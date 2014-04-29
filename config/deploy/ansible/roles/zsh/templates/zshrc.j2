@@ -1,0 +1,17 @@
+ZSH=$HOME/.oh-my-zsh
+ZSH_THEME="gnzh"
+
+COMPLETION_WAITING_DOTS="true"
+
+plugins=(postgres git rvm bundler tmux jump)
+source $ZSH/oh-my-zsh.sh
+
+PATH=$PATH:$HOME/bin
+PATH=$PATH:/usr/local/share/python
+
+export EDITOR="vim"
+
+# Speed up tab autocomplete for git
+__git_files () {
+  _wanted files expl 'local files' _files
+}

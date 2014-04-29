@@ -1,0 +1,23 @@
+---
+
+- name: Install zsh
+  apt: name=zsh
+  sudo: yes
+
+- name: Change default shell
+  command: chsh -s /usr/bin/zsh {{username}}
+  sudo: yes
+
+- name: Install oh-my-zsh
+  git: >
+    repo=https://github.com/robbyrussell/oh-my-zsh.git
+    dest=~/.oh-my-zsh
+
+- name: Copy .zshrc
+  template: src=zshrc.j2 dest=~/.zshrc
+
+- name: Copy custom aliases and functions
+  template: src={{ item }}.zsh.j2 dest=~/.oh-my-zsh/custom/{{ item }}.zsh
+  with_items:
+    - functions
+    - aliases

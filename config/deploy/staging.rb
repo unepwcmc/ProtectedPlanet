@@ -4,7 +4,7 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'ec2-54-80-231-124.compute-1.amazonaws.com', user: 'deploy', roles: %w{web app db}
+server 'ec2-54-80-231-124.compute-1.amazonaws.com', user: 'ubuntu', roles: %w{web app db}
 
 set :rails_env, :staging
 

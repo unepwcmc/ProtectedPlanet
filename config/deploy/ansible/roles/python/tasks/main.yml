@@ -1,0 +1,10 @@
+---
+
+- name: install python dependencies
+  apt: name={{ item }} state=present
+  sudo: yes
+  with_items:
+    - build-essential
+    - python-dev
+    - python-pycurl
+    - python-pip

@@ -1,0 +1,13 @@
+---
+
+- name: Setup default user and SSH keys
+  hosts: servers
+  user: root
+
+  vars_prompt:
+    - name: user_password
+      prompt: "Enter a password for the new user:"
+      private: true
+
+  roles:
+    - sudo_user

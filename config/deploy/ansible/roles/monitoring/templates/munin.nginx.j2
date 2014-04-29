@@ -1,0 +1,11 @@
+server {
+  listen       80;
+  server_name  stats.cyanoryx.com www.stats.cyanoryx.com;
+
+  access_log  /var/log/nginx/munin.access.log;
+  error_log  /var/log/nginx/munin.error.log;
+
+  location /stats {
+    root /var/cache/munin/www;
+  }
+}

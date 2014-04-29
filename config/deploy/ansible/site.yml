@@ -1,0 +1,14 @@
+---
+
+- name: Setup server
+  hosts: servers
+  user: ubuntu
+  sudo: yes
+
+  pre_tasks:
+    - name: update apt if needed
+      apt: update_cache=yes cache_valid_time=3600
+      sudo: yes
+
+  roles:
+    - ruby

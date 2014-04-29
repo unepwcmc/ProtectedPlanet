@@ -1,0 +1,16 @@
+---
+
+- name: Install vim
+  apt: name=vim
+  sudo: yes
+
+- name: Get vim config
+  git: repo="https://github.com/adammulligan/vim-config.git" dest=~/.vim/
+
+- name: Symlink vimrc to home directory
+  file: src=~/.vim/vimrc dest=~/.vimrc state=link
+
+- name: Setup Vundle
+  git: repo="https://github.com/gmarik/vundle.git" dest=~/.vim/bundle/vundle
+- name: Install Vundles
+  command: vim +BundleInstall +qall

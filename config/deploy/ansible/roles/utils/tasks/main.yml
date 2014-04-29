@@ -1,0 +1,10 @@
+---
+
+- name: Install SCM Breeze in ~/.zshrc
+  lineinfile:
+    dest=~/.zshrc
+    line="[ -s \"$HOME/.scm_breeze/scm_breeze.sh\" ] && source \"$HOME/.scm_breeze/scm_breeze.sh\""
+    regexp="scm_breeze"
+    state=present
+    insertafter=EOF
+    create=True
