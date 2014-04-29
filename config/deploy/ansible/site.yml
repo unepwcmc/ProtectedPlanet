@@ -11,4 +11,13 @@
       sudo: yes
 
   roles:
+    - ruby
+    - monitoring
+    - security
+    - nginx
+    - tmux
+    - utils
+    - ruby
     - postgresql
+    - user
+    - app
