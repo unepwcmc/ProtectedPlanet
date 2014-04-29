@@ -11,4 +11,4 @@
       sudo: yes
 
   roles:
-    - ruby
+    - postgresql

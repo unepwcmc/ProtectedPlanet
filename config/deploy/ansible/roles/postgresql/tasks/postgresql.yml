@@ -1,9 +1,15 @@
 ---
+- name: Install Postgresql dependencies
+  apt: pkg={{ item }} state=installed update-cache=yes
+  with_items:
+    - libpq-dev
+
 - name: Install Postgresql server and client
   apt: pkg={{ item }}-{{ postgresql.version }} state=installed update-cache=yes
   register: postgresql_install
   with_items:
     - postgresql
+    - postgresql-server-dev
   tags:
     - packages
 
