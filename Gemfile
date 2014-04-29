@@ -26,4 +26,4 @@ gem 'capistrano',  '~> 3.1'
 gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-bundler', '~> 1.1', require: false
 
-gem "minitest-rails", group: :test
+gem 'factory_girl_rails', '~> 4.4.1'
