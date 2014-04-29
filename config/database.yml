@@ -20,3 +20,7 @@ test:
 production:
   <<: *default
   database: pp_production
+
+staging:
+  <<: *default
+  database: pp_staging
