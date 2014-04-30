@@ -39,9 +39,11 @@ class TestWdpaGetter < ActiveSupport::TestCase
 
     filename = 'hey_this_is_a_filename.zip'
 
+    file_write_mock = mock()
+    file_write_mock.stubs(:write)
     File.expects(:open).
       with(filename, 'w').
-      yields()
+      yields(file_write_mock)
 
     wdpa_getter = WdpaGetter.new()
     wdpa_getter.save_current_wdpa_to(filename: filename)
