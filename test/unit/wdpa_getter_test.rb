@@ -16,7 +16,7 @@ class TestWdpaGetter < ActiveSupport::TestCase
     WdpaGetter.new()
   end
 
-  test '.save_current_wdpa_to retrives the WDPA from S3, and saves it to the
+  test '.save_current_wdpa_to retrieves the latest WDPA from S3, and saves it to the
    given filename' do
     latest_file_mock = mock()
     latest_file_mock.stubs(:last_modified).returns(2.days.ago)
@@ -24,7 +24,7 @@ class TestWdpaGetter < ActiveSupport::TestCase
 
     oldest_file_mock = mock()
     oldest_file_mock.stubs(:last_modified).returns(10.days.ago)
-    oldest_file_mock.stubs(:read).raises(Exception)
+    oldest_file_mock.stubs(:read).raises(Exception, "Expected the oldest file to not be read")
 
     bucket_mock = mock()
     bucket_mock.stubs(:objects).returns([
