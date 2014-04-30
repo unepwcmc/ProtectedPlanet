@@ -24,7 +24,7 @@ class TestWdpaGetter < ActiveSupport::TestCase
 
     oldest_file_mock = mock()
     oldest_file_mock.stubs(:last_modified).returns(10.days.ago)
-    oldest_file_mock.stubs(:read).raises(Exception, "Expected the oldest file to not be read")
+    oldest_file_mock.stubs(:read).raises(Exception, "Expected the oldest file to not be downloaded")
 
     bucket_mock = mock()
     bucket_mock.stubs(:objects).returns([
