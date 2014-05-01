@@ -2,6 +2,7 @@ class OgrPostgres
   def import file: file_path, to: database_name
     @file_path = file
     @database_name = to
+    @db_config = Rails.configuration.database_configuration[Rails.env]
 
     system(ogr_command)
   end
@@ -17,9 +18,5 @@ class OgrPostgres
     template = File.read(template_path)
 
     ERB.new(template).result binding
-  end
-
-  def db_config
-    Rails.configuration.database_configuration[Rails.env]
   end
 end
