@@ -31,3 +31,4 @@ gem 'mocha', '~> 1.0.0'
 
 gem 'aws-sdk', '~> 1.3.9'
 gem 'gdal'
+gem 'typhoeus'
