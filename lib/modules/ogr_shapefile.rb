@@ -28,8 +28,6 @@ class OgrShapefile
 	end
 
 	def zip_command filename
-		puts 'ZIP FILENAME'
-		puts filename
 		zip_command = ["zip #{filename}.zip"]
 
 		SHAPEFILE_PARTS.each do |part|
