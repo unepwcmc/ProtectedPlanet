@@ -10,7 +10,7 @@ class TestCartoDbMerger < ActiveSupport::TestCase
     response = Typhoeus::Response.new(code: 200)
     Typhoeus
       .expects(:get)
-      .with("http://#{cartodb_username}.cartodb.com/api/api/v2/sql", 
+      .with("http://#{cartodb_username}.cartodb.com/api/v2/sql", 
         params: {
           q: 'INSERT INTO poly_1 (SELECT * FROM poly_2 UNION ALL SELECT * FROM poly_3)',
           api_key: cartodb_api_key
