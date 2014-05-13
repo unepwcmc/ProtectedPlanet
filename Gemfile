@@ -31,8 +31,11 @@ gem 'mocha', '~> 1.0.0'
 gem 'webmock', '~> 1.18.0', require: false
 
 gem 'aws-sdk', '~> 1.3.9'
+
 gem 'gdal', '~> 0.0.5'
+gem 'dbf', '~> 2.0.7'
 
 gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
-gem 'dbf', '~> 2.0.7'
+
+gem 'sequel', '~> 4.10.0'
