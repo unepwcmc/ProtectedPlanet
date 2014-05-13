@@ -10,7 +10,7 @@ class OgrShapefile
 
 		limit = feature_count / number_of_pieces 
 		(0..number_of_pieces-1).each do |piece_index|
-			shapefile_name = piece_index
+			shapefile_name = "#{layer}_#{piece_index}"
 			offset = limit * piece_index
 
 			ogr_command binding
@@ -28,6 +28,8 @@ class OgrShapefile
 	end
 
 	def zip_command filename
+		puts 'ZIP FILENAME'
+		puts filename
 		zip_command = ["zip #{filename}.zip"]
 
 		SHAPEFILE_PARTS.each do |part|

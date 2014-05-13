@@ -8,3 +8,6 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
+
+#Ignore secrets.yml
+/config/secrets.yml
