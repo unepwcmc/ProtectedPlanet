@@ -18,7 +18,7 @@ class TestCartoDbMerger < ActiveSupport::TestCase
       )
       .returns(response)
 
-    cartodb_merger = CartoDbMerger.new
+    cartodb_merger = CartoDb::Merger.new
     response = cartodb_merger.merge table_names
 
     assert response, "Expected .merge to return true if successful"

@@ -1,4 +1,4 @@
-class CartoDbImporter
+class CartoDb::Importer
   include HTTMultiParty
 
   def initialize username, api_key

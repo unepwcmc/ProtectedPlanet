@@ -1,4 +1,4 @@
-class CartoDbMerger
+class CartoDb::Merger
   def merge table_names
     @table_names = table_names
     @columns =  "the_geom, wdpaid, wdpa_pid, name, orig_name, country, sub_loc, desig, desig_eng, desig_type, iucn_cat, int_crit, marine, rep_m_area, gis_m_area, rep_area, gis_area, status, status_yr, gov_type, mang_auth, mang_plan, no_take, no_tk_area, metadataid, shape_leng, shape_area"
