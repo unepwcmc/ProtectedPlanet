@@ -1,30 +1,38 @@
 class CartoDbImporter
-  def initialize username: username, api_key: api_key
-    @api_key = api_key
-    @username = username
+  include HTTMultiParty
+
+  def initialize username, api_key
+    self.class.base_uri "https://#{username}.cartodb.com/api/v1/imports/"
+    @options = { query: { api_key: api_key } }
   end
 
   def import filename
-    response = Typhoeus.post(
-      "https://#{@username}.cartodb.com/api/v1/imports/", 
-      params: {api_key: @api_key}, 
-      body: {file: File.open(filename, 'r')}
-    )
+    import_id = create_import filename
+    return check_import_succeeded import_id
+  end
 
-    return false unless response.response_code == 200
+  private
 
-    item_queue_id = JSON.parse(response.body)["item_queue_id"]
+  def status import_id
+    response = self.class.get("/#{import_id}", @options)
+    return JSON.parse(response.body)["state"]
+  end
 
-    status = nil
-    begin
-      response = Typhoeus.get(
-        "https://#{@username}.cartodb.com/api/v1/imports/#{item_queue_id}",
-        params: {api_key: @api_key}
-      )
+  def check_import_succeeded import_id
+    while state = status(import_id) do
+      if ['complete', 'failure'].include? state
+        return state == 'complete'
+      end
+    end
+  end
 
-      status = JSON.parse(response.body)["state"]
-    end while status != 'complete' && status != 'failure'
+  def create_import filename
+    options = @options.merge({
+      file: File.open(filename, 'r'),
+      detect_mime_type: true
+    })
 
-    return status == 'complete'
+    response = self.class.post("/", options)
+    return JSON.parse(response.body)["item_queue_id"]
   end
 end
