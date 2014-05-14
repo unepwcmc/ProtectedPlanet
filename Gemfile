@@ -35,3 +35,4 @@ gem 'gdal', '~> 0.0.5'
 
 gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
+gem 'dbf', '~> 2.0.7'
