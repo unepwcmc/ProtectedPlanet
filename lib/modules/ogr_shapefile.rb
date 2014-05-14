@@ -14,7 +14,6 @@ class OgrShapefile
       offset = limit * piece_index
 
       ogr_command binding
-      zip_command shapefile_name
     end
   end
 
@@ -25,18 +24,6 @@ class OgrShapefile
     layer = ogr_driver.get_layer(@layer)
 
     return layer.get_feature_count
-  end
-
-  def zip_command filename
-    zip_command = ["zip #{filename}.zip"]
-
-    SHAPEFILE_PARTS.each do |part|
-      zip_command.push "#{filename}.#{part}"
-    end
-
-    system(zip_command.join(" "))
-
-    File.delete(*zip_command.drop(1))
   end
 
   def ogr_command context_binding
