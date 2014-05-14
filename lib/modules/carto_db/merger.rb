@@ -1,21 +1,22 @@
 class CartoDb::Merger
+  include HTTParty
+
+  def initialize username, api_key
+    self.class.base_uri "https://#{username}.cartodb.com/api/v2/sql"
+    @options = { query: { api_key: api_key } }
+  end
+
   def merge table_names
     @table_names = table_names
     @columns =  "the_geom, wdpaid, wdpa_pid, name, orig_name, country, sub_loc, desig, desig_eng, desig_type, iucn_cat, int_crit, marine, rep_m_area, gis_m_area, rep_area, gis_area, status, status_yr, gov_type, mang_auth, mang_plan, no_take, no_tk_area, metadataid, shape_leng, shape_area"
 
-    cartodb_username = Rails.application.secrets.cartodb_username
-    cartodb_api_key  = Rails.application.secrets.cartodb_api_key
-    cartodb_url      = "http://#{cartodb_username}.cartodb.com/api/v2/sql"
+    @options[:query][:q] = merge_query
+    response = self.class.get('/', @options)
 
-    Typhoeus.get(cartodb_url,
-      params: {
-        q: merge_query,
-        api_key: cartodb_api_key
-      }
-    )
+    return response.code == 200
   end
 
-   private
+  private
 
   def merge_query
     "INSERT INTO #{@table_names[0]} (#{union_tables_query})"
