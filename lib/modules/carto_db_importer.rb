@@ -7,8 +7,8 @@ class CartoDbImporter
   end
 
   def import filename
-    import_id = create_import filename
-    return check_import_succeeded import_id
+    import_id = start_import filename
+    return import_complete import_id
   end
 
   private
@@ -18,7 +18,7 @@ class CartoDbImporter
     return JSON.parse(response.body)["state"]
   end
 
-  def check_import_succeeded import_id
+  def import_complete import_id
     while state = status(import_id) do
       if ['complete', 'failure'].include? state
         return state == 'complete'
@@ -26,7 +26,7 @@ class CartoDbImporter
     end
   end
 
-  def create_import filename
+  def start_import filename
     options = @options.merge({
       file: File.open(filename, 'r'),
       detect_mime_type: true
