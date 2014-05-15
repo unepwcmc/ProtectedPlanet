@@ -16,7 +16,7 @@ class TestCartoDbImporter < ActiveSupport::TestCase
 
   test 'import returns true when number of rows in cartodb match number of rows in shapefile' do
     tablename = 'table_0'
-
+    layer_mock = mock()
     layer_mock.stubs(:get_feature_count).returns(200).once
     datasource_mock = mock()
     datasource_mock.expects(:get_layer).returns(layer_mock)
@@ -24,14 +24,17 @@ class TestCartoDbImporter < ActiveSupport::TestCase
 
     stub_request(:get, "https://chewie.cartodb.com/api/v2/sql/").
       with({query: {api_key: '1234', q: "SELECT COUNT(*) FROM #{tablename}"}}).
-      to_return(:rows: [{"count"=>200}])
+      to_return(rows: [{"count"=>200}])
+
+    cartodb_importer = CartoDb::Importer.new "chewie", "1234"
+    response = cartodb_importer.check tablename
 
     assert response, "Expected .check to return true if match"
   end
 
   test 'import returns false when number of rows in cartodb does not match number of rows in shapefile' do
     tablename = 'table_0'
-
+    layer_mock = mock()
     layer_mock.stubs(:get_feature_count).returns(200).once
     datasource_mock = mock()
     datasource_mock.expects(:get_layer).returns(layer_mock)
@@ -39,7 +42,10 @@ class TestCartoDbImporter < ActiveSupport::TestCase
 
     stub_request(:get, "https://chewie.cartodb.com/api/v2/sql/").
       with({query: {api_key: '1234', q: "SELECT COUNT(*) FROM #{tablename}"}}).
-      to_return(:rows: [{"count"=>199}])
+      to_return(rows: [{"count"=>199}])
+
+    cartodb_importer = CartoDb::Importer.new "chewie", "1234"
+    response = cartodb_importer.check tablename
 
     refute response, "Expected .check to return false if do not match"
   end
