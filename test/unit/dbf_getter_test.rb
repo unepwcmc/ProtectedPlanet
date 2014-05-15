@@ -5,8 +5,8 @@ class TestDbfGetter < ActiveSupport::TestCase
   test '.columns gets the names of the columns in a dbf file and brigns them as an array' do
     filename = 'chewy.dbf'
     column_name_mock = mock()
-    columns_mock = mock()
 
+    table_mock = mock()
     columns_mock.expects(:each).returns(column_name_mock)
     table_mock = mock()
     table_mock.expects(:columns).returns(columns_mock)
