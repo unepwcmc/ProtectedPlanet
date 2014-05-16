@@ -21,7 +21,7 @@ class ShapefileSplit
   private
 
   def query limit, offset
-    "SELECT * FROM poly LIMIT #{limit} OFFSET #{offset}"
+    "SELECT * FROM #{@layer} LIMIT #{limit} OFFSET #{offset}"
   end
 
   def feature_count
