@@ -12,8 +12,8 @@ class TestShapefileSplit < ActiveSupport::TestCase
     datasource_mock.expects(:get_layer).returns(layer_mock)
     Gdal::Ogr::expects(:open).returns(datasource_mock)
 
-    OgrShapefile.any_instance.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" ./poly_0.shp -dialect sqlite -sql \"SELECT * FROM poly LIMIT 100 OFFSET 0\" #{filename}")
-    OgrShapefile.any_instance.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" ./poly_1.shp -dialect sqlite -sql \"SELECT * FROM poly LIMIT 100 OFFSET 100\" #{filename}")
+    OgrShapefile.any_instance.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" -lco ENCODING=UTF-8 ./poly_0.shp -dialect sqlite -sql \"SELECT * FROM poly LIMIT 100 OFFSET 0\" #{filename}")
+    OgrShapefile.any_instance.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" -lco ENCODING=UTF-8 ./poly_1.shp -dialect sqlite -sql \"SELECT * FROM poly LIMIT 100 OFFSET 100\" #{filename}")
 
     Shapefile.any_instance.expects(:system).with("zip ./poly_0.zip ./poly_0.shx ./poly_0.shp ./poly_0.dbf ./poly_0.prj")
     Shapefile.any_instance.expects(:system).with("zip ./poly_1.zip ./poly_1.shx ./poly_1.shp ./poly_1.dbf ./poly_1.prj")
