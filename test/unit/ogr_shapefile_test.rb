@@ -6,7 +6,7 @@ class TestOgrShapefile < ActiveSupport::TestCase
    given query and returns the shapefile components' do
     filename = '/tmp/my_gdb.gdb'
 
-    OgrShapefile.any_instance.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" /tmp/my_gdb.shp -dialect sqlite -sql \"SELECT * FROM somewhere\" #{filename}")
+    OgrShapefile.any_instance.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" -lco ENCODING=UTF-8 /tmp/my_gdb.shp -dialect sqlite -sql \"SELECT * FROM somewhere\" #{filename}")
     Shapefile.any_instance.expects(:system).with("zip /tmp/my_gdb.zip /tmp/my_gdb.shx /tmp/my_gdb.shp /tmp/my_gdb.dbf /tmp/my_gdb.prj")
 
     ogr = OgrShapefile.new filename, '/tmp/my_gdb.shp'
