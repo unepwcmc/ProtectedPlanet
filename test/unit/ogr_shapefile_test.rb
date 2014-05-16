@@ -2,20 +2,16 @@ require 'test_helper'
 require 'gdal-ruby/ogr'
 
 class TestOgrShapefile < ActiveSupport::TestCase
-  test '.split runs the correct ogr2ogr command to split a geo database in to `n` shapefiles and then zips them individually' do
-    filename = 'my_gdb.gdb'
-    layername = 'poly'
+  test '.convert_with_query runs the correct ogr2ogr command with the
+   given query and returns the shapefile components' do
+    filename = '/tmp/my_gdb.gdb'
 
-    layer_mock = mock()
-    layer_mock.stubs(:get_feature_count).returns(200).once
-    datasource_mock = mock()
-    datasource_mock.expects(:get_layer).returns(layer_mock)
-    Gdal::Ogr::expects(:open).returns(datasource_mock)
+    OgrShapefile.any_instance.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" /tmp/my_gdb.shp -dialect sqlite -sql \"SELECT * FROM somewhere\" #{filename}")
+    Shapefile.any_instance.expects(:system).with("zip /tmp/my_gdb.zip /tmp/my_gdb.shx /tmp/my_gdb.shp /tmp/my_gdb.dbf /tmp/my_gdb.prj")
 
-    OgrShapefile.any_instance.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" poly_0.shp -dialect sqlite -sql \"SELECT * FROM poly LIMIT 100 OFFSET 0\" #{filename}")
-    OgrShapefile.any_instance.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" poly_1.shp -dialect sqlite -sql \"SELECT * FROM poly LIMIT 100 OFFSET 100\" #{filename}")
+    ogr = OgrShapefile.new filename, '/tmp/my_gdb.shp'
+    shapefile_components = ogr.convert_with_query "SELECT * FROM somewhere"
 
-    ogr = OgrShapefile.new
-    ogr.split layer: layername, filename: filename, number_of_pieces: 2
+    assert_equal '/tmp/my_gdb.zip', shapefile_components
   end
 end

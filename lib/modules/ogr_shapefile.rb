@@ -1,35 +1,27 @@
-require 'gdal-ruby/ogr'
-
 class OgrShapefile
-  SHAPEFILE_PARTS = ['shx', 'shp', 'dbf', 'prj']
+  TEMPLATE_PATH = File.join(Rails.root, 'lib', 'modules', 'ogr_shapefile_command.erb')
 
-  def split layer: layer, filename: filename, number_of_pieces: number_of_pieces
-    @filename = filename
-    @layer = layer
-    @number_of_pieces = number_of_pieces
+  def initialize input_file, new_file
+    @input_file = input_file
+    @new_file   = new_file
+  end
 
-    limit = feature_count / number_of_pieces
-    (0..number_of_pieces-1).each do |piece_index|
-      shapefile_name = "#{layer}_#{piece_index}"
-      offset = limit * piece_index
+  def convert_with_query query
+    options = {
+      query: query
+    }
 
-      ogr_command binding
-    end
+    run options
   end
 
   private
 
-  def feature_count
-    ogr_driver = Gdal::Ogr.open(@filename)
-    layer = ogr_driver.get_layer(@layer)
+  def run options
+    shapefile = Shapefile.new @new_file
 
-    return layer.get_feature_count
-  end
+    template = ERB.new(File.read(TEMPLATE_PATH))
+    system(template.result(binding).squish)
 
-  def ogr_command context_binding
-    template_path = File.join(Rails.root, 'lib', 'modules', 'ogr_shapefile_command.erb')
-    template = File.read(template_path)
-
-    system(ERB.new(template).result(context_binding).squish)
+    return shapefile.compress
   end
 end

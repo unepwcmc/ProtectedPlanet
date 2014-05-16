@@ -1,6 +1,8 @@
 ogr2ogr -overwrite -skipfailures
   -f "ESRI Shapefile"
-	<%= shapefile_name %>.shp 
-	-dialect sqlite 
-	-sql "SELECT * FROM <%= @layer %> LIMIT <%= limit %> OFFSET <%= offset %>" 
-	<%= @filename %>
+  <%= shapefile.path %>
+  -dialect sqlite
+  <% if options[:query] %>
+    -sql "<%= options[:query] %>"
+  <% end %>
+  <%= @input_file %>
