@@ -1,5 +1,5 @@
-class OgrShapefile
-  TEMPLATE_PATH = File.join(Rails.root, 'lib', 'modules', 'ogr_shapefile_command.erb')
+class Ogr::Shapefile
+  TEMPLATE_PATH = File.join(File.dirname(__FILE__), 'ogr_shapefile_command.erb')
 
   def initialize input_file
     @input_file = input_file

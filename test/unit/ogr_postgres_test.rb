@@ -6,9 +6,9 @@ class TestOgrPostgres < ActiveSupport::TestCase
     db_name   = "my_little_database"
 
     ogr_command = "ogr2ogr -overwrite -skipfailures -f \"PostgreSQL\" PG:\" host=#{db_config["host"]} user=#{db_config["username"]} dbname=#{db_name}\" ./an/file"
-    OgrPostgres.any_instance.expects(:system).with(ogr_command).once
+    Ogr::Postgres.any_instance.expects(:system).with(ogr_command).once
 
-    ogr = OgrPostgres.new
+    ogr = Ogr::Postgres.new
     ogr.import file: './an/file', to: db_name
   end
 end

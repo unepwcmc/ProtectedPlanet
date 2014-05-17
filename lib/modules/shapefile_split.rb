@@ -13,7 +13,7 @@ class ShapefileSplit
       new_shapefile_path = File.join(File.dirname(@filename), "#{shapefile_name}.shp")
       offset = limit * piece_index
 
-      ogr_shapefile = OgrShapefile.new @filename
+      ogr_shapefile = Ogr::Shapefile.new @filename
       ogr_shapefile.convert_with_query query(limit, offset), new_shapefile_path
     end
   end
