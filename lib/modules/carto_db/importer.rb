@@ -3,15 +3,18 @@ class CartoDb::Importer
   require 'gdal-ruby/ogr'
 
   def initialize username, api_key
-    @username = username
-    @api_key = api_key
     self.class.base_uri "https://#{username}.cartodb.com/api/v1/imports/"
     @options = { query: { api_key: api_key } }
   end
 
   def import filename
     import_id = start_import filename
-    return import_complete import_id
+
+    unless import_id.nil?
+      return import_complete import_id
+    end
+
+    return false
   end
 
   private
@@ -36,6 +39,11 @@ class CartoDb::Importer
     })
 
     response = self.class.post("/", options)
-    return JSON.parse(response.body)["item_queue_id"]
+
+    if response.nil?
+      return
+    else
+      return JSON.parse(response.body)["item_queue_id"]
+    end
   end
 end
