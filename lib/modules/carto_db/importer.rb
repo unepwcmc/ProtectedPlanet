@@ -14,12 +14,6 @@ class CartoDb::Importer
     return import_complete import_id
   end
 
-  def check tablename
-    ogr_feature_count = shp_feature_count tablename
-    cartodb_feature_count = cartodb_count tablename
-    ogr_feature_count == ogr_feature_count 
-  end
-
   private
 
   def status import_id
@@ -44,22 +38,4 @@ class CartoDb::Importer
     response = self.class.post("/", options)
     return JSON.parse(response.body)["item_queue_id"]
   end
-
-  def cartodb_count tablename
-    count_query = count_query tablename
-    count_options = { query: { q: count_query, api_key: @api_key } }
-    self.class.get("https://#{@username}.cartodb.com/api/v1", count_options)
-    return JSON.parse(response.body)["rows"][0]["count"]
-  end
-
-  def shp_feature_count tablename
-    ogr_driver = Gdal::Ogr.open("#{tablename}.shp")
-    layer = ogr_driver.get_layer(0)
-    return layer.get_feature_count
-  end
-
-  def count_query tablename
-    "SELECT COUNT(*) FROM #{tablename}"
-  end
-
 end
