@@ -1,26 +1,18 @@
 class Ogr::Shapefile
   TEMPLATE_PATH = File.join(File.dirname(__FILE__), 'ogr_shapefile_command.erb')
 
-  def initialize input_file
-    @input_file = input_file
-  end
-
-  def convert_with_query query, filename
+  def self.convert_with_query filename, new_filename, query
     options = {
       query: query
     }
 
-    run filename, options
+    run filename, new_filename, options
   end
 
   private
 
-  def run new_file, options
-    shapefile = Shapefile.new new_file
-
+  def self.run filename, new_filename, options
     template = ERB.new(File.read(TEMPLATE_PATH))
     system(template.result(binding).squish)
-
-    return shapefile.compress
   end
 end

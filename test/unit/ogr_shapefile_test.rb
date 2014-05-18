@@ -6,12 +6,12 @@ class TestOgrShapefile < ActiveSupport::TestCase
    given query and returns the shapefile components' do
     filename = '/tmp/my_gdb.gdb'
 
-    Ogr::Shapefile.any_instance.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" -lco ENCODING=UTF-8 /tmp/my_gdb.shp -dialect sqlite -sql \"SELECT * FROM somewhere\" #{filename}")
-    Shapefile.any_instance.expects(:system).with("zip /tmp/my_gdb.zip /tmp/my_gdb.shx /tmp/my_gdb.shp /tmp/my_gdb.dbf /tmp/my_gdb.prj")
+    Ogr::Shapefile.
+      expects(:system).
+      with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" -lco ENCODING=UTF-8 /tmp/my_gdb.shp -dialect sqlite -sql \"SELECT * FROM somewhere\" #{filename}").
+      returns(true)
 
-    ogr = Ogr::Shapefile.new filename
-    shapefile_components = ogr.convert_with_query "SELECT * FROM somewhere", '/tmp/my_gdb.shp'
-
-    assert_equal '/tmp/my_gdb.zip', shapefile_components
+    response = Ogr::Shapefile.convert_with_query filename, '/tmp/my_gdb.shp', 'SELECT * FROM somewhere'
+    assert response, "Expected convert_with_query to return true on success"
   end
 end

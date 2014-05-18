@@ -1,9 +1,9 @@
 ogr2ogr -overwrite -skipfailures
   -f "ESRI Shapefile"
   -lco ENCODING=UTF-8
-  <%= shapefile.path %>
+  <%= new_filename %>
   -dialect sqlite
   <% if options[:query] %>
     -sql "<%= options[:query] %>"
   <% end %>
-  <%= @input_file %>
+  <%= filename %>
