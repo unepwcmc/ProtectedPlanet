@@ -1,4 +1,4 @@
-class CartoDb::Importer
+class CartoDb::Uploader
   include HTTMultiParty
   require 'gdal-ruby/ogr'
 
@@ -7,11 +7,11 @@ class CartoDb::Importer
     @options = { query: { api_key: api_key } }
   end
 
-  def import filename
-    import_id = start_import filename
+  def upload filename
+    upload_id = start_upload filename
 
-    unless import_id.nil?
-      return import_complete import_id
+    unless upload_id.nil?
+      return upload_complete upload_id
     end
 
     return false
@@ -19,20 +19,20 @@ class CartoDb::Importer
 
   private
 
-  def status import_id
-    response = self.class.get("/#{import_id}", @options)
+  def status upload_id
+    response = self.class.get("/#{upload_id}", @options)
     return JSON.parse(response.body)["state"]
   end
 
-  def import_complete import_id
-    while state = status(import_id) do
+  def upload_complete upload_id
+    while state = status(upload_id) do
       if ['complete', 'failure'].include? state
         return state == 'complete'
       end
     end
   end
 
-  def start_import filename
+  def start_upload filename
     options = @options.merge({
       file: File.open(filename, 'r'),
       detect_mime_type: true
