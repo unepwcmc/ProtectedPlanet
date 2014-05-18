@@ -1,7 +1,7 @@
 require 'gdal-ruby/ogr'
 
-class Shapefile::Split
-  def split layer: layer, filename: filename, number_of_pieces: number_of_pieces
+class Ogr::Split
+  def split filename, layer, number_of_pieces
     @filename = filename
     @layer = layer
 
@@ -12,8 +12,12 @@ class Shapefile::Split
       new_shapefile_path = File.join(File.dirname(@filename), "#{shapefile_name}.shp")
       offset = limit * piece_index
 
-      ogr_shapefile = Ogr::Shapefile.new @filename
-      ogr_shapefile.convert_with_query query(limit, offset), new_shapefile_path
+      Ogr::Shapefile.convert_with_query(
+        filename, new_shapefile_path,
+        query(limit, offset)
+      )
+
+      new_shapefile_path
     end
   end
 
