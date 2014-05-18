@@ -1,7 +1,7 @@
 require 'test_helper'
 require 'gdal-ruby/ogr'
 
-class TestShapefileSplit < ActiveSupport::TestCase
+class TestOgrSplit < ActiveSupport::TestCase
   test '.split runs the correct ogr2ogr command to split a geo database
    in to `n` shapefiles and then zips them individually' do
     filename = 'my_gdb.gdb'
