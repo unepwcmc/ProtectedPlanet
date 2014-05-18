@@ -24,4 +24,18 @@ class TestShapefile < ActiveSupport::TestCase
 
     assert_equal "/tmp/file.zip", zip_file
   end
+
+  test '.columns returns an array of column names for the shapefile' do
+    shapefile = 'chewbacca.shp'
+
+    column_mock = mock()
+    column_mock.expects(:name).returns('hans')
+
+    table_mock = mock()
+    table_mock.expects(:columns).returns([column_mock])
+    DBF::Table.expects(:new).with('./chewbacca.dbf').returns(table_mock)
+
+    columns = Shapefile.new(shapefile).columns
+    assert_equal ['hans'], columns
+  end
 end

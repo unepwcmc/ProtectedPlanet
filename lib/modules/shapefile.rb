@@ -24,8 +24,15 @@ class Shapefile
     return zip_file
   end
 
+  def columns
+    dbf_path = "#{path_without_extension}.dbf"
+    dbf_table = DBF::Table.new(dbf_path)
+
+    return dbf_table.columns.map(&:name)
+  end
+
   private
- 
+
   def path_without_extension
     File.join(File.dirname(@path), "#{filename}")
   end
