@@ -28,7 +28,7 @@ class CartoDb::Merger
 
   def union_tables_query
     table_queries = merge_candidates.map do |table_name|
-      "SELECT #{@column_names} FROM #{table_name}"
+      "SELECT #{@column_names.join(', ')} FROM #{table_name}"
     end
 
     table_queries.join(' UNION ALL ')
