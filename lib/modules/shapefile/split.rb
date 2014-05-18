@@ -1,10 +1,9 @@
 require 'gdal-ruby/ogr'
 
-class ShapefileSplit
+class Shapefile::Split
   def split layer: layer, filename: filename, number_of_pieces: number_of_pieces
     @filename = filename
     @layer = layer
-    @number_of_pieces = number_of_pieces
 
     limit = feature_count / number_of_pieces
 
