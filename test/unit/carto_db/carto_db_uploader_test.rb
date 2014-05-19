@@ -6,7 +6,7 @@ class TestCartoDbUploader < ActiveSupport::TestCase
     upload_id = 'really-long-uuid'
 
     stub_request(:post, "https://chewie.cartodb.com/api/v1/imports/").
-      with({body: {api_key: '1234'}}).
+      with({ headers: {'Content-Length' => /.*/, 'Content-Type' => /multipart\/form-data;.*/} }).
       to_return(:status => 200, :body => "{\"item_queue_id\": \"#{upload_id}\"}")
 
     stub_request(:get, "https://chewie.cartodb.com/api/v1/imports/#{upload_id}").
@@ -23,7 +23,7 @@ class TestCartoDbUploader < ActiveSupport::TestCase
     upload_id = 'really-long-uuid'
 
     stub_request(:post, "https://chewie.cartodb.com/api/v1/imports/").
-      with({body: {api_key: '1234'}}).
+      with({ headers: {'Content-Length' => /.*/, 'Content-Type' => /multipart\/form-data;.*/} }).
       to_return(:status => 200, :body => "{\"item_queue_id\": \"#{upload_id}\"}")
 
     stub_request(:get, "https://chewie.cartodb.com/api/v1/imports/#{upload_id}").
@@ -38,7 +38,7 @@ class TestCartoDbUploader < ActiveSupport::TestCase
 
   test '.upload returns false when the file fails to upload' do
     stub_request(:post, "https://chewie.cartodb.com/api/v1/imports/").
-      with({body: {api_key: '1234'}}).
+      with({ headers: {'Content-Length' => /.*/, 'Content-Type' => /multipart\/form-data;.*/} }).
       to_return(:status => 500, :body => "")
 
     uploader = CartoDb::Uploader.new "chewie", "1234"
