@@ -33,8 +33,10 @@ class CartoDb::Uploader
   end
 
   def start_upload filename
-    options = @options.merge({
-      file: File.open(filename, 'r'),
+    options = @options.deep_merge({
+      query: {
+        file: File.open(filename, 'r'),
+      },
       detect_mime_type: true
     })
 
