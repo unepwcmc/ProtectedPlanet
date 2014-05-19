@@ -1,7 +1,7 @@
 class Shapefile
   attr_accessor :path
 
-  SHAPEFILE_PARTS = ['shx', 'shp', 'dbf', 'prj']
+  SHAPEFILE_PARTS = ['shx', 'shp', 'dbf', 'prj', 'cpg']
 
   def initialize path
     @path = path
