@@ -19,7 +19,7 @@ class Shapefile
 
   def compress
     zip_file = "#{path_without_extension}.zip"
-    system("zip #{zip_file} #{components.join(" ")}")
+    system("zip -j #{zip_file} #{components.join(" ")}")
 
     return zip_file
   end

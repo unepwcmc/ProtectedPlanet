@@ -17,7 +17,7 @@ class TestShapefile < ActiveSupport::TestCase
   end
 
   test '.compress zips the shapefile and its components, and returns the zip path' do
-    Shapefile.any_instance.expects(:system).with("zip /tmp/file.zip /tmp/file.shx /tmp/file.shp /tmp/file.dbf /tmp/file.prj")
+    Shapefile.any_instance.expects(:system).with("zip -j /tmp/file.zip /tmp/file.shx /tmp/file.shp /tmp/file.dbf /tmp/file.prj")
 
     shapefile = Shapefile.new "/tmp/file.shp"
     zip_file = shapefile.compress
