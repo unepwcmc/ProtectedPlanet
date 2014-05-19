@@ -1,0 +1,11 @@
+language: ruby
+bundler_args: --without development production staging
+rvm:
+  - 2.1.1
+notifications:
+  email:
+    - adam.mulligan@unep-wcmc.org
+    - miguel.torres@unep-wcmc.org
+branches:
+  only:
+    - master
