@@ -29,6 +29,8 @@ class CartoDb::Uploader
       if ['complete', 'failure'].include? state
         return state == 'complete'
       end
+
+      sleep 5
     end
   end
 
