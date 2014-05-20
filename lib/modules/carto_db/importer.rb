@@ -5,10 +5,10 @@ class CartoDb::Importer
     @logger = logger
   end
 
-  def import
+  def import filename, layer_name
     @logger.info "Splitting file..."
     ogr_split = Ogr::Split.new
-    shapefiles = ogr_split.split '/Users/adammulligan/tmp/pp/WDPA_Apr2014.gdb', 'WDPA_poly_Apr2014', 5
+    shapefiles = ogr_split.split filename, layer_name, 5
     shapefiles.map! { |path| Shapefile.new path }
 
     shapefiles.each do |shapefile|
