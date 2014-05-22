@@ -1,9 +1,9 @@
 class Wdpa::Attribute
   TYPE_CONVERSIONS = {
-    boolean: Proc.new { |value| value.match(/^(true|t|1)$/i) != nil },
-    integer: Proc.new { |value| value.to_i },
-    string:  Proc.new { |value| value.to_s },
-    float:   Proc.new { |value| value.to_f }
+    boolean: -> (value) { value.match(/^(true|t|1)$/i) != nil },
+    integer: -> (value) { value.to_i },
+    string:  -> (value) { value.to_s },
+    float:   -> (value) { value.to_f }
   }
 
   def self.standardise(value, as:)
