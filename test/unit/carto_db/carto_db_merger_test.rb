@@ -16,8 +16,8 @@ class TestCartoDbMerger < ActiveSupport::TestCase
     columns = ['one', 'two', 'three']
 
     expected_query = '''
-      INSERT INTO poly_1 (SELECT one, two, three FROM poly_2
-      UNION ALL SELECT one, two, three FROM poly_3)
+      INSERT INTO poly_1 (one, two, three) SELECT one, two, three FROM poly_2
+      UNION ALL SELECT one, two, three FROM poly_3
     '''.squish
 
     stub_request(:get, "https://chewie.cartodb.com/api/v2/sql/").
