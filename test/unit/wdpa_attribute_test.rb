@@ -16,7 +16,7 @@ class TestWdpaAttribute < ActiveSupport::TestCase
     assert_equal 1, Wdpa::Attribute.standardise('1', as: :integer),
       "Expected '1' to be converted to 1"
 
-    assert_equal 1, Wdpa::Attribute.standardise('abc', as: :integer),
+    assert_equal 0, Wdpa::Attribute.standardise('abc', as: :integer),
       "Expected 'abc' to be converted to 1"
   end
 
