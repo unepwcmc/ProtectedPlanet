@@ -37,6 +37,30 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal({marine: true}, attributes)
   end
 
+  test '.attributes_from_standards_hash returns the correct attribute
+   for reported_marine_area' do
+    attributes = WdpaDataStandard.attributes_from_standards_hash({rep_m_area: 14.5643})
+    assert_equal({reported_marine_area: 14.5643}, attributes)
+  end
+
+  test '.attributes_from_standards_hash returns the correct attribute
+   for reported_area' do
+    attributes = WdpaDataStandard.attributes_from_standards_hash({rep_area: 14.5643})
+    assert_equal({reported_area: 14.5643}, attributes)
+  end
+
+  test '.attributes_from_standards_hash returns the correct attribute
+   for gis_marine_area' do
+    attributes = WdpaDataStandard.attributes_from_standards_hash({gis_m_area: 14.5643})
+    assert_equal({gis_marine_area: 14.5643}, attributes)
+  end
+
+  test '.attributes_from_standards_hash returns the correct attribute
+   for gis_area' do
+    attributes = WdpaDataStandard.attributes_from_standards_hash({gis_area: 14.5643})
+    assert_equal({gis_area: 14.5643}, attributes)
+  end
+
   test '.attributes_from_standards_hash ignores attributes not in the
    WDPA Standard' do
     attributes = WdpaDataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})
