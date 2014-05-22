@@ -1,9 +1,10 @@
 require 'gdal-ruby/ogr'
 
 class Ogr::Split
-  def split filename, layer, number_of_pieces
+  def split filename, layer, number_of_pieces, column_names = ['*']
     @filename = filename
     @layer = layer
+    @column_names = column_names
 
     limit = feature_count / number_of_pieces
 
@@ -24,7 +25,7 @@ class Ogr::Split
   private
 
   def query limit, offset
-    "SELECT * FROM #{@layer} LIMIT #{limit} OFFSET #{offset}"
+    "SELECT #{@column_names.join(',')} FROM #{@layer} LIMIT #{limit} OFFSET #{offset}"
   end
 
   def feature_count
