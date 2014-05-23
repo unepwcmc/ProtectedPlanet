@@ -1,40 +1,34 @@
 class CartoDb::Merger
   include HTTParty
+  default_timeout 1800
 
   def initialize username, api_key
     self.class.base_uri "https://#{username}.cartodb.com/api/v2/sql"
     @options = { query: { api_key: api_key } }
   end
 
-  def merge table_names, column_names
+  def merge table_names
     @table_names = table_names
-    @column_names = column_names
 
-    @options[:query][:q] = merge_query
-    response = self.class.get('/', @options)
 
-    return response.code == 200
+    merge_query.each do |query|
+      @options[:query][:q] = query
+      puts query
+      puts self.class.get('/', @options)
+      response = self.class.get('/', @options)
+    end
   end
 
   private
 
   def merge_query
-    "INSERT INTO #{@table_names[0]} (#{column_names}) #{union_tables_query}"
+    merge_candidates.map do |table_name|
+      "INSERT INTO #{@table_names[0]} (wdpaid, the_geom) SELECT wdpaid, the_geom FROM #{table_name}"
+    end
   end
 
   def merge_candidates
     @table_names.drop(1)
   end
 
-  def union_tables_query
-    table_queries = merge_candidates.map do |table_name|
-      "SELECT #{column_names} FROM #{table_name}"
-    end
-
-    table_queries.join(' UNION ALL ')
-  end
-
-  def column_names
-    @column_names.join(', ')
-  end
 end

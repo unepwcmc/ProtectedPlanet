@@ -21,6 +21,7 @@ class CartoDb::Uploader
 
   def status upload_id
     response = self.class.get("/#{upload_id}", @options)
+    puts response.body["state"]
     return JSON.parse(response.body)["state"]
   end
 
