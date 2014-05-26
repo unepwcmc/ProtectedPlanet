@@ -7,23 +7,25 @@ class CartoDb::Merger
     @options = { query: { api_key: api_key } }
   end
 
-  def merge table_names
+  def merge table_names, column_names
     @table_names = table_names
-
+    @column_names = column_names
 
     merge_query.each do |query|
       @options[:query][:q] = query
-      puts query
-      puts self.class.get('/', @options)
       response = self.class.get('/', @options)
+
+      return false unless response.code == 200
     end
+
+    return true
   end
 
   private
 
   def merge_query
     merge_candidates.map do |table_name|
-      "INSERT INTO #{@table_names[0]} (wdpaid, the_geom) SELECT wdpaid, the_geom FROM #{table_name}"
+      "INSERT INTO #{@table_names[0]} (#{column_names}) SELECT #{column_names} FROM #{table_name}"
     end
   end
 
@@ -31,4 +33,7 @@ class CartoDb::Merger
     @table_names.drop(1)
   end
 
+  def column_names
+    @column_names.join(', ')
+  end
 end
