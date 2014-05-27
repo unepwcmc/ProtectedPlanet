@@ -23,6 +23,20 @@ class WdpaDataStandard
       end
     end
 
+    attributes = create_relations attributes
+
     return attributes
+  end
+
+  private
+
+  def self.create_relations attributes
+    attributes.each do |key, value|
+      if key == :country
+        attributes[:country].map! do |country|
+          Country.where(iso_3: country).first
+        end
+      end
+    end
   end
 end

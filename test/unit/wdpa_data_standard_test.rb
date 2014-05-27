@@ -63,7 +63,10 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash returns Country models for given
    ISO codes' do
-    attributes = WdpaDataStandard.attributes_from_standards_hash({country: 'GTM,NOR'})
+    FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')
+    FactoryGirl.create(:country, iso_3: 'GTM', name: 'Guatemala')
+
+    attributes = WdpaDataStandard.attributes_from_standards_hash({country: 'NOR, GTM,'})
 
     assert_equal 2, attributes[:country].length,
       "Expected two Country models to be returned"
