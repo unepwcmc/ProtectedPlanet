@@ -114,6 +114,17 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   1984, attributes[:legal_status_updated_at].year
   end
 
+  test '.attributes_from_standards_hash returns an IucnCategory for a
+   given IUCN category' do
+    category_name = 'Extinct'
+    FactoryGirl.create(:iucn_category, name: category_name)
+
+    attributes = WdpaDataStandard.attributes_from_standards_hash({iucn_cat: category_name})
+
+    assert_kind_of IucnCategory, attributes[:iucn_category]
+    assert_equal   category_name, attributes[:iucn_category].name
+  end
+
   test '.attributes_from_standards_hash ignores attributes not in the
    WDPA Standard' do
     attributes = WdpaDataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})
