@@ -95,6 +95,17 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   "AT-NOR", attributes[:sub_locations].second.iso
   end
 
+  test '.attributes_from_standards_hash returns LegalStatus models for a
+   given legal status' do
+    status_name = "It's legal, honest"
+    FactoryGirl.create(:legal_status, name: status_name)
+
+    attributes = WdpaDataStandard.attributes_from_standards_hash({status: status_name})
+
+    assert_kind_of LegalStatus,  attributes[:legal_status]
+    assert_equal   status_name, attributes[:legal_status].name
+  end
+
   test '.attributes_from_standards_hash ignores attributes not in the
    WDPA Standard' do
     attributes = WdpaDataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})
