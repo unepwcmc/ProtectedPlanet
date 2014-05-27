@@ -78,6 +78,23 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   "Guatemala", attributes[:country].second.name
   end
 
+  test '.attributes_from_standards_hash returns SubLocation models for given
+   ISO codes' do
+    FactoryGirl.create(:sub_location, iso: 'AT-NOR', english_name: 'Norway')
+    FactoryGirl.create(:sub_location, iso: 'AT-AT', english_name: 'Galaxy')
+
+    attributes = WdpaDataStandard.attributes_from_standards_hash({sub_loc: 'AT-AT, AT-NOR,'})
+
+    assert_equal 2, attributes[:sub_locations].length,
+      "Expected two SubLocation models to be returned"
+
+    assert_kind_of SubLocation,  attributes[:sub_locations].first
+    assert_equal   "AT-AT", attributes[:sub_locations].first.iso
+
+    assert_kind_of SubLocation, attributes[:sub_locations].second
+    assert_equal   "AT-NOR", attributes[:sub_locations].second.iso
+  end
+
   test '.attributes_from_standards_hash ignores attributes not in the
    WDPA Standard' do
     attributes = WdpaDataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})

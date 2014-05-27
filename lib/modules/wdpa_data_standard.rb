@@ -9,7 +9,8 @@ class WdpaDataStandard
     :rep_area => {name: :reported_area, type: :float},
     :gis_m_area => {name: :gis_marine_area, type: :float},
     :gis_area => {name: :gis_area, type: :float},
-    :country => {name: :country, type: :csv}
+    :country => {name: :country, type: :csv},
+    :sub_loc => {name: :sub_locations, type: :csv}
   }
 
   def self.attributes_from_standards_hash standards_hash
@@ -35,6 +36,12 @@ class WdpaDataStandard
       if key == :country
         attributes[:country].map! do |country|
           Country.where(iso_3: country).first
+        end
+      end
+
+      if key == :sub_locations
+        attributes[:sub_locations].map! do |sub_location|
+          SubLocation.where(iso: sub_location).first
         end
       end
     end
