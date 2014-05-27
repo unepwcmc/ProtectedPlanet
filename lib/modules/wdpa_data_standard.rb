@@ -14,7 +14,8 @@ class WdpaDataStandard
     :status     => {name: :legal_status, type: :string},
     :status_yr  => {name: :legal_status_updated_at, type: :year},
     :iucn_cat   => {name: :iucn_category, type: :string},
-    :gov_type   => {name: :governance, type: :string}
+    :gov_type   => {name: :governance, type: :string},
+    :mang_auth  => {name: :management_authority, type: :string}
   }
 
   def self.attributes_from_standards_hash standards_hash
@@ -59,6 +60,10 @@ class WdpaDataStandard
 
       if key == :governance
         attributes[:governance] = Governance.where(name: attributes[:governance]).first
+      end
+
+      if key == :management_authority
+        attributes[:management_authority] = ManagementAuthority.where(name: attributes[:management_authority]).first
       end
     end
   end

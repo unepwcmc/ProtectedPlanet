@@ -136,6 +136,17 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   governance_name, attributes[:governance].name
   end
 
+  test '.attributes_from_standards_hash returns a ManagementAuthority for a given
+   management authority' do
+    management_name = 'Authority of Authorities'
+    FactoryGirl.create(:management_authority, name: management_name)
+
+    attributes = WdpaDataStandard.attributes_from_standards_hash({mang_auth: management_name})
+
+    assert_kind_of ManagementAuthority, attributes[:management_authority]
+    assert_equal   management_name, attributes[:management_authority].name
+  end
+
   test '.attributes_from_standards_hash ignores attributes not in the
    WDPA Standard' do
     attributes = WdpaDataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})
