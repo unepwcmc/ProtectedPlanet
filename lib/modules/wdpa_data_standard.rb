@@ -1,16 +1,16 @@
 class WdpaDataStandard
   STANDARD_ATTRIBUTES = {
-    :wdpaid => {name: :wdpa_id, type: :integer},
-    :wdpa_pid => {name: :wdpa_parent_id, type: :integer},
-    :name => {name: :name, type: :string},
-    :orig_name => {name: :original_name, type: :string},
-    :marine => {name: :marine, type: :boolean},
+    :wdpaid     => {name: :wdpa_id, type: :integer},
+    :wdpa_pid   => {name: :wdpa_parent_id, type: :integer},
+    :name       => {name: :name, type: :string},
+    :orig_name  => {name: :original_name, type: :string},
+    :marine     => {name: :marine, type: :boolean},
     :rep_m_area => {name: :reported_marine_area, type: :float},
-    :rep_area => {name: :reported_area, type: :float},
+    :rep_area   => {name: :reported_area, type: :float},
     :gis_m_area => {name: :gis_marine_area, type: :float},
-    :gis_area => {name: :gis_area, type: :float},
-    :country => {name: :country, type: :csv},
-    :sub_loc => {name: :sub_locations, type: :csv}
+    :gis_area   => {name: :gis_area, type: :float},
+    :iso3       => {name: :countries, type: :csv},
+    :sub_loc    => {name: :sub_locations, type: :csv}
   }
 
   def self.attributes_from_standards_hash standards_hash
@@ -33,8 +33,8 @@ class WdpaDataStandard
 
   def self.create_relations attributes
     attributes.each do |key, value|
-      if key == :country
-        attributes[:country].map! do |country|
+      if key == :countries
+        attributes[:countries].map! do |country|
           Country.where(iso_3: country).first
         end
       end
