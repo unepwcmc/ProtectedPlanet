@@ -3,7 +3,8 @@ class Wdpa::Attribute
     boolean: -> (value) { value.match(/^(true|t|1)$/i) != nil },
     integer: -> (value) { value.to_i },
     string:  -> (value) { value.to_s },
-    float:   -> (value) { value.to_f }
+    float:   -> (value) { value.to_f },
+    csv:     -> (value) { value.split(',').map(&:strip) }
   }
 
   def self.standardise(value, as:)

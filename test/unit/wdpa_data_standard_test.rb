@@ -61,6 +61,20 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal({gis_area: 14.5643}, attributes)
   end
 
+  test '.attributes_from_standards_hash returns Country models for given
+   ISO codes' do
+    attributes = WdpaDataStandard.attributes_from_standards_hash({country: 'GTM,NOR'})
+
+    assert_equal 2, attributes[:country].length,
+      "Expected two Country models to be returned"
+
+    assert_kind_of Country,  attributes[:country].first
+    assert_equal   "Norway", attributes[:country].first.name
+
+    assert_kind_of Country, attributes[:country].second
+    assert_equal   "Guatemala", attributes[:country].second.name
+  end
+
   test '.attributes_from_standards_hash ignores attributes not in the
    WDPA Standard' do
     attributes = WdpaDataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})
