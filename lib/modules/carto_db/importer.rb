@@ -5,22 +5,28 @@ class CartoDb::Importer
     @logger = logger
   end
 
-  def import filename, layer_name, column_names
+  def import filename, layer_name
     @logger.info "Splitting file..."
     ogr_split = Ogr::Split.new
-    shapefiles = ogr_split.split filename, layer_name, 5, column_names
+    shapefiles = ogr_split.split filename, layer_name, 5, ['wdpaid', 'SHAPE']
     shapefiles.map! { |path| Shapefile.new path }
 
     shapefiles.each do |shapefile|
       @logger.info "Uploading #{shapefile.path}..."
       cartodb_uploader = CartoDb::Uploader.new @username, @api_key
-      @logger.info cartodb_uploader.upload shapefile.compress
+      upload_successful = cartodb_uploader.upload shapefile.compress
+
+      @logger.info upload_successful
+      unless upload_successful
+        @logger.error "Failed to upload #{shapefile.path}"
+        return
+      end
     end
 
     @logger.info "Merging files..."
     cartodb_merger = CartoDb::Merger.new @username, @api_key
 
     table_names = shapefiles.map { |s| s.filename }
-    @logger.info cartodb_merger.merge table_names, column_names
+    @logger.info cartodb_merger.merge table_names, ['wdpaid', 'the_geom']
   end
 end
