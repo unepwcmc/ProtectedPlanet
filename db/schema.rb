@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140527095736) do
+ActiveRecord::Schema.define(version: 20140527125150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,15 @@ ActiveRecord::Schema.define(version: 20140527095736) do
   end
 
   create_table "protected_areas", force: true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "sub_locations", force: true do |t|
+    t.string   "english_name"
+    t.string   "local_name"
+    t.string   "alternate_name"
+    t.string   "iso"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
