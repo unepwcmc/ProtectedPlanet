@@ -13,7 +13,8 @@ class WdpaDataStandard
     :sub_loc    => {name: :sub_locations, type: :csv},
     :status     => {name: :legal_status, type: :string},
     :status_yr  => {name: :legal_status_updated_at, type: :year},
-    :iucn_cat   => {name: :iucn_category, type: :string}
+    :iucn_cat   => {name: :iucn_category, type: :string},
+    :gov_type   => {name: :governance, type: :string}
   }
 
   def self.attributes_from_standards_hash standards_hash
@@ -54,6 +55,10 @@ class WdpaDataStandard
 
       if key == :iucn_category
         attributes[:iucn_category] = IucnCategory.where(name: attributes[:iucn_category]).first
+      end
+
+      if key == :governance
+        attributes[:governance] = Governance.where(name: attributes[:governance]).first
       end
     end
   end

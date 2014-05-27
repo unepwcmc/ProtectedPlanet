@@ -125,6 +125,17 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   category_name, attributes[:iucn_category].name
   end
 
+  test '.attributes_from_standards_hash returns a Governance for a given
+   governance type' do
+    governance_name = 'Ministry of Ministries'
+    FactoryGirl.create(:governance, name: governance_name)
+
+    attributes = WdpaDataStandard.attributes_from_standards_hash({gov_type: governance_name})
+
+    assert_kind_of Governance, attributes[:governance]
+    assert_equal   governance_name, attributes[:governance].name
+  end
+
   test '.attributes_from_standards_hash ignores attributes not in the
    WDPA Standard' do
     attributes = WdpaDataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})
