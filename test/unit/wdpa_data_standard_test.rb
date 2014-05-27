@@ -71,7 +71,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal 2, attributes[:countries].length,
       "Expected two Country models to be returned"
 
-    assert_kind_of Country,  attributes[:countries].first
+    assert_kind_of Country, attributes[:countries].first
     assert_equal   "Norway", attributes[:countries].first.name
 
     assert_kind_of Country, attributes[:countries].second
@@ -88,7 +88,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal 2, attributes[:sub_locations].length,
       "Expected two SubLocation models to be returned"
 
-    assert_kind_of SubLocation,  attributes[:sub_locations].first
+    assert_kind_of SubLocation, attributes[:sub_locations].first
     assert_equal   "AT-AT", attributes[:sub_locations].first.iso
 
     assert_kind_of SubLocation, attributes[:sub_locations].second
@@ -102,8 +102,16 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
     attributes = WdpaDataStandard.attributes_from_standards_hash({status: status_name})
 
-    assert_kind_of LegalStatus,  attributes[:legal_status]
+    assert_kind_of LegalStatus, attributes[:legal_status]
     assert_equal   status_name, attributes[:legal_status].name
+  end
+
+  test '.attributes_from_standards_hash returns a Date for a given legal
+   status change year' do
+    attributes = WdpaDataStandard.attributes_from_standards_hash({status_yr: '1984'})
+
+    assert_kind_of Date, attributes[:legal_status_updated_at]
+    assert_equal   1984, attributes[:legal_status_updated_at].year
   end
 
   test '.attributes_from_standards_hash ignores attributes not in the

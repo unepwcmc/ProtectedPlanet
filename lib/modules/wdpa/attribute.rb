@@ -4,6 +4,7 @@ class Wdpa::Attribute
     integer: -> (value) { value.to_i },
     string:  -> (value) { value.to_s },
     float:   -> (value) { value.to_f },
+    year:    -> (value) { Date.strptime(value, '%Y') },
     csv:     -> (value) { value.split(',').map(&:strip) }
   }
 

@@ -12,6 +12,7 @@ class WdpaDataStandard
     :iso3       => {name: :countries, type: :csv},
     :sub_loc    => {name: :sub_locations, type: :csv},
     :status     => {name: :legal_status, type: :string},
+    :status_yr  => {name: :legal_status_updated_at, type: :year}
   }
 
   def self.attributes_from_standards_hash standards_hash
