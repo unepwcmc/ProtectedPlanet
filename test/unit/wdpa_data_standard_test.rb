@@ -126,7 +126,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash returns a Date for a given legal
    status change year' do
-    attributes = WdpaDataStandard.attributes_from_standards_hash({status_yr: '1984'})
+    attributes = WdpaDataStandard.attributes_from_standards_hash({status_yr: 1984})
 
     assert_kind_of Date, attributes[:legal_status_updated_at]
     assert_equal   1984, attributes[:legal_status_updated_at].year
