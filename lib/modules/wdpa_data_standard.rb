@@ -18,7 +18,8 @@ class WdpaDataStandard
     :mang_auth  => {name: :management_authority, type: :string},
     :int_crit   => {name: :international_criteria, type: :string},
     :no_take    => {name: :no_take, type: :string},
-    :no_tk_area => {name: :no_take_area, type: :float}
+    :no_tk_area => {name: :no_take_area, type: :float},
+    :desig      => {name: :designation, type: :string}
   }
 
   def self.attributes_from_standards_hash standards_hash
@@ -67,6 +68,10 @@ class WdpaDataStandard
 
       if key == :management_authority
         attributes[:management_authority] = ManagementAuthority.where(name: attributes[:management_authority]).first
+      end
+
+      if key == :designation
+        attributes[:designation] = Designation.where(name: attributes[:designation]).first
       end
     end
   end

@@ -165,6 +165,17 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   management_name, attributes[:management_authority].name
   end
 
+  test '.attributes_from_standards_hash returns a Designation for a given
+   designation and designation type' do
+    designation = "Sites of Special Importance"
+    FactoryGirl.create(:designation, name: designation)
+
+    attributes = WdpaDataStandard.attributes_from_standards_hash({desig: designation})
+
+    assert_kind_of Designation, attributes[:designation]
+    assert_equal   designation, attributes[:designation].name
+  end
+
   test '.attributes_from_standards_hash ignores attributes not in the
    WDPA Standard' do
     attributes = WdpaDataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})
