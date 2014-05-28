@@ -67,6 +67,18 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal({international_criteria: '(ii)(iv)'}, attributes)
   end
 
+  test '.attributes_from_standards_hash returns the correct attribute
+   for no_take' do
+    attributes = WdpaDataStandard.attributes_from_standards_hash({no_take: 'All'})
+    assert_equal({no_take: 'All'}, attributes)
+  end
+
+  test '.attributes_from_standards_hash returns the correct attribute
+   for no_tk_area' do
+    attributes = WdpaDataStandard.attributes_from_standards_hash({no_tk_area: 0.4})
+    assert_equal({no_take_area: 0.4}, attributes)
+  end
+
   test '.attributes_from_standards_hash returns Country models for given
    ISO codes' do
     FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')

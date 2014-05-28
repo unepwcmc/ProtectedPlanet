@@ -16,7 +16,9 @@ class WdpaDataStandard
     :iucn_cat   => {name: :iucn_category, type: :string},
     :gov_type   => {name: :governance, type: :string},
     :mang_auth  => {name: :management_authority, type: :string},
-    :int_crit   => {name: :international_criteria, type: :string}
+    :int_crit   => {name: :international_criteria, type: :string},
+    :no_take    => {name: :no_take, type: :string},
+    :no_tk_area => {name: :no_take_area, type: :float}
   }
 
   def self.attributes_from_standards_hash standards_hash
