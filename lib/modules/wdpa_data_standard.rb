@@ -19,7 +19,8 @@ class WdpaDataStandard
     :int_crit   => {name: :international_criteria, type: :string},
     :no_take    => {name: :no_take, type: :string},
     :no_tk_area => {name: :no_take_area, type: :float},
-    :desig      => {name: :designation, type: :string}
+    :desig      => {name: :designation, type: :string},
+    :desig_type => {name: :jurisdiction, type: :string}
   }
 
   def self.attributes_from_standards_hash standards_hash
@@ -71,7 +72,13 @@ class WdpaDataStandard
       end
 
       if key == :designation
-        attributes[:designation] = Designation.where(name: attributes[:designation]).first
+        jurisdiction = Jurisdiction.where(name: attributes[:jurisdiction]).first
+        attributes[:designation] = Designation.where({
+          name: attributes[:designation],
+          jurisdiction: jurisdiction
+        }).first
+
+        attributes.delete(:jurisdiction)
       end
     end
   end

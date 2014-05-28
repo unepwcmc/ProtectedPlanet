@@ -168,12 +168,28 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns a Designation for a given
    designation and designation type' do
     designation = "Sites of Special Importance"
-    FactoryGirl.create(:designation, name: designation)
+    designation_type = "Universal"
 
-    attributes = WdpaDataStandard.attributes_from_standards_hash({desig: designation})
+    jurisdiction = FactoryGirl.create(:jurisdiction, name: designation_type)
+    FactoryGirl.create(:designation, name: designation, jurisdiction: jurisdiction)
+
+    attributes = WdpaDataStandard.attributes_from_standards_hash({
+      desig: designation,
+      desig_type: designation_type
+    })
 
     assert_kind_of Designation, attributes[:designation]
     assert_equal   designation, attributes[:designation].name
+
+    assert_kind_of Jurisdiction, attributes[:designation].jurisdiction
+    assert_equal   designation_type, attributes[:designation].jurisdiction.name
+
+    assert_nil attributes[:jurisdiction], "Expected jurisdiction to not be returned"
+  end
+
+  test '.attributes_from_standards_hash creates a new Designation if one
+   does not already exist' do
+    skip
   end
 
   test '.attributes_from_standards_hash ignores attributes not in the
