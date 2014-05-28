@@ -1,4 +1,4 @@
-class WdpaDataStandard
+class Wdpa::DataStandard
   STANDARD_ATTRIBUTES = {
     :wdpaid     => {name: :wdpa_id, type: :integer},
     :wdpa_pid   => {name: :wdpa_parent_id, type: :integer},
