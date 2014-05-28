@@ -61,6 +61,12 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal({gis_area: 14.5643}, attributes)
   end
 
+  test '.attributes_from_standards_hash returns the correct attribute
+   for int_crit' do
+    attributes = WdpaDataStandard.attributes_from_standards_hash({int_crit: '(ii)(iv)'})
+    assert_equal({international_criteria: '(ii)(iv)'}, attributes)
+  end
+
   test '.attributes_from_standards_hash returns Country models for given
    ISO codes' do
     FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')

@@ -15,7 +15,8 @@ class WdpaDataStandard
     :status_yr  => {name: :legal_status_updated_at, type: :year},
     :iucn_cat   => {name: :iucn_category, type: :string},
     :gov_type   => {name: :governance, type: :string},
-    :mang_auth  => {name: :management_authority, type: :string}
+    :mang_auth  => {name: :management_authority, type: :string},
+    :int_crit   => {name: :international_criteria, type: :string}
   }
 
   def self.attributes_from_standards_hash standards_hash
