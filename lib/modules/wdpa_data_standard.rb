@@ -23,64 +23,31 @@ class WdpaDataStandard
     :desig_type => {name: :jurisdiction, type: :string}
   }
 
-  def self.attributes_from_standards_hash standards_hash
-    attributes = {}
+  NESTED_ATTRIBUTES = [
+    :jurisdiction
+  ]
 
+  def self.attributes_from_standards_hash standards_hash
+    standardised_attributes = {}
     standards_hash.each do |key, value|
       attribute = STANDARD_ATTRIBUTES[key]
       unless attribute.nil?
         standardised_value = Wdpa::Attribute.standardise value, as: attribute[:type]
-        attributes[attribute[:name]] = standardised_value
+        standardised_attributes[attribute[:name]] = standardised_value
       end
     end
 
-    attributes = create_relations attributes
+    standardised_attributes.each do |key, value|
+      relation = Wdpa::Relation.new standardised_attributes
+      relational_value = relation.create(key, value)
 
-    return attributes
-  end
-
-  private
-
-  def self.create_relations attributes
-    attributes.each do |key, value|
-      if key == :countries
-        attributes[:countries].map! do |country|
-          Country.where(iso_3: country).first
-        end
-      end
-
-      if key == :sub_locations
-        attributes[:sub_locations].map! do |iso|
-          SubLocation.where(iso: iso).first
-        end
-        attributes[:sub_locations] = attributes[:sub_locations].compact
-      end
-
-      if key == :legal_status
-        attributes[:legal_status] = LegalStatus.where(name: attributes[:legal_status]).first
-      end
-
-      if key == :iucn_category
-        attributes[:iucn_category] = IucnCategory.where(name: attributes[:iucn_category]).first
-      end
-
-      if key == :governance
-        attributes[:governance] = Governance.where(name: attributes[:governance]).first
-      end
-
-      if key == :management_authority
-        attributes[:management_authority] = ManagementAuthority.where(name: attributes[:management_authority]).first
-      end
-
-      if key == :designation
-        jurisdiction = Jurisdiction.where(name: attributes[:jurisdiction]).first
-        attributes[:designation] = Designation.where({
-          name: attributes[:designation],
-          jurisdiction: jurisdiction
-        }).first
-
-        attributes.delete(:jurisdiction)
-      end
+      standardised_attributes[key] = relational_value
     end
+
+    NESTED_ATTRIBUTES.each do |attribute|
+      standardised_attributes.delete attribute
+    end
+
+    return standardised_attributes
   end
 end
