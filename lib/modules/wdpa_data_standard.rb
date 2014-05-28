@@ -50,9 +50,10 @@ class WdpaDataStandard
       end
 
       if key == :sub_locations
-        attributes[:sub_locations].map! do |sub_location|
-          SubLocation.where(iso: sub_location).first
+        attributes[:sub_locations].map! do |iso|
+          SubLocation.where(iso: iso).first
         end
+        attributes[:sub_locations] = attributes[:sub_locations].compact
       end
 
       if key == :legal_status

@@ -113,6 +113,14 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   "AT-NOR", attributes[:sub_locations].second.iso
   end
 
+  test '.attributes_from_standards_hash returns an empty array if the
+   sub locations do not exist' do
+    attributes = WdpaDataStandard.attributes_from_standards_hash({sub_loc: 'AT-AT'})
+
+    assert_equal 0, attributes[:sub_locations].length,
+      "Expected no SubLocation models to be returned"
+  end
+
   test '.attributes_from_standards_hash returns LegalStatus models for a
    given legal status' do
     status_name = "It's legal, honest"
