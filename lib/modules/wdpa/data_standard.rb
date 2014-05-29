@@ -25,6 +25,10 @@ class Wdpa::DataStandard
     :wkb_geometry => {name: :the_geom, type: :string}
   }
 
+  #
+  # Attributes that are only used in combination with other attributes,
+  # and have no matching attribute on ProtectedArea
+  #
   NESTED_ATTRIBUTES = [
     :jurisdiction,
     :no_take_area
