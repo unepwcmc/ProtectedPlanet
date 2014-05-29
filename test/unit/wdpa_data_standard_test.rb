@@ -103,6 +103,14 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   "Guatemala", attributes[:countries].second.name
   end
 
+  test '.attributes_from_standards_hash returns an empty array if the
+   countries do not exist' do
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({iso3: 'NOR'})
+
+    assert_equal 0, attributes[:countries].length,
+      "Expected no Country models to be returned"
+  end
+
   test '.attributes_from_standards_hash returns SubLocation models for given
    ISO codes' do
     FactoryGirl.create(:sub_location, iso: 'AT-NOR', english_name: 'Norway')
@@ -231,7 +239,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     designation = "Sites of Special Importance"
     designation_type = "Universal"
 
-     FactoryGirl.create(:jurisdiction, name: designation_type)
+    FactoryGirl.create(:jurisdiction, name: designation_type)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({
       desig: designation,

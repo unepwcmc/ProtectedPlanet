@@ -30,9 +30,8 @@ class Wdpa::Relation
   end
 
   def countries value
-    value.map do |iso_3|
-      Country.where(iso_3: iso_3).first
-    end
+    countries = value.map { |iso_3| Country.where(iso_3: iso_3).first }
+    countries.compact
   end
 
   def sub_locations value
