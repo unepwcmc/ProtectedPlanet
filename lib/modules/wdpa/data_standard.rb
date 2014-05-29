@@ -25,7 +25,8 @@ class Wdpa::DataStandard
   }
 
   NESTED_ATTRIBUTES = [
-    :jurisdiction
+    :jurisdiction,
+    :no_take_area
   ]
 
   def self.attributes_from_standards_hash standards_hash

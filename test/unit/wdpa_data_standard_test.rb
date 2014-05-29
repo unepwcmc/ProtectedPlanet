@@ -67,16 +67,23 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal({international_criteria: '(ii)(iv)'}, attributes)
   end
 
-  test '.attributes_from_standards_hash returns the correct attribute
-   for no_take' do
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({no_take: 'All'})
-    assert_equal({no_take: 'All'}, attributes)
-  end
+  test '.attributes_from_standards_hash returns a NoTakeStatus model for given
+   no_take value' do
+    status = "NO TAKE"
+    area   = 153.6
 
-  test '.attributes_from_standards_hash returns the correct attribute
-   for no_tk_area' do
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({no_tk_area: 0.4})
-    assert_equal({no_take_area: 0.4}, attributes)
+    FactoryGirl.create(:no_take_status, name: status, area: area)
+
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({
+      no_take: status,
+      no_tk_area: area
+    })
+
+    assert_kind_of NoTakeStatus, attributes[:no_take]
+    assert_equal   status, attributes[:no_take].name
+    assert_equal   area, attributes[:no_take].area
+
+    assert_nil attributes[:no_take_area], "Expected no_take_area to not be returned"
   end
 
   test '.attributes_from_standards_hash returns Country models for given

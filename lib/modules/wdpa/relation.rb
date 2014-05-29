@@ -47,4 +47,11 @@ class Wdpa::Relation
       jurisdiction: jurisdiction
     }).first
   end
+
+  def no_take value
+    NoTakeStatus.create({
+      name: value,
+      area: @current_attributes[:no_take_area]
+    })
+  end
 end
