@@ -16,6 +16,7 @@ class Wdpa::DataStandard
     :iucn_cat   => {name: :iucn_category, type: :string},
     :gov_type   => {name: :governance, type: :string},
     :mang_auth  => {name: :management_authority, type: :string},
+    :mang_plan  => {name: :management_plan, type: :string},
     :int_crit   => {name: :international_criteria, type: :string},
     :no_take    => {name: :no_take, type: :string},
     :no_tk_area => {name: :no_take_area, type: :float},

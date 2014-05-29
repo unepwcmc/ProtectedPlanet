@@ -178,6 +178,12 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   management_name, attributes[:management_authority].name
   end
 
+  test '.attributes_from_standards_hash returns the correct attribute for a
+   management plan' do
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({mang_plan: 'An plan'})
+    assert_equal({management_plan: 'An plan'}, attributes)
+  end
+
   test '.attributes_from_standards_hash creates a new ManagementAuthority if one
    does not already exist' do
     skip
