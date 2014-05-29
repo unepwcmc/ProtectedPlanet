@@ -30,26 +30,47 @@ class Wdpa::DataStandard
   ]
 
   def self.attributes_from_standards_hash standards_hash
-    standardised_attributes = {}
-    standards_hash.each do |key, value|
+    attributes = standardise_values standards_hash
+    attributes = create_models attributes
+    attributes = remove_nested_attributes attributes
+
+    attributes
+  end
+
+  private
+
+  def self.standardise_values hash
+    attributes = {}
+
+    hash.each do |key, value|
       attribute = STANDARD_ATTRIBUTES[key]
       unless attribute.nil?
         standardised_value = Wdpa::Attribute.standardise value, as: attribute[:type]
-        standardised_attributes[attribute[:name]] = standardised_value
+        attributes[attribute[:name]] = standardised_value
       end
     end
 
-    standardised_attributes.each do |key, value|
-      relation = Wdpa::Relation.new standardised_attributes
+    attributes
+  end
+
+  def self.create_models hash
+    attributes = {}
+
+    hash.each do |key, value|
+      relation = Wdpa::Relation.new hash
       relational_value = relation.create(key, value)
 
-      standardised_attributes[key] = relational_value
+      attributes[key] = relational_value
     end
 
+    attributes
+  end
+
+  def self.remove_nested_attributes hash
     NESTED_ATTRIBUTES.each do |attribute|
-      standardised_attributes.delete attribute
+      hash.delete attribute
     end
 
-    return standardised_attributes
+    hash
   end
 end
