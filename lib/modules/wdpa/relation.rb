@@ -14,7 +14,7 @@ class Wdpa::Relation
   private
 
   def legal_status value
-    LegalStatus.where(name: value).first
+    LegalStatus.where(name: value).first_or_create
   end
 
   def iucn_category value

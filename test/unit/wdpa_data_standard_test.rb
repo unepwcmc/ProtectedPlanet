@@ -141,7 +141,11 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash creates a new LegalStatus if one
    does not already exist' do
-    skip
+    status_name = "It might be legal, who knows"
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({status: status_name})
+
+    assert_kind_of LegalStatus, attributes[:legal_status]
+    assert_equal   status_name, attributes[:legal_status].name
   end
 
   test '.attributes_from_standards_hash returns a Date for a given legal
