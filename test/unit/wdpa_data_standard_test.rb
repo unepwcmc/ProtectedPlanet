@@ -228,7 +228,21 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash creates a new Designation if one
    does not already exist' do
-    skip
+    designation = "Sites of Special Importance"
+    designation_type = "Universal"
+
+     FactoryGirl.create(:jurisdiction, name: designation_type)
+
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({
+      desig: designation,
+      desig_type: designation_type
+    })
+
+    assert_kind_of Designation, attributes[:designation]
+    assert_equal   designation, attributes[:designation].name
+
+    assert_kind_of Jurisdiction, attributes[:designation].jurisdiction
+    assert_equal   designation_type, attributes[:designation].jurisdiction.name
   end
 
   test '.attributes_from_standards_hash ignores attributes not in the

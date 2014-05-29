@@ -45,7 +45,7 @@ class Wdpa::Relation
     Designation.where({
       name: value,
       jurisdiction: jurisdiction
-    }).first
+    }).first_or_create
   end
 
   def no_take value
