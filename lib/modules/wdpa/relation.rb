@@ -26,7 +26,7 @@ class Wdpa::Relation
   end
 
   def management_authority value
-    ManagementAuthority.where(name: value).first
+    ManagementAuthority.where(name: value).first_or_create
   end
 
   def countries value

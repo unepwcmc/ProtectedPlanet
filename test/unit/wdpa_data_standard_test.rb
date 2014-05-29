@@ -193,7 +193,11 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash creates a new ManagementAuthority if one
    does not already exist' do
-    skip
+    authority = 'A new authority in town'
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({mang_auth: authority})
+
+    assert_kind_of ManagementAuthority, attributes[:management_authority]
+    assert_equal   authority, attributes[:management_authority].name
   end
 
   test '.attributes_from_standards_hash returns a Designation for a given
