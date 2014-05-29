@@ -253,6 +253,12 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   designation_type, attributes[:designation].jurisdiction.name
   end
 
+  test '.attributes_from_standards_hash returns the correct attribute
+   for a given wkb_geometry' do
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({wkb_geometry: "\xEE\xFF"})
+    assert_equal({the_geom: "\xEE\xFF"}, attributes)
+  end
+
   test '.attributes_from_standards_hash ignores attributes not in the
    WDPA Standard' do
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})
