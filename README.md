@@ -1,5 +1,17 @@
 # Protected Planet Next
 
+## Data
+
+### Initial Seeding
+
+Some data is static and requires seeding if you're starting from an
+empty database. For example, the Country and Sub Location list. You can
+import these with:
+
+```
+rake db:seed
+```
+
 ## Deployment
 
 ### Capistrano
