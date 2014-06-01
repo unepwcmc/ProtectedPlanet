@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20140601191435) do
   create_table "protected_areas", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.spatial  "the_geom",   limit: {:srid=>0, :type=>"geometry"}
   end
 
   create_table "sub_locations", force: true do |t|
