@@ -32,7 +32,7 @@ ActiveRecord::Schema.define(version: 20140601191435) do
     t.integer  "jurisdiction_id"
   end
 
-  add_index "designations", ["jurisdiction_id"], name: "index_designations_on_jurisdiction_id", using: :btree
+  add_index "designations", ["jurisdiction_id"], :name => "index_designations_on_jurisdiction_id"
 
   create_table "governances", force: true do |t|
     t.string   "name"
