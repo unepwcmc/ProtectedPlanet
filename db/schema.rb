@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140601195843) do
+ActiveRecord::Schema.define(version: 20140601200419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,13 +74,13 @@ ActiveRecord::Schema.define(version: 20140601195843) do
   create_table "protected_areas", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.spatial  "the_geom",           limit: {:srid=>0, :type=>"geometry"}
+    t.spatial  "the_geom",             limit: {:srid=>0, :type=>"geometry"}
     t.integer  "wdpa_id"
     t.integer  "wdpa_parent_id"
     t.text     "name"
     t.text     "original_name"
     t.boolean  "marine"
-    t.decimal  "report_marine_area"
+    t.decimal  "reported_marine_area"
     t.decimal  "reported_area"
     t.decimal  "gis_area"
     t.decimal  "gis_marine_area"
