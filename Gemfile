@@ -32,6 +32,7 @@ gem 'webmock', '~> 1.18.0', require: false
 
 gem 'aws-sdk', '~> 1.3.9'
 
+gem 'activerecord-postgis-adapter', '~>2.0.1'
 gem 'gdal', '~> 0.0.5'
 gem 'dbf', '~> 2.0.7'
 
