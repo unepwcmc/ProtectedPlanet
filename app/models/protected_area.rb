@@ -5,4 +5,5 @@ class ProtectedArea < ActiveRecord::Base
   belongs_to :legal_status
   belongs_to :iucn_category
   belongs_to :governance
+  belongs_to :management_authority
 end
