@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140601205045) do
+ActiveRecord::Schema.define(version: 20140601205500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 20140601205045) do
     t.decimal  "gis_marine_area"
     t.integer  "legal_status_id"
     t.datetime "legal_status_updated_at"
+    t.integer  "iucn_category_id"
   end
 
   add_index "protected_areas", ["wdpa_id"], :name => "index_protected_areas_on_wdpa_id", :unique => true
