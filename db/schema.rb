@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140601200419) do
+ActiveRecord::Schema.define(version: 20140601203016) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,14 @@ ActiveRecord::Schema.define(version: 20140601200419) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "countries_protected_areas", id: false, force: true do |t|
+    t.integer "protected_area_id"
+    t.integer "country_id"
+  end
+
+  add_index "countries_protected_areas", ["country_id"], :name => "index_countries_protected_areas_on_country_id"
+  add_index "countries_protected_areas", ["protected_area_id", "country_id"], :name => "index_countries_protected_areas_composite"
 
   create_table "designations", force: true do |t|
     t.string   "name"
