@@ -7,4 +7,5 @@ class ProtectedArea < ActiveRecord::Base
   belongs_to :governance
   belongs_to :management_authority
   belongs_to :no_take_status
+  belongs_to :designation
 end
