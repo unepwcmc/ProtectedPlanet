@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140601195215) do
+ActiveRecord::Schema.define(version: 20140601195405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20140601195215) do
     t.integer  "wdpa_id"
     t.integer  "wdpa_parent_id"
     t.text     "name"
+    t.text     "original_name"
   end
 
   add_index "protected_areas", ["wdpa_id"], :name => "index_protected_areas_on_wdpa_id", :unique => true
