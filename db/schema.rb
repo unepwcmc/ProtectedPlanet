@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140601193923) do
+ActiveRecord::Schema.define(version: 20140601195215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20140601193923) do
     t.spatial  "the_geom",       limit: {:srid=>0, :type=>"geometry"}
     t.integer  "wdpa_id"
     t.integer  "wdpa_parent_id"
+    t.text     "name"
   end
 
   add_index "protected_areas", ["wdpa_id"], :name => "index_protected_areas_on_wdpa_id", :unique => true
