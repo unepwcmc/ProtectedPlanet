@@ -1,11 +1,12 @@
 class Wdpa::Attribute
   TYPE_CONVERSIONS = {
-    boolean: -> (value) { value.match(/^(true|t|1)$/i) != nil },
-    integer: -> (value) { value.to_i },
-    string:  -> (value) { value.to_s },
-    float:   -> (value) { value.to_f },
-    year:    -> (value) { Date.strptime(value.to_s, '%Y') },
-    csv:     -> (value) { value.split(',').map(&:strip) }
+    geometry: -> (value) { RGeo::WKRep::WKBParser.new.parse(value).to_s },
+    boolean:  -> (value) { value.match(/^(true|t|1)$/i) != nil },
+    integer:  -> (value) { value.to_i },
+    string:   -> (value) { value.to_s },
+    float:    -> (value) { value.to_f },
+    year:     -> (value) { Date.strptime(value.to_s, '%Y') },
+    csv:      -> (value) { value.split(',').map(&:strip) }
   }
 
   def self.standardise(value, as:)
