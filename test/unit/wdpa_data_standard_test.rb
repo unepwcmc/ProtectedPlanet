@@ -79,9 +79,9 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
       no_tk_area: area
     })
 
-    assert_kind_of NoTakeStatus, attributes[:no_take]
-    assert_equal   status, attributes[:no_take].name
-    assert_equal   area, attributes[:no_take].area
+    assert_kind_of NoTakeStatus, attributes[:no_take_status]
+    assert_equal   status, attributes[:no_take_status].name
+    assert_equal   area, attributes[:no_take_status].area
 
     assert_nil attributes[:no_take_area], "Expected no_take_area to not be returned"
   end

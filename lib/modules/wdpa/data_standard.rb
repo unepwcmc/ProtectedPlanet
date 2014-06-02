@@ -18,7 +18,7 @@ class Wdpa::DataStandard
     :mang_auth    => {name: :management_authority, type: :string},
     :mang_plan    => {name: :management_plan, type: :string},
     :int_crit     => {name: :international_criteria, type: :string},
-    :no_take      => {name: :no_take, type: :string},
+    :no_take      => {name: :no_take_status, type: :string},
     :no_tk_area   => {name: :no_take_area, type: :float},
     :desig        => {name: :designation, type: :string},
     :desig_type   => {name: :jurisdiction, type: :string},

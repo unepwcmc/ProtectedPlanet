@@ -47,7 +47,7 @@ class Wdpa::Relation
     }).first_or_create
   end
 
-  def no_take value
+  def no_take_status value
     NoTakeStatus.create({
       name: value,
       area: @current_attributes[:no_take_area]
