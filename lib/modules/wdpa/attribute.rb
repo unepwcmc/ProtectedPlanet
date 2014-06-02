@@ -5,8 +5,13 @@ class Wdpa::Attribute
     integer:  -> (value) { value.to_i },
     string:   -> (value) { value.to_s },
     float:    -> (value) { value.to_f },
-    year:     -> (value) { Date.strptime(value.to_s, '%Y') },
-    csv:      -> (value) { value.split(',').map(&:strip) }
+    csv:      -> (value) { value.split(',').map(&:strip) },
+    year:     -> (value) {
+      value = value.to_s
+      value = '1' if value == '0' # Postgres cannot handle zero dates
+
+      Date.strptime(value, '%Y')
+    }
   }
 
   def self.standardise(value, as:)

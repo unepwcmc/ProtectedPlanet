@@ -164,6 +164,17 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   1984, attributes[:legal_status_updated_at].year
   end
 
+  test '.attributes_from_standards_hash returns a valid Date that can be
+    stored in Rails for a given legal status change year' do
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({status_yr: 0})
+
+    protected_area = FactoryGirl.create(:protected_area)
+    protected_area.legal_status_updated_at = attributes[:legal_status_updated_at]
+
+    assert protected_area.save
+    assert_equal 0, protected_area.errors.to_a.count
+  end
+
   test '.attributes_from_standards_hash returns an IucnCategory for a
    given IUCN category' do
     category_name = 'Extinct'
