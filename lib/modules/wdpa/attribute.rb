@@ -8,7 +8,9 @@ class Wdpa::Attribute
     csv:      -> (value) { value.split(',').map(&:strip) },
     year:     -> (value) {
       value = value.to_s
-      value = '1' if value == '0' # Postgres cannot handle zero dates
+      # Postgres cannot handle zero dates, and the WDPA stores
+      # null legal statuses as zeroes
+      value = '1' if value == '0'
 
       Date.strptime(value, '%Y')
     }
