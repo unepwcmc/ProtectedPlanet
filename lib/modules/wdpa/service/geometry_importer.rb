@@ -8,9 +8,15 @@ class Wdpa::Service::GeometryImporter
         wkb_geometry: protected_area_attributes[:wkb_geometry]
       })
 
-      unless ProtectedArea.where(wdpa_id: standard_attributes[:wdpa_id]).count > 0
+      existing_protected_area = ProtectedArea.
+        where(wdpa_id: standard_attributes[:wdpa_id]).
+        first
+
+      if existing_protected_area.nil?
         return false
       end
+
+      next unless existing_protected_area.the_geom.nil?
 
       wdpa_id = standard_attributes[:wdpa_id]
       geometry = standard_attributes[:the_geom]

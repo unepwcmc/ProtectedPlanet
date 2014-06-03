@@ -68,4 +68,22 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
     import_successful = Wdpa::Service::GeometryImporter.import(protected_area_attributes)
     refute import_successful, "Expected import to fail"
   end
+
+  test '.import ignores PAs with geometries' do
+    old_geometry = "\x00\x00\x00\x00\x01?\xF0\x00\x00\x00\x00\x00\x00?\xF0\x00\x00\x00\x00\x00\x00" # POINT(1, 1)
+    new_geometry = "\x00\x00\x00\x00\x01?\xF0\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x00" # POINT(1, 2)
+
+    protected_area = FactoryGirl.create(:protected_area, wdpa_id: 987, the_geom: old_geometry)
+    protected_area_attributes = [{
+      wdpaid: 987,
+      wkb_geometry: new_geometry
+    }]
+
+    import_successul = Wdpa::Service::GeometryImporter.import(protected_area_attributes)
+
+    assert import_successul, "Expected the Protected Area to be imported successfully"
+
+    protected_area.reload
+    assert_equal "POINT (1.0 1.0)", protected_area.the_geom.to_s
+  end
 end
