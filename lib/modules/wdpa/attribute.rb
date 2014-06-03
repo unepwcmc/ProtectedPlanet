@@ -1,6 +1,6 @@
 class Wdpa::Attribute
   TYPE_CONVERSIONS = {
-    geometry: -> (value) { value },
+    geometry: -> (value) { RGeo::WKRep::WKBParser.new.parse(value).to_s },
     boolean:  -> (value) { value.match(/^(true|t|1)$/i) != nil },
     integer:  -> (value) { value.to_i },
     string:   -> (value) { value.to_s },

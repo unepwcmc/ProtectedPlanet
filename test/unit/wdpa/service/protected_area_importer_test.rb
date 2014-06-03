@@ -34,4 +34,8 @@ class TestWdpaProtectedAreaImporterService < ActiveSupport::TestCase
     assert imported, "Expected importer to return true on success"
     assert_equal 1, ProtectedArea.count
   end
+
+  test '.import ignores geometry attributes' do
+    skip
+  end
 end
