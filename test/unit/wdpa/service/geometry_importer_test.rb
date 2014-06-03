@@ -59,14 +59,15 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
     refute import_successful, "Expected import to fail"
   end
 
-  test '.import returns false if the protected area to update does not exist' do
+  test '.import ignores protected area that do not exist' do
     protected_area_attributes = [{
-      wdpaid: 100,
-      wkb_geometry: "\x00\x00\x00\x00\x01?\xF0\x00\x00\x00\x00\x00\x00?\xF0\x00\x00\x00\x00\x00\x00", # POINT(1, 1)
+      wdpaid: 100
     }]
 
-    import_successful = Wdpa::Service::GeometryImporter.import(protected_area_attributes)
-    refute import_successful, "Expected import to fail"
+    ActiveRecord::Base.connection.
+      expects(:execute).never
+
+    Wdpa::Service::GeometryImporter.import(protected_area_attributes)
   end
 
   test '.import ignores PAs with geometries' do
@@ -79,11 +80,20 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
       wkb_geometry: new_geometry
     }]
 
-    import_successul = Wdpa::Service::GeometryImporter.import(protected_area_attributes)
-
-    assert import_successul, "Expected the Protected Area to be imported successfully"
+    Wdpa::Service::GeometryImporter.import(protected_area_attributes)
 
     protected_area.reload
     assert_equal "POINT (1.0 1.0)", protected_area.the_geom.to_s
+  end
+
+  test '.import does not standardise the PA attributes before checking for the PA existence' do
+    protected_area_attributes = [{
+      wdpaid: 100,
+      wkb_geometry: "\x00\x00\x00\x00\x01?\xF0\x00\x00\x00\x00\x00\x00?\xF0\x00\x00\x00\x00\x00\x00", # POINT(1, 1)
+    }]
+
+    Wdpa::DataStandard.expects(:attributes_from_standards_hash).never
+
+    Wdpa::Service::GeometryImporter.import(protected_area_attributes)
   end
 end
