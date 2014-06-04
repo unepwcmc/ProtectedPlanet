@@ -6,7 +6,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
     db_config = Rails.configuration.database_configuration[Rails.env]
     db_name   = "my_little_database"
 
-    ogr_command = "ogr2ogr -overwrite -skipfailures -f \"PostgreSQL\" PG:\" host=#{db_config["host"]} user=#{db_config["username"]} dbname=#{db_name}\" ./an/file"
+    ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 -f \"PostgreSQL\" PG:\" host=#{db_config["host"]} user=#{db_config["username"]} dbname=#{db_name}\" ./an/file"
     Ogr::Postgres.any_instance.expects(:system).with(ogr_command).once
 
     ogr = Ogr::Postgres.new
@@ -17,7 +17,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
    database is given' do
     db_config = Rails.configuration.database_configuration[Rails.env]
 
-    ogr_command = "ogr2ogr -overwrite -skipfailures -f \"PostgreSQL\" PG:\" host=#{db_config["host"]} user=#{db_config["username"]} dbname=#{db_config["database"]}\" ./an/file"
+    ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 -f \"PostgreSQL\" PG:\" host=#{db_config["host"]} user=#{db_config["username"]} dbname=#{db_config["database"]}\" ./an/file"
     Ogr::Postgres.any_instance.expects(:system).with(ogr_command).once
 
     ogr = Ogr::Postgres.new

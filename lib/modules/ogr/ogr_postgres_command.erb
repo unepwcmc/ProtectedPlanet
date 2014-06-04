@@ -1,4 +1,4 @@
-ogr2ogr -overwrite -skipfailures
+ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8
   -f "PostgreSQL" PG:"
   host=<%= DB_CONFIG["host"] %>
   user=<%= DB_CONFIG["username"] %>
