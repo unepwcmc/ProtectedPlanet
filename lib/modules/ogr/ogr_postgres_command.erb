@@ -1,9 +1,9 @@
 ogr2ogr -overwrite -skipfailures
   -f "PostgreSQL" PG:"
-  host=<%= @db_config["host"] %>
-  user=<%= @db_config["username"] %>
-  <% unless @db_config["password"].nil? %>
-    password=<%= @db_config["password"] %>
+  host=<%= DB_CONFIG["host"] %>
+  user=<%= DB_CONFIG["username"] %>
+  <% unless DB_CONFIG["password"].nil? %>
+    password=<%= DB_CONFIG["password"] %>
   <% end %>
   dbname=<%= @database_name %>"
   <%= @file_path %>
