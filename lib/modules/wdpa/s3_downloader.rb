@@ -7,7 +7,7 @@ class Wdpa::S3Downloader
   end
 
   def save_current_wdpa_to filename: filename
-    File.open(filename, 'w') do |file|
+    File.open(filename, 'w:ASCII-8BIT') do |file|
       file.write current_wdpa.read
     end
   end
