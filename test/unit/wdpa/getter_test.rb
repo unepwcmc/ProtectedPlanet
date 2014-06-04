@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TestWdpaGetter < ActiveSupport::TestCase
+class TestWdpaS3Getter < ActiveSupport::TestCase
   def setup
     Rails.application.secrets.aws_access_key_id = '123'
     Rails.application.secrets.aws_secret_access_key = 'abc'
@@ -13,7 +13,7 @@ class TestWdpaGetter < ActiveSupport::TestCase
       :secret_access_key => 'abc'
     })
 
-    WdpaGetter.new()
+    Wdpa::S3Downloader.new()
   end
 
   test '.save_current_wdpa_to retrieves the latest WDPA from S3, and saves it to the
@@ -45,7 +45,7 @@ class TestWdpaGetter < ActiveSupport::TestCase
       with(filename, 'w').
       yields(file_write_mock)
 
-    wdpa_getter = WdpaGetter.new()
+    wdpa_getter = Wdpa::S3Downloader.new()
     wdpa_getter.save_current_wdpa_to(filename: filename)
   end
 end

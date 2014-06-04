@@ -1,4 +1,4 @@
-class WdpaGetter
+class Wdpa::S3Downloader
   def initialize
     @s3 = AWS::S3.new({
       access_key_id: Rails.application.secrets.aws_access_key_id,
