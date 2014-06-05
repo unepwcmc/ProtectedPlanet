@@ -9,8 +9,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
     ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 -f \"PostgreSQL\" PG:\" host=#{db_config["host"]} user=#{db_config["username"]} dbname=#{db_name}\" ./an/file"
     Ogr::Postgres.any_instance.expects(:system).with(ogr_command).once
 
-    ogr = Ogr::Postgres.new
-    ogr.import file: './an/file', to: db_name
+    Ogr::Postgres.import file: './an/file', to: db_name
   end
 
   test '.import defaults to the database in the Rails config if no
@@ -20,7 +19,6 @@ class TestOgrPostgres < ActiveSupport::TestCase
     ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 -f \"PostgreSQL\" PG:\" host=#{db_config["host"]} user=#{db_config["username"]} dbname=#{db_config["database"]}\" ./an/file"
     Ogr::Postgres.any_instance.expects(:system).with(ogr_command).once
 
-    ogr = Ogr::Postgres.new
-    ogr.import file: './an/file'
+    Ogr::Postgres.import file: './an/file'
   end
 end

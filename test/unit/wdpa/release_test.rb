@@ -16,7 +16,7 @@ class TestWdpaRelease < ActiveSupport::TestCase
       expects(:system).
       with("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
 
-    Ogr::Postgres.any_instance.
+    Ogr::Postgres.
       expects(:import).
       with(file: gdb_path)
 
