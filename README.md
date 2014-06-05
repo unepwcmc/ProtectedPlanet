@@ -1,5 +1,19 @@
 # Protected Planet Next
 
+## Setup
+
+### Secrets
+
+Some secrets are required by the application, such as AWS keys. Take a
+look in [`config/secrets.yml.example`](config/secrets.yml.example) for
+the options available, and fill them in as required (probably all of
+them). **You will need to copy the `secrets.yml` example file for the
+application to run correctly:**
+
+```
+  cp config/secrets.yml.example config/secrets.yml
+```
+
 ## Data
 
 ### Initial Seeding
