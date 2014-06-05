@@ -18,14 +18,6 @@ class Wdpa::Release
     Ogr::Postgres.new.import file: gdb_path
   end
 
-  def zip_path
-    "#{path_without_extension}.zip"
-  end
-
-  def gdb_path
-    "#{path_without_extension}.gdb"
-  end
-
   def geometry_tables
     gdb_metadata = Ogr::Info.new(gdb_path)
     gdb_metadata.layers_matching(WDPA_TABLE_MATCHER)
@@ -41,6 +33,23 @@ class Wdpa::Release
     end
 
     attributes.flatten
+  end
+
+  def clean_up
+    File.delete(zip_path)
+    File.delete(gdb_path)
+
+    geometry_tables.each do |table_name|
+      ActiveRecord::Migration.drop_table(table_name)
+    end
+  end
+
+  def zip_path
+    "#{path_without_extension}.zip"
+  end
+
+  def gdb_path
+    "#{path_without_extension}.gdb"
   end
 
   private

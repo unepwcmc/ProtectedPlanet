@@ -113,6 +113,20 @@ class TestWdpaRelease < ActiveSupport::TestCase
   end
 
   test '.clean_up removes the GDB and zip files, and drops the import tables' do
-    skip
+    zip_path = "zip_path"
+    Wdpa::Release.any_instance.expects(:zip_path).returns(zip_path).at_least_once
+    gdb_path = "gdb_path"
+    Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
+    geometry_tables = ["wdpa_poly", "wdpa_point"]
+    Wdpa::Release.any_instance.expects(:geometry_tables).returns(geometry_tables)
+
+    File.expects(:delete).with(zip_path)
+    File.expects(:delete).with(gdb_path)
+
+    ActiveRecord::Migration.expects(:drop_table).with(geometry_tables[0])
+    ActiveRecord::Migration.expects(:drop_table).with(geometry_tables[1])
+
+    wdpa_release = Wdpa::Release.new
+    wdpa_release.clean_up
   end
 end
