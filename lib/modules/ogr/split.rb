@@ -29,9 +29,7 @@ class Ogr::Split
   end
 
   def feature_count
-    ogr_driver = Gdal::Ogr.open(@filename)
-    layer = ogr_driver.get_layer(@layer)
-
-    return layer.get_feature_count
+    ogr_info = Ogr::Info.new @filename
+    ogr_info.feature_count @layer
   end
 end
