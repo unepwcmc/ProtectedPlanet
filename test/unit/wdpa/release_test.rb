@@ -120,8 +120,8 @@ class TestWdpaRelease < ActiveSupport::TestCase
     geometry_tables = ["wdpa_poly", "wdpa_point"]
     Wdpa::Release.any_instance.expects(:geometry_tables).returns(geometry_tables)
 
-    File.expects(:delete).with(zip_path)
-    File.expects(:delete).with(gdb_path)
+    FileUtils.expects(:rm_rf).with(zip_path)
+    FileUtils.expects(:rm_rf).with(gdb_path)
 
     ActiveRecord::Migration.expects(:drop_table).with(geometry_tables[0])
     ActiveRecord::Migration.expects(:drop_table).with(geometry_tables[1])
