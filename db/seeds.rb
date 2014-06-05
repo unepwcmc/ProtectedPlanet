@@ -42,3 +42,19 @@ csv_models.each do |model|
     puts failed_seeds
   end
 end
+
+puts "### Importing SubLocation Country Relations"
+
+SubLocation.all.each do |sub_location|
+  iso_code = sub_location.iso
+
+  unless iso_code.nil?
+    country_iso2 = iso_code.split('-').first
+    country = Country.where(iso: country_iso2).first
+
+    unless country.nil?
+      sub_location.country = country
+      sub_location.save!
+    end
+  end
+end
