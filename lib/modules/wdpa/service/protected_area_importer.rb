@@ -1,5 +1,7 @@
 class Wdpa::Service::ProtectedAreaImporter
   def self.import protected_areas
+    protected_areas = protected_areas.map(&:symbolize_keys)
+
     protected_areas.each do |protected_area_attributes|
       unless protected_area_exists(protected_area_attributes[:wdpaid])
         standardised_attributes = Wdpa::DataStandard.attributes_from_standards_hash(

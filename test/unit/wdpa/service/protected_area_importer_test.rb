@@ -35,6 +35,24 @@ class TestWdpaProtectedAreaImporterService < ActiveSupport::TestCase
     assert_equal 1, ProtectedArea.count
   end
 
+  test '.import works with stringified keys' do
+    pa_attributes = [{
+      "wdpaid" => 1234,
+      "orig_name" => 'Yosemite National Park'
+    },{
+      "wdpaid" => 4321,
+      "orig_name" => 'Saratoga Creek Water District Park'
+    }]
+
+    imported = Wdpa::Service::ProtectedAreaImporter.import(pa_attributes)
+
+    assert imported, "Expected importer to return true on success"
+    assert_equal 2, ProtectedArea.count
+
+    assert_not_nil ProtectedArea.where(wdpa_id: 1234).first
+    assert_not_nil ProtectedArea.where(wdpa_id: 4321).first
+  end
+
   test '.import ignores geometry attributes' do
     skip
   end
