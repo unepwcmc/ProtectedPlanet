@@ -23,7 +23,10 @@ class Wdpa::Service::ProtectedAreaImporter
     std_attributes = Wdpa::DataStandard::STANDARD_ATTRIBUTES
 
     attributes.select do |key, hash|
-      std_attributes[key][:type] != :geometry
+      std_attribute = std_attributes[key]
+      unless std_attribute.nil?
+        std_attribute[:type] != :geometry
+      end
     end
   end
 

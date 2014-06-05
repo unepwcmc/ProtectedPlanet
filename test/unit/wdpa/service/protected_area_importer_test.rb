@@ -53,10 +53,12 @@ class TestWdpaProtectedAreaImporterService < ActiveSupport::TestCase
     assert_not_nil ProtectedArea.where(wdpa_id: 4321).first
   end
 
-  test '.import ignores geometry attributes' do
+  test '.import ignores geometry attributes and attributes that are not
+   in the standard' do
     pa_attributes = [{
       wdpaid: 123,
-      wkb_geometry: "don't tread on me"
+      wkb_geometry: "don't tread on me",
+      ogc_fid: 'test'
     }]
 
     Wdpa::DataStandard.
