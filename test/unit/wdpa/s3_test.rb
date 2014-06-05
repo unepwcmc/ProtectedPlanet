@@ -13,7 +13,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
       :secret_access_key => 'abc'
     })
 
-    Wdpa::S3Downloader.new()
+    Wdpa::S3.new()
   end
 
   test '.save_current_wdpa_to handles encoding correctly' do
@@ -33,7 +33,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
 
     filename = File.join(Rails.root, 'tmp', 'hey_this_is_a_filename.zip')
 
-    wdpa_getter = Wdpa::S3Downloader.new()
+    wdpa_getter = Wdpa::S3.new()
     wdpa_getter.save_current_wdpa_to(filename: filename)
 
     File.delete filename
@@ -68,7 +68,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
       with(filename, 'w:ASCII-8BIT').
       yields(file_write_mock)
 
-    wdpa_getter = Wdpa::S3Downloader.new()
+    wdpa_getter = Wdpa::S3.new()
     wdpa_getter.save_current_wdpa_to(filename: filename)
   end
 end

@@ -14,7 +14,7 @@ class Wdpa::Release
   end
 
   def download
-    Wdpa::S3Downloader.new.save_current_wdpa_to filename: zip_path
+    Wdpa::S3.new.save_current_wdpa_to filename: zip_path
     system("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
     Ogr::Postgres.new.import file: gdb_path
   end
