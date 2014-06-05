@@ -54,6 +54,18 @@ class TestWdpaProtectedAreaImporterService < ActiveSupport::TestCase
   end
 
   test '.import ignores geometry attributes' do
-    skip
+    pa_attributes = [{
+      wdpaid: 123,
+      wkb_geometry: "don't tread on me"
+    }]
+
+    Wdpa::DataStandard.
+      expects(:attributes_from_standards_hash).
+      with({wdpaid: 123})
+
+    imported = Wdpa::Service::ProtectedAreaImporter.import(pa_attributes)
+
+    assert imported, "Expected importer to return true on success"
+    assert_equal 1, ProtectedArea.count
   end
 end

@@ -4,6 +4,7 @@ class Wdpa::Service::ProtectedAreaImporter
 
     protected_areas.each do |protected_area_attributes|
       unless protected_area_exists(protected_area_attributes[:wdpaid])
+        protected_area_attributes = remove_geometry protected_area_attributes
         standardised_attributes = Wdpa::DataStandard.attributes_from_standards_hash(
           protected_area_attributes
         )
@@ -17,6 +18,14 @@ class Wdpa::Service::ProtectedAreaImporter
   end
 
   private
+
+  def self.remove_geometry attributes
+    std_attributes = Wdpa::DataStandard::STANDARD_ATTRIBUTES
+
+    attributes.select do |key, hash|
+      std_attributes[key][:type] != :geometry
+    end
+  end
 
   def self.protected_area_exists wdpa_id
     ProtectedArea.
