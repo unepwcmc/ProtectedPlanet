@@ -1,6 +1,6 @@
-class Wdpa::Service::ProtectedAreaImporter
-  def self.import protected_areas
-    protected_areas = protected_areas.map(&:symbolize_keys)
+class Wdpa::ProtectedAreaImporter::AttributeImporter
+  def self.import wdpa_release
+    protected_areas = wdpa_release.protected_areas.map(&:symbolize_keys)
 
     protected_areas.each do |protected_area_attributes|
       unless protected_area_exists(protected_area_attributes[:wdpaid])

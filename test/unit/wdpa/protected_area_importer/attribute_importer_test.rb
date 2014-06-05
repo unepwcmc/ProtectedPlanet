@@ -1,7 +1,7 @@
 require 'test_helper'
 
-class TestWdpaProtectedAreaImporterService < ActiveSupport::TestCase
-  test '.import imports the given array of objects as standardised
+class TestWdpaAttributeImporterService < ActiveSupport::TestCase
+  test '.import imports the WDPA Release protected areas as standardised
    Protected Areas' do
     pa_attributes = [{
       wdpaid: 1234,
@@ -11,7 +11,10 @@ class TestWdpaProtectedAreaImporterService < ActiveSupport::TestCase
       orig_name: 'Saratoga Creek Water District Park'
     }]
 
-    imported = Wdpa::Service::ProtectedAreaImporter.import(pa_attributes)
+    wdpa_release = Wdpa::Release.new
+    wdpa_release.expects(:protected_areas).returns(pa_attributes)
+
+    imported = Wdpa::ProtectedAreaImporter::AttributeImporter.import(wdpa_release)
 
     assert imported, "Expected importer to return true on success"
     assert_equal 2, ProtectedArea.count
@@ -27,9 +30,12 @@ class TestWdpaProtectedAreaImporterService < ActiveSupport::TestCase
       wdpaid: pa.wdpa_id
     }]
 
+    wdpa_release = Wdpa::Release.new
+    wdpa_release.expects(:protected_areas).returns(pa_attributes)
+
     Wdpa::DataStandard.expects(:attributes_from_standards_hash).never
 
-    imported = Wdpa::Service::ProtectedAreaImporter.import(pa_attributes)
+    imported = Wdpa::ProtectedAreaImporter::AttributeImporter.import(wdpa_release)
 
     assert imported, "Expected importer to return true on success"
     assert_equal 1, ProtectedArea.count
@@ -44,7 +50,10 @@ class TestWdpaProtectedAreaImporterService < ActiveSupport::TestCase
       "orig_name" => 'Saratoga Creek Water District Park'
     }]
 
-    imported = Wdpa::Service::ProtectedAreaImporter.import(pa_attributes)
+    wdpa_release = Wdpa::Release.new
+    wdpa_release.expects(:protected_areas).returns(pa_attributes)
+
+    imported = Wdpa::ProtectedAreaImporter::AttributeImporter.import(wdpa_release)
 
     assert imported, "Expected importer to return true on success"
     assert_equal 2, ProtectedArea.count
@@ -65,7 +74,10 @@ class TestWdpaProtectedAreaImporterService < ActiveSupport::TestCase
       expects(:attributes_from_standards_hash).
       with({wdpaid: 123})
 
-    imported = Wdpa::Service::ProtectedAreaImporter.import(pa_attributes)
+    wdpa_release = Wdpa::Release.new
+    wdpa_release.expects(:protected_areas).returns(pa_attributes)
+
+    imported = Wdpa::ProtectedAreaImporter::AttributeImporter.import(wdpa_release)
 
     assert imported, "Expected importer to return true on success"
     assert_equal 1, ProtectedArea.count

@@ -13,22 +13,20 @@ gem 'turbolinks'
 
 gem 'spring',        group: :development
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
-
-# Use unicorn as the app server
-gem 'unicorn'
+group :production do
+  gem 'unicorn'
+end
 
 gem 'capistrano',  '~> 3.1'
 gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-bundler', '~> 1.1', require: false
 
-gem 'factory_girl_rails', '~> 4.4.1'
-gem 'mocha', '~> 1.0.0'
-gem 'webmock', '~> 1.18.0', require: false
+group :test do
+  gem 'factory_girl_rails', '~> 4.4.1'
+  gem 'mocha', '~> 1.0.0'
+  gem 'webmock', '~> 1.18.0', require: false
+  gem 'timecop', '~> 0.7.1'
+end
 
 gem 'aws-sdk', '~> 1.3.9'
 
@@ -39,4 +37,5 @@ gem 'dbf', '~> 2.0.7'
 gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
 
-gem 'sequel', '~> 4.10.0'
+# Use debugger
+# gem 'debugger', group: [:development, :test]

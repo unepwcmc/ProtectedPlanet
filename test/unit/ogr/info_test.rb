@@ -27,10 +27,10 @@ class TestOgrInfo < ActiveSupport::TestCase
     Ogr::Info.
       any_instance.
       expects(:layers).
-      returns(["matching", "notcorrect"])
+      returns(["wdpapolygons", "wdpa_points", "wdpa_source"])
 
     ogr_info = Ogr::Info.new 'filename'
-    assert_equal ["matching"], ogr_info.layers_matching(/match/)
+    assert_equal ["wdpapolygons", "wdpa_points"], ogr_info.layers_matching(/wdpa_?po/)
   end
 
   test '.layer_count returns the number of layers' do
