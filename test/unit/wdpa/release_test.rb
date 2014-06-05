@@ -65,7 +65,16 @@ class TestWdpaRelease < ActiveSupport::TestCase
   end
 
   test '.geometry_tables only returns geometry tables from the GDB' do
-    skip
+    gdb_path = "gdb_path"
+    Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
+
+    geometry_tables = ["wdpapoly_jun2014", "wdpa_point", "wdpa_source"]
+    Ogr::Info.any_instance.
+      expects(:layers).
+      returns(geometry_tables)
+
+    wdpa_release = Wdpa::Release.new
+    assert_equal geometry_tables[0..1], wdpa_release.geometry_tables
   end
 
   test '.protected_areas returns an array of protected area attributes

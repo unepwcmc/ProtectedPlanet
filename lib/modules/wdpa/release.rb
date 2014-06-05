@@ -28,7 +28,6 @@ class Wdpa::Release
 
   def geometry_tables
     gdb_metadata = Ogr::Info.new(gdb_path)
-
     gdb_metadata.layers_matching(WDPA_TABLE_MATCHER)
   end
 
