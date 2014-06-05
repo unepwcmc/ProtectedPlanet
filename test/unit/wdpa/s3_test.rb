@@ -16,7 +16,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
     Wdpa::S3.new()
   end
 
-  test '.save_current_wdpa_to handles encoding correctly' do
+  test '.download_current_wdpa_to handles encoding correctly' do
     latest_file_mock = mock()
     latest_file_mock.stubs(:last_modified).returns(2.days.ago)
 
@@ -33,13 +33,12 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
 
     filename = File.join(Rails.root, 'tmp', 'hey_this_is_a_filename.zip')
 
-    wdpa_getter = Wdpa::S3.new()
-    wdpa_getter.save_current_wdpa_to(filename: filename)
+    Wdpa::S3.download_current_wdpa_to filename: filename
 
     File.delete filename
   end
 
-  test '.save_current_wdpa_to retrieves the latest WDPA from S3, and saves it to the
+  test '.download_current_wdpa_to retrieves the latest WDPA from S3, and saves it to the
    given filename' do
     latest_file_mock = mock()
     latest_file_mock.stubs(:last_modified).returns(2.days.ago)
@@ -68,7 +67,6 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
       with(filename, 'w:ASCII-8BIT').
       yields(file_write_mock)
 
-    wdpa_getter = Wdpa::S3.new()
-    wdpa_getter.save_current_wdpa_to(filename: filename)
+    Wdpa::S3.download_current_wdpa_to filename: filename
   end
 end

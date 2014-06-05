@@ -8,8 +8,8 @@ class TestWdpaRelease < ActiveSupport::TestCase
     gdb_path = "gdb_path"
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
 
-    Wdpa::S3.any_instance.
-      expects(:save_current_wdpa_to).
+    Wdpa::S3.
+      expects(:download_current_wdpa_to).
       with(filename: zip_path)
 
     Wdpa::Release.any_instance.
