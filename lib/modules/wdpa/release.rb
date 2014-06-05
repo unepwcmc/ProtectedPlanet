@@ -1,5 +1,6 @@
 class Wdpa::Release
-  WDPA_TABLE_MATCHER = /wdpa_?po/i
+  WDPA_GEOMETRY_TABLE_MATCHER = /wdpa_?po/i
+  WDPA_SOURCE_TABLE_MATCHER = /wdpa_?source/i
 
   def self.download
     wdpa_release = self.new
@@ -20,7 +21,12 @@ class Wdpa::Release
 
   def geometry_tables
     gdb_metadata = Ogr::Info.new(gdb_path)
-    gdb_metadata.layers_matching(WDPA_TABLE_MATCHER)
+    gdb_metadata.layers_matching(WDPA_GEOMETRY_TABLE_MATCHER)
+  end
+
+  def source_table
+    gdb_metadata = Ogr::Info.new(gdb_path)
+    gdb_metadata.layers_matching(WDPA_SOURCE_TABLE_MATCHER).first
   end
 
   def protected_areas
@@ -42,6 +48,7 @@ class Wdpa::Release
     geometry_tables.each do |table_name|
       ActiveRecord::Migration.drop_table(table_name)
     end
+    ActiveRecord::Migration.drop_table(source_table)
   end
 
   def zip_path

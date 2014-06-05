@@ -68,13 +68,26 @@ class TestWdpaRelease < ActiveSupport::TestCase
     gdb_path = "gdb_path"
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
 
-    geometry_tables = ["wdpapoly_jun2014", "wdpa_point", "wdpa_source"]
+    tables = ["wdpapoly_jun2014", "wdpa_point", "wdpa_source"]
     Ogr::Info.any_instance.
       expects(:layers).
-      returns(geometry_tables)
+      returns(tables)
 
     wdpa_release = Wdpa::Release.new
-    assert_equal geometry_tables[0..1], wdpa_release.geometry_tables
+    assert_equal tables[0..1], wdpa_release.geometry_tables
+  end
+
+  test '.source_table only returns the source table from the GDB' do
+    gdb_path = "gdb_path"
+    Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
+
+    tables = ["wdpapoly_jun2014", "wdpa_point", "wdpa_source"]
+    Ogr::Info.any_instance.
+      expects(:layers).
+      returns(tables)
+
+    wdpa_release = Wdpa::Release.new
+    assert_equal tables[2], wdpa_release.source_table
   end
 
   test '.protected_areas returns an array of protected area attributes
@@ -119,12 +132,15 @@ class TestWdpaRelease < ActiveSupport::TestCase
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
     geometry_tables = ["wdpa_poly", "wdpa_point"]
     Wdpa::Release.any_instance.expects(:geometry_tables).returns(geometry_tables)
+    source_table = "wdpa_source"
+    Wdpa::Release.any_instance.expects(:source_table).returns(source_table)
 
     FileUtils.expects(:rm_rf).with(zip_path)
     FileUtils.expects(:rm_rf).with(gdb_path)
 
     ActiveRecord::Migration.expects(:drop_table).with(geometry_tables[0])
     ActiveRecord::Migration.expects(:drop_table).with(geometry_tables[1])
+    ActiveRecord::Migration.expects(:drop_table).with(source_table)
 
     wdpa_release = Wdpa::Release.new
     wdpa_release.clean_up
