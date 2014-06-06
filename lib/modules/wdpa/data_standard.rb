@@ -34,6 +34,10 @@ class Wdpa::DataStandard
     :no_take_area
   ]
 
+  def self.standard_attributes
+    STANDARD_ATTRIBUTES
+  end
+
   def self.attributes_from_standards_hash standards_hash
     attributes = standardise_values standards_hash
     attributes = create_models attributes

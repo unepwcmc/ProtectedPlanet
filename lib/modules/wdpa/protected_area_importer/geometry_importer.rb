@@ -3,20 +3,30 @@ class Wdpa::ProtectedAreaImporter::GeometryImporter
 
   def self.import wdpa_release
     wdpa_release.geometry_tables.each do |table_name|
-      begin
+      standard_geometry_attributes.each do |attribute, value|
         query = """
           UPDATE protected_areas pa
-          SET the_geom = import.wkb_geometry
+          SET #{value[:name]} = import.#{attribute}
           FROM #{table_name} import
           WHERE pa.wdpa_id = import.wdpaid;
         """.squish
 
         DB.execute(query)
-      rescue
-        return false
       end
     end
 
     true
+  rescue
+    return false
+  end
+
+  private
+
+  def self.standard_geometry_attributes
+    standard_attributes = Wdpa::DataStandard.standard_attributes
+
+    standard_attributes.select do |key, hash|
+      standard_attributes[key][:type] == :geometry
+    end
   end
 end

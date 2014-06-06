@@ -280,4 +280,9 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})
     assert_equal({}, attributes)
   end
+
+  test '#standard_attributes returns the pre-defined WDPA standard attributes' do
+    expected_attributes = Wdpa::DataStandard::STANDARD_ATTRIBUTES
+    assert_equal expected_attributes, Wdpa::DataStandard.standard_attributes
+  end
 end
