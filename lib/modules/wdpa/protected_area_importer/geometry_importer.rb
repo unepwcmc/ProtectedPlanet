@@ -2,6 +2,8 @@ class Wdpa::ProtectedAreaImporter::GeometryImporter
   DB = ActiveRecord::Base.connection
 
   def self.import wdpa_release
+    standard_geometry_attributes = Wdpa::DataStandard.standard_geometry_attributes
+
     wdpa_release.geometry_tables.each do |table_name|
       standard_geometry_attributes.each do |attribute, value|
         query = """
@@ -18,15 +20,5 @@ class Wdpa::ProtectedAreaImporter::GeometryImporter
     true
   rescue
     return false
-  end
-
-  private
-
-  def self.standard_geometry_attributes
-    standard_attributes = Wdpa::DataStandard.standard_attributes
-
-    standard_attributes.select do |key, hash|
-      standard_attributes[key][:type] == :geometry
-    end
   end
 end

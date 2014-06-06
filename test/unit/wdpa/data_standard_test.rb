@@ -285,4 +285,21 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     expected_attributes = Wdpa::DataStandard::STANDARD_ATTRIBUTES
     assert_equal expected_attributes, Wdpa::DataStandard.standard_attributes
   end
+
+  test '#standard_geometry_attributes returns only geometry attributes' do
+    geometry_attributes = {
+      :wkb_geometry => {name: :the_geom, type: :geometry},
+      :fake_geometry => {name: :fake_geom, type: :geometry}
+    }
+
+    other_attributes = {
+      :desig_type => {name: :jurisdiction, type: :string}
+    }
+
+    Wdpa::DataStandard.expects(:standard_attributes).returns(
+      geometry_attributes.merge(other_attributes)
+    ).at_least_once
+
+    assert_equal geometry_attributes, Wdpa::DataStandard.standard_geometry_attributes
+  end
 end

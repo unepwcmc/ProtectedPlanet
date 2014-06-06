@@ -38,6 +38,12 @@ class Wdpa::DataStandard
     STANDARD_ATTRIBUTES
   end
 
+  def self.standard_geometry_attributes
+    standard_attributes.select do |key, hash|
+      standard_attributes[key][:type] == :geometry
+    end
+  end
+
   def self.attributes_from_standards_hash standards_hash
     attributes = standardise_values standards_hash
     attributes = create_models attributes

@@ -66,8 +66,7 @@ class TestWdpaAttributeImporterService < ActiveSupport::TestCase
    in the standard' do
     pa_attributes = [{
       wdpaid: 123,
-      wkb_geometry: "don't tread on me",
-      ogc_fid: 'test'
+      wkb_geometry: "don't tread on me"
     }]
 
     Wdpa::DataStandard.

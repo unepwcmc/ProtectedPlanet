@@ -20,13 +20,8 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
   private
 
   def self.remove_geometry attributes
-    std_attributes = Wdpa::DataStandard::STANDARD_ATTRIBUTES
-
     attributes.select do |key, hash|
-      std_attribute = std_attributes[key]
-      unless std_attribute.nil?
-        std_attribute[:type] != :geometry
-      end
+      Wdpa::DataStandard.standard_geometry_attributes[key].nil?
     end
   end
 
