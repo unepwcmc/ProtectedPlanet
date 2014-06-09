@@ -1,4 +1,4 @@
-class WdpaGetter
+class Wdpa::S3
   def initialize
     @s3 = AWS::S3.new({
       access_key_id: Rails.application.secrets.aws_access_key_id,
@@ -6,8 +6,15 @@ class WdpaGetter
     })
   end
 
-  def save_current_wdpa_to filename: filename
-    File.open(filename, 'w') do |file|
+  def self.download_current_wdpa_to filename: filename
+    s3 = self.new
+    s3.download_current_wdpa_to filename: filename
+
+    s3
+  end
+
+  def download_current_wdpa_to filename: filename
+    File.open(filename, 'w:ASCII-8BIT') do |file|
       file.write current_wdpa.read
     end
   end

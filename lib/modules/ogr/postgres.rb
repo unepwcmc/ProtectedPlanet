@@ -1,8 +1,16 @@
 class Ogr::Postgres
-  def import file: file_path, to: database_name
+  DB_CONFIG = Rails.configuration.database_configuration[Rails.env]
+
+  def self.import file: , to: DB_CONFIG["database"]
+    ogr = self.new
+    ogr.import file: file, to: to
+
+    ogr
+  end
+
+  def import(file: , to:)
     @file_path = file
     @database_name = to
-    @db_config = Rails.configuration.database_configuration[Rails.env]
 
     system(ogr_command)
   end

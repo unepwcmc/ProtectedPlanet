@@ -1,0 +1,64 @@
+# WDPA Modules
+
+This set of modules encapsulates the behaviour for handling the WDPA
+dataset: downloading, retrieving metadata, importing, etc.
+
+## Data Standard
+
+The [WDPA Data Standard](data_standard.rb) defines the attributes that
+make up the WDPA dataset, and how they map to attributes used in this
+application. It acts as a manager for incoming WDPA data by
+standardising the data, and creating `ActiveRecord` relations.
+
+Check out the [WDPA Data Standard](../../../docs/wdpa_data_standard.pdf)
+(as of May 2014) for more detail.
+
+## Releases
+
+The WDPA is released approximately at the end of every month. These
+releases are represented internally as `Wdpa::Release` objects, which
+handle getting the releases in to Rails. `Release` objects are created
+during Imports, by `Wdpa::Importer`.
+
+The following tasks occur on a release when an Import is run.
+
+### Downloading
+
+Currently the WDPA is stored each month in AWS S3. `Wdpa::S3` represents
+a WDPA storage medium, and implements methods to download and save the
+WDPA from S3.
+
+The WDPA is downloaded as a File Geodatabase.
+
+### Importing
+
+GDAL's `ogr2ogr` imports the File Geodatabase in to the current Rails
+database, keeping the table names defined by the WDPA.
+
+### Standardisation
+
+`Wdpa::DataStandard` (see above) converts the GDB imported data (which
+is constrained by limitations, such as column name length) in to
+standardised hashes of
+[ProtectedArea](../../../app/models/protected_area.rb) attributes and
+relations.
+
+### Creating Protected Areas
+
+`Wdpa::ProtectedAreaImporter::AttributesImporter` takes the array of
+attributes from the standardisation process and creates the
+Protected Areas in the Rails database through `ProtectedArea#create`.
+
+### Importing Geometries
+
+`Wdpa::ProtectedAreaImporter::GeometryImporter` imports the Protected
+Area geometries on to the matching `ProtectedArea` models. It does so
+through an `UPDATE` SQL query, for performance reasons (primarily to
+avoid the ActiveRecord Postgis Adapter).
+
+### Cleanup
+
+The WDPA import tables are stored in the Rails database, and although
+they should have no effect on the running of the application, they are
+removed automatically at the end of an Import, along with the downloaded
+WDPA data.
