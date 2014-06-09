@@ -42,13 +42,13 @@ class Wdpa::Release
   end
 
   def clean_up
-    FileUtils.rm_rf(zip_path)
-    FileUtils.rm_rf(gdb_path)
-
     geometry_tables.each do |table_name|
       ActiveRecord::Migration.drop_table(table_name)
     end
     ActiveRecord::Migration.drop_table(source_table)
+
+    FileUtils.rm_rf(zip_path)
+    FileUtils.rm_rf(gdb_path)
   end
 
   def zip_path
