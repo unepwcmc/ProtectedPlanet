@@ -28,6 +28,32 @@ rake db:seed
 
 ## Deployment
 
+### Server Instances
+
+Protected Planet runs on the following AWS EC2 and RDS instances.
+
+#### Staging
+
+**RDS**
+
+   * DB - PostgreSQL with Postgis, db.m3.medium, 30G
+
+**EC2**
+
+   * Import - m3.xlarge
+   * Web -  m3.medium
+
+#### Production
+
+**RDS**
+
+   * DB - PostgreSQL with Postgis, db.m3.large, 30G
+
+**EC2**
+
+   * Import - m3.xlarge
+   * Web - m3.large
+
 ### Capistrano
 
 Deployments are handled by standard capistrano tasks:
