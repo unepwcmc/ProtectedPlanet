@@ -34,7 +34,7 @@ application to run correctly:**
 
 Some data is static and requires seeding if you're starting from an
 empty database. For example, the Country and Sub Location list. If you
-ran `rake db:setup` as above, you do not need to do anything else.
+ran `rake db:setup` as above, you do not need to seed anything.
 
 You can seed manually with:
 
