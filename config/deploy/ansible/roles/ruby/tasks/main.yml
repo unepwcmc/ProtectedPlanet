@@ -31,7 +31,8 @@
 
 - name: Extract ruby
   when: ruby_version_installed.rc == 1
-  command: tar -xvf /tmp/ruby-{{ ruby_version }}.tar.gz chdir=/tmp
+  command: tar -xvf /tmp/ruby-{{ ruby_version }}.tar.gz -C /tmp/ruby-{{ ruby_version }} chdir=/tmp
+  sudo: yes
 
 - name: Make, configure, and install ruby
   when: ruby_version_installed.rc == 1
