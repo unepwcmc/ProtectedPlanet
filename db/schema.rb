@@ -82,7 +82,6 @@ ActiveRecord::Schema.define(version: 20140605105549) do
   create_table "protected_areas", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.spatial  "the_geom",                limit: {:srid=>0, :type=>"geometry"}
     t.integer  "wdpa_id"
     t.integer  "wdpa_parent_id"
     t.text     "name"
@@ -101,6 +100,7 @@ ActiveRecord::Schema.define(version: 20140605105549) do
     t.string   "international_criteria"
     t.integer  "no_take_status_id"
     t.integer  "designation_id"
+    t.spatial  "the_geom",                limit: {:srid=>0, :type=>"geometry"}
   end
 
   add_index "protected_areas", ["designation_id"], :name => "index_protected_areas_on_designation_id"
@@ -131,82 +131,5 @@ ActiveRecord::Schema.define(version: 20140605105549) do
   end
 
   add_index "sub_locations", ["country_id"], :name => "index_sub_locations_on_country_id"
-
-  create_table "wdpa_source_june2014", primary_key: "ogc_fid", force: true do |t|
-    t.float  "metadataid"
-    t.string "data_title", limit: nil
-    t.string "resp_party", limit: nil
-    t.string "resp_email", limit: nil
-    t.string "year",       limit: nil
-    t.string "language",   limit: nil
-    t.string "char_set",   limit: nil
-    t.string "ref_system", limit: nil
-    t.string "scale",      limit: nil
-    t.string "lineage",    limit: nil
-    t.string "citation",   limit: nil
-    t.string "disclaimer", limit: nil
-  end
-
-  create_table "wdpapoint_june2014", primary_key: "ogc_fid", force: true do |t|
-    t.spatial "wkb_geometry", limit: {:srid=>4326, :type=>"multi_point"}
-    t.integer "wdpaid"
-    t.integer "wdpa_pid"
-    t.string  "name",         limit: nil
-    t.string  "orig_name",    limit: nil
-    t.string  "sub_loc",      limit: nil
-    t.string  "desig",        limit: nil
-    t.string  "desig_eng",    limit: nil
-    t.string  "desig_type",   limit: nil
-    t.string  "iucn_cat",     limit: nil
-    t.string  "int_crit",     limit: nil
-    t.string  "marine",       limit: nil
-    t.float   "rep_m_area"
-    t.float   "rep_area"
-    t.string  "status",       limit: nil
-    t.integer "status_yr"
-    t.string  "gov_type",     limit: nil
-    t.string  "mang_auth",    limit: nil
-    t.string  "mang_plan",    limit: nil
-    t.string  "no_take",      limit: nil
-    t.float   "no_tk_area"
-    t.integer "metadataid"
-    t.string  "iso3",         limit: nil
-    t.string  "parent_iso3",  limit: nil
-  end
-
-  add_index "wdpapoint_june2014", ["wkb_geometry"], :name => "wdpapoint_june2014_wkb_geometry_geom_idx", :spatial => true
-
-  create_table "wdpapoly_june2014", primary_key: "ogc_fid", force: true do |t|
-    t.spatial "wkb_geometry", limit: {:srid=>4326, :type=>"multi_polygon"}
-    t.integer "wdpaid"
-    t.integer "wdpa_pid"
-    t.string  "name",         limit: nil
-    t.string  "orig_name",    limit: nil
-    t.string  "sub_loc",      limit: nil
-    t.string  "desig",        limit: nil
-    t.string  "desig_eng",    limit: nil
-    t.string  "desig_type",   limit: nil
-    t.string  "iucn_cat",     limit: nil
-    t.string  "int_crit",     limit: nil
-    t.string  "marine",       limit: nil
-    t.float   "rep_m_area"
-    t.float   "gis_m_area"
-    t.float   "rep_area"
-    t.float   "gis_area"
-    t.string  "status",       limit: nil
-    t.integer "status_yr"
-    t.string  "gov_type",     limit: nil
-    t.string  "mang_auth",    limit: nil
-    t.string  "mang_plan",    limit: nil
-    t.string  "no_take",      limit: nil
-    t.float   "no_tk_area"
-    t.integer "metadataid"
-    t.string  "parent_iso3",  limit: nil
-    t.string  "iso3",         limit: nil
-    t.float   "shape_length"
-    t.float   "shape_area"
-  end
-
-  add_index "wdpapoly_june2014", ["wkb_geometry"], :name => "wdpapoly_june2014_wkb_geometry_geom_idx", :spatial => true
 
 end
