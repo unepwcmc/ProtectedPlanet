@@ -1,7 +1,9 @@
 ---
 
 - name: Setup server
-  hosts: servers
+  hosts:
+    - staging
+    - production
   user: ubuntu
   sudo: yes
 
