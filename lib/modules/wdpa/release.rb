@@ -43,9 +43,9 @@ class Wdpa::Release
 
   def clean_up
     geometry_tables.each do |table_name|
-      ActiveRecord::Migration.drop_table(table_name)
+      ActiveRecord::Migration.drop_table(table_name.downcase)
     end
-    ActiveRecord::Migration.drop_table(source_table)
+    ActiveRecord::Migration.drop_table(source_table.downcase)
 
     FileUtils.rm_rf(zip_path)
     FileUtils.rm_rf(gdb_path)

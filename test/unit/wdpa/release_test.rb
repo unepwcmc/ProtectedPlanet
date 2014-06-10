@@ -130,17 +130,16 @@ class TestWdpaRelease < ActiveSupport::TestCase
     Wdpa::Release.any_instance.expects(:zip_path).returns(zip_path).at_least_once
     gdb_path = "gdb_path"
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
-    geometry_tables = ["wdpa_poly", "wdpa_point"]
-    Wdpa::Release.any_instance.expects(:geometry_tables).returns(geometry_tables)
-    source_table = "wdpa_source"
-    Wdpa::Release.any_instance.expects(:source_table).returns(source_table)
+
+    Wdpa::Release.any_instance.expects(:geometry_tables).returns(["WDPA_poly", "WDPA_point"])
+    Wdpa::Release.any_instance.expects(:source_table).returns('WDPA_source')
 
     FileUtils.expects(:rm_rf).with(zip_path)
     FileUtils.expects(:rm_rf).with(gdb_path)
 
-    ActiveRecord::Migration.expects(:drop_table).with(geometry_tables[0])
-    ActiveRecord::Migration.expects(:drop_table).with(geometry_tables[1])
-    ActiveRecord::Migration.expects(:drop_table).with(source_table)
+    ActiveRecord::Migration.expects(:drop_table).with('wdpa_poly')
+    ActiveRecord::Migration.expects(:drop_table).with('wdpa_point')
+    ActiveRecord::Migration.expects(:drop_table).with('wdpa_source')
 
     wdpa_release = Wdpa::Release.new
     wdpa_release.clean_up
