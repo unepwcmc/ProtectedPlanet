@@ -7,7 +7,7 @@ ruby_url: "http://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.2.tar.gz"
 
 postgresql:
   version: 9.3
-  repo: 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main'
+  repo: 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main'
 
   user: postgres
   group: postgres

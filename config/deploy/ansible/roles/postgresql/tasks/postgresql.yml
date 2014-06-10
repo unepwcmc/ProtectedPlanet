@@ -5,11 +5,13 @@
     - libpq-dev
 
 - name: Install Postgresql server and client
-  apt: pkg={{ item }}-{{ postgresql.version }} state=installed update-cache=yes
+  apt: pkg={{ item }} state=installed update-cache=yes
   register: postgresql_install
   with_items:
-    - postgresql
-    - postgresql-server-dev
+    - postgresql-{{ postgresql.version}}
+    - postgresql-{{ postgresql.version }}-postgis-2.1
+    - postgresql-contrib
+    - postgresql-server-dev-{{ postgresql.version }}
   tags:
     - packages
 
