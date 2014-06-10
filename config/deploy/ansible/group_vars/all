@@ -3,8 +3,8 @@ host_name: pp-staging
 
 adam_email: adammulligan@fastmail.fm
 
-ruby_version: "2.1.1"
-ruby_url: "http://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.1.tar.gz"
+ruby_version: "2.1.2"
+ruby_url: "http://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.2.tar.gz"
 
 postgresql:
   version: 9.3
