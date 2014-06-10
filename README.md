@@ -1,5 +1,7 @@
 # Protected Planet Next
 
+[![Build Status](https://travis-ci.org/unepwcmc/ProtectedPlanet.svg)](https://travis-ci.org/unepwcmc/ProtectedPlanet)
+
 You can check out the previous version of Protected Planet on
 [GitHub](https://github.com/unepwcmc/ppe).
 
