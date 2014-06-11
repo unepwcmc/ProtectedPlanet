@@ -30,6 +30,20 @@ application to run correctly:**
 
 ## Data
 
+### Lazy Seeding for Development
+
+In development you can use a pre-made database that is seeded with Countries,
+Protected Areas, etc. Download the
+[dataset](http://protectedplanet.s3.amazonaws.com/pp_development.tar.bz2) off
+S3, and:
+
+```
+  tar xvf pp_development.tar.bz2
+  psql pp_development < pp_development.sql
+```
+
+You can manually seed the database with data using the instructions below.
+
 ### Initial Seeding
 
 Some data is static and requires seeding if you're starting from an
