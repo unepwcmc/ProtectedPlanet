@@ -11,6 +11,7 @@ You can check out the previous version of Protected Planet on
 2. [Importing and Managing the WDPA](docs/wdpa.md)
 3. [Servers and Deployment](docs/servers.md)
 4. [Development workflow, conventions and tips](docs/workflow.md)
+5. [Search](docs/search.md)
 
 ## Licence
 
