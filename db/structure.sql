@@ -89,7 +89,7 @@ CREATE TABLE countries (
     iso_3 character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    language text DEFAULT 'english'::text NOT NULL
+    language character varying(255)
 );
 
 
@@ -423,24 +423,6 @@ CREATE TABLE sub_locations (
     updated_at timestamp without time zone,
     country_id integer
 );
-
-
---
--- Name: search_index; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE MATERIALIZED VIEW search_index AS
- SELECT pa.id,
-    pa.name,
-    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(pa.name, ''::text)), 'A'::"char")) || to_tsvector((first(c.language))::regconfig, unaccent(COALESCE(pa.original_name, ''::text)))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ''::text)))) || to_tsvector(first((c.language)::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ''::text)))) AS document
-   FROM (((protected_areas pa
-   LEFT JOIN countries_protected_areas cpa ON ((cpa.protected_area_id = pa.id)))
-   LEFT JOIN countries c ON ((cpa.country_id = c.id)))
-   LEFT JOIN sub_locations sl ON ((c.id = sl.country_id)))
-  GROUP BY pa.name, pa.id, pa.original_name
-  ORDER BY pa.name
- LIMIT 1000
-  WITH NO DATA;
 
 
 --
@@ -806,13 +788,6 @@ ALTER TABLE ONLY wdpapoly_june2014
 
 
 --
--- Name: idx_fts_search; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX idx_fts_search ON search_index USING gin (document);
-
-
---
 -- Name: index_countries_protected_areas_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1019,3 +994,4 @@ INSERT INTO schema_migrations (version) VALUES ('20140602104439');
 
 INSERT INTO schema_migrations (version) VALUES ('20140605105549');
 
+INSERT INTO schema_migrations (version) VALUES ('20140612090110');
