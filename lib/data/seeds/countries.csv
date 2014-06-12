@@ -1,240 +1,252 @@
-name,iso,iso_3
-Antigua and Barbuda,AG,ATG
-Bosnia and Herzegovina,BA,BIH
-Cocos (Keeling) Islands,CC,\N
-"Congo, the Democratic Republic of the",CD,COD
-Cote D'Ivoire,CI,CIV
-Fiji,FJ,FJI
-French Southern Territories,TF,\N
-Heard Island and Mcdonald Islands,HM,\N
-Holy See (Vatican City State),VA,VAT
-"Iran, Islamic Republic of",IR,IRN
-"Korea, Democratic People's Republic of",KP,PRK
-"Korea, Republic of",KR,KOR
-Belarus,BY,BLR
-Lao People's Democratic Republic,LA,LAO
-"Macedonia, the Former Yugoslav Republic of",MK,MKD
-United States,US,USA
-"Micronesia, Federated States of",FM,FSM
-"Moldova, Republic of",MD,MDA
-"Palestinian Territory, Occupied",PS,\N
-Pitcairn,PN,PCN
-Reunion,RE,REU
-Saint Helena,SH,SHN
-Saint Kitts and Nevis,KN,KNA
-Saint Pierre and Miquelon,PM,SPM
-Sao Tome and Principe,ST,STP
-Serbia and Montenegro,CS,\N
-South Georgia and the South Sandwich Islands,GS,\N
-Svalbard and Jan Mayen,SJ,SJM
-Syrian Arab Republic,SY,SYR
-"Taiwan, Province of China",TW,TWN
-"Tanzania, United Republic of",TZ,TZA
-Timor-Leste,TL,\N
-Trinidad and Tobago,TT,TTO
-Mexico,MX,MEX
-Myanmar,MM,MMR
-"Virgin Islands, British",VG,VGB
-"Virgin Islands, U.s.",VI,VIR
-Wallis and Futuna,WF,WLF
-Albania,AL,ALB
-Algeria,DZ,DZA
-American Samoa,AS,ASM
-Vanuatu,VU,VUT
-Yemen,YE,YEM
-Andorra,AD,AND
-Angola,AO,AGO
-Anguilla,AI,AIA
-Argentina,AR,ARG
-Armenia,AM,ARM
-Aruba,AW,ABW
-Australia,AU,AUS
-Austria,AT,AUT
-Azerbaijan,AZ,AZE
-Bahamas,BS,BHS
-Bahrain,BH,BHR
-Bangladesh,BD,BGD
-Barbados,BB,BRB
-Belgium,BE,BEL
-Benin,BJ,BEN
-Bermuda,BM,BMU
-Bhutan,BT,BTN
-Bolivia,BO,BOL
-Botswana,BW,BWA
-Bouvet Island,BV,\N
-Brazil,BR,BRA
-British Indian Ocean Territory,IO,\N
-Brunei Darussalam,BN,BRN
-Bulgaria,BG,BGR
-Burkina Faso,BF,BFA
-Burundi,BI,BDI
-Cambodia,KH,KHM
-Cameroon,CM,CMR
-Canada,CA,CAN
-Cape Verde,CV,CPV
-Malta,MT,MLT
-Cayman Islands,KY,CYM
-Chad,TD,TCD
-Chile,CL,CHL
-China,CN,CHN
-Christmas Island,CX,\N
-Colombia,CO,COL
-Comoros,KM,COM
-Cook Islands,CK,COK
-Costa Rica,CR,CRI
-Croatia,HR,HRV
-Cuba,CU,CUB
-Cyprus,CY,CYP
-Czech Republic,CZ,CZE
-Denmark,DK,DNK
-Djibouti,DJ,DJI
-Dominica,DM,DMA
-Dominican Republic,DO,DOM
-Ecuador,EC,ECU
-Egypt,EG,EGY
-Equatorial Guinea,GQ,GNQ
-Eritrea,ER,ERI
-Estonia,EE,EST
-Ethiopia,ET,ETH
-Faroe Islands,FO,FRO
-Finland,FI,FIN
-France,FR,FRA
-French Guiana,GF,GUF
-French Polynesia,PF,PYF
-Gabon,GA,GAB
-Gambia,GM,GMB
-Georgia,GE,GEO
-Germany,DE,DEU
-Ghana,GH,GHA
-Gibraltar,GI,GIB
-Greece,GR,GRC
-Greenland,GL,GRL
-Grenada,GD,GRD
-Guadeloupe,GP,GLP
-Guam,GU,GUM
-Guatemala,GT,GTM
-Guinea,GN,GIN
-Guinea-Bissau,GW,GNB
-Guyana,GY,GUY
-Haiti,HT,HTI
-Honduras,HN,HND
-Hong Kong,HK,HKG
-Hungary,HU,HUN
-Iceland,IS,ISL
-India,IN,IND
-Indonesia,ID,IDN
-Iraq,IQ,IRQ
-Israel,IL,ISR
-Italy,IT,ITA
-Jamaica,JM,JAM
-Japan,JP,JPN
-Jordan,JO,JOR
-Kazakhstan,KZ,KAZ
-Kenya,KE,KEN
-Kiribati,KI,KIR
-Kuwait,KW,KWT
-Kyrgyzstan,KG,KGZ
-Latvia,LV,LVA
-Lesotho,LS,LSO
-Liberia,LR,LBR
-Libyan Arab Jamahiriya,LY,LBY
-Lithuania,LT,LTU
-Luxembourg,LU,LUX
-Macao,MO,MAC
-Madagascar,MG,MDG
-Malawi,MW,MWI
-Malaysia,MY,MYS
-Maldives,MV,MDV
-Mali,ML,MLI
-Marshall Islands,MH,MHL
-Martinique,MQ,MTQ
-Mauritius,MU,MUS
-Mayotte,YT,\N
-Monaco,MC,MCO
-Mongolia,MN,MNG
-Montserrat,MS,MSR
-Morocco,MA,MAR
-Mozambique,MZ,MOZ
-Namibia,NA,NAM
-Nauru,NR,NRU
-Nepal,NP,NPL
-Netherlands,NL,NLD
-New Caledonia,NC,NCL
-New Zealand,NZ,NZL
-Nicaragua,NI,NIC
-Niger,NE,NER
-Nigeria,NG,NGA
-Niue,NU,NIU
-Norfolk Island,NF,NFK
-Northern Mariana Islands,MP,MNP
-Norway,NO,NOR
-Oman,OM,OMN
-Pakistan,PK,PAK
-Palau,PW,PLW
-Panama,PA,PAN
-Paraguay,PY,PRY
-Peru,PE,PER
-Philippines,PH,PHL
-Poland,PL,POL
-Portugal,PT,PRT
-Puerto Rico,PR,PRI
-Qatar,QA,QAT
-Romania,RO,ROM
-Russian Federation,RU,RUS
-Rwanda,RW,RWA
-Saint Lucia,LC,LCA
-Saint Vincent and the Grenadines,VC,VCT
-Samoa,WS,WSM
-San Marino,SM,SMR
-Senegal,SN,SEN
-Seychelles,SC,SYC
-Sierra Leone,SL,SLE
-Singapore,SG,SGP
-Slovakia,SK,SVK
-Slovenia,SI,SVN
-Solomon Islands,SB,SLB
-Somalia,SO,SOM
-South Africa,ZA,ZAF
-Spain,ES,ESP
-Sri Lanka,LK,LKA
-Sudan,SD,SDN
-Suriname,SR,SUR
-Swaziland,SZ,SWZ
-Sweden,SE,SWE
-Switzerland,CH,CHE
-Thailand,TH,THA
-Togo,TG,TGO
-Tokelau,TK,TKL
-Tonga,TO,TON
-Tunisia,TN,TUN
-Turkey,TR,TUR
-Turkmenistan,TM,TKM
-Turks and Caicos Islands,TC,TCA
-Tuvalu,TV,TUV
-Uganda,UG,UGA
-Ukraine,UA,UKR
-United Kingdom,GB,GBR
-United States Minor Outlying Islands,UM,\N
-Uruguay,UY,URY
-Uzbekistan,UZ,UZB
-Venezuela,VE,VEN
-Viet Nam,VN,VNM
-Western Sahara,EH,ESH
-Zambia,ZM,ZMB
-Zimbabwe,ZW,ZWE
-Antarctica,AQ,\N
-Belize,BZ,BLZ
-Central African Republic,CF,CAF
-El Salvador,SV,SLV
-Ireland,IE,IRL
-Lebanon,LB,LBN
-Liechtenstein,LI,LIE
-Mauritania,MR,MRT
-Afghanistan,AF,AFG
-Falkland Islands (Malvinas),FK,FLK
-Netherlands Antilles,AN,ANT
-Congo,CG,COG
-Papua New Guinea,PG,PNG
-Saudi Arabia,SA,SAU
-Tajikistan,TJ,TJK
-United Arab Emirates,AE,ARE
+name,iso,iso_3,language
+Afghanistan,AF,AFG,pashto
+Åland Islands,AX,ALA,swedish
+Albania,AL,ALB,albanian
+Algeria,DZ,DZA,arabic
+American Samoa,AS,ASM,english
+Andorra,AD,AND,catalan
+Angola,AO,AGO,portuguese
+Anguilla,AI,AIA,english
+Antarctica,AQ,ATA,
+Antigua and Barbuda,AG,ATG,english
+Argentina,AR,ARG,spanish
+Armenia,AM,ARM,armenian
+Aruba,AW,ABW,dutch
+Ascension Island,SH,SHN,english
+Australia,AU,AUS,english
+Austria,AT,AUT,german
+Azerbaijan,AZ,AZE,azerbaijani
+Bahamas,BS,BHS,english
+Bahrain,BH,BHR,arabic
+Bangladesh,BD,BGD,bangla
+Barbados,BB,BRB,english
+Belarus,BY,BLR,belarusian
+Belgium,BE,BEL,dutch
+Belize,BZ,BLZ,english
+Benin,BJ,BEN,french
+Bermuda,BM,BMU,english
+Bhutan,BT,BTN,dzongkha
+Bolivia,BO,BOL,spanish
+Bonaire,BQ,BES,dutch
+Bosnia and Herzegovina,BA,BIH,bosnian
+Botswana,BW,BWA,english
+Bouvet Island,BV,BVT,
+Brazil,BR,BRA,portuguese
+British Indian Ocean Territory,IO,IOT,english
+British Virgin Islands,VG,VGB,english
+Brunei,BN,BRN,malay
+Bulgaria,BG,BGR,bulgarian
+Burkina Faso,BF,BFA,french
+Burundi,BI,BDI,kirundi
+Cambodia,KH,KHM,khmer
+Cameroon,CM,CMR,french
+Canada,CA,CAN,english
+Cape Verde,CV,CPV,portuguese
+Cayman Islands,KY,CYM,english
+Central African Republic,CF,CAF,sango
+Chad,TD,TCD,french
+Chile,CL,CHL,spanish
+China,CN,CHN,standard chinese
+Christmas Island,CX,CXR,english
+Cocos (Keeling) Islands,CC,CCK,english
+Colombia,CO,COL,spanish
+Comoros,KM,COM,comorian
+Republic of the Congo,CG,COG,french
+Democratic Republic of the Congo,CD,COD,french
+Cook Islands,CK,COK,english
+Costa Rica,CR,CRI,spanish
+Croatia,HR,HRV,croatian
+Cuba,CU,CUB,spanish
+Curaçao,CW,CUW,dutch
+Cyprus,CY,CYP,greek
+Czech Republic,CZ,CZE,czech
+Denmark,DK,DNK,danish
+Djibouti,DJ,DJI,french
+Dominica,DM,DMA,english
+Dominican Republic,DO,DOM,spanish
+Ecuador,EC,ECU,spanish
+Egypt,EG,EGY,arabic
+El Salvador,SV,SLV,castilian
+Equatorial Guinea,GQ,GNQ,spanish
+Eritrea,ER,ERI,tigrinya
+Estonia,EE,EST,estonian
+Ethiopia,ET,ETH,amharic
+Falkland Islands,FK,FLK,english
+Faroe Islands,FO,FRO,faroese
+Fiji,FJ,FJI,english
+Finland,FI,FIN,finnish
+France,FR,FRA,french
+French Guiana,GF,GUF,french
+French Polynesia,PF,PYF,french
+French Southern and Antarctic Lands,TF,ATF,french
+Gabon,GA,GAB,french
+Gambia,GM,GMB,english
+Georgia,GE,GEO,georgian
+Germany,DE,DEU,german
+Ghana,GH,GHA,english
+Gibraltar,GI,GIB,english
+Greece,GR,GRC,greek
+Greenland,GL,GRL,greenlandic
+Grenada,GD,GRD,english
+Guadeloupe,GP,GLP,french
+Guam,GU,GUM,english
+Guatemala,GT,GTM,spanish
+Guernsey,GG,GGY,english
+Guinea,GN,GIN,french
+Guinea-Bissau,GW,GNB,portuguese
+Guyana,GY,GUY,english
+Haiti,HT,HTI,french
+Heard Island and McDonald Islands,HM,HMD,
+Vatican City,VA,VAT,italian
+Honduras,HN,HND,spanish
+Hong Kong,HK,HKG,chinese
+Hungary,HU,HUN,hungarian
+Iceland,IS,ISL,icelandic
+India,IN,IND,hindi
+Indonesia,ID,IDN,indonesian
+Ivory Coast,CI,CIV,french
+Iran,IR,IRN,persian
+Iraq,IQ,IRQ,arabic
+Ireland,IE,IRL,irish
+Isle of Man,IM,IMN,english
+Israel,IL,ISR,hebrew
+Italy,IT,ITA,italian
+Jamaica,JM,JAM,jamaican english
+Japan,JP,JPN,japanese
+Jersey,JE,JEY,english
+Jordan,JO,JOR,arabic
+Kazakhstan,KZ,KAZ,kazakh
+Kenya,KE,KEN,swahili
+Kiribati,KI,KIR,english
+Kuwait,KW,KWT,arabic
+Kyrgyzstan,KG,KGZ,kyrgyz
+Laos,LA,LAO,lao
+Latvia,LV,LVA,latvian
+Lebanon,LB,LBN,arabic
+Lesotho,LS,LSO,sesotho
+Liberia,LR,LBR,english
+Libya,LY,LBY,arabic
+Liechtenstein,LI,LIE,german
+Lithuania,LT,LTU,lithuanian
+Luxembourg,LU,LUX,french
+Macau,MO,MAC,traditional chinese
+Macedonia,MK,MKD,macedonian
+Madagascar,MG,MDG,malagasy
+Malawi,MW,MWI,chichewa
+Malaysia,MY,MYS,malaysian
+Maldives,MV,MDV,maldivian
+Mali,ML,MLI,french
+Malta,MT,MLT,maltese
+Marshall Islands,MH,MHL,marshallese
+Martinique,MQ,MTQ,french
+Mauritania,MR,MRT,arabic
+Mauritius,MU,MUS,french
+Mayotte,YT,MYT,french
+Mexico,MX,MEX,spanish
+Micronesia,FM,FSM,english
+Moldova,MD,MDA,moldovan
+Monaco,MC,MCO,french
+Mongolia,MN,MNG,mongolian
+Montenegro,ME,MNE,montenegrin
+Montserrat,MS,MSR,english
+Morocco,MA,MAR,arabic
+Mozambique,MZ,MOZ,portuguese
+Myanmar,MM,MMR,burmese
+Namibia,NA,NAM,english
+Nauru,NR,NRU,nauruan
+Nepal,NP,NPL,nepali
+Netherlands,NL,NLD,dutch
+New Caledonia,NC,NCL,french
+New Zealand,NZ,NZL,english
+Nicaragua,NI,NIC,spanish
+Niger,NE,NER,french
+Nigeria,NG,NGA,english
+Niue,NU,NIU,niuean
+Norfolk Island,NF,NFK,english
+North Korea,KP,PRK,korean
+Northern Mariana Islands,MP,MNP,english
+Norway,NO,NOR,norwegian
+Oman,OM,OMN,arabic
+Pakistan,PK,PAK,english
+Palau,PW,PLW,english
+Palestine,PS,PSE,arabic
+Panama,PA,PAN,spanish
+Papua New Guinea,PG,PNG,hiri motu
+Paraguay,PY,PRY,spanish
+Peru,PE,PER,spanish
+Philippines,PH,PHL,filipino
+Pitcairn Islands,PN,PCN,english
+Poland,PL,POL,polish
+Portugal,PT,PRT,portuguese
+Puerto Rico,PR,PRI,spanish
+Qatar,QA,QAT,arabic
+Republic of Kosovo,XK,KOS,albanian
+Réunion,RE,REU,french
+Romania,RO,ROU,romanian
+Russia,RU,RUS,russian
+Rwanda,RW,RWA,kinyarwanda
+Saint Barthélemy,BL,BLM,french
+Saint Helena,SH,SHN,english
+Saint Kitts and Nevis,KN,KNA,english
+Saint Lucia,LC,LCA,english
+Saint Martin,MF,MAF,french
+Saint Pierre and Miquelon,PM,SPM,french
+Saint Vincent and the Grenadines,VC,VCT,english
+Samoa,WS,WSM,samoan
+San Marino,SM,SMR,italian
+São Tomé and Príncipe,ST,STP,portuguese
+Saudi Arabia,SA,SAU,arabic
+Senegal,SN,SEN,french
+Serbia,RS,SRB,serbian
+Seychelles,SC,SYC,french
+Sierra Leone,SL,SLE,english
+Singapore,SG,SGP,english
+Sint Maarten,SX,SXM,dutch
+Slovakia,SK,SVK,slovak
+Slovenia,SI,SVN,slovene
+Solomon Islands,SB,SLB,english
+Somalia,SO,SOM,somali
+South Africa,ZA,ZAF,afrikaans
+South Georgia,GS,SGS,english
+South Korea,KR,KOR,korean
+South Sudan,SS,SSD,english
+Spain,ES,ESP,spanish
+Sri Lanka,LK,LKA,sinhala
+Sudan,SD,SDN,arabic
+Suriname,SR,SUR,dutch
+Svalbard and Jan Mayen,SJ,SJM,norwegian
+Swaziland,SZ,SWZ,swazi
+Sweden,SE,SWE,swedish
+Switzerland,CH,CHE,german
+Syria,SY,SYR,arabic
+Taiwan,TW,TWN,standard chinese
+Tajikistan,TJ,TJK,tajik
+Tanzania,TZ,TZA,swahili
+Thailand,TH,THA,thai
+Timor-Leste,TL,TLS,portuguese
+Togo,TG,TGO,french
+Tokelau,TK,TKL,tokelauan
+Tonga,TO,TON,tongan
+Trinidad and Tobago,TT,TTO,english
+Tunisia,TN,TUN,arabic
+Turkey,TR,TUR,turkish
+Turkmenistan,TM,TKM,turkmen
+Turks and Caicos Islands,TC,TCA,english
+Tuvalu,TV,TUV,tuvaluan
+Uganda,UG,UGA,english
+Ukraine,UA,UKR,ukrainian
+United Arab Emirates,AE,ARE,arabic
+United Kingdom,GB,GBR,english
+United States,US,USA,english
+United States Minor Outlying Islands,UM,UMI,english
+United States Virgin Islands,VI,VIR,english
+Uruguay,UY,URY,spanish
+Uzbekistan,UZ,UZB,uzbek
+Vanuatu,VU,VUT,bislama
+Venezuela,VE,VEN,spanish
+Vietnam,VN,VNM,vietnamese
+Wallis and Futuna,WF,WLF,french
+Western Sahara,EH,ESH,berber
+Yemen,YE,YEM,arabic
+Zambia,ZM,ZMB,english
+Zimbabwe,ZW,ZWE,chewa
