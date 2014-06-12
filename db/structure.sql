@@ -60,8 +60,8 @@ SET search_path = public, pg_catalog;
 CREATE FUNCTION first_agg(anyelement, anyelement) RETURNS anyelement
     LANGUAGE sql IMMUTABLE STRICT
     AS $_$
-        SELECT $1;
-$_$;
+            SELECT $1;
+          $_$;
 
 
 --
@@ -349,6 +349,7 @@ CREATE TABLE protected_areas (
     id integer NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
+    the_geom geometry,
     wdpa_id integer,
     wdpa_parent_id integer,
     name text,
@@ -366,8 +367,7 @@ CREATE TABLE protected_areas (
     management_authority_id integer,
     international_criteria character varying(255),
     no_take_status_id integer,
-    designation_id integer,
-    the_geom geometry
+    designation_id integer
 );
 
 
@@ -445,151 +445,13 @@ ALTER SEQUENCE sub_locations_id_seq OWNED BY sub_locations.id;
 
 
 --
--- Name: wdpa_source_june2014; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: tsvector_search_documents; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
-CREATE TABLE wdpa_source_june2014 (
-    ogc_fid integer NOT NULL,
-    metadataid double precision,
-    data_title character varying,
-    resp_party character varying,
-    resp_email character varying,
-    year character varying,
-    language character varying,
-    char_set character varying,
-    ref_system character varying,
-    scale character varying,
-    lineage character varying,
-    citation character varying,
-    disclaimer character varying
+CREATE TABLE tsvector_search_documents (
+    id integer,
+    document tsvector
 );
-
-
---
--- Name: wdpa_source_june2014_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE wdpa_source_june2014_ogc_fid_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: wdpa_source_june2014_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE wdpa_source_june2014_ogc_fid_seq OWNED BY wdpa_source_june2014.ogc_fid;
-
-
---
--- Name: wdpapoint_june2014; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE wdpapoint_june2014 (
-    ogc_fid integer NOT NULL,
-    wkb_geometry geometry(MultiPoint,4326),
-    wdpaid integer,
-    wdpa_pid integer,
-    name character varying,
-    orig_name character varying,
-    sub_loc character varying,
-    desig character varying,
-    desig_eng character varying,
-    desig_type character varying,
-    iucn_cat character varying,
-    int_crit character varying,
-    marine character varying,
-    rep_m_area double precision,
-    rep_area double precision,
-    status character varying,
-    status_yr integer,
-    gov_type character varying,
-    mang_auth character varying,
-    mang_plan character varying,
-    no_take character varying,
-    no_tk_area double precision,
-    metadataid integer,
-    iso3 character varying,
-    parent_iso3 character varying
-);
-
-
---
--- Name: wdpapoint_june2014_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE wdpapoint_june2014_ogc_fid_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: wdpapoint_june2014_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE wdpapoint_june2014_ogc_fid_seq OWNED BY wdpapoint_june2014.ogc_fid;
-
-
---
--- Name: wdpapoly_june2014; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE wdpapoly_june2014 (
-    ogc_fid integer NOT NULL,
-    wkb_geometry geometry(MultiPolygon,4326),
-    wdpaid integer,
-    wdpa_pid integer,
-    name character varying,
-    orig_name character varying,
-    sub_loc character varying,
-    desig character varying,
-    desig_eng character varying,
-    desig_type character varying,
-    iucn_cat character varying,
-    int_crit character varying,
-    marine character varying,
-    rep_m_area double precision,
-    gis_m_area double precision,
-    rep_area double precision,
-    gis_area double precision,
-    status character varying,
-    status_yr integer,
-    gov_type character varying,
-    mang_auth character varying,
-    mang_plan character varying,
-    no_take character varying,
-    no_tk_area double precision,
-    metadataid integer,
-    parent_iso3 character varying,
-    iso3 character varying,
-    shape_length double precision,
-    shape_area double precision
-);
-
-
---
--- Name: wdpapoly_june2014_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE wdpapoly_june2014_ogc_fid_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: wdpapoly_june2014_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE wdpapoly_june2014_ogc_fid_seq OWNED BY wdpapoly_june2014.ogc_fid;
 
 
 --
@@ -660,27 +522,6 @@ ALTER TABLE ONLY protected_areas ALTER COLUMN id SET DEFAULT nextval('protected_
 --
 
 ALTER TABLE ONLY sub_locations ALTER COLUMN id SET DEFAULT nextval('sub_locations_id_seq'::regclass);
-
-
---
--- Name: ogc_fid; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY wdpa_source_june2014 ALTER COLUMN ogc_fid SET DEFAULT nextval('wdpa_source_june2014_ogc_fid_seq'::regclass);
-
-
---
--- Name: ogc_fid; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY wdpapoint_june2014 ALTER COLUMN ogc_fid SET DEFAULT nextval('wdpapoint_june2014_ogc_fid_seq'::regclass);
-
-
---
--- Name: ogc_fid; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY wdpapoly_june2014 ALTER COLUMN ogc_fid SET DEFAULT nextval('wdpapoly_june2014_ogc_fid_seq'::regclass);
 
 
 --
@@ -761,30 +602,6 @@ ALTER TABLE ONLY protected_areas
 
 ALTER TABLE ONLY sub_locations
     ADD CONSTRAINT sub_locations_pkey PRIMARY KEY (id);
-
-
---
--- Name: wdpa_source_june2014_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY wdpa_source_june2014
-    ADD CONSTRAINT wdpa_source_june2014_pkey PRIMARY KEY (ogc_fid);
-
-
---
--- Name: wdpapoint_june2014_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY wdpapoint_june2014
-    ADD CONSTRAINT wdpapoint_june2014_pkey PRIMARY KEY (ogc_fid);
-
-
---
--- Name: wdpapoly_june2014_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY wdpapoly_june2014
-    ADD CONSTRAINT wdpapoly_june2014_pkey PRIMARY KEY (ogc_fid);
 
 
 --
@@ -893,17 +710,18 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
--- Name: wdpapoint_june2014_wkb_geometry_geom_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: _RETURN; Type: RULE; Schema: public; Owner: -
 --
 
-CREATE INDEX wdpapoint_june2014_wkb_geometry_geom_idx ON wdpapoint_june2014 USING gist (wkb_geometry);
-
-
---
--- Name: wdpapoly_june2014_wkb_geometry_geom_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX wdpapoly_june2014_wkb_geometry_geom_idx ON wdpapoly_june2014 USING gist (wkb_geometry);
+CREATE RULE "_RETURN" AS
+    ON SELECT TO tsvector_search_documents DO INSTEAD  SELECT pa.id,
+    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(pa.name, ''::text)), 'A'::"char")) || to_tsvector((first(c.language))::regconfig, COALESCE(unaccent(pa.original_name), ''::text))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ''::text)))) || to_tsvector(first((c.language)::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ''::text)))) AS document
+   FROM (((protected_areas pa
+   LEFT JOIN countries_protected_areas cpa ON ((cpa.protected_area_id = pa.id)))
+   LEFT JOIN countries c ON ((cpa.country_id = c.id)))
+   LEFT JOIN sub_locations sl ON ((c.id = sl.country_id)))
+  GROUP BY pa.id
+  ORDER BY pa.id;
 
 
 --
@@ -997,3 +815,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140605105549');
 INSERT INTO schema_migrations (version) VALUES ('20140612090110');
 
 INSERT INTO schema_migrations (version) VALUES ('20140612092941');
+
+INSERT INTO schema_migrations (version) VALUES ('20140612133146');
