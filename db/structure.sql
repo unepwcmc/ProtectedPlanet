@@ -703,6 +703,13 @@ CREATE INDEX index_sub_locations_on_country_id ON sub_locations USING btree (cou
 
 
 --
+-- Name: index_tsvector_search_documents_on_document; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_tsvector_search_documents_on_document ON tsvector_search_documents USING gin (document);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -817,3 +824,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140612090110');
 INSERT INTO schema_migrations (version) VALUES ('20140612092941');
 
 INSERT INTO schema_migrations (version) VALUES ('20140612133146');
+
+INSERT INTO schema_migrations (version) VALUES ('20140612141706');
