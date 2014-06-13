@@ -17,13 +17,14 @@ class AddSearchView < ActiveRecord::Migration
         SQL
 
         execute <<-SQL
+          DROP MATERIALIZED VIEW IF EXISTS tsvector_search_documents;
           CREATE MATERIALIZED VIEW tsvector_search_documents AS
             SELECT pa.id,
               setweight(to_tsvector('english'::regconfig, coalesce (string_agg(c.name, ' '), '')), 'B') ||
               setweight(to_tsvector('english'::regconfig, coalesce (pa.name, '')), 'A') ||
-              to_tsvector(public.first(c.language)::regconfig, coalesce (unaccent(pa.original_name), '')) ||
-              to_tsvector('english'::regconfig, coalesce (string_agg(sl.english_name, ''))) ||
-              to_tsvector(public.first(c.language::regconfig), coalesce (string_agg(sl.alternate_name, '')))
+              to_tsvector(coalesce(public.first(c.language)::regconfig, 'simple'::regconfig), coalesce (unaccent(pa.original_name), '')) ||
+              to_tsvector('english'::regconfig, coalesce (string_agg(sl.english_name, ' '), '')) ||
+              to_tsvector(coalesce(public.first(c.language::regconfig), 'simple'::regconfig), coalesce (string_agg(sl.alternate_name, ' '), ''))
             AS document
             FROM protected_areas pa
 
