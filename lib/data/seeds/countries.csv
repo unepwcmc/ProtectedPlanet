@@ -1,78 +1,78 @@
-name,iso,iso_3,""
-Afghanistan,AF,AFG,""
+name,iso,iso_3,language
+Afghanistan,AF,AFG,
 Åland Islands,AX,ALA,swedish
-Albania,AL,ALB,""
-Algeria,DZ,DZA,""
+Albania,AL,ALB,
+Algeria,DZ,DZA,
 American Samoa,AS,ASM,english
-Andorra,AD,AND,""
+Andorra,AD,AND,
 Angola,AO,AGO,portuguese
 Anguilla,AI,AIA,english
-Antarctica,AQ,ATA,""
+Antarctica,AQ,ATA,
 Antigua and Barbuda,AG,ATG,english
 Argentina,AR,ARG,spanish
-Armenia,AM,ARM,""
+Armenia,AM,ARM,
 Aruba,AW,ABW,dutch
 Ascension Island,SH,SHN,english
 Australia,AU,AUS,english
 Austria,AT,AUT,german
-Azerbaijan,AZ,AZE,""
+Azerbaijan,AZ,AZE,
 Bahamas,BS,BHS,english
-Bahrain,BH,BHR,""
-Bangladesh,BD,BGD,""
+Bahrain,BH,BHR,
+Bangladesh,BD,BGD,
 Barbados,BB,BRB,english
-Belarus,BY,BLR,""
+Belarus,BY,BLR,
 Belgium,BE,BEL,dutch
 Belize,BZ,BLZ,english
 Benin,BJ,BEN,french
 Bermuda,BM,BMU,english
-Bhutan,BT,BTN,""
+Bhutan,BT,BTN,
 Bolivia,BO,BOL,spanish
 Bonaire,BQ,BES,dutch
-Bosnia and Herzegovina,BA,BIH,""
+Bosnia and Herzegovina,BA,BIH,
 Botswana,BW,BWA,english
-Bouvet Island,BV,BVT,""
+Bouvet Island,BV,BVT,
 Brazil,BR,BRA,portuguese
 British Indian Ocean Territory,IO,IOT,english
 British Virgin Islands,VG,VGB,english
-Brunei,BN,BRN,""
-Bulgaria,BG,BGR,""
+Brunei,BN,BRN,
+Bulgaria,BG,BGR,
 Burkina Faso,BF,BFA,french
-Burundi,BI,BDI,""
-Cambodia,KH,KHM,""
+Burundi,BI,BDI,
+Cambodia,KH,KHM,
 Cameroon,CM,CMR,french
 Canada,CA,CAN,english
 Cape Verde,CV,CPV,portuguese
 Cayman Islands,KY,CYM,english
-Central African Republic,CF,CAF,""
+Central African Republic,CF,CAF,
 Chad,TD,TCD,french
 Chile,CL,CHL,spanish
-China,CN,CHN,""
+China,CN,CHN,
 Christmas Island,CX,CXR,english
 Cocos (Keeling) Islands,CC,CCK,english
 Colombia,CO,COL,spanish
-Comoros,KM,COM,""
+Comoros,KM,COM,
 Republic of the Congo,CG,COG,french
 Democratic Republic of the Congo,CD,COD,french
 Cook Islands,CK,COK,english
 Costa Rica,CR,CRI,spanish
-Croatia,HR,HRV,""
+Croatia,HR,HRV,
 Cuba,CU,CUB,spanish
 Curaçao,CW,CUW,dutch
-Cyprus,CY,CYP,""
-Czech Republic,CZ,CZE,""
+Cyprus,CY,CYP,
+Czech Republic,CZ,CZE,
 Denmark,DK,DNK,danish
 Djibouti,DJ,DJI,french
 Dominica,DM,DMA,english
 Dominican Republic,DO,DOM,spanish
 Ecuador,EC,ECU,spanish
-Egypt,EG,EGY,""
-El Salvador,SV,SLV,""
+Egypt,EG,EGY,
+El Salvador,SV,SLV,
 Equatorial Guinea,GQ,GNQ,spanish
-Eritrea,ER,ERI,""
-Estonia,EE,EST,""
-Ethiopia,ET,ETH,""
+Eritrea,ER,ERI,
+Estonia,EE,EST,
+Ethiopia,ET,ETH,
 Falkland Islands,FK,FLK,english
-Faroe Islands,FO,FRO,""
+Faroe Islands,FO,FRO,
 Fiji,FJ,FJI,english
 Finland,FI,FIN,finnish
 France,FR,FRA,french
@@ -81,12 +81,12 @@ French Polynesia,PF,PYF,french
 French Southern and Antarctic Lands,TF,ATF,french
 Gabon,GA,GAB,french
 Gambia,GM,GMB,english
-Georgia,GE,GEO,""
+Georgia,GE,GEO,
 Germany,DE,DEU,german
 Ghana,GH,GHA,english
 Gibraltar,GI,GIB,english
-Greece,GR,GRC,""
-Greenland,GL,GRL,""
+Greece,GR,GRC,
+Greenland,GL,GRL,
 Grenada,GD,GRD,english
 Guadeloupe,GP,GLP,french
 Guam,GU,GUM,english
@@ -96,95 +96,95 @@ Guinea,GN,GIN,french
 Guinea-Bissau,GW,GNB,portuguese
 Guyana,GY,GUY,english
 Haiti,HT,HTI,french
-Heard Island and McDonald Islands,HM,HMD,""
+Heard Island and McDonald Islands,HM,HMD,
 Vatican City,VA,VAT,italian
 Honduras,HN,HND,spanish
-Hong Kong,HK,HKG,""
+Hong Kong,HK,HKG,
 Hungary,HU,HUN,hungarian
-Iceland,IS,ISL,""
-India,IN,IND,""
-Indonesia,ID,IDN,""
+Iceland,IS,ISL,
+India,IN,IND,
+Indonesia,ID,IDN,
 Ivory Coast,CI,CIV,french
-Iran,IR,IRN,""
-Iraq,IQ,IRQ,""
-Ireland,IE,IRL,""
+Iran,IR,IRN,
+Iraq,IQ,IRQ,
+Ireland,IE,IRL,
 Isle of Man,IM,IMN,english
-Israel,IL,ISR,""
+Israel,IL,ISR,
 Italy,IT,ITA,italian
-Jamaica,JM,JAM,""
-Japan,JP,JPN,""
+Jamaica,JM,JAM,
+Japan,JP,JPN,
 Jersey,JE,JEY,english
-Jordan,JO,JOR,""
-Kazakhstan,KZ,KAZ,""
-Kenya,KE,KEN,""
+Jordan,JO,JOR,
+Kazakhstan,KZ,KAZ,
+Kenya,KE,KEN,
 Kiribati,KI,KIR,english
-Kuwait,KW,KWT,""
-Kyrgyzstan,KG,KGZ,""
-Laos,LA,LAO,""
-Latvia,LV,LVA,""
-Lebanon,LB,LBN,""
-Lesotho,LS,LSO,""
+Kuwait,KW,KWT,
+Kyrgyzstan,KG,KGZ,
+Laos,LA,LAO,
+Latvia,LV,LVA,
+Lebanon,LB,LBN,
+Lesotho,LS,LSO,
 Liberia,LR,LBR,english
-Libya,LY,LBY,""
+Libya,LY,LBY,
 Liechtenstein,LI,LIE,german
-Lithuania,LT,LTU,""
+Lithuania,LT,LTU,
 Luxembourg,LU,LUX,french
-Macau,MO,MAC,""
-Macedonia,MK,MKD,""
-Madagascar,MG,MDG,""
-Malawi,MW,MWI,""
-Malaysia,MY,MYS,""
-Maldives,MV,MDV,""
+Macau,MO,MAC,
+Macedonia,MK,MKD,
+Madagascar,MG,MDG,
+Malawi,MW,MWI,
+Malaysia,MY,MYS,
+Maldives,MV,MDV,
 Mali,ML,MLI,french
-Malta,MT,MLT,""
-Marshall Islands,MH,MHL,""
+Malta,MT,MLT,
+Marshall Islands,MH,MHL,
 Martinique,MQ,MTQ,french
-Mauritania,MR,MRT,""
+Mauritania,MR,MRT,
 Mauritius,MU,MUS,french
 Mayotte,YT,MYT,french
 Mexico,MX,MEX,spanish
 Micronesia,FM,FSM,english
-Moldova,MD,MDA,""
+Moldova,MD,MDA,
 Monaco,MC,MCO,french
-Mongolia,MN,MNG,""
-Montenegro,ME,MNE,""
+Mongolia,MN,MNG,
+Montenegro,ME,MNE,
 Montserrat,MS,MSR,english
-Morocco,MA,MAR,""
+Morocco,MA,MAR,
 Mozambique,MZ,MOZ,portuguese
-Myanmar,MM,MMR,""
+Myanmar,MM,MMR,
 Namibia,NA,NAM,english
-Nauru,NR,NRU,""
-Nepal,NP,NPL,""
+Nauru,NR,NRU,
+Nepal,NP,NPL,
 Netherlands,NL,NLD,dutch
 New Caledonia,NC,NCL,french
 New Zealand,NZ,NZL,english
 Nicaragua,NI,NIC,spanish
 Niger,NE,NER,french
 Nigeria,NG,NGA,english
-Niue,NU,NIU,""
+Niue,NU,NIU,
 Norfolk Island,NF,NFK,english
-North Korea,KP,PRK,""
+North Korea,KP,PRK,
 Northern Mariana Islands,MP,MNP,english
 Norway,NO,NOR,norwegian
-Oman,OM,OMN,""
+Oman,OM,OMN,
 Pakistan,PK,PAK,english
 Palau,PW,PLW,english
-Palestine,PS,PSE,""
+Palestine,PS,PSE,
 Panama,PA,PAN,spanish
-Papua New Guinea,PG,PNG,""
+Papua New Guinea,PG,PNG,
 Paraguay,PY,PRY,spanish
 Peru,PE,PER,spanish
-Philippines,PH,PHL,""
+Philippines,PH,PHL,
 Pitcairn Islands,PN,PCN,english
-Poland,PL,POL,""
+Poland,PL,POL,
 Portugal,PT,PRT,portuguese
 Puerto Rico,PR,PRI,spanish
-Qatar,QA,QAT,""
-Republic of Kosovo,XK,KOS,""
+Qatar,QA,QAT,
+Republic of Kosovo,XK,KOS,
 Réunion,RE,REU,french
-Romania,RO,ROU,""
+Romania,RO,ROU,
 Russia,RU,RUS,russian
-Rwanda,RW,RWA,""
+Rwanda,RW,RWA,
 Saint Barthélemy,BL,BLM,french
 Saint Helena,SH,SHN,english
 Saint Kitts and Nevis,KN,KNA,english
@@ -192,61 +192,61 @@ Saint Lucia,LC,LCA,english
 Saint Martin,MF,MAF,french
 Saint Pierre and Miquelon,PM,SPM,french
 Saint Vincent and the Grenadines,VC,VCT,english
-Samoa,WS,WSM,""
+Samoa,WS,WSM,
 San Marino,SM,SMR,italian
 São Tomé and Príncipe,ST,STP,portuguese
-Saudi Arabia,SA,SAU,""
+Saudi Arabia,SA,SAU,
 Senegal,SN,SEN,french
-Serbia,RS,SRB,""
+Serbia,RS,SRB,
 Seychelles,SC,SYC,french
 Sierra Leone,SL,SLE,english
 Singapore,SG,SGP,english
 Sint Maarten,SX,SXM,dutch
-Slovakia,SK,SVK,""
-Slovenia,SI,SVN,""
+Slovakia,SK,SVK,
+Slovenia,SI,SVN,
 Solomon Islands,SB,SLB,english
-Somalia,SO,SOM,""
-South Africa,ZA,ZAF,""
+Somalia,SO,SOM,
+South Africa,ZA,ZAF,
 South Georgia,GS,SGS,english
-South Korea,KR,KOR,""
+South Korea,KR,KOR,
 South Sudan,SS,SSD,english
 Spain,ES,ESP,spanish
-Sri Lanka,LK,LKA,""
-Sudan,SD,SDN,""
+Sri Lanka,LK,LKA,
+Sudan,SD,SDN,
 Suriname,SR,SUR,dutch
 Svalbard and Jan Mayen,SJ,SJM,norwegian
-Swaziland,SZ,SWZ,""
+Swaziland,SZ,SWZ,
 Sweden,SE,SWE,swedish
 Switzerland,CH,CHE,german
-Syria,SY,SYR,""
-Taiwan,TW,TWN,""
-Tajikistan,TJ,TJK,""
-Tanzania,TZ,TZA,""
-Thailand,TH,THA,""
+Syria,SY,SYR,
+Taiwan,TW,TWN,
+Tajikistan,TJ,TJK,
+Tanzania,TZ,TZA,
+Thailand,TH,THA,
 Timor-Leste,TL,TLS,portuguese
 Togo,TG,TGO,french
-Tokelau,TK,TKL,""
-Tonga,TO,TON,""
+Tokelau,TK,TKL,
+Tonga,TO,TON,
 Trinidad and Tobago,TT,TTO,english
-Tunisia,TN,TUN,""
+Tunisia,TN,TUN,
 Turkey,TR,TUR,turkish
-Turkmenistan,TM,TKM,""
+Turkmenistan,TM,TKM,
 Turks and Caicos Islands,TC,TCA,english
-Tuvalu,TV,TUV,""
+Tuvalu,TV,TUV,
 Uganda,UG,UGA,english
-Ukraine,UA,UKR,""
-United Arab Emirates,AE,ARE,""
+Ukraine,UA,UKR,
+United Arab Emirates,AE,ARE,
 United Kingdom,GB,GBR,english
 United States,US,USA,english
 United States Minor Outlying Islands,UM,UMI,english
 United States Virgin Islands,VI,VIR,english
 Uruguay,UY,URY,spanish
-Uzbekistan,UZ,UZB,""
-Vanuatu,VU,VUT,""
+Uzbekistan,UZ,UZB,
+Vanuatu,VU,VUT,
 Venezuela,VE,VEN,spanish
-Vietnam,VN,VNM,""
+Vietnam,VN,VNM,
 Wallis and Futuna,WF,WLF,french
-Western Sahara,EH,ESH,""
-Yemen,YE,YEM,""
+Western Sahara,EH,ESH,
+Yemen,YE,YEM,
 Zambia,ZM,ZMB,english
-Zimbabwe,ZW,ZWE,""
+Zimbabwe,ZW,ZWE,
