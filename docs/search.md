@@ -62,3 +62,9 @@ regenerating) materialized views:
 ```
 REFRESH MATERIALIZED VIEW tsvector_search_documents;
 ```
+
+There is a rake task available for reindexing:
+
+```
+bundle exec rake search:reindex
+```
