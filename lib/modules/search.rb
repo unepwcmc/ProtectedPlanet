@@ -9,8 +9,7 @@ class Search
   end
 
   def search
-    protected_area_ids = DB.execute(query)
-    ids_to_protected_areas protected_area_ids
+    ProtectedArea.find(protected_area_ids_for_search)
   end
 
   private
@@ -29,11 +28,8 @@ class Search
     ])
   end
 
-  def ids_to_protected_areas ids
-    protected_areas = ids.map do |pa|
-      ProtectedArea.find(pa["id"])
-    end
-
-    protected_areas.compact
+  def protected_area_ids_for_search
+    results = DB.execute(query)
+    results.map { |attributes| attributes["id"] }
   end
 end
