@@ -349,7 +349,6 @@ CREATE TABLE protected_areas (
     id integer NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    the_geom geometry,
     wdpa_id integer,
     wdpa_parent_id integer,
     name text,
@@ -367,7 +366,8 @@ CREATE TABLE protected_areas (
     management_authority_id integer,
     international_criteria character varying(255),
     no_take_status_id integer,
-    designation_id integer
+    designation_id integer,
+    the_geom geometry
 );
 
 
@@ -929,7 +929,7 @@ CREATE INDEX wdpapoly_june2014_wkb_geometry_geom_idx ON wdpapoly_june2014 USING 
 
 CREATE RULE "_RETURN" AS
     ON SELECT TO tsvector_search_documents DO INSTEAD  SELECT pa.id,
-    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(pa.name, ''::text)), 'A'::"char")) || to_tsvector((first(c.language))::regconfig, COALESCE(unaccent(pa.original_name), ''::text))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ''::text)))) || to_tsvector(first((c.language)::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ''::text)))) AS document
+    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(pa.name, ''::text)), 'A'::"char")) || to_tsvector(COALESCE((first(c.language))::regconfig, 'simple'::regconfig), COALESCE(unaccent(pa.original_name), ''::text))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ' '::text), ''::text))) || to_tsvector(COALESCE(first((c.language)::regconfig), 'simple'::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ' '::text), ''::text))) AS document
    FROM (((protected_areas pa
    LEFT JOIN countries_protected_areas cpa ON ((cpa.protected_area_id = pa.id)))
    LEFT JOIN countries c ON ((cpa.country_id = c.id)))
@@ -1034,3 +1034,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140612133146');
 
 INSERT INTO schema_migrations (version) VALUES ('20140612141706');
 
+INSERT INTO schema_migrations (version) VALUES ('20140613103413');
+
+INSERT INTO schema_migrations (version) VALUES ('20140613110935');
+
+INSERT INTO schema_migrations (version) VALUES ('20140613125148');
