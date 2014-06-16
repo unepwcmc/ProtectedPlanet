@@ -6,6 +6,7 @@ class Wdpa::Attribute
     string:   -> (value) { value.to_s },
     float:    -> (value) { value.to_f },
     csv:      -> (value) { value.split(',').map(&:strip) },
+    slug:     -> (value) { value.parameterize },
     year:     -> (value) {
       value = value.to_s
       # Postgres cannot handle zero dates, and the WDPA stores

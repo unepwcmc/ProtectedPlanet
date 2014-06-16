@@ -16,7 +16,9 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns the correct attribute
    for name' do
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({name: 'Manbone Island'})
-    assert_equal({name: 'Manbone Island'}, attributes)
+
+    assert_not_nil attributes[:name]
+    assert_equal   'Manbone Island', attributes[:name]
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
@@ -273,6 +275,13 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
     assert_not_nil the_geom, "Expected the_geom to be returned"
     assert_equal wkt_geom, the_geom
+  end
+
+  test '.attributes_from_standards_hash creates a slug from the PA name' do
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({name: 'Waltér White Mountain'})
+
+    assert_not_nil attributes[:slug], "Expected the slug to be returned"
+    assert_equal   "walter-white-mountain", attributes[:slug]
   end
 
   test '.attributes_from_standards_hash ignores attributes not in the
