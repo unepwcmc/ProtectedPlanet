@@ -367,7 +367,8 @@ CREATE TABLE protected_areas (
     management_authority_id integer,
     international_criteria character varying(255),
     no_take_status_id integer,
-    designation_id integer
+    designation_id integer,
+    slug text
 );
 
 
@@ -817,4 +818,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140612092941');
 INSERT INTO schema_migrations (version) VALUES ('20140612133146');
 
 INSERT INTO schema_migrations (version) VALUES ('20140613125148');
+
+INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 
