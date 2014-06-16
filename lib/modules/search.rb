@@ -9,7 +9,7 @@ class Search
   end
 
   def search
-    ProtectedArea.find(protected_area_ids_for_search)
+    ProtectedArea.where(wdpa_id: protected_area_wdpa_ids_for_search)
   end
 
   private
@@ -18,7 +18,7 @@ class Search
 
   def query
     dirty_query = """
-      SELECT id
+      SELECT wdpa_id
       FROM tsvector_search_documents
       WHERE document @@ to_tsquery(?)
     """.squish
@@ -28,8 +28,8 @@ class Search
     ])
   end
 
-  def protected_area_ids_for_search
+  def protected_area_wdpa_ids_for_search
     results = DB.execute(query)
-    results.map { |attributes| attributes["id"] }
+    results.map { |attributes| attributes["wdpa_id"] }
   end
 end

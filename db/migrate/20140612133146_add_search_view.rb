@@ -19,10 +19,10 @@ class AddSearchView < ActiveRecord::Migration
         execute <<-SQL
           DROP MATERIALIZED VIEW IF EXISTS tsvector_search_documents;
           CREATE MATERIALIZED VIEW tsvector_search_documents AS
-            SELECT pa.id,
+            SELECT pa.wdpa_id,
               setweight(to_tsvector('english'::regconfig, coalesce (string_agg(c.name, ' '), '')), 'B') ||
-              setweight(to_tsvector('english'::regconfig, coalesce (pa.name, '')), 'A') ||
-              to_tsvector(coalesce(public.first(c.language)::regconfig, 'simple'::regconfig), coalesce (unaccent(pa.original_name), '')) ||
+              setweight(to_tsvector('english'::regconfig, coalesce (public.first(pa.name), '')), 'A') ||
+              to_tsvector(coalesce(public.first(c.language)::regconfig, 'simple'::regconfig), coalesce (unaccent(public.first(pa.original_name)), '')) ||
               to_tsvector('english'::regconfig, coalesce (string_agg(sl.english_name, ' '), '')) ||
               to_tsvector(coalesce(public.first(c.language::regconfig), 'simple'::regconfig), coalesce (string_agg(sl.alternate_name, ' '), ''))
             AS document
@@ -32,8 +32,8 @@ class AddSearchView < ActiveRecord::Migration
             LEFT JOIN countries c ON cpa.country_id = c.id
             LEFT JOIN sub_locations sl ON c.id = sl.country_id
 
-            GROUP BY pa.id
-            ORDER BY pa.id;
+            GROUP BY pa.wdpa_id
+            ORDER BY pa.wdpa_id;
         SQL
       end
 

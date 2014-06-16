@@ -445,13 +445,19 @@ ALTER SEQUENCE sub_locations_id_seq OWNED BY sub_locations.id;
 
 
 --
--- Name: tsvector_search_documents; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: tsvector_search_documents; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE tsvector_search_documents (
-    id integer,
-    document tsvector
-);
+CREATE MATERIALIZED VIEW tsvector_search_documents AS
+ SELECT pa.wdpa_id,
+    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(first(pa.name), ''::text)), 'A'::"char")) || to_tsvector(COALESCE((first(c.language))::regconfig, 'simple'::regconfig), COALESCE(unaccent(first(pa.original_name)), ''::text))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ' '::text), ''::text))) || to_tsvector(COALESCE(first((c.language)::regconfig), 'simple'::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ' '::text), ''::text))) AS document
+   FROM (((protected_areas pa
+   LEFT JOIN countries_protected_areas cpa ON ((cpa.protected_area_id = pa.id)))
+   LEFT JOIN countries c ON ((cpa.country_id = c.id)))
+   LEFT JOIN sub_locations sl ON ((c.id = sl.country_id)))
+  GROUP BY pa.wdpa_id
+  ORDER BY pa.wdpa_id
+  WITH NO DATA;
 
 
 --
@@ -714,21 +720,6 @@ CREATE INDEX index_tsvector_search_documents_on_document ON tsvector_search_docu
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
-
-
---
--- Name: _RETURN; Type: RULE; Schema: public; Owner: -
---
-
-CREATE RULE "_RETURN" AS
-    ON SELECT TO tsvector_search_documents DO INSTEAD  SELECT pa.id,
-    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(pa.name, ''::text)), 'A'::"char")) || to_tsvector(COALESCE((first(c.language))::regconfig, 'simple'::regconfig), COALESCE(unaccent(pa.original_name), ''::text))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ' '::text), ''::text))) || to_tsvector(COALESCE(first((c.language)::regconfig), 'simple'::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ' '::text), ''::text))) AS document
-   FROM (((protected_areas pa
-   LEFT JOIN countries_protected_areas cpa ON ((cpa.protected_area_id = pa.id)))
-   LEFT JOIN countries c ON ((cpa.country_id = c.id)))
-   LEFT JOIN sub_locations sl ON ((c.id = sl.country_id)))
-  GROUP BY pa.id
-  ORDER BY pa.id;
 
 
 --
