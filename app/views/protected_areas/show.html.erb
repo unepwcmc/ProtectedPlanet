@@ -1,2 +1,7 @@
 <div id="map"></div>
 <h1><%= @protected_area.name %></h1>
+<script>
+  $(document).ready(function() {
+    fitToBounds(<%= @protected_area.bounds.to_json %>);
+  });
+</script>
