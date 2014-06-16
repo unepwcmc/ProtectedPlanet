@@ -11,5 +11,7 @@
  * file per style scope.
  *
  *= require_tree .
+ *= require 'reset'
+ *= require 'base'
  *= require_self
  */

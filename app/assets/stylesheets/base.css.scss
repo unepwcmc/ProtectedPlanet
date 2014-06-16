@@ -1,0 +1,27 @@
+body {
+  font-family: Helvetica, Arial;
+}
+
+header {
+  background: #666;
+  height: 50px;
+  overflow: hidden;
+
+  .header-inner {
+    margin: 15px auto;
+    width: 1000px;
+    clear: both;
+  }
+
+  h1 {
+    float: left;
+  }
+
+  nav {
+    float: right;
+
+    ul li {
+      display: inline-block;
+    }
+  }
+}
