@@ -123,6 +123,74 @@ CREATE TABLE countries_protected_areas (
 
 
 --
+-- Name: country_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE country_statistics (
+    id integer NOT NULL,
+    country_id integer,
+    area double precision,
+    pa_area double precision,
+    percentage_cover_pas double precision,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: country_statistics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE country_statistics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: country_statistics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE country_statistics_id_seq OWNED BY country_statistics.id;
+
+
+--
+-- Name: country_stats; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE country_stats (
+    id integer NOT NULL,
+    country_id integer,
+    area double precision,
+    pa_area double precision,
+    percentage_cover_pas double precision,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: country_stats_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE country_stats_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: country_stats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE country_stats_id_seq OWNED BY country_stats.id;
+
+
+--
 -- Name: designations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -401,6 +469,105 @@ CREATE TABLE protected_areas_sub_locations (
 
 
 --
+-- Name: region_stats; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE region_stats (
+    id integer NOT NULL,
+    region_id integer,
+    area double precision,
+    pa_area double precision,
+    percentage_cover_pas double precision,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: region_stats_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE region_stats_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: region_stats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE region_stats_id_seq OWNED BY region_stats.id;
+
+
+--
+-- Name: regional_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE regional_statistics (
+    id integer NOT NULL,
+    region_id integer,
+    area double precision,
+    pa_area double precision,
+    percentage_cover_pas double precision,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: regional_statistics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE regional_statistics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: regional_statistics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE regional_statistics_id_seq OWNED BY regional_statistics.id;
+
+
+--
+-- Name: regions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE regions (
+    id integer NOT NULL,
+    name character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: regions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE regions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: regions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE regions_id_seq OWNED BY regions.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -445,19 +612,13 @@ ALTER SEQUENCE sub_locations_id_seq OWNED BY sub_locations.id;
 
 
 --
--- Name: tsvector_search_documents; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
+-- Name: tsvector_search_documents; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE MATERIALIZED VIEW tsvector_search_documents AS
- SELECT pa.wdpa_id,
-    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(first(pa.name), ''::text)), 'A'::"char")) || to_tsvector(COALESCE((first(c.language))::regconfig, 'simple'::regconfig), COALESCE(unaccent(first(pa.original_name)), ''::text))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ' '::text), ''::text))) || to_tsvector(COALESCE(first((c.language)::regconfig), 'simple'::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ' '::text), ''::text))) AS document
-   FROM (((protected_areas pa
-   LEFT JOIN countries_protected_areas cpa ON ((cpa.protected_area_id = pa.id)))
-   LEFT JOIN countries c ON ((cpa.country_id = c.id)))
-   LEFT JOIN sub_locations sl ON ((c.id = sl.country_id)))
-  GROUP BY pa.wdpa_id
-  ORDER BY pa.wdpa_id
-  WITH NO DATA;
+CREATE TABLE tsvector_search_documents (
+    id integer,
+    document tsvector
+);
 
 
 --
@@ -465,6 +626,20 @@ CREATE MATERIALIZED VIEW tsvector_search_documents AS
 --
 
 ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY country_statistics ALTER COLUMN id SET DEFAULT nextval('country_statistics_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY country_stats ALTER COLUMN id SET DEFAULT nextval('country_stats_id_seq'::regclass);
 
 
 --
@@ -527,6 +702,27 @@ ALTER TABLE ONLY protected_areas ALTER COLUMN id SET DEFAULT nextval('protected_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY region_stats ALTER COLUMN id SET DEFAULT nextval('region_stats_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY regional_statistics ALTER COLUMN id SET DEFAULT nextval('regional_statistics_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY regions ALTER COLUMN id SET DEFAULT nextval('regions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY sub_locations ALTER COLUMN id SET DEFAULT nextval('sub_locations_id_seq'::regclass);
 
 
@@ -536,6 +732,22 @@ ALTER TABLE ONLY sub_locations ALTER COLUMN id SET DEFAULT nextval('sub_location
 
 ALTER TABLE ONLY countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: country_statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY country_statistics
+    ADD CONSTRAINT country_statistics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: country_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY country_stats
+    ADD CONSTRAINT country_stats_pkey PRIMARY KEY (id);
 
 
 --
@@ -600,6 +812,30 @@ ALTER TABLE ONLY no_take_statuses
 
 ALTER TABLE ONLY protected_areas
     ADD CONSTRAINT protected_areas_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: region_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY region_stats
+    ADD CONSTRAINT region_stats_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: regional_statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY regional_statistics
+    ADD CONSTRAINT regional_statistics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: regions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY regions
+    ADD CONSTRAINT regions_pkey PRIMARY KEY (id);
 
 
 --
@@ -817,4 +1053,14 @@ INSERT INTO schema_migrations (version) VALUES ('20140612092941');
 INSERT INTO schema_migrations (version) VALUES ('20140612133146');
 
 INSERT INTO schema_migrations (version) VALUES ('20140613125148');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617090445');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617090531');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617091236');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617091255');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617091326');
 
