@@ -38,11 +38,15 @@ class StatsTest < ActiveSupport::TestCase
     FactoryGirl.create(:protected_area, designation: designation_1, wdpa_id: 1)
     FactoryGirl.create(:protected_area, designation: designation_1, wdpa_id: 2)
     FactoryGirl.create(:protected_area, designation: designation_2, wdpa_id: 3)
-
     assert_equal ({'Lionel Messi' => 2, 'Robin Van Persie' => 1}), Stats.global_protected_areas_by_designation
   end
 
-
-
-
+  test '.number of countries providing data' do
+    country_1 = FactoryGirl.create(:country, name: 'Old Caledonia')
+    country_2 = FactoryGirl.create(:country, name: 'Old Zealand')
+    FactoryGirl.create(:protected_area, countries: [country_1], wdpa_id: 1)
+    FactoryGirl.create(:protected_area, countries: [country_1], wdpa_id: 2)
+    FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 3)  
+    assert_equal 2, Stats.countries_providing_data
+  end
 end

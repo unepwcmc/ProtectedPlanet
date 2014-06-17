@@ -27,5 +27,9 @@ class Stats
     end
     result
   end
+
+  def self.countries_providing_data
+    ProtectedArea.select("countries.id").joins(:countries).group("countries.id").length
+  end
 end
 
