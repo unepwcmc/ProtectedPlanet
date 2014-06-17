@@ -196,7 +196,8 @@ CREATE TABLE images (
     updated_at timestamp without time zone,
     title text,
     lonlat geography(Point,4326),
-    protected_area_id integer
+    protected_area_id integer,
+    details_url text
 );
 
 
@@ -946,3 +947,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140617133557');
 INSERT INTO schema_migrations (version) VALUES ('20140617133708');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617133943');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617170024');
