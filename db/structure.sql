@@ -186,6 +186,40 @@ ALTER SEQUENCE governances_id_seq OWNED BY governances.id;
 
 
 --
+-- Name: images; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE images (
+    id integer NOT NULL,
+    url text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    title text,
+    lonlat geography(Point,4326),
+    protected_area_id integer
+);
+
+
+--
+-- Name: images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE images_id_seq OWNED BY images.id;
+
+
+--
 -- Name: iucn_categories; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -520,6 +554,13 @@ ALTER TABLE ONLY governances ALTER COLUMN id SET DEFAULT nextval('governances_id
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY iucn_categories ALTER COLUMN id SET DEFAULT nextval('iucn_categories_id_seq'::regclass);
 
 
@@ -594,6 +635,14 @@ ALTER TABLE ONLY designations
 
 ALTER TABLE ONLY governances
     ADD CONSTRAINT governances_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: images_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY images
+    ADD CONSTRAINT images_pkey PRIMARY KEY (id);
 
 
 --
@@ -679,6 +728,13 @@ CREATE INDEX index_countries_protected_areas_on_country_id ON countries_protecte
 --
 
 CREATE INDEX index_designations_on_jurisdiction_id ON designations USING btree (jurisdiction_id);
+
+
+--
+-- Name: index_images_on_protected_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_images_on_protected_area_id ON images USING btree (protected_area_id);
 
 
 --
@@ -871,4 +927,10 @@ INSERT INTO schema_migrations (version) VALUES ('20140613125148');
 INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091620');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617093647');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617095318');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617113201');
 
