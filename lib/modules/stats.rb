@@ -31,5 +31,15 @@ class Stats
   def self.countries_providing_data
     ProtectedArea.select("countries.id").joins(:countries).group("countries.id").length
   end
+
+  def self.country_total_pas iso
+    total_pas_in iso, 'countries'
+  end
+
+  private
+
+  def self.total_pas_in entity_code,type
+    ProtectedArea.joins(type.to_sym).where("iso = '#{entity_code}'").count
+  end
 end
 

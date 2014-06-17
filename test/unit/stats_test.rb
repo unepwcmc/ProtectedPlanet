@@ -49,4 +49,14 @@ class StatsTest < ActiveSupport::TestCase
     FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 3)  
     assert_equal 2, Stats.countries_providing_data
   end
+
+  test '.number of pas in one country' do
+    country_1 = FactoryGirl.create(:country, name: 'Banana Republic', iso: 'BN')
+    country_2 = FactoryGirl.create(:country, name: 'Kingdom of Pineapple', iso: 'KP')
+    FactoryGirl.create(:protected_area, countries:  [country_1], wdpa_id: 1)
+    FactoryGirl.create(:protected_area, countries: [country_1], wdpa_id: 2)
+    FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 3)
+    assert_equal 2, Stats.country_total_pas('BN')
+
+  end
 end
