@@ -13,13 +13,21 @@ The application depends on:
 * Redis
 
 They require no special setup, so install them with your favourite
-package manager.
+package manager. For example, on OS X:
+
+```
+  # Get https://rvm.io or any other ruby version manager, then...
+  brew install postgresql
+  brew install postgis
+  brew install redis
+```
 
 After that, it's pretty standard:
 
 ```
   bundle install
   rake db:setup
+
   bundle exec rails s
 ```
 
@@ -34,6 +42,12 @@ application to run correctly:**
 ```
   cp config/secrets.yml.example config/secrets.yml
 ```
+
+### Background Workers
+
+Some tasks that take a long time require processing in the background,
+and are handled by Sidekiq. See the [workers docs](workers.md) for more
+info.
 
 ## Data
 
