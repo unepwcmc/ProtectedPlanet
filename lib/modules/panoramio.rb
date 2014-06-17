@@ -31,8 +31,9 @@ class Panoramio
   def attributes_for_image image
     attributes = {}
 
-    attributes[:title] = image["photo_title"]
-    attributes[:url]   = image["photo_file_url"]
+    attributes[:title]       = image["photo_title"]
+    attributes[:url]         = image["photo_file_url"]
+    attributes[:details_url] = image["photo_url"]
 
     latitude = image["latitude"]
     longitude = image["longitude"]
