@@ -1,0 +1,12 @@
+  <div>
+    Wikipedia
+    <% if wikipedia_article %>
+      <small><a href='<%= wikipedia_article.url %>'><%= t('wikipedia_article_link') %></a></small>
+    <% end %>
+  </div>
+  <% if wikipedia_article %>
+    <p><%= wikipedia_article.summary %></p>
+    <img src='<%= wikipedia_article.image_url %>'>
+  <% else %>
+    <p><%= t('wikipedia_not_found') %></p>
+  <% end %>
