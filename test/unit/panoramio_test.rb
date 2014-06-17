@@ -6,7 +6,7 @@ class PanoramioTest < ActiveSupport::TestCase
 
     query = panoramio.instance_variable_get(:@options)[:query]
 
-    assert_equal({set: 'public', from: 0, to: 20}, query)
+    assert_equal({set: 'public', size: 'square', from: 0, to: 20}, query)
     assert_equal "http://www.panoramio.com/map/get_panoramas.php", Panoramio.base_uri
   end
 
@@ -22,6 +22,7 @@ class PanoramioTest < ActiveSupport::TestCase
 
     query = {
       set: 'public',
+      size: 'square',
       from: 0,
       to: 20,
       miny: 0,

@@ -6,6 +6,7 @@ class Panoramio
     @options = {
       query: {
         set: 'public',
+        size: 'square',
         from: 0,
         to: 20
       }
