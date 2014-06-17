@@ -195,7 +195,8 @@ CREATE TABLE images (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     title text,
-    lonlat geography(Point,4326)
+    lonlat geography(Point,4326),
+    protected_area_id integer
 );
 
 
@@ -681,6 +682,13 @@ CREATE INDEX index_designations_on_jurisdiction_id ON designations USING btree (
 
 
 --
+-- Name: index_images_on_protected_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_images_on_protected_area_id ON images USING btree (protected_area_id);
+
+
+--
 -- Name: index_protected_areas_on_designation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -872,4 +880,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 INSERT INTO schema_migrations (version) VALUES ('20140617093647');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617095318');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617113201');
 
