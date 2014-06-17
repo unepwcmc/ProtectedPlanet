@@ -1,4 +1,4 @@
-## Setup
+## Setup and Configuration
 
 Protected Planet is a standard Rails app, using a PostgreSQL database with
 Postgis extensions.
