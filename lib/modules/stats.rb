@@ -36,6 +36,20 @@ class Stats
     total_pas_in iso, 'countries'
   end
 
+  def self.country_percentage_cover_pas iso
+    CountryStatistic.joins(:country)
+                     .where("countries.iso" => iso)
+                     .first[:percentage_cover_pas]
+  end
+
+  def self.country_pas_with_iucn_category iso
+    ProtectedArea.joins(:iucn_category, :countries)
+                 .where("iucn_categories.name IN ('Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI') AND iso = '#{iso}'")
+                 .count
+
+  end
+
+
   private
 
   def self.total_pas_in entity_code,type

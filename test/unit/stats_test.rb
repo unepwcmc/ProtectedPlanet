@@ -50,6 +50,7 @@ class StatsTest < ActiveSupport::TestCase
     assert_equal 2, Stats.countries_providing_data
   end
 
+
   test '.number of pas in one country' do
     country_1 = FactoryGirl.create(:country, name: 'Banana Republic', iso: 'BN')
     country_2 = FactoryGirl.create(:country, name: 'Kingdom of Pineapple', iso: 'KP')
@@ -57,6 +58,24 @@ class StatsTest < ActiveSupport::TestCase
     FactoryGirl.create(:protected_area, countries: [country_1], wdpa_id: 2)
     FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 3)
     assert_equal 2, Stats.country_total_pas('BN')
+  end
 
+  test '.percentage cover of protected areas in country' do
+    country = FactoryGirl.create(:country, iso: 'BANANA')
+    FactoryGirl.create(:country_statistic, country: country, :percentage_cover_pas => 50)
+    assert_equal 50, Stats.country_percentage_cover_pas('BANANA')
+  end
+
+  test '.protected areas with IUCN category per Country' do
+    iucn_category_1 = FactoryGirl.create(:iucn_category, name: 'Ib')
+    iucn_category_2 = FactoryGirl.create(:iucn_category, name: 'V')
+    no_iucn_category = FactoryGirl.create(:iucn_category, name: 'Pepe')
+    country_1 = FactoryGirl.create(:country, iso: 'TOMATO')
+    country_2 = FactoryGirl.create(:country, iso: 'EGGPLANT')
+
+    FactoryGirl.create(:protected_area, iucn_category: iucn_category_1, countries:  [country_1] )
+    FactoryGirl.create(:protected_area, iucn_category: iucn_category_2, countries:  [country_2])
+    FactoryGirl.create(:protected_area, iucn_category: no_iucn_category, countries:  [country_1])
+    assert_equal 1, Stats.country_pas_with_iucn_category('TOMATO')
   end
 end

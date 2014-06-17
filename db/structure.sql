@@ -89,7 +89,8 @@ CREATE TABLE countries (
     iso_3 character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    language character varying(255)
+    language character varying(255),
+    region_id integer
 );
 
 
@@ -1066,4 +1067,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140617091255');
 INSERT INTO schema_migrations (version) VALUES ('20140617091326');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617161632');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617170938');
 
