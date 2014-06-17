@@ -19,11 +19,9 @@ class Panoramio
 
   def images_for_bounds bounds
     query = @options[:query].merge params_from_bounds(bounds)
-    puts "requesting for images"
     response = self.class.get '', query: query
 
     images = JSON.parse(response.body)["photos"]
-    puts images
     images.map { |image| attributes_for_image(image) }
   end
 
