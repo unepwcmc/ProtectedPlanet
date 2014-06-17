@@ -13,3 +13,5 @@
 
 /tmp/*
 !/tmp/.gitkeep
+
+dump.rdb
