@@ -31,7 +31,7 @@ After that, it's pretty standard:
   bundle exec rails s
 ```
 
-### Secrets
+### Configuration and Secrets
 
 Some secrets are required by the application, such as AWS keys. Take a
 look in [`config/secrets.yml.example`](config/secrets.yml.example) for
@@ -42,6 +42,11 @@ application to run correctly:**
 ```
   cp config/secrets.yml.example config/secrets.yml
 ```
+
+Generally `secrets.yml` is also used for non-secret configuration, so
+that the config values can reside in the same file for easy maintenance.
+It is advisable that only in exceptional circumstances do you put custom
+config in environments files or other initializers.
 
 ### Background Workers
 
