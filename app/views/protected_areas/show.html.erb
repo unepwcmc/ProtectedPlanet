@@ -1,5 +1,29 @@
 <div id="map"></div>
-<h1><%= @protected_area.name %></h1>
+
+<div class="container">
+  <main>
+    <section class="info-card">
+      <h2><%= @protected_area.name %></h2>
+
+      <hr>
+    </section>
+
+    <div class="factsheet">
+      <section>
+        Official Record
+      </section>
+
+      <section class="column-left">
+        Wikipedia
+      </section>
+
+      <section class="column-right">
+        Photos
+      </section>
+    </div>
+  </main>
+</div>
+
 <script>
   $(document).ready(function() {
     fitToBounds(<%= @protected_area.bounds.to_json %>);
