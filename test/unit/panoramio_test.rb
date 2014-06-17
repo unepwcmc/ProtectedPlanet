@@ -6,7 +6,7 @@ class PanoramioTest < ActiveSupport::TestCase
 
     query = panoramio.instance_variable_get(:@options)[:query]
 
-    assert_equal({set: 'public', from: 0, to: 20}, query)
+    assert_equal({set: 'public', size: 'square', from: 0, to: 20}, query)
     assert_equal "http://www.panoramio.com/map/get_panoramas.php", Panoramio.base_uri
   end
 
@@ -14,6 +14,7 @@ class PanoramioTest < ActiveSupport::TestCase
     bounds = [[0, -1], [2, 1]]
 
     attributes = {
+      "photo_url" => 'http://google.com/image',
       "photo_file_url" => 'http://google.com/image.gif',
       "photo_title" => "An photo",
       "longitude" => 11.280727,
@@ -22,6 +23,7 @@ class PanoramioTest < ActiveSupport::TestCase
 
     query = {
       set: 'public',
+      size: 'square',
       from: 0,
       to: 20,
       miny: 0,
@@ -42,6 +44,7 @@ class PanoramioTest < ActiveSupport::TestCase
     image = images.first
 
     assert_equal attributes["photo_title"], image[:title]
+    assert_equal attributes["photo_url"], image[:details_url]
     assert_equal attributes["photo_file_url"], image[:url]
 
     latitude = attributes["latitude"]

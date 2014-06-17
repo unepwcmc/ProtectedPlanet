@@ -31,4 +31,19 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
     assert_match Regexp.new(wikipedia_article.image_url), @response.body
     assert_match Regexp.new(wikipedia_article.url), @response.body
   end
+
+  test 'renders the Images for the Protected Area' do
+    image = FactoryGirl.create(:image, url: 'http://images.com/image.jpg')
+    FactoryGirl.create(:protected_area, wdpa_id: 1234, images: [image])
+
+    get '/1234'
+
+    assert_select 'ul.protected_area_photos' do
+      assert_select 'li', 1 do |elements|
+        elements.each do |element|
+          assert_select element, 'img'
+        end
+      end
+    end
+  end
 end

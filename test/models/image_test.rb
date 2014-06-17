@@ -7,6 +7,7 @@ class ImageTest < ActiveSupport::TestCase
     image_attributes = [{
       title: 'An image',
       url: 'http://panoramio.com/an-image.gif',
+      details_url: 'http://google.com',
       lonlat: RGeo::Geographic.spherical_factory(:srid => 4326).point(1, 1)
     }]
 
