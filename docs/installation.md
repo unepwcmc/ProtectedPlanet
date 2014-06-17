@@ -5,8 +5,15 @@ Postgis extensions.
 
 ### Installation
 
-The application depends on Ruby, PostgreSQL and Postgis. They require no
-special setup, so install them with your favourite package manager.
+The application depends on:
+
+* Ruby
+* PostgreSQL
+* Postgis
+* Redis
+
+They require no special setup, so install them with your favourite
+package manager.
 
 After that, it's pretty standard:
 
