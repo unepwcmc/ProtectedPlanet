@@ -22,8 +22,24 @@ class StatsTest < ActiveSupport::TestCase
     FactoryGirl.create(:protected_area, iucn_category: iucn_category_1)
     FactoryGirl.create(:protected_area, iucn_category: iucn_category_2)
     FactoryGirl.create(:protected_area, iucn_category: no_iucn_category)
-
     assert_equal 2, Stats.global_pas_with_iucn_category
+  end
+
+  test '.number of types of designations' do
+    FactoryGirl.create(:designation, name: 'Lionel Messi')
+    FactoryGirl.create(:designation, name: 'Robin Van Persie')
+    assert_equal 2, Stats.global_designation_count
+  end
+
+  test '.total protected areas by designation' do
+    designation_1 = FactoryGirl.create(:designation, name: 'Lionel Messi')
+    designation_2 = FactoryGirl.create(:designation, name: 'Robin Van Persie')
+    FactoryGirl.create(:designation, name: 'Puppy')
+    FactoryGirl.create(:protected_area, designation: designation_1, wdpa_id: 1)
+    FactoryGirl.create(:protected_area, designation: designation_1, wdpa_id: 2)
+    FactoryGirl.create(:protected_area, designation: designation_2, wdpa_id: 3)
+
+    assert_equal ({'Lionel Messi' => 2, 'Robin Van Persie' => 1}), Stats.global_protected_areas_by_designation
   end
 
 
