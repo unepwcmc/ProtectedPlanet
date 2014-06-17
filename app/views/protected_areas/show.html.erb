@@ -16,13 +16,13 @@
       <section class="column-left">
         <div>
           Wikipedia
-          <% if @wikipedia_summary %>
-            <small><%= link_to t('wikipedia_article_link'), @wikipedia_summary.article_url %></small>
+          <% if @wikipedia_article %>
+            <small><%= link_to t('wikipedia_article_link'), @wikipedia_article.url %></small>
           <% end %>
         </div>
-        <% if @wikipedia_summary %>
-          <p><%= @wikipedia_summary.summary %></p>
-          <%= image_tag @wikipedia_summary.image_url %>
+        <% if @wikipedia_article %>
+          <p><%= @wikipedia_article.summary %></p>
+          <%= image_tag @wikipedia_article.image_url %>
         <% else %>
           <p><%= t('wikipedia_not_found') %>
         <% end %>

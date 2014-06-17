@@ -18,17 +18,17 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
 
   test 'renders the Wikipedia summary' do
     protected_area = FactoryGirl.create(:protected_area, slug: 'killbear')
-    wikipedia_summary = FactoryGirl.create(
-      :wikipedia_summary,
+    wikipedia_article = FactoryGirl.create(
+      :wikipedia_article,
       summary: 'Summary text',
       image_url: 'http://url.com/image.jpg',
-      article_url: 'http://url.com/article',
+      url: 'http://url.com/article',
       protected_area: protected_area
     )
 
     get '/killbear'
-    assert_match Regexp.new(wikipedia_summary.summary), @response.body
-    assert_match Regexp.new(wikipedia_summary.image_url), @response.body
-    assert_match Regexp.new(wikipedia_summary.article_url), @response.body
+    assert_match Regexp.new(wikipedia_article.summary), @response.body
+    assert_match Regexp.new(wikipedia_article.image_url), @response.body
+    assert_match Regexp.new(wikipedia_article.url), @response.body
   end
 end

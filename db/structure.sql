@@ -403,7 +403,7 @@ CREATE TABLE protected_areas (
     no_take_status_id integer,
     designation_id integer,
     slug text,
-    wikipedia_summary_id integer
+    wikipedia_article_id integer
 );
 
 
@@ -497,24 +497,24 @@ CREATE MATERIALIZED VIEW tsvector_search_documents AS
 
 
 --
--- Name: wikipedia_summaries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: wikipedia_articles; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
-CREATE TABLE wikipedia_summaries (
+CREATE TABLE wikipedia_articles (
     id integer NOT NULL,
     summary text,
+    url character varying(255),
     image_url character varying(255),
-    article_url character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
 
 
 --
--- Name: wikipedia_summaries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: wikipedia_articles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE wikipedia_summaries_id_seq
+CREATE SEQUENCE wikipedia_articles_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -523,10 +523,10 @@ CREATE SEQUENCE wikipedia_summaries_id_seq
 
 
 --
--- Name: wikipedia_summaries_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: wikipedia_articles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE wikipedia_summaries_id_seq OWNED BY wikipedia_summaries.id;
+ALTER SEQUENCE wikipedia_articles_id_seq OWNED BY wikipedia_articles.id;
 
 
 --
@@ -610,7 +610,7 @@ ALTER TABLE ONLY sub_locations ALTER COLUMN id SET DEFAULT nextval('sub_location
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY wikipedia_summaries ALTER COLUMN id SET DEFAULT nextval('wikipedia_summaries_id_seq'::regclass);
+ALTER TABLE ONLY wikipedia_articles ALTER COLUMN id SET DEFAULT nextval('wikipedia_articles_id_seq'::regclass);
 
 
 --
@@ -702,11 +702,11 @@ ALTER TABLE ONLY sub_locations
 
 
 --
--- Name: wikipedia_summaries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: wikipedia_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
-ALTER TABLE ONLY wikipedia_summaries
-    ADD CONSTRAINT wikipedia_summaries_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY wikipedia_articles
+    ADD CONSTRAINT wikipedia_articles_pkey PRIMARY KEY (id);
 
 
 --
@@ -791,6 +791,13 @@ CREATE UNIQUE INDEX index_protected_areas_on_wdpa_id ON protected_areas USING bt
 --
 
 CREATE INDEX index_protected_areas_on_wdpa_parent_id ON protected_areas USING btree (wdpa_parent_id);
+
+
+--
+-- Name: index_protected_areas_on_wikipedia_article_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_protected_areas_on_wikipedia_article_id ON protected_areas USING btree (wikipedia_article_id);
 
 
 --
@@ -934,3 +941,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140617095318');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617113201');
 
+INSERT INTO schema_migrations (version) VALUES ('20140617133557');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617133708');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617133943');
