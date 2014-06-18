@@ -49,10 +49,19 @@ class Stats
   end
 
   def self.country_designation_count iso
-    country_protected_area = ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
-    country_protected_area.select('designations.id').joins(:designation).group('designations.id').length
+    country_protected_areas = ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
+    country_protected_areas.select('designations.id').joins(:designation).group('designations.id').length
   end
 
+  def self.country_protected_areas_by_designation iso
+    country_protected_areas = ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
+    designation_count = country_protected_areas.select('designations.name, count(*)').joins(:designation).group('designations.name')
+    result = {}
+    designation_count.each do |designation|
+      result.merge!(designation[:name] => designation[:count])
+    end
+    result
+  end 
 
   private
 

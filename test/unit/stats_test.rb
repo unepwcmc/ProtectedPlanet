@@ -87,4 +87,21 @@ class StatsTest < ActiveSupport::TestCase
     FactoryGirl.create(:protected_area, designation: designation_2, countries:  [country_1])
     assert_equal 2, Stats.country_designation_count('TOMATO')
   end
+
+  test '.total protected areas by designation in a country' do
+    designation_1 = FactoryGirl.create(:designation, name: 'Lionel Messi')
+    designation_2 = FactoryGirl.create(:designation, name: 'Robin Van Persie')
+    designation_3 = FactoryGirl.create(:designation, name: 'Cristiano Ronaldo')  
+    country_1 = FactoryGirl.create(:country, iso: 'TOMATO')
+    country_2 = FactoryGirl.create(:country, iso: 'BANANA')
+    FactoryGirl.create(:protected_area, designation: designation_1, countries:  [country_1])
+    FactoryGirl.create(:protected_area, designation: designation_1, countries:  [country_1])
+    FactoryGirl.create(:protected_area, designation: designation_2, countries:  [country_1])
+    FactoryGirl.create(:protected_area, designation: designation_3, countries:  [country_2])
+    assert_equal ({'Lionel Messi' => 2, 'Robin Van Persie' => 1}), Stats.country_protected_areas_by_designation('TOMATO')
+  end
+
+
+
+
 end
