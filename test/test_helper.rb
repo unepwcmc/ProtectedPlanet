@@ -20,3 +20,8 @@ class ActionDispatch::IntegrationTest
   include Capybara::DSL
   Capybara.app = Rails.application
 end
+
+# shut up, Sidekiq
+Sidekiq.configure_client do |config|
+  config.logger.level = Logger::WARN
+end
