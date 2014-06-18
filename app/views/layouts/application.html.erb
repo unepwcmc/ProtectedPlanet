@@ -4,6 +4,8 @@
   <title>ProtectedPlanet</title>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
   <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
@@ -16,8 +18,8 @@
 
       <nav>
         <ul>
-          <li><a href="#">Download</a></li>
-          <li><input type="text" placeholder="Search for an area, country or region"></li>
+          <li><a href="#" class="btn">Download</a></li>
+          <li id="search"><i class="fa fa-search"></i><input type="text" placeholder="Search for an area, country or region"></li>
         </ul>
       </nav>
     </div>
