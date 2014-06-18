@@ -1,0 +1,7 @@
+---
+
+- name: Install GDAL
+  apt: pkg=gdal-bin state=installed
+
+- name: Install GDAL dev headers
+  apt: pkg=libgdal-dev state=installed
