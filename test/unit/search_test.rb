@@ -47,7 +47,7 @@ class TestSearch < ActiveSupport::TestCase
       with("""
         SELECT wdpa_id
         FROM tsvector_search_documents
-        WHERE document @@ to_tsquery(''' --')
+        WHERE document @@ to_tsquery(''' & --')
       """.squish).
       returns([])
 
