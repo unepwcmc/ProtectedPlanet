@@ -13,7 +13,6 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
         return false unless protected_area
 
         WikipediaSummaryWorker.perform_async protected_area.id
-        ImageWorker.perform_async protected_area.id
       end
     end
 

@@ -10,6 +10,8 @@ class TestWdpaProtectedAreaImporter < ActiveSupport::TestCase
     Wdpa::ProtectedAreaImporter::GeometryImporter
       .expects(:import).with(wdpa_release)
 
+    Wdpa::ProtectedAreaImporter::AssetImporter.expects(:import)
+
     Wdpa::ProtectedAreaImporter.import wdpa_release
   end
 end
