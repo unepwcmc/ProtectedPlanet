@@ -11,8 +11,6 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
 
         protected_area = ProtectedArea.create(standardised_attributes)
         return false unless protected_area
-
-        WikipediaSummaryWorker.perform_async protected_area.id
       end
     end
 
