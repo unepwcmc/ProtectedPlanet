@@ -13,6 +13,7 @@
         <h3>
           Official record
           <span>Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>
+          <%= render 'official_record', protected_area: @protected_area %>
         </h3>
       </section>
 
