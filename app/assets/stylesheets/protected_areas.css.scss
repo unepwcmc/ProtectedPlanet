@@ -36,6 +36,7 @@ section.info-card {
   font-family: 'MuseoSans-100', $font-stack;
   margin-top: 30px;
   padding: 20px;
+  line-height: 1.5em;
 
   text-align: center;
 
@@ -45,9 +46,18 @@ section.info-card {
     font-family: 'MuseoSlab-500', $font-stack;
   }
 
+  h3, p {
+    font-size: 0.9em;
+
+    a{
+      color: $blue;
+    }
+  }
+
   hr {
     width: 30px;
     border: 1px solid #cacaca;
+    margin: 30px auto;
   }
 }
 
