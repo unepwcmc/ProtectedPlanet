@@ -16,7 +16,14 @@ class Wdpa::Release
   def download
     Wdpa::S3.download_current_wdpa_to filename: zip_path
     system("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
-    Ogr::Postgres.import file: gdb_path
+
+    geometry_tables.each do |geometry_table|
+      Ogr::Postgres.import(
+        gdb_path,
+        geometry_table,
+        standardised_geometry_table(geometry_table)
+      )
+    end
   end
 
   def geometry_tables
@@ -42,11 +49,6 @@ class Wdpa::Release
   end
 
   def clean_up
-    geometry_tables.each do |table_name|
-      ActiveRecord::Migration.drop_table(table_name.downcase)
-    end
-    ActiveRecord::Migration.drop_table(source_table.downcase)
-
     FileUtils.rm_rf(zip_path)
     FileUtils.rm_rf(gdb_path)
   end
@@ -67,6 +69,14 @@ class Wdpa::Release
 
   def tmp_path
     File.join(Rails.root, 'tmp')
+  end
+
+  def standardised_geometry_table table
+    if !!(table =~ /poly/)
+      "polygon_import"
+    else
+      "point_import"
+    end
   end
 
   def start_time

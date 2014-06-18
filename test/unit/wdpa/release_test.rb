@@ -16,9 +16,18 @@ class TestWdpaRelease < ActiveSupport::TestCase
       expects(:system).
       with("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
 
+    geometry_tables = ["point", "polygons"]
+    Wdpa::Release.any_instance.
+      expects(:geometry_tables).
+      returns(geometry_tables)
+
     Ogr::Postgres.
       expects(:import).
-      with(file: gdb_path)
+      with(gdb_path, "point", "point_import")
+
+    Ogr::Postgres.
+      expects(:import).
+      with(gdb_path, "polygons", "polygon_import")
 
     assert_kind_of Wdpa::Release, Wdpa::Release.download
   end
@@ -131,15 +140,8 @@ class TestWdpaRelease < ActiveSupport::TestCase
     gdb_path = "gdb_path"
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
 
-    Wdpa::Release.any_instance.expects(:geometry_tables).returns(["WDPA_poly", "WDPA_point"])
-    Wdpa::Release.any_instance.expects(:source_table).returns('WDPA_source')
-
     FileUtils.expects(:rm_rf).with(zip_path)
     FileUtils.expects(:rm_rf).with(gdb_path)
-
-    ActiveRecord::Migration.expects(:drop_table).with('wdpa_poly')
-    ActiveRecord::Migration.expects(:drop_table).with('wdpa_point')
-    ActiveRecord::Migration.expects(:drop_table).with('wdpa_source')
 
     wdpa_release = Wdpa::Release.new
     wdpa_release.clean_up
