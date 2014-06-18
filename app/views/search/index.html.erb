@@ -6,14 +6,9 @@
     </section>
 
     <% if @query %>
-      <section class="two-third">
+      <section>
         <h2>Showing <%= @protected_areas.length %> <%= 'result'.pluralize @protected_areas.length %> for <%= @query %></h2>
         <%= render 'search_results', protected_areas: @protected_areas %>
-      </section>
-
-      <section class="one-third">
-        <h2>Filter your results</h2>
-        <a href="/search?q=<%= @query %>">Reset</a>
       </section>
     <% end %>
 
