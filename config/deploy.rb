@@ -6,7 +6,7 @@ set :repo_url, 'https://github.com/unepwcmc/ProtectedPlanet.git'
 
 set :branch, "master"
 
-#set :linked_files, %w{config/database.yml config/secrets.yml}
+set :linked_files, %w{config/database.yml config/secrets.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Default value for default_env is {}
