@@ -1,7 +1,7 @@
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
-require "mocha/test_unit"
+require 'mocha/test_unit'
 require 'webmock/minitest'
 
 class ActiveSupport::TestCase
@@ -13,4 +13,10 @@ module MiniTest::Assertions
     assert ((array_one - array_two) + (array_two - array_one)).empty?,
       "Expected #{array_one} to contain the same elements as #{array_two}"
   end
+end
+
+class ActionDispatch::IntegrationTest
+  # Make the Capybara DSL available in all integration tests
+  include Capybara::DSL
+  Capybara.app = Rails.application
 end
