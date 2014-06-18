@@ -667,7 +667,7 @@ CREATE MATERIALIZED VIEW tsvector_search_documents AS
 
 
 --
--- Name: wikipedia_articles; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: wikipedia_articles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE wikipedia_articles (
@@ -947,7 +947,7 @@ ALTER TABLE ONLY sub_locations
 
 
 --
--- Name: wikipedia_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: wikipedia_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY wikipedia_articles
@@ -1039,7 +1039,7 @@ CREATE INDEX index_protected_areas_on_wdpa_parent_id ON protected_areas USING bt
 
 
 --
--- Name: index_protected_areas_on_wikipedia_article_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_on_wikipedia_article_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_on_wikipedia_article_id ON protected_areas USING btree (wikipedia_article_id);
@@ -1207,3 +1207,4 @@ INSERT INTO schema_migrations (version) VALUES ('20140617133708');
 INSERT INTO schema_migrations (version) VALUES ('20140617133943');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617170024');
+

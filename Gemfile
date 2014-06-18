@@ -29,6 +29,7 @@ group :test do
   gem 'mocha', '~> 1.0.0'
   gem 'webmock', '~> 1.18.0', require: false
   gem 'timecop', '~> 0.7.1'
+  gem 'capybara', '~> 2.3.0'
 end
 
 gem 'aws-sdk', '~> 1.3.9'

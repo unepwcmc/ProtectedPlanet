@@ -16,6 +16,10 @@ class Search
 
   DB = ActiveRecord::Base.connection
 
+  def querify_search_term search_term
+    search_term.squish.gsub(/\s+/, ' & ')
+  end
+
   def query
     dirty_query = """
       SELECT wdpa_id
@@ -24,7 +28,7 @@ class Search
     """.squish
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, @search_term
+      dirty_query, querify_search_term(@search_term)
     ])
   end
 

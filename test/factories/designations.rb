@@ -3,5 +3,6 @@
 FactoryGirl.define do
   factory :designation do
     name "MyString"
+    association :jurisdiction, factory: :jurisdiction, name: 'My jurisdiction'
   end
 end
