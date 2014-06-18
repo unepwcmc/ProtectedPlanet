@@ -4,10 +4,10 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'ec2-54-89-116-224.compute-1.amazonaws.com', user: 'ubuntu', roles: %w{web}
-server 'ec2-54-80-52-179.compute-1.amazonaws.com', user: 'ubuntu', roles: %w{util}
+server 'ec2-54-195-196-250.eu-west-1.compute.amazonaws.com', user: 'ubuntu', roles: %w{web}
+server 'ec2-54-195-208-72.eu-west-1.compute.amazonaws.com', user: 'ubuntu', roles: %w{util}
 
-set :rails_env, :staging
+set :rails_env, :production
 
 # Custom SSH Options
 # ==================
