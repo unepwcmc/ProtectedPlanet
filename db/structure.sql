@@ -255,6 +255,41 @@ ALTER SEQUENCE governances_id_seq OWNED BY governances.id;
 
 
 --
+-- Name: images; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE images (
+    id integer NOT NULL,
+    url text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    title text,
+    lonlat geography(Point,4326),
+    protected_area_id integer,
+    details_url text
+);
+
+
+--
+-- Name: images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE images_id_seq OWNED BY images.id;
+
+
+--
 -- Name: iucn_categories; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -436,7 +471,9 @@ CREATE TABLE protected_areas (
     management_authority_id integer,
     international_criteria character varying(255),
     no_take_status_id integer,
-    designation_id integer
+    designation_id integer,
+    slug text,
+    wikipedia_article_id integer
 );
 
 
@@ -614,13 +651,52 @@ ALTER SEQUENCE sub_locations_id_seq OWNED BY sub_locations.id;
 
 
 --
--- Name: tsvector_search_documents; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: tsvector_search_documents; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE tsvector_search_documents (
-    id integer,
-    document tsvector
+CREATE MATERIALIZED VIEW tsvector_search_documents AS
+ SELECT pa.wdpa_id,
+    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(first(pa.name), ''::text)), 'A'::"char")) || to_tsvector(COALESCE((first(c.language))::regconfig, 'simple'::regconfig), COALESCE(unaccent(first(pa.original_name)), ''::text))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ' '::text), ''::text))) || to_tsvector(COALESCE(first((c.language)::regconfig), 'simple'::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ' '::text), ''::text))) AS document
+   FROM (((protected_areas pa
+   LEFT JOIN countries_protected_areas cpa ON ((cpa.protected_area_id = pa.id)))
+   LEFT JOIN countries c ON ((cpa.country_id = c.id)))
+   LEFT JOIN sub_locations sl ON ((c.id = sl.country_id)))
+  GROUP BY pa.wdpa_id
+  ORDER BY pa.wdpa_id
+  WITH NO DATA;
+
+
+--
+-- Name: wikipedia_articles; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE wikipedia_articles (
+    id integer NOT NULL,
+    summary text,
+    url character varying(255),
+    image_url character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
+
+
+--
+-- Name: wikipedia_articles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE wikipedia_articles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: wikipedia_articles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE wikipedia_articles_id_seq OWNED BY wikipedia_articles.id;
 
 
 --
@@ -656,6 +732,13 @@ ALTER TABLE ONLY designations ALTER COLUMN id SET DEFAULT nextval('designations_
 --
 
 ALTER TABLE ONLY governances ALTER COLUMN id SET DEFAULT nextval('governances_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY images ALTER COLUMN id SET DEFAULT nextval('images_id_seq'::regclass);
 
 
 --
@@ -729,6 +812,13 @@ ALTER TABLE ONLY sub_locations ALTER COLUMN id SET DEFAULT nextval('sub_location
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY wikipedia_articles ALTER COLUMN id SET DEFAULT nextval('wikipedia_articles_id_seq'::regclass);
+
+
+--
 -- Name: countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -766,6 +856,14 @@ ALTER TABLE ONLY designations
 
 ALTER TABLE ONLY governances
     ADD CONSTRAINT governances_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: images_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY images
+    ADD CONSTRAINT images_pkey PRIMARY KEY (id);
 
 
 --
@@ -849,6 +947,14 @@ ALTER TABLE ONLY sub_locations
 
 
 --
+-- Name: wikipedia_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY wikipedia_articles
+    ADD CONSTRAINT wikipedia_articles_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: index_countries_protected_areas_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -867,6 +973,13 @@ CREATE INDEX index_countries_protected_areas_on_country_id ON countries_protecte
 --
 
 CREATE INDEX index_designations_on_jurisdiction_id ON designations USING btree (jurisdiction_id);
+
+
+--
+-- Name: index_images_on_protected_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_images_on_protected_area_id ON images USING btree (protected_area_id);
 
 
 --
@@ -923,6 +1036,13 @@ CREATE UNIQUE INDEX index_protected_areas_on_wdpa_id ON protected_areas USING bt
 --
 
 CREATE INDEX index_protected_areas_on_wdpa_parent_id ON protected_areas USING btree (wdpa_parent_id);
+
+
+--
+-- Name: index_protected_areas_on_wikipedia_article_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_protected_areas_on_wikipedia_article_id ON protected_areas USING btree (wikipedia_article_id);
 
 
 --
@@ -1070,3 +1190,20 @@ INSERT INTO schema_migrations (version) VALUES ('20140617161632');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617170938');
 
+INSERT INTO schema_migrations (version) VALUES ('20140616142743');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617091620');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617093647');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617095318');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617113201');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617133557');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617133708');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617133943');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617170024');

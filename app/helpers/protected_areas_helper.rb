@@ -1,0 +1,2 @@
+module ProtectedAreasHelper
+end

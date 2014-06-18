@@ -20,3 +20,8 @@ postgresql:
     checkpoint_completion_target: 0.5
 
     effective_cache_size: 128MB
+
+redis:
+  deb:
+    package: 'redis-server'
+    service: 'redis-server'

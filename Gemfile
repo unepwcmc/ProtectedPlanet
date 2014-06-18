@@ -17,9 +17,12 @@ group :production do
   gem 'unicorn'
 end
 
-gem 'capistrano',  '~> 3.1'
-gem 'capistrano-rails', '~> 1.1'
-gem 'capistrano-bundler', '~> 1.1', require: false
+group :development do
+  gem 'capistrano',  '~> 3.1'
+  gem 'capistrano-rails', '~> 1.1'
+  gem 'capistrano-bundler', '~> 1.1', require: false
+  gem 'capistrano-sidekiq', '~> 0.3.3'
+end
 
 group :test do
   gem 'factory_girl_rails', '~> 4.4.1'
@@ -36,6 +39,8 @@ gem 'dbf', '~> 2.0.7'
 
 gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
+
+gem 'sidekiq', '~> 3.1.4'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]

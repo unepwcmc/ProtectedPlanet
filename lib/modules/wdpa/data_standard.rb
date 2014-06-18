@@ -2,7 +2,10 @@ class Wdpa::DataStandard
   STANDARD_ATTRIBUTES = {
     :wdpaid       => {name: :wdpa_id, type: :integer},
     :wdpa_pid     => {name: :wdpa_parent_id, type: :integer},
-    :name         => {name: :name, type: :string},
+    :name         => [
+      {name: :name, type: :string},
+      {name: :slug, type: :slug}
+    ],
     :orig_name    => {name: :original_name, type: :string},
     :marine       => {name: :marine, type: :boolean},
     :rep_m_area   => {name: :reported_marine_area, type: :float},
@@ -40,7 +43,9 @@ class Wdpa::DataStandard
 
   def self.standard_geometry_attributes
     standard_attributes.select do |key, hash|
-      standard_attributes[key][:type] == :geometry
+      Array.wrap(standard_attributes[key]).any? do |attribute|
+        attribute[:type] == :geometry
+      end
     end
   end
 
@@ -55,17 +60,17 @@ class Wdpa::DataStandard
   private
 
   def self.standardise_values hash
-    attributes = {}
+    standardised_attributes = {}
 
     hash.each do |key, value|
-      attribute = STANDARD_ATTRIBUTES[key]
-      unless attribute.nil?
+      attributes = Array.wrap(STANDARD_ATTRIBUTES[key])
+      attributes.each do |attribute|
         standardised_value = Wdpa::Attribute.standardise value, as: attribute[:type]
-        attributes[attribute[:name]] = standardised_value
+        standardised_attributes[attribute[:name]] = standardised_value
       end
     end
 
-    attributes
+    standardised_attributes
   end
 
   def self.create_models hash

@@ -1,0 +1,37 @@
+<div id="map"></div>
+
+<div class="container">
+  <main>
+    <section class="info-card">
+      <h2><%= @protected_area.name %></h2>
+
+      <hr>
+    </section>
+
+    <div class="factsheet">
+      <section>
+        <h3>
+          Official record
+          <span>Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>
+          <%= render 'official_record', protected_area: @protected_area %>
+        </h3>
+      </section>
+
+      <section class="column-left">
+        <h3>Wikipedia description</h3>
+        <%= render 'wikipedia_box', wikipedia_article: @wikipedia_article %>
+      </section>
+
+      <section class="column-right">
+        <h3>Images for this area</h3>
+        <%= render 'photos_list', images: @protected_area.images %>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script>
+  $(document).ready(function() {
+    fitToBounds(<%= @protected_area.bounds.to_json %>);
+  });
+</script>
