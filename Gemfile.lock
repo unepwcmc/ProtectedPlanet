@@ -48,6 +48,9 @@ GEM
     capistrano-rails (1.1.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
+    capistrano-sidekiq (0.3.3)
+      capistrano
+      sidekiq
     celluloid (0.15.2)
       timers (~> 1.1.0)
     coffee-rails (4.0.1)
@@ -200,6 +203,7 @@ DEPENDENCIES
   capistrano (~> 3.1)
   capistrano-bundler (~> 1.1)
   capistrano-rails (~> 1.1)
+  capistrano-sidekiq (~> 0.3.3)
   coffee-rails (~> 4.0.0)
   dbf (~> 2.0.7)
   factory_girl_rails (~> 4.4.1)
