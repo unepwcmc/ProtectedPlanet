@@ -21,5 +21,4 @@
     - ruby
     - postgresql
     - redis
-    - user
     - app
