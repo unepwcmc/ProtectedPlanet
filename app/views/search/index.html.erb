@@ -1,0 +1,18 @@
+<div class="container">
+  <main>
+    <section class="search-bar">
+      <h1>Search for protected areas, countries or regions</h1>
+      <%= render 'shared/search_form', query: @query %>
+    </section>
+
+    <% if @query %>
+      <section>
+        <h2>Showing <%= @protected_areas.length %> <%= 'result'.pluralize @protected_areas.length %> for <%= @query %></h2>
+        <%= render 'search_results', protected_areas: @protected_areas %>
+      </section>
+    <% end %>
+
+
+  </main>
+</div>
+

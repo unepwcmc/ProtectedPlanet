@@ -28,7 +28,6 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
 
     get '/killbear'
     assert_match Regexp.new(wikipedia_article.summary), @response.body
-    assert_match Regexp.new(wikipedia_article.image_url), @response.body
     assert_match Regexp.new(wikipedia_article.url), @response.body
   end
 
@@ -38,7 +37,7 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
 
     get '/1234'
 
-    assert_select 'ul.protected_area_photos' do
+    assert_select 'ul.protected-area-photos' do
       assert_select 'li', 1 do |elements|
         elements.each do |element|
           assert_select element, 'img'

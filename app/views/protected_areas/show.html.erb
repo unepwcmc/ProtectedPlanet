@@ -35,7 +35,10 @@
 </div>
 
 <script>
-  $(document).ready(function() {
+  function initializeMap() {
     fitToBounds(<%= @protected_area.bounds.to_json %>);
-  });
+  }
+
+  $(document).ready(initializeMap);
+  $(document).on('page:load', initializeMap);
 </script>

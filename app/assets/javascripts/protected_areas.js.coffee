@@ -1,4 +1,4 @@
-$(document).ready ->
+ready = ->
   map = L.map('map')
 
   L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map)
@@ -11,3 +11,6 @@ $(document).ready ->
       paddingTopLeft: [paddingLeft, 50],
       paddingBottomRight: [0, 50]
     })
+
+$(document).ready(ready)
+$(document).on('page:load', ready)
