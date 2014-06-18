@@ -403,7 +403,8 @@ CREATE TABLE protected_areas (
     international_criteria character varying(255),
     no_take_status_id integer,
     designation_id integer,
-    slug text
+    slug text,
+    wikipedia_article_id integer
 );
 
 
@@ -497,6 +498,39 @@ CREATE MATERIALIZED VIEW tsvector_search_documents AS
 
 
 --
+-- Name: wikipedia_articles; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE wikipedia_articles (
+    id integer NOT NULL,
+    summary text,
+    url character varying(255),
+    image_url character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: wikipedia_articles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE wikipedia_articles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: wikipedia_articles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE wikipedia_articles_id_seq OWNED BY wikipedia_articles.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -571,6 +605,13 @@ ALTER TABLE ONLY protected_areas ALTER COLUMN id SET DEFAULT nextval('protected_
 --
 
 ALTER TABLE ONLY sub_locations ALTER COLUMN id SET DEFAULT nextval('sub_locations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY wikipedia_articles ALTER COLUMN id SET DEFAULT nextval('wikipedia_articles_id_seq'::regclass);
 
 
 --
@@ -662,6 +703,14 @@ ALTER TABLE ONLY sub_locations
 
 
 --
+-- Name: wikipedia_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY wikipedia_articles
+    ADD CONSTRAINT wikipedia_articles_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: index_countries_protected_areas_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -743,6 +792,13 @@ CREATE UNIQUE INDEX index_protected_areas_on_wdpa_id ON protected_areas USING bt
 --
 
 CREATE INDEX index_protected_areas_on_wdpa_parent_id ON protected_areas USING btree (wdpa_parent_id);
+
+
+--
+-- Name: index_protected_areas_on_wikipedia_article_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_protected_areas_on_wikipedia_article_id ON protected_areas USING btree (wikipedia_article_id);
 
 
 --
@@ -878,10 +934,18 @@ INSERT INTO schema_migrations (version) VALUES ('20140613125148');
 
 INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 
+INSERT INTO schema_migrations (version) VALUES ('20140617091620');
+
 INSERT INTO schema_migrations (version) VALUES ('20140617093647');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617095318');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617113201');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617133557');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617133708');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617133943');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617170024');

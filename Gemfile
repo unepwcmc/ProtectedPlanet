@@ -37,5 +37,7 @@ gem 'dbf', '~> 2.0.7'
 gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
 
+gem 'sidekiq', '~> 3.1.4'
+
 # Use debugger
 # gem 'debugger', group: [:development, :test]
