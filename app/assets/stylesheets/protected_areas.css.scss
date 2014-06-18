@@ -46,8 +46,12 @@ section.info-card {
     font-family: 'MuseoSlab-500', $font-stack;
   }
 
-  h3, p {
+  p {
     font-size: 0.9em;
+
+    strong{
+      display: block;
+    }
 
     a{
       color: $blue;
