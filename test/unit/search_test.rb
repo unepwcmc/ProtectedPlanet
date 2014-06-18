@@ -53,4 +53,19 @@ class TestSearch < ActiveSupport::TestCase
 
     Search.search query
   end
+
+  test '#search squishes the query and joins the lexemes with & (and) operators' do
+    query = ' Killbear and   the Manbone'
+
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""
+        SELECT wdpa_id
+        FROM tsvector_search_documents
+        WHERE document @@ to_tsquery('Killbear & and & the & Manbone')
+      """.squish).
+      returns([])
+
+    Search.search query
+  end
 end
