@@ -80,9 +80,10 @@ section.info-card {
     float: left;
     width: 47.5%;
 
-    div{
+    p{
       font-family: 'MuseoSans-100', $font-stack;
-      padding: 20px;
+      margin: 20px;
+      padding: 0 0 0 10px;
       line-height: 1.4em;
 
       a {
@@ -116,6 +117,7 @@ section.info-card {
     padding: 10px;
     border-bottom: 1px solid #dad9e4;
     margin-right: 3px;
+    line-height: 1.2em;
 
     strong {
       font-weight: normal;

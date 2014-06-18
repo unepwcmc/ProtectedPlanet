@@ -3,7 +3,7 @@
 
 body{
   background: #e4e3eb;
-  font: 100% $font-stack;
+  font: $font-stack;
   color: #353946;
 }
 
@@ -11,6 +11,14 @@ a {
   text-decoration: none;
 }
 
+a.btn{
+  background: #83ad35;
+  padding: 5px;
+  color: #fff;
+  @include border-radius(2px);
+  font-size: 0.9em;
+  font-family: 'MuseoSans-100', $font-stack;
+}
 
 header {
   background: #2a2d37;
@@ -36,14 +44,6 @@ header {
       display: inline-block;
     }
 
-    a{
-      background: #83ad35;
-      padding: 5px;
-      color: #fff;
-      @include border-radius(2px);
-      font-size: 0.9em;
-      font-family: 'MuseoSans-100', $font-stack;
-    }
 
     #search{
       background: #353946;
