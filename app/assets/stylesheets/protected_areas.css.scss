@@ -67,8 +67,18 @@ section.info-card {
   }
 }
 
-.protected_area_photos {
+.protected-area-photos {
   li {
     display: inline;
+  }
+}
+
+.protected-area-official-record {
+  td {
+    strong {
+      font-weight: normal;
+      text-transform: uppercase;
+      display: block;
+    }
   }
 }
