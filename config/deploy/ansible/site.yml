@@ -20,5 +20,6 @@
     - utils
     - ruby
     - postgresql
+    - redis
     - user
     - app
