@@ -1,9 +1,14 @@
-body {
-  font-family: Helvetica, Arial;
+@import 'mixins';
+
+
+body{
+  background: #e4e3eb;
+  font: 100% $font-stack;
+  color: #353946;
 }
 
 header {
-  background: #CECECE;
+  background: #2a2d37;
   height: 50px;
   overflow: hidden;
 
@@ -15,6 +20,8 @@ header {
 
   h1 {
     float: left;
+    font: 100% $font-stack;
+    color: #fff;
   }
 
   nav {
@@ -22,6 +29,23 @@ header {
 
     ul li {
       display: inline-block;
+    }
+
+    a{
+      text-decoration: none;
+      background: #83ad35;
+      padding: 5px;
+      color: #fff;
+      @include border-radius(2px);
+      font: 80% $font-stack;
+    }
+
+    input{
+      background: #353946;
+      border: none;
+      padding: 5px;
+      color: #fff;
+      @include border-radius(2px);
     }
   }
 }
