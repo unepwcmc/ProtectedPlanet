@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'sidekiq/testing'
 
 class TestWdpaAttributeImporterService < ActiveSupport::TestCase
   test '.import imports the WDPA Release protected areas as standardised
@@ -81,35 +80,6 @@ class TestWdpaAttributeImporterService < ActiveSupport::TestCase
 
     assert imported, "Expected importer to return true on success"
     assert_equal 1, ProtectedArea.count
-  end
-
-  test '.import enqueues a WikipediaSummaryWorker job for new PAs' do
-    existing_wdpa_id = 8765
-    non_existing_wdpa_id = 4321
-
-    pa = FactoryGirl.create(:protected_area, wdpa_id: existing_wdpa_id)
-    pa_attributes = [{
-      wdpaid: existing_wdpa_id,
-      orig_name: 'Yosemite National Park'
-    },{
-      wdpaid: non_existing_wdpa_id,
-      orig_name: 'Saratoga Creek Water District Park'
-    }]
-
-    Sidekiq::Testing.fake!
-
-    wdpa_release = Wdpa::Release.new
-    wdpa_release.expects(:protected_areas).returns(pa_attributes)
-
-    Wdpa::ProtectedAreaImporter::AttributeImporter.import(wdpa_release)
-
-    assert_equal 1, WikipediaSummaryWorker.jobs.size
-    assert_equal(
-      ProtectedArea.where(wdpa_id: non_existing_wdpa_id).first.id,
-      WikipediaSummaryWorker.jobs.first['args'].first
-    )
-
-    Sidekiq::Worker.clear_all
   end
 
 end

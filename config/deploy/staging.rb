@@ -7,7 +7,7 @@
 server 'ec2-54-89-116-224.compute-1.amazonaws.com', user: 'ubuntu', roles: %w{web}
 server 'ec2-54-80-52-179.compute-1.amazonaws.com', user: 'ubuntu', roles: %w{util}
 
-set :rails_env, :staging
+set :rails_env, :production
 
 # Custom SSH Options
 # ==================

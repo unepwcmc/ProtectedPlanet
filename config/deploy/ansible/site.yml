@@ -19,6 +19,7 @@
     - tmux
     - utils
     - ruby
+    - gdal
     - postgresql
     - redis
     - app
