@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'rgeo'
 
 class ProtectedAreaTest < ActiveSupport::TestCase
   test ".create creates a postgis geometry from a WKT geometry" do
