@@ -34,7 +34,6 @@ class StatsTest < ActiveSupport::TestCase
   test '.total protected areas by designation' do
     designation_1 = FactoryGirl.create(:designation, name: 'Lionel Messi')
     designation_2 = FactoryGirl.create(:designation, name: 'Robin Van Persie')
-    FactoryGirl.create(:designation, name: 'Puppy')
     FactoryGirl.create(:protected_area, designation: designation_1, wdpa_id: 1)
     FactoryGirl.create(:protected_area, designation: designation_1, wdpa_id: 2)
     FactoryGirl.create(:protected_area, designation: designation_2, wdpa_id: 3)
@@ -77,5 +76,15 @@ class StatsTest < ActiveSupport::TestCase
     FactoryGirl.create(:protected_area, iucn_category: iucn_category_2, countries:  [country_2])
     FactoryGirl.create(:protected_area, iucn_category: no_iucn_category, countries:  [country_1])
     assert_equal 1, Stats.country_pas_with_iucn_category('TOMATO')
+  end
+
+  test '.number of types of designations per country' do
+    designation_1 = FactoryGirl.create(:designation, name: 'Lionel Messi')
+    designation_2 = FactoryGirl.create(:designation, name: 'Robin Van Persie')
+    designation_3 = FactoryGirl.create(:designation, name: 'Cristiano Ronaldo')
+    country_1 = FactoryGirl.create(:country, iso: 'TOMATO')
+    FactoryGirl.create(:protected_area, designation: designation_1, countries:  [country_1])
+    FactoryGirl.create(:protected_area, designation: designation_2, countries:  [country_1])
+    assert_equal 2, Stats.country_designation_count('TOMATO')
   end
 end

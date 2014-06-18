@@ -46,7 +46,11 @@ class Stats
     ProtectedArea.joins(:iucn_category, :countries)
                  .where("iucn_categories.name IN ('Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI') AND iso = '#{iso}'")
                  .count
+  end
 
+  def self.country_designation_count iso
+    country_protected_area = ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
+    country_protected_area.select('designations.id').joins(:designation).group('designations.id').length
   end
 
 
