@@ -25,7 +25,7 @@ main section {
   border: 1px solid #dadada;
   background: #ececf4;
   box-sizing: border-box;
-  @include border-radius(3px);
+  @include border-radius(5px);
   width: 100%;
 }
 
@@ -41,7 +41,7 @@ section.info-card {
   h2 {
     font-size: 1.5em;
     color: #353946;
-    font: 100% $font-stack;
+    font-family: 'MuseoSlab-500', $font-stack;
   }
 
   hr {
@@ -55,16 +55,16 @@ section.info-card {
 
   h3{
     margin: 10px 20px 0 20px;
-    font: 100% $font-stack;
+    font-family: 'MuseoSlab-500', $font-stack;
     border-bottom: 1px solid $grey;
     padding: 10px;
 
     span{
-     color:$grey;
      background: #e6e6ee;
-     @include border-radius(2px);
+     @include border-radius(5px);
+     font-family: 'MuseoSans-100', $font-stack;
      font-size: 0.8em;
-     padding: 2px;
+     padding: 5px;
     }
   }
 
@@ -79,6 +79,18 @@ section.info-card {
   section.column-left {
     float: left;
     width: 47.5%;
+
+    div{
+      font-family: 'MuseoSans-100', $font-stack;
+      padding: 20px;
+      line-height: 1.4em;
+
+      a {
+        font-family: 'MuseoSans-500';
+        color: $blue;
+      }
+
+    }
   }
 
   section.column-right {
@@ -98,11 +110,11 @@ section.info-card {
   margin: 10px 0 10px 0;
   border-spacing: 20px 0px ;
   border-collapse: separate;
-  font: 100% $font-stack;
+  font-family: 'MuseoSans-100', $font-stack;
 
   td {
     padding: 10px;
-    border-bottom: 1px solid $grey;
+    border-bottom: 1px solid #dad9e4;
     margin-right: 3px;
 
     strong {

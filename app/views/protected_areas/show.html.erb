@@ -12,13 +12,13 @@
       <section>
         <h3>
           Official record
-          <span>Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>        </h3>
+          <span><i class="fa fa-clock-o"></i> Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>        </h3>
           <%= render 'official_record', protected_area: @protected_area %>
       </section>
 
       <section class="column-left">
         <h3>Wikipedia description</h3>
-        <%= render 'wikipedia_box', wikipedia_article: @wikipedia_article %>
+        <div><%= render 'wikipedia_box', wikipedia_article: @wikipedia_article %></div>
       </section>
 
       <section class="column-right">

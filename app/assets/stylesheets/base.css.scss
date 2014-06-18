@@ -7,6 +7,11 @@ body{
   color: #353946;
 }
 
+a {
+  text-decoration: none;
+}
+
+
 header {
   background: #2a2d37;
   height: 50px;
@@ -20,7 +25,7 @@ header {
 
   h1 {
     float: left;
-    font: 100% $font-stack;
+    font-family: 'MuseoSans-500', $font-stack;
     color: #fff;
   }
 
@@ -32,20 +37,29 @@ header {
     }
 
     a{
-      text-decoration: none;
       background: #83ad35;
       padding: 5px;
       color: #fff;
       @include border-radius(2px);
-      font: 80% $font-stack;
+      font-size: 0.9em;
+      font-family: 'MuseoSans-100', $font-stack;
+    }
+
+    #search{
+      background: #353946;
+      border: none;
+      padding: 4px;
+      color: #e6e6ee;
+      @include border-radius(2px);
     }
 
     input{
       background: #353946;
       border: none;
-      padding: 5px;
-      color: #fff;
+      color: #e6e6ee;
       @include border-radius(2px);
+      margin: 0 0 0 5px;
+      width: 200px;
     }
   }
 }

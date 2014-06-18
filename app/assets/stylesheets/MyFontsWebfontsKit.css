@@ -39,17 +39,12 @@
 /* @import must be at top of file, otherwise CSS will not work */
 @import url("//hello.myfonts.net/count/2b3136");
 
+@font-face {font-family: 'MuseoSans-700';src:url('fonts/2B3136_0_0.eot');src:url('fonts/2B3136_0_0.eot?#iefix') format('embedded-opentype'),url('fonts/2B3136_0_0.woff') format('woff'),url('fonts/2B3136_0_0.ttf') format('truetype');}
 
-@font-face {font-family: 'MuseoSans-700';src:font-url('fonts/2B3136_0_0.eot');src:font-url('fonts/2B3136_0_0.eot?#iefix') format('embedded-opentype'),font-url('fonts/2B3136_0_0.woff') format('woff'),font-url('fonts/2B3136_0_0.ttf') format('truetype');}
+@font-face {font-family: 'MuseoSans-300';src:url('fonts/2B3136_1_0.eot');src:url('fonts/2B3136_1_0.eot?#iefix') format('embedded-opentype'),url('fonts/2B3136_1_0.woff') format('woff'),url('fonts/2B3136_1_0.ttf') format('truetype');}
 
+@font-face {font-family: 'MuseoSans-500';src:url('fonts/2B3136_2_0.eot');src:url('fonts/2B3136_2_0.eot?#iefix') format('embedded-opentype'),url('fonts/2B3136_2_0.woff') format('woff'),url('fonts/2B3136_2_0.ttf') format('truetype');}
 
-@font-face {font-family: 'MuseoSans-300';src:font-url('fonts/2B3136_1_0.eot');src:font-url('fonts/2B3136_1_0.eot?#iefix') format('embedded-opentype'),font-url('fonts/2B3136_1_0.woff') format('woff'),font-url('fonts/2B3136_1_0.ttf') format('truetype');}
+@font-face {font-family: 'MuseoSans-100';src:url('fonts/2B3136_3_0.eot');src:url('fonts/2B3136_3_0.eot?#iefix') format('embedded-opentype'),url('fonts/2B3136_3_0.woff') format('woff'),url('fonts/2B3136_3_0.ttf') format('truetype');}
 
-
-@font-face {font-family: 'MuseoSans-500';src:font-url('fonts/2B3136_2_0.eot');src:font-url('fonts/2B3136_2_0.eot?#iefix') format('embedded-opentype'),font-url('fonts/2B3136_2_0.woff') format('woff'),font-url('fonts/2B3136_2_0.ttf') format('truetype');}
-
-
-@font-face {font-family: 'MuseoSans-100';src:font-url('fonts/2B3136_3_0.eot');src:font-url('fonts/2B3136_3_0.eot?#iefix') format('embedded-opentype'),font-url('fonts/2B3136_3_0.woff') format('woff'),font-url('fonts/2B3136_3_0.ttf') format('truetype');}
-
-
-@font-face {font-family: 'MuseoSlab-500';src:font-url('fonts/2B3136_4_0.eot');src:font-url('fonts/2B3136_4_0.eot?#iefix') format('embedded-opentype'),font-url('fonts/2B3136_4_0.woff') format('woff'),font-url('fonts/2B3136_4_0.ttf') format('truetype');}
+@font-face {font-family: 'MuseoSlab-500';src:url('fonts/2B3136_4_0.eot');src:url('fonts/2B3136_4_0.eot?#iefix') format('embedded-opentype'),url('fonts/2B3136_4_0.woff') format('woff'),url('fonts/2B3136_4_0.ttf') format('truetype');}
