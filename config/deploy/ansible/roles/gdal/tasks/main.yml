@@ -4,12 +4,20 @@
   register: gdal_installed
   ignore_errors: True
 
+- name: Add UbuntuGIS Unstable repository
+  apt_repository: repo='{{ gdal.repo }}' state=present
+
+- name: Add repository key
+  apt_key: data="{{ lookup('file', '314DF160.asc') }}"  state=present
+  when: gdal_installed.rc != 0
+
 - name: Install gdal dependencies
   apt: pkg=$item state=installed update-cache=yes
   when: gdal_installed.rc != 0
   with_items:
     - build-essential
     - python-all-dev
+    - libgdal1h
 
 - name: Download gdal
   when: gdal_installed.rc != 0
