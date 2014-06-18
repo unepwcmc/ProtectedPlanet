@@ -1,0 +1,47 @@
+<table class="protected-area-official-record">
+  <tbody>
+    <tr>
+      <td>
+        <strong>Sublocation</strong>
+        <%= protected_area.sub_locations.map(&:iso).join(', ') %>
+      </td>
+      <td>
+        <strong>Reported Area KM&sup2;</strong>
+        <%= protected_area.reported_area %>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <strong>IUCN Category</strong>
+        <%= protected_area.iucn_category.name %>
+      </td>
+      <td>
+        <strong>English Designation</strong>
+        <%= protected_area.designation.name %>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <strong>Status</strong>
+        <%= protected_area.legal_status.name %>
+      </td>
+      <td>
+        <strong>Type of Designation</strong>
+        <%= protected_area.designation.jurisdiction.name %>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <strong>Status Year</strong>
+        <%= protected_area.legal_status_updated_at.strftime('%Y') %>
+      </td>
+      <td>
+        <strong>Governance Type</strong>
+        <%= protected_area.governance.name %>
+      </td>
+    </tr>
+  </tbody>
+</table>
