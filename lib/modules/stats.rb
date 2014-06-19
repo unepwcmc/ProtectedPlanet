@@ -58,7 +58,19 @@ class Stats
     result[0]["count"].to_i
   end
 
-
+  def self.region_designation_count iso
+    sql = """SELECT count(1) FROM
+                (SELECT ds.id FROM regions rg 
+                  RIGHT JOIN countries ct ON region_id = rg.id
+                  JOIN countries_protected_areas cpa ON country_id = ct.id
+                  JOIN protected_areas pa ON protected_area_id = pa.id
+                  JOIN designations ds ON designation_id = ds.id
+                  WHERE rg.iso =? 
+                  GROUP BY ds.id) a""".squish
+    sql_sanitized = ActiveRecord::Base.__send__(:sanitize_sql, [sql, iso], '')
+    result = DB.execute(sql_sanitized)
+    result[0]["count"].to_i
+  end 
 
   #Countries
 

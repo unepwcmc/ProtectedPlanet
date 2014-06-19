@@ -140,6 +140,22 @@ class StatsTest < ActiveSupport::TestCase
     assert_equal 2, Stats.region_pas_with_iucn_category('AMA')
   end
 
+  test '.number of types of designations per region' do
+    designation_1 = FactoryGirl.create(:designation, name: 'Lionel Messi')
+    designation_2 = FactoryGirl.create(:designation, name: 'Robin Van Persie')
+    designation_3 = FactoryGirl.create(:designation, name: 'Cristiano Ronaldo')
+    region_1 = FactoryGirl.create(:region, name: 'Afronesia', iso: 'AFE')
+    region_2 = FactoryGirl.create(:region, name: 'Eurarctica', iso: 'EUA')
+    country_1 = FactoryGirl.create(:country, region: region_1)
+    country_2 = FactoryGirl.create(:country, region: region_2)
+    country_3 = FactoryGirl.create(:country, region: region_1)
+    FactoryGirl.create(:protected_area, designation: designation_1, countries:  [country_1])
+    FactoryGirl.create(:protected_area, designation: designation_1, countries:  [country_1])
+    FactoryGirl.create(:protected_area, designation: designation_2, countries:  [country_2])
+    FactoryGirl.create(:protected_area, designation: designation_3, countries:  [country_3])
+    assert_equal 2, Stats.region_designation_count('AFE')
+  end
+
 
 
 
