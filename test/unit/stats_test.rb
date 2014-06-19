@@ -172,7 +172,17 @@ class StatsTest < ActiveSupport::TestCase
     assert_equal ({'Cristiano Ronaldo' => 1, 'Lionel Messi' => 2}), Stats.region_protected_areas_by_designation('AFE')
   end
 
-
+  test '.number of countries providing data by region' do
+    region_1 = FactoryGirl.create(:region, name: 'Afronesia', iso: 'AFE')
+    region_2 = FactoryGirl.create(:region, name: 'Eurarctica', iso: 'EUA')
+    country_1 = FactoryGirl.create(:country, region: region_1)
+    country_2 = FactoryGirl.create(:country, region: region_2)
+    country_3 = FactoryGirl.create(:country, region: region_1)
+    FactoryGirl.create(:protected_area, countries: [country_1], wdpa_id: 1)
+    FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 2)
+    FactoryGirl.create(:protected_area, countries: [country_3], wdpa_id: 3)  
+    assert_equal 2, Stats.region_countries_providing_data('AFE')
+  end
 
 
 end

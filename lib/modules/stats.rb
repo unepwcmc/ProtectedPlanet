@@ -87,7 +87,12 @@ class Stats
       result_hash.merge!(designation["name"] => designation["count"].to_i)
     end
     result_hash
-  end 
+  end
+
+  def self.region_countries_providing_data iso
+    countries_list = countries_in_region iso
+    countries_list.joins(:protected_areas).group("countries.id").length
+  end
 
 
 
