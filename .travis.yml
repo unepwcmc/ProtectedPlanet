@@ -8,7 +8,7 @@ before_install:
   - sudo apt-get install gdal-bin
   - sudo apt-get install libgdal1-dev
   - sudo apt-get install libgdal-dev
-bundler_args: --without development production staging
+bundler_args: --without development production staging --jobs=4
 rvm:
   - 2.1.2
 before_script:
