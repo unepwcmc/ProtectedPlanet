@@ -10,17 +10,14 @@
   margin-top: 50px;
 }
 
-.container {
-  position: relative;
-  width: 980px;
-  margin: 0 auto;
 
-  main {
-    width: 100%;
-    position: absolute;
-    top: 0;
+
+main {
+    width: 980px;
+    position: relative;
+    margin: 0 auto;
   }
-}
+
 
 main section {
   border: 1px solid #dadada;
@@ -34,10 +31,10 @@ section.info-card {
   width: 320px;
   height: 300px;
   font-family: 'MuseoSans-100', $font-stack;
-  margin-top: 30px;
   padding: 20px;
   line-height: 1.5em;
-
+  position: absolute;
+  top: 25px;
   text-align: center;
 
   h2 {
@@ -66,7 +63,8 @@ section.info-card {
 }
 
 .factsheet {
-  margin-top: 70px;
+  margin-top: -50px;
+  float: left;
 
   h3{
     margin: 10px 20px 0 20px;
