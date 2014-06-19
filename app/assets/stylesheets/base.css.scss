@@ -9,6 +9,11 @@ body{
 
 a {
   text-decoration: none;
+  color: $dark-grey;
+
+  :visited{
+    color: $dark-grey;
+  }
 }
 
 
@@ -19,6 +24,24 @@ a.btn{
   @include border-radius(2px);
   font-size: 0.9em;
   font-family: 'MuseoSans-100', $font-stack;
+}
+
+form{
+
+  input{
+    font-family: 'MuseoSans-100', $font-stack;
+    font-size: 1.0em ;
+  }
+
+  button{
+    border: none;
+    background: $green;
+    padding: 5px 20px 5px 20px;
+    @include border-radius(5px);
+    color: #fff;
+    font-family: 'MuseoSans-100', $font-stack;
+    font-size: 1em;
+  }
 }
 
 header {
@@ -70,6 +93,31 @@ header {
   margin: 0 0 40px 0;
 }
 
+main {
+    width: 980px;
+    position: relative;
+    margin: 0 auto;
+
+    h2{
+      font-family: 'MuseoSlab-500', $font-stack;
+      font-size: 1.5em;
+      margin: 0px 0 0 0;
+    }
+
+    h3{
+      font-family: 'MuseoSans-500', $font-stack;
+
+    }
+
+    h4{
+      font-family: 'MuseoSans-300', $font-stack;
+    }
+
+    p{
+      font-family: 'MuseoSans-100', $font-stack;
+    }
+
+  }
 
 .clear{
   clear: both;
