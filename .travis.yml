@@ -1,6 +1,5 @@
 language: ruby
 before_install:
-  - sudo apt-get install libgdal1h
   - sudo apt-get install gdal-bin
 bundler_args: --without development production staging
 rvm:
