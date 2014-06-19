@@ -6,6 +6,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
 require 'mocha/test_unit'
 require 'webmock/minitest'
+WebMock.disable_net_connect!(:allow => "codeclimate.com")
 
 class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
