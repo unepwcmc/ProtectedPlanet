@@ -28,6 +28,13 @@ class Wdpa::DataStandard
     :wkb_geometry => {name: :the_geom, type: :geometry}
   }
 
+  POLYGON_ATTRIBUTES = [
+    :gis_m_area,
+    :gis_area,
+    :shape_area,
+    :shape_length
+  ]
+
   module Matchers
     GEOMETRY_TABLE = /wdpa_?po/i
     POLYGON_TABLE  = /poly/i
@@ -45,6 +52,10 @@ class Wdpa::DataStandard
 
   def self.standard_attributes
     STANDARD_ATTRIBUTES
+  end
+
+  def self.common_attributes
+    STANDARD_ATTRIBUTES.keys - POLYGON_ATTRIBUTES
   end
 
   def self.standard_geometry_attributes
