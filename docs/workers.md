@@ -31,7 +31,21 @@ helped:
 * http://stackoverflow.com/a/8838848/245017
 * http://stackoverflow.com/a/8814262/245017
 
+The Wikipedia workers are enqueued during the WDPA import, but can be
+run manually for Protected Areas:
+
+```
+WikipediaSummaryWorker.perform_async <protected_area_id>
+```
+
 ## Photos
 
 Protected Areas have photos currently retrieved from Panoramio by
 searching the Panoramio API with the Protected Area bounding box.
+
+The photo downloading workers are enqueued during the WDPA import, but
+can be run manually for Protected Areas:
+
+```
+ImageWorker.perform_async <protected_area_id>
+```
