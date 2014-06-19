@@ -6,7 +6,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
     db_config = Rails.configuration.database_configuration[Rails.env]
 
     ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 -f \"PostgreSQL\" PG:\" host=#{db_config["host"]} user=#{db_config["username"]} dbname=#{db_config["database"]}\" ./an/file"
-    Ogr::Postgres.any_instance.expects(:system).with(ogr_command).once
+    Ogr::Postgres.expects(:system).with(ogr_command).once
 
     Ogr::Postgres.import './an/file'
   end
@@ -22,7 +22,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
       -sql \"SELECT * FROM #{table_name}\"
       ./an/file
     """.squish
-    Ogr::Postgres.any_instance.expects(:system).with(ogr_command).once
+    Ogr::Postgres.expects(:system).with(ogr_command).once
 
     Ogr::Postgres.import './an/file', table_name
   end
@@ -41,7 +41,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
       -nln #{new_table_name}
       ./an/file
     """.squish
-    Ogr::Postgres.any_instance.expects(:system).with(ogr_command).once
+    Ogr::Postgres.expects(:system).with(ogr_command).once
 
     Ogr::Postgres.import './an/file', table_name, new_table_name
   end
@@ -54,5 +54,62 @@ class TestOgrPostgres < ActiveSupport::TestCase
     assert_raises ArgumentError, error_msg do
       Ogr::Postgres.import './an/file', nil, new_table_name
     end
+  end
+
+  test '.export given the Shapefile type, executes a ogr2ogr command
+   that exports to a Shapefile with the given query' do
+    db_config = Rails.configuration.database_configuration[Rails.env]
+    query = 'SELECT * FROM table'
+    driver = 'ESRI Shapefile'
+    export_file_name = 'export.shp'
+
+    ogr_command = """
+      ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config["host"]}
+      user=#{db_config["username"]} dbname=#{db_config["database"]}
+      password=#{db_config["password"]}\"
+      -sql \"#{query}\"
+    """.squish
+
+    Ogr::Postgres.expects(:system).with(ogr_command).once
+
+    Ogr::Postgres.export :shapefile, export_file_name, query
+  end
+
+  test '.export given the CSV type, executes a ogr2ogr command
+   that exports to a CSV with the given query' do
+    db_config = Rails.configuration.database_configuration[Rails.env]
+    query = 'SELECT * FROM table'
+    driver = 'CSV'
+    export_file_name = 'export.csv'
+
+    ogr_command = """
+      ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config["host"]}
+      user=#{db_config["username"]} dbname=#{db_config["database"]}
+      password=#{db_config["password"]}\"
+      -sql \"#{query}\"
+    """.squish
+
+    Ogr::Postgres.expects(:system).with(ogr_command).once
+
+    Ogr::Postgres.export :csv, export_file_name, query
+  end
+
+  test '.export given the KML type, executes a ogr2ogr command
+   that exports to a KML with the given query' do
+    db_config = Rails.configuration.database_configuration[Rails.env]
+    query = 'SELECT * FROM table'
+    driver = 'KML'
+    export_file_name = 'export.csv'
+
+    ogr_command = """
+      ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config["host"]}
+      user=#{db_config["username"]} dbname=#{db_config["database"]}
+      password=#{db_config["password"]}\"
+      -sql \"#{query}\"
+    """.squish
+
+    Ogr::Postgres.expects(:system).with(ogr_command).once
+
+    Ogr::Postgres.export :kml, export_file_name, query
   end
 end
