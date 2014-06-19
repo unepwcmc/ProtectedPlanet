@@ -20,7 +20,7 @@ class Stats::Regional
               JOIN countries_protected_areas cpa ON country_id = ct.id
               JOIN protected_areas pa ON protected_area_id = pa.id
               JOIN iucn_categories ic ON iucn_category_id = ic.id
-              WHERE rg.iso =? AND ic.name IN ('Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI')""".squish
+              WHERE rg.iso =? AND ic.name IN (#{IUCN_CATEGORIES})""".squish
     sql_sanitized = ActiveRecord::Base.__send__(:sanitize_sql, [sql, iso], '')
     result = DB.execute(sql_sanitized)
     result[0]["count"].to_i
