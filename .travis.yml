@@ -2,6 +2,8 @@ language: ruby
 before_install:
   - sudo apt-get update
   - sudo apt-get install gdal-bin
+  - sudo apt-get install libgdal1-dev
+  - sudo apt-get install libgdal-dev
 bundler_args: --without development production staging
 rvm:
   - 2.1.2
