@@ -39,6 +39,14 @@ class Stats
     countries_in_region.joins(:protected_areas).count
   end
 
+  def self.region_percentage_cover_pas iso
+    RegionalStatistic.joins(:region)
+                     .where("regions.iso" => iso)
+                     .first[:percentage_cover_pas]
+  end
+
+
+
   #Countries
 
   def self.country_total_pas iso
