@@ -192,6 +192,36 @@ ALTER SEQUENCE country_stats_id_seq OWNED BY country_stats.id;
 
 
 --
+-- Name: cow_island; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE cow_island (
+    id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    the_geom geometry,
+    wdpa_id integer,
+    wdpa_parent_id integer,
+    name text,
+    original_name text,
+    marine boolean,
+    reported_marine_area numeric,
+    reported_area numeric,
+    gis_area numeric,
+    gis_marine_area numeric,
+    legal_status_id integer,
+    legal_status_updated_at timestamp without time zone,
+    iucn_category_id integer,
+    governance_id integer,
+    management_plan text,
+    management_authority_id integer,
+    international_criteria character varying(255),
+    no_take_status_id integer,
+    designation_id integer
+);
+
+
+--
 -- Name: designations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -651,19 +681,13 @@ ALTER SEQUENCE sub_locations_id_seq OWNED BY sub_locations.id;
 
 
 --
--- Name: tsvector_search_documents; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
+-- Name: tsvector_search_documents; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE MATERIALIZED VIEW tsvector_search_documents AS
- SELECT pa.wdpa_id,
-    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(first(pa.name), ''::text)), 'A'::"char")) || to_tsvector(COALESCE((first(c.language))::regconfig, 'simple'::regconfig), COALESCE(unaccent(first(pa.original_name)), ''::text))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ' '::text), ''::text))) || to_tsvector(COALESCE(first((c.language)::regconfig), 'simple'::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ' '::text), ''::text))) AS document
-   FROM (((protected_areas pa
-   LEFT JOIN countries_protected_areas cpa ON ((cpa.protected_area_id = pa.id)))
-   LEFT JOIN countries c ON ((cpa.country_id = c.id)))
-   LEFT JOIN sub_locations sl ON ((c.id = sl.country_id)))
-  GROUP BY pa.wdpa_id
-  ORDER BY pa.wdpa_id
-  WITH NO DATA;
+CREATE TABLE tsvector_search_documents (
+    id integer,
+    document tsvector
+);
 
 
 --
@@ -1176,6 +1200,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140612133146');
 
 INSERT INTO schema_migrations (version) VALUES ('20140613125148');
 
+INSERT INTO schema_migrations (version) VALUES ('20140616142743');
+
 INSERT INTO schema_migrations (version) VALUES ('20140617090445');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617090531');
@@ -1185,12 +1211,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140617091236');
 INSERT INTO schema_migrations (version) VALUES ('20140617091255');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091326');
-
-INSERT INTO schema_migrations (version) VALUES ('20140617161632');
-
-INSERT INTO schema_migrations (version) VALUES ('20140617170938');
-
-INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091620');
 
@@ -1206,5 +1226,9 @@ INSERT INTO schema_migrations (version) VALUES ('20140617133708');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617133943');
 
+INSERT INTO schema_migrations (version) VALUES ('20140617161632');
+
 INSERT INTO schema_migrations (version) VALUES ('20140617170024');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617170938');
 
