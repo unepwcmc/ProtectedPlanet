@@ -6,15 +6,19 @@
       <h2><%= @protected_area.name %></h2>
 
       <hr>
-    </section>
+      <p><strong>Area of Outstanding Natural Beauty</strong>
+      <a href="#">United Kingdom</a>, <a href="#">Europe</a> | Marine Area</p>
+      <hr>
+
+      <a href="#" class="btn">Download the WDPA dataset</a>
+     </section>
 
     <div class="factsheet">
       <section>
         <h3>
           Official record
-          <span>Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>
+          <span><i class="fa fa-clock-o"></i> Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>        </h3>
           <%= render 'official_record', protected_area: @protected_area %>
-        </h3>
       </section>
 
       <section class="column-left">

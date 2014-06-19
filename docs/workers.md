@@ -30,3 +30,8 @@ helped:
 * http://en.wikipedia.org/w/api.php
 * http://stackoverflow.com/a/8838848/245017
 * http://stackoverflow.com/a/8814262/245017
+
+## Photos
+
+Protected Areas have photos currently retrieved from Panoramio by
+searching the Panoramio API with the Protected Area bounding box.

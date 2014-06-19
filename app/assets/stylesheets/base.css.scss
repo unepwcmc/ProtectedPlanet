@@ -1,9 +1,27 @@
-body {
-  font-family: Helvetica, Arial;
+@import 'mixins';
+@import 'variables';
+
+body{
+  background: #e4e3eb;
+  font: $font-stack;
+  color: #353946;
+}
+
+a {
+  text-decoration: none;
+}
+
+a.btn{
+  background: #83ad35;
+  padding: 5px;
+  color: #fff;
+  @include border-radius(2px);
+  font-size: 0.9em;
+  font-family: 'MuseoSans-100', $font-stack;
 }
 
 header {
-  background: #CECECE;
+  background: #2a2d37;
   height: 50px;
   overflow: hidden;
 
@@ -15,6 +33,8 @@ header {
 
   h1 {
     float: left;
+    font-family: 'MuseoSans-500', $font-stack;
+    color: #fff;
   }
 
   nav {
@@ -22,6 +42,24 @@ header {
 
     ul li {
       display: inline-block;
+    }
+
+
+    #search{
+      background: #353946;
+      border: none;
+      padding: 4px;
+      color: #e6e6ee;
+      @include border-radius(2px);
+    }
+
+    input{
+      background: #353946;
+      border: none;
+      color: #e6e6ee;
+      @include border-radius(2px);
+      margin: 0 0 0 5px;
+      width: 200px;
     }
   }
 }
