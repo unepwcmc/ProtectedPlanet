@@ -1,4 +1,7 @@
 class Wdpa::Release
+  DB = ActiveRecord::Base.connection
+  IMPORT_VIEW_NAME = "imported_protected_areas"
+
   def self.download
     wdpa_release = self.new
     wdpa_release.download
@@ -31,6 +34,20 @@ class Wdpa::Release
   def source_table
     gdb_metadata = Ogr::Info.new(gdb_path)
     gdb_metadata.layers_matching(Wdpa::DataStandard::Matchers::SOURCE_TABLE).first
+  end
+
+  def create_import_view
+    attributes = Wdpa::DataStandard.common_attributes.join(', ')
+    create_query = "CREATE OR REPLACE VIEW #{IMPORT_VIEW_NAME} AS "
+
+    select_queries = []
+    geometry_tables.each do |geometry_table|
+      select_queries << "SELECT #{attributes} FROM #{geometry_table}"
+    end
+
+    create_query << select_queries.join(" UNION ALL ")
+
+    DB.execute(create_query)
   end
 
   def protected_areas
