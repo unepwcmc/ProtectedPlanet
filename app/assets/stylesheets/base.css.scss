@@ -1,27 +1,25 @@
 @import 'mixins';
 @import 'variables';
 
+
 body{
-  background: #e4e3eb;
+  background: $dark-blue;
   font: $font-stack;
   color: #353946;
 }
 
-a {
+a, a:visited {
   text-decoration: none;
   color: $dark-grey;
-
-  :visited{
-    color: $dark-grey;
-  }
 }
 
 
-a.btn{
-  background: #83ad35;
-  padding: 5px;
+.btn, button {
+  background: $green;
+  padding: 5px 20px 5px 20px;
   color: #fff;
-  @include border-radius(2px);
+  border: none;
+  @include border-radius(5px);
   font-size: 0.9em;
   font-family: 'MuseoSans-100', $font-stack;
 }
@@ -33,15 +31,6 @@ form{
     font-size: 1.0em ;
   }
 
-  button{
-    border: none;
-    background: $green;
-    padding: 5px 20px 5px 20px;
-    @include border-radius(5px);
-    color: #fff;
-    font-family: 'MuseoSans-100', $font-stack;
-    font-size: 1em;
-  }
 }
 
 header {
@@ -90,7 +79,10 @@ header {
 .container{
   width: 100%;
   position: relative;
+  padding: 0 0 30px 0;
   margin: 0 0 40px 0;
+  background: #e4e3eb;
+  overflow: hidden;
 }
 
 main {
@@ -101,7 +93,7 @@ main {
     h2{
       font-family: 'MuseoSlab-500', $font-stack;
       font-size: 1.5em;
-      margin: 0px 0 0 0;
+      margin: 0;
     }
 
     h3{
@@ -119,8 +111,9 @@ main {
 
   }
 
-.clear{
-  clear: both;
+#map{
+  border-top: 1px solid $grey;
+  border-bottom: 1px solid $grey;
 }
 
 footer{
