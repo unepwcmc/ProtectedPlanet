@@ -11,6 +11,7 @@ a {
   text-decoration: none;
 }
 
+
 a.btn{
   background: #83ad35;
   padding: 5px;
@@ -21,14 +22,13 @@ a.btn{
 }
 
 header {
-  background: #2a2d37;
+  background: $dark-blue;
   height: 50px;
   overflow: hidden;
 
   .header-inner {
     margin: 15px auto;
     width: 1000px;
-    clear: both;
   }
 
   h1 {
@@ -64,9 +64,26 @@ header {
   }
 }
 
-
-.content-container{
+.container{
   width: 100%;
-  height: 100px;
-  border: 1px solid #000;
+  position: relative;
+  margin: 0 0 40px 0;
+}
+
+
+.clear{
+  clear: both;
+}
+
+footer{
+  width: 100%;
+  background: $dark-blue;
+
+  .footer-inner {
+    padding: 50px 0;
+    margin: 0px auto;
+    width: 1000px;
+    color: $grey-blue;
+    font-family: 'MuseoSans-100', $font-stack;
+  }
 }
