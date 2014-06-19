@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class DownloadShapefile < ActiveSupport::TestCase
+class DownloadShapefileTest < ActiveSupport::TestCase
   test '#generate, given a zip file path, exports shapefiles for each
    geometry table, and returns them as a single zip' do
     zip_file_path = './all-shp.zip'
