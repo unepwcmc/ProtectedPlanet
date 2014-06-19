@@ -22,7 +22,7 @@ class Download
       zip_path = zip_path_for_type(type)
 
       generator.generate zip_path
-      Download::S3.upload zip_path
+      S3.upload zip_path
     end
   end
 
