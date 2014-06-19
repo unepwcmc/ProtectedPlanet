@@ -1,7 +1,4 @@
 class Wdpa::Release
-  WDPA_GEOMETRY_TABLE_MATCHER = /wdpa_?po/i
-  WDPA_SOURCE_TABLE_MATCHER = /wdpa_?source/i
-
   def self.download
     wdpa_release = self.new
     wdpa_release.download
@@ -21,19 +18,19 @@ class Wdpa::Release
       Ogr::Postgres.import(
         gdb_path,
         geometry_table,
-        standardised_geometry_table(geometry_table)
+        Wdpa::DataStandard.standardise_table_name(geometry_table)
       )
     end
   end
 
   def geometry_tables
     gdb_metadata = Ogr::Info.new(gdb_path)
-    gdb_metadata.layers_matching(WDPA_GEOMETRY_TABLE_MATCHER)
+    gdb_metadata.layers_matching(Wdpa::DataStandard::Matchers::GEOMETRY_TABLE)
   end
 
   def source_table
     gdb_metadata = Ogr::Info.new(gdb_path)
-    gdb_metadata.layers_matching(WDPA_SOURCE_TABLE_MATCHER).first
+    gdb_metadata.layers_matching(Wdpa::DataStandard::Matchers::SOURCE_TABLE).first
   end
 
   def protected_areas
@@ -69,14 +66,6 @@ class Wdpa::Release
 
   def tmp_path
     File.join(Rails.root, 'tmp')
-  end
-
-  def standardised_geometry_table table
-    if !!(table =~ /poly/)
-      "polygon_import"
-    else
-      "point_import"
-    end
   end
 
   def start_time

@@ -23,11 +23,11 @@ class TestWdpaRelease < ActiveSupport::TestCase
 
     Ogr::Postgres.
       expects(:import).
-      with(gdb_path, "point", "point_import")
+      with(gdb_path, "point", "standard_points")
 
     Ogr::Postgres.
       expects(:import).
-      with(gdb_path, "polygons", "polygon_import")
+      with(gdb_path, "polygons", "standard_polygons")
 
     assert_kind_of Wdpa::Release, Wdpa::Release.download
   end
