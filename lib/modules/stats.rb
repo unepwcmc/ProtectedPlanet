@@ -1,6 +1,7 @@
 class Stats
 
   IUCN_CATEGORIES = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
+  DB = ActiveRecord::Base.connection
 
   #Global Statistics
 
@@ -35,8 +36,8 @@ class Stats
   end
   # Regions
   def self.region_total_pas iso
-    countries_in_region = Country.joins(:region).where("regions.iso = '#{iso}'")
-    countries_in_region.joins(:protected_areas).count
+    countries_list = countries_in_region iso
+    countries_list.joins(:protected_areas).count
   end
 
   def self.region_percentage_cover_pas iso
@@ -45,12 +46,24 @@ class Stats
                      .first[:percentage_cover_pas]
   end
 
+  def self.region_pas_with_iucn_category iso
+    sql = """SELECT count(1) FROM regions rg 
+              RIGHT JOIN countries ct ON region_id = rg.id
+              JOIN countries_protected_areas cpa ON country_id = ct.id
+              JOIN protected_areas pa ON protected_area_id = pa.id
+              JOIN iucn_categories ic ON iucn_category_id = ic.id
+              WHERE rg.iso =? AND ic.name IN ('Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI')""".squish
+    sql_sanitized = ActiveRecord::Base.__send__(:sanitize_sql, [sql, iso], '')
+    result = DB.execute(sql_sanitized)
+    result[0]["count"].to_i
+  end
+
 
 
   #Countries
 
   def self.country_total_pas iso
-    ProtectedArea.joins(:countries).where("iso = '#{iso}'").count
+    ProtectedArea.select(:id).joins(:countries).where("iso = '#{iso}'").count
   end
 
   def self.country_percentage_cover_pas iso
@@ -60,7 +73,8 @@ class Stats
   end
 
   def self.country_pas_with_iucn_category iso
-    ProtectedArea.joins(:iucn_category, :countries)
+    ProtectedArea.select(:id)
+                 .joins(:iucn_category, :countries)
                  .where("iucn_categories.name IN (#{IUCN_CATEGORIES}) AND iso = '#{iso}'")
                  .count
   end
@@ -76,6 +90,10 @@ class Stats
   end 
 
   private
+
+  def self.countries_in_region iso
+    Country.joins(:region).where("regions.iso = '#{iso}'")
+  end
 
   def self.protected_areas_in_country iso
     ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
