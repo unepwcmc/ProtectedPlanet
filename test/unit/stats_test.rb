@@ -101,6 +101,18 @@ class StatsTest < ActiveSupport::TestCase
     assert_equal ({'Lionel Messi' => 2, 'Robin Van Persie' => 1}), Stats.country_protected_areas_by_designation('TOMATO')
   end
 
+  test '.number of pas in one region' do
+    region_1 = FactoryGirl.create(:region, name: 'Africasia', iso: 'AFS')
+    region_2 = FactoryGirl.create(:region, name: 'Eurociania', iso: 'EOC')
+    country_1 = FactoryGirl.create(:country, region: region_1)
+    country_2 = FactoryGirl.create(:country, region: region_2)
+    country_3 = FactoryGirl.create(:country, region: region_1)
+    FactoryGirl.create(:protected_area, countries:  [country_1], wdpa_id: 1)
+    FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 2)
+    FactoryGirl.create(:protected_area, countries: [country_3], wdpa_id: 3)
+    assert_equal 2, Stats.region_total_pas('AFS')
+  end
+
 
 
 

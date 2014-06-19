@@ -2,6 +2,9 @@ class Stats
 
   IUCN_CATEGORIES = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
 
+  #Global Statistics
+
+
   def self.global_pa_count 
     ProtectedArea.count
   end
@@ -30,9 +33,16 @@ class Stats
   def self.countries_providing_data
     ProtectedArea.select("countries.id").joins(:countries).group("countries.id").length
   end
+  # Regions
+  def self.region_total_pas iso
+    countries_in_region = Country.joins(:region).where("regions.iso = '#{iso}'")
+    countries_in_region.joins(:protected_areas).count
+  end
+
+  #Countries
 
   def self.country_total_pas iso
-    total_pas_in iso, 'countries'
+    ProtectedArea.joins(:countries).where("iso = '#{iso}'").count
   end
 
   def self.country_percentage_cover_pas iso
@@ -58,10 +68,6 @@ class Stats
   end 
 
   private
-
-  def self.total_pas_in entity_code,type
-    ProtectedArea.joins(type.to_sym).where("iso = '#{entity_code}'").count
-  end
 
   def self.protected_areas_in_country iso
     ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
