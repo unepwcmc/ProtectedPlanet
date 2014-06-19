@@ -1,0 +1,2 @@
+class Download::Kml
+end

@@ -1,62 +1,39 @@
 class Download
-  BASE_QUERY = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
+  TMP_PATH = File.join(Rails.root, 'tmp')
 
-  TYPES = {
-    csv: {
-      driver: :csv,
-      query: BASE_QUERY,
-      file_extension: 'csv'
-    },
-    shapefile_polygons: {
-      driver: :shapefile,
-      query: [BASE_QUERY, "WHERE ST_GeometryType(the_geom) ILIKE '%poly%'"].join(' '),
-      file_extension: 'shp'
-    },
-    shapefile_points: {
-      driver: :shapefile,
-      query: [BASE_QUERY, "WHERE ST_GeometryType(the_geom) ILIKE '%point%'"].join(' '),
-      file_extension: 'shp'
-    },
-    kml: {
-      driver: :kml,
-      query: BASE_QUERY,
-      file_extension: 'kml'
-    }
-  }
+  GENERATORS = [
+    Download::Csv,
+    Download::Shapefile,
+    Download::Kml
+  ]
 
-  def self.generate
-    download = self.new
+  def self.generate country_ids=nil
+    download = Download.new country_ids
     download.generate
-    download
   end
 
-  def initialize
-    @start_time = Time.now
+  def initialize country_ids
+    @download_type = country_ids || 'all'
   end
 
   def generate
-    TYPES.each do |type, _|
-      generate type
+    GENERATORS.each do |generator|
+      type = generator.to_s.demodulize.downcase
+      zip_path = zip_path_for_type(type)
+
+      generator.generate zip_path
+      Download::S3.upload zip_path
     end
   end
 
   private
 
-  def generate type
-    query = TYPES[type][:query]
-    driver = TYPES[type][:driver]
-    Ogr::Postgres.export(driver, path_for(type), query.squish)
+  def zip_path_for_type type
+    path = File.join(TMP_PATH,filename_for_type(type))
+    "#{path}.zip"
   end
 
-  def path_for type
-    File.join(tmp_path, "all_#{type}_#{start_time}.#{TYPES[type][:file_extension]}")
-  end
-
-  def tmp_path
-    File.join(Rails.root, 'tmp')
-  end
-
-  def start_time
-    @start_time.strftime("%Y-%m-%d-%H%M")
+  def filename_for_type type
+    "#{@download_type}-#{type}"
   end
 end
