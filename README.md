@@ -14,6 +14,7 @@ You can check out the previous version of Protected Planet on
 4. [Development workflow, conventions and tips](docs/workflow.md)
 5. [Search](docs/search.md)
 6. [Background Workers](docs/workers.md)
+7. [Downloads](docs/downloads.md)
 
 ## Licence
 

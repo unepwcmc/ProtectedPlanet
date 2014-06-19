@@ -25,6 +25,16 @@ the [workers docs](workers.md) for more info.
 The WDPA modules have [documentation](../lib/modules/wdpa/README.md)
 available.
 
+##### Imported Data Retention
+
+The WDPA is imported in to the Rails database (e.g. `pp_development`)
+and consists of three tables: polygon, points and source. Although these
+aren't used in the general running of the application, they are kept so
+that we can generate downloads with the WDPA Data Standard without
+having to re-transform the data back to how it started.
+
+You can find more info in the [download documentation](downloads.md).
+
 #### Map Tiles and Geometries
 
 Map tiles are stored and rendered by [CartoDB](http://cartodb.com). Due
