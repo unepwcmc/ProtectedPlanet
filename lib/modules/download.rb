@@ -7,22 +7,24 @@ class Download
     Download::Kml
   ]
 
-  def self.generate country_ids=nil
-    download = Download.new country_ids
+  def self.generate download_name, pa_ids=nil
+    download = Download.new download_name, pa_ids
     download.generate
   end
 
-  def initialize country_ids
-    @download_type = country_ids || 'all'
+  def initialize download_name, pa_ids=nil
+    @download_name = download_name
+    @pa_ids = pa_ids
   end
 
   def generate
     GENERATORS.each do |generator|
       type = generator.to_s.demodulize.downcase
       zip_path = zip_path_for_type(type)
+      download_name = File.basename(zip_path)
 
       generator.generate zip_path
-      S3.upload zip_path
+      S3.upload download_name, zip_path
     end
   end
 
@@ -34,6 +36,6 @@ class Download
   end
 
   def filename_for_type type
-    "#{@download_type}-#{type}"
+    "#{@download_name}-#{type}"
   end
 end
