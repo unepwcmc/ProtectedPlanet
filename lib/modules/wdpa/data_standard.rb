@@ -28,6 +28,19 @@ class Wdpa::DataStandard
     :wkb_geometry => {name: :the_geom, type: :geometry}
   }
 
+  POLYGON_ATTRIBUTES = [
+    :gis_m_area,
+    :gis_area,
+    :shape_area,
+    :shape_length
+  ]
+
+  module Matchers
+    GEOMETRY_TABLE = /wdpa_?po/i
+    POLYGON_TABLE  = /poly/i
+    SOURCE_TABLE   = /wdpa_?source/i
+  end
+
   #
   # Attributes that are only used in combination with other attributes,
   # and have no matching attribute on ProtectedArea
@@ -39,6 +52,10 @@ class Wdpa::DataStandard
 
   def self.standard_attributes
     STANDARD_ATTRIBUTES
+  end
+
+  def self.common_attributes
+    STANDARD_ATTRIBUTES.keys - POLYGON_ATTRIBUTES
   end
 
   def self.standard_geometry_attributes
@@ -55,6 +72,14 @@ class Wdpa::DataStandard
     attributes = remove_nested_attributes attributes
 
     attributes
+  end
+
+  def self.standardise_table_name table
+    if !!(table =~ Matchers::POLYGON_TABLE)
+      "standard_polygons"
+    else
+      "standard_points"
+    end
   end
 
   private

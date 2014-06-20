@@ -1,6 +1,6 @@
 class Wdpa::Release
-  WDPA_GEOMETRY_TABLE_MATCHER = /wdpa_?po/i
-  WDPA_SOURCE_TABLE_MATCHER = /wdpa_?source/i
+  DB = ActiveRecord::Base.connection
+  IMPORT_VIEW_NAME = "imported_protected_areas"
 
   def self.download
     wdpa_release = self.new
@@ -16,17 +16,38 @@ class Wdpa::Release
   def download
     Wdpa::S3.download_current_wdpa_to filename: zip_path
     system("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
-    Ogr::Postgres.import file: gdb_path
+
+    geometry_tables.each do |geometry_table|
+      Ogr::Postgres.import(
+        gdb_path,
+        geometry_table,
+        Wdpa::DataStandard.standardise_table_name(geometry_table)
+      )
+    end
   end
 
   def geometry_tables
     gdb_metadata = Ogr::Info.new(gdb_path)
-    gdb_metadata.layers_matching(WDPA_GEOMETRY_TABLE_MATCHER)
+    gdb_metadata.layers_matching(Wdpa::DataStandard::Matchers::GEOMETRY_TABLE)
   end
 
   def source_table
     gdb_metadata = Ogr::Info.new(gdb_path)
-    gdb_metadata.layers_matching(WDPA_SOURCE_TABLE_MATCHER).first
+    gdb_metadata.layers_matching(Wdpa::DataStandard::Matchers::SOURCE_TABLE).first
+  end
+
+  def create_import_view
+    attributes = Wdpa::DataStandard.common_attributes.join(', ')
+    create_query = "CREATE OR REPLACE VIEW #{IMPORT_VIEW_NAME} AS "
+
+    select_queries = []
+    geometry_tables.each do |geometry_table|
+      select_queries << "SELECT #{attributes} FROM #{geometry_table}"
+    end
+
+    create_query << select_queries.join(" UNION ALL ")
+
+    DB.execute(create_query)
   end
 
   def protected_areas
@@ -42,11 +63,6 @@ class Wdpa::Release
   end
 
   def clean_up
-    geometry_tables.each do |table_name|
-      ActiveRecord::Migration.drop_table(table_name.downcase)
-    end
-    ActiveRecord::Migration.drop_table(source_table.downcase)
-
     FileUtils.rm_rf(zip_path)
     FileUtils.rm_rf(gdb_path)
   end

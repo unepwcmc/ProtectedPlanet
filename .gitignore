@@ -17,3 +17,5 @@
 !/tmp/.gitkeep
 
 dump.rdb
+
+/coverage

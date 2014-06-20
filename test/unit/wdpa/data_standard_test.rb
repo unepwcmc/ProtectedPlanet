@@ -311,4 +311,13 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
     assert_equal geometry_attributes, Wdpa::DataStandard.standard_geometry_attributes
   end
+
+  test '#standardise_table_name converts WDPA Geodatabase table names in
+   to consistent names' do
+    standardised_name = Wdpa::DataStandard.standardise_table_name 'wdpapoly_june2014'
+    assert_equal 'standard_polygons', standardised_name
+
+    standardised_name = Wdpa::DataStandard.standardise_table_name 'wdpapoint_june2014'
+    assert_equal 'standard_points', standardised_name
+  end
 end
