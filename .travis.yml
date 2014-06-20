@@ -8,13 +8,13 @@ before_install:
   - sudo apt-get install libgdal1-dev
   - sudo apt-get install libgdal-dev
   - sudo apt-get install postgresql-9.3-postgis-2.1 -f
+  - psql -c 'create database pp_test' -U postgres
+  - psql -c 'CREATE EXTENSION postgis;' -U postgres -d pp_test
+  - psql -c 'CREATE EXTENSION postgis_topology;' -U postgres -d pp_test
 bundler_args: --without development production staging --jobs=4
 rvm:
   - 2.1.2
 before_script:
-  - psql -c 'create database pp_test' -U postgres
-  - psql -c 'CREATE EXTENSION postgis;' -U postgres -d pp_test
-  - psql -c 'CREATE EXTENSION postgis_topology;' -U postgres -d pp_test
   - RAILS_ENV=test bundle exec rake db:migrate
 notifications:
   email:
