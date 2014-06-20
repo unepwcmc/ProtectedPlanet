@@ -10,8 +10,8 @@ Protected Areas by country. They are generated statically during the
 WDPA import, so that users are able to download them instantly.
 
 The Download class is fairly naive and generates datasets for any given
-array of Protected Area IDs. It is the responsibility of the caller to
-decide what is to be downloaded.
+array of WDPA IDs. It is the responsibility of the caller to decide what
+is to be downloaded, and what the file should be saved as in S3.
 
 ```
 Download.generate 'download_name', [123, 456, 2881]
@@ -24,7 +24,7 @@ tables.
 
 As the polygon and points geometries are stored separately, we create a
 postgres `VIEW` during import that is based on a `UNION` of the two
-tables.
+tables. This view is managed by `Wdpa::Release`.
 
 ## Storage and access
 
