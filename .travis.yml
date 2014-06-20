@@ -5,15 +5,15 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libgdal1
   - sudo apt-get install gdal-bin
-  - sudo apt-get install libspatialite3=3.0.0~beta20110817-3
+  - sudo apt-get install libspatialite3=3.0.0~beta20110817-3 --force-yes
   - echo libspatialite3 hold | sudo dpkg --set-selections
-  - sudo apt-get install libspatialite-dev
-  - sudo apt-get install libgeos-c1=3.3.3-1.1~pgdg12.4+1
+  - sudo apt-get install libspatialite-dev --force-yes
+  - sudo apt-get install libgeos-c1=3.3.3-1.1~pgdg12.4+1 --force-yes
   - echo libgeos-c1 hold | sudo dpkg --set-selections
-  - sudo apt-get install libgdal1=1.9.0-3.1~pgdg12.4+1
+  - sudo apt-get install libgdal1=1.9.0-3.1~pgdg12.4+1 --force-yes
   - echo libgdal1 hold | sudo dpkg --set-selections
-  - sudo apt-get install libgdal-dev
-  - sudo apt-get install libgdal1-dev
+  - sudo apt-get install libgdal-dev --force-yes
+  - sudo apt-get install libgdal1-dev --force-yes
   - sudo apt-get install Postgresql-9.3-postgis -f
   - psql -c 'create database pp_test' -U postgres
   - psql -c 'CREATE EXTENSION postgis;' -U postgres -d pp_test
