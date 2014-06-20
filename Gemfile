@@ -30,6 +30,7 @@ group :test do
   gem 'webmock', '~> 1.18.0', require: false
   gem 'timecop', '~> 0.7.1'
   gem 'capybara', '~> 2.3.0'
+  gem 'codeclimate-test-reporter', require: nil
 end
 
 gem 'aws-sdk', '~> 1.3.9'
