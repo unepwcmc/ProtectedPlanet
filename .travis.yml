@@ -22,6 +22,7 @@ bundler_args: --without development production staging --jobs=6
 rvm:
   - 2.1.2
 before_script:
+  - cp config/secrets.yml.example config/secrets.yml
   - RAILS_ENV=test bundle exec rake db:migrate
 notifications:
   email:
