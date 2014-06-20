@@ -1,25 +1,34 @@
 class Download::Kml
-  QUERY = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
-
-  def self.generate zip_path
-    download_kml = new zip_path
+  def self.generate zip_path, wdpa_ids = nil
+    download_kml = new zip_path, wdpa_ids
     download_kml.generate
 
     download_kml
   end
 
-  def initialize zip_path
+  def initialize zip_path, wdpa_ids
     @zip_path = zip_path
+    @wdpa_ids = wdpa_ids
   end
 
   def generate
-    export_success = Ogr::Postgres.export :kml, kml_path, QUERY
+    export_success = Ogr::Postgres.export :kml, kml_path, query
     if export_success
       return system("zip -j #{@zip_path} #{kml_path}")
     end
   end
 
   private
+
+  def query
+    query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
+
+    if @wdpa_ids.present?
+       query << " WHERE wdpaid IN (#{@wdpa_ids.join(',')})"
+    end
+
+    query
+  end
 
   def kml_path
     "#{path_without_extension}.kml"

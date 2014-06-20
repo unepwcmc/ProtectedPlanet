@@ -7,14 +7,14 @@ class Download
     Download::Kml
   ]
 
-  def self.generate download_name, pa_ids=nil
-    download = Download.new download_name, pa_ids
+  def self.generate download_name, wdpa_ids=nil
+    download = Download.new download_name, wdpa_ids
     download.generate
   end
 
-  def initialize download_name, pa_ids=nil
+  def initialize download_name, wdpa_ids=nil
     @download_name = download_name
-    @pa_ids = pa_ids
+    @wdpa_ids = wdpa_ids
   end
 
   def generate
@@ -23,7 +23,7 @@ class Download
       zip_path = zip_path_for_type(type)
       download_name = File.basename(zip_path)
 
-      generator.generate zip_path
+      generator.generate zip_path, for: @wdpa_ids
       S3.upload download_name, zip_path
     end
   end
