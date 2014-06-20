@@ -9,7 +9,7 @@ class Stats::Global
 
   def self.percentage_cover_pas
     RegionalStatistic.joins(:region)
-                     .where('regions.name' => 'global')
+                     .where('regions.iso' => 'GLOBAL')
                      .first[:percentage_cover_pas]
   end
 
