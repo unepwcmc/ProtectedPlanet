@@ -2,8 +2,6 @@ class Download::Csv
   def self.generate zip_path, wdpa_ids = nil
     download_csv = new zip_path, wdpa_ids
     download_csv.generate
-
-    download_csv
   end
 
   def initialize zip_path, wdpa_ids
@@ -16,6 +14,8 @@ class Download::Csv
     if export_success
       return system("zip -j #{@zip_path} #{csv_path}")
     end
+
+    false
   end
 
   private

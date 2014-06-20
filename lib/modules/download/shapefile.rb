@@ -10,8 +10,6 @@ class Download::Shapefile
   def self.generate zip_path, wdpa_ids = nil
     download_shapefile = new zip_path, wdpa_ids
     download_shapefile.generate
-
-    download_shapefile
   end
 
   def initialize zip_path, wdpa_ids

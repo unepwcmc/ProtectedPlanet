@@ -2,8 +2,6 @@ class Download::Kml
   def self.generate zip_path, wdpa_ids = nil
     download_kml = new zip_path, wdpa_ids
     download_kml.generate
-
-    download_kml
   end
 
   def initialize zip_path, wdpa_ids
@@ -16,6 +14,8 @@ class Download::Kml
     if export_success
       return system("zip -j #{@zip_path} #{kml_path}")
     end
+
+    false
   end
 
   private

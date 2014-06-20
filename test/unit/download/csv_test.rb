@@ -14,8 +14,23 @@ class DownloadCsvTest < ActiveSupport::TestCase
       returns(true)
     Ogr::Postgres.expects(:export).with(:csv, csv_file_path, query).returns(true)
 
-    assert Download::Csv.generate(zip_file_path),
+    assert_equal true, Download::Csv.generate(zip_file_path),
       "Expected #generate to return true on success"
+  end
+
+  test '#generate returns false if the export fails' do
+    Ogr::Postgres.expects(:export).returns(false)
+
+    assert_equal false, Download::Csv.generate(''),
+      "Expected #generate to return false on failure"
+  end
+
+  test '#generate returns false if the zip fails' do
+    Ogr::Postgres.expects(:export).returns(true)
+    Download::Csv.any_instance.expects(:system).returns(false)
+
+    assert_equal false, Download::Csv.generate(''),
+      "Expected #generate to return false on failure"
   end
 
   test '#generate, given a path and WDPA IDs, calls ogr2ogr with the path, a query,

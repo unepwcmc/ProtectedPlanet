@@ -18,6 +18,21 @@ class DownloadKmlTest < ActiveSupport::TestCase
       "Expected #generate to return true on success"
   end
 
+  test '#generate returns false if the export fails' do
+    Ogr::Postgres.expects(:export).returns(false)
+
+    assert_equal false, Download::Kml.generate(''),
+      "Expected #generate to return false on failure"
+  end
+
+  test '#generate returns false if the zip fails' do
+    Ogr::Postgres.expects(:export).returns(true)
+    Download::Kml.any_instance.expects(:system).returns(false)
+
+    assert_equal false, Download::Kml.generate(''),
+      "Expected #generate to return false on failure"
+  end
+
   test '#generate, given a path and WDPA IDs, calls ogr2ogr with the
    path, a query, and the specific driver' do
     zip_file_path = './all-kml.zip'

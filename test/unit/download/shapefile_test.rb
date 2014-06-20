@@ -31,6 +31,21 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Download::Shapefile.generate zip_file_path
   end
 
+  test '#generate returns false if the export fails' do
+    Ogr::Postgres.expects(:export).returns(false)
+
+    assert_equal false, Download::Shapefile.generate(''),
+      "Expected #generate to return false on failure"
+  end
+
+  test '#generate returns false if the zip fails' do
+    Ogr::Postgres.expects(:export).returns(true).twice
+    Download::Shapefile.any_instance.expects(:system).returns(false)
+
+    assert_equal false, Download::Shapefile.generate(''),
+      "Expected #generate to return false on failure"
+  end
+
   test '#generate, given a zip file path and WDPA IDs, exports
    shapefiles for each geometry table, and returns them as a single zip' do
     zip_file_path = './all-shp.zip'
