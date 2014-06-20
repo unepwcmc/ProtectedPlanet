@@ -10,7 +10,7 @@ class StatsTest < ActiveSupport::TestCase
   end
 
   test '.percentage cover of protected areas' do
-    region = FactoryGirl.create(:region, name: 'global')
+    region = FactoryGirl.create(:region, iso: 'GLOBAL')
     FactoryGirl.create(:regional_statistic, region: region, :percentage_cover_pas => 50)
     assert_equal 50, Stats::Global.percentage_cover_pas
   end
