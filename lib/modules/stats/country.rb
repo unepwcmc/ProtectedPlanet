@@ -4,7 +4,7 @@ class Stats::Country
   IUCN_CATEGORIES = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
 
   def self.total_pas iso
-    ProtectedArea.select(:id).joins(:countries).where("iso = '#{iso}'").count
+    ProtectedArea.select(:id).joins(:countries).where("iso = ?", iso).count
   end
 
   def self.percentage_cover_pas iso

@@ -26,11 +26,8 @@ csv_models.each do |model|
 
     attributes = row.to_hash
     if model == Country
-     attributes["region_id"] = Region.find_by_name(attributes["region"]).id
-     attributes.tap { |k| k.delete("region") }
-    else
+      attributes["region"] = Region.where(name: attributes["region"]).first
     end
-    puts attributes
 
     instance = model.where(attributes).first || model.new(attributes)
 
