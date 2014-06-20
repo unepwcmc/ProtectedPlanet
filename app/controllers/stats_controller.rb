@@ -1,4 +1,3 @@
-class StatsController < ApplicationController
-  def index
-  end
+class Stats::StatsController < ApplicationController
+  layout 'stats'
 end
