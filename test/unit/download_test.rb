@@ -43,4 +43,17 @@ class DownloadTest < ActiveSupport::TestCase
     download_success = Download.generate download_name, pa_ids
     assert download_success, "Expected Download.generate to return true on success"
   end
+
+  test '.link_to, given a name and a type, returns a link to the
+   download S3 bucket for that object name' do
+    download_name = 'that-download'
+    type = :csv
+
+    Rails.application.secrets.aws_downloads_bucket = 'pp-downloads-development'
+
+    expected_url = "https://pp-downloads-development.s3.amazonaws.com/that-download-csv.zip"
+    url = Download.link_to download_name, type
+
+    assert_equal expected_url, url
+  end
 end

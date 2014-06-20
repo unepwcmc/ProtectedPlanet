@@ -12,9 +12,23 @@ class Download
     download.generate
   end
 
+  def self.link_to object_name, type
+    download = Download.new object_name
+    download.link_to type
+  end
+
   def initialize download_name, wdpa_ids=nil
     @download_name = download_name
     @wdpa_ids = wdpa_ids
+  end
+
+  def link_to type
+    file_name = File.basename zip_path_for_type(type)
+
+    bucket_name = Rails.application.secrets.aws_downloads_bucket
+    url = "https://#{bucket_name}.s3.amazonaws.com"
+
+    URI.join(url, file_name).to_s
   end
 
   def generate
