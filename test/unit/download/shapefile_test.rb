@@ -46,6 +46,32 @@ class DownloadShapefileTest < ActiveSupport::TestCase
       "Expected #generate to return false on failure"
   end
 
+  test '#generate removes non-zip files when finished' do
+    shp_polygons_paths = [
+      './all-polygons.shp',
+      './all-polygons.shx',
+      './all-polygons.dbf',
+      './all-polygons.prj',
+      './all-polygons.cpg'
+    ]
+
+    shp_points_paths = [
+      './all-points.shp',
+      './all-points.shx',
+      './all-points.dbf',
+      './all-points.prj',
+      './all-points.cpg'
+    ]
+
+    Ogr::Postgres.stubs(:export).returns(true)
+    Download::Shapefile.any_instance.stubs(:system).returns(true)
+
+    FileUtils.expects(:rm_rf).with(shp_polygons_paths)
+    FileUtils.expects(:rm_rf).with(shp_points_paths)
+
+    Download::Shapefile.generate('./all.zip')
+  end
+
   test '#generate, given a zip file path and WDPA IDs, exports
    shapefiles for each geometry table, and returns them as a single zip' do
     zip_file_path = './all-shp.zip'

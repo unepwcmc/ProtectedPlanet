@@ -10,15 +10,18 @@ class Download::Kml
   end
 
   def generate
-    export_success = Ogr::Postgres.export :kml, kml_path, query
-    if export_success
-      return system("zip -j #{@zip_path} #{kml_path}")
-    end
-
-    false
+    clean_up_after { export and zip }
   end
 
   private
+
+  def export
+    Ogr::Postgres.export :kml, kml_path, query
+  end
+
+  def zip
+    system("zip -j #{@zip_path} #{kml_path}")
+  end
 
   def query
     query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
@@ -28,6 +31,17 @@ class Download::Kml
     end
 
     query
+  end
+
+  def clean_up_after
+    return_value = yield
+    clean_up
+
+    return_value
+  end
+
+  def clean_up
+    FileUtils.rm_rf kml_path
   end
 
   def kml_path

@@ -21,24 +21,39 @@ class Download::Shapefile
   def generate
     shapefile_paths = []
 
-    QUERY_CONDITIONS.each do |name, condition|
-      query = "#{BASE_QUERY} #{condition}"
-      if @wdpa_ids.present?
-        query << " AND wdpaid IN (#{@wdpa_ids.join(', ')})"
+    clean_up_after do
+      QUERY_CONDITIONS.each do |name, condition|
+        query = "#{BASE_QUERY} #{condition}"
+        if @wdpa_ids.present?
+          query << " AND wdpaid IN (#{@wdpa_ids.join(', ')})"
+        end
+
+        component_paths = shapefile_components(name)
+
+        export_success = Ogr::Postgres.export :shapefile, component_paths.first, query
+        return false unless export_success
+
+        shapefile_paths |= component_paths
       end
 
-      component_paths = shapefile_components(name)
-
-      export_success = Ogr::Postgres.export :shapefile, component_paths.first, query
-      return false unless export_success
-
-      shapefile_paths |= component_paths
+      system("zip -j #{zip_path} #{shapefile_paths.join(' ')}")
     end
-
-    system("zip -j #{zip_path} #{shapefile_paths.join(' ')}")
   end
 
   private
+
+  def clean_up_after
+    return_value = yield
+    clean_up
+
+    return_value
+  end
+
+  def clean_up
+    QUERY_CONDITIONS.each do |name, _|
+      FileUtils.rm_rf shapefile_components(name)
+    end
+  end
 
   def zip_path
     File.join(@path, "#{@filename}.zip")

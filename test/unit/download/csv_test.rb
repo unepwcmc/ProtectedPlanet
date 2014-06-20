@@ -33,6 +33,17 @@ class DownloadCsvTest < ActiveSupport::TestCase
       "Expected #generate to return false on failure"
   end
 
+  test '#generate removes non-zip files when finished' do
+    csv_path = './all-csv.csv'
+
+    Ogr::Postgres.stubs(:export).returns(true)
+    Download::Csv.any_instance.stubs(:system).returns(true)
+
+    FileUtils.expects(:rm_rf).with(csv_path)
+
+    Download::Csv.generate('./all-csv.zip')
+  end
+
   test '#generate, given a path and WDPA IDs, calls ogr2ogr with the path, a query,
    and the specific driver' do
     zip_file_path = './all-csv.zip'
@@ -48,7 +59,7 @@ class DownloadCsvTest < ActiveSupport::TestCase
       returns(true)
     Ogr::Postgres.expects(:export).with(:csv, csv_file_path, query).returns(true)
 
-    assert Download::Csv.generate(zip_file_path, wdpa_ids),
+    assert_equal true, Download::Csv.generate(zip_file_path, wdpa_ids),
       "Expected #generate to return true on success"
   end
 end

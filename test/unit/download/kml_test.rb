@@ -33,6 +33,17 @@ class DownloadKmlTest < ActiveSupport::TestCase
       "Expected #generate to return false on failure"
   end
 
+  test '#generate removes non-zip files when finished' do
+    kml_path = './all.kml'
+
+    Ogr::Postgres.stubs(:export).returns(true)
+    Download::Kml.any_instance.stubs(:system).returns(true)
+
+    FileUtils.expects(:rm_rf).with(kml_path)
+
+    Download::Kml.generate('./all.zip')
+  end
+
   test '#generate, given a path and WDPA IDs, calls ogr2ogr with the
    path, a query, and the specific driver' do
     zip_file_path = './all-kml.zip'
