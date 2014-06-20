@@ -1,6 +1,6 @@
 language: ruby
 before_install:
-  - sudo apt-add-repository --remove ppa:ubuntugis/ubuntugis-unstable
+  - sudo apt-add-repository --remove ppa:ubuntugis/ubuntugis-unstable -y
   - sudo apt-get update
   - sudo apt-get install gdal-bin
   - sudo apt-get install libgdal1-dev
