@@ -3,6 +3,8 @@ before_install:
   - sudo apt-add-repository --remove ppa:ubuntugis/ubuntugis-unstable -y
   - sudo apt-get update
   - sudo apt-get install libgdal1
+  - sudo apt-get install gdal-bin
+  - sudo apt-get install libgdal1-dev
   - sudo apt-get install Postgresql-9.3-postgis -f
   - psql -c 'create database pp_test' -U postgres
   - psql -c 'CREATE EXTENSION postgis;' -U postgres -d pp_test
