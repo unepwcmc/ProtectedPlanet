@@ -3,8 +3,8 @@ class Download::Shapefile
 
   BASE_QUERY = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
   QUERY_CONDITIONS = {
-    polygons: "WHERE ST_GeometryType(wkb_geometry) LIKE '%Poly'",
-    points:   "WHERE ST_GeometryType(wkb_geometry) LIKE '%Point'"
+    polygons: "WHERE ST_GeometryType(wkb_geometry) LIKE '%Poly%'",
+    points:   "WHERE ST_GeometryType(wkb_geometry) LIKE '%Point%'"
   }
 
   def self.generate zip_path, wdpa_ids = nil
