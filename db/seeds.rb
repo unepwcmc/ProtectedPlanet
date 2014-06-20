@@ -8,7 +8,7 @@
 #
 
 csv_models = [
-  Country, SubLocation, Jurisdiction, Governance, IucnCategory
+  SubLocation, Jurisdiction, Governance, IucnCategory, Region, Country
 ]
 
 csv_models.each do |model|
@@ -23,7 +23,12 @@ csv_models.each do |model|
   failed_seeds = []
 
   CSV.foreach(source, headers: true) do |row|
+
     attributes = row.to_hash
+    if model == Country
+      attributes["region"] = Region.where(name: attributes["region"]).first
+    end
+
     instance = model.where(attributes).first || model.new(attributes)
 
     if instance.new_record?
@@ -42,6 +47,7 @@ csv_models.each do |model|
     puts failed_seeds
   end
 end
+
 
 puts "### Importing SubLocation Country Relations"
 

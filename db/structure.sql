@@ -79,7 +79,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: countries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: countries; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE countries (
@@ -114,7 +114,7 @@ ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
 
 
 --
--- Name: countries_protected_areas; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: countries_protected_areas; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE countries_protected_areas (
@@ -124,7 +124,7 @@ CREATE TABLE countries_protected_areas (
 
 
 --
--- Name: country_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: country_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE country_statistics (
@@ -158,7 +158,7 @@ ALTER SEQUENCE country_statistics_id_seq OWNED BY country_statistics.id;
 
 
 --
--- Name: country_stats; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: country_stats; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE country_stats (
@@ -192,7 +192,7 @@ ALTER SEQUENCE country_stats_id_seq OWNED BY country_stats.id;
 
 
 --
--- Name: designations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: designations; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE designations (
@@ -224,7 +224,7 @@ ALTER SEQUENCE designations_id_seq OWNED BY designations.id;
 
 
 --
--- Name: governances; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: governances; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE governances (
@@ -255,7 +255,7 @@ ALTER SEQUENCE governances_id_seq OWNED BY governances.id;
 
 
 --
--- Name: images; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: images; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE images (
@@ -290,7 +290,7 @@ ALTER SEQUENCE images_id_seq OWNED BY images.id;
 
 
 --
--- Name: iucn_categories; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: iucn_categories; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE iucn_categories (
@@ -321,7 +321,7 @@ ALTER SEQUENCE iucn_categories_id_seq OWNED BY iucn_categories.id;
 
 
 --
--- Name: jurisdictions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: jurisdictions; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE jurisdictions (
@@ -352,7 +352,7 @@ ALTER SEQUENCE jurisdictions_id_seq OWNED BY jurisdictions.id;
 
 
 --
--- Name: legal_statuses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: legal_statuses; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE legal_statuses (
@@ -383,7 +383,7 @@ ALTER SEQUENCE legal_statuses_id_seq OWNED BY legal_statuses.id;
 
 
 --
--- Name: management_authorities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: management_authorities; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE management_authorities (
@@ -414,7 +414,7 @@ ALTER SEQUENCE management_authorities_id_seq OWNED BY management_authorities.id;
 
 
 --
--- Name: no_take_statuses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: no_take_statuses; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE no_take_statuses (
@@ -446,7 +446,7 @@ ALTER SEQUENCE no_take_statuses_id_seq OWNED BY no_take_statuses.id;
 
 
 --
--- Name: protected_areas; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: protected_areas; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE protected_areas (
@@ -497,7 +497,7 @@ ALTER SEQUENCE protected_areas_id_seq OWNED BY protected_areas.id;
 
 
 --
--- Name: protected_areas_sub_locations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: protected_areas_sub_locations; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE protected_areas_sub_locations (
@@ -507,7 +507,7 @@ CREATE TABLE protected_areas_sub_locations (
 
 
 --
--- Name: region_stats; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: region_stats; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE region_stats (
@@ -541,7 +541,7 @@ ALTER SEQUENCE region_stats_id_seq OWNED BY region_stats.id;
 
 
 --
--- Name: regional_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: regional_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE regional_statistics (
@@ -575,7 +575,7 @@ ALTER SEQUENCE regional_statistics_id_seq OWNED BY regional_statistics.id;
 
 
 --
--- Name: regions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: regions; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE regions (
@@ -607,7 +607,7 @@ ALTER SEQUENCE regions_id_seq OWNED BY regions.id;
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE schema_migrations (
@@ -616,7 +616,7 @@ CREATE TABLE schema_migrations (
 
 
 --
--- Name: sub_locations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: sub_locations; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE sub_locations (
@@ -651,7 +651,7 @@ ALTER SEQUENCE sub_locations_id_seq OWNED BY sub_locations.id;
 
 
 --
--- Name: tsvector_search_documents; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace: 
+-- Name: tsvector_search_documents; Type: MATERIALIZED VIEW; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE MATERIALIZED VIEW tsvector_search_documents AS
@@ -667,7 +667,7 @@ CREATE MATERIALIZED VIEW tsvector_search_documents AS
 
 
 --
--- Name: wikipedia_articles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: wikipedia_articles; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE wikipedia_articles (
@@ -819,7 +819,7 @@ ALTER TABLE ONLY wikipedia_articles ALTER COLUMN id SET DEFAULT nextval('wikiped
 
 
 --
--- Name: countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY countries
@@ -827,7 +827,7 @@ ALTER TABLE ONLY countries
 
 
 --
--- Name: country_statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: country_statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY country_statistics
@@ -835,7 +835,7 @@ ALTER TABLE ONLY country_statistics
 
 
 --
--- Name: country_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: country_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY country_stats
@@ -843,7 +843,7 @@ ALTER TABLE ONLY country_stats
 
 
 --
--- Name: designations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: designations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY designations
@@ -851,7 +851,7 @@ ALTER TABLE ONLY designations
 
 
 --
--- Name: governances_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: governances_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY governances
@@ -859,7 +859,7 @@ ALTER TABLE ONLY governances
 
 
 --
--- Name: images_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: images_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY images
@@ -867,7 +867,7 @@ ALTER TABLE ONLY images
 
 
 --
--- Name: iucn_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: iucn_categories_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY iucn_categories
@@ -875,7 +875,7 @@ ALTER TABLE ONLY iucn_categories
 
 
 --
--- Name: jurisdictions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: jurisdictions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY jurisdictions
@@ -883,7 +883,7 @@ ALTER TABLE ONLY jurisdictions
 
 
 --
--- Name: legal_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: legal_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY legal_statuses
@@ -891,7 +891,7 @@ ALTER TABLE ONLY legal_statuses
 
 
 --
--- Name: management_authorities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: management_authorities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY management_authorities
@@ -899,7 +899,7 @@ ALTER TABLE ONLY management_authorities
 
 
 --
--- Name: no_take_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: no_take_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY no_take_statuses
@@ -907,7 +907,7 @@ ALTER TABLE ONLY no_take_statuses
 
 
 --
--- Name: protected_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: protected_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY protected_areas
@@ -915,7 +915,7 @@ ALTER TABLE ONLY protected_areas
 
 
 --
--- Name: region_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: region_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY region_stats
@@ -923,7 +923,7 @@ ALTER TABLE ONLY region_stats
 
 
 --
--- Name: regional_statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: regional_statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY regional_statistics
@@ -931,7 +931,7 @@ ALTER TABLE ONLY regional_statistics
 
 
 --
--- Name: regions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: regions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY regions
@@ -939,7 +939,7 @@ ALTER TABLE ONLY regions
 
 
 --
--- Name: sub_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: sub_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY sub_locations
@@ -947,7 +947,7 @@ ALTER TABLE ONLY sub_locations
 
 
 --
--- Name: wikipedia_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: wikipedia_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY wikipedia_articles
@@ -955,126 +955,126 @@ ALTER TABLE ONLY wikipedia_articles
 
 
 --
--- Name: index_countries_protected_areas_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_countries_protected_areas_composite; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_countries_protected_areas_composite ON countries_protected_areas USING btree (protected_area_id, country_id);
 
 
 --
--- Name: index_countries_protected_areas_on_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_countries_protected_areas_on_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_countries_protected_areas_on_country_id ON countries_protected_areas USING btree (country_id);
 
 
 --
--- Name: index_designations_on_jurisdiction_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_designations_on_jurisdiction_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_designations_on_jurisdiction_id ON designations USING btree (jurisdiction_id);
 
 
 --
--- Name: index_images_on_protected_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_images_on_protected_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_images_on_protected_area_id ON images USING btree (protected_area_id);
 
 
 --
--- Name: index_protected_areas_on_designation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_on_designation_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_protected_areas_on_designation_id ON protected_areas USING btree (designation_id);
 
 
 --
--- Name: index_protected_areas_on_governance_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_on_governance_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_protected_areas_on_governance_id ON protected_areas USING btree (governance_id);
 
 
 --
--- Name: index_protected_areas_on_iucn_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_on_iucn_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_protected_areas_on_iucn_category_id ON protected_areas USING btree (iucn_category_id);
 
 
 --
--- Name: index_protected_areas_on_legal_status_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_on_legal_status_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_protected_areas_on_legal_status_id ON protected_areas USING btree (legal_status_id);
 
 
 --
--- Name: index_protected_areas_on_management_authority_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_on_management_authority_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_protected_areas_on_management_authority_id ON protected_areas USING btree (management_authority_id);
 
 
 --
--- Name: index_protected_areas_on_no_take_status_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_on_no_take_status_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_protected_areas_on_no_take_status_id ON protected_areas USING btree (no_take_status_id);
 
 
 --
--- Name: index_protected_areas_on_wdpa_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_on_wdpa_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE UNIQUE INDEX index_protected_areas_on_wdpa_id ON protected_areas USING btree (wdpa_id);
 
 
 --
--- Name: index_protected_areas_on_wdpa_parent_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_on_wdpa_parent_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_protected_areas_on_wdpa_parent_id ON protected_areas USING btree (wdpa_parent_id);
 
 
 --
--- Name: index_protected_areas_on_wikipedia_article_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_on_wikipedia_article_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_protected_areas_on_wikipedia_article_id ON protected_areas USING btree (wikipedia_article_id);
 
 
 --
--- Name: index_protected_areas_sub_locations_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_sub_locations_composite; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_protected_areas_sub_locations_composite ON protected_areas_sub_locations USING btree (protected_area_id, sub_location_id);
 
 
 --
--- Name: index_protected_areas_sub_locations_on_sub_location_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_protected_areas_sub_locations_on_sub_location_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_protected_areas_sub_locations_on_sub_location_id ON protected_areas_sub_locations USING btree (sub_location_id);
 
 
 --
--- Name: index_sub_locations_on_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_sub_locations_on_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_sub_locations_on_country_id ON sub_locations USING btree (country_id);
 
 
 --
--- Name: index_tsvector_search_documents_on_document; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_tsvector_search_documents_on_document; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE INDEX index_tsvector_search_documents_on_document ON tsvector_search_documents USING gin (document);
 
 
 --
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
@@ -1176,6 +1176,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140612133146');
 
 INSERT INTO schema_migrations (version) VALUES ('20140613125148');
 
+INSERT INTO schema_migrations (version) VALUES ('20140616142743');
+
 INSERT INTO schema_migrations (version) VALUES ('20140617090445');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617090531');
@@ -1185,8 +1187,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140617091236');
 INSERT INTO schema_migrations (version) VALUES ('20140617091255');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091326');
-
-INSERT INTO schema_migrations (version) VALUES ('20140617161632');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617170938');
 
@@ -1206,5 +1206,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140617133708');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617133943');
 
+INSERT INTO schema_migrations (version) VALUES ('20140617161632');
+
 INSERT INTO schema_migrations (version) VALUES ('20140617170024');
 
+INSERT INTO schema_migrations (version) VALUES ('20140617170938');
