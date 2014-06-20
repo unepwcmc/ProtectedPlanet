@@ -35,3 +35,11 @@
     - ./configure --with-python
     - make
     - sudo make install
+
+- name: Get GEOS version
+  shell: geos-config --version
+  register: geos_version
+
+- name: Symlink libgeos to correct place for use by RGeo
+  file: src=/usr/lib/libgeos-{{geos_version.stdout}}.so dest=/usr/lib/libgeos.so state=link
+  sudo: yes
