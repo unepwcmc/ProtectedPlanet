@@ -25,11 +25,12 @@ before_script:
   - RAILS_ENV=test bundle exec rake db:migrate
 notifications:
   email:
+    - adam.mulligan@unep-wcmc.org
     - andrea.rossi@unep-wcmc.org
+    - miguel.torres@unep-wcmc.org
 branches:
   only:
     - master
-    - fix-travis-build
 addons:
   code_climate:
     repo_token:
