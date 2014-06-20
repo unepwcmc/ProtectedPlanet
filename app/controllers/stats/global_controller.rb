@@ -4,6 +4,6 @@ class Stats::GlobalController < ApplicationController
     @pas_with_iucn_category = Stats::Global.pas_with_iucn_category
     @number_of_designations = Stats::Global.designation_count
     @countries_providing_data = Stats::Global.countries_providing_data
-    @territory_covered_by_pas = Stats::Global.percentage_cover_pas
+    #@territory_covered_by_pas = Stats::Global.percentage_cover_pas
   end
 end

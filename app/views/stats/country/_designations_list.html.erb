@@ -1,0 +1,11 @@
+<ul>
+  <% designations_by_frequency.each do |name,number| %>
+    <li class='designation'>
+      <div>
+        <p>
+          <%= name %> (<%= number %>)
+        </p>
+      </div>
+    </li>
+  <% end %>
+</ul>

@@ -9,13 +9,13 @@ class StatsShowTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders regional stats' do
-    FactoryGirl.create(:region, name: 'Americasia', iso: 'AMA')
+    FactoryGirl.create(:region, iso: 'AMA')
     get '/stats/regional/AMA'
     assert page.has_content?, @response.body
   end
 
   test 'renders country stats' do
-    FactoryGirl.create(:country, name: 'Orange Emirate', iso: 'PUM')
+    FactoryGirl.create(:country, iso: 'PUM')
     get '/stats/country/PUM'
     assert page.has_content?, @response.body
   end
