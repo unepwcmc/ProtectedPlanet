@@ -1,34 +1,46 @@
 @import 'mixins';
 @import 'variables';
 
+
 body{
-  background: #e4e3eb;
+  background: $dark-blue;
   font: $font-stack;
   color: #353946;
 }
 
-a {
+a, a:visited {
   text-decoration: none;
+  color: $dark-grey;
 }
 
-a.btn{
-  background: #83ad35;
-  padding: 5px;
+
+.btn, button {
+  background: $green;
+  padding: 5px 20px 5px 20px;
   color: #fff;
-  @include border-radius(2px);
+  border: none;
+  @include border-radius(5px);
   font-size: 0.9em;
   font-family: 'MuseoSans-100', $font-stack;
 }
 
+form{
+
+  input{
+    font-family: 'MuseoSans-100', $font-stack;
+    font-size: 1.0em ;
+  }
+
+}
+
 header {
-  background: #2a2d37;
+  background: $dark-blue;
   height: 50px;
   overflow: hidden;
 
   .header-inner {
     margin: 15px auto;
     width: 1000px;
-    clear: both;
   }
 
   h1 {
@@ -61,5 +73,58 @@ header {
       margin: 0 0 0 5px;
       width: 200px;
     }
+  }
+}
+
+.container{
+  width: 100%;
+  position: relative;
+  padding: 0 0 30px 0;
+  margin: 0 0 40px 0;
+  background: #e4e3eb;
+  overflow: hidden;
+}
+
+main {
+    width: 980px;
+    position: relative;
+    margin: 0 auto;
+
+    h2{
+      font-family: 'MuseoSlab-500', $font-stack;
+      font-size: 1.5em;
+      margin: 0;
+    }
+
+    h3{
+      font-family: 'MuseoSans-500', $font-stack;
+
+    }
+
+    h4{
+      font-family: 'MuseoSans-300', $font-stack;
+    }
+
+    p{
+      font-family: 'MuseoSans-100', $font-stack;
+    }
+
+  }
+
+#map{
+  border-top: 1px solid $grey;
+  border-bottom: 1px solid $grey;
+}
+
+footer{
+  width: 100%;
+  background: $dark-blue;
+
+  .footer-inner {
+    padding: 50px 0;
+    margin: 0px auto;
+    width: 1000px;
+    color: $grey-blue;
+    font-family: 'MuseoSans-100', $font-stack;
   }
 }

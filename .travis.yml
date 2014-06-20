@@ -1,14 +1,41 @@
 language: ruby
 before_install:
+  - sudo apt-get purge libgdal1
+  - sudo apt-add-repository --remove ppa:ubuntugis/ppa -y
   - sudo apt-get update
+  - sudo apt-get install libgdal1
   - sudo apt-get install gdal-bin
-bundler_args: --without development production staging
+  - sudo apt-get install libspatialite3=3.0.0~beta20110817-3 --force-yes
+  - echo libspatialite3 hold | sudo dpkg --set-selections
+  - sudo apt-get install libspatialite-dev --force-yes
+  - sudo apt-get install libgeos-c1=3.3.3-1.1~pgdg12.4+1 --force-yes
+  - echo libgeos-c1 hold | sudo dpkg --set-selections
+  - sudo apt-get install libgdal1=1.9.0-3.1~pgdg12.4+1 --force-yes
+  - echo libgdal1 hold | sudo dpkg --set-selections
+  - sudo apt-get install libgdal-dev --force-yes
+  - sudo apt-get install libgdal1-dev --force-yes
+  - sudo apt-get install Postgresql-9.3-postgis -f
+  - psql -c 'create database pp_test' -U postgres
+  - psql -c 'CREATE EXTENSION postgis;' -U postgres -d pp_test
+  - psql -c 'CREATE EXTENSION postgis_topology;' -U postgres -d pp_test
+  - sudo ln -s /usr/lib/libgeos-`geos-config --version`.so /usr/lib/libgeos.so
+bundler_args: --without development production staging --jobs=6
 rvm:
   - 2.1.2
+before_script:
+  - cp config/secrets.yml.example config/secrets.yml
+  - RAILS_ENV=test bundle exec rake db:migrate
 notifications:
   email:
     - adam.mulligan@unep-wcmc.org
+    - andrea.rossi@unep-wcmc.org
     - miguel.torres@unep-wcmc.org
 branches:
   only:
     - master
+addons:
+  code_climate:
+    repo_token:
+      secure: "YsOamnH3K8SwysSe2EKm11Wi+Qi0ZsTMGDL3jD+9uWYWM6+MIFEFY7xJf2psoImHzzMoJE5EYtIbQBNk0WB2dtehdaI29yaQ+5RFoMw+z+M2t119GKE3QgD8W0vlhXWKadVXbSnU3EUCaHn+u2rzFU0jNx/+GCoPuG2ltfJf404="
+  postgresql: 9.3
+
