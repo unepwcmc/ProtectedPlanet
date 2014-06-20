@@ -39,10 +39,16 @@ class Download
 
       generator.generate zip_path, @wdpa_ids
       S3.upload download_name, zip_path
+
+      clean_up zip_path
     end
   end
 
   private
+
+  def clean_up path
+    FileUtils.rm_rf path
+  end
 
   def zip_path_for_type type
     path = File.join(TMP_PATH,filename_for_type(type))

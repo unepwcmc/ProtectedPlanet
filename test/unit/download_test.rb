@@ -44,6 +44,24 @@ class DownloadTest < ActiveSupport::TestCase
     assert download_success, "Expected Download.generate to return true on success"
   end
 
+  test '.generate removes the zip after uploading to S3' do
+    Download::Shapefile.stubs(:generate)
+    Download::Kml.stubs(:generate)
+    Download::Csv.stubs(:generate)
+    S3.stubs(:upload)
+
+    shapefile_zip_path = File.join(Rails.root, 'tmp', 'an_download-shapefile.zip')
+    FileUtils.expects(:rm_rf).with(shapefile_zip_path)
+
+    csv_zip_path = File.join(Rails.root, 'tmp', 'an_download-csv.zip')
+    FileUtils.expects(:rm_rf).with(csv_zip_path)
+
+    kml_zip_path = File.join(Rails.root, 'tmp', 'an_download-kml.zip')
+    FileUtils.expects(:rm_rf).with(kml_zip_path)
+
+    Download.generate 'an_download'
+  end
+
   test '.link_to, given a name and a type, returns a link to the
    download S3 bucket for that object name' do
     download_name = 'that-download'
