@@ -12,5 +12,12 @@
       </section>
     <% end %>
 
+    <ul class="results-pages">
+      <% (1..@page_count || 0).each do |page| %>
+        <li>
+          <%= link_to_if page != @page_number, page, search_path(page: page, q: @query) %>
+        </li>
+      <% end %>
+    </ul>
   </main>
 </div>

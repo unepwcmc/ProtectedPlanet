@@ -9,7 +9,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     FactoryGirl.create(:protected_area, name: non_searched_pa_name)
     found_pa = FactoryGirl.create(:protected_area, name: searched_pa_name)
 
-    Search.stubs(:count)
+    Search.expects(:count).returns(100)
     Search.expects(:search).with(query, page: 1, limit: 10).returns([found_pa])
 
     visit('/search')
@@ -30,12 +30,17 @@ class SearchTest < ActionDispatch::IntegrationTest
     searched_pa_name = 'The Killbear A National Park'
     found_pa = FactoryGirl.create(:protected_area, name: searched_pa_name)
 
-    Search.expects(:count).with(query).returns(2000)
+    Search.expects(:count).with(query).returns(200)
     Search.expects(:search).with(query, page: 2, limit: 10).returns([found_pa])
 
-    visit("/search?query=#{query}&page=2")
+    visit("/search?q=#{query}&page=2")
 
-    assert page.has_content?("Showing 2000 results for \"#{query}\""),
+    assert page.has_selector?(".results-pages"),
+      "Expected pagination controls to exist"
+    assert_equal "20", page.find('.results-pages li:last-child a').text,
+      "Expected last page link to exist"
+
+    assert page.has_content?("Showing 200 results for \"#{query}\""),
       "Expected results count to be shown"
 
     assert page.has_content?(searched_pa_name),
