@@ -1,8 +1,7 @@
 @import 'mixins';
 @import 'variables';
 
-
-body{
+body {
   background: $dark-blue;
   font: $font-stack;
   color: #353946;
@@ -13,10 +12,8 @@ a, a:visited {
   color: $dark-grey;
 }
 
-
 a.btn, button {
   background: $green;
-  padding: 15px 20px 15px 20px;
   color: #fff;
   border: none;
   @include border-radius(5px);
@@ -24,17 +21,23 @@ a.btn, button {
   font-family: 'MuseoSans-300', $font-stack;
 }
 
-button{
+.btn-primary {
+  padding: 15px 20px;
+}
+
+.btn-secondary {
   padding: 5px 10px;
 }
 
-form{
+input {
+  outline: none;
+}
 
-  input{
+form {
+  input {
     font-family: 'MuseoSans-100', $font-stack;
-    font-size: 1.0em ;
+    font-size: 1.0em;
   }
-
 }
 
 header {
@@ -61,32 +64,24 @@ header {
       display: inline-block;
     }
 
-
-    #search{
+    .search {
       background: #353946;
-      border: none;
       padding: 4px;
       color: #e6e6ee;
       @include border-radius(2px);
-    }
 
-    input{
-      background: #353946;
-      border: none;
-      color: #e6e6ee;
-      @include border-radius(2px);
-      margin: 0 0 0 5px;
-      width: 200px;
-    }
-
-    .btn{
-      color: #fff;
-      padding: 5px 10px;
+      input {
+        background: #353946;
+        border: none;
+        color: #e6e6ee;
+        margin: 0 0 0 5px;
+        width: 200px;
+      }
     }
   }
 }
 
-.container{
+.container {
   width: 100%;
   position: relative;
   padding: 0;
@@ -94,93 +89,72 @@ header {
   background: #e4e3eb;
   overflow: hidden;
 
-
-  h2{
+  h2 {
     font-family: 'MuseoSlab-500', $font-stack;
     font-size: 2em;
     margin: 0;
   }
 
-  h3{
+  h3 {
     font-family: 'MuseoSans-500', $font-stack;
   }
 
-  h4{
+  h4 {
     font-family: 'MuseoSans-300', $font-stack;
   }
 
-  p{
+  p {
     font-family: 'MuseoSans-100', $font-stack;
   }
 }
 
 main {
-    width: 980px;
-    position: relative;
-    margin: 0 auto;
-  }
+  width: 980px;
+  position: relative;
+  margin: 0 auto;
+}
 
-#map{
+#map {
   border-top: 1px solid $grey;
   border-bottom: 1px solid $grey;
 }
 
-
-.intro{
-  text-align: center;
-  line-height: 1.5em;
-  background: none;
-  border: 0;
-
-  h2{
-    padding: 5px;
-    margin: 0 0 10px 0;
-  }
-
-  p{
-    font-size: 1.2em;
-  }
-}
-
-.stats{
-
-  ul{
+.stats {
+  ul {
     margin: 10px 30px 0 30px;
-    }
+  }
 
-    li{
-      padding: 20px 0;
-      border-bottom: 1px solid $light-grey;
+  li {
+    padding: 20px 0;
+    border-bottom: 1px solid $light-grey;
+    float: left;
+    width: 100%;
+
+    img {
+      width: 60px;
+      height: 60px;
       float: left;
-      width: 100%;
-
-      img{
-        width: 60px;
-        height: 60px;
-        float: left;
-        margin: 0 10px 0 0;
-      }
-
-      p{
-        float: left;
-        font-family: 'MuseoSans-500', $font-stack;
-        font-size: 4em;
-
-        span{
-          font-size: 0.6em;
-        }
-
-        small{
-          font-family: 'MuseoSans-100', $font-stack;
-          font-size: 0.3em;
-        }
-      }
+      margin: 0 10px 0 0;
     }
 
+    p {
+      float: left;
+      font-family: 'MuseoSans-500', $font-stack;
+      font-size: 4em;
+
+      span {
+        font-size: 0.6em;
+      }
+
+      small {
+        font-family: 'MuseoSans-100', $font-stack;
+        font-size: 0.3em;
+      }
+    }
+  }
 }
 
-
-footer{
+footer {
   width: 100%;
   background: $dark-blue;
 

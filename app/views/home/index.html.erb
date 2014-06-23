@@ -1,72 +1,75 @@
 <div id="map">
 </div>
-<div id="overlay">
+
+<div class="overlay">
   <section>
-  <h1>Protected Planet</h1>
-  <p>Discover and explore protected areas around the world</p>
-  <section class="search-bar">
-    <%= render 'shared/search_form', query: @query %>
+    <h1>Protected Planet</h1>
+    <p>Discover and explore protected areas around the world</p>
+
+    <div class="search-bar">
+      <%= render 'shared/search_form', query: @query %>
+    </div>
+
+    <a href="#" class="btn btn-primary"><i class="fa fa-download"></i> Download the WDPA dataset</a>
   </section>
-  <a href="#" class="btn"><i class="fa fa-download"></i> Download the WDPA dataset</a>
-</section>
 </div>
 
 <div id="white-bg">
   <section>
-  <h2>Protected Areas at a Glimpse</h2>
-  <p>Explore the different regions and countries and learn about their protected areas</p>
-  <ul>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-    <li></li>
-  </ul>
-</section>
+    <h2>Protected Areas at a Glimpse</h2>
+    <p>Explore the different regions and countries and learn about their protected areas</p>
+
+    <ul>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+      <li></li>
+    </ul>
+  </section>
 </div>
 
-<div class="bg-img home">
-<main>
-  <div class="factsheet">
-    <section class="intro">
+<div class="home-statistics bg-img">
+  <main>
+    <div class="factsheet">
+      <section class="intro">
         <h2>A World of Protected Areas</h2>
         <p>This is a summary of the status of all the protected areas at a global level. To learn more about a region, country, or area in particular, you can search, or explore the map.</p>
-    </section>
-    <section class="column-left stats">
-      <h3>Protected Areas (PAs)</h3>
-      <ul>
-        <li>
-          <img src="/assets/stats-img.png"/><p>277892</p>
-        </li>
-      </ul>
-    </section>
+      </section>
 
+      <section class="column-left stats">
+        <h3>Protected Areas (PAs)</h3>
+        <ul>
+          <li>
+            <img src="/assets/stats-img.png"/><p>277892</p>
+          </li>
+        </ul>
+      </section>
 
-    <section class="column-right stats">
-      <h3>Territory Covered by PAs</h3>
-      <ul>
-        <li>
-          <img src="/assets/stats-img.png"/><p>30<span>%</span> <small>of the world</small></p>
-        </li>
-        <li>
-          <img src="/assets/stats-img.png"/><p>20<span>%</span> <small>terrestrial</small></p>
-        </li>
-        <li>
-          <img src="/assets/stats-img.png"/><p>10<span>%</span> <small>Marine</small></p>
-        </li>
-      </ul>
-    </section>
+      <section class="column-right stats">
+        <h3>Territory Covered by PAs</h3>
+        <ul>
+          <li>
+            <img src="/assets/stats-img.png"/><p>30<span>%</span> <small>of the world</small></p>
+          </li>
+          <li>
+            <img src="/assets/stats-img.png"/><p>20<span>%</span> <small>terrestrial</small></p>
+          </li>
+          <li>
+            <img src="/assets/stats-img.png"/><p>10<span>%</span> <small>Marine</small></p>
+          </li>
+        </ul>
+      </section>
 
-
-    <section class="column-left stats">
-      <h3>Number of Designations</h3>
-      <ul>
-        <li>
-          <img src="/assets/stats-img.png"/><p>2000</p>
-        </li>
-      </ul>
-    </section>
-  </div>
-</main>
+      <section class="column-left stats">
+        <h3>Number of Designations</h3>
+        <ul>
+          <li>
+            <img src="/assets/stats-img.png"/><p>2000</p>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </main>
 </div>
