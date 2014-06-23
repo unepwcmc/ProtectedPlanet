@@ -1,8 +1,7 @@
 @import 'mixins';
 @import 'variables';
 
-
-.bg-img{
+.bg-img {
   background-image: url(/assets/world-background.png);
   background-repeat: no-repeat;
   background-position: -200px -400px;
@@ -13,13 +12,13 @@
   margin-top: 30px;
   padding: 10px;
 
-  form{
+  form {
     background: #f1f1f1;
     padding: 10px;
     border: 1px solid #dadada;
     @include border-radius(5px);
 
-    input{
+    input {
       width: 88%;
       border: none;
       padding: 5px;
@@ -28,39 +27,35 @@
   }
 }
 
-.search-results{
-  margin: 40px 0 0 0;
+.search-results {
+  margin: 40px 0 40px 0;
 
   a {
     text-decoration: underline;
   }
 
-  h4{
+  h4 {
     padding: 20px 0 20px 30px;
   }
 
-  h3{
-
+  h3 {
     a {
       text-decoration: none;
     }
   }
 
-  small{
+  small {
     font-family: 'MuseoSans-300', $font-stack;
-
   }
 
-  li:first-child{
+  li:first-child {
     border-top: 1px solid $grey;
   }
 
-}
-
-.result {
-  border-bottom: 1px solid $light-grey;
-  background: #f1f1f1;
-  padding: 20px 0 20px 30px;
-  line-height: 1.5em;
-
+  .result {
+    border-bottom: 1px solid $light-grey;
+    background: #f1f1f1;
+    padding: 20px 0 20px 30px;
+    line-height: 1.5em;
+  }
 }

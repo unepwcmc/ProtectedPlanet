@@ -1,7 +1,6 @@
 @import 'mixins';
 @import 'variables';
 
-
 #map {
   width: 100%;
   height: 400px;
@@ -9,7 +8,6 @@
 
   margin-top: 50px;
 }
-
 
 main section {
   border: 1px solid #dadada;
@@ -19,7 +17,7 @@ main section {
   width: 100%;
 }
 
-section.info-card {
+.info-card {
   width: 320px;
   height: 300px;
   font-family: 'MuseoSans-100', $font-stack;
@@ -38,11 +36,11 @@ section.info-card {
   p {
     font-size: 0.9em;
 
-    strong{
+    strong {
       display: block;
     }
 
-    a{
+    a {
       color: $blue;
     }
   }
@@ -59,13 +57,13 @@ section.info-card {
   margin-top: -50px;
   float: left;
 
-  h3{
+  h3 {
     margin: 10px 20px 0 20px;
     font-family: 'MuseoSlab-500', $font-stack;
     border-bottom: 1px solid $grey;
     padding: 10px;
 
-    span{
+    span {
      background: #e6e6ee;
      @include border-radius(5px);
      font-family: 'MuseoSans-100', $font-stack;
@@ -82,7 +80,7 @@ section.info-card {
     margin-top: 30px;
   }
 
-  section.column-left {
+  .column-left {
     float: left;
     width: 47.5%;
 
@@ -100,7 +98,7 @@ section.info-card {
     }
   }
 
-  section.column-right {
+  .column-right {
     float: right;
     width: 47.5%;
   }
@@ -108,7 +106,6 @@ section.info-card {
 
 .protected-area-photos {
   margin: 10px 20px 10px 20px;
-
 
   li {
     display: block;
@@ -147,9 +144,8 @@ section.info-card {
   }
 
   tr:last-child {
-
-    td{
-    border: none;
+    td {
+      border: none;
     }
   }
 }
