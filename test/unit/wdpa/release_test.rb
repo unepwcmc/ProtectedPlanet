@@ -16,18 +16,21 @@ class TestWdpaRelease < ActiveSupport::TestCase
       expects(:system).
       with("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
 
-    geometry_tables = ["point", "polygons"]
+    geometry_tables = {
+      "point" => "std_point",
+      "polygons" => "std_poly"
+    }
     Wdpa::Release.any_instance.
       expects(:geometry_tables).
       returns(geometry_tables)
 
     Ogr::Postgres.
       expects(:import).
-      with(gdb_path, "point", "standard_points")
+      with(gdb_path, "point", "std_point")
 
     Ogr::Postgres.
       expects(:import).
-      with(gdb_path, "polygons", "standard_polygons")
+      with(gdb_path, "polygons", "std_poly")
 
     assert_kind_of Wdpa::Release, Wdpa::Release.download
   end
@@ -61,6 +64,9 @@ class TestWdpaRelease < ActiveSupport::TestCase
     gdb_path = "gdb_path"
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
 
+    Wdpa::DataStandard.expects(:standardise_table_name).returns('one')
+    Wdpa::DataStandard.expects(:standardise_table_name).returns('two')
+
     geometry_tables = ["wdpapoly_jun2014", "wdpa_point"]
     ogr_info_mock = mock()
     ogr_info_mock.
@@ -69,13 +75,21 @@ class TestWdpaRelease < ActiveSupport::TestCase
       returns(geometry_tables)
     Ogr::Info.expects(:new).with(gdb_path).returns(ogr_info_mock)
 
+    expected_tables = {
+      "wdpa_point"       => "one",
+      "wdpapoly_jun2014" => "two",
+    }
+
     wdpa_release = Wdpa::Release.new
-    assert_equal geometry_tables, wdpa_release.geometry_tables
+    assert_equal expected_tables, wdpa_release.geometry_tables
   end
 
   test '.geometry_tables only returns geometry tables from the GDB' do
     gdb_path = "gdb_path"
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
+
+    Wdpa::DataStandard.expects(:standardise_table_name).returns('one')
+    Wdpa::DataStandard.expects(:standardise_table_name).returns('two')
 
     tables = ["wdpapoly_jun2014", "wdpa_point", "wdpa_source"]
     Ogr::Info.any_instance.
@@ -83,7 +97,12 @@ class TestWdpaRelease < ActiveSupport::TestCase
       returns(tables)
 
     wdpa_release = Wdpa::Release.new
-    assert_equal tables[0..1], wdpa_release.geometry_tables
+    expected_tables = {
+      "wdpa_point"       => "one",
+      "wdpapoly_jun2014" => "two",
+    }
+
+    assert_equal expected_tables, wdpa_release.geometry_tables
   end
 
   test '.source_table only returns the source table from the GDB' do
@@ -109,7 +128,10 @@ class TestWdpaRelease < ActiveSupport::TestCase
       "wdpaid" => 6789
     }]
 
-    geometry_tables = ["wdpa_poly", "wdpa_point"]
+    geometry_tables = {
+      "point" => "std_point",
+      "polygons" => "std_poly"
+    }
 
     pg_result_mock = mock()
     pg_result_mock.expects(:to_a).returns(pa_attributes[0..1])
@@ -118,12 +140,12 @@ class TestWdpaRelease < ActiveSupport::TestCase
     connection_mock = mock()
     connection_mock.
       stubs(:execute).
-      with("SELECT * FROM #{geometry_tables.first}").
+      with("SELECT * FROM #{geometry_tables["point"]}").
       returns(pg_result_mock)
 
     connection_mock.
       stubs(:execute).
-      with("SELECT * FROM #{geometry_tables.second}").
+      with("SELECT * FROM #{geometry_tables["polygons"]}").
       returns(pg_result_mock)
 
     ActiveRecord::Base.expects(:connection).returns(connection_mock)

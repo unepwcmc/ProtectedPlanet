@@ -17,18 +17,22 @@ class Wdpa::Release
     Wdpa::S3.download_current_wdpa_to filename: zip_path
     system("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
 
-    geometry_tables.each do |geometry_table|
+    geometry_tables.each do |geometry_table, std_geometry_table|
       Ogr::Postgres.import(
         gdb_path,
         geometry_table,
-        Wdpa::DataStandard.standardise_table_name(geometry_table)
+        std_geometry_table
       )
     end
   end
 
   def geometry_tables
     gdb_metadata = Ogr::Info.new(gdb_path)
-    gdb_metadata.layers_matching(Wdpa::DataStandard::Matchers::GEOMETRY_TABLE)
+    geometry_tables = gdb_metadata.layers_matching(
+      Wdpa::DataStandard::Matchers::GEOMETRY_TABLE
+    )
+
+    Hash[geometry_tables.map { |tbl| [tbl, Wdpa::DataStandard.standardise_table_name(tbl)] }]
   end
 
   def source_table
@@ -41,7 +45,7 @@ class Wdpa::Release
     create_query = "CREATE OR REPLACE VIEW #{IMPORT_VIEW_NAME} AS "
 
     select_queries = []
-    geometry_tables.each do |geometry_table|
+    geometry_tables.each do |geometry_table, _|
       select_queries << "SELECT #{attributes} FROM #{geometry_table}"
     end
 
@@ -53,9 +57,9 @@ class Wdpa::Release
   def protected_areas
     connection = ActiveRecord::Base.connection
 
-    attributes = geometry_tables.map do |table_name|
+    attributes = geometry_tables.map do |table_name, std_table_name|
       connection.execute(
-        "SELECT * FROM #{table_name}"
+        "SELECT * FROM #{std_table_name}"
       ).to_a
     end
 
