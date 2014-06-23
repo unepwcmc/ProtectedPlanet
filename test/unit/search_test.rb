@@ -68,4 +68,59 @@ class TestSearch < ActiveSupport::TestCase
 
     Search.search query
   end
+
+  test '#search, given a page and limit, constructs a search query
+   using offset and limit to paginate the results' do
+    query = 'manbone'
+
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""
+        SELECT wdpa_id
+        FROM tsvector_search_documents
+        WHERE document @@ to_tsquery('manbone')
+        LIMIT 20
+        OFFSET 20
+      """.squish).
+      returns([])
+
+    Search.search query, page: 2, limit: 20
+  end
+
+  test '#search, given a string page and limit value, correctly
+   paginates' do
+    query = 'manbone'
+
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""
+        SELECT wdpa_id
+        FROM tsvector_search_documents
+        WHERE document @@ to_tsquery('manbone')
+        LIMIT 20
+        OFFSET 20
+      """.squish).
+      returns([])
+
+    Search.search query, page: "2", limit: "20"
+  end
+
+  test '#count, given a query, returns the number of results that would
+   be returned' do
+    query = 'manbone'
+
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""
+        SELECT COUNT(wdpa_id)
+        FROM tsvector_search_documents
+        WHERE document @@ to_tsquery('manbone')
+      """.squish).
+      returns([{"count"=> 1}])
+
+    results_count = Search.count(query)
+
+    assert_equal 1, results_count
+    assert_kind_of Integer, results_count
+  end
 end
