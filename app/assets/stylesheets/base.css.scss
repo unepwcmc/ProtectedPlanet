@@ -35,7 +35,7 @@ input {
 }
 
 .bg-img {
-  background-image: url(/assets/world-background.png);
+  background-image: image-url('world-background.png');
   background-repeat: no-repeat;
   background-position: -200px -400px;
   padding: 40px 0 0 0;
