@@ -34,7 +34,9 @@ class Wdpa::Release
       Wdpa::DataStandard::Matchers::GEOMETRY_TABLE
     )
 
-    Hash[geometry_tables.map { |tbl| [tbl, Wdpa::DataStandard.standardise_table_name(tbl)] }]
+    geometry_tables.each_with_object({}) do |tbl, hash|
+      hash[tbl] = Wdpa::DataStandard.standardise_table_name(tbl)
+    end
   end
 
   def source_table
