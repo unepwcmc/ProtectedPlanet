@@ -56,6 +56,10 @@ header {
     float: left;
     font-family: 'MuseoSans-500', $font-stack;
     color: #fff;
+
+    a, a:visited {
+      color: white;
+    }
   }
 
   nav {
