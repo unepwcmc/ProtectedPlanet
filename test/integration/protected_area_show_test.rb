@@ -3,21 +3,34 @@ require 'test_helper'
 class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
 
   test 'renders the Protected Area name' do
-    FactoryGirl.create(:protected_area, name: 'Killbear', slug: 'killbear')
+    FactoryGirl.create(:protected_area,
+      name: 'Killbear',
+      slug: 'killbear',
+      countries: [FactoryGirl.create(:country)]
+    )
+
 
     get '/killbear'
     assert_match /Killbear/, @response.body
   end
 
   test 'renders the Protected Area name given a WDPA ID' do
-    FactoryGirl.create(:protected_area, wdpa_id: 1234, name: 'Killbear')
+    FactoryGirl.create(:protected_area,
+      wdpa_id: 1234,
+      name: 'Killbear',
+      countries: [FactoryGirl.create(:country)]
+    )
 
     get '/1234'
     assert_match /Killbear/, @response.body
   end
 
   test 'renders the Wikipedia summary' do
-    protected_area = FactoryGirl.create(:protected_area, slug: 'killbear')
+    protected_area = FactoryGirl.create(:protected_area,
+      slug: 'killbear',
+      countries: [FactoryGirl.create(:country)]
+    )
+
     wikipedia_article = FactoryGirl.create(
       :wikipedia_article,
       summary: 'Summary text',
@@ -33,7 +46,11 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
 
   test 'renders the Images for the Protected Area' do
     image = FactoryGirl.create(:image, url: 'http://images.com/image.jpg')
-    FactoryGirl.create(:protected_area, wdpa_id: 1234, images: [image])
+    FactoryGirl.create(:protected_area,
+      wdpa_id: 1234,
+      images: [image],
+      countries: [FactoryGirl.create(:country)]
+    )
 
     get '/1234'
 
