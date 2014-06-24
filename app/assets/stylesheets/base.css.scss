@@ -19,6 +19,13 @@ a.btn, button {
   @include border-radius(5px);
   font-size: 0.9em;
   font-family: 'MuseoSans-300', $font-stack;
+  @include transition(background-color 0.3s);
+
+  &:hover {
+    @include transition(background-color 0.3s);
+    background-color: $dark-green;
+    cursor: pointer;
+  }
 }
 
 .btn-primary {
@@ -31,13 +38,15 @@ a.btn, button {
 
 input {
   outline: none;
+  font-family: 'MuseoSans-100', $font-stack;
 }
 
-form {
-  input {
-    font-family: 'MuseoSans-100', $font-stack;
-    font-size: 1.0em;
-  }
+.bg-img {
+  background-image: image-url('world-background.png');
+  background-repeat: no-repeat;
+  background-position: -200px -400px;
+  padding: 40px 0 0 0;
+  height: 100%;
 }
 
 header {
@@ -47,37 +56,47 @@ header {
 
   .header-inner {
     margin: 15px auto;
-    width: 1000px;
+    width: 980px;
   }
 
   h1 {
     float: left;
     font-family: 'MuseoSans-500', $font-stack;
     color: #fff;
-    margin: 0 0 0 40px;
+
+    a, a:visited {
+      color: white;
+    }
   }
 
   nav {
     float: right;
+    margin-top: -4px;
 
     ul li {
       display: inline-block;
     }
 
-    .search {
-      background: #353946;
-      padding: 4px;
-      color: #e6e6ee;
-      @include border-radius(2px);
+  }
+}
 
-      input {
-        background: #353946;
-        border: none;
-        color: #e6e6ee;
-        margin: 0 0 0 5px;
-        width: 200px;
-      }
-    }
+.nav-search {
+  background: #353946;
+  padding: 4px;
+  color: #e6e6ee;
+  @include border-radius(2px);
+
+  form {
+    display: inline;
+  }
+
+  input {
+    font-size: 0.75em;
+    background: #353946;
+    border: none;
+    color: #e6e6ee;
+    margin: 0 0 0 5px;
+    width: 200px;
   }
 }
 
@@ -115,6 +134,9 @@ main {
 }
 
 #map {
+  width: 100%;
+  height: 400px;
+  float: left;
   border-top: 1px solid $grey;
   border-bottom: 1px solid $grey;
 }

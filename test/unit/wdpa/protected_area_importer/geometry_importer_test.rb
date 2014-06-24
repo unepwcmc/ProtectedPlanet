@@ -3,7 +3,11 @@ require 'test_helper'
 class TestWdpaGeometryImporterService < ActiveSupport::TestCase
   test '.import updates all the PA geometries with the geometries in the
    given WDPA Release' do
-    table_names = ["geom1", "geom2"]
+    table_names = {
+      "geom1" => "std_geom1",
+      "geom2" => "std_geom2"
+    }
+
     wdpa_release = Wdpa::Release.new
     wdpa_release.expects(:geometry_tables).returns(table_names)
 
@@ -18,7 +22,7 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
       with("""
         UPDATE protected_areas pa
         SET the_geom = import.wkb_geometry
-        FROM #{table_names[0]} import
+        FROM #{table_names["geom1"]} import
         WHERE pa.wdpa_id = import.wdpaid;
       """.squish)
 
@@ -27,7 +31,7 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
       with("""
         UPDATE protected_areas pa
         SET fake_geom = import.fake_geometry
-        FROM #{table_names[0]} import
+        FROM #{table_names["geom1"]} import
         WHERE pa.wdpa_id = import.wdpaid;
       """.squish)
 
@@ -36,7 +40,7 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
       with("""
         UPDATE protected_areas pa
         SET the_geom = import.wkb_geometry
-        FROM #{table_names[1]} import
+        FROM #{table_names["geom2"]} import
         WHERE pa.wdpa_id = import.wdpaid;
       """.squish)
 
@@ -45,7 +49,7 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
       with("""
         UPDATE protected_areas pa
         SET fake_geom = import.fake_geometry
-        FROM #{table_names[1]} import
+        FROM #{table_names["geom2"]} import
         WHERE pa.wdpa_id = import.wdpaid;
       """.squish)
 

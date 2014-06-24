@@ -2,4 +2,5 @@ en:
   wikipedia_not_found: 'No wikipedia article found'
   wikipedia_read_more: 'Read More'
 
-  search_form_placeholder: ''
+  search_form_placeholder: 'Search for a protected area, country or region'
+  nav_search_form_placeholder: 'Search for an area, country or region'
