@@ -1,11 +1,7 @@
 @import 'mixins';
 @import 'variables';
 
-#map {
-  width: 100%;
-  height: 400px;
-  float: left;
-
+.protected-area-map {
   margin-top: 50px;
 }
 
