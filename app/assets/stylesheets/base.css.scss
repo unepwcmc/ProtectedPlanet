@@ -31,13 +31,15 @@ a.btn, button {
 
 input {
   outline: none;
+  font-family: 'MuseoSans-100', $font-stack;
 }
 
-form {
-  input {
-    font-family: 'MuseoSans-100', $font-stack;
-    font-size: 1.0em;
-  }
+.bg-img {
+  background-image: url(/assets/world-background.png);
+  background-repeat: no-repeat;
+  background-position: -200px -400px;
+  padding: 40px 0 0 0;
+  height: 100%;
 }
 
 header {
@@ -64,20 +66,26 @@ header {
       display: inline-block;
     }
 
-    .search {
-      background: #353946;
-      padding: 4px;
-      color: #e6e6ee;
-      @include border-radius(2px);
+  }
+}
 
-      input {
-        background: #353946;
-        border: none;
-        color: #e6e6ee;
-        margin: 0 0 0 5px;
-        width: 200px;
-      }
-    }
+.nav-search {
+  background: #353946;
+  padding: 4px;
+  color: #e6e6ee;
+  @include border-radius(2px);
+
+  form {
+    display: inline;
+  }
+
+  input {
+    font-size: 0.75em;
+    background: #353946;
+    border: none;
+    color: #e6e6ee;
+    margin: 0 0 0 5px;
+    width: 200px;
   }
 }
 

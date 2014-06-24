@@ -20,7 +20,12 @@
       <nav>
         <ul>
           <li><a href="#" class="btn btn-secondary">Download</a></li>
-          <li class="search"><i class="fa fa-search"></i><input type="text" placeholder="Search for an area, country or region"></li>
+          <li class="nav-search">
+            <i class="fa fa-search"></i>
+            <form action='/search' method='get'>
+              <input name='q' type='text' placeholder='<%= t('nav_search_form_placeholder') %>'>
+            </form>
+          </li>
         </ul>
       </nav>
     </div>
