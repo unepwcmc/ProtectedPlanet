@@ -32,6 +32,9 @@ class TestWdpaRelease < ActiveSupport::TestCase
       expects(:import).
       with(gdb_path, "polygons", "std_poly")
 
+    Wdpa::Release.any_instance.
+      expects(:create_import_view)
+
     assert_kind_of Wdpa::Release, Wdpa::Release.download
   end
 

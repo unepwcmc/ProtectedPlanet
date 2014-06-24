@@ -24,6 +24,8 @@ class Wdpa::Release
         std_geometry_table
       )
     end
+
+    create_import_view
   end
 
   def geometry_tables
