@@ -19,6 +19,13 @@ a.btn, button {
   @include border-radius(5px);
   font-size: 0.9em;
   font-family: 'MuseoSans-300', $font-stack;
+  @include transition(background-color 0.3s);
+
+  &:hover {
+    @include transition(background-color 0.3s);
+    background-color: $dark-green;
+    cursor: pointer;
+  }
 }
 
 .btn-primary {
