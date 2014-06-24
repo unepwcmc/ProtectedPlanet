@@ -88,6 +88,11 @@
       background: $grey;
       float: left;
       margin-right: 13px;
+
+      img {
+        width: 150px;
+        height: 150px;
+      }
     }
 
     :last-child {
