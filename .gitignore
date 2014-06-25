@@ -19,3 +19,4 @@
 dump.rdb
 
 /coverage
+/public/assets
