@@ -1,6 +1,4 @@
 class Search
-  DB = ActiveRecord::Base.connection
-
   def self.search search_term
     search_instance = self.new search_term
     search_instance.search
@@ -15,6 +13,8 @@ class Search
   end
 
   private
+
+  DB = ActiveRecord::Base.connection
 
   def protected_area_wdpa_ids_for_search
     results = DB.execute(query)
