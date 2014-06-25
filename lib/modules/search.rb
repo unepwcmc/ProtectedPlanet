@@ -20,10 +20,6 @@ class Search
     ProtectedArea.where(wdpa_id: protected_area_wdpa_ids_for_search)
   end
 
-  def count
-    DB.execute(query 'COUNT(wdpa_id)')[0]["count"].to_i
-  end
-
   private
 
   def protected_area_wdpa_ids_for_search
@@ -36,7 +32,6 @@ class Search
       SELECT #{Array.wrap(select_attributes).join(', ')}
       FROM tsvector_search_documents
       WHERE document @@ to_tsquery(?)
-      #{pagination_conditions}
     """.squish
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
@@ -46,18 +41,5 @@ class Search
 
   def search_term
     @search_term.squish.gsub(/\s+/, ' & ')
-  end
-
-  def pagination_conditions
-    if @pagination_options
-      page   = @pagination_options[:page].to_i
-      limit  = @pagination_options[:limit].to_i
-      offset = (page-1) * limit
-
-      """
-      LIMIT #{limit}
-      OFFSET #{offset}
-      """
-    end
   end
 end

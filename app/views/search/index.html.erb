@@ -7,17 +7,11 @@
 
     <% if @query %>
       <section class="search-results">
-        <h4>Showing <%= @protected_areas_count %> <%= 'result'.pluralize @protected_areas_count %> for "<%= @query %>"</h4>
+        <h4>Showing <%= @protected_areas.count %> <%= 'result'.pluralize @protected_areas_count %> for "<%= @query %>"</h4>
         <%= render 'search_results', protected_areas: @protected_areas %>
       </section>
-    <% end %>
 
-    <ul class="results-pages">
-      <% (1..@page_count || 0).each do |page| %>
-        <li>
-          <%= link_to_if page != @page_number, page, search_path(page: page, q: @query) %>
-        </li>
-      <% end %>
-    </ul>
+      <%= will_paginate @protected_areas %>
+    <% end %>
   </main>
 </div>

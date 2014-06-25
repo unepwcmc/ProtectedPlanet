@@ -6,11 +6,10 @@ class SearchTest < ActionDispatch::IntegrationTest
     searched_pa_name = 'The Killbear A National Park'
     non_searched_pa_name = 'Manbone Reserve'
 
-    FactoryGirl.create(:protected_area, name: non_searched_pa_name)
     found_pa = FactoryGirl.create(:protected_area, name: searched_pa_name)
+    FactoryGirl.create(:protected_area, name: non_searched_pa_name)
 
-    Search.expects(:count).returns(100)
-    Search.expects(:search).with(query, page: 1, limit: 10).returns([found_pa])
+    Search.expects(:search).with(query).returns(ProtectedArea.where(id: found_pa.id))
 
     visit('/search')
 
@@ -23,27 +22,25 @@ class SearchTest < ActionDispatch::IntegrationTest
       'Expected only searched PA names to be rendered'
   end
 
-  test 'submitting a search query with a page number shows the given
-   page of results' do
+  test 'submitting a query with more than 10 PAs paginates the results' do
     query = 'Killbear'
+    results_count = 11
 
-    searched_pa_name = 'The Killbear A National Park'
-    found_pa = FactoryGirl.create(:protected_area, name: searched_pa_name)
+    results_count.times do
+      FactoryGirl.create(:protected_area, name: 'An name')
+    end
 
-    Search.expects(:count).with(query).returns(200)
-    Search.expects(:search).with(query, page: 2, limit: 10).returns([found_pa])
+    Search.expects(:search).with(query).returns(ProtectedArea.all)
 
     visit("/search?q=#{query}&page=2")
 
-    assert page.has_selector?(".results-pages"),
+    assert page.has_selector?(".pagination"),
       "Expected pagination controls to exist"
-    assert_equal "20", page.find('.results-pages li:last-child a').text,
+
+    assert_equal "2", page.find('.pagination .current').text,
       "Expected last page link to exist"
 
-    assert page.has_content?("Showing 200 results for \"#{query}\""),
+    assert page.has_content?("Showing #{results_count} results for \"#{query}\""),
       "Expected results count to be shown"
-
-    assert page.has_content?(searched_pa_name),
-      'Expected PA name to be rendered'
   end
 end

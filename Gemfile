@@ -33,6 +33,8 @@ group :test do
   gem 'codeclimate-test-reporter', require: nil
 end
 
+gem 'will_paginate', '~> 3.0'
+
 gem 'aws-sdk', '~> 1.3.9'
 
 gem 'activerecord-postgis-adapter', '~>2.0.1'
