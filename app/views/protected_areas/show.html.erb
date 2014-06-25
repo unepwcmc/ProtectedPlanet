@@ -6,8 +6,11 @@
 
     <hr>
 
-    <p><strong><%= @protected_area.designation.name %></strong>
-    <a href="#">United Kingdom</a>, <a href="#">Europe</a> | Marine Area</p>
+    <p>
+      <strong><%= @protected_area.designation.name %></strong>
+      <a href="#">United Kingdom</a>, <a href="#">Europe</a>
+      | <%= @protected_area.marine ? "Marine" : "Terrestrial" %> Area
+    </p>
 
     <hr>
 
