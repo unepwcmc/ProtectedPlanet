@@ -1,6 +1,4 @@
 class SearchController < ApplicationController
-  RESULTS_LIMIT = 10
-
   def index
     if @query = params[:q]
       @protected_areas = Search.
