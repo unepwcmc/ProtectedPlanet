@@ -91,7 +91,7 @@ CREATE TABLE countries (
     updated_at timestamp without time zone,
     language character varying(255),
     region_id integer,
-    bbox text
+    bounding_box geometry
 );
 
 
@@ -1189,10 +1189,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140617091255');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091326');
 
-INSERT INTO schema_migrations (version) VALUES ('20140617170938');
-
-INSERT INTO schema_migrations (version) VALUES ('20140616142743');
-
 INSERT INTO schema_migrations (version) VALUES ('20140617091620');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617093647');
@@ -1212,3 +1208,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140617161632');
 INSERT INTO schema_migrations (version) VALUES ('20140617170024');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617170938');
+
+INSERT INTO schema_migrations (version) VALUES ('20140625101751');
+
