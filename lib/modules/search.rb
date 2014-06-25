@@ -1,19 +1,13 @@
 class Search
   DB = ActiveRecord::Base.connection
 
-  def self.search search_term, pagination_options = nil
-    search_instance = self.new search_term, pagination_options
+  def self.search search_term
+    search_instance = self.new search_term
     search_instance.search
   end
 
-  def self.count search_term
-    search_instance = self.new search_term, nil
-    search_instance.count
-  end
-
-  def initialize search_term, pagination_options
+  def initialize search_term
     @search_term = search_term
-    @pagination_options = pagination_options
   end
 
   def search
@@ -27,9 +21,9 @@ class Search
     results.map { |attributes| attributes["wdpa_id"] }
   end
 
-  def query select_attributes = 'wdpa_id'
+  def query
     dirty_query = """
-      SELECT #{Array.wrap(select_attributes).join(', ')}
+      SELECT wdpa_id
       FROM tsvector_search_documents
       WHERE document @@ to_tsquery(?)
     """.squish
