@@ -7,7 +7,7 @@
 
     <% if @query %>
       <section class="search-results">
-        <h4>Showing <%= @protected_areas.count %> <%= 'result'.pluralize @protected_areas_count %> for "<%= @query %>"</h4>
+        <h4>Showing <%= @protected_areas.count %> <%= 'result'.pluralize @protected_areas.count %> for "<%= @query %>"</h4>
         <%= render 'search_results', protected_areas: @protected_areas %>
       </section>
 
