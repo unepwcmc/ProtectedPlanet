@@ -90,7 +90,8 @@ CREATE TABLE countries (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     language character varying(255),
-    region_id integer
+    region_id integer,
+    bbox text
 );
 
 
