@@ -4,6 +4,7 @@
 
 * {
   font-family: 'Museo', $font-stack;
+  font-weight: normal;
 }
 
 body {
@@ -12,11 +13,13 @@ body {
 }
 
 a, a:visited {
+  font-weight: bold;
   text-decoration: none;
   color: $dark-grey;
 }
 
 a.btn, button {
+  font-weight: normal;
   background: $green;
   color: #fff;
   border: none;
@@ -49,6 +52,10 @@ input {
   background-position: -200px -400px;
   padding: 40px 0 0 0;
   height: 100%;
+}
+
+h2 {
+  font-family: 'MuseoSlab', $font-stack;
 }
 
 header {
@@ -109,10 +116,6 @@ header {
   margin: 0;
   background: #e4e3eb;
   overflow: hidden;
-
-  h3 {
-    font-weight: bolder;
-  }
 
   h2 {
     font-weight: normal;

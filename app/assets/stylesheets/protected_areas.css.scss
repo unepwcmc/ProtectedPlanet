@@ -76,10 +76,9 @@ main section {
 
     margin-top: 30px;
     padding: 20px;
-    font-family: 'MuseoSans-100', $font-stack;
 
     a {
-      font-family: 'MuseoSans-500';
+      font-weight: bold;
       color: $blue;
     }
   }
@@ -116,7 +115,6 @@ main section {
   width: 100%;
   margin: 10px 0 10px 0;
   border-collapse: separate;
-  font-family: 'MuseoSans-100', $font-stack;
 
   td {
     padding: 10px 0;
@@ -131,7 +129,6 @@ main section {
       display: block;
       color: #9c9ea9;
     }
-
   }
 
   tr:last-child {
