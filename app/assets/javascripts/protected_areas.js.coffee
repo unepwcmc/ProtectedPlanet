@@ -29,7 +29,7 @@ ready = ->
         JSON.parse(boundTo)
       ])
 
-  #Modal initialisation
+  # Download Modal initialisation
   downloadModal = new DownloadModal()
   $('body').append(downloadModal.$el)
   $('.btn-download').on('click', (e) ->
