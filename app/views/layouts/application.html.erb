@@ -15,12 +15,17 @@
 
   <header>
     <div class="header-inner">
-      <h1>protectedplanet.net</h1>
+      <h1><%= link_to "protectedplanet.net", root_url %></h1>
 
       <nav>
         <ul>
-          <li><a data-download-object="all" href="#" class="btn-download btn btn-secondary">Download</a></li>
-          <li class="search"><i class="fa fa-search"></i><input type="text" placeholder="Search for an area, country or region"></li>
+          <li><a data-download-object="all" href="#" class="btn btn-secondary btn-download">Download</a></li>
+          <li class="nav-search">
+            <i class="fa fa-search"></i>
+            <form action='/search' method='get'>
+              <input name='q' type='text' placeholder='<%= t('nav_search_form_placeholder') %>'>
+            </form>
+          </li>
         </ul>
       </nav>
     </div>

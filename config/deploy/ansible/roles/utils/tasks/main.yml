@@ -8,3 +8,6 @@
     state=present
     insertafter=EOF
     create=True
+
+- name: Install zip
+  apt: pkg=zip state=installed update-cache=yes

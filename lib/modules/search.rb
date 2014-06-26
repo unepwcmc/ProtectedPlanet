@@ -16,8 +16,9 @@ class Search
 
   DB = ActiveRecord::Base.connection
 
-  def querify_search_term search_term
-    search_term.squish.gsub(/\s+/, ' & ')
+  def protected_area_wdpa_ids_for_search
+    results = DB.execute(query)
+    results.map { |attributes| attributes["wdpa_id"] }
   end
 
   def query
@@ -28,12 +29,11 @@ class Search
     """.squish
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, querify_search_term(@search_term)
+      dirty_query, search_term
     ])
   end
 
-  def protected_area_wdpa_ids_for_search
-    results = DB.execute(query)
-    results.map { |attributes| attributes["wdpa_id"] }
+  def search_term
+    @search_term.squish.gsub(/\s+/, ' & ')
   end
 end

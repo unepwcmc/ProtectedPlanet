@@ -7,10 +7,12 @@
 
     <% if @query %>
       <section class="search-results">
-        <h4>Showing <%= @protected_areas.length %> <%= 'result'.pluralize @protected_areas.length %> for "<%= @query %>"</h4>
+        <h4>Showing <%= @protected_areas.count %> <%= 'result'.pluralize @protected_areas.count %> for "<%= @query %>"</h4>
         <%= render 'search_results', protected_areas: @protected_areas %>
       </section>
-    <% end %>
 
+      <%= will_paginate(@protected_areas,
+            :previous_label => "\u276E", :next_label => "\u276F") %>
+    <% end %>
   </main>
 </div>

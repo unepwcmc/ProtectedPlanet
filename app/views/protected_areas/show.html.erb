@@ -1,5 +1,4 @@
-
-<div id="map" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>"></div>
+<div class="protected-area-map" id="map" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>"></div>
 
 <main>
   <section class="info-card">
@@ -7,8 +6,12 @@
 
     <hr>
 
-    <p><strong>Area of Outstanding Natural Beauty</strong>
-    <a href="#">United Kingdom</a>, <a href="#">Europe</a> | Marine Area</p>
+    <p>
+      <strong><%= @protected_area.designation.name %></strong>
+      <%= link_to @country.name, search_path(query: @country.name) %>,
+      <%= link_to @region.name, search_path(query: @region.name) %>
+      | <%= @protected_area.marine ? "Marine" : "Terrestrial" %> Area
+    </p>
 
     <hr>
 

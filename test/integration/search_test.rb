@@ -6,10 +6,10 @@ class SearchTest < ActionDispatch::IntegrationTest
     searched_pa_name = 'The Killbear A National Park'
     non_searched_pa_name = 'Manbone Reserve'
 
-    FactoryGirl.create(:protected_area, name: non_searched_pa_name)
     found_pa = FactoryGirl.create(:protected_area, name: searched_pa_name)
+    FactoryGirl.create(:protected_area, name: non_searched_pa_name)
 
-    Search.expects(:search).with(query).returns([found_pa])
+    Search.expects(:search).with(query).returns(ProtectedArea.where(id: found_pa.id))
 
     visit('/search')
 
@@ -20,5 +20,27 @@ class SearchTest < ActionDispatch::IntegrationTest
       'Expected PA name to be rendered'
     assert page.has_no_content?(non_searched_pa_name),
       'Expected only searched PA names to be rendered'
+  end
+
+  test 'submitting a query with more than 10 PAs paginates the results' do
+    query = 'Killbear'
+    results_count = 11
+
+    results_count.times do
+      FactoryGirl.create(:protected_area, name: 'An name')
+    end
+
+    Search.expects(:search).with(query).returns(ProtectedArea.all)
+
+    visit("/search?q=#{query}&page=2")
+
+    assert page.has_selector?(".pagination"),
+      "Expected pagination controls to exist"
+
+    assert_equal "2", page.find('.pagination .current').text,
+      "Expected last page link to exist"
+
+    assert page.has_content?("Showing #{results_count} results for \"#{query}\""),
+      "Expected results count to be shown"
   end
 end

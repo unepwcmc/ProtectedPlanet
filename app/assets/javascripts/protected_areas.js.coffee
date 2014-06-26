@@ -3,8 +3,8 @@ class ProtectedAreaMap
     @map = L.map(elementId, {scrollWheelZoom: false})
     @map.zoomControl.setPosition('topright')
 
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(@map)
-    L.tileLayer('http://carbon-tool.cartodb.com/tiles/wdpa_poly_feb2014_0/{z}/{x}/{y}.png').addTo(@map)
+  L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png').addTo(@map)
+  L.tileLayer('http://carbon-tool.cartodb.com/tiles/wdpa_poly_feb2014_0/{z}/{x}/{y}.png').addTo(@map)
 
   fitToBounds: (bounds) ->
     mapSize = @map.getSize()
@@ -41,4 +41,3 @@ ready = ->
 
 $(document).ready(ready)
 $(document).on('page:load', ready)
-
