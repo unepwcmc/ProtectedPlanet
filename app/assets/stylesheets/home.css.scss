@@ -19,7 +19,8 @@
     border: 3px solid $light-grey;
     padding: 10px 10px 3px 10px;
     margin: 20px auto;
-    font-family: 'MuseoSlab-500', $font-stack;
+    font-family: 'MuseoSlab', $font-stack;
+    font-weight: normal;
     font-size: 3.2em;
   }
 
@@ -78,6 +79,10 @@
     font-size: 1.2em;
   }
 
+  h2 {
+    font-weight: bold;
+  }
+
   ul {
     margin: 40px 0;
 
@@ -104,6 +109,10 @@
 .home-statistics {
   float: left;
   width: 100%;
+
+  h2 {
+    font-weight: bold;
+  }
 
   .factsheet{
     margin: 20px 0;

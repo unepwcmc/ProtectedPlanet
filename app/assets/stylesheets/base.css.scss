@@ -1,9 +1,13 @@
+@import 'fonts';
 @import 'mixins';
 @import 'variables';
 
+* {
+  font-family: 'Museo', $font-stack;
+}
+
 body {
   background: $dark-blue;
-  font: $font-stack;
   color: #353946;
 }
 
@@ -18,7 +22,6 @@ a.btn, button {
   border: none;
   @include border-radius(5px);
   font-size: 0.9em;
-  font-family: 'MuseoSans-300', $font-stack;
   @include transition(background-color 0.3s);
 
   &:hover {
@@ -38,7 +41,6 @@ a.btn, button {
 
 input {
   outline: none;
-  font-family: 'MuseoSans-100', $font-stack;
 }
 
 .bg-img {
@@ -61,7 +63,7 @@ header {
 
   h1 {
     float: left;
-    font-family: 'MuseoSans-500', $font-stack;
+    font-weight: bold;
     color: #fff;
 
     a, a:visited {
@@ -108,22 +110,18 @@ header {
   background: #e4e3eb;
   overflow: hidden;
 
+  h3 {
+    font-weight: bolder;
+  }
+
   h2 {
-    font-family: 'MuseoSlab-500', $font-stack;
+    font-weight: normal;
     font-size: 2em;
     margin: 0;
   }
 
-  h3 {
-    font-family: 'MuseoSans-500', $font-stack;
-  }
-
   h4 {
-    font-family: 'MuseoSans-300', $font-stack;
-  }
-
-  p {
-    font-family: 'MuseoSans-100', $font-stack;
+    font-weight: bold;
   }
 }
 
@@ -161,7 +159,7 @@ main {
 
     p {
       float: left;
-      font-family: 'MuseoSans-500', $font-stack;
+      font-weight: bolder;
       font-size: 4em;
 
       span {
@@ -169,7 +167,7 @@ main {
       }
 
       small {
-        font-family: 'MuseoSans-100', $font-stack;
+        font-family: normal;
         font-size: 0.3em;
       }
     }
@@ -185,6 +183,5 @@ footer {
     margin: 0px auto;
     width: 1000px;
     color: $grey-blue;
-    font-family: 'MuseoSans-100', $font-stack;
   }
 }
