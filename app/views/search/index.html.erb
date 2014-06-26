@@ -11,7 +11,8 @@
         <%= render 'search_results', protected_areas: @protected_areas %>
       </section>
 
-      <%= will_paginate @protected_areas %>
+      <%= will_paginate(@protected_areas,
+            :previous_label => "\u276E", :next_label => "\u276F") %>
     <% end %>
   </main>
 </div>

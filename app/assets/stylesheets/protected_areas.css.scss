@@ -55,11 +55,11 @@ main section {
   float: left;
 
   h3 {
-    margin: 10px 20px 0 20px;
-    font-family: 'MuseoSlab', $font-stack;
     font-weight: normal;
+    font-family: 'MuseoSlab', $font-stack;
     border-bottom: 1px solid $grey;
-    padding: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
 
     span {
      background: #e6e6ee;
@@ -75,23 +75,18 @@ main section {
     }
 
     margin-top: 30px;
+    padding: 20px;
+    font-family: 'MuseoSans-100', $font-stack;
+
+    a {
+      font-family: 'MuseoSans-500';
+      color: $blue;
+    }
   }
 
   .column-left {
     float: left;
     width: 47.5%;
-
-    div{
-      font-family: 'MuseoSans-100', $font-stack;
-      margin: 20px;
-      padding: 0 0 0 10px;
-      line-height: 1.4em;
-
-      a {
-        font-family: 'MuseoSans-500';
-        color: $blue;
-      }
-    }
   }
 
   .column-right {
@@ -101,12 +96,8 @@ main section {
 }
 
 .protected-area-photos {
-  margin: 10px 20px 10px 20px;
-
   li {
     display: block;
-    width: 60px;
-    height: 60px;
     float: left;
     padding: 0 12px 12px 0;
   }
@@ -114,17 +105,21 @@ main section {
   li:nth-child(6n+6) {
     padding-right: 0px;
   }
+
+  img {
+    width: 60px;
+    height: 60px;
+  }
 }
 
 .protected-area-official-record {
   width: 100%;
   margin: 10px 0 10px 0;
-  border-spacing: 20px 0px ;
   border-collapse: separate;
   font-family: 'MuseoSans-100', $font-stack;
 
   td {
-    padding: 10px;
+    padding: 10px 0;
     border-bottom: 1px solid #dad9e4;
     margin-right: 3px;
     line-height: 1.2em;

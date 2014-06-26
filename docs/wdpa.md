@@ -35,6 +35,14 @@ having to re-transform the data back to how it started.
 
 You can find more info in the [download documentation](downloads.md).
 
+##### Testing the import process
+
+Generally in development you are able to use the database dump given in
+the [installation docs](installation.md). However, if you need to test
+the import process, using the whole WDPA can be time consuming. There is
+a smaller File Geodatabase [available on
+S3](http://protectedplanet.s3.amazonaws.com/WDPA_dev.zip).
+
 #### Map Tiles and Geometries
 
 Map tiles are stored and rendered by [CartoDB](http://cartodb.com). Due
