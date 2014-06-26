@@ -4,10 +4,7 @@ class @DownloadModal
 
   @template: """
     <div id="download-modal">
-      <h3>
-        Select a download type
-        <span><i class="fa fa-clock-o"></i> Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>
-      </h3>
+      <h3>Select a download type</h3>
       <section>
         <div id="link-container"></div>
         <p>…or use the ESRI web service</p>
