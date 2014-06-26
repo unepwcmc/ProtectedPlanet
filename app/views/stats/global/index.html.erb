@@ -1,46 +1,31 @@
 <div id="map"></div>
 
-<div class="container">
-  <main>
-    <section class="info-card">
-      <h2>Protected Areas in the Globe</h2>
+<main>
+  <section class="info-card">
+    <h2>Protected Areas in the Globe</h2>
 
-      <a href="#" class="btn">Download the WDPA dataset</a>
-     </section>
+    <a href="#" class="btn btn-primary">Download the WDPA dataset</a>
+   </section>
 
-    <div class="factsheet">
+  <div class="factsheet">
+    <section class="box-left">
+      <h3>Protected Areas (PA's)</h3>
+      <strong><%= @number_of_pas %></strong>
+    </section>
 
-      <section class="box-left">
-        <h3>Protected Areas (PA's)</h3>
-        <strong><%= @number_of_pas %></strong>
-      </section>
+    <section class="box-left">
+      <h3>PA's with IUCN category</h3>
+      <strong><%= @pas_with_iucn_category %></strong>
+    </section>
 
-      <section class="box-left">
-        <h3>PA's with IUCN category</h3>
-        <strong><%= @pas_with_iucn_category %></strong>
-      </section>
+    <section class="box-left">
+      <h3>Number of designations</h3>
+      <strong><%= @number_of_designations %></strong>
+    </section>
 
-      <section class="box-left">
-        <h3>Number of designations</h3>
-        <strong><%= @number_of_designations %></strong>
-      </section>
-
-      <section class="box-left">
-        <h3>Countries providing data</h3>
-        <strong><%= @countries_providing_data %></strong>
-      </section>
-
-      <section class="column-right">
-        <h3>Territory Covered by PA's</h3>
-        <strong></strong>
-      </section>
-    </div>
-  </main>
-</div>
-
-<script>
-  function initializeMap() 
-
-  $(document).ready(initializeMap);
-  $(document).on('page:load', initializeMap);
-</script>
+    <section class="box-left">
+      <h3>Countries providing data</h3>
+      <strong><%= @countries_providing_data %></strong>
+    </section>
+  </div>
+</main>
