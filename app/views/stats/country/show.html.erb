@@ -8,22 +8,22 @@
    </section>
 
   <div class="factsheet">
-    <section class="box-left">
+    <section class="box-left pa-count">
       <h3>Protected Areas (PA's)</h3>
       <strong><%= @number_of_pas %></strong>
     </section>
 
-    <section class="box-left">
+    <section class="box-left iucn-category-pa-count">
       <h3>PA's with IUCN category</h3>
       <strong><%= @pas_with_iucn_category %></strong>
     </section>
 
-    <section class="box-right">
+    <section class="box-right designation-count">
       <h3>Number of designations</h3>
       <strong><%= @number_of_designations %></strong>
     </section>
 
-    <section class="designations-box">
+    <section class="box-right designation-frequency">
       <h3>Designations by frequency</h3>
       <%= render 'designations_list', designations_by_frequency: @designations_by_frequency %>
     </section>
