@@ -1,4 +1,5 @@
-<div id="map"></div>
+
+<div id="map" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>"></div>
 
 <main>
   <section class="info-card">
@@ -11,7 +12,7 @@
 
     <hr>
 
-    <a href="<%= link_to_download @protected_area, 'csv' %>" class="btn btn-primary">Download the WDPA dataset</a>
+    <a data-download-object="<%= @protected_area.countries.first.iso_3 %>" class="btn-download btn btn-primary" href="#">Download the WDPA dataset</a>
   </section>
 
   <div class="factsheet">
@@ -37,13 +38,3 @@
     </section>
   </div>
 </main>
-
-
-<script>
-  function initializeMap() {
-    fitToBounds(<%= @protected_area.bounds.to_json %>);
-  }
-
-  $(document).ready(initializeMap);
-  $(document).on('page:load', initializeMap);
-</script>
