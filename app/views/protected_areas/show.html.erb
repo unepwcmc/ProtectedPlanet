@@ -1,37 +1,46 @@
-<div id="map"></div>
+<div class="protected-area-map" id="map"></div>
 
+<main>
+  <section class="info-card">
+    <h2><%= @protected_area.name %></h2>
 
-  <main>
-    <section class="info-card">
-      <h2><%= @protected_area.name %></h2>
+    <hr>
 
-      <hr>
-      <p><strong>Area of Outstanding Natural Beauty</strong>
-      <a href="#">United Kingdom</a>, <a href="#">Europe</a> | Marine Area</p>
-      <hr>
+    <p>
+      <strong><%= @protected_area.designation.name %></strong>
+      <%= link_to @country.name, search_path(query: @country.name) %>,
+      <%= link_to @region.name, search_path(query: @region.name) %>
+      | <%= @protected_area.marine ? "Marine" : "Terrestrial" %> Area
+    </p>
 
-      <a href="#" class="btn">Download the WDPA dataset</a>
-     </section>
+    <hr>
 
-    <div class="factsheet">
-      <section>
-        <h3>
-          Official record
-          <span><i class="fa fa-clock-o"></i> Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>        </h3>
-          <%= render 'official_record', protected_area: @protected_area %>
-      </section>
+    <a href="#" class="btn btn-primary">Download the WDPA dataset</a>
+  </section>
 
-      <section class="column-left">
-        <h3>Wikipedia description</h3>
-        <%= render 'wikipedia_box', wikipedia_article: @wikipedia_article %>
-      </section>
+  <div class="factsheet">
+    <section>
+      <h3>
+        Official record
+        <span><i class="fa fa-clock-o"></i> Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>
+      </h3>
 
-      <section class="column-right">
-        <h3>Images for this area</h3>
-        <%= render 'photos_list', images: @protected_area.images %>
-      </section>
-    </div>
-  </main>
+      <%= render 'official_record', protected_area: @protected_area %>
+    </section>
+
+    <section class="column-left">
+      <h3>Wikipedia description</h3>
+
+      <%= render 'wikipedia_box', wikipedia_article: @wikipedia_article %>
+    </section>
+
+    <section class="column-right">
+      <h3>Images for this area</h3>
+
+      <%= render 'photos_list', images: @protected_area.images %>
+    </section>
+  </div>
+</main>
 
 
 <script>

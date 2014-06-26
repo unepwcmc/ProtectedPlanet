@@ -3,8 +3,9 @@
 <head>
   <title>ProtectedPlanet</title>
   <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <script src="//cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
 
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
@@ -14,26 +15,31 @@
 
   <header>
     <div class="header-inner">
-      <h1>protectedplanet.net</h1>
+      <h1><%= link_to "protectedplanet.net", root_url %></h1>
 
       <nav>
         <ul>
-          <li><a href="#" class="btn">Download</a></li>
-          <li id="search"><i class="fa fa-search"></i><input type="text" placeholder="Search for an area, country or region"></li>
+          <li><a href="#" class="btn btn-secondary">Download</a></li>
+          <li class="nav-search">
+            <i class="fa fa-search"></i>
+            <form action='/search' method='get'>
+              <input name='q' type='text' placeholder='<%= t('nav_search_form_placeholder') %>'>
+            </form>
+          </li>
         </ul>
       </nav>
     </div>
   </header>
 
-<div class="container">
-  <%= yield %>
-</div>
+  <div class="container">
+    <%= yield %>
+  </div>
 
-<footer>
-  <div class="footer-inner">
-  <p>&copy; ProtectedPlanet 2014</p>
-</div>
-</footer>
+  <footer>
+    <div class="footer-inner">
+      <p>&copy; ProtectedPlanet 2014</p>
+    </div>
+  </footer>
 
 </body>
 </html>
