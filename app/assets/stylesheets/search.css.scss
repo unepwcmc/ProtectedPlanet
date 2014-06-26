@@ -66,7 +66,8 @@
     border: 1px solid #A8AAB4;
     padding: 6px 7px 3px 7px;
     @include border-radius(5px);
-    @include transition(color 0.5s);
+
+    @include transition(color 0.5s, border 0.5s);
   }
 
   .disabled {
@@ -76,7 +77,8 @@
   .current, a:hover {
     border-color: $blue;
     color: $blue;
-    @include transition(color 0.5s);
+
+    @include transition(color 0.5s, border 0.5s);
   }
 
   .gap {
