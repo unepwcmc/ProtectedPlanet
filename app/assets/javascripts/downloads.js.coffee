@@ -1,3 +1,46 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
+class @DownloadModal
+  DEFAULT_TYPES = ['csv', 'shp', 'kml']
+  BASE_DOWNLOAD_PATH = '/downloads'
+
+  @template: """
+    <div id="download-modal">
+      <h3>
+        Select a download type
+        <span><i class="fa fa-clock-o"></i> Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>
+      </h3>
+      <section>
+        <div id="link-container"></div>
+        <p>…or use the ESRI web service</p>
+      </section>
+      <div>
+        <a href="#" id="close-modal" class="btn btn-primary">Cancel</a>
+      </div>
+    </div>
+  """
+
+  constructor: ->
+    @$el = $(@constructor.template)
+    @$el.find('#close-modal').on('click', (e) =>
+      @hide()
+      e.preventDefault()
+    )
+
+  buildLinksFor: (objectName, types) ->
+    types ||= DEFAULT_TYPES
+    linkContainer = @$el.find('#link-container')
+
+    newLinks = types.map((type) ->
+      typeLinkText = type.toUpperCase()
+      typeLinkHref = "#{BASE_DOWNLOAD_PATH}/#{objectName}?type=#{type}"
+
+      newLink = "<a class=\"btn btn-primary\" href=\"#{typeLinkHref}\">#{typeLinkText}</a>"
+      newLink
+    )
+
+    linkContainer.html(newLinks)
+
+  show: ->
+    @$el.addClass('opened')
+
+  hide: ->
+    @$el.removeClass('opened')
