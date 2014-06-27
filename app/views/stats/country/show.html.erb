@@ -4,17 +4,25 @@
   <section class="info-card">
     <h2><%= @country.name %></h2>
 
-    <a href="#" class="btn btn-primary">Download the WDPA dataset</a>
+    <hr>
+
+    <p>
+      <%= link_to @country.region.name, search_path(query: @country.region.name) %>
+    </p>
+
+    <hr>
+
+    <a href="#" class="btn btn-primary">Download the WDPA <%= @country.name %> dataset</a>
    </section>
 
   <div class="factsheet">
     <section class="column-left stats pa-count">
-      <h3>Protected Areas (PA's)</h3>
+      <h3>Protected Areas (PAs)</h3>
       <p><%= @number_of_pas %></p>
     </section>
 
     <section class="column-right stats iucn-category-pa-count">
-      <h3>PA's with IUCN category</h3>
+      <h3>PAs with IUCN category</h3>
       <p><%= @pas_with_iucn_category %></p>
     </section>
 

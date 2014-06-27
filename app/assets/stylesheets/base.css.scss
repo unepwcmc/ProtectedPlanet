@@ -13,6 +13,7 @@ a, a:visited {
 }
 
 a.btn, button {
+  display: inline-block;
   background: $green;
   color: #fff;
   border: none;
