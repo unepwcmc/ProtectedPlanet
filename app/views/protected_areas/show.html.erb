@@ -1,4 +1,4 @@
-<div class="protected-area-map" id="map" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>"></div>
+<div class="protected-area-map" id="map" data-bound-from="<%= map_bounds(@protected_area)['from'] %>" data-bound-to="<%= map_bounds(@protected_area)['to'] %>"></div>
 
 <main>
   <section class="info-card">
