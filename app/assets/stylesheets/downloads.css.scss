@@ -9,15 +9,28 @@
   top: 25%;
   left: 30%;
   width: 40%;
-  padding: 10px;
+  padding: 30px;
   @include border-radius(5px);
-  box-shadow: 1px 1px 4px 0px black;
-
   background: #fff;
-
+  text-align: center;
   box-sizing:border-box;
   -moz-box-sizing:border-box;
   -webkit-box-sizing:border-box;
+
+  h2 {
+    font-family: 'MuseoSlab-500', $font-stack;
+    font-size: 1.6em;
+    margin: 0;
+  }
+
+  p {
+    font-family: 'MuseoSans-100', $font-stack;
+  }
+
+  .fa-cloud-download{
+    margin: 20px 0;
+    color: $light-grey;
+  }
 
   &.opened {
     display: block;
@@ -26,7 +39,21 @@
   a.btn {
     display: inline-block;
     margin: 20px;
+    padding: 10px 40px;
   }
+
+  .fa-external-link{
+    margin-left: 10px;
+  }
+}
+
+#close-modal{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+
+  @include border-radius(5px);
 }
 
 .total-overlay {
