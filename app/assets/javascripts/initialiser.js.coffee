@@ -12,11 +12,10 @@ class @PageInitialiser
 
     boundFrom = mapEl.attr('data-bound-from')
     boundTo = mapEl.attr('data-bound-to')
+    withPadding = mapEl.attr('data-padding-enabled') || false
+
     if boundFrom? and boundTo?
-      map.fitToBounds([
-        JSON.parse(boundFrom),
-        JSON.parse(boundTo)
-      ])
+      map.fitToBounds.apply(map, [boundFrom, boundTo, withPadding].map(JSON.parse))
 
 
   initialiseDownloadModal: ->
