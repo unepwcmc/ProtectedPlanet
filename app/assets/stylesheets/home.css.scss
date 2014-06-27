@@ -58,49 +58,6 @@
   }
 }
 
-#white-bg {
-  float: left;
-  margin: 0;
-  display: block;
-  width: 100%;
-  padding: 40px 0px;
-  line-height: 2.5em;
-  background: #fff;
-
-  section {
-    width: 980px;
-    margin: 0 auto;
-    text-align: center;
-    overflow: hidden;
-  }
-
-  p {
-    font-size: 1.2em;
-  }
-
-  ul {
-    margin: 40px 0;
-
-    li {
-      width: 150px;
-      height: 150px;
-      border: 1px solid $dark-grey;
-      background: $grey;
-      float: left;
-      margin-right: 13px;
-
-      img {
-        width: 150px;
-        height: 150px;
-      }
-    }
-
-    :last-child {
-      margin-right: 0;
-    }
-  }
-}
-
 .home-statistics {
   float: left;
   width: 100%;
