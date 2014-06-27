@@ -49,7 +49,7 @@ class Wdpa::Release
     create_query = "CREATE OR REPLACE VIEW #{IMPORT_VIEW_NAME} AS "
 
     select_queries = []
-    geometry_tables.each do |geometry_table, _|
+    geometry_tables.each do |_, geometry_table|
       select_queries << "SELECT #{attributes} FROM #{geometry_table}"
     end
 
