@@ -1,3 +1,45 @@
-// Place all the styles related to the Downloads controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+@import 'mixins';
+@import 'variables';
+
+#download-modal {
+  display: none;
+
+  position: fixed;
+  z-index: 9999;
+  top: 25%;
+  left: 30%;
+  width: 40%;
+  padding: 10px;
+  @include border-radius(5px);
+  box-shadow: 1px 1px 4px 0px black;
+
+  background: #fff;
+
+  box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+
+  &.opened {
+    display: block;
+  }
+
+  a.btn {
+    display: inline-block;
+    margin: 20px;
+  }
+}
+
+.total-overlay {
+  display: none;
+  position: fixed;
+  z-index: 5000;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.5);
+
+  &.visible {
+    display: block;
+  }
+}
