@@ -170,8 +170,8 @@ main {
 }
 
 .stats {
-  ul {
-    margin: 10px 30px 0 30px;
+  ul, p {
+    margin: 10px 30px 0 0;
   }
 
   li {
@@ -180,26 +180,35 @@ main {
     float: left;
     width: 100%;
 
+    &:first-of-type {
+      padding-top: 5px;
+    }
+
+    &:last-of-type {
+      border: 0;
+      padding-bottom: 0;
+    }
+
     img {
       width: 60px;
       height: 60px;
       float: left;
       margin: 0 10px 0 0;
     }
+  }
 
-    p {
-      float: left;
-      font-family: 'MuseoSans-500', $font-stack;
-      font-size: 4em;
+  p {
+    float: left;
+    font-family: 'MuseoSans-500', $font-stack;
+    font-size: 4em;
 
-      span {
-        font-size: 0.6em;
-      }
+    span {
+      font-size: 0.6em;
+    }
 
-      small {
-        font-family: 'MuseoSans-100', $font-stack;
-        font-size: 0.3em;
-      }
+    small {
+      font-family: 'MuseoSans-100', $font-stack;
+      font-size: 0.3em;
     }
   }
 }

@@ -70,10 +70,6 @@ main section {
   }
 
   section {
-    &:first-of-type {
-      margin-top: 0;
-    }
-
     margin-top: 30px;
     padding: 20px;
     font-family: 'MuseoSans-100', $font-stack;
