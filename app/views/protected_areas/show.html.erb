@@ -8,8 +8,8 @@
 
     <p>
       <strong><%= @protected_area.designation.name %></strong>
-      <%= link_to @country.name, search_path(query: @country.name) %>,
-      <%= link_to @region.name, search_path(query: @region.name) %>
+      <%= link_to @country.name, search_path(q: @country.name) %>,
+      <%= link_to @region.name, search_path(q: @region.name) %>
       | <%= @protected_area.marine ? "Marine" : "Terrestrial" %> Area
     </p>
 
