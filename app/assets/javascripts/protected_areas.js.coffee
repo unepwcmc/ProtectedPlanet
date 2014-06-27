@@ -32,6 +32,7 @@ ready = ->
   # Download Modal initialisation
   downloadModal = new DownloadModal()
   $('body').append(downloadModal.$el)
+  $('body').append(downloadModal.$overlay)
   $('.btn-download').on('click', (e) ->
     downloadModal.buildLinksFor(@getAttribute('data-download-object'))
     downloadModal.show()
