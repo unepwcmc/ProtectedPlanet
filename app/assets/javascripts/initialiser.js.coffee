@@ -2,21 +2,25 @@ class @PageInitialiser
   DEFAULT_ZOOM_CONTROLS_POS = 'topright'
 
   initialiseMap: (mapContainerId) ->
-    mapEl = $("##{mapContainerId}")
-    return false unless mapEl?
+    return false if $("##{mapContainerId}").length == 0
 
     map = new ProtectedAreaMap(mapContainerId)
+    map.setZoomControlPosition(map.el.attr('data-zoom-controls') || DEFAULT_ZOOM_CONTROLS_POS)
 
-    zoomControlsPosition = mapEl.attr('data-zoom-controls')
-    map.setZoomControlPosition(zoomControlsPosition || DEFAULT_ZOOM_CONTROLS_POS)
-
-    boundFrom = mapEl.attr('data-bound-from')
-    boundTo = mapEl.attr('data-bound-to')
-    withPadding = mapEl.attr('data-padding-enabled') || false
-
+    # Bounds
+    boundFrom = map.el.attr('data-bound-from')
+    boundTo = map.el.attr('data-bound-to')
     if boundFrom? and boundTo?
-      map.fitToBounds.apply(map, [boundFrom, boundTo, withPadding].map(JSON.parse))
+      withPadding = map.el.attr('data-padding-enabled')
+      map.fitToBounds(
+        [boundFrom, boundTo].map(JSON.parse),
+        withPadding
+      )
 
+    # Geolocation
+    locationEnabled = map.el.attr('data-geolocation-enabled')
+    if locationEnabled?
+      map.locate()
 
   initialiseDownloadModal: ->
     downloadModal = new DownloadModal()
