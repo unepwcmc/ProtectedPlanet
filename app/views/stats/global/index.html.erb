@@ -1,31 +1,33 @@
-<div id="map"></div>
+<div class="protected-area-map" id="map" data-bound-from="[90, 180]" data-bound-to="[-90, -180]"></div>
 
 <main>
   <section class="info-card">
     <h2>Protected Areas in the Globe</h2>
 
+    <hr>
+
     <a href="#" class="btn btn-primary">Download the WDPA dataset</a>
    </section>
 
   <div class="factsheet">
-    <section class="box-left">
-      <h3>Protected Areas (PA's)</h3>
-      <strong><%= @number_of_pas %></strong>
+    <section class="column-left stats">
+      <h3>Protected Areas (PAs)</h3>
+      <p><%= @number_of_pas %></p>
     </section>
 
-    <section class="box-left">
-      <h3>PA's with IUCN category</h3>
-      <strong><%= @pas_with_iucn_category %></strong>
+    <section class="column-right stats">
+      <h3>PAs with IUCN category</h3>
+      <p><%= @pas_with_iucn_category %></p>
     </section>
 
-    <section class="box-left">
+    <section class="column-right stats">
       <h3>Number of designations</h3>
-      <strong><%= @number_of_designations %></strong>
+      <p><%= @number_of_designations %></p>
     </section>
 
-    <section class="box-left">
+    <section class="column-left stats">
       <h3>Countries providing data</h3>
-      <strong><%= @countries_providing_data %></strong>
+      <p><%= @countries_providing_data %></p>
     </section>
   </div>
 </main>
