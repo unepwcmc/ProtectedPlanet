@@ -1,4 +1,4 @@
-<div class="protected-area-map" id="map"></div>
+<div class="protected-area-map" id="map" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>"></div>
 
 <main>
   <section class="info-card">
@@ -7,18 +7,15 @@
     <hr>
 
     <p>
-      <%= @protected_area.designation.name %>
-    </p>
-
-    <p>
-      <%= link_to @country.name, search_path(query: @country.name) %>,
-      <%= link_to @region.name, search_path(query: @region.name) %>
+      <strong><%= @protected_area.designation.name %></strong>
+      <%= link_to @country.name, search_path(q: @country.name) %>,
+      <%= link_to @region.name, search_path(q: @region.name) %>
       | <%= @protected_area.marine ? "Marine" : "Terrestrial" %> Area
     </p>
 
     <hr>
 
-    <a href="#" class="btn btn-primary">Download the WDPA dataset</a>
+    <a data-download-object="<%= @protected_area.countries.first.iso_3 %>" class="btn-download btn btn-primary" href="#">Download the WDPA dataset</a>
   </section>
 
   <div class="factsheet">
@@ -44,13 +41,3 @@
     </section>
   </div>
 </main>
-
-
-<script>
-  function initializeMap() {
-    fitToBounds(<%= @protected_area.bounds.to_json %>);
-  }
-
-  $(document).ready(initializeMap);
-  $(document).on('page:load', initializeMap);
-</script>
