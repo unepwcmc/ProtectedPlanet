@@ -1,7 +1,7 @@
 class @ProtectedAreaMap
   constructor: (elementId) ->
     @el = $("##{elementId}")
-    @map = L.map(elementId, {scrollWheelZoom: false})
+    @map = L.map(elementId, {zoomControl: false, scrollWheelZoom: false})
 
     L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png').addTo(@map)
     L.tileLayer('http://carbon-tool.cartodb.com/tiles/wdpa_poly_feb2014_0/{z}/{x}/{y}.png').addTo(@map)
@@ -15,8 +15,8 @@ class @ProtectedAreaMap
 
     @map.fitBounds(bounds, opts)
 
-  setZoomControlPosition: (position) ->
-    @map.zoomControl.setPosition(position)
+  setZoomControl: (position) ->
+    @map.addControl(L.control.zoom(position: position))
 
   locate: ->
     @map.locate(setView: true)

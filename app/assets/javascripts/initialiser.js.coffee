@@ -1,13 +1,14 @@
 class @PageInitialiser
-  DEFAULT_ZOOM_CONTROLS_POS = 'topright'
 
   initialiseMap: (mapContainerId) ->
     return false if $("##{mapContainerId}").length == 0
 
     map = new ProtectedAreaMap(mapContainerId)
-    map.setZoomControlPosition(map.el.attr('data-zoom-controls') || DEFAULT_ZOOM_CONTROLS_POS)
 
-    # Bounds
+    zoomControl = map.el.attr('data-zoom-control')
+    if zoomControl?
+      map.setZoomControl(zoomControl)
+
     boundFrom = map.el.attr('data-bound-from')
     boundTo = map.el.attr('data-bound-to')
     if boundFrom? and boundTo?
