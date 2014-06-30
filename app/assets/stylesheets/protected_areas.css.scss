@@ -48,46 +48,14 @@ main section {
   }
 }
 
+.grid .info-card {
+  margin-top: 0;
+}
+
 .factsheet {
   width: 100%;
-  margin-top: -50px;
-  padding-bottom: 25px;
+  margin-top: -80px;
   float: left;
-
-  h3 {
-    font-weight: normal;
-    font-family: 'MuseoSlab', $font-stack;
-    border-bottom: 1px solid $grey;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-
-    span {
-     background: #e6e6ee;
-     @include border-radius(5px);
-     font-size: 0.8em;
-     padding: 5px;
-    }
-  }
-
-  section {
-    margin-top: 30px;
-    padding: 20px;
-
-    a {
-      font-weight: bold;
-      color: $blue;
-    }
-  }
-
-  .column-left {
-    float: left;
-    width: 48.5%;
-  }
-
-  .column-right {
-    float: right;
-    width: 48.5%;
-  }
 }
 
 .protected-area-photos {

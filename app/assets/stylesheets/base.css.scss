@@ -51,7 +51,6 @@ input {
   background-image: image-url('world-background.png');
   background-repeat: no-repeat;
   background-position: -200px -400px;
-  padding: 40px 0 0 0;
   height: 100%;
 }
 
@@ -132,7 +131,8 @@ header {
 main {
   width: 980px;
   position: relative;
-  margin: 0 auto;
+  margin: 0px auto;
+  padding-top: 40px;
 }
 
 #download-modal {
@@ -224,5 +224,46 @@ footer {
     margin: 0px auto;
     width: 1000px;
     color: $grey-blue;
+  }
+}
+
+.grid {
+  section {
+    margin-top: 30px;
+    padding: 20px;
+
+    a {
+      font-weight: bold;
+      color: $blue;
+    }
+
+    h3 {
+      font-weight: normal;
+      font-family: 'MuseoSlab', $font-stack;
+      border-bottom: 1px solid $grey;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+
+      span {
+       background: #e6e6ee;
+       @include border-radius(5px);
+       font-size: 0.8em;
+       padding: 5px;
+      }
+    }
+
+    &:last-of-type {
+      margin-bottom: 30px;
+    }
+  }
+
+  .column-left {
+    float: left;
+    width: 48.5%;
+  }
+
+  .column-right {
+    float: right;
+    width: 48.5%;
   }
 }
