@@ -232,11 +232,6 @@ footer {
     margin-top: 30px;
     padding: 20px;
 
-    a {
-      font-weight: bold;
-      color: $blue;
-    }
-
     h3 {
       font-weight: normal;
       font-family: 'MuseoSlab', $font-stack;
@@ -265,5 +260,12 @@ footer {
   .column-right {
     float: right;
     width: 48.5%;
+  }
+}
+
+section {
+  a {
+    font-weight: bold;
+    color: $blue;
   }
 }
