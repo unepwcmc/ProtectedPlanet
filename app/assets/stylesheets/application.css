@@ -15,5 +15,6 @@
  *= require 'home'
  *= require 'protected_areas'
  *= require 'search'
+ *= require 'leaflet_overrides'
  *= require_self
  */
