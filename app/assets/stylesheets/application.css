@@ -16,5 +16,6 @@
  *= require 'protected_areas'
  *= require 'search'
  *= require 'leaflet_overrides'
+ *= require 'downloads'
  *= require_self
  */
