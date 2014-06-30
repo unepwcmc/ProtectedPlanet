@@ -87,13 +87,13 @@ class DownloadShapefileTest < ActiveSupport::TestCase
       SELECT *
       FROM #{Wdpa::Release::IMPORT_VIEW_NAME}
       WHERE ST_GeometryType(wkb_geometry) LIKE '%Poly%'
-      AND wdpaid IN (1, 2, 3)
+      AND wdpaid IN (1,2,3)
     """.squish
     shp_point_query = """
       SELECT *
       FROM #{Wdpa::Release::IMPORT_VIEW_NAME}
       WHERE ST_GeometryType(wkb_geometry) LIKE '%Point%'
-      AND wdpaid IN (1, 2, 3)
+      AND wdpaid IN (1,2,3)
     """.squish
 
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, shp_polygon_query).returns(true)
