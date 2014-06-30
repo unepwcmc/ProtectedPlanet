@@ -16,13 +16,13 @@
   box-sizing: border-box;
 
   h2 {
-    font-family: 'MuseoSlab-500', $font-stack;
+    font-family: 'MuseoSlab', $font-stack;
     font-size: 1.6em;
     margin: 0;
   }
 
   p {
-    font-family: 'MuseoSans-100', $font-stack;
+    font-weight: normal;
   }
 
   .fa-cloud-download{
