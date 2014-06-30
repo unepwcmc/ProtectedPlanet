@@ -1,11 +1,22 @@
 ---
+
+- name: Install GEOS
+  apt: pkg={{ item }} state=installed update-cache=yes
+  with_items:
+    - libgeos-dev
+    - libgeos-{{ geos.version }}
+
+- name: Symlink libgeos to correct place for use by RGeo
+  file: src=/usr/lib/libgeos-{{geos.version}}.so dest=/usr/lib/libgeos.so state=link
+  sudo: yes
+
+- name: Add UbuntuGIS Unstable repository
+  apt_repository: repo='{{ gdal.repo }}' state=present
+
 - name: Checking installed version of GDAL
   shell: /usr/bin/test $(ogrinfo --version |  sed -n 's/GDAL \(.*\), released.*/\1/p') = {{gdal.version}}
   register: gdal_installed
   ignore_errors: True
-
-- name: Add UbuntuGIS Unstable repository
-  apt_repository: repo='{{ gdal.repo }}' state=present
 
 - name: Add repository key
   apt_key: data="{{ lookup('file', '314DF160.asc') }}"  state=present
@@ -35,11 +46,3 @@
     - ./configure --with-python
     - make
     - sudo make install
-
-- name: Get GEOS version
-  shell: geos-config --version
-  register: geos_version
-
-- name: Symlink libgeos to correct place for use by RGeo
-  file: src=/usr/lib/libgeos-{{geos_version.stdout}}.so dest=/usr/lib/libgeos.so state=link
-  sudo: yes
