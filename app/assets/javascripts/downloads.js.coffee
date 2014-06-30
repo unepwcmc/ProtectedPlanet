@@ -19,14 +19,18 @@ class @DownloadModal
     </div>
   """
 
-  constructor: ->
+  constructor: ($container) ->
     @$overlay = $(@constructor.overlayTemplate)
     @$el = $(@constructor.template)
 
-    for el in [@$overlay, @$el.find('#close-modal')]
-      el.on('click', (e) =>
+    $container.append(@$overlay)
+    $container.append(@$el)
+
+    $closeModalBtn = @$el.find('#close-modal')
+    for $el in [@$overlay, $closeModalBtn]
+      $el.on('click', (ev) =>
         @hide()
-        e.preventDefault()
+        ev.preventDefault()
       )
 
   buildLinksFor: (objectName, types) ->
