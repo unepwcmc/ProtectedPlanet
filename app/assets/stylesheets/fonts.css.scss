@@ -1,29 +1,20 @@
 @font-face {
-  font-family: 'MuseoSans-700';
-  src:font-url('fonts/MuseoSans-700.eot');
-  src:font-url('fonts/MuseoSans-700.eot?#iefix') format('embedded-opentype'),font-url('fonts/MuseoSans-700.woff') format('woff'),font-url('fonts/MuseoSans-700.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'MuseoSans-300';
-  src:font-url('fonts/MuseoSans-300.eot');
-  src:font-url('fonts/MuseoSans-300.eot?#iefix') format('embedded-opentype'),font-url('fonts/MuseoSans-300.woff') format('woff'),font-url('fonts/MuseoSans-300.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'MuseoSans-500';
-  src:font-url('fonts/MuseoSans-500.eot');
-  src:font-url('fonts/MuseoSans-500.eot?#iefix') format('embedded-opentype'),font-url('fonts/MuseoSans-500.woff') format('woff'),font-url('fonts/MuseoSans-500.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'MuseoSans-100';
+  font-family: 'Museo';
+  font-weight: normal;
   src:font-url('fonts/MuseoSans-100.eot');
   src:font-url('fonts/MuseoSans-100.eot?#iefix') format('embedded-opentype'),font-url('fonts/MuseoSans-100.woff') format('woff'),font-url('fonts/MuseoSans-100.ttf') format('truetype');
 }
 
 @font-face {
-  font-family: 'MuseoSlab-500';
+  font-family: 'Museo';
+  font-weight: bold;
+  src:font-url('fonts/MuseoSans-500.eot');
+  src:font-url('fonts/MuseoSans-500.eot?#iefix') format('embedded-opentype'),font-url('fonts/MuseoSans-500.woff') format('woff'),font-url('fonts/MuseoSans-500.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'MuseoSlab';
+  font-weight: normal;
   src:font-url('fonts/MuseoSlab-500.eot');
   src:font-url('fonts/MuseoSlab-500.eot?#iefix') format('embedded-opentype'),font-url('fonts/MuseoSlab-500.woff') format('woff'),font-url('fonts/MuseoSlab-500.ttf') format('truetype');
 }

@@ -1,24 +1,31 @@
+@import 'fonts';
 @import 'mixins';
 @import 'variables';
 
+* {
+  font-family: 'Museo', $font-stack;
+  font-weight: normal;
+}
+
 body {
   background: $dark-blue;
-  font: $font-stack;
   color: #353946;
 }
 
 a, a:visited {
+  font-weight: bold;
   text-decoration: none;
   color: $dark-grey;
 }
 
 a.btn, button {
+  display: inline-block;
+  font-weight: normal;
   background: $green;
   color: #fff;
   border: none;
   @include border-radius(5px);
   font-size: 0.9em;
-  font-family: 'MuseoSans-300', $font-stack;
   @include transition(background-color 0.3s);
 
   &:hover {
@@ -38,15 +45,17 @@ a.btn, button {
 
 input {
   outline: none;
-  font-family: 'MuseoSans-100', $font-stack;
 }
 
 .bg-img {
   background-image: image-url('world-background.png');
   background-repeat: no-repeat;
   background-position: -200px -400px;
-  padding: 40px 0 0 0;
   height: 100%;
+}
+
+h2 {
+  font-family: 'MuseoSlab', $font-stack;
 }
 
 header {
@@ -61,7 +70,7 @@ header {
 
   h1 {
     float: left;
-    font-family: 'MuseoSans-500', $font-stack;
+    font-weight: bold;
     color: #fff;
 
     a, a:visited {
@@ -109,28 +118,21 @@ header {
   overflow: hidden;
 
   h2 {
-    font-family: 'MuseoSlab-500', $font-stack;
+    font-weight: normal;
     font-size: 2em;
     margin: 0;
   }
 
-  h3 {
-    font-family: 'MuseoSans-500', $font-stack;
-  }
-
   h4 {
-    font-family: 'MuseoSans-300', $font-stack;
-  }
-
-  p {
-    font-family: 'MuseoSans-100', $font-stack;
+    font-weight: bold;
   }
 }
 
 main {
   width: 980px;
   position: relative;
-  margin: 0 auto;
+  margin: 0px auto;
+  padding-top: 30px;
 }
 
 #map {
@@ -142,8 +144,8 @@ main {
 }
 
 .stats {
-  ul {
-    margin: 10px 30px 0 30px;
+  ul, p {
+    margin: 10px 30px 0 0;
   }
 
   li {
@@ -152,26 +154,35 @@ main {
     float: left;
     width: 100%;
 
+    &:first-of-type {
+      padding-top: 5px;
+    }
+
+    &:last-of-type {
+      border: 0;
+      padding-bottom: 0;
+    }
+
     img {
       width: 60px;
       height: 60px;
       float: left;
       margin: 0 10px 0 0;
     }
+  }
 
-    p {
-      float: left;
-      font-family: 'MuseoSans-500', $font-stack;
-      font-size: 4em;
+  p {
+    float: left;
+    font-weight: bolder;
+    font-size: 4em;
 
-      span {
-        font-size: 0.6em;
-      }
+    span {
+      font-size: 0.6em;
+    }
 
-      small {
-        font-family: 'MuseoSans-100', $font-stack;
-        font-size: 0.3em;
-      }
+    small {
+      font-family: normal;
+      font-size: 0.3em;
     }
   }
 }
@@ -185,6 +196,48 @@ footer {
     margin: 0px auto;
     width: 1000px;
     color: $grey-blue;
-    font-family: 'MuseoSans-100', $font-stack;
+  }
+}
+
+.grid {
+  section {
+    margin-top: 30px;
+    padding: 20px;
+
+    h3 {
+      font-weight: normal;
+      font-family: 'MuseoSlab', $font-stack;
+      border-bottom: 1px solid $grey;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+
+      span {
+       background: #e6e6ee;
+       @include border-radius(5px);
+       font-size: 0.8em;
+       padding: 5px;
+      }
+    }
+
+    &:last-of-type {
+      margin-bottom: 30px;
+    }
+  }
+
+  .column-left {
+    float: left;
+    width: 48.5%;
+  }
+
+  .column-right {
+    float: right;
+    width: 48.5%;
+  }
+}
+
+section {
+  a {
+    font-weight: bold;
+    color: $blue;
   }
 }

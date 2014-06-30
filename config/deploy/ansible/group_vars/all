@@ -30,3 +30,6 @@ gdal:
   version: "1.11.0"
   url: "http://download.osgeo.org/gdal/1.11.0/gdal-1.11.0.tar.gz"
   repo: 'deb http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu trusty main'
+
+geos:
+  version: "3.4.2"

@@ -1,5 +1,4 @@
-<div class="home-map" id="map">
-</div>
+<div data-bound-from="<%= map_bounds['from'] %>" data-bound-to="<%= map_bounds['to'] %>" class="home-map" id="map"></div>
 
 <div class="overlay">
   <section>
@@ -14,62 +13,43 @@
   </section>
 </div>
 
-<div id="white-bg">
-  <section>
-    <h2>Protected Areas at a Glimpse</h2>
-    <p>Explore the different regions and countries and learn about their protected areas</p>
-
-    <ul>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
-  </section>
-</div>
-
 <div class="home-statistics bg-img">
-  <main>
-    <div class="factsheet">
-      <section class="intro">
-        <h2>A World of Protected Areas</h2>
-        <p>This is a summary of the status of all the protected areas at a global level. To learn more about a region, country, or area in particular, you can search, or explore the map.</p>
-      </section>
+  <main class="grid">
+    <section class="intro">
+      <h2>A World of Protected Areas</h2>
+      <p>This is a summary of the status of all the protected areas at a global level. To learn more about a region, country, or area in particular, you can search, or explore the map.</p>
+    </section>
 
-      <section class="column-left stats">
-        <h3>Protected Areas (PAs)</h3>
-        <ul>
-          <li>
-            <img src="/assets/stats-img.png"/><p>277892</p>
-          </li>
-        </ul>
-      </section>
+    <section class="column-left stats">
+      <h3>Protected Areas (PAs)</h3>
+      <p>
+        <%= image_tag "map-marker@2x.png", style: "width: 29px; height: 44px" %>
+        <%= commaify @number_of_pas %>
+      </p>
+    </section>
 
-      <section class="column-right stats">
-        <h3>Territory Covered by PAs</h3>
-        <ul>
-          <li>
-            <img src="/assets/stats-img.png"/><p>30<span>%</span> <small>of the world</small></p>
-          </li>
-          <li>
-            <img src="/assets/stats-img.png"/><p>20<span>%</span> <small>terrestrial</small></p>
-          </li>
-          <li>
-            <img src="/assets/stats-img.png"/><p>10<span>%</span> <small>Marine</small></p>
-          </li>
-        </ul>
-      </section>
+    <section class="column-right stats">
+      <h3>PAs with IUCN category</h3>
+      <p>
+        <%= image_tag "IUCN@2x.png", style: "width: 50px; height: 49px" %>
+        <%= commaify @pas_with_iucn_category %>
+      </p>
+    </section>
 
-      <section class="column-left stats">
-        <h3>Number of Designations</h3>
-        <ul>
-          <li>
-            <img src="/assets/stats-img.png"/><p>2000</p>
-          </li>
-        </ul>
-      </section>
-    </div>
+    <section class="column-right stats">
+      <h3>Number of designations</h3>
+      <p>
+        <%= image_tag "designation@2x.png", style: "width: 38px; height: 49px" %>
+        <%= commaify @number_of_designations %>
+      </p>
+    </section>
+
+    <section class="column-left stats">
+      <h3>Countries providing data</h3>
+      <p>
+        <%= image_tag "data@2x.png", style: "width: 47px; height: 49px" %>
+        <%= commaify @countries_providing_data %>
+      </p>
+    </section>
   </main>
 </div>

@@ -1,0 +1,45 @@
+<div class="protected-area-map" id="map" data-bound-from="<%= @region.bounds.first %>" data-bound-to="<%= @region.bounds.last %>"></div>
+
+<main class="grid">
+  <section class="info-card">
+    <h2><%= @region.name %></h2>
+
+    <hr>
+
+    <a href="#" class="btn btn-primary">Download the WDPA dataset</a>
+  </section>
+
+  <div class="factsheet">
+    <section class="column-left stats pa-count">
+      <h3>Protected Areas (PAs)</h3>
+      <p>
+        <%= image_tag "map-marker@2x.png", style: "width: 29px; height: 44px" %>
+        <%= commaify @number_of_pas %>
+      </p>
+    </section>
+
+    <section class="column-right stats iucn-category-pa-count">
+      <h3>PAs with IUCN category</h3>
+      <p>
+        <%= image_tag "IUCN@2x.png", style: "width: 50px; height: 49px" %>
+        <%= commaify @pas_with_iucn_category %>
+      </p>
+    </section>
+
+    <section class="column-right stats designation-count">
+      <h3>Number of designations</h3>
+      <p>
+        <%= image_tag "designation@2x.png", style: "width: 38px; height: 49px" %>
+        <%= commaify @number_of_designations %>
+      </p>
+    </section>
+
+    <section class="column-left stats country-count">
+      <h3>Countries providing data</h3>
+      <p>
+        <%= image_tag "data@2x.png", style: "width: 47px; height: 49px" %>
+        <%= commaify @countries_providing_data %>
+      </p>
+    </section>
+  </div>
+</main>

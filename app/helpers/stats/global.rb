@@ -1,0 +1,2 @@
+module Stats::GlobalHelper
+end
