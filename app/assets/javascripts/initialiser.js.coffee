@@ -1,31 +1,30 @@
 class @PageInitialiser
 
-  initialiseMap: (mapContainerId) ->
-    return false if $("##{mapContainerId}").length == 0
+  initialiseMap: ($mapContainer) ->
+    return false if $mapContainer.length == 0
 
-    map = new ProtectedAreaMap(mapContainerId)
+    map = new ProtectedAreaMap($mapContainer)
 
-    zoomControl = map.el.attr('data-zoom-control')
+    zoomControl = $mapContainer.attr('data-zoom-control')
     if zoomControl?
       map.setZoomControl(zoomControl)
 
-    boundFrom = map.el.attr('data-bound-from')
-    boundTo = map.el.attr('data-bound-to')
+    boundFrom = $mapContainer.attr('data-bound-from')
+    boundTo = $mapContainer.attr('data-bound-to')
     if boundFrom? and boundTo?
-      withPadding = map.el.attr('data-padding-enabled')
+      withPadding = $mapContainer.attr('data-padding-enabled')
       map.fitToBounds(
         [boundFrom, boundTo].map(JSON.parse),
         withPadding
       )
 
     # Geolocation
-    locationEnabled = map.el.attr('data-geolocation-enabled')
+    locationEnabled = $mapContainer.attr('data-geolocation-enabled')
     if locationEnabled?
       map.locate()
 
-  initialiseDownloadModal: ->
-    downloadModal = new DownloadModal()
-    $('body').append(downloadModal.$el)
+  initialiseDownloadModal: ($modalContainer) ->
+    downloadModal = new DownloadModal($modalContainer)
     $('.btn-download').on('click', (e) ->
       downloadModal.buildLinksFor(@getAttribute('data-download-object'))
       downloadModal.show()
