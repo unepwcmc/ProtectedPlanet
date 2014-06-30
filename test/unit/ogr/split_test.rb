@@ -3,7 +3,7 @@ require 'gdal-ruby/ogr'
 
 class TestOgrSplit < ActiveSupport::TestCase
   test '#split runs the correct ogr2ogr command to split a geo database
-   in to `n` shapefiles and then zips them individually' do
+   in to `n` shapefiles and returns each as a Shapefile' do
     filename = 'my_gdb.gdb'
     layer_name = 'poly'
     column_name = ['wdpaid']
@@ -19,9 +19,9 @@ class TestOgrSplit < ActiveSupport::TestCase
 
     expected_shapefile_paths = ['./poly_0.shp', './poly_1.shp']
 
-    shapefile_paths = Ogr::Split.split filename, layer_name, 2, column_name
+    shapefiles = Ogr::Split.split filename, layer_name, 2, column_name
 
-    assert_equal expected_shapefile_paths, shapefile_paths
+    assert_equal expected_shapefile_paths, shapefiles.map(&:path)
   end
 
   test 'if column_names are not passed .split uses a *' do
@@ -37,10 +37,11 @@ class TestOgrSplit < ActiveSupport::TestCase
 
     Ogr::Shapefile.expects(:system).with("ogr2ogr -overwrite -skipfailures -f \"ESRI Shapefile\" -lco ENCODING=UTF-8 ./poly_0.shp -dialect sqlite -sql \"SELECT * FROM poly LIMIT 200 OFFSET 0\" #{filename}")
 
-    expected_shapefile_paths = ['./poly_0.shp']
+    shapefile = Ogr::Split.split(filename, layer_name, 1).first
 
-    shapefile_paths = Ogr::Split.split filename, layer_name, 1
+    expected_shapefile_path = './poly_0.shp'
 
-    assert_equal expected_shapefile_paths, shapefile_paths
+    assert_kind_of Shapefile, shapefile
+    assert_equal expected_shapefile_path, shapefile.path
   end
 end

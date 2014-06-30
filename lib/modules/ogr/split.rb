@@ -1,4 +1,5 @@
 require 'gdal-ruby/ogr'
+require 'shapefile'
 
 class Ogr::Split
   def self.split filename, layer, number_of_pieces, column_names = ['*']
@@ -25,7 +26,7 @@ class Ogr::Split
         query(limit, offset)
       )
 
-      new_shapefile_path
+      Shapefile.new(new_shapefile_path)
     end
   end
 
