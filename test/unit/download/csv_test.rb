@@ -22,6 +22,7 @@ class DownloadCsvTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the export fails' do
+    ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(false)
 
     assert_equal false, Download::Csv.generate(''),
@@ -29,6 +30,7 @@ class DownloadCsvTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the zip fails' do
+    ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(true)
     Download::Csv.any_instance.expects(:system).returns(false)
 
@@ -39,6 +41,7 @@ class DownloadCsvTest < ActiveSupport::TestCase
   test '#generate removes non-zip files when finished' do
     csv_path = './all-csv.csv'
 
+    ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.stubs(:export).returns(true)
     Download::Csv.any_instance.stubs(:system).returns(true)
 

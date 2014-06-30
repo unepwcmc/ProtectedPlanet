@@ -20,6 +20,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the export fails' do
+    ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(false)
 
     assert_equal false, Download::Kml.generate(''),
@@ -27,6 +28,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the zip fails' do
+    ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(true)
     Download::Kml.any_instance.expects(:system).returns(false)
 
@@ -37,6 +39,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
   test '#generate removes non-zip files when finished' do
     kml_path = './all.kml'
 
+    ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.stubs(:export).returns(true)
     Download::Kml.any_instance.stubs(:system).returns(true)
 
