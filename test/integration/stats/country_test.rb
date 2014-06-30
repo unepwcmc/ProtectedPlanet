@@ -2,7 +2,8 @@ require 'test_helper'
 
 class CountryStatsTest < ActionDispatch::IntegrationTest
   def setup
-    @country = FactoryGirl.create(:country)
+    region = FactoryGirl.create(:region)
+    @country = FactoryGirl.create(:country, region: region)
   end
 
   test 'renders the Country name' do
@@ -21,7 +22,7 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
 
     assert page.has_selector?('.pa-count'),
       "Expected page to have a PA count element"
-    assert_equal pa_count, page.find('.pa-count strong').text.to_i
+    assert_equal pa_count, page.find('.pa-count p').text.to_i
   end
 
   test 'renders the number of Protected Areas with IUCN Categories' do
@@ -41,7 +42,7 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
 
     assert page.has_selector?('.iucn-category-pa-count'),
       "Expected page to have an IUCN Category PA count element"
-    assert_equal pa_with_iucn_count, page.find('.iucn-category-pa-count strong').text.to_i
+    assert_equal pa_with_iucn_count, page.find('.iucn-category-pa-count p').text.to_i
   end
 
   test 'renders the number of designations' do
@@ -58,7 +59,7 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
 
     assert page.has_selector?('.designation-count'),
       "Expected page to have a designation count element"
-    assert_equal designation_count, page.find('.designation-count strong').text.to_i
+    assert_equal designation_count, page.find('.designation-count p').text.to_i
   end
 
   test 'renders the designations by frequency' do
