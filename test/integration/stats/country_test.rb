@@ -78,8 +78,8 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
       "Expected to have a list element per designation"
 
     assert_equal "Designation 1 (1)",
-      page.find('.designation-frequency li:first-of-type').text
+      page.all('.designation-frequency li').first.text
     assert_equal "Designation 2 (1)",
-      page.find('.designation-frequency li:last-of-type').text
+      page.all('.designation-frequency li').last.text
   end
 end
