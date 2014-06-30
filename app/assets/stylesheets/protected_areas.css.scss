@@ -15,8 +15,9 @@ main section {
 
 .info-card {
   width: 320px;
-  font-family: 'MuseoSans-100', $font-stack;
+  height: 300px;
   padding: 20px;
+  font-weight: normal;
   line-height: 1.5em;
   position: absolute;
   top: 25px;
@@ -25,7 +26,7 @@ main section {
   h2 {
     font-size: 1.5em;
     color: #353946;
-    font-family: 'MuseoSlab-500', $font-stack;
+    font-family: 'MuseoSlab', $font-stack;
   }
 
   p {
@@ -54,7 +55,8 @@ main section {
   float: left;
 
   h3 {
-    font-family: 'MuseoSlab-500', $font-stack;
+    font-weight: normal;
+    font-family: 'MuseoSlab', $font-stack;
     border-bottom: 1px solid $grey;
     margin-bottom: 20px;
     padding-bottom: 10px;
@@ -62,7 +64,6 @@ main section {
     span {
      background: #e6e6ee;
      @include border-radius(5px);
-     font-family: 'MuseoSans-100', $font-stack;
      font-size: 0.8em;
      padding: 5px;
     }
@@ -71,10 +72,9 @@ main section {
   section {
     margin-top: 30px;
     padding: 20px;
-    font-family: 'MuseoSans-100', $font-stack;
 
     a {
-      font-family: 'MuseoSans-500';
+      font-weight: bold;
       color: $blue;
     }
   }
@@ -111,7 +111,6 @@ main section {
   width: 100%;
   margin: 10px 0 10px 0;
   border-collapse: separate;
-  font-family: 'MuseoSans-100', $font-stack;
 
   td {
     padding: 10px 0;
@@ -126,7 +125,6 @@ main section {
       display: block;
       color: #9c9ea9;
     }
-
   }
 
   tr:last-child {
