@@ -1,6 +1,4 @@
-
 class Stats::Country
-
   IUCN_CATEGORIES = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
 
   def self.total_pas iso
@@ -37,9 +35,7 @@ class Stats::Country
 
   private
 
-
   def self.protected_areas_in_country iso
     ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
   end
-
 end

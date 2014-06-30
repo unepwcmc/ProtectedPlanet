@@ -1,25 +1,15 @@
-<div data-bound-from="<%= map_bounds['from'] %>" data-bound-to="<%= map_bounds['to'] %>" class="home-map" id="map"></div>
+<div data-bound-from="<%= map_bounds['from'] %>" data-bound-to="<%= map_bounds['to'] %>" class="protected-area-map" id="map"></div>
 
-<div class="overlay">
-  <section>
-    <h1>Protected Planet</h1>
-    <p>Discover and explore protected areas around the world</p>
+<main class="grid">
+  <section class="info-card">
+    <h2>Protected Areas in the Globe</h2>
 
-    <div class="search-bar">
-      <%= render 'shared/search_form', query: @query %>
-    </div>
+    <hr>
 
-    <a href="#" data-download-object="all" class="btn btn-primary btn-download"><i class="fa fa-download"></i> Download the WDPA dataset</a>
-  </section>
-</div>
+    <a href="#" class="btn btn-primary">Download the WDPA dataset</a>
+   </section>
 
-<div class="home-statistics bg-img">
-  <main class="grid">
-    <section class="intro">
-      <h2>A World of Protected Areas</h2>
-      <p>This is a summary of the status of all the protected areas at a global level. To learn more about a region, country, or area in particular, you can search, or explore the map.</p>
-    </section>
-
+  <div class="factsheet">
     <section class="column-left stats">
       <h3>Protected Areas (PAs)</h3>
       <p>
@@ -51,5 +41,5 @@
         <%= commaify @countries_providing_data %>
       </p>
     </section>
-  </main>
-</div>
+  </div>
+</main>

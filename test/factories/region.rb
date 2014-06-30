@@ -2,5 +2,7 @@
 
 FactoryGirl.define do
   factory :region do
+    name 'Cambridge'
+    iso 'CBG'
   end
 end
