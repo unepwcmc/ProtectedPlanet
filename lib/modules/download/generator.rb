@@ -38,6 +38,10 @@ class Download::Generator
 
   DB = ActiveRecord::Base.connection
 
+  def export
+    raise NotImplementedError
+  end
+
   def zip
     system("zip -j #{@zip_path} #{path}")
   end
