@@ -37,6 +37,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the export fails' do
+    ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(false)
 
     assert_equal false, Download::Shapefile.generate(''),
@@ -44,7 +45,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the zip fails' do
-    Ogr::Postgres.expects(:export).returns(true).twice
+    Ogr::Postgres.expects(:export).twice.returns(true)
     Download::Shapefile.any_instance.expects(:system).returns(false)
 
     assert_equal false, Download::Shapefile.generate(''),
@@ -68,8 +69,11 @@ class DownloadShapefileTest < ActiveSupport::TestCase
       './all-points.cpg'
     ]
 
-    Ogr::Postgres.stubs(:export).returns(true)
-    Download::Shapefile.any_instance.stubs(:system).returns(true)
+    ActiveRecord::Base.connection.stubs(:execute)
+    Ogr::Postgres.expects(:export).twice.returns(true)
+    Download::Shapefile.
+      any_instance.
+      expects(:system)
 
     FileUtils.expects(:rm_rf).with(shp_polygons_paths)
     FileUtils.expects(:rm_rf).with(shp_points_paths)
