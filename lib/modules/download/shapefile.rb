@@ -17,19 +17,33 @@ class Download::Shapefile < Download::Generator
 
     clean_up_after do
       QUERY_CONDITIONS.each do |name, condition|
-        component_paths = shapefile_components(name)
-
-        export_success = Ogr::Postgres.export :shapefile, component_paths.first, query(condition)
-        return false unless export_success
-
-        shapefile_paths |= component_paths
+        shapefile_paths |= export_component name, condition
       end
 
       system("zip -j #{zip_path} #{shapefile_paths.join(' ')}")
     end
+  rescue Ogr::Postgres::ExportError
+    return false
   end
 
   private
+
+  def export_component name, condition
+    component_paths = shapefile_components(name)
+
+    export_success = nil
+    with_view query(condition) do |view_name|
+      export_success = Ogr::Postgres.export(
+        :shapefile,
+        component_paths.first,
+        "SELECT * FROM #{view_name}"
+      )
+    end
+
+    raise Ogr::Postgres::ExportError unless export_success
+
+    component_paths
+  end
 
   def clean_up_after
     return_value = yield
