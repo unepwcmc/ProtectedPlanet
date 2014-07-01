@@ -1,4 +1,6 @@
 class Ogr::Postgres
+  class ExportError < StandardError; end;
+
   WRONG_ARGUMENTS_MSG = 'Given new table name, but no original table name'
   DB_CONFIG = Rails.configuration.database_configuration[Rails.env]
 

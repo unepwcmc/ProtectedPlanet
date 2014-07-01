@@ -21,8 +21,13 @@ class DownloadShapefileTest < ActiveSupport::TestCase
       WHERE ST_GeometryType(wkb_geometry) LIKE '%Point%'
     """.squish
 
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, shp_polygon_query).returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, shp_point_query).returns(true)
+    view_name_poly = 'temporary_view_123'
+    Download::Shapefile.any_instance.stubs(:with_view).with(shp_polygon_query).yields(view_name_poly).returns(true)
+    view_name_point = 'temporary_view_456'
+    Download::Shapefile.any_instance.stubs(:with_view).with(shp_point_query).yields(view_name_point).returns(true)
+
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
     Download::Shapefile.
       any_instance.
       expects(:system).
@@ -96,8 +101,14 @@ class DownloadShapefileTest < ActiveSupport::TestCase
       AND wdpaid IN (1,2,3)
     """.squish
 
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, shp_polygon_query).returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, shp_point_query).returns(true)
+    view_name_poly = 'temporary_view_123'
+    Download::Shapefile.any_instance.stubs(:with_view).with(shp_polygon_query).yields(view_name_poly).returns(true)
+    view_name_point = 'temporary_view_456'
+    Download::Shapefile.any_instance.stubs(:with_view).with(shp_point_query).yields(view_name_point).returns(true)
+
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
+
     Download::Shapefile.
       any_instance.
       expects(:system).
