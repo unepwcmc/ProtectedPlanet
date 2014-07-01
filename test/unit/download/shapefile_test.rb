@@ -45,6 +45,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the zip fails' do
+    ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).twice.returns(true)
     Download::Shapefile.any_instance.expects(:system).returns(false)
 
