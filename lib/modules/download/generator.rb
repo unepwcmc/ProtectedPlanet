@@ -12,6 +12,7 @@ class Download::Generator
   end
 
   def generate
+    return false if @wdpa_ids.is_a?(Array) && @wdpa_ids.empty?
     clean_up_after { export and zip }
   end
 
