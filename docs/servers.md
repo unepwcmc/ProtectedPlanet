@@ -2,29 +2,23 @@
 
 ## Server Instances
 
-Protected Planet runs on the following AWS EC2 and RDS instances.
+Protected Planet runs on the following AWS EC2 instances.
 
 ### Staging
-
-**RDS**
-
-   * DB - PostgreSQL with Postgis, db.m3.medium, 30G
 
 **EC2**
 
    * Import - m3.xlarge
    * Web -  m3.medium
+   * DB - m3.medium
 
 ### Production
-
-**RDS**
-
-   * DB - PostgreSQL with Postgis, db.m3.large, 30G
 
 **EC2**
 
    * Import - m3.xlarge
    * Web - m3.large
+   * DB - m3.large
 
 ## Capistrano
 
@@ -39,7 +33,9 @@ cap production deploy
 
 There is a collection of [Ansible](http://ansible.com) scripts in
 `config/deploy/ansible` that can be used to provision new servers with
-the required stack (Ruby, Postgres, etc).
+the required stack (Ruby, Postgres, etc). All servers are provisioned
+with exactly the same scripts, and thus they are all identical apart
+from their instance size.
 
 If you need to install a new dependency on a machine, add some
 configuration, etc. you should add an Ansible task/role so that it is
