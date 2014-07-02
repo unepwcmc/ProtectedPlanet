@@ -90,7 +90,8 @@ CREATE TABLE countries (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     language character varying(255),
-    region_id integer
+    region_id integer,
+    bounding_box geometry
 );
 
 
@@ -155,40 +156,6 @@ CREATE SEQUENCE country_statistics_id_seq
 --
 
 ALTER SEQUENCE country_statistics_id_seq OWNED BY country_statistics.id;
-
-
---
--- Name: country_stats; Type: TABLE; Schema: public; Owner: -; Tablespace:
---
-
-CREATE TABLE country_stats (
-    id integer NOT NULL,
-    country_id integer,
-    area double precision,
-    pa_area double precision,
-    percentage_cover_pas double precision,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
-);
-
-
---
--- Name: country_stats_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE country_stats_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: country_stats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE country_stats_id_seq OWNED BY country_stats.id;
 
 
 --
@@ -507,40 +474,6 @@ CREATE TABLE protected_areas_sub_locations (
 
 
 --
--- Name: region_stats; Type: TABLE; Schema: public; Owner: -; Tablespace:
---
-
-CREATE TABLE region_stats (
-    id integer NOT NULL,
-    region_id integer,
-    area double precision,
-    pa_area double precision,
-    percentage_cover_pas double precision,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
-);
-
-
---
--- Name: region_stats_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE region_stats_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: region_stats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE region_stats_id_seq OWNED BY region_stats.id;
-
-
---
 -- Name: regional_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
@@ -583,7 +516,8 @@ CREATE TABLE regions (
     name character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    iso character varying(255)
+    iso character varying(255),
+    bounding_box geometry
 );
 
 
@@ -592,6 +526,34 @@ CREATE TABLE regions (
 --
 
 CREATE SEQUENCE regions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: regions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE regions_id_seq OWNED BY regions.id;
+
+
+--
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE schema_migrations (
+    version character varying(255) NOT NULL
+);
+
+
+--
+-- Name: standard_points_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE standard_points_ogc_fid_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -717,13 +679,6 @@ ALTER TABLE ONLY country_statistics ALTER COLUMN id SET DEFAULT nextval('country
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY country_stats ALTER COLUMN id SET DEFAULT nextval('country_stats_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY designations ALTER COLUMN id SET DEFAULT nextval('designations_id_seq'::regclass);
 
 
@@ -787,18 +742,18 @@ ALTER TABLE ONLY protected_areas ALTER COLUMN id SET DEFAULT nextval('protected_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY region_stats ALTER COLUMN id SET DEFAULT nextval('region_stats_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY regional_statistics ALTER COLUMN id SET DEFAULT nextval('regional_statistics_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY regions ALTER COLUMN id SET DEFAULT nextval('regions_id_seq'::regclass);
+
+
+--
+-- Name: ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY regions ALTER COLUMN id SET DEFAULT nextval('regions_id_seq'::regclass);
@@ -832,14 +787,6 @@ ALTER TABLE ONLY countries
 
 ALTER TABLE ONLY country_statistics
     ADD CONSTRAINT country_statistics_pkey PRIMARY KEY (id);
-
-
---
--- Name: country_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
---
-
-ALTER TABLE ONLY country_stats
-    ADD CONSTRAINT country_stats_pkey PRIMARY KEY (id);
 
 
 --
@@ -915,19 +862,19 @@ ALTER TABLE ONLY protected_areas
 
 
 --
--- Name: region_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
---
-
-ALTER TABLE ONLY region_stats
-    ADD CONSTRAINT region_stats_pkey PRIMARY KEY (id);
-
-
---
 -- Name: regional_statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY regional_statistics
     ADD CONSTRAINT regional_statistics_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: regions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY regions
+    ADD CONSTRAINT regions_pkey PRIMARY KEY (id);
 
 
 --
@@ -1178,19 +1125,11 @@ INSERT INTO schema_migrations (version) VALUES ('20140613125148');
 
 INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 
-INSERT INTO schema_migrations (version) VALUES ('20140617090445');
-
-INSERT INTO schema_migrations (version) VALUES ('20140617090531');
-
 INSERT INTO schema_migrations (version) VALUES ('20140617091236');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091255');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091326');
-
-INSERT INTO schema_migrations (version) VALUES ('20140617170938');
-
-INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091620');
 
@@ -1211,3 +1150,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140617161632');
 INSERT INTO schema_migrations (version) VALUES ('20140617170024');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617170938');
+
+INSERT INTO schema_migrations (version) VALUES ('20140625101751');
+
+INSERT INTO schema_migrations (version) VALUES ('20140625154316');
+

@@ -19,28 +19,6 @@
   template: src=logwatch.conf.j2 dest=/usr/share/logwatch/default.conf/logwatch.conf
   sudo: yes
 
-- name: Install PSAD
-  apt: name=psad
-  sudo: yes
-- name: Copy PSAD config
-  template: src=psad.conf.j2 dest=/etc/psad/psad.conf
-  sudo: yes
-- name: Configure PSAD (IPtables)
-  command: iptables -A INPUT -j LOG
-  sudo: yes
-- name: Configure PSAD (IPtables)
-  command: iptables -A FORWARD -j LOG
-  sudo: yes
-- name: Configure PSAD (IP6tables)
-  command: ip6tables -A INPUT -j LOG
-  sudo: yes
-- name: Configure PSAD (IP6tables)
-  command: ip6tables -A FORWARD -j LOG
-  sudo: yes
-- name: Configure PSAD (update signatures)
-  command: psad --sig-update
-  sudo: yes
-
 - name: Install Munin
   apt: name=munin
   sudo: yes

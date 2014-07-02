@@ -19,7 +19,8 @@
     border: 3px solid $light-grey;
     padding: 10px 10px 3px 10px;
     margin: 20px auto;
-    font-family: 'MuseoSlab-500', $font-stack;
+    font-family: 'MuseoSlab', $font-stack;
+    font-weight: normal;
     font-size: 3.2em;
   }
 
@@ -37,12 +38,12 @@
     width: 440px;
     @include border-radius(5px);
 
-    form{
+    form {
       background: $dark-blue;
       padding: 0;
       border: 0;
 
-      input{
+      input {
         font-size: 0.9em;
         width: 72%;
         padding: 5px;
@@ -50,7 +51,7 @@
         color: $light-grey;
       }
 
-      button{
+      button {
         float: right;
         padding: 5px 30px;
       }
@@ -67,7 +68,7 @@
   }
 }
 
-.intro{
+.intro {
   text-align: center;
   line-height: 1.5em;
   background: none;
@@ -80,4 +81,8 @@
   p {
     font-size: 1.2em;
   }
+}
+
+.grid .intro {
+  margin-top: 0;
 }

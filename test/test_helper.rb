@@ -8,6 +8,8 @@ require 'mocha/test_unit'
 require 'webmock/minitest'
 WebMock.disable_net_connect!(:allow => "codeclimate.com")
 
+Mocha::Configuration.prevent(:stubbing_non_existent_method)
+
 class ActiveSupport::TestCase
   # Add more helper methods to be used by all tests here...
 end

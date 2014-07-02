@@ -2,25 +2,36 @@ class @DownloadModal
   DEFAULT_TYPES = ['csv', 'shp', 'kml']
   BASE_DOWNLOAD_PATH = '/downloads'
 
+  @overlayTemplate: "<div class=\"total-overlay\"></div>"
+
   @template: """
     <div id="download-modal">
-      <h3>Select a download type</h3>
+    <i class="fa fa-cloud-download fa-3x"></i>
+      <h2>Select a file type to download</h2>
       <section>
         <div id="link-container"></div>
-        <p>…or use the ESRI web service</p>
+        <h2>or</h2>
+        <a href="http://ec2-54-204-216-109.compute-1.amazonaws.com:6080/arcgis/rest/services/wdpa/wdpa/MapServer" class="btn btn-primary">use our ESRI web service <i class="fa fa-external-link"></i></a>
       </section>
       <div>
-        <a href="#" id="close-modal" class="btn btn-primary">Cancel</a>
+        <a href="#" id="close-modal"><i class="fa fa-times fa-2x"></i></a>
       </div>
     </div>
   """
 
-  constructor: ->
+  constructor: ($container) ->
+    @$overlay = $(@constructor.overlayTemplate)
     @$el = $(@constructor.template)
-    @$el.find('#close-modal').on('click', (e) =>
-      @hide()
-      e.preventDefault()
-    )
+
+    $container.append(@$overlay)
+    $container.append(@$el)
+
+    $closeModalBtn = @$el.find('#close-modal')
+    for $el in [@$overlay, $closeModalBtn]
+      $el.on('click', (ev) =>
+        @hide()
+        ev.preventDefault()
+      )
 
   buildLinksFor: (objectName, types) ->
     types ||= DEFAULT_TYPES
@@ -38,6 +49,8 @@ class @DownloadModal
 
   show: ->
     @$el.addClass('opened')
+    @$overlay.addClass('visible')
 
   hide: ->
     @$el.removeClass('opened')
+    @$overlay.removeClass('visible')

@@ -9,6 +9,7 @@ The application depends on:
 
 * Ruby
 * PostgreSQL
+* GDAL
 * Postgis
 * Redis
 
@@ -18,6 +19,7 @@ package manager. For example, on OS X:
 ```
   # Get https://rvm.io or any other ruby version manager, then...
   brew install postgresql
+  brew install gdal --with-postgresql
   brew install postgis
   brew install redis
 ```

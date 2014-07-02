@@ -1,16 +1,10 @@
-class Download::Shapefile
+class Download::Shapefile < Download::Generator
   SHAPEFILE_PARTS = ['shp', 'shx',  'dbf', 'prj', 'cpg']
 
-  BASE_QUERY = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
   QUERY_CONDITIONS = {
-    polygons: "WHERE ST_GeometryType(wkb_geometry) LIKE '%Poly%'",
-    points:   "WHERE ST_GeometryType(wkb_geometry) LIKE '%Point%'"
+    polygons: "ST_GeometryType(wkb_geometry) LIKE '%Poly%'",
+    points:   "ST_GeometryType(wkb_geometry) LIKE '%Point%'"
   }
-
-  def self.generate zip_path, wdpa_ids = nil
-    download_shapefile = new zip_path, wdpa_ids
-    download_shapefile.generate
-  end
 
   def initialize zip_path, wdpa_ids
     @path = File.dirname(zip_path)
@@ -23,24 +17,33 @@ class Download::Shapefile
 
     clean_up_after do
       QUERY_CONDITIONS.each do |name, condition|
-        query = "#{BASE_QUERY} #{condition}"
-        if @wdpa_ids.present?
-          query << " AND wdpaid IN (#{@wdpa_ids.join(', ')})"
-        end
-
-        component_paths = shapefile_components(name)
-
-        export_success = Ogr::Postgres.export :shapefile, component_paths.first, query
-        return false unless export_success
-
-        shapefile_paths |= component_paths
+        shapefile_paths |= export_component name, condition
       end
 
       system("zip -j #{zip_path} #{shapefile_paths.join(' ')}")
     end
+  rescue Ogr::Postgres::ExportError
+    return false
   end
 
   private
+
+  def export_component name, condition
+    component_paths = shapefile_components(name)
+
+    export_success = nil
+    with_view query(condition) do |view_name|
+      export_success = Ogr::Postgres.export(
+        :shapefile,
+        component_paths.first,
+        "SELECT * FROM #{view_name}"
+      )
+    end
+
+    raise Ogr::Postgres::ExportError unless export_success
+
+    component_paths
+  end
 
   def clean_up_after
     return_value = yield

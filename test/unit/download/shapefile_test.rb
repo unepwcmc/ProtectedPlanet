@@ -21,8 +21,13 @@ class DownloadShapefileTest < ActiveSupport::TestCase
       WHERE ST_GeometryType(wkb_geometry) LIKE '%Point%'
     """.squish
 
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, shp_polygon_query).returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, shp_point_query).returns(true)
+    view_name_poly = 'temporary_view_123'
+    Download::Shapefile.any_instance.stubs(:with_view).with(shp_polygon_query).yields(view_name_poly).returns(true)
+    view_name_point = 'temporary_view_456'
+    Download::Shapefile.any_instance.stubs(:with_view).with(shp_point_query).yields(view_name_point).returns(true)
+
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
     Download::Shapefile.
       any_instance.
       expects(:system).
@@ -32,6 +37,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the export fails' do
+    ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(false)
 
     assert_equal false, Download::Shapefile.generate(''),
@@ -39,7 +45,8 @@ class DownloadShapefileTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the zip fails' do
-    Ogr::Postgres.expects(:export).returns(true).twice
+    ActiveRecord::Base.connection.stubs(:execute)
+    Ogr::Postgres.expects(:export).twice.returns(true)
     Download::Shapefile.any_instance.expects(:system).returns(false)
 
     assert_equal false, Download::Shapefile.generate(''),
@@ -63,8 +70,11 @@ class DownloadShapefileTest < ActiveSupport::TestCase
       './all-points.cpg'
     ]
 
-    Ogr::Postgres.stubs(:export).returns(true)
-    Download::Shapefile.any_instance.stubs(:system).returns(true)
+    ActiveRecord::Base.connection.stubs(:execute)
+    Ogr::Postgres.expects(:export).twice.returns(true)
+    Download::Shapefile.
+      any_instance.
+      expects(:system)
 
     FileUtils.expects(:rm_rf).with(shp_polygons_paths)
     FileUtils.expects(:rm_rf).with(shp_points_paths)
@@ -87,17 +97,23 @@ class DownloadShapefileTest < ActiveSupport::TestCase
       SELECT *
       FROM #{Wdpa::Release::IMPORT_VIEW_NAME}
       WHERE ST_GeometryType(wkb_geometry) LIKE '%Poly%'
-      AND wdpaid IN (1, 2, 3)
+      AND wdpaid IN (1,2,3)
     """.squish
     shp_point_query = """
       SELECT *
       FROM #{Wdpa::Release::IMPORT_VIEW_NAME}
       WHERE ST_GeometryType(wkb_geometry) LIKE '%Point%'
-      AND wdpaid IN (1, 2, 3)
+      AND wdpaid IN (1,2,3)
     """.squish
 
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, shp_polygon_query).returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, shp_point_query).returns(true)
+    view_name_poly = 'temporary_view_123'
+    Download::Shapefile.any_instance.stubs(:with_view).with(shp_polygon_query).yields(view_name_poly).returns(true)
+    view_name_point = 'temporary_view_456'
+    Download::Shapefile.any_instance.stubs(:with_view).with(shp_point_query).yields(view_name_point).returns(true)
+
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
+
     Download::Shapefile.
       any_instance.
       expects(:system).
