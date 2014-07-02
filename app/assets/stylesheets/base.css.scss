@@ -304,3 +304,20 @@ section {
     color: #95b64c;
   }
 }
+
+#about-modal {
+  text-align: left;
+
+  p {
+    margin-bottom: 20px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+}
