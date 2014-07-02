@@ -245,29 +245,16 @@ section {
   color: white;
   height: 40px;
   text-align: center;
-  padding: 10px;
+  padding: 15px;
   box-sizing: border-box;
   font-size: 0.8em;
 
   a {
     color: white;
     text-decoration: underline;
-    margin-left: 20px;
 
     &:hover {
       text-decoration: none;
-    }
-  }
-
-  a.btn {
-    background: none;
-    border: 1px solid white;
-    text-decoration: none;
-    padding: 3px 5px;
-
-    &:hover {
-      background-color: white;
-      @include transition(background-color 0.3s);
     }
   }
 
@@ -281,6 +268,7 @@ section {
     margin: 0 10px;
     padding-top: 1px;
     box-sizing: border-box;
+    margin-top: -1px;
 
     &:hover {
       cursor: pointer;
@@ -298,10 +286,6 @@ section {
       background-color: #95B64C;
       color: white;
     }
-  }
-
-  a.btn:hover {
-    color: #95b64c;
   }
 }
 
