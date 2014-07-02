@@ -1,5 +1,5 @@
 class @DownloadModal
-  DEFAULT_TYPES = ['csv', 'shp', 'kml']
+  DEFAULT_TYPES = ['csv', 'shapefile', 'kml']
   BASE_DOWNLOAD_PATH = '/downloads'
 
   @overlayTemplate: "<div class=\"total-overlay\"></div>"
