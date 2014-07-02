@@ -7,7 +7,7 @@ class @AboutModal
       <section>
         <p>
           alpha.protectedplanet.net is an experimental prototype and first
-          iteration of our project to redevelop protected planet.
+          iteration of our project to redevelop Protected Planet.
         </p>
 
         <p>
@@ -26,7 +26,7 @@ class @AboutModal
         <p>
           Your feedback is vital to us, so please leave any comments and
           suggestions you have. They will help us to shape protected
-          planet over the coming months."
+          planet over the coming months.
         </p>
       </section>
 
