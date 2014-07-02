@@ -31,3 +31,9 @@ class @PageInitialiser
       e.preventDefault()
     )
 
+  initialiseAboutModal: ($modalContainer) ->
+    aboutModal = new AboutModal($modalContainer)
+    $('.btn-about').on('click', (e) ->
+      aboutModal.show()
+      e.preventDefault()
+    )
