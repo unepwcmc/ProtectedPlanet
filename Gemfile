@@ -15,6 +15,8 @@ gem 'spring',        group: :development
 
 group :production do
   gem 'unicorn'
+  gem 'dalli', '~> 2.7.2'
+  gem 'rack-cache', '~> 1.2'
 end
 
 group :development do
@@ -45,6 +47,7 @@ gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
 
 gem 'sidekiq', '~> 3.1.4'
+
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
