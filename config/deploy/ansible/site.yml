@@ -22,4 +22,5 @@
     - gdal
     - postgresql
     - redis
+    - memcached
     - app
