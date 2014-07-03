@@ -46,5 +46,8 @@ gem 'httmultiparty', '~> 0.3.14'
 
 gem 'sidekiq', '~> 3.1.4'
 
+gem 'dalli', '~> 2.7.2'
+gem 'rack-cache', '~> 1.2'
+
 # Use debugger
 # gem 'debugger', group: [:development, :test]
