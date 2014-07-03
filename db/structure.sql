@@ -618,13 +618,12 @@ ALTER SEQUENCE sub_locations_id_seq OWNED BY sub_locations.id;
 
 CREATE MATERIALIZED VIEW tsvector_search_documents AS
  SELECT pa.wdpa_id,
-    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(first(pa.name), ''::text)), 'A'::"char")) || to_tsvector(COALESCE((first(c.language))::regconfig, 'simple'::regconfig), COALESCE(unaccent(first(pa.original_name)), ''::text))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ' '::text), ''::text))) || to_tsvector(COALESCE(first((c.language)::regconfig), 'simple'::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ' '::text), ''::text))) AS document
+    (((setweight(to_tsvector('english'::regconfig, COALESCE(first(pa.name), ''::text)), 'A'::"char") || setweight(to_tsvector(COALESCE((first(c.language))::regconfig, 'simple'::regconfig), COALESCE(unaccent(first(pa.original_name)), ''::text)), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ' '::text), ''::text)), 'D'::"char")) AS document
    FROM (((protected_areas pa
    LEFT JOIN countries_protected_areas cpa ON ((cpa.protected_area_id = pa.id)))
    LEFT JOIN countries c ON ((cpa.country_id = c.id)))
    LEFT JOIN sub_locations sl ON ((c.id = sl.country_id)))
   GROUP BY pa.wdpa_id
-  ORDER BY pa.wdpa_id
   WITH NO DATA;
 
 
@@ -1155,3 +1154,4 @@ INSERT INTO schema_migrations (version) VALUES ('20140625101751');
 
 INSERT INTO schema_migrations (version) VALUES ('20140625154316');
 
+INSERT INTO schema_migrations (version) VALUES ('20140703130946');
