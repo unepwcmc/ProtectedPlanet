@@ -14,6 +14,13 @@ Rails.application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
+  # Use a different cache store in production.
+  config.cache_store = :dalli_store
+
+  # http://wcmc.io/heroku_memcached for reference
+  client = Dalli::Client.new(Rails.application.secrets.memcache_servers, {value_max_bytes: 10485760})
+  config.action_dispatch.rack_cache = {:metastore => client, :entitystore => client }
+
   # Enable Rack::Cache to put a simple HTTP cache in front of your application
   # Add `rack-cache` to your Gemfile before enabling this.
   # For large-scale production use, consider using a caching reverse proxy like nginx, varnish or squid.
