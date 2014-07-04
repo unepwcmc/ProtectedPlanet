@@ -79,7 +79,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: countries; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: countries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE countries (
@@ -91,7 +91,9 @@ CREATE TABLE countries (
     updated_at timestamp without time zone,
     language character varying(255),
     region_id integer,
-    bounding_box geometry
+    bounding_box geometry,
+    marine_pas_geom geometry,
+    land_pas_geom geometry
 );
 
 
@@ -1125,6 +1127,10 @@ INSERT INTO schema_migrations (version) VALUES ('20140613125148');
 
 INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 
+INSERT INTO schema_migrations (version) VALUES ('20140617090445');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617090531');
+
 INSERT INTO schema_migrations (version) VALUES ('20140617091236');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091255');
@@ -1154,4 +1160,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140617170938');
 INSERT INTO schema_migrations (version) VALUES ('20140625101751');
 
 INSERT INTO schema_migrations (version) VALUES ('20140625154316');
+
+INSERT INTO schema_migrations (version) VALUES ('20140704105917');
 

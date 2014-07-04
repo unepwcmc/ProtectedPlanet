@@ -1,6 +1,4 @@
 namespace :geo_stats do
-  COMPLEX_COUNTRIES_LAND = ['DEU','USA','FRA','GBR','AUS','FIN','BGR', 'CAN', 'ESP','SWE','BEL','EST', 'IRL', 'ITA', 'LTU', 'NZL','POL','CHE']
-  COMPLEX_COUNTRIES_MARINE = ['GBR']
   desc "Generate Country Flat protected_Areas"
   task country_dissolve: :environment do
     DB = ActiveRecord::Base.connection
@@ -23,11 +21,13 @@ namespace :geo_stats do
   end
 
   def query country, type, geometry
-    marine = type == 1 ? true : false
-    query = "INSERT INTO countries_pas_geom(iso3, the_geom, marine) 
-             SELECT '#{country}', ST_UNION(#{geometry}),  #{marine}
-             FROM wdpapoly_june2014
-             WHERE iso3 = '#{country}' AND st_isvalid(wkb_geometry) AND marine = '#{type}'"
+    column_prefix = type == 1 ? 'marine' : 'land'
+    query = "UPDATE countries
+             SET #{column_prefix}_pas_geom = a.the_geom
+             FROM (SELECT ST_UNION(#{geometry}) as the_geom
+             FROM standard_polygons
+             WHERE iso3 = '#{country}' AND st_isvalid(wkb_geometry) AND marine = '#{type}') a
+             WHERE iso_3 = '#{country}'"
     query
   end
 
