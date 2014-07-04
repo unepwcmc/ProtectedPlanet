@@ -47,8 +47,9 @@ the server, stop it.**
 
 The only requirement to use Ansible is that you [install the Ansible
 binary](http://docs.ansible.com/intro_installation.html). Once
-installed, you can add your machine(s) to `config/deploy/ansible/hosts`
-and run:
+installed, you can add your machine(s) to the host inventory files
+(`config/deploy/ansible/inventories/production` and
+`config/deploy/ansible/inventories/staging`) and run:
 
 ```
 cd config/deploy/ansible
