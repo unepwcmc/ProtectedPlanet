@@ -33,9 +33,7 @@ cap production deploy
 
 There is a collection of [Ansible](http://ansible.com) scripts in
 `config/deploy/ansible` that can be used to provision new servers with
-the required stack (Ruby, Postgres, etc). All servers are provisioned
-with exactly the same scripts, and thus they are all identical apart
-from their instance size.
+the required stack (Ruby, Postgres, etc).
 
 If you need to install a new dependency on a machine, add some
 configuration, etc. you should add an Ansible task/role so that it is
@@ -54,5 +52,27 @@ and run:
 
 ```
 cd config/deploy/ansible
-ansible-playbook -i hosts site.yml
+ansible-playbook -i hosts site.yml --ask-vault-pass
 ```
+
+This will ask you for a Vault password, which can be found in the
+Informatics Password Manager (speak to Stuart Watson for access).
+
+#### Ansible Vault
+
+[Ansible Vault](http://docs.ansible.com/playbooks_vault.html) is used to
+protected secret values for servers, such as passwords.
+
+Currently only two files are protected,
+[group_vars/staging](../config/deploy/ansible/group_vars/staging) and
+[group_vars/production](../config/deploy/ansible/group_vars/production).
+
+You can view or edit these files using the `ansible-vault` command:
+
+```
+ansible-vault edit config/deploy/ansible/group_vars/staging
+ansible-vault edit config/deploy/ansible/group_vars/production
+```
+
+This will ask you for a Vault password, which can be found in the
+Informatics Password Manager (speak to Stuart Watson for access).
