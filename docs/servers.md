@@ -69,15 +69,13 @@ Informatics Password Manager (speak to Stuart Watson for access).
 [Ansible Vault](http://docs.ansible.com/playbooks_vault.html) is used to
 protected secret values for servers, such as passwords.
 
-Currently only two files are protected,
-[group_vars/staging](../config/deploy/ansible/group_vars/staging) and
-[group_vars/production](../config/deploy/ansible/group_vars/production).
+Currently only one file is protected,
+[group_vars/db](../config/deploy/ansible/group_vars/db).
 
-You can view or edit these files using the `ansible-vault` command:
+You can view or edit this file using the `ansible-vault` command:
 
 ```
-ansible-vault edit config/deploy/ansible/group_vars/staging
-ansible-vault edit config/deploy/ansible/group_vars/production
+ansible-vault edit config/deploy/ansible/group_vars/db
 ```
 
 This will ask you for a Vault password, which can be found in the
