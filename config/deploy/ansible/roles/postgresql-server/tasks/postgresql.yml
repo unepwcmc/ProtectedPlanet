@@ -30,5 +30,4 @@
     - configuration
 
 - name: Create wcmc postgres role for web server
-  command: echo "CREATE USER {{ postgresql_user.username }} WITH SUPERUSER LOGIN PASSWORD '{{ postgresql_user.password }}'" | psql -U postgres
-  ignore_errors: True
+  command: psql -U postgres -c "CREATE USER {{ postgresql_user.username }} WITH SUPERUSER LOGIN PASSWORD '{{ postgresql_user.password }}'"
