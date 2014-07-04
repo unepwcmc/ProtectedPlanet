@@ -1,0 +1,13 @@
+[web]
+ec2-54-89-116-224.compute-1.amazonaws.com
+
+[db]
+ec2-54-90-50-225.compute-1.amazonaws.com
+
+[util]
+ec2-54-80-52-179.compute-1.amazonaws.com
+
+[all:children]
+web
+db
+util

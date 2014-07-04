@@ -1,9 +1,8 @@
 ---
 
-- name: Setup server
+- name: Setup server core
   hosts:
-    - staging
-    - production
+    - all
   user: ubuntu
   sudo: yes
 
@@ -15,12 +14,38 @@
   roles:
     - monitoring
     - security
-    - nginx
     - tmux
     - utils
     - ruby
     - gdal
-    - postgresql
     - redis
     - memcached
     - app
+
+- name: Setup web
+  hosts:
+    - web
+  user: ubuntu
+  sudo: yes
+
+  roles:
+    - nginx
+
+- name: Setup web, util
+  hosts:
+    - web
+    - util
+  user: ubuntu
+  sudo: yes
+
+  roles:
+    - postgresql-client
+
+- name: Setup db
+  hosts:
+    - db
+  user: ubuntu
+  sudo: yes
+
+  roles:
+    - postgresql-server

@@ -1,0 +1,3 @@
+postgresql_user:
+  username: wcmc
+  password: password
