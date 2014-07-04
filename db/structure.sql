@@ -93,7 +93,10 @@ CREATE TABLE countries (
     region_id integer,
     bounding_box geometry,
     marine_pas_geom geometry,
-    land_pas_geom geometry
+    land_pas_geom geometry,
+    land_geom geometry,
+    eez_geom geometry,
+    territorial_waters_geom geometry
 );
 
 
@@ -137,7 +140,11 @@ CREATE TABLE country_statistics (
     pa_area double precision,
     percentage_cover_pas double precision,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    percentage_region numeric,
+    percentage_land numeric,
+    percentage_water numeric,
+    percentage_coast numeric
 );
 
 
@@ -1162,4 +1169,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140625101751');
 INSERT INTO schema_migrations (version) VALUES ('20140625154316');
 
 INSERT INTO schema_migrations (version) VALUES ('20140704105917');
+
+INSERT INTO schema_migrations (version) VALUES ('20140704154012');
+
+INSERT INTO schema_migrations (version) VALUES ('20140704154428');
 
