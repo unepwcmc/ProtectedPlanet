@@ -52,7 +52,12 @@ and run:
 
 ```
 cd config/deploy/ansible
-ansible-playbook -i hosts site.yml --ask-vault-pass
+
+# staging
+ansible-playbook -i inventories/staging site.yml --ask-vault-pass
+
+# production
+ansible-playbook -i inventories/production site.yml --ask-vault-pass
 ```
 
 This will ask you for a Vault password, which can be found in the
