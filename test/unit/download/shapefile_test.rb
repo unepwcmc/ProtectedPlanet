@@ -121,4 +121,12 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
     Download::Shapefile.generate zip_file_path, wdpa_ids
   end
+
+  test '#generate, given a path and an empty array of wdpa_ids,
+   returns immediately' do
+    Download::Generator.any_instance.expects(:system).never
+    Ogr::Postgres.expects(:export).never
+
+    refute Download::Shapefile.generate('./none.zip', [])
+  end
 end
