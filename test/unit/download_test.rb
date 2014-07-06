@@ -7,17 +7,17 @@ class DownloadTest < ActiveSupport::TestCase
 
     shapefile_download_zip_name = 'an_download-shapefile.zip'
     shapefile_zip_path = File.join(Rails.root, 'tmp', shapefile_download_zip_name)
-    Download::Shapefile.expects(:generate).with(shapefile_zip_path, nil)
+    Download::Shapefile.expects(:generate).with(shapefile_zip_path, nil).returns(true)
     S3.expects(:upload).with(shapefile_download_zip_name, shapefile_zip_path)
 
     csv_download_zip_name = 'an_download-csv.zip'
     csv_zip_path = File.join(Rails.root, 'tmp', csv_download_zip_name)
-    Download::Csv.expects(:generate).with(csv_zip_path, nil)
+    Download::Csv.expects(:generate).with(csv_zip_path, nil).returns(true)
     S3.expects(:upload).with(csv_download_zip_name, csv_zip_path)
 
     kml_download_zip_name = 'an_download-kml.zip'
     kml_zip_path = File.join(Rails.root, 'tmp', kml_download_zip_name)
-    Download::Kml.expects(:generate).with(kml_zip_path, nil)
+    Download::Kml.expects(:generate).with(kml_zip_path, nil).returns(true)
     S3.expects(:upload).with(kml_download_zip_name, kml_zip_path)
 
     download_success = Download.generate download_name
@@ -45,9 +45,9 @@ class DownloadTest < ActiveSupport::TestCase
   end
 
   test '.generate removes the zip after uploading to S3' do
-    Download::Shapefile.stubs(:generate)
-    Download::Kml.stubs(:generate)
-    Download::Csv.stubs(:generate)
+    Download::Shapefile.stubs(:generate).returns(true)
+    Download::Kml.stubs(:generate).returns(true)
+    Download::Csv.stubs(:generate).returns(true)
     S3.stubs(:upload)
 
     shapefile_zip_path = File.join(Rails.root, 'tmp', 'an_download-shapefile.zip')
@@ -58,6 +58,17 @@ class DownloadTest < ActiveSupport::TestCase
 
     kml_zip_path = File.join(Rails.root, 'tmp', 'an_download-kml.zip')
     FileUtils.expects(:rm_rf).with(kml_zip_path)
+
+    Download.generate 'an_download'
+  end
+
+  test '.generate does not upload to S3 if a Generator returns
+   false' do
+    Download::Csv.stubs(:generate).returns(true)
+    Download::Kml.stubs(:generate).returns(true)
+    Download::Shapefile.expects(:generate).returns(false)
+
+    S3.expects(:upload).twice
 
     Download.generate 'an_download'
   end
