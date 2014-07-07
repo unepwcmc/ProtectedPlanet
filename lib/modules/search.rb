@@ -36,6 +36,8 @@ class Search
   end
 
   def search_term
-    @search_term.squish.gsub(/\s+/, ' & ')
+    lexemes = @search_term.split(' ')
+    lexemes = lexemes.map{|lexeme| "#{lexeme}:*"}
+    lexemes.join(' & ')
   end
 end

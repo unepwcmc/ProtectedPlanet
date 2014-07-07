@@ -6,7 +6,7 @@ class TestSearch < ActiveSupport::TestCase
 
     query = """
       SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery('#{search_query}') query
+      FROM tsvector_search_documents, to_tsquery('#{search_query}:*') query
       WHERE document @@ query
     """.squish
 
@@ -28,7 +28,7 @@ class TestSearch < ActiveSupport::TestCase
 
     query = """
       SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery(''' & --') query
+      FROM tsvector_search_documents, to_tsquery(''':* & --:*') query
       WHERE document @@ query
     """.squish
 
@@ -50,7 +50,7 @@ class TestSearch < ActiveSupport::TestCase
 
     query = """
       SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery('Killbear & and & the & Manbone') query
+      FROM tsvector_search_documents, to_tsquery('Killbear:* & and:* & the:* & Manbone:*') query
       WHERE document @@ query
     """.squish
 
