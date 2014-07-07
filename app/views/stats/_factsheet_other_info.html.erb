@@ -1,15 +1,39 @@
-<section class="column-right stats">
-  <h3>Number of designations</h3>
-  <p>
-    <%= image_tag "designation@2x.png", style: "width: 38px; height: 49px" %>
-    <%= commaify @number_of_designations %>
-  </p>
+<section class="cell three">
+
+  <header class="stats lighter">
+    <h3>Data providers</h3>
+  </header>
+
+  <section class="stats"> 
+    <p><%= commaify @countries_providing_data %></p>
+    <p class="label">Countries and territories</p>
+  </section>
+  
 </section>
 
-<section class="column-left stats">
-  <h3>Countries providing data</h3>
-  <p>
-    <%= image_tag "data@2x.png", style: "width: 47px; height: 49px" %>
-    <%= commaify @countries_providing_data %>
-  </p>
+ 
+<section class="cell three">
+  
+  <header class="stats lighter">
+    <h3>IUCN category areas</h3>
+  </header>
+
+  <section class="stats"> 
+    <p><%= commaify @countries_providing_data %></p>
+    <p class="label">Protected areas</p>
+  </section>
+  
+</section>
+  
+<section class="cell three">
+  
+  <header class="stats lighter">
+    <h3>Designations</h3>
+  </header>
+
+  <section class="stats"> 
+    <p><%= commaify @number_of_designations %></p>
+    <p class="label">Different types</p>
+  </section>
+
 </section>

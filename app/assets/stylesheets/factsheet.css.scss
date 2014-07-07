@@ -8,7 +8,7 @@
   @include box-sizing(border-box);
   text-transform: uppercase;
 
-  > section {
+  section.cell {
     color: white;
     text-align: center;
     overflow: auto;
@@ -17,11 +17,36 @@
     padding: 0;
     margin-top: 40px;
 
+    &.three {
+      width: 32%;
+      float: left;
+      margin: 30px 19px 10px 0;
+      &:last-child {
+        margin: 30px 0 10px 0;
+      }
+      section {
+        width: 100%;
+        margin: 20px auto 0; 
+        &:last-child {
+          border: 0;
+        }
+      }
+      
+    }
+
     header {
       h3 {
         font-size: 18px;
         padding: 13px;
         border: 0;
+      }
+      &.light {
+
+      }
+      &.lighter {
+        background-color: adjust-color(
+          $dark-blue, $hue: -1, $saturation: -8, $lightness: 47
+        );
       }
     }
 
