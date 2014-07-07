@@ -34,6 +34,16 @@ class Download::Generator
     DB.execute "DROP VIEW #{view_name}"
   end
 
+  ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')
+  ATTACHMENTS = [
+    File.join(ATTACHMENTS_PATH, 'WDPA_Terms_and_Conditions_of_Use.pdf'),
+    File.join(ATTACHMENTS_PATH, 'WDPA_Data_Standards.pdf')
+  ]
+
+  def attachments_paths
+    ATTACHMENTS.join(' ')
+  end
+
   private
 
   DB = ActiveRecord::Base.connection
@@ -43,7 +53,7 @@ class Download::Generator
   end
 
   def zip
-    system("zip -j #{@zip_path} #{path}")
+    system("zip -j #{@zip_path} #{path} #{attachments_paths}")
   end
 
   def query conditions = []

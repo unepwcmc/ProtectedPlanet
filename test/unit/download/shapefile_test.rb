@@ -28,10 +28,15 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
+
+    toc_path = "#{Rails.root}/lib/data/documents/WDPA_Terms_and_Conditions_of_Use.pdf"
+    data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
+    attachments_path = "#{toc_path} #{data_standard_path}"
+
     Download::Shapefile.
       any_instance.
       expects(:system).
-      with("zip -j #{zip_file_path} #{shp_polygon_joined_files} #{shp_point_joined_files}")
+      with("zip -j #{zip_file_path} #{shp_polygon_joined_files} #{shp_point_joined_files} #{attachments_path}")
 
     Download::Shapefile.generate zip_file_path
   end
@@ -114,10 +119,14 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
 
+    toc_path = "#{Rails.root}/lib/data/documents/WDPA_Terms_and_Conditions_of_Use.pdf"
+    data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
+    attachments_path = "#{toc_path} #{data_standard_path}"
+
     Download::Shapefile.
       any_instance.
       expects(:system).
-      with("zip -j #{zip_file_path} #{shp_polygon_joined_files} #{shp_point_joined_files}")
+      with("zip -j #{zip_file_path} #{shp_polygon_joined_files} #{shp_point_joined_files} #{attachments_path}")
 
     Download::Shapefile.generate zip_file_path, wdpa_ids
   end
