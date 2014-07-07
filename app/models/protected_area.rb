@@ -12,6 +12,8 @@ class ProtectedArea < ActiveRecord::Base
   belongs_to :designation
   belongs_to :wikipedia_article
 
+  after_create :create_slug
+
   def bounds
     rgeo_factory = RGeo::Geos.factory srid: 4326
     bounding_box = RGeo::Cartesian::BoundingBox.new rgeo_factory
@@ -21,5 +23,12 @@ class ProtectedArea < ActiveRecord::Base
       [bounding_box.min_y, bounding_box.min_x],
       [bounding_box.max_y, bounding_box.max_x]
     ]
+  end
+
+  private
+
+  def create_slug
+    updated_slug = [name, designation.try(:name)].join(' ').parameterize
+    update_attributes(slug: updated_slug)
   end
 end
