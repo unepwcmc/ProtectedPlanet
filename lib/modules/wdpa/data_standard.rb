@@ -2,10 +2,7 @@ class Wdpa::DataStandard
   STANDARD_ATTRIBUTES = {
     :wdpaid       => {name: :wdpa_id, type: :integer},
     :wdpa_pid     => {name: :wdpa_parent_id, type: :integer},
-    :name         => [
-      {name: :name, type: :string},
-      {name: :slug, type: :slug}
-    ],
+    :name         => {name: :name, type: :string},
     :orig_name    => {name: :original_name, type: :string},
     :marine       => {name: :marine, type: :boolean},
     :rep_m_area   => {name: :reported_marine_area, type: :float},
