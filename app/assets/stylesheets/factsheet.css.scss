@@ -20,9 +20,9 @@
     &.three {
       width: 32%;
       float: left;
-      margin: 30px 19px 10px 0;
+      margin: 40px 19px 50px 0;
       &:last-child {
-        margin: 30px 0 10px 0;
+        margin: 40px 0 50px 0;
       }
       section {
         width: 100%;
@@ -31,7 +31,12 @@
           border: 0;
         }
       }
-      
+    }
+
+    &.four {
+      section {
+        width: 24%;
+      }
     }
 
     header {
@@ -41,11 +46,13 @@
         border: 0;
       }
       &.light {
-
+        background-color: adjust-color(
+          $dark-blue, $hue: -1, $saturation: -8, $lightness: 30
+        );
       }
       &.lighter {
         background-color: adjust-color(
-          $dark-blue, $hue: -1, $saturation: -8, $lightness: 47
+          $dark-blue, $hue: -1, $saturation: -8, $lightness: 48
         );
       }
     }
@@ -56,20 +63,19 @@
       border: 0;
       padding: 0;
       margin: 20px 0;
+      border-left: 1px solid $grey;
+      @include border-radius(0);
+      &:first-child {
+        border: 0;
+      } 
+      &:last-of-type {
+        margin-bottom: 20px;
+      }
       
       p {
         width: 100%;
         text-align: center;
         color: $dark-grey;
-        //padding-bottom: 10px;
-      }
-  
-      &:last-child {
-        border-left: 1px solid $grey;
-        @include border-radius(0);
-      } 
-      &:last-of-type {
-        margin-bottom: 20px;
       }
 
       &.bar {
@@ -142,6 +148,10 @@
       font-size: 0.6em;
       &.big {
         font-size: 26px;
+        font-weight: bolder;
+      }
+      &.small {
+        font-size: 20px;
         font-weight: bolder;
       }
     }
