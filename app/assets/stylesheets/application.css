@@ -15,6 +15,7 @@
  *= require 'modals'
  *= require 'home'
  *= require 'protected_areas'
+ *= require 'factsheet'
  *= require 'search'
  *= require 'leaflet_overrides'
  *= require 'downloads'
