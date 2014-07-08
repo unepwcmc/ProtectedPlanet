@@ -34,9 +34,12 @@
   when: gdal_installed.rc != 0
   get_url: url={{gdal.url}} dest=/tmp/gdal-{{ gdal.version }}.tar.gz
 
+- name: Make directory for gdal tarball
+  file: path=/tmp/gdal-{{ gdal.version }} state=directory
+
 - name: Extract gdal
   when: gdal_installed.rc != 0
-  command: tar -xvf /tmp/gdal-{{ gdal.version }}.tar.gz -C /tmp/gdal-{{ gdal.version }} chdir=/tmp
+  command: tar -xvf /tmp/gdal-{{ gdal.version }}.tar.gz -C /tmp/gdal-{{ gdal.version }} --strip-components 1
   sudo: yes
 
 - name: Make, configure, and install gdal

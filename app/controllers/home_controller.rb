@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  after_filter :enable_caching
+
   def index
     @number_of_pas = Stats::Global.pa_count
     @number_of_designations = Stats::Global.designation_count

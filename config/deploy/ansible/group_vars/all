@@ -1,4 +1,4 @@
-username: root
+username: ubuntu
 
 adam_email: adammulligan@fastmail.fm
 
@@ -33,3 +33,10 @@ gdal:
 
 geos:
   version: "3.4.2"
+
+memcached:
+  listen: 127.0.0.1
+  port: 11211
+  user: nobody
+  memory: 64
+  max_connections: 1024

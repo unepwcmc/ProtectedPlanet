@@ -2,29 +2,23 @@
 
 ## Server Instances
 
-Protected Planet runs on the following AWS EC2 and RDS instances.
+Protected Planet runs on the following AWS EC2 instances.
 
 ### Staging
-
-**RDS**
-
-   * DB - PostgreSQL with Postgis, db.m3.medium, 30G
 
 **EC2**
 
    * Import - m3.xlarge
    * Web -  m3.medium
+   * DB - m3.medium
 
 ### Production
-
-**RDS**
-
-   * DB - PostgreSQL with Postgis, db.m3.large, 30G
 
 **EC2**
 
    * Import - m3.xlarge
    * Web - m3.large
+   * DB - m3.large
 
 ## Capistrano
 
@@ -53,10 +47,36 @@ the server, stop it.**
 
 The only requirement to use Ansible is that you [install the Ansible
 binary](http://docs.ansible.com/intro_installation.html). Once
-installed, you can add your machine(s) to `config/deploy/ansible/hosts`
-and run:
+installed, you can add your machine(s) to the host inventory files
+(`config/deploy/ansible/inventories/production` and
+`config/deploy/ansible/inventories/staging`) and run:
 
 ```
 cd config/deploy/ansible
-ansible-playbook -i hosts site.yml
+
+# staging
+ansible-playbook -i inventories/staging site.yml --ask-vault-pass
+
+# production
+ansible-playbook -i inventories/production site.yml --ask-vault-pass
 ```
+
+This will ask you for a Vault password, which can be found in the
+Informatics Password Manager (speak to Stuart Watson for access).
+
+#### Ansible Vault
+
+[Ansible Vault](http://docs.ansible.com/playbooks_vault.html) is used to
+protected secret values for servers, such as passwords.
+
+Currently only one file is protected,
+[group_vars/db](../config/deploy/ansible/group_vars/db).
+
+You can view or edit this file using the `ansible-vault` command:
+
+```
+ansible-vault edit config/deploy/ansible/group_vars/db
+```
+
+This will ask you for a Vault password, which can be found in the
+Informatics Password Manager (speak to Stuart Watson for access).

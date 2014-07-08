@@ -277,13 +277,6 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal wkt_geom, the_geom
   end
 
-  test '.attributes_from_standards_hash creates a slug from the PA name' do
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({name: 'Waltér White Mountain'})
-
-    assert_not_nil attributes[:slug], "Expected the slug to be returned"
-    assert_equal   "walter-white-mountain", attributes[:slug]
-  end
-
   test '.attributes_from_standards_hash ignores attributes not in the
    WDPA Standard' do
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({awesomeness: 'Very Awesome'})

@@ -29,7 +29,7 @@
       </td>
       <td>
         <strong>Type of Designation</strong>
-        <%= protected_area.designation.jurisdiction.name %>
+        <%= protected_area.designation.jurisdiction.try(:name) %>
       </td>
     </tr>
 

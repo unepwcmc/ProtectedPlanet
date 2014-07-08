@@ -58,7 +58,9 @@ avoid the ActiveRecord Postgis Adapter).
 
 ### Cleanup
 
-The WDPA import tables are stored in the Rails database, and although
-they should have no effect on the running of the application, they are
-removed automatically at the end of an Import, along with the downloaded
-WDPA data.
+The WDPA import tables aren't used in the general running of the
+application, but are kept so that we can generate downloads with the
+WDPA Data Standard without having to re-transform the data back to how
+it started.
+
+The cleanup step only removes the downloaded WDPA GDB files.

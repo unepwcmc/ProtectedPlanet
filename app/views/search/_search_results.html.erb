@@ -6,8 +6,8 @@
         <h3><a href='/<%= protected_area.slug %>'><%= protected_area.name %></a> | <small><%= protected_area.designation.name %></small></h3>
         <p>
           <% protected_area.countries.each do |country| %>
-            <a href="/search?q=<%= country.name %>"><%= country.name %></a>,
-            <a href="/search?q=<%= country.region.try(:name) %>"><%= country.region.try(:name) %></a>
+            <a href="<%= country_stats_path(iso: country.iso) %>"><%= country.name %></a>,
+            <a href="<%= regional_stats_path(iso: country.region.try(:iso)) %>"><%= country.region.try(:name) %></a>
             |
           <% end %>
           <icon></icon>
