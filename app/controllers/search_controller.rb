@@ -8,8 +8,10 @@ class SearchController < ApplicationController
 
     if @protected_areas.length == 0
       @similar_search = true
-      @search = Search.search_similar_to(@query)
-      @protected_areas = @search.results
+      @search = Search.search_for_similar(@query)
+      @protected_areas = @search.results.paginate(pagination_opts)
+
+      params[:q] = @search.query
     end
   end
 end

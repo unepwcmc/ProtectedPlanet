@@ -1,5 +1,5 @@
 class Search
-  attr_reader :search_term, :results
+  attr_reader :query, :results
 
   def self.search search_term
     search_instance = self.new search_term
@@ -11,11 +11,11 @@ class Search
     similarities = Search::Similarity.search search_term
     return self.new(search_term) if similarities.empty?
 
-    self.search similarities.first
+    self.search similarities.first.word
   end
 
   def initialize search_term
-    self.search_term = search_term
+    self.query = search_term
     self.results = []
   end
 
@@ -24,7 +24,7 @@ class Search
   end
 
   private
-  attr_writer :search_term, :results
+  attr_writer :query, :results
 
   def join_query
     """
@@ -48,7 +48,7 @@ class Search
   end
 
   def search_term
-    lexemes = @search_term.split(' ')
+    lexemes = self.query.split(' ')
     lexemes = lexemes.map{|lexeme| "#{lexeme}:*"}
     lexemes.join(' & ')
   end
