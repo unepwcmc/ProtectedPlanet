@@ -1,18 +1,30 @@
 class Search
+  attr_reader :search_term, :results
+
   def self.search search_term
     search_instance = self.new search_term
     search_instance.search
+    search_instance
+  end
+
+  def self.search_for_similar search_term
+    similarities = Search::Similarity.search search_term
+    return self.new(search_term) if similarities.empty?
+
+    self.search similarities.first
   end
 
   def initialize search_term
-    @search_term = search_term
+    self.search_term = search_term
+    self.results = []
   end
 
   def search
-    ProtectedArea.joins(join_query).order("rank DESC")
+    self.results = ProtectedArea.joins(join_query).order('rank DESC')
   end
 
   private
+  attr_writer :search_term, :results
 
   def join_query
     """

@@ -11,7 +11,7 @@ class TestSearch < ActiveSupport::TestCase
     """.squish
 
     order_mock = mock()
-    order_mock.expects(:order).with("rank DESC")
+    order_mock.expects(:order).with("rank DESC").returns([])
 
     ProtectedArea.expects(:joins).with("""
       INNER JOIN (
@@ -33,7 +33,7 @@ class TestSearch < ActiveSupport::TestCase
     """.squish
 
     order_mock = mock()
-    order_mock.stubs(:order)
+    order_mock.stubs(:order).returns([])
 
     ProtectedArea.expects(:joins).with("""
       INNER JOIN (
@@ -55,7 +55,7 @@ class TestSearch < ActiveSupport::TestCase
     """.squish
 
     order_mock = mock()
-    order_mock.stubs(:order)
+    order_mock.stubs(:order).returns([])
 
     ProtectedArea.expects(:joins).with("""
       INNER JOIN (
@@ -65,5 +65,26 @@ class TestSearch < ActiveSupport::TestCase
     """.squish).returns(order_mock)
 
     Search.search search_query
+  end
+
+  test '#search populates the results attribute of Search' do
+    results = []
+
+    order_mock = mock()
+    order_mock.stubs(:order).returns([])
+
+    ProtectedArea.expects(:joins).returns(order_mock)
+
+    Search.any_instance.expects(:results=).with(results).twice
+
+    Search.search 'search'
+  end
+
+  test '#search_for_similar calls Search::Similarity to fetch similitarities' do
+    search_term = 'manbone'
+
+    Search::Similarity.expects(:search).with(search_term).returns([])
+
+    Search.search_for_similar search_term
   end
 end
