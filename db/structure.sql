@@ -868,6 +868,14 @@ ALTER TABLE ONLY jurisdictions
 
 
 --
+-- Name: legacy_protected_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY legacy_protected_areas
+    ADD CONSTRAINT legacy_protected_areas_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: legal_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
