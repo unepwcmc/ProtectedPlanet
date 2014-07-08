@@ -5,6 +5,12 @@ class Stats::Country
     ProtectedArea.select(:id).joins(:countries).where("iso = ?", iso).count
   end
 
+  def self.percentage_global_pas iso
+    country_pas = total_pas iso
+    global_pas = ProtectedArea.count
+    country_pas.to_f / global_pas * 100
+  end
+
   def self.percentage_cover_pas iso
     CountryStatistic.joins(:country)
                      .where("countries.iso" => iso)

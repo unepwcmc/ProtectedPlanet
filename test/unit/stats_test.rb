@@ -50,7 +50,7 @@ class StatsTest < ActiveSupport::TestCase
     assert_equal 2, Stats::Global.countries_providing_data
   end
 
-    test '.number of pas in one region' do
+  test '.number of pas in one region' do
     region_1 = FactoryGirl.create(:region, name: 'Africasia', iso: 'AFS')
     region_2 = FactoryGirl.create(:region, name: 'Eurociania', iso: 'EOC')
     country_1 = FactoryGirl.create(:country, region: region_1)
@@ -60,6 +60,19 @@ class StatsTest < ActiveSupport::TestCase
     FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 2)
     FactoryGirl.create(:protected_area, countries: [country_3], wdpa_id: 3)
     assert_equal 2, Stats::Regional.total_pas('AFS')
+  end
+
+  test '.percentage of global pas in one region' do
+    region_1 = FactoryGirl.create(:region, name: 'Africasia', iso: 'AFS')
+    region_2 = FactoryGirl.create(:region, name: 'Eurociania', iso: 'EOC')
+    country_1 = FactoryGirl.create(:country, region: region_1)
+    country_2 = FactoryGirl.create(:country, region: region_2)
+    country_3 = FactoryGirl.create(:country, region: region_1)
+    FactoryGirl.create(:protected_area, countries: [country_1], wdpa_id: 1)
+    FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 2)
+    FactoryGirl.create(:protected_area, countries: [country_3], wdpa_id: 3)
+    FactoryGirl.create(:protected_area, countries: [country_3], wdpa_id: 4)
+    assert_equal 75, Stats::Regional.percentage_global_pas('AFS')
   end
 
   test '.percentage cover of protected areas in region' do
@@ -137,6 +150,14 @@ class StatsTest < ActiveSupport::TestCase
     FactoryGirl.create(:protected_area, countries: [country_1], wdpa_id: 2)
     FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 3)
     assert_equal 2, Stats::Country.total_pas('BN')
+  end
+
+  test '.percentage of global pas in one country' do
+    country_1 = FactoryGirl.create(:country, name: 'Banana Republic', iso: 'BN')
+    country_2 = FactoryGirl.create(:country, name: 'Kingdom of Pineapple', iso: 'KP')
+    FactoryGirl.create(:protected_area, countries:  [country_1], wdpa_id: 1)
+    FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 3)
+    assert_equal 50, Stats::Country.percentage_global_pas('BN')
   end
 
   test '.percentage cover of protected areas in country' do
