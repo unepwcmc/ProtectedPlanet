@@ -4,10 +4,10 @@ class @ProtectedAreaMap
 
     L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png').addTo(@map)
 
-  addWdpaTiles: (wdpa_id) ->
+  addWdpaTiles: (wdpaId) ->
     sublayers = [
       sql: "select * from wdpapoly_july2014_0"
-      cartocss: "#wdpapoly_july2014_0[ wdpaid = #{wdpa_id}]{line-color:#D41623;line-width:1;polygon-fill:#E43430;polygon-opacity:0.5;}#wdpapoly_july2014_0[ wdpaid != #{wdpa_id}]{line-color:#40541b;line-width:0.4;polygon-fill:#83ad35;polygon-opacity:0.4;}"
+      cartocss: "#wdpapoly_july2014_0[ wdpaid = #{wdpaId}]{line-color:#D41623;line-width:1;polygon-fill:#E43430;polygon-opacity:0.5;}#wdpapoly_july2014_0[ wdpaid != #{wdpaId}]{line-color:#40541b;line-width:0.4;polygon-fill:#83ad35;polygon-opacity:0.4;}"
     ]
     carto_tiles = new cartodb.Tiles(
       sublayers: sublayers
