@@ -91,7 +91,12 @@ CREATE TABLE countries (
     updated_at timestamp without time zone,
     language character varying(255),
     region_id integer,
-    bounding_box geometry
+    bounding_box geometry,
+    marine_pas_geom geometry,
+    land_pas_geom geometry,
+    land_geom geometry,
+    eez_geom geometry,
+    territorial_waters_geom geometry
 );
 
 
@@ -135,7 +140,11 @@ CREATE TABLE country_statistics (
     pa_area double precision,
     percentage_cover_pas double precision,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    percentage_region numeric,
+    percentage_land numeric,
+    percentage_water numeric,
+    percentage_coast numeric
 );
 
 
@@ -1082,6 +1091,10 @@ INSERT INTO schema_migrations (version) VALUES ('20140613125148');
 
 INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 
+INSERT INTO schema_migrations (version) VALUES ('20140617090445');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617090531');
+
 INSERT INTO schema_migrations (version) VALUES ('20140617091236');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091255');
@@ -1111,4 +1124,10 @@ INSERT INTO schema_migrations (version) VALUES ('20140617170938');
 INSERT INTO schema_migrations (version) VALUES ('20140625101751');
 
 INSERT INTO schema_migrations (version) VALUES ('20140625154316');
+
+INSERT INTO schema_migrations (version) VALUES ('20140704105917');
+
+INSERT INTO schema_migrations (version) VALUES ('20140704154012');
+
+INSERT INTO schema_migrations (version) VALUES ('20140704154428');
 
