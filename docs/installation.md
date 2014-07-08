@@ -24,6 +24,9 @@ package manager. For example, on OS X:
   brew install redis
 ```
 
+If you are running Ubuntu or another Linux distribution, see "GEOS and
+Linux" below.
+
 After that, it's pretty standard:
 
 ```
@@ -31,6 +34,19 @@ After that, it's pretty standard:
   rake db:setup
 
   bundle exec rails s
+```
+
+#### GEOS and Linux
+
+The RGeo gem is dependent on GEOS (which is installed with GDAL) being
+linked to the correct location on disk. The latest versions of GEOS
+installed by package managers on most Linux distributions are located
+incorrectly for RGeo's use. You can fix this easily:
+
+```
+  ls /usr/lib | grep geos
+    #=> /usr/lib/libgeos-3.4.2.so
+  ln -s /usr/lib/libgeos-3.4.2.so /usr/lib/libgeos.so
 ```
 
 ### Configuration and Secrets

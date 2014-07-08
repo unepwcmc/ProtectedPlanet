@@ -20,22 +20,22 @@ logfile /var/log/memcached.log
 # Start with a cap of 64 megs of memory. It's reasonable, and the daemon default
 # Note that the daemon will grow to this size, but does not start out holding this much
 # memory
--m {{ memory }}
+-m {{ memcached.memory }}
 
 # Default connection port is 11211
--p {{ port }}
+-p {{ memcached.port }}
 
 # Run the daemon as root. The start-memcached will default to running as root if no
 # -u command is present in this config file
--u {{ user }}
+-u {{ memcached.user }}
 
 # Specify which IP address to listen on. The default is to listen on all IP addresses
 # This parameter is one of the only security measures that memcached has, so make sure
 # it's listening on a firewalled interface.
--l {{ listen }}
+-l {{ memcached.listen }}
 
 # Limit the number of simultaneous incoming connections. The daemon default is 1024
--c {{ max_connections }}
+-c {{ memcached.max_connections }}
 
 # Lock down all paged memory. Consult with the README and homepage before you do this
 # -k

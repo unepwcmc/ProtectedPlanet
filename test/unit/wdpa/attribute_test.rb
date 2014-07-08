@@ -39,11 +39,6 @@ class TestWdpaAttribute < ActiveSupport::TestCase
       "Expected 'abc' to be converted to 0.0"
   end
 
-  test '.standardise converts strings in to slugs' do
-    assert_equal 'walter-white-mountain',
-      Wdpa::Attribute.standardise('Walter White Mountain', as: :slug)
-  end
-
   test ".standardise raises an error if the specified converter doesn't exist" do
     assert_raises NotImplementedError, "No conversion exists for type 'blue'" do
       Wdpa::Attribute.standardise('carebear', as: :blue)

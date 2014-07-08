@@ -1,0 +1,13 @@
+[web]
+ec2-54-195-196-250.eu-west-1.compute.amazonaws.com
+
+[db]
+ec2-46-51-162-231.eu-west-1.compute.amazonaws.com
+
+[util]
+ec2-54-195-208-72.eu-west-1.compute.amazonaws.com
+
+[all:children]
+web
+db
+util
