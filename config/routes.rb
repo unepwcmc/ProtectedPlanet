@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get '/search', to: 'search#index'
 
   get '/sites/:id', to: 'sites#show'
+  get '/sites/:id/*other', to: 'sites#show'
 
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 end
