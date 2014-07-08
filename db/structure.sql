@@ -24,6 +24,20 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+
+
+--
 -- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -546,6 +560,15 @@ ALTER SEQUENCE regions_id_seq OWNED BY regions.id;
 
 CREATE TABLE schema_migrations (
     version character varying(255) NOT NULL
+);
+
+
+--
+-- Name: search_lexemes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE search_lexemes (
+    word text
 );
 
 
@@ -1155,3 +1178,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140625101751');
 INSERT INTO schema_migrations (version) VALUES ('20140625154316');
 
 INSERT INTO schema_migrations (version) VALUES ('20140703130946');
+
+INSERT INTO schema_migrations (version) VALUES ('20140707111454');
+
