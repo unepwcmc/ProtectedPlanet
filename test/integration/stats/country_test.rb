@@ -25,6 +25,18 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
     assert_equal pa_count, page.find('.pa-count p').text.to_i
   end
 
+  test 'renders percentage of global pas in one country' do
+    FactoryGirl.create(:protected_area, countries: [@country], designation: nil)
+    FactoryGirl.create(:protected_area)
+    percentage = 50
+
+    visit "/stats/country/#{@country.iso}"
+    
+    assert page.has_selector?('.pa-global-percentage'),
+      "Expected page to have a PA percentage element"
+    assert_equal percentage, page.find('.pa-global-percentage p').text.to_i
+  end
+
   test 'renders the number of Protected Areas with IUCN Categories' do
     iucn_category = FactoryGirl.create(:iucn_category, name: 'Ia')
 

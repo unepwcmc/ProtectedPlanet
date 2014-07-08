@@ -8,6 +8,12 @@ class Stats::Regional
     countries_list.joins(:protected_areas).count
   end
 
+  def self.percentage_global_pas iso
+    regional_pas = self.total_pas iso
+    global_pas = ProtectedArea.count
+    regional_pas.to_f / global_pas * 100
+  end
+
   def self.percentage_cover_pas iso
     RegionalStatistic.joins(:region)
                      .where("regions.iso" => iso)
