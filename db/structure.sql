@@ -319,6 +319,38 @@ ALTER SEQUENCE jurisdictions_id_seq OWNED BY jurisdictions.id;
 
 
 --
+-- Name: legacy_protected_areas; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE legacy_protected_areas (
+    id integer NOT NULL,
+    wdpa_id integer,
+    slug text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: legacy_protected_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE legacy_protected_areas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: legacy_protected_areas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE legacy_protected_areas_id_seq OWNED BY legacy_protected_areas.id;
+
+
+--
 -- Name: legal_statuses; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
@@ -707,6 +739,13 @@ ALTER TABLE ONLY iucn_categories ALTER COLUMN id SET DEFAULT nextval('iucn_categ
 --
 
 ALTER TABLE ONLY jurisdictions ALTER COLUMN id SET DEFAULT nextval('jurisdictions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY legacy_protected_areas ALTER COLUMN id SET DEFAULT nextval('legacy_protected_areas_id_seq'::regclass);
 
 
 --
@@ -1155,3 +1194,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140625101751');
 INSERT INTO schema_migrations (version) VALUES ('20140625154316');
 
 INSERT INTO schema_migrations (version) VALUES ('20140703130946');
+
+INSERT INTO schema_migrations (version) VALUES ('20140708193519');
