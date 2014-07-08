@@ -4,7 +4,6 @@
 
 * {
   font-family: 'Museo', $font-stack;
-  font-weight: normal;
 }
 
 body {
@@ -143,50 +142,6 @@ main {
   border-bottom: 1px solid $grey;
 }
 
-.stats {
-  ul, p {
-    margin: 10px 30px 0 0;
-  }
-
-  li {
-    padding: 20px 0;
-    border-bottom: 1px solid $light-grey;
-    float: left;
-    width: 100%;
-
-    &:first-of-type {
-      padding-top: 5px;
-    }
-
-    &:last-of-type {
-      border: 0;
-      padding-bottom: 0;
-    }
-
-    img {
-      width: 60px;
-      height: 60px;
-      float: left;
-      margin: 0 10px 0 0;
-    }
-  }
-
-  p {
-    float: left;
-    font-weight: bolder;
-    font-size: 4em;
-
-    span {
-      font-size: 0.6em;
-    }
-
-    small {
-      font-family: normal;
-      font-size: 0.3em;
-    }
-  }
-}
-
 footer {
   width: 100%;
   background: $dark-blue;
@@ -239,5 +194,70 @@ section {
   a {
     font-weight: bold;
     color: $blue;
+  }
+}
+
+.alert {
+  color: white;
+  height: 40px;
+  text-align: center;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 0.8em;
+
+  a {
+    color: white;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .close {
+    float: right;
+    background: white;
+    border-radius: 50%;
+    border: 1px solid white;
+    height: 17px;
+    width: 17px;
+    margin: 0 10px;
+    padding-top: 1px;
+    box-sizing: border-box;
+    margin-top: -1px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.alert.info {
+  background-color: #95B64C;
+
+  .close {
+    color: #95B64C;
+
+    &:hover {
+      background-color: #95B64C;
+      color: white;
+    }
+  }
+}
+
+#about-modal {
+  text-align: left;
+
+  p {
+    margin-bottom: 20px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
   }
 }

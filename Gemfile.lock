@@ -71,6 +71,7 @@ GEM
     connection_pool (2.0.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
+    dalli (2.7.2)
     dbf (2.0.7)
       fastercsv (~> 1.5.4)
     docile (1.1.5)
@@ -119,6 +120,8 @@ GEM
     pg (0.17.1)
     polyglot (0.3.4)
     rack (1.5.2)
+    rack-cache (1.2)
+      rack (>= 0.4)
     rack-test (0.6.2)
       rack (>= 1.0)
     rails (4.1.0)
@@ -224,6 +227,7 @@ DEPENDENCIES
   capybara (~> 2.3.0)
   codeclimate-test-reporter
   coffee-rails (~> 4.0.0)
+  dalli (~> 2.7.2)
   dbf (~> 2.0.7)
   factory_girl_rails (~> 4.4.1)
   gdal (~> 0.0.5)
@@ -232,6 +236,7 @@ DEPENDENCIES
   jquery-rails
   mocha (~> 1.0.0)
   pg
+  rack-cache (~> 1.2)
   rails (= 4.1.0)
   sass-rails (~> 4.0.3)
   sidekiq (~> 3.1.4)

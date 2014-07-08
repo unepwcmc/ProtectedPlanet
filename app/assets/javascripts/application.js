@@ -13,4 +13,17 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require modernizr.custom.30580
+//= require d3
 //= require_tree .
+
+$(document).ready(function() {
+  if (!(/dont-show-alpha-notice/.test(document.cookie))) {
+    $('.alpha-notice').show();
+  }
+
+  $('.alpha-notice .close').on('click', function(event) {
+    $('.alpha-notice').remove();
+    document.cookie = "dont-show-alpha-notice=true";
+  });
+});
