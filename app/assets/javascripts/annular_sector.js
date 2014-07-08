@@ -23,24 +23,33 @@ var annularSectorGenerator = (function() {
   return function(data, selector, width, height, inner_radius_start, outer_radius_start) {
     var radius = Math.min(width, height) / 2,
         inner_radius_start = (inner_radius_start === void 0) ? 
-          15 : inner_radius_start,
+          6 : inner_radius_start,
         outer_radius_start = (outer_radius_start === void 0) ? 
-          5 : outer_radius_start;
+          6 : outer_radius_start;
 
-    var svg = d3.select(selector).append("svg")
-      .attr("width", width)
-      .attr("height", height)
-    .append("g")
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    var svg = d3.select(selector).append('svg')
+      .attr('width', width)
+      .attr('height', height)
+    .append('g')
+      .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
-    var g = svg.selectAll(".arc")
+    var g = svg.selectAll('.arc')
         .data(pie()(data))
-      .enter().append("g")
-        .attr("class", "arc");
+      .enter().append('g')
+        .attr('class', 'arc');
   
-    g.append("path")
-      .attr("d", arc(radius, inner_radius_start, outer_radius_start))
-      .style("fill", function(d) { return d.data.color; });
+    g.append('path')
+      .attr('d', arc(radius, inner_radius_start, outer_radius_start))
+      .attr('stroke', function(d) { return d.data.color; })
+      .attr('stroke-width', 10)
+      .attr('stroke-linejoin', function(d) {
+        // see: https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
+        if (d.data.is_background) {
+          return 'bevel';
+        } else {
+          return 'round';
+        }
+      });
   }
 
 })();

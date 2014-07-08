@@ -39,6 +39,12 @@
       }
     }
 
+    &.annular {
+      section.stats {
+        height: 154px;
+      }
+    }
+
     header {
       h3 {
         font-size: 18px;
@@ -58,6 +64,7 @@
     }
 
     section {
+      position: relative;
       width: 50%;
       float: left;
       border: 0;
@@ -97,7 +104,16 @@
           background: $green;
           height: 100%;
         }
-      }       
+      }
+
+      .viz-label {
+        position: absolute;
+        top: 14px;
+        left:0;
+        right:0;
+        margin-left:auto;
+        margin-right:auto;
+      } 
     }
 
   }

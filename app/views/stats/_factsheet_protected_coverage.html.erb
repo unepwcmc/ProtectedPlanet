@@ -1,4 +1,4 @@
-<section class="cell four">
+<section class="cell four annular">
 
   <header class="stats light">
     <h3>Territory covered by PAs</h3>
@@ -6,26 +6,34 @@
   
   <section class="stats">
     <div class="viz"></div>
-    <p><span class="big">34</span><span class="small">%</span></p>
-    <p class="label">of the region</p>
+    <div class="viz-label">
+      <p><span class="big">34</span><span class="small">%</span></p>
+      <p class="label">of the region</p>
+    </div>
   </section>
 
   <section class="stats">
     <div class="viz"></div>
-    <p><span class="big">18</span><span class="small">%</span></p>
-    <p class="label">of the land</p>
+    <div class="viz-label">
+      <p><span class="big">18</span><span class="small">%</span></p>
+      <p class="label">of the land</p>
+    </div>
   </section>
 
   <section class="stats">
     <div class="viz"></div>
-    <p><span class="big">10</span><span class="small">%</span></p>
-    <p class="label">of the water</p>
+    <div class="viz-label">
+      <p><span class="big">10</span><span class="small">%</span></p>
+      <p class="label">of the water</p>
+    </div>
   </section>
 
   <section class="stats">
     <div class="viz"></div>
-    <p><span class="big">8</span><span class="small">%</span></p>
-    <p class="label">of the coast</p>
+    <div class="viz-label">
+      <p><span class="big">8</span><span class="small">%</span></p>
+      <p class="label">of the coast</p>
+  </div>
   </section>
   
 </section>
@@ -33,15 +41,17 @@
 <script>
 
 $(document).ready(function() {
-  var rand = function(){ return Math.round(Math.random()*100) + 1; };
-  $('.stats > .viz').each(function(idx, el) {
-    var rand_val = rand();
-    var data = [
-      {value: rand_val, color: '#f3b74d'},
-      {value: 100 - rand_val, color: '#d2d2db'},
-    ]
-    annularSectorGenerator(data, el, 150, 150);
-  });
+  if (Modernizr.svg) {
+    var rand = function(){ return Math.round(Math.random()*100) + 1; };
+    $('.stats > .viz').each(function(idx, el) {
+      var rand_val = rand();
+      var data = [
+        {value: rand_val, color: '#f3b74d'},
+        {value: 100 - rand_val, color: '#d2d2db', is_background: true},
+      ]
+      annularSectorGenerator(data, el, 150, 150);
+    });
+  }
 });
 
 </script>
