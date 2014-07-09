@@ -30,6 +30,14 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     assert_equal [[0, -1.5], [2, 1]], protected_area.bounds
   end
 
+  test ".bounds only calls the database once" do
+    protected_area = FactoryGirl.create(:protected_area, the_geom: 'POLYGON ((-1.5 0, 0 1, 1 2, 1 0, -1.5 0))')
+
+    ActiveRecord::Base.connection.expects(:execute).returns([{}]).once
+
+    protected_area.bounds
+  end
+
   test '.without_geometry does not select the_geom' do
     geometry_wkt = "POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))"
     protected_area = FactoryGirl.create(:protected_area, the_geom: geometry_wkt)

@@ -46,8 +46,8 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def bounding_box
-    bounding_box = DB.execute(bounding_box_query).first
-    bounding_box.each { |key,str| bounding_box[key] = str.to_f }
+    @bounding_box ||= DB.execute(bounding_box_query).first
+    @bounding_box.each { |key,str| @bounding_box[key] = str.to_f }
   end
 
   def create_slug
