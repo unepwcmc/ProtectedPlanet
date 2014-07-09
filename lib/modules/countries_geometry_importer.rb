@@ -18,6 +18,14 @@ class CountriesGeometryImporter
     end
   end
 
+  def self.restore_table filepath
+    system("pg_restore -c -i -U postgres -d pp_development -v #{filepath}")
+  end
+
+  private
+
+
+
   def countries_geometries filename
     bucket_name = Rails.application.secrets.aws_datasets_bucket
     @s3.buckets[bucket_name].objects[filename].read

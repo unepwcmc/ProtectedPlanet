@@ -35,14 +35,22 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
     countries_geometries = CountriesGeometryImporter.new
     countries_geometries.download_countries_geometries_to(filename, filepath)
 
-    File.delete filepath
   end
 
   test 'imports countries dump table' do
+    filepath = File.join(Rails.root, 'tmp', 'compressed_table.tar.gz')
 
+    CountriesGeometryImporter.expects(:system).
+    with("pg_restore -c -i -U postgres -d pp_development -v #{filepath}").
+    returns(true)
+
+    response =  CountriesGeometryImporter.restore_table filepath
+    assert response, "Expected restore_table to return true on success"
   end
 
+
   test 'updates countries table' do
+    
 
   end
 
