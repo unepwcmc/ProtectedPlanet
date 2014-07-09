@@ -1,5 +1,7 @@
 'use strict'
 
+// see: https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
+
 var annularSectorGenerator = (function() {
 
   var pi = Math.PI;
@@ -42,14 +44,8 @@ var annularSectorGenerator = (function() {
       .attr('d', arc(radius, inner_radius_start, outer_radius_start))
       .attr('stroke', function(d) { return d.data.color; })
       .attr('stroke-width', 10)
-      .attr('stroke-linejoin', function(d) {
-        // see: https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
-        if (d.data.is_background) {
-          return 'bevel';
-        } else {
-          return 'round';
-        }
-      });
+      .attr('stroke-linejoin', 'round');
+
   }
 
 })();
