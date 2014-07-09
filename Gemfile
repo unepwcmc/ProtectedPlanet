@@ -49,5 +49,5 @@ gem 'httmultiparty', '~> 0.3.14'
 gem 'sidekiq', '~> 3.1.4'
 
 
-# Use debugger
-# gem 'debugger', group: [:development, :test]
+# For debugging
+# gem 'byebug', group: [:development, :test]
