@@ -18,8 +18,11 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
 
   test 'downloads countries dump table' do
 
+    file_mock = mock()
+    file_mock.stubs(:read).returns(true)
+
     bucket_mock = mock()
-    bucket_mock.stubs(:objects).returns('countries_geometries_dump.tar.gz')
+    bucket_mock.stubs(:objects).returns({'countries_geometries_dump.tar.gz' => file_mock})
 
     s3_mock = mock()
     s3_mock.stubs(:buckets).returns({'ppe.datasets' => bucket_mock})
@@ -29,13 +32,14 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
     filename = 'countries_geometries_dump.tar.gz'
 
     filepath = File.join(Rails.root, 'tmp', filename)
-
-    CountriesGeometryImporter.download_countries_geometries_to(filename, filepath)
+    countries_geometries = CountriesGeometryImporter.new
+    countries_geometries.download_countries_geometries_to(filename, filepath)
 
     File.delete filepath
   end
 
   test 'imports countries dump table' do
+
   end
 
   test 'updates countries table' do
