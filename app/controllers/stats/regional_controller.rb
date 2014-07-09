@@ -9,5 +9,12 @@ class Stats::RegionalController < ApplicationController
     @pas_with_iucn_category = Stats::Regional.pas_with_iucn_category iso
     @number_of_designations = Stats::Regional.designation_count iso
     @countries_providing_data = Stats::Regional.countries_providing_data iso
+
+    # TODO
+    @percentage_protected = Random.rand(100)
+    @percentage_protected_land = Random.rand(100)
+    @percentage_protected_sea = Random.rand(100)
+    @percentage_protected_coast = Random.rand(100)
+    @focus = 'region'
   end
 end

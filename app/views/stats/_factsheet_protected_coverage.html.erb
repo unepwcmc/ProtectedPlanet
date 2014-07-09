@@ -5,33 +5,33 @@
   </header>
   
   <section class="stats">
-    <div class="viz"></div>
+    <div class="viz" data-colour="#f3b74d" data-value="<%= @percentage_protected %>"></div>
     <div class="viz-label">
-      <p><span class="big">34</span><span class="small">%</span></p>
-      <p class="label">of the region</p>
+      <p><span class="big"><%= @percentage_protected %></span><span class="small">%</span></p>
+      <p class="label">of the <%= @focus %></p>
     </div>
   </section>
 
   <section class="stats">
-    <div class="viz"></div>
+    <div class="viz" data-colour="#9d857c" data-value="<%= @percentage_protected_land %>"></div>
     <div class="viz-label">
-      <p><span class="big">18</span><span class="small">%</span></p>
+      <p><span class="big"><%= @percentage_protected_land %></span><span class="small">%</span></p>
       <p class="label">of the land</p>
     </div>
   </section>
 
   <section class="stats">
-    <div class="viz"></div>
+    <div class="viz" data-colour="#5395a7" data-value="<%= @percentage_protected_sea %>"></div>
     <div class="viz-label">
-      <p><span class="big">10</span><span class="small">%</span></p>
-      <p class="label">of the water</p>
+      <p><span class="big"><%= @percentage_protected_sea %></span><span class="small">%</span></p>
+      <p class="label">of the sea</p>
     </div>
   </section>
 
   <section class="stats">
-    <div class="viz"></div>
+    <div class="viz" data-colour="#36b4d2" data-value="<%= @percentage_protected_coast %>"></div>
     <div class="viz-label">
-      <p><span class="big">8</span><span class="small">%</span></p>
+      <p><span class="big"><%= @percentage_protected_coast %></span><span class="small">%</span></p>
       <p class="label">of the coast</p>
   </div>
   </section>

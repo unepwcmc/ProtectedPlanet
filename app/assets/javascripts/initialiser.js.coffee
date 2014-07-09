@@ -43,14 +43,14 @@ class @PageInitialiser
     rand = ->
       Math.round(Math.random() * 100) + 1
     $vizContainer.find('.viz').each (idx, el) ->
-      rand_val = rand()
+      value = $(el).attr('data-value')
       data = [
         {
-          value: rand_val
-          color: "#f3b74d"
+          value: value
+          color: $(el).attr('data-colour')
         }
         {
-          value: 100 - rand_val
+          value: 100 - value
           color: "#d2d2db"
           is_background: true
         }
