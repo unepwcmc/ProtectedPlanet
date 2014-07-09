@@ -5,6 +5,10 @@ class @PageInitialiser
 
     map = new ProtectedAreaMap($mapContainer)
 
+    wdpaId = $mapContainer.attr('data-wdpa-id')
+    if wdpaId?
+      map.addWdpaTiles(wdpaId)
+
     zoomControl = $mapContainer.attr('data-zoom-control')
     if zoomControl?
       map.setZoomControl(zoomControl)

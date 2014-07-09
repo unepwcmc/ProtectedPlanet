@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require cartodb.core
 //= require_tree .
 
 $(document).ready(function() {

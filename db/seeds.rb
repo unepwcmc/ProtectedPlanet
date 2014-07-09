@@ -8,7 +8,8 @@
 #
 
 csv_models = [
-  SubLocation, Jurisdiction, Governance, IucnCategory, Region, Country
+  SubLocation, Jurisdiction, Governance,
+  IucnCategory, Region, Country, LegacyProtectedArea
 ]
 
 csv_models.each do |model|
