@@ -20,13 +20,7 @@ namespace :geo_stats do
     end
   end
 
-  desc "Generate Country Flat protected_Areas"
-  task geom_download: :environment do
-    filename = 'countries_geometries_dump.tar.gz'
-    filepath = File.join(Rails.root, 'tmp', filename)
-    country_importer = CountriesGeometryImporter.new()
-    country_importer.download_countries_geometries_to filename, filepath
-  end
+
 
   def query country, type, geometry
     column_prefix = type == 1 ? 'marine' : 'land'
