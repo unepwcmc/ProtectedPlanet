@@ -4,7 +4,18 @@ class @ProtectedAreaMap
 
     L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png').addTo(@map)
 
-  addWdpaTiles: (wdpaId) ->
+  
+  _addSelectedStyle: (args) ->
+    opacity = args.opacity or .5
+    args.cartocss += """
+      ##{args.table}[#{args.attrName} = #{args.attrVal}]{
+        line-color:#D41623;
+        line-width:1;
+        polygon-fill:#E43430;
+        polygon-opacity:#{opacity};}
+    """
+
+  addWdpaTiles: (tileConfig) ->
     cartocss = """
       #wdpapoly_july2014_0{
         line-color:#40541b;
@@ -13,19 +24,31 @@ class @ProtectedAreaMap
         polygon-opacity:0.4;}
     """
 
-    if wdpaId?
-      cartocss += """
-        #wdpapoly_july2014_0[wdpaid = #{wdpaId}]{
-          line-color:#D41623;
-          line-width:1;
-          polygon-fill:#E43430;
-          polygon-opacity:0.5;}
-      """
+    if tileConfig.wdpaId?
+      args = 
+        cartocss: cartocss
+        table: 'wdpapoly_july2014_0'
+        attrName: 'wdpaid'
+        attrVal: tileConfig.wdpaId
+      cartocss = @_addSelectedStyle args
 
     sublayers = [
       sql: "select * from wdpapoly_july2014_0"
       cartocss: cartocss
     ]
+
+    if tileConfig.iso3?
+      args = 
+        cartocss: ''
+        table: 'countries_geometries'
+        attrName: 'iso_3'
+        attrVal: "'#{tileConfig.iso3}'"
+        opacity: .2
+      country_sublayer =
+        sql: "select * from #{args.table} where iso_3 = '#{tileConfig.iso3}'"
+        cartocss: @_addSelectedStyle args
+      sublayers.push country_sublayer
+
     carto_tiles = new cartodb.Tiles(
       sublayers: sublayers
       user_name: "carbon-tool"
