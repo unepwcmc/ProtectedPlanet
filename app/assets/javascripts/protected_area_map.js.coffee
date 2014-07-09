@@ -35,6 +35,12 @@ class @ProtectedAreaMap
     )
 
   fitToBounds: (bounds, withPadding) ->
+    # If a protected area overlaps the antimeridian ST_Extent does not 
+    # return a correct bounding box (Ideas to fix this?)
+    # So, assuming that no protected areas real bbox width is bigger than 300,
+    # if this is the case correct to a fixed 10 degree width.
+    if Math.abs(bounds[0][1]) + Math.abs(bounds[1][1]) > 300
+      bounds[1][1] = -170
     opts = {}
     if withPadding?
       padding = @calculatePadding()
