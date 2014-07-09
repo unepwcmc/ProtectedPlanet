@@ -22,7 +22,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
 
     assert page.has_selector?('.pa-count'),
       "Expected page to have a PA count element"
-    assert_equal pa_count, page.find('.pa-count p').text.to_i
+    assert_equal pa_count, page.first('.pa-count p').text.to_i
   end
 
   test 'renders percentage of global pas in one regopm' do
@@ -56,7 +56,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
 
     assert page.has_selector?('.iucn-category-pa-count'),
       "Expected page to have an IUCN Category PA count element"
-    assert_equal pa_with_iucn_count, page.find('.iucn-category-pa-count p').text.to_i
+    assert_equal pa_with_iucn_count, page.first('.iucn-category-pa-count p').text.to_i
   end
 
   test 'renders the number of designations' do
@@ -71,7 +71,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
 
     assert page.has_selector?('.designation-count'),
       "Expected page to have a designation count element"
-    assert_equal "1", page.find('.designation-count p').text
+    assert_equal "1", page.first('.designation-count p').text
   end
 
   test 'renders the number of Countries providing data' do
@@ -87,6 +87,6 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
 
     assert page.has_selector?('.country-count'),
       "Expected page to have a country count element"
-    assert_equal data_providing_country_count, page.find('.country-count p').text.to_i
+    assert_equal data_providing_country_count, page.first('.country-count p').text.to_i
   end
 end

@@ -85,7 +85,7 @@
         color: $dark-grey;
       }
 
-      &.bar {
+      &.pa-global-percentage {
         padding: 13px 0 17px 0;
         .bar-container {
           @include border-radius(5px);

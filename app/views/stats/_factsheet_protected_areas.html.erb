@@ -4,12 +4,12 @@
     <h3>Protected Areas (PAs)</h3>
   </header>
   
-  <section class="stats">
+  <section class="stats pa-count">
     <p><%= commaify @number_of_pas %></p>
     <p class="label">protected areas</p>
   </section>
   
-  <section class="stats bar">
+  <section class="stats pa-global-percentage">
     <p class="label"><span class="big"><%=number_with_precision(@percentage_of_global_pas, precision: @precision)%></span><span class="small">%</span> of global protected areas</p>
     <div class="bar-container">
       <div class="bar" style="width: <%=@percentage_of_global_pas%>%;"></div>
