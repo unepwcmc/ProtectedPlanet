@@ -1,4 +1,4 @@
-<section class="cell four annular">
+<section class="cell four annular" id="protected-coverage-viz">
 
   <header class="stats light">
     <h3>Territory covered by PAs</h3>
@@ -37,21 +37,3 @@
   </section>
   
 </section>
-
-<script>
-
-$(document).ready(function() {
-  if (Modernizr.svg) {
-    var rand = function(){ return Math.round(Math.random()*100) + 1; };
-    $('.stats > .viz').each(function(idx, el) {
-      var rand_val = rand();
-      var data = [
-        {value: rand_val, color: '#f3b74d'},
-        {value: 100 - rand_val, color: '#d2d2db', is_background: true}
-      ]
-      annularSectorGenerator(data, el, 150, 150);
-    });
-  }
-});
-
-</script>

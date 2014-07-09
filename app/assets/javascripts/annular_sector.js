@@ -1,6 +1,9 @@
 'use strict'
 
-// see: https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
+// see:
+// https://github.com/mbostock/d3/wiki/SVG-Shapes#arc
+// https://github.com/mbostock/d3/wiki/Pie-Layout#pie
+// https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
 
 var annularSectorGenerator = (function() {
 
