@@ -11,12 +11,17 @@ class @ProtectedAreaMap
         line-width:0.4;
         polygon-fill:#83ad35;
         polygon-opacity:0.4;}
-      #wdpapoly_july2014_0[wdpaid = #{wdpaId}]{
-        line-color:#D41623;
-        line-width:1;
-        polygon-fill:#E43430;
-        polygon-opacity:0.5;}
     """
+
+    if wdpaId?
+      cartocss += """
+        #wdpapoly_july2014_0[wdpaid = #{wdpaId}]{
+          line-color:#D41623;
+          line-width:1;
+          polygon-fill:#E43430;
+          polygon-opacity:0.5;}
+      """
+
     sublayers = [
       sql: "select * from wdpapoly_july2014_0"
       cartocss: cartocss
