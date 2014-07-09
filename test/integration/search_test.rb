@@ -9,7 +9,10 @@ class SearchTest < ActionDispatch::IntegrationTest
     found_pa = FactoryGirl.create(:protected_area, name: searched_pa_name)
     FactoryGirl.create(:protected_area, name: non_searched_pa_name)
 
-    Search.expects(:search).with(query).returns(ProtectedArea.where(id: found_pa.id))
+    search = Search.new query
+    search.send(:results=, ProtectedArea.where(id: found_pa.id))
+
+    Search.expects(:search).with(query).returns(search)
 
     visit('/search')
 
@@ -30,7 +33,10 @@ class SearchTest < ActionDispatch::IntegrationTest
       FactoryGirl.create(:protected_area, name: 'An name')
     end
 
-    Search.expects(:search).with(query).returns(ProtectedArea.all)
+    search = Search.new query
+    search.send(:results=, ProtectedArea.all)
+
+    Search.expects(:search).with(query).returns(search)
 
     visit("/search?q=#{query}&page=2")
 
