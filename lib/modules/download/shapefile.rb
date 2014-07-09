@@ -13,6 +13,8 @@ class Download::Shapefile < Download::Generator
   end
 
   def generate
+    return false if @wdpa_ids.is_a?(Array) && @wdpa_ids.empty?
+
     shapefile_paths = []
 
     clean_up_after do
