@@ -22,7 +22,7 @@ class Download::Shapefile < Download::Generator
         shapefile_paths |= export_component name, condition
       end
 
-      system("zip -j #{zip_path} #{shapefile_paths.join(' ')}")
+      system("zip -j #{zip_path} #{shapefile_paths.join(' ')} #{attachments_paths}")
     end
   rescue Ogr::Postgres::ExportError
     return false

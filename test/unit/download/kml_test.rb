@@ -10,7 +10,11 @@ class DownloadKmlTest < ActiveSupport::TestCase
     view_name = 'temporary_view_123'
     Download::Kml.any_instance.stubs(:with_view).with(query).yields(view_name).returns(true)
 
-    zip_command = "zip -j #{zip_file_path} #{kml_file_path}"
+    toc_path = "#{Rails.root}/lib/data/documents/WDPA_Terms_and_Conditions_of_Use.pdf"
+    data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
+    attachments_path = "#{toc_path} #{data_standard_path}"
+
+    zip_command = "zip -j #{zip_file_path} #{kml_file_path} #{attachments_path}"
     Download::Kml.any_instance.expects(:system).with(zip_command).returns(true)
 
     Ogr::Postgres.expects(:export).with(:kml, kml_file_path, "SELECT * FROM #{view_name}").returns(true)
@@ -82,7 +86,11 @@ class DownloadKmlTest < ActiveSupport::TestCase
     view_name = 'temporary_view_123'
     Download::Kml.any_instance.stubs(:with_view).with(query).yields(view_name).returns(true)
 
-    zip_command = "zip -j #{zip_file_path} #{kml_file_path}"
+    toc_path = "#{Rails.root}/lib/data/documents/WDPA_Terms_and_Conditions_of_Use.pdf"
+    data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
+    attachments_path = "#{toc_path} #{data_standard_path}"
+
+    zip_command = "zip -j #{zip_file_path} #{kml_file_path} #{attachments_path}"
     Download::Kml.any_instance.expects(:system).with(zip_command).returns(true)
 
     Ogr::Postgres.expects(:export).with(:kml, kml_file_path, "SELECT * FROM #{view_name}").returns(true)
