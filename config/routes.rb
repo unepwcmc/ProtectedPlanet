@@ -9,5 +9,9 @@ Rails.application.routes.draw do
   get '/downloads/:iso_3', to: 'downloads#show'
 
   get '/search', to: 'search#index'
-  get '/:id', to: 'protected_areas#show'
+
+  get '/sites/:id', to: 'sites#show'
+  get '/sites/:id/*other', to: 'sites#show'
+
+  get '/:id', to: 'protected_areas#show', as: 'protected_area'
 end
