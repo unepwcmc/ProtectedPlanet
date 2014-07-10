@@ -79,4 +79,14 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
     assert response, "Expected delete_table to return true on success"
   end
 
+  test 'deletes temp file' do
+    filepath = '/path/to/old/file.tar.gz'
+    File.expects(:delete).returns(true)
+
+    response = CountriesGeometryImporter.delete_temp_file filepath
+    assert response, "Expected delete_table to return true on success"
+  end
+
+
+
 end

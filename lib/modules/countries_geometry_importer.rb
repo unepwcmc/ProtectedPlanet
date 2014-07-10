@@ -30,6 +30,10 @@ class CountriesGeometryImporter
     delete_query
   end
 
+  def self.delete_temp_file filepath
+    File.delete filepath
+  end
+
   private
 
   DB = ActiveRecord::Base.connection
