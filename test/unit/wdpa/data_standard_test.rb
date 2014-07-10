@@ -199,6 +199,16 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   governance_name, attributes[:governance].name
   end
 
+  test '.attributes_from_standards_hash returns a Source for a given
+   metadataid' do
+    source = FactoryGirl.create(:source)
+
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({metadataid: source.id})
+
+    assert_kind_of Source, attributes[:source]
+    assert_equal   source.id, attributes[:source].id
+  end
+
   test '.attributes_from_standards_hash returns a ManagementAuthority for a given
    management authority' do
     management_name = 'Authority of Authorities'

@@ -22,7 +22,8 @@ class Wdpa::DataStandard
     :no_tk_area   => {name: :no_take_area, type: :float},
     :desig        => {name: :designation, type: :string},
     :desig_type   => {name: :jurisdiction, type: :string},
-    :wkb_geometry => {name: :the_geom, type: :geometry}
+    :wkb_geometry => {name: :the_geom, type: :geometry},
+    :metadataid   => {name: :source, type: :integer}
   }
 
   POLYGON_ATTRIBUTES = [
