@@ -39,6 +39,19 @@ class @ProtectedAreaMap
       cartocss: @_addSelectedStyle args
     sublayers
 
+  addRegionTiles: (tileConfig, sublayers) ->
+    args = 
+      cartocss: ''
+      table: 'continents'
+      attrName: 'continent'
+      attrVal: "'#{tileConfig.regionName}'"
+      opacity: .2
+
+    sublayers.push 
+      sql: "select * from #{args.table} where continent = '#{tileConfig.regionName}'"
+      cartocss: @_addSelectedStyle args
+    sublayers
+
   addCartodbTiles: (tileConfig) ->
     # Always show the wdpa layer:
     cartocss = """
@@ -56,6 +69,8 @@ class @ProtectedAreaMap
       sublayers = @addSelectedWdpaTiles tileConfig, sublayers, 0
     if tileConfig.iso3?
       sublayers = @addCountryTiles tileConfig, sublayers
+    if tileConfig.regionName?
+      sublayers = @addRegionTiles tileConfig, sublayers
     carto_tiles = new cartodb.Tiles(
       sublayers: sublayers
       user_name: "carbon-tool"
