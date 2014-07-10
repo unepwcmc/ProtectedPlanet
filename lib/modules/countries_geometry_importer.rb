@@ -23,7 +23,11 @@ class CountriesGeometryImporter
   end
 
   def self.update_table type, country
-    run_query(type,country)
+    update_query(type,country)
+  end
+
+  def self.delete_temp_table
+    delete_query
   end
 
   private
@@ -35,12 +39,8 @@ class CountriesGeometryImporter
     @s3.buckets[bucket_name].objects[filename].read
   end
 
-  def self.run_query type,country
-    sql = query(type,country)
-    DB.execute(sql)    
-  end
 
-  def self.query type,country
+  def self.update_query type,country
       dirty_query = """
         UPDATE countries
         SET #{type.downcase}_geom = the_geom
@@ -48,10 +48,15 @@ class CountriesGeometryImporter
         WHERE type = ? AND iso_3 = ?
     """.squish
 
-    conn = ActiveRecord::Base.send(:sanitize_sql_array, [
+    sql = ActiveRecord::Base.send(:sanitize_sql_array, [
       dirty_query, type, country
     ])
+    DB.execute(sql)
+  end
 
+  def self.delete_query
+    sql = "DELETE FROM countries_geometries_temp"
+    DB.execute(sql)
   end
 
 

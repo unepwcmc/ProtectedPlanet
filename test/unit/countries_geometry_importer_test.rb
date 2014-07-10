@@ -68,7 +68,15 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
   end
 
   test 'deletes old table' do
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""
+        DELETE FROM countries_geometries_temp
+      """.squish).
+      returns(true)
 
+    response = CountriesGeometryImporter.delete_temp_table
+    assert response, "Expected delete_table to return true on success"
   end
 
 end

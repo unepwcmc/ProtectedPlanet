@@ -96,7 +96,7 @@ CREATE TABLE countries (
     land_pas_geom geometry,
     land_geom geometry,
     eez_geom geometry,
-    territorial_waters_geom geometry
+    ts_geom geometry
 );
 
 
@@ -1168,9 +1168,13 @@ INSERT INTO schema_migrations (version) VALUES ('20140625101751');
 
 INSERT INTO schema_migrations (version) VALUES ('20140625154316');
 
+INSERT INTO schema_migrations (version) VALUES ('20140703130946');
+
 INSERT INTO schema_migrations (version) VALUES ('20140704105917');
 
 INSERT INTO schema_migrations (version) VALUES ('20140704154012');
 
 INSERT INTO schema_migrations (version) VALUES ('20140704154428');
+
+INSERT INTO schema_migrations (version) VALUES ('20140709181758');
 
