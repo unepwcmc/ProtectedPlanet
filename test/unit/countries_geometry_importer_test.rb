@@ -5,6 +5,8 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
     Rails.application.secrets.aws_access_key_id = '123'
     Rails.application.secrets.aws_secret_access_key = 'abc'
     Rails.application.secrets.aws_bucket = 'ppe.datasets'
+    @filename = 'countries_geometries_dump.tar.gz'
+    @filepath = File.join(Rails.root, 'tmp', 'compressed_table.tar.gz')
   end
 
   test '#new creates an S3 connection' do
@@ -13,7 +15,7 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
       :secret_access_key => 'abc'
     })
 
-    CountriesGeometryImporter.new()
+    CountriesGeometryImporter.new(@filename,@filepath)
   end
 
   test 'downloads countries dump table' do
@@ -29,22 +31,23 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
 
     AWS::S3.expects(:new).returns(s3_mock)
 
-    filename = 'countries_geometries_dump.tar.gz'
-
-    filepath = File.join(Rails.root, 'tmp', filename)
-    countries_geometries = CountriesGeometryImporter.new
-    countries_geometries.download_countries_geometries_to(filename, filepath)
+    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
+    countries_geometries.download_countries_geometries
 
   end
 
   test 'imports countries dump table' do
-    filepath = File.join(Rails.root, 'tmp', 'compressed_table.tar.gz')
 
-    CountriesGeometryImporter.expects(:system).
-    with("pg_restore -c -i -U postgres -d pp_development -v #{filepath}").
+
+    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
+    
+    countries_geometries.expects(:system).
+    with("pg_restore -c -i -U postgres -d pp_development -v #{@filepath}").
     returns(true)
 
-    response =  CountriesGeometryImporter.restore_table filepath
+
+
+    response =  countries_geometries.restore_table
     assert response, "Expected restore_table to return true on success"
   end
 
@@ -62,7 +65,8 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
       """.squish).
       returns(true)
 
-    response = CountriesGeometryImporter.update_table type, country
+    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
+    response = countries_geometries.update_table type, country
     assert response, "Expected update_table to return true on success"
 
   end
@@ -74,16 +78,17 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
         DELETE FROM countries_geometries_temp
       """.squish).
       returns(true)
-
-    response = CountriesGeometryImporter.delete_temp_table
+    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
+    response = countries_geometries.delete_temp_table
     assert response, "Expected delete_table to return true on success"
   end
 
   test 'deletes temp file' do
-    filepath = '/path/to/old/file.tar.gz'
+
     File.expects(:delete).returns(true)
 
-    response = CountriesGeometryImporter.delete_temp_file filepath
+    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
+    response = countries_geometries.delete_temp_file
     assert response, "Expected delete_table to return true on success"
   end
 
