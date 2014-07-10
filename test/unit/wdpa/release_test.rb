@@ -140,18 +140,17 @@ class TestWdpaRelease < ActiveSupport::TestCase
     pg_result_mock.expects(:to_a).returns(pa_attributes[0..1])
     pg_result_mock.expects(:to_a).returns(pa_attributes[2])
 
-    connection_mock = mock()
-    connection_mock.
-      stubs(:execute).
+    connection = ActiveRecord::Base.connection
+
+    connection.
+      expects(:execute).
       with("SELECT * FROM #{geometry_tables["point"]}").
       returns(pg_result_mock)
 
-    connection_mock.
-      stubs(:execute).
+    connection.
+      expects(:execute).
       with("SELECT * FROM #{geometry_tables["polygons"]}").
       returns(pg_result_mock)
-
-    ActiveRecord::Base.expects(:connection).returns(connection_mock)
 
     wdpa_release = Wdpa::Release.new
     wdpa_release.expects(:geometry_tables).returns(geometry_tables)
@@ -159,7 +158,31 @@ class TestWdpaRelease < ActiveSupport::TestCase
     assert_same_elements pa_attributes, wdpa_release.protected_areas
   end
 
-  test '.clean_up removes the GDB and zip files, and drops the import tables' do
+  test '.sources returns an array of sources attributes from the import' do
+    source_table = 'wdpa_source'
+
+    source_attributes = [{
+      id: 321
+    }, {
+      id: 123
+    }]
+
+    pg_result_mock = mock()
+    pg_result_mock.expects(:to_a).returns(source_attributes)
+
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("SELECT * FROM #{source_table}").
+      returns(pg_result_mock)
+
+    wdpa_release = Wdpa::Release.new
+    wdpa_release.expects(:source_table).returns(source_table)
+
+    assert_same_elements source_attributes, wdpa_release.sources
+  end
+
+  test '.clean_up removes the GDB and zip files, and drops the import
+   tables' do
     zip_path = "zip_path"
     Wdpa::Release.any_instance.expects(:zip_path).returns(zip_path).at_least_once
     gdb_path = "gdb_path"
