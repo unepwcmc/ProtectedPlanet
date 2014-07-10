@@ -15,24 +15,15 @@ class @ProtectedAreaMap
         polygon-opacity:#{opacity};}
     """
 
-  addWdpaTiles: (tileConfig, sublayers) ->
-    cartocss = """
-      #wdpapoly_july2014_0{
-        line-color:#40541b;
-        line-width:0.4;
-        polygon-fill:#83ad35;
-        polygon-opacity:0.4;}
-    """
+  addSelectedWdpaTiles: (tileConfig, sublayers, idx) ->
     args = 
-      cartocss: cartocss
+      cartocss: sublayers[idx].cartocss
       table: 'wdpapoly_july2014_0'
       attrName: 'wdpaid'
       attrVal: tileConfig.wdpaId
     cartocss = @_addSelectedStyle args
 
-    sublayers.push
-      sql: "select * from wdpapoly_july2014_0"
-      cartocss: cartocss
+    sublayers[idx].cartocss = cartocss
     sublayers
 
   addCountryTiles: (tileConfig, sublayers) ->
@@ -49,9 +40,20 @@ class @ProtectedAreaMap
     sublayers
 
   addCartodbTiles: (tileConfig) ->
-    sublayers = []
+    # Always show the wdpa layer:
+    cartocss = """
+      #wdpapoly_july2014_0{
+        line-color:#40541b;
+        line-width:0.4;
+        polygon-fill:#83ad35;
+        polygon-opacity:0.4;}
+    """
+    sublayers = [
+      sql: "select * from wdpapoly_july2014_0"
+      cartocss: cartocss
+    ]
     if tileConfig.wdpaId?
-      sublayers = @addWdpaTiles tileConfig, sublayers
+      sublayers = @addSelectedWdpaTiles tileConfig, sublayers, 0
     if tileConfig.iso3?
       sublayers = @addCountryTiles tileConfig, sublayers
     carto_tiles = new cartodb.Tiles(
