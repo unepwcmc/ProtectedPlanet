@@ -4,7 +4,43 @@ class @ProtectedAreaMap
 
     L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png').addTo(@map)
 
-  addWdpaTiles: (wdpaId) ->
+  
+  _addSelectedStyle: (args) ->
+    opacity = args.opacity or .5
+    args.cartocss += """
+      ##{args.table}[#{args.attrName} = #{args.attrVal}]{
+        line-color:#D41623;
+        line-width:1;
+        polygon-fill:#E43430;
+        polygon-opacity:#{opacity};}
+    """
+
+  addSelectedWdpaTiles: (tileConfig, sublayers, idx) ->
+    args = 
+      cartocss: sublayers[idx].cartocss
+      table: 'wdpapoly_july2014_0'
+      attrName: 'wdpaid'
+      attrVal: tileConfig.wdpaId
+    cartocss = @_addSelectedStyle args
+
+    sublayers[idx].cartocss = cartocss
+    sublayers
+
+  addCountryTiles: (tileConfig, sublayers) ->
+    args = 
+      cartocss: ''
+      table: 'countries_geometries'
+      attrName: 'iso_3'
+      attrVal: "'#{tileConfig.iso3}'"
+      opacity: .2
+
+    sublayers.push 
+      sql: "select * from #{args.table} where iso_3 = '#{tileConfig.iso3}'"
+      cartocss: @_addSelectedStyle args
+    sublayers
+
+  addCartodbTiles: (tileConfig) ->
+    # Always show the wdpa layer:
     cartocss = """
       #wdpapoly_july2014_0{
         line-color:#40541b;
@@ -12,26 +48,20 @@ class @ProtectedAreaMap
         polygon-fill:#83ad35;
         polygon-opacity:0.4;}
     """
-
-    if wdpaId?
-      cartocss += """
-        #wdpapoly_july2014_0[wdpaid = #{wdpaId}]{
-          line-color:#D41623;
-          line-width:1;
-          polygon-fill:#E43430;
-          polygon-opacity:0.5;}
-      """
-
     sublayers = [
       sql: "select * from wdpapoly_july2014_0"
       cartocss: cartocss
     ]
+    if tileConfig.wdpaId?
+      sublayers = @addSelectedWdpaTiles tileConfig, sublayers, 0
+    if tileConfig.iso3?
+      sublayers = @addCountryTiles tileConfig, sublayers
     carto_tiles = new cartodb.Tiles(
       sublayers: sublayers
       user_name: "carbon-tool"
     )
     carto_tiles.getTiles( (o) =>
-      L.tileLayer(o.tiles[0]).addTo(@map)
+      L.tileLayer(o.tiles[0]).addTo @map
     )
 
   normalizeBounds: (bounds) ->
