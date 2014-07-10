@@ -85,7 +85,7 @@ class Wdpa::DataStandard
     standardised_attributes = {}
 
     hash.each do |key, value|
-      attributes = Array.wrap(STANDARD_ATTRIBUTES[key])
+      attributes = Array.wrap(self::STANDARD_ATTRIBUTES[key])
       attributes.each do |attribute|
         standardised_value = Wdpa::Attribute.standardise value, as: attribute[:type]
         standardised_attributes[attribute[:name]] = standardised_value

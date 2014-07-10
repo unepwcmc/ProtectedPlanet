@@ -162,9 +162,9 @@ class TestWdpaRelease < ActiveSupport::TestCase
     source_table = 'wdpa_source'
 
     source_attributes = [{
-      id: 321
+      metadataid: 321
     }, {
-      id: 123
+      metadataid: 123
     }]
 
     pg_result_mock = mock()
