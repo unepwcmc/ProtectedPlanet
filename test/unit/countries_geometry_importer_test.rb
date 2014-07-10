@@ -61,7 +61,7 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
         UPDATE countries
         SET air_geom = the_geom
         FROM countries_geometries_temp
-        WHERE type = 'AIR' AND iso_3 = 'BAM'
+        WHERE type = 'AIR' AND countries.iso_3 = 'BAM'
       """.squish).
       returns(true)
 
