@@ -30,12 +30,12 @@ class Geospatial::Geometry
   def query country, type, geometry
 
     column_prefix = type == 1 ? 'marine' : 'land'
-    query = "UPDATE countries
+    query = """UPDATE countries
              SET #{column_prefix}_pas_geom = a.the_geom
              FROM (SELECT ST_UNION(#{geometry}) as the_geom
              FROM standard_polygons
              WHERE iso3 = '#{country}' AND st_isvalid(wkb_geometry) AND marine = '#{type}') a
-             WHERE iso_3 = '#{country}'"
+             WHERE iso_3 = '#{country}'""".squish
     DB.execute(query)
   end
 
