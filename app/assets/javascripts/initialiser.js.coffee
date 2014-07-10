@@ -8,7 +8,7 @@ class @PageInitialiser
     tileConfig = 
       wdpaId: $mapContainer.attr('data-wdpa-id')
       iso3: $mapContainer.attr('data-iso3')
-    map.addWdpaTiles tileConfig
+    map.addCartodbTiles tileConfig
 
     zoomControl = $mapContainer.attr('data-zoom-control')
     if zoomControl?

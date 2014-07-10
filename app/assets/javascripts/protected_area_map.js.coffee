@@ -15,7 +15,7 @@ class @ProtectedAreaMap
         polygon-opacity:#{opacity};}
     """
 
-  addWdpaTiles: (tileConfig) ->
+  addWdpaTiles: (tileConfig, sublayers) ->
     cartocss = """
       #wdpapoly_july2014_0{
         line-color:#40541b;
@@ -23,38 +23,43 @@ class @ProtectedAreaMap
         polygon-fill:#83ad35;
         polygon-opacity:0.4;}
     """
+    args = 
+      cartocss: cartocss
+      table: 'wdpapoly_july2014_0'
+      attrName: 'wdpaid'
+      attrVal: tileConfig.wdpaId
+    cartocss = @_addSelectedStyle args
 
-    if tileConfig.wdpaId?
-      args = 
-        cartocss: cartocss
-        table: 'wdpapoly_july2014_0'
-        attrName: 'wdpaid'
-        attrVal: tileConfig.wdpaId
-      cartocss = @_addSelectedStyle args
-
-    sublayers = [
+    sublayers.push
       sql: "select * from wdpapoly_july2014_0"
       cartocss: cartocss
-    ]
+    sublayers
 
+  addCountryTiles: (tileConfig, sublayers) ->
+    args = 
+      cartocss: ''
+      table: 'countries_geometries'
+      attrName: 'iso_3'
+      attrVal: "'#{tileConfig.iso3}'"
+      opacity: .2
+
+    sublayers.push 
+      sql: "select * from #{args.table} where iso_3 = '#{tileConfig.iso3}'"
+      cartocss: @_addSelectedStyle args
+    sublayers
+
+  addCartodbTiles: (tileConfig) ->
+    sublayers = []
+    if tileConfig.wdpaId?
+      sublayers = @addWdpaTiles tileConfig, sublayers
     if tileConfig.iso3?
-      args = 
-        cartocss: ''
-        table: 'countries_geometries'
-        attrName: 'iso_3'
-        attrVal: "'#{tileConfig.iso3}'"
-        opacity: .2
-      country_sublayer =
-        sql: "select * from #{args.table} where iso_3 = '#{tileConfig.iso3}'"
-        cartocss: @_addSelectedStyle args
-      sublayers.push country_sublayer
-
+      sublayers = @addCountryTiles tileConfig, sublayers
     carto_tiles = new cartodb.Tiles(
       sublayers: sublayers
       user_name: "carbon-tool"
     )
     carto_tiles.getTiles( (o) =>
-      L.tileLayer(o.tiles[0]).addTo(@map)
+      L.tileLayer(o.tiles[0]).addTo @map
     )
 
   fitToBounds: (bounds, withPadding) ->
