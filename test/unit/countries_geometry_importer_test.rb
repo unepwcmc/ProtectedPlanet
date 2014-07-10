@@ -50,7 +50,20 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
 
 
   test 'updates countries table' do
-    
+    type = 'AIR'
+    country = 'BAM'
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""
+        UPDATE countries
+        SET air_geom = the_geom
+        FROM countries_geometries_temp
+        WHERE type = 'AIR' AND iso_3 = 'BAM'
+      """.squish).
+      returns(true)
+
+    response = CountriesGeometryImporter.update_table type, country
+    assert response, "Expected update_table to return true on success"
 
   end
 
