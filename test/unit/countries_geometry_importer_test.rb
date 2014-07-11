@@ -37,15 +37,14 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
   end
 
   test 'imports countries dump table' do
-
-
+    db_config   = Rails.configuration.database_configuration
+    db_port = db_config[Rails.env]["port"] || 5432
+    db_name = db_config[Rails.env]["database"]
     countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
     
     countries_geometries.expects(:system).
-    with("pg_restore -c -i -U postgres -d pp_development -v #{@filepath}").
+    with("pg_restore -c -i -U postgres -d #{db_name} -v #{@filepath} -p #{db_port}").
     returns(true)
-
-
 
     response =  countries_geometries.restore_table
     assert response, "Expected restore_table to return true on success"
