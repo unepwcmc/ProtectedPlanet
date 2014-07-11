@@ -8,7 +8,7 @@ namespace :import do
     country_importer = CountriesGeometryImporter.new(FILENAME,FILEPATH)
 
     puts "Downloading dump table"
-    #country_importer.download_countries_geometries
+    country_importer.download_countries_geometries
 
     puts "Importing dump table"
     country_importer.restore_table 

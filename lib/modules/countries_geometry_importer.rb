@@ -45,12 +45,14 @@ class CountriesGeometryImporter
       dirty_query = """
         UPDATE countries
         SET #{type.downcase}_geom = the_geom
-        FROM countries_geometries_temp
-        WHERE type = ? AND countries.iso_3 = ?
+        FROM (SELECT ST_Collectionextract(ST_collect(the_geom),3) the_geom
+                FROM countries_geometries_temp
+                WHERE type = ? AND iso_3 = ?) a
+        WHERE iso_3 = ?
     """.squish
 
     sql = ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, type, country
+      dirty_query, type, country, country
     ])
     DB.execute(sql)
   end

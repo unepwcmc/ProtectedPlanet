@@ -53,15 +53,17 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
 
 
   test 'updates countries table' do
-    type = 'AIR'
-    country = 'BAM'
+    type = 'LAND'
+    country = 'POL'
     ActiveRecord::Base.connection.
       expects(:execute).
       with("""
         UPDATE countries
-        SET air_geom = the_geom
-        FROM countries_geometries_temp
-        WHERE type = 'AIR' AND countries.iso_3 = 'BAM'
+        SET land_geom = the_geom
+        FROM (SELECT ST_Collectionextract(ST_collect(the_geom),3) the_geom
+                FROM countries_geometries_temp
+                WHERE type = 'LAND' AND iso_3 = 'POL') a 
+        WHERE iso_3 = 'POL'
       """.squish).
       returns(true)
 
