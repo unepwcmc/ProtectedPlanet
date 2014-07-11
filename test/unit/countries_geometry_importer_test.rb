@@ -77,7 +77,10 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
   test 'creates indexes' do
     ActiveRecord::Base.connection.
       expects(:execute).
-      with("""CREATE INDEX land_geom_gindx ON countries USING GIST (land_geom);
+      with("""DROP INDEX IF EXISTS land_geom_gindx;
+              DROP INDEX IF EXISTS eez_geom_gindx;
+              DROP INDEX IF EXISTS ts_geom_gindx;
+              CREATE INDEX land_geom_gindx ON countries USING GIST (land_geom);
               CREATE INDEX eez_geom_gindx ON countries USING GIST (eez_geom);
               CREATE INDEX ts_geom_gindx ON countries USING GIST (ts_geom);""".squish).
       returns(true)

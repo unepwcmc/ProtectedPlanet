@@ -15,8 +15,6 @@ namespace :import do
 
     countries = Country.pluck(:iso_3)
     
-
-
     TYPE.each do |type|
       countries.each do |iso_3|
         puts "Importing #{type} for #{iso_3}"
