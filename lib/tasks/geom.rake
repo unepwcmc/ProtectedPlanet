@@ -13,8 +13,8 @@ namespace :geom do
       attributes = row.to_hash
       country = Country.where(:iso_3 => attributes['iso_3']).first
       unless country.normalized_bounding_box?
-        country.normalized_bounding_box = attributes['normalized_bounding_box']
-        country.save
+        sql = "update countries set normalized_bounding_box = ST_GeomFromText('#{attributes['normalized_bounding_box']}') where iso_3 = '#{attributes['iso_3']}'"
+        ActiveRecord::Base.connection.execute(sql) 
         logger.info "Updated #{country.name}."
       end
     end
