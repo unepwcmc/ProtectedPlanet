@@ -64,12 +64,22 @@ class @ProtectedAreaMap
       L.tileLayer(o.tiles[0]).addTo @map
     )
 
+  _calculateBoundWidth: (bounds) ->
+    x1 = bounds[0][1]
+    x2 = bounds[1][1]
+    if x1 < 0 and x2 >= 0
+      return Math.abs(bounds[0][1]) + Math.abs(bounds[1][1])
+    else
+      max = Math.max(Math.abs(x1), Math.abs(x2))
+      min = Math.min(Math.abs(x1), Math.abs(x2))
+      return max - min
+
   normalizeBounds: (bounds) ->
     # If a protected area overlaps the antimeridian ST_Extent does not 
     # return a correct bounding box (Ideas to fix this?)
     # So, assuming that no protected areas real bbox width is bigger than 300,
-    # if this is the case correct to a fixed 10 degree width.
-    if Math.abs(bounds[0][1]) + Math.abs(bounds[1][1]) > 300
+    # if this is the case correct to a fixed 10 degree width. 
+    if @_calculateBoundWidth(bounds) > 300
       bounds[1][1] = -170
     bounds
 
