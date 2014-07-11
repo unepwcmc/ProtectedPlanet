@@ -6,11 +6,12 @@ class @ProtectedAreaMap
 
   
   _addSelectedStyle: (args) ->
-    opacity = args.opacity or .5
+    opacity = if args.opacity? then args.opacity else .5
+    lineWidth = if args.lineWidth? then args.lineWidth else 1
     args.cartocss += """
       ##{args.table}[#{args.attrName} = #{args.attrVal}]{
         line-color:#D41623;
-        line-width:1;
+        line-width:#{lineWidth};
         polygon-fill:#E43430;
         polygon-opacity:#{opacity};}
     """
@@ -33,6 +34,7 @@ class @ProtectedAreaMap
       attrName: 'iso_3'
       attrVal: "'#{tileConfig.iso3}'"
       opacity: .2
+      lineWidth: 0
 
     sublayers.push 
       sql: "select * from #{args.table} where iso_3 = '#{tileConfig.iso3}'"
@@ -46,6 +48,7 @@ class @ProtectedAreaMap
       attrName: 'continent'
       attrVal: "'#{tileConfig.regionName}'"
       opacity: .2
+      lineWidth: 0
 
     sublayers.push 
       sql: "select * from #{args.table} where continent = '#{tileConfig.regionName}'"
