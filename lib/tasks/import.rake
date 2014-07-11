@@ -24,6 +24,9 @@ namespace :import do
       end
     end
 
+    puts "Creating geospatial indexes"
+    country_importer.create_indexes
+
     puts "Deleting temporary table and file"
     country_importer.delete_temp_table
     country_importer.delete_temp_file 

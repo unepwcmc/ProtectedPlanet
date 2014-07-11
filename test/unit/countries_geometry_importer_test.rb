@@ -73,6 +73,21 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
 
   end
 
+
+  test 'creates indexes' do
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""CREATE INDEX land_geom_gindx ON countries USING GIST (land_geom);
+              CREATE INDEX eez_geom_gindx ON countries USING GIST (eez_geom);
+              CREATE INDEX ts_geom_gindx ON countries USING GIST (ts_geom);""".squish).
+      returns(true)
+
+    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
+    response = countries_geometries.create_indexes
+    assert response, "Expected update_table to return true on success"
+
+  end
+
   test 'deletes old table' do
     ActiveRecord::Base.connection.
       expects(:execute).

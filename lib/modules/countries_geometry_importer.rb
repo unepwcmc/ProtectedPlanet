@@ -23,6 +23,10 @@ class CountriesGeometryImporter
     update_query(type,country)
   end
 
+  def create_indexes
+    create_indexes_query
+  end
+
   def delete_temp_table
     delete_query
   end
@@ -30,6 +34,7 @@ class CountriesGeometryImporter
   def delete_temp_file
     File.delete @filepath
   end
+
 
   private
 
@@ -39,7 +44,6 @@ class CountriesGeometryImporter
     bucket_name = Rails.application.secrets.aws_datasets_bucket
     @s3.buckets[bucket_name].objects[@filename].read
   end
-
 
   def update_query type,country
       dirty_query = """
@@ -55,6 +59,13 @@ class CountriesGeometryImporter
       dirty_query, type, country, country
     ])
     DB.execute(sql)
+  end
+
+  def create_indexes_query
+    query = """CREATE INDEX land_geom_gindx ON countries USING GIST (land_geom);
+               CREATE INDEX eez_geom_gindx ON countries USING GIST (eez_geom);
+               CREATE INDEX ts_geom_gindx ON countries USING GIST (ts_geom);""".squish
+    DB.execute(query)
   end
 
   def delete_query
