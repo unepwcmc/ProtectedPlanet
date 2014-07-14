@@ -11,6 +11,7 @@
  * file per style scope.
  *
  *= require 'reset'
+ *= require 'leaflet'
  *= require 'base'
  *= require 'modals'
  *= require 'home'
