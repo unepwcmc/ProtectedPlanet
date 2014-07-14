@@ -7,11 +7,7 @@ class Country < ActiveRecord::Base
   def bounds
     rgeo_factory = RGeo::Geos.factory srid: 4326
     bounds = RGeo::Cartesian::BoundingBox.new rgeo_factory
-    if self.normalized_bounding_box?
-      bounds.add normalized_bounding_box
-    else 
-      bounds.add bounding_box
-    end
+    bounds.add bounding_box
     
     [
       [bounds.min_y, bounds.min_x],
