@@ -5,6 +5,12 @@ class @PageInitialiser
 
     map = new ProtectedAreaMap($mapContainer)
 
+    tileConfig = 
+      wdpaId: $mapContainer.attr('data-wdpa-id')
+      iso3: $mapContainer.attr('data-iso3')
+      regionName: $mapContainer.attr('data-region-name')
+    map.addCartodbTiles tileConfig
+
     zoomControl = $mapContainer.attr('data-zoom-control')
     if zoomControl?
       map.setZoomControl(zoomControl)

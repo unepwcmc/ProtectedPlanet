@@ -7,7 +7,13 @@
 
     <% if @query %>
       <section class="search-results">
-        <h4>Showing <%= @protected_areas.count %> <%= 'result'.pluralize @protected_areas.count %> for "<%= @query %>"</h4>
+        <h4>
+          <% if @similar_search %>
+            <strong>No results found for "<%= @query %>"</strong> -
+          <% end %>
+
+          Showing <%= @protected_areas.count %> <%= 'result'.pluralize @protected_areas.count %> for "<%= @search.query %>"
+        </h4>
         <%= render 'search_results', protected_areas: @protected_areas %>
       </section>
 
