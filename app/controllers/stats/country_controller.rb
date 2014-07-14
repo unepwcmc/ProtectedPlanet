@@ -12,9 +12,9 @@ class Stats::CountryController < ApplicationController
 
     # TODO
     @percentage_protected = Random.rand(100)
-    @percentage_protected_land = Random.rand(100)
-    @percentage_protected_sea = Random.rand(100)
-    @percentage_protected_coast = Random.rand(100)
+    @percentage_protected_land = Stats::Country.percentage_protected_land iso
+    @percentage_protected_sea = Stats::Country.percentage_protected_sea iso
+    @percentage_protected_coast = Stats::Country.percentage_protected_coast iso
     @focus = 'country'
   end
 end
