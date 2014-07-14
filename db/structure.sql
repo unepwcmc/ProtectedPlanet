@@ -24,6 +24,20 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+
+
+--
 -- Name: postgis; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -331,6 +345,38 @@ ALTER SEQUENCE jurisdictions_id_seq OWNED BY jurisdictions.id;
 
 
 --
+-- Name: legacy_protected_areas; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE legacy_protected_areas (
+    id integer NOT NULL,
+    wdpa_id integer,
+    slug text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: legacy_protected_areas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE legacy_protected_areas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: legacy_protected_areas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE legacy_protected_areas_id_seq OWNED BY legacy_protected_areas.id;
+
+
+--
 -- Name: legal_statuses; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
@@ -562,6 +608,56 @@ CREATE TABLE schema_migrations (
 
 
 --
+-- Name: search_lexemes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE search_lexemes (
+    word text
+);
+
+
+--
+-- Name: sources; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE sources (
+    id integer NOT NULL,
+    title character varying(255),
+    responsible_party character varying(255),
+    responsible_email character varying(255),
+    year date,
+    language character varying(255),
+    character_set character varying(255),
+    reference_system character varying(255),
+    scale character varying(255),
+    lineage text,
+    citation text,
+    disclaimer text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: sources_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE sources_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sources_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE sources_id_seq OWNED BY sources.id;
+
+
+--
 -- Name: standard_points_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -630,13 +726,12 @@ ALTER SEQUENCE sub_locations_id_seq OWNED BY sub_locations.id;
 
 CREATE MATERIALIZED VIEW tsvector_search_documents AS
  SELECT pa.wdpa_id,
-    ((((setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'B'::"char") || setweight(to_tsvector('english'::regconfig, COALESCE(first(pa.name), ''::text)), 'A'::"char")) || to_tsvector(COALESCE((first(c.language))::regconfig, 'simple'::regconfig), COALESCE(unaccent(first(pa.original_name)), ''::text))) || to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ' '::text), ''::text))) || to_tsvector(COALESCE(first((c.language)::regconfig), 'simple'::regconfig), COALESCE(string_agg((sl.alternate_name)::text, ' '::text), ''::text))) AS document
+    (((setweight(to_tsvector('english'::regconfig, COALESCE(first(pa.name), ''::text)), 'A'::"char") || setweight(to_tsvector(COALESCE((first(c.language))::regconfig, 'simple'::regconfig), COALESCE(unaccent(first(pa.original_name)), ''::text)), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, COALESCE(string_agg(c.name, ' '::text), ''::text)), 'C'::"char")) || setweight(to_tsvector('english'::regconfig, COALESCE(string_agg((sl.english_name)::text, ' '::text), ''::text)), 'D'::"char")) AS document
    FROM (((protected_areas pa
    LEFT JOIN countries_protected_areas cpa ON ((cpa.protected_area_id = pa.id)))
    LEFT JOIN countries c ON ((cpa.country_id = c.id)))
    LEFT JOIN sub_locations sl ON ((c.id = sl.country_id)))
   GROUP BY pa.wdpa_id
-  ORDER BY pa.wdpa_id
   WITH NO DATA;
 
 
@@ -726,6 +821,13 @@ ALTER TABLE ONLY jurisdictions ALTER COLUMN id SET DEFAULT nextval('jurisdiction
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY legacy_protected_areas ALTER COLUMN id SET DEFAULT nextval('legacy_protected_areas_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY legal_statuses ALTER COLUMN id SET DEFAULT nextval('legal_statuses_id_seq'::regclass);
 
 
@@ -762,6 +864,13 @@ ALTER TABLE ONLY regional_statistics ALTER COLUMN id SET DEFAULT nextval('region
 --
 
 ALTER TABLE ONLY regions ALTER COLUMN id SET DEFAULT nextval('regions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY sources ALTER COLUMN id SET DEFAULT nextval('sources_id_seq'::regclass);
 
 
 --
@@ -842,6 +951,14 @@ ALTER TABLE ONLY jurisdictions
 
 
 --
+-- Name: legacy_protected_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY legacy_protected_areas
+    ADD CONSTRAINT legacy_protected_areas_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: legal_statuses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
@@ -890,11 +1007,12 @@ ALTER TABLE ONLY regions
 
 
 --
--- Name: regions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
-ALTER TABLE ONLY regions
-    ADD CONSTRAINT regions_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY sources
+    ADD CONSTRAINT sources_pkey PRIMARY KEY (id);
+
 
 
 --
@@ -1188,4 +1306,10 @@ INSERT INTO schema_migrations (version) VALUES ('20140710144513');
 INSERT INTO schema_migrations (version) VALUES ('20140714105648');
 
 INSERT INTO schema_migrations (version) VALUES ('20140714110350');
+
+INSERT INTO schema_migrations (version) VALUES ('20140707111454');
+
+INSERT INTO schema_migrations (version) VALUES ('20140708193519');
+
+INSERT INTO schema_migrations (version) VALUES ('20140710124303');
 

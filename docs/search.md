@@ -49,6 +49,35 @@ FROM tsvector_search_documents
 WHERE document @@ to_tsquery('manbone');
 ```
 
+Adding a `:*` at the end of search terms will make sure subterms are found as
+well. Being `Geoff:*` the search term of the previous query, the `@@` operator
+will yield `Geoffery` as a result.
+
+### Handling misspellings
+
+Along the table containing all documents to query against, a second table
+(`search_lexemes`), containing all the search lexemes, makes it possible to
+have a fuzzy search in protectedplanet.
+
+This is achieved by using the Postgres extension
+[`pg_trgm`](http://www.postgresql.org/docs/9.3/static/pgtrgm.html) to match
+similar lexemes against the given search term, with a similarity index, ranging
+from 0 to 1 (with a default similarity threshold of 0.3).
+
+For example, the following query returns all similar words (and the
+corresponding similarity) to `manbone`.
+
+```
+SELECT word, similarity(word, 'manbone') AS similarity
+FROM search_lexemes
+WHERE word % 'manbone'
+ORDER BY similarity DESC;
+```
+
+The `ORDER BY` clause guarantees having the closest match as first result,
+ready to be used as a suitable replacement for a term returning zero search
+results.
+
 ## Rebuilding
 
 As the indexed materials (PAs, countries, sub locations) are only

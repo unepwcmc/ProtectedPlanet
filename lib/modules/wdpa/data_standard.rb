@@ -2,10 +2,7 @@ class Wdpa::DataStandard
   STANDARD_ATTRIBUTES = {
     :wdpaid       => {name: :wdpa_id, type: :integer},
     :wdpa_pid     => {name: :wdpa_parent_id, type: :integer},
-    :name         => [
-      {name: :name, type: :string},
-      {name: :slug, type: :slug}
-    ],
+    :name         => {name: :name, type: :string},
     :orig_name    => {name: :original_name, type: :string},
     :marine       => {name: :marine, type: :boolean},
     :rep_m_area   => {name: :reported_marine_area, type: :float},
@@ -25,7 +22,8 @@ class Wdpa::DataStandard
     :no_tk_area   => {name: :no_take_area, type: :float},
     :desig        => {name: :designation, type: :string},
     :desig_type   => {name: :jurisdiction, type: :string},
-    :wkb_geometry => {name: :the_geom, type: :geometry}
+    :wkb_geometry => {name: :the_geom, type: :geometry},
+    :metadataid   => {name: :source, type: :integer}
   }
 
   POLYGON_ATTRIBUTES = [
@@ -88,7 +86,7 @@ class Wdpa::DataStandard
     standardised_attributes = {}
 
     hash.each do |key, value|
-      attributes = Array.wrap(STANDARD_ATTRIBUTES[key])
+      attributes = Array.wrap(self::STANDARD_ATTRIBUTES[key])
       attributes.each do |attribute|
         standardised_value = Wdpa::Attribute.standardise value, as: attribute[:type]
         standardised_attributes[attribute[:name]] = standardised_value

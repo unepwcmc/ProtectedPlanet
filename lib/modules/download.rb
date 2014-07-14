@@ -37,10 +37,12 @@ class Download
       zip_path = zip_path_for_type(type)
       download_name = File.basename(zip_path)
 
-      generator.generate zip_path, @wdpa_ids
-      S3.upload download_name, zip_path
+      generated = generator.generate zip_path, @wdpa_ids
 
-      clean_up zip_path
+      if generated
+        S3.upload download_name, zip_path
+        clean_up zip_path
+      end
     end
   end
 

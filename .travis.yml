@@ -30,6 +30,8 @@ notifications:
     - adam.mulligan@unep-wcmc.org
     - andrea.rossi@unep-wcmc.org
     - miguel.torres@unep-wcmc.org
+  slack:
+    secure: PXeuZLPRuD9rEwdwZ3Gq4SIcu1wDrahuKXa9GiP6HHqgDVWvMgLYPzFTrfKOlY27vyaNfUxk4bGiaexf8wR/zOYBkWDMrPLnfyMhfqcWOFj/IK/cqylTQWkjk2I5N2ljfK2lzebz0Tta1MMohVcvAl7Zsfa51uEXHPXMz0Cn6SM=
 branches:
   only:
     - master

@@ -199,6 +199,16 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   governance_name, attributes[:governance].name
   end
 
+  test '.attributes_from_standards_hash returns a Source for a given
+   metadataid' do
+    source = FactoryGirl.create(:source)
+
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({metadataid: source.id})
+
+    assert_kind_of Source, attributes[:source]
+    assert_equal   source.id, attributes[:source].id
+  end
+
   test '.attributes_from_standards_hash returns a ManagementAuthority for a given
    management authority' do
     management_name = 'Authority of Authorities'
@@ -275,13 +285,6 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
     assert_not_nil the_geom, "Expected the_geom to be returned"
     assert_equal wkt_geom, the_geom
-  end
-
-  test '.attributes_from_standards_hash creates a slug from the PA name' do
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({name: 'Waltér White Mountain'})
-
-    assert_not_nil attributes[:slug], "Expected the slug to be returned"
-    assert_equal   "walter-white-mountain", attributes[:slug]
   end
 
   test '.attributes_from_standards_hash ignores attributes not in the

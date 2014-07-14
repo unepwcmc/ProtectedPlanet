@@ -2,70 +2,89 @@ require 'test_helper'
 
 class TestSearch < ActiveSupport::TestCase
   test '#search runs a full text search and returns the matching PA models' do
-    protected_area = FactoryGirl.create(:protected_area, wdpa_id: 1234)
+    search_query = 'manbone'
 
-    query = 'manbone'
+    query = """
+      SELECT wdpa_id, ts_rank(document, query) AS rank
+      FROM tsvector_search_documents, to_tsquery('#{search_query}:*') query
+      WHERE document @@ query
+    """.squish
 
-    ActiveRecord::Base.connection.
-      expects(:execute).
-      with("""
-        SELECT wdpa_id
-        FROM tsvector_search_documents
-        WHERE document @@ to_tsquery('#{query}')
-      """.squish).
-      returns([{"wdpa_id" => protected_area.wdpa_id}])
+    order_mock = mock()
+    order_mock.expects(:order).with("rank DESC").returns([])
 
-    results = Search.search query
-    found_protected_area = results.first
+    ProtectedArea.expects(:joins).with("""
+      INNER JOIN (
+        #{query}
+      ) AS search_results
+      ON search_results.wdpa_id = protected_areas.wdpa_id
+    """.squish).returns(order_mock)
 
-    assert_kind_of ProtectedArea, found_protected_area
-    assert_equal   protected_area.id, found_protected_area.id
-  end
-
-  test '#search returns an empty array if no PAs are found' do
-    query = 'manbone'
-
-    ActiveRecord::Base.connection.
-      expects(:execute).
-      with("""
-        SELECT wdpa_id
-        FROM tsvector_search_documents
-        WHERE document @@ to_tsquery('#{query}')
-      """.squish).
-      returns([])
-
-    results = Search.search query
-
-    assert_equal 0, results.count
+    Search.search search_query
   end
 
   test '#search sanitizes potential SQL injections' do
-    query = "' --"
+    search_query = "' --"
 
-    ActiveRecord::Base.connection.
-      expects(:execute).
-      with("""
-        SELECT wdpa_id
-        FROM tsvector_search_documents
-        WHERE document @@ to_tsquery(''' & --')
-      """.squish).
-      returns([])
+    query = """
+      SELECT wdpa_id, ts_rank(document, query) AS rank
+      FROM tsvector_search_documents, to_tsquery(''':* & --:*') query
+      WHERE document @@ query
+    """.squish
 
-    Search.search query
+    order_mock = mock()
+    order_mock.stubs(:order).returns([])
+
+    ProtectedArea.expects(:joins).with("""
+      INNER JOIN (
+        #{query}
+      ) AS search_results
+      ON search_results.wdpa_id = protected_areas.wdpa_id
+    """.squish).returns(order_mock)
+
+    Search.search search_query
   end
 
   test '#search squishes the query and joins the lexemes with & (and) operators' do
-    query = ' Killbear and   the Manbone'
+    search_query = ' Killbear and   the Manbone'
 
-    ActiveRecord::Base.connection.
-      expects(:execute).
-      with("""
-        SELECT wdpa_id
-        FROM tsvector_search_documents
-        WHERE document @@ to_tsquery('Killbear & and & the & Manbone')
-      """.squish).
-      returns([])
+    query = """
+      SELECT wdpa_id, ts_rank(document, query) AS rank
+      FROM tsvector_search_documents, to_tsquery('Killbear:* & and:* & the:* & Manbone:*') query
+      WHERE document @@ query
+    """.squish
 
-    Search.search query
+    order_mock = mock()
+    order_mock.stubs(:order).returns([])
+
+    ProtectedArea.expects(:joins).with("""
+      INNER JOIN (
+        #{query}
+      ) AS search_results
+      ON search_results.wdpa_id = protected_areas.wdpa_id
+    """.squish).returns(order_mock)
+
+    Search.search search_query
+  end
+
+  test '#search populates the results attribute of Search' do
+    results = []
+
+    order_mock = mock()
+    order_mock.stubs(:order).returns([])
+
+    ProtectedArea.expects(:joins).returns(order_mock)
+
+    Search.any_instance.expects(:results=).with(results).twice
+
+    Search.search 'search'
+  end
+
+  test '#search_for_similar calls Search::Similarity to fetch similitarities' do
+    search_term = 'manbone'
+
+    Search::Similarity.expects(:search).with(search_term).returns([])
+
+    Search.search_for_similar search_term
   end
 end
