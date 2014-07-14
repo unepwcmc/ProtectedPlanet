@@ -15,8 +15,11 @@ class CountriesGeometryImporter
     end
   end
 
-  def restore_table 
-    system("pg_restore -c -i -U postgres -d pp_development -v #{@filepath}")
+  def restore_table
+    db_config   = Rails.configuration.database_configuration
+    db_port = db_config[Rails.env]["port"] || 5432
+    db_name = db_config[Rails.env]["database"]
+    system("pg_restore -c -i -U postgres -d #{db_name} -v #{@filepath} -p #{db_port}")
   end
 
   def update_table type, country
