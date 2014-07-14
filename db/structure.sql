@@ -130,21 +130,24 @@ CREATE TABLE countries_protected_areas (
 
 
 --
--- Name: country_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: country_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE country_statistics (
     id integer NOT NULL,
     country_id integer,
-    area double precision,
     pa_area double precision,
-    percentage_cover_pas double precision,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    percentage_region numeric,
     percentage_land numeric,
-    percentage_water numeric,
-    percentage_coast numeric
+    eez_area double precision,
+    ts_area double precision,
+    pa_land_area double precision,
+    pa_marine_area double precision,
+    percentage_pa_land_cover double precision,
+    percentage_pa_eez_cover double precision,
+    percentage_pa_ts_cover double precision,
+    land_area double precision
 );
 
 
@@ -1177,4 +1180,12 @@ INSERT INTO schema_migrations (version) VALUES ('20140704154012');
 INSERT INTO schema_migrations (version) VALUES ('20140704154428');
 
 INSERT INTO schema_migrations (version) VALUES ('20140709181758');
+
+INSERT INTO schema_migrations (version) VALUES ('20140710144417');
+
+INSERT INTO schema_migrations (version) VALUES ('20140710144513');
+
+INSERT INTO schema_migrations (version) VALUES ('20140714105648');
+
+INSERT INTO schema_migrations (version) VALUES ('20140714110350');
 
