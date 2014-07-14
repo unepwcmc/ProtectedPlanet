@@ -53,4 +53,8 @@ class Wdpa::Relation
       area: @current_attributes[:no_take_area]
     })
   end
+
+  def source value
+    Source.where(id: value).first
+  end
 end

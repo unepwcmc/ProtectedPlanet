@@ -1,0 +1,27 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  responsible_party: MyString
+  responsible_email: MyString
+  year: 2014-07-10
+  language: MyString
+  character_set: MyString
+  reference_system: MyString
+  scale: MyString
+  lineage: MyText
+  citation: MyText
+  disclaimer: MyText
+
+two:
+  title: MyString
+  responsible_party: MyString
+  responsible_email: MyString
+  year: 2014-07-10
+  language: MyString
+  character_set: MyString
+  reference_system: MyString
+  scale: MyString
+  lineage: MyText
+  citation: MyText
+  disclaimer: MyText

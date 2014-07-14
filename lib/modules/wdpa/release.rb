@@ -59,15 +59,17 @@ class Wdpa::Release
   end
 
   def protected_areas
-    connection = ActiveRecord::Base.connection
-
     attributes = geometry_tables.map do |table_name, std_table_name|
-      connection.execute(
+      DB.execute(
         "SELECT * FROM #{std_table_name}"
       ).to_a
     end
 
     attributes.flatten
+  end
+
+  def sources
+    DB.execute("SELECT * FROM #{source_table}").to_a
   end
 
   def clean_up
