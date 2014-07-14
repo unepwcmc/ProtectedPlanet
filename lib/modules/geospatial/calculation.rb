@@ -58,5 +58,4 @@ class Geospatial::Calculation
             ST_Area(ST_Transform(ts_geom,954009)) ts_Area
             from countries) areas""".squish
   end
-
 end

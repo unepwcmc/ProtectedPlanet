@@ -15,7 +15,9 @@ You can check out the previous version of Protected Planet on
 5. [Search](docs/search.md)
 6. [Background Workers](docs/workers.md)
 7. [Downloads](docs/downloads.md)
-8. [caching](docs/caching.md)
+8. [Caching](docs/caching.md)
+9. [Base Datasets](docs/base_datasets.md)
+10. [Statistics](docs/statistics.md)
 
 ## Licence
 
