@@ -5,7 +5,10 @@ namespace :geo_stats do
     complex_countries_marine = ['GBR']
 
     geometry_operator = Geospatial::Geometry.new(complex_countries_land,complex_countries_marine)
+    geometry_operator.drop_indexes
     geometry_operator.dissolve_countries
+    geometry_operator.create_indexes
+
 
   end
 
