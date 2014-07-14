@@ -69,4 +69,17 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
 
     Wdpa::S3.download_current_wdpa_to filename: filename
   end
+
+  test '.new_wdpa? compares the current wdpa last modified time with the given
+   argument' do
+    older_time = Time.new(2010)
+    recent_time = Time.new(2014)
+
+    file_mock = mock()
+    file_mock.expects(:last_modified).returns(recent_time)
+    Wdpa::S3.any_instance.expects(:current_wdpa).returns(file_mock)
+
+    assert Wdpa::S3.new_wdpa?(older_time),
+      'Expected new_wdpa? to return true when given a time older than the current_wdpa'
+  end
 end
