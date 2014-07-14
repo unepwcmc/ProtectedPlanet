@@ -12,8 +12,6 @@ class Wdpa::SourceImporter
     sources = @wdpa_release.sources.map(&:symbolize_keys)
 
     sources.each do |source_attributes|
-      #next if source_exists(source)
-
       standardised_attributes = Wdpa::DataStandard::Source.attributes_from_standards_hash(
         source_attributes
       )
