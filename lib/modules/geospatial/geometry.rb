@@ -5,6 +5,12 @@ class Geospatial::Geometry
     @complex_countries_marine = complex_countries_marine
   end
 
+  def drop_indexes
+    query = """DROP INDEX IF EXISTS land_pas_geom_gindx;
+              DROP INDEX IF EXISTS marine_pas_geom_gindx;""".squish
+    db_execute query
+  end
+
   def dissolve_countries
     iso3 = Country.pluck(:iso_3)
     marine = [0,1]
@@ -23,9 +29,19 @@ class Geospatial::Geometry
     end
   end
 
+  def create_indexes
+    query = """CREATE INDEX land_pas_geom_gindx ON countries USING GIST (land_pas_geom);
+               CREATE INDEX marine_pas_geom_gindx ON countries USING GIST (marine_pas_geom);""".squish
+    db_execute query
+  end
+
   private
 
   DB = ActiveRecord::Base.connection
+
+  def db_execute query
+    DB.execute(query)
+  end
 
   def query country, type, geometry
 
@@ -36,7 +52,7 @@ class Geospatial::Geometry
              FROM standard_polygons
              WHERE iso3 = '#{country}' AND st_isvalid(wkb_geometry) AND marine = '#{type}') a
              WHERE iso_3 = '#{country}'""".squish
-    DB.execute(query)
+    db_execute query
   end
 
   def complex_geometries iso3,marine
