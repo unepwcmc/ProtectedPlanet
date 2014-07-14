@@ -9,11 +9,11 @@ set :branch, "master"
 set :linked_files, %w{config/database.yml config/secrets.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
-# Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
-
-# Default value for keep_releases is 5
-# set :keep_releases, 5
+# Whenever configuration
+set :whenever_environment, defer { stage }
+set :whenever_command, 'bundle exec whenever'
+set :whenever_roles, [:util]
+require 'whenever/capistrano'
 
 namespace :deploy do
 
