@@ -13,10 +13,19 @@ class Wdpa::S3
     s3
   end
 
+  def self.new_wdpa? since
+    s3 = self.new
+    s3.new_wdpa? since
+  end
+
   def download_current_wdpa_to filename: filename
     File.open(filename, 'w:ASCII-8BIT') do |file|
       file.write current_wdpa.read
     end
+  end
+
+  def new_wdpa? since
+    current_wdpa.last_modified > since
   end
 
   private
