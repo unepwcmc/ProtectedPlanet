@@ -10,10 +10,9 @@ set :linked_files, %w{config/database.yml config/secrets.yml .env}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Whenever configuration
-set :whenever_environment, defer { stage }
-set :whenever_command, 'bundle exec whenever'
+set :whenever_environment, -> { fetch(:stage) }
+set :whenever_command, 'cd #{current_path} && bundle exec whenever'
 set :whenever_roles, [:util]
-require 'whenever/capistrano'
 
 namespace :deploy do
 

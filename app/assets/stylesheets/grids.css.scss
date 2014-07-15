@@ -1,0 +1,38 @@
+@import "variables";
+@import "mixins";
+
+.grid {
+  section {
+    margin-top: 30px;
+    padding: 20px;
+
+    h3 {
+      font-weight: normal;
+      font-family: 'MuseoSlab', $font-stack;
+      border-bottom: 1px solid $grey;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+
+      span {
+       background: #e6e6ee;
+       @include border-radius(5px);
+       font-size: 0.8em;
+       padding: 5px;
+      }
+    }
+
+    &:last-of-type {
+      margin-bottom: 30px;
+    }
+  }
+
+  .column-left {
+    float: left;
+    width: 48.5%;
+  }
+
+  .column-right {
+    float: right;
+    width: 48.5%;
+  }
+}

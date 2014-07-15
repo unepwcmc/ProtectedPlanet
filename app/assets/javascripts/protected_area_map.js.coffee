@@ -4,7 +4,6 @@ class @ProtectedAreaMap
 
     L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png').addTo(@map)
 
-  
   _addSelectedStyle: (args) ->
     opacity = if args.opacity? then args.opacity else .5
     lineWidth = if args.lineWidth? then args.lineWidth else 1
@@ -17,7 +16,7 @@ class @ProtectedAreaMap
     """
 
   addSelectedWdpaTiles: (tileConfig, sublayers, idx) ->
-    args = 
+    args =
       cartocss: sublayers[idx].cartocss
       table: 'wdpapoly_july2014_0'
       attrName: 'wdpaid'
@@ -28,7 +27,7 @@ class @ProtectedAreaMap
     sublayers
 
   addCountryTiles: (tileConfig, sublayers) ->
-    args = 
+    args =
       cartocss: ''
       table: 'countries_geometries'
       attrName: 'iso_3'
@@ -36,13 +35,13 @@ class @ProtectedAreaMap
       opacity: .2
       lineWidth: 0
 
-    sublayers.push 
+    sublayers.push
       sql: "select * from #{args.table} where iso_3 = '#{tileConfig.iso3}'"
       cartocss: @_addSelectedStyle args
     sublayers
 
   addRegionTiles: (tileConfig, sublayers) ->
-    args = 
+    args =
       cartocss: ''
       table: 'continents'
       attrName: 'continent'
@@ -50,7 +49,7 @@ class @ProtectedAreaMap
       opacity: .2
       lineWidth: 0
 
-    sublayers.push 
+    sublayers.push
       sql: "select * from #{args.table} where continent = '#{tileConfig.regionName}'"
       cartocss: @_addSelectedStyle args
     sublayers
@@ -83,7 +82,7 @@ class @ProtectedAreaMap
     )
 
   normalizeBounds: (bounds) ->
-    # If a protected area overlaps the antimeridian ST_Extent does not 
+    # If a protected area overlaps the antimeridian ST_Extent does not
     # return a correct bounding box (Ideas to fix this?)
     # So, assuming that no protected areas real bbox width is bigger than 300,
     # if this is the case correct to a fixed 10 degree width.
@@ -109,4 +108,4 @@ class @ProtectedAreaMap
   calculatePadding: ->
     mapSize = @map.getSize()
     paddingLeft = mapSize.x/5
-    {topLeft: [paddingLeft, 50], bottomRight: [0, 50]}
+    {topLeft: [paddingLeft, 50], bottomRight: [0,70]}
