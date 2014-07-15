@@ -237,6 +237,7 @@ DEPENDENCIES
   dalli (~> 2.7.2)
   dbf (~> 2.0.7)
   dotenv (~> 0.11.1)
+  dotenv-deployment
   factory_girl_rails (~> 4.4.1)
   gdal (~> 0.0.5)
   httmultiparty (~> 0.3.14)
