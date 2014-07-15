@@ -11,10 +11,10 @@ class Stats::Country
     country_pas.to_f / global_pas * 100
   end
 
-  def self.percentage_cover_pas iso
+  def self.percentage_pa_cover iso
     CountryStatistic.joins(:country)
                      .where("countries.iso" => iso)
-                     .first[:percentage_cover_pas]
+                     .first[:percentage_pa_cover]
   end
 
   def self.pas_with_iucn_category iso

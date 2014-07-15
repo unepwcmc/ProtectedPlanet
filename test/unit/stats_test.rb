@@ -162,8 +162,8 @@ class StatsTest < ActiveSupport::TestCase
 
   test '.percentage cover of protected areas in country' do
     country = FactoryGirl.create(:country, iso: 'BANANA')
-    FactoryGirl.create(:country_statistic, country: country, :percentage_cover_pas => 50)
-    assert_equal 50, Stats::Country.percentage_cover_pas('BANANA')
+    FactoryGirl.create(:country_statistic, country: country, :percentage_pa_cover => 50)
+    assert_equal 50, Stats::Country.percentage_pa_cover('BANANA')
   end
 
   test '.protected areas with IUCN category per Country' do

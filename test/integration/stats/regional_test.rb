@@ -6,6 +6,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders the Region name' do
+    FactoryGirl.create(:protected_area)
     get "/stats/regional/#{@region.iso}"
     assert_match(/#{@region.name}/, @response.body)
   end
@@ -27,11 +28,11 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
 
   test 'renders percentage of global pas in one regopm' do
     country = FactoryGirl.create(:country, region: @region)
-    FactoryGirl.create(:protected_area, countries: [@country], designation: nil)
+    FactoryGirl.create(:protected_area, countries: [country], designation: nil)
     FactoryGirl.create(:protected_area)
     percentage = 50
 
-    visit "/stats/country/#{region.iso}"
+    visit "/stats/regional/#{@region.iso}"
 
     assert page.has_selector?('.pa-global-percentage'),
       "Expected page to have a PA percentage element"

@@ -33,7 +33,7 @@ class TestGeospatialCalculation < ActiveSupport::TestCase
             COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0), 
             pa_land_area, 
             pa_marine_area,
-            (COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0)) / (COALESCE(land_area + COALESCE(eez_area, 0) + COALESCE(ts_area,0))*100,
+            (COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0)) / (land_area + COALESCE(eez_area, 0) + COALESCE(ts_area,0))*100,
             COALESCE(pa_land_area,0) / land_area * 100,
             CASE 
               WHEN eez_area = 0 THEN

@@ -12,7 +12,7 @@ class Stats::RegionalController < ApplicationController
 
     # TODO
     @percentage_protected = Random.rand(100)
-    @percentage_protected_land = Random.rand(100)
+    @percentage_protected_land = 50
     @percentage_protected_sea = Random.rand(100)
     @percentage_protected_coast = Random.rand(100)
     @focus = 'region'
