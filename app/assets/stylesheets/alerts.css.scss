@@ -1,3 +1,5 @@
+@import "variables";
+
 .alert {
   color: white;
   height: 40px;
@@ -6,12 +8,22 @@
   box-sizing: border-box;
   font-size: 0.8em;
 
-  a {
-    color: white;
-    text-decoration: underline;
+  .alert-inner {
+    margin: 0px auto;
+    width: 980px;
 
-    &:hover {
-      text-decoration: none;
+    p {
+      float: left;
+    }
+
+    a {
+      float: right;
+      margin-top: -6px;
+      background-color: $dark-green;
+
+      &:hover {
+        background-color: $green;
+      }
     }
   }
 }
