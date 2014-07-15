@@ -5,4 +5,9 @@ class StaticPagesControllerTest < ActionController::TestCase
     get :terms
     assert_response :success
   end
+
+  test "should get wdpa terms" do
+    get :wdpa_terms
+    assert_response :success
+  end
 end

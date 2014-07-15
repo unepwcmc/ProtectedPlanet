@@ -1,10 +1,20 @@
 .terms-and-conditions {
-  font-weight: bold;
-  font-size: 1.5em;
-  margin: 30px 0;
-  line-height: 1em;
+  > ol {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 30px 0;
+  }
 
-  > li li {
+  ol {
+    line-height: 1em;
+  }
+
+  p {
+    line-height: 1.5em;
+    margin: 30px 0;
+  }
+
+  > ol > li li {
     font-size: 1rem;
     font-weight: normal;
     margin-top: 10px;
