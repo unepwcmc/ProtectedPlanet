@@ -8,6 +8,21 @@ main section {
   width: 100%;
 }
 
+.map-disclaimer {
+  position: absolute;
+  top: 330px;
+  left: 42px;
+
+  padding: 4px;
+
+  width: 895px;
+  text-align: center;
+  font-size: 0.8em;
+  background-color: rgba(210,210,210,0.7);
+
+  @include border-radius(4px 4px 0 0);
+}
+
 .info-card {
   width: 320px;
   height: 300px;
