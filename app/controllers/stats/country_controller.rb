@@ -11,7 +11,7 @@ class Stats::CountryController < ApplicationController
     @designations_by_frequency = Stats::Country.protected_areas_by_designation iso
 
     # TODO
-    @percentage_protected = Random.rand(100)
+    @percentage_protected = Stats::Country.percentage_pa_cover iso
     @percentage_protected_land = Stats::Country.percentage_protected_land iso
     @percentage_protected_sea = Stats::Country.percentage_protected_sea iso
     @percentage_protected_coast = Stats::Country.percentage_protected_coast iso

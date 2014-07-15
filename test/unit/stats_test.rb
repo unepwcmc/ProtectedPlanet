@@ -166,6 +166,24 @@ class StatsTest < ActiveSupport::TestCase
     assert_equal 50, Stats::Country.percentage_pa_cover('BANANA')
   end
 
+  test '.percentage cover of land protected areas in country' do
+    country = FactoryGirl.create(:country, iso: 'BANANA')
+    FactoryGirl.create(:country_statistic, country: country, :percentage_pa_land_cover => 50)
+    assert_equal 50, Stats::Country.percentage_protected_land('BANANA')
+  end
+
+  test '.percentage cover of sea protected areas in country' do
+    country = FactoryGirl.create(:country, iso: 'BANANA')
+    FactoryGirl.create(:country_statistic, country: country, :percentage_pa_eez_cover => 50)
+    assert_equal 50, Stats::Country.percentage_protected_sea('BANANA')
+  end
+
+  test '.percentage cover of coast protected areas in country' do
+    country = FactoryGirl.create(:country, iso: 'BANANA')
+    FactoryGirl.create(:country_statistic, country: country, :percentage_pa_ts_cover => 50)
+    assert_equal 50, Stats::Country.percentage_protected_coast('BANANA')
+  end
+
   test '.protected areas with IUCN category per Country' do
     iucn_category_1 = FactoryGirl.create(:iucn_category, name: 'Ib')
     iucn_category_2 = FactoryGirl.create(:iucn_category, name: 'V')
