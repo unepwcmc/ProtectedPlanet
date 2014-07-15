@@ -17,6 +17,7 @@
  *= require 'protected_areas'
  *= require 'search'
  *= require 'stats'
+ *= require 'static_pages'
  *= require 'leaflet_overrides'
  *= require 'downloads'
  *= require 'alerts'

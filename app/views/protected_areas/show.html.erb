@@ -1,7 +1,4 @@
-<div class="about-links">
-  <a href="#" class="btn-about">About</a> |
-  <a href="#">Terms and Conditions</a>
-</div>
+<%= render 'shared/info_links' %>
 
 <div class="protected-area-map" id="map" data-zoom-control="topright" data-padding-enabled data-bound-from="<%= map_bounds(@protected_area)['from'] %>" data-bound-to="<%= map_bounds(@protected_area)['to'] %>" data-wdpa-id="<%= @protected_area.wdpa_id %>"></div>
 

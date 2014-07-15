@@ -1,27 +1,6 @@
 @import 'mixins';
 @import 'variables';
 
-.protected-area-map {
-}
-
-.about-links {
-  height: 50px;
-  margin: 0 auto;
-  width: 980px;
-  text-align: right;
-  padding-top: 18px;
-  font-size: 0.9em;
-
-  a {
-    font-weight: normal;
-    text-decoration: underline;
-
-    &:hover {
-      text-decoration: none;
-    }
-  }
-}
-
 main section {
   border: 1px solid #dadada;
   background: #ececf4;
