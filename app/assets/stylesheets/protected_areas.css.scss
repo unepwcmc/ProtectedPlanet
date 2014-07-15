@@ -2,13 +2,29 @@
 @import 'variables';
 
 .protected-area-map {
-  margin-top: 50px;
+}
+
+.about-links {
+  height: 50px;
+  margin: 0 auto;
+  width: 980px;
+  text-align: right;
+  padding-top: 18px;
+  font-size: 0.9em;
+
+  a {
+    font-weight: normal;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
 
 main section {
   border: 1px solid #dadada;
   background: #ececf4;
-  box-sizing: border-box;
   @include border-radius(5px);
   width: 100%;
 }
@@ -49,7 +65,7 @@ main section {
 }
 
 .grid .info-card {
-  margin-top: 0;
+  margin-top: -50px;
 }
 
 .factsheet {

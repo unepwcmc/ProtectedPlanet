@@ -16,7 +16,10 @@
  *= require 'home'
  *= require 'protected_areas'
  *= require 'search'
+ *= require 'stats'
  *= require 'leaflet_overrides'
  *= require 'downloads'
+ *= require 'alerts'
+ *= require 'grids'
  *= require_self
  */
