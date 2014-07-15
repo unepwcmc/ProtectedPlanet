@@ -46,8 +46,6 @@ class @PageInitialiser
 
   initialiseProtectedCoverageViz: ($vizContainer) ->
     return false if $vizContainer.length == 0 or not Modernizr.svg?
-    rand = ->
-      Math.round(Math.random() * 100) + 1
     $vizContainer.find('.viz').each (idx, el) ->
       value = $(el).attr('data-value')
       data = [
