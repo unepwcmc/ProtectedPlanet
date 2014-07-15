@@ -105,7 +105,23 @@ CREATE TABLE countries (
     updated_at timestamp without time zone,
     language character varying(255),
     region_id integer,
-    bounding_box geometry
+    bounding_box geometry,
+    marine_pas_geom geometry,
+    land_pas_geom geometry,
+    land_geom geometry,
+    eez_geom geometry,
+    ts_geom geometry
+);
+
+
+--
+-- Name: countries_geometries_temp; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE countries_geometries_temp (
+    the_geom geometry,
+    iso_3 text,
+    type character varying
 );
 
 
@@ -139,17 +155,23 @@ CREATE TABLE countries_protected_areas (
 
 
 --
--- Name: country_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: country_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE country_statistics (
     id integer NOT NULL,
     country_id integer,
-    area double precision,
     pa_area double precision,
-    percentage_cover_pas double precision,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    eez_area double precision,
+    ts_area double precision,
+    pa_land_area double precision,
+    pa_marine_area double precision,
+    percentage_pa_land_cover double precision,
+    percentage_pa_eez_cover double precision,
+    percentage_pa_ts_cover double precision,
+    land_area double precision
 );
 
 
@@ -528,9 +550,18 @@ CREATE TABLE regional_statistics (
     region_id integer,
     area double precision,
     pa_area double precision,
-    percentage_cover_pas double precision,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    eez_area double precision,
+    ts_area double precision,
+    pa_land_area double precision,
+    pa_marine_area double precision,
+    percentage_land double precision,
+    percentage_pa_land_cover double precision,
+    percentage_pa_eez_cover double precision,
+    percentage_pa_ts_cover double precision,
+    land_area double precision,
+    percentage_pa_cover double precision
 );
 
 
@@ -1020,129 +1051,206 @@ ALTER TABLE ONLY wikipedia_articles
 
 
 --
--- Name: index_countries_protected_areas_composite; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: eez_geom_gindx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX eez_geom_gindx ON countries USING gist (eez_geom);
+
+
+--
+-- Name: index_countries_protected_areas_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_countries_protected_areas_composite ON countries_protected_areas USING btree (protected_area_id, country_id);
 
 
 --
--- Name: index_countries_protected_areas_on_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_countries_protected_areas_on_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_countries_protected_areas_on_country_id ON countries_protected_areas USING btree (country_id);
 
 
 --
--- Name: index_designations_on_jurisdiction_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_designations_on_jurisdiction_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_designations_on_jurisdiction_id ON designations USING btree (jurisdiction_id);
 
 
 --
--- Name: index_images_on_protected_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_images_on_protected_area_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_images_on_protected_area_id ON images USING btree (protected_area_id);
 
 
 --
--- Name: index_protected_areas_on_designation_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_on_designation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_on_designation_id ON protected_areas USING btree (designation_id);
 
 
 --
--- Name: index_protected_areas_on_governance_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_on_governance_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_on_governance_id ON protected_areas USING btree (governance_id);
 
 
 --
--- Name: index_protected_areas_on_iucn_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_on_iucn_category_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_on_iucn_category_id ON protected_areas USING btree (iucn_category_id);
 
 
 --
--- Name: index_protected_areas_on_legal_status_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_on_legal_status_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_on_legal_status_id ON protected_areas USING btree (legal_status_id);
 
 
 --
--- Name: index_protected_areas_on_management_authority_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_on_management_authority_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_on_management_authority_id ON protected_areas USING btree (management_authority_id);
 
 
 --
--- Name: index_protected_areas_on_no_take_status_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_on_no_take_status_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_on_no_take_status_id ON protected_areas USING btree (no_take_status_id);
 
 
 --
--- Name: index_protected_areas_on_wdpa_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_on_wdpa_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_protected_areas_on_wdpa_id ON protected_areas USING btree (wdpa_id);
 
 
 --
--- Name: index_protected_areas_on_wdpa_parent_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_on_wdpa_parent_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_on_wdpa_parent_id ON protected_areas USING btree (wdpa_parent_id);
 
 
 --
--- Name: index_protected_areas_on_wikipedia_article_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_on_wikipedia_article_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_on_wikipedia_article_id ON protected_areas USING btree (wikipedia_article_id);
 
 
 --
--- Name: index_protected_areas_sub_locations_composite; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_sub_locations_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_sub_locations_composite ON protected_areas_sub_locations USING btree (protected_area_id, sub_location_id);
 
 
 --
--- Name: index_protected_areas_sub_locations_on_sub_location_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_protected_areas_sub_locations_on_sub_location_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_protected_areas_sub_locations_on_sub_location_id ON protected_areas_sub_locations USING btree (sub_location_id);
 
 
 --
--- Name: index_sub_locations_on_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_sub_locations_on_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_sub_locations_on_country_id ON sub_locations USING btree (country_id);
 
 
 --
--- Name: index_tsvector_search_documents_on_document; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_tsvector_search_documents_on_document; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_tsvector_search_documents_on_document ON tsvector_search_documents USING gin (document);
 
 
 --
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: land_geom_gindx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX land_geom_gindx ON countries USING gist (land_geom);
+
+
+--
+-- Name: land_pas_geom_gindx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX land_pas_geom_gindx ON countries USING gist (land_pas_geom);
+
+
+--
+-- Name: marine_pas_geom_gindx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX marine_pas_geom_gindx ON countries USING gist (marine_pas_geom);
+
+
+--
+-- Name: search_lexemes_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX search_lexemes_idx ON search_lexemes USING gin (word gin_trgm_ops);
+
+
+--
+-- Name: standard_points_wkb_geometry_geom_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX standard_points_wkb_geometry_geom_idx ON standard_points USING gist (wkb_geometry);
+
+
+--
+-- Name: standard_polygons_wkb_geometry_geom_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX standard_polygons_wkb_geometry_geom_idx ON standard_polygons USING gist (wkb_geometry);
+
+
+--
+-- Name: ts_geom_gindx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX ts_geom_gindx ON countries USING gist (ts_geom);
+
+
+--
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+
+
+--
+-- Name: wdpa_polygons_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX wdpa_polygons_idx ON wdpapoly_june2014 USING gist (wkb_geometry);
+
+
+--
+-- Name: wdpapoint_june2014_wkb_geometry_geom_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX wdpapoint_june2014_wkb_geometry_geom_idx ON wdpapoint_june2014 USING gist (wkb_geometry);
+
+
+--
+-- Name: wdpapoly_june2014_wkb_geometry_geom_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX wdpapoly_june2014_wkb_geometry_geom_idx ON wdpapoly_june2014 USING gist (wkb_geometry);
 
 
 --
@@ -1243,6 +1351,10 @@ INSERT INTO schema_migrations (version) VALUES ('20140613125148');
 
 INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 
+INSERT INTO schema_migrations (version) VALUES ('20140617090445');
+
+INSERT INTO schema_migrations (version) VALUES ('20140617090531');
+
 INSERT INTO schema_migrations (version) VALUES ('20140617091236');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091255');
@@ -1281,18 +1393,31 @@ INSERT INTO schema_migrations (version) VALUES ('20140704154012');
 
 INSERT INTO schema_migrations (version) VALUES ('20140704154428');
 
+INSERT INTO schema_migrations (version) VALUES ('20140707111454');
+
+INSERT INTO schema_migrations (version) VALUES ('20140708193519');
+
 INSERT INTO schema_migrations (version) VALUES ('20140709181758');
+
+INSERT INTO schema_migrations (version) VALUES ('20140710124303');
 
 INSERT INTO schema_migrations (version) VALUES ('20140710144417');
 
 INSERT INTO schema_migrations (version) VALUES ('20140710144513');
 
-INSERT INTO schema_migrations (version) VALUES ('20140707111454');
+INSERT INTO schema_migrations (version) VALUES ('20140714105648');
 
-INSERT INTO schema_migrations (version) VALUES ('20140708193519');
+INSERT INTO schema_migrations (version) VALUES ('20140714110350');
 
-INSERT INTO schema_migrations (version) VALUES ('20140707111454');
+INSERT INTO schema_migrations (version) VALUES ('20140714231111');
 
-INSERT INTO schema_migrations (version) VALUES ('20140708193519');
+INSERT INTO schema_migrations (version) VALUES ('20140715151517');
 
-INSERT INTO schema_migrations (version) VALUES ('20140710124303');
+INSERT INTO schema_migrations (version) VALUES ('20140715152844');
+
+INSERT INTO schema_migrations (version) VALUES ('20140715155911');
+
+INSERT INTO schema_migrations (version) VALUES ('20140715160555');
+
+INSERT INTO schema_migrations (version) VALUES ('20140715160624');
+
