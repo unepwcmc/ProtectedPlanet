@@ -29,6 +29,13 @@ class Geospatial::Geometry
     end
   end
 
+  def create_buffers
+    query = """UPDATE standard_points
+      SET buffer_geom = ST_Buffer(wkb_geometry::geography, |/( rep_area*1000000 / pi() ))::geometry
+      WHERE rep_area IS NOT NULL OR wdpaid NOT IN (18293, 34878);""".squish
+    db_execute query
+  end
+
   def create_indexes
     query = """CREATE INDEX land_pas_geom_gindx ON countries USING GIST (land_pas_geom);
                CREATE INDEX marine_pas_geom_gindx ON countries USING GIST (marine_pas_geom);""".squish
@@ -48,9 +55,14 @@ class Geospatial::Geometry
     column_prefix = type == 1 ? 'marine' : 'land'
     query = """UPDATE countries
              SET #{column_prefix}_pas_geom = a.the_geom
-             FROM (SELECT ST_UNION(#{geometry}) as the_geom
-             FROM standard_polygons
-             WHERE iso3 = '#{country}' AND st_isvalid(wkb_geometry) AND marine = '#{type}') a
+             FROM (
+              SELECT ST_UNION(the_geom) as the_geom
+              FROM 
+               (SELECT  iso3, #{geometry} the_geom FROM standard_polygons pol 
+                WHERE pol.iso3 = '#{country}' AND st_isvalid(pol.wkb_geometry) AND pol.marine = '#{type}'
+                UNION 
+                SELECT iso3, buffer_geom the_geom FROM standard_points poi
+                WHERE poi.iso3 = '#{country}' AND st_isvalid(poi.buffer_geom) AND poi.marine = '#{type}') b) a
              WHERE iso_3 = '#{country}'""".squish
     db_execute query
   end

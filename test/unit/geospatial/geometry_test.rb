@@ -24,16 +24,18 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
      complex_countries_land = ['BUM', 'COM']
      complex_countries_marine = ['LEO']
 
-
-
-
-     ActiveRecord::Base.connection.
+    ActiveRecord::Base.connection.
      expects(:execute).
      with("""UPDATE countries
              SET land_pas_geom = a.the_geom
-             FROM (SELECT ST_UNION(wkb_geometry) as the_geom
-             FROM standard_polygons
-             WHERE iso3 = 'BAM' AND st_isvalid(wkb_geometry) AND marine = '0') a
+             FROM (
+               SELECT ST_UNION(the_geom) as the_geom
+               FROM 
+               (SELECT  iso3, wkb_geometry the_geom FROM standard_polygons pol 
+                WHERE pol.iso3 = 'BAM' AND st_isvalid(pol.wkb_geometry) AND pol.marine = '0'
+                UNION 
+                SELECT iso3, buffer_geom the_geom FROM standard_points poi
+                WHERE poi.iso3 = 'BAM' AND st_isvalid(poi.buffer_geom) AND poi.marine = '0') b) a
              WHERE iso_3 = 'BAM'""".squish).
      returns true
 
@@ -41,9 +43,14 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
      expects(:execute).
      with("""UPDATE countries
              SET marine_pas_geom = a.the_geom
-             FROM (SELECT ST_UNION(wkb_geometry) as the_geom
-             FROM standard_polygons
-             WHERE iso3 = 'BAM' AND st_isvalid(wkb_geometry) AND marine = '1') a
+             FROM (
+               SELECT ST_UNION(the_geom) as the_geom
+               FROM 
+               (SELECT  iso3, wkb_geometry the_geom FROM standard_polygons pol 
+                WHERE pol.iso3 = 'BAM' AND st_isvalid(pol.wkb_geometry) AND pol.marine = '1'
+                UNION 
+                SELECT iso3, buffer_geom the_geom FROM standard_points poi
+                WHERE poi.iso3 = 'BAM' AND st_isvalid(poi.buffer_geom) AND poi.marine = '1') b) a
              WHERE iso_3 = 'BAM'""".squish).
      returns true
 
@@ -52,6 +59,64 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
       response = geometry_operator.dissolve_countries
 
       assert response, 'Expects query'
+  end
+
+  test '.merges geometries for countries with complex land geometries' do
+     FactoryGirl.create(:country, iso_3: 'BUM')
+     complex_countries_land = ['BUM', 'COM']
+     complex_countries_marine = ['LEO']
+
+    ActiveRecord::Base.connection.
+     expects(:execute).
+     with("""UPDATE countries
+             SET land_pas_geom = a.the_geom
+             FROM (
+               SELECT ST_UNION(the_geom) as the_geom
+               FROM 
+               (SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.00000001)) the_geom FROM standard_polygons pol 
+                WHERE pol.iso3 = 'BUM' AND st_isvalid(pol.wkb_geometry) AND pol.marine = '0'
+                UNION 
+                SELECT iso3, buffer_geom the_geom FROM standard_points poi
+                WHERE poi.iso3 = 'BUM' AND st_isvalid(poi.buffer_geom) AND poi.marine = '0') b) a
+             WHERE iso_3 = 'BUM'""".squish).
+     returns true
+
+     ActiveRecord::Base.connection.
+     expects(:execute).
+     with("""UPDATE countries
+             SET marine_pas_geom = a.the_geom
+             FROM (
+               SELECT ST_UNION(the_geom) as the_geom
+               FROM 
+               (SELECT  iso3, wkb_geometry the_geom FROM standard_polygons pol 
+                WHERE pol.iso3 = 'BUM' AND st_isvalid(pol.wkb_geometry) AND pol.marine = '1'
+                UNION 
+                SELECT iso3, buffer_geom the_geom FROM standard_points poi
+                WHERE poi.iso3 = 'BUM' AND st_isvalid(poi.buffer_geom) AND poi.marine = '1') b) a
+             WHERE iso_3 = 'BUM'""".squish).
+     returns true
+
+
+      geometry_operator = Geospatial::Geometry.new(complex_countries_land,complex_countries_marine)
+      response = geometry_operator.dissolve_countries
+
+      assert response, 'Expects query'
+  end
+
+  test '.updates buffer_geom field on standard_points' do
+
+    complex_countries_land = ['BUM', 'COM']
+    complex_countries_marine = ['LEO']
+    
+    ActiveRecord::Base.connection.
+     expects(:execute).
+     with("""UPDATE standard_points
+             SET buffer_geom = ST_Buffer(wkb_geometry::geography, |/( rep_area*1000000 / pi() ))::geometry
+             WHERE rep_area IS NOT NULL OR wdpaid NOT IN (18293, 34878);""".squish).
+     returns true
+    geometry_operator = Geospatial::Geometry.new(complex_countries_land,complex_countries_marine)
+    response = geometry_operator.create_buffers
+    assert response, 'Expects query'
   end
 
   test '.creates indexes' do
