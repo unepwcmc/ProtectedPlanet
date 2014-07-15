@@ -24,6 +24,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-bundler', '~> 1.1', require: false
   gem 'capistrano-sidekiq', '~> 0.3.3'
+  gem 'dotenv', '~> 0.11.1'
 end
 
 group :test do
