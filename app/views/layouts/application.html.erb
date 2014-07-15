@@ -14,8 +14,13 @@
 <body>
 
   <div class="alert info">
-    <strong>This is an experimental prototype.</strong> There might be errors, inconsistencies, or inaccuracies.
-    <a href="#" class="btn-about">About this prototype</a>
+    <div class="alert-inner">
+      <p>
+        <strong>This is an experimental prototype.</strong> There might be errors, inconsistencies, or inaccuracies.
+      </p>
+
+      <a class="btn btn-secondary" href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>Tell us what you think</a>
+    </div>
   </div>
 
   <header>
@@ -42,7 +47,15 @@
 
   <footer>
     <div class="footer-inner">
-      <p>&copy; ProtectedPlanet 2014</p>
+      <div class="footer-copyright">
+        <p><strong>&copy; ProtectedPlanet 2014</strong></p>
+        <p>All rights reserved</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="#" class="btn-about">About</a> |
+        <%= link_to "Terms and Conditions", wcmc_terms_path %>
+      </div>
     </div>
   </footer>
 
