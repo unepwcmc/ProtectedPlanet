@@ -10,6 +10,16 @@ class TestGeospatialCalculation < ActiveSupport::TestCase
     assert response,"Expects delete_all to be run"
   end
 
+
+  test '.deletes current regional_statistics values' do
+    RegionalStatistic.expects(:destroy_all).returns(:true)
+
+    geometry_calculator = Geospatial::Calculation.new()
+    response = geometry_calculator.delete_regional_and_global_stats
+
+    assert response,"Expects delete_all to be run"
+  end
+
   test '.inserts countries' do
     ActiveRecord::Base.connection.
     expects(:execute).

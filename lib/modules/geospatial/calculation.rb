@@ -4,6 +4,10 @@ class Geospatial::Calculation
     CountryStatistic.destroy_all
   end
 
+  def delete_regional_and_global_stats
+    RegionalStatistic.destroy_all
+  end
+
   def insert_country_stats
     execute_query 'country'
   end
