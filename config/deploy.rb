@@ -50,3 +50,29 @@ namespace :deploy do
   end
 
 end
+
+namespace :maintenance do
+
+  desc 'Turn on maintenance mode'
+  task :on do
+    on roles(:web), in: :sequence, wait: 5 do
+      within current_path do
+        with :rails_env => fetch(:rails_env) do
+          execute :rake, 'maintenance:start allowed_paths="/admin/maintenance"'
+        end
+      end
+    end
+  end
+
+  desc 'Turn off maintenance mode'
+  task :off do
+    on roles(:web), in: :sequence, wait: 5 do
+      within current_path do
+        with :rails_env => fetch(:rails_env) do
+          execute :rake, 'maintenance:end'
+        end
+      end
+      end
+  end
+
+end
