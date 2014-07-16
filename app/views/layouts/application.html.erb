@@ -19,7 +19,12 @@
         <strong>This is an experimental prototype.</strong> There might be errors, inconsistencies, or inaccuracies.
       </p>
 
-      <a class="btn btn-secondary" href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>Tell us what you think</a>
+      <div class="links">
+        <a href="#" class="btn-about">about</a> |
+        <%= link_to "WDPA terms & conditions", wdpa_terms_path %>
+
+        <a class="btn btn-secondary" href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>Tell us what you think</a>
+      </div>
     </div>
   </div>
 
@@ -47,6 +52,16 @@
 
   <footer>
     <div class="footer-inner">
+      <div class="footer-logos">
+        <a href="http://unep-wcmc.org" title="UNEP-WCMC Website">
+          <%= image_tag 'wcmc-footer-logo@2x.png', style: 'width: 58px; height: 33px' %>
+        </a>
+
+        <a href="http://iucn.org" title="IUCN Website">
+          <%= image_tag 'iucn-footer-logo@2x.png', style: 'width: 39px; height: 39px' %>
+        </a>
+      </div>
+
       <div class="footer-copyright">
         <p><strong>&copy; ProtectedPlanet 2014</strong></p>
         <p>All rights reserved</p>
@@ -54,7 +69,7 @@
 
       <div class="footer-links">
         <a href="#" class="btn-about">About</a> |
-        <%= link_to "Terms and Conditions", wcmc_terms_path %>
+        <%= link_to "Site Terms of Use", wcmc_terms_path %>
       </div>
     </div>
   </footer>
