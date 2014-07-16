@@ -54,7 +54,6 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
              WHERE iso_3 = 'BAM'""".squish).
      returns true
 
-
       geometry_operator = Geospatial::Geometry.new(complex_countries_land,complex_countries_marine)
       response = geometry_operator.dissolve_countries
 
@@ -96,11 +95,53 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
              WHERE iso_3 = 'BUM'""".squish).
      returns true
 
-
       geometry_operator = Geospatial::Geometry.new(complex_countries_land,complex_countries_marine)
       response = geometry_operator.dissolve_countries
 
       assert response, 'Expects query'
+  end
+
+  test '.splits geometries for pas in eez and ts marine areas' do
+    FactoryGirl.create(:country, iso_3: 'BUM')
+    complex_countries_land = ['BUM', 'COM']
+    complex_countries_marine = ['LEO']
+
+    ActiveRecord::Base.connection.
+    expects(:execute).
+    with("""
+      UPDATE countries SET marine_ts_pas_geom = (
+        SELECT CASE
+            WHEN ST_Within(marine_pas_geom, ts_geom)
+            THEN marine_pas_geom
+            ELSE ST_Multi(ST_Intersection(marine_pas_geom, ts_geom))
+         END
+        FROM countries
+        WHERE iso_3 = 'BUM'
+      )
+      WHERE iso_3 = 'BUM'
+    """.squish).
+    returns true
+
+    ActiveRecord::Base.connection.
+    expects(:execute).
+    with("""
+      UPDATE countries SET marine_eez_pas_geom = (
+        SELECT CASE
+            WHEN ST_Within(marine_pas_geom, eez_geom)
+            THEN marine_pas_geom
+            ELSE ST_Multi(ST_Intersection(marine_pas_geom, eez_geom))
+         END
+        FROM countries
+        WHERE iso_3 = 'BUM'
+      )
+      WHERE iso_3 = 'BUM'
+    """.squish).
+    returns true
+
+    geometry_operator = Geospatial::Geometry.new(complex_countries_land,complex_countries_marine)
+    response = geometry_operator.split_countries_marine
+
+    assert response, 'Expects query'
   end
 
   test '.updates buffer_geom field on standard_points' do
