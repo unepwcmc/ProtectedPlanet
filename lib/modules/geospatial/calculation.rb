@@ -12,6 +12,10 @@ class Geospatial::Calculation
     execute_query 'regional'
   end
 
+  def insert_global_stats
+    execute_query 'global'
+  end
+
 
   private
 
@@ -27,7 +31,8 @@ class Geospatial::Calculation
 
   def main_query type
     id_prefix = type == 'country' ? 'country' : 'region'
-    """ INSERT INTO #{type}_statistics (
+    table = type == 'global' ? 'regional' : type
+    """ INSERT INTO #{table}_statistics (
         #{id_prefix}_id,
         land_area,
         eez_area,
@@ -74,18 +79,26 @@ class Geospatial::Calculation
   end
 
     def from_regional_query
-    """(SELECT r.id,
-                sum(pa_land_area) pa_land_area,
-                sum(pa_marine_area) pa_marine_area,
-                sum(land_area) land_area,
-                sum(eez_area) eez_area,
-                sum(ts_area) ts_area
-                FROM country_statistics cs
-              JOIN countries c ON cs.country_id = c.id
-              RIGHT JOIN regions r on r.id = c.region_id
-              GROUP BY r.id) a"""
-  end
+      """#{from_regional_table_query} JOIN regions r on r.id = c.region_id
+         GROUP BY r.id) a"""
+    end
 
+    def from_global_query
+      """#{from_regional_table_query}, 
+          regions r
+          where r.iso = 'GL'
+          group by r.id) a"""
+    end
 
-
+    def from_regional_table_query
+      """(SELECT r.id,
+          sum(pa_land_area) pa_land_area, 
+          sum(pa_marine_area) pa_marine_area, 
+          sum(land_area) land_area, 
+          sum(eez_area) eez_area, 
+          sum(ts_area) ts_area
+          FROM country_statistics cs
+        JOIN countries c ON cs.country_id = c.id
+      """
+    end
 end
