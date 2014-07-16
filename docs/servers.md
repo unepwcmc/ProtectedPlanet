@@ -80,3 +80,34 @@ ansible-vault edit config/deploy/ansible/group_vars/db
 
 This will ask you for a Vault password, which can be found in the
 Informatics Password Manager (speak to Stuart Watson for access).
+
+## Maintenance Mode
+
+Servers can be put in to maintenance mode to restrict access to the
+site during deploys, maintenance, etc. This state is handled by the
+`AdminController`, and is secured by a `maintenance_mode_key` in in the
+`secrets.yml` config file.
+
+### Manually
+
+If you need to turn on maintenance mode from a different server, as the
+Utility box has to do during an import, you can do so via HTTP:
+
+```
+# On
+curl -X PUT -d maintenance_mode_on=true --header "X-Auth-Key: <key>" <domain>/admin/maintenance
+# Off
+curl -X PUT -d maintenance_mode_on=false --header "X-Auth-Key: <key>" <domain>/admin/maintenance
+```
+
+### Capistrano
+
+If you need to turn maintenance mode on manually, you can use
+capistrano:
+
+```
+# On
+cap <stage> maintenance:on
+# Off
+cap <stage> maintenance:off
+```
