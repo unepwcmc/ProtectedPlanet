@@ -1,6 +1,6 @@
 class WdpaImportWorker
   @@REDIS_PREFIX = Rails.application.secrets.redis['wdpa_imports_prefix']
-  @@LOCKING_KEY = "#{@@REDIS_PREFIX}:locking_key"
+  @@LOCKING_KEY  = "#{@@REDIS_PREFIX}:locking_key"
 
   include Sidekiq::Worker
   sidekiq_options :retry => false
