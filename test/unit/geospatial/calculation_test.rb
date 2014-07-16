@@ -63,7 +63,7 @@ class TestGeospatialCalculation < ActiveSupport::TestCase
     
   end
 
-  test '.inserts countries' do
+  test '.inserts regions' do
       ActiveRecord::Base.connection.
     expects(:execute).
     with("""INSERT INTO regional_statistics
@@ -103,11 +103,11 @@ class TestGeospatialCalculation < ActiveSupport::TestCase
                 sum(pa_marine_area) pa_marine_area, 
                 sum(land_area) land_area, 
                 sum(eez_area) eez_area, 
-                sum(ts_sArea) ts_area
+                sum(ts_area) ts_area
                 FROM country_statistics cs
               JOIN countries c ON cs.country_id = c.id
               RIGHT JOIN regions r on r.id = c.region_id
-              group by r.iso, r.id) a""".squish).
+              GROUP BY r.id) a""".squish).
     returns true
 
     geometry_calculator = Geospatial::Calculation.new()
