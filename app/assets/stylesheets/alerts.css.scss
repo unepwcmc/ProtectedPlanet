@@ -12,13 +12,25 @@
     margin: 0px auto;
     width: 980px;
 
+    .links {
+      float: right;
+    }
+
     p {
       float: left;
     }
 
     a {
-      float: right;
+      color: white;
       margin-top: -6px;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    a.btn {
+      margin-left: 5px;
       background-color: $dark-green;
 
       &:hover {
