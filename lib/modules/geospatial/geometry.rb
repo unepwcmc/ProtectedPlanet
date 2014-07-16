@@ -73,10 +73,12 @@ class Geospatial::Geometry
               SELECT ST_UNION(the_geom) as the_geom
               FROM 
                (SELECT  iso3, #{geometry} the_geom FROM standard_polygons pol 
-                WHERE pol.iso3 = '#{country}' AND st_isvalid(pol.wkb_geometry) AND pol.marine = '#{type}'
+                WHERE pol.iso3 = '#{country}' AND st_isvalid(pol.wkb_geometry) 
+                AND pol.marine = '#{type}' AND pol.status NOT IN ('Proposed', 'Not Reported')
                 UNION 
                 SELECT iso3, buffer_geom the_geom FROM standard_points poi
-                WHERE poi.iso3 = '#{country}' AND st_isvalid(poi.buffer_geom) AND poi.marine = '#{type}') b) a
+                WHERE poi.iso3 = '#{country}' AND st_isvalid(poi.buffer_geom) 
+                AND poi.marine = '#{type}' AND poi.status NOT IN ('Proposed', 'Not Reported')) b) a
              WHERE iso_3 = '#{country}'""".squish
     db_execute query
   end

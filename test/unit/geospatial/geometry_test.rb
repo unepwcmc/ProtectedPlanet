@@ -10,6 +10,8 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
       expects(:execute).
       with("""DROP INDEX IF EXISTS land_pas_geom_gindx;
               DROP INDEX IF EXISTS marine_pas_geom_gindx;
+              DROP INDEX IF EXISTS marine_ts_pas_geom_gindx;
+              DROP INDEX IF EXISTS marine_ts_eez_geom_gindx;
            """.squish).
       returns(true)
 
@@ -32,10 +34,12 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
                SELECT ST_UNION(the_geom) as the_geom
                FROM 
                (SELECT  iso3, wkb_geometry the_geom FROM standard_polygons pol 
-                WHERE pol.iso3 = 'BAM' AND st_isvalid(pol.wkb_geometry) AND pol.marine = '0'
+                WHERE pol.iso3 = 'BAM' AND st_isvalid(pol.wkb_geometry) 
+                 AND pol.marine = '0' AND pol.status NOT IN ('Proposed', 'Not Reported')
                 UNION 
                 SELECT iso3, buffer_geom the_geom FROM standard_points poi
-                WHERE poi.iso3 = 'BAM' AND st_isvalid(poi.buffer_geom) AND poi.marine = '0') b) a
+                WHERE poi.iso3 = 'BAM' AND st_isvalid(poi.buffer_geom) 
+                AND poi.marine = '0' AND poi.status NOT IN ('Proposed', 'Not Reported')) b) a
              WHERE iso_3 = 'BAM'""".squish).
      returns true
 
@@ -47,10 +51,12 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
                SELECT ST_UNION(the_geom) as the_geom
                FROM 
                (SELECT  iso3, wkb_geometry the_geom FROM standard_polygons pol 
-                WHERE pol.iso3 = 'BAM' AND st_isvalid(pol.wkb_geometry) AND pol.marine = '1'
+                WHERE pol.iso3 = 'BAM' AND st_isvalid(pol.wkb_geometry) 
+                 AND pol.marine = '1' AND pol.status NOT IN ('Proposed', 'Not Reported')
                 UNION 
                 SELECT iso3, buffer_geom the_geom FROM standard_points poi
-                WHERE poi.iso3 = 'BAM' AND st_isvalid(poi.buffer_geom) AND poi.marine = '1') b) a
+                WHERE poi.iso3 = 'BAM' AND st_isvalid(poi.buffer_geom) 
+                AND poi.marine = '1' AND poi.status NOT IN ('Proposed', 'Not Reported')) b) a
              WHERE iso_3 = 'BAM'""".squish).
      returns true
 
@@ -72,11 +78,14 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
              FROM (
                SELECT ST_UNION(the_geom) as the_geom
                FROM 
-               (SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.00000001)) the_geom FROM standard_polygons pol 
-                WHERE pol.iso3 = 'BUM' AND st_isvalid(pol.wkb_geometry) AND pol.marine = '0'
+               (SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.00000001)) the_geom 
+                FROM standard_polygons pol 
+                WHERE pol.iso3 = 'BUM' AND st_isvalid(pol.wkb_geometry) 
+                 AND pol.marine = '0' AND pol.status NOT IN ('Proposed', 'Not Reported')
                 UNION 
                 SELECT iso3, buffer_geom the_geom FROM standard_points poi
-                WHERE poi.iso3 = 'BUM' AND st_isvalid(poi.buffer_geom) AND poi.marine = '0') b) a
+                WHERE poi.iso3 = 'BUM' AND st_isvalid(poi.buffer_geom) 
+                AND poi.marine = '0' AND poi.status NOT IN ('Proposed', 'Not Reported')) b) a
              WHERE iso_3 = 'BUM'""".squish).
      returns true
 
@@ -88,10 +97,12 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
                SELECT ST_UNION(the_geom) as the_geom
                FROM 
                (SELECT  iso3, wkb_geometry the_geom FROM standard_polygons pol 
-                WHERE pol.iso3 = 'BUM' AND st_isvalid(pol.wkb_geometry) AND pol.marine = '1'
+                WHERE pol.iso3 = 'BUM' AND st_isvalid(pol.wkb_geometry) 
+                 AND pol.marine = '1' AND pol.status NOT IN ('Proposed', 'Not Reported')
                 UNION 
                 SELECT iso3, buffer_geom the_geom FROM standard_points poi
-                WHERE poi.iso3 = 'BUM' AND st_isvalid(poi.buffer_geom) AND poi.marine = '1') b) a
+                WHERE poi.iso3 = 'BUM' AND st_isvalid(poi.buffer_geom) 
+                AND poi.marine = '1' AND poi.status NOT IN ('Proposed', 'Not Reported')) b) a
              WHERE iso_3 = 'BUM'""".squish).
      returns true
 
@@ -167,6 +178,8 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
       expects(:execute).
       with("""CREATE INDEX land_pas_geom_gindx ON countries USING GIST (land_pas_geom);
               CREATE INDEX marine_pas_geom_gindx ON countries USING GIST (marine_pas_geom);
+              CREATE INDEX marine_ts_pas_geom_gindx ON countries USING GIST (marine_ts_pas_geom);
+              CREATE INDEX marine_eez_pas_geom_gindx ON countries USING GIST (marine_eez_pas_geom);
               """.squish).
       returns(true)
 
