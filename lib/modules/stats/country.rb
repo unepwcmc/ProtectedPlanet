@@ -42,19 +42,19 @@ class Stats::Country
   def self.percentage_protected_land iso
     CountryStatistic.joins(:country).
       where("countries.iso = ?", iso).select(:percentage_pa_land_cover).
-      first.percentage_pa_land_cover.round
+      first.percentage_pa_land_cover
   end
 
   def self.percentage_protected_sea iso
     CountryStatistic.joins(:country).
       where("countries.iso = ?", iso).select(:percentage_pa_eez_cover).
-      first.percentage_pa_eez_cover.round
+      first.percentage_pa_eez_cover
   end
 
   def self.percentage_protected_coast iso
     CountryStatistic.joins(:country).
       where("countries.iso = ?", iso).select(:percentage_pa_ts_cover).
-      first.percentage_pa_ts_cover.round
+      first.percentage_pa_ts_cover
   end
 
   private
