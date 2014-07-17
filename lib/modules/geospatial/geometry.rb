@@ -90,10 +90,10 @@ class Geospatial::Geometry
         SELECT CASE
             WHEN ST_Within(marine_pas_geom, #{marine_type}_geom)
             THEN marine_pas_geom
-            ELSE ST_Multi(ST_Intersection(marine_pas_geom, #{marine_type}_geom))
+            ELSE ST_Intersection(ST_MakeValid(marine_pas_geom), ST_MakeValid(#{marine_type}_geom))
          END
         FROM countries
-        WHERE iso_3 = '#{country}'
+        WHERE iso_3 = '#{country}' LIMIT 1 
         )
         WHERE iso_3 = '#{country}'
       """.squish
