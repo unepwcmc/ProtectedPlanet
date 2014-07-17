@@ -6,6 +6,8 @@ class TestWdpaImporter < ActiveSupport::TestCase
     wdpa_release = mock()
     wdpa_release.stubs(:clean_up)
 
+    ImportTools.stubs(:with_db).yields
+
     Wdpa::Release.expects(:download).returns(wdpa_release)
     Wdpa::SourceImporter.expects(:import).with(wdpa_release)
     Wdpa::ProtectedAreaImporter.expects(:import).with(wdpa_release)
