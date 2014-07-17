@@ -48,6 +48,7 @@ class @PageInitialiser
     return false if $vizContainer.length == 0 or not Modernizr.svg?
     $vizContainer.find('.viz').each (idx, el) ->
       value = $(el).attr('data-value')
+      return if typeof +value isnt "number" or +value is isNaN
       data = [
         {
           value: value
