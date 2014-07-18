@@ -1,116 +1,44 @@
 require 'test_helper'
 
 class TestCountriesGeometryImporter < ActiveSupport::TestCase
-  def setup
-    Rails.application.secrets.aws_access_key_id = '123'
-    Rails.application.secrets.aws_secret_access_key = 'abc'
-    Rails.application.secrets.aws_bucket = 'ppe.datasets'
-    @filename = 'countries_geometries_dump.tar.gz'
-    @filepath = File.join(Rails.root, 'tmp', 'compressed_table.tar.gz')
-  end
+  test '#import downloads the geometries from S4, imports to postgres
+   and updates each Country with the matching geometries' do
+    bucket = Rails.application.secrets.aws_datasets_bucket
 
-  test '#new creates an S3 connection' do
-    AWS::S3.expects(:new).with({
-      :access_key_id     => '123',
-      :secret_access_key => 'abc'
-    })
-
-    CountriesGeometryImporter.new(@filename,@filepath)
-  end
-
-  test 'downloads countries dump table' do
-
+    filename = 'countries_geometries_dump.tar.gz'
+    path = Rails.root.join('tmp', filename).to_s
     file_mock = mock()
-    file_mock.stubs(:read).returns(true)
-
+    file_mock.stubs(:read).returns("geometries contents")
     bucket_mock = mock()
-    bucket_mock.stubs(:objects).returns({'countries_geometries_dump.tar.gz' => file_mock})
-
+    bucket_mock.stubs(:objects).returns({filename => file_mock})
     s3_mock = mock()
-    s3_mock.stubs(:buckets).returns({'ppe.datasets' => bucket_mock})
-
+    s3_mock.stubs(:buckets).returns({bucket => bucket_mock})
     AWS::S3.expects(:new).returns(s3_mock)
 
-    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
-    countries_geometries.download_countries_geometries
+    file_write_mock = mock()
+    file_write_mock.expects(:write).with("geometries contents")
+    File.expects(:open).
+      with(path, 'w:ASCII-8BIT').
+      yields(file_write_mock).
+      returns(file_write_mock)
 
-  end
-
-  test 'imports countries dump table' do
-    db_config   = Rails.configuration.database_configuration
-    db_port = db_config[Rails.env]["port"] || 5432
-    db_name = db_config[Rails.env]["database"]
-    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
-    
-    countries_geometries.expects(:system).
-    with("pg_restore -c -i -U postgres -d #{db_name} -v #{@filepath} -p #{db_port}").
-    returns(true)
-
-    response =  countries_geometries.restore_table
-    assert response, "Expected restore_table to return true on success"
-  end
-
-
-  test 'updates countries table' do
-    type = 'LAND'
-    country = 'POL'
-    ActiveRecord::Base.connection.
-      expects(:execute).
-      with("""
-        UPDATE countries
-        SET land_geom = the_geom
-        FROM (SELECT ST_Collectionextract(ST_collect(the_geom),3) the_geom
-                FROM countries_geometries_temp
-                WHERE type = 'LAND' AND iso_3 = 'POL') a 
-        WHERE iso_3 = 'POL'
-      """.squish).
+    db_name = ActiveRecord::Base.connection.current_database
+    CountriesGeometryImporter.any_instance.expects(:system).
+      with("pg_restore -c -i -U postgres -d #{db_name} -v #{path}").
       returns(true)
 
-    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
-    response = countries_geometries.update_table type, country
-    assert response, "Expected update_table to return true on success"
+    FactoryGirl.create(:country, iso_3: 'GBR')
+    FactoryGirl.create(:country, iso_3: 'USA')
+    ActiveRecord::Base.connection.expects(:execute).times(6).returns(true)
 
-  end
-
-
-  test 'creates indexes' do
     ActiveRecord::Base.connection.
       expects(:execute).
-      with("""DROP INDEX IF EXISTS land_geom_gindx;
-              DROP INDEX IF EXISTS eez_geom_gindx;
-              DROP INDEX IF EXISTS ts_geom_gindx;
-              CREATE INDEX land_geom_gindx ON countries USING GIST (land_geom);
-              CREATE INDEX eez_geom_gindx ON countries USING GIST (eez_geom);
-              CREATE INDEX ts_geom_gindx ON countries USING GIST (ts_geom);""".squish).
+      with("DELETE FROM countries_geometries_temp").
       returns(true)
 
-    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
-    response = countries_geometries.create_indexes
-    assert response, "Expected update_table to return true on success"
+    File.expects(:delete).with(path).returns(true)
 
+    assert CountriesGeometryImporter.import(),
+      "Expected countries geometry importer to return true on success"
   end
-
-  test 'deletes old table' do
-    ActiveRecord::Base.connection.
-      expects(:execute).
-      with("""
-        DELETE FROM countries_geometries_temp
-      """.squish).
-      returns(true)
-    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
-    response = countries_geometries.delete_temp_table
-    assert response, "Expected delete_table to return true on success"
-  end
-
-  test 'deletes temp file' do
-
-    File.expects(:delete).returns(true)
-
-    countries_geometries = CountriesGeometryImporter.new(@filename,@filepath)
-    response = countries_geometries.delete_temp_file
-    assert response, "Expected delete_table to return true on success"
-  end
-
-
-
 end
