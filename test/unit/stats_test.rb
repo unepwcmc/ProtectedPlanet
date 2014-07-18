@@ -11,8 +11,8 @@ class StatsTest < ActiveSupport::TestCase
 
   test '.percentage cover of protected areas' do
     region = FactoryGirl.create(:region, iso: 'GLOBAL')
-    FactoryGirl.create(:regional_statistic, region: region, :percentage_cover_pas => 50)
-    assert_equal 50, Stats::Global.percentage_cover_pas
+    FactoryGirl.create(:regional_statistic, region: region, :percentage_pa_cover => 50)
+    assert_equal 50, Stats::Global.percentage_pa_cover
   end
 
   test '.protected areas with IUCN category' do
@@ -77,8 +77,8 @@ class StatsTest < ActiveSupport::TestCase
 
   test '.percentage cover of protected areas in region' do
     region = FactoryGirl.create(:region, iso: 'BANANA')
-    FactoryGirl.create(:regional_statistic, region: region, :percentage_cover_pas => 50)
-    assert_equal 50, Stats::Regional.percentage_cover_pas('BANANA')
+    FactoryGirl.create(:regional_statistic, region: region, :percentage_pa_cover => 50)
+    assert_equal 50, Stats::Regional.percentage_pa_cover('BANANA')
   end
 
   test '.protected areas with IUCN category per region' do

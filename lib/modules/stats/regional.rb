@@ -14,10 +14,10 @@ class Stats::Regional
     regional_pas.to_f / global_pas * 100
   end
 
-  def self.percentage_cover_pas iso
+  def self.percentage_pa_cover iso
     RegionalStatistic.joins(:region)
                      .where("regions.iso" => iso)
-                     .first[:percentage_cover_pas]
+                     .first[:percentage_pa_cover]
   end
 
   def self.pas_with_iucn_category iso

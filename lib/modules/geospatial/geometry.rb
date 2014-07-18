@@ -1,8 +1,8 @@
 class Geospatial::Geometry
 
-  def initialize complex_countries_land, complex_countries_marine
-    @complex_countries_land = complex_countries_land
-    @complex_countries_marine = complex_countries_marine
+  def initialize
+    @complex_countries_land = ['DEU','USA','FRA','GBR','AUS','FIN','BGR', 'CAN', 'ESP','SWE','BEL','EST', 'IRL', 'ITA', 'LTU', 'NZL','POL','CHE']
+    @complex_countries_marine = ['GBR']
     @iso3_codes = Country.pluck(:iso_3)
   end
 
@@ -66,36 +66,64 @@ class Geospatial::Geometry
 
   def dissolve_country country, type, geometry
     column_prefix = type == 1 ? 'marine' : 'land'
-    query = """UPDATE countries
-             SET #{column_prefix}_pas_geom = a.the_geom
-             FROM (
-              SELECT ST_UNION(the_geom) as the_geom
-              FROM 
-               (SELECT  iso3, #{geometry} the_geom FROM standard_polygons pol 
-                WHERE pol.iso3 = '#{country}' AND st_isvalid(pol.wkb_geometry) 
-                AND pol.marine = '#{type}' AND pol.status NOT IN ('Proposed', 'Not Reported')
-                UNION 
-                SELECT iso3, buffer_geom the_geom FROM standard_points poi
-                WHERE poi.iso3 = '#{country}' AND st_isvalid(poi.buffer_geom) 
-                AND poi.marine = '#{type}' AND poi.status NOT IN ('Proposed', 'Not Reported')) b) a
-             WHERE iso_3 = '#{country}'""".squish
+    query = """
+      UPDATE countries
+      SET #{column_prefix}_pas_geom = a.the_geom
+      FROM (
+       SELECT ST_UNION(the_geom) as the_geom
+       FROM 
+        (SELECT  iso3, #{geometry} the_geom FROM standard_polygons pol 
+          WHERE pol.iso3 = '#{country}' AND st_isvalid(pol.wkb_geometry) 
+          AND pol.marine = '#{type}' AND pol.status NOT IN ('Proposed', 'Not Reported')
+          UNION 
+          SELECT iso3, buffer_geom the_geom FROM standard_points poi
+          WHERE poi.iso3 = '#{country}' AND st_isvalid(poi.buffer_geom) 
+          AND poi.marine = '#{type}' AND poi.status NOT IN ('Proposed', 'Not Reported')
+          UNION
+          SELECT c.iso_3, ST_Makevalid(ST_Intersection(c.land_geom,s.wkb_geometry))
+          FROM standard_polygons s INNER JOIN countries c ON ST_Intersects(c.land_geom,s.wkb_geometry)
+          WHERE s.iso3 LIKE '%,%' AND c.iso_3 = '#{country}' 
+          AND poi.marine = '#{type}' AND poi.status NOT IN ('Proposed', 'Not Reported')) b) a
+      WHERE iso_3 = '#{country}'""".squish
     db_execute query
   end
 
   def split_country_marine country
     ['eez', 'ts'].each do |marine_type|
-      query = """
-        UPDATE countries SET marine_#{marine_type}_pas_geom = (
-        SELECT CASE
+
+      # Countries with topology problems...
+      unless ['USA', 'RUS', 'HRV', 'CAN', 'MYS', 'THA', 'GNQ', 'COL', 'JPN'].include? country
+        partial = "marine_pas_geom, #{marine_type}_geom"
+      else
+        partial = """
+          ST_MakeValid(ST_Buffer(ST_Simplify(marine_pas_geom,0.005),0.00000001)), 
+          ST_MakeValid(ST_Buffer(ST_Simplify(#{marine_type}_geom,0.005),0.00000001))
+        """.squish
+      end
+      # Further topology problems...
+      if ['HRV', 'THA'].include? country
+        query = """
+          UPDATE countries SET marine_#{marine_type}_pas_geom = (
+          SELECT ST_MakeValid(ST_Intersection(#{partial}))
+          FROM countries
+          WHERE iso_3 = '#{country}' LIMIT 1 
+          )
+          WHERE iso_3 = '#{country}'
+        """.squish
+      else
+        query = """
+          UPDATE countries SET marine_#{marine_type}_pas_geom = (
+          SELECT CASE
             WHEN ST_Within(marine_pas_geom, #{marine_type}_geom)
             THEN marine_pas_geom
-            ELSE ST_Intersection(ST_MakeValid(marine_pas_geom), ST_MakeValid(#{marine_type}_geom))
-         END
-        FROM countries
-        WHERE iso_3 = '#{country}' LIMIT 1 
-        )
-        WHERE iso_3 = '#{country}'
-      """.squish
+            ELSE ST_Intersection(#{partial})
+          END
+          FROM countries
+          WHERE iso_3 = '#{country}' LIMIT 1 
+          )
+          WHERE iso_3 = '#{country}'
+        """.squish
+      end
       db_execute query
     end
   end
