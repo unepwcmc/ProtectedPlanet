@@ -37,7 +37,6 @@ class Geospatial::Geometry
           type = 'Marine'
           geometry = complex_geometries(country,true)
         end
-        puts "Dissolving #{type} #{country}"
         dissolve_country(country,marine_area,geometry)
       end
     end
