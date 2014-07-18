@@ -27,12 +27,10 @@ class ImportToolsImportTest < ActiveSupport::TestCase
   test '.with_context executes the block code using the temporary DB' do
     ImportTools::Import.any_instance.stubs(:create_db)
     ImportTools::Import.any_instance.stubs(:lock_import).returns(true)
-
-    block = -> {}
-    ImportTools::PostgresHandler.any_instance.expects(:with_db).with(anything, block)
+    ImportTools::PostgresHandler.any_instance.expects(:with_db).yields
 
     import = ImportTools::Import.new
-    import.with_context(&block)
+    import.with_context{}
   end
 
   test '#find returns an Import instance with the found ID' do

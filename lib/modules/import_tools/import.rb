@@ -16,7 +16,7 @@ class ImportTools::Import
 
   def with_context &block
     pg_handler = ImportTools::PostgresHandler.new
-    pg_handler.with_db(db_name, block)
+    pg_handler.with_db(db_name, &block)
   end
 
   private

@@ -5,10 +5,10 @@ class ImportTools::PostgresHandler
     self.current_conn_values = ActiveRecord::Base.configurations[Rails.env]
   end
 
-  def with_db db_name
+  def with_db db_name, &block
     pg_conn_values = self.current_conn_values.merge('database' => db_name)
     ActiveRecord::Base.establish_connection pg_conn_values
-    yield(ActiveRecord::Base.connection)
+    block.call(ActiveRecord::Base.connection)
   ensure
     ActiveRecord::Base.establish_connection self.current_conn_values
   end
