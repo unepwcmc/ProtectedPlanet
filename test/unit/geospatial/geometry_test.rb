@@ -133,10 +133,10 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
         SELECT CASE
             WHEN ST_Within(marine_pas_geom, ts_geom)
             THEN marine_pas_geom
-            ELSE ST_Multi(ST_Intersection(marine_pas_geom, ts_geom))
+            ELSE ST_Intersection(marine_pas_geom, ts_geom)
          END
         FROM countries
-        WHERE iso_3 = 'BUM'
+        WHERE iso_3 = 'BUM' LIMIT 1 
       )
       WHERE iso_3 = 'BUM'
     """.squish).
@@ -149,10 +149,10 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
         SELECT CASE
             WHEN ST_Within(marine_pas_geom, eez_geom)
             THEN marine_pas_geom
-            ELSE ST_Multi(ST_Intersection(marine_pas_geom, eez_geom))
+            ELSE ST_Intersection(marine_pas_geom, eez_geom)
          END
         FROM countries
-        WHERE iso_3 = 'BUM'
+        WHERE iso_3 = 'BUM' LIMIT 1 
       )
       WHERE iso_3 = 'BUM'
     """.squish).

@@ -63,7 +63,6 @@ class Geospatial::Geometry
     DB.execute(query)
   end
 
-
   def dissolve_country country, type, geometry
     column_prefix = type == 1 ? 'marine' : 'land'
     query = """
@@ -92,7 +91,7 @@ class Geospatial::Geometry
     ['eez', 'ts'].each do |marine_type|
 
       # Countries with topology problems...
-      unless ['USA', 'RUS', 'HRV', 'CAN', 'MYS', 'THA', 'GNQ', 'COL', 'JPN'].include? country
+      unless ['USA', 'RUS', 'HRV', 'CAN', 'MYS', 'THA', 'GNQ', 'COL', 'JPN', 'ESP', 'NIC', 'KOR', 'EGY'].include? country
         partial = "marine_pas_geom, #{marine_type}_geom"
       else
         partial = """
@@ -100,8 +99,8 @@ class Geospatial::Geometry
           ST_MakeValid(ST_Buffer(ST_Simplify(#{marine_type}_geom,0.005),0.00000001))
         """.squish
       end
-      # Further topology problems...
-      if ['HRV', 'THA'].include? country
+      # Further, unresolved topology problems...
+      if ['HRV', 'THA', 'JPN', 'KOR'].include? country
         query = """
           UPDATE countries SET marine_#{marine_type}_pas_geom = (
           SELECT ST_MakeValid(ST_Intersection(#{partial}))
