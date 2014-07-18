@@ -58,10 +58,7 @@ class CountriesGeometryImporter
 
     countries.each do |iso_3|
       AREA_TYPES.each do |type|
-        puts "Updating for #{type} #{iso_3}"
-        query = update_query(type, iso_3)
-        puts query
-        DB.execute query
+        DB.execute update_query(type, iso_3)
       end
     end
   end
