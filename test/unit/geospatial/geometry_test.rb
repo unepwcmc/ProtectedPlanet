@@ -1,28 +1,10 @@
 require 'test_helper'
 
 class TestGeospatialGeometry < ActiveSupport::TestCase
+ test '.merges geometries for countries with simple land geometries' do
+   FactoryGirl.create(:country, iso_3: 'BAM')
 
-
-  test '.drops indexes' do
-    ActiveRecord::Base.connection.
-      expects(:execute).
-      with("""DROP INDEX IF EXISTS land_pas_geom_gindx;
-              DROP INDEX IF EXISTS marine_pas_geom_gindx;
-              DROP INDEX IF EXISTS marine_ts_pas_geom_gindx;
-              DROP INDEX IF EXISTS marine_ts_eez_geom_gindx;
-           """.squish).
-      returns(true)
-
-    geometry_operator = Geospatial::Geometry.new()
-    response = geometry_operator.drop_indexes
-
-    assert response, "Expected update_table to return true on success"
- end
-
-  test '.merges geometries for countries with simple land geometries' do
-    FactoryGirl.create(:country, iso_3: 'BAM')
-
-    ActiveRecord::Base.connection.
+   ActiveRecord::Base.connection.
      expects(:execute).
      with("""UPDATE countries
              SET land_pas_geom = a.the_geom
@@ -41,9 +23,9 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
                 FROM standard_polygons s INNER JOIN countries c ON ST_Intersects(c.land_geom,s.wkb_geometry)
                 WHERE s.iso3 LIKE '%,%' AND c.iso_3 = 'BAM' AND poi.marine = '0' AND poi.status NOT IN ('Proposed', 'Not Reported')) b) a
              WHERE iso_3 = 'BAM'""".squish).
-     returns true
+             returns true
 
-     ActiveRecord::Base.connection.
+   ActiveRecord::Base.connection.
      expects(:execute).
      with("""UPDATE countries
              SET marine_pas_geom = a.the_geom
@@ -62,12 +44,12 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
                 FROM standard_polygons s INNER JOIN countries c ON ST_Intersects(c.land_geom,s.wkb_geometry)
                 WHERE s.iso3 LIKE '%,%' AND c.iso_3 = 'BAM' AND poi.marine = '1' AND poi.status NOT IN ('Proposed', 'Not Reported')) b) a
             WHERE iso_3 = 'BAM'""".squish).
-     returns true
+            returns true
 
-      geometry_operator = Geospatial::Geometry.new()
-      response = geometry_operator.dissolve_countries
+   geometry_operator = Geospatial::Geometry.new()
+   response = geometry_operator.dissolve_countries
 
-      assert response, 'Expects query'
+   assert response, 'Expects query'
   end
 
   test '.merges geometries for countries with complex land geometries' do
@@ -165,7 +147,6 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
   end
 
   test '.updates buffer_geom field on standard_points' do
-    
     ActiveRecord::Base.connection.
      expects(:execute).
      with("""UPDATE standard_points
@@ -176,23 +157,4 @@ class TestGeospatialGeometry < ActiveSupport::TestCase
     response = geometry_operator.create_buffers
     assert response, 'Expects query'
   end
-
-  test '.creates indexes' do
-    complex_countries_land = ['BUM', 'COM']
-    complex_countries_marine = ['LEO']
-    ActiveRecord::Base.connection.
-      expects(:execute).
-      with("""CREATE INDEX land_pas_geom_gindx ON countries USING GIST (land_pas_geom);
-              CREATE INDEX marine_pas_geom_gindx ON countries USING GIST (marine_pas_geom);
-              CREATE INDEX marine_ts_pas_geom_gindx ON countries USING GIST (marine_ts_pas_geom);
-              CREATE INDEX marine_eez_pas_geom_gindx ON countries USING GIST (marine_eez_pas_geom);
-              """.squish).
-      returns(true)
-
-    geometry_operator = Geospatial::Geometry.new()
-    response = geometry_operator.create_indexes
-    assert response, "Expected update_table to return true on success"
-
-  end
-
 end

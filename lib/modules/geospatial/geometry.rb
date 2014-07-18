@@ -1,29 +1,8 @@
 class Geospatial::Geometry
-
   def initialize
     @complex_countries_land = ['DEU','USA','FRA','GBR','AUS','FIN','BGR', 'CAN', 'ESP','SWE','BEL','EST', 'IRL', 'ITA', 'LTU', 'NZL','POL','CHE']
     @complex_countries_marine = ['GBR']
     @iso3_codes = Country.pluck(:iso_3)
-  end
-
-  def drop_indexes
-    query = """
-      DROP INDEX IF EXISTS land_pas_geom_gindx;
-      DROP INDEX IF EXISTS marine_pas_geom_gindx;
-      DROP INDEX IF EXISTS marine_ts_pas_geom_gindx;
-      DROP INDEX IF EXISTS marine_ts_eez_geom_gindx;
-    """.squish
-    db_execute query
-  end
-
-  def create_indexes
-    query = """
-      CREATE INDEX land_pas_geom_gindx ON countries USING GIST (land_pas_geom);
-      CREATE INDEX marine_pas_geom_gindx ON countries USING GIST (marine_pas_geom);
-      CREATE INDEX marine_ts_pas_geom_gindx ON countries USING GIST (marine_ts_pas_geom);
-      CREATE INDEX marine_eez_pas_geom_gindx ON countries USING GIST (marine_eez_pas_geom);
-    """.squish
-    db_execute query
   end
 
   def dissolve_countries
