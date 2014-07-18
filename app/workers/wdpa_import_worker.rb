@@ -3,12 +3,14 @@ class WdpaImportWorker
   sidekiq_options :retry => false
 
   def perform
-    return unless ImportTools.create_import
-
     begin
+      import = ImportTools.create_import
+    rescue ImportTools::AlreadyRunningImportError
+      return
+    end
+
+    import.with_context do
       Wdpa::Importer.import
-    rescue => e
-      # ImportTools.abort_import
     end
   end
 end
