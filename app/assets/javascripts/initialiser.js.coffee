@@ -60,6 +60,6 @@ class @PageInitialiser
           is_background: true
         }
       ]
-      annularSectorGenerator data, el, 150, 150
+      annularSectorGenerator data, el, 160, 160
 
     

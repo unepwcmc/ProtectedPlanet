@@ -21,6 +21,6 @@ class Stats::CountryController < ApplicationController
 
   def get_stats method, iso
     value = Stats::Country.send(method.to_sym, iso)
-    if value then value.round else 'Not applicable' end
+    if value then value.round else nil end
   end
 end

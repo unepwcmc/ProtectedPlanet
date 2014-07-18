@@ -4,6 +4,7 @@
     <h3>Territory covered by PAs</h3>
   </header>
   
+  <% if @percentage_protected %>
   <section class="stats">
     <div class="viz" data-colour="#f3b74d" data-value="<%= @percentage_protected %>"></div>
     <div class="viz-label">
@@ -11,7 +12,9 @@
       <p class="label">of the <%= @focus %></p>
     </div>
   </section>
+  <% end %>
 
+  <% if @percentage_protected_land %>
   <section class="stats">
     <div class="viz" data-colour="#9d857c" data-value="<%= @percentage_protected_land %>"></div>
     <div class="viz-label">
@@ -19,7 +22,9 @@
       <p class="label">of the land</p>
     </div>
   </section>
+  <% end %>
 
+  <% if @percentage_protected_sea %>
   <section class="stats">
     <div class="viz" data-colour="#5395a7" data-value="<%= @percentage_protected_sea %>"></div>
     <div class="viz-label">
@@ -27,7 +32,9 @@
       <p class="label">of the sea</p>
     </div>
   </section>
+  <% end %>
 
+  <% if @percentage_protected_coast %>
   <section class="stats">
     <div class="viz" data-colour="#36b4d2" data-value="<%= @percentage_protected_coast %>"></div>
     <div class="viz-label">
@@ -35,5 +42,6 @@
       <p class="label">of the coast</p>
   </div>
   </section>
+  <% end %>
   
 </section>
