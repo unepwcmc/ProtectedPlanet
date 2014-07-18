@@ -8,8 +8,8 @@ namespace :geo_stats do
     geometry_operator.drop_indexes
     geometry_operator.create_buffers
     geometry_operator.dissolve_countries
+    geometry_operator.split_countries_marine
     geometry_operator.create_indexes
-
   end
 
   desc "Calculates geospatial stats"
