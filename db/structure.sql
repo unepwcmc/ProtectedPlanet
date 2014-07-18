@@ -1172,6 +1172,34 @@ CREATE INDEX index_countries_on_land_geom ON countries USING gist (land_geom);
 
 
 --
+-- Name: index_countries_on_land_pas_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_land_pas_geom ON countries USING gist (land_pas_geom);
+
+
+--
+-- Name: index_countries_on_marine_eez_pas_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_marine_eez_pas_geom ON countries USING gist (marine_eez_pas_geom);
+
+
+--
+-- Name: index_countries_on_marine_pas_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_marine_pas_geom ON countries USING gist (marine_pas_geom);
+
+
+--
+-- Name: index_countries_on_marine_ts_pas_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_marine_ts_pas_geom ON countries USING gist (marine_ts_pas_geom);
+
+
+--
 -- Name: index_countries_on_ts_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
@@ -1486,3 +1514,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140716103848');
 INSERT INTO schema_migrations (version) VALUES ('20140717133702');
 
 INSERT INTO schema_migrations (version) VALUES ('20140718131656');
+
+INSERT INTO schema_migrations (version) VALUES ('20140718134127');
