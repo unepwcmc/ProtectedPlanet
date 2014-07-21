@@ -7,7 +7,7 @@ With every new WDPA release background jobs need to be run to create new dissolv
 Postgis does not come with Mollweide support so you will need to run
 
 ```
-ŕake geo_stats:insert_mollweide
+rake geo_stats:insert_mollweide
 ```
 
 After it you would be able to use 954009 as the SRID for Mollweide
@@ -19,7 +19,7 @@ We have select the countries that have the most complex geometries to simplify t
 You should run:
 
 ```
-ŕake geo_stats:dissolve_countries
+rake geo_stats:dissolve_countries
 
 ```
 
@@ -30,5 +30,5 @@ This operation should take around one hour. It populates land_pas_geom and marin
 We have a rake task that populates the country_statistics table. You can use it running:
 
 ```
-ŕake geo_stats:calculate
+rake geo_stats:calculate
 ```

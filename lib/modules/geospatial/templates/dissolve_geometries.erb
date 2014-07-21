@@ -1,0 +1,33 @@
+UPDATE countries
+SET <%= area_type %>_pas_geom = a.the_geom
+FROM (
+ SELECT ST_UNION(the_geom) as the_geom
+ FROM (
+   SELECT  iso3, <%= geometry_attribute(country, area_type) %> the_geom FROM standard_polygons polygon
+     WHERE polygon.iso3 = '<%= country.iso_3 %>'
+      AND ST_IsValid(polygon.wkb_geometry)
+      AND polygon.marine = '<%= marine_status %>'
+      AND polygon.status NOT IN ('Proposed', 'Not Reported')
+
+   UNION
+
+   SELECT iso3, the_geom FROM (
+     SELECT iso3, ST_Buffer(wkb_geometry::geography, |/( rep_area*1000000 / pi() ))::geometry the_geom
+     FROM standard_points point
+     WHERE point.iso3 = '<%= country.iso_3 %>'
+       AND point.marine = '<%= marine_status %>'
+       AND point.status NOT IN ('Proposed', 'Not Reported')
+   ) AS c
+   WHERE ST_IsValid(the_geom)
+
+   UNION
+
+   SELECT country.iso_3, ST_Makevalid(ST_Intersection(country.land_geom, polygon.wkb_geometry)) FROM standard_polygons polygon
+     INNER JOIN countries country ON ST_Intersects(country.land_geom, polygon.wkb_geometry)
+     WHERE polygon.iso3 LIKE '%,%'
+      AND country.iso_3 = '<%= country.iso_3 %>'
+      AND polygon.marine = '<%= marine_status %>'
+      AND polygon.status NOT IN ('Proposed', 'Not Reported')
+  ) b
+) a
+WHERE iso_3 = '<%= country.iso_3 %>'

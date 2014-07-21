@@ -8,9 +8,9 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
 
   test 'renders the Country name' do
     FactoryGirl.create(:protected_area)
-    FactoryGirl.create(:country_statistic, country: @country, 
+    FactoryGirl.create(:country_statistic, country: @country,
       percentage_pa_cover: 50,
-      percentage_pa_land_cover: 50, 
+      percentage_pa_land_cover: 50,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
     get "/stats/country/#{@country.iso}"
     assert_match(/#{@country.name}/, @response.body)
@@ -22,8 +22,8 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
       FactoryGirl.create(:protected_area, countries: [@country], designation: nil)
     end
     FactoryGirl.create(:protected_area)
-    FactoryGirl.create(:country_statistic, country: @country, 
-      percentage_pa_land_cover: 50, 
+    FactoryGirl.create(:country_statistic, country: @country,
+      percentage_pa_land_cover: 50,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
 
     visit "/stats/country/#{@country.iso}"
@@ -36,14 +36,14 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
   test 'renders percentage of global pas in one country' do
     FactoryGirl.create(:protected_area, countries: [@country], designation: nil)
     FactoryGirl.create(:protected_area)
-    FactoryGirl.create(:country_statistic, country: @country, 
-      percentage_pa_land_cover: 50, 
+    FactoryGirl.create(:country_statistic, country: @country,
+      percentage_pa_land_cover: 50,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
 
     percentage = 50
 
     visit "/stats/country/#{@country.iso}"
-    
+
     assert page.has_selector?('.pa-global-percentage'),
       "Expected page to have a PA percentage element"
     assert_equal percentage, page.find('.pa-global-percentage p').text.to_i
@@ -59,8 +59,8 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
 
     FactoryGirl.create(:protected_area)
     not_reported_iucn_category = FactoryGirl.create(:iucn_category, name: 'Not Reported')
-    FactoryGirl.create(:country_statistic, country: @country, 
-      percentage_pa_land_cover: 50, 
+    FactoryGirl.create(:country_statistic, country: @country,
+      percentage_pa_land_cover: 50,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
     FactoryGirl.create(:protected_area,
       iucn_category: not_reported_iucn_category, countries: [@country])
@@ -78,8 +78,8 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
       designation = FactoryGirl.create(:designation)
       FactoryGirl.create(:protected_area, designation: designation, countries: [@country])
     end
-    FactoryGirl.create(:country_statistic, country: @country, 
-      percentage_pa_land_cover: 50, 
+    FactoryGirl.create(:country_statistic, country: @country,
+      percentage_pa_land_cover: 50,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
 
     FactoryGirl.create(:protected_area, designation: nil, countries: [@country])
@@ -99,8 +99,8 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
     designation_2 = FactoryGirl.create(:designation, name: 'Designation 2')
     FactoryGirl.create(:protected_area, designation: designation_2, countries: [@country])
 
-    FactoryGirl.create(:country_statistic, country: @country, 
-      percentage_pa_land_cover: 50, 
+    FactoryGirl.create(:country_statistic, country: @country,
+      percentage_pa_land_cover: 50,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
 
     visit "/stats/country/#{@country.iso}"
