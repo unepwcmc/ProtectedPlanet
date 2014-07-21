@@ -3,6 +3,10 @@ module Geospatial::CountryGeometryPopulator
     File.join('../templates', 'dissolve_geometries.erb'), __FILE__
   )
 
+  MARINE_GEOMETRIES_TEMPLATE = File.expand_path(
+    File.join('../templates', 'marine_geometry.erb'), __FILE__
+  )
+
   AREA_TYPES = {
     'marine' => 1,
     'land' => 0
@@ -14,7 +18,12 @@ module Geospatial::CountryGeometryPopulator
     end
   end
 
-  def populate_marine_geometries country
+  MARINE_TYPES = ['eez', 'ts']
+
+  def self.populate_marine_geometries country
+    MARINE_TYPES.each do |marine_type|
+      DB.execute render_template(MARINE_GEOMETRIES_TEMPLATE, binding)
+    end
   end
 
   private
@@ -38,6 +47,26 @@ module Geospatial::CountryGeometryPopulator
       'ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.00000001))'
     else
       'wkb_geometry'
+    end
+  end
+
+  COUNTRIES_WITH_TOPOLOGY_PROBLEMS = [
+    'USA','RUS','HRV','CAN','MYS','THA','GNQ','COL','JPN',
+    'ESP','NIC','KOR','EGY'
+  ]
+
+  def self.country_needs_simplifying? country
+    ['HRV', 'THA', 'JPN', 'KOR'].include? country.iso_3
+  end
+
+  def self.marine_geometry_attributes country, area_type
+    if COUNTRIES_WITH_TOPOLOGY_PROBLEMS.include? country.iso_3
+      [
+        'ST_MakeValid(ST_Buffer(ST_Simplify(marine_pas_geom,0.005),0.00000001))',
+        "ST_MakeValid(ST_Buffer(ST_Simplify(#{area_type}_geom,0.005),0.00000001))"
+      ]
+    else
+      ['marine_pas_geom', "#{area_type}_geom"]
     end
   end
 end

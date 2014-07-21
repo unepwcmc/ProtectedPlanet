@@ -1,0 +1,18 @@
+UPDATE countries
+SET marine_<%= marine_type %>_pas_geom = (
+  <% if country_needs_simplifying? country %>
+    SELECT ST_MakeValid(
+      ST_Intersection(
+        <%= marine_geometry_attributes(country, marine_type).join(', ') %>
+      )
+    )
+  <% else %>
+    SELECT CASE
+      WHEN ST_Within(marine_pas_geom, <%= marine_type %>_geom)
+        THEN marine_pas_geom
+        ELSE ST_Intersection(<%= marine_geometry_attributes(country, marine_type).join(', ') %>)
+      END
+  <% end %>
+  FROM countries
+  WHERE iso_3 = '<%= country.iso_3 %>' LIMIT 1
+) WHERE iso_3 = '<%= country.iso_3 %>'
