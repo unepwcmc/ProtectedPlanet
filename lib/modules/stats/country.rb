@@ -5,6 +5,15 @@ class Stats::Country
     ProtectedArea.select(:id).joins(:countries).where("iso = ?", iso).count
   end
 
+  def self.percentage_global_pas_area iso
+    global_stats = RegionalStatistic.joins(:region).where("name = ?", 'Global')
+
+    global_pa_area = global_stats.first[:pa_area]
+    pa_area = CountryStatistic.joins(:country).where("countries.iso" => iso)
+      .first[:pa_area]
+    pa_area / global_pa_area * 100
+  end
+
   def self.percentage_global_pas iso
     country_pas = total_pas iso
     global_pas = ProtectedArea.count
