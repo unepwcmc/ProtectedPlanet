@@ -22,11 +22,11 @@ module Geospatial::CountryGeometryPopulator::MarineGeometriesIntersector
 
   COUNTRIES_WITH_TOPOLOGY_PROBLEMS = [
     'USA','RUS','HRV','CAN','MYS','THA','GNQ','COL','JPN',
-    'ESP','NIC','KOR','EGY'
+    'ESP','NIC','KOR','EGY','MAR'
   ]
 
   def self.country_needs_simplifying? country
-    ['HRV', 'THA', 'JPN', 'KOR'].include? country.iso_3
+    ['HRV', 'THA', 'JPN', 'KOR', 'MAR'].include? country.iso_3
   end
 
   def self.marine_geometry_attributes country, area_type
