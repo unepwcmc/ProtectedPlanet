@@ -2,7 +2,7 @@ INSERT INTO <%= table_name %> (
   <%= id_attribute %>, land_area, eez_area, ts_area, pa_area,
   pa_land_area, pa_marine_area, percentage_pa_cover,
   percentage_pa_land_cover, percentage_pa_eez_cover,
-  percentage_pa_ts_cover
+  percentage_pa_ts_cover, created_at, updated_at
 )
 
 SELECT id, land_area, eez_area, ts_area,
@@ -22,7 +22,9 @@ SELECT id, land_area, eez_area, ts_area,
     0
     ELSE
     COALESCE(pa_marine_area,0) / ts_area * 100
-  END
+  END,
+  LOCALTIMESTAMP,
+  LOCALTIMESTAMP
 FROM (
   <%= from_query %>
 ) areas

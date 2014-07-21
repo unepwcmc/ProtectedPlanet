@@ -8,7 +8,7 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
         country_id, land_area, eez_area, ts_area, pa_area,
         pa_land_area, pa_marine_area, percentage_pa_cover,
         percentage_pa_land_cover, percentage_pa_eez_cover,
-        percentage_pa_ts_cover
+        percentage_pa_ts_cover, created_at, updated_at
       )
 
       SELECT id, land_area, eez_area, ts_area,
@@ -28,7 +28,9 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
           0
           ELSE
           COALESCE(pa_marine_area,0) / ts_area * 100
-        END
+        END,
+        LOCALTIMESTAMP,
+        LOCALTIMESTAMP
         FROM (
           SELECT id, ST_Area(ST_Transform(land_pas_geom,954009)) pa_land_area,
             ST_Area(ST_Transform(marine_pas_geom,954009)) pa_marine_area,
@@ -52,7 +54,7 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
         region_id, land_area, eez_area, ts_area, pa_area,
         pa_land_area, pa_marine_area, percentage_pa_cover,
         percentage_pa_land_cover, percentage_pa_eez_cover,
-        percentage_pa_ts_cover
+        percentage_pa_ts_cover, created_at, updated_at
       )
 
       SELECT id, land_area, eez_area, ts_area,
@@ -72,7 +74,9 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
           0
           ELSE
           COALESCE(pa_marine_area,0) / ts_area * 100
-        END
+        END,
+        LOCALTIMESTAMP,
+        LOCALTIMESTAMP
         FROM (
           SELECT r.id,
             sum(pa_land_area) pa_land_area,
@@ -100,7 +104,7 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
         region_id, land_area, eez_area, ts_area, pa_area,
         pa_land_area, pa_marine_area, percentage_pa_cover,
         percentage_pa_land_cover, percentage_pa_eez_cover,
-        percentage_pa_ts_cover
+        percentage_pa_ts_cover, created_at, updated_at
       )
 
       SELECT id, land_area, eez_area, ts_area,
@@ -120,7 +124,9 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
           0
           ELSE
           COALESCE(pa_marine_area,0) / ts_area * 100
-        END
+        END,
+        LOCALTIMESTAMP,
+        LOCALTIMESTAMP
         FROM (
           SELECT r.id,
             sum(pa_land_area) pa_land_area,
