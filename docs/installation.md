@@ -86,9 +86,9 @@ S3, and:
   psql pp_development < pp_development.sql
 ```
 
-You can manually seed the database with data using the instructions below.
+#### Manual Seeding
 
-### Initial Seeding
+You can manually seed the database with data using the instructions below.
 
 Some data is static and requires seeding if you're starting from an
 empty database. For example, the Country and Sub Location list. If you
@@ -99,6 +99,22 @@ You can seed manually with:
 ```
   rake db:seed
 ```
+
+### Country Geometries
+
+Geometries for countries are required for stats generation, and for
+generating shapefiles to be uploaded to CartoDB.
+
+`rake import:countries_geometries`
+
+#### Importing to CartoDB
+
+The stats pages are dependent on a `countries_geometries` tables in
+CartoDB for rendering country outlines on the map.
+
+This is created using the geometries imported above. Export the
+countries geometries as a CartoDB compliant format (Shapefile, CSV,
+etc.) using ogr2ogr, shp2pgsql or even qgis, and upload to CartoDB.
 
 ### WDPA
 
