@@ -6,14 +6,14 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
     query = """
       INSERT INTO country_statistics (
         country_id, land_area, eez_area, ts_area, pa_area,
-        pa_land_area, pa_marine_area, percentage_pa_cover,
-        percentage_pa_land_cover, percentage_pa_eez_cover,
+        pa_land_area, pa_marine_area, pa_eez_area, pa_ts_area,
+        percentage_pa_cover, percentage_pa_land_cover, percentage_pa_eez_cover,
         percentage_pa_ts_cover, created_at, updated_at
       )
 
       SELECT id, land_area, eez_area, ts_area,
         COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0),
-        pa_land_area, pa_marine_area,
+        pa_land_area, pa_marine_area, pa_eez_area, pa_ts_area,
         (COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0)) /
           (land_area + COALESCE(eez_area, 0) + COALESCE(ts_area,0))*100,
         COALESCE(pa_land_area,0) / land_area * 100,
@@ -21,19 +21,21 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
           WHEN eez_area = 0 THEN
           0
           ELSE
-          COALESCE(pa_marine_area,0) / eez_area * 100
+          COALESCE(pa_eez_area,0) / eez_area * 100
         END,
         CASE
           WHEN ts_area = 0 THEN
           0
           ELSE
-          COALESCE(pa_marine_area,0) / ts_area * 100
+          COALESCE(pa_ts_area,0) / ts_area * 100
         END,
         LOCALTIMESTAMP,
         LOCALTIMESTAMP
         FROM (
           SELECT id, ST_Area(ST_Transform(land_pas_geom,954009)) pa_land_area,
             ST_Area(ST_Transform(marine_pas_geom,954009)) pa_marine_area,
+            ST_Area(ST_Transform(marine_ts_pas_geom,954009)) pa_eez_area,
+            ST_Area(ST_Transform(marine_eez_pas_geom,954009)) pa_ts_area,
             ST_Area(ST_Transform(land_geom,954009)) land_area,
             ST_Area(ST_Transform(eez_geom,954009)) eez_area,
             ST_Area(ST_Transform(ts_geom,954009)) ts_Area
@@ -52,14 +54,14 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
     query = """
       INSERT INTO regional_statistics (
         region_id, land_area, eez_area, ts_area, pa_area,
-        pa_land_area, pa_marine_area, percentage_pa_cover,
-        percentage_pa_land_cover, percentage_pa_eez_cover,
+        pa_land_area, pa_marine_area, pa_eez_area, pa_ts_area,
+        percentage_pa_cover, percentage_pa_land_cover, percentage_pa_eez_cover,
         percentage_pa_ts_cover, created_at, updated_at
       )
 
       SELECT id, land_area, eez_area, ts_area,
         COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0),
-        pa_land_area, pa_marine_area,
+        pa_land_area, pa_marine_area, pa_eez_area, pa_ts_area,
         (COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0)) /
           (land_area + COALESCE(eez_area, 0) + COALESCE(ts_area,0))*100,
         COALESCE(pa_land_area,0) / land_area * 100,
@@ -67,13 +69,13 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
           WHEN eez_area = 0 THEN
           0
           ELSE
-          COALESCE(pa_marine_area,0) / eez_area * 100
+          COALESCE(pa_eez_area,0) / eez_area * 100
         END,
         CASE
           WHEN ts_area = 0 THEN
           0
           ELSE
-          COALESCE(pa_marine_area,0) / ts_area * 100
+          COALESCE(pa_ts_area,0) / ts_area * 100
         END,
         LOCALTIMESTAMP,
         LOCALTIMESTAMP
@@ -81,11 +83,13 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
           SELECT r.id,
             sum(pa_land_area) pa_land_area,
             sum(pa_marine_area) pa_marine_area,
+            sum(pa_eez_area) pa_eez_area,
+            sum(pa_ts_area) pa_ts_area,
             sum(land_area) land_area,
             sum(eez_area) eez_area,
             sum(ts_area) ts_area
             FROM country_statistics cs
-          JOIN countries c ON cs.country_id = c.id,
+          JOIN countries c ON cs.country_id = c.id
           JOIN regions r on r.id = c.region_id
           GROUP BY r.id
         ) areas
@@ -102,14 +106,14 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
     query = """
       INSERT INTO regional_statistics (
         region_id, land_area, eez_area, ts_area, pa_area,
-        pa_land_area, pa_marine_area, percentage_pa_cover,
-        percentage_pa_land_cover, percentage_pa_eez_cover,
+        pa_land_area, pa_marine_area, pa_eez_area, pa_ts_area,
+        percentage_pa_cover, percentage_pa_land_cover, percentage_pa_eez_cover,
         percentage_pa_ts_cover, created_at, updated_at
       )
 
       SELECT id, land_area, eez_area, ts_area,
         COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0),
-        pa_land_area, pa_marine_area,
+        pa_land_area, pa_marine_area, pa_eez_area, pa_ts_area,
         (COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0)) /
           (land_area + COALESCE(eez_area, 0) + COALESCE(ts_area,0))*100,
         COALESCE(pa_land_area,0) / land_area * 100,
@@ -117,13 +121,13 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
           WHEN eez_area = 0 THEN
           0
           ELSE
-          COALESCE(pa_marine_area,0) / eez_area * 100
+          COALESCE(pa_eez_area,0) / eez_area * 100
         END,
         CASE
           WHEN ts_area = 0 THEN
           0
           ELSE
-          COALESCE(pa_marine_area,0) / ts_area * 100
+          COALESCE(pa_ts_area,0) / ts_area * 100
         END,
         LOCALTIMESTAMP,
         LOCALTIMESTAMP
@@ -131,11 +135,13 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
           SELECT r.id,
             sum(pa_land_area) pa_land_area,
             sum(pa_marine_area) pa_marine_area,
+            sum(pa_eez_area) pa_eez_area,
+            sum(pa_ts_area) pa_ts_area,
             sum(land_area) land_area,
             sum(eez_area) eez_area,
             sum(ts_area) ts_area
             FROM country_statistics cs
-          JOIN countries c ON cs.country_id = c.id,
+          JOIN countries c ON cs.country_id = c.id
           regions r
           WHERE r.iso = 'GL'
           GROUP BY r.id

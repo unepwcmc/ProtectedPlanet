@@ -174,7 +174,9 @@ CREATE TABLE country_statistics (
     percentage_pa_eez_cover double precision,
     percentage_pa_ts_cover double precision,
     land_area double precision,
-    percentage_pa_cover double precision
+    percentage_pa_cover double precision,
+    pa_eez_area double precision,
+    pa_ts_area double precision
 );
 
 
@@ -687,7 +689,9 @@ CREATE TABLE regional_statistics (
     percentage_pa_eez_cover double precision,
     percentage_pa_ts_cover double precision,
     land_area double precision,
-    percentage_pa_cover double precision
+    percentage_pa_cover double precision,
+    pa_eez_area double precision,
+    pa_ts_area double precision
 );
 
 
@@ -1574,3 +1578,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140718131656');
 
 INSERT INTO schema_migrations (version) VALUES ('20140718134127');
 
+INSERT INTO schema_migrations (version) VALUES ('20140721122630');
+
+INSERT INTO schema_migrations (version) VALUES ('20140721122852');

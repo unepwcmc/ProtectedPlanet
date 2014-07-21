@@ -1,11 +1,13 @@
 SELECT r.id,
   sum(pa_land_area) pa_land_area,
   sum(pa_marine_area) pa_marine_area,
+  sum(pa_eez_area) pa_eez_area,
+  sum(pa_ts_area) pa_ts_area,
   sum(land_area) land_area,
   sum(eez_area) eez_area,
   sum(ts_area) ts_area
   FROM country_statistics cs
-JOIN countries c ON cs.country_id = c.id,
+JOIN countries c ON cs.country_id = c.id
 regions r
 WHERE r.iso = 'GL'
 GROUP BY r.id
