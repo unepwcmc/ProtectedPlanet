@@ -4,7 +4,7 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
   def setup
     @region = FactoryGirl.create(:region)
     @regional_statistic = FactoryGirl.create(:regional_statistic, 
-      region: @region, pa_land_area: 80, pa_marine_area: 20)
+      region: @region, pa_area: 100)
     @country = FactoryGirl.create(:country, region: @region, iso: 'IT')
   end
 

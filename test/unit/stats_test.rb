@@ -75,6 +75,17 @@ class StatsTest < ActiveSupport::TestCase
     assert_equal 75, Stats::Regional.percentage_global_pas('AFS')
   end
 
+  test '.percentage area cover of protected areas in region' do
+    global = FactoryGirl.create(:region, name: 'Global')
+    global_statistic = FactoryGirl.create(:regional_statistic, 
+      region: global, pa_area: 100)
+    region = FactoryGirl.create(:region, iso: 'LT')
+    regional_statistic = FactoryGirl.create(:regional_statistic, 
+      region: region, pa_area: 10)
+
+    assert_equal 10, Stats::Regional.percentage_global_pas_area('LT')
+  end
+
   test '.percentage cover of protected areas in region' do
     region = FactoryGirl.create(:region, iso: 'BANANA')
     FactoryGirl.create(:regional_statistic, region: region, :percentage_pa_cover => 50)
@@ -146,7 +157,7 @@ class StatsTest < ActiveSupport::TestCase
   test '.percentage area cover of protected areas' do
     region = FactoryGirl.create(:region, name: 'Global')
     regional_statistic = FactoryGirl.create(:regional_statistic, 
-      region: region, pa_land_area: 80, pa_marine_area: 20)
+      region: region, pa_area: 100)
     country = FactoryGirl.create(:country, iso: 'IT')
     country_statistic = FactoryGirl.create(:country_statistic, 
       country: country, pa_area: 10)

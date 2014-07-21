@@ -8,8 +8,7 @@ class Stats::Country
   def self.percentage_global_pas_area iso
     global_stats = RegionalStatistic.joins(:region).where("name = ?", 'Global')
 
-    global_pa_area = global_stats.first[:pa_land_area] + 
-                  global_stats.first[:pa_marine_area]
+    global_pa_area = global_stats.first[:pa_area]
     pa_area = CountryStatistic.joins(:country).where("countries.iso" => iso)
       .first[:pa_area]
     pa_area / global_pa_area * 100
