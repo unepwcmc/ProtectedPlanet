@@ -12,7 +12,7 @@
   <section class="stats pa-global-percentage">
     <label>
       <span class="big">
-        <%= round_to_first_non_null_digit(@percentage_of_global_pas)%>
+        <%= '%.1f' % @percentage_of_global_pas %>
       </span>
       <span class="small">%</span>
       of global protected areas
