@@ -18,8 +18,10 @@ class ImportTools::Import
     pg_handler.with_db(db_name, &block)
   end
 
-  def started_at
-    Time.at(self.id)
+  def finalise
+    ImportTools::MaintenanceSwitcher.on
+  ensure
+    ImportTools::MaintenanceSwitcher.off
   end
 
   def increase_total_jobs_count
@@ -36,6 +38,10 @@ class ImportTools::Import
 
   def completed?
     self.completed
+  end
+
+  def started_at
+    Time.at(self.id)
   end
 
   private

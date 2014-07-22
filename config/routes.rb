@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root to: 'home#index'
   get '/', to: 'home#index'
 
-  put 'admin/maintenance'
+  put 'admin/maintenance', as: 'maintenance'
 
   get '/terms', to: 'static_pages#terms', as: 'wcmc_terms'
   get '/wdpa-terms', to: 'static_pages#wdpa_terms', as: 'wdpa_terms'

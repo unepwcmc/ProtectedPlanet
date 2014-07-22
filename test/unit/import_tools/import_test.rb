@@ -58,12 +58,19 @@ class ImportToolsImportTest < ActiveSupport::TestCase
   end
 
   test '.increase_completed_jobs_count sets the completed property for the import' do
-    id = 123
     ImportTools::RedisHandler.any_instance.expects(:increase_property_and_compare).returns(true)
 
-    import = ImportTools::Import.new(id)
+    import = ImportTools::Import.new(123)
     import.increase_completed_jobs_count
 
     assert import.completed?
+  end
+
+  test '.finalise switches the maintenance mode twice' do
+    ImportTools::MaintenanceSwitcher.expects(:on)
+    ImportTools::MaintenanceSwitcher.expects(:off)
+
+    import = ImportTools::Import.new(123)
+    import.finalise
   end
 end
