@@ -16,6 +16,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
             AND ST_IsValid(polygon.wkb_geometry)
             AND polygon.marine = '1'
             AND polygon.status NOT IN ('Proposed', 'Not Reported')
+            AND polygon.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
 
          UNION
 
@@ -25,6 +26,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
            WHERE point.iso3 = 'FAK'
              AND point.marine = '1'
              AND point.status NOT IN ('Proposed', 'Not Reported')
+             AND point.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
          ) AS c
          WHERE ST_IsValid(the_geom)
 
@@ -36,6 +38,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
             AND country.iso_3 = 'FAK'
             AND polygon.marine = '1'
             AND polygon.status NOT IN ('Proposed', 'Not Reported')
+            AND polygon.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
         ) b
       ) a
       WHERE iso_3 = 'FAK'
@@ -52,6 +55,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
             AND ST_IsValid(polygon.wkb_geometry)
             AND polygon.marine = '0'
             AND polygon.status NOT IN ('Proposed', 'Not Reported')
+            AND polygon.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
 
          UNION
 
@@ -61,6 +65,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
            WHERE point.iso3 = 'FAK'
              AND point.marine = '0'
              AND point.status NOT IN ('Proposed', 'Not Reported')
+             AND point.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
          ) AS c
          WHERE ST_IsValid(the_geom)
 
@@ -72,6 +77,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
             AND country.iso_3 = 'FAK'
             AND polygon.marine = '0'
             AND polygon.status NOT IN ('Proposed', 'Not Reported')
+            AND polygon.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
         ) b
       ) a
       WHERE iso_3 = 'FAK'
@@ -98,6 +104,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
             AND ST_IsValid(polygon.wkb_geometry)
             AND polygon.marine = '1'
             AND polygon.status NOT IN ('Proposed', 'Not Reported')
+            AND polygon.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
 
          UNION
 
@@ -107,6 +114,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
            WHERE point.iso3 = 'GBR'
              AND point.marine = '1'
              AND point.status NOT IN ('Proposed', 'Not Reported')
+             AND point.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
          ) AS c
          WHERE ST_IsValid(the_geom)
 
@@ -118,6 +126,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
             AND country.iso_3 = 'GBR'
             AND polygon.marine = '1'
             AND polygon.status NOT IN ('Proposed', 'Not Reported')
+            AND polygon.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
         ) b
       ) a
       WHERE iso_3 = 'GBR'
@@ -134,6 +143,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
             AND ST_IsValid(polygon.wkb_geometry)
             AND polygon.marine = '0'
             AND polygon.status NOT IN ('Proposed', 'Not Reported')
+            AND polygon.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
 
          UNION
 
@@ -143,6 +153,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
            WHERE point.iso3 = 'GBR'
              AND point.marine = '0'
              AND point.status NOT IN ('Proposed', 'Not Reported')
+             AND point.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
          ) AS c
          WHERE ST_IsValid(the_geom)
 
@@ -154,6 +165,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
             AND country.iso_3 = 'GBR'
             AND polygon.marine = '0'
             AND polygon.status NOT IN ('Proposed', 'Not Reported')
+            AND polygon.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
         ) b
       ) a
       WHERE iso_3 = 'GBR'
