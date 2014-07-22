@@ -3,14 +3,21 @@
   <header class="stats">
     <h3>Protected Areas (PAs)</h3>
   </header>
-  
+
   <section class="stats pa-count">
     <p><%= commaify @number_of_pas %></p>
-    <p class="label">protected areas</p>
+    <label>protected areas</label>
   </section>
-  
+
   <section class="stats pa-global-percentage">
-    <p class="label"><span class="big"><%=round_to_first_non_null_digit(@percentage_of_global_pas)%></span><span class="small">%</span> of global protected areas</p>
+    <label>
+      <span class="big">
+        <%= round_to_first_non_null_digit(@percentage_of_global_pas)%>
+      </span>
+      <span class="small">%</span>
+      of global protected areas
+    </label>
+
     <div class="bar-container">
       <div class="bar" style="width: <%=@percentage_of_global_pas%>%;"></div>
     </div>

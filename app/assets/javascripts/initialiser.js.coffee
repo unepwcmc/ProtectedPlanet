@@ -5,7 +5,7 @@ class @PageInitialiser
 
     map = new ProtectedAreaMap($mapContainer)
 
-    tileConfig = 
+    tileConfig =
       wdpaId: $mapContainer.attr('data-wdpa-id')
       iso3: $mapContainer.attr('data-iso3')
       regionName: $mapContainer.attr('data-region-name')
@@ -62,4 +62,3 @@ class @PageInitialiser
       ]
       annularSectorGenerator data, el, 160, 160
 
-    
