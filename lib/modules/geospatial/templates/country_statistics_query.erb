@@ -1,0 +1,8 @@
+SELECT id, ST_Area(ST_Transform(land_pas_geom,954009)) pa_land_area,
+  ST_Area(ST_Transform(marine_pas_geom,954009)) pa_marine_area,
+  ST_Area(ST_Transform(marine_ts_pas_geom,954009)) pa_eez_area,
+  ST_Area(ST_Transform(marine_eez_pas_geom,954009)) pa_ts_area,
+  ST_Area(ST_Transform(land_geom,954009)) land_area,
+  ST_Area(ST_Transform(eez_geom,954009)) eez_area,
+  ST_Area(ST_Transform(ts_geom,954009)) ts_Area
+FROM countries

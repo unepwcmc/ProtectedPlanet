@@ -1,0 +1,26 @@
+<section class="cell one">
+
+  <header class="stats">
+    <h3>Protected Areas (PAs)</h3>
+  </header>
+
+  <section class="stats pa-count">
+    <p><%= commaify @number_of_pas %></p>
+    <label>protected areas</label>
+  </section>
+
+  <section class="stats pa-global-percentage">
+    <label>
+      <span class="big">
+        <%= '%.1f' % (@percentage_of_global_pas || 0) %>
+      </span>
+      <span class="small">%</span>
+      of global protected areas
+    </label>
+
+    <div class="bar-container">
+      <div class="bar" style="width: <%=@percentage_of_global_pas%>%;"></div>
+    </div>
+  </section>
+
+</section>

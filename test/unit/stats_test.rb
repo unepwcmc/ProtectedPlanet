@@ -11,9 +11,9 @@ class StatsTest < ActiveSupport::TestCase
 
   test '.percentage cover of protected areas' do
     region = FactoryGirl.create(:region, iso: 'GLOBAL')
-    FactoryGirl.create(:regional_statistic, region: region, :percentage_cover_pas => 50)
-    assert_equal 50, Stats::Global.percentage_cover_pas
-  end
+    FactoryGirl.create(:regional_statistic, region: region, :percentage_pa_cover => 50)
+    assert_equal 50, Stats::Global.percentage_pa_cover
+  end 
 
   test '.protected areas with IUCN category' do
     iucn_category_1 = FactoryGirl.create(:iucn_category, name: 'Ib')
@@ -50,7 +50,7 @@ class StatsTest < ActiveSupport::TestCase
     assert_equal 2, Stats::Global.countries_providing_data
   end
 
-    test '.number of pas in one region' do
+  test '.number of pas in one region' do
     region_1 = FactoryGirl.create(:region, name: 'Africasia', iso: 'AFS')
     region_2 = FactoryGirl.create(:region, name: 'Eurociania', iso: 'EOC')
     country_1 = FactoryGirl.create(:country, region: region_1)
@@ -62,10 +62,34 @@ class StatsTest < ActiveSupport::TestCase
     assert_equal 2, Stats::Regional.total_pas('AFS')
   end
 
+  test '.percentage of global pas in one region' do
+    region_1 = FactoryGirl.create(:region, name: 'Africasia', iso: 'AFS')
+    region_2 = FactoryGirl.create(:region, name: 'Eurociania', iso: 'EOC')
+    country_1 = FactoryGirl.create(:country, region: region_1)
+    country_2 = FactoryGirl.create(:country, region: region_2)
+    country_3 = FactoryGirl.create(:country, region: region_1)
+    FactoryGirl.create(:protected_area, countries: [country_1], wdpa_id: 1)
+    FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 2)
+    FactoryGirl.create(:protected_area, countries: [country_3], wdpa_id: 3)
+    FactoryGirl.create(:protected_area, countries: [country_3], wdpa_id: 4)
+    assert_equal 75, Stats::Regional.percentage_global_pas('AFS')
+  end
+
+  test '.percentage area cover of protected areas in region' do
+    global = FactoryGirl.create(:region, name: 'Global')
+    global_statistic = FactoryGirl.create(:regional_statistic, 
+      region: global, pa_area: 100)
+    region = FactoryGirl.create(:region, iso: 'LT')
+    regional_statistic = FactoryGirl.create(:regional_statistic, 
+      region: region, pa_area: 10)
+
+    assert_equal 10, Stats::Regional.percentage_global_pas_area('LT')
+  end
+
   test '.percentage cover of protected areas in region' do
     region = FactoryGirl.create(:region, iso: 'BANANA')
-    FactoryGirl.create(:regional_statistic, region: region, :percentage_cover_pas => 50)
-    assert_equal 50, Stats::Regional.percentage_cover_pas('BANANA')
+    FactoryGirl.create(:regional_statistic, region: region, :percentage_pa_cover => 50)
+    assert_equal 50, Stats::Regional.percentage_pa_cover('BANANA')
   end
 
   test '.protected areas with IUCN category per region' do
@@ -130,6 +154,16 @@ class StatsTest < ActiveSupport::TestCase
   end
 
 
+  test '.percentage area cover of protected areas' do
+    region = FactoryGirl.create(:region, name: 'Global')
+    regional_statistic = FactoryGirl.create(:regional_statistic, 
+      region: region, pa_area: 100)
+    country = FactoryGirl.create(:country, iso: 'IT')
+    country_statistic = FactoryGirl.create(:country_statistic, 
+      country: country, pa_area: 10)
+    assert_equal 10, Stats::Country.percentage_global_pas_area('IT')
+  end
+
   test '.number of pas in one country' do
     country_1 = FactoryGirl.create(:country, name: 'Banana Republic', iso: 'BN')
     country_2 = FactoryGirl.create(:country, name: 'Kingdom of Pineapple', iso: 'KP')
@@ -139,10 +173,36 @@ class StatsTest < ActiveSupport::TestCase
     assert_equal 2, Stats::Country.total_pas('BN')
   end
 
+  test '.percentage of global pas in one country' do
+    country_1 = FactoryGirl.create(:country, name: 'Banana Republic', iso: 'BN')
+    country_2 = FactoryGirl.create(:country, name: 'Kingdom of Pineapple', iso: 'KP')
+    FactoryGirl.create(:protected_area, countries:  [country_1], wdpa_id: 1)
+    FactoryGirl.create(:protected_area, countries: [country_2], wdpa_id: 3)
+    assert_equal 50, Stats::Country.percentage_global_pas('BN')
+  end
+
   test '.percentage cover of protected areas in country' do
     country = FactoryGirl.create(:country, iso: 'BANANA')
-    FactoryGirl.create(:country_statistic, country: country, :percentage_cover_pas => 50)
-    assert_equal 50, Stats::Country.percentage_cover_pas('BANANA')
+    FactoryGirl.create(:country_statistic, country: country, :percentage_pa_cover => 50)
+    assert_equal 50, Stats::Country.percentage_pa_cover('BANANA')
+  end
+
+  test '.percentage cover of land protected areas in country' do
+    country = FactoryGirl.create(:country, iso: 'BANANA')
+    FactoryGirl.create(:country_statistic, country: country, :percentage_pa_land_cover => 50)
+    assert_equal 50, Stats::Country.percentage_protected_land('BANANA')
+  end
+
+  test '.percentage cover of sea protected areas in country' do
+    country = FactoryGirl.create(:country, iso: 'BANANA')
+    FactoryGirl.create(:country_statistic, country: country, :percentage_pa_eez_cover => 50)
+    assert_equal 50, Stats::Country.percentage_protected_sea('BANANA')
+  end
+
+  test '.percentage cover of coast protected areas in country' do
+    country = FactoryGirl.create(:country, iso: 'BANANA')
+    FactoryGirl.create(:country_statistic, country: country, :percentage_pa_ts_cover => 50)
+    assert_equal 50, Stats::Country.percentage_protected_coast('BANANA')
   end
 
   test '.protected areas with IUCN category per Country' do

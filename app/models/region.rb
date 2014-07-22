@@ -1,5 +1,6 @@
 class Region < ActiveRecord::Base
   has_many :countries
+  has_one :regional_statistic
 
   def bounds
     rgeo_factory = RGeo::Geos.factory srid: 4326
