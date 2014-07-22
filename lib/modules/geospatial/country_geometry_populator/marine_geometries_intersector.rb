@@ -22,7 +22,7 @@ module Geospatial::CountryGeometryPopulator::MarineGeometriesIntersector
 
   COUNTRIES_WITH_TOPOLOGY_PROBLEMS = [
     'USA','RUS','HRV','CAN','MYS','THA','GNQ','COL','JPN',
-    'ESP','NIC','KOR','EGY','MAR'
+    'ESP','NIC','KOR','EGY','MAR', 'CHN'
   ]
 
   def self.country_needs_simplifying? country

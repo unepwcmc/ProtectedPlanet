@@ -8,6 +8,7 @@ FROM (
       AND ST_IsValid(polygon.wkb_geometry)
       AND polygon.marine = '<%= marine_status %>'
       AND polygon.status NOT IN ('Proposed', 'Not Reported')
+      AND polygon.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
 
    UNION
 
@@ -17,6 +18,7 @@ FROM (
      WHERE point.iso3 = '<%= country.iso_3 %>'
        AND point.marine = '<%= marine_status %>'
        AND point.status NOT IN ('Proposed', 'Not Reported')
+       AND point.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
    ) AS c
    WHERE ST_IsValid(the_geom)
 
@@ -28,6 +30,7 @@ FROM (
       AND country.iso_3 = '<%= country.iso_3 %>'
       AND polygon.marine = '<%= marine_status %>'
       AND polygon.status NOT IN ('Proposed', 'Not Reported')
+      AND polygon.desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
   ) b
 ) a
 WHERE iso_3 = '<%= country.iso_3 %>'
