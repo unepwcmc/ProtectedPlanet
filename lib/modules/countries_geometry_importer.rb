@@ -45,7 +45,7 @@ class CountriesGeometryImporter
       UPDATE countries
       SET #{type.downcase}_geom = the_geom
       FROM (
-        SELECT ST_CollectionExtract(ST_Collect(the_geom),3) the_geom
+        SELECT ST_Makevalid(ST_CollectionExtract(ST_Collect(the_geom),3)) the_geom
         FROM countries_geometries_temp
         WHERE type = '#{type}' AND iso_3 = '#{iso_3}'
       ) a

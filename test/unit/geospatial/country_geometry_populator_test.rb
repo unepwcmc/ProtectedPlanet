@@ -32,8 +32,8 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
          UNION
 
-         SELECT country.iso_3, ST_Makevalid(ST_Intersection(country.land_geom, polygon.wkb_geometry)) FROM standard_polygons polygon
-           INNER JOIN countries country ON ST_Intersects(country.land_geom, polygon.wkb_geometry)
+         SELECT country.iso_3, ST_Makevalid(ST_Intersection(ST_Buffer(country.land_geom,0.0), polygon.wkb_geometry)) FROM standard_polygons polygon
+           INNER JOIN countries country ON ST_Intersects(ST_Buffer(country.land_geom,0.0), polygon.wkb_geometry)
            WHERE polygon.iso3 LIKE '%,%'
             AND country.iso_3 = 'FAK'
             AND polygon.marine = '1'
@@ -71,8 +71,8 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
          UNION
 
-         SELECT country.iso_3, ST_Makevalid(ST_Intersection(country.land_geom, polygon.wkb_geometry)) FROM standard_polygons polygon
-           INNER JOIN countries country ON ST_Intersects(country.land_geom, polygon.wkb_geometry)
+         SELECT country.iso_3, ST_Makevalid(ST_Intersection(ST_Buffer(country.land_geom,0.0), polygon.wkb_geometry)) FROM standard_polygons polygon
+           INNER JOIN countries country ON ST_Intersects(ST_Buffer(country.land_geom,0.0), polygon.wkb_geometry)
            WHERE polygon.iso3 LIKE '%,%'
             AND country.iso_3 = 'FAK'
             AND polygon.marine = '0'
@@ -120,8 +120,8 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
          UNION
 
-         SELECT country.iso_3, ST_Makevalid(ST_Intersection(country.land_geom, polygon.wkb_geometry)) FROM standard_polygons polygon
-           INNER JOIN countries country ON ST_Intersects(country.land_geom, polygon.wkb_geometry)
+         SELECT country.iso_3, ST_Makevalid(ST_Intersection(ST_Buffer(country.land_geom,0.0), polygon.wkb_geometry)) FROM standard_polygons polygon
+           INNER JOIN countries country ON ST_Intersects(ST_Buffer(country.land_geom,0.0), polygon.wkb_geometry)
            WHERE polygon.iso3 LIKE '%,%'
             AND country.iso_3 = 'GBR'
             AND polygon.marine = '1'
@@ -159,8 +159,8 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
          UNION
 
-         SELECT country.iso_3, ST_Makevalid(ST_Intersection(country.land_geom, polygon.wkb_geometry)) FROM standard_polygons polygon
-           INNER JOIN countries country ON ST_Intersects(country.land_geom, polygon.wkb_geometry)
+         SELECT country.iso_3, ST_Makevalid(ST_Intersection(ST_Buffer(country.land_geom,0.0), polygon.wkb_geometry)) FROM standard_polygons polygon
+           INNER JOIN countries country ON ST_Intersects(ST_Buffer(country.land_geom,0.0), polygon.wkb_geometry)
            WHERE polygon.iso3 LIKE '%,%'
             AND country.iso_3 = 'GBR'
             AND polygon.marine = '0'
