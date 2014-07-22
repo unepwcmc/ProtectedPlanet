@@ -10,9 +10,6 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 
-#Ignore secrets.yml
-/config/secrets.yml
-
 /tmp/*
 !/tmp/.gitkeep
 
@@ -20,3 +17,5 @@ dump.rdb
 
 /coverage
 /public/assets
+
+.env

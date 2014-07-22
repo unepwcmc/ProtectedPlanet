@@ -108,4 +108,4 @@ class @ProtectedAreaMap
   calculatePadding: ->
     mapSize = @map.getSize()
     paddingLeft = mapSize.x/5
-    {topLeft: [paddingLeft, 50], bottomRight: [0, 50]}
+    {topLeft: [paddingLeft, 50], bottomRight: [0,70]}

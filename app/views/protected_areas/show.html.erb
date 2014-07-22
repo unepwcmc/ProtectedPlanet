@@ -1,6 +1,12 @@
 <div class="protected-area-map" id="map" data-zoom-control="topright" data-padding-enabled data-bound-from="<%= map_bounds(@protected_area)['from'] %>" data-bound-to="<%= map_bounds(@protected_area)['to'] %>" data-wdpa-id="<%= @protected_area.wdpa_id %>"></div>
 
 <main class="grid">
+  <div class="map-disclaimer">
+    The boundaries and names shown, and the designations used on this
+    map do not imply official endorsement or acceptance by the United
+    Nations or IUCN.
+  </div>
+
   <section class="info-card">
     <h2><%= @protected_area.name %></h2>
 
