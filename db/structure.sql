@@ -105,7 +105,14 @@ CREATE TABLE countries (
     updated_at timestamp without time zone,
     language character varying(255),
     region_id integer,
-    bounding_box geometry
+    bounding_box geometry,
+    marine_pas_geom geometry,
+    land_pas_geom geometry,
+    land_geom geometry,
+    eez_geom geometry,
+    ts_geom geometry,
+    marine_ts_pas_geom geometry,
+    marine_eez_pas_geom geometry
 );
 
 
@@ -145,11 +152,20 @@ CREATE TABLE countries_protected_areas (
 CREATE TABLE country_statistics (
     id integer NOT NULL,
     country_id integer,
-    area double precision,
     pa_area double precision,
-    percentage_cover_pas double precision,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    eez_area double precision,
+    ts_area double precision,
+    pa_land_area double precision,
+    pa_marine_area double precision,
+    percentage_pa_land_cover double precision,
+    percentage_pa_eez_cover double precision,
+    percentage_pa_ts_cover double precision,
+    land_area double precision,
+    percentage_pa_cover double precision,
+    pa_eez_area double precision,
+    pa_ts_area double precision
 );
 
 
@@ -268,6 +284,129 @@ CREATE SEQUENCE images_id_seq
 --
 
 ALTER SEQUENCE images_id_seq OWNED BY images.id;
+
+
+--
+-- Name: standard_points; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE standard_points (
+    ogc_fid integer NOT NULL,
+    wkb_geometry geometry(MultiPoint,4326),
+    wdpaid integer,
+    wdpa_pid integer,
+    name character varying,
+    orig_name character varying,
+    sub_loc character varying,
+    desig character varying,
+    desig_eng character varying,
+    desig_type character varying,
+    iucn_cat character varying,
+    int_crit character varying,
+    marine character varying,
+    rep_m_area double precision,
+    rep_area double precision,
+    status character varying,
+    status_yr integer,
+    gov_type character varying,
+    mang_auth character varying,
+    mang_plan character varying,
+    no_take character varying,
+    no_tk_area double precision,
+    metadataid integer,
+    iso3 character varying,
+    parent_iso3 character varying,
+    buffer_geom geometry
+);
+
+
+--
+-- Name: standard_polygons; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE standard_polygons (
+    ogc_fid integer NOT NULL,
+    wkb_geometry geometry(MultiPolygon,4326),
+    wdpaid integer,
+    wdpa_pid integer,
+    name character varying,
+    orig_name character varying,
+    sub_loc character varying,
+    desig character varying,
+    desig_eng character varying,
+    desig_type character varying,
+    iucn_cat character varying,
+    int_crit character varying,
+    marine character varying,
+    rep_m_area double precision,
+    gis_m_area double precision,
+    rep_area double precision,
+    gis_area double precision,
+    status character varying,
+    status_yr integer,
+    gov_type character varying,
+    mang_auth character varying,
+    mang_plan character varying,
+    no_take character varying,
+    no_tk_area double precision,
+    metadataid integer,
+    parent_iso3 character varying,
+    iso3 character varying,
+    shape_length double precision,
+    shape_area double precision
+);
+
+
+--
+-- Name: imported_protected_areas; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW imported_protected_areas AS
+         SELECT standard_polygons.wdpaid,
+            standard_polygons.wdpa_pid,
+            standard_polygons.name,
+            standard_polygons.orig_name,
+            standard_polygons.marine,
+            standard_polygons.rep_m_area,
+            standard_polygons.rep_area,
+            standard_polygons.iso3,
+            standard_polygons.sub_loc,
+            standard_polygons.status,
+            standard_polygons.status_yr,
+            standard_polygons.iucn_cat,
+            standard_polygons.gov_type,
+            standard_polygons.mang_auth,
+            standard_polygons.mang_plan,
+            standard_polygons.int_crit,
+            standard_polygons.no_take,
+            standard_polygons.no_tk_area,
+            standard_polygons.desig,
+            standard_polygons.desig_type,
+            standard_polygons.wkb_geometry
+           FROM standard_polygons
+UNION ALL
+         SELECT standard_points.wdpaid,
+            standard_points.wdpa_pid,
+            standard_points.name,
+            standard_points.orig_name,
+            standard_points.marine,
+            standard_points.rep_m_area,
+            standard_points.rep_area,
+            standard_points.iso3,
+            standard_points.sub_loc,
+            standard_points.status,
+            standard_points.status_yr,
+            standard_points.iucn_cat,
+            standard_points.gov_type,
+            standard_points.mang_auth,
+            standard_points.mang_plan,
+            standard_points.int_crit,
+            standard_points.no_take,
+            standard_points.no_tk_area,
+            standard_points.desig,
+            standard_points.desig_type,
+            standard_points.wkb_geometry
+           FROM standard_points;
 
 
 --
@@ -528,9 +667,20 @@ CREATE TABLE regional_statistics (
     region_id integer,
     area double precision,
     pa_area double precision,
-    percentage_cover_pas double precision,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    eez_area double precision,
+    ts_area double precision,
+    pa_land_area double precision,
+    pa_marine_area double precision,
+    percentage_land double precision,
+    percentage_pa_land_cover double precision,
+    percentage_pa_eez_cover double precision,
+    percentage_pa_ts_cover double precision,
+    land_area double precision,
+    percentage_pa_cover double precision,
+    pa_eez_area double precision,
+    pa_ts_area double precision
 );
 
 
@@ -658,19 +808,29 @@ CREATE SEQUENCE standard_points_ogc_fid_seq
 
 
 --
--- Name: regions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: standard_points_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE regions_id_seq OWNED BY regions.id;
+ALTER SEQUENCE standard_points_ogc_fid_seq OWNED BY standard_points.ogc_fid;
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: standard_polygons_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE TABLE schema_migrations (
-    version character varying(255) NOT NULL
-);
+CREATE SEQUENCE standard_polygons_ogc_fid_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: standard_polygons_ogc_fid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE standard_polygons_ogc_fid_seq OWNED BY standard_polygons.ogc_fid;
 
 
 --
@@ -865,7 +1025,14 @@ ALTER TABLE ONLY sources ALTER COLUMN id SET DEFAULT nextval('sources_id_seq'::r
 -- Name: ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY regions ALTER COLUMN id SET DEFAULT nextval('regions_id_seq'::regclass);
+ALTER TABLE ONLY standard_points ALTER COLUMN ogc_fid SET DEFAULT nextval('standard_points_ogc_fid_seq'::regclass);
+
+
+--
+-- Name: ogc_fid; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY standard_polygons ALTER COLUMN ogc_fid SET DEFAULT nextval('standard_polygons_ogc_fid_seq'::regclass);
 
 
 --
@@ -1002,6 +1169,21 @@ ALTER TABLE ONLY sources
     ADD CONSTRAINT sources_pkey PRIMARY KEY (id);
 
 
+--
+-- Name: standard_points_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY standard_points
+    ADD CONSTRAINT standard_points_pkey PRIMARY KEY (ogc_fid);
+
+
+--
+-- Name: standard_polygons_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY standard_polygons
+    ADD CONSTRAINT standard_polygons_pkey PRIMARY KEY (ogc_fid);
+
 
 --
 -- Name: sub_locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
@@ -1017,6 +1199,55 @@ ALTER TABLE ONLY sub_locations
 
 ALTER TABLE ONLY wikipedia_articles
     ADD CONSTRAINT wikipedia_articles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: index_countries_on_eez_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_eez_geom ON countries USING gist (eez_geom);
+
+
+--
+-- Name: index_countries_on_land_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_land_geom ON countries USING gist (land_geom);
+
+
+--
+-- Name: index_countries_on_land_pas_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_land_pas_geom ON countries USING gist (land_pas_geom);
+
+
+--
+-- Name: index_countries_on_marine_eez_pas_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_marine_eez_pas_geom ON countries USING gist (marine_eez_pas_geom);
+
+
+--
+-- Name: index_countries_on_marine_pas_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_marine_pas_geom ON countries USING gist (marine_pas_geom);
+
+
+--
+-- Name: index_countries_on_marine_ts_pas_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_marine_ts_pas_geom ON countries USING gist (marine_ts_pas_geom);
+
+
+--
+-- Name: index_countries_on_ts_geom; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX index_countries_on_ts_geom ON countries USING gist (ts_geom);
 
 
 --
@@ -1136,6 +1367,27 @@ CREATE INDEX index_sub_locations_on_country_id ON sub_locations USING btree (cou
 --
 
 CREATE INDEX index_tsvector_search_documents_on_document ON tsvector_search_documents USING gin (document);
+
+
+--
+-- Name: search_lexemes_idx; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX search_lexemes_idx ON search_lexemes USING gin (word gin_trgm_ops);
+
+
+--
+-- Name: standard_points_wkb_geometry_geom_idx; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX standard_points_wkb_geometry_geom_idx ON standard_points USING gist (wkb_geometry);
+
+
+--
+-- Name: standard_polygons_wkb_geometry_geom_idx; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE INDEX standard_polygons_wkb_geometry_geom_idx ON standard_polygons USING gist (wkb_geometry);
 
 
 --
@@ -1275,8 +1527,46 @@ INSERT INTO schema_migrations (version) VALUES ('20140625154316');
 
 INSERT INTO schema_migrations (version) VALUES ('20140703130946');
 
+INSERT INTO schema_migrations (version) VALUES ('20140704105917');
+
+INSERT INTO schema_migrations (version) VALUES ('20140704154012');
+
+INSERT INTO schema_migrations (version) VALUES ('20140704154428');
+
 INSERT INTO schema_migrations (version) VALUES ('20140707111454');
 
 INSERT INTO schema_migrations (version) VALUES ('20140708193519');
 
+INSERT INTO schema_migrations (version) VALUES ('20140709181758');
+
 INSERT INTO schema_migrations (version) VALUES ('20140710124303');
+
+INSERT INTO schema_migrations (version) VALUES ('20140710144417');
+
+INSERT INTO schema_migrations (version) VALUES ('20140714105648');
+
+INSERT INTO schema_migrations (version) VALUES ('20140714110350');
+
+INSERT INTO schema_migrations (version) VALUES ('20140714231111');
+
+INSERT INTO schema_migrations (version) VALUES ('20140715151517');
+
+INSERT INTO schema_migrations (version) VALUES ('20140715155911');
+
+INSERT INTO schema_migrations (version) VALUES ('20140715160555');
+
+INSERT INTO schema_migrations (version) VALUES ('20140715160624');
+
+INSERT INTO schema_migrations (version) VALUES ('20140716103827');
+
+INSERT INTO schema_migrations (version) VALUES ('20140716103848');
+
+INSERT INTO schema_migrations (version) VALUES ('20140717133702');
+
+INSERT INTO schema_migrations (version) VALUES ('20140718131656');
+
+INSERT INTO schema_migrations (version) VALUES ('20140718134127');
+
+INSERT INTO schema_migrations (version) VALUES ('20140721122630');
+
+INSERT INTO schema_migrations (version) VALUES ('20140721122852');
