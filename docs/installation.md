@@ -51,20 +51,18 @@ incorrectly for RGeo's use. You can fix this easily:
 
 ### Configuration and Secrets
 
-Some secrets are required by the application, such as AWS keys. Take a
-look in [`config/secrets.yml.example`](config/secrets.yml.example) for
-the options available, and fill them in as required (probably all of
-them). **You will need to copy the `secrets.yml` example file for the
-application to run correctly:**
+Application config is stored in `config/secrets.yml`, along with certain
+required secrets (such as AWS keys). To make development easier, the
+secrets.yml file uses environment variables to set secret config keys.
+
+In development, these can be setup using a
+[dotenv](https://github.com/bkeepers/dotenv) file in the project root.
+There is a template `.env` available, and should be used and filled in so
+that you don't have to manually set the required environment variables:
 
 ```
-  cp config/secrets.yml.example config/secrets.yml
+cp .env.example .env
 ```
-
-Generally `secrets.yml` is also used for non-secret configuration, so
-that the config values can reside in the same file for easy maintenance.
-It is advisable that only in exceptional circumstances do you put custom
-config in environments files or other initializers.
 
 ### Background Workers
 

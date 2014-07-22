@@ -52,7 +52,10 @@ gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
 
 gem 'sidekiq', '~> 3.1.4'
+gem 'whenever', require: false
 
+gem 'dotenv', '~> 0.11.1'
+gem 'dotenv-deployment'
 
 # For debugging
 # gem 'byebug', group: [:development, :test]

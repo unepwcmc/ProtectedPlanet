@@ -605,6 +605,47 @@ CREATE TABLE search_lexemes (
 
 
 --
+-- Name: sources; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE sources (
+    id integer NOT NULL,
+    title character varying(255),
+    responsible_party character varying(255),
+    responsible_email character varying(255),
+    year date,
+    language character varying(255),
+    character_set character varying(255),
+    reference_system character varying(255),
+    scale character varying(255),
+    lineage text,
+    citation text,
+    disclaimer text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: sources_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE sources_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sources_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE sources_id_seq OWNED BY sources.id;
+
+
+--
 -- Name: standard_points_ogc_fid_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -814,6 +855,13 @@ ALTER TABLE ONLY regions ALTER COLUMN id SET DEFAULT nextval('regions_id_seq'::r
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY sources ALTER COLUMN id SET DEFAULT nextval('sources_id_seq'::regclass);
+
+
+--
 -- Name: ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -947,11 +995,12 @@ ALTER TABLE ONLY regions
 
 
 --
--- Name: regions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
-ALTER TABLE ONLY regions
-    ADD CONSTRAINT regions_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY sources
+    ADD CONSTRAINT sources_pkey PRIMARY KEY (id);
+
 
 
 --
@@ -1229,3 +1278,5 @@ INSERT INTO schema_migrations (version) VALUES ('20140703130946');
 INSERT INTO schema_migrations (version) VALUES ('20140707111454');
 
 INSERT INTO schema_migrations (version) VALUES ('20140708193519');
+
+INSERT INTO schema_migrations (version) VALUES ('20140710124303');
