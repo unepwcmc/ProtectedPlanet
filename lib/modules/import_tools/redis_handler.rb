@@ -5,12 +5,12 @@ class ImportTools::RedisHandler
     Sidekiq.redis{|conn| self.redis = conn }
   end
 
-  def lock import_id
-    redis.setnx(current_import_key, import_id)
+  def lock id
+    redis.setnx(current_import_key, id)
   end
 
   def current_import_id
-    @current_import_id ||= redis.get current_import_key
+    redis.get current_import_key
   end
 
   def past_import_ids
@@ -21,8 +21,28 @@ class ImportTools::RedisHandler
     ).map(&:last)
   end
 
+  def increase_total_jobs_count id
+    redis.incr(total_jobs_count_key(id))
+  end
+
+  def increase_completed_jobs_count id
+    redis.incr(completed_jobs_count_key(id))
+  end
+
   private
   attr_writer :redis
+
+  def total_jobs_count_key id
+    "#{import_key(id)}:total_jobs"
+  end
+
+  def completed_jobs_count_key id
+    "#{import_key(id)}:completed_jobs"
+  end
+
+  def import_key id
+    "#{redis_prefix}:#{id}"
+  end
 
   def past_imports_key
     "#{redis_prefix}:past_imports"

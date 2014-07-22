@@ -1,6 +1,14 @@
 require 'test_helper'
 
 class ImportToolsImportTest < ActiveSupport::TestCase
+  test '#find returns an Import instance with the found ID' do
+    id = 123
+    import = ImportTools::Import.find(id)
+
+    assert_kind_of ImportTools::Import, import
+    assert_equal id, import.id
+  end
+
   test '#new tries to lock the import' do
     ImportTools::Import.any_instance.stubs(:create_db)
     ImportTools::Import.any_instance.expects(:lock_import)
@@ -33,11 +41,19 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     import.with_context{}
   end
 
-  test '#find returns an Import instance with the found ID' do
-    id = 123
-    import = ImportTools::Import.find(id)
+  test '.started_at returns a Time instance created from the import id (timestamp)' do
+    import_starting_time = Time.new(2014, 1, 1)
+    id = import_starting_time.to_i
+    import = ImportTools::Import.new(id)
 
-    assert_kind_of ImportTools::Import, import
-    assert_equal id, import.id
+    assert_equal import_starting_time, import.started_at
+  end
+
+  test '.increase_total_jobs_count calls redis to increase the number of jobs' do
+    id = 123
+    ImportTools::RedisHandler.any_instance.expects(:increase_total_jobs_count)
+
+    import = ImportTools::Import.new(id)
+    import.increase_total_jobs_count
   end
 end
