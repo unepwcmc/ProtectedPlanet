@@ -4,6 +4,7 @@
 
 * {
   font-family: 'Museo', $font-stack;
+  box-sizing: border-box;
 }
 
 body {
@@ -145,68 +146,14 @@ main {
 footer {
   width: 100%;
   background: $dark-blue;
+  font-size: 0.9em;
 
-  .footer-inner {
-    padding: 50px 0;
-    margin: 0px auto;
-    width: 1000px;
-    color: $grey-blue;
-  }
-}
-
-.grid {
-  section {
-    margin-top: 30px;
-    padding: 20px;
-
-    h3 {
-      font-weight: normal;
-      font-family: 'MuseoSlab', $font-stack;
-      border-bottom: 1px solid $grey;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-
-      span {
-       background: #e6e6ee;
-       @include border-radius(5px);
-       font-size: 0.8em;
-       padding: 5px;
-      }
-    }
-
-    &:last-of-type {
-      margin-bottom: 30px;
-    }
-  }
-
-  .column-left {
-    float: left;
-    width: 48.5%;
-  }
-
-  .column-right {
-    float: right;
-    width: 48.5%;
-  }
-}
-
-section {
-  a {
+  strong, a, a:visited {
+    color: #96989C;
     font-weight: bold;
-    color: $blue;
   }
-}
-
-.alert {
-  color: white;
-  height: 40px;
-  text-align: center;
-  padding: 15px;
-  box-sizing: border-box;
-  font-size: 0.8em;
 
   a {
-    color: white;
     text-decoration: underline;
 
     &:hover {
@@ -214,50 +161,42 @@ section {
     }
   }
 
-  .close {
-    float: right;
-    background: white;
-    border-radius: 50%;
-    border: 1px solid white;
-    height: 17px;
-    width: 17px;
-    margin: 0 10px;
-    padding-top: 1px;
-    box-sizing: border-box;
-    margin-top: -1px;
-
-    &:hover {
-      cursor: pointer;
-    }
+  .footer-inner {
+    height: 140px;
+    padding: 50px 0;
+    margin: 0px auto;
+    width: 980px;
+    color: $grey-blue;
   }
 }
 
-.alert.info {
-  background-color: #95B64C;
+.footer-logos {
+  img {
+    margin-right: 20px;
+  }
 
-  .close {
-    color: #95B64C;
-
-    &:hover {
-      background-color: #95B64C;
-      color: white;
-    }
+  a {
+    text-decoration: none;
   }
 }
 
-#about-modal {
-  text-align: left;
+.footer-copyright,
+.footer-links {
+  padding-top: 7px;
+}
 
-  p {
-    margin-bottom: 20px;
+.footer-copyright,
+.footer-logos {
+  float: left;
+}
 
-    &:last-of-type {
-      margin-bottom: 0;
-    }
-  }
+.footer-links {
+  float: right;
+}
 
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
+section {
+  a {
+    font-weight: bold;
+    color: $blue;
   }
 }

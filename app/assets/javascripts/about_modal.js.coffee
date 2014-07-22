@@ -7,7 +7,7 @@ class @AboutModal
       <section>
         <p>
           alpha.protectedplanet.net is an experimental prototype and first
-          iteration of our project to redevelop Protected Planet.
+          iteration of our project to redevelop <a href="http://www.protectedplanet.net">Protected Planet</a>
         </p>
 
         <p>
@@ -25,9 +25,11 @@ class @AboutModal
 
         <p>
           Your feedback is vital to us, so please leave any comments and
-          suggestions you have. They will help us to shape protected
-          planet over the coming months.
+          suggestions you have. They will help us to shape Protected
+          Planet over the coming months.
         </p>
+
+        <p><a href="http://www.protectedplanet.net/about">Learn more about the Protected Planet initiative</a></p>
       </section>
 
       <a href="#" id="close-modal"><i class="fa fa-times fa-2x"></i></a>

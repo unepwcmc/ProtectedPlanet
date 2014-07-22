@@ -35,7 +35,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
     assert_equal pa_count, page.first('.pa-count p').text.to_i
   end
 
-  test 'renders percentage of global pas in one regopm' do
+  test 'renders percentage of global pas in one region' do
     country = FactoryGirl.create(:country, region: @region)
     FactoryGirl.create(:protected_area, countries: [country], designation: nil)
     FactoryGirl.create(:protected_area)
@@ -48,7 +48,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
 
     assert page.has_selector?('.pa-global-percentage'),
       "Expected page to have a PA percentage element"
-    assert_equal percentage, page.find('.pa-global-percentage p').text.to_i
+    assert_equal percentage, page.find('.pa-global-percentage label .big').text.to_i
   end
 
   test 'renders the number of Protected Areas with IUCN Categories' do

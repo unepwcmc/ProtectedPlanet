@@ -27,9 +27,9 @@ var annularSectorGenerator = (function() {
 
   return function(data, selector, width, height, inner_radius_start, outer_radius_start) {
     var radius = Math.min(width, height) / 2,
-        inner_radius_start = (inner_radius_start === void 0) ? 
+        inner_radius_start = (inner_radius_start === void 0) ?
           6 : inner_radius_start,
-        outer_radius_start = (outer_radius_start === void 0) ? 
+        outer_radius_start = (outer_radius_start === void 0) ?
           6 : outer_radius_start;
 
     var svg = d3.select(selector).append('svg')
@@ -42,7 +42,7 @@ var annularSectorGenerator = (function() {
         .data(pie()(data))
       .enter().append('g')
         .attr('class', 'arc');
-  
+
     g.append('path')
       .attr('d', arc(radius, inner_radius_start, outer_radius_start))
       .attr('stroke', function(d) { return d.data.color; })
