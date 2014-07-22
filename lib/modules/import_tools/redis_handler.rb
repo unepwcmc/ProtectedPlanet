@@ -21,35 +21,36 @@ class ImportTools::RedisHandler
     ).map(&:last)
   end
 
-  def increase_total_jobs_count id
-    redis.incr(total_jobs_count_key(id))
+  def increase_property id, property
+    redis.incr import_property_key(id, property)
   end
 
-  def increase_completed_jobs_count id
-    redis.incr(completed_jobs_count_key(id))
+  def increase_property_and_compare id, property, compared_property
+    values = redis.multi do
+      redis.incr import_property_key(id, property)
+      redis.get import_property_key(id, compared_property)
+    end.map(&:to_i)
+
+    values.first == values.last
   end
 
   private
   attr_writer :redis
 
-  def total_jobs_count_key id
-    "#{import_key(id)}:total_jobs"
-  end
-
-  def completed_jobs_count_key id
-    "#{import_key(id)}:completed_jobs"
+  def import_property_key id, property
+    "#{import_key(id)}:#{property}"
   end
 
   def import_key id
     "#{redis_prefix}:#{id}"
   end
 
-  def past_imports_key
-    "#{redis_prefix}:past_imports"
-  end
-
   def current_import_key
     "#{redis_prefix}:current_import"
+  end
+
+  def past_imports_key
+    "#{redis_prefix}:past_imports"
   end
 
   def redis_prefix

@@ -1,5 +1,9 @@
 class ImportTools::Import
-  attr_reader :id
+  attr_reader :id, :completed
+
+  def self.find id
+    self.new id
+  end
 
   def initialize id=nil
     self.id = id || Time.now.to_i
@@ -8,10 +12,6 @@ class ImportTools::Import
       lock_import
       create_db
     end
-  end
-
-  def self.find id
-    self.new id
   end
 
   def with_context &block
@@ -23,15 +23,23 @@ class ImportTools::Import
   end
 
   def increase_total_jobs_count
-    redis_handler.increase_total_jobs_count(self.id)
+    redis_handler.increase_property(self.id, :total_jobs)
   end
 
   def increase_completed_jobs_count
-    redis_handler.increase_completed_jobs_count(self.id)
+    all_jobs_completed = redis_handler.increase_property_and_compare(
+      self.id, :completed_jobs, :total_jobs
+    )
+
+    self.completed = all_jobs_completed
+  end
+
+  def completed?
+    self.completed
   end
 
   private
-  attr_writer :id
+  attr_writer :id, :completed
 
   def lock_import
     raise ImportTools::AlreadyRunningImportError unless redis_handler.lock(self.id)

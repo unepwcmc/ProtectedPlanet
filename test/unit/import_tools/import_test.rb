@@ -51,9 +51,19 @@ class ImportToolsImportTest < ActiveSupport::TestCase
 
   test '.increase_total_jobs_count calls redis to increase the number of jobs' do
     id = 123
-    ImportTools::RedisHandler.any_instance.expects(:increase_total_jobs_count)
+    ImportTools::RedisHandler.any_instance.expects(:increase_property)
 
     import = ImportTools::Import.new(id)
     import.increase_total_jobs_count
+  end
+
+  test '.increase_completed_jobs_count sets the completed property for the import' do
+    id = 123
+    ImportTools::RedisHandler.any_instance.expects(:increase_property_and_compare).returns(true)
+
+    import = ImportTools::Import.new(id)
+    import.increase_completed_jobs_count
+
+    assert import.completed?
   end
 end
