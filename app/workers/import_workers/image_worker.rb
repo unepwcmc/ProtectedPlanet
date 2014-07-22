@@ -3,6 +3,9 @@ class ImportWorkers::ImageWorker < ImportWorker
     ImportTools.current_import.with_context do
       save_image(protected_area_id)
     end
+
+  ensure
+    finalise_job
   end
 
   def save_image protected_area_id
