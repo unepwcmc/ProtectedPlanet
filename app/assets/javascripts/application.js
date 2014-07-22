@@ -13,5 +13,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require leaflet-src
 //= require cartodb.core
 //= require_tree .
