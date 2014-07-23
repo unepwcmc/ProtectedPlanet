@@ -5,13 +5,9 @@ class Wdpa::Importer
   end
 
   def import
-    temp_db_name = "temp_import_db_#{Time.now.to_i}"
-
-    ImportTools.with_db(temp_db_name) do
-      wdpa_release = Wdpa::Release.download
-      execute_importers wdpa_release
-      wdpa_release.clean_up
-    end
+    wdpa_release = Wdpa::Release.download
+    execute_importers wdpa_release
+    wdpa_release.clean_up
   end
 
   private

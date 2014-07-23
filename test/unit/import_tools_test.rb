@@ -1,21 +1,30 @@
 require 'test_helper'
 
 class ImportToolsTest < ActiveSupport::TestCase
-  test '#with_db creates a DB with the given name' do
-    db_name = 'temp_test_db'
-
-    ImportTools::PostgresHandler.any_instance.expects(:create_database).with(db_name)
-    ImportTools::PostgresHandler.any_instance.stubs(:with_db)
-
-    ImportTools.with_db(db_name) {}
+  test '#create_import creates a new instance of ImportTools::Import' do
+    ImportTools::Import.expects(:new)
+    ImportTools.create_import
   end
 
-  test '#with_db creates a context with a different DB using PostgresHandler' do
-    db_name = 'temp_test_db'
+  test '#current_import returns an Import with the id returned from Redis' do
+    ImportTools::RedisHandler.any_instance.stubs(:current_import_id).returns(123)
 
-    ImportTools::PostgresHandler.any_instance.stubs(:create_database)
-    ImportTools::PostgresHandler.any_instance.expects(:with_db).with(db_name)
+    import = ImportTools.current_import
+    assert_equal 123, import.id
+  end
 
-    ImportTools.with_db(db_name) {}
+  test '#current_import returns nil if no import is found' do
+    ImportTools::RedisHandler.any_instance.stubs(:current_import_id).returns(nil)
+
+    import = ImportTools.current_import
+    assert_equal nil, import
+  end
+
+  test '#last_import returns an instance of Import with the id of the last import' do
+    ImportTools::RedisHandler.any_instance.expects(:past_import_ids).returns([1,2,3])
+
+    last_import = ImportTools.last_import
+    assert_kind_of ImportTools::Import, last_import
+    assert_equal 3, last_import.id
   end
 end
