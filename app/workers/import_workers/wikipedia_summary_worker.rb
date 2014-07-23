@@ -1,8 +1,14 @@
-class WikipediaSummaryWorker
-  include Sidekiq::Worker
-  sidekiq_options :retry => false
-
+class ImportWorkers::WikipediaSummaryWorker < ImportWorker
   def perform protected_area_id
+    ImportTools.current_import.with_context do
+      save_wikipedia_article(protected_area_id)
+    end
+
+  ensure
+    finalise_job
+  end
+
+  def save_wikipedia_article protected_area_id
     @protected_area = ProtectedArea.find protected_area_id
 
     articles = WikipediaArticle.search search_term

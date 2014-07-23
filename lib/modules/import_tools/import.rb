@@ -15,24 +15,41 @@ class ImportTools::Import
   end
 
   def with_context &block
-    pg_handler = ImportTools::PostgresHandler.new
     pg_handler.with_db(db_name, &block)
+  end
+
+  def started_at
+    Time.at(self.id)
+  end
+
+  def increase_total_jobs_count
+    redis_handler.increase_total_jobs_count(self.id)
+  end
+
+  def increase_completed_jobs_count
+    redis_handler.increase_completed_jobs_count(self.id)
   end
 
   private
   attr_writer :id
 
   def lock_import
-    redis_handler = ImportTools::RedisHandler.new
     raise ImportTools::AlreadyRunningImportError unless redis_handler.lock(self.id)
   end
 
   def create_db
-    pg_handler = ImportTools::PostgresHandler.new
     pg_handler.create_database(db_name)
   end
 
   def db_name
     "import_db_#{self.id}"
+  end
+
+  def redis_handler
+    @redis_handler ||= ImportTools::RedisHandler.new
+  end
+
+  def pg_handler
+    @pg_handler ||= ImportTools::PostgresHandler.new
   end
 end

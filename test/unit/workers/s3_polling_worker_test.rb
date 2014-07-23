@@ -3,12 +3,13 @@ require 'test_helper'
 class S3PollingWorkerTest < ActiveSupport::TestCase
   test '.perform calls S3.new_wdpa? to look for a new release, and spawns
    WdpaImportWorker, if a new release is found' do
-    last_import_id = Time.now.to_i
+    last_import_started_at = Time.now
 
     import_mock = mock()
-    import_mock.stubs(:id).returns(last_import_id)
+    import_mock.stubs(:started_at).returns(last_import_started_at)
     ImportTools.stubs(:last_import).returns(import_mock)
-    Wdpa::S3.stubs(:new_wdpa?).returns(true)
+
+    Wdpa::S3.expects(:new_wdpa?).with(last_import_started_at).returns(true)
 
     WdpaImportWorker.expects(:perform_async)
 

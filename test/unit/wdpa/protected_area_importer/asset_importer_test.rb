@@ -10,16 +10,16 @@ class TestWdpaAssetImporterService < ActiveSupport::TestCase
 
     Wdpa::ProtectedAreaImporter::AssetImporter.import
 
-    assert_equal 1, WikipediaSummaryWorker.jobs.size
-    assert_equal 1, ImageWorker.jobs.size
+    assert_equal 1, ImportWorkers::WikipediaSummaryWorker.jobs.size
+    assert_equal 1, ImportWorkers::ImageWorker.jobs.size
 
     assert_equal(
       pa.id,
-      WikipediaSummaryWorker.jobs.first['args'].first
+      ImportWorkers::WikipediaSummaryWorker.jobs.first['args'].first
     )
     assert_equal(
       pa.id,
-      ImageWorker.jobs.first['args'].first
+      ImportWorkers::ImageWorker.jobs.first['args'].first
     )
 
     Sidekiq::Worker.clear_all
