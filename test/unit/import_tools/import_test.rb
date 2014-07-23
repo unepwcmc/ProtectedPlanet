@@ -68,9 +68,24 @@ class ImportToolsImportTest < ActiveSupport::TestCase
 
   test '.finalise switches the maintenance mode twice' do
     ImportTools::MaintenanceSwitcher.expects(:on)
+    ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
     ImportTools::MaintenanceSwitcher.expects(:off)
 
     import = ImportTools::Import.new(123)
+    import.finalise
+  end
+
+  test '.finalise drop the old db and renames the new one' do
+    import = ImportTools::Import.new(123)
+
+    test_db = Rails.configuration.database_configuration[Rails.env]
+    import_db = "import_db_#{import.id}"
+
+    ImportTools::MaintenanceSwitcher.stubs(:on)
+    ImportTools::MaintenanceSwitcher.stubs(:off)
+    ImportTools::PostgresHandler.any_instance.expects(:drop_database).with(test_db)
+    ImportTools::PostgresHandler.any_instance.expects(:rename_database).with(import_db, test_db)
+
     import.finalise
   end
 end

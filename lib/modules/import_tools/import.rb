@@ -20,7 +20,7 @@ class ImportTools::Import
 
   def finalise
     ImportTools::MaintenanceSwitcher.on
-  ensure
+    swap_databases
     ImportTools::MaintenanceSwitcher.off
   end
 
@@ -53,6 +53,12 @@ class ImportTools::Import
 
   def create_db
     pg_handler.create_database(db_name)
+  end
+
+  def swap_databases
+    current_db_name = Rails.configuration.database_configuration[Rails.env]
+    pg_handler.drop_database(current_db_name)
+    pg_handler.rename_database(db_name, current_db_name)
   end
 
   def db_name
