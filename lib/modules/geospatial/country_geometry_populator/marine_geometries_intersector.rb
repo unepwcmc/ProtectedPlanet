@@ -17,7 +17,7 @@ module Geospatial::CountryGeometryPopulator::MarineGeometriesIntersector
 
   def self.render_template template_path, binding
     template = ERB.new(File.read(template_path))
-    puts template.result(binding).squish
+    template.result(binding).squish
   end
 
   COUNTRIES_WITH_TOPOLOGY_PROBLEMS = [
