@@ -18,4 +18,8 @@ module ImportTools
 
     last_import_id.present? ? Import.find(last_import_id) : nil
   end
+
+  def self.dump_path
+    Rails.root.join("lib", "data", "seeds", "pre_seeded_database.sql")
+  end
 end
