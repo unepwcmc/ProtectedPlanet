@@ -8,12 +8,9 @@ namespace :db do
     db_config = Rails.configuration.database_configuration[Rails.env]
     dump_path = Rails.root.join("lib", "data", "seeds", "pre_seeded_database.sql")
 
-    command = []
-    command << "PGPASSWORD=#{db_config["password"]}" if db_config["password"].present?
-    command << "psql -d #{db_config["database"]} -U #{db_config["username"]} -h #{db_config["host"]} < #{dump_path.to_s}"
+    pg_handler = ImportTools::PostgresHandler.new
+    sucessfully_seeded = pg_handler.seed(db_config['database'], dump_path)
 
-    if system(command.join(" "))
-      logger.info "Done."
-    end
+    logger.info('Done.') if sucessfully_seeded
   end
 end
