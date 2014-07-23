@@ -53,6 +53,7 @@ class ImportTools::Import
 
   def create_db
     pg_handler.create_database(db_name)
+    pg_handler.seed(db_name, ImportTools.dump_path)
   end
 
   def swap_databases

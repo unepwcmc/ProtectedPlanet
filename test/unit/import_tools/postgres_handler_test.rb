@@ -38,4 +38,25 @@ class ImportToolsPostgresHandlerTest < ActiveSupport::TestCase
     pg_handler = ImportTools::PostgresHandler.new
     pg_handler.rename_database db_name, new_db_name
   end
+
+  test '.seed populates the given db via an external command' do
+    test_db_name = 'test_db'
+    dump_path = './test/path.sql'
+    db_config = {
+      'username' => 'test',
+      'password' => 'test_pwd',
+      'database' => 'config_db',
+      'host'     => 'host'
+    }
+    ActiveRecord::Base.configurations.stubs(:[]).returns(db_config)
+
+    command = """
+      PGPASSWORD=#{db_config['password']}
+      psql -d #{test_db_name} -U #{db_config['username']} -h #{db_config['host']} < #{dump_path.to_s}
+    """.squish
+    ImportTools::PostgresHandler.any_instance.expects(:system).with(command)
+
+    pg_handler = ImportTools::PostgresHandler.new
+    pg_handler.seed(test_db_name, dump_path)
+  end
 end
