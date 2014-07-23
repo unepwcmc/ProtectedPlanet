@@ -24,7 +24,7 @@ module Geospatial::CountryGeometryPopulator::GeometryDissolver
   end
 
   COMPLEX_COUNTRIES = {
-    'marine' => ['GBR'],
+    'marine' => ['GBR','USA','CAN','MYT','CIV'],
     'land'   => ['DEU','USA','FRA','GBR','AUS','FIN','BGR','CAN',
                  'ESP','SWE','BEL','EST','IRL','ITA','LTU',
                  'NZL','POL','CHE']

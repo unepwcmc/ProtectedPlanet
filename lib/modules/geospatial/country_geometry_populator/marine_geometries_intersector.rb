@@ -17,26 +17,11 @@ module Geospatial::CountryGeometryPopulator::MarineGeometriesIntersector
 
   def self.render_template template_path, binding
     template = ERB.new(File.read(template_path))
-    puts template.result(binding).squish
+    template.result(binding).squish
   end
 
-  COUNTRIES_WITH_TOPOLOGY_PROBLEMS = [
-    'USA','RUS','HRV','CAN','MYS','THA','GNQ','COL','JPN',
-    'ESP','NIC','KOR','EGY','MAR','CHN','EGY', 'IDN','ERI'
-  ]
 
-  def self.country_needs_simplifying? country
-    ['HRV', 'THA', 'JPN', 'KOR', 'MAR','CHN','USA'].include? country.iso_3
-  end
-
-  def self.marine_geometry_attributes country, area_type
-    if COUNTRIES_WITH_TOPOLOGY_PROBLEMS.include? country.iso_3
-      [
-        'ST_MakeValid(ST_Buffer(ST_Simplify(marine_pas_geom,0.005),0.00000001))',
-        "ST_MakeValid(ST_Buffer(ST_Simplify(#{area_type}_geom,0.005),0.00000001))"
-      ]
-    else
-      ['marine_pas_geom', "#{area_type}_geom"]
-    end
+  def self.marine_geometry_attributes area_type
+    "#{area_type}_geom"
   end
 end
