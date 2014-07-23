@@ -21,6 +21,10 @@ class ImportTools::PostgresHandler
     with_db('postgres') { |connection| connection.drop_database(database_name) }
   end
 
+  def rename_database database_name, new_database_name
+    query = "ALTER DATABASE '#{database_name}' RENAME TO '#{new_database_name}'"
+    with_db('postgres') { |connection| connection.execute(query) }
+  end
 
   private
   attr_writer :current_conn_values

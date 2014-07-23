@@ -7,6 +7,7 @@ class TestWdpaAssetImporterService < ActiveSupport::TestCase
     pa = FactoryGirl.create(:protected_area)
 
     Sidekiq::Testing.fake!
+    ImportTools.stubs(:current_import).returns(stub_everything)
 
     Wdpa::ProtectedAreaImporter::AssetImporter.import
 
