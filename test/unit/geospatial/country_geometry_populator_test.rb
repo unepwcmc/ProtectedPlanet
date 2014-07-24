@@ -191,7 +191,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
     territorial_query = """
       UPDATE countries SET marine_ts_pas_geom = (
-        SELECT
+        SELECT 
         ST_Intersection(marine_pas_geom, ST_Buffer(ts_geom,0.0))
         FROM countries
         WHERE iso_3 = 'FAK' AND ST_Intersects(marine_pas_geom, ST_Buffer(ts_geom,0.0)) LIMIT 1

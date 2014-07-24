@@ -1,6 +1,7 @@
 class CountriesGeometryImporter
   FILEPATH = Rails.root.join('tmp', 'countries_geometries_dump.tar.gz').to_s
   AREA_TYPES = ['LAND','TS','EEZ']
+  COMPLEX_COUNTRIES = { 'TS' => ['CIV'],'LAND' => [],'EEZ' => []}
 
   def self.import
     importer = self.new
@@ -53,12 +54,21 @@ class CountriesGeometryImporter
     """.squish
   end
 
+  def simplify_query type, iso_3
+    """UPDATE countries 
+       SET #{type.downcase}_geom = st_simplify(#{type.downcase}_geom, 0.01) 
+       WHERE iso_3 = '#{iso_3}'"""
+  end
+
   def copy_countries
     countries = Country.pluck(:iso_3)
 
     countries.each do |iso_3|
       AREA_TYPES.each do |type|
         DB.execute update_query(type, iso_3)
+        if COMPLEX_COUNTRIES[type].include? iso_3
+          DB.execute simplify_query(type, iso_3)
+        end
       end
     end
   end
