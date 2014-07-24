@@ -75,7 +75,7 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     import.finalise
   end
 
-  test '.finalise drop the old db and renames the new one' do
+  test '.finalise drops the old db and renames the new one' do
     import = ImportTools::Import.new(123)
 
     test_db = Rails.configuration.database_configuration[Rails.env]
@@ -85,6 +85,18 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     ImportTools::MaintenanceSwitcher.stubs(:off)
     ImportTools::PostgresHandler.any_instance.expects(:drop_database).with(test_db)
     ImportTools::PostgresHandler.any_instance.expects(:rename_database).with(import_db, test_db)
+
+    import.finalise
+  end
+
+  test '.finalise unlocks the import' do
+    import = ImportTools::Import.new(123)
+
+    ImportTools::MaintenanceSwitcher.stubs(:on)
+    ImportTools::MaintenanceSwitcher.stubs(:off)
+    ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
+
+    ImportTools::RedisHandler.any_instance.expects(:unlock)
 
     import.finalise
   end

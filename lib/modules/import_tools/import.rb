@@ -22,6 +22,8 @@ class ImportTools::Import
     ImportTools::MaintenanceSwitcher.on
     swap_databases
     ImportTools::MaintenanceSwitcher.off
+  ensure
+    unlock_import
   end
 
   def increase_total_jobs_count
@@ -49,6 +51,10 @@ class ImportTools::Import
 
   def lock_import
     raise ImportTools::AlreadyRunningImportError unless redis_handler.lock(self.id)
+  end
+
+  def unlock_import
+    redis_handler.unlock
   end
 
   def create_db

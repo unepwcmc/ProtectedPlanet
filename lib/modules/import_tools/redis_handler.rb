@@ -9,6 +9,10 @@ class ImportTools::RedisHandler
     redis.setnx(current_key, id)
   end
 
+  def unlock
+    redis.del(current_key)
+  end
+
   def current_id
     redis.get current_key
   end

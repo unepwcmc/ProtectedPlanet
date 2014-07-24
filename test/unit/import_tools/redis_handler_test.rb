@@ -19,6 +19,14 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
     @redis_handler.lock(value)
   end
 
+  test '.unlock calls the setnx redis command with the given arguments' do
+    current_key = 'test_key'
+    @redis_handler.stubs(:current_key).returns(current_key)
+    @redis_handler.redis.expects(:del).with(current_key)
+
+    @redis_handler.unlock
+  end
+
   test '.current_id gets the id of the current import from redis' do
     expected_key = "#{Rails.application.secrets.redis['wdpa_imports_prefix']}:current"
 
