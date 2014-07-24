@@ -1,7 +1,7 @@
 class Stats::Global
   IUCN_CATEGORIES = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
 
-  def self.pa_count 
+  def self.pa_count
     ProtectedArea.count
   end
 
