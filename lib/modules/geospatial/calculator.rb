@@ -4,6 +4,7 @@ class Geospatial::Calculator
   )
 
   def self.calculate_statistics
+    clear_cache
     new(:country).calculate_statistics
     new(:regional).calculate_statistics
     new(:global).calculate_statistics
