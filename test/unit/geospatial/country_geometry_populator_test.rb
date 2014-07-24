@@ -191,7 +191,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
     territorial_query = """
       UPDATE countries SET marine_ts_pas_geom = (
-        SELECT 
+        SELECT
         ST_Intersection(marine_pas_geom, ST_Buffer(ts_geom,0.0))
         FROM countries
         WHERE iso_3 = 'FAK' AND ST_Intersects(marine_pas_geom, ST_Buffer(ts_geom,0.0)) LIMIT 1
@@ -203,78 +203,4 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
     Geospatial::CountryGeometryPopulator.populate_marine_geometries country
   end
-=begin
-  test '#populate_marine_geometries, given a country that has topology
-   problems, sets the EEZ and Territorial Water geometries by first
-   making them valid' do
-    country = FactoryGirl.build(:country, iso_3: 'HRV')
-
-    eez_query = """
-      UPDATE countries SET marine_eez_pas_geom = (
-        SELECT ST_MakeValid(
-          ST_Intersection(
-            ST_MakeValid(ST_Buffer(ST_Simplify(marine_pas_geom,0.005),0.00000001)),
-            ST_MakeValid(ST_Buffer(ST_Simplify(eez_geom,0.005),0.00000001))
-          )
-        )
-        FROM countries
-        WHERE iso_3 = 'HRV' LIMIT 1
-      ) WHERE iso_3 = 'HRV'
-    """.squish
-
-    territorial_query = """
-      UPDATE countries SET marine_ts_pas_geom = (
-        SELECT ST_MakeValid(
-          ST_Intersection(
-            ST_MakeValid(ST_Buffer(ST_Simplify(marine_pas_geom,0.005),0.00000001)),
-            ST_MakeValid(ST_Buffer(ST_Simplify(ts_geom,0.005),0.00000001))
-          )
-        )
-        FROM countries
-        WHERE iso_3 = 'HRV' LIMIT 1
-      ) WHERE iso_3 = 'HRV'
-    """.squish
-
-    ActiveRecord::Base.connection.expects(:execute).with(eez_query)
-    ActiveRecord::Base.connection.expects(:execute).with(territorial_query)
-
-    Geospatial::CountryGeometryPopulator.populate_marine_geometries country
-  end
-
-  test '#populate_marine_geometries, given a country with topology
-   problems, it buffers and makes valid the geometries' do
-    country = FactoryGirl.build(:country, iso_3: 'RUS')
-
-    eez_query = """
-      UPDATE countries SET marine_eez_pas_geom = (
-        SELECT CASE
-            WHEN ST_Within(marine_pas_geom, eez_geom)
-            THEN marine_pas_geom
-            ELSE ST_Intersection(ST_MakeValid(ST_Buffer(ST_Simplify(marine_pas_geom,0.005),0.00000001)),
-              ST_MakeValid(ST_Buffer(ST_Simplify(eez_geom,0.005),0.00000001)))
-          END
-        FROM countries
-        WHERE iso_3 = 'RUS' LIMIT 1
-      ) WHERE iso_3 = 'RUS'
-    """.squish
-
-    territorial_query = """
-      UPDATE countries SET marine_ts_pas_geom = (
-        SELECT CASE
-            WHEN ST_Within(marine_pas_geom, ts_geom)
-            THEN marine_pas_geom
-            ELSE ST_Intersection(ST_MakeValid(ST_Buffer(ST_Simplify(marine_pas_geom,0.005),0.00000001)),
-              ST_MakeValid(ST_Buffer(ST_Simplify(ts_geom,0.005),0.00000001)))
-          END
-        FROM countries
-        WHERE iso_3 = 'RUS' LIMIT 1
-      ) WHERE iso_3 = 'RUS'
-    """.squish
-
-    ActiveRecord::Base.connection.expects(:execute).with(eez_query)
-    ActiveRecord::Base.connection.expects(:execute).with(territorial_query)
-
-    Geospatial::CountryGeometryPopulator.populate_marine_geometries country
-  end
-=end
 end
