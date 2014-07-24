@@ -141,8 +141,8 @@ class TestGeospatialCalculator < ActiveSupport::TestCase
             sum(eez_area) eez_area,
             sum(ts_area) ts_area
             FROM country_statistics cs
-          JOIN countries c ON cs.country_id = c.id
-          JOIN regions r ON r.id = c.region_id
+          JOIN countries c ON cs.country_id = c.id,
+          regions r
           WHERE r.iso = 'GL'
           GROUP BY r.id
         ) areas
