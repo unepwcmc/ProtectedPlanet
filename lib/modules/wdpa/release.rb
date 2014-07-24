@@ -1,5 +1,4 @@
 class Wdpa::Release
-  DB = ActiveRecord::Base.connection
   IMPORT_VIEW_NAME = "imported_protected_areas"
 
   def self.download
@@ -55,12 +54,12 @@ class Wdpa::Release
 
     create_query << select_queries.join(" UNION ALL ")
 
-    DB.execute(create_query)
+    db.execute(create_query)
   end
 
   def protected_areas
     attributes = geometry_tables.map do |table_name, std_table_name|
-      DB.execute(
+      db.execute(
         "SELECT * FROM #{std_table_name}"
       ).to_a
     end
@@ -69,7 +68,7 @@ class Wdpa::Release
   end
 
   def sources
-    DB.execute("SELECT * FROM #{source_table}").to_a
+    db.execute("SELECT * FROM #{source_table}").to_a
   end
 
   def clean_up
@@ -97,5 +96,9 @@ class Wdpa::Release
 
   def start_time
     @start_time.strftime("%Y-%m-%d-%H%M")
+  end
+
+  def db
+    ActiveRecord::Base.connection
   end
 end
