@@ -23,7 +23,7 @@ class Wdpa::DataStandard
     :desig        => {name: :designation, type: :string},
     :desig_type   => {name: :jurisdiction, type: :string},
     :wkb_geometry => {name: :the_geom, type: :geometry},
-    :metadataid   => {name: :source, type: :integer}
+    :metadataid   => {name: :sources, type: :integer}
   }
 
   POLYGON_ATTRIBUTES = [
