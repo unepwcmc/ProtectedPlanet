@@ -19,6 +19,6 @@ class TestSourceImporter < ActiveSupport::TestCase
     assert imported, "Expected importer to return true on success"
     assert_equal 3, Source.count
 
-    assert_same_elements [5984, 4873, 1432], Source.pluck(:id)
+    assert_same_elements [5984, 4873, 1432], Source.pluck(:metadataid)
   end
 end
