@@ -28,8 +28,7 @@ class Wdpa::Release
   end
 
   def import_tables
-    src_table_name = source_table
-    geometry_tables.merge({src_table_name => src_table_name})
+    geometry_tables.merge({source_table => source_table})
   end
 
   def geometry_tables
@@ -45,7 +44,7 @@ class Wdpa::Release
 
   def source_table
     gdb_metadata = Ogr::Info.new(gdb_path)
-    gdb_metadata.layers_matching(Wdpa::DataStandard::Matchers::SOURCE_TABLE).first
+    @source_table ||= gdb_metadata.layers_matching(Wdpa::DataStandard::Matchers::SOURCE_TABLE).first
   end
 
   def create_import_view
