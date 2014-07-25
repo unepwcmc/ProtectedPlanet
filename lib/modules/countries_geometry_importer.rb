@@ -1,5 +1,8 @@
 class CountriesGeometryImporter
   FILEPATH = Rails.root.join('tmp', 'countries_geometries_dump.tar.gz').to_s
+
+  RESTORE_TEMPLATE = File.read(File.join(File.dirname(__FILE__), 'pg_restore_command.erb'))
+
   AREA_TYPES = ['LAND','TS','EEZ']
   COMPLEX_COUNTRIES = { 'TS' => ['CIV'],'LAND' => [],'EEZ' => []}
 
@@ -37,8 +40,13 @@ class CountriesGeometryImporter
   end
 
   def restore_to_temporary_table
-    db_name = ActiveRecord::Base.connection.current_database
-    system("pg_restore -c -i -U postgres -d #{db_name} -v #{FILEPATH}")
+    db_config = ActiveRecord::Base.connection_config
+    system restore_command(binding)
+  end
+
+  def restore_command context
+    compiled_template = ERB.new(RESTORE_TEMPLATE).result context
+    compiled_template.squish
   end
 
   def update_query type, iso_3

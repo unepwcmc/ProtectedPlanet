@@ -22,9 +22,16 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
       yields(file_write_mock).
       returns(file_write_mock)
 
-    db_name = ActiveRecord::Base.connection.current_database
+    db_config = {
+      host: 'localhost',
+      database: 'database',
+      username: 'username',
+      password: 'password'
+    }
+    ActiveRecord::Base.stubs(:connection_config).returns(db_config)
+
     CountriesGeometryImporter.any_instance.expects(:system).
-      with("pg_restore -c -i -U postgres -d #{db_name} -v #{path}").
+      with("PGPASSWORD=password pg_restore -c -i -U username -h localhost -d database -v #{path}").
       returns(true)
 
     FactoryGirl.create(:country, iso_3: 'GBR')
