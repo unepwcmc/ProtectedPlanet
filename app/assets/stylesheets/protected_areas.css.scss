@@ -1,6 +1,10 @@
 @import 'mixins';
 @import 'variables';
 
+.protected-area-map {
+  margin-top: 50px;
+}
+
 main section {
   border: 1px solid #dadada;
   background: #ececf4;
@@ -10,7 +14,7 @@ main section {
 
 .map-disclaimer {
   position: absolute;
-  top: 330px;
+  top: 379px;
   left: 42px;
 
   padding: 4px;
@@ -59,7 +63,7 @@ main section {
 }
 
 .grid .info-card {
-  margin-top: -50px;
+  margin-top: 0;
 }
 
 .factsheet {

@@ -8,17 +8,29 @@ Protected Planet runs on the following AWS EC2 instances.
 
 **EC2**
 
-   * Import - m3.xlarge
-   * Web -  m3.medium
-   * DB - m3.medium
+* Import
+    * m3.xlarge
+    * util-stage.protectedplanet.net
+* Web
+    * m3.medium
+    * http://stage.protectedplanet.net
+* DB
+    * m3.medium
+    * db-stage.protectedplanet.net
 
 ### Production
 
 **EC2**
 
-   * Import - m3.xlarge
-   * Web - m3.large
-   * DB - m3.large
+* Import
+    * m3.xlarge
+    * util-prod.protectedplanet.net
+* Web
+    * m3.large
+    * alpha.protectedplanet.net
+* DB
+    * m3.large
+    * db-prod.protectedplanet.net
 
 ## Capistrano
 

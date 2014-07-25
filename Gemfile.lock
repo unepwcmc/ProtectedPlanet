@@ -69,6 +69,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.7.0)
+    colorize (0.7.3)
     connection_pool (2.0.0)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
@@ -79,6 +80,7 @@ GEM
     dotenv (0.11.1)
       dotenv-deployment (~> 0.0.2)
     dotenv-deployment (0.0.2)
+    ejs (1.1.1)
     erubis (2.7.0)
     execjs (2.0.2)
     factory_girl (4.4.0)
@@ -102,6 +104,12 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.1)
     kgio (2.9.2)
+    konacha (3.2.3)
+      actionpack (>= 3.1, < 5)
+      capybara
+      colorize
+      railties (>= 3.1, < 5)
+      sprockets
     libv8 (3.16.14.3)
     mail (2.5.4)
       mime-types (~> 1.16)
@@ -243,11 +251,13 @@ DEPENDENCIES
   dbf (~> 2.0.7)
   dotenv (~> 0.11.1)
   dotenv-deployment
+  ejs
   factory_girl_rails (~> 4.4.1)
   gdal (~> 0.0.5)
   httmultiparty (~> 0.3.14)
   httparty (~> 0.13.1)
   jquery-rails
+  konacha
   mocha (~> 1.0.0)
   pg
   rack-cache (~> 1.2)

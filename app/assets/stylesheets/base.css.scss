@@ -162,6 +162,7 @@ footer {
   }
 
   .footer-inner {
+    height: 140px;
     padding: 50px 0;
     margin: 0px auto;
     width: 980px;
@@ -169,7 +170,23 @@ footer {
   }
 }
 
-.footer-copyright {
+.footer-logos {
+  img {
+    margin-right: 20px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+}
+
+.footer-copyright,
+.footer-links {
+  padding-top: 7px;
+}
+
+.footer-copyright,
+.footer-logos {
   float: left;
 }
 
@@ -181,23 +198,5 @@ section {
   a {
     font-weight: bold;
     color: $blue;
-  }
-}
-
-.info-links {
-  height: 50px;
-  margin: 0 auto;
-  width: 980px;
-  text-align: right;
-  padding-top: 18px;
-  font-size: 0.9em;
-
-  a {
-    font-weight: normal;
-    text-decoration: underline;
-
-    &:hover {
-      text-decoration: none;
-    }
   }
 }
