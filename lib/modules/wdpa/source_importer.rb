@@ -1,3 +1,5 @@
+require 'wdpa/data_standard/source'
+
 class Wdpa::SourceImporter
   def self.import wdpa_release
     importer = self.new wdpa_release
