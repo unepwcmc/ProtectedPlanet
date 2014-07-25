@@ -19,7 +19,11 @@ class CountriesGeometryImporter
   end
 
   def import
-    download and restore_to_temporary_table and copy_countries and cleanup
+    download
+    restore_to_temporary_table
+    copy_countries
+  ensure
+    cleanup
   end
 
   private
