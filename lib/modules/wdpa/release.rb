@@ -16,15 +16,20 @@ class Wdpa::Release
     Wdpa::S3.download_current_wdpa_to filename: zip_path
     system("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
 
-    geometry_tables.each do |geometry_table, std_geometry_table|
+    import_tables.each do |original_table, std_table|
       Ogr::Postgres.import(
         gdb_path,
-        geometry_table,
-        std_geometry_table
+        original_table,
+        std_table
       )
     end
 
     create_import_view
+  end
+
+  def import_tables
+    src_table_name = source_table
+    geometry_tables.merge({src_table_name => src_table_name})
   end
 
   def geometry_tables
