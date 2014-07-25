@@ -71,8 +71,9 @@
       }
 
       .viz-label {
+        font-size: 0.9em;
         position: absolute;
-        top: 14px;
+        top: 64px;
         left:0;
         right:0;
         margin-left:auto;
@@ -113,9 +114,11 @@
 .cell header {
   h3 {
     font-size: 18px;
-    padding: 17px;
+    padding: 15px;
     border: 0;
   }
+
+  height: 44px;
 
   background-color: #2b3146;
   &.light { background-color: #717C97; }
