@@ -14,6 +14,8 @@
     - postgresql-server-dev-{{ postgresql.version }}
   tags:
     - packages
+  notify:
+    - restart postgresql
 
 - name: Install PostgreSQL hba config file
   template: src=pg_hba.conf
