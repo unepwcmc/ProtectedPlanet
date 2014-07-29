@@ -78,7 +78,7 @@ class ImportToolsImportTest < ActiveSupport::TestCase
   test '.finalise drops the old db and renames the new one' do
     import = ImportTools::Import.new(123)
 
-    test_db = Rails.configuration.database_configuration[Rails.env]
+    test_db = Rails.configuration.database_configuration[Rails.env]['database']
     import_db = "import_db_#{import.id}"
 
     ImportTools::MaintenanceSwitcher.stubs(:on)
