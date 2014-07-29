@@ -12,12 +12,13 @@ class ImportTools::MaintenanceSwitcher
   end
 
   def switch(mode_on)
+    host = Rails.application.secrets.host
     authentication_key = Rails.application.secrets.maintenance_mode_key
 
     HTTParty.put(
-      url_for(:maintenance),
+      maintenance_url(host: host),
       query: {maintenance_mode_on: mode_on},
-      headers: {'Authorization' => authentication_key}
+      headers: {'X-Auth-Key' => authentication_key}
     )
   end
 end
