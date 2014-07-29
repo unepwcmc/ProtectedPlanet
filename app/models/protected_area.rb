@@ -1,4 +1,6 @@
 class ProtectedArea < ActiveRecord::Base
+  include Elasticsearch::Model
+
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :sub_locations
 
@@ -15,6 +17,39 @@ class ProtectedArea < ActiveRecord::Base
   after_create :create_slug
 
   scope :without_geometry, -> { select(self.column_names - ["the_geom"]) }
+
+  settings index: { number_of_shards: 1 } do
+    mappings dynamic: 'false' do
+      indexes :type, type: "string"
+      indexes :name, type: "string"
+      indexes :original_name, type: "string"
+      indexes :marine, type: "boolean"
+
+      indexes :sub_location, type: "nested" do
+        indexes :name, type: "string", index: "not_analyzed"
+      end
+
+      indexes :countries, type: "nested" do
+        indexes :id, type: "integer"
+        indexes :name, type: "string", index: "not_analyzed"
+
+        indexes :region, type: "nested" do
+          indexes :id, type: "integer"
+          indexes :name, type: "string", index: "not_analyzed"
+        end
+      end
+
+      indexes :iucn_category, type: "nested" do
+        indexes :id, type: "integer"
+        indexes :name, type: "string", index: "not_analyzed"
+      end
+
+      indexes :designation, type: "nested" do
+        indexes :id, type: "integer"
+        indexes :name, type: "string", index: "not_analyzed"
+      end
+    end
+  end
 
   def bounds
     [

@@ -81,6 +81,19 @@ GEM
       dotenv-deployment (~> 0.0.2)
     dotenv-deployment (0.0.2)
     ejs (1.1.1)
+    elasticsearch (1.0.4)
+      elasticsearch-api (= 1.0.4)
+      elasticsearch-transport (= 1.0.4)
+    elasticsearch-api (1.0.4)
+      multi_json
+    elasticsearch-model (0.1.4)
+      activesupport (> 3)
+      elasticsearch (> 0.4)
+      hashie
+    elasticsearch-rails (0.1.4)
+    elasticsearch-transport (1.0.4)
+      faraday
+      multi_json
     erubis (2.7.0)
     execjs (2.0.2)
     factory_girl (4.4.0)
@@ -88,8 +101,11 @@ GEM
     factory_girl_rails (4.4.1)
       factory_girl (~> 4.4.0)
       railties (>= 3.0.0)
+    faraday (0.9.0)
+      multipart-post (>= 1.2, < 3)
     fastercsv (1.5.5)
     gdal (0.0.5)
+    hashie (3.2.0)
     hike (1.2.3)
     httmultiparty (0.3.14)
       httparty (>= 0.7.3)
@@ -252,6 +268,8 @@ DEPENDENCIES
   dotenv (~> 0.11.1)
   dotenv-deployment
   ejs
+  elasticsearch-model (~> 0.1.4)
+  elasticsearch-rails (~> 0.1.4)
   factory_girl_rails (~> 4.4.1)
   gdal (~> 0.0.5)
   httmultiparty (~> 0.3.14)
