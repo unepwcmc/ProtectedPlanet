@@ -51,6 +51,23 @@ class ProtectedArea < ActiveRecord::Base
     end
   end
 
+  def as_indexed_json
+    {"type" => 'protected_area'}.merge(
+      self.as_json(
+        only: [:name, :original_name, :marine],
+        include: {
+          countries: {
+            only: [:name, :id],
+            include: { region: { only: [:id, :name] } }
+          },
+          sub_locations: { only: [:english_name] },
+          iucn_category: { only: [:id, :name] },
+          designation: { only: [:id, :name] }
+        }
+      )
+    )
+  end
+
   def bounds
     [
       [bounding_box["min_y"], bounding_box["min_x"]],
