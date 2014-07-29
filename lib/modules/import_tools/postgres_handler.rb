@@ -18,11 +18,14 @@ class ImportTools::PostgresHandler
   end
 
   def drop_database database_name
+    close_connections_to(database_name)
     with_db('postgres') { |connection| connection.drop_database(database_name) }
   end
 
   def rename_database database_name, new_database_name
-    query = "ALTER DATABASE '#{database_name}' RENAME TO '#{new_database_name}'"
+    query = "ALTER DATABASE #{database_name} RENAME TO #{new_database_name}"
+
+    close_connections_to(database_name)
     with_db('postgres') { |connection| connection.execute(query) }
   end
 
@@ -43,5 +46,15 @@ class ImportTools::PostgresHandler
 
   private
   attr_writer :current_conn_values
+
+  def close_connections_to database_name
+    query = """
+      SELECT pg_terminate_backend(pg_stat_activity.pid)
+      FROM pg_stat_activity
+      WHERE pg_stat_activity.datname = '#{database_name}'
+        AND pid <> pg_backend_pid();
+    """.squish
+    with_db('postgres') { |connection| connection.execute(query) }
+  end
 end
 
