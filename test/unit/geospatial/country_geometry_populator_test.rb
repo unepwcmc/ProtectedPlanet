@@ -2,10 +2,10 @@ require 'test_helper'
 
 class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
-  test '#repair_geometries repais not valid geometries from standard_polygons' do
+  test '#repair_geometries repairs not valid geometries from standard_polygons' do
     repair_query = """UPDATE standard_polygons
                       SET wkb_geometry = ST_Makevalid(ST_Multi(ST_Buffer(wkb_geometry,0.0)))
-                      WHERE NOT ST_IsValid(wkb_geometry)"""
+                      WHERE NOT ST_IsValid(wkb_geometry)""".squish
 
     ActiveRecord::Base.connection.expects(:execute).with(repair_query)
     Geospatial::CountryGeometryPopulator.repair_geometries
