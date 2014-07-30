@@ -98,7 +98,7 @@ class Stats::Regional
   private
 
   def self.countries_in_region iso
-    ::Country.joins(:region).where("regions.iso = ?", iso)
+    ::Country.select('id').joins(:region).where("regions.iso = ?", iso)
   end
 
 
