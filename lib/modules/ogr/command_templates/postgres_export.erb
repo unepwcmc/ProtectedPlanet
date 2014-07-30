@@ -1,7 +1,7 @@
 ogr2ogr -skipfailures
 -f "<%= DRIVERS[file_type] %>"
 <%= file_name %>
-PG:"host=<%= DB_CONFIG["host"] %>
-  user=<%= DB_CONFIG["username"] %> dbname=<%= DB_CONFIG["database"] %>
-  password=<%= DB_CONFIG["password"] %>"
+PG:"host=<%= db_config[:host] %>
+  user=<%= db_config[:username] %> dbname=<%= db_config[:database] %>
+  password=<%= db_config[:password] %>"
 -sql "<%= query %>"

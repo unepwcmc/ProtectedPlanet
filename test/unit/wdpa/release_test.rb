@@ -8,32 +8,24 @@ class TestWdpaRelease < ActiveSupport::TestCase
     gdb_path = "gdb_path"
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
 
-    Wdpa::S3.
-      expects(:download_current_wdpa_to).
-      with(filename: zip_path)
+    Wdpa::S3.expects(:download_current_wdpa_to).with(filename: zip_path)
 
     Wdpa::Release.any_instance.
       expects(:system).
       with("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
 
-    geometry_tables = {
+    import_tables = {
       "point" => "std_point",
-      "polygons" => "std_poly"
+      "polygons" => "std_poly",
+      "sources" => "sources"
     }
-    Wdpa::Release.any_instance.
-      expects(:geometry_tables).
-      returns(geometry_tables)
+    Wdpa::Release.any_instance.expects(:import_tables).returns(import_tables)
 
-    Ogr::Postgres.
-      expects(:import).
-      with(gdb_path, "point", "std_point")
+    Ogr::Postgres.expects(:import).with(gdb_path, "point", "std_point")
+    Ogr::Postgres.expects(:import).with(gdb_path, "polygons", "std_poly")
+    Ogr::Postgres.expects(:import).with(gdb_path, "sources", "sources")
 
-    Ogr::Postgres.
-      expects(:import).
-      with(gdb_path, "polygons", "std_poly")
-
-    Wdpa::Release.any_instance.
-      expects(:create_import_view)
+    Wdpa::Release.any_instance.expects(:create_import_view)
 
     assert_kind_of Wdpa::Release, Wdpa::Release.download
   end
@@ -119,6 +111,23 @@ class TestWdpaRelease < ActiveSupport::TestCase
 
     wdpa_release = Wdpa::Release.new
     assert_equal tables[2], wdpa_release.source_table
+  end
+
+  test '.import_tables returns a merge of geometry tables and the source table' do
+    geometry_tables = {"points" => "std_points", "polygons" => "std_poly"}
+    Wdpa::Release.any_instance.stubs(:geometry_tables).returns(geometry_tables)
+
+    source_table = "sources"
+    Wdpa::Release.any_instance.stubs(:source_table).returns(source_table)
+
+    expected_tables = {
+      "points" => "std_points",
+      "polygons" => "std_poly",
+      "sources" => "sources"
+    }
+
+    wdpa_release = Wdpa::Release.new
+    assert_equal expected_tables, wdpa_release.import_tables
   end
 
   test '.protected_areas returns an array of protected area attributes

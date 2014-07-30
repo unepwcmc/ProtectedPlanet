@@ -54,7 +54,7 @@ class Wdpa::Relation
     })
   end
 
-  def source value
-    Source.where(id: value).first
+  def sources value
+    Source.where(metadataid: value)
   end
 end

@@ -1,5 +1,4 @@
 class Wdpa::Release
-  DB = ActiveRecord::Base.connection
   IMPORT_VIEW_NAME = "imported_protected_areas"
 
   def self.download
@@ -17,15 +16,19 @@ class Wdpa::Release
     Wdpa::S3.download_current_wdpa_to filename: zip_path
     system("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
 
-    geometry_tables.each do |geometry_table, std_geometry_table|
+    import_tables.each do |original_table, std_table|
       Ogr::Postgres.import(
         gdb_path,
-        geometry_table,
-        std_geometry_table
+        original_table,
+        std_table
       )
     end
 
     create_import_view
+  end
+
+  def import_tables
+    geometry_tables.merge({source_table => source_table})
   end
 
   def geometry_tables
@@ -41,7 +44,7 @@ class Wdpa::Release
 
   def source_table
     gdb_metadata = Ogr::Info.new(gdb_path)
-    gdb_metadata.layers_matching(Wdpa::DataStandard::Matchers::SOURCE_TABLE).first
+    @source_table ||= gdb_metadata.layers_matching(Wdpa::DataStandard::Matchers::SOURCE_TABLE).first
   end
 
   def create_import_view
@@ -55,12 +58,12 @@ class Wdpa::Release
 
     create_query << select_queries.join(" UNION ALL ")
 
-    DB.execute(create_query)
+    db.execute(create_query)
   end
 
   def protected_areas
     attributes = geometry_tables.map do |table_name, std_table_name|
-      DB.execute(
+      db.execute(
         "SELECT * FROM #{std_table_name}"
       ).to_a
     end
@@ -69,7 +72,7 @@ class Wdpa::Release
   end
 
   def sources
-    DB.execute("SELECT * FROM #{source_table}").to_a
+    db.execute("SELECT * FROM #{source_table}").to_a
   end
 
   def clean_up
@@ -97,5 +100,9 @@ class Wdpa::Release
 
   def start_time
     @start_time.strftime("%Y-%m-%d-%H%M")
+  end
+
+  def db
+    ActiveRecord::Base.connection
   end
 end

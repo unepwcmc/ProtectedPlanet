@@ -28,10 +28,10 @@ class Download::Generator
     query_shasum = Digest::SHA1.hexdigest query
     view_name = "tmp_downloads_#{query_shasum}"
 
-    DB.execute "CREATE VIEW #{view_name} AS #{query}"
+    db.execute "CREATE VIEW #{view_name} AS #{query}"
     yield view_name
   ensure
-    DB.execute "DROP VIEW #{view_name}"
+    db.execute "DROP VIEW #{view_name}"
   end
 
   ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')
@@ -46,7 +46,9 @@ class Download::Generator
 
   private
 
-  DB = ActiveRecord::Base.connection
+  def db
+    ActiveRecord::Base.connection
+  end
 
   def export
     raise NotImplementedError

@@ -93,7 +93,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: countries; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: countries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE countries (
@@ -649,7 +649,17 @@ ALTER SEQUENCE protected_areas_id_seq OWNED BY protected_areas.id;
 
 
 --
--- Name: protected_areas_sub_locations; Type: TABLE; Schema: public; Owner: -; Tablespace:
+-- Name: protected_areas_sources; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE protected_areas_sources (
+    protected_area_id integer,
+    source_id integer
+);
+
+
+--
+-- Name: protected_areas_sub_locations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE TABLE protected_areas_sub_locations (
@@ -772,7 +782,8 @@ CREATE TABLE sources (
     citation text,
     disclaimer text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    metadataid integer
 );
 
 
@@ -1527,46 +1538,13 @@ INSERT INTO schema_migrations (version) VALUES ('20140625154316');
 
 INSERT INTO schema_migrations (version) VALUES ('20140703130946');
 
-INSERT INTO schema_migrations (version) VALUES ('20140704105917');
-
-INSERT INTO schema_migrations (version) VALUES ('20140704154012');
-
-INSERT INTO schema_migrations (version) VALUES ('20140704154428');
-
 INSERT INTO schema_migrations (version) VALUES ('20140707111454');
 
 INSERT INTO schema_migrations (version) VALUES ('20140708193519');
 
-INSERT INTO schema_migrations (version) VALUES ('20140709181758');
-
 INSERT INTO schema_migrations (version) VALUES ('20140710124303');
 
-INSERT INTO schema_migrations (version) VALUES ('20140710144417');
+INSERT INTO schema_migrations (version) VALUES ('20140725144859');
 
-INSERT INTO schema_migrations (version) VALUES ('20140714105648');
+INSERT INTO schema_migrations (version) VALUES ('20140725145539');
 
-INSERT INTO schema_migrations (version) VALUES ('20140714110350');
-
-INSERT INTO schema_migrations (version) VALUES ('20140714231111');
-
-INSERT INTO schema_migrations (version) VALUES ('20140715151517');
-
-INSERT INTO schema_migrations (version) VALUES ('20140715155911');
-
-INSERT INTO schema_migrations (version) VALUES ('20140715160555');
-
-INSERT INTO schema_migrations (version) VALUES ('20140715160624');
-
-INSERT INTO schema_migrations (version) VALUES ('20140716103827');
-
-INSERT INTO schema_migrations (version) VALUES ('20140716103848');
-
-INSERT INTO schema_migrations (version) VALUES ('20140717133702');
-
-INSERT INTO schema_migrations (version) VALUES ('20140718131656');
-
-INSERT INTO schema_migrations (version) VALUES ('20140718134127');
-
-INSERT INTO schema_migrations (version) VALUES ('20140721122630');
-
-INSERT INTO schema_migrations (version) VALUES ('20140721122852');

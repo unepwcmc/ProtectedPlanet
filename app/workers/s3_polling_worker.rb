@@ -3,25 +3,10 @@ class S3PollingWorker
   sidekiq_options :retry => false
 
   def perform
-    WdpaImportWorker.perform_async if no_last_import_or_new_wdpa?(last_import)
-  end
+    last_import = ImportTools.last_import
 
-  private
-
-  def last_import
-    Sidekiq.redis do |client|
-      client.zrevrangebyscore(
-        "#{Rails.application.secrets.redis['wdpa_imports_prefix']}:success",
-        '+inf', '-inf',
-        {withscores: true, limit: [0, 1]}
-      )
+    if last_import.nil? || Wdpa::S3.new_wdpa?(last_import.started_at)
+      WdpaImportWorker.perform_async
     end
-  end
-
-  def no_last_import_or_new_wdpa? import
-    last_timestamp = import.last
-    last_time = Time.strptime(last_timestamp, '%s') if last_timestamp
-
-    last_timestamp.nil? || Wdpa::S3.new_wdpa?(last_time)
   end
 end

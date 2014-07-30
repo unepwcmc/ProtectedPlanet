@@ -2,18 +2,18 @@ require 'test_helper'
 
 class WdpaImportWorkerTest < ActiveSupport::TestCase
   test '.perform stops immediately if there is another import ongoing' do
+    ImportTools.stubs(:create_import).raises(ImportTools::AlreadyRunningImportError)
     Wdpa::Importer.expects(:import).never
-    Sidekiq.expects(:redis).yields(stub_everything()).returns(nil)
 
     Sidekiq::Testing.inline! { WdpaImportWorker.perform_async }
   end
 
   test '.perform calls the WdpaImporter and unlocks redis after the process' do
-    Wdpa::Importer.expects(:import)
+    import_mock = mock()
+    import_mock.stubs(:with_context).yields
+    ImportTools.stubs(:create_import).returns(import_mock)
 
-    redis_mock = stub_everything()
-    redis_mock.expects(:del)
-    Sidekiq.expects(:redis).yields(redis_mock).returns(true).at_least_once
+    Wdpa::Importer.expects(:import)
 
     Sidekiq::Testing.inline! { WdpaImportWorker.perform_async }
   end

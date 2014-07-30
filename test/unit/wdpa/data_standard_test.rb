@@ -199,14 +199,20 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   governance_name, attributes[:governance].name
   end
 
-  test '.attributes_from_standards_hash returns a Source for a given
+  test '.attributes_from_standards_hash returns all matching Sources for a given
    metadataid' do
-    source = FactoryGirl.create(:source)
+    first_source = FactoryGirl.create(:source, metadataid: 123)
+    second_source = FactoryGirl.create(:source, metadataid: 123)
+    FactoryGirl.create(:source, metadataid: 456)
 
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({metadataid: source.id})
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({metadataid: 123})
 
-    assert_kind_of Source, attributes[:source]
-    assert_equal   source.id, attributes[:source].id
+    assert_equal 2, attributes[:sources].length
+
+    expected_attribute_ids = [first_source.id, second_source.id]
+    actual_attribute_ids = attributes[:sources].map(&:id)
+
+    assert_same_elements expected_attribute_ids, actual_attribute_ids
   end
 
   test '.attributes_from_standards_hash returns a ManagementAuthority for a given

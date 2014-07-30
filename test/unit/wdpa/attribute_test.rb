@@ -39,6 +39,14 @@ class TestWdpaAttribute < ActiveSupport::TestCase
       "Expected 'abc' to be converted to 0.0"
   end
 
+  test '.standardise converts year-like values to dates' do
+    assert_equal Date.new(1991), Wdpa::Attribute.standardise('1991', as: :year),
+      "Expected '1991' to be converted to date 1991"
+
+    assert_equal nil, Wdpa::Attribute.standardise('Not reported', as: :year),
+      "Expected a non-year-looking string to be converted to null"
+  end
+
   test ".standardise raises an error if the specified converter doesn't exist" do
     assert_raises NotImplementedError, "No conversion exists for type 'blue'" do
       Wdpa::Attribute.standardise('carebear', as: :blue)
