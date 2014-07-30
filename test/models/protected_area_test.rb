@@ -46,57 +46,6 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     refute selected_protected_area.has_attribute?(:the_geom)
   end
 
-  test '#mappings returns the Elastic Search index mappings' do
-    expected_mapping = {
-      protected_area: {
-        dynamic: "false",
-        properties: {
-          type: { type: "string" },
-          name: { type: "string" },
-          original_name: { type: "string" },
-          marine: { type: "boolean" },
-          sub_location: {
-            type: "nested",
-            properties: {
-              name: { type: "string", index: "not_analyzed" }
-            }
-          },
-          countries: {
-            type: 'nested',
-            properties: {
-              id: { type: 'integer' },
-              name: { type: 'string', index: 'not_analyzed' },
-              region: {
-                type: 'nested',
-                properties: {
-                  id: { type: 'integer' },
-                  name: { type: 'string', index: 'not_analyzed' }
-                }
-              }
-            }
-          },
-          iucn_category: {
-            type: 'nested',
-            properties: {
-              id: { type: 'integer' },
-              name: { type: 'string', index: 'not_analyzed' }
-            }
-          },
-          designation: {
-            type: 'nested',
-            properties: {
-              id: { type: 'integer' },
-              name: { type: 'string', index: 'not_analyzed'  }
-            }
-          },
-        }
-      }
-    }
-    actual_mapping = ProtectedArea.mappings.to_hash
-
-    assert_equal expected_mapping, actual_mapping
-  end
-
   test '.as_indexed_json returns the PA as JSON with nested attributes' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, name: 'Manboneland', region: region)
