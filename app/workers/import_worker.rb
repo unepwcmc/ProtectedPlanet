@@ -16,10 +16,8 @@ class ImportWorker
   end
 
   def self.perform_async *args
-    begin
-      import = ImportTools.current_import
-      import.increase_total_jobs_count
-    end
+    import = ImportTools.current_import
+    import.increase_total_jobs_count
 
     original_perform_async *args
   end
