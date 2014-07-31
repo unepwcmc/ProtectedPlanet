@@ -57,10 +57,11 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     pa = FactoryGirl.create(:protected_area,
       name: 'Manbone', countries: [country], sub_locations: [sub_location],
       original_name: 'Manboné', iucn_category: iucn_category,
-      designation: designation, marine: true
+      designation: designation, marine: true, wdpa_id: 555999
     )
 
     expected_json = {
+      "wdpa_id" => 555999,
       "type" => 'protected_area',
       "name" => 'Manbone',
       "original_name" => "Manboné",

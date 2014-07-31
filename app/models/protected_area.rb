@@ -1,6 +1,5 @@
 class ProtectedArea < ActiveRecord::Base
   include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
 
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :sub_locations
@@ -23,7 +22,7 @@ class ProtectedArea < ActiveRecord::Base
   def as_indexed_json options={}
     {"type" => 'protected_area'}.merge(
       self.as_json(
-        only: [:name, :original_name, :marine],
+        only: [:wdpa_id, :name, :original_name, :marine],
         include: {
           countries: {
             only: [:name, :id],
