@@ -32,7 +32,7 @@ module Geospatial::CountryGeometryPopulator::GeometryDissolver
 
   def self.geometry_attribute country, area_type
     if COMPLEX_COUNTRIES[area_type].include? country.iso_3
-      'ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.00000001))'
+      'ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.0))'
     else
       'wkb_geometry'
     end
