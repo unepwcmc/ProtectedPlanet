@@ -100,4 +100,17 @@ class ImportToolsImportTest < ActiveSupport::TestCase
 
     import.finalise
   end
+
+  test '.finalise adds the import to the done imports' do
+    import = ImportTools::Import.new(123)
+
+    ImportTools::MaintenanceSwitcher.stubs(:on)
+    ImportTools::MaintenanceSwitcher.stubs(:off)
+    ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
+
+    ImportTools::RedisHandler.any_instance.expects(:add_to_previous_ids).with(123)
+
+    import.finalise
+  end
+
 end
