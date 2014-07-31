@@ -1,4 +1,4 @@
-class ImportWorkers::WdpaImportWorker < ImportWorker
+class ImportWorkers::MainWorker < ImportWorker
   def perform
     ImportTools.current_import.with_context{ Wdpa::Importer.import }
   ensure

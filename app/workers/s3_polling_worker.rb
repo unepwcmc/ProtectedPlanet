@@ -16,7 +16,7 @@ class S3PollingWorker
   def create_and_start_import
     begin
       ImportTools.create_import
-      ImportWorkers::WdpaImportWorker.perform_async
+      ImportWorkers::MainWorker.perform_async
     rescue ImportTools::AlreadyRunningImportError
       return
     end
