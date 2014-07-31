@@ -20,7 +20,7 @@ class ImportToolsMaintenanceSwitcherTest < ActiveSupport::TestCase
     HTTParty.expects(:put).with(
       fake_url,
       query: {maintenance_mode_on: true},
-      headers: {'Authorization' => key}
+      headers: {'X-Auth-Key' => key}
     )
     ImportTools::MaintenanceSwitcher.on
   end
@@ -34,7 +34,7 @@ class ImportToolsMaintenanceSwitcherTest < ActiveSupport::TestCase
     HTTParty.expects(:put).with(
       fake_url,
       query: {maintenance_mode_on: false},
-      headers: {'Authorization' => key}
+      headers: {'X-Auth-Key' => key}
     )
     ImportTools::MaintenanceSwitcher.off
   end

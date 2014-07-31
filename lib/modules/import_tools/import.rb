@@ -22,6 +22,7 @@ class ImportTools::Import
     ImportTools::MaintenanceSwitcher.on
     swap_databases
     ImportTools::MaintenanceSwitcher.off
+    add_to_completed_imports
   ensure
     unlock_import
   end
@@ -63,9 +64,13 @@ class ImportTools::Import
   end
 
   def swap_databases
-    current_db_name = Rails.configuration.database_configuration[Rails.env]
+    current_db_name = Rails.configuration.database_configuration[Rails.env]["database"]
     pg_handler.drop_database(current_db_name)
     pg_handler.rename_database(db_name, current_db_name)
+  end
+
+  def add_to_completed_imports
+    redis_handler.add_to_previous_ids(self.id)
   end
 
   def db_name

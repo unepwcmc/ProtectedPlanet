@@ -78,7 +78,7 @@ class ImportToolsImportTest < ActiveSupport::TestCase
   test '.finalise drops the old db and renames the new one' do
     import = ImportTools::Import.new(123)
 
-    test_db = Rails.configuration.database_configuration[Rails.env]
+    test_db = Rails.configuration.database_configuration[Rails.env]['database']
     import_db = "import_db_#{import.id}"
 
     ImportTools::MaintenanceSwitcher.stubs(:on)
@@ -100,4 +100,17 @@ class ImportToolsImportTest < ActiveSupport::TestCase
 
     import.finalise
   end
+
+  test '.finalise adds the import to the done imports' do
+    import = ImportTools::Import.new(123)
+
+    ImportTools::MaintenanceSwitcher.stubs(:on)
+    ImportTools::MaintenanceSwitcher.stubs(:off)
+    ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
+
+    ImportTools::RedisHandler.any_instance.expects(:add_to_previous_ids).with(123)
+
+    import.finalise
+  end
+
 end

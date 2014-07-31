@@ -1,5 +1,7 @@
 class ImportWorker
   include Sidekiq::Worker
+  sidekiq_options :retry => false
+
   singleton_class.send(:alias_method, :original_perform_async, :perform_async)
 
   def perform
@@ -14,10 +16,8 @@ class ImportWorker
   end
 
   def self.perform_async *args
-    begin
-      import = ImportTools.current_import
-      import.increase_total_jobs_count
-    end
+    import = ImportTools.current_import
+    import.increase_total_jobs_count
 
     original_perform_async *args
   end

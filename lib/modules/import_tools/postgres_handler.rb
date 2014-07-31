@@ -9,8 +9,6 @@ class ImportTools::PostgresHandler
     pg_conn_values = current_conn_values.merge('database' => db_name)
     ActiveRecord::Base.establish_connection pg_conn_values
     block.call(ActiveRecord::Base.connection)
-  ensure
-    ActiveRecord::Base.establish_connection current_conn_values
   end
 
   def create_database database_name
@@ -18,11 +16,14 @@ class ImportTools::PostgresHandler
   end
 
   def drop_database database_name
+    close_connections_to(database_name)
     with_db('postgres') { |connection| connection.drop_database(database_name) }
   end
 
   def rename_database database_name, new_database_name
-    query = "ALTER DATABASE '#{database_name}' RENAME TO '#{new_database_name}'"
+    query = "ALTER DATABASE #{database_name} RENAME TO #{new_database_name}"
+
+    close_connections_to(database_name)
     with_db('postgres') { |connection| connection.execute(query) }
   end
 
@@ -43,5 +44,14 @@ class ImportTools::PostgresHandler
 
   private
   attr_writer :current_conn_values
-end
 
+  def close_connections_to database_name
+    query = """
+      SELECT pg_terminate_backend(pg_stat_activity.pid)
+      FROM pg_stat_activity
+      WHERE pg_stat_activity.datname = '#{database_name}'
+        AND pid <> pg_backend_pid();
+    """.squish
+    with_db('postgres') { |connection| connection.execute(query) }
+  end
+end
