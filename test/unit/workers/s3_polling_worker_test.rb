@@ -8,15 +8,23 @@ class S3PollingWorkerTest < ActiveSupport::TestCase
     import_mock = mock()
     import_mock.stubs(:started_at).returns(last_import_started_at)
     ImportTools.stubs(:last_import).returns(import_mock)
+    ImportTools.stubs(:create_import)
 
     Wdpa::S3.expects(:new_wdpa?).with(last_import_started_at).returns(true)
 
-    WdpaImportWorker.expects(:perform_async)
+    ImportWorkers::WdpaImportWorker.expects(:perform_async)
 
     Sidekiq::Testing.inline! do
       S3PollingWorker.perform_async
     end
   end
 
+  test '.perform stops immediately if there is another import ongoing' do
+    Wdpa::S3.stubs(:new_wdpa?).returns(true)
+    ImportTools.stubs(:create_import).raises(ImportTools::AlreadyRunningImportError)
+    ImportWorkers::WdpaImportWorker.expects(:perform_async).never
+
+    Sidekiq::Testing.inline! { S3PollingWorker.perform_async }
+  end
 
 end
