@@ -110,7 +110,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
       FROM (
        SELECT ST_UNION(the_geom) as the_geom
        FROM (
-         SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.00000001)) the_geom FROM standard_polygons polygon
+         SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.0)) the_geom FROM standard_polygons polygon
            WHERE polygon.iso3 = 'GBR'
             AND ST_IsValid(polygon.wkb_geometry)
             AND polygon.marine = '1'
@@ -149,7 +149,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
       FROM (
        SELECT ST_UNION(the_geom) as the_geom
        FROM (
-         SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.00000001)) the_geom FROM standard_polygons polygon
+         SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.0)) the_geom FROM standard_polygons polygon
            WHERE polygon.iso3 = 'GBR'
             AND ST_IsValid(polygon.wkb_geometry)
             AND polygon.marine = '0'
