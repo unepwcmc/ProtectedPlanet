@@ -4,6 +4,9 @@ CodeClimate::TestReporter.start
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rails/test_help'
+
+ActiveRecord::Migration.maintain_test_schema!
+
 require 'mocha/test_unit'
 require 'webmock/minitest'
 WebMock.disable_net_connect!(:allow => "codeclimate.com")
