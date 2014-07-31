@@ -9,8 +9,6 @@ class ImportTools::PostgresHandler
     pg_conn_values = current_conn_values.merge('database' => db_name)
     ActiveRecord::Base.establish_connection pg_conn_values
     block.call(ActiveRecord::Base.connection)
-  ensure
-    ActiveRecord::Base.establish_connection current_conn_values
   end
 
   def create_database database_name
@@ -57,4 +55,3 @@ class ImportTools::PostgresHandler
     with_db('postgres') { |connection| connection.execute(query) }
   end
 end
-
