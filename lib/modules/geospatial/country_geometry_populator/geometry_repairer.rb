@@ -16,8 +16,6 @@ module Geospatial::CountryGeometryPopulator::GeometryRepairer
   DB = ActiveRecord::Base.connection
 
   def self.render_template template_path
-    column_name = COLUMN_NAME
-    table_name = TABLE_NAME
     template = ERB.new(File.read(template_path))
     template.result(binding).squish
   end

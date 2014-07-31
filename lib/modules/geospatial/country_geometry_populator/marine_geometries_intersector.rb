@@ -14,8 +14,6 @@ module Geospatial::CountryGeometryPopulator::MarineGeometriesIntersector
   COLUMN_NAME = 'marine_pas_geom'
 
   def self.intersect country
-    column_name = COLUMN_NAME
-    table_name = TABLE_NAME
     DB.execute render_template(REPAIRER_TEMPLATE, binding)
     MARINE_TYPES.each do |marine_type|
       DB.execute render_template(INTERSECTOR_TEMPLATE, binding)

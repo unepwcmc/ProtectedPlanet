@@ -1,0 +1,3 @@
+UPDATE <%= TABLE_NAME %>
+SET <%= COLUMN_NAME %> = ST_Makevalid(ST_Multi(ST_Buffer(<%= COLUMN_NAME %>,0.0)))
+WHERE NOT ST_IsValid(<%= COLUMN_NAME %>)
