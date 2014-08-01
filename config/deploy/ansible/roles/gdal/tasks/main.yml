@@ -23,7 +23,7 @@
   when: gdal_installed.rc != 0
 
 - name: Install gdal dependencies
-  apt: pkg=$item state=installed update-cache=yes
+  apt: pkg={{item}} state=installed update-cache=yes
   when: gdal_installed.rc != 0
   with_items:
     - build-essential

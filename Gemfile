@@ -35,6 +35,11 @@ group :test do
   gem 'codeclimate-test-reporter', require: nil
 end
 
+group :test, :development do
+  gem 'konacha'
+  gem 'ejs'
+end
+
 gem 'will_paginate', '~> 3.0'
 
 gem 'aws-sdk', '~> 1.3.9'
@@ -51,6 +56,8 @@ gem 'whenever', require: false
 
 gem 'dotenv', '~> 0.11.1'
 gem 'dotenv-deployment'
+
+gem 'turnout', '~> 2.0.0'
 
 # For debugging
 # gem 'byebug', group: [:development, :test]

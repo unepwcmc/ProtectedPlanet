@@ -117,17 +117,6 @@ CREATE TABLE countries (
 
 
 --
--- Name: countries_geometries_temp; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE countries_geometries_temp (
-    the_geom geometry,
-    iso_3 text,
-    type character varying
-);
-
-
---
 -- Name: countries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -164,6 +153,7 @@ CREATE TABLE country_statistics (
     id integer NOT NULL,
     country_id integer,
     pa_area double precision,
+    percentage_cover_pas double precision,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     eez_area double precision,
@@ -326,8 +316,7 @@ CREATE TABLE standard_points (
     no_tk_area double precision,
     metadataid integer,
     iso3 character varying,
-    parent_iso3 character varying,
-    buffer_geom geometry
+    parent_iso3 character varying
 );
 
 
@@ -393,7 +382,8 @@ CREATE VIEW imported_protected_areas AS
             standard_polygons.no_tk_area,
             standard_polygons.desig,
             standard_polygons.desig_type,
-            standard_polygons.wkb_geometry
+            standard_polygons.wkb_geometry,
+            standard_polygons.metadataid
            FROM standard_polygons
 UNION ALL
          SELECT standard_points.wdpaid,
@@ -416,7 +406,8 @@ UNION ALL
             standard_points.no_tk_area,
             standard_points.desig,
             standard_points.desig_type,
-            standard_points.wkb_geometry
+            standard_points.wkb_geometry,
+            standard_points.metadataid
            FROM standard_points;
 
 
@@ -660,6 +651,16 @@ ALTER SEQUENCE protected_areas_id_seq OWNED BY protected_areas.id;
 
 
 --
+-- Name: protected_areas_sources; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE protected_areas_sources (
+    protected_area_id integer,
+    source_id integer
+);
+
+
+--
 -- Name: protected_areas_sub_locations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -783,7 +784,8 @@ CREATE TABLE sources (
     citation text,
     disclaimer text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    metadataid integer
 );
 
 
@@ -1353,6 +1355,20 @@ CREATE INDEX index_protected_areas_on_wikipedia_article_id ON protected_areas US
 
 
 --
+-- Name: index_protected_areas_sources_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_protected_areas_sources_composite ON protected_areas_sources USING btree (protected_area_id, source_id);
+
+
+--
+-- Name: index_protected_areas_sources_on_source_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_protected_areas_sources_on_source_id ON protected_areas_sources USING btree (source_id);
+
+
+--
 -- Name: index_protected_areas_sub_locations_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1364,6 +1380,13 @@ CREATE INDEX index_protected_areas_sub_locations_composite ON protected_areas_su
 --
 
 CREATE INDEX index_protected_areas_sub_locations_on_sub_location_id ON protected_areas_sub_locations USING btree (sub_location_id);
+
+
+--
+-- Name: index_sources_on_metadataid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_sources_on_metadataid ON sources USING btree (metadataid);
 
 
 --
@@ -1506,10 +1529,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140613125148');
 
 INSERT INTO schema_migrations (version) VALUES ('20140616142743');
 
-INSERT INTO schema_migrations (version) VALUES ('20140617090445');
-
-INSERT INTO schema_migrations (version) VALUES ('20140617090531');
-
 INSERT INTO schema_migrations (version) VALUES ('20140617091236');
 
 INSERT INTO schema_migrations (version) VALUES ('20140617091255');
@@ -1544,8 +1563,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140703130946');
 
 INSERT INTO schema_migrations (version) VALUES ('20140704105917');
 
-INSERT INTO schema_migrations (version) VALUES ('20140704154012');
-
 INSERT INTO schema_migrations (version) VALUES ('20140704154428');
 
 INSERT INTO schema_migrations (version) VALUES ('20140707111454');
@@ -1558,17 +1575,11 @@ INSERT INTO schema_migrations (version) VALUES ('20140710124303');
 
 INSERT INTO schema_migrations (version) VALUES ('20140710144417');
 
-INSERT INTO schema_migrations (version) VALUES ('20140710144513');
-
 INSERT INTO schema_migrations (version) VALUES ('20140714105648');
 
 INSERT INTO schema_migrations (version) VALUES ('20140714110350');
 
 INSERT INTO schema_migrations (version) VALUES ('20140714231111');
-
-INSERT INTO schema_migrations (version) VALUES ('20140715151517');
-
-INSERT INTO schema_migrations (version) VALUES ('20140715155911');
 
 INSERT INTO schema_migrations (version) VALUES ('20140715160555');
 
@@ -1587,3 +1598,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140718134127');
 INSERT INTO schema_migrations (version) VALUES ('20140721122630');
 
 INSERT INTO schema_migrations (version) VALUES ('20140721122852');
+
+INSERT INTO schema_migrations (version) VALUES ('20140725144859');
+
+INSERT INTO schema_migrations (version) VALUES ('20140725145539');
+
