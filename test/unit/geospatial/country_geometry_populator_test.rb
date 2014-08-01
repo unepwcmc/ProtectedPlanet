@@ -99,7 +99,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
       FROM (
        SELECT ST_UNION(the_geom) as the_geom
        FROM (
-         SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.00000001)) the_geom FROM standard_polygons polygon
+         SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.0)) the_geom FROM standard_polygons polygon
            WHERE polygon.iso3 = 'GBR'
             AND ST_IsValid(polygon.wkb_geometry)
             AND polygon.marine = '1'
@@ -138,7 +138,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
       FROM (
        SELECT ST_UNION(the_geom) as the_geom
        FROM (
-         SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.00000001)) the_geom FROM standard_polygons polygon
+         SELECT  iso3, ST_Makevalid(ST_Buffer(ST_Simplify(wkb_geometry,0.005),0.0)) the_geom FROM standard_polygons polygon
            WHERE polygon.iso3 = 'GBR'
             AND ST_IsValid(polygon.wkb_geometry)
             AND polygon.marine = '0'
@@ -181,6 +181,12 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
    Territorial Water geometries for that country' do
     country = FactoryGirl.build(:country, iso_3: 'FAK')
 
+    repair_query = """
+      UPDATE countries
+        SET marine_pas_geom = ST_Makevalid(ST_Multi(ST_Buffer(marine_pas_geom,0.0)))
+        WHERE NOT ST_IsValid(marine_pas_geom)
+    """.squish
+
     eez_query = """
       UPDATE countries SET marine_eez_pas_geom = (
         SELECT ST_Intersection(marine_pas_geom, ST_Buffer(eez_geom,0.0))
@@ -198,6 +204,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
       ) WHERE iso_3 = 'FAK'
     """.squish
 
+    ActiveRecord::Base.connection.expects(:execute).with(repair_query)
     ActiveRecord::Base.connection.expects(:execute).with(eez_query)
     ActiveRecord::Base.connection.expects(:execute).with(territorial_query)
 

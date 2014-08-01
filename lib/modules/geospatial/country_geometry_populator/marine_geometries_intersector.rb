@@ -1,13 +1,16 @@
 module Geospatial::CountryGeometryPopulator::MarineGeometriesIntersector
-  TEMPLATE = File.expand_path(
+
+  INTERSECTOR_TEMPLATE = File.expand_path(
     File.join('../../templates', 'marine_geometry.erb'), __FILE__
   )
 
   MARINE_TYPES = ['eez', 'ts']
 
   def self.intersect country
+    repair_marine_geometries
+
     MARINE_TYPES.each do |marine_type|
-      DB.execute render_template(TEMPLATE, binding)
+      DB.execute render_template(INTERSECTOR_TEMPLATE, binding)
     end
   end
 
@@ -20,6 +23,10 @@ module Geospatial::CountryGeometryPopulator::MarineGeometriesIntersector
     template.result(binding).squish
   end
 
+  def self.repair_marine_geometries
+    geometry = Geospatial::Geometry.new 'countries', 'marine_pas_geom'
+    geometry.repair
+  end
 
   def self.marine_geometry_attributes area_type
     "#{area_type}_geom"

@@ -71,6 +71,3 @@ We are considering that Russia is in Asia and Turkey is in Europe to
 calculate stats. In the future we may change th DB structure to split
 the protected areas of these two countries and get more acurate values
 for Regional Statistics.
-
-###
-
