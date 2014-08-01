@@ -4,16 +4,25 @@ class ImportTools::WebHandler
   def self.maintenance_on
     web_handler = self.new
     web_handler.maintenance_mode = true
+    web_handler
   end
 
   def self.maintenance_off
     web_handler = self.new
     web_handler.maintenance_mode = false
+    web_handler
+  end
+
+  def self.under_maintenance
+    maintenance_on
+    yield
+    maintenance_off
   end
 
   def self.clear_cache
     web_handler = self.new
     web_handler.clear_cache
+    web_handler
   end
 
   def maintenance_mode=(mode_on)

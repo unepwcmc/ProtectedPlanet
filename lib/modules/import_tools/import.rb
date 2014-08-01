@@ -19,9 +19,7 @@ class ImportTools::Import
   end
 
   def finalise
-    ImportTools::WebHandler.maintenance_on
     swap_databases
-    ImportTools::WebHandler.maintenance_off
     add_to_completed_imports
   ensure
     unlock_import
