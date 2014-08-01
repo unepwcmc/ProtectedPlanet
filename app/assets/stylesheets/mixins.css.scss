@@ -11,3 +11,9 @@
        -o-transition: $transition;
           transition: $transition;
 }
+
+@mixin box-sizing($box-sizing) {
+  -webkit-box-sizing: $box-sizing;
+     -moz-box-sizing: $box-sizing;
+          box-sizing: $box-sizing;
+}

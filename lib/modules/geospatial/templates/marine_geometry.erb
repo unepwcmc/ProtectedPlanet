@@ -1,0 +1,6 @@
+UPDATE countries
+SET marine_<%= marine_type %>_pas_geom = (
+  SELECT ST_Intersection(marine_pas_geom,  ST_Buffer(<%= marine_geometry_attributes(marine_type) %>,0.0))
+  FROM countries
+  WHERE iso_3 = '<%= country.iso_3 %>' AND ST_Intersects(marine_pas_geom,  ST_Buffer(<%= marine_geometry_attributes(marine_type) %>,0.0)) LIMIT 1
+) WHERE iso_3 = '<%= country.iso_3 %>'
