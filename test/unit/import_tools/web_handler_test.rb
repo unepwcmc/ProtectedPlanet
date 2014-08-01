@@ -44,6 +44,16 @@ class ImportToolsWebHandlerTest < ActiveSupport::TestCase
     ImportTools::WebHandler.maintenance_off
   end
 
+  test '#under_maintenance switches the maintenance mode twice, and yields in between' do
+    ImportTools::WebHandler.expects(:maintenance_on)
+    ImportTools::WebHandler.expects(:maintenance_off)
+
+    block_executed = false
+    ImportTools::WebHandler.under_maintenance { block_executed = true }
+
+    assert block_executed
+  end
+
   test '#clear_cache does an HTTP call to the clear_cache url' do
     key = Rails.application.secrets.maintenance_mode_key
 
