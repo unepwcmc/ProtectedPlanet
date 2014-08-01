@@ -66,23 +66,12 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     assert import.completed?
   end
 
-  test '.finalise switches the maintenance mode twice' do
-    ImportTools::MaintenanceSwitcher.expects(:on)
-    ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
-    ImportTools::MaintenanceSwitcher.expects(:off)
-
-    import = ImportTools::Import.new(123)
-    import.finalise
-  end
-
   test '.finalise drops the old db and renames the new one' do
     import = ImportTools::Import.new(123)
 
     test_db = Rails.configuration.database_configuration[Rails.env]['database']
     import_db = "import_db_#{import.id}"
 
-    ImportTools::MaintenanceSwitcher.stubs(:on)
-    ImportTools::MaintenanceSwitcher.stubs(:off)
     ImportTools::PostgresHandler.any_instance.expects(:drop_database).with(test_db)
     ImportTools::PostgresHandler.any_instance.expects(:rename_database).with(import_db, test_db)
 
@@ -92,8 +81,6 @@ class ImportToolsImportTest < ActiveSupport::TestCase
   test '.finalise unlocks the import' do
     import = ImportTools::Import.new(123)
 
-    ImportTools::MaintenanceSwitcher.stubs(:on)
-    ImportTools::MaintenanceSwitcher.stubs(:off)
     ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
 
     ImportTools::RedisHandler.any_instance.expects(:unlock)
@@ -104,13 +91,9 @@ class ImportToolsImportTest < ActiveSupport::TestCase
   test '.finalise adds the import to the done imports' do
     import = ImportTools::Import.new(123)
 
-    ImportTools::MaintenanceSwitcher.stubs(:on)
-    ImportTools::MaintenanceSwitcher.stubs(:off)
     ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
-
     ImportTools::RedisHandler.any_instance.expects(:add_to_previous_ids).with(123)
 
     import.finalise
   end
-
 end

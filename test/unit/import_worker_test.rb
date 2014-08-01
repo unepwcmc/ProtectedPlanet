@@ -25,9 +25,9 @@ class ImportWorkerTest < ActiveSupport::TestCase
     import_mock = mock()
     import_mock.stubs(:increase_completed_jobs_count)
     import_mock.stubs(:completed?).returns(true)
-    import_mock.expects(:finalise)
-
     ImportTools.stubs(:current_import).returns(import_mock)
+
+    ImportWorkers::FinaliserWorker.expects(:perform_async)
 
     ImportWorker.new.finalise_job
   end

@@ -12,7 +12,7 @@ class ImportWorker
     import = ImportTools.current_import
     import.increase_completed_jobs_count
 
-    import.finalise if import.completed?
+    ImportWorkers::FinaliserWorker.perform_async if import.completed?
   end
 
   def self.perform_async *args
