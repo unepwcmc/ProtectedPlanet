@@ -3,14 +3,17 @@ require 'test_helper'
 class RegionalStatsTest < ActionDispatch::IntegrationTest
   def setup
     @global = FactoryGirl.create(:region)
-    @global_statistic = FactoryGirl.create(:regional_statistic, 
-      region: @global, pa_area: 100)  
+    @global_statistic = FactoryGirl.create(:regional_statistic,
+      region: @global, pa_area: 100)
     @region = FactoryGirl.create(:region, iso: 'BWT')
+
+    global_region = FactoryGirl.create(:region, iso: 'GL')
+    FactoryGirl.create(:regional_statistic, region: global_region, pa_area: 100)
   end
 
   test 'renders the Region name' do
     FactoryGirl.create(:protected_area)
-    FactoryGirl.create(:regional_statistic, region: @region, 
+    FactoryGirl.create(:regional_statistic, region: @region,
       percentage_pa_land_cover: 50, pa_area: 10,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
     get "/stats/regional/#{@region.iso}"
@@ -24,7 +27,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
       FactoryGirl.create(:protected_area, countries: [country], designation: nil)
     end
     FactoryGirl.create(:protected_area)
-    FactoryGirl.create(:regional_statistic, region: @region, 
+    FactoryGirl.create(:regional_statistic, region: @region,
       percentage_pa_land_cover: 50, pa_area: 10,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
 
@@ -39,7 +42,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
     country = FactoryGirl.create(:country, region: @region)
     FactoryGirl.create(:protected_area, countries: [country], designation: nil)
     FactoryGirl.create(:protected_area)
-    FactoryGirl.create(:regional_statistic, region: @region, 
+    FactoryGirl.create(:regional_statistic, region: @region,
       percentage_pa_land_cover: 50, pa_area: 10,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
     percentage = 10
@@ -64,7 +67,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
     FactoryGirl.create(:protected_area)
     not_reported_iucn_category = FactoryGirl.create(:iucn_category, name: 'Not Reported')
     FactoryGirl.create(:protected_area, iucn_category: not_reported_iucn_category)
-    FactoryGirl.create(:regional_statistic, region: @region, 
+    FactoryGirl.create(:regional_statistic, region: @region,
       percentage_pa_land_cover: 50, pa_area: 10,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
 
@@ -82,7 +85,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
     country = FactoryGirl.create(:country, region: @region)
     FactoryGirl.create(:protected_area, countries: [country], designation: regional_designation)
     FactoryGirl.create(:protected_area, designation: non_regional_designation)
-    FactoryGirl.create(:regional_statistic, region: @region, 
+    FactoryGirl.create(:regional_statistic, region: @region,
       percentage_pa_land_cover: 50, pa_area: 10,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
 
@@ -101,7 +104,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
     end
 
     FactoryGirl.create(:country)
-    FactoryGirl.create(:regional_statistic, region: @region, 
+    FactoryGirl.create(:regional_statistic, region: @region,
       percentage_pa_land_cover: 50, pa_area: 10,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
 

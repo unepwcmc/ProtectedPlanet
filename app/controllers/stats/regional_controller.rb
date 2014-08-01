@@ -2,18 +2,22 @@ class Stats::RegionalController < ApplicationController
   def show
     iso = params[:iso]
 
-    @region = Region.where(iso:iso).first
-    @number_of_pas = Stats::Regional.total_pas iso
-    @precision = 0
-    @percentage_of_global_pas = get_stats 'percentage_global_pas_area', iso, false
-    @pas_with_iucn_category = get_stats 'pas_with_iucn_category', iso, true
-    @number_of_designations = get_stats 'designation_count', iso, true
-    @countries_providing_data = get_stats 'countries_providing_data', iso, true
+    @region = Region.where(iso: iso).first
+    @number_of_pas = @region.protected_areas.count
 
-    @percentage_protected = get_stats 'percentage_pa_cover', iso, true
-    @percentage_protected_land = get_stats 'percentage_protected_land', iso, true
-    @percentage_protected_sea = get_stats 'percentage_protected_sea', iso, true
-    @percentage_protected_coast = get_stats 'percentage_protected_coast', iso, true
+    @regional_statistic = @region.regional_statistic
+    global_statistic = Region.where(iso: 'GL').first.regional_statistic
+
+    @precision = 0
+    @percentage_of_global_pas = (@regional_statistic.pa_area / global_statistic.pa_area) * 100
+    @pas_with_iucn_category = @region.protected_areas_with_iucn_categories.count
+    @number_of_designations = @region.designations.count
+    @countries_providing_data = @region.countries_providing_data.count
+
+    @percentage_protected = @regional_statistic.percentage_pa_cover
+    @percentage_protected_land = @regional_statistic.percentage_pa_land_cover
+    @percentage_protected_sea = @regional_statistic.percentage_pa_eez_cover
+    @percentage_protected_coast = @regional_statistic.percentage_pa_ts_cover
     @focus = 'region'
   end
 
