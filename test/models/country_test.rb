@@ -57,4 +57,15 @@ class CountryTest < ActiveSupport::TestCase
 
     assert_equal 2, country_1.protected_areas_with_iucn_categories.count
   end
+
+  test '#data_providers returns all countries that provide PA data' do
+    country_1 = FactoryGirl.create(:country)
+    country_2 = FactoryGirl.create(:country)
+    FactoryGirl.create(:country)
+
+    FactoryGirl.create(:protected_area, countries: [country_1])
+    FactoryGirl.create(:protected_area, countries: [country_2])
+
+    assert_equal 2, Country.data_providers.count
+  end
 end

@@ -26,4 +26,8 @@ class Country < ActiveRecord::Base
       "iucn_categories.name IN (#{valid_categories})"
     )
   end
+
+  def self.data_providers
+    joins(:protected_areas).uniq
+  end
 end

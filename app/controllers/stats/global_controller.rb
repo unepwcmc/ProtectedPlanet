@@ -1,8 +1,15 @@
 class Stats::GlobalController < ApplicationController
   def index
-    @number_of_pas = Stats::Global.pa_count
-    @pas_with_iucn_category = Stats::Global.pas_with_iucn_category
-    @number_of_designations = Stats::Global.designation_count
-    @countries_providing_data = Stats::Global.countries_providing_data
+    @number_of_pas = ProtectedArea.count
+    @pas_with_iucn_category = ProtectedArea.with_valid_iucn_categories.count
+    @number_of_designations = Designation.count
+    @countries_providing_data = Country.data_providers.count
+    @percentage_of_global_pas = 100
+
+    @global_statistic = Region.where(iso: 'GL').first.regional_statistic
+    @percentage_protected = @global_statistic.percentage_pa_cover
+    @percentage_protected_land = @global_statistic.percentage_pa_land_cover
+    @percentage_protected_sea = @global_statistic.percentage_pa_eez_cover
+    @percentage_protected_coast = @global_statistic.percentage_pa_ts_cover
   end
 end
