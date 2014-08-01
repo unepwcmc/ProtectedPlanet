@@ -4,10 +4,7 @@ namespace :search do
     logger = Logger.new(STDOUT)
 
     logger.info "Reindexing search...."
-
-    DB = ActiveRecord::Base.connection
-    DB.execute("REFRESH MATERIALIZED VIEW tsvector_search_documents")
-
+    Search.reindex
     logger.info "Reindex complete."
   end
 end
