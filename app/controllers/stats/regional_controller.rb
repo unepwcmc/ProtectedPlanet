@@ -1,8 +1,6 @@
 class Stats::RegionalController < ApplicationController
   def show
-    iso = params[:iso]
-
-    @region = Region.where(iso: iso).first
+    @region = Region.where(iso: params[:iso]).first
     @number_of_pas = @region.protected_areas.count
 
     @regional_statistic = @region.regional_statistic
