@@ -15,7 +15,7 @@ class StatisticPresenterTest < ActiveSupport::TestCase
     @statistic.stubs(:pa_area).returns(10)
 
     percentage = @presenter.percentage_of_global_pas
-    assert_equal 40, percentage
+    assert_equal "40.0", percentage
   end
 
   test '.percentage_pa_cover returns the percentage pa cover' do
