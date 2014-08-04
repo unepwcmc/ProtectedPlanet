@@ -1,0 +1,8 @@
+<% if db_config[:password].present? %>
+  PGPASSWORD=<%= db_config[:password] %>
+<% end %>
+pg_restore -c -i
+  -U <%= db_config[:username] %>
+  -h <%= db_config[:host] %>
+  -d <%= db_config[:database] %>
+  -v <%= FILEPATH %>

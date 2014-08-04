@@ -5,7 +5,7 @@
   ignore_errors: True
 
 - name: Install ruby dependencies
-  apt: pkg=$item state=installed update-cache=yes
+  apt: pkg={{item}} state=installed update-cache=yes
   when: ruby_version_installed.rc == 1
   with_items:
     - build-essential

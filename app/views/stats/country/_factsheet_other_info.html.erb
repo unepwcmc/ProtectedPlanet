@@ -1,0 +1,26 @@
+
+<section class="cell two">
+
+  <header class="stats lighter">
+    <h3>IUCN category areas</h3>
+  </header>
+
+  <section class="stats iucn-category-pa-count">
+    <p><%= commaify @pas_with_iucn_category %></p>
+    <label>Protected areas</label>
+  </section>
+
+</section>
+
+<section class="cell two">
+
+  <header class="stats lighter">
+    <h3>Designations</h3>
+  </header>
+
+  <section class="stats designation-count">
+    <p><%= commaify @number_of_designations %></p>
+    <label>Different types</label>
+  </section>
+
+</section>

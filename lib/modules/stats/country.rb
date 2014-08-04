@@ -5,10 +5,25 @@ class Stats::Country
     ProtectedArea.select(:id).joins(:countries).where("iso = ?", iso).count
   end
 
-  def self.percentage_cover_pas iso
+  def self.percentage_global_pas_area iso
+    global_stats = RegionalStatistic.joins(:region).where("name = ?", 'Global')
+
+    global_pa_area = global_stats.first[:pa_area]
+    pa_area = CountryStatistic.joins(:country).where("countries.iso" => iso)
+      .first[:pa_area]
+    pa_area / global_pa_area * 100
+  end
+
+  def self.percentage_global_pas iso
+    country_pas = total_pas iso
+    global_pas = ProtectedArea.count
+    country_pas.to_f / global_pas * 100
+  end
+
+  def self.percentage_pa_cover iso
     CountryStatistic.joins(:country)
                      .where("countries.iso" => iso)
-                     .first[:percentage_cover_pas]
+                     .first[:percentage_pa_cover]
   end
 
   def self.pas_with_iucn_category iso
@@ -31,7 +46,25 @@ class Stats::Country
       result.merge!(designation[:name] => designation[:count])
     end
     result
-  end 
+  end
+
+  def self.percentage_protected_land iso
+    CountryStatistic.joins(:country).
+      where("countries.iso = ?", iso).select(:percentage_pa_land_cover).
+      first.percentage_pa_land_cover
+  end
+
+  def self.percentage_protected_sea iso
+    CountryStatistic.joins(:country).
+      where("countries.iso = ?", iso).select(:percentage_pa_eez_cover).
+      first.percentage_pa_eez_cover
+  end
+
+  def self.percentage_protected_coast iso
+    CountryStatistic.joins(:country).
+      where("countries.iso = ?", iso).select(:percentage_pa_ts_cover).
+      first.percentage_pa_ts_cover
+  end
 
   private
 

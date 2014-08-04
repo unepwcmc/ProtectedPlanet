@@ -1,7 +1,5 @@
 username: ubuntu
 
-adam_email: adammulligan@fastmail.fm
-
 ruby_version: "2.1.2"
 ruby_url: "http://ftp.ruby-lang.org/pub/ruby/2.1/ruby-2.1.2.tar.gz"
 
