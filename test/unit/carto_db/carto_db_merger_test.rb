@@ -15,7 +15,8 @@ class TestCartoDbMerger < ActiveSupport::TestCase
     table_names = ['poly_1', 'poly_2', 'poly_3']
 
     first_expected_query = '''
-      INSERT INTO poly_1 (wdpaid, the_geom) SELECT wdpaid, the_geom FROM poly_2
+      INSERT INTO poly_1 (wdpaid, the_geom) SELECT wdpaid, the_geom FROM poly_2;
+      DROP TABLE poly_2;
     '''.squish
 
     stub_request(:get, "https://chewie.cartodb.com/api/v2/sql/").
@@ -23,12 +24,15 @@ class TestCartoDbMerger < ActiveSupport::TestCase
       to_return(:status => 200, :body => "", :headers => {})
 
     second_expected_query = '''
-      INSERT INTO poly_1 (wdpaid, the_geom) SELECT wdpaid, the_geom FROM poly_3
+      INSERT INTO poly_1 (wdpaid, the_geom) SELECT wdpaid, the_geom FROM poly_3;
+      DROP TABLE poly_3;
     '''.squish
 
     stub_request(:get, "https://chewie.cartodb.com/api/v2/sql/").
       with({query: {api_key: '1234', q: second_expected_query}}).
       to_return(:status => 200, :body => "", :headers => {})
+
+
 
     cartodb_merger = CartoDb::Merger.new "chewie", "1234"
     response = cartodb_merger.merge table_names, ['wdpaid', 'the_geom']
