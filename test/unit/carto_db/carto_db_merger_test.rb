@@ -32,8 +32,6 @@ class TestCartoDbMerger < ActiveSupport::TestCase
       with({query: {api_key: '1234', q: second_expected_query}}).
       to_return(:status => 200, :body => "", :headers => {})
 
-
-
     cartodb_merger = CartoDb::Merger.new "chewie", "1234"
     response = cartodb_merger.merge table_names, ['wdpaid', 'the_geom']
 
