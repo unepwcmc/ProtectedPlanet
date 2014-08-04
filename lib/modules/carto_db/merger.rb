@@ -25,7 +25,8 @@ class CartoDb::Merger
 
   def merge_query
     merge_candidates.map do |table_name|
-      "INSERT INTO #{@table_names[0]} (#{column_names}) SELECT #{column_names} FROM #{table_name}"
+      """INSERT INTO #{@table_names[0]} (#{column_names}) SELECT #{column_names} FROM #{table_name};
+       DROP TABLE #{table_name};""".squish
     end
   end
 
