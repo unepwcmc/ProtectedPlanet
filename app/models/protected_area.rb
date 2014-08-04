@@ -1,5 +1,5 @@
 class ProtectedArea < ActiveRecord::Base
-  include Elasticsearch::Model
+  include GeometryConcern
 
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :sub_locations
@@ -16,8 +16,6 @@ class ProtectedArea < ActiveRecord::Base
   belongs_to :wikipedia_article
 
   after_create :create_slug
-
-  scope :without_geometry, -> { select(self.column_names - ["the_geom"]) }
 
   def as_indexed_json options={}
     {"type" => 'protected_area'}.merge(

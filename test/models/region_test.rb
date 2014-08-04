@@ -80,4 +80,12 @@ class RegionTest < ActiveSupport::TestCase
 
     assert_equal 2, region_1.protected_areas_with_iucn_categories.count
   end
+
+  test '.without_geometry does not select the geometry columns' do
+    region = FactoryGirl.create(:region)
+
+    selected_region = Region.without_geometry.find(region.id)
+
+    refute selected_region.has_attribute?(:bounding_box)
+  end
 end

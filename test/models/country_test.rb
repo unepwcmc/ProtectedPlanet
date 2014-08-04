@@ -6,4 +6,11 @@ class CountryTest < ActiveSupport::TestCase
 
     assert_equal [[0, -1], [2, 1]], country.bounds
   end
+
+  test '.without_geometry does not select the geometry columns' do
+    country = FactoryGirl.create(:country)
+
+    selected_country = Country.without_geometry.find(country.id)
+    refute selected_country.has_attribute?(:bounding_box)
+  end
 end
