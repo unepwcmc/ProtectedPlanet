@@ -1,5 +1,6 @@
 class ImportWorkers::FinaliserWorker
   include Sidekiq::Worker
+  sidekiq_options :retry => false
 
   def perform
     ImportTools::WebHandler.under_maintenance do
