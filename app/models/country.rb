@@ -9,6 +9,10 @@ class Country < ActiveRecord::Base
 
   has_and_belongs_to_many :protected_areas
 
+  def statistic
+    country_statistic
+  end
+
   def bounds
     rgeo_factory = RGeo::Geos.factory srid: 4326
     bounds = RGeo::Cartesian::BoundingBox.new rgeo_factory

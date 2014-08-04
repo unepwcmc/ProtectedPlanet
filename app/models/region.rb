@@ -6,6 +6,10 @@ class Region < ActiveRecord::Base
 
   has_one :regional_statistic
 
+  def statistic
+    regional_statistic
+  end
+
   def bounds
     rgeo_factory = RGeo::Geos.factory srid: 4326
     bounds = RGeo::Cartesian::BoundingBox.new rgeo_factory
