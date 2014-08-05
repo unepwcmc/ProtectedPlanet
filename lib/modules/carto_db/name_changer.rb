@@ -28,6 +28,17 @@ class CartoDb::NameChanger
 
   end
 
+
+  def drop_temp temp_table
+    query = drop_query(temp_table)
+
+    @options[:query][:q] = query
+    response = self.class.get('/', @options)
+
+    return response.code == 200 ? true : false
+
+  end
+
   private
 
   def delete_query table
@@ -43,6 +54,10 @@ class CartoDb::NameChanger
   def insert_query destination, source
     """INSERT INTO #{destination}
        SELECT * FROM #{source};""".squish
+  end
+
+  def drop_query table
+    """DROP TABLE #{table};""".squish
   end
 
 
