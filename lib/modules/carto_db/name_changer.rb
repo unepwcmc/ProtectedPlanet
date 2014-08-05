@@ -15,7 +15,16 @@ class CartoDb::NameChanger
     response = self.class.get('/', @options)
 
     return response.code == 200 ? true : false
+  end
 
+  def insert_new current_table, temp_table
+    query = insert_query(current_table, temp_table)
+    full_transaction = transaction(query)
+
+    @options[:query][:q] = full_transaction
+    response = self.class.get('/', @options)
+
+    return response.code == 200 ? true : false
 
   end
 
@@ -29,6 +38,11 @@ class CartoDb::NameChanger
     """BEGIN;
        #{query}
        COMMIT;""".squish
+  end
+
+  def insert_query destination, source
+    """INSERT INTO #{destination}
+       SELECT * FROM #{source};""".squish
   end
 
 
