@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // see:
 // https://github.com/mbostock/d3/wiki/SVG-Shapes#arc
@@ -16,8 +16,9 @@ var annularSectorGenerator = (function() {
   }
 
   function pie(start_angle, end_angle) {
-    var start_angle = (start_angle === void 0) ? 1.2*pi : start_angle,
-        end_angle = (end_angle === void 0) ? 2.8*pi : end_angle;
+    start_angle = (start_angle === undefined) ? 1.2*pi : start_angle;
+    end_angle = (end_angle === undefined) ? 2.8*pi : end_angle;
+
     return d3.layout.pie()
       .sort(null)
       .value(function(d) { return d.value; })
@@ -26,11 +27,11 @@ var annularSectorGenerator = (function() {
   }
 
   return function(data, selector, width, height, inner_radius_start, outer_radius_start) {
-    var radius = Math.min(width, height) / 2,
-        inner_radius_start = (inner_radius_start === void 0) ?
-          6 : inner_radius_start,
-        outer_radius_start = (outer_radius_start === void 0) ?
-          6 : outer_radius_start;
+    var radius = Math.min(width, height) / 2;
+    inner_radius_start = (inner_radius_start === undefined) ?
+      6 : inner_radius_start;
+    outer_radius_start = (outer_radius_start === undefined) ?
+      6 : outer_radius_start;
 
     var svg = d3.select(selector).append('svg')
       .attr('width', width)
@@ -49,6 +50,6 @@ var annularSectorGenerator = (function() {
       .attr('stroke-width', 10)
       .attr('stroke-linejoin', 'round');
 
-  }
+  };
 
-})();
+}());
