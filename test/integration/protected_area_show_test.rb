@@ -39,14 +39,9 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
       :protected_area, countries: [@country], images: [image]
     )
 
-    get "/#{@protected_area.wdpa_id}"
+    visit "/#{@protected_area.wdpa_id}"
 
-    assert_select 'ul.protected-area-photos' do
-      assert_select 'li', 1 do |elements|
-        elements.each do |element|
-          assert_select element, 'img'
-        end
-      end
-    end
+    assert page.has_selector?('ul.protected-area-photos')
+    assert_equal 1, page.all('.protected-area-photos li img').count
   end
 end

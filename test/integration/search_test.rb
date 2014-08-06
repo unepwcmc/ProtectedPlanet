@@ -25,9 +25,10 @@ class SearchTest < ActionDispatch::IntegrationTest
       'Expected only searched PA names to be rendered'
   end
 
-  test 'submitting a query with more than 10 PAs paginates the results' do
+  test 'submitting a query with more than the given limit of PAs
+   paginates the results' do
     query = 'Killbear'
-    results_count = 11
+    results_count = 2
 
     results_count.times do
       FactoryGirl.create(:protected_area, name: 'An name')
@@ -38,7 +39,7 @@ class SearchTest < ActionDispatch::IntegrationTest
 
     Search.expects(:search).with(query).returns(search)
 
-    visit("/search?q=#{query}&page=2")
+    visit("/search?q=#{query}&page=2&limit=1")
 
     assert page.has_selector?(".pagination"),
       "Expected pagination controls to exist"
