@@ -8,6 +8,10 @@ class Region < ActiveRecord::Base
 
   has_one :regional_statistic
 
+  def statistic
+    regional_statistic
+  end
+
   def countries_providing_data
     countries.joins(:protected_areas).uniq
   end
