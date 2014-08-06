@@ -7,59 +7,23 @@ class CartoDb::NameChanger
     @options = { query: { api_key: api_key } }
   end
 
-  def delete_current current_table
-    query = delete_query(current_table)
-    full_transaction = transaction(query)
-
-    @options[:query][:q] = full_transaction
-    response = self.class.get('/', @options)
-
-    return response.code == 200 ? true : false
-  end
-
-  def insert_new current_table, temp_table
-    query = insert_query(current_table, temp_table)
-    full_transaction = transaction(query)
-
-    @options[:query][:q] = full_transaction
-    response = self.class.get('/', @options)
-
-    return response.code == 200 ? true : false
-
-  end
-
-
-  def drop_temp temp_table
-    query = drop_query(temp_table)
+  def rename default_table, temp_table
+    query = transaction(default_table, temp_table)
 
     @options[:query][:q] = query
     response = self.class.get('/', @options)
 
     return response.code == 200 ? true : false
-
   end
 
   private
 
-  def delete_query table
-    """DELETE FROM #{table};""".squish
-  end
-
-  def transaction query
+  def transaction default_table, temp_table
     """BEGIN;
-       #{query}
+       DELETE FROM #{default_table};
+       INSERT INTO #{default_table}
+          SELECT * FROM #{temp_table};
+       DROP TABLE #{temp_table};
        COMMIT;""".squish
   end
-
-  def insert_query destination, source
-    """INSERT INTO #{destination}
-       SELECT * FROM #{source};""".squish
-  end
-
-  def drop_query table
-    """DROP TABLE #{table};""".squish
-  end
-
-
-
 end
