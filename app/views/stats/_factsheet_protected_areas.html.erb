@@ -12,14 +12,14 @@
   <section class="stats pa-global-percentage">
     <label>
       <span class="big">
-        <%= '%.1f' % (@percentage_of_global_pas || 0) %>
+        <%= @presenter.percentage_of_global_pas %>
       </span>
       <span class="small">%</span>
       of global protected areas
     </label>
 
     <div class="bar-container">
-      <div class="bar" style="width: <%=@percentage_of_global_pas%>%;"></div>
+      <div class="bar" style="width: <%= @presenter.percentage_of_global_pas %>%;"></div>
     </div>
   </section>
 

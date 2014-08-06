@@ -45,4 +45,16 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     selected_protected_area = ProtectedArea.without_geometry.find(protected_area.id)
     refute selected_protected_area.has_attribute?(:the_geom)
   end
+
+  test '#with_valid_iucn_categories returns PAs with valid IUCN
+   categories' do
+    iucn_category_1 = FactoryGirl.create(:iucn_category, name: 'Ib')
+    iucn_category_2 = FactoryGirl.create(:iucn_category, name: 'V')
+    no_iucn_category = FactoryGirl.create(:iucn_category, name: 'Cristiano Ronaldo')
+
+    FactoryGirl.create(:protected_area, iucn_category: iucn_category_1)
+    FactoryGirl.create(:protected_area, iucn_category: iucn_category_2)
+    FactoryGirl.create(:protected_area, iucn_category: no_iucn_category)
+    assert_equal 2, ProtectedArea.with_valid_iucn_categories.count
+  end
 end
