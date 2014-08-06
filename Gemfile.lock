@@ -86,11 +86,6 @@ GEM
       elasticsearch-transport (= 1.0.4)
     elasticsearch-api (1.0.4)
       multi_json
-    elasticsearch-model (0.1.4)
-      activesupport (> 3)
-      elasticsearch (> 0.4)
-      hashie
-    elasticsearch-rails (0.1.4)
     elasticsearch-transport (1.0.4)
       faraday
       multi_json
@@ -105,7 +100,6 @@ GEM
       multipart-post (>= 1.2, < 3)
     fastercsv (1.5.5)
     gdal (0.0.5)
-    hashie (3.2.0)
     hike (1.2.3)
     httmultiparty (0.3.14)
       httparty (>= 0.7.3)
@@ -268,8 +262,7 @@ DEPENDENCIES
   dotenv (~> 0.11.1)
   dotenv-deployment
   ejs
-  elasticsearch-model (~> 0.1.4)
-  elasticsearch-rails (~> 0.1.4)
+  elasticsearch (~> 1.0.4)
   factory_girl_rails (~> 4.4.1)
   gdal (~> 0.0.5)
   httmultiparty (~> 0.3.14)

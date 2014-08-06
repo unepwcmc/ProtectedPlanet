@@ -3,10 +3,14 @@ namespace :search do
   task reindex: :environment do
     logger = Logger.new(STDOUT)
 
-    logger.info "Reindexing search...."
+    Elasticsearch::Client.new.delete_by_query(
+      index: 'protected_areas', q: '*:*'
+    )
 
-    DB = ActiveRecord::Base.connection
-    DB.execute("REFRESH MATERIALIZED VIEW tsvector_search_documents")
+    [Country, Region, ProtectedArea].each do |model|
+      logger.info "Reindexing #{model}...."
+      Search::Index.index model.without_geometry
+    end
 
     logger.info "Reindex complete."
   end

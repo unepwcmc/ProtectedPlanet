@@ -18,19 +18,17 @@ class ProtectedArea < ActiveRecord::Base
   after_create :create_slug
 
   def as_indexed_json options={}
-    {"type" => 'protected_area'}.merge(
-      self.as_json(
-        only: [:wdpa_id, :name, :original_name, :marine],
-        include: {
-          countries: {
-            only: [:name, :id],
-            include: { region: { only: [:id, :name] } }
-          },
-          sub_locations: { only: [:english_name] },
-          iucn_category: { only: [:id, :name] },
-          designation: { only: [:id, :name] }
-        }
-      )
+    self.as_json(
+      only: [:wdpa_id, :name, :original_name, :marine],
+      include: {
+        countries: {
+          only: [:name, :id],
+          include: { region: { only: [:id, :name] } }
+        },
+        sub_locations: { only: [:english_name] },
+        iucn_category: { only: [:id, :name] },
+        designation: { only: [:id, :name] }
+      }
     )
   end
 

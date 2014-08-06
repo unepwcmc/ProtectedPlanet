@@ -88,4 +88,14 @@ class RegionTest < ActiveSupport::TestCase
 
     refute selected_region.has_attribute?(:bounding_box)
   end
+
+  test '.as_indexed_json returns the region as JSON' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+
+    expected_json = {
+      "name" => "North Manmerica"
+    }
+
+    assert_equal expected_json, region.as_indexed_json
+  end
 end

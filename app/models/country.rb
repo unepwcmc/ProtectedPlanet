@@ -6,4 +6,13 @@ class Country < ActiveRecord::Base
 
   has_many :sub_locations
   belongs_to :region
+
+  def as_indexed_json options={}
+    self.as_json(
+      only: [:name],
+      include: {
+        region: { only: [:id, :name] }
+      }
+    )
+  end
 end

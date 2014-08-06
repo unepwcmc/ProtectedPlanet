@@ -62,7 +62,6 @@ class ProtectedAreaTest < ActiveSupport::TestCase
 
     expected_json = {
       "wdpa_id" => 555999,
-      "type" => 'protected_area',
       "name" => 'Manbone',
       "original_name" => "Manboné",
       "marine" => true,

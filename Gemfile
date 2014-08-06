@@ -40,8 +40,7 @@ group :test, :development do
   gem 'ejs'
 end
 
-gem 'elasticsearch-rails', '~> 0.1.4'
-gem 'elasticsearch-model', '~> 0.1.4'
+gem 'elasticsearch', '~> 1.0.4'
 
 gem 'will_paginate', '~> 3.0'
 
