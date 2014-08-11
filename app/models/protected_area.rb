@@ -19,7 +19,7 @@ class ProtectedArea < ActiveRecord::Base
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:wdpa_id, :name, :original_name, :marine],
+      only: [:id, :wdpa_id, :name, :original_name, :marine],
       include: {
         countries: {
           only: [:name, :id],

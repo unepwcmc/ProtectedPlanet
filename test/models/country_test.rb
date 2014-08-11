@@ -20,6 +20,7 @@ class CountryTest < ActiveSupport::TestCase
     country = FactoryGirl.create(:country, id: 123, name: 'Manboneland', region: region)
 
     expected_json = {
+      "id" => 123,
       "name" => 'Manboneland',
       "region" => {
         "id" => 987,
