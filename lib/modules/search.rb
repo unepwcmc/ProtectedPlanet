@@ -1,23 +1,23 @@
 class Search
-  attr_reader :results
-
   def self.search search_term
-    instance = self.new
-    instance.search search_term
+    instance = self.new search_term
+    instance.search
 
     instance
   end
 
-  def initialize
-    @elastic_search = Elasticsearch::Client.new
-    self.results = []
+  def initialize search_term
+    @search_term = search_term
   end
 
-  def search search_term
-    body = {size: 10, query: Search::Query.new(search_term).to_h}
-    results = @elastic_search.search(index: 'protected_areas', body: body)["hits"]["hits"]
+  def search
+    @query_results ||= elastic_search.search(index: 'protected_areas', body: query)
+  end
 
-    self.results = results.map do |result|
+  def results
+    matches = @query_results["hits"]["hits"]
+
+    @matches ||= matches.map do |result|
       model_class = result["_type"].classify.constantize
       model_class.find(result["_source"]["id"])
     end
@@ -25,5 +25,14 @@ class Search
 
   private
 
-  attr_writer :results
+  def elastic_search
+    @elastic_search ||= Elasticsearch::Client.new
+  end
+
+  def query
+    {
+      size: 10,
+      query: Search::Query.new(@search_term).to_h
+    }
+  end
 end
