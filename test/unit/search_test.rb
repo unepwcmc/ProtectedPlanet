@@ -1,90 +1,68 @@
 require 'test_helper'
 
 class TestSearch < ActiveSupport::TestCase
-  test '#search runs a full text search and returns the matching PA models' do
-    search_query = 'manbone'
+  test '#search queries ElasticSearch with the given term, and returns
+   the matching models' do
+    protected_area = FactoryGirl.create(:protected_area)
+    country = FactoryGirl.create(:country)
 
-    query = """
-      SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery('#{search_query}:*') query
-      WHERE document @@ query
-    """.squish
+    search_query = "manbone"
 
-    order_mock = mock()
-    order_mock.expects(:order).with("rank DESC").returns([])
+    query_object = {
+      index: 'protected_areas',
+      body: {
+        size: 10,
+        query: {
+          "filtered" => {
+            "query" => {
+              "bool" => {
+                "should" => [
+                  { "nested" => { "path" => "countries", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "countries.name" ] } } } },
+                  { "nested" => { "path" => "countries.region", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "countries.region.name" ] } } } },
+                  { "nested" => { "path" => "sub_location", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "sub_location.english_name" ] } } } },
+                  { "nested" => { "path" => "designation", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "designation.name" ] } } } },
+                  { "nested" => { "path" => "iucn_category", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "iucn_category.name" ] } } } },
+                  { "multi_match" => { "query" => "*#{search_query}*", "fields" => [ "name", "original_name" ] } }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
 
-    ProtectedArea.expects(:joins).with("""
-      INNER JOIN (
-        #{query}
-      ) AS search_results
-      ON search_results.wdpa_id = protected_areas.wdpa_id
-    """.squish).returns(order_mock)
+    results_object = {
+      "hits" => {
+        "hits" => [{
+          "_type" => "protected_area",
+          "_source" => {
+            "id" => protected_area.id
+          }
+        }, {
+          "_type" => "country",
+          "_source" => {
+            "id" => country.id
+          }
+        }]
+      }
+    }
 
-    Search.search search_query
-  end
+    search_mock = mock()
+    search_mock.
+      expects(:search).
+      with(query_object).
+      returns(results_object)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
 
-  test '#search sanitizes potential SQL injections' do
-    search_query = "' --"
+    results = Search.search(search_query).results
+    assert 2, results.length
 
-    query = """
-      SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery(''':* & --:*') query
-      WHERE document @@ query
-    """.squish
+    returned_protected_area = results.first
+    assert_kind_of ProtectedArea, returned_protected_area
+    assert_equal   protected_area.id, returned_protected_area.id
 
-    order_mock = mock()
-    order_mock.stubs(:order).returns([])
-
-    ProtectedArea.expects(:joins).with("""
-      INNER JOIN (
-        #{query}
-      ) AS search_results
-      ON search_results.wdpa_id = protected_areas.wdpa_id
-    """.squish).returns(order_mock)
-
-    Search.search search_query
-  end
-
-  test '#search squishes the query and joins the lexemes with & (and) operators' do
-    search_query = ' Killbear and   the Manbone'
-
-    query = """
-      SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery('Killbear:* & and:* & the:* & Manbone:*') query
-      WHERE document @@ query
-    """.squish
-
-    order_mock = mock()
-    order_mock.stubs(:order).returns([])
-
-    ProtectedArea.expects(:joins).with("""
-      INNER JOIN (
-        #{query}
-      ) AS search_results
-      ON search_results.wdpa_id = protected_areas.wdpa_id
-    """.squish).returns(order_mock)
-
-    Search.search search_query
-  end
-
-  test '#search populates the results attribute of Search' do
-    results = []
-
-    order_mock = mock()
-    order_mock.stubs(:order).returns([])
-
-    ProtectedArea.expects(:joins).returns(order_mock)
-
-    Search.any_instance.expects(:results=).with(results).twice
-
-    Search.search 'search'
-  end
-
-  test '#search_for_similar calls Search::Similarity to fetch similitarities' do
-    search_term = 'manbone'
-
-    Search::Similarity.expects(:search).with(search_term).returns([])
-
-    Search.search_for_similar search_term
+    returned_country = results.second
+    assert_kind_of Country, returned_country
+    assert_equal   country.id, returned_country.id
   end
 end

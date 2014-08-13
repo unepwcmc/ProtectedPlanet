@@ -1,55 +1,29 @@
 class Search
-  attr_reader :query, :results
+  attr_reader :results
 
   def self.search search_term
-    search_instance = self.new search_term
-    search_instance.search
-    search_instance
+    instance = self.new
+    instance.search search_term
+
+    instance
   end
 
-  def self.search_for_similar search_term
-    similarities = Search::Similarity.search search_term
-    return self.new(search_term) if similarities.empty?
-
-    self.search similarities.first.word
-  end
-
-  def initialize search_term
-    self.query = search_term
+  def initialize
+    @elastic_search = Elasticsearch::Client.new
     self.results = []
   end
 
-  def search
-    self.results = ProtectedArea.joins(join_query).order('rank DESC')
+  def search search_term
+    body = {size: 10, query: Search::Query.new(search_term).to_h}
+    results = @elastic_search.search(index: 'protected_areas', body: body)["hits"]["hits"]
+
+    self.results = results.map do |result|
+      model_class = result["_type"].classify.constantize
+      model_class.find(result["_source"]["id"])
+    end
   end
 
   private
-  attr_writer :query, :results
 
-  def join_query
-    """
-      INNER JOIN (
-        #{search_query}
-      ) AS search_results
-      ON search_results.wdpa_id = protected_areas.wdpa_id
-    """.squish
-  end
-
-  def search_query
-    dirty_query = """
-      SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery(?) query
-      WHERE document @@ query
-    """.squish
-
-    ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, search_term
-    ])
-  end
-
-  def search_term
-    lexemes = self.query.split(' ')
-    lexemes = lexemes.map{|lexeme| "#{lexeme}:*"}
-    lexemes.join(' & ')
-  end
+  attr_writer :results
 end
