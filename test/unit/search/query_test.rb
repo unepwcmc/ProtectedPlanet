@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class SearchQueryTest < ActiveSupport::TestCase
-  test '.to_h, given a search term, returns an ElasticSearch query' do
+  test '.to_h, given a search term, returns an ElasticSearch query, with
+   aggregations' do
     term = "manbone"
 
     expected_object = {

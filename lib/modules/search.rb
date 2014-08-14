@@ -23,6 +23,10 @@ class Search
     end
   end
 
+  def aggregations
+    @query_results["aggregations"]
+  end
+
   private
 
   def elastic_search
@@ -32,7 +36,8 @@ class Search
   def query
     {
       size: 10,
-      query: Search::Query.new(@search_term).to_h
+      query: Search::Query.new(@search_term).to_h,
+      aggs: Search::Aggregation.all
     }
   end
 end
