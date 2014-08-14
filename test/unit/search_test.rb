@@ -29,19 +29,19 @@ class TestSearch < ActiveSupport::TestCase
           }
         },
         aggs: {
-          "protected_areas_by_country" => {
+          "country" => {
             "nested" => { "path" => "countries" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "countries.id" } } }
           },
-          "protected_areas_by_region" => {
+          "region" => {
             "nested" => { "path" => "countries.region" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "countries.region.id" } } }
           },
-          "protected_areas_by_designation" => {
+          "designation" => {
             "nested" => { "path" => "designation" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "designation.id" } } }
           },
-          "protected_areas_by_iucn_category" => {
+          "iucn_category" => {
             "nested" => { "path" => "iucn_category" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "iucn_category.id" } } }
           }
@@ -85,20 +85,28 @@ class TestSearch < ActiveSupport::TestCase
   end
 
   test '.aggregations returns all the aggregations' do
+    countries = [
+      FactoryGirl.create(:country),
+      FactoryGirl.create(:country)
+    ]
+
     search_query = "manbone"
 
     results_object = {
       "aggregations" => {
-        "protected_areas_by_country" => {
+        "country" => {
           "doc_count" => 0,
           "aggregation" => {
-            "buckets" => []
-          }
-        },
-        "protected_areas_by_region" => {
-          "doc_count" => 0,
-          "aggregation" => {
-            "buckets" => []
+            "buckets" => [
+              {
+                "key" => countries.first.id,
+                "doc_count" => 59
+              },
+              {
+                "key" => countries.second.id,
+                "doc_count" => 10
+              }
+            ]
           }
         }
       }
@@ -111,6 +119,15 @@ class TestSearch < ActiveSupport::TestCase
     Elasticsearch::Client.stubs(:new).returns(search_mock)
 
     aggregations = Search.search(search_query).aggregations
-    assert results_object["aggregations"], aggregations
+
+    country_aggregations = aggregations["country"]
+
+    assert_equal 2, country_aggregations.length
+
+    assert_kind_of Country, country_aggregations.first[:model]
+    assert_equal   59, country_aggregations.first[:count]
+
+    assert_kind_of Country, country_aggregations.second[:model]
+    assert_equal   10, country_aggregations.second[:count]
   end
 end

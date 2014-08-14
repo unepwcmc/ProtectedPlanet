@@ -1,5 +1,5 @@
 {
-  "protected_areas_by_country": {
+  "country": {
     "nested": {
       "path": "countries"
     },
@@ -11,7 +11,7 @@
       }
     }
   },
-  "protected_areas_by_region": {
+  "region": {
     "nested": {
       "path": "countries.region"
     },
@@ -23,7 +23,7 @@
       }
     }
   },
-  "protected_areas_by_designation": {
+  "designation": {
     "nested": {
       "path": "designation"
     },
@@ -35,7 +35,7 @@
       }
     }
   },
-  "protected_areas_by_iucn_category": {
+  "iucn_category": {
     "nested": {
       "path": "iucn_category"
     },

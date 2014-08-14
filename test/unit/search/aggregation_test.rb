@@ -3,7 +3,7 @@ require 'test_helper'
 class SearchAggregationTest < ActiveSupport::TestCase
   test '#all returns a hash with all aggregations configurations' do
     expected_aggregations = {
-      "protected_areas_by_country" => {
+      "country" => {
         "nested" => {
           "path" => "countries"
         },
@@ -15,7 +15,7 @@ class SearchAggregationTest < ActiveSupport::TestCase
           }
         }
       },
-      "protected_areas_by_region" => {
+      "region" => {
         "nested" => {
           "path" => "countries.region"
         },
@@ -27,7 +27,7 @@ class SearchAggregationTest < ActiveSupport::TestCase
           }
         }
       },
-      "protected_areas_by_designation" => {
+      "designation" => {
         "nested" => {
           "path" => "designation"
         },
@@ -39,7 +39,7 @@ class SearchAggregationTest < ActiveSupport::TestCase
           }
         }
       },
-      "protected_areas_by_iucn_category" => {
+      "iucn_category" => {
         "nested" => {
           "path" => "iucn_category"
         },
