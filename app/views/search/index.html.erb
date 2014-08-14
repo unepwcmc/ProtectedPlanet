@@ -6,6 +6,30 @@
     </section>
 
     <% if @query %>
+      <aside class="search-filters">
+        <h4>Filter Your Results</h4>
+
+        <ul>
+          <li>
+            <h5>Location</h5>
+
+            <ul>
+              <li>United States</li>
+              <li>United Kingdom</li>
+            </ul>
+          </li>
+
+          <li>
+            <h5>IUCN Category</h5>
+
+            <ul>
+              <li>Not Reported</li>
+              <li>IV</li>
+            </ul>
+          </li>
+        </ul>
+      </aside>
+
       <section class="search-results">
         <h4>
           <% if @similar_search %>

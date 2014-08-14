@@ -5,11 +5,13 @@
   margin-top: 50px;
 }
 
-main section {
-  border: 1px solid #dadada;
-  background: #ececf4;
-  @include border-radius(5px);
-  width: 100%;
+main {
+  section, aside {
+    border: 1px solid #dadada;
+    background: #ececf4;
+    @include border-radius(5px);
+    width: 100%;
+  }
 }
 
 .map-disclaimer {
