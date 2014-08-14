@@ -30,4 +30,22 @@ class SearchFilterTest < ActiveSupport::TestCase
 
     assert_equal filter.to_h, expected_hash
   end
+
+  test '.to_h, given a type Filter, returns the filter query as a
+   hash' do
+    term = 'country'
+    options = {
+      type: 'type'
+    }
+
+    filter = Search::Filter.new(term, options)
+
+    expected_hash = {
+      "type" => {
+        "value" => term
+      }
+    }
+
+    assert_equal filter.to_h, expected_hash
+  end
 end

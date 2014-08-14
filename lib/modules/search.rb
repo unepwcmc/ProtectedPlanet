@@ -1,13 +1,14 @@
 class Search
-  def self.search search_term
-    instance = self.new search_term
+  def self.search search_term, options={}
+    instance = self.new search_term, options
     instance.search
 
     instance
   end
 
-  def initialize search_term
+  def initialize search_term, options
     @search_term = search_term
+    @options = options
   end
 
   def search
@@ -49,7 +50,7 @@ class Search
   def query
     {
       size: 10,
-      query: Search::Query.new(@search_term).to_h,
+      query: Search::Query.new(@search_term, @options).to_h,
       aggs: Search::Aggregation.all
     }
   end

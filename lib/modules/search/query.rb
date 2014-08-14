@@ -1,39 +1,13 @@
-=begin
-=== base template ==
-"filtered": {
-  "query": {
-    "bool" => {
-    }
-  },
-  "filter": {
-    "and": [
-    ]
-  }
-}
-===
-=end
-
 class Search::Query
-  def initialize search_term
+  def initialize search_term, options={}
     @term = search_term
-  end
-
-  def matchers
-    hydrated_matchers = {}
-
-    MATCHERS.each do |type, matchers|
-      matchers.each do |matcher|
-        hydrated_matchers[type.to_s] ||= []
-        hydrated_matchers[type.to_s].push Search::Matcher.new(@term, matcher).to_h
-      end
-    end
-
-    hydrated_matchers
+    @options = options
   end
 
   def to_h
     base_query = template
-    base_query["filtered"]["query"]["bool"] = matchers
+    base_query["filtered"]["query"] = {"bool" => matchers}
+    base_query["filtered"]["filter"] = {"and" => filters} if @options[:filters].present?
 
     base_query
   end
@@ -54,9 +28,36 @@ class Search::Query
     ]
   }
 
-  FILTERS = [
-    { type: 'nested', path: 'countries.region', term: 'countries.region.id', required: true }
-  ]
+  def matchers
+    hydrated_matchers = {}
+
+    MATCHERS.each do |type, matchers|
+      matchers.each do |matcher|
+        hydrated_matchers[type.to_s] ||= []
+        hydrated_matchers[type.to_s].push Search::Matcher.new(@term, matcher).to_h
+      end
+    end
+
+    hydrated_matchers
+  end
+
+  FILTERS = {
+    type: { type: 'type' },
+    country: { type: 'nested', path: 'countries.region', term: 'countries.region.id', required: true }
+  }
+
+  def filters
+    constructed_filters = []
+    requested_filters = @options[:filters] || []
+
+    requested_filters.each do |filter|
+      constructed_filters.push Search::Filter.new(
+        filter[:value], FILTERS[filter[:name].to_sym]
+      ).to_h
+    end
+
+    constructed_filters
+  end
 
   def template
     JSON.parse(TEMPLATE)

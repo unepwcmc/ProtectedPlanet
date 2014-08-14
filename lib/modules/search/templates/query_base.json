@@ -1,7 +1,4 @@
 {
   "filtered": {
-    "query": {
-      "bool": {}
-    }
   }
 }

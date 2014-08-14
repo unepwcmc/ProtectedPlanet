@@ -56,4 +56,23 @@ class SearchQueryTest < ActiveSupport::TestCase
 
     assert_equal expected_object, query.to_h
   end
+
+  test '.to_h, given a search term and a type filter, builds a query
+    with a type filter' do
+    term = "manbone"
+    type = "country"
+
+    expected_object = {
+      "and" => [
+        "type" => {
+          "value" => type
+        }
+      ]
+    }
+
+    query = Search::Query.new(term, filters: [{name: 'type', value: 'country'}]).to_h
+    filters = query["filtered"]["filter"]
+
+    assert_equal expected_object, filters
+  end
 end
