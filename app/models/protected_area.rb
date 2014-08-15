@@ -70,4 +70,11 @@ class ProtectedArea < ActiveRecord::Base
     updated_slug = [name, designation.try(:name)].join(' ').parameterize
     update_attributes(slug: updated_slug)
   end
+
+  def self.with_valid_iucn_categories
+    valid_categories = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
+    joins(:iucn_category).where(
+      "iucn_categories.name IN (#{valid_categories})"
+    )
+  end
 end

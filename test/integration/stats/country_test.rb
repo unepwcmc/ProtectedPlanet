@@ -3,9 +3,12 @@ require 'test_helper'
 class CountryStatsTest < ActionDispatch::IntegrationTest
   def setup
     @region = FactoryGirl.create(:region)
-    @regional_statistic = FactoryGirl.create(:regional_statistic, 
+    @regional_statistic = FactoryGirl.create(:regional_statistic,
       region: @region, pa_area: 100)
     @country = FactoryGirl.create(:country, region: @region, iso: 'IT')
+
+    global_region = FactoryGirl.create(:region, iso: 'GL')
+    FactoryGirl.create(:regional_statistic, region: global_region, pa_area: 100)
   end
 
   test 'renders the Country name' do
@@ -63,7 +66,7 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
 
     FactoryGirl.create(:protected_area)
     not_reported_iucn_category = FactoryGirl.create(:iucn_category, name: 'Not Reported')
-    FactoryGirl.create(:country_statistic, country: @country, 
+    FactoryGirl.create(:country_statistic, country: @country,
       percentage_pa_land_cover: 50, pa_area: 40,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
     FactoryGirl.create(:protected_area,

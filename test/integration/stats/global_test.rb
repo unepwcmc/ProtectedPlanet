@@ -1,6 +1,11 @@
 require 'test_helper'
 
 class GlobalStatsTest < ActionDispatch::IntegrationTest
+  def setup
+    global_region = FactoryGirl.create(:region, iso: 'GL')
+    FactoryGirl.create(:regional_statistic, region: global_region, pa_area: 100)
+  end
+
   test 'renders the number of Protected Areas' do
     protected_area_count = 5
     protected_area_count.times do
