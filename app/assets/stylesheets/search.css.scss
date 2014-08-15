@@ -77,15 +77,41 @@
     font-weight: normal;
   }
 
-  li:first-child {
-    border-top: 1px solid $grey;
-  }
-
   .result {
     border-bottom: 1px solid $light-grey;
     background: #f1f1f1;
     padding: 20px 0 20px 30px;
     line-height: 1.5em;
+  }
+}
+
+.search-navigation {
+  border-top: 1px solid $grey;
+
+  li {
+    display: inline;
+  }
+
+  .btn {
+    box-sizing: border-box;
+    height: 40px;
+    color: inherit;
+    width: 24%;
+    background: none;
+    border-radius: 0;
+
+    margin: 0;
+    border-bottom: 1px solid $grey;
+    border-right: 1px solid $grey;
+
+    &:last-child {
+      border-right: 0;
+    }
+
+    &.selected, &:hover {
+      border-bottom: 5px solid #4194D4;
+      background: white;
+    }
   }
 }
 

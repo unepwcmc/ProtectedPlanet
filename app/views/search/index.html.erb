@@ -35,6 +35,14 @@
           Showing <%= @search.results.count %> <%= 'result'.pluralize @search.results.count %> for "<%= @query %>"
         </h4>
 
+        <div class="search-navigation">
+          <ul>
+            <li><a href="#" class="btn selected">All</a></li>
+            <li><a href="#" class="btn">Protected Areas</a></li>
+            <li><a href="#" class="btn">Countries</a></li>
+            <li><a href="#" class="btn">Regions</a></li>
+          </ul>
+        </div>
       </section>
     <% end %>
   </main>
