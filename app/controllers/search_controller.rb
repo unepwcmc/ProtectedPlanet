@@ -2,16 +2,20 @@ class SearchController < ApplicationController
   def index
     return unless @query = params[:q]
 
-    pagination_opts = {page: params[:page], per_page: params[:limit] || 10}
-    @search = Search.search(@query)
-    @protected_areas = @search.results.paginate(pagination_opts)
+    @search = Search.search(@query, {filters: filters})
+  end
 
-    if @protected_areas.length == 0
-      @similar_search = true
-      @search = Search.search_for_similar(@query)
-      @protected_areas = @search.results.paginate(pagination_opts)
+  private
 
-      params[:q] = @search.query
+  ALLOWED_FILTERS = ['type']
+
+  def filters
+    filters = []
+
+    params.each do |param, value|
+      filters.push({name: param, value: value}) if ALLOWED_FILTERS.include? param
     end
+
+    filters
   end
 end

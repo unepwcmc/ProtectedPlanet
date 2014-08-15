@@ -5,4 +5,41 @@ class SearchControllerTest < ActionController::TestCase
     get :index
     assert_response :success
   end
+
+  test 'GET :index, given a query, searches for that query' do
+    search_term = 'manbone'
+
+    results = [{
+      results: 'go here'
+    }]
+    results_mock = mock()
+    results_mock.stubs(:results).returns(results)
+
+    Search.
+      expects(:search).
+      with(search_term, {filters: []}).
+      returns(results_mock)
+
+    get :index, q: search_term
+
+    assert_response :success
+    assert_equal results_mock, assigns(:search)
+  end
+
+  test 'GET :index, given a query and a type filter, search for that
+   query with the filter option' do
+    search_term = 'manbone'
+
+    results_mock = mock()
+    results_mock.stubs(:results).returns([])
+
+    Search.
+      expects(:search).
+      with(search_term, {filters: [{name: 'type', value: 'country'}]}).
+      returns(results_mock)
+
+    get :index, q: search_term, type: 'country'
+
+    assert_response :success
+  end
 end

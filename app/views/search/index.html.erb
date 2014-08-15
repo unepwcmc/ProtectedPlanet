@@ -32,17 +32,10 @@
 
       <section class="search-results">
         <h4>
-          <% if @similar_search %>
-            <strong>No results found for "<%= @query %>"</strong> -
-          <% end %>
-
-          Showing <%= @protected_areas.count %> <%= 'result'.pluralize @protected_areas.count %> for "<%= @search.query %>"
+          Showing <%= @search.results.count %> <%= 'result'.pluralize @search.results.count %> for "<%= @query %>"
         </h4>
-        <%= render 'search_results', protected_areas: @protected_areas %>
-      </section>
 
-      <%= will_paginate(@protected_areas,
-            :previous_label => "\u276E", :next_label => "\u276F") %>
+      </section>
     <% end %>
   </main>
 </div>
