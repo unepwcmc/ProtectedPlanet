@@ -21,7 +21,9 @@
           <%= render 'type_facets' %>
         </div>
 
-        <%= render 'search_results', search: @search %>
+        <ul>
+          <%= render partial: 'search_result', collection: @search.results %>
+        </ul>
       </section>
     <% end %>
   </main>
