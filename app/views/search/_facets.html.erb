@@ -1,0 +1,13 @@
+<ul>
+  <% facets.each do |name, models| %>
+    <li>
+      <h5><%= name.humanize %></h5>
+
+      <ul>
+        <% models.each do |model| %>
+          <li><%= model[:model].name %> (<%= model[:count] %>)</li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>

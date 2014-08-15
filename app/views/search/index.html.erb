@@ -9,25 +9,7 @@
       <aside class="search-filters">
         <h4>Filter Your Results</h4>
 
-        <ul>
-          <li>
-            <h5>Location</h5>
-
-            <ul>
-              <li>United States</li>
-              <li>United Kingdom</li>
-            </ul>
-          </li>
-
-          <li>
-            <h5>IUCN Category</h5>
-
-            <ul>
-              <li>Not Reported</li>
-              <li>IV</li>
-            </ul>
-          </li>
-        </ul>
+        <%= render 'facets', facets: @search.aggregations %>
       </aside>
 
       <section class="search-results">
@@ -36,13 +18,10 @@
         </h4>
 
         <div class="search-navigation">
-          <ul>
-            <li><a href="#" class="btn selected">All</a></li>
-            <li><a href="#" class="btn">Protected Areas</a></li>
-            <li><a href="#" class="btn">Countries</a></li>
-            <li><a href="#" class="btn">Regions</a></li>
-          </ul>
+          <%= render 'type_facets' %>
         </div>
+
+        <%= render 'search_results', search: @search %>
       </section>
     <% end %>
   </main>
