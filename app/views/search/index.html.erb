@@ -14,7 +14,7 @@
 
       <section class="search-results">
         <h4>
-          Showing <%= @search.results.count %> <%= 'result'.pluralize @search.results.count %> for "<%= @query %>"
+          Showing <%= @search.count %> <%= 'result'.pluralize @search.results.count %> for "<%= @query %>"
         </h4>
 
         <%= render 'type_facets' %>

@@ -130,4 +130,25 @@ class TestSearch < ActiveSupport::TestCase
     assert_kind_of Country, country_aggregations.second[:model]
     assert_equal   10, country_aggregations.second[:count]
   end
+
+  test '.count returns the total count of the result set, rather than
+   array length, so that pagination works correctly' do
+    search_query = "manbone"
+
+    results_object = {
+      "hits" => {
+        "total" => 42
+      }
+    }
+
+    search_mock = mock()
+    search_mock.
+      expects(:search).
+      returns(results_object)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    results_count = Search.search(search_query).count
+
+    assert_equal 42, results_count
+  end
 end

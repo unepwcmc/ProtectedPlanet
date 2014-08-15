@@ -24,6 +24,10 @@ class Search
     end
   end
 
+  def count
+    @query_results["hits"]["total"]
+  end
+
   def aggregations
     aggs_by_model = {}
 
