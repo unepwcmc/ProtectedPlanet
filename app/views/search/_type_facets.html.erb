@@ -1,6 +1,17 @@
 <ul class="search-navigation">
-  <li class="selected"><a href="#" class="btn">All</a></li>
-  <li><a href="#" class="btn">Protected Areas</a></li>
-  <li><a href="#" class="btn">Countries</a></li>
-  <li><a href="#" class="btn">Regions</a></li>
+  <%= type_li_tag('', params[:type]) do %>
+    <%= link_to "All", search_path(q: @query), class: "btn" %>
+  <% end %>
+
+  <%= type_li_tag('protected_area', params[:type]) do %>
+    <%= link_to "Protected Areas", search_path(q: @query, type: 'protected_area'), class: "btn" %>
+  <% end %>
+
+  <%= type_li_tag('country', params[:type]) do %>
+    <%= link_to "Countries", search_path(q: @query, type: 'country'), class: "btn" %>
+  <% end %>
+
+  <%= type_li_tag('region', params[:type]) do %>
+    <%= link_to "Regions", search_path(q: @query, type: 'region'), class: "btn" %>
+  <% end %>
 </ul>
