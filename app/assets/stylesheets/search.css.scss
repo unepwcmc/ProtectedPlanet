@@ -8,16 +8,23 @@
 
   form {
     background: #f1f1f1;
-    padding: 10px;
     border: 1px solid #dadada;
     @include border-radius(5px);
 
     input {
       font-size: 1.3em;
-      width: 88%;
+      width: 880px;
       border: none;
       padding: 5px;
+      padding-left: 15px;
       background: #f1f1f1;
+    }
+
+    button {
+      padding: 5px 10px;
+      margin-top: 6px;
+      margin-right: 7px;
+      float: right;
     }
   }
 }
@@ -43,6 +50,7 @@
   > ul {
     padding: 20px 30px;
     border-top: 1px solid $grey;
+    background: #F1F1F1;
 
     > li {
       h5 {
@@ -77,8 +85,13 @@
 
   h3 {
     a {
+      color: #454A60;
       font-weight: bold;
       text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -91,26 +104,40 @@
     background: #f1f1f1;
     padding: 20px 0 20px 30px;
     line-height: 1.5em;
+
+    p {
+      a {
+        font-weight: normal;
+        color: inherit;
+
+        &:hover {
+          text-decoration: none;
+        }
+      }
+    }
+
+    &:last-child {
+      border-bottom: 0;
+    }
   }
 }
 
 .search-navigation {
   border-top: 1px solid $grey;
+  border-bottom: 1px solid $grey;
+
+  height: 42px;
 
   li {
-    display: inline;
-  }
+    text-align: center;
 
-  .btn {
-    box-sizing: border-box;
+    display: inline-block;
+    float: left;
+
     height: 40px;
-    color: inherit;
-    width: 24%;
-    background: none;
-    border-radius: 0;
-
     margin: 0;
-    border-bottom: 1px solid $grey;
+    padding-top: 10px;
+
     border-right: 1px solid $grey;
 
     &:last-child {
@@ -118,8 +145,23 @@
     }
 
     &.selected, &:hover {
+      cursor: pointer;
       border-bottom: 5px solid #4194D4;
       background: white;
+    }
+  }
+
+  .btn {
+    box-sizing: border-box;
+    color: inherit;
+    background: none;
+    border-radius: 0;
+    text-decoration: none;
+
+    width: 162px;
+
+    &:hover {
+      background: none;
     }
   }
 }

@@ -17,9 +17,7 @@
           Showing <%= @search.results.count %> <%= 'result'.pluralize @search.results.count %> for "<%= @query %>"
         </h4>
 
-        <div class="search-navigation">
-          <%= render 'type_facets' %>
-        </div>
+        <%= render 'type_facets' %>
 
         <ul>
           <%= render partial: 'search_result', collection: @search.results %>
