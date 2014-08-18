@@ -6,6 +6,8 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     import_mock.expects(:finalise)
     ImportTools.stubs(:current_import).returns(import_mock)
 
+    Search.stubs(:reindex)
+    Download.stubs(:make_current)
     ImportTools::WebHandler.stubs(:clear_cache)
     ImportTools::WebHandler.stubs(:under_maintenance).yields
 
@@ -17,11 +19,12 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     ImportWorkers::FinaliserWorker.new.perform
   end
 
-  test '.perform refreshes cache and search index' do
+  test '.perform refreshes cache, search index, and updates S3 downloads' do
     ImportTools.stubs(:current_import).returns(stub_everything)
     ImportTools::WebHandler.stubs(:under_maintenance).yields
 
     Search.expects(:reindex)
+    Download.expects(:make_current)
     ImportTools::WebHandler.expects(:clear_cache)
 
     ImportWorkers::FinaliserWorker.new.perform
