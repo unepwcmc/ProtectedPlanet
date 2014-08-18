@@ -49,4 +49,24 @@ class SearchControllerTest < ActionController::TestCase
 
     assert_response :success
   end
+
+  test 'GET :index, given an integer filter passed as a string, converts
+   the string to an integer before using it for search' do
+    search_term = 'manbone'
+
+    results = [ FactoryGirl.create(:protected_area) ]
+    results_mock = mock()
+    results_mock.stubs(:results).returns(results)
+    results_mock.stubs(:aggregations).returns([])
+    results_mock.stubs(:count).returns(0)
+
+    Search.
+      expects(:search).
+      with(search_term, {filters: [{name: 'country', value: 123}]}).
+      returns(results_mock)
+
+    get :index, q: search_term, country: "123"
+
+    assert_response :success
+  end
 end

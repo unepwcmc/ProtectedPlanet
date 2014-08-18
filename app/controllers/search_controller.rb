@@ -1,4 +1,6 @@
 class SearchController < ApplicationController
+  before_filter :convert_integer_filters
+
   def index
     return unless @query = params[:q]
 
@@ -7,7 +9,8 @@ class SearchController < ApplicationController
 
   private
 
-  ALLOWED_FILTERS = ['type']
+  ALLOWED_FILTERS = ['type', 'country']
+  INTEGER_FILTERS = ['country']
 
   def filters
     filters = []
@@ -17,5 +20,15 @@ class SearchController < ApplicationController
     end
 
     filters
+  end
+
+  # Rails params are passed as string, but Elastic Search depends on
+  # queries being given as the correct types.
+  def convert_integer_filters
+    INTEGER_FILTERS.each do |filter_name|
+      if params[filter_name].present?
+        params[filter_name] = params[filter_name].to_i
+      end
+    end
   end
 end
