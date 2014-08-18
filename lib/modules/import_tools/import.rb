@@ -11,17 +11,23 @@ class ImportTools::Import
     unless id
       lock_import
       create_db
+      self.use_import_db = true
     end
   end
 
-  def with_context &block
-    pg_handler.with_db(db_name, &block)
+  def use_import_db= import_db_on
+    if import_db_on
+      pg_handler.connect_to(db_name)
+    else
+      pg_handler.connect_to(Rails.configuration.database_configuration[Rails.env]['database'])
+    end
   end
 
   def finalise
     swap_databases
     add_to_completed_imports
   ensure
+    self.use_import_db = false
     unlock_import
   end
 

@@ -11,13 +11,14 @@ class ImportToolsImportTest < ActiveSupport::TestCase
 
   test '#new tries to lock the import' do
     ImportTools::Import.any_instance.stubs(:create_db)
+    ImportTools::Import.any_instance.stubs(:use_import_db=)
     ImportTools::Import.any_instance.expects(:lock_import)
 
     ImportTools::Import.new
   end
 
   test '#new raises an exception if the lock fails' do
-    ImportTools::Import.any_instance.stubs(:create_db)
+    ImportTools::Import.any_instance.expects(:create_db).never
     ImportTools::RedisHandler.any_instance.stubs(:lock).returns(false)
 
     assert_raise ImportTools::AlreadyRunningImportError do
@@ -25,20 +26,12 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     end
   end
 
-  test '#new creates a DB with the given name' do
+  test '#new creates and seeds a DB with the given name' do
     ImportTools::Import.any_instance.stubs(:lock_import)
     ImportTools::Import.any_instance.expects(:create_db)
+    ImportTools::Import.any_instance.stubs(:use_import_db=)
 
     ImportTools::Import.new
-  end
-
-  test '.with_context executes the block code using the temporary DB' do
-    ImportTools::Import.any_instance.stubs(:create_db)
-    ImportTools::Import.any_instance.stubs(:lock_import).returns(true)
-    ImportTools::PostgresHandler.any_instance.expects(:with_db).yields
-
-    import = ImportTools::Import.new
-    import.with_context{}
   end
 
   test '.started_at returns a Time instance created from the import id (timestamp)' do

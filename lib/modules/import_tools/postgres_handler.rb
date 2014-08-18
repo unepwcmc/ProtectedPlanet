@@ -5,26 +5,29 @@ class ImportTools::PostgresHandler
     self.current_conn_values = ActiveRecord::Base.configurations[Rails.env]
   end
 
-  def with_db db_name, &block
+  def connect_to db_name
     pg_conn_values = current_conn_values.merge('database' => db_name)
     ActiveRecord::Base.establish_connection pg_conn_values
-    block.call(ActiveRecord::Base.connection)
+    ActiveRecord::Base.connection
   end
 
   def create_database database_name
-    with_db('postgres') { |connection| connection.create_database(database_name) }
+    connection = connect_to('postgres')
+    connection.create_database(database_name)
   end
 
   def drop_database database_name
     close_connections_to(database_name)
-    with_db('postgres') { |connection| connection.drop_database(database_name) }
+    connection = connect_to('postgres')
+    connection.drop_database(database_name)
   end
 
   def rename_database database_name, new_database_name
-    query = "ALTER DATABASE #{database_name} RENAME TO #{new_database_name}"
-
     close_connections_to(database_name)
-    with_db('postgres') { |connection| connection.execute(query) }
+
+    query = "ALTER DATABASE #{database_name} RENAME TO #{new_database_name}"
+    connection = connect_to('postgres')
+    connection.execute(query)
   end
 
   def seed database_name, dump_path
@@ -52,6 +55,8 @@ class ImportTools::PostgresHandler
       WHERE pg_stat_activity.datname = '#{database_name}'
         AND pid <> pg_backend_pid();
     """.squish
-    with_db('postgres') { |connection| connection.execute(query) }
+
+    connection = connect_to('postgres')
+    connection.execute(query)
   end
 end
