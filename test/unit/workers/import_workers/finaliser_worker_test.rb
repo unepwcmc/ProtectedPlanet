@@ -16,4 +16,14 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     ImportTools::WebHandler.expects(:under_maintenance)
     ImportWorkers::FinaliserWorker.new.perform
   end
+
+  test '.perform refreshes cache and search index' do
+    ImportTools.stubs(:current_import).returns(stub_everything)
+    ImportTools::WebHandler.stubs(:under_maintenance).yields
+
+    Search.expects(:reindex)
+    ImportTools::WebHandler.expects(:clear_cache)
+
+    ImportWorkers::FinaliserWorker.new.perform
+  end
 end

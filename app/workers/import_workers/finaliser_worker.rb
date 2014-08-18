@@ -1,10 +1,11 @@
 class ImportWorkers::FinaliserWorker
   include Sidekiq::Worker
+  sidekiq_options :retry => false
 
   def perform
     ImportTools::WebHandler.under_maintenance do
       finalise_import
-      clear_cache
+      refresh_data
     end
   end
 
@@ -15,7 +16,8 @@ class ImportWorkers::FinaliserWorker
     import.finalise
   end
 
-  def clear_cache
+  def refresh_data
+    Search.reindex
     ImportTools::WebHandler.clear_cache
   end
 end
