@@ -9,8 +9,8 @@ class SearchController < ApplicationController
 
   private
 
-  ALLOWED_FILTERS = ['type', 'country']
-  INTEGER_FILTERS = ['country']
+  ALLOWED_FILTERS = ['type', 'country', 'iucn_category', 'designation', 'region']
+  INTEGER_FILTERS = ['country', 'iucn_category', 'designation', 'region']
 
   def filters
     filters = []

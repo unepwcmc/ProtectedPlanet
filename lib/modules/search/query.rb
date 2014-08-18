@@ -43,7 +43,10 @@ class Search::Query
 
   FILTERS = {
     type: { type: 'type' },
-    country: { type: 'nested', path: 'countries.region', term: 'countries.region.id', required: true }
+    country: { type: 'nested', path: 'countries', field: 'countries.id', required: true },
+    region: { type: 'nested', path: 'countries.region', field: 'countries.region.id', required: true },
+    iucn_category: { type: 'nested', path: 'iucn_category', field: 'iucn_category.id', required: true },
+    designation: { type: 'nested', path: 'designation', field: 'designation.id', required: true }
   }
 
   def filters
