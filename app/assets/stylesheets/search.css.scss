@@ -47,6 +47,14 @@
   float: right;
   width: 30%;
 
+  a {
+    font-weight: normal;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
   > ul {
     padding: 20px 30px;
     border-top: 1px solid $grey;
