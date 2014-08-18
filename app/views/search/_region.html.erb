@@ -3,11 +3,11 @@
   <div>
     <h3>
       <a href="<%= regional_stats_path(iso: model.iso) %>"><%= model.name %></a> | 
-      <small><%= model.protected_areas.count %> Protected Areas in this country</small>
+      <small><%= commaify model.protected_areas.count %> Protected Areas in this region</small>
     </h3>
 
     <p>
-      <%= StatisticPresenter.new(model).percentage_pa_cover %>% of this country is covered by Protected Areas
+      <%= StatisticPresenter.new(model).percentage_pa_cover %>% of this region is covered by Protected Areas
     </p>
   </div>
 </li>
