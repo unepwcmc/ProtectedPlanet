@@ -1,5 +1,5 @@
 <ul class="search-navigation">
-  <%= type_li_tag('', params[:type]) do %>
+  <%= type_li_tag(nil, params[:type]) do %>
     <%= link_to "All", search_path(q: @query), class: "btn" %>
   <% end %>
 
