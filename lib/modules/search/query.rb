@@ -29,16 +29,16 @@ class Search::Query
   }
 
   def matchers
-    hydrated_matchers = {}
+    constructed_matchers = {}
 
     MATCHERS.each do |type, matchers|
       matchers.each do |matcher|
-        hydrated_matchers[type.to_s] ||= []
-        hydrated_matchers[type.to_s].push Search::Matcher.new(@term, matcher).to_h
+        constructed_matchers[type.to_s] ||= []
+        constructed_matchers[type.to_s].push Search::Matcher.new(@term, matcher).to_h
       end
     end
 
-    hydrated_matchers
+    constructed_matchers
   end
 
   FILTERS = {

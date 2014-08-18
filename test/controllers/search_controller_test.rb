@@ -9,11 +9,13 @@ class SearchControllerTest < ActionController::TestCase
   test 'GET :index, given a query, searches for that query' do
     search_term = 'manbone'
 
-    results = [{
-      results: 'go here'
-    }]
+    results = [
+      FactoryGirl.create(:protected_area)
+    ]
     results_mock = mock()
     results_mock.stubs(:results).returns(results)
+    results_mock.stubs(:aggregations).returns([])
+    results_mock.stubs(:count).returns(0)
 
     Search.
       expects(:search).
@@ -30,8 +32,13 @@ class SearchControllerTest < ActionController::TestCase
    query with the filter option' do
     search_term = 'manbone'
 
+    results = [
+      FactoryGirl.create(:protected_area)
+    ]
     results_mock = mock()
-    results_mock.stubs(:results).returns([])
+    results_mock.stubs(:results).returns(results)
+    results_mock.stubs(:aggregations).returns([])
+    results_mock.stubs(:count).returns(0)
 
     Search.
       expects(:search).
