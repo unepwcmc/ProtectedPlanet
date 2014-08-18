@@ -5,17 +5,20 @@ class Search::Query
   end
 
   def to_h
-    base_query = template
-    base_query["filtered"]["query"] = {"bool" => matchers}
+    base_query = {
+      "filtered" => {
+        "query" => {
+          "bool" => matchers
+        }
+      }
+    }
+
     base_query["filtered"]["filter"] = {"and" => filters} if @options[:filters].present?
 
     base_query
   end
 
   private
-
-  TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'templates')
-  TEMPLATE = File.read(File.join(TEMPLATE_DIRECTORY, 'query_base.json'))
 
   MATCHERS = {
     should: [
@@ -60,9 +63,5 @@ class Search::Query
     end
 
     constructed_filters
-  end
-
-  def template
-    JSON.parse(TEMPLATE)
   end
 end
