@@ -13,6 +13,7 @@ class TestCartoDbMerger < ActiveSupport::TestCase
 
   test 'given an array of table names, .merge concatenates the tables together in CartoDB' do
     table_names = ['poly_1', 'poly_2', 'poly_3']
+    default_table = 'default'
 
     first_expected_query = '''
       INSERT INTO poly_1 (wdpaid, the_geom) SELECT wdpaid, the_geom FROM poly_2;
@@ -32,8 +33,21 @@ class TestCartoDbMerger < ActiveSupport::TestCase
       with({query: {api_key: '1234', q: second_expected_query}}).
       to_return(:status => 200, :body => "", :headers => {})
 
+
+    rename_query = """
+      BEGIN;
+      DELETE FROM default;
+      INSERT INTO default SELECT * FROM poly_1;
+      DROP TABLE poly_1;
+      COMMIT;
+      """.squish
+
+    stub_request(:get, "https://chewie.cartodb.com/api/v2/sql/").
+      with({query: {api_key: '1234', q: rename_query}}).
+      to_return(:status => 200, :body => "", :headers => {})
+
     cartodb_merger = CartoDb::Merger.new "chewie", "1234"
-    response = cartodb_merger.merge table_names, ['wdpaid', 'the_geom']
+    response = cartodb_merger.merge table_names, ['wdpaid', 'the_geom'], default_table
 
     assert_equal true, response, "Expected .merge to return true if successful"
   end
@@ -43,7 +57,7 @@ class TestCartoDbMerger < ActiveSupport::TestCase
       to_return(:status => 400)
 
     cartodb_merger = CartoDb::Merger.new "chewie", "1234"
-    response = cartodb_merger.merge ['an', 'table'], []
+    response = cartodb_merger.merge ['an', 'table'], [], ''
     assert_equal false, response, "Expected .merge to return false if unsuccessful"
   end
 end
