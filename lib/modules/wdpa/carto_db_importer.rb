@@ -7,7 +7,6 @@ class Wdpa::CartoDbImporter
   def initialize wdpa_release
     @wdpa_release = wdpa_release
     @shapefiles = []
-
     @cartodb_username = Rails.application.secrets.cartodb_username
     @cartodb_api_key = Rails.application.secrets.cartodb_api_key
   end
@@ -20,6 +19,7 @@ class Wdpa::CartoDbImporter
 
   STANDARD_COLUMNS = ['wdpaid', 'SHAPE']
   CARTODB_COLUMNS = ['wdpaid', 'the_geom']
+  CARTODB_DEFAULT_TABLE = 'wdpa_polygons'
 
   def split
     @wdpa_release.geometry_tables.each do |table, _|
@@ -42,5 +42,8 @@ class Wdpa::CartoDbImporter
     table_names = @shapefiles.map(&:filename)
     cartodb_merger = CartoDb::Merger.new @cartodb_username, @cartodb_api_key
     cartodb_merger.merge table_names, CARTODB_COLUMNS
+    cartodb_name_changer = CartoDb::NameChanger.new @cartodb_username, @cartodb_api_key
+    cartodb_name_changer.rename CARTODB_DEFAULT_TABLE,table_names[0]
   end
+
 end

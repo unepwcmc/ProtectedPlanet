@@ -38,9 +38,15 @@ class TestCartoDbImporter < ActiveSupport::TestCase
       'points-1', 'points-2', 'points-3', 'points-4', 'points-5'
     ]
 
+    default_cartodb_table = 'wdpa_polygons'
+
     CartoDb::Merger.any_instance.
       expects(:merge).
       with(expected_table_names, ["wdpaid", "the_geom"])
+
+    CartoDb::NameChanger.any_instance.
+      expects(:rename).
+      with(default_cartodb_table, 'points-1')
 
     Wdpa::CartoDbImporter.import wdpa_release
   end
