@@ -13,7 +13,7 @@ class CartoDb::Merger
     @default_table = default_table
 
     merge_query.each do |query|
-      response = query_cartodb(query)
+      response = query_cartodb query
       return false unless response.code == 200
     end
 
@@ -24,7 +24,7 @@ class CartoDb::Merger
 
   def join_tables
     merge_query.each do |query|
-      response = query_cartodb(query)
+      response = query_cartodb query
 
       return false unless response.code == 200
     end
@@ -32,8 +32,8 @@ class CartoDb::Merger
 
   def rename
     temp_table = @table_names[0]
-    query = rename_transaction(temp_table)
-    response = query_cartodb(query)
+    query = rename_transaction temp_table
+    response = query_cartodb query
 
     return false unless response.code == 200
   end
