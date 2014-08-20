@@ -6,7 +6,7 @@ class @ProtectedAreaMap
 
   _addSelectedStyle: (args) ->
     opacity = if args.opacity? then args.opacity else .5
-    lineWidth = if args.lineWidth? then args.lineWidth else 1
+    lineWidth = if args.lineWidth? then args.lineWidth else 0.05
     args.cartocss += """
       ##{args.table}[#{args.attrName} = #{args.attrVal}]{
         line-color:#D41623;
@@ -59,9 +59,9 @@ class @ProtectedAreaMap
     cartocss = """
       #wdpapoly_july2014_0{
         line-color:#40541b;
-        line-width:0.4;
+        line-width:0.05;
         polygon-fill:#83ad35;
-        polygon-opacity:0.4;}
+        polygon-opacity:0.7;}
     """
     sublayers = [
       sql: "select * from wdpapoly_july2014_0"
