@@ -42,7 +42,7 @@ class TestCartoDbImporter < ActiveSupport::TestCase
 
     CartoDb::Merger.any_instance.
       expects(:merge).
-      with(expected_table_names, ["wdpaid", "the_geom"])
+      with(expected_table_names, ["wdpaid", "the_geom"], default_cartodb_table)
 
     Wdpa::CartoDbImporter.import wdpa_release
   end

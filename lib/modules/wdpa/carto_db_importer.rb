@@ -41,7 +41,7 @@ class Wdpa::CartoDbImporter
   def merge
     table_names = @shapefiles.map(&:filename)
     cartodb_merger = CartoDb::Merger.new @cartodb_username, @cartodb_api_key
-    cartodb_merger.merge table_names, CARTODB_COLUMNS
+    cartodb_merger.merge table_names, CARTODB_COLUMNS, CARTODB_DEFAULT_TABLE
   end
 
 end
