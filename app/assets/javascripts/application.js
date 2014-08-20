@@ -13,6 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require modernizr.custom.30580
+//= require d3
 //= require leaflet-src
 //= require cartodb.core
 //= require_tree .

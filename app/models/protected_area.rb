@@ -1,4 +1,6 @@
 class ProtectedArea < ActiveRecord::Base
+  include GeometryConcern
+
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
@@ -14,8 +16,6 @@ class ProtectedArea < ActiveRecord::Base
   belongs_to :wikipedia_article
 
   after_create :create_slug
-
-  scope :without_geometry, -> { select(self.column_names - ["the_geom"]) }
 
   def bounds
     [
@@ -56,5 +56,12 @@ class ProtectedArea < ActiveRecord::Base
 
   def db
     ActiveRecord::Base.connection
+  end
+
+  def self.with_valid_iucn_categories
+    valid_categories = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
+    joins(:iucn_category).where(
+      "iucn_categories.name IN (#{valid_categories})"
+    )
   end
 end

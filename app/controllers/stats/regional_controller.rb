@@ -1,11 +1,13 @@
 class Stats::RegionalController < ApplicationController
   def show
-    iso = params[:iso]
+    @region = Region.where(iso: params[:iso]).first
+    @presenter = StatisticPresenter.new @region
 
-    @region = Region.where(iso: iso).first
-    @number_of_pas = Stats::Regional.total_pas iso
-    @pas_with_iucn_category = Stats::Regional.pas_with_iucn_category iso
-    @number_of_designations = Stats::Regional.designation_count iso
-    @countries_providing_data = Stats::Regional.countries_providing_data iso
+    @number_of_pas = @region.protected_areas.count
+    @pas_with_iucn_category = @region.protected_areas_with_iucn_categories.count
+    @number_of_designations = @region.designations.count
+    @countries_providing_data = @region.countries_providing_data.count
+
+    @focus = 'region'
   end
 end

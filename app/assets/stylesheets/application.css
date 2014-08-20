@@ -16,6 +16,7 @@
  *= require 'modals'
  *= require 'home'
  *= require 'protected_areas'
+ *= require 'factsheet'
  *= require 'search'
  *= require 'stats'
  *= require 'static_pages'

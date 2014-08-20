@@ -1,2 +1,0 @@
-module Stats::RegionalHelper
-end
