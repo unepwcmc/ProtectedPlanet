@@ -7,7 +7,12 @@
 
     <% if @query %>
       <aside class="search-filters">
-        <h4>Filter Your Results</h4>
+        <h4>
+          Filter Your Results
+          <%= link_to search_path(q: @query), class: 'btn btn-primary blue filters-reset' do %>
+            <i class="fa fa-times"></i> Reset
+          <% end %>
+        </h4>
 
         <%= render 'facets', facets: @search.aggregations %>
       </aside>
