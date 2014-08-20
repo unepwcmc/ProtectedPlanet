@@ -7,7 +7,13 @@ ec2-54-90-50-225.compute-1.amazonaws.com
 [util]
 ec2-54-80-52-179.compute-1.amazonaws.com
 
+[elasticsearch]
+178.62.5.4
+[elasticsearch:vars]
+elasticsearch_node_name=elasticsearch-stage
+
 [all:children]
 web
 db
 util
+elasticsearch

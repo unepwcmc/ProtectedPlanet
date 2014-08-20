@@ -49,3 +49,12 @@
 
   roles:
     - postgresql-server
+
+- name: Setup elastic search nodes
+  hosts:
+    - elasticsearch
+  user: ubuntu
+  sudo: yes
+
+  roles:
+    - elasticsearch
