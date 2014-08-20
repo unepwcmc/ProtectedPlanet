@@ -69,4 +69,23 @@ class SearchControllerTest < ActionController::TestCase
 
     assert_response :success
   end
+
+  test 'GET :index, given a search term and a page number, paginates the
+   results' do
+    search_term = 'manbone'
+
+    results_mock = mock()
+    results_mock.stubs(:results).returns([])
+    results_mock.stubs(:aggregations).returns([])
+    results_mock.stubs(:count).returns(0)
+
+    Search.
+      expects(:search).
+      with(search_term, {filters: [], page: 2}).
+      returns(results_mock)
+
+    get :index, q: search_term, page: 2
+
+    assert_response :success
+  end
 end

@@ -47,15 +47,22 @@ class Search
 
   private
 
+  RESULTS_SIZE = 10
+
   def elastic_search
     @elastic_search ||= Elasticsearch::Client.new
   end
 
   def query
     {
-      size: 10,
+      size: RESULTS_SIZE,
+      from: offset,
       query: Search::Query.new(@search_term, @options).to_h,
       aggs: Search::Aggregation.all
     }
+  end
+
+  def offset
+    RESULTS_SIZE * (@options[:page] || 0)
   end
 end

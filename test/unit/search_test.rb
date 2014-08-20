@@ -12,6 +12,7 @@ class TestSearch < ActiveSupport::TestCase
       index: 'protected_areas',
       body: {
         size: 10,
+        from: 0,
         query: {
           "filtered" => {
             "query" => {
@@ -150,5 +151,26 @@ class TestSearch < ActiveSupport::TestCase
     results_count = Search.search(search_query).count
 
     assert_equal 42, results_count
+  end
+
+  test '#search, given a search term and a page, offsets the
+   Elasticsearch query to correctly paginate' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
+
+    expected_query = {
+      size: 10,
+      from: 20,
+      query: {},
+      aggs: {}
+    }
+
+    search_mock = mock()
+    search_mock.
+      expects(:search).
+      with(index: 'protected_areas', body: expected_query)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    Search.search("manbone", page: 2)
   end
 end
