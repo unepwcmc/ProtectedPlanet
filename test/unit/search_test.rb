@@ -160,7 +160,7 @@ class TestSearch < ActiveSupport::TestCase
 
     expected_query = {
       size: 10,
-      from: 20,
+      from: 10,
       query: {},
       aggs: {}
     }
@@ -172,5 +172,44 @@ class TestSearch < ActiveSupport::TestCase
     Elasticsearch::Client.stubs(:new).returns(search_mock)
 
     Search.search("manbone", page: 2)
+  end
+
+  test '.current_page returns the current page number' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
+
+    search_mock = mock()
+    search_mock.stubs(:search)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    page = Search.search("manbone", page: 2).current_page
+
+    assert_equal 2, page
+  end
+
+  test '.current_page returns 1 if the current page is not set' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
+
+    search_mock = mock()
+    search_mock.stubs(:search)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    page = Search.search("manbone").current_page
+
+    assert_equal 1, page
+  end
+
+  test '.total_pages returns the total number of results pages' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
+
+    search_mock = mock()
+    search_mock.stubs(:search).returns({"hits" => {"total" => 400}})
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    pages = Search.search("manbone").total_pages
+
+    assert_equal 40, pages
   end
 end

@@ -45,6 +45,14 @@ class Search
     aggs_by_model
   end
 
+  def current_page
+    @options[:page] || 1
+  end
+
+  def total_pages
+    count / RESULTS_SIZE
+  end
+
   private
 
   RESULTS_SIZE = 10
@@ -63,6 +71,12 @@ class Search
   end
 
   def offset
-    RESULTS_SIZE * (@options[:page] || 0)
+    page = @options[:page]
+
+    if page && page > 0
+      RESULTS_SIZE * (page - 1)
+    else
+      0
+    end
   end
 end

@@ -23,6 +23,8 @@
           <%= render partial: 'search_result', collection: @search.results %>
         </ul>
       </section>
+
+      <%= will_paginate @search %>
     <% end %>
   </main>
 </div>

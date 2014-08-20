@@ -15,6 +15,8 @@ class SearchControllerTest < ActionController::TestCase
     results_mock = mock()
     results_mock.stubs(:results).returns(results)
     results_mock.stubs(:aggregations).returns([])
+    results_mock.stubs(:total_pages).returns(0)
+    results_mock.stubs(:current_page).returns(0)
     results_mock.stubs(:count).returns(0)
 
     Search.
@@ -38,6 +40,8 @@ class SearchControllerTest < ActionController::TestCase
     results_mock = mock()
     results_mock.stubs(:results).returns(results)
     results_mock.stubs(:aggregations).returns([])
+    results_mock.stubs(:total_pages).returns(0)
+    results_mock.stubs(:current_page).returns(0)
     results_mock.stubs(:count).returns(0)
 
     Search.
@@ -58,6 +62,8 @@ class SearchControllerTest < ActionController::TestCase
     results_mock = mock()
     results_mock.stubs(:results).returns(results)
     results_mock.stubs(:aggregations).returns([])
+    results_mock.stubs(:total_pages).returns(0)
+    results_mock.stubs(:current_page).returns(0)
     results_mock.stubs(:count).returns(0)
 
     Search.
@@ -76,6 +82,8 @@ class SearchControllerTest < ActionController::TestCase
 
     results_mock = mock()
     results_mock.stubs(:results).returns([])
+    results_mock.stubs(:total_pages).returns(0)
+    results_mock.stubs(:current_page).returns(0)
     results_mock.stubs(:aggregations).returns([])
     results_mock.stubs(:count).returns(0)
 
