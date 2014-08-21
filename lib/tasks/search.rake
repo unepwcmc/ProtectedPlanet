@@ -3,11 +3,11 @@ namespace :search do
   task reindex: :environment do
     logger = Logger.new(STDOUT)
 
-    Elasticsearch::Client.new.delete_by_query(
-      index: 'protected_areas', q: '*:*'
-    )
-
+    logger.info "Dropping index."
+    Search::Index.drop
+    logger.info "Populating index."
     Search::Index.index_all
+
     logger.info "Reindex complete."
   end
 end
