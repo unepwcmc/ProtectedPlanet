@@ -58,7 +58,9 @@ class Search
   RESULTS_SIZE = 10
 
   def elastic_search
-    @elastic_search ||= Elasticsearch::Client.new
+    @elastic_search ||= Elasticsearch::Client.new(
+      url: Rails.application.secrets.elasticsearch['url']
+    )
   end
 
   def query
