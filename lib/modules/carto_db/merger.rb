@@ -7,10 +7,10 @@ class CartoDb::Merger
     @options = { query: { api_key: api_key } }
   end
 
-  def merge table_names, column_names, default_table
+  def merge table_names, column_names
     @table_names = table_names
     @column_names = column_names
-    @default_table = default_table
+    @default_table = table_names[0].split('_')[0]
 
     merge_query.each do |query|
       response = query_cartodb query

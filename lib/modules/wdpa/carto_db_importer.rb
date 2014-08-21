@@ -19,7 +19,7 @@ class Wdpa::CartoDbImporter
 
   STANDARD_COLUMNS = ['wdpaid', 'SHAPE']
   CARTODB_COLUMNS = ['wdpaid', 'the_geom']
-  CARTODB_DEFAULT_TABLE = 'wdpa_polygons'
+
 
   def split
     @wdpa_release.geometry_tables.each do |table, _|
@@ -41,7 +41,7 @@ class Wdpa::CartoDbImporter
   def merge
     table_names = @shapefiles.map(&:filename)
     cartodb_merger = CartoDb::Merger.new @cartodb_username, @cartodb_api_key
-    cartodb_merger.merge table_names, CARTODB_COLUMNS, CARTODB_DEFAULT_TABLE
+    cartodb_merger.merge table_names, CARTODB_COLUMNS
   end
 
 end
