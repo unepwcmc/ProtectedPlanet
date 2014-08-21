@@ -1,14 +1,14 @@
 [web]
-ec2-54-89-116-224.compute-1.amazonaws.com
+stage.protectedplanet.net
 
 [db]
-ec2-54-90-50-225.compute-1.amazonaws.com
+db-stage.protectedplanet.net
 
 [util]
-ec2-54-80-52-179.compute-1.amazonaws.com
+util-stage.protectedplanet.net
 
 [elasticsearch]
-178.62.5.4
+ec2-54-81-197-189.compute-1.amazonaws.com
 [elasticsearch:vars]
 elasticsearch_node_name=elasticsearch-stage
 
