@@ -1,6 +1,3 @@
-require 'thread'
-require 'thwait'
-
 namespace :search do
   desc 'Reindex the full text search'
   task reindex: :environment do
