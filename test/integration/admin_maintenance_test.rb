@@ -53,6 +53,17 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
     assert_response 401
   end
 
+  test 'PUT /admin/clear_cache, given an authentication code, clears the Rails cache' do
+    cache_key = 'test_key'
+    Rails.cache.write(cache_key, 'value')
+
+    key = Rails.application.secrets.maintenance_mode_key
+    put('/admin/clear_cache', {}, {"X-Auth-Key" => key})
+
+    assert_response :success
+    assert_nil Rails.cache.read(cache_key)
+  end
+
   def teardown
     Turnout::MaintenanceFile.default.delete
   end

@@ -12,6 +12,7 @@ class TestSearch < ActiveSupport::TestCase
       index: 'protected_areas',
       body: {
         size: 10,
+        from: 0,
         query: {
           "filtered" => {
             "query" => {
@@ -22,7 +23,7 @@ class TestSearch < ActiveSupport::TestCase
                   { "nested" => { "path" => "sub_location", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "sub_location.english_name" ] } } } },
                   { "nested" => { "path" => "designation", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "designation.name" ] } } } },
                   { "nested" => { "path" => "iucn_category", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "iucn_category.name" ] } } } },
-                  { "multi_match" => { "query" => "*#{search_query}*", "fields" => [ "name", "original_name" ] } }
+                  { "function_score" => { "query" => { "multi_match" => { "query" => "*manbone*", "fields" => [ "name", "original_name" ] } }, "functions" => [ { "filter" => { "or" => [ { "type" => { "value" => "country"} }, { "type" => { "value" => "region"} } ] }, "boost_factor" => 15 } ] } }
                 ]
               }
             }
@@ -150,5 +151,65 @@ class TestSearch < ActiveSupport::TestCase
     results_count = Search.search(search_query).count
 
     assert_equal 42, results_count
+  end
+
+  test '#search, given a search term and a page, offsets the
+   Elasticsearch query to correctly paginate' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
+
+    expected_query = {
+      size: 10,
+      from: 10,
+      query: {},
+      aggs: {}
+    }
+
+    search_mock = mock()
+    search_mock.
+      expects(:search).
+      with(index: 'protected_areas', body: expected_query)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    Search.search("manbone", page: 2)
+  end
+
+  test '.current_page returns the current page number' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
+
+    search_mock = mock()
+    search_mock.stubs(:search)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    page = Search.search("manbone", page: 2).current_page
+
+    assert_equal 2, page
+  end
+
+  test '.current_page returns 1 if the current page is not set' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
+
+    search_mock = mock()
+    search_mock.stubs(:search)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    page = Search.search("manbone").current_page
+
+    assert_equal 1, page
+  end
+
+  test '.total_pages returns the total number of results pages' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
+
+    search_mock = mock()
+    search_mock.stubs(:search).returns({"hits" => {"total" => 400}})
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    pages = Search.search("manbone").total_pages
+
+    assert_equal 40, pages
   end
 end

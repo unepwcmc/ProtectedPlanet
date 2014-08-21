@@ -29,4 +29,12 @@ class IndexerTest < ActiveSupport::TestCase
 
     Search::Index.index ProtectedArea.without_geometry
   end
+
+  test '#index_all indexes all desired models' do
+    Search::Index.expects(:index).with(Country.without_geometry)
+    Search::Index.expects(:index).with(Region.without_geometry)
+    Search::Index.expects(:index).with(ProtectedArea.without_geometry)
+
+    Search::Index.index_all
+  end
 end

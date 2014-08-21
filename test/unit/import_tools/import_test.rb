@@ -11,13 +11,14 @@ class ImportToolsImportTest < ActiveSupport::TestCase
 
   test '#new tries to lock the import' do
     ImportTools::Import.any_instance.stubs(:create_db)
+    ImportTools::Import.any_instance.stubs(:use_import_db=)
     ImportTools::Import.any_instance.expects(:lock_import)
 
     ImportTools::Import.new
   end
 
   test '#new raises an exception if the lock fails' do
-    ImportTools::Import.any_instance.stubs(:create_db)
+    ImportTools::Import.any_instance.expects(:create_db).never
     ImportTools::RedisHandler.any_instance.stubs(:lock).returns(false)
 
     assert_raise ImportTools::AlreadyRunningImportError do
@@ -25,20 +26,12 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     end
   end
 
-  test '#new creates a DB with the given name' do
+  test '#new creates and seeds a DB with the given name' do
     ImportTools::Import.any_instance.stubs(:lock_import)
     ImportTools::Import.any_instance.expects(:create_db)
+    ImportTools::Import.any_instance.stubs(:use_import_db=)
 
     ImportTools::Import.new
-  end
-
-  test '.with_context executes the block code using the temporary DB' do
-    ImportTools::Import.any_instance.stubs(:create_db)
-    ImportTools::Import.any_instance.stubs(:lock_import).returns(true)
-    ImportTools::PostgresHandler.any_instance.expects(:with_db).yields
-
-    import = ImportTools::Import.new
-    import.with_context{}
   end
 
   test '.started_at returns a Time instance created from the import id (timestamp)' do
@@ -66,23 +59,12 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     assert import.completed?
   end
 
-  test '.finalise switches the maintenance mode twice' do
-    ImportTools::MaintenanceSwitcher.expects(:on)
-    ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
-    ImportTools::MaintenanceSwitcher.expects(:off)
-
-    import = ImportTools::Import.new(123)
-    import.finalise
-  end
-
   test '.finalise drops the old db and renames the new one' do
     import = ImportTools::Import.new(123)
 
-    test_db = Rails.configuration.database_configuration[Rails.env]
+    test_db = Rails.configuration.database_configuration[Rails.env]['database']
     import_db = "import_db_#{import.id}"
 
-    ImportTools::MaintenanceSwitcher.stubs(:on)
-    ImportTools::MaintenanceSwitcher.stubs(:off)
     ImportTools::PostgresHandler.any_instance.expects(:drop_database).with(test_db)
     ImportTools::PostgresHandler.any_instance.expects(:rename_database).with(import_db, test_db)
 
@@ -92,11 +74,18 @@ class ImportToolsImportTest < ActiveSupport::TestCase
   test '.finalise unlocks the import' do
     import = ImportTools::Import.new(123)
 
-    ImportTools::MaintenanceSwitcher.stubs(:on)
-    ImportTools::MaintenanceSwitcher.stubs(:off)
     ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
 
     ImportTools::RedisHandler.any_instance.expects(:unlock)
+
+    import.finalise
+  end
+
+  test '.finalise adds the import to the done imports' do
+    import = ImportTools::Import.new(123)
+
+    ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
+    ImportTools::RedisHandler.any_instance.expects(:add_to_previous_ids).with(123)
 
     import.finalise
   end

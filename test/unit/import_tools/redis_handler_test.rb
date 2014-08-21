@@ -48,4 +48,11 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
 
     assert @redis_handler.increase_property_and_compare(id, key_1, key_2)
   end
+
+  test '.add_to_previous_ids calls redis zadd with the given id' do
+    id = 123
+    @redis_handler.redis.expects(:zadd).with(anything, id, id.to_s)
+
+    @redis_handler.add_to_previous_ids(id)
+  end
 end

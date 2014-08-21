@@ -8,17 +8,17 @@ class DownloadTest < ActiveSupport::TestCase
     shapefile_download_zip_name = 'an_download-shapefile.zip'
     shapefile_zip_path = File.join(Rails.root, 'tmp', shapefile_download_zip_name)
     Download::Shapefile.expects(:generate).with(shapefile_zip_path, nil).returns(true)
-    S3.expects(:upload).with(shapefile_download_zip_name, shapefile_zip_path)
+    S3.expects(:upload).with("new_release/#{shapefile_download_zip_name}", shapefile_zip_path)
 
     csv_download_zip_name = 'an_download-csv.zip'
     csv_zip_path = File.join(Rails.root, 'tmp', csv_download_zip_name)
     Download::Csv.expects(:generate).with(csv_zip_path, nil).returns(true)
-    S3.expects(:upload).with(csv_download_zip_name, csv_zip_path)
+    S3.expects(:upload).with("new_release/#{csv_download_zip_name}", csv_zip_path)
 
     kml_download_zip_name = 'an_download-kml.zip'
     kml_zip_path = File.join(Rails.root, 'tmp', kml_download_zip_name)
     Download::Kml.expects(:generate).with(kml_zip_path, nil).returns(true)
-    S3.expects(:upload).with(kml_download_zip_name, kml_zip_path)
+    S3.expects(:upload).with("new_release/#{kml_download_zip_name}", kml_zip_path)
 
     download_success = Download.generate download_name
     assert download_success, "Expected Download.generate to return true on success"
@@ -80,9 +80,14 @@ class DownloadTest < ActiveSupport::TestCase
 
     Rails.application.secrets.aws_downloads_bucket = 'pp-downloads-development'
 
-    expected_url = "https://pp-downloads-development.s3.amazonaws.com/that-download-csv.zip"
+    expected_url = "https://pp-downloads-development.s3.amazonaws.com/#{Download::CURRENT_PREFIX}that-download-csv.zip"
     url = Download.link_to download_name, type
 
     assert_equal expected_url, url
+  end
+
+  test '.make_current moves all downloads to current folder in S3' do
+    S3.expects(:replace_all).with(Download::NEW_RELEASE_PREFIX, Download::CURRENT_PREFIX)
+    Download.make_current
   end
 end

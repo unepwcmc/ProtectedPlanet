@@ -4,13 +4,19 @@ class SearchController < ApplicationController
   def index
     return unless @query = params[:q]
 
-    @search = Search.search(@query, {filters: filters})
+    @search = Search.search(@query, search_options)
   end
 
   private
 
   ALLOWED_FILTERS = ['type', 'country', 'iucn_category', 'designation', 'region']
   INTEGER_FILTERS = ['country', 'iucn_category', 'designation', 'region']
+
+  def search_options
+    options = {filters: filters}
+    options[:page] = params[:page].to_i if params[:page].present?
+    options
+  end
 
   def filters
     filters = []

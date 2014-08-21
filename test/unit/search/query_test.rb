@@ -41,9 +41,27 @@ class SearchQueryTest < ActiveSupport::TestCase
                 }
               },
               {
-                "multi_match" => {
-                  "query" => "*manbone*",
-                  "fields" => [ "name", "original_name" ]
+                "function_score" => {
+                  "query" => {
+                      "multi_match" => {
+                          "query" => "*manbone*",
+                          "fields" => [
+                              "name",
+                              "original_name"
+                          ]
+                      }
+                  },
+                  "functions" => [
+                    {
+                      "filter" => {
+                        "or" => [
+                          { "type" => { "value" => "country"} },
+                          { "type" => { "value" => "region"} }
+                        ]
+                      },
+                      "boost_factor" => 15
+                    }
+                  ]
                 }
               }
             ]

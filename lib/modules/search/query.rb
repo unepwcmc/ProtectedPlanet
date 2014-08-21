@@ -27,7 +27,20 @@ class Search::Query
       { type: 'nested', path: 'sub_location', fields: ['sub_location.english_name'] },
       { type: 'nested', path: 'designation', fields: ['designation.name'] },
       { type: 'nested', path: 'iucn_category', fields: ['iucn_category.name'] },
-      { type: 'multi_match', fields: ['name', 'original_name' ] }
+      {
+        type: 'multi_match',
+        fields: ['name', 'original_name' ],
+        boost: true,
+        functions: [
+          "filter" => {
+            "or" => [
+              { "type" => { "value" => "country"} },
+              { "type" => { "value" => "region"} }
+            ]
+          },
+          "boost_factor" => 15
+        ]
+      }
     ]
   }
 
