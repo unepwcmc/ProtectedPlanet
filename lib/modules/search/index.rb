@@ -1,4 +1,10 @@
 class Search::Index
+  def self.index_all
+    [Country, Region, ProtectedArea].each do |model|
+      Search::Index.index model.without_geometry
+    end
+  end
+
   def self.index model_enumerable
     index = self.new model_enumerable
     index.index

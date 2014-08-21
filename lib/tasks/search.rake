@@ -7,11 +7,8 @@ namespace :search do
       index: 'protected_areas', q: '*:*'
     )
 
-    [Country, Region, ProtectedArea].each do |model|
-      logger.info "Reindexing #{model}...."
-      Search::Index.index model.without_geometry
-    end
-
+    logger.info "Reindexing..."
+    Search::Index.index_all
     logger.info "Reindex complete."
   end
 end
