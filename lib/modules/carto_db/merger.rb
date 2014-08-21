@@ -21,22 +21,6 @@ class CartoDb::Merger
     return true
   end
 
-  def join_tables
-    merge_query.each do |query|
-      response = query_cartodb query
-
-      return false unless response.code == 200
-    end
-  end
-
-  def insert_default_table
-    temp_table = @table_names[0]
-    query = rename_transaction temp_table
-    response = query_cartodb query
-
-    return false unless response.code == 200
-  end
-
   private
 
   def query_cartodb query
@@ -49,6 +33,14 @@ class CartoDb::Merger
       """INSERT INTO #{@table_names[0]} (#{column_names}) SELECT #{column_names} FROM #{table_name};
        DROP TABLE #{table_name};""".squish
     end
+  end
+
+  def insert_default_table
+    temp_table = @table_names[0]
+    query = rename_transaction temp_table
+    response = query_cartodb query
+
+    return false unless response.code == 200
   end
 
   def rename_transaction temp_table
