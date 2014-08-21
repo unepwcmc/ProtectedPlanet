@@ -6,6 +6,7 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     import_mock.expects(:finalise)
     ImportTools.stubs(:current_import).returns(import_mock)
 
+    Search::Index.stubs(:empty)
     Search::Index.stubs(:index_all)
     Download.stubs(:make_current)
     ImportTools::WebHandler.stubs(:clear_cache)
@@ -23,6 +24,7 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     ImportTools.stubs(:current_import).returns(stub_everything)
     ImportTools::WebHandler.stubs(:under_maintenance).yields
 
+    Search::Index.stubs(:empty)
     Search::Index.expects(:index_all)
     Download.expects(:make_current)
     ImportTools::WebHandler.expects(:clear_cache)

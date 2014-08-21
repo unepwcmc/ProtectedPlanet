@@ -17,7 +17,7 @@ class ImportWorkers::FinaliserWorker
   end
 
   def refresh_data
-    Search::Index.drop
+    Search::Index.empty
     Search::Index.index_all
 
     Download.make_current

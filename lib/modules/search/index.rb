@@ -12,24 +12,29 @@ class Search::Index
     Search::ParallelIndexer.index pa_relation
   end
 
-  def self.drop
-    Elasticsearch::Client.new.delete_by_query(index: INDEX_NAME, q: '*:*')
-  end
-
   def self.index collection
     index = self.new collection
     index.index
   end
 
+  def self.empty
+    index = self.new
+    index.empty
+  end
+
   INDEX_NAME = Rails.application.secrets.elasticsearch["index"]
 
-  def initialize collection
-    @client = Elasticsearch::Client.new
+  def initialize collection=nil
+    @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch['url'])
     @collection = collection
   end
 
   def index
     @client.bulk body: documents
+  end
+
+  def empty
+    @client.delete_by_query(index: INDEX_NAME, q: '*:*')
   end
 
   private

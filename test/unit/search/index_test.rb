@@ -45,13 +45,13 @@ class IndexTest < ActiveSupport::TestCase
     Search::Index.index_all
   end
 
-  test '#drop cleans the protected areas index' do
+  test '#empty empties the protected areas index' do
     index_name = Rails.application.secrets.elasticsearch['index']
 
     es_mock = mock()
     es_mock.expects(:delete_by_query).with(index: index_name, q: '*:*')
     Elasticsearch::Client.stubs(:new).returns(es_mock)
 
-    Search::Index.drop
+    Search::Index.empty
   end
 end
