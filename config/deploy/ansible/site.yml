@@ -16,9 +16,18 @@
     - security
     - tmux
     - utils
+    - redis
+
+- name: Setup app core
+  user: ubuntu
+  sudo: yes
+  hosts:
+    - web
+    - util
+    - db
+  roles:
     - ruby
     - gdal
-    - redis
     - memcached
     - app
 
