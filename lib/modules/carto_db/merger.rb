@@ -16,8 +16,7 @@ class CartoDb::Merger
       response = query_cartodb query
       return false unless response.code == 200
     end
-
-    rename
+    insert_default_table
 
     return true
   end
@@ -30,7 +29,7 @@ class CartoDb::Merger
     end
   end
 
-  def rename
+  def insert_default_table
     temp_table = @table_names[0]
     query = rename_transaction temp_table
     response = query_cartodb query
