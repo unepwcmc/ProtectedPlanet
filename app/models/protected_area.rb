@@ -41,8 +41,6 @@ class ProtectedArea < ActiveRecord::Base
 
   private
 
-  DB = ActiveRecord::Base.connection
-
   def bounding_box_query
     dirty_query = """
       SELECT ST_XMax(extent) AS max_x,
@@ -62,13 +60,17 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def bounding_box
-    @bounding_box ||= DB.execute(bounding_box_query).first
+    @bounding_box ||= db.execute(bounding_box_query).first
     @bounding_box.each { |key,str| @bounding_box[key] = str.to_f }
   end
 
   def create_slug
     updated_slug = [name, designation.try(:name)].join(' ').parameterize
     update_attributes(slug: updated_slug)
+  end
+
+  def db
+    ActiveRecord::Base.connection
   end
 
   def self.with_valid_iucn_categories

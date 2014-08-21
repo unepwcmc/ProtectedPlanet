@@ -212,4 +212,12 @@ class TestSearch < ActiveSupport::TestCase
 
     assert_equal 40, pages
   end
+
+  test '#reindex executes the REFRESH command on Postgres' do
+    ActiveRecord::Base.connection.expects(:execute).with("""
+      REFRESH MATERIALIZED VIEW tsvector_search_documents
+    """.squish)
+
+    Search.reindex
+  end
 end

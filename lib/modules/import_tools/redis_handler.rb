@@ -25,6 +25,10 @@ class ImportTools::RedisHandler
     ).map(&:last)
   end
 
+  def add_to_previous_ids id
+    redis.zadd(previous_ids_key, id, id.to_s)
+  end
+
   def increase_property id, property
     redis.incr property_key(id, property)
   end

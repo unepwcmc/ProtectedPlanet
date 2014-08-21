@@ -30,10 +30,12 @@ class ImportToolsPostgresHandlerTest < ActiveSupport::TestCase
 
   test '.rename_database executes a query to rename the db' do
     db_name, new_db_name = 'db', 'new_db'
-    expected_query = "ALTER DATABASE '#{db_name}' RENAME TO '#{new_db_name}'"
+    expected_query = "ALTER DATABASE #{db_name} RENAME TO #{new_db_name}"
 
-    ActiveRecord::Base.stubs(:establish_connection)
-    ActiveRecord::Base.connection.expects(:execute).with(expected_query)
+    connection_mock = mock()
+    connection_mock.expects(:execute)
+    ImportTools::PostgresHandler.any_instance.stubs(:close_connections_to)
+    ImportTools::PostgresHandler.any_instance.stubs(:connect_to).returns(connection_mock)
 
     pg_handler = ImportTools::PostgresHandler.new
     pg_handler.rename_database db_name, new_db_name

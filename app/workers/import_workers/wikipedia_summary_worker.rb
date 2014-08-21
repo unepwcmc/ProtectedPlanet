@@ -1,9 +1,6 @@
 class ImportWorkers::WikipediaSummaryWorker < ImportWorker
   def perform protected_area_id
-    ImportTools.current_import.with_context do
-      save_wikipedia_article(protected_area_id)
-    end
-
+    save_wikipedia_article(protected_area_id)
   ensure
     finalise_job
   end
