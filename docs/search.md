@@ -1,99 +1,88 @@
 # Search
 
-The Protected Planet search feature is powered by [PostgreSQL Full Text
-Search](http://www.postgresql.org/docs/9.3/static/textsearch-intro.html).
-It's wicked fast, if I do say so myself.
+The Protected Planet search feature is powered by
+[Elasticsearch](http://www.elasticsearch.org/overview/elasticsearch/).
 
 ## How it works
 
-There's a simple guide
-[available](http://blog.lostpropertyhq.com/postgres-full-text-search-is-good-enough/),
+There's a simple
+[video tutorial](http://www.elasticsearch.org/webinars/getting-started-with-elasticsearch/?watch=1),
 but it's pretty straightforward.
 
-Full text search operates on 'documents' consisting of the attributes
-you want to search through converted in to
-[`tsvector`](http://www.postgresql.org/docs/9.3/static/datatype-textsearch.html)s
-and concatenated together. The documents are stored in the [materialized
-view](http://www.postgresql.org/docs/9.3/static/rules-materializedviews.html)
-`tsvector_search_documents`.
+Elasticsearch operates effectively as a JSON document store, that is
+accessed by a JSON [query
+DSL](http://www.elasticsearch.org/videos/introducing-query-dsl?watch=1).
+Documents (protected areas, countries and regions) are converted to JSON
+and saved in Elasticsearch as an index for querying.
 
-The [migration](../db/migrate/20140612133146_add_search_view.rb) shows
-how the materialized view is constructed.
+The application does not hook in to Elasticsearch in any magic ways, and
+nor does Elasticsearch hook in to the application. Queries are passed
+over http to Elasticsearch, and results parsed in to ActiveRecord models
+by the application.
 
-### Indexing
+## Installation
 
-The `tsvector` document view is not technically an index, and we will
-need to index that view separately. We use
-[GIN](http://www.postgresql.org/docs/9.3/static/textsearch-indexes.html)
-indexes as they are super fast given our large, static dataset.
+Thankfully, Elasticsearch installation is super easy.
 
-```
-CREATE INDEX idx_search_documents ON tsvector_search_documents USING gin(document);
-```
-
-**The setup for the view and the index is handled by migrations, you do
-not need to do anything.**
-
-### Querying
-
-Queries are converted in to `tsquery` types so that they can be compared
-to `tsvector`s. Full text search uses the match operator (`@@`) to
-compare `tsvector` and `tsquery`.
-
-For example, the following query returns the Protected Area ID (not the
-WDPA ID) for any PAs matching 'manbone'.
+On OS X:
 
 ```
-SELECT id
-FROM tsvector_search_documents
-WHERE document @@ to_tsquery('manbone');
+brew update
+brew install elasticsearch
 ```
 
-Adding a `:*` at the end of search terms will make sure subterms are found as
-well. Being `Geoff:*` the search term of the previous query, the `@@` operator
-will yield `Geoffery` as a result.
+On Ubuntu/Debian systems, the
+[process](https://gist.github.com/wingdspur/2026107) is longer but still
+easy.
 
-### Handling misspellings
+### Production
 
-Along the table containing all documents to query against, a second table
-(`search_lexemes`), containing all the search lexemes, makes it possible to
-have a fuzzy search in protectedplanet.
+Production installation is, as with everything, handled by the [Ansible
+scripts](servers.md) and **should not be done manually**.
 
-This is achieved by using the Postgres extension
-[`pg_trgm`](http://www.postgresql.org/docs/9.3/static/pgtrgm.html) to match
-similar lexemes against the given search term, with a similarity index, ranging
-from 0 to 1 (with a default similarity threshold of 0.3).
+Elasticsearch is optimised for quick development, and as such it has
+pretty poor defaults for production, such as small allocations of
+memory. The [Ansible scripts](servers.md) handle setting these up for
+you, but for more info check out the [pre-flight
+checklist](http://www.elasticsearch.org/webinars/elasticsearch-pre-flight-checklist/).
 
-For example, the following query returns all similar words (and the
-corresponding similarity) to `manbone`.
+## Indexing
 
-```
-SELECT word, similarity(word, 'manbone') AS similarity
-FROM search_lexemes
-WHERE word % 'manbone'
-ORDER BY similarity DESC;
-```
-
-The `ORDER BY` clause guarantees having the closest match as first result,
-ready to be used as a suitable replacement for a term returning zero search
-results.
-
-## Rebuilding
-
-As the indexed materials (PAs, countries, sub locations) are only
+As the indexed materials (PAs, countries, regions) are only
 modified during an import, there are no triggers or automatic methods of
-re-indexing the search. It is, however, a simple and (relatively) quick
+re-indexing the search. It is, however, a simple and (kind of) quick
 process.
 
-Postgres provides a `REFRESH` function for repopulating (deleting and
-regenerating) materialized views:
+Elasticsearch is a JSON document store, and so to create an index, we
+convert the desired models in to JSON objects and PUT them in to the
+chosen index. In our case, we are using a single index to store multiple
+models: Protected Areas, Countries, and Regions. This way only a single,
+simple query needs to be made and multiple models can be interleaved in
+results.
 
-```
-REFRESH MATERIALIZED VIEW tsvector_search_documents;
-```
+Documents are stored with their `_type` set to the name of the converted
+Model, so that they can be converted back to ActiveRecord objects on
+retrieval.
 
-There is a rake task available for reindexing:
+Indexing is handled by `Search::Index` automatically at the end of an
+import, but can be run manually:
 
 ```
 bundle exec rake search:reindex
+```
+
+## Querying
+
+The `Search` class acts as a neat wrapper for hiding the terrifying
+complexity that is building Elasticsearch JSON queries:
+
+```
+# Basic search
+Search.search 'manbone'
+
+# Search with filters
+Search.search 'manbone', filters: {type: 'country', country: 123}
+
+# Search with pagination
+Search.search 'manbone', page: 3
 ```

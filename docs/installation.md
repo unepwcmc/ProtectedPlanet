@@ -12,16 +12,19 @@ The application depends on:
 * GDAL
 * Postgis
 * Redis
+* Elasticsearch
 
 They require no special setup, so install them with your favourite
 package manager. For example, on OS X:
 
 ```
   # Get https://rvm.io or any other ruby version manager, then...
+  brew update
   brew install postgresql
   brew install gdal --with-postgresql
   brew install postgis
   brew install redis
+  brew install elasticsearch
 ```
 
 If you are running Ubuntu or another Linux distribution, see "GEOS and
