@@ -12,14 +12,14 @@ class SearchQueryTest < ActiveSupport::TestCase
             "should" => [
               {
                 "nested" => {
-                  "path" => "countries",
-                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "countries.name" ] } }
+                  "path" => "countries_for_index",
+                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "countries_for_index.name" ] } }
                 }
               },
               {
                 "nested" => {
-                  "path" => "countries.region",
-                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "countries.region.name" ] } }
+                  "path" => "countries_for_index.region_for_index",
+                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "countries_for_index.region_for_index.name" ] } }
                 }
               },
               {

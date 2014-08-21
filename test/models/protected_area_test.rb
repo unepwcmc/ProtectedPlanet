@@ -71,11 +71,11 @@ class ProtectedAreaTest < ActiveSupport::TestCase
           "english_name" => "Manboneland City"
         }
       ],
-      "countries" => [
+      "countries_for_index" => [
         {
           "id" => 123,
           "name" => "Manboneland",
-          "region" => {
+          "region_for_index" => {
             "id" => 987,
             "name" => "North Manmerica"
           }

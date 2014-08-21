@@ -1,20 +1,31 @@
 class Search::Index
   def self.index_all
-    [Country, Region, ProtectedArea].each do |model|
-      Search::Index.index model.without_geometry
-    end
+    pa_relation = ProtectedArea.without_geometry.includes([
+      {:countries_for_index => :region_for_index},
+      :sub_locations,
+      :designation,
+      :iucn_category
+    ])
+
+    Search::Index.index Country.without_geometry.all
+    Search::Index.index Region.without_geometry.all
+    Search::ParallelIndexer.index pa_relation
   end
 
-  def self.index model_enumerable
-    index = self.new model_enumerable
+  def self.drop
+    Elasticsearch::Client.new.delete_by_query(index: INDEX_NAME, q: '*:*')
+  end
+
+  def self.index collection
+    index = self.new collection
     index.index
   end
 
   INDEX_NAME = Rails.application.secrets.elasticsearch["index"]
 
-  def initialize model_enumerable
+  def initialize collection
     @client = Elasticsearch::Client.new
-    @model_enumerable = model_enumerable
+    @collection = collection
   end
 
   def index
@@ -26,11 +37,9 @@ class Search::Index
   def documents
     documents = []
 
-    @model_enumerable.find_in_batches.each do |group|
-      group.each do |model_instance|
-        documents << index_header(model_instance)
-        documents << model_instance.as_indexed_json
-      end
+    @collection.each do |object|
+      documents << index_header(object)
+      documents << object.as_indexed_json
     end
 
     documents

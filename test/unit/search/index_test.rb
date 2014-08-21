@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class IndexerTest < ActiveSupport::TestCase
+class IndexTest < ActiveSupport::TestCase
   test '.index, given a Model enumerable, PUTs a set of Model records to Elastic Search' do
     elasticsearch_index = Rails.application.secrets.elasticsearch["index"]
 
@@ -31,10 +31,27 @@ class IndexerTest < ActiveSupport::TestCase
   end
 
   test '#index_all indexes all desired models' do
+    pa_relation =  ProtectedArea.without_geometry.includes([
+      {:countries_for_index => :region_for_index},
+      :sub_locations,
+      :designation,
+      :iucn_category
+    ])
+
     Search::Index.expects(:index).with(Country.without_geometry)
     Search::Index.expects(:index).with(Region.without_geometry)
-    Search::Index.expects(:index).with(ProtectedArea.without_geometry)
+    Search::ParallelIndexer.expects(:index).with(pa_relation)
 
     Search::Index.index_all
+  end
+
+  test '#drop cleans the protected areas index' do
+    index_name = Rails.application.secrets.elasticsearch['index']
+
+    es_mock = mock()
+    es_mock.expects(:delete_by_query).with(index: index_name, q: '*:*')
+    Elasticsearch::Client.stubs(:new).returns(es_mock)
+
+    Search::Index.drop
   end
 end

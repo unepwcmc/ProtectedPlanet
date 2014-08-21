@@ -18,8 +18,8 @@ class TestSearch < ActiveSupport::TestCase
             "query" => {
               "bool" => {
                 "should" => [
-                  { "nested" => { "path" => "countries", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "countries.name" ] } } } },
-                  { "nested" => { "path" => "countries.region", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "countries.region.name" ] } } } },
+                  { "nested" => { "path" => "countries_for_index", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "countries_for_index.name" ] } } } },
+                  { "nested" => { "path" => "countries_for_index.region_for_index", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "countries_for_index.region_for_index.name" ] } } } },
                   { "nested" => { "path" => "sub_location", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "sub_location.english_name" ] } } } },
                   { "nested" => { "path" => "designation", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "designation.name" ] } } } },
                   { "nested" => { "path" => "iucn_category", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "iucn_category.name" ] } } } },
@@ -31,12 +31,12 @@ class TestSearch < ActiveSupport::TestCase
         },
         aggs: {
           "country" => {
-            "nested" => { "path" => "countries" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "countries.id" } } }
+            "nested" => { "path" => "countries_for_index" },
+            "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.id" } } }
           },
           "region" => {
-            "nested" => { "path" => "countries.region" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "countries.region.id" } } }
+            "nested" => { "path" => "countries_for_index.region_for_index" },
+            "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.region_for_index.id" } } }
           },
           "designation" => {
             "nested" => { "path" => "designation" },

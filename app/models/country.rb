@@ -6,6 +6,7 @@ class Country < ActiveRecord::Base
   has_one :country_statistic
 
   belongs_to :region
+  belongs_to :region_for_index, -> { select("regions.id, regions.name") }, :class_name => "Region", :foreign_key => "region_id"
 
   has_many :sub_locations
   has_many :designations, -> { uniq }, through: :protected_areas
@@ -32,7 +33,7 @@ class Country < ActiveRecord::Base
     self.as_json(
       only: [:id, :name],
       include: {
-        region: { only: [:id, :name] }
+        region_for_index: { only: [:id, :name] }
       }
     )
   end

@@ -5,24 +5,24 @@ class SearchAggregationTest < ActiveSupport::TestCase
     expected_aggregations = {
       "country" => {
         "nested" => {
-          "path" => "countries"
+          "path" => "countries_for_index"
         },
         "aggs" => {
           "aggregation" => {
             "terms" => {
-              "field" => "countries.id"
+              "field" => "countries_for_index.id"
             }
           }
         }
       },
       "region" => {
         "nested" => {
-          "path" => "countries.region"
+          "path" => "countries_for_index.region_for_index"
         },
         "aggs" => {
           "aggregation" => {
             "terms" => {
-              "field" => "countries.region.id"
+              "field" => "countries_for_index.region_for_index.id"
             }
           }
         }
