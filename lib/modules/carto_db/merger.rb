@@ -10,7 +10,7 @@ class CartoDb::Merger
   def merge table_names, column_names
     @table_names = table_names
     @column_names = column_names
-    @default_table = table_names[0].split('_')[0]
+    @default_table = table_names[0].split('_')[0..1].join('_').split('_')[0..1].join('_')
 
     merge_query.each do |query|
       response = query_cartodb query
