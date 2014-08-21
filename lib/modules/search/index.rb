@@ -1,14 +1,14 @@
 class Search::Index
-  def self.index model_enumerable
-    index = self.new model_enumerable
+  def self.index collection
+    index = self.new collection
     index.index
   end
 
   INDEX_NAME = Rails.application.secrets.elasticsearch["index"]
 
-  def initialize model_enumerable
+  def initialize collection
     @client = Elasticsearch::Client.new
-    @model_enumerable = model_enumerable
+    @collection = collection
   end
 
   def index
@@ -20,11 +20,9 @@ class Search::Index
   def documents
     documents = []
 
-    @model_enumerable.find_in_batches.each do |group|
-      group.each do |model_instance|
-        documents << index_header(model_instance)
-        documents << model_instance.as_indexed_json
-      end
+    @collection.each do |object|
+      documents << index_header(object)
+      documents << object.as_indexed_json
     end
 
     documents
