@@ -22,8 +22,8 @@ class Search::Query
 
   MATCHERS = {
     should: [
-      { type: 'nested', path: 'countries', fields: ['countries.name'] },
-      { type: 'nested', path: 'countries.region', fields: ['countries.region.name'] },
+      { type: 'nested', path: 'countries_for_index', fields: ['countries_for_index.name'] },
+      { type: 'nested', path: 'countries_for_index.region_for_index', fields: ['countries_for_index.region_for_index.name'] },
       { type: 'nested', path: 'sub_location', fields: ['sub_location.english_name'] },
       { type: 'nested', path: 'designation', fields: ['designation.name'] },
       { type: 'nested', path: 'iucn_category', fields: ['iucn_category.name'] },
@@ -46,8 +46,8 @@ class Search::Query
 
   FILTERS = {
     type: { type: 'type' },
-    country: { type: 'nested', path: 'countries', field: 'countries.id', required: true },
-    region: { type: 'nested', path: 'countries.region', field: 'countries.region.id', required: true },
+    country: { type: 'nested', path: 'countries_for_index', field: 'countries_for_index.id', required: true },
+    region: { type: 'nested', path: 'countries_for_index.region_for_index', field: 'countries_for_index.region_for_index.id', required: true },
     iucn_category: { type: 'nested', path: 'iucn_category', field: 'iucn_category.id', required: true },
     designation: { type: 'nested', path: 'designation', field: 'designation.id', required: true }
   }
