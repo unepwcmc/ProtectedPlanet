@@ -30,7 +30,7 @@ class IndexTest < ActiveSupport::TestCase
     Search::Index.index ProtectedArea.without_geometry
   end
 
-  test '#index_all indexes all desired models' do
+  test '#create creates the index and indexes all desired models' do
     pa_relation =  ProtectedArea.without_geometry.includes([
       {:countries_for_index => :region_for_index},
       :sub_locations,
@@ -40,18 +40,47 @@ class IndexTest < ActiveSupport::TestCase
 
     Search::Index.expects(:index).with(Country.without_geometry)
     Search::Index.expects(:index).with(Region.without_geometry)
+    Search::Index.expects(:create_mapping).with('protected_area')
     Search::ParallelIndexer.expects(:index).with(pa_relation)
 
-    Search::Index.index_all
+    Search::Index.create
   end
 
-  test '#empty empties the protected areas index' do
+  test '#delete deletes the index' do
     index_name = Rails.application.secrets.elasticsearch['index']
 
+    indices_mock = mock()
+    indices_mock.expects(:delete).with(index: index_name)
+
     es_mock = mock()
-    es_mock.expects(:delete_by_query).with(index: index_name, q: '*:*')
+    es_mock.stubs(:indices).returns(indices_mock)
+
     Elasticsearch::Client.stubs(:new).returns(es_mock)
 
-    Search::Index.empty
+    Search::Index.delete
+  end
+
+  test '.create_mapping reads from an external JSON and sends the mapping to ES' do
+    mappings = {'protected_area' => ['id', 'name', 'original_name'], 'country' => ['id', 'name']}
+    JSON.expects(:parse).returns(mappings)
+
+    type = 'protected_area'
+    index_name = Rails.application.secrets.elasticsearch['index']
+
+    indices_mock = mock()
+    indices_mock.expects(:put_mapping).with({
+      index: index_name,
+      type: type,
+      body: {
+        'protected_area' => mappings['protected_area']
+      }
+    })
+
+    es_mock = mock()
+    es_mock.stubs(:indices).returns(indices_mock)
+
+    Elasticsearch::Client.stubs(:new).returns(es_mock)
+
+    Search::Index.new.create_mapping type
   end
 end

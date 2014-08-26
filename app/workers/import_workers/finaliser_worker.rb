@@ -17,8 +17,8 @@ class ImportWorkers::FinaliserWorker
   end
 
   def refresh_data
-    Search::Index.empty
-    Search::Index.index_all
+    Search::Index.delete
+    Search::Index.create
 
     Download.make_current
     ImportTools::WebHandler.clear_cache
