@@ -60,7 +60,7 @@ class IndexTest < ActiveSupport::TestCase
     Search::Index.delete
   end
 
-  test '.create_mapping reads from an external JSON and sends the mapping to ES' do
+  test '#create_mapping reads from an external JSON and sends the mapping to ES' do
     mappings = {'protected_area' => ['id', 'name', 'original_name'], 'country' => ['id', 'name']}
     JSON.expects(:parse).returns(mappings)
 
@@ -81,6 +81,6 @@ class IndexTest < ActiveSupport::TestCase
 
     Elasticsearch::Client.stubs(:new).returns(es_mock)
 
-    Search::Index.new.create_mapping type
+    Search::Index.create_mapping type
   end
 end
