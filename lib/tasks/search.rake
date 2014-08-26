@@ -3,10 +3,10 @@ namespace :search do
   task reindex: :environment do
     logger = Logger.new(STDOUT)
 
-    logger.info "Emptying index."
-    Search::Index.empty
-    logger.info "Populating index."
-    Search::Index.index_all
+    logger.info "Deleting index..."
+    Search::Index.delete
+    logger.info "Populating index..."
+    Search::Index.create
 
     logger.info "Reindex complete."
   end

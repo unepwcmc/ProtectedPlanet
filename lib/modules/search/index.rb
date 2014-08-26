@@ -1,5 +1,8 @@
 class Search::Index
-  def self.index_all
+  TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'templates')
+  MAPPINGS_TEMPLATE = File.read(File.join(TEMPLATE_DIRECTORY, 'mappings.json'))
+
+  def self.create
     pa_relation = ProtectedArea.without_geometry.includes([
       {:countries_for_index => :region_for_index},
       :sub_locations,
@@ -9,6 +12,8 @@ class Search::Index
 
     Search::Index.index Country.without_geometry.all
     Search::Index.index Region.without_geometry.all
+
+    Search::Index.create_mapping 'protected_area'
     Search::ParallelIndexer.index pa_relation
   end
 
@@ -17,9 +22,14 @@ class Search::Index
     index.index
   end
 
-  def self.empty
+  def self.create_mapping collection
     index = self.new
-    index.empty
+    index.create_mapping collection
+  end
+
+  def self.delete
+    index = self.new
+    index.delete
   end
 
   INDEX_NAME = Rails.application.secrets.elasticsearch["index"]
@@ -33,8 +43,17 @@ class Search::Index
     @client.bulk body: documents
   end
 
-  def empty
-    @client.delete_by_query(index: INDEX_NAME, q: '*:*')
+  def delete
+    @client.indices.delete index: INDEX_NAME
+  end
+
+  def create_mapping type
+    raise ArgumentError, "No mapping found for type #{type}" unless mappings[type]
+    @client.indices.put_mapping(
+      index: INDEX_NAME,
+      type: type,
+      body: { type => mappings[type] }
+    )
   end
 
   private
@@ -52,5 +71,9 @@ class Search::Index
 
   def index_header model
     {index: {_index: INDEX_NAME, _type: model.class.to_s.underscore}}
+  end
+
+  def mappings
+    @mappings ||= JSON.parse(MAPPINGS_TEMPLATE)
   end
 end

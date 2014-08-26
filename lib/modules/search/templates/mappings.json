@@ -1,0 +1,82 @@
+{
+  "protected_area": {
+    "dynamic": "false",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "wdpa_id": {
+        "type": "integer"
+      },
+      "type": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "original_name": {
+        "type": "string"
+      },
+      "marine": {
+        "type": "boolean"
+      },
+      "sub_location": {
+        "type": "nested",
+        "properties": {
+          "name": {
+            "type": "string",
+            "index": "not_analyzed"
+          }
+        }
+      },
+      "countries_for_index": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "index": "not_analyzed"
+          },
+          "region_for_index": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string",
+                "index": "not_analyzed"
+              }
+            }
+          }
+        }
+      },
+      "iucn_category": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "index": "not_analyzed"
+          }
+        }
+      },
+      "designation": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string",
+            "index": "not_analyzed"
+          }
+        }
+      }
+    }
+  }
+}
