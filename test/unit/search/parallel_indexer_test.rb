@@ -1,16 +1,19 @@
 require 'test_helper'
+require 'database_cleaner'
+
 
 class SearchParallelIndexerTest < ActiveSupport::TestCase
   test '#index, given an ActiveRecord::Association, creates threads
    to parallelly populate the ES index' do
-    2.times { FactoryGirl.create(:protected_area) }
+    10.times { FactoryGirl.create(:protected_area) }
 
-    concurrency_level = 2
+    concurrency_level = 1
+    batch_size = 5
     System::CPU.stubs(:count).returns(2)
     Rails.application.secrets.elasticsearch['indexing']['concurrency_level'] = concurrency_level
+    Rails.application.secrets.elasticsearch['indexing']['batch_size'] = batch_size
 
-    Thread.expects(:new).times(8)
-    Search::Index.expects(:index).times(2)
+    Search::Index.expects(:index).twice
 
     Search::ParallelIndexer.index ProtectedArea.without_geometry
   end
