@@ -2,7 +2,6 @@ class Ogr::Postgres
   class ExportError < StandardError; end;
 
   WRONG_ARGUMENTS_MSG = 'Given new table name, but no original table name'
-  DB_CONFIG = Rails.configuration.database_configuration[Rails.env]
 
   DRIVERS = {
     shapefile: 'ESRI Shapefile',
@@ -29,6 +28,10 @@ class Ogr::Postgres
   end
 
   private
+
+  def self.db_config
+    ActiveRecord::Base.connection_config
+  end
 
   def self.ogr_command template, context
     compiled_template = ERB.new(template).result context

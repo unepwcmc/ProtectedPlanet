@@ -14,6 +14,11 @@ class Search
     self.search similarities.first.word
   end
 
+  def self.reindex
+    db = ActiveRecord::Base.connection
+    db.execute('REFRESH MATERIALIZED VIEW tsvector_search_documents')
+  end
+
   def initialize search_term
     self.query = search_term
     self.results = []

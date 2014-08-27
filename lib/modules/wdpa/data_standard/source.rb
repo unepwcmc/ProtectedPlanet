@@ -1,6 +1,6 @@
 class Wdpa::DataStandard::Source < Wdpa::DataStandard
   STANDARD_ATTRIBUTES = {
-    :metadataid => {name: :id, type: :integer},
+    :metadataid => {name: :metadataid, type: :integer},
     :data_title => {name: :title, type: :string},
     :resp_party => {name: :responsible_party, type: :string},
     :resp_email => {name: :responsible_email, type: :string},

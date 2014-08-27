@@ -31,10 +31,14 @@ After that, it's pretty standard:
 
 ```
   bundle install
-  rake db:setup
+  rake db:migrate
+  rake db:lazy_seed
 
   bundle exec rails s
 ```
+
+There is a database dump available so that you can work with real data
+straight away. See "Lazy Seeding" below.
 
 #### GEOS and Linux
 
@@ -93,6 +97,12 @@ empty database. For example, the Country and Sub Location list. If you
 ran `rake db:setup` as above, you do not need to seed anything.
 
 You can seed manually with:
+
+```
+  rake db:lazy_seed
+```
+
+Or if you have plenty of time, and want to manually run your seeds:
 
 ```
   rake db:seed

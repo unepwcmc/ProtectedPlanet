@@ -1,5 +1,5 @@
 class AdminController < ApplicationController
-  protect_from_forgery :except => :maintenance
+  protect_from_forgery :except => [:clear_cache, :maintenance]
 
   def maintenance
     unless authenticated?
@@ -11,6 +11,16 @@ class AdminController < ApplicationController
     else
       maintenance_file.delete
     end
+
+    render json: {message: 'success'}
+  end
+
+  def clear_cache
+    unless authenticated?
+      return render json: {message: 'unauthorised'}, status: 401
+    end
+
+    Rails.cache.clear
 
     render json: {message: 'success'}
   end
