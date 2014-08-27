@@ -1,0 +1,13 @@
+<li class='result'>
+  <%= image_tag "world@2x.png", style: "width: 40px; height: 40px" %>
+  <div>
+    <h3>
+      <a href="<%= regional_stats_path(iso: model.iso) %>"><%= model.name %></a> | 
+      <small><%= commaify model.protected_areas.count %> Protected Areas in this region</small>
+    </h3>
+
+    <p>
+      <%= StatisticPresenter.new(model).percentage_pa_cover %>% of this region is covered by Protected Areas
+    </p>
+  </div>
+</li>

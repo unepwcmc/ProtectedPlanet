@@ -30,7 +30,7 @@ class Wdpa::Relation
   end
 
   def countries value
-    countries = value.map { |iso_3| Country.where(iso_3: iso_3).first }
+    countries = value.map { |iso_3| Country.select('id').where(iso_3: iso_3).first }
     countries.compact
   end
 

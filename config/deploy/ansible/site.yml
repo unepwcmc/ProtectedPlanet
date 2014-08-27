@@ -16,9 +16,18 @@
     - security
     - tmux
     - utils
+    - redis
+
+- name: Setup app core
+  user: ubuntu
+  sudo: yes
+  hosts:
+    - web
+    - util
+    - db
+  roles:
     - ruby
     - gdal
-    - redis
     - memcached
     - app
 
@@ -49,3 +58,12 @@
 
   roles:
     - postgresql-server
+
+- name: Setup elastic search nodes
+  hosts:
+    - elasticsearch
+  user: ubuntu
+  sudo: yes
+
+  roles:
+    - elasticsearch

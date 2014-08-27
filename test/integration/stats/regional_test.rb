@@ -22,7 +22,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
 
   test 'renders the number of PAs in the region' do
     country = FactoryGirl.create(:country, region: @region)
-    pa_count = 10
+    pa_count = 2
     pa_count.times do
       FactoryGirl.create(:protected_area, countries: [country], designation: nil)
     end
@@ -58,7 +58,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
     country = FactoryGirl.create(:country, region: @region)
 
     iucn_category = FactoryGirl.create(:iucn_category, name: 'Ia')
-    pa_with_iucn_count = 5
+    pa_with_iucn_count = 2
     pa_with_iucn_count.times do
       FactoryGirl.create(:protected_area,
         iucn_category: iucn_category, designation: nil, countries: [country])
@@ -97,7 +97,7 @@ class RegionalStatsTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders the number of Countries providing data' do
-    data_providing_country_count = 5
+    data_providing_country_count = 2
     data_providing_country_count.times do
       country = FactoryGirl.create(:country, region: @region)
       FactoryGirl.create(:protected_area, countries: [country])

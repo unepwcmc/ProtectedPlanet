@@ -90,8 +90,8 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash returns Country models for given
    ISO codes' do
-    FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')
-    FactoryGirl.create(:country, iso_3: 'GTM', name: 'Guatemala')
+    norway = FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')
+    guatemala = FactoryGirl.create(:country, iso_3: 'GTM', name: 'Guatemala')
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({iso3: 'NOR, GTM,'})
 
@@ -99,10 +99,10 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
       "Expected two Country models to be returned"
 
     assert_kind_of Country, attributes[:countries].first
-    assert_equal   "Norway", attributes[:countries].first.name
+    assert_equal   norway.id, attributes[:countries].first.id
 
     assert_kind_of Country, attributes[:countries].second
-    assert_equal   "Guatemala", attributes[:countries].second.name
+    assert_equal   guatemala.id, attributes[:countries].second.id
   end
 
   test '.attributes_from_standards_hash returns an empty array if the

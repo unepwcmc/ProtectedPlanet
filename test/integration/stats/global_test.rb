@@ -45,7 +45,7 @@ class GlobalStatsTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders the number of Countries providing data' do
-    data_providing_country_count = 5
+    data_providing_country_count = 2
     data_providing_country_count.times do
       country = FactoryGirl.create(:country)
       FactoryGirl.create(:protected_area, countries: [country])

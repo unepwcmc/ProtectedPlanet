@@ -5,10 +5,10 @@ class Stats::Global
     ProtectedArea.count
   end
 
-  def self.percentage_cover_pas
+  def self.percentage_pa_cover
     RegionalStatistic.joins(:region)
                      .where('regions.iso' => 'GLOBAL')
-                     .first[:percentage_cover_pas]
+                     .first[:percentage_pa_cover]
   end
 
   def self.pas_with_iucn_category

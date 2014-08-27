@@ -1,60 +1,84 @@
 class Search
-  attr_reader :query, :results
+  def self.search search_term, options={}
+    instance = self.new search_term, options
+    instance.search
 
-  def self.search search_term
-    search_instance = self.new search_term
-    search_instance.search
-    search_instance
+    instance
   end
 
-  def self.search_for_similar search_term
-    similarities = Search::Similarity.search search_term
-    return self.new(search_term) if similarities.empty?
-
-    self.search similarities.first.word
-  end
-
-  def self.reindex
-    db = ActiveRecord::Base.connection
-    db.execute('REFRESH MATERIALIZED VIEW tsvector_search_documents')
-  end
-
-  def initialize search_term
-    self.query = search_term
-    self.results = []
+  def initialize search_term, options
+    @search_term = search_term
+    @options = options
   end
 
   def search
-    self.results = ProtectedArea.joins(join_query).order('rank DESC')
+    @query_results ||= elastic_search.search(index: 'protected_areas', body: query)
+  end
+
+  def results
+    matches = @query_results["hits"]["hits"]
+
+    @matches ||= matches.map do |result|
+      model_class = result["_type"].classify.constantize
+      model_class.find(result["_source"]["id"])
+    end
+  end
+
+  def count
+    @query_results["hits"]["total"]
+  end
+
+  def aggregations
+    aggs_by_model = {}
+
+    @query_results["aggregations"].each do |name, aggs|
+      model = name.classify.constantize
+
+      aggs_by_model[name] = aggs["aggregation"]["buckets"].map do |info|
+        {
+          model: model.find(info["key"]),
+          count: info["doc_count"]
+        }
+      end
+    end
+
+    aggs_by_model
+  end
+
+  def current_page
+    @options[:page] || 1
+  end
+
+  def total_pages
+    count / RESULTS_SIZE
   end
 
   private
-  attr_writer :query, :results
 
-  def join_query
-    """
-      INNER JOIN (
-        #{search_query}
-      ) AS search_results
-      ON search_results.wdpa_id = protected_areas.wdpa_id
-    """.squish
+  RESULTS_SIZE = 10
+
+  def elastic_search
+    @elastic_search ||= Elasticsearch::Client.new(
+      url: Rails.application.secrets.elasticsearch['url']
+    )
   end
 
-  def search_query
-    dirty_query = """
-      SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery(?) query
-      WHERE document @@ query
-    """.squish
-
-    ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, search_term
-    ])
+  def query
+    {
+      size: RESULTS_SIZE,
+      from: offset,
+      query: Search::Query.new(@search_term, @options).to_h,
+      aggs: Search::Aggregation.all
+    }
   end
 
-  def search_term
-    lexemes = self.query.split(' ')
-    lexemes = lexemes.map{|lexeme| "#{lexeme}:*"}
-    lexemes.join(' & ')
+  def offset
+    page = @options[:page]
+
+    if page && page > 0
+      RESULTS_SIZE * (page - 1)
+    else
+      0
+    end
   end
 end

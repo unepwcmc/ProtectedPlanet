@@ -11,7 +11,24 @@ class CountryTest < ActiveSupport::TestCase
     country = FactoryGirl.create(:country)
 
     selected_country = Country.without_geometry.find(country.id)
+
     refute selected_country.has_attribute?(:bounding_box)
+  end
+
+  test '.as_indexed_json returns the Country as JSON' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryGirl.create(:country, id: 123, name: 'Manboneland', region: region)
+
+    expected_json = {
+      "id" => 123,
+      "name" => 'Manboneland',
+      "region_for_index" => {
+        "id" => 987,
+        "name" => "North Manmerica"
+      }
+    }
+
+    assert_equal expected_json, country.as_indexed_json
   end
 
   test '.protected_areas returns the number of Protected Areas in the country' do

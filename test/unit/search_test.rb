@@ -1,98 +1,215 @@
 require 'test_helper'
 
 class TestSearch < ActiveSupport::TestCase
-  test '#search runs a full text search and returns the matching PA models' do
-    search_query = 'manbone'
+  test '#search queries ElasticSearch with the given term, and returns
+   the matching models' do
+    protected_area = FactoryGirl.create(:protected_area)
+    country = FactoryGirl.create(:country)
 
-    query = """
-      SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery('#{search_query}:*') query
-      WHERE document @@ query
-    """.squish
+    search_query = "manbone"
 
-    order_mock = mock()
-    order_mock.expects(:order).with("rank DESC").returns([])
+    query_object = {
+      index: 'protected_areas',
+      body: {
+        size: 10,
+        from: 0,
+        query: {
+          "filtered" => {
+            "query" => {
+              "bool" => {
+                "should" => [
+                  { "nested" => { "path" => "countries_for_index", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "countries_for_index.name" ] } } } },
+                  { "nested" => { "path" => "countries_for_index.region_for_index", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "countries_for_index.region_for_index.name" ] } } } },
+                  { "nested" => { "path" => "sub_location", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "sub_location.english_name" ] } } } },
+                  { "nested" => { "path" => "designation", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "designation.name" ] } } } },
+                  { "nested" => { "path" => "iucn_category", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "iucn_category.name" ] } } } },
+                  { "function_score" => { "query" => { "multi_match" => { "query" => "*manbone*", "fields" => [ "name", "original_name" ] } }, "functions" => [ { "filter" => { "or" => [ { "type" => { "value" => "country"} }, { "type" => { "value" => "region"} } ] }, "boost_factor" => 15 } ] } }
+                ]
+              }
+            }
+          }
+        },
+        aggs: {
+          "country" => {
+            "nested" => { "path" => "countries_for_index" },
+            "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.id" } } }
+          },
+          "region" => {
+            "nested" => { "path" => "countries_for_index.region_for_index" },
+            "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.region_for_index.id" } } }
+          },
+          "designation" => {
+            "nested" => { "path" => "designation" },
+            "aggs" => { "aggregation" => { "terms" => { "field" => "designation.id" } } }
+          },
+          "iucn_category" => {
+            "nested" => { "path" => "iucn_category" },
+            "aggs" => { "aggregation" => { "terms" => { "field" => "iucn_category.id" } } }
+          }
+        }
+      }
+    }
 
-    ProtectedArea.expects(:joins).with("""
-      INNER JOIN (
-        #{query}
-      ) AS search_results
-      ON search_results.wdpa_id = protected_areas.wdpa_id
-    """.squish).returns(order_mock)
+    results_object = {
+      "hits" => {
+        "hits" => [{
+          "_type" => "protected_area",
+          "_source" => {
+            "id" => protected_area.id
+          }
+        }, {
+          "_type" => "country",
+          "_source" => {
+            "id" => country.id
+          }
+        }]
+      }
+    }
 
-    Search.search search_query
+    search_mock = mock()
+    search_mock.
+      expects(:search).
+      with(query_object).
+      returns(results_object)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    results = Search.search(search_query).results
+    assert 2, results.length
+
+    returned_protected_area = results.first
+    assert_kind_of ProtectedArea, returned_protected_area
+    assert_equal   protected_area.id, returned_protected_area.id
+
+    returned_country = results.second
+    assert_kind_of Country, returned_country
+    assert_equal   country.id, returned_country.id
   end
 
-  test '#search sanitizes potential SQL injections' do
-    search_query = "' --"
+  test '.aggregations returns all the aggregations' do
+    countries = [
+      FactoryGirl.create(:country),
+      FactoryGirl.create(:country)
+    ]
 
-    query = """
-      SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery(''':* & --:*') query
-      WHERE document @@ query
-    """.squish
+    search_query = "manbone"
 
-    order_mock = mock()
-    order_mock.stubs(:order).returns([])
+    results_object = {
+      "aggregations" => {
+        "country" => {
+          "doc_count" => 0,
+          "aggregation" => {
+            "buckets" => [
+              {
+                "key" => countries.first.id,
+                "doc_count" => 59
+              },
+              {
+                "key" => countries.second.id,
+                "doc_count" => 10
+              }
+            ]
+          }
+        }
+      }
+    }
 
-    ProtectedArea.expects(:joins).with("""
-      INNER JOIN (
-        #{query}
-      ) AS search_results
-      ON search_results.wdpa_id = protected_areas.wdpa_id
-    """.squish).returns(order_mock)
+    search_mock = mock()
+    search_mock.
+      expects(:search).
+      returns(results_object)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
 
-    Search.search search_query
+    aggregations = Search.search(search_query).aggregations
+
+    country_aggregations = aggregations["country"]
+
+    assert_equal 2, country_aggregations.length
+
+    assert_kind_of Country, country_aggregations.first[:model]
+    assert_equal   59, country_aggregations.first[:count]
+
+    assert_kind_of Country, country_aggregations.second[:model]
+    assert_equal   10, country_aggregations.second[:count]
   end
 
-  test '#search squishes the query and joins the lexemes with & (and) operators' do
-    search_query = ' Killbear and   the Manbone'
+  test '.count returns the total count of the result set, rather than
+   array length, so that pagination works correctly' do
+    search_query = "manbone"
 
-    query = """
-      SELECT wdpa_id, ts_rank(document, query) AS rank
-      FROM tsvector_search_documents, to_tsquery('Killbear:* & and:* & the:* & Manbone:*') query
-      WHERE document @@ query
-    """.squish
+    results_object = {
+      "hits" => {
+        "total" => 42
+      }
+    }
 
-    order_mock = mock()
-    order_mock.stubs(:order).returns([])
+    search_mock = mock()
+    search_mock.
+      expects(:search).
+      returns(results_object)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
 
-    ProtectedArea.expects(:joins).with("""
-      INNER JOIN (
-        #{query}
-      ) AS search_results
-      ON search_results.wdpa_id = protected_areas.wdpa_id
-    """.squish).returns(order_mock)
+    results_count = Search.search(search_query).count
 
-    Search.search search_query
+    assert_equal 42, results_count
   end
 
-  test '#search populates the results attribute of Search' do
-    results = []
+  test '#search, given a search term and a page, offsets the
+   Elasticsearch query to correctly paginate' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
 
-    order_mock = mock()
-    order_mock.stubs(:order).returns([])
+    expected_query = {
+      size: 10,
+      from: 10,
+      query: {},
+      aggs: {}
+    }
 
-    ProtectedArea.expects(:joins).returns(order_mock)
+    search_mock = mock()
+    search_mock.
+      expects(:search).
+      with(index: 'protected_areas', body: expected_query)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
 
-    Search.any_instance.expects(:results=).with(results).twice
-
-    Search.search 'search'
+    Search.search("manbone", page: 2)
   end
 
-  test '#search_for_similar calls Search::Similarity to fetch similitarities' do
-    search_term = 'manbone'
+  test '.current_page returns the current page number' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
 
-    Search::Similarity.expects(:search).with(search_term).returns([])
+    search_mock = mock()
+    search_mock.stubs(:search)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
 
-    Search.search_for_similar search_term
+    page = Search.search("manbone", page: 2).current_page
+
+    assert_equal 2, page
   end
 
-  test '#reindex executes the REFRESH command on Postgres' do
-    ActiveRecord::Base.connection.expects(:execute).with("""
-      REFRESH MATERIALIZED VIEW tsvector_search_documents
-    """.squish)
+  test '.current_page returns 1 if the current page is not set' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
 
-    Search.reindex
+    search_mock = mock()
+    search_mock.stubs(:search)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    page = Search.search("manbone").current_page
+
+    assert_equal 1, page
+  end
+
+  test '.total_pages returns the total number of results pages' do
+    Search::Query.any_instance.stubs(:to_h).returns({})
+    Search::Aggregation.stubs(:all).returns({})
+
+    search_mock = mock()
+    search_mock.stubs(:search).returns({"hits" => {"total" => 400}})
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    pages = Search.search("manbone").total_pages
+
+    assert_equal 40, pages
   end
 end

@@ -40,6 +40,8 @@ group :test, :development do
   gem 'ejs'
 end
 
+gem 'elasticsearch', '~> 1.0.4'
+
 gem 'will_paginate', '~> 3.0'
 
 gem 'aws-sdk', '~> 1.3.9'
@@ -54,6 +56,7 @@ gem 'httmultiparty', '~> 0.3.14'
 gem 'sidekiq', '~> 3.1.4'
 gem 'whenever', require: false
 
+gem 'system'
 gem 'dotenv', '~> 0.11.1'
 gem 'dotenv-deployment'
 

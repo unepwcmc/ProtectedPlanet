@@ -2,6 +2,7 @@ class ProtectedArea < ActiveRecord::Base
   include GeometryConcern
 
   has_and_belongs_to_many :countries
+  has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :region_id).includes(:region_for_index) }, :class_name => 'Country'
   has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
 
@@ -16,6 +17,21 @@ class ProtectedArea < ActiveRecord::Base
   belongs_to :wikipedia_article
 
   after_create :create_slug
+
+  def as_indexed_json options={}
+    self.as_json(
+      only: [:id, :wdpa_id, :name, :original_name, :marine],
+      include: {
+        countries_for_index: {
+          only: [:name, :id],
+          include: { region_for_index: { only: [:id, :name] } }
+        },
+        sub_locations: { only: [:english_name] },
+        iucn_category: { only: [:id, :name] },
+        designation: { only: [:id, :name] }
+      }
+    )
+  end
 
   def bounds
     [
