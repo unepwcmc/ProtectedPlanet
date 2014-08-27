@@ -47,11 +47,12 @@ SELECT iso3, ST_Union(the_geom)
   GROUP BY iso3
 ```
 
-1. Split by countries
+###1. Split by countries
+
 Instead of creating a single query to dissolve everything, as we need the statistics for countries, we do one dissolve query per country
 
 
-####Query Evolution 1
+#####Query Evolution 1
 
 ```SQL
 SELECT iso3, ST_Union(the_geom)
@@ -60,10 +61,11 @@ SELECT iso3, ST_Union(the_geom)
   GROUP BY iso3
 ```
 
-2. Split by type
+####2. Split by type
+
 Each country can have two types of protected areas: Marine and Terrestrial. In order to calculate coverage statistics for land, EEZ and TS we also need to split the protected areas by type. This type field in fact is called 'is_marine' and works as a boolean (true if it is marine, false if it is land) We will have one dissolve query per type for each country.
 
-####Query Evolution 2
+#####Query Evolution 2
 
 ```SQL
 SELECT iso3, ST_Union(the_geom)
@@ -72,10 +74,11 @@ SELECT iso3, ST_Union(the_geom)
   GROUP BY iso3
 ```
 
-3. Buffer Protected Areas Represented as points
+####3. Buffer Protected Areas Represented as points
+
 As we referred above we have about 10% of the Data represented by points. In order to have the most accurate representation we buffer the points according to the given area. If the areas were not supplied we simply ignore those points. All the new polygons created by this method are dissolved at the same time as the other polygons and according to their country and type.
 
-####Query Evolution 3
+#####Query Evolution 3
 
 ```SQL
 SELECT ST_UNION(the_geom) as the_geom
@@ -94,12 +97,18 @@ SELECT ST_UNION(the_geom) as the_geom
       AND is_marine = #{type}
 ```
 
-4. Simplifying polygons
+####4. Simplifying polygons
+
 The only way of doing this process in an reasonable time is simplifying the geometries so we have less nodes in each polygon. As we are calculating statistics for each country we have a wide range of areas and protected areas, from the Holy See to Russia. So, a simplification of 100 yards in Russia should not have any effect on the final result, that same simplification would affect the results of dozens of small countries.
+
 So, we took an iterative method to get the most accurate statistics in the fastest way. Many countries have a set of protected areas that can be dissolved in a couple of seconds due to their size, number and/or geometry's complexity. These countries do not need any simplification.
+
 On other hand we spent several hours to dissolve all the protected areas in countries like Germany, USA or Australia. We have then created two groups of countries (marine and terrestrial) whose geometries should be simplified. We then use two different queries, one with simplified geometries and the other one using the raw data.
 But, how much should we simplify? In first place, as we have all the data in a Geographical Coordinate System (WGS 84) does not make sense to transform it in a projected coordinate system, as we need to speed up the process. We took here also an iterative approach comparing speed and results. In the end we found that simplifying by 0.005 degrees would allow having accurate results in reasonable time. 
+
 At this point we are simplifying the land protected areas of 18 countries and the marine protected areas of 6 countries.
+
+#####Query Evolution 4
 
 ```Ruby
   COMPLEX_COUNTRIES = {
@@ -137,8 +146,11 @@ SELECT ST_UNION(the_geom) as the_geom
 ```
 
 
-5. Dealing with trans-national Protected Areas
+####5. Dealing with trans-national Protected Areas
+
 Trans-national Protected Areas are the only one to have a comma in their ISO3 column. After detecting a Protected Area like this, we intersect it with the geometries of the related countries to split it before dissolving with the other Protected Areas of each country.
+
+#####Query Evolution 5
 
 ```Ruby
   COMPLEX_COUNTRIES = {
@@ -185,8 +197,11 @@ SELECT ST_UNION(the_geom) as the_geom
 ```
 
 
-5. Excluding unwanted protected areas
+####5. Excluding unwanted protected areas
+
 Some of the Protected Areas should not be used to calculate statistics. In this group we have the ones whose status is _Proposed_ or _Not_ _Reported_ or _UNESCO_ _Biosphere_ _Reserves_.
+
+#####Query Evolution 5
 
 ```Ruby
   COMPLEX_COUNTRIES = {
@@ -237,9 +252,11 @@ SELECT ST_UNION(the_geom) as the_geom
   ) a
 ```
 
-6. Making Geometries Valid
+####6. Making Geometries Valid
+
 In some cases we create not valid geometries when simplifying or creating a buffer. We need in each case to make features topologically valid.
 
+######Query Evolution 6
 
 ```Ruby
   COMPLEX_COUNTRIES = {
