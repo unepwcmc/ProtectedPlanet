@@ -6,42 +6,48 @@ class TestCartoDbImporter < ActiveSupport::TestCase
     wdpa_release = Wdpa::Release.new
 
     geometry_tables = {
-      "points" => "std_points"
+      "points" => "std_points",
+      "polygons" => "std_polygons"
     }
     wdpa_release.expects(:geometry_tables).returns(geometry_tables)
 
     gdb_path = "/tmp/gdb_path.gdb"
-    wdpa_release.expects(:gdb_path).returns(gdb_path)
+    wdpa_release.expects(:gdb_path).returns(gdb_path).twice
 
     Shapefile.any_instance.stubs(:system).returns(true)
 
-    shapefiles = [
+    point_shapefiles = [
       Shapefile.new('points-1.shp'),
       Shapefile.new('points-2.shp'),
-      Shapefile.new('points-3.shp'),
-      Shapefile.new('points-4.shp'),
-      Shapefile.new('points-5.shp'),
+      Shapefile.new('points-3.shp')
     ]
 
     Ogr::Split.
       expects(:split).
       with(gdb_path, "points", 5, ["wdpaid", "SHAPE"]).
-      returns(shapefiles)
+      returns(point_shapefiles)
+
+    polygon_shapefiles = [
+      Shapefile.new('polygons-1.shp'),
+      Shapefile.new('polygons-2.shp')
+    ]
+
+    Ogr::Split.
+      expects(:split).
+      with(gdb_path, "polygons", 5, ["wdpaid", "SHAPE"]).
+      returns(polygon_shapefiles)
 
     CartoDb::Uploader.any_instance.expects(:upload).with("./points-1.zip").returns(true)
     CartoDb::Uploader.any_instance.expects(:upload).with("./points-2.zip").returns(true)
     CartoDb::Uploader.any_instance.expects(:upload).with("./points-3.zip").returns(true)
-    CartoDb::Uploader.any_instance.expects(:upload).with("./points-4.zip").returns(true)
-    CartoDb::Uploader.any_instance.expects(:upload).with("./points-5.zip").returns(true)
+    CartoDb::Uploader.any_instance.expects(:upload).with("./polygons-1.zip").returns(true)
+    CartoDb::Uploader.any_instance.expects(:upload).with("./polygons-2.zip").returns(true)
 
-    expected_table_names = [
-      'points-1', 'points-2', 'points-3', 'points-4', 'points-5'
-    ]
+    expected_points_table_names = [ 'points-1', 'points-2', 'points-3' ]
+    expected_polygons_table_names = [  'polygons-1', 'polygons-2' ]
 
-
-    CartoDb::Merger.any_instance.
-      expects(:merge).
-      with(expected_table_names, ["wdpaid", "the_geom"])
+    CartoDb::Merger.any_instance.expects(:merge).with(expected_points_table_names, ["wdpaid", "the_geom"])
+    CartoDb::Merger.any_instance.expects(:merge).with(expected_polygons_table_names, ["wdpaid", "the_geom"])
 
     Wdpa::CartoDbImporter.import wdpa_release
   end
