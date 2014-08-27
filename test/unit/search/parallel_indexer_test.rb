@@ -1,6 +1,4 @@
 require 'test_helper'
-require 'database_cleaner'
-
 
 class SearchParallelIndexerTest < ActiveSupport::TestCase
   test '#index, given an ActiveRecord::Association, creates threads

@@ -47,7 +47,7 @@ class Search::ParallelIndexer
 
   def start_indexing_threads
     threads_loop = -> {
-      while (length = batches_queue.length) > 0 || @batchers_running do
+      while batches_queue.length > 0 || @batchers_running do
         batch = batches_queue.pop
         next if batch.length == 0
         Search::Index.index batch
