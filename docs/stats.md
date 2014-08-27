@@ -52,8 +52,6 @@ SELECT iso3, ST_Union(the_geom)
 Instead of creating a single query to dissolve everything, as we need the statistics for countries, we do one dissolve query per country
 
 
-#####Query Evolution 1
-
 ```SQL
 SELECT iso3, ST_Union(the_geom)
   FROM standard_polygons
@@ -65,7 +63,6 @@ SELECT iso3, ST_Union(the_geom)
 
 Each country can have two types of protected areas: Marine and Terrestrial. In order to calculate coverage statistics for land, EEZ and TS we also need to split the protected areas by type. This type field in fact is called 'is_marine' and works as a boolean (true if it is marine, false if it is land) We will have one dissolve query per type for each country.
 
-#####Query Evolution 2
 
 ```SQL
 SELECT iso3, ST_Union(the_geom)
@@ -78,7 +75,6 @@ SELECT iso3, ST_Union(the_geom)
 
 As we referred above we have about 10% of the Data represented by points. In order to have the most accurate representation we buffer the points according to the given area. If the areas were not supplied we simply ignore those points. All the new polygons created by this method are dissolved at the same time as the other polygons and according to their country and type.
 
-#####Query Evolution 3
 
 ```SQL
 SELECT ST_UNION(the_geom) as the_geom
@@ -107,8 +103,6 @@ On other hand we spent several hours to dissolve all the protected areas in coun
 But, how much should we simplify? In first place, as we have all the data in a Geographical Coordinate System (WGS 84) does not make sense to transform it in a projected coordinate system, as we need to speed up the process. We took here also an iterative approach comparing speed and results. In the end we found that simplifying by 0.005 degrees would allow having accurate results in reasonable time. 
 
 At this point we are simplifying the land protected areas of 18 countries and the marine protected areas of 6 countries.
-
-#####Query Evolution 4
 
 ```Ruby
   COMPLEX_COUNTRIES = {
@@ -150,25 +144,6 @@ SELECT ST_UNION(the_geom) as the_geom
 
 Trans-national Protected Areas are the only one to have a comma in their ISO3 column. After detecting a Protected Area like this, we intersect it with the geometries of the related countries to split it before dissolving with the other Protected Areas of each country.
 
-#####Query Evolution 5
-
-```Ruby
-  COMPLEX_COUNTRIES = {
-    'marine' => ['GBR','USA','CAN','MYT','CIV','AUS'],
-    'land'   => ['DEU','USA','FRA','GBR','AUS','FIN','BGR','CAN',
-                 'ESP','SWE','BEL','EST','IRL','ITA','LTU',
-                 'NZL','POL','CHE']
-  }
-
-  def geometry_attribute country, area_type
-    if COMPLEX_COUNTRIES[area_type].include? country.iso_3
-      'ST_Makevalid(ST_Buffer(ST_Simplify(the_geom,0.005),0.0))'
-    else
-      'the_geom'
-    end
-  end
-```
-
 ```SQL
 SELECT ST_UNION(the_geom) as the_geom
   FROM (
@@ -200,25 +175,6 @@ SELECT ST_UNION(the_geom) as the_geom
 ####5. Excluding unwanted protected areas
 
 Some of the Protected Areas should not be used to calculate statistics. In this group we have the ones whose status is _Proposed_ or _Not_ _Reported_ or _UNESCO_ _Biosphere_ _Reserves_.
-
-#####Query Evolution 5
-
-```Ruby
-  COMPLEX_COUNTRIES = {
-    'marine' => ['GBR','USA','CAN','MYT','CIV','AUS'],
-    'land'   => ['DEU','USA','FRA','GBR','AUS','FIN','BGR','CAN',
-                 'ESP','SWE','BEL','EST','IRL','ITA','LTU',
-                 'NZL','POL','CHE']
-  }
-
-  def geometry_attribute country, area_type
-    if COMPLEX_COUNTRIES[area_type].include? country.iso_3
-      'ST_Makevalid(ST_Buffer(ST_Simplify(the_geom,0.005),0.0))'
-    else
-      'the_geom'
-    end
-  end
-```
 
 ```SQL
 SELECT ST_UNION(the_geom) as the_geom
@@ -256,25 +212,6 @@ SELECT ST_UNION(the_geom) as the_geom
 
 In some cases we create not valid geometries when simplifying or creating a buffer. We need in each case to make features topologically valid.
 
-######Query Evolution 6
-
-```Ruby
-  COMPLEX_COUNTRIES = {
-    'marine' => ['GBR','USA','CAN','MYT','CIV','AUS'],
-    'land'   => ['DEU','USA','FRA','GBR','AUS','FIN','BGR','CAN',
-                 'ESP','SWE','BEL','EST','IRL','ITA','LTU',
-                 'NZL','POL','CHE']
-  }
-
-  def geometry_attribute country, area_type
-    if COMPLEX_COUNTRIES[area_type].include? country.iso_3
-      'ST_Makevalid(ST_Buffer(ST_Simplify(the_geom,0.005),0.0))'
-    else
-      'the_geom'
-    end
-  end
-```
-
 ```SQL
 SELECT ST_UNION(the_geom) as the_geom
   FROM (
@@ -308,10 +245,47 @@ SELECT ST_UNION(the_geom) as the_geom
   ) a
 ```
 
+####7. Updating table
+
+All the geometries should be stored in the countries table. According to what we mentionend above we will have three update queries per country everytime we have new geometries.
+
+```SQL
+UPDATE countries
+SET #{type}_pas_geom = a.the_geom
+  FROM(
+  SELECT ST_UNION(the_geom) as the_geom
+    FROM (
+    SELECT iso3, #{geometry_attribute(country, area_type)} the_geom
+      FROM standard_polygons
+      WHERE iso3 = #{iso3}
+        AND ST_IsValid(polygon.wkb_geometry)
+        AND is_marine = #{type}
+        AND status NOT IN ('Proposed', 'Not Reported')
+        AND desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
+    UNION
+
+    SELECT iso3, ST_Buffer(the_geom::geography, |/( rep_area*1000000 / pi() ))::geometry the_geom
+     FROM standard_points
+     WHERE iso3 = #{iso3}
+      AND is_marine = #{type}
+      AND status NOT IN ('Proposed', 'Not Reported')
+      AND desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
 
 
+    UNION
 
+    SELECT country.iso_3, ST_Makevalid(ST_Intersection(ST_Buffer(country.land_geom,0.0), polygon.the_geom)) the_geom 
+      FROM standard_polygons polygon
+      INNER JOIN countries country ON ST_Intersects(ST_Buffer(country.land_geom,0.0), polygon.the_geom)
+      WHERE polygon.iso3 LIKE '%,%'
+        AND iso3 = #{iso3}
+        AND is_marine = #{type}
+        AND status NOT IN ('Proposed', 'Not Reported')
+        AND desig NOT IN ('UNESCO-MAB Biosphere Reserve', 'UNESCO-MAB Réserve de Biosphère')
+    ) b
+) a
+```
 
+####7. Inside a rails project
 
-
-
+The above query is (almost) in plain SQL. The only the countries, types of protected areas and simplifying code are ruby injections. In order to embed in a rails project we have created a [ERB template](../lib/modules/geospatial/templates/dissolve_geometries.erb) with the full query that is run by a [class](../lib/modules/geospatial/country_geometry_populator/geometry_dissolver.rb).
