@@ -57,14 +57,19 @@ class @ProtectedAreaMap
   addCartodbTiles: (tileConfig) ->
     # Always show the wdpa layer:
     cartocss = """
-      #wdpapoly_july2014_0{
+      #wdpa_point, #wdpa_poly {
         line-color:#40541b;
         line-width:0.05;
         polygon-fill:#83ad35;
         polygon-opacity:0.7;}
     """
+
     sublayers = [
-      sql: "select * from wdpapoly_july2014_0"
+      sql: """
+        SELECT the_geom FROM wdpa_point
+          UNION ALL
+        SELECT the_geom FROM wdpa_poly
+      """
       cartocss: cartocss
     ]
     if tileConfig.wdpaId?
