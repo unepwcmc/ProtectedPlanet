@@ -10,15 +10,8 @@ class CartoDb::Merger
   def merge table_names, column_names
     @table_names = table_names
     @column_names = column_names
-    @default_table = table_names[0].include?('point') ? 'wdpa_point' : 'wdpa_poly'
 
-    merge_query.each do |query|
-      response = query_cartodb query
-      return false unless response.code == 200
-    end
-    insert_default_table
-
-    return true
+    merge_tables and move_to_permanent_table
   end
 
   private
@@ -28,28 +21,46 @@ class CartoDb::Merger
     self.class.get('/', @options)
   end
 
-  def merge_query
-    merge_candidates.map do |table_name|
-      """INSERT INTO #{@table_names[0]} (#{column_names}) SELECT #{column_names} FROM #{table_name};
-       DROP TABLE #{table_name};""".squish
+  def merge_tables
+    merge_candidates.each do |table_name|
+      response = query_cartodb table_merge_query(table_name)
+      return false unless response.code == 200
     end
+
+    true
   end
 
-  def insert_default_table
-    temp_table = @table_names[0]
-    query = rename_transaction temp_table
-    response = query_cartodb query
-
-    return false unless response.code == 200
+  def table_merge_query table_name
+    """
+      INSERT INTO #{@table_names[0]}
+        (#{column_names})
+        SELECT #{column_names} FROM #{table_name};
+      DROP TABLE #{table_name};
+    """.squish
   end
 
-  def rename_transaction temp_table
-    """BEGIN;
-       DELETE FROM #{@default_table};
-       INSERT INTO #{@default_table}
-          SELECT * FROM #{temp_table};
-       DROP TABLE #{temp_table};
-       COMMIT;""".squish
+  def move_to_permanent_table
+    response = query_cartodb rename_query
+    return response.code == 200
+  end
+
+  def rename_query
+    """
+      BEGIN;
+      DELETE FROM #{permanent_table_name};
+      INSERT INTO #{permanent_table_name}
+         SELECT * FROM #{@table_names[0]};
+      DROP TABLE #{@table_names[0]};
+      COMMIT;
+    """.squish
+  end
+
+  def permanent_table_name
+    if !!(@table_names[0] =~ Wdpa::DataStandard::Matchers::POLYGON_TABLE)
+      "wdpa_poly"
+    else
+      "wdpa_point"
+    end
   end
 
   def merge_candidates
