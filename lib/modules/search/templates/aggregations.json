@@ -1,0 +1,50 @@
+{
+  "country": {
+    "nested": {
+      "path": "countries_for_index"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "countries_for_index.id"
+        }
+      }
+    }
+  },
+  "region": {
+    "nested": {
+      "path": "countries_for_index.region_for_index"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "countries_for_index.region_for_index.id"
+        }
+      }
+    }
+  },
+  "designation": {
+    "nested": {
+      "path": "designation"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "designation.id"
+        }
+      }
+    }
+  },
+  "iucn_category": {
+    "nested": {
+      "path": "iucn_category"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "iucn_category.id"
+        }
+      }
+    }
+  }
+}

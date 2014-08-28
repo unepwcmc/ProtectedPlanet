@@ -1,0 +1,15 @@
+<ul>
+  <% facets.each do |name, models| %>
+    <li>
+      <h5><%= name.humanize %></h5>
+
+      <ul>
+        <% models.each do |facet| %>
+          <li>
+            <%= facet_link facet, params %>
+          </li>
+        <% end %>
+      </ul>
+    </li>
+  <% end %>
+</ul>

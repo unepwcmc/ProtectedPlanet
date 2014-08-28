@@ -1,7 +1,8 @@
 # Protected Planet Next
 
 [![Build Status](https://travis-ci.org/unepwcmc/ProtectedPlanet.svg)](https://travis-ci.org/unepwcmc/ProtectedPlanet)
-[![Code Climate](https://codeclimate.com/github/unepwcmc/ProtectedPlanet.png)](https://codeclimate.com/github/unepwcmc/ProtectedPlanet)
+[![Code Climate](https://codeclimate.com/repos/539b16466956806b20010ddc/badges/e90cf6ba84f66503705c/gpa.svg)](https://codeclimate.com/repos/539b16466956806b20010ddc/feed)
+[![Test Coverage](https://codeclimate.com/repos/539b16466956806b20010ddc/badges/e90cf6ba84f66503705c/coverage.svg)](https://codeclimate.com/repos/539b16466956806b20010ddc/feed)
 
 You can check out the previous version of Protected Planet on
 [GitHub](https://github.com/unepwcmc/ppe).

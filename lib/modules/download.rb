@@ -1,5 +1,7 @@
 class Download
   TMP_PATH = File.join(Rails.root, 'tmp')
+  CURRENT_PREFIX = "current/"
+  NEW_RELEASE_PREFIX = "new_release/"
 
   GENERATORS = [
     Download::Csv,
@@ -17,6 +19,10 @@ class Download
     download.link_to type
   end
 
+  def self.make_current
+    S3.replace_all NEW_RELEASE_PREFIX, CURRENT_PREFIX
+  end
+
   def initialize download_name, wdpa_ids=nil
     @download_name = download_name
     @wdpa_ids = wdpa_ids
@@ -24,23 +30,26 @@ class Download
 
   def link_to type
     file_name = File.basename zip_path_for_type(type)
+    prefixed_file_name = CURRENT_PREFIX + file_name
 
     bucket_name = Rails.application.secrets.aws_downloads_bucket
     url = "https://#{bucket_name}.s3.amazonaws.com"
 
-    URI.join(url, file_name).to_s
+    URI.join(url, prefixed_file_name).to_s
   end
 
   def generate
     GENERATORS.each do |generator|
       type = generator.to_s.demodulize.downcase
       zip_path = zip_path_for_type(type)
-      download_name = File.basename(zip_path)
 
       generated = generator.generate zip_path, @wdpa_ids
 
       if generated
-        S3.upload download_name, zip_path
+        download_name = File.basename(zip_path)
+        prefixed_download_name = NEW_RELEASE_PREFIX + download_name
+
+        S3.upload prefixed_download_name, zip_path
         clean_up zip_path
       end
     end

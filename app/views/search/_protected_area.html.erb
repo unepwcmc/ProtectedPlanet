@@ -1,0 +1,15 @@
+<li class='result'>
+  <%= image_tag "map-marker@2x.png", style: "width: 29px; height: 44px" %>
+  <div>
+    <h3><a href='/<%= model.slug %>'><%= model.name %></a> | <small><%= model.designation.name %></small></h3>
+    <p>
+      <% model.countries.each do |country| %>
+        <a href="<%= country_stats_path(iso: country.iso) %>"><%= country.name %></a>,
+        <a href="<%= regional_stats_path(iso: country.region.try(:iso)) %>"><%= country.region.try(:name) %></a>
+        |
+      <% end %>
+      <icon></icon>
+      <%= model.marine ? 'Marine' : 'Terrestrial' %> area
+    </p>
+  </div>
+</li>

@@ -10,7 +10,7 @@ class TestSourceDataStandard < ActiveSupport::TestCase
       {metadataid: 1234}
     )
 
-    assert_equal({id: 1234}, attributes)
+    assert_equal({metadataid: 1234}, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
