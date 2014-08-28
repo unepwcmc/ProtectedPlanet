@@ -41,4 +41,5 @@ We follow a simple 3-step methodology explained in the following links:
 2. [Splitting Marine Protected Areas](marine_intersection.md)
 3. [Calculating Stats](stats_calculator.md)
 
+The geospatial operations are focused on countries and in the last step statistics are aggregated for regions and the entire planet.
 In the end we are taking around 6 hours to run automatically (2 hours for the first step and 4 hours for the second step).
