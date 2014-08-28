@@ -35,4 +35,5 @@ UPDATE countries
 ```
 
 ## 4. Inside a rails project
-As in the [Dissolving Geometries](dissolving_geometries.md) query, the example in this documentation is plain SQL with ruby injections. In order to embed in a rails project we have created a [ERB template](../lib/modules/geospatial/templates/marine_geometry.erb) with the full query that is run by a [class](../lib/modules/geospatial/country_geometry_populator/marine_geometry_intersector.rb).
+
+As in the [Dissolving Geometries](dissolving_geometries.md) query, the example in this documentation is plain SQL with ruby injections. In order to embed in a rails project we have created a [ERB template](../../lib/modules/geospatial/templates/marine_geometry.erb) with the full query that is run by a [class](../../lib/modules/geospatial/country_geometry_populator/marine_geometry_intersector.rb).

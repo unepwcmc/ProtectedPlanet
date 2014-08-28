@@ -1,12 +1,12 @@
 # Calculating statistics
 
-## Introduction
+## 1. Introduction
 
 After creating a flat Protected Area dataset and splitting marine protected areas by Exclusive Economic Zones (EEZ) and Territorial Seas (TS) the last step is to calculate the statistics for countries, regions (continents) and global.
 We have created two tables to store the statistics: _country_statistics_ and _regional_statistics_. We have included the global statistics in the last one as it did not make sense to create a table just with a row as all the statistics needed are the ones stored in regional_statisitics.
 As all the statistics may change every month, we delete all the values before inserting the new ones on the fly.
 
-## Values that we need.
+## 2. Values that we need.
 
 To calculate protected areas coverage statistics we need to get both the Protected Areas'areas and the administrative boundaries' areas. These are:
 
@@ -20,7 +20,7 @@ To calculate protected areas coverage statistics we need to get both the Protect
 * Protected Areas EEZ Area
 * Protected Areas TS Area
 
-### Statistics
+### Statistics:
 
 * Percentage of total territory's area covered by Protected Areas
 * Percentage of territory's land area covered by Protected Areas
@@ -30,7 +30,7 @@ To calculate protected areas coverage statistics we need to get both the Protect
 
 We have one column in country_statistics per value calculated.
 
-## Countries' Statistics
+## 3. Countries' Statistics
 
 ### Calculating the areas
 
@@ -168,7 +168,7 @@ SELECT id, land_area, eez_area, ts_area,
   ) areas
 ```
 
-## Regions Statistics
+## 4. Regions Statistics
 
 ### Calculating areas
 
@@ -237,7 +237,7 @@ SELECT id, land_area, eez_area, ts_area,
   GROUP BY r.id) areas
 ```
 
-## Global Statistics
+## 5. Global Statistics
 
 The statistics calculation for global statistics is very similar to what we have done with regional statistics. The only difference is that we restrict the operation to the global region (with its geometries).
 
@@ -284,6 +284,6 @@ SELECT id, land_area, eez_area, ts_area,
     GROUP BY r.id) areas
 ```
 
-## Inside a rails project
+## 6. Inside a rails project
 
-As in the [Dissolving Geometries](dissolving_geometries.md) and the [Marine Intersection](dissolving_geometries.md), the example in this documentation is plain SQL . In order to embed in a rails project we have created ERB Templates for  [countries](../lib/modules/geospatial/templates/countries_statistics_query.erb), [regions](../lib/modules/geospatial/templates/regional_statistics_query.erb), [planet](../lib/modules/geospatial/templates/global_statistics_query.erb) and the [common parts](../lib/modules/geospatial/templates/base_calculation.erb). In the end we get a DRY solution that should be run by a [class](../lib/modules/geospatial/calculator.rb).
+As in the [Dissolving Geometries](dissolving_geometries.md) and the [Marine Intersection](dissolving_geometries.md), the example in this documentation is plain SQL . In order to embed in a rails project we have created ERB Templates for  [countries](../../lib/modules/geospatial/templates/countries_statistics_query.erb), [regions](../../lib/modules/geospatial/templates/regional_statistics_query.erb), [planet](../../lib/modules/geospatial/templates/global_statistics_query.erb) and the [common parts](../../lib/modules/geospatial/templates/base_calculation.erb). In the end we get a DRY solution that should be run by a [class](../../lib/modules/geospatial/calculator.rb).
