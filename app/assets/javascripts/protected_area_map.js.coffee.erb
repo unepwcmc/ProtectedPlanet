@@ -1,4 +1,7 @@
 class @ProtectedAreaMap
+  POLYGONS_TABLE = 'wdpa_poly_<%= Rails.env %>'
+  POINTS_TABLE   = 'wdpa_point_<%= Rails.env %>'
+
   constructor: ($container) ->
     @map = L.map($container.attr('id'), {zoomControl: false, scrollWheelZoom: false})
 
@@ -62,7 +65,7 @@ class @ProtectedAreaMap
   addWdpaTiles: (tileConfig, sublayers) ->
     cartocss = [
       @_generateCartocss(
-        table: ['wdpa_poly', 'wdpa_point']
+        table: [POLYGONS_TABLE, POINTS_TABLE]
         lineColor: '40541b'
         polygonFill: '83ad35'
       )
@@ -70,13 +73,13 @@ class @ProtectedAreaMap
 
     if tileConfig.wdpaId?
       cartocss.push @_generateCartocss(
-        table: ['wdpa_poly', 'wdpa_point']
+        table: [POLYGONS_TABLE, POINTS_TABLE]
         attrName: 'wdpaid'
         attrVal: tileConfig.wdpaId
       )
 
     sublayers.push
-      sql: "SELECT the_geom FROM wdpa_point UNION ALL SELECT the_geom FROM wdpa_poly"
+      sql: "SELECT the_geom FROM #{POINTS_TABLE} UNION ALL SELECT the_geom FROM #{POLYGONS_TABLE}"
       cartocss: cartocss.join("\n")
     sublayers
 

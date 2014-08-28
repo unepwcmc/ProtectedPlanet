@@ -57,9 +57,9 @@ class CartoDb::Merger
 
   def permanent_table_name
     if !!(@table_names[0] =~ Wdpa::DataStandard::Matchers::POLYGON_TABLE)
-      "wdpa_poly"
+      "wdpa_poly_#{Rails.env}"
     else
-      "wdpa_point"
+      "wdpa_point_#{Rails.env}"
     end
   end
 

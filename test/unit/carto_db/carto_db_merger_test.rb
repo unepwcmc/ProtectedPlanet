@@ -33,10 +33,11 @@ class TestCartoDbMerger < ActiveSupport::TestCase
       to_return(:status => 200, :body => "", :headers => {})
 
 
+    env = Rails.env
     rename_query = """
       BEGIN;
-      DELETE FROM wdpa_poly;
-      INSERT INTO wdpa_poly SELECT * FROM wdpa_poly_1;
+      DELETE FROM wdpa_poly_#{env};
+      INSERT INTO wdpa_poly_#{env} SELECT * FROM wdpa_poly_1;
       DROP TABLE wdpa_poly_1;
       COMMIT;
       """.squish
