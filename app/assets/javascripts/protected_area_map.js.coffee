@@ -5,17 +5,16 @@ class @ProtectedAreaMap
     L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png').addTo(@map)
 
   _generateCartocssSelector: (args) ->
+    tables = args.table
+    tables = [tables] unless $.isArray(tables)
+
     if args.attrName and args.attrVal
       comparator = "[#{args.attrName} = #{args.attrVal}]"
-      if $.isArray(args.table)
-        return args.table.map((value) -> "##{value}#{comparator}").join(',')
-      else
-        return "##{args.table}#{comparator}"
+      mapFunction = (value) -> "##{value}#{comparator}"
     else
-      if $.isArray(args.table)
-        return args.table.map((value) -> "##{value}").join(',')
-      else
-        return "##{args.table}"
+      mapFunction = (value) -> "##{value}"
+
+    return tables.map(mapFunction).join(',')
 
   _generateCartocss: (args) ->
     args = $.extend({
