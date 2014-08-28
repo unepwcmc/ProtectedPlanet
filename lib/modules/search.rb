@@ -16,12 +16,15 @@ class Search
   end
 
   def results
-    matches = @query_results["hits"]["hits"]
-
-    @matches ||= matches.map do |result|
+    @results ||= matches.map do |result|
       model_class = result["_type"].classify.constantize
       model_class.find(result["_source"]["id"])
     end
+  end
+
+  def pluck key
+    @values ||= {}
+    @values[key] ||= matches.map { |result| result["_source"][key] }
   end
 
   def count
@@ -56,6 +59,10 @@ class Search
   private
 
   RESULTS_SIZE = 10
+
+  def matches
+    @query_results["hits"]["hits"]
+  end
 
   def elastic_search
     @elastic_search ||= Elasticsearch::Client.new(

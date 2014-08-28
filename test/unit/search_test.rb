@@ -212,4 +212,19 @@ class TestSearch < ActiveSupport::TestCase
 
     assert_equal 40, pages
   end
+
+  test '.pluck, given a property, returns the corresponding values in the EC hits' do
+    hits = [
+      { '_source' => {'wdpa_id' => 123, 'id' => 24} },
+      { '_source' => {'wdpa_id' => 345, 'id' => 1} },
+      { '_source' => {'id' => 22} }
+    ]
+
+    search_mock = mock()
+    search_mock.stubs(:search).returns({ "hits" => {"hits" => hits} })
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    values = Search.search('manbone').pluck('wdpa_id')
+    assert_equal [123, 345, nil], values
+  end
 end
