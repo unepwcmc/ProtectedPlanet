@@ -8,20 +8,35 @@ class DownloadTest < ActiveSupport::TestCase
     shapefile_download_zip_name = 'an_download-shapefile.zip'
     shapefile_zip_path = File.join(Rails.root, 'tmp', shapefile_download_zip_name)
     Download::Shapefile.expects(:generate).with(shapefile_zip_path, nil).returns(true)
-    S3.expects(:upload).with("new_release/#{shapefile_download_zip_name}", shapefile_zip_path)
+    S3.expects(:upload).with(Download::CURRENT_PREFIX + shapefile_download_zip_name, shapefile_zip_path)
 
     csv_download_zip_name = 'an_download-csv.zip'
     csv_zip_path = File.join(Rails.root, 'tmp', csv_download_zip_name)
     Download::Csv.expects(:generate).with(csv_zip_path, nil).returns(true)
-    S3.expects(:upload).with("new_release/#{csv_download_zip_name}", csv_zip_path)
+    S3.expects(:upload).with(Download::CURRENT_PREFIX + csv_download_zip_name, csv_zip_path)
 
     kml_download_zip_name = 'an_download-kml.zip'
     kml_zip_path = File.join(Rails.root, 'tmp', kml_download_zip_name)
     Download::Kml.expects(:generate).with(kml_zip_path, nil).returns(true)
-    S3.expects(:upload).with("new_release/#{kml_download_zip_name}", kml_zip_path)
+    S3.expects(:upload).with(Download::CURRENT_PREFIX + kml_download_zip_name, kml_zip_path)
 
     download_success = Download.generate download_name
     assert download_success, "Expected Download.generate to return true on success"
+  end
+
+  test '.generate, called with the import option, generates downloads with the import prefix' do
+    download_name = 'an_download'
+
+    Download::Shapefile.stubs(:generate).returns(true)
+    S3.expects(:upload).with(Download::IMPORT_PREFIX + 'an_download-shapefile.zip', anything)
+
+    Download::Csv.stubs(:generate).returns(true)
+    S3.expects(:upload).with(Download::IMPORT_PREFIX + 'an_download-csv.zip', anything)
+
+    Download::Kml.stubs(:generate).returns(true)
+    S3.expects(:upload).with(Download::IMPORT_PREFIX + 'an_download-kml.zip', anything)
+
+    Download.generate download_name, import: true
   end
 
   test '.generate, called with an array of PA IDs, generates downloads
@@ -40,7 +55,7 @@ class DownloadTest < ActiveSupport::TestCase
     kml_zip_path = File.join(Rails.root, 'tmp', 'an_download-kml.zip')
     Download::Kml.expects(:generate).with(kml_zip_path, pa_ids)
 
-    download_success = Download.generate download_name, pa_ids
+    download_success = Download.generate download_name, wdpa_ids: pa_ids
     assert download_success, "Expected Download.generate to return true on success"
   end
 
@@ -87,7 +102,7 @@ class DownloadTest < ActiveSupport::TestCase
   end
 
   test '.make_current moves all downloads to current folder in S3' do
-    S3.expects(:replace_all).with(Download::NEW_RELEASE_PREFIX, Download::CURRENT_PREFIX)
+    S3.expects(:replace_all).with(Download::IMPORT_PREFIX, Download::CURRENT_PREFIX)
     Download.make_current
   end
 end
