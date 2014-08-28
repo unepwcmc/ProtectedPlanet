@@ -13,5 +13,5 @@
     - restart nginx
 
 - name: Setup /var/www
-  file: dest=/var/www/ owner=ubuntu group=ubuntu state=directory
+  file: dest=/var/www/ owner={{username}} group={{username}} state=directory
   sudo: yes

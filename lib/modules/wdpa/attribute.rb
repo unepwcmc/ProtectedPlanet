@@ -9,8 +9,9 @@ class Wdpa::Attribute
     year:     -> (value) {
       value = value.to_s
       # Postgres cannot handle zero dates, and the WDPA stores
-      # null legal statuses as zeroes
-      value = '1' if value == '0'
+      # null legal statuses as zeroes. Also handles 'Not Reported' case
+      # and similar
+      return nil if value.to_i.zero?
 
       Date.strptime(value, '%Y')
     }

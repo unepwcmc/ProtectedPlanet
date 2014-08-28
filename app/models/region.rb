@@ -22,4 +22,10 @@ class Region < ActiveRecord::Base
       "iucn_categories.name IN (#{valid_categories})"
     )
   end
+
+  def as_indexed_json options={}
+    self.as_json(
+      only: [:id, :name]
+    )
+  end
 end

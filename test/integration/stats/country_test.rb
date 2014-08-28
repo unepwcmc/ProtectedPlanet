@@ -23,7 +23,7 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders the number of PAs in the region' do
-    pa_count = 10
+    pa_count = 2
     pa_count.times do
       FactoryGirl.create(:protected_area, countries: [@country], designation: nil)
     end
@@ -37,7 +37,7 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
 
     assert page.has_selector?('.pa-count'),
       "Expected page to have a PA count element"
-    assert_equal pa_count, page.first('.pa-count p').text.to_i
+    assert_equal 2, page.first('.pa-count p').text.to_i
   end
 
   test 'renders percentage of global pas in one country' do
@@ -59,7 +59,7 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
   test 'renders the number of Protected Areas with IUCN Categories' do
     iucn_category = FactoryGirl.create(:iucn_category, name: 'Ia')
 
-    pa_with_iucn_count = 5
+    pa_with_iucn_count = 2
     pa_with_iucn_count.times do
       FactoryGirl.create(:protected_area, countries: [@country], iucn_category: iucn_category)
     end
@@ -80,11 +80,9 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
   end
 
   test 'renders the number of designations' do
-    designation_count = 3
-    designation_count.times do
-      designation = FactoryGirl.create(:designation)
-      FactoryGirl.create(:protected_area, designation: designation, countries: [@country])
-    end
+    designation = FactoryGirl.create(:designation)
+    FactoryGirl.create(:protected_area, designation: designation, countries: [@country])
+
     FactoryGirl.create(:country_statistic, country: @country,
       percentage_pa_land_cover: 50, pa_area: 40,
       percentage_pa_eez_cover: 50, percentage_pa_ts_cover: 50)
@@ -96,7 +94,7 @@ class CountryStatsTest < ActionDispatch::IntegrationTest
 
     assert page.has_selector?('.designation-count'),
       "Expected page to have a designation count element"
-    assert_equal designation_count, page.first('.designation-count p').text.to_i
+    assert_equal 1, page.first('.designation-count p').text.to_i
   end
 
   test 'renders the designations by frequency' do

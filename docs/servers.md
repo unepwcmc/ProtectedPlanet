@@ -17,6 +17,9 @@ Protected Planet runs on the following AWS EC2 instances.
 * DB
     * m3.medium
     * db-stage.protectedplanet.net
+* Elasticsearch
+    * m3.medium
+    * ec2-54-81-197-189.compute-1.amazonaws.com
 
 ### Production
 

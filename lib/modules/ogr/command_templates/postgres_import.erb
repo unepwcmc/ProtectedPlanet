@@ -1,11 +1,11 @@
 ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8
   -f "PostgreSQL" PG:"
-  host=<%= DB_CONFIG["host"] %>
-  user=<%= DB_CONFIG["username"] %>
-  <% unless DB_CONFIG["password"].nil? %>
-    password=<%= DB_CONFIG["password"] %>
+  host=<%= db_config[:host] %>
+  user=<%= db_config[:username] %>
+  <% unless db_config[:password].nil? %>
+    password=<%= db_config[:password] %>
   <% end %>
-  dbname=<%= DB_CONFIG["database"] %>"
+  dbname=<%= db_config[:database] %>"
   <% if original_table_name %>
     -sql "SELECT * FROM <%= original_table_name %>"
   <% end %>

@@ -46,6 +46,54 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     refute selected_protected_area.has_attribute?(:the_geom)
   end
 
+  test '.as_indexed_json returns the PA as JSON with nested attributes' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryGirl.create(:country, id: 123, name: 'Manboneland', region: region)
+    sub_location = FactoryGirl.create(:sub_location, english_name: 'Manboneland City')
+
+    iucn_category = FactoryGirl.create(:iucn_category, id: 456, name: 'IA')
+    designation = FactoryGirl.create(:designation, id: 654, name: 'National')
+
+    pa = FactoryGirl.create(:protected_area,
+      name: 'Manbone', countries: [country], sub_locations: [sub_location],
+      original_name: 'Manboné', iucn_category: iucn_category,
+      designation: designation, marine: true, wdpa_id: 555999
+    )
+
+    expected_json = {
+      "id" => pa.id,
+      "wdpa_id" => 555999,
+      "name" => 'Manbone',
+      "original_name" => "Manboné",
+      "marine" => true,
+      "sub_locations" => [
+        {
+          "english_name" => "Manboneland City"
+        }
+      ],
+      "countries_for_index" => [
+        {
+          "id" => 123,
+          "name" => "Manboneland",
+          "region_for_index" => {
+            "id" => 987,
+            "name" => "North Manmerica"
+          }
+        }
+      ],
+      "iucn_category" => {
+        "id" => 456,
+        "name" => "IA"
+      },
+      "designation" => {
+        "id" => 654,
+        "name" => "National"
+      }
+    }
+
+    assert_equal expected_json, pa.as_indexed_json
+  end
+
   test '#with_valid_iucn_categories returns PAs with valid IUCN
    categories' do
     iucn_category_1 = FactoryGirl.create(:iucn_category, name: 'Ib')

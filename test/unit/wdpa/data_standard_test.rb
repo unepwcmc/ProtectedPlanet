@@ -90,8 +90,8 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash returns Country models for given
    ISO codes' do
-    FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')
-    FactoryGirl.create(:country, iso_3: 'GTM', name: 'Guatemala')
+    norway = FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')
+    guatemala = FactoryGirl.create(:country, iso_3: 'GTM', name: 'Guatemala')
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({iso3: 'NOR, GTM,'})
 
@@ -99,10 +99,10 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
       "Expected two Country models to be returned"
 
     assert_kind_of Country, attributes[:countries].first
-    assert_equal   "Norway", attributes[:countries].first.name
+    assert_equal   norway.id, attributes[:countries].first.id
 
     assert_kind_of Country, attributes[:countries].second
-    assert_equal   "Guatemala", attributes[:countries].second.name
+    assert_equal   guatemala.id, attributes[:countries].second.id
   end
 
   test '.attributes_from_standards_hash returns an empty array if the
@@ -199,14 +199,20 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     assert_equal   governance_name, attributes[:governance].name
   end
 
-  test '.attributes_from_standards_hash returns a Source for a given
+  test '.attributes_from_standards_hash returns all matching Sources for a given
    metadataid' do
-    source = FactoryGirl.create(:source)
+    first_source = FactoryGirl.create(:source, metadataid: 123)
+    second_source = FactoryGirl.create(:source, metadataid: 123)
+    FactoryGirl.create(:source, metadataid: 456)
 
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({metadataid: source.id})
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({metadataid: 123})
 
-    assert_kind_of Source, attributes[:source]
-    assert_equal   source.id, attributes[:source].id
+    assert_equal 2, attributes[:sources].length
+
+    expected_attribute_ids = [first_source.id, second_source.id]
+    actual_attribute_ids = attributes[:sources].map(&:id)
+
+    assert_same_elements expected_attribute_ids, actual_attribute_ids
   end
 
   test '.attributes_from_standards_hash returns a ManagementAuthority for a given

@@ -33,6 +33,17 @@ a.btn, button {
     background-color: $dark-green;
     cursor: pointer;
   }
+
+  &.blue {
+    background: none;
+    border: 1px solid #4194D4;
+    color: #4194D4;
+
+    &:hover {
+      color: white;
+      background-color: #4194D4;
+    }
+  }
 }
 
 .btn-primary {
@@ -52,6 +63,7 @@ input {
   background-repeat: no-repeat;
   background-position: -200px -400px;
   height: 100%;
+  overflow: hidden;
 }
 
 h2 {
