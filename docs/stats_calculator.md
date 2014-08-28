@@ -125,7 +125,7 @@ FROM (
 ) areas
 ```
 
-### Updating the table
+### Updating the statistics table
 
 As mentioned above, we delete all the values from the country_statistics table before inserting the new ones. This is the fastest way to update. We add timestamps to know when was the last change.
 
@@ -156,14 +156,134 @@ SELECT id, land_area, eez_area, ts_area,
   END,
   LOCALTIMESTAMP,
   LOCALTIMESTAMP
-FROM (
-  SELECT id, ST_Area(ST_Transform(land_pas_geom,954009)) pa_land_area,
-          ST_Area(ST_Transform(marine_pas_geom,954009)) pa_marine_area,
-          ST_Area(ST_Transform(marine_eez_pas_geom,954009)) pa_eez_area,
-          ST_Area(ST_Transform(marine_ts_pas_geom,954009)) pa_ts_area,
-          ST_Area(ST_Transform(land_geom,954009)) land_area,
-          ST_Area(ST_Transform(eez_geom,954009)) eez_area,
-          ST_Area(ST_Transform(ts_geom,954009)) ts_Area
-        FROM countries
-) areas
+  FROM (
+    SELECT id, ST_Area(ST_Transform(land_pas_geom,954009)) pa_land_area,
+            ST_Area(ST_Transform(marine_pas_geom,954009)) pa_marine_area,
+            ST_Area(ST_Transform(marine_eez_pas_geom,954009)) pa_eez_area,
+            ST_Area(ST_Transform(marine_ts_pas_geom,954009)) pa_ts_area,
+            ST_Area(ST_Transform(land_geom,954009)) land_area,
+            ST_Area(ST_Transform(eez_geom,954009)) eez_area,
+            ST_Area(ST_Transform(ts_geom,954009)) ts_Area
+          FROM countries
+  ) areas
 ```
+
+## Regions Statistics
+
+### Calculating areas
+
+In this case we do not need to do any geospatial operation, only to sum all the areas for each country in a continent. We consider Russia and Turkey as Asian territories as the majority of their territory is in Asia. The regions table as a one to many relationship with the countries table.
+
+The base query is:
+
+```SQL
+SELECT r.id,
+  sum(pa_land_area) pa_land_area,
+  sum(pa_marine_area) pa_marine_area,
+  sum(pa_eez_area) pa_eez_area,
+  sum(pa_ts_area) pa_ts_area,
+  sum(land_area) land_area,
+  sum(eez_area) eez_area,
+  sum(ts_area) ts_area
+  FROM country_statistics cs
+JOIN countries c ON cs.country_id = c.id
+JOIN regions r on r.id = c.region_id
+GROUP BY r.id
+```
+
+### Updating the statistics table
+
+The regional statistics calculation has the same structure as what we have done for countries. The query is very similar.
+
+```SQL
+INSERT INTO regional_statistics (
+  region_id, land_area, eez_area, ts_area, pa_area,
+  pa_land_area, pa_marine_area, pa_eez_area, pa_ts_area, percentage_pa_cover,
+  percentage_pa_land_cover, percentage_pa_eez_cover,
+  percentage_pa_ts_cover, created_at, updated_at
+)
+SELECT id, land_area, eez_area, ts_area,
+  COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0),
+  pa_land_area, pa_marine_area, pa_eez_area, pa_ts_area,
+  (COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0)) /
+    (land_area + COALESCE(eez_area, 0) + COALESCE(ts_area,0))*100,
+  COALESCE(pa_land_area,0) / land_area * 100,
+  CASE
+    WHEN eez_area = 0 THEN
+    0
+    ELSE
+    COALESCE(pa_eez_area,0) / eez_area * 100
+  END,
+  CASE
+    WHEN ts_area = 0 THEN
+    0
+    ELSE
+    COALESCE(pa_ts_area,0) / ts_area * 100
+  END,
+  LOCALTIMESTAMP,
+  LOCALTIMESTAMP
+  FROM (
+    SELECT r.id,
+    sum(pa_land_area) pa_land_area,
+    sum(pa_marine_area) pa_marine_area,
+    sum(pa_eez_area) pa_eez_area,
+    sum(pa_ts_area) pa_ts_area,
+    sum(land_area) land_area,
+    sum(eez_area) eez_area,
+    sum(ts_area) ts_area
+    FROM country_statistics cs
+  JOIN countries c ON cs.country_id = c.id
+  JOIN regions r on r.id = c.region_id
+  GROUP BY r.id) areas
+```
+
+## Global Statistics
+
+The statistics calculation for global statistics is very similar to what we have done with regional statistics. The only difference is that we restrict the operation to the global region (with its geometries).
+
+```SQL
+INSERT INTO regional_statistics (
+  region_id, land_area, eez_area, ts_area, pa_area,
+  pa_land_area, pa_marine_area, pa_eez_area, pa_ts_area, percentage_pa_cover,
+  percentage_pa_land_cover, percentage_pa_eez_cover,
+  percentage_pa_ts_cover, created_at, updated_at
+)
+SELECT id, land_area, eez_area, ts_area,
+  COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0),
+  pa_land_area, pa_marine_area, pa_eez_area, pa_ts_area,
+  (COALESCE(pa_land_area,0) + COALESCE(pa_marine_area,0)) /
+    (land_area + COALESCE(eez_area, 0) + COALESCE(ts_area,0))*100,
+  COALESCE(pa_land_area,0) / land_area * 100,
+  CASE
+    WHEN eez_area = 0 THEN
+    0
+    ELSE
+    COALESCE(pa_eez_area,0) / eez_area * 100
+  END,
+  CASE
+    WHEN ts_area = 0 THEN
+    0
+    ELSE
+    COALESCE(pa_ts_area,0) / ts_area * 100
+  END,
+  LOCALTIMESTAMP,
+  LOCALTIMESTAMP
+  FROM (
+    SELECT r.id,
+      sum(pa_land_area) pa_land_area,
+      sum(pa_marine_area) pa_marine_area,
+      sum(pa_eez_area) pa_eez_area,
+      sum(pa_ts_area) pa_ts_area,
+      sum(land_area) land_area,
+      sum(eez_area) eez_area,
+      sum(ts_area) ts_area
+      FROM country_statistics cs
+    JOIN countries c ON cs.country_id = c.id,
+    regions r
+    WHERE r.iso = 'GL'
+    GROUP BY r.id) areas
+```
+
+## Inside a rails project
+
+As in the [Dissolving Geometries](dissolving_geometries.md) and the [Marine Intersection](dissolving_geometries.md), the example in this documentation is plain SQL . In order to embed in a rails project we have created ERB Templates for  [countries](../lib/modules/geospatial/templates/countries_statistics_query.erb), [regions](../lib/modules/geospatial/templates/regional_statistics_query.erb), [planet](../lib/modules/geospatial/templates/global_statistics_query.erb) and the [common parts](../lib/modules/geospatial/templates/base_calculation.erb). In the end we get a DRY solution that should be run by a [class](../lib/modules/geospatial/calculator.rb).
