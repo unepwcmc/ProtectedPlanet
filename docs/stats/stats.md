@@ -4,11 +4,11 @@ As you may know we are managing [ProtectedPlanet.net](http://www.protectedplanet
 
 Now we are [rebuilding it](http://alpha.protectedplanet.net). At the end of the year we will have a completely new website running. You can view all the code for this new website in its [repository](https://github.com/unepwcmc/ProtectedPlanet) on [github](https://github.com).
 
-Coverage Statistics is one of the main features. It is very important for the users to know what is the percentage of the territory that is covered by protected areas in a certain country These statistics were calculated manually in the old website and every year we have a team spending some days calculating them for an yearly report using ESRI Software.
+Coverage Statistics is one of the main features. It is very important for the users to know what is the percentage of the territory that is covered by protected areas in a given country, region or the entire planet. These statistics were calculated manually in the old website and every year we have a team spending some days calculating them for an yearly report using ESRI Software.
 
 So we had a great challenge this time:
 
-Can we automatically calculate the statistics every month for all the protected areas and countries in the entire planet?
+> Can we automatically calculate the statistics every month for all the protected areas and countries in the entire planet?
 
 In this case time matters. If we want to calculate statistics every month it is not supposed to take 2 or 3 days processing as it was taking. We have chosen a full open source solution with Postgres/PostGIS to do all the back end tasks that we need to calculate statistics.
 
@@ -41,4 +41,4 @@ We follow a simple 3-step methodology explained in the following links:
 2. [Splitting Marine Protected Areas](marine_intersection.md)
 3. [Calculating Stats](stats_calculator.md)
 
-In the end we are taking around 6 hours to run automatically (2 hours for the first step and 4 hours for the second).
+In the end we are taking around 6 hours to run automatically (2 hours for the first step and 4 hours for the second step).
