@@ -211,7 +211,7 @@ SELECT ST_UNION(the_geom) as the_geom
 
 ## 8. Updating table
 
-All the geometries should be stored in the countries table. According to what we mentionend above we will have three update queries per country everytime we have new geometries.
+All the geometries should be stored in the countries table. According to what we mentioned above we will have three update queries per country every time we have new geometries.
 
 ```SQL
 UPDATE countries

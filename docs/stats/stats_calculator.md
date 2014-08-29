@@ -63,7 +63,7 @@ FROM countries
 
 ### Calculating
 
-We need to get all the values in the query plus the coverage percentages to insert on the statistics table. We need to create a new query with the calculations using the previous one as a subquery.
+We need to get all the values in the query plus the coverage percentages to insert on the statistics table. We need to create a new query with the calculations using the previous one as a sub-query.
 
 ```SQL
 SELECT land_area,
