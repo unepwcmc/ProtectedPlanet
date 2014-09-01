@@ -6,8 +6,7 @@ class Wdpa::CartoDbImporter
 
   def initialize wdpa_release
     @wdpa_release = wdpa_release
-    @shapefiles = []
-
+    @shapefiles = {}
     @cartodb_username = Rails.application.secrets.cartodb_username
     @cartodb_api_key = Rails.application.secrets.cartodb_api_key
   end
@@ -23,24 +22,27 @@ class Wdpa::CartoDbImporter
 
   def split
     @wdpa_release.geometry_tables.each do |table, _|
-      @shapefiles.push(
-        *Ogr::Split.split(@wdpa_release.gdb_path, table, 5, STANDARD_COLUMNS)
-      )
+      @shapefiles[table] =
+        Ogr::Split.split(@wdpa_release.gdb_path, table, 5, STANDARD_COLUMNS)
     end
   end
 
   def upload
-    @shapefiles.each do |shapefile|
-      cartodb_uploader = CartoDb::Uploader.new @cartodb_username, @cartodb_api_key
+    cartodb_uploader = CartoDb::Uploader.new @cartodb_username, @cartodb_api_key
 
-      upload_successful = cartodb_uploader.upload shapefile.compress
-      return false unless upload_successful
+    @shapefiles.each do |table_name, shapefiles|
+      shapefiles.each do |shapefile|
+        upload_successful = cartodb_uploader.upload shapefile.compress
+        return false unless upload_successful
+      end
     end
   end
 
   def merge
-    table_names = @shapefiles.map(&:filename)
-    cartodb_merger = CartoDb::Merger.new @cartodb_username, @cartodb_api_key
-    cartodb_merger.merge table_names, CARTODB_COLUMNS
+    @shapefiles.each do |table_name, shapefiles|
+      table_names = shapefiles.map(&:filename)
+      cartodb_merger = CartoDb::Merger.new @cartodb_username, @cartodb_api_key
+      cartodb_merger.merge table_names, CARTODB_COLUMNS
+    end
   end
 end

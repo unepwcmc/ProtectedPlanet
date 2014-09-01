@@ -12,11 +12,11 @@ class TestCartoDbMerger < ActiveSupport::TestCase
   end
 
   test 'given an array of table names, .merge concatenates the tables together in CartoDB' do
-    table_names = ['poly_1', 'poly_2', 'poly_3']
+    table_names = ['wdpa_poly_1', 'wdpa_poly_2', 'wdpa_poly_3']
 
     first_expected_query = '''
-      INSERT INTO poly_1 (wdpaid, the_geom) SELECT wdpaid, the_geom FROM poly_2;
-      DROP TABLE poly_2;
+      INSERT INTO wdpa_poly_1 (wdpaid, the_geom) SELECT wdpaid, the_geom FROM wdpa_poly_2;
+      DROP TABLE wdpa_poly_2;
     '''.squish
 
     stub_request(:get, "https://chewie.cartodb.com/api/v2/sql/").
@@ -24,12 +24,26 @@ class TestCartoDbMerger < ActiveSupport::TestCase
       to_return(:status => 200, :body => "", :headers => {})
 
     second_expected_query = '''
-      INSERT INTO poly_1 (wdpaid, the_geom) SELECT wdpaid, the_geom FROM poly_3;
-      DROP TABLE poly_3;
+      INSERT INTO wdpa_poly_1 (wdpaid, the_geom) SELECT wdpaid, the_geom FROM wdpa_poly_3;
+      DROP TABLE wdpa_poly_3;
     '''.squish
 
     stub_request(:get, "https://chewie.cartodb.com/api/v2/sql/").
       with({query: {api_key: '1234', q: second_expected_query}}).
+      to_return(:status => 200, :body => "", :headers => {})
+
+
+    env = Rails.env
+    rename_query = """
+      BEGIN;
+      DELETE FROM wdpa_poly_#{env};
+      INSERT INTO wdpa_poly_#{env} SELECT * FROM wdpa_poly_1;
+      DROP TABLE wdpa_poly_1;
+      COMMIT;
+      """.squish
+
+    stub_request(:get, "https://chewie.cartodb.com/api/v2/sql/").
+      with({query: {api_key: '1234', q: rename_query}}).
       to_return(:status => 200, :body => "", :headers => {})
 
     cartodb_merger = CartoDb::Merger.new "chewie", "1234"
