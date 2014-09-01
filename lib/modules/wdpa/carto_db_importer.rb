@@ -28,10 +28,10 @@ class Wdpa::CartoDbImporter
   end
 
   def upload
+    cartodb_uploader = CartoDb::Uploader.new @cartodb_username, @cartodb_api_key
+
     @shapefiles.each do |table_name, shapefiles|
       shapefiles.each do |shapefile|
-        cartodb_uploader = CartoDb::Uploader.new @cartodb_username, @cartodb_api_key
-
         upload_successful = cartodb_uploader.upload shapefile.compress
         return false unless upload_successful
       end
