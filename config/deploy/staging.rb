@@ -7,7 +7,7 @@
 server 'stage.protectedplanet.net', user: 'ubuntu', roles: %w{web}
 server 'util-stage.protectedplanet.net', user: 'ubuntu', roles: %w{util}
 
-set :rails_env, :production
+set :rails_env, :staging
 
 # Custom SSH Options
 # ==================

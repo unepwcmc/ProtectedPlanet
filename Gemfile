@@ -11,15 +11,14 @@ gem 'therubyracer',  platforms: :ruby
 gem 'jquery-rails'
 gem 'turbolinks'
 
-gem 'spring',        group: :development
-
-group :production do
+group :production, :staging do
   gem 'unicorn'
   gem 'dalli', '~> 2.7.2'
   gem 'rack-cache', '~> 1.2'
 end
 
 group :development do
+  gem 'spring'
   gem 'capistrano',  '~> 3.1'
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-bundler', '~> 1.1', require: false
