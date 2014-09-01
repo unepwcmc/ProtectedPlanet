@@ -58,9 +58,9 @@ region (continent) and the entire planet:
 
 We follow a simple 3-step methodology explained in the following links:
 
-1. [Dissolving Geometries](stats/dissolving_geometries.md)
-2. [Splitting Marine Protected Areas](stats/marine_intersection.md)
-3. [Calculating Stats](stats/stats_calculator.md)
+1. [Dissolving Geometries](dissolving_geometries.md)
+2. [Splitting Marine Protected Areas](marine_intersection.md)
+3. [Calculating Stats](stats_calculator.md)
 
 The geospatial operations are focused on countries and in the last step
 statistics are aggregated for regions and the entire planet. We are also
