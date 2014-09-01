@@ -1,14 +1,28 @@
-# Calculating statistics
+# Calculating Statistics
 
 ## 1. Introduction
 
-After creating a flat Protected Area dataset and splitting marine protected areas by Exclusive Economic Zones (EEZ) and Territorial Seas (TS) the last step is to calculate the statistics for countries, regions (continents) and the globe.
-We have created two tables to store the statistics: _country_statistics_ and _regional_statistics_. We have included the global statistics in the last one because it did not make sense to create a table just with a row as all the statistics needed are the ones stored in regional_statistics.
-All the statistics may change every month so we delete all the values before inserting the new ones on the fly.
+After creating a flat protected area dataset and splitting marine
+protected areas by Exclusive Economic Zones (EEZ) and Territorial Seas
+(TS), the last step is to calculate the statistics for countries, regions
+(continents) and the globe.
 
-## 2. Values that we need.
+We store the statistics in two tables:
 
-To calculate protected areas coverage statistics we need to get both the Protected Areas' areas and the administrative boundaries' areas. These are:
+* `country_statistics`
+* `regional_statistics`
+
+The global statistics are stored in the regional table, as the globe is
+technically a region and creating a third table for a single row does
+not make much practical sense.
+
+As the statistics change every month, we delete all the values before
+inserting the newly calculated ones.
+
+## 2. Values We Need
+
+To calculate protected area coverage statistics we need to get both the
+protected areas and the administrative boundary areas. These are:
 
 * Land Area (territory)
 * EEZ Area (territory)
@@ -18,7 +32,7 @@ To calculate protected areas coverage statistics we need to get both the Protect
 * Protected Areas EEZ Area
 * Protected Areas TS Area
 
-And then we need to calculate the statistics.
+And then we need to calculate the statistics:
 
 * Percentage of total territory's area covered by Protected Areas
 * Percentage of territory's land area covered by Protected Areas
@@ -26,14 +40,15 @@ And then we need to calculate the statistics.
 * Percentage of territory's TS area covered by Protected Areas
 * Percentage of territory's EEZ area covered by Protected Areas
 
-We have one column in country_statistics per value calculated.
+We have one column in `country_statistics` per value calculated.
 
 ## 3. Countries Statistics
 
 ### Calculating the areas
 
-As we have stored the geometries in the _countries_ table we will need only to get the areas from there and then calculate the statistics on the fly.
-The base query is:
+As we have stored the geometries in the `_countries_` table, we only
+need to get the areas from there and then calculate the statistics. The
+base query is:
 
 ```SQL
 SELECT id, ST_Area(ST_Transform(land_pas_geom,954009)) pa_land_area,
@@ -48,7 +63,10 @@ FROM countries
 
 ### Reprojecting
 
-As you may have detected, as we are using WGS 84 the query above gives us areas in square degrees, not a very common unit. To calculate the area in square meters we need to reproject the base layer to an equal area projection. In this case from WGS 84 to Mollweide.
+As we are using WGS 84, the query above gives us areas in square
+degrees, which is not a very common unit. To calculate the area in
+square meters we need to reproject the base layer to an equal area
+projection: in this case, Mollweide.
 
 ```SQL
 SELECT id, ST_Area(ST_Transform(land_pas_geom,954009)) pa_land_area,
@@ -63,7 +81,9 @@ FROM countries
 
 ### Calculating
 
-We need to get all the values in the query plus the coverage percentages to insert on the statistics table. We need to create a new query with the calculations using the previous one as a sub-query.
+We need to get all the values in the query, plus the coverage percentages,
+to insert in to the statistics table. We need to create a new query with
+the calculations using the previous one as a sub-query.
 
 ```SQL
 SELECT land_area,
@@ -92,7 +112,12 @@ SELECT land_area,
 
 ### Handling null values
 
-We have countries without seafront and we have countries without protected areas. These values are set as _null_ by Postgis. Postgres does not consider nulls as zeros so we need to change them to calculate the values. As the eez_area and ts_area area can be null, we must also avoid a division by zero when calculating their Protected Area coverage.
+We have countries without seafront and we have countries without
+protected areas. These values are set as `null` by Postgis. Postgres
+does not consider nulls as zeros, so we need to change them to calculate
+the correct values. As the `eez_area` and `ts_area` area can be null, we
+must also avoid a division by zero when calculating their protected area
+coverage.
 
 ```SQL
 SELECT land_area, eez_area, ts_area,
@@ -125,9 +150,10 @@ FROM (
 ) areas
 ```
 
-### Updating the statistics table
+### Updating the Statistics Table
 
-As mentioned above, we delete all the values from the country_statistics table before inserting the new ones. This is the fastest way to update. We add timestamps to know when was the last change.
+As mentioned, we delete all the values from the `country_statistics`
+table before inserting the new ones. This is the fastest way to update.
 
 ```SQL
 INSERT INTO country_statistics (
@@ -172,7 +198,10 @@ SELECT id, land_area, eez_area, ts_area,
 
 ### Calculating areas
 
-In this case we do not need to do any geospatial operation, only to sum all the areas for each country in a continent. We consider Russia and Turkey as Asian territories as the majority of their territory is in Asia. The regions table has a one to many relationship with the countries table.
+In this case we do not need to do any geospatial operation, only to sum
+all the areas for each country in a continent. We consider Russia and
+Turkey as Asian territories as the majority of their territory is in
+Asia.
 
 The base query is:
 
@@ -191,9 +220,7 @@ JOIN regions r on r.id = c.region_id
 GROUP BY r.id
 ```
 
-### Updating the statistics table
-
-The regional statistics calculation has the same structure as what we have done for countries. The query is very similar.
+### Updating the Regional Statistics Table
 
 ```SQL
 INSERT INTO regional_statistics (
@@ -239,7 +266,9 @@ SELECT id, land_area, eez_area, ts_area,
 
 ## 5. Global Statistics
 
-The statistics calculation for the entire planet is very similar to what we have done with regional statistics. The only difference is that we restrict the operation to the global region (with its geometries).
+The statistics calculation for the entire planet is very similar to what
+we have done with regional statistics. The only difference is that we
+restrict the operation to the global region (with its geometries).
 
 ```SQL
 INSERT INTO regional_statistics (
@@ -284,8 +313,16 @@ SELECT id, land_area, eez_area, ts_area,
     GROUP BY r.id) areas
 ```
 
-## 6. Inside a rails project
+## 6. Inside the Application
 
-As in the [Dissolving Geometries](dissolving_geometries.md) and the [Marine Intersection](dissolving_geometries.md), the example in this documentation is plain SQL . In order to embed in a rails project we have created ERB Templates for  [countries](../../lib/modules/geospatial/templates/countries_statistics_query.erb), [regions](../../lib/modules/geospatial/templates/regional_statistics_query.erb), [planet](../../lib/modules/geospatial/templates/global_statistics_query.erb) and the [common parts](../../lib/modules/geospatial/templates/base_calculation.erb). In the end we get a DRY solution that should be run by a [class](../../lib/modules/geospatial/calculator.rb).
+As in the [Dissolving Geometries](dissolving_geometries.md) and the
+[Marine Intersection](dissolving_geometries.md), the example in this
+documentation is plain SQL. In order to embed in a rails project we
+have created ERB Templates for
+[countries](../../lib/modules/geospatial/templates/countries_statistics_query.erb),
+[regions](../../lib/modules/geospatial/templates/regional_statistics_query.erb),
+[planet](../../lib/modules/geospatial/templates/global_statistics_query.erb)
+and the [common
+parts](../../lib/modules/geospatial/templates/base_calculation.erb).
 
-[Previous Step](marine_intersection.md) | [Home](stats.md)
+[Previous Step](marine_intersection.md) | [Home](../stats.md)

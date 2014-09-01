@@ -14,7 +14,7 @@ bundle exec rake stats:calculate
 
 ## What are we doing here?
 
-You can have a detailed explanation [here](stats.md).
+There is a [detailed, technical explanation](stats/stats.md) available.
 
 ### Dissolving protected areas by country
 
