@@ -31,7 +31,7 @@ class S3
     replacing_objects = bucket.objects.with_prefix(from)
     replaced_objects = bucket.objects.with_prefix(to)
 
-    bucket.objects.delete(replaced_objects)
+    replaced_objects.delete_all
 
     replacing_objects.each do |object|
       new_key = object.key.gsub(from, to)

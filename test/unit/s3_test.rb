@@ -44,9 +44,12 @@ class S3Test < ActiveSupport::TestCase
     object_mock.stubs(:key).returns(old_prefix + 'test')
     object_mock.expects(:move_to).with(new_prefix + 'test')
 
+    object_collection_mock = mock()
+    object_collection_mock.expects(:delete_all)
+    object_collection_mock.stubs(:each).yields(object_mock)
+
     objects_mock = mock()
-    objects_mock.stubs(:with_prefix).returns([object_mock])
-    objects_mock.expects(:delete).with([object_mock])
+    objects_mock.stubs(:with_prefix).returns(object_collection_mock)
 
     bucket_mock = mock()
     bucket_mock.stubs(:objects).returns(objects_mock)
