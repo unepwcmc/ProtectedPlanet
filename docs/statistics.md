@@ -14,6 +14,8 @@ bundle exec rake stats:calculate
 
 ## What are we doing here?
 
+There is a [detailed, technical explanation](stats/stats.md) available.
+
 ### Dissolving protected areas by country
 
 We have several protected areas that overlay each other. If we were
@@ -30,11 +32,6 @@ errors. So, we have selected the countries which were taking more than
 an acceptable time and we have simplified their protected areas
 geometries in 0.005º so we can dissolve all PA's in an hour.
 
-### Excluding geometry errors
-
-Some of the protected areas have geometry errors. There are around 400
-(less than 0.2%) that are not being used to calculate statistics. We are
-still trying to improve so we can discard less geometries.
 
 ### Handling with transnational Protected Areas
 
@@ -60,14 +57,14 @@ We are excluding the following Protected Areas according to the PA team
 
 ### Marine Protected areas
 
-We are intersecting the marine protected area with Economic Exclusive
+We are intersecting the marine protected area with Exclusive Economic
 Zones and Territorial Seas so we can calculate the statistics for both
 zones. You can import them following the
 [instructions](docs/installation.md#country-geometries).
 
 ### Intercontinental countries
 
-We are considering that Russia is in Asia and Turkey is in Europe to
+We are considering that Russia and Turkey are in Asia to
 calculate stats. In the future we may change th DB structure to split
 the protected areas of these two countries and get more acurate values
 for Regional Statistics.
