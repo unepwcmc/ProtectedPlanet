@@ -10,6 +10,7 @@ class TestWdpaImporter < ActiveSupport::TestCase
     Wdpa::SourceImporter.expects(:import).with(wdpa_release)
     Wdpa::ProtectedAreaImporter.expects(:import).with(wdpa_release)
     Wdpa::DownloadGenerator.expects(:generate)
+    Wdpa::CountryGeometryPopulator.expects(:populate)
     Wdpa::CartoDbImporter.expects(:import).with(wdpa_release)
 
     Wdpa::Importer.import

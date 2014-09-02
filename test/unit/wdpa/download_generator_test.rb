@@ -9,7 +9,6 @@ class DownloadGeneratorTest < ActiveSupport::TestCase
     samoa = FactoryGirl.create(:country, iso_3: 'SAM', region: north_america)
     kenya = FactoryGirl.create(:country, iso_3: 'KEN', region: asia)
 
-
     FactoryGirl.create(:protected_area, countries: [st_lucia, kenya], wdpa_id: 1)
     FactoryGirl.create(:protected_area, countries: [samoa], wdpa_id: 555555123)
 
