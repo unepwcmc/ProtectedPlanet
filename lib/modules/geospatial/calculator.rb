@@ -15,12 +15,14 @@ class Geospatial::Calculator
   end
 
   def calculate_statistics
-    DB.execute render_template BASE_QUERY_TEMPLATE, binding
+    db.execute render_template BASE_QUERY_TEMPLATE, binding
   end
 
   private
 
-  DB = ActiveRecord::Base.connection
+  def db
+    ActiveRecord::Base.connection
+  end
 
   def render_template template_path, binding
     template = ERB.new(File.read(template_path))
