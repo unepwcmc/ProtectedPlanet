@@ -16,6 +16,7 @@ class Wdpa::Importer
     Wdpa::SourceImporter.import wdpa_release
     Wdpa::ProtectedAreaImporter.import wdpa_release
     Wdpa::DownloadGenerator.generate
+    Wdpa::CountryGeometryPopulator.populate
     Wdpa::CartoDbImporter.import wdpa_release
   end
 end
