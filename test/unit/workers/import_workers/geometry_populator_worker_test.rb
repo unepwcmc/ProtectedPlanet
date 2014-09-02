@@ -12,6 +12,10 @@ class ImportWorkersGeometryPopulatorWorkerTest < ActiveSupport::TestCase
       expects(:populate_marine_geometries).
       with(country)
 
+    ImportWorkers::GeometryPopulatorWorker.
+      any_instance.
+      expects(:finalise_job)
+
     ImportWorkers::GeometryPopulatorWorker.new.perform country.id
   end
 end

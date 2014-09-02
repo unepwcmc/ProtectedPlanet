@@ -6,5 +6,7 @@ class ImportWorkers::GeometryPopulatorWorker < ImportWorker
       populator.populate_dissolved_geometries country
       populator.populate_marine_geometries country
     end
+  ensure
+    finalise_job
   end
 end
