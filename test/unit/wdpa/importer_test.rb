@@ -2,16 +2,21 @@ require 'test_helper'
 
 class TestWdpaImporter < ActiveSupport::TestCase
   test '.import creates a WDPA Release, imports the protected areas from
-   it, generates downloads for the imported PAs and cleans up' do
+   it, generates downloads for the imported PAs, enables the FinaliserWorker
+   and cleans up' do
+    import = sequence('import')
+
     wdpa_release = mock()
     wdpa_release.stubs(:clean_up)
 
-    Wdpa::Release.expects(:download).returns(wdpa_release)
-    Wdpa::SourceImporter.expects(:import).with(wdpa_release)
-    Wdpa::ProtectedAreaImporter.expects(:import).with(wdpa_release)
-    Wdpa::DownloadGenerator.expects(:generate)
-    Wdpa::CountryGeometryPopulator.expects(:populate)
-    Wdpa::CartoDbImporter.expects(:import).with(wdpa_release)
+    Wdpa::Release.expects(:download).returns(wdpa_release).in_sequence(import)
+    Wdpa::SourceImporter.expects(:import).with(wdpa_release).in_sequence(import)
+    Wdpa::ProtectedAreaImporter.expects(:import).with(wdpa_release).in_sequence(import)
+    Wdpa::DownloadGenerator.expects(:generate).in_sequence(import)
+    Wdpa::CountryGeometryPopulator.expects(:populate).in_sequence(import)
+    Wdpa::CartoDbImporter.expects(:import).with(wdpa_release).in_sequence(import)
+
+    ImportWorkers::FinaliserWorker.expects(:can_be_started=).with(true).in_sequence(import)
 
     Wdpa::Importer.import
   end

@@ -7,6 +7,8 @@ class Wdpa::Importer
   def import
     wdpa_release = Wdpa::Release.download
     execute_importers wdpa_release
+
+    ImportWorkers::FinaliserWorker.can_be_started = true
     wdpa_release.clean_up
   end
 
