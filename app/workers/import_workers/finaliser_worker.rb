@@ -2,11 +2,16 @@ class ImportWorkers::FinaliserWorker
   include Sidekiq::Worker
   sidekiq_options :retry => false
 
+  @@can_be_started = false
+  cattr_accessor :can_be_started
+
   def perform
     ImportTools::WebHandler.under_maintenance do
       finalise_import
       refresh_data
     end
+  ensure
+    self.class.can_be_started = false
   end
 
   private
