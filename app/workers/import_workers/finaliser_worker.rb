@@ -20,6 +20,7 @@ class ImportWorkers::FinaliserWorker
     Search::Index.delete
     Search::Index.create
 
+    Geospatial::Calculator.calculate_statistics
     Download.make_current
     ImportTools::WebHandler.clear_cache
   end
