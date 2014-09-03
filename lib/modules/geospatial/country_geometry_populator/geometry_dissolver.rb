@@ -10,13 +10,15 @@ module Geospatial::CountryGeometryPopulator::GeometryDissolver
 
   def self.dissolve country
     AREA_TYPES.each do |area_type, marine_status|
-      DB.execute render_template(TEMPLATE, binding)
+      db.execute render_template(TEMPLATE, binding)
     end
   end
 
   private
 
-  DB = ActiveRecord::Base.connection
+  def self.db
+    ActiveRecord::Base.connection
+  end
 
   def self.render_template template_path, binding
     template = ERB.new(File.read(template_path))

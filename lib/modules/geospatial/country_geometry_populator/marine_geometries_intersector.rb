@@ -10,13 +10,15 @@ module Geospatial::CountryGeometryPopulator::MarineGeometriesIntersector
     repair_marine_geometries
 
     MARINE_TYPES.each do |marine_type|
-      DB.execute render_template(INTERSECTOR_TEMPLATE, binding)
+      db.execute render_template(INTERSECTOR_TEMPLATE, binding)
     end
   end
 
   private
 
-  DB = ActiveRecord::Base.connection
+  def self.db
+    ActiveRecord::Base.connection
+  end
 
   def self.render_template template_path, binding
     template = ERB.new(File.read(template_path))
