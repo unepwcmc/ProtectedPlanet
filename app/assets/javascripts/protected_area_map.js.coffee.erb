@@ -79,7 +79,7 @@ class @ProtectedAreaMap
       )
 
     sublayers.push
-      sql: "SELECT the_geom, the_geom_webmercator FROM #{POINTS_TABLE} UNION ALL SELECT the_geom, the_geom_webmercator FROM #{POLYGONS_TABLE}"
+      sql: "SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POINTS_TABLE} UNION ALL SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POLYGONS_TABLE}"
       cartocss: cartocss.join("\n")
     sublayers
 
