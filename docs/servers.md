@@ -34,6 +34,9 @@ Protected Planet runs on the following AWS EC2 instances.
 * DB
     * m3.large
     * db-prod.protectedplanet.net
+* Elasticsearch
+    * m3.large
+    * ec2-54-75-208-148.eu-west-1.compute.amazonaws.com
 
 ## Capistrano
 

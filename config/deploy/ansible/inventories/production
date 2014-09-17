@@ -1,13 +1,20 @@
 [web]
-ec2-54-195-196-250.eu-west-1.compute.amazonaws.com
+alpha.protectedplanet.net
 
 [db]
-ec2-46-51-162-231.eu-west-1.compute.amazonaws.com
+db-prod.protectedplanet.net
 
 [util]
-ec2-54-195-208-72.eu-west-1.compute.amazonaws.com
+util-prod.protectedplanet.net
+
+[elasticsearch]
+ec2-54-75-208-148.eu-west-1.compute.amazonaws.com
+[elasticsearch:vars]
+elasticsearch_node_name=elasticsearch-prod
+
 
 [all:children]
 web
 db
 util
+elasticsearch
