@@ -227,4 +227,29 @@ class TestSearch < ActiveSupport::TestCase
     values = Search.search('manbone').pluck('wdpa_id')
     assert_equal [123, 345, nil], values
   end
+
+  test '#download, given a search term and filters, generates a search with
+   token, and spawns a SearchDownloader worker' do
+    search_term = 'san guillermo'
+    opts = {filters: [{name: 'type', value: 'protected_area'}]}
+    token = "san guillermo\u0004\b[\u0006[\u0006{\a:\tnameI\"\ttype\u0006:\u0006ET:\nvalueI\"\u0013protected_area\u0006;\u0006T"
+
+    Search.stubs(:find).returns(false)
+    Search.expects(:create).with(token, search_term, opts)
+    SearchDownloader.expects(:perform_async).with(token, search_term, opts)
+
+    Search.download(search_term, opts)
+  end
+
+  test '#download, given a search term and filters, returns an existing download when found' do
+    search_term = 'san guillermo'
+    opts = {filters: [{name: 'type', value: 'protected_area'}]}
+    token = "san guillermo\u0004\b[\u0006[\u0006{\a:\tnameI\"\ttype\u0006:\u0006ET:\nvalueI\"\u0013protected_area\u0006;\u0006T"
+
+    Search.expects(:find).with(token, search_term, opts).returns(true)
+    Search.expects(:create).never
+    SearchDownloader.expects(:perform_async).never
+
+    Search.download(search_term, opts)
+  end
 end

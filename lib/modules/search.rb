@@ -6,6 +6,18 @@ class Search
     instance
   end
 
+  def self.download search_term, options={}
+    token = search_term + Marshal.dump(
+      options.keys.sort.map{|key| options[key]}
+    )
+
+    self.find(token, search_term, options) || begin
+      instance = self.create(token, search_term, options)
+      SearchDownloader.perform_async(token, search_term, options)
+      instance
+    end
+  end
+
   def initialize search_term, options
     @search_term = search_term
     @options = options
