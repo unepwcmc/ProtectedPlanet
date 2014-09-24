@@ -29,30 +29,30 @@ class Search
 
   def results
     @results ||= matches.map do |result|
-      model_class = result["_type"].classify.constantize
-      model_class.find(result["_source"]["id"])
+      model_class = result['_type'].classify.constantize
+      model_class.find(result['_source']['id'])
     end
   end
 
   def pluck key
     @values ||= {}
-    @values[key] ||= matches.map { |result| result["_source"][key] }
+    @values[key] ||= matches.map { |result| result['_source'][key] }
   end
 
   def count
-    @query_results["hits"]["total"]
+    @query_results['hits']['total']
   end
 
   def aggregations
     aggs_by_model = {}
 
-    @query_results["aggregations"].each do |name, aggs|
+    @query_results['aggregations'].each do |name, aggs|
       model = name.classify.constantize
 
-      aggs_by_model[name] = aggs["aggregation"]["buckets"].map do |info|
+      aggs_by_model[name] = aggs['aggregation']['buckets'].map do |info|
         {
-          model: model.find(info["key"]),
-          count: info["doc_count"]
+          model: model.find(info['key']),
+          count: info['doc_count']
         }
       end
     end
@@ -73,7 +73,7 @@ class Search
   RESULTS_SIZE = 10
 
   def matches
-    @query_results["hits"]["hits"]
+    @query_results['hits']['hits']
   end
 
   def elastic_search
@@ -92,12 +92,6 @@ class Search
   end
 
   def offset
-    page = @options[:page]
-
-    if page && page > 0
-      RESULTS_SIZE * (page - 1)
-    else
-      0
-    end
+    RESULTS_SIZE * (current_page - 1)
   end
 end
