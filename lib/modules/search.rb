@@ -88,10 +88,13 @@ class Search
 
   def query
     {
-      size: RESULTS_SIZE,
-      from: offset,
+      size: @options[:size] || RESULTS_SIZE,
+      from: @options[:offset] || offset,
       query: Search::Query.new(@search_term, @options).to_h,
-      aggs: Search::Aggregation.all
+    }.tap{ |query|
+      unless @options[:without_aggregations]
+        query[:aggs] = Search::Aggregation.all
+      end
     }
   end
 
