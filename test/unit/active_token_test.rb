@@ -13,6 +13,18 @@ class ActiveTokenTest < ActiveSupport::TestCase
     assert_equal token, obj.token
   end
 
+  test '#create sets a key with the given token, and returns the created object' do
+    token = '123'
+    digested_token = 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'
+    time_mock = mock.tap{|time| time.stubs(:to_i).returns(1000) }
+
+    Time.stubs(:now).returns(time_mock)
+    $redis.expects(:hset).with("test:#{digested_token}", 'created_at', 1000)
+
+    obj = TestObj.create token
+    assert_kind_of TestObj, obj
+  end
+
   test '.properties creates and returns a ActiveToken::Properties object with
    the token key' do
     properties = {'prop1' => 'value1'}

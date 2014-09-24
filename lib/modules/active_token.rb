@@ -4,9 +4,16 @@ module ActiveToken
   end
 
   module ClassMethods
-    def find token
+    def find token, *attrs
       return nil unless $redis.exists(token_key(token))
-      self.new.tap{ |instance| instance.token = token }
+      self.new(*attrs).tap{ |instance| instance.token = token }
+    end
+
+    def create token=generate_token, *attrs
+      token = shaify_token(token)
+
+      $redis.hset(token_key(token), 'created_at', Time.now.to_i)
+      self.new(*attrs).tap{ |instance| instance.token = token }
     end
 
     def token_key token, property=nil
@@ -16,6 +23,10 @@ module ActiveToken
     private
     def token_domain domain
       @@domain = domain
+    end
+
+    def shaify_token token
+      Digest::SHA256.hexdigest token
     end
   end
 
