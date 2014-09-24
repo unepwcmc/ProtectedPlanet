@@ -23,7 +23,7 @@ class S3Test < ActiveSupport::TestCase
     File.expects(:size).returns(10)
 
     file_mock = mock()
-    file_mock.expects(:write).with(Pathname.new(__FILE__), {content_length: 10})
+    file_mock.expects(:write).with(Pathname.new(__FILE__), {acl: :public_read, content_length: 10})
 
     bucket_mock = mock()
     bucket_mock.expects(:objects).returns({object_name => file_mock})
