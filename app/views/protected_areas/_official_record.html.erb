@@ -36,7 +36,7 @@
     <tr>
       <td>
         <strong>Status Year</strong>
-        <%= protected_area.legal_status_updated_at.strftime('%Y') %>
+        <%= if protected_area.legal_status_updated_at then protected_area.legal_status_updated_at.strftime('%Y') end %>
       </td>
       <td>
         <strong>Governance Type</strong>
