@@ -34,6 +34,10 @@ class Search
     end
   end
 
+  def complete!
+    self.properties['status'] = 'completed'
+  end
+
   def pluck key
     @values ||= {}
     @values[key] ||= matches.map { |result| result['_source'][key] }

@@ -228,6 +228,14 @@ class TestSearch < ActiveSupport::TestCase
     assert_equal [123, 345, nil], values
   end
 
+  test '.complete! sets the status property to completed' do
+    properties_mock = mock()
+    properties_mock.expects(:[]=).with('status', 'completed')
+    Search.any_instance.stubs(:properties).returns(properties_mock)
+
+    Search.new('san guillermo', {}).complete!
+  end
+
   test '#download, given a search term and filters, generates a search with
    token, and spawns a SearchDownloader worker' do
     search_term = 'san guillermo'
