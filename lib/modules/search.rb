@@ -2,6 +2,8 @@ class Search
   include ActiveToken
   token_domain 'search'
 
+  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region]
+
   def self.search search_term, options={}
     instance = self.new search_term, options
     instance.search

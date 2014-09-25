@@ -88,7 +88,7 @@ class SearchQueryTest < ActiveSupport::TestCase
       ]
     }
 
-    query = Search::Query.new(term, filters: [{name: 'type', value: 'country'}]).to_h
+    query = Search::Query.new(term, filters: {type: 'country'}).to_h
     filters = query["filtered"]["filter"]
 
     assert_equal expected_object, filters
