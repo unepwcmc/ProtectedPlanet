@@ -14,7 +14,7 @@ class Search::Index
     Search::Index.index Region.without_geometry.all
 
     Search::Index.create_mapping 'protected_area'
-    Search::ParallelIndexer.index pa_relation
+    Search::Index.index pa_relation
   end
 
   def self.index collection
