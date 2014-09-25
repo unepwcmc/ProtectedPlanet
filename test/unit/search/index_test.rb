@@ -41,7 +41,7 @@ class IndexTest < ActiveSupport::TestCase
     Search::Index.expects(:index).with(Country.without_geometry)
     Search::Index.expects(:index).with(Region.without_geometry)
     Search::Index.expects(:create_mapping).with('protected_area')
-    Search::ParallelIndexer.expects(:index).with(pa_relation)
+    Search::Index.expects(:index).with(pa_relation)
 
     Search::Index.create
   end
