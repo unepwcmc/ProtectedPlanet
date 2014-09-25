@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   get '/stats/regional/:iso', to: 'stats/regional#show', as: 'regional_stats'
   get '/stats/country/:iso', to: 'stats/country#show', as: 'country_stats'
 
-  get '/downloads/:iso_3', to: 'downloads#show'
+  resource :downloads
 
   get '/search', to: 'search#index'
 
