@@ -1,8 +1,6 @@
-class @DownloadModal
+class @DownloadSelectionModal extends Modal
   DEFAULT_TYPES = ['csv', 'shapefile', 'kml']
   BASE_DOWNLOAD_PATH = '/downloads'
-
-  @overlayTemplate: "<div class=\"total-overlay\"></div>"
 
   @template: """
     <div id="download-modal" class="modal">
@@ -19,18 +17,8 @@ class @DownloadModal
   """
 
   constructor: ($container) ->
-    @$overlay = $(@constructor.overlayTemplate)
-    @$el = $(@constructor.template)
-
-    $container.append(@$overlay)
-    $container.append(@$el)
-
-    $closeModalBtn = @$el.find('#close-modal')
-    for $el in [@$overlay, $closeModalBtn]
-      $el.on('click', (ev) =>
-        @hide()
-        ev.preventDefault()
-      )
+    super($container)
+    @addCloseFunctionality()
 
   buildLinksFor: (objectName, types) ->
     types ||= DEFAULT_TYPES
@@ -45,11 +33,3 @@ class @DownloadModal
     )
 
     linkContainer.html(newLinks)
-
-  show: ->
-    @$el.addClass('opened')
-    @$overlay.addClass('visible')
-
-  hide: ->
-    @$el.removeClass('opened')
-    @$overlay.removeClass('visible')

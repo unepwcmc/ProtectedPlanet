@@ -30,7 +30,7 @@ class @PageInitialiser
       map.locate()
 
   initialiseDownloadModal: ($modalContainer) ->
-    downloadModal = new DownloadModal($modalContainer)
+    downloadModal = new DownloadSelectionModal($modalContainer)
     $('.btn-download').on('click', (e) ->
       downloadModal.buildLinksFor(@getAttribute('data-download-object'))
       downloadModal.show()
@@ -48,7 +48,7 @@ class @PageInitialiser
     return false if $vizContainer.length == 0 or not Modernizr.svg?
     $vizContainer.find('.viz').each (idx, el) ->
       value = $(el).attr('data-value')
-      return if typeof +value isnt "number" or +value is isNaN
+      return if typeof +value isnt 'number' or +value is isNaN
       data = [
         {
           value: value
@@ -56,7 +56,7 @@ class @PageInitialiser
         }
         {
           value: 100 - value
-          color: "#d2d2db"
+          color: '#d2d2db'
           is_background: true
         }
       ]
