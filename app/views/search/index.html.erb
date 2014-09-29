@@ -20,6 +20,7 @@
       <section class="search-results">
         <h4>
           Showing <%= @search.count %> <%= 'result'.pluralize @search.results.count %> for "<%= @query %>"
+          <a data-create-from="<%= downloads_path %>" data-poll-from="<%= download_poll_path %>" class="btn btn-secondary download-search"><i class="fa fa-download"></i> Download results</a>
         </h4>
 
         <%= render 'type_facets' %>

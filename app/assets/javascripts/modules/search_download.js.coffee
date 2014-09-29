@@ -4,15 +4,19 @@ class @SearchDownload
   @start: (creationPath, pollingPath) ->
     new SearchDownload(creationPath, pollingPath).start()
 
-  constructor: (@creationPath, @pollingPath) ->
+  constructor: (@creationPath, @pollingPath, @opts={mainContainer: $('body')}) ->
+    @generationModal = new DownloadGenerationModal(@opts.mainContainer)
+    @selectionModal = new DownloadSelectionModal(@opts.mainContainer)
 
   start: ->
     @submitDownload( (token) =>
-      #@showGenerationModal()
-      #@pollDownload(token, (download) =>
-      #  hideGenerationModal()
-      #  showSelectionModal()
-      #)
+      @generationModal.show()
+      @pollDownload(token, (download) =>
+        @generationModal.hide()
+
+        @selectionModal.buildLinksFor(download.filename)
+        @selectionModal.show()
+      )
     )
 
 
@@ -22,8 +26,10 @@ class @SearchDownload
     )
 
   pollDownload: (token, next) ->
-    intervalId = setInterval( ->
-      $.getJSON("#{@pollingPath}?token=#{token}", (json) ->
-        console.log(json)
+    intervalId = setInterval( =>
+      $.getJSON("#{@pollingPath}?token=#{token}", (download) ->
+        if download.status == 'completed'
+          window.clearInterval(intervalId)
+          next(download)
       )
     , POLLING_INTERVAL)
