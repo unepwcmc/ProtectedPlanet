@@ -12,8 +12,10 @@ class Search
   end
 
   def self.download search_term, options={}
-    token = search_term + Marshal.dump(
-      options.keys.sort.map{|key| options[key]}
+    token = Digest::SHA256.hexdigest(
+      search_term + Marshal.dump(
+        options.keys.sort.map{|key| options[key]}
+      )
     )
 
     find(token, search_term, options) || begin

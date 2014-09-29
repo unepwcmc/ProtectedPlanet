@@ -240,7 +240,7 @@ class TestSearch < ActiveSupport::TestCase
    token, and spawns a SearchDownloader worker' do
     search_term = 'san guillermo'
     opts = {filters: [{name: 'type', value: 'protected_area'}]}
-    token = "san guillermo\u0004\b[\u0006[\u0006{\a:\tnameI\"\ttype\u0006:\u0006ET:\nvalueI\"\u0013protected_area\u0006;\u0006T"
+    token = "3b00778be9391426bb3c900b977dfb3771fc9cdd83e1d1f99bda77b77c3d6750"
 
     Search.stubs(:find).returns(false)
     Search.expects(:create).with(token, search_term, opts)
@@ -252,7 +252,7 @@ class TestSearch < ActiveSupport::TestCase
   test '#download, given a search term and filters, returns an existing download when found' do
     search_term = 'san guillermo'
     opts = {filters: [{name: 'type', value: 'protected_area'}]}
-    token = "san guillermo\u0004\b[\u0006[\u0006{\a:\tnameI\"\ttype\u0006:\u0006ET:\nvalueI\"\u0013protected_area\u0006;\u0006T"
+    token = "3b00778be9391426bb3c900b977dfb3771fc9cdd83e1d1f99bda77b77c3d6750"
 
     Search.expects(:find).with(token, search_term, opts).returns(true)
     Search.expects(:create).never
