@@ -28,8 +28,9 @@ class @DownloadSelectionModal extends Modal
       typeLinkText = type.toUpperCase()
       typeLinkHref = "#{BASE_DOWNLOAD_PATH}/#{objectName}?type=#{type}"
 
-      newLink = "<a class=\"btn btn-primary\" href=\"#{typeLinkHref}\">#{typeLinkText}</a>"
-      newLink
+      """
+        <a target="_blank" class="btn btn-primary" href="#{typeLinkHref}">#{typeLinkText}</a>
+      """
     )
 
     linkContainer.html(newLinks)
