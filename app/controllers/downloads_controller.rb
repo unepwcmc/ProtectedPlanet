@@ -13,6 +13,6 @@ class DownloadsController < ApplicationController
 
   private
   def filters
-    params.permit(Search::ALLOWED_FILTERS)
+    params.stringify_keys.slice(*Search::ALLOWED_FILTERS)
   end
 end

@@ -9,11 +9,13 @@ class WorkersSearchDownloaderTest < ActiveSupport::TestCase
     search_mock = mock()
     search_mock.expects(:pluck).with('id').returns(pa_ids)
     search_mock.expects(:token=)
+    search_mock.stubs(:complete!)
+    search_mock.stubs(:properties).returns({})
 
     ProtectedArea.stubs(:count).returns(100)
     Download.expects(:generate).with("search_#{digested_pa_ids}", {wdpa_ids: pa_ids})
     Search.expects(:search).with(query_term, {
-      filters: [{name: 'type', value: 'protected_area'}],
+      filters: {'type' => 'protected_area'},
       size: 100,
       without_aggregations: true
     }).returns(search_mock)
