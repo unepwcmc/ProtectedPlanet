@@ -39,7 +39,7 @@ class SearchDownloader
   end
 
   def protected_area_ids
-    @pa_ids ||= search.pluck('id')
+    @pa_ids ||= search.pluck('wdpa_id')
   end
 
   def filename
