@@ -25,7 +25,7 @@ class SearchDownloader
   def search
     @search ||= begin
       instance = Search.search(@search_term, {
-        filters: {'type' => 'protected_area'}.merge(@options[:filters] || {}),
+        filters: {'type' => 'protected_area'}.merge(@options['filters'] || {}),
         size: ProtectedArea.count,
         without_aggregations: true
       })
