@@ -18,7 +18,7 @@ class Search
     end
   end
 
-  def initialize search_term, options
+  def initialize search_term='', options={}
     @search_term = search_term
     @options = options
   end
