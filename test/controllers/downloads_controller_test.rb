@@ -12,4 +12,20 @@ class DownloadsControllerTest < ActionController::TestCase
     get :show, iso_3: country.iso_3, type: type
     assert_redirected_to link
   end
+
+  test 'POST :create, given a search term, initiates a download generation' do
+    search_term = 'manbone'
+    options = {filters: {'type' => 'protected_area'}}
+    token = '12345'
+
+    search_mock = mock
+    search_mock.stubs(:token).returns(token)
+    Search.expects(:download).with(search_term, options).returns(search_mock)
+
+
+    post :create, q: search_term, type: 'protected_area'
+
+    json_response = JSON.parse(@response.body)
+    assert_equal({'token' => token}, json_response)
+  end
 end
