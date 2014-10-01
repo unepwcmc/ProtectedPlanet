@@ -31,23 +31,23 @@ class ImportTools::Import
   end
 
   def increase_total_jobs_count
-    redis_handler.increase_property(self.token, :total_jobs)
+    redis_handler.increase_property(token, :total_jobs)
   end
 
   def increase_completed_jobs_count
     all_jobs_completed = redis_handler.increase_property_and_compare(
-      self.token, :completed_jobs, :total_jobs
+      token, :completed_jobs, :total_jobs
     )
 
     self.completed = all_jobs_completed
   end
 
   def completed?
-    self.completed
+    completed
   end
 
   def started_at
-    Time.at(self.token)
+    Time.at(token)
   end
 
   private

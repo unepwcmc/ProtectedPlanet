@@ -21,7 +21,7 @@ class ImportToolsTest < ActiveSupport::TestCase
   end
 
   test '#last_import returns an instance of Import with the token of the last import' do
-    ImportTools::RedisHandler.any_instance.expects(:previous_imports).returns([1,2,3])
+    ImportTools::RedisHandler.any_instance.expects(:previous_imports).returns([1, 2, 3])
     ImportTools::Import.expects(:find).with(3)
 
     ImportTools.last_import
