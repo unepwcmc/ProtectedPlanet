@@ -33,7 +33,7 @@ class SearchDownloader
     end
   end
 
-  def create_ids_digest
+  def ids_digest
     Digest::SHA256.hexdigest(protected_area_ids.join)
   end
 
@@ -42,6 +42,6 @@ class SearchDownloader
   end
 
   def filename
-    "search_#{create_ids_digest}"
+    "search_#{ids_digest}"
   end
 end
