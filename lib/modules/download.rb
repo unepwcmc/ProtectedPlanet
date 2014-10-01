@@ -1,7 +1,7 @@
 class Download
   TMP_PATH = File.join(Rails.root, 'tmp')
-  CURRENT_PREFIX = "current/"
-  NEW_RELEASE_PREFIX = "new_release/"
+  CURRENT_PREFIX = 'current/'
+  IMPORT_PREFIX = 'import/'
 
   GENERATORS = [
     Download::Csv,
@@ -9,8 +9,8 @@ class Download
     Download::Kml
   ]
 
-  def self.generate download_name, wdpa_ids=nil
-    download = Download.new download_name, wdpa_ids
+  def self.generate download_name, opts={}
+    download = Download.new download_name, opts
     download.generate
   end
 
@@ -20,12 +20,13 @@ class Download
   end
 
   def self.make_current
-    S3.replace_all NEW_RELEASE_PREFIX, CURRENT_PREFIX
+    S3.replace_all IMPORT_PREFIX, CURRENT_PREFIX
   end
 
-  def initialize download_name, wdpa_ids=nil
+  def initialize download_name, opts={}
     @download_name = download_name
-    @wdpa_ids = wdpa_ids
+    @wdpa_ids = opts[:wdpa_ids]
+    @for_import = opts[:for_import]
   end
 
   def link_to type
@@ -46,16 +47,21 @@ class Download
       generated = generator.generate zip_path, @wdpa_ids
 
       if generated
-        download_name = File.basename(zip_path)
-        prefixed_download_name = NEW_RELEASE_PREFIX + download_name
-
-        S3.upload prefixed_download_name, zip_path
+        upload_to_s3 zip_path
         clean_up zip_path
       end
     end
   end
 
   private
+
+  def upload_to_s3 zip_path
+    download_name = File.basename(zip_path)
+    prefix = @for_import ? IMPORT_PREFIX : CURRENT_PREFIX
+    prefixed_download_name = prefix + download_name
+
+    S3.upload prefixed_download_name, zip_path
+  end
 
   def clean_up path
     FileUtils.rm_rf path
