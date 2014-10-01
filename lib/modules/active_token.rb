@@ -10,8 +10,6 @@ module ActiveToken
     end
 
     def create token=generate_token, *attrs
-      token = hash_token(token)
-
       $redis.hset(token_key(token), 'created_at', Time.now.to_i)
       new(*attrs).tap{ |instance| instance.token = token }
     end
@@ -24,10 +22,6 @@ module ActiveToken
 
     def token_domain domain
       @@domain = domain
-    end
-
-    def hash_token token
-      Digest::SHA256.hexdigest token
     end
   end
 
