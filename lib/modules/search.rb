@@ -1,4 +1,7 @@
 class Search
+  include ActiveToken
+  token_domain 'search'
+
   def self.search search_term, options={}
     instance = self.new search_term, options
     instance.search
