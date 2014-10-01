@@ -9,7 +9,7 @@ class DownloadsControllerTest < ActionController::TestCase
 
     Download.expects(:link_to).returns(link)
 
-    get :show, iso_3: country.iso_3, type: type
+    get :show, id: country.iso_3, type: type
     assert_redirected_to link
   end
 
