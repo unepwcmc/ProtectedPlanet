@@ -4,7 +4,7 @@ class ImportTools::RedisHandler
   end
 
   def unlock
-    redis.del(current_key)
+    $redis.del(current_key)
   end
 
   def current_token
@@ -37,7 +37,6 @@ class ImportTools::RedisHandler
   end
 
   private
-  attr_writer :redis
 
   def property_key token, property
     "#{key(token)}:#{property}"
