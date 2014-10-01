@@ -23,11 +23,11 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
     @redis_handler.unlock
   end
 
-  test '.current_id gets the id of the current import from redis' do
+  test '.current_token gets the token of the current import from redis' do
     expected_key = "#{Rails.application.secrets.redis['wdpa_imports_prefix']}:current"
 
     $redis.expects(:get).with(expected_key)
-    @redis_handler.current_id
+    @redis_handler.current_token
   end
 
   test '.increase_property_and_compare calls redis commands in a redis transaction' do
@@ -36,19 +36,19 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
   end
 
   test '.increase_property_and_compare returns true if the values for the properties are equal' do
-    id = 1
+    token = 1
     key_1, key_2 = [:key_1, :key_2]
     value_1, value_2 = [123, 123]
 
     $redis.stubs(:multi).returns([value_1, value_2])
 
-    assert @redis_handler.increase_property_and_compare(id, key_1, key_2)
+    assert @redis_handler.increase_property_and_compare(token, key_1, key_2)
   end
 
-  test '.add_to_previous_ids calls redis zadd with the given id' do
-    id = 123
-    $redis.expects(:zadd).with(anything, id, id.to_s)
+  test '.add_to_previous_imports calls redis zadd with the given token' do
+    token = 123
+    $redis.expects(:zadd).with(anything, token, token.to_s)
 
-    @redis_handler.add_to_previous_ids(id)
+    @redis_handler.add_to_previous_imports(token)
   end
 end
