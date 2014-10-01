@@ -23,7 +23,7 @@ class S3
     file_path = Pathname.new(file_path)
     file_size = File.size(file_path)
 
-    object.write(file_path, content_length: file_size)
+    object.write(file_path, acl: :public_read, content_length: file_size)
   end
 
   def replace_all from, to
