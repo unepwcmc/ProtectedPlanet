@@ -11,6 +11,11 @@ class DownloadsController < ApplicationController
     render json: {token: search.token}
   end
 
+  def poll
+    search = Search.find(params[:token])
+    render(search ? {json: search.properties} : {status: 404})
+  end
+
   private
 
   def filters

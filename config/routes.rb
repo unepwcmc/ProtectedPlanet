@@ -12,7 +12,8 @@ Rails.application.routes.draw do
   get '/stats/regional/:iso', to: 'stats/regional#show', as: 'regional_stats'
   get '/stats/country/:iso', to: 'stats/country#show', as: 'country_stats'
 
-  resource :downloads, only: [:show, :create]
+  get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
+  resources :downloads, only: [:show, :create]
 
   get '/search', to: 'search#index'
 

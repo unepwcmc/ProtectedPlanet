@@ -62,3 +62,12 @@ class @PageInitialiser
       ]
       annularSectorGenerator data, el, 160, 160
 
+  initialiseSearchDownloads: ($downloadBtn, $modalContainer) ->
+    return false if $downloadBtn.length == 0
+
+    $downloadBtn.on('click', (e) ->
+      SearchDownload.start(
+        $downloadBtn.data('create-from'), $downloadBtn.data('poll-from')
+      )
+      e.preventDefault()
+    )
