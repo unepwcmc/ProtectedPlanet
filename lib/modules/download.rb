@@ -26,7 +26,7 @@ class Download
   def initialize download_name, opts={}
     @download_name = download_name
     @wdpa_ids = opts[:wdpa_ids]
-    @import = opts[:import]
+    @for_import = opts[:for_import]
   end
 
   def link_to type
@@ -47,7 +47,7 @@ class Download
       generated = generator.generate zip_path, @wdpa_ids
 
       if generated
-        upload_to_S3 zip_path
+        upload_to_s3 zip_path
         clean_up zip_path
       end
     end
@@ -55,9 +55,9 @@ class Download
 
   private
 
-  def upload_to_S3 zip_path
+  def upload_to_s3 zip_path
     download_name = File.basename(zip_path)
-    prefix = @import ? IMPORT_PREFIX : CURRENT_PREFIX
+    prefix = @for_import ? IMPORT_PREFIX : CURRENT_PREFIX
     prefixed_download_name = prefix + download_name
 
     S3.upload prefixed_download_name, zip_path

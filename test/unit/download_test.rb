@@ -36,7 +36,7 @@ class DownloadTest < ActiveSupport::TestCase
     Download::Kml.stubs(:generate).returns(true)
     S3.expects(:upload).with(Download::IMPORT_PREFIX + 'an_download-kml.zip', anything)
 
-    Download.generate download_name, import: true
+    Download.generate download_name, for_import: true
   end
 
   test '.generate, called with an array of PA IDs, generates downloads

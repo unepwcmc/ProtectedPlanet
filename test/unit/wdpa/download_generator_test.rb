@@ -15,12 +15,12 @@ class DownloadGeneratorTest < ActiveSupport::TestCase
 
     Download.expects(:generate).with('all')
 
-    Download.expects(:generate).with(st_lucia.iso_3, wdpa_ids: [1], import: true)
-    Download.expects(:generate).with(kenya.iso_3, wdpa_ids: [1], import: true)
-    Download.expects(:generate).with(samoa.iso_3, wdpa_ids: [555555123], import: true)
+    Download.expects(:generate).with(st_lucia.iso_3, wdpa_ids: [1], for_import: true)
+    Download.expects(:generate).with(kenya.iso_3, wdpa_ids: [1], for_import: true)
+    Download.expects(:generate).with(samoa.iso_3, wdpa_ids: [555555123], for_import: true)
 
-    Download.expects(:generate).with(north_america.iso, wdpa_ids: [1, 555555123], import: true)
-    Download.expects(:generate).with(asia.iso, wdpa_ids: [1], import: true)
+    Download.expects(:generate).with(north_america.iso, wdpa_ids: [1, 555555123], for_import: true)
+    Download.expects(:generate).with(asia.iso, wdpa_ids: [1], for_import: true)
 
     Wdpa::DownloadGenerator.generate
   end
