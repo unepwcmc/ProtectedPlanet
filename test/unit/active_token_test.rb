@@ -16,7 +16,7 @@ class ActiveTokenTest < ActiveSupport::TestCase
   test '#create sets a key with the given token, and returns the created object' do
     token = '123'
     digested_token = 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'
-    time_mock = mock.tap{|time| time.stubs(:to_i).returns(1000) }
+    time_mock = mock.tap{ |time| time.stubs(:to_i).returns(1000) }
 
     Time.stubs(:now).returns(time_mock)
     $redis.expects(:hset).with("test:#{digested_token}", 'created_at', 1000)
@@ -31,10 +31,10 @@ class ActiveTokenTest < ActiveSupport::TestCase
     obj = TestObj.new
     obj.token = '123'
 
-    ActiveToken::Properties
-      .expects(:new)
-      .with(TestObj.token_key(obj.token))
-      .returns(properties)
+    ActiveToken::Properties.
+      expects(:new).
+      with(TestObj.token_key(obj.token)).
+      returns(properties)
     assert_equal properties, obj.properties
   end
 
