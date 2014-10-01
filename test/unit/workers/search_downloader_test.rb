@@ -7,7 +7,7 @@ class WorkersSearchDownloaderTest < ActiveSupport::TestCase
     digested_pa_ids = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'
 
     search_mock = mock()
-    search_mock.expects(:pluck).with('id').returns(pa_ids)
+    search_mock.expects(:pluck).with('wdpa_id').returns(pa_ids)
     search_mock.expects(:token=)
     search_mock.stubs(:complete!)
     search_mock.stubs(:properties).returns({})
