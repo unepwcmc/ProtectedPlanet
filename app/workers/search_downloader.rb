@@ -7,7 +7,8 @@ class SearchDownloader
     @token = token
     @options = options
 
-    generate_download and complete_search
+    generate_download
+    complete_search
   end
 
   private
@@ -24,10 +25,10 @@ class SearchDownloader
   def search
     @search ||= begin
       instance = Search.search(@search_term, {
-        filters: [{name: 'type', value: 'protected_area'}],
+        filters: {'type' => 'protected_area'}.merge(@options['filters'] || {}),
         size: ProtectedArea.count,
         without_aggregations: true
-      }.merge(@options))
+      })
       instance.token = @token
       instance
     end
