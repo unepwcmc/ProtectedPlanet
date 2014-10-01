@@ -14,8 +14,8 @@ class Search
       options.keys.sort.map{|key| options[key]}
     )
 
-    self.find(token, search_term, options) || begin
-      instance = self.create(token, search_term, options)
+    find(token, search_term, options) || begin
+      instance = create(token, search_term, options)
       SearchDownloader.perform_async(token, search_term, options)
       instance
     end
@@ -38,7 +38,7 @@ class Search
   end
 
   def complete!
-    self.properties['status'] = 'completed'
+    properties['status'] = 'completed'
   end
 
   def pluck key
@@ -94,11 +94,11 @@ class Search
       size: @options[:size] || RESULTS_SIZE,
       from: @options[:offset] || offset,
       query: Search::Query.new(@search_term, @options).to_h,
-    }.tap{ |query|
+    }.tap do |query|
       unless @options[:without_aggregations]
         query[:aggs] = Search::Aggregation.all
       end
-    }
+    end
   end
 
   def offset
