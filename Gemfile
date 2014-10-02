@@ -15,6 +15,7 @@ group :production, :staging do
   gem 'unicorn'
   gem 'dalli', '~> 2.7.2'
   gem 'rack-cache', '~> 1.2'
+  gem 'raygun4ruby'
 end
 
 group :development do

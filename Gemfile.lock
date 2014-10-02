@@ -165,6 +165,10 @@ GEM
       thor (>= 0.18.1, < 2.0)
     raindrops (0.13.0)
     rake (10.3.1)
+    raygun4ruby (1.1.4)
+      httparty (~> 0.11)
+      json
+      rack
     redis (3.0.7)
     redis-namespace (1.4.1)
       redis (~> 3.0.4)
@@ -276,6 +280,7 @@ DEPENDENCIES
   pg
   rack-cache (~> 1.2)
   rails (= 4.1.0)
+  raygun4ruby
   sass-rails (~> 4.0.3)
   sidekiq (~> 3.1.4)
   spring
