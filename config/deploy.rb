@@ -14,6 +14,8 @@ set :whenever_environment, -> { fetch(:stage) }
 set :whenever_command, 'cd #{current_path} && bundle exec whenever'
 set :whenever_roles, [:util]
 
+set :sidekiq_role, :web
+
 namespace :deploy do
 
   desc 'Restart application'
