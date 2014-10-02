@@ -12,8 +12,6 @@ class Country < ActiveRecord::Base
   has_many :designations, -> { uniq }, through: :protected_areas
   has_many :iucn_categories, through: :protected_areas
 
-  has_and_belongs_to_many :protected_areas
-
   def statistic
     country_statistic
   end
