@@ -20,4 +20,7 @@ Rails.application.routes.draw do
   get '/sites/:id/*other', to: 'sites#show'
 
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
+
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/admin/sidekiq'
 end
