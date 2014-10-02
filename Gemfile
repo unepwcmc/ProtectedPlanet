@@ -15,7 +15,6 @@ group :production, :staging do
   gem 'unicorn'
   gem 'dalli', '~> 2.7.2'
   gem 'rack-cache', '~> 1.2'
-  gem 'raygun4ruby'
 end
 
 group :development do
@@ -55,6 +54,7 @@ gem 'httmultiparty', '~> 0.3.14'
 
 gem 'sidekiq', '~> 3.1.4'
 gem 'whenever', require: false
+gem 'raygun4ruby'
 
 gem 'system'
 gem 'dotenv', '~> 0.11.1'
