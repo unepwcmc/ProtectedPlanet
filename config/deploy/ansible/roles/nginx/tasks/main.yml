@@ -15,3 +15,12 @@
 - name: Setup /var/www
   file: dest=/var/www/ owner={{username}} group={{username}} state=directory
   sudo: yes
+
+- name: Install passlib for htpasswd
+  apt: pkg=python-passlib state=installed update_cache=true
+  sudo: yes
+
+- name: Setup .htpasswd
+  htpasswd: path=/etc/nginx/.htpasswd name={{sidekiq_web_login.username}} password={{sidekiq_web_login.password}} owner=www-data group=www-data mode=0640
+  notify:
+    - start nginx
