@@ -14,6 +14,12 @@ Jobs are processed by running:
 bundle exec sidekiq
 ```
 
+## Status
+
+You can check the status of the current Sidekiq jobs at the route
+`/admin/sidekiq`. The username is admin, and the password is available
+from the WCMC Informatics password database.
+
 ## Assets
 
 Importing assets for Protected Areas tends to be quite time consuming as
