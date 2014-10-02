@@ -64,5 +64,7 @@ gem 'dotenv-deployment'
 
 gem 'turnout', '~> 2.0.0'
 
+gem 'sinatra', '>= 1.3.0', :require => nil
+
 # For debugging
 # gem 'byebug', group: [:development, :test]
