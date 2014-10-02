@@ -11,7 +11,7 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 
 # Whenever configuration
 set :whenever_environment, -> { fetch(:stage) }
-set :whenever_command, 'cd #{current_path} && bundle exec whenever'
+set :whenever_command, "cd #{current_path} && bundle exec whenever --update-crontab"
 set :whenever_roles, [:util]
 
 set :sidekiq_role, :web
