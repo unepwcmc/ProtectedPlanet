@@ -54,7 +54,9 @@ gem 'httmultiparty', '~> 0.3.14'
 
 gem 'sidekiq', '~> 3.1.4'
 gem 'whenever', require: false
+
 gem 'raygun4ruby'
+gem 'newrelic_rpm'
 
 gem 'system'
 gem 'dotenv', '~> 0.11.1'

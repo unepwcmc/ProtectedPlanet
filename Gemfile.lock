@@ -137,6 +137,7 @@ GEM
     net-scp (1.2.0)
       net-ssh (>= 2.6.5)
     net-ssh (2.8.0)
+    newrelic_rpm (3.9.5.251)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     pg (0.17.1)
@@ -277,6 +278,7 @@ DEPENDENCIES
   jquery-rails
   konacha
   mocha (~> 1.0.0)
+  newrelic_rpm
   pg
   rack-cache (~> 1.2)
   rails (= 4.1.0)
