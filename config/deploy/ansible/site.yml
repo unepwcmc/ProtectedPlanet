@@ -57,6 +57,7 @@
 
   roles:
     - redis
+    - sidekiq
 
 - name: Setup db
   hosts:
