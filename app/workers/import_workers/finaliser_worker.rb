@@ -1,6 +1,6 @@
 class ImportWorkers::FinaliserWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => false
+  sidekiq_options :retry => false, :queue => :import
 
   @@can_be_started = false
   cattr_accessor :can_be_started

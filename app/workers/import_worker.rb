@@ -1,6 +1,6 @@
 class ImportWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => false
+  sidekiq_options :retry => false, :queue => :import
 
   singleton_class.send(:alias_method, :original_perform_async, :perform_async)
 
