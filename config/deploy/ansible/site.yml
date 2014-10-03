@@ -28,7 +28,6 @@
     - ruby
     - gdal
     - memcached
-    - app
 
 - name: Setup web
   hosts:
@@ -38,6 +37,7 @@
 
   roles:
     - nginx
+    - app
 
 - name: Setup web, util
   hosts:
