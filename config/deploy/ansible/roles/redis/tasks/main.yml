@@ -4,12 +4,12 @@
   sudo: yes
   apt: pkg={{ redis.deb.package }} state=installed update-cache=yes
 
-# Bind Redis server to all interfaces
-- name: "Bind Redis server to all interfaces"
+# Compile redis.conf template
+- name: "Compile redis.conf template"
   sudo: yes
-  lineinfile: dest=/etc/redis/redis.conf state=present regexp="^#?bind" line="#bind 127.0.0.1"
+  template: src=redis.conf.j2 dest=/etc/redis/redis.conf
   notify:
-    - "Restart Redis"
+    - Restart redis
 
 # Ensure Redis server is running
 - name: "Ensure Redis server is running"
