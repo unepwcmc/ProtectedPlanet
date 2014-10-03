@@ -1,0 +1,7 @@
+---
+
+- name: Install Sidekiq sysv config
+  template: src=sidekiq.j2 dest=/etc/init.d/sidekiq mode=755
+  sudo: yes
+  notify:
+    - "Start Sidekiq"

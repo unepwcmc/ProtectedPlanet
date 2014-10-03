@@ -14,4 +14,4 @@
 # Ensure Redis server is running
 - name: "Ensure Redis server is running"
   sudo: yes
-  service: name={{ redis.deb.service }} state=started
+  service: name={{ redis.deb.service }} state=started enabled=yes

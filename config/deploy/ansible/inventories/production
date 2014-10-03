@@ -12,9 +12,11 @@ ec2-54-75-208-148.eu-west-1.compute.amazonaws.com
 [elasticsearch:vars]
 elasticsearch_node_name=elasticsearch-prod
 
-
 [all:children]
 web
 db
 util
 elasticsearch
+
+[all:vars]
+stage=production
