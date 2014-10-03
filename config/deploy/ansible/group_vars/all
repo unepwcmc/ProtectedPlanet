@@ -76,3 +76,36 @@ elasticsearch_misc_auto_create_index: "true"
 elasticsearch_misc_query_bool_max_clause_count: 4096
 elasticsearch_misc_disable_delete_all_indices: "true"
 elasticsearch_java_opts: "-XX:-UseSuperWord"
+
+redis_bind: 0.0.0.0
+redis_port: 6379
+redis_tcp_backlog: 511
+redis_tcp_keepalive: 0
+redis_maxclients: 10000
+redis_timeout: 0
+
+## General configuration
+redis_daemonize: "yes"
+redis_pidfile: /var/run/redis/{{ redis_port }}.pid
+# Number of databases to allow
+redis_databases: 16
+redis_loglevel: notice
+# Log queries slower than this many milliseconds. -1 to disable
+redis_slowlog_log_slower_than: 10000
+# Maximum number of slow queries to save
+redis_slowlog_max_len: 128
+# Redis memory limit (e.g. 4294967296, 4096mb, 4gb)
+redis_maxmemory: false
+redis_maxmemory_policy: noeviction
+# How frequently to snapshot the database to disk
+# e.g. "900 1" => 900 seconds if at least 1 key changed
+redis_save:
+  - 900 1
+  - 300 10
+  - 60 10000
+redis_appendonly: "no"
+redis_appendfsync: "everysec"
+redis_no_appendfsync_on_rewrite: "no"
+redis_auto_aof_rewrite_percentage: "100"
+redis_auto_aof_rewrite_min_size: "64mb"
+

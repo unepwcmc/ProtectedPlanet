@@ -16,7 +16,6 @@
     - security
     - tmux
     - utils
-    - redis
 
 - name: Setup app core
   user: ubuntu
@@ -49,6 +48,15 @@
 
   roles:
     - postgresql-client
+
+- name: Setup util
+  hosts:
+    - util
+  user: ubuntu
+  sudo: yes
+
+  roles:
+    - redis
 
 - name: Setup db
   hosts:
