@@ -72,7 +72,16 @@ stop() {
 status() {
 
   ps -ef | grep 'sidekiq [0-9].[0-9].[0-9]' | grep -v grep
-  return $?
+  [ $? -eq 0 ] || return $?
+
+  {% for process in sidekiq_processes %}
+    PID_FILE="$APP_DIR/tmp/${APP}-{{ process.name }}.pid"
+
+    cat $PID_FILE 2>&1 | xargs ps -p > /dev/null
+    [ $? -eq 0 ] || return $?
+  {% endfor %}
+
+  return 0
 
 }
 
