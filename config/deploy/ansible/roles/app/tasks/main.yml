@@ -8,3 +8,9 @@
 
 - name: Install unicorn gem for Rails servers
   gem: name=unicorn state=present
+
+- name: Install unicorn sysv config
+  template: src=unicorn.j2 dest=/etc/init.d/unicorn mode=755
+  sudo: yes
+  notify:
+    - "Start Unicorn"
