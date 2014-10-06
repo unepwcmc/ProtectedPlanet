@@ -109,3 +109,10 @@ redis_no_appendfsync_on_rewrite: "no"
 redis_auto_aof_rewrite_percentage: "100"
 redis_auto_aof_rewrite_min_size: "64mb"
 
+sidekiq_processes:
+  - name: sidekiq_import
+    queues:
+      - import
+  - name: sidekiq_default
+    queues:
+      - default
