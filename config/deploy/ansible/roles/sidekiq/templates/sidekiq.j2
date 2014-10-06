@@ -52,11 +52,11 @@ start() {
 stop() {
 
   {% for process in sidekiq_processes %}
-    SIG="INT"
     PID_FILE="$APP_DIR/tmp/${APP}-{{ process.name }}.pid"
+    CMD="cd $APP_DIR; bundle exec sidekiqctl stop $PID_FILE"
 
-    kill -$SIG `cat $PID_FILE`
     echo "Stopping sidekiq ({{ process.name }}) message processor .."
+    su -c "$CMD" - $AS_USER
 
     RETVAL=$?
   {% endfor %}
