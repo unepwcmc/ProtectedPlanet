@@ -1,14 +1,6 @@
 require 'test_helper'
 
 class ImportToolsImportTest < ActiveSupport::TestCase
-  test '#find returns an Import instance with the found ID' do
-    id = 123
-    import = ImportTools::Import.find(id)
-
-    assert_kind_of ImportTools::Import, import
-    assert_equal id, import.id
-  end
-
   test '#new tries to lock the import' do
     ImportTools::Import.any_instance.stubs(:create_db)
     ImportTools::Import.any_instance.stubs(:use_import_db=)
@@ -34,19 +26,19 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     ImportTools::Import.new
   end
 
-  test '.started_at returns a Time instance created from the import id (timestamp)' do
+  test '.started_at returns a Time instance created from the import token (timestamp)' do
     import_starting_time = Time.new(2014, 1, 1)
-    id = import_starting_time.to_i
-    import = ImportTools::Import.new(id)
+    token = import_starting_time.to_i
+    import = ImportTools::Import.new(token)
 
     assert_equal import_starting_time, import.started_at
   end
 
   test '.increase_total_jobs_count calls redis to increase the number of jobs' do
-    id = 123
+    token = 123
     ImportTools::RedisHandler.any_instance.expects(:increase_property)
 
-    import = ImportTools::Import.new(id)
+    import = ImportTools::Import.new(token)
     import.increase_total_jobs_count
   end
 
@@ -63,7 +55,7 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     import = ImportTools::Import.new(123)
 
     test_db = Rails.configuration.database_configuration[Rails.env]['database']
-    import_db = "import_db_#{import.id}"
+    import_db = "import_db_#{import.token}"
 
     ImportTools::PostgresHandler.any_instance.expects(:drop_database).with(test_db)
     ImportTools::PostgresHandler.any_instance.expects(:rename_database).with(import_db, test_db)
@@ -85,7 +77,7 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     import = ImportTools::Import.new(123)
 
     ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
-    ImportTools::RedisHandler.any_instance.expects(:add_to_previous_ids).with(123)
+    ImportTools::RedisHandler.any_instance.expects(:add_to_previous_imports).with(123)
 
     import.finalise
   end

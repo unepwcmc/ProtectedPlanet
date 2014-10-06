@@ -13,7 +13,11 @@ class Search::Query
       }
     }
 
-    base_query["filtered"]["filter"] = {"and" => filters} if @options[:filters].present?
+    if @options[:filters].present?
+      base_query["filtered"]["filter"] = {
+        "and" => Search::Filter.from_params(@options[:filters])
+      }
+    end
 
     base_query
   end
@@ -55,26 +59,5 @@ class Search::Query
     end
 
     constructed_matchers
-  end
-
-  FILTERS = {
-    type: { type: 'type' },
-    country: { type: 'nested', path: 'countries_for_index', field: 'countries_for_index.id', required: true },
-    region: { type: 'nested', path: 'countries_for_index.region_for_index', field: 'countries_for_index.region_for_index.id', required: true },
-    iucn_category: { type: 'nested', path: 'iucn_category', field: 'iucn_category.id', required: true },
-    designation: { type: 'nested', path: 'designation', field: 'designation.id', required: true }
-  }
-
-  def filters
-    constructed_filters = []
-    requested_filters = @options[:filters] || []
-
-    requested_filters.each do |filter|
-      constructed_filters.push Search::Filter.new(
-        filter[:value], FILTERS[filter[:name].to_sym]
-      ).to_h
-    end
-
-    constructed_filters
   end
 end
