@@ -5,7 +5,8 @@ set -e
 TIMEOUT=60
 APP_ROOT=/var/www/pp/current
 PID=$APP_ROOT/tmp/pids/unicorn.pid
-CMD="$APP_ROOT/bin/unicorn -D -c $APP_ROOT/config/unicorn.rb"
+AS_USER={{username}}
+CMD="cd $APP_ROOT && bundle exec unicorn_rails -D -c $APP_ROOT/config/unicorn.rb -E {{stage}}"
 action="$1"
 set -u
 
@@ -24,7 +25,7 @@ oldsig () {
 case $action in
 start)
   sig 0 && echo >&2 "Already running" && exit 0
-  $CMD
+  su -c "$CMD" - $AS_USER
   ;;
 stop)
   sig QUIT && exit 0
@@ -37,7 +38,7 @@ force-stop)
 restart|reload)
   sig HUP && echo reloaded OK && exit 0
   echo >&2 "Couldn't reload, starting '$CMD' instead"
-  $CMD
+  su -c "$CMD" - $AS_USER
   ;;
 upgrade)
   if sig USR2 && sleep 2 && sig 0 && oldsig QUIT
