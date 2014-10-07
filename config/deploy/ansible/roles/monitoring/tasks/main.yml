@@ -30,3 +30,15 @@
   sudo: yes
   notify:
     - restart nginx
+
+- name: Install Monit
+  apt: pkg=monit state=installed update-cache=yes
+  sudo: yes
+  notify:
+    - start monit
+
+- name: Install Monit config
+  template: src=monitrc-{{item}}.j2 dest=/etc/monit/monitrc mode=0700
+  with_items: group_names
+  notify:
+    - reload monit

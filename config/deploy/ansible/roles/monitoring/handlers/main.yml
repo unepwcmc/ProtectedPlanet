@@ -1,0 +1,8 @@
+---
+- name: start monit
+  command: monit
+  sudo: yes
+
+- name: reload monit
+  command: monit reload
+  sudo: yes
