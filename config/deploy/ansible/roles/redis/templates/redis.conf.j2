@@ -12,15 +12,6 @@ pidfile {{ redis_pidfile }}
 # If port 0 is specified Redis will not listen on a TCP socket.
 port {{ redis_port }}
 
-# TCP listen() backlog.
-#
-# In high requests-per-second environments you need an high backlog in order
-# to avoid slow clients connections issues. Note that the Linux kernel
-# will silently truncate it to the value of /proc/sys/net/core/somaxconn so
-# make sure to raise both the value of somaxconn and tcp_max_syn_backlog
-# in order to get the desired effect.
-tcp-backlog {{ redis_tcp_backlog }}
-
 # By default Redis listens for connections from all the network interfaces
 # available on the server. It is possible to listen to just one or multiple
 # interfaces using the "bind" configuration directive, followed by one or
@@ -37,11 +28,6 @@ timeout {{ redis_timeout }}
 # notice (moderately verbose, what you want in production probably)
 # warning (only very important / critical messages are logged)
 loglevel {{ redis_loglevel }}
-
-# Specify the log file name. Also the empty string can be used to force
-# Redis to log on the standard output. Note that if you use standard
-# output for logging but daemonize, logs will be sent to /dev/null
-logfile {{ redis_logfile }}
 
 # Set the number of databases. The default database is DB 0, you can select
 # a different one on a per-connection basis using SELECT <dbid> where
