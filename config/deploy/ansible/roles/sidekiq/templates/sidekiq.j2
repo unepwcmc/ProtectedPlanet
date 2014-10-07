@@ -14,18 +14,7 @@
 APP="pp"
 AS_USER="ubuntu"
 APP_DIR="/var/www/${APP}/current"
-
-APP_CONFIG="${APP_DIR}/config"
-LOG_FILE="$APP_DIR/log/sidekiq.log"
-LOCK_FILE="$APP_DIR/${APP}-lock"
-PID_FILE="$APP_DIR/${APP}.pid"
-GEMFILE="$APP_DIR/Gemfile"
-SIDEKIQ="sidekiq"
 APP_ENV="{{stage}}"
-BUNDLE="bundle"
-
-START_CMD="$BUNDLE exec $SIDEKIQ -e $APP_ENV -P $PID_FILE"
-CMD="cd ${APP_DIR}; ${START_CMD} >> ${LOG_FILE} 2>&1 &"
 
 RETVAL=0
 
@@ -35,39 +24,60 @@ start() {
   status
   if [ $? -eq 1 ]; then
 
-    [ `id -u` == '0' ] || (echo "$SIDEKIQ runs as root only .."; exit 5)
+    [ `id -u` == '0' ] || (echo "sidekiq runs as root only .."; exit 5)
     [ -d $APP_DIR ] || (echo "$APP_DIR not found!.. Exiting"; exit 6)
-    cd $APP_DIR
-    echo "Starting $SIDEKIQ message processor .. "
 
-    su -c "$CMD" - $AS_USER
+    {% for process in sidekiq_processes %}
+      LOG_FILE="$APP_DIR/log/{{ process.name }}.log"
+      PID_FILE="$APP_DIR/tmp/${APP}-{{ process.name }}.pid"
+      QUEUES="{{ process.queues|join(' -q ') }}"
 
-    RETVAL=$?
-    #Sleeping for 8 seconds for process to be precisely visible in process table - See status ()
-    sleep 8
-    [ $RETVAL -eq 0 ] && touch $LOCK_FILE
+      START_CMD="bundle exec sidekiq -e $APP_ENV -P $PID_FILE -q $QUEUES"
+      CMD="cd ${APP_DIR}; ${START_CMD} >> ${LOG_FILE} 2>&1 &"
+
+      echo "Starting sidekiq ({{ process.name }}) message processor .. "
+      su -c "$CMD" - $AS_USER
+
+      RETVAL=$?
+      #Sleeping for 8 seconds for process to be precisely visible in process table - See status ()
+      sleep 8
+    {% endfor %}
     return $RETVAL
   else
-    echo "$SIDEKIQ message processor is already running .. "
+    echo "sidekiq message processor is already running .. "
   fi
-
 
 }
 
 stop() {
 
-    echo "Stopping $SIDEKIQ message processor .."
-    SIG="INT"
-    kill -$SIG `cat  $PID_FILE`
+  {% for process in sidekiq_processes %}
+    PID_FILE="$APP_DIR/tmp/${APP}-{{ process.name }}.pid"
+    CMD="cd $APP_DIR; bundle exec sidekiqctl stop $PID_FILE"
+
+    echo "Stopping sidekiq ({{ process.name }}) message processor .."
+    su -c "$CMD" - $AS_USER
+
     RETVAL=$?
-    [ $RETVAL -eq 0 ] && rm -f $LOCK_FILE
-    return $RETVAL
+  {% endfor %}
+  return $RETVAL
+
 }
 
 status() {
 
   ps -ef | grep 'sidekiq [0-9].[0-9].[0-9]' | grep -v grep
-  return $?
+  [ $? -eq 0 ] || return $?
+
+  {% for process in sidekiq_processes %}
+    PID_FILE="$APP_DIR/tmp/${APP}-{{ process.name }}.pid"
+
+    cat $PID_FILE 2>&1 | xargs ps -p > /dev/null
+    [ $? -eq 0 ] || return $?
+  {% endfor %}
+
+  return 0
+
 }
 
 
@@ -82,10 +92,10 @@ case "$1" in
         status
 
         if [ $? -eq 0 ]; then
-             echo "$SIDEKIQ message processor is running .."
+             echo "sidekiq message processor is running .."
              RETVAL=0
          else
-             echo "$SIDEKIQ message processor is stopped .."
+             echo "sidekiq message processor is stopped .."
              RETVAL=1
          fi
         ;;
