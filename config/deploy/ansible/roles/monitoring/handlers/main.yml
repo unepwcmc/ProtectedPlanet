@@ -1,8 +1,8 @@
 ---
 - name: start monit
-  command: monit
+  service: name=monit state=started enabled=yes
   sudo: yes
 
 - name: reload monit
-  command: monit reload
+  service: name=monit state=restarted enabled=yes
   sudo: yes

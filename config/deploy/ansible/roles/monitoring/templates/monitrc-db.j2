@@ -1,7 +1,7 @@
 {% extends "monitrc.j2" %}
 
 {% block child %}
-  check process postgres with pidfile /var/run/postgresql/{{postgresql.version}}-main.pid
-      start program = "sudo service postgresql start" with timeout 60 seconds
-      stop program  = "sudo service postgresql stop"
+  check process postgresql with pidfile /var/run/postgresql/9.3-main.pid
+    start program = "/etc/init.d/postgresql start" with timeout 60 seconds
+    stop program  = "/etc/init.d/postgresql stop"
 {% endblock %}
