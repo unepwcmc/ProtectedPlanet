@@ -59,4 +59,10 @@
     use address localhost
     allow localhost
 
-{% block child %}{% endblock %}
+{% for gname in groups %}
+  {% for host in groups[gname] %}
+    {% if hostvars[host]["inventory_hostname"] == inventory_hostname %}
+{% include("monitrc-%s.j2" % gname) ignore missing %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
