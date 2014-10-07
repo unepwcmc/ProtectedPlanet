@@ -1,0 +1,5 @@
+{% for sidekiq_process in sidekiq_processes %}
+check process {{ sidekiq_process.name }} with pidfile /var/www/pp/current/tmp/pp-{{ sidekiq_process.name }}.pid
+  start program = "/etc/init.d/sidekiq start" with timeout 60 seconds
+  stop program  = "/etc/init.d/sidekiq stop"
+{% endfor %}
