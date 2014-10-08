@@ -11,7 +11,6 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 
 # Whenever configuration
 set :whenever_environment, -> { fetch(:stage) }
-set :whenever_command, "cd #{current_path} && bundle exec whenever --update-crontab"
 set :whenever_roles, [:util]
 
 set :sidekiq_role, :util
@@ -57,7 +56,7 @@ namespace :deploy do
       execute 'sudo service monit stop || :'
     end
   end
-  after :restart, :start_monit do
+  after :start_sidekiq, :start_monit do
     on roles(:all) do
       execute 'sudo service monit start || :'
     end
