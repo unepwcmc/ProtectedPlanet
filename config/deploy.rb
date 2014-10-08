@@ -53,10 +53,14 @@ namespace :deploy do
   end
 
   before :stop, :stop_monit do
-    execute 'sudo service monit stop || :'
+    on roles(:all) do
+      execute 'sudo service monit stop || :'
+    end
   end
   after :restart, :start_monit do
-    execute 'sudo service monit start || :'
+    on roles(:all) do
+      execute 'sudo service monit start || :'
+    end
   end
 
   after :stop, :stop_sidekiq do
@@ -64,7 +68,6 @@ namespace :deploy do
       execute 'sudo service sidekiq stop'
     end
   end
-
   after :restart, :start_sidekiq do
     on roles(fetch(:sidekiq_role)) do
       execute 'sudo service sidekiq start'
