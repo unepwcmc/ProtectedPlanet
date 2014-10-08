@@ -1,6 +1,9 @@
 class ImportTools::RedisHandler
   def lock token
-    $redis.setnx(current_key, token)
+    import_locked = $redis.setnx(current_key, token)
+    $redis.set("#{redis_prefix}:#{token}", '') if import_locked
+
+    import_locked
   end
 
   def unlock

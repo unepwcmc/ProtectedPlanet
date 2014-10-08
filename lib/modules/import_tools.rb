@@ -7,16 +7,16 @@ module ImportTools
 
   def self.current_import
     redis_handler = RedisHandler.new
-    current_import_id = redis_handler.current_token
+    current_import_token = redis_handler.current_token
 
-    current_import_id.present? ? Import.find(current_import_id) : nil
+    current_import_token.present? ? Import.new(current_import_token) : nil
   end
 
   def self.last_import
     redis_handler = RedisHandler.new
-    last_import_id = redis_handler.previous_imports.last
+    last_import_token = redis_handler.previous_imports.last
 
-    last_import_id.present? ? Import.find(last_import_id) : nil
+    last_import_token.present? ? Import.new(last_import_token) : nil
   end
 
   def self.dump_path

@@ -5,7 +5,7 @@ class ImportTools::Import
   attr_reader :completed
 
   def initialize token=nil
-    self.token = token
+    self.token = token || Time.now.to_i
 
     unless token
       lock_import
