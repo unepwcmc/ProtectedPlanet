@@ -38,7 +38,7 @@ class AdminController < ApplicationController
 
   def maintenance_file
     file = Turnout::MaintenanceFile.default
-    file.import_env_vars "allowed_paths" => "/admin/maintenance"
+    file.import_env_vars "allowed_paths" => ["/admin/maintenance", "/admin/sidekiq"]
     file
   end
 end
