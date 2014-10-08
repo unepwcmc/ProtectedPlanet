@@ -14,7 +14,8 @@ set :whenever_environment, -> { fetch(:stage) }
 set :whenever_command, "cd #{current_path} && bundle exec whenever --update-crontab"
 set :whenever_roles, [:util]
 
-set :sidekiq_role, :web
+set :sidekiq_role, :util
+set :sidekiq_default_hooks, false
 
 namespace :deploy do
 
@@ -52,10 +53,25 @@ namespace :deploy do
   end
 
   before :stop, :stop_monit do
-    execute 'sudo service monit stop || :'
+    on roles(:all) do
+      execute 'sudo service monit stop || :'
+    end
   end
   after :restart, :start_monit do
-    execute 'sudo service monit start || :'
+    on roles(:all) do
+      execute 'sudo service monit start || :'
+    end
+  end
+
+  after :stop, :stop_sidekiq do
+    on roles(fetch(:sidekiq_role)) do
+      execute 'sudo service sidekiq stop'
+    end
+  end
+  after :restart, :start_sidekiq do
+    on roles(fetch(:sidekiq_role)) do
+      execute 'sudo service sidekiq start'
+    end
   end
 
 end
@@ -81,7 +97,7 @@ namespace :maintenance do
           execute :rake, 'maintenance:end'
         end
       end
-      end
+    end
   end
 
 end
