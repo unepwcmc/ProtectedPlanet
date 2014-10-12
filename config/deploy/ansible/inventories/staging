@@ -17,3 +17,6 @@ web
 db
 util
 elasticsearch
+
+[all:vars]
+stage=staging

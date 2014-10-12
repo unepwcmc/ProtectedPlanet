@@ -1,14 +1,13 @@
 class ImportTools::Import
-  attr_reader :id, :completed
+  include ActiveToken
+  token_domain 'wdpa_imports'
 
-  def self.find id
-    self.new id
-  end
+  attr_reader :completed
 
-  def initialize id=nil
-    self.id = id || Time.now.to_i
+  def initialize token=nil
+    self.token = token || Time.now.to_i
 
-    unless id
+    unless token
       lock_import
       create_db
       self.use_import_db = true
@@ -32,30 +31,30 @@ class ImportTools::Import
   end
 
   def increase_total_jobs_count
-    redis_handler.increase_property(self.id, :total_jobs)
+    redis_handler.increase_property(token, :total_jobs)
   end
 
   def increase_completed_jobs_count
     all_jobs_completed = redis_handler.increase_property_and_compare(
-      self.id, :completed_jobs, :total_jobs
+      token, :completed_jobs, :total_jobs
     )
 
     self.completed = all_jobs_completed
   end
 
   def completed?
-    self.completed
+    completed
   end
 
   def started_at
-    Time.at(self.id)
+    Time.at(token)
   end
 
   private
-  attr_writer :id, :completed
+  attr_writer :completed
 
   def lock_import
-    raise ImportTools::AlreadyRunningImportError unless redis_handler.lock(self.id)
+    raise ImportTools::AlreadyRunningImportError unless redis_handler.lock(self.token)
   end
 
   def unlock_import
@@ -74,11 +73,11 @@ class ImportTools::Import
   end
 
   def add_to_completed_imports
-    redis_handler.add_to_previous_ids(self.id)
+    redis_handler.add_to_previous_imports(self.token)
   end
 
   def db_name
-    "import_db_#{self.id}"
+    "import_db_#{self.token}"
   end
 
   def redis_handler

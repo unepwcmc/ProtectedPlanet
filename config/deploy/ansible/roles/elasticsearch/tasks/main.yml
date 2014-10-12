@@ -87,4 +87,4 @@
 
 # Restart Elasticsearch
 - name: Restarting Elasticsearch
-  service: name=elasticsearch state=restarted
+  service: name=elasticsearch state=restarted enabled=yes

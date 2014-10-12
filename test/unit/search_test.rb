@@ -212,4 +212,52 @@ class TestSearch < ActiveSupport::TestCase
 
     assert_equal 40, pages
   end
+
+  test '.pluck, given a property, returns the corresponding values in the EC hits' do
+    hits = [
+      { '_source' => {'wdpa_id' => 123, 'id' => 24} },
+      { '_source' => {'wdpa_id' => 345, 'id' => 1} },
+      { '_source' => {'id' => 22} }
+    ]
+
+    search_mock = mock()
+    search_mock.stubs(:search).returns({ "hits" => {"hits" => hits} })
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    values = Search.search('manbone').pluck('wdpa_id')
+    assert_equal [123, 345, nil], values
+  end
+
+  test '.complete! sets the status property to completed' do
+    properties_mock = mock()
+    properties_mock.expects(:[]=).with('status', 'completed')
+    Search.any_instance.stubs(:properties).returns(properties_mock)
+
+    Search.new('san guillermo', {}).complete!
+  end
+
+  test '#download, given a search term and filters, generates a search with
+   token, and spawns a SearchDownloader worker' do
+    search_term = 'san guillermo'
+    opts = {filters: [{name: 'type', value: 'protected_area'}]}
+    token = "3b00778be9391426bb3c900b977dfb3771fc9cdd83e1d1f99bda77b77c3d6750"
+
+    Search.stubs(:find).returns(false)
+    Search.expects(:create).with(token, search_term, opts)
+    SearchDownloader.expects(:perform_async).with(token, search_term, opts)
+
+    Search.download(search_term, opts)
+  end
+
+  test '#download, given a search term and filters, returns an existing download when found' do
+    search_term = 'san guillermo'
+    opts = {filters: [{name: 'type', value: 'protected_area'}]}
+    token = "3b00778be9391426bb3c900b977dfb3771fc9cdd83e1d1f99bda77b77c3d6750"
+
+    Search.expects(:find).with(token, search_term, opts).returns(true)
+    Search.expects(:create).never
+    SearchDownloader.expects(:perform_async).never
+
+    Search.download(search_term, opts)
+  end
 end

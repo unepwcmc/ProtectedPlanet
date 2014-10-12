@@ -1,6 +1,4 @@
-class @AboutModal
-  @overlayTemplate: "<div class=\"total-overlay\"></div>"
-
+class @AboutModal extends Modal
   @template: """
     <div id="about-modal" class="modal">
       <h2>About this prototype</h2>
@@ -37,23 +35,6 @@ class @AboutModal
   """
 
   constructor: ($container) ->
-    @$overlay = $(@constructor.overlayTemplate)
-    @$el = $(@constructor.template)
+    super($container)
+    @addCloseFunctionality()
 
-    $container.append(@$overlay)
-    $container.append(@$el)
-
-    $closeModalBtn = @$el.find('#close-modal')
-    for $el in [@$overlay, $closeModalBtn]
-      $el.on('click', (ev) =>
-        @hide()
-        ev.preventDefault()
-      )
-
-  show: ->
-    @$el.addClass('opened')
-    @$overlay.addClass('visible')
-
-  hide: ->
-    @$el.removeClass('opened')
-    @$overlay.removeClass('visible')

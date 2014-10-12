@@ -16,7 +16,6 @@
     - security
     - tmux
     - utils
-    - redis
 
 - name: Setup app core
   user: ubuntu
@@ -29,7 +28,6 @@
     - ruby
     - gdal
     - memcached
-    - app
 
 - name: Setup web
   hosts:
@@ -39,6 +37,7 @@
 
   roles:
     - nginx
+    - app
 
 - name: Setup web, util
   hosts:
@@ -49,6 +48,16 @@
 
   roles:
     - postgresql-client
+
+- name: Setup util
+  hosts:
+    - util
+  user: ubuntu
+  sudo: yes
+
+  roles:
+    - redis
+    - sidekiq
 
 - name: Setup db
   hosts:

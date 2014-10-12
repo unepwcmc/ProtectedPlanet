@@ -6,25 +6,24 @@ class ImportToolsTest < ActiveSupport::TestCase
     ImportTools.create_import
   end
 
-  test '#current_import returns an Import with the id returned from Redis' do
-    ImportTools::RedisHandler.any_instance.stubs(:current_id).returns(123)
+  test '#current_import returns an Import with the token returned from Redis' do
+    ImportTools::RedisHandler.any_instance.stubs(:current_token).returns(123)
+    ImportTools::Import.expects(:new).with(123)
 
-    import = ImportTools.current_import
-    assert_equal 123, import.id
+    ImportTools.current_import
   end
 
   test '#current_import returns nil if no import is found' do
-    ImportTools::RedisHandler.any_instance.stubs(:current_id).returns(nil)
+    ImportTools::RedisHandler.any_instance.stubs(:current_token).returns(nil)
 
     import = ImportTools.current_import
     assert_equal nil, import
   end
 
-  test '#last_import returns an instance of Import with the id of the last import' do
-    ImportTools::RedisHandler.any_instance.expects(:previous_ids).returns([1,2,3])
+  test '#last_import returns an instance of Import with the token of the last import' do
+    ImportTools::RedisHandler.any_instance.expects(:previous_imports).returns([1, 2, 3])
+    ImportTools::Import.expects(:new).with(3)
 
-    last_import = ImportTools.last_import
-    assert_kind_of ImportTools::Import, last_import
-    assert_equal 3, last_import.id
+    ImportTools.last_import
   end
 end

@@ -1,6 +1,6 @@
 class S3PollingWorker
   include Sidekiq::Worker
-  sidekiq_options :retry => false
+  sidekiq_options :retry => false, :queue => :import, :backtrace => true
 
   def perform
     last_import = ImportTools.last_import

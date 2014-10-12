@@ -1,0 +1,4 @@
+---
+- name: "Start Sidekiq"
+  sudo: yes
+  service: name=sidekiq state=restarted enabled=yes
