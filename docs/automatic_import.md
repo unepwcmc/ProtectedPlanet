@@ -1,7 +1,7 @@
 # Protected Planet Monthly WDPA Release Import
 
 The new Protected Planet website is designed to make importing and displaying
-the WDPA monthly releases as easy (and fast) as possible.
+the WDPA monthly releases as easy and fast as possible.
 
 ## What you have to do
 
@@ -25,7 +25,7 @@ requires no further input from you.
 
 ## How long does it take?
 
-The import itself takes approximately **6 hours**. However it is designed to
+The import itself takes approximately **10 hours**. However it is designed to
 minimise website downtime, only taking protectedplanet.net offline for up to 10
 minutes.
 
