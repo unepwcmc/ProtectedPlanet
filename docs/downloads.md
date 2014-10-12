@@ -5,16 +5,16 @@ in three formats: CSV, KML and Shapefile.
 
 ## Generation
 
-There are currently two types of downloads: the entire WDPA, and
-Protected Areas by country. They are generated statically during the
-WDPA import, so that users are able to download them instantly.
+There are currently three types of downloads: the entire WDPA, Protected
+Areas by country -- both statically generated -- and Protected Areas
+filtered by a search.
 
 The Download class is fairly naive and generates datasets for any given
 array of WDPA IDs. It is the responsibility of the caller to decide what
 is to be downloaded, and what the file should be saved as in S3.
 
 ```
-Download.generate 'download_name', [123, 456, 2881]
+Download.generate 'download_name', wdpa_ids: [123, 456, 2881]
 ```
 
 ### Data
@@ -25,6 +25,13 @@ tables.
 As the polygon and points geometries are stored separately, we create a
 postgres `VIEW` during import that is based on a `UNION` of the two
 tables. This view is managed by `Wdpa::Release`.
+
+### Caching
+
+The country and full downloads are generated statically during the WDPA
+import, so that users are able to download them instantly. The search
+downloads are generated on-the-fly, and cached by what PAs they contain,
+so searches with the same results will have instant downloads.
 
 ## Storage and access
 
