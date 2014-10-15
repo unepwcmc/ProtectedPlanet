@@ -7,10 +7,6 @@ class ImportConfirmationMailerTest < ActionMailer::TestCase
     confirmation_key = "abcd"
 
     import = ImportTools::Import.new(import_token)
-    ImportTools::Import.expects(:find).
-      with(import_token).
-      returns(import)
-
     ImportTools::Import.any_instance.
       expects(:confirmation_key).
       returns(confirmation_key)
@@ -20,7 +16,14 @@ class ImportConfirmationMailerTest < ActionMailer::TestCase
     assert_equal ['no-reply@unep-wcmc.org'], email.from
     assert_equal ['blackhole@unep-wcmc.org'], email.to
     assert_equal '[Protected Planet] Your import is ready and needs confirming', email.subject
-    assert_match(/#{import_token}/, email.body.to_s)
-    assert_match(/#{confirmation_key}/, email.body.to_s)
+
+    assert_match(
+      Regexp.new("http://localhost:3000/admin/import/#{import_token}/confirm\\?key=#{confirmation_key}"),
+      email.body.to_s
+    )
+    assert_match(
+      Regexp.new("http://localhost:3000/admin/import/#{import_token}/cancel\\?key=#{confirmation_key}"),
+      email.body.to_s
+    )
   end
 end
