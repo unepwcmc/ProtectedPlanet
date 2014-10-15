@@ -3,6 +3,10 @@ module ImportTools::Import::Confirmable
     stored_confirmation_key or generate_confirmation_key
   end
 
+  def verify_confirmation_key confirmation_key
+    stored_confirmation_key == confirmation_key
+  end
+
   private
 
   def generate_confirmation_key
