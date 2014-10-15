@@ -4,7 +4,11 @@ module ImportTools::Import::Confirmable
   end
 
   def verify_confirmation_key confirmation_key
-    stored_confirmation_key == confirmation_key
+    if confirmation_key.present?
+      stored_confirmation_key == confirmation_key
+    else
+      false
+    end
   end
 
   private

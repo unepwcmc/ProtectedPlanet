@@ -58,4 +58,11 @@ class ConfirmableTest < ActiveSupport::TestCase
     refute import.verify_confirmation_key(confirmation_key),
       "Expected the confirmation key #{confirmation_key} to not be correct"
   end
+
+  test '.verify_confirmation_key, given nil, returns false' do
+    import = ImportTools::Import.new('abcd')
+
+    refute import.verify_confirmation_key(nil),
+      "Expected nil to not be verifiable"
+  end
 end
