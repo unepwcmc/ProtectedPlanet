@@ -51,4 +51,28 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
 
     @redis_handler.add_to_previous_imports(token)
   end
+
+  test '.set_property sets a redis key with the given property and value' do
+    prefix = Rails.application.secrets.redis['wdpa_imports_prefix']
+    token = "token"
+    property = "property"
+    value = "value"
+
+    $redis.expects(:set).with("#{prefix}:#{token}:#{property}", value)
+
+    @redis_handler.set_property(token, property, value)
+  end
+
+  test '.get_property gets the value for the given redis key' do
+    prefix = Rails.application.secrets.redis['wdpa_imports_prefix']
+    token = "token"
+    property = "property"
+    value = "value"
+
+    $redis.expects(:get).
+      with("#{prefix}:#{token}:#{property}").
+      returns(value)
+
+    assert_equal value, @redis_handler.get_property(token, property)
+  end
 end
