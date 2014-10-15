@@ -6,13 +6,14 @@ class S3PollingWorkerTest < ActiveSupport::TestCase
     last_import_started_at = Time.now
 
     import_mock = mock()
+    import_mock.stubs(:token).returns(last_import_started_at.to_s)
     import_mock.stubs(:started_at).returns(last_import_started_at)
     ImportTools.stubs(:last_import).returns(import_mock)
     ImportTools.stubs(:create_import)
 
     Wdpa::S3.expects(:new_wdpa?).with(last_import_started_at).returns(true)
 
-    ImportWorkers::MainWorker.expects(:perform_async)
+    ImportConfirmationMailer.expects(:create).with(import_mock)
 
     Sidekiq::Testing.inline! do
       S3PollingWorker.perform_async
