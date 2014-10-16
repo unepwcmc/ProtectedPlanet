@@ -1,18 +1,23 @@
 class Import::ConfirmationController < ApplicationController
   before_filter :verify_key
+  after_filter :delete_confirmation_key
 
   def confirm
-    render text: ""
+    ImportWorkers::MainWorker.perform_async
   end
 
   def cancel
-    render text: ""
+    import.stop(false)
   end
 
   private
 
   def import
-    @import ||= ImportTools::Import.find(params[:token])
+    @import ||= ImportTools::Import.find(params[:token], params[:token])
+  end
+
+  def delete_confirmation_key
+    import.delete_confirmation_key
   end
 
   def verify_key

@@ -75,4 +75,15 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
 
     assert_equal value, @redis_handler.get_property(token, property)
   end
+
+  test '.delete_property deletes the given property from redis' do
+    prefix = Rails.application.secrets.redis['wdpa_imports_prefix']
+    token = "token"
+    property = "property"
+
+    $redis.expects(:del).
+      with("#{prefix}:#{token}:#{property}")
+
+    assert_equal nil, @redis_handler.delete_property(token, property)
+  end
 end

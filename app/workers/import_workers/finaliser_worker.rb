@@ -18,7 +18,7 @@ class ImportWorkers::FinaliserWorker
 
   def finalise_import
     import = ImportTools.current_import
-    import.finalise
+    import.stop
   end
 
   def refresh_data

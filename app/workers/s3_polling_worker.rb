@@ -7,19 +7,19 @@ class S3PollingWorker
 
     if last_import.nil? || Wdpa::S3.new_wdpa?(last_import.started_at)
       create_import
-      send_confirmation_email last_import
     end
   end
 
   private
 
   def send_confirmation_email import
-    ImportConfirmationMailer.create(import)
+    ImportConfirmationMailer.create(import).deliver
   end
 
   def create_import
     begin
-      ImportTools.create_import
+      import = ImportTools.create_import
+      send_confirmation_email import
     rescue ImportTools::AlreadyRunningImportError
       return
     end

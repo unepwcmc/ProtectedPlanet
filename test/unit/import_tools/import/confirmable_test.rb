@@ -65,4 +65,14 @@ class ConfirmableTest < ActiveSupport::TestCase
     refute import.verify_confirmation_key(nil),
       "Expected nil to not be verifiable"
   end
+
+  test '.delete_confirmation_key deletes the key from redis' do
+    import = ImportTools::Import.new('abcd')
+
+    ImportTools::RedisHandler.any_instance.
+      expects(:delete_property).
+      with(import.token, 'confirmation_key')
+
+    import.delete_confirmation_key
+  end
 end

@@ -11,6 +11,10 @@ module ImportTools::Import::Confirmable
     end
   end
 
+  def delete_confirmation_key
+    redis_handler.delete_property(self.token, 'confirmation_key')
+  end
+
   private
 
   def generate_confirmation_key

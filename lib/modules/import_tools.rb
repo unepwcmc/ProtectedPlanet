@@ -2,7 +2,7 @@ module ImportTools
   class AlreadyRunningImportError < StandardError; end;
 
   def self.create_import
-    Import.new
+    ImportTools::Import.new
   end
 
   def self.current_import
