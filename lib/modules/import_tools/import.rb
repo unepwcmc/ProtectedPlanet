@@ -1,4 +1,5 @@
 class ImportTools::Import
+  include Confirmable
   include ActiveToken
   token_domain 'wdpa_imports'
 
@@ -22,8 +23,8 @@ class ImportTools::Import
     end
   end
 
-  def finalise
-    swap_databases
+  def stop finalise=true
+    swap_databases if finalise
     add_to_completed_imports
   ensure
     self.use_import_db = false

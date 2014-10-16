@@ -1,0 +1,27 @@
+<p>
+  Hello,
+</p>
+
+<p>
+  You (or possibly someone else) recently added a new WDPA release to be
+  displayed on Protected Planet.
+</p>
+
+<p>
+  If you want this release to be shown on Protected Planet, please confirm
+  the import below. Or, should you wish not to go ahead with the import,
+  click cancel.
+</p>
+
+<p>
+  ## Danger Zone ##
+</p>
+
+<p>
+  <%= link_to "Confirm", admin_import_confirm_url(import_id: @token, key: @confirmation_key) %> or
+  <%= link_to "Cancel", admin_import_cancel_url(import_id: @token, key: @confirmation_key) %>
+</p>
+
+<p>
+  #################
+</p>

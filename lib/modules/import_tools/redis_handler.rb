@@ -26,6 +26,18 @@ class ImportTools::RedisHandler
     $redis.zadd(previous_imports_key, token, token.to_s)
   end
 
+  def delete_property token, property
+    $redis.del(property_key(token, property))
+  end
+
+  def get_property token, property
+    $redis.get(property_key(token, property))
+  end
+
+  def set_property token, property, value
+    $redis.set(property_key(token, property), value)
+  end
+
   def increase_property token, property
     $redis.incr property_key(token, property)
   end

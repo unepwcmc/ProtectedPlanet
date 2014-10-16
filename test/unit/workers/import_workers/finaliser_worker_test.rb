@@ -3,7 +3,7 @@ require 'test_helper'
 class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
   test '.perform calls finalise on the current import' do
     import_mock = mock()
-    import_mock.expects(:finalise)
+    import_mock.expects(:stop)
     ImportTools.stubs(:current_import).returns(import_mock)
 
     Search::Index.stubs(:delete)

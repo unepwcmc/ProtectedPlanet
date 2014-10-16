@@ -6,17 +6,22 @@ class S3PollingWorkerTest < ActiveSupport::TestCase
     last_import_started_at = Time.now
 
     import_mock = mock()
+    import_mock.stubs(:token).returns(last_import_started_at.to_s)
+    import_mock.stubs(:confirmation_key).returns('keyyek')
     import_mock.stubs(:started_at).returns(last_import_started_at)
     ImportTools.stubs(:last_import).returns(import_mock)
-    ImportTools.stubs(:create_import)
+    ImportTools.stubs(:create_import).returns(import_mock)
 
     Wdpa::S3.expects(:new_wdpa?).with(last_import_started_at).returns(true)
 
-    ImportWorkers::MainWorker.expects(:perform_async)
-
     Sidekiq::Testing.inline! do
-      S3PollingWorker.perform_async
+      assert_difference 'ActionMailer::Base.deliveries.size', +1 do
+        S3PollingWorker.perform_async
+      end
     end
+
+    confirmation_email = ActionMailer::Base.deliveries.last
+    assert_equal 'blackhole@unep-wcmc.org', confirmation_email.to[0]
   end
 
   test '.perform stops immediately if there is another import ongoing' do

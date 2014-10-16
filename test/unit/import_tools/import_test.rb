@@ -51,7 +51,7 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     assert import.completed?
   end
 
-  test '.finalise drops the old db and renames the new one' do
+  test '.stop(true) drops the old db and renames the new one' do
     import = ImportTools::Import.new(123)
 
     test_db = Rails.configuration.database_configuration[Rails.env]['database']
@@ -60,25 +60,49 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     ImportTools::PostgresHandler.any_instance.expects(:drop_database).with(test_db)
     ImportTools::PostgresHandler.any_instance.expects(:rename_database).with(import_db, test_db)
 
-    import.finalise
+    import.stop
   end
 
-  test '.finalise unlocks the import' do
+  test '.stop(true) unlocks the import' do
     import = ImportTools::Import.new(123)
 
     ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
-
     ImportTools::RedisHandler.any_instance.expects(:unlock)
 
-    import.finalise
+    import.stop
   end
 
-  test '.finalise adds the import to the done imports' do
+  test '.stop(true) adds the import to the done imports' do
     import = ImportTools::Import.new(123)
 
     ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
     ImportTools::RedisHandler.any_instance.expects(:add_to_previous_imports).with(123)
 
-    import.finalise
+    import.stop
+  end
+
+  test '.stop(false) unlocks the import, but does not swap the databases' do
+    import = ImportTools::Import.new(123)
+
+    ImportTools::PostgresHandler.any_instance.expects(:drop_database).never
+    ImportTools::PostgresHandler.any_instance.expects(:rename_database).never
+
+    ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
+    ImportTools::RedisHandler.any_instance.expects(:unlock)
+
+    import.stop
+  end
+
+  test '.stop(false) adds the import to the done imports, but does not
+   swap the databases' do
+    import = ImportTools::Import.new(123)
+
+    ImportTools::PostgresHandler.any_instance.expects(:drop_database).never
+    ImportTools::PostgresHandler.any_instance.expects(:rename_database).never
+
+    ImportTools::PostgresHandler.stubs(:new).returns(stub_everything)
+    ImportTools::RedisHandler.any_instance.expects(:add_to_previous_imports).with(123)
+
+    import.stop
   end
 end
