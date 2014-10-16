@@ -5,12 +5,15 @@ Rails.application.routes.draw do
   put '/admin/maintenance', as: 'maintenance'
   put '/admin/clear_cache', as: 'clear_cache'
 
-  get '/admin/import/:token/confirm',
-    to: 'import/confirmation#confirm',
-    as: 'confirm_import'
-  get '/admin/import/:token/cancel',
-    to: 'import/confirmation#cancel',
-    as: 'cancel_import'
+  namespace :admin do
+    resources :import, only: [] do
+      get :confirm
+      get :cancel
+    end
+  end
+
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/admin/sidekiq'
 
   get '/terms', to: 'static_pages#terms', as: 'wcmc_terms'
   get '/wdpa-terms', to: 'static_pages#wdpa_terms', as: 'wdpa_terms'
@@ -28,7 +31,4 @@ Rails.application.routes.draw do
   get '/sites/:id/*other', to: 'sites#show'
 
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
-
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/admin/sidekiq'
 end

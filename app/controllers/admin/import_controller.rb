@@ -1,4 +1,4 @@
-class Import::ConfirmationController < ApplicationController
+class Admin::ImportController < ApplicationController
   before_filter :verify_key
   after_filter :delete_confirmation_key
 
@@ -15,7 +15,7 @@ class Import::ConfirmationController < ApplicationController
   private
 
   def import
-    @import ||= ImportTools::Import.find(params[:token], params[:token])
+    @import ||= ImportTools::Import.find(params[:import_id], params[:import_id])
   end
 
   def delete_confirmation_key

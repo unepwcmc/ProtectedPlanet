@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Import::ConfirmationControllerTest < ActionController::TestCase
+class Admin::ImportControllerTest < ActionController::TestCase
   test "GET :confirm, given a valid key, creates an Import worker to
    start the import process" do
     import = ImportTools::Import.new('abcd')
@@ -9,7 +9,7 @@ class Import::ConfirmationControllerTest < ActionController::TestCase
 
     ImportWorkers::MainWorker.expects(:perform_async)
 
-    get :confirm, token: import.token, key: import.confirmation_key
+    get :confirm, import_id: import.token, key: import.confirmation_key
 
     assert_response :success
   end
@@ -20,7 +20,7 @@ class Import::ConfirmationControllerTest < ActionController::TestCase
     import.expects(:stop).with(false)
     import.expects(:delete_confirmation_key)
 
-    get :cancel, token: import.token, key: import.confirmation_key
+    get :cancel, import_id: import.token, key: import.confirmation_key
 
     assert_response :success
   end

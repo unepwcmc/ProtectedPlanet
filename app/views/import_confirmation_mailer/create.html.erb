@@ -18,8 +18,8 @@
 </p>
 
 <p>
-  <%= link_to "Confirm", confirm_import_url(token: @token, key: @confirmation_key) %> or
-  <%= link_to "Cancel", cancel_import_url(token: @token, key: @confirmation_key) %>
+  <%= link_to "Confirm", admin_import_confirm_url(import_id: @token, key: @confirmation_key) %> or
+  <%= link_to "Cancel", admin_import_cancel_url(import_id: @token, key: @confirmation_key) %>
 </p>
 
 <p>
