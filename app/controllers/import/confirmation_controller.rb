@@ -2,6 +2,8 @@ class Import::ConfirmationController < ApplicationController
   before_filter :verify_key
   after_filter :delete_confirmation_key
 
+  layout "import_confirmation"
+
   def confirm
     ImportWorkers::MainWorker.perform_async
   end
@@ -22,7 +24,7 @@ class Import::ConfirmationController < ApplicationController
 
   def verify_key
     unless import.verify_confirmation_key params[:key]
-      return render text: "", status: 401
+      return render "unauthorised", status: 401
     end
   end
 end
