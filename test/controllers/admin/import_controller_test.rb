@@ -24,4 +24,15 @@ class Admin::ImportControllerTest < ActionController::TestCase
 
     assert_response :success
   end
+
+  test "GET :confirm, given an invalid key, does not delete the
+   confirmation key" do
+    import = ImportTools::Import.new('abcd')
+    ImportTools::Import.expects(:find).returns(import)
+    import.expects(:delete_confirmation_key).never
+
+    get :cancel, import_id: import.token, key: "sdlknflfsdkn"
+
+    assert_response 401
+  end
 end
