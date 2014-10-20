@@ -600,6 +600,37 @@ ALTER SEQUENCE no_take_statuses_id_seq OWNED BY no_take_statuses.id;
 
 
 --
+-- Name: projects; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE projects (
+    id integer NOT NULL,
+    name text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE projects_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: projects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
+
+
+--
 -- Name: protected_areas; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1010,6 +1041,13 @@ ALTER TABLE ONLY no_take_statuses ALTER COLUMN id SET DEFAULT nextval('no_take_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY protected_areas ALTER COLUMN id SET DEFAULT nextval('protected_areas_id_seq'::regclass);
 
 
@@ -1148,6 +1186,14 @@ ALTER TABLE ONLY management_authorities
 
 ALTER TABLE ONLY no_take_statuses
     ADD CONSTRAINT no_take_statuses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY projects
+    ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
 
 
 --
@@ -1602,4 +1648,6 @@ INSERT INTO schema_migrations (version) VALUES ('20140721122852');
 INSERT INTO schema_migrations (version) VALUES ('20140725144859');
 
 INSERT INTO schema_migrations (version) VALUES ('20140725145539');
+
+INSERT INTO schema_migrations (version) VALUES ('20141020135233');
 
