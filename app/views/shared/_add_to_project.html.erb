@@ -1,0 +1,5 @@
+<%= form_tag projects_path do %>
+  <%= hidden_field_tag 'first_item_id', item.id %>
+  <%= hidden_field_tag 'first_item_type', type %>
+  <%= submit_tag 'Add to Projects' %>
+<% end %>

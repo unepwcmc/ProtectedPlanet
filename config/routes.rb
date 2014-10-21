@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :projects, only: [:create, :index]
+
   require 'sidekiq/web'
   mount Sidekiq::Web => '/admin/sidekiq'
 
