@@ -3,7 +3,7 @@ worker_processes 4;
 pid /var/run/nginx.pid;
 
 events {
-	worker_connections 768;
+        worker_connections 2048;
 	# multi_accept on;
 }
 
