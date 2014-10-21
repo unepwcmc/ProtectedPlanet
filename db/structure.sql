@@ -600,6 +600,39 @@ ALTER SEQUENCE no_take_statuses_id_seq OWNED BY no_take_statuses.id;
 
 
 --
+-- Name: project_items; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE project_items (
+    id integer NOT NULL,
+    project_id integer,
+    item_id integer,
+    item_type character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: project_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE project_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: project_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE project_items_id_seq OWNED BY project_items.id;
+
+
+--
 -- Name: projects; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -607,7 +640,8 @@ CREATE TABLE projects (
     id integer NOT NULL,
     name text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    user_id integer
 );
 
 
@@ -1081,6 +1115,13 @@ ALTER TABLE ONLY no_take_statuses ALTER COLUMN id SET DEFAULT nextval('no_take_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY project_items ALTER COLUMN id SET DEFAULT nextval('project_items_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
 
 
@@ -1236,6 +1277,14 @@ ALTER TABLE ONLY no_take_statuses
 
 
 --
+-- Name: project_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY project_items
+    ADD CONSTRAINT project_items_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1300,7 +1349,7 @@ ALTER TABLE ONLY sub_locations
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY users
@@ -1390,6 +1439,20 @@ CREATE INDEX index_designations_on_jurisdiction_id ON designations USING btree (
 --
 
 CREATE INDEX index_images_on_protected_area_id ON images USING btree (protected_area_id);
+
+
+--
+-- Name: index_project_items_on_project_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_project_items_on_project_id ON project_items USING btree (project_id);
+
+
+--
+-- Name: index_projects_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_projects_on_user_id ON projects USING btree (user_id);
 
 
 --
@@ -1491,17 +1554,17 @@ CREATE INDEX index_sources_on_metadataid ON sources USING btree (metadataid);
 
 
 --
--- Name: index_sub_locations_on_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_sub_locations_on_country_id ON sub_locations USING btree (country_id);
+CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
--- Name: index_tsvector_search_documents_on_document; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_tsvector_search_documents_on_document ON tsvector_search_documents USING gin (document);
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
 
 
 --
@@ -1707,4 +1770,8 @@ INSERT INTO schema_migrations (version) VALUES ('20140725145539');
 INSERT INTO schema_migrations (version) VALUES ('20141020132951');
 
 INSERT INTO schema_migrations (version) VALUES ('20141020135233');
+
+INSERT INTO schema_migrations (version) VALUES ('20141020141143');
+
+INSERT INTO schema_migrations (version) VALUES ('20141020142210');
 

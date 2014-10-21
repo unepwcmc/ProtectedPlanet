@@ -6,6 +6,9 @@ class Region < ActiveRecord::Base
   has_many :designations, -> { uniq }, through: :protected_areas
   has_many :iucn_categories, through: :protected_areas
 
+  has_many :project_items, as: :item
+  has_many :projects, through: :project_items
+
   has_one :regional_statistic
 
   def statistic
