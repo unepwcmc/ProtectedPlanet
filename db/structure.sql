@@ -814,6 +814,40 @@ ALTER SEQUENCE regions_id_seq OWNED BY regions.id;
 
 
 --
+-- Name: saved_searches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE saved_searches (
+    id integer NOT NULL,
+    search_term character varying(255),
+    filters character varying(255),
+    results_ids text[] DEFAULT '{}'::text[],
+    project_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: saved_searches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE saved_searches_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: saved_searches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE saved_searches_id_seq OWNED BY saved_searches.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1150,6 +1184,13 @@ ALTER TABLE ONLY regions ALTER COLUMN id SET DEFAULT nextval('regions_id_seq'::r
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY saved_searches ALTER COLUMN id SET DEFAULT nextval('saved_searches_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY sources ALTER COLUMN id SET DEFAULT nextval('sources_id_seq'::regclass);
 
 
@@ -1314,6 +1355,14 @@ ALTER TABLE ONLY regional_statistics
 
 ALTER TABLE ONLY regions
     ADD CONSTRAINT regions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: saved_searches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY saved_searches
+    ADD CONSTRAINT saved_searches_pkey PRIMARY KEY (id);
 
 
 --
@@ -1536,7 +1585,7 @@ CREATE INDEX index_protected_areas_sources_on_source_id ON protected_areas_sourc
 -- Name: index_protected_areas_sub_locations_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_protected_areas_sub_locations_composite ON protected_areas_sub_locations USING btree (protected_area_id, sub_location_id);
+CREATE INDEX index_saved_searches_on_project_id ON saved_searches USING btree (project_id);
 
 
 --
@@ -1774,4 +1823,6 @@ INSERT INTO schema_migrations (version) VALUES ('20141020135233');
 INSERT INTO schema_migrations (version) VALUES ('20141020141143');
 
 INSERT INTO schema_migrations (version) VALUES ('20141020142210');
+
+INSERT INTO schema_migrations (version) VALUES ('20141021143253');
 
