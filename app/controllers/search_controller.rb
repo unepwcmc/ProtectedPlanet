@@ -1,4 +1,6 @@
 class SearchController < ApplicationController
+  after_filter :enable_caching, only: [:index]
+
   def index
     return unless @query = params[:q]
 
