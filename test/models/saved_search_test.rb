@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SearchTest < ActiveSupport::TestCase
+class SavedSearchTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end
