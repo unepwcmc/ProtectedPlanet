@@ -600,6 +600,71 @@ ALTER SEQUENCE no_take_statuses_id_seq OWNED BY no_take_statuses.id;
 
 
 --
+-- Name: project_items; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE project_items (
+    id integer NOT NULL,
+    project_id integer,
+    item_id integer,
+    item_type character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: project_items_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE project_items_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: project_items_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE project_items_id_seq OWNED BY project_items.id;
+
+
+--
+-- Name: projects; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE projects (
+    id integer NOT NULL,
+    name text,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    user_id integer
+);
+
+
+--
+-- Name: projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE projects_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: projects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE projects_id_seq OWNED BY projects.id;
+
+
+--
 -- Name: protected_areas; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -746,6 +811,40 @@ CREATE SEQUENCE regions_id_seq
 --
 
 ALTER SEQUENCE regions_id_seq OWNED BY regions.id;
+
+
+--
+-- Name: saved_searches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE saved_searches (
+    id integer NOT NULL,
+    search_term character varying(255),
+    filters character varying(255),
+    results_ids text[] DEFAULT '{}'::text[],
+    project_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: saved_searches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE saved_searches_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: saved_searches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE saved_searches_id_seq OWNED BY saved_searches.id;
 
 
 --
@@ -897,7 +996,47 @@ CREATE MATERIALIZED VIEW tsvector_search_documents AS
 
 
 --
--- Name: wikipedia_articles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    email character varying(255) DEFAULT ''::character varying NOT NULL,
+    encrypted_password character varying(255) DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying(255),
+    reset_password_sent_at timestamp without time zone,
+    remember_created_at timestamp without time zone,
+    sign_in_count integer DEFAULT 0 NOT NULL,
+    current_sign_in_at timestamp without time zone,
+    last_sign_in_at timestamp without time zone,
+    current_sign_in_ip character varying(255),
+    last_sign_in_ip character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+--
+-- Name: wikipedia_articles; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE TABLE wikipedia_articles (
@@ -1010,6 +1149,20 @@ ALTER TABLE ONLY no_take_statuses ALTER COLUMN id SET DEFAULT nextval('no_take_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY project_items ALTER COLUMN id SET DEFAULT nextval('project_items_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY projects ALTER COLUMN id SET DEFAULT nextval('projects_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY protected_areas ALTER COLUMN id SET DEFAULT nextval('protected_areas_id_seq'::regclass);
 
 
@@ -1025,6 +1178,13 @@ ALTER TABLE ONLY regional_statistics ALTER COLUMN id SET DEFAULT nextval('region
 --
 
 ALTER TABLE ONLY regions ALTER COLUMN id SET DEFAULT nextval('regions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY saved_searches ALTER COLUMN id SET DEFAULT nextval('saved_searches_id_seq'::regclass);
 
 
 --
@@ -1057,6 +1217,13 @@ ALTER TABLE ONLY sub_locations ALTER COLUMN id SET DEFAULT nextval('sub_location
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- Name: ogc_fid; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY wikipedia_articles ALTER COLUMN id SET DEFAULT nextval('wikipedia_articles_id_seq'::regclass);
@@ -1151,6 +1318,22 @@ ALTER TABLE ONLY no_take_statuses
 
 
 --
+-- Name: project_items_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY project_items
+    ADD CONSTRAINT project_items_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY projects
+    ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: protected_areas_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1172,6 +1355,14 @@ ALTER TABLE ONLY regional_statistics
 
 ALTER TABLE ONLY regions
     ADD CONSTRAINT regions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: saved_searches_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY saved_searches
+    ADD CONSTRAINT saved_searches_pkey PRIMARY KEY (id);
 
 
 --
@@ -1207,7 +1398,15 @@ ALTER TABLE ONLY sub_locations
 
 
 --
--- Name: wikipedia_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: wikipedia_articles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
 --
 
 ALTER TABLE ONLY wikipedia_articles
@@ -1292,6 +1491,20 @@ CREATE INDEX index_images_on_protected_area_id ON images USING btree (protected_
 
 
 --
+-- Name: index_project_items_on_project_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_project_items_on_project_id ON project_items USING btree (project_id);
+
+
+--
+-- Name: index_projects_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_projects_on_user_id ON projects USING btree (user_id);
+
+
+--
 -- Name: index_protected_areas_on_designation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1372,7 +1585,7 @@ CREATE INDEX index_protected_areas_sources_on_source_id ON protected_areas_sourc
 -- Name: index_protected_areas_sub_locations_composite; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_protected_areas_sub_locations_composite ON protected_areas_sub_locations USING btree (protected_area_id, sub_location_id);
+CREATE INDEX index_saved_searches_on_project_id ON saved_searches USING btree (project_id);
 
 
 --
@@ -1390,17 +1603,17 @@ CREATE INDEX index_sources_on_metadataid ON sources USING btree (metadataid);
 
 
 --
--- Name: index_sub_locations_on_country_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_sub_locations_on_country_id ON sub_locations USING btree (country_id);
+CREATE UNIQUE INDEX index_users_on_email ON users USING btree (email);
 
 
 --
--- Name: index_tsvector_search_documents_on_document; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_tsvector_search_documents_on_document ON tsvector_search_documents USING gin (document);
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
 
 
 --
@@ -1602,4 +1815,14 @@ INSERT INTO schema_migrations (version) VALUES ('20140721122852');
 INSERT INTO schema_migrations (version) VALUES ('20140725144859');
 
 INSERT INTO schema_migrations (version) VALUES ('20140725145539');
+
+INSERT INTO schema_migrations (version) VALUES ('20141020132951');
+
+INSERT INTO schema_migrations (version) VALUES ('20141020135233');
+
+INSERT INTO schema_migrations (version) VALUES ('20141020141143');
+
+INSERT INTO schema_migrations (version) VALUES ('20141020142210');
+
+INSERT INTO schema_migrations (version) VALUES ('20141021143253');
 

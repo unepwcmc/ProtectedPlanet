@@ -14,6 +14,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :projects, only: [:create, :index]
+
   require 'sidekiq/web'
   mount Sidekiq::Web => '/admin/sidekiq'
 
@@ -28,6 +30,7 @@ Rails.application.routes.draw do
   resources :downloads, only: [:show, :create]
 
   get '/search', to: 'search#index'
+  post '/search', to: 'search#create'
 
   get '/sites/:id', to: 'sites#show'
   get '/sites/:id/*other', to: 'sites#show'
