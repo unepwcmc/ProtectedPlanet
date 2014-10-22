@@ -87,7 +87,7 @@ class SearchControllerTest < ActionController::TestCase
     search_term = 'san guillermo'
 
     @project = FactoryGirl.create(:project, user: @user)
-    assert_difference('SavedSearch.count') do
+    assert_difference('SavedSearch.count', 1) do
       post :create, search_term: search_term, project_id: @project.id
     end
 
