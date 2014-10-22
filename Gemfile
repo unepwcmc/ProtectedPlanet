@@ -24,6 +24,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-bundler', '~> 1.1', require: false
   gem 'capistrano-sidekiq', '~> 0.3.3'
+  gem 'byebug', '~> 3.1.2'
 end
 
 group :test do
@@ -67,5 +68,3 @@ gem 'turnout', '~> 2.0.0'
 
 gem 'sinatra', '>= 1.3.0', :require => nil
 
-# For debugging
-# gem 'byebug', group: [:development, :test]
