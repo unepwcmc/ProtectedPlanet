@@ -1,6 +1,6 @@
 <main class="grid">
   <% @projects.each do |project| %>
-    <h3><%= project.name %> | <small>Download Complete Data Set</small></h3>
+    <h3><%= project.name %> (<%= project.items.count %> Items) | <small>Download Complete Data Set</small></h3>
 
     <ul>
     <% project.items.each do |item| %>

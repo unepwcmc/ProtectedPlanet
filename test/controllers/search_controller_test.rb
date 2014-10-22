@@ -25,6 +25,8 @@ class SearchControllerTest < ActionController::TestCase
     results_mock.stubs(:total_pages).returns(0)
     results_mock.stubs(:current_page).returns(0)
     results_mock.stubs(:count).returns(0)
+    results_mock.stubs(:search_term).returns(search_term)
+    results_mock.stubs(:options).returns({filters: {}})
 
     Search.
       expects(:search).
@@ -50,6 +52,8 @@ class SearchControllerTest < ActionController::TestCase
     results_mock.stubs(:total_pages).returns(0)
     results_mock.stubs(:current_page).returns(0)
     results_mock.stubs(:count).returns(0)
+    results_mock.stubs(:search_term).returns(search_term)
+    results_mock.stubs(:options).returns({filters: {}})
 
     Search.
       expects(:search).
@@ -71,6 +75,8 @@ class SearchControllerTest < ActionController::TestCase
     results_mock.stubs(:current_page).returns(0)
     results_mock.stubs(:aggregations).returns([])
     results_mock.stubs(:count).returns(0)
+    results_mock.stubs(:search_term).returns(search_term)
+    results_mock.stubs(:options).returns({filters: {}})
 
     Search.
       expects(:search).

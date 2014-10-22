@@ -20,6 +20,12 @@
       <section class="search-results">
         <h4>
           Showing <%= @search.count %> <%= 'result'.pluralize @search.results.count %> for "<%= @query %>"
+          <%= form_tag search_path do %>
+            <%= hidden_field_tag 'search_term', @search.search_term %>
+            <%= hidden_field_tag 'filters', @search.options[:filters].to_json %>
+            <%= select_tag 'project_id', options_from_collection_for_select(current_user.projects, :id, :name), include_blank: true %>
+            <%= submit_tag 'Add to Your Projects' %>
+          <% end %>
           <a data-create-from="<%= downloads_path %>" data-poll-from="<%= download_poll_path %>" class="btn btn-secondary download-search"><i class="fa fa-download"></i> Download results</a>
         </h4>
 
