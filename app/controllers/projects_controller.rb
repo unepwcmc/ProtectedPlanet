@@ -21,8 +21,8 @@ class ProjectsController < ApplicationController
   private
 
   def item
-    item_id = params[:first_item_id]
-    item_class = ITEM_TYPES[params[:first_item_type].to_sym]
+    item_id = params[:item_id]
+    item_class = ITEM_TYPES[params[:item_type].to_sym]
 
     item_class.find(item_id)
   end

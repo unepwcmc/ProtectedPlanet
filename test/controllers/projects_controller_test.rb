@@ -17,7 +17,7 @@ class ProjectsControllerTest < ActionController::TestCase
     pa = FactoryGirl.create(:protected_area)
 
     assert_difference('Project.count') do
-      post :create, first_item_id: pa.id, first_item_type: 'protected_area'
+      post :create, item_id: pa.id, item_type: 'protected_area'
     end
 
     assert_redirected_to projects_path
