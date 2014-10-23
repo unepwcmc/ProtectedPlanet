@@ -12,6 +12,7 @@
  *
  *= require 'reset'
  *= require 'leaflet'
+ *= require 'leaflet-markercluster'
  *= require 'base'
  *= require 'modals'
  *= require 'home'
