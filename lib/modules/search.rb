@@ -22,7 +22,7 @@ class Search
 
     find(token, search_term, options) || begin
       instance = create(token, search_term, options)
-      SearchDownloader.perform_async(token, search_term, options)
+      SearchWorkers::Downloader.perform_async(token, search_term, options)
       instance
     end
   end
