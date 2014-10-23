@@ -9,3 +9,4 @@
 - name: "Start Unicorn"
   service: name=unicorn state=restarted enabled=yes
   sudo: yes
+  ignore_errors: True
