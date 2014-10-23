@@ -18,6 +18,12 @@ class StatisticPresenterTest < ActiveSupport::TestCase
     assert_equal "40.0", percentage
   end
 
+  test '.percentage_of_global_pas returns 0 if the percentage cannot
+   be calculated' do
+    percentage = @presenter.percentage_of_global_pas
+    assert_equal "0", percentage
+  end
+
   test '.percentage_pa_cover returns the percentage pa cover' do
     CountryStatistic.any_instance.stubs(:percentage_pa_cover).returns(50)
     percentage = @presenter.percentage_pa_cover

@@ -1,5 +1,5 @@
 [web]
-alpha.protectedplanet.net
+www-prod.protectedplanet.net
 
 [db]
 db-prod.protectedplanet.net
@@ -8,7 +8,7 @@ db-prod.protectedplanet.net
 util-prod.protectedplanet.net
 
 [elasticsearch]
-ec2-54-75-208-148.eu-west-1.compute.amazonaws.com
+search-prod.protectedplanet.net
 [elasticsearch:vars]
 elasticsearch_node_name=elasticsearch-prod
 

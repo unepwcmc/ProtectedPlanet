@@ -3,7 +3,7 @@ namespace :db do
   task lazy_seed: :environment do
     logger = Logger.new(STDOUT)
 
-    logger.info "Importing from PostgreSQL dump..."
+    logger.info "Importing seeds from PostgreSQL dump..."
 
     db_config = Rails.configuration.database_configuration[Rails.env]
     dump_path = Rails.root.join("lib", "data", "seeds", "pre_seeded_database.sql")

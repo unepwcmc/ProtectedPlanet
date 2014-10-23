@@ -36,4 +36,9 @@ class ProtectedAreasControllerTest < ActionController::TestCase
     assert_not_nil selected_protected_area
     refute selected_protected_area.has_attribute?(:the_geom)
   end
+
+  test '#show, given a PA that does not exist, renders a 404 page' do
+    get :show, id: 'flarglearg'
+    assert_response :missing
+  end
 end

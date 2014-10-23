@@ -10,7 +10,6 @@ gem 'therubyracer',  platforms: :ruby
 
 gem 'jquery-rails'
 gem 'turbolinks'
-gem 'devise', '~> 3.4.0'
 
 group :production, :staging do
   gem 'unicorn'
