@@ -8,4 +8,11 @@ class Stats::GlobalControllerTest < ActionController::TestCase
     get :index
     assert_response :success
   end
+
+  test '.index, when there are no global statistics, returns 200' do
+    FactoryGirl.create(:region, iso: 'GL')
+
+    get :index
+    assert_response :success
+  end
 end
