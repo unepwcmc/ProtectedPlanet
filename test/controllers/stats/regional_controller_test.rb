@@ -13,6 +13,8 @@ class Stats::RegionalControllerTest < ActionController::TestCase
       percentage_pa_eez_cover: 50,
       percentage_pa_ts_cover: 50)
 
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+    
     get :show, iso: 'AMA'
     assert_response :success
   end
