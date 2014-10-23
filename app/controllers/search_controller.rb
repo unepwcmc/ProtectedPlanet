@@ -1,6 +1,5 @@
 class SearchController < ApplicationController
   before_action :authenticate_user!, only: [:create]
-
   after_filter :enable_caching, only: [:index]
 
   def index
