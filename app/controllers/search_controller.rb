@@ -8,7 +8,7 @@ class SearchController < ApplicationController
   end
 
   def create
-    SavedSearch.create!(
+    SavedSearch.create_and_populate(
       search_params.merge({project_id: project.id})
     )
 
