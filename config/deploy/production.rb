@@ -4,7 +4,7 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-server 'alpha.protectedplanet.net', user: 'ubuntu', roles: %w{web}
+server 'www-prod.protectedplanet.net', user: 'ubuntu', roles: %w{web}
 server 'util-prod.protectedplanet.net', user: 'ubuntu', roles: %w{util}
 
 set :rails_env, :production

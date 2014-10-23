@@ -22,4 +22,17 @@ class Stats::CountryControllerTest < ActionController::TestCase
     get :show, iso: 'PUM'
     assert_response :success
   end
+
+  test '.show, given a Country with no stats, returns 200' do
+    global_region = FactoryGirl.create(:region, iso: 'GL')
+    FactoryGirl.create(:regional_statistic, region: global_region, pa_area: 100)
+
+    region = FactoryGirl.create(:region)
+    FactoryGirl.create(:regional_statistic, region: region, pa_area: 100)
+
+    country = FactoryGirl.create(:country, name: 'Orange Emirate', iso: 'PUM', region: region)
+
+    get :show, iso: country.iso
+    assert_response :success
+  end
 end

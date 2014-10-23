@@ -7,6 +7,8 @@ class StatisticPresenter
   def percentage_of_global_pas
     percentage = (@statistic.pa_area / global_statistic.pa_area) * 100
     '%.1f' % percentage
+  rescue NoMethodError
+    "0"
   end
 
   def method_missing method
@@ -16,6 +18,6 @@ class StatisticPresenter
   private
 
   def global_statistic
-    @global_statistic ||= Region.where(iso: 'GL').first.regional_statistic
+    @global_statistic ||= Region.where(iso: 'GL').first.try(:regional_statistic)
   end
 end
