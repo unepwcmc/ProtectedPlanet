@@ -34,6 +34,7 @@ group :test do
   gem 'timecop', '~> 0.7.1'
   gem 'capybara', '~> 2.3.0'
   gem 'codeclimate-test-reporter', require: nil
+  gem 'selenium-webdriver'
 end
 
 group :test, :development do
@@ -63,6 +64,8 @@ gem 'newrelic_rpm'
 gem 'system'
 gem 'dotenv', '~> 0.11.1'
 gem 'dotenv-deployment'
+
+gem 'best_in_place'
 
 gem 'turnout', '~> 2.0.0'
 

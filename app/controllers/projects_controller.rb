@@ -18,6 +18,20 @@ class ProjectsController < ApplicationController
     redirect_to action: :index
   end
 
+  def update
+    @project = Project.find(params[:id])
+
+    respond_to do |format|
+      if @project.update_attributes(project_params)
+        format.html { redirect_to projects_path, :notice => 'Project was successfully updated.' }
+        format.json { head :ok }
+      else
+        format.html { render :action => "index" }
+        format.json { render :json => @project.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
   def item
@@ -26,4 +40,9 @@ class ProjectsController < ApplicationController
 
     item_class.find(item_id)
   end
+
+  def project_params
+    params.require(:project).permit(:name)
+  end
+
 end
