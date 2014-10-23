@@ -1,4 +1,4 @@
-class WorkersSearchDownloaderTest < ActiveSupport::TestCase
+class SearchWorkersDownloaderTest < ActiveSupport::TestCase
   test '.perform executes a search and generates a download with the returned
    ids' do
     query_term = 'manbone'
@@ -20,7 +20,7 @@ class WorkersSearchDownloaderTest < ActiveSupport::TestCase
       without_aggregations: true
     }).returns(search_mock)
 
-    SearchDownloader.new.perform token, query_term, {}
+    SearchWorkers::Downloader.new.perform token, query_term, {}
   end
 
   test '.perform completes the search updating its status and filename
@@ -39,6 +39,6 @@ class WorkersSearchDownloaderTest < ActiveSupport::TestCase
     Search.stubs(:search).returns(search_mock)
     Download.stubs(:generate).returns(true)
 
-    SearchDownloader.new.perform '12345', 'san guillermo', {}
+    SearchWorkers::Downloader.new.perform '12345', 'san guillermo', {}
   end
 end
