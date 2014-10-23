@@ -20,8 +20,6 @@ class StatisticPresenterTest < ActiveSupport::TestCase
 
   test '.percentage_of_global_pas returns 0 if the percentage cannot
    be calculated' do
-    FactoryGirl.create(:region, iso: 'GL')
-
     percentage = @presenter.percentage_of_global_pas
     assert_equal "0", percentage
   end
