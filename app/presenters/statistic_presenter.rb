@@ -7,6 +7,8 @@ class StatisticPresenter
   def percentage_of_global_pas
     percentage = (@statistic.pa_area / global_statistic.pa_area) * 100
     '%.1f' % percentage
+  rescue
+    "0"
   end
 
   def method_missing method
