@@ -108,6 +108,8 @@ class ProtectedAreaTest < ActiveSupport::TestCase
 
   test '.as_api_feeder returns the PA as JSON with requested attributes' do
 
+  time = Time.local(2008, 9, 1, 10, 5, 0)
+
   region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
   country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manboneland', region: region)
   sub_location = FactoryGirl.create(:sub_location, english_name: 'Manboneland City')
@@ -122,7 +124,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     name: 'Manbone', countries: [country], sub_locations: [sub_location],
     original_name: 'Manboné', iucn_category: iucn_category,
     designation: designation, governance: governance,
-    legal_status: legal_status, legal_status_updated_at: '2007-01-01', marine: true, wdpa_id: 555999,
+    legal_status: legal_status, legal_status_updated_at: time, marine: true, wdpa_id: 555999,
     reported_area: 10.2)
 
     expected_json = {
@@ -131,37 +133,31 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "name" => 'Manbone',
       "original_name" => "Manboné",
       "marine" => true,
-      "legal_status_updated_at" => "2007-01-01",
+      "legal_status_updated_at" => time,
       "sub_locations" => [
         {
           "english_name" => "Manboneland City"
         }
       ],
-      "countries_for_index" => [
+      "countries" => [
         {
-          "id" => 123,
           "name" => "Manboneland",
           "iso_3" => "MBN",
-          "region_for_index" => {
-            "id" => 987,
+          "region" => {
             "name" => "North Manmerica"
           }
         }
       ],
       "iucn_category" => {
-        "id" => 456,
         "name" => "IA"
       },
       "designation" => {
-        "id" => 654,
         "name" => "National",
         "jurisdiction" => {
-          "id" => 2,
           "name" => "International"
         }
       },
       "legal_status" => {
-        "id" => 987,
         "name" => "Proposed"
       }
     }
