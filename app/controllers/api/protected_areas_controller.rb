@@ -5,7 +5,8 @@ class Api::ProtectedAreasController < ApplicationController
       @protected_areas = ProtectedArea.
                          without_geometry.
                          where('wdpa_id = ?', wdpa_id.to_i).
-                         first
+                         first.
+                         as_api_feeder
     end
 
     render json: @protected_areas, status: 200
