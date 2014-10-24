@@ -128,7 +128,6 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     reported_area: 10.2)
 
     expected_json = {
-      "id" => pa.id,
       "wdpa_id" => 555999,
       "name" => 'Manbone',
       "original_name" => "Manboné",
