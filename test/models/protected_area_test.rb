@@ -109,22 +109,20 @@ class ProtectedAreaTest < ActiveSupport::TestCase
   test '.as_api_feeder returns the PA as JSON with requested attributes' do
 
   region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-  country = FactoryGirl.create(:country, id: 123, iso3: 'MB', name: 'Manboneland', region: region)
+  country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manboneland', region: region)
   sub_location = FactoryGirl.create(:sub_location, english_name: 'Manboneland City')
 
+  jurisdiction = FactoryGirl.create(:jurisdiction, id: 2, name: 'International')
   iucn_category = FactoryGirl.create(:iucn_category, id: 456, name: 'IA')
-  designation = FactoryGirl.create(:designation, id: 654, name: 'National')
+  designation = FactoryGirl.create(:designation, id: 654, name: 'National', jurisdiction: jurisdiction)
   governance = FactoryGirl.create(:governance, id: 111, name: 'Bone Man')
   legal_status = FactoryGirl.create(:legal_status, id: 987, name: 'Proposed')
-  jurisdiction = FactoryGirl.create(:jurisdiction, id: 2, name: 'International')
-
 
   pa = FactoryGirl.create(:protected_area,
     name: 'Manbone', countries: [country], sub_locations: [sub_location],
-    original_name: 'Manboné', iucn_category: iucn_category, 
-    designation: designation, governance: governance, 
-    legal_status: legal_status, jurisdiction: jurisdiction, 
-    legal_status_updated_at: '2007-01-01', marine: true, wdpa_id: 555999, 
+    original_name: 'Manboné', iucn_category: iucn_category,
+    designation: designation, governance: governance,
+    legal_status: legal_status, legal_status_updated_at: '2007-01-01', marine: true, wdpa_id: 555999,
     reported_area: 10.2)
 
     expected_json = {
@@ -133,6 +131,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "name" => 'Manbone',
       "original_name" => "Manboné",
       "marine" => true,
+      "legal_status_updated_at" => "2007-01-01",
       "sub_locations" => [
         {
           "english_name" => "Manboneland City"
@@ -142,7 +141,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
         {
           "id" => 123,
           "name" => "Manboneland",
-          "iso3" => "MB",
+          "iso_3" => "MBN",
           "region_for_index" => {
             "id" => 987,
             "name" => "North Manmerica"
@@ -155,17 +154,16 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       },
       "designation" => {
         "id" => 654,
-        "name" => "National"
+        "name" => "National",
+        "jurisdiction" => {
+          "id" => 2,
+          "name" => "International"
+        }
       },
       "legal_status" => {
         "id" => 987,
         "name" => "Proposed"
-      },
-      "jurisdiction" => {
-        "id" => 2,
-        "name" => "International"
-      },
-      "legal_status_updated_at" => "2007-01-01"
+      }
     }
 
     assert_equal expected_json, pa.as_api_feeder

@@ -40,6 +40,25 @@ class ProtectedArea < ActiveRecord::Base
     ]
   end
 
+  def as_api_feeder
+    self.as_json(
+      only: [:id, :wdpa_id, :name, :original_name, :marine, :legal_status_updated_at],
+      include: {
+        countries_for_index: {
+          only: [:name, :id, :iso_3],
+          include: { region_for_index: { only: [:id, :name] } }
+        },
+        sub_locations: { only: [:english_name] },
+        iucn_category: { only: [:id, :name] },
+        designation: {
+          only: [:id, :name],
+          include: {jurisdiction: {only: [:id, :name]}}
+        },
+        legal_status: { only: [:id, :name] }
+      }
+    )
+  end
+
   private
 
   def bounding_box_query
