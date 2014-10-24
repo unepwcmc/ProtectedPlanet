@@ -42,7 +42,7 @@ class ProtectedArea < ActiveRecord::Base
 
   def as_api_feeder
     self.as_json(
-      only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at],
+      only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area],
       include: {
         sub_locations: { only: [:english_name] },
         countries: {

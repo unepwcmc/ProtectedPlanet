@@ -133,6 +133,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "original_name" => "Manboné",
       "marine" => true,
       "legal_status_updated_at" => time,
+      "reported_area" => 10.2,
       "sub_locations" => [
         {
           "english_name" => "Manboneland City"
