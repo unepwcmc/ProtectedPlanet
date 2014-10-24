@@ -1,11 +1,10 @@
-class @ProtectedAreaMap
+window.ProtectedPlanet ||= {}
+
+class ProtectedPlanet.ProtectedAreaMap
   POLYGONS_TABLE = 'wdpa_poly_<%= Rails.env %>'
   POINTS_TABLE   = 'wdpa_point_<%= Rails.env %>'
 
-  constructor: ($container) ->
-    @map = L.map($container.attr('id'), {zoomControl: false, scrollWheelZoom: false})
-
-    L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png').addTo(@map)
+  constructor: (@map, @config) ->
 
   _generateCartocssSelector: (args) ->
     tables = args.table
@@ -36,33 +35,33 @@ class @ProtectedAreaMap
       }
     """
 
-  addCountryTiles: (tileConfig, sublayers) ->
+  addCountryTiles: (sublayers) ->
     args =
       table: 'countries_geometries'
       attrName: 'iso_3'
-      attrVal: "'#{tileConfig.iso3}'"
+      attrVal: "'#{@config['iso3']}'"
       opacity: .2
       lineWidth: 0
 
     sublayers.push
-      sql: "SELECT * FROM #{args.table} WHERE iso_3 = '#{tileConfig.iso3}'"
+      sql: "SELECT * FROM #{args.table} WHERE iso_3 = '#{@config['iso3']}'"
       cartocss: @_generateCartocss(args)
     sublayers
 
-  addRegionTiles: (tileConfig, sublayers) ->
+  addRegionTiles: (sublayers) ->
     args =
       table: 'continents'
       attrName: 'continent'
-      attrVal: "'#{tileConfig.regionName}'"
+      attrVal: "'#{@config['regionName']}'"
       opacity: .2
       lineWidth: 0
 
     sublayers.push
-      sql: "SELECT * FROM #{args.table} WHERE continent = '#{tileConfig.regionName}'"
+      sql: "SELECT * FROM #{args.table} WHERE continent = '#{@config['regionName']}'"
       cartocss: @_generateCartocss(args)
     sublayers
 
-  addWdpaTiles: (tileConfig, sublayers) ->
+  addWdpaTiles: (sublayers) ->
     cartocss = [
       @_generateCartocss(
         table: [POLYGONS_TABLE, POINTS_TABLE]
@@ -71,11 +70,11 @@ class @ProtectedAreaMap
       )
     ]
 
-    if tileConfig.wdpaId?
+    if @config['wdpaId']?
       cartocss.push @_generateCartocss(
         table: [POLYGONS_TABLE, POINTS_TABLE]
         attrName: 'wdpaid'
-        attrVal: tileConfig.wdpaId
+        attrVal: @config['wdpaId']
       )
 
     sublayers.push
@@ -83,15 +82,15 @@ class @ProtectedAreaMap
       cartocss: cartocss.join("\n")
     sublayers
 
-  addCartodbTiles: (tileConfig) ->
+  render: ->
     sublayers = []
 
-    @addWdpaTiles(tileConfig, sublayers)
+    @addWdpaTiles(sublayers)
 
-    if tileConfig.iso3?
-      sublayers = @addCountryTiles tileConfig, sublayers
-    if tileConfig.regionName?
-      sublayers = @addRegionTiles tileConfig, sublayers
+    if @config['iso3']?
+      sublayers = @addCountryTiles sublayers
+    if @config['regionName']?
+      sublayers = @addRegionTiles sublayers
 
     carto_tiles = new cartodb.Tiles(
       sublayers: sublayers
@@ -101,42 +100,3 @@ class @ProtectedAreaMap
     carto_tiles.getTiles( (o) =>
       L.tileLayer(o.tiles[0]).addTo @map
     )
-
-  _calculateBoundWidth: (bounds) ->
-    x1 = bounds[0][1]
-    x2 = bounds[1][1]
-    if x1 < 0 and x2 >= 0
-      return Math.abs(x1) + Math.abs(x2)
-    else
-      max = Math.max(Math.abs(x1), Math.abs(x2))
-      min = Math.min(Math.abs(x1), Math.abs(x2))
-      return max - min
-
-  normalizeBounds: (bounds) ->
-    # If a protected area overlaps the antimeridian ST_Extent does not
-    # return a correct bounding box (Ideas to fix this?)
-    # So, assuming that no protected areas real bbox width is bigger than 300,
-    # if this is the case correct to a fixed 10 degree width.
-    if @_calculateBoundWidth(bounds) > 300
-      bounds[1][1] = -170
-    bounds
-
-  fitToBounds: (bounds, withPadding) ->
-    opts = {}
-    if withPadding?
-      padding = @calculatePadding()
-      opts.paddingTopLeft = padding.topLeft
-      opts.paddingBottomRight = padding.bottomRight
-
-    @map.fitBounds(@normalizeBounds(bounds), opts)
-
-  setZoomControl: (position) ->
-    @map.addControl(L.control.zoom(position: position))
-
-  locate: ->
-    @map.locate(setView: true)
-
-  calculatePadding: ->
-    mapSize = @map.getSize()
-    paddingLeft = mapSize.x/5
-    {topLeft: [paddingLeft, 50], bottomRight: [0,70]}

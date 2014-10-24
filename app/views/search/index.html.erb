@@ -5,6 +5,9 @@
       <%= render 'shared/search_form', query: @query %>
     </section>
 
+    <div class="search-map" id="map" data-zoom-control="topright">
+    </div>
+
     <% if @query %>
       <aside class="search-filters">
         <h4>
