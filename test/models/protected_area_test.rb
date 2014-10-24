@@ -158,6 +158,9 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       },
       "legal_status" => {
         "name" => "Proposed"
+      },
+      "governance" =>  {
+        "name" => "Bone Man"
       }
     }
 

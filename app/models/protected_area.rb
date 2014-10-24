@@ -54,7 +54,8 @@ class ProtectedArea < ActiveRecord::Base
           only: [:name],
           include: {jurisdiction: {only: [:name]}}
         },
-        legal_status: { only: [:name] }
+        legal_status: { only: [:name] },
+        governance: { only: [:name] }
       }
     )
   end
