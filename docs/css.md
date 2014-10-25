@@ -9,24 +9,24 @@ These guidelines are adapted from the [Medium](http://medium.com) LESS [coding g
 ## Contents
 
 1. [Naming Conventions](#naming-conventions)
-	1. Namespacing
-	2. Javascript
-2. IDs vs. Classes
-3. Formatting
-	1. Nesting
-	2. Comments
-	3. Spacing
-	4. Quotes
-4. Polyfills and Vendor Prefixes
-5. Variables
-	1. Colours
-	2. z-index
-6. Components
-7. Semantics
-	1. Grids
-8. Performance
-	1. Specificity
-9. Clearfixes
+    1. [Namespacing](#namespacing)
+    2. [Javascript](#javascript)
+2. [IDs vs. Classes](#ids-vs-classes)
+3. [Formatting](#formatting)
+    1. [Nesting](#nesting)
+    2. [Comments](#comments)
+    3. [Spacing](#spacing)
+    4. [Quotes](#quotes)
+4. [Polyfills and Vendor Prefixes](#polyfills-and-vendor-prefixes)
+5. [Variables](#variables)
+    1. [Colours](#colours)
+    2. [z-index](#z-index)
+6. [Components](#components)
+7. [Semantics](#semantics)
+    1. [Grids](#grids)
+8. [Performance](#performance)
+    1. [Specificity](#specificity)
+9. [Clearfixes](#clearfixes)
 
 ## Naming Conventions
 
