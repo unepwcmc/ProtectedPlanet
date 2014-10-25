@@ -2,6 +2,11 @@
 
 Stolen without guilt from [NRT](https://github.com/unepwcmc/NRT).
 
+### CSS
+
+Please read the [CSS coding guidelines](css.md) before writing any
+CSS/Sass.
+
 ### Testing
 
 The application is built test-first, using TDD. New features are expected to have
