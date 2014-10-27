@@ -13,11 +13,11 @@
 
   <ul>
     <li>
-      <span>65%</span>
+      <span><%= Wdpa::DataStandard.percentage_complete(@protected_area).round(2) %></span>
       Data Complete
     </li>
     <li>
-      <span>8</span>
+      <span><%= Wdpa::DataStandard.data_gaps(@protected_area) %></span>
       Data Gaps
     </li>
     <li>Last Updated sometime</li>
