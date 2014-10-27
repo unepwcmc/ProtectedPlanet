@@ -66,6 +66,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "name" => 'Manbone',
       "original_name" => "Manboné",
       "marine" => true,
+      "coordinates" => [0.0, 0.0],
       "sub_locations" => [
         {
           "english_name" => "Manboneland City"

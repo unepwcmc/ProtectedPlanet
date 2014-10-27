@@ -93,4 +93,28 @@ class SearchQueryTest < ActiveSupport::TestCase
 
     assert_equal expected_object, filters
   end
+
+  test '.to_h, given no search term, and a filter, builds a query without matchers' do
+    expected_filters = {
+      "filtered" => {
+        "filter" => {
+          "and" => [
+            {
+              "geo_distance" => {
+                "distance" => "2000km",
+                "protected_area.coordinates" => {
+                  "lat" => -69,
+                  "lon" => -29
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+
+    query = Search::Query.new('', filters: {location: [-69, -29]}).to_h
+
+    assert_equal expected_filters, query
+  end
 end

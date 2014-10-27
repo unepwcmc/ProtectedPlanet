@@ -7,11 +7,14 @@ class Search::Query
   def to_h
     base_query = {
       "filtered" => {
-        "query" => {
-          "bool" => matchers
-        }
       }
     }
+
+    if @term.present?
+        base_query["filtered"]["query"] = {
+          "bool" => matchers
+        }
+    end
 
     if @options[:filters].present?
       base_query["filtered"]["filter"] = {
