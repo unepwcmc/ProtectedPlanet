@@ -11,42 +11,18 @@
 </head>
 <body>
 
-  <div class="alert info">
-    <div class="alert-inner">
-      <p>
-        <strong>This is an experimental prototype.</strong> There might be errors, inconsistencies, or inaccuracies.
-      </p>
-
-      <div class="links">
-        <a href="#" class="btn-about">about</a> |
-        <%= link_to "WDPA terms & conditions", wdpa_terms_path %>
-
-        <a class="btn btn-secondary" href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>Tell us what you think</a>
-      </div>
-    </div>
-  </div>
+  <nav>
+    <ul>
+      <li>Nav item</li>
+    </ul>
+  </nav>
 
   <header>
-    <div class="header-inner">
-      <h1><%= link_to "protectedplanet.net", root_url %></h1>
-
-      <nav>
-        <ul>
-          <li><a data-download-object="all" href="#" class="btn btn-secondary btn-download">Download</a></li>
-          <li class="nav-search">
-            <i class="fa fa-search"></i>
-            <form action='/search' method='get'>
-              <input name='q' type='text' placeholder='<%= t('nav_search_form_placeholder') %>'>
-            </form>
-          </li>
-        </ul>
-      </nav>
-    </div>
   </header>
 
-  <div class="container">
+  <main>
     <%= yield %>
-  </div>
+  </main>
 
   <footer>
     <div class="footer-inner">
