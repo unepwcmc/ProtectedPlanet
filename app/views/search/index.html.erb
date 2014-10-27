@@ -5,7 +5,10 @@
       <%= render 'shared/search_form', query: @query %>
     </section>
 
-    <div class="search-map" id="map" data-zoom-control="topright">
+    <div class="search-map"
+      id="map"
+      data-zoom-control="topright"
+      data-search-term="<%= @query %>">
     </div>
 
     <% if @query %>
