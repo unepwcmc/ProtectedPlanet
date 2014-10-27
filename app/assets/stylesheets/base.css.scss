@@ -1,21 +1,29 @@
 @import 'colors';
+@import 'bourbon';
+@import 'neat';
 
-/* Variables */
 $font-stack: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$gutter: 0px;
 
-
-/* Typography */
 h1,h2,h3,p {
   font-family: $font-stack;
   color: $dark-grey;
 }
 
-/* Layout Elements */
+img { max-width: 100%; height: auto; }
+
 section.page-header {
   padding: 20px;
   background-color: $light-grey;
 }
 
 div.item {
+  @include span-columns(3);
+  @include omega(4n);
   border: 1px solid $light-grey;
+  @include fill-parent;
+  margin-right: 0px;
+  width: 25%;
 }
+
+div.item-info { padding: 20px; }
