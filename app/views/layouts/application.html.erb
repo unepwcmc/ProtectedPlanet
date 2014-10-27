@@ -15,8 +15,13 @@
 <body>
 
   <nav>
+    <%= image_tag 'pp-logo.png', size: '80', id: 'brand' %>
+
     <ul>
-      <li>Nav item</li>
+      <li><a href="#">Example Link</a></li>
+      <li><a href="#">Example Link</a></li>
+      <li><a href="#">Example Link</a></li>
+      <li><a href="#">Example Link</a></li>
     </ul>
   </nav>
 
@@ -29,27 +34,21 @@
   </main>
 
   <footer>
-    <div class="footer-inner">
-      <div class="footer-logos">
+    <ul class="menu">
+      <li>
         <a href="http://unep-wcmc.org" title="UNEP-WCMC Website">
-          <%= image_tag 'wcmc-footer-logo@2x.png', style: 'width: 58px; height: 33px' %>
-        </a>
-
+          <%= image_tag 'wcmc-footer-logo@2x.png', style: 'width: 58px; height: 33px' %></a>
+      </li>
+      <li>
         <a href="http://iucn.org" title="IUCN Website">
           <%= image_tag 'iucn-footer-logo@2x.png', style: 'width: 39px; height: 39px' %>
         </a>
-      </div>
-
-      <div class="footer-copyright">
-        <p><strong>&copy; ProtectedPlanet 2014</strong></p>
-        <p>All rights reserved</p>
-      </div>
-
-      <div class="footer-links">
-        <a href="#" class="btn-about">About</a> |
-        <%= link_to "Site Terms of Use", wcmc_terms_path %>
-      </div>
-    </div>
+      </li>
+      <li><p><strong>&copy; ProtectedPlanet 2014</strong></p></li>
+      <li><p>All rights reserved</p></li>
+      <li><a href="#" class="btn-about">About</a></li>
+      <li><%= link_to "Site Terms of Use", wcmc_terms_path %></li>
+    </ul>
   </footer>
 
   <% if Rails.env == 'production' %>

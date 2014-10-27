@@ -23,6 +23,24 @@ input {
   padding: 10px;
 }
 
+nav {
+  padding: 10px;
+  background-color: $green;
+}
+
+
+footer {
+  padding: 20px;
+  background-color: $dark-blue;
+}
+
+footer p,a {
+  color: $light-grey;
+}
+
+
+
+
 section.page-header {
   padding: 20px;
   background-color: $light-grey;
