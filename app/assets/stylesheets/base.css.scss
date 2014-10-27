@@ -1,3 +1,21 @@
-h1 { font-size: 20px; }
-div.page-header { background-color: #777; }
+@import 'colors';
 
+/* Variables */
+$font-stack: "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+
+/* Typography */
+h1,h2,h3,p {
+  font-family: $font-stack;
+  color: $dark-grey;
+}
+
+/* Layout Elements */
+section.page-header {
+  padding: 20px;
+  background-color: $light-grey;
+}
+
+div.item {
+  border: 1px solid $light-grey;
+}
