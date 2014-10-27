@@ -1,11 +1,17 @@
-<main class="grid">
+<main>
   <% @projects.each_with_index do |project, i| %>
-    <h3><%= best_in_place project, :name, as: :input, activator: ".rename_#{i}", ok_button: "Save", cancel_button: "Cancel" %> (<%= project.items.count %> Items) <small class="rename_<%= i %>">(Rename)</small> | <small>Download Complete Data Set</small></h3>
-
-    <ul>
-    <% project.items.each do |item| %>
-      <li><%= item.name %></li>
-    <% end %>
-    </ul>
+    <div class="page-header">
+      <h1><i class="fa fa-edit"></i><%= best_in_place project, :name, as: :input, activator: "", ok_button: "Save", cancel_button: "Cancel" %> (<%= project.items.count %> Items)</h1>
+      <h3>Download Complete Data Set</h3>
+    </div>
+      
+    <section>
+      <% project.items.each do |item| %>
+        <div class="item">
+          <%= item.name %>
+          <p>Download Data Set</p>
+        </div>
+      <% end %>
+    </section>
   <% end %>
 </main>

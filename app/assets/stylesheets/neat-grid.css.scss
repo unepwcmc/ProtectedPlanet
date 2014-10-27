@@ -1,0 +1,15 @@
+@import "bourbon";
+@import "neat";
+
+main { }
+section { @include outer-container; }
+
+li.block { 
+  @include span-columns(3);
+  @include omega(4n);
+}
+
+div.item {
+  @include span-columns(3);
+  @include omega(4n);
+}
