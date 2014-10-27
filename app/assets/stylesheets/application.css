@@ -12,9 +12,10 @@
  *
  *= require 'reset'
  *= require 'leaflet'
+ *= require 'leaflet-markercluster'
+ *= require 'leaflet_overrides'
  *= require 'colors'
  *= require 'z-index'
  *= require 'base'
- *= require 'leaflet_overrides'
  *= require_self
  */
