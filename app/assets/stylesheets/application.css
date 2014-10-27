@@ -12,17 +12,9 @@
  *
  *= require 'reset'
  *= require 'leaflet'
+ *= require 'colors'
+ *= require 'z-index'
  *= require 'base'
- *= require 'modals'
- *= require 'home'
- *= require 'protected_areas'
- *= require 'factsheet'
- *= require 'search'
- *= require 'stats'
- *= require 'static_pages'
  *= require 'leaflet_overrides'
- *= require 'downloads'
- *= require 'alerts'
- *= require 'grids'
  *= require_self
  */
