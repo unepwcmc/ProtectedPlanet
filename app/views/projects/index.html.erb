@@ -1,15 +1,20 @@
 <main>
   <% @projects.each_with_index do |project, i| %>
-    <div class="page-header">
-      <h1><i class="fa fa-edit"></i><%= best_in_place project, :name, as: :input, activator: "", ok_button: "Save", cancel_button: "Cancel" %> (<%= project.items.count %> Items)</h1>
-      <h3>Download Complete Data Set</h3>
-    </div>
+    <section class="page-header">
+      <h1><i class="fa fa-edit"></i> <%= best_in_place project, :name, as: :input %> (<%= project.items.count %> Items) <span class="subtitle"><i class="fa fa-download"></i> Download Complete Data Set</h1></div>
+    </section>
       
     <section>
       <% project.items.each do |item| %>
         <div class="item">
-          <%= item.name %>
-          <p>Download Data Set</p>
+          <div class="item-preview">
+            <img src="http://placekitten.com/600/400">
+          </div>
+
+          <div class="item-info">
+            <h1><%= item.name %> (<%= item.class %>)</h1>
+            <p><i class="fa fa-download"></i> Download Data Set</p>
+          </div>
         </div>
       <% end %>
     </section>

@@ -1,15 +1,10 @@
 @import "bourbon";
 @import "neat";
+@import "neat-helpers";
+@import 'colors';
 
-main { }
+/* Defaults */
+$gutter: 0%;
+$max-width: 100%;
+
 section { @include outer-container; }
-
-li.block { 
-  @include span-columns(3);
-  @include omega(4n);
-}
-
-div.item {
-  @include span-columns(3);
-  @include omega(4n);
-}

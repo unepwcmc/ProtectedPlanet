@@ -1,5 +1,6 @@
-h1 { font-size: 20px; }
-div.page-header { background-color: #777; }
+@import 'colors';
+@import 'bourbon';
+@import 'neat';
 
 main {
   min-width: 768px;
@@ -8,3 +9,49 @@ main {
   height: 100%;
   overflow: hidden;
 }
+
+$font-stack: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$gutter: 0px;
+
+h1,h2,h3,p {
+  font-family: $font-stack;
+  color: $dark-grey;
+}
+
+h1 { font-size: 18px; }
+h2 { font-size: 16px; }
+h3 { font-size: 16px; }
+p { font-size: 14px; }
+
+img { max-width: 100%; height: auto; }
+
+input {
+  font-size: 20px;
+  border: 0px;
+  padding: 10px;
+}
+
+section.page-header {
+  padding: 20px;
+  background-color: $light-grey;
+}
+
+div.item {
+  @include span-columns(3);
+  @include omega(4n);
+  border: 1px solid $light-grey;
+  @include fill-parent;
+  margin-right: 0px;
+  width: 25%;
+}
+
+div.item-info {
+  padding: 20px;
+}
+
+div.item-info > h1 { margin-bottom: 20px; }
+
+span.subtitle {
+  margin-left: 40px;
+}
+>>>>>>> b53eafcef2c08462dc74910d3b99f2e7406e3f12
