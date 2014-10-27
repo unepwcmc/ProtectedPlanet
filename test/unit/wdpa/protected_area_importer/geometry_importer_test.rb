@@ -14,7 +14,7 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
     Wdpa::DataStandard.expects(:standard_attributes).returns({
       :desig_type   => {name: :jurisdiction, type: :string},
       :wkb_geometry => {name: :the_geom, type: :geometry},
-      :fake_geometry => {name: :fake_geom, type: :geometry}
+      :second_geometry => {name: :second_geom, type: :geometry}
     }).at_least_once
 
     ActiveRecord::Base.connection.
@@ -30,9 +30,25 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
       expects(:execute).
       with("""
         UPDATE protected_areas pa
-        SET fake_geom = import.fake_geometry
+        SET second_geom = import.second_geometry
         FROM #{table_names["geom1"]} import
         WHERE pa.wdpa_id = import.wdpaid;
+      """.squish)
+
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""
+        UPDATE protected_areas pa
+        SET the_geom_longitude = ST_X(ST_Centroid(the_geom)),
+            the_geom_latitude = ST_Y(ST_Centroid(the_geom));
+      """.squish)
+
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""
+        UPDATE protected_areas pa
+        SET second_geom_longitude = ST_X(ST_Centroid(second_geom)),
+            second_geom_latitude = ST_Y(ST_Centroid(second_geom));
       """.squish)
 
     ActiveRecord::Base.connection.
@@ -48,9 +64,25 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
       expects(:execute).
       with("""
         UPDATE protected_areas pa
-        SET fake_geom = import.fake_geometry
+        SET second_geom = import.second_geometry
         FROM #{table_names["geom2"]} import
         WHERE pa.wdpa_id = import.wdpaid;
+      """.squish)
+
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""
+        UPDATE protected_areas pa
+        SET the_geom_longitude = ST_X(ST_Centroid(the_geom)),
+            the_geom_latitude = ST_Y(ST_Centroid(the_geom));
+      """.squish)
+
+    ActiveRecord::Base.connection.
+      expects(:execute).
+      with("""
+        UPDATE protected_areas pa
+        SET second_geom_longitude = ST_X(ST_Centroid(second_geom)),
+            second_geom_latitude = ST_Y(ST_Centroid(second_geom));
       """.squish)
 
     import_successful = Wdpa::ProtectedAreaImporter::GeometryImporter.import wdpa_release

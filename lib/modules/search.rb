@@ -41,6 +41,12 @@ class Search
     end
   end
 
+  def with_coords
+    ProtectedArea.
+      select(:id, :wdpa_id, :name, :the_geom_latitude, :the_geom_longitude).
+      where("id IN (?)", pluck('id').compact.uniq)
+  end
+
   def complete!
     properties['status'] = 'completed'
   end

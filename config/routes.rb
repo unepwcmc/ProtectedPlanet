@@ -5,6 +5,10 @@ Rails.application.routes.draw do
   put '/admin/maintenance', as: 'maintenance'
   put '/admin/clear_cache', as: 'clear_cache'
 
+  namespace :api do
+    get '/search/points', to: 'search#points'
+  end
+
   namespace :admin do
     resources :import, only: [] do
       get :confirm

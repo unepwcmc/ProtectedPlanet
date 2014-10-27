@@ -260,4 +260,46 @@ class TestSearch < ActiveSupport::TestCase
 
     Search.download(search_term, opts)
   end
+
+  test '.with_coords returns all the search result models with their
+   coordinates, WDPA ID and name' do
+    pa_attributes = [{
+      wdpa_id: 123,
+      name: 'Benaffleckburg',
+      the_geom_latitude: '1',
+      the_geom_longitude: '-2'
+    }, {
+      wdpa_id: 321,
+      name: 'Caseyaffleckistan',
+      the_geom_latitude: '-1',
+      the_geom_longitude: '0'
+    }]
+
+    benaffleckburg = FactoryGirl.create(:protected_area, pa_attributes.first)
+    caseyaffleckistan = FactoryGirl.create(:protected_area, pa_attributes.second)
+
+    results_object = {
+      "hits" => {
+        "hits" => [{
+          "_type" => "protected_area",
+          "_source" => {
+            "id" => benaffleckburg.id
+          }
+        }, {
+          "_type" => "protected_area",
+          "_source" => {
+            "id" => caseyaffleckistan.id
+          }
+        }]
+      }
+    }
+
+    search_mock = mock().tap { |m| m.stubs(:search).returns(results_object) }
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
+
+    results = Search.search('affleck').with_coords
+
+    assert_equal benaffleckburg.id, results.first.id
+    assert_equal caseyaffleckistan.id, results.second.id
+  end
 end
