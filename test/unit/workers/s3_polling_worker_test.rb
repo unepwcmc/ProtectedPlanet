@@ -15,7 +15,7 @@ class S3PollingWorkerTest < ActiveSupport::TestCase
     Wdpa::S3.expects(:new_wdpa?).with(last_import_started_at).returns(true)
 
     Sidekiq::Testing.inline! do
-      assert_difference 'ActionMailer::Base.deliveries.size', +1 do
+      assert_difference 'ActionMailer::Base.deliveries.size', 1 do
         S3PollingWorker.perform_async
       end
     end

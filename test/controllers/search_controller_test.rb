@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class SearchControllerTest < ActionController::TestCase
+  include Devise::TestHelpers
+
+  def setup
+    @user = FactoryGirl.create(:user)
+    sign_in @user
+  end
+
   test '.index returns a 200 HTTP code' do
     get :index
     assert_response :success
@@ -18,6 +25,8 @@ class SearchControllerTest < ActionController::TestCase
     results_mock.stubs(:total_pages).returns(0)
     results_mock.stubs(:current_page).returns(0)
     results_mock.stubs(:count).returns(0)
+    results_mock.stubs(:search_term).returns(search_term)
+    results_mock.stubs(:options).returns({filters: {}})
 
     Search.
       expects(:search).
@@ -43,6 +52,8 @@ class SearchControllerTest < ActionController::TestCase
     results_mock.stubs(:total_pages).returns(0)
     results_mock.stubs(:current_page).returns(0)
     results_mock.stubs(:count).returns(0)
+    results_mock.stubs(:search_term).returns(search_term)
+    results_mock.stubs(:options).returns({filters: {}})
 
     Search.
       expects(:search).
@@ -64,6 +75,8 @@ class SearchControllerTest < ActionController::TestCase
     results_mock.stubs(:current_page).returns(0)
     results_mock.stubs(:aggregations).returns([])
     results_mock.stubs(:count).returns(0)
+    results_mock.stubs(:search_term).returns(search_term)
+    results_mock.stubs(:options).returns({filters: {}})
 
     Search.
       expects(:search).
@@ -73,5 +86,17 @@ class SearchControllerTest < ActionController::TestCase
     get :index, q: search_term, page: 2
 
     assert_response :success
+  end
+
+  test 'POST :create, given a search term, filters, and a project id,
+   creates a Search object linked to the given project' do
+    search_term = 'san guillermo'
+
+    @project = FactoryGirl.create(:project, user: @user)
+    assert_difference('SavedSearch.count', 1) do
+      post :create, search_term: search_term, project_id: @project.id
+    end
+
+    assert_equal @project, SavedSearch.last.project
   end
 end

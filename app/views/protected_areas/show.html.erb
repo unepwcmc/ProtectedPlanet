@@ -17,6 +17,7 @@
       <a href="<%= country_stats_path(iso: @country.iso) %>"><%= @country.name %></a>,
       <a href="<%= regional_stats_path(iso: @region.try(:iso)) %>"><%= @region.try(:name) %></a>
       | <%= @protected_area.marine ? "Marine" : "Terrestrial" %> Area
+      <%= render partial: 'shared/add_to_project', locals: {item: @protected_area, type: 'protected_area'} %>
     </p>
 
     <hr>
