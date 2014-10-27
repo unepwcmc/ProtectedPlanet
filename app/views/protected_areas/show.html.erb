@@ -22,6 +22,14 @@
     </li>
     <li>Last Updated sometime</li>
   </ul>
+
+  <h3>Related</h3>
+
+  <ul>
+    <% if @protected_area.wikipedia_article %>
+      <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
+    <% end %>
+  </ul>
 </article>
 
 <div class="protected-area-map" id="map"
