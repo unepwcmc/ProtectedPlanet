@@ -24,10 +24,9 @@ input {
 }
 
 nav {
-  padding: 10px;
+  padding: 20px;
   background-color: $green;
 }
-
 
 footer {
   padding: 20px;
@@ -41,12 +40,12 @@ footer p,a {
 
 
 
-section.page-header {
+.page-header {
   padding: 20px;
   background-color: $light-grey;
 }
 
-div.item {
+.item {
   @include span-columns(3);
   @include omega(4n);
   border: 1px solid $light-grey;
@@ -55,12 +54,12 @@ div.item {
   width: 25%;
 }
 
-div.item-info { 
+.item-info { 
   padding: 20px;
 }
 
-div.item-info > h1 { margin-bottom: 20px; }
+.item-info > h1 { margin-bottom: 20px; }
 
-span.subtitle {
+.subtitle {
   margin-left: 40px;
 }
