@@ -2,11 +2,13 @@
 @import 'bourbon';
 @import 'neat';
 
-$font-stack: MuseoSans-300;
 $gutter: 0px;
 
+body, * {
+  font-family: MuseoSans-300;
+}
+
 h1,h2,h3,p,a {
-  font-family: $font-stack;
   color: $dark-grey;
 }
 
@@ -17,42 +19,68 @@ p { font-size: 14px; }
 
 img { max-width: 100%; height: auto; }
 
-input {
-  font-size: 20px;
-  border: 0px;
-  padding: 10px;
+nav {
+  overflow:hidden;
+  font-size: 0.938em;
+  width: 100%;
+  list-style: none;
+
+  li {
+    line-height: 60px;
+    float: left;
+
+    &.icon img { vertical-align: middle; }
+
+    a {
+      display: block;
+      padding: 0px 20px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+  }
 }
 
-
-
-.page-header {
-  padding: 20px;
-  background-color: $light-grey;
+.right {
+  float: right;
 }
 
-.item {
-  @include span-columns(3);
-  @include omega(4n+1);
-  @include fill-parent;
-  border: 1px solid $light-grey;
-  margin-right: 0px;
-  width: 25%;
+.nav-main {
+  background-color: $green;
+
+  li {
+    &.active {
+      a { background-color: $dark-green; }
+    }
+
+    a {
+      color: $white;
+    }
+
+    a:hover {
+      background-color: $dark-green;
+    }
+  }
 }
 
-.item-info { 
-  padding: 20px;
+header {
+  background-color: $white;
+
+  li {
+    &.active {
+      a {
+        background-color: $light-grey;
+      }
+    }
+
+    a {
+      color: $dark-grey;
+    }
+
+    a:hover {
+      background-color: $light-grey;
+    }
+  }
 }
-
-.item-info {
-  h1 { margin-bottom: 20px; }
-}
-
-.subtitle {
-  font-size: 14px;
-  margin-left: 40px;
-}
-
-
 
 footer {
   font-family: MuseoSans-100;
@@ -64,7 +92,8 @@ footer {
   }
 
   a {
-  text-decoration: none;
+    text-decoration: none;
+
     &:hover {
       text-decoration: none;
     }
@@ -87,10 +116,6 @@ footer {
   }
 }
 
-.footer-copyright, .footer-links {
-  //padding-top: 7px;
-}
-
 .footer-copyright, .footer-logos {
   float: left;
 }
@@ -99,64 +124,3 @@ footer {
   float: right;
 }
 
-nav {
-  overflow:hidden;
-  font-size: 0.938em;
-  width: 100%;
-  float: left;
-  list-style: none; 
-
-  li { 
-    line-height: 60px;
-    float: left;
-
-    &.icon img { vertical-align: middle; }
-
-    a {
-      display: block;
-      padding: 0px 20px;
-      text-decoration: none; 
-      text-transform: uppercase;
-    }
-  }
-}
-
-.nav-right {
-  float: right;
-}
-
-.nav-main {
-  background-color: $green;
-
-  li {
-    &.active {
-      a { background-color: $dark-green; }
-    }
-
-    a {
-      color: $white;
-    }
-
-    a:hover {
-      background-color: $dark-green;
-    }   
-  }
-}
-
-.sub-nav {
-  background-color: $white;
-
-  li {
-    &.active {
-      a { background-color: $light-grey; }
-    }
-
-    a {
-      color: $dark-grey;
-    }
-    
-    a:hover {
-      background-color: $light-grey;
-    }
-  }
-}
