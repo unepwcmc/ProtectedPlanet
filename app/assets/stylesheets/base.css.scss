@@ -55,12 +55,12 @@ input {
 
 
 footer {
+  font-family: MuseoSans-100;
   width: 100%;
   background: $dark-blue;
-  font-size: 0.9em;
+  font-size: 0.938em;
   strong, p, a, a:visited {
-    color: #96989C;
-    font-weight: bold;
+    color: $light-grey;
   }
 
   a {
@@ -71,7 +71,9 @@ footer {
   }
 
   .footer-inner {
-    height: 140px;
+    display: block;
+    line-height: 60px; //140
+    vertical-align: middle;
     padding: 50px 0;
     margin: 0px auto;
     width: 95%;
@@ -86,7 +88,7 @@ footer {
 }
 
 .footer-copyright, .footer-links {
-  padding-top: 7px;
+  //padding-top: 7px;
 }
 
 .footer-copyright, .footer-logos {
@@ -99,7 +101,6 @@ footer {
 
 nav {
   overflow:hidden;
-  font-family: MuseoSans-300;
   font-size: 0.938em;
   width: 100%;
   float: left;
