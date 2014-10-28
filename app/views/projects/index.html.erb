@@ -6,9 +6,7 @@
         <%= best_in_place project, :name, as: :input %> (<%= project.items.count %> Items) 
         <span class="subtitle"><i class="fa fa-download"></i> Download Complete Data Set</span></h1>
     </div>
-      
-    <% project.items.each do |item| %>
-      <%= render partial: "project_item", collection: project.items %>
-    <% end %>
+
+    <%= render partial: "project_item", collection: project.items %>
   </section>
 <% end %>

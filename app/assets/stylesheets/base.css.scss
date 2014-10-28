@@ -43,7 +43,9 @@ input {
   padding: 20px;
 }
 
-.item-info > h1 { margin-bottom: 20px; }
+.item-info {
+  h1 { margin-bottom: 20px; }
+}
 
 .subtitle {
   font-size: 14px;
@@ -95,83 +97,65 @@ footer {
   float: right;
 }
 
-
-
-
-
-
-.nav-main {
+nav {
   overflow:hidden;
   font-family: MuseoSans-300;
-  font-size: 1.125em;
+  font-size: 0.938em;
   width: 100%;
   float: left;
-  list-style: none;
-  background-color: $green;
+  list-style: none; 
 
-  li {
+  li { 
     line-height: 60px;
     float: left;
-
-    &.active {
-      a { background-color: $dark-grey; }
-      a:hover { background-color: $dark-grey; }
-    }
 
     &.icon img { vertical-align: middle; }
 
     a {
-      color: $white;
       display: block;
       padding: 0px 20px;
       text-decoration: none; 
       text-transform: uppercase;
+    }
+  }
+}
+
+.nav-right {
+  float: right;
+}
+
+.nav-main {
+  background-color: $green;
+
+  li {
+    &.active {
+      a { background-color: $dark-green; }
+    }
+
+    a {
+      color: $white;
     }
 
     a:hover {
       background-color: $dark-green;
-    }
-
-    
+    }   
   }
 }
 
 .sub-nav {
-  overflow:hidden;
-  font-family: MuseoSans-300;
-  font-size: 1.125em;
-  width: 100%;
-  float: left;
-  list-style: none;
   background-color: $white;
 
   li {
-    line-height: 60px;
-    float: left;
-
     &.active {
       a { background-color: $light-grey; }
-      a:hover { background-color: $light-grey; }
     }
-
-    &#brand > a { padding: 0px; }
-    &.icon > a { padding: 0px; }
 
     a {
       color: $dark-grey;
-      display: block;
-      padding: 0px 20px;
-      text-decoration: none; 
-      text-transform: uppercase;
     }
     
     a:hover {
       background-color: $light-grey;
     }
   }
-}
-
-
-.nav-right {
-  float: right;
 }
