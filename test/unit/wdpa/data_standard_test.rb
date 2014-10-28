@@ -329,4 +329,30 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     standardised_name = Wdpa::DataStandard.standardise_table_name 'wdpapoint_june2014'
     assert_equal 'standard_points', standardised_name
   end
+
+  test '#percentage_complete, given a PA model, returns the percentage
+   of the WDPA attributes that are filled' do
+    pa = FactoryGirl.create(:protected_area,
+      wdpa_id: 1234,
+      name: 'An Protected Area',
+      original_name: 'Not an protected area'
+    )
+
+    percentage = Wdpa::DataStandard.percentage_complete(pa)
+
+    assert_equal 33.33, percentage.round(2)
+  end
+
+  test '#data_gaps, given a PA model, returns the number of fields
+   missing data' do
+    pa = FactoryGirl.create(:protected_area,
+      wdpa_id: 1234,
+      name: 'An Protected Area',
+      original_name: 'Not an protected area'
+    )
+
+    gaps = Wdpa::DataStandard.data_gaps(pa)
+
+    assert_equal 16, gaps
+  end
 end

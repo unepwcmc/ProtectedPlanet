@@ -1,56 +1,40 @@
+<% content_for :header do %>
+  <h2><%= @protected_area.name %></h2>
+<% end %>
+
+<article>
+  <h3>Official Record</h3>
+  <%= render 'official_record', protected_area: @protected_area %>
+
+  <h3>Data Provider</h3>
+  <ul>
+    <%= render @protected_area.sources %>
+  </ul>
+
+  <ul>
+    <li>
+      <span><%= Wdpa::DataStandard.percentage_complete(@protected_area).round(2) %></span>
+      Data Complete
+    </li>
+    <li>
+      <span><%= Wdpa::DataStandard.data_gaps(@protected_area) %></span>
+      Data Gaps
+    </li>
+    <li>Last Updated sometime</li>
+  </ul>
+
+  <h3>Related</h3>
+
+  <ul>
+    <% if @protected_area.wikipedia_article %>
+      <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
+    <% end %>
+  </ul>
+</article>
+
 <div class="protected-area-map" id="map"
   data-zoom-control="topright"
   data-padding-enabled data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
   data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
   data-wdpa-id="<%= @protected_area.wdpa_id %>">
 </div>
-
-
-<main class="grid">
-  <div class="map-disclaimer">
-    The boundaries and names shown, and the designations used on this
-    map do not imply official endorsement or acceptance by the United
-    Nations or IUCN.
-  </div>
-
-  <section class="info-card">
-    <h2><%= @protected_area.name %></h2>
-
-    <hr>
-
-    <p>
-      <strong><%= @protected_area.designation.name %></strong>
-      <a href="<%= country_stats_path(iso: @country.iso) %>"><%= @country.name %></a>,
-      <a href="<%= regional_stats_path(iso: @region.try(:iso)) %>"><%= @region.try(:name) %></a>
-      | <%= @protected_area.marine ? "Marine" : "Terrestrial" %> Area
-      <%= render partial: 'shared/add_to_project', locals: {item: @protected_area, type: 'protected_area'} %>
-    </p>
-
-    <hr>
-
-    <a data-download-object="<%= @protected_area.countries.first.iso_3 %>" class="btn-download btn btn-primary" href="#">Download the WDPA dataset</a>
-  </section>
-
-  <div class="factsheet">
-    <section>
-      <h3>
-        Official record
-        <span><i class="fa fa-clock-o"></i> Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>
-      </h3>
-
-      <%= render 'official_record', protected_area: @protected_area %>
-    </section>
-
-    <section class="column-left">
-      <h3>Wikipedia description</h3>
-
-      <%= render 'wikipedia_box', wikipedia_article: @wikipedia_article %>
-    </section>
-
-    <section class="column-right">
-      <h3>Images for this area</h3>
-
-      <%= render 'photos_list', images: @protected_area.images %>
-    </section>
-  </div>
-</main>
