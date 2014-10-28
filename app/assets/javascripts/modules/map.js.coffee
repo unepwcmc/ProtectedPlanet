@@ -15,8 +15,13 @@ class ProtectedPlanet.Map
     return new map_class(@map, @config)
 
   addBaseLayer: ->
-    L.tileLayer(
-      'http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png'
+    terrain = L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png')
+    terrain.addTo(@map)
+    satellite = L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.k2p9jhk8/{z}/{x}/{y}.png')
+
+    L.control.layers(
+      "Terrain": terrain,
+      "Satellite": satellite
     ).addTo(@map)
 
   addZoomControl: ->
