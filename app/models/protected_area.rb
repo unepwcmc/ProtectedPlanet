@@ -20,6 +20,10 @@ class ProtectedArea < ActiveRecord::Base
 
   after_create :create_slug
 
+  def wdpa_ids
+    wdpa_id
+  end
+
   def as_indexed_json options={}
     self.as_json(
       only: [:id, :wdpa_id, :name, :original_name, :marine],
