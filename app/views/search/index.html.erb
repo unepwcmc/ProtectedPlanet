@@ -1,47 +1,18 @@
-<div class="bg-img">
-  <main>
-    <h2>Search for protected areas, countries or regions</h2>
-    <section class="search-bar">
-      <%= render 'shared/search_form', query: @query %>
-    </section>
+<h2>Search for protected areas, countries or regions</h2>
+<section class="search-bar">
+  <%= render 'shared/search_form', query: @query %>
+</section>
 
-    <div class="search-map"
-      id="map"
-      data-zoom-control="topright"
-      data-search-term="<%= @query %>">
-    </div>
-
-    <% if @query %>
-      <aside class="search-filters">
-        <h4>
-          Filter Your Results
-          <%= link_to search_path(q: @query), class: 'btn btn-primary blue filters-reset' do %>
-            <i class="fa fa-times"></i> Reset
-          <% end %>
-        </h4>
-
-        <%= render 'facets', facets: @search.aggregations %>
-      </aside>
-
-      <section class="search-results">
-        <h4>
-          Showing <%= @search.count %> <%= 'result'.pluralize @search.results.count %> for "<%= @query %>"
-
-          <% unless current_user.nil? %>
-            <%= render 'add_search_to_projects' %>
-          <% end %>
-
-          <a data-create-from="<%= downloads_path %>" data-poll-from="<%= download_poll_path %>" class="btn btn-secondary download-search"><i class="fa fa-download"></i> Download results</a>
-        </h4>
-
-        <%= render 'type_facets' %>
-
-        <ul>
-          <%= render partial: 'search_result', collection: @search.results %>
-        </ul>
-      </section>
-
-      <%= will_paginate @search %>
-    <% end %>
-  </main>
+<div class="search-map"
+  id="map"
+  data-zoom-control="topright"
+  data-url="<%= api_search_points_url(params) %>">
 </div>
+
+<% if @query %>
+  <section class="search-results">
+    <ul>
+      <%= render partial: 'search_result', collection: @search.results %>
+    </ul>
+  </section>
+<% end %>

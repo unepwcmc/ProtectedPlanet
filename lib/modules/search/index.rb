@@ -40,7 +40,7 @@ class Search::Index
   end
 
   def index
-    @client.bulk body: documents
+    documents_in_batches { |batch| @client.bulk body: batch }
   end
 
   def delete
@@ -58,15 +58,15 @@ class Search::Index
 
   private
 
-  def documents
-    documents = []
+  def documents_in_batches
+    @collection.find_in_batches.each do |group|
+      batch = group.each_with_object([]) do |object, bulk|
+        bulk << index_header(object)
+        bulk << object.as_indexed_json
+      end
 
-    @collection.each do |object|
-      documents << index_header(object)
-      documents << object.as_indexed_json
+      yield batch
     end
-
-    documents
   end
 
   def index_header model
