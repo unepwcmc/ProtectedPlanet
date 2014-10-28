@@ -1,0 +1,11 @@
+<main class="grid">
+  <% @projects.each_with_index do |project, i| %>
+    <h3><%= best_in_place project, :name, as: :input, activator: ".rename_#{i}", ok_button: "Save", cancel_button: "Cancel" %> (<%= project.items.count %> Items) <small class="rename_<%= i %>">(Rename)</small> | <small>Download Complete Data Set</small></h3>
+
+    <ul>
+    <% project.items.each do |item| %>
+      <li><%= item.name %></li>
+    <% end %>
+    </ul>
+  <% end %>
+</main>

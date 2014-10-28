@@ -1,4 +1,5 @@
 class SearchController < ApplicationController
+  before_action :authenticate_user!, only: [:create]
   after_filter :enable_caching, only: [:index]
 
   def index
@@ -7,7 +8,27 @@ class SearchController < ApplicationController
     @search = Search.search(@query, search_options)
   end
 
+  def create
+    SavedSearch.create_and_populate(
+      search_params.merge({project_id: project.id})
+    )
+
+    redirect_to projects_path
+  end
+
   private
+
+  def project
+    find_by = {id: search_params[:project_id], user: current_user}
+
+    @project ||= Project.find_or_create_by(find_by) do |project|
+      project.name = "New Project"
+    end
+  end
+
+  def search_params
+    params.permit(:search_term, :filters, :project_id)
+  end
 
   def search_options
     options = {filters: filters}

@@ -7,6 +7,8 @@ class ProtectedArea < ActiveRecord::Base
   has_and_belongs_to_many :sources
 
   has_many :images
+  has_many :project_items, as: :item
+  has_many :projects, through: :project_items
 
   belongs_to :legal_status
   belongs_to :iucn_category
@@ -17,6 +19,10 @@ class ProtectedArea < ActiveRecord::Base
   belongs_to :wikipedia_article
 
   after_create :create_slug
+
+  def wdpa_ids
+    wdpa_id
+  end
 
   def as_indexed_json options={}
     self.as_json(

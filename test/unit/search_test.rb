@@ -237,14 +237,15 @@ class TestSearch < ActiveSupport::TestCase
   end
 
   test '#download, given a search term and filters, generates a search with
-   token, and spawns a SearchDownloader worker' do
+   token, and spawns a SearchWorkers::Downloader worker' do
+
     search_term = 'san guillermo'
     opts = {filters: [{name: 'type', value: 'protected_area'}]}
     token = "3b00778be9391426bb3c900b977dfb3771fc9cdd83e1d1f99bda77b77c3d6750"
 
     Search.stubs(:find).returns(false)
     Search.expects(:create).with(token, search_term, opts)
-    SearchDownloader.expects(:perform_async).with(token, search_term, opts)
+    SearchWorkers::Downloader.expects(:perform_async).with(token, search_term, opts)
 
     Search.download(search_term, opts)
   end
@@ -256,7 +257,7 @@ class TestSearch < ActiveSupport::TestCase
 
     Search.expects(:find).with(token, search_term, opts).returns(true)
     Search.expects(:create).never
-    SearchDownloader.expects(:perform_async).never
+    SearchWorkers::Downloader.expects(:perform_async).never
 
     Search.download(search_term, opts)
   end

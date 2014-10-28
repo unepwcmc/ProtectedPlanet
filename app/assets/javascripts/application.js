@@ -17,7 +17,9 @@
 //= require d3
 //= require leaflet-src
 //= require cartodb.core
+//= require best_in_place
 //= require_tree ./controllers
 //= require_tree ./modules
 //= require_tree ./modules/modals
 //= require_tree .
+
