@@ -20,6 +20,9 @@
       "marine": {
         "type": "boolean"
       },
+      "coordinates": {
+        "type": "geo_point"
+      },
       "sub_location": {
         "type": "nested",
         "properties": {

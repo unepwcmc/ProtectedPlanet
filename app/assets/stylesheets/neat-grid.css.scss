@@ -1,0 +1,10 @@
+@import "bourbon";
+@import "neat";
+@import "neat-helpers";
+@import 'colors';
+
+/* Defaults */
+$gutter: 0%;
+$max-width: 100%;
+
+section { @include outer-container; }

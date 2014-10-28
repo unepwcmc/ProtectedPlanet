@@ -12,17 +12,12 @@
  *
  *= require 'reset'
  *= require 'leaflet'
- *= require 'base'
- *= require 'modals'
- *= require 'home'
- *= require 'protected_areas'
- *= require 'factsheet'
- *= require 'search'
- *= require 'stats'
- *= require 'static_pages'
+ *= require 'leaflet-markercluster'
  *= require 'leaflet_overrides'
- *= require 'downloads'
- *= require 'alerts'
- *= require 'grids'
+ *= require 'colors'
+ *= require 'z-index'
+ *= require 'map'
+ *= require 'base'
+ *= require 'protected_areas'
  *= require_self
  */

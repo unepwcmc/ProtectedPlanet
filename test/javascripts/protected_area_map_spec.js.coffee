@@ -1,10 +1,10 @@
 #= require spec_helper
-#= require protected_area_map
+#= require modules/protected_area_map
 
 describe "ProtectedAreaMap", ->
-  
+
   describe "#_calculateBoundWidth()", ->
-    
+
     it "should return the correct bounding box width", ->
       $('body').html(JST['templates/protected_area_map_spec']())
       map = new ProtectedAreaMap($('#map'))

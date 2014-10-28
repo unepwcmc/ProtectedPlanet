@@ -1,6 +1,0 @@
-<% if wikipedia_article %>
-  <%= wikipedia_article.summary.html_safe %>
-  <a href='<%= wikipedia_article.url %>'><%= t('wikipedia_read_more') %></a>
-<% else %>
-  <%= t('wikipedia_not_found') %>
-<% end %>

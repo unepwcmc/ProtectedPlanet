@@ -91,4 +91,26 @@ class SearchFilterTest < ActiveSupport::TestCase
 
     assert_equal filter.to_h, expected_hash
   end
+
+  test '.to_h, given a geo filter, returns the filter as a hash' do
+    term = [1,2]
+    options = {
+      type: 'geo',
+      field: 'protected_area.coordinates',
+    }
+
+    filter = Search::Filter.new(term, options)
+
+    expected_hash = {
+      "geo_distance" => {
+        "distance" => "2000km",
+        "protected_area.coordinates" => {
+          "lat" => 1,
+          "lon" => 2
+        }
+      }
+    }
+
+    assert_equal filter.to_h, expected_hash
+  end
 end

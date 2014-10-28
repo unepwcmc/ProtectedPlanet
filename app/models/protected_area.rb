@@ -27,6 +27,7 @@ class ProtectedArea < ActiveRecord::Base
   def as_indexed_json options={}
     self.as_json(
       only: [:id, :wdpa_id, :name, :original_name, :marine],
+      methods: [:coordinates],
       include: {
         countries_for_index: {
           only: [:name, :id],
@@ -44,6 +45,20 @@ class ProtectedArea < ActiveRecord::Base
       [bounding_box["min_y"], bounding_box["min_x"]],
       [bounding_box["max_y"], bounding_box["max_x"]]
     ]
+  end
+
+  def coordinates
+    [the_geom_latitude.to_f, the_geom_longitude.to_f]
+  end
+
+  def nearest_protected_areas
+    @nearest_pas ||= Search.search('',
+      {
+        size: 2,
+        filters: {location: coordinates},
+        sort: {geo_distance: coordinates}
+      }
+    ).results
   end
 
   private
