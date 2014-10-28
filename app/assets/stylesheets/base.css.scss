@@ -89,6 +89,7 @@ footer {
   width: 100%;
   background: $color--footer-bg;
   font-size: 0.938em;
+  height: 75px;
 
   a {
     text-decoration: none;
@@ -98,15 +99,14 @@ footer {
     }
 
     &:hover {
-      text-decoration: none;
+      text-decoration: underline;
     }
   }
 
   .footer-inner {
     display: block;
-    line-height: 60px;
-    vertical-align: middle;
-    padding: 50px 0;
+    line-height: 41px;
+    padding: 20px 0;
     margin: 0px auto;
     width: 95%;
 
@@ -128,4 +128,12 @@ footer {
 
 .footer-links {
   float: right;
+
+  a {
+    margin-right: 20px;
+  }
+
+  a:last-child {
+    margin-right: 0;
+  }
 }
