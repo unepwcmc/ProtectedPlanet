@@ -5,6 +5,9 @@ class ProtectedAreasControllerTest < ActionController::TestCase
     @region  = FactoryGirl.create(:region, name: 'Killbeurope')
     @country = FactoryGirl.create(:country, name: 'Killbearland', region: @region)
     @protected_area = FactoryGirl.create(:protected_area, name: 'Killbear', countries: [@country])
+
+    search_mock = mock().tap { |m| m.stubs(:results).returns([]) }
+    Search.stubs(:search).returns(search_mock)
   end
 
   test '#show returns a 200 HTTP code' do
