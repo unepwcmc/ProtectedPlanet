@@ -108,14 +108,16 @@ class ProtectedAreaTest < ActiveSupport::TestCase
   end
 
   test '.nearest_protected_areas returns the closest 2 PAs, ordered by
-   distance ASC' do
+   distance ASC and memoizes the result' do
     pa = FactoryGirl.create(:protected_area, the_geom_latitude: 1, the_geom_longitude: 0)
 
     search_mock = mock().tap { |m| m.expects(:results).returns([FactoryGirl.create(:protected_area)]) }
     Search.expects(:search).
       with('', {size: 2, filters: {location: [1, 0]}, sort: {geo_distance: [1, 0]}}).
-      returns(search_mock)
+      returns(search_mock).
+      once
 
+    pa.nearest_protected_areas
     nearest = pa.nearest_protected_areas
     assert_equal 1, nearest.length
   end

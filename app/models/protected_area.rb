@@ -52,7 +52,7 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def nearest_protected_areas
-    Search.search('',
+    @nearest_pas ||= Search.search('',
       {
         size: 2,
         filters: {location: coordinates},
