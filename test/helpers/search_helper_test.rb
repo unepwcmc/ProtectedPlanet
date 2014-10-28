@@ -33,4 +33,57 @@ class SearchHelperTest < ActionView::TestCase
 
     assert_equal expected_link, link
   end
+
+  test '#protected_area_cover, given a pa with an image, returns the image tag
+   for an image of the pa' do
+    image = FactoryGirl.create(:image, url: 'http://hey.com/img.bmp')
+
+    pa = FactoryGirl.create(:protected_area,
+      name: "Manbone",
+      images: [image]
+    )
+
+    expected_tag = '<img alt="Manbone" src="http://hey.com/img.bmp" style="width: 256px; height: 128px" />'
+    tag = protected_area_cover(pa)
+
+    assert_equal expected_tag, tag
+  end
+
+  test '#protected_area_cover, given a pa without an image, returns map of the
+   PA' do
+    pa = FactoryGirl.create(:protected_area,
+      name: "Manbone",
+      the_geom: 'POINT(1 0)',
+      the_geom_latitude: 1,
+      the_geom_longitude: 0
+    )
+    expected_tag = '<img alt="Manbone" '
+    expected_tag << 'src="http://mapbox.com/geojson({&quot;type&quot;:&quot;Point&quot;,&quot;coordinates&quot;:[1,0]})'
+    expected_tag << '/auto/256x128.png?access_token=123" style="width: 256px; height: 128px" />'
+
+    Rails.application.secrets.stubs(:mapbox).returns({'access_token' => '123', 'base_url' => 'http://mapbox.com/'})
+    tag = protected_area_cover(pa)
+
+    assert_equal expected_tag, tag
+  end
+
+  test '#country_cover, given a country, returns the image tag
+   for an image of the country' do
+    country = FactoryGirl.create(:country, iso: "MBO", name: 'Country')
+
+    expected_tag = '<img alt="Country" src="/images/countries/MBO.png" style="width: 256px; height: 128px" />'
+    tag = country_cover(country)
+
+    assert_equal expected_tag, tag
+  end
+
+  test '#region_cover, given a region, returns the image tag
+   for an image of the region' do
+    region = FactoryGirl.create(:region, iso: "MBO", name: 'region')
+
+    expected_tag = '<img alt="region" src="/images/regions/MBO.png" style="width: 256px; height: 128px" />'
+    tag = region_cover(region)
+
+    assert_equal expected_tag, tag
+  end
 end

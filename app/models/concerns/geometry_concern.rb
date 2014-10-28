@@ -21,4 +21,18 @@ module GeometryConcern
       [bounds.max_y, bounds.max_x]
     ]
   end
+
+  def geojson
+    ActiveRecord::Base.connection.select_value("""
+      SELECT ST_AsGeoJSON(#{main_geom_column}, 3)
+      FROM #{self.class.table_name}
+      WHERE id = #{id}
+    """.squish)
+  end
+
+  private
+
+  def main_geom_column
+    self.respond_to?(:the_geom) ? 'the_geom' : 'bounding_box'
+  end
 end
