@@ -49,21 +49,27 @@
   </main>
 
   <footer>
-    <ul class="menu">
-      <li>
+    <div class="footer-inner">
+      <div class="footer-logos">
         <a href="http://unep-wcmc.org" title="UNEP-WCMC Website">
-          <%= image_tag 'wcmc-footer-logo@2x.png', style: 'width: 58px; height: 33px' %></a>
-      </li>
-      <li>
+          <%= image_tag 'wcmc-footer-logo@2x.png', style: 'width: 58px; height: 33px' %>
+        </a>
+
         <a href="http://iucn.org" title="IUCN Website">
           <%= image_tag 'iucn-footer-logo@2x.png', style: 'width: 39px; height: 39px' %>
         </a>
-      </li>
-      <li><p><strong>&copy; ProtectedPlanet 2014</strong></p></li>
-      <li><p>All rights reserved</p></li>
-      <li><a href="#" class="btn-about">About</a></li>
-      <li><%= link_to "Site Terms of Use", wcmc_terms_path %></li>
-    </ul>
+      </div>
+
+      <div class="footer-copyright">
+        <p><strong>&copy; ProtectedPlanet 2014</strong></p>
+        <p>All rights reserved</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="#" class="btn-about">About</a>
+        <%= link_to "Site Terms of Use", wcmc_terms_path %>
+      </div>
+    </div>
   </footer>
 
   <% if Rails.env == 'production' %>
