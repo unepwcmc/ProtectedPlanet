@@ -12,31 +12,22 @@
 
   <%= csrf_meta_tags %>
 </head>
+
 <body>
   <nav class="nav-main">
-    <ul class="nav">
+    <ul>
+      <li class="icon">
+        <%= link_to image_tag('pp-logo.png', size: '80'), root_path %>
+      </li>
       <li><a href="#">Our Mandate</a></li>
       <li class="active"><a href="#">PAS Data</a></li>
       <li><a href="#">Contact Us</a></li>
       <li><a href="#">Blog</a></li>
     </ul>
 
-    <ul class="nav nav-right">
+    <ul class="right">
       <li><a href="#">My Account</a></li>
-      
-    </ul>
-  </nav>
-
-  <nav class="sub-nav">
-    <ul class="nav">
-      <li><a href="#">Our Mandate</a></li>
-      <li class="active"><a href="#">PAS Data</a></li>
-      <li><a href="#">Contact Us</a></li>
-      <li><a href="#">Blog</a></li>
-    </ul>
-    
-    <ul class="nav-right">
-      <li><a href="#">My Account</a></li>
+      <li class="icon"><a href="#"><%= image_tag('icon-search.png', size: '30') %></a></li>
     </ul>
   </nav>
 
@@ -61,8 +52,7 @@
       </div>
 
       <div class="footer-copyright">
-        <p><strong>&copy; ProtectedPlanet 2014</strong></p>
-        <p>All rights reserved</p>
+        <p>&copy; ProtectedPlanet 2014. All rights reserved</p>
       </div>
 
       <div class="footer-links">
