@@ -5,7 +5,7 @@
 $font-stack: "Helvetica Neue", Helvetica, Arial, sans-serif;
 $gutter: 0px;
 
-h1,h2,h3,p {
+h1,h2,h3,p,a {
   font-family: $font-stack;
   color: $dark-grey;
 }
@@ -28,6 +28,24 @@ nav {
   background-color: $green;
 }
 
+#brand, .nav, .nav li {
+  display: inline;
+}
+
+.nav li {
+  margin: 0px 10px;
+}
+
+nav p,a {
+  color: $white;
+  text-decoration: none;
+}
+
+nav a:hover {
+    color: $dark-green;
+    background-color: #FFF;
+}
+
 footer {
   padding: 20px;
   background-color: $dark-blue;
@@ -36,6 +54,7 @@ footer {
 footer p,a {
   color: $light-grey;
 }
+
 
 
 
