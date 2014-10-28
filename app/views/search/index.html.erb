@@ -1,11 +1,18 @@
-<div class="bg-img">
-  <main>
-    <% if @query %>
-      <section class="search-results">
-        <ul>
-          <%= render partial: 'search_result', collection: @search.results %>
-        </ul>
-      </section>
-    <% end %>
-  </main>
+<h2>Search for protected areas, countries or regions</h2>
+<section class="search-bar">
+  <%= render 'shared/search_form', query: @query %>
+</section>
+
+<div class="search-map"
+  id="map"
+  data-zoom-control="topright"
+  data-url="<%= api_search_points_url(params) %>">
 </div>
+
+<% if @query %>
+  <section class="search-results">
+    <ul>
+      <%= render partial: 'search_result', collection: @search.results %>
+    </ul>
+  </section>
+<% end %>
