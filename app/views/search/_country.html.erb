@@ -1,8 +1,8 @@
 <li class='result'>
-  <%= image_tag "terrestrial@2x.png", style: "width: 40px; height: 40px" %>
+  <%= country_cover model %>
   <div>
     <h3>
-      <a href="<%= country_stats_path(iso: model.iso) %>"><%= model.name %></a> | 
+      <a href="<%= country_stats_path(iso: model.iso) %>"><%= model.name %></a> |
       <small><%= commaify model.protected_areas.count %> Protected Areas in this country</small>
     </h3>
 
