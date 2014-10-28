@@ -110,6 +110,7 @@ footer {
   background-color: $green;
 
   li {
+    line-height: 60px;
     float: left;
 
     &.active {
@@ -117,10 +118,12 @@ footer {
       a:hover { background-color: $dark-grey; }
     }
 
+    &.icon img { vertical-align: middle; }
+
     a {
       color: $white;
       display: block;
-      padding: 20px;
+      padding: 0px 20px;
       text-decoration: none; 
       text-transform: uppercase;
     }
@@ -143,6 +146,7 @@ footer {
   background-color: $white;
 
   li {
+    line-height: 60px;
     float: left;
 
     &.active {
@@ -150,10 +154,13 @@ footer {
       a:hover { background-color: $light-grey; }
     }
 
+    &#brand > a { padding: 0px; }
+    &.icon > a { padding: 0px; }
+
     a {
       color: $dark-grey;
       display: block;
-      padding: 20px;
+      padding: 0px 20px;
       text-decoration: none; 
       text-transform: uppercase;
     }
