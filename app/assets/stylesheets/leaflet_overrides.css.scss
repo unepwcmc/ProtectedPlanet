@@ -47,9 +47,8 @@
 .leaflet-control-layers {
   label {
     margin-right: 1px;
-    height: 30px;
-    line-height: 21px;
-    padding: 5px;
+    height: 40px;
+    padding: 8px 10px;
     display: inline-block;
   }
 
@@ -68,6 +67,7 @@
 .leaflet-bar .leaflet-control-zoom-out {
   background-color: $color--leaflet-control;
   color: $color--leaflet-control-text;
+  font-size: 1.3em;
 
   &:hover {
     cursor: pointer;
@@ -86,10 +86,12 @@
   .leaflet-control-zoom-in:hover,
   .leaflet-control-zoom-out:hover {
     display: inline-block;
-    width: 30px;
-    height: 30px;
-    line-height: 29px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
     border-bottom: 0;
+    font-weight: normal;
+    font-size: 1.7rem;
   }
 
   .leaflet-control-zoom-in {
