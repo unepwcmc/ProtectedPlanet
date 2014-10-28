@@ -15,9 +15,10 @@
 //= require turbolinks
 //= require modernizr.custom.30580
 //= require d3
-//= require leaflet-src
+//= require leaflet
+//= require leaflet.markercluster
 //= require cartodb.core
-//= require_tree ./controllers
+//= require best_in_place
 //= require_tree ./modules
 //= require_tree ./modules/modals
-//= require_tree .
+//= require ./initialiser

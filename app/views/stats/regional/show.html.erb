@@ -3,6 +3,7 @@
 <main class="grid">
   <section class="info-card">
     <h2><%= @region.name %></h2>
+    <%= render partial: 'shared/add_to_project', locals: {item: @region, type: 'region'} %>
 
     <hr>
 

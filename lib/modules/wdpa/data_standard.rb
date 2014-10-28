@@ -80,7 +80,21 @@ class Wdpa::DataStandard
     end
   end
 
+  def self.percentage_complete protected_area
+    (fields_with_data(protected_area).count.to_f / STANDARD_ATTRIBUTES.count) * 100
+  end
+
+  def self.data_gaps protected_area
+    STANDARD_ATTRIBUTES.count - fields_with_data(protected_area).count
+  end
+
   private
+
+  def self.fields_with_data protected_area
+    STANDARD_ATTRIBUTES.values.select do |attribute|
+      protected_area.try(attribute[:name]).present?
+    end
+  end
 
   def self.standardise_values hash
     standardised_attributes = {}

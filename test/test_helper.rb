@@ -14,7 +14,7 @@ WebMock.disable_net_connect!(:allow => "codeclimate.com")
 Mocha::Configuration.prevent(:stubbing_non_existent_method)
 
 class ActiveSupport::TestCase
-  # Add more helper methods to be used by all tests here...
+
 end
 
 module MiniTest::Assertions
@@ -25,12 +25,28 @@ module MiniTest::Assertions
 end
 
 class ActionDispatch::IntegrationTest
+  include Warden::Test::Helpers
+  Warden.test_mode!
+
   # Make the Capybara DSL available in all integration tests
   include Capybara::DSL
   Capybara.app = Rails.application
+
+  def sign_in user
+    login_as(user, scope: :user)
+  end
+
+  def teardown
+    Warden.test_reset!
+  end
+end
+
+class ActionController::TestCase
+  include Devise::TestHelpers
 end
 
 # shut up, Sidekiq
 Sidekiq.configure_client do |config|
   config.logger.level = Logger::WARN
 end
+

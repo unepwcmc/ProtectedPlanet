@@ -4,6 +4,8 @@ class Search
 
   ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region]
 
+  attr_reader :search_term, :options
+
   def self.search search_term, options={}
     instance = self.new search_term, options
     instance.search
@@ -20,14 +22,14 @@ class Search
 
     find(token, search_term, options) || begin
       instance = create(token, search_term, options)
-      SearchDownloader.perform_async(token, search_term, options)
+      SearchWorkers::Downloader.perform_async(token, search_term, options)
       instance
     end
   end
 
   def initialize search_term='', options={}
-    @search_term = search_term
-    @options = options
+    self.search_term = search_term
+    self.options = options
   end
 
   def search
@@ -39,6 +41,12 @@ class Search
       model_class = result['_type'].classify.constantize
       model_class.find(result['_source']['id'])
     end
+  end
+
+  def with_coords
+    ProtectedArea.
+      select(:id, :wdpa_id, :name, :the_geom_latitude, :the_geom_longitude).
+      where("id IN (?)", pluck('id').compact.uniq)
   end
 
   def complete!
@@ -72,7 +80,7 @@ class Search
   end
 
   def current_page
-    @options[:page] || 1
+    options[:page] || 1
   end
 
   def total_pages
@@ -80,6 +88,7 @@ class Search
   end
 
   private
+  attr_writer :search_term, :options
 
   RESULTS_SIZE = 10
 
@@ -95,12 +104,16 @@ class Search
 
   def query
     {
-      size: @options[:size] || RESULTS_SIZE,
-      from: @options[:offset] || offset,
-      query: Search::Query.new(@search_term, @options).to_h,
+      size: options[:size] || RESULTS_SIZE,
+      from: options[:offset] || offset,
+      query: Search::Query.new(search_term, options).to_h,
     }.tap do |query|
-      unless @options[:without_aggregations]
+      unless options[:without_aggregations]
         query[:aggs] = Search::Aggregation.all
+      end
+
+      if options[:sort].present?
+        query[:sort] = Search::Sorter.from_params(options[:sort])
       end
     end
   end

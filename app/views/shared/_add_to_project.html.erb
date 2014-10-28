@@ -1,0 +1,11 @@
+<%= form_tag projects_path, id: 'add_to_projects_form' do %>
+  <%= hidden_field_tag 'item_id', item.id %>
+  <%= hidden_field_tag 'item_type', type %>
+
+  
+<% if user_signed_in? %>
+  <%= select_tag 'project_id', options_from_collection_for_select(current_user.projects, :id, :name), include_blank: true %>
+<% end %>
+
+  <%= submit_tag 'Add to Projects' %>
+<% end %>

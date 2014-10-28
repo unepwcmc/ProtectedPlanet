@@ -7,9 +7,11 @@ gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer',  platforms: :ruby
+gem "autoprefixer-rails"
 
 gem 'jquery-rails'
 gem 'turbolinks'
+gem 'neat'
 
 group :production, :staging do
   gem 'unicorn'
@@ -23,6 +25,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-bundler', '~> 1.1', require: false
   gem 'capistrano-sidekiq', '~> 0.3.3'
+  gem 'byebug', '~> 3.1.2'
 end
 
 group :test do
@@ -32,6 +35,7 @@ group :test do
   gem 'timecop', '~> 0.7.1'
   gem 'capybara', '~> 2.3.0'
   gem 'codeclimate-test-reporter', require: nil
+  gem 'selenium-webdriver'
 end
 
 group :test, :development do
@@ -62,9 +66,11 @@ gem 'system'
 gem 'dotenv', '~> 0.11.1'
 gem 'dotenv-deployment'
 
+gem 'best_in_place'
+
 gem 'turnout', '~> 2.0.0'
 
 gem 'sinatra', '>= 1.3.0', :require => nil
 
-# For debugging
-# gem 'byebug', group: [:development, :test]
+gem 'devise', '~> 3.4.0'
+

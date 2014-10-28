@@ -5,6 +5,12 @@
       <%= render 'shared/search_form', query: @query %>
     </section>
 
+    <div class="search-map"
+      id="map"
+      data-zoom-control="topright"
+      data-url="<%= api_search_points_url(params) %>">
+    </div>
+
     <% if @query %>
       <aside class="search-filters">
         <h4>
@@ -20,6 +26,11 @@
       <section class="search-results">
         <h4>
           Showing <%= @search.count %> <%= 'result'.pluralize @search.results.count %> for "<%= @query %>"
+
+          <% unless current_user.nil? %>
+            <%= render 'add_search_to_projects' %>
+          <% end %>
+
           <a data-create-from="<%= downloads_path %>" data-poll-from="<%= download_poll_path %>" class="btn btn-secondary download-search"><i class="fa fa-download"></i> Download results</a>
         </h4>
 
