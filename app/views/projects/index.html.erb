@@ -8,16 +8,7 @@
     </div>
       
     <% project.items.each do |item| %>
-      <div class="item">
-        <div class="item-preview">
-          <img src="http://placekitten.com/600/400">
-        </div>
-
-        <div class="item-info">
-          <h1><%= item.name %> (<%= item.class %>)</h1>
-          <p><i class="fa fa-download"></i> Download Data Set</p>
-        </div>
-      </div>
+      <%= render partial: "project_item", collection: project.items %>
     <% end %>
   </section>
 <% end %>

@@ -18,30 +18,4 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
     get "/#{@protected_area.wdpa_id}"
     assert_match /Killbear/, @response.body
   end
-
-  test 'renders the Wikipedia summary' do
-    wikipedia_article = FactoryGirl.create(
-      :wikipedia_article,
-      summary: 'Summary text',
-      image_url: 'http://url.com/image.jpg',
-      url: 'http://url.com/article',
-      protected_area: @protected_area
-    )
-
-    get "/#{@protected_area.slug}"
-    assert_match Regexp.new(wikipedia_article.summary), @response.body
-    assert_match Regexp.new(wikipedia_article.url), @response.body
-  end
-
-  test 'renders the Images for the Protected Area' do
-    image = FactoryGirl.create(:image, url: 'http://images.com/image.jpg')
-    @protected_area = FactoryGirl.create(
-      :protected_area, countries: [@country], images: [image]
-    )
-
-    visit "/#{@protected_area.wdpa_id}"
-
-    assert page.has_selector?('ul.protected-area-photos')
-    assert_equal 1, page.all('.protected-area-photos li img').count
-  end
 end

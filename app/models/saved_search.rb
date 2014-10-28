@@ -14,4 +14,8 @@ class SavedSearch < ActiveRecord::Base
   def parsed_filters
     JSON.parse(filters) if filters.present?
   end
+
+  def wdpa_ids
+    results_ids
+  end
 end
