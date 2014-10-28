@@ -8,7 +8,7 @@
     <div class="search-map"
       id="map"
       data-zoom-control="topright"
-      data-search-term="<%= @query %>">
+      data-url="<%= api_search_points_url(params) %>">
     </div>
 
     <% if @query %>
