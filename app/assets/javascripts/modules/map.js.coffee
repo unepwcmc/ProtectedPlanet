@@ -4,8 +4,9 @@ class ProtectedPlanet.Map
   constructor: (@$mapContainer, map_class) ->
     return false if @$mapContainer.length == 0
 
-    @map = L.map($mapContainer.attr('id'), {zoomControl: false, scrollWheelZoom: false})
     @config = @$mapContainer.data()
+    @map = L.map($mapContainer.attr('id'),
+      {zoomControl: false, scrollWheelZoom: false})
 
     @addBaseLayer()
     @addZoomControl()

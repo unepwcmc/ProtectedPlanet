@@ -7,11 +7,11 @@ module SearchHelper
     end
   end
 
-  def facet_link facet, query_params
+  def facet_link facet
     model = facet[:model]
 
     link_name = "#{model.name} (#{facet[:count]})"
-    link_params = query_params.merge({
+    link_params = params.merge({
       model.class.to_s.underscore => model.id
     })
 

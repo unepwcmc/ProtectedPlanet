@@ -14,6 +14,9 @@ class AddItemToProjectsTest < ActionDispatch::IntegrationTest
       name: "My New Project", user: @user)
 
     sign_in @user
+
+    search_mock = mock().tap { |m| m.stubs(:results).returns([]) }
+    Search.stubs(:search).returns(search_mock)
   end
 
   test "add region to existing project" do
