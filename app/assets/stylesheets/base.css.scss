@@ -17,45 +17,11 @@ p { font-size: 14px; }
 
 img { max-width: 100%; height: auto; }
 
-input { 
+input {
   font-size: 20px;
   border: 0px;
   padding: 10px;
 }
-
-nav {
-  padding: 20px;
-  background-color: $green;
-}
-
-#brand, .nav, .nav li {
-  display: inline;
-}
-
-.nav li {
-  margin: 0px 10px;
-}
-
-nav p,a {
-  color: $white;
-  text-decoration: none;
-}
-
-nav a:hover {
-    color: $dark-green;
-    background-color: #FFF;
-}
-
-footer {
-  padding: 20px;
-  background-color: $dark-blue;
-}
-
-footer p,a {
-  color: $light-grey;
-}
-
-
 
 
 
@@ -66,9 +32,9 @@ footer p,a {
 
 .item {
   @include span-columns(3);
-  @include omega(4n);
-  border: 1px solid $light-grey;
+  @include omega(4n+1);
   @include fill-parent;
+  border: 1px solid $light-grey;
   margin-right: 0px;
   width: 25%;
 }
@@ -80,5 +46,116 @@ footer p,a {
 .item-info > h1 { margin-bottom: 20px; }
 
 .subtitle {
+  font-size: 14px;
   margin-left: 40px;
+}
+
+
+
+footer {
+  width: 100%;
+  background: $dark-blue;
+  font-size: 0.9em;
+  strong, p, a, a:visited {
+    color: #96989C;
+    font-weight: bold;
+  }
+
+  a {
+  text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .footer-inner {
+    height: 140px;
+    padding: 50px 0;
+    margin: 0px auto;
+    width: 95%;
+    color: $grey-blue;
+  }
+}
+
+.footer-logos {
+  img {
+    margin-right: 20px;
+  }
+  a {
+  text-decoration: none;
+  }
+}
+
+.footer-copyright, .footer-links {
+  padding-top: 7px;
+}
+
+.footer-copyright, .footer-logos {
+  float: left;
+}
+
+.footer-links {
+  float: right;
+}
+
+
+
+
+
+
+.nav-main {
+  overflow:hidden;
+  font-family: MuseoSans-300;
+  font-size: 1.125em;
+  width: 100%;
+  float: left;
+  list-style: none;
+  background-color: $green;
+
+  li {
+    float: left;
+
+    a {
+      color: $white;
+      display: block;
+      padding: 20px;
+      text-decoration: none; 
+      text-transform: uppercase;
+    }
+
+    a:hover {
+      background-color: $dark-green;
+    }
+  }
+}
+
+.sub-nav {
+  overflow:hidden;
+  font-family: MuseoSans-300;
+  font-size: 1.125em;
+  width: 100%;
+  float: left;
+  list-style: none;
+  background-color: $white;
+
+  li {
+    float: left;
+
+    a {
+      color: $dark-grey;
+      display: block;
+      padding: 20px;
+      text-decoration: none; 
+      text-transform: uppercase;
+    }
+    
+    a:hover {
+      background-color: $light-grey;
+    }
+  }
+}
+
+
+.nav-right {
+  float: right;
 }

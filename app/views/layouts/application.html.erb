@@ -13,14 +13,30 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <nav>
-    <%= image_tag 'pp-logo.png', size: '80', id: 'brand' %>
-
+  <nav class="nav-main">
     <ul class="nav">
       <li><a href="#">Our Mandate</a></li>
       <li><a href="#">PAS Data</a></li>
       <li><a href="#">Contact Us</a></li>
       <li><a href="#">Blog</a></li>
+    </ul>
+
+    <ul class="nav nav-right">
+      <li><a href="#">My Account</a></li>
+      
+    </ul>
+  </nav>
+
+  <nav class="sub-nav">
+    <ul class="nav">
+      <li><a href="#">Our Mandate</a></li>
+      <li class="active"><a href="#">PAS Data</a></li>
+      <li><a href="#">Contact Us</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    
+    <ul class="nav-right">
+      <li><a href="#">My Account</a></li>
     </ul>
   </nav>
 
