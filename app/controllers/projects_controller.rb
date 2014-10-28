@@ -21,15 +21,8 @@ class ProjectsController < ApplicationController
   def update
     @project = Project.find(params[:id])
 
-    respond_to do |format|
-      if @project.update_attributes(project_params)
-        format.html { redirect_to projects_path, :notice => 'Project was successfully updated.' }
-        format.json { head :ok }
-      else
-        format.html { render :action => "index" }
-        format.json { render :json => @project.errors, :status => :unprocessable_entity }
-      end
-    end
+    @project.update_attributes(project_params)
+    render json: true
   end
 
   private

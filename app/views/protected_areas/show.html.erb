@@ -30,6 +30,16 @@
       <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
     <% end %>
   </ul>
+
+  <% if @protected_area.nearest_protected_areas.count > 0 %>
+    <h3>Nearest Protected Areas</h3>
+
+    <ul>
+      <% @protected_area.nearest_protected_areas.each do |protected_area| %>
+        <li><%= protected_area.name %></li>
+      <% end %>
+    </ul>
+  <% end %>
 </article>
 
 <div class="protected-area-map" id="map"

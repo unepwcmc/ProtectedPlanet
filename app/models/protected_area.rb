@@ -20,6 +20,10 @@ class ProtectedArea < ActiveRecord::Base
 
   after_create :create_slug
 
+  def wdpa_ids
+    wdpa_id
+  end
+
   def as_indexed_json options={}
     self.as_json(
       only: [:id, :wdpa_id, :name, :original_name, :marine],
@@ -45,6 +49,16 @@ class ProtectedArea < ActiveRecord::Base
 
   def coordinates
     [the_geom_latitude.to_f, the_geom_longitude.to_f]
+  end
+
+  def nearest_protected_areas
+    @nearest_pas ||= Search.search('',
+      {
+        size: 2,
+        filters: {location: coordinates},
+        sort: {geo_distance: coordinates}
+      }
+    ).results
   end
 
   private

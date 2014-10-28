@@ -23,4 +23,13 @@ class ProjectsControllerTest < ActionController::TestCase
     assert_redirected_to projects_path
     assert_includes Project.first.items, pa
   end
+
+  test '.update, given a project id, updates the project with the given params' do
+    project = FactoryGirl.create(:project, name: 'test_project')
+
+    put(:update, id: project.id, project: {name: 'new_test_project'})
+
+    assert_response :success
+    assert_equal 'new_test_project', project.reload.name
+  end
 end

@@ -11,6 +11,10 @@ class Region < ActiveRecord::Base
 
   has_one :regional_statistic
 
+  def wdpa_ids
+    protected_areas.map(&:wdpa_id)
+  end
+
   def statistic
     regional_statistic
   end
