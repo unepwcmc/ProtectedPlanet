@@ -2,10 +2,10 @@
 @import 'bourbon';
 @import 'neat';
 
-$font-stack: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$font-stack: MuseoSans-300;
 $gutter: 0px;
 
-h1,h2,h3,p {
+h1,h2,h3,p,a {
   font-family: $font-stack;
   color: $dark-grey;
 }
