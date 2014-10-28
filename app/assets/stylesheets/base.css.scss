@@ -62,7 +62,7 @@ footer {
   }
 
   a {
-  text-decoration: underline;
+  text-decoration: none;
     &:hover {
       text-decoration: none;
     }
@@ -80,9 +80,6 @@ footer {
 .footer-logos {
   img {
     margin-right: 20px;
-  }
-  a {
-  text-decoration: none;
   }
 }
 
@@ -115,6 +112,11 @@ footer {
   li {
     float: left;
 
+    &.active {
+      a { background-color: $dark-grey; }
+      a:hover { background-color: $dark-grey; }
+    }
+
     a {
       color: $white;
       display: block;
@@ -126,6 +128,8 @@ footer {
     a:hover {
       background-color: $dark-green;
     }
+
+    
   }
 }
 
@@ -140,6 +144,11 @@ footer {
 
   li {
     float: left;
+
+    &.active {
+      a { background-color: $light-grey; }
+      a:hover { background-color: $light-grey; }
+    }
 
     a {
       color: $dark-grey;
