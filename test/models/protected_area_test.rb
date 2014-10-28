@@ -106,4 +106,17 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     FactoryGirl.create(:protected_area, iucn_category: no_iucn_category)
     assert_equal 2, ProtectedArea.with_valid_iucn_categories.count
   end
+
+  test '.nearest_protected_areas returns the closest 2 PAs, ordered by
+   distance ASC' do
+    pa = FactoryGirl.create(:protected_area, the_geom_latitude: 1, the_geom_longitude: 0)
+
+    search_mock = mock().tap { |m| m.expects(:results).returns([FactoryGirl.create(:protected_area)]) }
+    Search.expects(:search).
+      with('', {size: 2, filters: {location: [1, 0]}, sort: {geo_distance: [1, 0]}}).
+      returns(search_mock)
+
+    nearest = pa.nearest_protected_areas
+    assert_equal 1, nearest.length
+  end
 end

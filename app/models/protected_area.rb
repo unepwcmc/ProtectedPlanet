@@ -47,6 +47,16 @@ class ProtectedArea < ActiveRecord::Base
     [the_geom_latitude.to_f, the_geom_longitude.to_f]
   end
 
+  def nearest_protected_areas
+    Search.search('',
+      {
+        size: 2,
+        filters: {location: coordinates},
+        sort: {geo_distance: coordinates}
+      }
+    ).results
+  end
+
   private
 
   def bounding_box_query
