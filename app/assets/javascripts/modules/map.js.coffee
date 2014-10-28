@@ -24,9 +24,7 @@ class ProtectedPlanet.Map
     ).addTo(@map)
 
   addZoomControl: ->
-    position = @config['zoomControl']
-    if position?
-      @map.addControl(L.control.zoom(position: position))
+    @map.addControl(L.control.zoom(position: 'topright'))
 
   setToBounds: ->
     boundFrom = @config['boundFrom']
