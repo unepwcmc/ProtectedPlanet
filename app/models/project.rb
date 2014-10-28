@@ -8,5 +8,11 @@ class Project < ActiveRecord::Base
   has_many :protected_areas, through: :project_items, source: :item, source_type: 'ProtectedArea'
   has_many :countries, through: :project_items, source: :item, source_type: 'Country'
   has_many :regions, through: :project_items, source: :item, source_type: 'Region'
-  polymorphic_group :items, [:protected_areas, :countries, :regions]
+  has_many :saved_searches
+
+  polymorphic_group :items, [:protected_areas, :countries, :regions, :saved_searches]
+
+  def download_link type
+    Download.link_to "project_#{id}_all", type
+  end
 end

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  devise_for :users
+
   root to: 'home#index'
   get '/', to: 'home#index'
 
@@ -12,7 +14,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :projects, only: [:create, :index]
+  resources :projects, only: [:create, :index, :update]
 
   require 'sidekiq/web'
   mount Sidekiq::Web => '/admin/sidekiq'

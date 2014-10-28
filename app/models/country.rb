@@ -15,6 +15,10 @@ class Country < ActiveRecord::Base
   has_many :project_items, as: :item
   has_many :projects, through: :project_items
 
+  def wdpa_ids
+    protected_areas.map(&:wdpa_id)
+  end
+
   def statistic
     country_statistic
   end

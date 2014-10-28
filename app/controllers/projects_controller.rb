@@ -18,6 +18,13 @@ class ProjectsController < ApplicationController
     redirect_to action: :index
   end
 
+  def update
+    @project = Project.find(params[:id])
+
+    @project.update_attributes(project_params)
+    render json: true
+  end
+
   private
 
   def item
@@ -26,4 +33,9 @@ class ProjectsController < ApplicationController
 
     item_class.find(item_id)
   end
+
+  def project_params
+    params.require(:project).permit(:name)
+  end
+
 end
