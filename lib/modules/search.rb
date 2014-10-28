@@ -111,6 +111,10 @@ class Search
       unless options[:without_aggregations]
         query[:aggs] = Search::Aggregation.all
       end
+
+      if options[:sort].present?
+        query[:sort] = Search::Sorter.from_params(options[:sort])
+      end
     end
   end
 
