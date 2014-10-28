@@ -1,5 +1,5 @@
 <li class='result'>
-  <%= image_tag "map-marker@2x.png", style: "width: 29px; height: 44px" %>
+  <%= protected_area_cover model %>
   <div>
     <h3><a href='/<%= model.slug %>'><%= model.name %></a> | <small><%= model.designation.name %></small></h3>
     <p>

@@ -6,4 +6,10 @@ $dark-blue: hsl(226, 24, 22);
 $grey-blue: #848184;
 $green: #83ad35;
 $dark-green: #759935;
-$white: #ffffff;
+$white: rgb(255,255,255);
+
+$color--leaflet-control: $dark-blue;
+$color--leaflet-control-text: $white;
+$color--leaflet-control-hover-bg: $white;
+$color--leaflet-control-hover-text: $dark-blue;
+$color--leaflet-control-border: $white;
