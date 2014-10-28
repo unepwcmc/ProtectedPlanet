@@ -9,7 +9,7 @@ body, * {
 }
 
 h1,h2,h3,p,a {
-  color: $dark-grey;
+  color: $color--base;
 }
 
 h1 { font-size: 18px; }
@@ -45,39 +45,41 @@ nav {
 }
 
 .nav-main {
-  background-color: $green;
+  background-color: $color--nav-bg;
 
   li {
     &.active {
-      a { background-color: $dark-green; }
+      a {
+        background-color: $color--nav-active-link;
+      }
     }
 
     a {
-      color: $white;
+      color: $color--nav-link;
     }
 
     a:hover {
-      background-color: $dark-green;
+      background-color: $color--nav-hover-link;
     }
   }
 }
 
 header {
-  background-color: $white;
+  background-color: $color--header-bg;
 
   li {
     &.active {
       a {
-        background-color: $light-grey;
+        background-color: $color--header-active-link;
       }
     }
 
     a {
-      color: $dark-grey;
+      color: $color--header-link;
     }
 
     a:hover {
-      background-color: $light-grey;
+      background-color: $color--header-hover-link;
     }
   }
 }
@@ -85,14 +87,15 @@ header {
 footer {
   font-family: MuseoSans-100;
   width: 100%;
-  background: $dark-blue;
+  background: $color--footer-bg;
   font-size: 0.938em;
-  strong, p, a, a:visited {
-    color: $light-grey;
-  }
 
   a {
     text-decoration: none;
+
+    &, &:visited {
+      color: $color--footer-link;
+    }
 
     &:hover {
       text-decoration: none;
@@ -101,12 +104,15 @@ footer {
 
   .footer-inner {
     display: block;
-    line-height: 60px; //140
+    line-height: 60px;
     vertical-align: middle;
     padding: 50px 0;
     margin: 0px auto;
     width: 95%;
-    color: $grey-blue;
+
+    p {
+      color: $color--footer;
+    }
   }
 }
 
@@ -123,4 +129,3 @@ footer {
 .footer-links {
   float: right;
 }
-
