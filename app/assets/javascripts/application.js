@@ -21,4 +21,3 @@
 //= require best_in_place
 //= require_tree ./modules
 //= require_tree ./modules/modals
-//= require ./initialiser
