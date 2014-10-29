@@ -1,24 +1,5 @@
 @import 'colors';
 
-a.btn, button {
-  display: inline-block;
-  font-weight: normal;
-  background: $color--base-btn-bg;
-  border: none;
-  font-size: 0.9em;
-  box-sizing: border-box;
-  transition: background-color 0.3s;
-  text-decoration: none;
-  text-align: center;
-  color: $color--base-btn-text;
-
-  &:hover {
-    transition: background-color 0.3s;
-    background-color: $color--base-btn-hover-bg;
-    cursor: pointer;
-  }
-}
-
 .btn.btn-map-download {
   position: absolute;
   top: 111px;

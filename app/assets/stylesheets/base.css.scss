@@ -24,19 +24,26 @@ nav {
   font-size: 0.938em;
   width: 100%;
   list-style: none;
+}
 
-  li {
-    line-height: 60px;
-    float: left;
+nav li {
+  line-height: 60px;
+  float: left;
 
-    &.icon img { vertical-align: middle; }
+  &.logo {
+    width: 200px;
+    border-right: 1px solid $color--nav-border;
+  }
 
-    a {
-      display: block;
-      padding: 0px 20px;
-      text-decoration: none;
-      text-transform: uppercase;
-    }
+  &.icon img {
+    vertical-align: middle;
+  }
+
+  a {
+    display: block;
+    padding: 0px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
   }
 }
 
@@ -64,6 +71,7 @@ nav {
   }
 }
 
+.nav-main.home-nav-main,
 header {
   background-color: $color--header-bg;
 
@@ -135,5 +143,24 @@ footer {
 
   a:last-child {
     margin-right: 0;
+  }
+}
+
+a.btn, button {
+  display: inline-block;
+  font-weight: normal;
+  background: $color--base-btn-bg;
+  border: none;
+  font-size: 0.9em;
+  box-sizing: border-box;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  text-align: center;
+  color: $color--base-btn-text;
+
+  &:hover {
+    transition: background-color 0.3s;
+    background-color: $color--base-btn-hover-bg;
+    cursor: pointer;
   }
 }
