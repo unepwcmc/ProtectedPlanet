@@ -1,5 +1,65 @@
+@import 'colors';
+@import 'fonts';
+
+section { width: 500px;
+float:left;}
+
 article {
-  width: 450px;
-  background: blue;
-  float: left;
+  padding: 20px;
+  font-family: MuseoSans-100;
+  font-size: 14px;
+  color: $grey;
+
+  h3 {
+    color: $medium-grey;
+    margin: 20px 0px;
+  }
+
+  h3:first-child {
+    margin: 0px 0px 20px 0px;
+  }
+
+  table { width: 100%; }
+}
+
+.protected-area-official-record {
+  tr {
+    border-top: 1px solid $light-grey;
+
+    td {
+      padding: 10px 0px;
+      strong {
+        font-family: MuseoSans-100;
+        font-size: 12px;
+        color: $medium-grey;
+      }
+    }
+
+  }
+
+  tr:first-child {
+    border-top: none;
+  }
+}
+
+.protected-area-infographic {
+  
+  background: $dark-blue;
+  font-family: MuseoSans-300;
+  text-align: center;
+  width: 100%;
+
+  li {
+    display:inline;
+    margin-right: 5%;
+    color: $white;
+    font-size: 12px;
+    line-height: 60px;
+    span {
+      font-size: 30px;
+    }
+    li:last-child {
+      margin-right:none;
+    }
+  }
 }
