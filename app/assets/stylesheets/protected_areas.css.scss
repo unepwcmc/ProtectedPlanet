@@ -1,5 +1,68 @@
-article {
-  width: 450px;
-  background: blue;
-  float: left;
+@import 'colors';
+@import 'fonts';
+
+.factsheet {
+  width: 500px;
+  float:left;
+}
+
+.factsheet article {
+  padding: 20px;
+  font-family: MuseoSans-100;
+  font-size: 14px;
+  color: $color--pa-text;
+
+  h3 {
+    color: $color--pa-header;
+    margin: 20px 0px;
+  }
+
+  h3:first-child {
+    margin: 0px 0px 20px 0px;
+  }
+}
+
+.factsheet table {
+  width: 100%;
+
+  tr {
+    border-top: 1px solid $color--pa-table-border;
+  }
+
+  tr:first-child {
+    border-top: none;
+  }
+
+  td {
+    padding: 10px 0px;
+
+    strong {
+      font-family: MuseoSans-100;
+      font-size: 12px;
+      color: $color--pa-table-attribute;
+    }
+  }
+}
+
+.protected-area-infographic {
+  background: $color--pa-infographic-bg;
+  font-family: MuseoSans-300;
+  text-align: center;
+  width: 100%;
+
+  li {
+    display:inline;
+    margin-right: 5%;
+    color: $color--pa-infographic-text;
+    font-size: 12px;
+    line-height: 60px;
+  }
+
+  li span {
+    font-size: 30px;
+  }
+
+  li:last-child {
+    margin-right: none;
+  }
 }
