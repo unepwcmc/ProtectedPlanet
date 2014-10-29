@@ -18,12 +18,19 @@ p { font-size: 14px; }
 img { max-width: 100%; height: auto; }
 
 input {
-  font-size: 20px;
+  font-family: MuseoSans-300;
+  font-size: 14px;
   border: 0px;
   padding: 10px;
 }
 
-
+select {
+  font-size: 14px;
+  font-family: MuseoSans-300;
+  border: 1px solid $light-grey;
+  padding: 10px;
+  color: $dark-grey;
+}
 
 .page-header {
   padding: 20px;
@@ -51,8 +58,6 @@ input {
   font-size: 14px;
   margin-left: 40px;
 }
-
-
 
 footer {
   font-family: MuseoSans-100;
@@ -112,11 +117,12 @@ nav {
 
     &.icon img { vertical-align: middle; }
 
+    h1,h2 { padding: 0px 20px; }
+
     a {
       display: block;
       padding: 0px 20px;
       text-decoration: none; 
-      text-transform: uppercase;
     }
   }
 }
@@ -135,6 +141,7 @@ nav {
 
     a {
       color: $white;
+      text-transform: uppercase;
     }
 
     a:hover {
@@ -145,6 +152,7 @@ nav {
 
 .sub-nav {
   background-color: $white;
+  border-bottom: 1px solid $light-grey;
 
   li {
     &.active {
@@ -153,6 +161,15 @@ nav {
 
     a {
       color: $dark-grey;
+    }
+
+    h1 { 
+      color: $medium-grey;
+      font-size: 22px;
+    }
+
+    h2 { 
+      color: $grey;
     }
     
     a:hover {
