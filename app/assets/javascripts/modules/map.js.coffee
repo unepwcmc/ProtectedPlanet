@@ -10,12 +10,13 @@ class ProtectedPlanet.Map
     @map = L.mapbox.map(
       $mapContainer.attr('id'),
       'unepwcmc.ijh17499',
-      {minZoom: 2, zoomControl: false, attributionControl: false}
+      {minZoom: 3, zoomControl: false, attributionControl: false}
     )
 
     @addBaseLayer()
     @addZoomControl()
     @setToBounds()
+    @startAnimation()
 
     return new map_class(@map, @config)
 
@@ -65,6 +66,13 @@ class ProtectedPlanet.Map
       max = Math.max(Math.abs(x1), Math.abs(x2))
       min = Math.min(Math.abs(x1), Math.abs(x2))
       return max - min
+
+  startAnimation: ->
+    panMap = => @map.panBy(new L.Point(0.5, 0))
+    interval = setInterval(panMap, 200)
+
+    @map.on('dragstart', -> clearInterval(interval))
+    @map.on('zoomstart', -> clearInterval(interval))
 
   normalizeBounds: (bounds) ->
     # If a protected area overlaps the antimeridian ST_Extent does not
