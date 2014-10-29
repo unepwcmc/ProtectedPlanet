@@ -16,6 +16,8 @@ setupFiltersConcertina = ->
 
 ready = ->
   new ProtectedPlanet.Map($('#map'), ProtectedPlanet.ProtectedAreaMap).render()
+  new ProtectedPlanet.Dropdown($('.btn-map-download'), $('.download-type-dropdown'))
+
   setupFiltersConcertina()
 
 $(document).ready(ready)
