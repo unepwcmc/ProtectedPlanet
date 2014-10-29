@@ -1,7 +1,19 @@
-@import 'bourbon';
-@import 'neat';
+@import 'z-index';
+@import 'colors';
 
 #map {
   height: 400px;
   width: auto;
+}
+
+.map-disclaimer {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  z-index: $zIndex-10;
+  background: $color--map-disclaimer-bg;
+  width: 100%;
+  color: $color--map-disclaimer-text;
+  text-align: center;
+  padding: 5px;
 }

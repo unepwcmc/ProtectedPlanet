@@ -3,7 +3,7 @@ $medium-grey: rgb(113, 124, 151);
 $grey: #c8c8c8;
 $light-grey: #dadada;
 
-$dark-blue: hsl(226, 24, 22);
+$dark-blue: rgb(43,49,70);
 $grey-blue: #848184;
 $blue: #317fce;
 
@@ -49,3 +49,6 @@ $color--pa-table-border: $light-grey;
 $color--pa-table-attribute: $medium-grey;
 $color--pa-infographic-bg: $dark-blue;
 $color--pa-infographic-text: $white;
+
+$color--map-disclaimer-bg: transparentize($dark-blue, 0.5);
+$color--map-disclaimer-text: $white;
