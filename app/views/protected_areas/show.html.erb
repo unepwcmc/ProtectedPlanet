@@ -2,7 +2,7 @@
   <h2><%= @protected_area.name %></h2>
 <% end %>
 
-<section>
+<section class="factsheet">
   <article>
     <h3>Official Record</h3>
     <%= render 'official_record', protected_area: @protected_area %>
@@ -31,7 +31,7 @@
       <% if @protected_area.wikipedia_article %>
         <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
       <% end %>
-    </ul>  
+    </ul>
   </article>
 </section>
 
