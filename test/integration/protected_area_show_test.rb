@@ -7,6 +7,9 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
     @protected_area = FactoryGirl.create(
       :protected_area, name: 'Killbear', slug: 'killbear', countries: [@country]
     )
+
+    search_mock = mock().tap { |m| m.stubs(:results).returns([]) }
+    Search.stubs(:search).returns(search_mock)
   end
 
   test 'renders the Protected Area name' do
