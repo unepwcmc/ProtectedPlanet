@@ -21,28 +21,24 @@ module SearchHelper
   end
 
   def protected_area_cover protected_area, opts={size: {x: 256, y: 128}}
-    cover_url = if protected_area.images.any?
-      protected_area.images.first.url
-    else
-      mapbox_url protected_area.geojson, opts[:size]
-    end
-
-    image_tag cover_url, style: "width: #{opts[:size][:x]}px; height: #{opts[:size][:y]}px", alt: protected_area.name
+    image_tag(
+      tiles_path({id: protected_area.id}.merge(opts)),
+      style: style(opts),
+      alt: protected_area.name
+    )
   end
 
   def country_cover country, opts={size: {x: 256, y: 128}}
-    image_tag(
-      "countries/#{country.iso}.png",
-      style: "width: #{opts[:size][:x]}px; height: #{opts[:size][:y]}px",
-      alt: country.name
-    )
+    image_tag("countries/#{country.iso}.png", style: style(opts), alt: country.name)
   end
 
   def region_cover region, opts={size: {x: 256, y: 128}}
-    image_tag(
-      "regions/#{region.iso}.png",
-      style: "width: #{opts[:size][:x]}px; height: #{opts[:size][:y]}px",
-      alt: region.name
-    )
+    image_tag("regions/#{region.iso}.png", style: style(opts), alt: region.name)
+  end
+
+  private
+
+  def style opts
+    "width: #{opts[:size][:x]}px; height: #{opts[:size][:y]}px"
   end
 end
