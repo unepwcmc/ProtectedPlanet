@@ -2,20 +2,14 @@
 @import 'bourbon';
 @import 'neat';
 
-main {
-  min-width: 768px;
-  margin: 0 auto;
-  position: relative;
-  height: 100%;
-  overflow: hidden;
-}
-
-$font-stack: "Helvetica Neue", Helvetica, Arial, sans-serif;
 $gutter: 0px;
 
-h1,h2,h3,p {
-  font-family: $font-stack;
-  color: $dark-grey;
+body, * {
+  font-family: MuseoSans-300;
+}
+
+h1,h2,h3,p,a {
+  color: $color--base;
 }
 
 h1 { font-size: 18px; }
@@ -25,32 +19,121 @@ p { font-size: 14px; }
 
 img { max-width: 100%; height: auto; }
 
-input {
-  font-size: 20px;
-  border: 0px;
-  padding: 10px;
+nav {
+  overflow:hidden;
+  font-size: 0.938em;
+  width: 100%;
+  list-style: none;
+
+  li {
+    line-height: 60px;
+    float: left;
+
+    &.icon img { vertical-align: middle; }
+
+    a {
+      display: block;
+      padding: 0px 20px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+  }
 }
 
-section.page-header {
-  padding: 20px;
-  background-color: $light-grey;
+.right {
+  float: right;
 }
 
-div.item {
-  @include span-columns(3);
-  @include omega(4n);
-  border: 1px solid $light-grey;
-  @include fill-parent;
-  margin-right: 0px;
-  width: 25%;
+.nav-main {
+  background-color: $color--nav-bg;
+
+  li {
+    &.active {
+      a {
+        background-color: $color--nav-active-link;
+      }
+    }
+
+    a {
+      color: $color--nav-link;
+    }
+
+    a:hover {
+      background-color: $color--nav-hover-link;
+    }
+  }
 }
 
-div.item-info {
-  padding: 20px;
+header {
+  background-color: $color--header-bg;
+
+  li {
+    &.active {
+      a {
+        background-color: $color--header-active-link;
+      }
+    }
+
+    a {
+      color: $color--header-link;
+    }
+
+    a:hover {
+      background-color: $color--header-hover-link;
+    }
+  }
 }
 
-div.item-info > h1 { margin-bottom: 20px; }
+footer {
+  font-family: MuseoSans-100;
+  width: 100%;
+  background: $color--footer-bg;
+  font-size: 0.938em;
+  height: 75px;
 
-span.subtitle {
-  margin-left: 40px;
+  a {
+    text-decoration: none;
+
+    &, &:visited {
+      color: $color--footer-link;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .footer-inner {
+    display: block;
+    line-height: 41px;
+    padding: 20px 0;
+    margin: 0px auto;
+    width: 95%;
+
+    p {
+      color: $color--footer;
+    }
+  }
+}
+
+.footer-logos {
+  img {
+    margin-right: 20px;
+  }
+}
+
+.footer-copyright, .footer-logos {
+  float: left;
+}
+
+.footer-links {
+  float: right;
+
+  a {
+    margin-right: 20px;
+  }
+
+  a:last-child {
+    margin-right: 0;
+  }
 }

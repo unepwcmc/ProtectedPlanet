@@ -11,8 +11,6 @@ initialiseSearchDownloads = ->
 
 ready = ->
   new window.ProtectedPlanet.Map($('#map'), ProtectedPlanet.SearchMap)
-
-  initialiser = new window.ProtectedPlanet.PageInitialiser()
   initialiseSearchDownloads()
 
 $(document).ready(ready)

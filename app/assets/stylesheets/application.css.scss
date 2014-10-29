@@ -11,13 +11,15 @@
  * file per style scope.
  *
  *= require 'reset'
+ *= require 'colors'
+ *= require 'z-index'
  *= require 'leaflet'
  *= require 'leaflet-markercluster'
  *= require 'leaflet_overrides'
- *= require 'colors'
- *= require 'z-index'
  *= require 'map'
  *= require 'base'
  *= require 'protected_areas'
+ *= require 'projects'
+ *= require 'neat-grid'
  *= require_self
  */

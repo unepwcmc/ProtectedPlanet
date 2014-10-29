@@ -1,0 +1,39 @@
+@import 'colors';
+@import 'bourbon';
+@import 'neat';
+
+.project {
+  h3 {
+    padding: 20px;
+    background-color: $color--project-header;
+
+    input {
+      font-size: 15px;
+      border: 0px;
+      padding: 5px 10px;
+    }
+  }
+}
+
+.project-subtitle {
+  font-size: 14px;
+  margin-left: 40px;
+}
+
+.project-item {
+  @include span-columns(3);
+  @include omega(4n+1);
+  @include fill-parent;
+  margin-right: 0px;
+  width: 25%;
+  border: 1px solid $color--project-item-border;
+
+  h4 {
+    margin: 20px;
+  }
+
+  p {
+    padding: 20px;
+  }
+}
+
