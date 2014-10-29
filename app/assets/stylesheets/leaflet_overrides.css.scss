@@ -97,6 +97,12 @@
     font-weight: normal;
     font-size: 1.7rem;
     opacity: 1;
+
+    &.leaflet-disabled {
+      background-color: $color--leaflet-control;
+      color: $color--leaflet-control-text;
+      cursor: not-allowed;
+    }
   }
 
   .leaflet-control-zoom-in {
