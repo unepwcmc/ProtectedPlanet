@@ -4,13 +4,14 @@
       <li><h1><%= @protected_area.name %></h1></li>
       <li><h2><%= @protected_area.name %></h2></li>
       <li><a href="#">Follow</a></li>
-      <li><a href="#">Download Dataset</a></li>
+      <li><a href="#">Download Dataset <i class="fa fa-sort-desc"></i>
+</a></li>
       <li><%= render partial: 'shared/add_to_project', locals: {item: @protected_area, type: 'protected_area'} %></li>
     </ul>
   </nav>
 <% end %>
 
-<section>
+<section class="protected-area">
   <article>
     <h3>Official Record</h3>
     <%= render 'official_record', protected_area: @protected_area %>

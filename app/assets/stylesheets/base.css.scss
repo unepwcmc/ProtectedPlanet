@@ -25,11 +25,17 @@ input {
 }
 
 select {
+  appearance:none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
   font-size: 14px;
   font-family: MuseoSans-300;
   border: 1px solid $light-grey;
   padding: 10px;
   color: $dark-grey;
+  background: transparent url("icon-dropdown-grey.png") no-repeat right center;
+  text-indent: 0.01px;
+  text-overflow: "";
 }
 
 .page-header {
@@ -115,7 +121,17 @@ nav {
     line-height: 60px;
     float: left;
 
-    &.icon img { vertical-align: middle; }
+    &.icon {
+      border-left: 1px solid $light-grey;
+      border-right: 1px solid $light-grey;
+    }
+
+    &.icon:first-child { border-left: none; }
+    &.icon:last-child { border-right: none; }
+
+    &.icon img { 
+      vertical-align: middle;
+    }
 
     h1,h2 { padding: 0px 20px; }
 
@@ -129,6 +145,7 @@ nav {
 
 .nav-right {
   float: right;
+  border-left: 1px solid $light-grey;
 }
 
 .nav-main {
