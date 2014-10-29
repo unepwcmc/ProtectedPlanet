@@ -2,16 +2,18 @@
   <h2><%= @protected_area.name %></h2>
 <% end %>
 
-<article>
-  <h3>Official Record</h3>
-  <%= render 'official_record', protected_area: @protected_area %>
+<section class="factsheet">
+  <article>
+    <h3>Official Record</h3>
+    <%= render 'official_record', protected_area: @protected_area %>
 
-  <h3>Data Provider</h3>
-  <ul>
-    <%= render @protected_area.sources %>
-  </ul>
+    <h3>Data Provider</h3>
+    <ul>
+      <%= render @protected_area.sources %>
+    </ul>
+  </article>
 
-  <ul>
+  <ul class="protected-area-infographic">
     <li>
       <span><%= Wdpa::DataStandard.percentage_complete(@protected_area).round(2) %></span>
       Data Complete
@@ -23,27 +25,17 @@
     <li>Last Updated sometime</li>
   </ul>
 
-  <h3>Related</h3>
-
-  <ul>
-    <% if @protected_area.wikipedia_article %>
-      <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
-    <% end %>
-  </ul>
-
-  <% if @protected_area.nearest_protected_areas.count > 0 %>
-    <h3>Nearest Protected Areas</h3>
-
+  <article>
+    <h3>Related</h3>
     <ul>
-      <% @protected_area.nearest_protected_areas.each do |protected_area| %>
-        <li><%= protected_area.name %></li>
+      <% if @protected_area.wikipedia_article %>
+        <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
       <% end %>
     </ul>
-  <% end %>
-</article>
+  </article>
+</section>
 
 <div class="protected-area-map" id="map"
-  data-zoom-control="topright"
   data-padding-enabled data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
   data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
   data-wdpa-id="<%= @protected_area.wdpa_id %>">

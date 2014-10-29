@@ -1,8 +1,46 @@
 $dark-grey: #353946;
+$medium-grey: rgb(113, 124, 151);
 $grey: #c8c8c8;
 $light-grey: #dadada;
-$blue: #317fce;
+
 $dark-blue: hsl(226, 24, 22);
 $grey-blue: #848184;
-$green: #83ad35;
+$blue: #317fce;
+
 $dark-green: #759935;
+$green: #83ad35;
+
+$white: rgb(255,255,255);
+
+$color--base: $dark-grey;
+$color--bg: $dark-blue;
+
+$color--leaflet-control: $dark-blue;
+$color--leaflet-control-text: $white;
+$color--leaflet-control-hover-bg: $white;
+$color--leaflet-control-hover-text: $dark-blue;
+$color--leaflet-control-border: $white;
+
+$color--nav-bg: $green;
+$color--nav-active-link: $dark-green;
+$color--nav-link: $white;
+$color--nav-hover-link: $dark-green;
+
+$color--header-bg: $white;
+$color--header-active-link: $light-grey;
+$color--header-link: $dark-grey;
+$color--header-hover-link: $light-grey;
+
+$color--footer-bg: $dark-blue;
+$color--footer: $light-grey;
+$color--footer-link: $light-grey;
+
+$color--project-header: $light-grey;
+$color--project-item-border: $light-grey;
+
+$color--pa-text: $grey;
+$color--pa-header: $medium-grey;
+$color--pa-table-border: $light-grey;
+$color--pa-table-attribute: $medium-grey;
+$color--pa-infographic-bg: $dark-blue;
+$color--pa-infographic-text: $white;

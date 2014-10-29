@@ -20,7 +20,6 @@ initialiseProtectedCoverageViz = ->
 
 ready = ->
   new ProtectedPlanet.Map($('#map'), ProtectedPlanet.ProtectedAreaMap).render()
-  new ProtectedPlanet.PageInitialiser()
   initialiseProtectedCoverageViz()
 
 $(document).ready(ready)

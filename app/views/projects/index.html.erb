@@ -1,11 +1,11 @@
-<main>
-  <% @projects.each do |project| %>
-    <section class="page-header">
-      <h1><i class="fa fa-edit"></i> <%= best_in_place project, :name, as: :input %> (<%= project.items.count %> Items) <span class="subtitle"><i class="fa fa-download"></i> Download Complete Data Set</h1></div>
-    </section>
+<% @projects.each_with_index do |project, i| %>
+  <section class="project">
+    <h3>
+      <i class="fa fa-edit"></i>
+      <%= best_in_place project, :name, as: :input %> (<%= project.items.count %> Items)
+      <span class="project-subtitle"><i class="fa fa-download"></i> Download Complete Data Set</span>
+    </h3>
 
-    <section>
-      <%= render partial: "project_item", collection: project.items %>
-    </section>
-  <% end %>
-</main>
+    <%= render partial: "project_item", collection: project.items %>
+  </section>
+<% end %>
