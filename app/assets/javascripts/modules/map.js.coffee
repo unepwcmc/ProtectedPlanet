@@ -5,8 +5,13 @@ class ProtectedPlanet.Map
     return false if @$mapContainer.length == 0
 
     @config = @$mapContainer.data()
-    @map = L.map($mapContainer.attr('id'),
-      {zoomControl: false, scrollWheelZoom: false})
+    L.mapbox.accessToken = 'pk.eyJ1IjoidW5lcHdjbWMiLCJhIjoiRXg1RERWRSJ9.taTsSWwtAfFX_HMVGo2Cug'
+
+    @map = L.mapbox.map(
+      $mapContainer.attr('id'),
+      'unepwcmc.ijh17499',
+      {detectRetina: true, zoomControl: false}
+    )
 
     @addBaseLayer()
     @addZoomControl()
@@ -15,8 +20,8 @@ class ProtectedPlanet.Map
     return new map_class(@map, @config)
 
   addBaseLayer: ->
-    terrain = L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png').addTo(@map)
-    satellite = L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.k2p9jhk8/{z}/{x}/{y}.png')
+    terrain = L.mapbox.tileLayer('unepwcmc.ijh17499')
+    satellite = L.mapbox.tileLayer('unepwcmc.k2p9jhk8')
 
     L.control.layers(
       "Terrain": terrain,
