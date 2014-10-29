@@ -2,14 +2,18 @@
 @import 'colors';
 
 #map {
-  height: 400px;
-  width: auto;
+  position: fixed;
+  top: 60px;
+  bottom: 75px;
+  left: 200px;
+  right: 0;
 }
 
 .map-filters {
   float: left;
   height: 400px;
   width: 200px;
+  min-height: 100%;
 }
 
 .map-disclaimer {

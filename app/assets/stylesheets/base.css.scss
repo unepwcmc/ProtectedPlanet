@@ -4,8 +4,34 @@
 
 $gutter: 0px;
 
-body, * {
+* {
+  margin: 0;
   font-family: MuseoSans-300;
+}
+
+html, body {
+  height: 100%;
+}
+
+.container {
+  min-height: 100%;
+  margin-bottom: -75px;
+}
+
+.container:after {
+  content: "";
+  display: block;
+}
+
+main {
+  position: fixed;
+  bottom: 75px;
+  left: 0px;
+  top: 60px;
+}
+
+footer, .container:after {
+  height: 75px;
 }
 
 h1,h2,h3,p,a {
@@ -97,7 +123,6 @@ footer {
   width: 100%;
   background: $color--footer-bg;
   font-size: 0.938em;
-  height: 75px;
 
   a {
     text-decoration: none;
