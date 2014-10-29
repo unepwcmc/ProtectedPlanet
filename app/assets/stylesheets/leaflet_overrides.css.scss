@@ -68,8 +68,12 @@
   background-color: $color--leaflet-control;
   color: $color--leaflet-control-text;
   font-size: 1.3em;
+  transition: background-color 0.3s;
+  transition: color 0.3s;
 
   &:hover {
+    transition: background-color 0.3s;
+    transition: color 0.3s;
     cursor: pointer;
     background-color: $color--leaflet-control-hover-bg;
     color: $color--leaflet-control-hover-text;
