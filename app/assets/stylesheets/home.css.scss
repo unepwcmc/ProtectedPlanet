@@ -78,3 +78,31 @@
     width: 100%;
   }
 }
+
+.nav-main.home-nav-main {
+  background-color: $color--header-bg;
+
+  li.active {
+    a {
+      background-color: $color--header-active-link;
+    }
+  }
+
+  li {
+    a {
+      color: $color--header-link;
+    }
+
+    a:hover {
+      background-color: $color--header-hover-link;
+    }
+  }
+
+  li.logo {
+    background-image: image-url('pp-logo-grey.png');
+
+    a:hover {
+      background-color: inherit;
+    }
+  }
+}
