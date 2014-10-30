@@ -29,7 +29,4 @@
   </div>
 </div>
 
-<a href="#" class="btn btn-map-download">
-  <span>Download WDPA dataset</span>
-  <%= image_tag "icon-download.png", style: "height: 29px; width: 20px;" %>
-</a>
+<%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', item_id: 'all'} %>
