@@ -2,7 +2,7 @@ class Search
   include ActiveToken
   token_domain 'search'
 
-  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region]
+  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine]
 
   attr_reader :search_term, :options
 

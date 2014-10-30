@@ -1,6 +1,7 @@
 class Search::Filter
   FILTERS = {
     type: { type: 'type' },
+    marine: { type: 'equality', path: 'marine' },
     country: { type: 'nested', path: 'countries_for_index', field: 'countries_for_index.id', required: true },
     region: { type: 'nested', path: 'countries_for_index.region_for_index', field: 'countries_for_index.region_for_index.id', required: true },
     iucn_category: { type: 'nested', path: 'iucn_category', field: 'iucn_category.id', required: true },
@@ -42,7 +43,7 @@ class Search::Filter
   }
 
   def standardise value
-    CONVERSIONS[@options[:path]].try(:call, value) || value
+    CONVERSIONS[@options[:path].to_s].call(value) rescue value
   end
 
   def filter

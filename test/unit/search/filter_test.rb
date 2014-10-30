@@ -37,10 +37,10 @@ class SearchFilterTest < ActiveSupport::TestCase
     assert_equal expected_filters, filter
   end
 
-  test '#from_params, given a hash of search params, returns the filter query
+  test '#from_params, given a marine filter, returns the filter query
    as a hash' do
-    filters = Search::Filter.from_params(type: 'protected_area')
-    expected_filters = [{"bool"=>{"should"=>[{"type"=>{"value"=>"protected_area"}}]}}]
+    filters = Search::Filter.from_params(marine: false)
+    expected_filters = [{"bool"=>{"should"=>[{"term"=>{"marine"=>false}}]}}]
 
     assert_equal expected_filters, filters
   end
