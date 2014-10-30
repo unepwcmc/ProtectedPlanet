@@ -1,6 +1,80 @@
 @import 'colors';
 
+
+.search-sub-nav ul {
+  li {
+    float: left;
+
+    &:last-child {
+      margin-right: 20px;
+    }
+
+    &.right {
+      float: right;
+    }
+
+    h1, h2 {
+      display: inline-block;
+    }
+
+    h2 {
+      color: $medium-grey;
+    }
+
+    .search-download {
+      border-left: solid 1px $color--search-download-border;
+      border-right: solid 1px $color--search-download-border;
+      background-color: $color--search-download-bg;
+      color: $color--search-download-text;
+      text-transform: uppercase;
+      font-size: 1em;
+
+      img {
+        margin-top: 4px;
+      }
+    }
+  }
+}
+
 .map-filters.search-map-filters {
+  width: 350px;
   background: $color--search-filters-bg;
+
+  header {
+    height: 40px;
+    background-color: $color--search-filters-header;
+
+    ul {
+      float: right;
+
+      li {
+        border-left: solid 1px $color--search-switch-border;
+        float: left;
+      }
+    }
+
+    span {
+      color: $color--search-filters-text;
+      display: inline-block;
+      margin: 13px 0px 0px 14px;
+    }
+
+    a {
+      padding: 10px;
+      vertical-align: middle;
+      display: block;
+      height: 40px;
+      width: 40px;
+    }
+  }
+}
+
+.search-parent #map,
+.search-parent {
+  top: 120px;
+}
+
+.search-parent #map {
+  left: 350px;
 }
 
