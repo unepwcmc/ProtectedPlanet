@@ -1,16 +1,19 @@
 window.ProtectedPlanet ||= {}
+window.ProtectedPlanet.Maps ||= {}
 
-class ProtectedPlanet.SearchMap extends ProtectedPlanet.Map
-  constructor: (@map, @config) ->
-    @getPoints( (points) =>
+class ProtectedPlanet.Maps.Search
+  @showSearchResults: (map, url) ->
+    return unless url?
+
+    @getPoints(url, (points) =>
       markers = L.markerClusterGroup(
         showCoverageOnHover: false
       ).addLayers(points)
-      @map.addLayer(markers)
+      map.addLayer(markers)
     )
 
-  getPoints: (callback) ->
-    $.get(@config.url, (protected_areas) =>
+  @getPoints: (url, callback) ->
+    $.get(url, (protected_areas) =>
       markerList = []
 
       for pa in protected_areas
@@ -26,7 +29,7 @@ class ProtectedPlanet.SearchMap extends ProtectedPlanet.Map
       callback(markerList)
     )
 
-  fitToResults: (points) ->
+  @fitToResults: (points) ->
     lats = points.map((p) -> parseFloat(p.the_geom_latitude))
     lons = points.map((p) -> parseFloat(p.the_geom_longitude))
 
