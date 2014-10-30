@@ -28,6 +28,7 @@ main {
   bottom: 75px;
   left: 0px;
   top: 60px;
+  overflow: scroll;
 }
 
 footer, .container:after {
@@ -82,23 +83,18 @@ nav li {
   float: right;
 }
 
+.nav-main,
+footer {
+  position: fixed;
+}
+
 .nav-main {
   background-color: $color--nav-bg;
 
   li {
-    &.active {
-      a {
-        background-color: $color--nav-active-link;
-      }
-    }
-
-    a {
-      color: $color--nav-link;
-    }
-
-    a:hover {
-      background-color: $color--nav-hover-link;
-    }
+    &.active { a { background-color: $color--nav-active-link; } }
+    a { color: $color--nav-link; }
+    a:hover { background-color: $color--nav-hover-link; }
   }
 }
 
@@ -106,19 +102,9 @@ header {
   background-color: $color--header-bg;
 
   li {
-    &.active {
-      a {
-        background-color: $color--header-active-link;
-      }
-    }
-
-    a {
-      color: $color--header-link;
-    }
-
-    a:hover {
-      background-color: $color--header-hover-link;
-    }
+    &.active { a { background-color: $color--header-active-link; } }
+    a { color: $color--header-link; }
+    a:hover { background-color: $color--header-hover-link; }
   }
 }
 
