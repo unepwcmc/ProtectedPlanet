@@ -10,7 +10,7 @@ class ProtectedPlanet.Map
     @map = L.mapbox.map(
       $mapContainer.attr('id'),
       'unepwcmc.ijh17499',
-      {minZoom: 3, zoomControl: false, attributionControl: false}
+      {minZoom: 2, zoomControl: false, attributionControl: false}
     )
 
     @addBaseLayer()
