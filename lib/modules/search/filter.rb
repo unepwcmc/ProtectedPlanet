@@ -21,9 +21,9 @@ class Search::Filter
     constructed_filters = []
 
     params.each do |name, value|
-      constructed_filters.push self.new(
-        value, FILTERS[name.to_sym]
-      ).to_h
+      constructed_filters.push(
+        *Array.wrap(self.new(value, FILTERS[name.to_sym]).to_h)
+      )
     end
 
     constructed_filters
@@ -34,7 +34,7 @@ class Search::Filter
   CONVERSIONS = {
     "countries_for_index" => -> (value) { value.to_i },
     "countries_for_index.region_for_index" => -> (value) { value.to_i },
-    "iucn_category" => -> (value) { value.to_i },
+    "iucn_category" => -> (value) { Array.wrap(value).map(&:to_i) },
     "designation" => -> (value) { value.to_i }
   }
 
