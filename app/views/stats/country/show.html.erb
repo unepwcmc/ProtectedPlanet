@@ -9,7 +9,6 @@
   </nav>
 <% end %>
 
-
 <div class="protected-area-map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>"></div>
 
 <main class="grid">
@@ -26,6 +25,7 @@
 
     <a href="#" data-download-object="<%= @country.iso_3 %>" class="btn btn-primary btn-download">Download the WDPA <%= @country.name %> dataset</a>
    </section>
+
 
   <div class="factsheet">
     <%= render "stats/factsheet_protected_areas" %>

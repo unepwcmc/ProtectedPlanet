@@ -96,6 +96,10 @@ nav li {
   &.icon {
     border-left: 1px solid $light-grey;
     border-right: 1px solid $light-grey;
+
+    a:hover {
+      background-color: inherit;
+    }
   }
 
   &.icon:first-child { border-left: none; }
