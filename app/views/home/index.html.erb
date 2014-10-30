@@ -2,6 +2,9 @@
   data-bound-from="<%= map_bounds['from'] %>"
   data-bound-to="<%= map_bounds['to'] %>"
   data-animate="true"
+  <% if map_filtered? %>
+    data-url="<%= api_search_points_url(params) %>"
+  <% end %>
   class="home-map"
   id="map">
   <div class="map-disclaimer">

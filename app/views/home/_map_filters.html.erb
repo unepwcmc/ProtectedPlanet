@@ -1,18 +1,37 @@
 <aside class="map-filters home-map-filters">
   <ul>
-    <li>
+    <li data-attribute="marine">
       <a href="#">Type of Area</a>
       <ul>
-        <li><a href="#">Terrestrial</a></li>
-        <li><a href="#">Marine</a></li>
+        <li>
+          <%= link_to_filter(
+              "Terrestrial", "marine", false,
+              class: filter_link_active_class('marine', "false")
+            ) %>
+        </li>
+
+        <li>
+          <%= link_to_filter(
+              "Marine", "marine", true,
+              {
+                class: filter_link_active_class('marine', "true"),
+              }
+            ) %>
+        </li>
       </ul>
     </li>
 
-    <li>
+    <li data-attribute="iucn_category%5B%5D">
       <a href="#">IUCN Category</a>
       <ul>
         <% IucnCategory.all.each do |category| %>
-          <li><a href="#"><%= category.name %></a></li>
+          <li>
+            <%= link_to_filter(
+                category.name, 'iucn_category[]', category.id,
+                class: filter_link_active_class('iucn_category', category.id.to_s)
+              )
+            %>
+          </li>
         <% end %>
       </ul>
     </li>

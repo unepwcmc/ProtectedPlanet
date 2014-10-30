@@ -30,6 +30,7 @@
     background-size: 14px 8px;
   }
 
+  > ul > li a.active-filter,
   > ul > li a:hover {
     background-color: $color--home-filters-hover-bg;
     cursor: pointer;

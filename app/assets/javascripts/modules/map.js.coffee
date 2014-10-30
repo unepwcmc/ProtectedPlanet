@@ -15,7 +15,8 @@ class ProtectedPlanet.Map
     ProtectedPlanet.Maps.Bounds.setToBounds(map, config)
     ProtectedPlanet.Maps.ProtectedAreaOverlay.render(map, config)
     ProtectedPlanet.Maps.Search.showSearchResults(map, config.url)
-    ProtectedPlanet.Maps.Animation.startAnimation(map) if config.animate
+    if config.animate and !config.url?
+      ProtectedPlanet.Maps.Animation.startAnimation(map)
 
   createMap: (id) ->
     L.mapbox.map(
