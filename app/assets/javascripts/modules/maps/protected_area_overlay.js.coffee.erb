@@ -1,15 +1,11 @@
 window.ProtectedPlanet ||= {}
+window.ProtectedPlanet.Maps ||= {}
 
-class ProtectedPlanet.ProtectedAreaMap
+class ProtectedPlanet.Maps.ProtectedAreaOverlay
   POLYGONS_TABLE = 'wdpa_poly_<%= Rails.env %>'
   POINTS_TABLE   = 'wdpa_point_<%= Rails.env %>'
 
-  constructor: (@map, @config) ->
-    @map.on('baselayerchange', =>
-      @paOverlay.bringToFront()
-    )
-
-  _generateCartocssSelector: (args) ->
+  @_generateCartocssSelector: (args) ->
     tables = args.table
     tables = [tables] unless $.isArray(tables)
 
@@ -21,7 +17,7 @@ class ProtectedPlanet.ProtectedAreaMap
 
     return tables.map(mapFunction).join(',')
 
-  _generateCartocss: (args) ->
+  @_generateCartocss: (args) ->
     args = $.extend({
       opacity: 0.7
       lineWidth: 0.05
@@ -38,33 +34,33 @@ class ProtectedPlanet.ProtectedAreaMap
       }
     """
 
-  addCountryTiles: (sublayers) ->
+  @_countryTiles: (iso3) ->
     args =
       table: 'countries_geometries'
       attrName: 'iso_3'
-      attrVal: "'#{@config['iso3']}'"
+      attrVal: "'#{iso3}'"
       opacity: .2
       lineWidth: 0
 
-    sublayers.push
-      sql: "SELECT * FROM #{args.table} WHERE iso_3 = '#{@config['iso3']}'"
+    {
+      sql: "SELECT * FROM #{args.table} WHERE iso_3 = '#{iso3}'"
       cartocss: @_generateCartocss(args)
-    sublayers
+    }
 
-  addRegionTiles: (sublayers) ->
+  @_regionTiles: (regionName) ->
     args =
       table: 'continents'
       attrName: 'continent'
-      attrVal: "'#{@config['regionName']}'"
+      attrVal: "'#{regionName}'"
       opacity: .2
       lineWidth: 0
 
-    sublayers.push
-      sql: "SELECT * FROM #{args.table} WHERE continent = '#{@config['regionName']}'"
+    {
+      sql: "SELECT * FROM #{args.table} WHERE continent = '#{regionName}'"
       cartocss: @_generateCartocss(args)
-    sublayers
+    }
 
-  addWdpaTiles: (sublayers) ->
+  @_wdpaTiles: (wdpaId) ->
     cartocss = [
       @_generateCartocss(
         table: [POLYGONS_TABLE, POINTS_TABLE]
@@ -73,33 +69,28 @@ class ProtectedPlanet.ProtectedAreaMap
       )
     ]
 
-    if @config['wdpaId']?
+    if wdpaId?
       cartocss.push @_generateCartocss(
         table: [POLYGONS_TABLE, POINTS_TABLE]
         attrName: 'wdpaid'
-        attrVal: @config['wdpaId']
+        attrVal: wdpaId
       )
 
-    sublayers.push
+    {
       sql: "SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POINTS_TABLE} UNION ALL SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POLYGONS_TABLE}"
       cartocss: cartocss.join("\n")
-    sublayers
+    }
 
-  render: ->
+  @render: (map, config) ->
     sublayers = []
-
-    @addWdpaTiles(sublayers)
-
-    if @config['iso3']?
-      sublayers = @addCountryTiles sublayers
-    if @config['regionName']?
-      sublayers = @addRegionTiles sublayers
+    sublayers.push @_wdpaTiles(config.wdpaId)
+    sublayers.push @_countryTiles(config.iso3) if config.iso3?
+    sublayers.push @_regionTiles(config.regionName) if config.regionName?
 
     carto_tiles = new cartodb.Tiles(
       sublayers: sublayers
       user_name: "carbon-tool"
     )
 
-    carto_tiles.getTiles( (o) =>
-      @paOverlay = L.tileLayer(o.tiles[0]).addTo(@map)
-    )
+    map.on('baselayerchange', => @paOverlay.bringToFront())
+    carto_tiles.getTiles( (o) => @paOverlay = L.tileLayer(o.tiles[0]).addTo(map))

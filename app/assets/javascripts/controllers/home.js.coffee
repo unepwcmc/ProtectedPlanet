@@ -15,7 +15,7 @@ setupFiltersConcertina = ->
   $filtersListItems.on('click', '> a', toggleFilterChild)
 
 ready = ->
-  new ProtectedPlanet.Map($('#map'), ProtectedPlanet.HomeMap).render()
+  new ProtectedPlanet.Map($('#map')).render()
   new ProtectedPlanet.Dropdown($('.btn-map-download'), $('.download-type-dropdown'))
 
   setupFiltersConcertina()

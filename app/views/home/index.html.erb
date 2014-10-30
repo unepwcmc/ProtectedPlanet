@@ -1,25 +1,7 @@
-<aside class="map-filters home-map-filters">
-  <ul>
-    <li>
-      <a href="#">Type of Area</a>
-      <ul>
-        <li><a href="#">Terrestrial</a></li>
-        <li><a href="#">Marine</a></li>
-      </ul>
-    </li>
-
-    <li>
-      <a href="#">IUCN Category</a>
-      <ul>
-        <li><a href="#">Terrestrial</a></li>
-      </ul>
-    </li>
-  </ul>
-</aside>
-
 <div
   data-bound-from="<%= map_bounds['from'] %>"
   data-bound-to="<%= map_bounds['to'] %>"
+  data-animate="true"
   class="home-map"
   id="map">
   <div class="map-disclaimer">
@@ -29,4 +11,5 @@
   </div>
 </div>
 
+<%= render partial: 'map_filters' %>
 <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', item_id: 'all'} %>
