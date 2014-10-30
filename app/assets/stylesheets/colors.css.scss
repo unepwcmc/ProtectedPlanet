@@ -3,7 +3,7 @@ $medium-grey: rgb(113, 124, 151);
 $grey: #c8c8c8;
 $light-grey: #dadada;
 
-$dark-blue: hsl(226, 24, 22);
+$dark-blue: rgb(43,49,70);
 $grey-blue: #848184;
 $blue: #317fce;
 
@@ -13,6 +13,10 @@ $green: #83ad35;
 $white: rgb(255,255,255);
 
 $color--base: $dark-grey;
+$color--base-btn-bg: $green;
+$color--base-btn-hover-bg: $dark-green;
+$color--base-btn-text: $white;
+
 $color--bg: $dark-blue;
 
 $color--leaflet-control: $dark-blue;
@@ -25,6 +29,7 @@ $color--nav-bg: $green;
 $color--nav-active-link: $dark-green;
 $color--nav-link: $white;
 $color--nav-hover-link: $dark-green;
+$color--nav-border: $light-grey;
 
 $color--header-bg: $white;
 $color--header-active-link: $light-grey;
@@ -44,3 +49,12 @@ $color--pa-table-border: $light-grey;
 $color--pa-table-attribute: $medium-grey;
 $color--pa-infographic-bg: $dark-blue;
 $color--pa-infographic-text: $white;
+
+$color--home-filters-bg: $green;
+$color--home-filters-hover-bg: $dark-green;
+$color--home-filters-border: $white;
+$color--home-filters-child-border: $light-grey;
+$color--home-filters-text: $white;
+
+$color--map-disclaimer-bg: transparentize($dark-blue, 0.5);
+$color--map-disclaimer-text: $white;

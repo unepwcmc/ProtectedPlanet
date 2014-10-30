@@ -5,6 +5,9 @@ class ProtectedPlanet.ProtectedAreaMap
   POINTS_TABLE   = 'wdpa_point_<%= Rails.env %>'
 
   constructor: (@map, @config) ->
+    @map.on('baselayerchange', =>
+      @paOverlay.bringToFront()
+    )
 
   _generateCartocssSelector: (args) ->
     tables = args.table
@@ -98,5 +101,5 @@ class ProtectedPlanet.ProtectedAreaMap
     )
 
     carto_tiles.getTiles( (o) =>
-      L.tileLayer(o.tiles[0]).addTo @map
+      @paOverlay = L.tileLayer(o.tiles[0]).addTo(@map)
     )

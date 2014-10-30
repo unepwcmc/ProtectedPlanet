@@ -5,18 +5,24 @@ class ProtectedPlanet.Map
     return false if @$mapContainer.length == 0
 
     @config = @$mapContainer.data()
-    @map = L.map($mapContainer.attr('id'),
-      {zoomControl: false, scrollWheelZoom: false})
+    L.mapbox.accessToken = 'pk.eyJ1IjoidW5lcHdjbWMiLCJhIjoiRXg1RERWRSJ9.taTsSWwtAfFX_HMVGo2Cug'
+
+    @map = L.mapbox.map(
+      $mapContainer.attr('id'),
+      'unepwcmc.ijh17499',
+      {minZoom: 2, zoomControl: false, attributionControl: false}
+    )
 
     @addBaseLayer()
     @addZoomControl()
     @setToBounds()
+    @startAnimation()
 
     return new map_class(@map, @config)
 
   addBaseLayer: ->
-    terrain = L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.ijh17499/{z}/{x}/{y}.png').addTo(@map)
-    satellite = L.tileLayer('http://api.tiles.mapbox.com/v3/unepwcmc.k2p9jhk8/{z}/{x}/{y}.png')
+    terrain = L.mapbox.tileLayer('unepwcmc.ijh17499')
+    satellite = L.mapbox.tileLayer('unepwcmc.k2p9jhk8')
 
     L.control.layers(
       "Terrain": terrain,
@@ -60,6 +66,13 @@ class ProtectedPlanet.Map
       max = Math.max(Math.abs(x1), Math.abs(x2))
       min = Math.min(Math.abs(x1), Math.abs(x2))
       return max - min
+
+  startAnimation: ->
+    panMap = => @map.panBy(new L.Point(0.5, 0))
+    interval = setInterval(panMap, 300)
+
+    @map.on('dragstart', -> clearInterval(interval))
+    @map.on('zoomstart', -> clearInterval(interval))
 
   normalizeBounds: (bounds) ->
     # If a protected area overlaps the antimeridian ST_Extent does not

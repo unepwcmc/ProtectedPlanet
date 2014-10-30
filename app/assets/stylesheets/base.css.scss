@@ -4,8 +4,34 @@
 
 $gutter: 0px;
 
-body, * {
+* {
+  margin: 0;
   font-family: MuseoSans-300;
+}
+
+html, body {
+  height: 100%;
+}
+
+.container {
+  min-height: 100%;
+  margin-bottom: -75px;
+}
+
+.container:after {
+  content: "";
+  display: block;
+}
+
+main {
+  position: fixed;
+  bottom: 75px;
+  left: 0px;
+  top: 60px;
+}
+
+footer, .container:after {
+  height: 75px;
 }
 
 h1,h2,h3,p,a {
@@ -24,19 +50,31 @@ nav {
   font-size: 0.938em;
   width: 100%;
   list-style: none;
+}
 
-  li {
-    line-height: 60px;
-    float: left;
+nav li {
+  line-height: 60px;
+  float: left;
 
-    &.icon img { vertical-align: middle; }
+  &.logo {
+    width: 200px;
+    height: 60px;
+    text-indent: -9999px;
+    border-right: 1px solid $color--nav-border;
+    background: image-url('pp-logo.png') no-repeat;
+    background-size: 72px 34px;
+    background-position: 15px 12px;
+  }
 
-    a {
-      display: block;
-      padding: 0px 20px;
-      text-decoration: none;
-      text-transform: uppercase;
-    }
+  &.icon img {
+    vertical-align: middle;
+  }
+
+  a {
+    display: block;
+    padding: 0px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
   }
 }
 
@@ -44,23 +82,18 @@ nav {
   float: right;
 }
 
+.nav-main,
+footer {
+  position: fixed;
+}
+
 .nav-main {
   background-color: $color--nav-bg;
 
   li {
-    &.active {
-      a {
-        background-color: $color--nav-active-link;
-      }
-    }
-
-    a {
-      color: $color--nav-link;
-    }
-
-    a:hover {
-      background-color: $color--nav-hover-link;
-    }
+    &.active { a { background-color: $color--nav-active-link; } }
+    a { color: $color--nav-link; }
+    a:hover { background-color: $color--nav-hover-link; }
   }
 }
 
@@ -68,19 +101,9 @@ header {
   background-color: $color--header-bg;
 
   li {
-    &.active {
-      a {
-        background-color: $color--header-active-link;
-      }
-    }
-
-    a {
-      color: $color--header-link;
-    }
-
-    a:hover {
-      background-color: $color--header-hover-link;
-    }
+    &.active { a { background-color: $color--header-active-link; } }
+    a { color: $color--header-link; }
+    a:hover { background-color: $color--header-hover-link; }
   }
 }
 
@@ -89,7 +112,6 @@ footer {
   width: 100%;
   background: $color--footer-bg;
   font-size: 0.938em;
-  height: 75px;
 
   a {
     text-decoration: none;
@@ -135,5 +157,44 @@ footer {
 
   a:last-child {
     margin-right: 0;
+  }
+}
+
+a.btn, button {
+  display: inline-block;
+  font-weight: normal;
+  background: $color--base-btn-bg;
+  border: none;
+  font-size: 0.9em;
+  box-sizing: border-box;
+  transition: background-color 0.3s;
+  text-decoration: none;
+  text-align: center;
+  color: $color--base-btn-text;
+
+  &:hover {
+    transition: background-color 0.3s;
+    background-color: $color--base-btn-hover-bg;
+    cursor: pointer;
+  }
+}
+
+.btn.btn-download {
+  width: 231px;
+  height: 75px;
+  padding: 10px 15px;
+  font-size: 1.2em;
+  line-height: 1.5em;
+  text-align: left;
+
+  img {
+    float: right;
+    margin-top: 12px;
+  }
+
+  span {
+    float: left;
+    display: inline-block;
+    width: 125px;
   }
 }
