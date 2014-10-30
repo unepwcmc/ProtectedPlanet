@@ -38,6 +38,10 @@ h1,h2,h3,p,a {
   color: $color--base;
 }
 
+strong {
+  font-family: 'MuseoSans-700';
+}
+
 h1 { font-size: 18px; }
 h2 { font-size: 16px; }
 h3 { font-size: 16px; }
@@ -64,56 +68,65 @@ nav {
   font-size: 0.938em;
   width: 100%;
   float: left;
-  list-style: none; 
-}
+  list-style: none;
 
-nav li {
-  line-height: 60px;
-  float: left;
+  li {
+    line-height: 60px;
+    float: left;
 
-  h1,h2 { padding: 0px 20px; }
+    h1,h2 { padding: 0px 20px; }
 
-  &.logo {
-    width: 200px;
-    height: 60px;
-    text-indent: -9999px;
-    border-right: 1px solid $color--nav-border;
-    background: image-url('logo-white.png') no-repeat;
-    background-size: 72px 34px;
-    background-position: 15px 12px;
-  }
-
-  &.search {
-    width: 60px;
-    height: 60px;
-    text-indent: -9999px;
-    border-right: 1px solid $color--nav-border;
-    background: image-url('icon-search.png') no-repeat;
-    background-size: 30px 30px;
-    background-position: 15px 15px;
-  }
-
-  &.icon {
-    border-left: 1px solid $light-grey;
-    border-right: 1px solid $light-grey;
-
-    a:hover {
-      background-color: inherit;
+    &:last-child {
+      margin-right: 20px;
     }
-  }
 
-  &.icon:first-child { border-left: none; }
-  &.icon:last-child { border-right: none; }
+    &.logo {
+      width: 200px;
+      height: 60px;
+      text-indent: -9999px;
+      border-right: 1px solid $color--nav-border;
+      background: image-url('logo-white.png') no-repeat;
+      background-size: 72px 34px;
+      background-position: 15px 12px;
+    }
 
-  &.icon img {
-    vertical-align: middle;
-  }
+    &.account {
+      width: 171px;
+      border-left: 1px solid $light-grey;
+    }
 
-  a {
-    display: block;
-    padding: 0px 20px;
-    text-decoration: none;
-    text-transform: uppercase;
+    &.search {
+      width: 60px;
+      height: 60px;
+      text-indent: -9999px;
+      border-right: 1px solid $color--nav-border;
+      background: image-url('icon-search.png') no-repeat;
+      background-size: 30px 30px;
+      background-position: 15px 15px;
+    }
+
+    &.icon {
+      border-left: 1px solid $light-grey;
+      border-right: 1px solid $light-grey;
+
+      &:first-child { border-left: none; }
+
+      a:hover {
+        background-color: inherit;
+      }
+    }
+
+
+    &.icon img {
+      vertical-align: middle;
+    }
+
+    a {
+      display: block;
+      padding: 0px 20px;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
   }
 }
 
@@ -144,17 +157,18 @@ footer {
 
   a {
     color: $dark-grey;
+    text-transform: none;
   }
 
-  h1 { 
+  h1 {
     color: $medium-grey;
     font-size: 22px;
   }
 
-  h2 { 
+  h2 {
     color: $grey;
   }
-  
+
   a:hover {
     background-color: $light-grey;
   }
