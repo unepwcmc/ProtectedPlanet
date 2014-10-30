@@ -6,10 +6,13 @@ class ProtectedPlanet.Map
   constructor: (@$mapContainer) ->
 
   render: ->
-    return false if @$mapContainer.length == 0
+    if @$mapContainer.length == 0 or ProtectedPlanet.Map.mapInitiated
+      return false
 
     config = @$mapContainer.data()
+
     map = @createMap(@$mapContainer.attr('id'))
+    ProtectedPlanet.Map.mapInitiated = true
 
     ProtectedPlanet.Maps.BaseLayer.render(map)
     ProtectedPlanet.Maps.Bounds.setToBounds(map, config)
