@@ -1,9 +1,19 @@
+<% content_for :header do %>
+  <nav class="sub-nav">
+    <ul class="nav">
+      <li><h1><%= @country.name %></h1></li>
+      <li><h2><%= @country.name %></h2></li>
+      <li><a href="#">Compare Countries</a></li>
+      <li><%= render partial: 'shared/add_to_project', locals: {item: @country, type: 'country'} %></li>
+    </ul>
+  </nav>
+<% end %>
+
 <div class="protected-area-map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>"></div>
 
 <main class="grid">
   <section class="info-card">
-    <h2><%= @country.name %></h2>
-    <%= render partial: 'shared/add_to_project', locals: {item: @country, type: 'country'} %>
+
 
     <hr>
 
@@ -15,6 +25,7 @@
 
     <a href="#" data-download-object="<%= @country.iso_3 %>" class="btn btn-primary btn-download">Download the WDPA <%= @country.name %> dataset</a>
    </section>
+
 
   <div class="factsheet">
     <%= render "stats/factsheet_protected_areas" %>

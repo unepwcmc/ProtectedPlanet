@@ -45,26 +45,65 @@ p { font-size: 14px; }
 
 img { max-width: 100%; height: auto; }
 
+select {
+  appearance:none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  font-size: 14px;
+  font-family: MuseoSans-300;
+  border: 1px solid $light-grey;
+  padding: 10px;
+  color: $dark-grey;
+  background: transparent url("icon-dropdown-grey.png") no-repeat right center;
+  text-indent: 0.01px;
+  text-overflow: "";
+}
+
 nav {
-  overflow:hidden;
+  overflow: hidden;
   font-size: 0.938em;
   width: 100%;
-  list-style: none;
+  float: left;
+  list-style: none; 
 }
 
 nav li {
   line-height: 60px;
   float: left;
 
+  h1,h2 { padding: 0px 20px; }
+
   &.logo {
     width: 200px;
     height: 60px;
     text-indent: -9999px;
     border-right: 1px solid $color--nav-border;
-    background: image-url('pp-logo.png') no-repeat;
+    background: image-url('logo-white.png') no-repeat;
     background-size: 72px 34px;
     background-position: 15px 12px;
   }
+
+  &.search {
+    width: 60px;
+    height: 60px;
+    text-indent: -9999px;
+    border-right: 1px solid $color--nav-border;
+    background: image-url('icon-search.png') no-repeat;
+    background-size: 30px 30px;
+    background-position: 15px 15px;
+  }
+
+  &.icon {
+    border-left: 1px solid $light-grey;
+    border-right: 1px solid $light-grey;
+
+    a:hover {
+      background-color: inherit;
+    }
+  }
+
+  &.icon:first-child { border-left: none; }
+  &.icon:last-child { border-right: none; }
 
   &.icon img {
     vertical-align: middle;
@@ -94,6 +133,30 @@ footer {
     &.active { a { background-color: $color--nav-active-link; } }
     a { color: $color--nav-link; }
     a:hover { background-color: $color--nav-hover-link; }
+    a:last-child { margin-right: 0; }
+  }
+}
+
+.sub-nav {
+  background-color: $white;
+  border-bottom: 1px solid $light-grey;
+  margin-top: 60px;
+
+  a {
+    color: $dark-grey;
+  }
+
+  h1 { 
+    color: $medium-grey;
+    font-size: 22px;
+  }
+
+  h2 { 
+    color: $grey;
+  }
+  
+  a:hover {
+    background-color: $light-grey;
   }
 }
 
@@ -150,14 +213,6 @@ footer {
 
 .footer-links {
   float: right;
-
-  a {
-    margin-right: 20px;
-  }
-
-  a:last-child {
-    margin-right: 0;
-  }
 }
 
 a.btn, button {
