@@ -19,7 +19,7 @@ initialiseProtectedCoverageViz = ->
     annularSectorGenerator data, el, 160, 160
 
 ready = ->
-  new ProtectedPlanet.Map($('#map'), ProtectedPlanet.ProtectedAreaMap).render()
+  new ProtectedPlanet.Map($('#map')).render()
   initialiseProtectedCoverageViz()
 
 $(document).ready(ready)

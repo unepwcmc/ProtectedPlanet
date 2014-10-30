@@ -10,7 +10,7 @@ initialiseSearchDownloads = ->
   )
 
 ready = ->
-  new window.ProtectedPlanet.Map($('#map'), ProtectedPlanet.SearchMap)
+  new window.ProtectedPlanet.Map($('#map')).render()
   initialiseSearchDownloads()
 
 $(document).ready(ready)
