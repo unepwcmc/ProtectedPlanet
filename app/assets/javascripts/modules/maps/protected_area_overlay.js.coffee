@@ -2,10 +2,8 @@ window.ProtectedPlanet ||= {}
 window.ProtectedPlanet.Maps ||= {}
 
 class ProtectedPlanet.Maps.ProtectedAreaOverlay
-  #POLYGONS_TABLE = 'wdpa_poly_<%= Rails.env %>'
-  #POINTS_TABLE   = 'wdpa_point_<%= Rails.env %>'
-  POLYGONS_TABLE = 'wdpa_poly_production'
-  POINTS_TABLE   = 'wdpa_point_production'
+  POLYGONS_TABLE = 'wdpa_poly_<%= Rails.env %>'
+  POINTS_TABLE   = 'wdpa_point_<%= Rails.env %>'
 
   @_generateCartocssSelector: (args) ->
     tables = args.table
