@@ -15,13 +15,13 @@ module ActiveToken
     end
 
     def token_key token
-      "#{@@domain}:#{token}"
+      "#{@domain}:#{token}"
     end
 
     private
 
     def token_domain domain
-      @@domain = domain
+      @domain = domain
     end
   end
 

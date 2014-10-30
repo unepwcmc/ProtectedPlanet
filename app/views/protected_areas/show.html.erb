@@ -11,7 +11,7 @@
   </nav>
 <% end %>
 
-<section class="protected-area">
+<section class="factsheet">
   <article>
     <h3>Official Record</h3>
     <%= render 'official_record', protected_area: @protected_area %>
@@ -40,13 +40,12 @@
       <% if @protected_area.wikipedia_article %>
         <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
       <% end %>
-    </ul>  
+    </ul>
   </article>
 </section>
 
 <div class="protected-area-map" id="map"
-  data-zoom-control="topright"
-  data-padding-enabled data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
+  data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
   data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
   data-wdpa-id="<%= @protected_area.wdpa_id %>">
 </div>

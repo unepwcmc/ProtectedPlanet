@@ -1,0 +1,105 @@
+@import 'colors';
+
+.btn.btn-map-download {
+  position: fixed;
+  top: 111px;
+  right: 10px;
+}
+
+.map-filters.home-map-filters {
+  background: $color--home-filters-bg;
+
+  &, a {
+    color: $color--home-filters-text;
+    text-decoration: none;
+  }
+}
+
+.home-map-filters {
+  > ul > li,
+  > ul > li a.active {
+    border-bottom: 1px solid $color--home-filters-border;
+  }
+
+  > ul > li,
+  > ul > li > a:hover {
+    font-size: 1.2rem;
+    background: image-url("icon-dropdown-white.png") no-repeat;
+    background-position: 170px 26px;
+    background-size: 14px 8px;
+  }
+
+  > ul > li a:hover {
+    background-color: $color--home-filters-hover-bg;
+    cursor: pointer;
+  }
+
+  li {
+    width: 100%;
+  }
+
+  > ul ul {
+    display: none;
+
+    li {
+      font-size: 1rem;
+      border-bottom: 1px solid $color--home-filters-child-border;
+    }
+
+    li a {
+      padding-left: 20px;
+    }
+
+    li:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  a {
+    display: inline-block;
+    padding: 20px 45px 20px 10px;
+    width: 100%;
+  }
+}
+
+.nav-main.home-nav-main {
+  background-color: $color--header-bg;
+
+  li.active {
+    a {
+      background-color: $color--header-active-link;
+    }
+  }
+
+  li {
+    a {
+      color: $color--header-link;
+    }
+
+    a:hover {
+      background-color: $color--header-hover-link;
+    }
+  }
+
+  li.logo {
+    background-image: image-url('logo-grey.png');
+
+    a:hover {
+      background-color: inherit;
+    }
+  }
+}
+
+.download-type-dropdown li {
+  background-color: $dark-green;
+  border-top: solid 1px $white;
+
+  a {
+    text-align: left;
+    color: $white;
+
+    display: inline-block;
+    padding: 20px;
+    width: 100%;
+  }
+}
