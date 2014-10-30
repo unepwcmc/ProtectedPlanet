@@ -21,7 +21,7 @@ module AssetGenerator
     uri = URI(Rails.application.secrets.mapbox['base_url'])
 
     path = uri.path
-    path << "geojson(#{geojson})/auto/#{size[:x]}x#{size[:y]}.png"
+    path << "geojson(#{geojson})/auto/#{size[:x]}x#{size[:y]}@2x.png"
     path << "?access_token=#{access_token}"
 
     {host: uri.host, path: path}
