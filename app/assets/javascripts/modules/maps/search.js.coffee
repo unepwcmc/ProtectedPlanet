@@ -4,16 +4,18 @@ window.ProtectedPlanet.Maps ||= {}
 class ProtectedPlanet.Maps.Search
   @showSearchResults: (map, url) ->
     return unless url?
+    new ProtectedPlanet.Maps.Search(map, url)
 
-    @getPoints(url, (points) =>
+  constructor: (@map, @url) ->
+    @getPoints((points) =>
       markers = L.markerClusterGroup(
         showCoverageOnHover: false
       ).addLayers(points)
-      map.addLayer(markers)
+      @map.addLayer(markers)
     )
 
-  @getPoints: (url, callback) ->
-    $.get(url, (protected_areas) =>
+  getPoints: (callback) ->
+    $.get(@url, (protected_areas) =>
       markerList = []
 
       for pa in protected_areas
@@ -29,7 +31,7 @@ class ProtectedPlanet.Maps.Search
       callback(markerList)
     )
 
-  @fitToResults: (points) ->
+  fitToResults: (points) ->
     lats = points.map((p) -> parseFloat(p.the_geom_latitude))
     lons = points.map((p) -> parseFloat(p.the_geom_longitude))
 
@@ -38,7 +40,10 @@ class ProtectedPlanet.Maps.Search
     maxLon = Math.max.apply(Math, lons)
     minLon = Math.min.apply(Math, lons)
 
-    @fitToBounds([[maxLat,maxLon],[minLat,minLon]])
+    ProtectedPlanet.Maps.Bounds.setToBounds(@map, {
+      boundFrom: [maxLat,maxLon],
+      boundTo: [minLat, minLon]
+    })
 
   linkTo: (pa) ->
     "<a href=\"/#{pa.wdpa_id}\">#{pa.name}</a>"
