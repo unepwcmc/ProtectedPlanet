@@ -23,6 +23,8 @@ html, body {
   display: block;
 }
 
+a { text-decoration: none; }
+
 main {
   position: fixed;
   bottom: 75px;
@@ -124,7 +126,6 @@ nav {
     a {
       display: block;
       padding: 0px 20px;
-      text-decoration: none;
       text-transform: uppercase;
     }
   }
@@ -191,8 +192,6 @@ footer {
   font-size: 0.938em;
 
   a {
-    text-decoration: none;
-
     &, &:visited {
       color: $color--footer-link;
     }
@@ -237,7 +236,6 @@ a.btn, button {
   font-size: 0.9em;
   box-sizing: border-box;
   transition: background-color 0.3s;
-  text-decoration: none;
   text-align: center;
   color: $color--base-btn-text;
 

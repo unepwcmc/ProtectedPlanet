@@ -1,4 +1,29 @@
-<h2>Search for protected areas, countries or regions</h2>
+<% content_for :header do %>
+  <nav class="sub-nav search-sub-nav">
+    <ul>
+      <li>
+        <h1><%= @query %></h1>
+        <h2><strong><%= @search.count %></strong> Protected Areas</h2>
+      </li>
+      <li><a href="#">Compare Countries</a></li>
+      <li><a href="#">Add to My Projects</a></li>
+      <li class="right"><%= render partial: 'shared/download_data_set', locals: {custom_classes: 'search-download', item_id: 'search', image: 'icon-download-black.png'} %></li>
+    </ul>
+  </nav>
+<% end %>
+
+<aside class="map-filters search-map-filters">
+  <header>
+    <span>Results</span>
+    <ul style="float: right">
+      <li><a href="#"><%= image_tag('icon-map-grey.png', size: '20') %></a></li>
+      <li><a href="#"><%= image_tag('icon-grid-grey.png', size: '20') %></a></li>
+      <li><a href="#"><%= image_tag('icon-toggle-panel-grey.png', size: '20') %></a></li>
+    </ul>
+  </header>
+  <%= render partial: 'facets', locals: {facets: @search.aggregations} %>
+</aside>
+
 <section class="search-bar">
   <%= render 'shared/search_form', query: @query %>
 </section>

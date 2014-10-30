@@ -17,7 +17,10 @@ module SearchHelper
       model.class.to_s.underscore => model.id
     })
 
-    link_to link_name, search_path(link_params)
+    link_to search_path(link_params) do
+      facet_count = content_tag(:strong, "(#{facet[:count]})")
+      raw "#{model.name} #{facet_count}"
+    end
   end
 
   def protected_area_cover protected_area, opts={size: {x: 256, y: 128}}

@@ -37,10 +37,13 @@
 }
 
 .map-filters.search-map-filters {
-  width: 350px;
+  overflow: scroll;
+  width: 270px;
   background: $color--search-filters-bg;
 
   header {
+    position: fixed;
+    width: 270px;
     height: 40px;
     background-color: $color--search-filters-header;
 
@@ -67,6 +70,25 @@
       width: 40px;
     }
   }
+
+  > ul > li {
+    &:first-child {
+      margin-top: 40px;
+    }
+
+    border-bottom: solid 1px $color--search-filters-border;
+    padding: 0px 20px 20px 20px;
+
+    h5 {
+      padding: 20px 10px 10px 0px;
+      text-transform: uppercase;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+  }
 }
 
 .search-parent #map,
@@ -75,6 +97,6 @@
 }
 
 .search-parent #map {
-  left: 350px;
+  left: 270px;
 }
 
