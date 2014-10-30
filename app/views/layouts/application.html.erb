@@ -34,7 +34,7 @@
       <%= yield :header %>
     </header>
 
-    <main>
+    <main class="<%= controller_name %>-parent">
       <%= yield %>
     </main>
   </div>
