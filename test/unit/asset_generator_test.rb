@@ -15,7 +15,7 @@ class AssetGeneratorTest < ActiveSupport::TestCase
       stubs(:mapbox).
       returns({'base_url' => 'http://mapbox.com/', 'access_token' => '123'})
     Net::HTTP.expects(:get_response).
-      with('mapbox.com', '/geojson({})/auto/25x25.png?access_token=123').
+      with('mapbox.com', '/geojson({})/auto/25x25@2x.png?access_token=123').
       returns(response_mock)
 
     pa_image = AssetGenerator.protected_area_tile(protected_area, options)
