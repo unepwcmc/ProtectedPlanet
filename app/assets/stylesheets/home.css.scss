@@ -4,23 +4,6 @@
   position: fixed;
   top: 111px;
   right: 10px;
-  width: 231px;
-  height: 75px;
-  padding: 10px 15px;
-  font-size: 1.2em;
-  line-height: 1.5em;
-  text-align: left;
-
-  img {
-    float: right;
-    margin-top: 12px;
-  }
-
-  span {
-    float: left;
-    display: inline-block;
-    width: 125px;
-  }
 }
 
 .map-filters.home-map-filters {
@@ -104,5 +87,19 @@
     a:hover {
       background-color: inherit;
     }
+  }
+}
+
+.download-type-dropdown li {
+  background-color: $dark-green;
+  border-top: solid 1px $white;
+
+  a {
+    text-align: left;
+    color: $white;
+
+    display: inline-block;
+    padding: 20px;
+    width: 100%;
   }
 }

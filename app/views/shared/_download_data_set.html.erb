@@ -1,0 +1,11 @@
+<a href="#" class="btn btn-download <%= custom_classes %>">
+  <span>Download WDPA dataset</span>
+  <%= image_tag "icon-download.png", style: "height: 29px; width: 20px;" %>
+</a>
+
+<ul class="download-type-dropdown">
+  <li><a target="_blank" href="<%= download_path id: item_id, type: 'csv' %>" class="btn">CSV</a></li>
+  <li><a target="_blank" href="<%= download_path id: item_id, type: 'kml' %>" class="btn">KML</a></li>
+  <li><a target="_blank" href="<%= download_path id: item_id, type: 'shp' %>" class="btn">SHP</a></li>
+</select>
+
