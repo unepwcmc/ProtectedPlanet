@@ -1,0 +1,79 @@
+@import 'colors';
+@import 'fonts';
+
+div {
+  &.login-right-panel {
+    position:absolute;
+    top: 0px;
+    bottom: 0px;
+    background: $light-grey;
+    right: 0px;
+    padding: 50px;
+
+    img { 
+      float:left;
+      margin-right: 40px;
+    }
+
+    h1,h2,p { 
+      text-wrap:none;
+    }
+  }
+
+  &.login-form { 
+    padding: 50px;
+
+    input {
+      border: 1px solid $light-grey;
+      font-size: 24px;
+      padding: 5px;
+      width: 100%;
+
+      &.btn {
+        background: $dark-blue;
+        text-transform: uppercase;
+        color: $white;
+        border:none;
+        font-size: 16px;
+        padding: 10px;
+      }
+    }
+
+    label {
+      color: $medium-grey;
+    }
+  }
+
+  &.login-right-panel, &.login-form {
+    article {
+      width:400px;
+      margin-left: auto;
+      margin-right: auto;
+      text-wrap: none;
+    }
+
+    h1,h2,p {
+      margin-bottom: 20px;
+    }
+
+    h1:last-child,h2:last-child,p:last-child {
+      margin-bottom: none;
+    }
+  }
+
+  div {
+    &.form-group {
+      margin-bottom: 40px;
+    }
+
+    &.form-group:last-child {
+      margin-bottom: 0px;
+    }
+
+    &.shared-links {
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+    }
+  }
+}
