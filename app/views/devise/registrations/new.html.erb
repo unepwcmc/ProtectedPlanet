@@ -11,7 +11,7 @@
         </div>
 
         <div class="form-group">
-          <%= f.label :password %> <% if @validatable %><i>(<%= @minimum_password_length %> characters minimum)</i><% end %>
+          <%= f.label :password, 'Password (8 Characters Minimum)' %>
           <%= f.password_field :password, autocomplete: "off", class: 'login-input' %>
         </div>
 
