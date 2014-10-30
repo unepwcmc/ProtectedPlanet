@@ -1,7 +1,11 @@
 class Search::Filter::Nested < Search::Filter
   def to_h
-    Array.wrap(@term).each_with_object([]) do |value, filters|
-      filters.push(filter(value))
+    if @term.kind_of? Array
+      return @term.each_with_object([]) do |value, filters|
+        filters.push(filter(value))
+      end
+    else
+      filter(@term)
     end
   end
 

@@ -21,9 +21,12 @@ class Search::Filter
     constructed_filters = []
 
     params.each do |name, value|
-      constructed_filters.push(
-        *Array.wrap(self.new(value, FILTERS[name.to_sym]).to_h)
-      )
+      filter = self.new(value, FILTERS[name.to_sym]).to_h
+      constructed_filters << {
+        "bool" => {
+          "should" => Array.wrap(filter)
+        }
+      }
     end
 
     constructed_filters
