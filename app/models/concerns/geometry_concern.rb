@@ -24,7 +24,7 @@ module GeometryConcern
 
   def geojson
     ActiveRecord::Base.connection.select_value("""
-      SELECT ST_AsGeoJSON(#{main_geom_column}, 3)
+      SELECT ST_AsGeoJSON(ST_SimplifyPreserveTopology(#{main_geom_column}, 0.003), 3)
       FROM #{self.class.table_name}
       WHERE id = #{id}
     """.squish)
