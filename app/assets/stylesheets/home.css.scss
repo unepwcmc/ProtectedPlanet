@@ -8,6 +8,7 @@
 
 .map-filters.home-map-filters {
   background: $color--home-filters-bg;
+  overflow: scroll;
 
   &, a {
     color: $color--home-filters-text;
@@ -29,6 +30,7 @@
     background-size: 14px 8px;
   }
 
+  > ul > li a.active-filter,
   > ul > li a:hover {
     background-color: $color--home-filters-hover-bg;
     cursor: pointer;

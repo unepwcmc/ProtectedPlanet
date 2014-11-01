@@ -1,3 +1,9 @@
+getParameter = (name) ->
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]")
+  regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
+  results = regex.exec(location.search)
+  return if results == null then "" else results[1].replace(/\+/g, " ")
+
 toggleFilterChild = (event) ->
   event.preventDefault()
 
@@ -11,11 +17,16 @@ setupFiltersConcertina = ->
   $filtersList = $('.home-map-filters > ul')
   $filtersListItems = $filtersList.find('> li')
 
-  $filtersListItems.find('ul').stop()
-  $filtersListItems.on('click', '> a', toggleFilterChild)
+  $filtersListItems.each( (index, element) ->
+    $element = $(element)
+    filterName = $element.data().attribute
+
+    $element.find('> ul').show() if getParameter(filterName)
+    $element.on('click', '> a', toggleFilterChild)
+  )
 
 ready = ->
-  new ProtectedPlanet.Map($('#map'), ProtectedPlanet.ProtectedAreaMap).render()
+  new ProtectedPlanet.Map($('#map')).render()
   new ProtectedPlanet.Dropdown($('.btn-map-download'), $('.download-type-dropdown'))
 
   setupFiltersConcertina()

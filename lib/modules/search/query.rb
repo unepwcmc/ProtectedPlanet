@@ -17,7 +17,9 @@ class Search::Query
     if @options[:filters].present?
       base_query["filtered"] ||= {}
       base_query["filtered"]["filter"] = {
-        "and" => Search::Filter.from_params(@options[:filters])
+        "bool" => {
+          "must" => Search::Filter.from_params(@options[:filters])
+        }
       }
     end
 
