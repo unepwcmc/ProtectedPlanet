@@ -10,6 +10,7 @@ class ProtectedPlanet.Maps.Search
     @getPoints((points) =>
       markers = L.markerClusterGroup(
         showCoverageOnHover: false
+        singleMarkerMode: true
       ).addLayers(points)
       @map.addLayer(markers)
     )

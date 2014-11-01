@@ -25,5 +25,5 @@ class ProtectedPlanet.Map
     L.mapbox.map(
       id,
       'unepwcmc.ijh17499',
-      {minZoom: 2, zoomControl: false, attributionControl: false}
+      {zoomControl: false, attributionControl: false}
     ).addControl(L.control.zoom(position: 'topright'))
