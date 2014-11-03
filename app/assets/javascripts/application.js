@@ -23,4 +23,4 @@
 //= require_tree ./modules/search
 //= require_tree ./modules
 //= require_tree ./modules/modals
-//
+//= require_tree ./controllers
