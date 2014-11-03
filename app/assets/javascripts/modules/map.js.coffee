@@ -14,6 +14,9 @@ class ProtectedPlanet.Map
     if @$mapContainer.length == 0
       return false
 
+    if ProtectedPlanet.Map.instance?
+      ProtectedPlanet.Map.instance.remove()
+
     config = @$mapContainer.data()
 
     map = @createMap(@$mapContainer.attr('id'))
@@ -24,6 +27,8 @@ class ProtectedPlanet.Map
     ProtectedPlanet.Maps.Search.showSearchResults(map, config.url)
     if config.animate and !config.url?
       ProtectedPlanet.Maps.Animation.startAnimation(map)
+
+    ProtectedPlanet.Map.instance = map
 
   createMap: (id) ->
     L.mapbox.map(
