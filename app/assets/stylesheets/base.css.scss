@@ -66,6 +66,13 @@ nav {
   width: 100%;
   float: left;
   list-style: none;
+
+  ul {
+    ul {
+    position: absolute;
+      z-index: 999;
+    }
+  }
 }
 
 nav li {
@@ -145,22 +152,16 @@ footer {
   border-bottom: 1px solid $light-grey;
   margin-top: 60px;
 
-  a {
-    color: $dark-grey;
-  }
+  a { color: $dark-grey; }
 
   h1 { 
     color: $medium-grey;
     font-size: 22px;
   }
 
-  h2 { 
-    color: $grey;
-  }
+  h2 { color: $grey; }
   
-  a:hover {
-    background-color: $light-grey;
-  }
+  a:hover { background-color: $light-grey; }
 }
 
 header {
@@ -181,14 +182,11 @@ footer {
 
   a {
     text-decoration: none;
+    margin-right: 20px;
 
-    &, &:visited {
-      color: $color--footer-link;
-    }
-
-    &:hover {
-      text-decoration: underline;
-    }
+    &:last-child { margin-right: 0px; }
+    &, &:visited { color: $color--footer-link; }
+    &:hover { text-decoration: underline; }
   }
 
   .footer-inner {
@@ -198,25 +196,17 @@ footer {
     margin: 0px auto;
     width: 95%;
 
-    p {
-      color: $color--footer;
-    }
+    p { color: $color--footer; }
   }
 }
 
 .footer-logos {
-  img {
-    margin-right: 20px;
-  }
+  img { margin-right: 20px; }
 }
 
-.footer-copyright, .footer-logos {
-  float: left;
-}
+.footer-copyright, .footer-logos { float: left; }
 
-.footer-links {
-  float: right;
-}
+.footer-links { float: right; }
 
 a.btn, button {
   display: inline-block;
