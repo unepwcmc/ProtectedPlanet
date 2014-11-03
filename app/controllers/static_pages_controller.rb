@@ -4,4 +4,7 @@ class StaticPagesController < ApplicationController
 
   def wdpa_terms
   end
+
+  def about
+  end
 end

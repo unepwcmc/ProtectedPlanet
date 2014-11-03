@@ -7,4 +7,10 @@
 $gutter: 0%;
 $max-width: 100%;
 
-section { @include outer-container; }
+section { 
+  @include outer-container;
+}
+
+div {
+  &.col-six { @include span-columns(6); }
+}
