@@ -1,3 +1,5 @@
+secrets = Rails.application.secrets.mailer
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -37,4 +39,17 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.asset_host = secrets['asset_host']
+  config.action_mailer.default_url_options = { :host => secrets['host'] }
+  config.action_mailer.smtp_settings = {
+    :enable_starttls_auto => true,
+    :address => secrets['address'],
+    :port => 587,
+    :domain => secrets['domain'],
+    :authentication => :login,
+    :user_name => secrets['username'],
+    :password => secrets['password']
+  }
 end

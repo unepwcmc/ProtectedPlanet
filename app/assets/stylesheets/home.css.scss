@@ -4,8 +4,8 @@
 
 .btn.btn-map-download {
   position: fixed;
-  top: 111px;
-  right: 10px;
+  top: 121px;
+  right: 20px;
 
   transition: top $search-bar-transition-time ease;
 
@@ -34,7 +34,7 @@
   > ul > li,
   > ul > li > a:hover {
     font-size: 1.2rem;
-    background: image-url("icon-dropdown-white.png") no-repeat;
+    background: image-url("icon-dropdown-grey.png") no-repeat;
     background-position: 170px 26px;
     background-size: 14px 8px;
   }
@@ -103,10 +103,13 @@
 
 .download-type-dropdown {
   z-index: $zIndex-9;
+  display: none;
 
   li {
     background-color: $dark-green;
     border-top: solid 1px $white;
+    float: none;
+    line-height: 1rem;
 
     a {
       text-align: left;
@@ -118,7 +121,6 @@
     }
   }
 }
-
 
 .home-parent {
   transition: top $search-bar-transition-time ease;
