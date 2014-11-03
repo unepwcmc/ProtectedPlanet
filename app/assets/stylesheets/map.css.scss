@@ -2,7 +2,7 @@
 @import 'z-index';
 @import 'colors';
 
-#map {
+.search-grid, #map {
   position: fixed;
   top: 60px;
   bottom: 75px;
