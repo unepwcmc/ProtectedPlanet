@@ -1,3 +1,5 @@
+@import 'transitions';
+@import 'z-index';
 @import 'colors';
 @import 'bourbon';
 @import 'neat';
@@ -105,6 +107,12 @@ nav {
       background: image-url('icon-search.png') no-repeat;
       background-size: 30px 30px;
       background-position: 15px 15px;
+
+      &.opened {
+        background-image: image-url('icon-search-grey.png');
+        background-color: white;
+        transition: all 1s ease;
+      }
     }
 
     &.icon {
@@ -131,6 +139,45 @@ nav {
   }
 }
 
+.search-bar {
+  transition: margin-top $search-bar-transition-time ease;
+  z-index: $zIndex-1;
+  height: 60px;
+  width: 100%;
+  float: left;
+  overflow: hidden;
+  padding:15px 20px;
+  background-color: $color--search-bar-bg;
+
+  &.opened {
+    transition: margin-top $search-bar-transition-time ease;
+    margin-top: 60px;
+  }
+
+  .search-input {
+    color: $color--search-input-text;
+    background-color: $color--search-input-bg;
+    position: absolute;
+    height: 31px;
+    right: 251px;
+    left: 20px;
+    font-size: 16px;
+    line-height: 33px;
+    padding-left: 10px;
+    border: 0;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .search-submit {
+    color: $color--search-input-text;
+    background-color: $color--search-input-bg;
+    width: 230px;
+    height: 31px;
+    float: right;
+  }
+}
+
 .right {
   float: right;
 }
@@ -154,7 +201,6 @@ footer {
 .sub-nav {
   background-color: $white;
   border-bottom: 1px solid $light-grey;
-  margin-top: 60px;
 
   a {
     color: $dark-grey;

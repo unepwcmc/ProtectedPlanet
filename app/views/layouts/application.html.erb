@@ -33,6 +33,10 @@
         </ul>
       </nav>
 
+      <div class="search-bar">
+        <%= render partial: 'shared/search_form', locals: {query: @query} %>
+      </div>
+
       <%= yield :header %>
     </header>
 

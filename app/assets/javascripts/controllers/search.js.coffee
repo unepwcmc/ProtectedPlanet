@@ -9,9 +9,15 @@ initialiseSearchDownloads = ->
     e.preventDefault()
   )
 
+setupSearch = ->
+  new ProtectedPlanet.Search.Bar($('.search-bar'), $('.icon.search'))
+
 ready = ->
   new window.ProtectedPlanet.Map($('#map')).render()
+  new ProtectedPlanet.Dropdown($('.btn-search-download'), $('.download-type-dropdown'))
+
   initialiseSearchDownloads()
+  setupSearch()
 
 $(document).ready(ready)
 $(document).on('page:load', ready)

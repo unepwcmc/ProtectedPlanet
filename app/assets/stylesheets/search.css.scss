@@ -1,4 +1,7 @@
+@import 'transitions';
 @import 'colors';
+
+$width--search-sidebar: 270px;
 
 
 .search-sub-nav ul {
@@ -21,7 +24,7 @@
       color: $medium-grey;
     }
 
-    .search-download {
+    .btn-search-download {
       border-left: solid 1px $color--search-download-border;
       border-right: solid 1px $color--search-download-border;
       background-color: $color--search-download-bg;
@@ -38,12 +41,12 @@
 
 .map-filters.search-map-filters {
   overflow: scroll;
-  width: 270px;
+  width: $width--search-sidebar;
   background: $color--search-filters-bg;
 
   header {
     position: fixed;
-    width: 270px;
+    width: $width--search-sidebar;
     height: 40px;
     background-color: $color--search-filters-header;
 
@@ -72,22 +75,20 @@
   }
 
   > ul > li {
-    &:first-child {
-      margin-top: 40px;
-    }
-
     border-bottom: solid 1px $color--search-filters-border;
     padding: 0px 20px 20px 20px;
+
+    &:first-child { margin-top: 40px; }
+    a:hover { text-decoration: underline; }
 
     h5 {
       padding: 20px 10px 10px 0px;
       text-transform: uppercase;
     }
 
-    a:hover {
-      text-decoration: underline;
+    > ul >li {
+      padding-bottom: 2px;
     }
-
   }
 }
 
@@ -97,6 +98,6 @@
 }
 
 .search-parent #map {
-  left: 270px;
+  left: $width--search-sidebar;
 }
 
