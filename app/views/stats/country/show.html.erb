@@ -4,32 +4,77 @@
       <li><h1><%= @country.name %></h1></li>
       <li><h2><%= @country.name %></h2></li>
       <li><a href="#">Compare Countries</a></li>
+      <li><a href="#">Download Data Set</a></li>
       <li><%= render partial: 'shared/add_to_project', locals: {item: @country, type: 'country'} %></li>
     </ul>
   </nav>
 <% end %>
 
+<section class="factsheet">
+  <article>
+    <h3>Protected Areas Value</h3>
+    <strong>???</strong> Total Area (Sq Km)
+    
+
+    <table class="centered">
+      <tbody>
+        <tr>
+          <td>
+            <strong>Land Area Protected</strong>
+          </td>
+          <td>
+            <strong>Marine Area Protected</strong>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>???</strong> Km&sup2; Land Area
+          </td>
+          <td>
+            <strong>???</strong> Km&sup2; Marine Area
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong>???</strong> Km&sup2; Protected
+          </td>
+          <td>
+            <strong>???</strong> Km&sup2; Protected
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </article>
+  <article>
+    <h3>Conservation Statistics</h3>
+    <hr>
+    <strong>??? Protected Areas</strong>
+    <strong>??? Land, ??? Marine</strong>
+    <strong>??% Protected</strong>
+    <hr>
+  </article>
+  <article><strong>???</strong> have an IUCN Category. IUCN has defined a series of six protected area management categories, based on primary management objectives.</article>
+  <article>
+    <h3>Designations</h3>
+    <table>
+      <tbody>
+        <% @country.designations.each do |d| %>
+          <tr>
+            <td>
+              <strong><%= d.name %></strong>
+            </td>
+            <td class="right-aligned">
+              (<%= d.protected_areas.count %>)
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </article>
+  <article>
+    <h3>Protected Areas in <%= @country.name %></h3>
+  </article>
+</section>
+
 <div class="protected-area-map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>"></div>
-
-<main class="grid">
-  <section class="info-card">
-
-
-    <hr>
-
-    <p>
-      <%= link_to @country.region.name, search_path(q: @country.region.name) %>
-    </p>
-
-    <hr>
-
-    <a href="#" data-download-object="<%= @country.iso_3 %>" class="btn btn-primary btn-download">Download the WDPA <%= @country.name %> dataset</a>
-   </section>
-
-
-  <div class="factsheet">
-    <%= render "stats/factsheet_protected_areas" %>
-    <%= render "stats/factsheet_protected_coverage" %>
-    <%= render "stats/country/factsheet_other_info" %>
-  </div>
-</main>

@@ -1,0 +1,9 @@
+@import 'colors';
+
+table.centered td { text-align: center; }
+td.right-aligned { text-align: right;}
+
+hr {
+  height: 1px;
+  color: $light-grey;
+}

@@ -24,7 +24,6 @@ html, body {
 }
 
 main {
-  position: fixed;
   bottom: 75px;
   left: 0px;
   top: 60px;
@@ -152,7 +151,10 @@ footer {
   border-bottom: 1px solid $light-grey;
   margin-top: 60px;
 
-  a { color: $dark-grey; }
+  a { 
+    color: $dark-grey;
+    text-transform: none;
+  }
 
   h1 { 
     color: $medium-grey;
@@ -252,3 +254,4 @@ a.btn, button {
   padding: 10px;
   margin: 10px;
 }
+
