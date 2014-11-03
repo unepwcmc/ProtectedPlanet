@@ -65,11 +65,11 @@ nav {
   font-size: 0.938em;
   width: 100%;
   float: left;
-  list-style: none; 
+  list-style: none;
 }
 
 nav li {
-  line-height: 60px;
+  line-height: 59px;
   float: left;
 
   h1,h2 { padding: 0px 20px; }
@@ -80,6 +80,7 @@ nav li {
     text-indent: -9999px;
     border-right: 1px solid $color--nav-border;
     background: image-url('logo-white.png') no-repeat;
+    background-color: $dark-green;
     background-size: 72px 34px;
     background-position: 15px 12px;
   }
@@ -99,7 +100,7 @@ nav li {
     border-right: 1px solid $light-grey;
 
     a:hover {
-      background-color: inherit;
+      background-color: transparent;
     }
   }
 
@@ -129,6 +130,7 @@ footer {
 
 .nav-main {
   background-color: $color--nav-bg;
+  
 
   li {
     &.active { a { background-color: $color--nav-active-link; } }
