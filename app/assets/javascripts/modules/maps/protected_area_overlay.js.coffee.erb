@@ -60,7 +60,21 @@ class ProtectedPlanet.Maps.ProtectedAreaOverlay
       cartocss: @_generateCartocss(args)
     }
 
-  @_wdpaTiles: (wdpaId) ->
+  @_wdpa_where_clause: (config) ->
+    clauses = []
+
+    if config.iucnCategory?
+      clauses.push "iucn_cat IN (#{config.iucnCategory.map((c) -> "'#{c}'").join(',')})"
+
+    if config.marine?
+      clauses.push "marine = '#{config.marine}'"
+
+    if clauses.length > 0
+      "WHERE #{clauses.join(" AND ")}"
+    else
+      ""
+
+  @_wdpaTiles: (config) ->
     cartocss = [
       @_generateCartocss(
         table: [POLYGONS_TABLE, POINTS_TABLE]
@@ -69,21 +83,21 @@ class ProtectedPlanet.Maps.ProtectedAreaOverlay
       )
     ]
 
-    if wdpaId?
+    if config.wdpaId?
       cartocss.push @_generateCartocss(
         table: [POLYGONS_TABLE, POINTS_TABLE]
         attrName: 'wdpaid'
-        attrVal: wdpaId
+        attrVal: config.wdpaId
       )
 
     {
-      sql: "SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POINTS_TABLE} UNION ALL SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POLYGONS_TABLE}"
+      sql: "SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POINTS_TABLE} #{@_wdpa_where_clause(config)} UNION ALL SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POLYGONS_TABLE} #{@_wdpa_where_clause(config)}"
       cartocss: cartocss.join("\n")
     }
 
   @render: (map, config) ->
     sublayers = []
-    sublayers.push @_wdpaTiles(config.wdpaId)
+    sublayers.push @_wdpaTiles(config)
     sublayers.push @_countryTiles(config.iso3) if config.iso3?
     sublayers.push @_regionTiles(config.regionName) if config.regionName?
 
