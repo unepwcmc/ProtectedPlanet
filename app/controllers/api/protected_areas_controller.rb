@@ -1,14 +1,11 @@
 class Api::ProtectedAreasController < ApplicationController
-  def index
-    @protected_areas = {}
-    if wdpa_id = params[:wdpa_id]
-      @protected_areas = ProtectedArea.
+  def show
+    @protected_area = ProtectedArea.
                          without_geometry.
-                         where('wdpa_id = ?', wdpa_id.to_i).
+                         where('wdpa_id = ?', params[:wdpa_id]).
                          first.
                          as_api_feeder
-    end
 
-    render json: @protected_areas, status: 200
+    render json: @protected_area, status: 200
   end
 end

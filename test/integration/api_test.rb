@@ -26,11 +26,13 @@ class ApiTest < ActionDispatch::IntegrationTest
     legal_status: legal_status, legal_status_updated_at: time,
     marine: true, wdpa_id: 555333, reported_area: 10.2)
     
-    get 'api/protected_areas?wdpa_id=555999'
+    get 'api/protected_areas/555999'
 
     assert_equal 200, response.status
 
     protected_area = JSON.parse(response.body, symbolize_names: true)
+
+    puts protected_area
 
     name = protected_area[:name]
     legal_status = protected_area[:legal_status][:name]

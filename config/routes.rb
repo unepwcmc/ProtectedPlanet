@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   get '/sites/:id', to: 'sites#show'
   get '/sites/:id/*other', to: 'sites#show'
 
-  get '/api/protected_areas', to: 'api/protected_areas#index', as: 'api'
+  get '/api/protected_areas/:wdpa_id', to: 'api/protected_areas#show', as: 'api'
 
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 
