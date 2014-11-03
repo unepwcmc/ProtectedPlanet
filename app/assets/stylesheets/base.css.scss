@@ -65,11 +65,18 @@ nav {
   font-size: 0.938em;
   width: 100%;
   float: left;
-  list-style: none; 
+  list-style: none;
+
+  ul {
+    ul {
+    position: absolute;
+      z-index: 999;
+    }
+  }
 }
 
 nav li {
-  line-height: 60px;
+  line-height: 59px;
   float: left;
 
   h1,h2 { padding: 0px 20px; }
@@ -80,6 +87,7 @@ nav li {
     text-indent: -9999px;
     border-right: 1px solid $color--nav-border;
     background: image-url('logo-white.png') no-repeat;
+    background-color: $dark-green;
     background-size: 72px 34px;
     background-position: 15px 12px;
   }
@@ -99,7 +107,7 @@ nav li {
     border-right: 1px solid $light-grey;
 
     a:hover {
-      background-color: inherit;
+      background-color: transparent;
     }
   }
 
@@ -129,6 +137,7 @@ footer {
 
 .nav-main {
   background-color: $color--nav-bg;
+  
 
   li {
     &.active { a { background-color: $color--nav-active-link; } }
@@ -143,22 +152,16 @@ footer {
   border-bottom: 1px solid $light-grey;
   margin-top: 60px;
 
-  a {
-    color: $dark-grey;
-  }
+  a { color: $dark-grey; }
 
   h1 { 
     color: $medium-grey;
     font-size: 22px;
   }
 
-  h2 { 
-    color: $grey;
-  }
+  h2 { color: $grey; }
   
-  a:hover {
-    background-color: $light-grey;
-  }
+  a:hover { background-color: $light-grey; }
 }
 
 header {
@@ -179,14 +182,11 @@ footer {
 
   a {
     text-decoration: none;
+    margin-right: 20px;
 
-    &, &:visited {
-      color: $color--footer-link;
-    }
-
-    &:hover {
-      text-decoration: underline;
-    }
+    &:last-child { margin-right: 0px; }
+    &, &:visited { color: $color--footer-link; }
+    &:hover { text-decoration: underline; }
   }
 
   .footer-inner {
@@ -196,25 +196,17 @@ footer {
     margin: 0px auto;
     width: 95%;
 
-    p {
-      color: $color--footer;
-    }
+    p { color: $color--footer; }
   }
 }
 
 .footer-logos {
-  img {
-    margin-right: 20px;
-  }
+  img { margin-right: 20px; }
 }
 
-.footer-copyright, .footer-logos {
-  float: left;
-}
+.footer-copyright, .footer-logos { float: left; }
 
-.footer-links {
-  float: right;
-}
+.footer-links { float: right; }
 
 a.btn, button {
   display: inline-block;
@@ -253,4 +245,10 @@ a.btn, button {
     display: inline-block;
     width: 125px;
   }
+}
+
+.flash {
+  border: 1px solid $green;
+  padding: 10px;
+  margin: 10px;
 }

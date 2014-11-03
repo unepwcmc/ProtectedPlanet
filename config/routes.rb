@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   get '/terms', to: 'static_pages#terms', as: 'wcmc_terms'
   get '/wdpa-terms', to: 'static_pages#wdpa_terms', as: 'wdpa_terms'
+  get '/about', to: 'static_pages#about', as: 'about'
 
   get '/stats/global', to: 'stats/global#index', as: 'global_stats'
   get '/stats/regional/:iso', to: 'stats/regional#show', as: 'regional_stats'
