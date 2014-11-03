@@ -112,6 +112,12 @@
 }
 
 .marker-cluster-medium {
+  div {
+    margin-left: 4px;
+  }
+}
+
+.marker-cluster-medium {
   width: 50px !important;
   height: 50px !important;
   border-radius: 25px;
@@ -130,8 +136,8 @@
 
   div {
     font-size: 18px;
-    margin: 15px;
-    margin-left: 14px;
+    margin: 15px 5px;
+    width: 50px;
   }
 }
 
