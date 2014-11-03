@@ -101,6 +101,8 @@ nav {
     }
 
     &.search {
+      transition: background-image 1s ease;
+      transition: background-color 1s ease;
       width: 60px;
       height: 60px;
       text-indent: -9999px;
