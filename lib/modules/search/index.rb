@@ -22,6 +22,11 @@ class Search::Index
     index.index
   end
 
+  def self.count
+    index = self.new
+    index.count
+  end
+
   def self.create_mapping collection
     index = self.new
     index.create_mapping collection
@@ -45,6 +50,10 @@ class Search::Index
 
   def delete
     @client.indices.delete index: INDEX_NAME
+  end
+
+  def count
+    @client.count['count']
   end
 
   def create_mapping type
