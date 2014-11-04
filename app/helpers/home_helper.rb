@@ -36,6 +36,14 @@ module HomeHelper
     end
   end
 
+  def size_class
+    map_filtered? ? "sub-nav-open" : ""
+  end
+
+  def map_filtered?
+    params.include?('marine') || params.include?('iucn_category')
+  end
+
   private
 
   def selected_iucn_categories
@@ -44,9 +52,5 @@ module HomeHelper
 
   def selected_marine_filter
     params[:marine] ? 1 : 0
-  end
-
-  def map_filtered?
-    params.include?('marine') || params.include?('iucn_category')
   end
 end
