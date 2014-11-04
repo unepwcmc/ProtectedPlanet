@@ -6,4 +6,35 @@ td.right-aligned { text-align: right;}
 hr {
   height: 1px;
   color: $light-grey;
+  margin: 20px 0px;
+}
+
+.conservation-statistics {
+  span, p { color: $dark-blue; }
+  margin: 0px auto;
+}
+
+
+
+
+
+
+
+div {
+  &.inset-statistic {
+    display: inline-block;
+    width: 225px;
+  }
+
+  &.text-holder {
+      margin: 7px 0 0 10px;
+      float: left;
+      color: $dark-blue;
+  }
+}
+
+.large {
+    display: block;
+    font-size: 42px;
+    float: left;
 }

@@ -10,20 +10,28 @@
   </nav>
 <% end %>
 
-<section class="factsheet">
+<section class="factsheet" id="protected-coverage-viz">
   <article>
     <h3>Protected Areas Value</h3>
     <strong>???</strong> Total Area (Sq Km)
-    
+
 
     <table class="centered">
       <tbody>
         <tr>
           <td>
-            <strong>Land Area Protected</strong>
+            <div class="viz" data-colour="#2B3146" data-value="<%= @presenter.percentage_pa_eez_cover %>"></div>
+            <div class="viz-label">
+              <p><span class="big"><%= @presenter.percentage_pa_eez_cover %></span><span class="small">%</span></p>
+              <label>Land Area Protected</label>
+            </div>
           </td>
           <td>
-            <strong>Marine Area Protected</strong>
+            <div class="viz" data-colour="#2B3146" data-value="<%= @presenter.percentage_pa_eez_cover %>"></div>
+            <div class="viz-label">
+              <p><span class="big"><%= @presenter.percentage_pa_eez_cover %></span><span class="small">%</span></p>
+              <label>Marine Area Protected</label>
+            </div>
           </td>
         </tr>
         <tr>
@@ -46,15 +54,29 @@
     </table>
 
   </article>
-  <article>
+  <article class="conservation-statistics">
     <h3>Conservation Statistics</h3>
     <hr>
-    <strong>??? Protected Areas</strong>
-    <strong>??? Land, ??? Marine</strong>
-    <strong>??% Protected</strong>
+      <div class="inset-statistic">
+        <span class="large">???</span>
+        <div class="text-holder">
+          Protected Areas<br>
+          ??? Land, ??? Marine
+        </div>
+      </div>
+
+      <div class="inset-statistic">
+        <span class="large">???</span>
+        <div class="text-holder">
+          Protected
+        </div>
+      </div>
+    <hr>
+      <strong>???</strong> have an IUCN Category. IUCN has defined a series of six protected area management categories, based on primary management objectives.<br><br>
+
+      <img src="http://placehold.it/460x200&text=replace+with+graph">
     <hr>
   </article>
-  <article><strong>???</strong> have an IUCN Category. IUCN has defined a series of six protected area management categories, based on primary management objectives.</article>
   <article>
     <h3>Designations</h3>
     <table>
