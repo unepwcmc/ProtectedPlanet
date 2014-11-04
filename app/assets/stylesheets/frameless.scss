@@ -141,15 +141,6 @@ input, textarea, button, select {
 	These are easy to forget
 */
 
-::selection {
-	background: red;
-	color: white;
-}
-::-moz-selection {
-	background: red;
-	color: white;
-}
-
 img::selection {
 	background: transparent;
 }
