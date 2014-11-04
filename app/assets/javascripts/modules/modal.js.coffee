@@ -6,7 +6,7 @@ class @Modal
     @render()
 
   render: (template) ->
-    $template = $(template || @constructor.template)
+    $template = $((template || @constructor.template).call())
     @$container.html($template)
     @bindCloseFunctionality()
 
