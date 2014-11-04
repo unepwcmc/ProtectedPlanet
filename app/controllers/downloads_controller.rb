@@ -20,7 +20,7 @@ class DownloadsController < ApplicationController
 
   def options
     {filters: filters}.tap { |options|
-      options[:user] = current_user if current_user.present?
+      options[:email] = current_user.email if current_user.present?
     }
   end
 

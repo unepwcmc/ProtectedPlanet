@@ -34,7 +34,7 @@ class DownloadsControllerTest < ActionController::TestCase
     sign_in user
 
     search_term = 'manbone'
-    options = {filters: {'type' => 'protected_area'}, user: user}
+    options = {filters: {'type' => 'protected_area'}, email: user.email}
 
     search_mock = mock()
     search_mock.stubs(:token)

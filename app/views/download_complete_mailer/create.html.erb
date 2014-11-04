@@ -1,0 +1,15 @@
+<p>
+  Hi,
+</p>
+
+<p>
+  Your recently started download on <a href="<%= root_url %>">Protected
+  Planet</a> is now complete! You can download it instantly in the
+  following formats:
+</p>
+
+<ul>
+  <li><%= link_to "CSV", download_url(@filename, type: 'csv') %></li>
+  <li><%= link_to "KML", download_url(@filename, type: 'kml') %></li>
+  <li><%= link_to "SHP", download_url(@filename, type: 'shp') %></li>
+</ul>
