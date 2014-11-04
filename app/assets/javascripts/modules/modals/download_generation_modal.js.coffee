@@ -1,28 +1,8 @@
 class @DownloadGenerationModal extends Modal
   BASE_DOWNLOAD_PATH = '/downloads'
 
-  @template: """
-    <div id="close-modal">X</div>
-    <h2>Generating personalised dataset…</h2>
-
-    <p>
-      Saved search results can take a while to process in to your
-      chosen format for download. Pop your email in below to get a
-      notification when it's done, or wait here.
-    </p>
-  """
-
-  @downloadCompleteTemplate: """
-    <div id="close-modal">X</div>
-    <h2>Download available</h2>
-
-    <p>
-      Your personalised dataset has been generated and is ready for download.
-    </p>
-
-    <p class="link-container">
-    </p>
-  """
+  @template: -> $('#download-modal-template').html()
+  @downloadCompleteTemplate: -> $('#download-complete-modal-template').html()
 
   constructor: ($container) ->
     super($container)

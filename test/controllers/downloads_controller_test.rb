@@ -22,11 +22,27 @@ class DownloadsControllerTest < ActionController::TestCase
     search_mock.stubs(:token).returns(token)
     Search.expects(:download).with(search_term, options).returns(search_mock)
 
-
     post :create, q: search_term, type: 'protected_area'
 
     json_response = JSON.parse(@response.body)
     assert_equal({'token' => token}, json_response)
+  end
+
+  test 'POST :create, given a search term, filters and a user, generates
+   a download with the given user' do
+    user = FactoryGirl.create(:user)
+    sign_in user
+
+    search_term = 'manbone'
+    options = {filters: {'type' => 'protected_area'}, email: user.email}
+
+    search_mock = mock()
+    search_mock.stubs(:token)
+    Search.expects(:download).with(search_term, options).returns(search_mock)
+
+    post :create, q: search_term, type: 'protected_area'
+
+    assert_response :success
   end
 
   test 'GET :poll, given a token, returns the properties of the given download' do

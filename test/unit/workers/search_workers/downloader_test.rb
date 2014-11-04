@@ -23,6 +23,30 @@ class SearchWorkersDownloaderTest < ActiveSupport::TestCase
     SearchWorkers::Downloader.new.perform token, query_term, {}
   end
 
+  test '.perform, given an email, sends a completion email when the
+   download is done' do
+    email = "tests@theinternetemail.com"
+    pa_ids = [1,2,3,4]
+    filename = 'search_03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'
+
+    search_mock = mock()
+    search_mock.stubs(:pluck).with('wdpa_id').returns(pa_ids)
+    search_mock.stubs(:properties).returns({})
+    search_mock.stubs(:token=)
+    search_mock.stubs(:complete!)
+    Search.stubs(:search).returns(search_mock)
+
+    Download.stubs(:generate)
+
+    mailer_mock = mock().tap { |m| m.expects(:deliver) }
+    DownloadCompleteMailer.
+      expects(:create).
+      with(filename, email).
+      returns(mailer_mock)
+
+    SearchWorkers::Downloader.new.perform "", "", {email: email}
+  end
+
   test '.perform completes the search updating its status and filename
    properties' do
     digested_pa_ids = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'
