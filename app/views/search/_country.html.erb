@@ -1,8 +1,9 @@
 <li class='result'>
   <%= country_cover model %>
-  <div>
+  <div class="inner-result">
+
     <h3>
-      <a href="<%= country_stats_path(iso: model.iso) %>"><%= model.name %></a> |
+      <a href="<%= country_stats_path(iso: model.iso) %>"><%= model.name %></a>
       <small><%= commaify model.protected_areas.count %> Protected Areas in this country</small>
     </h3>
 
