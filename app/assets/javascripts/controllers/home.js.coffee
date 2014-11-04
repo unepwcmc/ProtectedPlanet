@@ -1,5 +1,5 @@
 initialiseFilterDownloads = ->
-  $downloadBtns = $('.download-type-dropdown a')
+  $downloadBtns = $('nav.sub-nav .download-type-dropdown a')
   return false if $downloadBtns.length == 0
 
   $downloadBtns.on('click', (e) ->
@@ -46,7 +46,9 @@ setupSearchBar = ->
 
 ready = ->
   new ProtectedPlanet.Map($('#map')).render()
-  new ProtectedPlanet.Dropdown($('.btn-search-download'), $('.download-type-dropdown'))
+
+  new ProtectedPlanet.Dropdown($('.btn-search-download'), $('nav.sub-nav .download-type-dropdown'))
+  new ProtectedPlanet.Dropdown($('.btn-map-download'), $('main .download-type-dropdown'))
 
   setupSearchBar()
   setupFiltersConcertina()
