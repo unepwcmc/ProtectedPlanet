@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   get '/country/:iso', to: 'stats/country#show', as: 'country_stats'
 
   get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
-  resources :downloads, only: [:show, :create]
+  resources :downloads, only: [:show, :create, :update]
 
   get '/search', to: 'search#index'
   post '/search', to: 'search#create'
