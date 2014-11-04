@@ -7,7 +7,7 @@ class DownloadsController < ApplicationController
   end
 
   def create
-    search = Search.download(params[:q], {filters: filters})
+    search = Search.download(params[:q], options)
     render json: {token: search.token}
   end
 
@@ -17,6 +17,12 @@ class DownloadsController < ApplicationController
   end
 
   private
+
+  def options
+    {filters: filters}.tap { |options|
+      options[:email] = current_user.email if current_user.present?
+    }
+  end
 
   def filters
     params.stringify_keys.slice(*Search::ALLOWED_FILTERS)

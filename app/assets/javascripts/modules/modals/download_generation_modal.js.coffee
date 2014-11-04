@@ -1,10 +1,20 @@
 class @DownloadGenerationModal extends Modal
-  @template: """
-    <div id="download-modal" class="modal">
-      <i class="fa fa-circle-o-notch fa-3x"></i>
-      <h2>Generating download…</h2>
-    </div>
-  """
+  BASE_DOWNLOAD_PATH = '/downloads'
+
+  @template: -> $('#download-modal-template').html()
+  @downloadCompleteTemplate: -> $('#download-complete-modal-template').html()
 
   constructor: ($container) ->
     super($container)
+
+  showDownloadCompleteTemplate: ->
+    @render(@constructor.downloadCompleteTemplate)
+    @show()
+
+  showDownloadLink: (objectName, type) ->
+    @showDownloadCompleteTemplate()
+
+    downloadUrl = "#{BASE_DOWNLOAD_PATH}/#{objectName}?type=#{type}"
+    @find('.link-container').html("""
+      <a target="_blank" class="btn btn-primary" href="#{downloadUrl}">Download</a>
+    """)

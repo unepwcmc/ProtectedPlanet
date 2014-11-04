@@ -78,5 +78,36 @@
     <%= render 'shared/uservoice' %>
   <% end %>
 
+  <script id="download-modal-template" type="text/html">
+    <div id="close-modal">X</div>
+    <h2>Generating personalised dataset…</h2>
+
+    <p>
+      Saved search results can take a while to process in to your
+      chosen format for download.
+      <% if user_signed_in? %>
+        You can wait here, or we'll send you an email when your download
+        is ready.
+      <% else %>
+        Your download will be ready soon, and will appear here when it's
+        done.
+      <% end %>
+    </p>
+  </script>
+
+  <script id="download-complete-modal-template" type="text/html">
+    <div id="close-modal">X</div>
+    <h2>Download available</h2>
+
+    <p>
+      Your personalised dataset has been generated and is ready for download.
+    </p>
+
+    <p class="link-container">
+    </p>
+  </script>
+
+  <div id="download-modal" class="modal">
+  </div>
 </body>
 </html>
