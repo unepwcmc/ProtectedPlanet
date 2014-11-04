@@ -19,5 +19,7 @@
 //= require leaflet.markercluster
 //= require cartodb.core
 //= require best_in_place
+//= require_tree ./modules/maps
 //= require_tree ./modules
 //= require_tree ./modules/modals
+//= require_tree ./controllers

@@ -1,6 +1,7 @@
 class Search::Filter
   FILTERS = {
     type: { type: 'type' },
+    marine: { type: 'equality', path: 'marine' },
     country: { type: 'nested', path: 'countries_for_index', field: 'countries_for_index.id', required: true },
     region: { type: 'nested', path: 'countries_for_index.region_for_index', field: 'countries_for_index.region_for_index.id', required: true },
     iucn_category: { type: 'nested', path: 'iucn_category', field: 'iucn_category.id', required: true },
@@ -21,9 +22,12 @@ class Search::Filter
     constructed_filters = []
 
     params.each do |name, value|
-      constructed_filters.push self.new(
-        value, FILTERS[name.to_sym]
-      ).to_h
+      filter = self.new(value, FILTERS[name.to_sym]).to_h
+      constructed_filters << {
+        "bool" => {
+          "should" => Array.wrap(filter)
+        }
+      }
     end
 
     constructed_filters
@@ -34,12 +38,12 @@ class Search::Filter
   CONVERSIONS = {
     "countries_for_index" => -> (value) { value.to_i },
     "countries_for_index.region_for_index" => -> (value) { value.to_i },
-    "iucn_category" => -> (value) { value.to_i },
+    "iucn_category" => -> (value) { Array.wrap(value).map(&:to_i) },
     "designation" => -> (value) { value.to_i }
   }
 
   def standardise value
-    CONVERSIONS[@options[:path]].try(:call, value) || value
+    CONVERSIONS[@options[:path].to_s].call(value) rescue value
   end
 
   def filter
