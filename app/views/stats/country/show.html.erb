@@ -121,6 +121,9 @@
   </article>
   <article>
     <h3>Protected Areas in <%= @country.name %></h3>
+    <% @country.protected_areas.order("RANDOM()").limit(2).each do |pa| %>
+      <%= image_tag(pa.random_image_url, size: '225') %>
+    <% end %>
   </article>
 </section>
 
