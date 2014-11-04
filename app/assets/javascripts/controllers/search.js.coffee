@@ -12,7 +12,7 @@ initialiseSearchDownloads = ->
 setupSearch = ->
   new ProtectedPlanet.Search.Bar($('.search-bar'), $('.icon.search'))
   new ProtectedPlanet.Search.Sidebar($('.search-map-filters'), {
-    relatedEls: [$('.search-parent #map')]
+    relatedEls: [$('.search-parent #map'), $('.search-grid')]
   })
 
 ready = ->
