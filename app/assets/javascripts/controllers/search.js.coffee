@@ -1,12 +1,12 @@
 initialiseSearchDownloads = ->
-  $downloadBtn = $('.download-search')
-  return false if $downloadBtn.length == 0
+  $downloadBtns = $('.download-type-dropdown a')
+  return false if $downloadBtns.length == 0
 
-  $downloadBtn.on('click', (e) ->
-    SearchDownload.start(
-      $downloadBtn.data('create-from'), $downloadBtn.data('poll-from')
-    )
+  $downloadBtns.on('click', (e) ->
     e.preventDefault()
+
+    button = $(e.target)
+    ProtectedPlanet.Search.Download.start(button.data('type'))
   )
 
 setupSearch = ->
