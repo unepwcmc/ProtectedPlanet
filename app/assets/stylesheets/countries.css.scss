@@ -9,15 +9,15 @@ hr {
   margin: 20px 0px;
 }
 
-.conservation-statistics {
-  span, p { color: $dark-blue; }
-  margin: 0px auto;
-}
-
 div {
   &.inset-statistic {
     display: inline-block;
     width: 225px;
+  }
+
+  &.inset-statistic-large {
+    display: inline-block;
+    width: 450px;
   }
 
   &.text-holder {
@@ -31,4 +31,12 @@ div {
     display: block;
     font-size: 42px;
     float: left;
+    color: $dark-blue;
+}
+
+.extra-large {
+    display: block;
+    font-size: 64px;
+    float: left;
+    color: $dark-blue;
 }
