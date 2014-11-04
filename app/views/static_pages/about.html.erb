@@ -1,1 +1,37 @@
-<h1>About ProtectedPlanet Page</h1>
+<div class="header">
+  <div class="headline"><h1>Discover the world's protected areas</h1></div>
+</div>
+
+<article class="centered">
+  <p>ProtectedPlanet.net is the online interface for the World Database on Protected Areas (WDPA), a join project of IUCN and UNEP, and the most comprehensive global database on terrestrial and marine protected areas. ProtectedPlanet.net lets you discover the protected areas of the world through exploring the maps and intuitive searching, feeding you information from the WDPA, photos from Panoramio and text descriptions from Wikipedia.</p>
+</article>
+
+<article class="blue-third">
+  <p>Search and explore Protected Areas around the world from the WDPA database.</p>
+</article>
+
+<article class="blue-third">
+  <p>View statistics for accessing progress towards international biodiversity protection targets.</p>
+</article>
+
+<article class="blue-third">
+  <p>Download the most comprehensive global dataset on protected areas in the world.</p>
+</article>
+
+<article class="two-thirds">
+  <p>ProtectedPlanet.net is the online interface for the World Database on Protected Areas (WDPA), a join project of IUCN and UNEP, and the most comprehensive global database on terrestrial and marine protected areas. ProtectedPlanet.net lets you discover the protected areas of the world through exploring the maps and intuitive searching, feeding you information from the WDPA, photos from Panoramio and text descriptions from Wikipedia.</p>
+</article>
+
+<article class="green-third">
+  <h1><%= commaify Country.data_providers.count %></h1>
+  <hr class="about">
+  <p>Countries providing data</p>
+
+  <h1><%= commaify ProtectedArea.count %></h1>
+  <hr class="about">
+  <p>Protected Areas</p>
+
+  <h1><%= commaify Designation.count %></h1>
+  <hr class="about">
+  <p>Number of Designations</p>
+</article>
