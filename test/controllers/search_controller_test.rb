@@ -8,11 +8,6 @@ class SearchControllerTest < ActionController::TestCase
     sign_in @user
   end
 
-  test '.index returns a 200 HTTP code' do
-    get :index
-    assert_response :success
-  end
-
   test 'GET :index, given a query, searches for that query' do
     search_term = 'manbone'
 
