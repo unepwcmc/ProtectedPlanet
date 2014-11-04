@@ -41,6 +41,13 @@ $width--search-sidebar: 270px;
   width: $width--search-sidebar;
   background: $color--search-filters-bg;
 
+  transition: margin $search-sidebar-transition-time ease;
+
+  &.closed {
+    margin-left: (-$width--search-sidebar);
+    transition: margin $search-sidebar-transition-time ease;
+  }
+
   header {
     position: fixed;
     width: $width--search-sidebar;
@@ -53,6 +60,19 @@ $width--search-sidebar: 270px;
       li {
         border-left: solid 1px $color--search-switch-border;
         float: left;
+
+        &.active {
+          background-color: $color--search-filters-active;
+        }
+
+        a {
+          padding: 10px;
+          vertical-align: middle;
+          display: block;
+          height: 40px;
+          width: 40px;
+          background-color: inherit;
+        }
       }
     }
 
@@ -60,14 +80,6 @@ $width--search-sidebar: 270px;
       color: $color--search-filters-text;
       display: inline-block;
       margin: 13px 0px 0px 14px;
-    }
-
-    a {
-      padding: 10px;
-      vertical-align: middle;
-      display: block;
-      height: 40px;
-      width: 40px;
     }
   }
 
@@ -90,10 +102,41 @@ $width--search-sidebar: 270px;
 }
 
 .search-parent #map,
+.search-parent .search-grid,
 .search-parent {
   top: 120px;
 }
 
-.search-parent #map {
+.search-parent #map, .search-parent .search-grid {
   left: $width--search-sidebar;
+
+  transition: left $search-sidebar-transition-time ease;
+
+  &.opened {
+    left: 0px;
+    transition: left $search-sidebar-transition-time ease;
+  }
+}
+
+.search-parent .search-grid {
+  display: none;
+}
+
+.fixed-sidebar-toggle {
+  background-color: $color--search-filters-header;
+  padding: 10px;
+  vertical-align: middle;
+  display: block;
+  position: fixed;
+  top: 120px;
+  left: -40px;
+  width: 40px;
+  height: 40px;
+
+  transition: left 0.3s ease;
+
+  &.opened {
+    transition: left 0.3s ease;
+    left: 0px;
+  }
 }
