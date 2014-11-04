@@ -14,36 +14,12 @@ class SearchHelperTest < ActionView::TestCase
     assert_equal '<li class="">inner text</li>', selected_class
   end
 
-  test '#protected_area_cover, given a pa with an image, returns the image tag
-   for an image of the pa' do
-    image = FactoryGirl.create(:image, url: 'http://hey.com/img.bmp')
+  test '#protected_area_cover, given a pa, returns an image tag to the asset controller' do
+    pa = FactoryGirl.create(:protected_area, name: "Manbone")
+    expected_tag = %Q{<img alt="Manbone" src="/assets/tiles/#{pa.id}?size%5Bx%5D=256&amp;size%5By%5D=128" style="width: 256px; height: 128px" />}
 
-    pa = FactoryGirl.create(:protected_area,
-      name: "Manbone",
-      images: [image]
-    )
 
-    expected_tag = '<img alt="Manbone" src="http://hey.com/img.bmp" style="width: 256px; height: 128px" />'
     tag = protected_area_cover(pa)
-
-    assert_equal expected_tag, tag
-  end
-
-  test '#protected_area_cover, given a pa without an image, returns map of the
-   PA' do
-    pa = FactoryGirl.create(:protected_area,
-      name: "Manbone",
-      the_geom: 'POINT(1 0)',
-      the_geom_latitude: 1,
-      the_geom_longitude: 0
-    )
-    expected_tag = '<img alt="Manbone" '
-    expected_tag << 'src="http://mapbox.com/geojson({&quot;type&quot;:&quot;Point&quot;,&quot;coordinates&quot;:[1,0]})'
-    expected_tag << '/auto/256x128.png?access_token=123" style="width: 256px; height: 128px" />'
-
-    Rails.application.secrets.stubs(:mapbox).returns({'access_token' => '123', 'base_url' => 'http://mapbox.com/'})
-    tag = protected_area_cover(pa)
-
     assert_equal expected_tag, tag
   end
 

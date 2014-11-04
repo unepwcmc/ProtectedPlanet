@@ -9,9 +9,18 @@ initialiseSearchDownloads = ->
     e.preventDefault()
   )
 
+setupSearch = ->
+  new ProtectedPlanet.Search.Bar($('.search-bar'), $('.icon.search'))
+  new ProtectedPlanet.Search.Sidebar($('.search-map-filters'), {
+    relatedEls: [$('.search-parent #map')]
+  })
+
 ready = ->
-  new window.ProtectedPlanet.Map($('#map')).render()
+  new ProtectedPlanet.Map($('#map')).render()
+  new ProtectedPlanet.Dropdown($('.btn-search-download'), $('.download-type-dropdown'))
+
   initialiseSearchDownloads()
+  setupSearch()
 
 $(document).ready(ready)
 $(document).on('page:load', ready)

@@ -2,9 +2,9 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
 
   ITEM_TYPES = {
-    region: Region,
-    country: Country,
-    protected_area: ProtectedArea
+    'region' => Region,
+    'country' => Country,
+    'protected_area' => ProtectedArea
   }
 
   def index
@@ -29,7 +29,7 @@ class ProjectsController < ApplicationController
 
   def item
     item_id = params[:item_id]
-    item_class = ITEM_TYPES[params[:item_type].to_sym]
+    item_class = ITEM_TYPES[params[:item_type]]
 
     item_class.find(item_id)
   end

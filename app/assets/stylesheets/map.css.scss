@@ -1,12 +1,20 @@
+@import 'transitions';
 @import 'z-index';
 @import 'colors';
 
-#map {
+.search-grid, #map {
   position: fixed;
   top: 60px;
   bottom: 75px;
   left: 200px;
   right: 0;
+
+  transition: top $search-bar-transition-time ease;
+
+  &.opened {
+    transition: top $search-bar-transition-time ease;
+    top: 120px;
+  }
 }
 
 .map-filters {

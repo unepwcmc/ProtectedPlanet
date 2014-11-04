@@ -1,4 +1,7 @@
-class @SearchDownload
+window.ProtectedPlanet ||= {}
+window.ProtectedPlanet.Search ||= {}
+
+class ProtectedPlanet.Search.Download
   POLLING_INTERVAL = 250
 
   @start: (creationPath, pollingPath) ->

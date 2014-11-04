@@ -1,9 +1,18 @@
+@import 'z-index';
+@import 'transitions';
 @import 'colors';
 
 .btn.btn-map-download {
   position: fixed;
-  top: 111px;
-  right: 10px;
+  top: 121px;
+  right: 20px;
+
+  transition: top $search-bar-transition-time ease;
+
+  &.opened {
+    transition: top $search-bar-transition-time ease;
+    top: 171px;
+  }
 }
 
 .map-filters.home-map-filters {
@@ -92,16 +101,32 @@
   }
 }
 
-.download-type-dropdown li {
-  background-color: $dark-green;
-  border-top: solid 1px $white;
+.download-type-dropdown {
+  z-index: $zIndex-9;
+  display: none;
 
-  a {
-    text-align: left;
-    color: $white;
+  li {
+    background-color: $dark-green;
+    border-top: solid 1px $white;
+    float: none;
+    line-height: 1rem;
 
-    display: inline-block;
-    padding: 20px;
-    width: 100%;
+    a {
+      text-align: left;
+      color: $white;
+
+      display: inline-block;
+      padding: 20px;
+      width: 100%;
+    }
+  }
+}
+
+.home-parent {
+  transition: top $search-bar-transition-time ease;
+
+  &.opened {
+    transition: top $search-bar-transition-time ease;
+    top: 120px;
   }
 }
