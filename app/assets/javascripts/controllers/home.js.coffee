@@ -39,9 +39,6 @@ setupFiltersConcertina = ->
 ready = ->
   new ProtectedPlanet.Map($('#map')).render()
 
-  new ProtectedPlanet.Dropdown($('.btn-search-download'), $('nav.sub-nav .download-type-dropdown'))
-  new ProtectedPlanet.Dropdown($('.btn-map-download'), $('main .download-type-dropdown'))
-
   setupFiltersConcertina()
   initialiseFilterDownloads()
 

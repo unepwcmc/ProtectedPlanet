@@ -20,6 +20,10 @@ initialiseProtectedCoverageViz = ->
 
 ready = ->
   new ProtectedPlanet.Map($('#map')).render()
+
+  new FancySelect(selectEl: $('.add-to-projects-select'), customClass: 'add-to-projects-dropdown')
+  new ProtectedPlanet.Dropdown($('.add-to-projects-submit'), $('.add-to-projects-dropdown'))
+
   initialiseProtectedCoverageViz()
 
 $(document).ready(ready)

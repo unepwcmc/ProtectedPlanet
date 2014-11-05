@@ -30,7 +30,15 @@ var ready = function() {
     $('.search-bar'),
     $('.icon.search')
   );
-}
+  new ProtectedPlanet.Dropdown(
+    $('.btn-map-download'),
+    $('main .download-type-dropdown')
+  );
+  new ProtectedPlanet.Dropdown(
+    $('.btn-search-download'),
+    $('.download-type-dropdown')
+  )
+};
 
 $(document).ready(ready)
 $(document).on('page:load', ready)

@@ -2,10 +2,10 @@
   <%= hidden_field_tag 'item_id', item.id %>
   <%= hidden_field_tag 'item_type', type %>
 
-  
+
 <% if user_signed_in? %>
-  <%= select_tag 'project_id', options_from_collection_for_select(current_user.projects, :id, :name), include_blank: true %>
+  <%= select_tag 'project_id', options_from_collection_for_select(current_user.projects, :id, :name), include_blank: true, class: 'add-to-projects-select' %>
 <% end %>
 
-  <%= submit_tag 'Add to Projects' %>
+  <%= submit_tag 'Add to Projects', class: 'add-to-projects-submit' %>
 <% end %>

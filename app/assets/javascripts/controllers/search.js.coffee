@@ -6,7 +6,6 @@ initialiseSearchDownloads = ->
     e.preventDefault()
 
     button = $(e.target)
-    ProtectedPlanet.Search.Download.start(button.data('type'))
   )
 
 setupSearch = ->
@@ -16,7 +15,6 @@ setupSearch = ->
 
 ready = ->
   new ProtectedPlanet.Map($('#map')).render()
-  new ProtectedPlanet.Dropdown($('.btn-search-download'), $('.download-type-dropdown'))
 
   initialiseSearchDownloads()
   setupSearch()
