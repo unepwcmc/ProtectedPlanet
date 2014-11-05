@@ -24,10 +24,6 @@
   <%= render partial: 'facets', locals: {facets: @search.aggregations} %>
 </aside>
 
-<section class="search-bar">
-  <%= render 'shared/search_form', query: @query %>
-</section>
-
 <div class="search-map"
   id="map"
   data-url="<%= api_search_points_url(params) %>">
