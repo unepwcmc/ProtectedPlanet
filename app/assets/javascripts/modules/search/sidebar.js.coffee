@@ -8,7 +8,7 @@ class ProtectedPlanet.Search.Sidebar
     @$openMapTriggerEl = $('.btn-switch-map')
     @$openGridTriggerEl = $('.btn-switch-grid')
 
-    $('.btn-switch-map').addClass('active')
+    $('.btn-switch-grid').addClass('active')
     @addEventListeners()
 
   addEventListeners: ->
