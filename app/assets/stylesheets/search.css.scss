@@ -1,12 +1,18 @@
 @import 'frameless';
 @import 'transitions';
 @import 'colors';
+@import 'z-index';
 
 $width--search-sidebar: 270px;
 
+.search-sub-nav {
+  position: fixed;
+  top: 60px;
+  z-index: $zIndex-1;
+}
+
 .search-sub-nav ul {
   li {
-
     &.right {
       float: right;
     }
@@ -119,7 +125,7 @@ $width--search-sidebar: 270px;
   }
 }
 
-.search-parent .search-grid {
+.search-parent .search-map {
   display: none;
 }
 
@@ -147,12 +153,19 @@ $width--search-sidebar: 270px;
   background-color: $white;
 }
 
+.search-grid ul {
+  float: left;
+  border-left: 1px solid $light-grey;
+}
+
 li.result {
   float: left;
   @include width(1);
   height: 256px;
   box-sizing: content-box;
   border: solid 2px $light-grey;
+  border-top: 0;
+  border-left: 0;
 }
 
 .inner-result {

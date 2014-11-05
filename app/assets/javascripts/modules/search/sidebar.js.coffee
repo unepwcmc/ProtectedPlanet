@@ -8,7 +8,7 @@ class ProtectedPlanet.Search.Sidebar
     @$openMapTriggerEl = $('.btn-switch-map')
     @$openGridTriggerEl = $('.btn-switch-grid')
 
-    $('.btn-switch-map').addClass('active')
+    $('.btn-switch-grid').addClass('active')
     @addEventListeners()
 
   addEventListeners: ->
@@ -36,6 +36,7 @@ class ProtectedPlanet.Search.Sidebar
       return false if $el.hasClass('active')
 
       [@$openMapTriggerEl, @$openGridTriggerEl].forEach((el) -> el.toggleClass('active'))
-      $('.search-map').slideToggle()
-      $('.search-grid').slideToggle()
+      $('.search-map').toggle()
+      $('.search-grid').toggle()
+      ProtectedPlanet.Map.instance.invalidateSize(true)
       ev.preventDefault()

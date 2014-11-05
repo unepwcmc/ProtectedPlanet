@@ -36,21 +36,12 @@ setupFiltersConcertina = ->
     $element.on('click', '> a', toggleFilterChild)
   )
 
-setupSearchBar = ->
-  relatedEls = [$('.home-parent'), $('.home-map'), $('.btn-map-download')]
-  new ProtectedPlanet.Search.Bar(
-    $('.search-bar'),
-    $('.icon.search'),
-    {relatedEls: relatedEls}
-  )
-
 ready = ->
   new ProtectedPlanet.Map($('#map')).render()
 
   new ProtectedPlanet.Dropdown($('.btn-search-download'), $('nav.sub-nav .download-type-dropdown'))
   new ProtectedPlanet.Dropdown($('.btn-map-download'), $('main .download-type-dropdown'))
 
-  setupSearchBar()
   setupFiltersConcertina()
   initialiseFilterDownloads()
 
