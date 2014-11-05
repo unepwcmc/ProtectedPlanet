@@ -28,6 +28,7 @@ html, body {
 a { text-decoration: none; }
 
 main {
+  overflow: scroll;
   position: fixed;
   bottom: 75px;
   left: 0px;
