@@ -1,12 +1,18 @@
 @import 'frameless';
 @import 'transitions';
 @import 'colors';
+@import 'z-index';
 
 $width--search-sidebar: 270px;
 
+.search-sub-nav {
+  position: fixed;
+  top: 60px;
+  z-index: $zIndex-1;
+}
+
 .search-sub-nav ul {
   li {
-
     &.right {
       float: right;
     }

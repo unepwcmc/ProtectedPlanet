@@ -24,3 +24,13 @@
 //= require_tree ./modules
 //= require_tree ./modules/modals
 //= require_tree ./controllers
+
+var ready = function() {
+  new ProtectedPlanet.Search.Bar(
+    $('.search-bar'),
+    $('.icon.search')
+  );
+}
+
+$(document).ready(ready)
+$(document).on('page:load', ready)

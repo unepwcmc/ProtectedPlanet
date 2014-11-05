@@ -38,4 +38,5 @@ class ProtectedPlanet.Search.Sidebar
       [@$openMapTriggerEl, @$openGridTriggerEl].forEach((el) -> el.toggleClass('active'))
       $('.search-map').toggle()
       $('.search-grid').toggle()
+      ProtectedPlanet.Map.instance.invalidateSize(true)
       ev.preventDefault()
