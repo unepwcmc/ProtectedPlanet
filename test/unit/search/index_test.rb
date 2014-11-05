@@ -83,4 +83,14 @@ class IndexTest < ActiveSupport::TestCase
 
     Search::Index.create_mapping type
   end
+
+  test '.count returns the number of documents in the index' do
+    es_mock = mock
+    es_mock.expects(:count).returns({'count' => 123})
+
+
+    Elasticsearch::Client.expects(:new).returns(es_mock)
+
+    assert_equal 123, Search::Index.new.count
+  end
 end

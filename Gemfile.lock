@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/unepwcmc/bystander.git
+  revision: 2350b415c9b7eafe432e2affc870049f1db9c695
+  branch: configuration-dsl
+  specs:
+    bystander (1.0.0)
+      slack-notifier (~> 0.6.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -238,6 +246,7 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (~> 1.3, >= 1.3.4)
+    slack-notifier (0.6.1)
     spring (1.1.2)
     sprockets (2.11.0)
       hike (~> 1.2)
@@ -306,6 +315,7 @@ DEPENDENCIES
   aws-sdk (~> 1.3.9)
   best_in_place
   byebug (~> 3.1.2)
+  bystander!
   capistrano (~> 3.1)
   capistrano-bundler (~> 1.1)
   capistrano-rails (~> 1.1)
