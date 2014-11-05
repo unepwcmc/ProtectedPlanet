@@ -11,7 +11,7 @@
 .headline {
   display:block;
   margin: auto;
-  width: 500px;
+  width: 550px;
   position:relative;
   top: 25%;
 
@@ -21,6 +21,7 @@
     color: $white;
     text-align: center;
     line-height: 60px;
+    font-family: MuseoSlab-500;
   }
 }
 
@@ -109,18 +110,19 @@ hr {
 
 .full-width-left {
   width: 70%;
-  margin: auto;
+  margin: 40px auto;
 
   p { margin: 20px 0px; }
 }
+
 
 h1.page-header, h2.page-header {
   font-family: MuseoSlab-500;
   border-bottom: 1px solid $light-grey;
   border-top: 1px solid $light-grey;
   padding: 20px 0px;
-  margin: 40px 0px;
 }
+
 
 h1.page-header { 
   font-size: 36px;
