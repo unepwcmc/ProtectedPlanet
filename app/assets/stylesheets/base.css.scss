@@ -102,9 +102,16 @@ nav li {
     text-indent: -9999px;
     border-right: 1px solid $color--nav-border;
     background: image-url('logo-white.png') no-repeat;
-    background-color: $dark-green;
     background-size: 72px 34px;
     background-position: 15px 12px;
+
+    &:hover {
+      background-color: $dark-green;
+    }
+
+    a:hover {
+      background-color: transparent;
+    }
   }
 
   &.account {
@@ -121,6 +128,7 @@ nav li {
     background: image-url('icon-search.png') no-repeat;
     background-size: 30px 30px;
     background-position: 15px 15px;
+    margin-right: 20px;
 
     &.opened {
       background-image: image-url('icon-search-grey.png');
