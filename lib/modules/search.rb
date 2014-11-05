@@ -15,7 +15,7 @@ class Search
 
   def self.download search_term, options={}
     token = Digest::SHA256.hexdigest(
-      search_term + Marshal.dump(
+      (search_term || "") + Marshal.dump(
         options.keys.sort.map{|key| options[key]}
       )
     )

@@ -15,13 +15,21 @@
     transition: top $search-bar-transition-time ease;
     top: 120px;
   }
+
+  &.sub-nav-open {
+    top: 120px;
+  }
 }
 
 .map-filters {
   float: left;
-  height: 400px;
+  height: 100%;
   width: 200px;
   min-height: 100%;
+
+  &.sub-nav-open {
+    margin-top: 60px;
+  }
 }
 
 .map-disclaimer {

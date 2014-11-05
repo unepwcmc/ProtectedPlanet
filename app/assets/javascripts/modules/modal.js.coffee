@@ -1,8 +1,6 @@
 class @Modal
-  @overlayTemplate: '<div class="total-overlay"><div>'
-
   constructor: (@$container) ->
-    @addOverlay()
+    @$overlay = $('.total-overlay')
     @render()
 
   render: (template) ->
@@ -10,12 +8,8 @@ class @Modal
     @$container.html($template)
     @bindCloseFunctionality()
 
-  addOverlay: ->
-    @$overlay = $(@constructor.overlayTemplate)
-    $('body').append(@$overlay)
-
   bindCloseFunctionality: ->
-    $closeModalBtn = @$container.find('#close-modal')
+    $closeModalBtn = @$container.find('.js-close-modal')
     for $el in [@$overlay, $closeModalBtn]
       $el.on('click', (ev) =>
         @hide()

@@ -36,9 +36,27 @@
   .fa-external-link{
     margin-left: 10px;
   }
+
+  .btn,
+  button,
+  input {
+    width: 100%;
+    display: block;
+  }
+
+  input {
+    padding: 5px;
+    border: 0;
+    background: $color--download-modal-input-bg;
+  }
+
+  .btn,
+  button {
+    padding: 15px;
+  }
 }
 
-#close-modal{
+.btn-close {
   cursor: pointer;
   position: absolute;
   top: 10px;

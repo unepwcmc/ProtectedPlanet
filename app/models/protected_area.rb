@@ -61,6 +61,11 @@ class ProtectedArea < ActiveRecord::Base
     ).results
   end
 
+  def random_image_url
+    images = self.images.order("RANDOM()")
+    images.empty? ? "http://www.placehold.it/320x250" : images.first.url
+  end
+
   private
 
   def bounding_box_query

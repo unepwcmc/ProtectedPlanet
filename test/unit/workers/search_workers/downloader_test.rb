@@ -13,6 +13,8 @@ class SearchWorkersDownloaderTest < ActiveSupport::TestCase
     search_mock.stubs(:properties).returns({})
 
     ProtectedArea.stubs(:count).returns(100)
+    Search.stubs(:find).returns(search_mock)
+
     Download.expects(:generate).with("search_#{digested_pa_ids}", {wdpa_ids: pa_ids})
     Search.expects(:search).with(query_term, {
       filters: {'type' => 'protected_area'},
@@ -23,18 +25,20 @@ class SearchWorkersDownloaderTest < ActiveSupport::TestCase
     SearchWorkers::Downloader.new.perform token, query_term, {}
   end
 
-  test '.perform, given an email, sends a completion email when the
+  test '.perform, given a Search with an email, sends a completion email when the
    download is done' do
     email = "tests@theinternetemail.com"
     pa_ids = [1,2,3,4]
     filename = 'search_03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'
+    token = 1234
 
     search_mock = mock()
     search_mock.stubs(:pluck).with('wdpa_id').returns(pa_ids)
-    search_mock.stubs(:properties).returns({})
+    search_mock.stubs(:properties).returns({'user_email' => email })
     search_mock.stubs(:token=)
     search_mock.stubs(:complete!)
     Search.stubs(:search).returns(search_mock)
+    Search.expects(:find).with(token).returns(search_mock)
 
     Download.stubs(:generate)
 
@@ -44,7 +48,7 @@ class SearchWorkersDownloaderTest < ActiveSupport::TestCase
       with(filename, email).
       returns(mailer_mock)
 
-    SearchWorkers::Downloader.new.perform "", "", {email: email}
+    SearchWorkers::Downloader.new.perform token, "", {}
   end
 
   test '.perform completes the search updating its status and filename
@@ -53,6 +57,7 @@ class SearchWorkersDownloaderTest < ActiveSupport::TestCase
 
     properties_mock = mock()
     properties_mock.expects(:[]=).with('filename', "search_#{digested_pa_ids}")
+    properties_mock.stubs(:[])
 
     search_mock = mock()
     search_mock.expects(:token=)
@@ -60,6 +65,7 @@ class SearchWorkersDownloaderTest < ActiveSupport::TestCase
     search_mock.stubs(:pluck).returns([1,2,3,4])
     search_mock.expects(:complete!)
 
+    Search.stubs(:find).returns(search_mock)
     Search.stubs(:search).returns(search_mock)
     Download.stubs(:generate).returns(true)
 

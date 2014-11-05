@@ -1,9 +1,10 @@
 <% @projects.each_with_index do |project, i| %>
   <section class="project">
     <h3>
-      <i class="fa fa-edit"></i>
+
       <%= best_in_place project, :name, as: :input %> (<%= project.items.count %> Items)
-      <span class="project-subtitle"><i class="fa fa-download"></i> Download Complete Data Set</span>
+      <span class="project-subtitle">Download Complete Data Set</span>
+      <%= image_tag "icon-download-grey.png", style: "height: 20px;", class: 'icon' %>
     </h3>
 
     <%= render partial: "project_item", collection: project.items %>

@@ -220,6 +220,8 @@ footer {
 .sub-nav {
   background-color: $white;
   border-bottom: 1px solid $light-grey;
+  position: fixed;
+  top: 60px;
 
   a {
     color: $dark-grey;
@@ -331,4 +333,8 @@ a.btn, button {
   border: 1px solid $green;
   padding: 10px;
   margin: 10px;
+}
+
+.protected_areas-parent #map, .country-parent #map, .protected_areas-parent, .country-parent {
+  top: 120px;
 }

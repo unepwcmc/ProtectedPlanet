@@ -7,8 +7,17 @@ class DownloadsController < ApplicationController
   end
 
   def create
-    search = Search.download(params[:q], options)
+    search = Search.download(params[:q], {filters: filters})
+    set_email(search)
+
     render json: {token: search.token}
+  end
+
+  def update
+    search = Search.find(params[:id])
+    set_email(search)
+
+    render(search ? {json: search.properties} : {status: 404})
   end
 
   def poll
@@ -18,10 +27,11 @@ class DownloadsController < ApplicationController
 
   private
 
-  def options
-    {filters: filters}.tap { |options|
-      options[:email] = current_user.email if current_user.present?
-    }
+  def set_email search
+    email = params[:email] || current_user.try(:email)
+    if email.present?
+      search.properties['user_email'] = email
+    end
   end
 
   def filters

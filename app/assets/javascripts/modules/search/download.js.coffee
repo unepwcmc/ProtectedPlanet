@@ -14,7 +14,9 @@ class ProtectedPlanet.Search.Download
 
   start: ->
     @submitDownload( (token) =>
+      @generationModal.initialiseForm(token)
       @generationModal.show()
+
       @pollDownload(token, (download) =>
         @generationModal.showDownloadLink(download.filename, @type)
       )

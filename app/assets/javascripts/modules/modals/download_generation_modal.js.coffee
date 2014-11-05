@@ -7,14 +7,22 @@ class @DownloadGenerationModal extends Modal
   constructor: ($container) ->
     super($container)
 
+  initialiseForm: (token) ->
+    $form = @$container.find('form')
+    return if $form.length is 0
+
+    $form.attr('action', "/downloads/#{token}")
+    $form.on("ajax:success", => @hide())
+
+
   showDownloadCompleteTemplate: ->
     @render(@constructor.downloadCompleteTemplate)
     @show()
 
   showDownloadLink: (objectName, type) ->
-    @showDownloadCompleteTemplate()
+    #@showDownloadCompleteTemplate()
 
-    downloadUrl = "#{BASE_DOWNLOAD_PATH}/#{objectName}?type=#{type}"
-    @find('.link-container').html("""
-      <a target="_blank" class="btn btn-primary" href="#{downloadUrl}">Download</a>
-    """)
+    #downloadUrl = "#{BASE_DOWNLOAD_PATH}/#{objectName}?type=#{type}"
+    #@find('.link-container').html("""
+      #<a target="_blank" class="btn btn-primary" href="#{downloadUrl}">Download</a>
+    #""")

@@ -31,10 +31,10 @@ Rails.application.routes.draw do
 
   get '/stats/global', to: 'stats/global#index', as: 'global_stats'
   get '/stats/regional/:iso', to: 'stats/regional#show', as: 'regional_stats'
-  get '/stats/country/:iso', to: 'stats/country#show', as: 'country_stats'
+  get '/country/:iso', to: 'stats/country#show', as: 'country_stats'
 
   get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
-  resources :downloads, only: [:show, :create]
+  resources :downloads, only: [:show, :create, :update]
 
   get '/search', to: 'search#index'
   post '/search', to: 'search#create'

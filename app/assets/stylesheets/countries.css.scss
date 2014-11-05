@@ -1,0 +1,42 @@
+@import 'colors';
+
+table.centered td { text-align: center; }
+td.right-aligned { text-align: right;}
+
+hr {
+  height: 1px;
+  color: $light-grey;
+  margin: 20px 0px;
+}
+
+div {
+  &.inset-statistic {
+    display: inline-block;
+    width: 225px;
+  }
+
+  &.inset-statistic-large {
+    display: inline-block;
+    width: 450px;
+  }
+
+  &.text-holder {
+      margin: 7px 0 0 10px;
+      float: left;
+      color: $dark-blue;
+  }
+}
+
+.large {
+    display: block;
+    font-size: 42px;
+    float: left;
+    color: $dark-blue;
+}
+
+.extra-large {
+    display: block;
+    font-size: 64px;
+    float: left;
+    color: $dark-blue;
+}

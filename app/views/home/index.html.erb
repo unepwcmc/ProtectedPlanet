@@ -1,3 +1,16 @@
+<% if map_filtered? %>
+  <%= content_for :header do %>
+    <nav class="sub-nav search-sub-nav">
+      <ul>
+        <li>
+          <h1>Showing <strong><%= @search.count %></strong> Protected Areas</h1>
+        </li>
+        <li class="right"><%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-search-download', item_id: 'search', image: 'icon-download-black.png'} %></li>
+      </ul>
+    </nav>
+  <% end %>
+<% end %>
+
 <div
   data-bound-from="<%= map_bounds['from'] %>"
   data-bound-to="<%= map_bounds['to'] %>"
@@ -7,7 +20,7 @@
   <%= iucn_data_attribute %>
   <%= marine_attribute %>
 
-  class="home-map"
+  class="home-map <%= size_class %>"
   id="map">
   <div class="map-disclaimer">
     The boundaries and names shown, and the designations used on this
@@ -17,4 +30,7 @@
 </div>
 
 <%= render partial: 'map_filters' %>
-<%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', item_id: 'all'} %>
+
+<% unless map_filtered? %>
+  <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', item_id: 'all'} %>
+<% end %>
