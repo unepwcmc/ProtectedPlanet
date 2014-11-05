@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class ApiTest < ActionDispatch::IntegrationTest
-  test 'returns protected_areas filtered by wdpa_id' do
+  test '/api/protected_area, given a WDPA ID, returns the protected
+   area' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manboneland', region: region)
     sub_location = FactoryGirl.create(:sub_location, english_name: 'Manboneland City')
@@ -25,19 +26,18 @@ class ApiTest < ActionDispatch::IntegrationTest
     designation: designation, governance: governance,
     legal_status: legal_status, legal_status_updated_at: time,
     marine: true, wdpa_id: 555333, reported_area: 10.2)
-    
-    get 'api/protected_areas/555999'
 
-    assert_equal 200, response.status
+    get '/api/protected_areas/555999'
+
+    assert_response :success
 
     protected_area = JSON.parse(response.body, symbolize_names: true)
+    assert_equal 'Manbone', protected_area[:name]
+  end
 
-    puts protected_area
-
-    name = protected_area[:name]
-    legal_status = protected_area[:legal_status][:name]
-
-    assert_includes name, 'Manbone'
-    refute_includes name, 'Killbear'
+  test '/api/protected_area, given an invalid WDPA ID, returns a 404
+   status' do
+    get '/api/protected_areas/666'
+    assert_response :missing
   end
 end

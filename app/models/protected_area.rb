@@ -33,13 +33,6 @@ class ProtectedArea < ActiveRecord::Base
     )
   end
 
-  def bounds
-    [
-      [bounding_box["min_y"], bounding_box["min_x"]],
-      [bounding_box["max_y"], bounding_box["max_x"]]
-    ]
-  end
-
   def as_api_feeder
     self.as_json(
       only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area],
@@ -58,6 +51,13 @@ class ProtectedArea < ActiveRecord::Base
         governance: { only: [:name] }
       }
     )
+  end
+
+  def bounds
+    [
+      [bounding_box["min_y"], bounding_box["min_x"]],
+      [bounding_box["max_y"], bounding_box["max_x"]]
+    ]
   end
 
   private

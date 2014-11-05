@@ -19,8 +19,9 @@ Rails.application.routes.draw do
   get '/sites/:id', to: 'sites#show'
   get '/sites/:id/*other', to: 'sites#show'
 
-  get '/api/protected_areas/:wdpa_id', to: 'api/protected_areas#show', as: 'api'
+  namespace :api do
+    resources :protected_areas, only: [:show]
+  end
 
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
-
 end
