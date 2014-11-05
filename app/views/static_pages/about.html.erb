@@ -1,1 +1,43 @@
-<h1>About ProtectedPlanet Page</h1>
+<div class="header">
+  <div class="headline"><h1>Discover the world's protected areas</h1></div>
+</div>
+
+<article class="centered">
+  <p>ProtectedPlanet.net is the online interface for the World Database on Protected Areas (WDPA), a join project of IUCN and UNEP, and the most comprehensive global database on terrestrial and marine protected areas. ProtectedPlanet.net lets you discover the protected areas of the world through exploring the maps and intuitive searching, feeding you information from the WDPA, photos from Panoramio and text descriptions from Wikipedia.</p>
+</article>
+
+<article class="blue-third">
+  <p>Search and explore Protected Areas around the world from the WDPA database.</p>
+</article>
+
+<article class="blue-third">
+  <p>View statistics for accessing progress towards international biodiversity protection targets.</p>
+</article>
+
+<article class="blue-third">
+  <p>Download the most comprehensive global dataset on protected areas in the world.</p>
+</article>
+
+<article class="two-thirds">
+  <p>ProtectedPlanet.net is the new face of the World Database on Protected Areas (WDPA). Its humble beginnings started 30 years ago as the United Nations global list of national parks and has evolved into the only global, spatially referenced information source on parks and protected areas. We have created ProtectedPlanet.net not only to showcase this wealth of information, but also give tools to willing ‘citizen scientists’ who can feed their knowledge about protected areas into the WDPA.</p>
+
+  <p>ProtectedPlanet.net allows you to search in any language to find information about individual protected areas. If you don’t know exactly what you are looking for, you can explore the world from the maps. Our aim is to make use of the huge resources out there and concentrate our efforts on delivering the most relevant and accurate protected areas information to the global community.</p>
+
+  <p>The World Database on Protected Areas is managed at UNEP-WCMC in Cambridge, UK supported by IUCN staff and the IUCN World Commission on Protected Areas. It relies on the magnitude of work carried out by staff in institutions in every country that work on mapping and collating information on protected areas. Without this work from governments and NGOs alike, there would be no World Database on Protected Areas.</p>
+
+  <p>If you are a national protected areas data manager and want to find out how to contribute to the WDPA, please contact protectedareas@unep-wcmc.org and our team will be happy to help you.</p>
+</article>
+
+<article class="green-third">
+  <h1><%= commaify Country.data_providers.count %></h1>
+  <hr class="about">
+  <p>Countries providing data</p>
+
+  <h1><%= commaify ProtectedArea.count %></h1>
+  <hr class="about">
+  <p>Protected Areas</p>
+
+  <h1><%= commaify Designation.count %></h1>
+  <hr class="about">
+  <p>Number of Designations</p>
+</article>
