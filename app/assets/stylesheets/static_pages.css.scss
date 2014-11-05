@@ -98,3 +98,37 @@ hr {
     margin: 10px auto;
     }
 }
+
+.terms-and-conditions {
+  p {
+    text-align: left;
+    width: 100%;
+    margin: none;
+  }
+}
+
+.full-width-left {
+  width: 70%;
+  margin: auto;
+
+  p { margin: 20px 0px; }
+}
+
+h1.page-header, h2.page-header {
+  font-family: MuseoSlab-500;
+  border-bottom: 1px solid $light-grey;
+  border-top: 1px solid $light-grey;
+  padding: 20px 0px;
+  margin: 40px 0px;
+}
+
+h1.page-header { 
+  font-size: 36px;
+  text-align: center;
+}
+
+h2.page-header {
+  font-size: 28px; 
+}
+
+  
