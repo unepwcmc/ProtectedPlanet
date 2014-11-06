@@ -19,8 +19,8 @@ class ProtectedPlanet.Maps.Interactive
   handleMapClick: (e) =>
     coords = e.latlng
     params = {
-      lon: coords.lat
-      lat: coords.lng
+      lon: coords.lng
+      lat: coords.lat
       distance: 1
     }
 

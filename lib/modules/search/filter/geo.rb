@@ -16,8 +16,8 @@ class Search::Filter::Geo < Search::Filter
 
   def coords
     {
-      "lat" => @term[:coords].first,
-      "lon" => @term[:coords].second
+      "lon" => @term[:coords].first,
+      "lat" => @term[:coords].second
     }
   end
 end

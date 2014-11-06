@@ -15,7 +15,8 @@ class Api::SearchController < ApplicationController
         location: {
           coords: [params[:lon], params[:lat]], distance: params[:distance]
         }
-      }
+      },
+      sort: {geo_distance: [params[:lon].to_f, params[:lat].to_f]}
     ).results
   end
 
