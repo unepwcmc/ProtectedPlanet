@@ -21,6 +21,7 @@ class ProtectedPlanet.Map
 
     map = @createMap(@$mapContainer.attr('id'))
 
+    new ProtectedPlanet.Maps.Interactive(map).listen()
     ProtectedPlanet.Maps.BaseLayer.render(map)
     ProtectedPlanet.Maps.Bounds.setToBounds(map, config)
     ProtectedPlanet.Maps.ProtectedAreaOverlay.render(map, config)

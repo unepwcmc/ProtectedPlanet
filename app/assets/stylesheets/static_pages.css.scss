@@ -1,0 +1,93 @@
+@import 'colors';
+@import 'fonts';
+
+.static_pages-parent {
+  .header {
+    height: 300px;
+    background: image-url('background.jpg') no-repeat;
+    background-position: center center;
+    background-size: 100%;
+  }
+
+  .headline {
+    display:block;
+    margin: auto;
+    width: 550px;
+    position:relative;
+    top: 25%;
+
+    h1 {
+      font-size: 48px;
+      color: $white;
+      text-align: center;
+      line-height: 60px;
+      font-family: MuseoSlab-500;
+    }
+  }
+
+  ul {
+    margin: 40px 0;
+    height: 125px;
+  }
+
+  li:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  li {
+    width: 33.33%;
+    background-color: $dark-blue;
+    padding: 20px;
+    border-right: 1px solid $white;
+    display: inline-block;
+    text-align: center;
+    color: $white;
+    margin: auto;
+    font-size: 18px;
+    line-height: 28px;
+    float: left;
+
+    &:last-child { border-right: none; }
+  }
+
+  article {
+    p {
+      font-size: 18px;
+      line-height: 28px;
+    }
+
+    p:last-child {
+      margin-bottom: 40px;
+    }
+
+    p, h2 {
+      margin: auto;
+      margin-top: 40px;
+      width: 70%;
+    }
+  }
+
+  article.centered {
+    p {
+      text-align: center;
+    }
+  }
+
+  h1, h2 {
+    font-family: MuseoSlab-500;
+    border-bottom: 1px solid $light-grey;
+    border-top: 1px solid $light-grey;
+    padding: 20px 0px;
+  }
+
+  h1 {
+    font-size: 36px;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+}

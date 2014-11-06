@@ -73,15 +73,37 @@ class SearchFilterTest < ActiveSupport::TestCase
     assert_equal expected_filters, filters
   end
 
+  test '#from_params, given a geo filter passed as a string, converts
+   the string to a float' do
+    puts "the test"
+    filters = Search::Filter.from_params(location: {coords: ['1','2'], distance: '2'})
+
+    expected_filters =  [{
+      "bool" => {
+        "should" => [{
+          "geo_distance" => {
+            "distance" => "2000km",
+            "protected_area.coordinates" => {
+              "lat"=>1.0,
+              "lon"=>2.0
+            }
+          }
+        }]
+      }
+    }]
+
+    assert_equal expected_filters, filters
+  end
+
   test '.to_h, given a geo filter, returns the filter as a hash' do
-    filters = Search::Filter.from_params(location: [1,2])
+    filters = Search::Filter.from_params(location: {distance_km: 123, coords: [1,2]})
 
     expected_filters = [{
       "bool"=>{
         "should"=>[
           {
             "geo_distance"=>{
-              "distance"=>"2000km",
+              "distance"=>"123km",
               "protected_area.coordinates"=>{
                 "lat"=>1,
                 "lon"=>2

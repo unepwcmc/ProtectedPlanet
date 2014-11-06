@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/search/points', to: 'search#points'
+    get '/search/by_point', to: 'search#by_point'
   end
 
   namespace :admin do
