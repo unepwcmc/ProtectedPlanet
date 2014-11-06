@@ -90,7 +90,7 @@ class Search
   private
   attr_writer :search_term, :options
 
-  RESULTS_SIZE = 10
+  RESULTS_SIZE = 20
 
   def matches
     @query_results['hits']['hits']
