@@ -15,6 +15,7 @@
 //= require turbolinks
 //= require modernizr.custom.30580
 //= require d3
+//= require jquery.infinitescroll
 //= require mapbox
 //= require leaflet.markercluster
 //= require cartodb.core

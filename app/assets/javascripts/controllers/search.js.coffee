@@ -9,6 +9,7 @@ initialiseSearchDownloads = ->
   )
 
 setupSearch = ->
+  new ProtectedPlanet.Search.Pagination('.search-grid ul', '.result')
   new ProtectedPlanet.Search.Sidebar($('.search-map-filters'), {
     relatedEls: [$('.search-parent #map'), $('.search-grid')]
   })

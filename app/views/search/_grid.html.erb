@@ -1,0 +1,4 @@
+<ul>
+  <%= render partial: 'search_result', collection: @search.results %>
+</ul>
+<%= will_paginate @search, params: {grid: true} %>
