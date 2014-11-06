@@ -1,5 +1,6 @@
 class CartoDb::Uploader
   include HTTMultiParty
+  default_timeout 1800
   require 'gdal-ruby/ogr'
 
   def initialize username, api_key
