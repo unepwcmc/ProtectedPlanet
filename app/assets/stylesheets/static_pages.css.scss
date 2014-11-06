@@ -25,13 +25,15 @@
   }
 }
 
-p { 
-  text-align: center;
-  width: 70%;
-  margin: auto;
-  font-size: 18px;
-  line-height: 28px;
+.full-width-left, .centered, .two-thirds, .green-third {
+  p { 
+    text-align: center;
+    width: 70%;
+    margin: auto;
+    font-size: 18px;
+    line-height: 28px;
   }
+}
 
 .centered {
   padding: 40px;
