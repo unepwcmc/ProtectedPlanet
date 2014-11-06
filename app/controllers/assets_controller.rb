@@ -3,6 +3,8 @@ class AssetsController < ApplicationController
   def tiles
     image = AssetGenerator.protected_area_tile(protected_area, asset_params)
     send_data image, type: 'image/png', disposition: 'inline'
+  rescue AssetGenerator::AssetGenerationFailedError
+    redirect_to ActionController::Base.helpers.asset_path('search-placeholder-country.png', type: :image)
   end
 
   private

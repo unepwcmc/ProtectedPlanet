@@ -1,4 +1,6 @@
 module AssetGenerator
+  class AssetGenerationFailedError < StandardError; end;
+
   def self.protected_area_tile protected_area, opts={size: {x: 128, y: 256}}
     tile_url = if protected_area.images.any?
       panoramio_url protected_area.images.first.url
@@ -29,6 +31,8 @@ module AssetGenerator
 
   def self.request_tile host, path
     res = Net::HTTP.get_response(host, path)
+    raise AssetGenerationFailedError if res.code != '200'
+
     res.body
   end
 end
