@@ -23,11 +23,24 @@ module GeometryConcern
   end
 
   def geojson
-    ActiveRecord::Base.connection.select_value("""
+    geojson = ActiveRecord::Base.connection.select_value("""
       SELECT ST_AsGeoJSON(ST_SimplifyPreserveTopology(#{main_geom_column}, 0.003), 3)
       FROM #{self.class.table_name}
       WHERE id = #{id}
     """.squish)
+    geometry = JSON.parse(geojson)
+
+    URI.encode({
+      "type" => "Feature",
+      "properties" => {
+        "fill-opacity" => 0.7,
+        "stroke-width" => 0.05,
+        "stroke" => "#40541b",
+        "fill" => "#83ad35",
+        "marker-color" => "#2B3146"
+      },
+      "geometry" => geometry
+    }.to_json)
   end
 
   private
