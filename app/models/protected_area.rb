@@ -48,7 +48,7 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def coordinates
-    [the_geom_latitude.to_f, the_geom_longitude.to_f]
+    [the_geom_longitude.to_f, the_geom_latitude.to_f]
   end
 
   def nearest_protected_areas

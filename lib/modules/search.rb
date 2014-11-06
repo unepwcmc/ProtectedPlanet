@@ -39,7 +39,7 @@ class Search
   def results
     @results ||= matches.map do |result|
       model_class = result['_type'].classify.constantize
-      model_class.find(result['_source']['id'])
+      model_class.without_geometry.find(result['_source']['id'])
     end
   end
 

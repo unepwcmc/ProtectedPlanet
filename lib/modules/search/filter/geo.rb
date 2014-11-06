@@ -2,12 +2,22 @@ class Search::Filter::Geo < Search::Filter
   def to_h
     {
       "geo_distance" => {
-        "distance" => "2000km",
-        @options[:field] => {
-          "lat" => @term.first,
-          "lon" => @term.second
-        }
+        "distance" => "#{distance}km",
+        @options[:field] => coords
       }
+    }
+  end
+
+  private
+
+  def distance
+    @term[:distance_km] || 2000
+  end
+
+  def coords
+    {
+      "lat" => @term[:coords].first,
+      "lon" => @term[:coords].second
     }
   end
 end

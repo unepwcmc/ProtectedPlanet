@@ -6,7 +6,7 @@ class Search::Filter
     region: { type: 'nested', path: 'countries_for_index.region_for_index', field: 'countries_for_index.region_for_index.id', required: true },
     iucn_category: { type: 'nested', path: 'iucn_category', field: 'iucn_category.id', required: true },
     designation: { type: 'nested', path: 'designation', field: 'designation.id', required: true },
-    location: { type: 'geo', field: 'protected_area.coordinates' },
+    location: { type: 'geo', path: 'location', field: 'protected_area.coordinates' },
   }
 
   def initialize term, options
@@ -39,7 +39,13 @@ class Search::Filter
     "countries_for_index" => -> (value) { value.to_i },
     "countries_for_index.region_for_index" => -> (value) { value.to_i },
     "iucn_category" => -> (value) { Array.wrap(value).map(&:to_i) },
-    "designation" => -> (value) { value.to_i }
+    "designation" => -> (value) { value.to_i },
+    "location" => -> (value) {
+      value.tap { |v|
+        v[:coords] = v[:coords].map(&:to_f)
+        v[:distance] = v[:distance].to_f
+      }
+    }
   }
 
   def standardise value
