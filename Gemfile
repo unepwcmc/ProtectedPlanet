@@ -59,7 +59,6 @@ gem 'httmultiparty', '~> 0.3.14'
 gem 'sidekiq', '~> 3.1.4'
 gem 'whenever', require: false
 
-gem 'raygun4ruby'
 gem 'newrelic_rpm'
 
 gem 'system'
@@ -74,3 +73,4 @@ gem 'sinatra', '>= 1.3.0', :require => nil
 
 gem 'devise', '~> 3.4.0'
 
+gem 'bystander', github: 'unepwcmc/bystander', branch: 'configuration-dsl'

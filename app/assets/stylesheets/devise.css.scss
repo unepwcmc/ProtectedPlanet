@@ -1,18 +1,24 @@
 @import 'colors';
 @import 'fonts';
+@import 'bourbon';
+@import 'neat';
 
 div {
+
   &.login-right-panel {
     position:absolute;
-    top: 0px;
-    bottom: 0px;
+    top: 60px;
+    //bottom: 0px;
     background: $light-grey;
     right: 0px;
-    padding: 50px;
+    padding: 40px;
+    overflow:hidden
 
     img { 
-      float:left;
-      margin-right: 40px;
+      //float:left;
+      //height: 20%;
+      //width: 20%;
+      //margin-right: 10px;
     }
 
     h1,h2,p { 
@@ -25,7 +31,12 @@ div {
       color: $medium-grey;
     }
 
-    article { width:500px; }
+    article { @include outer-container;
+      div {
+        &.login-image { @include span-columns(3);}
+        &.login-text { @include span-columns(9);}
+      }
+    }
   }
 
   &.login-form { 

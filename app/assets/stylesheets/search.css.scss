@@ -1,12 +1,18 @@
+@import 'frameless';
 @import 'transitions';
 @import 'colors';
+@import 'z-index';
 
 $width--search-sidebar: 270px;
 
+.search-sub-nav {
+  position: fixed;
+  top: 60px;
+  z-index: $zIndex-1;
+}
 
 .search-sub-nav ul {
   li {
-
     &.right {
       float: right;
     }
@@ -119,7 +125,7 @@ $width--search-sidebar: 270px;
   }
 }
 
-.search-parent .search-grid {
+.search-parent .search-map {
   display: none;
 }
 
@@ -139,5 +145,47 @@ $width--search-sidebar: 270px;
   &.opened {
     transition: left 0.3s ease;
     left: 0px;
+  }
+}
+
+.search-grid {
+  overflow: scroll;
+  background-color: $white;
+}
+
+.search-grid ul {
+  float: left;
+  border-left: 1px solid $light-grey;
+}
+
+li.result {
+  float: left;
+  @include width(1);
+  height: 256px;
+  box-sizing: content-box;
+  border: solid 2px $light-grey;
+  border-top: 0;
+  border-left: 0;
+}
+
+.inner-result {
+  padding: 8px;
+  position: relative;
+  height: 128px;
+  margin-top: -4px;
+
+  h3 {
+    margin-top: 4px;
+
+    small {
+      color: $color--search-result-small-text;
     }
   }
+
+  p {
+    color: $color--search-result-small-text;
+    position: absolute;
+    bottom: 8px;
+  }
+}
+

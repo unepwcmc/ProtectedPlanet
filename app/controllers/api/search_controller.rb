@@ -8,6 +8,18 @@ class Api::SearchController < ApplicationController
     render json: results
   end
 
+  def by_point
+    render json: Search.search('',
+      size: 1,
+      filters: {
+        location: {
+          coords: [params[:lon], params[:lat]], distance: params[:distance]
+        }
+      },
+      sort: {geo_distance: [params[:lon].to_f, params[:lat].to_f]}
+    ).results
+  end
+
   private
 
   def search_options extra_options

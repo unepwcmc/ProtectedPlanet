@@ -15,6 +15,7 @@
 //= require turbolinks
 //= require modernizr.custom.30580
 //= require d3
+//= require jquery.infinitescroll
 //= require mapbox
 //= require leaflet.markercluster
 //= require cartodb.core
@@ -24,3 +25,21 @@
 //= require_tree ./modules
 //= require_tree ./modules/modals
 //= require_tree ./controllers
+
+var ready = function() {
+  new ProtectedPlanet.Search.Bar(
+    $('.search-bar'),
+    $('.icon.search')
+  );
+  new ProtectedPlanet.Dropdown(
+    $('.btn-map-download'),
+    $('main .download-type-dropdown')
+  );
+  new ProtectedPlanet.Dropdown(
+    $('.btn-search-download'),
+    $('.download-type-dropdown')
+  )
+};
+
+$(document).ready(ready)
+$(document).on('page:load', ready)

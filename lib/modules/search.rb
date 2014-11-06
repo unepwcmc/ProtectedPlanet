@@ -15,7 +15,7 @@ class Search
 
   def self.download search_term, options={}
     token = Digest::SHA256.hexdigest(
-      search_term + Marshal.dump(
+      (search_term || "") + Marshal.dump(
         options.keys.sort.map{|key| options[key]}
       )
     )
@@ -39,7 +39,7 @@ class Search
   def results
     @results ||= matches.map do |result|
       model_class = result['_type'].classify.constantize
-      model_class.find(result['_source']['id'])
+      model_class.without_geometry.find(result['_source']['id'])
     end
   end
 
@@ -90,7 +90,7 @@ class Search
   private
   attr_writer :search_term, :options
 
-  RESULTS_SIZE = 10
+  RESULTS_SIZE = 20
 
   def matches
     @query_results['hits']['hits']

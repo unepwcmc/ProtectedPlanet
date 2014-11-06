@@ -1,0 +1,80 @@
+@import 'colors';
+@import 'z-index';
+
+.modal {
+  display: none;
+
+  position: fixed;
+  z-index: $zIndex-9;
+  top: 25%;
+  left: 30%;
+  width: 40%;
+  padding: 30px;
+  background: #fff;
+  box-sizing: border-box;
+
+  h2 {
+    font-size: 1.4em;
+    margin: 0;
+  }
+
+  p {
+    color: $color--download-modal-text;
+    font-weight: normal;
+    margin-top: 20px;
+  }
+
+  &.opened {
+    display: block;
+  }
+
+  a.btn {
+    display: inline-block;
+    padding: 10px 40px;
+  }
+
+  .fa-external-link{
+    margin-left: 10px;
+  }
+
+  .btn,
+  button,
+  input {
+    width: 100%;
+    display: block;
+  }
+
+  input {
+    padding: 5px;
+    border: 0;
+    background: $color--download-modal-input-bg;
+  }
+
+  .btn,
+  button {
+    padding: 15px;
+  }
+}
+
+.btn-close {
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px;
+}
+
+.total-overlay {
+  display: none;
+  position: fixed;
+  z-index: $zIndex-8;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: $color--download-modal-overlay-bg;
+
+  &.visible {
+    display: block;
+  }
+}

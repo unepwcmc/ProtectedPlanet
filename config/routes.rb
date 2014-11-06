@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/search/points', to: 'search#points'
+    get '/search/by_point', to: 'search#by_point'
   end
 
   namespace :admin do
@@ -37,7 +38,7 @@ Rails.application.routes.draw do
   post '/country/:iso/compare', to: 'stats/country#compare', as: 'compare_countries'
 
   get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
-  resources :downloads, only: [:show, :create]
+  resources :downloads, only: [:show, :create, :update]
 
   get '/search', to: 'search#index'
   post '/search', to: 'search#create'

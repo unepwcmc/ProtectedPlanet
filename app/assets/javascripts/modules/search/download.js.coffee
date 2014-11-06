@@ -2,35 +2,34 @@ window.ProtectedPlanet ||= {}
 window.ProtectedPlanet.Search ||= {}
 
 class ProtectedPlanet.Search.Download
+  CREATION_PATH = '/downloads'
+  POLLING_PATH = '/downloads/poll'
   POLLING_INTERVAL = 250
 
-  @start: (creationPath, pollingPath) ->
-    new SearchDownload(creationPath, pollingPath).start()
+  @start: (type) ->
+    new ProtectedPlanet.Search.Download(type).start()
 
-  constructor: (@creationPath, @pollingPath, @opts={mainContainer: $('body')}) ->
+  constructor: (@type, @opts={mainContainer: $('#download-modal')}) ->
     @generationModal = new DownloadGenerationModal(@opts.mainContainer)
-    @selectionModal = new DownloadSelectionModal(@opts.mainContainer)
 
   start: ->
     @submitDownload( (token) =>
+      @generationModal.initialiseForm(token)
       @generationModal.show()
-      @pollDownload(token, (download) =>
-        @generationModal.hide()
 
-        @selectionModal.buildLinksFor(download.filename)
-        @selectionModal.show()
+      @pollDownload(token, (download) =>
+        @generationModal.showDownloadLink(download.filename, @type)
       )
     )
 
-
   submitDownload: (next) ->
-    $.post(@creationPath + window.location.search, (data) ->
+    $.post(CREATION_PATH + window.location.search, (data) ->
       next(data.token)
     )
 
   pollDownload: (token, next) ->
     intervalId = setInterval( =>
-      $.getJSON("#{@pollingPath}?token=#{token}", (download) ->
+      $.getJSON("#{POLLING_PATH}?token=#{token}", (download) ->
         if download.status == 'completed'
           window.clearInterval(intervalId)
           next(download)

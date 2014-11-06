@@ -1,7 +1,7 @@
 <li class='result'>
   <%= protected_area_cover model %>
-  <div>
-    <h3><a href='/<%= model.slug %>'><%= model.name %></a> | <small><%= model.designation.name %></small></h3>
+  <div class="inner-result">
+    <h3><a href='/<%= model.slug %>'><%= model.name %></a>,  <small><%= model.designation.name %></small></h3>
     <p>
       <% model.countries.each do |country| %>
         <a href="<%= country_stats_path(iso: country.iso) %>"><%= country.name %></a>,
@@ -9,7 +9,7 @@
         |
       <% end %>
       <icon></icon>
-      <%= model.marine ? 'Marine' : 'Terrestrial' %> area
+      <%= model.marine ? 'Marine' : 'Terrestrial' %> Area
     </p>
   </div>
 </li>

@@ -14,13 +14,13 @@
  *= require 'colors'
  *= require 'z-index'
  *= require 'transitions'
- *= require 'font-awesome'
  *= require 'mapbox'
  *= require 'leaflet'
  *= require 'leaflet-markercluster'
  *= require 'leaflet_overrides'
  *= require 'map'
  *= require 'base'
+ *= require 'modals'
  *= require 'home'
  *= require 'protected_areas'
  *= require 'projects'
@@ -28,5 +28,6 @@
  *= require 'neat-grid'
  *= require 'devise'
  *= require 'countries'
+ *= require 'static_pages'
  *= require_self
  */

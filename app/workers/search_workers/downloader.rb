@@ -1,9 +1,8 @@
 class SearchWorkers::Downloader < SearchWorkers::Base
-
   def perform token, search_term, options
     self.search_term = search_term
     self.token = token
-    self.filters  = options['filters']
+    self.filters = options['filters']
 
     generate_download
     complete_search
@@ -13,6 +12,7 @@ class SearchWorkers::Downloader < SearchWorkers::Base
 
   def generate_download
     Download.generate(filename, {wdpa_ids: protected_area_ids})
+    send_completion_email
   end
 
   def complete_search
@@ -26,5 +26,17 @@ class SearchWorkers::Downloader < SearchWorkers::Base
 
   def filename
     "search_#{ids_digest}"
+  end
+
+  def send_completion_email
+    if email
+      DownloadCompleteMailer.
+        create(filename, email).
+        deliver
+    end
+  end
+
+  def email
+    @email ||= Search.find(self.token).properties['user_email']
   end
 end

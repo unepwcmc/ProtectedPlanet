@@ -8,7 +8,16 @@ class DownloadsController < ApplicationController
 
   def create
     search = Search.download(params[:q], {filters: filters})
+    set_email(search)
+
     render json: {token: search.token}
+  end
+
+  def update
+    search = Search.find(params[:id])
+    set_email(search)
+
+    render(search ? {json: search.properties} : {status: 404})
   end
 
   def poll
@@ -17,6 +26,13 @@ class DownloadsController < ApplicationController
   end
 
   private
+
+  def set_email search
+    email = params[:email] || current_user.try(:email)
+    if email.present?
+      search.properties['user_email'] = email
+    end
+  end
 
   def filters
     params.stringify_keys.slice(*Search::ALLOWED_FILTERS)

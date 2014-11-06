@@ -6,6 +6,8 @@ class SearchController < ApplicationController
     return unless @query = params[:q]
 
     @search = Search.search(@query, search_options)
+
+    render partial: 'grid' if params[:grid]
   end
 
   def create

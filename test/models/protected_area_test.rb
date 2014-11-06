@@ -57,7 +57,8 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     pa = FactoryGirl.create(:protected_area,
       name: 'Manbone', countries: [country], sub_locations: [sub_location],
       original_name: 'Manboné', iucn_category: iucn_category,
-      designation: designation, marine: true, wdpa_id: 555999
+      designation: designation, marine: true, wdpa_id: 555999,
+      the_geom_latitude: 1, the_geom_longitude: 2
     )
 
     expected_json = {
@@ -66,7 +67,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "name" => 'Manbone',
       "original_name" => "Manboné",
       "marine" => true,
-      "coordinates" => [0.0, 0.0],
+      "coordinates" => [2.0, 1.0],
       "sub_locations" => [
         {
           "english_name" => "Manboneland City"
@@ -113,7 +114,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
 
     search_mock = mock().tap { |m| m.expects(:results).returns([FactoryGirl.create(:protected_area)]) }
     Search.expects(:search).
-      with('', {size: 2, filters: {location: [1, 0]}, sort: {geo_distance: [1, 0]}}).
+      with('', {size: 2, filters: {location: [0,1]}, sort: {geo_distance: [0,1]}}).
       returns(search_mock).
       once
 

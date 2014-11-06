@@ -5,9 +5,8 @@ class window.FancySelect
     </div>
   """
 
-  constructor: (options) ->
-    @selectEl = options.selectEl
-    @$selectEl = $(@selectEl)
+  constructor: (@options) ->
+    @$selectEl = $(@options.selectEl)
     @$selectEl.hide()
 
     @render(options)
@@ -51,6 +50,7 @@ class window.FancySelect
     selectClass = @$selectEl.attr('class')
     @$el.addClass(selectClass)
     @$el.addClass('fancy-select')
+    @$el.addClass(@options.customClass) if @options.customClass
 
   addEventListeners: ->
     @$el.find('li').click(@updateSelect)

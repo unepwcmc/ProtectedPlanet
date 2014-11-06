@@ -1,6 +1,4 @@
 class Wdpa::ProtectedAreaImporter::GeometryImporter
-  DB = ActiveRecord::Base.connection
-
   def self.import wdpa_release
     standard_geometry_attributes = Wdpa::DataStandard.standard_geometry_attributes
 
@@ -19,7 +17,7 @@ class Wdpa::ProtectedAreaImporter::GeometryImporter
   private
 
   def self.import_geometry standardised_name, original_name, table
-    DB.execute("""
+    db.execute("""
       UPDATE protected_areas pa
       SET #{standardised_name} = import.#{original_name}
       FROM #{table} import
@@ -28,10 +26,14 @@ class Wdpa::ProtectedAreaImporter::GeometryImporter
   end
 
   def self.import_coordinates standardised_name
-    DB.execute("""
+    db.execute("""
       UPDATE protected_areas pa
       SET #{standardised_name}_longitude = ST_X(ST_Centroid(#{standardised_name})),
           #{standardised_name}_latitude = ST_Y(ST_Centroid(#{standardised_name}));
     """.squish)
+  end
+
+  def self.db
+    ActiveRecord::Base.connection
   end
 end

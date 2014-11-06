@@ -1,3 +1,14 @@
+initialiseFilterDownloads = ->
+  $downloadBtns = $('nav.sub-nav .download-type-dropdown a')
+  return false if $downloadBtns.length == 0
+
+  $downloadBtns.on('click', (e) ->
+    e.preventDefault()
+
+    button = $(e.target)
+    ProtectedPlanet.Search.Download.start(button.data('type'))
+  )
+
 getParameter = (name) ->
   name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]")
   regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
@@ -25,20 +36,11 @@ setupFiltersConcertina = ->
     $element.on('click', '> a', toggleFilterChild)
   )
 
-setupSearchBar = ->
-  relatedEls = [$('.home-parent'), $('.home-map'), $('.btn-map-download')]
-  new ProtectedPlanet.Search.Bar(
-    $('.search-bar'),
-    $('.icon.search'),
-    {relatedEls: relatedEls}
-  )
-
 ready = ->
   new ProtectedPlanet.Map($('#map')).render()
-  new ProtectedPlanet.Dropdown($('.btn-map-download'), $('.download-type-dropdown'))
 
-  setupSearchBar()
   setupFiltersConcertina()
+  initialiseFilterDownloads()
 
 $(document).ready(ready)
 $(document).on('page:load', ready)

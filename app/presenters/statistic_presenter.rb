@@ -5,14 +5,14 @@ class StatisticPresenter
   end
 
   def percentage_of_global_pas
-    percentage = (@statistic.pa_area / global_statistic.pa_area) * 100
+    percentage = (pa_area / global_statistic.pa_area) * 100
     '%.1f' % percentage
   rescue NoMethodError
     "0"
   end
 
   def percentage_pa_marine_cover
-    percentage = @statistic.percentage_pa_eez_cover + @statistic.percentage_pa_ts_cover
+    percentage = percentage_pa_eez_cover + percentage_pa_ts_cover
     '%.1f' % percentage
   rescue NoMethodError
     "0"

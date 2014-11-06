@@ -33,6 +33,8 @@ class ProtectedPlanet.Maps.Search
     )
 
   fitToResults: (points) ->
+    return if points.length is 0
+
     lats = points.map((p) -> parseFloat(p.the_geom_latitude))
     lons = points.map((p) -> parseFloat(p.the_geom_longitude))
 
@@ -42,7 +44,7 @@ class ProtectedPlanet.Maps.Search
     minLon = Math.min.apply(Math, lons)
 
     ProtectedPlanet.Maps.Bounds.setToBounds(@map, {
-      boundFrom: [maxLat,maxLon],
+      boundFrom: [maxLat, maxLon],
       boundTo: [minLat, minLon]
     })
 

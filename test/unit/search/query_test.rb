@@ -131,7 +131,7 @@ class SearchQueryTest < ActiveSupport::TestCase
       }
     }
 
-    query = Search::Query.new('', filters: {location: [-69, -29]}).to_h
+    query = Search::Query.new('', filters: {location: {coords: [-69, -29]}}).to_h
 
     assert_equal expected_filters, query
   end

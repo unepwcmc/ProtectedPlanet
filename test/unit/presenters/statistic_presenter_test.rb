@@ -19,16 +19,16 @@ class StatisticPresenterTest < ActiveSupport::TestCase
   end
 
   test '.percentage_pa_marine_cover returns the total of marine cover' do
-    regional_statistic = FactoryGirl.create(:regional_statistic, percentage_pa_eez_cover: 30, percentage_pa_ts_cover: 23)
-    FactoryGirl.create(:region, iso: 'GL', regional_statistic: regional_statistic)
+    @statistic.stubs(:percentage_pa_eez_cover).returns(30)
+    @statistic.stubs(:percentage_pa_ts_cover).returns(23)
 
     percentage = @presenter.percentage_pa_marine_cover
     assert_equal "53.0", percentage
   end
 
   test '.marine_area returns the total marine area' do
-    regional_statistic = FactoryGirl.create(:regional_statistic, ts_area: 6, eez_area: 12)
-    FactoryGirl.create(:region, iso: 'GL', regional_statistic: regional_statistic)
+    @statistic.stubs(:ts_area).returns(6)
+    @statistic.stubs(:eez_area).returns(12)
 
     area = @presenter.marine_area
     assert_equal 18.0, area
