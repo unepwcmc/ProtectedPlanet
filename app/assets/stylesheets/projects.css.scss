@@ -26,7 +26,26 @@
   }
 }
 
+.no-projects {
+  width:50%;
+  margin: 50px auto;
+  border: 1px solid $green;
+  padding:40px;
 
+  h1 { 
+    font-size: 32px;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    color: $medium-grey;
+  }
+
+}
+
+.info-search {
+  margin-top: 20px;
+}
 
 .project-item {
   @include span-columns(3);

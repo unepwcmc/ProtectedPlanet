@@ -175,29 +175,29 @@ nav li {
     position: fixed;
     top: 60px;
   }
+}
 
-  .search-input {
-    color: $color--search-input-text;
-    background-color: $color--search-input-bg;
-    width:100%;
-    height: 31px;
-    right: 251px;
-    left: 20px;
-    font-size: 16px;
-    line-height: 33px;
-    padding-left: 10px;
-    border: 0;
-    outline: none;
-    box-sizing: border-box;
-  }
+.search-input {
+  color: $color--search-input-text;
+  background-color: $color--search-input-bg;
+  width:100%;
+  height: 31px;
+  right: 251px;
+  left: 20px;
+  font-size: 16px;
+  line-height: 33px;
+  padding-left: 10px;
+  border: 0;
+  outline: none;
+  box-sizing: border-box;
+}
 
-  .search-submit {
-    color: $color--search-input-text;
-    background-color: $color--search-input-bg;
-    width: 100%;
-    height: 31px;
-    float: right;
-  }
+.search-submit {
+  color: $color--search-input-text;
+  background-color: $color--search-input-bg;
+  width: 100%;
+  height: 31px;
+  float: right;
 }
 
 .right {
