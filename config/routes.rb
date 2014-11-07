@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   put '/admin/maintenance', as: 'maintenance'
   put '/admin/clear_cache', as: 'clear_cache'
 
-  get '/assets/tiles/:id', to: 'assets#tiles', as: 'tiles'
+  get '/assets/tiles/:id/:version', to: 'assets#tiles', as: 'tiles'
 
   namespace :api do
     get '/search/points', to: 'search#points'
