@@ -3,7 +3,6 @@
     <ul class="nav">
       <li><h1><%= @protected_area.name %></h1></li>
       <li><h2><%= @protected_area.countries.first.name %></h2></li>
-      <li><a href="#">Follow</a></li>
       <li><a href="#">Download Dataset <i class="fa fa-caret-down"></i>
 </a></li>
       <li><%= render partial: 'shared/add_to_project', locals: {item: @protected_area, type: 'protected_area'} %></li>
@@ -27,11 +26,6 @@
       <span><%= Wdpa::DataStandard.percentage_complete(@protected_area).round(2) %></span>
       Data Complete
     </li>
-    <li>
-      <span><%= Wdpa::DataStandard.data_gaps(@protected_area) %></span>
-      Data Gaps
-    </li>
-    <li>Last Updated sometime</li>
   </ul>
 
   <% if related_links?(@protected_area) %>
