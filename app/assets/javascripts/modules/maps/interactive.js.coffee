@@ -17,6 +17,8 @@ class ProtectedPlanet.Maps.Interactive
       openPopup()
 
   handleMapClick: (e) =>
+    return if @map.getZoom() < 4
+
     coords = e.latlng
     params = {
       lon: coords.lng
