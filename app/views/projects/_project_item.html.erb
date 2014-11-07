@@ -1,9 +1,5 @@
 <div class="project-item">
   <img src="http://placekitten.com/600/400">
 
-  <h4><%= project_item.name %> (<%= project_item.class %>)</h4>
-  <p>
-    <a href="#"><i class="fa fa-download"></i> Download Data Set</a>
-  </p>
+  <h4><%= link_to "#{project_item.name} (#{class_to_human(project_item.class)})", root_path %></h4>
 </div>
-

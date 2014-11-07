@@ -3,7 +3,7 @@
 @import 'neat';
 
 .project {
-  h3 {
+  .project-header {
     padding: 20px;
     background-color: $color--project-header;
 
@@ -12,13 +12,21 @@
       border: 0px;
       padding: 5px 10px;
     }
+
+    h1,h2 { display: inline; }
+
+    h2, a {
+      color: $medium-grey;
+      font-size: 14px;
+
+      a:hover { color: $dark-grey; }
+    }
+
+    .menu { margin-left: 40px; }
   }
 }
 
-.project-subtitle {
-  font-size: 14px;
-  margin-left: 40px;
-}
+
 
 .project-item {
   @include span-columns(3);
@@ -26,7 +34,10 @@
   @include fill-parent;
   margin-right: 0px;
   width: 25%;
-  border: 1px solid $color--project-item-border;
+  border-bottom: 1px solid $color--project-item-border;
+  border-right: 1px solid $color--project-item-border;
+
+  //&:nth-child(4n+1) {border-right:none;}
 
   h4 {
     margin: 20px;
