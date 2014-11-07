@@ -15,11 +15,11 @@ class ProtectedPlanet.Dropdown
     @addEventListener()
 
   positionEl: ->
-    triggerPosition = @$triggerEl.position()
+    triggerPosition = @$triggerEl.offset()
 
     @$el.width(@$triggerEl.outerWidth())
 
-    @$el.css('position', @$triggerEl.css('position'))
+    @$el.css('position', 'fixed')
     @$el.css('top', (triggerPosition.top + @$triggerEl.outerHeight()) )
     @$el.css('left', triggerPosition.left)
 
