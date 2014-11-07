@@ -24,16 +24,11 @@ module HomeHelper
   end
 
   def link_to_filter link_name, key, value, options = {}
-    link_params = params.merge({key => value})
-    link_to link_name, root_path(link_params), options
+    link_to link_name, root_path(link_params(key, value)), options
   end
 
   def filter_link_active_class key, value
-    if params.include?(key) && (params[key] == value || params[key].include?(value))
-      "active-filter"
-    else
-      ""
-    end
+    in_params?(key, value) ? "active-filter" : ""
   end
 
   def size_class
@@ -45,6 +40,26 @@ module HomeHelper
   end
 
   private
+
+  def link_params key, value
+    value = value.to_s
+    params_copy = params.dup
+
+    if /(.+)\[\]/ =~ key
+      arr = params_copy[$1] ||= []
+      arr.include?(value) ? arr.delete(value) : arr.push(value)
+
+      params_copy.delete($1) if arr.empty?
+    else
+      params_copy[key] == value ? params_copy.delete(key) : params_copy[key] = value
+    end
+
+    params_copy
+  end
+
+  def in_params? key, value
+    params[key] == value || params[key].try(:include?, value)
+  end
 
   def selected_iucn_categories
     IucnCategory.where('id IN (?)', params[:iucn_category]).pluck(:name)
