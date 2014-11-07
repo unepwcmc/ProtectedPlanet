@@ -54,8 +54,8 @@ class ProtectedArea < ActiveRecord::Base
   def nearest_protected_areas
     @nearest_pas ||= Search.search('',
       {
-        size: 2,
-        filters: {location: coordinates},
+        size: 3,
+        filters: {location: {coords: coordinates}},
         sort: {geo_distance: coordinates}
       }
     ).results
