@@ -1,4 +1,8 @@
-<ul>
-  <%= render partial: 'search_result', collection: @search.results %>
-</ul>
-<%= will_paginate @search, params: {grid: true} %>
+<% if @search.count > 0 %>
+  <ul>
+    <%= render partial: 'search_result', collection: @search.results %>
+  </ul>
+  <%= will_paginate @search, params: {grid: true} %>
+<% else %>
+  <h1>There were no results found</h1>
+<% end %>
