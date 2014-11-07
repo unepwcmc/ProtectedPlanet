@@ -1,5 +1,5 @@
 <div class="project-item">
   <img src="http://placekitten.com/600/400">
 
-  <h4><%= link_to "#{project_item.name} (#{class_to_human(project_item.class)})", root_path %></h4>
+  <h4><%= link_to "#{project_item.name} (#{class_to_human(project_item.class)})", show_item_path(project_item) %></h4>
 </div>
