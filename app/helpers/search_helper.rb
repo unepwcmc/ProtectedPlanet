@@ -37,7 +37,7 @@ module SearchHelper
   end
 
   def region_cover region, opts={size: {x: 256, y: 128}}
-    image_tag("regions/#{region.iso}.png", style: style(opts), alt: region.name)
+    image_tag("search-placeholder-country.png", style: style(opts), alt: region.name)
   end
 
   private
