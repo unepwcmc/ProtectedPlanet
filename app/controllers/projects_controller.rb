@@ -25,6 +25,12 @@ class ProjectsController < ApplicationController
     render json: true
   end
 
+  def destroy
+    @project = Project.find(params[:id])
+    @project.destroy
+    redirect_to projects_path
+  end
+
   private
 
   def item

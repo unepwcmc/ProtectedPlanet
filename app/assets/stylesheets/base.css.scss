@@ -64,7 +64,6 @@ select {
   border: 1px solid $light-grey;
   padding: 10px;
   color: $dark-grey;
-  background: transparent url("icon-dropdown-grey.png") no-repeat right center;
   text-indent: 0.01px;
   text-overflow: "";
 }
@@ -136,6 +135,9 @@ nav li {
       background-color: white;
       transition: all 1s ease;
     }
+
+    &:hover { background-color: $dark-green; }
+    a:hover { background-color: transparent; }
   }
 
   &.icon {
