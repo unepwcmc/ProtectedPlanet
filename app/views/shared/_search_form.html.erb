@@ -1,4 +1,9 @@
-<form action='/search' method='get'>
-  <input name="q" placeholder="Search the protected areas of our planet" value='<%= query %>' class="search-input" type="text">
-  <button class="search-submit btn" type="submit">Search</button>
+<form action='/search' method='get' id="search-form">
+  <div class="col-ten">
+    <input name="q" placeholder="Search the protected areas of our planet" value='<%= query %>' class="search-input" type="text">
+  </div>
+
+  <div class="search-button col-two">
+    <button class="search-submit btn" type="submit">Search</button>
+  </div>
 </form>
