@@ -1,5 +1,6 @@
 [web]
 www-prod.protectedplanet.net
+ec2-54-75-204-95.eu-west-1.compute.amazonaws.com
 
 [db]
 db-prod.protectedplanet.net

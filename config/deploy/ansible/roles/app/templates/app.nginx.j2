@@ -5,11 +5,15 @@ upstream app {
 
 server {
   listen 80;
-  server_name {{inventory_hostname}};
+  server_name {{inventory_hostname}} alpha.protectedplanet.net;
 
   root /var/www/pp/current/public;
 
   try_files $uri/index.html $uri @app;
+
+  location ~* \.(eot|ttf|woff)$ {
+    add_header Access-Control-Allow-Origin *;
+  }
 
   location /admin/sidekiq {
     auth_basic "Restricted";
