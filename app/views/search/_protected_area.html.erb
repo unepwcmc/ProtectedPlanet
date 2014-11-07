@@ -1,11 +1,14 @@
 <li class='result'>
-  <%= protected_area_cover model %>
+  <a href="/<%= model.slug %>">
+    <%= protected_area_cover model %>
+  </a>
+
   <div class="inner-result">
     <h3><a href='/<%= model.slug %>'><%= model.name %></a>,  <small><%= model.designation.name %></small></h3>
     <p>
       <% model.countries.each do |country| %>
         <a href="<%= country_stats_path(iso: country.iso) %>"><%= country.name %></a>,
-        <a href="<%= regional_stats_path(iso: country.region.try(:iso)) %>"><%= country.region.try(:name) %></a>
+        <%= country.region.try(:name) %>
         |
       <% end %>
       <icon></icon>

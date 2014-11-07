@@ -40,6 +40,26 @@ class ProtectedArea < ActiveRecord::Base
     )
   end
 
+  def as_api_feeder
+    self.as_json(
+      only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area],
+      include: {
+        sub_locations: { only: [:english_name] },
+        countries: {
+          only: [:name, :iso_3],
+          include: { region: { only: [:name] } }
+        },
+        iucn_category: { only: [:name] },
+        designation: {
+          only: [:name],
+          include: {jurisdiction: {only: [:name]}}
+        },
+        legal_status: { only: [:name] },
+        governance: { only: [:name] }
+      }
+    )
+  end
+
   def bounds
     [
       [bounding_box["min_y"], bounding_box["min_x"]],
@@ -54,8 +74,8 @@ class ProtectedArea < ActiveRecord::Base
   def nearest_protected_areas
     @nearest_pas ||= Search.search('',
       {
-        size: 2,
-        filters: {location: coordinates},
+        size: 3,
+        filters: {location: {coords: coordinates}},
         sort: {geo_distance: coordinates}
       }
     ).results

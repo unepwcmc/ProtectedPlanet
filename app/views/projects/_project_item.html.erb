@@ -1,9 +1,5 @@
 <div class="project-item">
   <%= image_tag 'search-placeholder-country.png' %>
 
-  <h4><%= project_item.name %> (<%= project_item.class %>)</h4>
-  <p>
-    <a href="#"><i class="fa fa-download"></i> Download Data Set</a>
-  </p>
+  <h4><%= link_to "#{project_item.name} (#{class_to_human(project_item.class)})", show_item_path(project_item) %></h4>
 </div>
-

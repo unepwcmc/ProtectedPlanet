@@ -4,8 +4,6 @@
 .factsheet {
   width: 500px;
   float:left;
-  padding-top: 60px;
-  padding-bottom: 60px;
 }
 
 .factsheet article {
@@ -71,4 +69,10 @@
 
 #map.protected-area-map {
   left: 500px;
+}
+
+.nearest-protected-areas {
+  li {
+    display: inline-block;
+  }
 }

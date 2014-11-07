@@ -1,9 +1,9 @@
 <% content_for :header do %>
   <nav class="sub-nav">
     <ul class="nav">
-      <li><h1><%= @country.name %></h1></li>
-      <li><h2><%= @country.name %></h2></li>
-      <li><a href="#">Compare Countries</a></li>
+      <li><h1><%= @country.name %>, <%= @country.region.name %></h1></li>
+      <li><h2><%= @country.protected_areas.count %> Protected Areas</h2></li>
+      <li><%= link_to 'Compare Countries', new_countries_comparison_path %></li>
       <li><a href="#">Download Data Set</a></li>
       <li><%= render partial: 'shared/add_to_project', locals: {item: @country, type: 'country'} %></li>
     </ul>
@@ -118,4 +118,10 @@
   </article>
 </section>
 
-<div class="protected-area-map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>"></div>
+<div class="protected-area-map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>">
+  <div class="map-disclaimer">
+    The boundaries and names shown, and the designations used on this
+    map do not imply official endorsement or acceptance by the United
+    Nations or IUCN.
+  </div>
+</div>

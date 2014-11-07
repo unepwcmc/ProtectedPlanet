@@ -32,14 +32,14 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_redirect off;
-    proxy_pass http://ppeeuloadbalancer-2055795880.eu-west-1.elb.amazonaws.com/api/;
+    proxy_pass http://prod-www.protectedplanet.net/api/;
   }
 
   location /api2 {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_redirect off;
-    proxy_pass http://ppeeuloadbalancer-2055795880.eu-west-1.elb.amazonaws.com/api2/;
+    proxy_pass http://prod-www.protectedplanet.net/api2/;
   }
 
   location @app {

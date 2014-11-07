@@ -2,7 +2,7 @@
   <nav class="sub-nav">
     <ul class="nav">
       <li><h1><%= @protected_area.name %></h1></li>
-      <li><h2><%= @protected_area.name %></h2></li>
+      <li><h2><%= @protected_area.countries.first.name %></h2></li>
       <li><a href="#">Follow</a></li>
       <li><a href="#">Download Dataset <i class="fa fa-caret-down"></i>
 </a></li>
@@ -34,13 +34,33 @@
     <li>Last Updated sometime</li>
   </ul>
 
+  <% if related_links?(@protected_area) %>
+    <article>
+      <h3>Related</h3>
+      <ul>
+        <% if @protected_area.wikipedia_article %>
+          <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
+        <% end %>
+      </ul>
+    </article>
+  <% end %>
+
   <article>
-    <h3>Related</h3>
-    <ul>
-      <% if @protected_area.wikipedia_article %>
-        <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
-      <% end %>
-    </ul>
+    <% if @protected_area.nearest_protected_areas.count > 1 %>
+      <h3>Nearest Protected Areas</h3>
+
+      <ul class="nearest-protected-areas">
+        <% @protected_area.nearest_protected_areas[1..2].each do |protected_area| %>
+          <li>
+            <a href="/<%= protected_area.slug %>">
+              <%= protected_area_cover protected_area, {size: {x: 200, y: 100}} %>
+            </a>
+
+            <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
   </article>
 </section>
 
@@ -48,4 +68,9 @@
   data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
   data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
   data-wdpa-id="<%= @protected_area.wdpa_id %>">
+  <div class="map-disclaimer">
+    The boundaries and names shown, and the designations used on this
+    map do not imply official endorsement or acceptance by the United
+    Nations or IUCN.
+  </div>
 </div>

@@ -7,4 +7,8 @@ module ProtectedAreasHelper
       'to' =>   protected_area.bounds.last
     }
   end
+
+  def related_links? protected_area
+    !!protected_area.wikipedia_article
+  end
 end
