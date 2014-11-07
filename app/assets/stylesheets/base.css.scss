@@ -163,7 +163,7 @@ nav li {
 }
 
 .search-bar {
-  z-index: $zIndex-2;
+  z-index: 1001;
   height: 60px;
   width: 100%;
   float: left;
@@ -179,7 +179,7 @@ nav li {
   .search-input {
     color: $color--search-input-text;
     background-color: $color--search-input-bg;
-    position: absolute;
+    width:100%;
     height: 31px;
     right: 251px;
     left: 20px;
@@ -194,7 +194,7 @@ nav li {
   .search-submit {
     color: $color--search-input-text;
     background-color: $color--search-input-bg;
-    width: 230px;
+    width: 100%;
     height: 31px;
     float: right;
   }
@@ -340,4 +340,9 @@ a.btn, button {
 
 .protected_areas-parent #map, .country-parent #map, .protected_areas-parent, .country-parent {
   top: 120px;
+}
+
+#search-form {
+  @include outer-container;
+  max-width: 100%;
 }
