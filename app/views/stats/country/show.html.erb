@@ -13,7 +13,6 @@
 <section class="factsheet" id="protected-coverage-viz">
   <article>
     <h3>Protected Areas Value</h3>
-
     <div class="inset-statistic-large">
       <span class="extra-large"><%= @presenter.pa_area %></span>
       <div class="text-holder">
@@ -21,11 +20,7 @@
         <%= @presenter.percentage_pa_cover %>% Protected
       </div>
     </div>
-
-
     Total Area (Sq Km)
-
-
     <table class="centered">
       <tbody>
         <tr>
@@ -62,7 +57,6 @@
         </tr>
       </tbody>
     </table>
-
   </article>
   <article class="conservation-statistics">
     <h3>Conservation Statistics</h3>
@@ -83,23 +77,20 @@
       </div>
     <hr>
       <strong><%= @country.protected_areas_with_iucn_categories.count %></strong> have an IUCN Category. IUCN has defined a series of six protected area management categories, based on primary management objectives.<br><br>
-
       <table>
-      <tbody>
-        <% @country.iucn_categories.each do |c| %>
-          <tr>
-            <td>
-              <strong><%= c.name %></strong>
-            </td>
-            <td class="right-aligned">
-              (<%= c.protected_areas.count %>)
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-
-
+        <tbody>
+          <% @country.iucn_categories.each do |c| %>
+            <tr>
+              <td>
+                <strong><%= c.name %></strong>
+              </td>
+              <td class="right-aligned">
+                (<%= c.protected_areas.count %>)
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     <hr>
   </article>
   <article>

@@ -1,4 +1,6 @@
 @import 'colors';
+@import 'bourbon';
+@import 'neat';
 
 table.centered td { text-align: center; }
 td.right-aligned { text-align: right;}
@@ -39,4 +41,17 @@ div {
     font-size: 64px;
     float: left;
     color: $dark-blue;
+}
+
+
+.countries-compare-left { 
+  border-right: 1px solid $grey;
+}
+
+.countries-compare-left, .countries-compare-right {   
+  @include span-columns(6);
+
+  div.factsheet {
+    width:100%;
+  }
 }

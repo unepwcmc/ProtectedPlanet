@@ -17,8 +17,8 @@ class Wdpa::CartoDbImporter
 
   private
 
-  STANDARD_COLUMNS = ['wdpaid', 'SHAPE']
-  CARTODB_COLUMNS = ['wdpaid', 'the_geom']
+  STANDARD_COLUMNS = ['wdpaid', 'SHAPE', 'iucn_cat', 'marine']
+  CARTODB_COLUMNS = ['wdpaid', 'the_geom', 'iucn_cat', 'marine']
 
   def split
     @wdpa_release.geometry_tables.each do |table, _|

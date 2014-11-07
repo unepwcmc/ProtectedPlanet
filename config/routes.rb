@@ -34,6 +34,9 @@ Rails.application.routes.draw do
   get '/stats/regional/:iso', to: 'stats/regional#show', as: 'regional_stats'
   get '/country/:iso', to: 'stats/country#show', as: 'country_stats'
 
+  get '/country/:iso/compare', to: 'stats/country#new_comparison', as: 'new_countries_comparison'
+  post '/country/:iso/compare', to: 'stats/country#compare', as: 'compare_countries'
+
   get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
   resources :downloads, only: [:show, :create, :update]
 
