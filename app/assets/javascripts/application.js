@@ -33,11 +33,11 @@ var ready = function() {
   );
   new ProtectedPlanet.Dropdown(
     $('.btn-map-download'),
-    $('.download-type-dropdown')
+    $(".download-type-dropdown[data-download-type='general']")
   );
   new ProtectedPlanet.Dropdown(
     $('.btn-search-download'),
-    $('.download-type-dropdown')
+    $(".download-type-dropdown[data-download-type='search']")
   )
 };
 

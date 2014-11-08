@@ -9,6 +9,7 @@ class ProtectedPlanet.Dropdown
     @render()
 
   render: ->
+    @$el.appendTo('body')
     @$el.hide()
 
     @positionEl()

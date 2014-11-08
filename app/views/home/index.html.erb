@@ -5,7 +5,7 @@
         <li>
           <h1>Showing <strong><%= @search.count %></strong> Protected Areas</h1>
         </li>
-        <li class="right"><%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-search-download', item_id: 'search', image: 'icon-download-black.png'} %></li>
+        <li class="right"><%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-search-download', download_type: 'search', image: 'icon-download-black.png'} %></li>
       </ul>
     </nav>
   <% end %>
@@ -32,5 +32,5 @@
 <%= render partial: 'map_filters' %>
 
 <% unless map_filtered? %>
-  <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', item_id: 'all'} %>
+  <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', download_type: 'general', item_id: 'all'} %>
 <% end %>
