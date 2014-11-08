@@ -24,8 +24,10 @@ module SearchHelper
   end
 
   def protected_area_cover protected_area, opts={size: {x: 256, y: 128}}
+    version = Rails.application.secrets.mapbox['version']
+
     image_tag(
-      tiles_path({id: protected_area.id}.merge(opts)),
+      tiles_path({id: protected_area.id, version: version}.merge(opts)),
       style: style(opts),
       alt: protected_area.name
     )
