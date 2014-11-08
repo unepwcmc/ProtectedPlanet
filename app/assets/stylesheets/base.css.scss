@@ -288,7 +288,8 @@ footer {
 }
 
 .footer-logos {
-  img { margin-right: 20px; }
+  margin-right: 20px;
+  img { margin-right: 0px; }
 }
 
 .footer-copyright, .footer-logos { float: left; }
