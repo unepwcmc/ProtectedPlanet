@@ -12,6 +12,7 @@ class ProtectedPlanet.Downloads.Search extends ProtectedPlanet.Downloads.Base
       )
     )
 
+
   submitDownload: (next) ->
     $.post(@constructor.CREATION_PATH + window.location.search, (data) ->
       next(data.token)

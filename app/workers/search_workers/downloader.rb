@@ -16,7 +16,7 @@ class SearchWorkers::Downloader < SearchWorkers::Base
   end
 
   def complete_search
-    search.properties['filename'] = filename
+    search.properties['links'] = filename
     search.complete!
   end
 
@@ -25,7 +25,9 @@ class SearchWorkers::Downloader < SearchWorkers::Base
   end
 
   def filename
-    "search_#{ids_digest}"
+    ['csv', 'shp', 'kml'].each_with_object({}) do |type, hash|
+      hash[type] = Download.link_to "search_#{ids_digest}", type
+    end.to_json
   end
 
   def send_completion_email

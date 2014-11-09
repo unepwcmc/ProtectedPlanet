@@ -18,13 +18,3 @@ class ProtectedPlanet.Downloads.Base
     @opts.mainContainer ||= $('#download-modal')
     @generationModal = new DownloadGenerationModal(@opts.mainContainer)
 
-  start: ->
-    @submitDownload( (token) =>
-      @generationModal.initialiseForm(token)
-      @generationModal.show()
-
-      @pollDownload(token, (download) =>
-        @generationModal.showDownloadLink(JSON.parse(download.links)[@type])
-      )
-    )
-
