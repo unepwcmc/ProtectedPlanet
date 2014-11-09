@@ -1,7 +1,8 @@
 $dark-grey: #353946;
 $medium-grey: rgb(113, 124, 151);
 $grey: #c8c8c8;
-$light-grey: #dadada;
+$light-grey: #f7f7f7;
+$medium-light-grey: #ededed;
 
 $dark-blue: rgb(43,49,70);
 $grey-blue: #848184;
@@ -44,8 +45,12 @@ $color--footer-bg: $dark-blue;
 $color--footer: $light-grey;
 $color--footer-link: $light-grey;
 
-$color--project-header: $light-grey;
+$color--project-header-bg: $white;
+$color--project-header-border: $medium-light-grey;
+$color--project-header-small: $medium-grey;
 $color--project-item-border: $light-grey;
+$color--project-bg: $light-grey;
+$color--project-item-bg: $white;
 
 $color--pa-text: $grey;
 $color--pa-header: $medium-grey;

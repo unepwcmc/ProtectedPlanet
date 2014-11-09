@@ -3,17 +3,41 @@
 @import 'neat';
 
 .project {
+  background-color: $color--project-bg;
+
+  &:last-child {
+    .project-item {
+      border-bottom: 1px solid $color--project-item-border;
+    }
+  }
+
   .project-header {
     padding: 20px;
-    background-color: $color--project-header;
+    background-color: $color--project-header-bg;
+    border-bottom: solid 1px $color--project-header-border;
+    border-top: solid 1px $color--project-header-border;
 
+    ul li {
+      display: inline-block;
+
+      &.project-name {
+        cursor: pointer;
+      }
+    }
     input {
       font-size: 15px;
       border: 0px;
       padding: 5px 10px;
     }
 
-    h1,h2 { display: inline; }
+    h1 small {
+      font-size: 0.8em;
+      vertical-align: text-bottom;
+      margin-left: 5px;
+      color: $color--project-header-small;
+    }
+
+    h1,h2 { display: inline-block; }
 
     h2, a {
       color: $medium-grey;
@@ -24,31 +48,26 @@
 
     .menu { margin-left: 40px; }
   }
-}
 
+  .project-item {
+    @include span-columns(3);
+    @include omega(4n+1);
+    @include fill-parent;
+    margin-right: 0px;
+    width: 25%;
+    border-right: 1px solid $color--project-item-border;
+    background-color: $color--project-item-bg;
 
-
-.project-item {
-  @include span-columns(3);
-  @include omega(4n+1);
-  @include fill-parent;
-  margin-right: 0px;
-  width: 25%;
-  border-bottom: 1px solid $color--project-item-border;
-  border-right: 1px solid $color--project-item-border;
-
-  //&:nth-child(4n+1) {border-right:none;}
-
-  h4 {
-    margin: 20px;
-  }
-
-  p {
-    padding: 20px;
+    h4 { margin: 20px; }
+    p { padding: 20px; }
   }
 }
+
 
 .projects-parent {
   overflow: scroll;
 }
 
+.btn-project-download {
+  cursor: pointer;
+}
