@@ -13,6 +13,6 @@ class Project < ActiveRecord::Base
   polymorphic_group :items, [:protected_areas, :countries, :regions, :saved_searches]
 
   def download_link type
-    Download.link_to "project_#{id}_all", type
+    $redis.get("project_#{id}_all")
   end
 end

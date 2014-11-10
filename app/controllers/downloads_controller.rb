@@ -1,9 +1,16 @@
 class DownloadsController < ApplicationController
   def show
-    country_iso_3 = params[:id]
     type = params[:type]
 
-    redirect_to Download.link_to(country_iso_3, type)
+    link = if params[:domain] == 'general'
+      country_iso_3 = params[:id]
+      Download.link_to(country_iso_3, type)
+    elsif params[:domain] == 'project'
+      project_id = params[:id]
+      Download.link_to "project_#{project_id}_all", type
+    end
+
+    render({json: {link: link}})
   end
 
   def create
@@ -21,8 +28,13 @@ class DownloadsController < ApplicationController
   end
 
   def poll
-    search = Search.find(params[:token])
-    render(search ? {json: search.properties} : {status: 404})
+    if params[:domain] == 'search'
+      search = Search.find(params[:token])
+      render(search ? {json: search.properties} : {status: 404})
+    elsif params[:domain] == 'project'
+      project = Project.find(params[:token])
+      render(project ? {json: project.download_link} : {status: 404})
+    end
   end
 
   private

@@ -1,12 +1,24 @@
-initialiseFilterDownloads = ->
-  $downloadBtns = $('nav.sub-nav .download-type-dropdown a')
+initialiseDownloads = ->
+  $downloadBtns = [
+    $(".download-type-dropdown[data-download-type='general'] a")
+    $(".download-type-dropdown[data-download-type='search'] a")
+  ]
+
   return false if $downloadBtns.length == 0
 
-  $downloadBtns.on('click', (e) ->
-    e.preventDefault()
+  $downloadBtns.forEach( ($btn) ->
+    $btn.on('click', (e) ->
+      button = $(@)
+      e.preventDefault()
 
-    button = $(e.target)
-    ProtectedPlanet.Search.Download.start(button.data('type'))
+      list = button.parents('ul')
+
+      ProtectedPlanet.Downloads.Base.start(
+        list.data('download-type'),
+        button.data('type'),
+        {itemId: list.data('item-id')}
+      )
+    )
   )
 
 getParameter = (name) ->
@@ -40,7 +52,7 @@ ready = ->
   new ProtectedPlanet.Map($('#map')).render()
 
   setupFiltersConcertina()
-  initialiseFilterDownloads()
+  initialiseDownloads()
 
 $(document).ready(ready)
 $(document).on('page:load', ready)

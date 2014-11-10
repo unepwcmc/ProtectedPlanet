@@ -22,28 +22,4 @@ module SearchHelper
       raw "#{model.name} #{facet_count}"
     end
   end
-
-  def protected_area_cover protected_area, opts={size: {x: 256, y: 128}}
-    version = Rails.application.secrets.mapbox['version']
-
-    image_tag(
-      tiles_path({id: protected_area.id, version: version}.merge(opts)),
-      style: style(opts),
-      alt: protected_area.name
-    )
-  end
-
-  def country_cover country, opts={size: {x: 256, y: 128}}
-    image_tag("search-placeholder-country.png", style: style(opts), alt: country.name)
-  end
-
-  def region_cover region, opts={size: {x: 256, y: 128}}
-    image_tag("search-placeholder-country.png", style: style(opts), alt: region.name)
-  end
-
-  private
-
-  def style opts
-    "width: #{opts[:size][:x]}px; height: #{opts[:size][:y]}px"
-  end
 end

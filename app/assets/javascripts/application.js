@@ -33,12 +33,18 @@ var ready = function() {
   );
   new ProtectedPlanet.Dropdown(
     $('.btn-map-download'),
-    $('.download-type-dropdown')
+    $(".download-type-dropdown[data-download-type='general']")
   );
   new ProtectedPlanet.Dropdown(
     $('.btn-search-download'),
-    $('.download-type-dropdown')
-  )
+    $(".download-type-dropdown[data-download-type='search']")
+  );
+  $(".project").each( function(i, el) {
+    new ProtectedPlanet.Dropdown(
+      $(el).find('.btn-project-download'),
+      $(el).find(".download-type-dropdown[data-download-type='project']")
+    );
+  });
 };
 
 $(document).ready(ready)
