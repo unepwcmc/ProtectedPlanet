@@ -1,28 +1,36 @@
-<% @projects.each_with_index do |project, i| %>
-  <section class="project">
-    <header class="project-header">
-      <ul>
-        <li class="project-name" id="rename-<%= i %>"><h1><%= best_in_place project, :name, as: :input, activator: "#rename-#{i}" %><small><i class="fa fa-edit" ></i></small></h1></li>
-        <li class="menu">
+<% if @projects.empty? %>
+  <section class="no-projects">
 
-          <a class="btn-project-download">
-            Download Complete Data Set <i class="fa fa-caret-down"></i>
-          </a>
-
-          <ul data-download-type="project" class="download-type-dropdown">
-            <li><a data-type="csv" class="btn">CSV</a></li>
-            <li><a data-type="kml" class="btn">KML</a></li>
-            <li><a data-type="shp" class="btn">SHP</a></li>
-          </ul>
-        </li>
-        <li class="right">
-          <%= link_to project_path(project), method: :delete, data: { confirm: "Are you sure you want to delete this project?"} do %>
-            Delete this project <i class="fa fa-times"></i>
-          <% end %>
-        </li>
-      </ul>
-    </header>
-
-    <%= render partial: "project_item", collection: project.items %>
+    <h1>You have no projects yet</h1>
+    <h2>You can add Countries, Protected Areas, Regions and Searches to a project. Try a search to get started...</h2>
+    <div class="info-search"><%= render partial: 'shared/search_form', locals: {query: @query} %></div>
   </section>
+<% else %>
+  <% @projects.each_with_index do |project, i| %>
+    <section class="project">
+      <header class="project-header">
+        <ul>
+          <li class="project-name" id="rename-<%= i %>"><h1><%= best_in_place project, :name, as: :input, activator: "#rename-#{i}" %><small><i class="fa fa-edit" ></i></small></h1></li>
+          <li class="menu">
+
+            <a class="btn-project-download">
+              Download Complete Data Set <i class="fa fa-caret-down"></i>
+            </a>
+
+            <ul data-download-type="project" class="download-type-dropdown">
+              <li><a data-type="csv" class="btn">CSV</a></li>
+              <li><a data-type="kml" class="btn">KML</a></li>
+              <li><a data-type="shp" class="btn">SHP</a></li>
+            </ul>
+          </li>
+          <li class="right">
+            <%= link_to project_path(project), method: :delete, data: { confirm: "Are you sure you want to delete this project?"} do %>
+              Delete this project <i class="fa fa-times"></i>
+            <% end %>
+          </li>
+        </ul>
+      </header>
+
+      <%= render partial: "project_item", collection: project.items %>
+  <% end %>
 <% end %>

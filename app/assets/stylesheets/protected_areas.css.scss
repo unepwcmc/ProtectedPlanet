@@ -35,10 +35,13 @@
 
   td {
     padding: 10px 0px;
+    line-height: 1.1em;
 
     strong {
-      font-family: MuseoSans-100;
+      font-family: MuseoSans-300;
+      font-weight: normal;
       font-size: 12px;
+      display: block;
       color: $color--pa-table-attribute;
     }
   }
