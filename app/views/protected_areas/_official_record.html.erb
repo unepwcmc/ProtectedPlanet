@@ -2,16 +2,6 @@
   <tbody>
     <tr>
       <td>
-        <strong>WDPA ID</strong>
-        <%= protected_area.wdpa_id %>
-      </td>
-      <td>
-        
-      </td>
-    </tr>
-
-    <tr>
-      <td>
         <strong>Sublocation</strong>
         <%= protected_area.sub_locations.map(&:iso).join(', ') %>
       </td>
@@ -53,5 +43,14 @@
         <%= protected_area.governance.try(:name) %>
       </td>
     </tr>
+
+    <tr>
+      <td>
+        <strong>WDPA ID</strong>
+        <%= protected_area.wdpa_id %>
+      </td>
+      <td></td>
+    </tr>
+
   </tbody>
 </table>
