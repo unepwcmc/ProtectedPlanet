@@ -1,4 +1,4 @@
-class Api::ProtectedAreasController < ApplicationController
+class Api::V3::ProtectedAreasController < ApplicationController
   def show
     protected_area = ProtectedArea.
       without_geometry.

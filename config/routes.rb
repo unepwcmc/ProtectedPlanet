@@ -10,8 +10,12 @@ Rails.application.routes.draw do
   get '/assets/tiles/:id', to: 'assets#tiles', as: 'tiles'
 
   namespace :api do
-    get '/search/points', to: 'search#points'
-    get '/search/by_point', to: 'search#by_point'
+    namespace :v3 do
+      resources :protected_areas, only: [:show]
+
+      get '/search/points', to: 'search#points'
+      get '/search/by_point', to: 'search#by_point'
+    end
   end
 
   namespace :admin do
@@ -45,10 +49,6 @@ Rails.application.routes.draw do
 
   get '/sites/:id', to: 'sites#show'
   get '/sites/:id/*other', to: 'sites#show'
-
-  namespace :api do
-    resources :protected_areas, only: [:show]
-  end
 
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 end

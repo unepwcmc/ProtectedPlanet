@@ -1,4 +1,4 @@
-class Api::SearchController < ApplicationController
+class Api::V3::SearchController < ApplicationController
   def points
     results = Search.search(
       params[:q],
