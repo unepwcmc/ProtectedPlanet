@@ -9,18 +9,27 @@ class Api::SearchController < ApplicationController
   end
 
   def by_point
-    render json: Search.search('',
-      size: 1,
-      filters: {
-        location: {
-          coords: [params[:lon], params[:lat]], distance: params[:distance]
-        }
-      },
-      sort: {geo_distance: [params[:lon].to_f, params[:lat].to_f]}
-    ).results
+    dirty_query = """
+      SELECT p.id, p.wdpa_id, p.name, p.the_geom_latitude, p.the_geom_longitude
+      FROM protected_areas p
+      WHERE ST_DWithin(p.the_geom, ST_GeomFromText('POINT(? ?)',4326), 0.0000001)
+      LIMIT 1;
+    """.squish
+
+    query = ActiveRecord::Base.send(:sanitize_sql_array, [
+      dirty_query, params[:lon].to_f, params[:lat].to_f
+    ])
+
+    results = db.execute(query)
+
+    render json: results
   end
 
   private
+
+  def db
+    ActiveRecord::Base.connection
+  end
 
   def search_options extra_options
     options = {filters: filters}

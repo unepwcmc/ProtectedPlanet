@@ -29,7 +29,6 @@ class ApplicationController < ActionController::Base
     return unless request.get?
 
     if (!NO_REDIRECT.include?(request.path) && !request.xhr?)
-      puts "STORING LOCATION"
       session[:previous_url] = request.fullpath
     end
   end
