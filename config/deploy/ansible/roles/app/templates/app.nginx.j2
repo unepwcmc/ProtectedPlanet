@@ -1,5 +1,4 @@
 upstream app {
-  # Path to Unicorn SOCK file, as defined previously
   server unix:/tmp/unicorn.pp.sock fail_timeout=0;
 }
 
@@ -10,6 +9,10 @@ server {
   root /var/www/pp/current/public;
 
   try_files $uri/index.html $uri @app;
+
+  ##
+  # Add CORS header to font files, so that Chrome is able to render them
+  ##
 
   location ~* \.(eot|ttf|woff)$ {
     add_header Access-Control-Allow-Origin *;
@@ -25,12 +28,27 @@ server {
     proxy_pass http://app;
   }
 
-  location /api/search {
+  location @app {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_redirect off;
     proxy_pass http://app;
   }
+
+  ##
+  # API requests for the new API take priority over legacy requests.
+  ##
+
+  location /api/v3 {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    proxy_pass http://app;
+  }
+
+  ##
+  # Opaquely proxy API requests to old servers
+  ##
 
   location /api {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -44,13 +62,6 @@ server {
     proxy_set_header Host $http_host;
     proxy_redirect off;
     proxy_pass http://prod-www.protectedplanet.net/api2/;
-  }
-
-  location @app {
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $http_host;
-    proxy_redirect off;
-    proxy_pass http://app;
   }
 
   error_page 500 502 503 504 /500.html;
