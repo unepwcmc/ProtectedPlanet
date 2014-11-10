@@ -8,11 +8,13 @@ td.right-aligned { text-align: right;}
 hr {
   height: 1px;
   color: $light-grey;
-  margin: 20px 0px;
+  margin: 0px;
+  margin-bottom: 20px;
 }
 
 div {
   &.inset-statistic {
+    margin-bottom: 12px;
     display: inline-block;
     width: 225px;
   }

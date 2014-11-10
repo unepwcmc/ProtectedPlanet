@@ -348,3 +348,9 @@ a.btn, button {
   @include outer-container;
   max-width: 100%;
 }
+
+.country-parent {
+  article table {
+    margin-top: 10px;
+  }
+}
