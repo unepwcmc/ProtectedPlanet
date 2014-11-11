@@ -7,7 +7,7 @@ module HomeHelper
 
   def filter_url_attribute
     if map_filtered?
-      "data-url=\"#{api_search_points_url(params)}\"".html_safe
+      "data-url=\"#{api_v3_search_points_url(params)}\"".html_safe
     end
   end
 
