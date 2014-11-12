@@ -3,7 +3,7 @@
     <ul class="nav">
       <li><h1><%= @protected_area.name %></h1></li>
       <li><h2><%= @protected_area.countries.first.name %>, <%= @protected_area.countries.first.region.name %></h2></li>
-      <li><%= render partial: 'shared/add_to_project', locals: {item: @protected_area, type: 'protected_area'} %></li>
+      <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'protected_area', item_id: @protected_area.id} %></li>
     </ul>
   </nav>
 <% end %>

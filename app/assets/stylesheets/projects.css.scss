@@ -50,6 +50,7 @@
   }
 
   .project-item {
+    min-height: 256px;
     @include span-columns(3);
     @include omega(4n+1);
     @include fill-parent;
@@ -90,4 +91,20 @@
 
 .btn-project-download {
   cursor: pointer;
+}
+
+.projects-dropdown {
+  background-color: $color--project-dropdown-bg;
+
+  li a {
+    display: inline-block;
+    width: 100%;
+    padding: 13px 7px;
+    border-bottom: solid 1px $color--project-header-border;
+    border-top: solid 1px $color--project-header-border;
+
+    &:hover {
+      background-color: $color--project-header-border;
+    }
+  }
 }

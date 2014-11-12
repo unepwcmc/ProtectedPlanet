@@ -17,14 +17,16 @@
               Download Complete Data Set <i class="fa fa-caret-down"></i>
             </a>
 
-            <ul data-download-type="project" class="download-type-dropdown">
-              <li><a data-type="csv" class="btn">CSV</a></li>
-              <li><a data-type="kml" class="btn">KML</a></li>
-              <li><a data-type="shp" class="btn">SHP</a></li>
-            </ul>
+            <script data-download-type="project" class="download-type-dropdown" type="text/html">
+              <ul>
+                <li><a data-type="csv" class="btn">CSV</a></li>
+                <li><a data-type="kml" class="btn">KML</a></li>
+                <li><a data-type="shp" class="btn">SHP</a></li>
+              </ul>
+            </script>
           </li>
           <li class="right">
-            <%= link_to project_path(project), method: :delete, data: { confirm: "Are you sure you want to delete this project?"} do %>
+            <%= link_to project_path(project), method: :delete, data: {confirm: "Are you sure you want to delete this project?"} do %>
               Delete this project <i class="fa fa-times"></i>
             <% end %>
           </li>

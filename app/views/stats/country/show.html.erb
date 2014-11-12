@@ -1,11 +1,11 @@
 <% content_for :header do %>
-  <nav class="sub-nav">
+  <nav class="sub-nav search-sub-nav">
     <ul class="nav">
       <li><h1><%= @country.name %>, <%= @country.region.name %></h1></li>
       <li><h2><%= @country.protected_areas.count %> Protected Areas</h2></li>
       <li><%= link_to 'Compare Countries', new_countries_comparison_path %></li>
-      <li><a href="#">Download Data Set</a></li>
-      <li><%= render partial: 'shared/add_to_project', locals: {item: @country, type: 'country'} %></li>
+      <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'country', item_id: @country.id} %></li>
+      <li class="right"><%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-search-download', download_type: 'general', image: 'icon-download-black.png', item_id: @country.iso } %></li>
     </ul>
   </nav>
 <% end %>

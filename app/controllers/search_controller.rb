@@ -1,4 +1,5 @@
 class SearchController < ApplicationController
+  before_filter :load_user_projects
   before_action :authenticate_user!, only: [:create]
   after_filter :enable_caching, only: [:index]
 

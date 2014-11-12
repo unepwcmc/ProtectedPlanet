@@ -20,9 +20,15 @@ class ProjectsController < ApplicationController
 
   def update
     @project = Project.find(params[:id])
+    render(status: 404) and return if @project.nil?
 
-    @project.update_attributes(project_params)
-    render json: true
+    if item
+      @project.items << item unless @project.items.include? item
+      redirect_to action: :index
+    else
+      @project.update_attributes(project_params)
+      render json: true
+    end
   end
 
   def destroy
@@ -34,14 +40,15 @@ class ProjectsController < ApplicationController
   private
 
   def item
-    item_id = params[:item_id]
-    item_class = ITEM_TYPES[params[:item_type]]
+    @item ||= begin
+      item_id = params[:item_id]
+      item_class = ITEM_TYPES[params[:item_type]]
 
-    item_class.find(item_id)
+      item_class and item_class.find(item_id)
+    end
   end
 
   def project_params
     params.require(:project).permit(:name)
   end
-
 end
