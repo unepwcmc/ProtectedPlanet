@@ -32,7 +32,13 @@
 <%= render partial: 'map_filters' %>
 
 <% if map_filtered? %>
-  <a class="btn btn-download btn-marine-toggle"><i class="fa fa-square"> Show marine PAs only</a>
+    <%= link_to_filter '', 'marine', true, { class: "btn btn-download btn-marine-toggle"} do %>
+      <% if params["marine"] == "true" %>
+        <i class="fa fa-square"></i> Show marine PAs only
+      <% else %>
+        <i class="fa fa-square-o"></i> Show marine PAs only
+      <% end %>
+    <% end %>
 <% end %>
 
 <% unless map_filtered? %>

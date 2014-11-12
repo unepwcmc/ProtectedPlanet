@@ -24,7 +24,11 @@ module HomeHelper
   end
 
   def link_to_filter link_name, key, value, options = {}
-    link_to link_name, root_path(link_params(key, value)), options
+    if block_given?
+      link_to yield.html_safe, root_path(link_params(key, value)), options
+    else
+      link_to link_name, root_path(link_params(key, value)), options
+    end
   end
 
   def filter_link_active_class key, value

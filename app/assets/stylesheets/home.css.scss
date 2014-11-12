@@ -26,12 +26,17 @@
   transition: top $search-bar-transition-time ease;
 
   i {
-    margin-right: 2px;
+    margin-right: 5px;
   }
 
   &.opened {
     transition: top $search-bar-transition-time ease;
     top: 171px;
+  }
+
+  &:hover {
+    background-color: $white;
+    color: $dark-grey;
   }
 }
 
