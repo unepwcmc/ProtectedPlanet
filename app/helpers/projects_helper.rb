@@ -11,17 +11,17 @@ module ProjectsHelper
   end
 
   def show_item_path item
-    case item.class.name
-    when 'SavedSearch'
+    case item
+    when SavedSearch
       search_path(q: item.name)
-    when 'Country'
-      country_stats_path(item)
-    when 'Region'
+    when Country
+      country_stats_path(item.iso)
+    when Region
       regional_stats_path(item)
-    when 'ProtectedArea'
-      protected_area_path(item)
+    when ProtectedArea
+      protected_area_path(item.slug)
     else
       root_path
     end
-  end  
+  end
 end

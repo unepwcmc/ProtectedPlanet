@@ -1,11 +1,16 @@
-<%= form_tag projects_path, id: 'add_to_projects_form' do %>
-  <%= hidden_field_tag 'item_id', item.id %>
-  <%= hidden_field_tag 'item_type', type %>
-
-
 <% if user_signed_in? %>
-  <%= select_tag 'project_id', options_from_collection_for_select(current_user.projects, :id, :name), include_blank: true, class: 'add-to-projects-select' %>
-<% end %>
+  <script id="add-to-project" type="text/html">
+    <ul class="projects-dropdown">
+      <% @projects.each do |project| %>
+        <li><%= link_to project.name, project_path(project, item_type: item_type, item_id: item_id), method: :put %></li>
+      <% end %>
+      <li>
+        <%= link_to(projects_path(item_type: item_type, item_id: item_id), method: :post) do %>
+          <i class="fa fa-plus"></i> Add to New Project
+        <% end %>
+      </li>
+    </ul>
+  </script>
 
-  <%= submit_tag 'Add to Projects', class: 'add-to-projects-submit' %>
+  <a class="btn-add-to-project" href="#">Add to My Projects  <i class="fa fa-angle-down"></i></a>
 <% end %>

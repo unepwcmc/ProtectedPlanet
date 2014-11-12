@@ -32,4 +32,8 @@ class ApplicationController < ActionController::Base
       session[:previous_url] = request.fullpath
     end
   end
+
+  def load_user_projects
+    @projects = current_user.projects if user_signed_in?
+  end
 end

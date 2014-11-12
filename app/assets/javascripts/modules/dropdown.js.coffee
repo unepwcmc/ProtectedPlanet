@@ -9,6 +9,9 @@ class ProtectedPlanet.Dropdown
     @render()
 
   render: ->
+    if @$el.prop('tagName') == 'SCRIPT'
+      @$el = $(@$el.html())
+
     @$el.appendTo('body')
     @$el.hide()
 
@@ -26,6 +29,7 @@ class ProtectedPlanet.Dropdown
 
   addEventListener: ->
     @$triggerEl.on(@options.on, (event) =>
+      @$triggerEl.toggleClass('active')
       @$el.slideToggle()
       event.preventDefault()
     )

@@ -161,6 +161,10 @@ nav li {
   a:hover {
     background-color: transparent;
   }
+
+  a.active {
+    background-color: $color--project-dropdown-active;
+  }
 }
 
 .search-bar {

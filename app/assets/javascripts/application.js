@@ -27,11 +27,14 @@
 //= require_tree ./modules/modals
 //= require_tree ./controllers
 
-var ready = function() {
+var initializeSearchBar = function() {
   new ProtectedPlanet.Search.Bar(
     $('.search-bar'),
     $('.icon.search')
   );
+};
+
+var initializeDropdowns = function() {
   new ProtectedPlanet.Dropdown(
     $('.btn-map-download'),
     $(".download-type-dropdown[data-download-type='general']")
@@ -40,17 +43,32 @@ var ready = function() {
     $('.btn-search-download'),
     $(".download-type-dropdown[data-download-type='search']")
   );
+  new ProtectedPlanet.Dropdown(
+    $('.btn-search-download'),
+    $(".download-type-dropdown[data-download-type='general']")
+  );
   $(".project").each( function(i, el) {
     new ProtectedPlanet.Dropdown(
       $(el).find('.btn-project-download'),
       $(el).find(".download-type-dropdown[data-download-type='project']")
     );
   });
+
   $("#countries-select").select2({
     placeholder: "Select a Country for Comparison",
     width: 'element'
   });
+  new ProtectedPlanet.Dropdown(
+    $('.btn-add-to-project'),
+    $('#add-to-project')
+  );
 };
 
-$(document).ready(ready)
+
+var ready = function() {
+  initializeSearchBar();
+  initializeDropdowns();
+};
+
+$(window).load(ready)
 $(document).on('page:load', ready)

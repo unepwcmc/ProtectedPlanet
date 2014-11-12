@@ -1,5 +1,6 @@
 class Stats::CountryController < ApplicationController
   before_filter :load_vars
+  before_filter :load_user_projects
 
   def show
   end
