@@ -29,6 +29,7 @@ class ProtectedPlanet.Dropdown
 
   addEventListener: ->
     @$triggerEl.on(@options.on, (event) =>
+      @positionEl()
       @$triggerEl.toggleClass('active')
       @$el.slideToggle()
       event.preventDefault()

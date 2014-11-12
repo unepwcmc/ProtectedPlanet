@@ -12,16 +12,25 @@
   }
 
   .project-header {
-    padding: 20px;
+    height: 60px;
     background-color: $color--project-header-bg;
     border-bottom: solid 1px $color--project-header-border;
     border-top: solid 1px $color--project-header-border;
 
     ul li {
-      display: inline-block;
+      line-height: 58px;
+      float:left;
 
       &.project-name {
         cursor: pointer;
+      }
+
+      &.right {
+        float: right;
+
+        &:last-child {
+          margin-right: 20px;
+        }
       }
     }
     input {
@@ -32,21 +41,21 @@
 
     h1 small {
       font-size: 0.8em;
-      vertical-align: text-bottom;
       margin-left: 5px;
       color: $color--project-header-small;
     }
 
-    h1,h2 { display: inline-block; }
 
-    h2, a {
+    h1, h2, a {
+      padding: 0px 20px;
+      display: block;
+      box-sizing: border-box;
       color: $medium-grey;
-      font-size: 14px;
 
       a:hover { color: $dark-grey; }
     }
 
-    .menu { margin-left: 40px; }
+    h2, a { font-size: 14px; }
   }
 
   .project-item {

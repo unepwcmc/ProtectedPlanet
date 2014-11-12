@@ -18,7 +18,7 @@
             </a>
 
             <script data-download-type="project" class="download-type-dropdown" type="text/html">
-              <ul>
+              <ul class="download-type-dropdown">
                 <li><a data-type="csv" class="btn">CSV</a></li>
                 <li><a data-type="kml" class="btn">KML</a></li>
                 <li><a data-type="shp" class="btn">SHP</a></li>
@@ -34,5 +34,6 @@
       </header>
 
       <%= render partial: "project_item", collection: project.items %>
+    </section>
   <% end %>
 <% end %>

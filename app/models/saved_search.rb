@@ -3,8 +3,9 @@ class SavedSearch < ActiveRecord::Base
   accepts_nested_attributes_for :project
 
   def self.create_and_populate params
-    saved_search = self.create!(params)
-    SearchWorkers::ResultsPopulator.perform_async(saved_search.id)
+    self.create!(params).tap{ |saved_search|
+      SearchWorkers::ResultsPopulator.perform_async(saved_search.id)
+    }
   end
 
   def name
