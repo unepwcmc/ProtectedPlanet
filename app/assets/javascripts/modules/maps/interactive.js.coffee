@@ -17,8 +17,6 @@ class ProtectedPlanet.Maps.Interactive
       openPopup()
 
   handleMapClick: (e) =>
-    return if @map.getZoom() < 4
-
     coords = e.latlng
     params = {
       lon: coords.lng
@@ -26,7 +24,7 @@ class ProtectedPlanet.Maps.Interactive
       distance: 1
     }
 
-    $.get('/api/search/by_point', params, (data) =>
+    $.get('/api/v3/search/by_point', params, (data) =>
       if data.length > 0
         @addMarker(coords, data[0])
     )
