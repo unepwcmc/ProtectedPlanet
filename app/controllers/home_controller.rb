@@ -1,6 +1,4 @@
 class HomeController < ApplicationController
-  after_filter :enable_caching
-
   def index
     if filtered?
       @search = Search.search '', {filters: filters}
