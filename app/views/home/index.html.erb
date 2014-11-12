@@ -31,6 +31,10 @@
 
 <%= render partial: 'map_filters' %>
 
+<% if map_filtered? %>
+  <a class="btn btn-download btn-marine-toggle"><i class="fa fa-square"> Show marine PAs only</a>
+<% end %>
+
 <% unless map_filtered? %>
   <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', download_type: 'general', item_id: 'all'} %>
 <% end %>

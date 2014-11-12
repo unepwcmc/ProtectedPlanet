@@ -15,6 +15,26 @@
   }
 }
 
+.btn.btn-marine-toggle {
+  position: fixed;
+  top: 181px;
+  right: 20px;
+  height: 40px;
+  font-size: 1em;
+
+  background-color: $dark-grey;
+  transition: top $search-bar-transition-time ease;
+
+  i {
+    margin-right: 2px;
+  }
+
+  &.opened {
+    transition: top $search-bar-transition-time ease;
+    top: 171px;
+  }
+}
+
 .map-filters.home-map-filters {
   background: $color--home-filters-bg;
   overflow: scroll;
