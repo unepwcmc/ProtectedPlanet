@@ -1,0 +1,18 @@
+<% if user_signed_in? %>
+  <script id="add-search-to-project" type="text/html">
+    <ul class="projects-dropdown">
+      <% @projects.each do |project| %>
+        <li>
+          <%= link_to project.name, search_path(project_id: project.id, search_term: @search.search_term, filters: @search.options[:filters].to_json), method: :post %>
+        </li>
+      <% end %>
+      <li>
+        <%= link_to(search_path(search_term: @search.search_term, filters: @search.options[:filters].to_json), method: :post) do %>
+          <i class="fa fa-plus"></i> Add to New Project
+        <% end %>
+      </li>
+    </ul>
+  </script>
+
+  <a class="btn-add-search-to-project" href="#">Add to My Projects  <i class="fa fa-angle-down"></i></a>
+<% end %>
