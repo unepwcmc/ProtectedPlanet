@@ -1,4 +1,4 @@
-initialiseDownloads = ->
+initialiseProjectsDownloads = ->
   $downloadBtns = [
     $(".download-type-dropdown[data-download-type='project'] a")
   ]
@@ -21,7 +21,7 @@ initialiseDownloads = ->
   )
 
 ready = ->
-  initialiseDownloads()
+  initialiseProjectsDownloads()
   $('.best_in_place').best_in_place()
 
 $(window).load(ready)
