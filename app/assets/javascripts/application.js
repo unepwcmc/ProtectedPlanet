@@ -20,6 +20,7 @@
 //= require leaflet.markercluster
 //= require cartodb.core
 //= require best_in_place
+//= require select2
 //= require_tree ./modules/maps
 //= require_tree ./modules/search
 //= require_tree ./modules
@@ -44,6 +45,10 @@ var ready = function() {
       $(el).find('.btn-project-download'),
       $(el).find(".download-type-dropdown[data-download-type='project']")
     );
+  });
+  $("#countries-select").select2({
+    placeholder: "Select a Country for Comparison",
+    width: 'element'
   });
 };
 
