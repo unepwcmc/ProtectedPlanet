@@ -52,7 +52,8 @@
       box-sizing: border-box;
       color: $medium-grey;
 
-      a:hover { color: $dark-grey; }
+      &:hover { color: $dark-grey; }
+      &.active { background-color: $light-grey; }
     }
 
     h2, a { font-size: 14px; }

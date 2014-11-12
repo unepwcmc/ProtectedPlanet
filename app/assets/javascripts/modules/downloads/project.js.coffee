@@ -11,7 +11,7 @@ class ProtectedPlanet.Downloads.Project extends ProtectedPlanet.Downloads.Base
     )
 
   submitDownload: (next) =>
-    $.get(@constructor.CREATION_PATH + "/#{project_id}?domain=project", next)
+    $.get(@constructor.CREATION_PATH + "/#{@opts.itemId}?domain=project", next)
 
   showDownloadModal: (download) =>
     @generationModal.showDownloadLink(download[@type])

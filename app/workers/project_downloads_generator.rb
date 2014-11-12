@@ -7,8 +7,8 @@ class ProjectDownloadsGenerator
     wdpa_ids = Set.new project.items.flat_map(&:wdpa_ids)
 
     while_generating project.id do
-      Download.generate "project_#{project.id}_all", wdpa_ids.to_a
-      links id
+      Download.generate "project_#{project.id}_all", {wdpa_ids: wdpa_ids.to_a}
+      links project.id
     end
   end
 
