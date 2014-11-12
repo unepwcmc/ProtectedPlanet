@@ -4,7 +4,7 @@ window.ProtectedPlanet.Downloads ||= {}
 class ProtectedPlanet.Downloads.Project extends ProtectedPlanet.Downloads.Base
   start: ->
     @submitDownload( (download) =>
-      if download.link?
+      if download.links?
         @showDownloadModal(download)
       else
         @pollDownload(download, @showDownloadModal)
@@ -14,7 +14,7 @@ class ProtectedPlanet.Downloads.Project extends ProtectedPlanet.Downloads.Base
     $.get(@constructor.CREATION_PATH + "/#{@opts.itemId}?domain=project", next)
 
   showDownloadModal: (download) =>
-    @generationModal.showDownloadLink(download[@type])
+    @generationModal.showDownloadLink(JSON.parse(download.links)[@type])
 
   pollDownload: (download, next) =>
     checkPolling = (data) =>
@@ -23,5 +23,5 @@ class ProtectedPlanet.Downloads.Project extends ProtectedPlanet.Downloads.Base
         next(data)
 
     intervalId = setInterval( =>
-      $.get("#{@constructor.POLLING_PATH}", {token: download.token}, checkPolling)
+      $.get("#{@constructor.POLLING_PATH}", {token: @opts.itemId, domain: 'project'}, checkPolling)
     , @constructor.POLLING_INTERVAL)

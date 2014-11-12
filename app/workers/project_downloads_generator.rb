@@ -8,14 +8,14 @@ class ProjectDownloadsGenerator
 
     while_generating project.id do
       Download.generate "project_#{project.id}_all", {wdpa_ids: wdpa_ids.to_a}
-      links project.id
+      {status: 'completed', links: links(project.id)}.to_json
     end
   end
 
   private
 
   def while_generating id
-    $redis.set("projects:#{id}:all", 'generating')
+    $redis.set("projects:#{id}:all", {status: 'generating'}.to_json)
     $redis.set("projects:#{id}:all", yield)
   end
 
