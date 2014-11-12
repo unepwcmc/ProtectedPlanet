@@ -1,6 +1,5 @@
 class ProtectedAreasController < ApplicationController
   before_filter :load_user_projects
-  after_filter :enable_caching
 
   def show
     id = params[:id]
