@@ -12,6 +12,8 @@ gem "autoprefixer-rails"
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'neat'
+gem 'premailer-rails'
+
 
 group :production, :staging do
   gem 'unicorn'
