@@ -20,7 +20,7 @@
       <article>
         <h3>Select a Country to compare</h3>
         <%= form_tag compare_countries_path do %>
-          <%= collection_select(nil, :compare_iso, Country.select(:iso, :name).all, :iso, :name, prompt: true) %>
+          <%= collection_select(nil, :compare_iso, Country.select(:iso, :name).all, :iso, :name, {prompt: true}, {id: 'countries-select'}) %>
           <%= submit_tag "Submit", class: 'button' %>
         <% end %>
       </article>
