@@ -12,7 +12,10 @@ class Project < ActiveRecord::Base
 
   polymorphic_group :items, [:protected_areas, :countries, :regions, :saved_searches]
 
-  def download_link type
-    $redis.get("project_#{id}_all")
+  def download_info
+    generation_status = $redis.get("projects:#{id}:all")
+    ProjectDownloadsGenerator.perform_async id if generation_status.nil?
+
+    JSON.parse(generation_status) rescue {}
   end
 end

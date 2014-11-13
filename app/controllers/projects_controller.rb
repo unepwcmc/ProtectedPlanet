@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
     render(status: 404) and return if @project.nil?
 
     if item
-      @project.items << item unless @project.items.include? item
+      add_item_to_project
       redirect_to action: :index
     else
       @project.update_attributes(project_params)
@@ -38,6 +38,13 @@ class ProjectsController < ApplicationController
   end
 
   private
+
+  def add_item_to_project
+    unless @project.items.include? item
+      @project.items << item
+      ProjectDownloadsGenerator.perform_async @project.id
+    end
+  end
 
   def item
     @item ||= begin

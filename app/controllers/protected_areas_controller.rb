@@ -1,6 +1,5 @@
 class ProtectedAreasController < ApplicationController
   before_filter :load_user_projects
-  after_filter :enable_caching
 
   def show
     id = params[:id]
@@ -11,7 +10,7 @@ class ProtectedAreasController < ApplicationController
 
     return render_404 if @protected_area.blank?
 
-    @country = @protected_area.countries.first
+    @country = @protected_area.countries.without_geometry.first
     @region  = @country.region
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)

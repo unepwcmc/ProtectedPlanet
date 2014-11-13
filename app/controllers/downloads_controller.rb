@@ -2,15 +2,15 @@ class DownloadsController < ApplicationController
   def show
     type = params[:type]
 
-    link = if params[:domain] == 'general'
+    json = if params[:domain] == 'general'
       country_iso_3 = params[:id]
-      Download.link_to(country_iso_3, type)
+      {link: Download.link_to(country_iso_3, type)}
     elsif params[:domain] == 'project'
-      project_id = params[:id]
-      Download.link_to "project_#{project_id}_all", type
+      project = Project.find(params[:id])
+      project.download_info
     end
 
-    render({json: {link: link}})
+    render json: json
   end
 
   def create
@@ -33,7 +33,7 @@ class DownloadsController < ApplicationController
       render(search ? {json: search.properties} : {status: 404})
     elsif params[:domain] == 'project'
       project = Project.find(params[:token])
-      render(project ? {json: project.download_link} : {status: 404})
+      render(project ? {json: project.download_info} : {status: 404})
     end
   end
 

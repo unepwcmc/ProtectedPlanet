@@ -62,6 +62,10 @@ var initializeDropdowns = function() {
     $('.btn-add-to-project'),
     $('#add-to-project')
   );
+  new ProtectedPlanet.Dropdown(
+    $('.btn-add-search-to-project'),
+    $('#add-search-to-project')
+  );
 };
 
 

@@ -11,26 +11,38 @@
   <% end %>
 <% end %>
 
-<div
-  data-bound-from="<%= map_bounds['from'] %>"
-  data-bound-to="<%= map_bounds['to'] %>"
-  data-animate="true"
+<% cache do %>
+  <div
+    data-bound-from="<%= map_bounds['from'] %>"
+    data-bound-to="<%= map_bounds['to'] %>"
+    data-animate="true"
 
-  <%= filter_url_attribute %>
-  <%= iucn_data_attribute %>
-  <%= marine_attribute %>
+    <%= filter_url_attribute %>
+    <%= iucn_data_attribute %>
+    <%= marine_attribute %>
 
-  class="home-map <%= size_class %>"
-  id="map">
-  <div class="map-disclaimer">
-    The boundaries and names shown, and the designations used on this
-    map do not imply official endorsement or acceptance by the United
-    Nations or IUCN.
+    class="home-map <%= size_class %>"
+    id="map">
+    <div class="map-disclaimer">
+      The boundaries and names shown, and the designations used on this
+      map do not imply official endorsement or acceptance by the United
+      Nations or IUCN.
+    </div>
   </div>
-</div>
 
-<%= render partial: 'map_filters' %>
+  <%= render partial: 'map_filters' %>
 
-<% unless map_filtered? %>
-  <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', download_type: 'general', item_id: 'all'} %>
+  <% if map_filtered? %>
+      <%= link_to_filter '', 'marine', true, { class: "btn btn-download btn-marine-toggle"} do %>
+        <% if params["marine"] == "true" %>
+          <i class="fa fa-square"></i> Show marine PAs only
+        <% else %>
+          <i class="fa fa-square-o"></i> Show marine PAs only
+        <% end %>
+      <% end %>
+  <% end %>
+
+  <% unless map_filtered? %>
+    <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', download_type: 'general', item_id: 'all'} %>
+  <% end %>
 <% end %>

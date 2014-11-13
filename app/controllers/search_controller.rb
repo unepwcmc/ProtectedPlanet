@@ -1,7 +1,6 @@
 class SearchController < ApplicationController
   before_filter :load_user_projects
   before_action :authenticate_user!, only: [:create]
-  after_filter :enable_caching, only: [:index]
 
   def index
     return unless @query = params[:q]
@@ -15,6 +14,7 @@ class SearchController < ApplicationController
     SavedSearch.create_and_populate(
       search_params.merge({project_id: project.id})
     )
+    ProjectDownloadsGenerator.perform_async @project.id
 
     redirect_to projects_path
   end

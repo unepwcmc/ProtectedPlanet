@@ -70,7 +70,7 @@ class Search
 
       aggs_by_model[name] = aggs['aggregation']['buckets'].map do |info|
         {
-          model: model.find(info['key']),
+          model: (model.without_geometry.find(info['key']) rescue model.find(info['key'])),
           count: info['doc_count']
         }
       end

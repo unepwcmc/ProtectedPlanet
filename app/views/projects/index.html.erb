@@ -14,16 +14,14 @@
           <li class="menu">
 
             <a class="btn-project-download">
-              Download Complete Data Set <i class="fa fa-caret-down"></i>
+              Download Complete Data Set  <i class="fa fa-angle-down"></i>
             </a>
 
-            <script data-download-type="project" class="download-type-dropdown" type="text/html">
-              <ul>
-                <li><a data-type="csv" class="btn">CSV</a></li>
-                <li><a data-type="kml" class="btn">KML</a></li>
-                <li><a data-type="shp" class="btn">SHP</a></li>
-              </ul>
-            </script>
+            <ul data-item-id="<%= project.id %>" data-download-type="project" class="download-type-dropdown">
+              <li><a data-type="csv" class="btn">CSV</a></li>
+              <li><a data-type="kml" class="btn">KML</a></li>
+              <li><a data-type="shp" class="btn">SHP</a></li>
+            </ul>
           </li>
           <li class="right">
             <%= link_to project_path(project), method: :delete, data: {confirm: "Are you sure you want to delete this project?"} do %>
@@ -34,5 +32,6 @@
       </header>
 
       <%= render partial: "project_item", collection: project.items %>
+    </section>
   <% end %>
 <% end %>

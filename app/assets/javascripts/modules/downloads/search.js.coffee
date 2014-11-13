@@ -17,3 +17,13 @@ class ProtectedPlanet.Downloads.Search extends ProtectedPlanet.Downloads.Base
     $.post(@constructor.CREATION_PATH + window.location.search, (data) ->
       next(data.token)
     )
+
+  pollDownload: (token, next) =>
+    checkPolling = (data) =>
+      if data.status == 'completed'
+        window.clearInterval(intervalId)
+        next(data)
+
+    intervalId = setInterval( =>
+      $.get("#{@constructor.POLLING_PATH}", {token: token, domain: 'search'}, checkPolling)
+    , @constructor.POLLING_INTERVAL)

@@ -3,8 +3,9 @@ class SavedSearch < ActiveRecord::Base
   accepts_nested_attributes_for :project
 
   def self.create_and_populate params
-    saved_search = self.create!(params)
-    SearchWorkers::ResultsPopulator.perform_async(saved_search.id)
+    self.create!(params).tap{ |saved_search|
+      SearchWorkers::ResultsPopulator.perform_async(saved_search.id)
+    }
   end
 
   def name
@@ -16,6 +17,17 @@ class SavedSearch < ActiveRecord::Base
   end
 
   def wdpa_ids
-    results_ids
+    results_ids.map(&:to_i)
+  end
+
+  def generation_info
+    generation_status = $redis.get("saved_searches:#{id}:all")
+    SearchWorkers::ResultsPopulator.perform_async id if generation_status.nil?
+
+    JSON.parse(generation_status) rescue {}
+  end
+
+  def population_completed?
+    generation_info['status'] == 'completed'
   end
 end

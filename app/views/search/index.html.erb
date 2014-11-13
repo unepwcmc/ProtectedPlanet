@@ -5,23 +5,28 @@
         <h1><%= @query %></h1>
         <h2><strong><%= @search.count %></strong> Protected Areas</h2>
       </li>
-      <li><a href="#">Add to My Projects</a></li>
-      <li class="right"><%= render partial: 'shared/download_data_set', locals: {download_type: 'search', custom_classes: 'btn-search-download', item_id: 'search', image: 'icon-download-black.png'} %></li>
+      <li><a href="#">Compare Countries</a></li>
+      <% if @search.count > 0 %>
+        <li><%= render partial: 'add_search_to_project' %></li>
+        <li class="right"><%= render partial: 'shared/download_data_set', locals: {download_type: 'search', custom_classes: 'btn-search-download', item_id: 'search', image: 'icon-download-black.png'} %></li>
+      <% end %>
     </ul>
   </nav>
 <% end %>
 
-<aside class="map-filters search-map-filters">
-  <header>
-    <span>Results</span>
-    <ul>
-      <li class="btn-switch-grid"><a href="#"><%= image_tag('icon-grid-grey.png', size: '20') %></a></li>
-      <li class="btn-switch-map"><a href="#"><%= image_tag('icon-map-grey.png', size: '20') %></a></li>
-      <li class="sidebar-toggle"><a href="#"><%= image_tag('icon-toggle-panel-grey.png', size: '20') %></a></li>
-    </ul>
-  </header>
-  <%= render partial: 'facets', locals: {facets: @search.aggregations} %>
-</aside>
+<% if @search.count > 0 %>
+  <aside class="map-filters search-map-filters">
+    <header>
+      <span>Results</span>
+      <ul>
+        <li class="btn-switch-grid"><a href="#"><%= image_tag('icon-grid-grey.png', size: '20') %></a></li>
+        <li class="btn-switch-map"><a href="#"><%= image_tag('icon-map-grey.png', size: '20') %></a></li>
+        <li class="sidebar-toggle"><a href="#"><%= image_tag('icon-toggle-panel-grey.png', size: '20') %></a></li>
+      </ul>
+    </header>
+    <%= render partial: 'facets', locals: {facets: @search.aggregations} %>
+  </aside>
+<% end %>
 
 <div class="search-map"
   id="map"
@@ -33,7 +38,7 @@
   </div>
 </div>
 
-<div class="search-grid">
+<div class="search-grid <%= 'no-results' if @search.count.zero? %>">
   <%= render partial: 'grid' %>
 </div>
 
