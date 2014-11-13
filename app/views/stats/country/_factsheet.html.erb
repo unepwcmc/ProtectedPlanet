@@ -2,9 +2,9 @@
   <article>
     <h3>Protected Areas Value</h3>
     <div class="inset-statistic-large">
-      <span class="extra-large"><%= commaify presenter.pa_area %></span>km&sup2;
+      <span class="extra-large"><%= commaify((presenter.pa_area / 1000000).round) %> <small>km&sup2;</small></span>
       <div class="text-holder">
-        <%= commaify presenter.pa_land_area %> Km&sup2; Land - <%= commaify presenter.pa_marine_area %> Km&sup2; Marine<br>
+        <%= commaify((presenter.pa_land_area / 1000000).round) %> Km&sup2; Land - <%= commaify((presenter.pa_marine_area / 1000000).round) %> Km&sup2; Marine<br>
         <%= presenter.percentage_pa_cover %>% Protected
       </div>
     </div>
@@ -29,18 +29,18 @@
         </tr>
         <tr>
           <td>
-            <strong><%= commaify presenter.land_area %></strong> Km&sup2; Land Area
+            <strong><%= commaify((presenter.land_area / 1000000).round) %></strong> Km&sup2; Land Area
           </td>
           <td>
-            <strong><%= commaify presenter.marine_area %></strong> Km&sup2; Marine Area
+            <strong><%= commaify((presenter.marine_area / 1000000).round) %></strong> Km&sup2; Marine Area
           </td>
         </tr>
         <tr>
           <td>
-            <strong><%= commaify presenter.pa_land_area %></strong> Km&sup2; Protected
+            <strong><%= commaify((presenter.pa_land_area / 1000000).round) %></strong> Km&sup2; Protected
           </td>
           <td>
-            <strong><%= commaify presenter.pa_marine_area %></strong> Km&sup2; Protected
+            <strong><%= commaify((presenter.pa_marine_area / 1000000).round) %></strong> Km&sup2; Protected
           </td>
         </tr>
       </tbody>

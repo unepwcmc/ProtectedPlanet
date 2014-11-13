@@ -15,18 +15,15 @@ hr {
 div {
   &.inset-statistic {
     margin-bottom: 12px;
-    display: inline-block;
     width: 225px;
   }
 
   &.inset-statistic-large {
-    display: inline-block;
     width: 450px;
   }
 
   &.text-holder {
-      margin: 7px 0 0 10px;
-      float: left;
+    margin-top: 10px;
       color: $dark-blue;
   }
 }
@@ -41,16 +38,29 @@ div {
 .extra-large {
     display: block;
     font-size: 64px;
-    float: left;
     color: $dark-blue;
+
+    small {
+      font-size: 0.4em;
+    }
 }
 
+.conservation-statistics {
+  .text-holder,
+  .extra-large {
+    float: left;
+  }
 
-.countries-compare-left { 
+  .inset-statistic {
+    display: inline-block;
+  }
+}
+
+.countries-compare-left {
   border-right: 1px solid $grey;
 }
 
-.countries-compare-left, .countries-compare-right {   
+.countries-compare-left, .countries-compare-right {
   @include span-columns(6);
 
   div.factsheet {
