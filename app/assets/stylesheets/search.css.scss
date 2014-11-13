@@ -124,6 +124,10 @@ $width--search-sidebar: 270px;
     left: 0px;
     transition: left $search-sidebar-transition-time ease;
   }
+
+  &.no-results {
+    left: 0px;
+  }
 }
 
 .search-parent .search-map {
