@@ -17,6 +17,17 @@ class SavedSearch < ActiveRecord::Base
   end
 
   def wdpa_ids
-    results_ids
+    results_ids.map(&:to_i)
+  end
+
+  def generation_info
+    generation_status = $redis.get("saved_searches:#{id}:all")
+    SearchWorkers::ResultsPopulator.perform_async id if generation_status.nil?
+
+    JSON.parse(generation_status) rescue {}
+  end
+
+  def population_completed?
+    generation_info['status'] == 'completed'
   end
 end
