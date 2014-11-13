@@ -7,6 +7,7 @@ class ProtectedPlanet.Downloads.Project extends ProtectedPlanet.Downloads.Base
       if download.links?
         @showDownloadModal(download)
       else
+        @generationModal.show()
         @pollDownload(download, @showDownloadModal)
     )
 
