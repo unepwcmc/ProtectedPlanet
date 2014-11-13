@@ -18,12 +18,12 @@ class ProtectedPlanet.Downloads.Search extends ProtectedPlanet.Downloads.Base
       next(data.token)
     )
 
-  pollDownload: (download, next) =>
+  pollDownload: (token, next) =>
     checkPolling = (data) =>
       if data.status == 'completed'
         window.clearInterval(intervalId)
         next(data)
 
     intervalId = setInterval( =>
-      $.get("#{@constructor.POLLING_PATH}", {token: download.token, domain: 'search'}, checkPolling)
+      $.get("#{@constructor.POLLING_PATH}", {token: token, domain: 'search'}, checkPolling)
     , @constructor.POLLING_INTERVAL)
