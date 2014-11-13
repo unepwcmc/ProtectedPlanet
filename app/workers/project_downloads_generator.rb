@@ -12,7 +12,7 @@ class ProjectDownloadsGenerator
       {status: 'completed', links: links(@project.id)}.to_json
     end
   rescue ItemsNotReadyError
-    ProjectDownloadsGenerator.perform_in(10.seconds, project_id)
+    ProjectDownloadsGenerator.perform_at(10.seconds.from_now, project_id)
   end
 
   private
