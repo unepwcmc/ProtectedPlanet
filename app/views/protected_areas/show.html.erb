@@ -8,61 +8,63 @@
   </nav>
 <% end %>
 
-<section class="factsheet">
-  <article>
-    <h3>Official Record</h3>
-    <%= render 'official_record', protected_area: @protected_area %>
-
-    <h3>Data Provider</h3>
-    <ul>
-      <%= render @protected_area.sources %>
-    </ul>
-  </article>
-
-  <ul class="protected-area-infographic">
-    <li>
-      <span><%= Wdpa::DataStandard.percentage_complete(@protected_area).round(2) %>%</span>
-      Data Complete
-    </li>
-  </ul>
-
-  <% if related_links?(@protected_area) %>
+<% cache do %>
+  <section class="factsheet">
     <article>
-      <h3>Related</h3>
+      <h3>Official Record</h3>
+      <%= render 'official_record', protected_area: @protected_area %>
+
+      <h3>Data Provider</h3>
       <ul>
-        <% if @protected_area.wikipedia_article %>
-          <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
-        <% end %>
+        <%= render @protected_area.sources %>
       </ul>
     </article>
-  <% end %>
 
-  <article>
-    <% if @protected_area.nearest_protected_areas.count > 1 %>
-      <h3>Nearest Protected Areas</h3>
+    <ul class="protected-area-infographic">
+      <li>
+        <span><%= Wdpa::DataStandard.percentage_complete(@protected_area).round(2) %>%</span>
+        Data Complete
+      </li>
+    </ul>
 
-      <ul class="nearest-protected-areas">
-        <% @protected_area.nearest_protected_areas[1..2].each do |protected_area| %>
-          <li>
-            <a href="/<%= protected_area.slug %>">
-              <%= image_tag(protected_area_cover_link(protected_area, {size: {x: 200, y: 100}}), style: "width: 200px; height: 100px;") %>
-            </a>
-
-            <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
-          </li>
-        <% end %>
-      </ul>
+    <% if related_links?(@protected_area) %>
+      <article>
+        <h3>Related</h3>
+        <ul>
+          <% if @protected_area.wikipedia_article %>
+            <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
+          <% end %>
+        </ul>
+      </article>
     <% end %>
-  </article>
-</section>
 
-<div class="protected-area-map" id="map"
-  data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
-  data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
-  data-wdpa-id="<%= @protected_area.wdpa_id %>">
-  <div class="map-disclaimer">
-    The boundaries and names shown, and the designations used on this
-    map do not imply official endorsement or acceptance by the United
-    Nations or IUCN.
+    <article>
+      <% if @protected_area.nearest_protected_areas.count > 1 %>
+        <h3>Nearest Protected Areas</h3>
+
+        <ul class="nearest-protected-areas">
+          <% @protected_area.nearest_protected_areas[1..2].each do |protected_area| %>
+            <li>
+              <a href="/<%= protected_area.slug %>">
+                <%= image_tag(protected_area_cover_link(protected_area, {size: {x: 200, y: 100}}), style: "width: 200px; height: 100px;") %>
+              </a>
+
+              <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </article>
+  </section>
+
+  <div class="protected-area-map" id="map"
+    data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
+    data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
+    data-wdpa-id="<%= @protected_area.wdpa_id %>">
+    <div class="map-disclaimer">
+      The boundaries and names shown, and the designations used on this
+      map do not imply official endorsement or acceptance by the United
+      Nations or IUCN.
+    </div>
   </div>
-</div>
+<% end %>
