@@ -84,8 +84,8 @@ class SearchFilterTest < ActiveSupport::TestCase
           "geo_distance" => {
             "distance" => "2000km",
             "protected_area.coordinates" => {
-              "lat"=>1.0,
-              "lon"=>2.0
+              "lon"=>1.0,
+              "lat"=>2.0
             }
           }
         }]
@@ -105,8 +105,8 @@ class SearchFilterTest < ActiveSupport::TestCase
             "geo_distance"=>{
               "distance"=>"123km",
               "protected_area.coordinates"=>{
-                "lat"=>1,
-                "lon"=>2
+                "lon"=>1.0,
+                "lat"=>2.0
               }
             }
           }

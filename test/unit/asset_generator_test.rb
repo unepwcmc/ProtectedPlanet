@@ -7,6 +7,7 @@ class AssetGeneratorTest < ActiveSupport::TestCase
 
     response_mock = mock
     response_mock.stubs(:body).returns('the image')
+    response_mock.stubs(:code).returns('200')
 
     protected_area = FactoryGirl.create(:protected_area)
     protected_area.stubs(:geojson).returns('{}')

@@ -117,8 +117,8 @@ class SearchQueryTest < ActiveSupport::TestCase
                       "geo_distance"=>{
                         "distance"=>"2000km",
                         "protected_area.coordinates"=>{
-                          "lat"=>-69,
-                          "lon"=>-29
+                          "lon"=>-69,
+                          "lat"=>-29
                         }
                       }
                     }

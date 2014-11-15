@@ -24,7 +24,7 @@ class TestCartoDbImporter < ActiveSupport::TestCase
 
     Ogr::Split.
       expects(:split).
-      with(gdb_path, "points", 5, ["wdpaid", "SHAPE"]).
+      with(gdb_path, "points", 5, ["wdpaid", "SHAPE", 'iucn_cat', 'marine']).
       returns(point_shapefiles)
 
     polygon_shapefiles = [
@@ -34,7 +34,7 @@ class TestCartoDbImporter < ActiveSupport::TestCase
 
     Ogr::Split.
       expects(:split).
-      with(gdb_path, "polygons", 5, ["wdpaid", "SHAPE"]).
+      with(gdb_path, "polygons", 5, ["wdpaid", "SHAPE", 'iucn_cat', 'marine']).
       returns(polygon_shapefiles)
 
     CartoDb::Uploader.any_instance.expects(:upload).with("./points-1.zip").returns(true)
@@ -46,8 +46,8 @@ class TestCartoDbImporter < ActiveSupport::TestCase
     expected_points_table_names = [ 'points-1', 'points-2', 'points-3' ]
     expected_polygons_table_names = [  'polygons-1', 'polygons-2' ]
 
-    CartoDb::Merger.any_instance.expects(:merge).with(expected_points_table_names, ["wdpaid", "the_geom"])
-    CartoDb::Merger.any_instance.expects(:merge).with(expected_polygons_table_names, ["wdpaid", "the_geom"])
+    CartoDb::Merger.any_instance.expects(:merge).with(expected_points_table_names, ["wdpaid", "the_geom", 'iucn_cat', 'marine'])
+    CartoDb::Merger.any_instance.expects(:merge).with(expected_polygons_table_names, ["wdpaid", "the_geom", 'iucn_cat', 'marine'])
 
     Wdpa::CartoDbImporter.import wdpa_release
   end

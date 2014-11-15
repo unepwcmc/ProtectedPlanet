@@ -10,14 +10,12 @@ class ProjectTest < ActiveSupport::TestCase
     assert_same_elements [pa, country, region], project.items
   end
 
-  test '.download_link, given a type, returns a link to the project download' do
+  test '.download_info returns an hash of information about the download link' do
     project = FactoryGirl.create(:project)
-    expected_link = "http://link.to/prject_download_csv.zip"
+    expected_json = '{"link": "this_is_the_link"}'
 
-    Download.expects(:link_to).
-      with("project_#{project.id}_all", :csv).
-      returns(expected_link)
+    $redis.expects(:get).returns(expected_json)
 
-    assert_equal expected_link, project.download_link(:csv)
+    assert_equal 'this_is_the_link', project.download_info['link']
   end
 end
