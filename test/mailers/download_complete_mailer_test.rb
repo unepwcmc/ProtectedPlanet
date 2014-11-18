@@ -13,16 +13,16 @@ class DownloadCompleteMailerTest < ActionMailer::TestCase
     assert_equal '[Protected Planet] Your download is ready', email.subject
 
     assert_match(
-      Regexp.new("http://localhost:3000/downloads/#{filename}\\?type=csv"),
-      email.body.to_s
+      Regexp.new("https://pp-downloads-development.s3.amazonaws.com/current/filename-csv.zip"),
+      html_body(email)
     )
     assert_match(
-      Regexp.new("http://localhost:3000/downloads/#{filename}\\?type=kml"),
-      email.body.to_s
+      Regexp.new("https://pp-downloads-development.s3.amazonaws.com/current/filename-kml.zip"),
+      html_body(email)
     )
     assert_match(
-      Regexp.new("http://localhost:3000/downloads/#{filename}\\?type=shp"),
-      email.body.to_s
+      Regexp.new("https://pp-downloads-development.s3.amazonaws.com/current/filename-shp.zip"),
+      html_body(email)
     )
   end
 end

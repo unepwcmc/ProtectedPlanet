@@ -19,11 +19,11 @@ class ImportConfirmationMailerTest < ActionMailer::TestCase
 
     assert_match(
       Regexp.new("http://localhost:3000/admin/import/#{import_token}/confirm\\?key=#{confirmation_key}"),
-      email.body.to_s
+      html_body(email)
     )
     assert_match(
       Regexp.new("http://localhost:3000/admin/import/#{import_token}/cancel\\?key=#{confirmation_key}"),
-      email.body.to_s
+      html_body(email)
     )
   end
 end

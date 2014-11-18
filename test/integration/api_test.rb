@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ApiTest < ActionDispatch::IntegrationTest
-  test '/api/protected_area, given a WDPA ID, returns the protected
+  test '/api/v3/protected_area, given a WDPA ID, returns the protected
    area' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manboneland', region: region)
@@ -27,7 +27,7 @@ class ApiTest < ActionDispatch::IntegrationTest
     legal_status: legal_status, legal_status_updated_at: time,
     marine: true, wdpa_id: 555333, reported_area: 10.2)
 
-    get '/api/protected_areas/555999'
+    get '/api/v3/protected_areas/555999'
 
     assert_response :success
 
@@ -35,9 +35,9 @@ class ApiTest < ActionDispatch::IntegrationTest
     assert_equal 'Manbone', protected_area[:name]
   end
 
-  test '/api/protected_area, given an invalid WDPA ID, returns a 404
+  test '/api/v3/protected_area, given an invalid WDPA ID, returns a 404
    status' do
-    get '/api/protected_areas/666'
+    get '/api/v3/protected_areas/666'
     assert_response :missing
   end
 end

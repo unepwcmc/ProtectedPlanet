@@ -54,9 +54,14 @@ class SearchWorkersDownloaderTest < ActiveSupport::TestCase
   test '.perform completes the search updating its status and filename
    properties' do
     digested_pa_ids = '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'
+    links_json = {
+      "csv" => "https://pp-downloads-development.s3.amazonaws.com/current/search_#{digested_pa_ids}-csv.zip",
+      "shp" => "https://pp-downloads-development.s3.amazonaws.com/current/search_#{digested_pa_ids}-shp.zip",
+      "kml" => "https://pp-downloads-development.s3.amazonaws.com/current/search_#{digested_pa_ids}-kml.zip"
+    }.to_json
 
     properties_mock = mock()
-    properties_mock.expects(:[]=).with('filename', "search_#{digested_pa_ids}")
+    properties_mock.expects(:[]=).with('links', links_json)
     properties_mock.stubs(:[])
 
     search_mock = mock()
