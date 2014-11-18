@@ -75,7 +75,6 @@ class SearchFilterTest < ActiveSupport::TestCase
 
   test '#from_params, given a geo filter passed as a string, converts
    the string to a float' do
-    puts "the test"
     filters = Search::Filter.from_params(location: {coords: ['1','2'], distance: '2'})
 
     expected_filters =  [{
