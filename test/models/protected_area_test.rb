@@ -114,7 +114,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
 
     search_mock = mock().tap { |m| m.expects(:results).returns([FactoryGirl.create(:protected_area)]) }
     Search.expects(:search).
-      with('', {size: 2, filters: {location: [0,1]}, sort: {geo_distance: [0,1]}}).
+      with('', {size: 3, filters: {location: {coords: [0,1]}}, sort: {geo_distance: [0,1]}}).
       returns(search_mock).
       once
 

@@ -11,7 +11,7 @@ class TestSearch < ActiveSupport::TestCase
     query_object = {
       index: 'protected_areas',
       body: {
-        size: 10,
+        size: 20,
         from: 0,
         query: {
           "filtered" => {
@@ -159,8 +159,8 @@ class TestSearch < ActiveSupport::TestCase
     Search::Aggregation.stubs(:all).returns({})
 
     expected_query = {
-      size: 10,
-      from: 10,
+      size: 20,
+      from: 20,
       query: {},
       aggs: {}
     }
@@ -210,7 +210,7 @@ class TestSearch < ActiveSupport::TestCase
 
     pages = Search.search("manbone").total_pages
 
-    assert_equal 40, pages
+    assert_equal 20, pages
   end
 
   test '.pluck, given a property, returns the corresponding values in the EC hits' do

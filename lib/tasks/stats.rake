@@ -1,4 +1,4 @@
-LOGGER = Logger.new STDOUT
+LOGGER ||= Logger.new STDOUT
 
 namespace :stats do
   desc "Calculates geospatial statistics"

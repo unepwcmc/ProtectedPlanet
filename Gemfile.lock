@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/unepwcmc/bystander.git
-  revision: 2350b415c9b7eafe432e2affc870049f1db9c695
+  revision: 0f2a1382f8524372281e717d47e484a64573cb93
   branch: configuration-dsl
   specs:
     bystander (1.0.0)
