@@ -13,11 +13,9 @@ WebMock.disable_net_connect!(:allow => "codeclimate.com", :allow_localhost => tr
 
 Mocha::Configuration.prevent(:stubbing_non_existent_method)
 
-class ActiveSupport::TestCase
-
 class ActionMailer::TestCase
   def html_body mail
-    mail.body.parts.find {|p| p.content_type.match /html/}.body.raw_source
+    mail.body.parts.find{|p| p.content_type.match /html/}.body.raw_source
   end
 end
 
