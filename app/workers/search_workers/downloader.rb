@@ -36,9 +36,7 @@ class SearchWorkers::Downloader < SearchWorkers::Base
 
   def send_completion_email
     if email
-      DownloadCompleteMailer.
-        create(filename, email).
-        deliver
+      DownloadCompleteMailer.create(filename, email).deliver
     end
   end
 
