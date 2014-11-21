@@ -4,9 +4,9 @@ class Download
   IMPORT_PREFIX = 'import/'
 
   GENERATORS = [
-    Download::Csv,
-    Download::Shapefile,
-    Download::Kml
+    Download::Generators::Csv,
+    Download::Generators::Shapefile,
+    Download::Generators::Kml
   ]
 
   def self.generate download_name, opts={}

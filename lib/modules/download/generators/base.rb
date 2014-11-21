@@ -1,6 +1,6 @@
 require 'digest/sha1'
 
-class Download::Generator
+class Download::Generators::Base
   def self.generate zip_path, wdpa_ids = nil
     generator = new zip_path, wdpa_ids
     generator.generate

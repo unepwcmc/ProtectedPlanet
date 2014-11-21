@@ -1,4 +1,4 @@
-class Download::Kml < Download::Generator
+class Download::Generators::Kml < Download::Generators::Base
   private
 
   def export

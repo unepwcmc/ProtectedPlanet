@@ -22,9 +22,9 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     """.squish
 
     view_name_poly = 'temporary_view_123'
-    Download::Shapefile.any_instance.stubs(:with_view).with(shp_polygon_query).yields(view_name_poly).returns(true)
+    Download::Generators::Shapefile.any_instance.stubs(:with_view).with(shp_polygon_query).yields(view_name_poly).returns(true)
     view_name_point = 'temporary_view_456'
-    Download::Shapefile.any_instance.stubs(:with_view).with(shp_point_query).yields(view_name_point).returns(true)
+    Download::Generators::Shapefile.any_instance.stubs(:with_view).with(shp_point_query).yields(view_name_point).returns(true)
 
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
@@ -33,28 +33,28 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
     attachments_path = "#{toc_path} #{data_standard_path}"
 
-    Download::Shapefile.
+    Download::Generators::Shapefile.
       any_instance.
       expects(:system).
       with("zip -j #{zip_file_path} #{shp_polygon_joined_files} #{shp_point_joined_files} #{attachments_path}")
 
-    Download::Shapefile.generate zip_file_path
+    Download::Generators::Shapefile.generate zip_file_path
   end
 
   test '#generate returns false if the export fails' do
     ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(false)
 
-    assert_equal false, Download::Shapefile.generate(''),
+    assert_equal false, Download::Generators::Shapefile.generate(''),
       "Expected #generate to return false on failure"
   end
 
   test '#generate returns false if the zip fails' do
     ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).twice.returns(true)
-    Download::Shapefile.any_instance.expects(:system).returns(false)
+    Download::Generators::Shapefile.any_instance.expects(:system).returns(false)
 
-    assert_equal false, Download::Shapefile.generate(''),
+    assert_equal false, Download::Generators::Shapefile.generate(''),
       "Expected #generate to return false on failure"
   end
 
@@ -77,14 +77,14 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
     ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).twice.returns(true)
-    Download::Shapefile.
+    Download::Generators::Shapefile.
       any_instance.
       expects(:system)
 
     FileUtils.expects(:rm_rf).with(shp_polygons_paths)
     FileUtils.expects(:rm_rf).with(shp_points_paths)
 
-    Download::Shapefile.generate('./all.zip')
+    Download::Generators::Shapefile.generate('./all.zip')
   end
 
   test '#generate, given a zip file path and WDPA IDs, exports
@@ -112,9 +112,9 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     """.squish
 
     view_name_poly = 'temporary_view_123'
-    Download::Shapefile.any_instance.stubs(:with_view).with(shp_polygon_query).yields(view_name_poly).returns(true)
+    Download::Generators::Shapefile.any_instance.stubs(:with_view).with(shp_polygon_query).yields(view_name_poly).returns(true)
     view_name_point = 'temporary_view_456'
-    Download::Shapefile.any_instance.stubs(:with_view).with(shp_point_query).yields(view_name_point).returns(true)
+    Download::Generators::Shapefile.any_instance.stubs(:with_view).with(shp_point_query).yields(view_name_point).returns(true)
 
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
@@ -123,19 +123,19 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
     attachments_path = "#{toc_path} #{data_standard_path}"
 
-    Download::Shapefile.
+    Download::Generators::Shapefile.
       any_instance.
       expects(:system).
       with("zip -j #{zip_file_path} #{shp_polygon_joined_files} #{shp_point_joined_files} #{attachments_path}")
 
-    Download::Shapefile.generate zip_file_path, wdpa_ids
+    Download::Generators::Shapefile.generate zip_file_path, wdpa_ids
   end
 
   test '#generate, given a path and an empty array of wdpa_ids,
    returns immediately' do
-    Download::Generator.any_instance.expects(:system).never
+    Download::Generators::Base.any_instance.expects(:system).never
     Ogr::Postgres.expects(:export).never
 
-    refute Download::Shapefile.generate('./none.zip', [])
+    refute Download::Generators::Shapefile.generate('./none.zip', [])
   end
 end

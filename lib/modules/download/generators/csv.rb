@@ -1,4 +1,4 @@
-class Download::Csv < Download::Generator
+class Download::Generators::Csv < Download::Generators::Base
   private
 
   def export
