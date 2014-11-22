@@ -1,4 +1,6 @@
 class Download::Generators::Csv < Download::Generators::Base
+  TYPE = 'csv'
+
   private
 
   def export

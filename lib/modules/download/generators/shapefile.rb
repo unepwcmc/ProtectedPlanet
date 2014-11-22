@@ -1,4 +1,5 @@
 class Download::Generators::Shapefile < Download::Generators::Base
+  TYPE = 'shapefile'
   SHAPEFILE_PARTS = ['shp', 'shx',  'dbf', 'prj', 'cpg']
 
   QUERY_CONDITIONS = {

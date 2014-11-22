@@ -1,4 +1,6 @@
 class Download::Generators::Kml < Download::Generators::Base
+  TYPE = 'kml'
+
   private
 
   def export
