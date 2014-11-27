@@ -22,6 +22,7 @@ class Search
 
     find(token, search_term, options) || begin
       instance = create(token, search_term, options)
+      instance.generating!
       SearchWorkers::Downloader.perform_async(token, search_term, options)
       instance
     end
@@ -47,6 +48,10 @@ class Search
     ProtectedArea.
       select(:id, :wdpa_id, :name, :the_geom_latitude, :the_geom_longitude).
       where("id IN (?)", pluck('id').compact.uniq)
+  end
+
+  def generating!
+    properties['status'] = 'generating'
   end
 
   def complete!
