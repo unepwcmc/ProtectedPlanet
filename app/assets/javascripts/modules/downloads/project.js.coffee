@@ -7,7 +7,4 @@ class ProtectedPlanet.Downloads.Project extends ProtectedPlanet.Downloads.Base
     @domain = 'project'
 
   submitDownload: (next) =>
-    $.get(@constructor.CREATION_PATH + "/#{@opts.itemId}?domain=project", next)
-
-  completed: (download) ->
-    download.status == 'completed'
+    $.post(@constructor.CREATION_PATH + "/#{@opts.itemId}?domain=project", next)

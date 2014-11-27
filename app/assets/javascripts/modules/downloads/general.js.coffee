@@ -7,11 +7,8 @@ class ProtectedPlanet.Downloads.General extends ProtectedPlanet.Downloads.Base
     @domain = 'general'
 
   submitDownload: (next) ->
-    $.get(
+    $.post(
       @constructor.CREATION_PATH + "/#{@opts.itemId}",
       {domain: @domain, ext: @ext}
       next
     )
-
-  completed: (download) ->
-    true

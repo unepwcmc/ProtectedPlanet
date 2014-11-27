@@ -44,3 +44,5 @@ class ProtectedPlanet.Downloads.Base
   showDownloadModal: (download) =>
     @generationModal.showDownloadLink(JSON.parse(download.links)[@ext])
 
+  completed: (download) ->
+    download.status == 'completed'

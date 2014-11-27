@@ -10,6 +10,3 @@ class ProtectedPlanet.Downloads.Search extends ProtectedPlanet.Downloads.Base
     $.post(@constructor.CREATION_PATH + window.location.search, (data) ->
       next(data.token)
     )
-
-  completed: (download) ->
-    download.status == 'completed'
