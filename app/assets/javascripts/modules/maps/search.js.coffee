@@ -21,7 +21,7 @@ class ProtectedPlanet.Maps.Search
 
       for pa in protected_areas
         marker = L.marker(
-          L.latLng(pa.the_geom_latitude, pa.the_geom_longitude),
+          L.latLng(pa.coordinates?[0], pa.coordinates?[1]),
           { title: pa.name }
         )
 
@@ -35,8 +35,8 @@ class ProtectedPlanet.Maps.Search
   fitToResults: (points) ->
     return if points.length is 0
 
-    lats = points.map((p) -> parseFloat(p.the_geom_latitude))
-    lons = points.map((p) -> parseFloat(p.the_geom_longitude))
+    lats = points.map((p) -> parseFloat(p.coordinates[0]))
+    lons = points.map((p) -> parseFloat(p.coordinates[1]))
 
     maxLat = Math.max.apply(Math, lats)
     minLat = Math.min.apply(Math, lats)
