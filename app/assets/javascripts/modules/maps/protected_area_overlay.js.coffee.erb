@@ -1,110 +1,111 @@
-window.ProtectedPlanet ||= {}
-window.ProtectedPlanet.Maps ||= {}
+define(['jquery', 'cartodb.core'], ($, cdb) ->
+  class ProtectedAreaOverlay
+    POLYGONS_TABLE = 'wdpa_poly_<%= Rails.env %>'
+    POINTS_TABLE   = 'wdpa_point_<%= Rails.env %>'
 
-class ProtectedPlanet.Maps.ProtectedAreaOverlay
-  POLYGONS_TABLE = 'wdpa_poly_<%= Rails.env %>'
-  POINTS_TABLE   = 'wdpa_point_<%= Rails.env %>'
+    @_generateCartocssSelector: (args) ->
+      tables = args.table
+      tables = [tables] unless $.isArray(tables)
 
-  @_generateCartocssSelector: (args) ->
-    tables = args.table
-    tables = [tables] unless $.isArray(tables)
+      if args.attrName and args.attrVal
+        comparator = "[#{args.attrName} = #{args.attrVal}]"
+        mapFunction = (value) -> "##{value}#{comparator}"
+      else
+        mapFunction = (value) -> "##{value}"
 
-    if args.attrName and args.attrVal
-      comparator = "[#{args.attrName} = #{args.attrVal}]"
-      mapFunction = (value) -> "##{value}#{comparator}"
-    else
-      mapFunction = (value) -> "##{value}"
+      return tables.map(mapFunction).join(',')
 
-    return tables.map(mapFunction).join(',')
+    @_generateCartocss: (args) ->
+      args = $.extend({
+        opacity: 0.7
+        lineWidth: 0.05
+        lineColor: '2B3146'
+        polygonFill: '2B3146'
+      }, args)
 
-  @_generateCartocss: (args) ->
-    args = $.extend({
-      opacity: 0.7
-      lineWidth: 0.05
-      lineColor: '2B3146'
-      polygonFill: '2B3146'
-    }, args)
+      """
+        #{@_generateCartocssSelector(args)} {
+          line-color:##{args.lineColor};
+          line-width:#{args.lineWidth};
+          polygon-fill:##{args.polygonFill};
+          polygon-opacity:#{args.opacity};
+        }
+      """
 
-    """
-      #{@_generateCartocssSelector(args)} {
-        line-color:##{args.lineColor};
-        line-width:#{args.lineWidth};
-        polygon-fill:##{args.polygonFill};
-        polygon-opacity:#{args.opacity};
+    @_countryTiles: (iso3) ->
+      args =
+        table: 'countries_geometries'
+        attrName: 'iso_3'
+        attrVal: "'#{iso3}'"
+        opacity: .2
+        lineWidth: 0
+
+      {
+        sql: "SELECT * FROM #{args.table} WHERE iso_3 = '#{iso3}'"
+        cartocss: @_generateCartocss(args)
       }
-    """
 
-  @_countryTiles: (iso3) ->
-    args =
-      table: 'countries_geometries'
-      attrName: 'iso_3'
-      attrVal: "'#{iso3}'"
-      opacity: .2
-      lineWidth: 0
+    @_regionTiles: (regionName) ->
+      args =
+        table: 'continents'
+        attrName: 'continent'
+        attrVal: "'#{regionName}'"
+        opacity: .2
+        lineWidth: 0
 
-    {
-      sql: "SELECT * FROM #{args.table} WHERE iso_3 = '#{iso3}'"
-      cartocss: @_generateCartocss(args)
-    }
+      {
+        sql: "SELECT * FROM #{args.table} WHERE continent = '#{regionName}'"
+        cartocss: @_generateCartocss(args)
+      }
 
-  @_regionTiles: (regionName) ->
-    args =
-      table: 'continents'
-      attrName: 'continent'
-      attrVal: "'#{regionName}'"
-      opacity: .2
-      lineWidth: 0
+    @_wdpa_where_clause: (config) ->
+      clauses = []
 
-    {
-      sql: "SELECT * FROM #{args.table} WHERE continent = '#{regionName}'"
-      cartocss: @_generateCartocss(args)
-    }
+      if config.iucnCategory?
+        clauses.push "iucn_cat IN (#{config.iucnCategory.map((c) -> "'#{c}'").join(',')})"
 
-  @_wdpa_where_clause: (config) ->
-    clauses = []
+      if config.marine?
+        clauses.push "marine = '#{config.marine}'"
 
-    if config.iucnCategory?
-      clauses.push "iucn_cat IN (#{config.iucnCategory.map((c) -> "'#{c}'").join(',')})"
+      if clauses.length > 0
+        "WHERE #{clauses.join(" AND ")}"
+      else
+        ""
 
-    if config.marine?
-      clauses.push "marine = '#{config.marine}'"
+    @_wdpaTiles: (config) ->
+      cartocss = [
+        @_generateCartocss(
+          table: [POLYGONS_TABLE, POINTS_TABLE]
+          lineColor: '40541b'
+          polygonFill: '83ad35'
+        )
+      ]
 
-    if clauses.length > 0
-      "WHERE #{clauses.join(" AND ")}"
-    else
-      ""
+      if config.wdpaId?
+        cartocss.push @_generateCartocss(
+          table: [POLYGONS_TABLE, POINTS_TABLE]
+          attrName: 'wdpaid'
+          attrVal: config.wdpaId
+        )
 
-  @_wdpaTiles: (config) ->
-    cartocss = [
-      @_generateCartocss(
-        table: [POLYGONS_TABLE, POINTS_TABLE]
-        lineColor: '40541b'
-        polygonFill: '83ad35'
+      {
+        sql: "SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POINTS_TABLE} #{@_wdpa_where_clause(config)} UNION ALL SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POLYGONS_TABLE} #{@_wdpa_where_clause(config)}"
+        cartocss: cartocss.join("\n")
+      }
+
+    @render: (map, config) ->
+      sublayers = []
+      sublayers.push @_wdpaTiles(config)
+      sublayers.push @_countryTiles(config.iso3) if config.iso3?
+      sublayers.push @_regionTiles(config.regionName) if config.regionName?
+
+      carto_tiles = new cartodb.Tiles(
+        sublayers: sublayers
+        user_name: "carbon-tool"
       )
-    ]
 
-    if config.wdpaId?
-      cartocss.push @_generateCartocss(
-        table: [POLYGONS_TABLE, POINTS_TABLE]
-        attrName: 'wdpaid'
-        attrVal: config.wdpaId
-      )
+      map.on('baselayerchange', => @paOverlay.bringToFront())
+      carto_tiles.getTiles( (o) => @paOverlay = L.tileLayer(o.tiles[0]).addTo(map))
 
-    {
-      sql: "SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POINTS_TABLE} #{@_wdpa_where_clause(config)} UNION ALL SELECT the_geom, the_geom_webmercator, wdpaid FROM #{POLYGONS_TABLE} #{@_wdpa_where_clause(config)}"
-      cartocss: cartocss.join("\n")
-    }
-
-  @render: (map, config) ->
-    sublayers = []
-    sublayers.push @_wdpaTiles(config)
-    sublayers.push @_countryTiles(config.iso3) if config.iso3?
-    sublayers.push @_regionTiles(config.regionName) if config.regionName?
-
-    carto_tiles = new cartodb.Tiles(
-      sublayers: sublayers
-      user_name: "carbon-tool"
-    )
-
-    map.on('baselayerchange', => @paOverlay.bringToFront())
-    carto_tiles.getTiles( (o) => @paOverlay = L.tileLayer(o.tiles[0]).addTo(map))
+  return ProtectedAreaOverlay
+)

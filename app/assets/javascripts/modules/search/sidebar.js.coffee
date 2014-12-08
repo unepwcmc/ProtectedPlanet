@@ -1,42 +1,43 @@
-window.ProtectedPlanet ||= {}
-window.ProtectedPlanet.Search ||= {}
+define(['jquery'], ($) ->
+  class Sidebar
+    constructor: (@$el, @options) ->
+      @$openTriggerEl = $('.fixed-sidebar-toggle')
+      @$closeTriggerEl = $('.sidebar-toggle')
+      @$openMapTriggerEl = $('.btn-switch-map')
+      @$openGridTriggerEl = $('.btn-switch-grid')
 
-class ProtectedPlanet.Search.Sidebar
-  constructor: (@$el, @options) ->
-    @$openTriggerEl = $('.fixed-sidebar-toggle')
-    @$closeTriggerEl = $('.sidebar-toggle')
-    @$openMapTriggerEl = $('.btn-switch-map')
-    @$openGridTriggerEl = $('.btn-switch-grid')
+      $('.btn-switch-grid').addClass('active')
+      @addEventListeners()
 
-    $('.btn-switch-grid').addClass('active')
-    @addEventListeners()
+    addEventListeners: ->
+      @$openTriggerEl.click(@toggleSidebar(true))
+      @$closeTriggerEl.click(@toggleSidebar(false))
 
-  addEventListeners: ->
-    @$openTriggerEl.click(@toggleSidebar(true))
-    @$closeTriggerEl.click(@toggleSidebar(false))
+      @$openMapTriggerEl.click(@toggleGrid(@$openMapTriggerEl))
+      @$openGridTriggerEl.click(@toggleGrid(@$openGridTriggerEl))
 
-    @$openMapTriggerEl.click(@toggleGrid(@$openMapTriggerEl))
-    @$openGridTriggerEl.click(@toggleGrid(@$openGridTriggerEl))
+    toggleSidebar: (opening) =>
+      (ev) =>
+        @$el.one('transitionend', =>
+          ProtectedPlanet.Map.instance.invalidateSize(true)
+          @$openTriggerEl.addClass('opened') unless opening
+        )
 
-  toggleSidebar: (opening) =>
-    (ev) =>
-      @$el.one('transitionend', =>
+        @$openTriggerEl.removeClass('opened') if opening
+        @$el.toggleClass('closed')
+        @options.relatedEls?.forEach( ($relatedEl) -> $relatedEl.toggleClass('opened') )
+
+        ev.preventDefault()
+
+    toggleGrid: ($el) =>
+      (ev) =>
+        return false if $el.hasClass('active')
+
+        [@$openMapTriggerEl, @$openGridTriggerEl].forEach((el) -> el.toggleClass('active'))
+        $('.search-map').toggle()
+        $('.search-grid').toggle()
         ProtectedPlanet.Map.instance.invalidateSize(true)
-        @$openTriggerEl.addClass('opened') unless opening
-      )
+        ev.preventDefault()
 
-      @$openTriggerEl.removeClass('opened') if opening
-      @$el.toggleClass('closed')
-      @options.relatedEls?.forEach( ($relatedEl) -> $relatedEl.toggleClass('opened') )
-
-      ev.preventDefault()
-
-  toggleGrid: ($el) =>
-    (ev) =>
-      return false if $el.hasClass('active')
-
-      [@$openMapTriggerEl, @$openGridTriggerEl].forEach((el) -> el.toggleClass('active'))
-      $('.search-map').toggle()
-      $('.search-grid').toggle()
-      ProtectedPlanet.Map.instance.invalidateSize(true)
-      ev.preventDefault()
+  return Sidebar
+)

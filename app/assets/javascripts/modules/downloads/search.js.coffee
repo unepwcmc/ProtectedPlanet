@@ -1,11 +1,11 @@
-window.ProtectedPlanet ||= {}
-window.ProtectedPlanet.Downloads ||= {}
+define(['jquery', './base'], ($, Base) ->
+  class Search extends Base
+    constructor: (@type, @opts={}) ->
+      super(@type, @opts)
+      @domain = 'search'
 
-class ProtectedPlanet.Downloads.Search extends ProtectedPlanet.Downloads.Base
-  constructor: (@type, @opts={}) ->
-    super(@type, @opts)
-    @domain = 'search'
+    submitDownload: (next) ->
+      $.post(@constructor.CREATION_PATH + window.location.search, {domain: @domain}, next)
 
-  submitDownload: (next) ->
-    $.post(@constructor.CREATION_PATH + window.location.search, {domain: @domain}, next)
-
+  return Search
+)

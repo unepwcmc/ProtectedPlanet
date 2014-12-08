@@ -1,16 +1,16 @@
-window.ProtectedPlanet ||= {}
-window.ProtectedPlanet.Search ||= {}
+define(['jquery.infinitescroll'], ->
+  class Pagination
+    constructor: (@container, @resultClass) ->
+      @render()
 
-class ProtectedPlanet.Search.Pagination
+    render: ->
+      @container.infinitescroll(
+        navSelector: '.pagination'
+        nextSelector: '.pagination a[rel=next]'
+        itemSelector: @resultClass
+        loading:
+          msgText: ''
+      )
 
-  constructor: (@containerClass, @resultClass) ->
-    @render()
-
-  render: ->
-    $(@containerClass).infinitescroll(
-      navSelector: '.pagination'
-      nextSelector: '.pagination a[rel=next]'
-      itemSelector: @resultClass
-      loading:
-        msgText: ''
-    )
+  return Pagination
+)
