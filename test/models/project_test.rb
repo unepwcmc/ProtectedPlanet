@@ -9,13 +9,4 @@ class ProjectTest < ActiveSupport::TestCase
 
     assert_same_elements [pa, country, region], project.items
   end
-
-  test '.download_info returns an hash of information about the download link' do
-    project = FactoryGirl.create(:project)
-    expected_json = '{"link": "this_is_the_link"}'
-
-    $redis.expects(:get).returns(expected_json)
-
-    assert_equal 'this_is_the_link', project.download_info['link']
-  end
 end

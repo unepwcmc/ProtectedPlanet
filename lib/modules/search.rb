@@ -13,21 +13,6 @@ class Search
     instance
   end
 
-  def self.download search_term, options={}
-    token = Digest::SHA256.hexdigest(
-      (search_term || "") + Marshal.dump(
-        options.keys.sort.map{|key| options[key]}
-      )
-    )
-
-    find(token, search_term, options) || begin
-      instance = create(token, search_term, options)
-      instance.generating!
-      SearchWorkers::Downloader.perform_async(token, search_term, options)
-      instance
-    end
-  end
-
   def initialize search_term='', options={}
     self.search_term = search_term
     self.options = options
@@ -48,14 +33,6 @@ class Search
     ProtectedArea.
       select(:id, :wdpa_id, :name, :the_geom_latitude, :the_geom_longitude).
       where("id IN (?)", pluck('id').compact.uniq)
-  end
-
-  def generating!
-    properties['status'] = 'generating'
-  end
-
-  def complete!
-    properties['status'] = 'completed'
   end
 
   def pluck key
