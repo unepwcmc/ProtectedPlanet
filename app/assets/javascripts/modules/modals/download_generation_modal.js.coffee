@@ -19,11 +19,13 @@ class @DownloadGenerationModal extends Modal
     @render(@constructor.downloadCompleteTemplate)
     @show()
 
-  showDownloadLink: (url) ->
+  showDownloadLink: (filename, token) ->
     @showDownloadCompleteTemplate()
 
+    download_url = @url(filename, token)
     @find('.link-container').html("""
-      <a target="_blank" class="btn btn-primary" href="#{url}">Download</a>
+      <a target="_blank" class="btn btn-primary" href="#{download_url}">Download</a>
     """)
 
-
+  url: (filename, type) ->
+    "#{BASE_DOWNLOAD_PATH}/#{filename}?type=#{type}"

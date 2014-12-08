@@ -6,25 +6,25 @@ class ProtectedPlanet.Downloads.Base
   @POLLING_PATH: '/downloads/poll'
   @POLLING_INTERVAL: 250
 
-  @start: (domain, ext, opts={}) ->
+  @start: (domain, type, opts={}) ->
     DOWNLOADERS =
       'general': ProtectedPlanet.Downloads.General
       'project': ProtectedPlanet.Downloads.Project
       'search':  ProtectedPlanet.Downloads.Search
 
-    new DOWNLOADERS[domain](ext, opts).start()
+    new DOWNLOADERS[domain](type, opts).start()
 
-  constructor: (@ext, @opts={}) ->
+  constructor: (@type, @opts={}) ->
     @opts.mainContainer ||= $('#download-modal')
     @generationModal = new DownloadGenerationModal(@opts.mainContainer)
 
   start: ->
     @submitDownload( (download) =>
       if @completed(download)
-        @showDownloadLink(download)
+        @showDownloadModal(download)
       else
         @showGenerationModal(download)
-        @pollDownload(download.token, @showDownloadLink)
+        @pollDownload(download.token, @showDownloadModal)
     )
 
   pollDownload: (token, next) =>
@@ -42,7 +42,7 @@ class ProtectedPlanet.Downloads.Base
     @generationModal.show()
 
   showDownloadModal: (download) =>
-    @generationModal.showDownloadLink(JSON.parse(download.links)[@ext])
+    @generationModal.showDownloadLink(download.filename, @type)
 
   completed: (download) ->
-    download.status == 'completed'
+    download.status == 'ready'
