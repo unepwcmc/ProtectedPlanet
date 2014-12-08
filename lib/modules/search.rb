@@ -1,7 +1,4 @@
 class Search
-  include ActiveToken
-  token_domain 'search'
-
   ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine]
 
   attr_reader :search_term, :options
@@ -89,14 +86,16 @@ class Search
       size: options[:size] || RESULTS_SIZE,
       from: options[:offset] || offset,
       query: Search::Query.new(search_term, options).to_h,
-    }.tap do |query|
-      unless options[:without_aggregations]
-        query[:aggs] = Search::Aggregation.all
-      end
+    }.tap( &method(:optional_queries) )
+  end
 
-      if options[:sort].present?
-        query[:sort] = Search::Sorter.from_params(options[:sort])
-      end
+  def optional_queries query
+    unless options[:without_aggregations]
+      query[:aggs] = Search::Aggregation.all
+    end
+
+    if options[:sort].present?
+      query[:sort] = Search::Sorter.from_params(options[:sort])
     end
   end
 
