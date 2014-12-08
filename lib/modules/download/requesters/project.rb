@@ -1,19 +1,24 @@
 class Download::Requesters::Project < Download::Requesters::Base
-  def initialize project
-    @project = project
+  def initialize project_id
+    @project_id = project_id
   end
 
   def request
-    generation_status = $redis.get(download_key)
-    ProjectDownloadsGenerator.perform_async @project.id if generation_status.nil?
+    unless ['ready', 'generating'].include? generation_info['status']
+      DownloadWorkers::Project.perform_async @project_id
+    end
 
-    JSON.parse(generation_status) rescue {}
+    {'token' => identifier}.merge(generation_info)
+  end
+
+  def domain
+    'project'
   end
 
   private
 
-  def download_key
-    "downloads:projects:#{@project.id}:all"
+  def identifier
+    @project_id
   end
 end
 

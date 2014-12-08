@@ -4,13 +4,16 @@ class Download::Requesters::General < Download::Requesters::Base
   end
 
   def request
-    generation_status = $redis.get(download_key)
-    JSON.parse(generation_status) rescue {}
+    generation_info
+  end
+
+  def domain
+    'general'
   end
 
   private
 
-  def download_key
-    "downloads:general:#{@token}"
+  def identifier
+    @token
   end
 end
