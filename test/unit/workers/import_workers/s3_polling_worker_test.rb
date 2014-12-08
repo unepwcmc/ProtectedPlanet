@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class S3PollingWorkerTest < ActiveSupport::TestCase
+class ImportWorkersS3PollingWorkerTest < ActiveSupport::TestCase
   test '.perform calls S3.new_wdpa? to look for a new release, and spawns
    MainWorker, if a new release is found' do
     last_import_started_at = Time.now
@@ -16,7 +16,7 @@ class S3PollingWorkerTest < ActiveSupport::TestCase
 
     Sidekiq::Testing.inline! do
       assert_difference 'ActionMailer::Base.deliveries.size', 1 do
-        S3PollingWorker.perform_async
+        ImportWorkers::S3PollingWorker.perform_async
       end
     end
 
@@ -29,7 +29,7 @@ class S3PollingWorkerTest < ActiveSupport::TestCase
     ImportTools.stubs(:create_import).raises(ImportTools::AlreadyRunningImportError)
     ImportWorkers::MainWorker.expects(:perform_async).never
 
-    Sidekiq::Testing.inline! { S3PollingWorker.perform_async }
+    Sidekiq::Testing.inline! { ImportWorkers::S3PollingWorker.perform_async }
   end
 
 end

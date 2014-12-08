@@ -1,4 +1,4 @@
-class ImportWorkers::WikipediaSummaryWorker < ImportWorker
+class ImportWorkers::WikipediaSummaryWorker < ImportWorkers::Base
   def perform protected_area_id
     save_wikipedia_article(protected_area_id)
   ensure

@@ -1,4 +1,4 @@
-class S3PollingWorker
+class ImportWorkers::S3PollingWorker
   include Sidekiq::Worker
   sidekiq_options :retry => false, :queue => :import, :backtrace => true
 

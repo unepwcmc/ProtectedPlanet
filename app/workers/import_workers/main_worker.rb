@@ -1,4 +1,4 @@
-class ImportWorkers::MainWorker < ImportWorker
+class ImportWorkers::MainWorker < ImportWorkers::Base
   def perform
     Wdpa::Importer.import
   ensure

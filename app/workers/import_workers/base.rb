@@ -1,4 +1,4 @@
-class ImportWorker
+class ImportWorkers::Base
   include Sidekiq::Worker
   sidekiq_options :retry => false, :queue => :import, :backtrace => true
 
@@ -21,6 +21,6 @@ class ImportWorker
     import = ImportTools.current_import
     import.increase_total_jobs_count
 
-    original_perform_async *args
+    original_perform_async(*args)
   end
 end
