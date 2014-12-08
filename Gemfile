@@ -10,7 +10,6 @@ gem 'therubyracer',  platforms: :ruby
 gem "autoprefixer-rails"
 
 gem 'jquery-rails'
-gem 'turbolinks'
 gem 'neat'
 gem 'premailer-rails'
 

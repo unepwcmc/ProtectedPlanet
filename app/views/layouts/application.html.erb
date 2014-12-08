@@ -3,8 +3,8 @@
 <head>
   <title>ProtectedPlanet</title>
 
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
   <%= csrf_meta_tags %>
@@ -80,7 +80,6 @@
   <% end %>
 
   <%= render 'shared/download_modal' %>
-  <a href="#" target="_blank" class="hidden download-link-hack"></a>
 
 </body>
 </html>
