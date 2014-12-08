@@ -37,30 +37,13 @@ class Search
   end
 
   def results
-    @results ||= matches.map do |result|
-      model_class = result['_type'].classify.constantize
-      model_class.without_geometry.find(result['_source']['id'])
-    end
-  end
-
-  def with_coords
-    ProtectedArea.
-      select(:id, :wdpa_id, :name, :the_geom_latitude, :the_geom_longitude).
-      where("id IN (?)", pluck('id').compact.uniq)
+    @results ||= Search::Results.new(@query_results)
   end
 
   def complete!
     properties['status'] = 'completed'
   end
 
-  def pluck key
-    @values ||= {}
-    @values[key] ||= matches.map { |result| result['_source'][key] }
-  end
-
-  def count
-    @query_results['hits']['total']
-  end
 
   def aggregations
     aggs_by_model = {}
@@ -84,17 +67,13 @@ class Search
   end
 
   def total_pages
-    count / RESULTS_SIZE
+    results.count / RESULTS_SIZE
   end
 
   private
   attr_writer :search_term, :options
 
   RESULTS_SIZE = 20
-
-  def matches
-    @query_results['hits']['hits']
-  end
 
   def elastic_search
     @elastic_search ||= Elasticsearch::Client.new(

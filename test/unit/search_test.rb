@@ -132,27 +132,6 @@ class TestSearch < ActiveSupport::TestCase
     assert_equal   10, country_aggregations.second[:count]
   end
 
-  test '.count returns the total count of the result set, rather than
-   array length, so that pagination works correctly' do
-    search_query = "manbone"
-
-    results_object = {
-      "hits" => {
-        "total" => 42
-      }
-    }
-
-    search_mock = mock()
-    search_mock.
-      expects(:search).
-      returns(results_object)
-    Elasticsearch::Client.stubs(:new).returns(search_mock)
-
-    results_count = Search.search(search_query).count
-
-    assert_equal 42, results_count
-  end
-
   test '#search, given a search term and a page, offsets the
    Elasticsearch query to correctly paginate' do
     Search::Query.any_instance.stubs(:to_h).returns({})
@@ -213,20 +192,6 @@ class TestSearch < ActiveSupport::TestCase
     assert_equal 20, pages
   end
 
-  test '.pluck, given a property, returns the corresponding values in the EC hits' do
-    hits = [
-      { '_source' => {'wdpa_id' => 123, 'id' => 24} },
-      { '_source' => {'wdpa_id' => 345, 'id' => 1} },
-      { '_source' => {'id' => 22} }
-    ]
-
-    search_mock = mock()
-    search_mock.stubs(:search).returns({ "hits" => {"hits" => hits} })
-    Elasticsearch::Client.stubs(:new).returns(search_mock)
-
-    values = Search.search('manbone').pluck('wdpa_id')
-    assert_equal [123, 345, nil], values
-  end
 
   test '.complete! sets the status property to completed' do
     properties_mock = mock()
@@ -271,47 +236,5 @@ class TestSearch < ActiveSupport::TestCase
     SearchWorkers::Downloader.expects(:perform_async).never
 
     Search.download(search_term, opts)
-  end
-
-  test '.with_coords returns all the search result models with their
-   coordinates, WDPA ID and name' do
-    pa_attributes = [{
-      wdpa_id: 123,
-      name: 'Benaffleckburg',
-      the_geom_latitude: '1',
-      the_geom_longitude: '-2'
-    }, {
-      wdpa_id: 321,
-      name: 'Caseyaffleckistan',
-      the_geom_latitude: '-1',
-      the_geom_longitude: '0'
-    }]
-
-    benaffleckburg = FactoryGirl.create(:protected_area, pa_attributes.first)
-    caseyaffleckistan = FactoryGirl.create(:protected_area, pa_attributes.second)
-
-    results_object = {
-      "hits" => {
-        "hits" => [{
-          "_type" => "protected_area",
-          "_source" => {
-            "id" => benaffleckburg.id
-          }
-        }, {
-          "_type" => "protected_area",
-          "_source" => {
-            "id" => caseyaffleckistan.id
-          }
-        }]
-      }
-    }
-
-    search_mock = mock().tap { |m| m.stubs(:search).returns(results_object) }
-    Elasticsearch::Client.stubs(:new).returns(search_mock)
-
-    results = Search.search('affleck').with_coords
-
-    assert_equal benaffleckburg.id, results.first.id
-    assert_equal caseyaffleckistan.id, results.second.id
   end
 end
