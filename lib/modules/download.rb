@@ -1,4 +1,24 @@
 module Download
+  def self.request params
+    Download::Router.request(params.delete('domain'), params)
+  end
+
+  def self.poll params
+    Download::Router.poll(params.delete('domain'), params)
+  end
+
+  def self.link_to filename, type
+    Download::Utils.link_to filename, type
+  end
+
+  def self.set_email
+    Download::Router.set_email(params.delete('domain'), params)
+  end
+
+  def self.make_current
+    Utils.make_current
+  end
+
 
   TMP_PATH = File.join(Rails.root, 'tmp')
   CURRENT_PREFIX = 'current/'
@@ -21,14 +41,6 @@ module Download
         clean_up zip_path
       end
     end
-  end
-
-  def self.link_to download_name, type
-    Utils.link_to download_name, type
-  end
-
-  def self.make_current
-    Utils.make_current
   end
 
   private
