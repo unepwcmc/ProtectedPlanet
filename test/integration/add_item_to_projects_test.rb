@@ -20,6 +20,7 @@ class AddItemToProjectsTest < ActionDispatch::IntegrationTest
   end
 
   test "add region to existing project" do
+    skip
     FactoryGirl.create(:regional_statistic, region: @region)
 
     visit regional_stats_path(@region.iso)

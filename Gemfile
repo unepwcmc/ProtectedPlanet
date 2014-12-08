@@ -38,6 +38,8 @@ group :test do
   gem 'capybara', '~> 2.3.0'
   gem 'codeclimate-test-reporter', require: nil
   gem 'selenium-webdriver'
+  gem 'poltergeist'
+  gem 'database_cleaner'
 end
 
 group :test, :development do

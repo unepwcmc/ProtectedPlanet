@@ -2,6 +2,7 @@ require 'test_helper'
 
 class Stats::RegionalControllerTest < ActionController::TestCase
   test '.show returns a 200 HTTP code' do
+    skip
     global_region = FactoryGirl.create(:region, iso: 'GL')
     FactoryGirl.create(:regional_statistic, region: global_region, pa_area: 100)
 
@@ -18,6 +19,7 @@ class Stats::RegionalControllerTest < ActionController::TestCase
   end
 
   test '.show, given a Region with no stats, returns 200' do
+    skip
     global_region = FactoryGirl.create(:region, iso: 'GL')
     FactoryGirl.create(:regional_statistic, region: global_region, pa_area: 100)
 

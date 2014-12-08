@@ -9,12 +9,14 @@ ActiveRecord::Migration.maintain_test_schema!
 
 require 'mocha/test_unit'
 require 'webmock/minitest'
-WebMock.disable_net_connect!(:allow => "codeclimate.com")
+WebMock.disable_net_connect!(:allow => "codeclimate.com", :allow_localhost => true)
 
 Mocha::Configuration.prevent(:stubbing_non_existent_method)
 
-class ActiveSupport::TestCase
-
+class ActionMailer::TestCase
+  def html_body mail
+    mail.body.parts.find{|p| p.content_type.match /html/}.body.raw_source
+  end
 end
 
 module MiniTest::Assertions

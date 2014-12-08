@@ -27,7 +27,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     search_mock = mock().tap { |m| m.stubs(:search).returns(results_object) }
     Elasticsearch::Client.stubs(:new).returns(search_mock)
 
-    get '/api/search/points', q: 'manbone'
+    get '/api/v3/search/points', q: 'manbone'
 
     assert_response :success
     assert_equal([expected_attributes], JSON.parse(response.body))

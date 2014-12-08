@@ -1,16 +1,17 @@
 require 'test_helper'
 
 class DownloadsControllerTest < ActionController::TestCase
-  test '#show redirects to the S3 bucket URL for the provided country ISO3 and
-   type' do
+  test '#show responds with a json containing the link to s3, when domain is general' do
     type = 'csv'
     country = FactoryGirl.create(:country, iso_3: 'CAN')
     link = "https://bucket.s3.com/#{country.iso_3}.#{type}"
 
     Download.expects(:link_to).returns(link)
 
-    get :show, id: country.iso_3, type: type
-    assert_redirected_to link
+    get :show, id: country.iso_3, type: type, domain: :general
+
+    json_response = JSON.parse(@response.body)
+    assert_equal({'link' => link}, json_response)
   end
 
   test 'POST :create, given a search term and filters, initiates a download generation' do
@@ -55,7 +56,7 @@ class DownloadsControllerTest < ActionController::TestCase
     search_mock.stubs(:properties).returns(search_properties)
     Search.expects(:find).with(token).returns(search_mock)
 
-    get :poll, token: token
+    get :poll, token: token, domain: :search
 
     json_response = JSON.parse(@response.body)
     assert_equal search_properties, json_response
