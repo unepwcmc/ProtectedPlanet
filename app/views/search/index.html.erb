@@ -3,10 +3,10 @@
     <ul>
       <li>
         <h1><%= @query %></h1>
-        <h2><strong><%= @search.count %></strong> Protected Areas</h2>
+        <h2><strong><%= @search.results.count %></strong> Protected Areas</h2>
       </li>
       <li><a href="#">Compare Countries</a></li>
-      <% if @search.count > 0 %>
+      <% if @search.results.count > 0 %>
         <li><%= render partial: 'add_search_to_project' %></li>
         <li class="right"><%= render partial: 'shared/download_data_set', locals: {download_type: 'search', custom_classes: 'btn-search-download', item_id: 'search', image: 'icon-download-black.png'} %></li>
       <% end %>
@@ -14,7 +14,7 @@
   </nav>
 <% end %>
 
-<% if @search.count > 0 %>
+<% if @search.results.count > 0 %>
   <aside class="map-filters search-map-filters">
     <header>
       <span>Results</span>
@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<div class="search-grid <%= 'no-results' if @search.count.zero? %>">
+<div class="search-grid <%= 'no-results' if @search.results.count.zero? %>">
   <%= render partial: 'grid' %>
 </div>
 
