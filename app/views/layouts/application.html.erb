@@ -3,7 +3,7 @@
 <head>
   <title>ProtectedPlanet</title>
 
-  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= requirejs_include_tag controller_name %>
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -15,7 +15,7 @@
     <header>
       <nav class="nav-main">
         <ul>
-          <li class="logo icon">
+          <li class="logo">
             <%= link_to "Protected Planet", root_path %>
           </li>
           <li><%= link_to 'About', about_path %></li>
@@ -24,15 +24,7 @@
         </ul>
 
         <ul class="right">
-          <% if user_signed_in? %>
-            <li><%= link_to "My Projects", projects_path %></li>
-            <li><%= link_to "Sign Out", destroy_user_session_path, method: :delete %></li>
-          <% else %>
-            <li><%= link_to "Sign Up", new_user_registration_path %></li>
-            <li><%= link_to "Sign In", new_user_session_path %></li>
-          <% end %>
-
-          <li class="search icon">
+          <li class="search-button">
             <%= link_to "Protected Planet", root_path %>
           </li>
         </ul>

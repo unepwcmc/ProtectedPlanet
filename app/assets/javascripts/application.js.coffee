@@ -34,7 +34,7 @@ require(DEPENDENCIES, ($, SearchBar, Map, DownloadsBase, DownloadsGeneral, Downl
       )
     )
 
-  new SearchBar($('.search-bar'), $('.icon.search'))
+  new SearchBar()
   new Map($('#map')).render()
   initializeDownloadButtons()
 )
