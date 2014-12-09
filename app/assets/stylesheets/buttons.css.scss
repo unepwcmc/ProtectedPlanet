@@ -1,0 +1,40 @@
+@import 'colors';
+
+a.btn, button {
+  display: inline-block;
+  font-weight: normal;
+  background: $color--base-btn-bg;
+  border: none;
+  font-size: 0.9em;
+  box-sizing: border-box;
+  transition: background-color 0.3s;
+  text-align: center;
+  color: $color--base-btn-text;
+
+  &:hover {
+    transition: background-color 0.3s;
+    background-color: $color--base-btn-hover-bg;
+    cursor: pointer;
+  }
+}
+
+.btn.btn-download {
+  width: 231px;
+  height: 75px;
+  padding: 10px 15px;
+  font-size: 1.2em;
+  line-height: 1.5em;
+  text-align: left;
+
+  img {
+    float: right;
+    margin-top: 12px;
+  }
+
+  span {
+    float: left;
+    display: inline-block;
+    width: 125px;
+  }
+}
+

@@ -1,0 +1,46 @@
+@import 'colors';
+
+footer {
+  font-family: MuseoSans-100;
+  width: 100%;
+  background: $color--footer-bg;
+  font-size: 0.938em;
+  position: fixed;
+
+  a {
+    &, &:visited {
+      color: $color--footer-link;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    text-decoration: none;
+    margin-right: 20px;
+    &:last-child { margin-right: 0px; }
+  }
+
+  .footer-inner {
+    display: block;
+    line-height: 41px;
+    padding: 20px 0;
+    margin: 0px auto;
+    width: 95%;
+
+    p { color: $color--footer; }
+  }
+}
+
+.footer-logos {
+  margin-right: 20px;
+  img { margin-right: 0px; }
+}
+
+.footer-copyright, .footer-logos { float: left; }
+.footer-links { float: right; }
+
+footer, .container:after {
+  height: 75px;
+}
+

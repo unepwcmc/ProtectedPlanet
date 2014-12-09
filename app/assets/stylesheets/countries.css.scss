@@ -5,6 +5,12 @@
 table.centered td { text-align: center; }
 td.right-aligned { text-align: right;}
 
+.country-parent {
+  article table {
+    margin-top: 10px;
+  }
+}
+
 hr {
   height: 1px;
   color: $light-grey;
