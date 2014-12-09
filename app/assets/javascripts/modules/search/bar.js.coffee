@@ -10,6 +10,7 @@ define(['jquery'], ($) ->
 
     addEventListeners: ->
       @$triggerEl.click( (ev) =>
+        @$el.stop()
         @$el.slideToggle()
         @$triggerEl.toggleClass('opened')
         @options.relatedEls?.forEach(($el) -> $el?.toggleClass('opened'))
