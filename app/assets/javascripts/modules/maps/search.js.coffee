@@ -26,6 +26,7 @@ define(['jquery', './bounds', 'mapbox', 'leaflet.markercluster'], ($, Bounds) ->
           marker.bindPopup(@linkTo(pa))
           markerList.push(marker)
 
+        @showResultsCount(protected_areas.length)
         @fitToResults(protected_areas)
         callback(markerList)
       )
@@ -45,6 +46,9 @@ define(['jquery', './bounds', 'mapbox', 'leaflet.markercluster'], ($, Bounds) ->
         boundFrom: [maxLat, maxLon],
         boundTo: [minLat, minLon]
       })
+
+    showResultsCount: (count) ->
+      $('.results-count').html(count)
 
     linkTo: (pa) ->
       "<a href=\"/#{pa.wdpa_id}\">#{pa.name}</a>"
