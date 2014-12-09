@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Stats::CountryControllerTest < ActionController::TestCase
+class CountryControllerTest < ActionController::TestCase
   test '.show returns a 200 HTTP code' do
     global_region = FactoryGirl.create(:region, iso: 'GL')
     FactoryGirl.create(:regional_statistic, region: global_region, pa_area: 100)

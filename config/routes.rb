@@ -36,8 +36,8 @@ Rails.application.routes.draw do
 
   get '/stats/global', to: 'stats/global#index', as: 'global_stats'
   get '/stats/regional/:iso', to: 'stats/regional#show', as: 'regional_stats'
-  get '/country/:iso', to: 'stats/country#show', as: 'country_stats'
 
+  get '/country/:iso', to: 'country#show', as: 'country'
   get '/country/:iso/compare', to: 'stats/country#new_comparison', as: 'new_countries_comparison'
   post '/country/:iso/compare', to: 'stats/country#compare', as: 'compare_countries'
 

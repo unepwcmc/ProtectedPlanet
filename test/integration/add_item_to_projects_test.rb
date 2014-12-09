@@ -31,7 +31,7 @@ class AddItemToProjectsTest < ActionDispatch::IntegrationTest
   test "add country to existing project" do
     FactoryGirl.create(:country_statistic, country: @country)
 
-    visit country_stats_path(@country.iso)
+    visit country_path(@country.iso)
     add_item_to_project
     assert_includes Project.last.items, @country
   end

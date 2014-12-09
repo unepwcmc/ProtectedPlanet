@@ -7,7 +7,7 @@
     <h3><a href='/<%= model.slug %>'><%= model.name %></a>,  <small><%= model.designation.name %></small></h3>
     <p>
       <% model.countries.each do |country| %>
-        <a href="<%= country_stats_path(iso: country.iso) %>"><%= country.name %></a>,
+        <a href="<%= country_path(iso: country.iso) %>"><%= country.name %></a>,
         <%= country.region.try(:name) %>
         |
       <% end %>

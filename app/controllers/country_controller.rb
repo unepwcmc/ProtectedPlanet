@@ -1,4 +1,4 @@
-class Stats::CountryController < ApplicationController
+class CountryController < ApplicationController
   before_filter :load_vars
   before_filter :load_user_projects
 
