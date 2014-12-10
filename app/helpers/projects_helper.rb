@@ -15,7 +15,7 @@ module ProjectsHelper
     when SavedSearch
       search_path(q: item.name)
     when Country
-      country_stats_path(item.iso)
+      country_path(item.iso)
     when Region
       regional_stats_path(item)
     when ProtectedArea
