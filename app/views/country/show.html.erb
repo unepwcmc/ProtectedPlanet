@@ -1,25 +1,15 @@
-<% content_for :header do %>
-  <nav class="sub-nav search-sub-nav">
-    <ul class="nav">
-      <li><h1><%= @country.name %>, <%= @country.region.name %></h1></li>
-      <li><h2><%= @country.protected_areas.count %> Protected Areas</h2></li>
-      <li><%= link_to 'Compare Countries', new_countries_comparison_path %></li>
-      <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'country', item_id: @country.id} %></li>
-      <li class="right"><%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-search-download', download_type: 'general', image: 'icon-download-black.png', item_id: @country.iso } %></li>
-    </ul>
-  </nav>
-<% end %>
+<% render partial: 'header' %>
 
 <% cache do %>
-  <section class="factsheet" id="protected-coverage-viz">
+  <section id="protected-coverage-viz">
     <%= render partial: 'factsheet', locals: {presenter: @presenter, country: @country} %>
-  </section>
 
-  <div class="protected-area-map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>">
-    <div class="map-disclaimer">
-      The boundaries and names shown, and the designations used on this
-      map do not imply official endorsement or acceptance by the United
-      Nations or IUCN.
+    <div class="protected-area-map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>">
+      <div class="map-disclaimer">
+        The boundaries and names shown, and the designations used on this
+        map do not imply official endorsement or acceptance by the United
+        Nations or IUCN.
+      </div>
     </div>
-  </div>
+  </section>
 <% end %>
