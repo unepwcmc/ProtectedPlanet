@@ -5,15 +5,20 @@ class CountryController < ApplicationController
   def show
   end
 
-  def new_comparison
-  end
-
   def compare
-    @comparison_country = Country.where(iso: params[:compare_iso]).first
-    @comparison_presenter = StatisticPresenter.new @comparison_country
+    params[:iso2] ? load_second_country : load_comparable_countries
   end
 
   private
+
+  def load_second_country
+    @second_country = Country.where(iso: params[:iso2]).first
+    @second_presenter = StatisticPresenter.new @second_country
+  end
+
+  def load_comparable_countries
+    @comparable_countries = Country.select(:iso, :name).all
+  end
 
   def load_vars
     @country = Country.where(iso: params[:iso]).first

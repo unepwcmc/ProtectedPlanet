@@ -1,24 +1,20 @@
-<% content_for :header do %>
+<% render partial: 'header' %>
 
-  <nav class="sub-nav">
-    <ul class="nav">
-      <li><h1><%= @country.name %>, <%= @country.region.name %></h1></li>
-      <li><h2>Comparing: <%= @comparison_country.name %>, <%= @comparison_country.region.name %></h2></li>
-      <li><%= link_to 'Compare Countries', new_countries_comparison_path %></li>
-      <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'country', item_id: @country.id} %></li>
-      <li class="right"><%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-search-download', download_type: 'general', image: 'icon-download-black.png', item_id: @country.iso } %></li>
-    </ul>
-  </nav>
-<% end %>
+<section id="protected-coverage-viz">
+  <div class="countries-compare-left">
+    <%= render partial: 'factsheet', locals: {presenter: @presenter, country: @country} %>
+  </div>
 
-<% cache("#{@country.id}-#{@comparison_country.id}-comparison") do %>
-  <section id="protected-coverage-viz">
-    <div class="countries-compare-left">
-      <%= render partial: 'factsheet', locals: {presenter: @presenter, country: @country} %>
-    </div>
-
-    <div class="countries-compare-right">
-      <%= render partial: 'factsheet', locals: {presenter: @comparison_presenter, country: @comparison_country} %>
-    </div>
-  </section>
-<% end %>
+  <div class="countries-compare-right">
+    <% if @second_country %>
+      <% cache("#{@country.id}-#{@second_country.id}-comparison") do %>
+        <%= render partial: 'factsheet', locals: {presenter: @second_presenter, country: @second_country} %>
+      <% end %>
+    <% else %>
+      <div class="countries-selection">
+        <h3>Select a Country to compare</h3>
+        <%= collection_select(nil, :iso2, @comparable_countries, :iso, :name, {prompt: true}, {id: 'countries-select'}) %>
+      </div>
+    <% end %>
+  </div>
+</section>
