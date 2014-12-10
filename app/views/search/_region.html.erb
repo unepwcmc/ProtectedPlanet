@@ -2,7 +2,7 @@
   <%= cover model %>
   <div class="inner-result">
     <h3>
-      <a href="<%= regional_stats_path(iso: model.iso) %>"><%= model.name %></a> |
+      <%= model.name %> |
       <small><%= commaify model.protected_areas.count %> Protected Areas in this region</small>
     </h3>
 
