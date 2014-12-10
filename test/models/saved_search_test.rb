@@ -6,7 +6,10 @@ class SavedSearchTest < ActiveSupport::TestCase
     saved_search = FactoryGirl.create(:saved_search)
 
     search_mock = mock
-    search_mock.stubs(:pluck).returns(results_ids)
+    results_mock = mock
+    results_mock.stubs(:pluck).returns(results_ids)
+    search_mock.stubs(:results).returns(results_mock)
+
     Search.expects(:search).returns(search_mock)
 
     assert_same_elements results_ids, saved_search.wdpa_ids

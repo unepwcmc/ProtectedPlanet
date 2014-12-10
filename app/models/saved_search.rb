@@ -11,7 +11,7 @@ class SavedSearch < ActiveRecord::Base
   end
 
   def wdpa_ids
-    search.pluck('wdpa_id')
+    search.results.pluck('wdpa_id')
   end
 
   private

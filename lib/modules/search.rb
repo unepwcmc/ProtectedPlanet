@@ -23,10 +23,6 @@ class Search
     @results ||= Search::Results.new(@query_results)
   end
 
-  def complete!
-    properties['status'] = 'completed'
-  end
-
   def aggregations
     aggs_by_model = {}
 
