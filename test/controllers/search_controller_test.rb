@@ -83,6 +83,25 @@ class SearchControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'GET :map, given a search term, returns success' do
+    search_term = 'manbone'
+
+    results_mock = mock()
+    results_mock.stubs(:results).returns([])
+    results_mock.stubs(:total_pages).returns(0)
+    results_mock.stubs(:current_page).returns(0)
+    results_mock.stubs(:aggregations).returns([])
+    results_mock.stubs(:count).returns(0)
+    results_mock.stubs(:search_term).returns(search_term)
+    results_mock.stubs(:options).returns({filters: {}})
+
+    Search.expects(:search).with(search_term, {filters: {}}).returns(results_mock)
+
+    get :map, q: search_term
+
+    assert_response :success
+  end
+
   test 'POST :create, given a search term, filters, and a project id,
    creates a Search object linked to the given project' do
     search_term = 'san guillermo'

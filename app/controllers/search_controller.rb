@@ -2,12 +2,16 @@ class SearchController < ApplicationController
   before_filter :load_user_projects
   before_action :authenticate_user!, only: [:create]
 
+  before_filter :ignore_empty_query, only: [:index, :map]
+
   def index
-    return unless @query = params[:q]
-
     @search = Search.search(@query, search_options)
-
     render partial: 'grid' if params[:grid]
+  end
+
+  def map
+    @search = Search.search(@query, search_options)
+    render :index
   end
 
   def create
@@ -18,6 +22,10 @@ class SearchController < ApplicationController
   end
 
   private
+
+  def ignore_empty_query
+    return unless @query = params[:q]
+  end
 
   def project
     find_by = {id: search_params[:project_id], user: current_user}

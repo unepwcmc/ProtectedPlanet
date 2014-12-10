@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   resources :downloads, only: [:show, :create, :update]
 
   get '/search', to: 'search#index'
+  get '/search/map', to: 'search#map'
   post '/search', to: 'search#create'
 
   get '/sites/:id', to: 'sites#show'

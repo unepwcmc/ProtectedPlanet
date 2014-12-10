@@ -19,27 +19,35 @@
     <header>
       <span>Results</span>
       <ul>
-        <li class="btn-switch-grid"><a href="#"><%= image_tag('icon-grid-grey.png', size: '20') %></a></li>
-        <li class="btn-switch-map"><a href="#"><%= image_tag('icon-map-grey.png', size: '20') %></a></li>
+        <li class="btn-switch-grid">
+          <%= link_to(search_path(params)) do %>
+            <%= image_tag('icon-grid-grey.png', size: '20') %>
+          <% end %>
+        </li>
+
+        <li class="btn-switch-map">
+          <%= link_to(search_map_path(params)) do %>
+            <%= image_tag('icon-map-grey.png', size: '20') %>
+          <% end %>
+        </li>
       </ul>
     </header>
     <%= render partial: 'facets', locals: {facets: @search.aggregations} %>
   </aside>
 <% end %>
 
-<div class="search-map"
-  id="map"
-  data-url="<%= api_v3_search_points_url(params) %>">
-  <div class="map-disclaimer">
-    The boundaries and names shown, and the designations used on this
-    map do not imply official endorsement or acceptance by the United
-    Nations or IUCN.
+<% if current_page?(controller: 'search', action: 'map') %>
+  <div class="search-map"
+    id="map"
+    data-url="<%= api_v3_search_points_url(params) %>">
+    <div class="map-disclaimer">
+      The boundaries and names shown, and the designations used on this
+      map do not imply official endorsement or acceptance by the United
+      Nations or IUCN.
+    </div>
   </div>
-</div>
-
-<div class="search-grid <%= 'no-results' if @search.count.zero? %>">
-  <%= render partial: 'grid' %>
-</div>
-
-<a class="fixed-sidebar-toggle" href="#"><%= image_tag('icon-toggle-panel-grey.png', size: '20') %></a>
-
+<% else %>
+  <div class="search-grid <%= 'no-results' if @search.count.zero? %>">
+    <%= render partial: 'grid' %>
+  </div>
+<% end %>

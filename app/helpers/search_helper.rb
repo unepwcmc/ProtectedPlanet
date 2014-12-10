@@ -12,12 +12,11 @@ module SearchHelper
   def facet_link facet
     model = facet[:model]
 
-    link_name = "#{model.name} (#{facet[:count]})"
     link_params = params.merge({
       model.class.to_s.underscore => model.id
     })
 
-    link_to search_path(link_params) do
+    link_to url_for(link_params) do
       facet_count = content_tag(:strong, "(#{facet[:count]})")
       raw "#{model.name} #{facet_count}"
     end
