@@ -18,13 +18,13 @@
     <header>
       <span>Results</span>
       <ul>
-        <li class="btn-switch-grid">
+        <li class="btn-switch-grid <%= "active" if current_page?(action: 'index') %>">
           <%= link_to(search_path(params)) do %>
             <%= image_tag('icon-grid-grey.png', size: '20') %>
           <% end %>
         </li>
 
-        <li class="btn-switch-map">
+        <li class="btn-switch-map <%= "active" if current_page?(action: 'map') %>">
           <%= link_to(search_map_path(params)) do %>
             <%= image_tag('icon-map-grey.png', size: '20') %>
           <% end %>
