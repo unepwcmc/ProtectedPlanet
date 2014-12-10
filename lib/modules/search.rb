@@ -1,7 +1,4 @@
 class Search
-  include ActiveToken
-  token_domain 'search'
-
   ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine]
 
   attr_reader :search_term, :options
@@ -11,20 +8,6 @@ class Search
     instance.search
 
     instance
-  end
-
-  def self.download search_term, options={}
-    token = Digest::SHA256.hexdigest(
-      (search_term || "") + Marshal.dump(
-        options.keys.sort.map{|key| options[key]}
-      )
-    )
-
-    find(token, search_term, options) || begin
-      instance = create(token, search_term, options)
-      SearchWorkers::Downloader.perform_async(token, search_term, options)
-      instance
-    end
   end
 
   def initialize search_term='', options={}
@@ -47,10 +30,6 @@ class Search
     ProtectedArea.
       select(:id, :wdpa_id, :name, :the_geom_latitude, :the_geom_longitude).
       where("id IN (?)", pluck('id').compact.uniq)
-  end
-
-  def complete!
-    properties['status'] = 'completed'
   end
 
   def pluck key
@@ -107,14 +86,16 @@ class Search
       size: options[:size] || RESULTS_SIZE,
       from: options[:offset] || offset,
       query: Search::Query.new(search_term, options).to_h,
-    }.tap do |query|
-      unless options[:without_aggregations]
-        query[:aggs] = Search::Aggregation.all
-      end
+    }.tap( &method(:optional_queries) )
+  end
 
-      if options[:sort].present?
-        query[:sort] = Search::Sorter.from_params(options[:sort])
-      end
+  def optional_queries query
+    unless options[:without_aggregations]
+      query[:aggs] = Search::Aggregation.all
+    end
+
+    if options[:sort].present?
+      query[:sort] = Search::Sorter.from_params(options[:sort])
     end
   end
 

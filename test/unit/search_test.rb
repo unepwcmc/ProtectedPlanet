@@ -228,51 +228,6 @@ class TestSearch < ActiveSupport::TestCase
     assert_equal [123, 345, nil], values
   end
 
-  test '.complete! sets the status property to completed' do
-    properties_mock = mock()
-    properties_mock.expects(:[]=).with('status', 'completed')
-    Search.any_instance.stubs(:properties).returns(properties_mock)
-
-    Search.new('san guillermo', {}).complete!
-  end
-
-  test '#download, given a search term and filters, generates a search with
-   token, and spawns a SearchWorkers::Downloader worker' do
-    search_term = 'san guillermo'
-    opts = {filters: [{name: 'type', value: 'protected_area'}]}
-    token = "3b00778be9391426bb3c900b977dfb3771fc9cdd83e1d1f99bda77b77c3d6750"
-
-    Search.stubs(:find).returns(false)
-    Search.expects(:create).with(token, search_term, opts)
-    SearchWorkers::Downloader.expects(:perform_async).with(token, search_term, opts)
-
-    Search.download(search_term, opts)
-  end
-
-  test '#download, given no search term and filters, generates a hash
-   correctly' do
-    opts = {filters: [{name: 'type', value: 'protected_area'}]}
-    token = "41373132404e5f2ae5549fa87d05dcbc1bb4bcb69933a229d50c0711b46b533e"
-
-    Search.stubs(:find).returns(false)
-    Search.stubs(:create)
-    SearchWorkers::Downloader.expects(:perform_async).with(token, nil, opts)
-
-    Search.download(nil, opts)
-  end
-
-  test '#download, given a search term and filters, returns an existing download when found' do
-    search_term = 'san guillermo'
-    opts = {filters: [{name: 'type', value: 'protected_area'}]}
-    token = "3b00778be9391426bb3c900b977dfb3771fc9cdd83e1d1f99bda77b77c3d6750"
-
-    Search.expects(:find).with(token, search_term, opts).returns(true)
-    Search.expects(:create).never
-    SearchWorkers::Downloader.expects(:perform_async).never
-
-    Search.download(search_term, opts)
-  end
-
   test '.with_coords returns all the search result models with their
    coordinates, WDPA ID and name' do
     pa_attributes = [{

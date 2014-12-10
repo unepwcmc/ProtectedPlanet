@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class DownloadsControllerTest < ActionController::TestCase
-  test '#show responds with a json containing the link to s3, when domain is general' do
+  test 'GET :show responds with a json containing the link to s3, when domain is general' do
     type = 'csv'
     country = FactoryGirl.create(:country, iso_3: 'CAN')
     link = "https://bucket.s3.com/#{country.iso_3}.#{type}"
@@ -9,68 +9,49 @@ class DownloadsControllerTest < ActionController::TestCase
     Download.expects(:link_to).returns(link)
 
     get :show, id: country.iso_3, type: type, domain: :general
-
-    json_response = JSON.parse(@response.body)
-    assert_equal({'link' => link}, json_response)
+    assert_redirected_to link
   end
 
   test 'POST :create, given a search term and filters, initiates a download generation' do
     search_term = 'manbone'
-    options = {filters: {'type' => 'protected_area'}}
     token = '12345'
+    expected_json = {'status' => 'generating', 'token' => token}
 
-    search_mock = mock
-    search_mock.stubs(:token).returns(token)
-    search_mock.expects(:properties).never
-    Search.expects(:download).with(search_term, options).returns(search_mock)
+    Download.expects(:request).
+      with('q' => search_term, 'type' => 'protected_area', 'controller' => 'downloads', 'action' => 'create').
+      returns(expected_json)
 
     post :create, q: search_term, type: 'protected_area'
 
     json_response = JSON.parse(@response.body)
-    assert_equal({'token' => token}, json_response)
-  end
-
-  test 'POST :create, given a search term, filters and a user, generates
-   a download with the given user' do
-    user = FactoryGirl.create(:user)
-    sign_in user
-
-    search_term = 'manbone'
-    options = {filters: {'type' => 'protected_area'}}
-
-    search_mock = mock()
-    search_mock.stubs(:token)
-    search_mock.expects(:properties).returns({})
-    Search.expects(:download).with(search_term, options).returns(search_mock)
-
-    post :create, q: search_term, type: 'protected_area'
-
-    assert_response :success
+    assert_equal(expected_json, json_response)
   end
 
   test 'GET :poll, given a token, returns the properties of the given download' do
-    search_properties = {'status' => 'preparing'}
     token = '12345'
+    expected_json = {'status' => 'generating', 'token' => token}
 
-    search_mock = mock()
-    search_mock.stubs(:properties).returns(search_properties)
-    Search.expects(:find).with(token).returns(search_mock)
+    Download.expects(:poll).
+      with('domain' => 'project', 'token' => '12345', 'controller' => 'downloads', 'action' => 'poll').
+      returns(expected_json)
 
-    get :poll, token: token, domain: :search
+    get :poll, domain: 'project', token: token
 
     json_response = JSON.parse(@response.body)
-    assert_equal search_properties, json_response
+    assert_equal(expected_json, json_response)
   end
 
   test 'PUT :update, given a token and an email, adds a users email
    address to the Search properties' do
-    search_properties = {}
     token = '12345'
     email = 'stephen@fakename.com'
 
-    search_mock = mock()
-    search_mock.stubs(:properties).returns(search_properties)
-    Search.expects(:find).with(token).returns(search_mock)
+    Download.expects(:set_email).with({
+      'id' => token,
+      'email' => email,
+      'action' => 'update',
+      'controller' => 'downloads'
+    })
 
     put :update, id: token, email: email
 

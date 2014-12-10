@@ -1,18 +1,11 @@
-window.ProtectedPlanet ||= {}
-window.ProtectedPlanet.Downloads ||= {}
+define(['jquery', './base'], ($, Base) ->
+  class General extends Base
+    constructor: (@type, @opts={}) ->
+      super(@type, @opts)
+      @domain = 'general'
 
-class ProtectedPlanet.Downloads.General extends ProtectedPlanet.Downloads.Base
-  start: ->
-    @submitDownload( (download) =>
-      @generationModal.showDownloadLink(download.link)
-    )
+    submitDownload: (next) ->
+      $.post(@constructor.CREATION_PATH, {id: @opts.itemId, domain: @domain}, next)
 
-
-  submitDownload: (next) ->
-    $.get(
-      @constructor.CREATION_PATH + "/#{@opts.itemId}",
-      {domain: 'general', type: @type}
-      next
-    )
-
-
+  return General
+)

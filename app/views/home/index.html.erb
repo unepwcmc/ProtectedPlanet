@@ -3,7 +3,7 @@
     <nav class="sub-nav search-sub-nav">
       <ul>
         <li>
-          <h1>Showing <strong><%= @search.count %></strong> Protected Areas</h1>
+          <h1>Showing <strong class="results-count">…</strong> Protected Areas</h1>
         </li>
         <li class="right"><%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-search-download', download_type: 'search', image: 'icon-download-black.png'} %></li>
       </ul>
@@ -15,7 +15,6 @@
   <div
     data-bound-from="<%= map_bounds['from'] %>"
     data-bound-to="<%= map_bounds['to'] %>"
-    data-animate="true"
 
     <%= filter_url_attribute %>
     <%= iucn_data_attribute %>

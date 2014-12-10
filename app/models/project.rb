@@ -11,11 +11,4 @@ class Project < ActiveRecord::Base
   has_many :saved_searches
 
   polymorphic_group :items, [:protected_areas, :countries, :regions, :saved_searches]
-
-  def download_info
-    generation_status = $redis.get("projects:#{id}:all")
-    ProjectDownloadsGenerator.perform_async id if generation_status.nil?
-
-    JSON.parse(generation_status) rescue {}
-  end
 end

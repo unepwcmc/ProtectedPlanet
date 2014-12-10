@@ -11,10 +11,8 @@ class SearchController < ApplicationController
   end
 
   def create
-    SavedSearch.create_and_populate(
-      search_params.merge({project_id: project.id})
-    )
-    ProjectDownloadsGenerator.perform_async @project.id
+    SavedSearch.create(search_params.merge({project_id: project.id}))
+    DownloadWorkers::Project.perform_async @project.id
 
     redirect_to projects_path
   end

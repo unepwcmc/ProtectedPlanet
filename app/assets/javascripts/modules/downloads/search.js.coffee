@@ -1,29 +1,11 @@
-window.ProtectedPlanet ||= {}
-window.ProtectedPlanet.Downloads ||= {}
+define(['jquery', './base'], ($, Base) ->
+  class Search extends Base
+    constructor: (@type, @opts={}) ->
+      super(@type, @opts)
+      @domain = 'search'
 
-class ProtectedPlanet.Downloads.Search extends ProtectedPlanet.Downloads.Base
-  start: ->
-    @submitDownload( (token) =>
-      @generationModal.initialiseForm(token)
-      @generationModal.show()
+    submitDownload: (next) ->
+      $.post(@constructor.CREATION_PATH + window.location.search, {domain: @domain}, next)
 
-      @pollDownload(token, (download) =>
-        @generationModal.showDownloadLink(JSON.parse(download.links)[@type])
-      )
-    )
-
-
-  submitDownload: (next) ->
-    $.post(@constructor.CREATION_PATH + window.location.search, (data) ->
-      next(data.token)
-    )
-
-  pollDownload: (token, next) =>
-    checkPolling = (data) =>
-      if data.status == 'completed'
-        window.clearInterval(intervalId)
-        next(data)
-
-    intervalId = setInterval( =>
-      $.get("#{@constructor.POLLING_PATH}", {token: token, domain: 'search'}, checkPolling)
-    , @constructor.POLLING_INTERVAL)
+  return Search
+)

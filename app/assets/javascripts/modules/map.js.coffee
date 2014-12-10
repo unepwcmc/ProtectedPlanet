@@ -1,37 +1,41 @@
-window.ProtectedPlanet ||= {}
+DEPENDENCIES = [
+  'mapbox', './maps/base_layer', './maps/interactive', './maps/bounds',
+  './maps/protected_area_overlay', './maps/search'
+]
 
-class ProtectedPlanet.Map
-  L.mapbox.accessToken = 'pk.eyJ1IjoidW5lcHdjbWMiLCJhIjoiRXg1RERWRSJ9.taTsSWwtAfFX_HMVGo2Cug'
+define(DEPENDENCIES, (mapbox, BaseLayer, Interactive, Bounds,
+  ProtectedAreaOverlay, Search) ->
+  class Map
+    L.mapbox.accessToken = 'pk.eyJ1IjoidW5lcHdjbWMiLCJhIjoiRXg1RERWRSJ9.taTsSWwtAfFX_HMVGo2Cug'
 
-  CONFIG =
-    minZoom: 2
-    zoomControl: false
-    attributionControl: false
+    CONFIG =
+      minZoom: 2
+      zoomControl: false
+      attributionControl: false
 
-  constructor: (@$mapContainer) ->
+    constructor: (@$mapContainer) ->
 
-  render: ->
-    if @$mapContainer.length == 0
-      return false
+    render: ->
+      if @$mapContainer.length == 0
+        return false
 
-    if ProtectedPlanet.Map.instance?
-      ProtectedPlanet.Map.instance.remove()
+      config = @$mapContainer.data()
 
-    config = @$mapContainer.data()
+      map = @createMap(@$mapContainer.attr('id'))
 
-    map = @createMap(@$mapContainer.attr('id'))
+      Interactive.listen(map)
+      BaseLayer.render(map)
+      Bounds.setToBounds(map, config)
+      ProtectedAreaOverlay.render(map, config)
+      Search.showSearchResults(map, config.url)
 
-    new ProtectedPlanet.Maps.Interactive(map).listen()
-    ProtectedPlanet.Maps.BaseLayer.render(map)
-    ProtectedPlanet.Maps.Bounds.setToBounds(map, config)
-    ProtectedPlanet.Maps.ProtectedAreaOverlay.render(map, config)
-    ProtectedPlanet.Maps.Search.showSearchResults(map, config.url)
-    if config.animate and !config.url?
-      ProtectedPlanet.Maps.Animation.startAnimation(map)
+      window.ProtectedPlanet ||= {}
+      window.ProtectedPlanet.Map = {'instance': map}
 
-    ProtectedPlanet.Map.instance = map
+    createMap: (id) ->
+      L.mapbox.map(
+        id, 'unepwcmc.ijh17499', CONFIG
+      ).addControl(L.control.zoom(position: 'topright'))
 
-  createMap: (id) ->
-    L.mapbox.map(
-      id, 'unepwcmc.ijh17499', CONFIG
-    ).addControl(L.control.zoom(position: 'topright'))
+  return Map
+)

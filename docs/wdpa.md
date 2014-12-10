@@ -6,6 +6,9 @@ Geodatabase](http://webhelp.esri.com/arcgisdesktop/9.2/index.cfm?topicname=types
 which means we have to do some conversions before we can use the data in
 the application.
 
+**NOTE:** none of the following steps are required to install or setup
+the application.
+
 #### Importing to Rails
 
 In the Rails console, run the following:

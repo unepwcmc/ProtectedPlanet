@@ -1,4 +1,4 @@
-class ImportWorkers::ImageWorker < ImportWorker
+class ImportWorkers::ImageWorker < ImportWorkers::Base
   def perform protected_area_id
     save_image(protected_area_id)
   ensure
