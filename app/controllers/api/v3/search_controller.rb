@@ -3,9 +3,9 @@ class Api::V3::SearchController < ApplicationController
     results = Search.search(
       params[:q],
       search_options(size: ProtectedArea.count)
-    ).with_coords
+    ).results
 
-    render json: results
+    render json: results.with_coords
   end
 
   def by_point
@@ -32,7 +32,7 @@ class Api::V3::SearchController < ApplicationController
   end
 
   def search_options extra_options
-    options = {filters: filters}
+    options = {filters: {'type' => 'protected_area'}.merge(filters || {})}
     options[:page] = params[:page].to_i if params[:page].present?
     options.merge(extra_options)
   end
