@@ -15,7 +15,6 @@ define('download_generation_modal', ['modal'], (Modal) ->
       $form.attr('action', "/downloads/#{token}")
       $form.on("ajax:success", => @hide())
 
-
     showDownloadCompleteTemplate: ->
       @render(@constructor.downloadCompleteTemplate)
       @show()

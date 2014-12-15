@@ -12,7 +12,6 @@ require(['search_bar', 'dropdown', 'map'], (SearchBar, Dropdown, Map) ->
 require(
   ['downloads_general', 'downloads_project', 'downloads_search'],
   (DownloadsGeneral, DownloadsProject, DownloadsSearch) ->
-    debugger
     $downloadBtns = [
       $(".download-type-dropdown[data-download-type='general'] a")
       $(".download-type-dropdown[data-download-type='search'] a")
