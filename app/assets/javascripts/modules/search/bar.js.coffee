@@ -1,4 +1,4 @@
-define(['jquery'], ($) ->
+define('search_bar', [], () ->
   class SearchBar
     constructor: (@options) ->
       @$el = $('.search-bar')

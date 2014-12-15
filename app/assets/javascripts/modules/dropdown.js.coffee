@@ -1,4 +1,4 @@
-define([], ->
+define('dropdown', [], ->
   class Dropdown
     constructor: (@$triggerEl, @$el, @options) ->
       if @$triggerEl.length is 0 or @$el.length is 0

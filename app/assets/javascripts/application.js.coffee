@@ -35,13 +35,7 @@ require(DEPENDENCIES, ($, SearchBar, Map, DownloadsBase, DownloadsGeneral, Downl
       )
     )
 
-  new SearchBar()
   new Map($('#map')).render()
   initializeDownloadButtons()
-
-  new Dropdown(
-    $('.btn-download'),
-    $(".download-type-dropdown[data-download-type='general']")
-  )
 
 )
