@@ -1,4 +1,4 @@
-define(['mapbox', 'jquery'], (mapbox, $) ->
+define('interactive', [], () ->
   class Interactive
     constructor: (@map) ->
 

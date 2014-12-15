@@ -1,4 +1,4 @@
-define([], ->
+define('bounds', [], ->
   class Bounds
     @setToBounds: (map, config) ->
       boundFrom = config['boundFrom']

@@ -1,5 +1,7 @@
-require(['search_bar', 'dropdown'], (SearchBar, Dropdown) ->
+require(['search_bar', 'dropdown', 'map'], (SearchBar, Dropdown, Map) ->
   new SearchBar()
+
+  new Map($('#map')).render()
 
   new Dropdown(
     $('.btn-download'),
