@@ -1,5 +1,5 @@
 class CountryController < ApplicationController
-  before_filter :enable_caching
+  after_filter :enable_caching
   before_filter :load_vars
 
   def show
