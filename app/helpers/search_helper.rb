@@ -21,4 +21,8 @@ module SearchHelper
       raw "#{model.name} #{facet_count}"
     end
   end
+
+  def clear_filters_link params
+    link_to "Clear Filters", search_path(params.slice(:q))
+  end
 end

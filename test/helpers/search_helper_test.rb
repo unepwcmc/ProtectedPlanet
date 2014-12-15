@@ -13,4 +13,11 @@ class SearchHelperTest < ActionView::TestCase
     selected_class = type_li_tag('protected_area', 'country') { "inner text" }
     assert_equal '<li class="">inner text</li>', selected_class
   end
+
+  test '#clear_filters_link, given params, returns an <a> tag to remove
+   the current search filters' do
+    params = {q: 'boneman', country: 123}
+    expected_link = '<a href="/search?q=boneman">Clear Filters</a>'
+    assert_equal expected_link, clear_filters_link(params)
+  end
 end

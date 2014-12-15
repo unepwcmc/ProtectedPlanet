@@ -1,4 +1,7 @@
 <ul>
+  <li class="facet">
+    <%= clear_filters_link(params) %>
+  </li>
   <% facets.each do |name, models| %>
     <li class="facet">
       <h5><%= name.humanize %></h5>
