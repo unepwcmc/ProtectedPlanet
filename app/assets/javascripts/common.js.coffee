@@ -1,12 +1,17 @@
-DEPENDENCIES = [
-  'jquery', 'modules/search/bar', 'modules/map',
-  'modules/downloads/base', 'modules/downloads/general',
-  'modules/downloads/project', 'modules/downloads/search',
-  'modules/dropdown'
-]
+require(['search_bar', 'dropdown', 'map'], (SearchBar, Dropdown, Map) ->
+  new SearchBar()
 
-require(DEPENDENCIES, ($, SearchBar, Map, DownloadsBase, DownloadsGeneral, DownloadsProject, DownloadsSearch, Dropdown)->
-  initializeDownloadButtons = ->
+  new Map($('#map')).render()
+
+  new Dropdown(
+    $('.btn-download'),
+    $(".download-type-dropdown[data-download-type='general']")
+  )
+)
+
+require(
+  ['downloads_general', 'downloads_project', 'downloads_search'],
+  (DownloadsGeneral, DownloadsProject, DownloadsSearch) ->
     $downloadBtns = [
       $(".download-type-dropdown[data-download-type='general'] a")
       $(".download-type-dropdown[data-download-type='search'] a")
@@ -34,14 +39,4 @@ require(DEPENDENCIES, ($, SearchBar, Map, DownloadsBase, DownloadsGeneral, Downl
         )
       )
     )
-
-  new SearchBar()
-  new Map($('#map')).render()
-  initializeDownloadButtons()
-
-  new Dropdown(
-    $('.btn-download'),
-    $(".download-type-dropdown[data-download-type='general']")
-  )
-
 )

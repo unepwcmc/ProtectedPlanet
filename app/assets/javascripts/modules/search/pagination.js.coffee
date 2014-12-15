@@ -1,4 +1,4 @@
-define(['jquery.infinitescroll'], ->
+define('pagination', [], ->
   class Pagination
     constructor: (@container, @resultClass) ->
       @render()

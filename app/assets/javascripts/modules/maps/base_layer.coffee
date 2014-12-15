@@ -1,4 +1,4 @@
-define(['mapbox'], ->
+define('base_layer', [], ->
   class BaseLayer
     @render: (map) ->
       terrain = L.mapbox.tileLayer('unepwcmc.ijh17499')

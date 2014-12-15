@@ -17,13 +17,7 @@ var _ = this._; _.noConflict();
 var Mustache;
 
 (function (exports) {
-  if (typeof module !== "undefined" && typeof module.exports !== "undefined") {
-    module.exports = exports; // CommonJS
-  } else if (typeof define === "function") {
-    define(exports); // AMD
-  } else {
-    Mustache = exports; // <script>
-  }
+  Mustache = exports; // <script>
 }((function () {
   var exports = {};
 

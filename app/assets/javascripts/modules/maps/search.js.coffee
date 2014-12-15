@@ -1,4 +1,4 @@
-define(['jquery', './bounds', 'mapbox', 'leaflet.markercluster'], ($, Bounds) ->
+define('search', ['bounds'], (Bounds) ->
   class Search
     @showSearchResults: (map, url) ->
       return unless url?

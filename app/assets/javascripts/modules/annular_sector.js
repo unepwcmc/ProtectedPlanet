@@ -3,7 +3,7 @@
 // https://github.com/mbostock/d3/wiki/Pie-Layout#pie
 // https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes
 
-define(['jquery', 'd3'], function($, d3) {
+define('annular_sector', [], function() {
   return (function() {
     var pi = Math.PI;
 

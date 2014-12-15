@@ -217,8 +217,6 @@ GEM
     redis-namespace (1.4.1)
       redis (~> 3.0.4)
     ref (1.0.5)
-    requirejs-rails (0.9.5)
-      railties (>= 3.1.1)
     responders (1.1.1)
       railties (>= 3.2, < 4.2)
     rgeo (0.3.20)
@@ -348,7 +346,6 @@ DEPENDENCIES
   premailer-rails
   rack-cache (~> 1.2)
   rails (= 4.1.0)
-  requirejs-rails
   sass-rails (~> 4.0.3)
   selenium-webdriver
   sidekiq (~> 3.1.4)

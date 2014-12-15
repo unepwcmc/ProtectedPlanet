@@ -1,4 +1,4 @@
-define(['jquery'], ($) ->
+define('modal', [], () ->
   class Modal
     constructor: (@$container) ->
       @$overlay = $('.total-overlay')

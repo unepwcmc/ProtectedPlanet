@@ -1,4 +1,4 @@
-define(['jquery', './base'], ($, Base) ->
+define('downloads_project', ['downloads_base'], (Base) ->
   class Project extends Base
     constructor: (@type, @opts={}) ->
       super(@type, @opts)
