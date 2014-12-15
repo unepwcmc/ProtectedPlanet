@@ -1,4 +1,4 @@
-define(['jquery', 'modules/modal'], ($, Modal) ->
+define('download_generation_modal', ['modal'], (Modal) ->
   class DownloadGenerationModal extends Modal
     BASE_DOWNLOAD_PATH = '/downloads'
 

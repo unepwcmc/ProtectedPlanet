@@ -1,8 +1,4 @@
-DEPENDENCIES = [
-  'jquery', 'modules/modals/download_generation_modal'
-]
-
-define(DEPENDENCIES, ($, DownloadGenerationModal) ->
+define('downloads_base', ['download_generation_modal'], (DownloadGenerationModal) ->
   class Base
     @CREATION_PATH: '/downloads'
     @POLLING_PATH: '/downloads/poll'
