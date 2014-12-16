@@ -8,7 +8,7 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test '#cover, given a pa, returns an image tag to the asset controller' do
     pa = FactoryGirl.create(:protected_area, name: "Manbone")
-    expected_tag = %Q{<img alt="Manbone" src="/assets/tiles/#{pa.id}?size%5Bx%5D=256&amp;size%5By%5D=128&amp;version=1" />}
+    expected_tag = %Q{<img alt="Manbone" src="https://pp-downloads-development.s3.amazonaws.com/current/tiles/#{pa.wdpa_id}" />}
 
 
     tag = cover(pa)

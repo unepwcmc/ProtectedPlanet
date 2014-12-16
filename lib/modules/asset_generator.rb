@@ -7,6 +7,11 @@ module AssetGenerator
     request_tile tile_url[:host], tile_url[:path]
   end
 
+  def self.link_to asset_id
+    file_name = "tiles/#{asset_id}"
+    S3.link_to file_name
+  end
+
   private
 
   def self.mapbox_url geojson, size

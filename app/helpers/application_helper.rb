@@ -19,9 +19,7 @@ module ApplicationHelper
   end
 
   def protected_area_cover_link protected_area, opts
-    version = Rails.application.secrets.mapbox['version']
-    image_params = {id: protected_area.id, version: version}.merge(opts)
-    return tiles_path(image_params)
+    AssetGenerator.link_to protected_area.wdpa_id
   end
 
   def country_cover country, opts

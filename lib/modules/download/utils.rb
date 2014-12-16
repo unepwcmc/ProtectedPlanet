@@ -2,12 +2,7 @@ module Download
   module Utils
     def self.link_to download_name, type
       file_name = File.basename zip_path_for_type(download_name, type)
-      prefixed_file_name = CURRENT_PREFIX + file_name
-
-      bucket_name = Rails.application.secrets.aws_downloads_bucket
-      url = "https://#{bucket_name}.s3.amazonaws.com"
-
-      URI.join(url, prefixed_file_name).to_s
+      S3.link_to file_name
     end
 
     def self.make_current
