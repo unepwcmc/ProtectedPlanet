@@ -3,6 +3,11 @@ require 'test_helper'
 class SearchAggregationTest < ActiveSupport::TestCase
   test '#all returns a hash with all aggregations configurations' do
     expected_aggregations = {
+      "type_of_territory" => {
+        "terms" => {
+          "field" => "marine"
+        }
+      },
       "country" => {
         "nested" => {
           "path" => "countries_for_index"

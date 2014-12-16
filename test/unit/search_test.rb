@@ -30,6 +30,9 @@ class TestSearch < ActiveSupport::TestCase
           }
         },
         aggs: {
+          "type_of_territory" => {
+            "terms" => { "field" => "marine" }
+          },
           "country" => {
             "nested" => { "path" => "countries_for_index" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.id" } } }
