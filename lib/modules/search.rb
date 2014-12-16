@@ -29,20 +29,7 @@ class Search
   end
 
   def aggregations
-    aggs_by_model = {}
-
-    @query_results['aggregations'].each do |name, aggs|
-      model = name.classify.constantize
-
-      aggs_by_model[name] = aggs['aggregation']['buckets'].map do |info|
-        {
-          model: (model.without_geometry.find(info['key']) rescue model.find(info['key'])),
-          count: info['doc_count']
-        }
-      end
-    end
-
-    aggs_by_model
+    Search::Aggregation.parse(@query_results['aggregations'])
   end
 
   def current_page
