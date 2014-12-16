@@ -6,7 +6,7 @@ module Download
     end
 
     def self.make_current
-      S3.replace_all IMPORT_PREFIX, CURRENT_PREFIX
+      S3.replace_all S3::IMPORT_PREFIX, S3::CURRENT_PREFIX
     end
 
     def self.zip_path_for_type download_name, type

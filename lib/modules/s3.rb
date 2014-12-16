@@ -1,4 +1,7 @@
 class S3
+  CURRENT_PREFIX = 'current/'
+  IMPORT_PREFIX = 'import/'
+
   def initialize
     @s3 = AWS::S3.new({
       access_key_id: Rails.application.secrets.aws_access_key_id,
