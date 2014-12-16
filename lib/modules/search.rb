@@ -1,7 +1,12 @@
 class Search
+  CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml'))
   ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine]
 
   attr_reader :search_term, :options
+
+  def self.configuration
+    @@configuration ||= YAML.load(CONFIGURATION_FILE)
+  end
 
   def self.search search_term, options={}
     instance = self.new search_term, options
