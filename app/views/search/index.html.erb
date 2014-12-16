@@ -30,7 +30,7 @@
         </li>
       </ul>
     </header>
-    <%= render partial: 'facets', locals: {facets: @search.aggregations} %>
+    <%= render partial: 'facets', locals: {aggregations: @search.aggregations} %>
   </aside>
 <% end %>
 

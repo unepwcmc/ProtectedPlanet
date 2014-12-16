@@ -2,14 +2,14 @@
   <li class="facet">
     <%= clear_filters_link(params) %>
   </li>
-  <% facets.each do |name, models| %>
+  <% aggregations.each do |name, buckets| %>
     <li class="facet">
       <h5><%= name.humanize %></h5>
 
       <ul>
-        <% models.each do |facet| %>
+        <% buckets.each do |bucket| %>
           <li>
-            <%= facet_link facet %>
+            <%= facet_link bucket %>
           </li>
         <% end %>
       </ul>
