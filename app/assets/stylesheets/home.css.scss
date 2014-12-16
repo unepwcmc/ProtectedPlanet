@@ -74,6 +74,7 @@ nav .download-type-dropdown {
 
 .download-type-dropdown {
   z-index: $zIndex-7;
+  display: none;
 
   li {
     background-color: $dark-green;
