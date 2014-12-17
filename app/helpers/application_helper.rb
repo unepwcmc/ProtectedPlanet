@@ -10,29 +10,26 @@ module ApplicationHelper
     number_with_delimiter(number, delimeter: ',')
   end
 
-  def cover item, opts={size: {x: 256, y: 128}}
-    send(COVER_HELPERS[item.class], item, opts)
+  def cover item
+    send COVER_HELPERS[item.class], item
   end
 
-  def protected_area_cover protected_area, opts
-    image_tag(protected_area_cover_link(protected_area, opts), alt: protected_area.name)
+  def protected_area_cover protected_area
+    image_tag(
+      AssetGenerator.link_to(protected_area.wdpa_id),
+      alt: protected_area.name
+    )
   end
 
-  def protected_area_cover_link protected_area, opts
-    version = Rails.application.secrets.mapbox['version']
-    image_params = {id: protected_area.id, version: version}.merge(opts)
-    return tiles_path(image_params)
-  end
-
-  def country_cover country, opts
+  def country_cover country
     image_tag("search-placeholder-country.png", alt: country.name)
   end
 
-  def region_cover region, opts
+  def region_cover region
     image_tag("search-placeholder-region.png", alt: region.name)
   end
 
-  def saved_search_cover saved_search, opts
+  def saved_search_cover saved_search
     image_tag("projects-saved-searches.png", alt: saved_search.name)
   end
 end

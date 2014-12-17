@@ -42,7 +42,7 @@ class S3Test < ActiveSupport::TestCase
 
     object_mock = mock()
     object_mock.stubs(:key).returns(old_prefix + 'test')
-    object_mock.expects(:move_to).with(new_prefix + 'test')
+    object_mock.expects(:move_to).with(new_prefix + 'test', acl: :public_read)
 
     object_collection_mock = mock()
     object_collection_mock.expects(:delete_all)
