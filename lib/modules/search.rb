@@ -1,7 +1,12 @@
 class Search
+  CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml'))
   ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine]
 
   attr_reader :search_term, :options
+
+  def self.configuration
+    @@configuration ||= YAML.load(CONFIGURATION_FILE)
+  end
 
   def self.search search_term, options={}
     instance = self.new search_term, options
@@ -24,20 +29,7 @@ class Search
   end
 
   def aggregations
-    aggs_by_model = {}
-
-    @query_results['aggregations'].each do |name, aggs|
-      model = name.classify.constantize
-
-      aggs_by_model[name] = aggs['aggregation']['buckets'].map do |info|
-        {
-          model: (model.without_geometry.find(info['key']) rescue model.find(info['key'])),
-          count: info['doc_count']
-        }
-      end
-    end
-
-    aggs_by_model
+    Search::Aggregation.parse(@query_results['aggregations'])
   end
 
   def current_page

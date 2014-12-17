@@ -30,6 +30,9 @@ class TestSearch < ActiveSupport::TestCase
           }
         },
         aggs: {
+          "type_of_territory" => {
+            "terms" => { "field" => "marine" }
+          },
           "country" => {
             "nested" => { "path" => "countries_for_index" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.id" } } }
@@ -86,50 +89,15 @@ class TestSearch < ActiveSupport::TestCase
   end
 
   test '.aggregations returns all the aggregations' do
-    countries = [
-      FactoryGirl.create(:country),
-      FactoryGirl.create(:country)
-    ]
-
-    search_query = "manbone"
-
-    results_object = {
-      "aggregations" => {
-        "country" => {
-          "doc_count" => 0,
-          "aggregation" => {
-            "buckets" => [
-              {
-                "key" => countries.first.id,
-                "doc_count" => 59
-              },
-              {
-                "key" => countries.second.id,
-                "doc_count" => 10
-              }
-            ]
-          }
-        }
+    expected_aggregations = {
+      'country' => {
+        model: FactoryGirl.create(:country),
+        count: 59
       }
     }
 
-    search_mock = mock()
-    search_mock.
-      expects(:search).
-      returns(results_object)
-    Elasticsearch::Client.stubs(:new).returns(search_mock)
-
-    aggregations = Search.search(search_query).aggregations
-
-    country_aggregations = aggregations["country"]
-
-    assert_equal 2, country_aggregations.length
-
-    assert_kind_of Country, country_aggregations.first[:model]
-    assert_equal   59, country_aggregations.first[:count]
-
-    assert_kind_of Country, country_aggregations.second[:model]
-    assert_equal   10, country_aggregations.second[:count]
+    Search::Aggregation.expects(:parse).returns(expected_aggregations)
+    assert_equal expected_aggregations, Search.search('manbone').aggregations
   end
 
   test '#search, given a search term and a page, offsets the
