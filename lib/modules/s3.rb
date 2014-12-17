@@ -23,9 +23,7 @@ class S3
     prefix = opts[:for_import] ? IMPORT_PREFIX : CURRENT_PREFIX
     prefixed_file_name = prefix + file_name
 
-    bucket_name = Rails.application.secrets.aws_downloads_bucket
-    url = "https://#{bucket_name}.s3.amazonaws.com"
-
+    url = Rails.application.secrets.aws_s3_cdn
     URI.join(url, prefixed_file_name).to_s
   end
 
