@@ -99,13 +99,20 @@ $width--search-sidebar: 270px;
     &:first-child {
       margin-top: 40px;
       padding: 10px 0 10px 20px;
-      background: $medium-light-grey;
+      border-bottom: none;
+
 
       a {
-        color: $green;
+        float: right;
+        color: $white;
+        background: $grey;
+        padding: 3px 5px;
+        font-size: 13px;
+        margin: 0 10px 0 0;
 
         &:hover {
-          color: $dark-green;
+          background: $dark-grey;
+          text-decoration: none;
         }
       }
     }
