@@ -8,7 +8,7 @@ class ApplicationHelperTest < ActionView::TestCase
 
   test '#cover, given a pa, returns an image tag to the asset controller' do
     pa = FactoryGirl.create(:protected_area, name: "Manbone")
-    url = Rails.application.secrets.aws_s3_cdn
+    url = Rails.application.secrets.aws_s3_url
 
     expected_tag = %Q{<img alt="Manbone" src="#{url}/current/tiles/#{pa.wdpa_id}" />}
 

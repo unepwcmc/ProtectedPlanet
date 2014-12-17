@@ -23,7 +23,7 @@ class S3
     prefix = opts[:for_import] ? IMPORT_PREFIX : CURRENT_PREFIX
     prefixed_file_name = prefix + file_name
 
-    url = Rails.application.secrets.aws_s3_cdn
+    url = Rails.application.secrets.aws_s3_url
     URI.join(url, prefixed_file_name).to_s
   end
 
