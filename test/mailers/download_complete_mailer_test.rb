@@ -12,16 +12,18 @@ class DownloadCompleteMailerTest < ActionMailer::TestCase
     assert_equal [address], email.to
     assert_equal '[Protected Planet] Your download is ready', email.subject
 
+    url = Rails.application.secrets.aws_s3_cdn
+
     assert_match(
-      Regexp.new("https://pp-downloads-development.s3.amazonaws.com/current/filename-csv.zip"),
+      Regexp.new("#{url}/current/filename-csv.zip"),
       html_body(email)
     )
     assert_match(
-      Regexp.new("https://pp-downloads-development.s3.amazonaws.com/current/filename-kml.zip"),
+      Regexp.new("#{url}/current/filename-kml.zip"),
       html_body(email)
     )
     assert_match(
-      Regexp.new("https://pp-downloads-development.s3.amazonaws.com/current/filename-shp.zip"),
+      Regexp.new("#{url}/current/filename-shp.zip"),
       html_body(email)
     )
   end
