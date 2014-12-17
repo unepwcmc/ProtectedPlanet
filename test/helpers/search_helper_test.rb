@@ -20,4 +20,10 @@ class SearchHelperTest < ActionView::TestCase
     expected_link = '<a href="/search?q=boneman">Clear Filters</a>'
     assert_equal expected_link, clear_filters_link(params)
   end
+
+  test '#clear_filters_link, given params, returns nothing if there are
+   no filters' do
+    params = {q: 'boneman'}
+    assert_equal '', clear_filters_link(params)
+  end
 end
