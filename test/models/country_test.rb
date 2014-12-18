@@ -101,4 +101,40 @@ class CountryTest < ActiveSupport::TestCase
     random_pas = country.random_protected_areas 2
     assert_same_elements country_pas, random_pas
   end
+
+  test '#protected_areas_per_designation returns groups of pa counts per designation' do
+    designation_1 = FactoryGirl.create(:designation)
+    designation_2 = FactoryGirl.create(:designation)
+    country = FactoryGirl.create(:country)
+    expected_groups = [{
+      'designation' => designation_1.name,
+      'count' => '2'
+    }, {
+      'designation' => designation_2.name,
+      'count' => '3'
+    }]
+
+    2.times { FactoryGirl.create(:protected_area, countries: [country], designation: designation_1) }
+    3.times { FactoryGirl.create(:protected_area, countries: [country], designation: designation_2) }
+
+    assert_same_elements expected_groups, country.protected_areas_per_designation.to_a
+  end
+
+  test '#protected_areas_per_iucn_category returns groups of pa counts per iucn_category' do
+    iucn_category_1 = FactoryGirl.create(:iucn_category, name: 'Ib')
+    iucn_category_2 = FactoryGirl.create(:iucn_category, name: 'V')
+    country = FactoryGirl.create(:country)
+    expected_groups = [{
+      'iucn_category' => iucn_category_1.name,
+      'count' => '2'
+    }, {
+      'iucn_category' => iucn_category_2.name,
+      'count' => '3'
+    }]
+
+    2.times { FactoryGirl.create(:protected_area, countries: [country], iucn_category: iucn_category_1) }
+    3.times { FactoryGirl.create(:protected_area, countries: [country], iucn_category: iucn_category_2) }
+
+    assert_same_elements expected_groups, country.protected_areas_per_iucn_category.to_a
+  end
 end

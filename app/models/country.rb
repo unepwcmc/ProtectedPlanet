@@ -47,4 +47,39 @@ class Country < ActiveRecord::Base
     random_offset = rand(protected_areas.count-wanted)
     protected_areas.offset(random_offset).limit(wanted)
   end
+
+  def protected_areas_per_designation
+    ActiveRecord::Base.connection.execute("""
+      SELECT designations.name AS designation, pas_per_designations.count
+      FROM designations
+      INNER JOIN (
+        #{protected_areas_inner_join(:designation_id)}
+      ) AS pas_per_designations
+        ON pas_per_designations.designation_id = designations.id
+    """)
+  end
+
+  def protected_areas_per_iucn_category
+    ActiveRecord::Base.connection.execute("""
+      SELECT iucn_categories.name AS iucn_category, pas_per_iucn_categories.count
+      FROM iucn_categories
+      INNER JOIN (
+        #{protected_areas_inner_join(:iucn_category_id)}
+      ) AS pas_per_iucn_categories
+        ON pas_per_iucn_categories.iucn_category_id = iucn_categories.id
+    """)
+  end
+
+  private
+
+  def protected_areas_inner_join group_by
+    """
+      SELECT #{group_by}, COUNT(protected_areas.id) AS count
+      FROM protected_areas
+      INNER JOIN countries_protected_areas
+        ON protected_areas.id = countries_protected_areas.protected_area_id
+        AND countries_protected_areas.country_id = #{self.id}
+      GROUP BY #{group_by}
+    """
+  end
 end
