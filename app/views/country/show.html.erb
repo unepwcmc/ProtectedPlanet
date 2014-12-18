@@ -1,15 +1,13 @@
 <% render partial: 'header' %>
 
-<% cache do %>
-  <section id="protected-coverage-viz">
-    <%= render partial: 'factsheet', locals: {presenter: @presenter, country: @country} %>
+<section id="protected-coverage-viz">
+  <%= render partial: 'factsheet', locals: {presenter: @presenter, country: @country} %>
 
-    <div class="protected-area-map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>">
-      <div class="map-disclaimer">
-        The boundaries and names shown, and the designations used on this
-        map do not imply official endorsement or acceptance by the United
-        Nations or IUCN.
-      </div>
+  <div class="protected-area-map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>">
+    <div class="map-disclaimer">
+      The boundaries and names shown, and the designations used on this
+      map do not imply official endorsement or acceptance by the United
+      Nations or IUCN.
     </div>
-  </section>
-<% end %>
+  </div>
+</section>

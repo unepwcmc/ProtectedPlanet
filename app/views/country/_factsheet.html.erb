@@ -1,136 +1,133 @@
-<% cache("#{country.id}-factsheet") do %>
-  <div class="factsheet">
-
-    <article>
-      <h3>Protected Areas Value</h3>
-      <div class="inset-statistic-large">
-        <span class="extra-large"><%= commaify((presenter.pa_area / 1000000).round) %> <small>km&sup2;</small></span>
-        <div class="text-holder">
-          <%= commaify((presenter.pa_land_area / 1000000).round) %> Km&sup2; Land - <%= commaify((presenter.pa_marine_area / 1000000).round) %> Km&sup2; Marine<br>
-          <%= presenter.percentage_pa_cover %>% Protected
-        </div>
+<div class="factsheet">
+  <article>
+    <h3>Protected Areas Value</h3>
+    <div class="inset-statistic-large">
+      <span class="extra-large"><%= commaify((presenter.pa_area / 1000000).round) %> <small>km&sup2;</small></span>
+      <div class="text-holder">
+        <%= commaify((presenter.pa_land_area / 1000000).round) %> Km&sup2; Land - <%= commaify((presenter.pa_marine_area / 1000000).round) %> Km&sup2; Marine<br>
+        <%= presenter.percentage_pa_cover %>% Protected
       </div>
+    </div>
 
-      <table class="centered">
-        <tbody>
-          <tr>
-            <td>
-              <div class="viz" data-colour="#2B3146" data-value="<%= presenter.percentage_pa_land_cover %>"></div>
-              <div class="viz-label">
-                <p><span class="big"><%= presenter.percentage_pa_land_cover %></span><span class="small">%</span></p>
-                <label>Land Area Protected</label>
-              </div>
-            </td>
-            <td>
-              <div class="viz" data-colour="#2B3146" data-value="<%= presenter.percentage_pa_marine_cover %>"></div>
-              <div class="viz-label">
-                <p><span class="big"><%= presenter.percentage_pa_marine_cover %></span><span class="small">%</span></p>
-                <label>Marine Area Protected</label>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong><%= commaify((presenter.land_area / 1000000).round) %></strong> Km&sup2; Land Area
-            </td>
-            <td>
-              <strong><%= commaify((presenter.marine_area / 1000000).round) %></strong> Km&sup2; Marine Area
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <strong><%= commaify((presenter.pa_land_area / 1000000).round) %></strong> Km&sup2; Protected
-            </td>
-            <td>
-              <strong><%= commaify((presenter.pa_marine_area / 1000000).round) %></strong> Km&sup2; Protected
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </article>
-    <article class="conservation-statistics">
-      <h3>Conservation Statistics</h3>
+    <table class="centered">
+      <tbody>
+        <tr>
+          <td>
+            <div class="viz" data-colour="#2B3146" data-value="<%= presenter.percentage_pa_land_cover %>"></div>
+            <div class="viz-label">
+              <p><span class="big"><%= presenter.percentage_pa_land_cover %></span><span class="small">%</span></p>
+              <label>Land Area Protected</label>
+            </div>
+          </td>
+          <td>
+            <div class="viz" data-colour="#2B3146" data-value="<%= presenter.percentage_pa_marine_cover %>"></div>
+            <div class="viz-label">
+              <p><span class="big"><%= presenter.percentage_pa_marine_cover %></span><span class="small">%</span></p>
+              <label>Marine Area Protected</label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong><%= commaify((presenter.land_area / 1000000).round) %></strong> Km&sup2; Land Area
+          </td>
+          <td>
+            <strong><%= commaify((presenter.marine_area / 1000000).round) %></strong> Km&sup2; Marine Area
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <strong><%= commaify((presenter.pa_land_area / 1000000).round) %></strong> Km&sup2; Protected
+          </td>
+          <td>
+            <strong><%= commaify((presenter.pa_marine_area / 1000000).round) %></strong> Km&sup2; Protected
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+  <article class="conservation-statistics">
+    <h3>Conservation Statistics</h3>
 
-      <hr>
+    <hr>
 
-      <div class="inset-statistic">
-        <span class="large"><%= commaify country.protected_areas.count %></span>
-        <div class="text-holder">
-          Protected Areas
-        </div>
+    <div class="inset-statistic">
+      <span class="large"><%= commaify country.protected_areas.count %></span>
+      <div class="text-holder">
+        Protected Areas
       </div>
+    </div>
 
-      <div class="inset-statistic">
-        <span class="large"><%= presenter.percentage_pa_cover %>%</span>
-        <div class="text-holder">
-          Protected
-        </div>
+    <div class="inset-statistic">
+      <span class="large"><%= presenter.percentage_pa_cover %>%</span>
+      <div class="text-holder">
+        Protected
       </div>
+    </div>
 
-      <hr>
+    <hr>
 
-      <p>
-        <strong><%= commaify country.protected_areas_with_iucn_categories.count %></strong>
-          Protected Areas have an IUCN Category. IUCN has defined a series of
-            six protected area management categories, based on primary
-            management objectives.
-      </p>
+    <p>
+      <strong><%= commaify country.protected_areas_with_iucn_categories.count %></strong>
+        Protected Areas have an IUCN Category. IUCN has defined a series of
+          six protected area management categories, based on primary
+          management objectives.
+    </p>
 
-        <% if country.protected_areas_with_iucn_categories.count > 0 %>
-          <table>
-            <tbody>
-              <% (IucnCategory.all & country.iucn_categories).each do |iucn_category| %>
-                <tr>
-                  <td>
-                    <strong><%= iucn_category.name %></strong>
-                  </td>
-                  <td class="right-aligned">
-                    (<%= ActiveRecord::Base.connection.execute("SELECT COUNT(protected_areas.id) FROM protected_areas INNER JOIN countries_protected_areas ON countries_protected_areas.country_id = #{country.id} AND countries_protected_areas.protected_area_id = protected_areas.id WHERE iucn_category_id = #{iucn_category.id}").first["count"] %>)
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        <% end %>
-    </article>
-
-    <% if country.designations.count > 0 %>
-      <article>
-        <hr>
-        <h3>Designations</h3>
+      <% if country.protected_areas_with_iucn_categories.count > 0 %>
         <table>
           <tbody>
-            <% country.designations.each do |d| %>
+            <% (IucnCategory.all & country.iucn_categories).each do |iucn_category| %>
               <tr>
                 <td>
-                  <strong><%= d.name %></strong>
+                  <strong><%= iucn_category.name %></strong>
                 </td>
                 <td class="right-aligned">
-                  (<%= d.protected_areas.count %>)
+                  (<%= ActiveRecord::Base.connection.execute("SELECT COUNT(protected_areas.id) FROM protected_areas INNER JOIN countries_protected_areas ON countries_protected_areas.country_id = #{country.id} AND countries_protected_areas.protected_area_id = protected_areas.id WHERE iucn_category_id = #{iucn_category.id}").first["count"] %>)
                 </td>
               </tr>
             <% end %>
           </tbody>
         </table>
-      </article>
-    <% end %>
+      <% end %>
+  </article>
 
-    <% if country.protected_areas.count > 0 %>
-      <article>
-        <hr>
-        <h3>Protected Areas in <%= country.name %></h3>
-        <ul class="nearest-protected-areas">
-          <% country.protected_areas.order("RANDOM()").limit(2).each do |protected_area| %>
-            <li>
-              <a href="/<%= protected_area.slug %>">
-                <%= image_tag(protected_area_cover_link(protected_area, {size: {x: 200, y: 100}}), style: "width: 200px; height: 100px;") %>
-              </a>
-
-              <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
-            </li>
+  <% if country.designations.count > 0 %>
+    <article>
+      <hr>
+      <h3>Designations</h3>
+      <table>
+        <tbody>
+          <% country.designations.each do |d| %>
+            <tr>
+              <td>
+                <strong><%= d.name %></strong>
+              </td>
+              <td class="right-aligned">
+                (<%= d.protected_areas.count %>)
+              </td>
+            </tr>
           <% end %>
-        </ul>
-      </article>
-    <% end %>
-  </div>
-<% end %>
+        </tbody>
+      </table>
+    </article>
+  <% end %>
+
+  <% if country.protected_areas.count > 0 %>
+    <article>
+      <hr>
+      <h3>Protected Areas in <%= country.name %></h3>
+      <ul class="nearest-protected-areas">
+        <% country.protected_areas.order("RANDOM()").limit(2).each do |protected_area| %>
+          <li>
+            <a href="/<%= protected_area.slug %>">
+              <%= image_tag(protected_area_cover_link(protected_area, {size: {x: 200, y: 100}}), style: "width: 200px; height: 100px;") %>
+            </a>
+
+            <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
+          </li>
+        <% end %>
+      </ul>
+    </article>
+  <% end %>
+</div>
