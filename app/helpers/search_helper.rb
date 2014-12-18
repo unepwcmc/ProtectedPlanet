@@ -21,7 +21,7 @@ module SearchHelper
   end
 
   def clear_filters_link params
-    if params.length > 1
+    if params.length > 3
       link_to "Clear Filters", search_path(params.slice(:q))
     else
       ''

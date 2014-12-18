@@ -16,14 +16,14 @@ class SearchHelperTest < ActionView::TestCase
 
   test '#clear_filters_link, given params, returns an <a> tag to remove
    the current search filters' do
-    params = {q: 'boneman', country: 123}
+    params = {q: 'boneman', country: 123, action: 'yo', controller: 'mama'}
     expected_link = '<a href="/search?q=boneman">Clear Filters</a>'
     assert_equal expected_link, clear_filters_link(params)
   end
 
   test '#clear_filters_link, given params, returns nothing if there are
    no filters' do
-    params = {q: 'boneman'}
+    params = {q: 'boneman', action: 'yo', controller: 'mama'}
     assert_equal '', clear_filters_link(params)
   end
 end
