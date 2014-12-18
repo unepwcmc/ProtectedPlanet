@@ -42,4 +42,9 @@ class Country < ActiveRecord::Base
       }
     )
   end
+
+  def random_protected_areas wanted=1
+    random_offset = rand(protected_areas.count-wanted)
+    protected_areas.offset(random_offset).limit(wanted)
+  end
 end

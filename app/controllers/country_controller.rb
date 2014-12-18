@@ -22,6 +22,7 @@ class CountryController < ApplicationController
 
   def load_vars
     @country = Country.where(iso: params[:iso]).first
+    @random_pas = @country.random_protected_areas 2
     @presenter = StatisticPresenter.new @country
   end
 end

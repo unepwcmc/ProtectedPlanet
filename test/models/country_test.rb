@@ -92,4 +92,13 @@ class CountryTest < ActiveSupport::TestCase
 
     assert_equal 2, Country.data_providers.count
   end
+
+  test '#random_protected_areas, given an integer, returns the given number of random pas' do
+    country = FactoryGirl.create(:country)
+    country_pas = 2.times.map{ FactoryGirl.create(:protected_area, countries: [country]) }
+    2.times{ FactoryGirl.create(:protected_area) }
+
+    random_pas = country.random_protected_areas 2
+    assert_same_elements country_pas, random_pas
+  end
 end

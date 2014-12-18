@@ -89,12 +89,28 @@ class TestSearch < ActiveSupport::TestCase
   end
 
   test '.aggregations returns all the aggregations' do
+    country = FactoryGirl.create(:country)
     expected_aggregations = {
       'country' => {
-        model: FactoryGirl.create(:country),
+        model: country.id,
         count: 59
       }
     }
+
+    es_response = {
+      'country' => {
+        'doc_count'=> 169,
+        'aggregation' => {
+          'buckets'=> [
+            {'key' => country.id, 'doc_count' => 59},
+          ]
+        }
+      }
+    }
+
+    search_mock = mock()
+    search_mock.stubs(:search).returns(es_response)
+    Elasticsearch::Client.stubs(:new).returns(search_mock)
 
     Search::Aggregation.expects(:parse).returns(expected_aggregations)
     assert_equal expected_aggregations, Search.search('manbone').aggregations
