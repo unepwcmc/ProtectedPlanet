@@ -1,3 +1,5 @@
+secrets = Rails.application.secrets.mailer
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -22,6 +24,9 @@ Rails.application.configure do
 
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
+
+  config.assets.compress = false
+  config.assets.compile = false
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false

@@ -1,49 +1,70 @@
-<div class="protected-area-map" id="map" data-zoom-control="topright" data-padding-enabled data-bound-from="<%= map_bounds(@protected_area)['from'] %>" data-bound-to="<%= map_bounds(@protected_area)['to'] %>" data-wdpa-id="<%= @protected_area.wdpa_id %>"></div>
+<% content_for :header do %>
+  <nav class="sub-nav">
+    <ul class="nav">
+      <li><h1><%= @protected_area.name %></h1></li>
+      <li><h2><a href="<%= country_path(@country.iso) %>"><%= @country.name %>, <%= @region.name %></a></h2></li>
+      <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'protected_area', item_id: @protected_area.id} %></li>
+    </ul>
+  </nav>
+<% end %>
 
-<main class="grid">
-  <div class="map-disclaimer">
-    The boundaries and names shown, and the designations used on this
-    map do not imply official endorsement or acceptance by the United
-    Nations or IUCN.
-  </div>
+<% cache do %>
+  <section class="factsheet">
+    <article>
+      <h3>Official Record</h3>
+      <%= render 'official_record', protected_area: @protected_area %>
 
-  <section class="info-card">
-    <h2><%= @protected_area.name %></h2>
+      <h3>Data Provider</h3>
+      <ul>
+        <%= render @protected_area.sources %>
+      </ul>
+    </article>
 
-    <hr>
+    <ul class="protected-area-infographic">
+      <li>
+        <span><%= Wdpa::DataStandard.percentage_complete(@protected_area).round(2) %>%</span>
+        Data Complete
+      </li>
+    </ul>
 
-    <p>
-      <strong><%= @protected_area.designation.name %></strong>
-      <a href="<%= country_stats_path(iso: @country.iso) %>"><%= @country.name %></a>,
-      <a href="<%= regional_stats_path(iso: @region.try(:iso)) %>"><%= @region.try(:name) %></a>
-      | <%= @protected_area.marine ? "Marine" : "Terrestrial" %> Area
-    </p>
+    <% if related_links?(@protected_area) %>
+      <article>
+        <h3>Related</h3>
+        <ul>
+          <% if @protected_area.wikipedia_article %>
+            <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
+          <% end %>
+        </ul>
+      </article>
+    <% end %>
 
-    <hr>
+    <article>
+      <% if @protected_area.nearest_protected_areas.count > 1 %>
+        <h3>Nearest Protected Areas</h3>
 
-    <a data-download-object="<%= @protected_area.countries.first.iso_3 %>" class="btn-download btn btn-primary" href="#">Download the WDPA dataset</a>
+        <ul class="nearest-protected-areas">
+          <% @protected_area.nearest_protected_areas[1..2].each do |protected_area| %>
+            <li>
+              <a href="/<%= protected_area.slug %>">
+                <%= protected_area_cover(protected_area) %>
+              </a>
+
+              <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </article>
   </section>
 
-  <div class="factsheet">
-    <section>
-      <h3>
-        Official record
-        <span><i class="fa fa-clock-o"></i> Last updated on <%= @protected_area.created_at.strftime('%e %B %Y') %></span>
-      </h3>
-
-      <%= render 'official_record', protected_area: @protected_area %>
-    </section>
-
-    <section class="column-left">
-      <h3>Wikipedia description</h3>
-
-      <%= render 'wikipedia_box', wikipedia_article: @wikipedia_article %>
-    </section>
-
-    <section class="column-right">
-      <h3>Images for this area</h3>
-
-      <%= render 'photos_list', images: @protected_area.images %>
-    </section>
+  <div class="protected-area-map" id="map"
+    data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
+    data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
+    data-wdpa-id="<%= @protected_area.wdpa_id %>">
+    <div class="map-disclaimer">
+      The boundaries and names shown, and the designations used on this
+      map do not imply official endorsement or acceptance by the United
+      Nations or IUCN.
+    </div>
   </div>
-</main>
+<% end %>

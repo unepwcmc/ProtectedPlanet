@@ -1,0 +1,20 @@
+<% content_for :header do %>
+  <nav class="sub-nav search-sub-nav">
+    <ul class="nav">
+      <% if @second_country %>
+        <li>
+          <h1><%= link_to "#{@country.name}, #{@country.region.name}", country_path(@country.iso) %></h1>
+        </li>
+        <li><h2>Comparing: <%= @second_country.name %>, <%= @second_country.region.name %></h2></li>
+      <% else %>
+        <li><h1><%= @country.name %>, <%= @country.region.name %></h1></li>
+        <li><h2><%= @country.protected_areas.count %> Protected Areas</h2></li>
+      <% end %>
+
+      <li><%= link_to 'Compare Countries', compare_countries_path(iso: @country.iso) %></li>
+      <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'country', item_id: @country.id} %></li>
+      <li class="right"><%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-search-download', download_type: 'general', image: 'icon-download-black.png', item_id: @country.iso } %></li>
+    </ul>
+  </nav>
+<% end %>
+

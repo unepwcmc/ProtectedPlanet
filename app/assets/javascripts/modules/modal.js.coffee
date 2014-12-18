@@ -1,29 +1,32 @@
-class @Modal
-  @overlayTemplate: '<div class="total-overlay"><div>'
+define('modal', [], () ->
+  class Modal
+    constructor: (@$container) ->
+      @$overlay = $('.total-overlay')
+      @render()
 
-  constructor: ($container) ->
-    @$el = $(@constructor.template)
-    $container.append(@$el)
-    @addOverlay($container)
+    render: (template) ->
+      $template = $((template || @constructor.template).call())
+      @$container.html($template)
+      @bindCloseFunctionality()
 
-  addOverlay: ($container) ->
-    @$overlay = $(@constructor.overlayTemplate)
-    $container.append(@$overlay)
+    bindCloseFunctionality: ->
+      $closeModalBtn = @$container.find('.js-close-modal')
+      for $el in [@$overlay, $closeModalBtn]
+        $el.on('click', (ev) =>
+          @hide()
+          ev.preventDefault()
+        )
 
-  addCloseFunctionality: ->
-    $closeModalBtn = @$el.find('#close-modal')
-    for $el in [@$overlay, $closeModalBtn]
-      $el.on('click', (ev) =>
-        @hide()
-        ev.preventDefault()
-      )
+    find: (selector) ->
+      @$container.find(selector)
 
-  show: ->
-    @$el.addClass('opened')
-    @$overlay.addClass('visible')
+    show: ->
+      @$container.addClass('opened')
+      @$overlay.addClass('visible')
 
-  hide: ->
-    @$el.removeClass('opened')
-    @$overlay.removeClass('visible')
+    hide: ->
+      @$container.removeClass('opened')
+      @$overlay.removeClass('visible')
 
-
+  return Modal
+)

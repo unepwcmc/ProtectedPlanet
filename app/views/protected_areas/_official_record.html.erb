@@ -1,4 +1,4 @@
-<table class="protected-area-official-record">
+<table>
   <tbody>
     <tr>
       <td>
@@ -43,5 +43,14 @@
         <%= protected_area.governance.try(:name) %>
       </td>
     </tr>
+
+    <tr>
+      <td>
+        <strong>WDPA ID</strong>
+        <%= protected_area.wdpa_id %>
+      </td>
+      <td></td>
+    </tr>
+
   </tbody>
 </table>

@@ -1,20 +1,46 @@
-@font-face {
-  font-family: 'Museo';
+@import url(http://fonts.googleapis.com/css?family=Lato:100,300);
+
+@font-face { 
+  font-family: 'MuseoSans-700';
   font-weight: normal;
-  src:font-url('fonts/MuseoSans-100.eot');
-  src:font-url('fonts/MuseoSans-100.eot?#iefix') format('embedded-opentype'),font-url('fonts/MuseoSans-100.woff') format('woff'),font-url('fonts/MuseoSans-100.ttf') format('truetype');
+  font-style: normal;
+  src:  font_url('MuseoSans-700.eot') format('oet'),
+        font_url('MuseoSans-700.ttf') format('ttf'),
+        font_url('MuseoSans-700.woff') format('woff');
 }
 
-@font-face {
-  font-family: 'Museo';
-  font-weight: bold;
-  src:font-url('fonts/MuseoSans-500.eot');
-  src:font-url('fonts/MuseoSans-500.eot?#iefix') format('embedded-opentype'),font-url('fonts/MuseoSans-500.woff') format('woff'),font-url('fonts/MuseoSans-500.ttf') format('truetype');
+@font-face { 
+  font-family: 'MuseoSans-300';
+  font-weight: normal;
+  font-style: normal;
+  src:  font_url('MuseoSans-300.eot') format('oet'),
+        font_url('MuseoSans-300.ttf') format('ttf'),
+        font_url('MuseoSans-300.woff') format('woff');
 }
 
-@font-face {
-  font-family: 'MuseoSlab';
+@font-face { 
+  font-family: 'MuseoSans-500';
   font-weight: normal;
-  src:font-url('fonts/MuseoSlab-500.eot');
-  src:font-url('fonts/MuseoSlab-500.eot?#iefix') format('embedded-opentype'),font-url('fonts/MuseoSlab-500.woff') format('woff'),font-url('fonts/MuseoSlab-500.ttf') format('truetype');
+  font-style: normal;
+  src:  font_url('MuseoSans-500.eot') format('oet'),
+        font_url('MuseoSans-500.ttf') format('ttf'),
+        font_url('MuseoSans-500.woff') format('woff');
+}
+
+@font-face { 
+  font-family: 'MuseoSans-100';
+  font-weight: normal;
+  font-style: normal;
+  src:  font_url('MuseoSans-100.eot') format('oet'),
+        font_url('MuseoSans-100.ttf') format('ttf'),
+        font_url('MuseoSans-100.woff') format('woff');
+}
+
+@font-face { 
+  font-family: 'MuseoSlab-500';
+  font-weight: normal;
+  font-style: normal;
+  src:  font_url('MuseoSlab-500.eot') format('oet'),
+        font_url('MuseoSlab-500.ttf') format('ttf'),
+        font_url('MuseoSlab-500.woff') format('woff');
 }

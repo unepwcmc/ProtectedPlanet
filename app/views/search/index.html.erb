@@ -1,36 +1,52 @@
-<div class="bg-img">
-  <main>
-    <h2>Search for protected areas, countries or regions</h2>
-    <section class="search-bar">
-      <%= render 'shared/search_form', query: @query %>
-    </section>
+<% content_for :header do %>
+  <nav class="sub-nav search-sub-nav">
+    <ul>
+      <li>
+        <h1>You searched for <strong>"<%= @query %>"</strong></h1>
+        <h2><strong><%= @search.results.count %></strong> results</h2>
+      </li>
+      <% if @search.results.count > 0 %>
+        <li class="right"><%= render partial: 'shared/download_data_set', locals: {download_type: 'search', custom_classes: 'btn-search-download', item_id: 'search', image: 'icon-download-black.png'} %></li>
+      <% end %>
+    </ul>
+  </nav>
+<% end %>
 
-    <% if @query %>
-      <aside class="search-filters">
-        <h4>
-          Filter Your Results
-          <%= link_to search_path(q: @query), class: 'btn btn-primary blue filters-reset' do %>
-            <i class="fa fa-times"></i> Reset
+<% if @search.results.count > 0 %>
+  <aside class="map-filters search-map-filters">
+    <header>
+      <span>Filters</span>
+      <ul>
+        <li class="btn-switch-grid <%= "active" if current_page?(action: 'index') %>">
+          <%= link_to(search_path(params)) do %>
+            <%= image_tag('icon-grid-grey.png', size: '20') %>
           <% end %>
-        </h4>
+        </li>
 
-        <%= render 'facets', facets: @search.aggregations %>
-      </aside>
+        <li class="btn-switch-map <%= "active" if current_page?(action: 'map') %>">
+          <%= link_to(search_map_path(params)) do %>
+            <%= image_tag('icon-map-grey.png', size: '20') %>
+          <% end %>
+        </li>
+      </ul>
+    </header>
+    <%= render partial: 'facets', locals: {aggregations: @search.aggregations} %>
+  </aside>
+<% end %>
 
-      <section class="search-results">
-        <h4>
-          Showing <%= @search.count %> <%= 'result'.pluralize @search.results.count %> for "<%= @query %>"
-          <a data-create-from="<%= downloads_path %>" data-poll-from="<%= download_poll_path %>" class="btn btn-secondary download-search"><i class="fa fa-download"></i> Download results</a>
-        </h4>
-
-        <%= render 'type_facets' %>
-
-        <ul>
-          <%= render partial: 'search_result', collection: @search.results %>
-        </ul>
-      </section>
-
-      <%= will_paginate @search %>
-    <% end %>
-  </main>
+<% if current_page?(controller: 'search', action: 'map') %>
+  <div class="search-map"
+    id="map"
+    data-url="<%= api_v3_search_points_url(params) %>">
+    <div class="map-disclaimer">
+      The boundaries and names shown, and the designations used on this
+      map do not imply official endorsement or acceptance by the United
+      Nations or IUCN.
+    </div>
+  </div>
+<% else %>
+  <div class="search-grid <%= 'no-results' if @search.results.count.zero? %>">
+    <%= render partial: 'grid' %>
+  </div>
+<% end %>
 </div>

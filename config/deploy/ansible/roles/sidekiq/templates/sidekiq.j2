@@ -24,7 +24,7 @@ start() {
   [ -d $APP_DIR ] || (echo "$APP_DIR not found!.. Exiting"; exit 102)
 
   {% for process in sidekiq_processes %}
-    PID_FILE="$APP_DIR/tmp/{{ process.name }}.pid"
+    PID_FILE="$APP_DIR/tmp/pids/{{ process.name }}.pid"
 
     if running $PID_FILE; then
       echo "{{process.name}} is already running"
@@ -50,7 +50,7 @@ start() {
 
 stop() {
   {% for process in sidekiq_processes %}
-    PID_FILE="$APP_DIR/tmp/{{ process.name }}.pid"
+    PID_FILE="$APP_DIR/tmp/pids/{{ process.name }}.pid"
     CMD="cd $APP_DIR; bundle exec sidekiqctl stop $PID_FILE"
 
     echo "Stopping sidekiq ({{ process.name }}) message processor .."
@@ -62,7 +62,7 @@ status() {
   declare -i RESULT=0
 
   {% for process in sidekiq_processes %}
-    PID_FILE="$APP_DIR/tmp/{{ process.name }}.pid"
+    PID_FILE="$APP_DIR/tmp/pids/{{ process.name }}.pid"
     if running $PID_FILE; then
       echo "{{ process.name }} is running"
     else

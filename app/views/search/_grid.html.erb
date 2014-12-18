@@ -1,0 +1,13 @@
+<% if @search.results.count.zero? %>
+  <section class="no-projects">
+
+    <h1>No results found</h1>
+    <h2>You can search for Countries and Protected Areas. Try another search...</h2>
+    <div class="info-search"><%= render partial: 'shared/search_form', locals: {query: ''} %></div>
+  </section>
+<% else %>
+  <ul>
+    <%= render partial: 'search_result', collection: @search.results %>
+  </ul>
+  <%= will_paginate @search, params: {grid: true} %>
+<% end %>

@@ -1,0 +1,22 @@
+aggregations:
+  type_of_territory:
+    type: "boolean"
+    query: "marine"
+    labels:
+      T: "Marine"
+      F: "Terrestrial"
+    identifiers:
+      T: true
+      F: false
+  country:
+    type: "model"
+    class: "Country"
+  region:
+    type: "model"
+    class: "Region"
+  designation:
+    type: "model"
+    class: "Designation"
+  iucn_category:
+    type: "model"
+    class: "IucnCategory"

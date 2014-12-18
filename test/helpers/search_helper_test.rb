@@ -14,23 +14,16 @@ class SearchHelperTest < ActionView::TestCase
     assert_equal '<li class="">inner text</li>', selected_class
   end
 
-  test '#link_to_search, given params and a filter, returns a link to
-   the current search with the new filter' do
-    params = {
-      query: 'test',
-      type: 'country'
-    }
+  test '#clear_filters_link, given params, returns an <a> tag to remove
+   the current search filters' do
+    params = {q: 'boneman', country: 123}
+    expected_link = '<a href="/search?q=boneman">Clear Filters</a>'
+    assert_equal expected_link, clear_filters_link(params)
+  end
 
-    model = FactoryGirl.create(:country, name: 'Manbone', id: 123)
-
-    facet = {
-      model: model,
-      count: 4
-    }
-
-    expected_link = "<a href=\"/search?country=123&amp;query=test&amp;type=country\">Manbone (4)</a>"
-    link = facet_link facet, params
-
-    assert_equal expected_link, link
+  test '#clear_filters_link, given params, returns nothing if there are
+   no filters' do
+    params = {q: 'boneman'}
+    assert_equal '', clear_filters_link(params)
   end
 end

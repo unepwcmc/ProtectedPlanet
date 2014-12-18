@@ -1,3 +1,5 @@
+require 'rake'
+
 class ImportTools::PostgresHandler
   attr_reader :current_conn_values
 
@@ -14,6 +16,8 @@ class ImportTools::PostgresHandler
   def create_database database_name
     connection = connect_to('postgres')
     connection.create_database(database_name)
+    Rails.application.load_tasks
+    Rake::Task['db:migrate'].invoke
   end
 
   def drop_database database_name

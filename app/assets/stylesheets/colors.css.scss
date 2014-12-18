@@ -1,0 +1,93 @@
+$dark-grey: #353946;
+$medium-grey: rgb(113, 124, 151);
+$grey: #c8c8c8;
+$light-grey: #f7f7f7;
+$medium-light-grey: #ededed;
+
+$dark-blue: rgb(43,49,70);
+$grey-blue: #848184;
+$blue: #317fce;
+
+$dark-green: #759935;
+$green: #83ad35;
+
+$white: rgb(255,255,255);
+
+$color--base: $dark-grey;
+$color--base-btn-bg: $green;
+$color--base-btn-hover-bg: $dark-green;
+$color--base-btn-text: $white;
+
+$color--bg: $dark-blue;
+
+$color--leaflet-control: $dark-blue;
+$color--leaflet-control-text: $white;
+$color--leaflet-control-hover-bg: $white;
+$color--leaflet-control-hover-text: $dark-blue;
+$color--leaflet-control-border: $white;
+
+$color--leaflet-cluster-bg: $dark-blue;
+$color--leaflet-cluster-border: $white;
+$color--leaflet-cluster-text: $white;
+
+$color--nav-bg: $green;
+$color--nav-active-link: $dark-green;
+$color--nav-link: $white;
+$color--nav-hover-link: $dark-green;
+$color--nav-border: $light-grey;
+
+$color--header-bg: $white;
+$color--header-active-link: $light-grey;
+$color--header-link: $dark-grey;
+$color--header-hover-link: $light-grey;
+
+$color--footer-bg: $dark-blue;
+$color--footer: $light-grey;
+$color--footer-link: $light-grey;
+
+$color--project-header-bg: $white;
+$color--project-header-border: $medium-light-grey;
+$color--project-header-small: $medium-grey;
+$color--project-item-border: $light-grey;
+$color--project-bg: $light-grey;
+$color--project-item-bg: $white;
+$color--project-dropdown-bg: $light-grey;
+$color--project-dropdown-active: $light-grey;
+
+$color--pa-text: $grey;
+$color--pa-header: $medium-grey;
+$color--pa-table-border: $light-grey;
+$color--pa-table-attribute: $medium-grey;
+$color--pa-infographic-bg: $dark-blue;
+$color--pa-infographic-text: $white;
+
+$color--home-filters-bg: $white;
+$color--home-filters-hover-bg: $light-grey;
+$color--home-filters-border: $light-grey;
+$color--home-filters-child-border: $light-grey;
+$color--home-filters-text: $medium-grey;
+
+$color--map-disclaimer-bg: transparentize($dark-blue, 0.5);
+$color--map-disclaimer-text: $white;
+
+$color--search-download-bg: $white;
+$color--search-download-text: $dark-grey;
+$color--search-download-border: $light-grey;
+
+$color--search-bar-bg: $white;
+$color--search-input-bg: $light-grey;
+$color--search-input-bg-hover: $medium-light-grey;
+$color--search-input-text: $dark-grey;
+
+$color--search-header-bg: $white;
+$color--search-filters-bg: $white;
+$color--search-filters-header: $dark-blue;
+$color--search-filters-active: $dark-green;
+$color--search-filters-text: $white;
+$color--search-switch-border: $white;
+$color--search-filters-border: $light-grey;
+$color--search-result-small-text: $light-grey;
+
+$color--download-modal-text: $medium-grey;
+$color--download-modal-overlay-bg: rgba(0,0,0,0.5);
+$color--download-modal-input-bg: $light-grey;

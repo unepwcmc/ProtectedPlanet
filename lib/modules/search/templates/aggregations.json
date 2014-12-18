@@ -1,4 +1,9 @@
 {
+  "type_of_territory": {
+    "terms": {
+      "field": "marine"
+    }
+  },
   "country": {
     "nested": {
       "path": "countries_for_index"

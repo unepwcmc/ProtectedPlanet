@@ -1,4 +1,4 @@
-class ImportWorkers::GeometryPopulatorWorker < ImportWorker
+class ImportWorkers::GeometryPopulatorWorker < ImportWorkers::Base
   def perform country_id
     country = Country.find(country_id)
     if country

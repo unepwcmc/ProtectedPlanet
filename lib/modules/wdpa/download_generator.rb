@@ -1,16 +1,13 @@
 class Wdpa::DownloadGenerator
   def self.generate
-    Download.generate 'all'
+    DownloadWorkers::General.perform_async :general, 'all', for_import: true
 
-    collect_wdpa_ids = -> (country) {country.protected_areas.pluck(:wdpa_id)}
-
-    Country.all.each do |country|
-      Download.generate country.iso_3, wdpa_ids: collect_wdpa_ids.call(country), for_import: true
+    Country.pluck(:iso_3).each do |country_iso_3|
+      DownloadWorkers::General.perform_async :country, country_iso_3, for_import: true
     end
 
-    Region.all.each do |region|
-      wdpa_ids = Set.new region.countries.flat_map(&collect_wdpa_ids)
-      Download.generate region.iso, wdpa_ids: wdpa_ids.to_a, for_import: true
+    Region.pluck(:iso).each do |region_iso|
+      DownloadWorkers::General.perform_async :region, region_iso, for_import: true
     end
   end
 end

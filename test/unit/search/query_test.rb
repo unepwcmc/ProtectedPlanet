@@ -81,16 +81,58 @@ class SearchQueryTest < ActiveSupport::TestCase
     type = "country"
 
     expected_object = {
-      "and" => [
-        "type" => {
-          "value" => type
-        }
-      ]
+      "bool"=>{
+        "must"=>[
+          {
+            "bool"=>{
+              "should"=>[
+                {
+                  "type"=>{
+                    "value"=>type
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
 
     query = Search::Query.new(term, filters: {type: 'country'}).to_h
     filters = query["filtered"]["filter"]
 
     assert_equal expected_object, filters
+  end
+
+  test '.to_h, given no search term, and a filter, builds a query without matchers' do
+    expected_filters = {
+      "filtered"=>{
+        "filter"=>{
+          "bool"=>{
+            "must"=>[
+              {
+                "bool"=>{
+                  "should"=>[
+                    {
+                      "geo_distance"=>{
+                        "distance"=>"2000km",
+                        "protected_area.coordinates"=>{
+                          "lon"=>-69,
+                          "lat"=>-29
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+
+    query = Search::Query.new('', filters: {location: {coords: [-69, -29]}}).to_h
+
+    assert_equal expected_filters, query
   end
 end

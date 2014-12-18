@@ -1,13 +1,14 @@
 <li class='result'>
-  <%= image_tag "terrestrial@2x.png", style: "width: 40px; height: 40px" %>
-  <div>
+  <a href="<%= country_path(iso: model.iso) %>"><%= cover model %></a>
+  <div class="inner-result">
+
     <h3>
-      <a href="<%= country_stats_path(iso: model.iso) %>"><%= model.name %></a> | 
+      <a href="<%= country_path(iso: model.iso) %>"><%= model.name %></a>
       <small><%= commaify model.protected_areas.count %> Protected Areas in this country</small>
     </h3>
 
     <p>
-      <%= StatisticPresenter.new(model).percentage_pa_cover %>% of this country is covered by Protected Areas
+      <%= StatisticPresenter.new(model).percentage_pa_cover %>% of country covered by Protected Areas
     </p>
   </div>
 </li>

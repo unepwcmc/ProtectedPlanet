@@ -1,0 +1,45 @@
+@import 'transitions';
+@import 'z-index';
+@import 'colors';
+
+.search-grid, #map {
+  position: fixed;
+  top: 60px;
+  bottom: 75px;
+  left: 200px;
+  right: 0;
+
+  transition: top $search-bar-transition-time ease;
+
+  &.opened {
+    transition: top $search-bar-transition-time ease;
+    top: 120px;
+  }
+
+  &.sub-nav-open {
+    top: 120px;
+  }
+}
+
+.map-filters {
+  float: left;
+  height: 100%;
+  width: 200px;
+  min-height: 100%;
+
+  &.sub-nav-open {
+    margin-top: 60px;
+  }
+}
+
+.map-disclaimer {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  z-index: $zIndex-10;
+  background: $color--map-disclaimer-bg;
+  width: 100%;
+  color: $color--map-disclaimer-text;
+  text-align: center;
+  padding: 5px;
+}

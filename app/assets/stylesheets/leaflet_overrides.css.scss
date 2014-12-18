@@ -1,8 +1,154 @@
+@import 'colors';
+
 .leaflet-right {
-  right: 10px;
+  top: 10px;
+  right: 20px;
 }
 
 .leaflet-left {
   left: 10px;
 }
 
+.leaflet-control-layers,
+.leaflet-bar,
+.leaflet-bar a {
+  box-shadow: none;
+  border-radius: 0;
+  border: 0;
+  background: none;
+  color: $color--leaflet-control-text;
+
+  &:first-child {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+.leaflet-control-container {
+  .leaflet-top.leaflet-right div {
+    display: inline-block;
+    clear: none;
+  }
+
+  .leaflet-control-layers {
+    margin-right: 0;
+    float: left;
+  }
+}
+
+.leaflet-control-layers-expanded {
+  padding: 0;
+}
+
+.leaflet-control-layers {
+  label {
+    margin-right: 1px;
+    height: 40px;
+    padding: 8px 10px;
+    display: inline-block;
+  }
+
+  input,
+  .leaflet-control-layers-toggle {
+    display: none;
+  }
+
+  .leaflet-control-layers-list {
+    display: block;
+  }
+}
+
+.leaflet-control-layers label,
+.leaflet-bar .leaflet-control-zoom-in,
+.leaflet-bar .leaflet-control-zoom-out {
+  background-color: $color--leaflet-control;
+  color: $color--leaflet-control-text;
+  font-size: 1.3em;
+  transition: background-color 0.3s;
+  transition: color 0.3s;
+
+  &:hover {
+    transition: background-color 0.3s;
+    transition: color 0.3s;
+    cursor: pointer;
+    background-color: $color--leaflet-control-hover-bg;
+    color: $color--leaflet-control-hover-text;
+  }
+}
+
+.leaflet-bar.leaflet-control {
+  margin-right: 0;
+}
+
+.leaflet-bar {
+  .leaflet-control-zoom-in,
+  .leaflet-control-zoom-out,
+  .leaflet-control-zoom-in:hover,
+  .leaflet-control-zoom-out:hover {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 0;
+    font-weight: normal;
+    font-size: 1.7rem;
+    opacity: 1;
+
+    &.leaflet-disabled {
+      background-color: $color--leaflet-control;
+      color: $color--leaflet-control-text;
+      cursor: not-allowed;
+    }
+  }
+
+  .leaflet-control-zoom-in {
+    float: left;
+    margin-right: 1px;
+  }
+}
+
+.marker-cluster-medium {
+  div {
+    margin-left: 4px;
+  }
+}
+
+.marker-cluster-medium {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 25px;
+
+  div {
+    font-size: 16px;
+    margin: 10px;
+    margin-left: 9px;
+  }
+}
+
+.marker-cluster-large {
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 30px;
+
+  div {
+    font-size: 18px;
+    margin: 15px 5px;
+    width: 50px;
+  }
+}
+
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  border: 1px solid $color--leaflet-cluster-border;
+
+  &, div {
+    color: $color--leaflet-cluster-text;
+    background: $color--leaflet-cluster-bg;
+  }
+}

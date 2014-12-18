@@ -1,4 +1,6 @@
 module SearchHelper
+  include ApplicationHelper
+
   def type_li_tag type, current_type
     selected_class = (type == current_type) ? "selected" : ""
 
@@ -7,14 +9,22 @@ module SearchHelper
     end
   end
 
-  def facet_link facet, query_params
-    model = facet[:model]
-
-    link_name = "#{model.name} (#{facet[:count]})"
-    link_params = query_params.merge({
-      model.class.to_s.underscore => model.id
+  def facet_link facet
+    link_params = params.merge({
+       facet[:query] => facet[:identifier]
     })
 
-    link_to link_name, search_path(link_params)
+    link_to url_for(link_params) do
+      facet_count = content_tag(:strong, "(#{facet[:count]})")
+      raw "#{facet[:label]} #{facet_count}"
+    end
+  end
+
+  def clear_filters_link params
+    if params.length > 1
+      link_to "Clear Filters", search_path(params.slice(:q))
+    else
+      ''
+    end
   end
 end

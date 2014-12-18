@@ -1,0 +1,125 @@
+@import 'z-index';
+@import 'colors';
+
+nav {
+  z-index: $zIndex-2;
+  overflow: hidden;
+  font-size: 0.938em;
+  width: 100%;
+  float: left;
+  list-style: none;
+}
+
+nav li {
+  line-height: 59px;
+  float: left;
+
+  transition: all 0.5s ease;
+  &:hover { transition: all 0.5s ease; }
+
+  h1,h2 { padding: 0px 20px; }
+
+  &.logo {
+    width: 265px;
+    height: 60px;
+    text-indent: -9999px;
+    background: image-url('logo-white.png') no-repeat;
+    background-size: 110px 39px;
+    background-position: 18px 12px;
+
+    &:hover {
+      background-color: $dark-green;
+    }
+
+    a:hover {
+      background-color: transparent;
+    }
+  }
+
+  &.search-button {
+    width: 60px;
+    height: 60px;
+    text-indent: -9999px;
+    border-right: 1px solid $color--nav-border;
+    border-left: 1px solid $color--nav-border;
+    background: image-url('icon-search.png') no-repeat;
+    background-size: 30px 30px;
+    background-position: 15px 15px;
+    margin-right: 20px;
+
+    &.opened {
+      background-image: image-url('icon-search-grey.png');
+
+      &, &:hover {
+        background-color: white;
+      }
+    }
+
+    &:hover { background-color: $dark-green; }
+    a:hover { background-color: transparent; }
+  }
+
+  a {
+    display: block;
+    padding: 0px 20px;
+    text-transform: uppercase;
+  }
+
+  a:hover {
+    background-color: transparent;
+  }
+
+  a.active {
+    background-color: $color--project-dropdown-active;
+  }
+}
+
+.nav-main {
+  position: fixed;
+  background-color: $color--nav-bg;
+
+  li {
+    &.active a {
+      background-color: $color--nav-active-link;
+    }
+
+    a {
+      color: $color--nav-link;
+      transition: all 0.5s ease;
+    }
+
+    a:hover {
+      background-color: $color--nav-hover-link;
+      transition: all 0.5s ease;
+    }
+
+    a:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.sub-nav {
+  background-color: $white;
+  border-bottom: 1px solid $light-grey;
+  position: fixed;
+  top: 60px;
+
+  a {
+    color: $dark-grey;
+    text-transform: none;
+  }
+
+  h1 {
+    color: $medium-grey;
+    font-size: 22px;
+  }
+
+  h2 {
+    color: $grey;
+  }
+
+  a:hover {
+    background-color: $light-grey;
+  }
+}

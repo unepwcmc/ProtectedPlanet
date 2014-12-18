@@ -57,7 +57,8 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     pa = FactoryGirl.create(:protected_area,
       name: 'Manbone', countries: [country], sub_locations: [sub_location],
       original_name: 'Manboné', iucn_category: iucn_category,
-      designation: designation, marine: true, wdpa_id: 555999
+      designation: designation, marine: true, wdpa_id: 555999,
+      the_geom_latitude: 1, the_geom_longitude: 2
     )
 
     expected_json = {
@@ -66,6 +67,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "name" => 'Manbone',
       "original_name" => "Manboné",
       "marine" => true,
+      "coordinates" => [2.0, 1.0],
       "sub_locations" => [
         {
           "english_name" => "Manboneland City"
@@ -106,65 +108,79 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     assert_equal 2, ProtectedArea.with_valid_iucn_categories.count
   end
 
+  test '.nearest_protected_areas returns the closest 2 PAs, ordered by
+   distance ASC and memoizes the result' do
+    pa = FactoryGirl.create(:protected_area, the_geom_latitude: 1, the_geom_longitude: 0)
+
+    search_mock = mock().tap { |m| m.expects(:results).returns([FactoryGirl.create(:protected_area)]) }
+    Search.expects(:search).
+      with('', {size: 3, filters: {location: {coords: [0,1]}}, sort: {geo_distance: [0,1]}}).
+      returns(search_mock).
+      once
+
+    pa.nearest_protected_areas
+    nearest = pa.nearest_protected_areas
+    assert_equal 1, nearest.length
+  end
+
   test '.as_api_feeder returns the PA as JSON with requested attributes' do
+    time = Time.local(2008, 9, 1, 10, 5, 0)
 
-  time = Time.local(2008, 9, 1, 10, 5, 0)
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manboneland', region: region)
+    sub_location = FactoryGirl.create(:sub_location, english_name: 'Manboneland City')
 
-  region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-  country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manboneland', region: region)
-  sub_location = FactoryGirl.create(:sub_location, english_name: 'Manboneland City')
+    jurisdiction = FactoryGirl.create(:jurisdiction, id: 2, name: 'International')
+    iucn_category = FactoryGirl.create(:iucn_category, id: 456, name: 'IA')
+    designation = FactoryGirl.create(:designation, id: 654, name: 'National', jurisdiction: jurisdiction)
+    governance = FactoryGirl.create(:governance, id: 111, name: 'Bone Man')
+    legal_status = FactoryGirl.create(:legal_status, id: 987, name: 'Proposed')
 
-  jurisdiction = FactoryGirl.create(:jurisdiction, id: 2, name: 'International')
-  iucn_category = FactoryGirl.create(:iucn_category, id: 456, name: 'IA')
-  designation = FactoryGirl.create(:designation, id: 654, name: 'National', jurisdiction: jurisdiction)
-  governance = FactoryGirl.create(:governance, id: 111, name: 'Bone Man')
-  legal_status = FactoryGirl.create(:legal_status, id: 987, name: 'Proposed')
+    pa = FactoryGirl.create(:protected_area,
+      name: 'Manbone', countries: [country], sub_locations: [sub_location],
+      original_name: 'Manboné', iucn_category: iucn_category,
+      designation: designation, governance: governance,
+      legal_status: legal_status, legal_status_updated_at: time, marine: true, wdpa_id: 555999,
+      reported_area: 10.2)
 
-  pa = FactoryGirl.create(:protected_area,
-    name: 'Manbone', countries: [country], sub_locations: [sub_location],
-    original_name: 'Manboné', iucn_category: iucn_category,
-    designation: designation, governance: governance,
-    legal_status: legal_status, legal_status_updated_at: time, marine: true, wdpa_id: 555999,
-    reported_area: 10.2)
-
-    expected_json = {
-      "wdpa_id" => 555999,
-      "name" => 'Manbone',
-      "original_name" => "Manboné",
-      "marine" => true,
-      "legal_status_updated_at" => time,
-      "reported_area" => 10.2,
-      "sub_locations" => [
-        {
-          "english_name" => "Manboneland City"
-        }
-      ],
-      "countries" => [
-        {
-          "name" => "Manboneland",
-          "iso_3" => "MBN",
-          "region" => {
-            "name" => "North Manmerica"
+      expected_json = {
+        "wdpa_id" => 555999,
+        "name" => 'Manbone',
+        "original_name" => "Manboné",
+        "marine" => true,
+        "legal_status_updated_at" => time,
+        "reported_area" => 10.2,
+        "sub_locations" => [
+          {
+            "english_name" => "Manboneland City"
           }
+        ],
+        "countries" => [
+          {
+            "name" => "Manboneland",
+            "iso_3" => "MBN",
+            "region" => {
+              "name" => "North Manmerica"
+            }
+          }
+        ],
+        "iucn_category" => {
+          "name" => "IA"
+        },
+        "designation" => {
+          "name" => "National",
+          "jurisdiction" => {
+            "name" => "International"
+          }
+        },
+        "legal_status" => {
+          "name" => "Proposed"
+        },
+        "governance" =>  {
+          "name" => "Bone Man"
         }
-      ],
-      "iucn_category" => {
-        "name" => "IA"
-      },
-      "designation" => {
-        "name" => "National",
-        "jurisdiction" => {
-          "name" => "International"
-        }
-      },
-      "legal_status" => {
-        "name" => "Proposed"
-      },
-      "governance" =>  {
-        "name" => "Bone Man"
       }
-    }
 
-    assert_equal expected_json, pa.as_api_feeder
+      assert_equal expected_json, pa.as_api_feeder
   end
 end

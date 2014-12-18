@@ -59,8 +59,7 @@ We are excluding the following Protected Areas according to the PA team
 
 We are intersecting the marine protected area with Exclusive Economic
 Zones and Territorial Seas so we can calculate the statistics for both
-zones. You can import them following the
-[instructions](docs/installation.md#country-geometries).
+zones.
 
 ### Intercontinental countries
 
@@ -68,3 +67,21 @@ We are considering that Russia and Turkey are in Asia to
 calculate stats. In the future we may change th DB structure to split
 the protected areas of these two countries and get more acurate values
 for Regional Statistics.
+
+## Data
+
+### Country Geometries
+
+Geometries for countries are required for stats generation, and for
+generating shapefiles to be uploaded to CartoDB.
+
+`rake import:countries_geometries`
+
+#### Importing to CartoDB
+
+The stats pages are dependent on a `countries_geometries` tables in
+CartoDB for rendering country outlines on the map.
+
+This is created using the geometries imported above. Export the
+countries geometries as a CartoDB compliant format (Shapefile, CSV,
+etc.) using ogr2ogr, shp2pgsql or even qgis, and upload to CartoDB.

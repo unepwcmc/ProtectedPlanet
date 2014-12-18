@@ -1,0 +1,7 @@
+<div class="project-item">
+  <%= link_to show_item_path(project_item) do %>
+    <%= cover project_item %>
+  <% end%>
+
+  <h4><%= link_to "#{project_item.name} (#{class_to_human(project_item.class)})", show_item_path(project_item) %></h4>
+</div>

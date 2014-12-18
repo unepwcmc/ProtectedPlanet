@@ -1,13 +1,43 @@
 class SearchController < ApplicationController
-  after_filter :enable_caching, only: [:index]
+  after_filter :enable_caching
+  before_action :authenticate_user!, only: [:create]
+
+  before_filter :ignore_empty_query, only: [:index, :map]
 
   def index
-    return unless @query = params[:q]
-
     @search = Search.search(@query, search_options)
+    render partial: 'grid' if params[:grid]
+  end
+
+  def map
+    @search = Search.search(@query, search_options)
+    render :index
+  end
+
+  def create
+    SavedSearch.create(search_params.merge({project_id: project.id}))
+    DownloadWorkers::Project.perform_async @project.id
+
+    redirect_to projects_path
   end
 
   private
+
+  def ignore_empty_query
+    return unless @query = params[:q]
+  end
+
+  def project
+    find_by = {id: search_params[:project_id], user: current_user}
+
+    @project ||= Project.find_or_create_by(find_by) do |project|
+      project.name = "New Project"
+    end
+  end
+
+  def search_params
+    params.permit(:search_term, :filters, :project_id)
+  end
 
   def search_options
     options = {filters: filters}

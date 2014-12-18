@@ -1,5 +1,6 @@
 class ImportConfirmationMailer < ActionMailer::Base
   default from: "no-reply@unep-wcmc.org"
+  layout 'mailer'
 
   def create import
     @token = import.token

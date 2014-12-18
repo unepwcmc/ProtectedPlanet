@@ -11,7 +11,7 @@ class TestSearch < ActiveSupport::TestCase
     query_object = {
       index: 'protected_areas',
       body: {
-        size: 10,
+        size: 20,
         from: 0,
         query: {
           "filtered" => {
@@ -30,6 +30,9 @@ class TestSearch < ActiveSupport::TestCase
           }
         },
         aggs: {
+          "type_of_territory" => {
+            "terms" => { "field" => "marine" }
+          },
           "country" => {
             "nested" => { "path" => "countries_for_index" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.id" } } }
@@ -86,71 +89,15 @@ class TestSearch < ActiveSupport::TestCase
   end
 
   test '.aggregations returns all the aggregations' do
-    countries = [
-      FactoryGirl.create(:country),
-      FactoryGirl.create(:country)
-    ]
-
-    search_query = "manbone"
-
-    results_object = {
-      "aggregations" => {
-        "country" => {
-          "doc_count" => 0,
-          "aggregation" => {
-            "buckets" => [
-              {
-                "key" => countries.first.id,
-                "doc_count" => 59
-              },
-              {
-                "key" => countries.second.id,
-                "doc_count" => 10
-              }
-            ]
-          }
-        }
+    expected_aggregations = {
+      'country' => {
+        model: FactoryGirl.create(:country),
+        count: 59
       }
     }
 
-    search_mock = mock()
-    search_mock.
-      expects(:search).
-      returns(results_object)
-    Elasticsearch::Client.stubs(:new).returns(search_mock)
-
-    aggregations = Search.search(search_query).aggregations
-
-    country_aggregations = aggregations["country"]
-
-    assert_equal 2, country_aggregations.length
-
-    assert_kind_of Country, country_aggregations.first[:model]
-    assert_equal   59, country_aggregations.first[:count]
-
-    assert_kind_of Country, country_aggregations.second[:model]
-    assert_equal   10, country_aggregations.second[:count]
-  end
-
-  test '.count returns the total count of the result set, rather than
-   array length, so that pagination works correctly' do
-    search_query = "manbone"
-
-    results_object = {
-      "hits" => {
-        "total" => 42
-      }
-    }
-
-    search_mock = mock()
-    search_mock.
-      expects(:search).
-      returns(results_object)
-    Elasticsearch::Client.stubs(:new).returns(search_mock)
-
-    results_count = Search.search(search_query).count
-
-    assert_equal 42, results_count
+    Search::Aggregation.expects(:parse).returns(expected_aggregations)
+    assert_equal expected_aggregations, Search.search('manbone').aggregations
   end
 
   test '#search, given a search term and a page, offsets the
@@ -159,8 +106,8 @@ class TestSearch < ActiveSupport::TestCase
     Search::Aggregation.stubs(:all).returns({})
 
     expected_query = {
-      size: 10,
-      from: 10,
+      size: 20,
+      from: 20,
       query: {},
       aggs: {}
     }
@@ -210,54 +157,6 @@ class TestSearch < ActiveSupport::TestCase
 
     pages = Search.search("manbone").total_pages
 
-    assert_equal 40, pages
-  end
-
-  test '.pluck, given a property, returns the corresponding values in the EC hits' do
-    hits = [
-      { '_source' => {'wdpa_id' => 123, 'id' => 24} },
-      { '_source' => {'wdpa_id' => 345, 'id' => 1} },
-      { '_source' => {'id' => 22} }
-    ]
-
-    search_mock = mock()
-    search_mock.stubs(:search).returns({ "hits" => {"hits" => hits} })
-    Elasticsearch::Client.stubs(:new).returns(search_mock)
-
-    values = Search.search('manbone').pluck('wdpa_id')
-    assert_equal [123, 345, nil], values
-  end
-
-  test '.complete! sets the status property to completed' do
-    properties_mock = mock()
-    properties_mock.expects(:[]=).with('status', 'completed')
-    Search.any_instance.stubs(:properties).returns(properties_mock)
-
-    Search.new('san guillermo', {}).complete!
-  end
-
-  test '#download, given a search term and filters, generates a search with
-   token, and spawns a SearchDownloader worker' do
-    search_term = 'san guillermo'
-    opts = {filters: [{name: 'type', value: 'protected_area'}]}
-    token = "3b00778be9391426bb3c900b977dfb3771fc9cdd83e1d1f99bda77b77c3d6750"
-
-    Search.stubs(:find).returns(false)
-    Search.expects(:create).with(token, search_term, opts)
-    SearchDownloader.expects(:perform_async).with(token, search_term, opts)
-
-    Search.download(search_term, opts)
-  end
-
-  test '#download, given a search term and filters, returns an existing download when found' do
-    search_term = 'san guillermo'
-    opts = {filters: [{name: 'type', value: 'protected_area'}]}
-    token = "3b00778be9391426bb3c900b977dfb3771fc9cdd83e1d1f99bda77b77c3d6750"
-
-    Search.expects(:find).with(token, search_term, opts).returns(true)
-    Search.expects(:create).never
-    SearchDownloader.expects(:perform_async).never
-
-    Search.download(search_term, opts)
+    assert_equal 20, pages
   end
 end

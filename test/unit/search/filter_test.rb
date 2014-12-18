@@ -1,94 +1,162 @@
 require 'test_helper'
 
 class SearchFilterTest < ActiveSupport::TestCase
-  test '.to_h, given a nested Filter, returns the filter query as a
+  test '#from_params, given a nested Filter, returns the filter query as a
    hash' do
-    term = 3
-    options = {
-      type: 'nested',
-      path: 'countries.region',
-      field: 'countries.region.id',
-      required: true
-    }
+    filters = Search::Filter.from_params({region: 3})
 
-    filter = Search::Filter.new(term, options)
-
-    expected_hash = {
-      "nested" => {
-        "path" => "countries.region",
-        "filter" => {
-           "bool" => {
-              "must" => {
-                "term" => {
-                  "countries.region.id" => 3
+    expected_filters = [{
+      "bool"=>{
+        "should"=>[
+          {
+            "nested"=>{
+              "path"=>"countries_for_index.region_for_index",
+              "filter"=>{
+                "bool"=>{
+                  "must"=>{
+                    "term"=>{
+                      "countries_for_index.region_for_index.id"=>3
+                    }
+                  }
                 }
               }
             }
-        }
-      }
-    }
-
-    assert_equal filter.to_h, expected_hash
-  end
-
-  test '.to_h, given a type Filter, returns the filter query as a
-   hash' do
-    term = 'country'
-    options = {
-      type: 'type'
-    }
-
-    filter = Search::Filter.new(term, options)
-
-    expected_hash = {
-      "type" => {
-        "value" => term
-      }
-    }
-
-    assert_equal filter.to_h, expected_hash
-  end
-
-  test '#from_params, given a hash of search params, returns the filter query
-   as a hash' do
-    filters = Search::Filter.from_params(type: 'protected_area')
-
-    expected_filters = [{
-      "type" => {
-        "value" => 'protected_area'
+          }
+        ]
       }
     }]
 
-    assert_equal filters, expected_filters
+    assert_equal expected_filters, filters
   end
 
-  test '#new, given an integer filter passed as a string, converts
+  test '#from_params, given a type Filter, returns the filter query as a
+   hash' do
+    filter = Search::Filter.from_params({type: 'country'})
+    expected_filters = [{"bool"=>{"should"=>[{"type"=>{"value"=>"country"}}]}}]
+
+    assert_equal expected_filters, filter
+  end
+
+  test '#from_params, given a marine filter, returns the filter query
+   as a hash' do
+    filters = Search::Filter.from_params(marine: false)
+    expected_filters = [{"bool"=>{"should"=>[{"term"=>{"marine"=>false}}]}}]
+
+    assert_equal expected_filters, filters
+  end
+
+  test '#from_params, given an integer filter passed as a string, converts
    the string to an integer' do
-    term = "3"
-    options = {
-      type: 'nested',
-      path: 'countries_for_index.region_for_index',
-      field: 'countries_for_index.region_for_index.id',
-      required: true
-    }
+    filters = Search::Filter.from_params(region: '3')
 
-    filter = Search::Filter.new(term, options)
-
-    expected_hash = {
-      "nested" => {
-        "path" => "countries_for_index.region_for_index",
-        "filter" => {
-           "bool" => {
-              "must" => {
-                "term" => {
-                  "countries_for_index.region_for_index.id" => 3
+    expected_filters = [{
+      "bool"=>{
+        "should"=>[
+          {
+            "nested"=>{
+              "path"=>"countries_for_index.region_for_index",
+              "filter"=>{
+                "bool"=>{
+                  "must"=>{
+                    "term"=>{
+                      "countries_for_index.region_for_index.id"=>3
+                    }
+                  }
                 }
               }
             }
-        }
+          }
+        ]
       }
-    }
+    }]
 
-    assert_equal filter.to_h, expected_hash
+    assert_equal expected_filters, filters
+  end
+
+  test '#from_params, given a geo filter passed as a string, converts
+   the string to a float' do
+    filters = Search::Filter.from_params(location: {coords: ['1','2'], distance: '2'})
+
+    expected_filters =  [{
+      "bool" => {
+        "should" => [{
+          "geo_distance" => {
+            "distance" => "2000km",
+            "protected_area.coordinates" => {
+              "lon"=>1.0,
+              "lat"=>2.0
+            }
+          }
+        }]
+      }
+    }]
+
+    assert_equal expected_filters, filters
+  end
+
+  test '.to_h, given a geo filter, returns the filter as a hash' do
+    filters = Search::Filter.from_params(location: {distance_km: 123, coords: [1,2]})
+
+    expected_filters = [{
+      "bool"=>{
+        "should"=>[
+          {
+            "geo_distance"=>{
+              "distance"=>"123km",
+              "protected_area.coordinates"=>{
+                "lon"=>1.0,
+                "lat"=>2.0
+              }
+            }
+          }
+        ]
+      }
+    }]
+
+    assert_equal expected_filters, filters
+  end
+
+  test '#from_params, given a filter with an array of values, creates a
+   filter for each value' do
+    filters = Search::Filter.from_params(
+      iucn_category: [1,2]
+    )
+
+    expected_filters = [{
+      "bool"=>{
+        "should"=>[
+          {
+            "nested"=>{
+              "path"=>"iucn_category",
+              "filter"=>{
+                "bool"=>{
+                  "must"=>{
+                    "term"=>{
+                      "iucn_category.id"=>1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "nested"=>{
+              "path"=>"iucn_category",
+              "filter"=>{
+                "bool"=>{
+                  "must"=>{
+                    "term"=>{
+                      "iucn_category.id"=>2
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }]
+
+    assert_equal expected_filters, filters
   end
 end
