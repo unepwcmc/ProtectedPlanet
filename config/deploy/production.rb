@@ -5,7 +5,6 @@
 # used to set extended properties on the server.
 
 server 'www-prod.protectedplanet.net', user: 'ubuntu', roles: %w{web}
-server 'ec2-54-75-204-95.eu-west-1.compute.amazonaws.com', user: 'ubuntu', roles: %w{web}
 server 'util-prod.protectedplanet.net', user: 'ubuntu', roles: %w{util}
 
 set :rails_env, :production
