@@ -21,6 +21,10 @@ module SearchHelper
   end
 
   def clear_filters_link params
-    link_to "Clear Filters", search_path(params.slice(:q))
+    if params.length > 1
+      link_to "Clear Filters", search_path(params.slice(:q))
+    else
+      ''
+    end
   end
 end

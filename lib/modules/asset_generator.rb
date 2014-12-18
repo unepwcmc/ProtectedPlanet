@@ -1,10 +1,13 @@
 module AssetGenerator
   class AssetGenerationFailedError < StandardError; end;
+  FALLBACK_PATH = Rails.root.join('app/assets/images', 'search-placeholder-country.png')
 
   def self.protected_area_tile protected_area, opts={size: {x: 128, y: 256}}
     tile_url = mapbox_url protected_area.geojson, opts[:size]
 
     request_tile tile_url[:host], tile_url[:path]
+  rescue AssetGenerationFailedError
+    fallback_tile
   end
 
   def self.link_to asset_id
@@ -30,5 +33,9 @@ module AssetGenerator
     raise AssetGenerationFailedError if res.code != '200'
 
     res.body
+  end
+
+  def self.fallback_tile
+    @fallback_tile ||= File.read(FALLBACK_PATH)
   end
 end
