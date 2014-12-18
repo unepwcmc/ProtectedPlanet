@@ -11,7 +11,6 @@ class Search::Index
     ])
 
     Search::Index.index Country.without_geometry.all
-    Search::Index.index Region.without_geometry.all
 
     Search::Index.create_mapping 'protected_area'
     Search::Index.index pa_relation

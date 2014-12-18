@@ -7,9 +7,7 @@
 
   <div class="countries-compare-right">
     <% if @second_country %>
-      <% cache("#{@country.id}-#{@second_country.id}-comparison") do %>
-        <%= render partial: 'factsheet', locals: {presenter: @second_presenter, country: @second_country} %>
-      <% end %>
+      <%= render partial: 'factsheet', locals: {presenter: @second_presenter, country: @second_country} %>
     <% else %>
       <div class="countries-selection">
         <h3>Select a Country to compare</h3>

@@ -20,10 +20,9 @@ nav li {
   h1,h2 { padding: 0px 20px; }
 
   &.logo {
-    width: 200px;
+    width: 265px;
     height: 60px;
     text-indent: -9999px;
-    border-right: 1px solid $color--nav-border;
     background: image-url('logo-white.png') no-repeat;
     background-size: 110px 39px;
     background-position: 18px 12px;
@@ -124,4 +123,3 @@ nav li {
     background-color: $light-grey;
   }
 }
-
