@@ -115,15 +115,15 @@
       </article>
     <% end %>
 
-    <% if country.protected_areas.count > 0 %>
+    <% if @random_protected_areas %>
       <article>
         <hr>
         <h3>Protected Areas in <%= country.name %></h3>
         <ul class="nearest-protected-areas">
-          <% country.protected_areas.order("RANDOM()").limit(2).each do |protected_area| %>
+          <% @random_protected_areas.each do |protected_area| %>
             <li>
               <a href="/<%= protected_area.slug %>">
-                <%= image_tag(protected_area_cover_link(protected_area, {size: {x: 200, y: 100}}), style: "width: 200px; height: 100px;") %>
+                <%= protected_area_cover(protected_area) %>
               </a>
 
               <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
