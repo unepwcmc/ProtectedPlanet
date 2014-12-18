@@ -2,8 +2,8 @@
   <nav class="sub-nav search-sub-nav">
     <ul>
       <li>
-        <h1><%= @query %></h1>
-        <h2><strong><%= @search.results.count %></strong> Protected Areas</h2>
+        <h1>You searched for <strong>"<%= @query %>"</strong></h1>
+        <h2><strong><%= @search.results.count %></strong> results</h2>
       </li>
       <% if @search.results.count > 0 %>
         <li class="right"><%= render partial: 'shared/download_data_set', locals: {download_type: 'search', custom_classes: 'btn-search-download', item_id: 'search', image: 'icon-download-black.png'} %></li>
@@ -15,7 +15,7 @@
 <% if @search.results.count > 0 %>
   <aside class="map-filters search-map-filters">
     <header>
-      <span>Results</span>
+      <span>Filters</span>
       <ul>
         <li class="btn-switch-grid <%= "active" if current_page?(action: 'index') %>">
           <%= link_to(search_path(params)) do %>
@@ -50,4 +50,3 @@
   </div>
 <% end %>
 </div>
-
