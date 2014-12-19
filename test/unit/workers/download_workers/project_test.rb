@@ -15,6 +15,8 @@ class DownloadWorkersProjectTest < ActiveSupport::TestCase
       saved_searches: [saved_search]
     )
 
+    SavedSearch.any_instance.stubs(:wdpa_ids).returns([pa.wdpa_id])
+
     Download.expects(:generate).with("projects_#{project.id}_all", {wdpa_ids: [pa.wdpa_id]})
 
     DownloadWorkers::Project.new.perform project.id
