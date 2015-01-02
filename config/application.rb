@@ -1,5 +1,9 @@
 require File.expand_path('../boot', __FILE__)
 
+# Enable profiling for Garbage Collection (and
+# get all the information on Newrelic
+GC::Profiler.enable
+
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
