@@ -1,27 +1,19 @@
+<ul class="key-records">
+<li><p>WDPA ID</p> <strong><%= protected_area.wdpa_id %></strong></li>
+<li><p>Reported Area KM&sup2;</p>  <strong><%= protected_area.reported_area %></strong></li>
+<li><p>English Designation</p>  <strong><%= protected_area.designation.name %></strong></li>
+<li><p>IUCN Category</p> <strong><%= protected_area.iucn_category.name %></strong></li>
+</ul>
+
+<div class="data-provider">
+<h5>Data Provider</h5>
+<ul>
+  <%= render @protected_area.sources %>
+</ul>
+</div>
+
 <table>
   <tbody>
-    <tr>
-      <td>
-        <strong>Sublocation</strong>
-        <%= protected_area.sub_locations.map(&:iso).join(', ') %>
-      </td>
-      <td>
-        <strong>Reported Area KM&sup2;</strong>
-        <%= protected_area.reported_area %>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <strong>IUCN Category</strong>
-        <%= protected_area.iucn_category.name %>
-      </td>
-      <td>
-        <strong>English Designation</strong>
-        <%= protected_area.designation.name %>
-      </td>
-    </tr>
-
     <tr>
       <td>
         <strong>Status</strong>
@@ -39,16 +31,20 @@
         <%= if protected_area.legal_status_updated_at then protected_area.legal_status_updated_at.strftime('%Y') end %>
       </td>
       <td>
-        <strong>Governance Type</strong>
-        <%= protected_area.governance.try(:name) %>
+        <strong>Sublocation</strong>
+        <%= protected_area.sub_locations.map(&:iso).join(', ') %>
       </td>
     </tr>
 
     <tr>
       <td>
-        <strong>WDPA ID</strong>
-        <%= protected_area.wdpa_id %>
+        <strong>Governance Type</strong>
+        <%= protected_area.governance.try(:name) %>
+        </td>
+      <td>
       </td>
+    </tr>
+
       <td></td>
     </tr>
 

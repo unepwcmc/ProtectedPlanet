@@ -1,7 +1,7 @@
 <% content_for :header do %>
   <nav class="sub-nav">
     <ul class="nav">
-      <li><h1><%= @protected_area.name %></h1></li>
+      <li><h1>Official Record for <strong><%= @protected_area.name %><strong></h1></li>
       <li><h2><a href="<%= country_path(@country.iso) %>"><%= @country.name %>, <%= @region.name %></a></h2></li>
       <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'protected_area', item_id: @protected_area.id} %></li>
     </ul>
@@ -10,13 +10,8 @@
 
 <section class="factsheet">
   <article>
-    <h3>Official Record</h3>
-    <%= render 'official_record', protected_area: @protected_area %>
 
-    <h3>Data Provider</h3>
-    <ul>
-      <%= render @protected_area.sources %>
-    </ul>
+    <%= render 'official_record', protected_area: @protected_area %>
   </article>
 
   <ul class="protected-area-infographic">

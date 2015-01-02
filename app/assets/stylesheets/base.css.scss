@@ -48,8 +48,9 @@ h5 { font-family: 'MuseoSans-500';}
 p { font-size: 14px; }
 
 strong {
-  font-family: 'MuseoSans-300';
+  font-family: 'MuseoSans-500';
   font-weight: normal;
+  color: $dark-grey;
 }
 
 img { max-width: 100%; height: auto; }
