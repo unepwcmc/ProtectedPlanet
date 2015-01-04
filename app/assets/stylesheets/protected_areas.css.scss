@@ -55,8 +55,9 @@
   margin: 30px 0;
   width: 95%;
   padding: 5px;
-  border-top: 1px solid $green;
-  border-bottom: 1px solid $green;
+  border-top: 1px solid $grey;
+  border-bottom: 1px solid $grey;
+  background: $light-grey;
 
   ul li{
     background: none;
@@ -91,24 +92,26 @@
 
 .protected-area-infographic {
   background: $dark-green;
-  font-family: MuseoSans-300;
-  text-align: center;
+  text-align: left;
+  padding: 0 0 0 20px;
   width: 100%;
 
   li {
     display:inline;
-    margin-right: 5%;
     color: $color--pa-infographic-text;
     font-size: 12px;
-    line-height: 60px;
   }
 
   li span {
-    font-size: 30px;
+    font-size: 40px;
+    font-family: MuseoSans-500;
+    line-height: 60px;
   }
 
   li:last-child {
     margin-right: none;
+    padding: 0;
+    margin:0;
   }
 }
 
