@@ -28,7 +28,9 @@ class CountriesGeometryImporter
 
   private
 
-  DB = ActiveRecord::Base.connection
+  def db
+    ActiveRecord::Base.connection
+  end
 
   def download
     File.open(FILEPATH, 'w:ASCII-8BIT') do |file|
@@ -77,16 +79,16 @@ class CountriesGeometryImporter
 
     countries.each do |iso_3|
       AREA_TYPES.each do |type|
-        DB.execute update_query(type, iso_3)
+        db.execute update_query(type, iso_3)
         if COMPLEX_COUNTRIES[type].include? iso_3
-          DB.execute simplify_query(type, iso_3)
+          db.execute simplify_query(type, iso_3)
         end
       end
     end
   end
 
   def cleanup
-    DB.execute("DELETE FROM countries_geometries_temp")
+    db.execute("DELETE FROM countries_geometries_temp")
     File.delete(FILEPATH)
   end
 end
