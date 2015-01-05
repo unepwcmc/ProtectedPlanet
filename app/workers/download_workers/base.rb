@@ -33,7 +33,7 @@ class DownloadWorkers::Base
     end.to_json
   end
 
-  def keep_last_arg args
+  def self.keep_last_arg args
     self.instance_method(:perform).arity.abs == args.size
   end
 end
