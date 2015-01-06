@@ -113,4 +113,9 @@ class SearchControllerTest < ActionController::TestCase
 
     assert_equal @project, SavedSearch.last.project
   end
+
+  test 'GET :autocomplete, given a search term, returns success' do
+    get :autocomplete, q: 'San Gui'
+    assert_response :success
+  end
 end
