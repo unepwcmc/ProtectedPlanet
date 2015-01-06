@@ -12,6 +12,8 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     ImportTools::WebHandler.stubs(:clear_cache)
     ImportTools::WebHandler.stubs(:under_maintenance).yields
     Geospatial::Calculator.stubs(:calculate_statistics)
+    Autocompletion.stubs(:drop)
+    Autocompletion.stubs(:populate)
 
     ImportWorkers::FinaliserWorker.new.perform
   end
@@ -21,14 +23,16 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     ImportWorkers::FinaliserWorker.new.perform
   end
 
-  test '.perform refreshes cache, search index, updates S3 downloads and
-   calculates statistics' do
+  test '.perform refreshes cache, search index, autocompletion cache,
+   updates S3 downloads and calculates statistics' do
     ImportTools.stubs(:current_import).returns(stub_everything)
     ImportTools::WebHandler.stubs(:under_maintenance).yields
 
     Search::Index.stubs(:delete)
     Search::Index.expects(:create)
     Download.expects(:make_current)
+    Autocompletion.expects(:drop)
+    Autocompletion.expects(:populate)
     ImportTools::WebHandler.expects(:clear_cache)
     Geospatial::Calculator.expects(:calculate_statistics)
 
