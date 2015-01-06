@@ -20,6 +20,20 @@ module SearchHelper
     end
   end
 
+  def autocomplete_link result
+    if result[:type] == 'protected_area'
+      link_to protected_area_url(result[:identifier]) do
+        image = image_tag(AssetGenerator.link_to(result[:identifier]))
+        raw "#{image}#{result[:name]}"
+      end
+    else
+      link_to country_url(result[:identifier]) do
+        image = image_tag("search-placeholder-country.png")
+        raw "#{image}#{result[:name]}"
+      end
+    end
+  end
+
   def clear_filters_link params
     if params.length > 3
       link_to "Clear Filters", search_path(params.slice(:q))
