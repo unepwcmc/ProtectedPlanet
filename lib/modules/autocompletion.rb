@@ -4,7 +4,7 @@ module Autocompletion
   def self.lookup term
     limit = {limit: [0, 5]}
 
-    $redis.zrangebylex(AUTOCOMPLETION_KEY, "(#{term}", "+", limit).map do |result|
+    $redis.zrangebylex(AUTOCOMPLETION_KEY, "(#{term.downcase}", "+", limit).map do |result|
       result = result.split("||")
 
       {
