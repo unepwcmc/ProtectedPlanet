@@ -1,15 +1,15 @@
 <ul class="key-records">
-<li><p>WDPA ID</p> <strong><%= protected_area.wdpa_id %></strong></li>
-<li><p>Reported Area KM&sup2;</p>  <strong><%= protected_area.reported_area %></strong></li>
-<li><p>English Designation</p>  <strong><%= protected_area.designation.name %></strong></li>
-<li><p>IUCN Category</p> <strong><%= protected_area.iucn_category.name %></strong></li>
+  <li><p>WDPA ID</p> <strong><%= protected_area.wdpa_id %></strong></li>
+  <li><p>Reported Area KM&sup2;</p>  <strong><%= protected_area.reported_area %></strong></li>
+  <li><p>English Designation</p>  <strong title="<%= protected_area.designation.name %>"><%= protected_area.designation.name %></strong></li>
+  <li><p>IUCN Category</p> <strong><%= protected_area.iucn_category.name %></strong></li>
 </ul>
 
 <div class="data-provider">
-<h5>Data Provider</h5>
-<ul>
-  <%= render @protected_area.sources %>
-</ul>
+  <h5>Data Provider</h5>
+  <ul>
+    <%= render @protected_area.sources %>
+  </ul>
 </div>
 
 <table>

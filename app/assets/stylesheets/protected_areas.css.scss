@@ -24,30 +24,34 @@
 
 
 
-.key-records{
+.key-records {
   margin: 10px 0;
   width: 95%;
 
-  li{
+  li {
     margin: 15px 0;
     height: 15px;
     background: url("/assets/official-record-bg.png") repeat-x 0px 6px;
+    clear: left;
 
-    p{
+    p {
       float:left;
       padding: 0 5px 0 0;
       background: $white;
     }
 
-    strong{
+    strong {
       float: right;
       margin-left: 0px;
       padding: 0 0 0 10px;
       background: $white;
+      max-width:55%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      height: 15px;
+      white-space: nowrap;
+      display: inline-block;
     }
-
-    clear: left;
-
   }
 }
 
@@ -77,6 +81,7 @@
   }
 
   td {
+    width: 50%;
     padding: 10px 0px;
     line-height: 1.1em;
 
