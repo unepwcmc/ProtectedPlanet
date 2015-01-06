@@ -49,6 +49,8 @@ class Search::Index
 
   def delete
     @client.indices.delete index: INDEX_NAME
+  rescue Elasticsearch::Transport::Transport::Errors::NotFound
+    Rails.logger.warn("Index #{INDEX_NAME} not found. Skipping")
   end
 
   def count
