@@ -45,3 +45,30 @@
     background-color: $color--search-input-bg-hover;
   }
 }
+
+.autocompletion-results {
+  display: none;
+
+  width: 100%;
+  overflow: hidden;
+  padding: 15px 20px;
+  background-color: white;
+  z-index: 300;
+  position: fixed;
+  top: 120px;
+}
+
+.autocompletion-result {
+  line-height: 64px;
+
+  a {
+    display: block;
+  }
+
+  img {
+    float: left;
+    height: 64px;
+    width: 128px;
+    margin-right: 32px;
+  }
+}
