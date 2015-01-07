@@ -3,10 +3,6 @@
 @import 'colors';
 
 .btn.btn-map-download {
-  position: fixed;
-  top: 121px;
-  right: 20px;
-
   transition: top $search-bar-transition-time ease;
 
   &.opened {
@@ -104,4 +100,14 @@ nav .download-type-dropdown {
     transition: top $search-bar-transition-time ease;
     top: 120px;
   }
+}
+
+.explore {
+  height: 200px;
+  width: 400px;
+  background: white;
+  position: relative;
+  z-index: 900;
+  box-sizing: border-box;
+  margin: 150px auto;
 }
