@@ -16,6 +16,8 @@ class ImportTools::PostgresHandler
   def create_database database_name
     connection = connect_to('postgres')
     connection.create_database(database_name)
+
+    connect_to(database_name)
     Rails.application.load_tasks
     Rake::Task['db:migrate'].invoke
   end
