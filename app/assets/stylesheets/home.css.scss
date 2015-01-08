@@ -4,6 +4,7 @@
 
 .btn.btn-map-download {
   transition: top $search-bar-transition-time ease;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.20);
 
   &.opened {
     transition: top $search-bar-transition-time ease;
@@ -103,11 +104,31 @@ nav .download-type-dropdown {
 }
 
 .explore {
-  height: 200px;
-  width: 400px;
-  background: white;
+  width: 840px;
+  height: 120px;
   position: relative;
   z-index: 900;
-  box-sizing: border-box;
   margin: 150px auto;
+  box-sizing: border-box;
+
+  h1{
+    font-family: 'MuseoSans-100';
+    font-size: 30px;
+    color: $green;
+    padding: 10px 20px;
+    clear: both;
+  }
+
+  div {
+    width: 600px;
+    height: 75px;
+    background: white;
+    padding: 20px;
+    float: left;
+    box-shadow: 5px 5px 5px rgba(0,0,0,0.20);
+  }
+
+  a.btn {
+    float: right;
+  }
 }
