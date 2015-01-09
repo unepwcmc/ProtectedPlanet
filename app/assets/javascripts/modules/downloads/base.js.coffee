@@ -32,7 +32,7 @@ define('downloads_base', ['download_generation_modal'], (DownloadGenerationModal
       @generationModal.show()
 
     showDownloadModal: (download) =>
-      @generationModal.showDownloadLink(download.filename, @type)
+      @generationModal.showDownloadLink(download.filename, @type, @completedDownloadTemplate)
 
     completed: (download) ->
       download.status == 'ready'

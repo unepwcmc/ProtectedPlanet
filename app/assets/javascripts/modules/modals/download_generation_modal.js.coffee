@@ -15,12 +15,12 @@ define('download_generation_modal', ['modal'], (Modal) ->
       $form.attr('action', "/downloads/#{token}")
       $form.on("ajax:success", => @hide())
 
-    showDownloadCompleteTemplate: ->
-      @render(@constructor.downloadCompleteTemplate)
+    showDownloadCompleteTemplate: (template) ->
+      @render(template || @constructor.downloadCompleteTemplate)
       @show()
 
-    showDownloadLink: (filename, token) ->
-      @showDownloadCompleteTemplate()
+    showDownloadLink: (filename, token, template) ->
+      @showDownloadCompleteTemplate(template)
 
       download_url = @url(filename, token)
       @find('.link-container').html("""
