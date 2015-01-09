@@ -3,7 +3,7 @@ define('search_bar', [], () ->
     constructor: (@options) ->
       @$el = $('.search-bar')
       @$triggerEl = $('.search-button')
-      @$inputEl = $('.search-input')
+      @$inputEl = $('header .search-input')
       @options ||= {}
 
       @addEventListeners()
