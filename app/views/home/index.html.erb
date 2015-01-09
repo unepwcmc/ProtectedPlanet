@@ -13,8 +13,10 @@
 
 <div class="explore">
   <h1>Start Exploring</h1>
-  <div>
-  <%= render partial: 'shared/search_form', locals: {query: @query} %>
+
+  <div class="search-bar-container">
+    <%= render partial: 'shared/search_form', locals: {query: @query} %>
   </div>
+
   <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', download_type: 'general', item_id: 'all'} %>
 </div>

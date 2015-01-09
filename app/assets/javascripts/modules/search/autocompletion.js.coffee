@@ -1,4 +1,4 @@
-define('autocompletion', [], () ->
+define('autocompletion', ['asyncImg'], (asyncImg) ->
   AUTOCOMPLETION_BASE_PATH = '/search/autocomplete'
 
   class Autocompletion
@@ -10,17 +10,21 @@ define('autocompletion', [], () ->
       @addEventListener()
 
     addEventListener: ->
-      @$searchInput.on('keyup', (ev) =>
-        return @hideResults() if ev.which is 27
-
-        term = @$searchInput.val()
-        if term.length > 2
-          @autocomplete(term)
-        else
-          @hideResults()
-      ).on('blur', =>
-        setTimeout(@hideResults, 500)
+      @$searchInput.on(
+        'keyup', _.debounce(@handleKeyup, 300)
+      ).on(
+        'blur', => setTimeout(@hideResults, 500)
       )
+
+    handleKeyup: (ev) =>
+      return @hideResults() if ev.which is 27
+      return if @term is @$searchInput.val()
+
+      @term = @$searchInput.val()
+      if @term.length > 2
+        @autocomplete(@term)
+      else
+        @hideResults()
 
     autocomplete: (term) =>
       $.get(AUTOCOMPLETION_BASE_PATH, {q: term}, @showResults)
@@ -34,8 +38,9 @@ define('autocompletion', [], () ->
     showResults: (results) =>
       @$resultsEl.show()
       @$resultsEl.offset(@parentElOffset())
-      @$resultsEl.width(@$parentEl.outerWidth())
+      @$resultsEl.width(@$parentEl.width())
       @$resultsEl.html(results)
+      asyncImg()
 
     hideResults: =>
       @$resultsEl.hide()
