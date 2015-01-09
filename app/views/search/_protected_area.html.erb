@@ -9,10 +9,7 @@
       <% model.countries.select(:iso, :name, :region_id).each do |country| %>
         <a href="<%= country_path(iso: country.iso) %>"><%= country.name %></a>,
         <%= country.region.try(:name) %>
-        |
       <% end %>
-      <icon></icon>
-      <%= model.marine ? 'Marine' : 'Terrestrial' %> Area
     </p>
   </div>
 </li>
