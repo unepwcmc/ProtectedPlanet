@@ -1,6 +1,7 @@
 //= require 'require'
 //= require jquery
 //= require jquery_ujs
+//= require async-img.min
 //= require 'modules/search/bar'
 //= require 'modules/search/autocompletion'
 //= require 'modules/dropdown'

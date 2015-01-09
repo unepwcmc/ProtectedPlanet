@@ -15,9 +15,13 @@ module ApplicationHelper
   end
 
   def protected_area_cover protected_area
+    version = Rails.application.secrets.mapbox['version']
+    image_params = {id: protected_area.id, version: version}
+
     image_tag(
-      AssetGenerator.link_to(protected_area.wdpa_id),
-      alt: protected_area.name
+      "search-placeholder-country.png",
+      "alt" => protected_area.name,
+      "data-async" => tiles_path(image_params),
     )
   end
 

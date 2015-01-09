@@ -1,5 +1,5 @@
 $(document).ready( ->
-  require(['search_bar', 'autocompletion', 'dropdown', 'map'], (SearchBar, Autocompletion, Dropdown, Map) ->
+  require(['search_bar', 'autocompletion', 'dropdown', 'map', 'asyncImg'], (SearchBar, Autocompletion, Dropdown, Map, asyncImg) ->
     bar = new SearchBar()
 
     bar.$inputEl.each( ->
@@ -12,6 +12,8 @@ $(document).ready( ->
       $('.btn-download'),
       $(".download-type-dropdown[data-download-type='general']")
     )
+
+    asyncImg()
   )
 
   require(
