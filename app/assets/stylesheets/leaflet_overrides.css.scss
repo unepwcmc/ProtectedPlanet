@@ -17,13 +17,14 @@
   border: 0;
   background: none;
   color: $color--leaflet-control-text;
+  font-family: MuseoSans-100;
 
-  &:first-child {
+  &:hover:first-child,
+  &:hover:last-child,
+  &:first-child,
+  &:last-child {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-  }
-
-  &:last-child {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
   }
@@ -70,11 +71,9 @@
   color: $color--leaflet-control-text;
   font-size: 1.3em;
   transition: background-color 0.3s;
-  transition: color 0.3s;
 
   &:hover {
     transition: background-color 0.3s;
-    transition: color 0.3s;
     cursor: pointer;
     background-color: $color--leaflet-control-hover-bg;
     color: $color--leaflet-control-hover-text;
