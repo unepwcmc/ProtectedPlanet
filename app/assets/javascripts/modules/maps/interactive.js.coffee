@@ -7,6 +7,7 @@ define('interactive', [], () ->
 
     listen: ->
       @map.on('click', @handleMapClick)
+      @map.on('dragstart', @handleMapDrag)
 
     addMarker: (coords, protected_area) =>
       if @currentMarker?
@@ -29,6 +30,9 @@ define('interactive', [], () ->
         if data.length > 0
           @addMarker(coords, data[0])
       )
+
+    handleMapDrag: =>
+      $('.explore').fadeOut()
 
     linkTo: (pa) ->
       "<a href=\"/#{pa.wdpa_id}\">#{pa.name}</a>"

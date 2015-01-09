@@ -45,4 +45,6 @@ $(document).ready( ->
         )
       )
   )
+
+  $('.explore .search-input').focus()
 )
