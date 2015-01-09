@@ -66,13 +66,14 @@
 }
 
 .autocompletion-result {
-  line-height: 64px;
+  line-height: 86px;
 
   a {
     display: block;
   }
 
   img {
+    box-sizing: content-box;
     float: left;
     height: 64px;
     width: 128px;

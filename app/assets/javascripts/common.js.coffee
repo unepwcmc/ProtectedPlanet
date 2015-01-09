@@ -2,9 +2,7 @@ $(document).ready( ->
   require(['search_bar', 'autocompletion', 'dropdown', 'map', 'asyncImg'], (SearchBar, Autocompletion, Dropdown, Map, asyncImg) ->
     bar = new SearchBar()
 
-    bar.$inputEl.each( ->
-      new Autocompletion($(this))
-    )
+    $('.search-input').each( -> new Autocompletion($(this)))
 
     new Map($('#map')).render()
 

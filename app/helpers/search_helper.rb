@@ -22,8 +22,15 @@ module SearchHelper
 
   def autocomplete_link result
     if result[:type] == 'protected_area'
+      version = Rails.application.secrets.mapbox['version']
+      image_params = {id: result[:identifier], version: version}
+
       link_to protected_area_url(result[:identifier]) do
-        image = image_tag(AssetGenerator.link_to(result[:identifier]))
+        image = image_tag(
+          "search-placeholder-country.png",
+          "alt" => result[:name],
+          "data-async" => tiles_path(image_params),
+        )
         raw "#{image}#{result[:name]}"
       end
     else
