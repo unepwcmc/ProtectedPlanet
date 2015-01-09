@@ -2,6 +2,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require 'modules/search/bar'
+//= require 'modules/search/autocompletion'
 //= require 'modules/dropdown'
 //= require 'modules/modal'
 //= require 'modules/modals/download_generation_modal'

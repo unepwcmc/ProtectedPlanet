@@ -5,7 +5,6 @@
   height: 60px;
   width: 100%;
   float: left;
-  overflow: hidden;
   padding: 15px 20px;
   background-color: $color--search-bar-bg;
   z-index: $zIndex-3;
@@ -43,5 +42,41 @@
 
   &:hover {
     background-color: $color--search-input-bg-hover;
+  }
+}
+
+.autocompletion-results {
+  display: none;
+
+  width: 100%;
+  overflow: hidden;
+  padding: 15px 20px;
+  background-color: white;
+  z-index: 300;
+  position: fixed;
+  top: 120px;
+}
+
+.no-projects .autocompletion-results {
+  padding: 0;
+
+  ul {
+    border: 0;
+  }
+}
+
+.autocompletion-result {
+  line-height: 64px;
+
+  a {
+    display: block;
+  }
+
+  img {
+    float: left;
+    height: 64px;
+    width: 128px;
+    margin-right: 10px;
+    padding: 10px;
   }
 }

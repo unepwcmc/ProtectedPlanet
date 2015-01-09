@@ -21,6 +21,12 @@ class SearchController < ApplicationController
     redirect_to projects_path
   end
 
+  def autocomplete
+    @results = Autocompletion.lookup params[:q]
+
+    render partial: 'search/autocomplete'
+  end
+
   private
 
   def ignore_empty_query

@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
   get '/search', to: 'search#index'
   get '/search/map', to: 'search#map'
+  get '/search/autocomplete', to: 'search#autocomplete'
   post '/search', to: 'search#create'
 
   get '/sites/:id', to: 'sites#show'
