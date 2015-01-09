@@ -20,7 +20,7 @@ define('autocompletion', ['asyncImg'], (asyncImg) ->
       return @hideResults() if ev.which is 27
       return if @term is @$searchInput.val()
 
-      @term ||= @$searchInput.val()
+      @term = @$searchInput.val()
       if @term.length > 2
         @autocomplete(@term)
       else
