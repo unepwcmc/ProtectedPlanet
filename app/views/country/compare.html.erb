@@ -1,3 +1,9 @@
+<% if @second_country %>
+  <%= content_for :page_title, "Comparing #{@country.name} with #{@second_country.name}" %>
+<% else %>
+  <%= content_for :page_title, @country.name %>
+<% end %>
+
 <% render partial: 'header' %>
 
 <section id="protected-coverage-viz">

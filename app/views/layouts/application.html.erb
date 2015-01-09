@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>ProtectedPlanet</title>
+  <title><%= page_title("Protected Planet") %></title>
 
   <%= stylesheet_link_tag 'application', media: 'all' %>
   <%= javascript_include_tag controller_name %>
@@ -18,7 +18,7 @@
           <li class="logo">
             <%= link_to "Protected Planet", root_path %>
           </li>
-    </ul>
+        </ul>
 
         <ul class="right">
           <li><%= link_to 'About', about_path %></li>

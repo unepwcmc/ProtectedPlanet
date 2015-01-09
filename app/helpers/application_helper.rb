@@ -32,4 +32,14 @@ module ApplicationHelper
   def saved_search_cover saved_search
     image_tag("projects-saved-searches.png", alt: saved_search.name)
   end
+
+  def page_title base_title
+    custom_title = content_for(:page_title)
+
+    if custom_title
+      "#{custom_title} | #{base_title}".html_safe
+    else
+      base_title
+    end
+  end
 end
