@@ -1,7 +1,10 @@
 $(document).ready( ->
   require(['search_bar', 'autocompletion', 'dropdown', 'map'], (SearchBar, Autocompletion, Dropdown, Map) ->
     bar = new SearchBar()
-    new Autocompletion(bar.$inputEl, bar.$autocompletionEl)
+
+    bar.$inputEl.each( ->
+      new Autocompletion($(this))
+    )
 
     new Map($('#map')).render()
 

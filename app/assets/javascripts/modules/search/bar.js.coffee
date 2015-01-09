@@ -4,7 +4,6 @@ define('search_bar', [], () ->
       @$el = $('.search-bar')
       @$triggerEl = $('.search-button')
       @$inputEl = $('.search-input')
-      @$autocompletionEl = $('.autocompletion-results')
       @options ||= {}
 
       @addEventListeners()
