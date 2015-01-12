@@ -8,7 +8,7 @@
         <li><h2>Comparing: <%= @second_country.name %>, <%= @second_country.region.name %></h2></li>
       <% else %>
         <li><h1><%= @country.name %>, <%= @country.region.name %></h1></li>
-        <li><h2><%= @country.protected_areas.count %> Protected Areas</h2></li>
+        <li><h2><%= commaify(@country.protected_areas.count) %> Protected Areas</h2></li>
       <% end %>
 
       <li><%= link_to 'Compare Countries', compare_countries_path(iso: @country.iso) %></li>
