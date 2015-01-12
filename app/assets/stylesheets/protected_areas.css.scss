@@ -122,23 +122,31 @@
 
 .nearest-protected-areas {
   li {
-    display: inline-block;
-    padding: 0 0 5px 0;
-    border-bottom: 2px solid $green;
+    border-top: 1px solid $grey;
+    border-bottom: 1px solid $grey;
+    clear: left;
+    height: 101px;
+    margin: 10px 0;
   }
 
   img {
     width: 177px;
-    height: 100px;
+    height: 99px;
+    float: left;
   }
 
   h4 {
-    padding: 10px 0 10px 5px;
+    width: 182px;
+    height: 99px;
+    background: $light-grey;
+    margin: 0 0 0 1px;
+    float: left;
 
-      &:hover{
-        background: $light-grey;
+      a{
+        display: block;
+        margin: 20px 0 0 5px;
       }
-    
+
   }
 
 }
