@@ -49,12 +49,15 @@
   display: none;
 
   width: 100%;
-  overflow: hidden;
+  height: 15em;
+  overflow: scroll;
   padding: 15px 20px;
   background-color: white;
   z-index: 300;
   position: fixed;
   top: 120px;
+  border-bottom: 2px solid $green;
+  box-shadow: 5px 5px 5px rgba(0,0,0,0.20);
 }
 
 .no-projects .autocompletion-results {
@@ -67,9 +70,14 @@
 
 .autocompletion-result {
   line-height: 86px;
+  border-bottom: 1px dotted $grey;
 
   a {
     display: block;
+
+    &:hover{
+      background: $light-grey;
+    }
   }
 
   img {
