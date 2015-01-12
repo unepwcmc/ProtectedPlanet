@@ -208,10 +208,27 @@ li.result {
   h3 {
     margin-top: 4px;
 
+    a:first-of-type,
     small {
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      display: block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    small {
+      top: 26px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+
+      margin-top: 5px;
+      padding-top: 5px;
+
       border-top: 1px solid $green;
-      margin: 2px;
-      padding: 4px 0 0 0;
       display:block;
       color: $medium-grey;
     }
@@ -219,6 +236,8 @@ li.result {
 
   p {
     position: absolute;
+    left: 8px;
+    right: 8px;
     bottom: 8px;
     color: $medium-grey;
     padding: 3px 5px;

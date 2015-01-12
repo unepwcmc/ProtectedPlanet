@@ -4,15 +4,12 @@
   </a>
 
   <div class="inner-result">
-    <h3><a href='/<%= model.slug %>'><%= model.name %></a>  <small><%= model.designation.name %></small></h3>
+    <h3><a href='/<%= model.slug %>' title="<%= model.name %>"><%= model.name %></a>  <small title="<%= model.designation.name %>"><%= model.designation.name %></small></h3>
     <p>
       <% model.countries.select(:iso, :name, :region_id).each do |country| %>
         <a href="<%= country_path(iso: country.iso) %>"><%= country.name %></a>,
         <%= country.region.try(:name) %>
-        |
       <% end %>
-      <icon></icon>
-      <%= model.marine ? 'Marine' : 'Terrestrial' %> Area
     </p>
   </div>
 </li>

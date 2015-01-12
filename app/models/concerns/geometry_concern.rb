@@ -32,18 +32,32 @@ module GeometryConcern
 
     URI.encode({
       "type" => "Feature",
-      "properties" => {
-        "fill-opacity" => 0.7,
-        "stroke-width" => 0.05,
-        "stroke" => "#40541b",
-        "fill" => "#83ad35",
-        "marker-color" => "#2B3146"
-      },
+      "properties" => geometry_properties,
       "geometry" => geometry
     }.to_json)
   end
 
   private
+
+  def geometry_properties
+    if self.respond_to?(:marine) && marine
+      {
+        "fill-opacity" => 0.7,
+        "stroke-width" => 0.05,
+        "stroke" => "#2E5387",
+        "fill" => "#3E7BB6",
+        "marker-color" => "#2B3146"
+      }
+    else
+      {
+        "fill-opacity" => 0.7,
+        "stroke-width" => 0.05,
+        "stroke" => "#40541b",
+        "fill" => "#83ad35",
+        "marker-color" => "#2B3146"
+      }
+    end
+  end
 
   def main_geom_column
     self.respond_to?(:the_geom) ? 'the_geom' : 'bounding_box'

@@ -22,11 +22,8 @@
   }
 }
 
-
-
 .key-records {
   margin: 10px 0;
-  width: 95%;
 
   li {
     margin: 15px 0;
@@ -57,7 +54,6 @@
 
 .data-provider{
   margin: 30px 0;
-  width: 95%;
   padding: 5px;
   border-top: 1px solid $grey;
   border-bottom: 1px solid $grey;
@@ -69,7 +65,7 @@
 }
 
 .factsheet table {
-  width: 95%;
+  width: 100%;
   margin: 20px 0 0 0;
 
   tr {
@@ -130,7 +126,7 @@
   }
 
   img {
-    width: 170px;
+    width: 177px;
     height: 100px;
   }
 }

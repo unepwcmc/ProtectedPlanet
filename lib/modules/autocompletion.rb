@@ -17,8 +17,8 @@ module Autocompletion
   end
 
   def self.populate
-    ProtectedArea.pluck(:name, :wdpa_id).each do |name, wdpa_id|
-      $redis.zadd(AUTOCOMPLETION_KEY, 0, "#{name.downcase}||#{name}||protected_area||#{wdpa_id}")
+    ProtectedArea.pluck(:name, :id).each do |name, id|
+      $redis.zadd(AUTOCOMPLETION_KEY, 0, "#{name.downcase}||#{name}||protected_area||#{id}")
     end
 
     Country.pluck(:name, :iso_3).each do |name, iso_3|

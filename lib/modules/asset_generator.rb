@@ -2,8 +2,8 @@ module AssetGenerator
   class AssetGenerationFailedError < StandardError; end;
   FALLBACK_PATH = Rails.root.join('app/assets/images', 'search-placeholder-country.png')
 
-  def self.protected_area_tile protected_area, opts={size: {x: 128, y: 256}}
-    tile_url = mapbox_url protected_area.geojson, opts[:size]
+  def self.protected_area_tile protected_area
+    tile_url = mapbox_url protected_area.geojson
 
     request_tile tile_url[:host], tile_url[:path]
   rescue AssetGenerationFailedError
@@ -17,9 +17,10 @@ module AssetGenerator
 
   private
 
-  def self.mapbox_url geojson, size
+  def self.mapbox_url geojson
     access_token = Rails.application.secrets.mapbox['access_token']
     uri = URI(Rails.application.secrets.mapbox['base_url'])
+    size = {y: 128, x: 256}
 
     path = uri.path
     path << "geojson(#{geojson})/auto/#{size[:x]}x#{size[:y]}@2x.png"
