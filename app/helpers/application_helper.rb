@@ -46,4 +46,39 @@ module ApplicationHelper
       base_title
     end
   end
+
+  DOWNLOAD_TYPES = {
+    csv: {
+      content: 'CSV',
+      attrs: {'data-type' => 'csv', 'class' => 'btn'}
+    },
+    kml: {
+      content: 'KML',
+      attrs: {'data-type' => 'kml', 'class' => 'btn'}
+    },
+    shp: {
+      content: 'SHP',
+      attrs: {'data-type' => 'shp', 'class' => 'btn'}
+    },
+    esri: {
+      content: 'ESRI Web Service',
+      attrs: {'href' => Rails.application.secrets.esri_web_service_url, 'class' => 'btn'}
+    }
+  }
+
+  def download_dropdown item_id, download_type, types
+    download_dropdown_attrs = {
+      'data-item-id' => item_id,
+      'data-download-type' => download_type,
+      'class' => 'download-type-dropdown'
+    }
+
+    content_tag :ul, download_dropdown_attrs do
+      types.map do |type|
+        content_tag :li do
+          content_tag :a, DOWNLOAD_TYPES[type][:content], DOWNLOAD_TYPES[type][:attrs]
+        end
+      end.join.html_safe
+    end
+  end
 end

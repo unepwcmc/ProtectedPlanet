@@ -27,6 +27,9 @@ $(document).ready( ->
 
       $downloadBtns.forEach( ($btn) ->
         $btn.on('click', (e) ->
+          # skip standard links
+          return unless $(@).data('type')
+
           button = $(@)
           e.preventDefault()
 
