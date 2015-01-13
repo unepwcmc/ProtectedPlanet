@@ -21,8 +21,8 @@ module Autocompletion
       $redis.zadd(AUTOCOMPLETION_KEY, 0, "#{name.downcase}||#{name}||protected_area||#{wdpa_id}")
     end
 
-    Country.pluck(:name, :iso_3).each do |name, iso_3|
-      $redis.zadd(AUTOCOMPLETION_KEY, 0, "#{name.downcase}||#{name}||country||#{iso_3}")
+    Country.pluck(:name, :iso).each do |name, iso|
+      $redis.zadd(AUTOCOMPLETION_KEY, 0, "#{name.downcase}||#{name}||country||#{iso}")
     end
   end
 
