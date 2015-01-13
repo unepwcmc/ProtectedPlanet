@@ -18,10 +18,10 @@ class AssetGeneratorTest < ActiveSupport::TestCase
       stubs(:mapbox).
       returns({'base_url' => 'http://mapbox.com/', 'access_token' => '123'})
     Net::HTTP.expects(:get_response).
-      with('mapbox.com', '/geojson({})/auto/25x25@2x.png?access_token=123').
+      with('mapbox.com', '/geojson({})/auto/256x128@2x.png?access_token=123').
       returns(response_mock)
 
-    pa_image = AssetGenerator.protected_area_tile(@protected_area, @options)
+    pa_image = AssetGenerator.protected_area_tile(@protected_area)
     assert_equal 'the image', pa_image
   end
 
@@ -33,7 +33,7 @@ class AssetGeneratorTest < ActiveSupport::TestCase
 
     File.expects(:read).with(AssetGenerator::FALLBACK_PATH).returns('fallback image')
 
-    pa_image = AssetGenerator.protected_area_tile(@protected_area, @options)
+    pa_image = AssetGenerator.protected_area_tile(@protected_area)
     assert_equal 'fallback image', pa_image
   end
 end

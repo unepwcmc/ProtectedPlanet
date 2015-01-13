@@ -9,6 +9,6 @@ class AssetsController < ApplicationController
   private
 
   def protected_area
-    @protected_area ||= ProtectedArea.find(params[:id])
+    @protected_area ||= ProtectedArea.where(wdpa_id: params[:id]).first
   end
 end

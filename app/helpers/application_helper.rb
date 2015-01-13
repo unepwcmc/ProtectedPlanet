@@ -16,7 +16,7 @@ module ApplicationHelper
 
   def protected_area_cover protected_area
     version = Rails.application.secrets.mapbox['version']
-    image_params = {id: protected_area.id, version: version}
+    image_params = {id: protected_area.wdpa_id, version: version}
 
     image_tag(
       "search-placeholder-country.png",
