@@ -1,7 +1,7 @@
 class DownloadWorkers::General < DownloadWorkers::Base
   def perform type, identifier, opts={}
     while_generating(key(identifier)) do
-      Download.generate filename(identifier), opts.merge({wdpa_ids: collect_wdpa_ids(type, identifier)})
+      Download.generate filename(identifier), opts.symbolize_keys.merge({wdpa_ids: collect_wdpa_ids(type, identifier)})
       {status: 'ready', filename: filename(identifier)}.to_json
     end
   end
