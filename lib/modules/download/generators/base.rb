@@ -29,9 +29,10 @@ class Download::Generators::Base
     view_name = "tmp_downloads_#{query_shasum}"
 
     db.execute "CREATE VIEW #{view_name} AS #{query}"
-    yield view_name
-  ensure
+    export_outcome = yield view_name
     db.execute "DROP VIEW #{view_name}"
+
+    export_outcome
   end
 
   ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')
