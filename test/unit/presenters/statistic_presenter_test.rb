@@ -18,22 +18,6 @@ class StatisticPresenterTest < ActiveSupport::TestCase
     assert_equal "40.0", percentage
   end
 
-  test '.percentage_pa_marine_cover returns the total of marine cover' do
-    @statistic.stubs(:percentage_pa_eez_cover).returns(30)
-    @statistic.stubs(:percentage_pa_ts_cover).returns(23)
-
-    percentage = @presenter.percentage_pa_marine_cover
-    assert_equal "53.0", percentage
-  end
-
-  test '.marine_area returns the total marine area' do
-    @statistic.stubs(:ts_area).returns(6)
-    @statistic.stubs(:eez_area).returns(12)
-
-    area = @presenter.marine_area
-    assert_equal 18.0, area
-  end
-
   test '.percentage_of_global_pas returns 0 if the percentage cannot
    be calculated' do
     percentage = @presenter.percentage_of_global_pas
