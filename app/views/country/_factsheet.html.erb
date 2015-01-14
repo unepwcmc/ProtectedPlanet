@@ -1,4 +1,4 @@
-<div class="factsheet">
+<div class="factsheet" data-country-iso="<%= country.iso %>">
   <%= render partial: 'country/factsheet/pas_value', locals: {presenter: presenter, country: country} %>
   <%= render partial: 'country/factsheet/statistics', locals: {presenter: presenter, country: country} %>
 </div>

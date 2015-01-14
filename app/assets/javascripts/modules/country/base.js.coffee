@@ -26,6 +26,8 @@ $(document).ready( ->
 
   $countriesSelect.select2(containerCss: {width: '200px'})
   $countriesSelect.on 'change', (ev) ->
-    iso2 = ev.added.id
-    window.location = "/country/AR/compare/#{iso2}"
+    iso = $('.factsheet').data('countryIso')
+    iso_to_compare = ev.added.id
+
+    window.location = "/country/#{iso}/compare/#{iso_to_compare}"
 )

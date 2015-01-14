@@ -35,7 +35,7 @@ Rails.application.routes.draw do
   get '/about', to: 'static_pages#about', as: 'about'
 
   get '/country/:iso', to: 'country#show', as: 'country'
-  get '/country/:iso/compare(/:iso2)', to: 'country#compare', as: 'compare_countries'
+  get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
 
   get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
   resources :downloads, only: [:show, :create, :update]

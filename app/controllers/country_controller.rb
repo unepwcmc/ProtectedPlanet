@@ -6,13 +6,13 @@ class CountryController < ApplicationController
   end
 
   def compare
-    params[:iso2] ? load_second_country : load_comparable_countries
+    params[:iso_to_compare] ? load_second_country : load_comparable_countries
   end
 
   private
 
   def load_second_country
-    @second_country = Country.where(iso: params[:iso2]).first
+    @second_country = Country.where(iso: params[:iso_to_compare]).first
     @second_presenter = StatisticPresenter.new @second_country
   end
 
