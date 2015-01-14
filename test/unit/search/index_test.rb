@@ -38,7 +38,8 @@ class IndexTest < ActiveSupport::TestCase
       :iucn_category
     ])
 
-    Elasticsearch::Client.stubs(:new).returns(stub_everything)
+    Elasticsearch::Client.stubs(:new).
+      returns(stub_everything(count: {'count' => 0}))
 
     Search::Index.expects(:index).with(Country.without_geometry)
     Search::Index.expects(:create_mapping).with('protected_area')
