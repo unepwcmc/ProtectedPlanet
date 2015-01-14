@@ -4,7 +4,17 @@
   <nav class="sub-nav">
     <ul class="nav">
       <li><h1>Official Record for <strong><%= @protected_area.name %><strong></h1></li>
-      <li><h2><a href="<%= country_path(@country.iso) %>"><%= @country.name %>, <%= @region.name %></a></h2></li>
+
+      <% unless @country.blank? %>
+        <li>
+          <h2>
+            <a href="<%= country_path(@country.iso) %>">
+              <%= @country.name %><% if @region %>, <%= @region.name %><% end %>
+            </a>
+          </h2>
+        </li>
+      <% end %>
+
       <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'protected_area', item_id: @protected_area.id} %></li>
     </ul>
   </nav>

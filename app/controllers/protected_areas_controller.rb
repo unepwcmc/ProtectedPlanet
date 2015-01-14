@@ -11,7 +11,7 @@ class ProtectedAreasController < ApplicationController
     return render_404 if @protected_area.blank?
 
     @country = @protected_area.countries.without_geometry.first
-    @region  = @country.region
+    @region  = @country.try(:region)
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
   end
