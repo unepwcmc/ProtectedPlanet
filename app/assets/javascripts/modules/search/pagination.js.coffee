@@ -1,4 +1,4 @@
-define('pagination', [], ->
+define('pagination', ['asyncImg'], (asyncImg) ->
   class Pagination
     constructor: (@container, @resultClass) ->
       @render()
@@ -10,6 +10,8 @@ define('pagination', [], ->
         itemSelector: @resultClass
         loading:
           msgText: ''
+      , (newResults) ->
+        asyncImg()
       )
 
   return Pagination

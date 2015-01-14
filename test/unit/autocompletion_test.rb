@@ -17,10 +17,10 @@ class AutocompletionTest < ActiveSupport::TestCase
 
   test '.populate saves all the items in the autocompletion redis key' do
     FactoryGirl.create(:protected_area, name: 'San Guillermo', wdpa_id: 123)
-    FactoryGirl.create(:country, name: 'Japan', iso_3: 'JAP')
+    FactoryGirl.create(:country, name: 'Japan', iso: 'JA')
 
     $redis.expects(:zadd).with('autocompletion', 0, "san guillermo||San Guillermo||protected_area||123")
-    $redis.expects(:zadd).with('autocompletion', 0, "japan||Japan||country||JAP")
+    $redis.expects(:zadd).with('autocompletion', 0, "japan||Japan||country||JA")
     Autocompletion.populate
   end
 end
