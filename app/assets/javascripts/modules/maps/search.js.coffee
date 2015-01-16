@@ -19,7 +19,7 @@ define('search', ['bounds'], (Bounds) ->
 
         for pa in protected_areas
           marker = L.marker(
-            L.latLng(pa.coordinates?[0], pa.coordinates?[1]),
+            L.latLng(pa.coordinates?[1], pa.coordinates?[0]),
             { title: pa.name }
           )
 
@@ -34,8 +34,8 @@ define('search', ['bounds'], (Bounds) ->
     fitToResults: (points) ->
       return if points.length is 0
 
-      lats = points.map((p) -> parseFloat(p.coordinates[0]))
-      lons = points.map((p) -> parseFloat(p.coordinates[1]))
+      lats = points.map((p) -> parseFloat(p.coordinates[1]))
+      lons = points.map((p) -> parseFloat(p.coordinates[0]))
 
       maxLat = Math.max.apply(Math, lats)
       minLat = Math.min.apply(Math, lats)
