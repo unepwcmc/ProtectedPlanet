@@ -5,7 +5,7 @@ define('downloads_search', ['downloads_base'], (Base) ->
       @domain = 'search'
 
     submitDownload: (next) ->
-      $.post(@constructor.CREATION_PATH + window.location.search, {domain: @domain}, next)
+      $.post(@constructor.CREATION_PATH + window.location.search, {AUTH_TOKEN: @authToken, domain: @domain}, next)
 
   return Search
 )

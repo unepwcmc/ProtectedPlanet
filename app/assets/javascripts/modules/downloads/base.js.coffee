@@ -5,6 +5,7 @@ define('downloads_base', ['download_generation_modal'], (DownloadGenerationModal
     @POLLING_INTERVAL: 250
 
     constructor: (@type, @opts={}) ->
+      @authToken = $('meta[name=csrf-ken]').attr('content')
       @opts.mainContainer ||= $('#download-modal')
       @generationModal = new DownloadGenerationModal(@opts.mainContainer)
 

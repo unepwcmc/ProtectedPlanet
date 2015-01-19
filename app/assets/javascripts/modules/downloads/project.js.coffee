@@ -5,7 +5,7 @@ define('downloads_project', ['downloads_base'], (Base) ->
       @domain = 'project'
 
     submitDownload: (next) =>
-      $.post(@constructor.CREATION_PATH, {id: @opts.itemId, domain: @domain}, next)
+      $.post(@constructor.CREATION_PATH, {AUTH_TOKEN: @authToken, id: @opts.itemId, domain: @domain}, next)
 
   return Project
 )
