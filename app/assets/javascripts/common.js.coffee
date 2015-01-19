@@ -40,11 +40,12 @@ $(document).ready( ->
             'project': DownloadsProject
             'search': DownloadsSearch
 
-          downloader = new DOWNLOADERS[list.data('download-type')]
-          downloader.start(
+          downloader = new DOWNLOADERS[list.data('download-type')](
             button.data('type'),
             {itemId: list.data('item-id')}
           )
+
+          downloader.start()
         )
       )
   )
