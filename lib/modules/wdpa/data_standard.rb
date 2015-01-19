@@ -20,7 +20,7 @@ class Wdpa::DataStandard
     :int_crit     => {name: :international_criteria, type: :string},
     :no_take      => {name: :no_take_status, type: :string},
     :no_tk_area   => {name: :no_take_area, type: :float},
-    :desig        => {name: :designation, type: :string},
+    :design_en    => {name: :designation, type: :string},
     :desig_type   => {name: :jurisdiction, type: :string},
     :wkb_geometry => {name: :the_geom, type: :geometry},
     :metadataid   => {name: :sources, type: :integer}

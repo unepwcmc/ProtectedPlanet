@@ -250,7 +250,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     FactoryGirl.create(:designation, name: designation, jurisdiction: jurisdiction)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({
-      desig: designation,
+      design_en: designation,
       desig_type: designation_type
     })
 
@@ -271,7 +271,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     FactoryGirl.create(:jurisdiction, name: designation_type)
 
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({
-      desig: designation,
+      design_en: designation,
       desig_type: designation_type
     })
 
