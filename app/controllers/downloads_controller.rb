@@ -1,4 +1,6 @@
 class DownloadsController < ApplicationController
+  skip_before_action :verify_authenticity_token
+
   def show
     redirect_to Download.link_to(params['id'], params['type'])
   end
