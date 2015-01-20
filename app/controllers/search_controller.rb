@@ -30,7 +30,8 @@ class SearchController < ApplicationController
   private
 
   def ignore_empty_query
-    return unless @query = params[:q]
+    @query = params[:q]
+    redirect_to :root if @query.blank?
   end
 
   def project
