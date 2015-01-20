@@ -5,6 +5,7 @@
 //= require 'underscore-min'
 //= require 'modules/search/bar'
 //= require 'modules/search/autocompletion'
+//= require 'modules/search/query_control'
 //= require 'modules/dropdown'
 //= require 'modules/modal'
 //= require 'modules/modals/download_generation_modal'

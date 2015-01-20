@@ -1,17 +1,22 @@
 $(document).ready( ->
-  require(['search_bar', 'autocompletion', 'dropdown', 'map', 'asyncImg'], (SearchBar, Autocompletion, Dropdown, Map, asyncImg) ->
-    bar = new SearchBar()
+  require(
+    ['search_bar', 'autocompletion', 'query_control', 'dropdown', 'map', 'asyncImg'],
+    (SearchBar, Autocompletion, QueryControl, Dropdown, Map, asyncImg) ->
+      bar = new SearchBar()
 
-    $('.search-input').each( -> new Autocompletion($(this)))
+      $('.search-input').each( ->
+        new Autocompletion($(this))
+        new QueryControl($(this))
+      )
 
-    new Map($('#map')).render()
+      new Map($('#map')).render()
 
-    new Dropdown(
-      $('.btn-download'),
-      $(".download-type-dropdown[data-download-type='general']")
-    )
+      new Dropdown(
+        $('.btn-download'),
+        $(".download-type-dropdown[data-download-type='general']")
+      )
 
-    asyncImg()
+      asyncImg()
   )
 
   require(
