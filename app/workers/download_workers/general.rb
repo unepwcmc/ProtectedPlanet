@@ -19,7 +19,7 @@ class DownloadWorkers::General < DownloadWorkers::Base
     when 'general'
       nil
     when 'country'
-      wdpa_ids_per_country.call(Country.where(iso_3: identifier).first)
+      wdpa_ids_per_country.call(Country.where(iso: identifier).first)
     when 'region'
       region = Region.where(iso: identifier).first
       Set.new(region.countries.flat_map(&wdpa_ids_per_country)).to_a
