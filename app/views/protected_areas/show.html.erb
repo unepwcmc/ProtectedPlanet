@@ -37,6 +37,9 @@
     <article>
       <h3>Related</h3>
       <ul>
+        <% if @protected_area.has_irreplaceability_info %>
+          <li><a target="_blank" href='<%= url_for_irreplaceability @protected_area %>'>Irreplaceability Info</a></li>
+        <% end %>
         <% if @protected_area.wikipedia_article %>
           <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
         <% end %>

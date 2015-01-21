@@ -9,6 +9,13 @@ module ProtectedAreasHelper
   end
 
   def related_links? protected_area
-    !!protected_area.wikipedia_article
+    protected_area.wikipedia_article || protected_area.has_irreplaceability_info
+  end
+
+  def url_for_irreplaceability protected_area
+    File.join(
+      Rails.application.secrets.irreplaceability_info_base_url,
+      protected_area.wdpa_id.to_s
+    )
   end
 end
