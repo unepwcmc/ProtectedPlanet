@@ -11,6 +11,7 @@ class TestWdpaProtectedAreaImporter < ActiveSupport::TestCase
       .expects(:import).with(wdpa_release)
 
     Wdpa::ProtectedAreaImporter::AssetImporter.expects(:import)
+    Wdpa::ProtectedAreaImporter::IrreplaceabilityImporter.expects(:import)
 
     Wdpa::ProtectedAreaImporter.import wdpa_release
   end
