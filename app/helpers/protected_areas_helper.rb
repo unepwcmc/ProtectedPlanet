@@ -9,7 +9,7 @@ module ProtectedAreasHelper
   end
 
   def related_links? protected_area
-    protected_area.wikipedia_article || protected_area.has_irreplaceability_info
+    !!protected_area.wikipedia_article
   end
 
   def url_for_irreplaceability protected_area
