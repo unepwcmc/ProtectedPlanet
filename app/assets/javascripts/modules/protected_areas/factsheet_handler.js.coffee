@@ -4,21 +4,24 @@ define('factsheet_handler', [], ->
       $el[0].offsetWidth < $el[0].scrollWidth
 
     constructor: (@$factsheetEl) ->
+      @detectEllipsed()
       @addEventListeners()
 
     addEventListeners: ->
-      @$factsheetEl.find('li').hover( (ev) ->
-        right = $(@).find('strong')
-        if _isEllipsed(right)
-          left = $(@).find('p')
-          left.addClass('hidden-record')
-          right.addClass('full-record')
-      , (ev) ->
-        right = $(@).find('strong')
+      @$factsheetEl.find('.ellipsed').click( (ev) ->
         left = $(@).find('p')
-        left.removeClass('hidden-record')
-        right.removeClass('full-record')
+        right = $(@).find('strong')
+
+        left.toggleClass('hidden-record')
+        right.toggleClass('full-record')
       )
+
+    detectEllipsed: ->
+      @$factsheetEl.find('li > strong').each( ->
+        if _isEllipsed($(this))
+          $(this).parent('li').addClass('ellipsed')
+      )
+
 
 
   return FactsheetHandler

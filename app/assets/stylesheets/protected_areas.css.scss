@@ -31,6 +31,10 @@
     background: url("/assets/official-record-bg.png") repeat-x 0px 6px;
     clear: left;
 
+    &.ellipsed {
+      cursor: pointer;
+    }
+
     p {
       float:left;
       padding: 0 5px 0 0;
@@ -42,10 +46,7 @@
       transition-duration: 0.3s, 0.3s;
 
       &.hidden-record {
-        opacity: 0;
-        line-height: 0px;
-        transition-property: line-height, opacity;
-        transition-duration: 0.3s, 0.3s;
+        display: none;
       }
     }
 
@@ -61,11 +62,8 @@
       white-space: nowrap;
       display: inline-block;
 
-      transition: all 0.5s;
-
       &.full-record {
         max-width: 100%;
-        transition: all 0.5s;
       }
     }
   }
