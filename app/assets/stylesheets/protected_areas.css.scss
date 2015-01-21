@@ -42,9 +42,6 @@
       overflow:hidden;
       white-space: nowrap;
 
-      transition-property: line-height, opacity;
-      transition-duration: 0.3s, 0.3s;
-
       &.hidden-record {
         display: none;
       }
