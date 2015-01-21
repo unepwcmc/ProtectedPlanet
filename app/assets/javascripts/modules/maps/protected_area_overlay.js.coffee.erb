@@ -21,7 +21,8 @@ define('protected_area_overlay', [], () ->
         opacity: 0.7
         lineWidth: 0.05
         lineColor: '2B3146'
-        polygonFill: '2B3146'
+        polygonFill: '2B3146',
+        polygonCompOp: 'dst-over'
       }, args)
 
       """
@@ -30,6 +31,7 @@ define('protected_area_overlay', [], () ->
           line-width:#{args.lineWidth};
           polygon-fill:##{args.polygonFill};
           polygon-opacity:#{args.opacity};
+          polygon-comp-op:#{args.polygonCompOp};
         }
       """
 
@@ -94,7 +96,8 @@ define('protected_area_overlay', [], () ->
         cartocss.push @_generateCartocss(
           table: [POLYGONS_TABLE, POINTS_TABLE]
           attrName: 'wdpaid'
-          attrVal: config.wdpaId
+          attrVal: config.wdpaId,
+          polygonCompOp: 'src-over'
         )
 
       {
