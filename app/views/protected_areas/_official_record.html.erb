@@ -8,7 +8,11 @@
 <div class="data-provider">
   <h5>Data Provider</h5>
   <ul>
-    <%= render @protected_area.sources %>
+    <% if @protected_area.sources.any? %>
+      <%= render @protected_area.sources %>
+    <% else %>
+      <li>Not Reported</li>
+    <% end %>
   </ul>
 </div>
 
