@@ -132,6 +132,29 @@
   }
 }
 
+.data-completion-info {
+  //display: none;
+  background-color: $light-grey;
+
+  ul {
+    margin: 8px 0px;
+    column-count: 2;
+
+    li {
+      display: block;
+
+      &.complete {
+        color: $green;
+      }
+
+      &.not-complete {
+        color: $light-grey;
+      }
+    }
+  }
+}
+
+
 #map.protected-area-map {
   left: 400px;
 }

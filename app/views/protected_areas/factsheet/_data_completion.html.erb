@@ -1,0 +1,17 @@
+<li>
+  <span><%= @presenter.percentage_complete %>%</span>
+  Data Complete
+</li>
+<li class="data-completion-info">
+  <% @presenter.data_info.each do |section, attributes| %>
+    <div>
+      <h3><%= section %></h3>
+      <ul>
+        <% attributes.each do |attribute| %>
+          <li class="<%= attribute[:complete] ? 'complete' : 'not-complete' %>"><%= attribute[:label] %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</li>
+
