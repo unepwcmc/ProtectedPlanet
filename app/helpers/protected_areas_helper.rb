@@ -11,4 +11,14 @@ module ProtectedAreasHelper
   def related_links? protected_area
     !!protected_area.wikipedia_article
   end
+
+  def completion_attribute label, complete
+    if complete
+      content_tag(:li, class: 'complete') do
+        content_tag(:i, "   #{label}", class: 'fa fa-check')
+      end
+    else
+      content_tag(:li, label, class: 'non-complete')
+    end
+  end
 end

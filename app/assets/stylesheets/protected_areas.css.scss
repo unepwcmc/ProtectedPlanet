@@ -110,48 +110,53 @@
 .protected-area-infographic {
   background: $dark-green;
   text-align: left;
-  padding: 0 0 0 20px;
   width: 100%;
 
-  li {
-    display:inline;
+  > li {
+    padding-left: 20px;
+    display:block;
     color: $color--pa-infographic-text;
     font-size: 12px;
+    border-bottom: solid 3px $very-dark-green;
   }
 
-  li span {
+  > li:last-child {
+    border-bottom: none;
+  }
+}
+
+.percentage-container {
+  span {
     font-size: 40px;
     font-family: MuseoSans-500;
     line-height: 60px;
   }
-
-  li:last-child {
-    margin-right: none;
-    padding: 0;
-    margin:0;
-  }
 }
 
 .data-completion-info {
-  //display: none;
-  background-color: $light-grey;
+  padding: 20px;
 
   ul {
     margin: 8px 0px;
     column-count: 2;
 
     li {
+      padding: 2px;
       display: block;
-
-      &.complete {
-        color: $green;
-      }
-
-      &.not-complete {
-        color: $light-grey;
-      }
     }
   }
+}
+
+.open-details-container {
+  padding: 5px 20px;
+  text-align: center;
+}
+
+.open-details-anchor {
+  color: $light-grey;
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
 }
 
 

@@ -8,13 +8,22 @@ define('factsheet_handler', [], ->
       @addEventListeners()
 
     addEventListeners: ->
-      @$factsheetEl.find('.ellipsed').click( (ev) ->
+      @$factsheetEl.find('.key-records > .ellipsed').click( (ev) ->
         left = $(@).find('p')
         right = $(@).find('strong')
 
         left.toggleClass('hidden-record')
         right.toggleClass('full-record')
       )
+
+      @$factsheetEl.find('.open-details-anchor').click( (ev) ->
+        $('.data-completion-info').slideToggle()
+        $(this).find('i').toggleClass('fa-chevron-down')
+        $(this).find('i').toggleClass('fa-chevron-up')
+
+        ev.preventDefault()
+      )
+
 
     detectEllipsed: ->
       @$factsheetEl.find('li > strong').each( ->
