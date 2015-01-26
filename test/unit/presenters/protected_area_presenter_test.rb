@@ -30,7 +30,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
         {label: 'Geometry', complete: false}
       ], 'Categorisation' => [
         {label: 'Country', complete: true},
-        {label: 'Sublocations', complete:false},
+        {label: 'Sublocations', complete: true},
         {label: 'IUCN Category', complete: true},
         {label: 'Governance', complete: true},
         {label: 'Management Authority', complete: false},
@@ -59,6 +59,27 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
 
     presenter = ProtectedAreaPresenter.new(pa)
 
-    assert_equal 33.33, presenter.percentage_complete.round(2)
+    assert_equal 45.83, presenter.percentage_complete
+  end
+
+  test '#percentage_complete handles false attributes as present, not nil' do
+    pa1 = FactoryGirl.create(:protected_area,
+      wdpa_id: 1234,
+      name: 'An Protected Area',
+      original_name: 'Not an protected area',
+      marine: false
+    )
+    pa2 = FactoryGirl.create(:protected_area,
+      wdpa_id: 5678,
+      name: 'Another Protected Area',
+      original_name: 'Not another protected area',
+      marine: true
+    )
+
+    presenter1 = ProtectedAreaPresenter.new(pa1)
+    presenter2 = ProtectedAreaPresenter.new(pa2)
+
+    assert_equal 50.0, presenter1.percentage_complete
+    assert_equal 50.0, presenter2.percentage_complete
   end
 end

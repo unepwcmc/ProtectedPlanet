@@ -41,14 +41,16 @@ class ProtectedAreaPresenter
 
       {
         label: standard_attr[:label],
-        complete: protected_area.try(standard_attr[:name]).present?
+        complete: !protected_area.try(standard_attr[:name]).nil?
       }
     end
   end
 
+  # Warning: do NOT use .present? there, as some of the possible values
+  # are false. .present? will return false even if the value is not nil
   def num_fields_with_data
     standard_attributes.values.count do |attribute|
-      protected_area.try(attribute[:name]).present?
+      !protected_area.try(attribute[:name]).nil?
     end
   end
 
