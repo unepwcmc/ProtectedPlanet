@@ -80,7 +80,9 @@ define('protected_area_overlay', [], () ->
         @_generateCartocss(
           table: [POLYGONS_TABLE, POINTS_TABLE]
           lineColor: '40541b'
-          polygonFill: '83ad35'
+          polygonFill: '229A00'
+          opacity: .1
+          lineWidth: .1
         ),
 
         @_generateCartocss(
@@ -89,6 +91,7 @@ define('protected_area_overlay', [], () ->
           polygonFill: '3E7BB6'
           attrName: 'marine'
           attrVal: '1'
+          opacity: .1
         )
       ]
 
@@ -97,6 +100,9 @@ define('protected_area_overlay', [], () ->
           table: [POLYGONS_TABLE, POINTS_TABLE]
           attrName: 'wdpaid'
           attrVal: config.wdpaId,
+          lineColor: 'FF6600',
+          lineWidth: 2,
+          opacity: 0,
           polygonCompOp: 'src-over'
         )
 
