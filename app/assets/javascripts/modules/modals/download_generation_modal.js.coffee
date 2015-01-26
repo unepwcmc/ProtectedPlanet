@@ -19,13 +19,15 @@ define('download_generation_modal', ['modal'], (Modal) ->
       @render(template || @constructor.downloadCompleteTemplate)
       @show()
 
-    showDownloadLink: (filename, token, template) ->
+    showDownloadLink: (filename, token, template, clickHandler) ->
+      download_url = @url(filename, token)
+      clickHandler ||= (-> )
+
       @showDownloadCompleteTemplate(template)
 
-      download_url = @url(filename, token)
       @find('.link-container').html("""
         <a target="_blank" class="btn btn-primary" href="#{download_url}">Download</a>
-      """)
+      """).click(clickHandler)
 
     url: (filename, type) ->
       "#{BASE_DOWNLOAD_PATH}/#{filename}?type=#{type}"

@@ -28,12 +28,21 @@ define('downloads_base', ['download_generation_modal'], (DownloadGenerationModal
         $.get("#{@constructor.POLLING_PATH}", {token: token, domain: @domain}, checkPolling)
       , @constructor.POLLING_INTERVAL)
 
+    trackDownload: (action, identifier) =>
+      if _gaq?
+        _gaq.push(['_trackEvent', "Downloads - #{@domain}", action, identifier])
+
     showGenerationModal: (download) =>
       @generationModal.initialiseForm(download.token)
       @generationModal.show()
 
     showDownloadModal: (download) =>
-      @generationModal.showDownloadLink(download.filename, @type, @completedDownloadTemplate)
+      @generationModal.showDownloadLink(
+        download.filename,
+        @type,
+        @completedDownloadTemplate,
+        @trackDownloadClick
+      )
 
     completed: (download) ->
       download.status == 'ready'
