@@ -18,8 +18,7 @@ define('factsheet_handler', [], ->
 
       @$factsheetEl.find('.open-details-anchor').click( (ev) ->
         $('.data-completion-info').slideToggle()
-        $(this).find('i').toggleClass('fa-chevron-down')
-        $(this).find('i').toggleClass('fa-chevron-up')
+        $(this).find('i').toggleClass('fa-chevron-down fa-chevron-up')
 
         ev.preventDefault()
       )
