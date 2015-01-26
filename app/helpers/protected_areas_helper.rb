@@ -15,7 +15,8 @@ module ProtectedAreasHelper
   def completion_attribute label, complete
     if complete
       content_tag(:li, class: 'complete') do
-        content_tag(:i, "   #{label}", class: 'fa fa-check')
+        icon = content_tag(:i, '', class: 'fa fa-check')
+        raw "#{icon} #{label}"
       end
     else
       content_tag(:li, label, class: 'non-complete')
