@@ -29,8 +29,8 @@ define('downloads_base', ['download_generation_modal'], (DownloadGenerationModal
       , @constructor.POLLING_INTERVAL)
 
     trackDownload: (action, identifier) =>
-      if _gaq?
-        _gaq.push(['_trackEvent', "Downloads - #{@domain}", action, identifier])
+      if ga?
+        ga('send', 'event', "Downloads - #{@domain}", action, identifier)
 
     showGenerationModal: (download) =>
       @generationModal.initialiseForm(download.token)
