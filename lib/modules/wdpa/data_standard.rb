@@ -83,17 +83,6 @@ class Wdpa::DataStandard
 
   private
 
-  def self.fields_with_data protected_area, selected_fields=nil
-    attributes = if selected_fields
-      STANDARD_ATTRIBUTES.slice(*selected_fields)
-    else
-      STANDARD_ATTRIBUTES
-    end
-
-    attributes.values.select do |attribute|
-      protected_area.try(attribute[:name]).present?
-    end
-  end
 
   def self.standardise_values hash
     standardised_attributes = {}
