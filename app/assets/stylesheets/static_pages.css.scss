@@ -32,7 +32,7 @@
   }
 
 
-  a {
+  .navy-link {
     width: 33.33%;
     line-height: 28px;
     color: $white;
@@ -50,6 +50,16 @@
   }
 
   article {
+    a {
+      color: $blue;
+    }
+
+    pre {
+      padding-left: 10px;
+      font-size: 14px;
+      line-height: 32px;
+    }
+
     p {
       font-size: 18px;
       line-height: 28px;
@@ -59,7 +69,7 @@
       margin-bottom: 40px;
     }
 
-    p, h2 {
+    p, h2, pre {
       margin: auto;
       margin-top: 40px;
       width: 70%;
