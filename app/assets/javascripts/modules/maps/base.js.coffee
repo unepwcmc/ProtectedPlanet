@@ -31,7 +31,7 @@ define(
 
       createMap: (id) ->
         L.mapbox.map(
-          id, 'unepwcmc.ijh17499', CONFIG
+          id, 'unepwcmc.l8gj1ihl', CONFIG
         ).addControl(L.control.zoom(position: 'topright'))
 
     return Map
