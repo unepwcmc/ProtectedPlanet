@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   width="10"
+   height="10"
+   id="svg5212">
+  <defs
+     id="defs5214" />
+  <metadata
+     id="metadata5217">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-725.2857,-568.50505)"
+     id="layer1">
+    <g
+       transform="translate(773.28572,-681.85716)"
+       id="x-18"
+       style="display:inline">
+      <g
+         transform="matrix(0.55555497,0,0,0.55555497,-21.33337,560.1617)"
+         id="g21943"
+         style="fill:#808080">
+        <path
+           d="m -44.5,1245.3622 c -0.5,0 -0.5,4e-4 -0.5,0.5 0,0.2489 0.0814,0.4876 0.28125,0.6875 l 4.8125,4.8125 -4.8125,4.8125 c -0.19993,0.1999 -0.28125,0.4386 -0.28125,0.6875 0,0.4996 0,0.5 0.5,0.5 0.25,0 0.5,-0.062 0.71875,-0.2812 l 4.78125,-4.7813 4.78125,4.7813 c 0.21875,0.2192 0.46875,0.2812 0.71875,0.2812 0.5,0 0.5,-4e-4 0.5,-0.5 0,-0.2489 -0.0814,-0.4876 -0.28125,-0.6875 l -4.8125,-4.8125 4.8125,-4.8125 c 0.199917,-0.1999 0.28125,-0.4386 0.28125,-0.6875 0,-0.4996 0,-0.5 -0.5,-0.5 -0.25,0 -0.5,0.062 -0.71875,0.2813 l -4.78125,4.7812 -4.78125,-4.7812 C -44,1245.4242 -44.25,1245.3622 -44.5,1245.3622 z"
+           inkscape:connector-curvature="0"
+           id="path15001-8"
+           style="font-size:medium;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:normal;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;baseline-shift:baseline;color:#000000;fill:#b3b3b3;fill-opacity:1;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Sans;-inkscape-font-specification:Sans" />
+      </g>
+      <rect
+         width="9.999999"
+         height="10.000007"
+         x="-48.000019"
+         y="1250.3622"
+         id="rect22071"
+         style="opacity:0.5;color:#000000;fill:none;stroke:none;stroke-width:2;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+    </g>
+  </g>
+</svg>
