@@ -45,27 +45,25 @@
   </div>
 
   <footer>
-    <div class="footer-inner">
-      <div class="footer-logos">
-        <a href="http://unep-wcmc.org" title="UNEP-WCMC Website">
-          <%= image_tag 'wcmc-footer-logo@2x.png', style: 'width: 73px; height: 39px' %>
-        </a>
-
-        <a href="http://iucn.org" title="IUCN Website">
-          <%= image_tag 'iucn-footer-logo@2x.png', style: 'width: 35px; height: 35px' %>
-        </a>
-      </div>
-
-      <div class="footer-copyright">
+    <ul class="footer-logos">
+      <li class="wcmc-footer-logo">
+        <a href="http://unep-wcmc.org" title="UNEP-WCMC Website"></a>
+      </li>
+      <li class="iucn-footer-logo">
+        <a href="http://iucn.org" title="IUCN Website"></a>
+      </li>
+      <li class="footer-copyright">
         <p>&copy; ProtectedPlanet 2014. All rights reserved</p>
-      </div>
+      </li>
+    </ul>
 
-      <div class="footer-links">
-        <%= link_to "About", about_path %>
-        <%= link_to "WDPA Terms of Use", wdpa_terms_path %>
-        <%= link_to "Site Terms of Use", wcmc_terms_path %>
-      </div>
-    </div>
+
+    <ul class="footer-links">
+      <li><%= link_to "About", about_path %></li>
+      <li><%= link_to "WDPA Terms of Use", wdpa_terms_path %></li>
+      <li><%= link_to "Site Terms of Use", wcmc_terms_path %></li>
+      <li class="uservoice"><a href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>Send Feedback</a></li>
+    </ul>
   </footer>
 
   <% if Rails.env == 'production' %>
