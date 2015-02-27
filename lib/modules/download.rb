@@ -11,7 +11,7 @@ module Download
     Download::Utils.link_to filename, type
   end
 
-  def self.set_email
+  def self.set_email params
     Download::Router.set_email(params.delete('domain'), params)
   end
 

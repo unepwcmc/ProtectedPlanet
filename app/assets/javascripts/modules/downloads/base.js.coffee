@@ -29,7 +29,7 @@ define('downloads_base', ['download_generation_modal'], (DownloadGenerationModal
       , @constructor.POLLING_INTERVAL)
 
     showGenerationModal: (download) =>
-      @generationModal.initialiseForm(download.token)
+      @generationModal.initialiseForm(@domain, download.token)
       @generationModal.show()
 
     showDownloadModal: (download) =>

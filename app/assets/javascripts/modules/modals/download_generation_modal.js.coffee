@@ -8,12 +8,13 @@ define('download_generation_modal', ['modal'], (Modal) ->
     constructor: ($container) ->
       super($container)
 
-    initialiseForm: (token) ->
+    initialiseForm: (domain, token) ->
       $form = @$container.find('form')
       return if $form.length is 0
 
       $form.attr('action', "/downloads/#{token}")
       $form.on("ajax:success", => @hide())
+      $form.find('#domain').val(domain)
 
     showDownloadCompleteTemplate: (template) ->
       @render(template || @constructor.downloadCompleteTemplate)
