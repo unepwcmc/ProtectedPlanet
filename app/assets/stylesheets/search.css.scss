@@ -45,7 +45,7 @@ $width--search-sidebar: 270px;
 }
 
 .map-filters.search-map-filters {
-  overflow: scroll;
+  overflow: hidden;
   width: $width--search-sidebar;
   background: $color--search-filters-bg;
 
@@ -92,12 +92,18 @@ $width--search-sidebar: 270px;
     }
   }
 
+  > ul {
+    margin-top: 40px;
+    padding-bottom: 40px;
+    overflow-y: auto;
+    height: 100%;
+  }
+
   > ul > li {
     border-bottom: solid 1px $color--search-filters-border;
     padding: 0px 20px 20px 20px;
 
     &:first-child {
-      margin-top: 40px;
       padding: 10px 0 10px 20px;
       border-bottom: none;
 
