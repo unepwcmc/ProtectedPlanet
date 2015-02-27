@@ -30,8 +30,7 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/admin/sidekiq'
 
-  get '/terms', to: 'static_pages#terms', as: 'wcmc_terms'
-  get '/wdpa-terms', to: 'static_pages#wdpa_terms', as: 'wdpa_terms'
+  get '/terms', to: 'static_pages#terms', as: 'terms'
   get '/about', to: 'static_pages#about', as: 'about'
 
   get '/country/:iso', to: 'country#show', as: 'country'
