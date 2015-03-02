@@ -29,7 +29,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
 
-    toc_path = "#{Rails.root}/lib/data/documents/WDPA_Terms_and_Conditions_of_Use.pdf"
+    toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
     data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
     attachments_path = "#{toc_path} #{data_standard_path}"
 
@@ -119,7 +119,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
 
-    toc_path = "#{Rails.root}/lib/data/documents/WDPA_Terms_and_Conditions_of_Use.pdf"
+    toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
     data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
     attachments_path = "#{toc_path} #{data_standard_path}"
 
