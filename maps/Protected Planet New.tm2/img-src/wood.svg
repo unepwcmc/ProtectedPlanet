@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="31.999998"
+   height="31.999998"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/wood.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   sodipodi:docname="wood.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.313708"
+     inkscape:cx="121.00984"
+     inkscape:cy="38.893249"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1280"
+     inkscape:window-height="774"
+     inkscape:window-x="0"
+     inkscape:window-y="26"
+     inkscape:window-maximized="1"
+     showborder="true"
+     inkscape:showpageshadow="false"
+     borderlayer="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-nodes="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2985"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       originx="-145px"
+       originy="-638px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="bg"
+     sodipodi:insensitive="true">
+    <rect
+       style="color:#000000;fill:#a7cb61;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect4090"
+       width="32"
+       height="32"
+       x="0"
+       y="-1.9073486e-06" />
+  </g>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-145,-382.36218)">
+    <rect
+       y="374.36218"
+       x="260"
+       height="3.9999955"
+       width="3"
+       id="rect3915"
+       style="color:#000000;fill:#e1ebb0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/grass.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       id="g3966"
+       clip-path="none">
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3886"
+         width="7.9999995"
+         height="7.9999995"
+         x="143.5"
+         y="380.86218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3888"
+         width="7.9999995"
+         height="7.9999995"
+         x="161.5"
+         y="380.86218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="380.86218"
+         x="147.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3890"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3892"
+         width="6.0000005"
+         height="6.0000005"
+         x="156.5"
+         y="380.86218"
+         rx="3.0000005" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="380.86218"
+         x="169.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3894"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="384.86218"
+         x="149.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3896"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="384.86218"
+         x="167.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3898"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3900"
+         width="6.9999957"
+         height="6.9999957"
+         x="156"
+         y="385.36218"
+         rx="3.4999981" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="385.86218"
+         x="162.5"
+         height="6.9999957"
+         width="6.9999957"
+         id="rect3902"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="3.4999979" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:0.99999994000000003px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3904"
+         width="7.0000043"
+         height="7.0000043"
+         x="143.5"
+         y="385.86218"
+         rx="3.5000021" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3906"
+         width="7.9999995"
+         height="7.9999995"
+         x="153.5"
+         y="388.86218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3908"
+         width="7.9999995"
+         height="7.9999995"
+         x="171.5"
+         y="388.86218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="388.86218"
+         x="157.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3910"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3912"
+         width="6.9999995"
+         height="6.9999995"
+         x="167.5"
+         y="388.86218"
+         rx="3.5" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="388.86218"
+         x="145.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3914"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="393.86218"
+         x="157.5"
+         height="6.9999952"
+         width="6.9999952"
+         id="rect3916"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1.00000011999999994px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="3.4999976" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="392.86218"
+         x="143.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3918"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3920"
+         width="6.9999995"
+         height="6.9999995"
+         x="162.5"
+         y="392.86218"
+         rx="3.5" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="392.86218"
+         x="169.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3922"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3924"
+         width="7.0000043"
+         height="7.0000043"
+         x="151.5"
+         y="393.86218"
+         rx="3.5000026" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3926"
+         width="7.9999995"
+         height="7.9999995"
+         x="161.5"
+         y="396.86218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3928"
+         width="7.9999995"
+         height="7.9999995"
+         x="147.5"
+         y="394.86218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="396.86218"
+         x="166.5"
+         height="6.9999995"
+         width="6.9999995"
+         id="rect3930"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="3.5" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3932"
+         width="7.9999995"
+         height="7.9999995"
+         x="141.5"
+         y="396.86218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="398.86218"
+         x="157.5"
+         height="6"
+         width="6"
+         id="rect3934"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="3.0000002" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="400.86218"
+         x="165.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3936"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="400.86218"
+         x="154"
+         height="6.4999952"
+         width="6.4999952"
+         id="rect3938"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="3.2499979" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:0.99999994000000003px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3940"
+         width="7.0000043"
+         height="7.0000043"
+         x="170.5"
+         y="401.86218"
+         rx="3.5000021" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="400.86218"
+         x="145.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3942"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3944"
+         width="7.9999995"
+         height="7.9999995"
+         x="160.5"
+         y="400.36218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3946"
+         width="7.9999995"
+         height="7.9999995"
+         x="169.5"
+         y="404.86218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3948"
+         width="6.0000086"
+         height="6.0000086"
+         x="156.5"
+         y="405.86218"
+         rx="3.0000045" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="404.86218"
+         x="141.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3950"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3952"
+         width="7.9999995"
+         height="7.9999995"
+         x="149.5"
+         y="404.86218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="406.86218"
+         x="163.5"
+         height="6.9999957"
+         width="6.9999957"
+         id="rect3954"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:0.99999994000000003px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="3.4999981" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="408.86218"
+         x="141.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3956"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="408.86218"
+         x="159.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3958"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3960"
+         width="7.9999995"
+         height="7.9999995"
+         x="145.5"
+         y="408.86218"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         y="408.86218"
+         x="153.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect3962"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         rx="4" />
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect3964"
+         width="7.9999995"
+         height="7.9999995"
+         x="169"
+         y="408.36218"
+         rx="4" />
+      <rect
+         rx="4"
+         y="400.36218"
+         x="149.5"
+         height="7.9999995"
+         width="7.9999995"
+         id="rect4071"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <rect
+         rx="1.5000066"
+         style="opacity:0.75000000000000000;color:#000000;fill:#bfd494;fill-opacity:1;stroke:#b2cc7c;stroke-width:1px;stroke-opacity:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect4084"
+         width="3.0000131"
+         height="3.0000131"
+         x="151.5"
+         y="406.86218"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/sand.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3966"
+       id="use4054"
+       transform="translate(-32,-32.000005)"
+       width="31.999998"
+       height="31.999998" />
+    <use
+       height="31.999998"
+       width="31.999998"
+       transform="translate(0,-32.000005)"
+       id="use4056"
+       xlink:href="#g3966"
+       y="0"
+       x="0" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3966"
+       id="use4058"
+       transform="translate(32,-32.000005)"
+       width="31.999998"
+       height="31.999998" />
+    <use
+       height="31.999998"
+       width="31.999998"
+       transform="translate(-32,31.999995)"
+       id="use4060"
+       xlink:href="#g3966"
+       y="0"
+       x="0" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3966"
+       id="use4062"
+       transform="translate(0,31.999995)"
+       width="31.999998"
+       height="31.999998" />
+    <use
+       height="31.999998"
+       width="31.999998"
+       transform="translate(32,31.999995)"
+       id="use4064"
+       xlink:href="#g3966"
+       y="0"
+       x="0" />
+    <use
+       height="31.999998"
+       width="31.999998"
+       transform="translate(32,-4.5245361e-6)"
+       id="use4066"
+       xlink:href="#g3966"
+       y="0"
+       x="0" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g3966"
+       id="use4068"
+       transform="translate(-32,-4.5245361e-6)"
+       width="31.999998"
+       height="31.999998" />
+    <rect
+       style="color:#000000;fill:#d1e29a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3911"
+       width="2"
+       height="0.99999547"
+       x="260"
+       y="374.36218"
+       inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/grass.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <rect
+       y="376.36218"
+       x="261"
+       height="0.99999547"
+       width="2"
+       id="rect3913"
+       style="color:#000000;fill:#d1e29a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/grass.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+  </g>
+</svg>

@@ -1,13 +1,26 @@
 @import 'colors';
 
+$footer-height: 75px;
+
 footer {
-  font-family: MuseoSans-100;
-  width: 100%;
-  background: $color--footer-bg;
-  font-size: 0.938em;
   position: fixed;
 
+  width: 100%;
+  line-height: $footer-height;
+
+  padding: 0, 20px;
+  margin: 0px auto;
+
+  font-family: MuseoSans-100;
+  background: $color--footer-bg;
+  font-size: 0.938em;
+
+  p { color: $color--footer; }
+
   a {
+    line-height: $footer-height;
+    display: block;
+
     &, &:visited {
       color: $color--footer-link;
     }
@@ -16,31 +29,54 @@ footer {
       text-decoration: underline;
     }
 
-    text-decoration: none;
     margin-right: 20px;
     &:last-child { margin-right: 0px; }
   }
 
-  .footer-inner {
-    display: block;
-    line-height: 41px;
-    padding: 20px 0;
-    margin: 0px auto;
-    width: 95%;
-
-    p { color: $color--footer; }
-  }
 }
 
 .footer-logos {
-  margin-right: 20px;
-  img { margin-right: 0px; }
+  margin: 0 20px;
+}
+
+.footer-copyright, .footer-logos, .footer-links {
+  li {
+    padding: 0 10px;
+    float: left;
+  }
 }
 
 .footer-copyright, .footer-logos { float: left; }
 .footer-links { float: right; }
 
 footer, .container:after {
-  height: 75px;
+  height: $footer-height;
 }
 
+/* FOOTER LOGOS */
+
+.wcmc-footer-logo {
+  width: 90px;
+  height: $footer-height;
+  background: image-url('wcmc-footer-logo@2x.png') no-repeat;
+  background-size: auto 50%;
+  background-position: 10px;
+}
+
+.iucn-footer-logo {
+  width: 60px;
+  height: $footer-height;
+  background: image-url('iucn-footer-logo@2x.png') no-repeat;
+  background-size: auto 50%;
+  background-position: 10px;
+}
+
+.uservoice {
+  background-color: $dark-green;
+  margin-left: 10px;
+
+  &:hover {
+    background-color: $green;
+    a { text-decoration: none; }
+  }
+}

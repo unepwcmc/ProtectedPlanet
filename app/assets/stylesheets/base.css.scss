@@ -28,7 +28,8 @@ html, body {
 a { text-decoration: none; }
 
 main {
-  overflow: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
   position: fixed;
   bottom: 75px;
   left: 0px;

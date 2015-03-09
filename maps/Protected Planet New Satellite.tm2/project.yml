@@ -1,0 +1,55 @@
+_prefs: 
+  baselayer: null
+  mapid: unepwcmc.0d68a206
+  saveCenter: false
+_properties: {}
+attribution: "<a href='https://www.mapbox.com/about/maps/' target='_blank'>&copy; Mapbox &copy; OpenStreetMap</a> <a class='mapbox-improve-map' href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a>"
+bounds: 
+  - -180
+  - -85.0511
+  - 180
+  - 85.0511
+center: 
+  - -48.5156
+  - 32.3985
+  - 3
+description: Protected Planet New base layer, with satellite imagery, made with Mapbox Studio
+format: jpeg95
+interactivity_layer: ''
+layers: 
+  - mapbox_satellite_open
+  - mapbox_satellite_plus
+  - mapbox_satellite_full
+  - mapbox_satellite_watermask
+  - landuse
+  - waterway
+  - water
+  - aeroway
+  - barrier_line
+  - building
+  - landuse_overlay
+  - tunnel
+  - road
+  - bridge
+  - admin
+  - country_label_line
+  - country_label
+  - marine_label
+  - state_label
+  - place_label
+  - water_label
+  - poi_label
+  - road_label
+  - waterway_label
+  - housenum_label
+maxzoom: 22
+minzoom: 0
+name: Protected Planet New Satellite
+source: "mapbox:///mapbox.satellite,mapbox.mapbox-streets-v5"
+styles: 
+  - style.mss
+  - label.mss
+  - road.mss
+  - poi.mss
+  - admin.mss
+template: ''

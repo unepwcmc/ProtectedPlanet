@@ -33,6 +33,7 @@ define('interactive', [], () ->
 
     handleMapDrag: =>
       $('.explore').fadeOut()
+      $('.download-type-dropdown').fadeOut()
 
     linkTo: (pa) ->
       "<a href=\"/#{pa.wdpa_id}\">#{pa.name}</a>"

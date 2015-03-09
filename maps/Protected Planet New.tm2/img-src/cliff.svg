@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="40"
+   height="20"
+   id="svg3053"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="cliff.svg">
+  <defs
+     id="defs3055" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="11.313708"
+     inkscape:cx="2.8716874"
+     inkscape:cy="5.6970205"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1054"
+     inkscape:window-x="0"
+     inkscape:window-y="26"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3061"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true"
+       originx="-235px"
+       originy="-480px" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata3058">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-235,-552.36218)">
+    <g
+       id="cliff-md"
+       inkscape:label="#g3001"
+       inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff-md.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       transform="translate(9.9999828,8.0000042)"
+       style="fill:#a08a78;fill-opacity:1">
+      <rect
+         style="opacity:0.5;color:#000000;fill:#a08a78;fill-opacity:0;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect4443"
+         width="8.0000172"
+         height="7.0000257"
+         x="243"
+         y="-557.36218"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"
+         transform="scale(1,-1)" />
+      <g
+         id="g4454">
+        <rect
+           style="opacity:0.5;color:#000000;fill:#9a8a7e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           id="rect3833"
+           width="8.0000172"
+           height="1"
+           x="243"
+           y="-554.36218"
+           inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90"
+           transform="scale(1,-1)" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="rect3870"
+           d="m 243,554.36218 2,0 -1.5,3 -0.5,0 z"
+           style="opacity:0.5;color:#000000;fill:#9a8a7e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="rect3907"
+           d="m 247,554.36218 2,0 -1.5,1.5 -0.5,0 z"
+           style="opacity:0.5;color:#000000;fill:#9a8a7e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      </g>
+    </g>
+    <g
+       id="cliff-lg"
+       transform="matrix(1.3809524,0,0,1.3809524,-110.57142,-206.80463)"
+       inkscape:label="#g3005"
+       inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff-lg.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       style="fill:#a08a78;fill-opacity:1">
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff.png"
+         y="551.91388"
+         x="253.86206"
+         height="9.4137487"
+         width="7.2413735"
+         id="rect4441"
+         style="opacity:0.5;color:#000000;fill:#a08a78;fill-opacity:0;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      <g
+         id="g4449">
+        <rect
+           transform="scale(1,-1)"
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff.png"
+           y="-557.34491"
+           x="253.86206"
+           height="1.0862052"
+           width="7.2413735"
+           id="rect3009"
+           style="opacity:0.5;color:#000000;fill:#9a8a7e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="rect3860"
+           d="m 253.86206,557.34492 1.44827,0 -1.08621,3.98276 -0.36206,0 z"
+           style="opacity:0.5;color:#000000;fill:#9a8a7e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.38095236px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="rect3868"
+           d="m 257.48274,557.34492 1.44828,0 -1.08621,1.81035 -0.36207,0 z"
+           style="opacity:0.5;color:#000000;fill:#9a8a7e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.38095236px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+      </g>
+    </g>
+    <g
+       id="g3925"
+       inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff-sm.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       style="fill:#a08a78;fill-opacity:1"
+       transform="translate(0,4)">
+      <g
+         style="fill:#a08a78;fill-opacity:0"
+         id="g4445"
+         transform="matrix(0.85714618,0,0,4.9995957,34.284801,-2211.2247)"
+         inkscape:label="#g2997"
+         inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff-sm.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
+        <rect
+           style="opacity:0.5;color:#000000;fill:#a08a78;fill-opacity:0;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           id="rect4447"
+           width="7"
+           height="1.0000446"
+           x="268"
+           y="-554.36218"
+           inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90"
+           transform="scale(1,-1)" />
+      </g>
+      <g
+         id="g4459">
+        <g
+           style="fill:#9a8a7e;fill-opacity:1"
+           id="cliff-sm"
+           transform="matrix(0.85714618,0,0,1,34.284801,4.000004)"
+           inkscape:label="#g2997"
+           inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff-sm.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90">
+          <rect
+             style="opacity:0.5;color:#000000;fill:#9a8a7e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             id="rect2995"
+             width="7"
+             height="1.0000446"
+             x="268"
+             y="-554.36218"
+             inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90"
+             transform="scale(1,-1)" />
+        </g>
+        <g
+           style="fill:#9a8a7e;fill-opacity:1"
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff-sm.png"
+           inkscape:label="#g2997"
+           transform="matrix(0.14285714,0,0,2.9998779,225.71427,-1101.6567)"
+           id="g3911">
+          <path
+             transform="scale(1,-1)"
+             style="opacity:0.5;color:#000000;fill:#9a8a7e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             d="m 268,-554.02883 3.5,0 7,0.66669 -10.5,0 z"
+             id="rect3913"
+             inkscape:connector-curvature="0"
+             sodipodi:nodetypes="ccccc" />
+        </g>
+        <g
+           style="fill:#9a8a7e;fill-opacity:1"
+           id="g3915"
+           transform="matrix(0.14285714,0,0,1.9999587,228.71427,-548.33929)"
+           inkscape:label="#g2997"
+           inkscape:export-filename="/home/aj/src/mapbox-fancy/img/pattern/cliff-sm.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90">
+          <path
+             transform="scale(1,-1)"
+             style="opacity:0.5;color:#000000;fill:#9a8a7e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+             d="m 268,-553.86217 3.5,0 7,0.50003 -10.5,0 z"
+             id="rect3917"
+             inkscape:connector-curvature="0"
+             sodipodi:nodetypes="ccccc" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
