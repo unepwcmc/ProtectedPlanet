@@ -24,17 +24,6 @@ class Download::Generators::Base
     end
   end
 
-  def with_view query
-    query_shasum = Digest::SHA1.hexdigest query
-    view_name = "tmp_downloads_#{query_shasum}"
-
-    db.execute "CREATE VIEW #{view_name} AS #{query}"
-    export_outcome = yield view_name
-    db.execute "DROP VIEW #{view_name}"
-
-    export_outcome
-  end
-
   ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')
   ATTACHMENTS = [
     File.join(ATTACHMENTS_PATH, 'Terms_of_Use.pdf'),
@@ -46,6 +35,21 @@ class Download::Generators::Base
   end
 
   private
+
+  def with_view query
+    query_shasum = Digest::SHA1.hexdigest query
+    view_name = "tmp_downloads_#{query_shasum}"
+
+    ensure_new_view(view_name, query) { yield view_name }
+  end
+
+  def ensure_new_view view_name, query
+    db.execute "DROP VIEW IF EXISTS #{view_name}"
+    db.execute "CREATE VIEW #{view_name} AS #{query}"
+    yield
+  ensure
+    db.execute "DROP VIEW #{view_name}"
+  end
 
   def db
     ActiveRecord::Base.connection

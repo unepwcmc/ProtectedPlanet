@@ -63,13 +63,15 @@ class DownloadKmlTest < ActiveSupport::TestCase
       .with(:kml, './pa-kml.kml', "SELECT * FROM #{view_name}")
       .returns(true)
 
+    optional_drop_query = "DROP VIEW IF EXISTS #{view_name}"
+    drop_query = "DROP VIEW #{view_name}"
     create_query = """
       CREATE VIEW #{view_name} AS
       SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME} WHERE wdpaid IN (#{pa.wdpa_id})
     """.squish
-    ActiveRecord::Base.connection.expects(:execute).with(create_query)
 
-    drop_query = "DROP VIEW #{view_name}"
+    ActiveRecord::Base.connection.expects(:execute).with(optional_drop_query)
+    ActiveRecord::Base.connection.expects(:execute).with(create_query)
     ActiveRecord::Base.connection.expects(:execute).with(drop_query)
 
     Download::Generators::Kml.generate('./pa-kml.zip', [pa.wdpa_id])
