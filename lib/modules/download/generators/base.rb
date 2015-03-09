@@ -37,7 +37,7 @@ class Download::Generators::Base
 
   ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')
   ATTACHMENTS = [
-    File.join(ATTACHMENTS_PATH, 'WDPA_Terms_and_Conditions_of_Use.pdf'),
+    File.join(ATTACHMENTS_PATH, 'Terms_of_Use.pdf'),
     File.join(ATTACHMENTS_PATH, 'WDPA_Data_Standards.pdf')
   ]
 

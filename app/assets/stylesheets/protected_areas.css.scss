@@ -3,7 +3,8 @@
 
 .factsheet {
   overflow-y: auto;
-  width: 400px;
+  width: 415px;
+  height: 100%;
   float:left;
 }
 
@@ -111,27 +112,56 @@
 .protected-area-infographic {
   background: $dark-green;
   text-align: left;
-  padding: 0 0 0 20px;
   width: 100%;
 
-  li {
-    display:inline;
+  > li {
+    padding-left: 20px;
+    display:block;
     color: $color--pa-infographic-text;
     font-size: 12px;
+    border-bottom: solid 1px $color--pa-infographic-border;
   }
 
-  li span {
+  > li:last-child {
+    border-bottom: none;
+  }
+}
+
+.percentage-container {
+  span {
     font-size: 40px;
     font-family: MuseoSans-500;
     line-height: 60px;
   }
+}
 
-  li:last-child {
-    margin-right: none;
-    padding: 0;
-    margin:0;
+.data-completion-info {
+  padding: 20px;
+
+  ul {
+    margin: 8px 0px;
+    column-count: 2;
+
+    li {
+      padding: 2px;
+      display: block;
+    }
   }
 }
+
+.open-details-container {
+  padding: 5px 20px;
+  text-align: center;
+}
+
+.open-details-anchor {
+  font-size: 18px;
+  color: $light-grey;
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
 
 #map.protected-area-map {
   left: 400px;

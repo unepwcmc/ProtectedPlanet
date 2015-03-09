@@ -20,55 +20,7 @@
   </nav>
 <% end %>
 
-<section class="factsheet">
-  <article>
-
-    <%= render 'official_record', protected_area: @protected_area %>
-  </article>
-
-  <ul class="protected-area-infographic">
-    <li>
-      <span><%= Wdpa::DataStandard.percentage_complete(@protected_area).round(2) %>%</span>
-      Data Complete
-    </li>
-  </ul>
-
-  <% if @protected_area.has_irreplaceability_info %>
-    <article class="irreplaceability">
-      <h3><a target="_blank" href='<%= url_for_irreplaceability @protected_area %>'>Analysis of Irreplaceability</a></h3>
-      <span>This Protected Area has been assessed and ranked for irreplaceability</span>
-    </article>
-  <% end %>
-
-  <% if related_links?(@protected_area) %>
-    <article>
-      <h3>Related links</h3>
-      <ul>
-        <% if @protected_area.wikipedia_article %>
-          <li><a href='<%= @protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
-        <% end %>
-      </ul>
-    </article>
-  <% end %>
-
-  <article>
-    <% if @protected_area.nearest_protected_areas.count > 1 %>
-      <h3>Nearest Protected Areas</h3>
-
-      <ul class="nearest-protected-areas">
-        <% @protected_area.nearest_protected_areas[1..2].each do |protected_area| %>
-          <li>
-            <a href="/<%= protected_area.slug %>">
-              <%= protected_area_cover(protected_area) %>
-            </a>
-
-            <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
-          </li>
-        <% end %>
-      </ul>
-    <% end %>
-  </article>
-</section>
+<%= render partial: 'factsheet', locals: {protected_area: @protected_area} %>
 
 <div class="protected-area-map" id="map"
   data-bound-from="<%= map_bounds(@protected_area)['from'] %>"

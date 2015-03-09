@@ -1,13 +1,8 @@
 require 'test_helper'
 
 class StaticPagesTest < ActionDispatch::IntegrationTest
-  test '/terms renders the Terms and Conditions' do
+  test '/terms renders the Terms of Use' do
     get '/terms'
-    assert_response :success
-  end
-
-  test '/wdpa-terms renders the WDPA Terms and Conditions' do
-    get '/wdpa-terms'
     assert_response :success
   end
 end

@@ -8,24 +8,27 @@ define('download_generation_modal', ['modal'], (Modal) ->
     constructor: ($container) ->
       super($container)
 
-    initialiseForm: (token) ->
+    initialiseForm: (domain, token) ->
       $form = @$container.find('form')
       return if $form.length is 0
 
       $form.attr('action', "/downloads/#{token}")
       $form.on("ajax:success", => @hide())
+      $form.find('#domain').val(domain)
 
     showDownloadCompleteTemplate: (template) ->
       @render(template || @constructor.downloadCompleteTemplate)
       @show()
 
-    showDownloadLink: (filename, token, template) ->
+    showDownloadLink: (filename, token, template, clickHandler) ->
+      download_url = @url(filename, token)
+      clickHandler ||= (-> )
+
       @showDownloadCompleteTemplate(template)
 
-      download_url = @url(filename, token)
       @find('.link-container').html("""
         <a target="_blank" class="btn btn-primary" href="#{download_url}">Download</a>
-      """)
+      """).click(clickHandler)
 
     url: (filename, type) ->
       "#{BASE_DOWNLOAD_PATH}/#{filename}?type=#{type}"

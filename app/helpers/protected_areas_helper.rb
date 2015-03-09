@@ -18,4 +18,15 @@ module ProtectedAreasHelper
       protected_area.wdpa_id.to_s
     )
   end
+
+  def completion_attribute label, complete
+    if complete
+      content_tag(:li, class: 'complete') do
+        icon = content_tag(:i, '', class: 'fa fa-check')
+        raw "#{icon} #{label}"
+      end
+    else
+      content_tag(:li, label, class: 'non-complete')
+    end
+  end
 end

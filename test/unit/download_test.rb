@@ -95,4 +95,11 @@ class DownloadTest < ActiveSupport::TestCase
 
     Download.request params
   end
+
+  test '.set_email, given an hash of params, sets email using the router' do
+    params = {'domain' => 'general', 'id' => '123', 'email' => 'test@test.com'}
+    Download::Router.expects(:set_email).with('general', {'id' => '123', 'email' => 'test@test.com'})
+
+    Download.set_email params
+  end
 end

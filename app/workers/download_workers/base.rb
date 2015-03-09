@@ -23,7 +23,10 @@ class DownloadWorkers::Base
   end
 
   def while_generating key
-    $redis.set(key, {status: 'generating'}.to_json)
+    properties = Download::Utils.properties(key(@token))
+    generating_properties = properties.merge({'status' => 'generating'})
+
+    $redis.set(key, generating_properties.to_json)
     $redis.set(key, yield)
   end
 

@@ -10,7 +10,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:with_view).with(query).yields(view_name).returns(true)
 
-    toc_path = "#{Rails.root}/lib/data/documents/WDPA_Terms_and_Conditions_of_Use.pdf"
+    toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
     data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
     attachments_path = "#{toc_path} #{data_standard_path}"
 
@@ -86,7 +86,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:with_view).with(query).yields(view_name).returns(true)
 
-    toc_path = "#{Rails.root}/lib/data/documents/WDPA_Terms_and_Conditions_of_Use.pdf"
+    toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
     data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
     attachments_path = "#{toc_path} #{data_standard_path}"
 

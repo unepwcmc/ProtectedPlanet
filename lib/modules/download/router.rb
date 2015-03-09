@@ -22,10 +22,10 @@ module Download::Router
   end
 
   def self.set_email domain, params
-    key = Download::Utils.key(domain, params['token'])
+    key = Download::Utils.key(domain, params['id'])
 
     Download::Utils.properties(key).tap{ |properties|
-      properties['user_email'] = params['email']
+      properties['email'] = params['email']
       $redis.set(key, properties.to_json)
     }
   end
