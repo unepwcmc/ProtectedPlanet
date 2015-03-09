@@ -1,29 +1,29 @@
 class Wdpa::DataStandard
   STANDARD_ATTRIBUTES = {
-    :wdpaid       => {name: :wdpa_id, type: :integer},
-    :wdpa_pid     => {name: :wdpa_parent_id, type: :integer},
-    :name         => {name: :name, type: :string},
-    :orig_name    => {name: :original_name, type: :string},
-    :marine       => {name: :marine, type: :boolean},
-    :rep_m_area   => {name: :reported_marine_area, type: :float},
-    :rep_area     => {name: :reported_area, type: :float},
-    :gis_m_area   => {name: :gis_marine_area, type: :float},
-    :gis_area     => {name: :gis_area, type: :float},
-    :iso3         => {name: :countries, type: :csv},
-    :sub_loc      => {name: :sub_locations, type: :csv},
-    :status       => {name: :legal_status, type: :string},
-    :status_yr    => {name: :legal_status_updated_at, type: :year},
-    :iucn_cat     => {name: :iucn_category, type: :string},
-    :gov_type     => {name: :governance, type: :string},
-    :mang_auth    => {name: :management_authority, type: :string},
-    :mang_plan    => {name: :management_plan, type: :string},
-    :int_crit     => {name: :international_criteria, type: :string},
-    :no_take      => {name: :no_take_status, type: :string},
-    :no_tk_area   => {name: :no_take_area, type: :float},
-    :desig_eng    => {name: :designation, type: :string},
-    :desig_type   => {name: :jurisdiction, type: :string},
-    :wkb_geometry => {name: :the_geom, type: :geometry},
-    :metadataid   => {name: :sources, type: :integer}
+    :wdpaid       => {name: :wdpa_id, type: :integer, label: 'WDPA ID'},
+    :wdpa_pid     => {name: :wdpa_parent_id, type: :integer, label: 'WDPA Parent ID'},
+    :name         => {name: :name, type: :string, label: 'Name'},
+    :orig_name    => {name: :original_name, type: :string, label: 'Original Name'},
+    :marine       => {name: :marine, type: :boolean, label: 'Marine/Terrestrial'},
+    :rep_m_area   => {name: :reported_marine_area, type: :float, label: 'Reported Marine Area'},
+    :rep_area     => {name: :reported_area, type: :float, label: 'Reported Area'},
+    :gis_m_area   => {name: :gis_marine_area, type: :float, label: 'GIS Marine Area'},
+    :gis_area     => {name: :gis_area, type: :float, label: 'GIS Area'},
+    :iso3         => {name: :countries, type: :csv, label: 'Country'},
+    :sub_loc      => {name: :sub_locations, type: :csv, label: 'Sublocations'},
+    :status       => {name: :legal_status, type: :string, label: 'Legal Status'},
+    :status_yr    => {name: :legal_status_updated_at, type: :year, label: 'Status Year'},
+    :iucn_cat     => {name: :iucn_category, type: :string, label: 'IUCN Category'},
+    :gov_type     => {name: :governance, type: :string, label: 'Governance'},
+    :mang_auth    => {name: :management_authority, type: :string, label: 'Management Authority'},
+    :mang_plan    => {name: :management_plan, type: :string, label: 'Management Plan'},
+    :int_crit     => {name: :international_criteria, type: :string, label: 'International Criteria'},
+    :no_take      => {name: :no_take_status, type: :string, label: 'No-take Status'},
+    :no_tk_area   => {name: :no_take_area, type: :float, label: 'No-take Area'},
+    :desig_eng    => {name: :designation, type: :string, label: 'Designation'},
+    :desig_type   => {name: :jurisdiction, type: :string, label: 'Jurisdiction'},
+    :wkb_geometry => {name: :the_geom, type: :geometry, label: 'Geometry'},
+    :metadataid   => {name: :sources, type: :integer, label: 'Source'}
   }
 
   POLYGON_ATTRIBUTES = [
@@ -80,21 +80,9 @@ class Wdpa::DataStandard
     end
   end
 
-  def self.percentage_complete protected_area
-    (fields_with_data(protected_area).count.to_f / STANDARD_ATTRIBUTES.count) * 100
-  end
-
-  def self.data_gaps protected_area
-    STANDARD_ATTRIBUTES.count - fields_with_data(protected_area).count
-  end
 
   private
 
-  def self.fields_with_data protected_area
-    STANDARD_ATTRIBUTES.values.select do |attribute|
-      protected_area.try(attribute[:name]).present?
-    end
-  end
 
   def self.standardise_values hash
     standardised_attributes = {}

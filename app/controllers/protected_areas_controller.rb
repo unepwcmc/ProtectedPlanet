@@ -10,6 +10,7 @@ class ProtectedAreasController < ApplicationController
 
     return render_404 if @protected_area.blank?
 
+    @presenter = ProtectedAreaPresenter.new @protected_area
     @country = @protected_area.countries.without_geometry.first
     @region  = @country.try(:region)
 
