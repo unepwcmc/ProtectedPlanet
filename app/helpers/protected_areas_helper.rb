@@ -12,6 +12,13 @@ module ProtectedAreasHelper
     !!protected_area.wikipedia_article
   end
 
+  def url_for_irreplaceability protected_area
+    File.join(
+      Rails.application.secrets.irreplaceability_info_base_url,
+      protected_area.wdpa_id.to_s
+    )
+  end
+
   def completion_attribute label, complete
     if complete
       content_tag(:li, class: 'complete') do

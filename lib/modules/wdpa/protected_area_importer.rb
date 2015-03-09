@@ -3,5 +3,6 @@ class Wdpa::ProtectedAreaImporter
     Wdpa::ProtectedAreaImporter::AttributeImporter.import wdpa_release
     Wdpa::ProtectedAreaImporter::GeometryImporter.import wdpa_release
     Wdpa::ProtectedAreaImporter::AssetImporter.import
+    Wdpa::ProtectedAreaImporter::IrreplaceabilityImporter.import
   end
 end

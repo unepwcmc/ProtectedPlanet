@@ -16,6 +16,8 @@ set :whenever_roles, [:util]
 set :sidekiq_role, :util
 set :sidekiq_default_hooks, false
 
+set :migration_role, :util
+
 namespace :deploy do
 
   desc 'Restart application'
