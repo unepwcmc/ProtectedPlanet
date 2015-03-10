@@ -3,7 +3,7 @@
 
 .factsheet {
   overflow-y: auto;
-  width: 415px;
+  width: 420px;
   height: 100%;
   float:left;
 }
@@ -204,24 +204,25 @@
     margin: 10px 0;
   }
 
-  img {
-    width: 177px;
-    height: 99px;
+  a {
     float: left;
+
+    img {
+      width: 177px;
+      height: 99px;
+    }
   }
 
   h4 {
-    width: 182px;
+    width: auto;
     height: 99px;
     background: $light-grey;
     margin: 0 0 0 1px;
-    float: left;
+    float: none;
 
-      a{
-        display: block;
-        margin: 20px 0 0 5px;
-      }
-
+    a {
+      display: block;
+      margin: 20px 0 0 5px;
+    }
   }
-
 }
