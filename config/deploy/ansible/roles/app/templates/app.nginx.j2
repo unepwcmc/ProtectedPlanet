@@ -28,18 +28,11 @@ server {
     proxy_pass http://app;
   }
 
-  location @app {
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $http_host;
-    proxy_redirect off;
-    proxy_pass http://app;
-  }
-
   ##
   # API requests for the new API take priority over legacy requests.
   ##
 
-  location /api/v3 {
+  location ^~ /api/v3 {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_redirect off;
@@ -50,18 +43,25 @@ server {
   # Opaquely proxy API requests to old servers
   ##
 
-  location /api {
+  location ^~ /api2/ {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    proxy_pass http://prod-www.protectedplanet.net/api2/;
+  }
+
+  location ^~ /api/ {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_redirect off;
     proxy_pass http://prod-www.protectedplanet.net/api/;
   }
 
-  location /api2 {
+  location @app {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $http_host;
     proxy_redirect off;
-    proxy_pass http://prod-www.protectedplanet.net/api2/;
+    proxy_pass http://app;
   }
 
   error_page 500 502 503 504 /500.html;
