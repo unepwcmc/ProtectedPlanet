@@ -1,7 +1,9 @@
 $(document).ready( ->
   require(
-    ['search_bar', 'autocompletion', 'query_control', 'dropdown', 'map', 'asyncImg'],
-    (SearchBar, Autocompletion, QueryControl, Dropdown, Map, asyncImg) ->
+    ['search_bar', 'autocompletion', 'query_control', 'dropdown', 'map', 'asyncImg',
+     'downloads_general', 'downloads_project', 'downloads_search'],
+    (SearchBar, Autocompletion, QueryControl, Dropdown, Map, asyncImg,
+     DownloadsGeneral, DownloadsProject, DownloadsSearch) ->
       bar = new SearchBar()
 
       $('.search-input').each( ->
@@ -11,17 +13,13 @@ $(document).ready( ->
 
       new Map($('#map')).render()
 
-      new Dropdown(
+      dropdown = new Dropdown(
         $('.btn-download'),
         $(".download-type-dropdown[data-download-type='general']")
       )
 
       asyncImg()
-  )
 
-  require(
-    ['downloads_general', 'downloads_project', 'downloads_search'],
-    (DownloadsGeneral, DownloadsProject, DownloadsSearch) ->
       $downloadBtns = [
         $(".download-type-dropdown[data-download-type='general'] a")
         $(".download-type-dropdown[data-download-type='search'] a")
@@ -34,6 +32,8 @@ $(document).ready( ->
         $btn.on('click', (e) ->
           # skip standard links
           return unless $(@).data('type')
+
+          dropdown.hide()
 
           button = $(@)
           e.preventDefault()
