@@ -138,6 +138,14 @@
 .data-completion-info {
   padding: 20px;
 
+  div:not(:last-child) { margin-bottom: 5px; }
+
+  h3 {
+    font-weight: 300;
+    font-family: MuseoSans-300;
+    color: $color--pa-infographic-text;
+  }
+
   ul {
     margin: 8px 0px;
     column-count: 2;
