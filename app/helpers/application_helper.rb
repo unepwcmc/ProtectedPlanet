@@ -58,7 +58,7 @@ module ApplicationHelper
     },
     shp: {
       content: 'SHP',
-      attrs: {'data-type' => 'shp', 'class' => 'btn'}
+      attrs: {'data-type' => 'shapefile', 'class' => 'btn'}
     },
     esri: {
       content: 'ESRI Web Service',
