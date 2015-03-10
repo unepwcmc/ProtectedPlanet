@@ -31,6 +31,7 @@ define('dropdown', [], ->
 
     addEventListener: ->
       @$triggerEl.on(@options.on, (event) =>
+        @$el.stop()
         @positionEl()
         @$triggerEl.toggleClass('active')
         @$el.slideToggle()
