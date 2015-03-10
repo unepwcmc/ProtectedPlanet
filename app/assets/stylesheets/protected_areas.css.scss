@@ -3,7 +3,7 @@
 
 .factsheet {
   overflow-y: auto;
-  width: 415px;
+  width: 420px;
   height: 100%;
   float:left;
 }
@@ -138,6 +138,14 @@
 .data-completion-info {
   padding: 20px;
 
+  div:not(:last-child) { margin-bottom: 5px; }
+
+  h3 {
+    font-weight: 300;
+    font-family: MuseoSans-300;
+    color: $color--pa-infographic-text;
+  }
+
   ul {
     margin: 8px 0px;
     column-count: 2;
@@ -196,24 +204,25 @@
     margin: 10px 0;
   }
 
-  img {
-    width: 177px;
-    height: 99px;
+  a {
     float: left;
+
+    img {
+      width: 177px;
+      height: 99px;
+    }
   }
 
   h4 {
-    width: 182px;
+    width: auto;
     height: 99px;
     background: $light-grey;
     margin: 0 0 0 1px;
-    float: left;
+    float: none;
 
-      a{
-        display: block;
-        margin: 20px 0 0 5px;
-      }
-
+    a {
+      display: block;
+      margin: 20px 0 0 5px;
+    }
   }
-
 }
