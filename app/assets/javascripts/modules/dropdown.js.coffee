@@ -17,6 +17,9 @@ define('dropdown', [], ->
       @positionEl()
       @addEventListener()
 
+    hide: ->
+      @$el.slideToggle()
+
     positionEl: ->
       triggerPosition = @$triggerEl.offset()
 
