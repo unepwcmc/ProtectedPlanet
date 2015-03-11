@@ -1,4 +1,5 @@
 //= require 'require'
+//= require konami
 //= require jquery
 //= require jquery_ujs
 //= require 'async-img.min'
