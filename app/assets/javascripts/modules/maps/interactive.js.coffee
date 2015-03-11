@@ -7,7 +7,8 @@ define('interactive', [], () ->
 
     listen: ->
       @map.on('click', @handleMapClick)
-      @map.on('dragstart', @handleMapDrag)
+
+      @map.on('dragstart zoomstart click', @hideExplore)
 
     addMarker: (coords, protected_area) =>
       if @currentMarker?
@@ -31,7 +32,7 @@ define('interactive', [], () ->
           @addMarker(coords, data[0])
       )
 
-    handleMapDrag: =>
+    hideExplore: =>
       $('.explore').fadeOut()
       $('.download-type-dropdown').fadeOut()
 

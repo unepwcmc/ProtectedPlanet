@@ -20,9 +20,9 @@ define(
 
         map = @createMap(@$mapContainer.attr('id'))
 
-        Interactive.listen(map)
         BaseLayer.render(map)
         Bounds.setToBounds(map, config)
+        Interactive.listen(map)
         ProtectedAreaOverlay.render(map, config)
         Search.showSearchResults(map, config.url)
 
