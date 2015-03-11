@@ -22,6 +22,8 @@ module AssetGenerator
     uri = URI(Rails.application.secrets.mapbox['base_url'])
     size = {y: 128, x: 256}
 
+    raise AssetGenerationFailedError unless geojson.present?
+
     path = uri.path
     path << "geojson(#{geojson})/auto/#{size[:x]}x#{size[:y]}@2x.png"
     path << "?access_token=#{access_token}"

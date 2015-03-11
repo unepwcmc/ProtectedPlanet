@@ -36,4 +36,15 @@ class AssetGeneratorTest < ActiveSupport::TestCase
     pa_image = AssetGenerator.protected_area_tile(@protected_area)
     assert_equal 'fallback image', pa_image
   end
+
+  test '#protected_area_tile, given a Protected Area with no geometry, returns
+   the fallback tile' do
+    AssetGenerator.expects(:fallback_tile).returns('fallback image')
+
+    protected_area = FactoryGirl.create(:protected_area)
+    protected_area.stubs(:geojson).returns(nil)
+
+    pa_image = AssetGenerator.protected_area_tile(protected_area)
+    assert_equal 'fallback image', pa_image
+  end
 end

@@ -28,6 +28,8 @@ module GeometryConcern
       FROM #{self.class.table_name}
       WHERE id = #{id}
     """.squish)
+
+    return nil unless geojson.present?
     geometry = JSON.parse(geojson)
 
     URI.encode({
