@@ -60,5 +60,7 @@ $(document).ready( ->
   new Konami( () ->
     audio = new Audio('/jingle.mp3')
     audio.play()
+    styles = document.styleSheets[document.styleSheets.length-1]
+    styles.insertRule('* { font-family: "Comic Sans MS" !important; }',styles.cssRules.length)
   )
 )
