@@ -6,7 +6,7 @@ class SearchController < ApplicationController
 
   def index
     @search = Search.search(@query, search_options)
-    render partial: 'grid' if params[:grid]
+    render partial: 'grid' if request.xhr?
   end
 
   def map
