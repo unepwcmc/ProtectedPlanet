@@ -1,5 +1,6 @@
 class DownloadWorkers::Base
   include Sidekiq::Worker
+  sidekiq_options :retry => false, :backtrace => true
 
   def self.perform_async *args
     queue = if args.last.is_a?(Hash) && args.last[:for_import]
