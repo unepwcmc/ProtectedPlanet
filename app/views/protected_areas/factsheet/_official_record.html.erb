@@ -1,6 +1,6 @@
 <ul class="key-records">
   <li><p>WDPA ID</p> <strong><%= protected_area.wdpa_id %></strong></li>
-  <li><p>Reported Area KM&sup2;</p>  <strong><%= protected_area.reported_area %></strong></li>
+  <li><p>Reported Area KM&sup2;</p>  <strong><%= protected_area.reported_area.try(:round, 2) %></strong></li>
   <li><p>English Designation</p>  <strong title="<%= protected_area.designation.name %>"><%= protected_area.designation.name %></strong></li>
   <li><p>IUCN Category</p> <strong><%= protected_area.iucn_category.name %></strong></li>
 </ul>
