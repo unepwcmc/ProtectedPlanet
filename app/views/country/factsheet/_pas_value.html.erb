@@ -1,9 +1,9 @@
 <article>
   <h3>Protected Areas Value</h3>
   <div class="inset-statistic-large">
-    <span class="extra-large"><%= commaify(presenter.pa_area.round) %> <small>km&sup2;</small></span>
+    <span class="extra-large"><%= commaify(presenter.pa_area) %> <small>km&sup2;</small></span>
     <div class="text-holder">
-      <%= commaify(presenter.pa_land_area.round) %> Km&sup2; Land - <%= commaify(presenter.pa_marine_area.round) %> Km&sup2; Marine<br>
+      <%= commaify(presenter.pa_land_area) %> Km&sup2; Land - <%= commaify(presenter.pa_marine_area) %> Km&sup2; Marine<br>
       <%= presenter.percentage_pa_cover %>% Protected
     </div>
   </div>
