@@ -2,7 +2,7 @@ class ProtectedArea < ActiveRecord::Base
   include GeometryConcern
 
   has_and_belongs_to_many :countries
-  has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :region_id).includes(:region_for_index) }, :class_name => 'Country'
+  has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'
   has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
 
@@ -41,23 +41,20 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def as_api_feeder
-    self.as_json(
-      only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area],
-      include: {
-        sub_locations: { only: [:english_name] },
-        countries: {
-          only: [:name, :iso_3],
-          include: { region: { only: [:name] } }
-        },
-        iucn_category: { only: [:name] },
-        designation: {
-          only: [:name],
-          include: {jurisdiction: {only: [:name]}}
-        },
-        legal_status: { only: [:name] },
-        governance: { only: [:name] }
-      }
+    attributes = self.as_json(
+      only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area]
     )
+
+    relations = {
+      sub_locations: sub_locations.map{|sl| {english_name: sl.english_name}},
+      countries: countries_for_index.map {|c| {'name' => c.name, 'iso_3' => c.iso_3, 'region' => {'name' => c.region_for_index.name}}},
+      iucn_category: {'name' => iucn_category.name},
+      designation: {'name' => designation.name, 'jurisdiction' => {'name' => designation.jurisdiction.name}},
+      legal_status: {'name' => legal_status.name},
+      governance: {'name' => governance.name}
+    }.as_json
+
+    relations.merge attributes
   end
 
   def bounds
@@ -72,18 +69,11 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def nearest_protected_areas
-    @nearest_pas ||= Search.search('',
-      {
-        size: 3,
-        filters: {location: {coords: coordinates}},
-        sort: {geo_distance: coordinates}
-      }
-    ).results
-  end
-
-  def random_image_url
-    images = self.images.order("RANDOM()")
-    images.empty? ? "http://www.placehold.it/320x250" : images.first.url
+    @nearest_pas ||= Search.search('', {
+      size: 3,
+      filters: {location: {coords: coordinates}},
+      sort: {geo_distance: coordinates}
+    }).results
   end
 
   private
