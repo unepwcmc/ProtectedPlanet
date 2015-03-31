@@ -1,8 +1,8 @@
 <ul class="key-records">
   <li><p>WDPA ID</p> <strong><%= protected_area.wdpa_id %></strong></li>
   <li><p>Reported Area KM&sup2;</p>  <strong><%= protected_area.reported_area.try(:round, 2) %></strong></li>
-  <li><p>English Designation</p>  <strong title="<%= protected_area.designation.name %>"><%= protected_area.designation.name %></strong></li>
-  <li><p>IUCN Category</p> <strong><%= protected_area.iucn_category.name %></strong></li>
+  <li><p>English Designation</p>  <strong title="<%= protected_area.designation.try(:name) %>"><%= protected_area.designation.try(:name) %></strong></li>
+  <li><p>IUCN Category</p> <strong><%= protected_area.iucn_category.try(:name) %></strong></li>
 </ul>
 
 <div class="data-provider">
@@ -25,7 +25,7 @@
       </td>
       <td>
         <strong>Type of Designation</strong>
-        <%= protected_area.designation.jurisdiction.try(:name) %>
+        <%= protected_area.designation.try(:jurisdiction).try(:name) %>
       </td>
     </tr>
 
