@@ -46,12 +46,12 @@ class ProtectedArea < ActiveRecord::Base
     )
 
     relations = {
-      sub_locations: sub_locations.map{|sl| {english_name: sl.english_name}},
-      countries: countries_for_index.map {|c| {'name' => c.name, 'iso_3' => c.iso_3, 'region' => {'name' => c.region_for_index.name}}},
-      iucn_category: {'name' => iucn_category.name},
-      designation: {'name' => designation.name, 'jurisdiction' => {'name' => designation.jurisdiction.name}},
-      legal_status: {'name' => legal_status.name},
-      governance: {'name' => governance.name}
+      sub_locations: sub_locations.map{|sl| {english_name: sl.try(:english_name)}},
+      countries: countries_for_index.map {|c| {'name' => c.try(:name), 'iso_3' => c.try(:iso_3), 'region' => {'name' => c.try(:region_for_index).try(:name)}}},
+      iucn_category: {'name' => iucn_category.try(:name)},
+      designation: {'name' => designation.try(:name), 'jurisdiction' => {'name' => designation.try(:jurisdiction).try(:name)}},
+      legal_status: {'name' => legal_status.try(:name)},
+      governance: {'name' => governance.try(:name)}
     }.as_json
 
     relations.merge attributes
