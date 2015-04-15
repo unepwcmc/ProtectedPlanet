@@ -28,8 +28,18 @@ class Wdpa::ProtectedAreaImporter::GeometryImporter
   def self.import_coordinates standardised_name
     db.execute("""
       UPDATE protected_areas pa
-      SET #{standardised_name}_longitude = ST_X(ST_Centroid(#{standardised_name})),
-          #{standardised_name}_latitude = ST_Y(ST_Centroid(#{standardised_name}));
+      SET #{standardised_name}_longitude = (
+        CASE ST_IsValid(#{standardised_name})
+          WHEN TRUE THEN ST_X(ST_Centroid(#{standardised_name}))
+          WHEN FALSE THEN ST_X(ST_Centroid(ST_MakeValid(#{standardised_name})))
+        END
+      ),
+      #{standardised_name}_latitude = (
+        CASE ST_IsValid(#{standardised_name})
+          WHEN TRUE THEN ST_Y(ST_Centroid(#{standardised_name}))
+          WHEN FALSE THEN ST_Y(ST_Centroid(ST_MakeValid(#{standardised_name})))
+        END
+      );
     """.squish)
   end
 
