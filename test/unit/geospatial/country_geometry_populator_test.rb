@@ -183,7 +183,7 @@ class CountryGeometryPopulatorTest < ActiveSupport::TestCase
 
     repair_query = """
       UPDATE countries
-        SET marine_pas_geom = ST_Makevalid(ST_Multi(ST_Buffer(marine_pas_geom,0.0)))
+        SET marine_pas_geom = ST_Makevalid(ST_Multi(ST_Buffer(ST_MakeValid(marine_pas_geom),0.0)))
         WHERE NOT ST_IsValid(marine_pas_geom)
     """.squish
 

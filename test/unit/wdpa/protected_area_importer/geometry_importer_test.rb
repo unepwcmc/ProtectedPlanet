@@ -39,16 +39,36 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
       expects(:execute).
       with("""
         UPDATE protected_areas pa
-        SET the_geom_longitude = ST_X(ST_Centroid(the_geom)),
-            the_geom_latitude = ST_Y(ST_Centroid(the_geom));
+        SET the_geom_longitude = (
+          CASE ST_IsValid(the_geom)
+            WHEN TRUE THEN ST_X(ST_Centroid(the_geom))
+            WHEN FALSE THEN ST_X(ST_Centroid(ST_MakeValid(the_geom)))
+          END
+        ),
+        the_geom_latitude = (
+          CASE ST_IsValid(the_geom)
+            WHEN TRUE THEN ST_Y(ST_Centroid(the_geom))
+            WHEN FALSE THEN ST_Y(ST_Centroid(ST_MakeValid(the_geom)))
+          END
+        );
       """.squish)
 
     ActiveRecord::Base.connection.
       expects(:execute).
       with("""
         UPDATE protected_areas pa
-        SET second_geom_longitude = ST_X(ST_Centroid(second_geom)),
-            second_geom_latitude = ST_Y(ST_Centroid(second_geom));
+        SET second_geom_longitude = (
+          CASE ST_IsValid(second_geom)
+            WHEN TRUE THEN ST_X(ST_Centroid(second_geom))
+            WHEN FALSE THEN ST_X(ST_Centroid(ST_MakeValid(second_geom)))
+          END
+        ),
+        second_geom_latitude = (
+          CASE ST_IsValid(second_geom)
+            WHEN TRUE THEN ST_Y(ST_Centroid(second_geom))
+            WHEN FALSE THEN ST_Y(ST_Centroid(ST_MakeValid(second_geom)))
+          END
+        );
       """.squish)
 
     ActiveRecord::Base.connection.
@@ -73,16 +93,36 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
       expects(:execute).
       with("""
         UPDATE protected_areas pa
-        SET the_geom_longitude = ST_X(ST_Centroid(the_geom)),
-            the_geom_latitude = ST_Y(ST_Centroid(the_geom));
+        SET the_geom_longitude = (
+          CASE ST_IsValid(the_geom)
+            WHEN TRUE THEN ST_X(ST_Centroid(the_geom))
+            WHEN FALSE THEN ST_X(ST_Centroid(ST_MakeValid(the_geom)))
+          END
+        ),
+        the_geom_latitude = (
+          CASE ST_IsValid(the_geom)
+            WHEN TRUE THEN ST_Y(ST_Centroid(the_geom))
+            WHEN FALSE THEN ST_Y(ST_Centroid(ST_MakeValid(the_geom)))
+          END
+        );
       """.squish)
 
     ActiveRecord::Base.connection.
       expects(:execute).
       with("""
         UPDATE protected_areas pa
-        SET second_geom_longitude = ST_X(ST_Centroid(second_geom)),
-            second_geom_latitude = ST_Y(ST_Centroid(second_geom));
+        SET second_geom_longitude = (
+          CASE ST_IsValid(second_geom)
+            WHEN TRUE THEN ST_X(ST_Centroid(second_geom))
+            WHEN FALSE THEN ST_X(ST_Centroid(ST_MakeValid(second_geom)))
+          END
+        ),
+        second_geom_latitude = (
+          CASE ST_IsValid(second_geom)
+            WHEN TRUE THEN ST_Y(ST_Centroid(second_geom))
+            WHEN FALSE THEN ST_Y(ST_Centroid(ST_MakeValid(second_geom)))
+          END
+        );
       """.squish)
 
     import_successful = Wdpa::ProtectedAreaImporter::GeometryImporter.import wdpa_release
