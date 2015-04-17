@@ -47,10 +47,9 @@ class CartoDb::Merger
   def rename_query
     """
       BEGIN;
-      DELETE FROM #{permanent_table_name};
-      INSERT INTO #{permanent_table_name}
-         SELECT * FROM #{merge_table};
-      DROP TABLE #{merge_table};
+        DROP TABLE IF EXISTS #{permanent_table_name}_backup;
+        ALTER TABLE #{permanent_table_name} RENAME TO #{permanent_table_name}_backup;
+        ALTER TABLE #{merge_table} RENAME TO #{permanent_table_name};
       COMMIT;
     """.squish
   end
