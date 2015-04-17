@@ -22,7 +22,7 @@ class CartoDb::Merger
   end
 
   def merge_tables
-    merge_candidates.each do |table_name|
+    tables_to_merge.each do |table_name|
       response = query_cartodb table_merge_query(table_name)
       return false unless response.code == 200
     end
@@ -32,7 +32,7 @@ class CartoDb::Merger
 
   def table_merge_query table_name
     """
-      INSERT INTO #{@table_names[0]}
+      INSERT INTO #{merge_table}
         (#{column_names})
         SELECT #{column_names} FROM #{table_name};
       DROP TABLE #{table_name};
@@ -49,22 +49,26 @@ class CartoDb::Merger
       BEGIN;
       DELETE FROM #{permanent_table_name};
       INSERT INTO #{permanent_table_name}
-         SELECT * FROM #{@table_names[0]};
-      DROP TABLE #{@table_names[0]};
+         SELECT * FROM #{merge_table};
+      DROP TABLE #{merge_table};
       COMMIT;
     """.squish
   end
 
   def permanent_table_name
-    if !!(@table_names[0] =~ Wdpa::DataStandard::Matchers::POLYGON_TABLE)
+    if !!(merge_table =~ Wdpa::DataStandard::Matchers::POLYGON_TABLE)
       "wdpa_poly_#{Rails.env}"
     else
       "wdpa_point_#{Rails.env}"
     end
   end
 
-  def merge_candidates
-    @table_names.drop(1)
+  def tables_to_merge
+    @table_names[1..-1]
+  end
+
+  def merge_table
+    @table_names.first
   end
 
   def column_names
