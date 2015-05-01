@@ -51,13 +51,14 @@ class ImportToolsImportTest < ActiveSupport::TestCase
     assert import.completed?
   end
 
-  test '.stop(true) drops the old db and renames the new one' do
+  test '.stop(true) drops the old backup db, renames the old to backup, and the new to old' do
     import = ImportTools::Import.new(123)
 
     test_db = Rails.configuration.database_configuration[Rails.env]['database']
     import_db = "import_db_#{import.token}"
 
-    ImportTools::PostgresHandler.any_instance.expects(:drop_database).with(test_db)
+    ImportTools::PostgresHandler.any_instance.expects(:drop_database).with("#{test_db}_backup")
+    ImportTools::PostgresHandler.any_instance.expects(:rename_database).with(test_db, "#{test_db}_backup")
     ImportTools::PostgresHandler.any_instance.expects(:rename_database).with(import_db, test_db)
 
     import.stop

@@ -69,7 +69,8 @@ class ImportTools::Import
 
   def swap_databases
     current_db_name = Rails.configuration.database_configuration[Rails.env]["database"]
-    pg_handler.drop_database(current_db_name)
+    pg_handler.drop_database("#{current_db_name}_backup")
+    pg_handler.rename_database(current_db_name, "#{current_db_name}_backup")
     pg_handler.rename_database(db_name, current_db_name)
   end
 
