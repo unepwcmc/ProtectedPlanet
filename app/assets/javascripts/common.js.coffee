@@ -56,9 +56,4 @@ $(document).ready( ->
   )
 
   $('.explore .search-input').focus()
-
-  new Konami( () ->
-    audio = new Audio('/jingle.mp3')
-    audio.play()
-  )
 )
