@@ -8,7 +8,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
 
     view_name = 'temporary_view_all'
-    Download::Generators::Csv.any_instance.expects(:with_view).with(query).yields(view_name).returns(true)
+    Download::Generators::Csv.any_instance.expects(:create_view).with(query).returns(view_name)
 
     toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
     data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
@@ -63,7 +63,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME} WHERE wdpaid IN (1,2,3)"
 
     view_name = 'temporary_view_123'
-    Download::Generators::Csv.any_instance.stubs(:with_view).with(query).yields(view_name).returns(true)
+    Download::Generators::Csv.any_instance.stubs(:create_view).with(query).returns(view_name)
 
     toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
     data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"

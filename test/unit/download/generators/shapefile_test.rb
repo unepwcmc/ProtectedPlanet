@@ -22,9 +22,9 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     """.squish
 
     view_name_poly = 'temporary_view_123'
-    Download::Generators::Shapefile.any_instance.stubs(:with_view).with(shp_polygon_query).yields(view_name_poly).returns(true)
+    Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_polygon_query).returns(view_name_poly)
     view_name_point = 'temporary_view_456'
-    Download::Generators::Shapefile.any_instance.stubs(:with_view).with(shp_point_query).yields(view_name_point).returns(true)
+    Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_point_query).returns(view_name_point)
 
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
@@ -112,9 +112,9 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     """.squish
 
     view_name_poly = 'temporary_view_123'
-    Download::Generators::Shapefile.any_instance.stubs(:with_view).with(shp_polygon_query).yields(view_name_poly).returns(true)
+    Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_polygon_query).returns(view_name_poly)
     view_name_point = 'temporary_view_456'
-    Download::Generators::Shapefile.any_instance.stubs(:with_view).with(shp_point_query).yields(view_name_point).returns(true)
+    Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_point_query).returns(view_name_point)
 
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)

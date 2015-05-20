@@ -1,6 +1,12 @@
 require 'digest/sha1'
 
 class Download::Generators::Base
+  ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')
+  ATTACHMENTS = [
+    File.join(ATTACHMENTS_PATH, 'Terms_of_Use.pdf'),
+    File.join(ATTACHMENTS_PATH, 'WDPA_Data_Standards.pdf')
+  ]
+
   def self.generate zip_path, wdpa_ids = nil
     generator = new zip_path, wdpa_ids
     generator.generate
@@ -16,43 +22,23 @@ class Download::Generators::Base
     clean_up_after { export and zip }
   end
 
-  protected
+  private
 
   def export_from_postgres type
-    with_view query do |view_name|
-      Ogr::Postgres.export type, path, "SELECT * FROM #{view_name}"
-    end
+    view_name = create_view(query)
+    Ogr::Postgres.export type, path, "SELECT * FROM #{view_name}"
   end
-
-  ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')
-  ATTACHMENTS = [
-    File.join(ATTACHMENTS_PATH, 'Terms_of_Use.pdf'),
-    File.join(ATTACHMENTS_PATH, 'WDPA_Data_Standards.pdf')
-  ]
 
   def attachments_paths
     ATTACHMENTS.join(' ')
   end
 
-  private
-
-  def with_view query
+  def create_view query
     query_shasum = Digest::SHA1.hexdigest query
     view_name = "tmp_downloads_#{query_shasum}"
 
-    ensure_new_view(view_name, query) { yield view_name }
-  end
-
-  def ensure_new_view view_name, query
-    db.execute "DROP VIEW IF EXISTS #{view_name}"
-    db.execute "CREATE VIEW #{view_name} AS #{query}"
-    yield
-  ensure
-    db.execute "DROP VIEW #{view_name}"
-  end
-
-  def db
-    ActiveRecord::Base.connection
+    db.execute "CREATE OR REPLACE VIEW #{view_name} AS #{query}"
+    return view_name
   end
 
   def export
@@ -63,18 +49,12 @@ class Download::Generators::Base
     system("zip -j #{@zip_path} #{path} #{attachments_paths}")
   end
 
-  def query conditions = []
+  def query conditions=[]
     conditions = Array.wrap(conditions)
+    conditions << "wdpaid IN (#{@wdpa_ids.join(',')})" if @wdpa_ids.present?
 
     query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
-
-    if @wdpa_ids.present?
-      conditions << "wdpaid IN (#{@wdpa_ids.join(',')})"
-    end
-
-    if conditions.length > 0
-      query << " WHERE #{conditions.join(' AND ')}"
-    end
+    query << " WHERE #{conditions.join(' AND ')}" if conditions.any?
 
     query
   end
@@ -97,5 +77,9 @@ class Download::Generators::Base
   def path_without_extension
     filename_without_extension = File.basename(@zip_path, File.extname(@zip_path))
     File.join(File.dirname(@zip_path), filename_without_extension)
+  end
+
+  def db
+    ActiveRecord::Base.connection
   end
 end
