@@ -34,17 +34,14 @@ class Download::Generators::Shapefile < Download::Generators::Base
   def export_component name, condition
     component_paths = shapefile_components(name)
 
-    export_success = nil
-    with_view query(condition) do |view_name|
-      export_success = Ogr::Postgres.export(
-        :shapefile,
-        component_paths.first,
-        "SELECT * FROM #{view_name}"
-      )
-    end
+    view_name = create_view query(condition)
+    export_success = Ogr::Postgres.export(
+      :shapefile,
+      component_paths.first,
+      "SELECT * FROM #{view_name}"
+    )
 
     raise Ogr::Postgres::ExportError unless export_success
-
     component_paths
   end
 

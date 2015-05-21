@@ -8,7 +8,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
 
     view_name = 'temporary_view_123'
-    Download::Generators::Kml.any_instance.stubs(:with_view).with(query).yields(view_name).returns(true)
+    Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
 
     toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
     data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
@@ -52,7 +52,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     Download::Generators::Kml.generate('./all.zip')
   end
 
-  test '#generate creates a temporary download view and drops it after use' do
+  test '#generate creates a download view' do
     Download::Generators::Kml.any_instance.stubs(:system).returns(true)
 
     pa = FactoryGirl.create(:protected_area, wdpa_id: 1234)
@@ -63,16 +63,11 @@ class DownloadKmlTest < ActiveSupport::TestCase
       .with(:kml, './pa-kml.kml', "SELECT * FROM #{view_name}")
       .returns(true)
 
-    optional_drop_query = "DROP VIEW IF EXISTS #{view_name}"
-    drop_query = "DROP VIEW #{view_name}"
-    create_query = """
-      CREATE VIEW #{view_name} AS
-      SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME} WHERE wdpaid IN (#{pa.wdpa_id})
-    """.squish
 
-    ActiveRecord::Base.connection.expects(:execute).with(optional_drop_query)
-    ActiveRecord::Base.connection.expects(:execute).with(create_query)
-    ActiveRecord::Base.connection.expects(:execute).with(drop_query)
+    ActiveRecord::Base.connection.expects(:execute).with("""
+      CREATE OR REPLACE VIEW #{view_name} AS
+      SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME} WHERE wdpaid IN (#{pa.wdpa_id})
+    """.squish)
 
     Download::Generators::Kml.generate('./pa-kml.zip', [pa.wdpa_id])
   end
@@ -86,7 +81,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME} WHERE wdpaid IN (1,2,3)"
 
     view_name = 'temporary_view_123'
-    Download::Generators::Kml.any_instance.stubs(:with_view).with(query).yields(view_name).returns(true)
+    Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
 
     toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
     data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"

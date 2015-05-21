@@ -62,13 +62,11 @@ class Wdpa::Release
   end
 
   def protected_areas
-    attributes = geometry_tables.map do |table_name, std_table_name|
-      db.execute(
-        "SELECT * FROM #{std_table_name}"
-      ).to_a
+    geometry_tables.each_with_object([]) do |(_, std_table_name), protected_areas|
+      protected_areas.concat(
+        db.execute("SELECT * FROM #{std_table_name}").to_a
+      )
     end
-
-    attributes.flatten
   end
 
   def sources

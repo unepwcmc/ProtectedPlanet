@@ -147,7 +147,7 @@ class TestWdpaRelease < ActiveSupport::TestCase
 
     pg_result_mock = mock()
     pg_result_mock.expects(:to_a).returns(pa_attributes[0..1])
-    pg_result_mock.expects(:to_a).returns(pa_attributes[2])
+    pg_result_mock.expects(:to_a).returns([pa_attributes[2]])
 
     connection = ActiveRecord::Base.connection
 
