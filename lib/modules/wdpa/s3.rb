@@ -6,19 +6,19 @@ class Wdpa::S3
     })
   end
 
-  def self.download_current_wdpa_to filename: filename
-    s3 = self.new
-    s3.download_current_wdpa_to filename: filename
-
-    s3
+  def self.download_current_wdpa_to filename
+    self.new.tap{ |s3| s3.download_current_wdpa_to filename }
   end
 
   def self.new_wdpa? since
-    s3 = self.new
-    s3.new_wdpa? since
+    new.new_wdpa? since
   end
 
-  def download_current_wdpa_to filename: filename
+  def self.current_wdpa_identifier
+    new.current_wdpa_identifier
+  end
+
+  def download_current_wdpa_to filename
     File.open(filename, 'w:ASCII-8BIT') do |file|
       file.write current_wdpa.read
     end
