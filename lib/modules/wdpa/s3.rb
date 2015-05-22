@@ -28,6 +28,11 @@ class Wdpa::S3
     current_wdpa.last_modified > since
   end
 
+  def current_wdpa_identifier
+    # Assuming WDPA_MMMYYYY_Public.zip
+    current_wdpa.key[5..11]
+  end
+
   private
 
   def current_wdpa
