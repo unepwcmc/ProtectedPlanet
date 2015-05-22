@@ -63,6 +63,10 @@ module ApplicationHelper
     esri: {
       content: 'ESRI Web Service',
       attrs: {'href' => Rails.application.secrets.esri_web_service_url, 'class' => 'btn'}
+    },
+    gdb: {
+      content: 'File Geodatabase',
+      attrs: {'href' => Rails.application.secrets.wdpa_current_release_url, 'class' => 'btn'}
     }
   }
 
