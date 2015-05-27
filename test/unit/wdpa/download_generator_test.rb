@@ -17,4 +17,13 @@ class DownloadGeneratorTest < ActiveSupport::TestCase
 
     Wdpa::DownloadGenerator.generate
   end
+
+  test '#generate, called with argument false, performs the generation not for import' do
+    st_lucia = FactoryGirl.create(:country, iso: 'ST')
+
+    DownloadWorkers::General.expects(:perform_async).with(:general, 'all', for_import: false)
+    DownloadWorkers::General.expects(:perform_async).with(:country, st_lucia.iso, for_import: false)
+
+    Wdpa::DownloadGenerator.generate false
+  end
 end
