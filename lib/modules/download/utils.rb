@@ -36,11 +36,11 @@ module Download
     def self.filename domain, identifier
       case domain
       when 'search'
-        "searches_#{identifier}"
+        "#{Wdpa::S3.current_wdpa_identifier}_searches_#{identifier}"
       when 'project'
-        "projects_#{identifier}_all"
+        "#{Wdpa::S3.current_wdpa_identifier}_projects_#{identifier}_all"
       when 'general'
-        "general_#{identifier}"
+        "#{Wdpa::S3.current_wdpa_identifier}_general_#{identifier}"
       end
     end
   end

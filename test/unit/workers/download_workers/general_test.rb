@@ -1,8 +1,12 @@
 require 'test_helper'
 
 class DownloadWorkersGeneralTest < ActiveSupport::TestCase
+  def setup
+    Wdpa::S3.stubs(:current_wdpa_identifier).returns('Jun2015')
+  end
+
   test '.perform, called with type general, generates a download with all wdpa_ids' do
-    Download.expects(:generate).with('general_all', {wdpa_ids: nil})
+    Download.expects(:generate).with('Jun2015_general_all', {wdpa_ids: nil})
 
     DownloadWorkers::General.new.perform('general', 'all')
   end
@@ -12,7 +16,7 @@ class DownloadWorkersGeneralTest < ActiveSupport::TestCase
     pa1 = FactoryGirl.create(:protected_area, countries: [country])
     pa2 = FactoryGirl.create(:protected_area, countries: [country])
 
-    Download.expects(:generate).with('general_US', {wdpa_ids: [pa1.wdpa_id, pa2.wdpa_id]})
+    Download.expects(:generate).with('Jun2015_general_US', {wdpa_ids: [pa1.wdpa_id, pa2.wdpa_id]})
 
     DownloadWorkers::General.new.perform('country', 'US')
   end
@@ -23,7 +27,7 @@ class DownloadWorkersGeneralTest < ActiveSupport::TestCase
     pa1 = FactoryGirl.create(:protected_area, countries: [country])
     pa2 = FactoryGirl.create(:protected_area, countries: [country])
 
-    Download.expects(:generate).with('general_NA', {wdpa_ids: [pa1.wdpa_id, pa2.wdpa_id]})
+    Download.expects(:generate).with('Jun2015_general_NA', {wdpa_ids: [pa1.wdpa_id, pa2.wdpa_id]})
 
     DownloadWorkers::General.new.perform('region', 'NA')
   end

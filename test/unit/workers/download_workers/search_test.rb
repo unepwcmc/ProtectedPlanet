@@ -1,4 +1,8 @@
 class DownloadWorkersSearchTest < ActiveSupport::TestCase
+  def setup
+    Wdpa::S3.stubs(:current_wdpa_identifier).returns('Jun2015')
+  end
+
   test '.perform executes a search and generates a download with the returned
    ids' do
     query_term = 'manbone'
@@ -15,7 +19,7 @@ class DownloadWorkersSearchTest < ActiveSupport::TestCase
       returns(saved_search_mock)
 
     Download.expects(:generate).
-      with("searches_#{digested_pa_ids}", {wdpa_ids: pa_ids})
+      with("Jun2015_searches_#{digested_pa_ids}", {wdpa_ids: pa_ids})
 
     DownloadWorkers::Search.new.perform token, query_term, '{}'
   end
@@ -24,7 +28,7 @@ class DownloadWorkersSearchTest < ActiveSupport::TestCase
    download is done' do
     email = "tests@theinternetemail.com"
     pa_ids = [1,2,3,4]
-    filename = 'searches_03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'
+    filename = 'Jun2015_searches_03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'
     token = 1234
 
     saved_search_mock = mock()
