@@ -12,18 +12,18 @@ class DownloadWorkersGeneralTest < ActiveSupport::TestCase
   end
 
   test '.perform, called with type country, generates a download with all wdpa_ids from a country' do
-    country = FactoryGirl.create(:country, iso: 'US')
+    country = FactoryGirl.create(:country, iso_3: 'USA')
     pa1 = FactoryGirl.create(:protected_area, countries: [country])
     pa2 = FactoryGirl.create(:protected_area, countries: [country])
 
-    Download.expects(:generate).with('Jun2015_general_US', {wdpa_ids: [pa1.wdpa_id, pa2.wdpa_id]})
+    Download.expects(:generate).with('Jun2015_general_USA', {wdpa_ids: [pa1.wdpa_id, pa2.wdpa_id]})
 
-    DownloadWorkers::General.new.perform('country', 'US')
+    DownloadWorkers::General.new.perform('country', 'USA')
   end
 
   test '.perform, called with type region, generates a download with all wdpa_ids from a region' do
     region = FactoryGirl.create(:region, iso: 'NA')
-    country = FactoryGirl.create(:country, iso: 'US', region: region)
+    country = FactoryGirl.create(:country, iso_3: 'USA', region: region)
     pa1 = FactoryGirl.create(:protected_area, countries: [country])
     pa2 = FactoryGirl.create(:protected_area, countries: [country])
 
