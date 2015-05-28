@@ -210,9 +210,9 @@ class TestWdpaRelease < ActiveSupport::TestCase
 
     create_view_command = """
       CREATE OR REPLACE VIEW imported_protected_areas AS
-        SELECT a, b, 'polygon' AS type FROM standard_polygons
+        SELECT 'polygon' AS type, a, b FROM standard_polygons
         UNION ALL
-        SELECT a, b, 'point' AS type FROM standard_points
+        SELECT 'point' AS type, a, b FROM standard_points
     """.squish
 
     db = ActiveRecord::Base.connection

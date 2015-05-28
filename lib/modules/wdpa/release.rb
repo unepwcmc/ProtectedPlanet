@@ -54,8 +54,8 @@ class Wdpa::Release
     create_query = "CREATE OR REPLACE VIEW #{IMPORT_VIEW_NAME} AS "
 
     select_queries = []
-    select_queries << "SELECT #{attributes}, 'polygon' AS type FROM standard_polygons"
-    select_queries << "SELECT #{attributes}, 'point' AS type FROM standard_points"
+    select_queries << "SELECT 'polygon' AS type, #{attributes} FROM standard_polygons"
+    select_queries << "SELECT 'point' AS type, #{attributes} FROM standard_points"
 
     create_query << select_queries.join(' UNION ALL ')
 
