@@ -33,25 +33,11 @@ module Download
       end
     end
 
-    NO_APPEND = {domain: 'general', identifier: 'all'}
     def self.filename domain, identifier
-      add_domain     = -> (str) { str << "_#{domain}" }
-      add_identifier = -> (str) { str << "_#{identifier}" }
-
-      base_filename
-        .tap_if(domain != NO_APPEND[:domain], &add_domain)
-        .tap_if(identifier != NO_APPEND[:identifier], &add_identifier)
-    end
-
-
-    def self.base_filename
-      "WDPA_#{Wdpa::S3.current_wdpa_identifier}".extend(Ifable)
-    end
-
-    module Ifable
-      def tap_if condition, &block
-        condition ? tap(&block) : self
-      end
+      "WDPA_#{Wdpa::S3.current_wdpa_identifier}".tap { |base_filename|
+        base_filename << "_#{domain}"     if domain != 'general'
+        base_filename << "_#{identifier}" if identifier != 'all'
+      }
     end
   end
 end
