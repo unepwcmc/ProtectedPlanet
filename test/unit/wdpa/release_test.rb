@@ -206,19 +206,13 @@ class TestWdpaRelease < ActiveSupport::TestCase
 
   test '.create_import_view executes a DB command to create a view with
    the imported PAs' do
-    geometry_tables = {
-      "polygons" => "std_poly",
-      "point" => "std_point"
-    }
-    Wdpa::Release.any_instance.expects(:geometry_tables).returns(geometry_tables)
-
     Wdpa::DataStandard.expects(:common_attributes).returns([:a, :b])
 
     create_view_command = """
       CREATE OR REPLACE VIEW imported_protected_areas AS
-        SELECT a, b FROM #{geometry_tables["polygons"]}
+        SELECT a, b, 'polygon' AS type FROM standard_polygons
         UNION ALL
-        SELECT a, b FROM #{geometry_tables["point"]}
+        SELECT a, b, 'point' AS type FROM standard_points
     """.squish
 
     db = ActiveRecord::Base.connection
