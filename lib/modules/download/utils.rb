@@ -7,6 +7,11 @@ module Download
 
     def self.make_current
       S3.replace_all S3::IMPORT_PREFIX, S3::CURRENT_PREFIX
+
+      while temp_key = $redis.spop('import:all_downloads')
+        download_key = temp_key.sub('import:', '')
+        $redis.set(download_key, $redis.get(temp_key))
+      end
     end
 
     def self.zip_path_for_type download_name, type
