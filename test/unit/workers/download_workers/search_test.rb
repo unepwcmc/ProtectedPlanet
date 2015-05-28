@@ -19,7 +19,7 @@ class DownloadWorkersSearchTest < ActiveSupport::TestCase
       returns(saved_search_mock)
 
     Download.expects(:generate).
-      with("Jun2015_searches_#{digested_pa_ids}", {wdpa_ids: pa_ids})
+      with("WDPA_Jun2015_search_#{digested_pa_ids}", {wdpa_ids: pa_ids})
 
     DownloadWorkers::Search.new.perform token, query_term, '{}'
   end
@@ -28,7 +28,7 @@ class DownloadWorkersSearchTest < ActiveSupport::TestCase
    download is done' do
     email = "tests@theinternetemail.com"
     pa_ids = [1,2,3,4]
-    filename = 'Jun2015_searches_03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'
+    filename = 'WDPA_Jun2015_search_03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4'
     token = 1234
 
     saved_search_mock = mock()
