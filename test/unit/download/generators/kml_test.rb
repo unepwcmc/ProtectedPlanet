@@ -10,7 +10,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
 
-    appendix_path = "#{Rails.root}/lib/data/documents/Appendix 5 _WDPA_Metadata.pdf"
+    appendix_path = "#{Rails.root}/lib/data/documents/Appendix\\ 5\\ _WDPA_Metadata.pdf"
     summary_path = "#{Rails.root}/lib/data/documents/Summary_table_WDPA_attributes.pdf"
     manual_path = "#{Rails.root}/lib/data/documents/WDPA_Manual_1.0.pdf"
     attachments_path = "#{appendix_path} #{summary_path} #{manual_path}"
@@ -84,7 +84,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
 
-    appendix_path = "#{Rails.root}/lib/data/documents/Appendix 5 _WDPA_Metadata.pdf"
+    appendix_path = "#{Rails.root}/lib/data/documents/Appendix\\ 5\\ _WDPA_Metadata.pdf"
     manual_path = "#{Rails.root}/lib/data/documents/WDPA_Manual_1.0.pdf"
     summary_path = "#{Rails.root}/lib/data/documents/Summary_table_WDPA_attributes.pdf"
     attachments_path = "#{appendix_path} #{summary_path} #{manual_path}"
