@@ -8,7 +8,7 @@ class TestWdpaRelease < ActiveSupport::TestCase
     gdb_path = "gdb_path"
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
 
-    Wdpa::S3.expects(:download_current_wdpa_to).with(filename: zip_path)
+    Wdpa::S3.expects(:download_current_wdpa_to).with(zip_path)
 
     Wdpa::Release.any_instance.
       expects(:system).
@@ -206,19 +206,13 @@ class TestWdpaRelease < ActiveSupport::TestCase
 
   test '.create_import_view executes a DB command to create a view with
    the imported PAs' do
-    geometry_tables = {
-      "polygons" => "std_poly",
-      "point" => "std_point"
-    }
-    Wdpa::Release.any_instance.expects(:geometry_tables).returns(geometry_tables)
-
     Wdpa::DataStandard.expects(:common_attributes).returns([:a, :b])
 
     create_view_command = """
       CREATE OR REPLACE VIEW imported_protected_areas AS
-        SELECT a, b FROM #{geometry_tables["polygons"]}
+        SELECT 'polygon' AS type, a, b FROM standard_polygons
         UNION ALL
-        SELECT a, b FROM #{geometry_tables["point"]}
+        SELECT 'point' AS type, a, b FROM standard_points
     """.squish
 
     db = ActiveRecord::Base.connection

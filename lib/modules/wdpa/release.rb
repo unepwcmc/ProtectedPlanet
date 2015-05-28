@@ -13,7 +13,7 @@ class Wdpa::Release
   end
 
   def download
-    Wdpa::S3.download_current_wdpa_to filename: zip_path
+    Wdpa::S3.download_current_wdpa_to zip_path
     system("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
 
     import_tables.each do |original_table, std_table|
@@ -32,13 +32,15 @@ class Wdpa::Release
   end
 
   def geometry_tables
-    gdb_metadata = Ogr::Info.new(gdb_path)
-    geometry_tables = gdb_metadata.layers_matching(
-      Wdpa::DataStandard::Matchers::GEOMETRY_TABLE
-    )
+    @geometry_tables ||= begin
+      gdb_metadata = Ogr::Info.new(gdb_path)
+      geometry_tables = gdb_metadata.layers_matching(
+        Wdpa::DataStandard::Matchers::GEOMETRY_TABLE
+      )
 
-    geometry_tables.each_with_object({}) do |tbl, hash|
-      hash[tbl] = Wdpa::DataStandard.standardise_table_name(tbl)
+      geometry_tables.each_with_object({}) do |tbl, hash|
+        hash[tbl] = Wdpa::DataStandard.standardise_table_name(tbl)
+      end
     end
   end
 
@@ -52,11 +54,10 @@ class Wdpa::Release
     create_query = "CREATE OR REPLACE VIEW #{IMPORT_VIEW_NAME} AS "
 
     select_queries = []
-    geometry_tables.each do |_, geometry_table|
-      select_queries << "SELECT #{attributes} FROM #{geometry_table}"
-    end
+    select_queries << "SELECT 'polygon' AS type, #{attributes} FROM standard_polygons"
+    select_queries << "SELECT 'point' AS type, #{attributes} FROM standard_points"
 
-    create_query << select_queries.join(" UNION ALL ")
+    create_query << select_queries.join(' UNION ALL ')
 
     db.execute(create_query)
   end

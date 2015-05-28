@@ -10,9 +10,10 @@ class DownloadKmlTest < ActiveSupport::TestCase
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
 
-    toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
-    data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
-    attachments_path = "#{toc_path} #{data_standard_path}"
+    appendix_path = "#{Rails.root}/lib/data/documents/Appendix 5 _WDPA_Metadata.pdf"
+    summary_path = "#{Rails.root}/lib/data/documents/Summary_table_WDPA_attributes.pdf"
+    manual_path = "#{Rails.root}/lib/data/documents/WDPA_Manual_1.0.pdf"
+    attachments_path = "#{appendix_path} #{summary_path} #{manual_path}"
 
     zip_command = "zip -j #{zip_file_path} #{kml_file_path} #{attachments_path}"
     Download::Generators::Kml.any_instance.expects(:system).with(zip_command).returns(true)
@@ -83,9 +84,10 @@ class DownloadKmlTest < ActiveSupport::TestCase
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
 
-    toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
-    data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
-    attachments_path = "#{toc_path} #{data_standard_path}"
+    appendix_path = "#{Rails.root}/lib/data/documents/Appendix 5 _WDPA_Metadata.pdf"
+    manual_path = "#{Rails.root}/lib/data/documents/WDPA_Manual_1.0.pdf"
+    summary_path = "#{Rails.root}/lib/data/documents/Summary_table_WDPA_attributes.pdf"
+    attachments_path = "#{appendix_path} #{summary_path} #{manual_path}"
 
     zip_command = "zip -j #{zip_file_path} #{kml_file_path} #{attachments_path}"
     Download::Generators::Kml.any_instance.expects(:system).with(zip_command).returns(true)

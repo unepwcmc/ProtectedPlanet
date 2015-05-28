@@ -3,8 +3,9 @@ require 'digest/sha1'
 class Download::Generators::Base
   ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')
   ATTACHMENTS = [
-    File.join(ATTACHMENTS_PATH, 'Terms_of_Use.pdf'),
-    File.join(ATTACHMENTS_PATH, 'WDPA_Data_Standards.pdf')
+    File.join(ATTACHMENTS_PATH, 'Appendix 5 _WDPA_Metadata.pdf'),
+    File.join(ATTACHMENTS_PATH, 'Summary_table_WDPA_attributes.pdf'),
+    File.join(ATTACHMENTS_PATH, 'WDPA_Manual_1.0.pdf')
   ]
 
   def self.generate zip_path, wdpa_ids = nil

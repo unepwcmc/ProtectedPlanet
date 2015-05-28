@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class DownloadWorkersProjectTest < ActiveSupport::TestCase
+  def setup
+    Wdpa::S3.stubs(:current_wdpa_identifier).returns('Jun2015')
+  end
+
   test '.perform calls Download.generate with the wdpa_ids of all items in the
    project with the given project_id' do
     pa = FactoryGirl.create(:protected_area)
@@ -17,7 +21,7 @@ class DownloadWorkersProjectTest < ActiveSupport::TestCase
 
     SavedSearch.any_instance.stubs(:wdpa_ids).returns([pa.wdpa_id])
 
-    Download.expects(:generate).with("projects_#{project.id}_all", {wdpa_ids: [pa.wdpa_id]})
+    Download.expects(:generate).with("WDPA_Jun2015_project_#{project.id}", {wdpa_ids: [pa.wdpa_id]})
 
     DownloadWorkers::Project.new.perform project.id
   end

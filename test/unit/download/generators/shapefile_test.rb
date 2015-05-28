@@ -29,9 +29,10 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
 
-    toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
-    data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
-    attachments_path = "#{toc_path} #{data_standard_path}"
+    appendix_path = "#{Rails.root}/lib/data/documents/Appendix 5 _WDPA_Metadata.pdf"
+    manual_path = "#{Rails.root}/lib/data/documents/WDPA_Manual_1.0.pdf"
+    summary_path = "#{Rails.root}/lib/data/documents/Summary_table_WDPA_attributes.pdf"
+    attachments_path = "#{appendix_path} #{summary_path} #{manual_path}"
 
     Download::Generators::Shapefile.
       any_instance.
@@ -119,9 +120,10 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
 
-    toc_path = "#{Rails.root}/lib/data/documents/Terms_of_Use.pdf"
-    data_standard_path = "#{Rails.root}/lib/data/documents/WDPA_Data_Standards.pdf"
-    attachments_path = "#{toc_path} #{data_standard_path}"
+    appendix_path = "#{Rails.root}/lib/data/documents/Appendix 5 _WDPA_Metadata.pdf"
+    manual_path = "#{Rails.root}/lib/data/documents/WDPA_Manual_1.0.pdf"
+    summary_path = "#{Rails.root}/lib/data/documents/Summary_table_WDPA_attributes.pdf"
+    attachments_path = "#{appendix_path} #{summary_path} #{manual_path}"
 
     Download::Generators::Shapefile.
       any_instance.

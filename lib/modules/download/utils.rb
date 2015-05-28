@@ -34,14 +34,10 @@ module Download
     end
 
     def self.filename domain, identifier
-      case domain
-      when 'search'
-        "searches_#{identifier}"
-      when 'project'
-        "projects_#{identifier}_all"
-      when 'general'
-        "general_#{identifier}"
-      end
+      "WDPA_#{Wdpa::S3.current_wdpa_identifier}".tap { |base_filename|
+        base_filename << "_#{domain}"     if domain != 'general'
+        base_filename << "_#{identifier}" if identifier != 'all'
+      }
     end
   end
 end
