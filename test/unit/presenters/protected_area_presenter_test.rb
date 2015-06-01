@@ -59,7 +59,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
 
     presenter = ProtectedAreaPresenter.new(pa)
 
-    assert_equal 37.5, presenter.percentage_complete
+    assert_equal 45.0, presenter.percentage_complete
   end
 
   test '#percentage_complete handles false attributes as present, not nil' do
@@ -79,8 +79,8 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     presenter1 = ProtectedAreaPresenter.new(pa1)
     presenter2 = ProtectedAreaPresenter.new(pa2)
 
-    assert_equal 41.67, presenter1.percentage_complete
-    assert_equal 41.67, presenter2.percentage_complete
+    assert_equal 50.0, presenter1.percentage_complete
+    assert_equal 50.0, presenter2.percentage_complete
   end
 
   test '#percentage_complete handles polygons and points' do
@@ -104,7 +104,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     presenter1 = ProtectedAreaPresenter.new(pa1)
     presenter2 = ProtectedAreaPresenter.new(pa2)
 
-    assert_equal 41.67, presenter1.percentage_complete
-    assert_equal 45.83, presenter2.percentage_complete
+    assert_equal 50.0, presenter1.percentage_complete
+    assert_equal 55.0, presenter2.percentage_complete
   end
 end

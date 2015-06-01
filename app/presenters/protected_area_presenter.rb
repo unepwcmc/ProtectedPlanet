@@ -32,7 +32,7 @@ class ProtectedAreaPresenter
   end
 
   def percentage_complete
-    ((num_fields_with_data.to_f / standard_attributes.count) * 100).round(2)
+    ((num_fields_with_data.to_f / all_fields.count) * 100).round(2)
   end
 
   private
@@ -56,13 +56,17 @@ class ProtectedAreaPresenter
   end
 
   def num_fields_with_data
-    SECTIONS.flat_map { |section| section[:fields] }.count do |attribute|
+    all_fields.count do |attribute|
       standard_attr = standard_attributes[attribute[:field]]
 
       attribute[:assert].call(
         protected_area.try(standard_attr[:name])
       )
     end
+  end
+
+  def all_fields
+    SECTIONS.flat_map { |section| section[:fields] }
   end
 
   def standard_attributes
