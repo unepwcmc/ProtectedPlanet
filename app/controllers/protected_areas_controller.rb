@@ -4,7 +4,6 @@ class ProtectedAreasController < ApplicationController
   def show
     id = params[:id]
     @protected_area = ProtectedArea.
-      without_geometry.
       where("slug = ? OR wdpa_id = ?", id, id.to_i).
       first
 
