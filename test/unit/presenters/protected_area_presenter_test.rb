@@ -59,7 +59,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
 
     presenter = ProtectedAreaPresenter.new(pa)
 
-    assert_equal 45.83, presenter.percentage_complete
+    assert_equal 37.5, presenter.percentage_complete
   end
 
   test '#percentage_complete handles false attributes as present, not nil' do
@@ -79,7 +79,32 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     presenter1 = ProtectedAreaPresenter.new(pa1)
     presenter2 = ProtectedAreaPresenter.new(pa2)
 
-    assert_equal 50.0, presenter1.percentage_complete
-    assert_equal 50.0, presenter2.percentage_complete
+    assert_equal 41.67, presenter1.percentage_complete
+    assert_equal 41.67, presenter2.percentage_complete
+  end
+
+  test '#percentage_complete handles polygons and points' do
+    point = "MULTIPOINT ((0 0))"
+    polygon = "MULTIPOLYGON (((0 0, 1 1, 3 3, 0 0)))"
+    pa1 = FactoryGirl.create(:protected_area,
+      wdpa_id: 1234,
+      name: 'An Protected Area',
+      original_name: 'Not an protected area',
+      marine: false,
+      the_geom: RGeo::Geos.factory.parse_wkt(point)
+    )
+    pa2 = FactoryGirl.create(:protected_area,
+      wdpa_id: 5678,
+      name: 'Another Protected Area',
+      original_name: 'Not another protected area',
+      marine: true,
+      the_geom: RGeo::Geos.factory.parse_wkt(polygon)
+    )
+
+    presenter1 = ProtectedAreaPresenter.new(pa1)
+    presenter2 = ProtectedAreaPresenter.new(pa2)
+
+    assert_equal 41.67, presenter1.percentage_complete
+    assert_equal 45.83, presenter2.percentage_complete
   end
 end
