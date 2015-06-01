@@ -16,6 +16,7 @@ class ProtectedArea < ActiveRecord::Base
   belongs_to :management_authority
   belongs_to :no_take_status
   belongs_to :designation
+  delegate :jurisdiction, to: :designation, allow_nil: true
   belongs_to :wikipedia_article
 
   after_create :create_slug
