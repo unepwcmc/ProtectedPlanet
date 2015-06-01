@@ -30,7 +30,7 @@ class Wdpa::S3
 
   def current_wdpa_identifier
     # Assuming WDPA_MMMYYYY_Public.zip
-    current_wdpa.key[5..11]
+    current_wdpa.key.split('_').second
   end
 
   private

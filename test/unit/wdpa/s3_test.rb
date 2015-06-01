@@ -83,4 +83,12 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
 
     assert_equal 'Apr2015', Wdpa::S3.current_wdpa_identifier
   end
+
+  test '#current_wdpa_identifier returns Month+Year independently from the length of the months name' do
+    file_mock = mock()
+    file_mock.expects(:key).returns('WDPA_June2015_Public.zip')
+    Wdpa::S3.any_instance.expects(:current_wdpa).returns(file_mock)
+
+    assert_equal 'June2015', Wdpa::S3.current_wdpa_identifier
+  end
 end
