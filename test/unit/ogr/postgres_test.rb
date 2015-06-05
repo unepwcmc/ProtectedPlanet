@@ -68,6 +68,8 @@ class TestOgrPostgres < ActiveSupport::TestCase
       user=#{db_config[:username]} dbname=#{db_config[:database]}
       password=#{db_config[:password]}\"
       -sql \"#{query}\"
+      -lco \"ENCODING=UTF-8\"
+      -lco \"WRITE_BOM=YES\"
     """.squish
 
     Ogr::Postgres.expects(:system).with(ogr_command).once
@@ -87,6 +89,8 @@ class TestOgrPostgres < ActiveSupport::TestCase
       user=#{db_config[:username]} dbname=#{db_config[:database]}
       password=#{db_config[:password]}\"
       -sql \"#{query}\"
+      -lco \"ENCODING=UTF-8\"
+      -lco \"WRITE_BOM=YES\"
     """.squish
 
     Ogr::Postgres.expects(:system).with(ogr_command).once
@@ -106,6 +110,8 @@ class TestOgrPostgres < ActiveSupport::TestCase
       user=#{db_config[:username]} dbname=#{db_config[:database]}
       password=#{db_config[:password]}\"
       -sql \"#{query}\"
+      -lco \"ENCODING=UTF-8\"
+      -lco \"WRITE_BOM=YES\"
     """.squish
 
     Ogr::Postgres.expects(:system).with(ogr_command).once
