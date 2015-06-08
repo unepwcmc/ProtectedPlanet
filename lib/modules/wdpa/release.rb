@@ -26,6 +26,7 @@ class Wdpa::Release
     end
 
     create_import_view
+    create_downloads_view
   end
 
   def import_tables

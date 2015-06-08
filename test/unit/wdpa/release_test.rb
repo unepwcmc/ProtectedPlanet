@@ -26,6 +26,7 @@ class TestWdpaRelease < ActiveSupport::TestCase
     Ogr::Postgres.expects(:import).with(gdb_path, "sources", "sources")
 
     Wdpa::Release.any_instance.expects(:create_import_view)
+    Wdpa::Release.any_instance.expects(:create_downloads_view)
 
     assert_kind_of Wdpa::Release, Wdpa::Release.download
   end
