@@ -36,7 +36,7 @@ module Download
     end
 
     def self.mixed
-      points = for_points({13 => %{'' AS "GIS_M_AREA"}, 15 => %{'' AS "GIS_AREA"}})
+      points = for_points({13 => %{NULL AS "GIS_M_AREA"}, 15 => %{NULL AS "GIS_AREA"}})
       """
         SELECT 'Polygon' as TYPE, #{for_polygons[:select]}
         FROM #{for_polygons[:from]}
