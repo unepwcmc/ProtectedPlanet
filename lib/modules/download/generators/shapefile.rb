@@ -3,8 +3,8 @@ class Download::Generators::Shapefile < Download::Generators::Base
   SHAPEFILE_PARTS = ['shp', 'shx',  'dbf', 'prj', 'cpg']
 
   QUERY_CONDITIONS = {
-    polygons: "ST_GeometryType(wkb_geometry) LIKE '%Poly%'",
-    points:   "ST_GeometryType(wkb_geometry) LIKE '%Point%'"
+    polygons: "type = 'Polygon'",
+    points:   "type = 'Point'"
   }
 
   def initialize zip_path, wdpa_ids
