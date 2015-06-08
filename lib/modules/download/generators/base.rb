@@ -54,7 +54,8 @@ class Download::Generators::Base
     conditions = Array.wrap(conditions)
     conditions << "wdpaid IN (#{@wdpa_ids.join(',')})" if @wdpa_ids.present?
 
-    query = "SELECT * FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
+    query = "SELECT \"TYPE\", #{Download::Queries.for_polygons[:select]}"
+    query << " FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
     query << " WHERE #{conditions.join(' AND ')}" if conditions.any?
 
     query

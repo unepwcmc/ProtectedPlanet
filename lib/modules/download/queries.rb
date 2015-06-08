@@ -38,10 +38,10 @@ module Download
     def self.mixed
       points = for_points({13 => %{NULL AS "GIS_M_AREA"}, 15 => %{NULL AS "GIS_AREA"}})
       """
-        SELECT 'Polygon' as TYPE, #{for_polygons[:select]}
+        SELECT 'Polygon' as \"TYPE\", #{for_polygons[:select]}
         FROM #{for_polygons[:from]}
         UNION ALL
-        SELECT 'Point' as TYPE, #{points[:select]}
+        SELECT 'Point' as \"TYPE\", #{points[:select]}
         FROM #{points[:from]}
       """.squish
     end
