@@ -5,7 +5,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
    and the specific driver' do
     zip_file_path = './all-kml.zip'
     kml_file_path = './all-kml.kml'
-    query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
+    query = "SELECT * FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
 
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
@@ -57,7 +57,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     Download::Generators::Kml.any_instance.stubs(:system).returns(true)
 
     pa = FactoryGirl.create(:protected_area, wdpa_id: 1234)
-    view_name = "tmp_downloads_fac1733ca468c25058e80c9ecf1708818c82d090"
+    view_name = "tmp_downloads_d1cb6a4b3b592d9c3166bd647b20478381db0aa9"
 
     Ogr::Postgres
       .expects(:export)
@@ -67,7 +67,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
 
     ActiveRecord::Base.connection.expects(:execute).with("""
       CREATE OR REPLACE VIEW #{view_name} AS
-      SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME} WHERE wdpaid IN (#{pa.wdpa_id})
+      SELECT * FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME} WHERE wdpaid IN (#{pa.wdpa_id})
     """.squish)
 
     Download::Generators::Kml.generate('./pa-kml.zip', [pa.wdpa_id])
@@ -79,7 +79,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     kml_file_path = './all-kml.kml'
 
     wdpa_ids = [1,2,3]
-    query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME} WHERE wdpaid IN (1,2,3)"
+    query = "SELECT * FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME} WHERE wdpaid IN (1,2,3)"
 
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)

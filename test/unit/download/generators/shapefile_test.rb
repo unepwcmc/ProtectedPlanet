@@ -12,13 +12,13 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
     shp_polygon_query = """
       SELECT *
-      FROM #{Wdpa::Release::IMPORT_VIEW_NAME}
-      WHERE ST_GeometryType(wkb_geometry) LIKE '%Poly%'
+      FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
+      WHERE type = 'Polygon'
     """.squish
     shp_point_query = """
       SELECT *
-      FROM #{Wdpa::Release::IMPORT_VIEW_NAME}
-      WHERE ST_GeometryType(wkb_geometry) LIKE '%Point%'
+      FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
+      WHERE type = 'Point'
     """.squish
 
     view_name_poly = 'temporary_view_123'
@@ -101,14 +101,14 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
     shp_polygon_query = """
       SELECT *
-      FROM #{Wdpa::Release::IMPORT_VIEW_NAME}
-      WHERE ST_GeometryType(wkb_geometry) LIKE '%Poly%'
+      FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
+      WHERE type = 'Polygon'
       AND wdpaid IN (1,2,3)
     """.squish
     shp_point_query = """
       SELECT *
-      FROM #{Wdpa::Release::IMPORT_VIEW_NAME}
-      WHERE ST_GeometryType(wkb_geometry) LIKE '%Point%'
+      FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
+      WHERE type = 'Point'
       AND wdpaid IN (1,2,3)
     """.squish
 

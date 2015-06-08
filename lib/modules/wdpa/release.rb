@@ -1,5 +1,6 @@
 class Wdpa::Release
   IMPORT_VIEW_NAME = "imported_protected_areas"
+  DOWNLOADS_VIEW_NAME = "downloads_protected_areas"
 
   def self.download
     wdpa_release = self.new
@@ -54,12 +55,17 @@ class Wdpa::Release
     create_query = "CREATE OR REPLACE VIEW #{IMPORT_VIEW_NAME} AS "
 
     select_queries = []
-    select_queries << "SELECT 'polygon' AS type, #{attributes} FROM standard_polygons"
-    select_queries << "SELECT 'point' AS type, #{attributes} FROM standard_points"
+    select_queries << "SELECT #{attributes} FROM standard_polygons"
+    select_queries << "SELECT #{attributes} FROM standard_points"
 
     create_query << select_queries.join(' UNION ALL ')
 
     db.execute(create_query)
+  end
+
+  def create_downloads_view
+    create_query = "CREATE OR REPLACE VIEW #{DOWNLOADS_VIEW_NAME} AS "
+    db.execute(create_query + Download::Queries.mixed)
   end
 
   def protected_areas

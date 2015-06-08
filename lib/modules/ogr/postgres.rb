@@ -2,7 +2,6 @@ class Ogr::Postgres
   class ExportError < StandardError; end;
 
   WRONG_ARGUMENTS_MSG = 'Given new table name, but no original table name'
-
   DRIVERS = {
     shapefile: 'ESRI Shapefile',
     csv:       'CSV',
@@ -16,10 +15,7 @@ class Ogr::Postgres
   }
 
   def self.import file_path, original_table_name=nil, table_name=nil
-    if table_name && !original_table_name
-      raise ArgumentError, WRONG_ARGUMENTS_MSG
-    end
-
+    raise ArgumentError, WRONG_ARGUMENTS_MSG if table_name && !original_table_name
     system ogr_command(TEMPLATES[:import], binding)
   end
 

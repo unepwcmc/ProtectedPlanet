@@ -5,7 +5,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
    and the specific driver' do
     zip_file_path = './all-csv.zip'
     csv_file_path = './all-csv.csv'
-    query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME}"
+    query = "SELECT * FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
 
     view_name = 'temporary_view_all'
     Download::Generators::Csv.any_instance.expects(:create_view).with(query).returns(view_name)
@@ -61,7 +61,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     csv_file_path = './all-csv.csv'
 
     wdpa_ids = [1,2,3]
-    query = "SELECT * FROM #{Wdpa::Release::IMPORT_VIEW_NAME} WHERE wdpaid IN (1,2,3)"
+    query = "SELECT * FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME} WHERE wdpaid IN (1,2,3)"
 
     view_name = 'temporary_view_123'
     Download::Generators::Csv.any_instance.stubs(:create_view).with(query).returns(view_name)
