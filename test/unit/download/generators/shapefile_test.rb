@@ -11,14 +11,14 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     shp_point_joined_files = './all-shp-points.shp ./all-shp-points.shx ./all-shp-points.dbf ./all-shp-points.prj ./all-shp-points.cpg'
 
     shp_polygon_query = """
-      SELECT *
+      SELECT #{Download::Utils.download_columns}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
-      WHERE type = 'Polygon'
+      WHERE \"TYPE\" = 'Polygon'
     """.squish
     shp_point_query = """
-      SELECT *
+      SELECT #{Download::Utils.download_columns}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
-      WHERE type = 'Point'
+      WHERE \"TYPE\" = 'Point'
     """.squish
 
     view_name_poly = 'temporary_view_123'
@@ -100,15 +100,15 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     wdpa_ids = [1,2,3]
 
     shp_polygon_query = """
-      SELECT *
+      SELECT #{Download::Utils.download_columns}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
-      WHERE type = 'Polygon'
+      WHERE \"TYPE\" = 'Polygon'
       AND wdpaid IN (1,2,3)
     """.squish
     shp_point_query = """
-      SELECT *
+      SELECT #{Download::Utils.download_columns}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
-      WHERE type = 'Point'
+      WHERE \"TYPE\" = 'Point'
       AND wdpaid IN (1,2,3)
     """.squish
 

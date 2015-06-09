@@ -66,7 +66,9 @@ class Wdpa::Release
 
   def create_downloads_view
     create_query = "CREATE OR REPLACE VIEW #{DOWNLOADS_VIEW_NAME} AS "
-    db.execute(create_query + Download::Queries.mixed)
+    as_query = Download::Queries.mixed(true)
+
+    db.execute(create_query + "#{as_query[:select]} #{as_query[:from]}")
   end
 
   def protected_areas

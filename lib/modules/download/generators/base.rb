@@ -51,14 +51,18 @@ class Download::Generators::Base
   end
 
   def query conditions=[]
+    query = "SELECT \"TYPE\", #{Download::Utils.download_columns}"
+    query << " FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
+    add_conditions(query, conditions).squish
+  end
+
+  def add_conditions query, conditions
     conditions = Array.wrap(conditions)
     conditions << "wdpaid IN (#{@wdpa_ids.join(',')})" if @wdpa_ids.present?
 
-    query = "SELECT \"TYPE\", #{Download::Queries.for_polygons[:select]}"
-    query << " FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
-    query << " WHERE #{conditions.join(' AND ')}" if conditions.any?
-
-    query
+    query.tap { |q|
+      q << " WHERE #{conditions.join(' AND ')}" if conditions.any?
+    }
   end
 
   def clean_up_after

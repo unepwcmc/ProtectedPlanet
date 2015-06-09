@@ -32,18 +32,23 @@ module Download
         %{#{column} AS "#{column.upcase}"}
       }.join(',')
 
-      {select: "#{aliased_columns}", from: 'standard_polygons', where: ''}
+      {select: "#{aliased_columns}", from: 'standard_polygons'}
     end
 
-    def self.mixed
+    def self.mixed with_type
+      add_type = -> type { %{'#{type}' AS "TYPE", } if with_type }
       points = for_points({13 => %{NULL AS "GIS_M_AREA"}, 15 => %{NULL AS "GIS_AREA"}})
-      """
-        SELECT 'Polygon' as \"TYPE\", #{for_polygons[:select]}
+
+      selected_columns = with_type ? '*' : for_polygons[:select]
+      from = """
+        (SELECT #{add_type['Polygon']} #{for_polygons[:select]}
         FROM #{for_polygons[:from]}
         UNION ALL
-        SELECT 'Point' as \"TYPE\", #{points[:select]}
-        FROM #{points[:from]}
+        SELECT #{add_type['Point']} #{points[:select]}
+        FROM #{points[:from]}) AS all
       """.squish
+
+      {select: selected_columns, from: from}
     end
   end
 end

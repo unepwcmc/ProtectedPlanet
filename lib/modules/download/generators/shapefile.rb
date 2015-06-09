@@ -3,8 +3,8 @@ class Download::Generators::Shapefile < Download::Generators::Base
   SHAPEFILE_PARTS = ['shp', 'shx',  'dbf', 'prj', 'cpg']
 
   QUERY_CONDITIONS = {
-    polygons: "type = 'Polygon'",
-    points:   "type = 'Point'"
+    polygons: %{"TYPE" = 'Polygon'},
+    points:   %{"TYPE" = 'Point'},
   }
 
   def initialize zip_path, wdpa_ids
@@ -43,6 +43,12 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
     raise Ogr::Postgres::ExportError unless export_success
     component_paths
+  end
+
+  def query conditions=[]
+    query = "SELECT #{Download::Utils.download_columns}"
+    query << " FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
+    add_conditions(query, conditions).squish
   end
 
   def clean_up_after

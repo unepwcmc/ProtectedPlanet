@@ -5,6 +5,13 @@ module Download
       S3.link_to file_name
     end
 
+    def self.download_columns
+      add_quotes = -> str { %{"#{str}"} }
+      Download::Queries::POLYGONS_COLUMNS
+        .map(&:upcase).map(&add_quotes)
+        .join(',')
+    end
+
     def self.make_current
       S3.replace_all S3::IMPORT_PREFIX, S3::CURRENT_PREFIX
 
