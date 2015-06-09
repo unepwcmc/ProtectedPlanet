@@ -51,14 +51,14 @@ class Download::Generators::Base
   end
 
   def query conditions=[]
-    query = "SELECT \"TYPE\", #{Download::Utils.download_columns}"
+    query = %{SELECT "TYPE", #{Download::Utils.download_columns}}
     query << " FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
     add_conditions(query, conditions).squish
   end
 
   def add_conditions query, conditions
     conditions = Array.wrap(conditions)
-    conditions << "wdpaid IN (#{@wdpa_ids.join(',')})" if @wdpa_ids.present?
+    conditions << %{"WDPAID" IN (#{@wdpa_ids.join(',')})} if @wdpa_ids.present?
 
     query.tap { |q|
       q << " WHERE #{conditions.join(' AND ')}" if conditions.any?
