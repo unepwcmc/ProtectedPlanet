@@ -5,10 +5,14 @@ module Download
       S3.link_to file_name
     end
 
-    def self.download_columns
+    def self.download_columns opts={}
+      opts = {reject: []}.merge(opts)
       add_quotes = -> str { %{"#{str}"} }
+
       Download::Queries::POLYGONS_COLUMNS
-        .map(&:upcase).map(&add_quotes)
+        .reject { |col| opts[:reject].include? col }
+        .map(&:upcase)
+        .map(&add_quotes)
         .join(',')
     end
 

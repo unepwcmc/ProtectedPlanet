@@ -16,7 +16,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
       WHERE \"TYPE\" = 'Polygon'
     """.squish
     shp_point_query = """
-      SELECT #{Download::Utils.download_columns}
+      SELECT #{Download::Utils.download_columns(reject: [:gis_area, :gis_m_area])}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
       WHERE \"TYPE\" = 'Point'
     """.squish
@@ -103,13 +103,13 @@ class DownloadShapefileTest < ActiveSupport::TestCase
       SELECT #{Download::Utils.download_columns}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
       WHERE \"TYPE\" = 'Polygon'
-      AND wdpaid IN (1,2,3)
+      AND \"WDPAID\" IN (1,2,3)
     """.squish
     shp_point_query = """
-      SELECT #{Download::Utils.download_columns}
+      SELECT #{Download::Utils.download_columns(reject: [:gis_area, :gis_m_area])}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
       WHERE \"TYPE\" = 'Point'
-      AND wdpaid IN (1,2,3)
+      AND \"WDPAID\" IN (1,2,3)
     """.squish
 
     view_name_poly = 'temporary_view_123'

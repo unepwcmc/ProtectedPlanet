@@ -67,7 +67,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     query = """
       SELECT \"TYPE\", #{Download::Utils.download_columns}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
-      WHERE wdpaid IN (1,2,3)
+      WHERE \"WDPAID\" IN (1,2,3)
     """.squish
 
     view_name = 'temporary_view_123'

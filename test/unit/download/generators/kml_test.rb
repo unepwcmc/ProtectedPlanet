@@ -60,7 +60,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     Download::Generators::Kml.any_instance.stubs(:system).returns(true)
 
     pa = FactoryGirl.create(:protected_area, wdpa_id: 1234)
-    view_name = "tmp_downloads_3cf2dc4c438d6238b7474c66021555a3795c5afb"
+    view_name = "tmp_downloads_4db53fd3381d6de4cbcfd5489917d712391fc484"
 
     Ogr::Postgres
       .expects(:export)
@@ -70,7 +70,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
 
     ActiveRecord::Base.connection.expects(:execute).with("""
       CREATE OR REPLACE VIEW #{view_name} AS
-      SELECT \"TYPE\", #{Download::Utils.download_columns} FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME} WHERE wdpaid IN (#{pa.wdpa_id})
+      SELECT \"TYPE\", #{Download::Utils.download_columns} FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME} WHERE \"WDPAID\" IN (#{pa.wdpa_id})
     """.squish)
 
     Download::Generators::Kml.generate('./pa-kml.zip', [pa.wdpa_id])
@@ -85,7 +85,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
     query = """
       SELECT \"TYPE\", #{Download::Utils.download_columns}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
-      WHERE wdpaid IN (1,2,3)
+      WHERE \"WDPAID\" IN (1,2,3)
     """.squish
 
     view_name = 'temporary_view_123'

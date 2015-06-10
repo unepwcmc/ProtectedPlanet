@@ -3,8 +3,14 @@ class Download::Generators::Shapefile < Download::Generators::Base
   SHAPEFILE_PARTS = ['shp', 'shx',  'dbf', 'prj', 'cpg']
 
   QUERY_CONDITIONS = {
-    polygons: %{"TYPE" = 'Polygon'},
-    points:   %{"TYPE" = 'Point'},
+    polygons: {
+      select: Download::Utils.download_columns,
+      where: %{"TYPE" = 'Polygon'}
+    },
+    points:   {
+      select: Download::Utils.download_columns(reject: [:gis_area, :gis_m_area]),
+      where: %{"TYPE" = 'Point'}
+    }
   }
 
   def initialize zip_path, wdpa_ids
@@ -19,8 +25,8 @@ class Download::Generators::Shapefile < Download::Generators::Base
     shapefile_paths = []
 
     clean_up_after do
-      QUERY_CONDITIONS.each do |name, condition|
-        shapefile_paths |= export_component name, condition
+      QUERY_CONDITIONS.each do |name, props|
+        shapefile_paths |= export_component name, props
       end
 
       system("zip -j #{zip_path} #{shapefile_paths.join(' ')} #{attachments_paths}")
@@ -31,10 +37,10 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
   private
 
-  def export_component name, condition
+  def export_component name, props
     component_paths = shapefile_components(name)
 
-    view_name = create_view query(condition)
+    view_name = create_view query(props[:select], props[:where])
     export_success = Ogr::Postgres.export(
       :shapefile,
       component_paths.first,
@@ -45,8 +51,8 @@ class Download::Generators::Shapefile < Download::Generators::Base
     component_paths
   end
 
-  def query conditions=[]
-    query = "SELECT #{Download::Utils.download_columns}"
+  def query select, conditions=[]
+    query = "SELECT #{select}"
     query << " FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
     add_conditions(query, conditions).squish
   end
