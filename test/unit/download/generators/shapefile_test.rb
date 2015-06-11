@@ -26,6 +26,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     view_name_point = 'temporary_view_456'
     Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_point_query).returns(view_name_point)
 
+    ActiveRecord::Base.connection.stubs(:select_value).returns(1).twice
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
 
@@ -44,6 +45,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
   test '#generate returns false if the export fails' do
     ActiveRecord::Base.connection.stubs(:execute)
+    ActiveRecord::Base.connection.stubs(:select_value).returns(1)
     Ogr::Postgres.expects(:export).returns(false)
 
     assert_equal false, Download::Generators::Shapefile.generate(''),
@@ -52,6 +54,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
   test '#generate returns false if the zip fails' do
     ActiveRecord::Base.connection.stubs(:execute)
+    ActiveRecord::Base.connection.stubs(:select_value).returns(1).twice
     Ogr::Postgres.expects(:export).twice.returns(true)
     Download::Generators::Shapefile.any_instance.expects(:system).returns(false)
 
@@ -77,6 +80,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     ]
 
     ActiveRecord::Base.connection.stubs(:execute)
+    ActiveRecord::Base.connection.stubs(:select_value).returns(1).twice
     Ogr::Postgres.expects(:export).twice.returns(true)
     Download::Generators::Shapefile.
       any_instance.
@@ -117,6 +121,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     view_name_point = 'temporary_view_456'
     Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_point_query).returns(view_name_point)
 
+    ActiveRecord::Base.connection.stubs(:select_value).returns(1).twice
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
 
@@ -139,5 +144,15 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).never
 
     refute Download::Generators::Shapefile.generate('./none.zip', [])
+  end
+
+  test '#generate doesnt call Ogr::Postgres::export if the view has no pas' do
+    Download::Generators::Shapefile.any_instance.stubs(:create_view).twice
+    ActiveRecord::Base.connection.stubs(:select_value).returns(0).twice
+
+    Download::Generators::Base.any_instance.expects(:system)
+    Ogr::Postgres.expects(:export).never
+
+    Download::Generators::Shapefile.generate('./none.zip', [1,2,3])
   end
 end

@@ -39,8 +39,12 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
   def export_component name, props
     component_paths = shapefile_components(name)
-
     view_name = create_view query(props[:select], props[:where])
+
+    return [] if ActiveRecord::Base.connection.select_value("""
+      SELECT COUNT(*) FROM #{view_name}
+    """).to_i.zero?
+
     export_success = Ogr::Postgres.export(
       :shapefile,
       component_paths.first,
