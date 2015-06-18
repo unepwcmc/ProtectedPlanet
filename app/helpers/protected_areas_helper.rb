@@ -12,9 +12,9 @@ module ProtectedAreasHelper
     !!protected_area.wikipedia_article
   end
 
-  def url_for_irreplaceability protected_area
+  def url_for_related_source source, protected_area
     File.join(
-      Rails.application.secrets.irreplaceability_info_base_url,
+      Rails.application.secrets.related_sources_base_urls[source],
       protected_area.wdpa_id.to_s
     )
   end
