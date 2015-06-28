@@ -8,6 +8,16 @@ class SearchAggregationTest < ActiveSupport::TestCase
           "field" => "marine"
         }
       },
+      "has_irreplaceability_info" => {
+        "terms" => {
+          "field" => "has_irreplaceability_info"
+        }
+      },
+      "has_parcc_info" => {
+        "terms" => {
+          "field" => "has_parcc_info"
+        }
+      },
       "country" => {
         "nested" => {
           "path" => "countries_for_index"
@@ -64,10 +74,37 @@ class SearchAggregationTest < ActiveSupport::TestCase
   end
 
   test '.parse, given the hash of raw aggregations, returns the computed aggregations' do
+    region = FactoryGirl.create(:region)
+    designation = FactoryGirl.create(:designation)
+    iucn_category = FactoryGirl.create(:iucn_category)
     country_1 = FactoryGirl.create(:country)
     country_2 = FactoryGirl.create(:country)
 
     aggregations_hash = {
+      'designation' => {
+        'doc_count'=> 100,
+        'aggregation' => {
+          'buckets'=> [
+            {'key' => designation.id, 'doc_count' => 100},
+          ]
+        }
+      },
+      'iucn_category' => {
+        'doc_count'=> 100,
+        'aggregation' => {
+          'buckets'=> [
+            {'key' => iucn_category.id, 'doc_count' => 100},
+          ]
+        }
+      },
+      'region' => {
+        'doc_count'=> 100,
+        'aggregation' => {
+          'buckets'=> [
+            {'key' => region.id, 'doc_count' => 100},
+          ]
+        }
+      },
       'country' => {
         'doc_count'=> 169,
         'aggregation' => {
@@ -83,9 +120,41 @@ class SearchAggregationTest < ActiveSupport::TestCase
           {'key' => 'T', 'doc_count' => 64},
           {'key' => 'F', 'doc_count' => 17}
         ]
+      },
+      'has_parcc_info' => {
+        'doc_count'=> 100,
+        'buckets'=> [
+          {'key' => 'T', 'doc_count' => 50},
+          {'key' => 'F', 'doc_count' => 50}
+        ]
+      },
+      'has_irreplaceability_info' => {
+        'doc_count'=> 12,
+        'buckets'=> [
+          {'key' => 'T', 'doc_count' => 2},
+          {'key' => 'F', 'doc_count' => 10}
+        ]
       }
     }
     expected_response = {
+      'designation' => [{
+        label: designation.name,
+        query: 'designation',
+        count: 100,
+        identifier: designation.id
+      }],
+      'iucn_category' => [{
+        label: iucn_category.name,
+        query: 'iucn_category',
+        count: 100,
+        identifier: iucn_category.id
+      }],
+      'region' => [{
+        label: region.name,
+        query: 'region',
+        count: 100,
+        identifier: region.id
+      }],
       'country' => [{
         label: country_1.name,
         query: 'country',
@@ -107,6 +176,17 @@ class SearchAggregationTest < ActiveSupport::TestCase
         query: 'marine',
         count: 17,
         identifier: false
+      }],
+      'related_sources' => [{
+        label: 'Vulnerability Assessment',
+        query: 'has_parcc_info',
+        count: 50,
+        identifier: true
+      }, {
+        label: 'Irreplaceability Assessment',
+        query: 'has_irreplaceability_info',
+        count: 2,
+        identifier: true
       }]
     }
 

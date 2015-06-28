@@ -1,8 +1,8 @@
-class Search::Aggregators::Model
-  def self.build name, raw_aggregation, config
+module Search::Aggregators::Model
+  def self.build name, raw_aggregations, config
     model = (config['class'] || name.classify).constantize
 
-    raw_aggregation['aggregation']['buckets'].map do |info|
+    raw_aggregations[name]['aggregation']['buckets'].map do |info|
       {
         identifier: info['key'],
         query: config['query'] || name,

@@ -7,12 +7,14 @@ class SearchAggregatorsModel < ActiveSupport::TestCase
 
     name = 'country'
     aggregation_hash = {
-      'doc_count'=> 169,
-      'aggregation' => {
-        'buckets'=> [
-          {'key' => country_1.id, 'doc_count' => 64},
-          {'key' => country_2.id, 'doc_count' => 17}
-        ]
+      'country' => {
+        'doc_count'=> 169,
+        'aggregation' => {
+          'buckets'=> [
+            {'key' => country_1.id, 'doc_count' => 64},
+            {'key' => country_2.id, 'doc_count' => 17}
+          ]
+        }
       }
     }
     configuration_hash = {

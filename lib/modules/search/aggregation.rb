@@ -1,20 +1,18 @@
 class Search::Aggregation
   AGGREGATORS = {
     'boolean' => Search::Aggregators::Boolean,
-    'model'   => Search::Aggregators::Model
+    'model'   => Search::Aggregators::Model,
+    'grouped' => Search::Aggregators::Grouped
   }
 
   TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'templates')
   TEMPLATE = File.read(File.join(TEMPLATE_DIRECTORY, 'aggregations.json'))
 
   def self.parse raw_aggregations
-    {}.tap do |aggregations|
-      raw_aggregations.each do |name, hash|
-        aggregator = aggregator_for(name)
-        config = configuration[name]
+    configuration.each_with_object({}) do |(aggregation, config), aggregations|
+      aggregator = aggregator_for(aggregation)
 
-        aggregations[name] = aggregator.build(name, hash, config)
-      end
+      aggregations[aggregation] = aggregator.build(aggregation, raw_aggregations, config)
     end
   end
 
