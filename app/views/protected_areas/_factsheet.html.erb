@@ -10,7 +10,7 @@
   <% if protected_area.has_irreplaceability_info %>
     <%= render 'protected_areas/factsheet/related_source',
       title: "Analysis of Irreplaceability",
-      url: url_for('irreplaceability_info', protected_area),
+      url: url_for_related_source('irreplaceability_info', protected_area),
       info: "This Protected Area has been assessed and ranked for irreplaceability"
     %>
   <% end %>
@@ -18,7 +18,7 @@
   <% if protected_area.has_parcc_info %>
     <%= render 'protected_areas/factsheet/related_source',
       title: "Protected Area Resilient to Climate Change",
-      url: url_for('parcc_info', protected_area),
+      url: url_for_related_source('parcc_info', protected_area),
       info: "This Protected Area has additional information on resilience to Climate Change"
     %>
   <% end %>
