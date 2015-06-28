@@ -8,6 +8,23 @@ aggregations:
     identifiers:
       T: true
       F: false
+  related_sources:
+    type: "grouped"
+    members:
+      has_parcc_info:
+        type: "boolean"
+        query: "has_parcc_info"
+        labels:
+          T: "Vulnerability Assessment"
+        identifiers:
+          T: true
+      has_irreplaceability_info:
+        type: "boolean"
+        query: "has_irreplaceability_info"
+        labels:
+          T: "Irreplaceability Assessment"
+        identifiers:
+          T: true
   country:
     type: "model"
     class: "Country"
