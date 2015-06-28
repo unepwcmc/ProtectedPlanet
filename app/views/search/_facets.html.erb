@@ -2,7 +2,7 @@
   <li class="facet">
    <%= clear_filters_link(params) %>
   </li>
-  <% aggregations.each do |name, buckets| %>
+  <% aggregations.select{ |_agg, buckets| buckets.any? }.each do |name, buckets| %>
     <li class="facet">
       <h5><%= name.humanize %></h5>
 
