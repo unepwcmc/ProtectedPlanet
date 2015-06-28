@@ -3,16 +3,19 @@ module SearchHelper
 
   def type_li_tag type, current_type
     selected_class = (type == current_type) ? "selected" : ""
+    content_tag(:li, class: selected_class) { yield }
+  end
 
-    content_tag(:li, class: selected_class) do
-      yield
+  def autocomplete_link result
+    if result[:type] == 'protected_area'
+      pa_autocomplete_link result
+    else
+      country_autocomplete_link result
     end
   end
 
   def facet_link facet
-    link_params = params.merge({
-       facet[:query] => facet[:identifier]
-    })
+    link_params = params.merge({facet[:query] => facet[:identifier]})
 
     link_to url_for(link_params) do
       facet_count = content_tag(:strong, "(#{facet[:count]})")
@@ -20,32 +23,31 @@ module SearchHelper
     end
   end
 
-  def autocomplete_link result
-    if result[:type] == 'protected_area'
-      version = Rails.application.secrets.mapbox['version']
-      image_params = {id: result[:identifier], version: version}
+  def clear_filters_link params
+    return '' if params.length <= 3
+    link_to "Clear Filters", search_path(params.slice(:q))
+  end
 
-      link_to protected_area_url(result[:identifier]) do
-        image = image_tag(
-          "search-placeholder-country.png",
-          "alt" => result[:name],
-          "data-async" => tiles_path(image_params),
-        )
-        raw "#{image}#{result[:name]}"
-      end
-    else
-      link_to country_url(result[:identifier]) do
-        image = image_tag("search-placeholder-country.png")
-        raw "#{image}#{result[:name]}"
-      end
+  private
+
+  def pa_autocomplete_link result
+    version = Rails.application.secrets.mapbox['version']
+    image_params = {id: result[:identifier], version: version}
+
+    link_to protected_area_url(result[:identifier]) do
+      image = image_tag(
+        "search-placeholder-country.png",
+        "alt" => result[:name],
+        "data-async" => tiles_path(image_params),
+      )
+      raw "#{image}#{result[:name]}"
     end
   end
 
-  def clear_filters_link params
-    if params.length > 3
-      link_to "Clear Filters", search_path(params.slice(:q))
-    else
-      ''
+  def country_autocomplete_link result
+    link_to country_url(result[:identifier]) do
+      image = image_tag("search-placeholder-country.png")
+      raw "#{image}#{result[:name]}"
     end
   end
 end
