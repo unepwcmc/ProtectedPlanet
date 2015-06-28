@@ -2,11 +2,23 @@ class Search::Filter
   FILTERS = {
     type: { type: 'type' },
     marine: { type: 'equality', path: 'marine' },
-    country: { type: 'nested', path: 'countries_for_index', field: 'countries_for_index.id', required: true },
-    region: { type: 'nested', path: 'countries_for_index.region_for_index', field: 'countries_for_index.region_for_index.id', required: true },
     iucn_category: { type: 'nested', path: 'iucn_category', field: 'iucn_category.id', required: true },
     designation: { type: 'nested', path: 'designation', field: 'designation.id', required: true },
     location: { type: 'geo', path: 'location', field: 'protected_area.coordinates' },
+    has_parcc_info: { type: 'equality', path: 'has_parcc_info' },
+    has_irreplaceability_info: { type: 'equality', path: 'has_irreplaceability_info' },
+    country: {
+      type: 'nested',
+      path: 'countries_for_index',
+      field: 'countries_for_index.id',
+      required: true
+    },
+    region: {
+      type: 'nested',
+      path: 'countries_for_index.region_for_index',
+      field: 'countries_for_index.region_for_index.id',
+      required: true
+    }
   }
 
   def initialize term, options
