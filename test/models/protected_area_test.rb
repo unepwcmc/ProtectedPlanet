@@ -58,7 +58,8 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       name: 'Manbone', countries: [country], sub_locations: [sub_location],
       original_name: 'Manboné', iucn_category: iucn_category,
       designation: designation, marine: true, wdpa_id: 555999,
-      the_geom_latitude: 1, the_geom_longitude: 2
+      the_geom_latitude: 1, the_geom_longitude: 2,
+      has_irreplaceability_info: true, has_parcc_info: false
     )
 
     expected_json = {
@@ -67,6 +68,8 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "name" => 'Manbone',
       "original_name" => "Manboné",
       "marine" => true,
+      "has_irreplaceability_info" => true,
+      "has_parcc_info" => false,
       "coordinates" => [2.0, 1.0],
       "sub_locations" => [
         {
