@@ -14,12 +14,12 @@ class Search::Filter::Nested < Search::Filter
   def filter value
     {
       "nested" => {
-        "path" => @options[:path],
+        "path" => @options['path'],
         "filter" => {
           "bool" => {
             bool_key => {
               "term" => {
-                @options[:field] => value
+                @options['field'] => value
               }
             }
           }
@@ -29,6 +29,6 @@ class Search::Filter::Nested < Search::Filter
   end
 
   def bool_key
-    @options[:required] ?  "must" : "must_not"
+    @options['required'] ?  "must" : "must_not"
   end
 end

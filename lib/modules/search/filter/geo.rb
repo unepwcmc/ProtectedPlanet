@@ -3,7 +3,7 @@ class Search::Filter::Geo < Search::Filter
     {
       "geo_distance" => {
         "distance" => "#{distance}km",
-        @options[:field] => coords
+        @options['field'] => coords
       }
     }
   end
