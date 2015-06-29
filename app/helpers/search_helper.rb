@@ -25,7 +25,11 @@ module SearchHelper
 
   def clear_filters_link params
     return '' if params.length <= 3
-    link_to "Clear Filters", search_path(params.slice(:q))
+    if params[:main] && params[:q].nil?
+      link_to "Clear Filters", search_path(params.slice(:main, params[:main].to_sym))
+    else
+      link_to "Clear Filters", search_path(params.slice(:q))
+    end
   end
 
   DEFAULT_TITLE = 'Protected Areas'

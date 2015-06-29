@@ -21,6 +21,12 @@ class SearchHelperTest < ActionView::TestCase
     assert_equal expected_link, clear_filters_link(params)
   end
 
+  test '#clear_filters_link, given params with a main filter, returns a <a> tag to the main filter' do
+    params = {region: 234, country: 123, main: 'region', action: 'yo', controller: 'mama'}
+    expected_link = '<a href="/search?main=region&amp;region=234">Clear Filters</a>'
+    assert_equal expected_link, clear_filters_link(params)
+  end
+
   test '#clear_filters_link, given params, returns nothing if there are
    no filters' do
     params = {q: 'boneman', action: 'yo', controller: 'mama'}
