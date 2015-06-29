@@ -1,9 +1,9 @@
-<% content_for :page_title, "Showing results for '#{@query}'" %>
+<% content_for :page_title, search_title(params) %>
 <% content_for :header do %>
   <nav class="sub-nav search-sub-nav">
     <ul>
       <li>
-        <h1>You searched for <strong>"<%= @query %>"</strong></h1>
+        <h1><%= search_title(params) %></h1>
         <h2><strong><%= @search.results.count %></strong> results</h2>
       </li>
       <% if @search.results.count > 0 %>

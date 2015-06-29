@@ -28,7 +28,40 @@ module SearchHelper
     link_to "Clear Filters", search_path(params.slice(:q))
   end
 
+  DEFAULT_TITLE = 'Protected Areas'
+  def search_title params
+    title_with_query(params[:q]) or title_with_filter(params) or DEFAULT_TITLE
+  end
+
   private
+
+  def title_with_query query
+    if query.present?
+      %{Search results for <strong>"#{query}"</strong>}.html_safe
+    end
+  end
+
+  TITLE_GENERATORS = {
+    value: -> config, param { config['cases'][param.to_s] },
+    model: -> config, param {
+      model = config['model'].constantize
+      instance = model.find_by_id(param)
+      config['template'] % instance.name
+    }
+  }
+  def title_with_filter params
+    main_filter = params['main']
+    return if main_filter.nil? || params[main_filter].nil?
+
+    titles = Search.configuration['titles']
+    config = titles[main_filter.to_s]
+    type = config['type'].to_sym
+
+    return TITLE_GENERATORS[type][config, params[main_filter]]
+  rescue => err
+    Rails.logger.warn err
+    nil
+  end
 
   def pa_autocomplete_link result
     version = Rails.application.secrets.mapbox['version']
