@@ -1,3 +1,37 @@
+titles:
+  marine:
+    type: "value"
+    cases:
+      "true": "Marine Protected Areas"
+      "false": "Terrestrial Protected Areas"
+  has_parcc_info:
+    type: "value"
+    cases:
+      "true": "Protected Areas with Vulnerability Assessment"
+  has_irreplaceability_info:
+    type: "value"
+    cases:
+      "true": "Protected Areas with Irreplaceability Assessment"
+  iucn_category:
+    type: "model"
+    model: "IucnCategory"
+    property: "name"
+    template: "Protected Areas with IUCN Category %s"
+  country:
+    type: "model"
+    model: "Country"
+    property: "name"
+    template: "Protected Areas in %s"
+  region:
+    type: "model"
+    model: "Region"
+    property: "name"
+    template: "Protected Areas in %s"
+  designation:
+    type: "model"
+    model: "Designation"
+    property: "name"
+    template: "Protected Areas with Designation '%s'"
 aggregations:
   type_of_territory:
     type: "boolean"
@@ -37,7 +71,6 @@ aggregations:
   iucn_category:
     type: "model"
     class: "IucnCategory"
-
 filters:
     type:
       type: 'type'
