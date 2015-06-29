@@ -3,14 +3,13 @@ class SearchController < ApplicationController
   before_action :authenticate_user!, only: [:create]
 
   before_filter :ignore_empty_query, only: [:index, :map]
+  before_filter :load_search, only: [:index, :map]
 
   def index
-    @search = Search.search(@query, search_options)
     render partial: 'grid' if request.xhr?
   end
 
   def map
-    @search = Search.search(@query, search_options)
     render :index
   end
 
@@ -31,7 +30,12 @@ class SearchController < ApplicationController
 
   def ignore_empty_query
     @query = params[:q]
-    redirect_to :root if @query.blank?
+    redirect_to :root if @query.blank? && filters.empty?
+  end
+
+  def load_search
+    @search = Search.search(@query, search_options)
+    @main_filter = params[:main]
   end
 
   def project
