@@ -23,6 +23,26 @@ class TestWdpaAttributeImporterService < ActiveSupport::TestCase
     assert_not_nil ProtectedArea.where(wdpa_id: 4321).first
   end
 
+  test '.import does not standardise the attributes if the PA already
+   exists' do
+    pa_attributes = [{
+      wdpaid: 123
+    }, {
+      wdpaid: 123
+    }]
+
+    wdpa_release = Wdpa::Release.new
+    wdpa_release.expects(:protected_areas).returns(pa_attributes)
+
+    Wdpa::DataStandard.expects(:attributes_from_standards_hash).twice
+      .returns({wdpa_id: 123}, {wdpa_id: 123})
+
+    ProtectedArea.expects(:create).once
+
+    imported = Wdpa::ProtectedAreaImporter::AttributeImporter.import(wdpa_release)
+    assert imported, "Expected importer to return true on success"
+  end
+
   test '.import works with stringified keys' do
     pa_attributes = [{
       "wdpaid" => 1234,
@@ -53,7 +73,8 @@ class TestWdpaAttributeImporterService < ActiveSupport::TestCase
 
     Wdpa::DataStandard.
       expects(:attributes_from_standards_hash).
-      with({wdpaid: 123})
+      with({wdpaid: 123}).
+      returns({wdpa_id: 123})
 
     wdpa_release = Wdpa::Release.new
     wdpa_release.expects(:protected_areas).returns(pa_attributes)
