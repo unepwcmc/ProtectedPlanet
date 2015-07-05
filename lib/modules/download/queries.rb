@@ -45,7 +45,7 @@ module Download
         FROM #{for_polygons[:from]}
         UNION ALL
         SELECT #{add_type['Point']} #{points[:select]}
-        FROM #{points[:from]}) AS all
+        FROM #{points[:from]}) AS all_pas
       """.squish
 
       {select: selected_columns, from: from}
