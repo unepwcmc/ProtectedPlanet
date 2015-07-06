@@ -17,9 +17,9 @@
 
   <% if protected_area.has_parcc_info %>
     <%= render 'protected_areas/factsheet/related_source',
-      title: "Protected Area Resilient to Climate Change",
+      title: "Vulnerability Assessment",
       url: url_for_related_source('parcc_info', protected_area),
-      info: "This Protected Area has additional information on resilience to Climate Change"
+      info: "This Protected Area has been assessed for vulnerability"
     %>
   <% end %>
 
