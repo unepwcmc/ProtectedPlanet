@@ -11,7 +11,7 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     Download.stubs(:make_current)
     ImportTools::WebHandler.stubs(:clear_cache)
     ImportTools::WebHandler.stubs(:under_maintenance).yields
-    Geospatial::Calculator.stubs(:calculate_statistics)
+    #Geospatial::Calculator.stubs(:calculate_statistics)
     Autocompletion.stubs(:drop)
     Autocompletion.stubs(:populate)
 
@@ -34,7 +34,7 @@ class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase
     Autocompletion.expects(:drop)
     Autocompletion.expects(:populate)
     ImportTools::WebHandler.expects(:clear_cache)
-    Geospatial::Calculator.expects(:calculate_statistics)
+    #Geospatial::Calculator.expects(:calculate_statistics)
 
     ImportWorkers::FinaliserWorker.new.perform
   end
