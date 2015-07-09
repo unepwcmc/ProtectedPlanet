@@ -28,7 +28,7 @@ class ImportWorkers::FinaliserWorker
     Autocompletion.drop
     Autocompletion.populate
 
-    Geospatial::Calculator.calculate_statistics
+    #Geospatial::Calculator.calculate_statistics
     Download.make_current
     ImportTools::WebHandler.clear_cache
   end
