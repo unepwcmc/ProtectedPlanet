@@ -292,7 +292,7 @@ Map { background-color: @land; }
     [zoom>=14][zoom<=15] { line-width: 3.0; }
     [zoom>=16] { line-width: 4.0; }
     [disputed=1][zoom<=5] { line-dasharray: 4 , 3; }
-    [disputed=1][zoom>=6][zoom<=7] { line-dasharray: 5 , 3; }
+    [disputed=1][id=2374762][zoom>=6][zoom<=7] { line-dasharray: 5 , 3; }
     [disputed=1][zoom>=8][zoom<=9] { line-dasharray: 7 , 4; }
     [disputed=1][zoom>=10][zoom<=11] { line-dasharray: 9 , 5; }
     [disputed=1][zoom>=12][zoom<=13] { line-dasharray: 11 , 6; }

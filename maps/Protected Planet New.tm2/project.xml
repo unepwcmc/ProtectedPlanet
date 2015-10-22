@@ -11,7 +11,7 @@
   <Parameter name="maxzoom">20</Parameter>
   <Parameter name="minzoom">0</Parameter>
   <Parameter name="name"><![CDATA[Protected Planet New]]></Parameter>
-  <Parameter name="source"><![CDATA[mapbox:///mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v5]]></Parameter>
+  <Parameter name="source"><![CDATA[mapbox:///mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v6]]></Parameter>
 </Parameters>
 
 <FontSet name="fontset-0">
@@ -2056,158 +2056,6 @@
     <MarkersSymbolizer stroke-width="2" width="2.8800000000000003" allow-overlap="true" ignore-placement="true" stroke="#000000" />
   </Rule>
   <Rule>
-    <MaxScaleDenominator>2500</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'minor_rail')</Filter>
-    <LineSymbolizer stroke-width="9" stroke="#000000" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="butt" stroke-dasharray="6, 3" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#000000" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>5000</MaxScaleDenominator>
-    <MinScaleDenominator>2500</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'minor_rail')</Filter>
-    <LineSymbolizer stroke-width="8" stroke="#000000" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="butt" stroke-dasharray="6, 3" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#000000" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500</MaxScaleDenominator>
-    <MinScaleDenominator>5000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'minor_rail')</Filter>
-    <LineSymbolizer stroke-width="6" stroke="#000000" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="butt" stroke-dasharray="6, 3" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#000000" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000</MaxScaleDenominator>
-    <MinScaleDenominator>12500</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'minor_rail')</Filter>
-    <LineSymbolizer stroke-width="4.5" stroke="#000000" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="butt" stroke-dasharray="6, 3" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#000000" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000</MaxScaleDenominator>
-    <MinScaleDenominator>25000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'minor_rail')</Filter>
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>2500</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'major_rail')</Filter>
-    <LineSymbolizer stroke-width="9" stroke="#000000" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="butt" stroke-dasharray="6, 3" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#000000" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>5000</MaxScaleDenominator>
-    <MinScaleDenominator>2500</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'major_rail')</Filter>
-    <LineSymbolizer stroke-width="8" stroke="#000000" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="butt" stroke-dasharray="6, 3" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#000000" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500</MaxScaleDenominator>
-    <MinScaleDenominator>5000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'major_rail')</Filter>
-    <LineSymbolizer stroke-width="6" stroke="#000000" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="butt" stroke-dasharray="6, 3" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#000000" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000</MaxScaleDenominator>
-    <MinScaleDenominator>12500</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'major_rail')</Filter>
-    <LineSymbolizer stroke-width="4.5" stroke="#000000" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="butt" stroke-dasharray="6, 3" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#000000" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000</MaxScaleDenominator>
-    <MinScaleDenominator>25000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'major_rail')</Filter>
-    <LineSymbolizer stroke-width="3" stroke="#000000" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="butt" stroke-dasharray="6, 3" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#000000" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000</MaxScaleDenominator>
-    <MinScaleDenominator>50000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'major_rail')</Filter>
-    <LineSymbolizer stroke="#000000" stroke-opacity="0.5" stroke-linejoin="round" stroke-linecap="butt" stroke-dasharray="6, 3" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#000000" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'motorway')</Filter>
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" stroke="#000000" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>200000</MaxScaleDenominator>
-    <MinScaleDenominator>100000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'motorway')</Filter>
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" stroke="#000000" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>750000</MaxScaleDenominator>
-    <MinScaleDenominator>200000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'motorway')</Filter>
-    <LineSymbolizer stroke="#000000" stroke-linejoin="round" stroke-linecap="round" />
-    <LineSymbolizer stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>2500</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'path')</Filter>
-    <LineSymbolizer stroke="#efefe5" stroke-width="2" stroke-linejoin="round" />
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" stroke-width="5.6" stroke="#ffffff" stroke-opacity="0.75" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>5000</MaxScaleDenominator>
-    <MinScaleDenominator>2500</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'path')</Filter>
-    <LineSymbolizer stroke="#efefe5" stroke-width="2" stroke-linejoin="round" />
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" stroke-width="4.8" stroke="#ffffff" stroke-opacity="0.75" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500</MaxScaleDenominator>
-    <MinScaleDenominator>5000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'path')</Filter>
-    <LineSymbolizer stroke="#efefe5" stroke-width="2" stroke-linejoin="round" />
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" stroke-width="3.9" stroke="#ffffff" stroke-opacity="0.75" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000</MaxScaleDenominator>
-    <MinScaleDenominator>12500</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'path')</Filter>
-    <LineSymbolizer stroke="#efefe5" stroke-width="2" stroke-linejoin="round" />
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" stroke-width="3.2" stroke="#ffffff" stroke-opacity="0.75" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000</MaxScaleDenominator>
-    <MinScaleDenominator>25000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'path')</Filter>
-    <LineSymbolizer stroke="#efefe5" stroke-width="2" stroke-linejoin="round" />
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" stroke="#ffffff" stroke-opacity="0.75" stroke-width="1" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000</MaxScaleDenominator>
-    <MinScaleDenominator>50000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'path')</Filter>
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>200000</MaxScaleDenominator>
-    <MinScaleDenominator>100000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'path')</Filter>
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" />
-  </Rule>
-  <Rule>
     <MaxScaleDenominator>100000</MaxScaleDenominator>
     <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'driveway')</Filter>
     <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" />
@@ -2217,25 +2065,6 @@
     <MaxScaleDenominator>200000</MaxScaleDenominator>
     <MinScaleDenominator>100000</MinScaleDenominator>
     <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'driveway')</Filter>
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'service')</Filter>
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" stroke="#000000" stroke-linejoin="round" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000</MaxScaleDenominator>
-    <MinScaleDenominator>12500</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'service')</Filter>
-    <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" stroke="#ffffff" />
-    <LineSymbolizer stroke="#efefe5" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>200000</MaxScaleDenominator>
-    <MinScaleDenominator>100000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'service')</Filter>
     <LineSymbolizer stroke-linecap="butt" stroke-dasharray="6, 2" />
   </Rule>
   <Rule>
@@ -2848,21 +2677,6 @@
     <MinScaleDenominator>1500000</MinScaleDenominator>
     <Filter>([class] = 'motorway') and ([mapnik::geometry_type] = 2)</Filter>
     <LineSymbolizer stroke-width="1.2" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'major_rail')</Filter>
-    <LineSymbolizer stroke="#aaaaaa" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'minor_rail')</Filter>
-    <LineSymbolizer stroke="#aaaaaa" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>3000000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'motorway')</Filter>
-    <LineSymbolizer stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000</MaxScaleDenominator>
@@ -3970,23 +3784,6 @@
     <LineSymbolizer stroke-width="1.2800000000000002" stroke="#ffffff" stroke-linejoin="round" stroke-dasharray="6, 2" />
   </Rule>
   <Rule>
-    <MaxScaleDenominator>25000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'minor_rail')</Filter>
-    <LineSymbolizer stroke="#efefe5" />
-    <LineSymbolizer stroke="#aaaaaa" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'major_rail')</Filter>
-    <LineSymbolizer stroke="#efefe5" />
-    <LineSymbolizer stroke="#aaaaaa" stroke-dasharray="1, 2" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>750000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'motorway')</Filter>
-    <LineSymbolizer stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
     <MaxScaleDenominator>2500</MaxScaleDenominator>
     <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'aerialway')</Filter>
     <LineSymbolizer stroke-width="2.5" stroke="#808080" stroke-opacity="0.85" />
@@ -4026,17 +3823,6 @@
     <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'aerialway')</Filter>
     <LineSymbolizer stroke-width="0.2" stroke="#808080" stroke-opacity="0.85" />
     <LineSymbolizer stroke-width="5" stroke="#808080" stroke-opacity="0.75" stroke-dasharray="0.2, 18" clip="false" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'path')</Filter>
-    <LineSymbolizer stroke="#efefe5" stroke-width="2" />
-    <LineSymbolizer stroke="#ffffff" stroke-opacity="0.75" stroke-dasharray="1, 1" stroke-width="1" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([oneway] = 1) and ([class] = 'service')</Filter>
-    <LineSymbolizer stroke="#ffffff" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>200000</MaxScaleDenominator>
@@ -4544,16 +4330,6 @@
     <Filter>([class] = 'main') and ([mapnik::geometry_type] = 3)</Filter>
     <LineSymbolizer stroke="#000000" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" />
   </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([class] = 'minor_rail')</Filter>
-    <LineSymbolizer stroke-linejoin="round" />
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000</MaxScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([class] = 'major_rail')</Filter>
-    <LineSymbolizer stroke-linejoin="round" />
-  </Rule>
 </Style>
 <Layer name="bridge"
   group-by="layer"
@@ -4896,6 +4672,100 @@
 </Style>
 <Style name="admin-lev2" filter-mode="first" opacity="0.4">
   <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762) and ([maritime] = 1)</Filter>
+    <LineSymbolizer stroke-dasharray="5, 3" stroke-width="1.2" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000</MaxScaleDenominator>
+    <MinScaleDenominator>12500</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762) and ([maritime] = 1)</Filter>
+    <LineSymbolizer stroke-dasharray="13, 7" stroke-width="3" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762) and ([maritime] = 1)</Filter>
+    <LineSymbolizer stroke-dasharray="11, 6" stroke-width="2.6" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>750000</MaxScaleDenominator>
+    <MinScaleDenominator>200000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762) and ([maritime] = 1)</Filter>
+    <LineSymbolizer stroke-dasharray="9, 5" stroke-width="2.2" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>750000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762) and ([maritime] = 1)</Filter>
+    <LineSymbolizer stroke-dasharray="7, 4" stroke-width="1.8" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500</MaxScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762) and ([maritime] = 1)</Filter>
+    <LineSymbolizer stroke-dasharray="15, 8" stroke-width="4" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762) and ([maritime] = 1)</Filter>
+    <LineSymbolizer stroke-dasharray="4, 3" stroke-width="0.8" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762) and ([maritime] = 1)</Filter>
+    <LineSymbolizer stroke-dasharray="4, 3" stroke-width="0.4" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762)</Filter>
+    <LineSymbolizer stroke-dasharray="5, 3" stroke-width="1.2" stroke-linejoin="round" stroke="#223344" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000</MaxScaleDenominator>
+    <MinScaleDenominator>12500</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762)</Filter>
+    <LineSymbolizer stroke-dasharray="13, 7" stroke-width="3" stroke-linejoin="round" stroke="#223344" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000</MaxScaleDenominator>
+    <MinScaleDenominator>50000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762)</Filter>
+    <LineSymbolizer stroke-dasharray="11, 6" stroke-width="2.6" stroke-linejoin="round" stroke="#223344" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>750000</MaxScaleDenominator>
+    <MinScaleDenominator>200000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762)</Filter>
+    <LineSymbolizer stroke-dasharray="9, 5" stroke-width="2.2" stroke-linejoin="round" stroke="#223344" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>750000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762)</Filter>
+    <LineSymbolizer stroke-dasharray="7, 4" stroke-width="1.8" stroke-linejoin="round" stroke="#223344" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500</MaxScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762)</Filter>
+    <LineSymbolizer stroke-dasharray="15, 8" stroke-width="4" stroke-linejoin="round" stroke="#223344" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762)</Filter>
+    <LineSymbolizer stroke-dasharray="4, 3" stroke-width="0.8" stroke-linejoin="round" stroke="#223344" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([id] = 2374762)</Filter>
+    <LineSymbolizer stroke-dasharray="4, 3" stroke-width="0.4" stroke-linejoin="round" stroke="#223344" />
+  </Rule>
+  <Rule>
     <MaxScaleDenominator>50000</MaxScaleDenominator>
     <MinScaleDenominator>12500</MinScaleDenominator>
     <Filter>([admin_level] = 2) and ([disputed] = 1) and ([maritime] = 1)</Filter>
@@ -4920,12 +4790,6 @@
     <LineSymbolizer stroke-dasharray="7, 4" stroke-width="1.8" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
   </Rule>
   <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([maritime] = 1)</Filter>
-    <LineSymbolizer stroke-dasharray="5, 3" stroke-width="1.2" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
-  </Rule>
-  <Rule>
     <MaxScaleDenominator>12500</MaxScaleDenominator>
     <Filter>([admin_level] = 2) and ([disputed] = 1) and ([maritime] = 1)</Filter>
     <LineSymbolizer stroke-dasharray="15, 8" stroke-width="4" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
@@ -4941,6 +4805,12 @@
     <MinScaleDenominator>50000000</MinScaleDenominator>
     <Filter>([admin_level] = 2) and ([disputed] = 1) and ([maritime] = 1)</Filter>
     <LineSymbolizer stroke-dasharray="4, 3" stroke-width="0.4" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1) and ([maritime] = 1)</Filter>
+    <LineSymbolizer stroke-width="1.2" stroke="#002266" stroke-opacity="0.05" stroke-linejoin="round" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000</MaxScaleDenominator>
@@ -4967,12 +4837,6 @@
     <LineSymbolizer stroke-dasharray="7, 4" stroke-width="1.8" stroke-linejoin="round" stroke="#223344" />
   </Rule>
   <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([admin_level] = 2) and ([disputed] = 1)</Filter>
-    <LineSymbolizer stroke-dasharray="5, 3" stroke-width="1.2" stroke-linejoin="round" stroke="#223344" />
-  </Rule>
-  <Rule>
     <MaxScaleDenominator>12500</MaxScaleDenominator>
     <Filter>([admin_level] = 2) and ([disputed] = 1)</Filter>
     <LineSymbolizer stroke-dasharray="15, 8" stroke-width="4" stroke-linejoin="round" stroke="#223344" />
@@ -4988,6 +4852,12 @@
     <MinScaleDenominator>50000000</MinScaleDenominator>
     <Filter>([admin_level] = 2) and ([disputed] = 1)</Filter>
     <LineSymbolizer stroke-dasharray="4, 3" stroke-width="0.4" stroke-linejoin="round" stroke="#223344" />
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([admin_level] = 2) and ([disputed] = 1)</Filter>
+    <LineSymbolizer stroke-width="1.2" stroke-linejoin="round" stroke="#223344" />
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000</MaxScaleDenominator>
@@ -5153,6 +5023,146 @@
   <Rule>
     <MaxScaleDenominator>1500000</MaxScaleDenominator>
     <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="16" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="14" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="11" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="16" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="14" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="11" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="16" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="14" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="11" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="16" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="14" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="11" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] &gt;= 6) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
     <Filter>([scalerank] &gt;= 6)</Filter>
     <TextSymbolizer size="16" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
@@ -5184,6 +5194,170 @@
     <MinScaleDenominator>12500000</MinScaleDenominator>
     <Filter>([scalerank] &gt;= 6)</Filter>
     <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="18" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="16" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="14" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="18" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="16" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="14" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="18" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="16" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="14" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="18" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="16" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="14" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 5) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>1500000</MaxScaleDenominator>
@@ -5229,6 +5403,170 @@
   <Rule>
     <MaxScaleDenominator>1500000</MaxScaleDenominator>
     <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="18" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="16" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="15" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="18" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="16" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="15" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="18" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="16" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="15" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>1500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="18" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="16" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="15" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 4) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>1500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
     <Filter>([scalerank] = 4)</Filter>
     <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
@@ -5266,6 +5604,170 @@
     <MinScaleDenominator>25000000</MinScaleDenominator>
     <Filter>([scalerank] = 4)</Filter>
     <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="18" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="17" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="15" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="11" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="18" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="17" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="15" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="11" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="18" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="17" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="15" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="11" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>3000000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="18" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="17" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="15" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="11" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 3) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>3000000</MaxScaleDenominator>
@@ -5311,6 +5813,146 @@
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="20" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="17" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>200000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="20" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="17" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>200000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="20" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="17" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>200000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="20" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="17" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="13" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="12" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>200000000</MinScaleDenominator>
+    <Filter>([scalerank] = 2) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
     <Filter>([scalerank] = 2)</Filter>
     <TextSymbolizer size="20" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
@@ -5342,6 +5984,146 @@
     <MinScaleDenominator>200000000</MinScaleDenominator>
     <Filter>([scalerank] = 2)</Filter>
     <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="14" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="13" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer size="12" wrap-width="60" opacity="0.75" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>200000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="14" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="13" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer size="12" wrap-width="60" opacity="0.75" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>200000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="14" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="13" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer size="12" wrap-width="60" opacity="0.75" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>200000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="20" wrap-width="120" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="14" wrap-width="90" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="13" wrap-width="60" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer size="12" wrap-width="60" opacity="0.75" fontset-name="fontset-0" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>200000000</MinScaleDenominator>
+    <Filter>([scalerank] = 1) and ([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
@@ -5381,6 +6163,50 @@
   <Rule>
     <MaxScaleDenominator>200000000</MaxScaleDenominator>
     <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([name_en] = 'Taiwan')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Taiwan Province of China']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([name_en] = 'Republic of Macedonia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['The former Yugoslav Republic of Macedonia']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([name_en] = 'Venezuela')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Venezuela (Bolivarian Republic of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
+    <Filter>([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MinScaleDenominator>400000</MinScaleDenominator>
+    <Filter>([name_en] = 'Bolivia')</Filter>
+    <TextSymbolizer fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA['Bolivia (Plurinational state of)']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>200000000</MaxScaleDenominator>
+    <MinScaleDenominator>100000000</MinScaleDenominator>
     <TextSymbolizer opacity="0.75" fontset-name="fontset-0" placement="point" size="10" fill="#999b9a" halo-fill="#ffffff" halo-radius="1" halo-rasterizer="fast" wrap-width="30" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5396,23 +6222,67 @@
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
     <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 5) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer size="16" character-spacing="4" line-spacing="1" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5)</Filter>
+    <TextSymbolizer size="16" character-spacing="4" line-spacing="1" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5)</Filter>
+    <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5)</Filter>
+    <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5)</Filter>
+    <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 5) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="16" character-spacing="4" line-spacing="1" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 5) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 5) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 5) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 5) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 5) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 5) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5440,23 +6310,23 @@
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 4) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 4) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="16" character-spacing="4" line-spacing="1" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 4) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 4) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 4) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 4) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 4) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 4) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5482,69 +6352,25 @@
     <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer size="16" character-spacing="4" line-spacing="1" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000000</MaxScaleDenominator>
-    <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5)</Filter>
-    <TextSymbolizer size="16" character-spacing="4" line-spacing="1" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5)</Filter>
-    <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000000</MaxScaleDenominator>
-    <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5)</Filter>
-    <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 5)</Filter>
-    <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 4) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 4) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="16" character-spacing="4" line-spacing="1" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 4) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 4) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 4) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 4) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 4) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 4) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5572,17 +6398,49 @@
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
     <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 6) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6)</Filter>
+    <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6)</Filter>
+    <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6)</Filter>
+    <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 6) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 6) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 6) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 6) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 6) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5602,63 +6460,31 @@
     <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6)</Filter>
-    <TextSymbolizer size="14" character-spacing="3" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6)</Filter>
-    <TextSymbolizer size="12" character-spacing="2" line-spacing="6" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 6)</Filter>
-    <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 3) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 3) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="18" character-spacing="5" line-spacing="10" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 3) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 3) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="15" character-spacing="4" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 3) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 3) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="13" character-spacing="3" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 3) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 3) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="12" character-spacing="2" line-spacing="3" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 3) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 3) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5692,29 +6518,29 @@
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 3) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 3) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="18" character-spacing="5" line-spacing="10" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 3) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 3) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="15" character-spacing="4" line-spacing="8" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 3) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 3) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="13" character-spacing="3" line-spacing="8" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 3) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 3) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="12" character-spacing="2" line-spacing="3" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 3) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 3) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5748,29 +6574,29 @@
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="24" character-spacing="5" line-spacing="10" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="20" character-spacing="4" line-spacing="8" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="14" character-spacing="2" line-spacing="8" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="13" character-spacing="1" line-spacing="6" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5804,29 +6630,29 @@
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="24" character-spacing="5" line-spacing="10" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="20" character-spacing="4" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="14" character-spacing="2" line-spacing="8" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="13" character-spacing="1" line-spacing="6" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5860,67 +6686,23 @@
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer size="30" character-spacing="20" line-spacing="32" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000000</MaxScaleDenominator>
-    <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer size="25" character-spacing="16" line-spacing="24" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000000</MaxScaleDenominator>
-    <MinScaleDenominator>50000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer size="20" character-spacing="8" line-spacing="16" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1) and ([name_en].match('.*Sea.*Japan'))</Filter>
-    <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000000</MaxScaleDenominator>
-    <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1)</Filter>
-    <TextSymbolizer size="30" character-spacing="20" line-spacing="32" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000000</MaxScaleDenominator>
-    <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1)</Filter>
-    <TextSymbolizer size="25" character-spacing="16" line-spacing="24" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>100000000</MaxScaleDenominator>
-    <MinScaleDenominator>50000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1)</Filter>
-    <TextSymbolizer size="20" character-spacing="8" line-spacing="16" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1)</Filter>
-    <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000000</MaxScaleDenominator>
-    <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 1) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 1) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="30" character-spacing="20" line-spacing="32" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 1) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 1) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="25" character-spacing="16" line-spacing="24" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>100000000</MaxScaleDenominator>
     <MinScaleDenominator>50000000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 1) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 1) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer size="20" character-spacing="8" line-spacing="16" placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 1) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([labelrank] = 1) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5946,7 +6728,51 @@
     <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 2) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer size="30" character-spacing="20" line-spacing="32" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer size="25" character-spacing="16" line-spacing="24" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer size="20" character-spacing="8" line-spacing="16" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
+    <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1)</Filter>
+    <TextSymbolizer size="30" character-spacing="20" line-spacing="32" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1)</Filter>
+    <TextSymbolizer size="25" character-spacing="16" line-spacing="24" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>100000000</MaxScaleDenominator>
+    <MinScaleDenominator>50000000</MinScaleDenominator>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1)</Filter>
+    <TextSymbolizer size="20" character-spacing="8" line-spacing="16" placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <Filter>([mapnik::geometry_type] = 2) and ([labelrank] = 1)</Filter>
+    <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
+  </Rule>
+  <Rule>
+    <Filter>([mapnik::geometry_type] = 2) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -5954,7 +6780,7 @@
     <TextSymbolizer placement="line" avoid-edges="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
-    <Filter>([mapnik::geometry_type] = 1) and ([name_en].match('.*Sea.*Japan'))</Filter>
+    <Filter>([mapnik::geometry_type] = 1) and ([name_en] = 'East Sea — Sea of Japan')</Filter>
     <TextSymbolizer placement="point" wrap-width="50" wrap-before="true" fontset-name="fontset-1" fill="#fbfdfd" ><![CDATA['日本海']]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -6506,49 +7332,49 @@
   <Rule>
     <MaxScaleDenominator>2500</MaxScaleDenominator>
     <MinScaleDenominator>1500</MinScaleDenominator>
-    <Filter>([type] = 'hamlet')</Filter>
+    <Filter>([type] = 'neighbourhood')</Filter>
     <TextSymbolizer size="18" wrap-width="160" fontset-name="fontset-2" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" wrap-before="true" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>5000</MaxScaleDenominator>
     <MinScaleDenominator>2500</MinScaleDenominator>
-    <Filter>([type] = 'hamlet')</Filter>
+    <Filter>([type] = 'neighbourhood')</Filter>
     <TextSymbolizer size="16" wrap-width="130" fontset-name="fontset-2" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" wrap-before="true" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>12500</MaxScaleDenominator>
     <MinScaleDenominator>5000</MinScaleDenominator>
-    <Filter>([type] = 'hamlet')</Filter>
+    <Filter>([type] = 'neighbourhood')</Filter>
     <TextSymbolizer size="14" wrap-width="100" fontset-name="fontset-2" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" wrap-before="true" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000</MaxScaleDenominator>
     <MinScaleDenominator>12500</MinScaleDenominator>
-    <Filter>([type] = 'hamlet')</Filter>
+    <Filter>([type] = 'neighbourhood')</Filter>
     <TextSymbolizer size="12" wrap-width="80" fontset-name="fontset-2" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" wrap-before="true" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>2500</MaxScaleDenominator>
     <MinScaleDenominator>1500</MinScaleDenominator>
-    <Filter>([type] = 'neighbourhood')</Filter>
+    <Filter>([type] = 'hamlet')</Filter>
     <TextSymbolizer size="18" wrap-width="160" fontset-name="fontset-2" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" wrap-before="true" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>5000</MaxScaleDenominator>
     <MinScaleDenominator>2500</MinScaleDenominator>
-    <Filter>([type] = 'neighbourhood')</Filter>
+    <Filter>([type] = 'hamlet')</Filter>
     <TextSymbolizer size="16" wrap-width="130" fontset-name="fontset-2" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" wrap-before="true" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>12500</MaxScaleDenominator>
     <MinScaleDenominator>5000</MinScaleDenominator>
-    <Filter>([type] = 'neighbourhood')</Filter>
+    <Filter>([type] = 'hamlet')</Filter>
     <TextSymbolizer size="14" wrap-width="100" fontset-name="fontset-2" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" wrap-before="true" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000</MaxScaleDenominator>
     <MinScaleDenominator>12500</MinScaleDenominator>
-    <Filter>([type] = 'neighbourhood')</Filter>
+    <Filter>([type] = 'hamlet')</Filter>
     <TextSymbolizer size="12" wrap-width="80" fontset-name="fontset-2" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" wrap-before="true" line-spacing="-2" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
@@ -6587,14 +7413,80 @@
     <Filter>([type] = 'village')</Filter>
     <TextSymbolizer size="16" wrap-width="120" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" wrap-before="true" line-spacing="-4" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000</MaxScaleDenominator>
-    <MinScaleDenominator>2500</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 1) and ([type] = 'village')</Filter>
-    <TextSymbolizer fontset-name="fontset-3" placement="point" fill="#999b9a" size="11" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" wrap-width="60" wrap-before="true" line-spacing="-4" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
 </Style>
 <Style name="place_label-citydots" filter-mode="first">
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'N') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="13" dy="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'N') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="12" dy="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'N') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="12" dy="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'N') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer dy="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="13" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="12" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="12" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="13" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="12" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="12" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
     <MinScaleDenominator>3000000</MinScaleDenominator>
@@ -6618,6 +7510,30 @@
     <MinScaleDenominator>25000000</MinScaleDenominator>
     <Filter>([localrank] &lt;= 2) and ([ldir] = 'SW') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
     <ShieldSymbolizer dx="-4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="13" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="12" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer size="12" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
+    <ShieldSymbolizer dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -6670,54 +7586,6 @@
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
     <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'N') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="13" dy="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'N') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="12" dy="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000000</MaxScaleDenominator>
-    <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'N') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="12" dy="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000000</MaxScaleDenominator>
-    <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'N') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer dy="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="13" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="12" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000000</MaxScaleDenominator>
-    <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="12" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000000</MaxScaleDenominator>
-    <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
     <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
     <ShieldSymbolizer size="13" dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
@@ -6742,98 +7610,26 @@
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
     <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="13" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="15" dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="12" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="14" dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="12" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="13" dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="13" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="12" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000000</MaxScaleDenominator>
-    <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer size="12" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000000</MaxScaleDenominator>
-    <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 3) and ([scalerank] &lt;= 5)</Filter>
-    <ShieldSymbolizer dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="15" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="14" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000000</MaxScaleDenominator>
-    <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="13" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000000</MaxScaleDenominator>
-    <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="15" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>12500000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="14" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>25000000</MaxScaleDenominator>
-    <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="13" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000000</MaxScaleDenominator>
-    <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -6862,26 +7658,50 @@
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
     <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'E') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="15" dx="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="15" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'E') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="14" dx="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="14" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'E') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="13" dx="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="13" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'E') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer dx="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="15" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>12500000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="14" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>25000000</MaxScaleDenominator>
+    <MinScaleDenominator>12500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="13" dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>25000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'W') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer dx="-5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -6934,50 +7754,62 @@
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
     <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="15" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="15" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="14" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="14" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="13" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="13" dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer dx="4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
     <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="15" dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'E') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="15" dx="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>12500000</MaxScaleDenominator>
     <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="14" dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'E') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="14" dx="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>25000000</MaxScaleDenominator>
     <MinScaleDenominator>12500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer size="13" dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'E') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer size="13" dx="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
     <MinScaleDenominator>25000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
-    <ShieldSymbolizer dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'E') and ([scalerank] &gt;= 0) and ([scalerank] &lt;= 2)</Filter>
+    <ShieldSymbolizer dx="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 6)</Filter>
+    <ShieldSymbolizer size="12" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 6)</Filter>
+    <ShieldSymbolizer dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -7002,6 +7834,18 @@
     <MinScaleDenominator>6500000</MinScaleDenominator>
     <Filter>([localrank] &lt;= 2) and ([ldir] = 'S') and ([scalerank] &gt;= 6)</Filter>
     <ShieldSymbolizer dy="8" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>6500000</MaxScaleDenominator>
+    <MinScaleDenominator>3000000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 6)</Filter>
+    <ShieldSymbolizer size="12" dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
+  </Rule>
+  <Rule>
+    <MaxScaleDenominator>50000000</MaxScaleDenominator>
+    <MinScaleDenominator>6500000</MinScaleDenominator>
+    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 6)</Filter>
+    <ShieldSymbolizer dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
@@ -7042,18 +7886,6 @@
   <Rule>
     <MaxScaleDenominator>6500000</MaxScaleDenominator>
     <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 6)</Filter>
-    <ShieldSymbolizer size="12" dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'SE') and ([scalerank] &gt;= 6)</Filter>
-    <ShieldSymbolizer dx="4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
     <Filter>([localrank] &lt;= 2) and ([ldir] = 'SW') and ([scalerank] &gt;= 6)</Filter>
     <ShieldSymbolizer size="12" dx="-4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
@@ -7062,18 +7894,6 @@
     <MinScaleDenominator>6500000</MinScaleDenominator>
     <Filter>([localrank] &lt;= 2) and ([ldir] = 'SW') and ([scalerank] &gt;= 6)</Filter>
     <ShieldSymbolizer dx="-4" dy="5" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>6500000</MaxScaleDenominator>
-    <MinScaleDenominator>3000000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 6)</Filter>
-    <ShieldSymbolizer size="12" dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" ><![CDATA[[name]]]></ShieldSymbolizer>
-  </Rule>
-  <Rule>
-    <MaxScaleDenominator>50000000</MaxScaleDenominator>
-    <MinScaleDenominator>6500000</MinScaleDenominator>
-    <Filter>([localrank] &lt;= 2) and ([ldir] = 'NW') and ([scalerank] &gt;= 6)</Filter>
-    <ShieldSymbolizer dx="-4" dy="-3" file="img/icon/dot-small.png" unlock-image="true" fontset-name="fontset-3" placement="point" fill="#999b9a" halo-fill="#ffffff" halo-radius="1.5" opacity="0.5" minimum-distance="3" wrap-width="40" line-spacing="-4" size="12" ><![CDATA[[name]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000000</MaxScaleDenominator>
@@ -7131,13 +7951,13 @@
 
 <Style name="water_label" filter-mode="first">
   <Rule>
-    <MaxScaleDenominator>5000</MaxScaleDenominator>
-    <MinScaleDenominator>2500</MinScaleDenominator>
+    <MaxScaleDenominator>2500</MaxScaleDenominator>
     <Filter>([area] &gt; 3200000)</Filter>
     <TextSymbolizer size="18" wrap-width="150" halo-radius="2" halo-rasterizer="fast" wrap-before="true" halo-fill="#ffffff" line-spacing="-2" fontset-name="fontset-4" fill="#899ea4" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
-    <MaxScaleDenominator>2500</MaxScaleDenominator>
+    <MaxScaleDenominator>5000</MaxScaleDenominator>
+    <MinScaleDenominator>2500</MinScaleDenominator>
     <Filter>([area] &gt; 3200000)</Filter>
     <TextSymbolizer size="18" wrap-width="150" halo-radius="2" halo-rasterizer="fast" wrap-before="true" halo-fill="#ffffff" line-spacing="-2" fontset-name="fontset-4" fill="#899ea4" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
@@ -7687,14 +8507,8 @@
     <TextSymbolizer avoid-edges="true" character-spacing="0.25" placement="line" fontset-name="fontset-3" fill="#999b9a" size="9" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" minimum-distance="200" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
-    <MaxScaleDenominator>50000</MaxScaleDenominator>
-    <MinScaleDenominator>25000</MinScaleDenominator>
-    <Filter>([mapnik::geometry_type] = 2) and ([class] != 'motorway') and ([class] != 'main') and ([class] != 'street') and ([class] != 'street_limited') and ([len] &gt; 5000)</Filter>
-    <TextSymbolizer avoid-edges="true" character-spacing="0.25" placement="line" fontset-name="fontset-3" fill="#999b9a" size="9" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" minimum-distance="200" ><![CDATA[[name]]]></TextSymbolizer>
-  </Rule>
-  <Rule>
     <MaxScaleDenominator>100000</MaxScaleDenominator>
-    <MinScaleDenominator>50000</MinScaleDenominator>
+    <MinScaleDenominator>25000</MinScaleDenominator>
     <Filter>([mapnik::geometry_type] = 2) and ([class] != 'motorway') and ([class] != 'main') and ([class] != 'street') and ([class] != 'street_limited') and ([len] &gt; 5000)</Filter>
     <TextSymbolizer avoid-edges="true" character-spacing="0.25" placement="line" fontset-name="fontset-3" fill="#999b9a" size="9" halo-fill="#ffffff" halo-radius="1.5" halo-rasterizer="fast" minimum-distance="200" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
@@ -7938,34 +8752,34 @@
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000</MaxScaleDenominator>
-    <Filter>([class] = 'motorway') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
+    <Filter>([class] = 'main') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
     <ShieldSymbolizer spacing="400" minimum-distance="80" size="11" file="img/shield/generic-md-[reflen].png" fontset-name="fontset-0" fill="#999b9a" avoid-edges="true" minimum-padding="5" ><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>200000</MaxScaleDenominator>
     <MinScaleDenominator>50000</MinScaleDenominator>
-    <Filter>([class] = 'motorway') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
+    <Filter>([class] = 'main') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
     <ShieldSymbolizer minimum-distance="50" size="9" file="img/shield/generic-sm-[reflen].png" fontset-name="fontset-0" fill="#999b9a" spacing="200" avoid-edges="true" minimum-padding="5" ><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MinScaleDenominator>200000</MinScaleDenominator>
-    <Filter>([class] = 'motorway') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
+    <Filter>([class] = 'main') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
     <ShieldSymbolizer size="9" file="img/shield/generic-sm-[reflen].png" fontset-name="fontset-0" fill="#999b9a" spacing="200" avoid-edges="true" minimum-padding="5" minimum-distance="40" ><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>50000</MaxScaleDenominator>
-    <Filter>([class] = 'main') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
+    <Filter>([class] = 'motorway') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
     <ShieldSymbolizer spacing="400" minimum-distance="80" size="11" file="img/shield/generic-md-[reflen].png" fontset-name="fontset-0" fill="#999b9a" avoid-edges="true" minimum-padding="5" ><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>200000</MaxScaleDenominator>
     <MinScaleDenominator>50000</MinScaleDenominator>
-    <Filter>([class] = 'main') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
+    <Filter>([class] = 'motorway') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
     <ShieldSymbolizer minimum-distance="50" size="9" file="img/shield/generic-sm-[reflen].png" fontset-name="fontset-0" fill="#999b9a" spacing="200" avoid-edges="true" minimum-padding="5" ><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
     <MinScaleDenominator>200000</MinScaleDenominator>
-    <Filter>([class] = 'main') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
+    <Filter>([class] = 'motorway') and ([reflen] &gt; 0) and ([reflen] &lt;= 6)</Filter>
     <ShieldSymbolizer size="9" file="img/shield/generic-sm-[reflen].png" fontset-name="fontset-0" fill="#999b9a" spacing="200" avoid-edges="true" minimum-padding="5" minimum-distance="40" ><![CDATA[[ref]]]></ShieldSymbolizer>
   </Rule>
   <Rule>
@@ -8044,24 +8858,24 @@
   </Rule>
   <Rule>
     <MaxScaleDenominator>2500</MaxScaleDenominator>
-    <Filter>([class] = 'stream_intermittent')</Filter>
+    <Filter>([class] = 'stream')</Filter>
     <TextSymbolizer size="10" avoid-edges="true" fontset-name="fontset-4" fill="#899ea4" halo-fill="rgba(255, 255, 255, 0.19999999999999996)" halo-radius="1.5" halo-rasterizer="fast" placement="line" character-spacing="1" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>5000</MaxScaleDenominator>
     <MinScaleDenominator>2500</MinScaleDenominator>
-    <Filter>([class] = 'stream_intermittent')</Filter>
+    <Filter>([class] = 'stream')</Filter>
     <TextSymbolizer avoid-edges="true" fontset-name="fontset-4" fill="#899ea4" halo-fill="rgba(255, 255, 255, 0.19999999999999996)" halo-radius="1.5" halo-rasterizer="fast" placement="line" size="10" character-spacing="1" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>2500</MaxScaleDenominator>
-    <Filter>([class] = 'stream')</Filter>
+    <Filter>([class] = 'stream_intermittent')</Filter>
     <TextSymbolizer size="10" avoid-edges="true" fontset-name="fontset-4" fill="#899ea4" halo-fill="rgba(255, 255, 255, 0.19999999999999996)" halo-radius="1.5" halo-rasterizer="fast" placement="line" character-spacing="1" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
   <Rule>
     <MaxScaleDenominator>5000</MaxScaleDenominator>
     <MinScaleDenominator>2500</MinScaleDenominator>
-    <Filter>([class] = 'stream')</Filter>
+    <Filter>([class] = 'stream_intermittent')</Filter>
     <TextSymbolizer avoid-edges="true" fontset-name="fontset-4" fill="#899ea4" halo-fill="rgba(255, 255, 255, 0.19999999999999996)" halo-radius="1.5" halo-rasterizer="fast" placement="line" size="10" character-spacing="1" ><![CDATA[[name]]]></TextSymbolizer>
   </Rule>
 </Style>

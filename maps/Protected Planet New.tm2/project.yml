@@ -47,7 +47,7 @@ layers:
 maxzoom: 20
 minzoom: 0
 name: Protected Planet New
-source: "mapbox:///mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v5"
+source: "mapbox:///mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v6"
 styles: 
   - vars.mss
   - bg.mss

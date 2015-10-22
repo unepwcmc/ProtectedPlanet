@@ -23,7 +23,8 @@
   text-face-name: @sans_lt_italic;
   text-fill: lighten(@water,20);
 
-  [name_en=~".*Sea.*Japan"] {text-name: "'日本海'";}
+  // UN naming corrections
+  [name_en="East Sea — Sea of Japan"] {text-name: "'日本海'";}
 
   ["mapnik::geometry_type"=1] {
     text-placement: point;
@@ -135,6 +136,13 @@
 
 #country_label[zoom<=10] {
   text-name: @name;
+  
+  // UN naming corrections
+  [name_en="Bolivia"] {text-name: "'Bolivia (Plurinational state of)'";}
+  [name_en="Venezuela"] {text-name: "'Venezuela (Bolivarian Republic of)'";}
+  [name_en="Republic of Macedonia"] {text-name: "'The former Yugoslav Republic of Macedonia'";}
+  [name_en="Taiwan"] {text-name: "'Taiwan Province of China'"}
+  
   text-face-name: @sans_bold;
   text-placement: point;
   [zoom=2] { text-opacity: 0.75; }
