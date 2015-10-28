@@ -1,15 +1,17 @@
 require 'test_helper'
 
 class SearchAggregatorsBooleanTest < ActiveSupport::TestCase
-  test '.build, given a name, an aggregation hash, and a configuration hash,
+  test '.build, given a name, raw aggregations, and a configuration hash,
    returns the computed aggregation' do
     name = 'type_of_territory'
     aggregation_hash = {
-      'doc_count'=> 169,
-      'buckets'=> [
-        {'key' => 'T', 'doc_count' => 64},
-        {'key' => 'F', 'doc_count' => 17}
-      ]
+      'type_of_territory' => {
+        'doc_count'=> 169,
+        'buckets'=> [
+          {'key' => 'T', 'doc_count' => 64},
+          {'key' => 'F', 'doc_count' => 17}
+        ]
+      }
     }
     configuration_hash = {
       'type' => 'boolean',

@@ -33,6 +33,12 @@ class TestSearch < ActiveSupport::TestCase
           "type_of_territory" => {
             "terms" => { "field" => "marine" }
           },
+          "has_parcc_info" => {
+            "terms" => { "field" => "has_parcc_info" }
+          },
+          "has_irreplaceability_info" => {
+            "terms" => { "field" => "has_irreplaceability_info" }
+          },
           "country" => {
             "nested" => { "path" => "countries_for_index" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.id" } } }

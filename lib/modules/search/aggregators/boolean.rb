@@ -1,6 +1,8 @@
-class Search::Aggregators::Boolean
-  def self.build name, raw_aggregation, config
-    raw_aggregation['buckets'].map do |info|
+module Search::Aggregators::Boolean
+  def self.build name, raw_aggregations, config
+    with_identifier = -> info { config['identifiers'][info['key']].nil? }
+
+    raw_aggregations[name]['buckets'].reject(&with_identifier).map do |info|
       {
         label: config['labels'][info['key']],
         query: config['query'] || name,
