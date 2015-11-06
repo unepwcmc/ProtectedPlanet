@@ -4,7 +4,7 @@ gem 'rails', '4.1.9'
 gem 'pg'
 
 gem 'sass-rails', '~> 4.0.3'
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '~> 2.7.2'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer',  platforms: :ruby
 gem "autoprefixer-rails"
