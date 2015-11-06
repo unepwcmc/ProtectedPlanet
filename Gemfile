@@ -9,7 +9,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer',  platforms: :ruby
 gem "autoprefixer-rails"
 
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 3.1.3'
 gem 'neat'
 gem 'premailer-rails'
 
