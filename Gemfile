@@ -56,7 +56,7 @@ gem 'dbf', '~> 2.0.7'
 gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
 
-gem 'sidekiq', '~> 3.1.4'
+gem 'sidekiq', '~> 3.5.3'
 gem 'whenever', require: false
 
 gem 'newrelic_rpm'
