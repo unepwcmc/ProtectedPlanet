@@ -1,15 +1,15 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.9'
+gem 'rails', '4.1.11'
 gem 'pg'
 
 gem 'sass-rails', '~> 4.0.3'
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '~> 2.7.2'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer',  platforms: :ruby
 gem "autoprefixer-rails"
 
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 3.1.3'
 gem 'neat'
 gem 'premailer-rails'
 
@@ -56,7 +56,7 @@ gem 'dbf', '~> 2.0.7'
 gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
 
-gem 'sidekiq', '~> 3.1.4'
+gem 'sidekiq', '~> 3.5.3'
 gem 'whenever', require: false
 
 gem 'newrelic_rpm'
