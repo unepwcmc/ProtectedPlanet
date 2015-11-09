@@ -38,6 +38,8 @@
   roles:
     - nginx
     - app
+    - nodesource.node
+    - bower
 
 - name: Setup web, util
   hosts:
