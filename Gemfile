@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.1.11'
 gem 'pg'
 
-gem 'bower-rails', '~> 0.10.0'
+gem 'bower-rails', git: 'https://github.com/lucidstack/bower-rails.git', branch: 'better-resolve'
 gem 'sass-rails', '~> 5.0.4'
 gem 'uglifier', '~> 2.7.2'
 gem 'coffee-rails', '~> 4.0.0'
