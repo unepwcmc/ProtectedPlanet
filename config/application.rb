@@ -25,7 +25,8 @@ module ProtectedPlanet
     # config.i18n.default_locale = :de
 
     config.autoload_paths += %W(#{config.root}/lib/modules #{config.root}/app/presenters)
-    config.assets.precompile += %w(base.js country.js home.js map.js protected_areas.js search.js)
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
+    config.assets.precompile += %w(base.js country.js home.js map.js protected_areas.js search.js *.eot *.ttf *.woff)
 
     config.active_record.schema_format = :sql
 
