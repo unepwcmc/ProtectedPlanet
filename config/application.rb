@@ -26,7 +26,7 @@ module ProtectedPlanet
 
     config.autoload_paths += %W(#{config.root}/lib/modules #{config.root}/app/presenters)
     config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
-    config.assets.precompile += %w(base.js country.js home.js map.js protected_areas.js search.js *.eot *.ttf *.woff)
+    config.assets.precompile += %w(base.js country.js home.js map.js protected_areas.js search.js protectedplanet-frontend/dist/*)
 
     config.active_record.schema_format = :sql
 
