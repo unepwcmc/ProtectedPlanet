@@ -1,17 +1,11 @@
-<%= content_for :page_title, @country.name %>
-
-<% render partial: 'header' %>
-
-<section id="protected-coverage-viz">
-  <%= render partial: 'factsheet', locals: {presenter: @presenter, country: @country} %>
-
-  <div class="protected-area-map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>">
-    <div class="map-disclaimer">
-      The designations employed and the presentation of material on this map do
-      not imply the expression of any opinion whatsoever on the part of the
-      Secretariat of the United Nations concerning the legal status of any
-      country, territory, city or area or of its authorities, or concerning the
-      delimitation of its frontiers or boundaries.
+<div class="container--profile">
+  <div class="hero">
+    <div class="hero__top">
+      <h1 class="hero__title"><%= @country.name %>, <small><%= @country.region.name %></small></h1>
+      <div class="hero__download-link">
+        <i class="hero__download-icon fa fa-download"></i>Download this dataset
+      </div>
     </div>
+    <div class="hero__map" id="map"></div>
   </div>
-</section>
+</div>
