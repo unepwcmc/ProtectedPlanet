@@ -10,38 +10,31 @@
 </head>
 
 <body>
-  <div class="container">
-    <header>
-      <nav class="nav-main">
-        <ul>
-          <li class="logo">
-            <%= link_to "Protected Planet", root_path %>
-          </li>
-        </ul>
+  <header>
+    <nav class="navbar">
+      <ul>
+        <li class="navbar__element">
+          <%= link_to "protected planet", root_path %>
+        </li>
+      </ul>
 
-        <ul class="right">
-          <li><%= link_to 'About', about_path %></li>
-          <li><%= link_to 'Resources', 'http://blog.protectedplanet.net' %></li>
-          <li><%= link_to 'UN List', 'http://blog.protectedplanet.net/post/102481051829/2014-united-nations-list-of-protected-areas' %></li>
+      <ul class="right">
+        <li class="navbar__element"><%= link_to 'About', about_path %></li>
+        <li class="navbar__element"><%= link_to 'Resources', 'http://blog.protectedplanet.net' %></li>
+        <li class="navbar__element"><%= link_to 'UN List', 'http://blog.protectedplanet.net/post/102481051829/2014-united-nations-list-of-protected-areas' %></li>
 
-          <li class="search-button">
-            <%= link_to 'Protected Planet', root_path %>
-          </li>
-        </ul>
-      </nav>
+        <li class="navbar__element">
+          <%= link_to 'Search', root_path %>
+        </li>
+      </ul>
+    </nav>
 
-      <div class="search-bar">
-        <%= render partial: 'shared/search_form', locals: {query: @query} %>
-      </div>
+    <%= yield :header %>
+  </header>
 
-      <div class='autocompletion-results'></div>
-      <%= yield :header %>
-    </header>
-
-    <main class="<%= controller_name %>-parent">
-      <%= yield %>
-    </main>
-  </div>
+  <main class="<%= controller_name %>-parent">
+    <%= yield %>
+  </main>
 
   <footer>
     <ul class="footer-logos">
