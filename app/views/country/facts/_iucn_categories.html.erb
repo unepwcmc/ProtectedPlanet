@@ -1,0 +1,20 @@
+<section class="fact">
+<h2 class="fact__header">IUCN Management categories<i class="fact__external-link fa fa-external-link-square"></i></h2>
+  <div class="fact__body">
+    <table class="table">
+      <tr class="table__header">
+        <th class="table__column">Management categories</th>
+        <th class="table__column">Count</th>
+        <th class="table__column">%</th>
+      </tr>
+      <% @country.protected_areas_per_iucn_category.each do |row| %>
+        <tr class="table__row">
+          <td class="table__label table__label--link"><%= row["iucn_category"] %></td>
+          <td class="table__value"><%= row["count"] %></td>
+          <td class="table__value"><%= row["percentage"].to_f.round(2) %></td>
+        </tr>
+      <% end %>
+      </tr>
+    </table>
+  </div>
+</section>

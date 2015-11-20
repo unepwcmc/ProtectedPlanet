@@ -1,6 +1,6 @@
 class CountryController < ApplicationController
   after_filter :enable_caching
-  before_filter :load_vars
+  before_filter :load_vars, :no_footer
 
   def show
   end
@@ -27,5 +27,8 @@ class CountryController < ApplicationController
     end
 
     @presenter = StatisticPresenter.new @country
+    @designations_by_jurisdiction = @country.designations.group_by { |design|
+      design.jurisdiction.name
+    }
   end
 end

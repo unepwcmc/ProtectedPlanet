@@ -1,0 +1,49 @@
+<footer class="footer footer--for-profile">
+  <section class="footer__column">
+    <h2 class="footer__header">Citation</h2>
+    <p class="footer__body">
+    UNEP-WCMC (<%= Date.today.year %>). Protected Area Country Profile for <%= @country.name %> from the World Database of Protected Areas, <%= Date.today.strftime("%B %Y") %>. Available at: <a href="/">www.protectedplanet.net</a>
+    </p>
+  </section>
+
+  <section class="footer__column">
+    <h2 class="footer__header">References</h2>
+    <div class="footer__body">
+      <div class="reference">
+        <h3 class="reference__title">(Ref 1)</h3>
+        <p class="reference__body">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</p>
+        <a class="reference__link" href="#"><i class="reference__link-icon fa fa-external-link-square"></i>Dolor amet Sydney</a>
+      </div>
+      <div class="reference">
+        <h3 class="reference__title">(Ref 2)</h3>
+        <p class="reference__body">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</p>
+        <a class="reference__link" href="#"><i class="reference__link-icon fa fa-external-link-square"></i>Dolor amet Sydney</a>
+      </div>
+      <div class="reference">
+        <h3 class="reference__title">(Ref 3)</h3>
+        <p class="reference__body">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</p>
+        <a class="reference__link" href="#"><i class="reference__link-icon fa fa-external-link-square"></i>Dolor amet Sydney</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="footer__column">
+    <h2 class="footer__header">Downloads</h2>
+    <div class="footer__body footer__body--no-padding">
+      <div class="footer__row">
+        <button class="footer__link">
+          <i class="footer__link-icon fa fa-download"></i>Download this dataset
+        </button>
+        <button class="footer__link">
+          <i class="footer__link-icon fa fa-file-pdf-o"></i>Download this country page as PDF
+        </button>
+      </div>
+
+      <div class="footer__row">
+        <button class="big-button" onclick="window.location.href='#'">
+          <i class="fa fa-link big-button__icon"></i>Protected Area list of the country
+        </button>
+      </div>
+    </div>
+  </section>
+</footer>

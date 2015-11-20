@@ -20,6 +20,9 @@ define(
 
         map = @createMap(@$mapContainer.attr('id'))
 
+        unless config.scrollWheelZoom?
+          map.scrollWheelZoom.disable()
+
         BaseLayer.render(map)
         Bounds.setToBounds(map, config)
         Interactive.listen(map)

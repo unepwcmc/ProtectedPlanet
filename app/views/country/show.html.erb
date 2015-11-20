@@ -1,11 +1,5 @@
 <div class="container--profile">
-  <div class="hero">
-    <div class="hero__top">
-      <h1 class="hero__title"><%= @country.name %>, <small><%= @country.region.name %></small></h1>
-      <div class="hero__download-link">
-        <i class="hero__download-icon fa fa-download"></i>Download this dataset
-      </div>
-    </div>
-    <div class="hero__map" id="map"></div>
-  </div>
+  <%= render "hero" %>
+  <%= render "factsheet" %>
+  <%= render "footer" %>
 </div>

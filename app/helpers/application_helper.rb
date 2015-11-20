@@ -10,6 +10,10 @@ module ApplicationHelper
     number_with_delimiter(number, delimeter: ',')
   end
 
+  def spaceify number
+    number_with_delimiter(number, delimeter: ' ')
+  end
+
   def cover item
     send COVER_HELPERS[item.class], item
   end
