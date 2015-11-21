@@ -2,14 +2,14 @@
   <h2 class="fact__header">Polygons/Points ratio</h2>
 
   <div id="points-polygons-ratio" class="fact__body">
-    <div class="horizontal-bar"><div data-fill-value="12" class="horizontal-bar__inner"></div></div>
+    <div class="horizontal-bar"><div data-fill-value="<%= @presenter.geometry_ratio[:polygons] %>" class="horizontal-bar__inner"></div></div>
     <div class="space-between">
       <div class="value">
-        <h3 class="value__number value__number--alt-color value__number--large"><%= 12 %>%</h3>
+        <h3 class="value__number value__number--alt-color value__number--large"><%= @presenter.geometry_ratio[:polygons] %>%</h3>
         <small class="value__label">Polygons</small>
       </div>
       <div class="value">
-        <h3 class="value__number value__number--large"><%= 88 %>%</h3>
+        <h3 class="value__number value__number--large"><%= @presenter.geometry_ratio[:points] %>%</h3>
         <small class="value__label">Points</small>
       </div>
     </div>
