@@ -36,7 +36,8 @@ class ProtectedArea < ActiveRecord::Base
         },
         sub_locations: { only: [:english_name] },
         iucn_category: { only: [:id, :name] },
-        designation: { only: [:id, :name] }
+        designation: { only: [:id, :name] },
+        governance: { only: [:id, :name] }
       }
     )
   end

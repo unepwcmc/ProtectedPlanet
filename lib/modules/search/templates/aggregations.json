@@ -61,5 +61,17 @@
         }
       }
     }
+  },
+  "governance": {
+    "nested": {
+      "path": "governance"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "governance.id"
+        }
+      }
+    }
   }
 }

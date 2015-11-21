@@ -32,6 +32,11 @@ titles:
     model: "Designation"
     property: "name"
     template: "Protected Areas with Designation '%s'"
+  governance:
+    type: "model"
+    model: "Governance"
+    property: "name"
+    template: "Protected Areas with Governance '%s'"
 aggregations:
   type_of_territory:
     type: "boolean"
@@ -71,6 +76,9 @@ aggregations:
   iucn_category:
     type: "model"
     class: "IucnCategory"
+  governance:
+    type: "model"
+    class: "Governance"
 filters:
     type:
       type: 'type'
@@ -86,6 +94,11 @@ filters:
       type: 'nested'
       path: 'designation'
       field: 'designation.id'
+      required: true
+    governance:
+      type: 'nested'
+      path: 'governance'
+      field: 'governance.id'
       required: true
     location:
       type: 'geo'

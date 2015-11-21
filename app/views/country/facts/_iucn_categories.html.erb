@@ -9,7 +9,7 @@
       </tr>
       <% @country.protected_areas_per_iucn_category.each do |row| %>
         <tr class="table__row">
-          <td class="table__label table__label--link"><%= row["iucn_category"] %></td>
+          <td class="table__label table__label--link"><%= link_to row["iucn_category_name"], search_url(country: @country.id, iucn_category: row["iucn_category_id"], main: :country) %></td>
           <td class="table__value"><%= row["count"] %></td>
           <td class="table__value"><%= row["percentage"].to_f.round(2) %></td>
         </tr>

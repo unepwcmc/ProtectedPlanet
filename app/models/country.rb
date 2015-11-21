@@ -53,7 +53,7 @@ class Country < ActiveRecord::Base
 
   def protected_areas_per_designation(jurisdiction=nil)
     ActiveRecord::Base.connection.execute("""
-      SELECT designations.name AS designation, pas_per_designations.count
+      SELECT designations.id AS designation_id, designations.name AS designation_name, pas_per_designations.count
       FROM designations
       INNER JOIN (
         #{protected_areas_inner_join(:designation_id)}
@@ -81,7 +81,7 @@ class Country < ActiveRecord::Base
 
   def protected_areas_per_iucn_category
     ActiveRecord::Base.connection.execute("""
-      SELECT iucn_categories.name AS iucn_category, pas_per_iucn_categories.count, (pas_per_iucn_categories.count::decimal/(SUM(pas_per_iucn_categories.count) OVER ())::decimal) * 100 AS percentage
+      SELECT iucn_categories.id AS iucn_category_id, iucn_categories.name AS iucn_category_name, pas_per_iucn_categories.count, (pas_per_iucn_categories.count::decimal/(SUM(pas_per_iucn_categories.count) OVER ())::decimal) * 100 AS percentage
       FROM iucn_categories
       INNER JOIN (
         #{protected_areas_inner_join(:iucn_category_id)}
@@ -92,7 +92,7 @@ class Country < ActiveRecord::Base
 
   def protected_areas_per_governance
     ActiveRecord::Base.connection.execute("""
-      SELECT governances.name AS governance, pas_per_governances.count, (pas_per_governances.count::decimal/(SUM(pas_per_governances.count) OVER ())::decimal) * 100 AS percentage
+      SELECT governances.id AS governance_id, governances.name AS governance_name, pas_per_governances.count, (pas_per_governances.count::decimal/(SUM(pas_per_governances.count) OVER ())::decimal) * 100 AS percentage
       FROM governances
       INNER JOIN (
         #{protected_areas_inner_join(:governance_id)}
