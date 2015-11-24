@@ -1,9 +1,11 @@
+<% designations_count = @designations_by_jurisdiction[level].count rescue 0 %>
+
 <div class="one-thirds one-thirds--no-margin">
   <div class="fact">
     <h2 class="fact__header"><%= level %> designations<i class="fact__external-link fa fa-external-link-square"></i></h2>
     <div class="fact__body fact__body--lateral-padding">
       <p class="fact__single-figure fact__single-figure--push-down">
-        <%= @designations_by_jurisdiction[level].count rescue 0 %>
+        <%= designations_count %>
       </p>
 
       <table class="table table--sortable">
@@ -29,7 +31,7 @@
         </tbody>
       </table>
 
-      <% if @designations_by_jurisdiction[level].count > 10 %>
+      <% if designations_count > 10 %>
         <div class="space-between">
           <div class="fact__link">
           </div>
