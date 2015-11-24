@@ -1,6 +1,7 @@
 //= require 'require'
 //= require jquery
 //= require jquery_ujs
+//= require 'jquery.tablesorter.min'
 //= require 'async-img.min'
 //= require 'underscore-min'
 //= require 'modules/search/bar'
