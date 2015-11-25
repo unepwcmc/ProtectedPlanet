@@ -1,15 +1,20 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.11'
-gem 'pg'
+gem 'rails', '4.1.14'
 
-gem 'bower-rails', git: 'https://github.com/lucidstack/bower-rails.git', branch: 'better-resolve'
+gem 'pg'
+gem 'activerecord-postgis-adapter', '~>2.0.1'
+gem 'gdal', '~> 0.0.5'
+gem 'dbf', '~> 2.0.7'
+
+gem 'elasticsearch', '~> 1.0.4'
+
+gem 'bower-rails', '~> 0.10.0'
 gem 'sass-rails', '~> 5.0.4'
 gem 'uglifier', '~> 2.7.2'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer',  platforms: :ruby
-gem "autoprefixer-rails"
-
+gem 'autoprefixer-rails'
 gem 'jquery-rails', '~> 3.1.3'
 gem 'premailer-rails'
 
@@ -43,20 +48,15 @@ group :test, :development do
   gem 'ejs'
 end
 
-gem 'elasticsearch', '~> 1.0.4'
-
 gem 'will_paginate', '~> 3.0'
 
 gem 'aws-sdk', '~> 1.3.9'
-
-gem 'activerecord-postgis-adapter', '~>2.0.1'
-gem 'gdal', '~> 0.0.5'
-gem 'dbf', '~> 2.0.7'
 
 gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
 
 gem 'sidekiq', '~> 3.5.3'
+gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 
 gem 'newrelic_rpm'
@@ -66,11 +66,7 @@ gem 'dotenv', '~> 0.11.1'
 gem 'dotenv-deployment'
 
 gem 'best_in_place'
-
 gem 'turnout', '~> 2.0.0'
-
-gem 'sinatra', '>= 1.3.0', :require => nil
+gem 'bystander', github: 'unepwcmc/bystander', branch: 'configuration-dsl'
 
 gem 'devise', '~> 3.4.0'
-
-gem 'bystander', github: 'unepwcmc/bystander', branch: 'configuration-dsl'
