@@ -65,6 +65,18 @@ class SearchAggregationTest < ActiveSupport::TestCase
             }
           }
         }
+      },
+      "governance" => {
+        "nested" => {
+          "path" => "governance"
+        },
+        "aggs" => {
+          "aggregation" => {
+            "terms" => {
+              "field" => "governance.id"
+            }
+          }
+        }
       }
     }
 
@@ -77,6 +89,7 @@ class SearchAggregationTest < ActiveSupport::TestCase
     region = FactoryGirl.create(:region)
     designation = FactoryGirl.create(:designation)
     iucn_category = FactoryGirl.create(:iucn_category)
+    governance = FactoryGirl.create(:governance)
     country_1 = FactoryGirl.create(:country)
     country_2 = FactoryGirl.create(:country)
 
@@ -94,6 +107,14 @@ class SearchAggregationTest < ActiveSupport::TestCase
         'aggregation' => {
           'buckets'=> [
             {'key' => iucn_category.id, 'doc_count' => 100},
+          ]
+        }
+      },
+      'governance' => {
+        'doc_count'=> 100,
+        'aggregation' => {
+          'buckets'=> [
+            {'key' => governance.id, 'doc_count' => 100},
           ]
         }
       },
@@ -148,6 +169,12 @@ class SearchAggregationTest < ActiveSupport::TestCase
         query: 'iucn_category',
         count: 100,
         identifier: iucn_category.id
+      }],
+      'governance' => [{
+        label: governance.name,
+        query: 'governance',
+        count: 100,
+        identifier: governance.id
       }],
       'region' => [{
         label: region.name,

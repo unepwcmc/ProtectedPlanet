@@ -53,11 +53,13 @@ class ProtectedAreaTest < ActiveSupport::TestCase
 
     iucn_category = FactoryGirl.create(:iucn_category, id: 456, name: 'IA')
     designation = FactoryGirl.create(:designation, id: 654, name: 'National')
+    governance = FactoryGirl.create(:governance, id: 654, name: 'Regional')
 
     pa = FactoryGirl.create(:protected_area,
       name: 'Manbone', countries: [country], sub_locations: [sub_location],
       original_name: 'Manboné', iucn_category: iucn_category,
       designation: designation, marine: true, wdpa_id: 555999,
+      governance: governance,
       the_geom_latitude: 1, the_geom_longitude: 2,
       has_irreplaceability_info: true, has_parcc_info: false
     )
@@ -93,6 +95,10 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "designation" => {
         "id" => 654,
         "name" => "National"
+      },
+      "governance" => {
+        "id" => 654,
+        "name" => "Regional"
       }
     }
 

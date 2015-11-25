@@ -16,7 +16,9 @@ class CountryControllerTest < ActionController::TestCase
       percentage_pa_cover: 50,
       percentage_pa_land_cover: 50,
       percentage_pa_eez_cover: 50,
-      percentage_pa_ts_cover: 50
+      percentage_pa_ts_cover: 50,
+      polygons_count: 100,
+      points_count: 100
     )
 
     get :show, iso: 'PUM'

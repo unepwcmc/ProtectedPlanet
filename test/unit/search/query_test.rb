@@ -41,6 +41,12 @@ class SearchQueryTest < ActiveSupport::TestCase
                 }
               },
               {
+                "nested" => {
+                  "path" => "governance",
+                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "governance.name" ] } }
+                }
+              },
+              {
                 "function_score" => {
                   "query" => {
                       "multi_match" => {
@@ -81,14 +87,14 @@ class SearchQueryTest < ActiveSupport::TestCase
     type = "country"
 
     expected_object = {
-      "bool"=>{
-        "must"=>[
+      "bool" => {
+        "must" => [
           {
-            "bool"=>{
-              "should"=>[
+            "bool" => {
+              "should" => [
                 {
-                  "type"=>{
-                    "value"=>type
+                  "type" => {
+                    "value" => type
                   }
                 }
               ]
@@ -106,19 +112,19 @@ class SearchQueryTest < ActiveSupport::TestCase
 
   test '.to_h, given no search term, and a filter, builds a query without matchers' do
     expected_filters = {
-      "filtered"=>{
-        "filter"=>{
-          "bool"=>{
-            "must"=>[
+      "filtered" => {
+        "filter" => {
+          "bool" => {
+            "must" => [
               {
-                "bool"=>{
-                  "should"=>[
+                "bool" => {
+                  "should" => [
                     {
-                      "geo_distance"=>{
-                        "distance"=>"2000km",
-                        "protected_area.coordinates"=>{
-                          "lon"=>-69,
-                          "lat"=>-29
+                      "geo_distance" => {
+                        "distance" => "2000km",
+                        "protected_area.coordinates" => {
+                          "lon" => -69,
+                          "lat" => -29
                         }
                       }
                     }
