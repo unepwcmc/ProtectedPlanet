@@ -20,7 +20,7 @@ class ImportToolsWebHandlerTest < ActiveSupport::TestCase
     key = Rails.application.secrets.maintenance_mode_key
 
     fake_url = 'http://example.com/maintenance'
-    ImportTools::WebHandler.any_instance.stubs(:url_for).returns(fake_url)
+    ImportTools::WebHandler.any_instance.stubs(:maintenance_url).returns(fake_url)
 
     HTTParty.expects(:put).with(
       fake_url,
@@ -34,7 +34,7 @@ class ImportToolsWebHandlerTest < ActiveSupport::TestCase
     key = Rails.application.secrets.maintenance_mode_key
 
     fake_url = 'http://example.com/maintenance'
-    ImportTools::WebHandler.any_instance.stubs(:url_for).returns(fake_url)
+    ImportTools::WebHandler.any_instance.stubs(:maintenance_url).returns(fake_url)
 
     HTTParty.expects(:put).with(
       fake_url,
@@ -58,7 +58,7 @@ class ImportToolsWebHandlerTest < ActiveSupport::TestCase
     key = Rails.application.secrets.maintenance_mode_key
 
     fake_url = 'http://example.com/clear_cache'
-    ImportTools::WebHandler.any_instance.stubs(:url_for).returns(fake_url)
+    ImportTools::WebHandler.any_instance.stubs(:clear_cache_url).returns(fake_url)
 
     HTTParty.expects(:put).with(
       fake_url,

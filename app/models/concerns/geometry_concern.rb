@@ -7,7 +7,7 @@ module GeometryConcern
 
   module ClassMethods
     def geometry_columns
-      columns_hash.select { |_,v| v.type == :spatial }.keys
+      columns_hash.select { |_,v| v.type == :geometry }.keys
     end
   end
 

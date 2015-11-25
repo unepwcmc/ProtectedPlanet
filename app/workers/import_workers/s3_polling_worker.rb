@@ -13,7 +13,7 @@ class ImportWorkers::S3PollingWorker
   private
 
   def send_confirmation_email import
-    ImportConfirmationMailer.create(import).deliver
+    ImportConfirmationMailer.create(import).deliver_now
   end
 
   def create_import

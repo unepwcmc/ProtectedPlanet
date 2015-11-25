@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.1.14'
+gem 'rails', '4.2.5'
 
 gem 'pg'
-gem 'activerecord-postgis-adapter', '~>2.0.1'
+gem 'activerecord-postgis-adapter', '~> 3.1.0'
 gem 'gdal', '~> 0.0.5'
 gem 'dbf', '~> 2.0.7'
 
@@ -69,4 +69,4 @@ gem 'best_in_place'
 gem 'turnout', '~> 2.0.0'
 gem 'bystander', github: 'unepwcmc/bystander', branch: 'configuration-dsl'
 
-gem 'devise', '~> 3.4.0'
+gem 'devise', '~> 3.5.2'
