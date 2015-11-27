@@ -47,5 +47,10 @@ Rails.application.routes.draw do
   get '/sites/:id', to: 'sites#show'
   get '/sites/:id/*other', to: 'sites#show'
 
+
+  mount ProtectedplanetCms::Engine => '/cms'
+  comfy_route :cms_admin, path: '/admin'
+  comfy_route :cms, path: '/cms', sitemap: false
+
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 end

@@ -70,3 +70,5 @@ gem 'turnout', '~> 2.0.0'
 gem 'bystander', github: 'unepwcmc/bystander', branch: 'configuration-dsl'
 
 gem 'devise', '~> 3.5.2'
+
+gem 'protectedplanet_cms', path: '../protectedplanet-cms/'
