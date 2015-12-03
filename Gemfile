@@ -71,4 +71,4 @@ gem 'bystander', github: 'unepwcmc/bystander', branch: 'configuration-dsl'
 
 gem 'devise', '~> 3.5.2'
 
-gem 'protectedplanet_cms', path: '../protectedplanet-cms/'
+gem 'comfortable_mexican_sofa', '~> 1.12.8'

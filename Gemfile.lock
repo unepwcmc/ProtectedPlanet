@@ -6,13 +6,6 @@ GIT
     bystander (1.0.0)
       slack-notifier (~> 0.6.0)
 
-PATH
-  remote: ../protectedplanet-cms/
-  specs:
-    protectedplanet_cms (0.0.1)
-      comfortable_mexican_sofa (~> 1.12.0)
-      rails (~> 4.2.4)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -415,6 +408,7 @@ DEPENDENCIES
   capybara (~> 2.3.0)
   codeclimate-test-reporter
   coffee-rails (~> 4.0.0)
+  comfortable_mexican_sofa (~> 1.12.8)
   dalli (~> 2.7.2)
   dbf (~> 2.0.7)
   devise (~> 3.5.2)
@@ -432,7 +426,6 @@ DEPENDENCIES
   newrelic_rpm
   pg
   premailer-rails
-  protectedplanet_cms!
   rack-cache (~> 1.2)
   rails (= 4.2.5)
   sass-rails (~> 5.0.4)
