@@ -14,15 +14,17 @@
   <header>
     <nav class="navbar">
       <ul>
-        <li class="navbar__element">
+        <li class="navbar__element navbar__element--bigger">
           <%= link_to "protected planet", root_path %>
         </li>
       </ul>
 
       <ul class="right">
-        <li class="navbar__element"><%= link_to 'About', about_path %></li>
-        <li class="navbar__element"><%= link_to 'Resources', 'http://blog.protectedplanet.net' %></li>
-        <li class="navbar__element"><%= link_to 'UN List', 'http://blog.protectedplanet.net/post/102481051829/2014-united-nations-list-of-protected-areas' %></li>
+        <li class="navbar__element"><%= link_to 'About', '/about' %></li>
+        <li class="navbar__element"><%= link_to 'Updates & News', '#' %></li>
+        <li class="navbar__element"><%= link_to 'Resources', '#' %></li>
+        <li class="navbar__element"><%= link_to 'Terms & Conditions', '#' %></li>
+        <li class="navbar__element"><%= link_to 'Thematic Areas', '#' %></li>
 
         <li class="navbar__element">
           <%= link_to 'Search', root_path %>

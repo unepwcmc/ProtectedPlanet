@@ -31,7 +31,6 @@ Rails.application.routes.draw do
   mount Sidekiq::Web => '/admin/sidekiq'
 
   get '/terms', to: 'static_pages#terms', as: 'terms'
-  get '/about', to: 'static_pages#about', as: 'about'
 
   get '/country/:iso', to: 'country#show', as: 'country'
   get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
@@ -48,9 +47,8 @@ Rails.application.routes.draw do
   get '/sites/:id/*other', to: 'sites#show'
 
 
-  mount ProtectedplanetCms::Engine => '/cms'
   comfy_route :cms_admin, path: '/admin'
-  comfy_route :cms, path: '/cms', sitemap: false
+  comfy_route :cms, path: '/', sitemap: false
 
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 end
