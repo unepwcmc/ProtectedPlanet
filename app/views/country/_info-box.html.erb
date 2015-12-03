@@ -1,14 +1,14 @@
-<footer class="footer footer--for-profile">
-  <section class="footer__column">
-    <h2 class="footer__header">Citation</h2>
-    <p class="footer__body">
+<aside class="info-box">
+  <section class="info-box__column">
+    <h2 class="info-box__header">Citation</h2>
+    <p class="info-box__body">
     UNEP-WCMC (<%= Date.today.year %>). Protected Area Country Profile for <%= @country.name %> from the World Database of Protected Areas, <%= Date.today.strftime("%B %Y") %>. Available at: <a href="/">www.protectedplanet.net</a>
     </p>
   </section>
 
-  <section class="footer__column">
-    <h2 class="footer__header">References</h2>
-    <div class="footer__body">
+  <section class="info-box__column">
+    <h2 class="info-box__header">References</h2>
+    <div class="info-box__body">
       <div class="reference">
         <h3 class="reference__title">(Ref 1)</h3>
         <p class="reference__body">Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit</p>
@@ -27,23 +27,23 @@
     </div>
   </section>
 
-  <section class="footer__column">
-    <h2 class="footer__header">Downloads</h2>
-    <div class="footer__body footer__body--no-padding">
-      <div class="footer__row">
-        <button class="footer__link">
-          <i class="footer__link-icon fa fa-download"></i>Download this dataset
+  <section class="info-box__column">
+    <h2 class="info-box__header">Downloads</h2>
+    <div class="info-box__body info-box__body--no-padding">
+      <div class="info-box__row">
+        <button class="info-box__link">
+          <i class="info-box__link-icon fa fa-download"></i>Download this dataset
         </button>
-        <button class="footer__link">
-          <i class="footer__link-icon fa fa-file-pdf-o"></i>Download this country page as PDF
+        <button class="info-box__link">
+          <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download this country page as PDF
         </button>
       </div>
 
-      <div class="footer__row">
+      <div class="info-box__row">
         <button class="big-button" onclick="window.location.href='<%= search_url(country: @country.id, main: :country) %>'">
           <i class="fa fa-link big-button__icon"></i>Protected Area list of the country
         </button>
       </div>
     </div>
   </section>
-</footer>
+</aside>
