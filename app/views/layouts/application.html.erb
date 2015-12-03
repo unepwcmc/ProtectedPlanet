@@ -37,28 +37,19 @@
     <%= yield %>
   </main>
 
-  <% unless @no_footer.present? %>
-    <footer class="footer footer--old-footer">
-      <ul class="footer-logos">
-        <li class="wcmc-footer-logo">
-          <a href="http://unep-wcmc.org" title="UNEP-WCMC Website"></a>
-        </li>
-        <li class="iucn-footer-logo">
-          <a href="http://iucn.org" title="IUCN Website"></a>
-        </li>
-        <li class="footer-copyright">
-          <p>&copy; ProtectedPlanet 2014-2015. All rights reserved</p>
-        </li>
-      </ul>
+  <footer class="footer">
+    <p class="footer__element">
+      <i class="fa fa-copyright"></i> ProtectedPlanet 2014-2015. All rights reserved
+    </p>
 
-
-      <ul class="footer-links">
-        <li><%= link_to 'About', about_path %></li>
-        <li><%= link_to 'Terms of Use', terms_path %></li>
-        <li class="uservoice"><a href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>Send Feedback</a></li>
-      </ul>
-    </footer>
-  <% end %>
+    <div class="footer__element footer__element--right">
+      <a class="iucn-logo" href="http://www.iucn.org"></a>
+      <a class="unepwcmc-logo" href="http://www.unep-wcmc.org"></a>
+    </div>
+    <div class="footer__element footer__element--right footer__element--no-push footer__element--with-separator footer__element--hobbit uservoice">
+      <a href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger><i class="fa fa-comment"></i>Send Feedback</a>
+    </div>
+  </footer>
 
   <%= render 'shared/download_modal' %>
 
