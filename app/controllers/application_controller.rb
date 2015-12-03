@@ -36,8 +36,4 @@ class ApplicationController < ActionController::Base
   def load_user_projects
     @projects = current_user.projects if user_signed_in?
   end
-
-  def no_footer
-    @no_footer = true
-  end
 end
