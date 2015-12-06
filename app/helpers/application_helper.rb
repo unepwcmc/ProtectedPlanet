@@ -1,4 +1,6 @@
 module ApplicationHelper
+  include BemHelper
+
   COVER_HELPERS = {
     ProtectedArea => :protected_area_cover,
     Country => :country_cover,

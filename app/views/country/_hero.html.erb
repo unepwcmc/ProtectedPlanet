@@ -1,8 +1,8 @@
 <section class="hero">
   <div class="hero__top">
     <h1 class="hero__title"><%= @country.name %>, <small><%= @country.region.name %></small></h1>
-    <button class="hero__download-link">
-      <i class="hero__download-icon fa fa-download"></i>Download this dataset
+    <button class="link-with-icon">
+      <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
     </button>
   </div>
   <div class="hero__map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>"></div>
