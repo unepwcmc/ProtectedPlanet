@@ -72,3 +72,4 @@ gem 'bystander', github: 'unepwcmc/bystander', branch: 'configuration-dsl'
 gem 'devise', '~> 3.5.2'
 
 gem 'comfortable_mexican_sofa', '~> 1.12.8'
+gem 'nokogiri', '~> 1.6.7'
