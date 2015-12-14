@@ -6,8 +6,12 @@ $(document).ready( ->
       tinymce.init({
         selector: 'textarea.rich-text-editor, textarea[data-cms-rich-text]',
         height: 400,
-        plugins: "code",
-        toolbar: "code",
+        plugins: "code anchor",
+        toolbar: """
+          insertfile undo redo | styleselect | bold italic |
+          alignleft aligncenter alignright alignjustify |
+          bullist numlist outdent indent | anchor link | code
+        """,
         style_formats: [
           {title: 'Normal text', block: 'p', classes: 'article__paragraph' },
           {title: 'Bigger text (Introduction)', block: 'p', classes: 'article__paragraph article__paragraph--bigger' },
