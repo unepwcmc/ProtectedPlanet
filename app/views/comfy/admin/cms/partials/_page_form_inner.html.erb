@@ -1,0 +1,20 @@
+<div class="form-group versions-selection">
+  <label class="control-label col-sm-2" for="page_parent_id">Versioning</label>
+  <div class="col-sm-10">
+    <div class="radio">
+      <label>
+        <input id="disable-versions" name="versions-on-off" <%= "checked" if @page.older_version_id.nil? %> type="radio">
+        This page has no older versions
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input id="enable-versions" name="versions-on-off" <%= "checked" if @page.older_version_id %> type="radio">
+        This page has older versions to link
+      </label>
+    </div>
+
+    <input class="no-versions-hidden" type="hidden" value="">
+    <%= select(:page, :older_version_id, @site.pages.order('label').map { |page| [page.label, page.id] }, {}, class: 'versions-select form-control') %>
+  </div>
+</div>
