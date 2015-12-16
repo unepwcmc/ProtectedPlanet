@@ -50,3 +50,4 @@ Rails.application.configure do
     :password => secrets['password']
   }
 end
+
