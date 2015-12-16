@@ -1,5 +1,20 @@
 secrets = Rails.application.secrets.mailer
 
+class DisableAssetsLogger
+  def initialize(app)
+    @app = app
+    Rails.application.assets.logger = Logger.new('/dev/null')
+  end
+
+  def call(env)
+    previous_level = Rails.logger.level
+    Rails.logger.level = Logger::ERROR if env['PATH_INFO'].index("/assets/") == 0
+    @app.call(env)
+  ensure
+    Rails.logger.level = previous_level
+  end
+end
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -36,6 +51,9 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Shuts up logger for assets serving! Yay!
+  config.middleware.insert_before Rails::Rack::Logger, DisableAssetsLogger
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.asset_host = secrets['asset_host']
