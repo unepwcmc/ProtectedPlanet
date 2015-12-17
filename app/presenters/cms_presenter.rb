@@ -10,6 +10,10 @@ class CmsPresenter
     (new.reverse << @page).concat(old)
   end
 
+  def most_recent_version?
+    Comfy::Cms::Page.where(older_version_id: @page.id).count.zero?
+  end
+
   private
 
   def collect_older_versions page, collection=[]
