@@ -1,10 +1,16 @@
 $(document).ready( ->
-  console.log("HAI")
-  if window.CMS != undefined && window.CMS.wysiwyg != undefined
-    window.CMS.wysiwyg = ->
-      console.log("HEY")
+  tinymceInstances = []
+
+  window.CMS?.wysiwyg = ->
+    tinymceInstances.forEach( (instance) ->
+      tinymce.execCommand('mceRemoveEditor',true, instance)
+    )
+
+    tinymceInstances = []
+    $('textarea.rich-text-editor, textarea[data-cms-rich-text="true"]').each( (index, textarea) ->
+      tinymceInstances.push(textarea.id)
       tinymce.init({
-        selector: 'textarea.rich-text-editor, textarea[data-cms-rich-text]',
+        selector: "##{textarea.id}",
         height: 400,
         plugins: "code anchor",
         toolbar: """
@@ -18,5 +24,6 @@ $(document).ready( ->
           {title: 'Section title', block: 'h2', classes: 'article__title--paragraph' }
         ]
       })
+    )
 )
 
