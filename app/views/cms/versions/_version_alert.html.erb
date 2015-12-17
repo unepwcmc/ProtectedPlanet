@@ -1,9 +1,17 @@
-<%= if CmsPresenter.new(@cms_page).most_recent_version? %>
-  <div class="alert alert--success">
-    Latest version
-  </div>
+<% if CmsPresenter.new(@cms_page).most_recent_version? %>
+  <aside class="alert">
+    <i class="fa fa-check alert__icon alert__icon--success"></i>
+    <div>
+      <h4 class="alert__title alert__title--success">Latest version</h4>
+      <p class="alert__body"><%= @cms_page.label %> is currently the latest version available.</p>
+    </div>
+  </aside>
 <% else %>
-  <div class="alert alert--warning">
-    Outdated version
-  </div>
+  <aside class="alert alert--warning">
+    <i class="fa fa-warning alert__icon alert__icon--warning"></i>
+    <div>
+      <h4 class="alert__title alert__title--warning">Outdated version</h4>
+      <p class="alert__body"><%= @cms_page.label %> is an outdated version.</p>
+    </div>
+  </aside>
 <% end %>
