@@ -1,0 +1,9 @@
+<%= if CmsPresenter.new(@cms_page).most_recent_version? %>
+  <div class="alert alert--success">
+    Latest version
+  </div>
+<% else %>
+  <div class="alert alert--warning">
+    Outdated version
+  </div>
+<% end %>
