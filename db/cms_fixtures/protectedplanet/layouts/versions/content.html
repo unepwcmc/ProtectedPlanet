@@ -4,11 +4,12 @@
   </nav>
 
   <aside class="one-fourths">
-    {{ cms:partial:cms/versions_nav }}
+    {{ cms:partial:cms/versions/versions_nav }}
   </aside>
 
   <article class="three-fourths article">
     {{ cms:partial:cms/title }}
+    {{ cms:partial:cms/versions/version_alert }}
     {{ cms:page:content:rich_text }}
   </article>
 </main>
