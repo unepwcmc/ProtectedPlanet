@@ -3,7 +3,6 @@
 //= require jquery_ujs
 //= require 'jquery.tablesorter.min'
 //= require 'async-img.min'
-//= require 'tinymce/tinymce.min'
 //= require 'underscore-min'
 //= require 'modules/search/bar'
 //= require 'modules/search/autocompletion'
