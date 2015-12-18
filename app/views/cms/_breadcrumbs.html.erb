@@ -1,2 +1,10 @@
-<a class="breadcrumbs__link" href="/">Home</a> > <%= @cms_page.label %>
+<a class="breadcrumbs__link" href="/">Home</a>
+>
+<% if @cms_page.categories.any? %>
+  <a class="breadcrumbs__link" href="<%= resources_path %>">
+    Resources: <%= @cms_page.categories.first.label %>
+</a>
+>
+<% end %>
+<%= @cms_page.label %>
 

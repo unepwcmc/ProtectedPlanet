@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   get '/sites/:id/*other', to: 'sites#show'
 
 
+  get '/resources', to: 'cms/resources#index'
   comfy_route :cms_admin, path: '/admin'
   comfy_route :cms, path: '/', sitemap: false
 
