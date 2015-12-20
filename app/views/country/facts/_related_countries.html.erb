@@ -1,7 +1,7 @@
 <% if @country.children.any? || @country.parent.present? %>
   <section class="fact">
     <h2 class="fact__header">Related countries & territories</h2>
-    <div class="fact__body fact__body--no-padding">
+    <div class="fact__body">
 
       <% if @country.children.any? %>
         <p class="fact__subheader"><i class="fa fa-level-down"></i> Child countries & territories</p>
