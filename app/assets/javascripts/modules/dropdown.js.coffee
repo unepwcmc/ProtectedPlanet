@@ -14,25 +14,24 @@ define('dropdown', [], ->
       @$el.appendTo('body')
       @$el.hide()
 
-      @positionEl()
       @addEventListener()
 
     hide: ->
       @$el.slideToggle()
 
-    positionEl: ->
-      triggerPosition = @$triggerEl.offset()
+    positionEl: ($triggerEl) ->
+      triggerPosition = $triggerEl.offset()
 
-      @$el.width(@$triggerEl.outerWidth())
+      @$el.width($triggerEl.outerWidth())
 
       @$el.css('position', 'fixed')
-      @$el.css('top', (triggerPosition.top + @$triggerEl.outerHeight()) )
+      @$el.css('top', ((triggerPosition.top + $triggerEl.outerHeight()) - $(window).scrollTop()))
       @$el.css('left', triggerPosition.left)
 
     addEventListener: ->
       @$triggerEl.on(@options.on, (event) =>
         @$el.stop()
-        @positionEl()
+        @positionEl($(event.target))
         @$triggerEl.toggleClass('active')
         @$el.slideToggle()
         event.preventDefault()

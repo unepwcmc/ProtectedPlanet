@@ -1,9 +1,10 @@
 <section class="hero">
   <div class="hero__top">
     <h1 class="hero__title"><%= @country.name %>, <small class="hero__title hero__title--thin"><%= @country.region.name %></small></h1>
-    <button class="link-with-icon link-with-icon--bold">
+    <button class="js-download-btn link-with-icon link-with-icon--bold">
       <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
     </button>
+    <%= download_dropdown(@country.iso_3, 'general', (types rescue [:csv, :kml, :shp])) %>
   </div>
   <div class="hero__map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>"></div>
 </section>

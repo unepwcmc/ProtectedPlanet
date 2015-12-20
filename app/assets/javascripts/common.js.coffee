@@ -14,7 +14,7 @@ $(document).ready( ->
       new Map($('#map')).render()
 
       dropdown = new Dropdown(
-        $('.btn-download'),
+        $('.js-download-btn'),
         $(".download-type-dropdown[data-download-type='general']")
       )
 
