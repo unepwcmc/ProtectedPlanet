@@ -1,10 +1,16 @@
 <section class="hero">
-  <div class="hero__top">
-    <h1 class="hero__title"><%= @country.name %>, <small class="hero__title hero__title--thin"><%= @country.region.name %></small></h1>
-    <button class="js-download-btn link-with-icon link-with-icon--bold">
-      <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
-    </button>
+  <div class="hero__top <%= "hero__top--centered" if params[:for_pdf] %>">
+    <h1 class="hero__title <%= "hero__title--bigger" if params[:for_pdf] %>">
+      <%= @country.name %>, <small class="hero__title hero__title--thin"><%= @country.region.name %></small>
+    </h1>
+    <% unless params[:for_pdf] %>
+      <button class="js-download-btn link-with-icon link-with-icon--bold">
+        <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
+      </button>
+    <% end %>
     <%= download_dropdown(@country.iso_3, 'general', (types rescue [:csv, :kml, :shp])) %>
   </div>
-  <div class="hero__map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>"></div>
+  <% unless params[:for_pdf] %>
+    <div class="hero__map" id="map" data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>"></div>
+  <% end %>
 </section>

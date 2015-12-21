@@ -1,4 +1,4 @@
-<aside class="info-box">
+<aside class="pdf-page-break info-box">
   <section class="info-box__column">
     <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Citation</h2>
     <p class="info-box__body">
@@ -27,23 +27,25 @@
     </div>
   </section>
 
-  <section class="info-box__column">
-    <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Downloads</h2>
-    <div class="info-box__body info-box__body--no-padding">
-      <div class="info-box__row">
-        <button class="js-download-btn info-box__link">
-          <i class="info-box__link-icon fa fa-download"></i>Download this dataset
-        </button>
-        <button class="info-box__link">
-          <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download this country page as PDF
-        </button>
-      </div>
+  <% unless params[:for_pdf] %>
+    <section class="info-box__column">
+      <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Downloads</h2>
+      <div class="info-box__body info-box__body--no-padding">
+        <div class="info-box__row">
+          <button class="js-download-btn info-box__link">
+            <i class="info-box__link-icon fa fa-download"></i>Download this dataset
+          </button>
+          <a href="/country-profiles/protectedplanet-<%= @country.iso %>-country.pdf" class="info-box__link">
+            <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download this country page as PDF
+          </a>
+        </div>
 
-      <div class="info-box__row">
-        <button class="big-button" onclick="window.location.href='<%= search_url(country: @country.id, main: :country) %>'">
-          <i class="fa fa-link big-button__icon"></i>Protected Area list of the country
-        </button>
+        <div class="info-box__row">
+          <button class="big-button" onclick="window.location.href='<%= search_url(country: @country.id, main: :country) %>'">
+            <i class="fa fa-link big-button__icon"></i>Protected Area list of the country
+          </button>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  <% end %>
 </aside>

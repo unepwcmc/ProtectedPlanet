@@ -249,6 +249,11 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
     pg (0.17.1)
+    phantomjs (1.9.8.0)
+    phantompdf (1.2.2)
+      json
+      phantomjs
+      rack
     plupload-rails (1.2.1)
       rails (>= 3.1)
     premailer (1.8.2)
@@ -424,6 +429,7 @@ DEPENDENCIES
   newrelic_rpm
   nokogiri (~> 1.6.7)
   pg
+  phantompdf (~> 1.2.2)
   premailer-rails
   rack-cache (~> 1.2)
   rails (= 4.2.5)

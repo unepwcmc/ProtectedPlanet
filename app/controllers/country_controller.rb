@@ -3,7 +3,21 @@ class CountryController < ApplicationController
   before_filter :load_vars
 
   def show
+    respond_to do |format|
+      format.html
+      format.pdf {
+        options = {format: 'A4', margin: '0cm'}
+        pdf_generator = PhantomPDF::Generator.new(
+          render_to_string(formats: [:html]),
+          Rails.root.join("tmp/protectedplanet-#{@country.iso_3}-report.pdf").to_s,
+          options
+        )
+
+        send_file pdf_generator.generate, type: 'application/pdf'
+      }
+    end
   end
+
 
   def compare
     params[:iso_to_compare] ? load_second_country : load_comparable_countries

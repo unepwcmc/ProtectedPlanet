@@ -17,23 +17,25 @@
         <%= link_to "protected planet", root_path %>
       </div>
 
-      <div class="navbar__element navbar__element--right"><%= link_to 'About', '/about' %></div>
-      <div class="navbar__element navbar__element--right"><%= link_to 'Updates & News', '#' %></div>
-      <div class="navbar__element navbar__element--right">
-        <a href="<%= resources_path %>">
-          Resources <i class="fa fa-chevron-down"></i>
-        </a>
-      </div>
-      <div class="navbar__element navbar__element--right"><%= link_to 'Terms & Conditions', '/terms-and-conditions' %></div>
-      <div class="navbar__element navbar__element--right">
-        <button>
-          Thematic Areas <i class="fa fa-chevron-down"></i>
-        </button>
-      </div>
+      <% unless params[:for_pdf] %>
+        <div class="navbar__element navbar__element--right"><%= link_to 'About', '/about' %></div>
+        <div class="navbar__element navbar__element--right"><%= link_to 'Updates & News', '#' %></div>
+        <div class="navbar__element navbar__element--right">
+          <a href="<%= resources_path %>">
+            Resources <i class="fa fa-chevron-down"></i>
+          </a>
+        </div>
+        <div class="navbar__element navbar__element--right"><%= link_to 'Terms & Conditions', '/terms-and-conditions' %></div>
+        <div class="navbar__element navbar__element--right">
+          <button>
+            Thematic Areas <i class="fa fa-chevron-down"></i>
+          </button>
+        </div>
 
-      <div class="<%= bem("navbar__element", "with-separator", "right", "bold") %>">
-        <a href="<%= root_path %>" class="link-with-icon link-with-icon--no-color"> <i class="fa fa-search"></i> Search</a>
-      </div>
+        <div class="<%= bem("navbar__element", "with-separator", "right", "bold") %>">
+          <a href="<%= root_path %>" class="link-with-icon link-with-icon--no-color"> <i class="fa fa-search"></i> Search</a>
+        </div>
+      <% end %>
     </nav>
 
     <%= yield :header %>
@@ -52,11 +54,13 @@
       <a class="iucn-logo" href="http://www.iucn.org"></a>
       <a class="unepwcmc-logo" href="http://www.unep-wcmc.org"></a>
     </div>
-    <div class="<%= bem('footer__element', :right, :'no-push', :'with-separator') %>">
-      <a class="<%= bem('uservoice', :'no-color', :bold) %>" href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>
-        <i class="uservoice__icon fa fa-comment"></i>Send Feedback
-      </a>
-    </div>
+    <% unless params[:for_pdf] %>
+      <div class="<%= bem('footer__element', :right, :'no-push', :'with-separator') %>">
+        <a class="<%= bem('uservoice', :'no-color', :bold) %>" href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>
+          <i class="uservoice__icon fa fa-comment"></i>Send Feedback
+        </a>
+      </div>
+    <% end %>
   </footer>
 
   <%= render 'shared/download_modal' %>
