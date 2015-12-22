@@ -8,14 +8,14 @@
     frontiers or boundaries.
   </div>
 
-  <div class="js-close-explore js-explore-target o-overlay o-overlay--narrow">
+  <div class="js-explore-target u-click-through o-overlay o-overlay--narrow">
     <div class="u-width-100 <%= bem('info-box', 'white', 'hero') %>">
       <h1 class="info-box__header info-box__header--with-padding <%= bem('header-with-delimiter', 'bigger', 'bold', 'no-margin-bottom') %>">
         Start Exploring
         <button class="right"><i class="fa fa-times u-green"></i></button>
       </h1>
 
-      <div class="info-box__body info-box__body--no-padding">
+      <div class="info-box__body u-no-click-through info-box__body--no-padding">
         <div class="<%= bem('info-box__row', 'around-padding', 'light-border') %>">
           <%= render partial: 'shared/search_form', locals: {query: @query} %>
         </div>
