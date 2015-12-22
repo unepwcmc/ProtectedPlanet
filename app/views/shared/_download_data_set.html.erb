@@ -1,7 +1,5 @@
-<a href="#" class="btn btn-download <%= custom_classes %>">
-
-  <span>Download WDPA dataset</span>
-  <%= image_tag((image rescue "icon-download.png"), style: "height: 29px; width: 20px;") %>
-</a>
+<button href="#" class="big-button <%= custom_classes %>">
+  <i class="fa fa-download big-button__icon"></i>Download the WDPA dataset
+</button>
 
 <%= download_dropdown((item_id rescue nil), download_type, (types rescue [:csv, :kml, :shp])) %>

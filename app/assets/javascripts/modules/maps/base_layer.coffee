@@ -1,6 +1,6 @@
 define('base_layer', [], ->
   class BaseLayer
-    @render: (map) ->
+    @render: (map, opts={}) ->
       terrain = L.mapbox.tileLayer('unepwcmc.l8gj1ihl')
       satellite = L.mapbox.tileLayer('unepwcmc.lac5fjl1')
 
@@ -8,7 +8,7 @@ define('base_layer', [], ->
         "Terrain": terrain,
         "Satellite": satellite
       }, null, {
-        position: 'topleft'
+        position: opts.controlPosition || 'topleft'
       }).addTo(map)
 
   return BaseLayer

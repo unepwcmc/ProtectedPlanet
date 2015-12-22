@@ -8,11 +8,10 @@ class CountryController < ApplicationController
       format.pdf {
         options = {format: 'A4', margin: '0cm'}
         pdf_generator = PhantomPDF::Generator.new(
-          render_to_string(formats: [:html]),
-          Rails.root.join("tmp/protectedplanet-#{@country.iso_3}-report.pdf").to_s,
+          url_for(action: :show, iso: @country.iso, for_pdf: true),
+          Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s,
           options
         )
-
         send_file pdf_generator.generate, type: 'application/pdf'
       }
     end

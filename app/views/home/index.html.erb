@@ -1,24 +1,6 @@
-<div
-  data-bound-from="<%= map_bounds['from'] %>"
-  data-bound-to="<%= map_bounds['to'] %>"
-
-  class="home-map"
-  id="map">
-  <div class="map-disclaimer">
-    The designations employed and the presentation of material on this map do not
-    imply the expression of any opinion whatsoever on the part of the Secretariat
-    of the United Nations concerning the legal status of any country, territory,
-    city or area or of its authorities, or concerning the delimitation of its
-    frontiers or boundaries.
-  </div>
+<div class="container--fullscreen">
+  <%= render partial: 'hero' %>
 </div>
-
-<div class="explore">
-  <h1>Start Exploring</h1>
-
-  <div class="search-bar-container">
-    <%= render partial: 'shared/search_form', locals: {query: @query} %>
-  </div>
-
-  <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', download_type: 'general', item_id: 'all', types: [:csv, :kml, :shp, :gdb, :esri]} %>
+<div class="section container--profile">
+  <%= render partial: 'thematic_areas' %>
 </div>

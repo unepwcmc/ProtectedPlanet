@@ -23,7 +23,7 @@ define(
         unless config.scrollWheelZoom?
           map.scrollWheelZoom.disable()
 
-        BaseLayer.render(map)
+        BaseLayer.render(map, config)
         Bounds.setToBounds(map, config)
         Interactive.listen(map)
         ProtectedAreaOverlay.render(map, config)

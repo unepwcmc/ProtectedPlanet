@@ -33,7 +33,7 @@ define('interactive', [], () ->
       )
 
     hideExplore: =>
-      $('.explore').fadeOut()
+      $('.js-explore-target').fadeOut()
       $('.download-type-dropdown').fadeOut()
 
     linkTo: (pa) ->
