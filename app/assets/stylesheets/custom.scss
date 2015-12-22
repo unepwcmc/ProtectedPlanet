@@ -1,0 +1,15 @@
+$thematic-areas: (wdpa icca parcc pame);
+
+@each $thematic-area in $thematic-areas {
+  .#{$thematic-area}-background {
+    background-image: image-url("thematic-areas/#{$thematic-area}.jpg");
+    background-position: center;
+    background-size: cover;
+  }
+}
+
+.statistics-cover {
+  background-image: image-url("statistics-cover.jpg");
+  background-position: center;
+  background-size: cover;
+}

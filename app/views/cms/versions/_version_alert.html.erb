@@ -1,17 +1,22 @@
-<% if CmsPresenter.new(@cms_page).most_recent_version? %>
-  <aside class="alert">
-    <i class="fa fa-check alert__icon alert__icon--success"></i>
+<aside class="alert alert--flex alert--with-margin">
+  <% if CmsPresenter.new(@cms_page).most_recent_version? %>
+    <span class="fa-stack alert__icon alert__icon--success">
+      <i class="fa fa-circle fa-stack-2x"></i>
+      <i class="fa fa-check alert__icon-inner alert__icon-inner--success fa-stack-1x"></i>
+    </span>
+
     <div>
       <h4 class="alert__title alert__title--success">Latest version</h4>
       <p class="alert__body"><%= @cms_page.label %> is currently the latest version available.</p>
     </div>
-  </aside>
-<% else %>
-  <aside class="alert alert--warning">
-    <i class="fa fa-warning alert__icon alert__icon--warning"></i>
+  <% else %>
+    <span class="fa-stack alert__icon alert__icon--warning">
+      <i class="fa fa-circle fa-stack-2x"></i>
+      <i class="fa fa-check alert__icon-inner alert__icon-inner--warning fa-stack-1x"></i>
+    </span>
     <div>
       <h4 class="alert__title alert__title--warning">Outdated version</h4>
       <p class="alert__body"><%= @cms_page.label %> is an outdated version.</p>
     </div>
-  </aside>
-<% end %>
+  <% end %>
+</aside>

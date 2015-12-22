@@ -7,7 +7,6 @@ define('interactive', [], () ->
 
     listen: ->
       @map.on('click', @handleMapClick)
-
       @map.on('dragstart zoomstart click', @hideExplore)
 
     addMarker: (coords, protected_area) =>
