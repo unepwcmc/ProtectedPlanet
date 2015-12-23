@@ -1,5 +1,7 @@
-<button href="#" class="big-button <%= custom_classes %>">
-  <i class="fa fa-download big-button__icon"></i>Download the WDPA dataset
-</button>
+<div class="dropdown__trigger">
+  <button href="#" class="big-button <%= custom_classes %>">
+    <i class="fa fa-download big-button__icon"></i>Download the WDPA dataset
+  </button>
 
-<%= download_dropdown((item_id rescue nil), download_type, (types rescue [:csv, :kml, :shp])) %>
+  <%= download_dropdown((item_id rescue nil), download_type, (types rescue [:csv, :kml, :shp])) %>
+</div>

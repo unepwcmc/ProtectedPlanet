@@ -5,35 +5,12 @@ define('dropdown', [], ->
         return false
 
       @options ||= {on: 'click'}
-      @render()
-
-    render: ->
-      if @$el.prop('tagName') == 'SCRIPT'
-        @$el = $(@$el.html())
-
-      @$el.appendTo('body')
-      @$el.hide()
-
       @addEventListener()
-
-    hide: ->
-      @$el.slideToggle()
-
-    positionEl: ($triggerEl) ->
-      triggerPosition = $triggerEl.offset()
-
-      @$el.width($triggerEl.outerWidth())
-
-      @$el.css('position', 'fixed')
-      @$el.css('top', ((triggerPosition.top + $triggerEl.outerHeight()) - $(window).scrollTop()))
-      @$el.css('left', triggerPosition.left)
 
     addEventListener: ->
       @$triggerEl.on(@options.on, (event) =>
-        @$el.stop()
-        @positionEl($(event.target))
         @$triggerEl.toggleClass('active')
-        @$el.slideToggle()
+        @$el.slideToggle(100)
         event.preventDefault()
       )
 

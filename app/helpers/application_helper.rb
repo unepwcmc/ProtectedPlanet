@@ -56,23 +56,23 @@ module ApplicationHelper
   DOWNLOAD_TYPES = {
     csv: {
       content: 'CSV',
-      attrs: {'data-type' => 'csv', 'class' => 'btn'}
+      attrs: {'data-type' => 'csv', 'class' => 'dropdown__element'}
     },
     kml: {
       content: 'KML',
-      attrs: {'data-type' => 'kml', 'class' => 'btn'}
+      attrs: {'data-type' => 'kml', 'class' => 'dropdown__element'}
     },
     shp: {
       content: 'SHP',
-      attrs: {'data-type' => 'shapefile', 'class' => 'btn'}
+      attrs: {'data-type' => 'shapefile', 'class' => 'dropdown__element'}
     },
     esri: {
       content: 'ESRI Web Service',
-      attrs: {'href' => Rails.application.secrets.esri_web_service_url, 'class' => 'btn'}
+      attrs: {'href' => Rails.application.secrets.esri_web_service_url, 'class' => 'dropdown__element'}
     },
     gdb: {
       content: 'File Geodatabase',
-      attrs: {'href' => Rails.application.secrets.wdpa_current_release_url, 'class' => 'btn'}
+      attrs: {'href' => Rails.application.secrets.wdpa_current_release_url, 'class' => 'dropdown__element'}
     }
   }
 
@@ -80,14 +80,12 @@ module ApplicationHelper
     download_dropdown_attrs = {
       'data-item-id' => item_id,
       'data-download-type' => download_type,
-      'class' => 'download-type-dropdown'
+      'class' => 'dropdown download-type-dropdown'
     }
 
-    content_tag :ul, download_dropdown_attrs do
+    content_tag :div, download_dropdown_attrs do
       types.map do |type|
-        content_tag :li do
-          content_tag :a, DOWNLOAD_TYPES[type][:content], DOWNLOAD_TYPES[type][:attrs]
-        end
+        content_tag :a, DOWNLOAD_TYPES[type][:content], DOWNLOAD_TYPES[type][:attrs]
       end.join.html_safe
     end
   end
