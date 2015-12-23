@@ -13,3 +13,10 @@ $thematic-areas: (wdpa icca parcc pame);
   background-position: center;
   background-size: cover;
 }
+
+.protectedplanet-logo {
+  padding-left: 2.5rem;
+  content: "";
+  display: block;
+  background: image-url("hand-solo.png") center left/2rem no-repeat;
+}
