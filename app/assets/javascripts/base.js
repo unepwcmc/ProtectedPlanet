@@ -8,6 +8,7 @@
 //= require 'modules/search/autocompletion'
 //= require 'modules/search/query_control'
 //= require 'modules/dropdown'
+//= require 'modules/navbar'
 //= require 'modules/modal'
 //= require 'modules/modals/download_generation_modal'
 //= require 'modules/downloads/base'

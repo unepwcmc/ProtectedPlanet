@@ -1,8 +1,8 @@
 $(document).ready( ->
   require(
-    ['search_bar', 'autocompletion', 'query_control', 'dropdown', 'map', 'asyncImg',
+    ['search_bar', 'autocompletion', 'query_control', 'dropdown', 'map', 'navbar', 'asyncImg',
      'downloads_general', 'downloads_project', 'downloads_search'],
-    (SearchBar, Autocompletion, QueryControl, Dropdown, Map, asyncImg,
+    (SearchBar, Autocompletion, QueryControl, Dropdown, Map, Navbar, asyncImg,
      DownloadsGeneral, DownloadsProject, DownloadsSearch) ->
       bar = new SearchBar()
 
@@ -12,6 +12,7 @@ $(document).ready( ->
       )
 
       new Map($('#map')).render()
+      Navbar.initialize()
 
       dropdown = new Dropdown(
         $('.js-download-btn'),
