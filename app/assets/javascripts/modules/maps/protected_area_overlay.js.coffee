@@ -1,7 +1,7 @@
 define('protected_area_overlay', [], () ->
   class ProtectedAreaOverlay
-    POLYGONS_TABLE = 'wdpa_poly_<%= Rails.env %>'
-    POINTS_TABLE   = 'wdpa_point_<%= Rails.env %>'
+    POLYGONS_TABLE = 'wdpa_poly_production'
+    POINTS_TABLE   = 'wdpa_point_production'
 
     @_generateCartocssSelector: (args) ->
       tables = args.table
