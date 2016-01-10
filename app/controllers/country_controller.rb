@@ -44,7 +44,12 @@ class CountryController < ApplicationController
   end
 
   def load_vars
-    @country = Country.where(iso: params[:iso]).first
+    @country = if params[:iso].size == 2
+      Country.where(iso: params[:iso]).first
+    else
+      Country.where(iso_3: params[:iso]).first
+    end
+
     if @country.protected_areas.count > 0
       @random_protected_areas = @country.random_protected_areas 2
     end
