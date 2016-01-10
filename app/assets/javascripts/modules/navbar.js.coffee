@@ -15,6 +15,11 @@ define('navbar', ['dropdown'], (Dropdown) ->
         $('.js-thematic-areas-dd-target')
       )
 
+      @resourcesDropdown = new Dropdown(
+        $('.js-resources-dd-trigger'),
+        $('.js-resources-dd-target')
+      )
+
 
   return Navbar
 )

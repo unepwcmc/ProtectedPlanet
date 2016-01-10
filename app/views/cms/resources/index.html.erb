@@ -1,18 +1,18 @@
 <main class="container--profile container--right-padded container--push-bottom">
   <nav class="breadcrumbs">
-    <a class="breadcrumbs__link" href="/">Home</a> > Resources: <%= @section %>
+    <a class="breadcrumbs__link" href="/">Home</a> > Resources: <%= @category.label %>
   </nav>
 
   <div class="hero">
     <h1 class="hero__title hero__title--article">Resources</h1>
   </div>
 
-  <div class="one-fourths info-box info-box--fill-color">
+  <!--<div class="one-fourths info-box info-box--fill-color">
     <h2 class="info-box__header header-with-delimiter">Filters</h2>
     <div class="info-box__body">
       <em>Work in progress...</em>
     </div>
-  </div>
+    </div>-->
 
   <div class="three-fourths">
     <p class="header-with-delimiter header-with-delimiter--smaller header-with-delimiter--bold">Showing 1-10 of <%= @resources.size %> hits.</p>
