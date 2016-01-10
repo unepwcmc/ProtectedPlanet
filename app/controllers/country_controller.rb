@@ -1,6 +1,6 @@
 class CountryController < ApplicationController
   after_filter :enable_caching
-  before_filter :load_vars
+  before_filter :load_vars, except: [:codes]
 
   def show
     respond_to do |format|
@@ -15,6 +15,16 @@ class CountryController < ApplicationController
         send_file pdf_generator.generate, type: 'application/pdf'
       }
     end
+  end
+
+  def codes
+    countries = Country.order(:name).pluck(:name, :iso_3)
+    csv = CSV.generate { |rows|
+      rows << ["Name", "ISO3"]
+      countries.each(&rows.method(:<<))
+    }
+
+    send_data csv, filename: 'protectedplanet-country-codes.csv'
   end
 
 

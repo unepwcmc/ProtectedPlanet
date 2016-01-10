@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   get '/sites/:id', to: 'sites#show'
   get '/sites/:id/*other', to: 'sites#show'
 
+  get '/country_codes', to: 'country#codes', as: 'country_codes'
 
   get '/resources', to: 'cms/resources#index'
   comfy_route :cms_admin, path: '/admin'

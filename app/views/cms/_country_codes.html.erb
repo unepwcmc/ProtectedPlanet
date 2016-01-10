@@ -1,0 +1,36 @@
+<a class="row link-with-icon" href="<%= country_codes_path %>">
+  <i class="fa fa-download link-with-icon__icon"></i> Download complete country codes list as a .CSV
+</a>
+
+<% countries_by_letter = Country.pluck(:name, :iso_3).group_by{ |(name, _)| I18n.transliterate(name).first } %>
+
+<% countries_by_letter.keys.sort.each do |letter| %>
+  <div class="row expandable-section">
+    <h3 class="js-expandable-section-trigger expandable-section__header">
+      <%= letter %><i class="expandable-section__switch js-expandable-section-switch expandable-section__switch is-closed"></i>
+    </h3>
+    <div class="js-expandable-section-target expandable-section__body u-hide">
+      <table class="table table--sortable">
+        <thead>
+          <tr class="table__header">
+            <th class="table__column">Country name</th>
+            <th class="table__column">ISO alpha-3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% Array.wrap(countries_by_letter[letter]).each do |(name, iso_3)| %>
+            <tr class="table__row">
+              <td class="table__label table__label--link"><a href="<%= country_path(iso_3) %>"><%= name %></td>
+              <td class="table__value table__label--link"><a href="<%= country_path(iso_3) %>"><%= iso_3 %></td>
+            </tr>
+          <% end %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<a class="row row--push link-with-icon" href="<%= country_codes_path %>">
+  <i class="fa fa-download link-with-icon__icon"></i> Download complete country codes list as a .CSV
+</a>
