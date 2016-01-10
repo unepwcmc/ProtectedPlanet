@@ -49,8 +49,10 @@ Rails.application.routes.draw do
   get '/country_codes', to: 'country#codes', as: 'country_codes'
 
   get '/resources', to: 'cms/resources#index'
+
+
   comfy_route :cms_admin, path: '/admin'
-  comfy_route :cms, path: '/', sitemap: false
+  comfy_route :cms, path: '/c', sitemap: false
 
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 end
