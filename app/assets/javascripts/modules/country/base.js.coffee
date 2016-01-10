@@ -15,11 +15,6 @@ $(document).ready( ->
   percentagePolygons = $pointsPolygonsBar.data('fill-value')
   $pointsPolygonsBar.css('width', "#{percentagePolygons}%")
 
-  $('.table--sortable').tablesorter(
-    cssAsc: 'table__column--sort-asc'
-    cssDesc: 'table__column--sort-desc'
-  )
-
   $countriesSelect = $('#countries-select')
   return false if $countriesSelect.length == 0
 

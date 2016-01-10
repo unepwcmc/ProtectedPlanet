@@ -19,6 +19,11 @@ $(document).ready( ->
         $(".download-type-dropdown[data-download-type='general']")
       )
 
+      $('.table--sortable').tablesorter(
+        cssAsc: 'table__column--sort-asc'
+        cssDesc: 'table__column--sort-desc'
+      )
+
       asyncImg()
 
       $downloadBtns = [
