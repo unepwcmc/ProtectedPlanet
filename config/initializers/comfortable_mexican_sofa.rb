@@ -90,14 +90,14 @@ ComfortableMexicanSofa.configure do |config|
 
   # Reveal partials that can be overwritten in the admin area.
   # Default is false.
-  #   config.reveal_cms_partials = false
+  config.reveal_cms_partials = false
 
 end
 
 # Default credentials for ComfortableMexicanSofa::AccessControl::AdminAuthentication
 # YOU REALLY WANT TO CHANGE THIS BEFORE PUTTING YOUR SITE LIVE
-ComfortableMexicanSofa::AccessControl::AdminAuthentication.username = 'username'
-ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = 'password'
+ComfortableMexicanSofa::AccessControl::AdminAuthentication.username = ENV["COMFY_ADMIN_USERNAME"]
+ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = ENV["COMFY_ADMIN_PASSWORD"]
 
 # Uncomment this module and `config.admin_auth` above to use custom admin authentication
 # module ComfyAdminAuthentication
