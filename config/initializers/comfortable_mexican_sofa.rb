@@ -38,7 +38,7 @@ ComfortableMexicanSofa.configure do |config|
   config.enable_fixtures = false
 
   # Path where fixtures can be located.
-  #   config.fixtures_path = File.expand_path('db/cms_fixtures', Rails.root)
+  config.fixtures_path = File.expand_path('cms', Rails.root)
 
   # Importing fixtures into Database
   # To load fixtures into the database just run this rake task:
