@@ -11,6 +11,7 @@ gem 'elasticsearch', '~> 1.0.4'
 
 gem 'bower-rails', '~> 0.10.0'
 gem 'sass-rails', '~> 5.0.4'
+gem 'sprockets-rails', '~> 2.3.3'
 gem 'uglifier', '~> 2.7.2'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer',  platforms: :ruby
