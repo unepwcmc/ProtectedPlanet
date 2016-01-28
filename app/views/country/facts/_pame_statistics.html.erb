@@ -17,12 +17,12 @@
         <small class="value__label">of land assessed</small>
       </div>
       <div class="value stats-card__element stats-card__element--push-right">
-        <p class="value__number"><%= commaify @presenter.pa_land_area %> km<sup>2</sup></p>
-        <small class="value__label">Land Area Protected</small>
+        <p class="value__number"><%= @pame_statistics.assessments %></p>
+        <small class="value__label">PAME assessments undertaken</small>
       </div>
       <div class="value stats-card__element stats-card__element--push-right">
-        <p class="value__number"><%= commaify @presenter.land_area %> km<sup>2</sup></p>
-        <small class="value__label">Total Land Area</small>
+        <p class="value__number"><%= @pame_statistics.assessed_pas %></p>
+        <small class="value__label">Protected areas assessed</small>
       </div>
     </div>
   </div>
