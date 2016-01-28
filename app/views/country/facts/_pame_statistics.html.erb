@@ -1,0 +1,30 @@
+<section class="fact">
+  <h2 class="fact__header">
+    Protected Area Management Effectiveness (PAME)
+    <sup class="header__sup"><a href="#ref2">(Ref 2 ↓ )</a></sup>
+  </h2>
+  <div class="fact__body">
+    <div class="value row">
+      <p class="u-left value__number value__number--xxxxlarge"><%= (@pame_statistics.average_score*100).round(1) %>%</p>
+      <small class="value__label value__label--side">
+        Overall average score. This is an average against 36 separate indicators of management effectiveness.
+      </small>
+    </div>
+
+    <div class="flex-start">
+      <div class="value stats-card__element stats-card__element--push-right">
+        <p class="value__number"><%= (@pame_statistics.total_area_assessed).round(2) %>km2</p>
+        <small class="value__label">of land assessed</small>
+      </div>
+      <div class="value stats-card__element stats-card__element--push-right">
+        <p class="value__number"><%= commaify @presenter.pa_land_area %> km<sup>2</sup></p>
+        <small class="value__label">Land Area Protected</small>
+      </div>
+      <div class="value stats-card__element stats-card__element--push-right">
+        <p class="value__number"><%= commaify @presenter.land_area %> km<sup>2</sup></p>
+        <small class="value__label">Total Land Area</small>
+      </div>
+    </div>
+  </div>
+</section>
+

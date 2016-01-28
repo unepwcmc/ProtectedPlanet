@@ -50,11 +50,8 @@ class CountryController < ApplicationController
       Country.where(iso_3: params[:iso]).first
     end
 
-    if @country.protected_areas.count > 0
-      @random_protected_areas = @country.random_protected_areas 2
-    end
-
     @presenter = StatisticPresenter.new @country
+    @pame_statistics = @country.pame_statistic
     @designations_by_jurisdiction = @country.designations.group_by { |design|
       design.jurisdiction.name
     }

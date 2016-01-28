@@ -4,6 +4,7 @@ class Country < ActiveRecord::Base
   has_and_belongs_to_many :protected_areas
 
   has_one :country_statistic
+  has_one :pame_statistic
 
   belongs_to :region
   belongs_to :region_for_index, -> { select('regions.id, regions.name') }, :class_name => 'Region', :foreign_key => 'region_id'
