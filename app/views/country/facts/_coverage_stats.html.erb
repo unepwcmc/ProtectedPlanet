@@ -5,7 +5,10 @@
     <div id="land-stats" class="stats-card">
       <div class="stats-card__header header">
         <img class="header__image" src="<%= asset_url "land-stats.png" %>"/>
-        <h3 class="header__text">Area terrestrial    <sup class="header__sup">(Ref 1   <i class="fa fa-long-arrow-down"></i>)</h3>
+        <h3 class="header__text">
+          Area terrestrial
+          <sup class="header__sup"><a href="#ref1">(Ref 1 ↓ )</a></sup>
+        </h3>
       </div>
       <div class="stats-card__body stats-card__body--color">
         <div class="cube stats-card__element"><div data-fill-value="<%= @presenter.percentage_pa_land_cover %>" class="cube__inner"></div></div>
