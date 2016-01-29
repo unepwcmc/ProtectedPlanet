@@ -6,12 +6,12 @@
   <% unless params[:for_pdf] %>
     <div class="navbar__element navbar__element--right"><%= link_to 'About', '/c/about' %></div>
     <div class="navbar__element navbar__element--right"><%= link_to 'Updates & News', '#' %></div>
-    <div class="u-relative navbar__element js-navbar-actionable navbar__element--right">
-      <button class="js-resources-dd-trigger">
+    <div class="navbar__element js-resources js-navbar-actionable navbar__element--right">
+      <button class="js-trigger">
         Resources <i class="fa fa-chevron-down"></i>
       </button>
 
-      <div class="u-hide js-resources-dd-target dropdown">
+      <div class="u-hide js-target dropdown">
         <div class="dropdown__inner">
           <% Comfy::Cms::Category.all.each do |category| %>
             <a class="dropdown__element" href="<%= resources_path(category_id: category.id) %>"><%= category.label %></a>
@@ -20,12 +20,12 @@
       </div>
     </div>
     <div class="navbar__element navbar__element--right"><%= link_to 'Terms & Conditions', '/c/terms-and-conditions' %></div>
-    <div class="u-relative navbar__element js-navbar-actionable navbar__element--right">
-      <button class="js-thematic-areas-dd-trigger">
+    <div class="navbar__element navbar__element--right js-thematic-areas js-navbar-actionable">
+      <button class="js-trigger">
         Thematic Areas <i class="fa fa-chevron-down"></i>
       </button>
 
-      <div class="u-hide js-thematic-areas-dd-target dropdown">
+      <div class="u-hide js-target dropdown">
         <div class="dropdown__inner">
           <a class="dropdown__element" href="http://wcmc.io/WDPA_Manual">WDPA</a>
           <a class="dropdown__element" href="http://parcc.protectedplanet.net/">PARCC</a>
@@ -35,7 +35,7 @@
       </div>
     </div>
 
-    <div class="<%= bem("navbar__element", "with-separator", "right", "bold") %>">
+    <div class="<%= bem("navbar__element", "with-separator", "right") %>">
       <a href="<%= root_path %>" class="link-with-icon link-with-icon--no-color"> <i class="fa fa-search"></i> Search</a>
     </div>
   <% end %>

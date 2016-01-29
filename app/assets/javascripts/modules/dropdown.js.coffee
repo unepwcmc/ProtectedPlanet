@@ -1,17 +1,20 @@
 define('dropdown', [], ->
   class Dropdown
-    constructor: (@$triggerEl, @$el, @options) ->
-      if @$triggerEl.length is 0 or @$el.length is 0
-        return false
+    constructor: (@$el, @options) ->
+      return false if @$el.length is 0
+
+      @$triggerEl = @$el.find('.js-trigger')
+      @$targetEl  = @$el.find('.js-target')
 
       @options ||= {on: 'click'}
       @addEventListener()
 
     addEventListener: ->
       @$triggerEl.on(@options.on, (event) =>
-        @$triggerEl.toggleClass('active')
-        @$el.slideToggle(100)
         event.preventDefault()
+
+        @$triggerEl.toggleClass('active')
+        @$targetEl.slideToggle(100)
       )
 
   return Dropdown

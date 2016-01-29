@@ -14,10 +14,7 @@ $(document).ready( ->
       new Map($('#map')).render()
       Navbar.initialize()
 
-      dropdown = new Dropdown(
-        $('.js-download-btn'),
-        $(".download-type-dropdown[data-download-type='general']")
-      )
+      $('.js-download-btn').each (i, el) -> new Dropdown($(el))
 
       $('.table--sortable').tablesorter(
         cssAsc: 'table__column--sort-asc'

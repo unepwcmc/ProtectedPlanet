@@ -10,16 +10,8 @@ define('navbar', ['dropdown'], (Dropdown) ->
         $el.toggleClass('navbar__element--dark')
       )
 
-      @thematicAreasDropdown = new Dropdown(
-        $('.js-thematic-areas-dd-trigger'),
-        $('.js-thematic-areas-dd-target')
-      )
-
-      @resourcesDropdown = new Dropdown(
-        $('.js-resources-dd-trigger'),
-        $('.js-resources-dd-target')
-      )
-
+      @thematicAreasDropdown = new Dropdown $('.js-thematic-areas')
+      @resourcesDropdown     = new Dropdown $('.js-resources')
 
   return Navbar
 )

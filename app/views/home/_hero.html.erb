@@ -18,8 +18,8 @@
         <div class="<%= bem('info-box__row', 'around-padding', 'light-border') %>">
           <%= render partial: 'shared/search_form', locals: {query: @query} %>
         </div>
-        <div class="u-center <%= bem('info-box__row', 'around-padding', 'light-border') %>">
-          <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'js-download-btn btn-map-download', download_type: 'general', item_id: 'all', types: [:csv, :kml, :shp, :gdb, :esri]} %>
+        <div class="u-center <%= bem('info-box__row', 'around-padding', 'no-border') %>">
+          <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', download_type: 'general', item_id: 'all', types: [:csv, :kml, :shp, :gdb, :esri]} %>
         </div>
         <div class="alert ">
           <span class="fa-stack alert__icon alert__icon--info">

@@ -55,24 +55,24 @@ module ApplicationHelper
 
   DOWNLOAD_TYPES = {
     csv: {
-      content: 'CSV',
-      attrs: {'data-type' => 'csv', 'class' => 'dropdown__element'}
+      content: '.CSV',
+      attrs: {'data-type' => 'csv', 'class' => 'u-bold tooltip__element link-with-icon'}
     },
     kml: {
-      content: 'KML',
-      attrs: {'data-type' => 'kml', 'class' => 'dropdown__element'}
+      content: '.KML',
+      attrs: {'data-type' => 'kml', 'class' => 'u-bold tooltip__element link-with-icon'}
     },
     shp: {
-      content: 'SHP',
-      attrs: {'data-type' => 'shapefile', 'class' => 'dropdown__element'}
-    },
-    esri: {
-      content: 'ESRI Web Service',
-      attrs: {'href' => Rails.application.secrets.esri_web_service_url, 'class' => 'dropdown__element'}
+      content: '.SHP',
+      attrs: {'data-type' => 'shapefile', 'class' => 'u-bold tooltip__element link-with-icon'}
     },
     gdb: {
       content: 'File Geodatabase',
-      attrs: {'href' => Rails.application.secrets.wdpa_current_release_url, 'class' => 'dropdown__element'}
+      attrs: {'href' => Rails.application.secrets.wdpa_current_release_url, 'class' => 'u-bold tooltip__element link-with-icon'}
+    },
+    esri: {
+      content: 'ESRI Web Service',
+      attrs: {'href' => Rails.application.secrets.esri_web_service_url, 'class' => 'u-bold tooltip__element link-with-icon'}
     }
   }
 
@@ -80,12 +80,15 @@ module ApplicationHelper
     download_dropdown_attrs = {
       'data-item-id' => item_id,
       'data-download-type' => download_type,
-      'class' => 'dropdown download-type-dropdown'
+      'class' => 'js-target tooltip download-type-dropdown'
     }
 
     content_tag :div, download_dropdown_attrs do
       types.map do |type|
-        content_tag :a, DOWNLOAD_TYPES[type][:content], DOWNLOAD_TYPES[type][:attrs]
+        content_tag :a, DOWNLOAD_TYPES[type][:attrs] do
+          concat content_tag(:i, "", {class: "link-with-icon__icon fa fa-download"})
+          concat DOWNLOAD_TYPES[type][:content]
+        end
       end.join.html_safe
     end
   end
