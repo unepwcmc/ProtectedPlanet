@@ -19,6 +19,11 @@
   <meta name="og:url" content="<%= request.original_url %>" >
   <meta content="website" property="og:type">
 
+  <% if content_for?(:seo_image) %>
+    <meta content="<%= yield :seo_image %>" name="og:image">
+    <meta content="<%= yield :seo_image %>" name="twitter:image">
+  <% end %>
+
   <!-- IE stuff -->
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
   <!--[if lt IE 9]>
