@@ -1,3 +1,4 @@
+<%= content_for :seo, "Learn about and visualise the protected area #{@protected_area.name} (#{@protected_area.designation.try(:name)}), situated in #{@country.name}" %>
 <%= content_for :page_title, @protected_area.name %>
 
 <% content_for :header do %>

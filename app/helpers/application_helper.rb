@@ -53,6 +53,19 @@ module ApplicationHelper
     end
   end
 
+  DEFAULT_SEO_DESC = """
+    Protected Planet is the online interface for the
+    World Database on Protected Areas (WDPA), and the most comprehensive
+    global database on terrestrial and marine protected areas.
+  """
+  def seo_description
+    if content_for?(:seo)
+      content_for(:seo)
+    else
+      DEFAULT_SEO_DESC
+    end
+  end
+
   DOWNLOAD_TYPES = {
     csv: {
       content: '.CSV',

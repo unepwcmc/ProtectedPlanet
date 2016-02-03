@@ -1,14 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title><%= page_title('Protected Planet') %></title>
 
+  <!-- google -->
+  <meta name="Description" content="<%= seo_description %>">
+  <meta name="twitter:description" content="<%= seo_description %>" >
+
+  <!-- Twitter -->
+  <meta content="@protectedplanet" name="twitter:site">
+  <meta content="<%= page_title('Protected Planet') %>" name="twitter:title">
+
+  <!-- FB -->
+  <meta content="Lonely Planet" property="og:site_name">
+  <meta content="<%= page_title('Protected Planet') %>" name="og:title">
+  <meta name="og:description" content="<%= seo_description %>" >
+  <meta name="og:url" content="<%= request.original_url %>" >
+  <meta content="website" property="og:type">
+
   <!-- IE stuff -->
-    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-    <!--[if lt IE 9]>
-      <%= javascript_include_tag "html5shiv/dist/html5shiv.min.js" %>
-    <![endif]-->
-  <!-- IE stuff -->
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <!--[if lt IE 9]>
+    <%= javascript_include_tag "html5shiv/dist/html5shiv.min.js" %>
+  <![endif]-->
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
