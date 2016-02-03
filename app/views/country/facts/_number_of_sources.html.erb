@@ -1,7 +1,7 @@
 <section class="fact">
   <h2 class="fact__header">Number of sources</h2>
   <div class="fact__body">
-    <table class="table table--with-total">
+    <table class="table">
       <% total = 0 %>
       <% @country.protected_areas_per_jurisdiction.each do |row| %>
         <% total += row["count"].to_i %>
@@ -11,7 +11,7 @@
         </tr>
       <% end %>
 
-      <tr class="table__row">
+      <tr class="table__row table__row--last">
         <td class="table__label">TOTAL</td>
         <td class="table__value"><%= total %></td>
       </div>

@@ -16,9 +16,9 @@ $(document).ready( ->
 
       $('.js-download-btn').each (i, el) -> new Dropdown($(el))
 
-      $('.table--sortable').tablesorter(
-        cssAsc: 'table__column--sort-asc'
-        cssDesc: 'table__column--sort-desc'
+      $('.js-sortable-table').tablesorter(
+        cssAsc: 'is-sorted-asc'
+        cssDesc: 'is-sorted-desc'
       )
 
       asyncImg()

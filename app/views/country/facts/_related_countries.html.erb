@@ -5,11 +5,11 @@
 
       <% if @country.children.any? %>
         <p class="fact__subheader"><i class="fa fa-level-down"></i> Child countries & territories</p>
-        <table class="table table--sortable">
+        <table class="table js-sortable-table">
           <thead>
             <tr class="table__header">
-              <th class="table__column">Name</th>
-              <th class="table__column">Code</th>
+              <th class="table__column table__column--with-sorting">Name</th>
+              <th class="table__column table__column--with-sorting">Code</th>
             </tr>
           </thead>
           <tbody>
@@ -26,11 +26,11 @@
 
       <% if @country.parent.present? %>
         <p class="fact__subheader"><i class="fa fa-level-down"></i> Parent countries & territories</p>
-        <table class="table table--sortable">
+        <table class="table js-sortable-table">
           <thead>
             <tr class="table__header">
-              <th class="table__column">Name</th>
-              <th class="table__column">Code</th>
+              <th class="table__column table__column--with-sorting">Name</th>
+              <th class="table__column table__column--with-sorting">Code</th>
             </tr>
           </thead>
           <tbody>

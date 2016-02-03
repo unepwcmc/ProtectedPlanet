@@ -26,7 +26,9 @@ module ProtectedPlanet
 
     config.autoload_paths += %W(#{config.root}/lib/modules #{config.root}/app/presenters)
     config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
-    config.assets.precompile += %w(base.js country.js home.js map.js protected_areas.js search.js protectedplanet-frontend/dist/*)
+    config.assets.precompile += %w(base.js country.js home.js map.js protected_areas.js search.js)
+    config.assets.precompile += %w(protectedplanet-frontend/dist/*)
+    config.assets.precompile += %w(html5shiv/dist/*)
     config.tinymce.install = :compile
 
     config.active_record.schema_format = :sql
