@@ -26,10 +26,14 @@ module SearchHelper
   def clear_filters_link params
     if params[:main] && params[:q].nil?
       return '' if params.length <= 4
-      link_to "Clear Filters", search_path(params.slice(:main, params[:main].to_sym))
+
+      path = search_path(params.slice(:main, params[:main].to_sym))
+      link_to "Clear Filters", path, class: "filter-bar__reset"
     else
       return '' if params.length <= 3
-      link_to "Clear Filters", search_path(params.slice(:q))
+
+      path = search_path(params.slice(:q))
+      link_to "Clear Filters", path, class: "filter-bar__reset"
     end
   end
 
