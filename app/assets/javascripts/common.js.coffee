@@ -1,9 +1,9 @@
 $(document).ready( ->
   require(
     ['search_bar', 'autocompletion', 'query_control', 'dropdown', 'map', 'navbar', 'asyncImg',
-     'downloads_general', 'downloads_project', 'downloads_search'],
+     'downloads_general', 'downloads_project', 'downloads_search', 'expandable_section'],
     (SearchBar, Autocompletion, QueryControl, Dropdown, Map, Navbar, asyncImg,
-     DownloadsGeneral, DownloadsProject, DownloadsSearch) ->
+     DownloadsGeneral, DownloadsProject, DownloadsSearch, ExpandableSection) ->
       bar = new SearchBar()
 
       $('.search-input').each( ->
@@ -20,6 +20,9 @@ $(document).ready( ->
         cssAsc: 'is-sorted-asc'
         cssDesc: 'is-sorted-desc'
       )
+
+      if $expandableSections = $('.expandable-section')
+        ExpandableSection.initialize($expandableSections)
 
       asyncImg()
 

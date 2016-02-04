@@ -1,4 +1,4 @@
-define('cms:expandable_section', [], ->
+define('expandable_section', [], ->
   class ExpandableSection
     @initialize: ($expandableSectionsEl) ->
       new ExpandableSection($expandableSectionsEl).initialize()
@@ -12,7 +12,6 @@ define('cms:expandable_section', [], ->
       )
 
     enableToggling: ($sectionEl) =>
-      debugger
       $switchEl = $sectionEl.find(".#{@namespace}-switch")
       $targetEl = $sectionEl.find(".#{@namespace}-target")
 

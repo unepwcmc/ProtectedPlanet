@@ -14,6 +14,7 @@
 //= require 'modules/modals/download_generation_modal'
 //= require 'modules/downloads/base'
 //= require 'modules/protected_areas/factsheet_handler'
+//= require 'modules/expandable_section'
 //= require_tree './modules/downloads/'
 //= require 'map'
 //= require common
