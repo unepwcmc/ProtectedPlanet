@@ -41,9 +41,7 @@
     </div>
   <% else %>
     <div class="search-grid <%= 'no-results' if @search.results.count.zero? %>">
-      <div>
-        <%= render partial: 'grid' %>
-      </div>
+      <%= render partial: 'grid' %>
     </div>
   <% end %>
 </div>
