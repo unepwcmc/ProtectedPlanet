@@ -18,7 +18,7 @@ module SearchHelper
     link_params = params.merge({facet[:query] => facet[:identifier]})
 
     link_to url_for(link_params) do
-      facet_count = content_tag(:strong, "(#{facet[:count]})")
+      facet_count = content_tag(:strong, "(#{facet[:count]})", class: "filter-bar__value")
       raw "#{facet[:label]} #{facet_count}"
     end
   end
@@ -34,8 +34,9 @@ module SearchHelper
   end
 
   DEFAULT_TITLE = 'Protected Areas'
-  def search_title params
-    title_with_query(params[:q]) or title_with_filter(params) or DEFAULT_TITLE
+  def search_title params, only_text=false
+    title = title_with_query(params[:q]) or title_with_filter(params) or DEFAULT_TITLE
+    only_text ? strip_tags(title) : title
   end
 
   private

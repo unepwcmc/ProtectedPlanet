@@ -13,3 +13,17 @@ $thematic-areas: (wdpa icca parcc pame);
   background-position: center;
   background-size: cover;
 }
+
+.grid-icon {
+  background-image: image-url('icon-grid-grey.png');
+  background-position: center;
+  background-size: 50%;
+  background-repeat: no-repeat;
+}
+
+.map-icon {
+  background-image: image-url('icon-map-grey.png');
+  background-position: center;
+  background-size: 50%;
+  background-repeat: no-repeat;
+}

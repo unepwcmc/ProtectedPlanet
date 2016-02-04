@@ -6,8 +6,6 @@
     <div class="info-search"><%= render partial: 'shared/search_form', locals: {query: ''} %></div>
   </section>
 <% else %>
-  <ul>
-    <%= render partial: 'search_result', collection: @search.results %>
-  </ul>
+  <%= render partial: 'search_result', collection: @search.results %>
   <%= will_paginate @search %>
 <% end %>

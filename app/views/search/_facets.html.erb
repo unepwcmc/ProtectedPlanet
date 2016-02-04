@@ -1,10 +1,10 @@
 <ul>
-  <li class="facet">
+  <li>
    <%= clear_filters_link(params) %>
   </li>
   <% aggregations.select{ |_agg, buckets| buckets.any? }.each do |name, buckets| %>
-    <li class="facet">
-      <h5><%= name.humanize %></h5>
+    <li class="filter-bar__group">
+      <h5 class="filter-bar__group-title"><%= name.humanize %></h5>
 
       <ul>
         <% buckets.each do |bucket| %>

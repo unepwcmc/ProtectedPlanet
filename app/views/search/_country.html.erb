@@ -1,14 +1,12 @@
-<li class='result'>
-  <a href="<%= country_path(iso: model.iso) %>"><%= cover model %></a>
-  <div class="inner-result">
+<a href="<%= country_path(iso: model.iso) %>"><%= cover model %></a>
+<div class="inner-result">
 
-    <h3>
-      <a href="<%= country_path(iso: model.iso) %>"><%= model.name %></a>
-      <small><%= commaify model.protected_areas.count %> Protected Areas in this country</small>
-    </h3>
+  <h3>
+    <a href="<%= country_path(iso: model.iso) %>"><%= model.name %></a>
+    <small><%= commaify model.protected_areas.count %> Protected Areas in this country</small>
+  </h3>
 
-    <p>
-      <%= StatisticPresenter.new(model).percentage_pa_cover %>% of country covered by Protected Areas
-    </p>
-  </div>
-</li>
+  <p>
+    <%= StatisticPresenter.new(model).percentage_pa_cover %>% covered by Protected Areas
+  </p>
+</div>
