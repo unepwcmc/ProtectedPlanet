@@ -2,25 +2,23 @@
 <%= content_for :seo_image, tiles_url(id: @protected_area.wdpa_id, version: 1) %>
 <%= content_for :page_title, @protected_area.name %>
 
-<% content_for :header do %>
-  <nav class="sub-nav">
-    <ul class="nav">
-      <li><h1>Official Record for <strong><%= @protected_area.name %><strong></h1></li>
+<nav class="sub-nav">
+  <ul class="nav">
+    <li><h1>Official Record for <strong><%= @protected_area.name %><strong></h1></li>
 
-      <% unless @country.blank? %>
-        <li>
-          <h2>
-            <a href="<%= country_path(@country.iso) %>">
-              <%= @country.name %><% if @region %>, <%= @region.name %><% end %>
-            </a>
-          </h2>
-        </li>
-      <% end %>
+    <% unless @country.blank? %>
+      <li>
+        <h2>
+          <a href="<%= country_path(@country.iso) %>">
+            <%= @country.name %><% if @region %>, <%= @region.name %><% end %>
+          </a>
+        </h2>
+      </li>
+    <% end %>
 
-      <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'protected_area', item_id: @protected_area.id} %></li>
-    </ul>
-  </nav>
-<% end %>
+    <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'protected_area', item_id: @protected_area.id} %></li>
+  </ul>
+</nav>
 
 <%= render partial: 'factsheet', locals: {protected_area: @protected_area} %>
 

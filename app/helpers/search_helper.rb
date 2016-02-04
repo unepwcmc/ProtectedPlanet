@@ -17,8 +17,8 @@ module SearchHelper
   def facet_link facet
     link_params = params.merge({facet[:query] => facet[:identifier]})
 
-    link_to url_for(link_params) do
-      facet_count = content_tag(:strong, "(#{facet[:count]})", class: "filter-bar__value")
+    link_to(url_for(link_params), class: "filter-bar__value") do
+      facet_count = content_tag(:strong, "(#{facet[:count]})", class: "filter-bar__count")
       raw "#{facet[:label]} #{facet_count}"
     end
   end
@@ -28,12 +28,12 @@ module SearchHelper
       return '' if params.length <= 4
 
       path = search_path(params.slice(:main, params[:main].to_sym))
-      link_to "Clear Filters", path, class: "filter-bar__reset"
+      link_to "Clear Filters", path, class: "filter-bar__clear"
     else
       return '' if params.length <= 3
 
       path = search_path(params.slice(:q))
-      link_to "Clear Filters", path, class: "filter-bar__reset"
+      link_to "Clear Filters", path, class: "filter-bar__clear"
     end
   end
 
@@ -47,7 +47,7 @@ module SearchHelper
 
   def title_with_query query
     if query.present?
-      %{Search results for <strong>"#{query}"</strong>}.html_safe
+      %{Search results for <strong class="u-green">"#{query}"</strong>}.html_safe
     end
   end
 
