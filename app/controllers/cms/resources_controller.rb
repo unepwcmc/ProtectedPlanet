@@ -2,9 +2,7 @@ class Cms::ResourcesController < ApplicationController
   before_filter :load_category
 
   def index
-    @resources = Comfy::Cms::Page
-      .for_category(@category.label)
-      .reject(&:root?)
+    @resources = search.reject(&:root?)
   end
 
   private
@@ -17,5 +15,12 @@ class Cms::ResourcesController < ApplicationController
     end
   rescue
     @category = Comfy::Cms::Category.first
+  end
+
+  def search
+    resources = Comfy::Cms::Page.for_category(@category.label)
+    resources = resources.where("date_part('year', created_at) = ?", params[:year]) if params[:year]
+
+    resources
   end
 end

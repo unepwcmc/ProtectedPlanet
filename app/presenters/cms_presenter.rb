@@ -14,6 +14,10 @@ class CmsPresenter
     Comfy::Cms::Page.where(older_version_id: @page.id).count.zero?
   end
 
+  def self.all_by_year
+    Comfy::Cms::Page.order(:created_at).pluck(:created_at).group_by(&:year)
+  end
+
   private
 
   def collect_older_versions page, collection=[]
