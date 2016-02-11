@@ -13,7 +13,7 @@
 
       <div class="u-hide js-target dropdown">
         <div class="dropdown__inner">
-          <% Comfy::Cms::Category.all.each do |category| %>
+          <% Comfy::Cms::Category.of_type("Comfy::Cms::Page").all.each do |category| %>
             <a class="dropdown__element" href="<%= resources_path(category_id: category.id) %>"><%= category.label %></a>
           <% end %>
         </div>
