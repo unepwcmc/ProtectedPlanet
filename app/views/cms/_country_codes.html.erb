@@ -5,11 +5,11 @@
 <% countries_by_letter = Country.pluck(:name, :iso_3).group_by{ |(name, _)| I18n.transliterate(name).first } %>
 
 <% countries_by_letter.keys.sort.each do |letter| %>
-  <div class="row expandable-section">
-    <h3 class="js-expandable-section-trigger expandable-section__header">
-      <%= letter %><i class="expandable-section__switch js-expandable-section-switch expandable-section__switch is-closed"></i>
+  <div class="row expandable-section js-expandable-section">
+    <h3 class="js-trigger expandable-section__header">
+      <%= letter %><i class="expandable-section__switch js-switch expandable-section__switch is-closed"></i>
     </h3>
-    <div class="js-expandable-section-target expandable-section__body u-hide">
+    <div class="js-target expandable-section__body u-hide">
       <table class="table js-sortable-table">
         <thead>
           <tr class="table__header">

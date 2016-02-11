@@ -1,0 +1,20 @@
+<aside class="filter-bar filter-bar--non-fixed filter-bar--larger">
+  <div class="filter-bar__inner">
+    <header class="header-with-delimiter filter-bar__header">
+      <h2>
+        Filters
+      </h2>
+    </header>
+    <div class="js-expandable-section filter-bar__group">
+      <h3 class="js-trigger js-switch filter-bar__group-title is-open">Time period</h3>
+      <div class="js-target">
+        <% CmsPresenter.all_by_year.each do |(year, dates)| %>
+          <a class="filter-bar__value" href="<%= resources_path(year: year) %>">
+            <%= year %>
+            <strong class="filter-bar__count">(<%= dates.length %>)</strong>
+          </a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</aside>

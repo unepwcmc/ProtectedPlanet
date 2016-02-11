@@ -21,7 +21,7 @@ $(document).ready( ->
         cssDesc: 'is-sorted-desc'
       )
 
-      if $expandableSections = $('.expandable-section')
+      if $expandableSections = $('.js-expandable-section')
         ExpandableSection.initialize($expandableSections)
 
       asyncImg()
