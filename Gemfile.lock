@@ -50,6 +50,9 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.6)
+    appsignal (1.0.3)
+      rack
+      thread_safe
     arel (6.0.3)
     autoprefixer-rails (3.1.2.20141016)
       execjs
@@ -240,7 +243,6 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (3.0.1)
-    newrelic_rpm (3.9.5.251)
     nokogiri (1.6.7.2)
       mini_portile2 (~> 2.0.0.rc2)
     orm_adapter (0.5.0)
@@ -400,6 +402,7 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-postgis-adapter (~> 3.1.0)
+  appsignal
   autoprefixer-rails
   aws-sdk (~> 1.3.9)
   best_in_place
@@ -428,7 +431,6 @@ DEPENDENCIES
   jquery-rails (~> 3.1.3)
   konacha
   mocha (~> 1.0.0)
-  newrelic_rpm
   nokogiri (~> 1.6.7)
   pg
   phantompdf (~> 1.2.2)

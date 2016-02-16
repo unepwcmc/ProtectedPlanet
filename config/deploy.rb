@@ -127,3 +127,5 @@ namespace :git do
     end
   end
 end
+
+require 'appsignal/capistrano'
