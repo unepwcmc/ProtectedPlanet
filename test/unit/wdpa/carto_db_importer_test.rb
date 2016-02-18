@@ -24,7 +24,7 @@ class TestCartoDbImporter < ActiveSupport::TestCase
 
     Ogr::Split.
       expects(:split).
-      with(gdb_path, "points", 5, ["wdpaid", "SHAPE", 'iucn_cat', 'marine']).
+      with(gdb_path, "points", 10, ["wdpaid", "SHAPE", 'iucn_cat', 'marine']).
       returns(point_shapefiles)
 
     polygon_shapefiles = [
@@ -34,7 +34,7 @@ class TestCartoDbImporter < ActiveSupport::TestCase
 
     Ogr::Split.
       expects(:split).
-      with(gdb_path, "polygons", 5, ["wdpaid", "SHAPE", 'iucn_cat', 'marine']).
+      with(gdb_path, "polygons", 10, ["wdpaid", "SHAPE", 'iucn_cat', 'marine']).
       returns(polygon_shapefiles)
 
     CartoDb::Uploader.any_instance.expects(:upload).with("./points-1.zip").returns(true)

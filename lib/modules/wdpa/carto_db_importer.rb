@@ -23,7 +23,7 @@ class Wdpa::CartoDbImporter
   def split
     @wdpa_release.geometry_tables.each do |table, _|
       @shapefiles[table] =
-        Ogr::Split.split(@wdpa_release.gdb_path, table, 5, STANDARD_COLUMNS)
+        Ogr::Split.split(@wdpa_release.gdb_path, table, 10, STANDARD_COLUMNS)
     end
   end
 
