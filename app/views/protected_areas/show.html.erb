@@ -19,7 +19,7 @@
     <%= render partial: 'factsheet', locals: {protected_area: @protected_area} %>
   </div>
 
-  <div class="old-map two-thirds map map--main" id="map"
+  <div class="old-map two-thirds map" id="map"
     data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
     data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
     data-wdpa-id="<%= @protected_area.wdpa_id %>">
