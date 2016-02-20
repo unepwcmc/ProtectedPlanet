@@ -1,22 +1,19 @@
-<li class="percentage-container">
-  <span><%= @presenter.percentage_complete %>%</span>
-  Data Complete
-</li>
-<li class="data-completion-info" style="display: none">
-  <% @presenter.data_info.each do |section, attributes| %>
-    <div>
-      <h3><%= section %></h3>
-      <ul>
-        <% attributes.each do |attribute| %>
-          <%= completion_attribute attribute[:label], attribute[:complete] %>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-</li>
-<li class="open-details-container">
-  <a href="#" class="open-details-anchor">
-    <i class="fa fa-chevron-down"></i>
-  </a>
-</li>
-
+<div class="js-expandable-section protected-area-infographic">
+  <div class="percentage-container">
+    <span><%= @presenter.percentage_complete %>%</span>
+    Data Complete
+  </div>
+  <div class="data-completion-info js-target u-hide">
+    <% @presenter.data_info.each do |section, attributes| %>
+      <div>
+        <h3><%= section %></h3>
+        <ul>
+          <% attributes.each do |attribute| %>
+            <%= completion_attribute attribute[:label], attribute[:complete] %>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+  <button href="#" class="data-completion__trigger is-closed js-switch js-trigger"></button>
+</div>

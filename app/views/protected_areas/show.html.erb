@@ -1,36 +1,34 @@
 <%= content_for :seo, "Learn about and visualise the protected area #{@protected_area.name} (#{@protected_area.designation.try(:name)}), situated in #{@country.name}" %>
 <%= content_for :seo_image, tiles_url(id: @protected_area.wdpa_id, version: 1) %>
 <%= content_for :page_title, @protected_area.name %>
+<%= content_for :footer_classes, "fixed-footer" %>
 
-<nav class="sub-nav">
-  <ul class="nav">
-    <li><h1>Official Record for <strong><%= @protected_area.name %><strong></h1></li>
+<div class="container--fullscreen">
+  <div class="hero__top">
+    <h1 class="hero__title--base hero__title">
+      Official Record for <strong class="hero__link"><%= @protected_area.name %><strong>
+    </h1>
+    <h2>
+      <a class="hero__title hero__title--thin hero__link" href="<%= country_path(@country.iso) %>">
+        <%= @country.name %><% if @region %>, <%= @region.name %><% end %>
+      </a>
+    </h2>
+  </div>
 
-    <% unless @country.blank? %>
-      <li>
-        <h2>
-          <a href="<%= country_path(@country.iso) %>">
-            <%= @country.name %><% if @region %>, <%= @region.name %><% end %>
-          </a>
-        </h2>
-      </li>
-    <% end %>
+  <div class="old-factsheet">
+    <%= render partial: 'factsheet', locals: {protected_area: @protected_area} %>
+  </div>
 
-    <li><%= render partial: 'shared/add_to_project', locals: {item_type: 'protected_area', item_id: @protected_area.id} %></li>
-  </ul>
-</nav>
-
-<%= render partial: 'factsheet', locals: {protected_area: @protected_area} %>
-
-<div class="protected-area-map" id="map"
-  data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
-  data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
-  data-wdpa-id="<%= @protected_area.wdpa_id %>">
-  <div class="map-disclaimer">
-    The designations employed and the presentation of material on this map do not
-    imply the expression of any opinion whatsoever on the part of the Secretariat
-    of the United Nations concerning the legal status of any country, territory,
-    city or area or of its authorities, or concerning the delimitation of its
-    frontiers or boundaries.
+  <div class="old-map two-thirds map map--main" id="map"
+    data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
+    data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
+    data-wdpa-id="<%= @protected_area.wdpa_id %>">
+    <div class="map-disclaimer">
+      The designations employed and the presentation of material on this map do not
+      imply the expression of any opinion whatsoever on the part of the Secretariat
+      of the United Nations concerning the legal status of any country, territory,
+      city or area or of its authorities, or concerning the delimitation of its
+      frontiers or boundaries.
+    </div>
   </div>
 </div>

@@ -1,52 +1,54 @@
-<section class="factsheet">
-  <article>
-    <%= render 'protected_areas/factsheet/official_record', protected_area: protected_area %>
-  </article>
-
-  <ul class="protected-area-infographic">
-    <%= render 'protected_areas/factsheet/data_completion', protected_area: protected_area %>
-  </ul>
-
-  <% if protected_area.has_irreplaceability_info %>
-    <%= render 'protected_areas/factsheet/related_source',
-      title: "Analysis of Irreplaceability",
-      url: url_for_related_source('irreplaceability_info', protected_area),
-      info: "This Protected Area has been assessed and ranked for irreplaceability"
-    %>
-  <% end %>
-
-  <% if protected_area.has_parcc_info %>
-    <%= render 'protected_areas/factsheet/related_source',
-      title: "Vulnerability Assessment",
-      url: url_for_related_source('parcc_info', protected_area),
-      info: "This Protected Area has been assessed for its vulnerability to climate change"
-    %>
-  <% end %>
-
-  <% if related_links?(protected_area) %>
+<section class="info-box">
+  <div class="info-box__body info-box__body--no-padding">
     <article>
-      <h3>Related</h3>
-      <ul>
-        <li><a href='<%= protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
-      </ul>
+      <%= render 'protected_areas/factsheet/official_record', protected_area: protected_area %>
     </article>
-  <% end %>
 
-  <article>
-    <% if protected_area.nearest_protected_areas.count > 1 %>
-      <h3>Nearest Protected Areas</h3>
+    <div class="row info-box__row info-box__row--no-border">
+      <%= render 'protected_areas/factsheet/data_completion', protected_area: protected_area %>
+    </div>
 
-      <ul class="nearest-protected-areas">
-        <% protected_area.nearest_protected_areas[1..2].each do |protected_area| %>
-          <li>
-            <a href="/<%= protected_area.slug %>">
-              <%= protected_area_cover(protected_area) %>
-            </a>
-
-            <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
-          </li>
-        <% end %>
-      </ul>
+    <% if protected_area.has_irreplaceability_info %>
+      <%= render 'protected_areas/factsheet/related_source',
+        title: "Analysis of Irreplaceability",
+        url: url_for_related_source('irreplaceability_info', protected_area),
+        info: "This Protected Area has been assessed and ranked for irreplaceability"
+      %>
     <% end %>
-  </article>
+
+    <% if protected_area.has_parcc_info %>
+      <%= render 'protected_areas/factsheet/related_source',
+        title: "Vulnerability Assessment",
+        url: url_for_related_source('parcc_info', protected_area),
+        info: "This Protected Area has been assessed for its vulnerability to climate change"
+      %>
+    <% end %>
+
+    <% if related_links?(protected_area) %>
+      <article>
+        <h3>Related</h3>
+        <ul>
+          <li><a href='<%= protected_area.wikipedia_article.url %>'>Wikipedia article</a></li>
+        </ul>
+      </article>
+    <% end %>
+
+    <article>
+      <% if protected_area.nearest_protected_areas.count > 1 %>
+        <h3>Nearest Protected Areas</h3>
+
+        <ul class="nearest-protected-areas">
+          <% protected_area.nearest_protected_areas[1..2].each do |protected_area| %>
+            <li>
+              <a href="/<%= protected_area.slug %>">
+                <%= protected_area_cover(protected_area) %>
+              </a>
+
+              <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </article>
+  </div>
 </section>

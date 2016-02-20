@@ -1,51 +1,72 @@
-<ul class="key-records">
-  <li><p>WDPA ID</p> <strong><%= protected_area.wdpa_id %></strong></li>
-  <li><p>Reported Area KM&sup2;</p>  <strong><%= protected_area.reported_area.try(:round, 2) %></strong></li>
-  <li><p>English Designation</p>  <strong title="<%= protected_area.designation.try(:name) %>"><%= protected_area.designation.try(:name) %></strong></li>
-  <li><p>IUCN Category</p> <strong><%= protected_area.iucn_category.try(:name) %></strong></li>
-</ul>
-
-<div class="data-provider">
-  <h5>Data Provider</h5>
-  <ul>
-    <% if @protected_area.sources.any? %>
-      <%= render @protected_area.sources %>
-    <% else %>
-      <li>Not Reported</li>
-    <% end %>
-  </ul>
+<div class="key-records">
+  <p class="key-records__row">
+    WDPA ID
+    <strong class="u-right"><%= protected_area.wdpa_id %></strong>
+  </p>
+  <p class="key-records__row">
+    Reported Area KM&sup2;
+    <strong class="u-right"><%= protected_area.reported_area.try(:round, 2) %></strong>
+  </p>
+  <p class="key-records__row">
+    English Designation
+    <strong class="u-right"> <%= protected_area.designation.try(:name) %> </strong>
+  </p>
+  <p class="key-records__row">
+    IUCN Category
+    <strong class="u-right"><%= protected_area.iucn_category.try(:name) %></strong>
+  </p>
 </div>
 
-<table>
-  <tbody>
-    <tr>
-      <td>
-        <strong>Status</strong>
-        <%= protected_area.legal_status.name %>
-      </td>
-      <td>
-        <strong>Type of Designation</strong>
-        <%= protected_area.designation.try(:jurisdiction).try(:name) %>
-      </td>
-    </tr>
+<div class="info-box__row info-box__row--no-border row">
+  <div class="alert">
+    <span class="fa-stack alert__icon alert__icon--info">
+      <i class="fa fa-circle fa-stack-2x"></i>
+      <i class="fa fa-info alert__icon-inner alert__icon-inner--info fa-stack-1x"></i>
+    </span>
+    <div>
+      <h5 class="alert__title alert__title--info">Data Provider</h5>
+      <% if @protected_area.sources.any? %>
+        <%= render @protected_area.sources %>
+      <% else %>
+        <p>Not Reported</p>
+      <% end %>
+    </div>
+  </div>
+</div>
 
-    <tr>
-      <td>
-        <strong>Status Year</strong>
-        <%= if protected_area.legal_status_updated_at then protected_area.legal_status_updated_at.strftime('%Y') end %>
-      </td>
-      <td>
-        <strong>Sublocation</strong>
-        <%= protected_area.sub_locations.map(&:iso).join(', ') %>
-      </td>
-    </tr>
-
-    <tr>
-      <td>
-        <strong>Governance Type</strong>
-        <%= protected_area.governance.try(:name) %>
-      </td>
-    </tr>
-
-  </tbody>
-</table>
+<div class="row info-box__row info-box__row--no-border">
+  <div class="half value">
+    <h6 class="value__label">Status</h6>
+    <p class="value__number value__number--inherit">
+      <%= protected_area.legal_status.name %>
+    </p>
+  </div>
+  <div class="half value">
+    <h6 class="value__label">Type of Designation</h6>
+    <p class="value__number value__number--inherit">
+      <%= protected_area.designation.try(:jurisdiction).try(:name) %>
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="half value">
+    <h6 class="value__label">Status Year</h6>
+    <p class="value__number value__number--inherit">
+      <%= if protected_area.legal_status_updated_at then protected_area.legal_status_updated_at.strftime('%Y') end %>
+    </p>
+  </div>
+  <div class="half value">
+    <h6 class="value__label">Sublocation</h6>
+    <p class="value__number value__number--inherit">
+      <%= protected_area.sub_locations.map(&:iso).join(', ') %>
+    </p>
+  </div>
+</div>
+<div class="row">
+  <div class="value">
+    <h6 class="value__label">Governance Type</h6>
+    <p class="value__number value__number--inherit">
+      <%= protected_area.governance.try(:name) %>
+    </p>
+  </div>
+</div>
