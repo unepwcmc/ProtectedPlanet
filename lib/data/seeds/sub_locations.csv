@@ -706,7 +706,7 @@ KY-01~,Bodden Town,
 KY-02~,Cayman Brac,
 KY-03~,East End,
 KY-04~,George Town,
-Ky-05~,Little Cayman,
+KY-05~,Little Cayman,
 KY-06~,North Side,
 KY-07~,West Bay,
 CF-BB,Bamingui-Bangoran,
@@ -1561,7 +1561,7 @@ ID-MU,Maluku Utara,
 ID-NB,Nusa Tenggara Barat,
 ID-NT,Nusa Tenggara Timur,
 ID-PA,Papua,
-ID-PB,Papua Barat,Papua Barat/ Irian Jaya Barat  
+ID-PB,Papua Barat,Papua Barat/ Irian Jaya Barat
 ID-RI,Riau,
 ID-SR,Sulawesi Barat,
 ID-SN,Sulawesi Selatan,
@@ -3600,7 +3600,7 @@ TW-YUN,Yunlin,
 TJ-GB,Gorno-Badakhshan,Gorno-Badahşan
 TJ-KT,Khatlon,Hatlon
 TJ-SU,Sughd,"Chudjand, Hucand, Hudžand, Hücand, Khodzent, Khodzhent, Khudzhand, Leninabad"
-Tj-X1~,,"Dushambe, Dushanbe, Dušanbe, Düşanbey"
+TJ-X1~,,"Dushambe, Dushanbe, Dušanbe, Düşanbey"
 TZ-01,Arusha,
 TZ-02,Dar es Salaam,Daressalam
 TZ-03,Dodoma,
