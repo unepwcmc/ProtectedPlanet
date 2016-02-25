@@ -21,6 +21,8 @@ class CountryControllerTest < ActionController::TestCase
       points_count: 100
     )
 
+    FactoryGirl.create(:pame_statistic, country: country)
+
     get :show, iso: 'PUM'
     assert_response :success
   end

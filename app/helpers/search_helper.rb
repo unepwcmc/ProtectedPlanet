@@ -39,7 +39,7 @@ module SearchHelper
 
   DEFAULT_TITLE = 'Protected Areas'
   def search_title params, only_text=false
-    title = title_with_query(params[:q]) or title_with_filter(params) or DEFAULT_TITLE
+    title = title_with_query(params[:q]) || title_with_filter(params) || DEFAULT_TITLE
     only_text ? strip_tags(title) : title
   end
 
@@ -47,7 +47,7 @@ module SearchHelper
 
   def title_with_query query
     if query.present?
-      %{Search results for <strong class="u-green">"#{query}"</strong>}.html_safe
+      %{Search results for <strong class="u-link-color">"#{query}"</strong>}.html_safe
     end
   end
 

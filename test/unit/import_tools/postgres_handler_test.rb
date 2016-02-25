@@ -33,7 +33,7 @@ class ImportToolsPostgresHandlerTest < ActiveSupport::TestCase
     expected_query = "ALTER DATABASE #{db_name} RENAME TO #{new_db_name}"
 
     connection_mock = mock()
-    connection_mock.expects(:execute)
+    connection_mock.expects(:execute).with(expected_query)
     ImportTools::PostgresHandler.any_instance.stubs(:close_connections_to)
     ImportTools::PostgresHandler.any_instance.stubs(:connect_to).returns(connection_mock)
 
