@@ -1,4 +1,47 @@
----
+- name: Add postgres repo
+  apt_repository: repo='deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main' state=present
 
-- include: repository.yml
-- include: postgresql.yml
+- name: Add Key
+  apt_key: url=https://www.postgresql.org/media/keys/ACCC4CF8.asc state=present
+ 
+- name: Install PGTune
+  apt: name=pgtune state=installed update_cache=true
+
+- name: Ensure apt is up to date
+  apt: update_cache=yes
+
+- name: ensure packages are installed
+  apt: name={{item}}
+  with_items:
+      - postgresql-9.4
+      - postgresql-9.4-postgis-2.1
+      - postgresql-contrib
+      - libpq-dev  
+         
+- name: Back up postgres config file
+  command: mv /etc/postgresql/9.4/main/postgresql.conf /etc/postgresql/9.4/main/postgresql.conf.old
+
+
+- name: Setting Postgresql Optmizing via pgtune
+  command: pgtune
+            -i /etc/postgresql/9.4/main/postgresql.conf.old
+            -o /etc/postgresql/9.4/main/postgresql.conf
+  
+- name: Change owner of postgres config file to postgres
+  file: path=/etc/postgresql/9.4/main/postgresql.conf owner=postgres group=postgres mode=0644
+
+- name: create postgres user
+  postgresql_user: name={{username}}  password={{password}} role_attr_flags=SUPERUSER,CREATEDB,REPLICATION port=5432
+  notify: postgresql
+  sudo_user: postgres
+    
+- name: Copy over postgres check_file
+  copy: src=templates/postgres-restart dest=/usr/lib/nagios/plugins/postgres-restart mode="u+x,g+x,o+x"  
+  
+
+- name: Add postgres monitoring entries
+  action: lineinfile dest=/etc/nagios/nrpe.cfg regexp="{{ item.regexp }}" line="{{ item.line }}"
+  with_items:
+            - { regexp: '^command[check_procs_postgres]', line: 'command[check_procs_postgres]=/usr/lib/nagios/plugins/check_procs -w1:700 -c1:1024 -a postgres' }
+            - { regexp: '^command[postgresrestart]', line: 'command[postgresrestart]=/usr/lib/nagios/plugins/postgres-restart'
+  notify: nagios-nrpe-server

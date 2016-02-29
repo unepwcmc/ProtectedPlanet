@@ -1,0 +1,8 @@
+- name: nginx
+  service: name=nginx state=restarted
+      
+- name: nagios-nrpe-server
+  service: name=nagios-nrpe-server state=restarted
+       
+- name: fail2ban
+  service: name=fail2ban state=restarted
