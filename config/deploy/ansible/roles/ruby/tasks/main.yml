@@ -1,50 +1,8 @@
----
-- name: Checking installed version of ruby
-  shell: /usr/bin/test "$(ruby -e "puts RUBY_VERSION")" = {{ruby_version}}
-  register: ruby_version_installed
-  ignore_errors: True
+roles:
+  - role: rvm_io.rvm1-ruby
+    rvm1_install_flags: '--auto-dotfiles --user-install'
+    rvm1_install_path: '/home/{{ ansible_ssh_user }}/.rvm'
+    rvm1_user: '{{ ansible_ssh_user }}'
+    rvm1_rvm_version: 'stable'
+    rvm1_rvm_check_for_updates: True
 
-- name: Install ruby dependencies
-  apt: pkg={{item}} state=installed update-cache=yes
-  when: ruby_version_installed.rc == 1
-  with_items:
-    - build-essential
-    - libssl-dev
-    - libreadline6-dev
-    - libyaml-dev
-    - libsqlite3-dev
-    - sqlite3
-    - libgdbm-dev
-    - libncurses5-dev
-    - libtool
-    - bison
-    - libffi-dev
-    - libdigest-hmac-perl
-    - unzip
-    - zlib1g
-    - zlib1g-dev
-    - libpq-dev
-
-- name: Download ruby
-  when: ruby_version_installed.rc == 1
-  get_url: url={{ruby_url}} dest=/tmp/ruby-{{ ruby_version }}.tar.gz
-
-- name: Make directory for ruby tarball
-  file: path=/tmp/ruby-{{ ruby_version }} state=directory
-
-- name: Extract ruby
-  when: ruby_version_installed.rc == 1
-  command: tar -xvf /tmp/ruby-{{ ruby_version }}.tar.gz -C /tmp/ruby-{{ ruby_version }} --strip-components 1
-  sudo: yes
-
-- name: Make, configure, and install ruby
-  when: ruby_version_installed.rc == 1
-  command: chdir=/tmp/ruby-{{ ruby_version }} {{item}}
-  with_items:
-    - ./configure
-    - make
-    - sudo make install
-
-- name: Install bundler
-  gem: name=bundler state=present
-  sudo: yes
