@@ -1,17 +1,7 @@
----
-# Install Redis server
-- name: "Install Redis server"
-  sudo: yes
-  apt: pkg={{ redis.deb.package }} state=installed update-cache=yes
+- name: Add redis repo
+  apt_repository: repo='ppa:chris-lea/redis-server' state=present
+      
+- name: Install redis
+  apt: name=redis-server state=installed update_cache=true
 
-# Compile redis.conf template
-- name: "Compile redis.conf template"
-  sudo: yes
-  template: src=redis.conf.j2 dest=/etc/redis/redis.conf
-  notify:
-    - Restart redis
 
-# Ensure Redis server is running
-- name: "Ensure Redis server is running"
-  sudo: yes
-  service: name={{ redis.deb.service }} state=started enabled=yes
