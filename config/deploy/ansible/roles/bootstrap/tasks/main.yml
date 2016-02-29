@@ -40,6 +40,31 @@
   apt: name=fail2ban update_cache=yes
   notify: fail2ban
 
+
+- name: Copy over fail2ban action
+  template: src=templates/action-ufw.conf dest=/etc/fail2ban/action.d/ufw.conf
+  notify: fail2ban
+
+- name: Copy over sshd jail
+  template: src=templates/sshd.j2 dest=/etc/fail2ban/jail.d/sshd.conf
+  notify: fail2ban
+
+
+- name: Copy over portscan jail
+  template: src=templates/sshd.j2 dest=/etc/fail2ban/jail.d/sshd.conf
+  notify: fail2ban
+
+
+
+- name: Copy over fail2ban filter config
+  template: src=templates/ufw-port-scan.j2 dest=/etc/fail2ban/filter.d/ufw-port-scan.conf
+  notify: fail2ban
+      
+- name: Copy over fail2ban ssh filter config
+  template: src=templates/ssh-filter.j2 dest=/etc/fail2ban/filter.d/sshd.conf
+  notify: fail2ban
+
+
 - name: Set Localtime
   file: src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime
   

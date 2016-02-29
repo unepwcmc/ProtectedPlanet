@@ -1,0 +1,28 @@
+# Fail2Ban configuration file
+#
+# Regexp to catch known spambots and software alike. Please verify
+# that it is your intent to block IPs which were driven by
+# above mentioned bots.
+
+
+[Definition]
+badbotscustom = EmailCollector|WebEMailExtrac|TrackBack/1\.02|sogou music spider|ZmEu|CCBot|MJ12bot
+badbots = Atomic_Email_Hunter/4\.0|atSpider/1\.0|autoemailspider|bwh3_user_agent|China Local Browse 2\.6|ContactBot/0\.2|ContentSmartz|DataCha0s/2\.0|DBrowse 1\.4b|DBrowse 1\.4d|Demo Bot DOT 16b|Demo Bot Z 16b|$
+
+failregex = ^<HOST> -.*"(GET|POST).*HTTP.*"(?:%(badbots)s|%(badbotscustom)s)"$
+
+ignoreregex =
+
+# DEV Notes:
+# List of bad bots fetched from http://www.user-agents.org
+# Generated on Thu Nov  7 14:23:35 PST 2013 by files/gen_badbots.
+#
+# Author: Yaroslav Halchenko
+
+
+
+
+
+
+# fail2ban filter configuration for nginx
+

@@ -62,3 +62,33 @@
 - name: Setup .htpasswd
   htpasswd: path=/etc/nginx/.htpasswd name={{sidekiq_web_login.username}} password={{sidekiq_web_login.password}} owner=www-data group=www-data mode=0640
   notify: nginx
+
+
+- name: Copy over bad-bots config
+  template: src=templates/badbots.j2 dest=/etc/fail2ban/jail.d/badcots.conf
+  notify: fail2ban
+      
+- name: Copy over badbots filer
+  template: src=templates/nginx-filter.j2 dest=/etc/fail2ban/filter.d/nginx-badbots.conf
+  notify: fail2ban
+
+      
+- name: Copy over fail2ban filter config
+  template: src=templates/filter-nginx-req-limit.conf dest=/etc/fail2ban/filter.d/nginx-req-limit.conf
+  notify: fail2ban
+
+      
+- name: Copy over fail2ban config file
+  template: src=templates/jail-nginx-req-limit.conf dest=/etc/fail2ban/jail.d/nginx-req-limit.conf
+  notify: fail2ban
+
+
+- name: Copy over auth filter
+  template: src=templates/filter-nginx-req-limit.conf dest=/etc/fail2ban/filter.d/nginx-req-limit.conf
+  notify: fail2ban
+
+
+- name: Copy over auth jail
+  template: src=templates/jail-nginx-req-limit.conf dest=/etc/fail2ban/jail.d/nginx-req-limit.conf
+  notify: fail2ban
+
