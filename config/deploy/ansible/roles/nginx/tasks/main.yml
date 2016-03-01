@@ -65,30 +65,30 @@
 
 
 - name: Copy over bad-bots config
-  template: src=templates/badbots.j2 dest=/etc/fail2ban/jail.d/badcots.conf
+  template: src=templates/badbots_fail2ban_jail.j2 dest=/etc/fail2ban/jail.d/badbots.conf
   notify: fail2ban
       
 - name: Copy over badbots filer
-  template: src=templates/nginx-filter.j2 dest=/etc/fail2ban/filter.d/nginx-badbots.conf
+  template: src=templates/badbots_fail2ban_filter.j2 dest=/etc/fail2ban/filter.d/nginx-badbots.conf
   notify: fail2ban
 
       
 - name: Copy over fail2ban filter config
-  template: src=templates/filter-nginx-req-limit.conf dest=/etc/fail2ban/filter.d/nginx-req-limit.conf
+  template: src=templates/nginx_req_fail2ban_filter.j2 dest=/etc/fail2ban/filter.d/nginx-req-limit.conf
   notify: fail2ban
 
       
 - name: Copy over fail2ban config file
-  template: src=templates/jail-nginx-req-limit.conf dest=/etc/fail2ban/jail.d/nginx-req-limit.conf
+  template: src=templates/nginx_req_fail2ban_jail.j2 dest=/etc/fail2ban/jail.d/nginx-req-limit.conf
   notify: fail2ban
 
 
 - name: Copy over auth filter
-  template: src=templates/filter-nginx-req-limit.conf dest=/etc/fail2ban/filter.d/nginx-req-limit.conf
+  template: src=templates/nginx_auth_fail2ban_filter.j2 dest=/etc/fail2ban/filter.d/nginx-auth.conf
   notify: fail2ban
 
 
 - name: Copy over auth jail
-  template: src=templates/jail-nginx-req-limit.conf dest=/etc/fail2ban/jail.d/nginx-req-limit.conf
+  template: src=templates/nginx_auth_fail2ban_jail.j2 dest=/etc/fail2ban/jail.d/nginx-auth.conf
   notify: fail2ban
 
