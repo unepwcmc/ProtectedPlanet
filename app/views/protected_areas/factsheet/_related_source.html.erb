@@ -2,7 +2,7 @@
   <h3>
     <a target="_blank" href='<%= url %>'><%= title %></a>
 
-    <% if defined?(:logo) %>
+    <% if local_assigns[:logo] %>
       <img src="<%= logo %>">
     <% end %>
   </h3>
