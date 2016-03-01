@@ -33,7 +33,7 @@
   file: path=/etc/postgresql/9.4/main/postgresql.conf owner=postgres group=postgres mode=0644
 
 - name: create postgres user
-  postgresql_user: name={{username}}  password={{password}} role_attr_flags=SUPERUSER,CREATEDB,REPLICATION port=5432
+  postgresql_user: name={{ postgresql_user.username }}  password={{ postgresql_user.password }} role_attr_flags=SUPERUSER,CREATEDB,REPLICATION port=5432
   notify: postgresql
   sudo_user: postgres
     

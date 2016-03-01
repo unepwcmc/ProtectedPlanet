@@ -30,18 +30,3 @@
 - name: Change owner of postgres config file to postgres
   file: path=/etc/postgresql/9.4/main/postgresql.conf owner=postgres group=postgres mode=0644
 
-- name: create postgres user
-  postgresql_user: name={{username}}  password={{password}} role_attr_flags=SUPERUSER,CREATEDB,REPLICATION port=5432
-  notify: postgresql
-  sudo_user: postgres
-    
-- name: Copy over postgres check_file
-  copy: src=templates/postgres-restart dest=/usr/lib/nagios/plugins/postgres-restart mode="u+x,g+x,o+x"  
-  
-
-- name: Add postgres monitoring entries
-  action: lineinfile dest=/etc/nagios/nrpe.cfg regexp="{{ item.regexp }}" line="{{ item.line }}"
-  with_items:
-            - { regexp: '^command[check_procs_postgres]', line: 'command[check_procs_postgres]=/usr/lib/nagios/plugins/check_procs -w1:700 -c1:1024 -a postgres' }
-            - { regexp: '^command[postgresrestart]', line: 'command[postgresrestart]=/usr/lib/nagios/plugins/postgres-restart'
-  notify: nagios-nrpe-server

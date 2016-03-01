@@ -16,10 +16,10 @@
       
       
 - name: Change email address recipient
-  lineinfile: dest=/etc/apticron/apticron.conf state=present regexp='EMAIL="root"' line='EMAIL="{{recipient_email}}"'
+  lineinfile: dest=/etc/apticron/apticron.conf state=present regexp='EMAIL="root"' line='EMAIL="{{apticron.recipient_email}}"'
 
 - name: Change email address sender
-  lineinfile: dest=/etc/apticron/apticron.conf state=present regexp='# CUSTOM_FROM=""' line='CUSTOM_FROM="{{smtp_user}}"'
+  lineinfile: dest=/etc/apticron/apticron.conf state=present regexp='# CUSTOM_FROM=""' line='CUSTOM_FROM="{{apticron.smtp_user}}"'
 
 - name: Install landscape-common
   apt: name=landscape-common state=present
@@ -66,7 +66,7 @@
 
 
 - name: Set Localtime
-  file: src=/usr/share/zoneinfo/{{ timezone }} dest=/etc/localtime
+  file: src=/usr/share/zoneinfo/{{ ntp.timezone }} dest=/etc/localtime
   
 - name: Set Timezone
   template: src=templates/timezone dest=/etc/timezone
@@ -116,11 +116,11 @@
   apt: name=logwatch update_cache=yes
 
 - name: Setup recipient logwatch config
-  lineinfile: dest=/usr/share/logwatch/default.conf/logwatch.conf state=present regexp='MailTo = root' line="MailTo = {{recipient_email}}"
+  lineinfile: dest=/usr/share/logwatch/default.conf/logwatch.conf state=present regexp='MailTo = root' line="MailTo = {{logwatch.recipient_email}}"
 
 
 - name: Setup up logwatch sender information
-  lineinfile: dest=/usr/share/logwatch/default.conf/logwatch.conf state=present regexp='MailFrom = Logwatch' line="MailFrom = {{smtp_user}}"
+  lineinfile: dest=/usr/share/logwatch/default.conf/logwatch.conf state=present regexp='MailFrom = Logwatch' line="MailFrom = {{logwatch.smtp_user}}"
 
 
 - name: Creates Logwatch cron entry
@@ -141,7 +141,7 @@
 - name: Add postfix default settings
   action: lineinfile dest=/etc/postfix/main.cf line="{{ item.line }}"
   with_items:
-      - { line: 'relayhost = {{email_server}}:587' }
+      - { line: 'relayhost = {{postfix.email_server}}:587' }
       - { line: 'smtp_sasl_auth_enable = yes' }
       - { line: 'smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd' }
       - { line: 'smtp_sasl_security_options = noanonymous' }
@@ -152,7 +152,7 @@
 
    
 - name: Copy over sasl_passwd file
-  copy: content="{{email_server}}:587        {{ smtp_user }}:{{smtp_password}}" dest=/etc/postfix/sasl_passwd
+  copy: content="{{postfix.email_server}}:587        {{ postfix.smtp_user }}:{{postfix.smtp_password}}" dest=/etc/postfix/sasl_passwd
 
 
 - name: Configure password file
@@ -178,19 +178,19 @@
 
 
 - name: add user
-  action: user name={{ user }} password={{ password }} update_password=always shell=/bin/bash home=/home/{{ user }}
+  action: user name={{ deploy.username }} password={{ deploy.password }} update_password=always shell=/bin/bash home=/home/{{ deploy.username }}
 
 
 - name: add ubuntu user to group
-  user: name={{ user }}  password={{ password }} groups=sudo append=yes
+  user: name={{ deploy.username }}  password={{ deploy.password }} groups=sudo append=yes
 
 
 - name: Add informatics public keys
-  authorized_key: user={{ user }}  key=https://github.com/{{github_user}}.keys
+  authorized_key: user={{ deploy.username }}  key=https://github.com/{{deploy.github_user}}.keys
 
 
 - name: Add ubuntu user to sudoers
-  lineinfile: "dest=/etc/sudoers state=present regexp='{{sudo_user}}' line='wcmc ALL=(ALL) NOPASSWD: ALL'"
+  lineinfile: "dest=/etc/sudoers state=present regexp='{{deploy.username}}' line='{{deploy.username}} ALL=(ALL) NOPASSWD: ALL'"
 
       
 - name: Copy over ssh config file

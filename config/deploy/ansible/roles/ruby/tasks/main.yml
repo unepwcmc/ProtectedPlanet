@@ -1,8 +1,8 @@
 roles:
   - role: rvm_io.rvm1-ruby
     rvm1_install_flags: '--auto-dotfiles --user-install'
-    rvm1_install_path: '/home/{{ ansible_ssh_user }}/.rvm'
-    rvm1_user: '{{ ansible_ssh_user }}'
+    rvm1_install_path: '/home/{{deploy.username}}/.rvm'
+    rvm1_user: '{{ deploy.username }}'
     rvm1_rvm_version: 'stable'
     rvm1_rvm_check_for_updates: True
 
