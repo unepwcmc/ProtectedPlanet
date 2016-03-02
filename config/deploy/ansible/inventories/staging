@@ -1,14 +1,14 @@
 [web]
-stage.protectedplanet.net
+web.pp-staging.linode.protectedplanet.net
 
 [db]
-db-stage.protectedplanet.net
+db.pp-staging.linode.protectedplanet.net
 
 [util]
-util-stage.protectedplanet.net
+util.pp-staging.linode.protectedplanet.net
 
 [elasticsearch]
-ec2-54-81-197-189.compute-1.amazonaws.com
+search.pp-staging.linode.protectedplanet.net
 [elasticsearch:vars]
 elasticsearch_node_name=elasticsearch-stage
 
