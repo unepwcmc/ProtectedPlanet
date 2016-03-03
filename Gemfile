@@ -14,17 +14,20 @@ gem 'neat'
 gem 'premailer-rails'
 
 group :production, :staging do
-  gem 'unicorn'
+#  gem 'unicorn'
   gem 'dalli', '~> 2.7.2'
   gem 'rack-cache', '~> 1.2'
 end
 
 group :development do
   gem 'spring'
-  gem 'capistrano',  '~> 3.1'
-  gem 'capistrano-rails', '~> 1.1'
+  gem 'capistrano', '~> 3.4', require: false
+  gem 'capistrano-rails',   '~> 1.1', require: false
   gem 'capistrano-bundler', '~> 1.1', require: false
-  gem 'capistrano-sidekiq', '~> 0.3.3'
+  gem 'capistrano-rvm',   '~> 0.1', require: false
+  gem 'capistrano-sidekiq'
+  gem 'capistrano-maintenance', '~> 1.0', require: false
+  gem 'capistrano-passenger', '~> 0.1.1', require: false
   gem 'byebug', '~> 3.1.2'
 end
 
@@ -73,4 +76,5 @@ gem 'sinatra', '>= 1.3.0', :require => nil
 
 gem 'devise', '~> 3.4.0'
 
-gem 'bystander', github: 'unepwcmc/bystander', branch: 'configuration-dsl'
+gem 'bystander', :git => 'git@github.com:unepwcmc/bystander.git'
+
