@@ -10,6 +10,13 @@ set :deploy_user, 'wcmc'
 set :deploy_to, "/home/#{fetch(:deploy_user)}/#{fetch(:application)}"
 
 
+set :whenever_environment, -> { fetch(:stage) }
+set :whenever_roles, [:util]
+
+set :migration_role, :util
+
+
+
 
 set :rvm_type, :user
 set :rvm_ruby_version, '2.2.3'
