@@ -24,6 +24,15 @@
 - name: Change email address sender
   lineinfile: dest=/etc/apticron/apticron.conf state=present regexp='# CUSTOM_FROM=""' line='CUSTOM_FROM="{{apticron.smtp_user}}"'
 
+- name: Copy over apticron-slack-config
+  template: src=apticron-slack-config.j2 dest=/etc/apticron/apticron.conf
+
+- name: Copy over apticron-slack-executable
+  template: src=apticron-slack.j2 dest=/usr/sbin/apticron-slack
+
+- name: Copy over apitrcron-slack-cronjob
+  template: src=apticron-slack-cron.j2 dest=/etc/cron.d/apticron-slack
+
 - name: Install landscape-common
   apt: name=landscape-common state=present
 
