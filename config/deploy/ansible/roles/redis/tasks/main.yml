@@ -4,4 +4,7 @@
 - name: Install redis
   apt: name=redis-server state=installed update_cache=true
 
+- name: Copy over redis server
+  template: src=redis.conf.j2 dest=/etc/redis/redis.conf
+  notify: redis-server
 

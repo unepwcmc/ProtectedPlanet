@@ -15,9 +15,10 @@
   with_items:
       - postgresql-9.4
       - postgresql-server-dev-9.4
-      - postgresql-contrib
+      - postgresql-contrib-9.4
       - python-psycopg2
       - libpq-dev
+      - postgresql-9.4-postgis-2.1
          
       
 - name: Back up postgres config file

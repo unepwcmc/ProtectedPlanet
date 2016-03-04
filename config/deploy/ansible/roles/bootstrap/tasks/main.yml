@@ -1,8 +1,11 @@
 - name: "set hostname"
-  copy: content="{{hostname}}.{{fqdn}}" dest=/etc/hostname
+  copy: content="{{hostname}}" dest=/etc/hostname
 
 - name: "Make hostname permenant"
   command: "hostname -F /etc/hostname"
+
+- name: "Set FQDN"
+  lineinfile: dest=/etc/hosts state=present regexp='127.0.1.1       ubuntu' line="127.0.1.1  {fqdn}     {{hostname}}"
 
 - name: Update APT package cache
   apt: update_cache=yes cache_valid_time=3600
@@ -168,8 +171,8 @@
 
 
 - name: Copy over generic file
-  copy: content="root@{{hostname}}.{{fqdn}} {{smtp_user}}" dest=/etc/postfix/generic
-  copy: content="wcmc@{{hostname}}.{{fqdn}} {{smtp_user}}" dest=/etc/postfix/generic
+  copy: content="root@{{fqdn}} {{postfix.smtp_user}}" dest=/etc/postfix/generic
+  copy: content="wcmc@{{fqdn}} {{postfix.smtp_user}}" dest=/etc/postfix/generic
 
 
 - name: Configure mailserve details
