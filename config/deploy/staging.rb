@@ -2,6 +2,8 @@ set :stage, :staging
 
 server "web.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{web}
 server "util.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{util}
+server "db.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{db}
+
 
 set :application, "protectedplanet"
 set :server_name, "web.pp-staging.linode.protectedplanet.net"
