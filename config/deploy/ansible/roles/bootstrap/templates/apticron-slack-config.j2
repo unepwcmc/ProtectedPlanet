@@ -1,12 +1,9 @@
-/etc/apticron/apticron-slack.conf
-
-
 # apticron.conf
 #
 # set EMAIL to a space separated list of addresses which will be notified of
 # impending updates
 # 
-EMAIL="e1o0s0g6x5t0t4w6@wcmc.slack.com"
+EMAIL="{{apticron.recipient_email_slack}}"
 
 # 
 # Set DIFF_ONLY to "1" to only output the difference of the current run
@@ -100,5 +97,5 @@ EMAIL="e1o0s0g6x5t0t4w6@wcmc.slack.com"
 # 'From:' field used in the notification e-mails. Your default sender will
 # be something like root@.
 #
-CUSTOM_FROM="no-reply@unep-wcmc.org"
+CUSTOM_FROM="{{apticron.smtp_user}}"
 
