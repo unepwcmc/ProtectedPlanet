@@ -2,7 +2,7 @@
 lock '3.4.0'
 
 set :application, 'ProtectedPlanet'
-set :repo_url, 'github.com/unepwcmc/ProtectedPlanet.git'
+set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
 
 set :branch, 'linode-deploy'
 
