@@ -6,6 +6,9 @@ set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
 
 set :branch, 'linode-deploy'
 
+
+set :filter, :roles => %w{web util}
+
 set :deploy_user, 'wcmc'
 set :deploy_to, "/home/#{fetch(:deploy_user)}/#{fetch(:application)}"
 
