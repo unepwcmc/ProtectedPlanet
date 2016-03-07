@@ -2,7 +2,7 @@ set :stage, :staging
 
 server "web.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{web}
 server "util.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{util}
-server "db.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{db}
+server "db.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{db}, no_release: true
 
 
 set :application, "protectedplanet"
