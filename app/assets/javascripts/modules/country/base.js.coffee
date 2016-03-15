@@ -2,11 +2,11 @@ $(document).ready( ->
   $landStatsCube = $('#land-stats .cube__inner')
   $marineStatsCube = $('#marine-stats .cube__inner')
 
-  percentageLandCoverage = $landStatsCube.data('fill-value')
+  percentageLandCoverage = Math.sqrt($landStatsCube.data('fill-value')*100)
   $landStatsCube.css('height', "#{percentageLandCoverage}%")
   $landStatsCube.css('width', "#{percentageLandCoverage}%")
 
-  percentageMarineCoverage = $marineStatsCube.data('fill-value')
+  percentageMarineCoverage = Math.sqrt($marineStatsCube.data('fill-value')*100)
   $marineStatsCube.css('height', "#{percentageMarineCoverage}%")
   $marineStatsCube.css('width', "#{percentageMarineCoverage}%")
 
