@@ -6,12 +6,12 @@
   <% unless params[:for_pdf] %>
     <div class="navbar__element navbar__element--right"><%= link_to 'About', '/c/about' %></div>
     <div class="navbar__element navbar__element--right"><%= link_to 'Updates & News', '#' %></div>
-    <div class="navbar__element js-resources js-navbar-actionable navbar__element--right">
-      <button class="js-trigger">
+    <div data-dropdown-switch class="navbar__element js-dropdown navbar__element--right">
+      <button data-dropdown-trigger>
         Resources <i class="fa fa-chevron-down"></i>
       </button>
 
-      <div class="u-hide js-target dropdown">
+      <div data-dropdown-target class="u-hide dropdown">
         <div class="dropdown__inner">
           <% Comfy::Cms::Category.of_type("Comfy::Cms::Page").all.each do |category| %>
             <a class="dropdown__element" href="<%= resources_path(category_id: category.id) %>"><%= category.label %></a>
@@ -20,12 +20,12 @@
       </div>
     </div>
     <div class="navbar__element navbar__element--right"><%= link_to 'Terms & Conditions', '/c/terms-and-conditions' %></div>
-    <div class="navbar__element navbar__element--right js-thematic-areas js-navbar-actionable">
-      <button class="js-trigger">
+    <div data-dropdown-switch class="navbar__element navbar__element--right js-dropdown">
+      <button data-dropdown-trigger>
         Thematic Areas <i class="fa fa-chevron-down"></i>
       </button>
 
-      <div class="u-hide js-target dropdown">
+      <div data-dropdown-target class="u-hide dropdown">
         <div class="dropdown__inner">
           <a class="dropdown__element" href="http://wcmc.io/WDPA_Manual">WDPA</a>
           <a class="dropdown__element" href="http://parcc.protectedplanet.net/">PARCC</a>
@@ -35,8 +35,16 @@
       </div>
     </div>
 
-    <div class="<%= bem("navbar__element", "with-separator", "right") %>">
-      <a href="<%= root_path %>" class="link-with-icon link-with-icon--no-color"> <i class="fa fa-search"></i> Search</a>
+    <div data-dropdown-switch data-dropdown-switch-text
+      class="js-dropdown <%= bem("navbar__element", "with-separator", "right", "larger", "for-search-dropdown") %>"
+    >
+      <button data-dropdown-trigger class="link-with-icon link-with-icon--no-color"> <i class="fa fa-search"></i> Search</button>
+      <div data-dropdown-target class="u-hide dropdown dropdown--search-dropdown u-font-inherit">
+        <form action='/search' method='get' class="search-bar" id="search-form">
+          <input autocomplete="off" name="q" placeholder="Search the protected areas of our planet" value='<%= @query %>' class="search-bar__input" type="text">
+          <button class="search-bar__submit big-button big-button--compact" type="submit"><i class="fa fa-search"></i></button>
+        </form>
+      </div>
     </div>
   <% end %>
 </nav>

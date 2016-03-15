@@ -1,21 +1,39 @@
 define('dropdown', [], ->
   class Dropdown
     constructor: (@$el, @options) ->
-      return false if @$el.length is 0
-
-      @$triggerEl = @$el.find('.js-trigger')
-      @$targetEl  = @$el.find('.js-target')
-
       @options ||= {on: 'click'}
       @addEventListener()
 
     addEventListener: ->
-      @$triggerEl.on(@options.on, (event) =>
-        event.preventDefault()
+      $triggerEl = @$el.find('[data-dropdown-trigger]')
+        .addBack('[data-dropdown-trigger]')
+      $switchEl  = @$el.find('[data-dropdown-switch]')
+        .addBack('[data-dropdown-switch]')
+      $targetEl  = @$el.find('[data-dropdown-target]')
+        .addBack('[data-dropdown-target]')
 
-        @$triggerEl.toggleClass('active')
-        @$targetEl.slideToggle(100)
+      $triggerEl.on(@options.on, (event) =>
+        if $switchEl.length > 0
+          @handleSwitchEl($switchEl, $triggerEl)
+        else
+          @handleSwitchEl($triggerEl, $triggerEl)
+
+        $targetEl.slideToggle(100)
+
+        event.preventDefault()
       )
+
+    handleSwitchEl: ($switchEl, $triggerEl) ->
+      $switchEl.toggleClass('is-active')
+      if $switchEl.data().hasOwnProperty('dropdownSwitchText')
+        if $switchEl.hasClass('is-active')
+          $triggerEl.html("""
+            <i class="fa fa-times"></i> Close
+          """)
+        else
+          $triggerEl.html("""
+            <i class="fa fa-search"></i> Search
+          """)
 
   return Dropdown
 )
