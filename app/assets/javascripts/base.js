@@ -5,6 +5,7 @@
 //= require 'jquery.tablesorter.min'
 //= require 'async-img.min'
 //= require 'underscore-min'
+//= require 'modules/ui_state'
 //= require 'modules/search/bar'
 //= require 'modules/search/autocompletion'
 //= require 'modules/search/query_control'
