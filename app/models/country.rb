@@ -82,7 +82,7 @@ class Country < ActiveRecord::Base
 
   def sources_per_jurisdiction
     ActiveRecord::Base.connection.execute("""
-      SELECT jurisdictions.name, protected_areas_sources.source_id, COUNT(*)
+      SELECT jurisdictions.name, COUNT(DISTINCT protected_areas_sources.source_id)
       FROM jurisdictions
       INNER JOIN designations ON jurisdictions.id = designations.jurisdiction_id
       INNER JOIN (
@@ -96,7 +96,7 @@ class Country < ActiveRecord::Base
         protected_areas_sources
       ON
         protected_areas_sources.protected_area_id = pas_for_country.id
-      GROUP BY jurisdictions.name, protected_areas_sources.source_id
+      GROUP BY jurisdictions.name
     """)
   end
 
