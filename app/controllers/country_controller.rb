@@ -53,7 +53,7 @@ class CountryController < ApplicationController
     @presenter = StatisticPresenter.new @country
     @pame_statistics = @country.pame_statistic
     @designations_by_jurisdiction = @country.designations.group_by { |design|
-      design.jurisdiction.name
+      design.jurisdiction.name rescue "Not Reported"
     }
   end
 end
