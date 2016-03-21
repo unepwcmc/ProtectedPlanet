@@ -80,6 +80,26 @@ class Country < ActiveRecord::Base
     """)
   end
 
+  def sources_per_jurisdiction
+    ActiveRecord::Base.connection.execute("""
+      SELECT jurisdictions.name, protected_areas_sources.source_id, COUNT(*)
+      FROM jurisdictions
+      INNER JOIN designations ON jurisdictions.id = designations.jurisdiction_id
+      INNER JOIN (
+        SELECT protected_areas.id, protected_areas.designation_id
+        FROM protected_areas
+        INNER JOIN countries_protected_areas
+          ON protected_areas.id = countries_protected_areas.protected_area_id
+          AND countries_protected_areas.country_id = #{self.id}
+      ) AS pas_for_country ON pas_for_country.designation_id = designations.id
+      INNER JOIN
+        protected_areas_sources
+      ON
+        protected_areas_sources.protected_area_id = pas_for_country.id
+      GROUP BY jurisdictions.name, protected_areas_sources.source_id
+    """)
+  end
+
   def protected_areas_per_iucn_category
     ActiveRecord::Base.connection.execute("""
       SELECT iucn_categories.id AS iucn_category_id, iucn_categories.name AS iucn_category_name, pas_per_iucn_categories.count, round((pas_per_iucn_categories.count::decimal/(SUM(pas_per_iucn_categories.count) OVER ())::decimal) * 100, 2) AS percentage
