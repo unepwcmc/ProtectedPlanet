@@ -15,4 +15,10 @@ module CmsHelper
       content_tag(:em, NO_PREVIEW_MSG, class: 'search-result__body')
     end
   end
+
+  def cms_page_path page
+    File.join('/', page.site.path, page.full_path)
+  rescue
+    "#"
+  end
 end
