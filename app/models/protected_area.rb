@@ -21,6 +21,19 @@ class ProtectedArea < ActiveRecord::Base
 
   after_create :create_slug
 
+  def self.most_visited(date, limit=3)
+    year_month = date.strftime("%m-%Y")
+    opts = {with_scores: true, limit: [0, limit]}
+
+    results = $redis.zrevrangebyscore(year_month, "+inf", "-inf", opts)
+    results.map { |wdpa_id, visits|
+      {
+        protected_area: ProtectedArea.find_by_wdpa_id(wdpa_id),
+        visits: visits.to_i
+      }
+    }
+  end
+
   def wdpa_ids
     wdpa_id
   end

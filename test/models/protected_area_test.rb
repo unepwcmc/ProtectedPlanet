@@ -192,4 +192,18 @@ class ProtectedAreaTest < ActiveSupport::TestCase
 
       assert_equal expected_json, pa.as_api_feeder
   end
+
+  test "::most_visited, given a date, returns an array of most visited PAs for the month" do
+    pa1 = FactoryGirl.create(:protected_area, wdpa_id: 345)
+    pa2 = FactoryGirl.create(:protected_area, wdpa_id: 123)
+
+    $redis.expects(:zrevrangebyscore).with(
+      "09-1955", "+inf", "-inf",  {with_scores: true, limit: [0, 3]}
+    ).returns([["345", 4.0], ["123", 1.0]])
+
+    assert_equal(
+      [{protected_area: pa1, visits: 4}, {protected_area: pa2, visits: 1}],
+      ProtectedArea.most_visited(DateTime.new(1955, 9, 12))
+    )
+  end
 end
