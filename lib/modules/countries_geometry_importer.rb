@@ -69,8 +69,8 @@ class CountriesGeometryImporter
   end
 
   def simplify_query type, iso_3
-    """UPDATE countries 
-       SET #{type.downcase}_geom = st_simplify(#{type.downcase}_geom, 0.01) 
+    """UPDATE countries
+       SET #{type.downcase}_geom = st_simplify(#{type.downcase}_geom, 0.01)
        WHERE iso_3 = '#{iso_3}'"""
   end
 

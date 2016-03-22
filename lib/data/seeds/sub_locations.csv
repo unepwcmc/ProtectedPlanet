@@ -702,13 +702,13 @@ CV-SS,São Salvador do Mundo,
 CV-SV,São Vicente,
 CV-TA,Tarrafal,
 CV-TS,Tarrafal de São Nicolau,
-KY-01~,Bodden Town,
-KY-02~,Cayman Brac,
-KY-03~,East End,
-KY-04~,George Town,
-Ky-05~,Little Cayman,
-KY-06~,North Side,
-KY-07~,West Bay,
+KY-01,Bodden Town,
+KY-02,Cayman Brac,
+KY-03,East End,
+KY-04,George Town,
+KY-05,Little Cayman,
+KY-06,North Side,
+KY-07,West Bay,
 CF-BB,Bamingui-Bangoran,
 CF-BGF,Bangui,
 CF-BK,Basse-Kotto,
@@ -1230,10 +1230,10 @@ FR-88,Vosges,
 FR-WF,Wallis et Futuna (see also separate entry under WF),
 FR-89,Yonne,
 FR-78,Yvelines,
-TF-X2~,Crozet Islands,
-TF-X1~,Ile Saint-Paul et Ile Amsterdam,
-TF-X4~,Iles Eparses,
-TF-X3~,Kerguelen,
+TF-X2,Crozet Islands,
+TF-X1,Ile Saint-Paul et Ile Amsterdam,
+TF-X4,Iles Eparses,
+TF-X3,Kerguelen,
 GA-1,Estuaire,
 GA-2,Haut-Ogooué,
 GA-3,Moyen-Ogooué,
@@ -1561,7 +1561,7 @@ ID-MU,Maluku Utara,
 ID-NB,Nusa Tenggara Barat,
 ID-NT,Nusa Tenggara Timur,
 ID-PA,Papua,
-ID-PB,Papua Barat,Papua Barat/ Irian Jaya Barat  
+ID-PB,Papua Barat,Papua Barat/ Irian Jaya Barat
 ID-RI,Riau,
 ID-SR,Sulawesi Barat,
 ID-SN,Sulawesi Selatan,
@@ -1996,7 +1996,7 @@ LS-G,Quthing,
 LS-K,Thaba-Tseka,
 LR-BM,Bomi,
 LR-BG,Bong,
-LR-X1~,Gbarpolu,
+LR-X1,Gbarpolu,
 LR-GB,Grand Bassa,
 LR-CM,Grand Cape Mount,
 LR-GG,Grand Gedeh,Grand Gedah
@@ -2006,7 +2006,7 @@ LR-MG,Margibi,
 LR-MY,Maryland,
 LR-MO,Montserrado,
 LR-NI,Nimba,
-LR-X2~,River Gee,
+LR-X2,River Gee,
 LR-RI,Rivercess,
 LR-SI,Sinoe,
 LY-BU,Al Butnan,
@@ -2118,7 +2118,7 @@ MK-RN,Rankovce,
 MK-RE,Resen,
 MK-RM,Rosoman,
 MK-AJ,Saraj *,
-MK-X1~,Skopje,
+MK-X1,Skopje,
 MK-SS,Sopište,
 MK-NA,Staro Nagoricane,
 MK-UG,Struga,
@@ -2194,7 +2194,7 @@ MY-14,Wilayah Persekutuan Kuala Lumpur,
 MY-15,Wilayah Persekutuan Labuan,
 MY-16,Wilayah Persekutuan Putrajaya,
 MV-02,Alif,"Alif Atoll Dhekunu, Ari Atholhu Uthuruburi, North Ari Atoll"
-MV-X1~,Alif Dhaal,"Alif Atoll Uthuru, Alif Dhâl, Ari Atholhu Dhekunuburi, South Ari Atoll"
+MV-X1,Alif Dhaal,"Alif Atoll Uthuru, Alif Dhâl, Ari Atholhu Dhekunuburi, South Ari Atoll"
 MV-20,Baa,"Bâ, Maalhosmadhulu Dhekunuburi, Malosmadulu-South, South Maalhosmadhulu"
 MV-17,Dhaalu,"Dhaalu, Dhâl, Nilandhe Atholhu Dhekunuburi, Nilandu-South, South Nilandhe Atoll"
 MV-14,Faafu,"Faafu, Faafu Atoll, Fâf, Nilandhe Atholhu Uthuruburi, Nilandu-North, North Nilandhe, North Nilandhe Atoll"
@@ -2419,7 +2419,7 @@ MA-KHE,Khemisset,
 MA-KHN,Khenifra,
 MA-KHO,Khouribga,
 MA-KEN,Kénitra,
-MA-X1~,Laayoune-Boujdour-Sakia El Hamra,
+MA-X1,Laayoune-Boujdour-Sakia El Hamra,
 MA-LAR,Larache,
 MA-LAA,Laâyoune*,
 MA-MED,Mediouna,
@@ -2807,7 +2807,7 @@ PH-QUI,Quirino,Angkaki
 PH-RIZ,Rizal,
 PH-ROM,Romblon,
 PH-SAR,Sarangani,
-PH-X2~,Shariff Kabunsuan,
+PH-X2,Shariff Kabunsuan,
 PH-SIG,Siquijor,
 PH-12,Soccsksargen (Region XII),
 PH-SOR,Sorsogon,
@@ -2870,7 +2870,7 @@ QA-WA,Al Wakrah,"Wakra, Wakrah"
 QA-RA,Ar Rayyan,"Rayyan, ar-Rayyan"
 QA-JB,Jariyan al Batnah,
 QA-MS,Madinat ash Shamal,ash-Shamal
-QA-X1~,Umm Sa'id,Mesaieed
+QA-X1,Umm Sa'id,Mesaieed
 QA-US,Umm Salal,Umm Shalal
 RO-AB,Alba,
 RO-AR,Arad,
@@ -2945,7 +2945,7 @@ RU-KK,"Khakasiya, Respublika","Khakass Republic, Hakasija"
 RU-KHM,Khanty-Mansiyskiy avtonomnyy okrug [Yugra],"Hanty-Mansijskij Avtonomnyj Okrug, Hanty-Mansija"
 RU-KIR,Kirovskaya oblast',Kirovskaja Oblast
 RU-KO,"Komi, Respublika",
-RU-X1~,Komi-Permyak,"Komi-Permjatskij Avtonomnyj Okrug, Komi-Permjak"
+RU-X1,Komi-Permyak,"Komi-Permjatskij Avtonomnyj Okrug, Komi-Permjak"
 RU-KOS,Kostromskaya oblast',Kostromskaja Oblast
 RU-KDA,Krasnodarskiy kray,Krasnodarskij Kraj
 RU-KYA,Krasnoyarskiy kray,"Krasnojarsk, Krasnojarskij Kraj, Krasnojarsk"
@@ -3137,7 +3137,7 @@ SL-W,Western Area (Freetown),
 SG-01,Central Singapore,
 SG-02,North East,
 SG-03,North West,
-SG-X1~,Singapore - No State,
+SG-X1,Singapore - No State,
 SG-04,South East,
 SG-05,South West,
 SK-BC,Banskobystrický kraj,
@@ -3600,7 +3600,7 @@ TW-YUN,Yunlin,
 TJ-GB,Gorno-Badakhshan,Gorno-Badahşan
 TJ-KT,Khatlon,Hatlon
 TJ-SU,Sughd,"Chudjand, Hucand, Hudžand, Hücand, Khodzent, Khodzhent, Khudzhand, Leninabad"
-Tj-X1~,,"Dushambe, Dushanbe, Dušanbe, Düşanbey"
+TJ-X1,,"Dushambe, Dushanbe, Dušanbe, Düşanbey"
 TZ-01,Arusha,
 TZ-02,Dar es Salaam,Daressalam
 TZ-03,Dodoma,
@@ -4288,9 +4288,9 @@ UY-SJ,San José,
 UY-SO,Soriano,
 UY-TA,Tacuarembó,
 UY-TT,Treinta y Tres,
-UY-X1~,,
-UY-X2~,,
-UY-X3~,,
+UY-X1,,
+UY-X2,,
+UY-X3,,
 UZ-AN,Andijon,"Andijon, Andizhan, Andižan"
 UZ-BU,Buxoro,"Boukhara, Buchara, Buhara, Buhoro, Bukhara, Bukhoro"
 UZ-FA,Farg‘ona,"Farghona, Fergana, Ferghana, Ferghona"

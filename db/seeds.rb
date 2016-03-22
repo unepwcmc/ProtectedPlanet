@@ -7,9 +7,27 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 #
 
+
+# Import legacy protected areas
+################################
+#source = File.join(Rails.root, 'lib', 'data', 'seeds', 'legacy_protected_areas.sql')
+#config = ActiveRecord::Base.connection_config
+#command = []
+#
+#command << "PGPASSWORD=#{config["password"]}" if config["password"].present?
+#command << """
+#    psql -d #{config["database"]}
+#         -U #{config['username']}
+#         -h #{config['host']}
+#    < #{source.to_s}
+#""".squish
+#
+#system(command.join(" "))
+
+# Import models
+###############
 csv_models = [
-  SubLocation, Jurisdiction, Governance,
-  IucnCategory, Region, Country, LegacyProtectedArea
+  SubLocation
 ]
 
 csv_models.each do |model|
@@ -23,45 +41,40 @@ csv_models.each do |model|
   import_count = 0
   failed_seeds = []
 
-  CSV.foreach(source, headers: true) do |row|
+  ActiveRecord::Base.transaction do
+    CSV.foreach(source, headers: true) do |row|
+      attributes = row.to_hash
+      if model == Country
+        attributes["region_id"] = Region.where(name: attributes.delete("region")).select(:id).first.id
+      end
 
-    attributes = row.to_hash
-    if model == Country
-      attributes["region"] = Region.where(name: attributes["region"]).first
-    end
+      if model == SubLocation
+        iso_code = attributes['iso']
 
-    instance = model.where(attributes).first || model.new(attributes)
+        unless iso_code.nil?
+          p iso_code
+          country_iso2 = iso_code.split('-').first
+          country_id = Country.where(iso: country_iso2).select(:id).first.id
 
-    if instance.new_record?
-      if instance.save
+          unless country_id.nil?
+            attributes['country_id'] = country_id
+          end
+        end
+      end
+
+      if model.create(attributes)
         import_count += 1
       else
-        failed_seeds << attributes
+        failed_seevs << attributes
       end
     end
-  end
 
-  puts "### Imported #{import_count} #{pretty_name}"
+    puts "### Imported #{import_count} #{pretty_name}"
 
-  if failed_seeds.count > 0
-    puts "### The following #{failed_seeds.count} failed to import:"
-    puts failed_seeds
-  end
-end
-
-
-puts "### Importing SubLocation Country Relations"
-
-SubLocation.all.each do |sub_location|
-  iso_code = sub_location.iso
-
-  unless iso_code.nil?
-    country_iso2 = iso_code.split('-').first
-    country = Country.where(iso: country_iso2).first
-
-    unless country.nil?
-      sub_location.country = country
-      sub_location.save!
+    if failed_seeds.count > 0
+      puts "### The following #{failed_seeds.count} failed to import:"
+      puts failed_seeds
     end
   end
 end
+
