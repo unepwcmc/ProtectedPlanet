@@ -4,7 +4,6 @@ server "web.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{web}
 server "util.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{util}
 server "db.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{db}, :no_release => true
 
-
 set :application, "protectedplanet"
 set :server_name, "web.pp-staging.linode.protectedplanet.net"
 set :sudo_user, "wcmc"
