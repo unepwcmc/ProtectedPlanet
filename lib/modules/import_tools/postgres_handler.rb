@@ -36,19 +36,8 @@ class ImportTools::PostgresHandler
     connection.execute(query)
   end
 
-  def seed database_name, dump_path
-    pg_password = current_conn_values['password']
-    command = []
-
-    command << "PGPASSWORD=#{pg_password}" if pg_password.present?
-    command << """
-      psql -d #{database_name}
-           -U #{current_conn_values['username']}
-           -h #{current_conn_values['host']}
-      < #{dump_path.to_s}
-    """.squish
-
-    system(command.join(" "))
+  def seed
+    Rake::Task['db:seed'].invoke
   end
 
   private
