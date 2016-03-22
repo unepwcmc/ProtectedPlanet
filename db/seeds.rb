@@ -9,25 +9,26 @@
 
 
 # Import legacy protected areas
-################################
-#source = File.join(Rails.root, 'lib', 'data', 'seeds', 'legacy_protected_areas.sql')
-#config = ActiveRecord::Base.connection_config
-#command = []
-#
-#command << "PGPASSWORD=#{config["password"]}" if config["password"].present?
-#command << """
-#    psql -d #{config["database"]}
-#         -U #{config['username']}
-#         -h #{config['host']}
-#    < #{source.to_s}
-#""".squish
-#
-#system(command.join(" "))
+###############################
+source = File.join(Rails.root, 'lib', 'data', 'seeds', 'legacy_protected_areas.sql')
+config = ActiveRecord::Base.connection_config
+command = []
+
+command << "PGPASSWORD=#{config["password"]}" if config["password"].present?
+command << """
+    psql -d #{config["database"]}
+         -U #{config['username']}
+         -h #{config['host']}
+    < #{source.to_s}
+""".squish
+
+system(command.join(" "))
 
 # Import models
 ###############
 csv_models = [
-  SubLocation
+  Jurisdiction, Governance,
+  IucnCategory, Region, Country, SubLocation
 ]
 
 csv_models.each do |model|
@@ -52,7 +53,6 @@ csv_models.each do |model|
         iso_code = attributes['iso']
 
         unless iso_code.nil?
-          p iso_code
           country_iso2 = iso_code.split('-').first
           country_id = Country.where(iso: country_iso2).select(:id).first.id
 
