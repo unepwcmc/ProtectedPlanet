@@ -1,8 +1,11 @@
 class Wdpa::ProtectedAreaImporter::AttributeImporter
   def self.import wdpa_release
+    imported_wdpa_ids = {}
+
     wdpa_release.protected_areas_in_bulk(100) do |protected_areas|
       protected_areas.each do |protected_area_attributes|
         protected_area_attributes = protected_area_attributes.symbolize_keys
+        next if imported_wdpa_ids[protected_area_attributes[:wdpaid]]
 
         protected_area_attributes = remove_geometry protected_area_attributes
         standardised_attributes = Wdpa::DataStandard.attributes_from_standards_hash(
@@ -10,7 +13,9 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
         )
 
         next if standardised_attributes.nil?
-        unless ProtectedArea.create(standardised_attributes)
+        if ProtectedArea.create(standardised_attributes)
+          imported_wdpa_ids[protected_area_attributes[:wdpaid]] = true
+        else
           Bystander.log("Protected Area with WDPAID = #{standardised_attributes[:wdpa_id]} couldn't be imported")
         end
       end
