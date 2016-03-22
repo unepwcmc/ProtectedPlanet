@@ -1,4 +1,5 @@
 class ProtectedAreasController < ApplicationController
+  after_filter :record_visit
   after_filter :enable_caching
 
   def show
@@ -20,5 +21,12 @@ class ProtectedAreasController < ApplicationController
 
   def render_404
     render :file => "#{Rails.root}/public/404.html", :layout => false, :status => :not_found
+  end
+
+  def record_visit
+    return if @protected_area.nil?
+
+    year_month = DateTime.now.strftime("%m-%Y")
+    $redis.zincrby(year_month, 1, @protected_area.wdpa_id)
   end
 end
