@@ -14,13 +14,8 @@ source = File.join(Rails.root, 'lib', 'data', 'seeds', 'legacy_protected_areas.s
 config = ActiveRecord::Base.connection_config
 command = []
 
-command << "PGPASSWORD=#{config["password"]}" if config["password"].present?
-command << """
-    psql -d #{config["database"]}
-         -U #{config['username']}
-         -h #{config['host']}
-    < #{source.to_s}
-""".squish
+command << "PGPASSWORD=#{config[:password]}" if config[:password].present?
+command << %Q(psql -d #{config[:database]} -U #{config[:username]} -h #{config[:host]} < #{source.to_s})
 
 system(command.join(" "))
 
