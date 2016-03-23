@@ -85,7 +85,7 @@ class Wdpa::Release
       pieces = (total_pas/size).ceil
 
       (0...pieces).each do |piece|
-        yield(db.execute("SELECT * FROM #{std_table_name} LIMIT #{size} OFFSET #{piece*1000}").to_a)
+        yield(db.execute("SELECT * FROM #{std_table_name} LIMIT #{size} OFFSET #{piece*size}").to_a)
       end
     end
   end
