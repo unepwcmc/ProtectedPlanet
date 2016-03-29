@@ -1,7 +1,6 @@
 Bystander::Transports::Slack.configure do |slack|
-  slack.domain      'wcmc'
   slack.username    'Bystander'
-  slack.auth_token  ENV['SLACK_AUTH_TOKEN']
+  slack.webhook_url  ENV['SLACK_WEBHOOK_URL']
   slack.channel     '#pp-bystander'
 
   slack.prepend     "#{ENV['RAILS_ENV']} - (##{Process.pid}):"
