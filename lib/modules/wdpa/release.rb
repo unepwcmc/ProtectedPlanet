@@ -85,8 +85,9 @@ class Wdpa::Release
       pieces = (total_pas/size).ceil
 
       (0...pieces).each do |piece|
-        Bystander.log("Selecting piece #{piece}: from #{piece*size} to #{piece*size + size}")
-        yield(db.execute("SELECT * FROM #{std_table_name} LIMIT #{size} OFFSET #{piece*size}").to_a)
+        query = "SELECT * FROM #{std_table_name} LIMIT #{size} OFFSET #{piece*size}"
+        Bystander.log(query)
+        yield(db.execute(query).to_a)
       end
     end
   end

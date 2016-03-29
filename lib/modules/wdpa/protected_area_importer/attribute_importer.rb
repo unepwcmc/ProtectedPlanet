@@ -3,10 +3,12 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
     imported_wdpa_ids = {}
 
     wdpa_release.protected_areas_in_bulk(500) do |protected_areas|
+      Bystander.log("Batch: [#{protected_areas.map{|pa| pa[:wdpaid] }.join(",")}] ")
+
       protected_areas.each do |protected_area_attributes|
         protected_area_attributes = protected_area_attributes.symbolize_keys
         if imported_wdpa_ids[protected_area_attributes[:wdpaid]]
-          Bystander.log("WDPAID = #{protected_area_attributes[:wdpaid]} was skipped")
+          Bystander.log("WDPAID = #{protected_area_attributes[:wdpaid]} (pid #{protected_area_attributes[:wdpa_pid]}) was skipped")
           next
         end
 
