@@ -6,7 +6,7 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
     Bystander.log(query)
     ActiveRecord::Base.transaction do
       db.execute(query).to_a.each do |protected_area|
-        ActiveRecord::Base.transaction do
+        ActiveRecord::Base.transaction(requires_new: true) do
           imported_pa_ids << import_pa(protected_area)
         end
       end
@@ -40,6 +40,7 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
         PA with WDPAID #{protected_area_attributes[:wdpaid]} was not imported because:
         > #{err.message}
       """)
+      raise ActiveRecord::Rollback
     end
 
     pa ? pa.id : nil
