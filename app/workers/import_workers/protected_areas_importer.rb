@@ -1,6 +1,6 @@
 class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
   def perform table, limit, offset
-    query = "SELECT * FROM #{table} LIMIT #{limit} OFFSET #{offset} ORDER BY wdpaid"
+    query = "SELECT * FROM #{table} ORDER BY wdpaid LIMIT #{limit} OFFSET #{offset} "
 
     Bystander.log(query)
     db.execute(query).to_a.each do |protected_area|
@@ -31,6 +31,12 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
         PA with WDPAID #{protected_area_attributes[:wdpaid]} was not imported because:
         > #{err.message}
       """)
+    end
+  end
+
+  def remove_geometry attributes
+    attributes.select do |key, hash|
+      Wdpa::DataStandard.standard_geometry_attributes[key].nil?
     end
   end
 

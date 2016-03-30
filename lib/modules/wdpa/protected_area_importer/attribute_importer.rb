@@ -1,5 +1,7 @@
 class Wdpa::ProtectedAreaImporter::AttributeImporter
   def self.import _release
+    size = 1000
+
     ["standard_polygons", "standard_points"].each do |table|
       total_pas = db.select_value("SELECT count(*) FROM #{table}").to_f
       pieces = (total_pas/size).ceil
@@ -24,9 +26,7 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
 
   private
 
-  def self.remove_geometry attributes
-    attributes.select do |key, hash|
-      Wdpa::DataStandard.standard_geometry_attributes[key].nil?
-    end
+  def self.db
+    ActiveRecord::Base.connection
   end
 end
