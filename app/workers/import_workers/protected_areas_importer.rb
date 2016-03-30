@@ -6,7 +6,9 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
     Bystander.log(query)
     ActiveRecord::Base.transaction do
       db.execute(query).to_a.each do |protected_area|
-        imported_pa_ids << import_pa(protected_area)
+        ActiveRecord::Base.transaction do
+          imported_pa_ids << import_pa(protected_area)
+        end
       end
     end
 
