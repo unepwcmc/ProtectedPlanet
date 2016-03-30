@@ -1,10 +1,17 @@
 class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
   def perform table, limit, offset
     query = "SELECT * FROM #{table} ORDER BY wdpaid LIMIT #{limit} OFFSET #{offset} "
+    imported_pa_ids = []
 
     Bystander.log(query)
-    db.execute(query).to_a.each do |protected_area|
-      import_pa(protected_area)
+    ActiveRecord::Base.transaction do
+      db.execute(query).to_a.each do |protected_area|
+        imported_pa_ids << import_pa(protected_area)
+      end
+    end
+
+    imported_pa_ids.compact.each do |pa_id|
+      ImportWorkers::WikipediaSummaryWorker.perform_async pa_id
     end
   ensure
     finalise_job
@@ -23,15 +30,17 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
       return
     end
 
+    pa = nil
     begin
       pa = ProtectedArea.create!(standardised_attributes)
-      ImportWorkers::WikipediaSummaryWorker.perform_async pa.id
     rescue => err
       Bystander.log("""
         PA with WDPAID #{protected_area_attributes[:wdpaid]} was not imported because:
         > #{err.message}
       """)
     end
+
+    pa ? pa.id : nil
   end
 
   def remove_geometry attributes

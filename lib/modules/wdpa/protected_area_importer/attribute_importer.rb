@@ -1,6 +1,6 @@
 class Wdpa::ProtectedAreaImporter::AttributeImporter
   def self.import _release
-    size = 100
+    size = 5000
 
     ["standard_polygons", "standard_points"].each do |table|
       total_pas = db.select_value("SELECT count(*) FROM #{table}").to_f
