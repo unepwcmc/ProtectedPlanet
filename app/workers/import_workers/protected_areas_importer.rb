@@ -20,7 +20,7 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
 
     if standardised_attributes.nil?
       Bystander.log("Protected Area with WDPAID = #{protected_area_attributes[:wdpaid]} was skipped")
-      next
+      return
     end
 
     begin
