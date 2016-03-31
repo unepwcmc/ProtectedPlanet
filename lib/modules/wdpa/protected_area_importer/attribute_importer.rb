@@ -1,10 +1,10 @@
 class Wdpa::ProtectedAreaImporter::AttributeImporter
   BULK_SIZE = 1000
   def self.import wdpa_release
-    protected_areas_in_bulk(BULK_SIZE).each do |protected_areas|
+    protected_areas_in_bulk(BULK_SIZE) do |protected_areas|
       imported_pa_ids = []
       ActiveRecord::Base.transaction do
-        protected_areas.map do |protected_area_attributes|
+        protected_areas.each do |protected_area_attributes|
           imported_pa_ids << create_protected_area(protected_area_attributes)
         end
       end
