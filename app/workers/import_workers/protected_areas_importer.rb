@@ -5,7 +5,7 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
 
     Bystander.log(query)
     ActiveRecord::Base.transaction do
-      db.execute(query).to_a.each do |protected_area|
+      db.select_all(query).each do |protected_area|
         ActiveRecord::Base.transaction(requires_new: true) do
           imported_pa_ids << import_pa(protected_area)
         end
@@ -20,17 +20,9 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
   end
 
   def import_pa(protected_area_attributes)
-    protected_area_attributes = protected_area_attributes.symbolize_keys
-
-    protected_area_attributes = remove_geometry protected_area_attributes
     standardised_attributes = Wdpa::DataStandard.attributes_from_standards_hash(
-      protected_area_attributes
+      protected_area_attributes.symbolize_keys
     )
-
-    if standardised_attributes.nil?
-      Bystander.log("Protected Area with WDPAID = #{protected_area_attributes[:wdpaid]} was skipped")
-      return
-    end
 
     pa = nil
     begin
@@ -46,10 +38,19 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
     pa ? pa.id : nil
   end
 
-  def remove_geometry attributes
-    attributes.select do |key, hash|
-      Wdpa::DataStandard.standard_geometry_attributes[key].nil?
-    end
+  GEOMETRY_COLUMN = "wkb_geometry"
+  def create_query table, limit, offset
+    select = """
+      SELECT array_to_string(ARRAY(
+        SELECT c.column_name::text
+        FROM information_schema.columns As c
+        WHERE table_name = '#{table}'
+          AND  c.column_name <> '#{GEOMETRY_COLUMN}'
+      ), ',') As query
+    """
+
+    select_part = db.select_value(select)
+    "SELECT #{select_part} FROM #{table} ORDER BY wdpaid LIMIT #{limit} OFFSET #{offset}"
   end
 
   def db
