@@ -1,31 +1,69 @@
 class Wdpa::ProtectedAreaImporter::AttributeImporter
+  BULK_SIZE = 1000
   def self.import wdpa_release
-    imported_wdpa_ids = {}
-    protected_areas = wdpa_release.protected_areas
+    protected_areas_in_bulk(BULK_SIZE).each do |protected_areas|
+      imported_pa_ids = []
+      ActiveRecord::Base.transaction do
+        protected_areas.map do |protected_area_attributes|
+          imported_pa_ids << create_protected_area(protected_area_attributes)
+        end
+      end
 
-    protected_areas.each do |protected_area_attributes|
-      protected_area_attributes = protected_area_attributes.symbolize_keys
+      imported_pa_ids.compact.each do |pa_id|
+        ImportWorkers::WikipediaSummaryWorker.perform_async pa_id
+      end
+    end
+  end
 
-      protected_area_attributes = remove_geometry protected_area_attributes
-      standardised_attributes = Wdpa::DataStandard.attributes_from_standards_hash(
-        protected_area_attributes
-      )
+  def self.create_protected_area(attributes)
+    attributes = attributes.symbolize_keys
+    standardised_attributes = Wdpa::DataStandard.attributes_from_standards_hash(
+      attributes
+    )
 
-      next if standardised_attributes.nil?
-      next if imported_wdpa_ids[standardised_attributes[:wdpa_id]]
-
-      imported_wdpa_ids[standardised_attributes[:wdpa_id]] = true
-      ProtectedArea.create(standardised_attributes)
+    protected_area_id = nil
+    begin
+      ActiveRecord::Base.transaction(requires_new: true) do
+        protected_area_id = ProtectedArea.create!(standardised_attributes).id
+      end
+    rescue
+      Bystander.log("ProtectedArea with WDPAID #{attributes[:wdpaid]} not imported")
     end
 
-    return true
+    return protected_area_id
   end
 
   private
 
-  def self.remove_geometry attributes
-    attributes.select do |key, hash|
-      Wdpa::DataStandard.standard_geometry_attributes[key].nil?
+
+  def self.protected_areas_in_bulk(size)
+    ['standard_polygons', 'standard_points'].each do |table|
+      total_pas = db.select_value("SELECT count(*) FROM #{table}").to_f
+      pieces = (total_pas/size).ceil
+
+      (0...pieces).each do |piece|
+        query = build_query(table, size, size*piece)
+        yield(db.select_all(query))
+      end
     end
+  end
+
+  GEOMETRY_COLUMN = "wkb_geometry"
+  def self.build_query(table, limit, offset)
+    select = """
+      SELECT array_to_string(ARRAY(
+        SELECT c.column_name::text
+        FROM information_schema.columns As c
+        WHERE table_name = '#{table}'
+          AND  c.column_name <> '#{GEOMETRY_COLUMN}'
+      ), ',') As query
+    """
+
+    select_part = db.select_value(select)
+    "SELECT #{select_part} FROM #{table} ORDER BY wdpaid LIMIT #{limit} OFFSET #{offset}"
+  end
+
+  def self.db
+    ActiveRecord::Base.connection
   end
 end
