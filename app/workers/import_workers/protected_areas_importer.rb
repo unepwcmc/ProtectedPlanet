@@ -1,6 +1,6 @@
 class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
   def perform table, limit, offset
-    query = "SELECT * FROM #{table} ORDER BY wdpaid LIMIT #{limit} OFFSET #{offset} "
+    query = create_query(table, limit, offset)
     imported_pa_ids = []
 
     Bystander.log(query)
