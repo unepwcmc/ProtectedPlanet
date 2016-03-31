@@ -1,4 +1,5 @@
 ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8
+  --config PG_USE_COPY YES
   -f "PostgreSQL" PG:"
   host=<%= db_config[:host] %>
   user=<%= db_config[:username] %>
