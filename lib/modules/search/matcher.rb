@@ -7,9 +7,10 @@ class Search::Matcher
       { type: 'nested', path: 'designation', fields: ['designation.name'] },
       { type: 'nested', path: 'iucn_category', fields: ['iucn_category.name'] },
       { type: 'nested', path: 'governance', fields: ['governance.name'] },
+      { type: 'terms',  path: 'wdpa_id'},
       {
         type: 'multi_match',
-        fields: ['name', 'original_name' ],
+        fields: ['name', 'original_name'],
         boost: true,
         functions: [
           "filter" => {
@@ -49,7 +50,7 @@ class Search::Matcher
   private
 
   def matcher
-    matcher_type  = @options[:type].classify
+    matcher_type  = ActiveSupport::Inflector.camelize(@options[:type].to_s.sub(/.*\./, ''))
     matcher_class = "Search::Matcher::#{matcher_type}".constantize
 
     matcher_class.new @term, @options
