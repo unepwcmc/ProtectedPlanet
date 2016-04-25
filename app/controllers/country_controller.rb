@@ -6,13 +6,12 @@ class CountryController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf {
-        options = {format: 'A4', margin: '0cm'}
-        pdf_generator = PhantomPDF::Generator.new(
-          url_for(action: :show, iso: @country.iso, for_pdf: true),
-          Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s,
-          options
-        )
-        send_file pdf_generator.generate, type: 'application/pdf'
+        rasterizer = Rails.root.join("vendor/assets/javascripts/rasterize.js")
+        url = url_for(action: :show, iso: @country.iso, for_pdf: true),
+        dest_pdf = Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s,
+
+        `phantomjs #{rasterizer} '#{url}' #{dest_pdf}`
+        send_file dest_pdf, type: 'application/pdf'
       }
     end
   end
