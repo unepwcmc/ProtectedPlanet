@@ -1,4 +1,4 @@
-$thematic-areas: (wdpa icca parcc pame connectivity);
+$thematic-areas: (wdpa icca parcc pame connectivity green-list);
 
 @each $thematic-area in $thematic-areas {
   .#{$thematic-area}-background {
