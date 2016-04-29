@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   after_filter :store_location
+  before_filter :load_cms_pages
 
   def enable_caching
     expires_in Rails.application.secrets.cache_max_age, public: true
@@ -23,6 +24,11 @@ class ApplicationController < ActionController::Base
     "/users/confirmation",
     "/users/sign_out"
   ]
+
+  def load_cms_pages
+    @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
+    @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
+  end
 
   def store_location
     # store last url - this is needed for post-login redirect to whatever the user last visited.
