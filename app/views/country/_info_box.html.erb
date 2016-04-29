@@ -35,7 +35,7 @@
             <i class="info-box__link-icon fa fa-download"></i>Download this dataset
             <%= download_dropdown(@country.iso_3, 'general', (types rescue [:csv, :kml, :shp])) %>
           </button>
-          <a href="/country-profiles/protectedplanet-<%= @country.iso %>-country.pdf" class="info-box__link">
+          <a href="<%= url_for(format: :pdf, for_pdf: true) %>" class="info-box__link">
             <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download this country page as PDF
           </a>
         </div>
