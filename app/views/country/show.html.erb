@@ -1,5 +1,8 @@
 <div class="container--profile container--push-bottom">
   <%= render "hero" %>
   <%= render "factsheet" %>
+  <% if params[:for_pdf] %>
+    <div style="height: 40px; page-break-before: always"></div>
+  <% end %>
   <%= render "info_box" %>
 </div>
