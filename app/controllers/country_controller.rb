@@ -7,13 +7,17 @@ class CountryController < ApplicationController
       format.html
       format.pdf {
         rasterizer = Rails.root.join("vendor/assets/javascripts/rasterize.js")
-        url = url_for(action: :show, iso: @country.iso, for_pdf: true)
+        url = url_for(action: :pdf, iso: @country.iso)
         dest_pdf = Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s
 
         `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
         send_file dest_pdf, type: 'application/pdf'
       }
     end
+  end
+
+  def pdf
+    @for_pdf = true
   end
 
   def codes

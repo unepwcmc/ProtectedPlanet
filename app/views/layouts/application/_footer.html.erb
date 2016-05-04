@@ -1,17 +1,19 @@
-<footer class="footer <%= yield :footer_classes %>">
-  <p class="footer__element">
-    <i class="fa fa-copyright"></i> ProtectedPlanet 2014-2016. All rights reserved
-  </p>
+<% unless @for_pdf %>
+  <footer style="<%= yield :footer_style %>" class="footer <%= yield :footer_classes %>">
+    <p class="footer__element">
+      <i class="fa fa-copyright"></i> ProtectedPlanet 2014-2016. All rights reserved
+    </p>
 
-  <div class="<%= bem('footer__element', :right) %>">
-    <a class="iucn-logo" href="http://www.iucn.org"></a>
-    <a class="unepwcmc-logo" href="http://www.unep-wcmc.org"></a>
-  </div>
-  <% unless params[:for_pdf] %>
-    <div class="<%= bem('footer__element', :right, :'no-push', :'with-separator') %>">
-      <a class="<%= bem('uservoice', :'no-color', :bold) %>" href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>
-        <i class="uservoice__icon fa fa-comment"></i>Send Feedback
-      </a>
+    <div class="<%= bem('footer__element', :right) %>">
+      <a class="iucn-logo" href="http://www.iucn.org"></a>
+      <a class="unepwcmc-logo" href="http://www.unep-wcmc.org"></a>
     </div>
-  <% end %>
-</footer>
+    <% unless @for_pdf %>
+      <div class="<%= bem('footer__element', :right, :'no-push', :'with-separator') %>">
+        <a class="<%= bem('uservoice', :'no-color', :bold) %>" href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>
+          <i class="uservoice__icon fa fa-comment"></i>Send Feedback
+        </a>
+      </div>
+    <% end %>
+  </footer>
+<% end %>

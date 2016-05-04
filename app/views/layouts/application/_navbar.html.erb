@@ -3,7 +3,7 @@
     <%= link_to "protected planet", root_path, class: 'protectedplanet-logo' %>
   </div>
 
-  <% unless params[:for_pdf] %>
+  <% unless @for_pdf %>
     <div class="navbar__element navbar__element--right"><%= link_to 'About', '/c/about' %></div>
     <div class="navbar__element navbar__element--right"><%= link_to 'Updates & News', '#' %></div>
     <div data-dropdown-switch class="navbar__element js-dropdown navbar__element--right">
