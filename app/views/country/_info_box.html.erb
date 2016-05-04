@@ -34,7 +34,7 @@
           <i class="info-box__link-icon fa fa-download"></i>Download this dataset
           <%= download_dropdown(@country.iso_3, 'general', (types rescue [:csv, :kml, :shp])) %>
         </button>
-        <a href="<%= url_for(action: :pdf, iso: @country.iso) %>" class="info-box__link">
+        <a href="<%= url_for(action: :show, iso: @country.iso, format: :pdf) %>" class="info-box__link">
           <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download this country page as PDF
         </a>
       </div>

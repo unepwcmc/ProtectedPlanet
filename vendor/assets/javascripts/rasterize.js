@@ -32,7 +32,6 @@ if (system.args.length < 3 || system.args.length > 5) {
             page.viewportSize = { width: pageWidth, height: pageHeight };
         }
     }
-    page.zoomFactor = 0.2;
     page.open(address, function (status) {
         if (status !== 'success') {
             console.log('Unable to load the address!');
