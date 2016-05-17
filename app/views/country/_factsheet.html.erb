@@ -5,28 +5,21 @@
     <%= render "country/facts/number_of_sources" %>
   </div>
 
-  <% if params[:for_pdf] %> <div style="height: 40px; page-break-before: always"></div> <% end %>
-
-  <% if params[:for_pdf] %>
+  <div class="two-thirds">
     <%= render "country/facts/coverage_stats" %>
-    <div style="height: 40px; page-break-before: always"></div>
     <%= render "country/facts/pame_statistics" %>
-  <% else %>
-    <div class="two-thirds">
-      <%= render "country/facts/coverage_stats" %>
-      <%= render "country/facts/pame_statistics" %>
-    </div>
-  <% end %>
+  </div>
 </section>
 
 <section class="row">
+  <div class="one-thirds">
+    <%= render "country/facts/iucn_categories" %>
+  </div>
   <div class="two-thirds">
     <%= render "country/facts/governance_types" %>
     <%= render "country/facts/related_countries" %>
   </div>
 </section>
-
-<% if params[:for_pdf] %> <div style="height: 40px; page-break-before: always"></div> <% end %>
 
 <section class="row">
   <% %w[National Regional International].each do |level| %>
