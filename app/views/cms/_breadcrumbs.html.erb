@@ -1,7 +1,7 @@
 <a class="breadcrumbs__link" href="/">Home</a>
 >
 <% if @cms_page.categories.any? %>
-  <a class="breadcrumbs__link" href="<%= resources_path %>">
+  <a class="breadcrumbs__link" href="<%= resources_path(category_id: @cms_page.categories.first.id) %>">
     Resources: <%= @cms_page.categories.first.label %>
 </a>
 >
