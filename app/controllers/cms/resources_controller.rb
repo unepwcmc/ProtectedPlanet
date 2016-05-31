@@ -3,7 +3,7 @@ class Cms::ResourcesController < ApplicationController
 
   def index
     @all_resources = Comfy::Cms::Page.for_category(@category.label)
-    @resources = search(@all_resources).reject(&:root?)
+    @resources = search(@all_resources).reject(&:root?).reject { |p| p.parent.label != "Index" }
   end
 
   private

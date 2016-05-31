@@ -1,0 +1,6 @@
+<div class="vertical-nav">
+  <% @cms_page.parent.children.each do |page| %>
+    <%= cms_page page, @cms_page %>
+  <% end %>
+</div>
+

@@ -6,5 +6,8 @@
 </a>
 >
 <% end %>
-<%= @cms_page.label %>
 
+<% unless @cms_page.parent.label == "Index" %>
+  <%= @cms_page.parent.label %>:
+<% end %>
+<%= @cms_page.label %>
