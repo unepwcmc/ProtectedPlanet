@@ -5,7 +5,7 @@
 
   <% unless @for_pdf %>
     <div class="navbar__element navbar__element--right"><%= link_to 'About', '/c/about' %></div>
-    <div class="navbar__element navbar__element--right"><%= link_to 'Updates & News', '#' %></div>
+    <div class="navbar__element navbar__element--right"><%= link_to 'Updates & News', resources_path(category_id: @updates_and_news.id) %></div>
     <div data-dropdown-switch class="navbar__element js-dropdown navbar__element--right">
       <button data-dropdown-trigger>
         Resources <i class="fa fa-chevron-down"></i>

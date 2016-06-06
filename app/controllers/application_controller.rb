@@ -26,6 +26,7 @@ class ApplicationController < ActionController::Base
   ]
 
   def load_cms_pages
+    @updates_and_news  = Comfy::Cms::Category.find_by_label("Updates & News")
     @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
     @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
     @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
