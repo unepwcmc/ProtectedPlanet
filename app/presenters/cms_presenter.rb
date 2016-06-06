@@ -15,7 +15,7 @@ class CmsPresenter
   end
 
   def self.all_by_year resources
-    resources.order(:created_at).map(&:created_at).group_by(&:year)
+    resources.sort_by(&:created_at).map(&:created_at).group_by(&:year)
   end
 
   private
