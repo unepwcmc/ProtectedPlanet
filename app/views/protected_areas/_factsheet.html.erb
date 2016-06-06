@@ -32,23 +32,5 @@
         </ul>
       </article>
     <% end %>
-
-    <article>
-      <% if protected_area.nearest_protected_areas.count > 1 %>
-        <h3>Nearest Protected Areas</h3>
-
-        <ul class="nearest-protected-areas">
-          <% protected_area.nearest_protected_areas[1..2].each do |protected_area| %>
-            <li>
-              <a href="/<%= protected_area.slug %>">
-                <%= protected_area_cover(protected_area) %>
-              </a>
-
-              <h4><a href="/<%= protected_area.slug %>"><%= protected_area.name %></a></h4>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
-    </article>
   </div>
 </section>
