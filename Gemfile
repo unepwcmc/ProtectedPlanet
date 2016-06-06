@@ -19,6 +19,8 @@ gem 'autoprefixer-rails'
 gem 'jquery-rails', '~> 3.1.3'
 gem 'premailer-rails'
 
+gem 'levenshtein', '~> 0.2.2'
+
 group :production, :staging do
   gem 'unicorn'
   gem 'dalli', '~> 2.7.2'
