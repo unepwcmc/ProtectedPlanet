@@ -2,7 +2,7 @@
   <% aggregations.select{ |_agg, buckets| buckets.any? }.each do |name, buckets| %>
     <li class="filter-bar__group js-expandable-section expandable-section">
       <h5 class="js-trigger js-switch filter-bar__group-title is-closed">
-        <%= name.humanize %>
+        <%= name.humanize.gsub(/iucn/i, "IUCN") %>
       </h5>
 
       <ul class="js-target u-hide">
