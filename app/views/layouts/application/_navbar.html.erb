@@ -1,6 +1,8 @@
 <nav class="navbar">
   <div class="navbar__element navbar__element--bigger">
-    <%= link_to "protected planet", root_path, class: 'protectedplanet-logo' %>
+    <%= link_to root_path, class: 'protectedplanet-logo' do %>
+      protected planet<sup class="protectedplanet-logo__registered">®</sup>
+    <% end %>
   </div>
 
   <% unless @for_pdf %>
