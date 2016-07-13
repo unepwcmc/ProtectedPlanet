@@ -1,13 +1,3 @@
-$thematic-areas: (wdpa icca parcc pame connectivity green-list);
-
-@each $thematic-area in $thematic-areas {
-  .#{$thematic-area}-background {
-    background-image: image-url("thematic-areas/#{$thematic-area}.jpg");
-    background-position: center;
-    background-size: cover;
-  }
-}
-
 .statistics-cover {
   height: 42rem;
 
