@@ -1,33 +1,35 @@
-<div class="hero hero--push u-relative">
+<div class="hero hero--no-margin-top u-relative">
   <div data-bound-from="<%= map_bounds['from'] %>" data-control-position="bottomleft" data-bound-to="<%= map_bounds['to'] %>" class="map map--main" id="map"></div>
   <div class="disclaimer">
-    The designations employed and the presentation of material on this map do not
-    imply the expression of any opinion whatsoever on the part of the Secretariat
-    of the United Nations concerning the legal status of any country, territory,
-    city or area or of its authorities, or concerning the delimitation of its
-    frontiers or boundaries.
+    <a href="#thematic-areas">
+      The designations employed and the presentation of material on this map do not
+      imply the expression of any opinion whatsoever on the part of the Secretariat
+      of the United Nations concerning the legal status of any country, territory,
+      city or area or of its authorities, or concerning the delimitation of its
+      frontiers or boundaries.
+      <div class="disclaimer__arrow">
+        <div class="disclaimer__arrow-inner"></div>
+      </div>
+    </a>
   </div>
 
   <div class="js-explore-target u-click-through o-overlay">
-    <div class="col-six u-no-click-through <%= bem('info-box', 'fff', 'hero') %>">
-      <h1 class="info-box__header info-box__header--with-padding <%= bem('header-with-delimiter', 'bigger', 'bold', 'no-margin-bottom') %>">
-        Start Exploring
-        <button class="right"><i class="fa fa-times u-link-color"></i></button>
-      </h1>
-      <div class="info-box__body info-box__body--no-padding">
-        <div class="<%= bem('info-box__row', 'around-padding', 'light-border') %>">
-          <%= render partial: 'shared/search_form', locals: {query: @query} %>
+    <div class="col-five u-no-click-through <%= bem('info-box', 'fff', 'hero', 'shadow') %>">
+      <div class="search-bar info-box__body info-box__body--no-padding">
+
+        <form action='/search' method='get' class="search-bar__form" id="search-form">
+          <input autocomplete="off" name="q" placeholder="Search a protected area" value='<%= @query %>' class="search-bar__input" type="text">
+          <button class="search-bar__submit" type="submit"><i class="fa fa-search"></i></button>
+        </form>
+
+        <div class="js-download-btn tooltip__trigger">
+          <button href="#" class="js-trigger btn-map-download">
+            <i class="fa fa-download big-button__icon"></i>WDPA Dataset
+          </button>
+
+          <%= download_dropdown("all", "general", [:csv, :kml, :shp, :gdb, :esri]) %>
         </div>
-        <div class="u-center <%= bem('info-box__row', 'around-padding', 'no-border') %>">
-          <%= render partial: 'shared/download_data_set', locals: {custom_classes: 'btn-map-download', download_type: 'general', item_id: 'all', types: [:csv, :kml, :shp, :gdb, :esri]} %>
-        </div>
-        <div class="alert">
-          <span class="fa-stack alert__icon alert__icon--info">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-info alert__icon-inner alert__icon-inner--info fa-stack-1x"></i>
-          </span>
-          <p class="alert__body">You can also close this popup and start exploring the protected areas by clicking on the map.</p>
-        </div>
+
       </div>
     </div>
   </div>
