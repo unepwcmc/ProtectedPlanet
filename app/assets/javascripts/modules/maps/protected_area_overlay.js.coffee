@@ -122,7 +122,9 @@ define('protected_area_overlay', [], () ->
         user_name: "carbon-tool"
       )
 
-      map.on('baselayerchange', => @paOverlay.bringToFront())
+      map.on('baselayerchange', (e) =>
+        @paOverlay.bringToFront()
+      )
       carto_tiles.getTiles( (o) => @paOverlay = L.tileLayer(o.tiles[0]).addTo(map))
 
   return ProtectedAreaOverlay
