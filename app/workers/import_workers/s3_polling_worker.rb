@@ -12,14 +12,10 @@ class ImportWorkers::S3PollingWorker
 
   private
 
-  def send_confirmation_email import
-    ImportConfirmationMailer.create(import).deliver
-  end
-
   def create_import
     begin
-      import = ImportTools.create_import
-      send_confirmation_email import
+      ImportTools.create_import
+      ImportWorkers::MainWorker.perform_async
     rescue ImportTools::AlreadyRunningImportError
       return
     end
