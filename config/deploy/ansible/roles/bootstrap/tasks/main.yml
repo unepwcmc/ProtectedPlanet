@@ -100,6 +100,13 @@
 - name: Install NRPE
   apt: name=nagios-nrpe-server update_cache=yes
 
+- name: Install ZIP
+  apt: name=zip update_cache=yes
+  
+- name: Install unzip
+  apt: name=unzip update_cache=yes
+
+
 - name: Install nagios-plugins
   apt: name=nagios-plugins update_cache=yes
 
