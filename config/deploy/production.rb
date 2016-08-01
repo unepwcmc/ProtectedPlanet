@@ -1,11 +1,11 @@
 set :stage, :production
 
-server "web.pp-production.linode.protectedplanet.net", user: 'wcmc', roles: %w{web}
-server "import.pp-production.linode.protectedplanet.net", user: 'wcmc', roles: %w{util}
-server "db.pp-production.linode.protectedplanet.net", user: 'wcmc', roles: %w{db}, :no_release => true
+server "web-production-linode.protectedplanet.net", user: 'wcmc', roles: %w{web}
+server "import-production-linode.protectedplanet.net", user: 'wcmc', roles: %w{util}
+server "db-production-linode.protectedplanet.net", user: 'wcmc', roles: %w{db}, :no_release => true
 
 set :application, "protectedplanet"
-set :server_name, "web.pp-production.linode.protectedplanet.net"
+set :server_name, "web-production-linode.protectedplanet.net"
 set :sudo_user, "wcmc"
 set :app_port, "80"
 
