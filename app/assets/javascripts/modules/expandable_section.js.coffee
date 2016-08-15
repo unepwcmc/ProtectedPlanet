@@ -8,6 +8,7 @@ define('expandable_section', [], ->
     initialize: ->
       @$expandableSectionsEl.each( (i, sectionEl) =>
         @enableToggling($(sectionEl))
+        @openIfInPath($(sectionEl))
       )
 
     enableToggling: ($sectionEl) ->
@@ -18,6 +19,10 @@ define('expandable_section', [], ->
         $switchEl.toggleClass('is-open is-closed')
         $targetEl.toggleClass('u-hide')
       )
+
+    openIfInPath: ($sectionEl) ->
+      if(window.location.hash.split('#')[1] == $sectionEl.attr('id'))
+        $sectionEl.find(".js-trigger").click()
 )
 
 
