@@ -1,12 +1,10 @@
 $(document).ready( ->
   require(
-    ['search_bar', 'autocompletion', 'query_control', 'dropdown', 'map', 'navbar', 'asyncImg',
+    ['autocompletion', 'query_control', 'dropdown', 'map', 'navbar', 'asyncImg',
      'downloads_general', 'downloads_project', 'downloads_search', 'expandable_section'],
-    (SearchBar, Autocompletion, QueryControl, Dropdown, Map, Navbar, asyncImg,
+    (Autocompletion, QueryControl, Dropdown, Map, Navbar, asyncImg,
      DownloadsGeneral, DownloadsProject, DownloadsSearch, ExpandableSection) ->
-      bar = new SearchBar()
-
-      $('.search-input').each( ->
+      $('.js-search-input').each( ->
         new Autocompletion($(this))
         new QueryControl($(this))
       )

@@ -14,11 +14,11 @@
   </div>
 
   <div class="js-explore-target u-click-through o-overlay">
-    <div class="col-five u-no-click-through <%= bem('info-box', 'fff', 'hero', 'shadow') %>">
+    <div class="js-search-container col-five u-no-click-through <%= bem('info-box', 'fff', 'hero', 'shadow') %>">
       <div class="search-bar info-box__body info-box__body--no-padding">
 
         <form action='/search' method='get' class="search-bar__form" id="search-form">
-          <input autocomplete="off" name="q" placeholder="Search a protected area" value='<%= @query %>' class="search-bar__input" type="text">
+          <input autocomplete="off" name="q" placeholder="Search a protected area" value='<%= @query %>' class="search-bar__input js-search-input" type="text">
           <button class="search-bar__submit" type="submit"><i class="fa fa-search"></i></button>
         </form>
 
@@ -31,6 +31,7 @@
         </div>
 
       </div>
+      <div class="js-autocompletion-results autocompletion-results u-hide"></div>
     </div>
   </div>
 </div>

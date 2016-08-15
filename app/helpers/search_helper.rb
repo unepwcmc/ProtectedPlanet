@@ -83,14 +83,16 @@ module SearchHelper
         "alt" => result[:name],
         "data-async" => tiles_path(image_params),
       )
-      raw "#{image}#{result[:name]}"
+      concat image
+      concat result[:name]
     end
   end
 
   def country_autocomplete_link result
     link_to country_url(result[:identifier]) do
       image = image_tag("search-placeholder-country.png")
-      raw "#{image}#{result[:name]}"
+      concat image
+      concat result[:name]
     end
   end
 end
