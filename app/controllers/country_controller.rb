@@ -21,7 +21,7 @@ class CountryController < ApplicationController
   end
 
   def load_vars
-    @country = Country.where(iso: params[:iso]).first
+    @country = Country.where(iso: params[:iso].upcase).first
     if @country.protected_areas.count > 0
       @random_protected_areas = @country.random_protected_areas 2
     end
