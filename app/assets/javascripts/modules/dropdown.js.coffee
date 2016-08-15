@@ -8,9 +8,9 @@ define('dropdown', [], ->
         @addEventListener()
 
     addEventListener: ->
-      @$triggerEl = @$el.find('[data-dropdown-trigger]').addBack('[data-dropdown-trigger]')
-      @$switchEl  = @$el.find('[data-dropdown-switch]').addBack('[data-dropdown-switch]')
-      @$targetEl  = @$el.find('[data-dropdown-target]').addBack('[data-dropdown-target]')
+      @$triggerEl = @$el.find('.js-trigger').addBack('.js-trigger')
+      @$switchEl  = @$el.find('.js-switch').addBack('.js-switch')
+      @$targetEl  = @$el.find('.js-target').addBack('.js-target')
 
       @$triggerEl.on(@options.on, (event) =>
         if @open
@@ -50,7 +50,7 @@ define('dropdown', [], ->
     handleSwitchEl: =>
       @$switchEl.toggleClass('is-active')
 
-      if @$switchEl.data().hasOwnProperty('dropdownSwitchText')
+      if @$switchEl.data()?.hasOwnProperty('dropdownSwitchText')
         if @$switchEl.hasClass('is-active')
           @$triggerEl.html('<i class="fa fa-times"></i> Close')
         else

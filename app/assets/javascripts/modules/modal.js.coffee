@@ -21,11 +21,11 @@ define('modal', [], () ->
       @$container.find(selector)
 
     show: ->
-      @$container.addClass('opened')
+      @$container.addClass('is-opened')
       @$overlay.addClass('visible')
 
     hide: ->
-      @$container.removeClass('opened')
+      @$container.removeClass('is-opened')
       @$overlay.removeClass('visible')
 
   return Modal

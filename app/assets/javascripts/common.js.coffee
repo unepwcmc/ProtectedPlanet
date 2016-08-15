@@ -39,12 +39,10 @@ $(document).ready( ->
           # skip standard links
           return unless $(@).data('type')
 
-          dropdown.hide()
-
           button = $(@)
           e.preventDefault()
 
-          list = button.parents('ul')
+          list = button.parents('.js-target')
 
           DOWNLOADERS =
             'general': DownloadsGeneral
