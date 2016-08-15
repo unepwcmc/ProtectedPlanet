@@ -12,13 +12,13 @@
           Protected areas are internationally recognised as major tools in
           conserving species and ecosystems, and up to date information on
           protected areas is essential to fully enable conservation and
-          development activities.  <a class="link-with-icon u-bold" target="_blank" href="http://wcmc.io/WDPA_Manual"><i class="fa fa-arrow-right link-with-icon__icon"></i>Explore Global Stats</a>
+          development activities.  <a class="link-with-icon u-bold" target="_blank" href="<%= cms_page_path(@regions_page) %>"><i class="fa fa-arrow-right link-with-icon__icon"></i>Explore Global Stats</a>
         </p>
         <div class="info-box info-box--alt-color info-box--overflow">
           <h4 class="info-box__header info-box__header--white header-with-delimiter">UNEP Regions Stats</h4>
           <div class="info-box__body">
             <% Region.without_geometry.all.reject { |region| region.name == 'Global' }.each do |region| %>
-              <a class="u-block <%= bem('link-with-icon', 'no-color', 'push') %>" href="#">
+              <a class="u-block <%= bem('link-with-icon', 'no-color', 'push') %>" href="<%= cms_page_path(@regions_page) + "#" + region.name %>">
                 <i class="fa fa-area-chart link-with-icon__icon"></i><b class="u-x-bold"><%= region.name %></b> Stats
               </a>
             <% end %>
