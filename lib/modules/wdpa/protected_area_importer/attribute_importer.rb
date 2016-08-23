@@ -1,30 +1,67 @@
 class Wdpa::ProtectedAreaImporter::AttributeImporter
-  def self.import _release
-    size = 1000
+  BULK_SIZE = 1000
+  def self.import wdpa_release
+    protected_areas_in_bulk(BULK_SIZE) do |protected_areas|
+      imported_pa_ids = []
+      ActiveRecord::Base.transaction do
+        protected_areas.each do |protected_area_attributes|
+          imported_pa_ids << create_protected_area(protected_area_attributes)
+        end
+      end
 
-    ["standard_polygons", "standard_points"].each do |table|
+      imported_pa_ids.compact.each do |pa_id|
+        ImportWorkers::WikipediaSummaryWorker.perform_async pa_id
+      end
+    end
+  end
+
+  def self.create_protected_area(attributes)
+    attributes = attributes.symbolize_keys
+    standardised_attributes = Wdpa::DataStandard.attributes_from_standards_hash(
+      attributes
+    )
+
+    protected_area_id = nil
+    begin
+      ActiveRecord::Base.transaction(requires_new: true) do
+        protected_area_id = ProtectedArea.create!(standardised_attributes).id
+      end
+    rescue
+      Bystander.log("ProtectedArea with WDPAID #{attributes[:wdpaid]} not imported")
+    end
+
+    return protected_area_id
+  end
+
+  private
+
+
+  def self.protected_areas_in_bulk(size)
+    ['standard_polygons', 'standard_points'].each do |table|
       total_pas = db.select_value("SELECT count(*) FROM #{table}").to_f
       pieces = (total_pas/size).ceil
 
       (0...pieces).each do |piece|
-        ImportWorkers::ProtectedAreasImporter.perform_async(table, size, piece*size)
+        query = build_query(table, size, size*piece)
+        yield(db.select_all(query))
       end
     end
-
-    # wait for all imports to be taken
-    while Sidekiq::Queue.new("import").count > 0
-      sleep 10000
-    end
-
-    # wait for all worker (but itself) to finish
-    while Sidekiq::Workers.new.size > 1
-      sleep 10000
-    end
-
-    return true
   end
 
-  private
+  GEOMETRY_COLUMN = "wkb_geometry"
+  def self.build_query(table, limit, offset)
+    select = """
+      SELECT array_to_string(ARRAY(
+        SELECT c.column_name::text
+        FROM information_schema.columns As c
+        WHERE table_name = '#{table}'
+          AND  c.column_name <> '#{GEOMETRY_COLUMN}'
+      ), ',') As query
+    """
+
+    select_part = db.select_value(select)
+    "SELECT #{select_part} FROM #{table} ORDER BY wdpaid LIMIT #{limit} OFFSET #{offset}"
+  end
 
   def self.db
     ActiveRecord::Base.connection

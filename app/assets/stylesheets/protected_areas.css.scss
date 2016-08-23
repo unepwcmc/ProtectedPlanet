@@ -183,6 +183,10 @@
   border-bottom: 1px solid $grey;
   background: $light-grey;
 
+  h3 {
+    line-height: 2rem;
+  }
+
   a {
     color: $green;
     background: url("/assets/external-link.png") right no-repeat;
@@ -192,6 +196,13 @@
   span {
     margin: 0;
     padding: 0;
+  }
+
+  img {
+    width: auto;
+    height: 2rem;
+    float: left;
+    margin-right: .5rem;
   }
 }
 

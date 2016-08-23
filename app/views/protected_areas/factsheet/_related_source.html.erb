@@ -1,4 +1,10 @@
 <article class="related-source">
-  <h3><a target="_blank" href='<%= url %>'><%= title %></a></h3>
+  <h3>
+    <a target="_blank" href='<%= url %>'><%= title %></a>
+
+    <% if local_assigns[:logo] %>
+      <img src="<%= logo %>">
+    <% end %>
+  </h3>
   <span><%= info %></span>
 </article>
