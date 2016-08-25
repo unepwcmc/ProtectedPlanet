@@ -29,7 +29,6 @@ class ImportWorkers::FinaliserWorker
     Autocompletion.populate
 
     #Geospatial::Calculator.calculate_statistics
-    Stats::CountryStatisticsImporter.import
 
     Download.make_current
     ImportTools::WebHandler.clear_cache
