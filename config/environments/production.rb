@@ -65,7 +65,7 @@ Rails.application.configure do
   # config.cache_store = :mem_cache_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
-  config.action_controller.asset_host = "https://d3hwi8kk6ca2dz.cloudfront.net"
+  # config.action_controller.asset_host = ""
 
   # Precompile additional assets.
   # application.js, application.css, and all non-JS/CSS in app/assets folder are already added.
@@ -92,7 +92,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.asset_host = secrets['asset_host']
   config.action_mailer.default_url_options = { :host => secrets['host'] }
   config.action_mailer.smtp_settings = {
     :enable_starttls_auto => true,

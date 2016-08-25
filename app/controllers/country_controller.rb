@@ -48,9 +48,9 @@ class CountryController < ApplicationController
 
   def load_vars
     @country = if params[:iso].size == 2
-      Country.where(iso: params[:iso]).first
+      Country.where(iso: params[:iso].upcase).first
     else
-      Country.where(iso_3: params[:iso]).first
+      Country.where(iso_3: params[:iso].upcase).first
     end
 
     @presenter = StatisticPresenter.new @country

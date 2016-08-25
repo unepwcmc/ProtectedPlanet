@@ -15,14 +15,17 @@ gem 'sprockets-rails', '~> 2.3.3'
 gem 'uglifier', '~> 2.7.2'
 gem 'coffee-rails', '~> 4.0.0'
 gem 'therubyracer',  platforms: :ruby
-gem 'autoprefixer-rails'
+gem "autoprefixer-rails"
+gem "exception_notification", '~> 4.1.4'
+gem "slack-notifier", "~> 1.5.1"
+
 gem 'jquery-rails', '~> 3.1.3'
 gem 'premailer-rails'
 
 gem 'levenshtein', '~> 0.2.2'
 
 group :production, :staging do
-  gem 'unicorn'
+#  gem 'unicorn'
   gem 'dalli', '~> 2.7.2'
   gem 'rack-cache', '~> 1.2'
 end

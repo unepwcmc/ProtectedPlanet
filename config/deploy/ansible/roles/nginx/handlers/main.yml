@@ -1,7 +1,8 @@
-- name: start nginx
-  service: name=nginx state=started enabled=yes
-  sudo: yes
-
-- name: restart nginx
+- name: nginx
   service: name=nginx state=restarted
-  sudo: yes
+      
+- name: nagios-nrpe-server
+  service: name=nagios-nrpe-server state=restarted
+       
+- name: fail2ban
+  service: name=fail2ban state=restarted

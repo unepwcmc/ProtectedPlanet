@@ -1,4 +1,6 @@
 ---
-- name: Restart redis
-  sudo: yes
-  service: name={{ redis.deb.service }} state=restarted
+- name: restart redis-server
+  service: name=redis-server state=restarted enabled=yes
+
+
+

@@ -37,13 +37,13 @@ class Search
   end
 
   def total_pages
-    results.count / RESULTS_SIZE
+    (results.count / RESULTS_SIZE).ceil
   end
 
   private
   attr_writer :search_term, :options
 
-  RESULTS_SIZE = 20
+  RESULTS_SIZE = 20.0
 
   def elastic_search
     @elastic_search ||= Elasticsearch::Client.new(

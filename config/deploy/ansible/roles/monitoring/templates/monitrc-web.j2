@@ -1,7 +1,0 @@
-check process memcached with pidfile /var/run/memcached.pid
-  start program = "/etc/init.d/memcached start" with timeout 60 seconds
-  stop program  = "/etc/init.d/memcached stop"
-
-check process unicorn with pidfile /var/www/pp/current/tmp/pids/unicorn.pid
-  start program = "/etc/init.d/unicorn start" with timeout 60 seconds
-  stop program  = "/etc/init.d/unicorn stop"
