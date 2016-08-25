@@ -30,9 +30,12 @@ class CountryController < ApplicationController
     send_data csv, filename: 'protectedplanet-country-codes.csv'
   end
 
-
   def compare
     params[:iso_to_compare] ? load_second_country : load_comparable_countries
+  end
+
+  def protected_areas
+    redirect_to search_path(main: "country", country: @country.id)
   end
 
   private
