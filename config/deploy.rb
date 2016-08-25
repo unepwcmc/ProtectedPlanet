@@ -1,131 +1,40 @@
-# config valid only for Capistrano 3.1
+# config valid only for current version of Capistrano
 lock '3.4.0'
 
-set :application, 'pp'
-set :repo_url, 'https://github.com/unepwcmc/ProtectedPlanet.git'
+set :application, 'ProtectedPlanet'
+set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
 
-set :branch, "master"
+set :branch, 'linode-deploy'
 
-set :linked_files, %w{config/database.yml .env}
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
-# Whenever configuration
+set :filter, :roles => %w{web util}
+
+set :deploy_user, 'wcmc'
+set :deploy_to, "/home/#{fetch(:deploy_user)}/#{fetch(:application)}"
+
+
 set :whenever_environment, -> { fetch(:stage) }
 set :whenever_roles, [:util]
 
-set :sidekiq_role, :util
-set :sidekiq_default_hooks, false
-
 set :migration_role, :util
 
-namespace :deploy do
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:web), in: :sequence, wait: 5 do
-      invoke 'deploy:stop'
-      invoke 'deploy:start'
-    end
-  end
-  after :publishing, :restart
 
-  desc 'Start application'
-  task :start do
-    on roles(:web), in: :sequence, wait: 5 do
-      execute "cd #{current_path} ; bundle exec unicorn_rails -c config/unicorn.rb -D -E #{fetch(:rails_env)}"
-    end
-  end
 
-  desc 'Stop application'
-  task :stop do
-    on roles(:web), in: :sequence, wait: 5 do
-      execute "kill -s QUIT `cat #{shared_path}/tmp/pids/unicorn.pid` || :"
-    end
-  end
+set :rvm_type, :user
+set :rvm_ruby_version, '2.1.3'
 
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      within release_path do
-        with :rails_env => fetch(:rails_env) do
-          execute :rake, 'cache:clear'
-        end
-      end
-    end
-  end
+set :pty, true
 
-  before :stop, :stop_monit do
-    on roles(:all) do
-      execute 'sudo service monit stop || :'
-    end
-  end
 
-  after :stop, :stop_sidekiq do
-    on roles(fetch(:sidekiq_role)) do
-      execute 'sudo service sidekiq stop'
-    end
-  end
-  after :restart, :start_sidekiq do
-    on roles(fetch(:sidekiq_role)) do
-      execute 'sudo service sidekiq start'
-    end
-  end
+set :ssh_options, {
+  forward_agent: true,
+}
 
-  after :start_sidekiq, :start_monit do
-    on roles(:all) do
-      execute 'sudo service monit start || :'
-    end
-  end
+set :linked_files, %w{config/database.yml .env}
 
-end
+set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
 
-namespace :maintenance do
+set :keep_releases, 5
 
-  desc 'Turn on maintenance mode'
-  task :on do
-    on roles(:web), in: :sequence, wait: 5 do
-      within current_path do
-        with :rails_env => fetch(:rails_env) do
-          execute :rake, 'maintenance:start allowed_paths="/admin/maintenance"'
-        end
-      end
-    end
-  end
-
-  desc 'Turn off maintenance mode'
-  task :off do
-    on roles(:web), in: :sequence, wait: 5 do
-      within current_path do
-        with :rails_env => fetch(:rails_env) do
-          execute :rake, 'maintenance:end'
-        end
-      end
-    end
-  end
-end
-
-namespace :bower do
-  desc 'Install bower packages'
-  task :install do
-    on roles(:web) do
-      within release_path do
-        execute :rake, 'bower:install CI=true'
-      end
-    end
-  end
-end
-before 'deploy:compile_assets', 'bower:install'
-
-namespace :git do
-  desc 'Copy repo to releases'
-  task create_release: :'git:update' do
-    on roles(:all) do
-      with fetch(:git_environmental_variables) do
-        within repo_path do
-          execute :git, :clone, '-b', fetch(:branch), '--recursive', '.', release_path
-        end
-      end
-    end
-  end
-end
-
-require 'appsignal/capistrano'
+set :passenger_roles, :web

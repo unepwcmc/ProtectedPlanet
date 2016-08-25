@@ -80,9 +80,16 @@ GEM
     capistrano-bundler (1.1.4)
       capistrano (~> 3.1)
       sshkit (~> 1.2)
+    capistrano-maintenance (1.0.0)
+      capistrano (>= 3.0)
+    capistrano-passenger (0.2.0)
+      capistrano (~> 3.0)
     capistrano-rails (1.1.5)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
+    capistrano-rvm (0.1.2)
+      capistrano (~> 3.0)
+      sshkit (~> 1.2)
     capistrano-sidekiq (0.3.3)
       capistrano
       sidekiq
@@ -410,10 +417,13 @@ DEPENDENCIES
   bower-rails (~> 0.10.0)
   byebug (~> 3.1.2)
   bystander!
-  capistrano (~> 3.1)
-  capistrano-bundler (~> 1.1)
+  capistrano (~> 3.4)
+  capistrano-bundler (~> 1.1.4)
+  capistrano-maintenance (~> 1.0)
+  capistrano-passenger (~> 0.2.0)
   capistrano-rails (~> 1.1)
-  capistrano-sidekiq (~> 0.3.3)
+  capistrano-rvm (~> 0.1)
+  capistrano-sidekiq
   capybara (~> 2.3.0)
   codeclimate-test-reporter
   coffee-rails (~> 4.0.0)
