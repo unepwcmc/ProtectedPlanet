@@ -7,7 +7,10 @@
 
   <div class="two-thirds">
     <%= render "country/facts/coverage_stats" %>
-    <%= render "country/facts/pame_statistics" %>
+
+    <% if @pame_statistics %>
+      <%= render "country/facts/pame_statistics" %>
+    <% end %>
   </div>
 </section>
 
