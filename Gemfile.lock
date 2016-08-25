@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:unepwcmc/bystander.git
+  remote: git://github.com/unepwcmc/bystander.git
   revision: 5293e96caec6257af5a280b41f0d0d6ed7910850
   specs:
     bystander (2.0.0)

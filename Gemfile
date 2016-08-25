@@ -76,7 +76,7 @@ gem 'dotenv-deployment'
 
 gem 'best_in_place'
 gem 'turnout', '~> 2.0.0'
-gem 'bystander', github: 'unepwcmc/bystander', branch: 'configuration-dsl'
+gem 'bystander', github: 'unepwcmc/bystander'
 
 gem 'devise', '~> 3.5.2'
 
