@@ -31,6 +31,7 @@ class ImportWorkers::FinaliserWorker
     #Geospatial::Calculator.calculate_statistics
 
     Download.make_current
+    CmsTransfer.transfer
     ImportTools::WebHandler.clear_cache
   end
 end
