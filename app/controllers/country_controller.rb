@@ -56,6 +56,8 @@ class CountryController < ApplicationController
       Country.where(iso_3: params[:iso].upcase).first
     end
 
+    @country or raise_404
+
     @presenter = StatisticPresenter.new @country
     @pame_statistics = @country.pame_statistic
     @designations_by_jurisdiction = @country.designations.group_by { |design|

@@ -1,10 +1,18 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
+  class PageNotFound < StandardError; end;
+
   protect_from_forgery with: :exception
 
   after_filter :store_location
   before_filter :load_cms_pages
+
+  def raise_404
+    raise PageNotFound
+  end
+
+  rescue_from PageNotFound do
+    render_404
+  end
 
   def enable_caching
     expires_in Rails.application.secrets.cache_max_age, public: true
@@ -15,6 +23,10 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def render_404
+    render file: Rails.root.join("/public/404.html"), layout: false, status: :not_found
+  end
 
   NO_REDIRECT = [
     "/users/sign_in",
