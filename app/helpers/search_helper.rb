@@ -85,7 +85,10 @@ module SearchHelper
         class: "autocompletion__image"
       )
       concat image
-      concat result[:name]
+      concat(content_tag(:div, class: "autocompletion__body") do
+        concat content_tag(:span, result[:name])
+        concat content_tag(:span, result[:type].titleize, class: "autocompletion__type")
+      end)
     end
   end
 
