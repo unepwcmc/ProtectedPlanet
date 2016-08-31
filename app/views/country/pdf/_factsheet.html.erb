@@ -18,7 +18,9 @@
 
 <section class="row">
   <%= render "country/pdf/facts/coverage_stats" %>
-  <%= render "country/pdf/facts/pame_statistics" %>
+  <% if @pame_statistics %>
+    <%= render "country/pdf/facts/pame_statistics" %>
+  <% end %>
   <%= render "country/pdf/facts/related_countries" %>
 </section>
 
