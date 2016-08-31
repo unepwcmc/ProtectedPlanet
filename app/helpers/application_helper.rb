@@ -22,17 +22,24 @@ module ApplicationHelper
 
   def protected_area_cover protected_area
     version = Rails.application.secrets.mapbox['version']
-    image_params = {id: protected_area.wdpa_id, version: version}
+    image_params = {id: protected_area.wdpa_id, type: "protected_area", version: version}
 
     image_tag(
       "search-placeholder-country.png",
-      "alt" => protected_area.name,
-      "data-async" => tiles_path(image_params),
+      alt: protected_area.name,
+      data: {async: tiles_path(image_params)},
     )
   end
 
   def country_cover country
-    image_tag("search-placeholder-country.png", alt: country.name)
+    version = Rails.application.secrets.mapbox['version']
+    image_params = {id: country.iso, type: "country", version: version}
+
+    image_tag(
+      "search-placeholder-country.png",
+      alt: country.name,
+      data: {async: tiles_path(image_params)},
+    )
   end
 
   def region_cover region
