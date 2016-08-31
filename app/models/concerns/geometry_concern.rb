@@ -22,7 +22,7 @@ module GeometryConcern
     ]
   end
 
-  def geojson
+  def geojson geo_properties=nil
     geojson = ActiveRecord::Base.connection.select_value("""
       SELECT ST_AsGeoJSON(ST_SimplifyPreserveTopology(#{main_geom_column}, 0.003), 3)
       FROM #{self.class.table_name}
@@ -34,7 +34,7 @@ module GeometryConcern
 
     URI.encode({
       "type" => "Feature",
-      "properties" => geometry_properties,
+      "properties" => geo_properties || geometry_properties,
       "geometry" => geometry
     }.to_json)
   end

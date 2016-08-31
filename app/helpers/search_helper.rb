@@ -75,13 +75,14 @@ module SearchHelper
 
   def pa_autocomplete_link result
     version = Rails.application.secrets.mapbox['version']
-    image_params = {id: result[:identifier], version: version}
+    image_params = {id: result[:identifier], type: result[:type], version: version}
 
-    link_to protected_area_url(result[:identifier]) do
+    link_to protected_area_url(result[:identifier]), class: "autocompletion__result" do
       image = image_tag(
         "search-placeholder-country.png",
-        "alt" => result[:name],
-        "data-async" => tiles_path(image_params),
+        alt: result[:name],
+        data: {async: tiles_path(image_params)},
+        class: "autocompletion__image"
       )
       concat image
       concat result[:name]
@@ -89,10 +90,21 @@ module SearchHelper
   end
 
   def country_autocomplete_link result
-    link_to country_url(result[:identifier]) do
-      image = image_tag("search-placeholder-country.png")
+    version = Rails.application.secrets.mapbox['version']
+    image_params = {id: result[:identifier], type: result[:type], version: version}
+
+    link_to country_url(result[:identifier]), class: "autocompletion__result" do
+      image = image_tag(
+        "search-placeholder-country.png",
+        alt: result[:name],
+        data: {async: tiles_path(image_params)},
+        class: "autocompletion__image"
+      )
       concat image
-      concat result[:name]
+      concat(content_tag(:div, class: "autocompletion__body") do
+        concat content_tag(:span, result[:name])
+        concat content_tag(:span, result[:type].titleize, class: "autocompletion__type")
+      end)
     end
   end
 end
