@@ -1,4 +1,4 @@
-<%= content_for :seo, "Learn about and visualise the protected area #{@protected_area.name} (#{@protected_area.designation.try(:name)}), situated in #{@country.name rescue "Areas Beyond National Jusidisction"}" %>
+<%= content_for :seo, "Learn about and visualise the protected area #{@protected_area.name} (#{@protected_area.designation.try(:name)}), situated in #{@country.name rescue "Areas Beyond National Jurisdiction"}" %>
 <%= content_for :seo_image, tiles_url(id: @protected_area.wdpa_id, version: 1) %>
 <%= content_for :page_title, @protected_area.name %>
 <%= content_for :footer_classes, "fixed-footer" %>
@@ -17,7 +17,7 @@
     <% else %>
       <h2>
         <a class="hero__title hero__title--thin hero__link" href="#">
-          Areas Beyond National Jusidisction
+          Areas Beyond National Jurisdiction
         </a>
       </h2>
     <% end %>
