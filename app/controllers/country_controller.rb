@@ -1,6 +1,6 @@
 class CountryController < ApplicationController
   after_filter :enable_caching
-  before_filter :load_vars, except: [:codes]
+  before_filter :load_vars, except: [:codes, :compare]
 
   def show
     respond_to do |format|
@@ -31,7 +31,8 @@ class CountryController < ApplicationController
   end
 
   def compare
-    params[:iso_to_compare] ? load_second_country : load_comparable_countries
+    # Removed in PP 2.0, redirects to simple country page
+    redirect_to country_path(params[:iso])
   end
 
   def protected_areas
@@ -39,15 +40,6 @@ class CountryController < ApplicationController
   end
 
   private
-
-  def load_second_country
-    @second_country = Country.where(iso: params[:iso_to_compare]).first
-    @second_presenter = StatisticPresenter.new @second_country
-  end
-
-  def load_comparable_countries
-    @comparable_countries = Country.select(:iso, :name).all
-  end
 
   def load_vars
     @country = if params[:iso].size == 2
