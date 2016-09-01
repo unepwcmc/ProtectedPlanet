@@ -4,9 +4,6 @@ lock '3.4.0'
 set :application, 'ProtectedPlanet'
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
 
-set :branch, 'linode-deploy'
-
-
 set :filter, :roles => %w{web util}
 
 set :deploy_user, 'wcmc'
