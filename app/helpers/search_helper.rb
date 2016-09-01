@@ -17,8 +17,8 @@ module SearchHelper
   def facet_link facet
     link_params = params.merge({facet[:query] => facet[:identifier]})
 
-    link_to url_for(link_params) do
-      facet_count = content_tag(:strong, "(#{facet[:count]})")
+    link_to(url_for(link_params), class: "filter-bar__value") do
+      facet_count = content_tag(:strong, "(#{facet[:count]})", class: "filter-bar__count")
       raw "#{facet[:label]} #{facet_count}"
     end
   end
@@ -26,23 +26,28 @@ module SearchHelper
   def clear_filters_link params
     if params[:main] && params[:q].nil?
       return '' if params.length <= 4
-      link_to "Clear Filters", search_path(params.slice(:main, params[:main].to_sym))
+
+      path = search_path(params.slice(:main, params[:main].to_sym))
+      link_to "Clear Filters", path, class: "filter-bar__clear"
     else
       return '' if params.length <= 3
-      link_to "Clear Filters", search_path(params.slice(:q))
+
+      path = search_path(params.slice(:q))
+      link_to "Clear Filters", path, class: "filter-bar__clear"
     end
   end
 
   DEFAULT_TITLE = 'Protected Areas'
-  def search_title params
-    title_with_query(params[:q]) or title_with_filter(params) or DEFAULT_TITLE
+  def search_title params, only_text=false
+    title = title_with_query(params[:q]) || title_with_filter(params) || DEFAULT_TITLE
+    only_text ? strip_tags(title) : title
   end
 
   private
 
   def title_with_query query
     if query.present?
-      %{Search results for <strong>"#{query}"</strong>}.html_safe
+      %{Search results for <strong class="u-link-color">"#{query}"</strong>}.html_safe
     end
   end
 
@@ -70,22 +75,39 @@ module SearchHelper
 
   def pa_autocomplete_link result
     version = Rails.application.secrets.mapbox['version']
-    image_params = {id: result[:identifier], version: version}
+    image_params = {id: result[:identifier], type: result[:type], version: version}
 
-    link_to protected_area_url(result[:identifier]) do
+    link_to protected_area_url(result[:identifier]), class: "autocompletion__result" do
       image = image_tag(
         "search-placeholder-country.png",
-        "alt" => result[:name],
-        "data-async" => tiles_path(image_params),
+        alt: result[:name],
+        data: {async: tiles_path(image_params)},
+        class: "autocompletion__image"
       )
-      raw "#{image}#{result[:name]}"
+      concat image
+      concat(content_tag(:div, class: "autocompletion__body") do
+        concat content_tag(:span, result[:name])
+        concat content_tag(:span, result[:type].titleize, class: "autocompletion__type")
+      end)
     end
   end
 
   def country_autocomplete_link result
-    link_to country_url(result[:identifier]) do
-      image = image_tag("search-placeholder-country.png")
-      raw "#{image}#{result[:name]}"
+    version = Rails.application.secrets.mapbox['version']
+    image_params = {id: result[:identifier], type: result[:type], version: version}
+
+    link_to country_url(result[:identifier]), class: "autocompletion__result" do
+      image = image_tag(
+        "search-placeholder-country.png",
+        alt: result[:name],
+        data: {async: tiles_path(image_params)},
+        class: "autocompletion__image"
+      )
+      concat image
+      concat(content_tag(:div, class: "autocompletion__body") do
+        concat content_tag(:span, result[:name])
+        concat content_tag(:span, result[:type].titleize, class: "autocompletion__type")
+      end)
     end
   end
 end

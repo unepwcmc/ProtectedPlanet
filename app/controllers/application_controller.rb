@@ -1,9 +1,18 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
+  class PageNotFound < StandardError; end;
+
   protect_from_forgery with: :exception
 
   after_filter :store_location
+  before_filter :load_cms_pages
+
+  def raise_404
+    raise PageNotFound
+  end
+
+  rescue_from PageNotFound do
+    render_404
+  end
 
   def enable_caching
     expires_in Rails.application.secrets.cache_max_age, public: true
@@ -15,6 +24,10 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def render_404
+    render file: Rails.root.join("/public/404.html"), layout: false, status: :not_found
+  end
+
   NO_REDIRECT = [
     "/users/sign_in",
     "/users/sign_up",
@@ -23,6 +36,13 @@ class ApplicationController < ActionController::Base
     "/users/confirmation",
     "/users/sign_out"
   ]
+
+  def load_cms_pages
+    @updates_and_news  = Comfy::Cms::Category.find_by_label("Updates & News")
+    @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
+    @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
+    @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
+  end
 
   def store_location
     # store last url - this is needed for post-login redirect to whatever the user last visited.

@@ -79,6 +79,19 @@ class Wdpa::Release
     end
   end
 
+  def protected_areas_in_bulk(size)
+    geometry_tables.each_with_object([]) do |(_, std_table_name), protected_areas|
+      total_pas = db.select_value("SELECT count(*) FROM #{std_table_name}").to_f
+      pieces = (total_pas/size).ceil
+
+      (0...pieces).each do |piece|
+        query = "SELECT * FROM #{std_table_name} LIMIT #{size} OFFSET #{piece*size} ORDER BY wdpaid"
+        Bystander.log(query)
+        yield(db.execute(query).to_a)
+      end
+    end
+  end
+
   def sources
     db.execute("SELECT * FROM #{source_table}").to_a
   end

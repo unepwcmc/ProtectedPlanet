@@ -1,22 +1,26 @@
 $(document).ready( ->
   require(
-    ['search_bar', 'autocompletion', 'query_control', 'dropdown', 'map', 'asyncImg',
-     'downloads_general', 'downloads_project', 'downloads_search'],
-    (SearchBar, Autocompletion, QueryControl, Dropdown, Map, asyncImg,
-     DownloadsGeneral, DownloadsProject, DownloadsSearch) ->
-      bar = new SearchBar()
-
-      $('.search-input').each( ->
+    ['autocompletion', 'query_control', 'dropdown', 'map', 'navbar', 'asyncImg',
+     'downloads_general', 'downloads_project', 'downloads_search', 'expandable_section'],
+    (Autocompletion, QueryControl, Dropdown, Map, Navbar, asyncImg,
+     DownloadsGeneral, DownloadsProject, DownloadsSearch, ExpandableSection) ->
+      $('.js-search-input').each( ->
         new Autocompletion($(this))
         new QueryControl($(this))
       )
 
       new Map($('#map')).render()
+      Navbar.initialize()
 
-      dropdown = new Dropdown(
-        $('.btn-download'),
-        $(".download-type-dropdown[data-download-type='general']")
+      $('.js-download-btn').each (i, el) -> new Dropdown($(el))
+
+      $('.js-sortable-table').tablesorter(
+        cssAsc: 'is-sorted-asc'
+        cssDesc: 'is-sorted-desc'
       )
+
+      if $expandableSections = $('.js-expandable-section')
+        ExpandableSection.initialize($expandableSections)
 
       asyncImg()
 
@@ -33,12 +37,10 @@ $(document).ready( ->
           # skip standard links
           return unless $(@).data('type')
 
-          dropdown.hide()
-
           button = $(@)
           e.preventDefault()
 
-          list = button.parents('ul')
+          list = button.parents('.js-target')
 
           DOWNLOADERS =
             'general': DownloadsGeneral

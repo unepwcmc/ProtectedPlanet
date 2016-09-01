@@ -1,0 +1,223 @@
+- name: "set hostname"
+  copy: content="{{hostname}}" dest=/etc/hostname
+
+- name: "Make hostname permenant"
+  command: "hostname -F /etc/hostname"
+
+- name: "Set FQDN"
+  lineinfile: dest=/etc/hosts state=present regexp='127.0.1.1       ubuntu' line="127.0.1.1  {fqdn}     {{hostname}}"
+
+- name: Update APT package cache
+  apt: update_cache=yes cache_valid_time=3600
+
+
+- name: Upgrade APT to the latest packages
+  apt: upgrade=safe
+
+- name: Install apticron
+  apt: name=apticron state=present
+      
+      
+- name: Change email address recipient
+  lineinfile: dest=/etc/apticron/apticron.conf state=present regexp='EMAIL="root"' line='EMAIL="{{apticron.recipient_email}}"'
+
+- name: Change email address sender
+  lineinfile: dest=/etc/apticron/apticron.conf state=present regexp='# CUSTOM_FROM=""' line='CUSTOM_FROM="{{apticron.smtp_user}}"'
+
+- name: Copy over apticron-slack-config
+  template: src=apticron-slack-config.j2 dest=/etc/apticron/apticron.conf
+
+- name: Copy over apticron-slack-executable
+  template: src=apticron-slack.j2 dest=/usr/sbin/apticron-slack
+
+- name: Copy over apitrcron-slack-cronjob
+  template: src=apticron-slack-cron.j2 dest=/etc/cron.d/apticron-slack
+
+- name: Install landscape-common
+  apt: name=landscape-common state=present
+
+- name: Install ufw
+  apt: name=ufw state=present
+
+- name: Allow ssh port  
+  ufw: rule=allow port=22 proto=tcp
+
+- name: Allow NRPE port for nagios
+  ufw: rule=allow port=5666 proto=tcp
+
+- name: Enables UFW
+  ufw: state=enabled
+
+- name: Install fail2ban
+  apt: name=fail2ban update_cache=yes
+  notify: fail2ban
+
+
+- name: Copy over fail2ban action
+  template: src=templates/action-ufw.conf dest=/etc/fail2ban/action.d/ufw.conf
+  notify: fail2ban
+
+- name: Copy over sshd filter
+  template: src=templates/sshd_fail2ban_filter.j2 dest=/etc/fail2ban/filter.d/sshd.conf
+  notify: fail2ban
+
+
+- name: Copy over ssh jail
+  template: src=templates/sshd_fail2ban_jail.j2 dest=/etc/fail2ban/jail.d/sshd.conf
+  notify: fail2ban
+
+
+
+- name: Copy over fail2ban ufw filter config
+  template: src=templates/portscan_fail2ban_filter.j2 dest=/etc/fail2ban/filter.d/ufw-port-scan.conf
+  notify: fail2ban
+      
+- name: Copy over fail2ban ufw jail
+  template: src=templates/portscan_fail2ban_jail.j2 dest=/etc/fail2ban/jail.d/ufw-port-scan.conf
+  notify: fail2ban
+
+
+- name: Set Localtime
+  file: src=/usr/share/zoneinfo/{{ ntp.timezone }} dest=/etc/localtime
+  
+- name: Set Timezone
+  template: src=templates/timezone dest=/etc/timezone
+  notify: update tzdata
+  
+- name: Install NTP
+  apt: name=ntp update_cache=yes      
+  
+- name: set correct ntp servers
+  template: src=templates/ntp.j2 dest=/etc/ntp.conf
+  notify: ntp
+  
+- name: Copy over sources.list file
+  copy: src=templates/sources.list.j2 dest=/etc/apt/sources.list
+    
+- name: Copy over security sources.list file
+  copy: src=templates/security_sources.list.j2 dest=/etc/apt/sources.list.d/security.sources.list
+  
+- name: Install NRPE
+  apt: name=nagios-nrpe-server update_cache=yes
+
+- name: Install ZIP
+  apt: name=zip update_cache=yes
+  
+- name: Install unzip
+  apt: name=unzip update_cache=yes
+
+
+- name: Install nagios-plugins
+  apt: name=nagios-plugins update_cache=yes
+
+- name: set nagios server
+  template: src=templates/nrpe.j2 dest=/etc/nagios/nrpe.cfg
+  notify: nagios-nrpe-server
+      
+      
+- name: Add standard monitoring entries
+  action: lineinfile dest=/etc/nagios/nrpe.cfg regexp="{{ item.regexp }}" line="{{ item.line }}"
+  with_items:
+      - { regexp: '^command[check_load]', line: 'command[check_load]=/usr/lib/nagios/plugins/check_load -w 15,10,5 -c 30,25.20' }
+      - { regexp: '^command[command[check_hda1]]', line: 'command[check_disk]=/usr/lib/nagios/plugins/check_disk -w 3% -c 1% -p /' }
+      - { regexp: '^command[check_mem.pl]', line: 'command[check_mem.pl]=/usr/lib/nagios/plugins/check_mem.pl -w 10 -c 5 -f -C' }
+  notify: nagios-nrpe-server
+ 
+- name: Copy over check_mem nagios plugin
+  copy: src=templates/check_mem.j2 dest=/usr/lib/nagios/plugins/check_mem.pl mode="u+x,g+x,o+x"
+
+
+- name: Copy over check_file
+  copy: src=templates/check_file.j2 dest=/usr/lib/nagios/plugins/check_file_exists mode="u+x,g+x,o+x"
+ 
+
+- name: Install logwatch
+  apt: name=logwatch update_cache=yes
+
+- name: Setup recipient logwatch config
+  lineinfile: dest=/usr/share/logwatch/default.conf/logwatch.conf state=present regexp='MailTo = root' line="MailTo = {{logwatch.recipient_email}}"
+
+
+- name: Setup up logwatch sender information
+  lineinfile: dest=/usr/share/logwatch/default.conf/logwatch.conf state=present regexp='MailFrom = Logwatch' line="MailFrom = {{logwatch.smtp_user}}"
+
+
+- name: Creates Logwatch cron entry
+  cron: name="Runs logwatch" minute="0" hour="0" job="/usr/sbin/logwatch"
+
+- name: Set Postfix option hostname
+  debconf: name=postifx question="postfix/mailname" value="sandbox" vtype="string"
+
+- name: Set Postfix option type as internet site
+  debconf: name=postfix question="postfix/main_mailer_type" value="'Internet Site'" vtype="string"
+
+- name: Install postfix
+  apt: name=postfix state=present
+
+- name: Copy over config file
+  copy: src=/usr/share/postfix/main.cf.debian dest=/etc/postfix/main.cf
+
+- name: Add postfix default settings
+  action: lineinfile dest=/etc/postfix/main.cf line="{{ item.line }}"
+  with_items:
+      - { line: 'relayhost = {{postfix.email_server}}:587' }
+      - { line: 'smtp_sasl_auth_enable = yes' }
+      - { line: 'smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd' }
+      - { line: 'smtp_sasl_security_options = noanonymous' }
+      - { line: 'smtp_tls_CAfile = /etc/postfix/cacert.pem' }
+      - { line: 'smtp_use_tls = yes' }
+      - { line: 'smtp_generic_maps = hash:/etc/postfix/generic' }
+
+
+   
+- name: Copy over sasl_passwd file
+  copy: content="{{postfix.email_server}}:587        {{ postfix.smtp_user }}:{{postfix.smtp_password}}" dest=/etc/postfix/sasl_passwd
+
+
+- name: Configure password file
+  command: postmap /etc/postfix/sasl_passwd
+
+
+- name: Deploy cert
+  copy: src=/etc/ssl/certs/Thawte_Premium_Server_CA.pem dest=/etc/postfix/cacert.pem
+
+
+- name: Run newaliases
+  command: newaliases
+
+
+- name: Copy over generic file
+  copy: content="root@{{fqdn}} {{postfix.smtp_user}}" dest=/etc/postfix/generic
+  copy: content="wcmc@{{fqdn}} {{postfix.smtp_user}}" dest=/etc/postfix/generic
+
+
+- name: Configure mailserve details
+  command: postmap /etc/postfix/generic
+  notify: postfix
+
+
+- name: add user
+  action: user name={{ deploy.username }} password={{ deploy.password }} update_password=always shell=/bin/bash home=/home/{{ deploy.username }}
+
+
+- name: add ubuntu user to group
+  user: name={{ deploy.username }}  password={{ deploy.password }} groups=sudo append=yes
+
+
+- name: Add informatics public keys
+  authorized_key: user={{ deploy.username }}  key=https://github.com/{{deploy.github_user}}.keys
+
+
+- name: Add ubuntu user to sudoers
+  lineinfile: "dest=/etc/sudoers state=present regexp='{{deploy.username}}' line='{{deploy.username}} ALL=(ALL) NOPASSWD: ALL'"
+
+      
+- name: Copy over ssh config file
+  template: src=templates/sshd_config.j2 dest=/etc/ssh/sshd_config
+  notify: ssh
+
+
+- name: restart machine
+  command: shutdown -r now "Ansible updates triggered"
+
+

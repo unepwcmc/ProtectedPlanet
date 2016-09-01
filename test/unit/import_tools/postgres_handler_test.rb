@@ -33,7 +33,7 @@ class ImportToolsPostgresHandlerTest < ActiveSupport::TestCase
     expected_query = "ALTER DATABASE #{db_name} RENAME TO #{new_db_name}"
 
     connection_mock = mock()
-    connection_mock.expects(:execute)
+    connection_mock.expects(:execute).with(expected_query)
     ImportTools::PostgresHandler.any_instance.stubs(:close_connections_to)
     ImportTools::PostgresHandler.any_instance.stubs(:connect_to).returns(connection_mock)
 
@@ -41,24 +41,12 @@ class ImportToolsPostgresHandlerTest < ActiveSupport::TestCase
     pg_handler.rename_database db_name, new_db_name
   end
 
-  test '.seed populates the given db via an external command' do
-    test_db_name = 'test_db'
-    dump_path = './test/path.sql'
-    db_config = {
-      'username' => 'test',
-      'password' => 'test_pwd',
-      'database' => 'config_db',
-      'host'     => 'host'
-    }
-    ActiveRecord::Base.configurations.stubs(:[]).returns(db_config)
-
-    command = """
-      PGPASSWORD=#{db_config['password']}
-      psql -d #{test_db_name} -U #{db_config['username']} -h #{db_config['host']} < #{dump_path.to_s}
-    """.squish
-    ImportTools::PostgresHandler.any_instance.expects(:system).with(command)
+  test '.seed invokes the db:seed rake task' do
+    Rake::Task.expects(:[]).with('db:seed').returns(mock.tap { |m|
+      m.expects(:invoke)
+    })
 
     pg_handler = ImportTools::PostgresHandler.new
-    pg_handler.seed(test_db_name, dump_path)
+    pg_handler.seed
   end
 end

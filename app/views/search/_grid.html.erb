@@ -1,13 +1,15 @@
 <% if @search.results.count.zero? %>
-  <section class="no-projects">
+  <h1 class="link-with-icon fullscreen-message__header">No results found</h1>
 
-    <h1>No results found</h1>
-    <h2>You can search for Countries and Protected Areas. Try another search...</h2>
-    <div class="info-search"><%= render partial: 'shared/search_form', locals: {query: ''} %></div>
-  </section>
+  <p class="fullscreen-message__body row">
+    You can search for Countries and Protected Areas. Try another search...
+  </p>
+
+  <div class="u-width-60 u-margin-auto fullscreen-message__body">
+    <%= render partial: 'shared/search_form', locals: {query: ''} %>
+  </div>
+
 <% else %>
-  <ul>
-    <%= render partial: 'search_result', collection: @search.results %>
-  </ul>
+  <%= render partial: 'search_result', collection: @search.results %>
   <%= will_paginate @search %>
 <% end %>

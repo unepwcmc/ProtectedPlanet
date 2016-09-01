@@ -3,22 +3,15 @@
 - name: Setup server core
   hosts:
     - all
-  user: ubuntu
-  sudo: yes
-
-  pre_tasks:
-    - name: update apt if needed
-      apt: update_cache=yes cache_valid_time=3600
-      sudo: yes
+  user: root
+  sudo: no
 
   roles:
-    - monitoring
-    - security
-    - tmux
-    - utils
+    - bootstrap
+
 
 - name: Setup app core
-  user: ubuntu
+  user: wcmc
   sudo: yes
   hosts:
     - web
@@ -32,18 +25,20 @@
 - name: Setup web
   hosts:
     - web
-  user: ubuntu
+  user: wcmc
   sudo: yes
 
   roles:
     - nginx
     - app
+    - nodesource.node
+    - bower
 
 - name: Setup web, util
   hosts:
     - web
     - util
-  user: ubuntu
+  user: wcmc
   sudo: yes
 
   roles:
@@ -52,7 +47,7 @@
 - name: Setup util
   hosts:
     - util
-  user: ubuntu
+  user: wcmc
   sudo: yes
 
   roles:
@@ -62,7 +57,7 @@
 - name: Setup db
   hosts:
     - db
-  user: ubuntu
+  user: wcmc
   sudo: yes
 
   roles:
@@ -71,7 +66,7 @@
 - name: Setup elastic search nodes
   hosts:
     - elasticsearch
-  user: ubuntu
+  user: wcmc
   sudo: yes
 
   roles:

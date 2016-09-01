@@ -3,17 +3,14 @@ define('autocompletion', ['asyncImg'], (asyncImg) ->
 
   class Autocompletion
     constructor: (@$searchInput) ->
-      @$parentEl = @$searchInput.closest('div').first()
-      @parentElHeight = @$parentEl.outerHeight()
-      @$resultsEl = @constructResultsEl()
-
+      @$resultsEl = @$searchInput
+        .closest('.js-search-container')
+        .find('.js-autocompletion-results')
       @addEventListener()
 
     addEventListener: ->
       @$searchInput.on(
         'keyup', _.debounce(@handleKeyup, 300)
-      ).on(
-        'blur', => setTimeout(@hideResults, 500)
       )
 
     handleKeyup: (ev) =>
@@ -29,29 +26,13 @@ define('autocompletion', ['asyncImg'], (asyncImg) ->
     autocomplete: (term) =>
       $.get(AUTOCOMPLETION_BASE_PATH, {q: term}, @showResults)
 
-    constructResultsEl: ->
-      resultsEl = $('<div class="autocompletion-results"/>')
-      @$parentEl.append(resultsEl)
-
-      return resultsEl
-
     showResults: (results) =>
-      @$resultsEl.show()
-      @$resultsEl.offset(@parentElOffset())
-      @$resultsEl.width(@$parentEl.width())
       @$resultsEl.html(results)
+      @$resultsEl.show()
       asyncImg()
 
     hideResults: =>
       @$resultsEl.hide()
-
-    parentElOffset: =>
-      offset = @$parentEl.offset()
-
-      {
-        left: offset.left,
-        top: offset.top + @parentElHeight
-      }
 
   return Autocompletion
 )

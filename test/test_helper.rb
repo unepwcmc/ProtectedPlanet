@@ -7,7 +7,7 @@ require 'rails/test_help'
 
 ActiveRecord::Migration.maintain_test_schema!
 
-require 'mocha/test_unit'
+require 'mocha/mini_test'
 require 'webmock/minitest'
 WebMock.disable_net_connect!(:allow => "codeclimate.com", :allow_localhost => true)
 

@@ -27,7 +27,9 @@ define('download_generation_modal', ['modal'], (Modal) ->
       @showDownloadCompleteTemplate(template)
 
       @find('.link-container').html("""
-        <a target="_blank" class="btn btn-primary" href="#{download_url}">Download</a>
+        <a target="_blank" class="big-button u-width-100" href="#{download_url}">
+          <i class="big-button__icon fa fa-download"></i>Download
+        </a>
       """).click(clickHandler)
 
     url: (filename, type) ->

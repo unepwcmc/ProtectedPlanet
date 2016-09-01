@@ -7,7 +7,8 @@ class Search::Index
       {:countries_for_index => :region_for_index},
       :sub_locations,
       :designation,
-      :iucn_category
+      :iucn_category,
+      :governance
     ])
 
     Search::Index.index Country.without_geometry.all

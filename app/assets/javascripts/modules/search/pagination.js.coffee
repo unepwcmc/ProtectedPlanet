@@ -12,6 +12,8 @@ define('pagination', ['asyncImg'], (asyncImg) ->
           msgText: ''
       , (newResults) ->
         asyncImg()
+        $('#infscr-loading').remove()
+        $('.pagination').remove()
       )
 
   return Pagination

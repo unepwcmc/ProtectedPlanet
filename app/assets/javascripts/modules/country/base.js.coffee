@@ -1,25 +1,19 @@
 $(document).ready( ->
-  require(['annular_sector'], (annularSector)->
-    $vizContainer = $('#protected-coverage-viz')
-    return false if $vizContainer.length == 0
+  $landStatsCube = $('#land-stats .cube__inner')
+  $marineStatsCube = $('#marine-stats .cube__inner')
 
-    $vizContainer.find('.viz').each (idx, el) ->
-      value = $(el).attr('data-value')
-      return if typeof +value isnt 'number' or +value is isNaN
-      data = [
-        {
-          value: value
-          color: $(el).attr('data-colour')
-        }
-        {
-          value: 100 - value
-          color: '#d2d2db'
-          is_background: true
-        }
-      ]
+  percentageLandCoverage = Math.sqrt($landStatsCube.data('fill-value')*100)
+  $landStatsCube.css('height', "#{percentageLandCoverage}%")
+  $landStatsCube.css('width', "#{percentageLandCoverage}%")
 
-      annularSector data, el, 160, 160
-  )
+  percentageMarineCoverage = Math.sqrt($marineStatsCube.data('fill-value')*100)
+  $marineStatsCube.css('height', "#{percentageMarineCoverage}%")
+  $marineStatsCube.css('width', "#{percentageMarineCoverage}%")
+
+  $pointsPolygonsBar = $('#points-polygons-ratio .horizontal-bar__inner')
+
+  percentagePolygons = $pointsPolygonsBar.data('fill-value')
+  $pointsPolygonsBar.css('width', "#{percentagePolygons}%")
 
   $countriesSelect = $('#countries-select')
   return false if $countriesSelect.length == 0

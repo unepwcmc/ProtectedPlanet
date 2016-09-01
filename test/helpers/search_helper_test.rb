@@ -17,13 +17,13 @@ class SearchHelperTest < ActionView::TestCase
   test '#clear_filters_link, given params, returns an <a> tag to remove
    the current search filters' do
     params = {q: 'boneman', country: 123, action: 'yo', controller: 'mama'}
-    expected_link = '<a href="/search?q=boneman">Clear Filters</a>'
+    expected_link = '<a class="filter-bar__clear" href="/search?q=boneman">Clear Filters</a>'
     assert_equal expected_link, clear_filters_link(params)
   end
 
   test '#clear_filters_link, given params with a main filter, returns a <a> tag to the main filter' do
     params = {region: 234, country: 123, main: 'region', action: 'yo', controller: 'mama'}
-    expected_link = '<a href="/search?main=region&amp;region=234">Clear Filters</a>'
+    expected_link = '<a class="filter-bar__clear" href="/search?main=region&amp;region=234">Clear Filters</a>'
     assert_equal expected_link, clear_filters_link(params)
   end
 
@@ -35,7 +35,7 @@ class SearchHelperTest < ActionView::TestCase
 
   test '#search_title, given the params with a query, returns the search title' do
     params = {q: 'manbone', has_parcc_info: 'true'}
-    assert_equal %{Search results for <strong>"manbone"</strong>}, search_title(params)
+    assert_equal %{Search results for <strong class="u-link-color">"manbone"</strong>}, search_title(params)
   end
 
   test '#search_title, given params with no query, returns the search title' do

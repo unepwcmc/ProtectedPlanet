@@ -53,11 +53,13 @@ class ProtectedAreaTest < ActiveSupport::TestCase
 
     iucn_category = FactoryGirl.create(:iucn_category, id: 456, name: 'IA')
     designation = FactoryGirl.create(:designation, id: 654, name: 'National')
+    governance = FactoryGirl.create(:governance, id: 654, name: 'Regional')
 
     pa = FactoryGirl.create(:protected_area,
       name: 'Manbone', countries: [country], sub_locations: [sub_location],
       original_name: 'Manboné', iucn_category: iucn_category,
       designation: designation, marine: true, wdpa_id: 555999,
+      governance: governance,
       the_geom_latitude: 1, the_geom_longitude: 2,
       has_irreplaceability_info: true, has_parcc_info: false
     )
@@ -93,6 +95,10 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "designation" => {
         "id" => 654,
         "name" => "National"
+      },
+      "governance" => {
+        "id" => 654,
+        "name" => "Regional"
       }
     }
 
@@ -185,5 +191,19 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       }
 
       assert_equal expected_json, pa.as_api_feeder
+  end
+
+  test "::most_visited, given a date, returns an array of most visited PAs for the month" do
+    pa1 = FactoryGirl.create(:protected_area, wdpa_id: 345)
+    pa2 = FactoryGirl.create(:protected_area, wdpa_id: 123)
+
+    $redis.expects(:zrevrangebyscore).with(
+      "09-1955", "+inf", "-inf",  {with_scores: true, limit: [0, 3]}
+    ).returns([["345", 4.0], ["123", 1.0]])
+
+    assert_equal(
+      [{protected_area: pa1, visits: 4}, {protected_area: pa2, visits: 1}],
+      ProtectedArea.most_visited(DateTime.new(1955, 9, 12))
+    )
   end
 end

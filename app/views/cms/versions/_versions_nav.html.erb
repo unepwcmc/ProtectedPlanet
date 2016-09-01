@@ -1,0 +1,6 @@
+<div class="vertical-nav">
+  <% CmsPresenter.new(@cms_page).all_versions.each do |version| %>
+    <a href="/c<%= version.full_path %>" class="<%= article_version_element(version) %>"><%= version.label %></a>
+  <% end %>
+</div>
+

@@ -1,0 +1,37 @@
+<a class="row link-with-icon" href="<%= country_codes_path %>">
+  <i class="fa fa-download link-with-icon__icon"></i> Download complete country codes list as a .CSV
+</a>
+
+<% regions = Hash[Region.pluck(:id, :name)] %>
+<% countries_by_region = Country.pluck(:name, :iso_3, :region_id).group_by { |(name, _, region_id)| regions[region_id] } %>
+
+<% countries_by_region.keys.sort.each do |region| %>
+  <div id="<%= region %>" class="row expandable-section js-expandable-section">
+    <h3 class="js-trigger expandable-section__header">
+      <%= region %><i class="expandable-section__switch js-switch expandable-section__switch is-closed"></i>
+    </h3>
+    <div class="js-target expandable-section__body u-hide">
+      <table class="table js-sortable-table">
+        <thead>
+          <tr class="table__header">
+            <th class="table__column table__column--with-sorting">Country name</th>
+            <th class="table__column table__column--with-sorting">ISO alpha-3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% Array.wrap(countries_by_region[region]).each do |(name, iso_3, _)| %>
+            <tr class="table__row">
+              <td class="table__label table__label--link"><a href="<%= country_path(iso_3) %>"><%= name %></td>
+              <td class="table__value table__label--link"><a href="<%= country_path(iso_3) %>"><%= iso_3 %></td>
+            </tr>
+          <% end %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<a class="row row--push link-with-icon" href="<%= country_codes_path %>">
+  <i class="fa fa-download link-with-icon__icon"></i> Download complete country codes list as a .CSV
+</a>

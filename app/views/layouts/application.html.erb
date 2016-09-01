@@ -1,76 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
   <title><%= page_title('Protected Planet') %></title>
 
-  <%= stylesheet_link_tag 'application', media: 'all' %>
-  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- google -->
+  <meta name="Description" content="<%= seo_description %>">
+  <meta name="twitter:description" content="<%= seo_description %>">
 
+  <!-- Twitter -->
+  <meta name="twitter:site" content="@protectedplanet">
+  <meta name="twitter:title" content="<%= page_title('Protected Planet') %>">
+
+  <!-- FB -->
+  <meta name="og:site_name" content="Protected Planet">
+  <meta name="og:title" content="<%= page_title('Protected Planet') %>">
+  <meta name="og:description" content="<%= seo_description %>">
+  <meta name="og:url" content="<%= request.original_url %>">
+  <meta name="og:type" content="website">
+
+  <% if content_for?(:seo_image) %>
+    <meta content="<%= yield :seo_image %>" name="og:image">
+    <meta content="<%= yield :seo_image %>" name="twitter:image">
+  <% end %>
+
+  <!-- IE stuff -->
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <!--[if lt IE 9]>
+    <%= javascript_include_tag "html5shiv/dist/html5shiv.min.js" %>
+  <![endif]-->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
+
+  <%= stylesheet_link_tag 'application', media: 'all' %>
 </head>
 
 <body>
-  <div class="container">
+  <main class="body-container <%= controller_name %>-parent">
     <header>
-      <nav class="nav-main">
-        <ul>
-          <li class="logo">
-            <%= link_to "Protected Planet", root_path %>
-          </li>
-        </ul>
-
-        <ul class="right">
-          <li><%= link_to 'About', about_path %></li>
-          <li><%= link_to 'Resources', 'http://blog.protectedplanet.net' %></li>
-          <li><%= link_to 'UN List', 'http://blog.protectedplanet.net/post/102481051829/2014-united-nations-list-of-protected-areas' %></li>
-
-          <li class="search-button">
-            <%= link_to 'Protected Planet', root_path %>
-          </li>
-        </ul>
-      </nav>
-
-      <div class="search-bar">
-        <%= render partial: 'shared/search_form', locals: {query: @query} %>
-      </div>
-
-      <div class='autocompletion-results'></div>
+      <%= render 'layouts/application/navbar' %>
       <%= yield :header %>
     </header>
 
-    <main class="<%= controller_name %>-parent">
       <%= yield %>
-    </main>
-  </div>
+  </main>
 
-  <footer>
-    <ul class="footer-logos">
-      <li class="wcmc-footer-logo">
-        <a href="http://unep-wcmc.org" title="UNEP-WCMC Website"></a>
-      </li>
-      <li class="iucn-footer-logo">
-        <a href="http://iucn.org" title="IUCN Website"></a>
-      </li>
-      <li class="footer-copyright">
-        <p>&copy; ProtectedPlanet 2014-2015. All rights reserved</p>
-      </li>
-    </ul>
-
-
-    <ul class="footer-links">
-      <li><%= link_to 'About', about_path %></li>
-      <li><%= link_to 'Terms of Use', terms_path %></li>
-      <li class="uservoice"><a href="mailto:protectedareas@unep-wcmc.org" data-uv-trigger>Send Feedback</a></li>
-    </ul>
-  </footer>
+  <%= render "layouts/application/footer" %>
 
   <%= render 'shared/download_modal' %>
 
   <%= javascript_include_tag controller_name %>
+
   <% if Rails.env == 'production' %>
     <%= render 'shared/google_analytics' %>
     <%= render 'shared/mouseflow' %>
     <%= render 'shared/uservoice' %>
   <% end %>
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 </body>
 </html>

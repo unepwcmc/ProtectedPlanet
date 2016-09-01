@@ -1,6 +1,6 @@
 class Search
   CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml'))
-  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info]
+  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance]
 
   attr_reader :search_term, :options
 

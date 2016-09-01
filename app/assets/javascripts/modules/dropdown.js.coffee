@@ -1,42 +1,60 @@
 define('dropdown', [], ->
-  class Dropdown
-    constructor: (@$triggerEl, @$el, @options) ->
-      if @$triggerEl.length is 0 or @$el.length is 0
-        return false
-
+  window.Dropdown = class Dropdown
+    constructor: (@$el, @options) ->
       @options ||= {on: 'click'}
-      @render()
+      @open = false
 
-    render: ->
-      if @$el.prop('tagName') == 'SCRIPT'
-        @$el = $(@$el.html())
-
-      @$el.appendTo('body')
-      @$el.hide()
-
-      @positionEl()
-      @addEventListener()
-
-    hide: ->
-      @$el.slideToggle()
-
-    positionEl: ->
-      triggerPosition = @$triggerEl.offset()
-
-      @$el.width(@$triggerEl.outerWidth())
-
-      @$el.css('position', 'fixed')
-      @$el.css('top', (triggerPosition.top + @$triggerEl.outerHeight()) )
-      @$el.css('left', triggerPosition.left)
+      unless @options.noListener
+        @addEventListener()
 
     addEventListener: ->
+      @$triggerEl = @$el.find('.js-trigger').addBack('.js-trigger')
+      @$switchEl  = @$el.find('.js-switch').addBack('.js-switch')
+      @$targetEl  = @$el.find('.js-target').addBack('.js-target')
+
       @$triggerEl.on(@options.on, (event) =>
-        @$el.stop()
-        @positionEl()
-        @$triggerEl.toggleClass('active')
-        @$el.slideToggle()
+        if @open
+          @closeDropdown(@$targetEl)
+        else
+          @closeOtherDropdowns()
+          @openDropdown(@$targetEl)
+
         event.preventDefault()
       )
+
+    closeOtherDropdowns: ->
+      for dropdown in UiState.dropdowns
+        dropdown.closeDropdown()
+      UiState.dropdowns = []
+
+    openDropdown: =>
+      @open = true
+      @toggleDropdown()
+      UiState.dropdowns.push(@)
+
+    closeDropdown: =>
+      @open = false
+      @toggleDropdown()
+
+      dropdownIndex = UiState.dropdowns.indexOf(@)
+      UiState.dropdowns.splice(dropdownIndex, 1)
+
+    toggleDropdown: =>
+      if @$switchEl.length > 0
+        @handleSwitchEl(@$switchEl, @$triggerEl)
+      else
+        @handleSwitchEl(@$triggerEl, @$triggerEl)
+
+      @$targetEl.slideToggle(100)
+
+    handleSwitchEl: =>
+      @$switchEl.toggleClass('is-active')
+
+      if @$switchEl.data()?.hasOwnProperty('dropdownSwitchText')
+        if @$switchEl.hasClass('is-active')
+          @$triggerEl.html('<i class="fa fa-times"></i> Close')
+        else
+          @$triggerEl.html('<i class="fa fa-search"></i> Search')
 
   return Dropdown
 )

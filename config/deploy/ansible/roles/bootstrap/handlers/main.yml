@@ -1,0 +1,21 @@
+- name: fail2ban
+  service: name=fail2ban state=restarted
+
+- name: update tzdata
+  command: /usr/sbin/dpkg-reconfigure --frontend noninteractive tzdata
+
+- name: ntp
+  service: name=ntp state=restarted
+
+- name: nagios-nrpe-server
+  service: name=nagios-nrpe-server state=restarted
+
+- name: reboot
+  command: /sbin/reboot
+
+- name: ssh
+  service: name=ssh state=restarted
+
+- name: postfix
+  service: name=postfix state=restarted
+

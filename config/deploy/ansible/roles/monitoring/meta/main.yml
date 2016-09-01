@@ -1,4 +1,0 @@
----
-dependencies:
-  - role: python
-  - role: nginx

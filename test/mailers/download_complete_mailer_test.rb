@@ -6,7 +6,7 @@ class DownloadCompleteMailerTest < ActionMailer::TestCase
     filename = 'filename'
     address = "a@a.com"
 
-    email = DownloadCompleteMailer.create(filename, address).deliver
+    email = DownloadCompleteMailer.create(filename, address).deliver_now
 
     assert_equal ['no-reply@unep-wcmc.org'], email.from
     assert_equal [address], email.to

@@ -107,10 +107,12 @@ class CountryTest < ActiveSupport::TestCase
     designation_2 = FactoryGirl.create(:designation)
     country = FactoryGirl.create(:country)
     expected_groups = [{
-      'designation' => designation_1.name,
+      'designation_id' => designation_1.id.to_s,
+      'designation_name' => designation_1.name,
       'count' => '2'
     }, {
-      'designation' => designation_2.name,
+      'designation_id' => designation_2.id.to_s,
+      'designation_name' => designation_2.name,
       'count' => '3'
     }]
 
@@ -125,16 +127,42 @@ class CountryTest < ActiveSupport::TestCase
     iucn_category_2 = FactoryGirl.create(:iucn_category, name: 'V')
     country = FactoryGirl.create(:country)
     expected_groups = [{
-      'iucn_category' => iucn_category_1.name,
-      'count' => '2'
+      'iucn_category_id' => iucn_category_1.id.to_s,
+      'iucn_category_name' => iucn_category_1.name,
+      'count' => '2',
+      'percentage' => '40.00'
     }, {
-      'iucn_category' => iucn_category_2.name,
-      'count' => '3'
+      'iucn_category_id' => iucn_category_2.id.to_s,
+      'iucn_category_name' => iucn_category_2.name,
+      'count' => '3',
+      'percentage' => '60.00'
     }]
 
     2.times { FactoryGirl.create(:protected_area, countries: [country], iucn_category: iucn_category_1) }
     3.times { FactoryGirl.create(:protected_area, countries: [country], iucn_category: iucn_category_2) }
 
     assert_same_elements expected_groups, country.protected_areas_per_iucn_category.to_a
+  end
+
+  test '#protected_areas_per_governance returns groups of pa counts per governance' do
+    governance_1 = FactoryGirl.create(:governance, name: 'Regional')
+    governance_2 = FactoryGirl.create(:governance, name: 'International')
+    country = FactoryGirl.create(:country)
+    expected_groups = [{
+      'governance_id' => governance_1.id.to_s,
+      'governance_name' => governance_1.name,
+      'count' => '2',
+      'percentage' => '40.00'
+    }, {
+      'governance_id' => governance_2.id.to_s,
+      'governance_name' => governance_2.name,
+      'count' => '3',
+      'percentage' => '60.00'
+    }]
+
+    2.times { FactoryGirl.create(:protected_area, countries: [country], governance: governance_1) }
+    3.times { FactoryGirl.create(:protected_area, countries: [country], governance: governance_2) }
+
+    assert_same_elements expected_groups, country.protected_areas_per_governance.to_a
   end
 end

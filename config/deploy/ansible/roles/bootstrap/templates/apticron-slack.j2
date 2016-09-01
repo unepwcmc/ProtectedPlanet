@@ -1,0 +1,290 @@
+#!/bin/bash -e
+
+# Character set handling differs between the different mailx
+# implementations in Debian. Make sure we send proper headers, and a
+# text/plain content type.
+Mailx() {
+	if [ "x`readlink -e /usr/bin/mailx`" = "x/usr/bin/heirloom-mailx" ]
+	then
+		# heirloom-mailx creates correct headers, but needs help
+		# if the terminal charset (LC_CTYPE) is no UTF-8 locale
+		if [ -n "$CUSTOM_FROM" ] ; then
+			/usr/bin/mailx -S ttycharset=utf-8 -r "$CUSTOM_FROM" "$@"
+		else
+			/usr/bin/mailx -S ttycharset=utf-8 "$@"
+		fi
+	else
+		# bsd-mailx/mailutils' mailx don't do character set
+		# conversion, but do not support MIME either.
+		if [ -n "$CUSTOM_FROM" ] ; then
+			/usr/bin/mailx -a "MIME-Version: 1.0" \
+				-a "Content-type: text/plain; charset=UTF-8" \
+				-a "Content-transfer-encoding: 8bit" \
+				-a "From: $CUSTOM_FROM" \
+				"$@"
+		else
+			/usr/bin/mailx -a "MIME-Version: 1.0" \
+				-a "Content-type: text/plain; charset=UTF-8" \
+				-a "Content-transfer-encoding: 8bit" \
+				"$@"
+		fi
+	fi
+}
+
+if [ "x$1" = "x--cron" ] ; then
+
+	shift
+	tsfile='/var/lib/apticron/cron_run'
+
+	# Run only once a day ( grant 59 mins allowance )
+	test "x$( find $tsfile -mmin -1381 2>/dev/null )" = "x$tsfile" && exit 0
+
+	# Update the time-stamp file
+	LC_TIME=C touch -d "$( date +%H:%M )" "$tsfile" || true
+fi
+
+if [ -n "$1" ]; then
+	echo "Usage: apticron [--cron]"
+	echo "Mails a list of packages that are pending-upgrade to the"
+	echo "email address specified in /etc/apticron/apticron.conf"
+	echo "--cron:  used when invoked by cron in order to run no"
+	echo "         more than once a day."
+	exit 1
+fi
+
+# a sane default for email
+EMAIL=root
+
+# By default we have no profile
+LISTCHANGES_PROFILE=""
+
+# Set $DIRCACHE
+eval `/usr/bin/apt-config shell DIRCACHE Dir::Cache`
+
+# Set the SYSTEM
+SYSTEM=`/bin/hostname`
+
+# Set the IPADDRESSNUM
+IPADDRESSNUM="1"
+
+# Source lsb-release so we know what distribution we are
+DISTRIB_ID="Debian"    # Default to Debian
+[ -e /etc/lsb-release ] && . /etc/lsb-release
+
+# Source the config file
+[ -e /etc/apticron/apticron-slack.conf ] && . /etc/apticron/apticron-slack.conf
+
+# Force resolving and showing all FQDNs
+if [ -n "$ALL_FQDNS" ] ; then
+	SYSTEM=`/bin/hostname --all-fqdns`
+fi
+
+if [ -z "$IPADDRESSES" ] && [ -x /sbin/ip ]; then
+	# Set the IPv4 addresses
+	IPADDRESSES=`(echo $( /bin/hostname --all-ip-addresses ) ;
+		     /sbin/ip -f inet addr show scope global 2> /dev/null | \
+		     /bin/grep "scope global" |\
+		     /usr/bin/head -$IPADDRESSNUM |\
+		     /usr/bin/awk '{ print $2 }' |\
+		     /usr/bin/cut -d/ -f1) |\
+		     /usr/bin/uniq || true`
+
+	# Set the IPv6 addresses
+	IPADDRESSES="$IPADDRESSES `/sbin/ip -f inet6 addr show scope global 2> /dev/null | \
+	                           /bin/grep "scope global" | \
+				   /usr/bin/head -$IPADDRESSNUM |\
+				   /usr/bin/awk '{ print $2 }' |\
+				   /usr/bin/cut -d/ -f1`"
+fi
+
+# Turn our list of addresses into nicely formatted output
+ADDRESSES=""
+if [ -n "$IPADDRESSES" ] ; then
+	for address in $IPADDRESSES; do
+		# Add the Address
+		ADDRESSES="${ADDRESSES} ${address}"
+	done
+
+	ADDRESSES=`echo $ADDRESSES | /usr/bin/fmt -w68 |\
+		   /bin/sed 's/^/\t[ /;s/\$/ ]/'`
+	ADDRESSES=`echo -e "\n$ADDRESSES"`
+fi
+
+# update the package lists
+/usr/bin/apt-get -qq update || true
+
+# get the list of packages which are pending an upgrade
+PKGNAMES=`/usr/bin/apt-get -o Dir::Etc::sourcelist="/etc/apt/sources.list.d/security.sources.list" -o Dir::Etc::sourceparts="-" -o APT::Get::List-Cleanup="0" -q -y --ignore-hold --allow-unauthenticated -s dist-upgrade | \
+          /bin/grep ^Inst | /usr/bin/cut -d\  -f2 | /usr/bin/sort`
+
+# creating the future last_run file
+TMPFILE="$(mktemp -t apticron.XXXXXXXXXX)"
+for p in $PKGNAMES; do
+	echo $p >> $TMPFILE
+done
+
+# workaround to handle apt-get installing packages hold by aptitude. See #137771.
+APTITUDE_HOLDS=`grep "^State: 2" -B 2 /var/lib/aptitude/pkgstates 2>/dev/null |grep "^Package: .*$" |cut -d" " -f 2`
+DSELECT_HOLDS=`dpkg --get-selections |grep "hold$" |cut -f1`
+
+if [ "$NOTIFY_HOLDS" = "0" ]; then
+	# packages hold by aptitude don't go to the upgrading candidates list
+	for p in $APTITUDE_HOLDS; do
+		PKGNAMES=`echo $PKGNAMES |sed "s/\(^\| \)$p\( \|$\)/ /g;s/^ //g"`
+	done
+	# packages hold by dselect don't go to the upgrading candidates list
+	for p in $DSELECT_HOLDS; do
+		PKGNAMES=`echo $PKGNAMES |sed "s/\(^\| \)$p\( \|$\)/ /g;s/^ //g"`
+	done
+fi
+
+if [ "$NOTIFY_NEW" = "0" ]; then
+	# new packages don't go to the upgrading candidates list (see #531002)
+	for p in $PKGNAMES; do
+        	if [ -z "`dpkg -s $p 2>/dev/null| grep '^Status: install ok installed'`" ] ; then
+	       		PKGNAMES=`echo $PKGNAMES |sed "s/\(^\| \)$p\( \|$\)/ /g;s/^ //g"`
+		fi
+	done
+fi
+
+NUM_PACKAGES=`echo $PKGNAMES |wc -w`
+
+# Custom subject
+if [ -n "$CUSTOM_SUBJECT" ] ; then
+	MAILX_SUBJECT=$(eval "echo \"${CUSTOM_SUBJECT}\"")
+else
+	MAILX_SUBJECT="$NUM_PACKAGES $DISTRIB_ID package update(s) for $SYSTEM"
+fi
+
+# Custom no update subject
+if [ -n "$CUSTOM_NO_UPDATES_SUBJECT" ] ; then
+	MAILX_NO_UPDATE_SUBJECT=$(eval "echo \"${CUSTOM_NO_UPDATES_SUBJECT}\"")
+else
+	MAILX_NO_UPDATE_SUBJECT="No updates for $SYSTEM"
+fi
+
+# packages already reported won't be reported again if DIFF_ONLY option is marked
+LAST_RUN_FILE="/var/lib/apticron/last_run"
+if [ "$DIFF_ONLY" = "1" ] && [ -e "$LAST_RUN_FILE" ]; then
+	EXTRA_REPORT=" since the last run"
+	for p in `cat $LAST_RUN_FILE`; do
+		PKGNAMES=`echo $PKGNAMES |sed "s/\(^\| \)$p\( \|$\)/ /g;s/^ //g"`
+	done
+fi
+
+if [ -n "$PKGNAMES" ] ; then
+
+	# do the upgrade downloads
+	/usr/bin/apt-get --ignore-hold -qq -d --allow-unauthenticated --force-yes dist-upgrade > /dev/null
+
+  (
+	/bin/cat <<EOF
+apticron report [`/bin/date -R`]
+========================================================================
+
+apticron has detected that some packages need upgrading on:
+
+	$SYSTEM $ADDRESSES
+
+The following packages are currently pending an upgrade$EXTRA_REPORT:
+
+EOF
+
+	PKGPATH="/${DIRCACHE}archives/"
+	for PKG in $PKGNAMES ; do
+		VER=`LC_ALL=C /usr/bin/apt-cache policy $PKG |\
+		     /bin/grep Candidate: | /usr/bin/cut -f 4 -d \ `
+		VERFILE=`echo "$VER" | /bin/sed -e "s/:/%3a/g"`
+                if ls ${PKGPATH}${PKG}_${VERFILE}_*.deb >& /dev/null ; then
+			DEBS="$DEBS ${PKGPATH}${PKG}_${VERFILE}_*.deb"
+		fi
+		echo -e "\t"$PKG $VER
+	done
+
+	if [ "$DIFF_ONLY" = "1" ] && [ -e "$LAST_RUN_FILE" ]; then
+		echo -e "\n(there are $(grep -xf $LAST_RUN_FILE $TMPFILE |wc -l) other packages previously reported to you pending an upgrade!)"
+	fi
+
+	MISSING_DEBS=`apt-get -y --ignore-hold --allow-unauthenticated --print-uris dist-upgrade \
+                          | grep "file:" \
+                          | sed "s/'file:\(.*\)' .*/\1/g"`
+
+	DEBS=`echo $MISSING_DEBS $DEBS | /usr/bin/sort`
+
+	/bin/cat <<EOF
+
+========================================================================
+
+Package Details:
+
+EOF
+
+	if [ -x /usr/bin/apt-listchanges ] ; then
+		if [ -z "$LISTCHANGES_PROFILE" ] ; then
+			/usr/bin/apt-listchanges --which=both --headers -f text $DEBS
+		else
+			/usr/bin/apt-listchanges -f text --profile=$LISTCHANGES_PROFILE $DEBS
+		fi
+	else
+		echo "Install 'apt-listchanges' to see what's new in these packages."
+		echo
+	fi
+
+	/bin/cat <<EOF
+========================================================================
+
+You can perform the upgrade by issuing the command:
+
+	apt-get dist-upgrade
+
+as root on $SYSTEM
+EOF
+
+	if [ -n "$DSELECT_HOLDS" ] ; then
+        	/bin/cat <<EOF
+
+========================================================================
+
+INFO: the following packages are on hold, then will not be upgraded even if
+they have been present in the upgrading candidates list:
+
+`echo -e "\t" $DSELECT_HOLDS`
+EOF
+	fi
+
+	if [ -n "$APTITUDE_HOLDS" ] ; then
+        	/bin/cat <<EOF
+
+WARNING: the following packages were put on hold by aptitude but will be
+upgraded anyway *in case of using apt-get to do so*:
+
+`echo -e "\t" $APTITUDE_HOLDS`
+
+If you don't want them to be upgraded please use aptitude to upgrade your
+system. This is necessary because aptitude's holds are currently ignored by
+both dselect and apt-get. For more info please see #137771.
+EOF
+	fi
+
+        /bin/cat <<EOF
+
+--
+apticron
+EOF
+
+   ) 2>&1 | Mailx -s "$MAILX_SUBJECT" $EMAIL
+
+elif  [ "$NOTIFY_NO_UPDATES" = "1" ] ; then
+  (
+        /bin/cat <<EOF
+No new packages today.
+EOF
+
+   ) 2>&1 | Mailx -s "$MAILX_NO_UPDATE_SUBJECT" $EMAIL
+fi
+
+# updating the last_run file
+mv $TMPFILE $LAST_RUN_FILE
+
+exit 0
+

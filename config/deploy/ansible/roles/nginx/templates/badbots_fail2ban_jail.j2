@@ -1,0 +1,7 @@
+[nginx-badbots]
+enabled   = true
+filter   = nginx-badbots
+action   = ufw
+logpath = /var/log/nginx/*access.log
+bantime  = -1
+

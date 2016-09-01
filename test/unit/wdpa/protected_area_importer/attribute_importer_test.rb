@@ -12,7 +12,7 @@ class TestWdpaAttributeImporterService < ActiveSupport::TestCase
     }]
 
     wdpa_release = Wdpa::Release.new
-    wdpa_release.expects(:protected_areas).returns(pa_attributes)
+    wdpa_release.expects(:protected_areas_in_bulk).yields(pa_attributes)
 
     imported = Wdpa::ProtectedAreaImporter::AttributeImporter.import(wdpa_release)
 
@@ -26,22 +26,21 @@ class TestWdpaAttributeImporterService < ActiveSupport::TestCase
   test '.import does not standardise the attributes if the PA already
    exists' do
     pa_attributes = [{
-      wdpaid: 123
+      "wdpaid" => 123
     }, {
-      wdpaid: 123
+      "wdpaid" => 123
     }]
 
     wdpa_release = Wdpa::Release.new
-    wdpa_release.expects(:protected_areas).returns(pa_attributes)
+    wdpa_release.expects(:protected_areas_in_bulk).yields(pa_attributes)
 
-    Wdpa::DataStandard.expects(:attributes_from_standards_hash).twice
-      .returns({wdpa_id: 123}, {wdpa_id: 123})
-
-    ProtectedArea.expects(:create).once
+    Wdpa::DataStandard.expects(:attributes_from_standards_hash).once.returns({wdpa_id: 123})
+    ProtectedArea.expects(:create).once.returns(true)
 
     imported = Wdpa::ProtectedAreaImporter::AttributeImporter.import(wdpa_release)
     assert imported, "Expected importer to return true on success"
   end
+
 
   test '.import works with stringified keys' do
     pa_attributes = [{
@@ -53,7 +52,7 @@ class TestWdpaAttributeImporterService < ActiveSupport::TestCase
     }]
 
     wdpa_release = Wdpa::Release.new
-    wdpa_release.expects(:protected_areas).returns(pa_attributes)
+    wdpa_release.expects(:protected_areas_in_bulk).yields(pa_attributes)
 
     imported = Wdpa::ProtectedAreaImporter::AttributeImporter.import(wdpa_release)
 
@@ -77,7 +76,7 @@ class TestWdpaAttributeImporterService < ActiveSupport::TestCase
       returns({wdpa_id: 123})
 
     wdpa_release = Wdpa::Release.new
-    wdpa_release.expects(:protected_areas).returns(pa_attributes)
+    wdpa_release.expects(:protected_areas_in_bulk).yields(pa_attributes)
 
     imported = Wdpa::ProtectedAreaImporter::AttributeImporter.import(wdpa_release)
 

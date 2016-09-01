@@ -3,8 +3,18 @@ module AssetGenerator
   FALLBACK_PATH = Rails.root.join('app/assets/images', 'search-placeholder-country.png')
 
   def self.protected_area_tile protected_area
-    tile_url = mapbox_url protected_area.geojson
+    raise AssetGenerationFailedError if protected_area.nil?
 
+    tile_url = mapbox_url protected_area.geojson
+    request_tile tile_url[:host], tile_url[:path]
+  rescue AssetGenerationFailedError
+    fallback_tile
+  end
+
+  def self.country_tile country
+    raise AssetGenerationFailedError if country.nil?
+
+    tile_url = mapbox_url country.geojson({"fill-opacity" => 0, "stroke-width" => 0})
     request_tile tile_url[:host], tile_url[:path]
   rescue AssetGenerationFailedError
     fallback_tile

@@ -13,7 +13,10 @@ class ImportWorkers::Base
     import.increase_completed_jobs_count
 
     if import.completed? && ImportWorkers::FinaliserWorker.can_be_started
-      ImportWorkers::FinaliserWorker.perform_async
+      # finalising process is being fuzzy. Let's notify
+      # via bystander and call FinaliserWorker manually
+      # ImportWorkers::FinaliserWorker.perform_async
+      Bystander.log("FinaliserWorker ready to be called")
     end
   end
 

@@ -11,6 +11,17 @@ class StatisticPresenter
     "0"
   end
 
+  def geometry_ratio
+    @statistic.polygons_count ||= 0
+    @statistic.points_count   ||= 0
+    total = @statistic.polygons_count + @statistic.points_count
+
+    {
+      polygons: (((@statistic.polygons_count/total.to_f)*100).round rescue 0),
+      points:   (((@statistic.points_count/total.to_f)*100).round   rescue 0),
+    }
+  end
+
   def method_missing method
     @model.send(method) rescue @statistic.send(method).round rescue 0
   end

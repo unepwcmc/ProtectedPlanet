@@ -23,6 +23,7 @@ class TestSearch < ActiveSupport::TestCase
                   { "nested" => { "path" => "sub_location", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "sub_location.english_name" ] } } } },
                   { "nested" => { "path" => "designation", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "designation.name" ] } } } },
                   { "nested" => { "path" => "iucn_category", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "iucn_category.name" ] } } } },
+                  { "nested" => { "path" => "governance", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "governance.name" ] } } } },
                   { "function_score" => { "query" => { "multi_match" => { "query" => "*manbone*", "fields" => [ "name", "original_name" ] } }, "functions" => [ { "filter" => { "or" => [ { "type" => { "value" => "country"} }, { "type" => { "value" => "region"} } ] }, "boost_factor" => 15 } ] } }
                 ]
               }
@@ -50,6 +51,10 @@ class TestSearch < ActiveSupport::TestCase
           "designation" => {
             "nested" => { "path" => "designation" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "designation.id" } } }
+          },
+          "governance" => {
+            "nested" => { "path" => "governance" },
+            "aggs" => { "aggregation" => { "terms" => { "field" => "governance.id" } } }
           },
           "iucn_category" => {
             "nested" => { "path" => "iucn_category" },

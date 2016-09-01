@@ -1,0 +1,3 @@
+window.UiState = {
+  dropdowns: []
+}

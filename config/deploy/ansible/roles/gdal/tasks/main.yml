@@ -46,6 +46,6 @@
   when: gdal_installed.rc != 0
   command: chdir=/tmp/gdal-{{ gdal.version }} {{item}}
   with_items:
-    - ./configure --with-python
+    - ./configure --with-python --with-pg=$(which pg_config)
     - make
     - sudo make install

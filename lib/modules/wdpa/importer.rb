@@ -20,6 +20,7 @@ class Wdpa::Importer
     Wdpa::DownloadGenerator.generate
     #CountriesGeometryImporter.import
     #Wdpa::CountryGeometryPopulator.populate
+    Wdpa::GeometryRatioCalculator.calculate
     Wdpa::CartoDbImporter.import wdpa_release
   end
 end

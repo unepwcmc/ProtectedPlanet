@@ -8,8 +8,6 @@ define('interactive', [], () ->
     listen: ->
       @map.on('click', @handleMapClick)
 
-      @map.on('dragstart zoomstart click', @hideExplore)
-
     addMarker: (coords, protected_area) =>
       if @currentMarker?
         @map.removeLayer @currentMarker
@@ -31,10 +29,6 @@ define('interactive', [], () ->
         if data.length > 0
           @addMarker(coords, data[0])
       )
-
-    hideExplore: =>
-      $('.explore').fadeOut()
-      $('.download-type-dropdown').fadeOut()
 
     linkTo: (pa) ->
       "<a href=\"/#{pa.wdpa_id}\">#{pa.name}</a>"

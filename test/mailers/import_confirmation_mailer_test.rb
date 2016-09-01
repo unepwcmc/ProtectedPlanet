@@ -11,7 +11,7 @@ class ImportConfirmationMailerTest < ActionMailer::TestCase
       expects(:confirmation_key).
       returns(confirmation_key)
 
-    email = ImportConfirmationMailer.create(import).deliver
+    email = ImportConfirmationMailer.create(import).deliver_now
 
     assert_equal ['no-reply@unep-wcmc.org'], email.from
     assert_equal ['blackhole@unep-wcmc.org'], email.to

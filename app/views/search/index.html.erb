@@ -1,55 +1,47 @@
-<% content_for :page_title, search_title(params) %>
-<% content_for :header do %>
-  <nav class="sub-nav search-sub-nav">
-    <ul>
-      <li>
-        <h1><%= search_title(params) %></h1>
-        <h2><strong><%= @search.results.count %></strong> results</h2>
-      </li>
-      <% if @search.results.count > 0 %>
-        <li class="right"><%= render partial: 'shared/download_data_set', locals: {download_type: 'search', custom_classes: 'btn-search-download', item_id: 'search', image: 'icon-download-black.png'} %></li>
-      <% end %>
-    </ul>
-  </nav>
-<% end %>
+<%= content_for :page_title, search_title(params, true) %>
 
-<% if @search.results.count > 0 %>
-  <aside class="map-filters search-map-filters">
-    <header>
-      <span>Filters</span>
-      <ul>
-        <li class="btn-switch-grid <%= "active" if current_page?(action: 'index') %>">
-          <%= link_to(search_path(params)) do %>
-            <%= image_tag('icon-grid-grey.png', size: '20') %>
-          <% end %>
-        </li>
+<div class="container--fullscreen container--push-bottom">
 
-        <li class="btn-switch-map <%= "active" if current_page?(action: 'map') %>">
-          <%= link_to(search_map_path(params)) do %>
-            <%= image_tag('icon-map-grey.png', size: '20') %>
-          <% end %>
-        </li>
-      </ul>
-    </header>
-    <%= render partial: 'facets', locals: {aggregations: @search.aggregations} %>
-  </aside>
-<% end %>
-
-<% if current_page?(controller: 'search', action: 'map') %>
-  <div class="search-map"
-    id="map"
-    data-url="<%= api_v3_search_points_url(params) %>">
-    <div class="map-disclaimer">
-      The designations employed and the presentation of material on this map do not
-      imply the expression of any opinion whatsoever on the part of the Secretariat
-      of the United Nations concerning the legal status of any country, territory,
-      city or area or of its authorities, or concerning the delimitation of its
-      frontiers or boundaries.
+  <% if @search.results.count > 0 %>
+    <div class="js-download-btn hero__top u-center">
+      <h1 class="hero__title--base hero__title"><%= search_title(params) %></h1>
+      <button class="tooltip__trigger u-right js-trigger link-with-icon--bold link-with-icon">
+        <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
+        <%= download_dropdown('search', 'search', [:csv, :kml, :shp]) %>
+      </button>
     </div>
-  </div>
-<% else %>
-  <div class="search-grid <%= 'no-results' if @search.results.count.zero? %>">
-    <%= render partial: 'grid' %>
-  </div>
-<% end %>
+
+    <aside class="filter-bar">
+      <div class="filter-bar__inner">
+        <header class="header-with-delimiter filter-bar__header">
+          <h2>
+            Filters
+           <%= clear_filters_link(params) %>
+          </h2>
+        </header>
+        <%= render partial: 'facets', locals: {aggregations: @search.aggregations} %>
+      </div>
+
+      <%= link_to("", search_path(params), class: "filter-bar__header-icon grid-icon") %>
+      <%= link_to("", search_map_path(params), class: "filter-bar__header-icon map-icon") %>
+    </aside>
+  <% end %>
+
+  <% if current_page?(controller: 'search', action: 'map') %>
+    <div class="search-map"
+      id="map"
+      data-url="<%= api_v3_search_points_url(params) %>">
+      <div class="map-disclaimer">
+        The designations employed and the presentation of material on this map do not
+        imply the expression of any opinion whatsoever on the part of the Secretariat
+        of the United Nations concerning the legal status of any country, territory,
+        city or area or of its authorities, or concerning the delimitation of its
+        frontiers or boundaries.
+      </div>
+    </div>
+  <% else %>
+    <div class="<%= @search.results.count.zero? ? 'fullscreen-message' : 'search-grid' %>">
+      <%= render partial: 'grid' %>
+    </div>
+  <% end %>
 </div>

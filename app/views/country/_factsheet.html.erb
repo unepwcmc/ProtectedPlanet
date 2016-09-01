@@ -1,4 +1,31 @@
-<div class="factsheet" data-country-iso="<%= country.iso %>">
-  <%= render partial: 'country/factsheet/pas_value', locals: {presenter: presenter, country: country} %>
-  <%= render partial: 'country/factsheet/statistics', locals: {presenter: presenter, country: country} %>
-</div>
+<section class="row">
+  <div class="one-thirds">
+    <%= render "country/facts/number_of_pas" %>
+    <%= render "country/facts/polygons_points_ratio" %>
+    <%= render "country/facts/number_of_sources" %>
+  </div>
+
+  <div class="two-thirds">
+    <%= render "country/facts/coverage_stats" %>
+
+    <% if @pame_statistics %>
+      <%= render "country/facts/pame_statistics" %>
+    <% end %>
+  </div>
+</section>
+
+<section class="row">
+  <div class="one-thirds">
+    <%= render "country/facts/iucn_categories" %>
+  </div>
+  <div class="two-thirds">
+    <%= render "country/facts/governance_types" %>
+    <%= render "country/facts/related_countries" %>
+  </div>
+</section>
+
+<section class="row">
+  <% %w[National Regional International].each do |level| %>
+    <%= render "country/facts/designations", {level: level} %>
+  <% end %>
+</section>

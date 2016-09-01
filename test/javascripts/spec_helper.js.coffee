@@ -1,4 +1,3 @@
-#= require_tree ./templates
 #= require jquery
 #= require leaflet
 

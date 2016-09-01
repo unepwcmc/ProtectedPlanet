@@ -1,26 +1,94 @@
----
+- name: Add www.phusionpassenger.com repo
+  apt_repository: repo='deb https://oss-binaries.phusionpassenger.com/apt/passenger trusty main' state=present
 
-- name: Installs nginx
-  apt: pkg=nginx state=installed update_cache=true
-  sudo: yes
-  notify:
-    - start nginx
+- name: Add Key
+  apt_key: keyserver=keyserver.ubuntu.com id=561F9B9CAC40B2F7 state=present
 
-- name: Configure nginx
-  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf
-  sudo: yes
-  notify:
-    - restart nginx
+- name: Install Nginx dependencies and other packages
+  apt: name={{item}}
+  with_items:
+      - apt-transport-https
+      - ca-certificates
+      - git
+      - nodejs
+      - python-passlib
 
-- name: Setup /var/www
-  file: dest=/var/www/ owner={{username}} group={{username}} state=directory
-  sudo: yes
+- name: Install Nginx
+  apt: name=nginx-extras state=installed update_cache=true
 
-- name: Install passlib for htpasswd
-  apt: pkg=python-passlib state=installed update_cache=true
-  sudo: yes
+- name: Install passenger
+  apt: name=passenger state=installed update_cache=true
+
+
+- name: Copy over default config file
+  template: src=templates/nginx.conf.j2 dest=/etc/nginx/nginx.conf
+  notify: nginx
+
+- name: Get worker connections
+  shell: ulimit -n
+  register: worker_connections
+
+- name: Get worker processes
+  shell: grep processor /proc/cpuinfo | wc -l
+  register: worker_processes
+
+- name: replace worker_connections
+  replace: dest=/etc/nginx/nginx.conf regexp='worker_connections 768' replace='worker_connections {{worker_connections.stdout}}'
+  notify: nginx
+
+- name: replace worker_processes
+  replace: dest=/etc/nginx/nginx.conf regexp='worker_processes 4' replace='worker_processes {{worker_processes.stdout}}'
+  notify: nginx
+
+- name: Allow port 80
+  ufw: proto=tcp port=80 rule=allow
+
+- name: Allow port 443
+  ufw: proto=tcp port=443 rule=allow
+
+
+- name: Copy over check_file
+  copy: src=templates/nginx-restart dest=/usr/lib/nagios/plugins/nginx-restart mode="u+x,g+x,o+x"
+
+
+- name: Add nginx monitoring entries
+  action: lineinfile dest=/etc/nagios/nrpe.cfg regexp="{{ item.regexp }}" line="{{ item.line }}"
+  with_items:
+      - { regexp: '^command[checkprocsnginx]', line: 'command[check_procs_nginx]=/usr/lib/nagios/plugins/check_procs -c 1:3000 -C nginx' }
+      - { regexp: '^command[nginxrestart]', line: 'command[nginxrestart]=/usr/lib/nagios/plugins/nginx-restart'}
+  notify: nagios-nrpe-server
+
 
 - name: Setup .htpasswd
   htpasswd: path=/etc/nginx/.htpasswd name={{sidekiq_web_login.username}} password={{sidekiq_web_login.password}} owner=www-data group=www-data mode=0640
-  notify:
-    - start nginx
+  notify: nginx
+
+
+- name: Copy over bad-bots config
+  template: src=templates/badbots_fail2ban_jail.j2 dest=/etc/fail2ban/jail.d/badbots.conf
+  notify: fail2ban
+
+- name: Copy over badbots filer
+  template: src=templates/badbots_fail2ban_filter.j2 dest=/etc/fail2ban/filter.d/nginx-badbots.conf
+  notify: fail2ban
+
+
+- name: Copy over fail2ban filter config
+  template: src=templates/nginx_req_fail2ban_filter.j2 dest=/etc/fail2ban/filter.d/nginx-req-limit.conf
+  notify: fail2ban
+
+
+- name: Copy over fail2ban config file
+  template: src=templates/nginx_req_fail2ban_jail.j2 dest=/etc/fail2ban/jail.d/nginx-req-limit.conf
+  notify: fail2ban
+
+
+- name: Copy over auth filter
+  template: src=templates/nginx_auth_fail2ban_filter.j2 dest=/etc/fail2ban/filter.d/nginx-auth.conf
+  notify: fail2ban
+
+
+- name: Copy over auth jail
+  template: src=templates/nginx_auth_fail2ban_jail.j2 dest=/etc/fail2ban/jail.d/nginx-auth.conf
+  notify: fail2ban
+

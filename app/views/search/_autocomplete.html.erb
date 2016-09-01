@@ -1,5 +1,3 @@
-<ul>
-  <% @results.each do |result| %>
-    <li class="autocompletion-result"><%= autocomplete_link(result) %></li>
-  <% end %>
-</ul>
+<% @results.each do |result| %>
+  <%= autocomplete_link(result) %>
+<% end %>

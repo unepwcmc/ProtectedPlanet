@@ -1,0 +1,1407 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+<<	./lib/modules/polymorphic_group.rb	/^    def << item$/;"	f	class:PolymorphicGroup.PolymorphicArray
+AGGREGATORS	./lib/modules/search/aggregation.rb	/^  AGGREGATORS = {$/;"	C	class:Search.Aggregation
+ALLOWED_FILTERS	./lib/modules/search.rb	/^  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance]$/;"	C	class:Search
+AREA_TYPES	./lib/modules/countries_geometry_importer.rb	/^  AREA_TYPES = ['LAND','TS','EEZ']$/;"	C	class:CountriesGeometryImporter
+AREA_TYPES	./lib/modules/geospatial/country_geometry_populator/geometry_dissolver.rb	/^  AREA_TYPES = {$/;"	C	class:Geospatial.CountryGeometryPopulator.GeometryDissolver
+ASSERT_PRESENCE	./app/presenters/protected_area_presenter.rb	/^  ASSERT_PRESENCE = lambda { |field| {field: field, assert: PRESENCE} }$/;"	C	class:ProtectedAreaPresenter
+ATTACHMENTS	./lib/modules/download/generators/base.rb	/^  ATTACHMENTS = [$/;"	C	class:Download.Generators.Base
+ATTACHMENTS_PATH	./lib/modules/download/generators/base.rb	/^  ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')$/;"	C	class:Download.Generators.Base
+AUTOCOMPLETION_KEY	./lib/modules/autocompletion.rb	/^  AUTOCOMPLETION_KEY = "autocompletion"$/;"	C	class:Autocompletion
+ActiveToken	./lib/modules/active_token.rb	/^module ActiveToken$/;"	m
+ActiveToken	./lib/modules/active_token/properties.rb	/^module ActiveToken$/;"	m
+ActiveTokenTest	./test/unit/active_token_test.rb	/^class ActiveTokenTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+AddAreasToCountryStatistic	./db/migrate/20140710144417_add_areas_to_country_statistic.rb	/^class AddAreasToCountryStatistic < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddAttributesToImage	./db/migrate/20140617095318_add_attributes_to_image.rb	/^class AddAttributesToImage < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddBboxToCountries	./db/migrate/20140625101751_add_bbox_to_countries.rb	/^class AddBboxToCountries < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddBboxToRegions	./db/migrate/20140625154316_add_bbox_to_regions.rb	/^class AddBboxToRegions < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddColumnMetadataidToSourceTable	./db/migrate/20140725144859_add_column_metadataid_to_source_table.rb	/^class AddColumnMetadataidToSourceTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddColumnsToCountry	./db/migrate/20140704154428_add_columns_to_country.rb	/^class AddColumnsToCountry < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddCountryGeometriesIndexes	./db/migrate/20140717133702_add_country_geometries_indexes.rb	/^class AddCountryGeometriesIndexes < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddCountryIdColumnToCountriesTable	./db/migrate/20151117235200_add_country_id_column_to_countries_table.rb	/^class AddCountryIdColumnToCountriesTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddCountryRelationToSubLocation	./db/migrate/20140605105549_add_country_relation_to_sub_location.rb	/^class AddCountryRelationToSubLocation < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddDesignationIdIndexToProtectedArea	./db/migrate/20140602104439_add_designation_id_index_to_protected_area.rb	/^class AddDesignationIdIndexToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddDesignationIdToProtectedArea	./db/migrate/20140601211314_add_designation_id_to_protected_area.rb	/^class AddDesignationIdToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddDetailsUrlToImage	./db/migrate/20140617170024_add_details_url_to_image.rb	/^class AddDetailsUrlToImage < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddDeviseToUsers	./db/migrate/20141107164407_add_devise_to_users.rb	/^class AddDeviseToUsers < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddGeoCOlumnsToRegionalStatistic	./db/migrate/20140715160624_add_geo_c_olumns_to_regional_statistic.rb	/^class AddGeoCOlumnsToRegionalStatistic < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddGeometryRatioColumnsToCountryStatisticsTable	./db/migrate/20151121122006_add_geometry_ratio_columns_to_country_statistics_table.rb	/^class AddGeometryRatioColumnsToCountryStatisticsTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddGisAreaToProtectedArea	./db/migrate/20140601195757_add_gis_area_to_protected_area.rb	/^class AddGisAreaToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddGisMarineAreaToProtectedArea	./db/migrate/20140601195843_add_gis_marine_area_to_protected_area.rb	/^class AddGisMarineAreaToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddGovernanceIdIndexToProtectedArea	./db/migrate/20140602104158_add_governance_id_index_to_protected_area.rb	/^class AddGovernanceIdIndexToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddGovernanceIdToProtectedArea	./db/migrate/20140601210111_add_governance_id_to_protected_area.rb	/^class AddGovernanceIdToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddHasIrreplaceabilityInfoColumnToProtectedAreasTable	./db/migrate/20150121153231_add_has_irreplaceability_info_column_to_protected_areas_table.rb	/^class AddHasIrreplaceabilityInfoColumnToProtectedAreasTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddHasParccInfoToProtectedAreasTable	./db/migrate/20150618130809_add_has_parcc_info_to_protected_areas_table.rb	/^class AddHasParccInfoToProtectedAreasTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddIndexesToCountries	./db/migrate/20140718131656_add_indexes_to_countries.rb	/^class AddIndexesToCountries < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddInternationalCriteriaToProtectedArea	./db/migrate/20140601210855_add_international_criteria_to_protected_area.rb	/^class AddInternationalCriteriaToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddIsoToRegion	./db/migrate/20140617161632_add_iso_to_region.rb	/^class AddIsoToRegion < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddIucnCategoryIdIndexToProtectedArea	./db/migrate/20140602104104_add_iucn_category_id_index_to_protected_area.rb	/^class AddIucnCategoryIdIndexToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddIucnCategoryIdToProtectedArea	./db/migrate/20140601205500_add_iucn_category_id_to_protected_area.rb	/^class AddIucnCategoryIdToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddJurisdictionIdToDesignation	./db/migrate/20140528073943_add_jurisdiction_id_to_designation.rb	/^class AddJurisdictionIdToDesignation < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddLandAreaToCountryStatistic	./db/migrate/20140714110350_add_land_area_to_country_statistic.rb	/^class AddLandAreaToCountryStatistic < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddLanguageToCountry	./db/migrate/20140612090110_add_language_to_country.rb	/^class AddLanguageToCountry < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddLegalStatusIdIndexToProtectedArea	./db/migrate/20140602103846_add_legal_status_id_index_to_protected_area.rb	/^class AddLegalStatusIdIndexToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddLegalStatusIdToProtectedArea	./db/migrate/20140601204147_add_legal_status_id_to_protected_area.rb	/^class AddLegalStatusIdToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddLegalStatusUpdatedAtToProtectedArea	./db/migrate/20140601205045_add_legal_status_updated_at_to_protected_area.rb	/^class AddLegalStatusUpdatedAtToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddManagementAuthorityIdIndexToProtectedArea	./db/migrate/20140602104243_add_management_authority_id_index_to_protected_area.rb	/^class AddManagementAuthorityIdIndexToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddManagementAuthorityIdToProtectedArea	./db/migrate/20140601210739_add_management_authority_id_to_protected_area.rb	/^class AddManagementAuthorityIdToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddManagementPlanToProtectedArea	./db/migrate/20140601210622_add_management_plan_to_protected_area.rb	/^class AddManagementPlanToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddMarineAreaToCountryStatistic	./db/migrate/20150112151526_add_marine_area_to_country_statistic.rb	/^class AddMarineAreaToCountryStatistic < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddMarineEezPasGeomToCountries	./db/migrate/20140716103848_add_marine_eez_pas_geom_to_countries.rb	/^class AddMarineEezPasGeomToCountries < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddMarineToProtectedArea	./db/migrate/20140601195445_add_marine_to_protected_area.rb	/^class AddMarineToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddMarineTsPasGeomToCountries	./db/migrate/20140716103827_add_marine_ts_pas_geom_to_countries.rb	/^class AddMarineTsPasGeomToCountries < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddMolleweideProjection	./db/migrate/20140718134127_add_molleweide_projection.rb	/^class AddMolleweideProjection < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddNameToProtectedArea	./db/migrate/20140601195215_add_name_to_protected_area.rb	/^class AddNameToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddNoTakeStatusIdIndexToProtectedArea	./db/migrate/20140602104354_add_no_take_status_id_index_to_protected_area.rb	/^class AddNoTakeStatusIdIndexToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddNoTakeStatusIdToProtectedArea	./db/migrate/20140601211052_add_no_take_status_id_to_protected_area.rb	/^class AddNoTakeStatusIdToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddOlderVersionIdToArticlesTable	./db/migrate/20151216110546_add_older_version_id_to_articles_table.rb	/^class AddOlderVersionIdToArticlesTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddOriginalNameToProtectedArea	./db/migrate/20140601195405_add_original_name_to_protected_area.rb	/^class AddOriginalNameToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddPaEezAreaToCountryStatistic	./db/migrate/20140721122852_add_pa_eez_area_to_country_statistic.rb	/^class AddPaEezAreaToCountryStatistic < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddPaEezAreaToRegionalStatistic	./db/migrate/20140721122630_add_pa_eez_area_to_regional_statistic.rb	/^class AddPaEezAreaToRegionalStatistic < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddPasGeomToCountries	./db/migrate/20140704105917_add_pas_geom_to_countries.rb	/^class AddPasGeomToCountries < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddPercentagePaCoverToCountryStatistic	./db/migrate/20140714231111_add_percentage_pa_cover_to_country_statistic.rb	/^class AddPercentagePaCoverToCountryStatistic < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddPercentagePaMarineCoverToCountryStatistic	./db/migrate/20150112151154_add_percentage_pa_marine_cover_to_country_statistic.rb	/^class AddPercentagePaMarineCoverToCountryStatistic < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddProtectedAreaIdToImage	./db/migrate/20140617113201_add_protected_area_id_to_image.rb	/^class AddProtectedAreaIdToImage < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddProtectedAreaSourceJoinTable	./db/migrate/20140725145539_add_protected_area_source_join_table.rb	/^class AddProtectedAreaSourceJoinTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddRegionIdToCountries	./db/migrate/20140617170938_add_region_id_to_countries.rb	/^class AddRegionIdToCountries < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddReportedAreaToProtectedArea	./db/migrate/20140601195715_add_reported_area_to_protected_area.rb	/^class AddReportedAreaToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddReportedMarineAreaToProtectedArea	./db/migrate/20140601195642_add_reported_marine_area_to_protected_area.rb	/^class AddReportedMarineAreaToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddSearchLexemesTable	./db/migrate/20140707111454_add_search_lexemes_table.rb	/^class AddSearchLexemesTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddSearchView	./db/migrate/20140612133146_add_search_view.rb	/^class AddSearchView < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddSearchViewIndex	./db/migrate/20140613125148_add_search_view_index.rb	/^class AddSearchViewIndex < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddSlugColumnToProtectedAreasTable	./db/migrate/20140616142743_add_slug_column_to_protected_areas_table.rb	/^class AddSlugColumnToProtectedAreasTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddTheGeomLatitudeToProtectedArea	./db/migrate/20141023130537_add_the_geom_latitude_to_protected_area.rb	/^class AddTheGeomLatitudeToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddTheGeomLongitudeToProtectedArea	./db/migrate/20141023130515_add_the_geom_longitude_to_protected_area.rb	/^class AddTheGeomLongitudeToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddTheGeomToProtectedArea	./db/migrate/20140601191435_add_the_geom_to_protected_area.rb	/^class AddTheGeomToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddUnaccentExtension	./db/migrate/20140612092941_add_unaccent_extension.rb	/^class AddUnaccentExtension < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddUserIdToProjectsTable	./db/migrate/20141020141143_add_user_id_to_projects_table.rb	/^class AddUserIdToProjectsTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddWdpaIdToProtectedArea	./db/migrate/20140601193709_add_wdpa_id_to_protected_area.rb	/^class AddWdpaIdToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddWdpaParentIdToProtectedArea	./db/migrate/20140601193923_add_wdpa_parent_id_to_protected_area.rb	/^class AddWdpaParentIdToProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AddWeightToAllSearchParameters	./db/migrate/20140703130946_add_weight_to_all_search_parameters.rb	/^class AddWeightToAllSearchParameters < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+AdminController	./app/controllers/admin_controller.rb	/^class AdminController < ApplicationController$/;"	c	inherits:ApplicationController
+AdminMaintenanceTest	./test/integration/admin_maintenance_test.rb	/^class AdminMaintenanceTest < ActionDispatch::IntegrationTest$/;"	c	inherits:ActionDispatch.IntegrationTest
+Aggregation	./lib/modules/search/aggregation.rb	/^class Search::Aggregation$/;"	c	class:Search
+AlreadyRunningImportError	./lib/modules/import_tools.rb	/^  class AlreadyRunningImportError < StandardError; end;$/;"	c	class:ImportTools	inherits:StandardError
+ApiTest	./test/integration/api_test.rb	/^class ApiTest < ActionDispatch::IntegrationTest$/;"	c	inherits:ActionDispatch.IntegrationTest
+Application	./config/application.rb	/^  class Application < Rails::Application$/;"	c	class:ProtectedPlanet	inherits:Rails.Application
+ApplicationController	./app/controllers/application_controller.rb	/^class ApplicationController < ActionController::Base$/;"	c	inherits:ActionController.Base
+ApplicationHelper	./app/helpers/application_helper.rb	/^module ApplicationHelper$/;"	m
+ApplicationHelperTest	./test/helpers/application_helper_test.rb	/^class ApplicationHelperTest < ActionView::TestCase$/;"	c	inherits:ActionView.TestCase
+Assertions	./test/test_helper.rb	/^module MiniTest::Assertions$/;"	m	class:MiniTest
+AssetGenerationFailedError	./lib/modules/asset_generator.rb	/^  class AssetGenerationFailedError < StandardError; end;$/;"	c	class:AssetGenerator	inherits:StandardError
+AssetGenerator	./lib/modules/asset_generator.rb	/^module AssetGenerator$/;"	m
+AssetGeneratorTest	./test/unit/asset_generator_test.rb	/^class AssetGeneratorTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+AssetImporter	./lib/modules/wdpa/protected_area_importer/asset_importer.rb	/^class Wdpa::ProtectedAreaImporter::AssetImporter$/;"	c	class:Wdpa.ProtectedAreaImporter
+AssetsController	./app/controllers/assets_controller.rb	/^class AssetsController < ApplicationController$/;"	c	inherits:ApplicationController
+AssetsControllerTest	./test/controllers/asset_controller_test.rb	/^class AssetsControllerTest < ActionController::TestCase$/;"	c	inherits:ActionController.TestCase
+Attribute	./lib/modules/wdpa/attribute.rb	/^class Wdpa::Attribute$/;"	c	class:Wdpa
+AttributeImporter	./lib/modules/wdpa/protected_area_importer/attribute_importer.rb	/^class Wdpa::ProtectedAreaImporter::AttributeImporter$/;"	c	class:Wdpa.ProtectedAreaImporter
+Autocompletion	./lib/modules/autocompletion.rb	/^module Autocompletion$/;"	m
+AutocompletionTest	./test/unit/autocompletion_test.rb	/^class AutocompletionTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+BASE_QUERY_TEMPLATE	./lib/modules/geospatial/calculator.rb	/^  BASE_QUERY_TEMPLATE = File.expand_path($/;"	C	class:Geospatial.Calculator
+Base	./app/workers/download_workers/base.rb	/^class DownloadWorkers::Base$/;"	c	class:DownloadWorkers
+Base	./app/workers/import_workers/base.rb	/^class ImportWorkers::Base$/;"	c	class:ImportWorkers
+Base	./lib/modules/download/generators/base.rb	/^class Download::Generators::Base$/;"	c	class:Download.Generators
+Base	./lib/modules/download/requesters/base.rb	/^class Download::Requesters::Base$/;"	c	class:Download.Requesters
+BemHelper	./app/helpers/bem_helper.rb	/^module BemHelper$/;"	m
+Boolean	./lib/modules/search/aggregators/boolean.rb	/^module Search::Aggregators::Boolean$/;"	m	class:Search.Aggregators
+CARTODB_COLUMNS	./lib/modules/wdpa/carto_db_importer.rb	/^  CARTODB_COLUMNS = ['wdpaid', 'the_geom', 'iucn_cat', 'marine']$/;"	C	class:Wdpa.CartoDbImporter
+COMPLEX_COUNTRIES	./lib/modules/countries_geometry_importer.rb	/^  COMPLEX_COUNTRIES = { 'TS' => ['CIV'],'LAND' => [],'EEZ' => []}$/;"	C	class:CountriesGeometryImporter
+COMPLEX_COUNTRIES	./lib/modules/geospatial/country_geometry_populator/geometry_dissolver.rb	/^  COMPLEX_COUNTRIES = {$/;"	C	class:Geospatial.CountryGeometryPopulator.GeometryDissolver
+CONFIGURATION_FILE	./lib/modules/search.rb	/^  CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml'))$/;"	C	class:Search
+CONVERSIONS	./lib/modules/search/filter.rb	/^  CONVERSIONS = {$/;"	C	class:Search.Filter
+COVER_HELPERS	./app/helpers/application_helper.rb	/^  COVER_HELPERS = {$/;"	C	class:ApplicationHelper
+CURRENT_PREFIX	./lib/modules/download.rb	/^  CURRENT_PREFIX = 'current\/'$/;"	C	class:Download
+CURRENT_PREFIX	./lib/modules/s3.rb	/^  CURRENT_PREFIX = 'current\/'$/;"	C	class:S3
+Calculator	./lib/modules/geospatial/calculator.rb	/^class Geospatial::Calculator$/;"	c	class:Geospatial
+CartoDbImporter	./lib/modules/wdpa/carto_db_importer.rb	/^class Wdpa::CartoDbImporter$/;"	c	class:Wdpa
+ChangeWdpaParentIdOnProtectedArea	./db/migrate/20140602092716_change_wdpa_parent_id_on_protected_area.rb	/^class ChangeWdpaParentIdOnProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+ChangeWikipediaSummaryColumnOnProtectedArea	./db/migrate/20140617133943_change_wikipedia_summary_column_on_protected_area.rb	/^class ChangeWikipediaSummaryColumnOnProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+ClassMethods	./app/models/concerns/geometry_concern.rb	/^  module ClassMethods$/;"	m	class:GeometryConcern
+ClassMethods	./lib/modules/active_token.rb	/^  module ClassMethods$/;"	m	class:ActiveToken
+ClassMethods	./lib/modules/polymorphic_group.rb	/^  module ClassMethods$/;"	m	class:PolymorphicGroup
+CmsHelper	./app/helpers/cms_helper.rb	/^module CmsHelper$/;"	m
+CmsPresenter	./app/presenters/cms_presenter.rb	/^class CmsPresenter$/;"	c
+Confirmable	./lib/modules/import_tools/import/confirmable.rb	/^module ImportTools::Import::Confirmable$/;"	m	class:ImportTools.Import
+ConfirmableTest	./test/unit/import_tools/import/confirmable_test.rb	/^class ConfirmableTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+CountriesGeometryImporter	./lib/modules/countries_geometry_importer.rb	/^class CountriesGeometryImporter$/;"	c
+Country	./app/models/country.rb	/^class Country < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+CountryController	./app/controllers/country_controller.rb	/^class CountryController < ApplicationController$/;"	c	inherits:ApplicationController
+CountryControllerTest	./test/controllers/country_controller_test.rb	/^class CountryControllerTest < ActionController::TestCase$/;"	c	inherits:ActionController.TestCase
+CountryGeometryPopulator	./lib/modules/geospatial/country_geometry_populator.rb	/^module Geospatial::CountryGeometryPopulator$/;"	m	class:Geospatial
+CountryGeometryPopulator	./lib/modules/wdpa/country_geometry_populator.rb	/^class Wdpa::CountryGeometryPopulator$/;"	c	class:Wdpa
+CountryGeometryPopulatorTest	./test/unit/geospatial/country_geometry_populator_test.rb	/^class CountryGeometryPopulatorTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+CountryStatistic	./app/models/country_statistic.rb	/^class CountryStatistic < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+CountryStatisticTest	./test/models/country_statistic_test.rb	/^class CountryStatisticTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+CountryTest	./test/models/country_test.rb	/^class CountryTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+CreateCms	./db/migrate/20151202155924_create_cms.rb	/^class CreateCms < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateCountries	./db/migrate/20140527095736_create_countries.rb	/^class CreateCountries < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateCountriesProtectedAreas	./db/migrate/20140601203016_create_countries_protected_areas.rb	/^class CreateCountriesProtectedAreas < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateCountryStatistics	./db/migrate/20140617091255_create_country_statistics.rb	/^class CreateCountryStatistics < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateDesignations	./db/migrate/20140528072204_create_designations.rb	/^class CreateDesignations < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateExtensionPostgis	./db/migrate/20131104173246_create_extension_postgis.rb	/^class CreateExtensionPostgis < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateGovernances	./db/migrate/20140527151457_create_governances.rb	/^class CreateGovernances < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateImages	./db/migrate/20140617093647_create_images.rb	/^class CreateImages < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateIucnCategories	./db/migrate/20140527150153_create_iucn_categories.rb	/^class CreateIucnCategories < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateJurisdictions	./db/migrate/20140528072657_create_jurisdictions.rb	/^class CreateJurisdictions < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateLegacyProtectedAreas	./db/migrate/20140708193519_create_legacy_protected_areas.rb	/^class CreateLegacyProtectedAreas < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateLegalStatuses	./db/migrate/20140527135808_create_legal_statuses.rb	/^class CreateLegalStatuses < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateManagementAuthorities	./db/migrate/20140527152932_create_management_authorities.rb	/^class CreateManagementAuthorities < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateNoTakeStatuses	./db/migrate/20140529072242_create_no_take_statuses.rb	/^class CreateNoTakeStatuses < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateProjectItems	./db/migrate/20141020142210_create_project_items.rb	/^class CreateProjectItems < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateProjects	./db/migrate/20141020135233_create_projects.rb	/^class CreateProjects < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateProtectedAreas	./db/migrate/20140429140622_create_protected_areas.rb	/^class CreateProtectedAreas < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateProtectedAreasSubLocations	./db/migrate/20140601203550_create_protected_areas_sub_locations.rb	/^class CreateProtectedAreasSubLocations < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateRegionalStatistics	./db/migrate/20140617091236_create_regional_statistics.rb	/^class CreateRegionalStatistics < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateRegions	./db/migrate/20140617091326_create_regions.rb	/^class CreateRegions < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateSavedSearches	./db/migrate/20141021143253_create_saved_searches.rb	/^class CreateSavedSearches < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateSources	./db/migrate/20140710124303_create_sources.rb	/^class CreateSources < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateSubLocations	./db/migrate/20140527125150_create_sub_locations.rb	/^class CreateSubLocations < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateWikipediaArticles	./db/migrate/20140617133708_create_wikipedia_articles.rb	/^class CreateWikipediaArticles < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+CreateWikipediaSummaries	./db/migrate/20140617091620_create_wikipedia_summaries.rb	/^class CreateWikipediaSummaries < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+Csv	./lib/modules/download/generators/csv.rb	/^class Download::Generators::Csv < Download::Generators::Base$/;"	c	class:Download.Generators	inherits:Download.Generators.Base
+DEFAULT_OPTIONS	./lib/modules/wikipedia/url.rb	/^  DEFAULT_OPTIONS = {$/;"	C	class:Wikipedia.URL
+DEFAULT_TITLE	./app/helpers/search_helper.rb	/^  DEFAULT_TITLE = 'Protected Areas'$/;"	C	class:SearchHelper
+DOWNLOADS_VIEW_NAME	./lib/modules/wdpa/release.rb	/^  DOWNLOADS_VIEW_NAME = "downloads_protected_areas"$/;"	C	class:Wdpa.Release
+DOWNLOAD_TYPES	./app/helpers/application_helper.rb	/^  DOWNLOAD_TYPES = {$/;"	C	class:ApplicationHelper
+DRIVERS	./lib/modules/ogr/postgres.rb	/^  DRIVERS = {$/;"	C	class:Ogr.Postgres
+DataStandard	./lib/modules/wdpa/data_standard.rb	/^class Wdpa::DataStandard$/;"	c	class:Wdpa
+Designation	./app/models/designation.rb	/^class Designation < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+DesignationTest	./test/models/designation_test.rb	/^class DesignationTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DisableAssetsLogger	./config/environments/development.rb	/^class DisableAssetsLogger$/;"	c
+Download	./lib/modules/download.rb	/^module Download$/;"	m
+Download	./lib/modules/download/queries.rb	/^module Download$/;"	m
+Download	./lib/modules/download/utils.rb	/^module Download$/;"	m
+DownloadCompleteMailer	./app/mailers/download_complete_mailer.rb	/^class DownloadCompleteMailer < ActionMailer::Base$/;"	c	inherits:ActionMailer.Base
+DownloadCompleteMailerTest	./test/mailers/download_complete_mailer_test.rb	/^class DownloadCompleteMailerTest < ActionMailer::TestCase$/;"	c	inherits:ActionMailer.TestCase
+DownloadGenerator	./lib/modules/wdpa/download_generator.rb	/^class Wdpa::DownloadGenerator$/;"	c	class:Wdpa
+DownloadGeneratorTest	./test/unit/wdpa/download_generator_test.rb	/^class DownloadGeneratorTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadGeneratorsBaseTest	./test/unit/download/generators/base_test.rb	/^class DownloadGeneratorsBaseTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadGeneratorsCsvTest	./test/unit/download/generators/csv_test.rb	/^class DownloadGeneratorsCsvTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadKmlTest	./test/unit/download/generators/kml_test.rb	/^class DownloadKmlTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadPollersGeneralTest	./test/unit/download/pollers/general_test.rb	/^class DownloadPollersGeneralTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadPollersProjectTest	./test/unit/download/pollers/project_test.rb	/^class DownloadPollersProjectTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadPollersSearchTest	./test/unit/download/pollers/search_test.rb	/^class DownloadPollersSearchTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadRequesterGeneralTest	./test/unit/download/requesters/general_test.rb	/^class DownloadRequesterGeneralTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadRequesterProjectTest	./test/unit/download/requesters/project_test.rb	/^class DownloadRequesterProjectTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadRequestersBaseTest	./test/unit/download/requesters/base_test.rb	/^class DownloadRequestersBaseTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadRequestersSearchTest	./test/unit/download/requesters/search_test.rb	/^class DownloadRequestersSearchTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadRouterTest	./test/unit/download/router_test.rb	/^class DownloadRouterTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadShapefileTest	./test/unit/download/generators/shapefile_test.rb	/^class DownloadShapefileTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadTest	./test/unit/download_test.rb	/^class DownloadTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadUtilsTest	./test/unit/download/utils_test.rb	/^class DownloadUtilsTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadWorkersGeneralTest	./test/unit/workers/download_workers/general_test.rb	/^class DownloadWorkersGeneralTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadWorkersProjectTest	./test/unit/workers/download_workers/project_test.rb	/^class DownloadWorkersProjectTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadWorkersSearchTest	./test/unit/workers/download_workers/search_test.rb	/^class DownloadWorkersSearchTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+DownloadsController	./app/controllers/downloads_controller.rb	/^class DownloadsController < ApplicationController$/;"	c	inherits:ApplicationController
+DownloadsControllerTest	./test/controllers/downloads_controller_test.rb	/^class DownloadsControllerTest < ActionController::TestCase$/;"	c	inherits:ActionController.TestCase
+DropWikipediaSummaryTable	./db/migrate/20140617133557_drop_wikipedia_summary_table.rb	/^class DropWikipediaSummaryTable < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+Equality	./lib/modules/search/filter/equality.rb	/^class Search::Filter::Equality < Search::Filter$/;"	c	class:Search.Filter	inherits:Search.Filter
+ExportError	./lib/modules/ogr/postgres.rb	/^  class ExportError < StandardError; end;$/;"	c	class:Ogr.Postgres	inherits:StandardError
+FALLBACK_PATH	./lib/modules/asset_generator.rb	/^  FALLBACK_PATH = Rails.root.join('app\/assets\/images', 'search-placeholder-country.png')$/;"	C	class:AssetGenerator
+FILEPATH	./lib/modules/countries_geometry_importer.rb	/^  FILEPATH = Rails.root.join('tmp', 'countries_geometries_dump.tar.gz').to_s$/;"	C	class:CountriesGeometryImporter
+Filter	./lib/modules/search/filter.rb	/^class Search::Filter$/;"	c	class:Search
+FinaliserWorker	./app/workers/import_workers/finaliser_worker.rb	/^class ImportWorkers::FinaliserWorker$/;"	c	class:ImportWorkers
+FixMarineAreaTypeOnProtectedArea	./db/migrate/20140601200419_fix_marine_area_type_on_protected_area.rb	/^class FixMarineAreaTypeOnProtectedArea < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+FixTerritorialWatersGeometry	./db/migrate/20140709181758_fix_territorial_waters_geometry.rb	/^class FixTerritorialWatersGeometry < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+GENERATORS	./lib/modules/download.rb	/^  GENERATORS = [$/;"	C	class:Download
+GEOMETRY_TABLE	./lib/modules/wdpa/data_standard.rb	/^    GEOMETRY_TABLE = \/wdpa_?po\/i$/;"	C	class:Wdpa.DataStandard.Matchers
+General	./app/workers/download_workers/general.rb	/^class DownloadWorkers::General < DownloadWorkers::Base$/;"	c	class:DownloadWorkers	inherits:DownloadWorkers.Base
+General	./lib/modules/download/pollers/general.rb	/^class Download::Pollers::General$/;"	c	class:Download.Pollers
+General	./lib/modules/download/requesters/general.rb	/^class Download::Requesters::General < Download::Requesters::Base$/;"	c	class:Download.Requesters	inherits:Download.Requesters.Base
+Geo	./lib/modules/search/filter/geo.rb	/^class Search::Filter::Geo < Search::Filter$/;"	c	class:Search.Filter	inherits:Search.Filter
+GeoDistance	./lib/modules/search/sorter/geo_distance.rb	/^class Search::Sorter::GeoDistance < Search::Sorter$/;"	c	class:Search.Sorter	inherits:Search.Sorter
+Geometry	./lib/modules/geospatial/geometry.rb	/^class Geospatial::Geometry$/;"	c	class:Geospatial
+GeometryConcern	./app/models/concerns/geometry_concern.rb	/^module GeometryConcern$/;"	m
+GeometryDissolver	./lib/modules/geospatial/country_geometry_populator/geometry_dissolver.rb	/^module Geospatial::CountryGeometryPopulator::GeometryDissolver$/;"	m	class:Geospatial.CountryGeometryPopulator
+GeometryImporter	./lib/modules/wdpa/protected_area_importer/geometry_importer.rb	/^class Wdpa::ProtectedAreaImporter::GeometryImporter$/;"	c	class:Wdpa.ProtectedAreaImporter
+GeometryPopulatorWorker	./app/workers/import_workers/geometry_populator_worker.rb	/^class ImportWorkers::GeometryPopulatorWorker < ImportWorkers::Base$/;"	c	class:ImportWorkers	inherits:ImportWorkers.Base
+GeometryRatioCalculator	./lib/modules/wdpa/geometry_ratio_calculator.rb	/^module Wdpa::GeometryRatioCalculator$/;"	m	class:Wdpa
+GeospatialGeometryTest	./test/unit/geospatial/geometry_test.rb	/^class GeospatialGeometryTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Global	./lib/modules/stats/global.rb	/^class Stats::Global$/;"	c	class:Stats
+Governance	./app/models/governance.rb	/^class Governance < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+GovernanceTest	./test/models/governance_test.rb	/^class GovernanceTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Grouped	./lib/modules/search/aggregators/grouped.rb	/^module Search::Aggregators::Grouped$/;"	m	class:Search.Aggregators
+HomeController	./app/controllers/home_controller.rb	/^class HomeController < ApplicationController$/;"	c	inherits:ApplicationController
+HomeControllerTest	./test/controllers/home_controller_test.rb	/^class HomeControllerTest < ActionController::TestCase$/;"	c	inherits:ActionController.TestCase
+HomeHelper	./app/helpers/home_helper.rb	/^module HomeHelper$/;"	m
+HomeHelperTest	./test/helpers/home_helper_test.rb	/^class HomeHelperTest < ActionView::TestCase$/;"	c	inherits:ActionView.TestCase
+IMPORT_PREFIX	./lib/modules/download.rb	/^  IMPORT_PREFIX = 'import\/'$/;"	C	class:Download
+IMPORT_PREFIX	./lib/modules/s3.rb	/^  IMPORT_PREFIX = 'import\/'$/;"	C	class:S3
+IMPORT_VIEW_NAME	./lib/modules/wdpa/release.rb	/^  IMPORT_VIEW_NAME = "imported_protected_areas"$/;"	C	class:Wdpa.Release
+INDEX_NAME	./lib/modules/search/index.rb	/^  INDEX_NAME = Rails.application.secrets.elasticsearch["index"]$/;"	C	class:Search.Index
+INTERSECTOR_TEMPLATE	./lib/modules/geospatial/country_geometry_populator/marine_geometries_intersector.rb	/^  INTERSECTOR_TEMPLATE = File.expand_path($/;"	C	class:Geospatial.CountryGeometryPopulator.MarineGeometriesIntersector
+IRREPLACEABILITY_IMPORT	./lib/modules/wdpa/protected_area_importer.rb	/^  IRREPLACEABILITY_IMPORT = {$/;"	C	class:Wdpa.ProtectedAreaImporter
+ITEM_TYPES	./app/controllers/projects_controller.rb	/^  ITEM_TYPES = {$/;"	C	class:ProjectsController
+IUCN_CATEGORIES	./lib/modules/stats/global.rb	/^  IUCN_CATEGORIES = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"$/;"	C	class:Stats.Global
+Image	./app/models/image.rb	/^class Image < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+ImageTest	./test/models/image_test.rb	/^class ImageTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ImageWorker	./app/workers/import_workers/image_worker.rb	/^class ImportWorkers::ImageWorker < ImportWorkers::Base$/;"	c	class:ImportWorkers	inherits:ImportWorkers.Base
+Import	./lib/modules/import_tools/import.rb	/^class ImportTools::Import$/;"	c	class:ImportTools
+ImportConfirmationMailer	./app/mailers/import_confirmation_mailer.rb	/^class ImportConfirmationMailer < ActionMailer::Base$/;"	c	inherits:ActionMailer.Base
+ImportConfirmationMailerTest	./test/mailers/import_confirmation_mailer_test.rb	/^class ImportConfirmationMailerTest < ActionMailer::TestCase$/;"	c	inherits:ActionMailer.TestCase
+ImportConfirmationTest	./test/integration/import_confirmation_test.rb	/^class ImportConfirmationTest < ActionDispatch::IntegrationTest$/;"	c	inherits:ActionDispatch.IntegrationTest
+ImportController	./app/controllers/admin/import_controller.rb	/^class Admin::ImportController < ApplicationController$/;"	c	class:Admin	inherits:ApplicationController
+ImportControllerTest	./test/controllers/admin/import_controller_test.rb	/^class Admin::ImportControllerTest < ActionController::TestCase$/;"	c	class:Admin	inherits:ActionController.TestCase
+ImportTools	./lib/modules/import_tools.rb	/^module ImportTools$/;"	m
+ImportToolsImportTest	./test/unit/import_tools/import_test.rb	/^class ImportToolsImportTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ImportToolsPostgresHandlerTest	./test/unit/import_tools/postgres_handler_test.rb	/^class ImportToolsPostgresHandlerTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ImportToolsRedisHandlerTest	./test/unit/import_tools/redis_handler_test.rb	/^class ImportToolsRedisHandlerTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ImportToolsTest	./test/unit/import_tools_test.rb	/^class ImportToolsTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ImportToolsWebHandlerTest	./test/unit/import_tools/web_handler_test.rb	/^class ImportToolsWebHandlerTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ImportWorkersBaseTest	./test/unit/workers/import_workers/base_test.rb	/^class ImportWorkersBaseTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ImportWorkersFinaliserWorkerTest	./test/unit/workers/import_workers/finaliser_worker_test.rb	/^class ImportWorkersFinaliserWorkerTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ImportWorkersGeometryPopulatorWorkerTest	./test/unit/workers/import_workers/geometry_populator_worker_test.rb	/^class ImportWorkersGeometryPopulatorWorkerTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ImportWorkersMainWorkerTest	./test/unit/workers/import_workers/main_worker_test.rb	/^class ImportWorkersMainWorkerTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ImportWorkersS3PollingWorkerTest	./test/unit/workers/import_workers/s3_polling_worker_test.rb	/^class ImportWorkersS3PollingWorkerTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Importer	./lib/modules/wdpa/importer.rb	/^class Wdpa::Importer$/;"	c	class:Wdpa
+Index	./lib/modules/search/index.rb	/^class Search::Index$/;"	c	class:Search
+IndexTest	./test/unit/search/index_test.rb	/^class IndexTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Info	./lib/modules/ogr/info.rb	/^class Ogr::Info$/;"	c	class:Ogr
+IntegrationTest	./test/test_helper.rb	/^class ActionDispatch::IntegrationTest$/;"	c	class:ActionDispatch
+IucnCategory	./app/models/iucn_category.rb	/^class IucnCategory < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+IucnCategoryTest	./test/models/iucn_category_test.rb	/^class IucnCategoryTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Jurisdiction	./app/models/jurisdiction.rb	/^class Jurisdiction < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+JurisdictionTest	./test/models/jurisdiction_test.rb	/^class JurisdictionTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Kml	./lib/modules/download/generators/kml.rb	/^class Download::Generators::Kml < Download::Generators::Base$/;"	c	class:Download.Generators	inherits:Download.Generators.Base
+LegacyProtectedArea	./app/models/legacy_protected_area.rb	/^class LegacyProtectedArea < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+LegacyProtectedAreaTest	./test/models/legacy_protected_area_test.rb	/^class LegacyProtectedAreaTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+LegalStatus	./app/models/legal_status.rb	/^class LegalStatus < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+LegalStatusTest	./test/models/legal_status_test.rb	/^class LegalStatusTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+MAPPINGS_TEMPLATE	./lib/modules/search/index.rb	/^  MAPPINGS_TEMPLATE = File.read(File.join(TEMPLATE_DIRECTORY, 'mappings.json'))$/;"	C	class:Search.Index
+MARINE_TYPES	./lib/modules/geospatial/country_geometry_populator/marine_geometries_intersector.rb	/^  MARINE_TYPES = ['eez', 'ts']$/;"	C	class:Geospatial.CountryGeometryPopulator.MarineGeometriesIntersector
+MATCHERS	./lib/modules/search/matcher.rb	/^  MATCHERS = {$/;"	C	class:Search.Matcher
+MainWorker	./app/workers/import_workers/main_worker.rb	/^class ImportWorkers::MainWorker < ImportWorkers::Base$/;"	c	class:ImportWorkers	inherits:ImportWorkers.Base
+ManagementAuthority	./app/models/management_authority.rb	/^class ManagementAuthority < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+ManagementAuthorityTest	./test/models/management_authority_test.rb	/^class ManagementAuthorityTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+MarineGeometriesIntersector	./lib/modules/geospatial/country_geometry_populator/marine_geometries_intersector.rb	/^module Geospatial::CountryGeometryPopulator::MarineGeometriesIntersector$/;"	m	class:Geospatial.CountryGeometryPopulator
+Matcher	./lib/modules/search/matcher.rb	/^class Search::Matcher$/;"	c	class:Search
+Matchers	./lib/modules/wdpa/data_standard.rb	/^  module Matchers$/;"	m	class:Wdpa.DataStandard
+Merger	./lib/modules/carto_db/merger.rb	/^class CartoDb::Merger$/;"	c	class:CartoDb
+Model	./lib/modules/search/aggregators/model.rb	/^module Search::Aggregators::Model$/;"	m	class:Search.Aggregators
+MultiMatch	./lib/modules/search/matcher/multi_match.rb	/^class Search::Matcher::MultiMatch < Search::Matcher$/;"	c	class:Search.Matcher	inherits:Search.Matcher
+NESTED_ATTRIBUTES	./lib/modules/wdpa/data_standard.rb	/^  NESTED_ATTRIBUTES = [$/;"	C	class:Wdpa.DataStandard
+NO_PREVIEW_MSG	./app/helpers/cms_helper.rb	/^  NO_PREVIEW_MSG = "No preview available"$/;"	C	class:CmsHelper
+NO_REDIRECT	./app/controllers/application_controller.rb	/^  NO_REDIRECT = [$/;"	C	class:ApplicationController
+Nested	./lib/modules/search/filter/nested.rb	/^class Search::Filter::Nested < Search::Filter$/;"	c	class:Search.Filter	inherits:Search.Filter
+Nested	./lib/modules/search/matcher/nested.rb	/^class Search::Matcher::Nested < Search::Matcher$/;"	c	class:Search.Matcher	inherits:Search.Matcher
+NoTakeStatus	./app/models/no_take_status.rb	/^class NoTakeStatus < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+NoTakeStatusTest	./test/models/no_take_status_test.rb	/^class NoTakeStatusTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+PARAGRAPH_SELECTOR	./app/helpers/cms_helper.rb	/^  PARAGRAPH_SELECTOR = '.article__paragraph'$/;"	C	class:CmsHelper
+PARCC_IMPORT	./lib/modules/wdpa/protected_area_importer.rb	/^  PARCC_IMPORT = {$/;"	C	class:Wdpa.ProtectedAreaImporter
+POINTS_COLUMNS	./lib/modules/download/queries.rb	/^    POINTS_COLUMNS = [$/;"	C	class:Download.Queries
+POLYGON	./app/presenters/protected_area_presenter.rb	/^  POLYGON = -> (geom) { geom.try(:geometry_type) == RGeo::Feature::MultiPolygon }$/;"	C	class:ProtectedAreaPresenter
+POLYGONS_COLUMNS	./lib/modules/download/queries.rb	/^    POLYGONS_COLUMNS = POINTS_COLUMNS.clone$/;"	C	class:Download.Queries
+POLYGON_ATTRIBUTES	./lib/modules/wdpa/data_standard.rb	/^  POLYGON_ATTRIBUTES = [$/;"	C	class:Wdpa.DataStandard
+POLYGON_TABLE	./lib/modules/wdpa/data_standard.rb	/^    POLYGON_TABLE  = \/poly\/i$/;"	C	class:Wdpa.DataStandard.Matchers
+PRESENCE	./app/presenters/protected_area_presenter.rb	/^  PRESENCE = -> (obj) { !obj.nil? }$/;"	C	class:ProtectedAreaPresenter
+Panoramio	./lib/modules/panoramio.rb	/^class Panoramio$/;"	c
+PanoramioTest	./test/unit/panoramio_test.rb	/^class PanoramioTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ParallelIndexer	./lib/modules/search/parallel_indexer.rb	/^class Search::ParallelIndexer$/;"	c	class:Search
+PolymorphicArray	./lib/modules/polymorphic_group.rb	/^  class PolymorphicArray < Array$/;"	c	class:PolymorphicGroup	inherits:Array
+PolymorphicGroup	./lib/modules/polymorphic_group.rb	/^module PolymorphicGroup$/;"	m
+PolymorphicGroupTest	./test/unit/polymorphic_group_test.rb	/^class PolymorphicGroupTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Postgres	./lib/modules/ogr/postgres.rb	/^class Ogr::Postgres$/;"	c	class:Ogr
+PostgresHandler	./lib/modules/import_tools/postgres_handler.rb	/^class ImportTools::PostgresHandler$/;"	c	class:ImportTools
+Project	./app/models/project.rb	/^class Project < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+Project	./app/workers/download_workers/project.rb	/^class DownloadWorkers::Project < DownloadWorkers::Base$/;"	c	class:DownloadWorkers	inherits:DownloadWorkers.Base
+Project	./lib/modules/download/pollers/project.rb	/^class Download::Pollers::Project$/;"	c	class:Download.Pollers
+Project	./lib/modules/download/requesters/project.rb	/^class Download::Requesters::Project < Download::Requesters::Base$/;"	c	class:Download.Requesters	inherits:Download.Requesters.Base
+ProjectItem	./app/models/project_item.rb	/^class ProjectItem < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+ProjectsController	./app/controllers/projects_controller.rb	/^class ProjectsController < ApplicationController$/;"	c	inherits:ApplicationController
+ProjectsHelper	./app/helpers/projects_helper.rb	/^module ProjectsHelper$/;"	m
+Properties	./lib/modules/active_token/properties.rb	/^  class Properties < Hash$/;"	c	class:ActiveToken	inherits:Hash
+ProtectedArea	./app/models/protected_area.rb	/^class ProtectedArea < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+ProtectedAreaImporter	./lib/modules/wdpa/protected_area_importer.rb	/^class Wdpa::ProtectedAreaImporter$/;"	c	class:Wdpa
+ProtectedAreaPresenter	./app/presenters/protected_area_presenter.rb	/^class ProtectedAreaPresenter$/;"	c
+ProtectedAreaPresenterTest	./test/unit/presenters/protected_area_presenter_test.rb	/^class ProtectedAreaPresenterTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ProtectedAreaShowTest	./test/integration/protected_area_show_test.rb	/^class ProtectedAreaShowTest < ActionDispatch::IntegrationTest$/;"	c	inherits:ActionDispatch.IntegrationTest
+ProtectedAreaTest	./test/models/protected_area_test.rb	/^class ProtectedAreaTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+ProtectedAreasController	./app/controllers/api/v3/protected_areas_controller.rb	/^class Api::V3::ProtectedAreasController < ApplicationController$/;"	c	class:Api.V3	inherits:ApplicationController
+ProtectedAreasController	./app/controllers/protected_areas_controller.rb	/^class ProtectedAreasController < ApplicationController$/;"	c	inherits:ApplicationController
+ProtectedAreasControllerTest	./test/controllers/api/v3/protected_areas_controller_test.rb	/^class Api::V3::ProtectedAreasControllerTest < ActionController::TestCase$/;"	c	class:Api.V3	inherits:ActionController.TestCase
+ProtectedAreasControllerTest	./test/controllers/protected_areas_controller_test.rb	/^class ProtectedAreasControllerTest < ActionController::TestCase$/;"	c	inherits:ActionController.TestCase
+ProtectedAreasHelper	./app/helpers/protected_areas_helper.rb	/^module ProtectedAreasHelper$/;"	m
+ProtectedAreasHelperTest	./test/helpers/protected_areas_helper_test.rb	/^class ProtectedAreasHelperTest < ActionView::TestCase$/;"	c	inherits:ActionView.TestCase
+ProtectedPlanet	./config/application.rb	/^module ProtectedPlanet$/;"	m
+QUERY_CONDITIONS	./lib/modules/download/generators/shapefile.rb	/^  QUERY_CONDITIONS = {$/;"	C	class:Download.Generators.Shapefile
+Queries	./lib/modules/download/queries.rb	/^  module Queries$/;"	m	class:Download
+Query	./lib/modules/search/query.rb	/^class Search::Query$/;"	c	class:Search
+REPAIR_TEMPLATE	./lib/modules/geospatial/geometry.rb	/^  REPAIR_TEMPLATE = File.read($/;"	C	class:Geospatial.Geometry
+RESTORE_TEMPLATE	./lib/modules/countries_geometry_importer.rb	/^  RESTORE_TEMPLATE = File.read(File.join(File.dirname(__FILE__), 'pg_restore_command.erb'))$/;"	C	class:CountriesGeometryImporter
+RESULTS_SIZE	./lib/modules/search.rb	/^  RESULTS_SIZE = 20$/;"	C	class:Search
+RedisHandler	./lib/modules/import_tools/redis_handler.rb	/^class ImportTools::RedisHandler$/;"	c	class:ImportTools
+Region	./app/models/region.rb	/^class Region < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+RegionTest	./test/models/region_test.rb	/^class RegionTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+RegionalStatistic	./app/models/regional_statistic.rb	/^class RegionalStatistic < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+RegionalStatisticTest	./test/models/regional_statistic_test.rb	/^class RegionalStatisticTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+RelatedSourceImporter	./lib/modules/wdpa/protected_area_importer/related_source_importer.rb	/^class Wdpa::ProtectedAreaImporter::RelatedSourceImporter$/;"	c	class:Wdpa.ProtectedAreaImporter
+Relation	./lib/modules/wdpa/relation.rb	/^class Wdpa::Relation$/;"	c	class:Wdpa
+Release	./lib/modules/wdpa/release.rb	/^class Wdpa::Release$/;"	c	class:Wdpa
+RemovePercentageCoverPasFromRegionalStatistic	./db/migrate/20140715160555_remove_percentage_cover_pas_from_regional_statistic.rb	/^class RemovePercentageCoverPasFromRegionalStatistic < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+RemovesColumnsFromCountriesStatistics	./db/migrate/20140714105648_removes_columns_from_countries_statistics.rb	/^class RemovesColumnsFromCountriesStatistics < ActiveRecord::Migration$/;"	c	inherits:ActiveRecord.Migration
+ResourcesController	./app/controllers/cms/resources_controller.rb	/^class Cms::ResourcesController < ApplicationController$/;"	c	class:Cms	inherits:ApplicationController
+Results	./lib/modules/search/results.rb	/^class Search::Results$/;"	c	class:Search
+Router	./lib/modules/download/router.rb	/^module Download::Router$/;"	m	class:Download
+S3	./lib/modules/s3.rb	/^class S3$/;"	c
+S3	./lib/modules/wdpa/s3.rb	/^class Wdpa::S3$/;"	c	class:Wdpa
+S3PollingWorker	./app/workers/import_workers/s3_polling_worker.rb	/^class ImportWorkers::S3PollingWorker$/;"	c	class:ImportWorkers
+S3Test	./test/unit/s3_test.rb	/^class S3Test < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SECTIONS	./app/presenters/protected_area_presenter.rb	/^  SECTIONS = [{$/;"	C	class:ProtectedAreaPresenter
+SHAPEFILE_PARTS	./lib/modules/download/generators/shapefile.rb	/^  SHAPEFILE_PARTS = ['shp', 'shx',  'dbf', 'prj', 'cpg']$/;"	C	class:Download.Generators.Shapefile
+SHAPEFILE_PARTS	./lib/modules/shapefile.rb	/^  SHAPEFILE_PARTS = ['shx', 'shp', 'dbf', 'prj', 'cpg']$/;"	C	class:Shapefile
+SORTERS	./lib/modules/search/sorter.rb	/^  SORTERS = {$/;"	C	class:Search.Sorter
+SOURCE_TABLE	./lib/modules/wdpa/data_standard.rb	/^    SOURCE_TABLE   = \/wdpa_?source\/i$/;"	C	class:Wdpa.DataStandard.Matchers
+STANDARD_ATTRIBUTES	./lib/modules/wdpa/data_standard.rb	/^  STANDARD_ATTRIBUTES = {$/;"	C	class:Wdpa.DataStandard
+STANDARD_ATTRIBUTES	./lib/modules/wdpa/data_standard/source.rb	/^  STANDARD_ATTRIBUTES = {$/;"	C	class:Wdpa.DataStandard.Source
+STANDARD_COLUMNS	./lib/modules/wdpa/carto_db_importer.rb	/^  STANDARD_COLUMNS = ['wdpaid', 'SHAPE', 'iucn_cat', 'marine']$/;"	C	class:Wdpa.CartoDbImporter
+SavedSearch	./app/models/saved_search.rb	/^class SavedSearch < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+SavedSearchTest	./test/models/saved_search_test.rb	/^class SavedSearchTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Search	./app/workers/download_workers/search.rb	/^class DownloadWorkers::Search < DownloadWorkers::Base$/;"	c	class:DownloadWorkers	inherits:DownloadWorkers.Base
+Search	./lib/modules/download/pollers/search.rb	/^class Download::Pollers::Search$/;"	c	class:Download.Pollers
+Search	./lib/modules/download/requesters/search.rb	/^class Download::Requesters::Search < Download::Requesters::Base$/;"	c	class:Download.Requesters	inherits:Download.Requesters.Base
+Search	./lib/modules/search.rb	/^class Search$/;"	c
+SearchAggregationTest	./test/unit/search/aggregation_test.rb	/^class SearchAggregationTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SearchAggregatorsBooleanTest	./test/unit/search/aggregators/boolean_test.rb	/^class SearchAggregatorsBooleanTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SearchAggregatorsGroupedTest	./test/unit/search/aggregators/grouped_test.rb	/^class SearchAggregatorsGroupedTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SearchAggregatorsModel	./test/unit/search/aggregators/model_test.rb	/^class SearchAggregatorsModel < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SearchController	./app/controllers/api/v3/search_controller.rb	/^class Api::V3::SearchController < ApplicationController$/;"	c	class:Api.V3	inherits:ApplicationController
+SearchController	./app/controllers/search_controller.rb	/^class SearchController < ApplicationController$/;"	c	inherits:ApplicationController
+SearchControllerTest	./test/controllers/api/v3/search_controller_test.rb	/^class Api::V3::SearchControllerTest < ActionController::TestCase$/;"	c	class:Api.V3	inherits:ActionController.TestCase
+SearchControllerTest	./test/controllers/search_controller_test.rb	/^class SearchControllerTest < ActionController::TestCase$/;"	c	inherits:ActionController.TestCase
+SearchFilterTest	./test/unit/search/filter_test.rb	/^class SearchFilterTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SearchHelper	./app/helpers/search_helper.rb	/^module SearchHelper$/;"	m
+SearchHelperTest	./test/helpers/search_helper_test.rb	/^class SearchHelperTest < ActionView::TestCase$/;"	c	inherits:ActionView.TestCase
+SearchMatcherTest	./test/unit/search/matcher_test.rb	/^class SearchMatcherTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SearchQueryTest	./test/unit/search/query_test.rb	/^class SearchQueryTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SearchResultsTest	./test/unit/search/results_test.rb	/^class SearchResultsTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SearchSorterTest	./test/unit/search/sorter_test.rb	/^class SearchSorterTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SearchTest	./test/integration/api/search_test.rb	/^class SearchTest < ActionDispatch::IntegrationTest$/;"	c	inherits:ActionDispatch.IntegrationTest
+Shapefile	./lib/modules/download/generators/shapefile.rb	/^class Download::Generators::Shapefile < Download::Generators::Base$/;"	c	class:Download.Generators	inherits:Download.Generators.Base
+Shapefile	./lib/modules/ogr/shapefile.rb	/^class Ogr::Shapefile$/;"	c	class:Ogr
+Shapefile	./lib/modules/shapefile.rb	/^class Shapefile$/;"	c
+SitesController	./app/controllers/sites_controller.rb	/^class SitesController < ApplicationController$/;"	c	inherits:ApplicationController
+SitesControllerTest	./test/controllers/sites_controller_test.rb	/^class SitesControllerTest < ActionController::TestCase$/;"	c	inherits:ActionController.TestCase
+SitesTest	./test/integration/sites_test.rb	/^class SitesTest < ActionDispatch::IntegrationTest$/;"	c	inherits:ActionDispatch.IntegrationTest
+Sorter	./lib/modules/search/sorter.rb	/^class Search::Sorter$/;"	c	class:Search
+Source	./app/models/source.rb	/^class Source < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+Source	./lib/modules/wdpa/data_standard/source.rb	/^class Wdpa::DataStandard::Source < Wdpa::DataStandard$/;"	c	class:Wdpa.DataStandard	inherits:Wdpa.DataStandard
+SourceImporter	./lib/modules/wdpa/source_importer.rb	/^class Wdpa::SourceImporter$/;"	c	class:Wdpa
+SourceTest	./test/models/source_test.rb	/^class SourceTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Split	./lib/modules/ogr/split.rb	/^class Ogr::Split$/;"	c	class:Ogr
+StaticPagesController	./app/controllers/static_pages_controller.rb	/^class StaticPagesController < ApplicationController$/;"	c	inherits:ApplicationController
+StaticPagesControllerTest	./test/controllers/static_pages_controller_test.rb	/^class StaticPagesControllerTest < ActionController::TestCase$/;"	c	inherits:ActionController.TestCase
+StaticPagesTest	./test/integration/static_pages_test.rb	/^class StaticPagesTest < ActionDispatch::IntegrationTest$/;"	c	inherits:ActionDispatch.IntegrationTest
+StatisticPresenter	./app/presenters/statistic_presenter.rb	/^class StatisticPresenter$/;"	c
+StatisticPresenterTest	./test/unit/presenters/statistic_presenter_test.rb	/^class StatisticPresenterTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+SubLocation	./app/models/sub_location.rb	/^class SubLocation < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+SubLocationTest	./test/models/sub_location_test.rb	/^class SubLocationTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Summary	./lib/modules/wikipedia/summary.rb	/^class Wikipedia::Summary$/;"	c	class:Wikipedia
+TEMPLATE	./lib/modules/geospatial/country_geometry_populator/geometry_dissolver.rb	/^  TEMPLATE = File.expand_path($/;"	C	class:Geospatial.CountryGeometryPopulator.GeometryDissolver
+TEMPLATE	./lib/modules/search/aggregation.rb	/^  TEMPLATE = File.read(File.join(TEMPLATE_DIRECTORY, 'aggregations.json'))$/;"	C	class:Search.Aggregation
+TEMPLATES	./lib/modules/ogr/postgres.rb	/^  TEMPLATES = {$/;"	C	class:Ogr.Postgres
+TEMPLATE_DIRECTORY	./lib/modules/ogr/postgres.rb	/^  TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'command_templates')$/;"	C	class:Ogr.Postgres
+TEMPLATE_DIRECTORY	./lib/modules/search/aggregation.rb	/^  TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'templates')$/;"	C	class:Search.Aggregation
+TEMPLATE_DIRECTORY	./lib/modules/search/index.rb	/^  TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'templates')$/;"	C	class:Search.Index
+TEMPLATE_PATH	./lib/modules/ogr/shapefile.rb	/^  TEMPLATE_PATH = File.join(File.dirname(__FILE__), 'ogr_shapefile_command.erb')$/;"	C	class:Ogr.Shapefile
+TITLE_GENERATORS	./app/helpers/search_helper.rb	/^  TITLE_GENERATORS = {$/;"	C	class:SearchHelper
+TMP_PATH	./lib/modules/download.rb	/^  TMP_PATH = File.join(Rails.root, 'tmp')$/;"	C	class:Download
+TYPE	./lib/modules/download/generators/csv.rb	/^  TYPE = 'csv'$/;"	C	class:Download.Generators.Csv
+TYPE	./lib/modules/download/generators/kml.rb	/^  TYPE = 'kml'$/;"	C	class:Download.Generators.Kml
+TYPE	./lib/modules/download/generators/shapefile.rb	/^  TYPE = 'shapefile'$/;"	C	class:Download.Generators.Shapefile
+TYPE_CONVERSIONS	./lib/modules/wdpa/attribute.rb	/^  TYPE_CONVERSIONS = {$/;"	C	class:Wdpa.Attribute
+TestCartoDbImporter	./test/unit/wdpa/carto_db_importer_test.rb	/^class TestCartoDbImporter < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestCartoDbMerger	./test/unit/carto_db/carto_db_merger_test.rb	/^class TestCartoDbMerger < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestCartoDbUploader	./test/unit/carto_db/carto_db_uploader_test.rb	/^class TestCartoDbUploader < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestCase	./test/test_helper.rb	/^class ActionController::TestCase$/;"	c	class:ActionController
+TestCase	./test/test_helper.rb	/^class ActionMailer::TestCase$/;"	c	class:ActionMailer
+TestCountriesGeometryImporter	./test/unit/countries_geometry_importer_test.rb	/^class TestCountriesGeometryImporter < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestGeospatialCalculator	./test/unit/geospatial/calculator_test.rb	/^class TestGeospatialCalculator < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestObj	./test/unit/active_token_test.rb	/^  class TestObj$/;"	c	class:ActiveTokenTest
+TestOgrInfo	./test/unit/ogr/info_test.rb	/^class TestOgrInfo < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestOgrPostgres	./test/unit/ogr/postgres_test.rb	/^class TestOgrPostgres < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestOgrShapefile	./test/unit/ogr/shapefile_test.rb	/^class TestOgrShapefile < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestOgrSplit	./test/unit/ogr/split_test.rb	/^class TestOgrSplit < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestSearch	./test/unit/search_test.rb	/^class TestSearch < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestShapefile	./test/unit/shapefile_test.rb	/^class TestShapefile < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestSourceDataStandard	./test/unit/wdpa/data_standard/source_test.rb	/^class TestSourceDataStandard < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestSourceImporter	./test/unit/wdpa/source_importer_test.rb	/^class TestSourceImporter < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestWdpaAssetImporterService	./test/unit/wdpa/protected_area_importer/asset_importer_test.rb	/^class TestWdpaAssetImporterService < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestWdpaAttribute	./test/unit/wdpa/attribute_test.rb	/^class TestWdpaAttribute < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestWdpaAttributeImporterService	./test/unit/wdpa/protected_area_importer/attribute_importer_test.rb	/^class TestWdpaAttributeImporterService < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestWdpaDataStandard	./test/unit/wdpa/data_standard_test.rb	/^class TestWdpaDataStandard < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestWdpaGeometryImporterService	./test/unit/wdpa/protected_area_importer/geometry_importer_test.rb	/^class TestWdpaGeometryImporterService < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestWdpaImporter	./test/unit/wdpa/importer_test.rb	/^class TestWdpaImporter < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestWdpaProtectedAreaImporter	./test/unit/wdpa/protected_area_importer_test.rb	/^class TestWdpaProtectedAreaImporter < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestWdpaRelease	./test/unit/wdpa/release_test.rb	/^class TestWdpaRelease < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+TestWdpaS3Downloader	./test/unit/wdpa/s3_test.rb	/^class TestWdpaS3Downloader < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+Type	./lib/modules/search/filter/type.rb	/^class Search::Filter::Type < Search::Filter$/;"	c	class:Search.Filter	inherits:Search.Filter
+URL	./lib/modules/wikipedia/url.rb	/^class Wikipedia::URL$/;"	c	class:Wikipedia
+Uploader	./lib/modules/carto_db/uploader.rb	/^class CartoDb::Uploader$/;"	c	class:CartoDb
+User	./app/models/user.rb	/^class User < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+Utils	./lib/modules/download/utils.rb	/^  module Utils$/;"	m	class:Download
+WIKIPEDIA_HOSTNAME	./lib/modules/wikipedia/url.rb	/^  WIKIPEDIA_HOSTNAME = -> (lang) {"#{lang}.wikipedia.org"}$/;"	C	class:Wikipedia.URL
+WRONG_ARGUMENTS_MSG	./lib/modules/ogr/postgres.rb	/^  WRONG_ARGUMENTS_MSG = 'Given new table name, but no original table name'$/;"	C	class:Ogr.Postgres
+WdpaCountryGeometryPopulatorTest	./test/unit/wdpa/country_geometry_populator_test.rb	/^class WdpaCountryGeometryPopulatorTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+WdpaProtectedAreaImporterRelatedSourceImporterTest	./test/unit/wdpa/protected_area_importer/related_source_importer_test.rb	/^class WdpaProtectedAreaImporterRelatedSourceImporterTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+WebHandler	./lib/modules/import_tools/web_handler.rb	/^class ImportTools::WebHandler$/;"	c	class:ImportTools
+WikipediaArticle	./app/models/wikipedia_article.rb	/^class WikipediaArticle < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
+WikipediaArticleTest	./test/models/wikipedia_article_test.rb	/^class WikipediaArticleTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+WikipediaSummaryTest	./test/unit/wikipedia/summary_test.rb	/^class WikipediaSummaryTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+WikipediaSummaryWorker	./app/workers/import_workers/wikipedia_summary_worker.rb	/^class ImportWorkers::WikipediaSummaryWorker < ImportWorkers::Base$/;"	c	class:ImportWorkers	inherits:ImportWorkers.Base
+WikipediaURLTest	./test/unit/wikipedia/url_test.rb	/^class WikipediaURLTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
+[]=	./lib/modules/active_token/properties.rb	/^    def []= key, value$/;"	f	class:ActiveToken.Properties
+about	./app/controllers/static_pages_controller.rb	/^  def about$/;"	f	class:StaticPagesController
+add_conditions	./lib/modules/download/generators/base.rb	/^  def add_conditions query, conditions$/;"	f	class:Download.Generators.Base
+add_item_to_project	./app/controllers/projects_controller.rb	/^  def add_item_to_project$/;"	f	class:ProjectsController
+add_to_completed_imports	./lib/modules/import_tools/import.rb	/^  def add_to_completed_imports$/;"	f	class:ImportTools.Import
+add_to_previous_imports	./lib/modules/import_tools/redis_handler.rb	/^  def add_to_previous_imports token$/;"	f	class:ImportTools.RedisHandler
+admin_request	./lib/modules/import_tools/web_handler.rb	/^  def admin_request method, url, query={}$/;"	f	class:ImportTools.WebHandler
+after_sign_in_path_for	./app/controllers/application_controller.rb	/^  def after_sign_in_path_for(resource)$/;"	f	class:ApplicationController
+aggregations	./lib/modules/search.rb	/^  def aggregations$/;"	f	class:Search
+aggregator_for	./lib/modules/search/aggregation.rb	/^  def self.aggregator_for name$/;"	F	class:Search.Aggregation
+all	./lib/modules/search/aggregation.rb	/^  def self.all$/;"	F	class:Search.Aggregation
+all_fields	./app/presenters/protected_area_presenter.rb	/^  def all_fields$/;"	f	class:ProtectedAreaPresenter
+all_versions	./app/presenters/cms_presenter.rb	/^  def all_versions$/;"	f	class:CmsPresenter
+article_version_element	./app/helpers/cms_helper.rb	/^  def article_version_element version$/;"	f	class:CmsHelper
+as_api_feeder	./app/models/protected_area.rb	/^  def as_api_feeder$/;"	f	class:ProtectedArea
+as_indexed_json	./app/models/country.rb	/^  def as_indexed_json options={}$/;"	f	class:Country
+as_indexed_json	./app/models/protected_area.rb	/^  def as_indexed_json options={}$/;"	f	class:ProtectedArea
+as_indexed_json	./app/models/region.rb	/^  def as_indexed_json options={}$/;"	f	class:Region
+assert_same_elements	./test/test_helper.rb	/^  def assert_same_elements(array_one, array_two)$/;"	f	class:MiniTest.Assertions
+attachments_paths	./lib/modules/download/generators/base.rb	/^  def attachments_paths$/;"	f	class:Download.Generators.Base
+attributes_for_image	./lib/modules/panoramio.rb	/^  def attributes_for_image image$/;"	f	class:Panoramio
+attributes_from_standards_hash	./lib/modules/wdpa/data_standard.rb	/^  def self.attributes_from_standards_hash standards_hash$/;"	F	class:Wdpa.DataStandard
+authenticated?	./app/controllers/admin_controller.rb	/^  def authenticated?$/;"	f	class:AdminController
+autocomplete	./app/controllers/search_controller.rb	/^  def autocomplete$/;"	f	class:SearchController
+autocomplete_link	./app/helpers/search_helper.rb	/^  def autocomplete_link result$/;"	f	class:SearchHelper
+available_wdpa_databases	./lib/modules/wdpa/s3.rb	/^  def available_wdpa_databases$/;"	f	class:Wdpa.S3
+batch_size	./lib/modules/search/parallel_indexer.rb	/^  def batch_size$/;"	f	class:Search.ParallelIndexer
+batches_queue	./lib/modules/search/parallel_indexer.rb	/^  def batches_queue$/;"	f	class:Search.ParallelIndexer
+bem	./app/helpers/bem_helper.rb	/^  def bem b_or_e, *modifiers$/;"	f	class:BemHelper
+bool_key	./lib/modules/search/filter/nested.rb	/^  def bool_key$/;"	f	class:Search.Filter.Nested
+bounding_box	./app/models/protected_area.rb	/^  def bounding_box$/;"	f	class:ProtectedArea
+bounding_box_query	./app/models/protected_area.rb	/^  def bounding_box_query$/;"	f	class:ProtectedArea
+bounds	./app/models/concerns/geometry_concern.rb	/^  def bounds$/;"	f	class:GeometryConcern
+bounds	./app/models/protected_area.rb	/^  def bounds$/;"	f	class:ProtectedArea
+build	./lib/modules/search/aggregators/boolean.rb	/^  def self.build name, raw_aggregations, config$/;"	F	class:Search.Aggregators.Boolean
+build	./lib/modules/search/aggregators/grouped.rb	/^  def self.build group_name, raw_aggregations, config$/;"	F	class:Search.Aggregators.Grouped
+build	./lib/modules/search/aggregators/model.rb	/^  def self.build name, raw_aggregations, config$/;"	F	class:Search.Aggregators.Model
+build	./lib/modules/wikipedia/url.rb	/^  def self.build article, options={}$/;"	F	class:Wikipedia.URL
+build_country	./app/models/country_statistic.rb	/^  belongs_to :country$/;"	F	class:CountryStatistic
+build_country	./app/models/sub_location.rb	/^  belongs_to :country$/;"	F	class:SubLocation
+build_country_statistic	./app/models/country.rb	/^  has_one :country_statistic$/;"	F	class:Country
+build_designation	./app/models/protected_area.rb	/^  belongs_to :designation$/;"	F	class:ProtectedArea
+build_governance	./app/models/protected_area.rb	/^  belongs_to :governance$/;"	F	class:ProtectedArea
+build_item	./app/models/project_item.rb	/^  belongs_to :item, polymorphic: true$/;"	F	class:ProjectItem
+build_iucn_category	./app/models/protected_area.rb	/^  belongs_to :iucn_category$/;"	F	class:ProtectedArea
+build_jurisdiction	./app/models/designation.rb	/^  belongs_to :jurisdiction$/;"	F	class:Designation
+build_legal_status	./app/models/protected_area.rb	/^  belongs_to :legal_status$/;"	F	class:ProtectedArea
+build_management_authority	./app/models/protected_area.rb	/^  belongs_to :management_authority$/;"	F	class:ProtectedArea
+build_no_take_status	./app/models/protected_area.rb	/^  belongs_to :no_take_status$/;"	F	class:ProtectedArea
+build_parent	./app/models/country.rb	/^  belongs_to :parent, class_name: "Country", foreign_key: :country_id$/;"	F	class:Country
+build_project	./app/models/project_item.rb	/^  belongs_to :project$/;"	F	class:ProjectItem
+build_project	./app/models/saved_search.rb	/^  belongs_to :project$/;"	F	class:SavedSearch
+build_protected_area	./app/models/no_take_status.rb	/^  has_one :protected_area$/;"	F	class:NoTakeStatus
+build_protected_area	./app/models/wikipedia_article.rb	/^  has_one :protected_area$/;"	F	class:WikipediaArticle
+build_region	./app/models/country.rb	/^  belongs_to :region$/;"	F	class:Country
+build_region	./app/models/regional_statistic.rb	/^  belongs_to :region$/;"	F	class:RegionalStatistic
+build_region_for_index	./app/models/country.rb	/^  belongs_to :region_for_index, -> { select('regions.id, regions.name') }, :class_name => 'Region', :foreign_key => 'region_id'$/;"	F	class:Country
+build_regional_statistic	./app/models/region.rb	/^  has_one :regional_statistic$/;"	F	class:Region
+build_user	./app/models/project.rb	/^  belongs_to :user$/;"	F	class:Project
+build_wikipedia_article	./app/models/protected_area.rb	/^  belongs_to :wikipedia_article$/;"	F	class:ProtectedArea
+by_point	./app/controllers/api/v3/search_controller.rb	/^  def by_point$/;"	f	class:Api.V3.SearchController
+calculate	./lib/modules/wdpa/geometry_ratio_calculator.rb	/^  def self.calculate$/;"	F	class:Wdpa.GeometryRatioCalculator
+calculate_geometry_counts	./lib/modules/wdpa/geometry_ratio_calculator.rb	/^  def self.calculate_geometry_counts country_id$/;"	F	class:Wdpa.GeometryRatioCalculator
+calculate_statistics	./lib/modules/geospatial/calculator.rb	/^  def calculate_statistics$/;"	f	class:Geospatial.Calculator
+calculate_statistics	./lib/modules/geospatial/calculator.rb	/^  def self.calculate_statistics$/;"	F	class:Geospatial.Calculator
+call	./config/environments/development.rb	/^  def call(env)$/;"	f	class:DisableAssetsLogger
+cancel	./app/controllers/admin/import_controller.rb	/^  def cancel$/;"	f	class:Admin.ImportController
+change	./db/migrate/20131104173246_create_extension_postgis.rb	/^  def change$/;"	f	class:CreateExtensionPostgis
+change	./db/migrate/20140429140622_create_protected_areas.rb	/^  def change$/;"	f	class:CreateProtectedAreas
+change	./db/migrate/20140527095736_create_countries.rb	/^  def change$/;"	f	class:CreateCountries
+change	./db/migrate/20140527125150_create_sub_locations.rb	/^  def change$/;"	f	class:CreateSubLocations
+change	./db/migrate/20140527135808_create_legal_statuses.rb	/^  def change$/;"	f	class:CreateLegalStatuses
+change	./db/migrate/20140527150153_create_iucn_categories.rb	/^  def change$/;"	f	class:CreateIucnCategories
+change	./db/migrate/20140527151457_create_governances.rb	/^  def change$/;"	f	class:CreateGovernances
+change	./db/migrate/20140527152932_create_management_authorities.rb	/^  def change$/;"	f	class:CreateManagementAuthorities
+change	./db/migrate/20140528072204_create_designations.rb	/^  def change$/;"	f	class:CreateDesignations
+change	./db/migrate/20140528072657_create_jurisdictions.rb	/^  def change$/;"	f	class:CreateJurisdictions
+change	./db/migrate/20140528073943_add_jurisdiction_id_to_designation.rb	/^  def change$/;"	f	class:AddJurisdictionIdToDesignation
+change	./db/migrate/20140529072242_create_no_take_statuses.rb	/^  def change$/;"	f	class:CreateNoTakeStatuses
+change	./db/migrate/20140601191435_add_the_geom_to_protected_area.rb	/^  def change$/;"	f	class:AddTheGeomToProtectedArea
+change	./db/migrate/20140601193709_add_wdpa_id_to_protected_area.rb	/^  def change$/;"	f	class:AddWdpaIdToProtectedArea
+change	./db/migrate/20140601193923_add_wdpa_parent_id_to_protected_area.rb	/^  def change$/;"	f	class:AddWdpaParentIdToProtectedArea
+change	./db/migrate/20140601195215_add_name_to_protected_area.rb	/^  def change$/;"	f	class:AddNameToProtectedArea
+change	./db/migrate/20140601195405_add_original_name_to_protected_area.rb	/^  def change$/;"	f	class:AddOriginalNameToProtectedArea
+change	./db/migrate/20140601195445_add_marine_to_protected_area.rb	/^  def change$/;"	f	class:AddMarineToProtectedArea
+change	./db/migrate/20140601195642_add_reported_marine_area_to_protected_area.rb	/^  def change$/;"	f	class:AddReportedMarineAreaToProtectedArea
+change	./db/migrate/20140601195715_add_reported_area_to_protected_area.rb	/^  def change$/;"	f	class:AddReportedAreaToProtectedArea
+change	./db/migrate/20140601195757_add_gis_area_to_protected_area.rb	/^  def change$/;"	f	class:AddGisAreaToProtectedArea
+change	./db/migrate/20140601195843_add_gis_marine_area_to_protected_area.rb	/^  def change$/;"	f	class:AddGisMarineAreaToProtectedArea
+change	./db/migrate/20140601200419_fix_marine_area_type_on_protected_area.rb	/^  def change$/;"	f	class:FixMarineAreaTypeOnProtectedArea
+change	./db/migrate/20140601203016_create_countries_protected_areas.rb	/^  def change$/;"	f	class:CreateCountriesProtectedAreas
+change	./db/migrate/20140601203550_create_protected_areas_sub_locations.rb	/^  def change$/;"	f	class:CreateProtectedAreasSubLocations
+change	./db/migrate/20140601204147_add_legal_status_id_to_protected_area.rb	/^  def change$/;"	f	class:AddLegalStatusIdToProtectedArea
+change	./db/migrate/20140601205045_add_legal_status_updated_at_to_protected_area.rb	/^  def change$/;"	f	class:AddLegalStatusUpdatedAtToProtectedArea
+change	./db/migrate/20140601205500_add_iucn_category_id_to_protected_area.rb	/^  def change$/;"	f	class:AddIucnCategoryIdToProtectedArea
+change	./db/migrate/20140601210111_add_governance_id_to_protected_area.rb	/^  def change$/;"	f	class:AddGovernanceIdToProtectedArea
+change	./db/migrate/20140601210622_add_management_plan_to_protected_area.rb	/^  def change$/;"	f	class:AddManagementPlanToProtectedArea
+change	./db/migrate/20140601210739_add_management_authority_id_to_protected_area.rb	/^  def change$/;"	f	class:AddManagementAuthorityIdToProtectedArea
+change	./db/migrate/20140601210855_add_international_criteria_to_protected_area.rb	/^  def change$/;"	f	class:AddInternationalCriteriaToProtectedArea
+change	./db/migrate/20140601211052_add_no_take_status_id_to_protected_area.rb	/^  def change$/;"	f	class:AddNoTakeStatusIdToProtectedArea
+change	./db/migrate/20140601211314_add_designation_id_to_protected_area.rb	/^  def change$/;"	f	class:AddDesignationIdToProtectedArea
+change	./db/migrate/20140602092716_change_wdpa_parent_id_on_protected_area.rb	/^  def change$/;"	f	class:ChangeWdpaParentIdOnProtectedArea
+change	./db/migrate/20140602103846_add_legal_status_id_index_to_protected_area.rb	/^  def change$/;"	f	class:AddLegalStatusIdIndexToProtectedArea
+change	./db/migrate/20140602104104_add_iucn_category_id_index_to_protected_area.rb	/^  def change$/;"	f	class:AddIucnCategoryIdIndexToProtectedArea
+change	./db/migrate/20140602104158_add_governance_id_index_to_protected_area.rb	/^  def change$/;"	f	class:AddGovernanceIdIndexToProtectedArea
+change	./db/migrate/20140602104243_add_management_authority_id_index_to_protected_area.rb	/^  def change$/;"	f	class:AddManagementAuthorityIdIndexToProtectedArea
+change	./db/migrate/20140602104354_add_no_take_status_id_index_to_protected_area.rb	/^  def change$/;"	f	class:AddNoTakeStatusIdIndexToProtectedArea
+change	./db/migrate/20140602104439_add_designation_id_index_to_protected_area.rb	/^  def change$/;"	f	class:AddDesignationIdIndexToProtectedArea
+change	./db/migrate/20140605105549_add_country_relation_to_sub_location.rb	/^  def change$/;"	f	class:AddCountryRelationToSubLocation
+change	./db/migrate/20140612090110_add_language_to_country.rb	/^  def change$/;"	f	class:AddLanguageToCountry
+change	./db/migrate/20140612092941_add_unaccent_extension.rb	/^  def change$/;"	f	class:AddUnaccentExtension
+change	./db/migrate/20140612133146_add_search_view.rb	/^  def change$/;"	f	class:AddSearchView
+change	./db/migrate/20140613125148_add_search_view_index.rb	/^  def change$/;"	f	class:AddSearchViewIndex
+change	./db/migrate/20140616142743_add_slug_column_to_protected_areas_table.rb	/^  def change$/;"	f	class:AddSlugColumnToProtectedAreasTable
+change	./db/migrate/20140617091236_create_regional_statistics.rb	/^  def change$/;"	f	class:CreateRegionalStatistics
+change	./db/migrate/20140617091255_create_country_statistics.rb	/^  def change$/;"	f	class:CreateCountryStatistics
+change	./db/migrate/20140617091326_create_regions.rb	/^  def change$/;"	f	class:CreateRegions
+change	./db/migrate/20140617091620_create_wikipedia_summaries.rb	/^  def change$/;"	f	class:CreateWikipediaSummaries
+change	./db/migrate/20140617093647_create_images.rb	/^  def change$/;"	f	class:CreateImages
+change	./db/migrate/20140617095318_add_attributes_to_image.rb	/^  def change$/;"	f	class:AddAttributesToImage
+change	./db/migrate/20140617113201_add_protected_area_id_to_image.rb	/^  def change$/;"	f	class:AddProtectedAreaIdToImage
+change	./db/migrate/20140617133557_drop_wikipedia_summary_table.rb	/^  def change$/;"	f	class:DropWikipediaSummaryTable
+change	./db/migrate/20140617133708_create_wikipedia_articles.rb	/^  def change$/;"	f	class:CreateWikipediaArticles
+change	./db/migrate/20140617133943_change_wikipedia_summary_column_on_protected_area.rb	/^  def change$/;"	f	class:ChangeWikipediaSummaryColumnOnProtectedArea
+change	./db/migrate/20140617161632_add_iso_to_region.rb	/^  def change$/;"	f	class:AddIsoToRegion
+change	./db/migrate/20140617170024_add_details_url_to_image.rb	/^  def change$/;"	f	class:AddDetailsUrlToImage
+change	./db/migrate/20140617170938_add_region_id_to_countries.rb	/^  def change$/;"	f	class:AddRegionIdToCountries
+change	./db/migrate/20140625101751_add_bbox_to_countries.rb	/^  def change$/;"	f	class:AddBboxToCountries
+change	./db/migrate/20140625154316_add_bbox_to_regions.rb	/^  def change$/;"	f	class:AddBboxToRegions
+change	./db/migrate/20140703130946_add_weight_to_all_search_parameters.rb	/^  def change$/;"	f	class:AddWeightToAllSearchParameters
+change	./db/migrate/20140704105917_add_pas_geom_to_countries.rb	/^  def change$/;"	f	class:AddPasGeomToCountries
+change	./db/migrate/20140704154428_add_columns_to_country.rb	/^  def change$/;"	f	class:AddColumnsToCountry
+change	./db/migrate/20140707111454_add_search_lexemes_table.rb	/^  def change$/;"	f	class:AddSearchLexemesTable
+change	./db/migrate/20140708193519_create_legacy_protected_areas.rb	/^  def change$/;"	f	class:CreateLegacyProtectedAreas
+change	./db/migrate/20140709181758_fix_territorial_waters_geometry.rb	/^  def change$/;"	f	class:FixTerritorialWatersGeometry
+change	./db/migrate/20140710124303_create_sources.rb	/^  def change$/;"	f	class:CreateSources
+change	./db/migrate/20140710144417_add_areas_to_country_statistic.rb	/^  def change$/;"	f	class:AddAreasToCountryStatistic
+change	./db/migrate/20140714105648_removes_columns_from_countries_statistics.rb	/^  def change$/;"	f	class:RemovesColumnsFromCountriesStatistics
+change	./db/migrate/20140714110350_add_land_area_to_country_statistic.rb	/^  def change$/;"	f	class:AddLandAreaToCountryStatistic
+change	./db/migrate/20140714231111_add_percentage_pa_cover_to_country_statistic.rb	/^  def change$/;"	f	class:AddPercentagePaCoverToCountryStatistic
+change	./db/migrate/20140715160555_remove_percentage_cover_pas_from_regional_statistic.rb	/^  def change$/;"	f	class:RemovePercentageCoverPasFromRegionalStatistic
+change	./db/migrate/20140715160624_add_geo_c_olumns_to_regional_statistic.rb	/^  def change$/;"	f	class:AddGeoCOlumnsToRegionalStatistic
+change	./db/migrate/20140716103827_add_marine_ts_pas_geom_to_countries.rb	/^  def change$/;"	f	class:AddMarineTsPasGeomToCountries
+change	./db/migrate/20140716103848_add_marine_eez_pas_geom_to_countries.rb	/^  def change$/;"	f	class:AddMarineEezPasGeomToCountries
+change	./db/migrate/20140717133702_add_country_geometries_indexes.rb	/^  def change$/;"	f	class:AddCountryGeometriesIndexes
+change	./db/migrate/20140718131656_add_indexes_to_countries.rb	/^  def change$/;"	f	class:AddIndexesToCountries
+change	./db/migrate/20140718134127_add_molleweide_projection.rb	/^  def change$/;"	f	class:AddMolleweideProjection
+change	./db/migrate/20140721122630_add_pa_eez_area_to_regional_statistic.rb	/^  def change$/;"	f	class:AddPaEezAreaToRegionalStatistic
+change	./db/migrate/20140721122852_add_pa_eez_area_to_country_statistic.rb	/^  def change$/;"	f	class:AddPaEezAreaToCountryStatistic
+change	./db/migrate/20140725144859_add_column_metadataid_to_source_table.rb	/^  def change$/;"	f	class:AddColumnMetadataidToSourceTable
+change	./db/migrate/20140725145539_add_protected_area_source_join_table.rb	/^  def change$/;"	f	class:AddProtectedAreaSourceJoinTable
+change	./db/migrate/20141020135233_create_projects.rb	/^  def change$/;"	f	class:CreateProjects
+change	./db/migrate/20141020141143_add_user_id_to_projects_table.rb	/^  def change$/;"	f	class:AddUserIdToProjectsTable
+change	./db/migrate/20141020142210_create_project_items.rb	/^  def change$/;"	f	class:CreateProjectItems
+change	./db/migrate/20141021143253_create_saved_searches.rb	/^  def change$/;"	f	class:CreateSavedSearches
+change	./db/migrate/20141023130515_add_the_geom_longitude_to_protected_area.rb	/^  def change$/;"	f	class:AddTheGeomLongitudeToProtectedArea
+change	./db/migrate/20141023130537_add_the_geom_latitude_to_protected_area.rb	/^  def change$/;"	f	class:AddTheGeomLatitudeToProtectedArea
+change	./db/migrate/20150112151154_add_percentage_pa_marine_cover_to_country_statistic.rb	/^  def change$/;"	f	class:AddPercentagePaMarineCoverToCountryStatistic
+change	./db/migrate/20150112151526_add_marine_area_to_country_statistic.rb	/^  def change$/;"	f	class:AddMarineAreaToCountryStatistic
+change	./db/migrate/20150121153231_add_has_irreplaceability_info_column_to_protected_areas_table.rb	/^  def change$/;"	f	class:AddHasIrreplaceabilityInfoColumnToProtectedAreasTable
+change	./db/migrate/20150618130809_add_has_parcc_info_to_protected_areas_table.rb	/^  def change$/;"	f	class:AddHasParccInfoToProtectedAreasTable
+change	./db/migrate/20151117235200_add_country_id_column_to_countries_table.rb	/^  def change$/;"	f	class:AddCountryIdColumnToCountriesTable
+change	./db/migrate/20151121122006_add_geometry_ratio_columns_to_country_statistics_table.rb	/^  def change$/;"	f	class:AddGeometryRatioColumnsToCountryStatisticsTable
+change	./db/migrate/20151216110546_add_older_version_id_to_articles_table.rb	/^  def change$/;"	f	class:AddOlderVersionIdToArticlesTable
+children	./app/models/country.rb	/^  has_many :children, class_name: "Country"$/;"	F	class:Country
+children=	./app/models/country.rb	/^  has_many :children, class_name: "Country"$/;"	F	class:Country
+class_to_human	./app/helpers/projects_helper.rb	/^  def class_to_human classname$/;"	f	class:ProjectsHelper
+clean_up	./lib/modules/download.rb	/^  def self.clean_up path$/;"	F	class:Download
+clean_up	./lib/modules/download/generators/base.rb	/^  def clean_up$/;"	f	class:Download.Generators.Base
+clean_up	./lib/modules/download/generators/shapefile.rb	/^  def clean_up$/;"	f	class:Download.Generators.Shapefile
+clean_up	./lib/modules/wdpa/release.rb	/^  def clean_up$/;"	f	class:Wdpa.Release
+clean_up_after	./lib/modules/download/generators/base.rb	/^  def clean_up_after$/;"	f	class:Download.Generators.Base
+clean_up_after	./lib/modules/download/generators/shapefile.rb	/^  def clean_up_after$/;"	f	class:Download.Generators.Shapefile
+cleanup	./lib/modules/countries_geometry_importer.rb	/^  def cleanup$/;"	f	class:CountriesGeometryImporter
+clear_cache	./app/controllers/admin_controller.rb	/^  def clear_cache$/;"	f	class:AdminController
+clear_cache	./lib/modules/geospatial/calculator.rb	/^  def self.clear_cache$/;"	F	class:Geospatial.Calculator
+clear_cache	./lib/modules/import_tools/web_handler.rb	/^  def clear_cache$/;"	f	class:ImportTools.WebHandler
+clear_cache	./lib/modules/import_tools/web_handler.rb	/^  def self.clear_cache$/;"	F	class:ImportTools.WebHandler
+clear_filters_link	./app/helpers/search_helper.rb	/^  def clear_filters_link params$/;"	f	class:SearchHelper
+close_connections_to	./lib/modules/import_tools/postgres_handler.rb	/^  def close_connections_to database_name$/;"	f	class:ImportTools.PostgresHandler
+codes	./app/controllers/country_controller.rb	/^  def codes$/;"	f	class:CountryController
+collect_newer_versions	./app/presenters/cms_presenter.rb	/^  def collect_newer_versions page, collection=[]$/;"	f	class:CmsPresenter
+collect_older_versions	./app/presenters/cms_presenter.rb	/^  def collect_older_versions page, collection=[]$/;"	f	class:CmsPresenter
+collect_wdpa_ids	./app/workers/download_workers/general.rb	/^  def collect_wdpa_ids type, identifier=nil$/;"	f	class:DownloadWorkers.General
+column_names	./lib/modules/carto_db/merger.rb	/^  def column_names$/;"	f	class:CartoDb.Merger
+columns	./lib/modules/shapefile.rb	/^  def columns$/;"	f	class:Shapefile
+commaify	./app/helpers/application_helper.rb	/^  def commaify number$/;"	f	class:ApplicationHelper
+common_attributes	./lib/modules/wdpa/data_standard.rb	/^  def self.common_attributes$/;"	F	class:Wdpa.DataStandard
+compare	./app/controllers/country_controller.rb	/^  def compare$/;"	f	class:CountryController
+completed	./lib/modules/import_tools/import.rb	/^  attr_reader :completed$/;"	f	class:ImportTools.Import
+completed=	./lib/modules/import_tools/import.rb	/^  attr_writer :completed$/;"	f	class:ImportTools.Import
+completed?	./lib/modules/import_tools/import.rb	/^  def completed?$/;"	f	class:ImportTools.Import
+completeness_for	./app/presenters/protected_area_presenter.rb	/^  def completeness_for attributes$/;"	f	class:ProtectedAreaPresenter
+completion_attribute	./app/helpers/protected_areas_helper.rb	/^  def completion_attribute label, complete$/;"	f	class:ProtectedAreasHelper
+components	./lib/modules/shapefile.rb	/^  def components$/;"	f	class:Shapefile
+compress	./lib/modules/shapefile.rb	/^  def compress$/;"	f	class:Shapefile
+compressed_geometries	./lib/modules/countries_geometry_importer.rb	/^  def compressed_geometries$/;"	f	class:CountriesGeometryImporter
+concurrency_level	./lib/modules/search/parallel_indexer.rb	/^  def concurrency_level$/;"	f	class:Search.ParallelIndexer
+concurrent_threads	./lib/modules/search/parallel_indexer.rb	/^  def concurrent_threads$/;"	f	class:Search.ParallelIndexer
+configuration	./lib/modules/search.rb	/^  def self.configuration$/;"	F	class:Search
+configuration	./lib/modules/search/aggregation.rb	/^  def self.configuration$/;"	F	class:Search.Aggregation
+configuration	./lib/modules/search/filter.rb	/^  def self.configuration$/;"	F	class:Search.Filter
+configuration_for	./lib/modules/search/aggregation.rb	/^  def self.configuration_for name$/;"	F	class:Search.Aggregation
+confirm	./app/controllers/admin/import_controller.rb	/^  def confirm$/;"	f	class:Admin.ImportController
+confirmation_key	./lib/modules/import_tools/import/confirmable.rb	/^  def confirmation_key$/;"	f	class:ImportTools.Import.Confirmable
+connect_to	./lib/modules/import_tools/postgres_handler.rb	/^  def connect_to db_name$/;"	f	class:ImportTools.PostgresHandler
+convert_with_query	./lib/modules/ogr/shapefile.rb	/^  def self.convert_with_query filename, new_filename, query$/;"	F	class:Ogr.Shapefile
+coordinates	./app/models/protected_area.rb	/^  def coordinates$/;"	f	class:ProtectedArea
+coords	./lib/modules/search/filter/geo.rb	/^  def coords$/;"	f	class:Search.Filter.Geo
+copy_countries	./lib/modules/countries_geometry_importer.rb	/^  def copy_countries$/;"	f	class:CountriesGeometryImporter
+count	./lib/modules/search/index.rb	/^  def count$/;"	f	class:Search.Index
+count	./lib/modules/search/index.rb	/^  def self.count$/;"	F	class:Search.Index
+count	./lib/modules/search/results.rb	/^  def count$/;"	f	class:Search.Results
+countrie_ids	./app/models/project.rb	/^  has_many :countries, through: :project_items, source: :item, source_type: 'Country'$/;"	F	class:Project
+countrie_ids	./app/models/protected_area.rb	/^  has_and_belongs_to_many :countries$/;"	F	class:ProtectedArea
+countrie_ids	./app/models/region.rb	/^  has_many :countries$/;"	F	class:Region
+countrie_ids=	./app/models/project.rb	/^  has_many :countries, through: :project_items, source: :item, source_type: 'Country'$/;"	F	class:Project
+countrie_ids=	./app/models/protected_area.rb	/^  has_and_belongs_to_many :countries$/;"	F	class:ProtectedArea
+countrie_ids=	./app/models/region.rb	/^  has_many :countries$/;"	F	class:Region
+countries	./app/models/project.rb	/^  has_many :countries, through: :project_items, source: :item, source_type: 'Country'$/;"	F	class:Project
+countries	./app/models/protected_area.rb	/^  has_and_belongs_to_many :countries$/;"	F	class:ProtectedArea
+countries	./app/models/region.rb	/^  has_many :countries$/;"	F	class:Region
+countries	./lib/modules/wdpa/relation.rb	/^  def countries value$/;"	f	class:Wdpa.Relation
+countries=	./app/models/project.rb	/^  has_many :countries, through: :project_items, source: :item, source_type: 'Country'$/;"	F	class:Project
+countries=	./app/models/protected_area.rb	/^  has_and_belongs_to_many :countries$/;"	F	class:ProtectedArea
+countries=	./app/models/region.rb	/^  has_many :countries$/;"	F	class:Region
+countries_for_index	./app/models/protected_area.rb	/^  has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'$/;"	F	class:ProtectedArea
+countries_for_index=	./app/models/protected_area.rb	/^  has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'$/;"	F	class:ProtectedArea
+countries_providing_data	./app/models/region.rb	/^  def countries_providing_data$/;"	f	class:Region
+countries_providing_data	./lib/modules/stats/global.rb	/^  def self.countries_providing_data$/;"	F	class:Stats.Global
+country	./app/models/country_statistic.rb	/^  belongs_to :country$/;"	F	class:CountryStatistic
+country	./app/models/sub_location.rb	/^  belongs_to :country$/;"	F	class:SubLocation
+country=	./app/models/country_statistic.rb	/^  belongs_to :country$/;"	F	class:CountryStatistic
+country=	./app/models/sub_location.rb	/^  belongs_to :country$/;"	F	class:SubLocation
+country_autocomplete_link	./app/helpers/search_helper.rb	/^  def country_autocomplete_link result$/;"	f	class:SearchHelper
+country_cover	./app/helpers/application_helper.rb	/^  def country_cover country$/;"	f	class:ApplicationHelper
+country_statistic	./app/models/country.rb	/^  has_one :country_statistic$/;"	F	class:Country
+country_statistic=	./app/models/country.rb	/^  has_one :country_statistic$/;"	F	class:Country
+cover	./app/helpers/application_helper.rb	/^  def cover item$/;"	f	class:ApplicationHelper
+create	./app/controllers/downloads_controller.rb	/^  def create$/;"	f	class:DownloadsController
+create	./app/controllers/projects_controller.rb	/^  def create$/;"	f	class:ProjectsController
+create	./app/controllers/search_controller.rb	/^  def create$/;"	f	class:SearchController
+create	./app/mailers/download_complete_mailer.rb	/^  def create filename, email$/;"	f	class:DownloadCompleteMailer
+create	./app/mailers/import_confirmation_mailer.rb	/^  def create import$/;"	f	class:ImportConfirmationMailer
+create	./lib/modules/active_token.rb	/^    def create token=generate_token, *attrs$/;"	f	class:ActiveToken.ClassMethods
+create	./lib/modules/search/index.rb	/^  def self.create$/;"	F	class:Search.Index
+create	./lib/modules/wdpa/relation.rb	/^  def create attribute, value$/;"	f	class:Wdpa.Relation
+create_country	./app/models/country_statistic.rb	/^  belongs_to :country$/;"	F	class:CountryStatistic
+create_country	./app/models/sub_location.rb	/^  belongs_to :country$/;"	F	class:SubLocation
+create_country!	./app/models/country_statistic.rb	/^  belongs_to :country$/;"	F	class:CountryStatistic
+create_country!	./app/models/sub_location.rb	/^  belongs_to :country$/;"	F	class:SubLocation
+create_country_statistic	./app/models/country.rb	/^  has_one :country_statistic$/;"	F	class:Country
+create_country_statistic!	./app/models/country.rb	/^  has_one :country_statistic$/;"	F	class:Country
+create_database	./lib/modules/import_tools/postgres_handler.rb	/^  def create_database database_name$/;"	f	class:ImportTools.PostgresHandler
+create_db	./lib/modules/import_tools/import.rb	/^  def create_db$/;"	f	class:ImportTools.Import
+create_designation	./app/models/protected_area.rb	/^  belongs_to :designation$/;"	F	class:ProtectedArea
+create_designation!	./app/models/protected_area.rb	/^  belongs_to :designation$/;"	F	class:ProtectedArea
+create_downloads_view	./lib/modules/wdpa/release.rb	/^  def create_downloads_view$/;"	f	class:Wdpa.Release
+create_governance	./app/models/protected_area.rb	/^  belongs_to :governance$/;"	F	class:ProtectedArea
+create_governance!	./app/models/protected_area.rb	/^  belongs_to :governance$/;"	F	class:ProtectedArea
+create_import	./app/workers/import_workers/s3_polling_worker.rb	/^  def create_import$/;"	f	class:ImportWorkers.S3PollingWorker
+create_import	./lib/modules/import_tools.rb	/^  def self.create_import$/;"	F	class:ImportTools
+create_import_view	./lib/modules/wdpa/release.rb	/^  def create_import_view$/;"	f	class:Wdpa.Release
+create_item	./app/models/project_item.rb	/^  belongs_to :item, polymorphic: true$/;"	F	class:ProjectItem
+create_item!	./app/models/project_item.rb	/^  belongs_to :item, polymorphic: true$/;"	F	class:ProjectItem
+create_iucn_category	./app/models/protected_area.rb	/^  belongs_to :iucn_category$/;"	F	class:ProtectedArea
+create_iucn_category!	./app/models/protected_area.rb	/^  belongs_to :iucn_category$/;"	F	class:ProtectedArea
+create_jurisdiction	./app/models/designation.rb	/^  belongs_to :jurisdiction$/;"	F	class:Designation
+create_jurisdiction!	./app/models/designation.rb	/^  belongs_to :jurisdiction$/;"	F	class:Designation
+create_lazy_batches	./lib/modules/search/parallel_indexer.rb	/^  def create_lazy_batches$/;"	f	class:Search.ParallelIndexer
+create_legal_status	./app/models/protected_area.rb	/^  belongs_to :legal_status$/;"	F	class:ProtectedArea
+create_legal_status!	./app/models/protected_area.rb	/^  belongs_to :legal_status$/;"	F	class:ProtectedArea
+create_management_authority	./app/models/protected_area.rb	/^  belongs_to :management_authority$/;"	F	class:ProtectedArea
+create_management_authority!	./app/models/protected_area.rb	/^  belongs_to :management_authority$/;"	F	class:ProtectedArea
+create_mapping	./lib/modules/search/index.rb	/^  def create_mapping type$/;"	f	class:Search.Index
+create_mapping	./lib/modules/search/index.rb	/^  def self.create_mapping collection$/;"	F	class:Search.Index
+create_models	./lib/modules/wdpa/data_standard.rb	/^  def self.create_models hash$/;"	F	class:Wdpa.DataStandard
+create_no_take_status	./app/models/protected_area.rb	/^  belongs_to :no_take_status$/;"	F	class:ProtectedArea
+create_no_take_status!	./app/models/protected_area.rb	/^  belongs_to :no_take_status$/;"	F	class:ProtectedArea
+create_parent	./app/models/country.rb	/^  belongs_to :parent, class_name: "Country", foreign_key: :country_id$/;"	F	class:Country
+create_parent!	./app/models/country.rb	/^  belongs_to :parent, class_name: "Country", foreign_key: :country_id$/;"	F	class:Country
+create_project	./app/models/project_item.rb	/^  belongs_to :project$/;"	F	class:ProjectItem
+create_project	./app/models/saved_search.rb	/^  belongs_to :project$/;"	F	class:SavedSearch
+create_project!	./app/models/project_item.rb	/^  belongs_to :project$/;"	F	class:ProjectItem
+create_project!	./app/models/saved_search.rb	/^  belongs_to :project$/;"	F	class:SavedSearch
+create_protected_area	./app/models/no_take_status.rb	/^  has_one :protected_area$/;"	F	class:NoTakeStatus
+create_protected_area	./app/models/wikipedia_article.rb	/^  has_one :protected_area$/;"	F	class:WikipediaArticle
+create_protected_area!	./app/models/no_take_status.rb	/^  has_one :protected_area$/;"	F	class:NoTakeStatus
+create_protected_area!	./app/models/wikipedia_article.rb	/^  has_one :protected_area$/;"	F	class:WikipediaArticle
+create_region	./app/models/country.rb	/^  belongs_to :region$/;"	F	class:Country
+create_region	./app/models/regional_statistic.rb	/^  belongs_to :region$/;"	F	class:RegionalStatistic
+create_region!	./app/models/country.rb	/^  belongs_to :region$/;"	F	class:Country
+create_region!	./app/models/regional_statistic.rb	/^  belongs_to :region$/;"	F	class:RegionalStatistic
+create_region_for_index	./app/models/country.rb	/^  belongs_to :region_for_index, -> { select('regions.id, regions.name') }, :class_name => 'Region', :foreign_key => 'region_id'$/;"	F	class:Country
+create_region_for_index!	./app/models/country.rb	/^  belongs_to :region_for_index, -> { select('regions.id, regions.name') }, :class_name => 'Region', :foreign_key => 'region_id'$/;"	F	class:Country
+create_regional_statistic	./app/models/region.rb	/^  has_one :regional_statistic$/;"	F	class:Region
+create_regional_statistic!	./app/models/region.rb	/^  has_one :regional_statistic$/;"	F	class:Region
+create_slug	./app/models/protected_area.rb	/^  def create_slug$/;"	f	class:ProtectedArea
+create_user	./app/models/project.rb	/^  belongs_to :user$/;"	F	class:Project
+create_user!	./app/models/project.rb	/^  belongs_to :user$/;"	F	class:Project
+create_view	./lib/modules/download/generators/base.rb	/^  def create_view query$/;"	f	class:Download.Generators.Base
+create_wikipedia_article	./app/models/protected_area.rb	/^  belongs_to :wikipedia_article$/;"	F	class:ProtectedArea
+create_wikipedia_article!	./app/models/protected_area.rb	/^  belongs_to :wikipedia_article$/;"	F	class:ProtectedArea
+current_conn_values	./lib/modules/import_tools/postgres_handler.rb	/^  attr_reader :current_conn_values$/;"	f	class:ImportTools.PostgresHandler
+current_conn_values=	./lib/modules/import_tools/postgres_handler.rb	/^  attr_writer :current_conn_values$/;"	f	class:ImportTools.PostgresHandler
+current_import	./lib/modules/import_tools.rb	/^  def self.current_import$/;"	F	class:ImportTools
+current_key	./lib/modules/import_tools/redis_handler.rb	/^  def current_key$/;"	f	class:ImportTools.RedisHandler
+current_page	./lib/modules/search.rb	/^  def current_page$/;"	f	class:Search
+current_token	./lib/modules/import_tools/redis_handler.rb	/^  def current_token$/;"	f	class:ImportTools.RedisHandler
+current_wdpa	./lib/modules/wdpa/s3.rb	/^  def current_wdpa$/;"	f	class:Wdpa.S3
+current_wdpa_identifier	./lib/modules/wdpa/s3.rb	/^  def current_wdpa_identifier$/;"	f	class:Wdpa.S3
+current_wdpa_identifier	./lib/modules/wdpa/s3.rb	/^  def self.current_wdpa_identifier$/;"	F	class:Wdpa.S3
+data_info	./app/presenters/protected_area_presenter.rb	/^  def data_info$/;"	f	class:ProtectedAreaPresenter
+data_providers	./app/models/country.rb	/^  def self.data_providers$/;"	F	class:Country
+db	./app/controllers/api/v3/search_controller.rb	/^  def db$/;"	f	class:Api.V3.SearchController
+db	./app/models/protected_area.rb	/^  def db$/;"	f	class:ProtectedArea
+db	./lib/modules/countries_geometry_importer.rb	/^  def db$/;"	f	class:CountriesGeometryImporter
+db	./lib/modules/download/generators/base.rb	/^  def db$/;"	f	class:Download.Generators.Base
+db	./lib/modules/geospatial/calculator.rb	/^  def db$/;"	f	class:Geospatial.Calculator
+db	./lib/modules/geospatial/country_geometry_populator/geometry_dissolver.rb	/^  def self.db$/;"	F	class:Geospatial.CountryGeometryPopulator.GeometryDissolver
+db	./lib/modules/geospatial/country_geometry_populator/marine_geometries_intersector.rb	/^  def self.db$/;"	F	class:Geospatial.CountryGeometryPopulator.MarineGeometriesIntersector
+db	./lib/modules/geospatial/geometry.rb	/^  def db$/;"	f	class:Geospatial.Geometry
+db	./lib/modules/wdpa/protected_area_importer/geometry_importer.rb	/^  def self.db$/;"	F	class:Wdpa.ProtectedAreaImporter.GeometryImporter
+db	./lib/modules/wdpa/release.rb	/^  def db$/;"	f	class:Wdpa.Release
+db_config	./lib/modules/ogr/postgres.rb	/^  def self.db_config$/;"	F	class:Ogr.Postgres
+db_name	./lib/modules/import_tools/import.rb	/^  def db_name$/;"	f	class:ImportTools.Import
+delete	./lib/modules/search/index.rb	/^  def delete$/;"	f	class:Search.Index
+delete	./lib/modules/search/index.rb	/^  def self.delete$/;"	F	class:Search.Index
+delete_confirmation_key	./app/controllers/admin/import_controller.rb	/^  def delete_confirmation_key$/;"	f	class:Admin.ImportController
+delete_confirmation_key	./lib/modules/import_tools/import/confirmable.rb	/^  def delete_confirmation_key$/;"	f	class:ImportTools.Import.Confirmable
+delete_property	./lib/modules/import_tools/redis_handler.rb	/^  def delete_property token, property$/;"	f	class:ImportTools.RedisHandler
+designation	./app/models/protected_area.rb	/^  belongs_to :designation$/;"	F	class:ProtectedArea
+designation	./lib/modules/wdpa/relation.rb	/^  def designation value$/;"	f	class:Wdpa.Relation
+designation=	./app/models/protected_area.rb	/^  belongs_to :designation$/;"	F	class:ProtectedArea
+designation_count	./lib/modules/stats/global.rb	/^  def self.designation_count$/;"	F	class:Stats.Global
+designation_ids	./app/models/country.rb	/^  has_many :designations, -> { uniq }, through: :protected_areas$/;"	F	class:Country
+designation_ids	./app/models/jurisdiction.rb	/^  has_many :designations$/;"	F	class:Jurisdiction
+designation_ids	./app/models/region.rb	/^  has_many :designations, -> { uniq }, through: :protected_areas$/;"	F	class:Region
+designation_ids=	./app/models/country.rb	/^  has_many :designations, -> { uniq }, through: :protected_areas$/;"	F	class:Country
+designation_ids=	./app/models/jurisdiction.rb	/^  has_many :designations$/;"	F	class:Jurisdiction
+designation_ids=	./app/models/region.rb	/^  has_many :designations, -> { uniq }, through: :protected_areas$/;"	F	class:Region
+designations	./app/models/country.rb	/^  has_many :designations, -> { uniq }, through: :protected_areas$/;"	F	class:Country
+designations	./app/models/jurisdiction.rb	/^  has_many :designations$/;"	F	class:Jurisdiction
+designations	./app/models/region.rb	/^  has_many :designations, -> { uniq }, through: :protected_areas$/;"	F	class:Region
+designations=	./app/models/country.rb	/^  has_many :designations, -> { uniq }, through: :protected_areas$/;"	F	class:Country
+designations=	./app/models/jurisdiction.rb	/^  has_many :designations$/;"	F	class:Jurisdiction
+designations=	./app/models/region.rb	/^  has_many :designations, -> { uniq }, through: :protected_areas$/;"	F	class:Region
+destroy	./app/controllers/projects_controller.rb	/^  def destroy$/;"	f	class:ProjectsController
+dissolve	./lib/modules/geospatial/country_geometry_populator/geometry_dissolver.rb	/^  def self.dissolve country$/;"	F	class:Geospatial.CountryGeometryPopulator.GeometryDissolver
+distance	./lib/modules/search/filter/geo.rb	/^  def distance$/;"	f	class:Search.Filter.Geo
+documents_in_batches	./lib/modules/search/index.rb	/^  def documents_in_batches$/;"	f	class:Search.Index
+domain	./app/workers/download_workers/general.rb	/^  def domain$/;"	f	class:DownloadWorkers.General
+domain	./app/workers/download_workers/project.rb	/^  def domain$/;"	f	class:DownloadWorkers.Project
+domain	./app/workers/download_workers/search.rb	/^  def domain$/;"	f	class:DownloadWorkers.Search
+domain	./lib/modules/download/requesters/base.rb	/^  def domain$/;"	f	class:Download.Requesters.Base
+domain	./lib/modules/download/requesters/general.rb	/^  def domain$/;"	f	class:Download.Requesters.General
+domain	./lib/modules/download/requesters/project.rb	/^  def domain$/;"	f	class:Download.Requesters.Project
+domain	./lib/modules/download/requesters/search.rb	/^  def domain$/;"	f	class:Download.Requesters.Search
+down	./db/migrate/20141107164407_add_devise_to_users.rb	/^  def self.down$/;"	F	class:AddDeviseToUsers
+down	./db/migrate/20151202155924_create_cms.rb	/^  def self.down$/;"	F	class:CreateCms
+download	./lib/modules/countries_geometry_importer.rb	/^  def download$/;"	f	class:CountriesGeometryImporter
+download	./lib/modules/wdpa/release.rb	/^  def download$/;"	f	class:Wdpa.Release
+download	./lib/modules/wdpa/release.rb	/^  def self.download$/;"	F	class:Wdpa.Release
+download_columns	./lib/modules/download/utils.rb	/^    def self.download_columns opts={}$/;"	F	class:Download.Utils
+download_current_wdpa_to	./lib/modules/wdpa/s3.rb	/^  def download_current_wdpa_to filename$/;"	f	class:Wdpa.S3
+download_current_wdpa_to	./lib/modules/wdpa/s3.rb	/^  def self.download_current_wdpa_to filename$/;"	F	class:Wdpa.S3
+download_dropdown	./app/helpers/application_helper.rb	/^  def download_dropdown item_id, download_type, types$/;"	f	class:ApplicationHelper
+drop	./lib/modules/autocompletion.rb	/^  def self.drop$/;"	F	class:Autocompletion
+drop_database	./lib/modules/import_tools/postgres_handler.rb	/^  def drop_database database_name$/;"	f	class:ImportTools.PostgresHandler
+dump_path	./lib/modules/import_tools.rb	/^  def self.dump_path$/;"	F	class:ImportTools
+elastic_search	./lib/modules/search.rb	/^  def elastic_search$/;"	f	class:Search
+email	./app/workers/download_workers/search.rb	/^  def email$/;"	f	class:DownloadWorkers.Search
+email_addresses	./app/mailers/import_confirmation_mailer.rb	/^  def email_addresses$/;"	f	class:ImportConfirmationMailer
+enable_caching	./app/controllers/application_controller.rb	/^  def enable_caching$/;"	f	class:ApplicationController
+execute_importers	./lib/modules/wdpa/importer.rb	/^  def execute_importers wdpa_release$/;"	f	class:Wdpa.Importer
+export	./lib/modules/download/generators/base.rb	/^  def export$/;"	f	class:Download.Generators.Base
+export	./lib/modules/download/generators/csv.rb	/^  def export$/;"	f	class:Download.Generators.Csv
+export	./lib/modules/download/generators/kml.rb	/^  def export$/;"	f	class:Download.Generators.Kml
+export	./lib/modules/ogr/postgres.rb	/^  def self.export file_type, file_name, query$/;"	F	class:Ogr.Postgres
+export_component	./lib/modules/download/generators/shapefile.rb	/^  def export_component name, props$/;"	f	class:Download.Generators.Shapefile
+export_from_postgres	./lib/modules/download/generators/base.rb	/^  def export_from_postgres type$/;"	f	class:Download.Generators.Base
+extract_filters	./lib/modules/download/router.rb	/^  def self.extract_filters params$/;"	F	class:Download.Router
+facet_link	./app/helpers/search_helper.rb	/^  def facet_link facet$/;"	f	class:SearchHelper
+fallback_tile	./lib/modules/asset_generator.rb	/^  def self.fallback_tile$/;"	F	class:AssetGenerator
+feature_count	./lib/modules/ogr/info.rb	/^  def feature_count layer_name$/;"	f	class:Ogr.Info
+feature_count	./lib/modules/ogr/split.rb	/^  def feature_count$/;"	f	class:Ogr.Split
+fetch	./lib/modules/wikipedia/summary.rb	/^  def self.fetch wikipedia_article$/;"	F	class:Wikipedia.Summary
+filename	./app/workers/download_workers/base.rb	/^  def filename identifier$/;"	f	class:DownloadWorkers.Base
+filename	./lib/modules/download/utils.rb	/^    def self.filename domain, identifier$/;"	F	class:Download.Utils
+filename	./lib/modules/shapefile.rb	/^  def filename$/;"	f	class:Shapefile
+filename_for_type	./lib/modules/download/utils.rb	/^    def self.filename_for_type download_name, type$/;"	F	class:Download.Utils
+filter	./lib/modules/search/filter.rb	/^  def filter$/;"	f	class:Search.Filter
+filter	./lib/modules/search/filter/nested.rb	/^  def filter value$/;"	f	class:Search.Filter.Nested
+filters	./app/controllers/api/v3/search_controller.rb	/^  def filters$/;"	f	class:Api.V3.SearchController
+filters	./app/controllers/search_controller.rb	/^  def filters$/;"	f	class:SearchController
+filters	./lib/modules/download/requesters/search.rb	/^  def filters$/;"	f	class:Download.Requesters.Search
+finalise_import	./app/workers/import_workers/finaliser_worker.rb	/^  def finalise_import$/;"	f	class:ImportWorkers.FinaliserWorker
+finalise_job	./app/workers/import_workers/base.rb	/^  def finalise_job$/;"	f	class:ImportWorkers.Base
+find	./lib/modules/active_token.rb	/^    def find token, *attrs$/;"	f	class:ActiveToken.ClassMethods
+for_bounds	./app/models/image.rb	/^  def self.for_bounds bounds$/;"	F	class:Image
+for_points	./lib/modules/download/queries.rb	/^    def self.for_points extra_columns={}$/;"	F	class:Download.Queries
+for_polygons	./lib/modules/download/queries.rb	/^    def self.for_polygons$/;"	F	class:Download.Queries
+from_params	./lib/modules/search/filter.rb	/^  def self.from_params params$/;"	F	class:Search.Filter
+from_params	./lib/modules/search/matcher.rb	/^  def self.from_params term$/;"	F	class:Search.Matcher
+from_params	./lib/modules/search/sorter.rb	/^  def self.from_params params$/;"	F	class:Search.Sorter
+from_query	./lib/modules/geospatial/calculator.rb	/^  def from_query$/;"	f	class:Geospatial.Calculator
+gdb_path	./lib/modules/wdpa/release.rb	/^  def gdb_path$/;"	f	class:Wdpa.Release
+generate	./lib/modules/download.rb	/^  def self.generate download_name, opts={}$/;"	F	class:Download
+generate	./lib/modules/download/generators/base.rb	/^  def generate$/;"	f	class:Download.Generators.Base
+generate	./lib/modules/download/generators/base.rb	/^  def self.generate zip_path, wdpa_ids = nil$/;"	F	class:Download.Generators.Base
+generate	./lib/modules/download/generators/shapefile.rb	/^  def generate$/;"	f	class:Download.Generators.Shapefile
+generate	./lib/modules/wdpa/download_generator.rb	/^  def self.generate for_import=true$/;"	F	class:Wdpa.DownloadGenerator
+generate_confirmation_key	./lib/modules/import_tools/import/confirmable.rb	/^  def generate_confirmation_key$/;"	f	class:ImportTools.Import.Confirmable
+generate_download	./app/workers/download_workers/project.rb	/^  def generate_download$/;"	f	class:DownloadWorkers.Project
+generate_download	./app/workers/download_workers/search.rb	/^  def generate_download$/;"	f	class:DownloadWorkers.Search
+generate_token	./lib/modules/active_token.rb	/^  def generate_token generator=lambda{}$/;"	f	class:ActiveToken
+generation_info	./lib/modules/download/requesters/base.rb	/^  def generation_info$/;"	f	class:Download.Requesters.Base
+geojson	./app/models/concerns/geometry_concern.rb	/^  def geojson$/;"	f	class:GeometryConcern
+geometry_attribute	./lib/modules/geospatial/country_geometry_populator/geometry_dissolver.rb	/^  def self.geometry_attribute country, area_type$/;"	F	class:Geospatial.CountryGeometryPopulator.GeometryDissolver
+geometry_columns	./app/models/concerns/geometry_concern.rb	/^    def geometry_columns$/;"	f	class:GeometryConcern.ClassMethods
+geometry_properties	./app/models/concerns/geometry_concern.rb	/^  def geometry_properties$/;"	f	class:GeometryConcern
+geometry_ratio	./app/presenters/statistic_presenter.rb	/^  def geometry_ratio$/;"	f	class:StatisticPresenter
+geometry_tables	./lib/modules/wdpa/release.rb	/^  def geometry_tables$/;"	f	class:Wdpa.Release
+get_property	./lib/modules/import_tools/redis_handler.rb	/^  def get_property token, property$/;"	f	class:ImportTools.RedisHandler
+global_statistic	./app/presenters/statistic_presenter.rb	/^  def global_statistic$/;"	f	class:StatisticPresenter
+governance	./app/models/protected_area.rb	/^  belongs_to :governance$/;"	F	class:ProtectedArea
+governance	./lib/modules/wdpa/relation.rb	/^  def governance value$/;"	f	class:Wdpa.Relation
+governance=	./app/models/protected_area.rb	/^  belongs_to :governance$/;"	F	class:ProtectedArea
+html_body	./test/test_helper.rb	/^  def html_body mail$/;"	f	class:ActionMailer.TestCase
+id_attribute	./lib/modules/geospatial/calculator.rb	/^  def id_attribute$/;"	f	class:Geospatial.Calculator
+identifier	./lib/modules/download/requesters/general.rb	/^  def identifier$/;"	f	class:Download.Requesters.General
+identifier	./lib/modules/download/requesters/project.rb	/^  def identifier$/;"	f	class:Download.Requesters.Project
+identifier	./lib/modules/download/requesters/search.rb	/^  def identifier$/;"	f	class:Download.Requesters.Search
+ids_digest	./app/workers/download_workers/search.rb	/^  def ids_digest$/;"	f	class:DownloadWorkers.Search
+ignore_empty_query	./app/controllers/search_controller.rb	/^  def ignore_empty_query$/;"	f	class:SearchController
+image_ids	./app/models/protected_area.rb	/^  has_many :images$/;"	F	class:ProtectedArea
+image_ids=	./app/models/protected_area.rb	/^  has_many :images$/;"	F	class:ProtectedArea
+images	./app/models/protected_area.rb	/^  has_many :images$/;"	F	class:ProtectedArea
+images=	./app/models/protected_area.rb	/^  has_many :images$/;"	F	class:ProtectedArea
+images_for_bounds	./lib/modules/panoramio.rb	/^  def images_for_bounds bounds$/;"	f	class:Panoramio
+images_for_bounds	./lib/modules/panoramio.rb	/^  def self.images_for_bounds bounds$/;"	F	class:Panoramio
+import	./app/controllers/admin/import_controller.rb	/^  def import$/;"	f	class:Admin.ImportController
+import	./lib/modules/countries_geometry_importer.rb	/^  def import$/;"	f	class:CountriesGeometryImporter
+import	./lib/modules/countries_geometry_importer.rb	/^  def self.import$/;"	F	class:CountriesGeometryImporter
+import	./lib/modules/ogr/postgres.rb	/^  def self.import file_path, original_table_name=nil, table_name=nil$/;"	F	class:Ogr.Postgres
+import	./lib/modules/wdpa/carto_db_importer.rb	/^  def import$/;"	f	class:Wdpa.CartoDbImporter
+import	./lib/modules/wdpa/carto_db_importer.rb	/^  def self.import wdpa_release$/;"	F	class:Wdpa.CartoDbImporter
+import	./lib/modules/wdpa/importer.rb	/^  def import$/;"	f	class:Wdpa.Importer
+import	./lib/modules/wdpa/importer.rb	/^  def self.import$/;"	F	class:Wdpa.Importer
+import	./lib/modules/wdpa/protected_area_importer.rb	/^  def self.import wdpa_release$/;"	F	class:Wdpa.ProtectedAreaImporter
+import	./lib/modules/wdpa/protected_area_importer/asset_importer.rb	/^  def self.import$/;"	F	class:Wdpa.ProtectedAreaImporter.AssetImporter
+import	./lib/modules/wdpa/protected_area_importer/attribute_importer.rb	/^  def self.import wdpa_release$/;"	F	class:Wdpa.ProtectedAreaImporter.AttributeImporter
+import	./lib/modules/wdpa/protected_area_importer/geometry_importer.rb	/^  def self.import wdpa_release$/;"	F	class:Wdpa.ProtectedAreaImporter.GeometryImporter
+import	./lib/modules/wdpa/protected_area_importer/related_source_importer.rb	/^  def self.import path: path, field: field$/;"	F	class:Wdpa.ProtectedAreaImporter.RelatedSourceImporter
+import	./lib/modules/wdpa/source_importer.rb	/^  def import$/;"	f	class:Wdpa.SourceImporter
+import	./lib/modules/wdpa/source_importer.rb	/^  def self.import wdpa_release$/;"	F	class:Wdpa.SourceImporter
+import_coordinates	./lib/modules/wdpa/protected_area_importer/geometry_importer.rb	/^  def self.import_coordinates standardised_name$/;"	F	class:Wdpa.ProtectedAreaImporter.GeometryImporter
+import_geometry	./lib/modules/wdpa/protected_area_importer/geometry_importer.rb	/^  def self.import_geometry standardised_name, original_name, table$/;"	F	class:Wdpa.ProtectedAreaImporter.GeometryImporter
+import_tables	./lib/modules/wdpa/release.rb	/^  def import_tables$/;"	f	class:Wdpa.Release
+included	./lib/modules/active_token.rb	/^  def self.included receiver$/;"	F	class:ActiveToken
+included	./lib/modules/polymorphic_group.rb	/^  def self.included base$/;"	F	class:PolymorphicGroup
+increase_completed_jobs_count	./lib/modules/import_tools/import.rb	/^  def increase_completed_jobs_count$/;"	f	class:ImportTools.Import
+increase_property	./lib/modules/import_tools/redis_handler.rb	/^  def increase_property token, property$/;"	f	class:ImportTools.RedisHandler
+increase_property_and_compare	./lib/modules/import_tools/redis_handler.rb	/^  def increase_property_and_compare token, property, compared_property$/;"	f	class:ImportTools.RedisHandler
+increase_total_jobs_count	./lib/modules/import_tools/import.rb	/^  def increase_total_jobs_count$/;"	f	class:ImportTools.Import
+index	./app/controllers/cms/resources_controller.rb	/^  def index$/;"	f	class:Cms.ResourcesController
+index	./app/controllers/home_controller.rb	/^  def index$/;"	f	class:HomeController
+index	./app/controllers/projects_controller.rb	/^  def index$/;"	f	class:ProjectsController
+index	./app/controllers/search_controller.rb	/^  def index$/;"	f	class:SearchController
+index	./lib/modules/search/index.rb	/^  def index$/;"	f	class:Search.Index
+index	./lib/modules/search/index.rb	/^  def self.index collection$/;"	F	class:Search.Index
+index	./lib/modules/search/parallel_indexer.rb	/^  def index$/;"	f	class:Search.ParallelIndexer
+index	./lib/modules/search/parallel_indexer.rb	/^  def self.index model_enumerable$/;"	F	class:Search.ParallelIndexer
+index_header	./lib/modules/search/index.rb	/^  def index_header model$/;"	f	class:Search.Index
+initialize	./app/presenters/cms_presenter.rb	/^  def initialize page$/;"	f	class:CmsPresenter
+initialize	./app/presenters/protected_area_presenter.rb	/^  def initialize protected_area$/;"	f	class:ProtectedAreaPresenter
+initialize	./app/presenters/statistic_presenter.rb	/^  def initialize model$/;"	f	class:StatisticPresenter
+initialize	./config/environments/development.rb	/^  def initialize(app)$/;"	f	class:DisableAssetsLogger
+initialize	./lib/modules/active_token/properties.rb	/^    def initialize key$/;"	f	class:ActiveToken.Properties
+initialize	./lib/modules/carto_db/merger.rb	/^  def initialize username, api_key$/;"	f	class:CartoDb.Merger
+initialize	./lib/modules/carto_db/uploader.rb	/^  def initialize username, api_key$/;"	f	class:CartoDb.Uploader
+initialize	./lib/modules/countries_geometry_importer.rb	/^  def initialize$/;"	f	class:CountriesGeometryImporter
+initialize	./lib/modules/download/generators/base.rb	/^  def initialize zip_path, wdpa_ids$/;"	f	class:Download.Generators.Base
+initialize	./lib/modules/download/generators/shapefile.rb	/^  def initialize zip_path, wdpa_ids$/;"	f	class:Download.Generators.Shapefile
+initialize	./lib/modules/download/requesters/general.rb	/^  def initialize token$/;"	f	class:Download.Requesters.General
+initialize	./lib/modules/download/requesters/project.rb	/^  def initialize project_id$/;"	f	class:Download.Requesters.Project
+initialize	./lib/modules/download/requesters/search.rb	/^  def initialize search_term, filters$/;"	f	class:Download.Requesters.Search
+initialize	./lib/modules/geospatial/calculator.rb	/^  def initialize level$/;"	f	class:Geospatial.Calculator
+initialize	./lib/modules/geospatial/geometry.rb	/^  def initialize table_name, column_name$/;"	f	class:Geospatial.Geometry
+initialize	./lib/modules/import_tools/import.rb	/^  def initialize token=nil$/;"	f	class:ImportTools.Import
+initialize	./lib/modules/import_tools/postgres_handler.rb	/^  def initialize$/;"	f	class:ImportTools.PostgresHandler
+initialize	./lib/modules/ogr/info.rb	/^  def initialize filename$/;"	f	class:Ogr.Info
+initialize	./lib/modules/ogr/split.rb	/^  def initialize filename, layer, column_names$/;"	f	class:Ogr.Split
+initialize	./lib/modules/panoramio.rb	/^  def initialize$/;"	f	class:Panoramio
+initialize	./lib/modules/polymorphic_group.rb	/^    def initialize model$/;"	f	class:PolymorphicGroup.PolymorphicArray
+initialize	./lib/modules/s3.rb	/^  def initialize$/;"	f	class:S3
+initialize	./lib/modules/search.rb	/^  def initialize search_term='', options={}$/;"	f	class:Search
+initialize	./lib/modules/search/filter.rb	/^  def initialize term, options$/;"	f	class:Search.Filter
+initialize	./lib/modules/search/index.rb	/^  def initialize collection=nil$/;"	f	class:Search.Index
+initialize	./lib/modules/search/matcher.rb	/^  def initialize term, options$/;"	f	class:Search.Matcher
+initialize	./lib/modules/search/parallel_indexer.rb	/^  def initialize model_enumerable$/;"	f	class:Search.ParallelIndexer
+initialize	./lib/modules/search/query.rb	/^  def initialize search_term, options={}$/;"	f	class:Search.Query
+initialize	./lib/modules/search/results.rb	/^  def initialize query_results$/;"	f	class:Search.Results
+initialize	./lib/modules/search/sorter.rb	/^  def initialize term, options$/;"	f	class:Search.Sorter
+initialize	./lib/modules/shapefile.rb	/^  def initialize path$/;"	f	class:Shapefile
+initialize	./lib/modules/wdpa/carto_db_importer.rb	/^  def initialize wdpa_release$/;"	f	class:Wdpa.CartoDbImporter
+initialize	./lib/modules/wdpa/relation.rb	/^  def initialize current_attributes$/;"	f	class:Wdpa.Relation
+initialize	./lib/modules/wdpa/release.rb	/^  def initialize$/;"	f	class:Wdpa.Release
+initialize	./lib/modules/wdpa/s3.rb	/^  def initialize$/;"	f	class:Wdpa.S3
+initialize	./lib/modules/wdpa/source_importer.rb	/^  def initialize wdpa_release$/;"	f	class:Wdpa.SourceImporter
+intersect	./lib/modules/geospatial/country_geometry_populator/marine_geometries_intersector.rb	/^  def self.intersect country$/;"	F	class:Geospatial.CountryGeometryPopulator.MarineGeometriesIntersector
+item	./app/controllers/projects_controller.rb	/^  def item$/;"	f	class:ProjectsController
+item	./app/models/project_item.rb	/^  belongs_to :item, polymorphic: true$/;"	F	class:ProjectItem
+item=	./app/models/project_item.rb	/^  belongs_to :item, polymorphic: true$/;"	F	class:ProjectItem
+iucn_categorie_ids	./app/models/country.rb	/^  has_many :iucn_categories, through: :protected_areas$/;"	F	class:Country
+iucn_categorie_ids	./app/models/region.rb	/^  has_many :iucn_categories, through: :protected_areas$/;"	F	class:Region
+iucn_categorie_ids=	./app/models/country.rb	/^  has_many :iucn_categories, through: :protected_areas$/;"	F	class:Country
+iucn_categorie_ids=	./app/models/region.rb	/^  has_many :iucn_categories, through: :protected_areas$/;"	F	class:Region
+iucn_categories	./app/models/country.rb	/^  has_many :iucn_categories, through: :protected_areas$/;"	F	class:Country
+iucn_categories	./app/models/region.rb	/^  has_many :iucn_categories, through: :protected_areas$/;"	F	class:Region
+iucn_categories=	./app/models/country.rb	/^  has_many :iucn_categories, through: :protected_areas$/;"	F	class:Country
+iucn_categories=	./app/models/region.rb	/^  has_many :iucn_categories, through: :protected_areas$/;"	F	class:Region
+iucn_category	./app/models/protected_area.rb	/^  belongs_to :iucn_category$/;"	F	class:ProtectedArea
+iucn_category	./lib/modules/wdpa/relation.rb	/^  def iucn_category value$/;"	f	class:Wdpa.Relation
+iucn_category=	./app/models/protected_area.rb	/^  belongs_to :iucn_category$/;"	F	class:ProtectedArea
+jurisdiction	./app/models/designation.rb	/^  belongs_to :jurisdiction$/;"	F	class:Designation
+jurisdiction=	./app/models/designation.rb	/^  belongs_to :jurisdiction$/;"	F	class:Designation
+keep_last_arg	./app/workers/download_workers/base.rb	/^  def self.keep_last_arg args$/;"	F	class:DownloadWorkers.Base
+key	./app/workers/download_workers/base.rb	/^  def key identifier$/;"	f	class:DownloadWorkers.Base
+key	./lib/modules/download/utils.rb	/^    def self.key domain, identifier$/;"	F	class:Download.Utils
+key	./lib/modules/import_tools/redis_handler.rb	/^  def key token$/;"	f	class:ImportTools.RedisHandler
+last_import	./lib/modules/import_tools.rb	/^  def self.last_import$/;"	F	class:ImportTools
+layer_count	./lib/modules/ogr/info.rb	/^  def layer_count$/;"	f	class:Ogr.Info
+layers	./lib/modules/ogr/info.rb	/^  def layers$/;"	f	class:Ogr.Info
+layers_matching	./lib/modules/ogr/info.rb	/^  def layers_matching regex$/;"	f	class:Ogr.Info
+legacy_protected_area	./app/controllers/sites_controller.rb	/^  def legacy_protected_area$/;"	f	class:SitesController
+legal_status	./app/models/protected_area.rb	/^  belongs_to :legal_status$/;"	F	class:ProtectedArea
+legal_status	./lib/modules/wdpa/relation.rb	/^  def legal_status value$/;"	f	class:Wdpa.Relation
+legal_status=	./app/models/protected_area.rb	/^  belongs_to :legal_status$/;"	F	class:ProtectedArea
+link_to	./lib/modules/asset_generator.rb	/^  def self.link_to asset_id$/;"	F	class:AssetGenerator
+link_to	./lib/modules/download.rb	/^  def self.link_to filename, type$/;"	F	class:Download
+link_to	./lib/modules/download/utils.rb	/^    def self.link_to download_name, type$/;"	F	class:Download.Utils
+link_to	./lib/modules/s3.rb	/^  def self.link_to file_name, opts={for_import: false}$/;"	F	class:S3
+links	./app/workers/download_workers/base.rb	/^  def links$/;"	f	class:DownloadWorkers.Base
+load_category	./app/controllers/cms/resources_controller.rb	/^  def load_category$/;"	f	class:Cms.ResourcesController
+load_comparable_countries	./app/controllers/country_controller.rb	/^  def load_comparable_countries$/;"	f	class:CountryController
+load_search	./app/controllers/search_controller.rb	/^  def load_search$/;"	f	class:SearchController
+load_second_country	./app/controllers/country_controller.rb	/^  def load_second_country$/;"	f	class:CountryController
+load_user_projects	./app/controllers/application_controller.rb	/^  def load_user_projects$/;"	f	class:ApplicationController
+load_vars	./app/controllers/country_controller.rb	/^  def load_vars$/;"	f	class:CountryController
+lock	./lib/modules/import_tools/redis_handler.rb	/^  def lock token$/;"	f	class:ImportTools.RedisHandler
+lock_import	./lib/modules/import_tools/import.rb	/^  def lock_import$/;"	f	class:ImportTools.Import
+lookup	./lib/modules/autocompletion.rb	/^  def self.lookup term$/;"	F	class:Autocompletion
+main_geom_column	./app/models/concerns/geometry_concern.rb	/^  def main_geom_column$/;"	f	class:GeometryConcern
+maintenance	./app/controllers/admin_controller.rb	/^  def maintenance$/;"	f	class:AdminController
+maintenance_file	./app/controllers/admin_controller.rb	/^  def maintenance_file$/;"	f	class:AdminController
+maintenance_mode=	./lib/modules/import_tools/web_handler.rb	/^  def maintenance_mode=(mode_on)$/;"	f	class:ImportTools.WebHandler
+maintenance_mode_on	./app/controllers/admin_controller.rb	/^  def maintenance_mode_on$/;"	f	class:AdminController
+maintenance_off	./lib/modules/import_tools/web_handler.rb	/^  def self.maintenance_off$/;"	F	class:ImportTools.WebHandler
+maintenance_on	./lib/modules/import_tools/web_handler.rb	/^  def self.maintenance_on$/;"	F	class:ImportTools.WebHandler
+make_current	./lib/modules/download.rb	/^  def self.make_current$/;"	F	class:Download
+make_current	./lib/modules/download/utils.rb	/^    def self.make_current$/;"	F	class:Download.Utils
+management_authority	./app/models/protected_area.rb	/^  belongs_to :management_authority$/;"	F	class:ProtectedArea
+management_authority	./lib/modules/wdpa/relation.rb	/^  def management_authority value$/;"	f	class:Wdpa.Relation
+management_authority=	./app/models/protected_area.rb	/^  belongs_to :management_authority$/;"	F	class:ProtectedArea
+map	./app/controllers/search_controller.rb	/^  def map$/;"	f	class:SearchController
+map_bounds	./app/helpers/protected_areas_helper.rb	/^  def map_bounds protected_area=nil$/;"	f	class:ProtectedAreasHelper
+mapbox_url	./lib/modules/asset_generator.rb	/^  def self.mapbox_url geojson$/;"	F	class:AssetGenerator
+mappings	./lib/modules/search/index.rb	/^  def mappings$/;"	f	class:Search.Index
+marine_geometry_attributes	./lib/modules/geospatial/country_geometry_populator/marine_geometries_intersector.rb	/^  def self.marine_geometry_attributes area_type$/;"	F	class:Geospatial.CountryGeometryPopulator.MarineGeometriesIntersector
+matcher	./lib/modules/search/matcher.rb	/^  def matcher$/;"	f	class:Search.Matcher
+matches	./lib/modules/search/results.rb	/^  def matches$/;"	f	class:Search.Results
+merge	./lib/modules/carto_db/merger.rb	/^  def merge table_names, column_names$/;"	f	class:CartoDb.Merger
+merge	./lib/modules/wdpa/carto_db_importer.rb	/^  def merge$/;"	f	class:Wdpa.CartoDbImporter
+merge_table	./lib/modules/carto_db/merger.rb	/^  def merge_table$/;"	f	class:CartoDb.Merger
+merge_tables	./lib/modules/carto_db/merger.rb	/^  def merge_tables$/;"	f	class:CartoDb.Merger
+method_missing	./app/presenters/statistic_presenter.rb	/^  def method_missing method$/;"	f	class:StatisticPresenter
+method_missing	./lib/modules/search/results.rb	/^  def method_missing meth, *args, &blk$/;"	f	class:Search.Results
+mixed	./lib/modules/download/queries.rb	/^    def self.mixed with_type$/;"	F	class:Download.Queries
+most_recent_version?	./app/presenters/cms_presenter.rb	/^  def most_recent_version?$/;"	f	class:CmsPresenter
+move_to_permanent_table	./lib/modules/carto_db/merger.rb	/^  def move_to_permanent_table$/;"	f	class:CartoDb.Merger
+name	./app/models/saved_search.rb	/^  def name$/;"	f	class:SavedSearch
+nearest_protected_areas	./app/models/protected_area.rb	/^  def nearest_protected_areas$/;"	f	class:ProtectedArea
+new_protected_area	./app/controllers/sites_controller.rb	/^  def new_protected_area$/;"	f	class:SitesController
+new_wdpa?	./lib/modules/wdpa/s3.rb	/^  def new_wdpa? since$/;"	f	class:Wdpa.S3
+new_wdpa?	./lib/modules/wdpa/s3.rb	/^  def self.new_wdpa? since$/;"	F	class:Wdpa.S3
+no_take_status	./app/models/protected_area.rb	/^  belongs_to :no_take_status$/;"	F	class:ProtectedArea
+no_take_status	./lib/modules/wdpa/relation.rb	/^  def no_take_status value$/;"	f	class:Wdpa.Relation
+no_take_status=	./app/models/protected_area.rb	/^  belongs_to :no_take_status$/;"	F	class:ProtectedArea
+num_fields_with_data	./app/presenters/protected_area_presenter.rb	/^  def num_fields_with_data$/;"	f	class:ProtectedAreaPresenter
+objects	./lib/modules/search/results.rb	/^  def objects$/;"	f	class:Search.Results
+offset	./lib/modules/search.rb	/^  def offset$/;"	f	class:Search
+ogr_command	./lib/modules/ogr/postgres.rb	/^  def self.ogr_command template, context$/;"	F	class:Ogr.Postgres
+optional_queries	./lib/modules/search.rb	/^  def optional_queries query$/;"	f	class:Search
+options	./lib/modules/search.rb	/^  attr_reader :search_term, :options$/;"	f	class:Search
+options=	./lib/modules/search.rb	/^  attr_writer :search_term, :options$/;"	f	class:Search
+pa_autocomplete_link	./app/helpers/search_helper.rb	/^  def pa_autocomplete_link result$/;"	f	class:SearchHelper
+pa_count	./lib/modules/stats/global.rb	/^  def self.pa_count$/;"	F	class:Stats.Global
+page_title	./app/helpers/application_helper.rb	/^  def page_title base_title$/;"	f	class:ApplicationHelper
+params_from_bounds	./lib/modules/panoramio.rb	/^  def params_from_bounds bounds$/;"	f	class:Panoramio
+parent	./app/models/country.rb	/^  belongs_to :parent, class_name: "Country", foreign_key: :country_id$/;"	F	class:Country
+parent=	./app/models/country.rb	/^  belongs_to :parent, class_name: "Country", foreign_key: :country_id$/;"	F	class:Country
+parse	./lib/modules/search/aggregation.rb	/^  def self.parse raw_aggregations$/;"	F	class:Search.Aggregation
+parsed_filters	./app/models/saved_search.rb	/^  def parsed_filters$/;"	f	class:SavedSearch
+pas_with_iucn_category	./lib/modules/stats/global.rb	/^  def self.pas_with_iucn_category$/;"	F	class:Stats.Global
+path	./lib/modules/download/generators/base.rb	/^  def path$/;"	f	class:Download.Generators.Base
+path	./lib/modules/download/generators/csv.rb	/^  def path$/;"	f	class:Download.Generators.Csv
+path	./lib/modules/download/generators/kml.rb	/^  def path$/;"	f	class:Download.Generators.Kml
+path	./lib/modules/shapefile.rb	/^  attr_accessor :path$/;"	f	class:Shapefile
+path=	./lib/modules/shapefile.rb	/^  attr_accessor :path$/;"	f	class:Shapefile
+path_without_extension	./lib/modules/download/generators/base.rb	/^  def path_without_extension$/;"	f	class:Download.Generators.Base
+path_without_extension	./lib/modules/shapefile.rb	/^  def path_without_extension$/;"	f	class:Shapefile
+path_without_extension	./lib/modules/wdpa/release.rb	/^  def path_without_extension$/;"	f	class:Wdpa.Release
+percentage_complete	./app/presenters/protected_area_presenter.rb	/^  def percentage_complete$/;"	f	class:ProtectedAreaPresenter
+percentage_of_global_pas	./app/presenters/statistic_presenter.rb	/^  def percentage_of_global_pas$/;"	f	class:StatisticPresenter
+percentage_pa_cover	./lib/modules/stats/global.rb	/^  def self.percentage_pa_cover$/;"	F	class:Stats.Global
+perform	./app/workers/download_workers/general.rb	/^  def perform type, identifier, opts={}$/;"	f	class:DownloadWorkers.General
+perform	./app/workers/download_workers/project.rb	/^  def perform project_id$/;"	f	class:DownloadWorkers.Project
+perform	./app/workers/download_workers/search.rb	/^  def perform token, search_term, filters_json$/;"	f	class:DownloadWorkers.Search
+perform	./app/workers/import_workers/base.rb	/^  def perform$/;"	f	class:ImportWorkers.Base
+perform	./app/workers/import_workers/finaliser_worker.rb	/^  def perform$/;"	f	class:ImportWorkers.FinaliserWorker
+perform	./app/workers/import_workers/geometry_populator_worker.rb	/^  def perform country_id$/;"	f	class:ImportWorkers.GeometryPopulatorWorker
+perform	./app/workers/import_workers/image_worker.rb	/^  def perform protected_area_id$/;"	f	class:ImportWorkers.ImageWorker
+perform	./app/workers/import_workers/main_worker.rb	/^  def perform$/;"	f	class:ImportWorkers.MainWorker
+perform	./app/workers/import_workers/s3_polling_worker.rb	/^  def perform$/;"	f	class:ImportWorkers.S3PollingWorker
+perform	./app/workers/import_workers/wikipedia_summary_worker.rb	/^  def perform protected_area_id$/;"	f	class:ImportWorkers.WikipediaSummaryWorker
+perform_async	./app/workers/download_workers/base.rb	/^  def self.perform_async *args$/;"	F	class:DownloadWorkers.Base
+perform_async	./app/workers/import_workers/base.rb	/^  def self.perform_async *args$/;"	F	class:ImportWorkers.Base
+permanent_table_name	./lib/modules/carto_db/merger.rb	/^  def permanent_table_name$/;"	f	class:CartoDb.Merger
+pg_handler	./lib/modules/import_tools/import.rb	/^  def pg_handler$/;"	f	class:ImportTools.Import
+pluck	./lib/modules/search/results.rb	/^  def pluck key$/;"	f	class:Search.Results
+point_from_lon_lat	./lib/modules/panoramio.rb	/^  def point_from_lon_lat longitude, latitude$/;"	f	class:Panoramio
+points	./app/controllers/api/v3/search_controller.rb	/^  def points$/;"	f	class:Api.V3.SearchController
+poll	./app/controllers/downloads_controller.rb	/^  def poll$/;"	f	class:DownloadsController
+poll	./lib/modules/download.rb	/^  def self.poll params$/;"	F	class:Download
+poll	./lib/modules/download/pollers/general.rb	/^  def self.poll token$/;"	F	class:Download.Pollers.General
+poll	./lib/modules/download/pollers/project.rb	/^  def self.poll token$/;"	F	class:Download.Pollers.Project
+poll	./lib/modules/download/pollers/search.rb	/^  def self.poll token$/;"	F	class:Download.Pollers.Search
+poll	./lib/modules/download/router.rb	/^  def self.poll domain, params$/;"	F	class:Download.Router
+polymorphic_group	./lib/modules/polymorphic_group.rb	/^    def polymorphic_group group_name, relations$/;"	f	class:PolymorphicGroup.ClassMethods
+populate	./lib/modules/autocompletion.rb	/^  def self.populate$/;"	F	class:Autocompletion
+populate	./lib/modules/wdpa/country_geometry_populator.rb	/^  def self.populate$/;"	F	class:Wdpa.CountryGeometryPopulator
+populate_dissolved_geometries	./lib/modules/geospatial/country_geometry_populator.rb	/^  def self.populate_dissolved_geometries country$/;"	F	class:Geospatial.CountryGeometryPopulator
+populate_marine_geometries	./lib/modules/geospatial/country_geometry_populator.rb	/^  def self.populate_marine_geometries country$/;"	F	class:Geospatial.CountryGeometryPopulator
+previous_imports	./lib/modules/import_tools/redis_handler.rb	/^  def previous_imports$/;"	f	class:ImportTools.RedisHandler
+previous_imports_key	./lib/modules/import_tools/redis_handler.rb	/^  def previous_imports_key$/;"	f	class:ImportTools.RedisHandler
+project	./app/controllers/search_controller.rb	/^  def project$/;"	f	class:SearchController
+project	./app/models/project_item.rb	/^  belongs_to :project$/;"	F	class:ProjectItem
+project	./app/models/saved_search.rb	/^  belongs_to :project$/;"	F	class:SavedSearch
+project	./app/workers/download_workers/project.rb	/^  def project$/;"	f	class:DownloadWorkers.Project
+project=	./app/models/project_item.rb	/^  belongs_to :project$/;"	F	class:ProjectItem
+project=	./app/models/saved_search.rb	/^  belongs_to :project$/;"	F	class:SavedSearch
+project_ids	./app/models/country.rb	/^  has_many :projects, through: :project_items$/;"	F	class:Country
+project_ids	./app/models/protected_area.rb	/^  has_many :projects, through: :project_items$/;"	F	class:ProtectedArea
+project_ids	./app/models/region.rb	/^  has_many :projects, through: :project_items$/;"	F	class:Region
+project_ids	./app/models/user.rb	/^  has_many :projects$/;"	F	class:User
+project_ids=	./app/models/country.rb	/^  has_many :projects, through: :project_items$/;"	F	class:Country
+project_ids=	./app/models/protected_area.rb	/^  has_many :projects, through: :project_items$/;"	F	class:ProtectedArea
+project_ids=	./app/models/region.rb	/^  has_many :projects, through: :project_items$/;"	F	class:Region
+project_ids=	./app/models/user.rb	/^  has_many :projects$/;"	F	class:User
+project_item_ids	./app/models/country.rb	/^  has_many :project_items, as: :item$/;"	F	class:Country
+project_item_ids	./app/models/project.rb	/^  has_many :project_items$/;"	F	class:Project
+project_item_ids	./app/models/protected_area.rb	/^  has_many :project_items, as: :item$/;"	F	class:ProtectedArea
+project_item_ids	./app/models/region.rb	/^  has_many :project_items, as: :item$/;"	F	class:Region
+project_item_ids=	./app/models/country.rb	/^  has_many :project_items, as: :item$/;"	F	class:Country
+project_item_ids=	./app/models/project.rb	/^  has_many :project_items$/;"	F	class:Project
+project_item_ids=	./app/models/protected_area.rb	/^  has_many :project_items, as: :item$/;"	F	class:ProtectedArea
+project_item_ids=	./app/models/region.rb	/^  has_many :project_items, as: :item$/;"	F	class:Region
+project_items	./app/models/country.rb	/^  has_many :project_items, as: :item$/;"	F	class:Country
+project_items	./app/models/project.rb	/^  has_many :project_items$/;"	F	class:Project
+project_items	./app/models/protected_area.rb	/^  has_many :project_items, as: :item$/;"	F	class:ProtectedArea
+project_items	./app/models/region.rb	/^  has_many :project_items, as: :item$/;"	F	class:Region
+project_items=	./app/models/country.rb	/^  has_many :project_items, as: :item$/;"	F	class:Country
+project_items=	./app/models/project.rb	/^  has_many :project_items$/;"	F	class:Project
+project_items=	./app/models/protected_area.rb	/^  has_many :project_items, as: :item$/;"	F	class:ProtectedArea
+project_items=	./app/models/region.rb	/^  has_many :project_items, as: :item$/;"	F	class:Region
+project_params	./app/controllers/projects_controller.rb	/^  def project_params$/;"	f	class:ProjectsController
+projects	./app/models/country.rb	/^  has_many :projects, through: :project_items$/;"	F	class:Country
+projects	./app/models/protected_area.rb	/^  has_many :projects, through: :project_items$/;"	F	class:ProtectedArea
+projects	./app/models/region.rb	/^  has_many :projects, through: :project_items$/;"	F	class:Region
+projects	./app/models/user.rb	/^  has_many :projects$/;"	F	class:User
+projects=	./app/models/country.rb	/^  has_many :projects, through: :project_items$/;"	F	class:Country
+projects=	./app/models/protected_area.rb	/^  has_many :projects, through: :project_items$/;"	F	class:ProtectedArea
+projects=	./app/models/region.rb	/^  has_many :projects, through: :project_items$/;"	F	class:Region
+projects=	./app/models/user.rb	/^  has_many :projects$/;"	F	class:User
+properties	./lib/modules/active_token.rb	/^  def properties$/;"	f	class:ActiveToken
+properties	./lib/modules/download/utils.rb	/^    def self.properties key$/;"	F	class:Download.Utils
+property_key	./lib/modules/import_tools/redis_handler.rb	/^  def property_key token, property$/;"	f	class:ImportTools.RedisHandler
+protected_area	./app/controllers/assets_controller.rb	/^  def protected_area$/;"	f	class:AssetsController
+protected_area	./app/models/no_take_status.rb	/^  has_one :protected_area$/;"	F	class:NoTakeStatus
+protected_area	./app/models/wikipedia_article.rb	/^  has_one :protected_area$/;"	F	class:WikipediaArticle
+protected_area	./app/presenters/protected_area_presenter.rb	/^  def protected_area$/;"	f	class:ProtectedAreaPresenter
+protected_area=	./app/models/no_take_status.rb	/^  has_one :protected_area$/;"	F	class:NoTakeStatus
+protected_area=	./app/models/wikipedia_article.rb	/^  has_one :protected_area$/;"	F	class:WikipediaArticle
+protected_area_cover	./app/helpers/application_helper.rb	/^  def protected_area_cover protected_area$/;"	f	class:ApplicationHelper
+protected_area_ids	./app/models/country.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:Country
+protected_area_ids	./app/models/designation.rb	/^  has_many :protected_areas$/;"	F	class:Designation
+protected_area_ids	./app/models/governance.rb	/^  has_many :protected_areas$/;"	F	class:Governance
+protected_area_ids	./app/models/iucn_category.rb	/^  has_many :protected_areas$/;"	F	class:IucnCategory
+protected_area_ids	./app/models/legal_status.rb	/^  has_many :protected_areas$/;"	F	class:LegalStatus
+protected_area_ids	./app/models/management_authority.rb	/^  has_many :protected_areas$/;"	F	class:ManagementAuthority
+protected_area_ids	./app/models/project.rb	/^  has_many :protected_areas, through: :project_items, source: :item, source_type: 'ProtectedArea'$/;"	F	class:Project
+protected_area_ids	./app/models/region.rb	/^  has_many :protected_areas, through: :countries$/;"	F	class:Region
+protected_area_ids	./app/models/source.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:Source
+protected_area_ids	./app/models/sub_location.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:SubLocation
+protected_area_ids	./app/workers/download_workers/search.rb	/^  def protected_area_ids$/;"	f	class:DownloadWorkers.Search
+protected_area_ids=	./app/models/country.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:Country
+protected_area_ids=	./app/models/designation.rb	/^  has_many :protected_areas$/;"	F	class:Designation
+protected_area_ids=	./app/models/governance.rb	/^  has_many :protected_areas$/;"	F	class:Governance
+protected_area_ids=	./app/models/iucn_category.rb	/^  has_many :protected_areas$/;"	F	class:IucnCategory
+protected_area_ids=	./app/models/legal_status.rb	/^  has_many :protected_areas$/;"	F	class:LegalStatus
+protected_area_ids=	./app/models/management_authority.rb	/^  has_many :protected_areas$/;"	F	class:ManagementAuthority
+protected_area_ids=	./app/models/project.rb	/^  has_many :protected_areas, through: :project_items, source: :item, source_type: 'ProtectedArea'$/;"	F	class:Project
+protected_area_ids=	./app/models/region.rb	/^  has_many :protected_areas, through: :countries$/;"	F	class:Region
+protected_area_ids=	./app/models/source.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:Source
+protected_area_ids=	./app/models/sub_location.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:SubLocation
+protected_area_tile	./lib/modules/asset_generator.rb	/^  def self.protected_area_tile protected_area$/;"	F	class:AssetGenerator
+protected_areas	./app/models/country.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:Country
+protected_areas	./app/models/designation.rb	/^  has_many :protected_areas$/;"	F	class:Designation
+protected_areas	./app/models/governance.rb	/^  has_many :protected_areas$/;"	F	class:Governance
+protected_areas	./app/models/iucn_category.rb	/^  has_many :protected_areas$/;"	F	class:IucnCategory
+protected_areas	./app/models/legal_status.rb	/^  has_many :protected_areas$/;"	F	class:LegalStatus
+protected_areas	./app/models/management_authority.rb	/^  has_many :protected_areas$/;"	F	class:ManagementAuthority
+protected_areas	./app/models/project.rb	/^  has_many :protected_areas, through: :project_items, source: :item, source_type: 'ProtectedArea'$/;"	F	class:Project
+protected_areas	./app/models/region.rb	/^  has_many :protected_areas, through: :countries$/;"	F	class:Region
+protected_areas	./app/models/source.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:Source
+protected_areas	./app/models/sub_location.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:SubLocation
+protected_areas	./lib/modules/wdpa/release.rb	/^  def protected_areas$/;"	f	class:Wdpa.Release
+protected_areas=	./app/models/country.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:Country
+protected_areas=	./app/models/designation.rb	/^  has_many :protected_areas$/;"	F	class:Designation
+protected_areas=	./app/models/governance.rb	/^  has_many :protected_areas$/;"	F	class:Governance
+protected_areas=	./app/models/iucn_category.rb	/^  has_many :protected_areas$/;"	F	class:IucnCategory
+protected_areas=	./app/models/legal_status.rb	/^  has_many :protected_areas$/;"	F	class:LegalStatus
+protected_areas=	./app/models/management_authority.rb	/^  has_many :protected_areas$/;"	F	class:ManagementAuthority
+protected_areas=	./app/models/project.rb	/^  has_many :protected_areas, through: :project_items, source: :item, source_type: 'ProtectedArea'$/;"	F	class:Project
+protected_areas=	./app/models/region.rb	/^  has_many :protected_areas, through: :countries$/;"	F	class:Region
+protected_areas=	./app/models/source.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:Source
+protected_areas=	./app/models/sub_location.rb	/^  has_and_belongs_to_many :protected_areas$/;"	F	class:SubLocation
+protected_areas_by_designation	./lib/modules/stats/global.rb	/^  def self.protected_areas_by_designation$/;"	F	class:Stats.Global
+protected_areas_inner_join	./app/models/country.rb	/^  def protected_areas_inner_join group_by$/;"	f	class:Country
+protected_areas_per_designation	./app/models/country.rb	/^  def protected_areas_per_designation(jurisdiction=nil)$/;"	f	class:Country
+protected_areas_per_governance	./app/models/country.rb	/^  def protected_areas_per_governance$/;"	f	class:Country
+protected_areas_per_iucn_category	./app/models/country.rb	/^  def protected_areas_per_iucn_category$/;"	f	class:Country
+protected_areas_per_jurisdiction	./app/models/country.rb	/^  def protected_areas_per_jurisdiction$/;"	f	class:Country
+protected_areas_with_iucn_categories	./app/models/country.rb	/^  def protected_areas_with_iucn_categories$/;"	f	class:Country
+protected_areas_with_iucn_categories	./app/models/region.rb	/^  def protected_areas_with_iucn_categories$/;"	f	class:Region
+query	./lib/modules/download/generators/base.rb	/^  def query conditions=[]$/;"	f	class:Download.Generators.Base
+query	./lib/modules/download/generators/shapefile.rb	/^  def query select, conditions=[]$/;"	f	class:Download.Generators.Shapefile
+query	./lib/modules/ogr/split.rb	/^  def query limit, offset$/;"	f	class:Ogr.Split
+query	./lib/modules/search.rb	/^  def query$/;"	f	class:Search
+query	./lib/modules/search/matcher/multi_match.rb	/^  def query$/;"	f	class:Search.Matcher.MultiMatch
+query_cartodb	./lib/modules/carto_db/merger.rb	/^  def query_cartodb query$/;"	f	class:CartoDb.Merger
+query_with_booster	./lib/modules/search/matcher/multi_match.rb	/^  def query_with_booster$/;"	f	class:Search.Matcher.MultiMatch
+random_protected_areas	./app/models/country.rb	/^  def random_protected_areas wanted=1$/;"	f	class:Country
+raw	./lib/modules/search/results.rb	/^  def raw$/;"	f	class:Search.Results
+redis_handler	./lib/modules/import_tools/import.rb	/^  def redis_handler$/;"	f	class:ImportTools.Import
+redis_handler	./lib/modules/import_tools/import/confirmable.rb	/^  def redis_handler$/;"	f	class:ImportTools.Import.Confirmable
+redis_prefix	./lib/modules/import_tools/redis_handler.rb	/^  def redis_prefix$/;"	f	class:ImportTools.RedisHandler
+refresh_data	./app/workers/import_workers/finaliser_worker.rb	/^  def refresh_data$/;"	f	class:ImportWorkers.FinaliserWorker
+region	./app/models/country.rb	/^  belongs_to :region$/;"	F	class:Country
+region	./app/models/regional_statistic.rb	/^  belongs_to :region$/;"	F	class:RegionalStatistic
+region=	./app/models/country.rb	/^  belongs_to :region$/;"	F	class:Country
+region=	./app/models/regional_statistic.rb	/^  belongs_to :region$/;"	F	class:RegionalStatistic
+region_cover	./app/helpers/application_helper.rb	/^  def region_cover region$/;"	f	class:ApplicationHelper
+region_for_index	./app/models/country.rb	/^  belongs_to :region_for_index, -> { select('regions.id, regions.name') }, :class_name => 'Region', :foreign_key => 'region_id'$/;"	F	class:Country
+region_for_index=	./app/models/country.rb	/^  belongs_to :region_for_index, -> { select('regions.id, regions.name') }, :class_name => 'Region', :foreign_key => 'region_id'$/;"	F	class:Country
+region_ids	./app/models/project.rb	/^  has_many :regions, through: :project_items, source: :item, source_type: 'Region'$/;"	F	class:Project
+region_ids=	./app/models/project.rb	/^  has_many :regions, through: :project_items, source: :item, source_type: 'Region'$/;"	F	class:Project
+regional_statistic	./app/models/region.rb	/^  has_one :regional_statistic$/;"	F	class:Region
+regional_statistic=	./app/models/region.rb	/^  has_one :regional_statistic$/;"	F	class:Region
+regions	./app/models/project.rb	/^  has_many :regions, through: :project_items, source: :item, source_type: 'Region'$/;"	F	class:Project
+regions=	./app/models/project.rb	/^  has_many :regions, through: :project_items, source: :item, source_type: 'Region'$/;"	F	class:Project
+related_links?	./app/helpers/protected_areas_helper.rb	/^  def related_links? protected_area$/;"	f	class:ProtectedAreasHelper
+reload!	./lib/modules/active_token/properties.rb	/^    def reload!$/;"	f	class:ActiveToken.Properties
+remove_geometry	./lib/modules/wdpa/protected_area_importer/attribute_importer.rb	/^  def self.remove_geometry attributes$/;"	F	class:Wdpa.ProtectedAreaImporter.AttributeImporter
+remove_nested_attributes	./lib/modules/wdpa/data_standard.rb	/^  def self.remove_nested_attributes hash$/;"	F	class:Wdpa.DataStandard
+rename_database	./lib/modules/import_tools/postgres_handler.rb	/^  def rename_database database_name, new_database_name$/;"	f	class:ImportTools.PostgresHandler
+rename_query	./lib/modules/carto_db/merger.rb	/^  def rename_query$/;"	f	class:CartoDb.Merger
+render_404	./app/controllers/protected_areas_controller.rb	/^  def render_404$/;"	f	class:ProtectedAreasController
+render_template	./lib/modules/geospatial/calculator.rb	/^  def render_template template_path, binding$/;"	f	class:Geospatial.Calculator
+render_template	./lib/modules/geospatial/country_geometry_populator/geometry_dissolver.rb	/^  def self.render_template template_path, binding$/;"	F	class:Geospatial.CountryGeometryPopulator.GeometryDissolver
+render_template	./lib/modules/geospatial/country_geometry_populator/marine_geometries_intersector.rb	/^  def self.render_template template_path, binding$/;"	F	class:Geospatial.CountryGeometryPopulator.MarineGeometriesIntersector
+repair	./lib/modules/geospatial/geometry.rb	/^  def repair$/;"	f	class:Geospatial.Geometry
+repair_marine_geometries	./lib/modules/geospatial/country_geometry_populator/marine_geometries_intersector.rb	/^  def self.repair_marine_geometries$/;"	F	class:Geospatial.CountryGeometryPopulator.MarineGeometriesIntersector
+replace_all	./lib/modules/s3.rb	/^  def replace_all from, to$/;"	f	class:S3
+replace_all	./lib/modules/s3.rb	/^  def self.replace_all from, to$/;"	F	class:S3
+request	./lib/modules/download.rb	/^  def self.request params$/;"	F	class:Download
+request	./lib/modules/download/requesters/base.rb	/^  def request$/;"	f	class:Download.Requesters.Base
+request	./lib/modules/download/requesters/base.rb	/^  def self.request *args$/;"	F	class:Download.Requesters.Base
+request	./lib/modules/download/requesters/general.rb	/^  def request$/;"	f	class:Download.Requesters.General
+request	./lib/modules/download/requesters/project.rb	/^  def request$/;"	f	class:Download.Requesters.Project
+request	./lib/modules/download/requesters/search.rb	/^  def request$/;"	f	class:Download.Requesters.Search
+request	./lib/modules/download/router.rb	/^  def self.request domain, params$/;"	F	class:Download.Router
+request_tile	./lib/modules/asset_generator.rb	/^  def self.request_tile host, path$/;"	F	class:AssetGenerator
+respond_to?	./lib/modules/search/results.rb	/^  def respond_to? method, include_all=false$/;"	f	class:Search.Results
+restore_command	./lib/modules/countries_geometry_importer.rb	/^  def restore_command context$/;"	f	class:CountriesGeometryImporter
+restore_to_temporary_table	./lib/modules/countries_geometry_importer.rb	/^  def restore_to_temporary_table$/;"	f	class:CountriesGeometryImporter
+results	./lib/modules/search.rb	/^  def results$/;"	f	class:Search
+run	./lib/modules/ogr/shapefile.rb	/^  def self.run filename, new_filename, options$/;"	F	class:Ogr.Shapefile
+save_image	./app/workers/import_workers/image_worker.rb	/^  def save_image protected_area_id$/;"	f	class:ImportWorkers.ImageWorker
+save_wikipedia_article	./app/workers/import_workers/wikipedia_summary_worker.rb	/^  def save_wikipedia_article protected_area_id$/;"	f	class:ImportWorkers.WikipediaSummaryWorker
+saved_search_cover	./app/helpers/application_helper.rb	/^  def saved_search_cover saved_search$/;"	f	class:ApplicationHelper
+saved_searche_ids	./app/models/project.rb	/^  has_many :saved_searches$/;"	F	class:Project
+saved_searche_ids=	./app/models/project.rb	/^  has_many :saved_searches$/;"	F	class:Project
+saved_searches	./app/models/project.rb	/^  has_many :saved_searches$/;"	F	class:Project
+saved_searches=	./app/models/project.rb	/^  has_many :saved_searches$/;"	F	class:Project
+search	./app/models/saved_search.rb	/^  def search$/;"	f	class:SavedSearch
+search	./app/models/wikipedia_article.rb	/^  def self.search title$/;"	F	class:WikipediaArticle
+search	./app/workers/download_workers/search.rb	/^  def search$/;"	f	class:DownloadWorkers.Search
+search	./lib/modules/search.rb	/^  def search$/;"	f	class:Search
+search	./lib/modules/search.rb	/^  def self.search search_term, options={}$/;"	F	class:Search
+search_options	./app/controllers/api/v3/search_controller.rb	/^  def search_options extra_options$/;"	f	class:Api.V3.SearchController
+search_options	./app/controllers/search_controller.rb	/^  def search_options$/;"	f	class:SearchController
+search_params	./app/controllers/search_controller.rb	/^  def search_params$/;"	f	class:SearchController
+search_result_preview	./app/helpers/cms_helper.rb	/^  def search_result_preview resource$/;"	f	class:CmsHelper
+search_term	./app/workers/import_workers/wikipedia_summary_worker.rb	/^  def search_term$/;"	f	class:ImportWorkers.WikipediaSummaryWorker
+search_term	./lib/modules/search.rb	/^  attr_reader :search_term, :options$/;"	f	class:Search
+search_term=	./lib/modules/search.rb	/^  attr_writer :search_term, :options$/;"	f	class:Search
+search_title	./app/helpers/search_helper.rb	/^  def search_title params$/;"	f	class:SearchHelper
+seed	./lib/modules/import_tools/postgres_handler.rb	/^  def seed database_name, dump_path$/;"	f	class:ImportTools.PostgresHandler
+send_completion_email	./app/workers/download_workers/search.rb	/^  def send_completion_email$/;"	f	class:DownloadWorkers.Search
+send_confirmation_email	./app/workers/import_workers/s3_polling_worker.rb	/^  def send_confirmation_email import$/;"	f	class:ImportWorkers.S3PollingWorker
+set_email	./lib/modules/download.rb	/^  def self.set_email params$/;"	F	class:Download
+set_email	./lib/modules/download/router.rb	/^  def self.set_email domain, params$/;"	F	class:Download.Router
+set_property	./lib/modules/import_tools/redis_handler.rb	/^  def set_property token, property, value$/;"	f	class:ImportTools.RedisHandler
+setup	./test/controllers/protected_areas_controller_test.rb	/^  def setup$/;"	f	class:ProtectedAreasControllerTest
+setup	./test/controllers/search_controller_test.rb	/^  def setup$/;"	f	class:SearchControllerTest
+setup	./test/integration/import_confirmation_test.rb	/^  def setup$/;"	f	class:ImportConfirmationTest
+setup	./test/integration/protected_area_show_test.rb	/^  def setup$/;"	f	class:ProtectedAreaShowTest
+setup	./test/unit/asset_generator_test.rb	/^  def setup$/;"	f	class:AssetGeneratorTest
+setup	./test/unit/import_tools/redis_handler_test.rb	/^  def setup$/;"	f	class:ImportToolsRedisHandlerTest
+setup	./test/unit/polymorphic_group_test.rb	/^  def setup$/;"	f	class:PolymorphicGroupTest
+setup	./test/unit/presenters/statistic_presenter_test.rb	/^  def setup$/;"	f	class:StatisticPresenterTest
+setup	./test/unit/s3_test.rb	/^  def setup$/;"	f	class:S3Test
+setup	./test/unit/wdpa/s3_test.rb	/^  def setup$/;"	f	class:TestWdpaS3Downloader
+setup	./test/unit/workers/download_workers/general_test.rb	/^  def setup$/;"	f	class:DownloadWorkersGeneralTest
+setup	./test/unit/workers/download_workers/project_test.rb	/^  def setup$/;"	f	class:DownloadWorkersProjectTest
+setup	./test/unit/workers/download_workers/search_test.rb	/^  def setup$/;"	f	class:DownloadWorkersSearchTest
+shapefile_components	./lib/modules/download/generators/shapefile.rb	/^  def shapefile_components name$/;"	f	class:Download.Generators.Shapefile
+show	./app/controllers/api/v3/protected_areas_controller.rb	/^  def show$/;"	f	class:Api.V3.ProtectedAreasController
+show	./app/controllers/country_controller.rb	/^  def show$/;"	f	class:CountryController
+show	./app/controllers/downloads_controller.rb	/^  def show$/;"	f	class:DownloadsController
+show	./app/controllers/protected_areas_controller.rb	/^  def show$/;"	f	class:ProtectedAreasController
+show	./app/controllers/sites_controller.rb	/^  def show$/;"	f	class:SitesController
+show_item_path	./app/helpers/projects_helper.rb	/^  def show_item_path item$/;"	f	class:ProjectsHelper
+sign_in	./test/test_helper.rb	/^  def sign_in user$/;"	f	class:ActionDispatch.IntegrationTest
+simplify_query	./lib/modules/countries_geometry_importer.rb	/^  def simplify_query type, iso_3$/;"	f	class:CountriesGeometryImporter
+sorter	./lib/modules/search/sorter.rb	/^  def sorter$/;"	f	class:Search.Sorter
+source_ids	./app/models/protected_area.rb	/^  has_and_belongs_to_many :sources$/;"	F	class:ProtectedArea
+source_ids=	./app/models/protected_area.rb	/^  has_and_belongs_to_many :sources$/;"	F	class:ProtectedArea
+source_table	./lib/modules/wdpa/release.rb	/^  def source_table$/;"	f	class:Wdpa.Release
+sources	./app/models/protected_area.rb	/^  has_and_belongs_to_many :sources$/;"	F	class:ProtectedArea
+sources	./lib/modules/wdpa/relation.rb	/^  def sources value$/;"	f	class:Wdpa.Relation
+sources	./lib/modules/wdpa/release.rb	/^  def sources$/;"	f	class:Wdpa.Release
+sources=	./app/models/protected_area.rb	/^  has_and_belongs_to_many :sources$/;"	F	class:ProtectedArea
+spaceify	./app/helpers/application_helper.rb	/^  def spaceify number$/;"	f	class:ApplicationHelper
+split	./lib/modules/ogr/split.rb	/^  def self.split filename, layer, number_of_pieces, column_names = ['*']$/;"	F	class:Ogr.Split
+split	./lib/modules/ogr/split.rb	/^  def split number_of_pieces$/;"	f	class:Ogr.Split
+split	./lib/modules/wdpa/carto_db_importer.rb	/^  def split$/;"	f	class:Wdpa.CartoDbImporter
+standard_attributes	./app/presenters/protected_area_presenter.rb	/^  def standard_attributes$/;"	f	class:ProtectedAreaPresenter
+standard_attributes	./lib/modules/wdpa/data_standard.rb	/^  def self.standard_attributes$/;"	F	class:Wdpa.DataStandard
+standard_geometry_attributes	./lib/modules/wdpa/data_standard.rb	/^  def self.standard_geometry_attributes$/;"	F	class:Wdpa.DataStandard
+standardise	./lib/modules/search/filter.rb	/^  def standardise value$/;"	f	class:Search.Filter
+standardise	./lib/modules/wdpa/attribute.rb	/^  def self.standardise(value, as:)$/;"	F	class:Wdpa.Attribute
+standardise_table_name	./lib/modules/wdpa/data_standard.rb	/^  def self.standardise_table_name table$/;"	F	class:Wdpa.DataStandard
+standardise_values	./lib/modules/wdpa/data_standard.rb	/^  def self.standardise_values hash$/;"	F	class:Wdpa.DataStandard
+start_batch_threads	./lib/modules/search/parallel_indexer.rb	/^  def start_batch_threads lazy_batches$/;"	f	class:Search.ParallelIndexer
+start_indexing_threads	./lib/modules/search/parallel_indexer.rb	/^  def start_indexing_threads$/;"	f	class:Search.ParallelIndexer
+start_time	./lib/modules/wdpa/release.rb	/^  def start_time$/;"	f	class:Wdpa.Release
+start_upload	./lib/modules/carto_db/uploader.rb	/^  def start_upload filename$/;"	f	class:CartoDb.Uploader
+started_at	./lib/modules/import_tools/import.rb	/^  def started_at$/;"	f	class:ImportTools.Import
+statistic	./app/models/country.rb	/^  def statistic$/;"	f	class:Country
+statistic	./app/models/region.rb	/^  def statistic$/;"	f	class:Region
+status	./lib/modules/carto_db/uploader.rb	/^  def status upload_id$/;"	f	class:CartoDb.Uploader
+stop	./lib/modules/import_tools/import.rb	/^  def stop finalise=true$/;"	f	class:ImportTools.Import
+store_location	./app/controllers/application_controller.rb	/^  def store_location$/;"	f	class:ApplicationController
+stored_confirmation_key	./lib/modules/import_tools/import/confirmable.rb	/^  def stored_confirmation_key$/;"	f	class:ImportTools.Import.Confirmable
+sub_location_ids	./app/models/country.rb	/^  has_many :sub_locations$/;"	F	class:Country
+sub_location_ids	./app/models/protected_area.rb	/^  has_and_belongs_to_many :sub_locations$/;"	F	class:ProtectedArea
+sub_location_ids=	./app/models/country.rb	/^  has_many :sub_locations$/;"	F	class:Country
+sub_location_ids=	./app/models/protected_area.rb	/^  has_and_belongs_to_many :sub_locations$/;"	F	class:ProtectedArea
+sub_locations	./app/models/country.rb	/^  has_many :sub_locations$/;"	F	class:Country
+sub_locations	./app/models/protected_area.rb	/^  has_and_belongs_to_many :sub_locations$/;"	F	class:ProtectedArea
+sub_locations	./lib/modules/wdpa/relation.rb	/^  def sub_locations value$/;"	f	class:Wdpa.Relation
+sub_locations=	./app/models/country.rb	/^  has_many :sub_locations$/;"	F	class:Country
+sub_locations=	./app/models/protected_area.rb	/^  has_and_belongs_to_many :sub_locations$/;"	F	class:ProtectedArea
+swap_databases	./lib/modules/import_tools/import.rb	/^  def swap_databases$/;"	f	class:ImportTools.Import
+table_merge_query	./lib/modules/carto_db/merger.rb	/^  def table_merge_query table_name$/;"	f	class:CartoDb.Merger
+table_name	./lib/modules/geospatial/calculator.rb	/^  def table_name$/;"	f	class:Geospatial.Calculator
+tables_to_merge	./lib/modules/carto_db/merger.rb	/^  def tables_to_merge$/;"	f	class:CartoDb.Merger
+teardown	./test/integration/admin_maintenance_test.rb	/^  def teardown$/;"	f	class:AdminMaintenanceTest
+teardown	./test/test_helper.rb	/^  def teardown$/;"	f	class:ActionDispatch.IntegrationTest
+terms	./app/controllers/static_pages_controller.rb	/^  def terms$/;"	f	class:StaticPagesController
+tiles	./app/controllers/assets_controller.rb	/^  def tiles$/;"	f	class:AssetsController
+title	./app/models/wikipedia_article.rb	/^  attr_accessor :title$/;"	f	class:WikipediaArticle
+title=	./app/models/wikipedia_article.rb	/^  attr_accessor :title$/;"	f	class:WikipediaArticle
+title_for_url	./lib/modules/wikipedia/url.rb	/^  def self.title_for_url title$/;"	F	class:Wikipedia.URL
+title_with_filter	./app/helpers/search_helper.rb	/^  def title_with_filter params$/;"	f	class:SearchHelper
+title_with_query	./app/helpers/search_helper.rb	/^  def title_with_query query$/;"	f	class:SearchHelper
+tmp_path	./lib/modules/wdpa/release.rb	/^  def tmp_path$/;"	f	class:Wdpa.Release
+to_h	./lib/modules/search/filter.rb	/^  def to_h$/;"	f	class:Search.Filter
+to_h	./lib/modules/search/filter/equality.rb	/^  def to_h$/;"	f	class:Search.Filter.Equality
+to_h	./lib/modules/search/filter/geo.rb	/^  def to_h$/;"	f	class:Search.Filter.Geo
+to_h	./lib/modules/search/filter/nested.rb	/^  def to_h$/;"	f	class:Search.Filter.Nested
+to_h	./lib/modules/search/filter/type.rb	/^  def to_h$/;"	f	class:Search.Filter.Type
+to_h	./lib/modules/search/matcher.rb	/^  def to_h$/;"	f	class:Search.Matcher
+to_h	./lib/modules/search/matcher/multi_match.rb	/^  def to_h$/;"	f	class:Search.Matcher.MultiMatch
+to_h	./lib/modules/search/matcher/nested.rb	/^  def to_h$/;"	f	class:Search.Matcher.Nested
+to_h	./lib/modules/search/query.rb	/^  def to_h$/;"	f	class:Search.Query
+to_h	./lib/modules/search/sorter.rb	/^  def to_h$/;"	f	class:Search.Sorter
+to_h	./lib/modules/search/sorter/geo_distance.rb	/^  def to_h$/;"	f	class:Search.Sorter.GeoDistance
+token	./lib/modules/active_token.rb	/^  attr_accessor :token$/;"	f	class:ActiveToken
+token	./lib/modules/download/requesters/search.rb	/^  def token$/;"	f	class:Download.Requesters.Search
+token=	./lib/modules/active_token.rb	/^  attr_accessor :token$/;"	f	class:ActiveToken
+token_domain	./lib/modules/active_token.rb	/^    def token_domain domain$/;"	f	class:ActiveToken.ClassMethods
+token_key	./lib/modules/active_token.rb	/^    def token_key token$/;"	f	class:ActiveToken.ClassMethods
+total_pages	./lib/modules/search.rb	/^  def total_pages$/;"	f	class:Search
+type_li_tag	./app/helpers/search_helper.rb	/^  def type_li_tag type, current_type$/;"	f	class:SearchHelper
+under_maintenance	./lib/modules/import_tools/web_handler.rb	/^  def self.under_maintenance$/;"	F	class:ImportTools.WebHandler
+unlock	./lib/modules/import_tools/redis_handler.rb	/^  def unlock$/;"	f	class:ImportTools.RedisHandler
+unlock_import	./lib/modules/import_tools/import.rb	/^  def unlock_import$/;"	f	class:ImportTools.Import
+up	./db/migrate/20141107164407_add_devise_to_users.rb	/^  def self.up$/;"	F	class:AddDeviseToUsers
+up	./db/migrate/20151202155924_create_cms.rb	/^  def self.up$/;"	F	class:CreateCms
+update	./app/controllers/downloads_controller.rb	/^  def update$/;"	f	class:DownloadsController
+update	./app/controllers/projects_controller.rb	/^  def update$/;"	f	class:ProjectsController
+update_query	./lib/modules/countries_geometry_importer.rb	/^  def update_query type, iso_3$/;"	f	class:CountriesGeometryImporter
+upload	./lib/modules/carto_db/uploader.rb	/^  def upload filename$/;"	f	class:CartoDb.Uploader
+upload	./lib/modules/s3.rb	/^  def self.upload object_name, file_path, opts={}$/;"	F	class:S3
+upload	./lib/modules/s3.rb	/^  def upload object_name, source, opts$/;"	f	class:S3
+upload	./lib/modules/wdpa/carto_db_importer.rb	/^  def upload$/;"	f	class:Wdpa.CartoDbImporter
+upload_complete	./lib/modules/carto_db/uploader.rb	/^  def upload_complete upload_id$/;"	f	class:CartoDb.Uploader
+upload_to_s3	./lib/modules/download.rb	/^  def self.upload_to_s3 zip_path, for_import$/;"	F	class:Download
+url_for_related_source	./app/helpers/protected_areas_helper.rb	/^  def url_for_related_source source, protected_area$/;"	f	class:ProtectedAreasHelper
+use_import_db=	./lib/modules/import_tools/import.rb	/^  def use_import_db= import_db_on$/;"	f	class:ImportTools.Import
+user	./app/models/project.rb	/^  belongs_to :user$/;"	F	class:Project
+user=	./app/models/project.rb	/^  belongs_to :user$/;"	F	class:Project
+user_email	./app/controllers/downloads_controller.rb	/^  def user_email$/;"	f	class:DownloadsController
+verify_confirmation_key	./lib/modules/import_tools/import/confirmable.rb	/^  def verify_confirmation_key confirmation_key$/;"	f	class:ImportTools.Import.Confirmable
+verify_key	./app/controllers/admin/import_controller.rb	/^  def verify_key$/;"	f	class:Admin.ImportController
+wdpa_ids	./app/models/country.rb	/^  def wdpa_ids$/;"	f	class:Country
+wdpa_ids	./app/models/protected_area.rb	/^  def wdpa_ids$/;"	f	class:ProtectedArea
+wdpa_ids	./app/models/region.rb	/^  def wdpa_ids$/;"	f	class:Region
+wdpa_ids	./app/models/saved_search.rb	/^  def wdpa_ids$/;"	f	class:SavedSearch
+wdpa_ids	./app/workers/download_workers/project.rb	/^  def wdpa_ids$/;"	f	class:DownloadWorkers.Project
+wdpa_terms	./app/controllers/static_pages_controller.rb	/^  def wdpa_terms$/;"	f	class:StaticPagesController
+while_generating	./app/workers/download_workers/base.rb	/^  def while_generating key$/;"	f	class:DownloadWorkers.Base
+wikipedia_article	./app/models/protected_area.rb	/^  belongs_to :wikipedia_article$/;"	F	class:ProtectedArea
+wikipedia_article=	./app/models/protected_area.rb	/^  belongs_to :wikipedia_article$/;"	F	class:ProtectedArea
+with_coords	./lib/modules/search/results.rb	/^  def with_coords$/;"	f	class:Search.Results
+with_valid_iucn_categories	./app/models/protected_area.rb	/^  def self.with_valid_iucn_categories$/;"	F	class:ProtectedArea
+zip	./lib/modules/download/generators/base.rb	/^  def zip$/;"	f	class:Download.Generators.Base
+zip_path	./lib/modules/download/generators/shapefile.rb	/^  def zip_path$/;"	f	class:Download.Generators.Shapefile
+zip_path	./lib/modules/wdpa/release.rb	/^  def zip_path$/;"	f	class:Wdpa.Release
+zip_path_for_type	./lib/modules/download/utils.rb	/^    def self.zip_path_for_type download_name, type$/;"	F	class:Download.Utils
