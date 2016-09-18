@@ -32,6 +32,7 @@ class ImportWorkers::FinaliserWorker
 
     Download.make_current
     CmsTransfer.transfer
+    ApiTransfer.transfer
     ImportTools::WebHandler.clear_cache
   end
 end
