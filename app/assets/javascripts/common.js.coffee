@@ -1,9 +1,9 @@
 $(document).ready( ->
   require(
     ['autocompletion', 'query_control', 'dropdown', 'map', 'navbar', 'asyncImg',
-     'downloads_general', 'downloads_project', 'downloads_search', 'expandable_section'],
+     'downloads_general', 'downloads_project', 'downloads_search', 'expandable_section', 'dismissable'],
     (Autocompletion, QueryControl, Dropdown, Map, Navbar, asyncImg,
-     DownloadsGeneral, DownloadsProject, DownloadsSearch, ExpandableSection) ->
+     DownloadsGeneral, DownloadsProject, DownloadsSearch, ExpandableSection, Dismissable) ->
       $('.js-search-input').each( ->
         new Autocompletion($(this))
         new QueryControl($(this))
@@ -21,6 +21,9 @@ $(document).ready( ->
 
       if $expandableSections = $('.js-expandable-section')
         ExpandableSection.initialize($expandableSections)
+
+      if $dismissableEls = $('.js-dismissable')
+        Dismissable.initialize($dismissableEls)
 
       asyncImg()
 
