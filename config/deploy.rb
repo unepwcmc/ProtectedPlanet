@@ -30,7 +30,7 @@ set :ssh_options, {
 
 set :linked_files, %w{config/database.yml .env}
 
-set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
+set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system', 'public/.well-known')
 
 set :keep_releases, 5
 
