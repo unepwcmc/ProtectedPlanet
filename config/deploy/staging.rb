@@ -8,6 +8,7 @@ set :application, "protectedplanet"
 set :server_name, "web-staging-linode.protectedplanet.net"
 set :sudo_user, "wcmc"
 set :app_port, "80"
+set :branch, "ssl_changes"
 
 
 # server-based syntax

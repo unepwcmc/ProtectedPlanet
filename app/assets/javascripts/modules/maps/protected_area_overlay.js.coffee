@@ -118,6 +118,9 @@ define('protected_area_overlay', [], () ->
       sublayers.push @_regionTiles(config.regionName) if config.regionName?
 
       carto_tiles = new cartodb.Tiles(
+        tiler_protocol: "https"
+        tiler_port: "443",
+        tiler_domain: "carto.com",
         sublayers: sublayers
         user_name: "carbon-tool"
       )
