@@ -5,10 +5,10 @@
   <% if @search.results.count > 0 %>
     <div class="js-download-btn hero__top u-center">
       <h1 class="hero__title--base hero__title"><%= search_title(params) %></h1>
-      <button class="tooltip__trigger u-right js-trigger link-with-icon--bold link-with-icon">
+      <div class="tooltip__trigger u-right js-trigger link-with-icon--bold link-with-icon">
         <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
         <%= download_dropdown('search', 'search', [:csv, :kml, :shp]) %>
-      </button>
+      </div>
     </div>
 
     <aside class="filter-bar">

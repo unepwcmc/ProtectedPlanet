@@ -4,10 +4,10 @@
       <%= @country.name %>, <small class="hero__title hero__title--thin"><%= @country.region.name %></small>
     </h1>
     <% unless params[:for_pdf] %>
-      <button class="tooltip__trigger js-trigger link-with-icon link-with-icon--bold">
+      <div class="tooltip__trigger js-trigger link-with-icon link-with-icon--bold">
         <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
         <%= download_dropdown(@country.iso_3, 'general', (types rescue [:csv, :kml, :shp])) %>
-      </button>
+      </div>
     <% end %>
   </div>
   <% unless params[:for_pdf] %>
