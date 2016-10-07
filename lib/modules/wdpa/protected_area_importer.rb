@@ -9,9 +9,8 @@ class Wdpa::ProtectedAreaImporter
   }
 
   def self.import wdpa_release
-    Wdpa::ProtectedAreaImporter::AttributeImporter.import wdpa_release
-    Wdpa::ProtectedAreaImporter::GeometryImporter.import wdpa_release
-    Wdpa::ProtectedAreaImporter::AssetImporter.import
+    Wdpa::ProtectedAreaImporter::AttributeImporter.import
+    Wdpa::ProtectedAreaImporter::GeometryImporter.import
 
     Wdpa::ProtectedAreaImporter::RelatedSourceImporter.import(PARCC_IMPORT)
     Wdpa::ProtectedAreaImporter::RelatedSourceImporter.import(IRREPLACEABILITY_IMPORT)

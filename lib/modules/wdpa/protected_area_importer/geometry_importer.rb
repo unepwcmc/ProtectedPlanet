@@ -1,10 +1,10 @@
 class Wdpa::ProtectedAreaImporter::GeometryImporter
-  def self.import wdpa_release
+  def self.import
     standard_geometry_attributes = Wdpa::DataStandard.standard_geometry_attributes
 
-    wdpa_release.geometry_tables.each do |_, std_table_name|
+    ["standard_polygons", "standard_points"].each do |raw_import_table|
       standard_geometry_attributes.each do |attribute, value|
-        import_geometry(value[:name], attribute, std_table_name)
+        import_geometry(value[:name], attribute, raw_import_table)
         import_coordinates(value[:name])
       end
     end
