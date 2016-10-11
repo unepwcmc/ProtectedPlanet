@@ -2,7 +2,7 @@
   "name": "Protected Planet",
   "short_name": "pp.net",
   "start_url": ".",
-  "display": "minimal-ui",
+  "display": "standalone",
   "background_color": "#71a32b",
   "theme_color": "#71a32b",
   "orientation": "portrait",
