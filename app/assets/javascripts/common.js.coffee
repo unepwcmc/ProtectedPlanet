@@ -10,6 +10,7 @@ $(document).ready( ->
       )
 
       new Map($('#map')).render()
+      new Map($('#map-mobile')).render()
       Navbar.initialize()
 
       $('.js-download-btn').each (i, el) -> new Dropdown($(el))

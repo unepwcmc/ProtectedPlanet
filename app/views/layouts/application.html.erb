@@ -30,7 +30,7 @@
     <%= javascript_include_tag "html5shiv/dist/html5shiv.min.js" %>
   <![endif]-->
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
   <%= csrf_meta_tags %>
 
   <%= stylesheet_link_tag 'application', media: 'all' %>
@@ -38,7 +38,7 @@
 
 <body>
   <main class="body-container <%= controller_name %>-parent">
-    <header>
+    <header class="js-expandable-section">
       <%= render 'layouts/application/navbar' %>
       <%= yield :header %>
     </header>

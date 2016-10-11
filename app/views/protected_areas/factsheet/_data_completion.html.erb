@@ -3,7 +3,7 @@
     <span><%= @presenter.percentage_complete %>%</span>
     Data Complete
   </div>
-  <div class="data-completion-info js-target u-hide">
+  <div class="data-completion-info js-target">
     <% @presenter.data_info.each do |section, attributes| %>
       <div>
         <h3><%= section %></h3>
@@ -15,5 +15,5 @@
       </div>
     <% end %>
   </div>
-  <button href="#" class="data-completion__trigger is-closed js-switch js-trigger"></button>
+  <button href="#" class="data-completion__trigger is-open js-switch js-trigger"></button>
 </div>

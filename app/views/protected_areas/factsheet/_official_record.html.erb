@@ -1,19 +1,19 @@
 <div class="key-records">
   <p class="key-records__row">
     WDPA ID
-    <strong class="u-right"><%= protected_area.wdpa_id %></strong>
+    <strong class="key-records__value u-right"><%= protected_area.wdpa_id %></strong>
   </p>
   <p class="key-records__row">
     Reported Area KM&sup2;
-    <strong class="u-right"><%= protected_area.reported_area.try(:round, 2) %></strong>
+    <strong class="key-records__value u-right"><%= protected_area.reported_area.try(:round, 2) %></strong>
   </p>
   <p class="key-records__row">
     English Designation
-    <strong class="u-right"> <%= protected_area.designation.try(:name) %> </strong>
+    <strong class="key-records__value u-right"> <%= protected_area.designation.try(:name) %> </strong>
   </p>
   <p class="key-records__row">
     IUCN Category
-    <strong class="u-right"><%= protected_area.iucn_category.try(:name) %></strong>
+    <strong class="key-records__value u-right"><%= protected_area.iucn_category.try(:name) %></strong>
   </p>
 </div>
 

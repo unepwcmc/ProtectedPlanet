@@ -4,9 +4,9 @@
 <%= content_for :footer_classes, "fixed-footer" %>
 
 <div class="container--fullscreen">
-  <div class="hero__top">
+  <div class="u-only-desktop hero__top">
     <h1 class="hero__title--base hero__title">
-      Official Record for <strong class="hero__link"><%= @protected_area.name %><strong>
+      Official Record for <strong class="hero__link"><%= @protected_area.name %></strong>
     </h1>
     <% if @country %>
       <h2>
@@ -21,6 +21,19 @@
         </a>
       </h2>
     <% end %>
+  </div>
+
+  <div class="u-only-mobile hero">
+    <div class="hero__top">
+      <h1 class="hero__title--base hero__title">
+        Official Record for <strong class="hero__link"><%= @protected_area.name %></strong>
+      </h1>
+    </div>
+    <div class="map map--hero" id="map-mobile"
+      data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
+      data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
+      data-wdpa-id="<%= @protected_area.wdpa_id %>"
+    ></div>
   </div>
 
   <div class="old-factsheet">

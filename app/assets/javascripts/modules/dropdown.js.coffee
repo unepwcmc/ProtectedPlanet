@@ -8,9 +8,9 @@ define('dropdown', [], ->
         @addEventListener()
 
     addEventListener: ->
-      @$triggerEl = @$el.find('.js-trigger').addBack('.js-trigger')
-      @$switchEl  = @$el.find('.js-switch').addBack('.js-switch')
-      @$targetEl  = @$el.find('.js-target').addBack('.js-target')
+      @$triggerEl = @$el.children('.js-trigger').addBack('.js-trigger')
+      @$switchEl  = @$el.children('.js-switch').addBack('.js-switch')
+      @$targetEl  = @$el.children('.js-target').addBack('.js-target')
 
       @$triggerEl.on(@options.on, (event) =>
         if @open

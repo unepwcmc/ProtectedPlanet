@@ -19,3 +19,13 @@
 //= require_tree './modules/downloads/'
 //= require 'map'
 //= require common
+//
+
+// silly hack for mobile touch events
+function touchHoverFix() {
+    var el = this;
+    var par = el.parentNode;
+    var next = el.nextSibling;
+    par.removeChild(el);
+    setTimeout(function() {par.insertBefore(el, next);}, 10);
+}

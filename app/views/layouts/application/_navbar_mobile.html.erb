@@ -1,0 +1,42 @@
+<% if @updates_and_news.present? %>
+  <div class="mobile-menu__element mobile-menu__element--right">
+    <%= link_to 'Updates & News', resources_path(category_id: @updates_and_news.id) %>
+  </div>
+<% end %>
+
+<div class="js-expandable-section mobile-menu__element">
+  <button class="mobile-menu__element-button mobile-menu__switch js-trigger js-switch is-closed">
+    Resources
+  </button>
+
+  <div class="mobile-menu__subelement u-hide js-target">
+    <div class="dropdown__inner">
+      <% Comfy::Cms::Category.of_type("Comfy::Cms::Page").all.each do |category| %>
+        <a class="dropdown__element" href="<%= resources_path(category_id: category.id) %>"><%= category.label %></a>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="mobile-menu__element">
+  <%= link_to 'Terms & Conditions', '/c/terms-and-conditions' %>
+</div>
+
+<% if @wdpa_page.present? %>
+  <div class="mobile-menu__element js-expandable-section">
+    <button class="mobile-menu__element-button mobile-menu__switch js-trigger js-switch is-closed">
+      Thematic Areas
+    </button>
+
+    <div class="u-hide js-target mobile-menu__subelement">
+      <div class="dropdown__inner">
+        <a class="dropdown__element" href="<%= cms_page_path(@wdpa_page) %>">WDPA</a>
+        <a class="dropdown__element" href="http://parcc.protectedplanet.net/">PARCC</a>
+        <a class="dropdown__element" href="http://www.iccaregistry.org">ICCA</a>
+        <a class="dropdown__element" href="<%= cms_page_path(@pame_page) %>">PAME</a>
+        <a class="dropdown__element" href="<%= cms_page_path(@connectivity_page) %>">Connectivity Conservation</a>
+        <a class="dropdown__element" href="https://www.iucn.org/theme/protected-areas/our-work/green-list">Green List</a>
+      </div>
+    </div>
+  </div>
+<% end %>

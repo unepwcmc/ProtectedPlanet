@@ -5,56 +5,15 @@
     <% end %>
   </div>
 
+  <div ontouchend="this.onclick=touchHoverFix" class="js-trigger js-switch mobile-menu__hamburger is-closed u-only-mobile navbar__element navbar__element--right">
+    <i class="fa fa-bars mobile-menu__hamburger-icon"></i>
+  </div>
+
   <% unless @for_pdf %>
-    <div class="navbar__element navbar__element--right"><%= link_to 'About', '/c/about' %></div>
-    <% if @updates_and_news.present? %>
-      <div class="navbar__element navbar__element--right">
-        <%= link_to 'Updates & News', resources_path(category_id: @updates_and_news.id) %>
-      </div>
-    <% end %>
-    <div class="navbar__element js-dropdown navbar__element--right">
-      <button class="js-trigger">
-        Resources <i class="fa fa-chevron-down"></i>
-      </button>
-
-      <div class="u-hide js-target dropdown">
-        <div class="dropdown__inner">
-          <% Comfy::Cms::Category.of_type("Comfy::Cms::Page").all.each do |category| %>
-            <a class="dropdown__element" href="<%= resources_path(category_id: category.id) %>"><%= category.label %></a>
-          <% end %>
-        </div>
-      </div>
-    </div>
-    <div class="navbar__element navbar__element--right"><%= link_to 'Terms & Conditions', '/c/terms-and-conditions' %></div>
-    <% if @wdpa_page.present? %>
-      <div class="navbar__element navbar__element--right js-dropdown">
-        <button class="js-trigger">
-          Thematic Areas <i class="fa fa-chevron-down"></i>
-        </button>
-
-        <div class="u-hide js-target dropdown">
-          <div class="dropdown__inner">
-            <a class="dropdown__element" href="<%= cms_page_path(@wdpa_page) %>">WDPA</a>
-            <a class="dropdown__element" href="http://parcc.protectedplanet.net/">PARCC</a>
-            <a class="dropdown__element" href="http://www.iccaregistry.org">ICCA</a>
-            <a class="dropdown__element" href="<%= cms_page_path(@pame_page) %>">PAME</a>
-            <a class="dropdown__element" href="<%= cms_page_path(@connectivity_page) %>">Connectivity Conservation</a>
-            <a class="dropdown__element" href="https://www.iucn.org/theme/protected-areas/our-work/green-list">Green List</a>
-          </div>
-        </div>
-      </div>
-    <% end %>
-
-    <div data-dropdown-switch data-dropdown-switch-text class="js-switch js-dropdown <%= bem("navbar__element", "with-separator", "right", "larger", "for-search-dropdown") %>"
-    >
-      <button class="js-trigger link-with-icon link-with-icon--no-color"> <i class="fa fa-search"></i> Search</button>
-      <div class="u-hide js-target dropdown dropdown--search-dropdown u-font-inherit">
-        <form action='/search' method='get' class="search-bar" id="search-form">
-          <input autocomplete="off" name="q" placeholder="Search the protected areas of our planet" value='<%= @query %>' class="search-bar__input" type="text">
-          <button class="search-bar__submit" type="submit"><i class="fa fa-search"></i></button>
-        </form>
-      </div>
-    </div>
+    <%= render "layouts/application/navbar_desktop" %>
   <% end %>
 </nav>
 
+<div class="js-target u-hide u-only-mobile">
+  <%= render "layouts/application/navbar_mobile" %>
+</div>
