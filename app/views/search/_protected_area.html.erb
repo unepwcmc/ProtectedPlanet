@@ -4,10 +4,7 @@
 
 <div class="inner-result">
   <h3><a href='/<%= model.slug %>' title="<%= model.name %>"><%= model.name %></a>  <small title="<%= model.designation.name %>"><%= model.designation.name %></small></h3>
-  <p>
-    <% model.countries.select(:iso, :name, :region_id).each do |country| %>
-      <a href="<%= country_path(iso: country.iso) %>"><%= country.name %></a>,
-      <%= country.region.try(:name) %>
-    <% end %>
-  </p>
+  <% model.countries.select(:iso, :name, :region_id).each do |country| %>
+    <p><a href="<%= country_path(iso: country.iso) %>"><%= country.name %>, <%= country.region.try(:name) %></a></p>
+  <% end %>
 </div>
