@@ -1,7 +1,7 @@
 <div class="hero hero--no-margin-top u-relative">
   <form action='/search' method='get' class="u-only-mobile search-bar__form" id="search-form">
     <span class="search-bar__input-container">
-      <input autocomplete="off" name="q" placeholder="Search a protected area" value='<%= @query %>' class="search-bar__input js-search-input" type="text">
+      <input autocomplete="off" name="q" placeholder="Search countries and protected areas" value='<%= @query %>' class="search-bar__input js-search-input" type="text">
     </span>
   </form>
   <div data-bound-from="<%= map_bounds['from'] %>" data-control-position="bottomleft" data-bound-to="<%= map_bounds['to'] %>" class="map map--main js-resizable" data-mobile-height=40 data-desktop-height=70 id="map"></div>
