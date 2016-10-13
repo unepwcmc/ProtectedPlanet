@@ -33,14 +33,22 @@
       data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
       data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
       data-wdpa-id="<%= @protected_area.wdpa_id %>"
-    ></div>
+      >
+    </div>
+    <div class="disclaimer">
+      The designations employed and the presentation of material on this map do not
+      imply the expression of any opinion whatsoever on the part of the Secretariat
+      of the United Nations concerning the legal status of any country, territory,
+      city or area or of its authorities, or concerning the delimitation of its
+      frontiers or boundaries.
+    </div>
   </div>
 
   <div class="old-factsheet">
     <%= render partial: 'factsheet', locals: {protected_area: @protected_area} %>
   </div>
 
-  <div class="old-map two-thirds map" id="map"
+  <div class="old-map two-thirds map u-only-desktop" id="map"
     data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
     data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
     data-wdpa-id="<%= @protected_area.wdpa_id %>"
