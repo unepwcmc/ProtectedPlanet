@@ -5,11 +5,11 @@
   </p>
   <p class="u-only-mobile key-records__row">
     <%= protected_area.countries.count > 1 ? "Countries" : "Country" %>
-    <% protected_area.countries.each do |country| %>
-      <strong class="link-with-icon key-records__value u-right">
+    <strong class="link-with-icon key-records__value u-right">
+      <% protected_area.countries.each do |country| %>
         <%= link_to "#{country.name}, #{country.region.name}", country_path(country.iso_3) %>
-      </strong>
-    <% end %>
+      <% end %>
+    </strong>
   </p>
   <p class="key-records__row">
     Reported Area KM&sup2;

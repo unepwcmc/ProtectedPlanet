@@ -31,6 +31,10 @@ define(
 
         window.ProtectedPlanet ||= {}
         window.ProtectedPlanet.Map = {'instance': map}
+        window.ProtectedPlanet.Maps ||= {}
+        window.ProtectedPlanet.Maps[@$mapContainer.attr("id")] = {
+          "instance": map
+        }
 
       createMap: (id) ->
         L.mapbox.map(

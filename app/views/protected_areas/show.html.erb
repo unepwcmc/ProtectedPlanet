@@ -29,10 +29,11 @@
         Official Record for <strong class="hero__link"><%= @protected_area.name %></strong>
       </h1>
     </div>
-    <div class="map map--hero" id="map-mobile"
+    <div class="js-resizable map map--hero" id="map-mobile"
       data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
       data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
       data-wdpa-id="<%= @protected_area.wdpa_id %>"
+      data-mobile-height=33
       >
     </div>
     <div class="disclaimer">

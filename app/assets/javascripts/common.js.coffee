@@ -1,9 +1,11 @@
 $(document).ready( ->
   require(
     ['autocompletion', 'query_control', 'dropdown', 'map', 'navbar', 'asyncImg',
-     'downloads_general', 'downloads_project', 'downloads_search', 'expandable_section', 'dismissable'],
+     'downloads_general', 'downloads_project', 'downloads_search',
+     'expandable_section', 'dismissable', 'resizable'],
     (Autocompletion, QueryControl, Dropdown, Map, Navbar, asyncImg,
-     DownloadsGeneral, DownloadsProject, DownloadsSearch, ExpandableSection, Dismissable) ->
+     DownloadsGeneral, DownloadsProject, DownloadsSearch, ExpandableSection,
+     Dismissable, Resizable) ->
       $('.js-search-input').each( ->
         new Autocompletion($(this))
         new QueryControl($(this))
@@ -25,6 +27,9 @@ $(document).ready( ->
 
       if $dismissableEls = $('.js-dismissable')
         Dismissable.initialize($dismissableEls)
+
+      if $resizableEls = $('.js-resizable')
+        Resizable.initialize($resizableEls)
 
       asyncImg()
 

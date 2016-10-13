@@ -4,7 +4,7 @@
       <input autocomplete="off" name="q" placeholder="Search a protected area" value='<%= @query %>' class="search-bar__input js-search-input" type="text">
     </span>
   </form>
-  <div data-bound-from="<%= map_bounds['from'] %>" data-control-position="bottomleft" data-bound-to="<%= map_bounds['to'] %>" class="map map--main" id="map"></div>
+  <div data-bound-from="<%= map_bounds['from'] %>" data-control-position="bottomleft" data-bound-to="<%= map_bounds['to'] %>" class="map map--main js-resizable" data-mobile-height=40 data-desktop-height=70 id="map"></div>
   <div class="disclaimer">
     <a href="#thematic-areas">
       The designations employed and the presentation of material on this map do not
