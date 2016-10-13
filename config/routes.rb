@@ -30,7 +30,7 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/admin/sidekiq'
 
-  get '/terms', to: 'static_pages#terms', as: 'terms'
+  get '/terms', to: redirect("/c/terms-and-conditions")
 
   get '/country/:iso', to: 'country#show', as: 'country'
   get '/country/:iso/pdf', to: 'country#pdf', as: 'country_pdf'
