@@ -3,6 +3,14 @@
     WDPA ID
     <strong class="key-records__value u-right"><%= protected_area.wdpa_id %></strong>
   </p>
+  <p class="u-only-mobile key-records__row">
+    <%= protected_area.countries.count > 1 ? "Countries" : "Country" %>
+    <% protected_area.countries.each do |country| %>
+      <strong class="link-with-icon key-records__value u-right">
+        <%= link_to "#{country.name}, #{country.region.name}", country_path(country.iso_3) %>
+      </strong>
+    <% end %>
+  </p>
   <p class="key-records__row">
     Reported Area KM&sup2;
     <strong class="key-records__value u-right"><%= protected_area.reported_area.try(:round, 2) %></strong>
