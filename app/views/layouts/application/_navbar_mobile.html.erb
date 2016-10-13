@@ -1,6 +1,10 @@
+<div class="mobile-menu__element">
+  <%= link_to 'About', '/c/about', class: "mobile-menu__element-button" %>
+</div>
+
 <% if @updates_and_news.present? %>
-  <div class="mobile-menu__element mobile-menu__element--right">
-    <%= link_to 'Updates & News', resources_path(category_id: @updates_and_news.id) %>
+  <div class="mobile-menu__element">
+    <%= link_to 'Updates & News', resources_path(category_id: @updates_and_news.id), class: "mobile-menu__element-button" %>
   </div>
 <% end %>
 
@@ -19,7 +23,7 @@
 </div>
 
 <div class="mobile-menu__element">
-  <%= link_to 'Terms & Conditions', '/c/terms-and-conditions' %>
+  <%= link_to 'Terms & Conditions', '/c/terms-and-conditions', class: "mobile-menu__element-button" %>
 </div>
 
 <% if @wdpa_page.present? %>
