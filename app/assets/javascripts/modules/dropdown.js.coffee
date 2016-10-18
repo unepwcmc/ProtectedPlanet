@@ -8,9 +8,9 @@ define('dropdown', [], ->
         @addEventListener()
 
     addEventListener: ->
-      @$triggerEl = @$el.children('.js-trigger').addBack('.js-trigger')
-      @$switchEl  = @$el.children('.js-switch').addBack('.js-switch')
-      @$targetEl  = @$el.children('.js-target').addBack('.js-target')
+      @$triggerEl = @$el.find('.js-trigger').addBack('.js-trigger')
+      @$switchEl  = @$el.find('.js-switch').addBack('.js-switch')
+      @$targetEl  = @$el.find('.js-target').addBack('.js-target')
 
       @$triggerEl.on(@options.on, (event) =>
         if @open
@@ -40,11 +40,7 @@ define('dropdown', [], ->
       UiState.dropdowns.splice(dropdownIndex, 1)
 
     toggleDropdown: =>
-      if @$switchEl.length > 0
-        @handleSwitchEl(@$switchEl, @$triggerEl)
-      else
-        @handleSwitchEl(@$triggerEl, @$triggerEl)
-
+      @handleSwitchEl() if @$switchEl.length > 0
       @$targetEl.slideToggle(100)
 
     handleSwitchEl: =>
