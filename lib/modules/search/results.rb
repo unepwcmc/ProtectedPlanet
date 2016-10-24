@@ -8,10 +8,23 @@ class Search::Results
     @values[key] ||= matches.map { |result| result['_source'][key] }
   end
 
+  INCLUDES = {
+    "protected_area" => [:designation, {countries: :region}]
+  }
+
   def objects
+    by_type_and_id = matches.group_by { |match|
+      match["_type"]
+    }.each_with_object({}) { |(type, objs), final|
+      ids = objs.map { |obj| obj["_source"]["id"] }
+      final[type] = type.classify.constantize.where(id: ids).includes(INCLUDES[type]).group_by(&:id)
+    }
+
     @objects ||= matches.map do |result|
-      model_class = result['_type'].classify.constantize
-      model_class.without_geometry.find(result['_source']['id'])
+      id = result["_source"]["id"]
+      type = result["_type"]
+
+      by_type_and_id[type][id].first
     end
   end
 
