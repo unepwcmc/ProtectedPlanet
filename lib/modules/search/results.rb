@@ -9,7 +9,7 @@ class Search::Results
   end
 
   INCLUDES = {
-    "protected_area" => [:designation, {countries: :region}]
+    "protected_area" => [:designation, {countries_for_index: :region_for_index}]
   }
 
   def objects
