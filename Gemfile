@@ -68,7 +68,7 @@ gem 'sidekiq', '~> 3.5.3'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 
-gem 'appsignal'
+gem 'appsignal', '~> 1.3.6'
 
 gem 'system'
 gem 'dotenv', '~> 0.11.1'
