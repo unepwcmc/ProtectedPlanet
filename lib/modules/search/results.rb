@@ -17,7 +17,11 @@ class Search::Results
       match["_type"]
     }.each_with_object({}) { |(type, objs), final|
       ids = objs.map { |obj| obj["_source"]["id"] }
-      final[type] = type.classify.constantize.where(id: ids).includes(INCLUDES[type]).group_by(&:id)
+      final[type] = type.classify.constantize.
+        without_geometry.
+        where(id: ids).
+        includes(INCLUDES[type]).
+        group_by(&:id)
     }
 
     @objects ||= matches.map do |result|
