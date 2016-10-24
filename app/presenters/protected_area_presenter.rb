@@ -1,9 +1,12 @@
 class ProtectedAreaPresenter
-  POLYGON = -> (geom) { geom.try(:geometry_type) == RGeo::Feature::MultiPolygon }
+  POLYGON = -> (pa, _property) {
+    type = ProtectedArea.select("ST_GeometryType(the_geom) AS type").where(id: pa.id).first.type
+    type == "ST_MultiPolygon"
+  }
 
   # Warning: do NOT use .present? there, as some of the possible values
   # are false. .present? will return false even if the value is not nil
-  PRESENCE = -> (obj) { !obj.nil? }
+  PRESENCE = -> (pa, property) { !pa.try(property).nil? }
   ASSERT_PRESENCE = lambda { |field| {field: field, assert: PRESENCE} }
 
   SECTIONS = [{
@@ -49,7 +52,7 @@ class ProtectedAreaPresenter
       {
         label: standard_attr[:label],
         complete: attribute[:assert].call(
-          protected_area.try(standard_attr[:name])
+          protected_area, standard_attr[:name]
         )
       }
     end
