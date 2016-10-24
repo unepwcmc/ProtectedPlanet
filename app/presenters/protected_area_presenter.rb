@@ -63,7 +63,7 @@ class ProtectedAreaPresenter
       standard_attr = standard_attributes[attribute[:field]]
 
       attribute[:assert].call(
-        protected_area.try(standard_attr[:name])
+        protected_area, standard_attr[:name]
       )
     end
   end
