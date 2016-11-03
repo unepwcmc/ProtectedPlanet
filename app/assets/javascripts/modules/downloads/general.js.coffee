@@ -9,9 +9,6 @@ define('downloads_general', ['downloads_base'], (Base) ->
       @trackDownload("Submit - #{@type}", @opts.itemId)
       $.post(@constructor.CREATION_PATH, {AUTH_TOKEN: @authToken, id: @opts.itemId, domain: @domain}, next)
 
-    completed: ->
-      true
-
     trackDownloadClick: (ev) =>
       @trackDownload("Download Click - #{@type}", @opts.itemId)
 
