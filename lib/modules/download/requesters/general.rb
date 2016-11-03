@@ -5,7 +5,8 @@ class Download::Requesters::General < Download::Requesters::Base
 
   def request
     unless ['ready', 'generating'].include? generation_info['status']
-      DownloadWorkers::General.perform_async identifier
+      type = (identifier == "all" ? "general" : "country")
+      DownloadWorkers::General.perform_async type, identifier
     end
 
     {'token' => identifier}.merge(generation_info)
