@@ -22,6 +22,10 @@ class ImportWorkers::FinaliserWorker
   end
 
   def refresh_data
+    CmsTransfer.transfer
+    ApiTransfer.transfer
+    Download.make_current
+
     Search::Index.delete
     Search::Index.create
 
@@ -30,9 +34,6 @@ class ImportWorkers::FinaliserWorker
 
     #Geospatial::Calculator.calculate_statistics
 
-    Download.make_current
-    CmsTransfer.transfer
-    ApiTransfer.transfer
     ImportTools::WebHandler.clear_cache
   end
 end
