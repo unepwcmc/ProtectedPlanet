@@ -1,7 +1,7 @@
 define('protected_area_overlay', [], () ->
   class ProtectedAreaOverlay
-    POLYGONS_TABLE = 'wdpa_poly_production'
-    POINTS_TABLE   = 'wdpa_point_production'
+    POLYGONS_TABLE = 'wdpa_poly'
+    POINTS_TABLE   = 'wdpa_point'
 
     @_generateCartocssSelector: (args) ->
       tables = args.table
@@ -90,7 +90,7 @@ define('protected_area_overlay', [], () ->
           lineColor: '2E5387'
           polygonFill: '3E7BB6'
           attrName: 'marine'
-          attrVal: '1'
+          attrVal: '2'
           opacity: .1
         )
       ]
