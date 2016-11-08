@@ -1,16 +1,12 @@
 module Search::Aggregators::Model
   def self.build name, raw_aggregations, config
     model = (config['class'] || name.classify).constantize
-    infos = raw_aggregations[name]['aggregation']['buckets']
 
-    ids = infos.map { |info| info["key"] }
-    labels = model.select(:name).find(ids).map(&:name)
-
-    labels.zip(infos).map do |(label, info)|
+    raw_aggregations[name]['aggregation']['buckets'].map do |info|
       {
         identifier: info['key'],
         query: config['query'] || name,
-        label: label,
+        label: model.select(:name).find(info['key']).name,
         count: info['doc_count']
       }
     end
