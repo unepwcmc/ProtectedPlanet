@@ -1,5 +1,4 @@
 class ImportTools::Import
-  include Confirmable
   include ActiveToken
   token_domain 'wdpa_imports'
 

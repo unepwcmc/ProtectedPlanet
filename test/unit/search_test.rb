@@ -1,8 +1,7 @@
 require 'test_helper'
 
 class TestSearch < ActiveSupport::TestCase
-  test '#search queries ElasticSearch with the given term, and returns
-   the matching models' do
+  test '#search queries ElasticSearch with the given term, and returns the matching models' do
     protected_area = FactoryGirl.create(:protected_area)
     country = FactoryGirl.create(:country)
 
@@ -11,8 +10,8 @@ class TestSearch < ActiveSupport::TestCase
     query_object = {
       index: 'protected_areas',
       body: {
-        size: 20,
-        from: 0,
+        size: 20.0,
+        from: 0.0,
         query: {
           "filtered" => {
             "query" => {
@@ -24,13 +23,14 @@ class TestSearch < ActiveSupport::TestCase
                   { "nested" => { "path" => "designation", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "designation.name" ] } } } },
                   { "nested" => { "path" => "iucn_category", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "iucn_category.name" ] } } } },
                   { "nested" => { "path" => "governance", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "governance.name" ] } } } },
+                  {"terms" => {"wdpa_id" => []}},
                   { "function_score" => { "query" => { "multi_match" => { "query" => "*manbone*", "fields" => [ "name", "original_name" ] } }, "functions" => [ { "filter" => { "or" => [ { "type" => { "value" => "country"} }, { "type" => { "value" => "region"} } ] }, "boost_factor" => 15 } ] } }
                 ]
               }
             }
           }
         },
-        aggs: {
+        "aggs" => {
           "type_of_territory" => {
             "terms" => { "field" => "marine" }
           },
@@ -42,23 +42,23 @@ class TestSearch < ActiveSupport::TestCase
           },
           "country" => {
             "nested" => { "path" => "countries_for_index" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.id" } } }
+            "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.id", "size" => 500 } } }
           },
           "region" => {
             "nested" => { "path" => "countries_for_index.region_for_index" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.region_for_index.id" } } }
+            "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.region_for_index.id", "size" => 500 } } }
           },
           "designation" => {
             "nested" => { "path" => "designation" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "designation.id" } } }
+            "aggs" => { "aggregation" => { "terms" => { "field" => "designation.id", "size" => 500 } } }
           },
           "governance" => {
             "nested" => { "path" => "governance" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "governance.id" } } }
+            "aggs" => { "aggregation" => { "terms" => { "field" => "governance.id", "size" => 500 } } }
           },
           "iucn_category" => {
             "nested" => { "path" => "iucn_category" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "iucn_category.id" } } }
+            "aggs" => { "aggregation" => { "terms" => { "field" => "iucn_category.id", "size" => 500 } } }
           }
         }
       }

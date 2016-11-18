@@ -25,7 +25,8 @@ class SearchAggregationTest < ActiveSupport::TestCase
         "aggs" => {
           "aggregation" => {
             "terms" => {
-              "field" => "countries_for_index.id"
+              "field" => "countries_for_index.id",
+              "size" => 500
             }
           }
         }
@@ -37,7 +38,8 @@ class SearchAggregationTest < ActiveSupport::TestCase
         "aggs" => {
           "aggregation" => {
             "terms" => {
-              "field" => "countries_for_index.region_for_index.id"
+              "field" => "countries_for_index.region_for_index.id",
+              "size" => 500
             }
           }
         }
@@ -49,7 +51,8 @@ class SearchAggregationTest < ActiveSupport::TestCase
         "aggs" => {
           "aggregation" => {
             "terms" => {
-              "field" => "designation.id"
+              "field" => "designation.id",
+              "size" => 500
             }
           }
         }
@@ -61,7 +64,8 @@ class SearchAggregationTest < ActiveSupport::TestCase
         "aggs" => {
           "aggregation" => {
             "terms" => {
-              "field" => "iucn_category.id"
+              "field" => "iucn_category.id",
+              "size" => 500
             }
           }
         }
@@ -73,7 +77,8 @@ class SearchAggregationTest < ActiveSupport::TestCase
         "aggs" => {
           "aggregation" => {
             "terms" => {
-              "field" => "governance.id"
+              "field" => "governance.id",
+              "size" => 500
             }
           }
         }

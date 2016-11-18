@@ -20,29 +20,4 @@ class ImportWorkersBaseTest < ActiveSupport::TestCase
 
     ImportWorkers::Base.new.finalise_job
   end
-
-  test '.finalise_job finalises the import if this is completed' do
-    import_mock = mock()
-    import_mock.stubs(:increase_completed_jobs_count)
-    import_mock.stubs(:completed?).returns(true)
-    ImportTools.stubs(:current_import).returns(import_mock)
-
-    ImportWorkers::FinaliserWorker.stubs(:can_be_started).returns(true)
-
-    ImportWorkers::FinaliserWorker.expects(:perform_async)
-
-    ImportWorkers::Base.new.finalise_job
-  end
-
-  test ".finalise_job doesn't call the finaliser if this can't be started" do
-    import_mock = mock()
-    import_mock.stubs(:increase_completed_jobs_count)
-    import_mock.stubs(:completed?).returns(true)
-    ImportTools.stubs(:current_import).returns(import_mock)
-
-    ImportWorkers::FinaliserWorker.stubs(:can_be_started).returns(false)
-    ImportWorkers::FinaliserWorker.expects(:perform_async).never
-
-    ImportWorkers::Base.new.finalise_job
-  end
 end

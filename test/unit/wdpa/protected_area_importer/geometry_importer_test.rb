@@ -4,12 +4,10 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
   test '.import updates all the PA geometries with the geometries in the
    given WDPA Release' do
     table_names = {
-      "geom1" => "std_geom1",
-      "geom2" => "std_geom2"
+      "geom1" => "standard_points",
+      "geom2" => "standard_polygons"
     }
 
-    wdpa_release = Wdpa::Release.new
-    wdpa_release.expects(:geometry_tables).returns(table_names)
 
     Wdpa::DataStandard.expects(:standard_attributes).returns({
       :desig_type   => {name: :jurisdiction, type: :string},
@@ -125,21 +123,17 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
         );
       """.squish)
 
-    import_successful = Wdpa::ProtectedAreaImporter::GeometryImporter.import wdpa_release
+    import_successful = Wdpa::ProtectedAreaImporter::GeometryImporter.import
     assert import_successful, "Expected the geometry import to be successful"
   end
 
   test '.import returns false if any update query fails' do
-    wdpa_release = Wdpa::Release.new
-    wdpa_release.expects(:geometry_tables).returns(["geom1"])
-
     ActiveRecord::Base.connection.
       expects(:execute).
       raises(ActiveRecord::StatementInvalid).
       once
 
-    import_successful = Wdpa::ProtectedAreaImporter::GeometryImporter.import wdpa_release
-
+    import_successful = Wdpa::ProtectedAreaImporter::GeometryImporter.import
     refute import_successful, "Expected import to fail"
   end
 end

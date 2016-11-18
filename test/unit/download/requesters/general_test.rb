@@ -8,7 +8,9 @@ class DownloadRequesterGeneralTest < ActiveSupport::TestCase
 
     $redis.expects(:get).
       with("downloads:general:#{token}").
-      returns(download_properties)
+      returns(download_properties).
+      twice
+
 
     requester = Download::Requesters::General.new token
     assert_equal({'token' => '123', 'status' => 'completed'}, requester.request)

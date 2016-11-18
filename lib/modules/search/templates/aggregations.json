@@ -73,7 +73,8 @@
     "aggs": {
       "aggregation": {
         "terms": {
-          "field": "governance.id"
+          "field": "governance.id",
+          "size": 500
         }
       }
     }

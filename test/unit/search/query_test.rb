@@ -47,6 +47,11 @@ class SearchQueryTest < ActiveSupport::TestCase
                 }
               },
               {
+                "terms"=> {
+                  "wdpa_id"=>[]
+                }
+              },
+              {
                 "function_score" => {
                   "query" => {
                       "multi_match" => {

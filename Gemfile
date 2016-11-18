@@ -14,7 +14,6 @@ gem 'sass-rails', '~> 5.0.4'
 gem 'sprockets-rails', '~> 2.3.3'
 gem 'uglifier', '~> 2.7.2'
 gem 'coffee-rails', '~> 4.0.0'
-gem 'therubyracer',  platforms: :ruby
 gem "autoprefixer-rails"
 gem "exception_notification", '~> 4.1.4'
 gem "slack-notifier", "~> 1.5.1"

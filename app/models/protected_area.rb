@@ -6,7 +6,6 @@ class ProtectedArea < ActiveRecord::Base
   has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
 
-  has_many :images
   has_many :project_items, as: :item
   has_many :projects, through: :project_items
 

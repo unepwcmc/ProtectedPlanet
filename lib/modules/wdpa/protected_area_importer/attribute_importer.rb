@@ -8,10 +8,6 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
           imported_pa_ids << create_protected_area(protected_area_attributes)
         end
       end
-
-      imported_pa_ids.compact.each do |pa_id|
-        ImportWorkers::WikipediaSummaryWorker.perform_async pa_id
-      end
     end
   end
 
@@ -27,7 +23,7 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
         protected_area_id = ProtectedArea.create!(standardised_attributes).id
       end
     rescue
-      Bystander.log("ProtectedArea with WDPAID #{attributes[:wdpaid]} not imported")
+      Rails.logger.info("ProtectedArea with WDPAID #{attributes[:wdpaid]} not imported")
     end
 
     return protected_area_id

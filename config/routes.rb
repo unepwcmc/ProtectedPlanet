@@ -18,13 +18,6 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :admin do
-    resources :import, only: [] do
-      get :confirm
-      get :cancel
-    end
-  end
-
   resources :projects, only: [:create, :index, :update, :destroy]
 
   require 'sidekiq/web'
