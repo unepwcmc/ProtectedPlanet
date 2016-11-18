@@ -4,8 +4,7 @@ module ApplicationHelper
   COVER_HELPERS = {
     ProtectedArea => :protected_area_cover,
     Country => :country_cover,
-    Region => :region_cover,
-    SavedSearch => :saved_search_cover
+    Region => :region_cover
   }
 
   def commaify number
@@ -44,10 +43,6 @@ module ApplicationHelper
 
   def region_cover region
     image_tag("search-placeholder-region.png", alt: region.name)
-  end
-
-  def saved_search_cover saved_search
-    image_tag("projects-saved-searches.png", alt: saved_search.name)
   end
 
   def page_title base_title

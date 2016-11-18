@@ -14,19 +14,6 @@ class DownloadRouterTest < ActiveSupport::TestCase
     assert_equal expected_response, Download::Router.request(domain, params)
   end
 
-  test '.request, called with project domain and an hash of parameters, sends a
-   request to the correct requester' do
-    expected_response = {'status' => 'generating', 'token' => '123'}
-    domain = 'project'
-    params = {'id' => 123}
-
-    Download::Requesters::Project.expects(:request).
-      with(123).
-      returns(expected_response)
-
-    assert_equal expected_response, Download::Router.request(domain, params)
-  end
-
   test '.request, called with general domain and an hash of parameters, sends a
    request to the correct requester' do
     expected_response = {'status' => 'ready', 'token' => '123'}

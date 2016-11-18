@@ -13,9 +13,6 @@ class Country < ActiveRecord::Base
   has_many :designations, -> { uniq }, through: :protected_areas
   has_many :iucn_categories, through: :protected_areas
 
-  has_many :project_items, as: :item
-  has_many :projects, through: :project_items
-
   belongs_to :parent, class_name: "Country", foreign_key: :country_id
   has_many :children, class_name: "Country"
 

@@ -5,8 +5,6 @@ module Download::Router
       Download::Requesters::General.request(params['id'])
     when 'search'
       Download::Requesters::Search.request(params['q'], extract_filters(params))
-    when 'project'
-      Download::Requesters::Project.request(params['id'])
     end
   end
 
@@ -16,8 +14,6 @@ module Download::Router
       Download::Pollers::General.poll(params['token'])
     when 'search'
       Download::Pollers::Search.poll(params['token'])
-    when 'project'
-      Download::Pollers::Project.poll(params['token'])
     end
   end
 

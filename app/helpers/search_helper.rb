@@ -18,7 +18,12 @@ module SearchHelper
     link_params = params.merge({facet[:query] => facet[:identifier]})
 
     link_to(url_for(link_params), class: "filter-bar__value") do
-      facet_count = content_tag(:strong, "(#{facet[:count]})", class: "filter-bar__count")
+      facet_count = content_tag(
+        :strong,
+        "(#{facet[:count]})",
+        class: "filter-bar__count"
+      )
+
       raw "#{facet[:label]} #{facet_count}"
     end
   end
