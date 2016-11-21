@@ -17,7 +17,6 @@ class Wdpa::Importer
   def execute_importers wdpa_release
     Wdpa::SourceImporter.import wdpa_release
     Wdpa::ProtectedAreaImporter.import wdpa_release
-    Wdpa::DownloadGenerator.generate
     Wdpa::GeometryRatioCalculator.calculate
   end
 end

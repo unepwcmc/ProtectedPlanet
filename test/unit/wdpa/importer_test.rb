@@ -12,7 +12,6 @@ class TestWdpaImporter < ActiveSupport::TestCase
     Wdpa::Release.expects(:download).returns(wdpa_release).in_sequence(import)
     Wdpa::SourceImporter.expects(:import).with(wdpa_release).in_sequence(import)
     Wdpa::ProtectedAreaImporter.expects(:import).with(wdpa_release).in_sequence(import)
-    Wdpa::DownloadGenerator.expects(:generate).in_sequence(import)
 
     ImportWorkers::FinaliserWorker.expects(:can_be_started=).with(true).in_sequence(import)
 
