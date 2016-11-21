@@ -30,7 +30,7 @@ class TestSearch < ActiveSupport::TestCase
             }
           }
         },
-        "aggs" => {
+        aggs: {
           "type_of_territory" => {
             "terms" => { "field" => "marine" }
           },

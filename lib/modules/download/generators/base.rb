@@ -2,11 +2,6 @@ require 'digest/sha1'
 
 class Download::Generators::Base
   ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')
-  ATTACHMENTS = [
-    File.join(ATTACHMENTS_PATH, 'Appendix\\ 5\\ _WDPA_Metadata.pdf'),
-    File.join(ATTACHMENTS_PATH, 'Summary_table_WDPA_attributes.pdf'),
-    File.join(ATTACHMENTS_PATH, 'WDPA_Manual_1.0.pdf')
-  ]
 
   def self.generate zip_path, wdpa_ids = nil
     generator = new zip_path, wdpa_ids
@@ -30,10 +25,6 @@ class Download::Generators::Base
     Ogr::Postgres.export type, path, "SELECT * FROM #{view_name}"
   end
 
-  def attachments_paths
-    ATTACHMENTS.join(' ')
-  end
-
   def create_view query
     query_shasum = Digest::SHA1.hexdigest query
     view_name = "tmp_downloads_#{query_shasum}"
@@ -47,7 +38,7 @@ class Download::Generators::Base
   end
 
   def zip
-    system("zip -j #{@zip_path} #{path} #{attachments_paths}")
+    system("zip -j #{@zip_path} #{path}") and system("zip -ru #{@zip_path} *", chdir: ATTACHMENTS_PATH)
   end
 
   def query conditions=[]

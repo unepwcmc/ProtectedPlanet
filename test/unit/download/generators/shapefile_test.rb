@@ -30,15 +30,13 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
 
-    appendix_path = "#{Rails.root}/lib/data/documents/Appendix\\ 5\\ _WDPA_Metadata.pdf"
-    manual_path = "#{Rails.root}/lib/data/documents/WDPA_Manual_1.0.pdf"
-    summary_path = "#{Rails.root}/lib/data/documents/Summary_table_WDPA_attributes.pdf"
-    attachments_path = "#{appendix_path} #{summary_path} #{manual_path}"
+    create_zip_command = "zip -j #{zip_file_path} #{shp_polygon_joined_files} #{shp_point_joined_files}"
+    Download::Generators::Shapefile.any_instance.expects(:system).with(create_zip_command).returns(true)
 
-    Download::Generators::Shapefile.
-      any_instance.
-      expects(:system).
-      with("zip -j #{zip_file_path} #{shp_polygon_joined_files} #{shp_point_joined_files} #{attachments_path}")
+    update_zip_command = "zip -ru #{zip_file_path} *"
+    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    Download::Generators::Shapefile.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
+
 
     Download::Generators::Shapefile.generate zip_file_path
   end
@@ -84,7 +82,9 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).twice.returns(true)
     Download::Generators::Shapefile.
       any_instance.
-      expects(:system)
+      expects(:system).
+      returns(true).
+      twice
 
     FileUtils.expects(:rm_rf).with(shp_polygons_paths)
     FileUtils.expects(:rm_rf).with(shp_points_paths)
@@ -125,15 +125,12 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "SELECT * FROM #{view_name_poly}").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "SELECT * FROM #{view_name_point}").returns(true)
 
-    appendix_path = "#{Rails.root}/lib/data/documents/Appendix\\ 5\\ _WDPA_Metadata.pdf"
-    manual_path = "#{Rails.root}/lib/data/documents/WDPA_Manual_1.0.pdf"
-    summary_path = "#{Rails.root}/lib/data/documents/Summary_table_WDPA_attributes.pdf"
-    attachments_path = "#{appendix_path} #{summary_path} #{manual_path}"
+    create_zip_command = "zip -j #{zip_file_path} #{shp_polygon_joined_files} #{shp_point_joined_files}"
+    Download::Generators::Shapefile.any_instance.expects(:system).with(create_zip_command).returns(true)
 
-    Download::Generators::Shapefile.
-      any_instance.
-      expects(:system).
-      with("zip -j #{zip_file_path} #{shp_polygon_joined_files} #{shp_point_joined_files} #{attachments_path}")
+    update_zip_command = "zip -ru #{zip_file_path} *"
+    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    Download::Generators::Shapefile.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
 
     Download::Generators::Shapefile.generate zip_file_path, wdpa_ids
   end

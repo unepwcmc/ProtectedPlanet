@@ -13,13 +13,12 @@ class DownloadKmlTest < ActiveSupport::TestCase
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
 
-    appendix_path = "#{Rails.root}/lib/data/documents/Appendix\\ 5\\ _WDPA_Metadata.pdf"
-    summary_path = "#{Rails.root}/lib/data/documents/Summary_table_WDPA_attributes.pdf"
-    manual_path = "#{Rails.root}/lib/data/documents/WDPA_Manual_1.0.pdf"
-    attachments_path = "#{appendix_path} #{summary_path} #{manual_path}"
+    create_zip_command = "zip -j #{zip_file_path} #{kml_file_path}"
+    Download::Generators::Kml.any_instance.expects(:system).with(create_zip_command).returns(true)
 
-    zip_command = "zip -j #{zip_file_path} #{kml_file_path} #{attachments_path}"
-    Download::Generators::Kml.any_instance.expects(:system).with(zip_command).returns(true)
+    update_zip_command = "zip -ru #{zip_file_path} *"
+    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    Download::Generators::Kml.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
 
     Ogr::Postgres.expects(:export).with(:kml, kml_file_path, "SELECT * FROM #{view_name}").returns(true)
 
@@ -91,13 +90,12 @@ class DownloadKmlTest < ActiveSupport::TestCase
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
 
-    appendix_path = "#{Rails.root}/lib/data/documents/Appendix\\ 5\\ _WDPA_Metadata.pdf"
-    manual_path = "#{Rails.root}/lib/data/documents/WDPA_Manual_1.0.pdf"
-    summary_path = "#{Rails.root}/lib/data/documents/Summary_table_WDPA_attributes.pdf"
-    attachments_path = "#{appendix_path} #{summary_path} #{manual_path}"
+    create_zip_command = "zip -j #{zip_file_path} #{kml_file_path}"
+    Download::Generators::Kml.any_instance.expects(:system).with(create_zip_command).returns(true)
 
-    zip_command = "zip -j #{zip_file_path} #{kml_file_path} #{attachments_path}"
-    Download::Generators::Kml.any_instance.expects(:system).with(zip_command).returns(true)
+    update_zip_command = "zip -ru #{zip_file_path} *"
+    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    Download::Generators::Kml.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
 
     Ogr::Postgres.expects(:export).with(:kml, kml_file_path, "SELECT * FROM #{view_name}").returns(true)
 
