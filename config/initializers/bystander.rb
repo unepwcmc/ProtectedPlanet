@@ -15,7 +15,6 @@ Bystander.scene('import') do
     add Wdpa::ProtectedAreaImporter, :pa_importer
     add Wdpa::DownloadGenerator, :download_generator
     add Wdpa::CountryGeometryPopulator, :geometry_populator
-    add Wdpa::CartoDbImporter, :carto_db
     add ImportTools::WebHandler, :web_handler
   end
 
@@ -36,12 +35,6 @@ Bystander.scene('import') do
     add :pa_importer, :import, notify: :wrap
     add :download_generator, :generate, notify: :wrap
 
-    add :carto_db, :import, notify: :wrap
-    add :carto_db, :split, notify: :before
-    add :carto_db, :upload, notify: :before
-    add :carto_db, :merge, notify: :before
-
     add :web_handler, :under_maintenance, notify: :wrap
-
   end
 end
