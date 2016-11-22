@@ -4,9 +4,9 @@
     <strong class="key-records__value u-right"><%= protected_area.wdpa_id %></strong>
   </p>
   <p class="u-only-mobile key-records__row">
-    <%= @countries.count > 1 ? "Countries" : "Country" %>
+    <%= protected_area.countries.count > 1 ? "Countries" : "Country" %>
     <strong class="link-with-icon key-records__value u-right">
-      <% @countries.each do |country| %>
+      <% protected_area.countries.each do |country| %>
         <%= link_to "#{country.name}, #{country.region.name}", country_path(country.iso_3) %>
       <% end %>
     </strong>
