@@ -93,7 +93,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     norway = FactoryGirl.create(:country, iso_3: 'NOR', name: 'Norway')
     guatemala = FactoryGirl.create(:country, iso_3: 'GTM', name: 'Guatemala')
 
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({iso3: 'NOR, GTM,'})
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({iso3: 'NOR; GTM;'})
 
     assert_equal 2, attributes[:countries].length,
       "Expected two Country models to be returned"
@@ -118,7 +118,7 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
     FactoryGirl.create(:sub_location, iso: 'AT-NOR', english_name: 'Norway')
     FactoryGirl.create(:sub_location, iso: 'AT-AT', english_name: 'Galaxy')
 
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({sub_loc: 'AT-AT, AT-NOR,'})
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({sub_loc: 'AT-AT; AT-NOR;'})
 
     assert_equal 2, attributes[:sub_locations].length,
       "Expected two SubLocation models to be returned"
