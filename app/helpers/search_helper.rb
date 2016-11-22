@@ -100,6 +100,7 @@ module SearchHelper
   def country_autocomplete_link result
     version = Rails.application.secrets.mapbox['version']
     image_params = {id: result[:identifier], type: result[:type], version: version}
+    type = (result[:type] == "country" ? "country/territory" : result[:type])
 
     link_to country_url(result[:identifier]), class: "autocompletion__result" do
       image = image_tag(
@@ -111,7 +112,7 @@ module SearchHelper
       concat image
       concat(content_tag(:div, class: "autocompletion__body") do
         concat content_tag(:span, result[:name])
-        concat content_tag(:span, result[:type].titleize, class: "autocompletion__type")
+        concat content_tag(:span, type.titleize, class: "autocompletion__type")
       end)
     end
   end
