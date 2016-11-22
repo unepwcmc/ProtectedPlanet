@@ -11,8 +11,7 @@ class ProtectedAreasController < ApplicationController
     @protected_area or raise_404
 
     @presenter = ProtectedAreaPresenter.new @protected_area
-    @country = @protected_area.countries.without_geometry.first
-    @region  = @country.try(:region)
+    @countries = @protected_area.countries.without_geometry
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
   end
