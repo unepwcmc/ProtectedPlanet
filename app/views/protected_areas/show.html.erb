@@ -11,7 +11,7 @@
     <% if @countries.any? %>
       <h2>
         <% @countries.each do |country| %>
-          <a class="hero__title hero__title--thin hero__link" href="<%= country_path(country.iso) %>">
+          <a class="hero__title hero__title--thin hero__link hero__country-link" href="<%= country_path(country.iso) %>">
             <%= country.name %>
           </a>
         <% end %>
