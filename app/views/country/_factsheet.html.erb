@@ -8,7 +8,7 @@
   <div class="two-thirds">
     <%= render "country/facts/coverage_stats" %>
 
-    <% if @pame_statistics %>
+    <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
       <%= render "country/facts/pame_statistics" %>
     <% end %>
   </div>

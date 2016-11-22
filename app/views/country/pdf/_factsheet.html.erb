@@ -18,7 +18,7 @@
 
 <section class="row">
   <%= render "country/pdf/facts/coverage_stats" %>
-  <% if @pame_statistics %>
+  <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
     <%= render "country/pdf/facts/pame_statistics" %>
   <% end %>
   <%= render "country/pdf/facts/related_countries" %>
