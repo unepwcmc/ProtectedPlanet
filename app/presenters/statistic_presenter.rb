@@ -23,7 +23,7 @@ class StatisticPresenter
   end
 
   def method_missing method
-    @model.send(method) rescue @statistic.send(method).round rescue 0
+    @model.send(method) rescue @statistic.send(method) rescue 0
   end
 
   private
