@@ -22,11 +22,11 @@
       <%= form_tag downloads_path, method: :put, remote: true, id: 'download-modal-form' do %>
         <%= hidden_field_tag 'domain' %>
         <p>
-          <%= text_field_tag 'email', nil, placeholder: 'your@email.com' %>
+          <%= text_field_tag 'email', nil, placeholder: 'e.g. me@email.com' %>
         </p>
 
         <p>
-          <%= button_tag 'Submit' %>
+          <%= button_tag 'Submit', class: "big-button u-width-100" %>
         </p>
       <% end %>
     <% end %>
