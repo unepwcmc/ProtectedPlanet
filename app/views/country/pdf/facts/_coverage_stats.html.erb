@@ -12,7 +12,7 @@
       <div class="stats-card__body stats-card__body--color">
         <div class="cube stats-card__element"><div data-fill-value="<%= @presenter.percentage_pa_land_cover %>" class="cube__inner"></div></div>
         <div class="value stats-card__element">
-          <p class="value__number value__number--xxlarge"><%= @presenter.percentage_pa_land_cover %>%</p>
+          <p class="value__number value__number--xxlarge"><%= @presenter.percentage_pa_land_cover.round(2) %>%</p>
           <small class="value__label">coverage</small>
         </div>
         <div class="value stats-card__element">
@@ -33,7 +33,7 @@
       <div class="stats-card__body stats-card__body--alt-color">
         <div class="cube stats-card__element"><div data-fill-value="<%= @presenter.percentage_pa_marine_cover %>" class="cube__inner"></div></div>
         <div class="value stats-card__element">
-          <p class="value__number value__number--xxlarge"><%= @presenter.percentage_pa_marine_cover %>%</p>
+          <p class="value__number value__number--xxlarge"><%= @presenter.percentage_pa_marine_cover.round(2) %>%</p>
           <small class="value__label">coverage</small>
         </div>
         <div class="value stats-card__element">
