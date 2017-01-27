@@ -17,7 +17,7 @@
           <% @country.protected_areas_per_designation(jurisdiction).each do |row| %>
             <tr class="table__row">
               <td class="table__label table__label--link">
-                <%= link_to row["designation_name"], search_url(country: @country.id, designation: row["designation_id"], main: :country) %>
+                <%= link_to row["designation_name"], search_url(country: @country.name, designation: row["designation_name"], main: :country) %>
               </td>
               <td class="table__value">
                 <%= row["count"] %>

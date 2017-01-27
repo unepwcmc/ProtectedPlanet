@@ -42,7 +42,7 @@
       </div>
 
       <div class="<%= bem('info-box__row', 'no-border') %>">
-        <button class="big-button" onclick="window.location.href='<%= search_url(country: @country.id, main: :country) %>'">
+        <button class="big-button" onclick="window.location.href='<%= search_url(country: @country.name, main: :country) %>'">
           <i class="fa fa-link big-button__icon"></i>Protected Area list of the country
         </button>
       </div>
