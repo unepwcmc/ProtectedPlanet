@@ -16,6 +16,8 @@
       <% Comfy::Cms::Category.of_type("Comfy::Cms::Page").all.each do |category| %>
         <a class="dropdown__element" href="<%= resources_path(category_id: category.id) %>"><%= category.label %></a>
       <% end %>
+
+      <a class="dropdown__element" href="//api.protectedplanet.net">Protected Planet API</a>
     </div>
   </div>
 </div>
