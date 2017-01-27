@@ -167,36 +167,36 @@ class SearchAggregationTest < ActiveSupport::TestCase
         label: designation.name,
         query: 'designation',
         count: 100,
-        identifier: designation.id
+        identifier: designation.name
       }],
       'iucn_category' => [{
         label: iucn_category.name,
         query: 'iucn_category',
         count: 100,
-        identifier: iucn_category.id
+        identifier: iucn_category.name
       }],
       'governance' => [{
         label: governance.name,
         query: 'governance',
         count: 100,
-        identifier: governance.id
+        identifier: governance.name
       }],
       'region' => [{
         label: region.name,
         query: 'region',
         count: 100,
-        identifier: region.id
+        identifier: region.name
       }],
       'country' => [{
         label: country_1.name,
         query: 'country',
         count: 64,
-        identifier: country_1.id
+        identifier: country_1.name
       }, {
         label: country_2.name,
         query: 'country',
         count: 17,
-        identifier: country_2.id
+        identifier: country_2.name
       }],
       'type_of_territory' => [{
         label: 'Marine',

@@ -3,7 +3,7 @@ require 'test_helper'
 class SearchFilterTest < ActiveSupport::TestCase
   test '#from_params, given a nested Filter, returns the filter query as a
    hash' do
-    filters = Search::Filter.from_params({region: 3})
+    filters = Search::Filter.from_params({region: "Europe"})
 
     expected_filters = [{
       "bool"=>{
@@ -15,7 +15,7 @@ class SearchFilterTest < ActiveSupport::TestCase
                 "bool"=>{
                   "must"=>{
                     "term"=>{
-                      "countries_for_index.region_for_index.id"=>3
+                      "countries_for_index.region_for_index.name"=>"Europe"
                     }
                   }
                 }
@@ -41,34 +41,6 @@ class SearchFilterTest < ActiveSupport::TestCase
    as a hash' do
     filters = Search::Filter.from_params(marine: false)
     expected_filters = [{"bool"=>{"should"=>[{"term"=>{"marine"=>false}}]}}]
-
-    assert_equal expected_filters, filters
-  end
-
-  test '#from_params, given an integer filter passed as a string, converts
-   the string to an integer' do
-    filters = Search::Filter.from_params(region: '3')
-
-    expected_filters = [{
-      "bool"=>{
-        "should"=>[
-          {
-            "nested"=>{
-              "path"=>"countries_for_index.region_for_index",
-              "filter"=>{
-                "bool"=>{
-                  "must"=>{
-                    "term"=>{
-                      "countries_for_index.region_for_index.id"=>3
-                    }
-                  }
-                }
-              }
-            }
-          }
-        ]
-      }
-    }]
 
     assert_equal expected_filters, filters
   end
@@ -119,7 +91,7 @@ class SearchFilterTest < ActiveSupport::TestCase
   test '#from_params, given a filter with an array of values, creates a
    filter for each value' do
     filters = Search::Filter.from_params(
-      iucn_category: [1,2]
+      iucn_category: ["Not Reported", "II"]
     )
 
     expected_filters = [{
@@ -132,7 +104,7 @@ class SearchFilterTest < ActiveSupport::TestCase
                 "bool"=>{
                   "must"=>{
                     "term"=>{
-                      "iucn_category.id"=>1
+                      "iucn_category.name"=>"Not Reported"
                     }
                   }
                 }
@@ -146,7 +118,7 @@ class SearchFilterTest < ActiveSupport::TestCase
                 "bool"=>{
                   "must"=>{
                     "term"=>{
-                      "iucn_category.id"=>2
+                      "iucn_category.name"=>"II"
                     }
                   }
                 }

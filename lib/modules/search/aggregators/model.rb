@@ -3,10 +3,11 @@ module Search::Aggregators::Model
     model = (config['class'] || name.classify).constantize
 
     raw_aggregations[name]['aggregation']['buckets'].map do |info|
+      label = model.select(:name).find(info['key']).name
       {
-        identifier: info['key'],
+        identifier: label,
         query: config['query'] || name,
-        label: model.select(:name).find(info['key']).name,
+        label: label,
         count: info['doc_count']
       }
     end

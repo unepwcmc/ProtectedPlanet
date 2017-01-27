@@ -26,11 +26,7 @@ class Search::Filter
   private
 
   CONVERSIONS = {
-    "countries_for_index" => -> (value) { value.to_i },
-    "countries_for_index.region_for_index" => -> (value) { value.to_i },
-    "iucn_category" => -> (value) { Array.wrap(value).map(&:to_i) },
-    "designation" => -> (value) { value.to_i },
-    "governance" => -> (value) { value.to_i },
+    "iucn_category" => -> (value) { Array.wrap(value) },
     "location" => -> (value) {
       value.tap { |v|
         v[:coords] = v[:coords].map(&:to_f)

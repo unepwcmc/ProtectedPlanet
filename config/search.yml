@@ -91,17 +91,17 @@ filters:
     iucn_category:
       type: 'nested'
       path: 'iucn_category'
-      field: 'iucn_category.id'
+      field: 'iucn_category.name'
       required: true
     designation:
       type: 'nested'
       path: 'designation'
-      field: 'designation.id'
+      field: 'designation.name'
       required: true
     governance:
       type: 'nested'
       path: 'governance'
-      field: 'governance.id'
+      field: 'governance.name'
       required: true
     location:
       type: 'geo'
@@ -116,10 +116,10 @@ filters:
     country:
       type: 'nested'
       path: 'countries_for_index'
-      field: 'countries_for_index.id'
+      field: 'countries_for_index.name'
       required: true
     region:
       type: 'nested'
       path: 'countries_for_index.region_for_index'
-      field: 'countries_for_index.region_for_index.id'
+      field: 'countries_for_index.region_for_index.name'
       required: true
