@@ -1,7 +1,7 @@
 <% unless @for_pdf %>
   <footer style="<%= yield :footer_style %>" class="footer <%= yield :footer_classes %>">
     <p class="footer__element">
-      <i class="fa fa-copyright"></i> ProtectedPlanet 2014-2016. All rights reserved
+      <i class="fa fa-copyright"></i> ProtectedPlanet 2014-<%= Date.today.year %>. All rights reserved
     </p>
 
     <div class="<%= bem('footer__element', :logos, :right) %>">
