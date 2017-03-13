@@ -7,7 +7,7 @@ gem 'activerecord-postgis-adapter', '~> 3.1.0'
 gem 'gdal', '~> 0.0.5'
 gem 'dbf', '~> 2.0.7'
 
-gem 'elasticsearch', '~> 1.0.4'
+gem 'elasticsearch', '~> 5.0.3'
 
 gem 'bower-rails', '~> 0.10.0'
 gem 'sass-rails', '~> 5.0.4'
