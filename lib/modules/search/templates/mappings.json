@@ -3,7 +3,7 @@
     "dynamic": "false",
     "properties": {
       "id": {
-        "type": "integer"
+        "type": "long"
       },
       "wdpa_id": {
         "type": "integer"
