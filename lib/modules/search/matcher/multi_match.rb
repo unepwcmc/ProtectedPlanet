@@ -13,6 +13,7 @@ class Search::Matcher::MultiMatch < Search::Matcher
     {
       "function_score" => {
         "query" => query,
+        "boost" => "5",
         "functions" => @options[:functions]
       }
     }

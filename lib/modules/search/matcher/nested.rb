@@ -4,9 +4,10 @@ class Search::Matcher::Nested < Search::Matcher
       "nested" => {
         "path" => @options[:path],
         "query" => {
-          "fuzzy_like_this" => {
-            "like_text" => @term,
-            "fields" => @options[:fields]
+          "multi_match" => {
+            "query" => @term,
+            "fields" => @options[:fields],
+            "fuzziness" => "AUTO"
           }
         }
       }

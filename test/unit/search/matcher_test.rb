@@ -16,9 +16,10 @@ class SearchMatcherTest < ActiveSupport::TestCase
       "nested" => {
         "path" => "countries",
         "query" => {
-          "fuzzy_like_this" => {
-            "like_text" => term,
-            "fields" => [ "countries.name" ]
+          "multi_match" => {
+            "query" => term,
+            "fields" => [ "countries.name" ],
+            "fuzziness" => "AUTO"
           }
         }
       }
