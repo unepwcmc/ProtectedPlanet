@@ -8,15 +8,15 @@ class Search::Query
     base_query = {}
 
     if @term.present?
-      base_query["filtered"] ||= {}
-      base_query["filtered"]["query"] = {
+      base_query["bool"] ||= {}
+      base_query["bool"]["must"] = {
         "bool" => Search::Matcher.from_params(@term)
       }
     end
 
     if @options[:filters].present?
-      base_query["filtered"] ||= {}
-      base_query["filtered"]["filter"] = {
+      base_query["bool"] ||= {}
+      base_query["bool"]["filter"] = {
         "bool" => {
           "must" => Search::Filter.from_params(@options[:filters])
         }

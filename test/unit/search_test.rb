@@ -13,18 +13,35 @@ class TestSearch < ActiveSupport::TestCase
         size: 20.0,
         from: 0.0,
         query: {
-          "filtered" => {
-            "query" => {
+          "bool" => {
+            "must" => {
               "bool" => {
                 "should" => [
-                  { "nested" => { "path" => "countries_for_index", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "countries_for_index.name" ] } } } },
-                  { "nested" => { "path" => "countries_for_index.region_for_index", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "countries_for_index.region_for_index.name" ] } } } },
-                  { "nested" => { "path" => "sub_location", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "sub_location.english_name" ] } } } },
-                  { "nested" => { "path" => "designation", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "designation.name" ] } } } },
-                  { "nested" => { "path" => "iucn_category", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "iucn_category.name" ] } } } },
-                  { "nested" => { "path" => "governance", "query" => { "fuzzy_like_this" => { "like_text" => search_query, "fields" => [ "governance.name" ] } } } },
+                  { "nested" => { "path" => "countries_for_index", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "countries_for_index.name" ], "fuzziness" => "AUTO" } } } },
+                  { "nested" => { "path" => "countries_for_index.region_for_index", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "countries_for_index.region_for_index.name" ], "fuzziness" => "AUTO" } } } },
+                  { "nested" => { "path" => "sub_location", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "sub_location.english_name" ], "fuzziness" => "AUTO" } } } },
+                  { "nested" => { "path" => "designation", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "designation.name" ], "fuzziness" => "AUTO" } } } },
+                  { "nested" => { "path" => "iucn_category", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "iucn_category.name" ], "fuzziness" => "AUTO" } } } },
+                  { "nested" => { "path" => "governance", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "governance.name" ], "fuzziness" => "AUTO" } } } },
                   {"terms" => {"wdpa_id" => []}},
-                  { "function_score" => { "query" => { "multi_match" => { "query" => "*manbone*", "fields" => [ "name", "original_name" ] } }, "functions" => [ { "filter" => { "or" => [ { "type" => { "value" => "country"} }, { "type" => { "value" => "region"} } ] }, "boost_factor" => 15 } ] } }
+                  {
+                    "function_score" => {
+                      "query" => {
+                        "multi_match" => {
+                          "query" => "*manbone*",
+                          "fields" => [ "name", "original_name" ]
+                        }
+                      },
+                      "boost" => "5",
+                      "functions" => [{
+                          "filter" => {"match" => {"type" => "country"}},
+                          "weight" => 20
+                        }, {
+                          "filter" => {"match" => {"type" => "region"}},
+                          "weight" => 10
+                      }]
+                    }
+                  }
                 ]
               }
             }
