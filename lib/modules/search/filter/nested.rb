@@ -15,7 +15,7 @@ class Search::Filter::Nested < Search::Filter
     {
       "nested" => {
         "path" => @options['path'],
-        "filter" => {
+        "query" => {
           "bool" => {
             bool_key => {
               "term" => {
