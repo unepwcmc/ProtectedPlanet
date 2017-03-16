@@ -46,6 +46,8 @@ module Download
         "downloads:projects:#{identifier}:all"
       when 'general'
         "downloads:general:#{identifier}"
+      when 'protected_area'
+        "downloads:protected_area:#{identifier}"
       end
     end
 
