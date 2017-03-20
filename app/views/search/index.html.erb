@@ -37,21 +37,7 @@
     </aside>
   <% end %>
 
-  <% if current_page?(controller: 'search', action: 'map') %>
-    <div class="search-map"
-      id="map"
-      data-url="<%= api_v3_search_points_url(params) %>">
-      <div class="map-disclaimer">
-        The designations employed and the presentation of material on this map do not
-        imply the expression of any opinion whatsoever on the part of the Secretariat
-        of the United Nations concerning the legal status of any country, territory,
-        city or area or of its authorities, or concerning the delimitation of its
-        frontiers or boundaries.
-      </div>
-    </div>
-  <% else %>
-    <div class="<%= (@search.nil? || @search.results.count.zero?) ? 'fullscreen-message' : 'search-grid' %>">
-      <%= render partial: 'grid' %>
-    </div>
-  <% end %>
+  <div class="<%= (@search.nil? || @search.results.count.zero?) ? 'fullscreen-message' : 'search-grid' %>">
+    <%= render partial: 'grid' %>
+  </div>
 </div>

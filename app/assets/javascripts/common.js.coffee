@@ -1,11 +1,11 @@
 $(document).ready( ->
   require(
     ['autocompletion', 'query_control', 'dropdown', 'map', 'navbar', 'asyncImg',
-     'downloads_general', 'downloads_search',
+     'downloads_general', 'downloads_search', 'downloads_protected_area',
      'expandable_section', 'dismissable', 'resizable'],
     (Autocompletion, QueryControl, Dropdown, Map, Navbar, asyncImg,
-     DownloadsGeneral, DownloadsSearch, ExpandableSection,
-     Dismissable, Resizable) ->
+     DownloadsGeneral, DownloadsSearch, DownloadsProtectedArea,
+     ExpandableSection, Dismissable, Resizable) ->
       $('.js-search-input').each( ->
         new Autocompletion($(this))
         new QueryControl($(this))
@@ -36,6 +36,7 @@ $(document).ready( ->
       $downloadBtns = [
         $(".download-type-dropdown[data-download-type='general'] a")
         $(".download-type-dropdown[data-download-type='search'] a")
+        $(".download-type-dropdown[data-download-type='protected_area'] a")
       ]
 
       return false if $downloadBtns.length == 0
@@ -53,6 +54,7 @@ $(document).ready( ->
           DOWNLOADERS =
             'general': DownloadsGeneral
             'search': DownloadsSearch
+            'protected_area': DownloadsProtectedArea
 
           downloader = new DOWNLOADERS[list.data('download-type')](
             button.data('type'),

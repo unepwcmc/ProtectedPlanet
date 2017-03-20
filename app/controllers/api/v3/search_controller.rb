@@ -1,13 +1,4 @@
 class Api::V3::SearchController < ApplicationController
-  def points
-    results = Search.search(
-      params[:q],
-      search_options(size: ProtectedArea.count)
-    ).results
-
-    render json: results.with_coords
-  end
-
   def by_point
     dirty_query = """
       SELECT p.id, p.wdpa_id, p.name, p.the_geom_latitude, p.the_geom_longitude
@@ -29,12 +20,6 @@ class Api::V3::SearchController < ApplicationController
 
   def db
     ActiveRecord::Base.connection
-  end
-
-  def search_options extra_options
-    options = {filters: {'type' => 'protected_area'}.merge(filters || {})}
-    options[:page] = params[:page].to_i if params[:page].present?
-    options.merge(extra_options)
   end
 
   def filters

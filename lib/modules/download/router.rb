@@ -5,6 +5,8 @@ module Download::Router
       Download::Requesters::General.request(params['id'])
     when 'search'
       Download::Requesters::Search.request(params['q'], extract_filters(params))
+    when 'protected_area'
+      Download::Requesters::ProtectedArea.request(params['wdpa_id'])
     end
   end
 
@@ -14,6 +16,8 @@ module Download::Router
       Download::Pollers::General.poll(params['token'])
     when 'search'
       Download::Pollers::Search.poll(params['token'])
+    when 'protected_area'
+      Download::Pollers::ProtectedArea.poll(params['token'])
     end
   end
 
