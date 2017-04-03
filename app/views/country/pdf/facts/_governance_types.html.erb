@@ -14,7 +14,7 @@
         <% @country.protected_areas_per_governance.each do |row| %>
           <tr class="table__row">
             <td class="table__label"><%= link_to row["governance_name"], search_url(country: @country.name, governance: row["governance_name"], main: :country) %></td>
-            <td class="table__value">?</td>
+            <td class="table__value"><%= row["governance_type"] %></td>
             <td class="table__value"><%= row["count"] %></td>
             <td class="table__value"><%= row["percentage"].to_f.round(2) %></td>
           </tr>
