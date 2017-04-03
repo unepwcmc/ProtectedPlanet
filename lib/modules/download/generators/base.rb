@@ -15,7 +15,7 @@ class Download::Generators::Base
 
   def generate
     return false if @wdpa_ids.is_a?(Array) && @wdpa_ids.empty?
-    clean_up_after { export and zip }
+    clean_up_after { export and export_sources and zip }
   end
 
   private
@@ -33,12 +33,21 @@ class Download::Generators::Base
     return view_name
   end
 
+  def export_sources
+    Ogr::Postgres.export :csv, sources_path, """
+      SELECT #{Download::Utils.source_columns}
+      FROM standard_sources
+    """
+  end
+
   def export
     raise NotImplementedError
   end
 
   def zip
-    system("zip -j #{@zip_path} #{path}") and system("zip -ru #{@zip_path} *", chdir: ATTACHMENTS_PATH)
+    system("zip -j  #{@zip_path} #{path}")
+    system("zip -ru #{@zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
+    system("zip -ru #{@zip_path} *", chdir: ATTACHMENTS_PATH)
   end
 
   def query conditions=[]
@@ -69,6 +78,10 @@ class Download::Generators::Base
 
   def path
     raise NotImplementedError
+  end
+
+  def sources_path
+    File.join(File.dirname(@zip_path), "WDPA_sources.csv")
   end
 
   def path_without_extension

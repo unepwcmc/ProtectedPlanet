@@ -30,7 +30,9 @@ class Wdpa::Release
   end
 
   def import_tables
-    geometry_tables.merge({source_table => source_table})
+    geometry_tables.merge(
+      {source_table => Wdpa::DataStandard.standardise_table_name(source_table)}
+    )
   end
 
   def geometry_tables
@@ -93,7 +95,7 @@ class Wdpa::Release
   end
 
   def sources
-    db.execute("SELECT * FROM #{source_table}").to_a
+    db.execute("SELECT * FROM #{Wdpa::DataStandard.standardise_table_name(source_table)}").to_a
   end
 
   def clean_up

@@ -15,6 +15,13 @@ module Download
     POLYGONS_COLUMNS = POINTS_COLUMNS.clone
       .insert(13, :gis_m_area).insert(15, :gis_area)
 
+    SOURCE_COLUMNS = [
+      :metadataid, :data_title, :resp_party,
+      :resp_email, :year, :char_set,
+      :ref_system, :scale, :lineage,
+      :citation, :disclaimer, :language
+    ]
+
     def self.for_points extra_columns={}
       aliased_columns = POINTS_COLUMNS.map { |column|
         %{#{column} AS "#{column.upcase}"}

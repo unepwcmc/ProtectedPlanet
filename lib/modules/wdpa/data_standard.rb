@@ -75,11 +75,12 @@ class Wdpa::DataStandard
   def self.standardise_table_name table
     if !!(table =~ Matchers::POLYGON_TABLE)
       "standard_polygons"
+    elsif !!(table =~ Matchers::SOURCE_TABLE)
+      "standard_sources"
     else
       "standard_points"
     end
   end
-
 
   private
 

@@ -13,7 +13,16 @@ module Download
         .reject { |col| opts[:reject].include? col }
         .map(&:upcase)
         .map(&add_quotes)
-        .join(',')
+        .join(",")
+    end
+
+    def self.source_columns
+      add_quotes = -> str { %{"#{str}"} }
+
+      Download::Queries::SOURCE_COLUMNS
+        .map(&:upcase)
+        .map(&add_quotes)
+        .join(",")
     end
 
     def self.make_current
