@@ -34,6 +34,8 @@ class Download::Generators::Base
   end
 
   def export_sources
+    return true if File.exists?(sources_path)
+
     Ogr::Postgres.export :csv, sources_path, """
       SELECT #{Download::Utils.source_columns}
       FROM standard_sources

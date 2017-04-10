@@ -1,6 +1,5 @@
 ogr2ogr -skipfailures
 -f "<%= DRIVERS[file_type] %>"
--overwrite
 <%= file_name %>
 PG:"host=<%= db_config[:host] %>
   user=<%= db_config[:username] %> dbname=<%= db_config[:database] %>
