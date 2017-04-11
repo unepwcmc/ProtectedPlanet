@@ -4,21 +4,23 @@
 <%= content_for :footer_classes, "fixed-footer" %>
 
 <div class="container--fullscreen">
-  <div class="u-only-desktop hero__top">
-    <h1 class="hero__title--base hero__title">
+  <div class="u-only-desktop hero__top hero__top--flex-start">
+    <h1 class="hero__title hero__title--base hero__title--nowrap">
       Official Record for <strong class="hero__link"><%= @protected_area.name %></strong> in
-      <% if @countries.any? %>
-        <% @countries.each_with_index do |country, i| %>
-          <a class="hero__title hero__title--thin hero__link" href="<%= country_path(country.iso) %>">
-            <%= country.name %>
-          </a><%= ", " if i < @countries.length - 2 %><%= " and " if i == @countries.length - 2 %>
-        <% end %>
-      <% else %>
-        <a class="hero__title hero__title--thin hero__link" href="#">
-          Areas Beyond National Jurisdiction
-        </a>
-      <% end %>
     </h1>
+
+    <% if @countries.any? %>
+      <% @countries.each_with_index do |country, i| %>
+        <a class="hero__title hero__title--thin hero__link" href="<%= country_path(country.iso) %>">
+          <%= country.name %>
+        </a><%= ", " if i < @countries.length - 2 %><%= " and " if i == @countries.length - 2 %>
+      <% end %>
+    <% else %>
+      <a class="hero__title hero__title--thin hero__link" href="#">
+        Areas Beyond National Jurisdiction
+      </a>
+    <% end %>
+
     <h2 class="js-download-btn">
       <div class="u-only-desktop tooltip__trigger js-trigger link-with-icon link-with-icon--bold">
         <i class="link-with-icon__icon fa fa-download"></i>Download this site
