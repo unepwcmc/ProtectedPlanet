@@ -11,7 +11,7 @@ class Search
   def self.search search_term, options={}
     # after receiving some crazy long search terms that crash elasticsearch
     # we are limiting this to 128 characters
-    instance = self.new search_term[0..127], options
+    instance = self.new (search_term.present? ? search_term[0..127] : search_term), options
     instance.search
 
     instance
