@@ -9,7 +9,9 @@ class Search
   end
 
   def self.search search_term, options={}
-    instance = self.new search_term, options
+    # after receiving some crazy long search terms that crash elasticsearch
+    # we are limiting this to 128 characters
+    instance = self.new search_term[0..127], options
     instance.search
 
     instance
@@ -22,6 +24,10 @@ class Search
 
   def search
     @query_results ||= elastic_search.search(index: 'protected_areas', body: query)
+  rescue Faraday::TimeoutError => e
+    Rails.logger.warn "timeout in search"
+    Rails.logger.warn e
+    @query_results ||= {"hits" => {"total" => 0, "hits" => []}}
   end
 
   def results

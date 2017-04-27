@@ -18,7 +18,7 @@ class DownloadWorkers::Search < DownloadWorkers::Base
 
   def generate_download
     Download.generate(filename(ids_digest), {wdpa_ids: protected_area_ids})
-    send_completion_email if email
+    send_completion_email unless email.blank?
   end
 
   def send_completion_email
