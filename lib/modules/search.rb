@@ -9,7 +9,9 @@ class Search
   end
 
   def self.search search_term, options={}
-    instance = self.new search_term, options
+    # after receiving some crazy long search terms that crash elasticsearch
+    # we are limiting this to 128 characters
+    instance = self.new search_term[0..127], options
     instance.search
 
     instance
