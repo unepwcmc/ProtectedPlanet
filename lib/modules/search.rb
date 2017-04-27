@@ -24,6 +24,10 @@ class Search
 
   def search
     @query_results ||= elastic_search.search(index: 'protected_areas', body: query)
+  rescue Faraday::TimeoutError => e
+    Rails.logger.warn "timeout in search"
+    Rails.logger.warn e
+    @query_results ||= {"hits" => {"total" => 0, "hits" => []}}
   end
 
   def results
