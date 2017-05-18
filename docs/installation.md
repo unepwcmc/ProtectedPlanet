@@ -25,6 +25,10 @@ package manager. For example, on OS X:
   brew install postgis
   brew install redis
   brew install elasticsearch
+
+  # for assets
+  brew install nodejs
+  npm install -g bower
 ```
 
 Use `brew services` to start `redis`, `elasticsearch`, and `postgres`.
@@ -37,6 +41,7 @@ After that, it's pretty standard:
 ```
   bundle install
   rake db:migrate
+  rake bower:install
 
   bundle exec rails s
 ```
