@@ -27,6 +27,8 @@ package manager. For example, on OS X:
   brew install elasticsearch
 ```
 
+Use `brew services` to start `redis`, `elasticsearch`, and `postgres`.
+
 If you are running Ubuntu or another Linux distribution, see "GEOS and
 Linux" below.
 
@@ -35,13 +37,32 @@ After that, it's pretty standard:
 ```
   bundle install
   rake db:migrate
-  rake db:lazy_seed
 
   bundle exec rails s
 ```
 
-There is a database dump available so that you can work with real data
-straight away. See "Seeding" below.
+Before you can really do much with the website, you'll need to import
+a WDPA release. We have a small subset in the development S3 bucket, 
+so make sure you have the right secrets in your `.env`, and run this:
+
+```
+  bundle exec sidekiq
+  
+  # in another window
+  bundle exec rails c
+  > ImportWorkers::S3PollingWorker.perform_async
+```
+
+This will look for the latest file in the S3 bucket, and use it to import
+its protected areas, countries, and whatnot. After 5 to 10 minutes, the main
+worker will be done (you can check this in the sidekiq output). At this point,
+go back to the rails console and enter
+
+```
+  > ImportWorkers::FinaliserWorker.perform_async
+```
+This will take another couple of minutes. After this, you are ready to `localhost:3000`!
+
 
 #### GEOS and Linux
 
@@ -80,42 +101,6 @@ add it to the server's `.env` file.
 Some tasks that take a long time require processing in the background,
 and are handled by Sidekiq. See the [workers docs](workers.md) for more
 info.
-
-## Data
-
-### Seeding for Development
-
-In development you can use a pre-made database that is seeded with Countries,
-Protected Areas, etc. Download the
-[dataset](http://protectedplanet.s3.amazonaws.com/pp_development.tar.bz2) off
-S3, and:
-
-```
-  tar xvf pp_development.tar.bz2
-  psql pp_development < pp_development.sql
-```
-
-#### Manual Seeding
-
-You can manually seed the database with data using the instructions below.
-
-Some data is static and requires seeding if you're starting from an
-empty database. For example, the Country and Sub Location list. If you
-ran `rake db:setup`, you do not need to seed anything.
-
-You can seed manually with:
-
-```
-  rake db:lazy_seed
-```
-
-This uses a pre-made SQL file to insert all the required data.
-
-Or if you have plenty of time, and want to manually run your seeds:
-
-```
-  rake db:seed
-```
 
 ### WDPA
 
