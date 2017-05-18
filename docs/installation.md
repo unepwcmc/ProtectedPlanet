@@ -3,6 +3,8 @@
 Protected Planet is a standard Rails app, using a PostgreSQL database with
 Postgis extensions.
 
+⚠️ **This repository has submodules, be sure to clone it using `git clone --recursive`**
+
 ### Installation
 
 The application depends on:
