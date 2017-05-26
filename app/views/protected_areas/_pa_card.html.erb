@@ -3,7 +3,7 @@
     <%= link_to protected_area.name, protected_area_path(protected_area) %>
   </h3>
   <p class="pa-card__subtitle">
-    in <%= protected_area.countries.map { |c| link_to c.name, country_path(c) }.join(', ') %>
+    in <%= protected_area.countries.map { |c| link_to c.name, country_path(c) }.join(', ').html_safe %>
   </p>
   <div class="pa-card__map">
     <%= protected_area_cover(protected_area) %>
