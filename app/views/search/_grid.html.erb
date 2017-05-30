@@ -1,4 +1,4 @@
-<% if @search.results.count.zero? %>
+<% if @search.nil? || @search.results.count.zero? %>
   <h1 class="link-with-icon fullscreen-message__header">No results found</h1>
 
   <p class="fullscreen-message__body row">

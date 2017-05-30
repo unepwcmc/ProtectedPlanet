@@ -6,44 +6,44 @@ class SearchQueryTest < ActiveSupport::TestCase
     term = "manbone"
 
     expected_object = {
-      "filtered" => {
-        "query" => {
+      "bool" => {
+        "must" => {
           "bool" => {
             "should" => [
               {
                 "nested" => {
                   "path" => "countries_for_index",
-                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "countries_for_index.name" ] } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "countries_for_index.name" ], "fuzziness" => "AUTO" } }
                 }
               },
               {
                 "nested" => {
                   "path" => "countries_for_index.region_for_index",
-                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "countries_for_index.region_for_index.name" ] } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "countries_for_index.region_for_index.name" ], "fuzziness" => "AUTO" } }
                 }
               },
               {
                 "nested" => {
                   "path" => "sub_location",
-                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "sub_location.english_name" ] } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "sub_location.english_name" ], "fuzziness" => "AUTO" } }
                 }
               },
               {
                 "nested" => {
                   "path" => "designation",
-                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "designation.name" ] } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "designation.name" ], "fuzziness" => "AUTO" } }
                 }
               },
               {
                 "nested" => {
                   "path" => "iucn_category",
-                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "iucn_category.name" ] } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "iucn_category.name" ], "fuzziness" => "AUTO" } }
                 }
               },
               {
                 "nested" => {
                   "path" => "governance",
-                  "query" => { "fuzzy_like_this" => { "like_text" => "manbone", "fields" => [ "governance.name" ] } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "governance.name" ], "fuzziness" => "AUTO" } }
                 }
               },
               {
@@ -62,15 +62,14 @@ class SearchQueryTest < ActiveSupport::TestCase
                           ]
                       }
                   },
+                  "boost" => "5",
                   "functions" => [
                     {
-                      "filter" => {
-                        "or" => [
-                          { "type" => { "value" => "country"} },
-                          { "type" => { "value" => "region"} }
-                        ]
-                      },
-                      "boost_factor" => 15
+                      "filter" => {"match" => {"type" => "country"}},
+                      "weight" => 20
+                    }, {
+                      "filter" => {"match" => {"type" => "region"}},
+                      "weight" => 10
                     }
                   ]
                 }
@@ -110,14 +109,14 @@ class SearchQueryTest < ActiveSupport::TestCase
     }
 
     query = Search::Query.new(term, filters: {type: 'country'}).to_h
-    filters = query["filtered"]["filter"]
+    filters = query["bool"]["filter"]
 
     assert_equal expected_object, filters
   end
 
   test '.to_h, given no search term, and a filter, builds a query without matchers' do
     expected_filters = {
-      "filtered" => {
+      "bool" => {
         "filter" => {
           "bool" => {
             "must" => [
