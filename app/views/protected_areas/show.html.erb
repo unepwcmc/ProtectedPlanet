@@ -3,9 +3,46 @@
 <%= content_for :page_title, @protected_area.name %>
 <%= content_for :footer_classes, "fixed-footer" %>
 
-<div class="container--fullscreen">
-  <% @protected_area.networks.detect(&:designation).protected_areas.each do |pa| %>
-    <% next if @protected_area.wdpa_id == pa.wdpa_id %>
-    <%= render partial: "pa_card", locals: {protected_area: pa} %>
+<% has_designations = @protected_area.networks.detect(&:designation).present? %>
+
+<div class="container--profile">
+  <h1 class="header--h1-small"><%= @protected_area.name %> in <%= link_to '...', '/' %></h1>
+  
+  <% if has_designations %>
+    <div class="info-box info-box--fill-color info-box--small">
+      <p class="icon--info">
+        This site has multiple designations. <%= link_to raw('(See all details &#8595;)'), '#anchor-designations', class: 'link--page-anchor' %>
+      </p>
+    </div>
   <% end %>
+
+  <%= link_to '/', class:'link link--hero-download' do %>
+    <i class="fa fa-download"></i>Download site GIS file
+  <% end %>
+  <%= link_to '/', class:'link link--hero-download' do %>
+    <i class="fa fa-file-pdf-o"></i>Download site 
+  <% end %>
+
+  <%= render partial: "map" %>
+
+  <% if has_designations %>
+    <section id="anchor-designations">
+      <h2 class="header--section">Site multiple designations</h2>
+      <p class="article__paragraph u-margin--page">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultrices lobortis commodo. Donec nibh ante, porta ac nulla ullamcorper, eleifend scelerisque ex. Nulla laoreet nibh vitae diam sollicitudin, sit amet consectetur libero tincidunt. Aliquam erat volutpat. Nam magna ligula, placerat a est et, luctus tincidunt dui.</p>
+
+      <% @protected_area.networks.detect(&:designation).protected_areas.each do |pa| %>
+        <% next if @protected_area.wdpa_id == pa.wdpa_id %>
+        <%= render partial: "pa_card", locals: {protected_area: pa} %>
+      <% end %>
+    </section>
+  <% end %>
+  
+  <section>
+    <h2 class="header--section">Site network</h2>
+    
+    <%= render partial: "site_network_tabs" %>
+
+  </section>
+
+  <%= render partial: "info_footer" %>  
 </div>

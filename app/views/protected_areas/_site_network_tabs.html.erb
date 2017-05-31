@@ -1,0 +1,20 @@
+<!-- ALL PLACEHOLDER CONTENT TO BE UPDATED -->
+<div class="tab-container">
+  <ul class="tab__titles u-margin--page">
+    <li class="tab__title tab__title--active js-tab-title-active">Transboundary site</li>
+    <li class="tab__title">Tanzania NORTH ECO Project</li>
+    <li class="tab__title">TRANSAFRICAN sustainable</li>
+  </ul>
+
+  <div>
+    <div class="tab__content js-tab-content-active">
+      <p class="article__paragraph u-margin--page">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultrices lobortis commodo. Donec nibh ante, porta ac nulla ullamcorper, eleifend scelerisque ex. Nulla laoreet nibh vitae diam sollicitudin, sit amet consectetur libero tincidunt. Aliquam erat volutpat. Nam magna ligula, placerat a est et, luctus tincidunt dui.</p>
+
+      <% @protected_area.networks.detect(&:designation).protected_areas.each do |pa| %>
+        <% next if @protected_area.wdpa_id == pa.wdpa_id %>
+        <%= render partial: "pa_card", locals: {protected_area: pa} %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<!-- PLACEHOLDER CONTENT TO BE UPDATED -->
