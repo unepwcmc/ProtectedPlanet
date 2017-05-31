@@ -4,8 +4,7 @@
 <%= content_for :footer_classes, "fixed-footer" %>
 
 <div class="container--fullscreen">
-  <% @protected_area.networks.detect(&:designation).protected_areas.each do |pa| %>
-    <% next if @protected_area.wdpa_id == pa.wdpa_id %>
+  <% @other_designations.each do |pa| %>
     <%= render partial: "pa_card", locals: {protected_area: pa} %>
   <% end %>
 </div>
