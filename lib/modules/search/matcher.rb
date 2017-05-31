@@ -12,15 +12,13 @@ class Search::Matcher
         type: 'multi_match',
         fields: ['name', 'original_name'],
         boost: true,
-        functions: [
-          "filter" => {
-            "or" => [
-              { "type" => { "value" => "country"} },
-              { "type" => { "value" => "region"} }
-            ]
-          },
-          "boost_factor" => 15
-        ]
+        functions: [{
+          "filter" => {"match" => {"type" => "country"}},
+          "weight" => 20
+        }, {
+          "filter" => {"match" => {"type" => "region"}},
+          "weight" => 10
+        }]
       }
     ]
   }
