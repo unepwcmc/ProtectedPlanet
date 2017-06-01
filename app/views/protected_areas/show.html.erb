@@ -5,15 +5,11 @@
 
 <% has_designations = @protected_area.networks.detect(&:designation).present? %>
 
-<div class="container--profile">
+<div class="template--site container--profile container--push-bottom">
   <h1 class="header--h1-small"><%= @protected_area.name %> in <%= link_to '...', '/' %></h1>
   
   <% if has_designations %>
-    <div class="info-box info-box--fill-color info-box--small">
-      <p class="icon--info">
-        This site has multiple designations. <%= link_to raw('(See all details &#8595;)'), '#anchor-designations', class: 'link--page-anchor' %>
-      </p>
-    </div>
+    <%= render partial: "protected_areas/designations/info_box" %>
   <% end %>
 
   <%= link_to '/', class:'link link--hero-download' do %>
@@ -26,23 +22,10 @@
   <%= render partial: "map" %>
 
   <% if has_designations %>
-    <section id="anchor-designations">
-      <h2 class="header--section">Site multiple designations</h2>
-      <p class="article__paragraph u-margin--page">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultrices lobortis commodo. Donec nibh ante, porta ac nulla ullamcorper, eleifend scelerisque ex. Nulla laoreet nibh vitae diam sollicitudin, sit amet consectetur libero tincidunt. Aliquam erat volutpat. Nam magna ligula, placerat a est et, luctus tincidunt dui.</p>
-
-      <% @protected_area.networks.detect(&:designation).protected_areas.each do |pa| %>
-        <% next if @protected_area.wdpa_id == pa.wdpa_id %>
-        <%= render partial: "pa_card", locals: {protected_area: pa} %>
-      <% end %>
-    </section>
+    <%= render partial: "designations" %>    
   <% end %>
   
-  <section>
-    <h2 class="header--section">Site network</h2>
-    
-    <%= render partial: "site_network_tabs" %>
-
-  </section>
+  <%= render partial: "site_network_tabs" %>
 
   <%= render partial: "info_footer" %>  
 </div>
