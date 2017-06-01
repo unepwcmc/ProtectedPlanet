@@ -12,6 +12,7 @@ class ProtectedAreasController < ApplicationController
 
     @presenter = ProtectedAreaPresenter.new @protected_area
     @countries = @protected_area.countries.without_geometry
+    @other_designations = load_other_designations
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
   end
@@ -24,5 +25,12 @@ class ProtectedAreasController < ApplicationController
 
     year_month = DateTime.now.strftime("%m-%Y")
     $redis.zincrby(year_month, 1, @protected_area.wdpa_id)
+  end
+
+  def load_other_designations
+    other_designations = @protected_area.networks.detect(&:designation).try(:protected_areas)
+
+    other_designations = Array.wrap(other_designations)
+    other_designations.reject { |pa| pa.id == @protected_area.id }
   end
 end
