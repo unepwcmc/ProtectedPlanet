@@ -1,4 +1,4 @@
-<div class="pa-card">
+<div class="pa-card one-thirds">
   <h3 class="pa-card__name">
     <%= link_to protected_area.name, protected_area_path(protected_area) %>
   </h3>
@@ -10,7 +10,7 @@
   </div>
   <div class="pa-card__details">
     <div class="pa-card__detail">
-      <p>English designation</p>
+      <p>English Designation</p>
       <%= link_to protected_area.designation.name, search_url(designation: protected_area.designation.name, main: :designation), class: "pa-card__detail-link" %>
     </div>
     <div class="pa-card__detail">

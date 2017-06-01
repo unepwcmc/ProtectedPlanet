@@ -3,8 +3,31 @@
 <%= content_for :page_title, @protected_area.name %>
 <%= content_for :footer_classes, "fixed-footer" %>
 
-<div class="container--fullscreen">
-  <% @other_designations.each do |pa| %>
-    <%= render partial: "pa_card", locals: {protected_area: pa} %>
+
+<% has_designations = @protected_area.networks.detect(&:designation).present? %>
+
+<div class="template--site container--profile container--push-bottom">
+  <h1 class="header--h1-small"><%= @protected_area.name %> in <%= link_to '...', '/' %></h1>
+  
+  <% if has_designations %>
+    <%= render partial: "protected_areas/designations/info_box" %>
   <% end %>
+
+  <%= link_to '/', class:'link link--hero-download' do %>
+    <i class="fa fa-download"></i>Download site GIS file
+  <% end %>
+  <%= link_to '/', class:'link link--hero-download' do %>
+    <i class="fa fa-file-pdf-o"></i>Download site 
+
+  <% end %>
+
+  <%= render partial: "map" %>
+
+  <% if has_designations %>
+    <%= render partial: "designations" %>    
+  <% end %>
+  
+  <%= render partial: "site_network_tabs" %>
+
+  <%= render partial: "info_footer" %>  
 </div>
