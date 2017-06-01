@@ -1,0 +1,66 @@
+<h2 class="header--section">Attributes</h2>
+
+<p class="attribute attribute--bold">
+  <span class="attribute__title">Original Name</span>
+  <span class="attribute__value"></span>
+</p>
+
+<p class="attribute attribute--bold">
+  <span class="attribute__title">English Designation</span>
+  <span class="attribute__value"><%= @protected_area.designation.try(:name) %></span>
+</p>
+
+<p class="attribute attribute--bold">
+  <span class="attribute__title">IUCN Category</span>
+  <span class="attribute__value"><%= @protected_area.iucn_category.try(:name) %></span>
+</p>
+
+<p class="attribute">
+  <span class="attribute__title">Status</span>
+  <span class="attribute__value"><%= @protected_area.legal_status.name %></span>
+</p>
+
+<p class="attribute">
+  <span class="attribute__title">Type of Designation</span>
+  <span class="attribute__value"><%= @protected_area.designation.try(:jurisdiction).try(:name) %></span>
+</p>
+
+<p class="attribute">
+  <span class="attribute__title">Status Year</span>
+  <span class="attribute__value"><%= if @protected_area.legal_status_updated_at then @protected_area.legal_status_updated_at.strftime('%Y') end %></span>
+</p>
+
+<p class="attribute">
+  <span class="attribute__title">Sublocation</span>
+  <span class="attribute__value"><%= @protected_area.sub_locations.map(&:iso).join(', ') %></span>
+</p>
+
+<p class="attribute">
+  <span class="attribute__title">Governance Type</span>
+  <span class="attribute__value"><%= @protected_area.governance.try(:name) %></span>
+</p>
+
+<p class="attribute">
+  <span class="attribute__title">Owner Type</span>
+  <span class="attribute__value"></span>
+</p>
+
+<p class="attribute">
+  <span class="attribute__title">Management Authority</span>
+  <span class="attribute__value"></span>
+</p>
+
+<p class="attribute">
+  <span class="attribute__title">Management Plan</span>
+  <span class="attribute__value"></span>
+</p>
+
+<p class="attribute">
+  <span class="attribute__title">International Criteria</span>
+  <span class="attribute__value"></span>
+</p>
+
+<p class="attribute">
+  <span class="attribute__title">Jurisdiction</span>
+  <span class="attribute__value"></span>
+</p>
