@@ -3,18 +3,28 @@
     <h2 class="u-inline-block header--site-connections">Site connections</h2><button class="button--hide">Hide</button>
   </div>
   
-  <ul class="tab__titles u-margin--page">
-    <li class="tab__title tab__title--active js-tab-title-active">Transboundary site</li>
-    <li class="tab__title">Tanzania NORTH ECO Project</li>
-    <li class="tab__title">TRANSAFRICAN sustainable</li>
-  </ul>
+  <div class="js-tabs-map">
+    <ul class="tab__titles u-margin--page">
+      <li data-id="tab-1" class="tab__title js-tab-title tab__title--active">Transboundary site</li>
+      <li data-id="tab-2" class="tab__title js-tab-title">Tanzania NORTH ECO Project</li>
+      <li data-id="tab-3" class="tab__title js-tab-title">TRANSAFRICAN sustainable</li>
+    </ul>
 
-  <div class="key u-margin--page">
-    <p class="key__title"><span class="key__icon key__icon--green"></span><span>Serengeti National Park</span></p>
-    <p class="key__title"><span class="key__icon key__icon--green"></span><span>Long title long title long title long title long title</span></p>
-    <p class="key__title"><span class="key__icon key__icon--green"></span><span>Serengeti National Park</span></p>
-    <p class="key__title"><span class="key__icon key__icon--green"></span><span>Serengeti National Park</span></p>
-    <p class="key__title"><span class="key__icon key__icon--green"></span><span>Serengeti National Park</span></p>
+    <div data-id="tab-1-content" class="key tab__content js-tab-content u-margin--page">
+      <p class="key__title"><span class="key__icon"></span><span>Serengeti National Park</span></p>
+      <p class="key__title"><span class="key__icon"></span><span>Long title long title long title long title long title</span></p>
+      <p class="key__title"><span class="key__icon"></span><span>Serengeti National Park</span></p>
+      <p class="key__title"><span class="key__icon"></span><span>Serengeti National Park</span></p>
+      <p class="key__title"><span class="key__icon"></span><span>Serengeti National Park</span></p>
+    </div>
+
+    <div data-id="tab-2-content" class="key tab__content js-tab-content u-margin--page u-hide">
+      <p class="key__title"><span class="key__icon"></span><span>Network 2</span></p>
+    </div>
+
+    <div data-id="tab-3-content" class="key tab__content js-tab-content u-margin--page u-hide">
+      <p class="key__title"><span class="key__icon"></span><span>Network 3</span></p>
+    </div>
   </div>
 
   <div id="map">
