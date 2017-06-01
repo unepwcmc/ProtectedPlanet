@@ -3,6 +3,7 @@
 <%= content_for :page_title, @protected_area.name %>
 <%= content_for :footer_classes, "fixed-footer" %>
 
+
 <% has_designations = @protected_area.networks.detect(&:designation).present? %>
 
 <div class="template--site container--profile container--push-bottom">
@@ -17,6 +18,7 @@
   <% end %>
   <%= link_to '/', class:'link link--hero-download' do %>
     <i class="fa fa-file-pdf-o"></i>Download site 
+
   <% end %>
 
   <%= render partial: "map" %>
