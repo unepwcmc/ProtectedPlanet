@@ -14,7 +14,7 @@ the application.
 In the Rails console, run the following:
 
 ```
-  Wdpa::Importer.import
+  ImportWorkers::S3PollingWorker.perform_async
 ```
 
 This downloads the WDPA, imports it to your local PostgreSQL install and
@@ -24,9 +24,6 @@ Some attributes (wikipedia summaries, etc.) take some time to generate
 and so depend on Sidekiq workers to be calculated. Thus having a Redis
 server running is a requirement so that these jobs can be queued -- see
 the [workers docs](workers.md) for more info.
-
-The WDPA modules have [documentation](../lib/modules/wdpa/README.md)
-available.
 
 ##### Imported Data Retention
 
@@ -38,14 +35,6 @@ having to re-transform the data back to how it started.
 
 You can find more info in the [download documentation](downloads.md).
 
-##### Testing the import process
-
-Generally in development you are able to use the database dump given in
-the [installation docs](installation.md). However, if you need to test
-the import process, using the whole WDPA can be time consuming. There is
-a smaller File Geodatabase [available on
-S3](http://protectedplanet.s3.amazonaws.com/WDPA_dev.zip).
-
 #### Map Tiles and Geometries
 
 Map tiles are stored and rendered by [CartoDB](http://cartodb.com). Due
@@ -53,14 +42,3 @@ to the complexity of running this, there is no easy way to render tiles
 for your local dataset, and so locally you will render the same tiles
 that are run in production -- thankfully you are unlikely to find this a
 problem.
-
-You do not have to do any CartoDB setup in development. The CartoDB
-modules have [documentation](../lib/modules/carto_db/README.md)
-available for production.
-
-#### Esri ArcGIS REST Service
-
-An ArcGIS REST service is provided for analysing the Protected Areas
-data directly. It runs independently of the Protected Planet
-application -- you can find more documentation about it in the [GitHub
-Repository](https://github.com/unepwcmc/ProtectedPlanet-ESRI).
