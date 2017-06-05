@@ -10,8 +10,8 @@ make up the WDPA dataset, and how they map to attributes used in this
 application. It acts as a manager for incoming WDPA data by
 standardising the data, and creating `ActiveRecord` relations.
 
-Check out the [WDPA Data Standard](../../../docs/wdpa_data_standard.pdf)
-(as of May 2014) for more detail.
+Check out the [WDPA Manual](http://wcmc.io/WDPA_Manual) for more
+information.
 
 ## Releases
 

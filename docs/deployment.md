@@ -1,42 +1,4 @@
-# Servers and Deployment
-
-## Server Instances
-
-Protected Planet runs on the following AWS EC2 instances.
-
-### Staging
-
-**EC2**
-
-* Import
-    * m3.xlarge
-    * util-stage.protectedplanet.net
-* Web
-    * m3.medium
-    * http://stage.protectedplanet.net
-* DB
-    * m3.medium
-    * db-stage.protectedplanet.net
-* Elasticsearch
-    * m3.medium
-    * ec2-54-81-197-189.compute-1.amazonaws.com
-
-### Production
-
-**EC2**
-
-* Import
-    * m3.xlarge
-    * util-prod.protectedplanet.net
-* Web
-    * m3.large
-    * alpha.protectedplanet.net
-* DB
-    * m3.large
-    * db-prod.protectedplanet.net
-* Elasticsearch
-    * m3.large
-    * ec2-54-75-208-148.eu-west-1.compute.amazonaws.com
+# Deployment
 
 ## Capistrano
 

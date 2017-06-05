@@ -2,15 +2,10 @@
 
 Stolen without guilt from [NRT](https://github.com/unepwcmc/NRT).
 
-### CSS
-
-Please read the [CSS coding guidelines](css.md) before writing any
-CSS/Sass.
-
 ### Testing
 
 The application is built test-first, using TDD. New features are expected to have
-test coverage. See the [testing README](tests.md) for more info.
+test coverage.
 
 ### Tabs (nope)
 
@@ -18,7 +13,7 @@ No tabs please, 2 spaces in all languages (HTML, CSS, Ruby, Coffeescript...).
 
 ### Line-length
 
-80 characters
+100 (but try to keep it below 80) characters
 
 ### Commit workflow
 
