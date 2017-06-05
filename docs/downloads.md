@@ -1,13 +1,14 @@
 # Downloads
 
 Protected Planet allows users to download all, or subsets of, the WDPA
-in three formats: CSV, KML and Shapefile.
+in three formats: CSV, KML and Shapefile. All downloads are required to
+contain the WDPA manual in English, Spanish, and French.
 
 ## Generation
 
-There are currently three types of downloads: the entire WDPA, Protected
-Areas by country -- both statically generated -- and Protected Areas
-filtered by a search.
+There are currently four types of downloads: the entire WDPA, Protected
+Areas by country -- both statically generated --, Protected Areas
+filtered by a search, and single Protected Areas.
 
 The Download class is fairly naive and generates datasets for any given
 array of WDPA IDs. It is the responsibility of the caller to decide what
@@ -28,10 +29,9 @@ tables. This view is managed by `Wdpa::Release`.
 
 ### Caching
 
-The country and full downloads are generated statically during the WDPA
-import, so that users are able to download them instantly. The search
-downloads are generated on-the-fly, and cached by what PAs they contain,
-so searches with the same results will have instant downloads.
+The downloads are cached after the first generation, using a hash of the search
+terms or requested IDs. Downloads are then dropped every month, with the release
+of a new WDPA version.
 
 ## Storage and access
 
