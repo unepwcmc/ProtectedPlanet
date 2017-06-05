@@ -1,11 +1,11 @@
-<h2 class="header--section">WDPA ID</h2>
-<%= protected_area.wdpa_id %>
+<h2 class="header--section u-margin--page">WDPA ID</h2>
+<p class="u-margin--page attribute--large attribute__value attribute--bold"><%= protected_area.wdpa_id %></p>
 
-<h2 class="header--section">Reported Area</h2>
-<%= protected_area.reported_area.try(:round, 2) %> km&sup2;
+<h2 class="header--section u-margin--page">Reported Area</h2>
+<p class="u-margin--page attribute--xlarge attribute__value attribute--bold"><%= protected_area.reported_area.try(:round, 2) %> km&sup2;</p>
 
-<div class="info-box info-box--fill-color info-box--small">
-  <h5 class="icon--info">Data Provider</h5>
+<div class="info-box info-box--fill-color info-box--factsheet u-margin--page-right">
+  <h3 class="icon--info info-box__header">Data Provider</h3>
   <% if @protected_area.sources.any? %>
     <%= render @protected_area.sources %>
   <% else %>
@@ -13,6 +13,14 @@
   <% end %>
 </div>
 
-<h2 class="header--section">WPDA historic</h2>
-<p><span class="fact__title">WDPA presence</span><span class="fact__value"></span></p>
-<p><span class="fact__title">WDPA updates</span><span class="fact__value"></span></p>
+<h2 class="header--section u-margin--page">WPDA historic</h2>
+
+<p class="attribute u-margin--page">
+  <span class="attribute__title">WDPA presence</span>
+  <span class="attribute__value">Lorem ipsum</span>
+</p>
+
+<p class="attribute u-margin--page">
+  <span class="attribute__title">WDPA updates</span>
+  <span class="attribute__value">Lorem ipsum</span>
+</p>
