@@ -6,7 +6,7 @@ class ProtectedArea < ActiveRecord::Base
   has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
 
-  has_many :networks_protected_areas
+  has_many :networks_protected_areas, dependent: :destroy
   has_many :networks, through: :networks_protected_areas
 
   belongs_to :legal_status
