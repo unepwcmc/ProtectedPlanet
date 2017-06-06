@@ -1,80 +1,26 @@
-<div class="key-records">
-  <p class="key-records__row">
-    WDPA ID
-    <strong class="key-records__value u-right"><%= protected_area.wdpa_id %></strong>
-  </p>
-  <p class="u-only-mobile key-records__row">
-    <%= protected_area.countries.count > 1 ? "Countries" : "Country" %>
-    <strong class="link-with-icon key-records__value u-right">
-      <% protected_area.countries.each do |country| %>
-        <%= link_to "#{country.name}, #{country.region.name}", country_path(country.iso_3) %>
-      <% end %>
-    </strong>
-  </p>
-  <p class="key-records__row">
-    Reported Area KM&sup2;
-    <strong class="key-records__value u-right"><%= protected_area.reported_area.try(:round, 2) %></strong>
-  </p>
-  <p class="key-records__row">
-    English Designation
-    <strong class="key-records__value u-right"> <%= protected_area.designation.try(:name) %> </strong>
-  </p>
-  <p class="key-records__row">
-    IUCN Category
-    <strong class="key-records__value u-right"><%= protected_area.iucn_category.try(:name) %></strong>
-  </p>
+<h2 class="header--section u-margin--page">WDPA ID</h2>
+<p class="u-margin--page attribute--large attribute__value attribute--bold"><%= protected_area.wdpa_id %></p>
+
+<h2 class="header--section u-margin--page">Reported Area</h2>
+<p class="u-margin--page attribute--xlarge attribute__value attribute--bold"><%= protected_area.reported_area.try(:round, 2) %> km&sup2;</p>
+
+<div class="info-box info-box--fill-color info-box--factsheet u-margin--page-right">
+  <h3 class="icon--info info-box__header">Data Provider</h3>
+  <% if @protected_area.sources.any? %>
+    <%= render @protected_area.sources %>
+  <% else %>
+    <p>Not Reported</p>
+  <% end %>
 </div>
 
-<div class="info-box__row info-box__row--no-border row">
-  <div class="alert">
-    <span class="fa-stack alert__icon alert__icon--info">
-      <i class="fa fa-circle fa-stack-2x"></i>
-      <i class="fa fa-info alert__icon-inner alert__icon-inner--info fa-stack-1x"></i>
-    </span>
-    <div>
-      <h5 class="alert__title alert__title--info">Data Provider</h5>
-      <% if @protected_area.sources.any? %>
-        <%= render @protected_area.sources %>
-      <% else %>
-        <p>Not Reported</p>
-      <% end %>
-    </div>
-  </div>
-</div>
+<h2 class="header--section u-margin--page">WPDA historic</h2>
 
-<div class="row info-box__row info-box__row--no-border">
-  <div class="half value">
-    <h6 class="value__label">Status</h6>
-    <p class="value__number value__number--inherit">
-      <%= protected_area.legal_status.name %>
-    </p>
-  </div>
-  <div class="half value">
-    <h6 class="value__label">Type of Designation</h6>
-    <p class="value__number value__number--inherit">
-      <%= protected_area.designation.try(:jurisdiction).try(:name) %>
-    </p>
-  </div>
-</div>
-<div class="row">
-  <div class="half value">
-    <h6 class="value__label">Status Year</h6>
-    <p class="value__number value__number--inherit">
-      <%= if protected_area.legal_status_updated_at then protected_area.legal_status_updated_at.strftime('%Y') end %>
-    </p>
-  </div>
-  <div class="half value">
-    <h6 class="value__label">Sublocation</h6>
-    <p class="value__number value__number--inherit">
-      <%= protected_area.sub_locations.map(&:iso).join(', ') %>
-    </p>
-  </div>
-</div>
-<div class="row">
-  <div class="value">
-    <h6 class="value__label">Governance Type</h6>
-    <p class="value__number value__number--inherit">
-      <%= protected_area.governance.try(:name) %>
-    </p>
-  </div>
-</div>
+<p class="attribute u-margin--page">
+  <span class="attribute__title">WDPA presence</span>
+  <span class="attribute__value">Lorem ipsum</span>
+</p>
+
+<p class="attribute u-margin--page">
+  <span class="attribute__title">WDPA updates</span>
+  <span class="attribute__value">Lorem ipsum</span>
+</p>
