@@ -13,6 +13,7 @@ class ProtectedAreasController < ApplicationController
     @presenter = ProtectedAreaPresenter.new @protected_area
     @countries = @protected_area.countries.without_geometry
     @other_designations = load_other_designations
+    @networks = load_networks
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
   end
@@ -32,5 +33,12 @@ class ProtectedAreasController < ApplicationController
 
     other_designations = Array.wrap(other_designations)
     other_designations.reject { |pa| pa.id == @protected_area.id }
+  end
+
+  TRANSBOUNDARY_SITES = "Transboundary sites".freeze
+  def load_networks
+    networks = @protected_area.networks.reject(&:designation)
+    # ensure that transboundary sites network always appears first
+    networks.sort { |a,b| a.name == TRANSBOUNDARY_SITES ? -1 : a.name <=> b.name }
   end
 end
