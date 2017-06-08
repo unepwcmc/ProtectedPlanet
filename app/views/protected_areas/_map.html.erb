@@ -6,7 +6,7 @@
   <div class="js-tabs-map">
     <ul class="tab__titles u-margin--page">
       <% @networks.each_with_index do |network, i| %>
-        <li data-id="tab-<%= i+1 %>" class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>"><%= network.name %></li>
+        <li data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>" data-id="tab-<%= i+1 %>" class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>"><%= network.name %></li>
       <% end %>
     </ul>
 
