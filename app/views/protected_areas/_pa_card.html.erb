@@ -1,6 +1,6 @@
 <div class="pa-card one-thirds">
   <h3 class="pa-card__name">
-    <%= link_to protected_area.name, protected_area_path(protected_area) %>
+    <%= link_to protected_area.name, protected_area_path(protected_area.wdpa_id) %>
   </h3>
   <p class="pa-card__subtitle">
     in <%= protected_area.countries.map { |c| link_to c.name, country_path(c) }.join(', ').html_safe %>
@@ -20,7 +20,7 @@
     <div class="u-clearfix">
       <div class="pa-card__detail pa-card__detail--inline">
         <p>WDPA ID</p>
-        <%= link_to protected_area.wdpa_id, protected_area_path(protected_area), class: "pa-card__detail-link" %>
+        <%= link_to protected_area.wdpa_id, protected_area_path(protected_area.wdpa_id), class: "pa-card__detail-link" %>
       </div>
       <div class="pa-card__detail pa-card__detail--inline">
         <p>Reported Area</p>
