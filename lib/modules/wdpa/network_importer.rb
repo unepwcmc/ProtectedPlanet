@@ -22,13 +22,17 @@ module Wdpa::NetworkImporter
 
         next unless pa1 && pa2
 
-        if network = networks_by_wdpa_id[wdpa1]
-          network.protected_areas << pa2
-          networks_by_wdpa_id[wdpa2] = network
+        network1 = networks_by_wdpa_id[wdpa1]
+        network2 = networks_by_wdpa_id[wdpa2]
+        next if network1.present? && network1 == network2
 
-        elsif network = networks_by_wdpa_id[wdpa2]
-          network.protected_areas << pa1
-          networks_by_wdpa_id[wdpa1] = network
+        if network1.present?
+          network1.protected_areas << pa2
+          networks_by_wdpa_id[wdpa2] = network1
+
+        elsif network2.present?
+          network2.protected_areas << pa1
+          networks_by_wdpa_id[wdpa1] = network2
 
         else
           network = Network.create(name: "Transboundary sites")
