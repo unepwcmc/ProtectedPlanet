@@ -2,6 +2,8 @@ define('protected_area_overlay', [], () ->
   class ProtectedAreaOverlay
     POLYGONS_TABLE = 'wdpa_poly'
     POINTS_TABLE   = 'wdpa_point'
+    COLORS = ['71a32b', 'c6e3cb', '80cbd1', '40aed2', '3383b9', '27589e', '1b2c85']
+
 
     @_generateCartocssSelector: (args) ->
       tables = args.table
@@ -98,14 +100,15 @@ define('protected_area_overlay', [], () ->
       if config.wdpaIds?
         console.log('something')
 
-        for wdpaId in config.wdpaIds
+        for wdpaId, i in config.wdpaIds
           cartocss.push @_generateCartocss(
             table: [POLYGONS_TABLE, POINTS_TABLE]
             attrName: 'wdpaid'
             attrVal: wdpaId,
             lineColor: 'FF6600',
+            polygonFill: COLORS[i],
             lineWidth: 2,
-            opacity: 0.2,
+            opacity: 1.0,
             polygonCompOp: 'src-over'
           )
 
