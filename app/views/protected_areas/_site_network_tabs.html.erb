@@ -1,8 +1,6 @@
 <section>
   <h2 class="header--section">Site network</h2>
 
-  <!-- ALL PLACEHOLDER CONTENT TO BE UPDATED -->
-
   <div class="js-tabs-network tab-container">
     <ul class="tab__titles u-margin--page">
       <% @networks.each_with_index do |network, i| %>
@@ -13,13 +11,15 @@
     <% @networks.each_with_index do |network, i| %>
       <div data-id="tab-<%= i+1 %>-content" class="tab__content js-tab-content <%= "u-hide" unless i.zero? %>">
         <p class="article__paragraph u-margin--page">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultrices lobortis commodo. Donec nibh ante, porta ac nulla ullamcorper, eleifend scelerisque ex. Nulla laoreet nibh vitae diam sollicitudin, sit amet consectetur libero tincidunt. Aliquam erat volutpat. Nam magna ligula, placerat a est et, luctus tincidunt dui.</p>
-
-        <% network.protected_areas.each do |protected_area| %>
-          <% next if protected_area.id == @protected_area.id %>
-          <%= render partial: "pa_card", locals: {protected_area: protected_area} %>
-        <% end %>
+        
+        <div class="flex-row-wrap">
+          <% network.protected_areas.each do |protected_area| %>
+            <% next if protected_area.id == @protected_area.id %>
+            <%= render partial: "pa_card", locals: {protected_area: protected_area} %>
+          <% end %>
+        </div>
       </div>
     <% end %>
   </div>
-<!-- PLACEHOLDER CONTENT TO BE UPDATED -->
+  
 </section>
