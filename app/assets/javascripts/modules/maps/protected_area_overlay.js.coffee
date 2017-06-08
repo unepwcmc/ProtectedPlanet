@@ -143,9 +143,11 @@ define('protected_area_overlay', [], () ->
       map.on('baselayerchange', (e) =>
         @paOverlay.bringToFront()
       )
-      map.clearLayers()
       carto_tiles.getTiles( (o) =>
+        if window.ProtectedPlanet.Map.layer
+          map.removeLayer(window.ProtectedPlanet.Map.layer)
         @paOverlay = L.tileLayer(o.tiles[0]).addTo(map)
+        window.ProtectedPlanet.Map.layer = @paOverlay
       )
 
   return ProtectedAreaOverlay
