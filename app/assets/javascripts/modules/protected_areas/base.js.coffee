@@ -4,7 +4,10 @@ $(document).ready( ->
   )
 
   require(['tabs'], (Tabs) ->
-    new Tabs($('.js-tabs-map'))
+    new Tabs($('.js-tabs-map'), ($tab) ->
+      console.log($tab.data("wdpa-ids"))
+      window.ProtectedPlanet.Map.object.updateMap($tab.data("wdpa-ids"))
+    )
     new Tabs($('.js-tabs-network'))
   )
 )
