@@ -95,6 +95,9 @@ define('protected_area_overlay', [], () ->
         )
       ]
 
+      if config.wdpaIds?
+        console.log('something')
+
       if config.wdpaId?
         cartocss.push @_generateCartocss(
           table: [POLYGONS_TABLE, POINTS_TABLE]
