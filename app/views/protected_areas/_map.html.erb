@@ -21,7 +21,5 @@
     <% end %>
   </div>
 
-  <div id="map">
-    <!-- map -->
-  </div>
+  <div id="map" data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>"></div>
 </section>

@@ -98,6 +98,17 @@ define('protected_area_overlay', [], () ->
       if config.wdpaIds?
         console.log('something')
 
+        for wdpaId in config.wdpaIds
+          cartocss.push @_generateCartocss(
+            table: [POLYGONS_TABLE, POINTS_TABLE]
+            attrName: 'wdpaid'
+            attrVal: wdpaId,
+            lineColor: 'FF6600',
+            lineWidth: 2,
+            opacity: 0.2,
+            polygonCompOp: 'src-over'
+          )
+
       if config.wdpaId?
         cartocss.push @_generateCartocss(
           table: [POLYGONS_TABLE, POINTS_TABLE]
