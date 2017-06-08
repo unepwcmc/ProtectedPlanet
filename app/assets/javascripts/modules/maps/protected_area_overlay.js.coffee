@@ -108,7 +108,7 @@ define('protected_area_overlay', [], () ->
             lineColor: 'FF6600',
             polygonFill: COLORS[i],
             lineWidth: 2,
-            opacity: 1.0,
+            opacity: 0.6,
             polygonCompOp: 'src-over'
           )
 

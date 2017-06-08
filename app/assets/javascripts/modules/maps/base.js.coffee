@@ -30,7 +30,7 @@ define(
         Search.showSearchResults(map, config.url)
 
         window.ProtectedPlanet ||= {}
-        window.ProtectedPlanet.Map = {'instance': map}
+        window.ProtectedPlanet.Map = {instance: map, object: @}
         window.ProtectedPlanet.Maps ||= {}
         window.ProtectedPlanet.Maps[@$mapContainer.attr("id")] = {
           "instance": map
@@ -40,6 +40,10 @@ define(
         L.mapbox.map(
           id, 'unepwcmc.l8gj1ihl', CONFIG
         ).addControl(L.control.zoom(position: 'bottomright'))
+
+      updateMap: (ids) ->
+        @$mapContainer.data('wdpa-ids', ids)
+        @render()
 
     return Map
 )

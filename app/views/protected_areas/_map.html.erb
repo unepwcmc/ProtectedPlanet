@@ -20,5 +20,5 @@
     <% end %>
   </div>
 
-  <div class="map--hero" id="map" data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>"></div>
+  <div id="map" class="map--hero" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>" data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>"></div>
 </section>
