@@ -1,9 +1,9 @@
 <section id="anchor-designations">
   <h2 class="header--section">Site multiple designations</h2>
-  <p class="article__paragraph u-margin--page">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultrices lobortis commodo. Donec nibh ante, porta ac nulla ullamcorper, eleifend scelerisque ex. Nulla laoreet nibh vitae diam sollicitudin, sit amet consectetur libero tincidunt. Aliquam erat volutpat. Nam magna ligula, placerat a est et, luctus tincidunt dui.</p>
+  <p class="article__paragraph u-margin--page">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultrices lobortis commodo. Donec nibh ante, porta ac nulla ullamcorper, eleifend scelerisque ex. Nulla laoreet nibh vitae diam sollicitudin, sit amet consectetur libero tincidunt. Aliquam erat volutpat. Nam magna ligula, placerat a est et, luctus tincidunt dui.</p>
 
-  <% @protected_area.networks.detect(&:designation).protected_areas.each do |pa| %>
-    <% next if @protected_area.wdpa_id == pa.wdpa_id %>
+  <% @other_designations.each do |pa| %>
     <%= render partial: "pa_card", locals: {protected_area: pa} %>
   <% end %>
 </section>
