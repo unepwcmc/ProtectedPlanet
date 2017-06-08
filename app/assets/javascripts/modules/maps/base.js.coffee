@@ -18,22 +18,22 @@ define(
 
         config = @$mapContainer.data()
 
-        map = @createMap(@$mapContainer.attr('id'))
+        @map = @createMap(@$mapContainer.attr('id'))
 
         unless config.scrollWheelZoom?
-          map.scrollWheelZoom.disable()
+          @map.scrollWheelZoom.disable()
 
-        BaseLayer.render(map, config)
-        Bounds.setToBounds(map, config)
-        Interactive.listen(map)
-        ProtectedAreaOverlay.render(map, config)
-        Search.showSearchResults(map, config.url)
+        BaseLayer.render(@map, config)
+        Bounds.setToBounds(@map, config)
+        Interactive.listen(@map)
+        ProtectedAreaOverlay.render(@map, config)
+        Search.showSearchResults(@map, config.url)
 
         window.ProtectedPlanet ||= {}
-        window.ProtectedPlanet.Map = {instance: map, object: @}
+        window.ProtectedPlanet.Map = {instance: @map, object: @}
         window.ProtectedPlanet.Maps ||= {}
         window.ProtectedPlanet.Maps[@$mapContainer.attr("id")] = {
-          "instance": map
+          "instance": @map
         }
 
       createMap: (id) ->
@@ -43,7 +43,8 @@ define(
 
       updateMap: (ids) ->
         @$mapContainer.data('wdpa-ids', ids)
-        @render()
+        config = @$mapContainer.data()
+        ProtectedAreaOverlay.render(@map, config)
 
     return Map
 )

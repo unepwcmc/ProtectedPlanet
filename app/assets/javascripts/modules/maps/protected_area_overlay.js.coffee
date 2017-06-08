@@ -98,8 +98,6 @@ define('protected_area_overlay', [], () ->
       ]
 
       if config.wdpaIds?
-        console.log('something')
-
         for wdpaId, i in config.wdpaIds
           cartocss.push @_generateCartocss(
             table: [POLYGONS_TABLE, POINTS_TABLE]
@@ -145,7 +143,10 @@ define('protected_area_overlay', [], () ->
       map.on('baselayerchange', (e) =>
         @paOverlay.bringToFront()
       )
-      carto_tiles.getTiles( (o) => @paOverlay = L.tileLayer(o.tiles[0]).addTo(map))
+      map.clearLayers()
+      carto_tiles.getTiles( (o) =>
+        @paOverlay = L.tileLayer(o.tiles[0]).addTo(map)
+      )
 
   return ProtectedAreaOverlay
 )
