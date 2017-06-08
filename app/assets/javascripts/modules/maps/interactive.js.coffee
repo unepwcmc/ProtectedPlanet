@@ -1,6 +1,8 @@
 define('interactive', [], () ->
   class Interactive
     constructor: (@map) ->
+      if window.ProtectedPlanet?.Map.marker?
+        @map.removeLayer window.ProtectedPlanet.Map.marker
 
     @listen: (map) ->
       new Interactive(map).listen()
@@ -9,10 +11,10 @@ define('interactive', [], () ->
       @map.on('click', @handleMapClick)
 
     addMarker: (coords, protected_area) =>
-      if @currentMarker?
-        @map.removeLayer @currentMarker
+      if window.ProtectedPlanet.Map.marker?
+        @map.removeLayer window.ProtectedPlanet.Map.marker
 
-      @currentMarker = L.marker(coords).
+      window.ProtectedPlanet.Map.marker = L.marker(coords).
         addTo(@map).
         bindPopup(@linkTo(protected_area)).
         openPopup()

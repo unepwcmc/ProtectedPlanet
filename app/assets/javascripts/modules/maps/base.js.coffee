@@ -23,18 +23,18 @@ define(
         unless config.scrollWheelZoom?
           @map.scrollWheelZoom.disable()
 
-        BaseLayer.render(@map, config)
-        Bounds.setToBounds(@map, config)
-        Interactive.listen(@map)
-        ProtectedAreaOverlay.render(@map, config)
-        Search.showSearchResults(@map, config.url)
-
         window.ProtectedPlanet ||= {}
         window.ProtectedPlanet.Map = {instance: @map, object: @}
         window.ProtectedPlanet.Maps ||= {}
         window.ProtectedPlanet.Maps[@$mapContainer.attr("id")] = {
           "instance": @map
         }
+        
+        BaseLayer.render(@map, config)
+        Bounds.setToBounds(@map, config)
+        Interactive.listen(@map)
+        ProtectedAreaOverlay.render(@map, config)
+        Search.showSearchResults(@map, config.url)
 
       createMap: (id) ->
         L.mapbox.map(
@@ -44,6 +44,7 @@ define(
       updateMap: (ids) ->
         @$mapContainer.data('wdpa-ids', ids)
         config = @$mapContainer.data()
+        Interactive.listen(@map)
         ProtectedAreaOverlay.render(@map, config)
 
     return Map
