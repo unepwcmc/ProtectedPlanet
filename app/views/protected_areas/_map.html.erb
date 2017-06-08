@@ -14,12 +14,11 @@
     <% @networks.each_with_index do |network, i| %>
       <div data-id="tab-<%= i+1 %>-content" class="key tab__content js-tab-content u-margin--page <%= "u-hide" unless i.zero? %>">
         <% network.protected_areas.each do |protected_area| %>
-          <% next if protected_area.id == @protected_area.id %>
           <p class="key__title"><span class="key__icon"></span><span><%= protected_area.name %></span></p>
         <% end %>
       </div>
     <% end %>
   </div>
 
-  <div id="map" data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>"></div>
+  <div class="map--hero" id="map" data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>"></div>
 </section>
