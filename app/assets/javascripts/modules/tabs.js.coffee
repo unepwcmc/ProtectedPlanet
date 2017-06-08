@@ -9,7 +9,7 @@ define('tabs', [], ->
 
         @updateActiveTabTitle($clicked)
         @updateActiveTabContent($clicked)
-        next() if(typeof next != 'undefined')
+        next($clicked) if(typeof next != 'undefined')
       )
 
     updateActiveTabTitle: (tabTitle) ->
