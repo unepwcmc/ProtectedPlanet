@@ -2,6 +2,8 @@ define('protected_area_overlay', [], () ->
   class ProtectedAreaOverlay
     POLYGONS_TABLE = 'wdpa_poly'
     POINTS_TABLE   = 'wdpa_point'
+    COLORS = ['71a32b', 'c6e3cb', '80cbd1', '40aed2', '3383b9', '27589e', '1b2c85']
+
 
     @_generateCartocssSelector: (args) ->
       tables = args.table
@@ -95,6 +97,19 @@ define('protected_area_overlay', [], () ->
         )
       ]
 
+      if config.wdpaIds?
+        for wdpaId, i in config.wdpaIds
+          cartocss.push @_generateCartocss(
+            table: [POLYGONS_TABLE, POINTS_TABLE]
+            attrName: 'wdpaid'
+            attrVal: wdpaId,
+            lineColor: 'FF6600',
+            polygonFill: COLORS[i],
+            lineWidth: 2,
+            opacity: 0.6,
+            polygonCompOp: 'src-over'
+          )
+
       if config.wdpaId?
         cartocss.push @_generateCartocss(
           table: [POLYGONS_TABLE, POINTS_TABLE]
@@ -128,7 +143,12 @@ define('protected_area_overlay', [], () ->
       map.on('baselayerchange', (e) =>
         @paOverlay.bringToFront()
       )
-      carto_tiles.getTiles( (o) => @paOverlay = L.tileLayer(o.tiles[0]).addTo(map))
+      carto_tiles.getTiles( (o) =>
+        if window.ProtectedPlanet.Map.layer
+          map.removeLayer(window.ProtectedPlanet.Map.layer)
+        @paOverlay = L.tileLayer(o.tiles[0]).addTo(map)
+        window.ProtectedPlanet.Map.layer = @paOverlay
+      )
 
   return ProtectedAreaOverlay
 )

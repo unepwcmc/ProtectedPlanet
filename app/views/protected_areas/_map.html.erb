@@ -6,7 +6,7 @@
   <div class="js-tabs-map">
     <ul class="tab__titles u-margin--page">
       <% @networks.each_with_index do |network, i| %>
-        <li data-id="tab-<%= i+1 %>" class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>"><%= network.name %></li>
+        <li data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>" data-id="tab-<%= i+1 %>" class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>"><%= network.name %></li>
       <% end %>
     </ul>
 
@@ -14,14 +14,11 @@
     <% @networks.each_with_index do |network, i| %>
       <div data-id="tab-<%= i+1 %>-content" class="key tab__content js-tab-content u-margin--page <%= "u-hide" unless i.zero? %>">
         <% network.protected_areas.each do |protected_area| %>
-          <% next if protected_area.id == @protected_area.id %>
           <p class="key__title"><span class="key__icon"></span><span><%= protected_area.name %></span></p>
         <% end %>
       </div>
     <% end %>
   </div>
 
-  <div id="map">
-    <!-- map -->
-  </div>
+  <div id="map" class="map--hero" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>" data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>"></div>
 </section>
