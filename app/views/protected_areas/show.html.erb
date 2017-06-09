@@ -3,69 +3,32 @@
 <%= content_for :page_title, @protected_area.name %>
 <%= content_for :footer_classes, "fixed-footer" %>
 
-<div class="container--fullscreen">
-  <div class="u-only-desktop hero__top hero__top--flex-start">
-    <h1 class="hero__title hero__title--base hero__title--nowrap">
-      Official Record for <strong class="hero__link"><%= @protected_area.name %></strong> in
-    </h1>
 
-    <% if @countries.any? %>
-      <% @countries.each_with_index do |country, i| %>
-        <a class="hero__title hero__title--thin hero__link" href="<%= country_path(country.iso) %>">
-          <%= country.name %>
-        </a><%= ", " if i < @countries.length - 2 %><%= " and " if i == @countries.length - 2 %>
-      <% end %>
-    <% else %>
-      <a class="hero__title hero__title--thin hero__link" href="#">
-        Areas Beyond National Jurisdiction
-      </a>
-    <% end %>
+<% has_designations = @protected_area.networks.detect(&:designation).present? %>
 
-    <h2 class="js-download-btn">
-      <div class="u-only-desktop tooltip__trigger js-trigger link-with-icon link-with-icon--bold">
-        <i class="link-with-icon__icon fa fa-download"></i>Download this site
-        <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :kml, :shp])) %>
-      </div>
-    </h2>
-  </div>
+<div class="template--site container--profile container--push-bottom">
+  <h1 class="header--h1-small"><%= @protected_area.name %> in <%= link_to '...', '/' %></h1>
 
-  <div class="u-only-mobile hero">
-    <div class="hero__top">
-      <h1 class="hero__title--base hero__title">
-        Official Record for <strong class="hero__link"><%= @protected_area.name %></strong>
-      </h1>
-    </div>
-    <div class="js-resizable map map--hero" id="map-mobile"
-      data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
-      data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
-      data-wdpa-id="<%= @protected_area.wdpa_id %>"
-      data-mobile-height=33
-      >
-    </div>
-    <div class="disclaimer">
-      The designations employed and the presentation of material on this map do not
-      imply the expression of any opinion whatsoever on the part of the Secretariat
-      of the United Nations concerning the legal status of any country, territory,
-      city or area or of its authorities, or concerning the delimitation of its
-      frontiers or boundaries.
-    </div>
-  </div>
+  <% if has_designations %>
+    <%= render partial: "protected_areas/designations/info_box" %>
+  <% end %>
 
-  <div class="old-factsheet">
-    <%= render partial: 'factsheet', locals: {protected_area: @protected_area} %>
-  </div>
+  <%= link_to '/', class:'link link--hero-download' do %>
+    <i class="fa fa-download"></i>Download site GIS file
+  <% end %>
+  <%= link_to '/', class:'link link--hero-download' do %>
+    <i class="fa fa-file-pdf-o"></i>Download site
+  <% end %>
 
-  <div class="old-map two-thirds map u-only-desktop" id="map"
-    data-bound-from="<%= map_bounds(@protected_area)['from'] %>"
-    data-bound-to="<%= map_bounds(@protected_area)['to'] %>"
-    data-wdpa-id="<%= @protected_area.wdpa_id %>"
-    data-scroll-wheel-zoom>
-    <div class="map-disclaimer">
-      The designations employed and the presentation of material on this map do not
-      imply the expression of any opinion whatsoever on the part of the Secretariat
-      of the United Nations concerning the legal status of any country, territory,
-      city or area or of its authorities, or concerning the delimitation of its
-      frontiers or boundaries.
-    </div>
-  </div>
+  <%= render partial: "map" %>
+
+  <%= render partial: "factsheet" %>
+
+  <% if has_designations %>
+    <%= render partial: "designations" %>
+  <% end %>
+
+  <%= render partial: "site_network_tabs" %>
+
+  <%= render partial: "info_footer" %>
 </div>

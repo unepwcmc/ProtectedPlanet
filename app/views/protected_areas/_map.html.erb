@@ -1,0 +1,27 @@
+<section>
+  <div class="header--section">
+    <h2 class="u-inline-block header--site-connections">Site connections</h2><button class="button--hide">Hide</button>
+  </div>
+
+  <div class="js-tabs-map">
+    <ul class="tab__titles u-margin--page">
+      <% @networks.each_with_index do |network, i| %>
+        <li data-id="tab-<%= i+1 %>" class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>"><%= network.name %></li>
+      <% end %>
+    </ul>
+
+
+    <% @networks.each_with_index do |network, i| %>
+      <div data-id="tab-<%= i+1 %>-content" class="key tab__content js-tab-content u-margin--page <%= "u-hide" unless i.zero? %>">
+        <% network.protected_areas.each do |protected_area| %>
+          <% next if protected_area.id == @protected_area.id %>
+          <p class="key__title"><span class="key__icon"></span><span><%= protected_area.name %></span></p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div id="map">
+    <!-- map -->
+  </div>
+</section>

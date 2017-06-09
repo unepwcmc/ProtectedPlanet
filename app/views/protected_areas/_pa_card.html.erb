@@ -1,0 +1,31 @@
+<div class="pa-card flex-column-3">
+  <h3 class="pa-card__name">
+    <%= link_to protected_area.name, protected_area_path(protected_area.wdpa_id) %>
+  </h3>
+  <p class="pa-card__subtitle">
+    in <%= protected_area.countries.map { |c| link_to c.name, country_path(c) }.join(', ').html_safe %>
+  </p>
+  <div class="pa-card__map">
+    <%= protected_area_cover(protected_area) %>
+  </div>
+  <div class="pa-card__details">
+    <div class="pa-card__detail">
+      <p>English Designation</p>
+      <%= link_to protected_area.designation.name, search_url(designation: protected_area.designation.name, main: :designation), class: "pa-card__detail-link" %>
+    </div>
+    <div class="pa-card__detail">
+      <p>IUCN Category</p>
+      <%= link_to protected_area.iucn_category.name, search_url(designation: protected_area.iucn_category.name, main: :iucn_category), class: "pa-card__detail-link" %>
+    </div>
+    <div class="u-clearfix">
+      <div class="pa-card__detail pa-card__detail--inline">
+        <p>WDPA ID</p>
+        <%= link_to protected_area.wdpa_id, protected_area_path(protected_area.wdpa_id), class: "pa-card__detail-link" %>
+      </div>
+      <div class="pa-card__detail pa-card__detail--inline">
+        <p>Reported Area</p>
+        <%= protected_area.reported_area.round(1) %>
+      </div>
+    </div>
+  </div>
+</div>
