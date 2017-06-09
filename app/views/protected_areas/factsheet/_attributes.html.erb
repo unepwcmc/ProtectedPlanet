@@ -47,7 +47,7 @@
 
 <p class="attribute">
   <span class="attribute__title">Management Plan</span>
-  <span class="attribute__value"><%= @protected_area.management_plan || "Not Reported" %></span>
+  <span class="attribute__value"><%= parse_management_plan(@protected_area.management_plan) %></span>
 </p>
 
 <p class="attribute">
