@@ -28,7 +28,9 @@
     <%= render partial: "designations" %>
   <% end %>
 
-  <%= render partial: "site_network_tabs" %>
+  <% if @networks.any? %>
+    <%= render partial: "site_network_tabs" %>
+  <% end %>
 
   <%= render partial: "info_footer" %>
 </div>
