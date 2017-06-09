@@ -20,5 +20,9 @@
     <% end %>
   </div>
 
-  <div id="map" class="map--hero" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>" data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>"></div>
+  <% if @networks.first %>
+    <div id="map" class="map--hero" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>" data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>"></div>
+  <% else %>
+    <div id="map" class="map--hero" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>" data-wdpa-id="<%= @protected_area.wdpa_id %>"></div>
+  <% end %>
 </section>
