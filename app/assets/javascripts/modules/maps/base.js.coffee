@@ -1,7 +1,7 @@
 define(
   'map',
-  ['base_layer', 'interactive', 'bounds', 'protected_area_overlay', 'search'],
-  (BaseLayer, Interactive, Bounds, ProtectedAreaOverlay, Search) ->
+  ['base_layer', 'interactive', 'bounds', 'protected_area_overlay'],
+  (BaseLayer, Interactive, Bounds, ProtectedAreaOverlay) ->
     class Map
       L.mapbox.accessToken = 'pk.eyJ1IjoidW5lcHdjbWMiLCJhIjoiRXg1RERWRSJ9.taTsSWwtAfFX_HMVGo2Cug'
 
