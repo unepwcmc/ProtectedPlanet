@@ -5,11 +5,11 @@ define('tabs', [], ->
 
     addEventListeners: (next) ->
       @$container.find('.js-tab-title').on('click', (e) =>
-        clicked = e.target
+        $clicked = $(e.target)
 
-        @updateActiveTabTitle(clicked)
-        @updateActiveTabContent(clicked)
-        next($(clicked)) if(typeof next != 'undefined')
+        @updateActiveTabTitle($clicked)
+        activeTabContent = @updateActiveTabContent($clicked)
+        next($clicked, activeTabContent) if(typeof next != 'undefined')
       )
 
     updateActiveTabTitle: (tabTitle) ->
@@ -20,7 +20,10 @@ define('tabs', [], ->
       tabContentSelector = "[data-id='#{$(id).data('id')}-content']"
 
       @$container.find('.js-tab-content').addClass('u-hide')
-      @$container.find($(tabContentSelector)).removeClass('u-hide')
+      activeTabContent = @$container.find($(tabContentSelector))
+      activeTabContent.removeClass('u-hide')
+
+      activeTabContent
 
   return Tabs
 )

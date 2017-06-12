@@ -5,5 +5,4 @@
 //= require 'modules/maps/interactive'
 //= require 'modules/maps/bounds'
 //= require 'modules/maps/protected_area_overlay'
-//= require 'modules/maps/search'
 //= require 'modules/maps/base'

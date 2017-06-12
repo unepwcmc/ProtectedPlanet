@@ -11,7 +11,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v3 do
-      resources :protected_areas, only: [:show]
+      resources :protected_areas, only: [:show] do
+        member do
+          get 'geojson'
+        end
+      end
 
       get '/search/by_point', to: 'search#by_point'
     end
