@@ -32,8 +32,12 @@ define(
 
         BaseLayer.render(@map, config)
         Bounds.setToBounds(@map, config)
-        @updateMap(config.wdpaIds)
-        Search.showSearchResults(@map, config.url)
+
+        if config.wdpaIds
+          @updateMap(config.wdpaIds)
+        else
+          Interactive.listen(@map)
+          ProtectedAreaOverlay.render(@map, config)
 
       createMap: (id) ->
         L.mapbox.map(
