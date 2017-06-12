@@ -4,6 +4,14 @@
 <h2 class="header--section u-margin--page">Reported Area</h2>
 <p class="u-margin--page attribute--xlarge attribute__value attribute--bold"><%= protected_area.reported_area.try(:round, 2) %> km&sup2;</p>
 
+<% if @protected_area.has_parcc_info %>
+  <h2 class="header--section u-margin--page">Vulnerability Assessment</h2>
+  <p class="u-margin--page attribute--large attribute__value attribute--bold">
+    <%= link_to("Present", url_for_related_source('parcc_info', @protected_area)) %>
+    <i class="fa fa-external-link"></i>
+  </p>
+<% end %>
+
 <div class="info-box info-box--fill-color info-box--factsheet u-margin--page-right">
   <h3 class="icon--info info-box__header">Data Provider</h3>
   <% if @protected_area.sources.any? %>
