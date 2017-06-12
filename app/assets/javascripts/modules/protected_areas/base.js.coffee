@@ -8,8 +8,8 @@ $(document).ready( ->
 
       #update the geometry when the tab is changed
       if($tab != null)
-        window.ProtectedPlanet.Map.object.updateMap($tab.data("wdpa-ids"))
         window.ProtectedPlanet.Map.object.updateBounds($tab.data("network-id"))
+        window.ProtectedPlanet.Map.object.updateMap($tab.data("wdpa-ids"))
 
       #add hover effect to the each key and geometry
       if($tabContainer != null)
