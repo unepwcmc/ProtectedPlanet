@@ -7,15 +7,19 @@
     <div class="js-tabs-map">
       <ul class="tab__titles u-margin--page">
         <% @networks.each_with_index do |network, i| %>
-          <li data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>" data-id="tab-<%= i+1 %>" class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>"><%= network.name %></li>
+          <li data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>"
+            data-id="tab-<%= i+1 %>"
+            class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>">
+            <%= network.name %>
+          </li>
         <% end %>
       </ul>
 
 
       <% @networks.each_with_index do |network, i| %>
         <div data-id="tab-<%= i+1 %>-content" class="key tab__content js-tab-content u-margin--page <%= "u-hide" unless i.zero? %>">
-          <% network.protected_areas.each do |protected_area| %>
-            <p class="key__title"><span class="key__icon"></span><span><%= protected_area.name %></span></p>
+          <% network.protected_areas.each_with_index do |protected_area, i| %>
+            <p data-wdpa-id="<%= i %>" class="key__title"><span class="key__icon"></span><span><%= protected_area.name %></span></p>
           <% end %>
         </div>
       <% end %>
