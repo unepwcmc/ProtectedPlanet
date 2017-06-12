@@ -29,11 +29,10 @@ define(
         window.ProtectedPlanet.Maps[@$mapContainer.attr("id")] = {
           "instance": @map
         }
-        
+
         BaseLayer.render(@map, config)
         Bounds.setToBounds(@map, config)
-        Interactive.listen(@map)
-        ProtectedAreaOverlay.render(@map, config)
+        @updateMap(config.wdpaIds)
         Search.showSearchResults(@map, config.url)
 
       createMap: (id) ->
@@ -41,11 +40,27 @@ define(
           id, 'unepwcmc.l8gj1ihl', CONFIG
         ).addControl(L.control.zoom(position: 'bottomright'))
 
+      COLORS = ['#71a32b', '#c6e3cb', '#80cbd1', '#40aed2', '#3383b9', '#27589e', '#1b2c85']
       updateMap: (ids) ->
+        window.ProtectedPlanet.Map.protected_areas = []
+
         @$mapContainer.data('wdpa-ids', ids)
+
         config = @$mapContainer.data()
         Interactive.listen(@map)
-        ProtectedAreaOverlay.render(@map, config)
+
+        loadProtectedArea = (wdpaid, index) =>
+          $.getJSON("/api/v3/protected_areas/#{wdpaid}/geojson", (data) =>
+
+            pa_layer = L.geoJSON(data, style: ->
+              {fillOpacity: .6, weight: 1, fillColor: COLORS[index], color: "#FF6600"}
+            ).addTo(@map)
+
+            window.ProtectedPlanet.Map.protected_areas.push(pa_layer)
+          )
+
+        for wdpaid, index in ids
+          loadProtectedArea(wdpaid, index)
 
     return Map
 )
