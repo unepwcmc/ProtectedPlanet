@@ -28,7 +28,7 @@
       <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :kml, :shp])) %>
     </button>
 
-    <%= link_to '/', class:'link link--hero-download' do %>
+    <%= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class: 'link link--hero-download' do %>
       <i class="fa fa-file-pdf-o"></i>Download site
     <% end %>
   </div>

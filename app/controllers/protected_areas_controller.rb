@@ -16,6 +16,18 @@ class ProtectedAreasController < ApplicationController
     @networks = load_networks
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
+
+    respond_to do |format|
+      format.html
+      format.pdf {
+        rasterizer = Rails.root.join("vendor/assets/javascripts/rasterize.js")
+        url = url_for(action: :show, id: @protected_area.wdpa_id)
+        dest_pdf = Rails.root.join("tmp/#{@protected_area.wdpa_id}-site.pdf").to_s
+
+        `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
+        send_file dest_pdf, type: 'application/pdf'
+      }
+    end
   end
 
   private
