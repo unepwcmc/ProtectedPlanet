@@ -14,9 +14,11 @@
   <% end %>
 
   <div class="header__links">
-    <%= link_to '/', class:'link link--hero-download' do %>
+    <button class="js-download-btn link link--hero-download u-only-desktop tooltip__trigger js-trigger">
       <i class="fa fa-download"></i>Download site GIS file
-    <% end %>
+      <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :kml, :shp])) %>
+    </button>
+
     <%= link_to '/', class:'link link--hero-download' do %>
       <i class="fa fa-file-pdf-o"></i>Download site
     <% end %>
