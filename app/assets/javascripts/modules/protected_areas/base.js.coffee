@@ -6,6 +6,7 @@ $(document).ready( ->
   require(['tabs'], (Tabs) ->
     new Tabs($('.js-tabs-map'), ($tab, $content) ->
       window.ProtectedPlanet.Map.object.updateMap($tab.data("wdpa-ids"))
+      window.ProtectedPlanet.Map.object.updateBounds($tab.data("network-id"))
 
       $content.find("[data-wdpa-id]").mouseenter( (ev) ->
         ev.preventDefault()

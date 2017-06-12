@@ -52,6 +52,12 @@ define(
         for wdpaid, index in ids
           @loadProtectedArea(wdpaid, index)
 
+      updateBounds: (networkId) ->
+        $.getJSON("/api/v3/networks/#{networkId}/bounds", (data) =>
+          bounds = { boundFrom: data[0], boundTo: data[1] }
+          Bounds.setToBounds(@map,bounds)
+        )
+
       resetProtectedAreas: ->
         # remove tooltip if any
         if window.ProtectedPlanet?.Map.marker?

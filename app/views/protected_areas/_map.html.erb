@@ -9,6 +9,7 @@
         <% @networks.each_with_index do |network, i| %>
           <li data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>"
             data-id="tab-<%= i+1 %>"
+            data-network-id="<%= network.id %>"
             class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>">
             <%= network.name %>
           </li>
@@ -26,8 +27,8 @@
     </div>
 
     <div id="map" class="map--hero"
-      data-bound-from="<%= @protected_area.bounds.first %>"
-      data-bound-to="<%= @protected_area.bounds.last %>"
+      data-bound-from="<%= @networks.first.bounds.first %>"
+      data-bound-to="<%= @networks.first.bounds.last %>"
       data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>">
     </div>
   <% else %>
