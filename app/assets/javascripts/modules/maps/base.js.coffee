@@ -60,7 +60,7 @@ define(
               {fillOpacity: .6, weight: 1, fillColor: COLORS[index], color: "#FF6600"}
             ).addTo(@map)
 
-            window.ProtectedPlanet.Map.protected_areas.push(pa_layer)
+            window.ProtectedPlanet.Map.protected_areas[index] = pa_layer
           )
 
         for wdpaid, index in ids
