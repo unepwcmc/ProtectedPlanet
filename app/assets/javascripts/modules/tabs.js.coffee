@@ -1,15 +1,16 @@
 define('tabs', [], ->
   class Tabs
-    constructor: (@$container, next) ->
-      @addEventListeners(next)
+    constructor: (@$container, callback) ->
+      @addEventListeners(callback)
+      callback(null, @$container) if(typeof callback != 'undefined')
 
-    addEventListeners: (next) ->
+    addEventListeners: (callback) ->
       @$container.find('.js-tab-title').on('click', (e) =>
         $clicked = $(e.target)
 
         @updateActiveTabTitle($clicked)
         activeTabContent = @updateActiveTabContent($clicked)
-        next($clicked, activeTabContent) if(typeof next != 'undefined')
+        callback($clicked) if(typeof callback != 'undefined')
       )
 
     updateActiveTabTitle: (tabTitle) ->
