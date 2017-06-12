@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         end
       end
 
+      get '/networks/:id/bounds', to: 'networks#bounds'
       get '/search/by_point', to: 'search#by_point'
     end
   end
