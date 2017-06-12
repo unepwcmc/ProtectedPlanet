@@ -1,24 +1,42 @@
 <section>
-  <div class="header--section">
-    <h2 class="u-inline-block header--site-connections">Site connections</h2><button class="button--hide">Hide</button>
-  </div>
+  <% if @networks.any? %>
+    <div class="header--section">
+      <h2 class="u-inline-block header--site-connections">Site connections</h2><button class="button--hide">Hide</button>
+    </div>
 
-  <div class="js-tabs-map">
-    <ul class="tab__titles u-margin--page">
-      <% @networks.each_with_index do |network, i| %>
-        <li data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>" data-id="tab-<%= i+1 %>" class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>"><%= network.name %></li>
-      <% end %>
-    </ul>
-
-
-    <% @networks.each_with_index do |network, i| %>
-      <div data-id="tab-<%= i+1 %>-content" class="key tab__content js-tab-content u-margin--page <%= "u-hide" unless i.zero? %>">
-        <% network.protected_areas.each do |protected_area| %>
-          <p class="key__title"><span class="key__icon"></span><span><%= protected_area.name %></span></p>
+    <div class="js-tabs-map">
+      <ul class="tab__titles u-margin--page">
+        <% @networks.each_with_index do |network, i| %>
+          <li data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>"
+            data-id="tab-<%= i+1 %>"
+            class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>">
+            <%= network.name %>
+          </li>
         <% end %>
-      </div>
-    <% end %>
-  </div>
+      </ul>
 
-  <div id="map" class="map--hero" data-bound-from="<%= @protected_area.bounds.first %>" data-bound-to="<%= @protected_area.bounds.last %>" data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>"></div>
+
+      <% @networks.each_with_index do |network, i| %>
+        <div data-id="tab-<%= i+1 %>-content" class="key tab__content js-tab-content u-margin--page <%= "u-hide" unless i.zero? %>">
+          <% network.protected_areas.each_with_index do |protected_area, i| %>
+            <div class="key__item">
+              <p data-wdpa-id="<%= i %>" class="key__title"><span class="key__icon"></span><span><%= protected_area.name %></span></p>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div id="map" class="map--hero"
+      data-bound-from="<%= @protected_area.bounds.first %>"
+      data-bound-to="<%= @protected_area.bounds.last %>"
+      data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>">
+    </div>
+  <% else %>
+    <div id="map" class="map--hero"
+      data-bound-from="<%= @protected_area.bounds.first %>"
+      data-bound-to="<%= @protected_area.bounds.last %>"
+      data-wdpa-ids="<%= [@protected_area.wdpa_id] %>">
+    </div>
+  <% end %>
 </section>

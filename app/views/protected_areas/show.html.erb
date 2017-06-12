@@ -13,12 +13,14 @@
     <%= render partial: "protected_areas/designations/info_box" %>
   <% end %>
 
-  <%= link_to '/', class:'link link--hero-download' do %>
-    <i class="fa fa-download"></i>Download site GIS file
-  <% end %>
-  <%= link_to '/', class:'link link--hero-download' do %>
-    <i class="fa fa-file-pdf-o"></i>Download site
-  <% end %>
+  <div class="header__links">
+    <%= link_to '/', class:'link link--hero-download' do %>
+      <i class="fa fa-download"></i>Download site GIS file
+    <% end %>
+    <%= link_to '/', class:'link link--hero-download' do %>
+      <i class="fa fa-file-pdf-o"></i>Download site
+    <% end %>
+  </div>
 
   <%= render partial: "map" %>
 
@@ -28,7 +30,9 @@
     <%= render partial: "designations" %>
   <% end %>
 
-  <%= render partial: "site_network_tabs" %>
+  <% if @networks.any? %>
+    <%= render partial: "site_network_tabs" %>
+  <% end %>
 
   <%= render partial: "info_footer" %>
 </div>
