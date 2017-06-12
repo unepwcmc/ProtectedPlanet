@@ -25,7 +25,7 @@ class Network < ActiveRecord::Base
     """.squish
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, protected_areas.map(&:wdpa_id)
+      dirty_query, protected_areas.pluck(:wdpa_id)
     ])
   end
 
