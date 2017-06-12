@@ -20,7 +20,9 @@
       <% @networks.each_with_index do |network, i| %>
         <div data-id="tab-<%= i+1 %>-content" class="key tab__content js-tab-content u-margin--page <%= "u-hide" unless i.zero? %>">
           <% network.protected_areas.each_with_index do |protected_area, i| %>
-            <p data-wdpa-id="<%= i %>" class="key__title"><span class="key__icon"></span><span><%= protected_area.name %></span></p>
+            <div class="key__item">
+              <p data-wdpa-id="<%= i %>" class="key__title"><span class="key__icon"></span><span><%= protected_area.name %></span></p>
+            </div>
           <% end %>
         </div>
       <% end %>
