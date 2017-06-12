@@ -24,10 +24,7 @@
           <i class="info-box__link-icon fa fa-download"></i>Download site GIS file
           <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :kml, :shp])) %>
         </button>
-        <a href="<%=  %>" class="info-box__link">
-          <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download this page as a PDF
-        </a>
-        <%= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class:'info-box__link' do %>
+        <%= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class: 'info-box__link' do %>
           <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download site
         <% end %>
       </div>
