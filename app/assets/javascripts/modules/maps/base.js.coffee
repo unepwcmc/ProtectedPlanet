@@ -73,7 +73,6 @@ define(
 
       loadProtectedArea: (wdpaid, index) ->
         $.getJSON("/api/v3/protected_areas/#{wdpaid}/geojson", (data) =>
-
           unless wdpaid not in @shownIds
             pa_layer = L.geoJSON(data, style: ->
               {fillOpacity: .6, weight: 1, fillColor: COLORS[index], color: "#FF6600"}

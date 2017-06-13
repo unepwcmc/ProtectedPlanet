@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
 
   after_filter :store_location
   before_filter :load_cms_pages
+  before_filter :check_for_pdf
 
   def raise_404
     raise PageNotFound
@@ -42,6 +43,10 @@ class ApplicationController < ActionController::Base
     @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
     @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
     @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
+  end
+
+  def check_for_pdf
+    @for_pdf = params[:for_pdf].present?
   end
 
   def store_location
