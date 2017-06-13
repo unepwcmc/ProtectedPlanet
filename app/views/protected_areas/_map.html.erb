@@ -1,7 +1,7 @@
 <section>
   <% if @networks.any? %>
     <div class="header--section">
-      <h2 class="u-inline-block header--site-connections">Site connections</h2><button class="button--hide">Hide</button>
+      <h2 class="u-inline-block header--site-connections">Site connections</h2><button data-state="hide" class="button--hide js-site-toggle">Hide</button>
     </div>
 
     <div class="js-tabs-map">
@@ -18,9 +18,12 @@
 
 
       <% @networks.each_with_index do |network, i| %>
-        <div data-id="tab-<%= i+1 %>-content" class="key tab__content js-tab-content u-margin--page <%= "u-hide" unless i.zero? %>">
+        <div data-id="tab-<%= i+1 %>-content" 
+             data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>"
+             class="key tab__content js-tab-content u-margin--page <%= "u-hide" unless i.zero? %>">
+             
           <% network.protected_areas.each_with_index do |protected_area, i| %>
-            <div class="key__item">
+            <div class="key__item js-key-item">
               <p data-wdpa-id="<%= i %>" class="key__title"><span class="key__icon"></span><span><%= protected_area.name %></span></p>
             </div>
           <% end %>
