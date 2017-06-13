@@ -22,10 +22,10 @@ define('site_toggle', [], ->
 
     @_checkButton: ->
       currentWDPAIDs = @_getCurrentWDPAIDs()
-      
+
       if currentWDPAIDs.length > 1
         @$button.removeClass('u-hide')
-      else 
+      else
         @$button.addClass('u-hide')
 
     @_getCurrentTab: ->
@@ -55,7 +55,7 @@ define('site_toggle', [], ->
           $(val).addClass('key--hidden')
         )
 
-      else 
+      else
         keyItems = $currentTab.find('.js-key-item')
 
         $.each(keyItems, (index, val) ->

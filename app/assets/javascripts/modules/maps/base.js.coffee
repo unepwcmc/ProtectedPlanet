@@ -46,7 +46,7 @@ define(
 
       COLORS = ['#71a32b', '#c6e3cb', '#80cbd1', '#40aed2', '#3383b9', '#27589e', '#1b2c85']
       updateMap: (ids) ->
-        console.log(ids)
+        @shownIds = ids
         @resetProtectedAreas()
         @$mapContainer.data('wdpa-ids', ids)
 
@@ -55,8 +55,8 @@ define(
 
       updateBounds: (networkId) ->
         $.getJSON("/api/v3/networks/#{networkId}/bounds", (data) =>
-          bounds = { boundFrom: data[0], boundTo: data[1] }
-          Bounds.setToBounds(@map,bounds)
+          bounds = {boundFrom: data[0], boundTo: data[1]}
+          Bounds.setToBounds(@map, bounds)
         )
 
       resetProtectedAreas: ->
@@ -65,19 +65,21 @@ define(
           @map.removeLayer window.ProtectedPlanet.Map.marker
 
         # remove geometries from the map
-        for paLayer in (window.ProtectedPlanet.Map.protected_areas || [])
-          @map.removeLayer(paLayer)
+        for paLayer in (window.ProtectedPlanet.Map.protectedAreas || [])
+          @map.removeLayer(paLayer) unless typeof paLayer == 'undefined'
 
         # annihilate stored protected areas
-        window.ProtectedPlanet.Map.protected_areas = []
+        window.ProtectedPlanet.Map.protectedAreas = []
 
       loadProtectedArea: (wdpaid, index) ->
         $.getJSON("/api/v3/protected_areas/#{wdpaid}/geojson", (data) =>
-          pa_layer = L.geoJSON(data, style: ->
-            {fillOpacity: .6, weight: 1, fillColor: COLORS[index], color: "#FF6600"}
-          ).addTo(@map)
 
-          window.ProtectedPlanet.Map.protected_areas[index] = pa_layer
+          unless wdpaid not in @shownIds
+            pa_layer = L.geoJSON(data, style: ->
+              {fillOpacity: .6, weight: 1, fillColor: COLORS[index], color: "#FF6600"}
+            ).addTo(@map)
+
+            window.ProtectedPlanet.Map.protectedAreas[index] = pa_layer
         )
 
     return Map

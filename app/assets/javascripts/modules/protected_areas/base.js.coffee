@@ -14,7 +14,7 @@ $(document).ready( ->
         window.ProtectedPlanet.Map.object.updateBounds($tab.data("network-id"))
         window.ProtectedPlanet.Map.object.updateMap($tab.data("wdpa-ids"))
         SiteToggle.resetSiteToggle()
-      
+
       #add hover effect to the each key and geometry
       if($tabContainer != null)
         $tabContents = $tabContainer.find('.js-tab-content')
@@ -26,7 +26,7 @@ $(document).ready( ->
             ev.preventDefault()
             $pa = $(@)
 
-            for paGeometry, i in window.ProtectedPlanet.Map.protected_areas
+            for paGeometry, i in window.ProtectedPlanet.Map.protectedAreas
               if i == $pa.data("wdpa-id")
                 paGeometry.setStyle({weight: 3, fillOpacity: .8})
               else
@@ -37,7 +37,7 @@ $(document).ready( ->
             ev.preventDefault()
             $pa = $(@)
 
-            for paGeometry in window.ProtectedPlanet.Map.protected_areas
+            for paGeometry in window.ProtectedPlanet.Map.protectedAreas
               paGeometry.setStyle({weight: 1, fillOpacity: .6})
           )
         )
