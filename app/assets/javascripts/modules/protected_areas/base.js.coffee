@@ -3,12 +3,16 @@ $(document).ready( ->
     new FactsheetHandler($('.factsheet'))
   )
 
-  require(['tabs'], (Tabs) ->
+  require(['tabs', 'site_toggle'], (Tabs, SiteToggle) ->
+
+    SiteToggle.initialize($('.js-site-toggle'), $('.js-tabs-map'))
+
     new Tabs($('.js-tabs-map'), ($tab, $tabContainer = null) ->
 
       #update the geometry when the tab is changed
       if($tab != null)
         window.ProtectedPlanet.Map.object.updateMap($tab.data("wdpa-ids"))
+        SiteToggle.resetSiteToggle()
       
       #add hover effect to the each key and geometry
       if($tabContainer != null)

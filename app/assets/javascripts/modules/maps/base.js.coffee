@@ -46,6 +46,7 @@ define(
 
       COLORS = ['#71a32b', '#c6e3cb', '#80cbd1', '#40aed2', '#3383b9', '#27589e', '#1b2c85']
       updateMap: (ids) ->
+        console.log(ids)
         @resetProtectedAreas()
         @$mapContainer.data('wdpa-ids', ids)
 
