@@ -7,17 +7,28 @@
 <% has_designations = @protected_area.networks.detect(&:designation).present? %>
 
 <div class="template--site container--profile container--push-bottom">
-  <h1 class="header--h1-small"><%= @protected_area.name %> in <%= link_to '...', '/' %></h1>
+  <h1 class="header--h1-small">
+    <%= @protected_area.name %> in
+    <% if @countries.any? %>
+      <% @countries.each_with_index do |country, i| %>
+        <%= link_to country.name, country_path(country.iso) %><%= ", " if i < @countries.length - 2 %><%= " and " if i == @countries.length - 2 %>
+      <% end %>
+    <% else %>
+      <a href="#">Areas Beyond National Jurisdiction</a>
+    <% end %>
+    </h1>
 
   <% if has_designations %>
     <%= render partial: "protected_areas/designations/info_box" %>
   <% end %>
 
   <div class="header__links">
-    <%= link_to '/', class:'link link--hero-download' do %>
+    <button class="js-download-btn link link--hero-download u-only-desktop tooltip__trigger js-trigger">
       <i class="fa fa-download"></i>Download site GIS file
-    <% end %>
-    <%= link_to '/', class:'link link--hero-download' do %>
+      <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :kml, :shp])) %>
+    </button>
+
+    <%= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class: 'link link--hero-download' do %>
       <i class="fa fa-file-pdf-o"></i>Download site
     <% end %>
   </div>

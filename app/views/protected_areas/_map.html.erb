@@ -9,6 +9,7 @@
         <% @networks.each_with_index do |network, i| %>
           <li data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>"
             data-id="tab-<%= i+1 %>"
+            data-network-id="<%= network.id %>"
             class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>">
             <%= network.name %>
           </li>
@@ -30,16 +31,30 @@
       <% end %>
     </div>
 
-    <div id="map" class="map--hero"
-      data-bound-from="<%= @protected_area.bounds.first %>"
-      data-bound-to="<%= @protected_area.bounds.last %>"
+    <div id="map" class="map map--hero"
+      data-bound-from="<%= @networks.first.bounds.first %>"
+      data-bound-to="<%= @networks.first.bounds.last %>"
       data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>">
     </div>
+    <div class="disclaimer">
+      The designations employed and the presentation of material on this map do not
+      imply the expression of any opinion whatsoever on the part of the Secretariat
+      of the United Nations concerning the legal status of any country, territory,
+      city or area or of its authorities, or concerning the delimitation of its
+      frontiers or boundaries.
+    </div>
   <% else %>
-    <div id="map" class="map--hero"
+    <div id="map" class="map map--hero"
       data-bound-from="<%= @protected_area.bounds.first %>"
       data-bound-to="<%= @protected_area.bounds.last %>"
       data-wdpa-ids="<%= [@protected_area.wdpa_id] %>">
+    </div>
+    <div class="disclaimer">
+      The designations employed and the presentation of material on this map do not
+      imply the expression of any opinion whatsoever on the part of the Secretariat
+      of the United Nations concerning the legal status of any country, territory,
+      city or area or of its authorities, or concerning the delimitation of its
+      frontiers or boundaries.
     </div>
   <% end %>
 </section>
