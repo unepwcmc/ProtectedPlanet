@@ -13,13 +13,12 @@ Bystander.scene('import') do
     add Wdpa::Release, :release
     add Wdpa::SourceImporter, :source_importer
     add Wdpa::ProtectedAreaImporter, :pa_importer
-    add Wdpa::DownloadGenerator, :download_generator
     add Wdpa::CountryGeometryPopulator, :geometry_populator
     add ImportTools::WebHandler, :web_handler
   end
 
   acts do
-    add :download, :make_current, notify: :wrap
+    add :download, :clear_downloads, notify: :wrap
     add :indexer, :create, {
       notify: :wrap,
       heartbeat: {
@@ -33,7 +32,6 @@ Bystander.scene('import') do
     add :release, :download, notify: :wrap
     add :source_importer, :import, notify: :wrap
     add :pa_importer, :import, notify: :wrap
-    add :download_generator, :generate, notify: :wrap
 
     add :web_handler, :under_maintenance, notify: :wrap
   end

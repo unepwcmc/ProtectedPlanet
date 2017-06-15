@@ -22,9 +22,15 @@ class ImportWorkers::FinaliserWorker
   end
 
   def refresh_data
+    # Transfer tables from previous database that
+    # we can't get from the WDPA
     CmsTransfer.transfer
     ApiTransfer.transfer
-    Download.make_current
+
+    # Clear the redis cache and delete all downloads
+    # from the S3 bucket. This will trigger the generation
+    # of new downloads, every time a user asks for one.
+    Download.clear_downloads
 
     Search::Index.delete
     Search::Index.create
@@ -32,7 +38,9 @@ class ImportWorkers::FinaliserWorker
     Autocompletion.drop
     Autocompletion.populate
 
-    #Geospatial::Calculator.calculate_statistics
+    # Here for historical reasons. Country stats are no more generated
+    # dynamically, but received by the PA programme every month.
+    # Geospatial::Calculator.calculate_statistics
 
     ImportTools::WebHandler.clear_cache
   end

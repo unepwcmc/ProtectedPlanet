@@ -15,9 +15,9 @@ class DownloadUtilsTest < ActiveSupport::TestCase
     assert_equal expected_url, url
   end
 
-  test '.make_current moves all downloads to current folder in S3' do
-    S3.expects(:replace_all).with(S3::IMPORT_PREFIX, S3::CURRENT_PREFIX)
-    Download::Utils.make_current
+  test '.clear_downloads deletes all current downloads from folder in S3' do
+    S3.expects(:delete_all).with(S3::CURRENT_PREFIX)
+    Download::Utils.clear_downloads
   end
 
   test '.key, given a domain and an identifier, returns the redis key for the given args' do

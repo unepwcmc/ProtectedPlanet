@@ -1,5 +1,12 @@
 # Statistics
 
+> ## ⚠️ **WARNING**
+>
+> This file is left here for reference. For discrepancies with stats
+> results, the Protected Areas Programme now provides the country stats
+> directly. Although the code is still present in the project, this is
+> not called anymore.
+
 The app renders three levels of stats: global, regional and country.
 
 ## Calculate Statistics
