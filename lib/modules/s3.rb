@@ -14,9 +14,9 @@ class S3
     s3.upload object_name, file_path, opts
   end
 
-  def self.replace_all from, to
+  def self.delete_all path
     s3 = S3.new
-    s3.replace_all from, to
+    s3.delete_all path
   end
 
   def self.link_to file_name, opts={for_import: false}
@@ -41,16 +41,10 @@ class S3
     end
   end
 
-  def replace_all from, to
+  def delete_all path
     bucket = @s3.buckets[Rails.application.secrets.aws_downloads_bucket]
-    replacing_objects = bucket.objects.with_prefix(from)
-    replaced_objects = bucket.objects.with_prefix(to)
+    objects = bucket.objects.with_prefix(path)
 
-    replaced_objects.delete_all
-
-    replacing_objects.each do |object|
-      new_key = object.key.gsub(from, to)
-      object.move_to(new_key, acl: :public_read)
-    end
+    objects.delete_all
   end
 end

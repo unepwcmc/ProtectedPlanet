@@ -15,8 +15,8 @@ module Download
     Download::Router.set_email(params.delete('domain'), params)
   end
 
-  def self.make_current
-    Utils.make_current
+  def self.clear_downloads
+    Utils.clear_downloads
   end
 
 
