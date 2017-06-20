@@ -3,6 +3,10 @@ $(document).ready( ->
     new FactsheetHandler($('.factsheet'))
   )
 
+  require(['map'], (Map) ->
+    new Map($('#map-connections')).render()
+  )
+
   require(['tabs', 'site_toggle'], (Tabs, SiteToggle) ->
 
     SiteToggle.initialize($('.js-site-toggle'), $('.js-tabs-map'))
