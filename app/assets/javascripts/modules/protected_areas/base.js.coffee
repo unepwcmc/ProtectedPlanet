@@ -31,10 +31,8 @@ $(document).ready( ->
             $pa = $(@)
 
             for paGeometry, i in window.ProtectedPlanet.Map.protectedAreas
-              if i == $pa.data("wdpa-id")
-                paGeometry.setStyle({weight: 3, fillOpacity: .8})
-              else
-                paGeometry.setStyle({weight: 1, fillOpacity: .1})
+              if i != $pa.data("wdpa-id")
+                paGeometry.setStyle({weight: 1, fillOpacity: .1, opacity: .2 })
           )
 
           $content.find("[data-wdpa-id]").mouseleave( (ev) ->
