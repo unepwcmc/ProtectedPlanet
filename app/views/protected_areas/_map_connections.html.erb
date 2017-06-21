@@ -21,15 +21,20 @@
           <div data-id="tab-<%= i+1 %>-content" 
                data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>"
                class="key tab__content js-tab-content <%= "u-hide" unless i.zero? %>">
-               
+            
+            <p class="key__title">Display options</p>
+
             <% network.protected_areas.each_with_index do |protected_area, i| %>
-              <div class="key__item js-key-item">
-                <p data-wdpa-id="<%= i %>" class="key__checkbox key__checkbox--active">
-                  <span class="key__name"><%= protected_area.name %></span>
+              <div class="key__item">
+                <p data-wdpa-id="<%= i %>" class="key__checkbox key__checkbox--active js-key-item js-active-key-item">
+                  <span class="key__name <%= ' key__name--green ' if i == 0 %>"><%= protected_area.name %></span>
                   <span class="key__designation"><%= protected_area.designation.try(:name) || "Not Reported" %></span>
                 </p>
               </div>
             <% end %>
+              
+            <button class="js-key-toggle" data-toggle-type="hide">Uncheck all</button>
+            
           </div>
         <% end %>
       </div>
