@@ -1,6 +1,6 @@
 <section>
   <div class="header--section">
-    <h2 class="u-inline-block header--site-connections">Site network</h2><button data-state="hide" class="button--hide js-site-toggle">Hide</button>
+    <h2 class="u-inline-block">Site network</h2>
   </div>
 
   <div class="js-tabs-map">
@@ -15,32 +15,34 @@
       <% end %>
     </ul>
 
-    <div class="row">
-      <div class="one-fourths">
+    <div class="flex-row-wrap">
+      <div class="flex-1-quarter key-container">
         <% @networks.each_with_index do |network, i| %>
           <div data-id="tab-<%= i+1 %>-content" 
                data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>"
                class="key tab__content js-tab-content <%= "u-hide" unless i.zero? %>">
             
             <p class="key__title">Display options</p>
-
-            <% network.protected_areas.each_with_index do |protected_area, i| %>
-              <div class="key__item">
-                <p data-wdpa-id="<%= i %>" class="key__checkbox key__checkbox--active js-key-item js-active-key-item">
-                  <span class="key__name <%= ' key__name--green ' if i == 0 %>"><%= protected_area.name %></span>
-                  <span class="key__designation"><%= protected_area.designation.try(:name) || "Not Reported" %></span>
-                </p>
-              </div>
-            <% end %>
+            
+            <div class="key__list">
+              <% network.protected_areas.each_with_index do |protected_area, i| %>
+                <div class="key__item">
+                  <p data-wdpa-id="<%= i %>" class="key__checkbox key__checkbox--active js-key-item js-active-key-item">
+                    <span class="key__name <%= ' key__name--green ' if i == 0 %>"><%= protected_area.name %></span>
+                    <span class="key__designation"><%= protected_area.designation.try(:name) || "Not Reported" %></span>
+                  </p>
+                </div>
+              <% end %>
+            </div>
               
-            <button class="js-key-toggle" data-toggle-type="hide">Uncheck all</button>
+            <button class="button--grey js-key-toggle" data-toggle-type="hide">Uncheck all</button>
             
           </div>
         <% end %>
       </div>
 
-      <div class="three-fourths">
-        <div id="map-connections" class="map map--hero"
+      <div class="flex-3-quarters">
+        <div id="map-connections" class="map map--networks"
           data-bound-from="<%= @networks.first.bounds.first %>"
           data-bound-to="<%= @networks.first.bounds.last %>"
           data-wdpa-ids="<%= @networks.first.protected_areas.map(&:wdpa_id).to_json %>">
