@@ -31,7 +31,7 @@
     <% end %>
   </div>
 
-  <%= render partial: "map" %>
+  <%= render partial: "map_site" %>
 
   <%= render partial: "factsheet" %>
 
@@ -40,8 +40,9 @@
   <% end %>
 
   <% if @networks.any? %>
+    <%= render partial: "map_connections" %>
     <%= render partial: "site_network_tabs" %>
   <% end %>
 
-  <%= render partial: "info_footer" %>
+  <%#= render partial: "info_footer" %>
 </div>

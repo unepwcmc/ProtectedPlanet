@@ -44,7 +44,6 @@ define(
           id, 'unepwcmc.l8gj1ihl', CONFIG
         ).addControl(L.control.zoom(position: 'bottomright'))
 
-      COLORS = ['#71a32b', '#c6e3cb', '#80cbd1', '#40aed2', '#3383b9', '#27589e', '#1b2c85']
       updateMap: (ids) ->
         @shownIds = ids
         @resetProtectedAreas()
@@ -74,12 +73,16 @@ define(
       loadProtectedArea: (wdpaid, index) ->
         $.getJSON("/api/v3/protected_areas/#{wdpaid}/geojson", (data) =>
           unless wdpaid not in @shownIds
-            pa_layer = L.geoJSON(data, style: ->
-              {fillOpacity: .6, weight: 1, fillColor: COLORS[index], color: "#FF6600"}
+            pa_layer = L.geoJSON(data, style: =>
+              {fillOpacity: .6, weight: 1, fillColor: @getFillColor(index), color: "#FF6600"}
             ).addTo(@map)
 
             window.ProtectedPlanet.Map.protectedAreas[index] = pa_layer
         )
+
+      getFillColor: (index) ->
+        COLORS = ['#71a32b', '#1b2c85']
+        return if index == 0 then COLORS[0] else COLORS[1]
 
     return Map
 
