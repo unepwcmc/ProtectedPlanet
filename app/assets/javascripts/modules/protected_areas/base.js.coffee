@@ -15,6 +15,7 @@ $(document).ready( ->
       if($tab != null)
         window.ProtectedPlanet.Map.object.updateBounds($tab.data("network-id"))
         window.ProtectedPlanet.Map.object.updateMap($tab.data("wdpa-ids"))
+        MapKey.resetKey($tab)
 
       #add event listeners to items in the map key
       if($tabContainer != null)
