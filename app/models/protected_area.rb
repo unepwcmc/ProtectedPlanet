@@ -65,7 +65,9 @@ class ProtectedArea < ActiveRecord::Base
       iucn_category: {'name' => iucn_category.try(:name)},
       designation: {'name' => designation.try(:name), 'jurisdiction' => {'name' => designation.try(:jurisdiction).try(:name)}},
       legal_status: {'name' => legal_status.try(:name)},
-      governance: {'name' => governance.try(:name)}
+      governance: {'name' => governance.try(:name)},
+      networks_no: networks.count,
+      designations_no: networks.detect(&:designation).try(:protected_areas).try(:count) || 0
     }.as_json
 
     relations.merge attributes
