@@ -35,6 +35,10 @@
   <%= csrf_meta_tags %>
 
   <%= stylesheet_link_tag 'application', media: 'all' %>
+
+  <% if @for_pdf %>
+    <%= stylesheet_link_tag 'pdf', media: 'all' %>    
+  <% end %>
 </head>
 
 <body>

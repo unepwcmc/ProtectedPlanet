@@ -1,0 +1,20 @@
+.pdf {
+  &--protected-area {
+    .two-fiths,
+    .three-fiths {
+      flex: 100%;
+    }
+
+    .pa-card {
+      flex: 0 0 50% !important;
+      padding: 0 10px;
+    }
+
+    .js-tab-content.u-hide { display: block; }
+
+    .leaflet-control-layers,
+    .leaflet-control { 
+      display: none; 
+    }
+  }
+}

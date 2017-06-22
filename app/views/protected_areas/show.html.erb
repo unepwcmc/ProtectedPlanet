@@ -4,7 +4,7 @@
 
 <% has_designations = @protected_area.networks.detect(&:designation).present? %>
 
-<div class="template--site container--profile container--push-bottom">
+<div class="template--site container--profile container--push-bottom pdf--protected-area">
   <h1 class="header--h1-small">
     <%= @protected_area.name %> in
     <% if @countries.any? %>
@@ -14,10 +14,12 @@
     <% else %>
       <a href="#">Areas Beyond National Jurisdiction</a>
     <% end %>
-    </h1>
+  </h1>
 
   <% if has_designations %>
-    <%= render partial: "protected_areas/designations/info_box" %>
+    <% unless @for_pdf %>
+      <%= render partial: "protected_areas/designations/info_box" %>
+    <% end %>
   <% end %>
   
   <% unless @for_pdf %>
@@ -40,9 +42,12 @@
   <% if has_designations %>
     <%= render partial: "designations" %>
   <% end %>
-
+  
   <% if @networks.any? %>
-    <%= render partial: "map_connections" %>
+    <% unless @for_pdf %>
+      <%= render partial: "map_connections" %>
+    <% end %>
+
     <%= render partial: "site_network_tabs" %>
   <% end %>
 

@@ -54,5 +54,4 @@ Rails.application.routes.draw do
   comfy_route :cms, path: '/c', sitemap: false
 
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
-  get '/:id/pdf', to: 'protected_areas#pdf', as: 'protected_area_pdf'
 end
