@@ -2,7 +2,7 @@
   <h2 class="header--section">Site multiple designations</h2>
   <p class="article__paragraph u-margin--page"></p>
   
-  <div class="flex-row-wrap">
+  <div class="flex-row-wrap u-pdf-no-break">
     <% @other_designations.each do |pa| %>
       <%= render partial: "pa_card", locals: {protected_area: pa} %>
     <% end %>

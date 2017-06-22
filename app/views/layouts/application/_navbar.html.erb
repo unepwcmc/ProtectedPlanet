@@ -4,12 +4,12 @@
       protected planet<sup class="protectedplanet-logo__registered">®</sup>
     <% end %>
   </div>
-
-  <div ontouchend="this.onclick=touchHoverFix" class="js-trigger js-switch mobile-menu__hamburger is-closed u-only-mobile navbar__element navbar__element--right">
-    <i class="fa fa-bars mobile-menu__hamburger-icon"></i>
-  </div>
-
+  
   <% unless @for_pdf %>
+    <div ontouchend="this.onclick=touchHoverFix" class="js-trigger js-switch mobile-menu__hamburger is-closed u-only-mobile navbar__element navbar__element--right">
+      <i class="fa fa-bars mobile-menu__hamburger-icon"></i>
+    </div>
+
     <%= render "layouts/application/navbar_desktop" %>
   <% end %>
 </nav>

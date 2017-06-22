@@ -19,7 +19,7 @@
 
         <p class="article__paragraph u-margin--page"></p>
         
-        <div class="flex-row-wrap">
+        <div class="flex-row-wrap u-pdf-no-break">
           <% network.protected_areas.each do |protected_area| %>
             <% next if protected_area.id == @protected_area.id %>
             <%= render partial: "pa_card", locals: {protected_area: protected_area} %>
