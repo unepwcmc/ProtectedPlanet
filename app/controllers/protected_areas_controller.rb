@@ -21,13 +21,16 @@ class ProtectedAreasController < ApplicationController
       format.html
       format.pdf {
         rasterizer = Rails.root.join("vendor/assets/javascripts/rasterize.js")
-        url = url_for(action: :show, id: @protected_area.wdpa_id)
+        url = url_for(action: :pdf, id: @protected_area.wdpa_id)
         dest_pdf = Rails.root.join("tmp/#{@protected_area.wdpa_id}-site.pdf").to_s
-
+        byebug
         `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
         send_file dest_pdf, type: 'application/pdf'
       }
     end
+  end
+
+  def pdf
   end
 
   private
