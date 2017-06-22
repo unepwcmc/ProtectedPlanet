@@ -4,7 +4,7 @@
 
 <% has_designations = @protected_area.networks.detect(&:designation).present? %>
 
-<div class="template--site container--profile container--push-bottom">
+<div class="template--site container--profile container--push-bottom pdf--protected-area">
   <h1 class="header--h1-small">
     <%= @protected_area.name %> in
     <% if @countries.any? %>
@@ -14,22 +14,26 @@
     <% else %>
       <a href="#">Areas Beyond National Jurisdiction</a>
     <% end %>
-    </h1>
+  </h1>
 
   <% if has_designations %>
-    <%= render partial: "protected_areas/designations/info_box" %>
-  <% end %>
-
-  <div class="header__links">
-    <button class="js-download-btn link link--hero-download u-only-desktop tooltip__trigger js-trigger">
-      <i class="fa fa-download"></i>Download site GIS file
-      <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :kml, :shp])) %>
-    </button>
-
-    <%= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class: 'link link--hero-download' do %>
-      <i class="fa fa-file-pdf-o"></i>Download site
+    <% unless @for_pdf %>
+      <%= render partial: "protected_areas/designations/info_box" %>
     <% end %>
-  </div>
+  <% end %>
+  
+  <% unless @for_pdf %>
+    <div class="header__links">
+      <button class="js-download-btn link link--hero-download u-only-desktop tooltip__trigger js-trigger">
+        <i class="fa fa-download"></i>Download site GIS file
+        <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :kml, :shp])) %>
+      </button>
+
+      <%= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class: 'link link--hero-download' do %>
+        <i class="fa fa-file-pdf-o"></i>Download site
+      <% end %>
+    </div>
+  <% end %>
 
   <%= render partial: "map_site" %>
 
@@ -38,9 +42,12 @@
   <% if has_designations %>
     <%= render partial: "designations" %>
   <% end %>
-
+  
   <% if @networks.any? %>
-    <%= render partial: "map_connections" %>
+    <% unless @for_pdf %>
+      <%= render partial: "map_connections" %>
+    <% end %>
+
     <%= render partial: "site_network_tabs" %>
   <% end %>
 

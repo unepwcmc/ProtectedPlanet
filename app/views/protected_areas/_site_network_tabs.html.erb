@@ -2,14 +2,21 @@
   <h2 class="header--section u-margin--page">Site network breakdown</h2>
 
   <div class="js-tabs-network tab-container">
-    <ul class="tab__titles u-margin--page">
-      <% @networks.each_with_index do |network, i| %>
-        <li data-id="tab-<%= i+1 %>" class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>"><%= network.name %></li>
-      <% end %>
-    </ul>
+    <% unless @for_pdf %>
+      <ul class="tab__titles u-margin--page">
+        <% @networks.each_with_index do |network, i| %>
+          <li data-id="tab-<%= i+1 %>" class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>"><%= network.name %></li>
+        <% end %>
+      </ul>
+    <% end %>
 
     <% @networks.each_with_index do |network, i| %>
       <div data-id="tab-<%= i+1 %>-content" class="tab__content js-tab-content <%= "u-hide" unless i.zero? %>">
+        
+        <% if @for_pdf %>
+          <span class="tab__title tab__title--active"><%= network.name %></span>
+        <% end %>
+
         <p class="article__paragraph u-margin--page"></p>
         
         <div class="flex-row-wrap">
