@@ -9,6 +9,10 @@ class Network < ActiveRecord::Base
     ]
   end
 
+  def countries
+    protected_areas.map(&:countries).flatten.uniq
+  end
+
   private
 
   def bounding_box_query
