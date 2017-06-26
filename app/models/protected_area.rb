@@ -92,6 +92,11 @@ class ProtectedArea < ActiveRecord::Base
     }).results
   end
 
+  def percentage_overlap(pa)
+    overlap = db.execute(percentage_overlap_query(pa)).first["overlap"]
+    (overlap.to_f*100).to_i
+  end
+
   private
 
   def bounding_box_query
@@ -109,6 +114,21 @@ class ProtectedArea < ActiveRecord::Base
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
       dirty_query, wdpa_id
+    ])
+  end
+
+  def percentage_overlap_query(pa)
+    dirty_query = """
+      SELECT ST_AREA(ST_INTERSECTION(a,b))/ST_AREA(a) AS overlap
+      FROM (
+        SELECT pa1.the_geom AS a, pa2.the_geom AS b
+        FROM protected_areas AS pa1, protected_areas AS pa2
+        WHERE pa1.wdpa_id = ? AND pa2.wdpa_id = ?
+      ) AS intersection;
+    """.squish
+
+    ActiveRecord::Base.send(:sanitize_sql_array, [
+      dirty_query, wdpa_id, pa.wdpa_id
     ])
   end
 
