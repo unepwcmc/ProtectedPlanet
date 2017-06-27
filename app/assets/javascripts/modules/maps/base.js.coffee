@@ -11,7 +11,7 @@ define(
         attributionControl: false
 
       constructor: (@$mapContainer) ->
-
+        
       render: ->
         if @$mapContainer.length == 0
           return false
@@ -38,7 +38,7 @@ define(
         else
           Interactive.listen(@map)
           ProtectedAreaOverlay.render(@map, config)
-
+        
       createMap: (id) ->
         L.mapbox.map(
           id, 'unepwcmc.l8gj1ihl', CONFIG
@@ -57,6 +57,9 @@ define(
           bounds = {boundFrom: data[0], boundTo: data[1]}
           Bounds.setToBounds(@map, bounds)
         )
+
+      resizeMap: ->
+        @map.invalidateSize();
 
       resetProtectedAreas: ->
         # remove tooltip if any

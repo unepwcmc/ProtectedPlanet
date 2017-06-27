@@ -7,6 +7,10 @@ $(document).ready( ->
     new Map($('#map-connections')).render()
   )
 
+  require(['fullscreen'], (Fullscreen) ->
+    new Fullscreen($('.js-fullscreen-button'))
+  )
+
   require(['tabs', 'map_key'], (Tabs, MapKey) ->
 
     new Tabs($('.js-tabs-map'), ($tab, $tabContainer = null) ->
