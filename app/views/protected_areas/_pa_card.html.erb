@@ -23,8 +23,17 @@
         <%= link_to protected_area.wdpa_id, protected_area_path(protected_area.wdpa_id), class: "pa-card__detail-link" %>
       </div>
       <div class="pa-card__detail pa-card__detail--inline">
+        
+      </div>
+    </div>
+    <div>
+      <div class="pa-card__detail pa-card__detail--inline">
         <p>Reported Area</p>
         <%= protected_area.reported_area.round(1) %>
+      </div>
+      <div class="pa-card__detail pa-card__detail--inline">
+        <p>Percentage overlap</p>
+        <%#= protected_area.percentage_overlap(comparison_protected_area) %>
       </div>
     </div>
   </div>
