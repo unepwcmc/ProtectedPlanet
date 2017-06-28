@@ -24,17 +24,17 @@
       </div>
       <div class="pa-card__detail pa-card__detail--inline">
         <p>Year of Designation</p>
-
+        <p class="pa-card__detail-value"></p>
       </div>
     </div>
     <div class="pa-card__detail flex-row u-no-margin">
       <div class="pa-card__detail pa-card__detail--inline u-no-margin">
         <p>Reported Area</p>
-        <%= protected_area.reported_area.round(1) %>
+        <p class="pa-card__detail-value"><%= protected_area.reported_area.round(1) %> km<sup>2</sup></p>
       </div>
       <div class="pa-card__detail pa-card__detail--inline u-no-margin">
         <p>Percentage overlap</p>
-        <span class="u-bold">00%</span> (0000km<sup>2</sup>)
+        <p class="pa-card__detail-value"><span class="u-bold">00%</span> (0000 km<sup>2</sup>)</p>
         <%#= protected_area.percentage_overlap(comparison_protected_area) %>
       </div>
     </div>
