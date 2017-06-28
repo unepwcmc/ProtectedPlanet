@@ -6,13 +6,12 @@ $(document).ready( ->
   require(['map', 'fullscreen'], (Map, Fullscreen) ->
     new Fullscreen($('.js-fullscreen-button'))
 
-    #create maps
-    mapConnections = new Map($('#map-connections'))
+    #create maps !!the order of the maps matters!!
     mapSite = new Map($('#map-site'))
-
-    #render maps on page
-    mapConnections.render()
     mapSite.render()
+
+    mapConnections = new Map($('#map-connections'))
+    mapConnections.render()
 
     #pull out fullscreen buttons
     $mapConnectionsFullscreenButton = $('.js-fullscreen-button-connections')
