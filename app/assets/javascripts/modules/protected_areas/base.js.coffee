@@ -3,12 +3,29 @@ $(document).ready( ->
     new FactsheetHandler($('.factsheet'))
   )
 
-  require(['map'], (Map) ->
-    new Map($('#map-connections')).render()
-  )
-
-  require(['fullscreen'], (Fullscreen) ->
+  require(['map', 'fullscreen'], (Map, Fullscreen) ->
     new Fullscreen($('.js-fullscreen-button'))
+
+    #create maps
+    mapConnections = new Map($('#map-connections'))
+    mapSite = new Map($('#map-site'))
+
+    #render maps on page
+    mapConnections.render()
+    mapSite.render()
+
+    #pull out fullscreen buttons
+    $mapConnectionsFullscreenButton = $('.js-fullscreen-button-connections')
+    $mapSiteFullscreenButton = $('.js-fullscreen-button-site')
+
+    #add click event that will re-render the map correctly when the fullscreen button is clicked
+    $mapConnectionsFullscreenButton.on('click', ->
+      mapConnections.resizeMap()
+    )
+
+    $mapSiteFullscreenButton.on('click', ->
+      mapSite.resizeMap()
+    )
   )
 
   require(['tabs', 'map_key'], (Tabs, MapKey) ->

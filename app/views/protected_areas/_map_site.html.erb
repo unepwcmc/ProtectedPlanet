@@ -1,13 +1,13 @@
 <section class="js-fullscreen-target fullscreen" data-id="map-site-target">
   
   <button 
-    class="button--fullscreen js-fullscreen-button fa fa-expand fullscreen__button-site u-only-desktop" 
+    class="button--fullscreen js-fullscreen-button js-fullscreen-button-site fa fa-expand fullscreen__button-site u-only-desktop" 
     data-id="map-site"
     data-type="expand">
   </button>
 
   <div 
-    id="map" 
+    id="map-site" 
     class="map map--hero"
     data-bound-from="<%= @protected_area.bounds.first %>"
     data-bound-to="<%= @protected_area.bounds.last %>"
