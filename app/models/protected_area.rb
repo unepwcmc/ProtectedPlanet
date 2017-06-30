@@ -93,8 +93,13 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def percentage_overlap(pa)
-    overlap = db.execute(percentage_overlap_query(pa)).first["overlap"]
-    (overlap.to_f*100).to_i
+    percentage = db.execute(percentage_overlap_query(pa)).first["percentage"]
+    (percentage.to_f*100).to_i # WARNING to_i ignores very small percentages of overlap
+  end
+
+  def sqm_overlap(pa)
+    sqm = db.execute(percentage_overlap_query(pa)).first["sqm"]
+    (sqm.to_f / 1000000).round(2)
   end
 
   private
@@ -119,7 +124,8 @@ class ProtectedArea < ActiveRecord::Base
 
   def percentage_overlap_query(pa)
     dirty_query = """
-      SELECT ST_AREA(ST_INTERSECTION(a,b))/ST_AREA(a) AS overlap
+      SELECT ST_AREA(ST_INTERSECTION(a,b))/ST_AREA(a) AS percentage,
+             ST_AREA(ST_INTERSECTION(a,b)::geography) AS sqm
       FROM (
         SELECT pa1.the_geom AS a, pa2.the_geom AS b
         FROM protected_areas AS pa1, protected_areas AS pa2

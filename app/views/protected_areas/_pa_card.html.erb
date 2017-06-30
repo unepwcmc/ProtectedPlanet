@@ -34,8 +34,13 @@
       </div>
       <div class="pa-card__detail pa-card__detail--inline u-no-margin">
         <p>Percentage overlap</p>
-        <p class="pa-card__detail-value"><span class="u-bold">00%</span> (0000 km<sup>2</sup>)</p>
-        <%#= protected_area.percentage_overlap(comparison_protected_area) %>
+        <p class="pa-card__detail-value">
+          <span class="u-bold">
+            <%= protected_area.percentage_overlap(comparison_protected_area) %>%
+          </span>
+          (<%= protected_area.sqm_overlap(comparison_protected_area) %>
+          km<sup>2</sup>)
+        </p>
       </div>
     </div>
   </div>
