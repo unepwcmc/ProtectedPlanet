@@ -17,8 +17,15 @@
     
     <%= render partial: "protected_areas/networks/stats" %>
 
-    <div class="flex-row-wrap">
-      <div class="flex-1-quarter key-container">
+    <div class="flex-row-wrap js-fullscreen-target fullscreen" data-id="map-connections-target"">
+
+      <button 
+        class="button--fullscreen js-fullscreen-button js-fullscreen-button-connections fa fa-expand fullscreen__button-connections u-only-desktop" 
+        data-id="map-connections"
+        data-type="expand">
+      </button>
+
+      <div class="flex-1-quarter key-container u-bg--white">
         <% @networks.each_with_index do |network, i| %>
           <div data-id="tab-<%= i+1 %>-content" 
                data-wdpa-ids="<%= network.protected_areas.map(&:wdpa_id).to_json %>"
