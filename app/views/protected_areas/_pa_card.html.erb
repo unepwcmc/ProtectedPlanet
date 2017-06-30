@@ -17,14 +17,25 @@
       <p>IUCN Category</p>
       <%= link_to protected_area.iucn_category.name, search_url(designation: protected_area.iucn_category.name, main: :iucn_category), class: "pa-card__detail-link" %>
     </div>
-    <div class="u-clearfix">
+    <div class="pa-card__detail flex-row">
       <div class="pa-card__detail pa-card__detail--inline">
         <p>WDPA ID</p>
         <%= link_to protected_area.wdpa_id, protected_area_path(protected_area.wdpa_id), class: "pa-card__detail-link" %>
       </div>
       <div class="pa-card__detail pa-card__detail--inline">
+        <p>Year of Designation</p>
+        <p class="pa-card__detail-value"></p>
+      </div>
+    </div>
+    <div class="pa-card__detail flex-row u-no-margin">
+      <div class="pa-card__detail pa-card__detail--inline u-no-margin">
         <p>Reported Area</p>
-        <%= protected_area.reported_area.round(1) %>
+        <p class="pa-card__detail-value"><%= protected_area.reported_area.round(1) %> km<sup>2</sup></p>
+      </div>
+      <div class="pa-card__detail pa-card__detail--inline u-no-margin">
+        <p>Percentage overlap</p>
+        <p class="pa-card__detail-value"><span class="u-bold">00%</span> (0000 km<sup>2</sup>)</p>
+        <%#= protected_area.percentage_overlap(comparison_protected_area) %>
       </div>
     </div>
   </div>
