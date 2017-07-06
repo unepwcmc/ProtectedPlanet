@@ -6,13 +6,16 @@
 
 <% if @protected_area.has_parcc_info %>
   <h2 class="header--section u-margin--page">Vulnerability Assessment</h2>
-  <p class="u-margin--page attribute--large attribute__value attribute--bold">
-    <%= link_to("Present", url_for_related_source('parcc_info', @protected_area)) %>
-    <i class="fa fa-external-link"></i>
+  <p class="u-margin--page attribute__value attribute--bold flex-row-wrap align-items-center">
+    <%= image_tag "parcc-logo-title.png", width: "80", height: "auto", alt: "PARCC Logo" %>
+    <%= link_to url_for_related_source('parcc_info', @protected_area), class: "attribute__link-margin", title: "View the climate change vulnerability assessments for #{@protected_area.name}" do %>
+      Present
+      <i class="fa fa-external-link attribute__icon"></i>
+    <% end %>
   </p>
 <% end %>
 
-<div class="info-box info-box--fill-color info-box--factsheet u-margin--page-right">
+<div class="info-box info-box--fill-color info-box--factsheet info-box--margin-top u-margin--page-right">
   <h3 class="icon--info info-box__header">Data Provider</h3>
   <% if @protected_area.sources.any? %>
     <%= render @protected_area.sources %>
