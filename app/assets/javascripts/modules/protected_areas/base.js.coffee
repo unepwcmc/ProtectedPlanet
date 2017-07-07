@@ -3,6 +3,10 @@ $(document).ready( ->
     new FactsheetHandler($('.factsheet'))
   )
 
+  require(['show_hide'], (ShowHide) ->
+    new ShowHide($('.js-show-hide'))
+  )
+
   require(['map', 'fullscreen'], (Map, Fullscreen) ->
     new Fullscreen($('.js-fullscreen-button'))
 
