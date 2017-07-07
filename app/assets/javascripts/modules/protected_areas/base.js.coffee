@@ -3,6 +3,12 @@ $(document).ready( ->
     new FactsheetHandler($('.factsheet'))
   )
 
+  require(['show_hide'], (ShowHide) ->
+    quota = 6
+
+    new ShowHide($('.js-show-hide'), quota)
+  )
+
   require(['map', 'fullscreen'], (Map, Fullscreen) ->
     new Fullscreen($('.js-fullscreen-button'))
 
