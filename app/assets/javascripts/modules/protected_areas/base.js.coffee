@@ -4,7 +4,9 @@ $(document).ready( ->
   )
 
   require(['show_hide'], (ShowHide) ->
-    new ShowHide($('.js-show-hide'), 6)
+    quota = 6
+
+    new ShowHide($('.js-show-hide'), quota)
   )
 
   require(['map', 'fullscreen'], (Map, Fullscreen) ->
