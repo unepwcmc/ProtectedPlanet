@@ -1,6 +1,6 @@
 define('show_hide', [], ->
   class ShowHide
-    constructor: (@$button) ->
+    constructor: (@$button, @$quota) ->
       @setup()
       @addEventListeners()
 
@@ -14,7 +14,7 @@ define('show_hide', [], ->
 
         @hideCards($cards)
 
-        if($cards.length < 7) 
+        if($cards.length < @$quota + 1) 
           $wrapper.find('.js-show-hide').addClass('u-hide')
       )
 
@@ -42,7 +42,7 @@ define('show_hide', [], ->
       )
 
     hideCards: (cards) ->
-      $cardsToHide = cards.slice(6)
+      $cardsToHide = cards.slice(@$quota)
 
       $.each($cardsToHide, (index, card) ->
         $(card).addClass('u-hide')
