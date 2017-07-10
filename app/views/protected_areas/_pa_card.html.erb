@@ -35,13 +35,21 @@
       <div class="pa-card__detail pa-card__detail--inline u-no-margin">
         <p>Percentage overlap</p>
         <p class="pa-card__detail-value overlap">
-          <span class="u-bold overlap__percentage">
-          </span>
-          <span class="overlap__sqm">
-            (
-            <span class="overlap__sqm-value"></span>
-            km<sup>2</sup>)
-          </span>
+          <div class="loader js-pa-loader">
+            <span class="loader__dot"></span>
+            <span class="loader__dot"></span>
+            <span class="loader__dot"></span>
+          </div>
+          
+          <p class="js-percentage-overlap u-hide">
+            <span class="u-bold overlap__percentage">
+            </span>
+            <span class="overlap__sqm">
+              (
+              <span class="overlap__sqm-value"></span>
+              km<sup>2</sup>)
+            </span>
+          </p>
         </p>
       </div>
     </div>
