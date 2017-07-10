@@ -2,6 +2,7 @@
 //= require 'modules/protected_areas/map_key'
 //= require 'modules/protected_areas/factsheet_handler'
 //= require 'modules/protected_areas/base'
+//= require 'modules/protected_areas/overlap'
 //= require 'modules/fullscreen'
 //= require 'modules/show_hide'
 //= require 'modules/tabs'

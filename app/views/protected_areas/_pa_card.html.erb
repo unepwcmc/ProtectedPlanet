@@ -1,4 +1,4 @@
-<div class="pa-card flex-column-3 u-pdf-no-break js-show-hide-target show-hide-target">
+<div class="pa-card flex-column-3 u-pdf-no-break js-show-hide-target show-hide-target" data-wdpa_id=<%= protected_area.wdpa_id %>>
   <h3 class="pa-card__name">
     <%= link_to protected_area.name, protected_area_path(protected_area.wdpa_id) %>
   </h3>
@@ -27,19 +27,29 @@
         <p class="pa-card__detail-value"></p>
       </div>
     </div>
-    <div class="pa-card__detail flex-row u-no-margin">
+    <div class="pa-card__detail flex-row u-no-margin reported-area" data-wdpa_id=<%= comparison_protected_area.wdpa_id %>>
       <div class="pa-card__detail pa-card__detail--inline u-no-margin">
         <p>Reported Area</p>
         <p class="pa-card__detail-value"><%= protected_area.reported_area.round(1) %> km<sup>2</sup></p>
       </div>
       <div class="pa-card__detail pa-card__detail--inline u-no-margin">
         <p>Percentage overlap</p>
-        <p class="pa-card__detail-value">
-          <span class="u-bold">
-            <%= protected_area.percentage_overlap(comparison_protected_area) %>%
-          </span>
-          (<%= protected_area.sqm_overlap(comparison_protected_area) %>
-          km<sup>2</sup>)
+        <p class="pa-card__detail-value overlap">
+          <div class="loader js-pa-loader">
+            <span class="loader__dot"></span>
+            <span class="loader__dot"></span>
+            <span class="loader__dot"></span>
+          </div>
+          
+          <p class="js-percentage-overlap u-hide">
+            <span class="u-bold overlap__percentage">
+            </span>
+            <span class="overlap__sqm">
+              (
+              <span class="overlap__sqm-value"></span>
+              km<sup>2</sup>)
+            </span>
+          </p>
         </p>
       </div>
     </div>
