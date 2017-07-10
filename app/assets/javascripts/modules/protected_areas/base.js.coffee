@@ -57,4 +57,8 @@ $(document).ready( ->
 
     new Tabs($('.js-tabs-network'))
   )
+
+  require(['overlap'], (Overlap) ->
+    new Overlap($('.pa-card'))
+  )
 )
