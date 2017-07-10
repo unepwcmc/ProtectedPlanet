@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       resources :protected_areas, only: [:show] do
         member do
           get 'geojson'
+          get 'overlap/:comparison_wdpa_id', to: 'protected_areas#overlap'
         end
       end
 

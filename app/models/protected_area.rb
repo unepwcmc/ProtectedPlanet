@@ -92,14 +92,11 @@ class ProtectedArea < ActiveRecord::Base
     }).results
   end
 
-  def percentage_overlap(pa)
-    percentage = db.execute(percentage_overlap_query(pa)).first["percentage"]
-    (percentage.to_f*100).to_i # WARNING to_i ignores very small percentages of overlap
-  end
-
-  def sqm_overlap(pa)
-    sqm = db.execute(percentage_overlap_query(pa)).first["sqm"]
-    (sqm.to_f / 1000000).round(2)
+  def overlap(pa)
+    overlap = db.execute(overlap_query(pa)).first
+    overlap["percentage"] = (overlap["percentage"].to_f*100).to_i
+    overlap["sqm"] = (overlap["sqm"].to_f / 1000000).round(2)
+    overlap
   end
 
   private
@@ -122,7 +119,7 @@ class ProtectedArea < ActiveRecord::Base
     ])
   end
 
-  def percentage_overlap_query(pa)
+  def overlap_query(pa)
     dirty_query = """
       SELECT
         CASE ST_AREA(a)

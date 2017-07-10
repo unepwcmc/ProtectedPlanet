@@ -16,4 +16,12 @@ class Api::V3::ProtectedAreasController < ApplicationController
     protected_area = ProtectedArea.find_by(wdpa_id: params[:id])
     render text: URI.decode(protected_area.geojson)
   end
+
+  def overlap
+    protected_area = ProtectedArea.find_by(wdpa_id: params[:id])
+    comparison_protected_area = ProtectedArea.
+      find_by(wdpa_id: params[:comparison_wdpa_id])
+
+    render json: protected_area.overlap(comparison_protected_area)
+  end
 end
