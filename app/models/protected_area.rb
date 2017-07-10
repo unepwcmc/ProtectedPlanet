@@ -127,11 +127,11 @@ class ProtectedArea < ActiveRecord::Base
       SELECT
         CASE ST_AREA(a)
           WHEN '0' THEN '0'
-          ELSE ST_AREA(ST_INTERSECTION(a,b))/ST_AREA(a)
+          ELSE ST_AREA(ST_INTERSECTION(ST_MakeValid(a),ST_MakeValid(b)))/ST_AREA(ST_MakeValid(a))
         END AS percentage,
-        ST_AREA(ST_INTERSECTION(a,b)::geography) AS sqm
+        ST_AREA(ST_INTERSECTION(ST_MakeValid(a),ST_MakeValid(b))::geography) AS sqm
       FROM (
-        SELECT pa1.the_geom AS a, pa2.the_geom AS b
+        SELECT ST_SimplifyPreserveTopology(pa1.the_geom, 0.003) AS a, ST_SimplifyPreserveTopology(pa2.the_geom, 0.003) AS b
         FROM protected_areas AS pa1, protected_areas AS pa2
         WHERE pa1.wdpa_id = ? AND pa2.wdpa_id = ?
       ) AS intersection;
