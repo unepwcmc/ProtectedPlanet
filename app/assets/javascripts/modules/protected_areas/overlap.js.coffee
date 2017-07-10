@@ -19,8 +19,12 @@ define('overlap', [], ->
       )
 
     populateData: (paCard, data) ->
-      $(paCard).find('.overlap__percentage').html(data.percentage)
-      $(paCard).find('.overlap__sqm-value').html(data.sqm)
+      $paCard = $(paCard)
+
+      $paCard.find('.overlap__percentage').html(data.percentage)
+      $paCard.find('.overlap__sqm-value').html(data.sqm)
+      $paCard.find('.js-pa-loader').remove()
+      $paCard.find('.js-percentage-overlap').removeClass('u-hide')
 
   return Overlap
 )
