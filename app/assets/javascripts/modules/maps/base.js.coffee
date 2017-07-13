@@ -5,13 +5,16 @@ define(
     class Map
       L.mapbox.accessToken = 'pk.eyJ1IjoidW5lcHdjbWMiLCJhIjoiRXg1RERWRSJ9.taTsSWwtAfFX_HMVGo2Cug'
 
+      POLYGONS_TABLE = 'wdpa_poly'
+      POINTS_TABLE   = 'wdpa_point'
+
       CONFIG =
         minZoom: 2
         zoomControl: false
         attributionControl: false
 
       constructor: (@$mapContainer) ->
-        
+
       render: ->
         if @$mapContainer.length == 0
           return false
@@ -38,7 +41,7 @@ define(
         else
           Interactive.listen(@map)
           ProtectedAreaOverlay.render(@map, config)
-        
+
       createMap: (id) ->
         L.mapbox.map(
           id, 'unepwcmc.l8gj1ihl', CONFIG
@@ -74,13 +77,28 @@ define(
         window.ProtectedPlanet.Map.protectedAreas = []
 
       loadProtectedArea: (wdpaid, index) ->
-        $.getJSON("/api/v3/protected_areas/#{wdpaid}/geojson", (data) =>
-          unless wdpaid not in @shownIds
-            pa_layer = L.geoJSON(data, style: =>
-              {fillOpacity: .6, weight: 1, fillColor: @getFillColor(index), color: "#FF6600"}
-            ).addTo(@map)
+        query = "
+          SELECT ST_AsGeoJSON(the_geom) as the_geom
+          FROM #{POLYGONS_TABLE}
+          WHERE wdpa_poly.wdpaid = #{wdpaid}
 
-            window.ProtectedPlanet.Map.protectedAreas[index] = pa_layer
+          UNION ALL
+
+          SELECT ST_AsGeoJSON(the_geom) as the_geom
+          FROM #{POINTS_TABLE}
+          WHERE wdpa_point.wdpaid = #{wdpaid}
+        "
+        $.getJSON("https://carbon-tool.carto.com/api/v2/sql?q=#{query}", (data) =>
+          unless wdpaid not in @shownIds
+            unless data.rows[0]
+              console.log('No geojson data found')
+            else
+              the_geom = JSON.parse(data.rows[0].the_geom)
+              pa_layer = L.geoJSON(the_geom, style: =>
+                {fillOpacity: .6, weight: 1, fillColor: @getFillColor(index), color: "#FF6600"}
+              ).addTo(@map)
+
+              window.ProtectedPlanet.Map.protectedAreas[index] = pa_layer
         )
 
       getFillColor: (index) ->
