@@ -7,7 +7,7 @@ module Rack
     def call(env)
       status, headers, response = @app.call(env)
 
-      if Rails.application.secrets.disallow_all_web_crawlers.present?
+      if Rails.application.secrets.disallow_all_web_crawlers
         headers["X-Robots-Tag"] = "none"
       end
 
