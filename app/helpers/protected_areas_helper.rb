@@ -29,4 +29,12 @@ module ProtectedAreasHelper
       content_tag(:li, label, class: 'non-complete')
     end
   end
+
+  def parse_management_plan management_plan
+    if management_plan.starts_with?("http")
+      link_to("View Management Plan", management_plan)
+    else
+      management_plan
+    end
+  end
 end

@@ -6,6 +6,9 @@ class ProtectedArea < ActiveRecord::Base
   has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
 
+  has_many :networks_protected_areas, dependent: :destroy
+  has_many :networks, through: :networks_protected_areas
+
   belongs_to :legal_status
   belongs_to :iucn_category
   belongs_to :governance
@@ -62,7 +65,9 @@ class ProtectedArea < ActiveRecord::Base
       iucn_category: {'name' => iucn_category.try(:name)},
       designation: {'name' => designation.try(:name), 'jurisdiction' => {'name' => designation.try(:jurisdiction).try(:name)}},
       legal_status: {'name' => legal_status.try(:name)},
-      governance: {'name' => governance.try(:name)}
+      governance: {'name' => governance.try(:name)},
+      networks_no: networks.count,
+      designations_no: networks.detect(&:designation).try(:protected_areas).try(:count) || 0
     }.as_json
 
     relations.merge attributes
@@ -87,6 +92,13 @@ class ProtectedArea < ActiveRecord::Base
     }).results
   end
 
+  def overlap(pa)
+    overlap = db.execute(overlap_query(pa)).first
+    overlap["percentage"] = (overlap["percentage"].to_f*100).to_i
+    overlap["sqm"] = (overlap["sqm"].to_f / 1000000).round(2)
+    overlap
+  end
+
   private
 
   def bounding_box_query
@@ -104,6 +116,26 @@ class ProtectedArea < ActiveRecord::Base
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
       dirty_query, wdpa_id
+    ])
+  end
+
+  def overlap_query(pa)
+    dirty_query = """
+      SELECT
+        CASE ST_AREA(a)
+          WHEN '0' THEN '0'
+          ELSE ST_AREA(ST_INTERSECTION(ST_MakeValid(a),ST_MakeValid(b)))/ST_AREA(ST_MakeValid(a))
+        END AS percentage,
+        ST_AREA(ST_INTERSECTION(ST_MakeValid(a),ST_MakeValid(b))::geography) AS sqm
+      FROM (
+        SELECT ST_SimplifyPreserveTopology(pa1.the_geom, 0.003) AS a, ST_SimplifyPreserveTopology(pa2.the_geom, 0.003) AS b
+        FROM protected_areas AS pa1, protected_areas AS pa2
+        WHERE pa1.wdpa_id = ? AND pa2.wdpa_id = ?
+      ) AS intersection;
+    """.squish
+
+    ActiveRecord::Base.send(:sanitize_sql_array, [
+      dirty_query, wdpa_id, pa.wdpa_id
     ])
   end
 

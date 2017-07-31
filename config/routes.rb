@@ -11,8 +11,14 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v3 do
-      resources :protected_areas, only: [:show]
+      resources :protected_areas, only: [:show] do
+        member do
+          get 'geojson'
+          get 'overlap/:comparison_wdpa_id', to: 'protected_areas#overlap'
+        end
+      end
 
+      get '/networks/:id/bounds', to: 'networks#bounds'
       get '/search/by_point', to: 'search#by_point'
     end
   end

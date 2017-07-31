@@ -17,7 +17,6 @@ class CountryController < ApplicationController
   end
 
   def pdf
-    @for_pdf = true
   end
 
   def codes
