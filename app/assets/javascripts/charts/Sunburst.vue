@@ -11,14 +11,10 @@
 </template>
 
 <script>
-  //import * as d3 from 'd3'
-
   module.exports = {
-    name: 'sun-burst-chart',
+    name: 'sunburst',
 
-    props: {
-      json: {}
-    },
+    props: { },
 
     data () {
       return {
@@ -30,7 +26,52 @@
         chart: '',
         percentage: 0,
         type: '',
-        isActive: false
+        isActive: false,
+        json: {
+          "name": "protected areas",
+          "children": [
+            {
+              "name": "Cook Islands",
+              "size": 1900000
+            },
+            {
+              "name": "Grenada",
+              "size": 1154
+            },
+            {
+              "name": "Indonesia",
+              "size": 28547
+            },
+            {
+              "name": "Marshall Islands",
+              "size": 305.5
+            },
+            {
+              "name": "IDN/TLS",
+              "size": 6450
+            },
+            {
+              "name": "Colombia",
+              "size": 15000
+            },
+            {
+              "name": "Chile",
+              "size": 150000
+            },
+            {
+              "name": "China",
+              "size": 10432
+            },
+            {
+              "name": "Germany (CCAMLR)",
+              "size": 1800000
+            },
+            {
+              "name": "19 countries",
+              "size": 3700000
+            }
+          ]
+        }
       }
     },
 
@@ -40,12 +81,14 @@
 
     mounted: function () {
       console.log(d3)
-      //this.renderChart()
+      console.log('json', this.json)
+      this.renderChart()
     },
 
     methods: {
       renderChart: function () {
         // size variables
+        
         var totalItems = this.json.children.length
         var color = d3.scaleSequential(d3.interpolateCool).domain([0, totalItems])
         var data = d3.hierarchy(this.json).sum(function (d) { return d.size })
