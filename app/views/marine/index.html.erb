@@ -6,25 +6,35 @@
     </p>
   </header>
 
-  <div class="v-marine container--profile container--push-bottom">
+  <div class="v-marine container--push-bottom">
+    
+    <div class="section--block-color">
+      <section class="template--marine__section container--profile">
+        <%= render partial: "marine/sections/coverage_map" %>
+      </section>
+    </div>
 
-    <section>
-      <%= render partial: "marine/sections/coverage_map" %>
-    </section>
-
-    <section>
+    <section class="template--marine__section container--profile">
       <%= render partial: "marine/sections/national_waters" %>
     </section>
 
-    <section>
+    <div class="section--block-color">
+      <section class="template--marine__section container--profile">
+        <%= render partial: "marine/sections/size_distribution" %>
+      </section>
+    </div>
+
+    <section class="template--marine__section container--profile">
       <%= render partial: "marine/sections/ecoregions" %>
     </section>
+    
+    <div class="section--block-color">
+      <section class="template--marine__section container--profile">
+        <%= render partial: "marine/sections/growth" %>
+      </section>
+    </div>
 
-    <section>
-      <%= render partial: "marine/sections/growth" %>
-    </section>
-
-    <section>
+    <section class="template--marine__section container--profile">
       <%= render partial: "marine/sections/target" %>
     </section>
     
