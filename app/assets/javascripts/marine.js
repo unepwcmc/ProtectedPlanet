@@ -1,12 +1,13 @@
 //= require vue
 //= require d3
-//= require charts/Sunburst
-
-console.log('marine')
+//= require vue/charts/Sunburst
+//= require vue/test/Incrementor
 
 new Vue({
-  el: '#sunburst',
+  el: '.v-marine',
   components: {
-    'sunburst': VComponents['charts/Sunburst']
+    'sunburst': VComponents['charts/Sunburst'],
+    'incrementor': VComponents['vue/test/Incrementor']
   }
 })
+

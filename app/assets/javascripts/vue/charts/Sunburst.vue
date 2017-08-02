@@ -81,7 +81,6 @@
 
     mounted: function () {
       console.log(d3)
-      console.log('json', this.json)
       this.renderChart()
     },
 
@@ -90,7 +89,7 @@
         // size variables
         
         var totalItems = this.json.children.length
-        var color = d3.scaleSequential(d3.interpolateCool).domain([0, totalItems])
+        var color = d3.scaleSequential(d3.interpolate('#efefef', '#787878')).domain([0, totalItems])
         var data = d3.hierarchy(this.json).sum(function (d) { return d.size })
 
         // functions
@@ -143,7 +142,7 @@
         return d3.arc()
           .startAngle(function (d) { return d.x0 })
           .endAngle(function (d) { return d.x1 })
-          .innerRadius(function (d) { return Math.sqrt(d.y0) })
+          .innerRadius(function (d) { return Math.sqrt(d.y0) * 3/4 })
           .outerRadius(function (d) { return Math.sqrt(d.y1) })
       },
 
@@ -162,20 +161,23 @@
         sequenceArray.shift() // remove root node from the array
 
         // fade all the segments
-        d3.selectAll('path').style('opacity', 0.3)
+        //d3.selectAll('path').style('opacity', 0.3)
 
         // highlight only those that are an ancestor of the current segment.
         this.chart.selectAll('path')
           .filter(function (node) {
             return (sequenceArray.indexOf(node) >= 0)
           })
-          .style('opacity', 1)
+          .style('fill', '#A1D8DE')
 
         this.isActive = true
       },
 
       mouseLeave: function () {
-        this.chart.selectAll('path').style('opacity', 1)
+        var totalItems = this.json.children.length
+        var color = d3.scaleSequential(d3.interpolate('#efefef', '#898989')).domain([0, totalItems])
+        //this.chart.selectAll('path').style('opacity', 1)
+        this.chart.selectAll('path').style('fill', function (d, i) { return color(i) })
         this.isActive = false
       }
     }

@@ -1,5 +1,36 @@
-hello
+<div class="template--marine">
+  <header>
+    <h1><span>Explore the Worlds</span>Marine Protected Areas</h1>
+    <p>
+      Lorem ipsum
+    </p>
+  </header>
 
-<div id="sunburst">
-  <sunburst></sunburst>
+  <div class="v-marine container--profile container--push-bottom">
+
+    <section>
+      <%= render partial: "marine/sections/coverage_map" %>
+    </section>
+
+    <section>
+      <%= render partial: "marine/sections/national_waters" %>
+    </section>
+
+    <section>
+      <%= render partial: "marine/sections/ecoregions" %>
+    </section>
+
+    <section>
+      <%= render partial: "marine/sections/growth" %>
+    </section>
+
+    <section>
+      <%= render partial: "marine/sections/target" %>
+    </section>
+    
+    <footer>
+      <%#= render partial: "marine/sections/footer" %>
+    </footer>
+
+  </div>
 </div>
