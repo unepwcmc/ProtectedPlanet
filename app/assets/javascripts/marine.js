@@ -2,14 +2,17 @@
 //= require d3
 //= require vue/charts/Sunburst
 //= require vue/charts/Treemap
-//= require vue/test/Incrementor
+//= require vue/components/Incrementor
+//= require vue/components/InteractiveTreemap
+
 
 new Vue({
   el: '.v-marine',
   components: {
     'sunburst': VComponents['vue/charts/Sunburst'],
     'treemap': VComponents['vue/charts/Treemap'],
-    'incrementor': VComponents['vue/test/Incrementor']
+    'increment': VComponents['vue/components/Increment'],
+    'interactive-treemap': VComponents['vue/components/InteractiveTreemap']
   }
 })
 

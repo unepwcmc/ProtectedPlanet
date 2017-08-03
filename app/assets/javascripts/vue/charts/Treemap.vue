@@ -60,13 +60,13 @@
         var data = d3.hierarchy(this.json)
           .eachBefore(function(d) { d.data.id = (d.parent ? d.parent.data.id + "." : "") + d.data.name})
           .sum(function (d) { return d.size })
-          .sort(function(a, b) { return b.height - a.height || b.value - a.value })
+          .sort(function(a, b) { return a.height - b.height || a.value - b.value })
 
         var nodes = treemap(data)
         
         //color scheme
         var totalItems = nodes.count().value
-        var color = d3.scaleLinear().range(['#C2E5E9', '#729099']).domain([1, totalItems])
+        var color = d3.scaleLinear().range(['#729099', '#C2E5E9']).domain([1, totalItems])
         
         //build chart
         var cell = svg.selectAll("g")

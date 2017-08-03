@@ -6,7 +6,7 @@
 
 <script>
   module.exports = {
-    name: 'incrementor',
+    name: 'increment',
 
     props: {
       type: String,
