@@ -27,11 +27,11 @@
       }
     },
 
-    created: function(){
+    created() {
       this.calculateIncrementValue()
     },
 
-    mounted: function() {
+    mounted() {
       this.animate()
     },
 
@@ -39,12 +39,12 @@
       animate: function(){
         var self = this
 
-        window.setInterval(function(){
+        var interval = window.setInterval(function(){
           if(self.number + self.incrementValue < self.total){
             self.increment()
           } else {
             self.number = self.total
-            return
+            clearInterval(interval)
           }
         }, this.config.speedMs)
       },

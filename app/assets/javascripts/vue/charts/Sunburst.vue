@@ -75,17 +75,17 @@
       }
     },
 
-    created: function () {
+    created() {
       this.radius = Math.min(this.width, this.height) / 2
     },
 
-    mounted: function () {
+    mounted() {
       console.log(d3)
       this.renderChart()
     },
 
     methods: {
-      renderChart: function () {
+      renderChart() {
         // size variables
         
         var totalItems = this.json.children.length
@@ -118,7 +118,7 @@
         this.totalSize = path.datum().value
       },
 
-      createSVG: function () {
+      createSVG() {
         var svg = d3.select('.sunburst')
           .append('svg')
           .attr('viewBox', '0 0 ' + this.width + ' ' + this.height)
@@ -130,15 +130,15 @@
         return svg
       },
 
-      createChart: function (svg) {
+      createChart(svg) {
         return this.svg.append('g').attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')')
       },
 
-      partition: function () {
+      partition() {
         return d3.partition().size([2 * Math.PI, this.radius * this.radius])
       },
 
-      arc: function () {
+      arc() {
         return d3.arc()
           .startAngle(function (d) { return d.x0 })
           .endAngle(function (d) { return d.x1 })
@@ -146,7 +146,7 @@
           .outerRadius(function (d) { return Math.sqrt(d.y1) })
       },
 
-      mouseover: function (d) {
+      mouseover(d) {
         var percentage = (100 * d.value / this.totalSize).toPrecision(3)
 
         if (percentage < 0.1) {
@@ -173,7 +173,7 @@
         this.isActive = true
       },
 
-      mouseLeave: function () {
+      mouseLeave() {
         var totalItems = this.json.children.length
         var color = d3.scaleSequential(d3.interpolate('#efefef', '#898989')).domain([0, totalItems])
         //this.chart.selectAll('path').style('opacity', 1)

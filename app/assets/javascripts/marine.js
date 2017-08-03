@@ -6,7 +6,7 @@
 new Vue({
   el: '.v-marine',
   components: {
-    'sunburst': VComponents['charts/Sunburst'],
+    'sunburst': VComponents['vue/charts/Sunburst'],
     'incrementor': VComponents['vue/test/Incrementor']
   }
 })
