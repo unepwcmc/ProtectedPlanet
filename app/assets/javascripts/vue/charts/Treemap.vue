@@ -1,0 +1,118 @@
+<template>
+  <div>
+    <div class="treemap"></div>
+  </div>
+</template>
+
+<script>
+  module.exports = {
+    name: 'treemap',
+
+    data() {
+      return {
+        config: {
+          width: 600,
+          height: 400
+        },
+
+        json: {
+          "name": "protected areas",
+          "children": [
+            {
+              "name": "Ocean",
+              "size": 240,
+            },
+            {
+              "name": "Cook Islands",
+              "size": 100
+            },
+            {
+              "name": "Grenada",
+              "size": 20
+            },
+            {
+              "name": "Indonesia",
+              "size": 80
+            },
+            {
+              "name": "Marshall Islands",
+              "size": 40
+            }
+          ]
+        }
+      }
+    },
+
+    mounted() {
+      this.renderChart()
+    },
+
+    methods: {
+      renderChart: function(){
+        var svg = this.createSVG()
+
+        //data
+        var treemap = d3.treemap()
+          .tile(d3.treemapBinary)
+          .size([this.config.width, this.config.height])
+          .round(true)
+
+        var data = d3.hierarchy(this.json)
+          .eachBefore(function(d) { d.data.id = (d.parent ? d.parent.data.id + "." : "") + d.data.name})
+          .sum(function (d) { return d.size })
+          .sort(function(a, b) { return b.height - a.height || b.value - a.value })
+
+        var nodes = treemap(data)
+        
+        //color scheme
+        var totalItems = nodes.count().value
+        var color = d3.scaleLinear().range(['#C2E5E9', '#729099']).domain([1, totalItems])
+        
+        //build chart
+        var cell = svg.selectAll("g")
+          .data(nodes.descendants())
+          .enter().append("g")
+          .attr("transform", function(d) { return "translate(" + d.x0 + "," + d.y0 + ")" })
+
+        cell.append("rect")
+            .attr("id", function(d) { return d.data.id })
+            .attr("width", function(d) { return d.x1 - d.x0 })
+            .attr("height", function(d) { return d.y1 - d.y0 })
+            .attr("fill", function(d, i) { return color(i) })
+
+        cell.append("clipPath")
+            .attr("id", function(d) { return "clip-" + d.data.id })
+            .append("use")
+            .attr("xlink:href", function(d) { return "#" + d.data.id })
+
+        cell.append("text")
+          .attr("clip-path", function(d) { return "url(#clip-" + d.data.id + ")" })
+          .attr('transform', function(d) { 
+              x = (d.x1 - d.x0)/2
+              y = (d.y1 - d.y0)/2
+              return 'translate(' + x + ',' + y + ')'
+            }
+          )
+          .attr('text-anchor', 'middle')
+          .selectAll("tspan")
+          .data(function(d) { return d.data.name.split(/(?=[A-Z][^A-Z])/g) })
+          .enter().append("tspan")
+          .style('fill', 'white')
+          .style('font-family', 'sans-serif')
+          .text(function(d) { return d })
+      },
+
+      createSVG: function(){
+        var svg = d3.select('.treemap')
+          .append('svg')
+          .attr('viewBox', '0 0 ' + this.config.width + ' ' + this.config.height)
+          .attr('viewport', this.config.width + 'x' + this.config.height)
+          .attr('preserveAspectRatio', 'xMidYMid')
+          .attr('width', '100%')
+          .attr('height', '100%')
+
+        return svg
+      }
+    }
+  }
+</script>

@@ -80,7 +80,6 @@
     },
 
     mounted() {
-      console.log(d3)
       this.renderChart()
     },
 
