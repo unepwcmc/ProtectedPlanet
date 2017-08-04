@@ -1,15 +1,23 @@
 <template>
-  <span class="v-incrementor">
+  <span>
     {{ styledNumber }} 
   </span>
 </template>
 
 <script>
   module.exports = {
-    name: 'increment',
+    name: 'counter',
 
     props: {
-      type: String,
+      config: {
+        type: Object,
+        default: function(){
+          return {
+            speedMs: 30,
+            divisor: 50
+          }
+        }
+      },
       total: { 
         required: true,
         type: Number
@@ -18,21 +26,26 @@
 
     data() {
       return {
-        config: {
-          speedMs: 30,
-          divisor: 50
-        },
         number: 0,
         incrementValue: 0
       }
     },
 
     created() {
+      this.total = this.total
       this.calculateIncrementValue()
     },
 
     mounted() {
       this.animate()
+    },
+
+    watch: {
+      total: function(){
+        this.number = 0
+        this.calculateIncrementValue()
+        this.animate()
+      }
     },
 
     methods: {

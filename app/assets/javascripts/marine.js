@@ -2,7 +2,7 @@
 //= require d3
 //= require vue/charts/Sunburst
 //= require vue/charts/Treemap
-//= require vue/components/Incrementor
+//= require vue/components/Counter
 //= require vue/components/InteractiveTreemap
 
 
@@ -11,7 +11,7 @@ new Vue({
   components: {
     'sunburst': VComponents['vue/charts/Sunburst'],
     'treemap': VComponents['vue/charts/Treemap'],
-    'increment': VComponents['vue/components/Increment'],
+    'counter': VComponents['vue/components/Counter'],
     'interactive-treemap': VComponents['vue/components/InteractiveTreemap']
   }
 })

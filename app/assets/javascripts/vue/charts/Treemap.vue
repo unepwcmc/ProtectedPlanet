@@ -8,38 +8,18 @@
   module.exports = {
     name: 'treemap',
 
+    props: {
+      interactive: Boolean,
+      json: { required: true }
+    },
+
     data() {
       return {
         config: {
           width: 600,
           height: 400
         },
-
-        json: {
-          "name": "protected areas",
-          "children": [
-            {
-              "name": "Ocean",
-              "size": 240,
-            },
-            {
-              "name": "Cook Islands",
-              "size": 100
-            },
-            {
-              "name": "Grenada",
-              "size": 20
-            },
-            {
-              "name": "Indonesia",
-              "size": 80
-            },
-            {
-              "name": "Marshall Islands",
-              "size": 40
-            }
-          ]
-        }
+        totalArea: 0,
       }
     },
 
@@ -56,21 +36,24 @@
           .tile(d3.treemapBinary)
           .size([this.config.width, this.config.height])
           .round(true)
+          .paddingInner(1)
 
         var data = d3.hierarchy(this.json)
           .eachBefore(function(d) { d.data.id = (d.parent ? d.parent.data.id + "." : "") + d.data.name})
           .sum(function (d) { return d.size })
-          .sort(function(a, b) { return a.height - b.height || a.value - b.value })
+          .sort(function(a, b) { return b.height - a.height || b.value - a.value })
+
+        this.totalArea = data.value
 
         var nodes = treemap(data)
-        
+
         //color scheme
         var totalItems = nodes.count().value
-        var color = d3.scaleLinear().range(['#729099', '#C2E5E9']).domain([1, totalItems])
+        var color = d3.scaleLinear().range(['#729099', '#C2E5E9']).domain([0, totalItems - 1])
         
         //build chart
         var cell = svg.selectAll("g")
-          .data(nodes.descendants())
+          .data(nodes.leaves())
           .enter().append("g")
           .attr("transform", function(d) { return "translate(" + d.x0 + "," + d.y0 + ")" })
 
@@ -100,9 +83,16 @@
           .style('fill', 'white')
           .style('font-family', 'sans-serif')
           .text(function(d) { return d })
+
+        if(this.interactive){
+          cell.on('mouseover', (d) => {
+            this.mouseover(d.data.size)
+          })
+            .on('mouseleave', this.mouseleave)
+        }
       },
 
-      createSVG: function(){
+      createSVG(){
         var svg = d3.select('.treemap')
           .append('svg')
           .attr('viewBox', '0 0 ' + this.config.width + ' ' + this.config.height)
@@ -112,6 +102,23 @@
           .attr('height', '100%')
 
         return svg
+      },
+
+      setTotalArea() {
+
+      },
+
+      mouseover(size) {
+        var data = {
+          percent: (size/this.totalArea)*100,
+          km: size
+        }
+
+        this.$emit('mouseover', data)
+      },
+
+      mouseleave() {
+        this.$emit('mouseleave')
       }
     }
   }
