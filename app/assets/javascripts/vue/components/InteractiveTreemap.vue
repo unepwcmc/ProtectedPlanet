@@ -1,14 +1,15 @@
 <template>
   <div class="v-interactive-treemap flex-row-wrap justify-content-end">
-    <div class="flex-2-thirds">
+    <div class="flex-2-thirds v-interactive-treemap__treemap">
       <treemap :json="json" :interactive="true" v-on:mouseover="updatePercent"></treemap>
+      <p class="v-interactive-treemap__instruction">Hover over a country to see percentage and actual coverage</p>
     </div>
 
-    <div class="flex-1-third">
-      <h3 class="header--small">Percent of national waters covered by Protected Area</h3>
+    <div class="flex-1-third counter">
+      <h3 class="header--h3-insights">Percent of national waters covered by Protected Area</h3>
       <p class="text--120"><counter :total="percent" :config="counterConfig"></counter>%</p>
 
-      <h3 class="header--small">km² protected</h3>
+      <h3 class="header--h3-insights">km² protected</h3>
       <p class="text--48"><counter :total="km" :config="counterConfig"></counter>km²</p>
     </div>
   </div>

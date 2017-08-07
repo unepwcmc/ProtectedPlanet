@@ -1,7 +1,5 @@
 <template>
-  <span>
-    {{ styledNumber }} 
-  </span>
+  <span>{{ styledNumber }}</span>
 </template>
 
 <script>
