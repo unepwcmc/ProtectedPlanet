@@ -33,8 +33,8 @@
         percent: 0,
         km: 0,
         counterConfig: {
-          speed: 0,
-          divisor: 0
+          speed: 20,
+          divisor: 8
         },
         json: {
           "name": "ocean areas",

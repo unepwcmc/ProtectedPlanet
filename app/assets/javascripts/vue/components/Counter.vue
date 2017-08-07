@@ -11,7 +11,7 @@
         type: Object,
         default: function(){
           return {
-            speedMs: 30,
+            speed: 30,
             divisor: 50
           }
         }
@@ -25,13 +25,14 @@
     data() {
       return {
         number: 0,
-        incrementValue: 0
+        step: 0,
+        increase: true
       }
     },
 
     created() {
       this.total = this.total
-      this.calculateIncrementValue()
+      this.calculateStep()
     },
 
     mounted() {
@@ -40,8 +41,7 @@
 
     watch: {
       total: function(){
-        this.number = 0
-        this.calculateIncrementValue()
+        this.calculateStep()
         this.animate()
       }
     },
@@ -49,23 +49,42 @@
     methods: {
       animate: function(){
         var self = this
+        
+        this.checkDirection()
 
         var interval = window.setInterval(function(){
-          if(self.number + self.incrementValue < self.total){
-            self.increment()
+
+          if(self.increase && self.number + self.step < self.total){
+              self.increment()
+
+          } else if (!self.increase && self.number - self.step > self.total ){
+              self.decrement()  
+
           } else {
             self.number = self.total
             clearInterval(interval)
           }
-        }, this.config.speedMs)
+        }, this.config.speed)
       },
 
       increment: function(){
-        this.number = this.number + this.incrementValue
+        this.number = this.number + this.step
       },
 
-      calculateIncrementValue: function(){
-        this.incrementValue = this.total / this.config.divisor
+      decrement: function(){
+        this.number = this.number - this.step
+      },
+
+      calculateStep: function(){
+        this.step = Math.abs(this.total - this.number) / this.config.divisor
+      },
+
+      checkDirection: function(){
+        if(this.number < this.total){
+          this.increase = true
+        } else {
+          this.increase = false
+        }
       }
     },
 
