@@ -1,33 +1,17 @@
 <h2 class="header--h2-insights">Protected Areas coverage in 2017</h2>
 
-<!-- <div 
-  id="map-site" 
-  class="map map--hero"
-  data-bound-from="<%#= @protected_area.bounds.first %>"
-  data-bound-to="<%#= @protected_area.bounds.last %>"
-  data-wdpa-ids="<%#= [@protected_area.wdpa_id] %>">
-</div>
+<div class="u-relative">
+  <div
+    id="map-marine"
+    class="map map--main"
+    data-style="marine"
+    data-bound-from="<%= map_bounds['from'] %>"
+    data-bound-to="<%= map_bounds['to'] %>"
+    data-hide-control="true"
+    data-zoom-position="bottomleft">
+  </div>
 
-<div 
-  data-bound-from="<%#= map_bounds['from'] %>" 
-  data-control-position="bottomleft" 
-  data-bound-to="<%#= map_bounds['to'] %>" 
-  class="map map--main js-resizable" 
-  data-mobile-height=40 
-  data-desktop-height=70 
-  id="map">
-</div> -->
-
-<div
-  id="map-marine"
-  class="map map--hero"
-  data-bound-from="<%= map_bounds['from'] %>"
-  data-bound-to="<%= map_bounds['to'] %>"
-  data-control-position="bottomleft">
-</div>
-
-<div class="flex-row justify-content-end">
-  <div class="counter">
+  <div class="t--marine__counter counter">
     <h3 class="header--h3-insights">Number of Marine Protected Areas</h3>
     <p class="text--100"><counter :total="18300"></counter></p>
 
