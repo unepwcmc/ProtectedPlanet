@@ -6,6 +6,7 @@
     </div>
 
     <div class="flex-1-third counter">
+      <h3 class="text--48">{{ country }}</h3>
       <h3 class="header--h3-insights">Percent of national waters covered by Protected Area</h3>
       <p class="text--120"><counter :total="percent" :config="counterConfig"></counter>%</p>
 
@@ -30,6 +31,7 @@
 
     data() {
       return {
+        country: "",
         percent: 0,
         km: 0,
         counterConfig: {
@@ -71,8 +73,13 @@
 
     methods: {
       updatePercent: function(data){
+        this.country = data.country
         this.percent = data.percent
         this.km = data.km
+      },
+
+      updateCountry: function(data){
+        this.country = data
       }
     }
   }  

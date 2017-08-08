@@ -86,7 +86,7 @@
 
         if(this.interactive){
           cell.on('mouseover', (d) => {
-            this.mouseover(d.data.size)
+            this.mouseover(d.data)
           })
             .on('mouseleave', this.mouseleave)
         }
@@ -108,10 +108,11 @@
 
       },
 
-      mouseover(size) {
+      mouseover(data) {
         var data = {
-          percent: (size/this.totalArea)*100,
-          km: size
+          country: data.name,
+          percent: (data.size/this.totalArea)*100,
+          km: data.size
         }
 
         this.$emit('mouseover', data)
