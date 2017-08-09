@@ -23,6 +23,9 @@
       "has_irreplaceability_info": {
         "type": "boolean"
       },
+      "is_green_list": {
+        "type": "boolean"
+      },
       "has_parcc_info": {
         "type": "boolean"
       },
