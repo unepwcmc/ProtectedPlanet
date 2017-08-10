@@ -10,6 +10,7 @@ $(document).ready( ->
   new Vue({
     el: '.v-marine',
     components: {
+      'interactive-multiline': VComponents['vue/charts/InteractiveMultiline'],
       'sunburst': VComponents['vue/charts/Sunburst'],
       'treemap': VComponents['vue/charts/Treemap'],
       'counter': VComponents['vue/components/Counter'],
