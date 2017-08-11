@@ -64,8 +64,13 @@ module SearchHelper
       config['template'] % instance.name
     }
   }
+
   def title_with_filter params
-    main_filter = params['main']
+    main_filter       = params['main']
+    green_list_filter = params['is_green_list']
+
+    return "Protected Areas with Green List status" if green_list_filter == "true" && main_filter.nil?
+
     return if main_filter.nil? || params[main_filter].nil?
 
     titles = Search.configuration['titles']
