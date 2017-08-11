@@ -28,89 +28,100 @@
         chartWidth: 0,
         chartHeight: 0,
         datasetNames: [],
-        data: {
-          "national": [
-            {
-              "year": 2000,
-              "percent": 10,
-              "km": 1234
-            },
-            {
-              "year": 2005,
-              "percent": 12,
-              "km": 12334
-            },
-            {
-              "year": 2010,
-              "percent": 13,
-              "km": 12324
-            },
-            {
-              "year": 2015,
-              "percent": 18,
-              "km": 16234
-            },
-            {
-              "year": 2020,
-              "percent": 26,
-              "km": 12324
-            }
-          ],
-          "other": [
-            {
-              "year": 2000,
-              "percent": 30,
-              "km": 71234
-            },
-            {
-              "year": 2005,
-              "percent": 45,
-              "km": 15234
-            },
-            {
-              "year": 2010,
-              "percent": 55,
-              "km": 12344
-            },
-            {
-              "year": 2015,
-              "percent": 56,
-              "km": 12234
-            },
-            {
-              "year": 2020,
-              "percent": 67,
-              "km": 12534
-            }
-          ],
-          "last": [
-            {
-              "year": 2000,
-              "percent": 100,
-              "km": 16234
-            },
-            {
-              "year": 2005,
-              "percent": 98,
-              "km": 12374
-            },
-            {
-              "year": 2010,
-              "percent": 23,
-              "km": 51234
-            },
-            {
-              "year": 2015,
-              "percent": 8,
-              "km": 14234
-            },
-            {
-              "year": 2020,
-              "percent": 6,
-              "km": 16234
-            }
-          ]
-        }
+        scaleX: '',
+        scaleY: '',
+        data: [
+          {
+            "id": "national",
+            "dataset": [
+              {
+                "year": 2000,
+                "percent": 10,
+                "km": 1234
+              },
+              {
+                "year": 2005,
+                "percent": 12,
+                "km": 12334
+              },
+              {
+                "year": 2010,
+                "percent": 13,
+                "km": 12324
+              },
+              {
+                "year": 2015,
+                "percent": 18,
+                "km": 16234
+              },
+              {
+                "year": 2020,
+                "percent": 26,
+                "km": 12324
+              }
+            ]
+          },
+          {
+            "id": "other",
+            "dataset": [
+              {
+                "year": 2000,
+                "percent": 30,
+                "km": 71234
+              },
+              {
+                "year": 2005,
+                "percent": 45,
+                "km": 15234
+              },
+              {
+                "year": 2010,
+                "percent": 55,
+                "km": 12344
+              },
+              {
+                "year": 2015,
+                "percent": 56,
+                "km": 12234
+              },
+              {
+                "year": 2020,
+                "percent": 67,
+                "km": 12534
+              }
+            ]
+          },
+          {
+            "id": "last",
+            "dataset": [
+              {
+                "year": 2000,
+                "percent": 100,
+                "km": 16234
+              },
+              {
+                "year": 2005,
+                "percent": 98,
+                "km": 12374
+              },
+              {
+                "year": 2010,
+                "percent": 23,
+                "km": 51234
+              },
+              {
+                "year": 2015,
+                "percent": 8,
+                "km": 14234
+              },
+              {
+                "year": 2020,
+                "percent": 6,
+                "km": 16234
+              }
+            ]
+          }
+        ]
       }
     },
 
@@ -124,36 +135,19 @@
       this.createButtons()
       this.renderChart()
 
-      //animate in the first series so that chart is empty
+      // animate in the first series so that chart isn't  empty
       this.draw(this.datasetNames[0])
     },
 
     methods: {
       createButtons: function(){
-        this.datasetNames = Object.keys(this.data)
-      },
-
-      renderChart: function(){
-        this.svg = this.createSVG()
-
-        this.chart = this.svg.append("g")
-          .attr('class', 'chart')
-          .attr("width", this.chartWidth)
-          .attr("height", this.chartHeight)
-          .attr("transform", "translate(" + this.config.margin/2 + "," + this.config.margin/2 + ")")
-
-        //create series and add to the chart
-        var data = this.data
-
-        for (var key in data) {
-          if (data.hasOwnProperty(key)) {
-            this.build(data[key], key)
-          }
+        for(dataset of this.data){
+          this.datasetNames.push(dataset.id)
         }
       },
 
-      build: function(data, name) {
-        // parse the year / time
+      renderChart: function(){
+        var data = this.data
         var parseTime = d3.timeParse("%Y")
 
         // set the ranges
@@ -162,67 +156,102 @@
 
         // define the line
         var line = d3.line()
-          .x(function(d) { return x(d.year) })
+          .x(function(d) { return x(parseTime(d.year)) })
           .y(function(d) { return y(d.percent) })
 
-        // format the data
-        data.forEach(function(d) {
-          d.year = parseTime(d.year)
-          d.percent = +d.percent
-        })
-
         // Scale the range of the data
-        x.domain(d3.extent(data, function(d) { return d.year }))
+        x.domain([
+          d3.min(data, function(c) { 
+            return d3.min(c.dataset, function(d){ return parseTime(d.year) })
+          }),
+          d3.max(data, function(c) { 
+            return d3.max(c.dataset, function(d){ return parseTime(d.year) })
+          })
+        ])
+
         y.domain([0, 100])
 
-        // Add the X Axis
+        // create svg
+        this.svg = this.createSVG()
+
+        // create chart group
+        this.chart = this.svg.append("g")
+          .attr('class', 'chart')
+          .attr("width", this.chartWidth)
+          .attr("height", this.chartHeight)
+          .attr("transform", "translate(" + this.config.margin/2 + "," + this.config.margin/2 + ")")
+
+        // add x axis
         this.chart.append("g")
           .attr('class', 'v-interactive-multiline__axis')
           .attr('transform', 'translate(0,' + this.chartHeight + ')')
           .call(d3.axisBottom(x))
 
-        // Add the Y Axis
+        // add y axis
         this.chart.append("g")
           .attr('class', 'v-interactive-multiline__axis')
           .call(d3.axisLeft(y))
 
-        // Add the line
-        this.chart.append("path")
-          .data([data])
+        this.scaleX = x
+        this.scaleY = y
+
+        // add data path
+        var dataset = this.chart
+          .selectAll('.dataset')
+          .data(data)
+          .enter().append("path")
           .attr("class", "v-interactive-multiline__line")
-          .attr("data-name", name)
-          .attr("d", line)
+          .attr("data-name", function(d) { return d.id })
+          .attr("d", function(d) { return line(d.dataset) })
           .attr('stroke', 'black')
           .attr('fill', 'none')
 
-        var datapoints = this.chart.append('g')
-          .attr('class', 'v-interactive-multiline__datapoints')
-          .attr('data-datapoints', name)
-          .selectAll('circle')
+        // add a group for each set of datapoints
+        var datapointWrappers = this.chart
+          .selectAll('.datapoint-wrappers')
           .data(data)
           .enter()
           .append('g')
-          .attr('class', 'another-one')
+          .attr('class', 'v-interactive-multiline__datapoints')
+          .attr('data-datapoints', function(d) { return d.id })
 
+        // add a group for each data point
+        var datapoints = datapointWrappers.selectAll('.datapoints')
+          .data(function(d){ return d.dataset })
+          .enter()
+          .append('g')
+          .attr('class', 'datapoint-group')
+
+        // add the tooltip
         datapoints.append('text')
-          .attr('data-tooltip', function(d) { return name + x(d.year) })
+          .text(function(d){ return d.km })
+          .attr('data-tooltip', function(d) { 
+            return d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
+          })
           .attr('class', 'v-interactive-multiline__tooltip')
-          .attr('transform', function(d) { return 'translate(' + x(d.year) + ', ' + (y(d.percent) - 20) + ')'})
-          .text(function(d) { return d.km })
+          .attr('transform', (d) => 
+            'translate(' + x(parseTime(d.year)) + ', ' + (y(d.percent) - 20) + ')')
 
+        // add the circle datapoint
         datapoints.append('circle')
-          .attr('cx', function(d) { return x(d.year) })
-          .attr('cy', function(d) { return y(d.percent) })
+          .attr('cx', (d) => this.scaleX(parseTime(d.year)))
+          .attr('cy', (d) => this.scaleY(d.percent))
           .attr('r', 8)
           .attr('class', 'v-interactive-multiline__datapoint')
-          .on('mouseenter', function(d){
-            $('[data-tooltip="' + name + x(d.year) + '"]')
+          .on('mouseenter', function(d) {
+            var id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
+
+            $('[data-tooltip="' + id + '"]')
               .addClass('v-interactive-multiline__tooltip-active')
-          })
-          .on('mouseleave', function(d){
-            $('[data-tooltip="' + name + x(d.year) + '"]')
+            }
+          )
+          .on('mouseleave', function(d) {
+            var id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
+
+            $('[data-tooltip="' + id + '"]')
               .removeClass('v-interactive-multiline__tooltip-active')
-          })
+            }
+          )
       },
 
       createSVG: function(){
