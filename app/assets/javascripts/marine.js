@@ -7,6 +7,8 @@
 //= require vue/components/horizontal_bars/HorizontalBar
 //= require vue/components/horizontal_bars/HorizontalBars
 //= require vue/components/InteractiveTreemap
+//= require vue/components/rectangles/Rectangle
+//= require vue/components/rectangles/Rectangles
 //= require base
 //= require modules/marine/base
 //= require modules/maps/base

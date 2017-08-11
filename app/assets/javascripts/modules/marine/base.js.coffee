@@ -14,9 +14,9 @@ $(document).ready( ->
       'sunburst': VComponents['vue/charts/Sunburst'],
       'treemap': VComponents['vue/charts/Treemap'],
       'counter': VComponents['vue/components/Counter'],
-      'horizontal-bar': VComponents['vue/components/horizontal_bars/HorizontalBar'],
       'horizontal-bars': VComponents['vue/components/horizontal_bars/HorizontalBars'],
       'interactive-treemap': VComponents['vue/components/InteractiveTreemap']
+      'rectangles': VComponents['vue/components/rectangles/Rectangles']
     }
   })
 )
