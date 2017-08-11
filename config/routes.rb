@@ -55,4 +55,5 @@ Rails.application.routes.draw do
   comfy_route :cms, path: '/c', sitemap: false
 
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
+  get '/green_list/:id', to: 'green_list#show', as: 'green_list'
 end
