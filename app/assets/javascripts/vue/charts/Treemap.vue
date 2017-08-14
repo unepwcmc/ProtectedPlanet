@@ -25,6 +25,10 @@
 
     mounted() {
       this.renderChart()
+
+      //trigger mouse enter on the first cell so that the info panel is populated
+      var firstCountry = '#' + (this.json.children[0].id).replace(/\s|\./g, '-')
+      d3.select(firstCountry).dispatch('mouseenter')
     },
 
     methods: {
@@ -40,7 +44,7 @@
 
         var data = d3.hierarchy(this.json)
           .eachBefore(function(d) { d.data.id = (d.parent ? d.parent.data.id + "." : "") + d.data.name})
-          .sum(function (d) { return d.size })
+          .sum(function (d) { return d.totalMarineArea })
           .sort(function(a, b) { return b.height - a.height || b.value - a.value })
 
         this.totalArea = data.value
@@ -55,10 +59,10 @@
         var cell = svg.selectAll("g")
           .data(nodes.leaves())
           .enter().append("g")
+          .attr("id", function(d) { return (d.data.id).replace(/\s|\./g, '-') })
           .attr("transform", function(d) { return "translate(" + d.x0 + "," + d.y0 + ")" })
 
         cell.append("rect")
-            .attr("id", function(d) { return d.data.id })
             .attr("width", function(d) { return d.x1 - d.x0 })
             .attr("height", function(d) { return d.y1 - d.y0 })
             .attr("fill", function(d, i) { return color(i) })
@@ -85,8 +89,8 @@
           .text(function(d) { return d })
 
         if(this.interactive){
-          cell.on('mouseover', (d) => {
-            this.mouseover(d.data)
+          cell.on('mouseenter', (d) => {
+            this.mouseenter(d.data)
           })
             .on('mouseleave', this.mouseleave)
         }
@@ -104,22 +108,20 @@
         return svg
       },
 
-      setTotalArea() {
+      mouseenter(data) {
+        console.log('mouseenter')
 
-      },
-
-      mouseover(data) {
         var data = {
           country: data.name,
-          percent: (data.size/this.totalArea)*100,
-          km: data.size
+          totalMarineArea: data.totalMarineArea,
+          totalOverseasTerritories: data.totalOverseasTerritories,
+          national: data.national,
+          nationalPercentage: data.nationalPercentage,
+          overseas: data.overseas,
+          overseasPercentage: data.overseasPercentage
         }
 
-        this.$emit('mouseover', data)
-      },
-
-      mouseleave() {
-        this.$emit('mouseleave')
+        this.$emit('mouseenter', data)
       }
     }
   }

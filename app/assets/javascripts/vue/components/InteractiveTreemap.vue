@@ -1,17 +1,36 @@
 <template>
   <div class="v-interactive-treemap flex-row-wrap justify-content-end">
-    <div class="flex-2-thirds v-interactive-treemap__treemap">
-      <treemap :json="json" :interactive="true" v-on:mouseover="updatePercent"></treemap>
-      <p class="v-interactive-treemap__instruction">Hover over a country to see percentage and actual coverage</p>
-    </div>
 
     <div class="flex-1-third counter">
-      <h3 class="text--48">{{ country }}</h3>
-      <h3 class="header--h3-insights">Percent of national waters covered by Protected Area</h3>
-      <p class="text--120"><counter :total="percent" :config="counterConfig"></counter>%</p>
+      <div class="v-interactive-treemap__info u-bg--grey">
+        <p class="v-interactive-treemap__title">{{ country }}</p>
+        <p>{{ country }} has {{ styledNumber(totalMarineArea) }}km² of national waters, and {{ totalOverseasTerritories }} overseas territories</p>
 
-      <h3 class="header--h3-insights">km² protected</h3>
-      <p class="text--48"><counter :total="km" :config="counterConfig"></counter>km²</p>
+        <p class="v-interactive-treemap__stat">
+          <span class="v-interactive-treemap__percent">
+            <counter :total="nationalPercentage" :config="counterConfig"></counter>% 
+          </span>
+          <span class="v-interactive-treemap__km">
+            ({{ styledNumber(national) }}km²)
+          </span>
+          of their national waters are protected
+        </p>
+
+        <p class="v-interactive-treemap__stat">
+          <span class="v-interactive-treemap__percent">
+            <counter :total="overseasPercentage" :config="counterConfig"></counter>%
+          </span>
+          <span class="v-interactive-treemap__km">
+           ({{ styledNumber(overseas) }}km²)
+          </span>
+          of their overseas territories waters are protected
+        </p>
+      </div>
+    </div>
+
+    <div class="flex-2-thirds v-interactive-treemap__treemap">
+      <treemap :json="data" :interactive="true" v-on:mouseenter="updatePercent"></treemap>
+      <p class="v-interactive-treemap__instruction">Hover over a country to see percentage and actual coverage</p>
     </div>
   </div>
 </template>
@@ -26,60 +45,85 @@
     },
 
     props: {
-      test: String
+      //json: {}
     },
 
     data() {
       return {
         country: "",
-        percent: 0,
-        km: 0,
+        // percent: 0,
+        // km: 0,
+        totalMarineArea: 0,
+        totalOverseasTerritories: 0,
+        national: 0,
+        nationalPercentage: 0,
+        overseas: 0,
+        overseasPercentage: 0,
         counterConfig: {
           speed: 20,
           divisor: 8
         },
-        json: {
+        data: {
           "name": "ocean areas",
           "children": [
             {
-              "name": "",
-              "size": 10
+              "name": "Australia",
+              "totalMarineArea": 7432133,
+              "totalOverseasTerritories": 9,
+              "national": 3021418,
+              "nationalPercentage": 40.65,
+              "overseas": 4410704,
+              "overseasPercentage": 28.72
             },
             {
-              "name": "protected areas",
-              "children": [
-                {
-                  "name": "Cook Islands",
-                  "size": 1
-                },
-                {
-                  "name": "Grenada",
-                  "size": 3
-                },
-                {
-                  "name": "Indonesia",
-                  "size": 1
-                },
-                {
-                  "name": "Marshall Islands",
-                  "size": 5
-                }
-              ]
+              "name": "United Kingdom",
+              "totalMarineArea": 7654321,
+              "totalOverseasTerritories": 5,
+              "national": 12340,
+              "nationalPercentage": 12345,
+              "overseas": 9234,
+              "overseasPercentage": 5432
+            },
+            {
+              "name": "USA",
+              "totalMarineArea": 6543211,
+              "totalOverseasTerritories": 1,
+              "national": 12342,
+              "nationalPercentage": 12,
+              "overseas": 12344,
+              "overseasPercentage": 50
+            },
+            {
+              "name": "France",
+              "totalMarineArea": 5432111,
+              "totalOverseasTerritories": 1,
+              "national": 1232,
+              "nationalPercentage": 21,
+              "overseas": 1123123,
+              "overseasPercentage": 30
             }
           ]
         }
       }
     },
 
+    created () {
+      //this.data = this.json
+    },
+
     methods: {
       updatePercent: function(data){
         this.country = data.country
-        this.percent = data.percent
-        this.km = data.km
+        this.totalMarineArea = data.totalMarineArea
+        this.totalOverseasTerritories = data.totalOverseasTerritories
+        this.national = data.national
+        this.nationalPercentage = data.nationalPercentage
+        this.overseas = data.overseas
+        this.overseasPercentage = data.overseasPercentage
       },
 
-      updateCountry: function(data){
-        this.country = data
+      styledNumber: function(number){
+        return (Math.ceil(number * 10)/10).toLocaleString()
       }
     }
   }  
