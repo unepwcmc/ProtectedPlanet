@@ -111,12 +111,12 @@
               },
               {
                 "year": 2015,
-                "percent": 8,
+                "percent": 18,
                 "km": 14234
               },
               {
                 "year": 2020,
-                "percent": 6,
+                "percent": 16,
                 "km": 16234
               }
             ]
@@ -175,22 +175,38 @@
         this.svg = this.createSVG()
 
         // create chart group
-        this.chart = this.svg.append("g")
+        this.chart = this.svg.append('g')
           .attr('class', 'chart')
-          .attr("width", this.chartWidth)
-          .attr("height", this.chartHeight)
-          .attr("transform", "translate(" + this.config.margin/2 + "," + this.config.margin/2 + ")")
+          .attr('width', this.chartWidth)
+          .attr('height', this.chartHeight)
+          .attr('transform', 'translate(' + this.config.margin/2 + ',' + this.config.margin/2 + ')')
+
+        // add y gridlines
+        this.chart.append('g')
+          .attr('class', 'v-interactive-multiline__gridlines')
+          .call(d3.axisLeft(y).tickSize(-this.chartWidth, 0, 0).tickFormat(''))
 
         // add x axis
-        this.chart.append("g")
+        this.chart.append('g')
           .attr('class', 'v-interactive-multiline__axis')
           .attr('transform', 'translate(0,' + this.chartHeight + ')')
-          .call(d3.axisBottom(x))
+          .call(d3.axisBottom(x).ticks(5))
 
         // add y axis
-        this.chart.append("g")
+        this.chart.append('g')
           .attr('class', 'v-interactive-multiline__axis')
-          .call(d3.axisLeft(y))
+          .call(d3.axisLeft(y).tickFormat(function(d){ return d + '%'}))
+
+        //add target line
+        this.chart.append('g')
+        .attr('class', 'v-interactive-multiline__target')
+          .attr('transform', 'translate(0,' + this.chartHeight + ')')
+          .call(
+            d3.axisBottom(x)
+              .tickSize(-this.chartHeight, 0, 0)
+              .tickFormat('Projected coverage')
+              .tickValues([parseTime(2017)])
+          )
 
         this.scaleX = x
         this.scaleY = y
@@ -199,10 +215,10 @@
         var dataset = this.chart
           .selectAll('.dataset')
           .data(data)
-          .enter().append("path")
-          .attr("class", "v-interactive-multiline__line")
-          .attr("data-name", function(d) { return d.id })
-          .attr("d", function(d) { return line(d.dataset) })
+          .enter().append('path')
+          .attr('class', 'v-interactive-multiline__line')
+          .attr('data-name', function(d) { return d.id })
+          .attr('d', function(d) { return line(d.dataset) })
           .attr('stroke', 'black')
           .attr('fill', 'none')
 
