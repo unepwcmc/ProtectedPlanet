@@ -218,7 +218,6 @@
           .call(
             d3.axisBottom(x)
               .tickSize(-this.chartHeight, 0, 0)
-              .tickFormat('Projected coverage')
               .tickValues([parseTime(2017)])
           )
 
@@ -298,7 +297,6 @@
 
       draw: function(name){
         this.selectedTab = name
-        console.log(name)
 
         var lineClass = 'v-interactive-multiline__line-active'
         var datapointClass = 'v-interactive-multiline__datapoints-active'
