@@ -1,6 +1,7 @@
 //= require vue
 //= require d3
-//= require vue/charts/InteractiveMultiline
+//= require vue/charts/interactive_multiline/TabTitle
+//= require vue/charts/interactive_multiline/InteractiveMultiline
 //= require vue/charts/Sunburst
 //= require vue/charts/Treemap
 //= require vue/components/Counter

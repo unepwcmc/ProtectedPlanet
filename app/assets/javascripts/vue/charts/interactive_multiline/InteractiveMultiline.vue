@@ -1,8 +1,17 @@
 <template>
   <div class="v-interactive-multiline">
-    <div class="flex-row justify-content-center">
-      <button class="v-interactive-multiline__button" v-for="name in datasetNames" @click="draw(name)">{{ name }}</button>
+    <div class="v-interactive-multiline__tabs">
+
+      <tab-title v-for="name, key in datasetNames" 
+        :key="key"
+        :name="name"
+        :selected="selectedTab"
+        class="v-interactive-multiline__tab-title" 
+        v-on:tabClicked="draw(name)"
+      ></tab-title>
+
     </div>
+
     <div class="d3-svg v-interactive-multiline__chart"></div>
 
   </div>
@@ -11,6 +20,10 @@
 <script>
   module.exports = {
     name: 'interactive-multiline',
+
+    components: {
+      'tab-title': VComponents['vue/charts/interactive_multiline/TabTitle']
+    },
 
     props: {
       // json: { required: true }
@@ -30,6 +43,7 @@
         datasetNames: [],
         scaleX: '',
         scaleY: '',
+        selectedTab: '',
         data: [
           {
             "id": "national",
@@ -283,6 +297,9 @@
       },
 
       draw: function(name){
+        this.selectedTab = name
+        console.log(name)
+
         var lineClass = 'v-interactive-multiline__line-active'
         var datapointClass = 'v-interactive-multiline__datapoints-active'
 

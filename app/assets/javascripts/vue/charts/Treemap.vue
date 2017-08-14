@@ -27,7 +27,6 @@
       this.renderChart()
 
       //trigger mouse enter on the first cell so that the info panel is populated
-      console.log(this.orderedData)
       var firstCountry = '#' + (this.orderedData.children[0].data.id).replace(/\s|\./g, '-')
       d3.select(firstCountry).dispatch('mouseenter')
     },
