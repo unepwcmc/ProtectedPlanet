@@ -19,7 +19,7 @@
           width: 600,
           height: 400
         },
-        totalArea: 0,
+        orderedData: 0,
       }
     },
 
@@ -27,7 +27,8 @@
       this.renderChart()
 
       //trigger mouse enter on the first cell so that the info panel is populated
-      var firstCountry = '#' + (this.json.children[0].id).replace(/\s|\./g, '-')
+      console.log(this.orderedData)
+      var firstCountry = '#' + (this.orderedData.children[0].data.id).replace(/\s|\./g, '-')
       d3.select(firstCountry).dispatch('mouseenter')
     },
 
@@ -47,7 +48,7 @@
           .sum(function (d) { return d.totalMarineArea })
           .sort(function(a, b) { return b.height - a.height || b.value - a.value })
 
-        this.totalArea = data.value
+        this.orderedData = data
 
         var nodes = treemap(data)
 
@@ -56,24 +57,25 @@
         var color = d3.scaleLinear().range(['#729099', '#C2E5E9']).domain([0, totalItems - 1])
         
         //build chart
-        var cell = svg.selectAll("g")
+        var cell = svg.selectAll('g')
           .data(nodes.leaves())
-          .enter().append("g")
-          .attr("id", function(d) { return (d.data.id).replace(/\s|\./g, '-') })
-          .attr("transform", function(d) { return "translate(" + d.x0 + "," + d.y0 + ")" })
+          .enter().append('g')
+          .attr('id', function(d) { return (d.data.id).replace(/\s|\./g, '-') })
+          .attr('class', 'd3-treemap-cell')
+          .attr('transform', function(d) { return 'translate(' + d.x0 + ',' + d.y0 + ')' })
 
-        cell.append("rect")
-            .attr("width", function(d) { return d.x1 - d.x0 })
-            .attr("height", function(d) { return d.y1 - d.y0 })
-            .attr("fill", function(d, i) { return color(i) })
+        cell.append('rect')
+            .attr('width', function(d) { return d.x1 - d.x0 })
+            .attr('height', function(d) { return d.y1 - d.y0 })
+            .attr('fill', function(d, i) { return color(i) })
 
-        cell.append("clipPath")
-            .attr("id", function(d) { return "clip-" + d.data.id })
-            .append("use")
-            .attr("xlink:href", function(d) { return "#" + d.data.id })
+        cell.append('clipPath')
+            .attr('id', function(d) { return 'clip-' + d.data.id })
+            .append('use')
+            .attr('xlink:href', function(d) { return '#' + d.data.id })
 
-        cell.append("text")
-          .attr("clip-path", function(d) { return "url(#clip-" + d.data.id + ")" })
+        cell.append('text')
+          .attr('clip-path', function(d) { return 'url(#clip-' + d.data.id + ')' })
           .attr('transform', function(d) { 
               x = (d.x1 - d.x0)/2
               y = (d.y1 - d.y0)/2
@@ -81,9 +83,9 @@
             }
           )
           .attr('text-anchor', 'middle')
-          .selectAll("tspan")
+          .selectAll('tspan')
           .data(function(d) { return d.data.name.split(/(?=[A-Z][^A-Z])/g) })
-          .enter().append("tspan")
+          .enter().append('tspan')
           .style('fill', 'white')
           .style('font-family', 'sans-serif')
           .text(function(d) { return d })
@@ -109,7 +111,10 @@
       },
 
       mouseenter(data) {
-        console.log('mouseenter')
+        var activeClass = 'v-interactive-treemap__cell-active'
+
+        $('.d3-treemap-cell').removeClass(activeClass)
+        $('#' + (data.id).replace(/\s|\./g, '-')).addClass(activeClass)
 
         var data = {
           country: data.name,
