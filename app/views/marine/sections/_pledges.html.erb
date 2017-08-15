@@ -1,0 +1,41 @@
+<h2 class="header--h2-insights">From pledges to designations</h2>
+
+<p class="t--marine__section__introduction">
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu augue vestibulum, egestas ligula vel, fringilla quam. Mauris tellus urna, tempor vulputate leo sed, tristique ultrices diam. Proin mollis justo tortor, nec finibus turpis molestie blandit. Mauris a sollicitudin risus, a accumsan tortor. Mauris vestibulum urna ut felis volutpat tempor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean sem ex, commodo ut cursus eget, aliquam vel dui. Sed posuere mauris tincidunt dolor vulputate, non suscipit massa egestas. Phasellus posuere, dui nec feugiat aliquam, libero dui cursus metus, sed elementum sapien tellus at ligula. Vestibulum ac convallis nibh. Ut euismod aliquet odio, sit amet iaculis est lobortis nec. Maecenas auctor velit vel iaculis eleifend. 
+</p>
+
+<div class="table--grey">
+  <div class="table--grey__headers">
+
+    <% 
+      # NOTE
+      # If you update the table header names
+      # make sure you update the :before content 
+      # for the table cells in table.scss 
+    %>
+
+    <div class="table--grey__header-cell">PA name</div>
+    <div class="table--grey__header-cell">Country</div>
+    <div class="table--grey__header-cell">Size</div>
+    <div class="table--grey__header-cell">Date of designation</div>
+  </div>
+  
+  <div>
+    <% @designations.each do |designation| %>
+      <div class="table--grey__row">
+        <div class="table--grey__cell">
+          <%= designation[:name] %>
+        </div>
+        <div class="table--grey__cell">
+          <%= designation[:country] %>
+        </div>
+        <div class="table--grey__cell">
+          <%= designation[:size] %>
+        </div>
+        <div class="table--grey__cell">
+          <%= designation[:date] %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</table>
