@@ -16,8 +16,8 @@
     data() {
       return {
         config: {
-          width: 600,
-          height: 400
+          width: 700,
+          height: 550
         },
         orderedData: 0,
       }
