@@ -4,106 +4,49 @@
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu augue vestibulum, egestas ligula vel, fringilla quam. Mauris tellus urna, tempor vulputate leo sed, tristique ultrices diam. Proin mollis justo tortor, nec finibus turpis molestie blandit. Mauris a sollicitudin risus, a accumsan tortor. Mauris vestibulum urna ut felis volutpat tempor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean sem ex, commodo ut cursus eget, aliquam vel dui. Sed posuere mauris tincidunt dolor vulputate, non suscipit massa egestas. Phasellus posuere, dui nec feugiat aliquam, libero dui cursus metus, sed elementum sapien tellus at ligula. Vestibulum ac convallis nibh. Ut euismod aliquet odio, sit amet iaculis est lobortis nec. Maecenas auctor velit vel iaculis eleifend. 
 </p>
 
-<div class="u-text-sans u-bg--grey">
+<div class="flex-row-wrap u-text-sans">
 
-  <div class="flex-row-wrap">
+  <div class="flex-1-half flex-column-mobile flex-column-gap--right">
+    <div class="infographic u-bg--grey">
 
-    <div class="flex-2-fiths flex-column-mobile infographic--left">
-      <h3 class="header--h3-insights">National waters</h3>
-      <p class="text--standard">National waters or territorial waters, are defined by the 1982 United Nations Convention on the Law of the Sea, as a belt of coastal waters extending at most 12 nautical miles (22.2 km; 13.8 mi) from the baseline (usually the mean low-water mark) of a coastal state.</p>
-    </div>
+      <h3 class="infographic__header">National waters</h3>
+      <p class="text--standard infographic__intro">National waters or territorial waters, are defined by the 1982 United Nations Convention on the Law of the Sea, as a belt of coastal waters extending at most 12 nautical miles (22.2 km; 13.8 mi) from the baseline (usually the mean low-water mark) of a coastal state.</p>
 
-    <div class="flex-3-fiths flex-column-mobile infographic--right">
-      <h3 class="header--h3-insights">High Seas</h3>
-      <p class="text--standard">Marine Areas Beyond National Jurisdiction (ABNJ), commonly called the high seas, are those areas of ocean for which no one nation has sole responsibility for management. Learn more about the high seas here: https://www.thegef.org/topics/areas-beyond-national-jurisdiction</p>
-    </div>
-  </div>
-  
-  <div class="flex-row-wrap">
-    <div class="flex-2-fiths flex-column-mobile infographic--left">
       <h4>National Waters as a percentage of global oceans</h4>
-      <span class="text--100"><counter :total="39"></counter>%</span>
-    </div>
+      <span class="text--100 marine-4"><counter :total="<%= @distributions[:nationalWaters] %>"></counter>%</span>
 
-    <div class="flex-3-fiths flex-column-mobile infographic--right">
-      <h4>High Seas as a percentage of global oceans</h4>
-      <span class="text--100"><counter :total=61></counter>%</span>
-    </div>
-  </div>
-
-  <div class="flex-row-wrap">
-    <div class="flex-2-fiths flex-column-mobile infographic--left">
-      <div class="infographic__bar infographic__bar--left">
-        
+      <div class="infographic__bar infographic__bar">
+        <span class="infographic__bar-percentage infographic__bar-coverage" style="width: <%= @distributions[:nationalWaters] %>%"></span>
+        <span class="infographic__bar-percentage infographic__bar-pa" style="width: <%= @distributions[:nationalWatersPa] %>%"></span>
       </div>
-    </div>
 
-    <div class="flex-3-fiths flex-column-mobile infographic--right">
-      <div class="infographic__bar infographic__bar--right">
-        <span class="infographic__bar-protected--left"></span>
-      </div>
-    </div>
-  </div>
-
-  <div class="flex-row-wrap">
-    <div class="flex-2-fiths flex-column-mobile infographic--left">
       <h4>Protected Area coverage of national waters</h4>
-      <span class="text--100 u-marine-accent-color"><counter :total="15.9"></counter>%</span>
-    </div>
+      <span class="text--100 u-marine-accent-color infographic__pa u-word-break"><counter :total="<%= @distributions[:nationalWatersPa] %>"></counter>%</span>
 
-    <div class="flex-3-fiths flex-column-mobile infographic--right">
-      <h4>Protected Area coverage of high seas</h4>
-      <span class="text--100 u-marine-accent-color"><counter :total="0.4"></counter>%</span>
+      <h4>Total protected km² coverage</h4>
+      <span class="text--48 u-marine-accent-color u-word-break"><counter :total="<%= @distributions[:nationalWatersKm] %>"></counter>km²</span>
     </div>
   </div>
-  
-  <div class="flex-row-wrap">
-    <div class="flex-2-fiths flex-column-mobile infographic--left">
+
+  <div class="flex-1-half flex-column-mobile flex-column-gap--left">
+    <div class="infographic u-bg--grey u-text-right">
+
+      <h3 class="infographic__header">High Seas</h3>
+      <p class="text--standard infographic__intro">Marine Areas Beyond National Jurisdiction (ABNJ), commonly called the high seas, are those areas of ocean for which no one nation has sole responsibility for management. Learn more about the high seas <%= link_to 'here', 'https://www.thegef.org/topics/areas-beyond-national-jurisdiction' %></p>
+
+      <h4>High Seas as a percentage of global oceans</h4>
+      <span class="text--100 marine-4"><counter :total="<%= @distributions[:highSeas] %>"></counter>%</span>
+
+      <div class="infographic__bar infographic__bar">
+        <span class="infographic__bar-percentage infographic__bar-coverage" style="width: <%= @distributions[:highSeas] %>%"></span>
+        <span class="infographic__bar-percentage infographic__bar-pa" style="width: <%= @distributions[:highSeasPa] %>%"></span>
+      </div>
+
+      <h4>Protected Area coverage of high seas</h4>
+      <span class="text--100 u-marine-accent-color infographic__pa u-word-break"><counter :total="<%= @distributions[:highSeasPa] %>"></counter>%</span>
+
       <h4>Total protected km² coverage</h4>
-      <span class="text--48 u-marine-accent-color"><counter :total="10106820"></counter>km²</span>
-    </div>
-    
-    <div class="flex-3-fiths flex-column-mobile infographic--right">
-      <h4>Total protected km² coverage</h4>
-      <span class="text--48 u-marine-accent-color"><counter :total="500000"></counter>km²</span>
+      <span class="text--48 u-marine-accent-color u-word-break"><counter :total="<%= @distributions[:highSeasKm] %>"></counter>km²</span>
     </div>
   </div>
 </div>
-
-<!-- <div class="flex-row-wrap u-text-sans u-bg--grey">
-
-  <div class="flex-2-fiths flex-column-mobile infographic--left">
-
-    <h3 class="header--h3-insights">National waters</h3>
-    <p class="text--standard">National waters or territorial waters, are defined by the 1982 United Nations Convention on the Law of the Sea, as a belt of coastal waters extending at most 12 nautical miles (22.2 km; 13.8 mi) from the baseline (usually the mean low-water mark) of a coastal state.</p>
-
-    <h4>National Waters as a percentage of global oceans</h4>
-    <span class="text--100"><counter :total="39"></counter>%</span>
-
-    <div class="infographic__bar infographic__bar--left"></div>
-
-    <h4>Protected Area coverage of national waters</h4>
-    <span class="text--100 u-marine-accent-color"><counter :total="15.9"></counter>%</span>
-
-    <h4>Total protected km² coverage</h4>
-    <span class="text--48 u-marine-accent-color"><counter :total="10106820"></counter>km²</span>
-  </div>
-
-  <div class="flex-3-fiths flex-column-mobile t--marine__infographic--right">
-
-    <h3 class="header--h3-insights">High Seas</h3>
-    <p class="text--standard">Marine Areas Beyond National Jurisdiction (ABNJ), commonly called the high seas, are those areas of ocean for which no one nation has sole responsibility for management. Learn more about the high seas here: https://www.thegef.org/topics/areas-beyond-national-jurisdiction</p>
-
-    <h4>High Seas as a percentage of global oceans</h4>
-    <span class="text--100"><counter :total=61></counter>%</span>
-
-    <div class="infographic__bar infographic__bar--right"></div>
-
-    <h4>Protected Area coverage of high seas</h4>
-    <span class="text--100 u-marine-accent-color"><counter :total="0.4"></counter>%</span>
-
-    <h4>Total protected km² coverage</h4>
-    <span class="text--48 u-marine-accent-color"><counter :total="500000"></counter>km²</span>
-  </div>
-
-</div> -->
