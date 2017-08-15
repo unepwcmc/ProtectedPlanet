@@ -10,6 +10,7 @@ $(document).ready( ->
   new Vue({
     el: '.v-marine',
     components: {
+      'horizontal-bar-chart': VComponents['vue/charts/HorizontalBarChart'],
       'interactive-multiline': VComponents['vue/charts/interactive_multiline/InteractiveMultiline'],
       'sunburst': VComponents['vue/charts/Sunburst'],
       'treemap': VComponents['vue/charts/Treemap'],

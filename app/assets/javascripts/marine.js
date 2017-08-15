@@ -1,5 +1,6 @@
 //= require vue
 //= require d3
+//= require vue/charts/HorizontalBarChart
 //= require vue/charts/interactive_multiline/TabTitle
 //= require vue/charts/interactive_multiline/InteractiveMultiline
 //= require vue/charts/Sunburst

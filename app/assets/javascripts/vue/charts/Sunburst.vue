@@ -182,36 +182,3 @@
     }
   }
 </script>
-
-<style lang='scss'>
-  .sunburst {
-    margin: 0 auto;
-    width: 50%;
-
-    position: relative;
-
-    &__svg {
-      
-    }
-
-    &__info {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-
-      transform: translate(-50%, -50%);
-
-      &--active { display: block; }
-    }
-
-      &__percentage{
-        font-size: 30px;
-      }
-
-      &__type {
-        font-size: 30px;
-        text-transform: capitalize;
-      }
-  }
-</style>

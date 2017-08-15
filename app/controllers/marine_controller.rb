@@ -1,6 +1,19 @@
 class MarineController < ApplicationController
   
   def index
+    mostProtectedEcoregions = [
+      {
+        name: "North European Seas",
+        value: 200000
+      },
+      {
+        name: "Warm Temperate Northwest Atlantic",
+        value: 140000
+      }
+    ]
+
+    @mostProtectedEcoregions = mostProtectedEcoregions.to_json
+
     @distributions = {
       nationalWaters: 39,
       nationalWatersPa: 15.9,
