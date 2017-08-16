@@ -14,6 +14,12 @@
       <%= render partial: "marine/sections/distribution" %>
     </section>
 
+    <div class="section--block-color">
+      <section class="t--marine__section container--profile">
+        <%= render partial: "marine/sections/growth" %>
+      </section>
+    </div>
+
     <section class="t--marine__section container--profile">
       <%= render partial: "marine/sections/mpas" %>
     </section>
@@ -38,17 +44,19 @@
     
     <div class="section--block-color">
       <section class="t--marine__section container--profile">
-        <%= render partial: "marine/sections/growth" %>
+        <%= render partial: "marine/sections/target" %>
       </section>
     </div>
 
     <section class="t--marine__section container--profile">
-      <%= render partial: "marine/sections/target" %>
-    </section>
-
-    <section class="t--marine__section container--profile">
       <%= render partial: "marine/sections/pledges" %>
     </section>
+    
+    <div class="section--block-color">
+      <section class="t--marine__section container--profile">
+        <%= render partial: "marine/sections/greenlist" %>
+      </section>
+    </div>
     
     <footer>
       <%#= render partial: "marine/sections/footer" %>
