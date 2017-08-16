@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div class="treemap"></div>
-  </div>
+  <div class="treemap"></div>
 </template>
 
 <script>
@@ -60,7 +58,7 @@
           .data(nodes.leaves())
           .enter().append('g')
           .attr('id', function(d) { return (d.data.id).replace(/\s|\./g, '-') })
-          .attr('class', 'd3-treemap-cell')
+          .attr('class', 'd3-treemap-cell v-interactive-treemap__cell')
           .attr('transform', function(d) { return 'translate(' + d.x0 + ',' + d.y0 + ')' })
 
         cell.append('rect')
@@ -90,16 +88,14 @@
           .text(function(d) { return d })
 
         if(this.interactive){
-          cell.on('mouseenter', (d) => {
-            this.mouseenter(d.data)
-          })
-            .on('mouseleave', this.mouseleave)
+          cell.on('mouseenter touchstart', (d) => { this.mouseenter(d.data) })
         }
       },
 
       createSVG(){
         var svg = d3.select('.treemap')
           .append('svg')
+          .attr('class', 'u-block')
           .attr('viewBox', '0 0 ' + this.config.width + ' ' + this.config.height)
           .attr('viewport', this.config.width + 'x' + this.config.height)
           .attr('preserveAspectRatio', 'xMidYMid')
