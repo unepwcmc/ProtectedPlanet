@@ -56,7 +56,6 @@
         data.sort(function(a, b) { return a.value - b.value; });
 
         // if a max value has been passed through as a prop, use this to create the x axis domain
-        console.log(this.xAxisMax)
         if(this.xAxisMax){
           x.domain([0, this.xAxisMax])
         } else {
@@ -81,7 +80,6 @@
               .tickSize(0)
               .tickPadding(10)
               .tickFormat(function (d) { return d/1000 })
-              // .tickValues(this.config.xaxis)
           )
 
         // add y axis
@@ -144,7 +142,6 @@
           var lineNumber = 0
           var lineHeight = 1.1
           var x = text.attr('x')
-          // var dy = parseFloat(text.attr('dy'))
           var dy = 0
 
           var tspan = text.text(null)
