@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="d3-horizontal-bar-chart"></div>
+    <div :id="svgId" class="d3-horizontal-bar-chart"></div>
   </div>
 </template>
 
@@ -9,7 +9,9 @@
     name: "horizontal-bar-chart",
 
     props: {
-      json: Array
+      id: String,
+      json: Array,
+      xAxisMax: Number
     },
 
     data () {
@@ -18,16 +20,20 @@
           width: 555,
           height: 240,
           marginLeft: 140, 
-          marginBottom: 30
+          marginRight: 20,
+          marginBottom: 30,
+          xaxis: [0, 50000, 100000, 150000, 200000, 250000]
         },
         chartWidth: 0,
         chartHeight: 0,
+        svgId: 'd3-horizontal-bar-chart'
       }
     },
 
     created () {
-      this.chartWidth = this.config.width - this.config.marginLeft
+      this.chartWidth = this.config.width - this.config.marginLeft - this.config.marginRight
       this.chartHeight = this.config.height - this.config.marginBottom
+      this.svgId = 'd3-' + this.id
     },
 
     mounted () {
@@ -38,8 +44,6 @@
       renderChart () {
         var data = this.json
 
-        console.log(data)
-
         var svg = this.createSVG()
 
         var chart = svg.append('g')
@@ -48,17 +52,50 @@
         var x = d3.scaleLinear().range([0, this.chartWidth])
         var y = d3.scaleBand().range([this.chartHeight, 0])
 
-        x.domain([0, d3.max(data, function (d) { return d.value })])
+        // the largest bar should appear at the top
+        data.sort(function(a, b) { return a.value - b.value; });
+
+        // if a max value has been passed through as a prop, use this to create the x axis domain
+        console.log(this.xAxisMax)
+        if(this.xAxisMax){
+          x.domain([0, this.xAxisMax])
+        } else {
+          x.domain([0, d3.max(data, function (d) { return d.value })])
+        }
+
         y.domain(data.map(function (d) { return d.name })).padding(.5)
+
+        // add chart background
+        chart.append('rect')
+          .attr('width', this.chartWidth)
+          .attr('height', this.chartHeight)
+          .attr('class', 'background')
 
         // add x axis
         chart.append('g')
+          .attr('class', 'xaxis')
           .attr('transform', 'translate(0, ' + this.chartHeight + ')')
-          .call(d3.axisBottom(x).tickFormat(function (d) { return d/100   }))
+          .call(
+            d3.axisBottom(x)
+              .ticks(6)
+              .tickSize(0)
+              .tickPadding(10)
+              .tickFormat(function (d) { return d/1000 })
+              // .tickValues(this.config.xaxis)
+          )
 
         // add y axis
         chart.append('g')
-          .call(d3.axisLeft(y))
+          .attr('class', 'yaxis')
+          .call(d3.axisLeft(y).tickSize(0).tickPadding(10))
+          .selectAll('.tick text')
+          .call(this.wrap, this.config.marginLeft)
+
+        // add gridlines
+        chart.append('g')
+          .attr('class', 'gridlines')
+          .attr('transform', 'translate(0, ' + this.chartHeight + ')')
+          .call(d3.axisBottom(x).ticks(6).tickSize(-this.chartHeight, 0, 0).tickFormat(''))
 
         // add bars
         var bar = chart.selectAll('.bar')
@@ -73,15 +110,18 @@
             .attr('height', y.bandwidth())
             .attr('width', function (d) { return x(d.value) })
           
+          // add bar labels
           bar.append('text')
             .attr('class', 'bar-label')
-            .attr('transform', function (d) { return 'translate(' + x(d.value) + ',' + y.bandwidth()/2 + ')' })
+            .attr('transform', function (d) { 
+              return 'translate(' + (x(d.value) - 10) + ',' + ((y.bandwidth()/2) + 4) + ')' 
+            })
             .attr('text-anchor', 'end')
-            .text(function (d) { return d.value + 'km'})
+            .text((d) => this.styledNumber(d.value) + ' km²')
       },
 
       createSVG () {
-        var svg = d3.select('.d3-horizontal-bar-chart')
+        var svg = d3.select('#' + this.svgId)
           .append('svg')
           .attr('viewBox', '0 0 ' + this.config.width + ' ' + this.config.height)
           .attr('viewport', this.config.width + 'x' + this.config.height)
@@ -91,6 +131,46 @@
 
         return svg
       },
+
+      styledNumber (number) {
+        return number.toLocaleString()
+      },
+
+      wrap (text, width) {
+        text.each(function () {
+          var text = d3.select(this)
+          var words = text.text().split(/\s+/).reverse()
+          var line = []
+          var lineNumber = 0
+          var lineHeight = 1.1
+          var x = text.attr('x')
+          // var dy = parseFloat(text.attr('dy'))
+          var dy = 0
+
+          var tspan = text.text(null)
+            .append('tspan')
+            .attr('x', x)
+            .attr('y', 0)
+            .attr('dy', dy + 'em')
+
+          while (word = words.pop()) {
+            line.push(word)
+            tspan.text(line.join(' '))
+
+            if(tspan.node().getComputedTextLength() > width) {
+              line.pop()
+              tspan.text(line.join(' '))
+
+              line = [word]
+              tspan = text.append('tspan')
+                .attr('x', x)
+                .attr('y', 0)
+                .attr('dy', ++lineNumber * lineHeight + dy + 'em')
+                .text(word)
+            }
+          }
+        })        
+      }
     }
   }
 </script>

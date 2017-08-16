@@ -4,12 +4,13 @@
   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eu augue vestibulum, egestas ligula vel, fringilla quam. Mauris tellus urna, tempor vulputate leo sed, tristique ultrices diam. Proin mollis justo tortor, nec finibus turpis molestie blandit. Mauris a sollicitudin risus, a accumsan tortor. Mauris vestibulum urna ut felis volutpat tempor. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean sem ex, commodo ut cursus eget, aliquam vel dui. Sed posuere mauris tincidunt dolor vulputate, non suscipit massa egestas. Phasellus posuere, dui nec feugiat aliquam, libero dui cursus metus, sed elementum sapien tellus at ligula. Vestibulum ac convallis nibh. Ut euismod aliquet odio, sit amet iaculis est lobortis nec. Maecenas auctor velit vel iaculis eleifend. 
 </p>
 
-<div class="flex-row">
+<div class="flex-row-wrap">
   <div class="flex-1-half flex-column-gap--right">
     <h3 class="header--h3-insights">Most protected ecoregions</h3>
-    <horizontal-bar-chart :json="<%= @mostProtectedEcoregions %>"></horizontal-bar-chart>
+    <horizontal-bar-chart id="most-protected" :json="<%= @mostProtectedEcoregions %>" :x-axis-max="250000"></horizontal-bar-chart>
   </div>
   <div class="flex-1-half flex-column-gap--left">
     <h3 class="header--h3-insights">Least protected ecoregions</h3>
+    <horizontal-bar-chart id="least-protected" :json="<%= @leastProtectedEcoregions %>" :x-axis-max="250000"></horizontal-bar-chart>
   </div>
 </div>

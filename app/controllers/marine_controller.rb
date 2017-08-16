@@ -9,10 +9,31 @@ class MarineController < ApplicationController
       {
         name: "Warm Temperate Northwest Atlantic",
         value: 140000
+      },
+      {
+        name: "Northeast Australian Shelf",
+        value: 110000
       }
     ]
 
     @mostProtectedEcoregions = mostProtectedEcoregions.to_json
+
+    leastProtectedEcoregions = [
+      {
+        name: "Tropical East Pacific",
+        value: 114000
+      },
+      {
+        name: "West and South  Indian Shelf",
+        value: 90000
+      },
+      {
+        name: "Tropical East Pacific 2",
+        value: 75000
+      }
+    ]
+
+    @leastProtectedEcoregions = leastProtectedEcoregions.to_json
 
     @distributions = {
       nationalWaters: 39,
