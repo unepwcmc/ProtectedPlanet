@@ -16,8 +16,9 @@ $(document).ready( ->
       'treemap': VComponents['vue/charts/Treemap'],
       'counter': VComponents['vue/components/Counter'],
       'horizontal-bars': VComponents['vue/components/horizontal_bars/HorizontalBars'],
-      'interactive-treemap': VComponents['vue/components/InteractiveTreemap']
-      'rectangles': VComponents['vue/components/rectangles/Rectangles']
+      'interactive-treemap': VComponents['vue/components/InteractiveTreemap'],
+      'rectangles': VComponents['vue/components/rectangles/Rectangles'],
+      'sticky-nav': VComponents['vue/components/StickyNav']
     }
   })
 )

@@ -1,13 +1,57 @@
-<header class="t--marine__header flex-row">
+<%
+nav = '[
+  {
+    id: "coverage",
+    name: "Coverage"
+  },
+  {
+    id: "distribution",
+    name: "Distribution"
+  },
+  {
+    id: "growth",
+    name: "Growth"
+  },
+  {
+    id: "national",
+    name: "National"
+  },
+  {
+    id: "size-distribution",
+    name: "Size Distribution"
+  },
+  {
+    id: "ecoregions",
+    name: "Ecoregions"
+  },
+  {
+    id: "pledges",
+    name: "Pledges"
+  },
+  {
+    id: "designations",
+    name: "Designations"
+  },
+  {
+    id: "greenlist",
+    name: "Greenlist"
+  }
+]'
+
+%>
+
+<header class="template--marine__header flex-row">
   <div class="container--profile">
     <div class="flex-align-center">
       <h1>
         <span class="header--h1-insights-small u-bg--black-transparent">Explore the Worlds</span>
         <span class="header--h1-insights u-bg--black-transparent">Marine Protected Areas</span>
       </h1>
-      <p class="t--marine__introduction u-bg--black-transparent">
+      <p class="header__introduction u-bg--black-transparent">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ultrices lobortis commodo. Donec nibh ante, porta ac nulla ullamcorper, eleifend scelerisque ex. Nulla laoreet nibh vitae diam sollicitudin, sit amet consectetur libero tincidunt. Aliquam erat volutpat. Nam magna ligula, placerat a est et,  luctus tincidunt dui.
       </p>
     </div>
   </div>
+
+  <sticky-nav :json="<%= nav %>"></sticky-nav>
 </header>

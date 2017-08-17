@@ -11,6 +11,7 @@
 //= require vue/components/InteractiveTreemap
 //= require vue/components/rectangles/Rectangle
 //= require vue/components/rectangles/Rectangles
+//= require vue/components/StickyNav
 //= require base
 //= require modules/marine/base
 //= require modules/maps/base
