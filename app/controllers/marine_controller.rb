@@ -61,7 +61,7 @@ class MarineController < ApplicationController
           size: 353258,
           breakdown: [
             {
-              name: "national waters",
+              name: "National Waters",
               size: 353258
             }
           ]
@@ -71,7 +71,7 @@ class MarineController < ApplicationController
           size: 315439,
           breakdown: [
             {
-              name: "national waters",
+              name: "National Waters",
               size: 315439
             }
           ]
@@ -81,11 +81,11 @@ class MarineController < ApplicationController
           size: 9865824,
           breakdown: [
             {
-              name: "national waters",
+              name: "National Waters",
               size: 8065824
             },
             {
-              name: "abnj",
+              name: "ABNJ",
               size: 1800000
             }
           ]
@@ -95,11 +95,11 @@ class MarineController < ApplicationController
           size: 3481409,
           breakdown: [
             {
-              name: "national waters",
+              name: "National Waters",
               size: 353258
             },
             {
-              name: "abnj",
+              name: "ABNJ",
               size: 1550000
             }
           ]
@@ -109,7 +109,7 @@ class MarineController < ApplicationController
           size: 272549,
           breakdown: [
             {
-              name: "national waters",
+              name: "National Waters",
               size: 272549
             }
           ]
@@ -119,7 +119,7 @@ class MarineController < ApplicationController
           size: 2004710,
           breakdown: [
             {
-              name: "national waters",
+              name: "National Waters",
               size: 2004710
             }
           ]
