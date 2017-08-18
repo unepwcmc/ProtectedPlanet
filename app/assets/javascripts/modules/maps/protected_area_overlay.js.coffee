@@ -78,24 +78,46 @@ define('protected_area_overlay', [], () ->
         ""
 
     @_wdpaTiles: (config) ->
-      cartocss = [
-        @_generateCartocss(
-          table: [POLYGONS_TABLE, POINTS_TABLE]
-          lineColor: '40541b'
-          polygonFill: '229A00'
-          opacity: .1
-          lineWidth: .1
-        ),
+      if config.paColors?
+        cartocss = [
+          @_generateCartocss(
+            table: [POLYGONS_TABLE, POINTS_TABLE]
+            lineColor: config.paColors.terrestrial.line
+            polygonFill: config.paColors.terrestrial.fill
+            opacity: .1
+            lineWidth: .1
+          ),
 
-        @_generateCartocss(
-          table: [POLYGONS_TABLE, POINTS_TABLE]
-          lineColor: '2E5387'
-          polygonFill: '3E7BB6'
-          attrName: 'marine'
-          attrVal: '2'
-          opacity: .1
-        )
-      ]
+          @_generateCartocss(
+            table: [POLYGONS_TABLE, POINTS_TABLE]
+            lineColor: config.paColors.marine.line
+            polygonFill: config.paColors.marine.fill
+            attrName: 'marine'
+            attrVal: '2'
+            opacity: .1
+            lineWidth: .1
+          )
+        ]
+
+      else
+        cartocss = [
+          @_generateCartocss(
+            table: [POLYGONS_TABLE, POINTS_TABLE]
+            lineColor: '40541b'
+            polygonFill: '229A00'
+            opacity: .1
+            lineWidth: .1
+          ),
+
+          @_generateCartocss(
+            table: [POLYGONS_TABLE, POINTS_TABLE]
+            lineColor: '2E5387'
+            polygonFill: '3E7BB6'
+            attrName: 'marine'
+            attrVal: '2'
+            opacity: .1
+          )
+        ]
 
       if config.wdpaIds?
         for wdpaId, i in config.wdpaIds
