@@ -31,44 +31,72 @@
           "name": "protected areas",
           "children": [
             {
-              "name": "Cook Islands",
-              "size": 1900000
+              "name": "National priority actions",
+              "size": 353258,
+              "breakdown": [
+                {
+                  "name": "national waters",
+                  "size": 353258
+                }
+              ]
             },
             {
-              "name": "Grenada",
-              "size": 1154
+              "name": "Approved GEF-5 and GEF-6 projects",
+              "size": 315439,
+              "breakdown": [
+                {
+                  "name": "national waters",
+                  "size": 315439
+                }
+              ]
             },
             {
-              "name": "Indonesia",
-              "size": 28547
+              "name": "Voluntary commitments from UN Ocean Conference",
+              "size": 9865824,
+              "breakdown": [
+                {
+                  "name": "national waters",
+                  "size": 8065824
+                },
+                {
+                  "name": "abnj",
+                  "size": 1800000
+                }
+              ]
             },
             {
-              "name": "Marshall Islands",
-              "size": 305.5
+              "name": "Other Large MPA proposals",
+              "size": 3481409,
+              "breakdown": [
+                {
+                  "name": "national waters",
+                  "size": 353258
+                },
+                {
+                  "name": "abnj",
+                  "size": 1550000
+                }
+              ]
             },
             {
-              "name": "IDN/TLS",
-              "size": 6450
+              "name": "Micronesia and Caribbean Challenge",
+              "size": 272549,
+              "breakdown": [
+                {
+                  "name": "national waters",
+                  "size": 272549
+                }
+              ]
             },
             {
-              "name": "Colombia",
-              "size": 15000
-            },
-            {
-              "name": "Chile",
-              "size": 150000
-            },
-            {
-              "name": "China",
-              "size": 10432
-            },
-            {
-              "name": "Germany (CCAMLR)",
-              "size": 1800000
-            },
-            {
-              "name": "19 countries",
-              "size": 3700000
+              "name": "Protected area targets in post-COP10 NBSAPs",
+              "size": 2004710,
+              "breakdown": [
+                {
+                  "name": "national waters",
+                  "size": 2004710
+                }
+              ]
             }
           ]
         }
