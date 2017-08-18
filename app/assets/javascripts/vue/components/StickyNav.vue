@@ -80,7 +80,7 @@
       },
 
       scroll (sectionId) {
-        sectionY = $('#' + sectionId).offset().top
+        sectionY = $('#' + sectionId).offset().top - this.navHeight + 1
 
         $('html, body').animate({
           scrollTop: sectionY
