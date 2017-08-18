@@ -30,19 +30,16 @@
 
     data () {
       return {
-        classObject: {
-          'v-sticky-nav__menu--open' : this.isMenuOpen,
-          'v-sticky-nav__menu--stuck' : this.navSticky
+        config: {
+          breakpoints : {
+            medium: 763 //this MUST match the breakpoint set in the responsive.scss file
+          }
         },
         navY: 0,
         navHeight: 0,
         isMenuOpen: false,
         isNavSticky: false
       }
-    },
-
-    created () {
-      
     },
 
     mounted () {
@@ -52,6 +49,7 @@
       this.navY = nav.offset().top
 
       this.updateNav()
+      this.monitorResize()
     },
 
     methods: {
@@ -86,6 +84,16 @@
           scrollTop: sectionY
         }, 400, function(){
           window.location.hash = sectionId
+        })
+      },
+
+      monitorResize () {
+        var self = this
+
+        $(window).on('resize', function(){
+          width = $(window).width()
+
+          if(width > self.config.breakpoints.medium){ self.isMenuOpen = false }
         })
       }
     }
