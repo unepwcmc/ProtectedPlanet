@@ -14,7 +14,9 @@
   module.exports = {
     name: 'sunburst',
 
-    props: { },
+    props: { 
+      json: Object
+    },
 
     data () {
       return {
@@ -26,80 +28,7 @@
         chart: '',
         percentage: 0,
         type: '',
-        isActive: false,
-        json: {
-          "name": "protected areas",
-          "children": [
-            {
-              "name": "National priority actions",
-              "size": 353258,
-              "breakdown": [
-                {
-                  "name": "national waters",
-                  "size": 353258
-                }
-              ]
-            },
-            {
-              "name": "Approved GEF-5 and GEF-6 projects",
-              "size": 315439,
-              "breakdown": [
-                {
-                  "name": "national waters",
-                  "size": 315439
-                }
-              ]
-            },
-            {
-              "name": "Voluntary commitments from UN Ocean Conference",
-              "size": 9865824,
-              "breakdown": [
-                {
-                  "name": "national waters",
-                  "size": 8065824
-                },
-                {
-                  "name": "abnj",
-                  "size": 1800000
-                }
-              ]
-            },
-            {
-              "name": "Other Large MPA proposals",
-              "size": 3481409,
-              "breakdown": [
-                {
-                  "name": "national waters",
-                  "size": 353258
-                },
-                {
-                  "name": "abnj",
-                  "size": 1550000
-                }
-              ]
-            },
-            {
-              "name": "Micronesia and Caribbean Challenge",
-              "size": 272549,
-              "breakdown": [
-                {
-                  "name": "national waters",
-                  "size": 272549
-                }
-              ]
-            },
-            {
-              "name": "Protected area targets in post-COP10 NBSAPs",
-              "size": 2004710,
-              "breakdown": [
-                {
-                  "name": "national waters",
-                  "size": 2004710
-                }
-              ]
-            }
-          ]
-        }
+        isActive: false
       }
     },
 
