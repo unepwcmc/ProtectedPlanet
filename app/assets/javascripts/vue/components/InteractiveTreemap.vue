@@ -4,7 +4,7 @@
       <div class="flex-2-fiths counter v-interactive-treemap__info-panel">
         <div class="v-interactive-treemap__info u-bg--grey">
           <p class="v-interactive-treemap__title">{{ country }}</p>
-          <p>{{ country }} has {{ styledNumber(totalMarineArea) }}km² of national waters, and {{ totalOverseasTerritories }} overseas territories</p>
+          <p>{{ country }} has {{ styledNumber(totalMarineArea) }}km² of national waters, and {{ totalOverseasTerritories }} overseas {{ territories }}</p>
 
           <div class="flex-row-wrap justify-content-between">
             <p class="v-interactive-treemap__stat">
@@ -153,6 +153,16 @@
 
       styledNumber: function(number){
         return (Math.ceil(number * 10)/10).toLocaleString()
+      }
+    },
+
+    computed: {
+      territories () {
+        var string = 'territories'
+
+        if(this.totalOverseasTerritories == 1) { string = 'territory' }
+
+        return string
       }
     }
   }  

@@ -50,6 +50,18 @@ class MarineController < ApplicationController
         country: "United States of America",
         size: "2,105,050km²",
         date: "2016"
+      },
+      {
+        name: "Natural Park of the Coral Sea",
+        country: "United Kingdom of Great Britain",
+        size: "15,694km²",
+        date: "2016"
+      },
+      {
+        name: "New Caledonia",
+        country: "United States of America",
+        size: "1,292,967km²",
+        date: "2017"
       }
     ]
 
