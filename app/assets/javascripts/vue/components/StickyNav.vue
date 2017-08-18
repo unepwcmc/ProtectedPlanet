@@ -1,6 +1,6 @@
 <template>
   <div class="v-sticky-nav">
-    <div class="v-sticky-nav__wrapper flex-row" :class="{ 'v-sticky-nav__wrapper--stuck' : this.isNavSticky }">
+    <div class="v-sticky-nav__wrapper flex-row" :class="{ 'v-sticky-nav__wrapper--stuck' : this.isNavSticky, 'v-sticky-nav__wrapper--unstick' : !this.isNavSticky }">
 
       <div 
         @click="toggleMenu" 
@@ -73,7 +73,7 @@
           
           if(scrollY > self.navY + self.navHeight){
             self.isNavSticky = true
-          } else if(scrollY < self.navY){
+          } else {
             self.isNavSticky = false
           }
         }, 100)
