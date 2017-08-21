@@ -10,7 +10,8 @@
       "protectedplanet-frontend": "marine-page",
       "html5shiv": "",
       "jquery": "< 2.0.0",
-      "REM-unit-polyfill": ""
+      "REM-unit-polyfill": "",
+      "d3": "4.10.0"
     }
   }
 }
