@@ -4,6 +4,9 @@
 # User-agent: *
 # Disallow: /
 
+User-agent: *
+Disallow: /search
+
 User-agent: AhrefsBot 
 Disallow: /
 
