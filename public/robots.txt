@@ -3,8 +3,18 @@
 # To ban all spiders from the entire site uncomment the next two lines:
 # User-agent: *
 # Disallow: /
+
 User-agent: AhrefsBot 
 Disallow: /
 
 User-agent: Yandex
 Disallow: /
+
+User-agent: Googlebot
+Crawl-delay: 10
+
+User-agent: bingbot
+Crawl-delay: 20
+
+User-agent: Slurp
+Crawl-delay: 30
