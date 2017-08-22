@@ -29,7 +29,7 @@
       // json: { required: true }
     },
 
-    data() {
+    data: function() {
       return {
         config: {
           width: 860,
@@ -139,13 +139,13 @@
       }
     },
 
-    created() {
+    created: function() {
       this.chartWidth = this.config.width - this.config.margin
       this.chartHeight = this.config.height - this.config.margin
       //this.data = this.json
     },
 
-    mounted() {
+    mounted: function() {
       this.createButtons()
       this.renderChart()
 
@@ -155,9 +155,11 @@
 
     methods: {
       createButtons: function(){
-        for(dataset of this.data){
-          this.datasetNames.push(dataset.id)
-        }
+        var self = this
+
+        this.data.forEach(function (dataset) {
+          self.datasetNames.push(dataset.id)
+        })
       },
 
       renderChart: function(){
@@ -258,13 +260,16 @@
             return d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
           })
           .attr('class', 'v-interactive-multiline__tooltip')
-          .attr('transform', (d) => 
-            'translate(' + x(parseTime(d.year)) + ', ' + (y(d.percent) - 20) + ')')
+          .attr('transform', function (d) { 
+            return 'translate(' + x(parseTime(d.year)) + ', ' + (y(d.percent) - 20) + ')' 
+          })
+
+        var self = this
 
         // add the circle datapoint
         datapoints.append('circle')
-          .attr('cx', (d) => this.scaleX(parseTime(d.year)))
-          .attr('cy', (d) => this.scaleY(d.percent))
+          .attr('cx', function (d) { return self.scaleX(parseTime(d.year)) })
+          .attr('cy', function (d) { return self.scaleY(d.percent) })
           .attr('r', 8)
           .attr('class', 'v-interactive-multiline__datapoint')
           .on('mouseenter', function(d) {

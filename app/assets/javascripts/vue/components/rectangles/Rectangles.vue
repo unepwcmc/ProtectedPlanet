@@ -23,7 +23,7 @@
       // json: {}
     },
 
-    data () {
+    data: function() {
       return {
         max: 0,
         rectangles: [],
@@ -44,7 +44,7 @@
       }
     },
 
-    created () {
+    created: function() {
       //this.rectangles = this.json
       this.rectangles = this.data
       this.calculateMax()
@@ -54,11 +54,11 @@
       calculateMax: function () {
         var array = []
 
-        for ( dataset of this.data) {
+        this.data.forEach(function (dataset) {
           array.push(dataset.km)
-        }
+        })
 
-        this.max = Math.max(...array)
+        this.max = Math.max.apply(null, array)
       },
 
       percent: function (km) {

@@ -20,7 +20,7 @@
       json: Object
     },
 
-    data () {
+    data: function() {
       return {
         config: {
           width: 400,
@@ -36,16 +36,16 @@
       }
     },
 
-    created () {
+    created: function() {
       this.radius = Math.min(this.config.width, this.config.height) / 2
     },
 
-    mounted () {
+    mounted: function() {
       this.renderChart()
     },
 
     methods: {
-      renderChart () {
+      renderChart: function () {
         // size variables
         
         var totalItems = this.json.children.length
@@ -78,7 +78,7 @@
         this.totalSize = path.datum().value
       },
 
-      createSVG () {
+      createSVG: function () {
         var svg = d3.select('.d3-sunburst')
           .append('svg')
           .attr('viewBox', '0 0 ' + this.config.width + ' ' + this.config.height)
@@ -90,15 +90,15 @@
         return svg
       },
 
-      createChart (svg) {
+      createChart: function (svg) {
         return this.svg.append('g').attr('transform', 'translate(' + this.config.width / 2 + ',' + this.config.height / 2 + ')')
       },
 
-      partition () {
+      partition: function () {
         return d3.partition().size([2 * Math.PI, this.radius * this.radius])
       },
 
-      arc () {
+      arc: function () {
         return d3.arc()
           .startAngle(function (d) { return d.x0 })
           .endAngle(function (d) { return d.x1 })
@@ -106,7 +106,7 @@
           .outerRadius(function (d) { return Math.sqrt(d.y1) })
       },
 
-      mouseover (d) {
+      mouseover: function (d) {
         this.name = d.data.name
         this.breakdown = d.data.breakdown
 
@@ -123,7 +123,7 @@
         this.isActive = true
       },
 
-      mouseLeave () {
+      mouseLeave: function () {
         var totalItems = this.json.children.length
         var color = d3.scaleSequential(d3.interpolate('#ffffff', '#898989')).domain([0, totalItems])
         //this.chart.selectAll('path').style('opacity', 1)
@@ -131,7 +131,7 @@
         this.isActive = false
       },
 
-      styledNumber (number) {
+      styledNumber: function (number) {
         return number.toLocaleString()
       }
     }
