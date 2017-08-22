@@ -20,7 +20,7 @@
     },
 
     props: {
-      // json: {}
+      json: { required: true }
     },
 
     data: function() {
@@ -30,23 +30,12 @@
         colors: [
           '#90BDC4',
           '#729099'
-        ],
-        data: [
-          {
-            title: "Total global coverage of all MPA’s",
-            km: 20500000
-          },
-          {
-            title: "Total global coverage of largest 20 MPA’s",
-            km: 15000000
-          }
         ]
       }
     },
 
     created: function() {
-      //this.rectangles = this.json
-      this.rectangles = this.data
+      this.rectangles = this.json
       this.calculateMax()
     },
 
@@ -54,7 +43,7 @@
       calculateMax: function () {
         var array = []
 
-        this.data.forEach(function (dataset) {
+        this.json.forEach(function (dataset) {
           array.push(dataset.km)
         })
 

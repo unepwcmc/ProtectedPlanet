@@ -16,13 +16,13 @@
   
   <div class="t--marine__counter counter u-infront-map">
     <h3 class="header--h3-insights">Number of Marine Protected Areas</h3>
-    <p class="text--100"><counter :total="18300"></counter></p>
+    <p class="text--100"><counter :total="<%= @totalMarineProtectedAreas %>"></counter></p>
 
     <h3 class="header--h3-insights">Percent of the ocean covered by protected areas</h3>
-    <p class="text--144"><counter :total="5.7"></counter>%</p>
+    <p class="text--144"><counter :total="<%= @oceanProtectedAreasPercent %>"></counter>%</p>
 
     <h3 class="header--h3-insights">Total Area Protected</h3>
-    <p class="text--48"><counter :total="20500000"></counter>km²</p>
+    <p class="text--48"><counter :total="<%= @oceanProtectedAreasKm %>"></counter>km²</p>
   </div>
 </div>
 

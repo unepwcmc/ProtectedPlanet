@@ -19,37 +19,18 @@
     },
 
     props: {
-      // json: {}
+      json: { required: true }
     },
 
     data: function() {
       return {
         max: 0,
-        bars: {},
-        data: [
-          {
-            name: "Ross Sea Marine Reserve",
-            km: 1550000
-          },
-          {
-            name: "Papahānaumokuākea Marine National Monument",
-            km: 1510000
-          },
-          {
-            name: "Natural Park of the Coral Sea",
-            km: 1292967
-          },
-          {
-            name: "Marianas Trench Marine National Monument",
-            km: 345400
-          }
-        ]
+        bars: {}
       }
     },
 
     created: function() {
-      //this.bars = this.json 
-      this.bars = this.data
+      this.bars = this.json
       this.calculateMax()
     },
 
@@ -57,7 +38,7 @@
       calculateMax: function () {
         var array = []
 
-        this.data.forEach(function (dataset) {
+        this.json.forEach(function (dataset) {
           array.push(dataset.km)
         })
 

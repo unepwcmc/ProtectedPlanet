@@ -26,7 +26,7 @@
     },
 
     props: {
-      // json: { required: true }
+      json: { required: true }
     },
 
     data: function() {
@@ -43,106 +43,13 @@
         datasetNames: [],
         scaleX: '',
         scaleY: '',
-        selectedTab: '',
-        data: [
-          {
-            "id": "national",
-            "dataset": [
-              {
-                "year": 2000,
-                "percent": 10,
-                "km": 1234
-              },
-              {
-                "year": 2005,
-                "percent": 12,
-                "km": 12334
-              },
-              {
-                "year": 2010,
-                "percent": 13,
-                "km": 12324
-              },
-              {
-                "year": 2015,
-                "percent": 18,
-                "km": 16234
-              },
-              {
-                "year": 2020,
-                "percent": 26,
-                "km": 12324
-              }
-            ]
-          },
-          {
-            "id": "other",
-            "dataset": [
-              {
-                "year": 2000,
-                "percent": 30,
-                "km": 71234
-              },
-              {
-                "year": 2005,
-                "percent": 45,
-                "km": 15234
-              },
-              {
-                "year": 2010,
-                "percent": 55,
-                "km": 12344
-              },
-              {
-                "year": 2015,
-                "percent": 56,
-                "km": 12234
-              },
-              {
-                "year": 2020,
-                "percent": 67,
-                "km": 12534
-              }
-            ]
-          },
-          {
-            "id": "last",
-            "dataset": [
-              {
-                "year": 2000,
-                "percent": 100,
-                "km": 16234
-              },
-              {
-                "year": 2005,
-                "percent": 98,
-                "km": 12374
-              },
-              {
-                "year": 2010,
-                "percent": 23,
-                "km": 51234
-              },
-              {
-                "year": 2015,
-                "percent": 18,
-                "km": 14234
-              },
-              {
-                "year": 2020,
-                "percent": 16,
-                "km": 16234
-              }
-            ]
-          }
-        ]
+        selectedTab: ''
       }
     },
 
     created: function() {
       this.chartWidth = this.config.width - this.config.margin
       this.chartHeight = this.config.height - this.config.margin
-      //this.data = this.json
     },
 
     mounted: function() {
@@ -157,13 +64,13 @@
       createButtons: function(){
         var self = this
 
-        this.data.forEach(function (dataset) {
+        this.json.forEach(function (dataset) {
           self.datasetNames.push(dataset.id)
         })
       },
 
       renderChart: function(){
-        var data = this.data
+        var data = this.json
         var parseTime = d3.timeParse("%Y")
 
         // set the ranges

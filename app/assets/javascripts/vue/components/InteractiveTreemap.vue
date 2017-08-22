@@ -31,13 +31,13 @@
       </div>
 
       <div class="flex-3-fiths v-interactive-treemap__treemap">
-        <treemap :json="data" :interactive="true" v-on:mouseenter="updatePercent"></treemap>
+        <treemap :json="json" :interactive="true" v-on:mouseenter="updatePercent"></treemap>
         <p class="v-interactive-treemap__instruction">Hover over a country to see percentage and actual coverage</p>
       </div>
     </div>
 
     <div class="v-interactive-treemap__list">
-      <div v-for="child in data.children" class="v-interactive-treemap__list-item">
+      <div v-for="child in json.children" class="v-interactive-treemap__list-item">
         <p class="v-interactive-treemap__title">{{ child.name }}</p>
 
         <p>{{ child.country }} has {{ styledNumber(child.totalMarineArea) }}km² of national waters, and {{ child.totalOverseasTerritories }} overseas territories</p>
@@ -76,7 +76,7 @@
     },
 
     props: {
-      //json: {}
+      json: { required: true }
     },
 
     data: function() {
@@ -91,53 +91,8 @@
         counterConfig: {
           speed: 20,
           divisor: 8
-        },
-        data: {
-          "name": "ocean areas",
-          "children": [
-            {
-              "name": "Australia",
-              "totalMarineArea": 7432133,
-              "totalOverseasTerritories": 9,
-              "national": 3021418,
-              "nationalPercentage": 40.65,
-              "overseas": 4410704,
-              "overseasPercentage": 28.72
-            },
-            {
-              "name": "United Kingdom",
-              "totalMarineArea": 7654321,
-              "totalOverseasTerritories": 5,
-              "national": 12340,
-              "nationalPercentage": 12345,
-              "overseas": 9234,
-              "overseasPercentage": 5432
-            },
-            {
-              "name": "USA",
-              "totalMarineArea": 6543211,
-              "totalOverseasTerritories": 1,
-              "national": 12342,
-              "nationalPercentage": 12,
-              "overseas": 12344,
-              "overseasPercentage": 50
-            },
-            {
-              "name": "France",
-              "totalMarineArea": 5432111,
-              "totalOverseasTerritories": 1,
-              "national": 1232,
-              "nationalPercentage": 21,
-              "overseas": 1123123,
-              "overseasPercentage": 30
-            }
-          ]
         }
       }
-    },
-
-    created: function() {
-      //this.data = this.json
     },
 
     methods: {
