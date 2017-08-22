@@ -1,7 +1,7 @@
 <template>
-  <div class="js-rectangle v-rectangles__rectangle" :style="styleObject">
+  <div class="sm-rectangle v-rectangles__rectangle" :style="styleObject">
     <div class="v-rectangles__content">
-      <span class="js-value v-rectangles__title">{{ title }} ({{ styledKm }})</span>
+      <span class="v-rectangles__title">{{ title }} ({{ styledKm }})</span>
     </div>
   </div>
 </template>
@@ -31,16 +31,6 @@
       this.styleObject.width = this.percent
       this.styleObject.height = this.percent
       this.styleObject.backgroundColor = this.color
-    },
-
-    mounted: function() {
-      window.setTimeout(function(){
-        $('.js-rectangle').addClass('v-rectangles__rectangle-animate')
-      }, 1000)
-
-      window.setTimeout(function(){
-        $('.js-value').addClass('v-horizontal-bars__value-animate')
-      }, 1800)
     },
 
     computed: {

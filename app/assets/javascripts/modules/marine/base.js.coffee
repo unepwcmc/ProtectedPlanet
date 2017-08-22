@@ -1,12 +1,12 @@
 $(document).ready( ->
 
-  #generate map at the top of the page
+  # generate map at the top of the page
   require(['map'], (Map) ->
     mapMarine = new Map($('#map-marine'))
     mapMarine.render()
   )
 
-  #generate a new vue instance and initialise all the vue components on the page
+  # generate a new vue instance and initialise all the vue components on the page
   new Vue({
     el: '.v-marine',
     components: {
@@ -21,4 +21,17 @@ $(document).ready( ->
       'sticky-nav': VComponents['vue/components/StickyNav']
     }
   })
+
+  # generate triggers for animations using scroll magic
+  # controller
+  marineScrollMagic = new ScrollMagic.Controller()
+
+  # scenes
+  new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution' })
+    .setClassToggle('.sm-size-distribution .sm-bar', 'v-horizontal-bars__bar-wrapper-animate')
+    .addTo(marineScrollMagic)
+
+  new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution' })
+  .setClassToggle('.sm-size-distribution .sm-rectangle', 'v-rectangles__rectangle-animate')
+  .addTo(marineScrollMagic)
 )
