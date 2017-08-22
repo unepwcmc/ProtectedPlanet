@@ -208,11 +208,14 @@
       },
 
       draw: function(name){
+        console.log('draw', name)
         this.selectedTab = name
+        console.log('selectedTab', this.selectedTab)
 
         var lineClass = 'v-interactive-multiline__line-active'
         var datapointClass = 'v-interactive-multiline__datapoints-active'
 
+        console.log('add active class to: ', $('[data-name="' + name + '"]'))
         $('.v-interactive-multiline__line').removeClass(lineClass)
         $('[data-name="' + name + '"]').addClass(lineClass)
 

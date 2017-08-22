@@ -13,6 +13,7 @@
 
     methods: {
       clickTab: function () {
+        console.log('click tab', this.name)
         this.$emit('tabClicked', this.name)
       }
     },
