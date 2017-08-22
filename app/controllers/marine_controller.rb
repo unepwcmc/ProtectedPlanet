@@ -1,5 +1,18 @@
 class MarineController < ApplicationController
-  
+
+  before_action :national_statistics, only: [:index]
+
+  COUNTRIES = [
+    "United States of America",
+    "France",
+    "Australia",
+    "United Kingdom of Great Britain and Northern Ireland",
+    "New Zealand",
+    "Denmark",
+    "Norway",
+    "Netherlands"
+  ]
+
   def index
     # coverage
     @totalMarineProtectedAreas = 18300
@@ -111,51 +124,6 @@ class MarineController < ApplicationController
     ]
 
     @protectedAreasGrowth = protectedAreasGrowth.to_json
-
-    # national
-    nationalProtectedAreas = {
-      name: "ocean areas",
-      children: [
-        {
-          name: "Australia",
-          totalMarineArea: 7432133,
-          totalOverseasTerritories: 9,
-          national: 3021418,
-          nationalPercentage: 40.65,
-          overseas: 4410704,
-          overseasPercentage: 28.72
-        },
-        {
-          name: "United Kingdom",
-          totalMarineArea: 7654321,
-          totalOverseasTerritories: 5,
-          national: 12340,
-          nationalPercentage: 12345,
-          overseas: 9234,
-          overseasPercentage: 5432
-        },
-        {
-          name: "USA",
-          totalMarineArea: 6543211,
-          totalOverseasTerritories: 1,
-          national: 12342,
-          nationalPercentage: 12,
-          overseas: 12344,
-          overseasPercentage: 50
-        },
-        {
-          name: "France",
-          totalMarineArea: 5432111,
-          totalOverseasTerritories: 1,
-          national: 1232,
-          nationalPercentage: 21,
-          overseas: 1123123,
-          overseasPercentage: 30
-        }
-      ]
-    }
-
-    @nationalProtectedAreas = nationalProtectedAreas.to_json
 
     # size distribution
     top20ProtectedAreas = [
@@ -328,5 +296,23 @@ class MarineController < ApplicationController
 
     # greenlist
     # ??
+  end
+
+  def national_statistics
+    @nationalProtectedAreas = {
+      name: "ocean areas",
+      children:
+        Country.where(name: COUNTRIES).map do |country|
+          {
+            name: country.name,
+            totalMarineArea: country.statistic.marine_area,
+            totalOverseasTerritories: country.children.count,
+            national: country.statistic.pa_marine_area,
+            nationalPercentage: country.statistic.national_percentage,
+            overseas: country.statistic.overseas_total_area,
+            overseasPercentage: country.statistic.overseas_percentage
+          }
+        end
+    }.to_json
   end
 end
