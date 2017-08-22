@@ -22,7 +22,7 @@
       }
     },
 
-    data() {
+    data: function() {
       return {
         number: 0,
         step: 0,
@@ -30,12 +30,12 @@
       }
     },
 
-    created() {
+    created: function() {
       this.total = this.total
       this.calculateStep()
     },
 
-    mounted() {
+    mounted: function() {
       this.animate()
     },
 

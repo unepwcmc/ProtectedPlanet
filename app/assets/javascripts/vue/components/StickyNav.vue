@@ -28,7 +28,7 @@
       json: Array
     },
 
-    data () {
+    data: function() {
       return {
         config: {
           breakpoints : {
@@ -42,7 +42,7 @@
       }
     },
 
-    mounted () {
+    mounted: function() {
       var nav = $('.v-sticky-nav')
 
       this.navHeight = nav.height()
@@ -53,17 +53,17 @@
     },
 
     methods: {
-      toggleMenu () {
+      toggleMenu: function () {
         this.isMenuOpen = !this.isMenuOpen
       },
 
-      closeMenu () {
+      closeMenu: function () {
         if(this.isMenuOpen){
           this.isMenuOpen = false
         }
       },
 
-      updateNav () {
+      updateNav: function () {
         var self = this
 
         setInterval(function () {
@@ -77,7 +77,7 @@
         }, 100)
       },
 
-      scroll (sectionId) {
+      scroll: function (sectionId) {
         sectionY = $('#' + sectionId).offset().top - this.navHeight + 1
 
         $('html, body').animate({
@@ -87,7 +87,7 @@
         })
       },
 
-      monitorResize () {
+      monitorResize: function () {
         var self = this
 
         $(window).on('resize', function(){

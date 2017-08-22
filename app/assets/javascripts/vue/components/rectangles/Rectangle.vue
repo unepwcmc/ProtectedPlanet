@@ -17,7 +17,7 @@
       color: String
     },
 
-    data () {
+    data: function() {
       return {
         styleObject: {
           backgroundColor: '',
@@ -27,13 +27,13 @@
       }
     },
 
-    created () {
+    created: function() {
       this.styleObject.width = this.percent
       this.styleObject.height = this.percent
       this.styleObject.backgroundColor = this.color
     },
 
-    mounted () {
+    mounted: function() {
       window.setTimeout(function(){
         $('.js-rectangle').addClass('v-rectangles__rectangle-animate')
       }, 1000)

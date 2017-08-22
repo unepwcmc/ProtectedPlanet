@@ -79,7 +79,7 @@
       //json: {}
     },
 
-    data() {
+    data: function() {
       return {
         country: "",
         totalMarineArea: 0,
@@ -136,7 +136,7 @@
       }
     },
 
-    created () {
+    created: function() {
       //this.data = this.json
     },
 
@@ -157,7 +157,7 @@
     },
 
     computed: {
-      territories () {
+      territories: function () {
         var string = 'territories'
 
         if(this.totalOverseasTerritories == 1) { string = 'territory' }

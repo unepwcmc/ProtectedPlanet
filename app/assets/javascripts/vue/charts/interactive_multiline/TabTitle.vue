@@ -12,13 +12,13 @@
     },
 
     methods: {
-      clickTab () {
+      clickTab: function () {
         this.$emit('tabClicked', this.name)
       }
     },
 
     computed: {
-      isActive () {
+      isActive: function () {
         return this.name == this.selected
       }
     }

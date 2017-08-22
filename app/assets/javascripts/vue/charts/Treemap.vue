@@ -11,7 +11,7 @@
       json: { required: true }
     },
 
-    data() {
+    data: function() {
       return {
         config: {
           width: 700,
@@ -21,7 +21,7 @@
       }
     },
 
-    mounted() {
+    mounted: function() {
       this.renderChart()
 
       //trigger mouse enter on the first cell so that the info panel is populated
@@ -88,11 +88,12 @@
           .text(function(d) { return d })
 
         if(this.interactive){
-          cell.on('mouseenter touchstart', (d) => { this.mouseenter(d.data) })
+          var self = this
+          cell.on('mouseenter touchstart', function (d) { self.mouseenter(d.data) })
         }
       },
 
-      createSVG(){
+      createSVG: function (){
         var svg = d3.select('.treemap')
           .append('svg')
           .attr('class', 'u-block')
@@ -105,7 +106,7 @@
         return svg
       },
 
-      mouseenter(data) {
+      mouseenter: function (data) {
         var activeClass = 'v-interactive-treemap__cell-active'
 
         $('.d3-treemap-cell').removeClass(activeClass)

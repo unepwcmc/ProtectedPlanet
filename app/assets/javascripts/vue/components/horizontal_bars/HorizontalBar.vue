@@ -18,7 +18,7 @@
       percent: String
     },
 
-    data () {
+    data: function() {
       return {
         styleObject: {
           width: 0
@@ -26,11 +26,11 @@
       }
     },
 
-    created () {
+    created: function() {
       this.styleObject.width = this.percent
     },
 
-    mounted () {
+    mounted: function() {
       window.setTimeout(function(){
         $('.js-bar').addClass('v-horizontal-bars__bar-animate')
       }, 1000)

@@ -14,7 +14,7 @@
       xAxisMax: Number
     },
 
-    data () {
+    data: function() {
       return {
         config: {
           width: 555,
@@ -30,18 +30,18 @@
       }
     },
 
-    created () {
+    created: function() {
       this.chartWidth = this.config.width - this.config.marginLeft - this.config.marginRight
       this.chartHeight = this.config.height - this.config.marginBottom
       this.svgId = 'd3-' + this.id
     },
 
-    mounted () {
+    mounted: function() {
       this.renderChart()
     },
 
     methods: {
-      renderChart () {
+      renderChart: function () {
         var data = this.json
 
         var svg = this.createSVG()
@@ -108,6 +108,8 @@
             .attr('height', y.bandwidth())
             .attr('width', function (d) { return x(d.value) })
           
+          var self = this
+
           // add bar labels
           bar.append('text')
             .attr('class', 'bar-label')
@@ -115,10 +117,10 @@
               return 'translate(' + (x(d.value) - 10) + ',' + ((y.bandwidth()/2) + 4) + ')' 
             })
             .attr('text-anchor', 'end')
-            .text((d) => this.styledNumber(d.value) + ' km²')
+            .text(function(d) { return self.styledNumber(d.value) + ' km²' })
       },
 
-      createSVG () {
+      createSVG: function () {
         var svg = d3.select('#' + this.svgId)
           .append('svg')
           .attr('viewBox', '0 0 ' + this.config.width + ' ' + this.config.height)
@@ -130,11 +132,11 @@
         return svg
       },
 
-      styledNumber (number) {
+      styledNumber: function (number) {
         return number.toLocaleString()
       },
 
-      wrap (text, width) {
+      wrap: function (text, width) {
         text.each(function () {
           var text = d3.select(this)
           var words = text.text().split(/\s+/).reverse()
