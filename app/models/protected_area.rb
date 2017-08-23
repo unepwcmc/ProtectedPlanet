@@ -116,7 +116,7 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def self.global_marine_coverage
-    reported_areas = marine_areas.map(&:reported_marine_area)
+    reported_areas = marine_areas.pluck(:reported_marine_area)
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
