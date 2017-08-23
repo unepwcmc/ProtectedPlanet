@@ -1,4 +1,6 @@
 class ProtectedAreaPresenter
+  include ActionView::Helpers::NumberHelper
+
   POLYGON = -> (pa, _property) {
     type = ProtectedArea.select("ST_GeometryType(the_geom) AS type").where(id: pa.id).first.type
     type == "ST_MultiPolygon"
@@ -39,10 +41,11 @@ class ProtectedAreaPresenter
   end
 
   def marine_designation
+    size = protected_area.reported_area.to_f.round(2)
     {
       name: protected_area.name,
       country: protected_area.countries.first.name,
-      size: "#{protected_area.reported_area.to_f.round(2)}km²",
+      size: "#{number_with_delimiter(size, delimiter: ',')}km²",
       date: protected_area.legal_status_updated_at.year
     }
   end
