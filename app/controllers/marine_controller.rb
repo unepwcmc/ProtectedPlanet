@@ -1,6 +1,17 @@
 class MarineController < ApplicationController
 
+  #Calculated stats
+  before_action :coverage
+  before_action :most_protected_areas, only: [:index]
   before_action :national_statistics, only: [:index]
+  before_action :designations, only: [:index]
+
+  #Static stats
+  before_action :total_coverage, only: [:index]
+  before_action :distributions, only: [:index]
+  before_action :growth, only: [:index]
+  before_action :ecoregions, only: [:index]
+  before_action :pledges, only: [:index]
 
   COUNTRIES = [
     "United States of America",
@@ -14,12 +25,60 @@ class MarineController < ApplicationController
   ]
 
   def index
-    # coverage
+    # greenlist
+    # ??
+  end
+
+  def coverage
+    @coverageOfTop20ProtectedAreas = [
+      {
+        title: "Total global coverage of all MPA’s",
+        km: ProtectedArea.global_marine_coverage
+      },
+      {
+        title: "Total global coverage of largest 20 MPA’s",
+        km: ProtectedArea.sum_of_most_protected_marine_areas
+      }
+    ].to_json
+  end
+
+  def most_protected_areas
+    @top20ProtectedAreas =
+      ProtectedArea.most_protected_marine_areas(20).map do |pa|
+        ProtectedAreaPresenter.new(pa).name_size
+      end.to_json
+  end
+
+  def least_protected_areas
+    ProtectedArea.least_protected_marine_areas(20).map do |pa|
+      ProtectedAreaPresenter.new(pa).name_size
+    end
+  end
+
+  def national_statistics
+    @nationalProtectedAreas = {
+      name: "ocean areas",
+      children:
+        Country.where(name: COUNTRIES).map do |country|
+          CountryPresenter.new(country).marine_statistics
+        end
+    }.to_json
+  end
+
+  def designations
+    protected_areas = ProtectedArea.most_recent_designations(20)
+    @designations = protected_areas.map do |pa|
+      ProtectedAreaPresenter.new(pa).marine_designation
+    end
+  end
+
+  def total_coverage
     @totalMarineProtectedAreas = 18300
     @oceanProtectedAreasPercent = 5.7
     @oceanProtectedAreasKm = 20500000
+  end
 
-    # distribution
+  def distributions
     @distributions = {
       nationalWaters: 39,
       nationalWatersPa: 15.9,
@@ -28,9 +87,10 @@ class MarineController < ApplicationController
       highSeasPa: 0.4,
       highSeasKm: 500000
     }
+  end
 
-    # growth
-    protectedAreasGrowth = [
+  def growth
+    @protectedAreasGrowth = [
       {
         id: "national",
         dataset: [
@@ -121,47 +181,11 @@ class MarineController < ApplicationController
           }
         ]
       }
-    ]
+    ].to_json
+  end
 
-    @protectedAreasGrowth = protectedAreasGrowth.to_json
-
-    # size distribution
-    top20ProtectedAreas = [
-      {
-        name: "Ross Sea Marine Reserve",
-        km: 1550000
-      },
-      {
-        name: "Papahānaumokuākea Marine National Monument",
-        km: 1510000
-      },
-      {
-        name: "Natural Park of the Coral Sea",
-        km: 1292967
-      },
-      {
-        name: "Marianas Trench Marine National Monument",
-        km: 345400
-      }
-    ]
-
-    @top20ProtectedAreas = top20ProtectedAreas.to_json
-
-    coverageOfTop20ProtectedAreas = [
-      {
-        title: "Total global coverage of all MPA’s",
-        km: 20500000
-      },
-      {
-        title: "Total global coverage of largest 20 MPA’s",
-        km: 15000000
-      }
-    ]
-
-    @coverageOfTop20ProtectedAreas = coverageOfTop20ProtectedAreas.to_json
-
-    # ecoregions
-    mostProtectedEcoregions = [
+  def ecoregions
+    @mostProtectedEcoregions = [
       {
         name: "North European Seas",
         value: 200000
@@ -174,11 +198,9 @@ class MarineController < ApplicationController
         name: "Northeast Australian Shelf",
         value: 110000
       }
-    ]
+    ].to_json
 
-    @mostProtectedEcoregions = mostProtectedEcoregions.to_json
-
-    leastProtectedEcoregions = [
+    @leastProtectedEcoregions = [
       {
         name: "Tropical East Pacific",
         value: 114000
@@ -191,12 +213,12 @@ class MarineController < ApplicationController
         name: "Tropical East Pacific 2",
         value: 75000
       }
-    ]
+    ].to_json
 
-    @leastProtectedEcoregions = leastProtectedEcoregions.to_json
+  end
 
-    # pledges
-    pledges = {
+  def pledges
+    @pledges = {
       name: "protected areas",
       children: [
         {
@@ -268,51 +290,6 @@ class MarineController < ApplicationController
           ]
         }
       ]
-    }
-
-    @pledges = pledges.to_json
-
-    # designations
-    @designations = [
-      {
-        name: "Northern Bering Sea",
-        country: "United States of America",
-        size: "2,105,050km²",
-        date: "2016"
-      },
-      {
-        name: "Natural Park of the Coral Sea",
-        country: "United Kingdom of Great Britain",
-        size: "15,694km²",
-        date: "2016"
-      },
-      {
-        name: "New Caledonia",
-        country: "United States of America",
-        size: "1,292,967km²",
-        date: "2017"
-      }
-    ]
-
-    # greenlist
-    # ??
-  end
-
-  def national_statistics
-    @nationalProtectedAreas = {
-      name: "ocean areas",
-      children:
-        Country.where(name: COUNTRIES).map do |country|
-          {
-            name: country.name,
-            totalMarineArea: country.statistic.marine_area,
-            totalOverseasTerritories: country.children.count,
-            national: country.statistic.pa_marine_area,
-            nationalPercentage: country.statistic.national_percentage,
-            overseas: country.statistic.overseas_total_area,
-            overseasPercentage: country.statistic.overseas_percentage
-          }
-        end
     }.to_json
   end
 end
