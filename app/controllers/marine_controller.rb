@@ -1,6 +1,7 @@
 class MarineController < ApplicationController
 
   before_action :national_statistics, only: [:index]
+  before_action :designations, only: [:index]
 
   COUNTRIES = [
     "United States of America",
@@ -272,28 +273,6 @@ class MarineController < ApplicationController
 
     @pledges = pledges.to_json
 
-    # designations
-    @designations = [
-      {
-        name: "Northern Bering Sea",
-        country: "United States of America",
-        size: "2,105,050km²",
-        date: "2016"
-      },
-      {
-        name: "Natural Park of the Coral Sea",
-        country: "United Kingdom of Great Britain",
-        size: "15,694km²",
-        date: "2016"
-      },
-      {
-        name: "New Caledonia",
-        country: "United States of America",
-        size: "1,292,967km²",
-        date: "2017"
-      }
-    ]
-
     # greenlist
     # ??
   end
@@ -303,16 +282,15 @@ class MarineController < ApplicationController
       name: "ocean areas",
       children:
         Country.where(name: COUNTRIES).map do |country|
-          {
-            name: country.name,
-            totalMarineArea: country.statistic.marine_area,
-            totalOverseasTerritories: country.children.count,
-            national: country.statistic.pa_marine_area,
-            nationalPercentage: country.statistic.national_percentage,
-            overseas: country.statistic.overseas_total_area,
-            overseasPercentage: country.statistic.overseas_percentage
-          }
+          CountryPresenter.new(country).marine_statistics
         end
     }.to_json
+  end
+
+  def designations
+    protected_areas = ProtectedArea.most_recent_designations(20)
+    @designations = protected_areas.map do |pa|
+      ProtectedAreaPresenter.new(pa).marine_designation
+    end
   end
 end

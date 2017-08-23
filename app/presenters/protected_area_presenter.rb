@@ -38,6 +38,15 @@ class ProtectedAreaPresenter
     ((num_fields_with_data.to_f / all_fields.count) * 100).round(2)
   end
 
+  def marine_designation
+    {
+      name: protected_area.name,
+      country: protected_area.countries.first.name,
+      size: "#{protected_area.reported_area.to_f.round(2)}km²",
+      date: protected_area.legal_status_updated_at.year
+    }
+  end
+
   private
 
   def protected_area

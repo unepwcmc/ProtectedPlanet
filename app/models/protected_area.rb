@@ -20,6 +20,18 @@ class ProtectedArea < ActiveRecord::Base
 
   after_create :create_slug
 
+  scope :most_protected_marine_areas, -> (limit) {
+    order(reported_marine_area: :desc).limit(limit)
+  }
+
+  scope :least_protected_marine_areas, -> (limit) {
+    order(reported_marine_area: :asc).limit(limit)
+  }
+
+  scope :most_recent_designations, -> (limit) {
+    where("legal_status_updated_at IS NOT NULL").order(legal_status_updated_at: :desc).limit(limit)
+  }
+
   def self.most_visited(date, limit=3)
     year_month = date.strftime("%m-%Y")
     opts = {with_scores: true, limit: [0, limit]}
@@ -97,6 +109,13 @@ class ProtectedArea < ActiveRecord::Base
     overlap["percentage"] = (overlap["percentage"].to_f*100).to_i
     overlap["sqm"] = (overlap["sqm"].to_f / 1000000).round(2)
     overlap
+  end
+
+  def sum_of_most_protected_marine_areas
+    protected_areas = most_protected_marine_areas(20)
+    sum = 0
+    sum = reported_areas.map do |pa| sum += pa.reported_marine_area.to_f end
+    sum
   end
 
   private
