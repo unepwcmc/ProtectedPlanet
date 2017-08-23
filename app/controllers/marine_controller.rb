@@ -1,17 +1,17 @@
 class MarineController < ApplicationController
 
-  #Calculated stats
-  before_action :coverage
-  before_action :most_protected_areas, only: [:index]
-  before_action :national_statistics, only: [:index]
-  before_action :designations, only: [:index]
-
   #Static stats
   before_action :total_coverage, only: [:index]
   before_action :distributions, only: [:index]
   before_action :growth, only: [:index]
   before_action :ecoregions, only: [:index]
   before_action :pledges, only: [:index]
+
+  #Calculated stats
+  before_action :coverage
+  before_action :most_protected_areas, only: [:index]
+  before_action :national_statistics, only: [:index]
+  before_action :designations, only: [:index]
 
   COUNTRIES = [
     "United States of America",
@@ -33,7 +33,7 @@ class MarineController < ApplicationController
     @coverageOfTop20ProtectedAreas = [
       {
         title: "Total global coverage of all MPA’s",
-        km: ProtectedArea.global_marine_coverage
+        km: @distributions[:nationalWatersKm] + @distributions[:highSeasKm]
       },
       {
         title: "Total global coverage of largest 20 MPA’s",
