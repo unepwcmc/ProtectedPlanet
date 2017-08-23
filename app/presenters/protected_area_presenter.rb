@@ -40,6 +40,13 @@ class ProtectedAreaPresenter
     ((num_fields_with_data.to_f / all_fields.count) * 100).round(2)
   end
 
+  def name_size
+    {
+      name: protected_area.name,
+      km: protected_area.reported_marine_area.to_i
+    }
+  end
+
   def marine_designation
     size = protected_area.reported_area.to_f.round(2)
     {
