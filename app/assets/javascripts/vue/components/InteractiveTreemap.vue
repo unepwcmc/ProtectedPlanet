@@ -3,7 +3,7 @@
     <div class="flex-row-wrap justify-content-end">
       <div class="flex-2-fiths counter v-interactive-treemap__info-panel">
         <div class="v-interactive-treemap__info u-bg--grey">
-          <p class="v-interactive-treemap__title">{{ country }}</p>
+          <p class="v-interactive-treemap__title"><a :href="'country/'+iso" target="_blank">{{ country }}</a></p>
           <p>{{ country }} has {{ styledNumber(totalMarineArea) }}km² of national waters, and <a :href="overseasTerritoriesURL" target="_blank">{{ totalOverseasTerritories }} overseas {{ territories }}</a></p>
 
           <div class="flex-row-wrap justify-content-between">
@@ -82,6 +82,7 @@
     data: function() {
       return {
         country: "",
+        iso: "",
         totalMarineArea: 0,
         totalOverseasTerritories: 0,
         overseasTerritoriesURL: "",
@@ -99,6 +100,7 @@
     methods: {
       updatePercent: function(data){
         this.country = data.country
+        this.iso = data.iso
         this.totalMarineArea = data.totalMarineArea
         this.totalOverseasTerritories = data.totalOverseasTerritories
         this.overseasTerritoriesURL = data.overseasTerritoriesURL

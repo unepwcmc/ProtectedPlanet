@@ -7,6 +7,7 @@ class CountryPresenter
     statistic = StatisticPresenter.new(country)
     {
       name: country.name,
+      iso: country.iso,
       totalMarineArea: statistic.marine_area,
       totalOverseasTerritories: country.children.count,
       overseasTerritoriesURL: overseas_territories_url,

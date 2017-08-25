@@ -114,6 +114,7 @@
 
         var data = {
           country: data.name,
+          iso: data.iso,
           totalMarineArea: data.totalMarineArea,
           totalOverseasTerritories: data.totalOverseasTerritories,
           overseasTerritoriesURL: data.overseasTerritoriesURL,
