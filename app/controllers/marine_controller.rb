@@ -82,10 +82,10 @@ class MarineController < ApplicationController
     @distributions = {
       nationalWaters: 39,
       nationalWatersPa: 15.9,
-      nationalWatersKm: 10106820,
+      nationalWatersKm: 22445068,
       highSeas: 61,
-      highSeasPa: 0.4,
-      highSeasKm: 500000
+      highSeasPa: 0.25,
+      highSeasKm: 558116
     }
   end
 
