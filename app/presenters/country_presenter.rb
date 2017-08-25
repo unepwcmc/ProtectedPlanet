@@ -10,7 +10,7 @@ class CountryPresenter
       totalMarineArea: statistic.marine_area,
       totalOverseasTerritories: country.children.count,
       national: statistic.pa_marine_area,
-      nationalPercentage: statistic.national_percentage,
+      nationalPercentage: statistic.percentage_pa_marine_cover,
       overseas: statistic.overseas_total_area,
       overseasPercentage: statistic.overseas_percentage
     }
