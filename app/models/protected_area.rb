@@ -25,11 +25,15 @@ class ProtectedArea < ActiveRecord::Base
   }
 
   scope :most_protected_marine_areas, -> (limit) {
-    marine_areas.order(reported_marine_area: :desc).limit(limit)
+    marine_areas.
+    where("gis_marine_area IS NOT NULL").
+    order(gis_marine_area: :desc).limit(limit)
   }
 
   scope :least_protected_marine_areas, -> (limit) {
-    marine_areas.order(reported_marine_area: :asc).limit(limit)
+    marine_areas.
+    where("gis_marine_area IS NOT NULL").
+    order(gis_marine_area: :asc).limit(limit)
   }
 
   scope :most_recent_designations, -> (limit) {
@@ -121,7 +125,7 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def self.sum_of_most_protected_marine_areas
-    reported_areas = most_protected_marine_areas(20).map(&:reported_marine_area)
+    reported_areas = most_protected_marine_areas(20).map(&:gis_marine_area)
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
