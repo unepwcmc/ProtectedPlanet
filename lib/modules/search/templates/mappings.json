@@ -51,6 +51,9 @@
             "type": "string",
             "index": "not_analyzed"
           },
+          "iso_3": {
+            "type": "string"
+          },
           "region_for_index": {
             "type": "nested",
             "properties": {
