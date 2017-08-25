@@ -25,13 +25,11 @@ class ProtectedArea < ActiveRecord::Base
   }
 
   scope :most_protected_marine_areas, -> (limit) {
-    marine_areas.
     where("gis_marine_area IS NOT NULL").
     order(gis_marine_area: :desc).limit(limit)
   }
 
   scope :least_protected_marine_areas, -> (limit) {
-    marine_areas.
     where("gis_marine_area IS NOT NULL").
     order(gis_marine_area: :asc).limit(limit)
   }
