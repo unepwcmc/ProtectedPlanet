@@ -60,7 +60,7 @@
 
       // animate in the first series so that chart isn't  empty
       multilineController = new ScrollMagic.Controller()
-      self = this
+      var self = this
 
       new ScrollMagic.Scene({ triggerElement: '.sm-multiline', reverse: false })
         .on('start', function () {
