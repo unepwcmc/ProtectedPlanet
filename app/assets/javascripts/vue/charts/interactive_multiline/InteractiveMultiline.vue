@@ -216,10 +216,10 @@
         var datapointClass = 'v-interactive-multiline__datapoints'
         var activeDatapointClasses = datapointClass + ' v-interactive-multiline__datapoints-active'
 
-        $(lineClass).attr('class', lineClass)
+        $('.' + lineClass).attr('class', lineClass)
         $('[data-name="' + name + '"]').attr('class', activeLineClasses)
 
-        $(datapointClass).attr('class', datapointClass)
+        $('.' + datapointClass).attr('class', datapointClass)
         $('[data-datapoints="' + name + '"]').attr('class', activeDatapointClasses)
       }
     }
