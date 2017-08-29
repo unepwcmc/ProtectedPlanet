@@ -15,6 +15,16 @@
   </p>
 <% end %>
 
+<% if @protected_area.is_green_list %>
+  <h2 class="header--section u-margin--page">Green List</h2>
+  <p class="u-margin--page attribute__value attribute--bold flex-row-wrap align-items-center">
+    <%= link_to green_list_path(@protected_area.slug), class: "attribute__link-margin", title: "View the Green List page for #{@protected_area.name}" do %>
+      View Green List page
+      <i class="fa fa-external-link attribute__icon"></i>
+    <% end %>
+  </p>
+<% end %>
+
 <div class="info-box info-box--fill-color info-box--factsheet info-box--margin-top u-margin--page-right">
   <h3 class="icon--info info-box__header">Data Provider</h3>
   <% if @protected_area.sources.any? %>
