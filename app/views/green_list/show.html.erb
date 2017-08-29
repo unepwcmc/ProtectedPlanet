@@ -6,6 +6,7 @@
 
 <div class="template--site container--profile container--push-bottom pdf--protected-area">
   <h1 class="header--h1-small">
+    <%= link_to 'Green List: ', '/search?is_green_list=true' %>
     <%= @protected_area.name %> in
     <% if @countries.any? %>
       <% @countries.each_with_index do |country, i| %>
@@ -35,21 +36,12 @@
     </div>
   <% end %>
 
-  <%= render partial: "map_site" %>
+  <%= render partial: "protected_areas/map_site" %>
 
-  <%= render partial: "factsheet" %>
+  <%= render partial: "protected_areas/factsheet" %>
 
   <% if has_designations %>
-    <%= render partial: "designations" %>
+    <%= render partial: "protected_areas/designations" %>
   <% end %>
 
-  <% if @networks.any? %>
-    <% unless @for_pdf %>
-      <%= render partial: "map_connections" %>
-    <% end %>
-
-    <%= render partial: "site_network_tabs" %>
-  <% end %>
-
-  <%#= render partial: "info_footer" %>
 </div>

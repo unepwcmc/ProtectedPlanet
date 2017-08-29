@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>{{ name }}</p>
+    <p class="v-horizontal-bars__title">{{ name }}</p>
     <div class="v-horizontal-bars__bar-wrapper">
       <span class="js-bar v-horizontal-bars__bar" :style="styleObject"></span>
       <span class="js-value v-horizontal-bars__value">{{ styledKm }} </span>

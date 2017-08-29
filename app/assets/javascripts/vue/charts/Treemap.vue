@@ -35,7 +35,7 @@
 
         //data
         var treemap = d3.treemap()
-          .tile(d3.treemapBinary)
+          .tile(d3.treemapSquarify)
           .size([this.config.width, this.config.height])
           .round(true)
           .paddingInner(1)
@@ -52,7 +52,7 @@
         //color scheme
         var totalItems = nodes.count().value
         var color = d3.scaleLinear().range(['#729099', '#C2E5E9']).domain([0, totalItems - 1])
-        
+
         //build chart
         var cell = svg.selectAll('g')
           .data(nodes.leaves())
@@ -73,7 +73,7 @@
 
         cell.append('text')
           .attr('clip-path', function(d) { return 'url(#clip-' + d.data.id + ')' })
-          .attr('transform', function(d) { 
+          .attr('transform', function(d) {
               x = (d.x1 - d.x0)/2
               y = (d.y1 - d.y0)/2
               return 'translate(' + x + ',' + y + ')'
@@ -114,8 +114,10 @@
 
         var data = {
           country: data.name,
+          iso: data.iso,
           totalMarineArea: data.totalMarineArea,
           totalOverseasTerritories: data.totalOverseasTerritories,
+          overseasTerritoriesURL: data.overseasTerritoriesURL,
           national: data.national,
           nationalPercentage: data.nationalPercentage,
           overseas: data.overseas,

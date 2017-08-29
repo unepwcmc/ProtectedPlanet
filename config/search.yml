@@ -113,6 +113,9 @@ filters:
     has_irreplaceability_info:
       type: 'equality'
       path: 'has_irreplaceability_info'
+    is_green_list:
+      type: 'equality'
+      path: 'is_green_list'
     country:
       type: 'nested'
       path: 'countries_for_index'

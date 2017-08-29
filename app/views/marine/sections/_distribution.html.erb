@@ -45,11 +45,9 @@
         <span class="infographic__bar-layer infographic__bar--pa" style="width: <%= @distributions[:nationalWatersPa] %>%"></span>
       </div>
 
-      <h4>Protected Area coverage of national waters</h4>
       <span class="text--100 u-marine-accent-color infographic__pa"><counter :total="<%= @distributions[:nationalWatersPa] %>"></counter>%</span>
       
-      <h4>Total protected km² coverage</h4>
-      <span class="text--48 u-marine-accent-color"><counter :total="<%= @distributions[:nationalWatersKm] %>"></counter>km²</span>
+      <span class="infographic__km u-marine-accent-color">(<counter :total="<%= @distributions[:nationalWatersKm] %>"></counter>km²)</span>
     </div>
   
 
@@ -60,11 +58,9 @@
         <span class="infographic__bar-layer infographic__bar-layer--highseas infographic__bar--pa" style="width: <%= @distributions[:highSeasPa] %>%"></span>
       </div>
 
-      <h4>Protected Area coverage of high seas</h4>
       <span class="text--100 u-marine-accent-color infographic__pa"><counter :total="<%= @distributions[:highSeasPa] %>"></counter>%</span>
 
-      <h4>Total protected km² coverage</h4>
-      <span class="text--48 u-marine-accent-color"><counter :total="<%= @distributions[:highSeasKm] %>"></counter>km²</span>
+      <span class="infographic__km u-marine-accent-color">(<counter :total="<%= @distributions[:highSeasKm] %>"></counter>km²)</span>
     </div>
   </div>
 </div>

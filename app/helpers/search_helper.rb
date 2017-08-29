@@ -52,7 +52,18 @@ module SearchHelper
 
   def title_with_query query
     if query.present?
+      countries = title_with_iso_codes(query)
+      query = countries unless countries.empty?
       %{Search results for <strong class="u-link-color">"#{query}"</strong>}.html_safe
+    end
+  end
+
+  def title_with_iso_codes query
+    keywords = query.split(',')
+    if keywords.select { |k| k .length == 3 }.count == keywords.count
+      Country.where(iso_3: keywords).map(&:name).join(',')
+    else
+      []
     end
   end
 
@@ -64,8 +75,13 @@ module SearchHelper
       config['template'] % instance.name
     }
   }
+
   def title_with_filter params
-    main_filter = params['main']
+    main_filter       = params['main']
+    green_list_filter = params['is_green_list']
+
+    return "Protected Areas with Green List status" if green_list_filter == "true" && main_filter.nil?
+
     return if main_filter.nil? || params[main_filter].nil?
 
     titles = Search.configuration['titles']
