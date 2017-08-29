@@ -27,15 +27,15 @@ $(document).ready( ->
   marineScrollMagic = new ScrollMagic.Controller()
 
   # scenes
-  new ScrollMagic.Scene({ triggerElement: '.sm-coverage' })
+  new ScrollMagic.Scene({ triggerElement: '.sm-coverage', reverse: false })
     .setClassToggle('.sm-coverage .sm-coverage-counter', 'v-counter-animate')
     .addTo(marineScrollMagic)
 
-  new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution' })
+  new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution', reverse: false })
     .setClassToggle('.sm-size-distribution .sm-bar', 'v-horizontal-bars__bar-wrapper-animate')
     .addTo(marineScrollMagic)
 
-  new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution' })
+  new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution', reverse: false })
   .setClassToggle('.sm-size-distribution .sm-rectangle', 'v-rectangles__rectangle-animate')
   .addTo(marineScrollMagic)
 )
