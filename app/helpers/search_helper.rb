@@ -52,7 +52,18 @@ module SearchHelper
 
   def title_with_query query
     if query.present?
+      countries = title_with_iso_codes(query)
+      query = countries unless countries.empty?
       %{Search results for <strong class="u-link-color">"#{query}"</strong>}.html_safe
+    end
+  end
+
+  def title_with_iso_codes query
+    keywords = query.split(',')
+    if keywords.select { |k| k .length == 3 }.count == keywords.count
+      Country.where(iso_3: keywords).map(&:name).join(',')
+    else
+      []
     end
   end
 
