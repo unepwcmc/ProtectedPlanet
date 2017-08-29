@@ -9,7 +9,7 @@
     props: {
       config: {
         type: Object,
-        default: function(){
+        default: function () {
           return {
             speed: 30,
             divisor: 50
@@ -19,7 +19,8 @@
       total: { 
         required: true,
         type: Number
-      }
+      },
+      animate: { default: false }
     },
 
     data: function() {
@@ -36,23 +37,25 @@
     },
 
     mounted: function() {
-      this.animate()
+      if(this.animate){ this.count() }
+
+      this.scrollMagicHandlers()
     },
 
     watch: {
-      total: function(){
+      total: function () {
         this.calculateStep()
-        this.animate()
+        this.count()
       }
     },
 
     methods: {
-      animate: function(){
+      count: function () {
         var self = this
         
         this.checkDirection()
 
-        var interval = window.setInterval(function(){
+        var interval = window.setInterval(function () {
 
           if(self.increase && self.number + self.step < self.total){
               self.increment()
@@ -67,29 +70,55 @@
         }, this.config.speed)
       },
 
-      increment: function(){
+      increment: function () {
         this.number = this.number + this.step
       },
 
-      decrement: function(){
+      decrement: function () {
         this.number = this.number - this.step
       },
 
-      calculateStep: function(){
+      calculateStep: function () {
         this.step = Math.abs(this.total - this.number) / this.config.divisor
       },
 
-      checkDirection: function(){
+      checkDirection: function () {
         if(this.number < this.total){
           this.increase = true
         } else {
           this.increase = false
         }
+      },
+
+      scrollMagicHandlers: function () {
+        counterScrollMagic = new ScrollMagic.Controller()
+        var self = this
+
+        // coverage stats shown over the map
+        new ScrollMagic.Scene({ triggerElement: '.sm-coverage', reverse: false })
+          .on('start', function () {
+            if($(self.$el).hasClass('sm-coverage-counter')) { self.count() }
+          })
+          .addTo(counterScrollMagic)
+
+        // national waters and high seas infographic
+        new ScrollMagic.Scene({ triggerElement: '.sm-infographic', reverse: false })
+          .on('start', function () {
+            if($(self.$el).hasClass('sm-infographic-counter')) { self.count() }
+          })
+          .addTo(counterScrollMagic)
+
+        // pledges
+        new ScrollMagic.Scene({ triggerElement: '.sm-pledges', reverse: false })
+          .on('start', function () {
+            if($(self.$el).hasClass('sm-pledges')) { self.count() }
+          })
+          .addTo(counterScrollMagic)
       }
     },
 
     computed: {
-      styledNumber: function(){
+      styledNumber: function () {
         return (Math.ceil(this.number * 10)/10).toLocaleString()
       }
     }

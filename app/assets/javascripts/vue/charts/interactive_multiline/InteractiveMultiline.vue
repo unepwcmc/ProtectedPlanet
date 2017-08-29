@@ -1,5 +1,5 @@
 <template>
-  <div class="v-interactive-multiline">
+  <div class="v-interactive-multiline sm-multiline">
     <div class="v-interactive-multiline__tabs">
 
       <tab-title v-for="name, key in datasetNames" 
@@ -18,6 +18,8 @@
 </template>
 
 <script>
+  // require 
+
   module.exports = {
     name: 'interactive-multiline',
 
@@ -58,7 +60,14 @@
       this.renderChart()
 
       // animate in the first series so that chart isn't  empty
-      this.draw(this.datasetNames[0])
+      multilineController = new ScrollMagic.Controller()
+      var self = this
+
+      new ScrollMagic.Scene({ triggerElement: '.sm-multiline', reverse: false })
+        .on('start', function () {
+          self.draw(self.datasetNames[0])
+        })
+        .addTo(multilineController)
     },
 
     methods: {
