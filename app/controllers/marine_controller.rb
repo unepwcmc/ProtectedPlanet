@@ -43,8 +43,8 @@ class MarineController < ApplicationController
   end
 
   def most_protected_areas
-    @top20ProtectedAreas =
-      ProtectedArea.most_protected_marine_areas(20).map do |pa|
+    @top10ProtectedAreas =
+      ProtectedArea.most_protected_marine_areas(10).map do |pa|
         ProtectedAreaPresenter.new(pa).name_size
       end.to_json
   end
