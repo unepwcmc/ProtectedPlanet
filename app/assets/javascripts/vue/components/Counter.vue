@@ -107,6 +107,13 @@
             if($(self.$el).hasClass('sm-infographic-counter')) { self.count() }
           })
           .addTo(counterScrollMagic)
+
+        // pledges
+        new ScrollMagic.Scene({ triggerElement: '.sm-pledges', reverse: false })
+          .on('start', function () {
+            if($(self.$el).hasClass('sm-pledges')) { self.count() }
+          })
+          .addTo(counterScrollMagic)
       }
     },
 
