@@ -3,13 +3,13 @@
     <div class="flex-row-wrap justify-content-end">
       <div class="flex-2-fiths counter v-interactive-treemap__info-panel">
         <div class="v-interactive-treemap__info u-bg--grey">
-          <p class="v-interactive-treemap__title">{{ country }}</p>
-          <p>{{ country }} has {{ styledNumber(totalMarineArea) }}km² of national waters, and {{ totalOverseasTerritories }} overseas {{ territories }}</p>
+          <p class="v-interactive-treemap__title"><a :href="'country/'+iso" target="_blank">{{ country }}</a></p>
+          <p>{{ country }} has {{ styledNumber(totalMarineArea) }}km² of national waters, and <a :href="overseasTerritoriesURL" target="_blank">{{ totalOverseasTerritories }} overseas {{ territories }}</a></p>
 
           <div class="flex-row-wrap justify-content-between">
             <p class="v-interactive-treemap__stat">
               <span class="v-interactive-treemap__percent">
-                <counter :total="nationalPercentage" :config="counterConfig"></counter>% 
+                <counter :total="nationalPercentage" :config="counterConfig"></counter>%
               </span>
               <span class="v-interactive-treemap__km">
                 ({{ styledNumber(national) }}km²)
@@ -44,7 +44,7 @@
 
         <p class="v-interactive-treemap__stat">
           <span class="v-interactive-treemap__percent">
-            <counter :total="child.nationalPercentage" :config="counterConfig"></counter>% 
+            <counter :total="child.nationalPercentage" :config="counterConfig"></counter>%
           </span>
           <span class="v-interactive-treemap__km">
             ({{ styledNumber(child.national) }}km²)
@@ -70,7 +70,7 @@
   module.exports = {
     name: 'interactive-treemap',
 
-    components: { 
+    components: {
       'treemap': VComponents['vue/charts/Treemap'],
       'counter': VComponents['vue/components/Counter']
     },
@@ -82,8 +82,10 @@
     data: function() {
       return {
         country: "",
+        iso: "",
         totalMarineArea: 0,
         totalOverseasTerritories: 0,
+        overseasTerritoriesURL: "",
         national: 0,
         nationalPercentage: 0,
         overseas: 0,
@@ -98,8 +100,10 @@
     methods: {
       updatePercent: function(data){
         this.country = data.country
+        this.iso = data.iso
         this.totalMarineArea = data.totalMarineArea
         this.totalOverseasTerritories = data.totalOverseasTerritories
+        this.overseasTerritoriesURL = data.overseasTerritoriesURL
         this.national = data.national
         this.nationalPercentage = data.nationalPercentage
         this.overseas = data.overseas
@@ -120,5 +124,5 @@
         return string
       }
     }
-  }  
+  }
 </script>

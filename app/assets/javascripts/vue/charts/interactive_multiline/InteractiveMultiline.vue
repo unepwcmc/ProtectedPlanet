@@ -36,7 +36,8 @@
         config: {
           width: 860,
           height: 370,
-          margin: 80
+          margin: 80,
+          datapointRadius: 5
         },
         svg:'',
         chart: '',
@@ -186,7 +187,7 @@
         datapoints.append('circle')
           .attr('cx', function (d) { return self.scaleX(parseTime(d.year)) })
           .attr('cy', function (d) { return self.scaleY(d.percent) })
-          .attr('r', 8)
+          .attr('r', this.config.datapointRadius)
           .attr('class', 'v-interactive-multiline__datapoint')
           .on('mouseenter', function(d) {
             var id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year

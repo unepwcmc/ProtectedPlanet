@@ -10,7 +10,7 @@ class Search::Matcher
       { type: 'terms',  path: 'wdpa_id'},
       {
         type: 'multi_match',
-        fields: ['name', 'original_name'],
+        fields: ['iso_3', 'name', 'original_name'],
         boost: true,
         functions: [{
           "filter" => {"match" => {"type" => "country"}},
