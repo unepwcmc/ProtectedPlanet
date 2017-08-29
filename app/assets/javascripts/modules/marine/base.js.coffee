@@ -27,6 +27,10 @@ $(document).ready( ->
   marineScrollMagic = new ScrollMagic.Controller()
 
   # scenes
+  new ScrollMagic.Scene({ triggerElement: '.sm-coverage' })
+    .setClassToggle('.sm-coverage .sm-coverage-counter', 'v-counter-animate')
+    .addTo(marineScrollMagic)
+
   new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution' })
     .setClassToggle('.sm-size-distribution .sm-bar', 'v-horizontal-bars__bar-wrapper-animate')
     .addTo(marineScrollMagic)

@@ -19,7 +19,8 @@
       total: { 
         required: true,
         type: Number
-      }
+      },
+      animate: { default: false }
     },
 
     data: function() {
@@ -36,18 +37,18 @@
     },
 
     mounted: function() {
-      this.animate()
+      if(this.animate){ this.count() }
     },
 
     watch: {
       total: function(){
         this.calculateStep()
-        this.animate()
+        this.count()
       }
     },
 
     methods: {
-      animate: function(){
+      count: function(){
         var self = this
         
         this.checkDirection()
