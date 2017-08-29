@@ -35,7 +35,7 @@
 
         //data
         var treemap = d3.treemap()
-          .tile(d3.treemapBinary)
+          .tile(d3.treemapSquarify)
           .size([this.config.width, this.config.height])
           .round(true)
           .paddingInner(1)
