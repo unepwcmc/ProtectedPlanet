@@ -209,19 +209,18 @@
       },
 
       draw: function(name){
-        console.log('draw', name)
         this.selectedTab = name
-        console.log('selectedTab', this.selectedTab)
 
-        var lineClass = 'v-interactive-multiline__line-active'
-        var datapointClass = 'v-interactive-multiline__datapoints-active'
+        var lineClass = 'v-interactive-multiline__line'
+        var activeLineClasses = lineClass + ' v-interactive-multiline__line-active'
+        var datapointClass = 'v-interactive-multiline__datapoints'
+        var activeDatapointClasses = datapointClass + ' v-interactive-multiline__datapoints-active'
 
-        console.log('add active class to: ', $('[data-name="' + name + '"]'))
-        $('.v-interactive-multiline__line').removeClass(lineClass)
-        $('[data-name="' + name + '"]').addClass(lineClass)
+        $(lineClass).attr('class', lineClass)
+        $('[data-name="' + name + '"]').attr('class', activeLineClasses)
 
-        $('.v-interactive-multiline__datapoints').removeClass(datapointClass)
-        $('[data-datapoints="' + name + '"]').addClass(datapointClass)
+        $(datapointClass).attr('class', datapointClass)
+        $('[data-datapoints="' + name + '"]').attr('class', activeDatapointClasses)
       }
     }
   }
