@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div :id="svgId" class="d3-horizontal-bar-chart"></div>
+    <div :id="svgId" class="d3-horizontal-bar-chart sm-bar-chart"></div>
   </div>
 </template>
 

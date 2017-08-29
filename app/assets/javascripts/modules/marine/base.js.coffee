@@ -27,6 +27,10 @@ $(document).ready( ->
   marineScrollMagic = new ScrollMagic.Controller()
 
   # scenes
+  new ScrollMagic.Scene({ triggerElement: '.sm-bar-chart', reverse: false })
+    .setClassToggle('.sm-bar-chart', 'd3-horizontal-bar-chart-animate')
+    .addTo(marineScrollMagic)
+
   new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution', reverse: false })
     .setClassToggle('.sm-size-distribution .sm-bar', 'v-horizontal-bars__bar-wrapper-animate')
     .addTo(marineScrollMagic)
