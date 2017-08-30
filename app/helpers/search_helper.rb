@@ -57,6 +57,7 @@ module SearchHelper
   end
 
   def title_with_overseas_territories query
+    return nil unless query
     keywords = query.split(',')
     if keywords.select { |k| k .length == 3 }.count == keywords.count
       # They all belong to the same parent country already when coming from the marine page
