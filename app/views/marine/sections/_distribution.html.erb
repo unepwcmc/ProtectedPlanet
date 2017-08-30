@@ -22,17 +22,17 @@
 
   <h3 class="infographic__header infographic__header--fancy sm-infographic">The Global Ocean</h3>
   
-  <div class="infographic__bar infographic__bar">
+  <div class="infographic__bar--global infographic__bar">
     <span class="infographic__bar-layer infographic__bar--national" style="width: <%= @distributions[:nationalWaters] %>%"></span>
 
     <p class="infographic__percent infographic__percent--national">
       <span class="infographic__percent__title">National waters</span>
-      <span class="text--100"><counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWaters] %>"></counter>%</span>
+      <span class="text--60"><counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWaters] %>"></counter>%</span>
     </p>
 
     <p class="infographic__percent infographic__percent--highseas">
       <span class="infographic__percent__title">High Seas</span>
-      <span class="text--100"><counter class="sm-infographic-counter" :total="<%= @distributions[:highSeas] %>"></counter>%</span>
+      <span class="text--60"><counter class="sm-infographic-counter" :total="<%= @distributions[:highSeas] %>"></counter>%</span>
     </p>
   </div>
 
@@ -45,7 +45,7 @@
         <span class="infographic__bar-layer infographic__bar--pa" style="width: <%= @distributions[:nationalWatersPa] %>%"></span>
       </div>
 
-      <span class="text--100 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWatersPa] %>"></counter>%</span>
+      <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWatersPa] %>"></counter>%</span>
       
       <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWatersKm] %>"></counter>km²)</span>
     </div>
@@ -58,7 +58,7 @@
         <span class="infographic__bar-layer infographic__bar-layer--highseas infographic__bar--pa" style="width: <%= @distributions[:highSeasPa] %>%"></span>
       </div>
 
-      <span class="text--100 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @distributions[:highSeasPa] %>"></counter>%</span>
+      <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @distributions[:highSeasPa] %>"></counter>%</span>
 
       <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @distributions[:highSeasKm] %>"></counter>km²)</span>
     </div>
