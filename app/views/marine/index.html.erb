@@ -1,13 +1,21 @@
 <div class="v-marine template--marine">
-  
+
   <%= render partial: "marine/sections/header" %>
 
   <div class="container--push-bottom">
-    
+
     <div id="coverage" class="section--block-color">
       <section class="t--marine__section u-no-padding--bottom">
         <%= render partial: "marine/sections/coverage_map" %>
       </section>
+    </div>
+
+    <div class="js-download-btn tooltip__trigger marine-download">
+      <button href="#" class="js-trigger btn-map-download btn-map-download--marine">
+        <i class="fa fa-download big-button__icon"></i>WDPA Dataset
+      </button>
+
+      <%= download_dropdown("marine", "general", [:csv, :kml, :shp, :pdf]) %>
     </div>
 
     <section id="distribution" class="t--marine__section container--profile">
@@ -41,7 +49,7 @@
     <section id="ecoregions" class="t--marine__section t--marine__section--fact-top container--profile">
       <%= render partial: "marine/sections/ecoregions" %>
     </section>
-    
+
     <div id="pledges" class="section--block-color">
       <section class="t--marine__section container--profile">
         <%= render partial: "marine/sections/pledges" %>
@@ -51,13 +59,13 @@
     <section id="designations" class="t--marine__section container--profile">
       <%= render partial: "marine/sections/designations" %>
     </section>
-    
+
     <div id="greenlist" class="section--block-color">
       <section class="t--marine__section container--profile">
         <%= render partial: "marine/sections/greenlist" %>
       </section>
     </div>
-    
+
     <footer class="t--marine__section container--profile">
       <%= render partial: "marine/sections/footer" %>
     </footer>
