@@ -38,7 +38,7 @@
           height: 370,
           margin: 80,
           datapointRadius: 4,
-          yAxisMaxValue: 50,
+          yAxisMaxValue: 20,
           xAxisNumberOfTicks: 8
         },
         svg:'',
@@ -133,14 +133,14 @@
           .call(d3.axisLeft(y).tickFormat(function(d){ return d + '%'}))
 
         //add target line
-        this.chart.append('g')
-        .attr('class', 'v-interactive-multiline__target')
-          .attr('transform', 'translate(0,' + this.chartHeight + ')')
-          .call(
-            d3.axisBottom(x)
-              .tickSize(-this.chartHeight, 0, 0)
-              .tickValues([parseTime(2017)])
-          )
+        // this.chart.append('g')
+        // .attr('class', 'v-interactive-multiline__target')
+        //   .attr('transform', 'translate(0,' + this.chartHeight + ')')
+        //   .call(
+        //     d3.axisBottom(x)
+        //       .tickSize(-this.chartHeight, 0, 0)
+        //       .tickValues([parseTime(2017)])
+        //   )
 
         this.scaleX = x
         this.scaleY = y
