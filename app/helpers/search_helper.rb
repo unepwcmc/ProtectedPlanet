@@ -44,7 +44,7 @@ module SearchHelper
 
   DEFAULT_TITLE = 'Protected Areas'
   def search_title params, only_text=false
-    title = title_with_query(params[:q]) || title_with_filter(params) || DEFAULT_TITLE
+    title = title_with_overseas_territories(params[:q]) || title_with_query(params[:q]) || title_with_filter(params) || DEFAULT_TITLE
     only_text ? strip_tags(title) : title
   end
 
@@ -52,18 +52,17 @@ module SearchHelper
 
   def title_with_query query
     if query.present?
-      countries = title_with_iso_codes(query)
-      query = countries unless countries.empty?
       %{Search results for <strong class="u-link-color">"#{query}"</strong>}.html_safe
     end
   end
 
-  def title_with_iso_codes query
+  def title_with_overseas_territories query
     keywords = query.split(',')
     if keywords.select { |k| k .length == 3 }.count == keywords.count
-      Country.where(iso_3: keywords).map(&:name).join(',')
-    else
-      []
+      # They all belong to the same parent country already when coming from the marine page
+      parent_country = Country.find_by_iso_3(keywords.first).try(:parent).try(:name)
+      return nil unless parent_country
+      %{Search results for <strong class="u-link-color">#{parent_country} overseas territories</strong>}.html_safe
     end
   end
 
