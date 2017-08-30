@@ -4,7 +4,7 @@
       <div class="flex-2-fiths counter v-interactive-treemap__info-panel">
         <div class="v-interactive-treemap__info u-bg--grey">
           <p class="v-interactive-treemap__title"><a :href="'country/'+iso" target="_blank">{{ country }}</a></p>
-          <p>{{ country }} has {{ styledNumber(totalMarineArea) }}km² of national waters, and <a :href="overseasTerritoriesURL" target="_blank">{{ totalOverseasTerritories }} overseas {{ territories }}</a></p>
+          <p>{{ country }} and its <a :href="overseasTerritoriesURL" target="_blank">{{ totalOverseasTerritories }} overseas countries and {{ territories }}</a> have a combined area of {{ styledNumber(totalMarineArea) }}km²</p>
 
           <div class="flex-row-wrap justify-content-between">
             <p class="v-interactive-treemap__stat">

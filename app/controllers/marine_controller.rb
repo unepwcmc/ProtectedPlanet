@@ -66,16 +66,16 @@ class MarineController < ApplicationController
   end
 
   def designations
-    protected_areas = ProtectedArea.most_recent_designations(20)
+    protected_areas = ProtectedArea.most_recent_designations(10)
     @designations = protected_areas.map do |pa|
       ProtectedAreaPresenter.new(pa).marine_designation
     end
   end
 
   def total_coverage
-    @totalMarineProtectedAreas = 18300
-    @oceanProtectedAreasPercent = 5.7
-    @oceanProtectedAreasKm = 20500000
+    @totalMarineProtectedAreas = 15271
+    @oceanProtectedAreasPercent = 6.35
+    @oceanProtectedAreasKm = 23036078
   end
 
   def distributions
@@ -92,7 +92,7 @@ class MarineController < ApplicationController
   def growth
     @protectedAreasGrowth = [
       {
-        id: "national",
+        id: "Global",
         dataset: [
           {
             year: 2000,
@@ -122,7 +122,7 @@ class MarineController < ApplicationController
         ]
       },
       {
-        id: "other",
+        id: "National",
         dataset: [
           {
             year: 2000,
@@ -152,7 +152,7 @@ class MarineController < ApplicationController
         ]
       },
       {
-        id: "last",
+        id: "ABNJ",
         dataset: [
           {
             year: 2000,
