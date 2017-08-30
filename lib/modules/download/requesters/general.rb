@@ -5,7 +5,11 @@ class Download::Requesters::General < Download::Requesters::Base
 
   def request
     unless ['ready', 'generating'].include? generation_info['status']
-      type = (identifier == "all" ? "general" : "country")
+      type = if identifier == "marine"
+               "marine"
+             else
+               (identifier == "all" ? "general" :  "country")
+             end
       DownloadWorkers::General.perform_async type, identifier
     end
 

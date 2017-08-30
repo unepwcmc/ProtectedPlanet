@@ -88,6 +88,10 @@ module ApplicationHelper
     esri: {
       content: 'ESRI Web Service',
       attrs: {'href' => Rails.application.secrets.esri_web_service_url, 'class' => 'u-bold tooltip__element link-with-icon'}
+    },
+    pdf: {
+      content: '.PDF',
+      attrs: {'href' => '#!', 'class' => 'u-bold tooltip__element link-with-icon'}
     }
   }
 
