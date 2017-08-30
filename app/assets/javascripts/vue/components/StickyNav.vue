@@ -2,6 +2,8 @@
   <div class="v-sticky-nav">
     <div class="v-sticky-nav__wrapper flex-row" :class="{ 'v-sticky-nav__wrapper--stuck' : this.isNavSticky, 'v-sticky-nav__wrapper--unstick' : !this.isNavSticky }">
 
+      <p class="v-sticky-nav__title">Marine protected areas</p>
+
       <div 
         @click="toggleMenu" 
         class="v-sticky-nav__burger" 
