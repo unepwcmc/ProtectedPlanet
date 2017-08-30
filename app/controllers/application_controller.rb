@@ -43,7 +43,7 @@ class ApplicationController < ActionController::Base
     @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
     @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
     @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
-    @green_list_page   = Comfy::Cms::Page.find_by_label("Green List")
+    @green_list_page   = Comfy::Cms::Page.find_by_label("The IUCN Green List of Protected and Conserved Areas")
   end
 
   def check_for_pdf
