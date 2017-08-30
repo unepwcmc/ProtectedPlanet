@@ -37,7 +37,9 @@
           width: 860,
           height: 370,
           margin: 80,
-          datapointRadius: 5
+          datapointRadius: 4,
+          yAxisMaxValue: 50,
+          xAxisNumberOfTicks: 8
         },
         svg:'',
         chart: '',
@@ -102,7 +104,7 @@
           })
         ])
 
-        y.domain([0, 100])
+        y.domain([0, this.config.yAxisMaxValue])
 
         // create svg
         this.svg = this.createSVG()
@@ -123,7 +125,7 @@
         this.chart.append('g')
           .attr('class', 'v-interactive-multiline__axis')
           .attr('transform', 'translate(0,' + this.chartHeight + ')')
-          .call(d3.axisBottom(x).ticks(5))
+          .call(d3.axisBottom(x).ticks(this.config.xAxisNumberOfTicks))
 
         // add y axis
         this.chart.append('g')
@@ -172,7 +174,7 @@
 
         // add the tooltip
         datapoints.append('text')
-          .text(function(d){ return d.km })
+          .text(function(d){ return d.percent })
           .attr('data-tooltip', function(d) { 
             return d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
           })

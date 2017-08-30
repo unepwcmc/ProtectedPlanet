@@ -96,58 +96,152 @@ class MarineController < ApplicationController
         dataset: [
           {
             year: 2000,
-            percent: 10,
-            km: 1234
+            percent: 0.67
+          },
+          {
+            year: 2001,
+            percent: 0.73
+          },
+          {
+            year: 2002,
+            percent: 0.99
+          },
+          {
+            year: 2003,
+            percent: 1.00
+          },
+          {
+            year: 2004,
+            percent: 1.11
           },
           {
             year: 2005,
-            percent: 12,
-            km: 12334
+            percent: 1.13
+          },
+          {
+            year: 2006,
+            percent: 1.05
+          },
+          {
+            year: 2007,
+            percent: 1.43
+          },
+          {
+            year: 2008,
+            percent: 1.85
+          },
+          {
+            year: 2009,
+            percent: 2.32
           },
           {
             year: 2010,
-            percent: 13,
-            km: 12324
+            percent: 2.50
+          },
+          {
+            year: 2011,
+            percent: 2.53
+          },
+          {
+            year: 2012,
+            percent: 3.38
+          },
+          {
+            year: 2013,
+            percent: 3.47
+          },
+          {
+            year: 2014,
+            percent: 4.15
           },
           {
             year: 2015,
-            percent: 18,
-            km: 16234
+            percent: 4.43
           },
           {
-            year: 2020,
-            percent: 26,
-            km: 12324
+            year: 2016,
+            percent: 5.01
+          },
+          {
+            year: 2017,
+            percent: 6.35          
           }
         ]
       },
       {
         id: "National",
         dataset: [
-          {
+          {        
             year: 2000,
-            percent: 30,
-            km: 71234
+            percent: 1.72
+          },
+          {
+            year: 2001,
+            percent: 1.88
+          },
+          {
+            year: 2002,
+            percent: 2.54
+          },
+          {
+            year: 2003,
+            percent: 2.57
+          },
+          {
+            year: 2004,
+            percent: 2.86
           },
           {
             year: 2005,
-            percent: 45,
-            km: 15234
+            percent: 2.89
+          },
+          {
+            year: 2006,
+            percent: 2.70
+          },
+          {
+            year: 2007,
+            percent: 3.68
+          },
+          {
+            year: 2008,
+            percent: 3.93
+          },
+          {
+            year: 2009,
+            percent: 5.13
           },
           {
             year: 2010,
-            percent: 55,
-            km: 12344
+            percent: 5.88
+          },
+          {
+            year: 2011,
+            percent: 5.94
+          },
+          {
+            year: 2012,
+            percent: 8.43
+          },
+          {
+            year: 2013,
+            percent: 8.65
+          },
+          {
+            year: 2014,
+            percent: 9.66
           },
           {
             year: 2015,
-            percent: 56,
-            km: 12234
+            percent: 10.36
           },
           {
-            year: 2020,
-            percent: 67,
-            km: 12534
+            year: 2016,
+            percent: 12.74
+          },
+          {
+            year: 2017,
+            percent: 15.89
           }
         ]
       },
@@ -156,28 +250,75 @@ class MarineController < ApplicationController
         dataset: [
           {
             year: 2000,
-            percent: 100,
-            km: 16234
+            percent: 0.00
+          },
+          {
+            year: 2001,
+            percent: 0.00
+          },
+          {
+            year: 2002,
+            percent: 0.00
+          },
+          {
+            year: 2003,
+            percent: 0.00
+          },
+          {
+            year: 2004,
+            percent: 0.00
           },
           {
             year: 2005,
-            percent: 98,
-            km: 12374
+            percent: 0.00
+          },
+          {
+            year: 2006,
+            percent: 0.00
+          },
+          {
+            year: 2007,
+            percent: 0.00
+          },
+          {
+            year: 2008,
+            percent: 0.00
+          },
+          {
+            year: 2009,
+            percent: 0.00
           },
           {
             year: 2010,
-            percent: 23,
-            km: 51234
+            percent: 0.17
+          },
+          {
+            year: 2011,
+            percent: 0.17
+          },
+          {
+            year: 2012,
+            percent: 0.17
+          },
+          {
+            year: 2013,
+            percent: 0.17
+          },
+          {
+            year: 2014,
+            percent: 0.25
           },
           {
             year: 2015,
-            percent: 18,
-            km: 14234
+            percent: 0.25
           },
           {
-            year: 2020,
-            percent: 16,
-            km: 16234
+            year: 2016,
+            percent: 0.25
+          },
+          {
+            year: 2017,
+            percent: 0.25
           }
         ]
       }
