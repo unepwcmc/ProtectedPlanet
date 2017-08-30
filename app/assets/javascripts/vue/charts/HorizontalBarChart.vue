@@ -22,7 +22,7 @@
           marginLeft: 140, 
           marginRight: 20,
           marginBottom: 30,
-          xaxis: [0, 50000, 100000, 150000, 200000, 250000]
+          unit: '%'
         },
         chartWidth: 0,
         chartHeight: 0,
@@ -79,7 +79,6 @@
               .ticks(6)
               .tickSize(0)
               .tickPadding(10)
-              .tickFormat(function (d) { return d/1000 })
           )
 
         // add y axis
@@ -117,7 +116,7 @@
               return 'translate(' + (x(d.value) - 10) + ',' + ((y.bandwidth()/2) + 4) + ')' 
             })
             .attr('text-anchor', 'end')
-            .text(function(d) { return self.styledNumber(d.value) + ' km²' })
+            .text(function(d) { return self.styledNumber(d.value) + self.config.unit })
       },
 
       createSVG: function () {
