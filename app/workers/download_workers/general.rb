@@ -23,6 +23,8 @@ class DownloadWorkers::General < DownloadWorkers::Base
     when 'region'
       region = Region.where(iso: identifier).first
       Set.new(region.countries.flat_map(&wdpa_ids_per_country)).to_a
+    when 'marine'
+      ProtectedArea.where(marine: true).pluck(:wdpa_id)
     end
   end
 end
