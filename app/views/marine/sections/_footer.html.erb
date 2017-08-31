@@ -38,13 +38,20 @@
     <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Downloads</h2>
     <div class="info-box__body info-box__body--no-padding">
       <div class="info-box__row">
-        <button class="js-download-btn info-box__link u-only-desktop tooltip__trigger js-trigger">
-          <i class="info-box__link-icon fa fa-download"></i>Download site GIS file
-          <%#= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :kml, :shp])) %>
-        </button>
+        <%= link_to '/', class: 'info-box__link', title: 'Download ecoregions data' do %>
+          <i class="info-box__link-icon fa fa-download"></i>Download ecoregions data
+        <% end %>
+        
+        <%= link_to '/', class: 'info-box__link', title: 'Download recent designations data' do %>
+          <i class="info-box__link-icon fa fa-download"></i>Download recent designations data
+        <% end %>
 
-        <%= link_to '/', class: 'info-box__link' do %>
-          <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download site page
+        <%= link_to '/', class: 'info-box__link', title: 'Download pledges data' do %>
+          <i class="info-box__link-icon fa fa-download"></i>Download pledges data
+        <% end %>
+
+        <%= link_to '/', class: 'info-box__link', title: 'Download marine protected areas PDF' do %>
+          <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download marine protected areas PDF
         <% end %>
       </div>
     </div>
