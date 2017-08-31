@@ -2,7 +2,7 @@
   <section class="info-box__column">
     <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Citation</h2>
     <p class="info-box__body">
-    UNEP-WCMC (<%= Date.today.year %>).
+    UNEP-WCMC (<%= Date.today.year %>). World Databse on Protected Areas, available at: <%= link_to 'www.protectedplanet.net', '/', title: 'Protected Planet', class: 'button--green-link' %>.
     </p>
   </section>
 
@@ -11,11 +11,25 @@
     <div class="info-box__body">
       <div class="reference">
         <h3 id="ref1" class="reference__title">(Ref 1)</h3>
-        <p class="reference__body"><%= link_to 'Link to PDF', 'http://www.un.org/depts/los/biodiversity/prepcom_files/Chairs_streamlined_non-paper_to_delegations.pdf' %></p>
+        <p class="reference__body">
+          Chair’s streamlined non-paper on elements of a draft text of an international legally-binding instrument under the United Nations Convention on the Law of the Sea on the conservation and sustainable use of marine biological diversity of areas beyond national jurisdiction.
+          
+          <%= link_to 'View PDF', 'http://www.un.org/depts/los/biodiversity/prepcom_files/Chairs_streamlined_non-paper_to_delegations.pdf', target: '_blank', title: 'Chair’s streamlined non-paper on elements of a draft text of an international legally-binding instrument under the United Nations Convention on the Law of the Sea on the conservation and sustainable use of marine biological diversity of areas beyond national jurisdiction', class: 'button--external' %>
+        </p>
+
         <h3 id="ref2" class="reference__title">(Ref 2)</h3>
-        <p class="reference__body">UNCLOS, Part VII, Article 86</p>
+        <p class="reference__body">
+          UNCLOS, Part VII, Article 86
+
+          <%= link_to 'View Article', 'http://www.un.org/depts/los/convention_agreements/texts/unclos/UNCLOS-TOC.htm', target: '_blank', title: 'UNCLOS, Part VII, Article 86', class: 'button--external' %>
+        </p>
+
         <h3 id="ref3" class="reference__title">(Ref 3)</h3>
-        <p class="reference__body">UNCLOS, 1982, Article 1(1)</p>
+        <p class="reference__body">
+          UNCLOS, 1982, Article 1(1)
+
+          <%= link_to 'View Article', 'http://www.un.org/depts/los/convention_agreements/texts/unclos/UNCLOS-TOC.htm', target: '_blank', title: 'UNCLOS, 1982, Article 1(1)', class: 'button--external' %>
+        </p>
       </div>
     </div>
   </section>
@@ -24,13 +38,14 @@
     <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Downloads</h2>
     <div class="info-box__body info-box__body--no-padding">
       <div class="info-box__row">
-        <!-- <button class="js-download-btn info-box__link u-only-desktop tooltip__trigger js-trigger"> -->
-          <!-- <i class="info-box__link-icon fa fa-download"></i>Download site GIS file -->
+        <button class="js-download-btn info-box__link u-only-desktop tooltip__trigger js-trigger">
+          <i class="info-box__link-icon fa fa-download"></i>Download site GIS file
           <%#= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :kml, :shp])) %>
-        <!-- </button> -->
-        <%#= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class: 'info-box__link' do %>
-          <!-- <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download site -->
-        <% #end %>
+        </button>
+
+        <%= link_to '/', class: 'info-box__link' do %>
+          <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download site page
+        <% end %>
       </div>
     </div>
   </section>
