@@ -12,6 +12,7 @@ class MarineController < ApplicationController
   before_action :most_protected_areas, only: [:index]
   before_action :national_statistics, only: [:index]
   before_action :designations, only: [:index]
+  before_action :green_list_areas, only: [:index]
 
   COUNTRIES = [
     "United States of America",
@@ -25,8 +26,6 @@ class MarineController < ApplicationController
   ]
 
   def index
-    # greenlist
-    # ??
   end
 
   def coverage
@@ -164,14 +163,14 @@ class MarineController < ApplicationController
           },
           {
             year: 2017,
-            percent: 6.35          
+            percent: 6.35
           }
         ]
       },
       {
         id: "National",
         dataset: [
-          {        
+          {
             year: 2000,
             percent: 1.72
           },
@@ -432,5 +431,9 @@ class MarineController < ApplicationController
         }
       ]
     }.to_json
+  end
+
+  def green_list_areas
+    @green_list_areas = ProtectedArea.marine_areas.green_list_areas
   end
 end
