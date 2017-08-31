@@ -14,7 +14,9 @@
 
       <ul class="v-sticky-nav__menu" :class="{ 'v-sticky-nav__menu--open' : this.isMenuOpen }">
         <li v-for="link in json" @click="closeMenu" class="v-sticky-nav__menu-item">
-          <a :id="linkId(link.id)" class="v-sticky-nav__link" @click.prevent="scroll(link.id)">{{ link.name }}</a>
+          <a :id="linkId(link.id)" class="v-sticky-nav__link" @click.prevent="scroll(link.id)">
+            <span>{{ link.name }}</span>
+          </a>
         </li>
       </ul>
 
