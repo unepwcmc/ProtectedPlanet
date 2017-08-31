@@ -1,6 +1,6 @@
 <h2 class="header--h2-insights">Effectively of marine protected areas</h2>
 
-<div class="t--marine__section__introduction">
+<div class="template--marine__section__introduction">
   <p>
     An increasing need exists for the evaluation and understanding of the effectiveness of marine protected areas operating around the world. Protected Area Management Effectiveness (PAME), in particular the Management Effectiveness Tracking Tool (METT) is used in many parts of the world. Using such tools, a recent study (Gill et al. 2017) suggests that while ecological factors are key to enhancing the performance of MPAs, available capacity including resources and staff are fundamental for effective protected area management.
   </p>
@@ -9,8 +9,10 @@
   </p>
 </p>
 
-<% @green_list_areas.each do |area| %>
-  <div class="result">
-    <%= render 'search/protected_area', model: area %>
-  </div>
-<% end %>
+<div>
+  <% @green_list_areas.each do |area| %>
+    <div class="result">
+      <%= render 'search/protected_area', model: area %>
+    </div>
+  <% end %>
+</div>
