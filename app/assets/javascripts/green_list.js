@@ -7,3 +7,4 @@
 //= require 'modules/show_hide'
 //= require 'modules/tabs'
 //= require 'modules/maps/base'
+
