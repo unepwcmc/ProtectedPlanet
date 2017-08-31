@@ -1,12 +1,17 @@
 <template>
-  <div>
-    <div class="d3-sunburst u-text-sans">
+  <div class="flex-row-wrap">
+    <div class="flex-2-fiths">
+      <div class="d3-sunburst u-text-sans"></div>
+    </div>
+    
+    <div class="flex-3-fiths d3-sunburst__info-wrapper">
       <div class="d3-sunburst__info" :class="{ 'd3-sunburst__info--active' : isActive }">
-        <p class="d3-sunburst__title">{{ name }}</p>
-        <p v-for="item in breakdown">
-          <span class="d3-sunburst__subtitle">{{ item.name }}</span>
-          <span>{{ styledNumber(item.size) }}km</span>
-        </p>
+          <p class="d3-sunburst__title">{{ name }}</p>
+          <p v-for="item in breakdown">
+            <span class="d3-sunburst__subtitle">{{ item.name }}</span>
+            <span>{{ styledNumber(item.size) }}km</span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
@@ -42,6 +47,10 @@
 
     mounted: function() {
       this.renderChart()
+
+      //trigger mouse enter on the first pie section so that the info panel is populated
+      var firstSection = '#' + (this.json.children[0].name).replace(/\s|\./g, '-')
+      d3.select(firstSection).dispatch('mouseover')
     },
 
     methods: {
@@ -67,13 +76,13 @@
         var path = this.chart.datum(data).selectAll('path')
           .data(nodes)
           .enter().append('path')
+          .attr('id', function(d) { return (d.data.name).replace(/\s|\./g, '-') })
           .attr('class', 'd3-sunburst__section')
           .attr('display', function (d) { return d.depth ? null : 'none' }) // hide inner ring
           .attr('d', function (d) { return arc(d) })
           .style('stroke', '#fff')
           .style('fill', function (d, i) { return color(i) })
           .on('mouseover', this.mouseover)
-          .on('mouseleave', this.mouseLeave)
 
         this.totalSize = path.datum().value
       },
@@ -107,6 +116,8 @@
       },
 
       mouseover: function (d) {
+        this.resetSections()
+
         this.name = d.data.name
         this.breakdown = d.data.breakdown
 
@@ -118,17 +129,16 @@
           .filter(function (node) {
             return (sequenceArray.indexOf(node) >= 0)
           })
-          .style('fill', '#729099')
+          .style('fill', '#A1D8DE')
 
         this.isActive = true
       },
 
-      mouseLeave: function () {
+      resetSections: function () {
         var totalItems = this.json.children.length
         var color = d3.scaleSequential(d3.interpolate('#ffffff', '#898989')).domain([0, totalItems])
-        //this.chart.selectAll('path').style('opacity', 1)
+        this.chart.selectAll('path').style('opacity', 1)
         this.chart.selectAll('path').style('fill', function (d, i) { return color(i) })
-        this.isActive = false
       },
 
       styledNumber: function (number) {
