@@ -131,7 +131,7 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def self.sum_of_most_protected_marine_areas
-    reported_areas = most_protected_marine_areas(20).map(&:gis_marine_area)
+    reported_areas = without_proposed.most_protected_marine_areas(20).map(&:gis_marine_area)
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
