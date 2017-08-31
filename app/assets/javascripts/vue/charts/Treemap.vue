@@ -15,7 +15,7 @@
       return {
         config: {
           width: 700,
-          height: 550
+          height: 500
         },
         orderedData: 0,
       }
@@ -35,14 +35,14 @@
 
         //data
         var treemap = d3.treemap()
-          .tile(d3.treemapSquarify)
+          .tile(d3.treemapBinary)
           .size([this.config.width, this.config.height])
           .round(true)
           .paddingInner(1)
 
         var data = d3.hierarchy(this.json)
           .eachBefore(function(d) { d.data.id = (d.parent ? d.parent.data.id + "." : "") + d.data.name})
-          .sum(function (d) { return d.totalMarineArea })
+          .sum(function (d) { return d.national + d.overseas })
           .sort(function(a, b) { return b.height - a.height || b.value - a.value })
 
         this.orderedData = data
@@ -66,22 +66,16 @@
             .attr('height', function(d) { return d.y1 - d.y0 })
             .attr('fill', function(d, i) { return color(i) })
 
-        cell.append('clipPath')
-            .attr('id', function(d) { return 'clip-' + d.data.id })
-            .append('use')
-            .attr('xlink:href', function(d) { return '#' + d.data.id })
-
         cell.append('text')
-          .attr('clip-path', function(d) { return 'url(#clip-' + d.data.id + ')' })
           .attr('transform', function(d) {
               x = (d.x1 - d.x0)/2
-              y = (d.y1 - d.y0)/2
+              y = (d.y1 - d.y0)/2 + 6
               return 'translate(' + x + ',' + y + ')'
             }
           )
           .attr('text-anchor', 'middle')
           .selectAll('tspan')
-          .data(function(d) { return d.data.name.split(/(?=[A-Z][^A-Z])/g) })
+          .data(function(d) { return d.data.iso.split(/(?=[A-Z][^A-Z])/g) })
           .enter().append('tspan')
           .style('fill', 'white')
           .style('font-family', 'sans-serif')

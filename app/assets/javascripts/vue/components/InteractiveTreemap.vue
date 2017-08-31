@@ -2,8 +2,12 @@
   <div class="v-interactive-treemap">
     <div class="flex-row-wrap justify-content-end">
       <div class="flex-2-fiths counter v-interactive-treemap__info-panel">
-        <div class="v-interactive-treemap__info u-bg--grey">
-          <p class="v-interactive-treemap__title"><a :href="'country/'+iso" target="_blank">{{ country }}</a></p>
+        <div class
+        ="v-interactive-treemap__info">
+          <p class="v-interactive-treemap__title">
+            <a :href="'country/'+iso" class="button--basic-link" target="_blank">{{ country }}</a>
+          </p>
+
           <p>{{ country }} and its <a :href="overseasTerritoriesURL" target="_blank">{{ totalOverseasTerritories }} overseas countries and {{ territories }}</a> have a combined area of {{ styledNumber(totalMarineArea) }}km²</p>
 
           <div class="flex-row-wrap justify-content-between">
@@ -32,15 +36,16 @@
 
       <div class="flex-3-fiths v-interactive-treemap__treemap">
         <treemap :json="json" :interactive="true" v-on:mouseenter="updatePercent"></treemap>
-        <p class="v-interactive-treemap__instruction">Hover over a country to see percentage and actual coverage</p>
+        <p class="v-interactive-treemap__instruction u-show-desktop">Hover over a country to see percentage and actual coverage</p>
       </div>
     </div>
 
     <div class="v-interactive-treemap__list">
       <div v-for="child in json.children" class="v-interactive-treemap__list-item">
+
         <p class="v-interactive-treemap__title">{{ child.name }}</p>
 
-        <p>{{ child.country }} has {{ styledNumber(child.totalMarineArea) }}km² of national waters, and {{ child.totalOverseasTerritories }} overseas territories</p>
+        <p>{{ child.country }} and its {{ child.totalOverseasTerritories }} overseas countries and territories have a combined area of {{ styledNumber(child.totalMarineArea) }}km²</p>
 
         <p class="v-interactive-treemap__stat">
           <span class="v-interactive-treemap__percent">
