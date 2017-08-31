@@ -42,6 +42,10 @@ class ProtectedArea < ActiveRecord::Base
     where("legal_status_updated_at IS NOT NULL").order(legal_status_updated_at: :desc).limit(limit)
   }
 
+  scope :without_proposed, -> {
+    where.not(legal_status_id: 4)
+  }
+
   def self.most_visited(date, limit=3)
     year_month = date.strftime("%m-%Y")
     opts = {with_scores: true, limit: [0, limit]}
