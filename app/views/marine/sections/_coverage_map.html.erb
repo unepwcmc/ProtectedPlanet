@@ -11,7 +11,7 @@
     data-zoom-position="bottomleft"
     data-pa-colors='{ "terrestrial": { "line": "95d0c1", "fill": "a4d6c9" }, "marine": { "line": "004280", "fill": "004a8f" } }'>
   </div>
-  
+
   <div class="template--marine__counter counter u-infront-map sm-coverage">
     <h3 class="header--h3-insights">Number of Marine Protected Areas</h3>
     <p class="text--100"><counter class="sm-coverage-counter" :animate="false" :total="<%= @totalMarineProtectedAreas %>"></counter></p>
@@ -19,7 +19,7 @@
     <h3 class="header--h3-insights">Percent of the ocean covered by protected areas</h3>
     <p class="text--144"><counter class="sm-coverage-counter" :total="<%= @oceanProtectedAreasPercent %>"></counter>%</p>
 
-    <h3 class="header--h3-insights">Total Area Protected</h3>
+    <h3 class="header--h3-insights">Total area protected</h3>
     <p class="text--48"><counter class="sm-coverage-counter" :total="<%= @oceanProtectedAreasKm %>"></counter>km²</p>
   </div>
 </div>
