@@ -2,10 +2,10 @@
 
 <div class="template--marine__section__introduction">
   <p>
-    The global coverage of marine protected areas (MPAs) is 6.35%. The Global Ocean can be divided into areas within national jurisdiction (National Waters) and those in international waters (Areas Beyond National Jurisdiction (ABNJ)
+    The global coverage of marine protected areas (MPAs) is 6.35%. The Global Ocean can be divided into areas within national jurisdiction (National Waters) and those in international waters (Areas Beyond National Jurisdiction (ABNJ))
   </p>
   <p>
-    MPAs can be more easily created by governments in national waters where there are dedicated legal systems in place. In ABNJ it is more difficult to create MPAs due to the complex legal framework in place. As such, the percentage of MPAs created within national waters is much higher than that for ABNJ. National waters represent 39% of the global ocean and at present, 15.9% of these waters are designated as protected areas. Contrastingly, only 0.25% of ABNJ, which makes up the remaining 61% of the global ocean, has been established as protected areas. At present, international discussions are under way to discuss ways of simplifying the process to create MPAs in ABNJ. For more information on this, please see the <%= link_to 'DOALOS website', 'http://www.un.org/Depts/los/biodiversityworkinggroup/marine_biodiversity.htm' %>.
+    MPAs can be more easily created by governments in national waters where there are dedicated legal systems in place. In ABNJ it is more difficult to create MPAs due to the complex legal framework in place. As such, the percentage of MPAs created within national waters is much higher than that for ABNJ. National waters represent 39% of the global ocean and at present, 15.9% of these waters are designated as protected areas. In contrast, only 0.25% of ABNJ, which makes up the remaining 61% of the global ocean, has been established as protected areas. At present, international discussions are underway to establish ways of simplifying the process to create MPAs in ABNJ. For more information on this, please see the <%= link_to 'DOALOS website', 'http://www.un.org/Depts/los/biodiversityworkinggroup/marine_biodiversity.htm' %>.
   </p>
 </div>
 
@@ -16,12 +16,12 @@
       National waters represent an area of coastal water extending out to the limit of the Exclusive Economic Zone at 200 nautical miles from the baseline of a Coastal State. Coastal States have management jurisdiction over these waters, the resources within them and the resources in/under the seabed.
     </p>
     <p>
-      Marine Areas Beyond National Jurisdiction (ABNJ) are areas of the ocean that are not under the jurisdiction of any one country. Therefore, no individual nation has the sole responsibility for management of these areas. Defined in recent international discussions<sup>1</sup>, ABNJ includes both the High Seas – all parts of the sea that are not included in national waters<sup>2</sup>, and the Area – the seabed beyond the limits of national waters<sup>3</sup>.
+      Marine Areas Beyond National Jurisdiction (ABNJ) are areas of the ocean that are not under the jurisdiction of any one country. Therefore, no individual nation has the sole responsibility for management of these areas. Defined in recent international discussions<sup>1</sup>, ABNJ includes both the High Seas – all parts of the sea that are not included in national waters<sup>2</sup>, and the Protected Area – the seabed beyond the limits of national waters<sup>3</sup>.
     </p>
   </div>
 
   <h3 class="infographic__header infographic__header--fancy sm-infographic">The Global Ocean</h3>
-  
+
   <div class="infographic__bar--global infographic__bar">
     <span class="infographic__bar-layer infographic__bar--national" style="width: <%= @distributions[:nationalWaters] %>%"></span>
 
@@ -46,10 +46,10 @@
       </div>
 
       <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWatersPa] %>"></counter>%</span>
-      
+
       <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWatersKm] %>"></counter>km²)</span>
     </div>
-  
+
 
     <div class="flex-1-half infographic__right">
       <h4>Protected Area coverage of the high seas</h4>
