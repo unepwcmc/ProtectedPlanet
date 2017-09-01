@@ -119,7 +119,7 @@
 
     computed: {
       styledNumber: function () {
-        return (Math.ceil(this.number * 10)/10).toLocaleString()
+        return (Math.ceil(this.number * 100)/100).toLocaleString()
       }
     }
   }
