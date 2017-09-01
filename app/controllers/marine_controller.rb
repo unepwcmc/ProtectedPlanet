@@ -2,7 +2,7 @@ class MarineController < ApplicationController
 
   #Static stats
   before_action :total_coverage, only: [:index]
-  before_action :distributions, only: [:index]
+  before_action :distributions, only: [:index, :download_designations]
   before_action :growth, only: [:index]
   before_action :ecoregions, only: [:index]
   before_action :pledges, only: [:index]
@@ -11,7 +11,7 @@ class MarineController < ApplicationController
   before_action :coverage
   before_action :most_protected_areas, only: [:index]
   before_action :national_statistics, only: [:index]
-  before_action :designations, only: [:index]
+  before_action :designations, only: [:index, :download_designations]
   before_action :green_list_areas, only: [:index]
 
   COUNTRIES = [
@@ -26,6 +26,26 @@ class MarineController < ApplicationController
   ]
 
   def index
+  end
+
+  def download_designations
+    send_data(
+      generate_designations_csv,
+      filename: "most_recent_designations.csv",
+      type: "text/csv"
+    )
+  end
+
+  private
+
+  def generate_designations_csv
+    columns = ["PA name", "Country", "Size", "Date of designation"]
+    CSV.generate(headers: true) do |csv|
+      csv << columns
+      @designations.each do |d|
+        csv << d.values
+      end
+    end
   end
 
   def coverage
