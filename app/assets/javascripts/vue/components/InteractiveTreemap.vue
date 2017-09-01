@@ -48,9 +48,7 @@
         <p>{{ child.country }} and its {{ child.totalOverseasTerritories }} overseas countries and territories have a combined area of {{ styledNumber(child.totalMarineArea) }}km²</p>
 
         <p class="v-interactive-treemap__stat">
-          <span class="v-interactive-treemap__percent">
-            <counter :total="child.nationalPercentage" :config="counterConfig"></counter>%
-          </span>
+          <span class="v-interactive-treemap__percent">{{ styledNumber(child.nationalPercentage) }}%</span>
           <span class="v-interactive-treemap__km">
             ({{ styledNumber(child.national) }}km²)
           </span>
@@ -58,9 +56,7 @@
         </p>
 
         <p class="v-interactive-treemap__stat">
-          <span class="v-interactive-treemap__percent">
-            <counter :total="child.overseasPercentage" :config="counterConfig"></counter>%
-          </span>
+          <span class="v-interactive-treemap__percent">{{ styledNumber(child.overseasPercentage) }}%</span>
           <span class="v-interactive-treemap__km">
            ({{ styledNumber(child.overseas) }}km²)
           </span>
@@ -116,7 +112,7 @@
       },
 
       styledNumber: function(number){
-        return (Math.ceil(number * 10)/10).toLocaleString()
+        return (Math.ceil(number * 100)/100).toLocaleString()
       }
     },
 
