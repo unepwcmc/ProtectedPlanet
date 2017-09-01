@@ -7,13 +7,13 @@
   </button>
 
   <% if GREEN_LIST_IMAGES[@protected_area.wdpa_id] %>
-    <div>
-      <div class="half half--no-margin u-map-height">
+    <div class="flex-row-wrap">
+      <div class="flex-column-2 u-map-height">
         <%= image_tag 'green_list/logo-white.png', class: 'green-list-logo' %>
         <%= image_tag "green_list/#{GREEN_LIST_IMAGES[@protected_area.wdpa_id]}", class: 'u-height-100 u-width-100' %>
       </div>
 
-      <div class="half half--no-margin">
+      <div class="flex-column-2">
         <div
           id="map-site"
           class="map map--hero"
