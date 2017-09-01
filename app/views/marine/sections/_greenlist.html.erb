@@ -9,10 +9,12 @@
   </p>
 </div>
 
-<div>
+<div class="template--marine__greenlist flex-row-wrap">
   <% @green_list_areas.each do |area| %>
-    <div class="result">
-      <%= render 'search/protected_area', model: area %>
+    <div class="template--marine__greenlist-result">
+      <div class="result">
+        <%= render 'search/protected_area', model: area %>
+      </div>
     </div>
   <% end %>
 </div>
