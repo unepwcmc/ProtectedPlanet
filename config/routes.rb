@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get '/resources', to: 'cms/resources#index'
 
   get '/marine', to: 'marine#index'
+  get '/marine/download_designations', to: 'marine#download_designations'
 
   comfy_route :cms_admin, path: '/admin'
   comfy_route :cms, path: '/c', sitemap: false
