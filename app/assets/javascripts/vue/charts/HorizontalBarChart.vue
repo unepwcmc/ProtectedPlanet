@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div :id="svgId" class="d3-horizontal-bar-chart sm-bar-chart"></div>
-  </div>
+  <div :id="svgId" class="d3-horizontal-bar-chart sm-bar-chart" :style="{ paddingTop: paddingTop }"></div>
 </template>
 
 <script>
@@ -122,6 +120,8 @@
       createSVG: function () {
         var svg = d3.select('#' + this.svgId)
           .append('svg')
+          .attr('class', 'd3-horizontal-bar-chart__svg')
+          .attr('xmlns', 'http://www.w3.org/1999/xhtml')
           .attr('viewBox', '0 0 ' + this.config.width + ' ' + this.config.height)
           .attr('viewport', this.config.width + 'x' + this.config.height)
           .attr('preserveAspectRatio', 'xMidYMid')
@@ -168,6 +168,12 @@
             }
           }
         })        
+      }
+    },
+
+    computed: {
+      paddingTop: function () {
+        return (this.config.height / this.config.width) * 100 + '%'
       }
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="treemap"></div>
+  <div class="d3-treemap" :style="{ paddingTop: paddingTop }"></div>
 </template>
 
 <script>
@@ -88,9 +88,10 @@
       },
 
       createSVG: function (){
-        var svg = d3.select('.treemap')
+        var svg = d3.select('.d3-treemap')
           .append('svg')
-          .attr('class', 'u-block')
+          .attr('class', 'u-block d3-treemap__svg')
+          .attr('xmlns', 'http://www.w3.org/1999/xhtml')
           .attr('viewBox', '0 0 ' + this.config.width + ' ' + this.config.height)
           .attr('viewport', this.config.width + 'x' + this.config.height)
           .attr('preserveAspectRatio', 'xMidYMid')
@@ -119,6 +120,12 @@
         }
 
         this.$emit('mouseenter', data)
+      }
+    },
+
+    computed: {
+      paddingTop: function () {
+        return (this.config.height / this.config.width) * 100 + '%'
       }
     }
   }

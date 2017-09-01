@@ -1,7 +1,7 @@
 <template>
   <div class="flex-row-wrap">
     <div class="flex-2-fiths">
-      <div class="d3-sunburst u-text-sans"></div>
+      <div class="d3-sunburst u-text-sans" :style="{ paddingTop: paddingTop }"></div>
     </div>
     
     <div class="flex-3-fiths d3-sunburst__info-wrapper">
@@ -90,6 +90,8 @@
       createSVG: function () {
         var svg = d3.select('.d3-sunburst')
           .append('svg')
+          .attr('class', 'd3-sunburst__svg')
+          .attr('xmlns', 'http://www.w3.org/1999/xhtml')
           .attr('viewBox', '0 0 ' + this.config.width + ' ' + this.config.height)
           .attr('viewport', this.config.width + 'x' + this.config.height)
           .attr('preserveAspectRatio', 'xMidYMid')
@@ -143,6 +145,11 @@
 
       styledNumber: function (number) {
         return number.toLocaleString()
+      }
+    },
+    computed: {
+      paddingTop: function () {
+        return (this.config.height / this.config.width) * 100 + '%'
       }
     }
   }
