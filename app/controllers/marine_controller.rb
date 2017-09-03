@@ -62,10 +62,54 @@ class MarineController < ApplicationController
   end
 
   def most_protected_areas
-    @top10ProtectedAreas =
-      ProtectedArea.without_proposed.most_protected_marine_areas(10).map do |pa|
-        ProtectedAreaPresenter.new(pa).name_size
-      end.to_json
+    #@top10ProtectedAreas =
+    #  ProtectedArea.without_proposed.most_protected_marine_areas(10).map do |pa|
+    #    ProtectedAreaPresenter.new(pa).name_size
+    #  end.to_json
+    #  Use hardcoded data until we fix the issue on the source
+
+    @top10ProtectedAreas = [
+      {
+        name: 'Marae Moana',
+        km: 1982029
+      },
+      {
+        name: 'Réserve Naturelle Nationale des Terres australes françaises',
+        km: 1655001
+      },
+      {
+        name: 'Papahānaumokuākea Marine National Monument',
+        km: 1516555
+      },
+      {
+        name: 'Parc Naturel de la Mer de Corail',
+        km: 1291643
+      },
+      {
+        name: 'Pacific Remote Islands',
+        km: 1277784
+      },
+      {
+        name: 'South Georgia and South Sandwich Islands Marine Protected Area',
+        km: 1069872
+      },
+      {
+        name: 'Coral Sea',
+        km: 995261
+      },
+      {
+        name: 'Steller Sea Lion Protection Areas, Gulf',
+        km: 866717
+      },
+      {
+        name: 'Pitcairn Islands Marine Reserve',
+        km: 839568
+      },
+      {
+        name: 'British Indian Ocean Territory Marine Protected Area (Chagos)',
+        km: 642340
+      }
+    ].to_json
   end
 
   def least_protected_areas
