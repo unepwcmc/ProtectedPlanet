@@ -26,7 +26,7 @@ class MarineController < ApplicationController
   ]
 
   def index
-    @green_list_page   = Comfy::Cms::Page.find_by_slug("green-list")
+    @green_list_page = Comfy::Cms::Page.find_by_slug("green-list")
   end
 
   def download_designations
