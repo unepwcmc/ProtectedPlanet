@@ -51,11 +51,11 @@ class MarineController < ApplicationController
   def coverage
     @coverageOfTop20ProtectedAreas = [
       {
-        title: "Total global coverage of all MPA’s",
+        title: "Total global coverage of all MPAs",
         km: @distributions[:nationalWatersKm] + @distributions[:highSeasKm]
       },
       {
-        title: "Total global coverage of largest 20 MPA’s",
+        title: "Total global coverage of largest 20 MPAs",
         km: ProtectedArea.sum_of_most_protected_marine_areas
       }
     ].to_json
