@@ -1,7 +1,9 @@
 <template>
   <div class="flex-row-wrap">
     <div class="flex-2-fiths">
-      <div class="d3-sunburst u-text-sans" :style="{ paddingTop: paddingTop }"></div>
+      <div class="d3-sunburst-wrapper">
+        <div class="d3-sunburst u-text-sans" :style="{ paddingTop: paddingTop }"></div>
+      </div>
     </div>
     
     <div class="flex-3-fiths d3-sunburst__info-wrapper">
