@@ -174,7 +174,7 @@
 
         // add the tooltip
         datapoints.append('text')
-          .text(function(d){ return d.percent })
+          .text(function(d){ return d.percent + '%' })
           .attr('data-tooltip', function(d) { 
             return d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
           })
