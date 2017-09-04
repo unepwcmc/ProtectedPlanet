@@ -119,7 +119,12 @@
 
     computed: {
       styledNumber: function () {
-        return (Math.ceil(this.number * 100)/100).toLocaleString()
+        var roundingNumber = 1
+
+        if(this.total < 20) { roundingNumber = 10 } 
+        if(this.total < 9) { roundingNumber = 100 } 
+
+        return (Math.ceil(this.number * roundingNumber)/roundingNumber).toLocaleString()
       }
     }
   }
