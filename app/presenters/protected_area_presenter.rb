@@ -52,6 +52,7 @@ class ProtectedAreaPresenter
     {
       name: protected_area.name,
       country: protected_area.countries.first.name,
+      iso: protected_area.countries.first.iso_3,
       size: "#{number_with_delimiter(size, delimiter: ',')}km²",
       date: protected_area.legal_status_updated_at.year
     }
