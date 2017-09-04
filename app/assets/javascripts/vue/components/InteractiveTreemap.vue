@@ -8,7 +8,7 @@
             <a :href="'country/'+iso" class="button--basic-link" target="_blank">{{ country }}</a>
           </p>
 
-          <p>{{ country }} and its <a :href="overseasTerritoriesURL" target="_blank">{{ totalOverseasTerritories }} overseas countries and {{ territories }}</a> have a combined area of {{ styledNumber(totalMarineArea) }}km²</p>
+          <p>{{ country }} and its <a :href="overseasTerritoriesURL" target="_blank">{{ totalOverseasTerritories }} overseas {{ correctEnding('countries', totalOverseasTerritories) }} and {{ correctEnding('territories', totalOverseasTerritories) }}</a> have a combined area of {{ styledNumber(totalMarineArea) }}km²</p>
 
           <div class="flex-row-wrap justify-content-between">
             <p class="v-interactive-treemap__stat">
@@ -28,7 +28,7 @@
               <span class="v-interactive-treemap__km">
                ({{ styledNumber(overseas) }}km²)
               </span>
-              of their overseas territories waters are protected
+              of their overseas {{ correctEnding('territories', totalOverseasTerritories) }} waters are protected
             </p>
           </div>
         </div>
@@ -45,7 +45,7 @@
 
         <p class="v-interactive-treemap__title">{{ child.name }}</p>
 
-        <p>{{ child.country }} and its {{ child.totalOverseasTerritories }} overseas countries and territories have a combined area of {{ styledNumber(child.totalMarineArea) }}km²</p>
+        <p>{{ child.country }} and its {{ child.totalOverseasTerritories }} overseas {{ correctEnding('countries', child.totalOverseasTerritories) }} and {{ correctEnding('territories', child.totalOverseasTerritories) }} have a combined area of {{ styledNumber(child.totalMarineArea) }}km²</p>
 
         <p class="v-interactive-treemap__stat">
           <span class="v-interactive-treemap__percent">{{ styledNumber(child.nationalPercentage) }}%</span>
@@ -60,7 +60,7 @@
           <span class="v-interactive-treemap__km">
            ({{ styledNumber(child.overseas) }}km²)
           </span>
-          of their overseas territories waters are protected
+          of their overseas {{ correctEnding('territories', child.totalOverseasTerritories) }} waters are protected
         </p>
       </div>
     </div>
@@ -82,11 +82,11 @@
 
     data: function() {
       return {
-        country: "",
-        iso: "",
+        country: '',
+        iso: '',
         totalMarineArea: 0,
         totalOverseasTerritories: 0,
-        overseasTerritoriesURL: "",
+        overseasTerritoriesURL: '',
         national: 0,
         nationalPercentage: 0,
         overseas: 0,
@@ -99,7 +99,7 @@
     },
 
     methods: {
-      updatePercent: function(data){
+      updatePercent: function(data) {
         this.country = data.country
         this.iso = data.iso
         this.totalMarineArea = data.totalMarineArea
@@ -111,16 +111,14 @@
         this.overseasPercentage = data.overseasPercentage
       },
 
-      styledNumber: function(number){
+      styledNumber: function(number) {
         return (Math.ceil(number * 100)/100).toLocaleString()
-      }
-    },
+      },
 
-    computed: {
-      territories: function () {
-        var string = 'territories'
+      correctEnding: function (word, territories) {
+        var string = word
 
-        if(this.totalOverseasTerritories == 1) { string = 'territory' }
+        if(territories == 1) { string = string.slice(0, -3) + 'y' }
 
         return string
       }
