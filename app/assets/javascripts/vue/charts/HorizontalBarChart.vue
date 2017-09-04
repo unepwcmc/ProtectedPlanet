@@ -20,7 +20,8 @@
           marginLeft: 140, 
           marginRight: 20,
           marginBottom: 30,
-          unit: '%'
+          unit: '%',
+          yTickPadding: 10
         },
         chartWidth: 0,
         chartHeight: 0,
@@ -82,9 +83,9 @@
         // add y axis
         chart.append('g')
           .attr('class', 'yaxis')
-          .call(d3.axisLeft(y).tickSize(0).tickPadding(10))
+          .call(d3.axisLeft(y).tickSize(0).tickPadding(this.config.yTickPadding))
           .selectAll('.tick text')
-          .call(this.wrap, this.config.marginLeft)
+          .call(this.wrap, this.config.marginLeft - this.config.yTickPadding)
 
         // add gridlines
         chart.append('g')
