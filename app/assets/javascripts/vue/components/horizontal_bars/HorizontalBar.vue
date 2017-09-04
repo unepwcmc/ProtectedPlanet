@@ -1,6 +1,8 @@
 <template>
   <div>
-    <p class="v-horizontal-bars__title">{{ name }}</p>
+    <p class="v-horizontal-bars__title">
+      <a :href="url" :title="'View the ' + name + ' protected area'" target="_blank">{{ name }}</a>
+    </p>
     <div class="v-horizontal-bars__bar-wrapper sm-bar">
       <span class="v-horizontal-bars__bar" :style="styleObject"></span>
       <span class="v-horizontal-bars__value">{{ styledKm }} </span>
@@ -15,7 +17,8 @@
     props: {
       name: "",
       km: Number,
-      percent: String
+      percent: String,
+      url: String
     },
 
     data: function() {

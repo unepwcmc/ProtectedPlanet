@@ -4,6 +4,7 @@
       :key="key"
       :name="bar.name"
       :km="bar.km"
+      :url="bar.url"
       :percent="percent(bar.km)"
     >
     </horizontal-bar>
