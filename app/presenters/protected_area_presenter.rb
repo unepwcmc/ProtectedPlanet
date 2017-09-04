@@ -51,6 +51,7 @@ class ProtectedAreaPresenter
     size = protected_area.reported_area.to_f.round(2)
     {
       name: protected_area.name,
+      wdpa_id: protected_area.wdpa_id,
       country: protected_area.countries.first.name,
       iso: protected_area.countries.first.iso_3,
       size: "#{number_with_delimiter(size, delimiter: ',')}km²",
