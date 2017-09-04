@@ -109,11 +109,36 @@
 
           // add bar labels
           bar.append('text')
-            .attr('class', 'bar-label')
-            .attr('transform', function (d) { 
-              return 'translate(' + (x(d.value) - 10) + ',' + ((y.bandwidth()/2) + 4) + ')' 
+            .attr('class', function (d) {
+              //if bar is less than 10% width then add additional class
+
+              if(x(d.value)/self.xAxisMax < 0.1){
+                return 'bar-label bar-label--dark'
+              } else {
+                return 'bar-label'
+              }
             })
-            .attr('text-anchor', 'end')
+            .attr('transform', function (d) { 
+              var start = 0
+
+              //if bar is less than 10% width then show label at the end
+              if(x(d.value)/self.xAxisMax < 0.1){
+                start = x(d.value) + 10
+              } else {
+                start = x(d.value) - 10
+              }
+
+              return 'translate(' + start + ',' + ((y.bandwidth()/2) + 4) + ')' 
+            })
+            .attr('text-anchor', function (d) {
+              //if bar is less than 10% width then show label at the end
+              
+              if(x(d.value)/self.xAxisMax < 0.1){
+                return 'start'
+              } else {
+                return 'end'
+              }
+            })
             .text(function(d) { return self.styledNumber(d.value) + self.config.unit })
       },
 

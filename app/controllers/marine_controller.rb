@@ -391,31 +391,31 @@ class MarineController < ApplicationController
   def ecoregions
     @mostProtectedEcoregions = [
       {
-        name: "Eastern Indo-Pacific",
-        value: 24.3
+        name: "Galapagos",
+        value: 100
       },
       {
-        name: "Temperate Northern Pacific",
-        value: 21
+        name: "Amsterdam-St Paul",
+        value: 100
       },
       {
-        name: "Temperate Australasia",
-        value: 19
+        name: "Subantarctic Islands",
+        value: 95.5
       }
     ].to_json
 
     @leastProtectedEcoregions = [
       {
-        name: "Southern Cold Water",
-        value: 5
+        name: "West and South Indian Shelf",
+        value: 0.95
       },
       {
-        name: "Temperate South America",
-        value: 4
+        name: "Marquesas",
+        value: 0.89
       },
       {
-        name: "Atlantic Warm Water",
-        value: 3
+        name: "Continental High Antarctic",
+        value: 0.04
       }
     ].to_json
 
