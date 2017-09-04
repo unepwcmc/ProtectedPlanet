@@ -71,42 +71,52 @@ class MarineController < ApplicationController
     @top10ProtectedAreas = [
       {
         name: 'Marae Moana',
+        wdpa_id: 555624907,
         km: 1982029
       },
       {
         name: 'Réserve Naturelle Nationale des Terres australes françaises',
+        wdpa_id: 345888,
         km: 1655001
       },
       {
         name: 'Papahānaumokuākea Marine National Monument',
+        wdpa_id: 220201,
         km: 1516555
       },
       {
         name: 'Parc Naturel de la Mer de Corail',
+        wdpa_id: 555577562,
         km: 1291643
       },
       {
         name: 'Pacific Remote Islands',
+        wdpa_id: 400011,
         km: 1277784
       },
       {
         name: 'South Georgia and South Sandwich Islands Marine Protected Area',
+        wdpa_id: 555547601,
         km: 1069872
       },
       {
         name: 'Coral Sea',
+        wdpa_id: 555556875,
         km: 995261
       },
       {
         name: 'Steller Sea Lion Protection Areas, Gulf',
+        wdpa_id: 555586970,
         km: 866717
       },
       {
         name: 'Pitcairn Islands Marine Reserve',
+        wdpa_id: 555624172,
         km: 839568
       },
       {
         name: 'British Indian Ocean Territory Marine Protected Area (Chagos)',
+        wdpa_id: 555512151,
         km: 642340
       }
     ].to_json

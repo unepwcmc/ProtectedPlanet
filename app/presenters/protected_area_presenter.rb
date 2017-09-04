@@ -43,6 +43,7 @@ class ProtectedAreaPresenter
   def name_size
     {
       name: protected_area.name,
+      wdpa_id: protected_area.wdpa_id,
       km: protected_area.gis_marine_area.to_i
     }
   end
