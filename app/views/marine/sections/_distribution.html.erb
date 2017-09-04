@@ -19,48 +19,50 @@
       Marine Areas Beyond National Jurisdiction (ABNJ) are areas of the ocean that are not under the jurisdiction of any one country. Therefore, no individual nation has the sole responsibility for management of these areas. Defined in recent international discussions<sup>1</sup>, ABNJ includes both the High Seas – all parts of the sea that are not included in national waters<sup>2</sup>, and the Protected Area – the seabed beyond the limits of national waters<sup>3</sup>.
     </p>
   </div>
+  
+  <div class="sm-infographic">
+    <h3 class="infographic__header infographic__header--fancy">The Global Ocean</h3>
 
-  <h3 class="infographic__header infographic__header--fancy sm-infographic">The Global Ocean</h3>
+    <div class="infographic__bar--global infographic__bar">
+      <span class="infographic__bar-layer infographic__bar--national" style="width: <%= @distributions[:nationalWaters] %>%"></span>
 
-  <div class="infographic__bar--global infographic__bar">
-    <span class="infographic__bar-layer infographic__bar--national" style="width: <%= @distributions[:nationalWaters] %>%"></span>
+      <p class="infographic__percent infographic__percent--national">
+        <span class="infographic__percent__title">National waters</span>
+        <span class="text--60"><counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWaters] %>"></counter>%</span>
+      </p>
 
-    <p class="infographic__percent infographic__percent--national">
-      <span class="infographic__percent__title">National waters</span>
-      <span class="text--60"><counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWaters] %>"></counter>%</span>
-    </p>
-
-    <p class="infographic__percent infographic__percent--highseas">
-      <span class="infographic__percent__title">High Seas</span>
-      <span class="text--60"><counter class="sm-infographic-counter" :total="<%= @distributions[:highSeas] %>"></counter>%</span>
-    </p>
-  </div>
-
-  <div class="flex-row-responsive">
-
-    <div class="flex-1-half infographic__left">
-      <h4>Protected Area coverage of national waters</h4>
-
-      <div class="infographic__bar infographic__bar--national">
-        <span class="infographic__bar-layer infographic__bar--pa" style="width: <%= @distributions[:nationalWatersPa] %>%"></span>
-      </div>
-
-      <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWatersPa] %>"></counter>%</span>
-
-      <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWatersKm] %>"></counter>km²)</span>
+      <p class="infographic__percent infographic__percent--highseas">
+        <span class="infographic__percent__title">High Seas</span>
+        <span class="text--60"><counter class="sm-infographic-counter" :total="<%= @distributions[:highSeas] %>"></counter>%</span>
+      </p>
     </div>
 
+    <div class="flex-row-responsive">
 
-    <div class="flex-1-half infographic__right">
-      <h4>Protected Area coverage of the high seas</h4>
+      <div class="flex-1-half infographic__left">
+        <h4>Protected Area coverage of national waters</h4>
 
-      <div class="infographic__bar infographic__bar">
-        <span class="infographic__bar-layer infographic__bar-layer--highseas infographic__bar--pa" style="width: <%= @distributions[:highSeasPa] %>%"></span>
+        <div class="infographic__bar infographic__bar--national">
+          <span class="infographic__bar-layer infographic__bar--pa" style="width: <%= @distributions[:nationalWatersPa] %>%"></span>
+        </div>
+
+        <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWatersPa] %>"></counter>%</span>
+
+        <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @distributions[:nationalWatersKm] %>"></counter>km²)</span>
       </div>
 
-      <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @distributions[:highSeasPa] %>"></counter>%</span>
 
-      <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @distributions[:highSeasKm] %>"></counter>km²)</span>
+      <div class="flex-1-half infographic__right">
+        <h4>Protected Area coverage of the high seas</h4>
+
+        <div class="infographic__bar infographic__bar">
+          <span class="infographic__bar-layer infographic__bar-layer--highseas infographic__bar--pa" style="width: <%= @distributions[:highSeasPa] %>%"></span>
+        </div>
+
+        <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @distributions[:highSeasPa] %>"></counter>%</span>
+
+        <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @distributions[:highSeasKm] %>"></counter>km²)</span>
+      </div>
     </div>
   </div>
 </div>
