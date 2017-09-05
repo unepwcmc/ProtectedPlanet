@@ -47,7 +47,7 @@
           <a :href="'country/'+ child.iso" class="button--basic-link" target="_blank" :title="'Visit the ' + child.name + ' country page'">{{ child.name }}</a>
         </p>
 
-        <p>{{ child.country }} and its <a :href="overseasTerritoriesURL" target="_blank">{{ child.totalOverseasTerritories }} overseas {{ correctEnding('countries', child.totalOverseasTerritories) }} and {{ correctEnding('territories', child.totalOverseasTerritories) }}</a> have a combined area of {{ styledNumber(child.totalMarineArea) }}km²</p>
+        <p>{{ child.country }} and its <a :href="child.overseasTerritoriesURL" target="_blank">{{ child.totalOverseasTerritories }} overseas {{ correctEnding('countries', child.totalOverseasTerritories) }} and {{ correctEnding('territories', child.totalOverseasTerritories) }}</a> have a combined area of {{ styledNumber(child.totalMarineArea) }}km²</p>
 
         <p class="v-interactive-treemap__stat">
           <span class="v-interactive-treemap__percent">{{ styledNumber(child.nationalPercentage) }}%</span>
