@@ -7,11 +7,11 @@
   "vendor": {
     "name": "bower-rails generated vendor assets",
     "dependencies": {
-      "protectedplanet-frontend": "marine-page",
+      "protectedplanet-frontend": "master",
       "html5shiv": "",
       "jquery": "< 2.0.0",
       "REM-unit-polyfill": "",
-      "d3": "4.10.0", 
+      "d3": "4.10.0",
       "scrollmagic": "~2.0.5"
     }
   }
