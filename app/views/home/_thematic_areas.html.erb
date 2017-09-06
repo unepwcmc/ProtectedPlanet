@@ -21,17 +21,15 @@
       </div>
       <div class="half circle-story">
         <div class="circle-story__circle one-thirds">
-          <img src="<%= image_url("thematic-areas/parcc.jpg") %>" class="circle-story__circle-inner"/>
+          <img src="<%= image_url("thematic-areas/marine.png") %>" class="circle-story__circle-inner"/>
         </div>
 
         <div class="circle-story__body two-thirds">
-          <h2 class="circle-story__title"><a target="_blank" href="http://parcc.protectedplanet.net/">PARCC</a></h2>
+          <h2 class="circle-story__title"><a target="_blank" href="<%= marine_path %>">Marine Protected Areas</a></h2>
           <p class="circle-story__content">
-            The PARCC project's main
-            objective was to assess the vulnerability of West African protected
-            areas to climate change and help design more resilient protected area networks.
+            Explore the World's marine protected areas
           </p>
-          <a class="link-with-icon u-bold" target="_blank" href="http://parcc.protectedplanet.net/">
+          <a class="link-with-icon u-bold" target="_blank" href="<%= marine_path %>">
             Learn more<i class="fa fa-arrow-right link-with-icon__icon link-with-icon__icon--after"></i>
           </a>
         </div>
@@ -78,17 +76,17 @@
     <div class="row">
       <div class="half circle-story">
         <div class="circle-story__circle one-thirds">
-          <img src="<%= image_url("thematic-areas/connectivity.jpg") %>" class="circle-story__circle-inner"/>
+          <img src="<%= image_url("thematic-areas/parcc.jpg") %>" class="circle-story__circle-inner"/>
         </div>
 
         <div class="circle-story__body two-thirds">
-          <h2 class="circle-story__title"><a target="_blank" href="<%= cms_page_path(@connectivity_page) %>">Connectivity Conservation</a></h2>
+          <h2 class="circle-story__title"><a target="_blank" href="http://parcc.protectedplanet.net/">PARCC</a></h2>
           <p class="circle-story__content">
-            Connectivity Conservation aims to strengthen the protection of
-            biodiversity, enhance the provision of ecosystem services, and
-            increase resilience to climate change.
+            The PARCC project's main
+            objective was to assess the vulnerability of West African protected
+            areas to climate change and help design more resilient protected area networks.
           </p>
-          <a class="link-with-icon u-bold" target="_blank" href="<%= cms_page_path(@connectivity_page) %>">
+          <a class="link-with-icon u-bold" target="_blank" href="http://parcc.protectedplanet.net/">
             Learn more<i class="fa fa-arrow-right link-with-icon__icon link-with-icon__icon--after"></i>
           </a>
         </div>
@@ -99,13 +97,13 @@
         </div>
 
         <div class="circle-story__body two-thirds">
-          <h2 class="circle-story__title"><a target="_blank" href="https://www.iucn.org/theme/protected-areas/our-work/green-list">Green List</a></h2>
+          <h2 class="circle-story__title"><a target="_blank" href="<%= cms_page_path(@green_list_page) %>">Green List</a></h2>
           <p class="circle-story__content">
             The IUCN Green List is a new global standard for protected areas.
             The list recognizes success in achieving conservation outcomes and
             measures progress in effective management of protected areas.
           </p>
-          <a class="link-with-icon u-bold" target="_blank" href="https://www.iucn.org/theme/protected-areas/our-work/green-list">
+          <a class="link-with-icon u-bold" target="_blank" href="<%= cms_page_path(@green_list_page) %>">
             Learn more<i class="fa fa-arrow-right link-with-icon__icon link-with-icon__icon--after"></i>
           </a>
         </div>

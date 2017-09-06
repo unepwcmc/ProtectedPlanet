@@ -1,4 +1,6 @@
 class ProtectedAreaPresenter
+  include ActionView::Helpers::NumberHelper
+
   POLYGON = -> (pa, _property) {
     type = ProtectedArea.select("ST_GeometryType(the_geom) AS type").where(id: pa.id).first.type
     type == "ST_MultiPolygon"
@@ -36,6 +38,26 @@ class ProtectedAreaPresenter
 
   def percentage_complete
     ((num_fields_with_data.to_f / all_fields.count) * 100).round(2)
+  end
+
+  def name_size
+    {
+      name: protected_area.name,
+      wdpa_id: protected_area.wdpa_id,
+      km: protected_area.gis_marine_area.to_i
+    }
+  end
+
+  def marine_designation
+    size = protected_area.reported_area.to_f.round(2)
+    {
+      name: protected_area.name,
+      wdpa_id: protected_area.wdpa_id,
+      country: protected_area.countries.first.name,
+      iso: protected_area.countries.first.iso_3,
+      size: "#{number_with_delimiter(size, delimiter: ',')}km²",
+      date: protected_area.legal_status_updated_at.year
+    }
   end
 
   private

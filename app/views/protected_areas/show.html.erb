@@ -21,7 +21,7 @@
       <%= render partial: "protected_areas/designations/info_box" %>
     <% end %>
   <% end %>
-  
+
   <% unless @for_pdf %>
     <div class="header__links">
       <button class="js-download-btn link link--hero-download u-only-desktop tooltip__trigger js-trigger">
@@ -42,7 +42,7 @@
   <% if has_designations %>
     <%= render partial: "designations" %>
   <% end %>
-  
+
   <% if @networks.any? %>
     <% unless @for_pdf %>
       <%= render partial: "map_connections" %>

@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/adambutler/vuejs-rails.git
+  revision: 79de9df9d8b494580ac36037b65e10e1b71e28a1
+  specs:
+    vuejs-rails (2.3.2)
+
+GIT
   remote: git://github.com/unepwcmc/bystander.git
   revision: 5293e96caec6257af5a280b41f0d0d6ed7910850
   specs:
@@ -360,6 +366,10 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
+    sprockets-vue (0.1.0)
+      actionview
+      activesupport
+      sprockets (>= 3.0.0)
     sshkit (1.8.1)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
@@ -448,11 +458,13 @@ DEPENDENCIES
   slack-notifier (~> 1.5.1)
   spring
   sprockets-rails (~> 2.3.3)
+  sprockets-vue (~> 0.1.0)
   system
   timecop (~> 0.7.1)
   tinymce-rails (~> 4.3.2)
   turnout (~> 2.0.0)
   uglifier (~> 2.7.2)
+  vuejs-rails (~> 2.3.2)!
   webmock (~> 1.18.0)
   whenever
   will_paginate (~> 3.0)

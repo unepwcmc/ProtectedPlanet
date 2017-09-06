@@ -1,0 +1,66 @@
+<%= content_for :seo_image, image_url('social-marine.png') %>
+
+<div class="v-marine template--marine">
+
+  <%= render partial: "marine/sections/header" %>
+
+  <div class="container--push-bottom">
+
+    <div id="coverage" class="section--block-color">
+      <section class="template--marine__section u-no-padding--bottom">
+        <%= render partial: "marine/sections/coverage_map" %>
+      </section>
+    </div>
+
+    <div class="js-download-btn tooltip__trigger marine-download">
+      <button href="#" class="js-trigger btn-map-download btn-map-download--marine">
+        <i class="fa fa-download big-button__icon"></i>Download the marine dataset
+      </button>
+
+      <%= download_dropdown("marine", "general", [:csv, :kml, :shp, :pdf]) %>
+    </div>
+
+    <section id="distribution" class="template--marine__section container--profile">
+      <%= render partial: "marine/sections/distribution" %>
+    </section>
+
+    <div id="growth" class="section--block-color">
+      <section class="template--marine__section container--profile">
+        <%= render partial: "marine/sections/growth" %>
+      </section>
+    </div>
+
+    <section id="national" class="template--marine__section container--profile">
+      <%= render partial: "marine/sections/national" %>
+    </section>
+
+    <div id="size-distribution" class="section--block-color template--marine__fact-padding-bottom">
+      <section class="template--marine__section container--profile">
+        <%= render partial: "marine/sections/size_distribution" %>
+      </section>
+    </div>
+    
+    <section id="ecoregions" class="template--marine__section container--profile template--marine__fact-padding-top">
+      <%= render partial: "marine/sections/ecoregions" %>
+    </section>
+    
+    <div id="pledges">
+      <section class="template--marine__section">
+        <%= render partial: "marine/sections/pledges" %>
+      </section>
+
+      <section id="designations" class="template--marine__section container--profile">
+        <%= render partial: "marine/sections/designations" %>
+      </section>
+    </div>
+
+    <section id="greenlist" class="template--marine__section container--profile">
+      <%= render partial: "marine/sections/greenlist" %>
+    </section>
+    
+    <footer class="template--marine__section container--profile template--marine__footer">
+      <%= render partial: "marine/sections/footer" %>
+    </footer>
+
+  </div>
+</div>

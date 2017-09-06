@@ -37,7 +37,7 @@ class Country < ActiveRecord::Base
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:id, :name],
+      only: [:id, :name, :iso_3],
       include: {
         region_for_index: { only: [:id, :name] }
       }

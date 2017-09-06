@@ -23,6 +23,9 @@ gem 'premailer-rails'
 
 gem 'levenshtein', '~> 0.2.2'
 
+gem 'vuejs-rails', '~> 2.3.2', github: 'adambutler/vuejs-rails'
+gem 'sprockets-vue', '~> 0.1.0'
+
 group :production, :staging do
 #  gem 'unicorn'
   gem 'dalli', '~> 2.7.2'

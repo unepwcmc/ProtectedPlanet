@@ -21,7 +21,7 @@ define(
 
         config = @$mapContainer.data()
 
-        @map = @createMap(@$mapContainer.attr('id'))
+        @map = @createMap(@$mapContainer.attr('id'), @$mapContainer.data('zoom-position'))
 
         unless config.scrollWheelZoom?
           @map.scrollWheelZoom.disable()
@@ -42,10 +42,10 @@ define(
           Interactive.listen(@map)
           ProtectedAreaOverlay.render(@map, config)
 
-      createMap: (id) ->
+      createMap: (id, position = "bottomright") ->
         L.mapbox.map(
           id, 'unepwcmc.l8gj1ihl', CONFIG
-        ).addControl(L.control.zoom(position: 'bottomright'))
+        ).addControl(L.control.zoom(position: position))
 
       updateMap: (ids) ->
         @shownIds = ids

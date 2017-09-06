@@ -44,7 +44,7 @@ module SearchHelper
 
   DEFAULT_TITLE = 'Protected Areas'
   def search_title params, only_text=false
-    title = title_with_query(params[:q]) || title_with_filter(params) || DEFAULT_TITLE
+    title = title_with_overseas_territories(params[:q]) || title_with_query(params[:q]) || title_with_filter(params) || DEFAULT_TITLE
     only_text ? strip_tags(title) : title
   end
 
@@ -56,6 +56,17 @@ module SearchHelper
     end
   end
 
+  def title_with_overseas_territories query
+    return nil unless query
+    keywords = query.split(',')
+    if keywords.select { |k| k .length == 3 }.count == keywords.count
+      # They all belong to the same parent country already when coming from the marine page
+      parent_country = Country.find_by_iso_3(keywords.first).try(:parent).try(:name)
+      return nil unless parent_country
+      %{Search results for <strong class="u-link-color">#{parent_country} overseas territories</strong>}.html_safe
+    end
+  end
+
   TITLE_GENERATORS = {
     value: -> config, param { config['cases'][param.to_s] },
     model: -> config, param {
@@ -64,8 +75,13 @@ module SearchHelper
       config['template'] % instance.name
     }
   }
+
   def title_with_filter params
-    main_filter = params['main']
+    main_filter       = params['main']
+    green_list_filter = params['is_green_list']
+
+    return "Protected Areas with Green List status" if green_list_filter == "true" && main_filter.nil?
+
     return if main_filter.nil? || params[main_filter].nil?
 
     titles = Search.configuration['titles']
