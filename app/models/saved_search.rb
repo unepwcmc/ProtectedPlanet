@@ -16,7 +16,8 @@ class SavedSearch < ActiveRecord::Base
   def search
     @search ||= Search.search(search_term, {
       filters: {'type' => 'protected_area'}.merge(parsed_filters || {}),
-      without_aggregations: true
+      without_aggregations: true,
+      size: ProtectedArea.count
     })
   end
 end
