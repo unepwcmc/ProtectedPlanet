@@ -195,14 +195,14 @@
             var id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
 
             $('[data-tooltip="' + id + '"]')
-              .addClass('v-interactive-multiline__tooltip-active')
+              .attr('class', 'v-interactive-multiline__tooltip v-interactive-multiline__tooltip-active')
             }
           )
           .on('mouseleave', function(d) {
             var id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
 
             $('[data-tooltip="' + id + '"]')
-              .removeClass('v-interactive-multiline__tooltip-active')
+              .attr('class', 'v-interactive-multiline__tooltip')
             }
           )
       },
