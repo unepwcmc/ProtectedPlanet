@@ -2,7 +2,7 @@
   <section class="info-box__column">
     <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Citation</h2>
     <p class="info-box__body">
-      UNEP-WCMC and IUCN (year), Protected Planet: [insert name of component database; The World Database on Protected Areas (WDPA)/The Global Database on Protected Areas Management Effectiveness (GD-PAME)] [On-line], [insert month/year of the version downloaded], Cambridge, UK: UNEP-WCMC and IUCN. Available at: <%= link_to 'www.protectedplanet.net', '/', title: 'Protected Planet', class: 'button--green-link' %>.
+    UNEP-WCMC and IUCN (<%= Date.today.year %>) Marine Protected Planet [On-line], [<%= Date.today.strftime("%B") %>, <%= Date.today.year %>], Cambridge, UK: UNEP-WCMC and IUCN Available at: <%= link_to 'www.protectedplanet.net', '/', title: 'Protected Planet', class: 'button--green-link' %>.
     </p>
   </section>
 
