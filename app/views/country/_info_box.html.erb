@@ -11,7 +11,7 @@
     <div class="info-box__body">
       <div class="reference">
         <h3 id="ref1" class="reference__title">(Ref 1)</h3>
-        <p class="reference__body">UNEP-WCMC (2016). Global statistics from the World Database on Protected Areas (WDPA).Cambridge, UK: UNEP- WCMC.</p>
+        <p class="reference__body">UNEP-WCMC (2017). Global statistics from the World Database on Protected Areas (WDPA), <%= Date.today.strftime("%B") %> 2017 .Cambridge, UK: UNEP- WCMC.</p>
       </div>
       <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
         <div class="reference">
