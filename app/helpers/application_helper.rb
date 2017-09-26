@@ -68,6 +68,46 @@ module ApplicationHelper
     end
   end
 
+  def twitter_card
+    if content_for?(:twitter_card)
+      content_for(:twitter_card)
+    else
+      "summary"
+    end
+  end
+
+  def social_title
+    if content_for?(:social_title)
+      sanitize content_for(:social_title)
+    else
+      page_title 'Protected Planet'
+    end
+  end
+
+  def social_description
+    if content_for?(:social_description)
+      sanitize content_for(:social_description)
+    else
+      seo_description
+    end
+  end
+
+  def social_image
+    if content_for?(:social_image)
+      content_for(:social_image)
+    else
+      URI.join(root_url, image_path('social.png'))
+    end
+  end
+
+  def social_image_alt
+    if content_for?(:social_image_alt)
+      content_for(:social_image_alt)
+    else
+      "Screenshot of the Protected Planet website which shows the menu bar and a map of the world that has protected areas highlighted in green."
+    end
+  end
+
   DOWNLOAD_TYPES = {
     csv: {
       content: '.CSV',
