@@ -11,7 +11,7 @@ define(
       CONFIG =
         minZoom: 2
         zoomControl: false
-        attributionControl: false
+        attributionControl: true
 
       constructor: (@$mapContainer) ->
 
