@@ -3,26 +3,24 @@
 <head>
   <meta charset="utf-8">
   <title><%= page_title('Protected Planet') %></title>
-
-  <!-- google -->
-  <meta name="Description" content="<%= seo_description %>">
-  <meta name="twitter:description" content="<%= seo_description %>">
-
-  <!-- Twitter -->
+  <meta name="description" content="<%= seo_description %>">
+  
+  <!--  social meta tags -->
+  <meta property="og:site_name" content="Protected Planet">
+  <meta property="og:title" content="<%= social_title %>">
+  <meta property="og:description" content="<%= social_description %>">
+  <meta property="og:url" content="<%= request.original_url %>">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="<%= social_image %>">
+  
+  <meta name="twitter:card" content="<%= twitter_card %>" />
+  <meta name="twitter:title" content="<%= social_title %>">
+  <meta name="twitter:description" content="<%= social_description %>">
   <meta name="twitter:site" content="@protectedplanet">
-  <meta name="twitter:title" content="<%= page_title('Protected Planet') %>">
-
-  <!-- FB -->
-  <meta name="og:site_name" content="Protected Planet">
-  <meta name="og:title" content="<%= page_title('Protected Planet') %>">
-  <meta name="og:description" content="<%= seo_description %>">
-  <meta name="og:url" content="<%= request.original_url %>">
-  <meta name="og:type" content="website">
-
-  <% if content_for?(:seo_image) %>
-    <meta content="<%= yield :seo_image %>" name="og:image">
-    <meta content="<%= yield :seo_image %>" name="twitter:image">
-  <% end %>
+  <meta name="twitter:creator" content="@protectedplanet">
+  <meta name="twitter:image" content="<%= social_image %>">
+  <meta name="twitter:image-alt" content="<%= social_image_alt %>">
+  <!-- end social meta tags -->
 
   <!-- IE stuff -->
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
