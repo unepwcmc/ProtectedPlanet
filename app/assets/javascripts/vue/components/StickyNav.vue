@@ -6,10 +6,10 @@
 
       <div 
         @click="toggleMenu" 
-        class="v-sticky-nav__burger" 
-        :class="{ 'v-sticky-nav__burger--open' : isMenuOpen }">
+        class="burger v-sticky-nav__burger" 
+        :class="{ 'burger--open' : isMenuOpen }">
 
-        <span class="v-sticky-nav__burger-icon"></span>
+        <span class="burger-icon v-sticky-nav__burger-icon"></span>
       </div>
 
       <ul class="v-sticky-nav__menu" :class="{ 'v-sticky-nav__menu--open' : this.isMenuOpen }">
