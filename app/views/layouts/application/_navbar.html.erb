@@ -18,8 +18,8 @@
         <%= link_to 'Updates & News', resources_path(category_id: @updates_and_news.id), class: "navbar__element" %>
       <% end %>
 
-      <div class="navbar__element navbar__element--submenu js-dropdown js-trigger">
-        <button class="navbar__submenu__title">Resources</button>
+      <div class="navbar__element navbar__element--submenu js-dropdown">
+        <button class="navbar__submenu__title js-trigger">Resources</button>
 
         <div class="u-hide js-target navbar__submenu dropdown">
           <% Comfy::Cms::Category.of_type("Comfy::Cms::Page").all.each do |category| %>
@@ -33,8 +33,8 @@
       <%= link_to 'Terms & Conditions', '/c/terms-and-conditions', class: "navbar__element" %>
 
       <% if @wdpa_page.present? %>
-        <div class="navbar__element navbar__element--submenu js-dropdown js-trigger">
-          <button class="navbar__submenu__title">Thematic Areas</button>
+        <div class="navbar__element navbar__element--submenu js-dropdown">
+          <button class="navbar__submenu__title js-trigger">Thematic Areas</button>
 
           <div class="u-hide js-target navbar__submenu dropdown">
             <div class="navbar__submenu">
@@ -51,7 +51,7 @@
 
       <div data-dropdown-switch data-dropdown-switch-text class="js-switch js-dropdown <%= bem("navbar__element", "with-separator", "larger", "for-search-dropdown") %>"
         >
-        <button class="js-trigger link-with-icon link-with-icon--no-color"> <i class="fa fa-search"></i> Search</button>
+        <button class="js-trigger link-with-icon link-with-icon--no-color link-with-icon--no-underline"><i class="fa fa-search link-with-icon__icon"></i>Search</button>
         <div class="u-hide js-target dropdown dropdown--search-dropdown u-font-inherit">
           <form action='/search' method='get' class="search-bar" id="search-form">
             <input autocomplete="off" name="q" placeholder="Search the protected areas of our planet" value='<%= @query %>' class="search-bar__input" type="text">

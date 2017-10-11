@@ -14,8 +14,10 @@ define('dropdown', [], ->
 
       @$triggerEl.on(@options.on, (event) =>
         if @open
+          @$triggerEl.toggleClass('is-open')
           @closeDropdown(@$targetEl)
         else
+          @$triggerEl.toggleClass('is-open')
           @closeOtherDropdowns()
           @openDropdown(@$targetEl)
 
@@ -48,9 +50,9 @@ define('dropdown', [], ->
 
       if @$switchEl.data()?.hasOwnProperty('dropdownSwitchText')
         if @$switchEl.hasClass('is-active')
-          @$triggerEl.html('<i class="fa fa-times"></i> Close')
+          @$triggerEl.html('<i class="fa fa-times link-with-icon__icon"></i>Close')
         else
-          @$triggerEl.html('<i class="fa fa-search"></i> Search')
+          @$triggerEl.html('<i class="fa fa-search link-with-icon__icon"></i>Search')
 
   return Dropdown
 )
