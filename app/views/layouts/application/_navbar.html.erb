@@ -1,19 +1,65 @@
 <nav class="navbar">
-  <div class="navbar__element navbar__element--bigger">
+  <div class="navbar__element--bigger">
     <%= link_to root_path, class: 'protectedplanet-logo' do %>
       protected planet<sup class="protectedplanet-logo__registered">®</sup>
     <% end %>
   </div>
   
   <% unless @for_pdf %>
-    <div ontouchend="this.onclick=touchHoverFix" class="js-trigger js-switch mobile-menu__hamburger is-closed u-only-mobile navbar__element navbar__element--right">
-      <i class="fa fa-bars mobile-menu__hamburger-icon"></i>
+
+    <div ontouchend="this.onclick=touchHoverFix" class="burger navbar__burger is-closed js-trigger js-switch">
+      <span class="burger-icon navbar__burger-icon"></span>
     </div>
 
-    <%= render "layouts/application/navbar_desktop" %>
+    <div class="navbar__menu u-hide js-target">
+      <%= link_to 'About', '/c/about', class: "navbar__element" %>
+
+      <% if @updates_and_news.present? %>
+        <%= link_to 'Updates & News', resources_path(category_id: @updates_and_news.id), class: "navbar__element" %>
+      <% end %>
+
+      <div class="navbar__element navbar__element--submenu js-dropdown">
+        <button class="navbar__submenu__title js-trigger">Resources</button>
+
+        <div class="u-hide js-target navbar__submenu dropdown">
+          <% Comfy::Cms::Category.of_type("Comfy::Cms::Page").all.each do |category| %>
+            <a class="navbar__submenu__link" href="<%= resources_path(category_id: category.id) %>"><%= category.label %></a>
+          <% end %>
+
+          <a class="navbar__submenu__link" href="//api.protectedplanet.net">Protected Planet API</a>
+        </div>
+      </div>
+
+      <%= link_to 'Terms & Conditions', '/c/terms-and-conditions', class: "navbar__element" %>
+
+      <% if @wdpa_page.present? %>
+        <div class="navbar__element navbar__element--submenu js-dropdown">
+          <button class="navbar__submenu__title js-trigger">Thematic Areas</button>
+
+          <div class="u-hide js-target navbar__submenu dropdown">
+            <div class="navbar__submenu">
+              <a class="navbar__submenu__link" href="<%= cms_page_path(@wdpa_page) %>">WDPA</a>
+              <a class="navbar__submenu__link" href="<%= marine_path %>">Marine Protected Areas</a>
+              <a class="navbar__submenu__link" href="http://parcc.protectedplanet.net/">PARCC</a>
+              <a class="navbar__submenu__link" href="http://www.iccaregistry.org">ICCA</a>
+              <a class="navbar__submenu__link" href="<%= cms_page_path(@pame_page) %>">PAME</a>
+              <a class="navbar__submenu__link" href="<%= cms_page_path(@connectivity_page) %>">Connectivity Conservation</a>
+              <a class="navbar__submenu__link" href="<%= cms_page_path(@green_list_page) %>">Green List</a>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div data-dropdown-switch data-dropdown-switch-text class="js-switch js-dropdown <%= bem("navbar__element", "with-separator", "larger", "for-search-dropdown") %>"
+        >
+        <button class="js-trigger link-with-icon link-with-icon--no-color link-with-icon--no-underline"><i class="fa fa-search link-with-icon__icon"></i>Search</button>
+        <div class="u-hide js-target dropdown dropdown--search-dropdown u-font-inherit">
+          <form action='/search' method='get' class="search-bar" id="search-form">
+            <input autocomplete="off" name="q" placeholder="Search the protected areas of our planet" value='<%= @query %>' class="search-bar__input" type="text">
+            <button class="search-bar__submit" type="submit"><i class="fa fa-search"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
   <% end %>
 </nav>
-
-<div class="js-target u-hide u-only-mobile">
-  <%= render "layouts/application/navbar_mobile" %>
-</div>
