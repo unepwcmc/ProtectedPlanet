@@ -1,0 +1,39 @@
+<% @childPages = @cms_page.children.published %>
+
+<% 
+
+@options = []
+
+@cms_page.children.published.each do |child|
+  
+  object = {}
+
+  object[:title] = child.label
+
+  @options.push(object)
+
+end
+
+%>
+
+
+<%= @options.to_json.inspect %>
+
+<% @cms_page.children.published.each do |child| %>
+  
+  <div>
+    <h3><%= child.label %></h3>
+
+    <img src="" alt="">
+    
+    <div>
+      Content
+      <%= cms_block_content_render(:text, child) %>
+    </div>
+
+    <a href="" title="View protected area">View protected area</a>
+  </div>
+
+<% end %>
+
+<select-with-content :options="<%= @options.to_json %>" ></select-with-content>
