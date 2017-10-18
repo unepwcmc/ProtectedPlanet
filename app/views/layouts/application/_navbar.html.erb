@@ -4,7 +4,7 @@
       protected planet<sup class="protectedplanet-logo__registered">®</sup>
     <% end %>
   </div>
-  
+
   <% unless @for_pdf %>
 
     <div ontouchend="this.onclick=touchHoverFix" class="burger navbar__burger is-closed js-trigger js-switch">
@@ -32,23 +32,21 @@
 
       <%= link_to 'Terms & Conditions', '/c/terms-and-conditions', class: "navbar__element" %>
 
-      <% if @wdpa_page.present? %>
-        <div class="navbar__element navbar__element--submenu js-dropdown">
-          <button class="navbar__submenu__title js-trigger">Thematic Areas</button>
+      <div class="navbar__element navbar__element--submenu js-dropdown">
+        <button class="navbar__submenu__title js-trigger">Thematic Areas</button>
 
-          <div class="u-hide js-target navbar__submenu dropdown">
-            <div class="navbar__submenu">
-              <a class="navbar__submenu__link" href="<%= cms_page_path(@wdpa_page) %>">WDPA</a>
-              <a class="navbar__submenu__link" href="<%= marine_path %>">Marine Protected Areas</a>
-              <a class="navbar__submenu__link" href="http://parcc.protectedplanet.net/">PARCC</a>
-              <a class="navbar__submenu__link" href="http://www.iccaregistry.org">ICCA</a>
-              <a class="navbar__submenu__link" href="<%= cms_page_path(@pame_page) %>">PAME</a>
-              <a class="navbar__submenu__link" href="<%= cms_page_path(@connectivity_page) %>">Connectivity Conservation</a>
-              <a class="navbar__submenu__link" href="<%= cms_page_path(@green_list_page) %>">Green List</a>
-            </div>
+        <div class="u-hide js-target navbar__submenu dropdown">
+          <div class="navbar__submenu">
+            <a class="navbar__submenu__link" href="<%= cms_page_path(@wdpa_page) %>">WDPA</a>
+            <a class="navbar__submenu__link" href="<%= marine_path %>">Marine Protected Areas</a>
+            <a class="navbar__submenu__link" href="http://parcc.protectedplanet.net/">PARCC</a>
+            <a class="navbar__submenu__link" href="http://www.iccaregistry.org">ICCA</a>
+            <a class="navbar__submenu__link" href="<%= cms_page_path(@pame_page) %>">PAME</a>
+            <a class="navbar__submenu__link" href="<%= cms_page_path(@connectivity_page) %>">Connectivity Conservation</a>
+            <a class="navbar__submenu__link" href="<%= cms_page_path(@green_list_page) %>">Green List</a>
           </div>
         </div>
-      <% end %>
+      </div>
 
       <div data-dropdown-switch data-dropdown-switch-text class="js-switch js-dropdown <%= bem("navbar__element", "with-separator", "larger", "for-search-dropdown") %>"
         >
