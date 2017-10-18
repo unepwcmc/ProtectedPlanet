@@ -11,7 +11,7 @@ class HomeController < ApplicationController
                   comprehensive global database on terrestrial and marine protected
                   areas.",
         image: "wdpa.jpg",
-        url: Rails.root.join("/c" + @wdpa_page.full_path)
+        url: Rails.root.join("/c#{@wdpa_page.try(:full_path)}")
       },
       {
         title: "Marine Protected Areas",
@@ -35,7 +35,7 @@ class HomeController < ApplicationController
         primarily the extent to which it is
         protecting values and achieving goals and objectives.",
         image: "pame.jpg",
-        url: Rails.root.join("/c" + @pame_page.full_path)
+        url: Rails.root.join("/c#{@pame_page.try(:full_path)}")
       },
       {
         title: "PARCC",
@@ -51,7 +51,7 @@ class HomeController < ApplicationController
           The list recognizes success in achieving conservation outcomes and
           measures progress in effective management of protected areas.",
         image: "green-list.jpg",
-        url: Rails.root.join("/c" + @green_list_page.full_path)
+        url: Rails.root.join("/c#{@green_list_page.try(:full_path)}")
       }
     ]
   end
