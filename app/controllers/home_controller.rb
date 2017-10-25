@@ -56,7 +56,7 @@ class HomeController < ApplicationController
       {
         title: "Equity and Protected Areas",
         content: "Equity relates to how fairly a protected area is managed: who has a say in decisions, how decisions are taken, and how the costs and benefits are shared.",
-        image: "equity",
+        image: "equity.jpg",
         url: Rails.root.join("/c#{@equity_page.try(:full_path)}")
       }
     ]
