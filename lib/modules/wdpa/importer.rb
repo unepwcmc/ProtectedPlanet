@@ -19,6 +19,7 @@ class Wdpa::Importer
     Wdpa::ProtectedAreaImporter.import wdpa_release
     Wdpa::GeometryRatioCalculator.calculate
     Wdpa::NetworkImporter.import
+    Wdpa::OverseasTerritoriesImporter.import
     Wdpa::GreenListImporter.import
   end
 end
