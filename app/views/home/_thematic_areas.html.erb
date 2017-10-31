@@ -1,114 +1,32 @@
 <div id="thematic-areas" class="section section--padding-top">
   <h1 class="section__header">Discover our Thematic Areas</h1>
-  <div class="section__body">
-    <div class="row">
-      <div class="half circle-story">
-        <div class="circle-story__circle one-thirds">
-          <img src="<%= image_url("thematic-areas/wdpa.jpg") %>" class="circle-story__circle-inner"/>
-        </div>
+  
+  <div class="section__body flex-row-wrap">
+    
+    <% @thematicAreas.each do |area| %>
+      <div class="flex-1-half">
+        <div class="circle-story">
 
-        <div class="circle-story__body two-thirds">
-          <h2 class="circle-story__title"><a href="<%= cms_page_path(@wdpa_page) %>">WDPA</a></h2>
-          <p class="circle-story__content">
-            The World Database on Protected Areas (WDPA) is the most
-            comprehensive global database on terrestrial and marine protected
-            areas.
-          </p>
-          <a class="link-with-icon u-bold" target="_blank" href="<%= cms_page_path(@wdpa_page) %>">
-            Learn more<i class="fa fa-arrow-right link-with-icon__icon link-with-icon__icon--after"></i>
-          </a>
+          <div class="circle-story__circle flex-1-third">
+            <img src="<%= image_url("thematic-areas/#{area[:image]}") %>" class="circle-story__circle-inner" alt="Generic image for the <%= area[:title] %> thematic area">
+          </div>
+
+          <div class="circle-story__body flex-2-thirds">
+            <h2 class="circle-story__title">
+              <a href="<%= area[:url] %>" title="Visit the <%= area[:title] %> page"><%= area[:title] %></a>
+            </h2>
+
+            <p class="circle-story__content">
+              <%= area[:content] %>
+            </p>
+
+            <a href="<%= area[:url] %>" title="Visit the <%= area[:title] %> page" class="link-with-icon u-bold" >
+              Learn more<i class="fa fa-arrow-right link-with-icon__icon link-with-icon__icon--after"></i>
+            </a>
+          </div>
         </div>
       </div>
-      <div class="half circle-story">
-        <div class="circle-story__circle one-thirds">
-          <img src="<%= image_url("thematic-areas/marine.png") %>" class="circle-story__circle-inner"/>
-        </div>
+    <% end %>
 
-        <div class="circle-story__body two-thirds">
-          <h2 class="circle-story__title"><a target="_blank" href="<%= marine_path %>">Marine Protected Areas</a></h2>
-          <p class="circle-story__content">
-            Explore the World's marine protected areas
-          </p>
-          <a class="link-with-icon u-bold" target="_blank" href="<%= marine_path %>">
-            Learn more<i class="fa fa-arrow-right link-with-icon__icon link-with-icon__icon--after"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="half circle-story">
-        <div class="circle-story__circle one-thirds">
-          <img src="<%= image_url("thematic-areas/icca.jpg") %>" class="circle-story__circle-inner"/>
-        </div>
-
-        <div class="circle-story__body two-thirds">
-          <h2 class="circle-story__title"><a target="_blank" href="http://www.iccaregistry.org">ICCAs</a></h2>
-          <p class="circle-story__content">
-            The ICCA Registry is an online platform for indigenous
-            peoples’ and community conserved territories and areas, where
-            communities themselves provide data, case studies, maps, photos
-            and stories.
-          </p>
-          <a class="link-with-icon u-bold" target="_blank" href="http://www.iccaregistry.org">
-            Learn more<i class="fa fa-arrow-right link-with-icon__icon link-with-icon__icon--after"></i>
-          </a>
-        </div>
-      </div>
-      <div class="half circle-story">
-        <div class="circle-story__circle one-thirds">
-          <img src="<%= image_url("thematic-areas/pame.jpg") %>" class="circle-story__circle-inner"/>
-        </div>
-
-        <div class="circle-story__body two-thirds">
-          <h2 class="circle-story__title"><a target="_blank" href="<%= cms_page_path(@pame_page) %>">PAME</a></h2>
-          <p class="circle-story__content">
-          PAME is a global database, comprising many thousands of
-          assessments of how well a protected area is being managed –
-          primarily the extent to which it is
-          protecting values and achieving goals and objectives.
-          </p>
-          <a class="link-with-icon u-bold" target="_blank" href="<%= cms_page_path(@pame_page) %>">
-            Learn more<i class="fa fa-arrow-right link-with-icon__icon link-with-icon__icon--after"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="half circle-story">
-        <div class="circle-story__circle one-thirds">
-          <img src="<%= image_url("thematic-areas/parcc.jpg") %>" class="circle-story__circle-inner"/>
-        </div>
-
-        <div class="circle-story__body two-thirds">
-          <h2 class="circle-story__title"><a target="_blank" href="http://parcc.protectedplanet.net/">PARCC</a></h2>
-          <p class="circle-story__content">
-            The PARCC project's main
-            objective was to assess the vulnerability of West African protected
-            areas to climate change and help design more resilient protected area networks.
-          </p>
-          <a class="link-with-icon u-bold" target="_blank" href="http://parcc.protectedplanet.net/">
-            Learn more<i class="fa fa-arrow-right link-with-icon__icon link-with-icon__icon--after"></i>
-          </a>
-        </div>
-      </div>
-      <div class="half circle-story">
-        <div class="circle-story__circle one-thirds">
-          <img src="<%= image_url("thematic-areas/green-list.jpg") %>" class="circle-story__circle-inner"/>
-        </div>
-
-        <div class="circle-story__body two-thirds">
-          <h2 class="circle-story__title"><a target="_blank" href="<%= cms_page_path(@green_list_page) %>">Green List</a></h2>
-          <p class="circle-story__content">
-            The IUCN Green List is a new global standard for protected areas.
-            The list recognizes success in achieving conservation outcomes and
-            measures progress in effective management of protected areas.
-          </p>
-          <a class="link-with-icon u-bold" target="_blank" href="<%= cms_page_path(@green_list_page) %>">
-            Learn more<i class="fa fa-arrow-right link-with-icon__icon link-with-icon__icon--after"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div style="clear: both;"></div>
+  </div>  
 </div>

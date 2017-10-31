@@ -20,5 +20,6 @@ class Wdpa::Importer
     Wdpa::GeometryRatioCalculator.calculate
     Wdpa::NetworkImporter.import
     Wdpa::OverseasTerritoriesImporter.import
+    Wdpa::GreenListImporter.import
   end
 end

@@ -92,6 +92,10 @@ ComfortableMexicanSofa.configure do |config|
   # Default is false.
   config.reveal_cms_partials = false
 
+  # Create thumbnails of all images uploaded to the CMS
+  # - dropdownImage dimensions were calculated at thier largest in the desktop breakpoint
+  config.upload_file_options[:styles] = { dropdownImage: '853x853>'}
+
 end
 
 # Default credentials for ComfortableMexicanSofa::AccessControl::AdminAuthentication
