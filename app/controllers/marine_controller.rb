@@ -146,16 +146,16 @@ class MarineController < ApplicationController
   end
 
   def total_coverage
-    @totalMarineProtectedAreas = 15271
-    @oceanProtectedAreasPercent = 6.35
-    @oceanProtectedAreasKm = 23036078
+    @totalMarineProtectedAreas = 15357
+    @oceanProtectedAreasPercent = 6.40
+    @oceanProtectedAreasKm = 23183060
   end
 
   def distributions
     @distributions = {
       nationalWaters: 39,
-      nationalWatersPa: 15.9,
-      nationalWatersKm: 22445068,
+      nationalWatersPa: 16.02,
+      nationalWatersKm: 22624944,
       highSeas: 61,
       highSeasPa: 0.25,
       highSeasKm: 558116
