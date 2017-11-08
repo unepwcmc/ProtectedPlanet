@@ -237,7 +237,7 @@ class MarineController < ApplicationController
           },
           {
             year: 2017,
-            percent: 6.35
+            percent: 6.4
           }
         ]
       },
@@ -314,7 +314,7 @@ class MarineController < ApplicationController
           },
           {
             year: 2017,
-            percent: 15.89
+            percent: 16.02
           }
         ]
       },
