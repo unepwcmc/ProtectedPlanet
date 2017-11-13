@@ -8,7 +8,6 @@ before_install:
   - sudo apt-get install libspatialite-dev --force-yes
   - sudo apt-get install libgeos-c1 --force-yes
   - echo libgeos-c1 hold | sudo dpkg --set-selections
-  - sudo apt-get install libgdal1=1.9.0-3.1~pgdg12.4+1 --force-yes
   - echo libgdal1 hold | sudo dpkg --set-selections
   - sudo apt-get install libgdal-dev --force-yes
   - sudo apt-get install libgdal1-dev --force-yes
