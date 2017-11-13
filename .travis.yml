@@ -13,6 +13,7 @@ before_install:
   - sudo apt-get install libgdal1-dev --force-yes
   - sudo apt-get install postgresql-9.3-postgis-2.3 -f
   - psql -c 'create database pp_test' -U postgres
+  - psql -c 'create database pp_test_backup' -U postgres
   - psql -c 'CREATE EXTENSION postgis;' -U postgres -d pp_test
   - psql -c 'CREATE EXTENSION postgis_topology;' -U postgres -d pp_test
 bundler_args: --without development production staging --jobs=6
