@@ -5,6 +5,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libgdal1h
   - sudo apt-get install gdal-bin
+  - sudo apt-get install libproj-dev
   - sudo apt-get install libspatialite-dev --force-yes
   - sudo apt-get install libgeos-c1 --force-yes
   - echo libgeos-c1 hold | sudo dpkg --set-selections
