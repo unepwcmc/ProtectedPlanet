@@ -124,7 +124,7 @@ class TestWdpaRelease < ActiveSupport::TestCase
     expected_tables = {
       "points" => "std_points",
       "polygons" => "std_poly",
-      "sources" => "sources"
+      "sources" => "standard_points"
     }
 
     wdpa_release = Wdpa::Release.new
