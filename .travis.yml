@@ -3,7 +3,7 @@ before_install:
   - sudo apt-get purge libgdal1
   - sudo apt-add-repository --remove ppa:ubuntugis/ppa -y
   - sudo apt-get update
-  - sudo apt-get install libgdal1
+  - sudo apt-get install libgdal1h
   - sudo apt-get install gdal-bin
   - sudo apt-get install libspatialite3=3.0.0~beta20110817-3 --force-yes
   - echo libspatialite3 hold | sudo dpkg --set-selections
