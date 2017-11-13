@@ -5,7 +5,7 @@ before_install:
   - sudo apt-get update
   - sudo apt-get install libgdal1h
   - sudo apt-get install gdal-bin
-  - sudo apt-get install libspatialite3=3.0.0~beta20110817-3 --force-yes
+  - sudo apt-get install libspatialite3 --force-yes
   - echo libspatialite3 hold | sudo dpkg --set-selections
   - sudo apt-get install libspatialite-dev --force-yes
   - sudo apt-get install libgeos-c1=3.3.3-1.1~pgdg12.4+1 --force-yes
