@@ -72,6 +72,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "marine" => true,
       "has_irreplaceability_info" => true,
       "has_parcc_info" => false,
+      "is_green_list"=>false,
       "coordinates" => [2.0, 1.0],
       "sub_locations" => [
         {
