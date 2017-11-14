@@ -29,7 +29,7 @@ class TestSearch < ActiveSupport::TestCase
                       "query" => {
                         "multi_match" => {
                           "query" => "*manbone*",
-                          "fields" => [ "name", "original_name" ]
+                          "fields" => [ "iso_3", "name", "original_name" ]
                         }
                       },
                       "boost" => "5",
