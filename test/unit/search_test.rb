@@ -75,7 +75,7 @@ class TestSearch < ActiveSupport::TestCase
           "iucn_category" => {
             "nested" => { "path" => "iucn_category" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "iucn_category.id", "size" => 500 } } }
-          }
+          },
           "governance" => {
             "nested" => { "path" => "governance" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "governance.id", "size" => 500 } } }
