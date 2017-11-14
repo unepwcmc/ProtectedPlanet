@@ -54,6 +54,9 @@ class TestSearch < ActiveSupport::TestCase
           "has_parcc_info" => {
             "terms" => { "field" => "has_parcc_info" }
           },
+          "is_green_list" => {
+            "terms" => { "field" => "is_green_list" }
+          },
           "has_irreplaceability_info" => {
             "terms" => { "field" => "has_irreplaceability_info" }
           },
@@ -69,13 +72,13 @@ class TestSearch < ActiveSupport::TestCase
             "nested" => { "path" => "designation" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "designation.id", "size" => 500 } } }
           },
-          "governance" => {
-            "nested" => { "path" => "governance" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "governance.id", "size" => 500 } } }
-          },
           "iucn_category" => {
             "nested" => { "path" => "iucn_category" },
             "aggs" => { "aggregation" => { "terms" => { "field" => "iucn_category.id", "size" => 500 } } }
+          }
+          "governance" => {
+            "nested" => { "path" => "governance" },
+            "aggs" => { "aggregation" => { "terms" => { "field" => "governance.id", "size" => 500 } } }
           }
         }
       }
