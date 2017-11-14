@@ -22,6 +22,7 @@ class CountryTest < ActiveSupport::TestCase
     expected_json = {
       "id" => 123,
       "name" => 'Manboneland',
+      "iso_3"=>"MyString",
       "region_for_index" => {
         "id" => 987,
         "name" => "North Manmerica"
