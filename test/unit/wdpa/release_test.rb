@@ -169,7 +169,7 @@ class TestWdpaRelease < ActiveSupport::TestCase
   end
 
   test '.sources returns an array of sources attributes from the import' do
-    source_table = 'wdpa_source'
+    source_table = 'standard_points'
 
     source_attributes = [{
       metadataid: 321
