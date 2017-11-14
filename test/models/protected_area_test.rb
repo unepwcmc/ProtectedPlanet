@@ -188,7 +188,9 @@ class ProtectedAreaTest < ActiveSupport::TestCase
         },
         "governance" =>  {
           "name" => "Bone Man"
-        }
+        },
+        "networks_no" => 0,
+        "designations_no" => 0
       }
 
       assert_equal expected_json, pa.as_api_feeder
