@@ -8,14 +8,19 @@ class SearchAggregationTest < ActiveSupport::TestCase
           "field" => "marine"
         }
       },
-      "has_irreplaceability_info" => {
-        "terms" => {
-          "field" => "has_irreplaceability_info"
-        }
-      },
       "has_parcc_info" => {
         "terms" => {
           "field" => "has_parcc_info"
+        }
+      },
+      "is_green_list" => {
+        "terms" => {
+          "field" => "is_green_list"
+        }
+      },
+      "has_irreplaceability_info" => {
+        "terms" => {
+          "field" => "has_irreplaceability_info"
         }
       },
       "country" => {
