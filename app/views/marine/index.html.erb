@@ -24,27 +24,6 @@
       <%= download_dropdown("marine", "general", [:csv, :kml, :shp, :pdf]) %>
     </div>
 
-    <a 
-      href="https://twitter.com/intent/tweet/?text=<%= url_encode('Ocean fact') %>&url=<%= encoded_page_url %><%= url_encode('#hello') %>" 
-      title="Share Collated Coral on Twitter" 
-      class="social--share social--twitter"
-      target="_blank">
-    </a>
-
-    <a 
-    href="https://facebook.com/sharer/sharer.php?u=<%= encoded_page_url %><%= url_encode('#hello') %>&quote=<%= url_encode('This is my quote i want to add to my facebook share') %>" 
-    title="Share Collated Coral on Facebook" 
-    class="social--share social--facebook"
-    target="_blank">
-  </a>
-
-  <a 
-    href="https://www.linkedin.com/shareArticle?mini=true&url=<%= encoded_page_url %>#hi&summary=<%= url_encode('This is my linkedin summary') %>" 
-    title="Share Collated Coral on LinkedIn" 
-    class="social--share social--linkedin"
-    target="_blank">
-  </a>
-
     <section id="distribution" class="template--marine__section container--profile">
       <%= render partial: "marine/sections/distribution" %>
     </section>
