@@ -1,4 +1,5 @@
 set :stage, :staging
+set :branch, 'master'
 
 server "stage.protectedplanet.net", user: 'wcmc', roles: %w{web}
 server "util.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{util}
