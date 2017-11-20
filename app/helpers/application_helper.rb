@@ -145,7 +145,7 @@ module ApplicationHelper
     },
     pdf: {
       content: '.PDF',
-      attrs: {'href' => '#!', 'class' => 'u-bold tooltip__element link-with-icon'}
+      attrs: {'href' => '/MPA_Map.pdf', 'class' => 'u-bold tooltip__element link-with-icon', target: '_blank'}
     }
   }
 
