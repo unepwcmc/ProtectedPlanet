@@ -116,6 +116,12 @@ module ApplicationHelper
     end
   end
 
+  def create_social_link network, url, title, target
+    classes = 'social--share social--' + network
+
+    link_to '', url, class: classes, target: target, title: title
+  end
+
   DOWNLOAD_TYPES = {
     csv: {
       content: '.CSV',

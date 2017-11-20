@@ -1,28 +1,11 @@
 <div class="social--sharing">
-  <a 
-    href="https://twitter.com/intent/tweet/?text=<%= url_encode('Explore the World\'s Marine Protected Areas') %>&url=<%= encoded_page_url %>" 
-    title="Share Marine Protected Planet on Twitter" 
-    class="social--share social--twitter"
-    target="_blank">
-  </a>
 
-  <a 
-    href="https://facebook.com/sharer/sharer.php?u=<%= encoded_page_url %>" 
-    title="Share Marine Protected Planet on Facebook" 
-    class="social--share social--facebook"
-    target="_blank">
-  </a>
+  <%= create_social_link('twitter', 'https://twitter.com/intent/tweet/?text=' + url_encode("Explore the World\'s Marine Protected Areas") + '&url=' + encoded_page_url, 'Share Marine Protected Planet on Twitter', '_blank') %>
 
-  <a 
-    href="https://www.linkedin.com/shareArticle?mini=true&url=<%= encoded_page_url %>" 
-    title="Share Marine Protected Planet on LinkedIn" 
-    class="social--share social--linkedin"
-    target="_blank">
-  </a>
-  <a 
-    href="mailto:?subject=<%= url_encode('Marine Protected Planet website') %>&body=<%= encoded_page_url %>" 
-    title="Share Marine Protected Planet via Email" 
-    class="social--share social--email" 
-    target="_self">
-  </a>
+  <%= create_social_link('facebook', 'https://facebook.com/sharer/sharer.php?u=' + encoded_page_url, 'Share Marine Protected Planet on Facebook', '_blank') %>
+
+  <%= create_social_link('linkedin', 'https://www.linkedin.com/shareArticle?mini=true&url=' + encoded_page_url, 'Share Marine Protected Planet on LinkedIn', '_blank') %>
+
+  <%= create_social_link('email', 'mailto:?subject=' + url_encode('Marine Protected Planet website') + '&body=' + encoded_page_url, 'Share Marine Protected Planet via Email', '_self') %>
+
 </div>
