@@ -55,6 +55,14 @@ module ApplicationHelper
     end
   end
 
+  def url_encode (text)
+    ERB::Util.url_encode(text)
+  end
+
+  def encoded_page_url
+    url_encode(request.original_url)
+  end
+
   DEFAULT_SEO_DESC = """
     Protected Planet is the online interface for the
     World Database on Protected Areas (WDPA), and the most comprehensive
@@ -106,6 +114,12 @@ module ApplicationHelper
     else
       "Screenshot of the Protected Planet website which shows the menu bar and a map of the world that has protected areas highlighted in green."
     end
+  end
+
+  def create_social_link network, url, title, target
+    classes = 'social--share social--' + network
+
+    link_to '', url, class: classes, target: target, title: title
   end
 
   DOWNLOAD_TYPES = {
