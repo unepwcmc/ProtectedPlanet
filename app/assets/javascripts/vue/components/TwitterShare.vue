@@ -23,6 +23,7 @@
 
     data: function () {
       return {
+        twitterHandle: 'protectedplanet',
         charLimit: 140,
         watchingMouseUp: false,
         quote: '',
@@ -42,18 +43,22 @@
 
     computed: {
       twitterUrl: function () {
-        const quoteLimit = this.charLimit - 6 // the 6 is for "" ... and a space 
+        const quoteLimit = this.charLimit - 6 - this.twitterHandle.length - 5 // the 6 is for "" ... and 1 space // the 5 is for via and 2 spaces
         let quote = this.quote
 
         if (quote.length > quoteLimit) {
-          quote = '"' + quote.substring(0, quoteLimit) + '..." '
+          quote = quote.substring(0, quoteLimit) + '...'
         }
 
-        return 'https://twitter.com/intent/tweet/?text=' + quote + '&amp;url=' + this.url 
+        text = this.addQuoteMarks(quote)
+
+        return encodeURI('https://twitter.com/intent/tweet/?text=' + text + '&amp;url=' + this.url + '&via=' + this.twitterHandle)
       },
 
       emailUrl: function () {
-        return 'mailto:?subject=Marine%20Protected%20Planet%20website&amp;body=' + this.quote + '%0D%0A%0D%0A' + this.url
+        text = this.addQuoteMarks(this.quote)
+
+        return encodeURI('mailto:?subject=Marine Protected Planet&amp;body=' + text + '\n\n' + this.url)
       }
     },
 
@@ -62,6 +67,10 @@
         const href = window.location.href
 
         this.url = href.split('#')[0]
+      },
+
+      addQuoteMarks: function (text) {
+        return '"' + text + '"'
       },
 
       addListeners: function () {
