@@ -52,13 +52,13 @@
 
         text = this.addQuoteMarks(quote)
 
-        return encodeURI('https://twitter.com/intent/tweet/?text=' + text + '&amp;url=' + this.url + '&via=' + this.twitterHandle)
+        return encodeURI('https://twitter.com/intent/tweet/?text=' + text + '&url=' + this.url + '&via=' + this.twitterHandle)
       },
 
       emailUrl: function () {
         text = this.addQuoteMarks(this.quote)
 
-        return encodeURI('mailto:?subject=Marine Protected Planet&amp;body=' + text + '\n\n' + this.url)
+        return encodeURI('mailto:?subject=Marine Protected Planet&body=' + text + '\n\n' + this.url)
       }
     },
 
