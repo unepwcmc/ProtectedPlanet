@@ -18,7 +18,9 @@ $(document).ready( ->
       'horizontal-bars': VComponents['vue/components/horizontal_bars/HorizontalBars'],
       'interactive-treemap': VComponents['vue/components/InteractiveTreemap'],
       'rectangles': VComponents['vue/components/rectangles/Rectangles'],
-      'sticky-nav': VComponents['vue/components/StickyNav']
+      'sticky-nav': VComponents['vue/components/StickyNav'],
+      'sticky-tab': VComponents['vue/components/StickyTab'],
+      'twitter-share': VComponents['vue/components/TwitterShare']
     }
   })
 

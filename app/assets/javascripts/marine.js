@@ -13,6 +13,8 @@
 //= require vue/components/rectangles/Rectangle
 //= require vue/components/rectangles/Rectangles
 //= require vue/components/StickyNav
+//= require vue/components/StickyTab
+//= require vue/components/TwitterShare
 //= require 'require'
 //= require jquery
 //= require 'map'

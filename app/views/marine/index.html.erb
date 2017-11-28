@@ -5,6 +5,11 @@
 <%= content_for :social_image_alt, "A map of the world with highlighted areas that represent protected areas. The following statistics are shown: there are 15,271 marine protected areas, #{@oceanProtectedAreasPercent} of the ocean is covered by protected areas and the total area protected is 23,036,078km² These statistics are for 2017." %>
 
 <div class="v-marine template--marine">
+  <sticky-tab>
+    <p>Highlight some text to share via Twitter or Email.</p>
+  </sticky-tab>
+
+  <twitter-share></twitter-share>
 
   <%= render partial: "marine/sections/header" %>
 
