@@ -1,14 +1,14 @@
 <template>
   <div class="twitter-share" :style="styleObject" :class="{ 'twitter-share--active' : isActive }">
     <span class="twitter-share__title">Share quote via</span>
-    <a 
+    <a
       title="Share highlighted quote on Twitter"
       target="_blank"
       :href="twitterUrl"
       class="social--share social--twitter">
     </a>
 
-    <a 
+    <a
       title="Share highlighted quote by Email"
       target="_self"
       :href="emailUrl"
@@ -44,7 +44,7 @@
     computed: {
       twitterUrl: function () {
         const quoteLimit = this.charLimit - 6 - this.twitterHandle.length - 5 // the 6 is for "" ... and 1 space // the 5 is for via and 2 spaces
-        let quote = this.quote
+        var quote = this.quote
 
         if (quote.length > quoteLimit) {
           quote = quote.substring(0, quoteLimit) + '...'
@@ -79,11 +79,11 @@
         // listen for text being selected
         document.addEventListener("selectionchange", function() {
 
-          // add flag to make sure that the mouse up listener is only added once 
+          // add flag to make sure that the mouse up listener is only added once
           // whilst the user is highlighting text
           if (!that.watchingMouseUp) {
             that.watchingMouseUp = true
-            
+
             // listen for when the user stops highlighting text
             document.addEventListener("mouseup", function(e) {
 
@@ -103,7 +103,7 @@
                 that.isActive = true
                 that.styleObject.top = top + 'px'
                 that.styleObject.left = left + 'px'
-                that.quote = selected  
+                that.quote = selected
 
               } else {
                 that.isActive = false
@@ -112,6 +112,6 @@
           }
         }, false)
       }
-    } 
+    }
   }
 </script>
