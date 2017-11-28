@@ -29,7 +29,7 @@ class StatisticPresenter
   ["land", "marine"].each do |type|
     stat = "percentage_pa_#{type}_cover".to_sym
     define_method(stat) do
-      (@statistic.send(stat) && @statistic.send(stat) > 100.0) ? 100.0 : @statistic.send(stat)
+      (@statistic.send(stat) && @statistic.send(stat) > 100.0) ? 100.0 : (@statistic.send(stat) || 0) rescue 0
     end
   end
 
