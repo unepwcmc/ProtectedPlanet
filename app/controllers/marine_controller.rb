@@ -1,8 +1,7 @@
 class MarineController < ApplicationController
 
   #Static stats
-  before_action :total_coverage, only: [:index]
-  before_action :distributions, only: [:index, :download_designations]
+  before_action :marine_statistics, only: [:index, :download_designations]
   before_action :growth, only: [:index]
   before_action :ecoregions, only: [:index]
   before_action :pledges, only: [:index]
@@ -52,7 +51,7 @@ class MarineController < ApplicationController
     @coverageOfTop20ProtectedAreas = [
       {
         title: "Total global coverage of all MPAs",
-        km: @distributions[:nationalWatersKm] + @distributions[:highSeasKm]
+        km: @marine_statistics["protected area coverage of national waters km2"].to_i + @marine_statistics["protected area coverage of the high seas km2"].to_i
       },
       {
         title: "Total global coverage of largest 20 MPAs",
@@ -145,23 +144,8 @@ class MarineController < ApplicationController
     end
   end
 
-  def total_coverage
+  def marine_statistics
     @marine_statistics = Wdpa::MarineStatsImporter.stats
-    @totalMarineProtectedAreas = @marine_statistics["number of marine protected areas"]
-    @oceanProtectedAreasPercent = @marine_statistics["percent of the ocean covered by protected areas"]
-    @oceanProtectedAreasKm = @marine_statistics["total area protected"]
-  end
-
-  def distributions
-    @marine_statistics = Wdpa::MarineStatsImporter.stats
-    @distributions = {
-      nationalWaters: 39,
-      nationalWatersPa: @marine_statistics["protected area coverage of national waters %"],
-      nationalWatersKm: @marine_statistics["protected area coverage of national waters km2"],
-      highSeas: 61,
-      highSeasPa: @marine_statistics["protected area coverage of the high seas %"],
-      highSeasKm: @marine_statistics["protected area coverage of the high seas km2"]
-    }
   end
 
   def growth
