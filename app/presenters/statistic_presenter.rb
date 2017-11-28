@@ -26,6 +26,13 @@ class StatisticPresenter
     @model.send(method) rescue (@statistic.send(method) || 0) rescue 0
   end
 
+  ["land", "marine"].each do |type|
+    stat = "percentage_pa_#{type}_cover".to_sym
+    define_method(stat) do
+      @statistic.send(stat) > 100.0 ? 100.0 : @statistic.send(stat)
+    end
+  end
+
   private
 
   def global_statistic
