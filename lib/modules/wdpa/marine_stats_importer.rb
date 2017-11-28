@@ -12,10 +12,6 @@ module Wdpa::MarineStatsImporter
     end
   end
 
-  def self.stats
-    $redis.hgetall('wdpa_marine_stats')
-  end
-
   def self.stats_csv_path
     Rails.root.join('lib/data/seeds/marine_statistics.csv')
   end

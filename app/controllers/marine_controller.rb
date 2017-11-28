@@ -145,7 +145,7 @@ class MarineController < ApplicationController
   end
 
   def marine_statistics
-    @marine_statistics = Wdpa::MarineStatsImporter.stats
+    @marine_statistics = $redis.hgetall('wdpa_marine_stats')
   end
 
   def growth
