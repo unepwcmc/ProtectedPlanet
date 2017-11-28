@@ -8,7 +8,7 @@ class CountryPresenter
     {
       name: country.name,
       iso: country.iso,
-      totalMarineArea: statistic.marine_area,
+      totalMarineArea: statistic.total_marine_area,
       totalOverseasTerritories: country.children.count,
       overseasTerritoriesURL: overseas_territories_url,
       national: statistic.pa_marine_area,
