@@ -146,19 +146,21 @@ class MarineController < ApplicationController
   end
 
   def total_coverage
-    @totalMarineProtectedAreas = 15357
-    @oceanProtectedAreasPercent = 6.40
-    @oceanProtectedAreasKm = 23183060
+    @marine_statistics = Wdpa::MarineStatsImporter.stats
+    @totalMarineProtectedAreas = @marine_statistics["number of marine protected areas"]
+    @oceanProtectedAreasPercent = @marine_statistics["percent of the ocean covered by protected areas"]
+    @oceanProtectedAreasKm = @marine_statistics["total area protected"]
   end
 
   def distributions
+    @marine_statistics = Wdpa::MarineStatsImporter.stats
     @distributions = {
       nationalWaters: 39,
-      nationalWatersPa: 16.02,
-      nationalWatersKm: 22624944,
+      nationalWatersPa: @marine_statistics["protected area coverage of national waters %"],
+      nationalWatersKm: @marine_statistics["protected area coverage of national waters km2"],
       highSeas: 61,
-      highSeasPa: 0.25,
-      highSeasKm: 558116
+      highSeasPa: @marine_statistics["protected area coverage of the high seas %"],
+      highSeasKm: @marine_statistics["protected area coverage of the high seas km2"]
     }
   end
 
