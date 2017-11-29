@@ -1,8 +1,7 @@
 class MarineController < ApplicationController
 
   #Static stats
-  before_action :total_coverage, only: [:index]
-  before_action :distributions, only: [:index, :download_designations]
+  before_action :marine_statistics, only: [:index, :download_designations]
   before_action :growth, only: [:index]
   before_action :ecoregions, only: [:index]
   before_action :pledges, only: [:index]
@@ -52,7 +51,7 @@ class MarineController < ApplicationController
     @coverageOfTop20ProtectedAreas = [
       {
         title: "Total global coverage of all MPAs",
-        km: @distributions[:nationalWatersKm] + @distributions[:highSeasKm]
+        km: @marine_statistics["national_waters_pa_coverage_area"].to_i + @marine_statistics["high_seas_pa_coverage_area"].to_i
       },
       {
         title: "Total global coverage of largest 20 MPAs",
@@ -145,21 +144,8 @@ class MarineController < ApplicationController
     end
   end
 
-  def total_coverage
-    @totalMarineProtectedAreas = 15357
-    @oceanProtectedAreasPercent = 6.40
-    @oceanProtectedAreasKm = 23183060
-  end
-
-  def distributions
-    @distributions = {
-      nationalWaters: 39,
-      nationalWatersPa: 16.02,
-      nationalWatersKm: 22624944,
-      highSeas: 61,
-      highSeasPa: 0.25,
-      highSeasKm: 558116
-    }
+  def marine_statistics
+    @marine_statistics = $redis.hgetall('wdpa_marine_stats')
   end
 
   def growth
