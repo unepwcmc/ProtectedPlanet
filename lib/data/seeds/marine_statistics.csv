@@ -1,10 +1,10 @@
 type,value
-number of marine protected areas,153357
-percent of the ocean covered by protected areas,6.4
-total area protected,23183060
-protected area coverage of national waters %,16.02
-protected area coverage of national waters km2,"22,624,944"
-protected area coverage of the high seas %,0.25
-protected area coverage of the high seas km2,"558,116"
-national waters %,39
-global ocean %,61
+total_marine_protected_areas,153357
+total_ocean_pa_coverage_percentage,6.4
+total_ocean_area_protected,23183060
+national_waters_pa_coverage_percentage,16.02
+national_waters_pa_coverage_area,"22,624,944"
+high_seas_pa_coverage_percentage,0.25
+high_seas_pa_coverage_area,"558,116"
+national_waters_percentage,39
+global_ocean_percentage,61

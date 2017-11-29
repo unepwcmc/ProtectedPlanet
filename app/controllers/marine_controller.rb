@@ -51,7 +51,7 @@ class MarineController < ApplicationController
     @coverageOfTop20ProtectedAreas = [
       {
         title: "Total global coverage of all MPAs",
-        km: @marine_statistics["protected area coverage of national waters km2"].to_i + @marine_statistics["protected area coverage of the high seas km2"].to_i
+        km: @marine_statistics["national_waters_pa_coverage_area"].to_i + @marine_statistics["high_seas_pa_coverage_area"].to_i
       },
       {
         title: "Total global coverage of largest 20 MPAs",
