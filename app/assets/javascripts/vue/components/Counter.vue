@@ -16,7 +16,7 @@
           }
         }
       },
-      total: { 
+      total: {
         required: true,
         type: Number
       },
@@ -52,7 +52,7 @@
     methods: {
       count: function () {
         var self = this
-        
+
         this.checkDirection()
 
         var interval = window.setInterval(function () {
@@ -61,7 +61,7 @@
               self.increment()
 
           } else if (!self.increase && self.number - self.step > self.total ){
-              self.decrement()  
+              self.decrement()
 
           } else {
             self.number = self.total
@@ -121,8 +121,8 @@
       styledNumber: function () {
         var roundingNumber = 1
 
-        if(this.total < 20) { roundingNumber = 10 } 
-        if(this.total < 9) { roundingNumber = 100 } 
+        if(this.total < 20) { roundingNumber = 10 }
+        if(this.total < 17) { roundingNumber = 100 }
 
         return (Math.ceil(this.number * roundingNumber)/roundingNumber).toLocaleString()
       }
