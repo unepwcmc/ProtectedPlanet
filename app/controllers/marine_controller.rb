@@ -55,7 +55,9 @@ class MarineController < ApplicationController
       },
       {
         title: "Total global coverage of largest 20 MPAs",
-        km: ProtectedArea.sum_of_most_protected_marine_areas
+        km: 17573997
+        #Need to fix calculation for most protected marine areas. For some of those we need to sum the area of their PIDs
+        #km: ProtectedArea.sum_of_most_protected_marine_areas
       }
     ].to_json
   end
@@ -69,19 +71,24 @@ class MarineController < ApplicationController
 
     @top10ProtectedAreas = [
       {
+        name: 'Ross Sea Region Marine Protected Area',
+        url: '/555624810',
+        km: 2060058
+      },
+      {
         name: 'Marae Moana',
         url: '/555624907',
-        km: 1982029
+        km: 1981965
       },
       {
         name: 'Réserve Naturelle Nationale des Terres australes françaises',
         url: '/345888',
-        km: 1655001
+        km: 1654999
       },
       {
         name: 'Papahānaumokuākea Marine National Monument',
         url: '/220201',
-        km: 1516555
+        km: 1516557
       },
       {
         name: 'Parc Naturel de la Mer de Corail',
@@ -101,7 +108,7 @@ class MarineController < ApplicationController
       {
         name: 'Coral Sea',
         url: '/555556875',
-        km: 995261
+        km: 995251
       },
       {
         name: 'Steller Sea Lion Protection Areas, Gulf',
@@ -112,11 +119,6 @@ class MarineController < ApplicationController
         name: 'Pitcairn Islands Marine Reserve',
         url: '/555624172',
         km: 839568
-      },
-      {
-        name: 'British Indian Ocean Territory Marine Protected Area (Chagos)',
-        url: '/555512151',
-        km: 642340
       }
     ].to_json
   end
