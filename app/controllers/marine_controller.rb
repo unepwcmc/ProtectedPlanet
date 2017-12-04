@@ -379,7 +379,7 @@ class MarineController < ApplicationController
           },
           {
             year: 2017,
-            percent: 0.25
+            percent: 1.18
           }
         ]
       }
