@@ -1,0 +1,31 @@
+<section class="row">
+  <div class="one-thirds">
+    <%= render "region/facts/number_of_pas" %>
+    <%= render "region/facts/polygons_points_ratio" %>
+    <%= render "region/facts/number_of_sources" %>
+  </div>
+
+  <div class="two-thirds">
+    <%= render "region/facts/coverage_stats" %>
+
+    <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
+      <%= render "region/facts/pame_statistics" %>
+    <% end %>
+  </div>
+</section>
+
+<section class="row">
+  <div class="one-thirds">
+    <%= render "region/facts/iucn_categories" %>
+  </div>
+  <div class="two-thirds">
+    <%= render "region/facts/governance_types" %>
+    <%= render "region/facts/related_countries" %>
+  </div>
+</section>
+
+<section class="row">
+  <% %w[National Regional International].each do |level| %>
+    <%= render "region/facts/designations", {level: level} %>
+  <% end %>
+</section>

@@ -35,6 +35,11 @@ Rails.application.routes.draw do
   get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
   get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
+  get '/region/:iso', to: 'region#show', as: 'region'
+  get '/region/:iso/pdf', to: 'region#pdf', as: 'region_pdf'
+  get '/region/:iso/compare(:/iso_to_compare)', to: 'region#compare', as: 'compare_regions'
+  get '/region/:iso/protected_areas', to: 'region#protected_areas', as: 'region_protected_areas'
+
   get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
   resources :downloads, only: [:show, :create, :update]
 
