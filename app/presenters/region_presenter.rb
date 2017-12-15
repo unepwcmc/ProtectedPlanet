@@ -109,7 +109,7 @@ class RegionPresenter
     processed_data = region_data.map{ |key,value| {
           iucn_category_name: key,
           total_count: value[:count].reduce(0, :+),
-          total_percentage: value[:percentage].reduce(0, :+)
+          total_percentage: value[:percentage].reduce(0, :+) / value[:count].count
         }
     }
 
