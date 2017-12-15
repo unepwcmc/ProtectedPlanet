@@ -1,7 +1,7 @@
 class RegionPresenter
   def initialize region
     @region = region
-    @countries = Country.where(region_id: @region.id)
+    @countries = @region.countries
   end
 
   def geometry_ratio
@@ -21,62 +21,33 @@ class RegionPresenter
   end
 
   def percentage_pa_land_cover
-    pa_land_area = 0
-    total_pa_land_cover = 0
-
-    Country.all.each do |country|
-      pa_land_area += (country.statistic.pa_land_area || 0) if (country.region_id == @region.id)
-      total_pa_land_cover += country.statistic.pa_land_area || 0
-    end
-
-    percentage = (pa_land_area / total_pa_land_cover) * 100
+    statistics = @countries.map(&:statistic)
+    statistics.map(&:percentage_pa_land_cover).compact.reduce(:+)/@countries.count
   end
 
   def pa_land_area
-    pa_land_area = 0
-
-    @countries.each do |country|
-      pa_land_area += country.statistic.pa_land_area || 0
-    end
-    pa_land_area
+    statistics = @countries.map(&:statistic)
+    statistics.map(&:pa_land_area).compact.reduce(:+)
   end
 
   def land_area
-    land_area = 0
-
-    @countries.each do |country|
-      land_area += country.statistic.land_area || 0
-    end
-    land_area
+    statistics = @countries.map(&:statistic)
+    statistics.map(&:land_area).compact.reduce(:+)
   end
 
   def percentage_pa_marine_cover
-    pa_marine_area = 0
-    total_pa_marine_area = 0
-
-    Country.all.each do |country|
-      pa_marine_area += (country.statistic.pa_marine_area || 0) if (country.region_id == @region.id)
-      total_pa_marine_area += country.statistic.pa_marine_area || 0
-    end
-    percentage = (pa_marine_area / total_pa_marine_area) * 100
+    statistics = @countries.map(&:statistic)
+    statistics.map(&:percentage_pa_marine_cover).compact.reduce(:+)/@countries.count
   end
 
   def pa_marine_area
-    pa_marine_area = 0
-
-    @countries.each do |country|
-      pa_marine_area += country.statistic.pa_marine_area || 0
-    end
-    pa_marine_area
+    statistics = @countries.map(&:statistic)
+    statistics.map(&:pa_marine_area).compact.reduce(:+)
   end
 
   def marine_area
-    marine_area = 0
-
-    @countries.each do |country|
-      marine_area += country.statistic.marine_area || 0
-    end
-    marine_area
+    statistics = @countries.map(&:statistic)
+    statistics.map(&:marine_area).compact.reduce(:+)
   end
 
   def sources_per_jurisdiction
