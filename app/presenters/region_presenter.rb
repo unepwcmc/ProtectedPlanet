@@ -2,6 +2,7 @@ class RegionPresenter
   def initialize region
     @region = region
     @countries = @region.countries
+    @statistics = @countries.map(&:statistic)
   end
 
   def geometry_ratio
@@ -21,33 +22,27 @@ class RegionPresenter
   end
 
   def percentage_pa_land_cover
-    statistics = @countries.map(&:statistic)
-    statistics.map(&:percentage_pa_land_cover).compact.reduce(:+)/@countries.count
+    @statistics.map(&:percentage_pa_land_cover).compact.reduce(:+)/@countries.count
   end
 
   def pa_land_area
-    statistics = @countries.map(&:statistic)
-    statistics.map(&:pa_land_area).compact.reduce(:+)
+    @statistics.map(&:pa_land_area).compact.reduce(:+)
   end
 
   def land_area
-    statistics = @countries.map(&:statistic)
-    statistics.map(&:land_area).compact.reduce(:+)
+    @statistics.map(&:land_area).compact.reduce(:+)
   end
 
   def percentage_pa_marine_cover
-    statistics = @countries.map(&:statistic)
-    statistics.map(&:percentage_pa_marine_cover).compact.reduce(:+)/@countries.count
+    @statistics.map(&:percentage_pa_marine_cover).compact.reduce(:+)/@countries.count
   end
 
   def pa_marine_area
-    statistics = @countries.map(&:statistic)
-    statistics.map(&:pa_marine_area).compact.reduce(:+)
+    @statistics.map(&:pa_marine_area).compact.reduce(:+)
   end
 
   def marine_area
-    statistics = @countries.map(&:statistic)
-    statistics.map(&:marine_area).compact.reduce(:+)
+    @statistics.map(&:marine_area).compact.reduce(:+)
   end
 
   def sources_per_jurisdiction
@@ -70,11 +65,11 @@ class RegionPresenter
 
     region.countries.each do |country|
       country.protected_areas_per_iucn_category.each do |protected_area|
-        pa_category_name = protected_area['iucn_category_name']
-        region_data["#{pa_category_name}"][:count] = [] if region_data["#{pa_category_name}"][:count].nil?
-        region_data["#{pa_category_name}"][:count] << protected_area["count"].to_i
-        region_data["#{pa_category_name}"][:percentage] = [] if region_data["#{pa_category_name}"][:percentage].nil?
-        region_data["#{pa_category_name}"][:percentage] << protected_area["percentage"].to_f
+        region_pa_category = region_data[protected_area['iucn_category_name']]
+        region_pa_category[:count] = [] if region_pa_category[:count].nil?
+        region_pa_category[:count] << protected_area["count"].to_i
+        region_pa_category[:percentage] = [] if region_pa_category[:percentage].nil?
+        region_pa_category[:percentage] << protected_area["percentage"].to_f
       end
     end
 
