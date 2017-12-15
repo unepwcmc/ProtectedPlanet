@@ -94,8 +94,6 @@ class RegionPresenter
   end
 
   def protected_areas_per_iucn_category
-
-    valid_iucn_categories = IucnCategory.all.pluck(:name, :id).uniq
     region_data = Hash.new { |hash, key| hash[key] = Hash.new }
     processed_data = []
 
