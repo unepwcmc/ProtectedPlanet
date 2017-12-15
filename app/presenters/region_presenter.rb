@@ -99,10 +99,11 @@ class RegionPresenter
 
     region.countries.each do |country|
       country.protected_areas_per_iucn_category.each do |protected_area|
-        region_data["#{protected_area['iucn_category_name']}"][:count] = Array.new if region_data["#{protected_area['iucn_category_name']}"][:count].nil?
-        region_data["#{protected_area['iucn_category_name']}"][:count] << protected_area["count"].to_i
-        region_data["#{protected_area['iucn_category_name']}"][:percentage] = Array.new if region_data["#{protected_area['iucn_category_name']}"][:percentage].nil?
-        region_data["#{protected_area['iucn_category_name']}"][:percentage] << protected_area["percentage"].to_f
+        pa_category_name = protected_area['iucn_category_name']
+        region_data["#{pa_category_name}"][:count] = [] if region_data["#{pa_category_name}"][:count].nil?
+        region_data["#{pa_category_name}"][:count] << protected_area["count"].to_i
+        region_data["#{pa_category_name}"][:percentage] = [] if region_data["#{pa_category_name}"][:percentage].nil?
+        region_data["#{pa_category_name}"][:percentage] << protected_area["percentage"].to_f
       end
     end
 
