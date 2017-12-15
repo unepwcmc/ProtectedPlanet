@@ -94,22 +94,28 @@ class RegionPresenter
   end
 
   def protected_areas_per_iucn_category
-    protected_areas_per_iucn_category_array = []
 
-    @countries.each do |country|
-      country.protected_areas_per_iucn_category.each do |protected_areas_per_iucn|
-        hash =  {
-          "#{protected_areas_per_iucn['iucn_category_id']}" => {
-            iucn_category_name: protected_areas_per_iucn["iucn_category_name"],
-            count: protected_areas_per_iucn["count"],
-            percentage: protected_areas_per_iucn["percentage"]
-          }
-        }
-        protected_areas_per_iucn_category_array << hash
+    valid_iucn_categories = IucnCategory.all.pluck(:name, :id).uniq
+    region_data = Hash.new { |hash, key| hash[key] = Hash.new }
+    processed_data = []
+
+    region.countries.each do |country|
+      country.protected_areas_per_iucn_category.each do |protected_area|
+        region_data["#{protected_area['iucn_category_name']}"][:count] = Array.new if region_data["#{protected_area['iucn_category_name']}"][:count].nil?
+        region_data["#{protected_area['iucn_category_name']}"][:count] << protected_area["count"].to_i
+        region_data["#{protected_area['iucn_category_name']}"][:percentage] = Array.new if region_data["#{protected_area['iucn_category_name']}"][:percentage].nil?
+        region_data["#{protected_area['iucn_category_name']}"][:percentage] << protected_area["percentage"].to_f
       end
     end
-    output = merge_iucn_category_array_of_hashes(protected_areas_per_iucn_category_array)
-    map_iucn_category_hash(output)
+
+    processed_data = region_data.map{ |key,value| {
+          iucn_category_name: key,
+          total_count: value[:count].reduce(0, :+),
+          total_percentage: value[:percentage].reduce(0, :+)
+        }
+    }
+
+    processed_data
   end
 
   private
@@ -121,31 +127,6 @@ class RegionPresenter
   def overseas_territories_url
     overseas_territories = region.countries.map(&:iso_3).join(',')
     "search?q=#{overseas_territories}&type=country"
-  end
-
-  def merge_iucn_category_array_of_hashes(iucn_category_array)
-    iucn_category_array.inject{|hash, el| hash.merge( el ){|k, old_v, new_v|
-      merge_iucn_category_hash(old_v, new_v)}}
-  end
-
-  def merge_iucn_category_hash(old_v, new_v)
-    new_v[:count] = new_v[:count].to_i + old_v[:count].to_i
-    new_v[:percentage] = new_v[:percentage].to_f + old_v[:percentage].to_f
-    {
-      iucn_category_name: new_v[:iucn_category_name],
-      count: new_v[:count],
-      percentage: new_v[:percentage]
-    }
-  end
-
-  def map_iucn_category_hash(iucn_category_hash)
-    iucn_category_hash.map{ |key,value| {
-      iucn_category_id: key,
-      iucn_category_name: value[:iucn_category_name],
-      count: value[:count],
-      percentage: value[:percentage]
-    }
-  }
   end
 
 end
