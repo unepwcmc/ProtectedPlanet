@@ -6,7 +6,7 @@
 <% countries_by_region = Country.pluck(:name, :iso_3, :region_id).group_by { |(name, _, region_id)| regions[region_id] } %>
 
 <% countries_by_region.keys.sort.each do |region| %>
-  <div id="<%= link_to region region_path(Region.find_by(name: region).first.iso) %>" class="row expandable-section js-expandable-section">
+  <div id="<%= link_to region region_path(Region.find_by(name: region).iso) %>" class="row expandable-section js-expandable-section">
     <h3 class="js-trigger expandable-section__header">
       <%= region %><i class="expandable-section__switch js-switch expandable-section__switch is-closed"></i>
     </h3>
