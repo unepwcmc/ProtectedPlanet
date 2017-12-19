@@ -53,7 +53,7 @@ class RegionPresenter
 
     @countries.each do |country|
       country.sources_per_jurisdiction.each do |source_per_jurisdiction|
-        unless source_per_jurisdiction["name"].downcase.to_sym.nil?
+        unless source_per_jurisdiction["name"].downcase.to_sym.nil? || source_per_jurisdiction["count"].nil?
           sources_per_jurisdiction_hash[source_per_jurisdiction["name"].downcase.to_sym] += source_per_jurisdiction["count"].to_i || 0
         end
       end
