@@ -8,7 +8,7 @@
 <% countries_by_region.keys.sort.each do |region| %>
   <div id="<%= region %>" class="row expandable-section js-expandable-section">
     <h3 class="js-trigger expandable-section__header">
-      <%= region %><i class="expandable-section__switch js-switch expandable-section__switch is-closed"></i>
+      <%= link_to region, region_path(Region.find_by(name: region).iso) %><i class="expandable-section__switch js-switch expandable-section__switch is-closed"></i>
     </h3>
     <div class="js-target expandable-section__body u-hide">
       <table class="table js-sortable-table">
