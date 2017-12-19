@@ -9,7 +9,6 @@ class RegionController < ApplicationController
   def load_vars
     @region = Region.where(iso: params[:iso].upcase).first
     @region or raise_404
-    @location = @region
     @presenter = RegionPresenter.new @region
   end
 

@@ -49,7 +49,6 @@ class CountryController < ApplicationController
 
     @country or raise_404
 
-    @location = @country
     @presenter = StatisticPresenter.new @country
     @pame_statistics = @country.pame_statistic
     @designations_by_jurisdiction = @country.designations.group_by { |design|

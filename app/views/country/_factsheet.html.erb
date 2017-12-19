@@ -19,7 +19,7 @@
     <%= render "country/facts/iucn_categories" %>
   </div>
   <div class="two-thirds">
-    <%= render "shared/stats/facts/governance_types" %>
+    <%= render "shared/stats/facts/governance_types", {location: @country} %>
     <%= render "country/facts/related_countries" %>
   </div>
 </section>
