@@ -48,14 +48,13 @@ class RegionPresenter
   def sources_per_jurisdiction
     sources_per_jurisdiction_hash = {
       international: 0,
-      national: 0
+      national: 0,
+      global: 0
     }
 
     @countries.each do |country|
       country.sources_per_jurisdiction.each do |source_per_jurisdiction|
-        unless source_per_jurisdiction["name"].downcase.to_sym.nil? || source_per_jurisdiction["count"].nil?
-          sources_per_jurisdiction_hash[source_per_jurisdiction["name"].downcase.to_sym] += source_per_jurisdiction["count"].to_i || 0
-        end
+        sources_per_jurisdiction_hash[source_per_jurisdiction["name"].downcase.to_sym] += source_per_jurisdiction["count"].to_i || 0
       end
     end
     sources_per_jurisdiction_hash
