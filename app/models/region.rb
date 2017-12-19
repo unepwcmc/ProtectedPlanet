@@ -32,4 +32,29 @@ class Region < ActiveRecord::Base
       only: [:id, :name]
     )
   end
+
+  def protected_areas_per_designation(jurisdiction=nil)
+    ActiveRecord::Base.connection.execute("""
+      SELECT designations.id AS designation_id, designations.name AS designation_name, pas_per_designations.count
+      FROM designations
+      INNER JOIN (
+        #{protected_areas_inner_join(:designation_id)}
+      ) AS pas_per_designations
+        ON pas_per_designations.designation_id = designations.id
+      #{"WHERE designations.jurisdiction_id = #{jurisdiction.id}" if jurisdiction}
+    """)
+  end
+
+  private
+
+  def protected_areas_inner_join group_by
+    """
+      SELECT #{group_by}, COUNT(protected_areas.id) AS count
+      FROM protected_areas
+      INNER JOIN countries_protected_areas
+        ON protected_areas.id = countries_protected_areas.protected_area_id
+        AND countries_protected_areas.country_id IN (#{self.countries.pluck(:id).join(",")})
+      GROUP BY #{group_by}
+    """
+  end
 end
