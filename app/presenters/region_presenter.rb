@@ -49,7 +49,7 @@ class RegionPresenter
     sources_per_jurisdiction_hash = {
       international: 0,
       national: 0,
-      global: 0
+      regional: 0
     }
 
     @countries.each do |country|
