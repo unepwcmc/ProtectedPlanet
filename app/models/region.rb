@@ -71,6 +71,15 @@ class Region < ActiveRecord::Base
     """)
   end
 
+  def countries_and_territories
+    countries = self.countries
+    all_countries_and_territories = []
+
+    countries.each {|country| all_countries_and_territories << country.children }
+    all_countries_and_territories << countries
+    all_countries_and_territories.flatten.uniq!
+  end
+
   private
 
   def protected_areas_inner_join group_by
