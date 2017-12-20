@@ -77,7 +77,7 @@ class Region < ActiveRecord::Base
 
     countries.each {|country| all_countries_and_territories << country.children }
     all_countries_and_territories << countries
-    all_countries_and_territories.flatten.uniq!
+    all_countries_and_territories.flatten.uniq
   end
 
   private
