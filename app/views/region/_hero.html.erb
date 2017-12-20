@@ -3,11 +3,11 @@
     <h1 class="hero__title <%= "hero__title--bigger" if @for_pdf %>">
       <%= @region.name %>, <small class="hero__title hero__title--thin"><%= @region.name %></small>
     </h1>
-    <% unless @for_pdf %>
-      <div class="u-only-desktop tooltip__trigger js-trigger link-with-icon link-with-icon--bold">
-        <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
+    <%# unless @for_pdf %>
+    <%#  <div class="u-only-desktop tooltip__trigger js-trigger link-with-icon link-with-icon--bold disabled">
+        <i class="link-with-icon__icon fa fa-download"></i>Download this data--set
         <%= download_dropdown(@region.iso, 'general', (types rescue [:csv, :kml, :shp])) %>
-      </div>
+    <%#  </div>
     <% end %>
   </div>
   <% unless @for_pdf %>
