@@ -27,6 +27,6 @@
 
 <section class="row">
   <% %w[National Regional International].each do |level| %>
-    <%= render "region/facts/designations", {level: level} %>
+    <%= render "shared/stats/facts/designations", {location: @region, level: level, main: :region} %>
   <% end %>
 </section>
