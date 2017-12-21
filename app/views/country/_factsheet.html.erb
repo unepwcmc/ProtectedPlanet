@@ -16,7 +16,7 @@
 
 <section class="row">
   <div class="one-thirds">
-    <%= render "country/facts/iucn_categories" %>
+    <%= render "shared/stats/facts/iucn_categories", {location: @country} %>
   </div>
   <div class="two-thirds">
     <%= render "shared/stats/facts/governance_types", {location: @country} %>
