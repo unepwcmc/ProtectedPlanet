@@ -47,16 +47,16 @@ class RegionPresenter
 
   def sources_per_jurisdiction
     sources_per_jurisdiction_hash = {
-      international: 0,
-      national: 0,
-      regional: 0
+      "International" => 0,
+      "National" => 0,
+      "Regional" => 0
     }
 
-    @countries.each do |country|
-      country.sources_per_jurisdiction.each do |source_per_jurisdiction|
-        sources_per_jurisdiction_hash[source_per_jurisdiction["name"].downcase.to_sym] += source_per_jurisdiction["count"].to_i || 0
-      end
-    end
+    @countries.map(&:sources_per_jurisdiction).map { |res| res.map { |el|
+      sources_per_jurisdiction_hash[el["name"]] += el["count"].to_i || 0
+      }
+    }
+
     sources_per_jurisdiction_hash
   end
 

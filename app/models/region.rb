@@ -53,6 +53,26 @@ class Region < ActiveRecord::Base
     }
   end
 
+  def sources_per_jurisdiction
+    ActiveRecord::Base.connection.execute("""
+      SELECT jurisdictions.name, COUNT(DISTINCT protected_areas_sources.source_id)
+      FROM jurisdictions
+      INNER JOIN designations ON jurisdictions.id = designations.jurisdiction_id
+      INNER JOIN (
+        SELECT protected_areas.id, protected_areas.designation_id
+        FROM protected_areas
+        INNER JOIN countries_protected_areas
+          ON protected_areas.id = countries_protected_areas.protected_area_id
+          AND countries_protected_areas.country_id IN (#{self.countries.pluck(:id).join(",")})
+      ) AS pas_for_country ON pas_for_country.designation_id = designations.id
+      INNER JOIN
+        protected_areas_sources
+      ON
+        protected_areas_sources.protected_area_id = pas_for_country.id
+      GROUP BY jurisdictions.name
+    """)
+  end
+
   def as_indexed_json options={}
     self.as_json(
       only: [:id, :name]
