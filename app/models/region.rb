@@ -70,10 +70,10 @@ class Region < ActiveRecord::Base
     end
 
     processed_data = region_data.map{ |key,value| {
-          "iucn_category_name" => key,
-          "count" => value["count"],
-          "percentage" => 100 * value["count"] / total_region_count.reduce(0, :+)
-        }
+      "iucn_category_name" => key,
+      "count" => value["count"],
+      "percentage" => 100 * value["count"] / total_region_count.reduce(0, :+)
+      }
     }
 
     processed_data
