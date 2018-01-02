@@ -39,8 +39,6 @@ class Region < ActiveRecord::Base
         region_pa_category["count"] ||= 0
         region_pa_category["count"] += protected_area["count"].to_i
         total_region_count << protected_area["count"].to_i
-        region_pa_category["percentage"] ||= 0
-        region_pa_category["percentage"] += protected_area["percentage"].to_f
       end
     end
 
@@ -64,8 +62,6 @@ class Region < ActiveRecord::Base
         region_pa_category["count"] ||= 0
         region_pa_category["count"] += protected_area["count"].to_i
         total_region_count << protected_area["count"].to_i
-        region_pa_category["percentage"] ||= 0
-        region_pa_category["percentage"] += protected_area["percentage"].to_f
       end
     end
 
