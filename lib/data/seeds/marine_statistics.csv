@@ -1,10 +1,10 @@
-type,value,
-total_marine_protected_areas,"15,600"
-total_ocean_pa_coverage_percentage,6.96
-total_ocean_area_protected,"25,233,141"
-national_waters_pa_coverage_percentage,16.02
-national_waters_pa_coverage_area,"22,614,988"
+type,value
+total_marine_protected_areas,15609
+total_ocean_pa_coverage_percentage,6.97
+total_ocean_area_protected,25245207
+national_waters_pa_coverage_percentage,16.03
+national_waters_pa_coverage_area,22627054
 high_seas_pa_coverage_percentage,1.18
-high_seas_pa_coverage_area,"2,618,153"
+high_seas_pa_coverage_area,2618153
 national_waters_percentage,39
 global_ocean_percentage,61
