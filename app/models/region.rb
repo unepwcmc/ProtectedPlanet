@@ -28,13 +28,13 @@ class Region < ActiveRecord::Base
   end
 
   def protected_areas_per_governance
-    region_data = Hash.new { |hash, key| hash[key] = Hash.new }
+    region_data = {}
     processed_data = []
     total_region_count = []
 
     countries.each do |country|
       country.protected_areas_per_governance.each do |protected_area|
-        region_pa_category = region_data[protected_area["governance_name"]]
+        region_pa_category = region_data[protected_area["governance_name"]] ||= {}
         region_pa_category["governance_type"] ||= protected_area["governance_type"]
         region_pa_category["count"] ||= 0
         region_pa_category["count"] += protected_area["count"].to_i
@@ -52,13 +52,13 @@ class Region < ActiveRecord::Base
   end
 
   def protected_areas_per_iucn_category
-    region_data = Hash.new { |hash, key| hash[key] = Hash.new }
+    region_data = {}
     processed_data = []
     total_region_count = []
 
     countries.each do |country|
       country.protected_areas_per_iucn_category.each do |protected_area|
-        region_pa_category = region_data[protected_area["iucn_category_name"]]
+        region_pa_category = region_data[protected_area["iucn_category_name"]] ||= {}
         region_pa_category["count"] ||= 0
         region_pa_category["count"] += protected_area["count"].to_i
         total_region_count << protected_area["count"].to_i
