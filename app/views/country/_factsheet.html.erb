@@ -1,12 +1,12 @@
 <section class="row">
   <div class="one-thirds">
-    <%= render "country/facts/number_of_pas" %>
-    <%= render "country/facts/polygons_points_ratio" %>
-    <%= render "country/facts/number_of_sources" %>
+    <%= render "shared/stats/facts/number_of_pas", {location: @country} %>
+    <%= render "shared/stats/facts/polygons_points_ratio" %>
+    <%= render "shared/stats/facts/number_of_sources", {location: @country} %>
   </div>
 
   <div class="two-thirds">
-    <%= render "country/facts/coverage_stats" %>
+    <%= render "shared/stats/facts/coverage_stats" %>
 
     <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
       <%= render "country/facts/pame_statistics" %>
@@ -16,7 +16,7 @@
 
 <section class="row">
   <div class="one-thirds">
-    <%= render "country/facts/iucn_categories" %>
+    <%= render "shared/stats/facts/iucn_categories", {location: @country} %>
   </div>
   <div class="two-thirds">
     <%= render "shared/stats/facts/governance_types", {location: @country} %>
@@ -26,6 +26,6 @@
 
 <section class="row">
   <% %w[National Regional International].each do |level| %>
-    <%= render "country/facts/designations", {level: level} %>
+    <%= render "shared/stats/facts/designations", {location: @country, level: level} %>
   <% end %>
 </section>

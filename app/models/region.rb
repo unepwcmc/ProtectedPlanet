@@ -28,19 +28,17 @@ class Region < ActiveRecord::Base
   end
 
   def protected_areas_per_governance
-    region_data = Hash.new { |hash, key| hash[key] = Hash.new }
+    region_data = {}
     processed_data = []
     total_region_count = []
 
     countries.each do |country|
       country.protected_areas_per_governance.each do |protected_area|
-        region_pa_category = region_data[protected_area["governance_name"]]
+        region_pa_category = region_data[protected_area["governance_name"]] ||= {}
         region_pa_category["governance_type"] ||= protected_area["governance_type"]
         region_pa_category["count"] ||= 0
         region_pa_category["count"] += protected_area["count"].to_i
         total_region_count << protected_area["count"].to_i
-        region_pa_category["percentage"] ||= 0
-        region_pa_category["percentage"] += protected_area["percentage"].to_f
       end
     end
 
@@ -51,6 +49,50 @@ class Region < ActiveRecord::Base
           "percentage" => 100 * value["count"] / total_region_count.reduce(0, :+)
         }
     }
+  end
+
+  def protected_areas_per_iucn_category
+    region_data = {}
+    processed_data = []
+    total_region_count = []
+
+    countries.each do |country|
+      country.protected_areas_per_iucn_category.each do |protected_area|
+        region_pa_category = region_data[protected_area["iucn_category_name"]] ||= {}
+        region_pa_category["count"] ||= 0
+        region_pa_category["count"] += protected_area["count"].to_i
+        total_region_count << protected_area["count"].to_i
+      end
+    end
+
+    processed_data = region_data.map{ |key,value| {
+      "iucn_category_name" => key,
+      "count" => value["count"],
+      "percentage" => 100 * value["count"] / total_region_count.reduce(0, :+)
+      }
+    }
+
+    processed_data
+  end
+
+  def sources_per_jurisdiction
+    ActiveRecord::Base.connection.execute("""
+      SELECT jurisdictions.name, COUNT(DISTINCT protected_areas_sources.source_id)
+      FROM jurisdictions
+      INNER JOIN designations ON jurisdictions.id = designations.jurisdiction_id
+      INNER JOIN (
+        SELECT protected_areas.id, protected_areas.designation_id
+        FROM protected_areas
+        INNER JOIN countries_protected_areas
+          ON protected_areas.id = countries_protected_areas.protected_area_id
+          AND countries_protected_areas.country_id IN (#{self.countries.pluck(:id).join(",")})
+      ) AS pas_for_country ON pas_for_country.designation_id = designations.id
+      INNER JOIN
+        protected_areas_sources
+      ON
+        protected_areas_sources.protected_area_id = pas_for_country.id
+      GROUP BY jurisdictions.name
+    """)
   end
 
   def as_indexed_json options={}

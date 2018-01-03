@@ -3,11 +3,11 @@
   <div class="fact__body">
     <table class="table">
       <% total = 0 %>
-      <% @presenter.sources_per_jurisdiction.each do |k,v| %>
-        <% total += v.to_i %>
+      <% location.sources_per_jurisdiction.each do |row| %>
+        <% total += row["count"].to_i %>
         <tr class="table__row">
-          <td class="table__label">For <%= k.to_s.capitalize %> designations</td>
-          <td class="table__value"><%= v.to_i %></td>
+          <td class="table__label">For <%= row["name"] %> designations</td>
+          <td class="table__value"><%= row["count"] %></td>
         </tr>
       <% end %>
 
