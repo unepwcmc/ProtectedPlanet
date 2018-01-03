@@ -27,7 +27,7 @@
           <%= link_to designation[:name], protected_area_path(designation[:wdpa_id]) %>
         </div>
         <div class="table--grey__cell">
-          <%= link_to designation[:country], country_path(designation[:iso]) %>
+          <%= link_to designation[:country], designation[:iso].present? ? country_path(designation[:iso]) : '#' %>
         </div>
         <div class="table--grey__cell">
           <%= designation[:size] %>
