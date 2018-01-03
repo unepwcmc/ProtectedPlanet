@@ -7,7 +7,6 @@ class RegionController < ApplicationController
   private
 
   def load_vars
-    params[:iso]!="GL" or raise_404
     @region = Region.where(iso: params[:iso].upcase).first
     @region or raise_404
     @presenter = RegionPresenter.new @region
