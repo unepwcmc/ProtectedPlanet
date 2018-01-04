@@ -1,7 +1,10 @@
 <section class="hero hero--overflow">
   <div class="js-download-btn hero__top <%= "hero__top--centered" if @for_pdf %>">
     <h1 class="hero__title <%= "hero__title--bigger" if @for_pdf %>">
-      <%= @country.name %>, <small class="hero__title hero__title--thin"><%= @country.region.name %></small>
+      <%= @country.name %>,
+      <small class="hero__title hero__title--thin">
+        <%= link_to @country.region.name, region_path(@country.region.iso) %>
+      </small>
     </h1>
     <% unless @for_pdf %>
       <div class="u-only-desktop tooltip__trigger js-trigger link-with-icon link-with-icon--bold">
