@@ -3,7 +3,7 @@
   <div class="fact__body">
     <table class="table">
       <% total = 0 %>
-      <% @country.sources_per_jurisdiction.each do |row| %>
+      <% location.sources_per_jurisdiction.each do |row| %>
         <% total += row["count"].to_i %>
         <tr class="table__row">
           <td class="table__label">For <%= row["name"] %> designations</td>

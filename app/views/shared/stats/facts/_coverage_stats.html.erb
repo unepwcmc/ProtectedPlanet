@@ -4,7 +4,6 @@
     <sup class="header__sup"><a href="#ref1">(Ref 1 ↓ )</a></sup>
   </h2>
   <div class="fact__body--no-padding">
-
     <div id="land-stats" class="stats-card">
       <div class="stats-card__header header">
         <img class="header__image" src="<%= asset_url "land-stats.png" %>"/>
@@ -17,11 +16,11 @@
           <small class="value__label">coverage</small>
         </div>
         <div class="value stats-card__element">
-          <p class="value__number"><%= commaify @presenter.pa_land_area %> km<sup>2</sup></p>
+          <p class="value__number"><%= commaify @presenter.pa_land_area.round(0) %> km<sup>2</sup></p>
           <small class="value__label">Land Area Protected</small>
         </div>
         <div class="value stats-card__element">
-          <p class="value__number"><%= commaify @presenter.land_area %> km<sup>2</sup></p>
+          <p class="value__number"><%= commaify @presenter.land_area.round(0) %> km<sup>2</sup></p>
           <small class="value__label">Total Land Area</small>
         </div>
       </div>
@@ -39,11 +38,11 @@
           <small class="value__label">coverage</small>
         </div>
         <div class="value stats-card__element">
-          <p class="value__number"><%= commaify @presenter.pa_marine_area %> km<sup>2</sup></p>
+          <p class="value__number"><%= commaify @presenter.pa_marine_area.round(0) %> km<sup>2</sup></p>
           <small class="value__label">Marine Area Protected</small>
         </div>
         <div class="value stats-card__element">
-          <p class="value__number"><%= commaify @presenter.marine_area %> km<sup>2</sup></p>
+          <p class="value__number"><%= commaify @presenter.marine_area.round(0) %> km<sup>2</sup></p>
           <small class="value__label">Total Marine Area</small>
         </div>
       </div>
