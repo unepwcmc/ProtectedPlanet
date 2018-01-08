@@ -55,6 +55,7 @@ class Region < ActiveRecord::Base
     region_data = {}
     processed_data = []
     total_region_count = []
+    correct_order = ["Ia", "Ib", "II", "III", "IV", "V", "VI", "Not Reported", "Not Assigned", "Not Applicable"]
 
     countries.each do |country|
       country.protected_areas_per_iucn_category.each do |protected_area|
@@ -65,14 +66,16 @@ class Region < ActiveRecord::Base
       end
     end
 
-    processed_data = region_data.map{ |key,value| {
-      "iucn_category_name" => key,
-      "count" => value["count"],
-      "percentage" => 100 * value["count"] / total_region_count.reduce(0, :+)
+    processed_data = correct_order.map do |key,value|
+      next if region_data[key].nil?
+      {
+        "iucn_category_name" => key,
+        "count" => region_data[key]["count"],
+        "percentage" => 100 * region_data[key]["count"] / total_region_count.reduce(0, :+)
       }
-    }
+    end
 
-    processed_data
+    processed_data.compact
   end
 
   def sources_per_jurisdiction
