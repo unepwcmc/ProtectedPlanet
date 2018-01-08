@@ -66,16 +66,16 @@ class Region < ActiveRecord::Base
       end
     end
 
-    processed_data = correct_order.map do |key,value|
+    correct_order.each do |key,value|
       next if region_data[key].nil?
-      {
+      processed_data << {
         "iucn_category_name" => key,
         "count" => region_data[key]["count"],
         "percentage" => 100 * region_data[key]["count"] / total_region_count.reduce(0, :+)
       }
     end
 
-    processed_data.compact
+    processed_data
   end
 
   def sources_per_jurisdiction
