@@ -5,6 +5,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
    and the specific driver' do
     zip_file_path = './all-csv.zip'
     csv_file_path = './all-csv.csv'
+    wdpa_file_path = 'WDPA_sources.csv'
     query = """
       SELECT \"TYPE\", #{Download::Utils.download_columns}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
@@ -15,6 +16,10 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
 
     create_zip_command = "zip -j #{zip_file_path} #{csv_file_path}"
     Download::Generators::Csv.any_instance.expects(:system).with(create_zip_command).returns(true)
+
+    wdpa_zip_command = "zip -ru #{zip_file_path} #{wdpa_file_path}"
+    opts = {chdir: "."}
+    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
     opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
@@ -59,6 +64,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
    and the specific driver' do
     zip_file_path = './all-csv.zip'
     csv_file_path = './all-csv.csv'
+    wdpa_file_path = 'WDPA_sources.csv'
 
     wdpa_ids = [1,2,3]
     query = """
@@ -72,6 +78,10 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
 
     create_zip_command = "zip -j #{zip_file_path} #{csv_file_path}"
     Download::Generators::Csv.any_instance.expects(:system).with(create_zip_command).returns(true)
+
+    wdpa_zip_command = "zip -ru #{zip_file_path} #{wdpa_file_path}"
+    opts = {chdir: "."}
+    Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
     opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
