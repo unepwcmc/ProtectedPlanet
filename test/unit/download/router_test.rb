@@ -30,7 +30,7 @@ class DownloadRouterTest < ActiveSupport::TestCase
   test '.set_email, called with a domain and params including an email, sets
    the email in the properties of the given token' do
     domain = 'general'
-    params = {'id' => '123', 'email' => 'test@test.com'}
+    params = {'id' => '123', 'email' => 'test@test.com', 'status' => 'generating'}
 
     $redis.expects(:set).with('downloads:general:123', '{"email":"test@test.com"}')
 
