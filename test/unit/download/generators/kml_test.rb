@@ -5,16 +5,21 @@ class DownloadKmlTest < ActiveSupport::TestCase
    and the specific driver' do
     zip_file_path = './all-kml.zip'
     kml_file_path = './all-kml.kml'
+    wdpa_file_path = 'WDPA_sources.csv'
     query = """
       SELECT \"TYPE\", #{Download::Utils.download_columns}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
     """.squish
 
     view_name = 'temporary_view_123'
-    Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
+    Download::Generators::Kml.any_instance.expects(:create_view).with(query).returns(view_name)
 
     create_zip_command = "zip -j #{zip_file_path} #{kml_file_path}"
     Download::Generators::Kml.any_instance.expects(:system).with(create_zip_command).returns(true)
+
+    wdpa_zip_command = "zip -ru #{zip_file_path} #{wdpa_file_path}"
+    opts = {chdir: "."}
+    Download::Generators::Kml.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
     opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
@@ -22,7 +27,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
 
     Ogr::Postgres.expects(:export).with(:kml, kml_file_path, "SELECT * FROM #{view_name}").returns(true)
 
-    assert Download::Generators::Kml.generate(zip_file_path),
+    assert_equal true, Download::Generators::Kml.generate(zip_file_path),
       "Expected #generate to return true on success"
   end
 
@@ -79,6 +84,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
    path, a query, and the specific driver' do
     zip_file_path = './all-kml.zip'
     kml_file_path = './all-kml.kml'
+    wdpa_file_path = 'WDPA_sources.csv'
 
     wdpa_ids = [1,2,3]
     query = """
@@ -92,6 +98,10 @@ class DownloadKmlTest < ActiveSupport::TestCase
 
     create_zip_command = "zip -j #{zip_file_path} #{kml_file_path}"
     Download::Generators::Kml.any_instance.expects(:system).with(create_zip_command).returns(true)
+
+    wdpa_zip_command = "zip -ru #{zip_file_path} #{wdpa_file_path}"
+    opts = {chdir: "."}
+    Download::Generators::Kml.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
     opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}

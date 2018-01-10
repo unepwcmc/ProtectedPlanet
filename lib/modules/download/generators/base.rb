@@ -1,4 +1,5 @@
 require 'digest/sha1'
+require 'byebug'
 
 class Download::Generators::Base
   ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents')
