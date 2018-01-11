@@ -11,6 +11,8 @@ class DownloadKmlTest < ActiveSupport::TestCase
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
     """.squish
 
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
+
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.expects(:create_view).with(query).returns(view_name)
 
@@ -43,6 +45,8 @@ class DownloadKmlTest < ActiveSupport::TestCase
     wdpa_file_path = 'WDPA_sources.csv'
     ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(true)
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
+
     Download::Generators::Kml.any_instance.expects(:system).returns(false)
 
     wdpa_zip_command = "zip -ru  #{wdpa_file_path}"
@@ -70,6 +74,8 @@ class DownloadKmlTest < ActiveSupport::TestCase
   end
 
   test '#generate creates a download view' do
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
+
     Download::Generators::Kml.any_instance.stubs(:system).returns(true)
 
     pa = FactoryGirl.create(:protected_area, wdpa_id: 1234)
@@ -101,6 +107,8 @@ class DownloadKmlTest < ActiveSupport::TestCase
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
       WHERE \"WDPAID\" IN (1,2,3)
     """.squish
+
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
 
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)

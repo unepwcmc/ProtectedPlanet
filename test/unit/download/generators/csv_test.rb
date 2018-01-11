@@ -11,6 +11,8 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
     """.squish
 
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
+
     view_name = 'temporary_view_all'
     Download::Generators::Csv.any_instance.expects(:create_view).with(query).returns(view_name)
 
@@ -41,9 +43,10 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
 
   test '#generate returns false if the zip fails' do
     wdpa_file_path = 'WDPA_sources.csv'
-
     ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(true)
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
+
     Download::Generators::Csv.any_instance.expects(:system).returns(false)
 
     wdpa_zip_command = "zip -ru  #{wdpa_file_path}"
@@ -82,6 +85,8 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
       WHERE \"WDPAID\" IN (1,2,3)
     """.squish
+
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
 
     view_name = 'temporary_view_123'
     Download::Generators::Csv.any_instance.stubs(:create_view).with(query).returns(view_name)

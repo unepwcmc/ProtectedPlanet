@@ -34,7 +34,6 @@ class Download::Generators::Base
   end
 
   def export_sources
-    puts "export_sources - exists: #{File.exists?(sources_path)}, sources_path: #{sources_path}"
     return true if File.exists?(sources_path)
 
     Ogr::Postgres.export :csv, sources_path, """
