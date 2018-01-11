@@ -40,9 +40,18 @@ class DownloadKmlTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the zip fails' do
+    wdpa_file_path = 'WDPA_sources.csv'
     ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(true)
     Download::Generators::Kml.any_instance.expects(:system).returns(false)
+
+    wdpa_zip_command = "zip -ru  #{wdpa_file_path}"
+    opts = {chdir: "."}
+    Download::Generators::Kml.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
+
+    update_zip_command = "zip -ru  *"
+    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    Download::Generators::Kml.any_instance.expects(:system).with(update_zip_command, opts).returns(false)
 
     assert_equal false, Download::Generators::Kml.generate(''),
       "Expected #generate to return false on failure"
