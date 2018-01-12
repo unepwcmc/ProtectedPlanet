@@ -5,16 +5,23 @@ class DownloadKmlTest < ActiveSupport::TestCase
    and the specific driver' do
     zip_file_path = './all-kml.zip'
     kml_file_path = './all-kml.kml'
+    wdpa_file_path = 'WDPA_sources.csv'
     query = """
       SELECT \"TYPE\", #{Download::Utils.download_columns}
       FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
     """.squish
 
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
+
     view_name = 'temporary_view_123'
-    Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
+    Download::Generators::Kml.any_instance.expects(:create_view).with(query).returns(view_name)
 
     create_zip_command = "zip -j #{zip_file_path} #{kml_file_path}"
     Download::Generators::Kml.any_instance.expects(:system).with(create_zip_command).returns(true)
+
+    wdpa_zip_command = "zip -ru #{zip_file_path} #{wdpa_file_path}"
+    opts = {chdir: "."}
+    Download::Generators::Kml.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
     opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
@@ -22,7 +29,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
 
     Ogr::Postgres.expects(:export).with(:kml, kml_file_path, "SELECT * FROM #{view_name}").returns(true)
 
-    assert Download::Generators::Kml.generate(zip_file_path),
+    assert_equal true, Download::Generators::Kml.generate(zip_file_path),
       "Expected #generate to return true on success"
   end
 
@@ -35,9 +42,20 @@ class DownloadKmlTest < ActiveSupport::TestCase
   end
 
   test '#generate returns false if the zip fails' do
+    wdpa_file_path = 'WDPA_sources.csv'
     ActiveRecord::Base.connection.stubs(:execute)
     Ogr::Postgres.expects(:export).returns(true)
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
+
     Download::Generators::Kml.any_instance.expects(:system).returns(false)
+
+    wdpa_zip_command = "zip -ru  #{wdpa_file_path}"
+    opts = {chdir: "."}
+    Download::Generators::Kml.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
+
+    update_zip_command = "zip -ru  *"
+    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    Download::Generators::Kml.any_instance.expects(:system).with(update_zip_command, opts).returns(false)
 
     assert_equal false, Download::Generators::Kml.generate(''),
       "Expected #generate to return false on failure"
@@ -56,6 +74,8 @@ class DownloadKmlTest < ActiveSupport::TestCase
   end
 
   test '#generate creates a download view' do
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
+
     Download::Generators::Kml.any_instance.stubs(:system).returns(true)
 
     pa = FactoryGirl.create(:protected_area, wdpa_id: 1234)
@@ -79,6 +99,7 @@ class DownloadKmlTest < ActiveSupport::TestCase
    path, a query, and the specific driver' do
     zip_file_path = './all-kml.zip'
     kml_file_path = './all-kml.kml'
+    wdpa_file_path = 'WDPA_sources.csv'
 
     wdpa_ids = [1,2,3]
     query = """
@@ -87,11 +108,17 @@ class DownloadKmlTest < ActiveSupport::TestCase
       WHERE \"WDPAID\" IN (1,2,3)
     """.squish
 
+    File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
+
     view_name = 'temporary_view_123'
     Download::Generators::Kml.any_instance.stubs(:create_view).with(query).returns(view_name)
 
     create_zip_command = "zip -j #{zip_file_path} #{kml_file_path}"
     Download::Generators::Kml.any_instance.expects(:system).with(create_zip_command).returns(true)
+
+    wdpa_zip_command = "zip -ru #{zip_file_path} #{wdpa_file_path}"
+    opts = {chdir: "."}
+    Download::Generators::Kml.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
     opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
