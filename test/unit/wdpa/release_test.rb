@@ -124,7 +124,7 @@ class TestWdpaRelease < ActiveSupport::TestCase
     expected_tables = {
       "points" => "std_points",
       "polygons" => "std_poly",
-      "sources" => "sources"
+      "sources" => "standard_points"
     }
 
     wdpa_release = Wdpa::Release.new
@@ -169,7 +169,7 @@ class TestWdpaRelease < ActiveSupport::TestCase
   end
 
   test '.sources returns an array of sources attributes from the import' do
-    source_table = 'wdpa_source'
+    source_table = 'standard_points'
 
     source_attributes = [{
       metadataid: 321

@@ -47,7 +47,7 @@ class Download::Generators::Base
   end
 
   def zip
-    system("zip -j  #{@zip_path} #{path}")
+    system("zip -j #{@zip_path} #{path}")
     system("zip -ru #{@zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
     system("zip -ru #{@zip_path} *", chdir: ATTACHMENTS_PATH)
   end

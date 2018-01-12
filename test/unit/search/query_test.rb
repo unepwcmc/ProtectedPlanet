@@ -57,6 +57,7 @@ class SearchQueryTest < ActiveSupport::TestCase
                       "multi_match" => {
                           "query" => "*manbone*",
                           "fields" => [
+                              "iso_3",
                               "name",
                               "original_name"
                           ]

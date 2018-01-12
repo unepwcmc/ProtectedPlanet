@@ -11,7 +11,7 @@ class SearchFilterTest < ActiveSupport::TestCase
           {
             "nested"=>{
               "path"=>"countries_for_index.region_for_index",
-              "filter"=>{
+              "query"=>{
                 "bool"=>{
                   "must"=>{
                     "term"=>{
@@ -100,7 +100,7 @@ class SearchFilterTest < ActiveSupport::TestCase
           {
             "nested"=>{
               "path"=>"iucn_category",
-              "filter"=>{
+              "query"=>{
                 "bool"=>{
                   "must"=>{
                     "term"=>{
@@ -114,7 +114,7 @@ class SearchFilterTest < ActiveSupport::TestCase
           {
             "nested"=>{
               "path"=>"iucn_category",
-              "filter"=>{
+              "query"=>{
                 "bool"=>{
                   "must"=>{
                     "term"=>{

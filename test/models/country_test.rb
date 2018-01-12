@@ -22,6 +22,7 @@ class CountryTest < ActiveSupport::TestCase
     expected_json = {
       "id" => 123,
       "name" => 'Manboneland',
+      "iso_3"=> 'MyString',
       "region_for_index" => {
         "id" => 987,
         "name" => "North Manmerica"
@@ -151,11 +152,13 @@ class CountryTest < ActiveSupport::TestCase
     expected_groups = [{
       'governance_id' => governance_1.id.to_s,
       'governance_name' => governance_1.name,
+      'governance_type' => nil,
       'count' => '2',
       'percentage' => '40.00'
     }, {
       'governance_id' => governance_2.id.to_s,
       'governance_name' => governance_2.name,
+      'governance_type' => nil,
       'count' => '3',
       'percentage' => '60.00'
     }]
