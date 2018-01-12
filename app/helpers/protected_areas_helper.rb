@@ -31,7 +31,7 @@ module ProtectedAreasHelper
   end
 
   def parse_management_plan management_plan
-    if (management_plan.is_a? String) && (management_plan.&starts_with?("http"))
+    if (management_plan.is_a? String) && (management_plan.starts_with?("http"))
       link_to("View Management Plan", management_plan)
     else
       management_plan
