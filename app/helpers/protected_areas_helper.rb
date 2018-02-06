@@ -40,6 +40,6 @@ module ProtectedAreasHelper
 
   def reported_area
     area = @protected_area.reported_area
-    area.try(:nonzero?) ? area.round(2) : "Not Reported"
+    area.try(:nonzero?) ? "#{area.round(2)} km&sup2;".html_safe : "Not Reported"
   end
 end
