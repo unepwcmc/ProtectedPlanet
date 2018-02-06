@@ -37,4 +37,9 @@ module ProtectedAreasHelper
       management_plan
     end
   end
+
+  def reported_area
+    area = @protected_area.reported_area
+    area.try(:nonzero?) ? area.round(2) : "Not Reported"
+  end
 end
