@@ -7,7 +7,6 @@
   </h3>
 
   <p>
-    <% stats = StatisticPresenter.new(model) %>
-    <%= (stats.percentage_pa_land_cover + stats.percentage_pa_marine_cover).round(2) %> % covered by Protected Areas
+    <%= StatisticPresenter.new(model).percentage_total_pa_cover.round(2) %> % covered by Protected Areas
   </p>
 </div>
