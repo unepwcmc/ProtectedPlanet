@@ -22,6 +22,10 @@ class StatisticPresenter
     }
   end
 
+  def percentage_total_pa_cover
+    percentage_pa_land_cover + percentage_pa_marine_cover
+  end
+
   def method_missing method
     @model.send(method) rescue (@statistic.send(method) || 0) rescue 0
   end
