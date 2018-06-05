@@ -8,6 +8,7 @@ class ProtectedArea < ActiveRecord::Base
 
   has_many :networks_protected_areas, dependent: :destroy
   has_many :networks, through: :networks_protected_areas
+  has_many :pame_evaluations
 
   belongs_to :legal_status
   belongs_to :iucn_category

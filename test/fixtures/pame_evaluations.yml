@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  protected_area: 
+  method: 
+  year: 1
+
+two:
+  protected_area: 
+  method: 
+  year: 1
