@@ -42,4 +42,9 @@ module ProtectedAreasHelper
     area = @protected_area.reported_area
     area.try(:nonzero?) ? "#{area.round(2)} km&sup2;".html_safe : "Not Reported"
   end
+
+  def pame_evaluations_summary
+    grouped_evaluations = @protected_area.pame_evaluations.group_by(&:method)
+    grouped_evaluations.update(grouped_evaluations) { |_, evaluations| evaluations.map(&:year) }
+  end
 end

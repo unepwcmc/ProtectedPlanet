@@ -1,29 +1,10 @@
 <section class="fact">
-  <h2 class="fact__header">Management Effectiveness</h2>
+  <h2 class="fact__header">Management Effectiveness Evaluations</h2>
 
-  <p class="attribute">
-    <span class="attribute__title">Methodology 1</span>
-    <span class="attribute__value">Year 1, Year 2</span>
-  </p>
-
-  <p class="attribute">
-    <span class="attribute__title">Methodology 2</span>
-    <span class="attribute__value">METT: 2001, 2005, RAPPAM: 2008</span>
-  </p>
+  <% pame_evaluations_summary.each do |method, years| %>
+    <p class="attribute">
+      <span class="attribute__title"><%= method %></span>
+      <span class="attribute__value"><%= years.join(", ") %></span>
+    </p>
+  <% end %>
 </section>
-
-<% if true %>
-  <section class="fact">
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <% else %>
-    <p>No information available</p>
-  </section>
-<% end %>
-
-<% if true %>
-  <section class="fact">
-    <p>Read more about this site:</p>
-    <%= link_to "in English", root_path %>
-    <%= link_to "alternate language", root_path %>
-  </section>
-<% end %>
