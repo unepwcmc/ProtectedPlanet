@@ -47,6 +47,10 @@ class ProtectedArea < ActiveRecord::Base
     where.not(legal_status_id: 4)
   }
 
+  scope :with_pame_evaluations, -> {
+    includes(:pame_evaluations).where.not(pame_evaluations: {id: nil})
+  }
+
   def self.most_visited(date, limit=3)
     year_month = date.strftime("%m-%Y")
     opts = {with_scores: true, limit: [0, limit]}
