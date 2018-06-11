@@ -47,4 +47,12 @@ module ProtectedAreasHelper
     grouped_evaluations = @protected_area.pame_evaluations.group_by(&:method)
     grouped_evaluations.update(grouped_evaluations) { |_, evaluations| evaluations.map(&:year) }
   end
+
+
+  def has_pame_statistics_for(presenter, area=:land)
+    # Ensures pame stats are returned only for Country pages / Statistic presenters
+    presenter.class == StatisticPresenter &&
+      presenter.pame_statistic.send("pame_percentage_pa_#{area}_cover").present? &&
+      presenter.pame_statistic.send("pame_pa_#{area}_area").present?
+  end
 end
