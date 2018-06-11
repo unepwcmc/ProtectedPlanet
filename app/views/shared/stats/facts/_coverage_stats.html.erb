@@ -29,7 +29,7 @@
             </div>
           </div>
 
-          <% if @presenter.pame_statistic.pame_percentage_pa_land_cover.present? && @presenter.pame_statistic.pame_pa_land_area.present? %>
+          <% if has_pame_statistics_for(@presenter, :land) %>
             <div class="stats-card__row">
               <div class="stats-card__body stats-card__body--color-light">
                 <div class="value stats-card__element">
@@ -72,7 +72,7 @@
             </div>
           </div>
 
-          <% if @presenter.pame_statistic.pame_percentage_pa_marine_cover.present? && @presenter.pame_statistic.pame_pa_marine_area.present? %>
+          <% if has_pame_statistics_for(@presenter, :marine) %>
             <div class="stats-card__row">
               <div class="stats-card__body stats-card__body--alt-color-light">
                 <div class="value stats-card__element">
