@@ -9,22 +9,44 @@
         <img class="header__image" src="<%= asset_url "land-stats.png" %>"/>
         <h3 class="header__text">Area terrestrial</h3>
       </div>
+
       <div class="stats-card__body stats-card__body--color">
         <div class="cube stats-card__element"><div data-fill-value="<%= @presenter.percentage_pa_land_cover %>" class="cube__inner"></div></div>
-        <div class="value stats-card__element">
-          <p class="value__number value__number--xxlarge"><%= @presenter.percentage_pa_land_cover.round(2) %>%</p>
-          <small class="value__label">coverage</small>
-        </div>
-        <div class="value stats-card__element">
-          <p class="value__number"><%= commaify @presenter.pa_land_area.round(0) %> km<sup>2</sup></p>
-          <small class="value__label">Land Area Protected</small>
-        </div>
-        <div class="value stats-card__element">
-          <p class="value__number"><%= commaify @presenter.land_area.round(0) %> km<sup>2</sup></p>
-          <small class="value__label">Total Land Area</small>
+
+        <div>
+          <div class="stats-card__row">
+            <div class="value stats-card__element">
+              <p class="value__number value__number--xxlarge"><%= @presenter.percentage_pa_land_cover.round(2) %>%</p>
+              <small class="value__label">coverage</small>
+            </div>
+            <div class="value stats-card__element">
+              <p class="value__number"><%= commaify @presenter.pa_land_area.round(0) %> km<sup>2</sup></p>
+              <small class="value__label">Land Area Protected</small>
+            </div>
+            <div class="value stats-card__element">
+              <p class="value__number"><%= commaify @presenter.land_area.round(0) %> km<sup>2</sup></p>
+              <small class="value__label">Total Land Area</small>
+            </div>
+          </div>
+
+          <% if has_pame_statistics_for(@presenter, :land) %>
+            <div class="stats-card__row">
+              <div class="stats-card__body stats-card__body--color-light">
+                <div class="value stats-card__element">
+                  <p class="value__number"><%= @presenter.pame_statistic.pame_percentage_pa_land_cover %>%</p>
+                  <small class="value__label">with management effectiveness evaluation</small>
+                </div>
+                <div class="value stats-card__element">
+                  <p class="value__number"><%= commaify @presenter.pame_statistic.pame_pa_land_area %> km<sup>2</sup></p>
+                  <small class="value__label">Area Assessed</small>
+                </div>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
+
 
     <div id="marine-stats" class="stats-card">
       <div class="stats-card__header header">
@@ -33,17 +55,37 @@
       </div>
       <div class="stats-card__body stats-card__body--alt-color">
         <div class="cube stats-card__element"><div data-fill-value="<%= @presenter.percentage_pa_marine_cover %>" class="cube__inner"></div></div>
-        <div class="value stats-card__element">
-          <p class="value__number value__number--xxlarge"><%= @presenter.percentage_pa_marine_cover.round(2) %>%</p>
-          <small class="value__label">coverage</small>
-        </div>
-        <div class="value stats-card__element">
-          <p class="value__number"><%= commaify @presenter.pa_marine_area.round(0) %> km<sup>2</sup></p>
-          <small class="value__label">Marine Area Protected</small>
-        </div>
-        <div class="value stats-card__element">
-          <p class="value__number"><%= commaify @presenter.marine_area.round(0) %> km<sup>2</sup></p>
-          <small class="value__label">Total Marine Area</small>
+
+        <div>
+          <div class="stats-card__row">
+            <div class="value stats-card__element">
+              <p class="value__number value__number--xxlarge"><%= @presenter.percentage_pa_marine_cover.round(2) %>%</p>
+              <small class="value__label">coverage</small>
+            </div>
+            <div class="value stats-card__element">
+              <p class="value__number"><%= commaify @presenter.pa_marine_area.round(0) %> km<sup>2</sup></p>
+              <small class="value__label">Marine Area Protected</small>
+            </div>
+            <div class="value stats-card__element">
+              <p class="value__number"><%= commaify @presenter.marine_area.round(0) %> km<sup>2</sup></p>
+              <small class="value__label">Total Marine Area</small>
+            </div>
+          </div>
+
+          <% if has_pame_statistics_for(@presenter, :marine) %>
+            <div class="stats-card__row">
+              <div class="stats-card__body stats-card__body--alt-color-light">
+                <div class="value stats-card__element">
+                  <p class="value__number"><%= @presenter.pame_statistic.pame_percentage_pa_marine_cover %>%</p>
+                  <small class="value__label">with management effectiveness evaluation</small>
+                </div>
+                <div class="value stats-card__element">
+                  <p class="value__number"><%= commaify @presenter.pame_statistic.pame_pa_marine_area %> km<sup>2</sup></p>
+                  <small class="value__label">Area Assessed</small>
+                </div>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
