@@ -1,5 +1,5 @@
 set :stage, :staging
-set :branch, 'use_wdpa_id_on_search_results'
+set :branch, 'develop'
 
 server "stage.protectedplanet.net", user: 'wcmc', roles: %w{web}
 server "util.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{util}
