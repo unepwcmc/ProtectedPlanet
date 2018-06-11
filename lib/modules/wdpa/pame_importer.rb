@@ -1,5 +1,4 @@
 require 'csv'
-require 'byebug'
 
 module Wdpa::PameImporter
   PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_evaluations.csv".freeze
