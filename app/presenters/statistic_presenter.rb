@@ -1,7 +1,8 @@
 class StatisticPresenter
   def initialize model
-    @model = model
-    @statistic = model.statistic
+    @model          = model
+    @statistic      = model.statistic
+    @pame_statistic = model.pame_statistic
   end
 
   def percentage_of_global_pas

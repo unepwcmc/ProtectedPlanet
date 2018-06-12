@@ -20,7 +20,7 @@ module Stats::CountryStatisticsImporter
   def self.stats_csv_path
     Rails.root.join('lib/data/seeds/country_statistics.csv')
   end
-  
+
   def self.pame_csv_path
     Rails.root.join('lib/data/seeds/pame_country_stats.csv')
   end
