@@ -45,7 +45,9 @@ module ProtectedAreasHelper
 
   def pame_evaluations_summary
     grouped_evaluations = @protected_area.pame_evaluations.group_by(&:method)
-    grouped_evaluations.update(grouped_evaluations) { |_, evaluations| evaluations.map(&:year) }
+    grouped_evaluations.update(grouped_evaluations) do |_, evaluations|
+      evaluations.map { |ev| ev == 0 ? 'Not Reported' : ev.year }
+    end
   end
 
 
