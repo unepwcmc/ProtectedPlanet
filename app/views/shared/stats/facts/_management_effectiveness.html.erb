@@ -2,9 +2,9 @@
   <h2 class="fact__header">Management Effectiveness Evaluations</h2>
 
   <% if pame_evaluations_summary.any? %>
-    <% pame_evaluations_summary.each do |method, years| %>
+    <% pame_evaluations_summary.each do |methodology, years| %>
       <p class="attribute">
-        <span class="attribute__title"><%= method %></span>
+        <span class="attribute__title"><%= methodology %></span>
         <span class="attribute__value"><%= years.join(", ") %></span>
       </p>
     <% end %>
