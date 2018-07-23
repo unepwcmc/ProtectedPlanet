@@ -35,7 +35,7 @@
                 <div class="value stats-card__element">
                   <p class="value__number">
                     <span class="u-text-muted"><i class="fa fa-level-down"></i></span>
-                    <%= @presenter.pame_statistic.pame_percentage_pa_land_cover %>%</p>
+                    <%= @presenter.pame_statistic.pame_percentage_pa_land_cover.round(2) %>%</p>
                   <small class="value__label">with management effectiveness evaluation</small>
                 </div>
                 <div class="value stats-card__element">
@@ -80,7 +80,7 @@
                 <div class="value stats-card__element">
                   <p class="value__number">
                     <span class="u-text-muted"><i class="fa fa-level-down"></i></span>
-                    <%= @presenter.pame_statistic.pame_percentage_pa_marine_cover %>%
+                    <%= @presenter.pame_statistic.pame_percentage_pa_marine_cover.round(2) %>%
                   </p>
                   <small class="value__label">with management effectiveness evaluation</small>
                 </div>
