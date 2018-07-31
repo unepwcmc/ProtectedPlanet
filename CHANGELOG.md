@@ -1,3 +1,13 @@
+### 2.1.2
+
+**PAME stats**
+
+* Round percentage to 2 places
+
+**Countries**
+
+* Change Swaziland name to Eswatini, the Kingdom of in seed file and db
+
 ### 2.1.1
 
 **PAME stats**
