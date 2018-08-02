@@ -1,3 +1,7 @@
+### 2.1.3
+
+* Removes `resp_email` from download generator to fix bug when download fails to generate
+
 ### 2.1.2
 
 **PAME stats**
