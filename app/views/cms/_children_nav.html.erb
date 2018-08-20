@@ -2,7 +2,9 @@
   <% @cms_page.children.each do |page| %>
     
     <% if page.slug[0,3] == 'URL' %>
-      <%= link_to page.label, 'http://' + page.slug[3..-1], title: 'Visit ' + page.label, target: '_blank', class: 'vertical-nav__element' %>
+      <%= link_to 'http://' + page.slug[3..-1], title: 'Visit ' + page.label, target: '_blank', class: 'vertical-nav__element' do %>
+        <%= page.label %> <i class="fa fa-external-link-square"></i>
+      <% end %>
     <% else %> 
       <%= cms_page page, @cms_page %>
     <% end %>
