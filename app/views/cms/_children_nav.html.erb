@@ -1,6 +1,11 @@
 <div class="vertical-nav">
   <% @cms_page.children.each do |page| %>
-    <%= cms_page page, @cms_page %>
+    
+    <% if page.slug[0,3] == 'URL' %>
+      <%= link_to page.label, 'http://' + page.slug[3..-1], title: 'Visit ' + page.label, target: '_blank', class: 'vertical-nav__element' %>
+    <% else %> 
+      <%= cms_page page, @cms_page %>
+    <% end %>
   <% end %>
 </div>
 
