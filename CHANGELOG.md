@@ -1,3 +1,7 @@
+### 2.1.4
+
+Rename PAME statistics field from :method to :methodology to avoid reserved word clashes
+
 ### 2.1.3
 
 * Removes `resp_email` from download generator to fix bug when download fails to generate
