@@ -4,6 +4,8 @@ module Wdpa::PameImporter
   PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_evaluations.csv".freeze
 
   def self.import
+    puts "Importing PAME evaluations..."
+
     CSV.foreach(PAME_EVALUATIONS, headers: true) do |row|
       wdpa_id         = row[0].to_i
       methodology     = row[2]
@@ -22,7 +24,6 @@ module Wdpa::PameImporter
           pe.protected_area = protected_area
           pe.methodology    = methodology
           pe.year           = year
-          puts "Created Pame Evaluation for #{protected_area.name}: #{methodology} #{year}"
         end
       end
     end
