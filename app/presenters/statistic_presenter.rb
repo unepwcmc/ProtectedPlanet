@@ -1,7 +1,8 @@
 class StatisticPresenter
   def initialize model
-    @model = model
-    @statistic = model.statistic
+    @model          = model
+    @statistic      = model.statistic
+    @pame_statistic = model.pame_statistic
   end
 
   def percentage_of_global_pas
@@ -20,6 +21,10 @@ class StatisticPresenter
       polygons: (((@statistic.polygons_count/total.to_f)*100).round rescue 0),
       points:   (((@statistic.points_count/total.to_f)*100).round   rescue 0),
     }
+  end
+
+  def percentage_total_pa_cover
+    percentage_pa_land_cover + percentage_pa_marine_cover
   end
 
   def method_missing method
