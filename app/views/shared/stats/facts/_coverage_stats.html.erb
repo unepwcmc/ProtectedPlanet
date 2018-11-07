@@ -101,7 +101,7 @@
       countries due to difference in methodologies and datasets used to assess
       protected area coverage and differences in the base maps used to measure
       terrestrial and marine area of a country or territory.
-      <% if @country.iso_3 == 'JPN' %>
+      <% if @country && @country.iso_3 == 'JPN' %>
         Download <a href="https://www.cbd.int/doc/world/jp/jp-nr-05-en.pdf" class="link-with-icon">Japan’s fifth national report (pdf).</a>
       <% end %>
     </p>
