@@ -57,4 +57,21 @@ module ProtectedAreasHelper
       presenter.pame_statistic.send("pame_percentage_pa_#{area}_cover").present? &&
       presenter.pame_statistic.send("pame_pa_#{area}_area").present?
   end
+
+  def is_malaysia_pa?
+    [9786, 555635837, 3150].include?(@protected_area.wdpa_id)
+  end
+
+  def management_plan_documents
+    [
+      {
+        url: 'url1',
+        name: 'name1'
+      },
+      {
+        url: 'url2',
+        name: 'name2'
+      }
+    ]
+  end
 end
