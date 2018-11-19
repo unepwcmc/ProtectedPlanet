@@ -425,45 +425,45 @@ class MarineController < ApplicationController
       children: [
         {
           name: "National priority actions",
-          size: 478520,
+          size: 353258,
           breakdown: [
             {
               name: "National Waters",
-              size: 478520
+              size: 353258
             }
           ]
         },
         {
           name: "Approved GEF-5 and GEF-6 projects",
-          size: 762246,
+          size: 315439,
           breakdown: [
             {
               name: "National Waters",
-              size: 762246
+              size: 315439
             }
           ]
         },
         {
           name: "Voluntary commitments from UN Ocean Conference",
-          size: 17635796,
+          size: 9865824,
           breakdown: [
             {
               name: "National Waters",
-              size: 14035796
+              size: 8065824
             },
             {
               name: "ABNJ",
-              size: 3600000
+              size: 1800000
             }
           ]
         },
         {
           name: "Other Large MPA proposals",
-          size: 3822552,
+          size: 3481409,
           breakdown: [
             {
               name: "National Waters",
-              size: 2272552
+              size: 353258
             },
             {
               name: "ABNJ",
@@ -473,21 +473,21 @@ class MarineController < ApplicationController
         },
         {
           name: "Micronesia and Caribbean Challenge",
-          size: 502083,
+          size: 272549,
           breakdown: [
             {
               name: "National Waters",
-              size: 502083
+              size: 272549
             }
           ]
         },
         {
           name: "Protected area targets in post-COP10 NBSAPs",
-          size: 3587340,
+          size: 2004710,
           breakdown: [
             {
               name: "National Waters",
-              size: 3587340
+              size: 2004710
             }
           ]
         }
