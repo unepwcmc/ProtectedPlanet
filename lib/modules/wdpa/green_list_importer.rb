@@ -4,6 +4,8 @@ module Wdpa::GreenListImporter
 
   def import
     ActiveRecord::Base.transaction do
+      old_green_list = ProtectedArea.where(is_green_list: true)
+      old_green_list.update_all(is_green_list: false)
       csv = CSV.read(GREEN_LIST_SITES_CSV)
       csv.shift # remove headers
 
