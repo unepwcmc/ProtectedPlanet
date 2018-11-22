@@ -1,6 +1,14 @@
+### 2.1.6
+
+* Update Green List sites
+
+### 2.1.5
+
+* Use WDPA ID instead of slug for the show pages to prevent issue with protected areas with same name
+
 ### 2.1.4
 
-Rename PAME statistics field from :method to :methodology to avoid reserved word clashes
+* Rename PAME statistics field from :method to :methodology to avoid reserved word clashes
 
 ### 2.1.3
 
