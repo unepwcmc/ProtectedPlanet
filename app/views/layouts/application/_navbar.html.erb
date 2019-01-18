@@ -48,9 +48,10 @@
           </div>
         </div>
       </div>
+      
+      <%= link_to 'Live Report', 'https://livereport.protectedplanet.net', class: "navbar__element u-bold" %>
 
-      <div data-dropdown-switch data-dropdown-switch-text class="js-switch js-dropdown <%= bem("navbar__element", "with-separator", "larger", "for-search-dropdown") %>"
-        >
+      <div data-dropdown-switch data-dropdown-switch-text class="js-switch js-dropdown <%= bem("navbar__element", "with-separator", "larger", "for-search-dropdown") %>">
         <button class="js-trigger link-with-icon link-with-icon--no-color link-with-icon--no-underline navbar__element--search"><i class="fa fa-search link-with-icon__icon"></i>Search</button>
         <div class="u-hide js-target dropdown dropdown--search-dropdown u-font-inherit">
           <form action='/search' method='get' class="search-bar" id="search-form">
