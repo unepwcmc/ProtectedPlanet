@@ -24,3 +24,9 @@ You can check out the previous version of Protected Planet on
 
 Protected Planet is released under the [BSD
 3-Clause](http://opensource.org/licenses/BSD-3-Clause) License.
+
+## Docker
+
+```
+docker-compose build
+```

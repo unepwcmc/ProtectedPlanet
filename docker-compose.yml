@@ -1,0 +1,43 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/ProtectedPlanet
+    ports:
+      - "3000:3000"
+    env_file:
+      - '.env'
+    depends_on:
+      - db
+      - redis
+  db:
+    container_name: protectedplanet-db
+    image: kartoza/postgis
+    ports:
+      - "5432:5432"
+    env_file:
+      - '.env'
+    volumes:
+      - protectedplanet_pg_data:/var/lib/postgresql
+  redis:
+    image: redis
+    volumes:
+      - protectedplanet_redis_data:/data
+  sidekiq:
+     build: .
+     volumes:
+       - .:/ProtectedPlanet
+     links:
+       - db
+       - redis
+     command: bundle exec sidekiq
+     env_file:
+       - '.env'
+
+volumes:
+  protectedplanet_pg_data:
+    driver: local
+  protectedplanet_redis_data:
+    driver: local
