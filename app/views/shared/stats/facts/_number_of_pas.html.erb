@@ -1,4 +1,7 @@
 <section class="fact">
   <h2 class="fact__header">Number of Protected areas</h2>
   <p class="fact__body fact__single-figure"><%= spaceify(location.protected_areas.count) %></p>
+
+  <p class="value__number value__number--xxlarge"><span class="u-text-muted"><i class="fa fa-level-down"></i></span> <%= spaceify(location.protected_areas.with_pame_evaluations.count) %></p>
+  <small class="value__label">with management effectiveness evaluations</small>
 </section>

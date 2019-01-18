@@ -17,7 +17,7 @@ User-agent: Googlebot
 Crawl-delay: 10
 
 User-agent: bingbot
-Crawl-delay: 20
+Disallow: /
 
 User-agent: Slurp
 Crawl-delay: 30
