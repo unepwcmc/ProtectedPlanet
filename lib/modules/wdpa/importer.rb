@@ -22,5 +22,6 @@ class Wdpa::Importer
     Wdpa::OverseasTerritoriesImporter.import
     Wdpa::GreenListImporter.import
     Wdpa::MarineStatsImporter.import
+    Wdpa::PameImporter.import
   end
 end
