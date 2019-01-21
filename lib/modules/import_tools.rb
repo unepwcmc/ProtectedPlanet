@@ -22,4 +22,14 @@ module ImportTools
   def self.dump_path
     Rails.root.join("lib", "data", "seeds", "pre_seeded_database.sql")
   end
+
+  def self.monthly_import
+    ActiveRecord::Base.transaction do
+      CountryStatistic.delete_all
+      PameStatistic.delete_all
+      Stats::CountryStatisticsImporter.import
+      Wdpa::GeometryRatioCalculator.calculate
+      Wdpa::PameImporter.import
+    end
+  end
 end
