@@ -28,5 +28,7 @@ Protected Planet is released under the [BSD
 ## Docker
 
 ```
+docker volume create protectedplanet_pg_data
+docker volume create protectedplanet_redis_data
 docker-compose build
 ```
