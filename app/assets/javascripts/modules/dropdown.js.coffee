@@ -50,9 +50,9 @@ define('dropdown', [], ->
 
       if @$switchEl.data()?.hasOwnProperty('dropdownSwitchText')
         if @$switchEl.hasClass('is-active')
-          @$triggerEl.html('<i class="fa fa-times link-with-icon__icon"></i>Close')
+          @$triggerEl.html('<i class="fa fa-times"></i>')
         else
-          @$triggerEl.html('<i class="fa fa-search link-with-icon__icon"></i>Search')
+          @$triggerEl.html('<i class="fa fa-search"></i>')
 
   return Dropdown
 )
