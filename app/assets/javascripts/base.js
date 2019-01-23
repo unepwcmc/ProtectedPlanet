@@ -1,3 +1,6 @@
+//= require 'vue'
+//= require vue/components/carousel/Carousel
+//= require vue/components/carousel/CarouselSlide
 //= require 'require'
 //= require REM-unit-polyfill/js/rem.min.js
 //= require jquery
