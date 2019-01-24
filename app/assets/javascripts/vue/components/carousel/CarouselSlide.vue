@@ -1,5 +1,7 @@
 <template>
-  <span>Slide</span>
+  <div class="carousel-slide">
+    <slot></slot>
+  </div>
 </template>
 
 <script>
