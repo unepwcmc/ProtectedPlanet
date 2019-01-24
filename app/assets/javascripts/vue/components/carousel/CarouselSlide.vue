@@ -1,5 +1,5 @@
 <template>
-  <div class="v-carousel-slide">
+  <div :class="['carousel-slide', widthClass]">
     <slot></slot>
   </div>
 </template>
@@ -8,9 +8,17 @@
 module.exports = {
   name: 'carousel-slide',
 
+  props: {
+    slideWidth: {
+      default: 'full-width',
+      type: String
+    }
+  },
+
   data () {
     return {
-      slots: this.$slots.default
+      slots: this.$slots.default,
+      widthClass: `carousel-slide--${this.slideWidth}`
     }
   },
 

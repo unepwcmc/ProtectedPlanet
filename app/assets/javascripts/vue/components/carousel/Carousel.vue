@@ -1,5 +1,5 @@
 <template>
-  <div class="v-carousel">
+  <div class="carousel">
 
     <template v-if="title">
       <h1>{{ title }}</h1>
@@ -9,15 +9,15 @@
       <h2>{{ currentSlide }} of {{ totalSlides }}</h2>
     </template>
 
-    <div class="v-carousel__slides-container">
-      <div class="v-carousel__slides">
+    <div class="carousel__slides-container">
+      <div class="carousel__slides">
         <slot></slot>
       </div>
     </div>
-    <div class="v-carousel__indicators">
+    <div class="carousel__indicators">
       <button
         v-for="slide in totalSlides"
-        class="v-carousel__indicator"
+        class="carousel__indicator"
         :class="selectedSlideClass(slide)"
         @click="changeSlide(slide)"></button>
     </div>
@@ -52,7 +52,7 @@ module.exports = {
     this.addIndices()
     this.setSlideWidth()
     this.setSlideInterval()
-    this.slidesEl = this.$el.querySelector('.v-carousel__slides')
+    this.slidesEl = this.$el.querySelector('.carousel__slides')
   },
 
   methods: {
@@ -91,7 +91,7 @@ module.exports = {
     },
 
     selectedSlideClass (slide) {
-      return {'v-carousel__indicator--selected' : this.isCurrentSlide(slide)}
+      return {'carousel__indicator--selected' : this.isCurrentSlide(slide)}
     },
 
     isCurrentSlide (slide) {
