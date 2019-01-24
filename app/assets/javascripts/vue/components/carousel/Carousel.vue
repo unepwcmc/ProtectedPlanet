@@ -1,5 +1,5 @@
 <template>
-  <div class="carousel">
+  <div class="v-carousel">
 
     <template v-if="title">
       <h1>{{ title }}</h1>
@@ -9,15 +9,15 @@
       <h2>{{ currentSlide }} of {{ totalSlides }}</h2>
     </template>
 
-    <div class="carousel__slides-container">
-      <div class="carousel__slides">
+    <div class="v-carousel__slides-container">
+      <div class="v-carousel__slides">
         <slot></slot>
       </div>
     </div>
-    <div class="carousel__indicators">
+    <div class="v-carousel__indicators">
       <button
         v-for="slide in totalSlides"
-        class="carousel__indicator"
+        class="v-carousel__indicator"
         :class="selectedSlideClass(slide)"
         @click="changeSlide(slide)"></button>
     </div>
@@ -52,7 +52,7 @@ module.exports = {
     this.addIndices()
     this.setSlideWidth()
     this.setSlideInterval()
-    this.slidesEl = this.$el.querySelector('.carousel__slides')
+    this.slidesEl = this.$el.querySelector('.v-carousel__slides')
   },
 
   methods: {
@@ -91,7 +91,7 @@ module.exports = {
     },
 
     selectedSlideClass (slide) {
-      return {'carousel__indicator--selected' : this.isCurrentSlide(slide)}
+      return {'v-carousel__indicator--selected' : this.isCurrentSlide(slide)}
     },
 
     isCurrentSlide (slide) {
@@ -99,7 +99,10 @@ module.exports = {
     },
 
     setSlideWidth () {
-      this.slideWidth = this.children[0].$el.offsetWidth
+      const slide = this.children[0].$el
+      const style = slide.currentStyle || window.getComputedStyle(slide)
+
+      this.slideWidth = slide.offsetWidth + parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10)
     },
 
     setSlideTransform () {

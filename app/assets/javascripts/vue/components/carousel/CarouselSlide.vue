@@ -1,5 +1,5 @@
 <template>
-  <div class="carousel-slide">
+  <div class="v-carousel-slide">
     <slot></slot>
   </div>
 </template>
