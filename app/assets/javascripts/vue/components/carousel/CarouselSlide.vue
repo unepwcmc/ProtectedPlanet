@@ -6,6 +6,18 @@
 
 <script>
 module.exports = {
-  name: 'carousel-slide'
+  name: 'carousel-slide',
+
+  data () {
+    return {
+      slots: this.$slots.default
+    }
+  },
+
+  mounted() {
+    this.slots.forEach(child => {
+      child.elm.classList.remove("init-hidden")
+    })
+  },
 }
 </script>
