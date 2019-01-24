@@ -1,0 +1,23 @@
+.page-header
+  = link_to 'New Home Carousel Slide', new_admin_home_carousel_slide_path, :class => 'btn btn-default pull-right'
+  %h2= 'Home Carousel Slides'
+
+= will_paginate @home_carousel_slides, :theme => 'comfy'
+
+%table.table.table-hover.table-bordered
+  %tr
+    %th.main Title (Max characters: 30)
+    %th Description (Max characters: 150)
+    %th Url
+    %th
+  - @home_carousel_slides.each do |home_carousel_slide|
+    %tr
+      %td.main= home_carousel_slide.title
+      %td= home_carousel_slide.description
+      %td= home_carousel_slide.url
+      %td
+        .btn-group.btn-group-sm
+          = link_to 'Edit', edit_admin_home_carousel_slide_path(home_carousel_slide), :class => 'btn btn-default'
+          = link_to 'Delete', admin_home_carousel_slide_path(home_carousel_slide), :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-danger'
+
+= will_paginate @home_carousel_slides, :theme => 'comfy'

@@ -1,0 +1,8 @@
+%p The title may have up to 30 characters and the description may have up to 150.
+
+= form.text_field :title, maxlength: 35
+= form.text_field :description, maxlength: 150
+= form.text_field :url, maxlength: 255
+
+= form.form_group :class => 'form-actions' do
+  = form.submit :class => 'btn btn-primary'
