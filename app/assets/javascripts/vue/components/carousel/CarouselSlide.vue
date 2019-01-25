@@ -1,7 +1,7 @@
 <template>
-  <div :class="['carousel-slide', widthClass]">
+  <li :class="['carousel-slide', widthClass]">
     <slot></slot>
-  </div>
+  </li>
 </template>
 
 <script>

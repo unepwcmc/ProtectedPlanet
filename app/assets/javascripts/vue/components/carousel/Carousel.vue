@@ -1,8 +1,8 @@
 <template>
-  <div class="carousel">
+  <aside class="carousel" aria-labelledby="carousel-heading">
 
     <template v-if="title">
-      <h1>{{ title }}</h1>
+      <h1 id="carousel-heading">{{ title }}</h1>
     </template>
 
     <template v-if="showCount">
@@ -10,9 +10,9 @@
     </template>
 
     <div class="carousel__slides-container">
-      <div class="carousel__slides">
+      <ul class="carousel__slides">
         <slot></slot>
-      </div>
+      </ul>
     </div>
     <div class="carousel__indicators">
       <button
@@ -21,10 +21,11 @@
         :class="selectedSlideClass(slide)"
         @click="changeSlide(slide)"></button>
     </div>
-  </div>
+  </aside>
 </template>
 
 <script>
+//TODO: permenant title offscreen for accessibility?
 module.exports = {
   name: 'carousel',
 
@@ -70,14 +71,14 @@ module.exports = {
     },
 
     setSlideWidth () {
-      this.slideWidth = getWidthWithMargins(this.children[0].$el)
+      this.slideWidth = this.getWidthWithMargins(this.children[0].$el)
     },
 
     //TODO: export to helper
     getWidthWithMargins (element) {
       const style = element.currentStyle || window.getComputedStyle(element)
       
-      return slide.offsetWidth + parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10)
+      return element.offsetWidth + parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10)
     },
 
     setSlideInterval () {
