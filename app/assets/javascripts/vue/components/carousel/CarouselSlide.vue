@@ -1,6 +1,6 @@
 <template>
   <li :class="['carousel-slide', widthClass]">
-    <slot></slot>
+    <slot :slideScope="slideScope"></slot>
   </li>
 </template>
 
@@ -17,15 +17,10 @@ module.exports = {
 
   data () {
     return {
-      slots: this.$slots.default,
-      widthClass: `carousel-slide--${this.slideWidth}`
+      children: this.$children,
+      widthClass: `carousel-slide--${this.slideWidth}`,
+      slideScope: {}
     }
-  },
-
-  mounted() {
-    this.slots.forEach(child => {
-      child.elm.classList.remove("init-hidden")
-    })
-  },
+  }
 }
 </script>

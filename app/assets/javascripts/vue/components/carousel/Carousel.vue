@@ -11,7 +11,9 @@
 
     <div class="carousel__slides-container">
       <ul id="carousel-slides" class="carousel__slides">
-        <slot></slot>
+        <template v-for="n in 3">
+          <slot :slidesScope="slidesScope"></slot>
+        </template>
       </ul>
     </div>
     <div class="carousel__indicators">
@@ -34,17 +36,22 @@ module.exports = {
       default: false,
       type: Boolean
     },
-    title: String
+    title: String,
+    slideIntervalLength: {
+      default: 0,
+      type: Number
+    }
   },
 
   data() {
     return {
       currentSlide: 1,
       totalSlides: 0,
-      children: this.$children,
+      childSlideComponents: this.$children,
       nextSlideInterval: {},
       slideWidth: 0,
-      slidesEl: {}
+      slidesEl: {},
+      slidesScope: {}
     }
   },
 
@@ -56,22 +63,22 @@ module.exports = {
   },
 
   mounted () {
-    this.totalSlides = this.children.length
+    this.totalSlides = this.childSlideComponents.length / 3
     this.addIndices()
     this.setSlideWidth()
-    this.setSlideInterval()
+    if (this.slideIntervalLength) { this.setSlideInterval() }
     this.slidesEl = this.$el.querySelector('#carousel-slides')
   },
 
   methods: {
     addIndices () {
-      this.children.forEach( (child, index) => {
+      this.childSlideComponents.forEach( (child, index) => {
         child.index = index
       })
     },
 
     setSlideWidth () {
-      this.slideWidth = this.getWidthWithMargins(this.children[0].$el)
+      this.slideWidth = this.getWidthWithMargins(this.childSlideComponents[0].$el)
     },
 
     //TODO: export to helper
@@ -81,10 +88,16 @@ module.exports = {
       return element.offsetWidth + parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10)
     },
 
+    setSlideIntervalIfConfigured () {
+      if (this.slideIntervalLength) {
+        this.setSlideInterval()
+      }
+    },
+
     setSlideInterval () {
       this.nextSlideInterval = setInterval(() => {
         this.setNextSlide(true)
-      }, 4000)
+      }, this.slideIntervalLength)
     },
 
     setNextSlide (isAuto=false) {
@@ -99,7 +112,7 @@ module.exports = {
       this.currentSlide = slide
       this.setSlideTransform()
 
-      if (!isAuto) {
+      if (!isAuto && this.slideIntervalLength) {
         this.resetSlideInterval()
       }
     },
@@ -112,7 +125,7 @@ module.exports = {
 
     resetSlideInterval () {
         clearInterval(this.nextSlideInterval)
-        this.setSlideInterval()
+        this.setSlideIntervalIfConfigured()
     },
 
     selectedSlideClass (slide) {

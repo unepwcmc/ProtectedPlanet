@@ -1,9 +1,11 @@
 <carousel-slide>
-  <div class="home-carousel-slide init-hidden">
-    <h2 class="home-carousel-slide__title"><%= title %></h2>
-    <p class="home-carousel-slide__description"><%= description %></p>
-    <%= link_to url, target: '_blank', class: 'home-carousel-slide__link' do %>
-      <span>Explore</span><span class="home-carousel-slide__link-icon fas fa-arrow-right"></span>
-    <% end %>
-  </div>
+  <template scope="slideScope">
+    <div class="home-carousel-slide">
+      <h2 class="home-carousel-slide__title"><%= title %></h2>
+      <p class="home-carousel-slide__description"><%= description %></p>
+      <%= link_to url, target: '_blank', class: 'home-carousel-slide__link' do %>
+        <span>Explore</span><span class="home-carousel-slide__link-icon fas fa-arrow-right"></span>
+      <% end %>
+    </div>
+  </template>
 </carousel-slide>
