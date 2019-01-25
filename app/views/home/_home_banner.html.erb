@@ -1,7 +1,7 @@
 <header class="home-banner">
   <h1 class="home-banner__title">Discover the world's protected areas</h1>
   <carousel class="home-banner__carousel">
-  <%= @carousel_slides.each do |slide| %>
+  <% @carousel_slides.each do |slide| %>
     <%= render partial: "carousel_slide", locals: {
       title: slide.title,
       description: slide.description,

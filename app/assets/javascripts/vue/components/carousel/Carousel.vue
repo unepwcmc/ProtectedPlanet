@@ -47,6 +47,13 @@ module.exports = {
     }
   },
 
+  created() {
+    window.onresize = () => {
+      this.setSlideWidth()
+      this.setSlideTransform()
+    }
+  },
+
   mounted () {
     this.totalSlides = this.children.length
     this.addIndices()
