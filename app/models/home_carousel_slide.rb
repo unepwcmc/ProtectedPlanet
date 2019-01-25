@@ -1,7 +1,7 @@
 class HomeCarouselSlide < ActiveRecord::Base
   validates :title,
     presence: true,
-    length: {maximum: 30},
+    length: {maximum: 75},
     allow_nil: false
   validates :description,
     presence: true,
