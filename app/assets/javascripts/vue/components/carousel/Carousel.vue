@@ -69,13 +69,21 @@ module.exports = {
       })
     },
 
-    changeSlide (slide, isAuto=false) {
-      this.currentSlide = slide
-      this.setSlideTransform()
+    setSlideWidth () {
+      this.slideWidth = getWidthWithMargins(this.children[0].$el)
+    },
 
-      if (!isAuto) {
-        this.resetSlideInterval()
-      }
+    //TODO: export to helper
+    getWidthWithMargins (element) {
+      const style = element.currentStyle || window.getComputedStyle(element)
+      
+      return slide.offsetWidth + parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10)
+    },
+
+    setSlideInterval () {
+      this.nextSlideInterval = setInterval(() => {
+        this.setNextSlide(true)
+      }, 4000)
     },
 
     setNextSlide (isAuto=false) {
@@ -86,10 +94,19 @@ module.exports = {
       }
     },
 
-    setSlideInterval () {
-      this.nextSlideInterval = setInterval(() => {
-        this.setNextSlide(true)
-      }, 4000)
+    changeSlide (slide, isAuto=false) {
+      this.currentSlide = slide
+      this.setSlideTransform()
+
+      if (!isAuto) {
+        this.resetSlideInterval()
+      }
+    },
+
+    setSlideTransform () {
+      const shift = (this.currentSlide - 1) * this.slideWidth
+
+      this.slidesEl.style.transform = `translateX(-${shift}px)`
     },
 
     resetSlideInterval () {
@@ -103,19 +120,6 @@ module.exports = {
 
     isCurrentSlide (slide) {
       return slide === this.currentSlide
-    },
-
-    setSlideWidth () {
-      const slide = this.children[0].$el
-      const style = slide.currentStyle || window.getComputedStyle(slide)
-
-      this.slideWidth = slide.offsetWidth + parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10)
-    },
-
-    setSlideTransform () {
-      const shift = (this.currentSlide - 1) * this.slideWidth
-
-      this.slidesEl.style.transform = `translateX(-${shift}px)`
     }
   }
 }
