@@ -10,7 +10,7 @@
     </template>
 
     <div class="carousel__slides-container">
-      <ul class="carousel__slides">
+      <ul id="carousel-slides" class="carousel__slides">
         <slot></slot>
       </ul>
     </div>
@@ -60,7 +60,7 @@ module.exports = {
     this.addIndices()
     this.setSlideWidth()
     this.setSlideInterval()
-    this.slidesEl = this.$el.querySelector('.carousel__slides')
+    this.slidesEl = this.$el.querySelector('#carousel-slides')
   },
 
   methods: {
