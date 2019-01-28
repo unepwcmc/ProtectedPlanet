@@ -17,10 +17,10 @@
       </ul>
       <div v-if="showArrows" class="carousel__arrow-buttons">
         <button class="carousel__arrow carousel__arrow--left" @click="slideToPrevious()">
-          <span class="fas fa-angle-left"></span>
+          <span class="fas fa-chevron-left"></span>
         </button>
         <button class="carousel__arrow carousel__arrow--right" @click="slideToNext()">
-          <span class="fas fa-angle-right"></span>
+          <span class="fas fa-chevron-right"></span>
         </button>
       </div>
     </div>
