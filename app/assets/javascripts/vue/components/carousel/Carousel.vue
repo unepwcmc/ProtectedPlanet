@@ -27,6 +27,7 @@
 </template>
 
 <script>
+const helpers = require('./carousel-helpers')
 //TODO: permenant title offscreen for accessibility?
 module.exports = {
   name: 'carousel',
@@ -49,8 +50,9 @@ module.exports = {
       totalSlides: 0,
       childSlideComponents: this.$children,
       nextSlideInterval: {},
+      containerWidth: 0,
       slideWidth: 0,
-      slidesEl: {},
+      // slidesEl: {},
       slidesScope: {}
     }
   },
@@ -58,27 +60,62 @@ module.exports = {
   created() {
     window.onresize = () => {
       this.setSlideWidth()
-      this.setSlideTransform()
+      this.setSlideTransforms()
     }
+  },
+
+  computed: {
+    // totalFrames () {
+    //   return Math.ceil(this.totalSlides / Math.floor(this.containerWidth / this.slideWidth))
+    // }
   },
 
   mounted () {
     this.totalSlides = this.childSlideComponents.length / 3
     this.addIndices()
     this.setSlideWidth()
+    this.setContainerWidth()
+    this.setOrders()
+    this.setSlideTransforms()
     if (this.slideIntervalLength) { this.setSlideInterval() }
-    this.slidesEl = this.$el.querySelector('#carousel-slides')
+    // this.slidesEl = this.$el.querySelector('#carousel-slides')
   },
 
   methods: {
     addIndices () {
       this.childSlideComponents.forEach( (child, index) => {
-        child.index = index
+        const realIndex = index % this.totalSlides
+
+        child.index = realIndex
+      })
+    },
+
+    setOrders () {
+      this.childSlideComponents.forEach( (child, index) => {
+        child.order = index
+      })
+    },
+
+    shiftOrders (changeInIndex) {
+      this.childSlideComponents.forEach((child, index) => {
+        const newOrderBeforeMod = child.order - changeInIndex
+
+        if (newOrderBeforeMod < 0) {
+          child.order = newOrderBeforeMod + this.totalSlides * 3
+        } else if (newOrderBeforeMod > this.totalSlides * 3 - 1) {
+          child.order = newOrderBeforeMod - this.totalSlides * 3
+        } else {
+          child.order = newOrderBeforeMod
+        }
       })
     },
 
     setSlideWidth () {
       this.slideWidth = this.getWidthWithMargins(this.childSlideComponents[0].$el)
+    },
+
+    setContainerWidth () {
+      this.containerWidth = this.$el.offsetWidth
     },
 
     //TODO: export to helper
@@ -109,18 +146,50 @@ module.exports = {
     },
 
     changeSlide (slide, isAuto=false) {
+      const directSlideDisplacement = slide - this.currentSlide
+      let indirectSlideDistance;
+      let changeInIndex;
+
+      if (directSlideDisplacement > 0) {
+        indirectSlideDistance = this.currentSlide + this.totalSlides - slide
+      } else {
+        indirectSlideDistance = this.totalSlides - this.currentSlide + slide
+      }
+
+      if (Math.abs(directSlideDisplacement) > indirectSlideDistance) {
+        changeInIndex = indirectSlideDistance * -directSlideDisplacement/Math.abs(directSlideDisplacement)
+      } else {
+        changeInIndex = directSlideDisplacement
+      }
+
+      this.slideBy(changeInIndex)
       this.currentSlide = slide
-      this.setSlideTransform()
 
       if (!isAuto && this.slideIntervalLength) {
         this.resetSlideInterval()
       }
     },
 
-    setSlideTransform () {
-      const shift = (this.currentSlide - 1) * this.slideWidth
+    slideBy (changeInIndex) {
+      this.shiftOrders(changeInIndex)
+      this.setSlideTransforms()
+    },
 
-      this.slidesEl.style.transform = `translateX(-${shift}px)`
+    setSlideTransforms () {
+      this.childSlideComponents.forEach(child => {
+        const newLeft = (child.order - this.totalSlides) * this.slideWidth
+        let transition = child.$el.style.transition
+
+        if (newLeft * parseInt(child.$el.style.left) < 0) {
+          child.$el.style.transition = 'none'
+
+          setTimeout(() => {
+            child.$el.style.transition = transition
+          })
+        }
+
+        child.$el.style.left = newLeft + 'px'
+      })
     },
 
     resetSlideInterval () {
