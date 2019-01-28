@@ -61,6 +61,6 @@ class HomeController < ApplicationController
       }
     ]
 
-    @carousel_slides = HomeCarouselSlide.all
+    @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
   end
 end

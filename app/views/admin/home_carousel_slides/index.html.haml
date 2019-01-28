@@ -4,17 +4,19 @@
 
 = will_paginate @home_carousel_slides, :theme => 'comfy'
 
-%table.table.table-hover.table-bordered
+%table.table.table-hover.table-bordered.wrap
   %tr
-    %th.main Title (Max characters: 30)
-    %th Description (Max characters: 150)
+    %th.wrap Title (Max characters: 30)
+    %th.wrap Description (Max characters: 150)
     %th Url
+    %th Published
     %th
   - @home_carousel_slides.each do |home_carousel_slide|
     %tr
-      %td.main= home_carousel_slide.title
-      %td= home_carousel_slide.description
+      %td.wrap= home_carousel_slide.title
+      %td.wrap= home_carousel_slide.description
       %td= home_carousel_slide.url
+      %td= home_carousel_slide.published.to_s
       %td
         .btn-group.btn-group-sm
           = link_to 'Edit', edit_admin_home_carousel_slide_path(home_carousel_slide), :class => 'btn btn-default'

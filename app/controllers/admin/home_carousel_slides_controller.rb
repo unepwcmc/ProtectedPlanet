@@ -57,6 +57,6 @@ protected
   end
 
   def home_carousel_slide_params
-    params.fetch(:home_carousel_slide, {}).permit(:title, :description, :url)
+    params.fetch(:home_carousel_slide, {}).permit(:title, :description, :url, :published)
   end
 end
