@@ -15,6 +15,14 @@
           <slot :slidesScope="slidesScope"></slot>
         </template>
       </ul>
+      <div v-if="showArrows" class="carousel__arrow-buttons">
+        <button class="carousel__arrow carousel__arrow--left" @click="slideToPrevious()">
+          <span class="fas fa-angle-left"></span>
+        </button>
+        <button class="carousel__arrow carousel__arrow--right" @click="slideToNext()">
+          <span class="fas fa-angle-right"></span>
+        </button>
+      </div>
     </div>
     <div class="carousel__indicators">
       <button
@@ -27,7 +35,6 @@
 </template>
 
 <script>
-const helpers = require('./carousel-helpers')
 //TODO: permenant title offscreen for accessibility?
 module.exports = {
   name: 'carousel',
@@ -35,6 +42,10 @@ module.exports = {
   props: {
     showCount: {
       default: false,
+      type: Boolean
+    },
+    showArrows: {
+      default: true,
       type: Boolean
     },
     title: String,
@@ -49,11 +60,12 @@ module.exports = {
       currentSlide: 1,
       totalSlides: 0,
       childSlideComponents: this.$children,
-      nextSlideInterval: {},
       containerWidth: 0,
       slideWidth: 0,
-      // slidesEl: {},
-      slidesScope: {}
+      slidesScope: {},
+      nextSlideInterval: {},
+      transitioning: false,
+      transitionDuration: 600
     }
   },
 
@@ -64,65 +76,35 @@ module.exports = {
     }
   },
 
-  computed: {
-    // totalFrames () {
-    //   return Math.ceil(this.totalSlides / Math.floor(this.containerWidth / this.slideWidth))
-    // }
-  },
-
   mounted () {
-    this.totalSlides = this.childSlideComponents.length / 3
-    this.addIndices()
+    this.initData()
+    this.initSlideInidices()
+    this.initSlideOrders()
     this.setSlideWidth()
-    this.setContainerWidth()
-    this.setOrders()
     this.setSlideTransforms()
     if (this.slideIntervalLength) { this.setSlideInterval() }
-    // this.slidesEl = this.$el.querySelector('#carousel-slides')
   },
 
   methods: {
-    addIndices () {
-      this.childSlideComponents.forEach( (child, index) => {
-        const realIndex = index % this.totalSlides
+    initData () {
+      this.totalSlides = this.childSlideComponents.length / 3
+      this.transitionDuration = getTransitionDuration(this.childSlideComponents[0].$el)
+    },
 
-        child.index = realIndex
+    initSlideInidices () {
+      this.childSlideComponents.forEach((child, index) => {
+        child.index = index % this.totalSlides
       })
     },
 
-    setOrders () {
+    initSlideOrders () {
       this.childSlideComponents.forEach( (child, index) => {
         child.order = index
       })
     },
 
-    shiftOrders (changeInIndex) {
-      this.childSlideComponents.forEach((child, index) => {
-        const newOrderBeforeMod = child.order - changeInIndex
-
-        if (newOrderBeforeMod < 0) {
-          child.order = newOrderBeforeMod + this.totalSlides * 3
-        } else if (newOrderBeforeMod > this.totalSlides * 3 - 1) {
-          child.order = newOrderBeforeMod - this.totalSlides * 3
-        } else {
-          child.order = newOrderBeforeMod
-        }
-      })
-    },
-
     setSlideWidth () {
-      this.slideWidth = this.getWidthWithMargins(this.childSlideComponents[0].$el)
-    },
-
-    setContainerWidth () {
-      this.containerWidth = this.$el.offsetWidth
-    },
-
-    //TODO: export to helper
-    getWidthWithMargins (element) {
-      const style = element.currentStyle || window.getComputedStyle(element)
-      
-      return element.offsetWidth + parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10)
+      this.slideWidth = getWidthWithMargins(this.childSlideComponents[0].$el)
     },
 
     setSlideIntervalIfConfigured () {
@@ -133,11 +115,11 @@ module.exports = {
 
     setSlideInterval () {
       this.nextSlideInterval = setInterval(() => {
-        this.setNextSlide(true)
+        this.slideToNext(true)
       }, this.slideIntervalLength)
     },
 
-    setNextSlide (isAuto=false) {
+    slideToNext (isAuto=false) {
       if (this.currentSlide === this.totalSlides) {
         this.changeSlide(1, isAuto)
       } else {
@@ -145,24 +127,18 @@ module.exports = {
       }
     },
 
+    slideToPrevious (isAuto=false) {
+      if (this.currentSlide === 1) {
+        this.changeSlide(this.totalSlides, isAuto)
+      } else {
+        this.changeSlide(this.currentSlide - 1, isAuto)
+      }
+    },
+
     changeSlide (slide, isAuto=false) {
-      const directSlideDisplacement = slide - this.currentSlide
-      let indirectSlideDistance;
-      let changeInIndex;
+      if (this.transitioning) { return }
 
-      if (directSlideDisplacement > 0) {
-        indirectSlideDistance = this.currentSlide + this.totalSlides - slide
-      } else {
-        indirectSlideDistance = this.totalSlides - this.currentSlide + slide
-      }
-
-      if (Math.abs(directSlideDisplacement) > indirectSlideDistance) {
-        changeInIndex = indirectSlideDistance * -directSlideDisplacement/Math.abs(directSlideDisplacement)
-      } else {
-        changeInIndex = directSlideDisplacement
-      }
-
-      this.slideBy(changeInIndex)
+      this.slideBy(getChangeInIndex(slide, this.currentSlide, this.totalSlides))
       this.currentSlide = slide
 
       if (!isAuto && this.slideIntervalLength) {
@@ -172,24 +148,42 @@ module.exports = {
 
     slideBy (changeInIndex) {
       this.shiftOrders(changeInIndex)
+      this.setTransitioningTimeout()
       this.setSlideTransforms()
+    },
+
+    shiftOrders (changeInIndex) {
+      this.childSlideComponents.forEach((child, index) => {
+        child.order = getNewOrder(child.order, changeInIndex, this.totalSlides)
+      })
     },
 
     setSlideTransforms () {
       this.childSlideComponents.forEach(child => {
         const newLeft = (child.order - this.totalSlides) * this.slideWidth
-        let transition = child.$el.style.transition
 
         if (newLeft * parseInt(child.$el.style.left) < 0) {
-          child.$el.style.transition = 'none'
-
-          setTimeout(() => {
-            child.$el.style.transition = transition
-          })
+          this.brieflyRemoveSlideTransition(child.$el)
         }
 
         child.$el.style.left = newLeft + 'px'
       })
+    },
+
+    brieflyRemoveSlideTransition (el) {
+      el.classList.remove('slide-transition')
+
+      setTimeout(() => {
+        el.classList.add('slide-transition')
+      })
+    },
+
+    setTransitioningTimeout() {
+      this.transitioning = true
+
+      setTimeout(() => {  
+        this.transitioning = false
+      }, this.transitionDuration)
     },
 
     resetSlideInterval () {

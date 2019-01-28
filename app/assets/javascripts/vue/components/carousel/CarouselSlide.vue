@@ -1,5 +1,5 @@
 <template>
-  <li :class="['carousel-slide', widthClass]">
+  <li :class="['carousel-slide', 'slide-transition', widthClass]">
     <slot :slideScope="slideScope"></slot>
   </li>
 </template>

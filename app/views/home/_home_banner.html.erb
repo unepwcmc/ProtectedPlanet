@@ -1,6 +1,6 @@
 <header class="home-banner">
   <h1 class="home-banner__title">Discover the world's protected areas</h1>
-  <carousel :slide-interval-length="3000" class="home-banner__carousel">
+  <carousel :slide-interval-length="0" class="home-banner__carousel">
     <template scope="slidesScope">
       <% @carousel_slides.each do |slide| %>
         <%= render partial: "carousel_slide", locals: {
