@@ -45,3 +45,5 @@ const getChangeInIndex = (newSlide, oldSlide, totalSlides) => {
 
   return changeInIndex
 }
+
+const modGreaterThanZero = (x, base) => ((x - 1 + base) % base + 1)

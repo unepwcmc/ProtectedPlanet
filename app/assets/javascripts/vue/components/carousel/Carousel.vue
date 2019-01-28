@@ -108,9 +108,7 @@ module.exports = {
     },
 
     setSlideIntervalIfConfigured () {
-      if (this.slideIntervalLength) {
-        this.setSlideInterval()
-      }
+      if (this.slideIntervalLength) { this.setSlideInterval() }
     },
 
     setSlideInterval () {
@@ -120,19 +118,11 @@ module.exports = {
     },
 
     slideToNext (isAuto=false) {
-      if (this.currentSlide === this.totalSlides) {
-        this.changeSlide(1, isAuto)
-      } else {
-        this.changeSlide(this.currentSlide + 1, isAuto)
-      }
+      this.changeSlide(modGreaterThanZero(this.currentSlide + 1, this.totalSlides))
     },
 
     slideToPrevious (isAuto=false) {
-      if (this.currentSlide === 1) {
-        this.changeSlide(this.totalSlides, isAuto)
-      } else {
-        this.changeSlide(this.currentSlide - 1, isAuto)
-      }
+      this.changeSlide(modGreaterThanZero(this.currentSlide - 1, this.totalSlides))
     },
 
     changeSlide (slide, isAuto=false) {
