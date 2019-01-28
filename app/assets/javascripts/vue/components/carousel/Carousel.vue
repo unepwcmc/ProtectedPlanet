@@ -5,7 +5,7 @@
       <h1 id="carousel-heading">{{ title }}</h1>
     </template>
 
-    <template v-if="showCount">
+    <template v-if="showCount && hasMutlipleSlides">
       <h2>{{ currentSlide }} of {{ totalSlides }}</h2>
     </template>
 
@@ -15,7 +15,7 @@
           <slot :slidesScope="slidesScope"></slot>
         </template>
       </ul>
-      <div v-if="showArrows" class="carousel__arrow-buttons">
+      <div v-if="showArrows && hasMutlipleSlides" class="carousel__arrow-buttons">
         <button class="carousel__arrow carousel__arrow--left" @click="slideToPrevious()">
           <span class="fas fa-chevron-left"></span>
         </button>
@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <div class="carousel__indicators">
+    <div v-if="hasMutlipleSlides" class="carousel__indicators">
       <button
         v-for="slide in totalSlides"
         class="carousel__indicator"
@@ -85,6 +85,12 @@ module.exports = {
     this.setSlideWidth()
     this.setSlideTransforms()
     if (this.slideIntervalLength) { this.setSlideInterval() }
+  },
+
+  computed: {
+    hasMutlipleSlides () {
+      return this.childSlideComponents.length > 3
+    }
   },
 
   methods: {
