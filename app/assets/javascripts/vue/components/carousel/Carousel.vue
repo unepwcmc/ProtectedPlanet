@@ -24,6 +24,7 @@
         </button>
       </div>
     </div>
+
     <div class="carousel__indicators">
       <button
         v-for="slide in totalSlides"
@@ -31,6 +32,7 @@
         :class="selectedSlideClass(slide)"
         @click="changeSlide(slide)"></button>
     </div>
+
   </aside>
 </template>
 
@@ -40,15 +42,15 @@ module.exports = {
   name: 'carousel',
 
   props: {
-    showCount: {
-      default: false,
-      type: Boolean
-    },
+    title: String,
     showArrows: {
       default: true,
       type: Boolean
     },
-    title: String,
+    showCount: {
+      default: false,
+      type: Boolean
+    },
     slideIntervalLength: {
       default: 0,
       type: Number
@@ -86,6 +88,14 @@ module.exports = {
   },
 
   methods: {
+    selectedSlideClass (slide) {
+      return {'carousel__indicator--selected' : this.isCurrentSlide(slide)}
+    },
+
+    isCurrentSlide (slide) {
+      return slide === this.currentSlide
+    },
+
     initData () {
       this.totalSlides = this.childSlideComponents.length / 3
       this.transitionDuration = getTransitionDuration(this.childSlideComponents[0].$el)
@@ -179,14 +189,6 @@ module.exports = {
     resetSlideInterval () {
         clearInterval(this.nextSlideInterval)
         this.setSlideIntervalIfConfigured()
-    },
-
-    selectedSlideClass (slide) {
-      return {'carousel__indicator--selected' : this.isCurrentSlide(slide)}
-    },
-
-    isCurrentSlide (slide) {
-      return slide === this.currentSlide
     }
   }
 }
