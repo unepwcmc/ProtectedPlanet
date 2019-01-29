@@ -7,17 +7,17 @@
 
     <div class="carousel__slides-container">
 
-      <ul id="carousel-slides" class="carousel__slides" aria-live="off" aria-atomic="true">
+      <ul id="carousel-slides" class="carousel__slides transition" aria-live="off" aria-atomic="true">
         <template v-for="n in 3">
           <slot :slidesScope="slidesScope"></slot>
         </template>
       </ul>
 
       <div v-if="showArrows && hasMutlipleSlides" class="carousel__arrow-buttons">
-        <button aria-controls="carousel-slides" title="Next slide" class="carousel__arrow carousel__arrow--left" @click="slideToPrevious()">
+        <button aria-controls="carousel-slides" title="Previous slide" class="carousel__arrow carousel__arrow--left" @click="slideToPrevious()">
           <span class="fas fa-chevron-left"></span>
         </button>
-        <button aria-controls="carousel-slides" title="Previous slide" class="carousel__arrow carousel__arrow--right" @click="slideToNext()">
+        <button aria-controls="carousel-slides" title="Next slide" class="carousel__arrow carousel__arrow--right" @click="slideToNext()">
           <span class="fas fa-chevron-right"></span>
         </button>
       </div>
@@ -39,6 +39,8 @@
 
 <script>
 //TODO: permenant title offscreen for accessibility?
+const smallTimeout = 20
+
 module.exports = {
   name: 'carousel',
 
@@ -70,6 +72,7 @@ module.exports = {
       currentSlide: 1,
       totalSlides: 0,
       childSlideComponents: this.$children,
+      slideContainer: {},
       containerWidth: 0,
       slideWidth: 0,
       slidesScope: {},
@@ -82,17 +85,16 @@ module.exports = {
   created() {
     window.onresize = () => {
       this.setSlideWidth()
-      this.setSlideTransforms()
+      this.reorderSlides()
     }
   },
 
   mounted () {
     this.initData()
-    this.initSlideInidices()
     this.initSlideOrders()
     this.setSlideWidth()
-    this.setSlideTransforms()
-    if (this.slideIntervalLength) { this.setSlideInterval() }
+    this.initSlideContainerPosition()
+    this.setSlideIntervalIfConfigured()
   },
 
   computed: {
@@ -116,23 +118,22 @@ module.exports = {
 
     initData () {
       this.totalSlides = this.childSlideComponents.length / 3
-      this.transitionDuration = getTransitionDuration(this.childSlideComponents[0].$el)
-    },
-
-    initSlideInidices () {
-      this.childSlideComponents.forEach((child, index) => {
-        child.index = index % this.totalSlides
-      })
+      this.slideContainer = this.$el.querySelector('#carousel-slides')
+      this.transitionDuration = getTransitionDuration(this.slideContainer)
     },
 
     initSlideOrders () {
       this.childSlideComponents.forEach( (child, index) => {
-        child.order = index
+        child.$el.style.order = index
       })
     },
 
     setSlideWidth () {
       this.slideWidth = getWidthWithMargins(this.childSlideComponents[0].$el)
+    },
+
+    initSlideContainerPosition () {
+      this.slideContainer.style.left = - this.totalSlides * this.slideWidth + 'px'
     },
 
     setSlideIntervalIfConfigured () {
@@ -145,6 +146,11 @@ module.exports = {
       }, this.slideIntervalLength)
     },
 
+    resetSlideInterval () {
+        clearInterval(this.nextSlideInterval)
+        this.setSlideIntervalIfConfigured()
+    },
+
     slideToNext (isAuto=false) {
       this.changeSlide(modGreaterThanZero(this.currentSlide + 1, this.totalSlides))
     },
@@ -155,58 +161,53 @@ module.exports = {
 
     changeSlide (slide, isAuto=false) {
       if (this.transitioning) { return }
-
-      this.slideBy(getChangeInIndex(slide, this.currentSlide, this.totalSlides))
-      this.currentSlide = slide
-
+      
       if (!isAuto && this.slideIntervalLength) {
         this.resetSlideInterval()
       }
+
+      this.slideBy(getChangeInIndex(slide, this.currentSlide, this.totalSlides))
+      this.currentSlide = slide
     },
 
     slideBy (changeInIndex) {
-      this.shiftOrders(changeInIndex)
-      this.setTransitioningTimeout()
-      this.setSlideTransforms()
-    },
-
-    shiftOrders (changeInIndex) {
-      this.childSlideComponents.forEach((child, index) => {
-        child.order = getNewOrder(child.order, changeInIndex, this.totalSlides)
-      })
-    },
-
-    setSlideTransforms () {
-      this.childSlideComponents.forEach(child => {
-        const newLeft = (child.order - this.totalSlides) * this.slideWidth
-
-        if (newLeft * parseInt(child.$el.style.left) < 0) {
-          this.brieflyRemoveSlideTransition(child.$el)
-        }
-
-        child.$el.style.left = newLeft + 'px'
-      })
-    },
-
-    brieflyRemoveSlideTransition (el) {
-      el.classList.remove('slide-transition')
+      this.transitioning = true
+      this.moveSlideContainer(changeInIndex)
 
       setTimeout(() => {
-        el.classList.add('slide-transition')
-      })
-    },
+        this.invisiblyRepositionSlides(changeInIndex)
 
-    setTransitioningTimeout() {
-      this.transitioning = true
-
-      setTimeout(() => {  
-        this.transitioning = false
+        //TODO: investigate using promises here
+        setTimeout(() => { this.transitioning = false }, smallTimeout)
       }, this.transitionDuration)
     },
 
-    resetSlideInterval () {
-        clearInterval(this.nextSlideInterval)
-        this.setSlideIntervalIfConfigured()
+    moveSlideContainer (changeInIndex) {
+      this.slideContainer.style.transform = `translateX(${- changeInIndex * this.slideWidth}px)`
+    },
+
+    invisiblyRepositionSlides(changeInIndex) {        
+      this.reorderSlides(changeInIndex)
+      this.resetSlideContainerPosition()
+    },
+
+    resetSlideContainerPosition () {
+      this.brieflyRemoveTransition(this.slideContainer)
+      this.slideContainer.style.transform = 'none'
+    },
+
+    brieflyRemoveTransition (el) {
+      el.classList.remove('transition')
+
+      setTimeout(() => {
+        el.classList.add('transition')
+      }, smallTimeout)
+    },
+
+    reorderSlides (changeInIndex) {
+      this.childSlideComponents.forEach(child => {
+        child.$el.style.order = getNewOrder(child.$el.style.order, changeInIndex, this.totalSlides)
+      })
     }
   }
 }
