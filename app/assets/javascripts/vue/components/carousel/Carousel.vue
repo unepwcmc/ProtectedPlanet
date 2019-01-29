@@ -24,7 +24,7 @@
 
     </div>
 
-    <div v-if="hasMutlipleSlides" class="carousel__indicators">
+    <div v-if="hasMutlipleSlides" class="carousel__control-bar">
       <button
         v-for="slide in totalSlides"
         :title="`Move to slide ${slide}`"
@@ -32,6 +32,10 @@
         :aria-pressed="isCurrentSlide(slide)"
         :class="['carousel__indicator', selectedSlideClass(slide)]"
         @click="changeSlide(slide)"></button>
+
+      <button :title="pauseTitle" v-if="this.slideIntervalLength" class="carousel__pause" @click="toggleSlideInterval">
+        <span :class="[pauseIconClass]"></span>
+      </button>
     </div>
 
   </aside>
@@ -78,14 +82,15 @@ module.exports = {
       slidesScope: {},
       nextSlideInterval: {},
       transitioning: false,
-      transitionDuration: 600
+      transitionDuration: 0,
+      isPaused: Boolean(this.slideIntervalLength)
     }
   },
 
   created() {
     window.onresize = () => {
       this.setSlideWidth()
-      this.reorderSlides()
+      this.initSlideContainerPosition()
     }
   },
 
@@ -104,6 +109,14 @@ module.exports = {
 
     showSlideCount () {
       return this.showCount && this.hasMutlipleSlides
+    },
+
+    pauseIconClass () {
+      return this.isPaused ? 'fas fa-play': 'fas fa-pause'
+    },
+
+    pauseTitle () {
+      return this.isPaused ? 'Resume carousel' : 'Pause carousel'
     }
   },
 
@@ -144,11 +157,22 @@ module.exports = {
       this.nextSlideInterval = setInterval(() => {
         this.slideToNext(true)
       }, this.slideIntervalLength)
+
+      this.isPaused = false
     },
 
     resetSlideInterval () {
-        clearInterval(this.nextSlideInterval)
-        this.setSlideIntervalIfConfigured()
+      this.clearSlideInterval()
+      this.setSlideIntervalIfConfigured()
+    },
+
+    toggleSlideInterval() {
+      this.isPaused ? this.setSlideIntervalIfConfigured() : this.clearSlideInterval()
+    },
+
+    clearSlideInterval () {
+      clearInterval(this.nextSlideInterval)
+      this.isPaused = true
     },
 
     slideToNext (isAuto=false) {
