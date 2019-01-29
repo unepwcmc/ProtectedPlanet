@@ -1,35 +1,36 @@
 <template>
   <aside class="carousel" aria-labelledby="carousel-heading">
 
-    <template v-if="title">
-      <h1 id="carousel-heading">{{ title }}</h1>
-    </template>
+    <h1 id="carousel-heading" :class="{'screen-reader': !showTitle}">{{ title }}</h1>
 
-    <template v-if="showCount && hasMutlipleSlides">
-      <h2>{{ currentSlide }} of {{ totalSlides }}</h2>
-    </template>
+    <h2 :class="{'screen-reader': !showSlideCount}">{{ currentSlide }} of {{ totalSlides }}</h2>
 
     <div class="carousel__slides-container">
-      <ul id="carousel-slides" class="carousel__slides">
+
+      <ul id="carousel-slides" class="carousel__slides" aria-live="off" aria-atomic="true">
         <template v-for="n in 3">
           <slot :slidesScope="slidesScope"></slot>
         </template>
       </ul>
+
       <div v-if="showArrows && hasMutlipleSlides" class="carousel__arrow-buttons">
-        <button class="carousel__arrow carousel__arrow--left" @click="slideToPrevious()">
+        <button aria-controls="carousel-slides" title="Next slide" class="carousel__arrow carousel__arrow--left" @click="slideToPrevious()">
           <span class="fas fa-chevron-left"></span>
         </button>
-        <button class="carousel__arrow carousel__arrow--right" @click="slideToNext()">
+        <button aria-controls="carousel-slides" title="Previous slide" class="carousel__arrow carousel__arrow--right" @click="slideToNext()">
           <span class="fas fa-chevron-right"></span>
         </button>
       </div>
+
     </div>
 
     <div v-if="hasMutlipleSlides" class="carousel__indicators">
       <button
         v-for="slide in totalSlides"
-        class="carousel__indicator"
-        :class="selectedSlideClass(slide)"
+        :title="`Move to slide ${slide}`"
+        aria-controls="carousel-slides"
+        :aria-pressed="isCurrentSlide(slide)"
+        :class="['carousel__indicator', selectedSlideClass(slide)]"
         @click="changeSlide(slide)"></button>
     </div>
 
@@ -42,7 +43,14 @@ module.exports = {
   name: 'carousel',
 
   props: {
-    title: String,
+    title: {
+      default: 'Carousel',
+      type: String
+    },
+    showTitle: {
+      default: false,
+      type: Boolean
+    },
     showArrows: {
       default: true,
       type: Boolean
@@ -90,6 +98,10 @@ module.exports = {
   computed: {
     hasMutlipleSlides () {
       return this.childSlideComponents.length > 3
+    },
+
+    showSlideCount () {
+      return this.showCount && this.hasMutlipleSlides
     }
   },
 
