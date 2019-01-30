@@ -188,7 +188,7 @@ module.exports = {
     },
 
     changeSlide (slide, resetNextSlideInterval=true, forceDirection=0) {
-      if (this.transitioning) { return }
+      if (this.transitioning || slide === this.currentSlide) { return }
       
       if (resetNextSlideInterval && this.slideIntervalLength) {
         this.resetSlideInterval()
