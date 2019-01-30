@@ -168,7 +168,7 @@ module.exports = {
 
     setSlideInterval () {
       this.nextSlideInterval = setInterval(() => {
-        this.slideToNext(true)
+        this.slideToNext(false)
       }, this.slideIntervalLength)
 
       this.isPaused = false
@@ -179,22 +179,22 @@ module.exports = {
       this.isPaused = true
     },
 
-    slideToNext (isAuto=false) {
-      this.changeSlide(modGreaterThanZero(this.currentSlide + 1, this.totalSlides))
+    slideToNext (resetNextSlideInterval=true) {
+      this.changeSlide(modGreaterThanZero(this.currentSlide + 1, this.totalSlides), resetNextSlideInterval, 1)
     },
 
-    slideToPrevious (isAuto=false) {
-      this.changeSlide(modGreaterThanZero(this.currentSlide - 1, this.totalSlides))
+    slideToPrevious (resetNextSlideInterval=true) {
+      this.changeSlide(modGreaterThanZero(this.currentSlide - 1, this.totalSlides), resetNextSlideInterval, -1)
     },
 
-    changeSlide (slide, isAuto=false) {
+    changeSlide (slide, resetNextSlideInterval=true, forceDirection=0) {
       if (this.transitioning) { return }
       
-      if (!isAuto && this.slideIntervalLength) {
+      if (!resetNextSlideInterval && this.slideIntervalLength) {
         this.resetSlideInterval()
       }
 
-      this.slideBy(getChangeInIndex(slide, this.currentSlide, this.totalSlides))
+      this.slideBy(getChangeInIndex(slide, this.currentSlide, this.totalSlides, forceDirection))
       this.currentSlide = slide
     },
 

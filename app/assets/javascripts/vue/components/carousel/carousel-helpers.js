@@ -26,24 +26,27 @@ const getNewOrder = (oldOrder, changeInIndex, totalSlides) => {
   return newOrder
 }
 
-const getChangeInIndex = (newSlide, oldSlide, totalSlides) => {
+const getChangeInIndex = (newSlide, oldSlide, totalSlides, forceDirection) => {
   const directSlideDisplacement = newSlide - oldSlide
-  let indirectSlideDistance
-  let changeInIndex
+  let indirectSlideDisplacement
 
   if (directSlideDisplacement > 0) {
-    indirectSlideDistance = oldSlide + totalSlides - newSlide
+    indirectSlideDisplacement = - (oldSlide + totalSlides - newSlide)
   } else {
-    indirectSlideDistance = totalSlides - oldSlide + newSlide
+    indirectSlideDisplacement = totalSlides - oldSlide + newSlide
   }
 
-  if (Math.abs(directSlideDisplacement) > indirectSlideDistance) {
-    changeInIndex = indirectSlideDistance * -directSlideDisplacement/Math.abs(directSlideDisplacement)
-  } else {
-    changeInIndex = directSlideDisplacement
+  if(forceDirection > 0) {
+    return Math.max(indirectSlideDisplacement, directSlideDisplacement)
+  } else if (forceDirection < 0) {
+    return Math.min(indirectSlideDisplacement, directSlideDisplacement)
   }
 
-  return changeInIndex
+  if (Math.abs(directSlideDisplacement) > Math.abs(indirectSlideDisplacement)) {
+    return indirectSlideDisplacement
+  } else {
+    return directSlideDisplacement
+  }
 }
 
 const modGreaterThanZero = (x, base) => ((x - 1 + base) % base + 1)
