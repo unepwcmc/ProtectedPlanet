@@ -81,7 +81,7 @@ module.exports = {
       slidesScope: {},
       nextSlideInterval: {},
       transitioning: false,
-      transitionDuration: 0,
+      transitionendHandler: {},
       isPaused: Boolean(this.slideIntervalLength)
     }
   },
@@ -136,7 +136,6 @@ module.exports = {
     initData () {
       this.totalSlides = this.childSlideComponents.length / 3
       this.slideContainer = this.$el.querySelector('#carousel-slides')
-      this.transitionDuration = getTransitionDuration(this.slideContainer)
     },
 
     initSlideOrders () {
@@ -153,9 +152,11 @@ module.exports = {
       this.slideContainer.style.left = - this.totalSlides * this.slideWidth + 'px'
     },
 
-    resetSlideInterval () {
-      this.clearSlideInterval()
-      this.setSlideIntervalIfConfigured()
+    resetSlideIntervalIfNotPaused () {
+      if (!this.isPaused) {
+        this.clearSlideInterval()
+        this.setSlideIntervalIfConfigured()
+      }
     },
 
     toggleSlideInterval() {
@@ -190,9 +191,7 @@ module.exports = {
     changeSlide (slide, resetNextSlideInterval=true, forceDirection=0) {
       if (this.transitioning || slide === this.currentSlide) { return }
       
-      if (resetNextSlideInterval && this.slideIntervalLength) {
-        this.resetSlideInterval()
-      }
+      if (resetNextSlideInterval) { this.resetSlideIntervalIfNotPaused() }
 
       this.slideBy(getChangeInIndex(slide, this.currentSlide, this.totalSlides, forceDirection))
       this.currentSlide = slide
@@ -201,17 +200,26 @@ module.exports = {
     slideBy (changeInIndex) {
       this.transitioning = true
       this.moveSlideContainer(changeInIndex)
-
-      setTimeout(() => {
-        this.invisiblyRepositionSlides(changeInIndex)
-        this.setActiveStateOnChildren()
-
-      setTimeout(() => { this.transitioning = false }, smallTimeout)
-      }, this.transitionDuration)
+      this.replaceTransitionendHandler(changeInIndex)
     },
 
     moveSlideContainer (changeInIndex) {
       this.slideContainer.style.transform = `translateX(${- changeInIndex * this.slideWidth}px)`
+    },
+    
+    replaceTransitionendHandler (changeInIndex) {
+      this.slideContainer.removeEventListener('transitionend', this.transitionendHandler)
+      this.transitionendHandler = this.getOnTransitionEndHandler(changeInIndex)
+      this.slideContainer.addEventListener('transitionend', this.transitionendHandler)
+    },
+
+    getOnTransitionEndHandler (changeInIndex) {
+      return () => {
+        this.invisiblyRepositionSlides(changeInIndex)
+        this.setActiveStateOnChildren()
+  
+        setTimeout(() => { this.transitioning = false }, smallTimeout)
+      }
     },
 
     invisiblyRepositionSlides(changeInIndex) {        

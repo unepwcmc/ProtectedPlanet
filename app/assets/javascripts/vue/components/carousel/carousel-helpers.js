@@ -1,7 +1,3 @@
-
-const getTransitionDuration = el => 
-  parseFloat(getElementStyle(el).transitionDuration) * 1000
-
 const getWidthWithMargins = el => {
   const style = getElementStyle(el)
 
