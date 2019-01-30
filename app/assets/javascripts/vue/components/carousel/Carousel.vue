@@ -42,7 +42,6 @@
 </template>
 
 <script>
-//TODO: permenant title offscreen for accessibility?
 const smallTimeout = 20
 
 module.exports = {
@@ -99,6 +98,7 @@ module.exports = {
     this.initSlideOrders()
     this.setSlideWidth()
     this.initSlideContainerPosition()
+    this.setActiveStateOnChildren()
     this.setSlideIntervalIfConfigured()
   },
 
@@ -127,6 +127,10 @@ module.exports = {
 
     isCurrentSlide (slide) {
       return slide === this.currentSlide
+    },
+
+    isCurrentSlideElement (slideElement) {
+      return slideElement.style.order == this.totalSlides
     },
 
     initData () {
@@ -200,6 +204,7 @@ module.exports = {
 
       setTimeout(() => {
         this.invisiblyRepositionSlides(changeInIndex)
+        this.setActiveStateOnChildren()
 
         //TODO: investigate using promises here
         setTimeout(() => { this.transitioning = false }, smallTimeout)
@@ -231,6 +236,12 @@ module.exports = {
     reorderSlides (changeInIndex) {
       this.childSlideComponents.forEach(child => {
         child.$el.style.order = getNewOrder(child.$el.style.order, changeInIndex, this.totalSlides)
+      })
+    },
+
+    setActiveStateOnChildren () {
+      this.childSlideComponents.forEach(child => {
+        child.isActive = this.isCurrentSlideElement(child.$el)
       })
     }
   }
