@@ -153,6 +153,15 @@ module.exports = {
       this.slideContainer.style.left = - this.totalSlides * this.slideWidth + 'px'
     },
 
+    resetSlideInterval () {
+      this.clearSlideInterval()
+      this.setSlideIntervalIfConfigured()
+    },
+
+    toggleSlideInterval() {
+      this.isPaused ? this.setSlideIntervalIfConfigured() : this.clearSlideInterval()
+    },
+
     setSlideIntervalIfConfigured () {
       if (this.slideIntervalLength) { this.setSlideInterval() }
     },
@@ -163,15 +172,6 @@ module.exports = {
       }, this.slideIntervalLength)
 
       this.isPaused = false
-    },
-
-    resetSlideInterval () {
-      this.clearSlideInterval()
-      this.setSlideIntervalIfConfigured()
-    },
-
-    toggleSlideInterval() {
-      this.isPaused ? this.setSlideIntervalIfConfigured() : this.clearSlideInterval()
     },
 
     clearSlideInterval () {
@@ -206,8 +206,7 @@ module.exports = {
         this.invisiblyRepositionSlides(changeInIndex)
         this.setActiveStateOnChildren()
 
-        //TODO: investigate using promises here
-        setTimeout(() => { this.transitioning = false }, smallTimeout)
+      setTimeout(() => { this.transitioning = false }, smallTimeout)
       }, this.transitionDuration)
     },
 
