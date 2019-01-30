@@ -25,13 +25,15 @@
     </div>
 
     <div v-if="hasMutlipleSlides" class="carousel__control-bar">
-      <button
-        v-for="slide in totalSlides"
-        :title="`Move to slide ${slide}`"
-        aria-controls="carousel-slides"
-        :aria-pressed="isCurrentSlide(slide)"
-        :class="['carousel__indicator', selectedSlideClass(slide)]"
-        @click="changeSlide(slide)"></button>
+      <template v-if="showIndicators">
+        <button
+          v-for="slide in totalSlides"
+          :title="`Move to slide ${slide}`"
+          aria-controls="carousel-slides"
+          :aria-pressed="isCurrentSlide(slide)"
+          :class="['carousel__indicator', selectedSlideClass(slide)]"
+          @click="changeSlide(slide)"></button>
+      </template>
 
       <button :title="pauseTitle" v-if="this.slideIntervalLength" class="carousel__pause" @click="toggleSlideInterval">
         <span :class="[pauseIconClass]"></span>
@@ -67,6 +69,10 @@ module.exports = {
     slideIntervalLength: {
       default: 0,
       type: Number
+    },
+    showAllIndicators: {
+      default: false,
+      type: Boolean
     }
   },
 
@@ -117,6 +123,10 @@ module.exports = {
 
     pauseTitle () {
       return this.isPaused ? 'Resume carousel' : 'Pause carousel'
+    },
+
+    showIndicators () {
+      return this.showAllIndicators || this.totalSlides < 7
     }
   },
 
