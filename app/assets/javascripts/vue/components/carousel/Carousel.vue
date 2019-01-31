@@ -35,7 +35,7 @@
           @click="changeSlide(slide)"></button>
       </template>
 
-      <button :title="pauseTitle" v-if="this.slideIntervalLength" class="carousel__pause" @click="toggleSlideInterval">
+      <button :title="pauseTitle" v-if="slideIntervalLength" class="carousel__pause" @click="toggleSlideInterval">
         <span :class="[pauseIconClass]"></span>
       </button>
     </div>
