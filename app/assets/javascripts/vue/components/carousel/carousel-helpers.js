@@ -23,7 +23,7 @@ const convertRem = function (value) {
 
 const getRootElementFontSize = function () {
   return parseFloat(
-    getComputedStyle(document.documentElement).fontSize
+    getElementStyle(document.documentElement).fontSize
   );
 }
 
