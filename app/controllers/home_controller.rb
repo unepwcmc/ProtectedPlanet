@@ -63,7 +63,7 @@ class HomeController < ApplicationController
 
     @carousel_slides = [
       {
-        'title' => 'Protected Planet Report',
+        'title' => 'Explore the new Protected Planet Digital Report',
         'description' => 'The latest Protected Planet Digital Report assesses the current state of protected areas around the world.',
         'url' => 'http://livereport.protectedplanet.net'
       }
