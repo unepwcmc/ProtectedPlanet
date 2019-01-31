@@ -61,6 +61,12 @@ class HomeController < ApplicationController
       }
     ]
 
-    @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
+    @carousel_slides = [
+      {
+        'title' => 'Check out the new publication of the 2018 United Nations report',
+        'description' => 'Tracking progress towards global targets for protected areas',
+        'url' => 'http://livereport.protectedplanet.net'
+      }
+    ]
   end
 end

@@ -5,9 +5,9 @@
       <template scope="slidesScope">
         <% @carousel_slides.each do |slide| %>
           <%= render partial: "carousel_slide", locals: {
-            title: slide.title,
-            description: slide.description,
-            url: slide.url
+            title: slide['title'],
+            description: slide['description'],
+            url: slide['url']
           } %>
         <% end %>
       </template>
