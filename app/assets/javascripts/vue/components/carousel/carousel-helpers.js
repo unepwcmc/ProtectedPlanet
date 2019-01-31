@@ -29,7 +29,7 @@ const getRootElementFontSize = function () {
 
 const getNewOrder = function (oldOrder, changeInIndex, totalSlides) {
   const newOrderBeforeMod = oldOrder - changeInIndex
-  let newOrder;
+  var newOrder;
 
   if (newOrderBeforeMod < 0) {
     newOrder = newOrderBeforeMod + totalSlides * 3
@@ -44,7 +44,7 @@ const getNewOrder = function (oldOrder, changeInIndex, totalSlides) {
 
 const getChangeInIndex = function (newSlide, oldSlide, totalSlides, forceDirection) {
   const directSlideDisplacement = newSlide - oldSlide
-  let indirectSlideDisplacement
+  var indirectSlideDisplacement
 
   if (directSlideDisplacement > 0) {
     indirectSlideDisplacement = - (oldSlide + totalSlides - newSlide)
