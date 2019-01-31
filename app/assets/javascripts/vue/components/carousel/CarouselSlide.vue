@@ -17,31 +17,31 @@ module.exports = {
     }
   },
 
-  data () {
+  data: function () {
     return {
-      widthClass: `carousel-slide--${this.slideWidth}`,
+      widthClass: 'carousel-slide--' + this.slideWidth,
       slideScope: {},
       isActive: false,
       inputElements: []
     }
   },
 
-  mounted () {
+  mounted: function () {
     this.inputElements = this.$el.querySelectorAll(INPUT_SELECTORS)
     this.setTabIndices()
   },
 
   watch: {
-    isActive () {
+    isActive: function () {
       this.setTabIndices() 
     }
   },
 
   methods: {
-    setTabIndices() {
+    setTabIndices: function () {
       const tabIndex = this.isActive ? 0 : -1
 
-      this.inputElements.forEach(el => {
+      Array.prototype.forEach.call(this.inputElements, function (el) {
         el.tabIndex = tabIndex
         if(tabIndex === -1) { el.blur() }
       })

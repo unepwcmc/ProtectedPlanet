@@ -1,13 +1,33 @@
-const getWidthWithMargins = el => {
-  const style = getElementStyle(el)
-
-  return el.offsetWidth + parseInt(style.marginLeft, 10) + parseInt(style.marginRight, 10)
+const getWidthWithMargins = function (el) {
+  return el.offsetWidth
+    + getNumericCssProperty(el, 'marginLeft') 
+    + getNumericCssProperty(el, 'marginRight') 
 }
 
-const getElementStyle = el =>
-  el.currentStyle || window.getComputedStyle(el)
+const getNumericCssProperty = function (el, property) {
+  const propertyStyle = getElementStyle(el)[property]
 
-const getNewOrder = (oldOrder, changeInIndex, totalSlides) => {
+  if(propertyStyle.indexOf('rem') !== -1) {
+    return convertRem(parseFloat(propertyStyle))
+  }
+  return parseInt(propertyStyle, 10)
+}
+
+const getElementStyle = function (el) {
+  return el.currentStyle || window.getComputedStyle(el)
+}
+
+const convertRem = function (value) {
+  return value * getRootElementFontSize()
+}
+
+const getRootElementFontSize = function () {
+  return parseFloat(
+    getComputedStyle(document.documentElement).fontSize
+  );
+}
+
+const getNewOrder = function (oldOrder, changeInIndex, totalSlides) {
   const newOrderBeforeMod = oldOrder - changeInIndex
   let newOrder;
 
@@ -22,7 +42,7 @@ const getNewOrder = (oldOrder, changeInIndex, totalSlides) => {
   return newOrder
 }
 
-const getChangeInIndex = (newSlide, oldSlide, totalSlides, forceDirection) => {
+const getChangeInIndex = function (newSlide, oldSlide, totalSlides, forceDirection) {
   const directSlideDisplacement = newSlide - oldSlide
   let indirectSlideDisplacement
 
@@ -45,4 +65,6 @@ const getChangeInIndex = (newSlide, oldSlide, totalSlides, forceDirection) => {
   }
 }
 
-const modGreaterThanZero = (x, base) => ((x - 1 + base) % base + 1)
+const modGreaterThanZero = function (x, base) {
+  return ((x - 1 + base) % base + 1)
+}

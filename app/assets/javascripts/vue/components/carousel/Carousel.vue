@@ -28,7 +28,7 @@
       <template v-if="showIndicators">
         <button
           v-for="slide in totalSlides"
-          :title="`Move to slide ${slide}`"
+          :title="indicatorTitle(slide)"
           aria-controls="carousel-slides"
           :aria-pressed="isCurrentSlide(slide)"
           :class="['carousel__indicator', selectedSlideClass(slide)]"
@@ -76,7 +76,7 @@ module.exports = {
     }
   },
 
-  data() {
+  data: function () {
     return {
       currentSlide: 1,
       totalSlides: 0,
@@ -92,14 +92,14 @@ module.exports = {
     }
   },
 
-  created() {
-    window.onresize = () => {
+  created: function() {
+    window.onresize = function () {
       this.setSlideWidth()
       this.initSlideContainerPosition()
-    }
+    }.bind(this)
   },
 
-  mounted () {
+  mounted: function () {
     this.initData()
     this.initSlideOrders()
     this.setSlideWidth()
@@ -109,96 +109,107 @@ module.exports = {
   },
 
   computed: {
-    hasMutlipleSlides () {
+    hasMutlipleSlides: function () {
       return this.childSlideComponents.length > 3
     },
 
-    showSlideCount () {
+    showSlideCount: function () {
       return this.showCount && this.hasMutlipleSlides
     },
 
-    pauseIconClass () {
+    pauseIconClass: function () {
       return this.isPaused ? 'fas fa-play': 'fas fa-pause'
     },
 
-    pauseTitle () {
+    pauseTitle: function () {
       return this.isPaused ? 'Resume carousel' : 'Pause carousel'
     },
 
-    showIndicators () {
+    showIndicators: function () {
       return this.showAllIndicators || this.totalSlides < 7
     }
   },
 
   methods: {
-    selectedSlideClass (slide) {
+    selectedSlideClass: function (slide) {
       return {'carousel__indicator--selected' : this.isCurrentSlide(slide)}
     },
 
-    isCurrentSlide (slide) {
+    isCurrentSlide: function (slide) {
       return slide === this.currentSlide
     },
 
-    isCurrentSlideElement (slideElement) {
+    isCurrentSlideElement: function (slideElement) {
       return slideElement.style.order == this.totalSlides
     },
 
-    initData () {
+    indicatorTitle: function (slide) {
+      return 'Move to slide ' + slide
+    },
+
+    initData: function () {
       this.totalSlides = this.childSlideComponents.length / 3
       this.slideContainer = this.$el.querySelector('#carousel-slides')
     },
 
-    initSlideOrders () {
-      this.childSlideComponents.forEach( (child, index) => {
+    initSlideOrders: function () {
+      Array.prototype.forEach.call(this.childSlideComponents, function (child, index) {
         child.$el.style.order = index
       })
     },
 
-    setSlideWidth () {
+    setSlideWidth: function () {
       this.slideWidth = getWidthWithMargins(this.childSlideComponents[0].$el)
     },
 
-    initSlideContainerPosition () {
+    initSlideContainerPosition: function () {
       this.slideContainer.style.left = - this.totalSlides * this.slideWidth + 'px'
     },
 
-    resetSlideIntervalIfNotPaused () {
+    resetSlideIntervalIfNotPaused: function () {
       if (!this.isPaused) {
         this.clearSlideInterval()
         this.setSlideIntervalIfConfigured()
       }
     },
 
-    toggleSlideInterval() {
+    toggleSlideInterval: function () {
       this.isPaused ? this.setSlideIntervalIfConfigured() : this.clearSlideInterval()
     },
 
-    setSlideIntervalIfConfigured () {
+    setSlideIntervalIfConfigured: function () {
       if (this.slideIntervalLength) { this.setSlideInterval() }
     },
 
-    setSlideInterval () {
-      this.nextSlideInterval = setInterval(() => {
+    setSlideInterval: function () {
+      this.nextSlideInterval = setInterval(function () {
         this.slideToNext(false)
-      }, this.slideIntervalLength)
+      }.bind(this), this.slideIntervalLength)
 
       this.isPaused = false
     },
 
-    clearSlideInterval () {
+    clearSlideInterval: function () {
       clearInterval(this.nextSlideInterval)
       this.isPaused = true
     },
 
-    slideToNext (resetNextSlideInterval=true) {
+    slideToNext: function (resetNextSlideInterval) {
+      if(resetNextSlideInterval === undefined) {resetNextSlideInterval = true}
+
       this.changeSlide(modGreaterThanZero(this.currentSlide + 1, this.totalSlides), resetNextSlideInterval, 1)
     },
 
-    slideToPrevious (resetNextSlideInterval=true) {
+    slideToPrevious: function (resetNextSlideInterval) {
+      if(resetNextSlideInterval === undefined) {resetNextSlideInterval = true}
+
       this.changeSlide(modGreaterThanZero(this.currentSlide - 1, this.totalSlides), resetNextSlideInterval, -1)
     },
 
-    changeSlide (slide, resetNextSlideInterval=true, forceDirection=0) {
+    changeSlide: function (slide, resetNextSlideInterval, forceDirection) {
+      if(resetNextSlideInterval === undefined) {resetNextSlideInterval = true}
+      if(forceDirection === undefined) {forceDirection = 0}
+
       if (this.transitioning || slide === this.currentSlide) { return }
       
       if (resetNextSlideInterval) { this.resetSlideIntervalIfNotPaused() }
@@ -207,59 +218,59 @@ module.exports = {
       this.currentSlide = slide
     },
 
-    slideBy (changeInIndex) {
+    slideBy: function (changeInIndex) {
       this.transitioning = true
       this.moveSlideContainer(changeInIndex)
       this.replaceTransitionendHandler(changeInIndex)
     },
 
-    moveSlideContainer (changeInIndex) {
-      this.slideContainer.style.transform = `translateX(${- changeInIndex * this.slideWidth}px)`
+    moveSlideContainer: function (changeInIndex) {
+      this.slideContainer.style.transform = 'translateX('+ (- changeInIndex * this.slideWidth) + 'px)'
     },
     
-    replaceTransitionendHandler (changeInIndex) {
+    replaceTransitionendHandler: function (changeInIndex) {
       this.slideContainer.removeEventListener('transitionend', this.transitionendHandler)
       this.transitionendHandler = this.getOnTransitionEndHandler(changeInIndex)
       this.slideContainer.addEventListener('transitionend', this.transitionendHandler)
     },
 
-    getOnTransitionEndHandler (changeInIndex) {
-      return () => {
+    getOnTransitionEndHandler: function (changeInIndex) {
+      return function () {
         this.invisiblyRepositionSlides(changeInIndex)
         this.setActiveStateOnChildren()
   
-        setTimeout(() => { this.transitioning = false }, smallTimeout)
-      }
+        setTimeout(function () { this.transitioning = false }.bind(this), smallTimeout)
+      }.bind(this)
     },
 
-    invisiblyRepositionSlides(changeInIndex) {        
+    invisiblyRepositionSlides: function (changeInIndex) {        
       this.reorderSlides(changeInIndex)
       this.resetSlideContainerPosition()
     },
 
-    resetSlideContainerPosition () {
+    resetSlideContainerPosition: function () {
       this.brieflyRemoveTransition(this.slideContainer)
       this.slideContainer.style.transform = 'none'
     },
 
-    brieflyRemoveTransition (el) {
+    brieflyRemoveTransition: function (el) {
       el.classList.remove('transition')
 
-      setTimeout(() => {
+      setTimeout(function () {
         el.classList.add('transition')
       }, smallTimeout)
     },
 
-    reorderSlides (changeInIndex) {
-      this.childSlideComponents.forEach(child => {
+    reorderSlides: function (changeInIndex) {
+      Array.prototype.forEach.call(this.childSlideComponents, function (child) {
         child.$el.style.order = getNewOrder(child.$el.style.order, changeInIndex, this.totalSlides)
-      })
+      }.bind(this))
     },
 
-    setActiveStateOnChildren () {
-      this.childSlideComponents.forEach(child => {
+    setActiveStateOnChildren: function () {
+      Array.prototype.forEach.call(this.childSlideComponents, function (child) {
         child.isActive = this.isCurrentSlideElement(child.$el)
-      })
+      }.bind(this))
     }
   }
 }
