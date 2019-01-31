@@ -5,7 +5,7 @@
 </template>
 
 <script>
-const INPUT_SELECTORS = 'select, input, textarea, button, a, [tabindex]:not([tabindex="-1"])'
+var INPUT_SELECTORS = 'select, input, textarea, button, a, [tabindex]:not([tabindex="-1"])'
 
 module.exports = {
   name: 'carousel-slide',
@@ -39,7 +39,7 @@ module.exports = {
 
   methods: {
     setTabIndices: function () {
-      const tabIndex = this.isActive ? 0 : -1
+      var tabIndex = this.isActive ? 0 : -1
 
       Array.prototype.forEach.call(this.inputElements, function (el) {
         el.tabIndex = tabIndex

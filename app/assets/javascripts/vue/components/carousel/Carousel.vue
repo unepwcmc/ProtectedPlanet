@@ -44,7 +44,7 @@
 </template>
 
 <script>
-const smallTimeout = 20
+var smallTimeout = 20
 
 module.exports = {
   name: 'carousel',

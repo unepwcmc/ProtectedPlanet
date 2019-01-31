@@ -1,11 +1,11 @@
-const getWidthWithMargins = function (el) {
+var getWidthWithMargins = function (el) {
   return el.offsetWidth
     + getNumericCssProperty(el, 'marginLeft') 
     + getNumericCssProperty(el, 'marginRight') 
 }
 
-const getNumericCssProperty = function (el, property) {
-  const propertyStyle = getElementStyle(el)[property]
+var getNumericCssProperty = function (el, property) {
+  var propertyStyle = getElementStyle(el)[property]
 
   if(propertyStyle.indexOf('rem') !== -1) {
     return convertRem(parseFloat(propertyStyle))
@@ -13,22 +13,22 @@ const getNumericCssProperty = function (el, property) {
   return parseInt(propertyStyle, 10)
 }
 
-const getElementStyle = function (el) {
+var getElementStyle = function (el) {
   return el.currentStyle || window.getComputedStyle(el)
 }
 
-const convertRem = function (value) {
+var convertRem = function (value) {
   return value * getRootElementFontSize()
 }
 
-const getRootElementFontSize = function () {
+var getRootElementFontSize = function () {
   return parseFloat(
     getElementStyle(document.documentElement).fontSize
   );
 }
 
-const getNewOrder = function (oldOrder, changeInIndex, totalSlides) {
-  const newOrderBeforeMod = oldOrder - changeInIndex
+var getNewOrder = function (oldOrder, changeInIndex, totalSlides) {
+  var newOrderBeforeMod = oldOrder - changeInIndex
   var newOrder;
 
   if (newOrderBeforeMod < 0) {
@@ -42,8 +42,8 @@ const getNewOrder = function (oldOrder, changeInIndex, totalSlides) {
   return newOrder
 }
 
-const getChangeInIndex = function (newSlide, oldSlide, totalSlides, forceDirection) {
-  const directSlideDisplacement = newSlide - oldSlide
+var getChangeInIndex = function (newSlide, oldSlide, totalSlides, forceDirection) {
+  var directSlideDisplacement = newSlide - oldSlide
   var indirectSlideDisplacement
 
   if (directSlideDisplacement > 0) {
@@ -65,6 +65,6 @@ const getChangeInIndex = function (newSlide, oldSlide, totalSlides, forceDirecti
   }
 }
 
-const modGreaterThanZero = function (x, base) {
+var modGreaterThanZero = function (x, base) {
   return ((x - 1 + base) % base + 1)
 }
