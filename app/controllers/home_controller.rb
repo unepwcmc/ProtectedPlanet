@@ -63,9 +63,19 @@ class HomeController < ApplicationController
 
     @carousel_slides = [
       {
-        'title' => 'Explore the new Protected Planet Digital Report',
-        'description' => 'The latest Protected Planet Digital Report assesses the current state of protected areas around the world.',
-        'url' => 'http://livereport.protectedplanet.net'
+        "title" => "Explore the new monthly release of the WDPA",
+        "description" => "With updates on Ukraine and Cameroon's protected area networks.",
+        "url" => "https://www.protectedplanet.net/c/monthly-updates/2018/december-2018-update-of-the-wdpa"
+      },
+      {
+        "title" => "Explore the new Protected Planet Digital Report",
+        "description" => "The latest Protected Planet Digital Report assesses the current state of protected areas around the world.",
+        "url" => "http://livereport.protectedplanet.net"
+      },
+      {
+        "title" => "Explore the new edition of the United Nations List on Protected Areas",
+        "description" => "The List includes, for the first time, information on management effectiveness of the world's protected areas.",
+        "url" => "https://www.protectedplanet.net/c/united-nations-list-of-protected-areas/united-nations-list-of-protected-areas-2018"
       }
     ]
   end
