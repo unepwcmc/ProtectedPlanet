@@ -1,7 +1,5 @@
 var getWidthWithMargins = function (el) {
-  return el.offsetWidth
-    + getNumericCssProperty(el, 'marginLeft') 
-    + getNumericCssProperty(el, 'marginRight') 
+  return el.offsetWidth + getNumericCssProperty(el, 'marginLeft') + getNumericCssProperty(el, 'marginRight') 
 }
 
 var getNumericCssProperty = function (el, property) {
@@ -22,9 +20,7 @@ var convertRem = function (value) {
 }
 
 var getRootElementFontSize = function () {
-  return parseFloat(
-    getElementStyle(document.documentElement).fontSize
-  );
+  return parseFloat(getComputedStyle(document.body).fontSize)
 }
 
 var getNewOrder = function (oldOrder, changeInIndex, totalSlides) {
