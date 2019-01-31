@@ -1,3 +1,7 @@
+### 2.1.7
+
+* Add PAME importer to list of monthly importers
+
 ### 2.1.6
 
 * Update Green List sites
