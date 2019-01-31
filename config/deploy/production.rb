@@ -1,4 +1,5 @@
 set :stage, :production
+set :branch, 'banner-no-cms'
 
 server "web-production-linode.protectedplanet.net", user: 'wcmc', roles: %w{web}
 server "import-production-linode.protectedplanet.net", user: 'wcmc', roles: %w{util}
