@@ -63,8 +63,8 @@ class HomeController < ApplicationController
 
     @carousel_slides = [
       {
-        'title' => 'Check out the new publication of the 2018 United Nations report',
-        'description' => 'Tracking progress towards global targets for protected areas',
+        'title' => 'Protected Planet Report',
+        'description' => 'The latest Protected Planet Digital Report assesses the current state of protected areas around the world.',
         'url' => 'http://livereport.protectedplanet.net'
       }
     ]
