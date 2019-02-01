@@ -27,11 +27,42 @@ Protected Planet is released under the [BSD
 
 ## Docker
 
+You need a `.env` file similar to this:
+
+```
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_HOST=protectedplanet-db
+REDIS_URL=redis://redis:6379/1
+```
+
+To prepare the Docker environment:
 ```
 docker volume create protectedplanet_pg_data
 docker volume create protectedplanet_redis_data
 docker-compose build
+```
+
+To set-up the database
+```
 docker-compose run web rake db:create
 docker-compose run web rake db:migrate
 docker-compose run web rake db:seed
+```
+
+To bring up the ProtectedPlanet website locally:
+```
+docker-compose up
+```
+
+Visit: `http://localhost:3000`
+
+To shutdown:
+```
+docker-compose down
+```
+
+To rebuild the Docker container after making changes:
+```
+docker-compose up --build
 ```
