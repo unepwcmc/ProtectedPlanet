@@ -66,3 +66,9 @@ To rebuild the Docker container after making changes:
 ```
 docker-compose up --build
 ```
+
+To import the data, in another terminal after running `docker-compose up`:
+```
+docker-compose run web rails c
+ImportWorkers::S3PollingWorker.perform_async
+```
