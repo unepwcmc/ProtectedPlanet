@@ -31,4 +31,7 @@ Protected Planet is released under the [BSD
 docker volume create protectedplanet_pg_data
 docker volume create protectedplanet_redis_data
 docker-compose build
+docker-compose run web rake db:create
+docker-compose run web rake db:migrate
+docker-compose run web rake db:seed
 ```
