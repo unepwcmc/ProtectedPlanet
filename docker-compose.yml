@@ -12,6 +12,7 @@ services:
     depends_on:
       - db
       - redis
+      - elasticsearch
   db:
     container_name: protectedplanet-db
     image: kartoza/postgis
@@ -47,6 +48,10 @@ services:
         hard: -1
     ports:
       - "9200:9200"
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.3.2
+    ports:
+      - "5601:5601"
 
 volumes:
   protectedplanet_pg_data:
