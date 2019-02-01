@@ -4,7 +4,7 @@ class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
 
   def setup
     # TODO: login as admin user
-    @home_carousel_slide = home_carousel_slides(:default)
+    @home_carousel_slide = FactoryGirl.create(:home_carousel_slide)
   end
 
   def test_get_index
