@@ -38,8 +38,6 @@ REDIS_URL=redis://redis:6379/1
 
 To prepare the Docker environment:
 ```
-docker volume create protectedplanet_pg_data
-docker volume create protectedplanet_redis_data
 docker-compose build
 ```
 
