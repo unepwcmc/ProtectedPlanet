@@ -5,16 +5,22 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     nodejs \
     curl \
-    git \
-    postgresql-client
+    git
 
 RUN apt-get install software-properties-common -y
 
 WORKDIR /gdal
 RUN wget http://download.osgeo.org/gdal/1.11.5/gdal-1.11.5.tar.gz
 RUN tar -xvf gdal-1.11.5.tar.gz
-RUN ls -l gdal-1.11.5
 RUN cd gdal-1.11.5 \
+    && ./configure --prefix=/usr \
+    && make \
+    && make install
+
+WORKDIR /postgres
+RUN wget https://ftp.postgresql.org/pub/source/v11.1/postgresql-11.1.tar.gz
+RUN tar -xvf postgresql-11.1.tar.gz
+RUN cd postgresql-11.1 \
     && ./configure --prefix=/usr \
     && make \
     && make install

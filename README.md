@@ -71,3 +71,20 @@ To import the data, in another terminal after running `docker-compose up`:
 docker-compose run web rails c
 ImportWorkers::S3PollingWorker.perform_async
 ```
+
+For running tests:
+```
+docker-compose run -e "RAILS_ENV=test" web rake db:create db:migrate
+docker-compose run -e "RAILS_ENV=test" web rake test
+```
+
+To backup a docker image to a tar file:
+```
+docker save protectedplanet_web > protectedplanet.tar
+```
+
+You can then share this exact tar file with anyone else and they will have an exact copy of that version of that Dockerised ProtectedPlanet, through loading it:
+
+```
+docker load < protectedplanet.tar.gz
+```
