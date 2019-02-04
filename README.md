@@ -34,6 +34,7 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_HOST=protectedplanet-db
 REDIS_URL=redis://redis:6379/1
+RAILS_ENV=development
 ```
 
 To prepare the Docker environment:
