@@ -5,7 +5,8 @@ RUN apt-get update && apt-get install -y \
     build-essential \
     nodejs \
     curl \
-    git
+    git \
+    postgresql-client
 
 RUN apt-get install software-properties-common -y
 
