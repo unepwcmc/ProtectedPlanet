@@ -3,8 +3,9 @@ require_relative '../../test_helper'
 class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
 
   def setup
-    # TODO: login as admin user
     @home_carousel_slide = FactoryGirl.create(:home_carousel_slide)
+    @site = ::Comfy::Cms::Site.create(label: 'test', identifier: 'test', hostname: 'localhost')
+    @request.env["HTTP_AUTHORIZATION"] = "Basic " + Base64::encode64("#{ComfortableMexicanSofa::AccessControl::AdminAuthentication.username}:#{ComfortableMexicanSofa::AccessControl::AdminAuthentication.password}")
   end
 
   def test_get_index
