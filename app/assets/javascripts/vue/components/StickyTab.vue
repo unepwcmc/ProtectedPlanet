@@ -20,7 +20,7 @@
     methods: {
       toggleTab: function () {
         if (!this.isActive) {
-          const self = this
+          var self = this
 
           window.setTimeout(function () {
             self.isActive = false

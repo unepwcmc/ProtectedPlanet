@@ -13,7 +13,7 @@ module Wdpa::PameImporter
       protected_area  = ProtectedArea.find_by_wdpa_id(wdpa_id)
 
       if protected_area.nil?
-        puts "Could not find Protected Area with wdpa #{wdpa_id}"
+        puts "Could not find Protected Area with wdpa #{wdpa_id}" if Rails.env != 'test'
       else
         PameEvaluation.where({
           protected_area: protected_area,
