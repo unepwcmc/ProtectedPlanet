@@ -43,7 +43,7 @@
 
     computed: {
       twitterUrl: function () {
-        const quoteLimit = this.charLimit - 6 - this.twitterHandle.length - 5 // the 6 is for "" ... and 1 space // the 5 is for via and 2 spaces
+        var quoteLimit = this.charLimit - 6 - this.twitterHandle.length - 5 // the 6 is for "" ... and 1 space // the 5 is for via and 2 spaces
         var quote = this.quote
 
         if (quote.length > quoteLimit) {
@@ -64,7 +64,7 @@
 
     methods: {
       getPageUrl: function () {
-        const href = window.location.href
+        var href = window.location.href
 
         this.url = href.split('#')[0]
       },
@@ -74,7 +74,7 @@
       },
 
       addListeners: function () {
-        const that = this
+        var that = this
 
         // listen for text being selected
         document.addEventListener("selectionchange", function() {
@@ -88,7 +88,7 @@
             document.addEventListener("mouseup", function(e) {
 
               // get selected text
-              const selected = window.getSelection().toString()
+              var selected = window.getSelection().toString()
 
               // remove flag
               that.watchingMouseUp = false
@@ -96,9 +96,9 @@
               // only update the quote and show the share box if the selected text isn't blank
               // otherwise hide the twitter share pop up
               if (selected.length > 0) {
-                const textPosition = window.getSelection().getRangeAt(0).getBoundingClientRect()
-                const top = window.pageYOffset + textPosition.top - 5
-                const left = textPosition.left + ( .5 * textPosition.width)
+                var textPosition = window.getSelection().getRangeAt(0).getBoundingClientRect()
+                var top = window.pageYOffset + textPosition.top - 5
+                var left = textPosition.left + ( .5 * textPosition.width)
 
                 that.isActive = true
                 that.styleObject.top = top + 'px'

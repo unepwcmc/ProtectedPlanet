@@ -60,5 +60,7 @@ class HomeController < ApplicationController
         url: Rails.root.join("/c#{@equity_page.try(:full_path)}")
       }
     ]
+
+    @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
   end
 end

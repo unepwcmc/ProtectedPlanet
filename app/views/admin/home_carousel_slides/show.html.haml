@@ -1,0 +1,17 @@
+.page-header
+  %h2 Home Carousel Slide
+  
+%p
+  %strong Title: 
+  = @home_carousel_slide.title
+%p
+  %strong Description: 
+  = @home_carousel_slide.description
+%p
+  %strong Url: 
+  = @home_carousel_slide.url
+%p
+  %strong Published: 
+  = @home_carousel_slide.published.to_s
+
+= link_to 'Home Carousel Slides', admin_home_carousel_slides_path, :class => 'btn btn-primary'
