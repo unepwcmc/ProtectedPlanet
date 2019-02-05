@@ -80,11 +80,11 @@ docker-compose run -e "RAILS_ENV=test" web rake test
 
 To backup a docker image to a tar file:
 ```
-docker save protectedplanet_web > protectedplanet.tar
+docker save protectedplanet_web > protectedplanet_web.tar
 ```
 
 You can then share this exact tar file with anyone else and they will have an exact copy of that version of that Dockerised ProtectedPlanet, through loading it:
 
 ```
-docker load < protectedplanet.tar.gz
+docker load < protectedplanet_web.tar.gz
 ```
