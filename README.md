@@ -9,6 +9,16 @@ You can check out the previous version of Protected Planet on
 
 ## Topics
 
+When you clone this repo please do it recursively. For the first time:
+```
+git clone --recurse-submodules
+```
+
+If you already cloned it:
+```
+git submodule update --init --recursive
+```
+
 1. [Getting Started and Configuration](docs/installation.md)
 2. [Importing and Managing the WDPA](docs/wdpa.md)
     * [Automatic Import](docs/automatic_import.md)
@@ -35,6 +45,11 @@ POSTGRES_PASSWORD=postgres
 POSTGRES_HOST=protectedplanet-db
 REDIS_URL=redis://redis:6379/1
 RAILS_ENV=development
+```
+
+The database is in a separate repo at the moment:
+```
+git submodule foreach git pull origin master
 ```
 
 To prepare the Docker environment:
