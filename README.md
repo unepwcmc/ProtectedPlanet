@@ -44,6 +44,7 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_HOST=protectedplanet-db
 REDIS_URL=redis://redis:6379/1
+ELASTICSEARCH_URL=http://elasticsearch:9200
 RAILS_ENV=development
 ```
 
@@ -81,7 +82,15 @@ To rebuild the Docker container after making changes:
 docker-compose up --build
 ```
 
-To import the data, in another terminal after running `docker-compose up`:
+To import the data, in 3 other separate terminals after running `docker-compose up`:
+```
+docker-compose run web bundle exec sidekiq -q default
+```
+
+```
+docker-compose run web bundle exec sidekiq -q import
+```
+
 ```
 docker-compose run web rails c
 ImportWorkers::S3PollingWorker.perform_async
@@ -103,3 +112,17 @@ You can then share this exact tar file with anyone else and they will have an ex
 ```
 docker load < protectedplanet_web.tar.gz
 ```
+
+### Known issues with Docker:
+
+- Running tests is currently broken due to an issue with safe_yaml:
+```
+NoMethodError: undefined method `tagged_classes' for Psych:Module
+/usr/local/bundle/gems/safe_yaml-1.0.3/lib/safe_yaml/load.rb:43:in `<module:SafeYAML>'
+```
+- Searching with Elasticsearch is not working due to an issue:
+```
+error in search controller: [404] {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index","resource.type":"index_or_alias","resource.id":"protected_areas","index_uuid":"_na_","index":"protected_areas"}],"type":"index_not_found_exception","reason":"no such index","resource.type":"index_or_alias","resource.id":"protected_areas","index_uuid":"_na_","index":"protected_areas"},"status":404}
+```
+
+- Importing the WDPA data is currently not working under Docker in a reliable way.
