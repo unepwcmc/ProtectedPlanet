@@ -1,3 +1,12 @@
+### 2.2.0
+
+* Link DOIs to preferred resolver (reference links)
+* Add carousel with slides on the home page
+
+### 2.1.7
+
+* Add PAME importer to list of monthly importers
+
 ### 2.1.6
 
 * Update Green List sites
