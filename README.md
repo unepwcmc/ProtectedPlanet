@@ -70,6 +70,11 @@ To download and extract the frontend
 docker-compose run -u 'node' web rake bower:install
 ```
 
+To precompile the assets
+```
+docker-compose run -u 'node' web rake assets:precompile
+```
+
 To bring up the ProtectedPlanet website locally:
 ```
 docker-compose up
