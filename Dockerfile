@@ -3,7 +3,6 @@ MAINTAINER andrew.potter@unep-wcmc.org
 
 RUN apt-get update && apt-get install -y \
     build-essential \
-    nodejs \
     curl \
     git
 
@@ -25,10 +24,27 @@ RUN cd postgresql-11.1 \
     && make \
     && make install
 
+WORKDIR /node
+RUN wget http://nodejs.org/dist/v10.8.0/node-v10.8.0.tar.gz
+RUN tar -xvf node-v10.8.0.tar.gz
+RUN ls node-v10.8.0
+RUN cd node-v10.8.0 \
+    && ./configure --prefix=/usr \
+    && make install \
+    && wget https://www.npmjs.org/install.sh | sh
+
+RUN whereis npm
+RUN npm install bower -g
+
 WORKDIR /ProtectedPlanet
 ADD Gemfile /ProtectedPlanet/Gemfile
 ADD Gemfile.lock /ProtectedPlanet/Gemfile.lock
 RUN bundle install
+
+ARG USER=node
+ARG UID=1000
+ARG HOME=/home/$USER
+RUN adduser --uid $UID --shell /bin/bash --home $HOME $USER
 
 COPY . /ProtectedPlanet
 

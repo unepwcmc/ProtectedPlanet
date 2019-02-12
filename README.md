@@ -65,6 +65,11 @@ docker-compose run web rake db:migrate
 docker-compose run web rake db:seed
 ```
 
+To download and extract the frontend
+```
+docker-compose run -u 'node' web rake bower:install
+```
+
 To bring up the ProtectedPlanet website locally:
 ```
 docker-compose up
