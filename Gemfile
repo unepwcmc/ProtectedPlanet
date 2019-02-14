@@ -23,7 +23,7 @@ gem 'premailer-rails'
 
 gem 'levenshtein', '~> 0.2.2'
 
-gem 'vuejs-rails', '~> 2.3.2', github: 'adambutler/vuejs-rails'
+gem 'vuejs-rails', '~> 2.3.2'
 gem 'sprockets-vue', '~> 0.1.0'
 
 group :production, :staging do
@@ -47,7 +47,7 @@ end
 group :test do
   gem 'factory_girl_rails', '~> 4.4.1'
   gem 'mocha', '~> 1.0.0'
-  gem 'webmock', '~> 1.18.0', require: false
+  gem 'webmock', '~> 1.22.0', require: false
   gem 'timecop', '~> 0.7.1'
   gem 'capybara', '~> 2.3.0'
   gem 'codeclimate-test-reporter', require: nil
@@ -78,7 +78,7 @@ gem 'dotenv-deployment'
 
 gem 'best_in_place'
 gem 'turnout', '~> 2.0.0'
-gem 'bystander', github: 'unepwcmc/bystander'
+gem 'bystander', git: 'https://github.com/unepwcmc/bystander'
 
 gem 'devise', '~> 3.5.2'
 
