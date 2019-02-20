@@ -108,7 +108,22 @@ ImportWorkers::S3PollingWorker.perform_async
 
 For running tests:
 ```
+docker-compose run web rails dbconsole
+Password for user postgres:
+psql (11.1)
+Type "help" for help.
+
+protectedplanet-db=# CREATE DATABASE pp_test_backup;
+CREATE DATABASE
+```
+
+Followed by:
+```
 docker-compose run -e "RAILS_ENV=test" web rake db:create db:migrate
+```
+
+Finally to actually run the tests:
+```
 docker-compose run -e "RAILS_ENV=test" web rake test
 ```
 
@@ -125,11 +140,8 @@ docker load < protectedplanet_web.tar.gz
 
 ### Known issues with Docker:
 
-- Running tests is currently broken due to an issue with safe_yaml:
-```
-NoMethodError: undefined method `tagged_classes' for Psych:Module
-/usr/local/bundle/gems/safe_yaml-1.0.3/lib/safe_yaml/load.rb:43:in `<module:SafeYAML>'
-```
+- Running tests is currently broken due to several failures which still need fixing.
+
 - Searching with Elasticsearch is not working due to an issue:
 ```
 error in search controller: [404] {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index","resource.type":"index_or_alias","resource.id":"protected_areas","index_uuid":"_na_","index":"protected_areas"}],"type":"index_not_found_exception","reason":"no such index","resource.type":"index_or_alias","resource.id":"protected_areas","index_uuid":"_na_","index":"protected_areas"},"status":404}
