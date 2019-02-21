@@ -140,8 +140,6 @@ docker load < protectedplanet_web.tar.gz
 
 ### Known issues with Docker:
 
-- Running tests is currently broken due to several failures which still need fixing.
-
 - Searching with Elasticsearch is not working due to an issue:
 ```
 error in search controller: [404] {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index","resource.type":"index_or_alias","resource.id":"protected_areas","index_uuid":"_na_","index":"protected_areas"}],"type":"index_not_found_exception","reason":"no such index","resource.type":"index_or_alias","resource.id":"protected_areas","index_uuid":"_na_","index":"protected_areas"},"status":404}
