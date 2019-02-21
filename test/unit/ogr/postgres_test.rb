@@ -5,7 +5,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
    database to postgres' do
     db_config = ActiveRecord::Base.connection_config
 
-    ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 --config PG_USE_COPY YES -f \"PostgreSQL\" PG:\" host=#{db_config[:host]} user=#{db_config[:username]} dbname=#{db_config[:database]}\" ./an/file"
+    ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 --config PG_USE_COPY YES -f \"PostgreSQL\" PG:\" host=#{db_config[:host]} user=#{db_config[:username]} password=#{db_config[:password]} dbname=#{db_config[:database]}\" ./an/file"
     Ogr::Postgres.expects(:system).with(ogr_command).once
 
     Ogr::Postgres.import './an/file'
@@ -19,7 +19,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
       ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8
       --config PG_USE_COPY YES
       -f \"PostgreSQL\" PG:\" host=#{db_config[:host]}
-      user=#{db_config[:username]} dbname=#{db_config[:database]}\"
+      user=#{db_config[:username]} password=#{db_config[:password]} dbname=#{db_config[:database]}\"
       -sql \"SELECT * FROM #{table_name}\"
       ./an/file
     """.squish
@@ -38,7 +38,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
       ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8
       --config PG_USE_COPY YES
       -f \"PostgreSQL\" PG:\" host=#{db_config[:host]}
-      user=#{db_config[:username]} dbname=#{db_config[:database]}\"
+      user=#{db_config[:username]} password=#{db_config[:password]} dbname=#{db_config[:database]}\"
       -sql \"SELECT * FROM #{table_name}\"
       -nln #{new_table_name}
       ./an/file
