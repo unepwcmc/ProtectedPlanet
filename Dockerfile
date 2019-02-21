@@ -36,9 +36,18 @@ RUN cd node-v10.8.0 \
 RUN whereis npm
 RUN npm install bower -g
 
+WORKDIR /geos
+RUN wget https://download.osgeo.org/geos/geos-3.7.0.tar.bz2
+RUN tar -xvf geos-3.7.0.tar.bz2
+RUN ls geos-3.7.0
+RUN cd geos-3.7.0 \
+    && ./configure --prefix=/usr \
+    && make install
+
 WORKDIR /ProtectedPlanet
 ADD Gemfile /ProtectedPlanet/Gemfile
 ADD Gemfile.lock /ProtectedPlanet/Gemfile.lock
+RUN gem install rgeo --version '=0.4.0' -- --with-geos-dir=/usr/lib
 RUN bundle install
 
 ARG USER=node
