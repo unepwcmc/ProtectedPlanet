@@ -29,6 +29,7 @@ services:
     volumes:
       - protectedplanet_redis_data:/data
   sidekiq:
+     image: unepwcmc/protectedplanet:latest
      build: .
      volumes:
        - .:/ProtectedPlanet
