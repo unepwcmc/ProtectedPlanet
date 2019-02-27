@@ -1,6 +1,7 @@
 version: '3'
 services:
   web:
+    image: unepwcmc/protectedplanet:latest
     build: .
     command: bundle exec rails s -p 3000 -b '0.0.0.0'
     volumes:
@@ -40,6 +41,8 @@ services:
        - '.env'
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.4.3
+    volumes:
+      - protectedplanet_elasticsearch_data:/usr/share/elasticsearch/data
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -65,4 +68,6 @@ volumes:
   protectedplanet_redis_data:
     driver: local
   protectedplanet_import_data:
+    driver: local
+  protectedplanet_elasticsearch_data:
     driver: local
