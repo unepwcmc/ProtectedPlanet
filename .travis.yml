@@ -1,6 +1,6 @@
 language: ruby
 before_install:
-  - docker build -t unepwcmc/protectedplanet .
+  - docker pull unepwcmc/protectedplanet:latest
 bundler_args: --without development production staging --jobs=6
 rvm:
   - 2.1.2
