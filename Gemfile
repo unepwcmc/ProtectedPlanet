@@ -23,7 +23,7 @@ gem 'premailer-rails'
 
 gem 'levenshtein', '~> 0.2.2'
 
-gem 'vuejs-rails', '~> 2.3.2'
+gem 'vuejs-rails', '~> 2.3.2', git: 'https://github.com/adambutler/vuejs-rails'
 gem 'sprockets-vue', '~> 0.1.0'
 
 group :production, :staging do
