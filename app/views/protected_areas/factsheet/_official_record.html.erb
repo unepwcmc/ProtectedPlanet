@@ -38,6 +38,6 @@
 
 <% if @protected_area.story_map_link.present? %>
   <h2 class="header--section u-margin--page">Link to story map</h2>
-  <p><%= link_to 'Story Map', @protected_area.story_map_link %></p>
-  <p><%= link_to 'Story Map (Arabic version)', 'https://arcg.is/1j48mW' %></p>
+  <p class="u-margin--page"><%= link_to 'Story Map', @protected_area.story_map_link, class: 'link is-external', title: 'view the Story map', target: '_blank'%></p>
+  <p class="u-margin--page"><%= link_to 'Story Map (Arabic version)', 'https://arcg.is/1j48mW', class: 'link is-external', title: 'view the Story map', target: '_blank' %></p>
 <% end %>
