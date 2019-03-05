@@ -1,6 +1,6 @@
 #env:
 #  global:
-#   - CC_TEST_REPORTER_ID=''
+#   - CC_TEST_REPORTER_ID='abc123'
 language: ruby
 before_install:
   - sudo apt-get purge libgdal1

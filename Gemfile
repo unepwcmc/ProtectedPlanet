@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.8'
 
 gem 'pg', '~> 0.21'
 gem 'activerecord-postgis-adapter', '~> 3.1.0'
-# gem 'gdal', '~> 0.0.5'
+gem 'gdal', '~> 1.0.0'
 gem 'dbf', '~> 2.0.7'
 
 gem 'elasticsearch', '~> 5.0.3'
@@ -52,7 +52,7 @@ group :test do
   gem 'capybara', '~> 2.3.0'
   # gem 'codeclimate-test-reporter', require: nil
   gem 'simplecov', require: false, group: :test
-  gem 'simplecov-console'
+  # gem 'simplecov-console'
   gem 'selenium-webdriver'
 end
 
