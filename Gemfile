@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.8'
+gem 'rails', '4.2.11'
 
 gem 'pg', '~> 0.21'
 gem 'activerecord-postgis-adapter', '~> 3.1.0'
