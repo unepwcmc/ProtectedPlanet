@@ -2,9 +2,9 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.5.1'
 
-gem 'pg'
+gem 'pg', '~> 0.21'
 gem 'activerecord-postgis-adapter', '~> 3.1.0'
-gem 'gdal', '~> 0.0.5'
+# gem 'gdal', '~> 0.0.5'
 gem 'dbf', '~> 2.0.7'
 
 gem 'elasticsearch', '~> 5.0.3'
@@ -23,7 +23,7 @@ gem 'premailer-rails'
 
 gem 'levenshtein', '~> 0.2.2'
 
-gem 'vuejs-rails', '~> 2.3.2', git: 'https://github.com/adambutler/vuejs-rails'
+gem 'vuejs-rails', '~> 2.3.2'
 gem 'sprockets-vue', '~> 0.1.0'
 
 group :production, :staging do
@@ -50,7 +50,9 @@ group :test do
   gem 'webmock', '~> 1.22.0', require: false
   gem 'timecop', '~> 0.7.1'
   gem 'capybara', '~> 2.3.0'
-  gem 'codeclimate-test-reporter', require: nil
+  # gem 'codeclimate-test-reporter', require: nil
+  gem 'simplecov', require: false, group: :test
+  gem 'simplecov-console'
   gem 'selenium-webdriver'
 end
 
@@ -66,7 +68,7 @@ gem 'aws-sdk', '~> 1.3.9'
 gem 'httparty', '~> 0.13.1'
 gem 'httmultiparty', '~> 0.3.14'
 
-gem 'sidekiq', '~> 3.5.3'
+gem 'sidekiq', '~> 4.0.0'
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 
