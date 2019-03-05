@@ -16,8 +16,7 @@ class ImportToolsTest < ActiveSupport::TestCase
   test '#current_import returns nil if no import is found' do
     ImportTools::RedisHandler.any_instance.stubs(:current_token).returns(nil)
 
-    import = ImportTools.current_import
-    assert_equal nil, import
+    assert_nil ImportTools.current_import
   end
 
   test '#last_import returns an instance of Import with the token of the last import' do

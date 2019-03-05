@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.11'
 
-gem 'pg', '~> 0.21'
+gem 'pg', '~> 0.20'
 gem 'activerecord-postgis-adapter', '~> 3.1.0'
 gem 'gdal', '~> 1.0.0'
 gem 'dbf', '~> 2.0.7'
@@ -85,6 +85,6 @@ gem 'bystander', git: 'https://github.com/unepwcmc/bystander'
 gem 'devise', '~> 3.5.2'
 
 gem 'comfortable_mexican_sofa', '~> 1.12.8'
-gem 'nokogiri', '~> 1.6.7'
+gem 'nokogiri', '~> 1.8.1'
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'
