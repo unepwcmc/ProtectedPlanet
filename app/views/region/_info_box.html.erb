@@ -13,7 +13,7 @@
       <div class="js-download-btn info-box__row">
         <div class="js-trigger tooltip__trigger info-box__link">
           <i class="info-box__link-icon fa fa-download"></i>Download this dataset
-          <%= download_dropdown(@region.iso, 'general', (types rescue [:csv, :kml, :shp])) %>
+          <%= download_dropdown(@region.iso, 'general', (types rescue [:csv, :shp])) %>
         </div>
         <a href="<%= url_for(action: :show, iso: @region.iso, format: :pdf) %>" class="info-box__link">
           <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download this page as a PDF
