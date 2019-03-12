@@ -14,9 +14,7 @@
     <div class="navbar__menu u-hide js-target">
       <%= link_to 'About', '/c/about', class: "navbar__element" %>
 
-      <% if @updates_and_news.present? %>
-        <%= link_to 'Updates & News', resources_path(category_id: @updates_and_news.id), class: "navbar__element" %>
-      <% end %>
+      <%= link_to 'Blog', blog_path, class: "navbar__element" %>
 
       <div class="navbar__element navbar__element--submenu js-dropdown">
         <button class="navbar__submenu__title js-trigger">Resources</button>
@@ -48,7 +46,7 @@
           </div>
         </div>
       </div>
-      
+
       <%= link_to 'Live Report', 'https://livereport.protectedplanet.net', class: "navbar__element u-bold", title: 'View the Protected Planet Live Report', target: '_blank' %>
 
       <div data-dropdown-switch data-dropdown-switch-text class="js-switch js-dropdown <%= bem("navbar__element", "with-separator", "for-search-dropdown") %>">
