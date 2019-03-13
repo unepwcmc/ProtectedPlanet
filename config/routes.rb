@@ -55,7 +55,6 @@ Rails.application.routes.draw do
   get '/country_codes', to: 'country#codes', as: 'country_codes'
 
   get '/resources', to: 'cms/resources#index'
-  get '/blog', to: 'cms/blog#index'
 
   get '/marine', to: 'marine#index'
   get '/marine/download_designations', to: 'marine#download_designations'
