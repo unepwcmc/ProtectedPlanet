@@ -67,7 +67,7 @@ class DownloadTest < ActiveSupport::TestCase
     Download::Generators::Csv.stubs(:generate).returns(true)
     Download::Generators::Shapefile.expects(:generate).returns(false)
 
-    S3.expects(:upload).twice
+    S3.expects(:upload).once
 
     Download.generate 'an_download'
   end
