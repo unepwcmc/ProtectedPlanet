@@ -18,6 +18,10 @@ class CmsPresenter
     resources.sort_by(&:created_at).map(&:created_at).group_by(&:year)
   end
 
+  def self.all_by_month resources
+    resources.group_by { |u| u.created_at.strftime('%Y-%m') }
+  end
+
   private
 
   def collect_older_versions page, collection=[]
