@@ -1,37 +1,37 @@
 source 'https://rubygems.org'
 
-gem 'rails', '4.2.11'
+gem 'rails', '5.0.0'
 
 gem 'pg', '~> 0.20'
-gem 'activerecord-postgis-adapter', '~> 3.1.0'
-gem 'gdal', '~> 1.0.0'
+gem 'activerecord-postgis-adapter', '~> 4.0.0'
+# # gem 'gdal', '~> 1.0.0'
 gem 'dbf', '~> 2.0.7'
-
+#
 gem 'elasticsearch', '~> 5.0.3'
-
+#
 gem 'bower-rails', '~> 0.10.0'
-gem 'sass-rails', '~> 5.0.4'
-gem 'sprockets-rails', '~> 2.3.3'
+gem 'sass-rails', '~> 5.0.7'
+gem 'sprockets-rails', '~> 3.2.1'
 gem 'uglifier', '~> 2.7.2'
-gem 'coffee-rails', '~> 4.0.0'
+gem 'coffee-rails', '~> 4.2.2'
 gem "autoprefixer-rails"
-gem "exception_notification", '~> 4.1.4'
+gem "exception_notification", '~> 4.3.0'
 gem "slack-notifier", "~> 1.5.1"
-
-gem 'jquery-rails', '~> 3.1.3'
+#
+gem 'jquery-rails', '~> 4.3.3'
 gem 'premailer-rails'
-
+#
 gem 'levenshtein', '~> 0.2.2'
 
 gem 'vuejs-rails', '~> 2.3.2'
 gem 'sprockets-vue', '~> 0.1.0'
-
+#
 group :production, :staging do
 #  gem 'unicorn'
   gem 'dalli', '~> 2.7.2'
   gem 'rack-cache', '~> 1.2'
 end
-
+#
 group :development do
   gem 'spring'
   gem 'capistrano', '~> 3.4', require: false
@@ -57,18 +57,18 @@ group :test do
 end
 
 group :test, :development do
-  gem 'konacha'
+  #gem 'konacha' - TODO - NOT COMPATIBLE WITH RAILS 5
   gem 'ejs'
 end
 
 gem 'will_paginate', '~> 3.0'
 
-gem 'aws-sdk', '~> 1.3.9'
+gem 'aws-sdk', '~> 3' # DRAMATIC CHANGES
 
-gem 'httparty', '~> 0.13.1'
+gem 'httparty', '~> 0.15.1' # FROM 13 to 15 BREAKING CHANGES
 gem 'httmultiparty', '~> 0.3.14'
 
-gem 'sidekiq', '~> 4.0.0'
+gem 'sidekiq', '~> 5.2.5' # DRAMATIC CHANGES
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 
@@ -78,13 +78,13 @@ gem 'system'
 gem 'dotenv', '~> 0.11.1'
 gem 'dotenv-deployment'
 
-gem 'best_in_place'
-gem 'turnout', '~> 2.0.0'
+gem 'best_in_place', '~> 3.0.1'
+gem 'turnout', '~> 2.5.0'
 gem 'bystander', git: 'https://github.com/unepwcmc/bystander'
 
-gem 'devise', '~> 3.5.2'
+gem 'devise', '~> 4.0.0' # MAJOR VERSION CHANGE, CHECK DOCS
 
-gem 'comfortable_mexican_sofa', '~> 1.12.8'
-gem 'nokogiri', '~> 1.8.1'
+gem 'comfortable_mexican_sofa', '1.12.10'
+gem 'nokogiri', '~> 1.10.1'
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'
