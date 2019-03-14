@@ -1,3 +1,8 @@
+### 2.3.0
+
+* Add blog
+* Remove kml format download
+
 ### 2.2.0
 
 * Link DOIs to preferred resolver (reference links)
