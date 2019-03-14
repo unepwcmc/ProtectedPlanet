@@ -48,12 +48,12 @@ module CmsHelper
     page = current_page
     breadcrumbs = []
 
-    breadcrumbs.push(breadcrumb_link(page))
-    
+    breadcrumbs << breadcrumb_link(page)
+
     while hasParent?(page) && page.parent.label != 'Index'
       page = page.parent
 
-      breadcrumbs.push(breadcrumb_link(page))
+      breadcrumbs << breadcrumb_link(page)
     end
 
     breadcrumbs
