@@ -7,7 +7,7 @@
     <% unless @for_pdf %>
       <div class="u-only-desktop tooltip__trigger js-trigger link-with-icon link-with-icon--bold">
         <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
-        <%= download_dropdown(@region.iso, 'general', (types rescue [:csv, :kml, :shp])) %>
+        <%= download_dropdown(@region.iso, 'general', (types rescue [:csv, :shp])) %>
       </div>
     <% end %>
     -->
