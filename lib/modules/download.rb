@@ -26,8 +26,7 @@ module Download
 
   GENERATORS = [
     Download::Generators::Csv,
-    Download::Generators::Shapefile,
-    Download::Generators::Kml
+    Download::Generators::Shapefile
   ]
 
   def self.generate download_name, opts={}
