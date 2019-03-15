@@ -60,6 +60,8 @@ module CmsHelper
   end
 
   def get_filtered_pages pages
+    pages.select {|page| page['is_published'] = true }
+
     if params[:year]
       pages = pages.where("date_part('year', created_at) = ?", params[:year])
 
