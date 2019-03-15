@@ -1,8 +1,9 @@
 class DownloadWorkers::Search < DownloadWorkers::Base
-  def perform token, search_term, filters_json
+  def perform token, search_term, filters
     @token = token
     @search_term = search_term
-    @filters_json = filters_json
+    @filters_json = filters.to_json
+    @filters_values = filters.values
 
     while_generating(key(token)) do
       generate_download
@@ -26,7 +27,9 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   end
 
   def ids_digest
-    Digest::SHA256.hexdigest(protected_area_ids.join)
+    return "#{@search_term}" if @filters_values.empty?
+    filter = @filters_values.map { |f| f[0..11] }.join(',')
+    "#{@search_term}_#{filter}".gsub(' ', '_')
   end
 
   def email
