@@ -20,7 +20,7 @@ gem "slack-notifier", "~> 1.5.1"
 #
 gem 'jquery-rails', '~> 4.3.3'
 gem 'premailer-rails'
-#
+# gem 'listen'
 gem 'levenshtein', '~> 0.2.2'
 
 gem 'vuejs-rails', '~> 2.3.2'
@@ -42,6 +42,12 @@ group :development do
   gem 'capistrano-maintenance', '~> 1.0', require: false
   gem 'capistrano-passenger', '~> 0.2.0', require: false
   gem 'byebug', '~> 3.1.2'
+  # gem 'listen', '~> 3.1.5'
+  # gem 'spring-watcher-listen', '~> 2.0.0'
+  #
+  # gem 'web-console', '>= 3.3.0'
+  # gem 'listen', '>= 3.0.5', '< 3.2'
+  # gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
 group :test do
