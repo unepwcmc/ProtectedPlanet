@@ -1,4 +1,4 @@
-FROM ruby:2.4
+FROM ruby:2.4.1
 MAINTAINER andrew.potter@unep-wcmc.org
 
 RUN apt-get update && apt-get install -y \

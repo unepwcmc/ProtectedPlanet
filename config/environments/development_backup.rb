@@ -67,7 +67,5 @@ Rails.application.configure do
     :user_name => secrets['username'],
     :password => secrets['password']
   }
-
-  # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 end
 
