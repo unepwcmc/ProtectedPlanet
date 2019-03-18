@@ -1,5 +1,5 @@
 <div class="vertical-nav">
-  <% @cms_page.children.each do |page| %>
+  <% @cms_page.children.published.each do |page| %>
     
     <% if page.slug[0,3] == 'URL' %>
       <%= link_to 'http://' + page.slug[3..-1], title: 'Visit ' + page.label, target: '_blank', class: 'vertical-nav__element' do %>

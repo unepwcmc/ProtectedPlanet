@@ -61,10 +61,10 @@ module CmsHelper
 
   def get_filtered_pages pages
     if params[:year]
-      pages = pages.where("date_part('year', created_at) = ?", params[:year])
+      pages = pages.select{|page| page['created_at'].year == params[:year].to_i}
 
       if params[:month]
-        pages = pages.where("date_part('month', created_at) = ?", params[:month])
+        pages = pages.select{|page| page['created_at'].month == params[:month].to_i}
       end
     else
       pages
