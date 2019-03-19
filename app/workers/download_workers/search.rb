@@ -28,6 +28,7 @@ class DownloadWorkers::Search < DownloadWorkers::Base
 
   def ids_digest
     sha = Digest::SHA256.hexdigest(protected_area_ids.join)
+    return "#{sha}" if @search_term.blank?
     return "#{@search_term}_#{sha}".gsub(' ', '_') if @filters_values.empty?
     filter = @filters_values.map { |f| f[0..11] }.join(',')
     "#{@search_term}_#{filter}_#{sha}".gsub(' ', '_')
