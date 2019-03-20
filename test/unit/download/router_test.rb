@@ -32,7 +32,7 @@ class DownloadRouterTest < ActiveSupport::TestCase
     domain = 'general'
     params = {'id' => '123', 'email' => 'test@test.com'}
 
-    $redis.expects(:set).with('downloads:general:123', '{"status":"generating","email":"test@test.com"}')
+    $redis.expects(:set).with('downloads:general:123', '{"email":"test@test.com"}')
 
     Download::Router.set_email(domain, params)
   end
