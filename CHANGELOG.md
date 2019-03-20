@@ -1,3 +1,9 @@
+### 2.4.0
+
+* Show all blog post (including grandchildren .etc) on the blog page
+* Change the zip filename for the protected area search results to be more reader friendly
+* Add the ability for a country to have many story maps
+
 ### 2.3.0
 
 * Add blog

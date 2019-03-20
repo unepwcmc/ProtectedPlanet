@@ -9,16 +9,13 @@ module Wdpa::StoryMapLinkListImporter
 
       csv.each do |row|
         wdpa_id = Integer(row[0]) rescue false
-        if wdpa_id
-          pa = ProtectedArea.find_by_wdpa_id(wdpa_id)
+        unless ProtectedArea.find_by_wdpa_id(wdpa_id).blank?
+          protected_area = ProtectedArea.find_by_wdpa_id(wdpa_id)
+          StoryMapLink.where(protected_area: protected_area, link: row[1], link_type: row[2])
+                      .first_or_create
+          puts "Added this link #{row[1]} to #{wdpa_id}"
         else
-          pa = ProtectedArea.find_by_slug(row[0])
-        end
-
-        unless pa.blank?
-          pa.story_map_link = row[1]
-          pa.save
-          puts "Added this link #{row[1]} to #{row[0]}"
+          puts "Protected Area with wdpa_id #{row[0]} doesn't exist"
         end
       end
     end
