@@ -4,7 +4,7 @@ gem 'rails', '5.0.0'
 
 gem 'pg', '~> 0.21'
 gem 'activerecord-postgis-adapter', '~> 4.0.0'
-# # gem 'gdal', '~> 1.0.0'
+gem 'gdal'
 gem 'dbf', '~> 2.0.7'
 #
 gem 'elasticsearch', '~> 5.0.3'

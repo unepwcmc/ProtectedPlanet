@@ -16,6 +16,14 @@ RUN cd gdal-1.11.5 \
     && make \
     && make install
 
+# WORKDIR /gdal
+# RUN wget http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz
+# RUN tar -xvf gdal-2.4.0.tar.gz
+# RUN cd gdal-2.4.0 \
+    # && ./configure --prefix=/usr \
+    # && make \
+    # && make install
+
 WORKDIR /postgres
 RUN wget https://ftp.postgresql.org/pub/source/v11.1/postgresql-11.1.tar.gz
 RUN tar -xvf postgresql-11.1.tar.gz
