@@ -1,3 +1,3 @@
-class RegionalStatistic < ActiveRecord::Base
+class RegionalStatistic < ApplicationRecord
   belongs_to :region
 end
