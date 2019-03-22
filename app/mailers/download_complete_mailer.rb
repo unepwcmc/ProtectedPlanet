@@ -1,7 +1,4 @@
-class DownloadCompleteMailer < ActionMailer::Base
-  default from: "no-reply@unep-wcmc.org"
-  layout 'mailer'
-
+class DownloadCompleteMailer < ApplicationMailer
   def create filename, email
     @filename = filename
 

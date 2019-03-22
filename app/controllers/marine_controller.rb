@@ -1,17 +1,17 @@
 class MarineController < ApplicationController
 
   #Static stats
-  before_action :marine_statistics, only: [:index, :download_designations]
-  before_action :growth, only: [:index]
-  before_action :ecoregions, only: [:index]
-  before_action :pledges, only: [:index]
+  before_filter :marine_statistics, only: [:index, :download_designations]
+  before_filter :growth, only: [:index]
+  before_filter :ecoregions, only: [:index]
+  before_filter :pledges, only: [:index]
 
   #Calculated stats
-  before_action :coverage
-  before_action :most_protected_areas, only: [:index]
-  before_action :national_statistics, only: [:index]
-  before_action :designations, only: [:index, :download_designations]
-  before_action :green_list_areas, only: [:index]
+  before_filter :coverage
+  before_filter :most_protected_areas, only: [:index]
+  before_filter :national_statistics, only: [:index]
+  before_filter :designations, only: [:index, :download_designations]
+  before_filter :green_list_areas, only: [:index]
 
   COUNTRIES = [
     "United States of America",

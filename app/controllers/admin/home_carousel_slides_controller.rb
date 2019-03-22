@@ -1,7 +1,6 @@
 class Admin::HomeCarouselSlidesController < Comfy::Admin::Cms::BaseController
-
-  before_action :build_home_carousel_slide,  :only => [:new, :create]
-  before_action :load_home_carousel_slide,   :only => [:show, :edit, :update, :destroy]
+  before_filter :build_home_carousel_slide,  :only => [:new, :create]
+  before_filter :load_home_carousel_slide,   :only => [:show, :edit, :update, :destroy]
 
   def index
     @home_carousel_slides = HomeCarouselSlide.page(params[:page])

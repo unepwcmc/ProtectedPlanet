@@ -23,7 +23,7 @@ class CountryControllerTest < ActionController::TestCase
 
     FactoryGirl.create(:pame_statistic, country: country)
 
-    get :show, iso: 'PUM'
+    get :show, params: {iso: 'PUM'}
     assert_response :success
   end
 end
