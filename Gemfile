@@ -65,7 +65,9 @@ end
 group :test, :development do
   #gem 'konacha' - TODO - NOT COMPATIBLE WITH RAILS 5
   gem 'ejs'
+  # gem 'minitest', '5.10.3' # Explicit minitest version fixes test reporting errors
 end
+
 
 gem 'will_paginate', '~> 3.0'
 

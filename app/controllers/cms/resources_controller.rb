@@ -1,5 +1,5 @@
 class Cms::ResourcesController < ApplicationController
-  before_filter :load_category
+  before_action :load_category
 
   def index
     @all_resources = Comfy::Cms::Page.for_category(@category.label)
