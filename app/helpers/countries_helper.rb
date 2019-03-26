@@ -7,6 +7,12 @@ module CountriesHelper
     @country && @country.iso_3 == "JPN"
   end
 
+  def has_restricted_sites?
+    restricted_iso3 = ["RUS", "EST", "CHN", "GBR"]
+    
+    return restricted_iso3.include? @country.iso_3
+  end
+
   def malaysia_documents
     [
       {
