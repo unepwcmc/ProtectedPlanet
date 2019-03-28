@@ -40,3 +40,9 @@ addons:
 services:
   - redis-server
   - elasticsearch
+# Manually handle git submodules
+git:
+  submodules: false
+before_install:
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
