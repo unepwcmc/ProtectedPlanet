@@ -1,0 +1,21 @@
+<% @posts = @cms_page.descendants.select {|page| page['is_published'] == true } %>
+
+<main class="container--profile container--right-padded container--push-bottom">
+  <nav class="breadcrumbs">
+    <%= render partial: "cms/breadcrumbs" %>  
+  </nav>
+
+  <div class="hero">
+    <h1 class="hero__title hero__title--article">Blog</h1>
+  </div>
+  
+  <%= render partial: "cms/blog/filter_bar", locals: { posts: @posts } %>
+
+  <div class="three-fourths">
+    <p class="header-with-delimiter header-with-delimiter--smaller header-with-delimiter--bold">Showing <%= get_filtered_pages(@posts).size %> blog post(s).</p>
+
+    <div class="right-padded">
+      <%= render partial: 'cms/blog/blog_post', collection: get_filtered_pages(@posts) %>
+    </div>
+  </div>
+</main>

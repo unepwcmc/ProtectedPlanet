@@ -22,7 +22,7 @@
       <div class="info-box__row">
         <button class="js-download-btn info-box__link u-only-desktop tooltip__trigger js-trigger">
           <i class="info-box__link-icon fa fa-download"></i>Download site GIS file
-          <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :kml, :shp])) %>
+          <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :shp])) %>
         </button>
         <%= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class: 'info-box__link' do %>
           <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download site

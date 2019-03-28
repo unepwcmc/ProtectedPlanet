@@ -19,10 +19,6 @@ class DownloadCompleteMailerTest < ActionMailer::TestCase
       html_body(email)
     )
     assert_match(
-      Regexp.new("#{url}/current/filename-kml.zip"),
-      html_body(email)
-    )
-    assert_match(
       Regexp.new("#{url}/current/filename-shp.zip"),
       html_body(email)
     )

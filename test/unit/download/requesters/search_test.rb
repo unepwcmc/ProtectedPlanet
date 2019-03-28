@@ -10,7 +10,7 @@ class DownloadRequestersSearchTest < ActiveSupport::TestCase
     $redis.stubs(:set).with("downloads:searches:#{token}", '{"status":"generating"}')
     DownloadWorkers::Search.
       expects(:perform_async).
-      with(token, search_term, '{}')
+      with(token, search_term, {})
 
     requester = Download::Requesters::Search.new search_term, filters
     assert_equal({'status' => 'generating', 'token' => token}, requester.request)

@@ -23,5 +23,6 @@ class Wdpa::Importer
     Wdpa::GreenListImporter.import
     Wdpa::MarineStatsImporter.import
     Wdpa::PameImporter.import
+    Wdpa::StoryMapLinkListImporter.import
   end
 end
