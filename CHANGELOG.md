@@ -1,3 +1,7 @@
+### 2.4.1
+
+* Add a warning message to country pages that have restricted Protected Areas
+
 ### 2.4.0
 
 * Show all blog post (including grandchildren .etc) on the blog page
