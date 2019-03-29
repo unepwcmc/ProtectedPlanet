@@ -1139,6 +1139,7 @@ DEPENDENCIES
   httparty (~> 0.15.1)
   jquery-rails (~> 4.3.3)
   levenshtein (~> 0.2.2)
+  minitest (~> 5.10, != 5.10.2)
   mocha (~> 1.0.0)
   nokogiri (~> 1.10.1)
   pg (~> 0.21)
