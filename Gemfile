@@ -24,6 +24,8 @@ gem 'levenshtein', '~> 0.2.2'
 
 gem 'vuejs-rails', '~> 2.3.2'
 gem 'sprockets-vue', '~> 0.1.0'
+
+gem 'rails-controller-testing'
 #
 group :production, :staging do
 #  gem 'unicorn'

@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'gdal-ruby/ogr'
+#require 'gdal-ruby/ogr'
 
 class TestOgrSplit < ActiveSupport::TestCase
   test '#split runs the correct ogr2ogr command to split a geo database
