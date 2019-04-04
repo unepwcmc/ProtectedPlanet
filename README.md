@@ -102,13 +102,13 @@ docker-compose run web /bin/bash -l -c "bundle exec sidekiq -q import"
 ```
 
 ```
-docker-compose run web rails c
+docker-compose run web /bin/bash -l -c "rails c"
 ImportWorkers::S3PollingWorker.perform_async
 ```
 
 For running tests:
 ```
-docker-compose run web rails dbconsole
+docker-compose run web /bin/bash -l -c "rails dbconsole"
 Password for user postgres:
 psql (11.1)
 Type "help" for help.
