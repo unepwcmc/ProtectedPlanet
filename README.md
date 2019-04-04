@@ -68,12 +68,12 @@ docker-compose run web /bin/bash -l -c "rake db:seed"
 
 To download and extract the frontend
 ```
-docker-compose run -u 'node' web /bin/bash -l -c "rake bower:install"
+docker-compose run web /bin/bash -l -c "rake bower:install"
 ```
 
 To precompile the assets
 ```
-docker-compose run -u 'node' web /bin/bash -l -c "rake assets:precompile"
+docker-compose run web /bin/bash -l -c "rake assets:precompile"
 ```
 
 To bring up the ProtectedPlanet website locally:
