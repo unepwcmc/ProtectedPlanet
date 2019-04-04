@@ -44,7 +44,8 @@ POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_HOST=protectedplanet-db
 REDIS_URL=redis://redis:6379/1
-ELASTICSEARCH_URL=http://elasticsearch:9200
+ELASTIC_SEARCH_URL=http://elastic:elastic@elasticsearch:9200
+xpack.security.enabled=false
 RAILS_ENV=development
 ```
 
@@ -92,21 +93,19 @@ To rebuild the Docker container after making changes:
 docker-compose up --build
 ```
 
-To import the data, in 3 other separate terminals after running `docker-compose up`:
+To import the database sql dump:
 ```
-docker-compose run web /bin/bash -l -c "bundle exec sidekiq -q default"
-```
-
-```
-docker-compose run web /bin/bash -l -c "bundle exec sidekiq -q import"
+docker-compose run -v ~/path/to/sql/dump:/import_database web bash -c "psql protectedplanet-db < /import_database/pp_development.sql -U postgres -h protectedplanet-db"
 ```
 
+To reindex the data in Elasticsearch:
 ```
-docker-compose run web /bin/bash -l -c "rails c"
-ImportWorkers::S3PollingWorker.perform_async
+docker-compose run web /bin/bash -l -c "bundle exec rails c"
+Search::Index.delete
+Search::Index.create
 ```
 
-For running tests:
+For running tests, we have an additional table which must be created:
 ```
 docker-compose run web /bin/bash -l -c "rails dbconsole"
 Password for user postgres:
@@ -127,7 +126,7 @@ Finally to actually run the tests:
 docker-compose run -e "RAILS_ENV=test" web /bin/bash -l -c "rake test"
 ```
 
-To backup a docker image to a tar file:
+To backup a docker image to a tar file for sharing with others:
 ```
 docker save protectedplanet_web > protectedplanet_web.tar
 ```
@@ -137,12 +136,3 @@ You can then share this exact tar file with anyone else and they will have an ex
 ```
 docker load < protectedplanet_web.tar.gz
 ```
-
-### Known issues with Docker:
-
-- Searching with Elasticsearch is not working due to an issue:
-```
-error in search controller: [404] {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index","resource.type":"index_or_alias","resource.id":"protected_areas","index_uuid":"_na_","index":"protected_areas"}],"type":"index_not_found_exception","reason":"no such index","resource.type":"index_or_alias","resource.id":"protected_areas","index_uuid":"_na_","index":"protected_areas"},"status":404}
-```
-
-- Importing the WDPA data is currently not working under Docker in a reliable way.
