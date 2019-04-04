@@ -60,19 +60,19 @@ docker-compose build
 
 To set-up the database
 ```
-docker-compose run web rake db:create
-docker-compose run web rake db:migrate
-docker-compose run web rake db:seed
+docker-compose run web /bin/bash -l -c "rake db:create"
+docker-compose run web /bin/bash -l -c "rake db:migrate"
+docker-compose run web /bin/bash -l -c "rake db:seed"
 ```
 
 To download and extract the frontend
 ```
-docker-compose run -u 'node' web rake bower:install
+docker-compose run -u 'node' web /bin/bash -l -c "rake bower:install"
 ```
 
 To precompile the assets
 ```
-docker-compose run -u 'node' web rake assets:precompile
+docker-compose run -u 'node' web /bin/bash -l -c "rake assets:precompile"
 ```
 
 To bring up the ProtectedPlanet website locally:
@@ -94,11 +94,11 @@ docker-compose up --build
 
 To import the data, in 3 other separate terminals after running `docker-compose up`:
 ```
-docker-compose run web bundle exec sidekiq -q default
+docker-compose run web /bin/bash -l -c "bundle exec sidekiq -q default"
 ```
 
 ```
-docker-compose run web bundle exec sidekiq -q import
+docker-compose run web /bin/bash -l -c "bundle exec sidekiq -q import"
 ```
 
 ```
@@ -119,12 +119,12 @@ CREATE DATABASE
 
 Followed by:
 ```
-docker-compose run -e "RAILS_ENV=test" web rake db:create db:migrate
+docker-compose run -e "RAILS_ENV=test" web /bin/bash -l -c "rake db:create db:migrate"
 ```
 
 Finally to actually run the tests:
 ```
-docker-compose run -e "RAILS_ENV=test" web rake test
+docker-compose run -e "RAILS_ENV=test" web /bin/bash -l -c "rake test"
 ```
 
 To backup a docker image to a tar file:

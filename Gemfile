@@ -1,10 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.0.0'
+gem 'rails', '5.0.2'
 
 gem 'pg', '~> 0.21'
 gem 'activerecord-postgis-adapter', '~> 4.0.0'
-gem 'gdal'
 gem 'dbf', '~> 2.0.7'
 #
 gem 'elasticsearch', '~> 5.0.3'
@@ -41,7 +40,7 @@ group :development do
   gem 'capistrano-sidekiq'
   gem 'capistrano-maintenance', '~> 1.0', require: false
   gem 'capistrano-passenger', '~> 0.2.0', require: false
-  gem 'byebug', '~> 3.1.2'
+  gem 'byebug', '~> 9.0', '>= 9.0.5'
   # gem 'listen', '~> 3.1.5'
   # gem 'spring-watcher-listen', '~> 2.0.0'
   #

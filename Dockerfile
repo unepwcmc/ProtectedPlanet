@@ -1,28 +1,8 @@
-FROM ruby:2.4.1
+FROM gentoo/stage3-amd64
 MAINTAINER andrew.potter@unep-wcmc.org
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    git
-
-RUN apt-get install software-properties-common -y
-
-WORKDIR /gdal
-RUN wget http://download.osgeo.org/gdal/1.11.5/gdal-1.11.5.tar.gz
-RUN tar -xvf gdal-1.11.5.tar.gz
-RUN cd gdal-1.11.5 \
-    && ./configure --prefix=/usr \
-    && make \
-    && make install
-
-# WORKDIR /gdal
-# RUN wget http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz
-# RUN tar -xvf gdal-2.4.0.tar.gz
-# RUN cd gdal-2.4.0 \
-    # && ./configure --prefix=/usr \
-    # && make \
-    # && make install
+RUN emerge --sync && emerge sudo
+RUN emerge dev-vcs/git
 
 WORKDIR /postgres
 RUN wget https://ftp.postgresql.org/pub/source/v11.1/postgresql-11.1.tar.gz
@@ -52,16 +32,29 @@ RUN cd geos-3.7.0 \
     && ./configure --prefix=/usr \
     && make install
 
+ARG USER=protectedplanet
+ARG UID=1000
+ARG HOME=/home/$USER
+RUN useradd --uid $UID --shell /bin/bash --home $HOME $USER
+
+WORKDIR /rvm
+RUN curl -sSL https://github.com/rvm/rvm/tarball/stable -o rvm-stable.tar.gz
+RUN mkdir rvm && cd rvm \
+    && tar --strip-components=1 -xzf ../rvm-stable.tar.gz \
+    && ./install --auto-dotfiles
+
+RUN /bin/bash -l -c ". /home/$USER/.rvm/scripts/rvm"
+RUN /bin/bash -l -c "rvm install 2.4.1"
+
+RUN /bin/bash -l -c "gem install bundler"
+RUN /bin/bash -l -c "gem install rake"
+RUN /bin/bash -l -c "gem install rgeo --version '=0.4.0'" -- --with-geos-dir=/usr/lib
+
 WORKDIR /ProtectedPlanet
 ADD Gemfile /ProtectedPlanet/Gemfile
 ADD Gemfile.lock /ProtectedPlanet/Gemfile.lock
-RUN gem install rgeo --version '=0.4.0' -- --with-geos-dir=/usr/lib
-RUN bundle install
 
-ARG USER=node
-ARG UID=1000
-ARG HOME=/home/$USER
-RUN adduser --uid $UID --shell /bin/bash --home $HOME $USER
+RUN /bin/bash -l -c "bundle install"
 
 COPY . /ProtectedPlanet
 
