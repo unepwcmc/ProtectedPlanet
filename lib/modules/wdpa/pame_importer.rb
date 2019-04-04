@@ -1,10 +1,11 @@
 require 'csv'
 
 module Wdpa::PameImporter
-  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-01-31.csv".freeze
+  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-03-29.csv".freeze
 
   def self.import
     puts "Importing PAME evaluations..."
+    missing_pas = []
 
     CSV.foreach(PAME_EVALUATIONS, headers: true) do |row|
       wdpa_id         = row[1].to_i
@@ -27,7 +28,9 @@ module Wdpa::PameImporter
         end
 
       if protected_area.nil?
-        puts "Could not find Protected Area with wdpa #{wdpa_id}" if Rails.env != 'test'
+        puts "Could not find Protected Area with wdpa #{wdpa_id}" if Rails.env != 'development'
+        missing_pas << wdpa_id
+        puts "So far we have missing_pas: #{missing_pas.count}"
       else
         PameEvaluation.where({
           protected_area: protected_area,
@@ -49,5 +52,7 @@ module Wdpa::PameImporter
     end
 
     puts "Import finished!"
+    puts missing_pas.count
+    puts missing_pas.join(",")
   end
 end
