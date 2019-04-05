@@ -54,6 +54,8 @@ services:
         hard: -1
     ports:
       - "9200:9200"
+    env_file:
+      - '.env'
   kibana:
     image: docker.elastic.co/kibana/kibana:6.3.2
     ports:
