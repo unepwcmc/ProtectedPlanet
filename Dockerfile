@@ -58,6 +58,8 @@ RUN /bin/bash -l -c "bundle install"
 
 COPY . /ProtectedPlanet
 
+RUN chown -R protectedplanet:protectedplanet /home/protectedplanet/.rvm
+
 EXPOSE 3000
 
 CMD ["rails", "server", "-b", "0.0.0.0"]

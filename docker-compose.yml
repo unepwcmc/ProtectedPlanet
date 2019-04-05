@@ -26,6 +26,8 @@ services:
       - protectedplanet_pg_data:/var/lib/postgresql
   redis:
     image: redis
+    env_file:
+      - '.env'
     volumes:
       - protectedplanet_redis_data:/data
   sidekiq:
