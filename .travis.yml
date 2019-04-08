@@ -1,5 +1,10 @@
 language: ruby
+# Manually handle git submodules
+git:
+  submodules: false
 before_install:
+  - sed -i 's/git@github.com:/https:\/\/github.com\//' .gitmodules
+  - git submodule update --init --recursive
   - sudo apt-get purge libgdal1
   - sudo apt-add-repository --remove ppa:ubuntugis/ppa -y
   - sudo apt-get update
