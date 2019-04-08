@@ -1,3 +1,8 @@
+### 2.4.1
+
+* Update the PAME importer to use the latest monthly CSV with additional PAME Evaluation information.
+* Add pame source model.
+
 ### 2.4.0
 
 * Show all blog post (including grandchildren .etc) on the blog page
