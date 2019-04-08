@@ -28,7 +28,7 @@ module Wdpa::PameImporter
         end
 
       if protected_area.nil?
-        puts "Could not find Protected Area with wdpa #{wdpa_id}" if Rails.env != 'development'
+        puts "Could not find Protected Area with wdpa #{wdpa_id}"
         missing_pas << wdpa_id
         puts "So far we have missing_pas: #{missing_pas.count}"
       else
