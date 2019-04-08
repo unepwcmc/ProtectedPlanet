@@ -28,9 +28,7 @@ module Wdpa::PameImporter
         end
 
       if protected_area.nil?
-        puts "Could not find Protected Area with wdpa #{wdpa_id}"
         missing_pas << wdpa_id
-        puts "So far we have missing_pas: #{missing_pas.count}"
       else
         PameEvaluation.where({
           protected_area: protected_area,
@@ -52,7 +50,7 @@ module Wdpa::PameImporter
     end
 
     puts "Import finished!"
-    puts missing_pas.count
+    puts "Missing Protected Areas: #{missing_pas.count}"
     puts missing_pas.join(",")
   end
 end
