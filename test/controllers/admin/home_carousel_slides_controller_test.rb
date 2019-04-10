@@ -46,18 +46,17 @@ class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
   end
 
   def test_creation
-    skip("skipping this test which is broken currently")
     assert_difference 'HomeCarouselSlide.count' do
       post :create, params: {
           :home_carousel_slide => {
           :title => 'test title',
           :description => 'test description',
-          :url => 'test url',
+          :url => 'test url'
         }
     }
       home_carousel_slide = HomeCarouselSlide.last
       assert_response :redirect
-      assert_redirected_to :action => :show, params: {:id => home_carousel_slide}
+      assert_redirected_to admin_home_carousel_slide_path(home_carousel_slide)
       assert_equal 'Home Carousel Slide created', flash[:success]
     end
   end
@@ -73,7 +72,7 @@ class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
 
   def test_update
     put :update, params: {
-      :id => @home_carousel_slide, 
+      :id => @home_carousel_slide,
       :home_carousel_slide => {
         :title => 'Updated'
       }
@@ -87,7 +86,7 @@ class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
 
   def test_update_failure
     put :update, params: {
-      :id => @home_carousel_slide, 
+      :id => @home_carousel_slide,
       :home_carousel_slide => {
         :title => ''
       }
