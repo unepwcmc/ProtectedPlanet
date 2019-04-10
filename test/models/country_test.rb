@@ -104,18 +104,17 @@ class CountryTest < ActiveSupport::TestCase
   end
 
   test '#protected_areas_per_designation returns groups of pa counts per designation' do
-    skip("skipping this test which is broken currently")
     designation_1 = FactoryGirl.create(:designation)
     designation_2 = FactoryGirl.create(:designation)
     country = FactoryGirl.create(:country)
     expected_groups = [{
-      'designation_id' => designation_1.id.to_s,
+      'designation_id' => designation_1.id,
       'designation_name' => designation_1.name,
-      'count' => '2'
+      'count' => 2
     }, {
-      'designation_id' => designation_2.id.to_s,
+      'designation_id' => designation_2.id,
       'designation_name' => designation_2.name,
-      'count' => '3'
+      'count' => 3
     }]
 
     2.times { FactoryGirl.create(:protected_area, countries: [country], designation: designation_1) }
@@ -125,19 +124,18 @@ class CountryTest < ActiveSupport::TestCase
   end
 
   test '#protected_areas_per_iucn_category returns groups of pa counts per iucn_category' do
-    skip("skipping this test which is broken currently")
     iucn_category_1 = FactoryGirl.create(:iucn_category, name: 'Ib')
     iucn_category_2 = FactoryGirl.create(:iucn_category, name: 'V')
     country = FactoryGirl.create(:country)
     expected_groups = [{
-      'iucn_category_id' => iucn_category_1.id.to_s,
+      'iucn_category_id' => iucn_category_1.id,
       'iucn_category_name' => iucn_category_1.name,
-      'count' => '2',
+      'count' => 2,
       'percentage' => '40.00'
     }, {
-      'iucn_category_id' => iucn_category_2.id.to_s,
+      'iucn_category_id' => iucn_category_2.id,
       'iucn_category_name' => iucn_category_2.name,
-      'count' => '3',
+      'count' => 3,
       'percentage' => '60.00'
     }]
 
@@ -148,21 +146,20 @@ class CountryTest < ActiveSupport::TestCase
   end
 
   test '#protected_areas_per_governance returns groups of pa counts per governance' do
-    skip("skipping this test which is broken currently")
     governance_1 = FactoryGirl.create(:governance, name: 'Regional')
     governance_2 = FactoryGirl.create(:governance, name: 'International')
     country = FactoryGirl.create(:country)
     expected_groups = [{
-      'governance_id' => governance_1.id.to_s,
+      'governance_id' => governance_1.id,
       'governance_name' => governance_1.name,
       'governance_type' => nil,
-      'count' => '2',
+      'count' => 2,
       'percentage' => '40.00'
     }, {
-      'governance_id' => governance_2.id.to_s,
+      'governance_id' => governance_2.id,
       'governance_name' => governance_2.name,
       'governance_type' => nil,
-      'count' => '3',
+      'count' => 3,
       'percentage' => '60.00'
     }]
 
