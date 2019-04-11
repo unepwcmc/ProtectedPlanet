@@ -1,7 +1,11 @@
-### 2.4.1
+### 2.4.2
 
 * Update the PAME importer to use the latest monthly CSV with additional PAME Evaluation information.
 * Add pame source model.
+
+### 2.4.1
+
+* Add a warning message to country pages that have restricted Protected Areas
 
 ### 2.4.0
 
