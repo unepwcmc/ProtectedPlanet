@@ -4,7 +4,7 @@ class HomeController < ApplicationController
 
     @thematicAreas = [
       {
-        title: "WDPA",
+        title: "Current WDPA",
         content: "The World Database on Protected Areas (WDPA) is the most
                   comprehensive global database on terrestrial and marine protected
                   areas.",
