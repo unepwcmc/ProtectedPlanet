@@ -1,4 +1,7 @@
 class HomeCarouselSlide < ActiveRecord::Base
+
+  self.table_name = "comfy_cms_home_carousel_slides"
+
   validates :title,
     presence: true,
     length: {maximum: 75},
