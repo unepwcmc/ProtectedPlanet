@@ -12,6 +12,12 @@ class HomeController < ApplicationController
         url: Rails.root.join("/c#{@wdpa_page.try(:full_path)}")
       },
       {
+        title: "Historic WDPA",
+        content: "Access to historic versions of the WDPA and case studies showing the strengths and weaknesses of using historic versions.",
+        image: "historic_wdpa.jpg",
+        url: Rails.root.join("/c#{@historic_wdpa_page.try(:full_path)}")
+      },
+      {
         title: "Marine Protected Areas",
         content: "Explore the World's marine protected areas",
         image: "marine.png",
