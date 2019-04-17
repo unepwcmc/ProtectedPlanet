@@ -1,12 +1,5 @@
-<%
-options = [
-  { id: 1, name: '2010', url: 'https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500' },
-  { id: 2, name: '2011', url: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80' },
-  { id: 3, name: '2012', url: 'https://cdn.pixabay.com/photo/2018/10/30/16/06/water-lily-3784022__340.jpg' }
-]
-%>
 <div class="wdpa-download-tool">
   <h2>Versions of the WDPA</h2>
   <p>Please find below access to previous WDPA monthly releases in Esri file geodatabase format.</p>
-  <wdpa-download-tool :select-options="<%= options.to_json %>" ></wdpa-download-tool>
+  <wdpa-download-tool :select-options="<%= @wdpa_releases.to_json %>" ></wdpa-download-tool>
 </div>

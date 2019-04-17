@@ -59,6 +59,8 @@ Rails.application.routes.draw do
   get '/marine', to: 'marine#index'
   get '/marine/download_designations', to: 'marine#download_designations'
 
+  get '/c/historic-versions-of-the-wdpa', to: 'historic_wdpa#index'
+
   comfy_route :cms_admin, path: '/admin'
   comfy_route :cms, path: '/c', sitemap: false
 
