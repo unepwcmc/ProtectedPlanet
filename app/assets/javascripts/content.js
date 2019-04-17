@@ -4,3 +4,7 @@
 //= require 'modules/cms/external_links'
 //= require 'modules/cms/base'
 //= require vue/components/SelectWithContent
+//= require vue/components/v_select_searchable/focus-helpers
+//= require vue/components/v_select_searchable/mixin-popup-close-listeners
+//= require vue/components/v_select_searchable/VSelectSearchable
+//= require vue/components/wdpa_download_tool/WdpaDownloadTool

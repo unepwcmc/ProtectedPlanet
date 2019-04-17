@@ -22,7 +22,8 @@ $(document).ready( ->
   new Vue({
     el: '.v-cms-content',
     components: {
-      'select-with-content': VComponents['vue/components/SelectWithContent']
+      'select-with-content': VComponents['vue/components/SelectWithContent'],
+      'wdpa-download-tool': VComponents['vue/components/wdpa_download_tool/WdpaDownloadTool']
     }
   })
 )
