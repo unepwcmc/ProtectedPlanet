@@ -1,0 +1,15 @@
+.page-header
+  %h2 Historic Wdpa Release
+  
+%p
+  %strong Year: 
+  = @historic_wdpa_release.year
+%p
+  %strong Month: 
+  = @historic_wdpa_release.month
+%p
+  %strong Url: 
+  = @historic_wdpa_release.url
+
+
+= link_to 'Historic WDPA Releases', admin_historic_wdpa_releases_path, :class => 'btn btn-primary'

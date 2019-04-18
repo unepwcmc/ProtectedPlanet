@@ -1,0 +1,23 @@
+.page-header
+  = link_to 'New Historic Wdpa Release', new_admin_historic_wdpa_release_path, :class => 'btn btn-default pull-right'
+  %h2= 'Historic Wdpa Releases'
+
+= will_paginate @historic_wdpa_releases, :theme => 'comfy'
+
+%table.table.table-hover.table-bordered
+  %tr
+    %th Year
+    %th Month
+    %th Url
+    %th
+  - @historic_wdpa_releases.each do |historic_wdpa_release|
+    %tr
+      %td.main= historic_wdpa_release.year
+      %td= historic_wdpa_release.month
+      %td= historic_wdpa_release.url
+      %td
+        .btn-group.btn-group-sm
+          = link_to 'Edit', edit_admin_historic_wdpa_release_path(historic_wdpa_release), :class => 'btn btn-default'
+          = link_to 'Delete', admin_historic_wdpa_release_path(historic_wdpa_release), :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-danger'
+
+= will_paginate @historic_wdpa_releases, :theme => 'comfy'

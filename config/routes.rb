@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   namespace :admin do
+    resources :historic_wdpa_releases
     resources :home_carousel_slides
   end
 
