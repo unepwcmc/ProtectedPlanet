@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-v-start flex-wrap">
     <v-select-searchable 
       :options="selectOptions"
       :config="selectConfig"
