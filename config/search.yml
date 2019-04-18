@@ -116,6 +116,12 @@ filters:
     is_green_list:
       type: 'equality'
       path: 'is_green_list'
+    green_list_status:
+      type: 'equality'
+      path: 'green_list_status'
+    green_list_status_date:
+      type: 'equality'
+      path: 'green_list_status_date'
     country:
       type: 'nested'
       path: 'countries_for_index'

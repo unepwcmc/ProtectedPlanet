@@ -14,6 +14,16 @@
       "field": "is_green_list"
     }
   },
+  "green_list_status": {
+    "terms": {
+      "field": "green_list_status"
+    }
+  },
+  "green_list_status_date": {
+    "terms": {
+      "field": "green_list_status_date"
+    }
+  },
   "has_irreplaceability_info": {
     "terms": {
       "field": "has_irreplaceability_info"

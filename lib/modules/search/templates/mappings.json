@@ -26,6 +26,12 @@
       "is_green_list": {
         "type": "boolean"
       },
+      "green_list_status": {
+        "type": "keyword"
+      },
+      "green_list_status_date": {
+        "type": "keyword"
+      },
       "has_parcc_info": {
         "type": "boolean"
       },
