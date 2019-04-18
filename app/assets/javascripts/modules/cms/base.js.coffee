@@ -18,6 +18,13 @@ $(document).ready( ->
       setPosition()
   )
 
+  if $iframe = $('iframe')
+    $iframe.width('100%')
+    $iframe.height 281/500 * $iframe.width()
+
+    window.addEventListener 'resize', ->
+      $iframe.height 281/500 * $iframe.width()
+
   # generate a new vue instance and initialise all the vue components on the page
   new Vue({
     el: '.v-cms-content',
