@@ -1,6 +1,6 @@
-= form.text_field :url
-= form.text_field :month
-= form.text_field :year
+= form.text_field :url, maxlength: 255
+= form.select :month, month_select_options
+= form.select :year, year_select_options
 
 = form.form_group :class => 'form-actions' do
   = form.submit :class => 'btn btn-primary'

@@ -13,7 +13,7 @@
   - @historic_wdpa_releases.each do |historic_wdpa_release|
     %tr
       %td.main= historic_wdpa_release.year
-      %td= historic_wdpa_release.month
+      %td= Date::MONTHNAMES[historic_wdpa_release.month]
       %td= historic_wdpa_release.url
       %td
         .btn-group.btn-group-sm

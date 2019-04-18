@@ -6,7 +6,7 @@
   = @historic_wdpa_release.year
 %p
   %strong Month: 
-  = @historic_wdpa_release.month
+  = Date::MONTHNAMES[@historic_wdpa_release.month]
 %p
   %strong Url: 
   = @historic_wdpa_release.url

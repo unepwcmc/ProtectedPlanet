@@ -12,10 +12,14 @@ class Admin::HistoricWdpaReleasesController < Comfy::Admin::Cms::BaseController
   end
 
   def new
+    @year_select_options = year_select_options
+    @month_select_options = month_select_options
     render
   end
 
   def edit
+    @year_select_options = year_select_options
+    @month_select_options = month_select_options
     render
   end
 
@@ -58,5 +62,13 @@ protected
 
   def historic_wdpa_release_params
     params.fetch(:historic_wdpa_release, {}).permit(:url, :month, :year)
+  end
+
+  def month_select_options
+    Date::MONTHNAMES.each_with_index.map { |name, index| [name, index] }.drop(1)
+  end
+
+  def year_select_options
+    [*2015..(Date.today.year + 1)]
   end
 end
