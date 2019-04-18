@@ -2,9 +2,13 @@ var INPUT_SELECTORS = 'select, input, textarea, button, a, [tabindex]:not([tabin
 var DISABLED_TAB_VALUE = -5;
 var TAB_KEYCODE = 9;
 
-var isTabForward = e => e.keyCode === TAB_KEYCODE && !e.shiftKey
+var isTabForward = function (e) {
+  return e.keyCode === TAB_KEYCODE && !e.shiftKey
+}
 
-var isTabBackward = e => e.keyCode === TAB_KEYCODE && e.shiftKey
+var isTabBackward = function (e) {
+  return e.keyCode === TAB_KEYCODE && e.shiftKey
+}
 
 var getInputs = function (el) {
   return el.querySelectorAll(INPUT_SELECTORS)

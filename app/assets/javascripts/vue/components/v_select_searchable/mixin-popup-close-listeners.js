@@ -4,8 +4,8 @@ const closeOnEscKeypress = true
 const toggleVariable = 'isActive'
 
 var mixinPopupCloseListeners = function (closeCallback) {
-  return {
-    mounted () {
+  return ({
+    mounted: function () {
       if(closeOnClickOutside) {
         window.addEventListener('click', this.clickOutsideHandler)
       }
@@ -16,11 +16,11 @@ var mixinPopupCloseListeners = function (closeCallback) {
     },
 
     methods: {
-      clickOutsideHandler (e) {
+      clickOutsideHandler: function (e) {
         if (this[toggleVariable] && !this.$el.contains(e.target)) { this[closeCallback](e) }
       },
 
-      escKeypressHandler (e) {
+      escKeypressHandler: function (e) {
         if (e.keyCode === ESCAPE_KEYCODE) { 
           if(this[toggleVariable]) {
             this[closeCallback](e)
@@ -30,9 +30,9 @@ var mixinPopupCloseListeners = function (closeCallback) {
       }
     },
 
-    beforeDestroy() {
+    beforeDestroy: function () {
       window.removeEventListener('click', this.clickOutsideHandler)
       window.removeEventListener('keydown', this.escKeypressHandler)
     }
-  }
+  })
 }
