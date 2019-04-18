@@ -20,13 +20,13 @@ var preventTab = function (e) {
   }
 }
 
-var disabvarabbing = function (el) {
+var disableTabbing = function (el) {
   Array.prototype.forEach.call(getInputs(el), function (input) {
     input.tabIndex = DISABLED_TAB_VALUE
   })
 }
 
-var reenabvarabbing = function (el) {
+var reenableTabbing = function (el) {
   Array.prototype.forEach.call(el.querySelectorAll("[tabindex='" + DISABLED_TAB_VALUE + "']"), function (input) {
     input.tabIndex = 0
   })
