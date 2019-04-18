@@ -42,7 +42,7 @@
             :name="dropdownOptionsName"
             :value="option"
             v-model="selectedInternal">
-          <span class="v-select__option-text">{{ option.name }}</span>
+          <span @click="closeSelect" class="v-select__option-text">{{ option.name }}</span>
         </label>
       </li>
 
