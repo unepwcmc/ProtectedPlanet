@@ -1,6 +1,7 @@
 class Admin::HistoricWdpaReleasesController < Comfy::Admin::Cms::BaseController
 
   before_action :build_historic_wdpa_release,  :only => [:new, :create]
+  before_action :set_select_options,  :except => [:index, :show, :destroy]
   before_action :load_historic_wdpa_release,   :only => [:show, :edit, :update, :destroy]
 
   def index
@@ -12,14 +13,10 @@ class Admin::HistoricWdpaReleasesController < Comfy::Admin::Cms::BaseController
   end
 
   def new
-    @year_select_options = year_select_options
-    @month_select_options = month_select_options
     render
   end
 
   def edit
-    @year_select_options = year_select_options
-    @month_select_options = month_select_options
     render
   end
 
@@ -62,6 +59,11 @@ protected
 
   def historic_wdpa_release_params
     params.fetch(:historic_wdpa_release, {}).permit(:url, :month, :year)
+  end
+
+  def set_select_options
+    @year_select_options = year_select_options
+    @month_select_options = month_select_options
   end
 
   def month_select_options
