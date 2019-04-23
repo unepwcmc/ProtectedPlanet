@@ -45,6 +45,7 @@ class ApplicationController < ActionController::Base
     @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
     @green_list_page   = Comfy::Cms::Page.find_by_slug("green-list")
     @equity_page       = Comfy::Cms::Page.find_by_slug("equity")
+    @aichi_11_page     = Comfy::Cms::Page.find_by_label("Global Partnership on Aichi Target 11")
   end
 
   def check_for_pdf

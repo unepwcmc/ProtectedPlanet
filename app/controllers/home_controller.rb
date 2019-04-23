@@ -56,6 +56,12 @@ class HomeController < ApplicationController
         content: "Equity relates to how fairly a protected area is managed: who has a say in decisions, how decisions are taken, and how the costs and benefits are shared.",
         image: "equity.jpg",
         url: Rails.root.join("/c#{@equity_page.try(:full_path)}")
+      },
+      {
+        title: "Global Partnership on Aichi Target 11",
+        content: "Aichi Target 11 on protected and conserved areas is one of the 20 targets of the Strategic Plan for Biodiversity 2011-2020. This plan provides an overarching framework for the conservation of biodiversity and guides implementation by state parties.",
+        image: "aichi-11.jpg",
+        url: Rails.root.join("/c#{@aichi_11_page.try(:full_path)}")
       }
     ]
 
