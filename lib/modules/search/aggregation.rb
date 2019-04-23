@@ -2,7 +2,8 @@ class Search::Aggregation
   AGGREGATORS = {
     'boolean' => Search::Aggregators::Boolean,
     'model'   => Search::Aggregators::Model,
-    'grouped' => Search::Aggregators::Grouped
+    'grouped' => Search::Aggregators::Grouped,
+    'green_list' => Search::Aggregators::GreenList
   }
 
   TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'templates')
