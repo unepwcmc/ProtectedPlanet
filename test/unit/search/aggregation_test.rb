@@ -18,6 +18,32 @@ class SearchAggregationTest < ActiveSupport::TestCase
           "field" => "is_green_list"
         }
       },
+      "green_list_status"=> {
+        "terms"=> {
+          "field"=> "green_list_status"
+        },
+        "aggs"=> {
+          "aggregation"=> {
+            "terms"=> {
+              "field"=> "green_list_status",
+              "size"=> 500
+            }
+          }
+        }
+      },
+      "green_list_status_date"=> {
+        "terms"=> {
+          "field"=> "green_list_status_date"
+        },
+        "aggs"=> {
+          "aggregation"=> {
+            "terms"=> {
+              "field"=> "green_list_status_date",
+              "size"=> 500
+            }
+          }
+        }
+      },
       "has_irreplaceability_info" => {
         "terms" => {
           "field" => "has_irreplaceability_info"
@@ -165,6 +191,18 @@ class SearchAggregationTest < ActiveSupport::TestCase
           {'key' => 'T', 'doc_count' => 2},
           {'key' => 'F', 'doc_count' => 10}
         ]
+      },
+      'green_list_status' => {
+        'doc_count'=> 1,
+        'buckets'=> [
+          {'key' => 'Candidate', 'doc_count' => 1}
+        ]
+      },
+      'green_list_status_date' => {
+        'doc_count'=> 1,
+        'buckets'=> [
+          {'key' => '2018', 'doc_count' => 1},
+        ]
       }
     }
     expected_response = {
@@ -224,6 +262,18 @@ class SearchAggregationTest < ActiveSupport::TestCase
         query: 'has_irreplaceability_info',
         count: 2,
         identifier: true
+      }],
+      'green_list_status' => [{
+        label: 'Candidate',
+        query: 'green_list_status',
+        count: 1,
+        identifier: 'Candidate'
+      }],
+      'green_list_status_date' => [{
+        label: '2018',
+        query: 'green_list_status_date',
+        count: 1,
+        identifier: '2018'
       }]
     }
 

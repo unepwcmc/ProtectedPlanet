@@ -73,6 +73,8 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "has_irreplaceability_info" => true,
       "has_parcc_info" => false,
       "is_green_list"=>false,
+      "green_list_status"=>nil,
+      "green_list_status_date"=>nil,
       "coordinates" => [2.0, 1.0],
       "sub_locations" => [
         {

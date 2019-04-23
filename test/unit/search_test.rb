@@ -57,6 +57,14 @@ class TestSearch < ActiveSupport::TestCase
           "is_green_list" => {
             "terms" => { "field" => "is_green_list" }
           },
+          "green_list_status"=> {
+            "terms"=> { "field"=> "green_list_status" },
+            "aggs"=> { "aggregation"=> { "terms"=> { "field"=> "green_list_status", "size"=> 500 } } }
+          },
+          "green_list_status_date"=> {
+            "terms"=> { "field"=> "green_list_status_date" },
+            "aggs"=> { "aggregation"=> { "terms"=> { "field"=> "green_list_status_date", "size"=> 500 } } }
+          },
           "has_irreplaceability_info" => {
             "terms" => { "field" => "has_irreplaceability_info" }
           },
