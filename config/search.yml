@@ -79,6 +79,10 @@ aggregations:
   governance:
     type: "model"
     class: "Governance"
+  green_list_status:
+    type: "green_list"
+  green_list_status_date:
+    type: "green_list"
 filters:
     type:
       type: 'type'
