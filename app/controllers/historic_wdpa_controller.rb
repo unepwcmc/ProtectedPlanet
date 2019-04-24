@@ -3,7 +3,7 @@ class HistoricWdpaController < ApplicationController
     wdpa_releases = HistoricWdpaRelease.all.order(:year, :month).as_json
 
     wdpa_releases.each do |release|
-      release[:name] = "#{release['year']} - #{Date::MONTHNAMES[release['month']]}"
+      release['name'] = "#{release['year']} - #{Date::MONTHNAMES[release['month']]}"
     end
 
     @wdpa_releases = wdpa_releases
