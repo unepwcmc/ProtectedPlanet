@@ -11,7 +11,7 @@ module Wdpa::PameImporter
       wdpa_id         = row[1].to_i
       methodology     = row[3]
       year            = row[4].to_i
-      protected_area  = ProtectedArea.find_by_wdpa_id(wdpa_id)
+      protected_area  = ProtectedArea.find_by_wdpa_id(wdpa_id) || nil
       metadata_id     = row[6].to_i
       url             = row[5]
       pame_source     = PameSource.where({
