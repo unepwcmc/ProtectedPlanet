@@ -1,6 +1,11 @@
 require 'test_helper'
 
 class DownloadRouterTest < ActiveSupport::TestCase
+
+  def setup
+    Rails.cache.clear
+  end
+
   test '.request, called with search domain and an hash of parameters, sends a
    request to the correct requester' do
     expected_response = {'status' => 'generating', 'token' => '123'}
@@ -29,7 +34,6 @@ class DownloadRouterTest < ActiveSupport::TestCase
 
   test '.set_email, called with a domain and params including an email, sets
    the email in the properties of the given token' do
-    skip("skipping this test which randomly fails")
     domain = 'general'
     params = {'id' => '123', 'email' => 'test@test.com'}
 
