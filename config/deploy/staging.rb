@@ -1,14 +1,14 @@
 set :stage, :staging
-set :branch, 'develop'
+set :branch, "staging_deploy"
 
-server "stage.protectedplanet.net", user: 'wcmc', roles: %w{web}
-server "util.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{util}
-server "db.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{db}, :no_release => true
+
+server "new-web.pp-staging.linode.protectedplanet.net", user: 'wcmc', roles: %w{app web db}
 
 set :application, "protectedplanet"
-set :server_name, "web-staging-linode.protectedplanet.net"
+set :server_name, "protectedplanet"
 set :sudo_user, "wcmc"
 set :app_port, "80"
+
 
 
 # server-based syntax

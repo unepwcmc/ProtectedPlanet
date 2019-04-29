@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.4.0'
+lock '3.11.0'
 
 set :application, 'ProtectedPlanet'
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
@@ -19,7 +19,7 @@ set :migration_role, :util
 
 
 set :rvm_type, :user
-set :rvm_ruby_version, '2.1.3'
+set :rvm_ruby_version, '2.4.1'
 
 set :pty, true
 

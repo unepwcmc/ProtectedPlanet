@@ -35,7 +35,7 @@ end
 #
 group :development do
   gem 'spring'
-  gem 'capistrano', '~> 3.4', require: false
+  gem 'capistrano', '~> 3.11.0', require: false
   gem 'capistrano-rails',   '~> 1.1', require: false
   gem 'capistrano-bundler', '~> 1.1.4', require: false
   gem 'capistrano-rvm',   '~> 0.1', require: false
@@ -90,7 +90,8 @@ gem 'dotenv-deployment'
 
 gem 'best_in_place', '~> 3.0.1'
 gem 'turnout', '~> 2.5.0'
-gem 'bystander', git: 'https://github.com/unepwcmc/bystander'
+
+gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
 gem 'devise', '~> 4.0.0' # MAJOR VERSION CHANGE, CHECK DOCS
 
