@@ -16,6 +16,24 @@ set :whenever_roles, [:util]
 set :migration_role, :util
 
 
+set :nvm_type, :user # or :system, depends on your nvm setup
+set :nvm_node, 'v10.15.1'
+set :nvm_map_bins, %w{node npm yarn}
+
+
+namespace :bower do
+  desc 'Install dependencies with npm'
+  task :install do
+    on roles(:web) do
+      within release_path do
+        execute "bash -c 'source ~/.nvm/nvm.sh && cd '#{release_path}' && bower install'"
+      end
+    end
+  end
+end
+
+
+before 'deploy:assets:precompile', 'bower:install'
 
 
 set :rvm_type, :user
