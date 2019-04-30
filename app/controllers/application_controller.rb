@@ -3,9 +3,9 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  after_filter :store_location
-  before_filter :load_cms_pages
-  before_filter :check_for_pdf
+  after_action :store_location
+  before_action :load_cms_pages
+  before_action :check_for_pdf
 
   def raise_404
     raise PageNotFound
@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
     @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
     @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
     @green_list_page   = Comfy::Cms::Page.find_by_slug("green-list")
-    @equity_page   = Comfy::Cms::Page.find_by_slug("equity")
+    @equity_page       = Comfy::Cms::Page.find_by_slug("equity")
   end
 
   def check_for_pdf

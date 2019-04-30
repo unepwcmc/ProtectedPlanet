@@ -1,5 +1,5 @@
 class RegionController < ApplicationController
-  before_filter :load_vars
+  before_action :load_vars
 
   def show
   end

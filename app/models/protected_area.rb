@@ -1,4 +1,4 @@
-class ProtectedArea < ActiveRecord::Base
+class ProtectedArea < ApplicationRecord
   include GeometryConcern
 
   has_and_belongs_to_many :countries
@@ -9,6 +9,7 @@ class ProtectedArea < ActiveRecord::Base
   has_many :networks_protected_areas, dependent: :destroy
   has_many :networks, through: :networks_protected_areas
   has_many :pame_evaluations
+  has_many :story_map_links
 
   belongs_to :legal_status
   belongs_to :iucn_category

@@ -7,7 +7,7 @@ class AssetsControllerTest < ActionController::TestCase
 
     AssetGenerator.stubs(:protected_area_tile).returns("the tile")
 
-    get :tiles, "id" => pa.id, "type" => "protected_area"
+    get :tiles, params: {"id" => pa.id, "type" => "protected_area"}
     assert_equal "the tile", @response.body
   end
 end

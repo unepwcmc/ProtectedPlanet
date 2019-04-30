@@ -15,11 +15,6 @@ class DownloadTest < ActiveSupport::TestCase
     Download::Generators::Csv.expects(:generate).with(csv_zip_path, nil).returns(true)
     S3.expects(:upload).with(Download::CURRENT_PREFIX + csv_download_zip_name, csv_zip_path)
 
-    kml_download_zip_name = 'an_download-kml.zip'
-    kml_zip_path = File.join(Rails.root, 'tmp', kml_download_zip_name)
-    Download::Generators::Kml.expects(:generate).with(kml_zip_path, nil).returns(true)
-    S3.expects(:upload).with(Download::CURRENT_PREFIX + kml_download_zip_name, kml_zip_path)
-
     download_success = Download.generate download_name
     assert download_success, "Expected Download.generate to return true on success"
   end
@@ -32,9 +27,6 @@ class DownloadTest < ActiveSupport::TestCase
 
     Download::Generators::Csv.stubs(:generate).returns(true)
     S3.expects(:upload).with(Download::IMPORT_PREFIX + 'an_download-csv.zip', anything)
-
-    Download::Generators::Kml.stubs(:generate).returns(true)
-    S3.expects(:upload).with(Download::IMPORT_PREFIX + 'an_download-kml.zip', anything)
 
     Download.generate download_name, for_import: true
   end
@@ -52,16 +44,12 @@ class DownloadTest < ActiveSupport::TestCase
     csv_zip_path = File.join(Rails.root, 'tmp', 'an_download-csv.zip')
     Download::Generators::Csv.expects(:generate).with(csv_zip_path, pa_ids)
 
-    kml_zip_path = File.join(Rails.root, 'tmp', 'an_download-kml.zip')
-    Download::Generators::Kml.expects(:generate).with(kml_zip_path, pa_ids)
-
     download_success = Download.generate download_name, wdpa_ids: pa_ids
     assert download_success, "Expected Download.generate to return true on success"
   end
 
   test '.generate removes the zip after uploading to S3' do
     Download::Generators::Shapefile.stubs(:generate).returns(true)
-    Download::Generators::Kml.stubs(:generate).returns(true)
     Download::Generators::Csv.stubs(:generate).returns(true)
     S3.stubs(:upload)
 
@@ -71,19 +59,15 @@ class DownloadTest < ActiveSupport::TestCase
     csv_zip_path = File.join(Rails.root, 'tmp', 'an_download-csv.zip')
     FileUtils.expects(:rm_rf).with(csv_zip_path)
 
-    kml_zip_path = File.join(Rails.root, 'tmp', 'an_download-kml.zip')
-    FileUtils.expects(:rm_rf).with(kml_zip_path)
-
     Download.generate 'an_download'
   end
 
   test '.generate does not upload to S3 if a Generator returns
    false' do
     Download::Generators::Csv.stubs(:generate).returns(true)
-    Download::Generators::Kml.stubs(:generate).returns(true)
     Download::Generators::Shapefile.expects(:generate).returns(false)
 
-    S3.expects(:upload).twice
+    S3.expects(:upload).once
 
     Download.generate 'an_download'
   end

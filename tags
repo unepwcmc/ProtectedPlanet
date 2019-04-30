@@ -179,7 +179,6 @@ DownloadGenerator	./lib/modules/wdpa/download_generator.rb	/^class Wdpa::Downloa
 DownloadGeneratorTest	./test/unit/wdpa/download_generator_test.rb	/^class DownloadGeneratorTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
 DownloadGeneratorsBaseTest	./test/unit/download/generators/base_test.rb	/^class DownloadGeneratorsBaseTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
 DownloadGeneratorsCsvTest	./test/unit/download/generators/csv_test.rb	/^class DownloadGeneratorsCsvTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
-DownloadKmlTest	./test/unit/download/generators/kml_test.rb	/^class DownloadKmlTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
 DownloadPollersGeneralTest	./test/unit/download/pollers/general_test.rb	/^class DownloadPollersGeneralTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
 DownloadPollersProjectTest	./test/unit/download/pollers/project_test.rb	/^class DownloadPollersProjectTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
 DownloadPollersSearchTest	./test/unit/download/pollers/search_test.rb	/^class DownloadPollersSearchTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
@@ -264,7 +263,6 @@ IucnCategory	./app/models/iucn_category.rb	/^class IucnCategory < ActiveRecord::
 IucnCategoryTest	./test/models/iucn_category_test.rb	/^class IucnCategoryTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
 Jurisdiction	./app/models/jurisdiction.rb	/^class Jurisdiction < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
 JurisdictionTest	./test/models/jurisdiction_test.rb	/^class JurisdictionTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
-Kml	./lib/modules/download/generators/kml.rb	/^class Download::Generators::Kml < Download::Generators::Base$/;"	c	class:Download.Generators	inherits:Download.Generators.Base
 LegacyProtectedArea	./app/models/legacy_protected_area.rb	/^class LegacyProtectedArea < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
 LegacyProtectedAreaTest	./test/models/legacy_protected_area_test.rb	/^class LegacyProtectedAreaTest < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
 LegalStatus	./app/models/legal_status.rb	/^class LegalStatus < ActiveRecord::Base$/;"	c	inherits:ActiveRecord.Base
@@ -408,7 +406,6 @@ TEMPLATE_PATH	./lib/modules/ogr/shapefile.rb	/^  TEMPLATE_PATH = File.join(File.
 TITLE_GENERATORS	./app/helpers/search_helper.rb	/^  TITLE_GENERATORS = {$/;"	C	class:SearchHelper
 TMP_PATH	./lib/modules/download.rb	/^  TMP_PATH = File.join(Rails.root, 'tmp')$/;"	C	class:Download
 TYPE	./lib/modules/download/generators/csv.rb	/^  TYPE = 'csv'$/;"	C	class:Download.Generators.Csv
-TYPE	./lib/modules/download/generators/kml.rb	/^  TYPE = 'kml'$/;"	C	class:Download.Generators.Kml
 TYPE	./lib/modules/download/generators/shapefile.rb	/^  TYPE = 'shapefile'$/;"	C	class:Download.Generators.Shapefile
 TYPE_CONVERSIONS	./lib/modules/wdpa/attribute.rb	/^  TYPE_CONVERSIONS = {$/;"	C	class:Wdpa.Attribute
 TestCartoDbImporter	./test/unit/wdpa/carto_db_importer_test.rb	/^class TestCartoDbImporter < ActiveSupport::TestCase$/;"	c	inherits:ActiveSupport.TestCase
@@ -828,7 +825,6 @@ enable_caching	./app/controllers/application_controller.rb	/^  def enable_cachin
 execute_importers	./lib/modules/wdpa/importer.rb	/^  def execute_importers wdpa_release$/;"	f	class:Wdpa.Importer
 export	./lib/modules/download/generators/base.rb	/^  def export$/;"	f	class:Download.Generators.Base
 export	./lib/modules/download/generators/csv.rb	/^  def export$/;"	f	class:Download.Generators.Csv
-export	./lib/modules/download/generators/kml.rb	/^  def export$/;"	f	class:Download.Generators.Kml
 export	./lib/modules/ogr/postgres.rb	/^  def self.export file_type, file_name, query$/;"	F	class:Ogr.Postgres
 export_component	./lib/modules/download/generators/shapefile.rb	/^  def export_component name, props$/;"	f	class:Download.Generators.Shapefile
 export_from_postgres	./lib/modules/download/generators/base.rb	/^  def export_from_postgres type$/;"	f	class:Download.Generators.Base
@@ -1058,7 +1054,6 @@ parsed_filters	./app/models/saved_search.rb	/^  def parsed_filters$/;"	f	class:S
 pas_with_iucn_category	./lib/modules/stats/global.rb	/^  def self.pas_with_iucn_category$/;"	F	class:Stats.Global
 path	./lib/modules/download/generators/base.rb	/^  def path$/;"	f	class:Download.Generators.Base
 path	./lib/modules/download/generators/csv.rb	/^  def path$/;"	f	class:Download.Generators.Csv
-path	./lib/modules/download/generators/kml.rb	/^  def path$/;"	f	class:Download.Generators.Kml
 path	./lib/modules/shapefile.rb	/^  attr_accessor :path$/;"	f	class:Shapefile
 path=	./lib/modules/shapefile.rb	/^  attr_accessor :path$/;"	f	class:Shapefile
 path_without_extension	./lib/modules/download/generators/base.rb	/^  def path_without_extension$/;"	f	class:Download.Generators.Base

@@ -1,4 +1,4 @@
-class Country < ActiveRecord::Base
+class Country < ApplicationRecord
   include GeometryConcern
 
   has_and_belongs_to_many :protected_areas

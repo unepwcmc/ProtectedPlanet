@@ -61,19 +61,19 @@ docker-compose build
 
 To set-up the database
 ```
-docker-compose run web rake db:create
-docker-compose run web rake db:migrate
-docker-compose run web rake db:seed
+docker-compose run web /bin/bash -l -c "rake db:create"
+docker-compose run web /bin/bash -l -c "rake db:migrate"
+docker-compose run web /bin/bash -l -c "rake db:seed"
 ```
 
 To download and extract the frontend
 ```
-docker-compose run -u 'node' web rake bower:install
+docker-compose run web /bin/bash -l -c "rake bower:install"
 ```
 
 To precompile the assets
 ```
-docker-compose run -u 'node' web rake assets:precompile
+docker-compose run web /bin/bash -l -c "rake assets:precompile"
 ```
 
 To bring up the ProtectedPlanet website locally:
@@ -100,14 +100,14 @@ docker-compose run -v ~/path/to/sql/dump:/import_database web bash -c "psql prot
 
 To reindex the data in Elasticsearch:
 ```
-docker-compose run web bundle exec rails c
+docker-compose run web /bin/bash -l -c "bundle exec rails c"
 Search::Index.delete
 Search::Index.create
 ```
 
 For running tests, we have an additional table which must be created:
 ```
-docker-compose run web rails dbconsole
+docker-compose run web /bin/bash -l -c "rails dbconsole"
 Password for user postgres:
 psql (11.1)
 Type "help" for help.
@@ -118,12 +118,12 @@ CREATE DATABASE
 
 Followed by:
 ```
-docker-compose run -e "RAILS_ENV=test" web rake db:create db:migrate
+docker-compose run -e "RAILS_ENV=test" web /bin/bash -l -c "rake db:create db:migrate"
 ```
 
 Finally to actually run the tests:
 ```
-docker-compose run -e "RAILS_ENV=test" web rake test
+docker-compose run -e "RAILS_ENV=test" web /bin/bash -l -c "rake test"
 ```
 
 To backup a docker image to a tar file for sharing with others:

@@ -99,25 +99,4 @@ class TestOgrPostgres < ActiveSupport::TestCase
 
     Ogr::Postgres.export :csv, export_file_name, query
   end
-
-  test '.export given the KML type, executes a ogr2ogr command
-   that exports to a KML with the given query' do
-    db_config = ActiveRecord::Base.connection_config
-    query = 'SELECT * FROM table'
-    driver = 'KML'
-    export_file_name = 'export.csv'
-
-    ogr_command = """
-      ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config[:host]}
-      user=#{db_config[:username]} dbname=#{db_config[:database]}
-      password=#{db_config[:password]}\"
-      -sql \"#{query}\"
-      -lco \"ENCODING=UTF-8\"
-      -lco \"WRITE_BOM=YES\"
-    """.squish
-
-    Ogr::Postgres.expects(:system).with(ogr_command).once
-
-    Ogr::Postgres.export :kml, export_file_name, query
-  end
 end

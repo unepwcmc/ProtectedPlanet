@@ -35,4 +35,41 @@ module CmsHelper
   rescue
     "#"
   end
+
+  def hasParent? page
+    page.parent
+  end
+
+  def breadcrumb_link page
+    "<a href='/c#{page.full_path}' title='Visit #{page.label}' class='breadcrumbs__link'>#{page.label}</a>"
+  end
+
+  def get_breadcrumbs current_page
+    page = current_page
+    breadcrumbs = []
+
+    breadcrumbs << breadcrumb_link(page)
+
+    while hasParent?(page) && page.parent.label != 'Index'
+      page = page.parent
+
+      breadcrumbs << breadcrumb_link(page)
+    end
+
+    breadcrumbs
+  end
+
+  def get_filtered_pages pages
+    if params[:year]
+      pages = pages.select{|page| page['created_at'].year == params[:year].to_i}
+
+      if params[:month]
+        pages = pages.select{|page| page['created_at'].month == params[:month].to_i}
+      end
+    else
+      pages
+    end
+
+    pages
+  end
 end

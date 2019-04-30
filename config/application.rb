@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 # Enable profiling for Garbage Collection (and
 # get all the information on Newrelic

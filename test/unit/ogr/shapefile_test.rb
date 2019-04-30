@@ -1,5 +1,5 @@
 require 'test_helper'
-require 'gdal-ruby/ogr'
+#require 'gdal-ruby/ogr'
 
 class TestOgrShapefile < ActiveSupport::TestCase
   test '.convert_with_query runs the correct ogr2ogr command with the

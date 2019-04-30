@@ -1,6 +1,11 @@
 require 'test_helper'
 
 class DownloadRouterTest < ActiveSupport::TestCase
+
+  def setup
+    Rails.cache.clear
+  end
+
   test '.request, called with search domain and an hash of parameters, sends a
    request to the correct requester' do
     expected_response = {'status' => 'generating', 'token' => '123'}

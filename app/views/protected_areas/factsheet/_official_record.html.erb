@@ -36,3 +36,9 @@
   <% end %>
 </div>
 
+<% if @protected_area.story_map_links.any? %>
+    <h2 class="header--section u-margin--page">Link to story map</h2>
+    <% @protected_area.story_map_links.each do |story_map_link| %>
+      <p class="u-margin--page"><%= link_to "Story Map(#{story_map_link.link_type})", story_map_link.link, class: 'link is-external', title: 'view the Story map', target: '_blank'%></p>
+    <% end %>
+<% end %>

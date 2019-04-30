@@ -1,4 +1,4 @@
-class WikipediaArticle < ActiveRecord::Base
+class WikipediaArticle < ApplicationRecord
   attr_accessor :title
   has_one :protected_area
 

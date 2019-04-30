@@ -1,6 +1,6 @@
 class ProtectedAreasController < ApplicationController
-  after_filter :record_visit
-  after_filter :enable_caching
+  after_action :record_visit
+  after_action :enable_caching
 
   def show
     id = params[:id]
