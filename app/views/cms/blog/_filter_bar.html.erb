@@ -1,0 +1,28 @@
+<aside class="u-only-desktop filter-bar filter-bar--non-fixed filter-bar--larger">
+  <div class="filter-bar__inner">
+    <header class="header-with-delimiter filter-bar__header">
+      <h2>
+        Filters
+      </h2>
+    </header>
+    <div class="filter-bar__body">
+      <div class="js-expandable-section filter-bar__group">
+        <h3 class="js-trigger js-switch filter-bar__group-title is-open">Time period</h3>
+        <div class="js-target">
+          <% CmsPresenter.all_by_year(posts).each do |(year, pages)| %>
+            <a class="filter-bar__value" href="<% @cms_page.full_path %>?year=<%= year %>">
+              <%= year %>
+              <strong class="filter-bar__count">(<%= pages.length %>)</strong>
+            </a>
+
+            <% CmsPresenter.all_by_month(posts, year).each do |(month, pages)| %>
+              <a class="filter-bar__value filter-bar__sub-value" href="<% @cms_page.full_path %>?year=<%= year %>&month=<%= month.split('-').second %>">
+                <%= month.split('-').first %> <strong class="filter-bar__count">(<%= pages.length %>)</strong>
+              </a>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>

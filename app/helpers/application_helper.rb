@@ -127,10 +127,6 @@ module ApplicationHelper
       content: '.CSV',
       attrs: {'data-type' => 'csv', 'class' => 'u-bold tooltip__element link-with-icon'}
     },
-    kml: {
-      content: '.KML',
-      attrs: {'data-type' => 'kml', 'class' => 'u-bold tooltip__element link-with-icon'}
-    },
     shp: {
       content: '.SHP',
       attrs: {'data-type' => 'shapefile', 'class' => 'u-bold tooltip__element link-with-icon'}
