@@ -1,3 +1,8 @@
+### 2.4.3
+
+* Update the PAME importer to use the latest monthly CSV (May 2019 release).
+* Move Home Carousel slide model under cms namespace to prevent contents disappearing after release.
+
 ### 2.4.2
 
 * Update the PAME importer to use the latest monthly CSV with additional PAME Evaluation information.
