@@ -1,7 +1,7 @@
 {
   "name": "bower-rails generated vendor assets",
   "dependencies": {
-    "protectedplanet-frontend": "feature/temporal-wdpa",
+    "protectedplanet-frontend": "temporal-wdpa-test",
     "html5shiv": "",
     "jquery": "< 2.0.0",
     "REM-unit-polyfill": "",
