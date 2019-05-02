@@ -77,12 +77,12 @@ After that, it's pretty standard:
 ```
 
 Before you can really do much with the website, you'll need to import
-a WDPA release. We have a small subset in the development S3 bucket, 
+a WDPA release. We have a small subset in the development S3 bucket,
 so make sure you have the right secrets in your `.env`, and run this:
 
 ```
   bundle exec sidekiq
-  
+
   # in another window
   bundle exec rails c
   > ImportWorkers::S3PollingWorker.perform_async
@@ -111,6 +111,29 @@ incorrectly for RGeo's use. You can fix this easily:
     #=> /usr/lib/libgeos-3.4.2.so
   ln -s /usr/lib/libgeos-3.4.2.so /usr/lib/libgeos.so
 ```
+
+Please note, if you experience an error when viewing the regions or countries pages like this:
+
+```
+undefined method `point' for nil:NilClass
+```
+
+You must install the rgeo gem with the correct path for geos specified. Please use the following example as guidance:
+
+```
+  /usr/local/bin/geos-config --prefix
+    /usr/local/Cellar/geos/3.6.2
+
+  gem install rgeo --version '=0.4.0' -- --with-geos-dir=/usr/local/Cellar/geos/3.6.2/
+    Building native extensions with: '--with-geos-dir=/usr/local/Cellar/geos/3.6.2/'
+    This could take a while...
+    Successfully installed rgeo-0.4.0
+    Parsing documentation for rgeo-0.4.0
+    Done installing documentation for rgeo after 2 seconds
+    1 gem installed
+```
+
+This error should now be resolved.
 
 ### Configuration and Secrets
 

@@ -30,7 +30,7 @@ RUN cd node-v10.8.0 \
     && wget https://www.npmjs.org/install.sh | sh
 
 RUN whereis npm
-RUN npm install bower -g
+RUN npm install bower yarn -g
 
 WORKDIR /geos
 RUN wget https://download.osgeo.org/geos/geos-3.7.0.tar.bz2
