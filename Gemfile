@@ -8,7 +8,6 @@ gem 'dbf', '~> 2.0.7'
 #
 gem 'elasticsearch', '~> 5.0.3'
 #
-gem 'bower-rails', '~> 0.10.0'
 gem 'sass-rails', '~> 5.0.7'
 gem 'sprockets-rails', '~> 3.2.1'
 gem 'uglifier', '~> 2.7.2'

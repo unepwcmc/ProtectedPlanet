@@ -1,0 +1,29 @@
+//keep old responsive mixins with old breakpoints to avoid breaking styles across the existing site
+
+@mixin only-mobile {
+  @media only screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin only-desktop {
+  @media only screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+//----------------------------------------
+// breakpoint variables
+//----------------------------------------
+$small: rem-calc(628); //mobile
+$medium: rem-calc(763); //tablet portrait
+$large: rem-calc(1024); //tablet landscape
+
+//----------------------------------------
+// responsive mixins
+//----------------------------------------
+@mixin breakpoint($breakpoint){
+  @media only screen and (min-width: $breakpoint + 1) {
+    @content;
+  }
+}

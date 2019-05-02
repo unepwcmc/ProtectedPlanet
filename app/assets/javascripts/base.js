@@ -1,6 +1,5 @@
 //= require 'require'
-//= require REM-unit-polyfill/js/rem.min.js
-//= require jquery
+//= require jquery/dist/jquery.min
 //= require jquery_ujs
 //= require 'jquery.tablesorter.min'
 //= require 'async-img.min'

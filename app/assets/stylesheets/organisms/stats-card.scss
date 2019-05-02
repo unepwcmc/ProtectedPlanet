@@ -1,0 +1,50 @@
+@include b(stats-card) {
+  &:not(:last-child) {
+    border-bottom: dashed rem-calc(1) $grey-33;
+  }
+
+  padding: rem-calc(30 0);
+
+  @include e(body) {
+    @extend %flexbox;
+    @include justify-content(flex-start);
+    @include align-items(flex-end);
+    @include flex-wrap(wrap);
+
+    @include value;
+
+    @include m(color) {
+      @include value($brown);
+      @include cube(6.25rem, $bg-color: $grey-15, $fill-color: $brown);
+    }
+
+    @include m(alt-color) {
+      @include value($blue--light);
+      @include cube(6.25rem, $bg-color: $grey-15, $fill-color: $blue--light);
+    }
+
+    @include m(color-light) {
+      @include value(lighten($brown, 15%));
+    }
+
+    @include m(alt-color-light) {
+      @include value(lighten($blue--light, 15%));
+    }
+  }
+
+  @include e(row) {
+    @extend %flexbox;
+    @include flex-direction(column);
+
+    @include breakpoint($small){ @include flex-direction(row); }
+  }
+
+  @include e(element) {
+    margin-right: rem-calc(16);
+    margin-bottom: rem-calc(16);
+
+    @include m(push-right) {
+      margin-right: rem-calc(40);
+    }
+  }
+}

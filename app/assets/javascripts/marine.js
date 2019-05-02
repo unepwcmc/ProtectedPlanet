@@ -1,6 +1,6 @@
 //= require vue
-//= require d3
-//= require scrollmagic
+//= require d3/dist/d3
+//= require scrollmagic/scrollmagic/minified/ScrollMagic.min
 //= require vue/charts/HorizontalBarChart
 //= require vue/charts/interactive_multiline/TabTitle
 //= require vue/charts/interactive_multiline/InteractiveMultiline
@@ -16,7 +16,7 @@
 //= require vue/components/StickyTab
 //= require vue/components/TwitterShare
 //= require 'require'
-//= require jquery
+//= require jquery/dist/jquery.min
 //= require 'map'
 //= require modules/marine/base
 //= require modules/maps/base
