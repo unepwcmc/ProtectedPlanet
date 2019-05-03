@@ -4,6 +4,8 @@ module Wdpa::PameImporter
   PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-04-25.csv".freeze
 
   def self.import
+    puts "Deleting old PAME evaluations..."
+    PameEvaluation.delete_all
     puts "Importing PAME evaluations..."
     missing_pas = []
 
