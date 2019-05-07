@@ -1144,7 +1144,7 @@ DEPENDENCIES
   rack-cache (~> 1.2)
   rails (= 5.0.2)
   rails-controller-testing
-  sass-rails (~> 5.0.4)
+  sass-rails (~> 5.0.7)
   selenium-webdriver
   sidekiq (~> 5.2.5)
   simplecov
