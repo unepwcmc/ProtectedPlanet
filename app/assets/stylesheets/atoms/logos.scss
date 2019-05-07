@@ -12,7 +12,7 @@
     height: 30px;
   }
 
-  background: url('https://s3.amazonaws.com/wcmc.logo/UN-Environment-WCMC+logo+2017+white.svg') no-repeat;
+  background: url('https://s3.amazonaws.com/wcmc.logo/UNEP_WCMC_logo_white.svg') no-repeat;
   background-size: 80%;
   background-position: center;
 }
@@ -27,7 +27,7 @@
     height: 30px;
   }
 
-  background: asset-url('images/IUCN_logo@2x.png') no-repeat;
+  background: image_url('IUCN_logo@2x.png') no-repeat;
   background-size: 65%;
   background-position: center;
 }
@@ -37,7 +37,7 @@
   padding-left: 2.5rem;
   content: "";
   display: block;
-  background: asset-url("images/hand-solo.png") center left/2rem no-repeat;
+  background: image_url('hand-solo.png') center left/2rem no-repeat;
 }
 .protectedplanet-logo {
   @include protectedplanet-logo;

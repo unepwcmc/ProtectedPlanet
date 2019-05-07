@@ -17,14 +17,8 @@
 @import 'bourbon/core/bourbon';
 @import 'bourbon-neat/app/assets/stylesheets/neat';
 
-
-// // fonts
-// @import '../../../font-awesome/scss/font-awesome';
-
 // // maps
-// @import '../../../leaflet/dist/leaflet';
-// @import '../../../leaflet.markercluster/dist/MarkerCluster';
-// bower components
+@import 'leaflet/dist/leaflet';
 
 // development mixins
 @import 'utilities/flexbox';
