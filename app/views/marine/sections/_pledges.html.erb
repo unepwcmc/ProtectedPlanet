@@ -23,10 +23,14 @@
       <div class="flex-row justify-content-between template--marine__pledges-title">
         <h4>Global MPA pledges</h4>
 
+<%
+=begin%>
         <%= link_to '/', title: 'Download the commitments and pledges data', class: 'button--basic-link u-hide-mobile' do %>
           <i class="fa fa-download"></i>
           Download this data
-        <% end %>
+        <% end %> 
+<%
+=end%>
       </div>
 
       <sunburst class="" :json="<%= @pledges %>"></sunburst>
