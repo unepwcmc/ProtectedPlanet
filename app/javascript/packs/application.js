@@ -16,5 +16,3 @@
 // const imagePath = (name) => images(name, true)
 
 import '../vue.js'
-
-console.log('vue')

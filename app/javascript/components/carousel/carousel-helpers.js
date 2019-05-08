@@ -1,9 +1,9 @@
-var getWidthWithMargins = function (el) {
-  return el.offsetWidth + getNumericCssProperty(el, 'marginLeft') + getNumericCssProperty(el, 'marginRight') 
-}
+export const getWidthWithMargins = el => el.offsetWidth
+  + getNumericCssProperty(el, 'marginLeft')
+  + getNumericCssProperty(el, 'marginRight')
 
-var getNumericCssProperty = function (el, property) {
-  var propertyStyle = getElementStyle(el)[property]
+const getNumericCssProperty = (el, property) => {
+  const propertyStyle = getElementStyle(el)[property]
 
   if(propertyStyle.indexOf('rem') !== -1) {
     return convertRem(parseFloat(propertyStyle))
@@ -11,21 +11,18 @@ var getNumericCssProperty = function (el, property) {
   return parseInt(propertyStyle, 10)
 }
 
-var getElementStyle = function (el) {
-  return el.currentStyle || window.getComputedStyle(el)
-}
+const convertRem = value => value * getRootElementFontSize()
 
-var convertRem = function (value) {
-  return value * getRootElementFontSize()
-}
+//for ie - maybe not the safest method - assumes returns pxs
+const getRootElementFontSize = () => 
+  parseFloat(getComputedStyle(document.documentElement).fontSize)
 
-var getRootElementFontSize = function () {
-  return parseFloat(getComputedStyle(document.body).fontSize)
-}
+const getElementStyle = el =>
+  el.currentStyle || window.getComputedStyle(el)
 
-var getNewOrder = function (oldOrder, changeInIndex, totalSlides) {
-  var newOrderBeforeMod = oldOrder - changeInIndex
-  var newOrder;
+export const getNewOrder = (oldOrder, changeInIndex, totalSlides) => {
+  const newOrderBeforeMod = oldOrder - changeInIndex
+  let newOrder
 
   if (newOrderBeforeMod < 0) {
     newOrder = newOrderBeforeMod + totalSlides * 3
@@ -38,9 +35,9 @@ var getNewOrder = function (oldOrder, changeInIndex, totalSlides) {
   return newOrder
 }
 
-var getChangeInIndex = function (newSlide, oldSlide, totalSlides, forceDirection) {
-  var directSlideDisplacement = newSlide - oldSlide
-  var indirectSlideDisplacement
+export const getChangeInIndex = (newSlide, oldSlide, totalSlides, forceDirection) => {
+  const directSlideDisplacement = newSlide - oldSlide
+  let indirectSlideDisplacement
 
   if (directSlideDisplacement > 0) {
     indirectSlideDisplacement = - (oldSlide + totalSlides - newSlide)
@@ -61,6 +58,4 @@ var getChangeInIndex = function (newSlide, oldSlide, totalSlides, forceDirection
   }
 }
 
-var modGreaterThanZero = function (x, base) {
-  return ((x - 1 + base) % base + 1)
-}
+export const modGreaterThanZero = (x, base) => ((x - 1 + base) % base + 1)
