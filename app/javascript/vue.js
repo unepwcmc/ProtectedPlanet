@@ -4,6 +4,7 @@ import Vue from 'vue/dist/vue.esm'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import HorizontalBars from './components/horizontal-bars/HorizontalBars'
+import Rectangles from './components/rectangles/Rectangles'
 import StickyNav from './components/sticky-nav/StickyNav'
 import StickyTab from './components/sticky-nav/StickyTab'
 
@@ -17,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Carousel,
         CarouselSlide,
         HorizontalBars,
+        Rectangles,
         StickyNav,
         StickyTab
       }
@@ -38,6 +40,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution', reverse: false })
-  // .setClassToggle('.sm-size-distribution .sm-rectangle', 'v-rectangles__rectangle-animate')
-  // .addTo(marineScrollMagic)

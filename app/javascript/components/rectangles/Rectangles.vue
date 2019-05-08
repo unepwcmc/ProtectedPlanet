@@ -12,18 +12,18 @@
 </template>
 
 <script>
-  module.exports = {
+  import Rectangle from './Rectangle'
+
+  export default {
     name: 'rectangles',
 
-    components: {
-      'rectangle': VComponents['vue/components/rectangles/Rectangle']
-    },
+    components: { Rectangle },
 
     props: {
       json: { required: true }
     },
 
-    data: function() {
+    data() {
       return {
         max: 0,
         rectangles: [],
@@ -34,27 +34,39 @@
       }
     },
 
-    created: function() {
+    created() {
       this.rectangles = this.json
       this.calculateMax()
     },
 
-    methods: {
-      calculateMax: function () {
-        var array = []
+    mounted () {
+      this.scrollMagicHandlers()
+    },
 
-        this.json.forEach(function (dataset) {
+    methods: {
+      scrollMagicHandlers () {
+        const marineScrollMagic = new ScrollMagic.Controller()
+        
+        new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution', reverse: false })
+          .setClassToggle('.sm-size-distribution .sm-rectangle', 'v-rectangles__rectangle-animate')
+          .addTo(marineScrollMagic)
+      },
+
+      calculateMax () {
+        let array = []
+
+        this.json.forEach((dataset) => {
           array.push(dataset.km)
         })
 
         this.max = Math.max.apply(null, array)
       },
 
-      percent: function (km) {
-        return Math.round((km / this.max)*100) + '%'
+      percent (km) {
+        return `${Math.round((km / this.max)*100)}%`
       },
 
-      color: function(key){
+      color (key) {
         return this.colors[key]
       }
     },

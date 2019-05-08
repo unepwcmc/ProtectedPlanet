@@ -8,8 +8,6 @@
 //= require vue/charts/Treemap
 //= require vue/components/Counter
 //= require vue/components/InteractiveTreemap
-//= require vue/components/rectangles/Rectangle
-//= require vue/components/rectangles/Rectangles
 //= require vue/components/TwitterShare
 //= require 'require'
 //= require jquery/dist/jquery.min

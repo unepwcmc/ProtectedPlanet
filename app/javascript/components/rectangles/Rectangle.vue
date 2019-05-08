@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'rectangle',
 
     props: {
@@ -17,7 +17,7 @@
       color: String
     },
 
-    data: function() {
+    data () {
       return {
         styleObject: {
           backgroundColor: '',
@@ -27,15 +27,15 @@
       }
     },
 
-    created: function() {
+    created () {
       this.styleObject.width = this.percent
       this.styleObject.height = this.percent
       this.styleObject.backgroundColor = this.color
     },
 
     computed: {
-      styledKm: function () {
-        return this.km.toLocaleString() + ' km²'        
+      styledKm () {
+        return `${this.km.toLocaleString()} km²`
       }
     }
   }
