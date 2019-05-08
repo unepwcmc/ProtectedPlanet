@@ -67,6 +67,7 @@ RUN /bin/bash -l -c "bundle install"
 COPY . /ProtectedPlanet
 
 RUN chown -R protectedplanet:protectedplanet /home/protectedplanet/.rvm
+RUN chown -R protectedplanet:protectedplanet /home/protectedplanet/.bundle
 
 EXPOSE 3000
 
