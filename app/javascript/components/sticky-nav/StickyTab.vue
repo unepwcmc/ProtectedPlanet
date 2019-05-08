@@ -8,22 +8,20 @@
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'sticky-tab',
 
-    data: function () {
+    data () {
       return  {
         isActive: false
       }
     },
 
     methods: {
-      toggleTab: function () {
+      toggleTab () {
         if (!this.isActive) {
-          var self = this
-
-          window.setTimeout(function () {
-            self.isActive = false
+          window.setTimeout(() => {
+            this.isActive = false
           }, 5000)
         }
 

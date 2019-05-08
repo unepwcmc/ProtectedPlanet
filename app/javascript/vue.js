@@ -4,6 +4,7 @@ import Vue from 'vue/dist/vue.esm'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import StickyNav from './components/sticky-nav/StickyNav'
+import StickyTab from './components/sticky-nav/StickyTab'
 
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
@@ -14,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
       components: {
         Carousel,
         CarouselSlide,
-        StickyNav
+        StickyNav,
+        StickyTab
       }
     })
   }
