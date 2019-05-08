@@ -7,8 +7,6 @@
 //= require vue/charts/Sunburst
 //= require vue/charts/Treemap
 //= require vue/components/Counter
-//= require vue/components/horizontal_bars/HorizontalBar
-//= require vue/components/horizontal_bars/HorizontalBars
 //= require vue/components/InteractiveTreemap
 //= require vue/components/rectangles/Rectangle
 //= require vue/components/rectangles/Rectangles

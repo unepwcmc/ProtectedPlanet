@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'horizontal-bar',
 
     props: {
@@ -21,7 +21,7 @@
       url: String
     },
 
-    data: function() {
+    data () {
       return {
         styleObject: {
           width: 0
@@ -29,12 +29,12 @@
       }
     },
 
-    created: function() {
+    created () {
       this.styleObject.width = this.percent
     },
 
     computed: {
-      styledKm: function () {
+      styledKm () {
         return this.km.toLocaleString() + ' km²'
       }
     }

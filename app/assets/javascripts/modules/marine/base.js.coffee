@@ -6,6 +6,4 @@ $(document).ready( ->
     mapMarine.render()
   )
 
-  # generate a new vue instance and initialise all the vue components on the page
-  
 )

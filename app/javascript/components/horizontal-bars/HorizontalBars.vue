@@ -12,41 +12,53 @@
 </template>
 
 <script>
-  module.exports = {
+  import HorizontalBar from './HorizontalBar'
+
+  export default {
     name: 'horizontal-bars',
 
-    components: {
-      'horizontal-bar': VComponents['vue/components/horizontal_bars/HorizontalBar'],
-    },
+    components: { HorizontalBar },
 
     props: {
       json: { required: true }
     },
 
-    data: function() {
+    data () {
       return {
         max: 0,
         bars: {}
       }
     },
 
-    created: function() {
+    created () {
       this.bars = this.json
       this.calculateMax()
     },
 
-    methods: {
-      calculateMax: function () {
-        var array = []
+    mounted () {
+      this.scrollMagicHandlers()
+    },
 
-        this.json.forEach(function (dataset) {
+    methods: {
+      scrollMagicHandlers () {
+        const marineScrollMagic = new ScrollMagic.Controller()
+        
+        new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution', reverse: false })
+          .setClassToggle('.sm-size-distribution .sm-bar', 'v-horizontal-bars__bar-wrapper-animate')
+          .addTo(marineScrollMagic)
+      },
+
+      calculateMax () {
+        let array = []
+
+        this.json.forEach((dataset) => {
           array.push(dataset.km)
         })
 
         this.max = Math.max.apply(null, array)
       },
 
-      percent: function (km) {
+      percent (km) {
         return Math.round((km / this.max)*100) + '%'
       }
     }
