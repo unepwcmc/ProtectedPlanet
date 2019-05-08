@@ -25,14 +25,14 @@
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'sticky-nav',
 
     props: {
       json: Array
     },
 
-    data: function() {
+    data () {
       return {
         config: {
           breakpoints : {
@@ -47,7 +47,7 @@
       }
     },
 
-    mounted: function() {
+    mounted () {
       this.setNavHeight()
       this.navY = $(this.navClass).offset().top
 
@@ -55,44 +55,40 @@
       this.monitorResize()
 
       // give d3 svgs a change to render before creating the scroll magic hooks
-      var self = this
-
-      window.setTimeout(function () {
-        self.scrollMagicHandlers()
+      window.setTimeout(() => {
+        this.scrollMagicHandlers()
       }, 2000)
     },
 
     methods: {
-      toggleMenu: function () {
+      toggleMenu () {
         this.isMenuOpen = !this.isMenuOpen
       },
 
-      closeMenu: function () {
+      closeMenu () {
         if(this.isMenuOpen){
           this.isMenuOpen = false
         }
       },
 
-      updateNav: function () {
-        var self = this
-
-        setInterval(function () {
-          scrollY = window.pageYOffset
+      updateNav () {
+        setInterval(() => {
+          const scrollY = window.pageYOffset
           
-          if(scrollY > self.navY + self.navHeight){
-            self.isNavSticky = true
+          if(scrollY > this.navY + this.navHeight){
+            this.isNavSticky = true
           } else {
-            self.isNavSticky = false
+            this.isNavSticky = false
           }
         }, 100)
       },
 
-      setNavHeight: function () {
+      setNavHeight () {
         this.navHeight = $(this.navClass).height()
       },
 
       scroll: function (sectionId) {
-        sectionY = $('#' + sectionId).offset().top - this.navHeight + 1
+        const sectionY = $('#' + sectionId).offset().top - this.navHeight + 1
 
         $('html, body').animate({
           scrollTop: sectionY
@@ -101,43 +97,40 @@
         })
       },
 
-      monitorResize: function () {
-        var self = this
-
-        $(window).on('resize', function(){
+      monitorResize () {
+        $(window).on('resize', () => {
           width = $(window).width()
 
-          if(width > self.config.breakpoints.medium){ self.isMenuOpen = false }
+          if(width > this.config.breakpoints.medium){ this.isMenuOpen = false }
 
-          self.setNavHeight()
-          self.updateScrollMagicDurations()
+          this.setNavHeight()
+          this.updateScrollMagicDurations()
         })
       },
 
-      linkId: function (link) {
+      linkId (link) {
         return link + '-menu-item'
       },
 
-      scrollMagicHandlers: function () {
+      scrollMagicHandlers () {
         this.navScrollMagic = new ScrollMagic.Controller()
 
-        var self = this
-        var scrollMagicScenes = []
+        let scrollMagicScenes = []
 
         // add scene for each item in the navigation
         this.json.forEach(function (link) {
-          var scene = {}
+          let scene = {}
           
           scene.id = link.id
 
           scene.scene = new ScrollMagic.Scene({ 
-            duration: self.getSceneDuration(link.id),
+            duration: this.getSceneDuration(link.id),
             triggerElement: '#' + link.id, 
             triggerHook: 'onLeave' 
           })
-          .offset(-self.navHeight)
+          .offset(-this.navHeight)
           .setClassToggle('#' + link.id + '-menu-item', 'v-sticky-nav__link-active')
-          .addTo(self.navScrollMagic)
+          .addTo(this.navScrollMagic)
 
           scrollMagicScenes.push(scene)
         })
@@ -145,16 +138,14 @@
         this.scrollMagicScenes = scrollMagicScenes
       },
 
-      updateScrollMagicDurations: function () {
-        var self = this
-
-        this.scrollMagicScenes.forEach(function (scene) {
-          scene.scene.duration(self.getSceneDuration(scene.id))
+      updateScrollMagicDurations () {
+        this.scrollMagicScenes.forEach((scene) => {
+          scene.scene.duration(this.getSceneDuration(scene.id))
         })
       },
 
       getSceneDuration: function (id) {
-        var section = $('#' + id)
+        const section = $('#' + id)
 
         return section.innerHeight()
       }
