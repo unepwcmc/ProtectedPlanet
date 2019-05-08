@@ -118,7 +118,7 @@
         let scrollMagicScenes = []
 
         // add scene for each item in the navigation
-        this.json.forEach(function (link) {
+        this.json.forEach((link) => {
           let scene = {}
           
           scene.id = link.id
