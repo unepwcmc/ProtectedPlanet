@@ -66,9 +66,9 @@ docker-compose run web /bin/bash -l -c "rake db:migrate"
 docker-compose run web /bin/bash -l -c "rake db:seed"
 ```
 
-To download and extract the frontend
+To install front end dependencies
 ```
-docker-compose run web /bin/bash -l -c "rake bower:install"
+docker-compose run web /bin/bash -l -c "yarn install"
 ```
 
 To precompile the assets
