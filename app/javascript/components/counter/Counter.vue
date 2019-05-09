@@ -95,21 +95,21 @@
 
         // coverage stats shown over the map
         new ScrollMagic.Scene({ triggerElement: '.sm-coverage', reverse: false })
-          .on('start', function () {
+          .on('start', () => {
             if($(this.$el).hasClass('sm-coverage-counter')) { this.count() }
           })
           .addTo(counterScrollMagic)
 
         // national waters and high seas infographic
         new ScrollMagic.Scene({ triggerElement: '.sm-infographic', reverse: false })
-          .on('start', function () {
+          .on('start', () => {
             if($(this.$el).hasClass('sm-infographic-counter')) { this.count() }
           })
           .addTo(counterScrollMagic)
 
         // pledges
         new ScrollMagic.Scene({ triggerElement: '.sm-pledges', reverse: false })
-          .on('start', function () {
+          .on('start', () => {
             if($(this.$el).hasClass('sm-pledges')) { this.count() }
           })
           .addTo(counterScrollMagic)

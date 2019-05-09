@@ -1,4 +1,5 @@
 import Vue from 'vue/dist/vue.esm'
+import ScrollMagic from 'scrollmagic'
 
 // components
 import Carousel from './components/carousel/Carousel'
@@ -38,15 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
   }
+
+  const marineScrollMagic = new ScrollMagic.Controller()
+
+  new ScrollMagic.Scene({ triggerElement: '.sm-infographic', reverse: false })
+    .setClassToggle('.sm-infographic .infographic__bar--pa', 'infographic__bar--pa--animate')
+    .addTo(marineScrollMagic)
 })
 
 
-  // marineScrollMagic = new ScrollMagic.Controller()
-
-
-  // new ScrollMagic.Scene({ triggerElement: '.sm-infographic', reverse: false })
-  //   .setClassToggle('.sm-infographic .infographic__bar--pa', 'infographic__bar--pa--animate')
-  //   .addTo(marineScrollMagic)
-
-
-
+  

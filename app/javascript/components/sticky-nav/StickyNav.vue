@@ -101,7 +101,7 @@
 
       monitorResize () {
         $(window).on('resize', () => {
-          width = $(window).width()
+          const width = $(window).width()
 
           if(width > this.config.breakpoints.medium){ this.isMenuOpen = false }
 

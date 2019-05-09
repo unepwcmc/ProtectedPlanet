@@ -44,7 +44,7 @@
     computed: {
       twitterUrl () {
         const quoteLimit = this.charLimit - 6 - this.twitterHandle.length - 5 // the 6 is for "" ... and 1 space // the 5 is for via and 2 spaces
-        const quote = this.quote
+        let quote = this.quote
 
         if (quote.length > quoteLimit) {
           quote = quote.substring(0, quoteLimit) + '...'
