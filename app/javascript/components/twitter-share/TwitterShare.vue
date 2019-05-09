@@ -18,10 +18,10 @@
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'twitter-share',
 
-    data: function () {
+    data () {
       return {
         twitterHandle: 'protectedplanet',
         charLimit: 140,
@@ -36,77 +36,75 @@
       }
     },
 
-    mounted: function () {
+    mounted () {
       this.getPageUrl()
       this.addListeners()
     },
 
     computed: {
-      twitterUrl: function () {
-        var quoteLimit = this.charLimit - 6 - this.twitterHandle.length - 5 // the 6 is for "" ... and 1 space // the 5 is for via and 2 spaces
-        var quote = this.quote
+      twitterUrl () {
+        const quoteLimit = this.charLimit - 6 - this.twitterHandle.length - 5 // the 6 is for "" ... and 1 space // the 5 is for via and 2 spaces
+        const quote = this.quote
 
         if (quote.length > quoteLimit) {
           quote = quote.substring(0, quoteLimit) + '...'
         }
 
-        text = this.addQuoteMarks(quote)
+        const text = this.addQuoteMarks(quote)
 
         return encodeURI('https://twitter.com/intent/tweet/?text=' + text + '&url=' + this.url + '&via=' + this.twitterHandle)
       },
 
-      emailUrl: function () {
-        text = this.addQuoteMarks(this.quote)
+      emailUrl () {
+        const text = this.addQuoteMarks(this.quote)
 
         return encodeURI('mailto:?subject=Marine Protected Planet&body=' + text + '\n\n' + this.url)
       }
     },
 
     methods: {
-      getPageUrl: function () {
-        var href = window.location.href
+      getPageUrl () {
+        const href = window.location.href
 
         this.url = href.split('#')[0]
       },
 
-      addQuoteMarks: function (text) {
+      addQuoteMarks (text) {
         return '"' + text + '"'
       },
 
-      addListeners: function () {
-        var that = this
-
+      addListeners () {
         // listen for text being selected
-        document.addEventListener("selectionchange", function() {
+        document.addEventListener("selectionchange", () => {
 
           // add flag to make sure that the mouse up listener is only added once
           // whilst the user is highlighting text
-          if (!that.watchingMouseUp) {
-            that.watchingMouseUp = true
+          if (!this.watchingMouseUp) {
+            this.watchingMouseUp = true
 
             // listen for when the user stops highlighting text
-            document.addEventListener("mouseup", function(e) {
+            document.addEventListener("mouseup", (e) => {
 
               // get selected text
-              var selected = window.getSelection().toString()
+              const selected = window.getSelection().toString()
 
               // remove flag
-              that.watchingMouseUp = false
+              this.watchingMouseUp = false
 
               // only update the quote and show the share box if the selected text isn't blank
               // otherwise hide the twitter share pop up
               if (selected.length > 0) {
-                var textPosition = window.getSelection().getRangeAt(0).getBoundingClientRect()
-                var top = window.pageYOffset + textPosition.top - 5
-                var left = textPosition.left + ( .5 * textPosition.width)
-
-                that.isActive = true
-                that.styleObject.top = top + 'px'
-                that.styleObject.left = left + 'px'
-                that.quote = selected
+                const textPosition = window.getSelection().getRangeAt(0).getBoundingClientRect(),
+                  top = window.pageYOffset + textPosition.top - 5,
+                  left = textPosition.left + ( .5 * textPosition.width)
+                
+                this.isActive = true
+                this.styleObject.top = top + 'px'
+                this.styleObject.left = left + 'px'
+                this.quote = selected
 
               } else {
-                that.isActive = false
+                this.isActive = false
               }
             }, { once: true })
           }

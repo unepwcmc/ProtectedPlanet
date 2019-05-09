@@ -7,6 +7,7 @@ import HorizontalBars from './components/horizontal-bars/HorizontalBars'
 import Rectangles from './components/rectangles/Rectangles'
 import StickyNav from './components/sticky-nav/StickyNav'
 import StickyTab from './components/sticky-nav/StickyTab'
+import TwitterShare from './components/twitter-share/TwitterShare'
 
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
@@ -20,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
         HorizontalBars,
         Rectangles,
         StickyNav,
-        StickyTab
+        StickyTab,
+        TwitterShare
       }
     })
   }
