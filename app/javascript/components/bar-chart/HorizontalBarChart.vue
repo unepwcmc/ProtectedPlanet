@@ -3,6 +3,9 @@
 </template>
 
 <script>
+  import ScrollMagic from 'scrollmagic'
+  import * as d3 from 'd3'
+
   export default {
     name: "horizontal-bar-chart",
 

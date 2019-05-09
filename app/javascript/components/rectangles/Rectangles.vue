@@ -12,6 +12,7 @@
 </template>
 
 <script>
+  import ScrollMagic from 'scrollmagic'
   import Rectangle from './Rectangle'
 
   export default {

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'tab-title',
 
     props: {
@@ -12,13 +12,13 @@
     },
 
     methods: {
-      clickTab: function () {
+      clickTab () {
         this.$emit('tabClicked', this.name)
       }
     },
 
     computed: {
-      isActive: function () {
+      isActive () {
         return this.name == this.selected
       }
     }

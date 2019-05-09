@@ -25,6 +25,8 @@
 </template>
 
 <script>
+  import ScrollMagic from 'scrollmagic'
+  
   export default {
     name: 'sticky-nav',
 

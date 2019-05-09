@@ -12,6 +12,7 @@
 </template>
 
 <script>
+  import ScrollMagic from 'scrollmagic'
   import HorizontalBar from './HorizontalBar'
 
   export default {

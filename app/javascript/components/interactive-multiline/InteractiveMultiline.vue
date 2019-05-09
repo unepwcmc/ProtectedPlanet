@@ -18,20 +18,21 @@
 </template>
 
 <script>
-  // require 
+  import ScrollMagic from 'scrollmagic'
+  import * as d3 from 'd3'
 
-  module.exports = {
+  import TabTitle from './TabTitle'
+
+  export default {
     name: 'interactive-multiline',
 
-    components: {
-      'tab-title': VComponents['vue/charts/interactive_multiline/TabTitle']
-    },
+    components: { TabTitle },
 
     props: {
       json: { required: true }
     },
 
-    data: function() {
+    data () {
       return {
         config: {
           width: 860,
@@ -52,45 +53,42 @@
       }
     },
 
-    created: function() {
+    created () {
       this.chartWidth = this.config.width - this.config.margin
       this.chartHeight = this.config.height - this.config.margin
     },
 
-    mounted: function() {
+    mounted () {
       this.createButtons()
       this.renderChart()
 
       // animate in the first series so that chart isn't  empty
-      multilineController = new ScrollMagic.Controller()
-      var self = this
+      const multilineController = new ScrollMagic.Controller()
 
       new ScrollMagic.Scene({ triggerElement: '.sm-multiline', reverse: false })
-        .on('start', function () {
-          self.draw(self.datasetNames[0])
+        .on('start', () => {
+          this.draw(this.datasetNames[0])
         })
         .addTo(multilineController)
     },
 
     methods: {
-      createButtons: function(){
-        var self = this
-
-        this.json.forEach(function (dataset) {
-          self.datasetNames.push(dataset.id)
+      createButtons (){
+        this.json.forEach((dataset) => {
+          this.datasetNames.push(dataset.id)
         })
       },
 
-      renderChart: function(){
-        var data = this.json
-        var parseTime = d3.timeParse("%Y")
+      renderChart (){
+        const data = this.json
+        const parseTime = d3.timeParse("%Y")
 
         // set the ranges
-        var x = d3.scaleTime().range([0, this.chartWidth])
-        var y = d3.scaleLinear().range([this.chartHeight, 0])
+        const x = d3.scaleTime().range([0, this.chartWidth])
+        const y = d3.scaleLinear().range([this.chartHeight, 0])
 
         // define the line
-        var line = d3.line()
+        const line = d3.line()
           .x(function(d) { return x(parseTime(d.year)) })
           .y(function(d) { return y(d.percent) })
 
@@ -132,21 +130,11 @@
           .attr('class', 'v-interactive-multiline__axis')
           .call(d3.axisLeft(y).tickFormat(function(d){ return d + '%'}))
 
-        //add target line
-        // this.chart.append('g')
-        // .attr('class', 'v-interactive-multiline__target')
-        //   .attr('transform', 'translate(0,' + this.chartHeight + ')')
-        //   .call(
-        //     d3.axisBottom(x)
-        //       .tickSize(-this.chartHeight, 0, 0)
-        //       .tickValues([parseTime(2017)])
-        //   )
-
         this.scaleX = x
         this.scaleY = y
 
         // add data path
-        var dataset = this.chart
+        const dataset = this.chart
           .selectAll('.dataset')
           .data(data)
           .enter().append('path')
@@ -157,7 +145,7 @@
           .attr('fill', 'none')
 
         // add a group for each set of datapoints
-        var datapointWrappers = this.chart
+        const datapointWrappers = this.chart
           .selectAll('.datapoint-wrappers')
           .data(data)
           .enter()
@@ -166,7 +154,7 @@
           .attr('data-datapoints', function(d) { return d.id })
 
         // add a group for each data point
-        var datapoints = datapointWrappers.selectAll('.datapoints')
+        const datapoints = datapointWrappers.selectAll('.datapoints')
           .data(function(d){ return d.dataset })
           .enter()
           .append('g')
@@ -174,7 +162,7 @@
 
         // add the tooltip
         datapoints.append('text')
-          .text(function(d){ return d.percent + '%' })
+          .text(function (d) { return d.percent + '%' })
           .attr('data-tooltip', function(d) { 
             return d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
           })
@@ -183,23 +171,21 @@
             return 'translate(' + x(parseTime(d.year)) + ', ' + (y(d.percent) - 20) + ')' 
           })
 
-        var self = this
-
         // add the circle datapoint
         datapoints.append('circle')
-          .attr('cx', function (d) { return self.scaleX(parseTime(d.year)) })
-          .attr('cy', function (d) { return self.scaleY(d.percent) })
+          .attr('cx', (d) => { return this.scaleX(parseTime(d.year)) })
+          .attr('cy', (d) => { return this.scaleY(d.percent) })
           .attr('r', this.config.datapointRadius)
           .attr('class', 'v-interactive-multiline__datapoint')
-          .on('mouseenter', function(d) {
-            var id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
+          .on('mouseenter', function (d) {
+            const id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
 
             $('[data-tooltip="' + id + '"]')
               .attr('class', 'v-interactive-multiline__tooltip v-interactive-multiline__tooltip-active')
             }
           )
-          .on('mouseleave', function(d) {
-            var id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
+          .on('mouseleave', function (d) {
+            const id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
 
             $('[data-tooltip="' + id + '"]')
               .attr('class', 'v-interactive-multiline__tooltip')
@@ -207,8 +193,8 @@
           )
       },
 
-      createSVG: function(){
-        var svg = d3.select('.d3-svg')
+      createSVG (){
+        const svg = d3.select('.d3-svg')
           .append('svg')
           .attr('class', 'v-interactive-multiline__svg')
           .attr('xmlns', 'http://www.w3.org/1999/xhtml')
@@ -221,13 +207,13 @@
         return svg
       },
 
-      draw: function(name){
+      draw (name){
         this.selectedTab = name
 
-        var lineClass = 'v-interactive-multiline__line'
-        var activeLineClasses = lineClass + ' v-interactive-multiline__line-active'
-        var datapointClass = 'v-interactive-multiline__datapoints'
-        var activeDatapointClasses = datapointClass + ' v-interactive-multiline__datapoints-active'
+        const lineClass = 'v-interactive-multiline__line',
+          activeLineClasses = lineClass + ' v-interactive-multiline__line-active',
+          datapointClass = 'v-interactive-multiline__datapoints',
+          activeDatapointClasses = datapointClass + ' v-interactive-multiline__datapoints-active'
 
         $('.' + lineClass).attr('class', lineClass)
         $('[data-name="' + name + '"]').attr('class', activeLineClasses)

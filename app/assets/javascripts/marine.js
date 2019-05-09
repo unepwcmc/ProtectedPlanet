@@ -1,6 +1,3 @@
-//= require vue
-//= require d3/dist/d3
-//= require scrollmagic/scrollmagic/minified/ScrollMagic.min
 //= require 'require' 
 //= require jquery/dist/jquery.min
 //= require 'map'
