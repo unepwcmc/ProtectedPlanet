@@ -5,6 +5,7 @@ import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import HorizontalBars from './components/horizontal-bars/HorizontalBars'
 import Rectangles from './components/rectangles/Rectangles'
+import SelectWithContent from './components/select/SelectWithContent'
 import StickyNav from './components/sticky-nav/StickyNav'
 import StickyTab from './components/sticky-nav/StickyTab'
 import TwitterShare from './components/twitter-share/TwitterShare'
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         CarouselSlide,
         HorizontalBars,
         Rectangles,
+        SelectWithContent,
         StickyNav,
         StickyTab,
         TwitterShare

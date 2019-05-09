@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'select-with-content',
 
     props: {
@@ -25,7 +25,7 @@
       }
     },
 
-    data: function() {
+    data () {
       return {
         selected: null
       }
