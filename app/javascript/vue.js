@@ -3,11 +3,13 @@ import Vue from 'vue/dist/vue.esm'
 // components
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
+import Counter from './components/counter/Counter'
 import HorizontalBars from './components/horizontal-bars/HorizontalBars'
 import Rectangles from './components/rectangles/Rectangles'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyNav from './components/sticky-nav/StickyNav'
 import StickyTab from './components/sticky-nav/StickyTab'
+import InteractiveTreemap from './components/interactive-treemap/InteractiveTreemap'
 import TwitterShare from './components/twitter-share/TwitterShare'
 
 document.addEventListener('DOMContentLoaded', () => { 
@@ -19,11 +21,13 @@ document.addEventListener('DOMContentLoaded', () => {
       components: {
         Carousel,
         CarouselSlide,
+        Counter,
         HorizontalBars,
         Rectangles,
         SelectWithContent,
         StickyNav,
         StickyTab,
+        InteractiveTreemap,
         TwitterShare
       }
     })

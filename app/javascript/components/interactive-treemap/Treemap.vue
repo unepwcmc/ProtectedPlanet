@@ -3,7 +3,9 @@
 </template>
 
 <script>
-  module.exports = {
+  import * as d3 from 'd3'
+  
+  export default {
     name: 'treemap',
 
     props: {
@@ -11,7 +13,7 @@
       json: { required: true }
     },
 
-    data: function() {
+    data () {
       return {
         config: {
           width: 700,
@@ -21,40 +23,46 @@
       }
     },
 
-    mounted: function() {
+    mounted () {
       this.renderChart()
 
       //trigger mouse enter on the first cell so that the info panel is populated
-      var firstCountry = '#' + (this.orderedData.children[0].data.id).replace(/\s|\./g, '-')
+      const firstCountry = '#' + (this.orderedData.children[0].data.id).replace(/\s|\./g, '-')
       d3.select(firstCountry).dispatch('mouseenter')
     },
 
+    computed: {
+      paddingTop () {
+        return (this.config.height / this.config.width) * 100 + '%'
+      }
+    },
+
     methods: {
-      renderChart: function(){
-        var svg = this.createSVG()
+      renderChart (){
+        const svg = this.createSVG()
 
         //data
-        var treemap = d3.treemap()
+        const treemap = d3.treemap()
           .tile(d3.treemapBinary)
           .size([this.config.width, this.config.height])
           .round(true)
           .paddingInner(1)
 
-        var data = d3.hierarchy(this.json)
+        const data = d3.hierarchy(this.json)
           .eachBefore(function(d) { d.data.id = (d.parent ? d.parent.data.id + "." : "") + d.data.name})
           .sum(function (d) { return d.national + d.overseas })
           .sort(function(a, b) { return b.height - a.height || b.value - a.value })
 
         this.orderedData = data
 
-        var nodes = treemap(data)
+        const nodes = treemap(data)
 
         //color scheme
-        var totalItems = nodes.count().value
-        var color = d3.scaleLinear().range(['#729099', '#C2E5E9']).domain([0, totalItems - 1])
+        const totalItems = nodes.count().value
+        const color = d3.scaleLinear().range(['#729099', '#C2E5E9']).domain([0, totalItems - 1])
 
         //build chart
-        var cell = svg.selectAll('g')
+        const cell = svg.selectAll('g')
           .data(nodes.leaves())
           .enter().append('g')
           .attr('id', function(d) { return (d.data.id).replace(/\s|\./g, '-') })
@@ -68,8 +76,8 @@
 
         cell.append('text')
           .attr('transform', function(d) {
-              x = (d.x1 - d.x0)/2
-              y = (d.y1 - d.y0)/2 + 6
+              const x = (d.x1 - d.x0)/2
+              const y = (d.y1 - d.y0)/2 + 6
               return 'translate(' + x + ',' + y + ')'
             }
           )
@@ -82,13 +90,12 @@
           .text(function(d) { return d })
 
         if(this.interactive){
-          var self = this
-          cell.on('mouseenter touchstart', function (d) { self.mouseenter(d.data) })
+          cell.on('mouseenter touchstart', (d) => { this.mouseenter(d.data) })
         }
       },
 
-      createSVG: function (){
-        var svg = d3.select('.d3-treemap')
+      createSVG (){
+        let svg = d3.select('.d3-treemap')
           .append('svg')
           .attr('class', 'u-block d3-treemap__svg')
           .attr('xmlns', 'http://www.w3.org/1999/xhtml')
@@ -101,13 +108,13 @@
         return svg
       },
 
-      mouseenter: function (data) {
-        var activeClass = 'v-interactive-treemap__cell-active'
+      mouseenter (data) {
+        const activeClass = 'v-interactive-treemap__cell-active'
 
         $('.d3-treemap-cell').removeClass(activeClass)
         $('#' + (data.id).replace(/\s|\./g, '-')).addClass(activeClass)
 
-        var data = {
+        const d = {
           country: data.name,
           iso: data.iso,
           totalMarineArea: data.totalMarineArea,
@@ -119,13 +126,7 @@
           overseasPercentage: data.overseasPercentage
         }
 
-        this.$emit('mouseenter', data)
-      }
-    },
-
-    computed: {
-      paddingTop: function () {
-        return (this.config.height / this.config.width) * 100 + '%'
+        this.$emit('mouseenter', d)
       }
     }
   }

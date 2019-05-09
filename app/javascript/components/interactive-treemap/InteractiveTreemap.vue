@@ -70,19 +70,19 @@
 </template>
 
 <script>
-  module.exports = {
+  import Treemap from './Treemap'
+  import Counter from '../counter/Counter'
+
+  export default {
     name: 'interactive-treemap',
 
-    components: {
-      'treemap': VComponents['vue/charts/Treemap'],
-      'counter': VComponents['vue/components/Counter']
-    },
+    components: { Counter, Treemap },
 
     props: {
       json: { required: true }
     },
 
-    data: function() {
+    data () {
       return {
         country: '',
         iso: '',
@@ -101,7 +101,7 @@
     },
 
     methods: {
-      updatePercent: function(data) {
+      updatePercent (data) {
         this.country = data.country
         this.iso = data.iso
         this.totalMarineArea = data.totalMarineArea
@@ -113,11 +113,11 @@
         this.overseasPercentage = data.overseasPercentage
       },
 
-      styledNumber: function(number) {
+      styledNumber (number) {
         return (Math.ceil(number * 100)/100).toLocaleString()
       },
 
-      correctEnding: function (word, territories) {
+      correctEnding  (word, territories) {
         var string = word
 
         if(territories == 1) { string = string.slice(0, -3) + 'y' }

@@ -1,15 +1,17 @@
 <template>
-  <span>{{ styledNumber }}</span>
+  <span v-if="total > 0">{{ styledNumber }}</span>
 </template>
 
 <script>
-  module.exports = {
+  import ScrollMagic from 'scrollmagic'
+
+  export default {
     name: 'counter',
 
     props: {
       config: {
         type: Object,
-        default: function () {
+        default () {
           return {
             speed: 30,
             divisor: 50
@@ -17,13 +19,13 @@
         }
       },
       total: {
-        required: true,
-        type: Number
+        type: Number,
+        default: 0
       },
       animate: { default: false }
     },
 
-    data: function() {
+    data() {
       return {
         number: 0,
         step: 0,
@@ -31,58 +33,56 @@
       }
     },
 
-    created: function() {
+    created() {
       this.total = this.total
       this.calculateStep()
     },
 
-    mounted: function() {
+    mounted() {
       if(this.animate){ this.count() }
 
       this.scrollMagicHandlers()
     },
 
     watch: {
-      total: function () {
+      total () {
         this.calculateStep()
         this.count()
       }
     },
 
     methods: {
-      count: function () {
-        var self = this
-
+      count () {
         this.checkDirection()
 
-        var interval = window.setInterval(function () {
+        var interval = window.setInterval(() => {
 
-          if(self.increase && self.number + self.step < self.total){
-              self.increment()
+          if(this.increase && this.number + this.step < this.total){
+              this.increment()
 
-          } else if (!self.increase && self.number - self.step > self.total ){
-              self.decrement()
+          } else if (!this.increase && this.number - this.step > this.total ){
+              this.decrement()
 
           } else {
-            self.number = self.total
+            this.number = this.total
             clearInterval(interval)
           }
         }, this.config.speed)
       },
 
-      increment: function () {
+      increment () {
         this.number = this.number + this.step
       },
 
-      decrement: function () {
+      decrement () {
         this.number = this.number - this.step
       },
 
-      calculateStep: function () {
+      calculateStep () {
         this.step = Math.abs(this.total - this.number) / this.config.divisor
       },
 
-      checkDirection: function () {
+      checkDirection () {
         if(this.number < this.total){
           this.increase = true
         } else {
@@ -90,35 +90,34 @@
         }
       },
 
-      scrollMagicHandlers: function () {
-        counterScrollMagic = new ScrollMagic.Controller()
-        var self = this
+      scrollMagicHandlers () {
+        const counterScrollMagic = new ScrollMagic.Controller()
 
         // coverage stats shown over the map
         new ScrollMagic.Scene({ triggerElement: '.sm-coverage', reverse: false })
           .on('start', function () {
-            if($(self.$el).hasClass('sm-coverage-counter')) { self.count() }
+            if($(this.$el).hasClass('sm-coverage-counter')) { this.count() }
           })
           .addTo(counterScrollMagic)
 
         // national waters and high seas infographic
         new ScrollMagic.Scene({ triggerElement: '.sm-infographic', reverse: false })
           .on('start', function () {
-            if($(self.$el).hasClass('sm-infographic-counter')) { self.count() }
+            if($(this.$el).hasClass('sm-infographic-counter')) { this.count() }
           })
           .addTo(counterScrollMagic)
 
         // pledges
         new ScrollMagic.Scene({ triggerElement: '.sm-pledges', reverse: false })
           .on('start', function () {
-            if($(self.$el).hasClass('sm-pledges')) { self.count() }
+            if($(this.$el).hasClass('sm-pledges')) { this.count() }
           })
           .addTo(counterScrollMagic)
       }
     },
 
     computed: {
-      styledNumber: function () {
+      styledNumber () {
         var roundingNumber = 1
 
         if(this.total < 20) { roundingNumber = 10 }

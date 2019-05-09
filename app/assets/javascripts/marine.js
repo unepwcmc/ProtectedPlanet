@@ -5,10 +5,7 @@
 //= require vue/charts/interactive_multiline/TabTitle
 //= require vue/charts/interactive_multiline/InteractiveMultiline
 //= require vue/charts/Sunburst
-//= require vue/charts/Treemap
-//= require vue/components/Counter
-//= require vue/components/InteractiveTreemap
-//= require 'require'
+//= require 'require' 
 //= require jquery/dist/jquery.min
 //= require 'map'
 //= require modules/marine/base
