@@ -1,9 +1,6 @@
 //= require vue
 //= require d3/dist/d3
 //= require scrollmagic/scrollmagic/minified/ScrollMagic.min
-//= require vue/charts/HorizontalBarChart
-//= require vue/charts/interactive_multiline/TabTitle
-//= require vue/charts/interactive_multiline/InteractiveMultiline
 //= require 'require' 
 //= require jquery/dist/jquery.min
 //= require 'map'

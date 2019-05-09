@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: "horizontal-bar-chart",
 
     props: {
@@ -12,7 +12,7 @@
       xAxisMax: Number
     },
 
-    data: function() {
+    data () {
       return {
         config: {
           width: 555,
@@ -29,27 +29,36 @@
       }
     },
 
-    created: function() {
+    created () {
       this.chartWidth = this.config.width - this.config.marginLeft - this.config.marginRight
       this.chartHeight = this.config.height - this.config.marginBottom
       this.svgId = 'd3-' + this.id
     },
 
-    mounted: function() {
+    mounted () {
       this.renderChart()
+      this.scrollMagicHandlers()
     },
 
     methods: {
-      renderChart: function () {
-        var data = this.json
+      scrollMagicHandlers () {
+        const marineScrollMagic = new ScrollMagic.Controller()
+        
+        new ScrollMagic.Scene({ triggerElement: '.sm-bar-chart', reverse: false })
+          .setClassToggle('.sm-bar-chart', 'd3-horizontal-bar-chart-animate')
+          .addTo(marineScrollMagic)
+      },
 
-        var svg = this.createSVG()
+      renderChart () {
+        const data = this.json
 
-        var chart = svg.append('g')
+        const svg = this.createSVG()
+
+        const chart = svg.append('g')
           .attr('transform', 'translate(' + this.config.marginLeft + ', 0)')
 
-        var x = d3.scaleLinear().range([0, this.chartWidth])
-        var y = d3.scaleBand().range([this.chartHeight, 0])
+        const x = d3.scaleLinear().range([0, this.chartWidth])
+        const y = d3.scaleBand().range([this.chartHeight, 0])
 
         // the largest bar should appear at the top
         data.sort(function(a, b) { return a.value - b.value; });
@@ -94,7 +103,7 @@
           .call(d3.axisBottom(x).ticks(6).tickSize(-this.chartHeight, 0, 0).tickFormat(''))
 
         // add bars
-        var bar = chart.selectAll('.bar')
+        const bar = chart.selectAll('.bar')
           .data(data)
           .enter().append('g')
           .attr('transform', function (d) { return 'translate(0, ' + y(d.name) + ')' })
@@ -106,24 +115,22 @@
             .attr('height', y.bandwidth())
             .attr('width', function (d) { return x(d.value) })
           
-          var self = this
-
           // add bar labels
           bar.append('text')
-            .attr('class', function (d) {
+            .attr('class', (d) => {
               //if bar is less than 10% width then add additional class
 
-              if(x(d.value)/self.xAxisMax < 0.1){
+              if(x(d.value)/this.xAxisMax < 0.1){
                 return 'bar-label bar-label--dark'
               } else {
                 return 'bar-label'
               }
             })
-            .attr('transform', function (d) { 
+            .attr('transform', (d) => { 
               var start = 0
 
               //if bar is less than 10% width then show label at the end
-              if(x(d.value)/self.xAxisMax < 0.1){
+              if(x(d.value)/this.xAxisMax < 0.1){
                 start = x(d.value) + 10
               } else {
                 start = x(d.value) - 10
@@ -131,20 +138,20 @@
 
               return 'translate(' + start + ',' + ((y.bandwidth()/2) + 4) + ')' 
             })
-            .attr('text-anchor', function (d) {
+            .attr('text-anchor', (d) => {
               //if bar is less than 10% width then show label at the end
               
-              if(x(d.value)/self.xAxisMax < 0.1){
+              if(x(d.value)/this.xAxisMax < 0.1){
                 return 'start'
               } else {
                 return 'end'
               }
             })
-            .text(function(d) { return self.styledNumber(d.value) + self.config.unit })
+            .text((d) => { return this.styledNumber(d.value) + this.config.unit })
       },
 
-      createSVG: function () {
-        var svg = d3.select('#' + this.svgId)
+      createSVG () {
+        const svg = d3.select('#' + this.svgId)
           .append('svg')
           .attr('class', 'd3-horizontal-bar-chart__svg')
           .attr('xmlns', 'http://www.w3.org/1999/xhtml')
@@ -157,21 +164,22 @@
         return svg
       },
 
-      styledNumber: function (number) {
+      styledNumber (number) {
         return number.toLocaleString()
       },
 
-      wrap: function (text, width) {
+      wrap (text, width) {
         text.each(function () {
-          var text = d3.select(this)
-          var words = text.text().split(/\s+/).reverse()
-          var line = []
-          var lineNumber = 0
-          var lineHeight = 1.1
-          var x = text.attr('x')
-          var dy = 0
+          const text = d3.select(this),
+            words = text.text().split(/\s+/).reverse(),
+            lineHeight = 1.1,
+            x = text.attr('x'),
+            dy = 0
 
-          var tspan = text.text(null)
+          let word = '',
+            line = [],
+            lineNumber = 0,
+            tspan = text.text(null)
             .append('tspan')
             .attr('x', x)
             .attr('y', 0)
@@ -198,7 +206,7 @@
     },
 
     computed: {
-      paddingTop: function () {
+      paddingTop () {
         return (this.config.height / this.config.width) * 100 + '%'
       }
     }

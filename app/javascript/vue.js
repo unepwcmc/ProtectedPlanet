@@ -4,6 +4,7 @@ import Vue from 'vue/dist/vue.esm'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
+import HorizontalBarChart from './components/bar-chart/HorizontalBarChart'
 import HorizontalBars from './components/horizontal-bars/HorizontalBars'
 import Rectangles from './components/rectangles/Rectangles'
 import SelectWithContent from './components/select/SelectWithContent'
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Carousel,
         CarouselSlide,
         Counter,
+        HorizontalBarChart,
         HorizontalBars,
         Rectangles,
         SelectWithContent,
@@ -42,10 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // new ScrollMagic.Scene({ triggerElement: '.sm-infographic', reverse: false })
   //   .setClassToggle('.sm-infographic .infographic__bar--pa', 'infographic__bar--pa--animate')
-  //   .addTo(marineScrollMagic)
-
-  // new ScrollMagic.Scene({ triggerElement: '.sm-bar-chart', reverse: false })
-  //   .setClassToggle('.sm-bar-chart', 'd3-horizontal-bar-chart-animate')
   //   .addTo(marineScrollMagic)
 
 
