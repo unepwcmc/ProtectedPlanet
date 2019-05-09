@@ -1,2 +1,1 @@
-//= require 'vue'
 //= require base
