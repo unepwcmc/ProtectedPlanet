@@ -9,6 +9,7 @@ import Rectangles from './components/rectangles/Rectangles'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyNav from './components/sticky-nav/StickyNav'
 import StickyTab from './components/sticky-nav/StickyTab'
+import Sunburst from './components/sunburst/Sunburst'
 import InteractiveTreemap from './components/interactive-treemap/InteractiveTreemap'
 import TwitterShare from './components/twitter-share/TwitterShare'
 
@@ -27,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         SelectWithContent,
         StickyNav,
         StickyTab,
+        Sunburst,
         InteractiveTreemap,
         TwitterShare
       }

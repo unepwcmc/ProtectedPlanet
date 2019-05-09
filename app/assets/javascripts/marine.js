@@ -4,7 +4,6 @@
 //= require vue/charts/HorizontalBarChart
 //= require vue/charts/interactive_multiline/TabTitle
 //= require vue/charts/interactive_multiline/InteractiveMultiline
-//= require vue/charts/Sunburst
 //= require 'require' 
 //= require jquery/dist/jquery.min
 //= require 'map'

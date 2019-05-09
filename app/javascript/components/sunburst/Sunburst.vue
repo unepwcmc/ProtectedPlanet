@@ -20,14 +20,16 @@
 </template>
 
 <script>
-  module.exports = {
+  import * as d3 from 'd3'
+
+  export default {
     name: 'sunburst',
 
     props: { 
       json: Object
     },
 
-    data: function() {
+    data() {
       return {
         config: {
           width: 400,
@@ -39,43 +41,42 @@
         chart: '',
         name: '',
         breakdown: [],
-        isActive: false
+        isActive: false,
+        totalItems: 0
       }
     },
 
-    created: function() {
+    created() {
       this.radius = Math.min(this.config.width, this.config.height) / 2
     },
 
-    mounted: function() {
+    mounted() {
       this.renderChart()
 
       //trigger mouse enter on the first pie section so that the info panel is populated
-      var firstSection = '#' + (this.json.children[0].name).replace(/\s|\./g, '-')
+      const firstSection = '#' + (this.json.children[0].name).replace(/\s|\./g, '-')
       d3.select(firstSection).dispatch('mouseover')
     },
 
     methods: {
-      renderChart: function () {
-        // size variables
-        
-        var totalItems = this.json.children.length
-        var color = d3.scaleSequential(d3.interpolate('#efefef', '#787878')).domain([0, totalItems])
-        var data = d3.hierarchy(this.json).sum(function (d) { return d.size })
+      renderChart () {
+        this.totalItems = this.json.children.length
+        const color = d3.scaleSequential(d3.interpolate('#efefef', '#787878')).domain([0, this.totalItems])
+        const data = d3.hierarchy(this.json).sum(function (d) { return d.size })
 
         // functions
-        var partition = this.partition()
-        var arc = this.arc()
+        const partition = this.partition()
+        const arc = this.arc()
 
         // create svg elements
         this.svg = this.createSVG()
         this.chart = this.createChart()
 
         // data
-        var nodes = partition(data).descendants()
+        const nodes = partition(data).descendants()
 
         // build chart
-        var path = this.chart.datum(data).selectAll('path')
+        const path = this.chart.datum(data).selectAll('path')
           .data(nodes)
           .enter().append('path')
           .attr('id', function(d) { return (d.data.name).replace(/\s|\./g, '-') })
@@ -89,8 +90,8 @@
         this.totalSize = path.datum().value
       },
 
-      createSVG: function () {
-        var svg = d3.select('.d3-sunburst')
+      createSVG () {
+        const svg = d3.select('.d3-sunburst')
           .append('svg')
           .attr('class', 'd3-sunburst__svg')
           .attr('xmlns', 'http://www.w3.org/1999/xhtml')
@@ -103,15 +104,15 @@
         return svg
       },
 
-      createChart: function (svg) {
+      createChart (svg) {
         return this.svg.append('g').attr('transform', 'translate(' + this.config.width / 2 + ',' + this.config.height / 2 + ')')
       },
 
-      partition: function () {
+      partition () {
         return d3.partition().size([2 * Math.PI, this.radius * this.radius])
       },
 
-      arc: function () {
+      arc () {
         return d3.arc()
           .startAngle(function (d) { return d.x0 })
           .endAngle(function (d) { return d.x1 })
@@ -119,13 +120,13 @@
           .outerRadius(function (d) { return Math.sqrt(d.y1) })
       },
 
-      mouseover: function (d) {
+      mouseover (d) {
         this.resetSections()
 
         this.name = d.data.name
         this.breakdown = d.data.breakdown
 
-        var sequenceArray = d.ancestors().reverse()
+        const sequenceArray = d.ancestors().reverse()
         sequenceArray.shift() // remove root node from the array
 
         // highlight only those that are an ancestor of the current segment.
@@ -138,19 +139,17 @@
         this.isActive = true
       },
 
-      resetSections: function () {
-        var totalItems = this.json.children.length
-        var color = d3.scaleSequential(d3.interpolate('#ffffff', '#898989')).domain([0, totalItems])
-        this.chart.selectAll('path').style('opacity', 1)
+      resetSections () {
+        const color = d3.scaleSequential(d3.interpolate('#efefef', '#787878')).domain([0, this.totalItems])
         this.chart.selectAll('path').style('fill', function (d, i) { return color(i) })
       },
 
-      styledNumber: function (number) {
+      styledNumber (number) {
         return number.toLocaleString()
       }
     },
     computed: {
-      paddingTop: function () {
+      paddingTop () {
         return (this.config.height / this.config.width) * 100 + '%'
       }
     }
