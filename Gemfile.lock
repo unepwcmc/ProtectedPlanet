@@ -852,12 +852,12 @@ GEM
       dotenv-deployment (~> 0.0.2)
     dotenv-deployment (0.0.2)
     ejs (1.1.1)
-    elasticsearch (5.0.5)
-      elasticsearch-api (= 5.0.5)
-      elasticsearch-transport (= 5.0.5)
-    elasticsearch-api (5.0.5)
+    elasticsearch (7.0.0)
+      elasticsearch-api (= 7.0.0)
+      elasticsearch-transport (= 7.0.0)
+    elasticsearch-api (7.0.0)
       multi_json
-    elasticsearch-transport (5.0.5)
+    elasticsearch-transport (7.0.0)
       faraday
       multi_json
     erubis (2.7.0)
@@ -1130,7 +1130,7 @@ DEPENDENCIES
   dotenv (~> 0.11.1)
   dotenv-deployment
   ejs
-  elasticsearch (~> 5.0.3)
+  elasticsearch (~> 7.0.0)
   exception_notification (~> 4.3.0)
   factory_girl_rails (~> 4.4.1)
   httmultiparty (~> 0.3.14)
