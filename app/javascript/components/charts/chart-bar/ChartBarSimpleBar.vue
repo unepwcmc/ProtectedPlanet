@@ -12,7 +12,7 @@
 
 <script>
   export default {
-    name: 'horizontal-bar',
+    name: 'chart-bar-simple-bar',
 
     props: {
       name: "",

@@ -1,38 +1,42 @@
 <template>
-  <div class="v-horizontal-bars">
-    <horizontal-bar v-for="bar, key in bars" 
+  <div class="v-rectangles">
+    <chart-rectangle v-for="rectangle, key in rectangles"
       :key="key"
-      :name="bar.name"
-      :km="bar.km"
-      :url="bar.url"
-      :percent="percent(bar.km)"
+      :title="rectangle.title"
+      :km="rectangle.km"
+      :percent="percent(rectangle.km)"
+      :color="color(key)"
     >
-    </horizontal-bar>
+    </chart-rectangle>
   </div>
 </template>
 
 <script>
   import ScrollMagic from 'scrollmagic'
-  import HorizontalBar from './HorizontalBar'
+  import ChartRectangle from './ChartRectangle'
 
   export default {
-    name: 'horizontal-bars',
+    name: 'chart-rectangles',
 
-    components: { HorizontalBar },
+    components: { ChartRectangle },
 
     props: {
       json: { required: true }
     },
 
-    data () {
+    data() {
       return {
         max: 0,
-        bars: {}
+        rectangles: [],
+        colors: [
+          '#90BDC4',
+          '#729099'
+        ]
       }
     },
 
-    created () {
-      this.bars = this.json
+    created() {
+      this.rectangles = this.json
       this.calculateMax()
     },
 
@@ -45,7 +49,7 @@
         const marineScrollMagic = new ScrollMagic.Controller()
         
         new ScrollMagic.Scene({ triggerElement: '.sm-size-distribution', reverse: false })
-          .setClassToggle('.sm-size-distribution .sm-bar', 'v-horizontal-bars__bar-wrapper-animate')
+          .setClassToggle('.sm-size-distribution .sm-rectangle', 'v-rectangles__rectangle-animate')
           .addTo(marineScrollMagic)
       },
 
@@ -60,8 +64,12 @@
       },
 
       percent (km) {
-        return Math.round((km / this.max)*100) + '%'
+        return `${Math.round((km / this.max)*100)}%`
+      },
+
+      color (key) {
+        return this.colors[key]
       }
-    }
+    },
   }
 </script>

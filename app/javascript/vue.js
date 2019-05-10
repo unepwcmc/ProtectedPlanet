@@ -1,20 +1,21 @@
 import Vue from 'vue/dist/vue.esm'
+import Vue2TouchEvents from 'vue2-touch-events'
 import ScrollMagic from 'scrollmagic'
 
 // components
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
-import HorizontalBarChart from './components/bar-chart/HorizontalBarChart'
-import HorizontalBars from './components/horizontal-bars/HorizontalBars'
-import InteractiveMultiline from './components/interactive-multiline/InteractiveMultiline'
-import InteractiveTreemap from './components/interactive-treemap/InteractiveTreemap'
-import Rectangles from './components/rectangles/Rectangles'
+import ChartBar from './components/charts/chart-bar/ChartBar'
+import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
+import ChartLine from './components/charts/chart-line/ChartLine'
+import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
+import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
+import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import SelectWithContent from './components/select/SelectWithContent'
-import StickyNav from './components/sticky-nav/StickyNav'
-import StickyTab from './components/sticky-nav/StickyTab'
-import Sunburst from './components/sunburst/Sunburst'
-import TwitterShare from './components/twitter-share/TwitterShare'
+import StickyNav from './components/sticky/StickyNav'
+import StickyTab from './components/sticky/StickyTab'
+import SocialShareText from './components/social/SocialShareText'
 
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
@@ -26,16 +27,16 @@ document.addEventListener('DOMContentLoaded', () => {
         Carousel,
         CarouselSlide,
         Counter,
-        HorizontalBarChart,
-        HorizontalBars,
-        InteractiveMultiline,
-        InteractiveTreemap,
-        Rectangles,
+        ChartBar,
+        ChartBarSimple,
+        ChartLine,
+        ChartTreemapInteractive,
+        ChartRectangles,
+        ChartSunburst,
         SelectWithContent,
         StickyNav,
         StickyTab,
-        Sunburst,
-        TwitterShare
+        SocialShareText
       }
     })
   }

@@ -23,7 +23,7 @@
   import * as d3 from 'd3'
 
   export default {
-    name: 'sunburst',
+    name: 'chart-sunburst',
 
     props: { 
       json: Object

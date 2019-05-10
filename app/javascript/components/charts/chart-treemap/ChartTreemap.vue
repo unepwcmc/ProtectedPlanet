@@ -6,7 +6,7 @@
   import * as d3 from 'd3'
   
   export default {
-    name: 'treemap',
+    name: 'chart-treemap',
 
     props: {
       interactive: Boolean,

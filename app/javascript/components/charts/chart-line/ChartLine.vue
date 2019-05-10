@@ -2,13 +2,13 @@
   <div class="v-interactive-multiline sm-multiline">
     <div class="v-interactive-multiline__tabs">
 
-      <tab-title v-for="name, key in datasetNames" 
+      <chart-line-tab v-for="name, key in datasetNames" 
         :key="key"
         :name="name"
         :selected="selectedTab"
         class="v-interactive-multiline__tab-title" 
         v-on:tabClicked="draw(name)"
-      ></tab-title>
+      ></chart-line-tab>
 
     </div>
 
@@ -21,12 +21,12 @@
   import ScrollMagic from 'scrollmagic'
   import * as d3 from 'd3'
 
-  import TabTitle from './TabTitle'
+  import ChartLineTab from './ChartLineTab'
 
   export default {
-    name: 'interactive-multiline',
+    name: 'chart-line',
 
-    components: { TabTitle },
+    components: { ChartLineTab },
 
     props: {
       json: { required: true }

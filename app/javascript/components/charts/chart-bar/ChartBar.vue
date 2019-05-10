@@ -7,7 +7,7 @@
   import * as d3 from 'd3'
 
   export default {
-    name: "horizontal-bar-chart",
+    name: "chart-bar",
 
     props: {
       id: String,

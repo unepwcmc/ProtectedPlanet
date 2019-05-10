@@ -4,7 +4,7 @@
 
 <script>
   export default {
-    name: 'tab-title',
+    name: 'chart-line-tab',
 
     props: {
       name: { required: true },

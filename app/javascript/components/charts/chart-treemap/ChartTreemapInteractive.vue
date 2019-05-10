@@ -35,7 +35,7 @@
       </div>
 
       <div class="flex-3-fiths v-interactive-treemap__treemap">
-        <treemap :json="json" :interactive="true" v-on:mouseenter="updatePercent"></treemap>
+        <chart-treemap :json="json" :interactive="true" v-on:mouseenter="updatePercent"></chart-treemap>
         <p class="v-interactive-treemap__instruction u-show-desktop">Hover over a country to see percentage and actual coverage</p>
       </div>
     </div>
@@ -70,13 +70,13 @@
 </template>
 
 <script>
-  import Treemap from './Treemap'
-  import Counter from '../counter/Counter'
+  import ChartTreemap from './ChartTreemap'
+  import Counter from '../../counter/Counter'
 
   export default {
-    name: 'interactive-treemap',
+    name: 'chart-treemap-interactive',
 
-    components: { Counter, Treemap },
+    components: { Counter, ChartTreemap },
 
     props: {
       json: { required: true }

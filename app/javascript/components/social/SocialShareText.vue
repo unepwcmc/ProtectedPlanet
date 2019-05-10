@@ -19,7 +19,7 @@
 
 <script>
   export default {
-    name: 'twitter-share',
+    name: 'social-share-text',
 
     data () {
       return {

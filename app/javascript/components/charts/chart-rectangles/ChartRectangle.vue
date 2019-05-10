@@ -8,7 +8,7 @@
 
 <script>
   export default {
-    name: 'rectangle',
+    name: 'chart-rectangle',
 
     props: {
       title: String,
