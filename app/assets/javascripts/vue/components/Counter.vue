@@ -125,8 +125,6 @@
         if(this.total < 17) { roundingNumber = 100 }
         if(this.config.decimal) { roundingNumber = Math.pow(10, this.config.decimal) }
 
-        console.log(roundingNumber)
-
         return (Math.ceil(this.number * roundingNumber)/roundingNumber).toLocaleString()
       }
     }
