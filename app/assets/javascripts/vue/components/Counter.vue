@@ -16,6 +16,10 @@
           }
         }
       },
+      decimal: {
+        type: Number,
+        default: 2
+      },
       total: {
         required: true,
         type: Number
@@ -119,11 +123,7 @@
 
     computed: {
       styledNumber: function () {
-        var roundingNumber = 1
-
-        if(this.total < 20) { roundingNumber = 10 }
-        if(this.total < 17) { roundingNumber = 100 }
-        if(this.config.decimal) { roundingNumber = Math.pow(10, this.config.decimal) }
+        const roundingNumber = Math.pow(10, this.decimal)
 
         return (Math.ceil(this.number * roundingNumber)/roundingNumber).toLocaleString()
       }

@@ -95,8 +95,7 @@
         overseasPercentage: 0,
         counterConfig: {
           speed: 20,
-          divisor: 8,
-          decimal: 2
+          divisor: 8
         }
       }
     },
