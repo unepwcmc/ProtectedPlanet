@@ -13,7 +13,7 @@
           <div class="flex-row-wrap justify-content-between">
             <p class="v-interactive-treemap__stat">
               <span class="v-interactive-treemap__percent">
-                <counter :total="nationalPercentage" :config="counterConfig"></counter>%
+                <counter :total="nationalPercentage" :config="counterConfig" :decimal="0"></counter>%
               </span>
               <span class="v-interactive-treemap__km">
                 ({{ styledNumber(national) }}km²)
@@ -23,7 +23,7 @@
 
             <p class="v-interactive-treemap__stat">
               <span class="v-interactive-treemap__percent">
-                <counter :total="overseasPercentage" :config="counterConfig"></counter>%
+                <counter :total="overseasPercentage" :config="counterConfig" :decimal="0"></counter>%
               </span>
               <span class="v-interactive-treemap__km">
                ({{ styledNumber(overseas) }}km²)
