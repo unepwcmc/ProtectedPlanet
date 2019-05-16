@@ -24,16 +24,16 @@
     <h3 class="infographic__header infographic__header--fancy">The Global Ocean</h3>
 
     <div class="infographic__bar--global infographic__bar">
-      <span class="infographic__bar-layer infographic__bar--national" style="width: <%= @marine_statistics['national_waters_percentage'].to_json %>%"></span>
+      <span class="infographic__bar-layer infographic__bar--national" style="width: <%= @marine_statistics['national_waters_percentage'] %>%"></span>
 
       <p class="infographic__percent infographic__percent--national">
         <span class="infographic__percent__title">National waters</span>
-        <span class="text--60"><counter class="sm-infographic-counter" :total="<%= @marine_statistics['national_waters_percentage'].to_json %>"></counter>%</span>
+        <span class="text--60"><counter class="sm-infographic-counter" :total="<%= @marine_statistics['national_waters_percentage'] %>"></counter>%</span>
       </p>
 
       <p class="infographic__percent infographic__percent--highseas">
         <span class="infographic__percent__title">High Seas</span>
-        <span class="text--60"><counter class="sm-infographic-counter" :total="<%= @marine_statistics['global_ocean_percentage'].to_json%>"></counter>%</span>
+        <span class="text--60"><counter class="sm-infographic-counter" :total="<%= @marine_statistics['global_ocean_percentage']%>"></counter>%</span>
       </p>
     </div>
 
@@ -43,12 +43,12 @@
         <h4>Protected Area coverage of national waters</h4>
 
         <div class="infographic__bar infographic__bar--national">
-          <span class="infographic__bar-layer infographic__bar--pa" style="width: <%= @marine_statistics['national_waters_pa_coverage_percentage'].to_json %>%"></span>
+          <span class="infographic__bar-layer infographic__bar--pa" style="width: <%= @marine_statistics['national_waters_pa_coverage_percentage'] %>%"></span>
         </div>
 
-        <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @marine_statistics['national_waters_pa_coverage_percentage'].to_json %>"></counter>%</span>
+        <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @marine_statistics['national_waters_pa_coverage_percentage'] %>"></counter>%</span>
 
-        <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @marine_statistics['national_waters_pa_coverage_area'].to_json %>"></counter>km<sup>2</sup>)</span>
+        <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @marine_statistics['national_waters_pa_coverage_area'] %>"></counter>km<sup>2</sup>)</span>
       </div>
 
 
@@ -56,13 +56,14 @@
         <h4>Protected Area coverage of the high seas</h4>
 
         <div class="infographic__bar infographic__bar">
-          <span class="infographic__bar-layer infographic__bar-layer--highseas infographic__bar--pa" style="width: <%= @marine_statistics['high_seas_pa_coverage_percentage'].to_json %>%"></span>
+          <span class="infographic__bar-layer infographic__bar-layer--highseas infographic__bar--pa" style="width: <%= @marine_statistics['high_seas_pa_coverage_percentage'] %>%"></span>
         </div>
 
-        <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @marine_statistics['high_seas_pa_coverage_percentage'].to_json %>"></counter>%</span>
+        <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= @marine_statistics['high_seas_pa_coverage_percentage'] %>"></counter>%</span>
 
-        <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @marine_statistics['high_seas_pa_coverage_area'].to_json %>"></counter>km<sup>2</sup>)</span>
+        <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= @marine_statistics['high_seas_pa_coverage_area'] %>"></counter>km<sup>2</sup>)</span>
       </div>
     </div>
+    <chart-bar-stacked></chart-bar-stacked>
   </div>
 </div>

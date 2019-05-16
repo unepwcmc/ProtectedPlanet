@@ -8,6 +8,7 @@ import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
 import ChartBar from './components/charts/chart-bar/ChartBar'
 import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
+import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
 import ChartLine from './components/charts/chart-line/ChartLine'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Counter,
         ChartBar,
         ChartBarSimple,
+        ChartBarStacked,
         ChartLine,
         ChartTreemapInteractive,
         ChartRectangles,
@@ -40,12 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
   }
-
-  const marineScrollMagic = new ScrollMagic.Controller()
-
-  new ScrollMagic.Scene({ triggerElement: '.sm-infographic', reverse: false })
-    .setClassToggle('.sm-infographic .infographic__bar--pa', 'infographic__bar--pa--animate')
-    .addTo(marineScrollMagic)
 })
 
 
