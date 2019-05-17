@@ -1,3 +1,15 @@
+FROM ruby:2.4.1
+RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
+
+RUN apt-get update -qq
+
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get install -y nodejs
+RUN apt-get update && apt-get install -y yarn
+
 FROM gentoo/stage3-amd64
 MAINTAINER andrew.potter@unep-wcmc.org
 
@@ -58,11 +70,15 @@ RUN /bin/bash -l -c "gem install bundler"
 RUN /bin/bash -l -c "gem install rake"
 RUN /bin/bash -l -c "gem install rgeo --version '=0.4.0'" -- --with-geos-dir=/usr/lib
 
+
 WORKDIR /ProtectedPlanet
 ADD Gemfile /ProtectedPlanet/Gemfile
 ADD Gemfile.lock /ProtectedPlanet/Gemfile.lock
 
+ADD package.json /ProtectedPlanet/package.json
+
 RUN /bin/bash -l -c "bundle install"
+RUN /bin/bash -l -c "yarn install"
 
 COPY . /ProtectedPlanet
 
