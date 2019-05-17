@@ -4,6 +4,14 @@ MAINTAINER andrew.potter@unep-wcmc.org
 RUN emerge --sync && emerge sudo
 RUN emerge dev-vcs/git
 
+WORKDIR /gdal
+RUN wget http://download.osgeo.org/gdal/2.4.0/gdal-2.4.0.tar.gz
+RUN tar -xvf gdal-2.4.0.tar.gz
+RUN cd gdal-2.4.0 \
+    && ./configure --prefix=/usr \
+    && make \
+    && make install
+
 WORKDIR /postgres
 RUN wget https://ftp.postgresql.org/pub/source/v11.1/postgresql-11.1.tar.gz
 RUN tar -xvf postgresql-11.1.tar.gz
@@ -22,7 +30,7 @@ RUN cd node-v10.8.0 \
     && wget https://www.npmjs.org/install.sh | sh
 
 RUN whereis npm
-RUN npm install bower -g
+RUN npm install bower yarn -g
 
 WORKDIR /geos
 RUN wget https://download.osgeo.org/geos/geos-3.7.0.tar.bz2

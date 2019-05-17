@@ -59,7 +59,7 @@ module Download
     def self.filename domain, identifier
       "WDPA_#{Wdpa::S3.current_wdpa_identifier}".tap { |base_filename|
         base_filename << "_#{domain}"     if domain != 'general'
-        base_filename << "_#{identifier}" if identifier != 'all'
+        base_filename << "_#{identifier}" if (identifier != 'all' && identifier.present?)
       }
     end
   end

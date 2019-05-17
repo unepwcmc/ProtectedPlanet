@@ -1,3 +1,28 @@
+### 2.4.3
+
+* Update the PAME importer to use the latest monthly CSV (May 2019 release).
+* Move Home Carousel slide model under cms namespace to prevent contents disappearing after release.
+
+### 2.4.2
+
+* Update the PAME importer to use the latest monthly CSV with additional PAME Evaluation information.
+* Add pame source model.
+
+### 2.4.1
+
+* Add a warning message to country pages that have restricted Protected Areas
+
+### 2.4.0
+
+* Show all blog post (including grandchildren .etc) on the blog page
+* Change the zip filename for the protected area search results to be more reader friendly
+* Add the ability for a country to have many story maps
+
+### 2.3.0
+
+* Add blog
+* Remove kml format download
+
 ### 2.2.0
 
 * Link DOIs to preferred resolver (reference links)
