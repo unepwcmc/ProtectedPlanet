@@ -21,7 +21,6 @@ dump.rdb
 /public/assets
 .env
 
-/vendor/assets/bower_components
 coverage
 node_modules
 /public/packs
