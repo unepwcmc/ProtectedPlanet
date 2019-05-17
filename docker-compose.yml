@@ -60,6 +60,15 @@ services:
     image: docker.elastic.co/kibana/kibana:6.3.2
     ports:
       - "5601:5601"
+  webpacker: 
+    build: .
+    env_file: 
+      - '.env'
+    command: ./bin/webpack-dev-server
+    volumes: 
+      - .:/protectedplanet
+    ports:
+      - '3035:3035'
 
 volumes:
   protectedplanet_pg_data:

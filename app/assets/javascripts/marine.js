@@ -1,5 +1,5 @@
 //= require 'require' 
-//= require jquery/dist/jquery.min
+//= require jquery
 //= require 'map'
 //= require modules/marine/base
 //= require modules/maps/base
