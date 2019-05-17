@@ -1,5 +1,5 @@
 //= require 'require'
-//= require jquery/dist/jquery.min
+//= require jquery
 //= require jquery_ujs
 //= require 'jquery.tablesorter.min'
 //= require 'async-img.min'

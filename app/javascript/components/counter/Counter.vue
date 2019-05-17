@@ -1,5 +1,5 @@
 <template>
-  <span v-if="total > 0">{{ styledNumber }}</span>
+  <span v-if="total >= 0">{{ styledNumber }}</span>
 </template>
 
 <script>
@@ -34,7 +34,6 @@
     },
 
     created() {
-      this.total = this.total
       this.calculateStep()
     },
 
