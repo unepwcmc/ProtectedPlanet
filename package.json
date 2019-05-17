@@ -5,7 +5,6 @@
     "bourbon": "^5.1.0",
     "bourbon-neat": "^1.9.0",
     "d3": "^5.9.2",
-    "jquery": "^3.4.0",
     "leaflet": "^1.4.0",
     "scrollmagic": "^2.0.6",
     "vue": "^2.6.10",
