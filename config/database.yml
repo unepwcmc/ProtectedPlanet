@@ -11,7 +11,6 @@ default: &default
   host: <%= ENV['POSTGRES_HOST'] %>
   username: <%= ENV['POSTGRES_USER'] %>
   password: <%= ENV['POSTGRES_PASSWORD'] %>
-  template: template_postgis
 
 development:
   <<: *default
