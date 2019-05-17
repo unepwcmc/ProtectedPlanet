@@ -60,8 +60,14 @@ docker-compose build
 ```
 
 To set-up the database
+`docker-compose run web /bin/bash -l -c "rake db:create"`
+
+To import the database sql dump:
 ```
-docker-compose run web /bin/bash -l -c "rake db:create"
+docker-compose run -v ~/path/to/sql/dump:/import_database web bash -c "psql protectedplanet-db < /import_database/pp_development.sql -U postgres -h protectedplanet-db"
+```
+
+```
 docker-compose run web /bin/bash -l -c "rake db:migrate"
 docker-compose run web /bin/bash -l -c "rake db:seed"
 ```
@@ -91,11 +97,6 @@ docker-compose down
 To rebuild the Docker container after making changes:
 ```
 docker-compose up --build
-```
-
-To import the database sql dump:
-```
-docker-compose run -v ~/path/to/sql/dump:/import_database web bash -c "psql protectedplanet-db < /import_database/pp_development.sql -U postgres -h protectedplanet-db"
 ```
 
 To reindex the data in Elasticsearch:
