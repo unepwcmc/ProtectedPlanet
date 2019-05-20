@@ -64,9 +64,10 @@ services:
     build: .
     env_file: 
       - '.env'
-    command: ./bin/webpack-dev-server
+    command: /bin/bash -l -c "./bin/webpack-dev-server"
+    user: protectedplanet
     volumes: 
-      - .:/protectedplanet
+      - .:/ProtectedPlanet
     ports:
       - '3035:3035'
 
