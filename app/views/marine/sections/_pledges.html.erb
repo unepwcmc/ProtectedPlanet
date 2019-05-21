@@ -3,7 +3,7 @@
 
   <div class="template--marine__section__introduction">
     <p>
-      UNEP-WCMC and the Convention on Biological Diversity (CBD) secretariat are tracking commitments made by nations to expand their protected area networks. Over 15 million km² has been pledged by over 70 countries and territories. The Regional Seas Conventions play a fundamental role in supporting sustainable management and use of the marine and coastal environment. Two of these regional conventions, namely OSPAR, the regional sea organization for the North East Atlantic, and the Convention for the Conservation of Antarctic Marine Living Resources (CCMALR) have driven the establishment of MPAs in areas beyond national jurisdiction.
+      UNEP-WCMC and the Convention on Biological Diversity (CBD) secretariat are tracking commitments made by nations to expand their protected area networks. As of 2018, over 15 million km² has been pledged by over 70 countries and territories. The Regional Seas Conventions play a fundamental role in supporting sustainable management and use of the marine and coastal environment. Two of these regional conventions, namely OSPAR, the regional sea organization for the North East Atlantic, and the Convention for the Conservation of Antarctic Marine Living Resources (CCMALR) have driven the establishment of MPAs in areas beyond national jurisdiction.
     </p>
 
     <p>
@@ -23,10 +23,14 @@
       <div class="flex-row justify-content-between template--marine__pledges-title">
         <h4>Global MPA pledges</h4>
 
+<%
+=begin%>
         <%= link_to '/', title: 'Download the commitments and pledges data', class: 'button--basic-link u-hide-mobile' do %>
           <i class="fa fa-download"></i>
           Download this data
-        <% end %>
+        <% end %> 
+<%
+=end%>
       </div>
 
       <sunburst class="" :json="<%= @pledges %>"></sunburst>
