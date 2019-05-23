@@ -64,10 +64,11 @@ services:
     build: .
     env_file: 
       - '.env'
-    command: /bin/bash -l -c "./bin/webpack-dev-server"
+    command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/webpacker"
     user: protectedplanet
     volumes: 
       - .:/ProtectedPlanet
+      - protected_planet_bundler:/usr/local/bundle
     ports:
       - '3035:3035'
 
@@ -77,4 +78,6 @@ volumes:
   protectedplanet_redis_data:
     driver: local
   protectedplanet_import_data:
+    driver: local
+  protected_planet_bundler:
     driver: local

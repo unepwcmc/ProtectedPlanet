@@ -62,8 +62,8 @@ RUN /bin/bash -l -c "gem install rgeo --version '=0.4.0'" -- --with-geos-dir=/us
 WORKDIR /ProtectedPlanet
 ADD Gemfile /ProtectedPlanet/Gemfile
 ADD Gemfile.lock /ProtectedPlanet/Gemfile.lock
-
 ADD package.json /ProtectedPlanet/package.json
+ADD docker/scripts /ProtectedPlanet/docker/scripts
 
 RUN /bin/bash -l -c "bundle install"
 RUN /bin/bash -l -c "yarn install"
@@ -72,6 +72,7 @@ COPY . /ProtectedPlanet
 
 RUN chown -R protectedplanet:protectedplanet /home/protectedplanet/.rvm
 RUN chown -R protectedplanet:protectedplanet /home/protectedplanet/.bundle
+RUN chown -R protectedplanet:protectedplanet /ProtectedPlanet/docker/scripts
 
 EXPOSE 3000
 
