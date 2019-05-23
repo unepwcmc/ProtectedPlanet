@@ -2,11 +2,12 @@ version: '3'
 services:
   web:
     build: .
-    command: /bin/bash -l -c "bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/rails"
     user: protectedplanet
     volumes:
       - .:/ProtectedPlanet
       - protectedplanet_import_data:/import_data
+      - protected_planet_bundler:/usr/local/bundle
     ports:
       - "3000:3000"
     env_file:
@@ -15,6 +16,7 @@ services:
       - db
       - redis
       - elasticsearch
+      - webpacker
   db:
     container_name: protectedplanet-db
     image: kartoza/postgis
@@ -38,7 +40,7 @@ services:
      links:
        - db
        - redis
-     command: /bin/bash -l -c "bundle exec sidekiq"
+     command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/sidekiq"
      user: protectedplanet
      env_file:
        - '.env'
