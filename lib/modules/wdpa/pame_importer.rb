@@ -1,7 +1,7 @@
 require 'csv'
 
 module Wdpa::PameImporter
-  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-04-25.csv".freeze
+  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-05-30.csv".freeze
 
   def self.import
     puts "Importing PAME evaluations..."
@@ -14,7 +14,7 @@ module Wdpa::PameImporter
       protected_area  = ProtectedArea.find_by_wdpa_id(wdpa_id) || nil
       metadata_id     = row[6].to_i
       url             = row[5]
-      restricted      = row[13] == "TRUE" ? true : false
+      restricted      = row[13] == "FALSE" ? false : true
       iso3s           = row[2]
       pame_source     = PameSource.where({
         data_title: row[9],
@@ -29,8 +29,9 @@ module Wdpa::PameImporter
           ps.language   = row[12]
         end
 
-      # If PameEvaluation doesn’t have a PA and is restricted then it's restricted.
-      if (protected_area.nil? && restricted) || (protected_area.present?)
+      if protected_area.nil? && (restricted == false) # If PameEvaluation doesn’t have a PA and isn’t restricted it should be deleted.
+        delete_evaluations << wdpa_id
+      elsif (protected_area.nil? && restricted) || (protected_area.present?) # If PameEvaluation doesn’t have a PA and is restricted then it's restricted.
         pame_evaluation = PameEvaluation.where({
           protected_area: protected_area,
           methodology: methodology,
