@@ -13,6 +13,7 @@ module Wdpa::PameImporter
       year            = row[4].to_i
       protected_area  = ProtectedArea.find_by_wdpa_id(wdpa_id) || nil
       metadata_id     = row[6].to_i
+      name            = row[7]
       url             = row[5]
       restricted      = row[13] == "FALSE" ? false : true
       iso3s           = row[2]
@@ -49,6 +50,11 @@ module Wdpa::PameImporter
           pe.url            = url
           pe.pame_source    = pame_source
           pe.restricted     = restricted
+
+          if protected_area.nil? && restricted
+            pe.wdpa_id = wdpa_id
+            pe.name    = name
+          end
         end
         if protected_area.nil? && restricted
           countries = []
