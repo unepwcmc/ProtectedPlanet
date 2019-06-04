@@ -62,7 +62,9 @@ module Wdpa::PameImporter
           countries = []
           iso3s.split(",").each do |iso3|
             country = Country.find_by(iso_3: iso3)
-            pame_evaluation.countries << country unless pame_evaluation.countries.include? country
+            if country.present?
+              pame_evaluation.countries << country unless pame_evaluation.countries.include? country
+            end
           end
         end
       elsif protected_area.nil? && !restricted # If PameEvaluation doesn’t have a PA and isn’t restricted it should be deleted.
