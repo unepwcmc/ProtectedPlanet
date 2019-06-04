@@ -28,6 +28,7 @@ rvm:
 before_script:
   - cp .env.example .env
   - RAILS_ENV=test bundle exec rake db:migrate
+  - RAILS_ENV=test bundle exec rake db:test:prepare
 notifications:
   email:
     - andrea.rossi@unep-wcmc.org
