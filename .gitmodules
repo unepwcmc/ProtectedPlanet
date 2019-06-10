@@ -1,4 +1,4 @@
 [submodule "db"]
   path = db
   url = https://github.com/unepwcmc/protectedplanet-db.git
-  branch = feature/add-restricted-protected-areas-flag
+  branch = master
