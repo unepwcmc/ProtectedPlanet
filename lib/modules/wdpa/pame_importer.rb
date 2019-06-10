@@ -32,9 +32,11 @@ module Wdpa::PameImporter
           ps.language   = row[12]
         end
 
-      if protected_area.nil? && (restricted == false) # If PameEvaluation doesn’t have a PA and isn’t restricted it should be deleted.
+      # If PameEvaluation does not have a PA and is not restricted it should be deleted.
+      if protected_area.nil? && (restricted == false)
         delete_evaluations << wdpa_id
-      elsif (protected_area.nil? && restricted) || (protected_area.present?) # If PameEvaluation doesn’t have a PA and is restricted then it's restricted.
+      # If PameEvaluation does not have a PA and is restricted then it is restricted.
+      elsif (protected_area.nil? && restricted) || protected_area.present?
         pame_evaluation = PameEvaluation.where({
           protected_area: protected_area,
           methodology: methodology,
