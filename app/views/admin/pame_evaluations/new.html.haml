@@ -1,0 +1,5 @@
+.page-header
+  %h2 New Pame Evaluation Upload
+
+= comfy_form_for [:admin, @pame_evaluation], :as => :file, :url => {:action => :create}, :html => {:multipart => true} do |form|
+  = render form

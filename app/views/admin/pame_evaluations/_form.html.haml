@@ -1,0 +1,7 @@
+%p Please type the id of the Pame Evaluation and chose a file to upload
+
+= form.text_field :id, maxlength: 20
+= form.file_field :file
+
+= form.form_group :class => 'form-actions' do
+  = form.submit :class => 'btn btn-primary'
