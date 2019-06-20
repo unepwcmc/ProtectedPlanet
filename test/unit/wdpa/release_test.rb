@@ -81,7 +81,6 @@ class TestWdpaRelease < ActiveSupport::TestCase
   end
 
   test '.geometry_tables only returns geometry tables from the GDB' do
-    skip("skipping this test which is broken currently")
     gdb_path = "gdb_path"
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
 
@@ -103,7 +102,6 @@ class TestWdpaRelease < ActiveSupport::TestCase
   end
 
   test '.source_table only returns the source table from the GDB' do
-    skip("skipping this test which is broken currently")
     gdb_path = "gdb_path"
     Wdpa::Release.any_instance.expects(:gdb_path).returns(gdb_path).at_least_once
 

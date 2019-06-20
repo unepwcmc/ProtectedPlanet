@@ -1,4 +1,4 @@
-#require 'gdal-ruby/ogr'
+require 'gdal-ruby/ogr'
 
 class Ogr::Info
   def initialize filename

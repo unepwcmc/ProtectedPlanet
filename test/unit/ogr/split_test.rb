@@ -1,10 +1,9 @@
 require 'test_helper'
-#require 'gdal-ruby/ogr'
+require 'gdal-ruby/ogr'
 
 class TestOgrSplit < ActiveSupport::TestCase
   test '#split runs the correct ogr2ogr command to split a geo database
    in to `n` shapefiles and returns each as a Shapefile' do
-    skip("skipping broken tests where gdal was removed")
     filename = 'my_gdb.gdb'
     layer_name = 'poly'
     column_name = ['wdpaid']
@@ -26,7 +25,6 @@ class TestOgrSplit < ActiveSupport::TestCase
   end
 
   test 'if column_names are not passed .split uses a *' do
-    skip("skipping broken tests where gdal was removed")
     filename = 'my_gdb.gdb'
     layer_name = 'poly'
 
