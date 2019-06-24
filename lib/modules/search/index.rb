@@ -11,36 +11,35 @@ class Search::Index
       :governance
     ])
 
-    Search::Index.index Country.without_geometry.all
-
-    Search::Index.create_mapping 'protected_area'
-    Search::Index.index pa_relation
+    Search::Index.index 'countries', Country.without_geometry.all
+#    Search::Index.create_mapping 'protected_areas', 'protected_area'
+    Search::Index.index 'protected_areas', pa_relation
   end
 
-  def self.index collection
-    index = self.new collection
+  def self.index index_name, collection
+    index = self.new index_name, collection
     index.index
   end
 
-  def self.count
-    index = self.new
-    index.count
+  def self.count index_name
+    index = self.new index_name
+    index.count 
   end
 
-  def self.create_mapping collection
-    index = self.new
+  def self.create_mapping index_name, collection
+    index = self.new index_name
     index.create_mapping collection
   end
 
-  def self.delete
-    index = self.new
+  def self.delete index_name
+    index = self.new index_name
     index.delete
   end
 
-  INDEX_NAME = Rails.application.secrets.elasticsearch["index"]
 
-  def initialize collection=nil
+  def initialize index_name, collection=nil
     @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch['url'])
+    @index_name = index_name
     @collection = collection
   end
 
@@ -49,9 +48,10 @@ class Search::Index
   end
 
   def delete
-    @client.indices.delete index: INDEX_NAME
+    @client.indices.delete index: @index_name
+    
   rescue Elasticsearch::Transport::Transport::Errors::NotFound
-    Rails.logger.warn("Index #{INDEX_NAME} not found. Skipping")
+    Rails.logger.warn("Index #{@index_name} not found. Skipping")
   end
 
   def count
@@ -61,7 +61,7 @@ class Search::Index
   def create_mapping type
     raise ArgumentError, "No mapping found for type #{type}" unless mappings[type]
     @client.indices.put_mapping(
-      index: INDEX_NAME,
+      index: @index_name,
       type: type,
       include_type_name: true,
       body: { type => mappings[type] }
@@ -82,7 +82,7 @@ class Search::Index
   end
 
   def index_header model
-    {index: {_index: INDEX_NAME, _type: "_doc"}}
+    {index: {_index: @index_name}}
   end
 
   def mappings

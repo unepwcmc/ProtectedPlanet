@@ -15,9 +15,9 @@ class IndexTest < ActiveSupport::TestCase
       )
 
     bulk_data = [
-      {index: {_index: "#{elasticsearch_index}",_type: "protected_area"}},
+      {index: {_index: "#{elasticsearch_index}"}},
       {name: "Charlie"},
-      {index: {_index: "#{elasticsearch_index}",_type: "protected_area"}},
+      {index: {_index: "#{elasticsearch_index}"}},
       {name: "Mac"}
     ]
 
@@ -72,7 +72,6 @@ class IndexTest < ActiveSupport::TestCase
     indices_mock = mock()
     indices_mock.expects(:put_mapping).with({
       index: index_name,
-      type: type,
       body: {
         'protected_area' => mappings['protected_area']
       }
