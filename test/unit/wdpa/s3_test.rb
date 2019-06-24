@@ -5,6 +5,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
     Rails.application.secrets.aws_access_key_id = '123'
     Rails.application.secrets.aws_secret_access_key = 'abc'
     Rails.application.secrets.aws_bucket = 'wdpa'
+    Rails.application.secrets.s3_region = 'eu-west-2'
 
     @bucket_mock = mock()
     @s3_mock = mock()
@@ -12,17 +13,18 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
   end
 
   test '#new creates an S3 connection' do
-    skip("skipping this test which is broken currently")
-    AWS::S3.expects(:new).with({
+    #skip("skipping this test which is broken currently")
+    Aws::S3::Resource.expects(:new).with({
       :access_key_id     => '123',
-      :secret_access_key => 'abc'
+      :secret_access_key => 'abc',
+      :region            => 'eu-west-2'
     })
 
     Wdpa::S3.new()
   end
 
   test '.download_current_wdpa_to handles encoding correctly' do
-    skip("skipping this test which is broken currently")
+    #skip("skipping this test which is broken currently")
     filename = File.join(Rails.root, 'tmp', 'hey_this_is_a_filename.zip')
     file_contents = "\x9B".force_encoding(Encoding::ASCII_8BIT)
 
@@ -31,7 +33,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
     latest_file_mock.expects(:read).returns(file_contents)
 
     @bucket_mock.stubs(:objects).returns([latest_file_mock])
-    AWS::S3.stubs(:new).returns(@s3_mock)
+    Aws::S3::Resource.stubs(:new).returns(@s3_mock)
 
     Wdpa::S3.download_current_wdpa_to filename
     File.delete filename
@@ -39,7 +41,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
 
   test '.download_current_wdpa_to retrieves the latest WDPA from S3, and saves it to the
    given filename' do
-    skip("skipping this test which is broken currently")
+    #skip("skipping this test which is broken currently")
     filename = 'hey_this_is_a_filename.zip'
 
     latest_file_mock = mock()
@@ -55,7 +57,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
       oldest_file_mock
     ])
 
-    AWS::S3.stubs(:new).returns(@s3_mock)
+    Aws::S3::Resource.stubs(:new).returns(@s3_mock)
 
     file_write_mock = mock()
     file_write_mock.stubs(:write)
@@ -68,7 +70,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
 
   test '.new_wdpa? compares the current wdpa last modified time with the given
    argument' do
-    skip("skipping this test which is broken currently")
+    #skip("skipping this test which is broken currently")
     older_time = Time.new(2010)
     recent_time = Time.new(2014)
 
@@ -81,7 +83,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
   end
 
   test '#current_wdpa_identifier returns a part of the WDPA filename' do
-    skip("skipping this test which is broken currently")
+    #skip("skipping this test which is broken currently")
     file_mock = mock()
     file_mock.expects(:key).returns('WDPA_Apr2015_Public.zip')
     Wdpa::S3.any_instance.expects(:current_wdpa).returns(file_mock)
@@ -90,7 +92,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
   end
 
   test '#current_wdpa_identifier returns Month+Year independently from the length of the months name' do
-    skip("skipping this test which is broken currently")
+    #skip("skipping this test which is broken currently")
     file_mock = mock()
     file_mock.expects(:key).returns('WDPA_June2015_Public.zip')
     Wdpa::S3.any_instance.expects(:current_wdpa).returns(file_mock)

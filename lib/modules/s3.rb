@@ -3,9 +3,10 @@ class S3
   IMPORT_PREFIX = 'import/'
 
   def initialize
-    @s3 = AWS::S3.new({
+    @s3 = Aws::S3::Resource.new({
       access_key_id: Rails.application.secrets.aws_access_key_id,
-      secret_access_key: Rails.application.secrets.aws_secret_access_key
+      secret_access_key: Rails.application.secrets.aws_secret_access_key,
+      region: Rails.application.secrets.s3_region
     })
   end
 
