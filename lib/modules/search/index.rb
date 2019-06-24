@@ -63,6 +63,7 @@ class Search::Index
     @client.indices.put_mapping(
       index: INDEX_NAME,
       type: type,
+      include_type_name: true,
       body: { type => mappings[type] }
     )
   end
@@ -81,7 +82,7 @@ class Search::Index
   end
 
   def index_header model
-    {index: {_index: INDEX_NAME, _type: model.class.to_s.underscore}}
+    {index: {_index: INDEX_NAME, _type: "_doc"}}
   end
 
   def mappings

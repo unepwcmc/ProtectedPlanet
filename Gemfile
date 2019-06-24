@@ -6,7 +6,7 @@ gem 'pg', '~> 0.21'
 gem 'activerecord-postgis-adapter', '~> 4.0.0'
 gem 'dbf', '~> 2.0.7'
 #
-gem 'elasticsearch', '~> 5.0.3'
+gem 'elasticsearch', '~> 7.0.0'
 #
 gem 'bower-rails', '~> 0.10.0'
 gem 'sass-rails', '~> 5.0.7'
