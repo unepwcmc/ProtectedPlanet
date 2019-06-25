@@ -13,7 +13,7 @@ ActiveRecord::Migration.maintain_test_schema!
 
 require 'mocha/mini_test'
 require 'webmock/minitest'
-WebMock.disable_net_connect!(:allow => "codeclimate.com", :allow_localhost => true)
+WebMock.disable_net_connect!(:allow => ["elasticsearch", "codeclimate.com"], :allow_localhost => true)
 
 Mocha::Configuration.prevent(:stubbing_non_existent_method)
 
