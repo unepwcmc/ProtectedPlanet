@@ -55,7 +55,7 @@ class Search::Index
   end
 
   def count
-    @client.count['count']
+    @client.count(index: @index_name)['count']
   end
 
   def create_mapping type
