@@ -120,5 +120,19 @@ class SearchTest < ActionDispatch::IntegrationTest
     end
   end
 
-  
+  test 'Index single ProtectedArea' do
+    pa = FactoryGirl.create(:protected_area)
+
+    # ES and WebMock don't get along
+    WebMock.disable!
+    begin
+      si = Search::Index.new 'protectedareas_test', ProtectedArea.all
+      si.index
+      sleep(1)
+      assert_equal 1, si.count
+    ensure
+      si.delete
+    end
+
+  end
 end
