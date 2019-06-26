@@ -38,12 +38,15 @@ class Country < ApplicationRecord
   end
 
   def as_indexed_json options={}
-    self.as_json(
-      only: [:id, :name, :iso_3],
+    js = self.as_json(
+      only: [:name, :iso_3, :id],
       include: {
-        region_for_index: { only: [:id, :name] }
+        region_for_index: { only: [ :name] }
       }
     )
+    #crude remapping to flatten
+    js['region_for_index'] = js['region_for_index']['name']
+    return js
   end
 
   def random_protected_areas wanted=1

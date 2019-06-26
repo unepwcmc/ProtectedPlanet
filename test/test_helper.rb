@@ -57,3 +57,7 @@ Sidekiq.configure_client do |config|
 end
 
 Bystander.enable_testing!
+
+def assert_greater(a, b)
+    assert_operator a, :>, b
+end
