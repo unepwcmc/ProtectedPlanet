@@ -45,7 +45,7 @@ class Search::Results
   end
 
   def count
-    @query_results['hits']['total']
+    @query_results['hits']['total']['value']
   end
 
   private

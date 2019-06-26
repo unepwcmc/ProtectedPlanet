@@ -8,23 +8,24 @@ class Search
     @@configuration ||= YAML.load(CONFIGURATION_FILE)
   end
 
-  def self.search search_term, options={}
+  def self.search search_term, options={}, index_name='protected_areas'
     # after receiving some crazy long search terms that crash elasticsearch
     # we are limiting this to 128 characters
-    instance = self.new (search_term.present? ? search_term[0..127] : search_term), options
+    instance = self.new (search_term.present? ? search_term[0..127] : search_term), options, index_name
     instance.search
 
     instance
   end
 
-  def initialize search_term='', options={}
+  def initialize search_term='', options, index_name
     self.search_term = search_term
     self.options = options
+    @index_name = index_name
   end
 
-  def search
+  def search 
 #    @query_results ||= elastic_search.search(index: 'protected_areas', body: query)
-    @query_results ||= elastic_search.search(index: 'countries', body: query)
+    @query_results ||= elastic_search.search(index: @index_name, body: query)
   rescue Faraday::TimeoutError => e
     Rails.logger.warn "timeout in search"
     Rails.logger.warn e
@@ -62,7 +63,8 @@ class Search
     {
       size: options[:size] || RESULTS_SIZE,
       from: options[:offset] || offset,
-      query: Search::Query.new(search_term, options).to_h,
+      query: { match: { name: search_term } },
+      #Search::Query.new(search_term, options).to_h,
     }.tap( &method(:optional_queries) )
   end
 
