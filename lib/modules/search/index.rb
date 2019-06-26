@@ -72,7 +72,7 @@ class Search::Index
 
   def documents_in_batches
     @collection.find_in_batches.each do |group|
-      batch = group.each_with_object([]) do |object, bulk|
+     batch = group.each_with_object([]) do |object, bulk|
         bulk << index_header(object)
         bulk << object.as_indexed_json
       end

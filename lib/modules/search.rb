@@ -23,7 +23,8 @@ class Search
   end
 
   def search
-    @query_results ||= elastic_search.search(index: 'protected_areas', body: query)
+#    @query_results ||= elastic_search.search(index: 'protected_areas', body: query)
+    @query_results ||= elastic_search.search(index: 'countries', body: query)
   rescue Faraday::TimeoutError => e
     Rails.logger.warn "timeout in search"
     Rails.logger.warn e
