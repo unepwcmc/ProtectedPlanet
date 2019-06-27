@@ -56,6 +56,8 @@ services:
       - "9200:9200"
     env_file:
       - '.env'
+    volumes:
+      - 'protectedplanet_es_data:/usr/share/elasticsearch/data'
   kibana:
     image: docker.elastic.co/kibana/kibana:7.0.0
     ports:
@@ -67,4 +69,6 @@ volumes:
   protectedplanet_redis_data:
     driver: local
   protectedplanet_import_data:
+    driver: local
+  protectedplanet_es_data:
     driver: local
