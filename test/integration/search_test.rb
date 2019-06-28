@@ -233,7 +233,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     params = {
       filters:
         {
-          iucn_category: "Ia"
+          iucn_category_name: "Ia"
         }
     }
     
