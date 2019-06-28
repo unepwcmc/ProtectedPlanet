@@ -63,11 +63,8 @@ class Search
     {
       size: options[:size] || RESULTS_SIZE,
       from: options[:offset] || offset,
-      # ^3 weights the field higher as ISO3 exact matches should beat country matches which should beat region matches
-      query: { multi_match: { query: search_term, fields: ["name^2", "iso_3^3", "countries_for_index", "region_for_index"] } },
-      #Search::Query.new(search_term, options).to_h,
-    }
-      #.tap( &method(:optional_queries) )
+      query: Search::Query.new(search_term, options).to_h,
+    }.tap( &method(:optional_queries) )
   end
 
   def optional_queries query

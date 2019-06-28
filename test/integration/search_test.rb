@@ -202,7 +202,10 @@ class SearchTest < ActionDispatch::IntegrationTest
     pa = FactoryGirl.create(:protected_area, name: "Badger Forest", wdpa_id: 3, countries: [country])
     
     params = {
-      wdpa_id: 1
+      filters:
+        {
+          wdpa_id: 1
+        }
     }
     
     # ES and WebMock don't get along
@@ -211,7 +214,7 @@ class SearchTest < ActionDispatch::IntegrationTest
       si = Search::Index.new 'protectedareas_test', ProtectedArea.all
       si.index
       sleep(1)
-      assert_equal 1, si.count
+      assert_equal 2, si.count
       search = Search.search 'north', params, 'protectedareas_test'
       assert_equal 1, search.results.count
     ensure
