@@ -8,7 +8,7 @@ class Search
     @@configuration ||= YAML.load(CONFIGURATION_FILE)
   end
 
-  def self.search search_term, options={}, index_name='protected_areas'
+  def self.search search_term, options={}, index_name='protectedareas_test,countries_test'
     # after receiving some crazy long search terms that crash elasticsearch
     # we are limiting this to 128 characters
     instance = self.new (search_term.present? ? search_term[0..127] : search_term), options, index_name

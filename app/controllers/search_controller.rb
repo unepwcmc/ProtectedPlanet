@@ -27,7 +27,7 @@ class SearchController < ApplicationController
 
   def load_search
     begin
-      @search = Search.search(@query, search_options)
+      @search = Search.search(@query, search_options, 'countries_test')
     rescue => e
       Rails.logger.warn("error in search controller: #{e.message}")
       @search = nil
