@@ -194,4 +194,30 @@ class SearchTest < ActionDispatch::IntegrationTest
     end
   end
 
+  test 'search single ProtectedArea on region name with params to restrict to one of two PAs' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+    
+    pa = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country])
+    pa = FactoryGirl.create(:protected_area, name: "Badger Forest", wdpa_id: 3, countries: [country])
+    
+    params = {
+      wdpa_id: 1
+    }
+    
+    # ES and WebMock don't get along
+    WebMock.disable!
+    begin
+      si = Search::Index.new 'protectedareas_test', ProtectedArea.all
+      si.index
+      sleep(1)
+      assert_equal 1, si.count
+      search = Search.search 'north', params, 'protectedareas_test'
+      assert_equal 1, search.results.count
+    ensure
+      si.delete
+    end
+  end  
+  
+  
 end
