@@ -86,6 +86,7 @@ class ProtectedArea < ApplicationRecord
     )
     js['countries_for_index'] = self.countries.map(&:name).join(' ')
     js['region_for_index'] = self.countries.map{|c| c.region.name}.join(' ')
+    js['iucn_category_name'] = self.iucn_category.name
     return js
   end
 
