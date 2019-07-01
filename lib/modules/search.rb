@@ -23,8 +23,7 @@ class Search
     @index_name = index_name
   end
 
-  def search 
-#    @query_results ||= elastic_search.search(index: 'protected_areas', body: query)
+  def search
     @query_results ||= elastic_search.search(index: @index_name, body: query)
   rescue Faraday::TimeoutError => e
     Rails.logger.warn "timeout in search"
@@ -33,7 +32,7 @@ class Search
   end
 
   def results
-    @results ||= Search::Results.new(@query_results)
+    @results ||= Search::Results.new(@query_results, 'Country')
   end
 
   def aggregations

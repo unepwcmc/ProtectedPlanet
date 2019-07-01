@@ -158,7 +158,6 @@ class SearchTest < ActionDispatch::IntegrationTest
   end  
   
   test 'search single ProtectedArea on region name with params to return both of two PAs' do
-    skip('andrews problem')
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     iucn_category = FactoryGirl.create(:iucn_category, name: "Ia")

@@ -64,21 +64,6 @@ aggregations:
           T: "Irreplaceability Assessment"
         identifiers:
           T: true
-  country:
-    type: "model"
-    class: "Country"
-  region:
-    type: "model"
-    class: "Region"
-  designation:
-    type: "model"
-    class: "Designation"
-  iucn_category:
-    type: "model"
-    class: "IucnCategory"
-  governance:
-    type: "model"
-    class: "Governance"
 filters:
     type:
       type: 'type'
