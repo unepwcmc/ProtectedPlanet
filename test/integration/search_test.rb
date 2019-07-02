@@ -29,7 +29,12 @@ class SearchTest < ActionDispatch::IntegrationTest
     end
   end
   
+  def assert_aggregation expected, name, value, aggs
+    value = aggs[name].select{|agg| agg[:label] == value}.count
+    assert_equal expected, value
+  end
 
+  
   test 'Index single country' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
@@ -144,6 +149,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     
     assert_index 1, 2
     search = Search.search 'north', params, 'protectedareas_test'
+    byebug
     assert_equal 1, search.results.count
   end  
   
@@ -200,6 +206,21 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_index 1, 2
     search = Search.search 'north', params, 'protectedareas_test'
     assert_equal 1, search.results.count
+  end  
+
+  test 'search with marine aggregation' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+
+    pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country], marine: true)
+    pa2 = FactoryGirl.create(:protected_area, name: "Blue Forest", wdpa_id: 3, countries: [country], marine: false)
+    
+    assert_index 1, 2
+    search = Search.search 'forest', {}, 'protectedareas_test'
+
+    assert_aggregation 1, 'type_of_territory', 'Marine', search.aggregations
+    assert_aggregation 1, 'type_of_territory', 'Terrestrial', search.aggregations
+
   end  
 
   

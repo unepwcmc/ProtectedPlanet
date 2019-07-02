@@ -42,11 +42,11 @@ aggregations:
     type: "boolean"
     query: "marine"
     labels:
-      T: "Marine"
-      F: "Terrestrial"
+      1: "Marine"
+      0: "Terrestrial"
     identifiers:
-      T: true
-      F: false
+      1: true
+      0: false
   related_sources:
     type: "grouped"
     members:
