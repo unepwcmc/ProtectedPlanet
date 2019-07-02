@@ -30,8 +30,8 @@ class SearchTest < ActionDispatch::IntegrationTest
   end
   
   def assert_aggregation expected, name, value, aggs
-    value = aggs[name].select{|agg| agg[:label] == value}.count
-    assert_equal expected, value
+    actual = aggs[name].first{|agg| agg[:label] == value}[:count]
+    assert_equal expected, actual
   end
 
   
@@ -149,17 +149,18 @@ class SearchTest < ActionDispatch::IntegrationTest
     
     assert_index 1, 2
     search = Search.search 'north', params, 'protectedareas_test'
-    byebug
     assert_equal 1, search.results.count
   end  
   
-  test 'search single ProtectedArea on region name with params to return both of two PAs' do
+  test 'search single ProtectedArea on region name with params to return two PAs' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
-    iucn_category = FactoryGirl.create(:iucn_category, name: "Ia")
+    iucn_category = FactoryGirl.create(:iucn_category, name: "Ia", id:1)
+    iucn_category2 = FactoryGirl.create(:iucn_category, name: "II", id:2)
     
     pa = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country], iucn_category: iucn_category)
-    pa = FactoryGirl.create(:protected_area, name: "Badger Forest", wdpa_id: 3, countries: [country], iucn_category: iucn_category)
+    pa = FactoryGirl.create(:protected_area, name: "Badger Forest", wdpa_id: 2, countries: [country], iucn_category: iucn_category)
+    pa = FactoryGirl.create(:protected_area, name: "Warthog Forest", wdpa_id: 3, countries: [country], iucn_category: iucn_category2)
     
     params = {
       filters:
@@ -168,9 +169,10 @@ class SearchTest < ActionDispatch::IntegrationTest
         }
     }
     
-    assert_index 1, 2
+    assert_index 1, 3
     search = Search.search 'north', params, 'protectedareas_test'
     assert_equal 2, search.results.count
+    assert_aggregation 2, 'iucn_category', 'Ia', search.aggregations
   end
 
 

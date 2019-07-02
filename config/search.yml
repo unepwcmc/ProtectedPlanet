@@ -54,16 +54,19 @@ aggregations:
         type: "boolean"
         query: "has_parcc_info"
         labels:
-          T: "Vulnerability Assessment"
+          1: "Vulnerability Assessment"
         identifiers:
-          T: true
+          1: true
       has_irreplaceability_info:
         type: "boolean"
         query: "has_irreplaceability_info"
         labels:
-          T: "Irreplaceability Assessment"
+          1: "Irreplaceability Assessment"
         identifiers:
-          T: true
+          1: true
+  iucn_category:
+    type: "model"
+    class: "IucnCategory"
 filters:
     type:
       type: 'type'
@@ -74,8 +77,9 @@ filters:
       type: 'equality'
       path: 'wdpa_id'
     iucn_category_name:
-      type: 'equality'
-      path: 'iucn_category_name'
+      type: 'nested'
+      path: 'iucn_category'
+      field: 'iucn_category.name'
       required: true
     designation:
       type: 'nested'

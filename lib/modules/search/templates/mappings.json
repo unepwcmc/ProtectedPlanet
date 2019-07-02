@@ -49,10 +49,17 @@
 	"iso_3" : {
 	    "type": "text"
 	},
-	"iucn_category_name" : {
-	    "type": "keyword"
+	"iucn_category": {
+            "type": "nested",
+            "properties": {
+		"id": {
+		    "type": "integer"
+		},
+		"name": {
+		    "type": "keyword"
+		}
+            }
 	},
-
 	"designation": {
         "type": "nested",
         "properties": {

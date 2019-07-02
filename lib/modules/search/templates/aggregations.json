@@ -18,5 +18,19 @@
     "terms": {
       "field": "has_irreplaceability_info"
     }
+  },
+    "iucn_category": {
+    "nested": {
+      "path": "iucn_category"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "iucn_category.id",
+          "size": 500
+        }
+      }
+    }
   }
+    
 }
