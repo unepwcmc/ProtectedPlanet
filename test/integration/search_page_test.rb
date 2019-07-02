@@ -55,7 +55,6 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     assert_index 2, 1
 
     get '/search?q=land'
-
     assert_response :success
     assert_select "h3>a", "Manbone land"
   end
@@ -73,7 +72,6 @@ class SearchPageTest < ActionDispatch::IntegrationTest
   end
 
   test 'search query that returns PA and country returns success' do
-    skip()
     region = FactoryGirl.create(:region, id: 987, name: 'Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'North Manbone land', region: region)
     pa = FactoryGirl.create(:protected_area, name: "North Protected Forest", countries: [country])

@@ -73,10 +73,9 @@ filters:
     wdpa_id:
       type: 'equality'
       path: 'wdpa_id'
-    iucn_category:
-      type: 'nested'
-      path: 'iucn_category'
-      field: 'iucn_category.name'
+    iucn_category_name:
+      type: 'equality'
+      path: 'iucn_category_name'
       required: true
     designation:
       type: 'nested'

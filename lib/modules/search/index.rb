@@ -12,7 +12,7 @@ class Search::Index
     ])
 
     Search::Index.index 'countries', Country.without_geometry.all
-#    Search::Index.create_mapping 'protected_areas', 'protected_area'
+    Search::Index.create_mapping 'protected_areas', 'protected_area'
     Search::Index.index 'protected_areas', pa_relation
   end
 
@@ -39,6 +39,7 @@ class Search::Index
 
   def initialize index_name, collection=nil
     @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch['url'])
+    @client.indices.create index: index_name, body: {mappings: mappings["protected_area"] }
     @index_name = index_name
     @collection = collection
   end

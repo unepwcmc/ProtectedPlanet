@@ -32,7 +32,7 @@
       "coordinates": {
         "type": "geo_point"
       },
-      "sub_location": {
+	"sub_location": {
         "type": "nested",
         "properties": {
           "name": {
@@ -40,43 +40,20 @@
           }
         }
       },
-      "countries_for_index": {
-        "type": "nested",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "keyword"
-          },
-          "iso_3": {
-            "type": "text"
-          },
-          "region_for_index": {
-            "type": "nested",
-            "properties": {
-              "id": {
-                "type": "integer"
-              },
-              "name": {
-                "type": "keyword"
-              }
-            }
-          }
-        }
-      },
-      "iucn_category": {
-        "type": "nested",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "keyword"
-          }
-        }
-      },
-      "designation": {
+	"countries_for_index" : {
+	    "type": "text"
+	},
+	"region_for_index" : {
+	    "type": "text"
+	},
+	"iso_3" : {
+	    "type": "text"
+	},
+	"iucn_category_name" : {
+	    "type": "keyword"
+	},
+
+	"designation": {
         "type": "nested",
         "properties": {
           "id": {

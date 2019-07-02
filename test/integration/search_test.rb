@@ -49,19 +49,9 @@ class SearchTest < ActionDispatch::IntegrationTest
   test 'search no country results' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
-
-    # ES and WebMock don't get along
-    WebMock.disable!
-    begin
-      si = Search::Index.new 'countries_test', Country.without_geometry.all
-      si.index
-      sleep(1)
-      assert_equal 1, si.count
-      search = Search.search 'nonexistent', {}, 'countries_test'
-      assert_equal 0, search.results.count
-    ensure
-      si.delete
-    end
+    assert_index 1, 0
+    search = Search.search 'nonexistent', {}, 'countries_test'
+    assert_equal 0, search.results.count
   end
 
   
@@ -108,7 +98,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_index 0, 1
   end
 
-  test 'search single ProtectedArea on name, no country' do
+  test 'search single ProtectedArea on name no country' do
     pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [])
 
     assert_index 0, 1
@@ -190,6 +180,27 @@ class SearchTest < ActionDispatch::IntegrationTest
     search = Search.search 'south', {}
     assert_equal 2, search.results.count
   end
+
+  test 'search single ProtectedArea on region name with designation params to restrict to one of two PAs' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+    jurisdiction = FactoryGirl.create(:jurisdiction, id: 2, name: 'International')
+    designation = FactoryGirl.create(:designation, id: 654, name: 'National', jurisdiction: jurisdiction)
+
+    pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country], designation: designation)
+    pa2 = FactoryGirl.create(:protected_area, name: "Badger Forest", wdpa_id: 3, countries: [country])
+    
+    params = {
+      filters:
+        {
+          designation: 'National'
+        }
+    }
+    
+    assert_index 1, 2
+    search = Search.search 'north', params, 'protectedareas_test'
+    assert_equal 1, search.results.count
+  end  
 
   
 end
