@@ -1,3 +1,7 @@
+### 2.4.6
+
+* Add country, pame_country and marine stats (WDPA July 2019 release).
+
 ### 2.4.5
 
 * Update the text and variables on the Marine page to prevent data becomming out of date.
