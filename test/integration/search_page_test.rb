@@ -83,5 +83,24 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     assert_select "h3>a", 2
   end
 
+  test 'search with country filter' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country1 = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+    country2 = FactoryGirl.create(:country, id: 124, iso_3: 'MBA', name: 'Sweden', region: region)
+
+    pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 11, countries: [country1])
+    pa2 = FactoryGirl.create(:protected_area, name: "Blue Forest", wdpa_id: 15, countries: [country2])
+    pa3 = FactoryGirl.create(:protected_area, name: "Bob Forest", wdpa_id: 13, countries: [country2])
+    
+    assert_index 3, 4
+
+    get '/search?q=forest&country=Sweden'
+
+    assert_response :success
+    assert_select "h3>a", 2
+
+
+  end  
+
   
 end

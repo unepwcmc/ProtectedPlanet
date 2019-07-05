@@ -67,6 +67,15 @@ aggregations:
   country:
     type: "model"
     class: "Country"
+  region:
+    type: "model"
+    class: "Region"
+  designation:
+    type: "model"
+    class: "Designation"
+  governance:
+    type: "model"
+    class: "Governance"
   iucn_category:
     type: "model"
     class: "IucnCategory"

@@ -52,7 +52,7 @@ class Search::Index
                                    }
                                  }
                                },
-                               mappings: mappings["protected_area"] }
+                               mappings: mappings }
     @index_name = index_name
     @collection = collection
   end

@@ -30,7 +30,7 @@ class SearchTest < ActionDispatch::IntegrationTest
   end
   
   def assert_aggregation expected, name, value, aggs
-    actual = aggs[name].first{|agg| agg[:label] == value}[:count]
+    actual = aggs[name].select{|agg| agg[:label] == value}[0][:count]
     assert_equal expected, actual
   end
 
@@ -110,29 +110,51 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_equal 1, search.results.count
   end
   
-  test 'search single ProtectedArea on country name' do
+  test 'search single ProtectedArea on exact country name' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     
     pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
     
     assert_index 1, 1
-    search = Search.search 'land', {}, 'protectedareas_test'
+    search = Search.search 'Manbone land', {}, 'protectedareas_test'
     assert_equal 1, search.results.count
   end
 
-  test 'search single ProtectedArea on region name' do
+  test 'search single ProtectedArea on case-insensitive country name' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     
     pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
     
     assert_index 1, 1
-    search = Search.search 'north', {}, 'protectedareas_test'
+    search = Search.search 'manbone LAND', {}, 'protectedareas_test'
     assert_equal 1, search.results.count
   end
 
-  test 'search single ProtectedArea on region name with params to restrict to one of two PAs' do
+  test 'search single ProtectedArea on wdpa name' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+    
+    pa = FactoryGirl.create(:protected_area, wdpa_id: 999, name: "Protected Forest", countries: [country])
+    
+    assert_index 1, 1
+    search = Search.search '999', {}, 'protectedareas_test'
+    assert_equal 1, search.results.count
+  end
+
+  test 'search single ProtectedArea on exact region name' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+    
+    pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
+    
+    assert_index 1, 1
+    search = Search.search 'North Manmerica', {}, 'protectedareas_test'
+    assert_equal 1, search.results.count
+  end
+
+  test 'search single ProtectedArea on name with params to restrict to one of two PAs' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     
@@ -147,11 +169,11 @@ class SearchTest < ActionDispatch::IntegrationTest
     }
     
     assert_index 1, 2
-    search = Search.search 'north', params, 'protectedareas_test'
+    search = Search.search 'forest', params, 'protectedareas_test'
     assert_equal 1, search.results.count
   end  
   
-  test 'search single ProtectedArea on region name with params to return two PAs' do
+  test 'search single ProtectedArea on name with params to return two PAs' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     iucn_category = FactoryGirl.create(:iucn_category, name: "Ia", id:1)
@@ -169,7 +191,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     }
     
     assert_index 1, 3
-    search = Search.search 'north', params, 'protectedareas_test'
+    search = Search.search 'forest', params, 'protectedareas_test'
     assert_equal 2, search.results.count
     assert_aggregation 2, 'iucn_category', 'Ia', search.aggregations
   end
@@ -188,7 +210,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_equal 2, search.results.count
   end
 
-  test 'search single ProtectedArea on region name with designation params to restrict to one of two PAs' do
+  test 'search ProtectedArea on  name with designation params to restrict to one of two PAs' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     jurisdiction = FactoryGirl.create(:jurisdiction, id: 2, name: 'International')
@@ -205,7 +227,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     }
     
     assert_index 1, 2
-    search = Search.search 'north', params, 'protectedareas_test'
+    search = Search.search 'forest', params, 'protectedareas_test'
     assert_equal 1, search.results.count
   end  
 
@@ -221,7 +243,61 @@ class SearchTest < ActionDispatch::IntegrationTest
 
     assert_aggregation 1, 'type_of_territory', 'Marine', search.aggregations
     assert_aggregation 1, 'type_of_territory', 'Terrestrial', search.aggregations
+  end  
 
+  test 'search with country aggregation' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country1 = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+    country2 = FactoryGirl.create(:country, id: 124, iso_3: 'MBA', name: 'Ant land', region: region)
+
+    pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country1])
+    pa2 = FactoryGirl.create(:protected_area, name: "Blue Forest", wdpa_id: 2, countries: [country2])
+    pa3 = FactoryGirl.create(:protected_area, name: "Bob Forest", wdpa_id: 3, countries: [country2])
+    
+    assert_index 2, 3
+    search = Search.search 'forest', {}, 'protectedareas_test'
+    assert_aggregation 1, 'country', 'Manbone land', search.aggregations
+    assert_aggregation 2, 'country', 'Ant land', search.aggregations
+  end  
+
+  test 'search with country filter' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country1 = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+    country2 = FactoryGirl.create(:country, id: 124, iso_3: 'MBA', name: 'Ant land', region: region)
+
+    pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country1])
+    pa2 = FactoryGirl.create(:protected_area, name: "Blue Forest", wdpa_id: 2, countries: [country2])
+    pa3 = FactoryGirl.create(:protected_area, name: "Bob Forest", wdpa_id: 3, countries: [country2])
+    
+    assert_index 2, 3
+    params = {
+      filters:
+        {
+          country: 'Ant land'
+        }
+    }
+
+    search = Search.search 'forest', params, 'protectedareas_test'
+    assert_equal 2, search.results.count
+    assert_aggregation 2, 'country', 'Ant land', search.aggregations
+  end  
+
+  
+    test 'search with region aggregation' do
+      region1 = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+      region2 = FactoryGirl.create(:region, id: 986, name: 'South Manmerica')
+      country1 = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region1)
+      country2 = FactoryGirl.create(:country, id: 124, iso_3: 'MBA', name: 'Ant land', region: region2)
+      country3 = FactoryGirl.create(:country, id: 125, iso_3: 'MBA', name: 'Badger land', region: region2)
+      
+      pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country1])
+      pa2 = FactoryGirl.create(:protected_area, name: "Blue Forest", wdpa_id: 2, countries: [country2])
+      pa3 = FactoryGirl.create(:protected_area, name: "Bob Forest", wdpa_id: 3, countries: [country3])
+      
+      assert_index 3, 3
+      search = Search.search 'forest', {}, 'protectedareas_test'
+      assert_aggregation 1, 'region', 'North Manmerica', search.aggregations
+      assert_aggregation 2, 'region', 'South Manmerica', search.aggregations
   end  
 
   
