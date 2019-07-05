@@ -31,10 +31,8 @@
         </header>
         <%= render partial: 'facets', locals: {aggregations: @search.aggregations} %>
       </div>
-<!-- These are invisible to me and cause unsafe errors from non-sanitised inputs
-      %= link_to("", search_path(params), class: "filter-bar__header-icon grid-icon") %>
-      %= link_to("", search_map_path(params), class: "filter-bar__header-icon map-icon") %>
--->
+      <%#= link_to("", search_path(params), class: "filter-bar__header-icon grid-icon") %>
+      <%#= link_to("", search_map_path(params), class: "filter-bar__header-icon map-icon") %>
     </aside>
   <% end %>
 
