@@ -11,9 +11,8 @@ class Search::Index
       :governance
     ])
 
-    Search::Index.index 'countries', Country.without_geometry.all
-    Search::Index.create_mapping 'protected_areas', 'protected_area'
-    Search::Index.index 'protected_areas', pa_relation
+    Search::Index.index Search::COUNTRY_INDEX, Country.without_geometry.all
+    Search::Index.index Search::PA_INDEX, pa_relation
   end
 
   def self.index index_name, collection
@@ -39,7 +38,6 @@ class Search::Index
 
   def initialize index_name, collection=nil
     @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch['url'])
-    #    @client.indices.delete index: index_name
     @client.indices.create index: index_name, body: {
                                settings: {
                                  analysis: {

@@ -6,8 +6,8 @@ class SearchTest < ActionDispatch::IntegrationTest
   def setup
     # ES and WebMock don't get along
     WebMock.disable!
-    @psi = Search::Index.new 'protectedareas_test', ProtectedArea.all
-    @csi = Search::Index.new 'countries_test', Country.without_geometry.all
+    @psi = Search::Index.new Search::PA_INDEX, ProtectedArea.all
+    @csi = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
   end
 
   def teardown
@@ -47,7 +47,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
 
     assert_index 1, 0
-    search = Search.search 'land', {}, 'countries_test'
+    search = Search.search 'land', {}
     assert_equal 1, search.results.count
   end
 
@@ -55,7 +55,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     assert_index 1, 0
-    search = Search.search 'nonexistent', {}, 'countries_test'
+    search = Search.search 'nonexistent', {}
     assert_equal 0, search.results.count
   end
 
@@ -64,7 +64,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     assert_index 1, 0
-    search = Search.search 'north', {}, 'countries_test'
+    search = Search.search 'north', {}
     assert_equal 1, search.results.count
   end
 
@@ -73,7 +73,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
 
     assert_index 1, 0
-    search = Search.search 'MBN', {}, 'countries_test'
+    search = Search.search 'MBN', {}
     assert_equal 1, search.results.count
   end
     
@@ -88,7 +88,7 @@ class SearchTest < ActionDispatch::IntegrationTest
 
     assert_index 3, 0
 
-    search = Search.search 'bel', {}, 'countries_test'
+    search = Search.search 'bel', {}
     assert_equal 3, search.results.count
     assert_equal iso3_match.id, search.results.matches[0]["_source"]["id"]
     assert_greater search.results.matches[0]['_score'], search.results.matches[1]['_score']
@@ -106,30 +106,30 @@ class SearchTest < ActionDispatch::IntegrationTest
     pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [])
 
     assert_index 0, 1
-    search = Search.search 'forest', {}, 'protectedareas_test'
+    search = Search.search 'forest', {}
     assert_equal 1, search.results.count
   end
   
-  test 'search single ProtectedArea on exact country name' do
+  test 'search  ProtectedArea and country on exact country name' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     
     pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
     
     assert_index 1, 1
-    search = Search.search 'Manbone land', {}, 'protectedareas_test'
-    assert_equal 1, search.results.count
+    search = Search.search 'Manbone land', {}
+    assert_equal 2, search.results.count
   end
 
-  test 'search single ProtectedArea on case-insensitive country name' do
+  test 'search ProtectedArea and country on case-insensitive country name' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     
     pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
     
     assert_index 1, 1
-    search = Search.search 'manbone LAND', {}, 'protectedareas_test'
-    assert_equal 1, search.results.count
+    search = Search.search 'manbone LAND', {}
+    assert_equal 2, search.results.count
   end
 
   test 'search single ProtectedArea on wdpa name' do
@@ -139,19 +139,19 @@ class SearchTest < ActionDispatch::IntegrationTest
     pa = FactoryGirl.create(:protected_area, wdpa_id: 999, name: "Protected Forest", countries: [country])
     
     assert_index 1, 1
-    search = Search.search '999', {}, 'protectedareas_test'
+    search = Search.search '999', {}
     assert_equal 1, search.results.count
   end
 
-  test 'search single ProtectedArea on exact region name' do
+  test 'search ProtectedArea and country on exact region name' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     
     pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
     
     assert_index 1, 1
-    search = Search.search 'North Manmerica', {}, 'protectedareas_test'
-    assert_equal 1, search.results.count
+    search = Search.search 'North Manmerica', {}
+    assert_equal 2, search.results.count
   end
 
   test 'search single ProtectedArea on name with params to restrict to one of two PAs' do
@@ -169,7 +169,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     }
     
     assert_index 1, 2
-    search = Search.search 'forest', params, 'protectedareas_test'
+    search = Search.search 'forest', params
     assert_equal 1, search.results.count
   end  
   
@@ -191,7 +191,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     }
     
     assert_index 1, 3
-    search = Search.search 'forest', params, 'protectedareas_test'
+    search = Search.search 'forest', params
     assert_equal 2, search.results.count
     assert_aggregation 2, 'iucn_category', 'Ia', search.aggregations
   end
@@ -227,7 +227,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     }
     
     assert_index 1, 2
-    search = Search.search 'forest', params, 'protectedareas_test'
+    search = Search.search 'forest', params
     assert_equal 1, search.results.count
   end  
 
@@ -239,7 +239,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     pa2 = FactoryGirl.create(:protected_area, name: "Blue Forest", wdpa_id: 3, countries: [country], marine: false)
     
     assert_index 1, 2
-    search = Search.search 'forest', {}, 'protectedareas_test'
+    search = Search.search 'forest', {}
 
     assert_aggregation 1, 'type_of_territory', 'Marine', search.aggregations
     assert_aggregation 1, 'type_of_territory', 'Terrestrial', search.aggregations
@@ -255,7 +255,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     pa3 = FactoryGirl.create(:protected_area, name: "Bob Forest", wdpa_id: 3, countries: [country2])
     
     assert_index 2, 3
-    search = Search.search 'forest', {}, 'protectedareas_test'
+    search = Search.search 'forest', {}
     assert_aggregation 1, 'country', 'Manbone land', search.aggregations
     assert_aggregation 2, 'country', 'Ant land', search.aggregations
   end  
@@ -277,7 +277,7 @@ class SearchTest < ActionDispatch::IntegrationTest
         }
     }
 
-    search = Search.search 'forest', params, 'protectedareas_test'
+    search = Search.search 'forest', params
     assert_equal 2, search.results.count
     assert_aggregation 2, 'country', 'Ant land', search.aggregations
   end  
@@ -295,7 +295,7 @@ class SearchTest < ActionDispatch::IntegrationTest
       pa3 = FactoryGirl.create(:protected_area, name: "Bob Forest", wdpa_id: 3, countries: [country3])
       
       assert_index 3, 3
-      search = Search.search 'forest', {}, 'protectedareas_test'
+      search = Search.search 'forest', {}
       assert_aggregation 1, 'region', 'North Manmerica', search.aggregations
       assert_aggregation 2, 'region', 'South Manmerica', search.aggregations
   end  
