@@ -25,11 +25,6 @@ class Search::Index
     index.count 
   end
 
-  def self.create_mapping index_name, collection
-    index = self.new index_name
-    index.create_mapping collection
-  end
-
   def self.delete index_name
     index = self.new index_name
     index.delete
@@ -38,19 +33,7 @@ class Search::Index
 
   def initialize index_name, collection=nil
     @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch['url'])
-    @client.indices.create index: index_name, body: {
-                               settings: {
-                                 analysis: {
-                                   normalizer: {
-                                     lc_normalizer: {
-                                       type: "custom",
-                                       char_filter: [],
-                                       filter: ["lowercase", "asciifolding"]
-                                     }
-                                   }
-                                 }
-                               },
-                               mappings: mappings }
+    @client.indices.create index: index_name, body:  mappings 
     @index_name = index_name
     @collection = collection
   end
@@ -70,15 +53,6 @@ class Search::Index
     @client.count(index: @index_name)['count']
   end
 
-  def create_mapping type
-    raise ArgumentError, "No mapping found for type #{type}" unless mappings[type]
-    @client.indices.put_mapping(
-      index: @index_name,
-      type: type,
-      include_type_name: true,
-      body: { type => mappings[type] }
-    )
-  end
 
   private
 

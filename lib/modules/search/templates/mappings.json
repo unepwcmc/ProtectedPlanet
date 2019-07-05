@@ -1,110 +1,123 @@
 {
-    "dynamic": "false",
-    "properties": {
-	"id": {
-	    "type": "long"
-	},
-	"wdpa_id": {
-	    "type": "integer"
-	},
-	"type": {
-	    "type": "text"
-	},
-	"name": {
-	    "type": "text"
-	},
-	"original_name": {
-	    "type": "text"
-	},
-	"marine": {
-	    "type": "boolean"
-	},
-	"has_irreplaceability_info": {
-	    "type": "boolean"
-	},
-	"is_green_list": {
-	    "type": "boolean"
-	},
-	"has_parcc_info": {
-	    "type": "boolean"
-	},
-	"coordinates": {
-	    "type": "geo_point"
-	},
-	"sub_location": {
-	    "type": "nested",
-	    "properties": {
-		"name": {
-		    "type": "keyword"
+    "settings": {
+	"analysis": {
+            "normalizer": {
+		"lc_normalizer": {
+                    "type": "custom",
+                    "char_filter": [],
+                    "filter": ["lowercase", "asciifolding"]
 		}
-	    }
-	},
-	"iso_3": {
-	    "type": "keyword",
-	    "normalizer": "lc_normalizer"
-	},
-	"region_name": {
-	    "type": "text"
-	},
+            }
+	}
+    },
+    "mappings": {
+	"dynamic": "false",
+	"properties": {
+	    "id": {
+		"type": "long"
+	    },
+	    "wdpa_id": {
+		"type": "integer"
+	    },
+	    "type": {
+		"type": "text"
+	    },
+	    "name": {
+		"type": "text"
+	    },
+	    "original_name": {
+		"type": "text"
+	    },
+	    "marine": {
+		"type": "boolean"
+	    },
+	    "has_irreplaceability_info": {
+		"type": "boolean"
+	    },
+	    "is_green_list": {
+		"type": "boolean"
+	    },
+	    "has_parcc_info": {
+		"type": "boolean"
+	    },
+	    "coordinates": {
+		"type": "geo_point"
+	    },
+	    "sub_location": {
+		"type": "nested",
+		"properties": {
+		    "name": {
+			"type": "keyword"
+		    }
+		}
+	    },
+	    "iso_3": {
+		"type": "keyword",
+		"normalizer": "lc_normalizer"
+	    },
+	    "region_name": {
+		"type": "text"
+	    },
 
-	"countries_for_index": {
-	    "type": "nested",
-	    "properties": {
-		"id": {
-		    "type": "integer"
-		},
-		"name": {
-		    "type": "keyword",
-		    "normalizer": "lc_normalizer"
-		},
-		"iso_3": {
-		    "type": "keyword",
-		    "normalizer": "lc_normalizer"
-		},
-		"region_for_index": {
-		    "type": "nested",
-		    "properties": {
-			"id": {
-			    "type": "integer"
-			},
-			"name": {
-			    "type": "keyword",
-			    "normalizer": "lc_normalizer"
+	    "countries_for_index": {
+		"type": "nested",
+		"properties": {
+		    "id": {
+			"type": "integer"
+		    },
+		    "name": {
+			"type": "keyword",
+			"normalizer": "lc_normalizer"
+		    },
+		    "iso_3": {
+			"type": "keyword",
+			"normalizer": "lc_normalizer"
+		    },
+		    "region_for_index": {
+			"type": "nested",
+			"properties": {
+			    "id": {
+				"type": "integer"
+			    },
+			    "name": {
+				"type": "keyword",
+				"normalizer": "lc_normalizer"
+			    }
 			}
 		    }
 		}
-	    }
-	},
-	"iucn_category": {
-	    "type": "nested",
-	    "properties": {
-		"id": {
-		    "type": "integer"
-		},
-		"name": {
-		    "type": "keyword"
+	    },
+	    "iucn_category": {
+		"type": "nested",
+		"properties": {
+		    "id": {
+			"type": "integer"
+		    },
+		    "name": {
+			"type": "keyword"
+		    }
 		}
-	    }
-	},
-	"designation": {
-	    "type": "nested",
-	    "properties": {
-		"id": {
-		    "type": "integer"
-		},
-		"name": {
-		    "type": "keyword"
+	    },
+	    "designation": {
+		"type": "nested",
+		"properties": {
+		    "id": {
+			"type": "integer"
+		    },
+		    "name": {
+			"type": "keyword"
+		    }
 		}
-	    }
-	},
-	"governance": {
-	    "type": "nested",
-	    "properties": {
-		"id": {
-		    "type": "integer"
-		},
-		"name": {
-		    "type": "keyword"
+	    },
+	    "governance": {
+		"type": "nested",
+		"properties": {
+		    "id": {
+			"type": "integer"
+		    },
+		    "name": {
+			"type": "keyword"
+		    }
 		}
 	    }
 	}
