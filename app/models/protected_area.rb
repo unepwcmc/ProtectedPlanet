@@ -74,19 +74,19 @@ class ProtectedArea < ApplicationRecord
       only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list],
       methods: [:coordinates],
       include: {
-#        countries_for_index: {
-#          only: [:name],
-#          include: { region_for_index: { only: [:id, :name] } }
-#        },
+        countries_for_index: {
+          only: [:name, :id, :iso_3],
+          include: { region_for_index: { only: [:id, :name] } }
+        },
         sub_locations: { only: [:english_name] },
         iucn_category: { only: [:id, :name] },
         designation: { only: [:id, :name] },
         governance: { only: [:id, :name] }
       }
     )
-    js['countries_for_index'] = self.countries.map(&:name).join(' ')
-    js['country_ids_for_index'] = self.countries.map(&:id).join(' ')
-    js['region_for_index'] = self.countries.map{|c| c.region.name}.join(' ')
+#    js['countries_for_index'] = self.countries.map(&:name).join(' ')
+#    js['country_ids_for_index'] = self.countries.map(&:id).join(' ')
+#    js['region_for_index'] = self.countries.map{|c| c.region.name}.join(' ')
  #   js['iucn_category_name'] = self.iucn_category.name
     return js
   end

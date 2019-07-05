@@ -64,6 +64,9 @@ aggregations:
           1: "Irreplaceability Assessment"
         identifiers:
           1: true
+  country:
+    type: "model"
+    class: "Country"
   iucn_category:
     type: "model"
     class: "IucnCategory"

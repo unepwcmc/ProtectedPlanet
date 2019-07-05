@@ -82,7 +82,6 @@ class SearchTest < ActionDispatch::IntegrationTest
     region2 = FactoryGirl.create(:region, id: 988, name: 'Bel')
     # make sure they aren't in index/id order so we are truly sorting
     region_match = FactoryGirl.create(:country, id: 125, iso_3: 'CHE', name: 'Cheese', region: region2)
-
     iso3_match = FactoryGirl.create(:country, id: 127, iso_3: 'BEL', name: 'Benland', region: region)
     country_match = FactoryGirl.create(:country, id: 124, iso_3: 'BLA', name: 'Bel', region: region)
 

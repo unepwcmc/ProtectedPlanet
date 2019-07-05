@@ -39,7 +39,20 @@ class Search::Index
 
   def initialize index_name, collection=nil
     @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch['url'])
-    @client.indices.create index: index_name, body: {mappings: mappings["protected_area"] }
+    #    @client.indices.delete index: index_name
+    @client.indices.create index: index_name, body: {
+                               settings: {
+                                 analysis: {
+                                   normalizer: {
+                                     lc_normalizer: {
+                                       type: "custom",
+                                       char_filter: [],
+                                       filter: ["lowercase", "asciifolding"]
+                                     }
+                                   }
+                                 }
+                               },
+                               mappings: mappings["protected_area"] }
     @index_name = index_name
     @collection = collection
   end

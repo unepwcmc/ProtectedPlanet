@@ -19,6 +19,19 @@
       "field": "has_irreplaceability_info"
     }
   },
+    "country": {
+    "nested": {
+      "path": "countries_for_index"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "countries_for_index.id",
+          "size": 500
+        }
+      }
+    }
+  },
     "iucn_category": {
     "nested": {
       "path": "iucn_category"

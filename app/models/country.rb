@@ -45,7 +45,7 @@ class Country < ApplicationRecord
       }
     )
     #crude remapping to flatten
-    js['region_for_index'] = js['region_for_index']['name']
+    js['region_name'] = js['region_for_index']['name']
     return js
   end
 
