@@ -54,15 +54,6 @@ class Search::Query
       base_query["bool"]["must"] = {
         "bool" => Search::Matcher.from_params(@term)
       }
-      # ^3 weights the field higher as ISO3 exact matches should beat country matches which should beat region matches
-      #base_query["bool"] ||= {  
-      #  must: {
-      #    multi_match: {
-      #      query:      @term,
-      #      fields:   ["name^2", "iso_3^3", "countries_for_index", "region_for_index"]
-      #    }
-      #  }
-      #}
     end
 
 

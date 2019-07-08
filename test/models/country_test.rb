@@ -24,9 +24,9 @@ class CountryTest < ActiveSupport::TestCase
       "name" => 'Manboneland',
       "iso_3"=> 'MyString',
       "region_for_index" => {
-        "id" => 987,
         "name" => "North Manmerica"
-      }
+      },
+      "region_name" => "North Manmerica"
     }
 
     assert_equal expected_json, country.as_indexed_json

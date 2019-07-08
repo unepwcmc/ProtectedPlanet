@@ -20,6 +20,7 @@ class SearchPageTest < ActionDispatch::IntegrationTest
   def teardown
     @psi.delete
     @csi.delete
+    WebMock.enable!
   end
   
   def assert_index num_countries, num_pas
@@ -88,9 +89,9 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     country1 = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     country2 = FactoryGirl.create(:country, id: 124, iso_3: 'MBA', name: 'Sweden', region: region)
 
-    pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 11, countries: [country1])
-    pa2 = FactoryGirl.create(:protected_area, name: "Blue Forest", wdpa_id: 15, countries: [country2])
-    pa3 = FactoryGirl.create(:protected_area, name: "Bob Forest", wdpa_id: 13, countries: [country2])
+    pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 21, countries: [country1])
+    pa2 = FactoryGirl.create(:protected_area, name: "Blue Forest", wdpa_id: 25, countries: [country2])
+    pa3 = FactoryGirl.create(:protected_area, name: "Bob Forest", wdpa_id: 23, countries: [country2])
     
     assert_index 3, 4
 

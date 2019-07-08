@@ -10,7 +10,6 @@ class Search::Index
       :iucn_category,
       :governance
     ])
-
     Search::Index.index Search::COUNTRY_INDEX, Country.without_geometry.all
     Search::Index.index Search::PA_INDEX, pa_relation
   end
@@ -20,9 +19,13 @@ class Search::Index
     index.index
   end
 
-  def self.count index_name
-    index = self.new index_name
-    index.count 
+  def self.count index_name = nil
+    if index_name.nil?
+      self.new(Search::COUNTRY_INDEX).count + self.new(Search::PA_INDEX).count
+    else
+      index = self.new index_name
+      index.count
+    end
   end
 
   def self.delete index_name
@@ -49,7 +52,7 @@ class Search::Index
     Rails.logger.warn("Index #{@index_name} not found. Skipping")
   end
 
-  def count
+  def count 
     @client.count(index: @index_name)['count']
   end
 

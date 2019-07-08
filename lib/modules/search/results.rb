@@ -1,8 +1,7 @@
 class Search::Results
-  def initialize query_results, type
+  def initialize query_results
     @query_results = query_results
-    @type = type
-    @type_index_map = {countries_test: "Country", protectedareas_test: "ProtectedArea"}
+    @type_index_map = {Search::COUNTRY_INDEX => "Country", Search::PA_INDEX => "ProtectedArea"}
   end
 
   def pluck key
@@ -17,11 +16,11 @@ class Search::Results
 
   
  def objects
-    by_type_and_id = matches.group_by { |match|
+   by_type_and_id = matches.group_by { |match|
       match["_index"]
     }.each_with_object({}) { |(index, objs), final|
       ids = objs.map { |obj| obj["_source"]["id"] }
-      type = @type_index_map[index.to_sym]
+      type = @type_index_map[index]
       final[type] = type.classify.constantize.
         without_geometry.
         where(id: ids).
@@ -30,7 +29,7 @@ class Search::Results
     }
     @objects ||= matches.map do |result|
       id = result["_source"]["id"]
-      type = @type_index_map[result["_index"].to_sym]
+      type = @type_index_map[result["_index"]]
       by_type_and_id[type][id].first
     end
   end

@@ -34,7 +34,7 @@ class Search
   end
 
   def results
-    @results ||= Search::Results.new(@query_results, 'Country')
+    @results ||= Search::Results.new(@query_results)
   end
 
   def aggregations

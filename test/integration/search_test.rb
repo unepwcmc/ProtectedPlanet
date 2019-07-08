@@ -13,6 +13,7 @@ class SearchTest < ActionDispatch::IntegrationTest
   def teardown
     @psi.delete
     @csi.delete
+    WebMock.enable!
   end
   
   def assert_index num_countries, num_pas
