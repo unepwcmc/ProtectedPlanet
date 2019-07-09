@@ -1,5 +1,4 @@
 require 'test_helper'
-require 'byebug'
 
 class TestPameImporter < ActiveSupport::TestCase
   test "#import pame evaluations" do
