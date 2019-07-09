@@ -4,12 +4,4 @@ class PameEvaluation < ActiveRecord::Base
   has_and_belongs_to_many :countries
 
   validates :methodology, :year, :metadata_id, :url, presence: true
-
-  def visible
-    if (protected_area.nil? && restricted) || protected_area.present?
-      true
-    else
-      false
-    end
-  end
 end
