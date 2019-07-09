@@ -3,13 +3,16 @@ require 'csv'
 module Wdpa::PameImporter
   PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-05-31.csv".freeze
 
-  def self.import
+  def self.import(csv_file=nil)
     puts "Deleting old PAME evaluations..."
     PameEvaluation.delete_all
     puts "Importing PAME evaluations..."
     hidden_evaluations = []
 
-    CSV.foreach(PAME_EVALUATIONS, headers: true) do |row|
+    csv_file = csv_file || PAME_EVALUATIONS
+
+    CSV.foreach(csv_file, headers: true) do |row|
+      id              = row[0].to_i
       wdpa_id         = row[1].to_i
       methodology     = row[3]
       year            = row[4].to_i
@@ -34,14 +37,12 @@ module Wdpa::PameImporter
         end
 
       # If PameEvaluation does not have a PA and is not restricted it should be hidden, so visible = false
-      if protected_area.nil? && (restricted == false)
-        visible = false
-        hidden_evaluations << wdpa_id
-      elsif (protected_area.nil? && restricted) || protected_area.present?
+      if (protected_area.nil? && restricted) || protected_area.present?
         visible = true
       end
 
       pame_evaluation = PameEvaluation.where({
+        id: id,
         protected_area: protected_area,
         methodology: methodology,
         year: year,
@@ -50,7 +51,9 @@ module Wdpa::PameImporter
         pame_source: pame_source,
         restricted: restricted
       }).first_or_create do |pe|
+        byebug
         # If the record doesn't exist, create it...
+        pe.id             = id
         pe.protected_area = protected_area
         pe.methodology    = methodology
         pe.year           = year
@@ -58,12 +61,8 @@ module Wdpa::PameImporter
         pe.url            = url
         pe.pame_source    = pame_source
         pe.restricted     = restricted
-        pe.visible        = visible
-
-        if protected_area.nil? && restricted
-          pe.wdpa_id = wdpa_id
-          pe.name    = name
-        end
+        pe.wdpa_id        = wdpa_id
+        pe.name           = name
       end
       if protected_area.nil? && restricted
         countries = []
