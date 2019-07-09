@@ -51,7 +51,6 @@ module Wdpa::PameImporter
         pame_source: pame_source,
         restricted: restricted
       }).first_or_create do |pe|
-        byebug
         # If the record doesn't exist, create it...
         pe.id             = id
         pe.protected_area = protected_area
@@ -63,6 +62,9 @@ module Wdpa::PameImporter
         pe.restricted     = restricted
         pe.wdpa_id        = wdpa_id
         pe.name           = name
+      end
+      if visible == false
+        hidden_evaluations << wdpa_id
       end
       if protected_area.nil? && restricted
         countries = []
