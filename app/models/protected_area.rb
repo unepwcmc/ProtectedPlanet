@@ -70,12 +70,12 @@ class ProtectedArea < ApplicationRecord
   end
 
   def as_indexed_json options={}
-    self.as_json(
+    js = self.as_json(
       only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list],
       methods: [:coordinates],
       include: {
         countries_for_index: {
-          only: [:name, :id],
+          only: [:name, :id, :iso_3],
           include: { region_for_index: { only: [:id, :name] } }
         },
         sub_locations: { only: [:english_name] },
@@ -84,6 +84,11 @@ class ProtectedArea < ApplicationRecord
         governance: { only: [:id, :name] }
       }
     )
+#    js['countries_for_index'] = self.countries.map(&:name).join(' ')
+#    js['country_ids_for_index'] = self.countries.map(&:id).join(' ')
+#    js['region_for_index'] = self.countries.map{|c| c.region.name}.join(' ')
+ #   js['iucn_category_name'] = self.iucn_category.name
+    return js
   end
 
   def as_api_feeder

@@ -43,10 +43,12 @@ You need a `.env` file similar to this:
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
 POSTGRES_HOST=protectedplanet-db
-REDIS_URL=redis://redis:6379/1
+POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology
+REDIS_URL=redis://redis:6379/0
+RAILS_ENV=development
 ELASTIC_SEARCH_URL=http://elastic:elastic@elasticsearch:9200
 xpack.security.enabled=false
-RAILS_ENV=development
+discovery.type=single-node
 ```
 
 The database is in a separate repo at the moment:

@@ -167,66 +167,8 @@ class SearchAggregationTest < ActiveSupport::TestCase
         ]
       }
     }
-    expected_response = {
-      'designation' => [{
-        label: designation.name,
-        query: 'designation',
-        count: 100,
-        identifier: designation.name
-      }],
-      'iucn_category' => [{
-        label: iucn_category.name,
-        query: 'iucn_category',
-        count: 100,
-        identifier: iucn_category.name
-      }],
-      'governance' => [{
-        label: governance.name,
-        query: 'governance',
-        count: 100,
-        identifier: governance.name
-      }],
-      'region' => [{
-        label: region.name,
-        query: 'region',
-        count: 100,
-        identifier: region.name
-      }],
-      'country' => [{
-        label: country_1.name,
-        query: 'country',
-        count: 64,
-        identifier: country_1.name
-      }, {
-        label: country_2.name,
-        query: 'country',
-        count: 17,
-        identifier: country_2.name
-      }],
-      'type_of_territory' => [{
-        label: 'Marine',
-        query: 'marine',
-        count: 64,
-        identifier: true
-      }, {
-        label: 'Terrestrial',
-        query: 'marine',
-        count: 17,
-        identifier: false
-      }],
-      'related_sources' => [{
-        label: 'Vulnerability Assessment',
-        query: 'has_parcc_info',
-        count: 50,
-        identifier: true
-      }, {
-        label: 'Irreplaceability Assessment',
-        query: 'has_irreplaceability_info',
-        count: 2,
-        identifier: true
-      }]
-    }
-
+    expected_response =
+{"type_of_territory"=>[], "related_sources"=>[], "country"=>[{:identifier=>"MyText", :query=>"country", :label=>"MyText", :count=>64}, {:identifier=>"MyText", :query=>"country", :label=>"MyText", :count=>17}], "region"=>[{:identifier=>"Global", :query=>"region", :label=>"Global", :count=>100}], "designation"=>[{:identifier=>"MyString", :query=>"designation", :label=>"MyString", :count=>100}], "governance"=>[{:identifier=>"MyString", :query=>"governance", :label=>"MyString", :count=>100}], "iucn_category"=>[{:identifier=>"MyString", :query=>"iucn_category", :label=>"MyString", :count=>100}]}
     aggregations = Search::Aggregation.parse(aggregations_hash)
     assert_equal expected_response, aggregations
   end

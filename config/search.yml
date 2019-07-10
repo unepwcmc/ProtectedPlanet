@@ -42,11 +42,11 @@ aggregations:
     type: "boolean"
     query: "marine"
     labels:
-      T: "Marine"
-      F: "Terrestrial"
+      1: "Marine"
+      0: "Terrestrial"
     identifiers:
-      T: true
-      F: false
+      1: true
+      0: false
   related_sources:
     type: "grouped"
     members:
@@ -54,16 +54,16 @@ aggregations:
         type: "boolean"
         query: "has_parcc_info"
         labels:
-          T: "Vulnerability Assessment"
+          1: "Vulnerability Assessment"
         identifiers:
-          T: true
+          1: true
       has_irreplaceability_info:
         type: "boolean"
         query: "has_irreplaceability_info"
         labels:
-          T: "Irreplaceability Assessment"
+          1: "Irreplaceability Assessment"
         identifiers:
-          T: true
+          1: true
   country:
     type: "model"
     class: "Country"
@@ -73,12 +73,12 @@ aggregations:
   designation:
     type: "model"
     class: "Designation"
-  iucn_category:
-    type: "model"
-    class: "IucnCategory"
   governance:
     type: "model"
     class: "Governance"
+  iucn_category:
+    type: "model"
+    class: "IucnCategory"
 filters:
     type:
       type: 'type'
@@ -88,7 +88,7 @@ filters:
     wdpa_id:
       type: 'equality'
       path: 'wdpa_id'
-    iucn_category:
+    iucn_category_name:
       type: 'nested'
       path: 'iucn_category'
       field: 'iucn_category.name'

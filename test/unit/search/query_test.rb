@@ -47,6 +47,12 @@ class SearchQueryTest < ActiveSupport::TestCase
                 }
               },
               {
+                "multi_match" => {
+                               "query" => "manbone",
+                               "fields"=>  ["name^2","iso_3^3","countries_for_index","region_name"],
+                               "fuzziness" => "AUTO"}
+              },
+              {
                 "terms"=> {
                   "wdpa_id"=>[]
                 }
@@ -55,12 +61,13 @@ class SearchQueryTest < ActiveSupport::TestCase
                 "function_score" => {
                   "query" => {
                       "multi_match" => {
-                          "query" => "*manbone*",
+                          "query" => "manbone",
                           "fields" => [
                               "iso_3",
                               "name",
                               "original_name"
-                          ]
+                          ],
+                          "fuzziness"=>"AUTO"
                       }
                   },
                   "boost" => "5",

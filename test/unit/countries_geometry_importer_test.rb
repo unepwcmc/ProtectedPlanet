@@ -3,7 +3,7 @@ require 'test_helper'
 class TestCountriesGeometryImporter < ActiveSupport::TestCase
   test '#import downloads the geometries from S4, imports to postgres
    and updates each Country with the matching geometries' do
-    skip("skipping broken S3 tests")
+    #skip("skipping broken S3 tests")
     bucket = Rails.application.secrets.aws_datasets_bucket
 
     filename = 'countries_geometries_dump.tar.gz'
@@ -14,7 +14,7 @@ class TestCountriesGeometryImporter < ActiveSupport::TestCase
     bucket_mock.stubs(:objects).returns({filename => file_mock})
     s3_mock = mock()
     s3_mock.stubs(:buckets).returns({bucket => bucket_mock})
-    AWS::S3.expects(:new).returns(s3_mock)
+    Aws::S3::Resource.expects(:new).returns(s3_mock)
 
     file_write_mock = mock()
     file_write_mock.expects(:write).with("geometries contents")

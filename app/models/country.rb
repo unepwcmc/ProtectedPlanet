@@ -16,6 +16,8 @@ class Country < ApplicationRecord
   belongs_to :parent, class_name: "Country", foreign_key: :country_id
   has_many :children, class_name: "Country"
 
+  has_and_belongs_to_many :pame_evaluations
+
   def wdpa_ids
     protected_areas.map(&:wdpa_id)
   end
@@ -36,12 +38,15 @@ class Country < ApplicationRecord
   end
 
   def as_indexed_json options={}
-    self.as_json(
-      only: [:id, :name, :iso_3],
+    js = self.as_json(
+      only: [:name, :iso_3, :id],
       include: {
-        region_for_index: { only: [:id, :name] }
+        region_for_index: { only: [ :name] }
       }
     )
+    #crude remapping to flatten
+    js['region_name'] = js['region_for_index']['name']
+    return js
   end
 
   def random_protected_areas wanted=1

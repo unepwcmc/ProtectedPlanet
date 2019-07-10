@@ -1,12 +1,13 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.0.2'
+gem 'rails', '5.0.5'
 gem 'webpacker'
+
 gem 'pg', '~> 0.21'
 gem 'activerecord-postgis-adapter', '~> 4.0.0'
 gem 'dbf', '~> 2.0.7'
 #
-gem 'elasticsearch', '~> 5.0.3'
+gem 'elasticsearch', '~> 7.0.0'
 #
 gem 'sass-rails', '~> 5.0.7'
 gem 'sprockets-rails', '~> 3.2.1'
@@ -25,6 +26,7 @@ gem 'vuejs-rails', '~> 2.3.2'
 gem 'sprockets-vue', '~> 0.1.0'
 
 gem 'rails-controller-testing'
+gem 'gdal', '~> 2.0'
 #
 group :production, :staging do
 #  gem 'unicorn'
@@ -41,7 +43,6 @@ group :development do
   gem 'capistrano-sidekiq'
   gem 'capistrano-maintenance', '~> 1.0', require: false
   gem 'capistrano-passenger', '~> 0.2.0', require: false
-  gem 'byebug', '~> 9.0', '>= 9.0.5'
   # gem 'listen', '~> 3.1.5'
   # gem 'spring-watcher-listen', '~> 2.0.0'
   #
@@ -67,6 +68,8 @@ group :test, :development do
   gem 'ejs'
   # gem 'minitest', '5.10.3' # Explicit minitest version fixes test reporting errors
   gem 'minitest', '~> 5.10', '!= 5.10.2'
+  gem 'byebug', '~> 9.0', '>= 9.0.5'
+
 end
 
 

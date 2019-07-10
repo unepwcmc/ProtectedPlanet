@@ -2,7 +2,6 @@ require 'test_helper'
 
 class TestOgrInfo < ActiveSupport::TestCase
   test '.layers returns an array of layer names' do
-    skip("skipping broken tests which depend on gdal")
     filename = '/tmp/whatever.gdb'
 
     ogr_mock = mock()
@@ -25,7 +24,6 @@ class TestOgrInfo < ActiveSupport::TestCase
   end
 
   test '.layers_matching returns layers that match the given regex' do
-    skip("skipping broken tests which depend on gdal")
     Ogr::Info.
       any_instance.
       expects(:layers).
@@ -36,7 +34,6 @@ class TestOgrInfo < ActiveSupport::TestCase
   end
 
   test '.layer_count returns the number of layers' do
-    skip("skipping broken tests which depend on gdal")
     filename = '/tmp/whatever.gdb'
 
     ogr_mock = mock()
@@ -52,7 +49,6 @@ class TestOgrInfo < ActiveSupport::TestCase
   end
 
   test '.feature_count returns the feature count for the given layer' do
-    skip("skipping broken tests which depend on gdal")
     filename = '/tmp/whatever.gdb'
 
     layer_mock = mock()

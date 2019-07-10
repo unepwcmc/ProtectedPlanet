@@ -2,8 +2,8 @@ version: '3'
 services:
   web:
     build: .
-    command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/rails"
-    user: protectedplanet
+    command: /bin/bash -l -c "bundle exec rails s -p 3000 -b '0.0.0.0'"
+    user: unepwcmc
     volumes:
       - .:/ProtectedPlanet
       - protectedplanet_import_data:/import_data
@@ -40,12 +40,12 @@ services:
      links:
        - db
        - redis
-     command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/sidekiq"
-     user: protectedplanet
+     command: /bin/bash -l -c "bundle exec sidekiq"
+     user: unepwcmc
      env_file:
        - '.env'
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.3
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -58,8 +58,10 @@ services:
       - "9200:9200"
     env_file:
       - '.env'
+    volumes:
+      - 'protectedplanet_es_data:/usr/share/elasticsearch/data'
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.3.2
+    image: docker.elastic.co/kibana/kibana:7.0.0
     ports:
       - "5601:5601"
   webpacker: 
@@ -81,5 +83,5 @@ volumes:
     driver: local
   protectedplanet_import_data:
     driver: local
-  protected_planet_bundler:
+  protectedplanet_es_data:
     driver: local

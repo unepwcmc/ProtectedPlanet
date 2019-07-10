@@ -26,7 +26,7 @@ Bystander.scene('import') do
         block: -> { "Elements in index: #{Search::Index.count}" }
       },
       ensure: -> (return_value) {
-        Search::Index.count == (ProtectedArea.count + Country.count + Region.count)
+        Search::Index.count == (ProtectedArea.count + Country.count)
       }
     }
     add :release, :download, notify: :wrap
