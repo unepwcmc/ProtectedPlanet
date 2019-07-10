@@ -62,6 +62,7 @@ module Wdpa::PameImporter
         pe.restricted     = restricted
         pe.wdpa_id        = wdpa_id
         pe.name           = name
+        pe.visible        = visible
       end
       if visible == false
         hidden_evaluations << wdpa_id
