@@ -1,15 +1,18 @@
 require 'csv'
 
 module Wdpa::PameImporter
-  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-05-31.csv".freeze
+  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-06-27.csv".freeze
 
-  def self.import
+  def self.import(csv_file=nil)
     puts "Deleting old PAME evaluations..."
     PameEvaluation.delete_all
     puts "Importing PAME evaluations..."
-    delete_evaluations = []
+    hidden_evaluations = []
 
-    CSV.foreach(PAME_EVALUATIONS, headers: true) do |row|
+    csv_file = csv_file || PAME_EVALUATIONS
+
+    CSV.foreach(csv_file, headers: true) do |row|
+      id              = row[0].to_i
       wdpa_id         = row[1].to_i
       methodology     = row[3]
       year            = row[4].to_i
@@ -19,6 +22,7 @@ module Wdpa::PameImporter
       url             = row[5]
       restricted      = row[13] == "FALSE" ? false : true
       iso3s           = row[2]
+      visible         = false
       pame_source     = PameSource.where({
         data_title: row[9],
         resp_party: row[10],
@@ -32,50 +36,50 @@ module Wdpa::PameImporter
           ps.language   = row[12]
         end
 
-      # If PameEvaluation does not have a PA and is not restricted it should be deleted.
-      if protected_area.nil? && (restricted == false)
-        delete_evaluations << wdpa_id
-      # If PameEvaluation does not have a PA and is restricted then it is restricted.
-      elsif (protected_area.nil? && restricted) || protected_area.present?
-        pame_evaluation = PameEvaluation.where({
-          protected_area: protected_area,
-          methodology: methodology,
-          year: year,
-          metadata_id: metadata_id,
-          url: url,
-          pame_source: pame_source,
-          restricted: restricted
-        }).first_or_create do |pe|
-          # If the record doesn't exist, create it...
-          pe.protected_area = protected_area
-          pe.methodology    = methodology
-          pe.year           = year
-          pe.metadata_id    = metadata_id
-          pe.url            = url
-          pe.pame_source    = pame_source
-          pe.restricted     = restricted
+      # If PameEvaluation does not have a PA and is not restricted it should be hidden, so visible = false
+      if (protected_area.nil? && restricted) || protected_area.present?
+        visible = true
+      end
 
-          if protected_area.nil? && restricted
-            pe.wdpa_id = wdpa_id
-            pe.name    = name
+      pame_evaluation = PameEvaluation.where({
+        id: id,
+        protected_area: protected_area,
+        methodology: methodology,
+        year: year,
+        metadata_id: metadata_id,
+        url: url,
+        pame_source: pame_source,
+        restricted: restricted
+      }).first_or_create do |pe|
+        # If the record doesn't exist, create it...
+        pe.id             = id
+        pe.protected_area = protected_area
+        pe.methodology    = methodology
+        pe.year           = year
+        pe.metadata_id    = metadata_id
+        pe.url            = url
+        pe.pame_source    = pame_source
+        pe.restricted     = restricted
+        pe.wdpa_id        = wdpa_id
+        pe.name           = name
+        pe.visible        = visible
+      end
+      if visible == false
+        hidden_evaluations << wdpa_id
+      end
+      if protected_area.nil? && restricted
+        countries = []
+        iso3s.split(",").each do |iso3|
+          country = Country.find_by(iso_3: iso3)
+          if country.present?
+            pame_evaluation.countries << country unless pame_evaluation.countries.include? country
           end
         end
-        if protected_area.nil? && restricted
-          countries = []
-          iso3s.split(",").each do |iso3|
-            country = Country.find_by(iso_3: iso3)
-            if country.present?
-              pame_evaluation.countries << country unless pame_evaluation.countries.include? country
-            end
-          end
-        end
-      elsif protected_area.nil? && !restricted # If PameEvaluation doesn’t have a PA and isn’t restricted it should be deleted.
-        delete_evaluations << wdpa_id
       end
     end
 
     puts "Import finished!"
-    puts "Please delete the following: #{delete_evaluations.count}"
-    puts delete_evaluations.join(",")
+    puts "The following are hidden: #{hidden_evaluations.count}"
+    puts hidden_evaluations.join(",")
   end
 end
