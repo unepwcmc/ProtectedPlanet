@@ -1,3 +1,7 @@
+### 2.4.4
+
+* Update the PAME importer for restricted PAME Evaluations with restricted Protected Areas flag.
+
 ### 2.4.3
 
 * Update the PAME importer to use the latest monthly CSV (May 2019 release).
