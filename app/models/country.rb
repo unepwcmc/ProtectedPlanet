@@ -16,6 +16,8 @@ class Country < ActiveRecord::Base
   belongs_to :parent, class_name: "Country", foreign_key: :country_id
   has_many :children, class_name: "Country"
 
+  has_and_belongs_to_many :pame_evaluations
+
   def wdpa_ids
     protected_areas.map(&:wdpa_id)
   end

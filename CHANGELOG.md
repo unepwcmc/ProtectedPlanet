@@ -1,3 +1,7 @@
+### 2.4.7
+
+* Update the PAME importer for restricted PAME Evaluations with restricted Protected Areas flag.
+
 ### 2.4.6
 
 * Add country, pame_country and marine stats (WDPA July 2019 release).
