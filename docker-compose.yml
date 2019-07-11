@@ -7,7 +7,7 @@ services:
     volumes:
       - .:/ProtectedPlanet
       - protectedplanet_import_data:/import_data
-      - protected_planet_bundler:/usr/local/bundle
+      - protectedplanet_bundler:/usr/local/bundle
     ports:
       - "3000:3000"
     env_file:
@@ -72,7 +72,7 @@ services:
     user: protectedplanet
     volumes: 
       - .:/ProtectedPlanet
-      - protected_planet_bundler:/usr/local/bundle
+      - protectedplanet_bundler:/usr/local/bundle
     ports:
       - '3035:3035'
 
@@ -84,4 +84,6 @@ volumes:
   protectedplanet_import_data:
     driver: local
   protectedplanet_es_data:
+    driver: local
+  protectedplanet_bundler:
     driver: local
