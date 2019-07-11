@@ -1,6 +1,20 @@
-### 2.4.4
+### 2.4.7
 
 * Update the PAME importer for restricted PAME Evaluations with restricted Protected Areas flag.
+
+### 2.4.6
+
+* Add country, pame_country and marine stats (WDPA July 2019 release).
+
+### 2.4.5
+
+* Update the text and variables on the Marine page to prevent data becomming out of date.
+* Manually add the Mapbox logo to the maps
+* Hide commitments and pledges data download link on the Marine page
+
+### 2.4.4
+
+* Add country, pame_country and marine stats (WDPA May 2019 release).
 
 ### 2.4.3
 
