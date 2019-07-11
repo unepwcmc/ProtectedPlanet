@@ -10,10 +10,12 @@ ADD Gemfile.lock /ProtectedPlanet/Gemfile.lock
 ADD package.json /ProtectedPlanet/package.json
 ADD docker/scripts /ProtectedPlanet/docker/scripts
 
+COPY --chown=unepwcmc:unepwcmc . /ProtectedPlanet
+
 RUN /bin/bash -l -c "bundle install"
 RUN /bin/bash -l -c "yarn install"
 
-COPY . /ProtectedPlanet
+
 
 EXPOSE 3000
 
