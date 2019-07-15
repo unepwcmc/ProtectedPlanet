@@ -33,6 +33,6 @@ class TestPameImporter < ActiveSupport::TestCase
     assert_equal 9, pame_evaluations.count
 
     hidden_pame_evaluation = PameEvaluation.find(64)
-    assert_equal false, hidden_pame_evaluation.visible
-  end  
+    assert_nil hidden_pame_evaluation.protected_area_id
+  end
 end
