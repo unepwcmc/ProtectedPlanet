@@ -22,7 +22,6 @@ module Wdpa::PameImporter
       url             = row[5]
       restricted      = row[13] == "FALSE" ? false : true
       iso3s           = row[2]
-      # visible         = false
       pame_source     = PameSource.where({
         data_title: row[9],
         resp_party: row[10],
@@ -35,11 +34,6 @@ module Wdpa::PameImporter
           ps.year       = row[11].to_i
           ps.language   = row[12]
         end
-
-      # If PameEvaluation has a protected_area then it is visible
-      # if protected_area.present?
-      #   visible = true
-      # end
 
       pame_evaluation = PameEvaluation.where({
         id: id,
@@ -62,7 +56,6 @@ module Wdpa::PameImporter
         pe.restricted     = restricted
         pe.wdpa_id        = wdpa_id
         pe.name           = name
-        #pe.visible        = visible
       end
       if protected_area.nil?
         hidden_evaluations << wdpa_id
