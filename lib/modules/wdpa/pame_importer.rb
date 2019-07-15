@@ -36,8 +36,8 @@ module Wdpa::PameImporter
           ps.language   = row[12]
         end
 
-      # If PameEvaluation does not have a PA and is not restricted it should be hidden, so visible = false
-      if (protected_area.nil? && restricted) || protected_area.present?
+      # If PameEvaluation has a protected_area then it is visible
+      if protected_area.present?
         visible = true
       end
 
