@@ -1,7 +1,7 @@
 require 'csv'
 
 module Wdpa::PameImporter
-  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-07-11.csv".freeze
+  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-07-11_dummy_data.csv".freeze
 
   def self.import(csv_file=nil)
     puts "Deleting old PAME evaluations..."
@@ -12,15 +12,23 @@ module Wdpa::PameImporter
     csv_file = csv_file || PAME_EVALUATIONS
 
     CSV.foreach(csv_file, headers: true) do |row|
-      id              = row[0].to_i
-      wdpa_id         = row[1].to_i
-      methodology     = row[3]
-      year            = row[4].to_i
-      protected_area  = ProtectedArea.find_by_wdpa_id(wdpa_id) || nil
-      metadata_id     = row[6].to_i
-      name            = row[7]
-      url             = row[5]
-      restricted      = row[13] == "FALSE" ? false : true
+      id                   = row[0].to_i
+      wdpa_id              = row[1].to_i
+      methodology          = row[3]
+      year                 = row[4].to_i
+      protected_area       = ProtectedArea.find_by_wdpa_id(wdpa_id) || nil
+      metadata_id          = row[6].to_i
+      name                 = row[7]
+      url                  = row[5]
+      restricted           = row[13] == "FALSE" ? false : true
+      assessment_is_public = row[14] == "FALSE" ? false : true
+
+      if assessment_is_public
+        url = url.blank? ? "Not currently public" : url
+      else
+        url = "Not reported"
+      end
+
       iso3s           = row[2]
       pame_source     = PameSource.where({
         data_title: row[9],
@@ -46,16 +54,17 @@ module Wdpa::PameImporter
         restricted: restricted
       }).first_or_create do |pe|
         # If the record doesn't exist, create it...
-        pe.id             = id
-        pe.protected_area = protected_area
-        pe.methodology    = methodology
-        pe.year           = year
-        pe.metadata_id    = metadata_id
-        pe.url            = url
-        pe.pame_source    = pame_source
-        pe.restricted     = restricted
-        pe.wdpa_id        = wdpa_id
-        pe.name           = name
+        pe.id                   = id
+        pe.protected_area       = protected_area
+        pe.methodology          = methodology
+        pe.year                 = year
+        pe.metadata_id          = metadata_id
+        pe.url                  = url
+        pe.pame_source          = pame_source
+        pe.restricted           = restricted
+        pe.wdpa_id              = wdpa_id
+        pe.name                 = name
+        pe.assessment_is_public = assessment_is_public
       end
       if protected_area.nil?
         hidden_evaluations << wdpa_id
