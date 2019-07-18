@@ -67,7 +67,7 @@ module Wdpa::PameImporter
         pe.assessment_is_public = assessment_is_public
       end
       if protected_area.nil?
-        hidden_evaluations << wdpa_id
+        hidden_evaluations << wdpa_id unless restricted
         countries = []
         iso3s.split(",").each do |iso3|
           country = Country.find_by(iso_3: iso3)
