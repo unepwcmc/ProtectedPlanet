@@ -68,7 +68,6 @@ module Wdpa::PameImporter
       end
       if protected_area.nil?
         hidden_evaluations << wdpa_id unless restricted
-        countries = []
         iso3s.split(",").each do |iso3|
           country = Country.find_by(iso_3: iso3)
           if country.present?
