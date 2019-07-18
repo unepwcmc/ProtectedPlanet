@@ -31,8 +31,5 @@ class TestPameImporter < ActiveSupport::TestCase
 
     pame_evaluations = PameEvaluation.all
     assert_equal 9, pame_evaluations.count
-
-    hidden_pame_evaluation = PameEvaluation.find(64)
-    assert_equal false, hidden_pame_evaluation.visible
-  end  
+  end
 end

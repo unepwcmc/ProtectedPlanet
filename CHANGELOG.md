@@ -1,3 +1,7 @@
+### 2.5.1
+
+* Add new url functionality for the PAME importer and fix the restricted PAME Evaluations.
+
 ### 2.5.0
 
 * Add and populate boolean column for countries to flag the ACP (BIOPAMA) related ones
