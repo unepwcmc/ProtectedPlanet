@@ -1,7 +1,7 @@
 require 'csv'
 
 module Wdpa::PameImporter
-  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-07-11_dummy_data.csv".freeze
+  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-07-11.csv".freeze
 
   def self.import(csv_file=nil)
     puts "Deleting old PAME evaluations..."
