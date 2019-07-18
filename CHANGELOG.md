@@ -1,3 +1,7 @@
+### 2.5.0
+
+* Add and populate boolean column for countries to flag the ACP (BIOPAMA) related ones
+
 ### 2.4.7
 
 * Update the PAME importer for restricted PAME Evaluations with restricted Protected Areas flag.
