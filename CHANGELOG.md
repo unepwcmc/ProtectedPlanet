@@ -1,3 +1,9 @@
+### 2.5.2
+
+**Bug fixes**
+
+* Fix PameImporter to manage restricted and hidden evaluations correctly
+
 ### 2.5.1
 
 * Add new url functionality for the PAME importer and fix the restricted PAME Evaluations.
