@@ -3,6 +3,7 @@
 **Bug fixes**
 
 * Fix PameImporter to manage restricted and hidden evaluations correctly
+* Fix CSV file to have iso codes instead of country names
 
 ### 2.5.1
 
