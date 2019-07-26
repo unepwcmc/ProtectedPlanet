@@ -7,19 +7,17 @@ set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
 set :deploy_user, 'wcmc'
 set :deploy_to, "/home/#{fetch(:deploy_user)}/#{fetch(:application)}"
 
-
-set :whenever_environment, -> { fetch(:stage) }
-set :whenever_roles, [:util]
-
-set :migration_role, :util
-
-
 set :nvm_type, :user # or :system, depends on your nvm setup
 set :nvm_node, 'v10.15.1'
 set :nvm_map_bins, %w{node npm yarn}
 
+set :scm_username, "unepwcmc-read"
+
+
 set :rvm_type, :user
-set :rvm_ruby_version, '2.4.1'
+set :rvm_ruby_version, '2.6.3'
+
+
 
 set :pty, true
 
