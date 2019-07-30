@@ -9,30 +9,11 @@ $stat-colour-marine-light: lighten($blue--light, 15%);
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
-@mixin card-row() {
-  display: flex;
-  @include flex-column;
-  @include flex-wrap;
-
-  @include breakpoint($small){ 
-    @include flex-row; 
-    @include flex-nowrap;
-    @include flex-h-between;
-  }
-}
-
-@mixin card-element() {
-  margin: rem-calc(0 0 10 0);
-  width: 30%;
-
-  &:last-child {
-    @include breakpoint($small) { margin-right: auto; }
-  }
-}
-
 @mixin card-infographic($size, $bg-color: $grey-100, $fill-color: $green) {
   @include flex-h-start();
+  @include flex-no-shrink();
   background-color: $bg-color;
+  margin-bottom: rem-calc(16);
   width: rem-calc($size); height: rem-calc($size);
 
   position: relative;
@@ -76,7 +57,8 @@ $stat-colour-marine-light: lighten($blue--light, 15%);
 
       &__body {
         @include flex-h-start;
-        @include flex-nowrap;
+        @include flex-wrap;
+        @include responsive-styles(flex-wrap, wrap, wrap, nowrap);
         
         display: flex;
       }
@@ -86,14 +68,23 @@ $stat-colour-marine-light: lighten($blue--light, 15%);
         }
 
           &__row {
-            @include card-row();
+            display: flex;
+            @include flex-column;
+            @include flex-wrap;
+
+            @include breakpoint($small){ 
+              @include flex-row; 
+              @include flex-nowrap;
+              @include flex-h-between;
+            }
           }
 
             &__element {
-              @include card-element();
+              @include responsive-styles(width, 100%, 30%, 30%);
+              margin: rem-calc(0 0 10 0);
 
-              &--push-right {
-                margin-right: rem-calc(40);
+              &:last-child {
+                @include breakpoint($small) { margin-right: auto; }
               }
             }
             
