@@ -3,10 +3,6 @@ module CountriesHelper
     @country && @country.iso_3 == "MYS"
   end
 
-  def is_japan?
-    @country && @country.iso_3 == "JPN"
-  end
-
   def has_restricted_sites?
     restricted_iso3 = ["RUS", "EST", "CHN", "GBR"]
     
