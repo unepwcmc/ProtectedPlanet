@@ -38,9 +38,11 @@
 // $blue-light: #2B678D;
 // $blue-grey: #264152;
 
-// $green: #71BE63;
+$green: #71a32b;
+$green--darker: #415519;
 
-// $primary: $blue-dark;
+$primary: $green;
+$primary-dark: $green--darker;
 
 // $accent-light: lighten($green, 15%);
 // $accent: $green;
@@ -81,9 +83,9 @@
 // breakpoints
 //--------------------------------------------------
 // must be in px not rem!
-$small: 720;
-$medium: 1024; //ipad
-$large: 1440;
+$small: 628; //mobile
+$medium: 763; //tablet portrait
+$large: 1024; //tablet landscape
 
 @mixin responsive-styles ($property, $mobile, $tablet, $laptop) {
   #{$property}: $mobile;

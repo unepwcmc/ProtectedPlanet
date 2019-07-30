@@ -9,10 +9,10 @@
       <div data-fill-value="<%= @presenter.percentage_pa_land_cover %>" class="cube__inner card__cube-inner"></div>
     </div>
 
-    <div class="card__stats">
+    <div class="card__column-2">
       <div class="card__row">
         <p class="card__element">
-          <span class="test card__number--large-land">
+          <span class="test card__number--xxlarge-land">
             <%= @presenter.percentage_pa_land_cover.round(2) %>%
           </span>
           coverage
@@ -21,19 +21,19 @@
 
       <div class="card__row">
         <p class="card__element">
-          <span class="card__number--land"> 
+          <span class="card__number--medium-land"> 
             <%= commaify @presenter.pa_land_area.round(0) %> km<sup>2</sup>
           </span>
           Land Area Protected
         </p>
         <p class="card__element">
-          <span class="card__number--land"> 
+          <span class="card__number--medium-land"> 
             <%= commaify @presenter.land_area.round(0) %> km<sup>2</sup>
           </span>
           Total Land Area
         </p>
         <p class="card__element">
-          <span class="card__number--land"> 
+          <span class="card__number--medium-land"> 
             <%#= commaify @presenter.percentage_nr_land_cover.round(0) %>XX%
           </span>
           <%#= @presenter.nr_version %>Xth National Report Coverage
@@ -43,14 +43,14 @@
       <% if has_pame_statistics_for(@presenter, :land) %>
         <div class="card__row">
           <p class="card__element">
-            <span class="card__number--land-light">
+            <span class="card__number--medium-land-light">
               <i class="fa fa-level-down u-text-muted"></i>
               <%= @presenter.pame_statistic.pame_percentage_pa_land_cover.round(2) %>%
             </span>
             with management effectiveness evaluation
           </p>
           <p class="card__element">
-            <span class="card__number--land-light">
+            <span class="card__number--medium-land-light">
               <%= commaify @presenter.pame_statistic.pame_pa_land_area %> km<sup>2</sup>
             </span>
             Area Assessed
