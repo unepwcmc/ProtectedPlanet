@@ -1,0 +1,62 @@
+<div id="marine-stats" class="card--stats">
+  <div class="card__header header">
+    <img class="header__image" src="<%= asset_url "marine-stats.png" %>"/>
+    <h3 class="header__text">Area marine</h3>
+  </div>
+
+  <div class="card__body">
+    <div class="card__column-1 card__cube--marine">
+      <div data-fill-value="<%= @presenter.percentage_pa_marine_cover %>" class="cube__inner card__cube-inner"></div>
+    </div>
+
+    <div class="flex-grow">
+      <div class="card__row">
+        <p class="card__element">
+          <span class="test card__number--large-marine">
+            <%= @presenter.percentage_pa_marine_cover.round(2) %>%
+          </span>
+          coverage
+        </p>
+      </div>
+
+      <div class="card__row">
+        <p class="card__element">
+          <span class="card__number--marine">
+            <%= commaify @presenter.pa_marine_area.round(0) %> km<sup>2</sup>
+          </span>
+          Marine Area Protected
+        </p>
+        <p class="card__element">
+          <span class="card__number--marine">
+            <%= commaify @presenter.marine_area.round(0) %> km<sup>2</sup>
+          </span>
+          Total Marine Area
+        </p>
+        <p class="card__element">
+          <span class="card__number--marine">
+            <%#= commaify @presenter.percentage_nr_marine_cover.round(0) %>XX%
+          </span>
+          <%#= @presenter.nr_version %>Xth National Report Coverage
+        </p>
+      </div>
+
+      <% if has_pame_statistics_for(@presenter, :marine) %>
+        <div class="card__row">
+          <p class="card__element">
+            <span class="card__number--marine-light">
+              <i class="fa fa-level-down u-text-muted"></i>
+              <%= @presenter.pame_statistic.pame_percentage_pa_marine_cover.round(2) %>%
+            </span>
+            with management effectiveness evaluation
+          </p>
+          <p class="card__element">
+            <span class="card__number--marine-light">
+              <%= commaify @presenter.pame_statistic.pame_pa_marine_area %> km<sup>2</sup>
+            </span>
+            Area Assessed
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

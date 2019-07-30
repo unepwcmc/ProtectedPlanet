@@ -13,6 +13,21 @@
  *
  *= require 'protectedplanet-frontend/dist/style/main'
  *= require 'custom'
+ *= require_self
  */
 
- @import './map/custom-leaflet';
+@import './resources/**/*';
+
+@import './map/custom-leaflet';
+
+@import './variables/*';
+
+@import './helpers/*';
+
+@import './utilities/*';
+
+@import './atoms/*';
+
+// @import './molecules/*';
+
+@import './organisms/*';

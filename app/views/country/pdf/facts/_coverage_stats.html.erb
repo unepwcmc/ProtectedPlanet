@@ -9,8 +9,12 @@
       <div class="stats-card__header header">
         <h3 class="header__text">Area terrestrial</h3>
       </div>
+
       <div class="stats-card__body stats-card__body--color">
-        <div class="cube stats-card__element"><div data-fill-value="<%= @presenter.percentage_pa_land_cover %>" class="cube__inner"></div></div>
+        <div class="stats-card__column-1 cube">
+          <div data-fill-value="<%= @presenter.percentage_pa_land_cover %>" class="cube__inner"></div>
+        </div>
+
         <div class="value stats-card__element">
           <p class="value__number value__number--xxlarge"><%= @presenter.percentage_pa_land_cover.round(2) %>%</p>
           <small class="value__label">coverage</small>
@@ -22,6 +26,10 @@
         <div class="value stats-card__element">
           <p class="value__number"><%= commaify @presenter.land_area %> km<sup>2</sup></p>
           <small class="value__label">Total Land Area</small>
+        </div>
+        <div class="value stats-card__element">
+          <p class="value__number"><%= commaify @presenter.land_area %>%</p>
+          <small class="value__label">5th National Report Coverage</small>
         </div>
       </div>
     </div>

@@ -1,0 +1,133 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$stat-colour-land: $brown;
+$stat-colour-land-light: lighten($brown, 15%);
+$stat-colour-marine: $blue--light;
+$stat-colour-marine-light: lighten($blue--light, 15%);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin card-row() {
+  display: flex;
+  @include flex-column;
+  @include flex-wrap;
+
+  @include breakpoint($small){ 
+    @include flex-row; 
+    @include flex-nowrap;
+    @include flex-h-between;
+  }
+}
+
+@mixin card-element() {
+  margin: rem-calc(0 0 10 0);
+  width: 30%;
+
+  &:last-child {
+    @include breakpoint($small) { margin-right: auto; }
+  }
+}
+
+@mixin card-infographic($size, $bg-color: $grey-100, $fill-color: $green) {
+  @include flex-h-start();
+  background-color: $bg-color;
+  width: rem-calc($size); height: rem-calc($size);
+
+  position: relative;
+
+  .card__cube-inner {
+    background-color: $fill-color;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+
+@mixin card-number($color: $grey-66, $font-size: medium, $font-weight: bold) {
+  @include text--alt($font-size, $font-weight);
+  color: $color;
+  display: block;
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.card {
+
+//--------------------------------------------------
+// card--stats used on country page
+//--------------------------------------------------
+  &--stats {
+    @include text(body, thin);
+    color: $grey-77;
+    padding: rem-calc(30 0);
+
+    &:not(:last-child) {
+      border-bottom: dashed rem-calc(1) $grey-33;
+    }
+
+    .card {
+      &--land {
+
+      }
+
+      &__body {
+        @include flex-h-start;
+        @include flex-nowrap;
+        
+        display: flex;
+      }
+
+        &__column-1 {
+          margin-right: rem-calc(16);
+        }
+
+          &__row {
+            @include card-row();
+          }
+
+            &__element {
+              @include card-element();
+
+              &--push-right {
+                margin-right: rem-calc(40);
+              }
+            }
+            
+            &__cube--land {
+              @include card-infographic(100, $bg-color: $grey-15, $fill-color: $stat-colour-land);
+            }
+
+            &__cube--marine {
+              @include card-infographic(100, $bg-color: $grey-15, $fill-color: $stat-colour-marine);
+            }
+
+              &__number--land {
+                @include card-number($stat-colour-land);
+              }
+
+              &__number--land-light {
+                @include card-number($stat-colour-land-light);
+              }
+
+              &__number--marine {
+                @include card-number($stat-colour-marine);
+              }
+
+              &__number--marine-light {
+                @include card-number($stat-colour-marine-light);
+              }
+
+              &__number--large-land {
+                @include card-number($stat-colour-land, xxlarge, bold);
+              }
+
+              &__number--large-marine {
+                @include card-number($stat-colour-marine, xxlarge, bold);
+              }
+    }
+  }
+}
