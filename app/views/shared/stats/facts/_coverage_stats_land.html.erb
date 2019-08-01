@@ -21,22 +21,22 @@
 
       <div class="card__row">
         <p class="card__element">
-          <span class="card__number--medium-land"> 
+          <span class="card__number--medium-land">
             <%= commaify @presenter.pa_land_area.round(0) %> km<sup>2</sup>
           </span>
           Land Area Protected
         </p>
         <p class="card__element">
-          <span class="card__number--medium-land"> 
+          <span class="card__number--medium-land">
             <%= commaify @presenter.land_area.round(0) %> km<sup>2</sup>
           </span>
           Total Land Area
         </p>
         <p class="card__element">
-          <span class="card__number--medium-land"> 
-            <%#= commaify @presenter.percentage_nr_land_cover.round(0) %>XX%
+          <span class="card__number--medium-land">
+            <%= commaify @presenter.percentage_nr_land_cover.round(0) %>%
           </span>
-          <%#= @presenter.nr_version %>Xth National Report Coverage
+          <%= @presenter.nr_version %>th National Report Coverage
         </p>
       </div>
 
