@@ -32,12 +32,15 @@
           </span>
           Total Land Area
         </p>
-        <p class="card__element">
-          <span class="card__number--medium-land">
-            <%= commaify @presenter.percentage_nr_land_cover.round(0) %>%
-          </span>
-          <%= @presenter.nr_version %>th National Report Coverage
-        </p>
+
+        <% unless is_regional_page(controller_name) %>
+          <p class="card__element">
+            <span class="card__number--medium-land">
+              <%= commaify @presenter.percentage_nr_land_cover.round(0) %>%
+            </span>
+            <%= @presenter.nr_version %>th National Report Coverage
+          </p>
+        <% end %>
       </div>
 
       <% if has_pame_statistics_for(@presenter, :land) %>
