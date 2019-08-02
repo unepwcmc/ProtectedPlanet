@@ -27,6 +27,10 @@ class StatisticPresenter
     percentage_pa_land_cover + percentage_pa_marine_cover
   end
 
+  def nr_report_url
+    @statistic.send(:nr_report_url) || ''
+  end
+
   def method_missing method
     @model.send(method) rescue (@statistic.send(method) || 0) rescue 0
   end
