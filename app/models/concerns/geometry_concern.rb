@@ -12,16 +12,14 @@ module GeometryConcern
   end
 
   def bounds
-    # rgeo_factory = RGeo::Geos.factory srid: 4326
-    # bounds = RGeo::Cartesian::BoundingBox.new rgeo_factory
-    # bounds.add bounding_box
+    rgeo_factory = RGeo::Geos.factory srid: 4326
+    bounds = RGeo::Cartesian::BoundingBox.new rgeo_factory
+    bounds.add bounding_box
 
-    # [
-    #   [bounds.min_y, bounds.min_x],
-    #   [bounds.max_y, bounds.max_x]
-    # ]
-
-    [ [0,0], [0,0] ]
+    [
+      [bounds.min_y, bounds.min_x],
+      [bounds.max_y, bounds.max_x]
+    ]
   end
 
   def geojson geo_properties=nil
