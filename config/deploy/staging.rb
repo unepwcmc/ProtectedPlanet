@@ -1,7 +1,7 @@
 set :stage, :staging
 set :branch, "devise_fix"
 
-server 'new-web.pp-staging.linode.protectedplanet.net', roles: %w{web app db}
+server 'new-web.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
 set :application, "protectedplanet"
 set :server_name, "protectedplanet"
