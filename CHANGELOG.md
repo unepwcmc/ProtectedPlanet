@@ -1,3 +1,7 @@
+### 2.5.3
+
+* Add country, pame_country and marine stats (WDPA August 2019 release).
+
 ### 2.5.2
 
 **Bug fixes**
