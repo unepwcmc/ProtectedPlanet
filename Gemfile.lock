@@ -782,6 +782,8 @@ GEM
       sshkit (>= 1.9.0)
     capistrano-bundler (1.6.0)
       capistrano (~> 3.1)
+    capistrano-git-with-submodules (2.0.3)
+      capistrano (~> 3.7)
     capistrano-maintenance (1.2.1)
       capistrano (>= 3.0)
     capistrano-passenger (0.2.0)
@@ -1120,6 +1122,7 @@ DEPENDENCIES
   bystander (= 2.0.0)!
   capistrano (= 3.11.0)
   capistrano-bundler (= 1.6.0)
+  capistrano-git-with-submodules (= 2.0.3)
   capistrano-maintenance (= 1.2.1)
   capistrano-passenger (= 0.2.0)
   capistrano-rails (= 1.4.0)
