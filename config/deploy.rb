@@ -17,11 +17,6 @@ set :scm_username, "unepwcmc-read"
 set :rvm_type, :user
 set :rvm_ruby_version, '2.6.3'
 
-
-
-set :pty, true
-
-
 set :ssh_options, {
   forward_agent: true,
 }
