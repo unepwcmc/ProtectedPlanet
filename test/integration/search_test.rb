@@ -7,7 +7,9 @@ class SearchTest < ActionDispatch::IntegrationTest
     # ES and WebMock don't get along
     WebMock.disable!
     @psi = Search::Index.new Search::PA_INDEX, ProtectedArea.all
+    @psi.create
     @csi = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
+    @csi.create
   end
 
   def teardown

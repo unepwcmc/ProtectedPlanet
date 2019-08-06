@@ -12,9 +12,10 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     pa = FactoryGirl.create(:protected_area, name: "skdfhshdf", countries: [country], marine: false, has_parcc_info: false, is_green_list: false, has_irreplaceability_info: false)
 
     @psi = Search::Index.new Search::PA_INDEX, ProtectedArea.all
+    @psi.create
     @csi = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
-
-
+    @csi.create
+    
   end
 
   def teardown
