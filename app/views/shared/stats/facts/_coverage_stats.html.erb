@@ -14,7 +14,13 @@
     <strong class="u-bold">Warning:</strong> These statistics might differ from those reported officially by
     countries due to difference in methodologies and datasets used to assess
     protected area coverage and differences in the base maps used to measure
-    terrestrial and marine area of a country or territory. <% unless @for_pdf || is_regional_page(controller_name) %><span class="red bold"></span> <%= link_to "Download the country's latest national report (pdf)", @presenter.nr_report_url, title: "Dowload the national report for #{@country.name}", class: 'link-with-icon bold' %><% end %>
+    terrestrial and marine area of a country or territory.
+    <% unless @for_pdf || is_regional_page(controller_name) %>
+      <% if @presenter.nr_report_url.present? %>
+        <span class="red bold"></span>
+        <%= link_to "Download the country's latest national report (pdf)", @presenter.nr_report_url, title: "Dowload the national report for #{@country.name}", class: 'link-with-icon bold' %>
+      <% end %>
+    <% end %>
   </p>
 
   <% if has_restricted_sites? %>
