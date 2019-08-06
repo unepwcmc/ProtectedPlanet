@@ -10,37 +10,43 @@ class Search::Index
       :iucn_category,
       :governance
     ])
-    Search::Index.index Search::COUNTRY_INDEX, Country.without_geometry.all
-    Search::Index.index Search::PA_INDEX, pa_relation
+
+
+    country_index = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
+    country_index.create
+    pa_index = Search::Index.new Search::PA_INDEX, pa_relation
+    self.index
   end
 
-  def self.index index_name, collection
-    index = self.new index_name, collection
-    index.index
-  end
-
-  def self.count index_name = nil
-    if index_name.nil?
-      self.new(Search::COUNTRY_INDEX).count + self.new(Search::PA_INDEX).count
-    else
+  def self.index
+    [Search::COUNTRY_INDEX, Search::PA_INDEX].each do |index_name|
       index = self.new index_name
-      index.count
+      index.index
     end
   end
 
-  def self.delete index_name
-    index = self.new index_name
-    index.delete
+  def self.count 
+    self.new(Search::COUNTRY_INDEX).count + self.new(Search::PA_INDEX).count
+  end
+
+  def self.delete
+    [Search::COUNTRY_INDEX, Search::PA_INDEX].each do |index_name|
+      index = self.new index_name
+      index.delete
+    end
   end
 
 
   def initialize index_name, collection=nil
     @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch['url'])
-    @client.indices.create index: index_name, body:  mappings 
     @index_name = index_name
     @collection = collection
   end
 
+  def create
+    @client.indices.create index: @index_name, body:  mappings 
+  end
+  
   def index
     documents_in_batches { |batch| @client.bulk body: batch }
   end

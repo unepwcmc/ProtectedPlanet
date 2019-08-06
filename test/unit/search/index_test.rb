@@ -31,34 +31,31 @@ class IndexTest < ActiveSupport::TestCase
     bulk_mock.stubs(:indices).returns(indices_mock)
 
     Elasticsearch::Client.stubs(:new).returns(bulk_mock)
-
-    Search::Index.index elasticsearch_index, ProtectedArea.without_geometry
+    
+    pai = Search::Index.new elasticsearch_index, ProtectedArea.without_geometry
+    pai.create
+    pai.index
   end
 
-  test 'create creates the index and indexes all desired models' do
-    pa_relation =  ProtectedArea.without_geometry.includes([
-      {:countries_for_index => :region_for_index},
-      :sub_locations,
-      :designation,
-      :iucn_category
-    ])
+  test 'create only creates the index' do
+    index_name = "fake_index"
 
-    Elasticsearch::Client.stubs(:new).
-      returns(stub_everything(count: {'count' => 0},
-                              indices: stub_everything()
-                             ))
+    indices_mock = mock()
+    indices_mock.expects(:create).with(index: index_name, body: JSON.parse(Search::Index::MAPPINGS_TEMPLATE))
 
-    Search::Index.expects(:index).with(Search::COUNTRY_INDEX, Country.without_geometry)
-    Search::Index.expects(:index).with(Search::PA_INDEX, pa_relation)
+    es_mock = mock()
+    es_mock.stubs(:indices).returns(indices_mock)
 
-    Search::Index.create
+    Elasticsearch::Client.stubs(:new).returns(es_mock)
+
+    fi = Search::Index.new "fake_index"
+    fi.create
   end
 
   test '#delete deletes the index' do
     index_name = "fake_index"
 
     indices_mock = mock()
-    indices_mock.expects(:create).with(any_parameters)
     indices_mock.expects(:delete).with(index: index_name)
 
     es_mock = mock()
@@ -66,19 +63,18 @@ class IndexTest < ActiveSupport::TestCase
 
     Elasticsearch::Client.stubs(:new).returns(es_mock)
 
-    Search::Index.delete "fake_index"
+    fi = Search::Index.new "fake_index"
+    fi.delete
   end
 
 
   test '.count returns the number of documents in the index' do
     es_mock = mock
     indices_mock = mock
-    es_mock.expects(:indices).returns(indices_mock)
     es_mock.expects(:count).returns({'count' => 123})
-    indices_mock.expects(:create).with(any_parameters)
 
     Elasticsearch::Client.expects(:new).returns(es_mock)
-
+    
     assert_equal 123, Search::Index.new("fake_index").count
   end
 end
