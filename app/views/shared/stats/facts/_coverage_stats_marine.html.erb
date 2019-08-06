@@ -36,7 +36,7 @@
         <% unless is_regional_page(controller_name) %>
           <p class="card__element">
             <span class="card__number--medium-marine">
-              <%= commaify @presenter.percentage_nr_marine_cover.round(0) %>%
+              <%= commaify @presenter.percentage_nr_marine_cover %>%
             </span>
             <%= @presenter.nr_version %>th National Report Coverage
           </p>

@@ -36,11 +36,14 @@ class StatisticPresenter
   end
 
   ["land", "marine"].each do |land_type|
-    ["pa", "nr"].each do |field_type|
-      stat = "percentage_#{field_type}_#{land_type}_cover".to_sym
-      define_method(stat) do
-        (@statistic.send(stat) && @statistic.send(stat) > 100.0) ? 100.0 : (@statistic.send(stat) || 0) rescue 0
-      end
+    stat = "percentage_pa_#{land_type}_cover".to_sym
+    define_method(stat) do
+      (@statistic.send(stat) && @statistic.send(stat) > 100.0) ? 100.0 : (@statistic.send(stat) || 0) rescue 0
+    end
+
+    stat = "percentage_nr_#{land_type}_cover".to_sym
+    define_method(stat) do
+      (@statistic.send(stat) && @statistic.send(stat) > 100.0) ? 100.0 : @statistic.send(stat).round(0) rescue nil
     end
   end
 
