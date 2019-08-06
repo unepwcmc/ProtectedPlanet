@@ -28,7 +28,7 @@ class StatisticPresenter
   end
 
   def nr_report_url
-    @statistic.send(:nr_report_url) || ''
+    (@statistic.send(:nr_report_url) || '') rescue ''
   end
 
   def method_missing method
