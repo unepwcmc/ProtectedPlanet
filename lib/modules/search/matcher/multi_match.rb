@@ -24,7 +24,7 @@ class Search::Matcher::MultiMatch < Search::Matcher
       "multi_match" => {
         "query" => "#{@term}",
         "fields" => @options[:fields],
-        "fuzziness" => "AUTO"
+        "fuzziness" => "0"
       }
     }
   end

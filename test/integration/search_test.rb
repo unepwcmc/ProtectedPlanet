@@ -303,5 +303,61 @@ class SearchTest < ActionDispatch::IntegrationTest
       assert_aggregation 2, 'region', 'South Manmerica', search.aggregations
   end  
 
+    # a bunch of tests to check stemming/fuzzy/partial matching is sane
+    
+  test 'search single country on stemmed name' do
+    region = FactoryGirl.create(:region, id: 987, name: 'Europe')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'Belgium', region: region)
+
+    assert_index 1, 0
+    search = Search.search 'belgiums', {}
+    assert_equal 1, search.results.count
+  end
+
+  test 'search single pa on stemmed country name' do
+    region = FactoryGirl.create(:region, id: 987, name: 'Europe')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'Belgium', region: region)
+    pa = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country])
+    assert_index 1, 1
+    search = Search.search 'belgiums', {}
+    assert_equal 1, search.results.count
+  end
+
+  test 'stemmed search single pa on country name' do
+    region = FactoryGirl.create(:region, id: 987, name: 'Europe')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'United States of America', region: region)
+    pa = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country])
+    assert_index 1, 1
+    search = Search.search 'state', {}
+    assert_equal 1, search.results.count
+  end
+
+  
+  test 'search areas on stemmed name both-ways-round' do
+    region = FactoryGirl.create(:region, id: 987, name: 'Europe')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'Belgium', region: region)
+      pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country])
+      pa2 = FactoryGirl.create(:protected_area, name: "Blue Forests", wdpa_id: 2, countries: [country])
+
+    assert_index 1, 2
+    search = Search.search 'forest', {}
+    assert_equal 2, search.results.count
+    
+    search = Search.search 'forests', {}
+    assert_equal 2, search.results.count
+  end
+
+
+  test 'search area on poor-fuzzy-match should not hit' do
+    region = FactoryGirl.create(:region, id: 987, name: 'Europe')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'Belgium', region: region)
+      pa1 = FactoryGirl.create(:protected_area, name: "Badger Forest", wdpa_id: 1, countries: [country])
+      pa2 = FactoryGirl.create(:protected_area, name: "Bodger Forests", wdpa_id: 2, countries: [country])
+
+    assert_index 1, 2
+    search = Search.search 'badgers', {}
+    assert_equal 1, search.results.count
+  end
+
   
 end
