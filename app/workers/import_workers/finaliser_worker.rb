@@ -34,7 +34,8 @@ class ImportWorkers::FinaliserWorker
 
     Search::Index.delete
     Search::Index.create
-
+    Search::Index.index
+    
     Autocompletion.drop
     Autocompletion.populate
 
