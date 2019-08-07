@@ -7,7 +7,7 @@ gem 'pg', '~> 0.21'
 gem 'activerecord-postgis-adapter', '~> 4.0.0'
 gem 'dbf', '~> 2.0.7'
 #
-gem 'elasticsearch', '~> 7.0.0'
+gem 'elasticsearch', '~> 7.2.0'
 #
 gem 'sass-rails', '~> 5.0.7'
 gem 'sprockets-rails', '~> 3.2.1'
@@ -36,13 +36,14 @@ end
 #
 group :development do
   gem 'spring'
-  gem 'capistrano', '~> 3.11.0', require: false
-  gem 'capistrano-rails',   '~> 1.1', require: false
-  gem 'capistrano-bundler', '~> 1.1.4', require: false
-  gem 'capistrano-rvm',   '~> 0.1', require: false
-  gem 'capistrano-sidekiq'
-  gem 'capistrano-maintenance', '~> 1.0', require: false
-  gem 'capistrano-passenger', '~> 0.2.0', require: false
+  gem 'capistrano', '3.11.0', require: false
+  gem 'capistrano-rails',   '1.4.0', require: false
+  gem 'capistrano-bundler', '1.6.0', require: false
+  gem 'capistrano-rvm', '0.1.2', require: false
+  gem 'capistrano-maintenance','1.2.1', require: false
+  gem 'capistrano-passenger', '0.2.0', require: false
+  gem 'capistrano-sidekiq','1.0.2'
+  gem 'capistrano-git-with-submodules', '2.0.3'
   # gem 'listen', '~> 3.1.5'
   # gem 'spring-watcher-listen', '~> 2.0.0'
   #
@@ -95,7 +96,7 @@ gem 'turnout', '~> 2.5.0'
 
 gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
-gem 'devise', '~> 4.0.0' # MAJOR VERSION CHANGE, CHECK DOCS
+gem 'devise', '~> 4.6.2' # MAJOR VERSION CHANGE, CHECK DOCS
 
 gem 'comfortable_mexican_sofa', '1.12.10'
 gem 'nokogiri', '~> 1.10.1'
