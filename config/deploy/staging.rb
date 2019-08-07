@@ -1,5 +1,5 @@
 set :stage, :staging
-set :branch, "devise_fix"
+set :branch, "frontend_updates"
 
 server 'new-web.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
