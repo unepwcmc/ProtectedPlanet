@@ -15,14 +15,9 @@ class Search::Index
     country_index = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
     country_index.create
     pa_index = Search::Index.new Search::PA_INDEX, pa_relation
-    self.index
-  end
-
-  def self.index
-    [Search::COUNTRY_INDEX, Search::PA_INDEX].each do |index_name|
-      index = self.new index_name
-      index.index
-    end
+    pa_index.create
+    country_index.index
+    pa_index.index
   end
 
   def self.count 

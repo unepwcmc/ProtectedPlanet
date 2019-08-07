@@ -19,7 +19,7 @@ class SearchMatcherTest < ActiveSupport::TestCase
           "multi_match" => {
             "query" => term,
             "fields" => [ "countries.name" ],
-            "fuzziness" => "AUTO"
+            "fuzziness" => "0"
           }
         }
       }
@@ -42,7 +42,7 @@ class SearchMatcherTest < ActiveSupport::TestCase
       "multi_match" => {
         "query" => "#{term}",
         "fields" => [ "name", "original_name" ],
-        "fuzziness" => "AUTO"
+        "fuzziness" => "0"
       }
     }
 
