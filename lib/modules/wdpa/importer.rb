@@ -24,5 +24,6 @@ class Wdpa::Importer
     Wdpa::MarineStatsImporter.import
     Wdpa::PameImporter.import
     Wdpa::StoryMapLinkListImporter.import
+    Wdpa::BiopamaCountriesImporter.import
   end
 end

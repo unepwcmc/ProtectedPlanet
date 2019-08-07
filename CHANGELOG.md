@@ -1,3 +1,36 @@
+### 2.5.2
+
+**Bug fixes**
+
+* Fix PameImporter to manage restricted and hidden evaluations correctly
+* Fix CSV file to have iso codes instead of country names
+
+### 2.5.1
+
+* Add new url functionality for the PAME importer and fix the restricted PAME Evaluations.
+
+### 2.5.0
+
+* Add and populate boolean column for countries to flag the ACP (BIOPAMA) related ones
+
+### 2.4.7
+
+* Update the PAME importer for restricted PAME Evaluations with restricted Protected Areas flag.
+
+### 2.4.6
+
+* Add country, pame_country and marine stats (WDPA July 2019 release).
+
+### 2.4.5
+
+* Update the text and variables on the Marine page to prevent data becomming out of date.
+* Manually add the Mapbox logo to the maps
+* Hide commitments and pledges data download link on the Marine page
+
+### 2.4.4
+
+* Add country, pame_country and marine stats (WDPA May 2019 release).
+
 ### 2.4.3
 
 * Update the PAME importer to use the latest monthly CSV (May 2019 release).
