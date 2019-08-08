@@ -3,16 +3,6 @@ require 'test_helper'
 class SearchAggregationTest < ActiveSupport::TestCase
   test '#all returns a hash with all aggregations configurations' do
     expected_aggregations = {
-      "type_of_territory" => {
-        "terms" => {
-          "field" => "marine"
-        }
-      },
-      "has_parcc_info" => {
-        "terms" => {
-          "field" => "has_parcc_info"
-        }
-      },
       "is_green_list" => {
         "terms" => {
           "field" => "is_green_list"
