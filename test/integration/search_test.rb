@@ -345,5 +345,33 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_equal 1, search.results.count
   end
 
+  test 'search should put countries first' do
+    region = FactoryGirl.create(:region, id: 987, name: 'Europe')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'Belgium', region: region)
+    pa1 = FactoryGirl.create(:protected_area, name: "Belgium Forest", wdpa_id: 1, countries: [country])
+    pa2 = FactoryGirl.create(:protected_area, name: "Forests of Belgium", wdpa_id: 2, countries: [country])
+
+    assert_index 1, 2
+    search = Search.search 'belgium', {}
+    assert_equal 3, search.results.count
+    assert_equal 'Belgium', search.results[0].name
+  end
+
+  test 'search should put france countries first' do
+    region = FactoryGirl.create(:region, id: 987, name: 'Europe')
+    france = FactoryGirl.create(:country, id: 123, iso_3: 'FRA', name: 'France', region: region)
+    usa = FactoryGirl.create(:country, id: 124, iso_3: 'USA', name: 'United States of America', region: region)
+    pa1 = FactoryGirl.create(:protected_area, name: "Oise-Pays de France", wdpa_id: 1, countries: [france])
+    pa2 = FactoryGirl.create(:protected_area, name: "Frances Mesa", wdpa_id: 2, countries: [usa])
+    (1..20).each do |ii|
+      FactoryGirl.create(:protected_area, name: "Area #{ii}", wdpa_id: 10+ii, countries:[usa])
+    end
+
+    assert_index 2, 22
+    search = Search.search 'france', {}
+    assert_equal 3, search.results.count
+    assert_equal 'France', search.results[0].name
+  end
+
   
 end
