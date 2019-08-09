@@ -1,8 +1,7 @@
-FROM unepwcmc/unepwcmc-geospatial-base:latest
+FROM unepwcmc/unepwcmc-geospatial-base:20190809
 LABEL maintainer="andrew.potter@unep-wcmc.org"
 
 USER unepwcmc
-
 
 WORKDIR /ProtectedPlanet
 ADD Gemfile /ProtectedPlanet/Gemfile
@@ -14,8 +13,6 @@ COPY --chown=unepwcmc:unepwcmc . /ProtectedPlanet
 
 RUN /bin/bash -l -c "bundle install"
 RUN /bin/bash -l -c "yarn install"
-
-
 
 EXPOSE 3000
 
