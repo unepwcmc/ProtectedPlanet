@@ -76,7 +76,7 @@ end
 
 gem 'will_paginate', '~> 3.0'
 
-gem 'aws-sdk', '~> 3' # DRAMATIC CHANGES
+gem 'aws-sdk', '3.0.1' # DRAMATIC CHANGES
 
 gem 'httparty', '~> 0.15.1' # FROM 13 to 15 BREAKING CHANGES
 gem 'httmultiparty', '~> 0.3.14'
