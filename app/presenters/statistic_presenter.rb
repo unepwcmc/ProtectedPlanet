@@ -41,9 +41,9 @@ class StatisticPresenter
       (@statistic.send(stat) && @statistic.send(stat) > 100.0) ? 100.0 : (@statistic.send(stat) || 0) rescue 0
     end
 
-    stat = "percentage_nr_#{land_type}_cover".to_sym
-    define_method(stat) do
-      (@statistic.send(stat) && @statistic.send(stat) > 100.0) ? 100.0 : @statistic.send(stat).round(0) rescue nil
+    nr_stat = "percentage_nr_#{land_type}_cover".to_sym
+    define_method(nr_stat) do
+      (@statistic.send(nr_stat) && @statistic.send(nr_stat) > 100.0) ? 100.0 : @statistic.send(nr_stat).round(0) rescue nil
     end
   end
 
