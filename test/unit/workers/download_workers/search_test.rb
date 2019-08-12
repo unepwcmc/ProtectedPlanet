@@ -21,7 +21,7 @@ class DownloadWorkersSearchTest < ActiveSupport::TestCase
     Download.expects(:generate).
       with("WDPA_Jun2015_search_manbone_#{digested_pa_ids}", {wdpa_ids: pa_ids})
 
-    DownloadWorkers::Search.new.perform token, query_term, {}
+    DownloadWorkers::Search.new.perform token, query_term, {}.to_json
   end
 
   test '.perform, given a Search with an email, sends a completion email when the
@@ -48,6 +48,6 @@ class DownloadWorkersSearchTest < ActiveSupport::TestCase
       with(filename, email).
       returns(mailer_mock)
 
-    DownloadWorkers::Search.new.perform token, '', {}
+    DownloadWorkers::Search.new.perform token, '', {}.to_json
   end
 end
