@@ -135,20 +135,6 @@ class SearchAggregationTest < ActiveSupport::TestCase
           ]
         }
       },
-      'type_of_territory' => {
-        'doc_count'=> 169,
-        'buckets'=> [
-          {'key' => 'T', 'doc_count' => 64},
-          {'key' => 'F', 'doc_count' => 17}
-        ]
-      },
-      'has_parcc_info' => {
-        'doc_count'=> 100,
-        'buckets'=> [
-          {'key' => 'T', 'doc_count' => 50},
-          {'key' => 'F', 'doc_count' => 50}
-        ]
-      },
       'has_irreplaceability_info' => {
         'doc_count'=> 12,
         'buckets'=> [
@@ -158,7 +144,7 @@ class SearchAggregationTest < ActiveSupport::TestCase
       }
     }
     expected_response =
-{"type_of_territory"=>[], "related_sources"=>[], "country"=>[{:identifier=>"MyText", :query=>"country", :label=>"MyText", :count=>64}, {:identifier=>"MyText", :query=>"country", :label=>"MyText", :count=>17}], "region"=>[{:identifier=>"Global", :query=>"region", :label=>"Global", :count=>100}], "designation"=>[{:identifier=>"MyString", :query=>"designation", :label=>"MyString", :count=>100}], "governance"=>[{:identifier=>"MyString", :query=>"governance", :label=>"MyString", :count=>100}], "iucn_category"=>[{:identifier=>"MyString", :query=>"iucn_category", :label=>"MyString", :count=>100}]}
+{"country"=>[{:identifier=>"MyText", :query=>"country", :label=>"MyText", :count=>64}, {:identifier=>"MyText", :query=>"country", :label=>"MyText", :count=>17}], "region"=>[{:identifier=>"Global", :query=>"region", :label=>"Global", :count=>100}], "designation"=>[{:identifier=>"MyString", :query=>"designation", :label=>"MyString", :count=>100}], "governance"=>[{:identifier=>"MyString", :query=>"governance", :label=>"MyString", :count=>100}], "iucn_category"=>[{:identifier=>"MyString", :query=>"iucn_category", :label=>"MyString", :count=>100}]}
     aggregations = Search::Aggregation.parse(aggregations_hash)
     assert_equal expected_response, aggregations
   end

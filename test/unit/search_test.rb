@@ -57,11 +57,7 @@ class TestSearch < ActiveSupport::TestCase
                                                                                                                                                                           'match' => {
                                                                                                                                                                             'type' => 'region'}}, 'weight' => 10}]}}]}}}},
           :aggs => {
-            'type_of_territory' => {
-              'terms' => {
-                'field' => 'marine'}}, 'has_parcc_info' => {
-              'terms' => {
-                'field' => 'has_parcc_info'}}, 'is_green_list' => {
+            'is_green_list' => {
               'terms' => {
                 'field' => 'is_green_list'}}, 'has_irreplaceability_info' => {
               'terms' => {
