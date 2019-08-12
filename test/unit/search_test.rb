@@ -12,6 +12,7 @@ class TestSearch < ActiveSupport::TestCase
       body: {
           :size => 20.0,
           :from => 0.0,
+          indices_boost: [{Search::COUNTRY_INDEX => 3}, {Search::PA_INDEX => 1} ],
           :query => {
             'bool' => {
               'must' => {
@@ -164,6 +165,7 @@ class TestSearch < ActiveSupport::TestCase
     expected_query = {
       size: 20,
       from: 20,
+      indices_boost: [{Search::COUNTRY_INDEX => 3}, {Search::PA_INDEX => 1} ],
       query: {},
       aggs: {}
     }
