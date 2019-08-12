@@ -42,6 +42,6 @@ class Wdpa::S3
 
   def available_wdpa_databases
     bucket_name = Rails.application.secrets.aws_bucket
-    @s3.buckets[bucket_name].objects
+    @s3.bucket(bucket_name).objects
   end
 end

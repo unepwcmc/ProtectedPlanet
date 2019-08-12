@@ -29,8 +29,17 @@ class S3
   end
 
   def upload object_name, source, opts
-    bucket = @s3.buckets[Rails.application.secrets.aws_downloads_bucket]
-    object = bucket.objects[object_name]
+    Bucket = @s3.bucket(Rails.application.secrets.aws_downloads_bucket)
+    object = bucket.object(object_name)
+    object.upload_file(source)
+    @client.put_object_acl({
+                        acl: "public-read",
+                        bucket: Rails.application.secrets.aws_downloads_bucket,
+                        key: object_name,
+                           })
+
+    object.get(response_target: "#{source}.dl")
+    return
 
     if opts[:raw]
       object.write(data: source, acl: :public_read)
@@ -42,8 +51,9 @@ class S3
     end
   end
 
+
   def delete_all path
-    bucket = @s3.buckets[Rails.application.secrets.aws_downloads_bucket]
+    bucket = @s3.bucket(Rails.application.secrets.aws_downloads_bucket)
     objects = bucket.objects.with_prefix(path)
 
     objects.delete_all
