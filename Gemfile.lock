@@ -316,6 +316,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (10.5.0)
+    rb-readline (0.5.5)
     redis (3.2.1)
     redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
@@ -451,6 +452,7 @@ DEPENDENCIES
   premailer-rails
   rack-cache (~> 1.2)
   rails (= 4.2.5.1)
+  rb-readline
   sass-rails (~> 5.0.4)
   selenium-webdriver
   sidekiq (~> 3.5.3)
@@ -468,3 +470,6 @@ DEPENDENCIES
   webmock (~> 1.18.0)
   whenever
   will_paginate (~> 3.0)
+
+BUNDLED WITH
+   1.16.1

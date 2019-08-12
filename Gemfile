@@ -6,6 +6,7 @@ gem 'pg'
 gem 'activerecord-postgis-adapter', '~> 3.1.0'
 gem 'gdal', '~> 0.0.5'
 gem 'dbf', '~> 2.0.7'
+gem 'rb-readline'
 
 gem 'elasticsearch', '~> 5.0.3'
 

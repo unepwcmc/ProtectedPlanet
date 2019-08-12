@@ -161,4 +161,8 @@ module ApplicationHelper
       end.join.html_safe
     end
   end
+
+  def is_regional_page controller_name
+    controller_name == 'region'
+  end
 end

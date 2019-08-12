@@ -1,9 +1,9 @@
 <section class="row">
   <div class="half">
-    <%= render "country/pdf/facts/number_of_pas" %>
+    <%= render "shared/stats/facts/number_of_pas", {location: @country} %>
   </div>
   <div class="half">
-    <%= render "country/pdf/facts/polygons_points_ratio" %>
+    <%= render "shared/stats/facts/polygons_points_ratio" %>
   </div>
 </section>
 
@@ -17,10 +17,7 @@
 <div style="height: 40px; page-break-before: always"></div>
 
 <section class="row">
-  <%= render "country/pdf/facts/coverage_stats" %>
-  <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
-    <%= render "country/pdf/facts/pame_statistics" %>
-  <% end %>
+  <%= render "shared/stats/facts/coverage_stats" %>
   <%= render "country/pdf/facts/related_countries" %>
 </section>
 
