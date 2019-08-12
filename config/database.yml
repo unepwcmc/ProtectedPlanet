@@ -20,4 +20,4 @@ production:
 
 staging:
   <<: *default
-  database: feature/nr-stats
+  database: develop
