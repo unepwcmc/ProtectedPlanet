@@ -189,7 +189,7 @@ class SearchTest < ActionDispatch::IntegrationTest
     params = {
       filters:
         {
-          iucn_category_name: "Ia"
+          iucn_category: "Ia"
         }
     }
     
@@ -234,6 +234,30 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_equal 1, search.results.count
   end  
 
+  test 'search with iucn_category filter' do
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+    iucn_category = FactoryGirl.create(:iucn_category, name: "Ia", id:1)
+    iucn_category2 = FactoryGirl.create(:iucn_category, name: "II", id:2)
+
+    pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country], iucn_category: iucn_category)
+    pa2 = FactoryGirl.create(:protected_area, name: "Blue Forest", wdpa_id: 2, countries: [country], iucn_category: iucn_category2)
+    pa3 = FactoryGirl.create(:protected_area, name: "Bob Forest", wdpa_id: 3, countries: [country],iucn_category: iucn_category2)
+    
+    assert_index 1, 3
+    params = {
+      filters:
+        {
+          iucn_category: 'II'
+        }
+    }
+
+    search = Search.search 'forest', params
+    assert_equal 2, search.results.count
+    assert_aggregation 2, 'iucn_category', 'II', search.aggregations
+  end  
+
+  
   test 'search with country aggregation' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country1 = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)

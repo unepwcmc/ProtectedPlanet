@@ -62,7 +62,7 @@ filters:
     wdpa_id:
       type: 'equality'
       path: 'wdpa_id'
-    iucn_category_name:
+    iucn_category:
       type: 'nested'
       path: 'iucn_category'
       field: 'iucn_category.name'
