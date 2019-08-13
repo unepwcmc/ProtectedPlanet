@@ -20,4 +20,4 @@ production:
 
 staging:
   <<: *default
-  database: pp_staging
+  database: develop

@@ -27,14 +27,23 @@ class StatisticPresenter
     percentage_pa_land_cover + percentage_pa_marine_cover
   end
 
+  def nr_report_url
+    (@statistic.send(:nr_report_url) || '') rescue ''
+  end
+
   def method_missing method
     @model.send(method) rescue (@statistic.send(method) || 0) rescue 0
   end
 
-  ["land", "marine"].each do |type|
-    stat = "percentage_pa_#{type}_cover".to_sym
+  ["land", "marine"].each do |land_type|
+    stat = "percentage_pa_#{land_type}_cover".to_sym
     define_method(stat) do
       (@statistic.send(stat) && @statistic.send(stat) > 100.0) ? 100.0 : (@statistic.send(stat) || 0) rescue 0
+    end
+
+    nr_stat = "percentage_nr_#{land_type}_cover".to_sym
+    define_method(nr_stat) do
+      (@statistic.send(nr_stat) && @statistic.send(nr_stat) > 100.0) ? 100.0 : @statistic.send(nr_stat).round(0) rescue nil
     end
   end
 
