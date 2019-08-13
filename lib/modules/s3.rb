@@ -7,7 +7,8 @@ class S3
       access_key_id: Rails.application.secrets.aws_access_key_id,
       secret_access_key: Rails.application.secrets.aws_secret_access_key,
       region: Rails.application.secrets.s3_region
-    })
+                                })
+    @client = Aws::S3::Client.new(region: Rails.application.secrets.s3_region)
   end
 
   def self.upload object_name, file_path, opts={}
