@@ -15,9 +15,10 @@ class SavedSearch < ApplicationRecord
 
   def search
     @search ||= Search.search(search_term, {
-      filters: {'type' => 'protected_area'}.merge(parsed_filters || {}),
-      without_aggregations: true,
-      size: 9999
-    })
+                                filters: parsed_filters || {},
+                                without_aggregations: true,
+                                size: 9999
+                              },
+                              Search::PA_INDEX)
   end
 end
