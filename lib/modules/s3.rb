@@ -29,7 +29,7 @@ class S3
   end
 
   def upload object_name, source, opts
-    Bucket = @s3.bucket(Rails.application.secrets.aws_downloads_bucket)
+    bucket = @s3.bucket(Rails.application.secrets.aws_downloads_bucket)
     object = bucket.object(object_name)
     object.upload_file(source)
     @client.put_object_acl({
