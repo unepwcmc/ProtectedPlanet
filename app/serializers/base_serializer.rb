@@ -8,10 +8,25 @@ class BaseSerializer
   end
 
   def serialize
+    # Use input data if present, otherwise use all records of model
     source = data || model.all
-    source.map(&:attributes).map do |d|
-      d.slice(*fields)
+    serialized_data = []
+    # Loop through records
+    source.map do |record|
+      hash = {}
+      # Loop through selected associations and related fields
+      relations.map do |relation, _fields|
+        relation_obj = record.send(relation)
+        # Skip if empty or not expected object
+        next unless relation_obj.is_a?(relation.to_s.camelize.constantize)
+        # Inject relation's fields
+        _fields.each { |field| hash.merge!("#{field}" => relation_obj.send(field)) }
+      end
+      # Inject model fields
+      fields.each { |field| hash.merge!("#{field}" => record.send(field)) }
+      serialized_data << hash
     end
+    serialized_data
   end
 
   protected
@@ -26,6 +41,10 @@ class BaseSerializer
 
   def fields
     raise NotImplementedError
+  end
+
+  def relations
+    {}
   end
 
   private

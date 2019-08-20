@@ -8,4 +8,11 @@ class CountrySerializer < BaseSerializer
   def fields
     [:name, :iso_3]
   end
+
+  def relations
+    {
+      country_statistic: [:percentage_pa_land_cover, :percentage_pa_marine_cover],
+      pame_statistic: [:pame_percentage_pa_land_cover, :pame_percentage_pa_marine_cover]
+    }
+  end
 end
