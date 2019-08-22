@@ -47,12 +47,22 @@ class Stats::CountryStatisticsApi
   private
 
   def self.format_data(data, endpoint)
-    data.map do |d|
-      {
-        name: d['country_name'],
-        iso3: d['country_iso3'],
-        value: d[ENDPOINTS[endpoint.to_sym][:field]]
-      }
+    field = ENDPOINTS[endpoint.to_sym][:field]
+    if endpoint.to_s == 'representative'
+      _sum = data.inject(0) do |sum, x|
+        sum + x[field]
+      end
+      # TODO Need to confirm if this is the correct calculation
+      value = (_sum / data.length).round(2)
+      { value: value }
+    else
+      data.map do |d|
+        {
+          name: d['country_name'],
+          iso3: d['country_iso3'],
+          value: d[field]
+        }
+      end
     end
   end
 end
