@@ -5,6 +5,7 @@ class Country < ActiveRecord::Base
 
   has_one :country_statistic
   has_one :pame_statistic
+  has_one :aichi11_target
 
   belongs_to :region
   belongs_to :region_for_index, -> { select('regions.id, regions.name') }, :class_name => 'Region', :foreign_key => 'region_id'
