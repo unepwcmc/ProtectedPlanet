@@ -27,7 +27,7 @@ class Stats::CountryStatisticsApi
     if iso3.present? && endpoint.to_s == 'representative'
       raise ArgumentError, ERRORS[:representative]
     end
-    url = "#{BASE_URL}#{ENDPOINTS[endpoint][:endpoint]}?format=json"
+    url = "#{BASE_URL}#{ENDPOINTS[endpoint.to_sym][:endpoint]}?format=json"
 
     begin
       res = HTTParty.public_send('get', url)
@@ -51,7 +51,7 @@ class Stats::CountryStatisticsApi
       {
         name: d['country_name'],
         iso3: d['country_iso3'],
-        value: d[ENDPOINTS[endpoint][:field]]
+        value: d[ENDPOINTS[endpoint.to_sym][:field]]
       }
     end
   end
