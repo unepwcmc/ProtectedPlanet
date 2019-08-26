@@ -60,6 +60,7 @@ Rails.application.routes.draw do
   get '/marine/download_designations', to: 'marine#download_designations'
 
   get '/target_11_dashboard', to: 'target_dashboard#index', as: 'target_dashboard'
+  get '/target_11_dashboard/load', to: 'target_dashboard#load', as: 'target_dashboard_load'
 
   comfy_route :cms_admin, path: '/admin'
   comfy_route :cms, path: '/c', sitemap: false
