@@ -1,18 +1,24 @@
 class BaseSerializer
   ARGUMENT_ERROR_MESSAGE= 'data input is not of type ActiveRecord::Relation'.freeze
 
-  def initialize(model, data=nil)
+  def initialize(model, params, data=nil)
     @model = model
+    @params = params
     @data = data
+    @source = data || model.all
     sanitise_data
   end
 
   def serialize
     # Use input data if present, otherwise use all records of model
-    source = data || model.all
-    serialized_data = []
+    serialized_data = {
+      page: page,
+      per_page: per_page,
+      data: [],
+      total: sorted.count
+    }
     # Loop through records
-    source.map do |record|
+    sorted_and_paginated.map do |record|
       hash = {}
       # Loop through selected associations and related fields
       relations.map do |relation, _fields|
@@ -24,7 +30,7 @@ class BaseSerializer
       end
       # Inject model fields
       fields.each { |field| hash.merge!("#{field}" => record.send(field)) }
-      serialized_data << hash
+      serialized_data[:data] << hash
     end
     serialized_data
   end
@@ -37,6 +43,10 @@ class BaseSerializer
 
   def data
     @data
+  end
+
+  def source
+    @source
   end
 
   def fields
@@ -53,5 +63,34 @@ class BaseSerializer
     if data && !data.is_a?(ActiveRecord::Relation)
       raise ArgumentError, ARGUMENT_ERROR_MESSAGE
     end
+  end
+
+  def sorted
+    associations = relations.keys
+    source.includes(associations)
+      .order("#{sort_by} #{order} NULLS LAST")
+      .references(associations)
+  end
+
+  def sorted_and_paginated
+    sorted.limit(per_page).offset(per_page * (page - 1))
+  end
+
+  def sort_by
+    @params[:sort_by]
+  end
+
+  def order
+    @params[:order]
+  end
+
+  def page
+    _page = @params[:page].to_i
+    (_page && _page >= 1) ? _page : 1
+  end
+
+  def per_page
+    _per_page = @params[:per_page].to_i
+    (_per_page && _per_page >= 1) ? _per_page : 8
   end
 end
