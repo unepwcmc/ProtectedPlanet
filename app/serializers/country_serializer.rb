@@ -1,6 +1,6 @@
 class CountrySerializer < BaseSerializer
-  def initialize(data = nil)
-    super(Country, data)
+  def initialize(params={}, data = nil)
+    super(Country, params, data)
   end
 
   private
@@ -17,5 +17,13 @@ class CountrySerializer < BaseSerializer
       ],
       pame_statistic: [:pame_percentage_pa_land_cover, :pame_percentage_pa_marine_cover]
     }
+  end
+
+  def sort_by
+    super || 'well_connected'
+  end
+
+  def order
+    super || 'desc'
   end
 end

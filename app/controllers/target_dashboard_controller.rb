@@ -10,12 +10,7 @@ class TargetDashboardController < ApplicationController
   end
 
   def load
-    per_page, page = [
-      target_dashboard_params[:per_page],
-      target_dashboard_params[:page]
-    ]
-    countries = Country.paginate(per_page: per_page, page: page)
-    @countries = CountrySerializer.new(countries).serialize
+    @countries = CountrySerializer.new(target_dashboard_params).serialize
 
     render json: @countries
   end
@@ -23,6 +18,6 @@ class TargetDashboardController < ApplicationController
   private
 
   def target_dashboard_params
-    params.require(:target_dashboard).permit(:per_page, :page)
+    params.require(:target_dashboard).permit(:per_page, :page, :sort_by, :order)
   end
 end
