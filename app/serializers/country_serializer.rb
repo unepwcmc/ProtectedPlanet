@@ -11,7 +11,10 @@ class CountrySerializer < BaseSerializer
 
   def relations
     {
-      country_statistic: [:percentage_pa_land_cover, :percentage_pa_marine_cover],
+      country_statistic: [
+        :percentage_pa_land_cover, :percentage_pa_marine_cover,
+        :well_connected, :importance
+      ],
       pame_statistic: [:pame_percentage_pa_land_cover, :pame_percentage_pa_marine_cover]
     }
   end
