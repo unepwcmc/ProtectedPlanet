@@ -2,7 +2,9 @@ module Stats::CountryStatisticsImporter
   def self.import
     import_stats(stats_csv_path, CountryStatistic)
     import_stats(pame_csv_path,  PameStatistic)
-    import_stats(aichi11_target_csv_path, Aichi11Target)
+
+    # Import stats from DOPA services
+    Stats::CountryStatisticsApi.import
   end
 
   def self.import_stats path, model
@@ -26,9 +28,5 @@ module Stats::CountryStatisticsImporter
 
   def self.pame_csv_path
     Rails.root.join('lib/data/seeds/pame_country_stats.csv')
-  end
-
-  def self.aichi11_target_csv_path
-    Rails.root.join('lib/data/seeds/aichi11_targets.csv')
   end
 end
