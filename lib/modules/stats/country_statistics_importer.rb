@@ -5,6 +5,9 @@ module Stats::CountryStatisticsImporter
 
     # Import stats from DOPA services
     Stats::CountryStatisticsApi.import
+
+    # Import Aichi11Target stats from CSV
+    Aichi11Target.instance
   end
 
   def self.import_stats path, model
