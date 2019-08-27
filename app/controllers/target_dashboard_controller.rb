@@ -3,6 +3,7 @@ class TargetDashboardController < ApplicationController
   def index
     countries = Country.paginate(per_page: CountrySerializer::PER_PAGE, page: 1)
     @countries = CountrySerializer.new({}, countries).serialize
+    @targets = Aichi11TargetSerializer.new.serialize
     @global_land_cover = CountryStatistic.global_percentage_pa_land_cover
     @global_marine_cover = CountryStatistic.global_percentage_pa_marine_cover
     @global_pame_land_cover = PameStatistic.global_pame_percentage_pa_land_cover
