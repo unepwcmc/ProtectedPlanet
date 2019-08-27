@@ -1,5 +1,6 @@
 class BaseSerializer
   ARGUMENT_ERROR_MESSAGE= 'data input is not of type ActiveRecord::Relation'.freeze
+  PER_PAGE = 8.freeze
 
   def initialize(model, params, data=nil)
     @model = model
@@ -57,6 +58,10 @@ class BaseSerializer
     {}
   end
 
+  def per_page_default
+    PER_PAGE
+  end
+
   private
 
   def sanitise_data
@@ -91,6 +96,6 @@ class BaseSerializer
 
   def per_page
     _per_page = @params[:per_page].to_i
-    (_per_page && _per_page >= 1) ? _per_page : 8
+    (_per_page && _per_page >= 1) ? _per_page : per_page_default
   end
 end
