@@ -33,7 +33,7 @@ class BaseSerializer
       fields.each { |field| hash.merge!("#{field}" => record.send(field)) }
       serialized_data[:data] << hash
     end
-    serialized_data
+    serialized_data.to_json
   end
 
   protected
