@@ -1,4 +1,6 @@
 class CountrySerializer < BaseSerializer
+  PER_PAGE = 15.freeze
+
   def initialize(params={}, data = nil)
     super(Country, params, data)
   end
@@ -25,5 +27,9 @@ class CountrySerializer < BaseSerializer
 
   def order
     super || 'desc'
+  end
+
+  def per_page_default
+    PER_PAGE
   end
 end
