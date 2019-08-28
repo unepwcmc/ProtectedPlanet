@@ -11,6 +11,7 @@ gem 'elasticsearch', '~> 7.2.0'
 #
 gem 'sass-rails', '~> 5.0.7'
 gem 'sprockets-rails', '~> 3.2.1'
+
 gem 'uglifier', '~> 2.7.2'
 gem 'coffee-rails', '~> 4.2.2'
 gem "autoprefixer-rails"

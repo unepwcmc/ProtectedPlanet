@@ -25,3 +25,4 @@ test:
 
 production:
   <<: *default
+  database: pp_production
