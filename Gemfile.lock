@@ -1001,7 +1001,6 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-<<<<<<< HEAD
     rake (12.3.3)
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
@@ -1013,18 +1012,6 @@ GEM
     rgeo (0.6.0)
     rgeo-activerecord (5.0.1)
       activerecord (~> 5.0.0)
-=======
-    rake (10.5.0)
-    rb-readline (0.5.5)
-    redis (3.2.1)
-    redis-namespace (1.5.2)
-      redis (~> 3.0, >= 3.0.4)
-    responders (2.1.0)
-      railties (>= 4.2.0, < 5)
-    rgeo (0.4.0)
-    rgeo-activerecord (4.0.0)
-      activerecord (~> 4.2)
->>>>>>> develop
       rgeo (~> 0.3)
     ruby_parser (3.13.0)
       sexp_processor (~> 4.9)
@@ -1165,15 +1152,9 @@ DEPENDENCIES
   phantompdf (~> 1.2.2)
   premailer-rails
   rack-cache (~> 1.2)
-<<<<<<< HEAD
   rails (= 5.0.5)
   rails-controller-testing
   sass-rails (~> 5.0.7)
-=======
-  rails (= 4.2.5.1)
-  rb-readline
-  sass-rails (~> 5.0.4)
->>>>>>> develop
   selenium-webdriver
   sidekiq (~> 5.2.5)
   simplecov
@@ -1194,8 +1175,4 @@ DEPENDENCIES
   will_paginate (~> 3.0)
 
 BUNDLED WITH
-<<<<<<< HEAD
    1.17.2
-=======
-   1.16.1
->>>>>>> develop
