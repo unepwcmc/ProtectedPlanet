@@ -21,6 +21,8 @@
 // // maps
 @import 'leaflet/dist/leaflet';
 
+@import './resources/**/*';
+
 // development mixins
 @import 'utilities/flexbox';
 @import 'utilities/accessibility';
@@ -162,10 +164,6 @@
 
 @import 'custom';
 
-@import './resources/**/*';
-
 @import './map/custom-leaflet';
-
-@import './variables/*';
 
 @import './helpers/*';
