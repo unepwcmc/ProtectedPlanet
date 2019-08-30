@@ -121,7 +121,7 @@ CREATE DATABASE
 
 Followed by:
 ```
-docker-compose run -e "RAILS_ENV=test" web /bin/bash -l -c "rake db:create db:migrate"
+docker-compose run -e "RAILS_ENV=test" web /bin/bash -l -c "rake db:create db:migrate db:seed"
 ```
 
 Finally to actually run the tests:
