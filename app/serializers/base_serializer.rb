@@ -23,14 +23,14 @@ class BaseSerializer
       hash = {}
       # Loop through selected associations and related fields
       relations.map do |relation, _fields|
-        relation_obj = record.send(relation)
+        relation_obj = record.public_send(relation)
         # Skip if empty or not expected object
         next unless relation_obj.is_a?(relation.to_s.camelize.constantize)
         # Inject relation's fields
-        _fields.each { |field| hash.merge!("#{field}" => relation_obj.send(field)) }
+        _fields.each { |field| hash.merge!("#{field}" => relation_obj.public_send(field)) }
       end
       # Inject model fields
-      fields.each { |field| hash.merge!("#{field}" => record.send(field)) }
+      fields.each { |field| hash.merge!("#{field}" => record.public_send(field)) }
       serialized_data[:data] << hash
     end
     serialized_data.to_json
