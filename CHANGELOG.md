@@ -1,3 +1,12 @@
+### 2.6.0
+
+* Add National Report stats to countries
+* Update country_statistics csv structure to include National Report stats
+
+### 2.5.3
+
+* Add country, pame_country and marine stats (WDPA August 2019 release).
+
 ### 2.5.2
 
 **Bug fixes**

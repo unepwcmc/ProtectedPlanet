@@ -68,7 +68,7 @@ services:
     build: .
     env_file: 
       - '.env'
-    command: /bin/bash -l -c "/ProtectedPlanet/docker/scripts/webpacker"
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
     user: unepwcmc
     volumes: 
       - .:/ProtectedPlanet

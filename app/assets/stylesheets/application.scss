@@ -11,14 +11,17 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_self
+ * *= require_self
  */
+
 // grids
 @import 'bourbon/core/bourbon';
 @import 'bourbon-neat/app/assets/stylesheets/neat';
 
 // // maps
 @import 'leaflet/dist/leaflet';
+
+@import './resources/**/*';
 
 // development mixins
 @import 'utilities/flexbox';
@@ -160,3 +163,7 @@
 @import 'utilities/u-classes';
 
 @import 'custom';
+
+@import './map/custom-leaflet';
+
+@import './helpers/*';

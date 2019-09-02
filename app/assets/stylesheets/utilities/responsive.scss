@@ -1,3 +1,27 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin breakpoint($breakpoint) {
+  @media screen and (min-width: $breakpoint + 1px) {
+    @content;
+  } 
+}
+
+@mixin breakpoint-down($breakpoint) {
+  @media screen and (max-width: $breakpoint) {
+    @content;
+  } 
+}
+
+@mixin between($breakpoint_1, $breakpoint_2) {
+  @media screen and (max-width: $breakpoint_2) and (min-width: $breakpoint_1 + 1px) {
+    @content;
+  } 
+}
+
+//--------------------------------------------------
+// mixins - old
+//--------------------------------------------------
 //keep old responsive mixins with old breakpoints to avoid breaking styles across the existing site
 
 @mixin only-mobile {
@@ -8,22 +32,6 @@
 
 @mixin only-desktop {
   @media only screen and (min-width: 768px) {
-    @content;
-  }
-}
-
-//----------------------------------------
-// breakpoint variables
-//----------------------------------------
-$small: rem-calc(628); //mobile
-$medium: rem-calc(763); //tablet portrait
-$large: rem-calc(1024); //tablet landscape
-
-//----------------------------------------
-// responsive mixins
-//----------------------------------------
-@mixin breakpoint($breakpoint){
-  @media only screen and (min-width: $breakpoint + 1) {
     @content;
   }
 }

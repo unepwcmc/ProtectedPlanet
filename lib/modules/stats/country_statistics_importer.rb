@@ -11,6 +11,8 @@ module Stats::CountryStatisticsImporter
 
     CSV.foreach(path, headers: true) do |row|
       country_iso3 = row.delete('iso3').last
+      # If the value is na (not applicable) use nil
+      row.each { |key, value| row[key] = nil if value && value.downcase == 'na' }
       attrs = {country_id: countries[country_iso3]}.merge(row)
 
       model.create(attrs)

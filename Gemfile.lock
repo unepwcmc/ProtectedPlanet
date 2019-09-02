@@ -1170,7 +1170,7 @@ DEPENDENCIES
   uglifier (~> 2.7.2)
   vuejs-rails (~> 2.3.2)
   webmock (~> 1.22.0)
-  webpacker
+  webpacker (~> 4.0.2)
   whenever
   will_paginate (~> 3.0)
 
