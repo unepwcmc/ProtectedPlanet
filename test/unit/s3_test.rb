@@ -21,21 +21,22 @@ class S3Test < ActiveSupport::TestCase
 
   test '#upload, given an object name and a file, uploads the file to S3
    with the object name' do
-    #skip("skipping broken s3 tests")
     object_name = 'object_name'
 
-    File.expects(:size).returns(10)
-
     file_mock = mock()
-    file_mock.expects(:write).with(Pathname.new(__FILE__), {acl: :public_read, content_length: 10})
+    file_mock.expects(:upload_file)
 
     bucket_mock = mock()
-    bucket_mock.expects(:objects).returns({object_name => file_mock})
+    bucket_mock.expects(:object).returns(file_mock)
 
     s3_mock = mock()
-    s3_mock.expects(:buckets).returns({'pp-downloads-development' => bucket_mock})
-
+    s3_mock.expects(:bucket).returns(bucket_mock)
+    
     Aws::S3::Resource.expects(:new).returns(s3_mock)
+
+    client_mock = mock()
+    client_mock.expects(:put_object_acl)
+    Aws::S3::Client.expects(:new).returns(client_mock)
 
     S3.upload object_name, __FILE__
   end

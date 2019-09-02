@@ -38,18 +38,7 @@ class S3
                         bucket: Rails.application.secrets.aws_downloads_bucket,
                         key: object_name,
                            })
-
-    object.get(response_target: "#{source}.dl")
     return
-
-    if opts[:raw]
-      object.write(data: source, acl: :public_read)
-    else
-      file_path = Pathname.new(source)
-      file_size = File.size(file_path)
-
-      object.write(file_path, acl: :public_read, content_length: file_size)
-    end
   end
 
 
