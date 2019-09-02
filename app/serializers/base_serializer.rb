@@ -10,6 +10,10 @@ class BaseSerializer
     sanitise_data
   end
 
+  def to_json
+    serialize.to_json
+  end
+
   def serialize
     # Use input data if present, otherwise use all records of model
     serialized_data = {
@@ -33,7 +37,7 @@ class BaseSerializer
       fields.each { |field| hash.merge!("#{field}" => record.public_send(field)) }
       serialized_data[:data] << hash
     end
-    serialized_data.to_json
+    serialized_data
   end
 
   protected
