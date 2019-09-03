@@ -37,6 +37,7 @@ before_script:
   - sleep 10
   - cp .env.example .env
   - RAILS_ENV=test bundle exec rake db:migrate db:seed
+  - bundle exec rails webpacker:binstubs
 notifications:
   email:
     - andrea.rossi@unep-wcmc.org
