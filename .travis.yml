@@ -42,7 +42,7 @@ rvm:
 before_script:
   - sleep 10
   - cp .env.example .env
-  - RAILS_ENV=test bundle exec rake db:drop db:create db:migrate db:seed
+  - RAILS_ENV=test bundle exec rake db:drop db:create db:migrate
 notifications:
   email:
     - andrea.rossi@unep-wcmc.org
