@@ -38,7 +38,7 @@ install:
   - bundle install
 bundler_args: --without development production staging --jobs=6
 rvm:
-  - 2.4.1
+  - 2.6.3
 before_script:
   - sleep 10
   - cp .env.example .env
