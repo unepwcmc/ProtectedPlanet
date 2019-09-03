@@ -91,7 +91,7 @@ class SearchFilterTest < ActiveSupport::TestCase
   test 'from_params, given a filter with an array of values, creates a
    filter for each value' do
     filters = Search::Filter.from_params(
-      iucn_category_name: ["Not Reported", "II"]
+      iucn_category: ["Not Reported", "II"]
     )
 
     expected_filters = [{

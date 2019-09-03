@@ -84,10 +84,6 @@ class ProtectedArea < ApplicationRecord
         governance: { only: [:id, :name] }
       }
     )
-#    js['countries_for_index'] = self.countries.map(&:name).join(' ')
-#    js['country_ids_for_index'] = self.countries.map(&:id).join(' ')
-#    js['region_for_index'] = self.countries.map{|c| c.region.name}.join(' ')
- #   js['iucn_category_name'] = self.iucn_category.name
     return js
   end
 
