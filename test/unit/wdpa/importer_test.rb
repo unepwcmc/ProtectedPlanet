@@ -4,7 +4,6 @@ class TestWdpaImporter < ActiveSupport::TestCase
   test '.import creates a WDPA Release, imports the protected areas from
    it, generates downloads for the imported PAs, enables the FinaliserWorker
    and cleans up' do
-    skip()
     import = sequence('import')
 
     wdpa_release = mock()
