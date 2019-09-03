@@ -9,11 +9,10 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
 
     @bucket_mock = mock()
     @s3_mock = mock()
-    @s3_mock.stubs(:buckets).returns({'wdpa' => @bucket_mock})
+    @s3_mock.stubs(:bucket).returns(@bucket_mock)
   end
 
   test '#new creates an S3 connection' do
-    #skip("skipping this test which is broken currently")
     Aws::S3::Resource.expects(:new).with({
       :access_key_id     => '123',
       :secret_access_key => 'abc',
@@ -24,7 +23,6 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
   end
 
   test '.download_current_wdpa_to handles encoding correctly' do
-    #skip("skipping this test which is broken currently")
     filename = File.join(Rails.root, 'tmp', 'hey_this_is_a_filename.zip')
     file_contents = "\x9B".force_encoding(Encoding::ASCII_8BIT)
 
@@ -41,7 +39,6 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
 
   test '.download_current_wdpa_to retrieves the latest WDPA from S3, and saves it to the
    given filename' do
-    #skip("skipping this test which is broken currently")
     filename = 'hey_this_is_a_filename.zip'
 
     latest_file_mock = mock()
@@ -61,6 +58,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
 
     file_write_mock = mock()
     file_write_mock.stubs(:write)
+
     File.expects(:open).
       with(filename, 'w:ASCII-8BIT').
       yields(file_write_mock)
@@ -70,7 +68,6 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
 
   test '.new_wdpa? compares the current wdpa last modified time with the given
    argument' do
-    #skip("skipping this test which is broken currently")
     older_time = Time.new(2010)
     recent_time = Time.new(2014)
 
@@ -83,7 +80,6 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
   end
 
   test '#current_wdpa_identifier returns a part of the WDPA filename' do
-    #skip("skipping this test which is broken currently")
     file_mock = mock()
     file_mock.expects(:key).returns('WDPA_Apr2015_Public.zip')
     Wdpa::S3.any_instance.expects(:current_wdpa).returns(file_mock)
@@ -92,7 +88,6 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
   end
 
   test '#current_wdpa_identifier returns Month+Year independently from the length of the months name' do
-    #skip("skipping this test which is broken currently")
     file_mock = mock()
     file_mock.expects(:key).returns('WDPA_June2015_Public.zip')
     Wdpa::S3.any_instance.expects(:current_wdpa).returns(file_mock)
