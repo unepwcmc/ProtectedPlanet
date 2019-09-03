@@ -31,11 +31,11 @@ before_install:
   - sudo chown -R elasticsearch:elasticsearch /etc/default/elasticsearch
   - sudo service elasticsearch start
 install:
-  - bundle install
   - nvm install node
   - node -v
   - npm i -g yarn
   - yarn
+  - bundle install
 bundler_args: --without development production staging --jobs=6
 rvm:
   - 2.4.1
