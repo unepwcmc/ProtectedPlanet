@@ -63,6 +63,7 @@ group :test do
   gem 'simplecov', require: false, group: :test
   # gem 'simplecov-console'
   gem 'selenium-webdriver'
+  gem 'database_cleaner'
 end
 
 group :test, :development do
