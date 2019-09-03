@@ -36,8 +36,8 @@ rvm:
 before_script:
   - sleep 10
   - cp .env.example .env
-  - RAILS_ENV=test bundle exec rails webpacker:compile
   - RAILS_ENV=test bundle exec rails webpacker:binstubs
+  - RAILS_ENV=test bundle exec rails webpacker:compile
   - RAILS_ENV=test bundle exec rake db:migrate db:seed
 notifications:
   email:
