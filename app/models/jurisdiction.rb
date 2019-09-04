@@ -1,3 +1,3 @@
-class Jurisdiction < ActiveRecord::Base
+class Jurisdiction < ApplicationRecord
   has_many :designations
 end

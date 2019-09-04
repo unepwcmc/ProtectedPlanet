@@ -84,6 +84,6 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
     $redis.expects(:del).
       with("#{prefix}:#{token}:#{property}")
 
-    assert_equal nil, @redis_handler.delete_property(token, property)
+    assert_nil @redis_handler.delete_property(token, property)
   end
 end

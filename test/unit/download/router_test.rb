@@ -1,6 +1,11 @@
 require 'test_helper'
 
 class DownloadRouterTest < ActiveSupport::TestCase
+
+  def setup
+    Rails.cache.clear
+  end
+
   test '.request, called with search domain and an hash of parameters, sends a
    request to the correct requester' do
     expected_response = {'status' => 'generating', 'token' => '123'}
@@ -32,7 +37,7 @@ class DownloadRouterTest < ActiveSupport::TestCase
     domain = 'general'
     params = {'id' => '123', 'email' => 'test@test.com'}
 
-    $redis.expects(:set).with('downloads:general:123', '{"email":"test@test.com"}')
+    $redis.expects(:set).with('downloads:general:123', regexp_matches(/test@test.com/))
 
     Download::Router.set_email(domain, params)
   end

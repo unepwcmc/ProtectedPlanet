@@ -43,7 +43,7 @@ class TestWdpaAttribute < ActiveSupport::TestCase
     assert_equal Date.new(1991), Wdpa::Attribute.standardise('1991', as: :year),
       "Expected '1991' to be converted to date 1991"
 
-    assert_equal nil, Wdpa::Attribute.standardise('Not reported', as: :year),
+    assert_nil Wdpa::Attribute.standardise('Not reported', as: :year),
       "Expected a non-year-looking string to be converted to null"
   end
 

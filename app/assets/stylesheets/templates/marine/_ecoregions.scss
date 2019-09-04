@@ -1,0 +1,14 @@
+//----------------------------------------
+// fact
+//----------------------------------------
+&__fact {
+  position: absolute;
+  top: rem-calc(-150);
+  right: rem-calc(20);
+
+  @include breakpoint($medium){
+    flex: 0 0 25%;
+
+    position: static;
+  }
+}

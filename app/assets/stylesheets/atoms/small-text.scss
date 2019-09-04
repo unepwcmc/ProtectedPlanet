@@ -1,0 +1,4 @@
+@include b(small-text) {
+  @include text--alt(small, thin);
+  font-style: italic;
+}

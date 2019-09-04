@@ -8,91 +8,97 @@ class TestSearch < ActiveSupport::TestCase
     search_query = "manbone"
 
     query_object = {
-      index: 'protected_areas',
+      index: 'protectedareas_test,countries_test',
       body: {
-        size: 20.0,
-        from: 0.0,
-        query: {
-          "bool" => {
-            "must" => {
-              "bool" => {
-                "should" => [
-                  { "nested" => { "path" => "countries_for_index", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "countries_for_index.name" ], "fuzziness" => "AUTO" } } } },
-                  { "nested" => { "path" => "countries_for_index.region_for_index", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "countries_for_index.region_for_index.name" ], "fuzziness" => "AUTO" } } } },
-                  { "nested" => { "path" => "sub_location", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "sub_location.english_name" ], "fuzziness" => "AUTO" } } } },
-                  { "nested" => { "path" => "designation", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "designation.name" ], "fuzziness" => "AUTO" } } } },
-                  { "nested" => { "path" => "iucn_category", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "iucn_category.name" ], "fuzziness" => "AUTO" } } } },
-                  { "nested" => { "path" => "governance", "query" => { "multi_match" => { "query" => search_query, "fields" => [ "governance.name" ], "fuzziness" => "AUTO" } } } },
-                  {"terms" => {"wdpa_id" => []}},
-                  {
-                    "function_score" => {
-                      "query" => {
-                        "multi_match" => {
-                          "query" => "*manbone*",
-                          "fields" => [ "iso_3", "name", "original_name" ]
-                        }
-                      },
-                      "boost" => "5",
-                      "functions" => [{
-                          "filter" => {"match" => {"type" => "country"}},
-                          "weight" => 20
-                        }, {
-                          "filter" => {"match" => {"type" => "region"}},
-                          "weight" => 10
-                      }]
-                    }
-                  }
-                ]
-              }
-            }
-          }
-        },
-        aggs: {
-          "type_of_territory" => {
-            "terms" => { "field" => "marine" }
-          },
-          "has_parcc_info" => {
-            "terms" => { "field" => "has_parcc_info" }
-          },
-          "is_green_list" => {
-            "terms" => { "field" => "is_green_list" }
-          },
-          "has_irreplaceability_info" => {
-            "terms" => { "field" => "has_irreplaceability_info" }
-          },
-          "country" => {
-            "nested" => { "path" => "countries_for_index" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.id", "size" => 500 } } }
-          },
-          "region" => {
-            "nested" => { "path" => "countries_for_index.region_for_index" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "countries_for_index.region_for_index.id", "size" => 500 } } }
-          },
-          "designation" => {
-            "nested" => { "path" => "designation" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "designation.id", "size" => 500 } } }
-          },
-          "iucn_category" => {
-            "nested" => { "path" => "iucn_category" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "iucn_category.id", "size" => 500 } } }
-          },
-          "governance" => {
-            "nested" => { "path" => "governance" },
-            "aggs" => { "aggregation" => { "terms" => { "field" => "governance.id", "size" => 500 } } }
-          }
-        }
-      }
+          :size => 20.0,
+          :from => 0.0,
+          indices_boost: [{Search::COUNTRY_INDEX => 3}, {Search::PA_INDEX => 1} ],
+          :query => {
+            'bool' => {
+              'must' => {
+                'bool' => {
+                  'should' => [{
+                                 'nested' => {
+                                   'path' => 'countries_for_index', 'query' => {
+                                     'multi_match' => {
+                                       'query' => 'manbone', 'fields' => ['countries_for_index.name'], 'fuzziness' => '0'}}}}, {
+                                 'nested' => {
+                                   'path' => 'countries_for_index.region_for_index', 'query' => {
+                                     'multi_match' => {
+                                       'query' => 'manbone', 'fields' => ['countries_for_index.region_for_index.name'], 'fuzziness' => '0'}}}}, {
+                                 'nested' => {
+                                   'path' => 'sub_location', 'query' => {
+                                     'multi_match' => {
+                                       'query' => 'manbone', 'fields' => ['sub_location.english_name'], 'fuzziness' => '0'}}}}, {
+                                 'nested' => {
+                                   'path' => 'designation', 'query' => {
+                                     'multi_match' => {
+                                       'query' => 'manbone', 'fields' => ['designation.name'], 'fuzziness' => '0'}}}}, {
+                                 'nested' => {
+                                   'path' => 'iucn_category', 'query' => {
+                                     'multi_match' => {
+                                       'query' => 'manbone', 'fields' => ['iucn_category.name'], 'fuzziness' => '0'}}}}, {
+                                 'nested' => {
+                                   'path' => 'governance', 'query' => {
+                                     'multi_match' => {
+                                       'query' => 'manbone', 'fields' => ['governance.name'], 'fuzziness' => '0'}}}}, {
+                                 'multi_match' => {
+                                   'query' => 'manbone', 'fields' => ['name^2', 'iso_3^3', 'countries_for_index', 'region_name'], 'fuzziness' => '0'}}, {
+                                 'terms' => {
+                                   'wdpa_id' => []}}, {
+                                 'function_score' => {
+                                   'query' => {
+                                     'multi_match' => {
+                                       'query' => 'manbone', 'fields' => ['iso_3', 'name', 'original_name'], 'fuzziness' => '0'}}, 'boost' => '5', 'functions' => [{
+                                                                                                                                                                        'filter' => {
+                                                                                                                                                                          'match' => {
+                                                                                                                                                                            'type' => 'country'}}, 'weight' => 20}, {
+                                                                                                                                                                        'filter' => {
+                                                                                                                                                                          'match' => {
+                                                                                                                                                                            'type' => 'region'}}, 'weight' => 10}]}}]}}}},
+          :aggs => {
+            'is_green_list' => {
+              'terms' => {
+                'field' => 'is_green_list'}}, 'has_irreplaceability_info' => {
+              'terms' => {
+                'field' => 'has_irreplaceability_info'}}, 'country' => {
+              'nested' => {
+                'path' => 'countries_for_index'}, 'aggs' => {
+                'aggregation' => {
+                  'terms' => {
+                    'field' => 'countries_for_index.id', 'size' => 500}}}}, 'region' => {
+              'nested' => {
+                'path' => 'countries_for_index.region_for_index'}, 'aggs' => {
+                'aggregation' => {
+                  'terms' => {
+                    'field' => 'countries_for_index.region_for_index.id', 'size' => 500}}}}, 'designation' => {
+              'nested' => {
+                'path' => 'designation'}, 'aggs' => {
+                'aggregation' => {
+                  'terms' => {
+                    'field' => 'designation.id', 'size' => 500}}}}, 'iucn_category' => {
+              'nested' => {
+                'path' => 'iucn_category'}, 'aggs' => {
+                'aggregation' => {
+                  'terms' => {
+                    'field' => 'iucn_category.id', 'size' => 500}}}}, 'governance' => {
+              'nested' => {
+                'path' => 'governance'}, 'aggs' => {
+                'aggregation' => {
+                  'terms' => {
+                    'field' => 'governance.id', 'size' => 500
+                  }}}}}}
     }
 
     results_object = {
       "hits" => {
         "hits" => [{
-          "_type" => "protected_area",
+          "_index" => Search::PA_INDEX,
           "_source" => {
             "id" => protected_area.id
           }
         }, {
-          "_type" => "country",
+          "_index" => Search::COUNTRY_INDEX,
           "_source" => {
             "id" => country.id
           }
@@ -155,6 +161,7 @@ class TestSearch < ActiveSupport::TestCase
     expected_query = {
       size: 20,
       from: 20,
+      indices_boost: [{Search::COUNTRY_INDEX => 3}, {Search::PA_INDEX => 1} ],
       query: {},
       aggs: {}
     }
@@ -162,7 +169,7 @@ class TestSearch < ActiveSupport::TestCase
     search_mock = mock()
     search_mock.
       expects(:search).
-      with(index: 'protected_areas', body: expected_query)
+      with(index: 'protectedareas_test,countries_test', body: expected_query)
     Elasticsearch::Client.stubs(:new).returns(search_mock)
 
     Search.search("manbone", page: 2)
@@ -199,7 +206,7 @@ class TestSearch < ActiveSupport::TestCase
     Search::Aggregation.stubs(:all).returns({})
 
     search_mock = mock()
-    search_mock.stubs(:search).returns({"hits" => {"total" => 400}})
+    search_mock.stubs(:search).returns({"hits" => {"total" => {"value" => 400 }}})
     Elasticsearch::Client.stubs(:new).returns(search_mock)
 
     pages = Search.search("manbone").total_pages

@@ -1,0 +1,48 @@
+//----------------------------------------
+// mixins
+//----------------------------------------
+@mixin arrow ($colour, $size) {
+  border-top: solid $size $colour;
+  border-right: solid $size transparent;
+  border-left: solid $size transparent;
+  content: '';
+
+  width: 0; height: 0;
+  position: absolute;
+  bottom: -$size;
+  left: 50%;
+
+  transform: translateX(-50%);
+} 
+
+//----------------------------------------
+// twitter share styles
+//----------------------------------------
+.twitter-share {
+  @extend .u-text-sans;
+
+  background: white;
+  border: solid rem-calc(2) $blue--marine-4;
+  border-radius: rem-calc(3);
+  padding: rem-calc(4 5 4 10);
+  
+  display: none;
+  position: absolute;
+  z-index: 100;
+
+  transform: translate(-50%, -100%);
+
+  &--active { display: block; }
+
+  &:before { @include arrow($blue--marine-4, rem-calc(8)); }
+
+  &:after { @include arrow(white, rem-calc(5)); }
+
+  &__title {
+    margin-right: rem-calc(4);
+
+    display: inline-block;
+
+    transform: translateY(-1px);
+  }
+}

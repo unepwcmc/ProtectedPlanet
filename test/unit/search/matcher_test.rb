@@ -19,7 +19,7 @@ class SearchMatcherTest < ActiveSupport::TestCase
           "multi_match" => {
             "query" => term,
             "fields" => [ "countries.name" ],
-            "fuzziness" => "AUTO"
+            "fuzziness" => "0"
           }
         }
       }
@@ -40,11 +40,12 @@ class SearchMatcherTest < ActiveSupport::TestCase
 
     expected_hash = {
       "multi_match" => {
-        "query" => "*#{term}*",
-        "fields" => [ "name", "original_name" ]
+        "query" => "#{term}",
+        "fields" => [ "name", "original_name" ],
+        "fuzziness" => "0"
       }
     }
 
-    assert_equal matcher.to_h, expected_hash
+    assert_equal  expected_hash, matcher.to_h
   end
 end

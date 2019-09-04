@@ -1,4 +1,4 @@
 Sidekiq.configure_server do |config|
-  config.redis = {url: $redis.client.options[:url]}
+  config.redis = {url: ENV["REDIS_URL"]}
 end
 

@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 # Enable profiling for Garbage Collection (and
 # get all the information on Newrelic
@@ -24,17 +24,11 @@ module ProtectedPlanet
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    config.autoload_paths += %W(
-      #{config.root}/lib/modules
-      #{config.root}/app/presenters
-      #{config.root}/app/serializers
-    )
-    config.assets.paths << Rails.root.join('vendor', 'assets', 'bower_components')
+    config.autoload_paths += %W(#{config.root}/lib/modules #{config.root}/app/presenters)
+    config.assets.paths << Rails.root.join('node_modules')
     config.assets.precompile += %w(base.js country.js home.js map.js protected_areas.js search.js resources.js content.js marine.js green_list.js region.js)
     config.assets.precompile += %w(d3/d3.js)
     config.assets.precompile += %w(d3/d3.min.js)
-    config.assets.precompile += %w(protectedplanet-frontend/dist/*)
-    config.assets.precompile += %w(html5shiv/dist/*)
     config.tinymce.install = :compile
 
     config.active_record.schema_format = :sql

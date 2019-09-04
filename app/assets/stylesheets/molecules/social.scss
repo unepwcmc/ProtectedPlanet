@@ -1,0 +1,55 @@
+//----------------------------------------
+// social mixins
+//----------------------------------------
+@mixin social-icon($colour, $unicode) {
+  background-color: $colour;
+  
+  &:hover { background-color: darken($colour, 5%); }
+
+  &:before { content: $unicode; }
+}
+
+.social {
+
+//----------------------------------------
+// icons
+//----------------------------------------
+  &--facebook { @include social-icon(#3b5998,'\f09a'); }
+  &--linkedin { @include social-icon(#0077b5,'\f0e1'); }
+  &--twitter { @include social-icon(#1da1f2,'\f099'); }
+  &--email { 
+    @include social-icon(#00a2e8, '\f0e0'); 
+    font-size: rem-calc(17);
+  }
+
+//----------------------------------------
+// sharing
+//----------------------------------------
+  &--sharing {
+    position: absolute;
+    top: rem-calc(5);
+    right: rem-calc(4);
+    
+    @include breakpoint($medium){
+      top: rem-calc(8);
+      right: rem-calc(6);
+    }
+  }
+
+    &--share {
+      border-radius: 3px;
+      margin: rem-calc(4);
+      padding-top: rem-calc(6);
+      text-align: center;
+      text-decoration: none;
+      width: rem-calc(28); height: rem-calc(28);
+
+      display: inline-block;
+
+      &:before {
+        color: white;
+        font: $fontAwesome;
+        font-size: rem-calc(18);
+      }  
+    }
+}

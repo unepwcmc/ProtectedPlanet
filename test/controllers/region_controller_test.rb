@@ -22,7 +22,7 @@ class RegionControllerTest < ActionController::TestCase
       points_count: 100
     )
 
-    get :show, iso: 'EU'
+    get :show, params: {iso: 'EU'}
     assert_response :success
   end
 

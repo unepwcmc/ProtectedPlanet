@@ -1,4 +1,4 @@
-class ProtectedArea < ActiveRecord::Base
+class ProtectedArea < ApplicationRecord
   include GeometryConcern
 
   has_and_belongs_to_many :countries
@@ -70,12 +70,12 @@ class ProtectedArea < ActiveRecord::Base
   end
 
   def as_indexed_json options={}
-    self.as_json(
+    js = self.as_json(
       only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list],
       methods: [:coordinates],
       include: {
         countries_for_index: {
-          only: [:name, :id],
+          only: [:name, :id, :iso_3],
           include: { region_for_index: { only: [:id, :name] } }
         },
         sub_locations: { only: [:english_name] },
@@ -84,6 +84,7 @@ class ProtectedArea < ActiveRecord::Base
         governance: { only: [:id, :name] }
       }
     )
+    return js
   end
 
   def as_api_feeder

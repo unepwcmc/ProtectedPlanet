@@ -16,14 +16,14 @@ class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
   end
 
   def test_get_show
-    get :show, :id => @home_carousel_slide
+    get :show, params: {id: @home_carousel_slide}
     assert_response :success
     assert assigns(:home_carousel_slide)
     assert_template :show
   end
 
   def test_get_show_failure
-    get :show, :id => 'invalid'
+    get :show, params: {id: 'invalid'}
     assert_response :redirect
     assert_redirected_to :action => :index
     assert_equal 'Home Carousel Slide not found', flash[:danger]
@@ -38,7 +38,7 @@ class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
   end
 
   def test_get_edit
-    get :edit, :id => @home_carousel_slide
+    get :edit, params: {id: @home_carousel_slide}
     assert_response :success
     assert assigns(:home_carousel_slide)
     assert_template :edit
@@ -47,21 +47,23 @@ class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
 
   def test_creation
     assert_difference 'HomeCarouselSlide.count' do
-      post :create, :home_carousel_slide => {
-        :title => 'test title',
-        :description => 'test description',
-        :url => 'test url',
-      }
+      post :create, params: {
+          :home_carousel_slide => {
+          :title => 'test title',
+          :description => 'test description',
+          :url => 'test url'
+        }
+    }
       home_carousel_slide = HomeCarouselSlide.last
       assert_response :redirect
-      assert_redirected_to :action => :show, :id => home_carousel_slide
+      assert_redirected_to admin_home_carousel_slide_path(home_carousel_slide)
       assert_equal 'Home Carousel Slide created', flash[:success]
     end
   end
 
   def test_creation_failure
     assert_no_difference 'HomeCarouselSlide.count' do
-      post :create, :home_carousel_slide => { }
+      post :create, params: {:home_carousel_slide => {}}
       assert_response :success
       assert_template :new
       assert_equal 'Failed to create Home Carousel Slide', flash[:danger]
@@ -69,8 +71,11 @@ class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
   end
 
   def test_update
-    put :update, :id => @home_carousel_slide, :home_carousel_slide => {
-      :title => 'Updated'
+    put :update, params: {
+      :id => @home_carousel_slide,
+      :home_carousel_slide => {
+        :title => 'Updated'
+      }
     }
     assert_response :redirect
     assert_redirected_to :action => :show, :id => @home_carousel_slide
@@ -80,8 +85,11 @@ class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
   end
 
   def test_update_failure
-    put :update, :id => @home_carousel_slide, :home_carousel_slide => {
-      :title => ''
+    put :update, params: {
+      :id => @home_carousel_slide,
+      :home_carousel_slide => {
+        :title => ''
+      }
     }
     assert_response :success
     assert_template :edit
@@ -92,7 +100,7 @@ class Admin::HomeCarouselSlidesControllerTest < ActionController::TestCase
 
   def test_destroy
     assert_difference 'HomeCarouselSlide.count', -1 do
-      delete :destroy, :id => @home_carousel_slide
+      delete :destroy, params: {:id => @home_carousel_slide}
       assert_response :redirect
       assert_redirected_to :action => :index
       assert_equal 'Home Carousel Slide deleted', flash[:success]

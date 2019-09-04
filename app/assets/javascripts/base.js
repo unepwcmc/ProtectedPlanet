@@ -1,5 +1,4 @@
 //= require 'require'
-//= require REM-unit-polyfill/js/rem.min.js
 //= require jquery
 //= require jquery_ujs
 //= require 'jquery.tablesorter.min'
