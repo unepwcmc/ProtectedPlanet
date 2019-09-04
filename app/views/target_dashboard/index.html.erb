@@ -4,12 +4,21 @@
   </header>
 
   <main>
-    <chart-dial
-      title="Marine"
-      colour="marine"
-      :dial-value="40"
-      :dial-target="60"
-    >
-    </chart-dial>    
+    <carousel class="carousel--basic">
+      <% @global_stats.each do |stat| %>
+        <carousel-slide>
+          <h3><%= stat[:title] %></h3>
+          
+          <% stat[:charts].each do |chart| %>
+            <chart-dial
+              title="<%= chart[:title] %>"
+              colour="<%= chart[:colour] %>"
+              :dial-value="<%= chart[:value] %>"
+              :dial-target="<%= chart[:target] %>" 
+            ></chart-dial>
+          <% end %>
+        </carousel-slide>
+      <% end %>
+    </carousel>
   </main>
 </div>
