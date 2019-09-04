@@ -9,6 +9,7 @@ import Counter from './components/counter/Counter'
 import ChartBar from './components/charts/chart-bar/ChartBar'
 import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
+import ChartDial from './components/charts/chart-dial/ChartDial'
 import ChartLine from './components/charts/chart-line/ChartLine'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartBar,
         ChartBarSimple,
         ChartBarStacked,
+        ChartDial,
         ChartLine,
         ChartTreemapInteractive,
         ChartRectangles,

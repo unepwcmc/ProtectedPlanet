@@ -1,0 +1,28 @@
+$chart-dial-color: $grey;
+$chart-text-color: $grey;
+
+&--dial {
+  width: 244px;
+
+  .chart {
+    &__arc {
+      &--default, &--background { fill: $chart-item-background; }
+      &--marine { fill: $marine; }
+      &--terrestrial { fill: $terrestrial; }
+    }
+
+    &__arrow-circle { fill: $chart-dial-color; }
+
+    &__arrow-head { fill: $chart-dial-color; }
+
+    &__arrow-line { 
+      stroke: $chart-dial-color; 
+      stroke-width: rem-calc(3);
+    }
+
+    &__title {
+      fill: $chart-text-color;
+      font-weight: $bold;
+    }
+  }
+}
