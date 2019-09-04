@@ -2,8 +2,8 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   def perform token, search_term, filters
     @token = token
     @search_term = search_term
-    @filters_json = filters.to_json
-    @filters_values = filters.values
+    @filters_json = filters
+    @filters_values = JSON.load(filters).values
 
     while_generating(key(token)) do
       generate_download

@@ -1,29 +1,32 @@
+
 class Search
   CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml'))
   ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance, :is_green_list]
-
+  COUNTRY_INDEX = 'countries_'+Rails.env
+  PA_INDEX = 'protectedareas_'+Rails.env
   attr_reader :search_term, :options
 
   def self.configuration
     @@configuration ||= YAML.load(CONFIGURATION_FILE)
   end
 
-  def self.search search_term, options={}
+  def self.search search_term, options={}, index_name=PA_INDEX+','+COUNTRY_INDEX
     # after receiving some crazy long search terms that crash elasticsearch
     # we are limiting this to 128 characters
-    instance = self.new (search_term.present? ? search_term[0..127] : search_term), options
+    instance = self.new (search_term.present? ? search_term[0..127] : search_term), options, index_name
     instance.search
 
     instance
   end
 
-  def initialize search_term='', options={}
+  def initialize search_term='', options, index_name
     self.search_term = search_term
     self.options = options
+    @index_name = index_name
   end
 
   def search
-    @query_results ||= elastic_search.search(index: 'protected_areas', body: query)
+    @query_results ||= elastic_search.search(index: @index_name, body: query)
   rescue Faraday::TimeoutError => e
     Rails.logger.warn "timeout in search"
     Rails.logger.warn e
@@ -61,6 +64,10 @@ class Search
     {
       size: options[:size] || RESULTS_SIZE,
       from: options[:offset] || offset,
+      # This line helps countries come first in search, may need tweaking as initial weights are dependent on the relative
+      # frequency of terms in the countries and PA indices which is hard to anticipate!
+      indices_boost: [{COUNTRY_INDEX => 3}, {PA_INDEX => 1} ],
+  
       query: Search::Query.new(search_term, options).to_h,
     }.tap( &method(:optional_queries) )
   end
@@ -69,7 +76,6 @@ class Search
     unless options[:without_aggregations]
       query[:aggs] = Search::Aggregation.all
     end
-
     if options[:sort].present?
       query[:sort] = Search::Sorter.from_params(options[:sort])
     end

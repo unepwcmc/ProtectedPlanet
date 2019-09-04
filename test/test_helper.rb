@@ -1,5 +1,9 @@
-require "codeclimate-test-reporter"
-CodeClimate::TestReporter.start
+# require "codeclimate-test-reporter"
+# CodeClimate::TestReporter.start
+# require 'simplecov'
+# require 'simplecov-console'
+# SimpleCov.formatter = SimpleCov::Formatter::Console
+# SimpleCov.start
 
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
@@ -9,7 +13,10 @@ ActiveRecord::Migration.maintain_test_schema!
 
 require 'mocha/mini_test'
 require 'webmock/minitest'
-WebMock.disable_net_connect!(:allow => "codeclimate.com", :allow_localhost => true)
+
+require 'database_cleaner'
+
+WebMock.disable_net_connect!(:allow => ["codeclimate.com"], :allow_localhost => true)
 
 Mocha::Configuration.prevent(:stubbing_non_existent_method)
 
@@ -53,3 +60,7 @@ Sidekiq.configure_client do |config|
 end
 
 Bystander.enable_testing!
+
+def assert_greater(a, b)
+    assert_operator a, :>, b
+end

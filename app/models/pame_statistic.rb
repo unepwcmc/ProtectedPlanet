@@ -1,4 +1,4 @@
-class PameStatistic < ActiveRecord::Base
+class PameStatistic < ApplicationRecord
   belongs_to :country
 
   [:land, :marine].each do |type|

@@ -1,87 +1,78 @@
 {
-  "type_of_territory": {
-    "terms": {
-      "field": "marine"
-    }
-  },
-  "has_parcc_info": {
-    "terms": {
-      "field": "has_parcc_info"
-    }
-  },
-  "is_green_list": {
-    "terms": {
-      "field": "is_green_list"
-    }
-  },
-  "has_irreplaceability_info": {
-    "terms": {
-      "field": "has_irreplaceability_info"
-    }
-  },
-  "country": {
-    "nested": {
-      "path": "countries_for_index"
+    "is_green_list": {
+	"terms": {
+	    "field": "is_green_list"
+	}
     },
-    "aggs": {
-      "aggregation": {
-        "terms": {
-          "field": "countries_for_index.id",
-          "size": 500
-        }
-      }
-    }
-  },
-  "region": {
-    "nested": {
-      "path": "countries_for_index.region_for_index"
+    "has_irreplaceability_info": {
+	"terms": {
+	    "field": "has_irreplaceability_info"
+	}
     },
-    "aggs": {
-      "aggregation": {
-        "terms": {
-          "field": "countries_for_index.region_for_index.id",
-          "size": 500
-        }
-      }
-    }
-  },
-  "designation": {
-    "nested": {
-      "path": "designation"
+    "country": {
+	"nested": {
+	    "path": "countries_for_index"
+	},
+	"aggs": {
+	    "aggregation": {
+		"terms": {
+		    "field": "countries_for_index.id",
+		    "size": 500
+		}
+	    }
+	}
     },
-    "aggs": {
-      "aggregation": {
-        "terms": {
-          "field": "designation.id",
-          "size": 500
-        }
-      }
-    }
-  },
-  "iucn_category": {
-    "nested": {
-      "path": "iucn_category"
+    "region": {
+	"nested": {
+	    "path": "countries_for_index.region_for_index"
+	},
+	"aggs": {
+	    "aggregation": {
+		"terms": {
+		    "field": "countries_for_index.region_for_index.id",
+		    "size": 500
+		}
+	    }
+	}
     },
-    "aggs": {
-      "aggregation": {
-        "terms": {
-          "field": "iucn_category.id",
-          "size": 500
-        }
-      }
-    }
-  },
-  "governance": {
-    "nested": {
-      "path": "governance"
+    "designation": {
+	"nested": {
+	    "path": "designation"
+	},
+	"aggs": {
+	    "aggregation": {
+		"terms": {
+		    "field": "designation.id",
+		    "size": 500
+		}
+	    }
+	}
     },
-    "aggs": {
-      "aggregation": {
-        "terms": {
-          "field": "governance.id",
-          "size": 500
-        }
-      }
+    "iucn_category": {
+	"nested": {
+	    "path": "iucn_category"
+	},
+	"aggs": {
+	    "aggregation": {
+		"terms": {
+		    "field": "iucn_category.id",
+		    "size": 500
+		}
+	    }
+	}
+    },
+    "governance": {
+	"nested": {
+	    "path": "governance"
+	},
+	"aggs": {
+	    "aggregation": {
+		"terms": {
+		    "field": "governance.id",
+		    "size": 500
+		}
+	    }
+	}
     }
-  }
+    
 }

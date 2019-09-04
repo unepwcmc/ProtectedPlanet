@@ -1,4 +1,4 @@
-class Network < ActiveRecord::Base
+class Network < ApplicationRecord
   has_many :networks_protected_areas, dependent: :destroy
   has_many :protected_areas, through: :networks_protected_areas
 

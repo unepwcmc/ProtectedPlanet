@@ -1,0 +1,89 @@
+version: '3'
+services:
+  web:
+    build: .
+    command: /bin/bash -l -c "bundle exec rails s -p 3000 -b '0.0.0.0'"
+    user: unepwcmc
+    volumes:
+      - .:/ProtectedPlanet
+      - protectedplanet_import_data:/import_data
+      - protectedplanet_bundler:/usr/local/bundle
+    ports:
+      - "3000:3000"
+    env_file:
+      - '.env'
+    depends_on:
+      - db
+      - redis
+      - elasticsearch
+      - webpacker
+  db:
+    container_name: protectedplanet-db
+    image: kartoza/postgis
+    ports:
+      - "5432:5432"
+    env_file:
+      - '.env'
+    volumes:
+      - protectedplanet_pg_data:/var/lib/postgresql
+  redis:
+    image: redis
+    env_file:
+      - '.env'
+    volumes:
+      - protectedplanet_redis_data:/data
+  sidekiq:
+     build: .
+     volumes:
+       - .:/ProtectedPlanet
+       - protectedplanet_import_data:/import_data
+     links:
+       - db
+       - redis
+     command: /bin/bash -l -c "bundle exec sidekiq"
+     user: unepwcmc
+     env_file:
+       - '.env'
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    env_file:
+      - '.env'
+    volumes:
+      - 'protectedplanet_es_data:/usr/share/elasticsearch/data'
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.0.0
+    ports:
+      - "5601:5601"
+  webpacker: 
+    build: .
+    env_file: 
+      - '.env'
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
+    user: unepwcmc
+    volumes: 
+      - .:/ProtectedPlanet
+      - protectedplanet_bundler:/usr/local/bundle
+    ports:
+      - '3035:3035'
+
+volumes:
+  protectedplanet_pg_data:
+    driver: local
+  protectedplanet_redis_data:
+    driver: local
+  protectedplanet_import_data:
+    driver: local
+  protectedplanet_es_data:
+    driver: local
+  protectedplanet_bundler:
+    driver: local

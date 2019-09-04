@@ -1,4 +1,4 @@
-class CountryStatistic < ActiveRecord::Base
+class CountryStatistic < ApplicationRecord
   belongs_to :country
 
   def national_percentage

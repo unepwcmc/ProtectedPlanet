@@ -11,67 +11,58 @@ class Search::Index
       :governance
     ])
 
-    Search::Index.index Country.without_geometry.all
 
-    Search::Index.create_mapping 'protected_area'
-    Search::Index.index pa_relation
+    country_index = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
+    country_index.create
+    pa_index = Search::Index.new Search::PA_INDEX, pa_relation
+    pa_index.create
+    country_index.index
+    pa_index.index
   end
 
-  def self.index collection
-    index = self.new collection
-    index.index
-  end
-
-  def self.count
-    index = self.new
-    index.count
-  end
-
-  def self.create_mapping collection
-    index = self.new
-    index.create_mapping collection
+  def self.count 
+    self.new(Search::COUNTRY_INDEX).count + self.new(Search::PA_INDEX).count
   end
 
   def self.delete
-    index = self.new
-    index.delete
+    [Search::COUNTRY_INDEX, Search::PA_INDEX].each do |index_name|
+      index = self.new index_name
+      index.delete
+    end
   end
 
-  INDEX_NAME = Rails.application.secrets.elasticsearch["index"]
 
-  def initialize collection=nil
+  def initialize index_name, collection=nil
     @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch['url'])
+    @index_name = index_name
     @collection = collection
   end
 
+  def create
+    @client.indices.create index: @index_name, body:  mappings 
+  end
+  
   def index
     documents_in_batches { |batch| @client.bulk body: batch }
   end
 
   def delete
-    @client.indices.delete index: INDEX_NAME
+    @client.indices.delete index: @index_name
+    
   rescue Elasticsearch::Transport::Transport::Errors::NotFound
-    Rails.logger.warn("Index #{INDEX_NAME} not found. Skipping")
+    Rails.logger.warn("Index #{@index_name} not found. Skipping")
   end
 
-  def count
-    @client.count['count']
+  def count 
+    @client.count(index: @index_name)['count']
   end
 
-  def create_mapping type
-    raise ArgumentError, "No mapping found for type #{type}" unless mappings[type]
-    @client.indices.put_mapping(
-      index: INDEX_NAME,
-      type: type,
-      body: { type => mappings[type] }
-    )
-  end
 
   private
 
   def documents_in_batches
     @collection.find_in_batches.each do |group|
-      batch = group.each_with_object([]) do |object, bulk|
+     batch = group.each_with_object([]) do |object, bulk|
         bulk << index_header(object)
         bulk << object.as_indexed_json
       end
@@ -81,7 +72,7 @@ class Search::Index
   end
 
   def index_header model
-    {index: {_index: INDEX_NAME, _type: model.class.to_s.underscore}}
+    {index: {_index: @index_name}}
   end
 
   def mappings

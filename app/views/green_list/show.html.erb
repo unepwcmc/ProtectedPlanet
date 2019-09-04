@@ -6,7 +6,7 @@
 
 <div class="template--site container--profile container--push-bottom pdf--protected-area">
   <h1 class="header--h1-small">
-    <%= link_to 'Green List: ', '/search?is_green_list=t,T,true,TRUE' %>
+    <%= link_to 'Green List: ', '/search?is_green_list=true' %>
     <%= @protected_area.name %> in
     <% if @countries.any? %>
       <% @countries.each_with_index do |country, i| %>

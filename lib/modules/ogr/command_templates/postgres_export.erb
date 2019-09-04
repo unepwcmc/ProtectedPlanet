@@ -2,8 +2,11 @@ ogr2ogr -skipfailures
 -f "<%= DRIVERS[file_type] %>"
 <%= file_name %>
 PG:"host=<%= db_config[:host] %>
-  user=<%= db_config[:username] %> dbname=<%= db_config[:database] %>
-  password=<%= db_config[:password] %>"
+  user=<%= db_config[:username] %> 
+  <% unless db_config[:password].nil? %>
+    password=<%= db_config[:password] %>
+  <% end %>
+  dbname=<%= db_config[:database] %>"
 -sql "<%= query %>"
 -lco "ENCODING=UTF-8"
 -lco "WRITE_BOM=YES"

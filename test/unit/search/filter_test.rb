@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class SearchFilterTest < ActiveSupport::TestCase
-  test '#from_params, given a nested Filter, returns the filter query as a
+  test 'from_params, given a nested Filter, returns the filter query as a
    hash' do
     filters = Search::Filter.from_params({region: "Europe"})
 
@@ -29,7 +29,7 @@ class SearchFilterTest < ActiveSupport::TestCase
     assert_equal expected_filters, filters
   end
 
-  test '#from_params, given a type Filter, returns the filter query as a
+  test 'from_params, given a type Filter, returns the filter query as a
    hash' do
     filter = Search::Filter.from_params({type: 'country'})
     expected_filters = [{"bool"=>{"should"=>[{"type"=>{"value"=>"country"}}]}}]
@@ -37,15 +37,15 @@ class SearchFilterTest < ActiveSupport::TestCase
     assert_equal expected_filters, filter
   end
 
-  test '#from_params, given a marine filter, returns the filter query
+  test 'from_params, given a marine filter, returns the filter query
    as a hash' do
     filters = Search::Filter.from_params(marine: false)
-    expected_filters = [{"bool"=>{"should"=>[{"term"=>{"marine"=>false}}]}}]
+    expected_filters = [{"bool"=>{"should"=>[{"match"=>{"marine"=>false}}]}}]
 
     assert_equal expected_filters, filters
   end
 
-  test '#from_params, given a geo filter passed as a string, converts
+  test 'from_params, given a geo filter passed as a string, converts
    the string to a float' do
     filters = Search::Filter.from_params(location: {coords: ['1','2'], distance: '2'})
 
@@ -88,7 +88,7 @@ class SearchFilterTest < ActiveSupport::TestCase
     assert_equal expected_filters, filters
   end
 
-  test '#from_params, given a filter with an array of values, creates a
+  test 'from_params, given a filter with an array of values, creates a
    filter for each value' do
     filters = Search::Filter.from_params(
       iucn_category: ["Not Reported", "II"]

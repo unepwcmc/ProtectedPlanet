@@ -24,9 +24,9 @@ class CountryTest < ActiveSupport::TestCase
       "name" => 'Manboneland',
       "iso_3"=> 'MyString',
       "region_for_index" => {
-        "id" => 987,
         "name" => "North Manmerica"
-      }
+      },
+      "region_name" => "North Manmerica"
     }
 
     assert_equal expected_json, country.as_indexed_json
@@ -108,13 +108,13 @@ class CountryTest < ActiveSupport::TestCase
     designation_2 = FactoryGirl.create(:designation)
     country = FactoryGirl.create(:country)
     expected_groups = [{
-      'designation_id' => designation_1.id.to_s,
+      'designation_id' => designation_1.id,
       'designation_name' => designation_1.name,
-      'count' => '2'
+      'count' => 2
     }, {
-      'designation_id' => designation_2.id.to_s,
+      'designation_id' => designation_2.id,
       'designation_name' => designation_2.name,
-      'count' => '3'
+      'count' => 3
     }]
 
     2.times { FactoryGirl.create(:protected_area, countries: [country], designation: designation_1) }
@@ -128,14 +128,14 @@ class CountryTest < ActiveSupport::TestCase
     iucn_category_2 = FactoryGirl.create(:iucn_category, name: 'V')
     country = FactoryGirl.create(:country)
     expected_groups = [{
-      'iucn_category_id' => iucn_category_1.id.to_s,
+      'iucn_category_id' => iucn_category_1.id,
       'iucn_category_name' => iucn_category_1.name,
-      'count' => '2',
+      'count' => 2,
       'percentage' => '40.00'
     }, {
-      'iucn_category_id' => iucn_category_2.id.to_s,
+      'iucn_category_id' => iucn_category_2.id,
       'iucn_category_name' => iucn_category_2.name,
-      'count' => '3',
+      'count' => 3,
       'percentage' => '60.00'
     }]
 
@@ -150,16 +150,16 @@ class CountryTest < ActiveSupport::TestCase
     governance_2 = FactoryGirl.create(:governance, name: 'International')
     country = FactoryGirl.create(:country)
     expected_groups = [{
-      'governance_id' => governance_1.id.to_s,
+      'governance_id' => governance_1.id,
       'governance_name' => governance_1.name,
       'governance_type' => nil,
-      'count' => '2',
+      'count' => 2,
       'percentage' => '40.00'
     }, {
-      'governance_id' => governance_2.id.to_s,
+      'governance_id' => governance_2.id,
       'governance_name' => governance_2.name,
       'governance_type' => nil,
-      'count' => '3',
+      'count' => 3,
       'percentage' => '60.00'
     }]
 
