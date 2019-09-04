@@ -1,8 +1,9 @@
 class Wdpa::S3
   def initialize
-    @s3 = AWS::S3.new({
+    @s3 = Aws::S3::Resource.new({
       access_key_id: Rails.application.secrets.aws_access_key_id,
-      secret_access_key: Rails.application.secrets.aws_secret_access_key
+      secret_access_key: Rails.application.secrets.aws_secret_access_key,
+      region: Rails.application.secrets.s3_region
     })
   end
 
@@ -41,6 +42,6 @@ class Wdpa::S3
 
   def available_wdpa_databases
     bucket_name = Rails.application.secrets.aws_bucket
-    @s3.buckets[bucket_name].objects
+    @s3.bucket(bucket_name).objects
   end
 end

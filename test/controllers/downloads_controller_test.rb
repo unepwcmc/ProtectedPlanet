@@ -8,7 +8,7 @@ class DownloadsControllerTest < ActionController::TestCase
 
     Download.expects(:link_to).returns(link)
 
-    get :show, id: country.iso_3, type: type, domain: :general
+    get :show, params: {id: country.iso_3, type: type, domain: :general}
     assert_redirected_to link
   end
 
@@ -21,7 +21,7 @@ class DownloadsControllerTest < ActionController::TestCase
       with('q' => search_term, 'type' => 'protected_area', 'controller' => 'downloads', 'action' => 'create').
       returns(expected_json)
 
-    post :create, q: search_term, type: 'protected_area'
+    post :create, params: {q: search_term, type: 'protected_area'}
 
     json_response = JSON.parse(@response.body)
     assert_equal(expected_json, json_response)
@@ -35,7 +35,7 @@ class DownloadsControllerTest < ActionController::TestCase
       with('domain' => 'project', 'token' => '12345', 'controller' => 'downloads', 'action' => 'poll').
       returns(expected_json)
 
-    get :poll, domain: 'project', token: token
+    get :poll, params: {domain: 'project', token: token}
 
     json_response = JSON.parse(@response.body)
     assert_equal(expected_json, json_response)
@@ -53,7 +53,7 @@ class DownloadsControllerTest < ActionController::TestCase
       'controller' => 'downloads'
     })
 
-    put :update, id: token, email: email
+    put :update, params: {id: token, email: email}
 
     assert_response :success
   end

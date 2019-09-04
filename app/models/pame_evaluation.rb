@@ -1,4 +1,4 @@
-class PameEvaluation < ActiveRecord::Base
+class PameEvaluation < ApplicationRecord
   belongs_to :protected_area
   belongs_to :pame_source
   has_and_belongs_to_many :countries

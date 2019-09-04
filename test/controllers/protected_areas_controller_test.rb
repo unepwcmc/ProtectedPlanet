@@ -11,7 +11,7 @@ class ProtectedAreasControllerTest < ActionController::TestCase
   end
 
   test '#show returns a 200 HTTP code' do
-    get :show, id: @protected_area.slug
+    get :show, params: {id: @protected_area.slug}
     assert_response :success
   end
 
@@ -24,11 +24,11 @@ class ProtectedAreasControllerTest < ActionController::TestCase
       :protected_area, designation: designation, countries: [country]
     )
 
-    get :show, id: protected_area.wdpa_id
+    get :show, params: {id: protected_area.wdpa_id}
   end
 
   test '#show, given a PA that does not exist, renders a 404 page' do
-    get :show, id: 'flarglearg'
+    get :show, params: {id: 'flarglearg'}
     assert_response :missing
   end
 end

@@ -1,2 +1,2 @@
-class LegacyProtectedArea < ActiveRecord::Base
+class LegacyProtectedArea < ApplicationRecord
 end

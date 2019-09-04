@@ -1,0 +1,13 @@
+.counter {
+  font-family: 'MuseoSans';
+
+  p {
+    font-family: inherit;
+  }
+
+  .header--h3-insights {
+    padding-top: rem-calc(18);
+
+    &:first-child { padding-top: 0; }
+  }
+}

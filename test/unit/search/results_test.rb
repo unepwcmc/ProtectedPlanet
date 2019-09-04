@@ -58,7 +58,7 @@ class SearchResultsTest < ActiveSupport::TestCase
 
   test '.count returns the total count of the result set, rather than
    array length, so that pagination works correctly' do
-    es_response = {"hits" => { "total" => 42 }}
+    es_response = {"hits" => { "total" => { "value" => 42} }}
     results = Search::Results.new(es_response)
 
     assert_equal 42, results.count

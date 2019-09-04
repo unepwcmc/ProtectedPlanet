@@ -1,0 +1,54 @@
+.v-horizontal-bars {
+  margin-bottom: rem-calc(20);
+  
+  &__bar-wrapper {
+    position: relative;
+
+    @include breakpoint($large){
+      display: inline;  
+    }
+  }
+
+    &__title {
+      font-size: rem-calc(14);
+      font-weight: $thin;
+    }
+
+    &__bar {
+      background-color: $blue--marine-3;
+      margin: rem-calc(3 0 9 0);
+      text-align: right;
+      height: rem-calc(24);
+
+      display: inline-block;
+
+      transform: scaleX(0);
+      transform-origin: left;
+
+      .v-horizontal-bars__bar-wrapper-animate & {
+        animation: fullScaleX .8s linear forwards;
+      }
+    }
+
+      &__value {
+        color: white;
+        font-family: 'MuseoSans';
+        font-size: rem-calc(15);
+        opacity: 0;
+        text-align: right;
+
+        position: absolute;
+        top: 8px;
+        left: 5px;
+
+        @include breakpoint($large){
+          top: -13px;
+          right: 5px;
+          left: initial;
+        }
+
+        .v-horizontal-bars__bar-wrapper-animate & {
+          animation: fullOpacity .2s .8s linear forwards;
+        }
+      }
+}

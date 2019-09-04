@@ -17,12 +17,4 @@ $(document).ready( ->
       $(window).scroll(setPosition)
       setPosition()
   )
-
-  # generate a new vue instance and initialise all the vue components on the page
-  new Vue({
-    el: '.v-cms-content',
-    components: {
-      'select-with-content': VComponents['vue/components/SelectWithContent']
-    }
-  })
 )

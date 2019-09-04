@@ -1,7 +1,7 @@
 class Search::Filter::Equality < Search::Filter
   def to_h
     {
-      "term" => {
+      "match" => {
         @options['path'] => @term
       }
     }

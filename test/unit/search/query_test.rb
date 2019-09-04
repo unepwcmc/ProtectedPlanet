@@ -13,38 +13,44 @@ class SearchQueryTest < ActiveSupport::TestCase
               {
                 "nested" => {
                   "path" => "countries_for_index",
-                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "countries_for_index.name" ], "fuzziness" => "AUTO" } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "countries_for_index.name" ], "fuzziness" => "0" } }
                 }
               },
               {
                 "nested" => {
                   "path" => "countries_for_index.region_for_index",
-                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "countries_for_index.region_for_index.name" ], "fuzziness" => "AUTO" } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "countries_for_index.region_for_index.name" ], "fuzziness" => "0" } }
                 }
               },
               {
                 "nested" => {
                   "path" => "sub_location",
-                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "sub_location.english_name" ], "fuzziness" => "AUTO" } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "sub_location.english_name" ], "fuzziness" => "0" } }
                 }
               },
               {
                 "nested" => {
                   "path" => "designation",
-                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "designation.name" ], "fuzziness" => "AUTO" } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "designation.name" ], "fuzziness" => "0" } }
                 }
               },
               {
                 "nested" => {
                   "path" => "iucn_category",
-                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "iucn_category.name" ], "fuzziness" => "AUTO" } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "iucn_category.name" ], "fuzziness" => "0" } }
                 }
               },
               {
                 "nested" => {
                   "path" => "governance",
-                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "governance.name" ], "fuzziness" => "AUTO" } }
+                  "query" => { "multi_match" => { "query" => "manbone", "fields" => [ "governance.name" ], "fuzziness" => "0" } }
                 }
+              },
+              {
+                "multi_match" => {
+                               "query" => "manbone",
+                               "fields"=>  ["name^2","iso_3^3","countries_for_index","region_name"],
+                               "fuzziness" => "0"}
               },
               {
                 "terms"=> {
@@ -55,12 +61,13 @@ class SearchQueryTest < ActiveSupport::TestCase
                 "function_score" => {
                   "query" => {
                       "multi_match" => {
-                          "query" => "*manbone*",
+                          "query" => "manbone",
                           "fields" => [
                               "iso_3",
                               "name",
                               "original_name"
-                          ]
+                          ],
+                          "fuzziness"=>"0"
                       }
                   },
                   "boost" => "5",

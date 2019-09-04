@@ -1,6 +1,6 @@
 class CountryController < ApplicationController
-  after_filter :enable_caching
-  before_filter :load_vars, except: [:codes, :compare]
+  after_action :enable_caching
+  before_action :load_vars, except: [:codes, :compare]
 
   def show
     respond_to do |format|

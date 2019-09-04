@@ -1,6 +1,5 @@
 //= require 'mapbox'
 //= require 'cartodb.core'
-//= require 'leaflet.markercluster'
 //= require 'modules/maps/base_layer'
 //= require 'modules/maps/interactive'
 //= require 'modules/maps/bounds'

@@ -22,8 +22,9 @@ class Search::Matcher::MultiMatch < Search::Matcher
   def query
     {
       "multi_match" => {
-        "query" => "*#{@term}*",
-        "fields" => @options[:fields]
+        "query" => "#{@term}",
+        "fields" => @options[:fields],
+        "fuzziness" => "0"
       }
     }
   end

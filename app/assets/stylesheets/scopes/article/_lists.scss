@@ -1,0 +1,18 @@
+ul, ol {
+  @extend .article__list;
+}
+
+ol {
+  counter-reset: item;
+
+  li {
+    &:before {
+      content: counter(item) ". ";
+      counter-increment: item;
+    }
+  }
+}
+
+ul li, ol li {
+  @extend .article__list-item;
+}

@@ -1,5 +1,7 @@
 module SearchHelper
   include ApplicationHelper
+  ALLOWED_PARAMS = Search::ALLOWED_FILTERS + [:q, :main]
+
 
   def type_li_tag type, current_type
     selected_class = (type == current_type) ? "selected" : ""
@@ -15,7 +17,8 @@ module SearchHelper
   end
 
   def facet_link facet
-    link_params = params.merge({facet[:query] => facet[:identifier]})
+    search_params = params.permit(ALLOWED_PARAMS)
+    link_params = search_params.merge({facet[:query] => facet[:identifier]})
 
     link_to(url_for(link_params), class: "filter-bar__value") do
       facet_count = content_tag(
@@ -29,15 +32,16 @@ module SearchHelper
   end
 
   def clear_filters_link params
-    if params[:main] && params[:q].nil?
-      return '' if params.length <= 4
+    search_params = params.permit(ALLOWED_PARAMS)
+    if search_params[:main] && search_params[:q].nil?
+      return '' if search_params.to_h.length <= 2
 
-      path = search_path(params.slice(:main, params[:main].to_sym))
+      path = search_path(search_params.slice(:main, search_params[:main].to_sym))
       link_to "Clear Filters", path, class: "filter-bar__clear"
     else
-      return '' if params.length <= 3
+      return '' if search_params.to_h.length <= 1
 
-      path = search_path(params.slice(:q))
+      path = search_path(search_params.slice(:q))
       link_to "Clear Filters", path, class: "filter-bar__clear"
     end
   end

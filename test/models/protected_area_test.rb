@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'test_helper'
 require 'rgeo'
 
@@ -83,6 +84,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
         {
           "id" => 123,
           "name" => "Manboneland",
+          "iso_3" => "MyString",
           "region_for_index" => {
             "id" => 987,
             "name" => "North Manmerica"

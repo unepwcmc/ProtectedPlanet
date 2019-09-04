@@ -3,9 +3,9 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  after_filter :store_location
-  before_filter :load_cms_pages
-  before_filter :check_for_pdf
+  after_action :store_location
+  before_action :load_cms_pages
+  before_action :check_for_pdf
 
   def raise_404
     raise PageNotFound

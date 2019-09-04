@@ -5,16 +5,18 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
     Rails.application.secrets.aws_access_key_id = '123'
     Rails.application.secrets.aws_secret_access_key = 'abc'
     Rails.application.secrets.aws_bucket = 'wdpa'
+    Rails.application.secrets.s3_region = 'eu-west-2'
 
     @bucket_mock = mock()
     @s3_mock = mock()
-    @s3_mock.stubs(:buckets).returns({'wdpa' => @bucket_mock})
+    @s3_mock.stubs(:bucket).returns(@bucket_mock)
   end
 
   test '#new creates an S3 connection' do
-    AWS::S3.expects(:new).with({
+    Aws::S3::Resource.expects(:new).with({
       :access_key_id     => '123',
-      :secret_access_key => 'abc'
+      :secret_access_key => 'abc',
+      :region            => 'eu-west-2'
     })
 
     Wdpa::S3.new()
@@ -29,7 +31,7 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
     latest_file_mock.expects(:read).returns(file_contents)
 
     @bucket_mock.stubs(:objects).returns([latest_file_mock])
-    AWS::S3.stubs(:new).returns(@s3_mock)
+    Aws::S3::Resource.stubs(:new).returns(@s3_mock)
 
     Wdpa::S3.download_current_wdpa_to filename
     File.delete filename
@@ -52,10 +54,11 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
       oldest_file_mock
     ])
 
-    AWS::S3.stubs(:new).returns(@s3_mock)
+    Aws::S3::Resource.stubs(:new).returns(@s3_mock)
 
     file_write_mock = mock()
     file_write_mock.stubs(:write)
+
     File.expects(:open).
       with(filename, 'w:ASCII-8BIT').
       yields(file_write_mock)
