@@ -12,6 +12,7 @@ class TargetDashboardController < ApplicationController
     @global_stats = [
       {
         title: 'Coverage',
+        id: 'coverage',
         charts: [
           {
             title: 'Terrestrial',
@@ -29,6 +30,7 @@ class TargetDashboardController < ApplicationController
       },
       {
         title: 'Effectively managed',
+        id: 'pame',
         charts: [
           {
             title: 'Terrestrial',

@@ -14,6 +14,8 @@
  * *= require_self
  */
 
+@import 'utilities/rem-calc';
+
 // grids
 @import 'bourbon/core/bourbon';
 @import 'bourbon-neat/app/assets/stylesheets/neat';
@@ -27,7 +29,6 @@
 @import 'utilities/flexbox';
 @import 'utilities/accessibility';
 @import 'utilities/bem';
-@import 'utilities/rem-calc';
 @import 'utilities/responsive';
 
 // variables
@@ -38,15 +39,15 @@
 @import 'variables/z-index';
 // variables
 
+@import './base';
+
 // atoms
 @import 'atoms/fonts';
 @import 'atoms/fa';
-
 @import 'atoms/colors';
 @import 'atoms/buttons';
 @import 'atoms/disclaimer';
 @import 'atoms/headers';
-@import 'atoms/icons';
 @import 'atoms/label';
 @import 'atoms/leaflet-controls';
 @import 'atoms/links';
@@ -91,7 +92,7 @@
 @import 'molecules/sticky-nav';
 @import 'molecules/sticky-tab';
 @import 'molecules/table';
-@import 'molecules/tooltip';
+@import 'molecules/tooltip-old';
 @import 'molecules/twitter-share';
 @import 'molecules/uservoice';
 @import 'molecules/value';

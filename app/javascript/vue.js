@@ -18,10 +18,13 @@ import SelectWithContent from './components/select/SelectWithContent'
 import StickyNav from './components/sticky/StickyNav'
 import StickyTab from './components/sticky/StickyTab'
 import SocialShareText from './components/social/SocialShareText'
+import Tooltip from './components/tooltip/Tooltip'
 
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
 
+    Vue.use(Vue2TouchEvents)
+    
     const app = new Vue({
       el: '#v-app',
 
@@ -40,11 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
         SelectWithContent,
         StickyNav,
         StickyTab,
-        SocialShareText
+        SocialShareText,
+        Tooltip
       }
     })
   }
 })
-
-
-  

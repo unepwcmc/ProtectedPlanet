@@ -1,0 +1,10 @@
+@mixin item-spacing($sides:'all', $type:'padding') {
+  $sides: if($sides == 'all', ('top','bottom','left','right'), ($sides));
+
+  @each $s in $sides {
+    #{$type}-#{$s}: $item-spacing-small;
+
+    @include breakpoint($medium) { #{$type}-#{$s}: $item-spacing-medium; }
+    @include breakpoint($large) { #{$type}-#{$s}: $item-spacing-large; }
+  }
+}

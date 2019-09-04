@@ -4,21 +4,38 @@
   </header>
 
   <main>
-    <carousel class="carousel--basic" :show-arrows="false" :show-all-indicators="true">
-      <% @global_stats.each do |stat| %>
-        <carousel-slide>
-          <h3><%= stat[:title] %></h3>
-          
-          <% stat[:charts].each do |chart| %>
-            <chart-dial
-              title="<%= chart[:title] %>"
-              colour="<%= chart[:colour] %>"
-              :dial-value="<%= chart[:value] %>"
-              :dial-target="<%= chart[:target] %>" 
-            ></chart-dial>
-          <% end %>
-        </carousel-slide>
-      <% end %>
-    </carousel>
+    <section>
+      <h2><%= t('thematic_area.target_11_dashboard.subtitle_1') %></h2>
+
+      <carousel class="carousel--basic" :show-arrows="false" :show-all-indicators="true">
+        <% @global_stats.each do |stat| %>
+          <carousel-slide>
+
+            <tooltip show-on="click" text="<%= t("thematic_area.target_11_dashboard.tooltips.#{stat[:id]}") %>">
+              <i class="">?</i>
+            </tooltip>
+
+            <h3><%= stat[:title] %></h3>
+            
+            <% stat[:charts].each do |chart| %>
+              <chart-dial
+                title="<%= chart[:title] %>"
+                colour="<%= chart[:colour] %>"
+                :dial-value="<%= chart[:value] %>"
+                :dial-target="<%= chart[:target] %>" 
+              ></chart-dial>
+            <% end %>
+          </carousel-slide>
+        <% end %>
+      </carousel>
+    </section>
+
+    <section>
+      <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
+
+      <p>sticky bar</p>
+
+      <p>table</p>
+    </section>
   </main>
 </div>

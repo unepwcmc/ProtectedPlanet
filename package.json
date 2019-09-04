@@ -1,16 +1,16 @@
 {
   "dependencies": {
     "@rails/webpacker": "^4.0.2",
-    "es6-promise": "^4.2.6",
     "bourbon": "^5.1.0",
     "bourbon-neat": "^1.9.0",
     "d3": "^5.9.2",
+    "es6-promise": "^4.2.6",
     "leaflet": "^1.4.0",
     "scrollmagic": "^2.0.6",
     "vue": "^2.6.10",
     "vue-loader": "^15.7.0",
-    "vue2-touch-events": "^2.0.0",
     "vue-template-compiler": "^2.6.10",
+    "vue2-touch-events": "^2.0.0",
     "vuex": "^3.1.0"
   },
   "devDependencies": {
