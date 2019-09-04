@@ -4,7 +4,7 @@
   </header>
 
   <main>
-    <carousel class="carousel--basic">
+    <carousel class="carousel--basic" :show-arrows="false" :show-all-indicators="true">
       <% @global_stats.each do |stat| %>
         <carousel-slide>
           <h3><%= stat[:title] %></h3>
