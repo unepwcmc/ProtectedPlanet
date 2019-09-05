@@ -15,14 +15,14 @@ class CountrySerializer < BaseSerializer
     {
       country_statistic: [
         :percentage_pa_land_cover, :percentage_pa_marine_cover,
-        :well_connected, :importance
+        :percentage_well_connected, :percentage_importance,
       ],
       pame_statistic: [:pame_percentage_pa_land_cover, :pame_percentage_pa_marine_cover]
     }
   end
 
   def sort_by
-    super || 'well_connected'
+    super || 'percentage_land_well_connected'
   end
 
   def order

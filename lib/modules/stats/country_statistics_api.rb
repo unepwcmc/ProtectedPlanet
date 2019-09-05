@@ -1,19 +1,22 @@
 class Stats::CountryStatisticsApi
-  BASE_URL = 'https://dopa-services.jrc.ec.europa.eu/services/d6dopa30/'.freeze
-  ENDPOINTS = {
-    representative: {
-      endpoint: 'habitats_and_biotopes/get_ecoregion_all_inds',
-      field: 'prot_perc'
-    },
-    well_connected: {
-      endpoint: 'administrative_units/get_country_all_inds',
-      field: 'protconn'
-    },
-    importance: {
-      endpoint: 'administrative_units/get_country_all_inds',
-      field: 'kba_avg_prot_perc'
-    }
-  }.freeze
+  STATISTICS_API = Rails.application.secrets[:country_statistics_api].freeze
+  BASE_URL = STATISTICS_API['url'].freeze
+  API_ENDPOINTS = STATISTICS_API['endpoints'].freeze
+    ENDPOINTS = {
+      representative: {
+        endpoint: API_ENDPOINTS['representative']['endpoint'],
+        field: API_ENDPOINTS['representative']['field']
+      },
+      well_connected: {
+        endpoint: API_ENDPOINTS['well_connected']['endpoint'],
+        field: API_ENDPOINTS['well_connected']['field']
+      },
+      importance: {
+        endpoint: API_ENDPOINTS['importance']['endpoint'],
+        field: API_ENDPOINTS['importance']['field']
+      }
+    }.freeze
+
   ERRORS = {
     representative: """
       Country level stats cannot be fetched for the representative endpoint.
@@ -53,8 +56,9 @@ class Stats::CountryStatisticsApi
           Rails.logger.info(not_found_error('statistic', iso3))
           next
         end
-
-        statistic.update_attributes("#{name}" => stat[field])
+        
+        attr_name = "percentage_#{name}"
+        statistic.update_attributes("#{attr_name}" => stat[field])
       end
     end
   end
@@ -65,8 +69,8 @@ class Stats::CountryStatisticsApi
     end
     url = endpoint_url(ENDPOINTS[endpoint.to_sym][:endpoint])
     data = fetch(url, iso3)
-
-    return data if data.key?(:error)
+    
+    return data if data.is_a?(Hash) && data.key?(:error)
 
     format_data(data, endpoint)
   end
@@ -77,7 +81,7 @@ class Stats::CountryStatisticsApi
     field = ENDPOINTS[endpoint.to_sym][:field]
     if endpoint.to_s == 'representative'
       _sum = data.inject(0) do |sum, x|
-        sum + x[field]
+        sum + (x[field] ? x[field] : 0)
       end
       # TODO Need to confirm if this is the correct calculation
       value = (_sum / data.length).round(2)
