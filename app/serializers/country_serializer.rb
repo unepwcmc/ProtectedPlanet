@@ -22,7 +22,7 @@ class CountrySerializer < BaseSerializer
   end
 
   def sort_by
-    super || 'percentage_land_well_connected'
+    super || 'percentage_well_connected'
   end
 
   def order
