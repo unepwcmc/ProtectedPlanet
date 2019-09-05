@@ -29,6 +29,7 @@ class CountryStatistic < ApplicationRecord
     (overseas_total_protected_marine_area / overseas_total_marine_area) * 100
   end
 
+  # TODO Need confirmation regarding this calculation
   [:land, :marine].each do |type|
     field_name = "percentage_pa_#{type}_cover"
     define_singleton_method("global_#{field_name}") do
