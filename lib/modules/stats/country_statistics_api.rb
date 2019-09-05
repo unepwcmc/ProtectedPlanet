@@ -57,8 +57,7 @@ class Stats::CountryStatisticsApi
           next
         end
         
-        # TODO To change based on actual fields and logic to use for marine stats
-        attr_name = "percentage_land_#{name}"
+        attr_name = "percentage_#{name}"
         statistic.update_attributes("#{attr_name}" => stat[field])
       end
     end
