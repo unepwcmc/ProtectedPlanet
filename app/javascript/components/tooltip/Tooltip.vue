@@ -1,5 +1,7 @@
 <template>
-  <div class="tooltip">
+  <div 
+    class="tooltip"
+  >
     <div v-if="onHover"
       v-touch="toggleTooltip"
       tabindex="0"
@@ -11,7 +13,8 @@
     >
       <slot />
     </div>
-    <div v-else
+    <div 
+      v-else
       v-touch="toggleTooltip"
       tabindex="0"
       :aria-describedby="id"
@@ -28,7 +31,12 @@
       role="tooltip"
       class="tooltip__target"
     >
-      <button v-if="!onHover" @click="toggleTooltip(false)" class="tooltip__close"></button>
+      <button 
+        v-if="!onHover" 
+        @click="toggleTooltip(false)" 
+        class="tooltip__close"
+      />
+
       {{ text }}
     </div>
   </div>
@@ -43,23 +51,20 @@ export default {
       type: String,
       required: true
     },
-    showOn: {
-      type: String,
-      default: 'hover' //options: hover, click
+    onHover: {
+      type: Boolean,
+      default: true
     }
   },
 
   data () {
     return {
       isActive: false,
-      id: `tooltip_${this._uid}`,
-      onHover: true,
+      id: `tooltip_${this._uid}`
     }
   },
 
   mounted () {   
-    this.onHover = this.showOn === 'hover'   
-    
     if(this.onHover) {
       const tooltipTrigger = this.$el.querySelector('.tooltip__trigger')
 
