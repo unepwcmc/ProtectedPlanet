@@ -124,6 +124,12 @@ $transition-options: 0.6s ease-in-out;
         &__slide {
           width: 50%;
         }
+
+        &__tooltip {
+          position: absolute;
+          top: rem-calc(10);
+          right: rem-calc(10);
+        }
     }
 
     .carousel-slide {

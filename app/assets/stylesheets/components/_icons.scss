@@ -20,11 +20,19 @@
   width: rem-calc(29); height: rem-calc(29);
 }
 
+@mixin icon-info() {
+  @include icon-basic;
+  background-image: image-url('icons/info.svg');
+  width: rem-calc(23); height: rem-calc(23);
+}
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
 .icon {
   &--close { @include icon-close; }
+
+  &--info-circle { @include icon-info; }
 
   &--info {
     padding-left: rem-calc(24);

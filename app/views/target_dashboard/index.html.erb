@@ -1,4 +1,4 @@
-<div class="container--profile container--push-bottom">
+<div id="new-styles" class="container--profile container--push-bottom">
   <header class="hero--thematic-area center">
     <h1 class="hero__title hero__title--article"><%= t('thematic_area.target_11_dashboard.title') %></h1> 
   </header>
@@ -11,8 +11,12 @@
         <% @global_stats.each do |stat| %>
           <carousel-slide>
 
-            <tooltip show-on="click" text="<%= t("thematic_area.target_11_dashboard.tooltips.#{stat[:id]}") %>">
-              <i class="">?</i>
+            <tooltip 
+              show-on="click" 
+              text="<%= t("thematic_area.target_11_dashboard.tooltips.#{stat[:id]}") %>"
+              class="carousel__tooltip"
+            >
+              <i class="icon--info-circle block"></i>
             </tooltip>
 
             <h3><%= stat[:title] %></h3>
