@@ -15,8 +15,7 @@ class CountrySerializer < BaseSerializer
     {
       country_statistic: [
         :percentage_pa_land_cover, :percentage_pa_marine_cover,
-        :percentage_land_well_connected, :percentage_marine_well_connected,
-        :percentage_land_importance, :percentage_marine_importance
+        :percentage_well_connected, :percentage_importance,
       ],
       pame_statistic: [:pame_percentage_pa_land_cover, :pame_percentage_pa_marine_cover]
     }
