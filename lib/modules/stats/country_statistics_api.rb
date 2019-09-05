@@ -1,21 +1,20 @@
 class Stats::CountryStatisticsApi
   STATISTICS_API = Rails.application.secrets[:country_statistics_api].freeze
   BASE_URL = STATISTICS_API['url'].freeze
-  API_ENDPOINTS = STATISTICS_API['endpoints'].freeze
-    ENDPOINTS = {
-      representative: {
-        endpoint: API_ENDPOINTS['representative']['endpoint'],
-        field: API_ENDPOINTS['representative']['field']
-      },
-      well_connected: {
-        endpoint: API_ENDPOINTS['well_connected']['endpoint'],
-        field: API_ENDPOINTS['well_connected']['field']
-      },
-      importance: {
-        endpoint: API_ENDPOINTS['importance']['endpoint'],
-        field: API_ENDPOINTS['importance']['field']
-      }
-    }.freeze
+  ENDPOINTS = {
+    representative: {
+      endpoint: STATISTICS_API['global_endpoint'],
+      field: STATISTICS_API['representative_field']
+    },
+    well_connected: {
+      endpoint: STATISTICS_API['national_endpoint'],
+      field: STATISTICS_API['well_connected_field']
+    },
+    importance: {
+      endpoint: STATISTICS_API['national_endpoint'],
+      field: STATISTICS_API['importance_field']
+    }
+  }.freeze
 
   ERRORS = {
     representative: """
@@ -42,24 +41,31 @@ class Stats::CountryStatisticsApi
       return data if data.is_a?(Hash) && data.key?(:error)
 
       # Update stat for each country
+      countries_not_found = []
+      statistics_not_found = []
       data.each do |stat|
-        iso3 = stat[ISO3_ATTRIBUTE]
-        country = Country.find_by_iso_3(iso3)
+        _iso3 = stat[ISO3_ATTRIBUTE]
+        next if _iso3.split('|').length > 1
+
+        country = Country.find_by_iso_3(_iso3)
         unless country
-          Rails.logger.info(not_found_error('country', iso3))
+          countries_not_found << _iso3
           next
         end
 
         field = attributes[:field]
-        statistic = country.country_statistic
-        unless statistic
-          Rails.logger.info(not_found_error('statistic', iso3))
+        country_statistic = country.country_statistic
+        unless country_statistic
+          statistics_not_found << _iso3
           next
         end
 
         attr_name = "percentage_#{name}"
-        statistic.update_attributes("#{attr_name}" => stat[field])
+        country_statistic.update_attributes("#{attr_name}" => stat[field])
       end
+
+      log_not_found_objects('country', countries_not_found)
+      log_not_found_objects('statistic', statistics_not_found)
     end
   end
 
@@ -116,7 +122,12 @@ class Stats::CountryStatisticsApi
     data
   end
 
-  def self.not_found_error(obj, iso3)
-    "A #{obj} with iso code #{iso3} has been fetched from the API but not found in the database."
+  def self.log_not_found_objects(obj, records)
+    return if records.empty?
+    Rails.logger.info(not_found_error(obj, records.join(',')))
+  end
+
+  def self.not_found_error(obj, iso_codes)
+    "#{obj} with iso code #{iso_codes} has been fetched from the API but not found in the database."
   end
 end
