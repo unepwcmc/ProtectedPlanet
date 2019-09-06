@@ -47,6 +47,53 @@ class TargetDashboardController < ApplicationController
         ]
       }
     ]
+
+    @row = #[
+      { 
+        title: 'France', 
+        url: 'http://localhost/country/france', 
+        stats: [
+          { 
+            title: 'Coverage',
+            charts: [
+              { 
+                title: 'Terrestrial', value: 55, target: 75, colour: 'terrestrial' 
+              },
+              { 
+                title: 'Marine', value: 55, target: 75, colour: 'marine' 
+              }
+            ]
+          },
+          { 
+            title: 'Effectively managed',
+            charts: [
+              { 
+                title: 'Terrestrial', value: 55, target: 75, colour: 'terrestrial' 
+              },
+              { 
+                title: 'Marine', value: 55, target: 75, colour: 'marine' 
+              }
+            ]
+          },
+          { 
+            title: 'Well connected',
+            charts: [
+              { 
+                title: 'Global', value: 55, target: 75, colour: 'global' 
+              }
+            ]
+          },
+          { 
+            title: 'Areas of importance for biodiversity',
+            charts: [
+              { 
+                title: 'Global', value: 55, target: 75, colour: 'global' 
+              }
+            ]
+          }
+        ] 
+      }.to_json
+    # ]
   end
 
   def load

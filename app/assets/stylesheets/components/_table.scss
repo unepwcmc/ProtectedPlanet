@@ -1,0 +1,38 @@
+.table {
+  &--horizontal-scroll {
+    .table {
+      &__row {
+        
+      }
+
+        &__row-title {
+          @include responsive-styles(display, block, block, none);
+          font-size: rem-calc(18);
+          font-weight: 700;
+        }
+        
+        &__scroll-wrapper {
+          overflow-x: scroll;
+        }
+
+          &__scroll {
+            @include flex-nowrap;
+            @include responsive-styles(width, 380%, 140%, 100%);
+
+            display: flex;
+          }
+
+            &__cell {
+              @include responsive-styles(border, solid 1px $grey-light, solid 1px $grey-light, none);
+              @include responsive-styles(margin-right , rem-calc(20), rem-calc(20), 0);
+              padding: rem-calc(18 20);
+            }
+            
+              &__cell-title {
+                @include responsive-styles(display, block, block, none);
+                font-size: rem-calc(17);
+                font-weight: 500;
+              }
+    }
+  }
+}

@@ -38,11 +38,9 @@
       <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
 
       <p>sticky bar</p>
-
-      <div style="width: 222px;">
-        <chart-row-target :value="40" :target="60" title="Terrestrial" colour="terrestrial"></chart-row-target>
-        <chart-row-target :value="56" :target="61" title="Marine" colour="marine"></chart-row-target>
-        <chart-row-target :value="16" :target="37" title="Global" colour="global"></chart-row-target>
+      
+      <div class="table--horizontal-scroll">
+        <row :row="<%= @row %>"></row>
       </div>
     </section>
   </main>
