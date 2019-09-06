@@ -48,7 +48,7 @@ import mixinId from '../../mixins/mixin-ids'
 import ChartRowTarget from '../charts/chart-row-target/ChartRowTarget.vue'
 
 export default {
-  name: 'Row',
+  name: 'TableRow',
 
   components: { ChartRowTarget },
 

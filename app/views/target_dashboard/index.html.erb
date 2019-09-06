@@ -39,9 +39,7 @@
 
       <p>sticky bar</p>
       
-      <div class="table--horizontal-scroll">
-        <row :row="<%= @row %>"></row>
-      </div>
+      <v-table :json="<%= @country_and_regions %>" class="table--horizontal-scroll"></v-table>
     </section>
   </main>
 </div>
