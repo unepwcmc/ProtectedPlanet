@@ -2,7 +2,8 @@
   &--horizontal-scroll {
     .table {
       &__row {
-        
+        @include responsive-styles(border, none, none, solid 1px $grey-light);
+        @include responsive-styles(margin-bottom, rem-calc(30), rem-calc(32), rem-calc(16));
       }
 
         &__row-title {
@@ -24,8 +25,8 @@
 
             &__cell {
               @include responsive-styles(border, solid 1px $grey-light, solid 1px $grey-light, none);
-              @include responsive-styles(margin-right , rem-calc(20), rem-calc(20), 0);
-              padding: rem-calc(18 20);
+              @include responsive-styles(margin-right, rem-calc(20), rem-calc(20), 0);
+              @include responsive-styles(padding, rem-calc(8 10), rem-calc(8 10), rem-calc(18 20));
             }
             
               &__cell-title {
