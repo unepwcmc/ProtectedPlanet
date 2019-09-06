@@ -1,6 +1,13 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
 $chart-dial-color: $grey;
 $chart-text-color: $grey;
+$chart-dial-font: $chart-font;
 
+//--------------------------------------------------
+// dial charts
+//--------------------------------------------------
 &--dial {
   width: 100%;
 
@@ -22,6 +29,7 @@ $chart-text-color: $grey;
 
     &__title {
       fill: $chart-text-color;
+      font-family: $chart-dial-font;
       font-weight: $bold;
     }
   }

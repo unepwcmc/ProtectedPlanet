@@ -13,6 +13,7 @@ import ChartDial from './components/charts/chart-dial/ChartDial'
 import ChartLine from './components/charts/chart-line/ChartLine'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
+import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyNav from './components/sticky/StickyNav'
@@ -39,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartLine,
         ChartTreemapInteractive,
         ChartRectangles,
+        ChartRowTarget,
         ChartSunburst,
         SelectWithContent,
         StickyNav,
