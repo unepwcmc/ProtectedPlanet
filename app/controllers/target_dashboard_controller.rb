@@ -4,7 +4,7 @@ class TargetDashboardController < ApplicationController
     countries = Country.paginate(per_page: CountrySerializer::PER_PAGE, page: 1)
     @countries = CountrySerializer.new({}, countries).serialize
     @targets = Aichi11TargetSerializer.new.serialize
-    @global_stats = Aichi11Target.get_global_stats.to_json
+    @global_stats = Aichi11Target.get_global_stats
   end
 
   def load
