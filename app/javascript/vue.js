@@ -15,6 +15,7 @@ import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTree
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import SelectWithContent from './components/select/SelectWithContent'
+import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
 import StickyTab from './components/sticky/StickyTab'
 import SocialShareText from './components/social/SocialShareText'
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRectangles,
         ChartSunburst,
         SelectWithContent,
+        StickyBar,
         StickyNav,
         StickyTab,
         SocialShareText,

@@ -1,0 +1,39 @@
+//----------------------------------------
+// animation
+//----------------------------------------
+@keyframes showNav {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+//----------------------------------------
+// sticky bar
+//----------------------------------------
+.sm-target-sticky {
+  background-color: $grey-light;
+  padding: rem-calc(10);
+}
+
+.sticky-bar {
+  border: solid red 1px;
+  width: 100%;
+
+  // display: block;
+  // position: absolute;
+  // top: rem-calc(100);
+  // left: 0;
+
+  &--stuck {    
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+
+    animation: showNav .3s forwards linear;
+  }
+}
