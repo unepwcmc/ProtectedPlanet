@@ -33,8 +33,6 @@ class Aichi11Target < ActiveRecord::Base
     global_stats
   end
 
-  private
-
   def self.import
     CSV.foreach(aichi11_target_csv_path, headers: true) do |row|
       return create({}.merge(row))
@@ -71,4 +69,6 @@ class Aichi11Target < ActiveRecord::Base
       }
     }
   end
+
+  private_class_method :import, :aichi11_target_csv_path, :stats
 end
