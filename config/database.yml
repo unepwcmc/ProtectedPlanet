@@ -8,13 +8,13 @@ default: &default
   adapter: postgis
   pool: 5
   timeout: 5000
-  host: <%= ENV['POSTGRES_HOST'] %>
+  host: localhost
   username: <%= ENV['POSTGRES_USER'] %>
   password: <%= ENV['POSTGRES_PASSWORD'] %>
 
 development:
   <<: *default
-  database: protectedplanet-db
+  database: pp_feb19
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
