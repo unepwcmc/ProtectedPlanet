@@ -32,24 +32,14 @@ class CountryStatistic < ApplicationRecord
   [:land, :marine].each do |type|
     field_name = "percentage_pa_#{type}_cover"
     define_singleton_method("global_#{field_name}") do
-      stats = where.not(country_id: nil)
-      sum =
-        stats.map(&field_name.to_sym).inject(0) do |_sum, x|
-          _sum + (x || 0)
-        end
-      (sum / Country.count).round(2)
+      Stats::Global.calculate_stats_for(self, field_name)
     end
   end
 
   [:well_connected, :importance].each do |field|
     field_name = "percentage_#{field}"
     define_singleton_method("global_#{field_name}") do
-      stats = where.not(country_id: nil)
-      sum =
-        stats.map(&field_name.to_sym).inject(0) do |_sum, x|
-          _sum + (x || 0)
-        end
-      (sum / Country.count).round(2)
+      Stats::Global.calculate_stats_for(self, field_name)
     end
   end
 end
