@@ -85,7 +85,7 @@
 
 <script>
 // import GradientPath from 'gradient-path'
-import mixinId from '../../mixins/mixin-ids'
+import mixinId from '../../../mixins/mixin-ids'
 
 export default {
   name: 'ChartDial',
