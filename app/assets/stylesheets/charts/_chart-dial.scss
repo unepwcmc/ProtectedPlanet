@@ -14,6 +14,7 @@ $chart-dial-font: $chart-font;
   .chart {
     &__arc {
       &--default, &--background { fill: $chart-item-background; }
+      &--global { fill: $global; }
       &--marine { fill: $marine; }
       &--terrestrial { fill: $terrestrial; }
     }
