@@ -2,6 +2,7 @@
 // variables
 //--------------------------------------------------
 $chart-row-target-font: $chart-font;
+$chart-row-target-font-color: $chart-font-color;
 $chart-row-target-font-size: rem-calc(16);
 
 
@@ -12,7 +13,7 @@ $chart-row-target-font-size: rem-calc(16);
   .chart {
     &__marker {
       &--target { 
-        stroke: $grey-darker; 
+        stroke: $chart-row-target-font-color; 
         stroke-dasharray: 2;
       }
 
@@ -20,7 +21,7 @@ $chart-row-target-font-size: rem-calc(16);
     }
 
     &__marker-title {
-      fill: $grey-darker;
+      fill: $chart-row-target-font-color;
       font-family: $chart-row-target-font;
       font-size: $chart-row-target-font-size;
       font-weight: 900;
@@ -34,7 +35,7 @@ $chart-row-target-font-size: rem-calc(16);
     }
 
     &__title {
-      fill: $grey-darker;
+      fill: $chart-row-target-font-color;
       font-size: $chart-row-target-font-size;
       font-family: $chart-row-target-font;
       font-weight: 700;

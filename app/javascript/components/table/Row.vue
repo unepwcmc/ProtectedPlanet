@@ -1,11 +1,25 @@
 <template>
   <div class="table__row">
-    <p class="table__row-title">{{ row.title }}</p>
+    <p class="table__row-title">
+      <a 
+        :href="row.url"
+        class="table__cell-link"
+        :title="`View the statistics page for ${row.title}`"
+      >
+        {{ row.title }}
+      </a>
+    </p>
     
     <div class="table__scroll-wrapper">
       <div class="table__scroll">
         <div class="table__cell breakpoint-medium-up">
-          <a :href="row.url">{{ row.title }}</a>
+          <a 
+            :href="row.url"
+            class="table__cell-link"
+            :title="`View the statistics page for ${row.title}`"
+          >
+            {{ row.title }}
+          </a>
         </div>
 
         <div
@@ -16,10 +30,12 @@
 
           <chart-row-target 
             v-for="(chart, index) in stat.charts"
+            :key="getVForKey('row', index)"
             :value="chart.value" 
             :target="chart.target" 
             :title="chart.title" 
             :colour="chart.colour" 
+            class="table__cell-chart"
           />
         </div>
       </div>
@@ -28,12 +44,15 @@
 </template>
 
 <script>
+import mixinId from '../../mixins/mixin-ids'
 import ChartRowTarget from '../charts/chart-row-target/ChartRowTarget.vue'
 
 export default {
   name: 'Row',
 
   components: { ChartRowTarget },
+
+  mixins: [ mixinId ],
 
   props: {
     row: {

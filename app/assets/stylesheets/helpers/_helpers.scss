@@ -1,6 +1,7 @@
 //--------------------------------------------------
 // helpers
 //--------------------------------------------------
+// - borders
 // - fouc
 // - font
 // - lists
@@ -12,6 +13,15 @@
 // - user interaction
 // - shapes
 //
+//--------------------------------------------------
+// borders and shadows
+//--------------------------------------------------
+@mixin box-shadow($colour){
+  box-shadow: 2px 2px 4px $colour;
+}
+
+@mixin shadow--grey-light { @include box-shadow($grey-light); }
+
 //--------------------------------------------------
 // fouc (flash of unstyled content)
 //--------------------------------------------------
