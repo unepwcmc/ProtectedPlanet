@@ -34,4 +34,13 @@ class Stats::Global
   def self.countries_providing_data
     ProtectedArea.select("countries.id").joins(:countries).group("countries.id").length
   end
+
+  def self.calculate_stats_for(klass, field_name)
+    stats = klass.where.not(country_id: nil)
+    sum =
+      stats.map(&field_name.to_sym).inject(0) do |_sum, x|
+        _sum + (x || 0)
+      end
+    (sum / Country.count).round(2)
+  end
 end
