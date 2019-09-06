@@ -2,12 +2,14 @@
 // variables
 //--------------------------------------------------
 $chart-item-background: $grey-light;
+$chart-font: $header-font;
 
 .chart {
 //--------------------------------------------------
 // charts
 //--------------------------------------------------
   @import './chart-dial';
+  @import './chart-row-target';
   @import './horizontal-bar-chart';
   @import './interactive-multiline';
   @import './interactive-treemap';
