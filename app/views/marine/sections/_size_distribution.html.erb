@@ -7,10 +7,10 @@
 <div class="flex-row-responsive sm-size-distribution">
   <div class="flex-1-half flex-column-gap--right">
     <h3 class="header--h3-insights">Top 10 Marine Protected Areas by size</h3>
-    <horizontal-bars :json="<%= @top10ProtectedAreas %>"></horizontal-bars>
+    <chart-bar-simple :json="<%= @top10ProtectedAreas %>"></chart-bar-simple>
   </div>
   <div class="flex-1-half flex-column-gap--left">
     <h3 class="header--h3-insights">Top 20 Marine Protected Areas by size</h3>
-    <rectangles :json="<%= @coverageOfTop20ProtectedAreas %>"></rectangles>
+    <chart-rectangles :json="<%= @coverageOfTop20ProtectedAreas %>"></chart-rectangles>
   </div>
 </div>

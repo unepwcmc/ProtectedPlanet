@@ -12,7 +12,7 @@ class Api::V3::SearchControllerTest < ActionController::TestCase
 
     ActiveRecord::Base.connection.expects(:execute).with(query)
 
-    get :by_point, lat: 1, lon: 2, distance: 1
+    get :by_point, params: {lat: 1, lon: 2, distance: 1}
     assert_response :success
   end
 end

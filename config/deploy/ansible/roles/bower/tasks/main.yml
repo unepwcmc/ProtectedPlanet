@@ -1,4 +1,0 @@
----
-
-- name: Install bower
-  npm: name=bower global=yes

@@ -1,6 +1,7 @@
 # Development Workflow, Conventions and Tips
 
 ### Frontend development
+TODO: Update this readme at the end of the frontend upgrade
 
 The Protected Planet CSS code lives in the
 [protectedplanet-frontend](https://github.com/unepwcmc/protectedplanet-frontend)

@@ -5,7 +5,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
    database to postgres' do
     db_config = ActiveRecord::Base.connection_config
 
-    ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 --config PG_USE_COPY YES -f \"PostgreSQL\" PG:\" host=#{db_config[:host]} user=#{db_config[:username]} dbname=#{db_config[:database]}\" ./an/file"
+    ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 --config PG_USE_COPY YES -f \"PostgreSQL\" PG:\" host=#{db_config[:host]} user=#{db_config[:username]}" + ( db_config[:password].nil? ? "": " password=#{db_config[:password]}") + " dbname=#{db_config[:database]}\" ./an/file"
     Ogr::Postgres.expects(:system).with(ogr_command).once
 
     Ogr::Postgres.import './an/file'
@@ -15,14 +15,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
     table_name = "my_first_table"
     db_config = ActiveRecord::Base.connection_config
 
-    ogr_command = """
-      ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8
-      --config PG_USE_COPY YES
-      -f \"PostgreSQL\" PG:\" host=#{db_config[:host]}
-      user=#{db_config[:username]} dbname=#{db_config[:database]}\"
-      -sql \"SELECT * FROM #{table_name}\"
-      ./an/file
-    """.squish
+    ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 --config PG_USE_COPY YES -f \"PostgreSQL\" PG:\" host=#{db_config[:host]} user=#{db_config[:username]}" + ( db_config[:password].nil? ? "": " password=#{db_config[:password]}") + " dbname=#{db_config[:database]}\" -sql \"SELECT * FROM #{table_name}\" ./an/file"
     Ogr::Postgres.expects(:system).with(ogr_command).once
 
     Ogr::Postgres.import './an/file', table_name
@@ -34,15 +27,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
     new_table_name = "my_second_first_table"
     db_config = ActiveRecord::Base.connection_config
 
-    ogr_command = """
-      ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8
-      --config PG_USE_COPY YES
-      -f \"PostgreSQL\" PG:\" host=#{db_config[:host]}
-      user=#{db_config[:username]} dbname=#{db_config[:database]}\"
-      -sql \"SELECT * FROM #{table_name}\"
-      -nln #{new_table_name}
-      ./an/file
-    """.squish
+    ogr_command = "ogr2ogr -overwrite -skipfailures -lco ENCODING=UTF-8 --config PG_USE_COPY YES -f \"PostgreSQL\" PG:\" host=#{db_config[:host]} user=#{db_config[:username]}" + ( db_config[:password].nil? ? "": " password=#{db_config[:password]}") + " dbname=#{db_config[:database]}\" -sql \"SELECT * FROM #{table_name}\" -nln #{new_table_name} ./an/file"
     Ogr::Postgres.expects(:system).with(ogr_command).once
 
     Ogr::Postgres.import './an/file', table_name, new_table_name
@@ -65,14 +50,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
     driver = 'ESRI Shapefile'
     export_file_name = 'export.shp'
 
-    ogr_command = """
-      ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config[:host]}
-      user=#{db_config[:username]} dbname=#{db_config[:database]}
-      password=#{db_config[:password]}\"
-      -sql \"#{query}\"
-      -lco \"ENCODING=UTF-8\"
-      -lco \"WRITE_BOM=YES\"
-    """.squish
+    ogr_command = "ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config[:host]} user=#{db_config[:username]}" + ( db_config[:password].nil? ? "": " password=#{db_config[:password]}") + " dbname=#{db_config[:database]}\" -sql \"#{query}\" -lco \"ENCODING=UTF-8\" -lco \"WRITE_BOM=YES\""
 
     Ogr::Postgres.expects(:system).with(ogr_command).once
 
@@ -86,14 +64,7 @@ class TestOgrPostgres < ActiveSupport::TestCase
     driver = 'CSV'
     export_file_name = 'export.csv'
 
-    ogr_command = """
-      ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config[:host]}
-      user=#{db_config[:username]} dbname=#{db_config[:database]}
-      password=#{db_config[:password]}\"
-      -sql \"#{query}\"
-      -lco \"ENCODING=UTF-8\"
-      -lco \"WRITE_BOM=YES\"
-    """.squish
+    ogr_command = "ogr2ogr -skipfailures -f \"#{driver}\" #{export_file_name} PG:\"host=#{db_config[:host]} user=#{db_config[:username]}" + ( db_config[:password].nil? ? "": " password=#{db_config[:password]}") + " dbname=#{db_config[:database]}\" -sql \"#{query}\" -lco \"ENCODING=UTF-8\" -lco \"WRITE_BOM=YES\""
 
     Ogr::Postgres.expects(:system).with(ogr_command).once
 

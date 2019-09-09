@@ -1,0 +1,16 @@
+.icon--info {
+  padding-left: rem-calc(24);
+  position: relative;
+
+  &:before {
+    @include text--icon(body);
+
+    color: $info-box__icon-color;
+    content: '\f05a';
+    display: inline-block;
+
+    position: absolute;
+    top: rem-calc(-2);
+    left: 0;
+  }
+}

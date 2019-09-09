@@ -23,12 +23,26 @@ before_install:
   - psql -c 'create database pp_test_backup' -U postgres
   - psql -c 'CREATE EXTENSION postgis;' -U postgres -d pp_test
   - psql -c 'CREATE EXTENSION postgis_topology;' -U postgres -d pp_test
+  - curl -s -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.0.1-amd64.deb
+  - sudo dpkg -i --force-confnew elasticsearch-7.0.1-amd64.deb
+  - sudo sed -i.old 's/-Xms1g/-Xms128m/' /etc/elasticsearch/jvm.options
+  - sudo sed -i.old 's/-Xmx1g/-Xmx128m/' /etc/elasticsearch/jvm.options
+  - echo -e '-XX:+DisableExplicitGC\n-Djdk.io.permissionsUseCanonicalPath=true\n-Dlog4j.skipJansi=true\n-server\n' | sudo tee -a /etc/elasticsearch/jvm.options
+  - sudo chown -R elasticsearch:elasticsearch /etc/default/elasticsearch
+  - sudo service elasticsearch start
+install:
+  - nvm install node
+  - node -v
+  - npm i -g yarn
+  - yarn
+  - bundle install
 bundler_args: --without development production staging --jobs=6
 rvm:
-  - 2.1.2
+  - 2.6.3
 before_script:
+  - sleep 10
   - cp .env.example .env
-  - RAILS_ENV=test bundle exec rake db:migrate
+  - RAILS_ENV=test bundle exec rake db:drop db:create db:migrate
 notifications:
   email:
     - andrea.rossi@unep-wcmc.org
@@ -45,4 +59,3 @@ addons:
   postgresql: 9.3
 services:
   - redis-server
-  - elasticsearch

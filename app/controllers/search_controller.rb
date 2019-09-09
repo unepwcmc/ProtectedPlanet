@@ -1,8 +1,8 @@
 class SearchController < ApplicationController
-  after_filter :enable_caching
+  after_action :enable_caching
 
-  before_filter :ignore_empty_query, only: [:index, :map]
-  before_filter :load_search, only: [:index, :map]
+  before_action :ignore_empty_query, only: [:index, :map]
+  before_action :load_search, only: [:index, :map]
 
   def index
     render partial: 'grid' if request.xhr?

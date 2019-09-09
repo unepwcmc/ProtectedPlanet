@@ -3,10 +3,12 @@ class S3
   IMPORT_PREFIX = 'import/'
 
   def initialize
-    @s3 = AWS::S3.new({
+    @s3 = Aws::S3::Resource.new({
       access_key_id: Rails.application.secrets.aws_access_key_id,
-      secret_access_key: Rails.application.secrets.aws_secret_access_key
-    })
+      secret_access_key: Rails.application.secrets.aws_secret_access_key,
+      region: Rails.application.secrets.s3_region
+                                })
+    @client = Aws::S3::Client.new(region: Rails.application.secrets.s3_region)
   end
 
   def self.upload object_name, file_path, opts={}
@@ -28,21 +30,20 @@ class S3
   end
 
   def upload object_name, source, opts
-    bucket = @s3.buckets[Rails.application.secrets.aws_downloads_bucket]
-    object = bucket.objects[object_name]
-
-    if opts[:raw]
-      object.write(data: source, acl: :public_read)
-    else
-      file_path = Pathname.new(source)
-      file_size = File.size(file_path)
-
-      object.write(file_path, acl: :public_read, content_length: file_size)
-    end
+    bucket = @s3.bucket(Rails.application.secrets.aws_downloads_bucket)
+    object = bucket.object(object_name)
+    object.upload_file(source)
+    @client.put_object_acl({
+                        acl: "public-read",
+                        bucket: Rails.application.secrets.aws_downloads_bucket,
+                        key: object_name,
+                           })
+    return
   end
 
+
   def delete_all path
-    bucket = @s3.buckets[Rails.application.secrets.aws_downloads_bucket]
+    bucket = @s3.bucket(Rails.application.secrets.aws_downloads_bucket)
     objects = bucket.objects.with_prefix(path)
 
     objects.delete_all

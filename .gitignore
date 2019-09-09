@@ -21,6 +21,12 @@ dump.rdb
 /public/assets
 .env
 
-/vendor/assets/bower_components
 coverage
 node_modules
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+tmp/cache/webpacker

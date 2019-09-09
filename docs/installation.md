@@ -41,8 +41,8 @@ package manager. For example, on OS X:
   brew install elasticsearch
 
   # for assets
-  brew install nodejs
-  npm install -g bower
+  brew install yarn
+  yarn install
 ```
 
 ⚠️ **Take this advice with caution - it might not work...**

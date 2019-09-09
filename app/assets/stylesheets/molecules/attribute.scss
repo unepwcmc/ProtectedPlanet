@@ -1,0 +1,46 @@
+%attribute--large-text {
+  line-height: 1;
+  margin-bottom: rem-calc(20);
+}
+
+.attribute {
+  @extend .flex-row;
+  @extend .align-items-end;
+
+  border-bottom: solid rem-calc(1) $attribute-border-color;
+  margin-top: rem-calc(18);
+  padding-bottom: rem-calc(2);
+
+  &--bold {
+    @include font-weight(bold);
+  }
+
+  &--large {
+    @extend %attribute--large-text;
+    font-size: rem-calc(24);
+  }
+
+  &--xlarge {
+    @extend %attribute--large-text;
+    font-size: rem-calc(48);
+  }
+
+  &__title {
+    color: $attribute__title-color;
+    flex: 0 0 60%;
+  }
+
+  &__value {
+    color: $attribute__value-color;
+    word-break: break-word;
+    font-family: 'MuseoSlab';
+    flex: 0 0 40%;
+  }
+
+  &__link-margin { margin: rem-calc(0 8 0 16); }
+
+  &__icon {
+    font-size: rem-calc(13);
+    transform: translateY(1px);
+  }
+}

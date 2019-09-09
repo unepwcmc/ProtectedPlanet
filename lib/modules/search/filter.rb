@@ -10,7 +10,6 @@ class Search::Filter
 
   def self.from_params params
     constructed_filters = []
-
     params.each do |name, value|
       filter = self.new(value, configuration[name.to_s]).to_h
       constructed_filters << {

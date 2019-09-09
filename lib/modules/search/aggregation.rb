@@ -11,7 +11,6 @@ class Search::Aggregation
   def self.parse raw_aggregations
     configuration.each_with_object({}) do |(aggregation, config), aggregations|
       aggregator = aggregator_for(aggregation)
-
       aggregations[aggregation] = aggregator.build(aggregation, raw_aggregations, config)
     end
   end

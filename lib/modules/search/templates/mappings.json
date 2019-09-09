@@ -1,109 +1,127 @@
 {
-  "protected_area": {
-    "dynamic": "false",
-    "properties": {
-      "id": {
-        "type": "long"
-      },
-      "wdpa_id": {
-        "type": "integer"
-      },
-      "type": {
-        "type": "string"
-      },
-      "name": {
-        "type": "string"
-      },
-      "original_name": {
-        "type": "string"
-      },
-      "marine": {
-        "type": "boolean"
-      },
-      "has_irreplaceability_info": {
-        "type": "boolean"
-      },
-      "is_green_list": {
-        "type": "boolean"
-      },
-      "has_parcc_info": {
-        "type": "boolean"
-      },
-      "coordinates": {
-        "type": "geo_point"
-      },
-      "sub_location": {
-        "type": "nested",
-        "properties": {
-          "name": {
-            "type": "string",
-            "index": "not_analyzed"
-          }
-        }
-      },
-      "countries_for_index": {
-        "type": "nested",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "index": "not_analyzed"
-          },
-          "iso_3": {
-            "type": "string"
-          },
-          "region_for_index": {
-            "type": "nested",
-            "properties": {
-              "id": {
-                "type": "integer"
-              },
-              "name": {
-                "type": "string",
-                "index": "not_analyzed"
-              }
+    "settings": {
+	"analysis": {
+            "normalizer": {
+		"lc_normalizer": {
+                    "type": "custom",
+                    "char_filter": [],
+                    "filter": ["lowercase", "asciifolding"]
+		}
             }
-          }
-        }
-      },
-      "iucn_category": {
-        "type": "nested",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "index": "not_analyzed"
-          }
-        }
-      },
-      "designation": {
-        "type": "nested",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "index": "not_analyzed"
-          }
-        }
-      },
-      "governance": {
-        "type": "nested",
-        "properties": {
-          "id": {
-            "type": "integer"
-          },
-          "name": {
-            "type": "string",
-            "index": "not_analyzed"
-          }
-        }
-      }
+	}
+    },
+    "mappings": {
+	"dynamic": "false",
+	"properties": {
+	    "id": {
+		"type": "long"
+	    },
+	    "wdpa_id": {
+		"type": "integer"
+	    },
+	    "type": {
+		"type": "text"
+	    },
+	    "name": {
+		"type": "text",
+		"analyzer": "english"
+	    },
+	    "original_name": {
+		"type": "text"
+	    },
+	    "marine": {
+		"type": "boolean"
+	    },
+	    "has_irreplaceability_info": {
+		"type": "boolean"
+	    },
+	    "is_green_list": {
+		"type": "boolean"
+	    },
+	    "has_parcc_info": {
+		"type": "boolean"
+	    },
+	    "coordinates": {
+		"type": "geo_point"
+	    },
+	    "sub_location": {
+		"type": "nested",
+		"properties": {
+		    "name": {
+			"type": "keyword"
+		    }
+		}
+	    },
+	    "iso_3": {
+		"type": "keyword",
+		"normalizer": "lc_normalizer"
+	    },
+	    "region_name": {
+		"type": "text",
+		"analyzer": "english"
+	    },
+
+	    "countries_for_index": {
+		"type": "nested",
+		"properties": {
+		    "id": {
+			"type": "integer"
+		    },
+		    "name": {
+			"type": "keyword",
+			"normalizer": "lc_normalizer"
+		    },
+		    "iso_3": {
+			"type": "keyword",
+			"normalizer": "lc_normalizer"
+		    },
+		    "region_for_index": {
+			"type": "nested",
+			"properties": {
+			    "id": {
+				"type": "integer"
+			    },
+			    "name": {
+				"type": "keyword",
+				"normalizer": "lc_normalizer"
+			    }
+			}
+		    }
+		}
+	    },
+	    "iucn_category": {
+		"type": "nested",
+		"properties": {
+		    "id": {
+			"type": "integer"
+		    },
+		    "name": {
+			"type": "keyword"
+		    }
+		}
+	    },
+	    "designation": {
+		"type": "nested",
+		"properties": {
+		    "id": {
+			"type": "integer"
+		    },
+		    "name": {
+			"type": "keyword"
+		    }
+		}
+	    },
+	    "governance": {
+		"type": "nested",
+		"properties": {
+		    "id": {
+			"type": "integer"
+		    },
+		    "name": {
+			"type": "keyword"
+		    }
+		}
+	    }
+	}
     }
-  }
 }

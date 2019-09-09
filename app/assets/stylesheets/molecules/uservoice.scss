@@ -1,0 +1,16 @@
+@mixin uservoice {
+  @include link-with-icon($icon__margin-sides: rem-calc(4)) {
+    @include e(icon) {
+      @include color($white);
+    }
+
+    @include text(small, bold);
+    @include line-height(2rem);
+  }
+
+  @content;
+}
+
+@include b(uservoice) {
+  @include uservoice;
+}
