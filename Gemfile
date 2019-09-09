@@ -4,7 +4,7 @@ gem 'rails', '5.0.5'
 gem 'webpacker', '~> 4.0.2'
 
 gem 'pg', '~> 0.21'
-gem 'activerecord-postgis-adapter', '~> 4.0.0'
+gem 'activerecord-postgis-adapter', '4.1.0'
 gem 'dbf', '~> 2.0.7'
 #
 gem 'elasticsearch', '~> 7.2.0'
@@ -74,6 +74,7 @@ group :test, :development do
   gem 'byebug', '~> 9.0', '>= 9.0.5'
 
 end
+
 
 
 gem 'will_paginate', '~> 3.0'
