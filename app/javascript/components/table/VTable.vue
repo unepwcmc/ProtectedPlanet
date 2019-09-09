@@ -36,6 +36,10 @@ export default {
     dataSrc: {
       type: String,
       required: true
+    },
+    itemsPerPage: {
+      type: Number,
+      default: 15
     }
   },
 
@@ -61,15 +65,15 @@ export default {
     getNewItems () {
       const data = {
         params: {
-          // items_per_page: this.itemsPerPage,
-          requested_page: this.$store.state.requestedPage,
-          sortDirection: this.$store.state.sortDirection,
-          sortField: this.$store.state.sortField
-          // searchTerm: this.$store.state.searchTerm
+          items_per_page: this.itemsPerPage,
+          requested_page: this.$store.state.table.requestedPage,
+          sortDirection: this.$store.state.table.sortDirection,
+          sortField: this.$store.state.table.sortField
+          // searchTerm: this.$store.state.table.searchTerm
         }
       }
 
-      console.log('getNewItems')
+      console.log('getNewItems', data)
 
       axios.post(this.dataSrc, data)
         .then(response => {
