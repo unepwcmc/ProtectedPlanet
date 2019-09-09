@@ -125,6 +125,11 @@ $transition-options: 0.6s ease-in-out;
           width: 50%;
         }
 
+        &__slide-title {
+          @include responsive-styles(margin, 0, rem-calc(0 5), rem-calc(0 10));
+          font-family: $header-font;
+        }
+
         &__tooltip {
           position: absolute;
           top: rem-calc(10);

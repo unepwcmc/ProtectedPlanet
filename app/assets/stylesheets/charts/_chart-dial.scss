@@ -9,6 +9,7 @@ $chart-dial-font: $chart-font;
 // dial charts
 //--------------------------------------------------
 &--dial {
+  font: $chart-dial-font;
   width: 100%;
 
   .chart {

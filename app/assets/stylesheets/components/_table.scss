@@ -1,7 +1,7 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$table-font: $body-font;
+$table-font: $header-font;
 $table-head-bg-color: $grey-lighter;
 
 //--------------------------------------------------
@@ -27,12 +27,11 @@ $table-head-bg-color: $grey-lighter;
 
     .table {
       &__head {
+        @include responsive-styles(display, none, none, flex);
         @include flex-nowrap;
         @include shadow--grey;
         @include table-row-spacing;
         background-color: $table-head-bg-color;
-
-        display: flex;
       }
 
       &__row {
