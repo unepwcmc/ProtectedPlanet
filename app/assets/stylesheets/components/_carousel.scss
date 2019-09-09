@@ -1,16 +1,45 @@
+//--------------------------------------------------
+// settings
+//--------------------------------------------------
 $padding-top-bottom: rem-calc(25);
-$padding-side: rem-calc(40);
+
+$padding-side-mobile: rem-calc(16);
+$padding-side-tablet: rem-calc(16);
+$padding-side-desktop: rem-calc(40);
+
+$padding-side: rem-calc(40); //old
+
+@mixin padding-side() {
+  padding-left: $padding-side-mobile;
+  padding-right: $padding-side-mobile;
+
+  @include breakpoint($small) {
+    padding-left: $padding-side-tablet;
+    padding-right: $padding-side-tablet;    
+  }
+
+  @include breakpoint($medium) {
+    padding-left: $padding-side-desktop;
+    padding-right: $padding-side-desktop;    
+  }
+}
 
 $indicator-height: rem-calc(14);
 $indicator-row-height: $indicator-height + $padding-top-bottom * 2;
 $transition-options: 0.6s ease-in-out;
 
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
 .transition {
   &.carousel__slides {
     transition: transform $transition-options;
   }
 }
 
+//--------------------------------------------------
+// news banner carousel
+//--------------------------------------------------
 .carousel {
   padding-top: $padding-top-bottom;
 
@@ -45,8 +74,8 @@ $transition-options: 0.6s ease-in-out;
       }
 
   &__control-bar {    
+    @include padding-side();
     color: white;
-    padding: rem-calc(0 $padding-side);
     height: $indicator-row-height;
 
     display: flex;
@@ -76,6 +105,43 @@ $transition-options: 0.6s ease-in-out;
         background-color: $white;
       }
     }
+
+//--------------------------------------------------
+// basic carousel
+//--------------------------------------------------
+  &--basic {
+    .carousel {
+      &__control-bar {
+        @include breakpoint($medium) { display: none; }
+      }
+
+        &__indicator {
+          background-color: $grey;
+
+          &--selected { background-color: $grey-dark; }
+        }
+
+        &__slide {
+          width: 50%;
+        }
+
+        &__tooltip {
+          position: absolute;
+          top: rem-calc(10);
+          right: rem-calc(10);
+        }
+    }
+
+    .carousel-slide {
+      @include responsive-styles(width, 100%, calc(40% - 5px), calc(20% - 10px));
+      @include responsive-styles(margin, 0, rem-calc(0 5), rem-calc(0 10));
+      border: solid 1px $grey-light;
+      box-shadow: 2px 2px 4px $grey-light;
+      padding: rem-calc(16 0);
+
+      position: relative;
+    }
+  }
 }
 
 .carousel-slide {

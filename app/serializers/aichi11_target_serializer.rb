@@ -8,7 +8,7 @@ class Aichi11TargetSerializer < BaseSerializer
   def serialize
     super
   end
-
+  
   private
 
   def fields

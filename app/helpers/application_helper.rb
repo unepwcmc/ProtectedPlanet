@@ -125,23 +125,23 @@ module ApplicationHelper
   DOWNLOAD_TYPES = {
     csv: {
       content: '.CSV',
-      attrs: {'data-type' => 'csv', 'class' => 'u-bold tooltip__element link-with-icon'}
+      attrs: {'data-type' => 'csv', 'class' => 'u-bold tooltip-old__element link-with-icon'}
     },
     shp: {
       content: '.SHP',
-      attrs: {'data-type' => 'shapefile', 'class' => 'u-bold tooltip__element link-with-icon'}
+      attrs: {'data-type' => 'shapefile', 'class' => 'u-bold tooltip-old__element link-with-icon'}
     },
     gdb: {
       content: 'File Geodatabase',
-      attrs: {'href' => Rails.application.secrets.wdpa_current_release_url, 'class' => 'u-bold tooltip__element link-with-icon'}
+      attrs: {'href' => Rails.application.secrets.wdpa_current_release_url, 'class' => 'u-bold tooltip-old__element link-with-icon'}
     },
     esri: {
       content: 'ESRI Web Service',
-      attrs: {'href' => Rails.application.secrets.esri_web_service_url, 'class' => 'u-bold tooltip__element link-with-icon'}
+      attrs: {'href' => Rails.application.secrets.esri_web_service_url, 'class' => 'u-bold tooltip-old__element link-with-icon'}
     },
     pdf: {
       content: '.PDF',
-      attrs: {'href' => '/MPA_Map.pdf', 'class' => 'u-bold tooltip__element link-with-icon', target: '_blank'}
+      attrs: {'href' => '/MPA_Map.pdf', 'class' => 'u-bold tooltip-old__element link-with-icon', target: '_blank'}
     }
   }
 
@@ -149,7 +149,7 @@ module ApplicationHelper
     download_dropdown_attrs = {
       'data-item-id' => item_id,
       'data-download-type' => download_type,
-      'class' => 'js-target tooltip download-type-dropdown'
+      'class' => 'js-target tooltip-old download-type-dropdown'
     }
 
     content_tag :div, download_dropdown_attrs do

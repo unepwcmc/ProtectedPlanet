@@ -11,7 +11,7 @@
     <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Downloads</h2>
     <div class="info-box__body info-box__body--no-padding">
       <div class="js-download-btn info-box__row">
-        <div class="js-trigger tooltip__trigger info-box__link">
+        <div class="js-trigger tooltip-old__trigger info-box__link">
           <i class="info-box__link-icon fa fa-download"></i>Download this dataset
           <%= download_dropdown(@region.iso, 'general', (types rescue [:csv, :shp])) %>
         </div>

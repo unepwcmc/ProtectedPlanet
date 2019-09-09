@@ -30,7 +30,7 @@ module ProtectedPlanet
       #{config.root}/app/serializers
     )
     config.assets.paths << Rails.root.join('node_modules')
-    config.assets.precompile += %w(base.js country.js home.js map.js protected_areas.js search.js resources.js content.js marine.js green_list.js region.js)
+    config.assets.precompile += %w(base.js country.js home.js map.js protected_areas.js search.js resources.js content.js marine.js green_list.js region.js target_dashboard.js)
     config.assets.precompile += %w(d3/d3.js)
     config.assets.precompile += %w(d3/d3.min.js)
     config.tinymce.install = :compile
@@ -40,5 +40,7 @@ module ProtectedPlanet
     config.to_prepare do
       Devise::Mailer.layout "mailer"
     end
+
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
   end
 end

@@ -1,5 +1,5 @@
 <template>
-  <li :class="['carousel-slide', 'transition', widthClass]">
+  <li :class="['carousel-slide', 'transition']">
     <slot :slideScope="slideScope"></slot>
   </li>
 </template>
@@ -19,7 +19,7 @@
 
     data () {
       return {
-        widthClass: 'carousel-slide--' + this.slideWidth,
+        // widthClass: 'carousel-slide--' + this.slideWidth,
         slideScope: {},
         isActive: false,
         inputElements: []

@@ -1,0 +1,53 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin icon-basic() {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+@mixin icon-button-reset() {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+@mixin icon-close() {
+  @include icon-basic;
+  background-image: image-url('icons/close.svg');
+  width: rem-calc(29); height: rem-calc(29);
+}
+
+@mixin icon-info() {
+  @include icon-basic;
+  background-image: image-url('icons/info.svg');
+  width: rem-calc(23); height: rem-calc(23);
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.icon {
+  &--close { @include icon-close; }
+
+  &--info-circle { @include icon-info; }
+
+  &--info {
+    padding-left: rem-calc(24);
+    position: relative;
+
+    &:before {
+      @include text--icon(body);
+
+      color: $info-box__icon-color;
+      content: '\f05a';
+      display: inline-block;
+
+      position: absolute;
+      top: rem-calc(-2);
+      left: 0;
+    }
+  }
+}

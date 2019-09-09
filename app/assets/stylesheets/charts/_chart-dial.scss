@@ -1,0 +1,37 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-dial-color: $grey;
+$chart-text-color: $grey;
+$chart-dial-font: $chart-font;
+
+//--------------------------------------------------
+// dial charts
+//--------------------------------------------------
+&--dial {
+  width: 100%;
+
+  .chart {
+    &__arc {
+      &--default, &--background { fill: $chart-item-background; }
+      &--global { fill: $global; }
+      &--marine { fill: $marine; }
+      &--terrestrial { fill: $terrestrial; }
+    }
+
+    &__arrow-circle { fill: $chart-dial-color; }
+
+    &__arrow-head { fill: $chart-dial-color; }
+
+    &__arrow-line { 
+      stroke: $chart-dial-color; 
+      stroke-width: rem-calc(3);
+    }
+
+    &__title {
+      fill: $chart-text-color;
+      font-family: $chart-dial-font;
+      font-weight: $bold;
+    }
+  }
+}
