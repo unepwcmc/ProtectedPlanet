@@ -1,23 +1,28 @@
 <template>
   <div>
-<!--     <table-head
+    <table-head
       :headings="json.head"
-    /> -->
+    />
 
     <table-row 
-      v-for="row in json.body"
+      v-for="(row, index) in json.body"
+      :key="getVForKey('row', index)"
       :row="row"
     />
   </div>  
 </template>
 
 <script>
+import mixinId from '../../mixins/mixin-ids'
+import TableHead from './TableHead'
 import TableRow from './TableRow'
 
 export default {
   name: 'VTable',
 
-  components: { TableRow },
+  components: { TableHead, TableRow },
+
+  mixins: [ mixinId ],
 
   props: {
     json: {

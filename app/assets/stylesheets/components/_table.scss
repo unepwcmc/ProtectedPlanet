@@ -1,9 +1,43 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$table-font: $body-font;
+$table-head-bg-color: $grey-lighter;
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin table-cell-basic() {
+  @include responsive-styles(margin-right, rem-calc(20), rem-calc(20), 0);
+  @include responsive-styles(padding, rem-calc(8 10), rem-calc(8 10), rem-calc(18 20));
+  @include responsive-styles(width, 25%, 25%, 20%);
+}
+
+@mixin table-row-spacing() {
+  @include responsive-styles(margin-bottom, rem-calc(30), rem-calc(32), rem-calc(16));
+}
+
 .table {
+//--------------------------------------------------
+// tables
+//--------------------------------------------------
   &--horizontal-scroll {
+    // color: $body-cont-color;
+    font-family: $table-font;
+
     .table {
+      &__head {
+        @include flex-nowrap;
+        @include shadow--grey;
+        @include table-row-spacing;
+        background-color: $table-head-bg-color;
+
+        display: flex;
+      }
+
       &__row {
+        @include table-row-spacing;
         @include responsive-styles(border, none, none, solid 1px $grey-light);
-        @include responsive-styles(margin-bottom, rem-calc(30), rem-calc(32), rem-calc(16));
 
         @include breakpoint($medium) {
           @include shadow--grey-light;
@@ -28,13 +62,14 @@
             display: flex;
           }
 
-            &__cell {
+            &__cell--heading {
+              @include table-cell-basic;
+            }
+
+            &__cell--body {
+              @include table-cell-basic;
               @include shadow--grey-light;
               @include responsive-styles(border, solid 1px $grey-light, solid 1px $grey-light, none);
-              @include responsive-styles(margin-right, rem-calc(20), rem-calc(20), 0);
-              @include responsive-styles(padding, rem-calc(8 10), rem-calc(8 10), rem-calc(18 20));
-              @include responsive-styles(width, 25%, 25%, 20%);
-
               @include breakpoint($medium) { box-shadow: none; }
             }
             
