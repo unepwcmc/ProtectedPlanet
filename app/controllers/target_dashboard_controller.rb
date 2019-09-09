@@ -5,11 +5,11 @@ class TargetDashboardController < ApplicationController
     @countries = CountrySerializer.new({}, countries).serialize
     @targets = Aichi11TargetSerializer.new.serialize
     @global_stats = Aichi11Target.get_global_stats
-    
+
 
     ###
     # need to get text into yml files
-    ### => 
+    ### =>
 
     @country_and_regions_headings = [
       {
@@ -36,54 +36,7 @@ class TargetDashboardController < ApplicationController
     ].to_json
 
 
-    #   body: [
-    #     { 
-    #       title: 'France', 
-    #       url: 'http://localhost/country/france', 
-    #       stats: [
-    #         { 
-    #           title: 'Coverage',
-    #           charts: [
-    #             { 
-    #               title: 'Terrestrial', value: 55, target: 75, colour: 'terrestrial' 
-    #             },
-    #             { 
-    #               title: 'Marine', value: 55, target: 75, colour: 'marine' 
-    #             }
-    #           ]
-    #         },
-    #         { 
-    #           title: 'Effectively managed',
-    #           charts: [
-    #             { 
-    #               title: 'Terrestrial', value: 55, target: 75, colour: 'terrestrial' 
-    #             },
-    #             { 
-    #               title: 'Marine', value: 55, target: 75, colour: 'marine' 
-    #             }
-    #           ]
-    #         },
-    #         { 
-    #           title: 'Well connected',
-    #           charts: [
-    #             { 
-    #               title: 'Global', value: 55, target: 75, colour: 'global' 
-    #             }
-    #           ]
-    #         },
-    #         { 
-    #           title: 'Areas of importance for biodiversity',
-    #           charts: [
-    #             { 
-    #               title: 'Global', value: 55, target: 75, colour: 'global' 
-    #             }
-    #           ]
-    #         }
-    #       ] 
-    #     },
-    #     {title:'Spain',url:'http://localhost/country/spain',stats:[{title:'Coverage',charts:[{title:'Terrestrial',value:55,target:75,colour:'terrestrial'},{title:'Marine',value:55,target:75,colour:'marine'}]},{title:'Effectivelymanaged',charts:[{title:'Terrestrial',value:55,target:75,colour:'terrestrial'},{title:'Marine',value:55,target:75,colour:'marine'}]},{title:'Wellconnected',charts:[{title:'Global',value:55,target:75,colour:'global'}]},{title:'Areasofimportanceforbiodiversity',charts:[{title:'Global',value:55,target:75,colour:'global'}]}]}
-    #   ]
-    # }.to_json
+    @country_and_regions = Aichi11TargetDashboardSerializer.new.serialize[:data].to_json
   end
 
   def load
