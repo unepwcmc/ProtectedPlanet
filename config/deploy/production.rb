@@ -1,13 +1,13 @@
 set :stage, :production
+set :branch, "new_production_deploy"
 
-server "web-production-linode.protectedplanet.net", user: 'wcmc', roles: %w{web}
-server "import-production-linode.protectedplanet.net", user: 'wcmc', roles: %w{util}
-server "db-production-linode.protectedplanet.net", user: 'wcmc', roles: %w{db}, :no_release => true
+server 'new-web.pp-production.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
 set :application, "protectedplanet"
-set :server_name, "web-production-linode.protectedplanet.net"
+set :server_name, "protectedplanet"
 set :sudo_user, "wcmc"
 set :app_port, "80"
+
 
 
 # server-based syntax
