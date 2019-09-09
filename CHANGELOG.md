@@ -5,6 +5,10 @@
 * Remove dependency on the protectedplanet-frontend repo and move styles in asset folder
 * Add docker for local development
 
+### 2.6.1
+
+* Add country, pame_country and marine stats (WDPA September 2019 release).
+
 ### 2.6.0
 
 * Add National Report stats to countries
