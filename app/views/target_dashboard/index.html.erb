@@ -1,4 +1,4 @@
-<div id="new-styles" class="container--profile container--push-bottom">
+<div class="new-styles container--profile container--push-bottom">
   <header class="hero--thematic-area center">
     <h1 class="hero__title hero__title--article"><%= t('thematic_area.target_11_dashboard.title') %></h1> 
   </header>
@@ -38,11 +38,9 @@
       <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
 
       <p>sticky bar</p>
-
-      <div style="width: 222px;">
-        <chart-row-target :value="40" :target="60" title="Terrestrial" colour="terrestrial"></chart-row-target>
-        <chart-row-target :value="56" :target="61" title="Marine" colour="marine"></chart-row-target>
-        <chart-row-target :value="16" :target="37" title="Global" colour="global"></chart-row-target>
+      
+      <div class="table--horizontal-scroll">
+        <row :row="<%= @row %>"></row>
       </div>
     </section>
   </main>
