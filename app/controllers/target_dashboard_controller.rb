@@ -9,7 +9,7 @@ class TargetDashboardController < ApplicationController
 
     ###
     # need to get text into yml files
-    ###
+    ### => 
 
     @country_and_regions_headings = [
       {

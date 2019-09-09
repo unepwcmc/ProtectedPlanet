@@ -59,23 +59,19 @@ export default {
 
   methods: {
     updateProperties (data) {
-      this.items = data.items
+      this.items = data.data
     },
 
     getNewItems () {
-      const data = {
-        params: {
-          items_per_page: this.itemsPerPage,
-          requested_page: this.$store.state.table.requestedPage,
-          sortDirection: this.$store.state.table.sortDirection,
-          sortField: this.$store.state.table.sortField
-          // searchTerm: this.$store.state.table.searchTerm
-        }
-      }
+      const itemsPerPage = this.itemsPerPage,
+        requestedPage = this.$store.state.table.requestedPage,
+        sortDirection = this.$store.state.table.sortDirection,
+        sortField = this.$store.state.table.sortField
+        // searchTerm = this.$store.state.table.searchTerm
 
-      console.log('getNewItems', data)
+      const endpoint = `${this.dataSrc}?target_dashboard[per_page]=${itemsPerPage}`
 
-      axios.post(this.dataSrc, data)
+      axios.get(endpoint)
         .then(response => {
           console.log('success', response)
 
