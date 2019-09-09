@@ -1,3 +1,10 @@
+### 3.0.0
+
+* Upgrade to Rails 5.0.5
+* Add webpacker 4.0.2
+* Remove dependency on the protectedplanet-frontend repo and move styles in asset folder
+* Add docker for local development
+
 ### 2.6.0
 
 * Add National Report stats to countries
