@@ -11,73 +11,79 @@ class TargetDashboardController < ApplicationController
     # need to get text into yml files
     ###
 
-    @country_and_regions = {
-      head: [
-        {
-          title: 'Country/Region',
-          # tooltip: need to re-think how to do the tooltips as the same ones are all over the page
-        },
-        {
-          title: 'Coverage'
-        },
-        {
-          title: 'Effectively managed'
-        },
-        {
-          title: 'Well connected'
-        },
-        {
-          title: 'Areas of importance for biodiversity'
-        }
-      ],
-      body: [
-        { 
-          title: 'France', 
-          url: 'http://localhost/country/france', 
-          stats: [
-            { 
-              title: 'Coverage',
-              charts: [
-                { 
-                  title: 'Terrestrial', value: 55, target: 75, colour: 'terrestrial' 
-                },
-                { 
-                  title: 'Marine', value: 55, target: 75, colour: 'marine' 
-                }
-              ]
-            },
-            { 
-              title: 'Effectively managed',
-              charts: [
-                { 
-                  title: 'Terrestrial', value: 55, target: 75, colour: 'terrestrial' 
-                },
-                { 
-                  title: 'Marine', value: 55, target: 75, colour: 'marine' 
-                }
-              ]
-            },
-            { 
-              title: 'Well connected',
-              charts: [
-                { 
-                  title: 'Global', value: 55, target: 75, colour: 'global' 
-                }
-              ]
-            },
-            { 
-              title: 'Areas of importance for biodiversity',
-              charts: [
-                { 
-                  title: 'Global', value: 55, target: 75, colour: 'global' 
-                }
-              ]
-            }
-          ] 
-        },
-        {title:'Spain',url:'http://localhost/country/spain',stats:[{title:'Coverage',charts:[{title:'Terrestrial',value:55,target:75,colour:'terrestrial'},{title:'Marine',value:55,target:75,colour:'marine'}]},{title:'Effectivelymanaged',charts:[{title:'Terrestrial',value:55,target:75,colour:'terrestrial'},{title:'Marine',value:55,target:75,colour:'marine'}]},{title:'Wellconnected',charts:[{title:'Global',value:55,target:75,colour:'global'}]},{title:'Areasofimportanceforbiodiversity',charts:[{title:'Global',value:55,target:75,colour:'global'}]}]}
-      ]
-    }.to_json
+    @country_and_regions_headings = [
+      {
+        id: 'country',
+        title: 'Country/Region',
+        # tooltip: need to re-think how to do the tooltips as the same ones are all over the page
+      },
+      {
+        id: 'coverage',
+        title: 'Coverage'
+      },
+      {
+        id: 'pame',
+        title: 'Effectively managed'
+      },
+      {
+        id: 'connected',
+        title: 'Well connected'
+      },
+      {
+        id: 'kba',
+        title: 'Areas of importance for biodiversity'
+      }
+    ].to_json
+
+
+    #   body: [
+    #     { 
+    #       title: 'France', 
+    #       url: 'http://localhost/country/france', 
+    #       stats: [
+    #         { 
+    #           title: 'Coverage',
+    #           charts: [
+    #             { 
+    #               title: 'Terrestrial', value: 55, target: 75, colour: 'terrestrial' 
+    #             },
+    #             { 
+    #               title: 'Marine', value: 55, target: 75, colour: 'marine' 
+    #             }
+    #           ]
+    #         },
+    #         { 
+    #           title: 'Effectively managed',
+    #           charts: [
+    #             { 
+    #               title: 'Terrestrial', value: 55, target: 75, colour: 'terrestrial' 
+    #             },
+    #             { 
+    #               title: 'Marine', value: 55, target: 75, colour: 'marine' 
+    #             }
+    #           ]
+    #         },
+    #         { 
+    #           title: 'Well connected',
+    #           charts: [
+    #             { 
+    #               title: 'Global', value: 55, target: 75, colour: 'global' 
+    #             }
+    #           ]
+    #         },
+    #         { 
+    #           title: 'Areas of importance for biodiversity',
+    #           charts: [
+    #             { 
+    #               title: 'Global', value: 55, target: 75, colour: 'global' 
+    #             }
+    #           ]
+    #         }
+    #       ] 
+    #     },
+    #     {title:'Spain',url:'http://localhost/country/spain',stats:[{title:'Coverage',charts:[{title:'Terrestrial',value:55,target:75,colour:'terrestrial'},{title:'Marine',value:55,target:75,colour:'marine'}]},{title:'Effectivelymanaged',charts:[{title:'Terrestrial',value:55,target:75,colour:'terrestrial'},{title:'Marine',value:55,target:75,colour:'marine'}]},{title:'Wellconnected',charts:[{title:'Global',value:55,target:75,colour:'global'}]},{title:'Areasofimportanceforbiodiversity',charts:[{title:'Global',value:55,target:75,colour:'global'}]}]}
+    #   ]
+    # }.to_json
   end
 
   def load

@@ -1,6 +1,10 @@
+// dependencies
 import Vue from 'vue/dist/vue.esm'
 import Vue2TouchEvents from 'vue2-touch-events'
 import ScrollMagic from 'scrollmagic'
+
+// store
+import store from './store/store.js'
 
 // components
 import Carousel from './components/carousel/Carousel'
@@ -22,6 +26,9 @@ import SocialShareText from './components/social/SocialShareText'
 import Tooltip from './components/tooltip/Tooltip'
 import VTable from './components/table/VTable'
 
+// eventhub
+export const eventHub = new Vue()
+
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
 
@@ -29,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const app = new Vue({
       el: '#v-app',
+      store,
 
       components: {
         Carousel,
