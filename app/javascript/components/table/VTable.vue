@@ -59,7 +59,7 @@ export default {
 
   methods: {
     updateProperties (data) {
-      this.items = data.data
+      this.items = data.items
     },
 
     getNewItems () {
@@ -73,8 +73,6 @@ export default {
 
       axios.get(endpoint)
         .then(response => {
-          console.log('success', response)
-
           this.updateProperties(response.data)
         })
         .catch(function (error) {

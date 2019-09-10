@@ -54,7 +54,7 @@
         :y="-28"
         text-anchor="middle"
       >
-        {{ value }}%
+        {{ prettyValue }}%
       </text>
 
       <text 
@@ -101,6 +101,12 @@ export default {
       svgHeight: 70,
       valueX: 0,
       targetX: 0,
+    }
+  },
+
+  computed: {
+    prettyValue() {
+      return Math.trunc(this.value)
     }
   },
 
