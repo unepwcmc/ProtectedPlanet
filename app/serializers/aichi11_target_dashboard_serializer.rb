@@ -56,6 +56,19 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
 
   private
 
+  def sort_by
+    sort_field_land = 'percentage_pa_land_cover'
+    sort_field_marine = 'percentage_pa_marine_cover'
+    case @params[:sort_by]
+    when 'coverage'
+      "(#{sort_field_land} + #{sort_field_marine})"
+    when 'effectively_managed'
+      "(pame_#{sort_field_land} + pame_#{sort_field_marine})"
+    else
+      super
+    end
+  end
+
   def stats_names
     STATS.keys.map { |key| STATS[key][:name] }
   end
@@ -87,12 +100,9 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
   def chart_hash(stat, stat_name, record, type)
     column_type = type == 'terrestrial' ? 'land' : type == 'global' ? '' : 'marine'
     _column_name = stat[:column_name].gsub(/type/, column_type)
-    # TODO global type needs changing when amending the database fields
-    target_type = type == 'global' ? 'terrestrial' : type
-    target_column = "#{stat_name}_#{target_type}"
+    target_column = "#{stat_name}_#{type}"
 
     relation = record.public_send(stat[:relation])
-    # TODO Check if disctinction between 0 and empty is necessary
     value = (relation && relation.public_send(_column_name)) || 0
     {
       title: type.capitalize,
