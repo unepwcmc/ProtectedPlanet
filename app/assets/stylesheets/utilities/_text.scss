@@ -28,7 +28,7 @@
 //--------------------------------------------------
 // mixins used in classes
 //--------------------------------------------------
-@mixin h1 { //this will just be used for the new dashboard page until the refresh work starts
+@mixin h1 { //temp-refresh
   @include text-1();
   line-height: $line-height-headings;
   text-align: center;
