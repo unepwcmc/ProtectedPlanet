@@ -27,7 +27,27 @@
 }
 
 //--------------------------------------------------
-// site structure - reusable styles/mixins
+// section padding
+//--------------------------------------------------
+.section-padding--top {
+  padding-top: $section-padding-top-mobile;
+  @include breakpoint($small) { padding-top: $section-padding-top-tablet; }
+  @include breakpoint($medium) { padding-top: $section-padding-top-desktop; }
+}
+
+.section-padding--bottom {
+  padding-bottom: $section-padding-bottom-mobile;
+  @include breakpoint($small) { padding-bottom: $section-padding-bottom-tablet; }
+  @include breakpoint($medium) { padding-bottom: $section-padding-bottom-desktop; }
+}
+
+.section-padding {
+  @extend .section-padding--top;
+  @extend .section-padding--bottom;
+}
+
+//--------------------------------------------------
+// item padding
 //--------------------------------------------------
 @mixin item-spacing($sides:'all', $type:'padding') {
   $sides: if($sides == 'all', ('top','bottom','left','right'), ($sides));

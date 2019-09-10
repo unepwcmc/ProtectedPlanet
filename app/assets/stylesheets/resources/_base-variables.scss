@@ -130,13 +130,13 @@ $gutter-large: rem-calc(32);
 // $page-padding-bottom-medium: rem-calc(60);
 // $page-padding-bottom-large: rem-calc(80);
 
-// $section-padding-top-small: rem-calc(20);
-// $section-padding-top-medium: rem-calc(40);
-// $section-padding-top-large: rem-calc(40);
+$section-padding-top-mobile: rem-calc(20);
+$section-padding-top-tablet: rem-calc(40);
+$section-padding-top-desktop: rem-calc(40);
 
-// $section-padding-bottom-small: rem-calc(30);
-// $section-padding-bottom-medium: rem-calc(60);
-// $section-padding-bottom-large: rem-calc(60);
+$section-padding-bottom-mobile: rem-calc(30);
+$section-padding-bottom-tablet: rem-calc(60);
+$section-padding-bottom-desktop: rem-calc(60);
 
 $item-spacing-small: rem-calc(14);
 $item-spacing-medium: rem-calc(20);
