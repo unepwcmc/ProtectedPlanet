@@ -14,10 +14,11 @@ class TargetDashboardController < ApplicationController
     @country_and_regions = Aichi11TargetDashboardSerializer.new.serialize[:data].to_json
   end
 
-  def load
-    @countries = CountrySerializer.new(target_dashboard_params).serialize
+  def load_countries
+    @country_and_regions =
+      Aichi11TargetDashboardSerializer.new(target_dashboard_params).serialize[:data].to_json
 
-    render json: @countries
+    render json: @country_and_regions
   end
 
   private
