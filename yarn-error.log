@@ -2,10 +2,10 @@ Arguments:
   /usr/bin/node /usr/bin/yarn install
 
 PATH: 
-  /home/protectedplanet/.rvm/gems/ruby-2.4.1/bin:/home/protectedplanet/.rvm/gems/ruby-2.4.1@global/bin:/home/protectedplanet/.rvm/rubies/ruby-2.4.1/bin:/home/protectedplanet/.rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
+  /home/unepwcmc/.rvm/gems/ruby-2.6.3/bin:/home/unepwcmc/.rvm/gems/ruby-2.6.3@global/bin:/home/unepwcmc/.rvm/rubies/ruby-2.6.3/bin:/home/unepwcmc/.rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
 
 Yarn version: 
-  1.15.2
+  1.17.3
 
 Node version: 
   10.8.0
@@ -14,12 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  SyntaxError: /ProtectedPlanet/package.json: Unexpected string in JSON at position 327
-      at JSON.parse (<anonymous>)
-      at /usr/lib64/node_modules/yarn/lib/cli.js:1625:59
-      at Generator.next (<anonymous>)
-      at step (/usr/lib64/node_modules/yarn/lib/cli.js:304:30)
-      at /usr/lib64/node_modules/yarn/lib/cli.js:315:13
+  Error: ENOENT: no such file or directory, lstat '/ProtectedPlanet/node_modules/webpack-cli/bin/.eslintrc.js'
 
 npm manifest: 
   {
@@ -29,12 +24,11 @@ npm manifest:
       "bourbon": "^5.1.0",
       "bourbon-neat": "^1.9.0",
       "d3": "^5.9.2",
-      "jquery": "^3.4.0",
       "leaflet": "^1.4.0",
       "scrollmagic": "^2.0.6",
       "vue": "^2.6.10",
       "vue-loader": "^15.7.0",
-      "vue2-touch-events": "^2.0.0"
+      "vue2-touch-events": "^2.0.0",
       "vue-template-compiler": "^2.6.10",
       "vuex": "^3.1.0"
     },
@@ -2752,6 +2746,11 @@ Lockfile:
       is-date-object "^1.0.1"
       is-symbol "^1.0.2"
   
+  es6-promise@^4.2.6:
+    version "4.2.6"
+    resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.6.tgz#b685edd8258886365ea62b57d30de28fadcd974f"
+    integrity sha512-aRVgGdnmW2OiySVPUC9e6m+plolMAJKjZnQlCwNSuK5yQ0JN61DZSO1X1Ufd1foqWRAlig0rhduTCHe7sVtK5Q==
+  
   escape-html@~1.0.3:
     version "1.0.3"
     resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
@@ -3921,11 +3920,6 @@ Lockfile:
     version "0.1.2"
     resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
     integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
-  
-  jquery@^3.4.0:
-    version "3.4.1"
-    resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
-    integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
   
   js-base64@^2.1.8:
     version "2.5.1"
@@ -7142,10 +7136,20 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
     integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
   
+  vue2-touch-events@^2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/vue2-touch-events/-/vue2-touch-events-2.0.0.tgz#1a6b3df368756c21abcdbd02ffcfd6a1efe4df3d"
+    integrity sha512-t4LyihIieUif96RDMgRllrt/1qRE8Zu0dZoyqOAqAttx/TWynIshBQ8TumCj1xhog5EDaIgsihuVA6hPnssCLQ==
+  
   vue@^2.6.10:
     version "2.6.10"
     resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
     integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
+  
+  vuex@^3.1.0:
+    version "3.1.1"
+    resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.1.1.tgz#0c264bfe30cdbccf96ab9db3177d211828a5910e"
+    integrity sha512-ER5moSbLZuNSMBFnEBVGhQ1uCBNJslH9W/Dw2W7GZN23UQA69uapP5GTT9Vm8Trc0PzBSVt6LzF3hGjmv41xcg==
   
   watchpack@^1.5.0:
     version "1.6.0"

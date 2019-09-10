@@ -38,7 +38,12 @@
       <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
 
       <div>
-        <v-select-searchable :config="{ id: 'search', label: 'Search by country/region'}" :options="<%= @search_options.to_json %>"></v-select-searchable>
+        <v-select-searchable 
+          class="select--searchable"
+          :config="{ id: 'search', label: 'Search by country/region'}" 
+          :options="<%= @search_options.to_json %>"
+        >
+        </v-select-searchable>
       </div>
       
       <v-table :table-headings="<%= @country_and_regions_headings %>" data-src="/target-11-dashboard/load" class="table--horizontal-scroll"></v-table>
