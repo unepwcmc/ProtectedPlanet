@@ -2,25 +2,30 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
   PER_PAGE = 15.freeze
   STATS = {
     country: {
+      id: 'country/region',
       name: 'Country/Region',
       column_name: 'name'
     },
     coverage: {
+      id: 'coverage',
       name: 'Coverage',
       relation: 'country_statistic',
       column_name: 'percentage_pa_type_cover'
     },
     effectively_managed: {
+      id: 'effectively_managed',
       name: 'Effectiveley managed',
       relation: 'pame_statistic',
       column_name: 'pame_percentage_pa_type_cover'
     },
     well_connected: {
+      id: 'well_connected',
       name: 'Well connected',
       relation: 'country_statistic',
       column_name: 'percentage_importance',
     },
     importance: {
+      id: 'importance',
       name: 'Areas of importance for biodiversity',
       relation: 'country_statistic',
       column_name: 'percentage_importance'
@@ -35,8 +40,8 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     serialized_data = {
       page: page,
       per_page: per_page,
-      data: { head: head, body: [] },
-      total: sorted.count
+      items: [],
+      total_entries: sorted.count
     }
     # Loop through records
     sorted_and_paginated.map do |record|
@@ -49,9 +54,13 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
       STATS.reject { |key, value| key == :country }.map do |stat_name, stat|
         hash[:stats] << body_stats(stat, stat_name, record)
       end
-      serialized_data[:data][:body] << hash.dup
+      serialized_data[:items] << hash.dup
     end
     serialized_data
+  end
+
+  def serialize_head
+    head.to_json
   end
 
   private
@@ -69,13 +78,12 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     end
   end
 
-  def stats_names
-    STATS.keys.map { |key| STATS[key][:name] }
-  end
-
   def head
-    stats_names.map do |stat_name|
-      { title: stat_name }
+    STATS.map do |key, stat|
+      {
+        id: stat[:id],
+        title: stat[:name]
+      }
     end
   end
 

@@ -11,29 +11,8 @@ class TargetDashboardController < ApplicationController
     # need to get text into yml files
     ### =>
 
-    @country_and_regions_headings = [
-      {
-        id: 'country',
-        title: 'Country/Region',
-        # tooltip: need to re-think how to do the tooltips as the same ones are all over the page
-      },
-      {
-        id: 'coverage',
-        title: 'Coverage'
-      },
-      {
-        id: 'pame',
-        title: 'Effectively managed'
-      },
-      {
-        id: 'connected',
-        title: 'Well connected'
-      },
-      {
-        id: 'kba',
-        title: 'Areas of importance for biodiversity'
-      }
-    ].to_json
+    @country_and_regions_headings =
+      Aichi11TargetDashboardSerializer.new.serialize_head
   end
 
   def load_countries
