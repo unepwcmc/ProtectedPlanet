@@ -1,6 +1,6 @@
-.new-styles { //temporary until the refresh work happens
-  color: $body-font-color; //temporary until the refresh work happens
-  font-family: $body-font; //temporary until the refresh work happens
+.new-styles { //temp-refresh
+  color: $body-font-color; //temp-refresh
+  font-family: $body-font; //temp-refresh
 
   * {
     box-sizing: border-box;
@@ -16,9 +16,9 @@
   h1 { @include h1; }
   h2 { @include h2; }
   
-  p,a { color: inherit; } //can remove when old stylesheets are removed in refresh
+  p,a { color: inherit; } //temp-refresh
   
-  a:link, //override old stylesheets - can removed when refresh is done
+  a:link, //temp-refresh
   a { 
     text-decoration: underline; 
 
