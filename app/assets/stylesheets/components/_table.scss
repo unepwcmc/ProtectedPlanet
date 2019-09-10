@@ -34,6 +34,12 @@ $table-head-bg-color: $grey-lighter;
         background-color: $table-head-bg-color;
       }
 
+        &__sort {
+          @include button-plain;
+          @include icon-sort;
+          padding: rem-calc(3 6);
+        }
+
       &__row {
         @include table-row-spacing;
         @include responsive-styles(border, none, none, solid 1px $grey-light);
