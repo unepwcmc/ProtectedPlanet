@@ -9,18 +9,24 @@ import Counter from './components/counter/Counter'
 import ChartBar from './components/charts/chart-bar/ChartBar'
 import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
+import ChartDial from './components/charts/chart-dial/ChartDial'
 import ChartLine from './components/charts/chart-line/ChartLine'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
+import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
+import Row from './components/table/Row'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyNav from './components/sticky/StickyNav'
 import StickyTab from './components/sticky/StickyTab'
 import SocialShareText from './components/social/SocialShareText'
+import Tooltip from './components/tooltip/Tooltip'
 
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
 
+    Vue.use(Vue2TouchEvents)
+    
     const app = new Vue({
       el: '#v-app',
 
@@ -31,18 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartBar,
         ChartBarSimple,
         ChartBarStacked,
+        ChartDial,
         ChartLine,
         ChartTreemapInteractive,
         ChartRectangles,
+        ChartRowTarget,
         ChartSunburst,
+        Row,
         SelectWithContent,
         StickyNav,
         StickyTab,
-        SocialShareText
+        SocialShareText,
+        Tooltip
       }
     })
   }
 })
-
-
-  

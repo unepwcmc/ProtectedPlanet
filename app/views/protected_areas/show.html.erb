@@ -24,7 +24,7 @@
 
   <% unless @for_pdf %>
     <div class="header__links">
-      <div class="js-download-btn link link--hero-download u-only-desktop tooltip__trigger js-trigger">
+      <div class="js-download-btn link link--hero-download u-only-desktop tooltip-old__trigger js-trigger">
         <i class="fa fa-download"></i>Download site GIS file
         <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :shp])) %>
       </div>

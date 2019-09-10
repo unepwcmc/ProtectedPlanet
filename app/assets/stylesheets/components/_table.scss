@@ -1,0 +1,55 @@
+.table {
+  &--horizontal-scroll {
+    .table {
+      &__row {
+        @include responsive-styles(border, none, none, solid 1px $grey-light);
+        @include responsive-styles(margin-bottom, rem-calc(30), rem-calc(32), rem-calc(16));
+
+        @include breakpoint($medium) {
+          @include shadow--grey-light;
+        }
+      }
+
+        &__row-title {
+          @include responsive-styles(display, block, block, none);
+          font-size: rem-calc(18);
+          font-weight: 700;
+          margin-bottom: rem-calc(10);
+        }
+        
+        &__scroll-wrapper {
+          overflow-x: scroll;
+        }
+
+          &__scroll {
+            @include flex-nowrap;
+            @include responsive-styles(width, 380%, 140%, 100%);
+
+            display: flex;
+          }
+
+            &__cell {
+              @include shadow--grey-light;
+              @include responsive-styles(border, solid 1px $grey-light, solid 1px $grey-light, none);
+              @include responsive-styles(margin-right, rem-calc(20), rem-calc(20), 0);
+              @include responsive-styles(padding, rem-calc(8 10), rem-calc(8 10), rem-calc(18 20));
+              @include responsive-styles(width, 25%, 25%, 20%);
+
+              @include breakpoint($medium) { box-shadow: none; }
+            }
+            
+              &__cell-title {
+                @include responsive-styles(display, block, block, none);
+                font-size: rem-calc(17);
+                font-weight: 500;
+                margin-bottom: rem-calc(14);
+              }
+
+              &__cell-link {
+                font-weight: 900;
+              }
+
+              &__cell-chart:nth-child(2) { margin-bottom: rem-calc(12); }
+    }
+  }
+}

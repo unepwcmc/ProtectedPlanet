@@ -5,7 +5,7 @@
   <% if @search.present? && @search.results.count > 0 %>
     <div class="u-only-desktop js-download-btn hero__top u-center">
       <h1 class="hero__title--base hero__title"><%= search_title(params) %></h1>
-      <div class="u-only-desktop tooltip__trigger u-right js-trigger link-with-icon--bold link-with-icon">
+      <div class="u-only-desktop tooltip-old__trigger u-right js-trigger link-with-icon--bold link-with-icon">
         <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
         <%= download_dropdown('search', 'search', [:csv, :shp]) %>
       </div>
@@ -14,7 +14,7 @@
     <div class="hero hero--no-margin-bottom u-only-mobile">
       <div class="js-download-btn hero__top u-center">
         <h1 class="hero__title--base hero__title"><%= search_title(params) %></h1>
-        <div class="u-only-desktop tooltip__trigger u-right js-trigger link-with-icon--bold link-with-icon">
+        <div class="u-only-desktop tooltip-old__trigger u-right js-trigger link-with-icon--bold link-with-icon">
           <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
           <%= download_dropdown('search', 'search', [:csv, :shp]) %>
         </div>

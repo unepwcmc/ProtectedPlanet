@@ -1,0 +1,38 @@
+.new-styles { //temporary until the refresh work happens
+  * {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    color: $body-font-color;
+    font-family: $body-font;
+    margin: 0;
+  }
+
+  h1 { @include h1; }
+  h2 { @include h2; }
+
+  p,a { color: inherit; } //can remove when old stylesheets are removed in refresh
+  
+  a:link, //override old stylesheets - can removed when refresh is done
+  a { 
+    text-decoration: underline; 
+
+    &:hover { text-decoration: none; }
+  }
+}
+
+//--------------------------------------------------
+// site structure - reusable styles/mixins
+//--------------------------------------------------
+@mixin item-spacing($sides:'all', $type:'padding') {
+  $sides: if($sides == 'all', ('top','bottom','left','right'), ($sides));
+
+  @each $s in $sides {
+    #{$type}-#{$s}: $item-spacing-small;
+
+    @include breakpoint($medium) { #{$type}-#{$s}: $item-spacing-medium; }
+    @include breakpoint($large) { #{$type}-#{$s}: $item-spacing-large; }
+  }
+}

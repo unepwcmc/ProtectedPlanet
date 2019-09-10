@@ -1,0 +1,55 @@
+//--------------------------------------------------
+// settings
+//--------------------------------------------------
+$tooltip-background-color: $grey-light;
+$border-style: solid rem-calc(10);
+
+//--------------------------------------------------
+// tooltips
+//--------------------------------------------------
+.tooltip {
+  position: relative;
+
+  &__trigger {
+    cursor: pointer;
+  }
+
+  &__target {
+    @include item-spacing;
+    font-size: rem-calc(15);
+    line-height: 1.4;
+    width: rem-calc(200);
+
+    background-color: $tooltip-background-color;
+
+    position: absolute;
+    top: 145%;
+    left: 50%;
+    z-index: 1;
+
+    transform: translateX(-50%);
+
+    &:after {
+      border-bottom: $border-style $tooltip-background-color;
+      border-right: $border-style transparent;
+      border-left: $border-style transparent;
+      content: '';
+      width: 0; height: 0;
+
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+
+      transform: translateX(-50%);
+    }
+  }
+
+  &__close {
+    @include icon-button-reset;
+    @include icon-close;
+
+    position: absolute;
+    top: rem-calc(10);
+    right: rem-calc(10);
+  }
+}
