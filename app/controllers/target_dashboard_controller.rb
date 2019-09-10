@@ -34,9 +34,6 @@ class TargetDashboardController < ApplicationController
         title: 'Areas of importance for biodiversity'
       }
     ].to_json
-
-
-    @country_and_regions = Aichi11TargetDashboardSerializer.new.serialize[:data].to_json
   end
 
   def load_countries
