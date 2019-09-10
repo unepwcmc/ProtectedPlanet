@@ -6,10 +6,13 @@ class TargetDashboardController < ApplicationController
     @targets = Aichi11TargetSerializer.new.serialize
     @global_stats = Aichi11Target.get_global_stats
 
-
-    ###
-    # need to get text into yml files
-    ### =>
+    @endpoint = {
+      url: '/target-11-dashboard/load-countries',
+      params: [
+        'target_dashboard[per_page]=PERPAGE',
+        'target_dashboard[sort_by]=SORTBY'
+      ]
+    }
 
     @country_and_regions_headings =
       Aichi11TargetDashboardSerializer.new.serialize_head

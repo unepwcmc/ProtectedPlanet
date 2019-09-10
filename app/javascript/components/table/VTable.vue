@@ -34,7 +34,7 @@ export default {
       required: true
     },
     dataSrc: {
-      type: String,
+      type: Object, // { url: String, params: [ String, String ] }
       required: true
     },
     itemsPerPage: {
@@ -69,7 +69,17 @@ export default {
         sortField = this.$store.state.table.sortField
         // searchTerm = this.$store.state.table.searchTerm
 
-      const endpoint = `${this.dataSrc}?target_dashboard[per_page]=${itemsPerPage}`
+      let endpoint = `${this.dataSrc.url}`
+
+      if(this.dataSrc.params) {
+        endpoint += '?'
+
+        endpoint += this.dataSrc.params.join('&')
+      }
+
+      endpoint = endpoint.replace('PERPAGE', itemsPerPage)
+      endpoint = endpoint.replace('SORTBY', sortField)
+
 
       axios.get(endpoint)
         .then(response => {

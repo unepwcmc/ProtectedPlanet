@@ -39,7 +39,7 @@
 
       <p>sticky bar</p>
       
-      <v-table :table-headings="<%= @country_and_regions_headings %>" data-src="/target-11-dashboard/load-countries" class="table--horizontal-scroll"></v-table>
+      <v-table :table-headings="<%= @country_and_regions_headings %>" :data-src="<%= @endpoint.to_json %>" class="table--horizontal-scroll"></v-table>
     </section>
   </main>
 </div>
