@@ -24,6 +24,7 @@ import StickyNav from './components/sticky/StickyNav'
 import StickyTab from './components/sticky/StickyTab'
 import SocialShareText from './components/social/SocialShareText'
 import Tooltip from './components/tooltip/Tooltip'
+import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
 
 // eventhub
@@ -55,8 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
         StickyNav,
         StickyTab,
         SocialShareText,
-        VTable,
-        Tooltip
+        Tooltip,
+        VSelectSearchable,
+        VTable
       }
     })
   }

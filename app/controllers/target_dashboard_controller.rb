@@ -7,6 +7,17 @@ class TargetDashboardController < ApplicationController
     @global_stats = Aichi11Target.get_global_stats
     
 
+    @search_options = [
+      {
+        id: 'FRA', # Or whatever you need in the back end
+        name: 'France'
+      }, 
+      {
+        id: 'ESP',
+        name: 'Spain'
+      }
+    ]
+
     ###
     # need to get text into yml files
     ###
