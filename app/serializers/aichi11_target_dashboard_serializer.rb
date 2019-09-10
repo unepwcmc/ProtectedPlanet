@@ -22,7 +22,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
       id: 'well_connected',
       name: 'Well connected',
       relation: 'country_statistic',
-      column_name: 'percentage_importance',
+      column_name: 'percentage_well_connected',
     },
     importance: {
       id: 'importance',
@@ -66,15 +66,16 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
   private
 
   def sort_by
+    _sort_by = @params[:sort_by]
     sort_field_land = 'percentage_pa_land_cover'
     sort_field_marine = 'percentage_pa_marine_cover'
-    case @params[:sort_by]
+    case _sort_by
     when 'coverage'
       "(#{sort_field_land} + #{sort_field_marine})"
     when 'effectively_managed'
       "(pame_#{sort_field_land} + pame_#{sort_field_marine})"
     else
-      super
+      _sort_by.present? ? STATS[_sort_by.to_sym][:column_name] : super
     end
   end
 
