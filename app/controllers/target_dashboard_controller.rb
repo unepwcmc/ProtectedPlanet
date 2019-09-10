@@ -5,17 +5,11 @@ class TargetDashboardController < ApplicationController
     @countries = CountrySerializer.new({}, countries).serialize
     @targets = Aichi11TargetSerializer.new.serialize
     @global_stats = Aichi11Target.get_global_stats
-    
-
-    ###
-    # need to get text into yml files
-    ###
 
     @country_and_regions = {
       head: [
         {
           title: 'Country/Region',
-          # tooltip: need to re-think how to do the tooltips as the same ones are all over the page
         },
         {
           title: 'Coverage'
