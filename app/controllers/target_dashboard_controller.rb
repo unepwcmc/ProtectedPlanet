@@ -9,8 +9,10 @@ class TargetDashboardController < ApplicationController
     @endpoint = {
       url: '/target-11-dashboard/load-countries',
       params: [
+        'target_dashboard[page]=PAGE',
         'target_dashboard[per_page]=PERPAGE',
-        'target_dashboard[sort_by]=SORTBY'
+        'target_dashboard[sort_by]=SORTBY',
+        'target_dashboard[order]=ORDER'
       ]
     }
 

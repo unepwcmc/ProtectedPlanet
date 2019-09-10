@@ -63,10 +63,11 @@ export default {
     },
 
     getNewItems () {
-      const itemsPerPage = this.itemsPerPage,
-        requestedPage = this.$store.state.table.requestedPage,
-        sortDirection = this.$store.state.table.sortDirection,
-        sortField = this.$store.state.table.sortField
+      const storeTable = this.$store.state.table,
+        itemsPerPage = this.itemsPerPage,
+        requestedPage = storeTable.requestedPage,
+        sortDirection = storeTable.sortDirection,
+        sortField = storeTable.sortField
         // searchTerm = this.$store.state.table.searchTerm
 
       let endpoint = `${this.dataSrc.url}`
@@ -78,8 +79,9 @@ export default {
       }
 
       endpoint = endpoint.replace('PERPAGE', itemsPerPage)
+      endpoint = endpoint.replace('PAGE', requestedPage)
       endpoint = endpoint.replace('SORTBY', sortField)
-
+      endpoint = endpoint.replace('ORDER', sortDirection)
 
       axios.get(endpoint)
         .then(response => {
