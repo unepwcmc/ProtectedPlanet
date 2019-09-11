@@ -26,6 +26,23 @@
   width: rem-calc(23); height: rem-calc(23);
 }
 
+@mixin icon-sort() {
+  &::before {
+    @include triangle(rem-calc(8), rem-calc(7), $grey); // ($base, $height, $color, $direction:'up')
+    content: '';
+    margin-bottom: rem-calc(1);
+
+    display: block;
+  }
+
+  &::after {
+    @include triangle(rem-calc(8), rem-calc(7), $grey, 'down'); // ($base, $height, $color, $direction:'up')
+    content: '';
+
+    display: block;
+  }
+}
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
@@ -50,4 +67,6 @@
       left: 0;
     }
   }
+
+  &--sort { @include icon-sort; }
 }

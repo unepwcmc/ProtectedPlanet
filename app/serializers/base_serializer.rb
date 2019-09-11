@@ -86,11 +86,11 @@ class BaseSerializer
   end
 
   def sort_by
-    @params[:sort_by]
+    @params[:sort_by].presence
   end
 
   def order
-    @params[:order]
+    @params[:order].presence
   end
 
   def page

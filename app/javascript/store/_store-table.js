@@ -1,3 +1,5 @@
+import { eventHub } from '../vue.js'
+
 export const storeTable = {
   namespaced: true,
 
@@ -8,7 +10,7 @@ export const storeTable = {
   },
 
   actions: {
-    updateSortParameters ({ commit }, sortParamters) {
+    updateSortParameters ({ commit, state }, sortParamters) {
       commit('updateSortDirection', sortParamters.direction)
       commit('updateSortField', sortParamters.field)
       commit('updateRequestedPage', 1)
@@ -17,13 +19,13 @@ export const storeTable = {
 
   mutations: {
     updateRequestedPage (state, page) {
-      this.state.requestedPage = page
+      state.requestedPage = page
     },
     updateSortDirection (state, direction) {
-      this.state.sortDirection = direction
+      state.sortDirection = direction
     },
     updateSortField (state, field) {
-      this.state.sortField = field
+      state.sortField = field
     },
   }
 }

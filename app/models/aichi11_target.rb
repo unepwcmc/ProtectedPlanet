@@ -23,14 +23,15 @@ class Aichi11Target < ActiveRecord::Base
   }.freeze
   def self.get_global_stats
     global_stats = Stats::CountryStatisticsApi.get_global_stats
+    pp_global_stats = []
     stats.each do |name, attributes|
       json = { title: attributes[:name], charts: [] }
       terrestrial_chart = DEFAULT_CHART_JSON.merge(**TERRESTRIAL, **attributes[:terrestrial])
       marine_chart = DEFAULT_CHART_JSON.merge(**MARINE, **attributes[:marine])
       json[:charts] = [terrestrial_chart, marine_chart]
-      global_stats << json.dup
+      pp_global_stats << json.dup
     end
-    global_stats
+    global_stats.unshift(*pp_global_stats)
   end
 
   def self.import

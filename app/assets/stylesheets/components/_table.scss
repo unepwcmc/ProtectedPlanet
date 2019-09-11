@@ -22,7 +22,6 @@ $table-head-bg-color: $grey-lighter;
 // tables
 //--------------------------------------------------
   &--horizontal-scroll {
-    // color: $body-cont-color;
     font-family: $table-font;
 
     .table {
@@ -58,12 +57,21 @@ $table-head-bg-color: $grey-lighter;
             @include flex-nowrap;
             @include responsive-styles(width, 380%, 140%, 100%);
 
-            display: flex;
+            display: flex; //temp-refresh
           }
 
             &__cell--heading {
               @include table-cell-basic;
+              align-items: center; //temp-refresh
+
+              display: flex; //temp-refresh
             }
+
+              &__sort {
+                @include button-plain;
+                @include icon-sort;
+                padding: rem-calc(3 6);
+              }
 
             &__cell--body {
               @include table-cell-basic;
