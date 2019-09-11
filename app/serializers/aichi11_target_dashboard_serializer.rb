@@ -66,7 +66,8 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
   private
 
   def sort_by
-    _sort_by = @params[:sort_by]
+    # Splitting by / for the country/region parameter
+    _sort_by = @params[:sort_by].split('/').first
     sort_field_land = 'percentage_pa_land_cover'
     sort_field_marine = 'percentage_pa_marine_cover'
     case _sort_by
