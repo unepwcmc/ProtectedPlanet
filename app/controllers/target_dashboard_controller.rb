@@ -6,6 +6,19 @@ class TargetDashboardController < ApplicationController
     @targets = Aichi11TargetSerializer.new.serialize
     @global_stats = Aichi11Target.get_global_stats
 
+    @search_config = { id: 'search', label: t('thematic_area.target_11_dashboard.search_config.label') }.to_json
+
+    @search_options = [
+      {
+        id: 'FRA', #TODO @FERDI or whatever you want the ids to be
+        name: 'France'
+      },
+      {
+        id: 'ESP',
+        name: 'Spain'
+      }
+    ].to_json
+
     @endpoint = {
       url: '/target-11-dashboard/load-countries',
       params: [

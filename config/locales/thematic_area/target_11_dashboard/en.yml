@@ -7,3 +7,5 @@ en:
       tooltips:
         coverage: "Proportion of a country's terrestrial or marine area coverage with protected areas. Statistics updated monthly. Source: WDPA (hyperlink to PP) (UNEP-WCMC & IUCN) 2. Tab 'Effectively managed': info tab should read: 'Proportion of a country's terrestrial or marine protected area network where management effectiveness evaluations have been reported as being undertaken'. Statistics updated monthly. Source: WDPA and GD-PAME"
         pame: Lorem ipsum
+      search_config: 
+        label: Search by country/region

@@ -40,8 +40,8 @@
       <div>
         <v-select-searchable 
           class="select--searchable"
-          :config="{ id: 'search', label: 'Search by country/region'}" 
-          :options="<%= @search_options.to_json %>"
+          :config="<%= @search_config %>" 
+          :options="<%= @search_options %>"
         >
         </v-select-searchable>
       </div>
