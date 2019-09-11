@@ -12,7 +12,7 @@
     
     <div class="table__scroll-wrapper">
       <div class="table__scroll">
-        <div class="table__cell breakpoint-medium-up">
+        <div class="table__cell--body breakpoint-medium-up">
           <a 
             :href="row.url"
             class="table__cell-link"
@@ -24,7 +24,7 @@
 
         <div
           v-for="stat in row.stats"
-          class="table__cell"
+          class="table__cell--body"
         >
           <p class="table__cell-title">{{ stat.title }}</p>
 
@@ -48,7 +48,7 @@ import mixinId from '../../mixins/mixin-ids'
 import ChartRowTarget from '../charts/chart-row-target/ChartRowTarget.vue'
 
 export default {
-  name: 'Row',
+  name: 'TableRow',
 
   components: { ChartRowTarget },
 

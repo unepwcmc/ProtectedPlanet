@@ -19,7 +19,7 @@
               <i class="icon--info-circle block"></i>
             </tooltip>
 
-            <h3><%= stat[:title] %></h3>
+            <h3 class="carousel__slide-title"><%= stat[:title] %></h3>
             
             <% stat[:charts].each do |chart| %>
               <chart-dial
@@ -39,9 +39,7 @@
 
       <p>sticky bar</p>
       
-      <div class="table--horizontal-scroll">
-        <row :row="<%= @row %>"></row>
-      </div>
+      <v-table :json="<%= @country_and_regions %>" class="table--horizontal-scroll"></v-table>
     </section>
   </main>
 </div>

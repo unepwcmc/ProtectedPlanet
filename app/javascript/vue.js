@@ -15,12 +15,12 @@ import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTree
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
-import Row from './components/table/Row'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyNav from './components/sticky/StickyNav'
 import StickyTab from './components/sticky/StickyTab'
 import SocialShareText from './components/social/SocialShareText'
 import Tooltip from './components/tooltip/Tooltip'
+import VTable from './components/table/VTable'
 
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
@@ -43,11 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRectangles,
         ChartRowTarget,
         ChartSunburst,
-        Row,
         SelectWithContent,
         StickyNav,
         StickyTab,
         SocialShareText,
+        VTable,
         Tooltip
       }
     })

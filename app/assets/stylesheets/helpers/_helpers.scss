@@ -21,6 +21,7 @@
 }
 
 @mixin shadow--grey-light { @include box-shadow($grey-light); }
+@mixin shadow--grey { @include box-shadow($grey); }
 
 //--------------------------------------------------
 // fouc (flash of unstyled content)
