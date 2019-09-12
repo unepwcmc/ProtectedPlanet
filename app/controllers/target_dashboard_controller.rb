@@ -8,9 +8,9 @@ class TargetDashboardController < ApplicationController
 
     @search_config = { id: 'search', label: t('thematic_area.target_11_dashboard.search_config.label') }.to_json
 
-    @search_options = [
+    @search_options = [ #this should be the list of countries and regions,
       {
-        id: 'FRA', #TODO @FERDI or whatever you want the ids to be
+        id: 'FRA', #TODO @FERDI or whatever you want the ids to be this is what will be sent to the backend (but that can be changed if you need the name as well)
         name: 'France'
       },
       {
@@ -25,7 +25,8 @@ class TargetDashboardController < ApplicationController
         'target_dashboard[page]=PAGE',
         'target_dashboard[per_page]=PERPAGE',
         'target_dashboard[sort_by]=SORTBY',
-        'target_dashboard[order]=ORDER'
+        'target_dashboard[order]=ORDER',
+        #'target_dashboard[search_term]=SEARCHTERM #TODO @FERDI make this work!
       ]
     }
 

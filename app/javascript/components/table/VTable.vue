@@ -51,6 +51,7 @@ export default {
 
   created () {
     eventHub.$on('getNewItems', this.getNewItems)
+    eventHub.$on('request:search', this.getNewItems)
   },
 
   mounted () {
@@ -67,8 +68,10 @@ export default {
         itemsPerPage = this.itemsPerPage,
         requestedPage = storeTable.requestedPage,
         sortDirection = storeTable.sortDirection,
-        sortField = storeTable.sortField
-        // searchTerm = this.$store.state.table.searchTerm
+        sortField = storeTable.sortField,
+        searchTerm = storeTable.searchTerm.id
+
+      console.log(searchTerm)
 
       let endpoint = `${this.dataSrc.url}`
 
@@ -82,6 +85,7 @@ export default {
       endpoint = endpoint.replace('PAGE', requestedPage)
       endpoint = endpoint.replace('SORTBY', sortField)
       endpoint = endpoint.replace('ORDER', sortDirection)
+      endpoint = endpoint.replace('SEARCHTERM', searchTerm)
 
       axios.get(endpoint)
         .then(response => {

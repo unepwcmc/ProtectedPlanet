@@ -26,6 +26,12 @@
   width: rem-calc(23); height: rem-calc(23);
 }
 
+@mixin icon-search() {
+  @include icon-basic;
+  background-image: image-url('icons/search.svg');
+  width: rem-calc(30); height: rem-calc(30); 
+}
+
 @mixin icon-sort() {
   &::before {
     @include triangle(rem-calc(8), rem-calc(7), $grey); // ($base, $height, $color, $direction:'up')
@@ -51,22 +57,26 @@
 
   &--info-circle { @include icon-info; }
 
-  &--info {
+  &--info { //temp-refresh
     padding-left: rem-calc(24);
     position: relative;
 
     &:before {
-      @include text--icon(body);
-
-      color: $info-box__icon-color;
+      color: #317fce;
       content: '\f05a';
-      display: inline-block;
+      font-family: 'FontAwesome';
+      font-size: rem-calc(16),;
+      font-weight: normal;
+      line-height: rem-calc(21);
 
+      display: inline-block;
       position: absolute;
       top: rem-calc(-2);
       left: 0;
     }
   }
+
+  &--search { @include icon-search; }
 
   &--sort { @include icon-sort; }
 }

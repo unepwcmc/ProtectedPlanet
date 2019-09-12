@@ -43,9 +43,10 @@
       >
 
       <span class="v-select__search-icons">
-        <span
+        <button
           v-show="!showResetIcon"
           class="v-select__search-icon"
+          @click="search"
         />
         <button 
           v-show="showResetIcon"
@@ -85,6 +86,7 @@
 <script>
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
 import mixinSelectShared from '../../mixins/mixin-select-shared'
+import { eventHub } from '../../vue.js'
 const UNDEFINED_ID = '__UNDEFINED__'
 const UNDEFINED_OBJECT = { id: UNDEFINED_ID, name: 'None' }
 
@@ -136,7 +138,7 @@ export default {
     },
 
     selectedInternal (newSelectedInternal) {
-      this.$emit('update:selected-option', newSelectedInternal)
+      this.$store.dispatch('table/updateSearchTerm', newSelectedInternal)
     }
   },
 
@@ -151,6 +153,11 @@ export default {
   },
 
   methods: {
+    search () {
+      console.log('search')
+      eventHub.$emit('request:search')
+    },
+
     closeSelect () {
       this.setSearchTermToSelected()
       this.resetHighlightedIndex()

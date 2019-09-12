@@ -9,10 +9,10 @@ $chart-font-color: $body-font-color;
 //--------------------------------------------------
 // charts
 //--------------------------------------------------
-  @import './chart-dial';
-  @import './chart-row-target';
-  @import './horizontal-bar-chart';
-  @import './interactive-multiline';
-  @import './interactive-treemap';
-  @import './sunburst';
+  @import './charts/chart-dial';
+  @import './charts/chart-row-target';
+  @import './charts/horizontal-bar-chart';
+  @import './charts/interactive-multiline';
+  @import './charts/interactive-treemap';
+  @import './charts/sunburst';
 }

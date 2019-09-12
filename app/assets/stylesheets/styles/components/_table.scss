@@ -23,6 +23,7 @@ $table-head-bg-color: $grey-lighter;
 //--------------------------------------------------
   &--horizontal-scroll {
     font-family: $table-font;
+    margin-top: rem-calc(26);
 
     .table {
       &__head {

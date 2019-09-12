@@ -1,0 +1,94 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$select-width: rem-calc(500);
+$select-height: rem-calc(48);
+
+$select-padding-side: rem-calc(12);
+$select-padding: rem-calc(10) $select-padding-side;
+
+$select-input-padding-right: rem-calc(30);
+$search-icon-padding-right: 2 * $select-padding-side;
+
+//--------------------------------------------------
+// selects
+//--------------------------------------------------
+.v-select {
+  &--searchable {
+    @include input-margin;
+    width: $select-width;
+
+    position: relative;
+
+    .v-select {
+
+      &__label { }
+
+      &__search {
+        &--active { 
+          .v-select__search-input { 
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+        }
+      }
+
+        &__search-input {
+          @include input-plain;
+          @include input-basic;
+          @include input-text;
+          padding-right: $select-input-padding-right;
+          width: 100%; height: $select-height;
+          
+
+          &::-ms-clear { display: none; }
+        }
+
+        &__search-icons {
+          @extend .flex-center;
+          height: 100%;
+
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+
+          &__search-icon {
+            @include button-plain;
+            @include icon-search;
+            font: inherit;
+            margin-right: $search-icon-padding-right;
+            margin-left: $select-padding-side;
+            padding: 0;
+
+            display: inline-block;
+
+            position: relative;
+
+            &--reset {
+              background-image: image-url('icons/close.svg');
+              background-size: 75%;
+            }
+          }
+
+      &__dropdown {
+        @include input-basic;
+        background-color: $white;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-top: none;
+        padding: 0;
+        width: 100%;
+      }
+
+        &__option {
+          @include input-text;
+          padding: $select-padding;
+
+          &:hover {
+            background-color: $grey-light;
+          }
+        }
+    }
+  }
+}

@@ -14,8 +14,6 @@
  * *= require_self
  */
 
-@import 'utilities/rem-calc';
-
 // grids
 @import 'bourbon/core/bourbon';
 @import 'bourbon-neat/app/assets/stylesheets/neat';
@@ -29,8 +27,6 @@
 @import 'utilities/flexbox';
 @import 'utilities/accessibility';
 @import 'utilities/bem';
-@import 'utilities/responsive';
-@import 'utilities/text';
 
 // variables
 @import 'variables/colors';
@@ -39,8 +35,6 @@
 @import 'variables/fonts';
 @import 'variables/z-index';
 // variables
-
-@import './base';
 
 // atoms
 @import 'atoms/fonts';
@@ -154,16 +148,19 @@
 @import 'templates/site';
 //templates
 
-//charts 
-@import 'charts/charts';
-//charts
-
 @import 'utilities/u-classes';
 
 @import 'custom';
 
 @import './map/custom-leaflet';
 
-@import './helpers/*';
-
-@import './components/*';
+@import './styles/base';
+@import './styles/helpers/**/*';
+@import './styles/components/icons';
+@import './styles/components/carousel';
+@import './styles/components/charts';
+@import './styles/components/hero';
+@import './styles/components/form';
+@import './styles/components/table';
+@import './styles/components/tooltip';
+// @import './styles/pages/**/*';
