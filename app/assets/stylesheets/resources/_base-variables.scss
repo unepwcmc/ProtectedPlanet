@@ -29,15 +29,19 @@
 // $white: #ffffff;
 // $black: #000000;
 
+$grey-lighter: #F5F5F5;
 $grey-light: #e1e1e1;
 $grey: #505050;
 $grey-dark: #8f8f8f;
-$grey-darker: #666666;
+$grey-darker: #44483E;
 
-$blue: #4D98BF;
-// $green: #84B145;
+// $blue-light: #54B7EB; //can't use these until the refresh because of old colours
+// $blue: #4D98BF;
+// $green-light: #B1D680;
 $green: #71a32b;
-$green--darker: #415519;
+$green--darker: #415519; 
+
+$purple: #9691D1;
 
 $primary: $green;
 $primary-dark: $green--darker;
@@ -45,8 +49,9 @@ $primary-dark: $green--darker;
 // $accent-light: lighten($green, 15%);
 // $accent: $green;
 
-$terrestrial: $green;
-$marine: $blue;
+$global: $purple;
+$marine: #54B7EB;
+$terrestrial: #B1D680;
 
 //--------------------------------------------------
 // buttons
@@ -67,8 +72,8 @@ $marine: $blue;
 //--------------------------------------------------
 // fonts
 //--------------------------------------------------
-// $body-font: 'Open Sans', sans-serif;
-// $body-font-color: $black;
+$body-font: 'MuseoSlab', serif;
+$body-font-color: $grey-darker;
 
 $header-font: 'Museo Sans', sans-serif;
 $header-font-color: $grey-darker;
@@ -125,13 +130,13 @@ $gutter-large: rem-calc(32);
 // $page-padding-bottom-medium: rem-calc(60);
 // $page-padding-bottom-large: rem-calc(80);
 
-// $section-padding-top-small: rem-calc(20);
-// $section-padding-top-medium: rem-calc(40);
-// $section-padding-top-large: rem-calc(40);
+$section-padding-top-mobile: rem-calc(20);
+$section-padding-top-tablet: rem-calc(40);
+$section-padding-top-desktop: rem-calc(40);
 
-// $section-padding-bottom-small: rem-calc(30);
-// $section-padding-bottom-medium: rem-calc(60);
-// $section-padding-bottom-large: rem-calc(60);
+$section-padding-bottom-mobile: rem-calc(30);
+$section-padding-bottom-tablet: rem-calc(60);
+$section-padding-bottom-desktop: rem-calc(60);
 
 $item-spacing-small: rem-calc(14);
 $item-spacing-medium: rem-calc(20);

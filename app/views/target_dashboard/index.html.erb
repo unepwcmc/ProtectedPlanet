@@ -1,10 +1,10 @@
-<div id="new-styles" class="container--profile container--push-bottom">
+<div class="new-styles container--profile container--push-bottom">
   <header class="hero--thematic-area center">
     <h1 class="hero__title hero__title--article"><%= t('thematic_area.target_11_dashboard.title') %></h1> 
   </header>
 
   <main>
-    <section>
+    <section class="section-padding--top">
       <h2><%= t('thematic_area.target_11_dashboard.subtitle_1') %></h2>
 
       <carousel class="carousel--basic" :show-arrows="false" :show-all-indicators="true">
@@ -19,7 +19,7 @@
               <i class="icon--info-circle block"></i>
             </tooltip>
 
-            <h3><%= stat[:title] %></h3>
+            <h3 class="carousel__slide-title"><%= stat[:title] %></h3>
             
             <% stat[:charts].each do |chart| %>
               <chart-dial
@@ -34,14 +34,19 @@
       </carousel>
     </section>
 
-    <section class="sm-trigger-sticky">
+    <section class="sm-trigger-sticky section-padding--top">
       <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
-      
-      <sticky-bar>
-        <p>sticky bar</p>
-      </sticky-bar>
 
-      <p>table</p>
+      <sticky-bar>
+        <v-select-searchable 
+          class="v-select--searchable"
+          :config="<%= @search_config %>" 
+          :options="<%= @search_options %>"
+        >
+        </v-select-searchable>
+      </sticky-bar>
+      
+      <v-table :table-headings="<%= @country_and_regions_headings %>" :data-src="<%= @endpoint.to_json %>" class="table--horizontal-scroll"></v-table>
     </section>
   </main>
 </div>

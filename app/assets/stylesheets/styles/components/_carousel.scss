@@ -125,6 +125,11 @@ $transition-options: 0.6s ease-in-out;
           width: 50%;
         }
 
+        &__slide-title {
+          @include responsive-styles(margin, 0, rem-calc(0 5), rem-calc(0 10));
+          font-family: $header-font;
+        }
+
         &__tooltip {
           position: absolute;
           top: rem-calc(10);
@@ -133,10 +138,10 @@ $transition-options: 0.6s ease-in-out;
     }
 
     .carousel-slide {
+      @include shadow--grey-light;
       @include responsive-styles(width, 100%, calc(40% - 5px), calc(20% - 10px));
       @include responsive-styles(margin, 0, rem-calc(0 5), rem-calc(0 10));
       border: solid 1px $grey-light;
-      box-shadow: 2px 2px 4px $grey-light;
       padding: rem-calc(16 0);
 
       position: relative;

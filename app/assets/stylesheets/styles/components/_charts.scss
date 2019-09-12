@@ -1,0 +1,18 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-item-background: $grey-light;
+$chart-font: $header-font;
+$chart-font-color: $body-font-color;
+
+.chart {
+//--------------------------------------------------
+// charts
+//--------------------------------------------------
+  @import './charts/chart-dial';
+  @import './charts/chart-row-target';
+  @import './charts/horizontal-bar-chart';
+  @import './charts/interactive-multiline';
+  @import './charts/interactive-treemap';
+  @import './charts/sunburst';
+}

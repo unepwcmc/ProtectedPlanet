@@ -1,0 +1,98 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$select-width-desktop: rem-calc(500);
+$select-height: rem-calc(48);
+
+$select-padding-side: rem-calc(12);
+$select-padding: rem-calc(10) $select-padding-side;
+
+$search-icon-padding-right: rem-calc(18);
+$search-icon-padding-left: $select-padding-side;
+
+$select-input-padding-right: calc(#{$search-icon-padding-right} + #{$search-icon-padding-left} + #{$icon-search-width});
+
+//--------------------------------------------------
+// selects
+//--------------------------------------------------
+.v-select {
+  &--searchable {
+    @include input-margin;
+    @include responsive-styles(width, 100%, $select-width-desktop, $select-width-desktop);
+
+    position: relative;
+
+    .v-select {
+
+      &__label { }
+
+      &__search {
+        &--active { 
+          .v-select__search-input { 
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+        }
+      }
+
+        &__search-input {
+          @include input-plain;
+          @include input-basic;
+          @include input-text;
+          padding-right: $select-input-padding-right;
+          width: 100%; height: $select-height;
+          
+
+          &::-ms-clear { display: none; }
+        }
+
+        &__search-icons {
+          display: flex; //temp-refresh
+          align-items: center; //temp-refresh
+          justify-content: center; //temp-refresh
+          height: 100%;
+
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+
+          &__search-icon {
+            @include button-plain;
+            @include icon-search;
+            font: inherit;
+            margin-right: $search-icon-padding-right;
+            margin-left: $search-icon-padding-left;
+            padding: 0;
+
+            display: inline-block;
+
+            position: relative;
+
+            &--reset {
+              background-image: image-url('icons/close.svg');
+              background-size: 75%;
+            }
+          }
+
+      &__dropdown {
+        @include input-basic;
+        background-color: $white;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-top: none;
+        padding: 0;
+        width: 100%;
+      }
+
+        &__option {
+          @include input-text;
+          padding: $select-padding;
+
+          &:hover {
+            background-color: $grey-light;
+          }
+        }
+    }
+  }
+}

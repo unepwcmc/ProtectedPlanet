@@ -1,0 +1,61 @@
+.new-styles { //temp-refresh
+  color: $body-font-color; //temp-refresh
+  font-family: $body-font; //temp-refresh
+
+  * {
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  // body {
+  //   color: $body-font-color;
+  //   font-family: $body-font;
+  //   margin: 0;
+  // }
+
+  h1 { @include h1; }
+  h2 { @include h2; }
+  
+  p,a { color: inherit; } //temp-refresh
+  
+  a:link, //temp-refresh
+  a { 
+    text-decoration: underline; 
+
+    &:hover { text-decoration: none; }
+  }
+}
+
+//--------------------------------------------------
+// section padding
+//--------------------------------------------------
+.section-padding--top {
+  padding-top: $section-padding-top-mobile;
+  @include breakpoint($small) { padding-top: $section-padding-top-tablet; }
+  @include breakpoint($medium) { padding-top: $section-padding-top-desktop; }
+}
+
+.section-padding--bottom {
+  padding-bottom: $section-padding-bottom-mobile;
+  @include breakpoint($small) { padding-bottom: $section-padding-bottom-tablet; }
+  @include breakpoint($medium) { padding-bottom: $section-padding-bottom-desktop; }
+}
+
+.section-padding {
+  @extend .section-padding--top;
+  @extend .section-padding--bottom;
+}
+
+//--------------------------------------------------
+// item padding
+//--------------------------------------------------
+@mixin item-spacing($sides:'all', $type:'padding') {
+  $sides: if($sides == 'all', ('top','bottom','left','right'), ($sides));
+
+  @each $s in $sides {
+    #{$type}-#{$s}: $item-spacing-small;
+
+    @include breakpoint($medium) { #{$type}-#{$s}: $item-spacing-medium; }
+    @include breakpoint($large) { #{$type}-#{$s}: $item-spacing-large; }
+  }
+}
