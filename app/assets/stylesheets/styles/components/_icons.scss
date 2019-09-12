@@ -1,4 +1,9 @@
 //--------------------------------------------------
+// variables
+//--------------------------------------------------
+$icon-search-width: rem-calc(21);
+
+//--------------------------------------------------
 // mixins
 //--------------------------------------------------
 @mixin icon-basic() {
@@ -29,7 +34,7 @@
 @mixin icon-search() {
   @include icon-basic;
   background-image: image-url('icons/search.svg');
-  width: rem-calc(30); height: rem-calc(30); 
+  width: $icon-search-width; height: rem-calc(23); 
 }
 
 @mixin icon-sort() {

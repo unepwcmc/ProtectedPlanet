@@ -51,7 +51,7 @@ export default {
 
   created () {
     eventHub.$on('getNewItems', this.getNewItems)
-    eventHub.$on('request:search', this.getNewItems)
+    eventHub.$on('update:selectedInternal', this.getNewItems)
   },
 
   mounted () {

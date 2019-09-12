@@ -6,7 +6,7 @@ class TargetDashboardController < ApplicationController
     @targets = Aichi11TargetSerializer.new.serialize
     @global_stats = Aichi11Target.get_global_stats
 
-    @search_config = { id: 'search', label: t('thematic_area.target_11_dashboard.search_config.label') }.to_json
+    @search_config = { id: 'search', placeholder: t('thematic_area.target_11_dashboard.search_config.label') }.to_json
 
     @search_options = [ #this should be the list of countries and regions,
       {

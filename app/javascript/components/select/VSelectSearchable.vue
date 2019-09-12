@@ -23,6 +23,7 @@
 
     <div :class="['v-select__search relative', {'v-select__search--active': isActive}]">
       <label
+        v-if="config.label"
         class="screen-reader"
         :for="searchId"
       >{{ config.label }} search</label>
@@ -37,7 +38,7 @@
         :aria-expanded="showOptions.toString()"
         :aria-owns="dropdownId"
         :aria-activedescendant="highlightedOptionId" 
-        :placeholder="placeholder"
+        :placeholder="config.placeholder"
         :disabled="isDisabled"
         @focus="openSelect"
       >
@@ -101,7 +102,7 @@ export default {
   props: {
     config: {
       required: true,
-      type: Object // { id: String, label: String }
+      type: Object // { id: String, label: String, placeholder: String }
     },
     options: {
       default: () => [],
@@ -139,6 +140,7 @@ export default {
 
     selectedInternal (newSelectedInternal) {
       this.$store.dispatch('table/updateSearchTerm', newSelectedInternal)
+      eventHub.$emit('update:selectedInternal')
     }
   },
 
@@ -153,11 +155,6 @@ export default {
   },
 
   methods: {
-    search () {
-      console.log('search')
-      eventHub.$emit('request:search')
-    },
-
     closeSelect () {
       this.setSearchTermToSelected()
       this.resetHighlightedIndex()

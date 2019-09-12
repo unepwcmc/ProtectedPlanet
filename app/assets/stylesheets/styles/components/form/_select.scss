@@ -1,14 +1,16 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$select-width: rem-calc(500);
+$select-width-desktop: rem-calc(500);
 $select-height: rem-calc(48);
 
 $select-padding-side: rem-calc(12);
 $select-padding: rem-calc(10) $select-padding-side;
 
-$select-input-padding-right: rem-calc(30);
-$search-icon-padding-right: 2 * $select-padding-side;
+$search-icon-padding-right: rem-calc(18);
+$search-icon-padding-left: $select-padding-side;
+
+$select-input-padding-right: calc(#{$search-icon-padding-right} + #{$search-icon-padding-left} + #{$icon-search-width});
 
 //--------------------------------------------------
 // selects
@@ -16,7 +18,7 @@ $search-icon-padding-right: 2 * $select-padding-side;
 .v-select {
   &--searchable {
     @include input-margin;
-    width: $select-width;
+    @include responsive-styles(width, 100%, $select-width-desktop, $select-width-desktop);
 
     position: relative;
 
@@ -45,7 +47,9 @@ $search-icon-padding-right: 2 * $select-padding-side;
         }
 
         &__search-icons {
-          @extend .flex-center;
+          display: flex; //temp-refresh
+          align-items: center; //temp-refresh
+          justify-content: center; //temp-refresh
           height: 100%;
 
           position: absolute;
@@ -58,7 +62,7 @@ $search-icon-padding-right: 2 * $select-padding-side;
             @include icon-search;
             font: inherit;
             margin-right: $search-icon-padding-right;
-            margin-left: $select-padding-side;
+            margin-left: $search-icon-padding-left;
             padding: 0;
 
             display: inline-block;
