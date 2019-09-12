@@ -47,7 +47,6 @@
         <button
           v-show="!showResetIcon"
           class="v-select__search-icon"
-          @click="search"
         />
         <button 
           v-show="showResetIcon"

@@ -34,10 +34,10 @@
       </carousel>
     </section>
 
-    <section class="sm-trigger-sticky section-padding--top">
+    <section class="sm-trigger-sticky-bar section-padding--top">
       <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
 
-      <sticky-bar>
+      <sticky-bar trigger-element=".sm-trigger-sticky-bar">
         <v-select-searchable 
           class="v-select--searchable"
           :config="<%= @search_config %>" 
