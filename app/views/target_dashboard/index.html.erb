@@ -47,7 +47,12 @@
         </v-select-searchable>
       </sticky-bar>
       
-      <v-table :table-headings="<%= @country_and_regions_headings %>" :data-src="<%= @endpoint.to_json %>" class="table--horizontal-scroll"></v-table>
+      <v-table 
+        :table-headings="<%= @country_and_regions_headings %>" 
+        :data-src="<%= @endpoint.to_json %>"
+        trigger-element="sm-trigger-infinite-scroll"
+        class="table--horizontal-scroll"
+      ></v-table>
     </section>
   </main>
 </div>

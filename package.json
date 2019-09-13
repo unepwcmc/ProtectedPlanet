@@ -6,6 +6,7 @@
     "bourbon-neat": "^1.9.0",
     "d3": "^5.9.2",
     "es6-promise": "^4.2.6",
+    "eslint": "^6.3.0",
     "leaflet": "^1.4.0",
     "scrollmagic": "^2.0.6",
     "vue": "^2.6.10",

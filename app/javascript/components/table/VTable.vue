@@ -9,11 +9,14 @@
       :key="getVForKey('row', index)"
       :row="row"
     />
-  </div>  
+
+    <span v-if="triggerElement" :class="triggerElement"></span>
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
+import ScrollMagic from 'scrollmagic'
 import { setCsrfToken } from '../../helpers/request-helpers'
 import { eventHub } from '../../vue.js'
 import mixinId from '../../mixins/mixin-ids'
@@ -40,12 +43,17 @@ export default {
     itemsPerPage: {
       type: Number,
       default: 15
+    },
+    triggerElement: {
+      type: String,
+      default: 'default'
     }
   },
 
   data () {
     return {
-      items: {}
+      items: () => {},
+      loadedItems: 0
     }
   },
 
@@ -56,22 +64,29 @@ export default {
 
   mounted () {
     this.getNewItems()
+
+    if(this.triggerElement) { this.scrollMagicHandlers() }
   },
 
   methods: {
-    updateProperties (data) {
-      this.items = data.items
+    getNewItems () {
+      this.ajaxRequest((data) => { this.items = data.items })
     },
 
-    getNewItems () {
+    getMoreItems () {
+      const currentPage = this.$store.state.table.requestedPage
+
+      this.$store.dispatch('table/updatePage', currentPage + 1)
+      this.ajaxRequest((data) => { this.items = this.items.concat(data.items) })
+    },
+
+    ajaxRequest (callback) {
       const storeTable = this.$store.state.table,
         itemsPerPage = this.itemsPerPage,
         requestedPage = storeTable.requestedPage,
         sortDirection = storeTable.sortDirection,
         sortField = storeTable.sortField,
         searchTerm = storeTable.searchTerm.id
-
-      console.log(searchTerm)
 
       let endpoint = `${this.dataSrc.url}`
 
@@ -89,10 +104,22 @@ export default {
 
       axios.get(endpoint)
         .then(response => {
-          this.updateProperties(response.data)
+          callback(response.data)
+          this.loadedItems = this.loadedItems + this.itemsPerPage
         })
         .catch(function (error) {
           console.log(error)
+        })
+    },
+
+    scrollMagicHandlers () {
+      let scrollMagicInfiniteScroll = new ScrollMagic.Controller()
+
+      new ScrollMagic.Scene({ triggerElement: `.${this.triggerElement}` })
+        .triggerHook('onEnter')
+        .addTo(scrollMagicInfiniteScroll)
+        .on('enter', () => {
+          this.getMoreItems()
         })
     }
   }

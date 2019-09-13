@@ -22,6 +22,9 @@ export const storeTable = {
       commit('updateSortField', sortParamters.field)
       commit('updateRequestedPage', 1)
     },
+    updatePage ({ commit }, requestedPage) {
+      commit('updateRequestedPage', requestedPage)
+    }
   },
 
   mutations: {

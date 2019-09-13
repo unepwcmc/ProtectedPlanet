@@ -17,6 +17,7 @@
   font-family: $header-font;
   font-weight: 700;
   line-height: $line-height-headings;
+  margin-bottom: rem-calc(24);
 }
 
 @mixin text-3 {
