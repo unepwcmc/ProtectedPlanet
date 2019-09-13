@@ -39,16 +39,19 @@
       <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
 
       <sticky-bar trigger-element=".sm-trigger-sticky-bar">
-        <v-select-searchable 
-          class="v-select--searchable"
-          :config="<%= @search_config %>" 
-          :options="<%= @search_options %>"
-        >
-        </v-select-searchable>
+        <div class="container--profile">
+          <v-select-searchable 
+            class="v-select--searchable"
+            :config="<%= @search_config %>" 
+            :options="<%= @search_options %>"
+          >
+          </v-select-searchable>
+        
+          <table-head :headings="<%= @country_and_regions_headings %>" class="table-head--horizontal-scroll"></table-head>
+        </div>
       </sticky-bar>
       
       <v-table 
-        :table-headings="<%= @country_and_regions_headings %>" 
         :data-src="<%= @endpoint.to_json %>"
         trigger-element="sm-trigger-infinite-scroll"
         class="table--horizontal-scroll"

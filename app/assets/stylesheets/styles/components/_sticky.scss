@@ -20,7 +20,7 @@ $sticky-bar-height: $select-height;
 // sticky bar wrapper
 //----------------------------------------
 .sticky-bar-wrapper {
-  height: $sticky-bar-height;
+  // height: $sticky-bar-height;
 }
 
 //----------------------------------------
@@ -32,24 +32,14 @@ $sticky-bar-height: $select-height;
 
   &--stuck {    
     @include shadow--grey-light;
-    @include gutters;
+    padding: rem-calc(10 0 0 0);
 
-    @include breakpoint_down($medium) {
-      padding-top: rem-calc(10);
-      padding-bottom: rem-calc(10);
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
 
-      display: block;
-      position: fixed;
-      top: 0;
-      right: 0;
-      left: 0;
-
-      animation: showNav .3s forwards linear;
-    }
-
-    @include breakpoint($medium) {
-      box-shadow: none;
-      padding: 0;
-    }
+    animation: showNav .3s forwards linear;
   }
 }

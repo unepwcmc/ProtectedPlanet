@@ -1,5 +1,5 @@
 <template>
-  <button class="table__sort" @click="sort"></button>
+  <button class="table-head__sort" @click="sort"></button>
 </template>
 
 <script>

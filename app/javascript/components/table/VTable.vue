@@ -1,9 +1,5 @@
 <template>
   <div>
-    <table-head
-      :headings="tableHeadings"
-    />
-
     <table-row 
       v-for="(row, index) in items"
       :key="getVForKey('row', index)"
@@ -21,21 +17,16 @@ import { setCsrfToken } from '../../helpers/request-helpers'
 import { eventHub } from '../../vue.js'
 import mixinId from '../../mixins/mixin-ids'
 
-import TableHead from './TableHead'
 import TableRow from './TableRow'
 
 export default {
   name: 'VTable',
 
-  components: { TableHead, TableRow },
+  components: { TableRow },
 
   mixins: [ mixinId ],
 
   props: {
-    tableHeadings: {
-      type: Array,
-      required: true
-    },
     dataSrc: {
       type: Object, // { url: String, params: [ String, String ] }
       required: true
