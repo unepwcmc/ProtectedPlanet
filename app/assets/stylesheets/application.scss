@@ -21,7 +21,12 @@
 // // maps
 @import 'leaflet/dist/leaflet';
 
-@import './resources/**/*';
+@import './resources/mixins/rem-calc';
+@import './resources/mixins/media-queries';
+@import './resources/mixins/flexbox';
+@import './resources/mixins/helpers';
+@import './resources/base-variables';
+@import './resources/variables/**/*';
 
 // development mixins
 @import 'utilities/flexbox';

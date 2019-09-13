@@ -17,7 +17,6 @@ $select-input-padding-right: calc(#{$search-icon-padding-right} + #{$search-icon
 //--------------------------------------------------
 .v-select {
   &--searchable {
-    @include input-margin;
     @include responsive-styles(width, 100%, $select-width-desktop, $select-width-desktop);
 
     position: relative;

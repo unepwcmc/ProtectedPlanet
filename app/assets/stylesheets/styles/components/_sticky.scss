@@ -1,4 +1,10 @@
 //----------------------------------------
+// variables
+//----------------------------------------
+$sticky-bar-background-color: $white;
+$sticky-bar-height: rem-calc(84);
+
+//----------------------------------------
 // animation
 //----------------------------------------
 @keyframes showNav {
@@ -11,31 +17,39 @@
 }
 
 //----------------------------------------
-// sticky bar
+// sticky bar wrapper
 //----------------------------------------
-.sm-target-sticky {
-  background-color: $grey-light;
-  padding: rem-calc(10);
+.sticky-bar-wrapper {
+  height: $sticky-bar-height;
 }
 
-
-
+//----------------------------------------
+// sticky bar
+//----------------------------------------
 .sticky-bar {
-  border: solid red 1px;
+  background-color: $sticky-bar-background-color;
   width: 100%;
 
-  // display: block;
-  // position: absolute;
-  // top: rem-calc(100);
-  // left: 0;
-
   &--stuck {    
-    display: block;
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
+    @include shadow--grey-light;
+    @include gutters;
 
-    animation: showNav .3s forwards linear;
+    @include breakpoint_down($medium) {
+      padding-top: rem-calc(10);
+      padding-bottom: rem-calc(10);
+
+      display: block;
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+
+      animation: showNav .3s forwards linear;
+    }
+
+    @include breakpoint($medium) {
+      box-shadow: none;
+      padding: 0;
+    }
   }
 }
