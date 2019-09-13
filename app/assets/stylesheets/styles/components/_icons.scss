@@ -19,6 +19,14 @@ $icon-search-width: rem-calc(21);
   padding: 0;
 }
 
+@mixin icon-aichi() {
+  @include responsive-styles(width, rem-calc(85), rem-calc(85), rem-calc(110));
+  @include responsive-styles(height, rem-calc(85), rem-calc(85), rem-calc(110));
+  margin-bottom: rem-calc(20);
+
+  display: block;
+}
+
 @mixin icon-close() {
   @include icon-basic;
   background-image: image-url('icons/close.svg');
@@ -58,8 +66,10 @@ $icon-search-width: rem-calc(21);
 // classes
 //--------------------------------------------------
 .icon {
+  &--aichi { @include icon-aichi; }
+  
   &--close { @include icon-close; }
-
+  
   &--info-circle { @include icon-info; }
 
   &--info { //temp-refresh

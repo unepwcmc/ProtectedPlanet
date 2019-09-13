@@ -6,15 +6,17 @@
 // base mixins
 //--------------------------------------------------
 @mixin text-1 {
-  @include responsive-styles(font-size, rem-calc(30), rem-calc(38), rem-calc(30));
+  @include responsive-styles(font-size, rem-calc(30), rem-calc(38), rem-calc(38));
   color: $header-font-color;
   font-weight: 500;
+  line-height: $line-height-headings;
 }
 
 @mixin text-2 {
   @include responsive-styles(font-size, rem-calc(22), rem-calc(22), rem-calc(22)); 
   font-family: $header-font;
   font-weight: 700;
+  line-height: $line-height-headings;
 }
 
 @mixin text-3 {
