@@ -85,7 +85,7 @@ module Stats::CountryStatisticsApi
         data = fetch_global_data
 
         # Return if there's an error
-        return data if data.is_a?(Hash) && data.key?(:error)
+        return data if data.nil? || (data.is_a?(Hash) && data.key?(:error))
 
         data = data.reject { |stat| contains_exception?(stat) }
         global_stats << format_data(data, name)
@@ -101,10 +101,14 @@ module Stats::CountryStatisticsApi
       chart_json = Aichi11Target::DEFAULT_CHART_JSON.dup
       attribute = ATTRIBUTES[endpoint.to_sym][:attribute]
 
-      _sum = data.inject(0) do |sum, x|
-        sum + (x[attribute] ? x[attribute] : 0)
+      attr_area_sum = total_area_sum = 0
+      data.map do |x|
+        attr_area = (x[attribute] ? x[attribute] : 0)
+        total_area = x[COUNTRY_AREA_ATTRIBUTE] || 0
+        attr_area_sum += (attr_area > 0 && total_area > 0) ? (attr_area * total_area / 100) : 0
+        total_area_sum += total_area
       end
-      value = (_sum / data.length).round(2)
+      value = (attr_area_sum / total_area_sum * 100).round(2)
       target = Aichi11Target.instance.public_send("#{endpoint.to_s}_global")
       json[:charts] << chart_json.merge!({ value: value, target: target })
       json
