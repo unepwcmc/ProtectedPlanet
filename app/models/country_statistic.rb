@@ -30,16 +30,18 @@ class CountryStatistic < ApplicationRecord
   end
 
   [:land, :marine].each do |type|
-    field_name = "percentage_pa_#{type}_cover"
+    field_name = "#{type}_area"
+    define_singleton_method("global_pa_#{field_name}") do
+      _attr = "pa_#{field_name}"
+      Stats::Global.calculate_stats_for(self, _attr)
+    end
+
     define_singleton_method("global_#{field_name}") do
       Stats::Global.calculate_stats_for(self, field_name)
     end
-  end
 
-  [:well_connected, :importance].each do |field|
-    field_name = "percentage_#{field}"
-    define_singleton_method("global_#{field_name}") do
-      Stats::Global.calculate_stats_for(self, field_name)
+    define_singleton_method("global_percentage_pa_#{type}_cover") do
+      (public_send("global_pa_#{field_name}") / public_send("global_#{field_name}") * 100).round(2)
     end
   end
 end
