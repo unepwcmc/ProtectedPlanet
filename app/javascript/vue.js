@@ -25,6 +25,7 @@ import StickyNav from './components/sticky/StickyNav'
 import StickyTab from './components/sticky/StickyTab'
 import SocialShareText from './components/social/SocialShareText'
 import TableHead from './components/table/TableHead'
+import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         StickyTab,
         SocialShareText,
         TableHead,
+        Target11Dashboard,
         Tooltip,
         VSelectSearchable,
         VTable

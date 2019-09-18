@@ -6,7 +6,7 @@
       :row="row"
     />
 
-    <span v-if="triggerElement" :class="triggerElement"></span>
+    <span v-if="triggerElement" v-show="loading" :class="[ triggerElement, 'icon--loading-spinner margin-center' ]"></span>
   </div>
 </template>
 
@@ -43,7 +43,8 @@ export default {
   data () {
     return {
       items: () => {},
-      loadedItems: 0
+      loadedItems: 0,
+      loading: false
     }
   },
 
@@ -70,6 +71,8 @@ export default {
     },
 
     ajaxRequest (callback) {
+      this.loading = true
+
       const storeTable = this.$store.state.table,
         itemsPerPage = this.itemsPerPage,
         requestedPage = storeTable.requestedPage,
@@ -91,12 +94,16 @@ export default {
       endpoint = endpoint.replace('ORDER', sortDirection)
       endpoint = endpoint.replace('SEARCHTERM', searchTerm)
 
+      console.log(endpoint)
+
       axios.get(endpoint)
         .then(response => {
           callback(response.data)
           this.loadedItems = this.loadedItems + this.itemsPerPage
+          this.loading = false
         })
         .catch(function (error) {
+          this.loading = false
           console.log(error)
         })
     },

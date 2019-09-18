@@ -1,4 +1,4 @@
-<div class="new-styles container">
+<div class="new-styles container page-padding--bottom">
   <header class="hero--thematic-area center">
     <%= image_tag 'icons/aichi-11.svg', alt: 'Aichi 11 icon', class: 'icon--aichi margin-center' %>
     <h1 class="hero__title hero__title--article"><%= t('thematic_area.target_11_dashboard.title') %></h1> 
@@ -38,24 +38,12 @@
     <section class="sm-trigger-sticky-bar section-padding--top">
       <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
 
-      <sticky-bar trigger-element=".sm-trigger-sticky-bar" class="sticky-bar--basic">
-        <div class="sticky-bar__content">
-          <v-select-searchable 
-            class="v-select--searchable"
-            :config="<%= @search_config %>" 
-            :options="<%= @search_options %>"
-          >
-          </v-select-searchable>
-        
-          <table-head :headings="<%= @country_and_regions_headings %>" class="table-head--horizontal-scroll"></table-head>
-        </div>
-      </sticky-bar>
-      
-      <v-table 
-        :data-src="<%= @endpoint.to_json %>"
-        trigger-element="sm-trigger-infinite-scroll"
-        class="table--horizontal-scroll"
-      ></v-table>
+      <target-11-dashboard
+        :select="<%= @search %>"
+        :table-headings="<%= @country_and_regions_headings %>" 
+        :table-data-src="<%= @endpoint.to_json %>"
+      >
+      </target-11-dashboard>
     </section>
   </main>
 </div>

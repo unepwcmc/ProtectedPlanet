@@ -39,6 +39,14 @@ $icon-search-width: rem-calc(21);
   width: rem-calc(23); height: rem-calc(23);
 }
 
+@mixin icon-loading-spinner() {
+  @include icon-basic;
+  background-image: image-url('icons/loading-spinner.svg');
+  width: rem-calc(40); height: rem-calc(40);
+
+  display: block;
+}
+
 @mixin icon-search() {
   @include icon-basic;
   background-image: image-url('icons/search.svg');
@@ -90,6 +98,8 @@ $icon-search-width: rem-calc(21);
       left: 0;
     }
   }
+
+  &--loading-spinner { @include icon-loading-spinner; }
 
   &--search { @include icon-search; }
 

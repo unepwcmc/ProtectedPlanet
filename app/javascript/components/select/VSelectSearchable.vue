@@ -86,7 +86,6 @@
 <script>
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
 import mixinSelectShared from '../../mixins/mixin-select-shared'
-import { eventHub } from '../../vue.js'
 const UNDEFINED_ID = '__UNDEFINED__'
 const UNDEFINED_OBJECT = { id: UNDEFINED_ID, name: 'None' }
 
@@ -138,8 +137,7 @@ export default {
     },
 
     selectedInternal (newSelectedInternal) {
-      this.$store.dispatch('table/updateSearchTerm', newSelectedInternal)
-      eventHub.$emit('update:selectedInternal')
+      this.$eventHub.$emit('update:selectedInternal', newSelectedInternal)
     }
   },
 
