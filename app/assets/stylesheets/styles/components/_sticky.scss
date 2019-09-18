@@ -2,26 +2,7 @@
 // variables
 //----------------------------------------
 $sticky-bar-background-color: $white;
-$sticky-bar-height: $select-height;
-
-//----------------------------------------
-// animation
-//----------------------------------------
-@keyframes showNav {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-//----------------------------------------
-// sticky bar wrapper
-//----------------------------------------
-.sticky-bar-wrapper {
-  // height: $sticky-bar-height;
-}
+$sticky-bar-padding: rem-calc(10);
 
 //----------------------------------------
 // sticky bar
@@ -33,11 +14,12 @@ $sticky-bar-height: $select-height;
     .sticky-bar {
       &__content {
         background-color: $sticky-bar-background-color;
+        padding-top: $sticky-bar-padding;
+        padding-bottom: $sticky-bar-padding;
 
         &.sticky-bar--stuck {
           @include gutters;
           @include shadow--grey-light;
-          padding: rem-calc(10 0 0 0);
           margin: 0 auto;
           width: 100%;
           max-width: $site-width;
@@ -47,8 +29,6 @@ $sticky-bar-height: $select-height;
           top: 0;
           right: 0;
           left: 0;
-
-          animation: showNav .3s forwards linear;
         }
       }
     }

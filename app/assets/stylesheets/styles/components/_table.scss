@@ -25,7 +25,6 @@ $table-head-bg-color: $grey-lighter;
     @include responsive-styles(display, none, none, flex);
     @include flex-nowrap;
     @include shadow--grey;
-    @include table-row-spacing;
     background-color: $table-head-bg-color;
     font-family: $table-font;
     margin-top: rem-calc(26);
@@ -78,8 +77,7 @@ $table-head-bg-color: $grey-lighter;
           &__scroll {
             @include flex-nowrap;
             @include responsive-styles(width, 380%, 140%, 100%);
-
-            display: flex; //temp-refresh
+            @include responsive-styles(display, flex, flex, flex);
           }
 
             &__cell {

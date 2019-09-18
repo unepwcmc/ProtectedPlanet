@@ -94,8 +94,6 @@ export default {
       endpoint = endpoint.replace('ORDER', sortDirection)
       endpoint = endpoint.replace('SEARCHTERM', searchTerm)
 
-      console.log(endpoint)
-
       axios.get(endpoint)
         .then(response => {
           callback(response.data)

@@ -42,6 +42,7 @@ $green: #71a32b;
 $green--darker: #415519; 
 
 $purple: #9691D1;
+$purple-dark: #794B9D;
 
 $primary: $green;
 $primary-dark: $green--darker;
@@ -93,7 +94,7 @@ $line-height-headings: 1.25;
 //--------------------------------------------------
 // must be in px not rem!
 $small: 628px; //mobile
-$medium: 763px; //tablet portrait
+$medium: 768px; //tablet portrait
 $large: 1024px; //tablet landscape
 $xlarge: 1704px; //monitor
 

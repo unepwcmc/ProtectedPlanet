@@ -4,19 +4,18 @@
       trigger-element=".sm-trigger-sticky-bar" 
       class="sticky-bar--basic"
     >
-      <div class="sticky-bar__content">
-        <v-select-searchable 
-          class="v-select--searchable"
-          :config="select.config" 
-          :options="select.options"
-        >
-        </v-select-searchable>
-          
-        <table-head 
-          :headings="tableHeadings" 
-          class="table-head--horizontal-scroll"
-        ></table-head>
-      </div>
+      
+      <v-select-searchable 
+        class="v-select--searchable"
+        :config="select.config" 
+        :options="select.options"
+      >
+      </v-select-searchable>
+        
+      <table-head 
+        :headings="tableHeadings" 
+        class="table-head--horizontal-scroll"
+      ></table-head>
     </sticky-bar>
         
     <v-table 
