@@ -68,7 +68,6 @@ export default {
         requestedPage = storeTable.requestedPage,
         sortDirection = storeTable.sortDirection,
         sortField = storeTable.sortField
-        // searchTerm = this.$store.state.table.searchTerm
 
       let endpoint = `${this.dataSrc.url}`
 

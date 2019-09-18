@@ -10,6 +10,7 @@ export default {
 
   props: {
     sortKey: {
+      type: String,
       required: true
     }
   },
@@ -23,7 +24,7 @@ export default {
   methods: {
     sort () {
       this.sortDirection = this.sortDirection * -1
-      const order = this.sortDirection == 1 ? "ASC" : "DESC"
+      const order = this.sortDirection === 1 ? "ASC" : "DESC"
 
       this.$store.dispatch('table/updateSortParameters', { field: this.sortKey, direction: order })
       eventHub.$emit('getNewItems')
