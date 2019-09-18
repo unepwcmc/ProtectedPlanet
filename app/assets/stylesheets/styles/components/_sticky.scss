@@ -27,19 +27,30 @@ $sticky-bar-height: $select-height;
 // sticky bar
 //----------------------------------------
 .sticky-bar {
-  background-color: $sticky-bar-background-color;
-  width: 100%;
+  &--basic {
+    width: 100%;
 
-  &--stuck {    
-    @include shadow--grey-light;
-    padding: rem-calc(10 0 0 0);
+    .sticky-bar {
+      &__content {
+        background-color: $sticky-bar-background-color;
 
-    display: block;
-    position: fixed;
-    top: 0;
-    right: 0;
-    left: 0;
+        &.sticky-bar--stuck {
+          @include gutters;
+          @include shadow--grey-light;
+          padding: rem-calc(10 0 0 0);
+          margin: 0 auto;
+          width: 100%;
+          max-width: $site-width;
 
-    animation: showNav .3s forwards linear;
+          display: block;
+          position: fixed;
+          top: 0;
+          right: 0;
+          left: 0;
+
+          animation: showNav .3s forwards linear;
+        }
+      }
+    }
   }
 }

@@ -1,8 +1,8 @@
 <template>
-  <div class="sticky-bar-wrapper">
-    <div :class="`${targetElementClass} sticky-bar`">
+  <div class="sticky-bar">
+    <div :class="`${targetElementClass} sticky-bar__content`">
       <slot />
-    </div>  
+    </div>
   </div>
 </template>
 
