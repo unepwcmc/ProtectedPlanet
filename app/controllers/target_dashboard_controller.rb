@@ -6,78 +6,25 @@ class TargetDashboardController < ApplicationController
     @targets = Aichi11TargetSerializer.new.serialize
     @global_stats = Aichi11Target.get_global_stats
 
-    @country_and_regions = {
-      head: [
-        {
-          title: 'Country/Region',
-        },
-        {
-          title: 'Coverage'
-        },
-        {
-          title: 'Effectively managed'
-        },
-        {
-          title: 'Well connected'
-        },
-        {
-          title: 'Areas of importance for biodiversity'
-        }
-      ],
-      body: [
-        { 
-          title: 'France', 
-          url: 'http://localhost/country/france', 
-          stats: [
-            { 
-              title: 'Coverage',
-              charts: [
-                { 
-                  title: 'Terrestrial', value: 55, target: 75, colour: 'terrestrial' 
-                },
-                { 
-                  title: 'Marine', value: 55, target: 75, colour: 'marine' 
-                }
-              ]
-            },
-            { 
-              title: 'Effectively managed',
-              charts: [
-                { 
-                  title: 'Terrestrial', value: 55, target: 75, colour: 'terrestrial' 
-                },
-                { 
-                  title: 'Marine', value: 55, target: 75, colour: 'marine' 
-                }
-              ]
-            },
-            { 
-              title: 'Well connected',
-              charts: [
-                { 
-                  title: 'Global', value: 55, target: 75, colour: 'global' 
-                }
-              ]
-            },
-            { 
-              title: 'Areas of importance for biodiversity',
-              charts: [
-                { 
-                  title: 'Global', value: 55, target: 75, colour: 'global' 
-                }
-              ]
-            }
-          ] 
-        },
-        {title:'Spain',url:'http://localhost/country/spain',stats:[{title:'Coverage',charts:[{title:'Terrestrial',value:55,target:75,colour:'terrestrial'},{title:'Marine',value:55,target:75,colour:'marine'}]},{title:'Effectivelymanaged',charts:[{title:'Terrestrial',value:55,target:75,colour:'terrestrial'},{title:'Marine',value:55,target:75,colour:'marine'}]},{title:'Wellconnected',charts:[{title:'Global',value:55,target:75,colour:'global'}]},{title:'Areasofimportanceforbiodiversity',charts:[{title:'Global',value:55,target:75,colour:'global'}]}]}
+    @endpoint = {
+      url: '/target-11-dashboard/load-countries',
+      params: [
+        'target_dashboard[page]=PAGE',
+        'target_dashboard[per_page]=PERPAGE',
+        'target_dashboard[sort_by]=SORTBY',
+        'target_dashboard[order]=ORDER'
       ]
-    }.to_json
+    }
+
+    @country_and_regions_headings =
+      Aichi11TargetDashboardSerializer.new.serialize_head
   end
 
-  def load
-    @countries = CountrySerializer.new(target_dashboard_params).serialize
+  def load_countries
+    @country_and_regions =
+      Aichi11TargetDashboardSerializer.new(target_dashboard_params).to_json
 
-    render json: @countries
+    render json: @country_and_regions
   end
 
   private

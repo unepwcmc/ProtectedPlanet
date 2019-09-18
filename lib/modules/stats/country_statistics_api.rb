@@ -96,9 +96,7 @@ module Stats::CountryStatisticsApi
         sum + (x[field] ? x[field] : 0)
       end
       value = (_sum / data.length).round(2)
-      # TODO target needs to be global now. This is to change after
-      # the database is changed accordingly. Using terrestrial for now.
-      target = Aichi11Target.instance.public_send("#{endpoint.to_s}_terrestrial")
+      target = Aichi11Target.instance.public_send("#{endpoint.to_s}_global")
       json[:charts] << chart_json.merge!({ value: value, target: target })
       json
     end

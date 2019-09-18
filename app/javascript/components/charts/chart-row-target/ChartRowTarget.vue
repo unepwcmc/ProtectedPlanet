@@ -54,7 +54,7 @@
         :y="-28"
         text-anchor="middle"
       >
-        {{ value }}%
+        {{ prettyValue }}%
       </text>
 
       <text 
@@ -98,15 +98,20 @@ export default {
       svgStartX: 0,
       svgStartY: -40,
       svgWidth: 222,
-      svgHeight: 70,
-      valueX: 0,
-      targetX: 0,
+      svgHeight: 70
     }
   },
 
-  mounted () {
-    this.valueX = this.svgWidth * (this.value/100)
-    this.targetX = this.svgWidth * (this.target/100)
+  computed: {
+    prettyValue() {
+      return Math.round(this.value)
+    },
+    valueX () {
+      return this.svgWidth * (this.value/100)
+    },
+    targetX () {
+      return this.svgWidth * (this.target/100)
+    }
   },
 
   methods: {

@@ -1,6 +1,10 @@
+// dependencies
 import Vue from 'vue/dist/vue.esm'
 import Vue2TouchEvents from 'vue2-touch-events'
 import ScrollMagic from 'scrollmagic'
+
+// store
+import store from './store/store.js'
 
 // components
 import Carousel from './components/carousel/Carousel'
@@ -25,10 +29,13 @@ import VTable from './components/table/VTable'
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
 
+    Vue.prototype.$eventHub = new Vue()
+
     Vue.use(Vue2TouchEvents)
     
     const app = new Vue({
       el: '#v-app',
+      store,
 
       components: {
         Carousel,
