@@ -99,9 +99,18 @@ $icon-search-width: rem-calc(21);
     }
   }
 
-  &--loading-spinner { @include icon-loading-spinner; }
+  &--loading-spinner { 
+    @include icon-loading-spinner; 
+
+    visibility: hidden;
+  }
 
   &--search { @include icon-search; }
 
   &--sort { @include icon-sort; }
+
+//--------------------------------------------------
+// helpers
+//--------------------------------------------------
+  &-visible { visibility: visible; }
 }

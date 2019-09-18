@@ -6,7 +6,7 @@
       :row="row"
     />
 
-    <span v-if="triggerElement" v-show="loading" :class="[ triggerElement, 'icon--loading-spinner margin-center' ]"></span>
+    <span v-if="triggerElement" :class="[ triggerElement, { 'icon-visible': isLoading }, 'icon--loading-spinner margin-center' ]"></span>
   </div>
 </template>
 
@@ -44,7 +44,7 @@ export default {
     return {
       items: () => {},
       loadedItems: 0,
-      loading: false
+      isLoading: false
     }
   },
 
@@ -71,7 +71,7 @@ export default {
     },
 
     ajaxRequest (callback) {
-      this.loading = true
+      this.isLoading = true
 
       const storeTable = this.$store.state.table,
         itemsPerPage = this.itemsPerPage,
@@ -100,10 +100,10 @@ export default {
         .then(response => {
           callback(response.data)
           this.loadedItems = this.loadedItems + this.itemsPerPage
-          this.loading = false
+          this.isLoading = false
         })
         .catch(function (error) {
-          this.loading = false
+          this.isLoading = false
           console.log(error)
         })
     },
