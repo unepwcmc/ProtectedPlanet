@@ -29,11 +29,10 @@ import Tooltip from './components/tooltip/Tooltip'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
 
-// eventhub
-export const eventHub = new Vue()
-
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
+
+    Vue.prototype.$eventHub = new Vue()
 
     Vue.use(Vue2TouchEvents)
     

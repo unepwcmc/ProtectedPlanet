@@ -3,13 +3,12 @@
 </template>
 
 <script>
-import { eventHub } from '../../vue.js'
-
 export default {
   name: 'TableSort',
 
   props: {
     sortKey: {
+      type: String,
       required: true
     }
   },
@@ -23,10 +22,10 @@ export default {
   methods: {
     sort () {
       this.sortDirection = this.sortDirection * -1
-      const order = this.sortDirection == 1 ? "ASC" : "DESC"
+      const order = this.sortDirection === 1 ? "ASC" : "DESC"
 
       this.$store.dispatch('table/updateSortParameters', { field: this.sortKey, direction: order })
-      eventHub.$emit('getNewItems')
+      this.$eventHub.$emit('getNewItems')
     }
   }
 }  

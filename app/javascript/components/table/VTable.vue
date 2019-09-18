@@ -14,7 +14,6 @@
 import axios from 'axios'
 import ScrollMagic from 'scrollmagic'
 import { setCsrfToken } from '../../helpers/request-helpers'
-import { eventHub } from '../../vue.js'
 import mixinId from '../../mixins/mixin-ids'
 
 import TableRow from './TableRow'
@@ -49,8 +48,7 @@ export default {
   },
 
   created () {
-    eventHub.$on('getNewItems', this.getNewItems)
-    eventHub.$on('update:selectedInternal', this.getNewItems)
+    this.$eventHub.$on('getNewItems', this.getNewItems)
   },
 
   mounted () {

@@ -104,7 +104,7 @@ export default {
 
   computed: {
     prettyValue() {
-      return Math.trunc(this.value)
+      return Math.round(this.value)
     },
     valueX () {
       return this.svgWidth * (this.value/100)
