@@ -3,8 +3,6 @@
 </template>
 
 <script>
-import { eventHub } from '../../vue.js'
-
 export default {
   name: 'TableSort',
 
@@ -27,7 +25,7 @@ export default {
       const order = this.sortDirection === 1 ? "ASC" : "DESC"
 
       this.$store.dispatch('table/updateSortParameters', { field: this.sortKey, direction: order })
-      eventHub.$emit('getNewItems')
+      this.$eventHub.$emit('getNewItems')
     }
   }
 }  

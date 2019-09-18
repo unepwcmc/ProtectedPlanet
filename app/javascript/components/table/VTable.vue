@@ -15,7 +15,6 @@
 <script>
 import axios from 'axios'
 import { setCsrfToken } from '../../helpers/request-helpers'
-import { eventHub } from '../../vue.js'
 import mixinId from '../../mixins/mixin-ids'
 
 import TableHead from './TableHead'
@@ -50,7 +49,7 @@ export default {
   },
 
   created () {
-    eventHub.$on('getNewItems', this.getNewItems)
+    this.$eventHub.$on('getNewItems', this.getNewItems)
   },
 
   mounted () {
