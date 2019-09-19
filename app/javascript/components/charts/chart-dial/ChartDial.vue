@@ -73,7 +73,7 @@
         :y="-dialValueLabelArcEndY"
         text-anchor="middle"
       >
-        {{ dialValue }}%
+        {{ prettyDialValue }}%
       </text>
     </svg>
   </div>  
@@ -129,6 +129,9 @@ export default {
   computed: {
     prettyTitle () {
       return `${this.title} target: ${this.dialTarget}%`
+    },
+    prettyDialValue () {
+      return Math.round(this.dialValue)
     },
     svgStartX () {
       return -this.dialDiameter/2 - this.paddingSides
