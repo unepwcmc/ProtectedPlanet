@@ -10,7 +10,7 @@ $select-padding: rem-calc(10) $select-padding-side;
 $search-icon-padding-right: rem-calc(18);
 $search-icon-padding-left: $select-padding-side;
 
-$select-input-padding-right: calc(#{$search-icon-padding-right} + #{$search-icon-padding-left} + #{$icon-search-width});
+$select-input-padding-right: #{$search-icon-padding-right} + #{$search-icon-padding-left} + #{$icon-search-width};
 
 $select-hover-color: $grey-light;
 $select-selected-color: $grey;
