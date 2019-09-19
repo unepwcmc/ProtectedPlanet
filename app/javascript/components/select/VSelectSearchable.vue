@@ -45,14 +45,19 @@
 
       <span class="v-select__search-icons">
         <button
-          v-show="!showResetIcon"
+          v-show="!showResetIcon && !hasSelectedOption"
           class="v-select__search-icon"
         />
         <button 
           v-show="showResetIcon"
           :id="searchResetId"
-          class="v-select__search-icon v-select__search-icon--reset hover--pointer"
+          class="v-select__search-icon v-select__search-icon--delete"
           @click="resetSearchTerm"
+        />
+        <button 
+          v-show="hasSelectedOption"
+          class="v-select__search-icon--reset"
+          @click="resetSelect"
         />
         <span 
           class="drop-arrow drop-arrow--margin-right arrow-svg hover--pointer"
@@ -121,6 +126,9 @@ export default {
   computed: {
     filteredOptions () {
       return this.options.filter(option => this.matchesSearchTerm(option))
+    },
+    hasSelectedOption () {
+      return this.selectedInternal !== UNDEFINED_OBJECT
     }
   },
 
@@ -161,6 +169,7 @@ export default {
     openSelect () {
       this.searchTerm = ''
       this.isActive = true
+      this.highlightedOptionIndex = 0
     },
 
     initializeSelectedInternal () {
@@ -191,6 +200,11 @@ export default {
         'v-select__option--selected': this.isSelected(option),
         'v-select__option--highlighted': this.isHighlighted(index)
       }
+    },
+
+    resetSelect () {
+      this.searchTerm = ''
+      this.selectedInternal = UNDEFINED_OBJECT
     }
   }
 }

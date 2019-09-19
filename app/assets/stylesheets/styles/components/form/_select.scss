@@ -12,6 +12,23 @@ $search-icon-padding-left: $select-padding-side;
 
 $select-input-padding-right: calc(#{$search-icon-padding-right} + #{$search-icon-padding-left} + #{$icon-search-width});
 
+$select-hover-color: $grey-light;
+$select-selected-color: $grey;
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin vselect-icon-basic() {
+  @include button-plain;
+  margin-right: $search-icon-padding-right;
+  margin-left: $search-icon-padding-left;
+  padding: 0;
+
+  display: inline-block;
+
+  position: relative;
+}
+
 //--------------------------------------------------
 // selects
 //--------------------------------------------------
@@ -31,7 +48,7 @@ $select-input-padding-right: calc(#{$search-icon-padding-right} + #{$search-icon
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
           }
-        }
+        } 
       }
 
         &__search-input {
@@ -57,21 +74,20 @@ $select-input-padding-right: calc(#{$search-icon-padding-right} + #{$search-icon
         }
 
           &__search-icon {
-            @include button-plain;
+            @include vselect-icon-basic;
             @include icon-search;
-            font: inherit;
-            margin-right: $search-icon-padding-right;
-            margin-left: $search-icon-padding-left;
-            padding: 0;
+          }
 
-            display: inline-block;
+          &__search-icon--delete {
+            @include vselect-icon-basic;
+            @include icon-cross;
+            opacity: 0.6;
+            transform: scale(.5);
+          }
 
-            position: relative;
-
-            &--reset {
-              background-image: image-url('icons/close.svg');
-              background-size: 75%;
-            }
+          &__search-icon--reset {
+            @include vselect-icon-basic;
+            @include icon-cross;
           }
 
       &__dropdown {
@@ -82,6 +98,9 @@ $select-input-padding-right: calc(#{$search-icon-padding-right} + #{$search-icon
         border-top: none;
         padding: 0;
         width: 100%;
+
+        position: absolute;
+        z-index: 1;
       }
 
         &__option {
@@ -89,8 +108,16 @@ $select-input-padding-right: calc(#{$search-icon-padding-right} + #{$search-icon
           padding: $select-padding;
 
           &:hover {
-            background-color: $grey-light;
+            background-color: $select-hover-color;
           }
+        }
+
+        &__option--selected {
+          background: $select-selected-color;
+        }
+        
+        &__option--highlighted {
+          background: $select-hover-color;
         }
     }
   }
