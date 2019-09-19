@@ -1,5 +1,3 @@
-import { eventHub } from '../vue.js'
-
 export const storeTable = {
   namespaced: true,
 

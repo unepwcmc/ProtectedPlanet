@@ -1,16 +1,12 @@
 <template>
   <div>
-    <table-head
-      :headings="tableHeadings"
-    />
-
     <table-row 
       v-for="(row, index) in items"
       :key="getVForKey('row', index)"
       :row="row"
     />
 
-    <span v-if="triggerElement" :class="triggerElement"></span>
+    <span v-if="triggerElement" v-bind:class="loadingSpinnerClasses"></span>
   </div>
 </template>
 
@@ -18,24 +14,18 @@
 import axios from 'axios'
 import ScrollMagic from 'scrollmagic'
 import { setCsrfToken } from '../../helpers/request-helpers'
-import { eventHub } from '../../vue.js'
 import mixinId from '../../mixins/mixin-ids'
 
-import TableHead from './TableHead'
 import TableRow from './TableRow'
 
 export default {
   name: 'VTable',
 
-  components: { TableHead, TableRow },
+  components: { TableRow },
 
   mixins: [ mixinId ],
 
   props: {
-    tableHeadings: {
-      type: Array,
-      required: true
-    },
     dataSrc: {
       type: Object, // { url: String, params: [ String, String ] }
       required: true
@@ -53,13 +43,23 @@ export default {
   data () {
     return {
       items: () => {},
-      loadedItems: 0
+      loadedItems: 0,
+      isLoading: false
+    }
+  },
+
+  computed: {
+    loadingSpinnerClasses () {
+      return [ 
+        this.triggerElement, 
+        { 'icon-visible': this.isLoading }, 
+        'icon--loading-spinner margin-center'
+      ]
     }
   },
 
   created () {
-    eventHub.$on('getNewItems', this.getNewItems)
-    eventHub.$on('update:selectedInternal', this.getNewItems)
+    this.$eventHub.$on('getNewItems', this.getNewItems)
   },
 
   mounted () {
@@ -81,13 +81,15 @@ export default {
     },
 
     ajaxRequest (callback) {
+      this.isLoading = true
+
       const storeTable = this.$store.state.table,
         itemsPerPage = this.itemsPerPage,
         requestedPage = storeTable.requestedPage,
         sortDirection = storeTable.sortDirection,
         sortField = storeTable.sortField,
-        searchTerm = storeTable.searchTerm.id
-
+        searchTerm = storeTable.searchTerm
+      
       let endpoint = `${this.dataSrc.url}`
 
       if(this.dataSrc.params) {
@@ -101,13 +103,15 @@ export default {
       endpoint = endpoint.replace('SORTBY', sortField)
       endpoint = endpoint.replace('ORDER', sortDirection)
       endpoint = endpoint.replace('SEARCHTERM', searchTerm)
-
+      console.log(endpoint)
       axios.get(endpoint)
         .then(response => {
           callback(response.data)
           this.loadedItems = this.loadedItems + this.itemsPerPage
+          this.isLoading = false
         })
-        .catch(function (error) {
+        .catch(error => {
+          this.isLoading = false
           console.log(error)
         })
     },

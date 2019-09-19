@@ -1,16 +1,22 @@
 <template>
-  <div class="sticky-bar-wrapper">
-    <div :class="`${targetElementClass} sticky-bar`">
+  <div class="sticky-bar" v-bind:style="{ height: stickyBarHeight }">
+    <div 
+      ref="stickyBarContent"
+      :class="[targetElementClass, id, 'sticky-bar__content']"
+    >
       <slot />
-    </div>  
+    </div>
   </div>
 </template>
 
 <script>
 import ScrollMagic from 'scrollmagic'
+import mixinResponsive from '../../mixins/mixin-responsive.js'
 
 export default {
   name: 'StickyBar',
+
+  mixins: [ mixinResponsive],
 
   props: {
     triggerElement: {
@@ -21,11 +27,21 @@ export default {
 
   data () {
     return {
-      targetElementClass: 'sm-target-sticky' 
+      id: `js-sticky-${this._uid}`,
+      targetElementClass: 'sm-target-sticky',
+      stickyHeight: 0
+    }
+  },
+
+  computed: {
+    stickyBarHeight () {
+      return `${this.stickyHeight}px`
     }
   },
 
   mounted () {
+    this.$eventHub.$on('windowResized', this.calculateStickyBarHeight)
+    this.calculateStickyBarHeight()
     this.scrollMagicHandlers()
   },
 
@@ -37,6 +53,10 @@ export default {
         .triggerHook('onLeave')
         .setClassToggle(`.${this.targetElementClass}`, 'sticky-bar--stuck')
         .addTo(scrollMagicSticky)
+    },
+
+    calculateStickyBarHeight () {
+      this.stickyHeight = this.$refs.stickyBarContent.clientHeight
     }
   }
 }

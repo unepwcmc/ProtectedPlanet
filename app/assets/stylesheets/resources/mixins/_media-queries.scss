@@ -8,7 +8,7 @@
 }
 
 @mixin breakpoint-down($breakpoint) {
-  @media screen and (max-width: $breakpoint + 0px) {
+  @media screen and (max-width: $breakpoint) {
     @content;
   } 
 }

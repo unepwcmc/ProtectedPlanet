@@ -17,23 +17,43 @@ $table-head-bg-color: $grey-lighter;
   @include responsive-styles(margin-bottom, rem-calc(30), rem-calc(32), rem-calc(16));
 }
 
+//--------------------------------------------------
+// table head
+//--------------------------------------------------
+.table-head {
+  &--horizontal-scroll {
+    @include responsive-styles(display, none, none, flex);
+    @include flex-nowrap;
+    @include shadow--grey;
+    background-color: $table-head-bg-color;
+    font-family: $table-font;
+    margin-top: rem-calc(26);
+  }
+
+  .table-head {
+    &__cell {
+      @include table-cell-basic;
+      align-items: center; //temp-refresh
+
+      display: flex; //temp-refresh
+    }
+
+    &__sort {
+      @include button-plain;
+      @include icon-sort;
+      padding: rem-calc(3 6);
+    }
+  }
+}
+
 .table {
 //--------------------------------------------------
 // tables
 //--------------------------------------------------
   &--horizontal-scroll {
     font-family: $table-font;
-    margin-top: rem-calc(26);
 
-    .table {
-      &__head {
-        @include responsive-styles(display, none, none, flex);
-        @include flex-nowrap;
-        @include shadow--grey;
-        @include table-row-spacing;
-        background-color: $table-head-bg-color;
-      }
-
+    .table {      
       &__row {
         @include table-row-spacing;
         @include responsive-styles(border, none, none, solid 1px $grey-light);
@@ -57,24 +77,10 @@ $table-head-bg-color: $grey-lighter;
           &__scroll {
             @include flex-nowrap;
             @include responsive-styles(width, 380%, 140%, 100%);
-
-            display: flex; //temp-refresh
+            @include responsive-styles(display, flex, flex, flex);
           }
 
-            &__cell--heading {
-              @include table-cell-basic;
-              align-items: center; //temp-refresh
-
-              display: flex; //temp-refresh
-            }
-
-              &__sort {
-                @include button-plain;
-                @include icon-sort;
-                padding: rem-calc(3 6);
-              }
-
-            &__cell--body {
+            &__cell {
               @include table-cell-basic;
               @include shadow--grey-light;
               @include responsive-styles(border, solid 1px $grey-light, solid 1px $grey-light, none);

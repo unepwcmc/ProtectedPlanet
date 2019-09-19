@@ -1,8 +1,8 @@
 <template>
-  <div class="table__head">
+  <div class="table-head">
     <div v-for="(heading, index) in headings"
       :key="getVForKey('row', index)"
-      class="table__cell--heading"
+      class="table-head__cell"
     >
       {{ heading.title }}
 
