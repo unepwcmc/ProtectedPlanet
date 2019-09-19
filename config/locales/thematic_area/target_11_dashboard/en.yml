@@ -4,8 +4,26 @@ en:
       title: Aichi Target 11 Dashboard
       subtitle_1: Global Level
       subtitle_2: Country & Regions
-      tooltips:
-        coverage: "Proportion of a country's terrestrial or marine area coverage with protected areas. Statistics updated monthly. Source: WDPA (hyperlink to PP) (UNEP-WCMC & IUCN) 2. Tab 'Effectively managed': info tab should read: 'Proportion of a country's terrestrial or marine protected area network where management effectiveness evaluations have been reported as being undertaken'. Statistics updated monthly. Source: WDPA and GD-PAME"
-        pame: Lorem ipsum
       search_config: 
         label: Search by country/region
+      tooltips:
+        -
+          id: coverage
+          title: Coverage
+          text: "Proportion of a country's terrestrial or marine area covered by protected areas. Statistics updated monthly. Source: <a href='https://www.protectedplanet.net/' title='View source' target'_blank'>WDPA</a> (UNEP-WCMC & IUCN)"
+        -
+          id: effectively_managed
+          title: Effectively managed
+          text: "Proportion of a country's terrestrial or marine protected area network where management effectiveness evaluations have been reported as being undertaken. Statistics updated monthly. Source: <a href='https://www.protectedplanet.net/' title='View source' target'_blank'>WDPA</a> and <a href='https://pame.protectedplanet.net/' title='View GD-PAME' target'_blank'>GD-PAME</a> (UNEP-WCMC & IUCN)"
+        -
+          id: representative
+          title: Representative
+          text: "TEXT TBC. Statistics updated 2018. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B1%20Terrestrial%20Coverage%20by%20Protected%20Areas_0.pdf' title='View source' target='_blank'>DOPA</a>"
+        -
+          id: well_connected
+          title: Well connected
+          text: "Proportion to which a country's terrestrial protected area network is designed to promote connectivity (note: no connectivity dataset is yet available for marine protected areas). Statistics updated 2018. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20C1%20Connectivity.pdf' title='View source' target='_blank'>DOPA</a>"
+        -
+          id: importance
+          title: Areas of importance for biodiversity
+          text: "The average proportion of a country’s terrestrial and marine key biodiversity areas that are covered with protected areas. Statistics updated 2018. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B3%20Key%20Biodiversity%20Areas_0.pdf' title='View source' target='_blank'>Birdlife</a> (EU Joint Research Centre)"

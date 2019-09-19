@@ -13,7 +13,8 @@
       </v-select-searchable>
         
       <table-head 
-        :headings="tableHeadings" 
+        :headings="tableHeadings"
+        :tooltipArray="tooltipArray"
         class="table-head--horizontal-scroll"
       ></table-head>
     </sticky-bar>
@@ -48,6 +49,10 @@ export default {
     },
     tableDataSrc: {
       type: Object, // { url: String, params: [ String, String ] }
+      required: true
+    },
+    tooltipArray: {
+      type: Array, // [ { id: String, title: String, text: String } ]
       required: true
     }
   },

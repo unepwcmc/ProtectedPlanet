@@ -25,7 +25,7 @@ class Aichi11Target < ActiveRecord::Base
     global_stats = Stats::CountryStatisticsApi.get_global_stats
     pp_global_stats = []
     stats.each do |name, attributes|
-      json = { title: attributes[:name], charts: [] }
+      json = { id: attributes[:id], title: attributes[:name], charts: [] }
       terrestrial_chart = DEFAULT_CHART_JSON.merge(**TERRESTRIAL, **attributes[:terrestrial])
       marine_chart = DEFAULT_CHART_JSON.merge(**MARINE, **attributes[:marine])
       json[:charts] = [terrestrial_chart, marine_chart]

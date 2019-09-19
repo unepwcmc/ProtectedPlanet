@@ -37,7 +37,7 @@
         class="tooltip__close"
       />
 
-      {{ text }}
+      <div v-html="text" />
     </div>
   </div>
 </template>

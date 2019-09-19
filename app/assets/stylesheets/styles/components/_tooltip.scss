@@ -2,7 +2,8 @@
 // settings
 //--------------------------------------------------
 $tooltip-background-color: $grey-light;
-$border-style: solid rem-calc(10);
+$tooltip-border-style: solid rem-calc(10);
+$tooltip-padding: rem-calc(22 24 20 20);
 
 //--------------------------------------------------
 // tooltips
@@ -15,10 +16,10 @@ $border-style: solid rem-calc(10);
   }
 
   &__target {
-    @include item-spacing;
     font-size: rem-calc(15);
     line-height: 1.4;
-    width: rem-calc(200);
+    padding: $tooltip-padding;
+    width: rem-calc(300);
 
     background-color: $tooltip-background-color;
 
@@ -30,9 +31,9 @@ $border-style: solid rem-calc(10);
     transform: translateX(-50%);
 
     &:after {
-      border-bottom: $border-style $tooltip-background-color;
-      border-right: $border-style transparent;
-      border-left: $border-style transparent;
+      border-bottom: $tooltip-border-style $tooltip-background-color;
+      border-right: $tooltip-border-style transparent;
+      border-left: $tooltip-border-style transparent;
       content: '';
       width: 0; height: 0;
 
