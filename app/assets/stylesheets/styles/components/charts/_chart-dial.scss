@@ -4,6 +4,9 @@
 $chart-dial-color: $chart-font-color;
 $chart-text-color: $chart-font-color;
 $chart-dial-font: $chart-font;
+$chart-dial-font-size: $chart-font-size;
+
+$chart-dial-target-color: $chart-target-color;
 
 //--------------------------------------------------
 // dial charts
@@ -28,10 +31,16 @@ $chart-dial-font: $chart-font;
       stroke: $chart-dial-color; 
       stroke-width: rem-calc(3);
     }
+    
+    &__arrow-line--target { 
+      stroke: $chart-dial-target-color; 
+      stroke-width: rem-calc(3);
+    }
 
     &__title {
       fill: $chart-text-color;
       font-family: $chart-dial-font;
+      font-size: $chart-dial-font-size;
       font-weight: $bold;
     }
   }

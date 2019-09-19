@@ -1,9 +1,10 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
+$chart-row-target-color: $chart-target-color;
 $chart-row-target-font: $chart-font;
 $chart-row-target-font-color: $chart-font-color;
-$chart-row-target-font-size: rem-calc(16);
+$chart-row-target-font-size: $chart-font-size;
 
 
 //--------------------------------------------------
@@ -13,7 +14,7 @@ $chart-row-target-font-size: rem-calc(16);
   .chart {
     &__marker {
       &--target { 
-        stroke: $chart-row-target-font-color; 
+        stroke: $chart-row-target-color; 
         stroke-dasharray: 2;
       }
 

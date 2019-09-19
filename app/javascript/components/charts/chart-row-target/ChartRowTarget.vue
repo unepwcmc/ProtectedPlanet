@@ -9,7 +9,7 @@
       :viewBox="`${svgStartX} ${svgStartY} ${svgWidth} ${svgHeight}`"
     >
       <polyline 
-        :points="getRowPath(svgWidth)" 
+        :points="getRowPath(chartWidth)" 
         :stroke-width="rowHeight" 
         class="chart__stroke--default"
       />
@@ -20,21 +20,21 @@
         :class="`chart__stroke--${colour}`"
       />
 
-      <polyline 
+<!--       <polyline 
         :points="getMarkerPath(valueX)"
         :stroke-width="3"
         class="chart__marker--value"
-      />
+      /> -->
 
       <polyline 
-        :points="getMarkerPath(valueX/2)"
+        :points="getMarkerPath(valueX)"
         :stroke-width="3"
         :class="`chart__stroke--${colour}`"
       />
 
       <polyline 
         v-if="target"
-        :points="getMarkerPath(targetX)"
+        :points="getMarkerPath(targetX, 'target')"
         :stroke-width="3"
         class="chart__marker--target"
       />
@@ -45,26 +45,26 @@
         x="0" 
         :y="rowHeight + 10"
       >
-        {{ title }}
+        {{ prettyTitle }}
       </text>
       
       <text 
         class="chart__marker-title"
-        :x="valueX/2" 
+        :x="valueX" 
         :y="-28"
         text-anchor="middle"
       >
         {{ prettyValue }}%
       </text>
 
-      <text 
+<!--       <text 
         class="chart__marker-title"
         :x="targetX" 
         :y="-28"
         text-anchor="middle"
       >
         {{ target }}%
-      </text>
+      </text> -->
     </svg>
   </div>
 </template>
@@ -95,29 +95,33 @@ export default {
   data () {
     return {
       rowHeight: 18,
-      svgStartX: 0,
+      svgStartX: -10,
       svgStartY: -40,
-      svgWidth: 222,
-      svgHeight: 70
+      svgWidth: 230,
+      svgHeight: 74,
+      chartWidth: 200,
     }
   },
 
   computed: {
+    prettyTitle() {
+      return `${this.title} target: ${this.target}%`
+    },
     prettyValue() {
       return Math.round(this.value)
     },
     valueX () {
-      return this.svgWidth * (this.value/100)
+      return this.chartWidth * (this.value/100)
     },
     targetX () {
-      return this.svgWidth * (this.target/100)
+      return this.chartWidth * (this.target/100)
     }
   },
 
   methods: {
-    getMarkerPath (x) {
-      const yStart = -this.rowHeight,
-        yEnd = this.rowHeight/2
+    getMarkerPath (x, type = '') {
+      const yEnd = this.rowHeight/2
+      const yStart = type === 'target' ? -this.rowHeight/2 : -this.rowHeight
 
       return `${x} ${yStart}, ${x}, ${yEnd}`
     },

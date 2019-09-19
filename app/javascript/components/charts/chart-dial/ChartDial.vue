@@ -59,7 +59,7 @@
         :x="svgStartX + paddingSides" 
         :y="paddingBottom - 1"
       >
-        {{ title }}
+        {{ prettyTitle }}
       </text>
 
       <text 
@@ -71,14 +71,14 @@
         {{ dialValue }}%
       </text>
 
-      <text 
+      <!-- <text 
         class="chart__title"
         :x="-dialTargetLabelArcEndX" 
         :y="-dialTargetLabelArcEndY"
         text-anchor="middle"
       >
         {{ dialTarget }}%
-      </text>
+      </text> -->
     </svg>
   </div>  
 </template>
@@ -130,6 +130,9 @@ export default {
   },
 
   computed: {
+    prettyTitle () {
+      return `${this.title} target: ${this.target}%`
+    },
     svgStartX () {
       return -this.dialDiameter/2 - this.paddingSides
     },
