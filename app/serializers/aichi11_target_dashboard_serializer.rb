@@ -91,6 +91,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
 
   def body_stats(stat, stat_name, record)
     {
+      id: stat[:id],
       title: stat[:name],
       charts: charts(stat, stat_name, record)
     }
