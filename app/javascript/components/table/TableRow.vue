@@ -20,6 +20,15 @@
           >
             {{ row.title }}
           </a>
+
+          <tooltip 
+            v-if="tooltipText"
+            :on-hover="false" 
+            :text="tooltipText"
+            class="carousel__tooltip breakpoint-medium-down"
+          >
+            <i class="icon--info-circle block"></i>
+          </tooltip>
         </div>
 
         <div
@@ -58,6 +67,10 @@ export default {
     row: {
       type: Object, // { title: '', url: '', stats: [{ charts: [{ title: '', value: '', target: '', colour: '' }] }] }
       required: true
+    },
+    tooltipText: {
+      type: String,
+      default: null
     }
   }
 }
