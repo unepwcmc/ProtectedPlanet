@@ -4,6 +4,7 @@
       v-for="(row, index) in items"
       :key="getVForKey('row', index)"
       :row="row"
+      :tooltipText="getTooltipText(row.id)"
     />
 
     <span v-if="triggerElement" :class="[ triggerElement, { 'icon-visible': isLoading }, 'icon--loading-spinner margin-center' ]"></span>
@@ -17,17 +18,22 @@ import { setCsrfToken } from '../../helpers/request-helpers'
 import mixinId from '../../mixins/mixin-ids'
 
 import TableRow from './TableRow'
+import Tooltip from '../tooltip/Tooltip'
 
 export default {
   name: 'VTable',
 
-  components: { TableRow },
+  components: { TableRow, Tooltip },
 
   mixins: [ mixinId ],
 
   props: {
     dataSrc: {
       type: Object, // { url: String, params: [ String, String ] }
+      required: true
+    },
+    tooltipArray: {
+      type: Array, // [ { id: String, title: String, text: String } ]
       required: true
     },
     itemsPerPage: {
@@ -115,6 +121,14 @@ export default {
         .on('enter', () => {
           this.getMoreItems()
         })
+    },
+
+    getTooltipText (id) {
+      const tooltip = this.tooltipArray.find(obj => {
+        return obj.id === id
+      })
+      
+      return tooltip !== undefined ? tooltip.text : ''
     }
   }
 } 

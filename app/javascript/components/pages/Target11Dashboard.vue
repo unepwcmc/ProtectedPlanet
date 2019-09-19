@@ -21,6 +21,7 @@
         
     <v-table 
       :data-src="tableDataSrc"
+      :tooltipArray="tooltipArray"
       trigger-element="sm-trigger-infinite-scroll"
       class="table--horizontal-scroll"
     ></v-table>
