@@ -1,7 +1,6 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$chart-row-target-color: $chart-target-color;
 $chart-row-target-font: $chart-font;
 $chart-row-target-font-color: $chart-font-color;
 $chart-row-target-font-size: $chart-font-size;
@@ -14,8 +13,7 @@ $chart-row-target-font-size: $chart-font-size;
   .chart {
     &__marker {
       &--target { 
-        stroke: $chart-row-target-color; 
-        stroke-dasharray: 2;
+        @include chart-target-line;
       }
 
       &--value { stroke: $grey-darker; }

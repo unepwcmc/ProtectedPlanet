@@ -20,12 +20,6 @@
         :class="`chart__stroke--${colour}`"
       />
 
-<!--       <polyline 
-        :points="getMarkerPath(valueX)"
-        :stroke-width="3"
-        class="chart__marker--value"
-      /> -->
-
       <polyline 
         :points="getMarkerPath(valueX)"
         :stroke-width="3"
@@ -35,15 +29,20 @@
       <polyline 
         v-if="target"
         :points="getMarkerPath(targetX, 'target')"
-        :stroke-width="3"
+        class="chart__marker--target"
+      />
+
+      <polyline 
+        :points="getLegendPath()"
         class="chart__marker--target"
       />
 
       <text
         v-if="title" 
         class="chart__title"
-        x="0" 
-        :y="rowHeight + 10"
+        alignment-baseline="middle"
+        :x="legendWidth + 5" 
+        :y="legendY"
       >
         {{ prettyTitle }}
       </text>
@@ -56,15 +55,6 @@
       >
         {{ prettyValue }}%
       </text>
-
-<!--       <text 
-        class="chart__marker-title"
-        :x="targetX" 
-        :y="-28"
-        text-anchor="middle"
-      >
-        {{ target }}%
-      </text> -->
     </svg>
   </div>
 </template>
@@ -100,6 +90,7 @@ export default {
       svgWidth: 230,
       svgHeight: 74,
       chartWidth: 200,
+      legendWidth: 10
     }
   },
 
@@ -115,6 +106,9 @@ export default {
     },
     targetX () {
       return this.chartWidth * (this.target/100)
+    },
+    legendY () {
+      return this.rowHeight + 5
     }
   },
 
@@ -128,6 +122,10 @@ export default {
 
     getRowPath (x) {
       return `0,0 ${x},0`
+    },
+
+    getLegendPath () {
+      return `0,${this.legendY} ${this.legendWidth},${this.legendY}`
     }
   }
 }

@@ -6,8 +6,6 @@ $chart-text-color: $chart-font-color;
 $chart-dial-font: $chart-font;
 $chart-dial-font-size: $chart-font-size;
 
-$chart-dial-target-color: $chart-target-color;
-
 //--------------------------------------------------
 // dial charts
 //--------------------------------------------------
@@ -33,8 +31,7 @@ $chart-dial-target-color: $chart-target-color;
     }
     
     &__arrow-line--target { 
-      stroke: $chart-dial-target-color; 
-      stroke-width: rem-calc(3);
+      @include chart-target-line;
     }
 
     &__title {
