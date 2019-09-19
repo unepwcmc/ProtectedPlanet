@@ -8,6 +8,7 @@
     "bourbon": "^5.1.0",
     "bourbon-neat": "^1.9.0",
     "d3": "^5.9.2",
+    "es6-object-assign": "^1.1.0",
     "es6-promise": "^4.2.6",
     "leaflet": "^1.4.0",
     "scrollmagic": "^2.0.6",
