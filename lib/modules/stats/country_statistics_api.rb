@@ -5,14 +5,17 @@ module Stats::CountryStatisticsApi
     ENDPOINTS = {
       representative: {
         name: 'Representative',
+        slug: 'representative',
         field: STATISTICS_API['representative_field']
       },
       well_connected: {
         name: 'Well connected',
+        slug: 'well_connected',
         field: STATISTICS_API['well_connected_field']
       },
       importance: {
         name: 'Areas of importance for biodiversity',
+        slug: 'importance',
         field: STATISTICS_API['importance_field']
       }
     }.freeze
@@ -88,9 +91,10 @@ module Stats::CountryStatisticsApi
 
     # This is only used for global stats
     def format_data(data, endpoint)
-      json = { title: ENDPOINTS[endpoint.to_sym][:name], charts: [] }
+      stat = ENDPOINTS[endpoint.to_sym]
+      json = { id: stat[:slug], title: stat[:name], charts: [] }
       chart_json = Aichi11Target::DEFAULT_CHART_JSON.dup
-      field = ENDPOINTS[endpoint.to_sym][:field]
+      field = stat[:field]
 
       _sum = data.inject(0) do |sum, x|
         sum + (x[field] ? x[field] : 0)
