@@ -109,9 +109,9 @@ $transition-options: 0.6s ease-in-out;
 //--------------------------------------------------
 // basic carousel
 //--------------------------------------------------
-  $carousel-basic-slide-margin-mobile: 0;
-  $carousel-basic-slide-margin-tablet: 5;
-  $carousel-basic-slide-margin-desktop: 10;
+  $carousel-basic-slide-margin-mobile: rem-calc(0);
+  $carousel-basic-slide-margin-tablet: rem-calc(5);
+  $carousel-basic-slide-margin-desktop: rem-calc(10);
 
   &--basic {
     padding-top: 0;
@@ -145,8 +145,8 @@ $transition-options: 0.6s ease-in-out;
 
     .carousel-slide {
       @include shadow--grey-light;
-      @include responsive-styles(width, 100%, calc(40% - #{$carousel-basic-slide-margin-tablet}px), calc(20% - #{$carousel-basic-slide-margin-desktop}px));
-      @include responsive-styles(margin-right, 0, rem-calc($carousel-basic-slide-margin-tablet), rem-calc($carousel-basic-slide-margin-desktop));
+      @include responsive-styles(width, 100%, calc(40% - #{$carousel-basic-slide-margin-tablet}), calc(20% - #{$carousel-basic-slide-margin-desktop}));
+      @include responsive-styles(margin-right, 0, $carousel-basic-slide-margin-tablet, $carousel-basic-slide-margin-desktop);
       border: solid 1px $grey-light;
       padding: rem-calc(16 0);
 

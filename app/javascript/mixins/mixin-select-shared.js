@@ -108,14 +108,7 @@ export default {
           this.decrementKeyboardFocus()
           break
         case KEYCODES.enter:
-          console.log('enter')
-          if(this.filteredOptions.length) { 
-            if(this.hasKeyboardFocus) {
-              this.selectOption(this.filteredOptions[this.highlightedOptionIndex])
-            } else {
-              this.selectOption(this.filteredOptions[0])
-            }
-          }
+          this.updateSelectedOption()
           break
         case KEYCODES.esc:
           document.activeElement.blur()
@@ -137,6 +130,16 @@ export default {
         this.highlightedOptionIndex = this.filteredOptions.length - 1
       } else if (this.hasKeyboardFocus) {
         this.highlightedOptionIndex--
+      }
+    },
+
+    updateSelectedOption () {
+      if(this.filteredOptions.length) { 
+        if(this.hasKeyboardFocus) {
+          this.selectOption(this.filteredOptions[this.highlightedOptionIndex])
+        } else {
+          this.selectOption(this.filteredOptions[0])
+        }
       }
     }
   },
