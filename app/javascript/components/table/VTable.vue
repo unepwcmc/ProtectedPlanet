@@ -1,37 +1,31 @@
 <template>
   <div>
-    <table-head
-      :headings="tableHeadings"
-    />
-
     <table-row 
       v-for="(row, index) in items"
       :key="getVForKey('row', index)"
       :row="row"
     />
-  </div>  
+
+    <span v-if="triggerElement" :class="[ triggerElement, { 'icon-visible': isLoading }, 'icon--loading-spinner margin-center' ]"></span>
+  </div>
 </template>
 
 <script>
 import axios from 'axios'
+import ScrollMagic from 'scrollmagic'
 import { setCsrfToken } from '../../helpers/request-helpers'
 import mixinId from '../../mixins/mixin-ids'
 
-import TableHead from './TableHead'
 import TableRow from './TableRow'
 
 export default {
   name: 'VTable',
 
-  components: { TableHead, TableRow },
+  components: { TableRow },
 
   mixins: [ mixinId ],
 
   props: {
-    tableHeadings: {
-      type: Array,
-      required: true
-    },
     dataSrc: {
       type: Object, // { url: String, params: [ String, String ] }
       required: true
@@ -39,12 +33,18 @@ export default {
     itemsPerPage: {
       type: Number,
       default: 15
+    },
+    triggerElement: {
+      type: String,
+      default: 'default'
     }
   },
 
   data () {
     return {
-      items: {}
+      items: () => {},
+      loadedItems: 0,
+      isLoading: false
     }
   },
 
@@ -54,20 +54,32 @@ export default {
 
   mounted () {
     this.getNewItems()
+
+    if(this.triggerElement) { this.scrollMagicHandlers() }
   },
 
   methods: {
-    updateProperties (data) {
-      this.items = data.items
+    getNewItems () {
+      this.ajaxRequest((data) => { this.items = data.items })
     },
 
-    getNewItems () {
+    getMoreItems () {
+      const currentPage = this.$store.state.table.requestedPage
+
+      this.$store.dispatch('table/updatePage', currentPage + 1)
+      this.ajaxRequest((data) => { this.items = this.items.concat(data.items) })
+    },
+
+    ajaxRequest (callback) {
+      this.isLoading = true
+
       const storeTable = this.$store.state.table,
         itemsPerPage = this.itemsPerPage,
         requestedPage = storeTable.requestedPage,
         sortDirection = storeTable.sortDirection,
-        sortField = storeTable.sortField
-
+        sortField = storeTable.sortField,
+        searchTerm = storeTable.searchTerm
+      
       let endpoint = `${this.dataSrc.url}`
 
       if(this.dataSrc.params) {
@@ -80,13 +92,28 @@ export default {
       endpoint = endpoint.replace('PAGE', requestedPage)
       endpoint = endpoint.replace('SORTBY', sortField)
       endpoint = endpoint.replace('ORDER', sortDirection)
-
+      endpoint = endpoint.replace('SEARCHTERM', searchTerm)
+      console.log(endpoint)
       axios.get(endpoint)
         .then(response => {
-          this.updateProperties(response.data)
+          callback(response.data)
+          this.loadedItems = this.loadedItems + this.itemsPerPage
+          this.isLoading = false
         })
-        .catch(function (error) {
+        .catch(error => {
+          this.isLoading = false
           console.log(error)
+        })
+    },
+
+    scrollMagicHandlers () {
+      let scrollMagicInfiniteScroll = new ScrollMagic.Controller()
+
+      new ScrollMagic.Scene({ triggerElement: `.${this.triggerElement}` })
+        .triggerHook('onEnter')
+        .addTo(scrollMagicInfiniteScroll)
+        .on('enter', () => {
+          this.getMoreItems()
         })
     }
   }

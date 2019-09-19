@@ -1,10 +1,11 @@
-<div class="new-styles container--profile container--push-bottom">
+<div class="new-styles container page-padding--bottom">
   <header class="hero--thematic-area center">
+    <%= image_tag 'icons/aichi-11.svg', alt: 'Aichi 11 icon', class: 'icon--aichi margin-center' %>
     <h1 class="hero__title hero__title--article"><%= t('thematic_area.target_11_dashboard.title') %></h1> 
   </header>
 
   <main>
-    <section>
+    <section class="section-padding--top">
       <h2><%= t('thematic_area.target_11_dashboard.subtitle_1') %></h2>
 
       <carousel class="carousel--basic" :show-arrows="false" :show-all-indicators="true">
@@ -34,12 +35,16 @@
       </carousel>
     </section>
 
-    <section>
+    <section class="section-padding--top">
       <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
 
-      <p>sticky bar</p>
-      
-      <v-table :table-headings="<%= @country_and_regions_headings %>" :data-src="<%= @endpoint.to_json %>" class="table--horizontal-scroll"></v-table>
+      <target-11-dashboard
+        class="sm-trigger-sticky-bar"
+        :select="<%= @search %>"
+        :table-headings="<%= @country_and_regions_headings %>" 
+        :table-data-src="<%= @endpoint.to_json %>"
+      >
+      </target-11-dashboard>
     </section>
   </main>
 </div>

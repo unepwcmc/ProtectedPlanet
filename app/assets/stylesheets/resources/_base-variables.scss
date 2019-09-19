@@ -42,6 +42,7 @@ $green: #71a32b;
 $green--darker: #415519; 
 
 $purple: #9691D1;
+$purple-dark: #794B9D;
 
 $primary: $green;
 $primary-dark: $green--darker;
@@ -92,10 +93,10 @@ $line-height-headings: 1.25;
 // breakpoints
 //--------------------------------------------------
 // must be in px not rem!
-$small: 628; //mobile
-$medium: 763; //tablet portrait
-$large: 1024; //tablet landscape
-$xlarge: 1704; //monitor
+$small: 628px; //mobile
+$medium: 768px; //tablet portrait
+$large: 1024px; //tablet landscape
+$xlarge: 1704px; //monitor
 
 @mixin responsive-styles ($property, $mobile, $tablet, $laptop) {
   #{$property}: $mobile;
@@ -122,21 +123,21 @@ $gutter-large: rem-calc(32);
 // $container-width-medium: rem-calc(1120);
 // $container-width-large: rem-calc(800);
 
-// $page-padding-top-small: rem-calc(16);
-// $page-padding-top-medium: rem-calc(24);
-// $page-padding-top-large: rem-calc(100);
+$page-padding-top-mobile: rem-calc(16);
+$page-padding-top-tablet: rem-calc(24);
+$page-padding-top-desktop: rem-calc(36);
 
-// $page-padding-bottom-small: rem-calc(32);
-// $page-padding-bottom-medium: rem-calc(60);
-// $page-padding-bottom-large: rem-calc(80);
+$page-padding-bottom-mobile: rem-calc(32);
+$page-padding-bottom-tablet: rem-calc(60);
+$page-padding-bottom-desktop: rem-calc(80);
 
-// $section-padding-top-small: rem-calc(20);
-// $section-padding-top-medium: rem-calc(40);
-// $section-padding-top-large: rem-calc(40);
+$section-padding-top-mobile: rem-calc(20);
+$section-padding-top-tablet: rem-calc(40);
+$section-padding-top-desktop: rem-calc(40);
 
-// $section-padding-bottom-small: rem-calc(30);
-// $section-padding-bottom-medium: rem-calc(60);
-// $section-padding-bottom-large: rem-calc(60);
+$section-padding-bottom-mobile: rem-calc(30);
+$section-padding-bottom-tablet: rem-calc(60);
+$section-padding-bottom-desktop: rem-calc(60);
 
 $item-spacing-small: rem-calc(14);
 $item-spacing-medium: rem-calc(20);
