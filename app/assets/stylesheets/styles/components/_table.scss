@@ -79,6 +79,7 @@ $table-head-bg-color: $grey-lighter;
           @include responsive-styles(display, block, block, none);
           font-size: rem-calc(18);
           font-weight: 700;
+          margin-bottom: rem-calc(10);
         }
         
         &__scroll-wrapper {
@@ -96,6 +97,12 @@ $table-head-bg-color: $grey-lighter;
               @include shadow--grey-light;
               @include responsive-styles(border, solid 1px $grey-light, solid 1px $grey-light, none);
               @include breakpoint($medium) { box-shadow: none; }
+              display: flex; //temp-refresh
+              flex-direction: column; //temp-refresh
+
+              &:first-child {
+                @include responsive-styles(display, none, none, flex);
+              }
             }
               
               &__cell-titles {
@@ -115,6 +122,13 @@ $table-head-bg-color: $grey-lighter;
               }
 
               &__cell-chart:nth-child(2) { margin-bottom: rem-calc(12); }
+
+              &__cell-index {
+                @include responsive-styles(display, block, block, none);
+                font-size: rem-calc(12);
+                font-weight: 500;
+                margin-top: auto;
+              }
     }
   }
 }

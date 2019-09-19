@@ -6,6 +6,7 @@ en:
       subtitle_2: Country & Regions
       search_config: 
         label: Search by country/region
+        placeholder: Search by country/region
       tooltips:
         -
           id: coverage

@@ -12,7 +12,7 @@
     
     <div class="table__scroll-wrapper">
       <div class="table__scroll">
-        <div class="table__cell breakpoint-medium-up">
+        <div class="table__cell">
           <a 
             :href="row.url"
             class="table__cell-link"
@@ -48,7 +48,7 @@
             class="table__cell-chart"
           />
 
-          <span>{{ index }} of {{ totalStats }}</span>
+          <span class="table__cell-index">{{ index + 1 }} <em class="text-light">of</em> {{ totalStats }}</span>
         </div>
       </div>
     </div>
@@ -80,7 +80,7 @@ export default {
 
   computed: {
     totalStats () {
-      return this.row.stats.count
+      return this.row.stats.length
     }
   },
 

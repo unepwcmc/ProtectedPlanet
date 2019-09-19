@@ -92,7 +92,7 @@
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
 import mixinSelectShared from '../../mixins/mixin-select-shared'
 const UNDEFINED_ID = '__UNDEFINED__'
-const UNDEFINED_OBJECT = { id: UNDEFINED_ID, name: 'None' }
+const UNDEFINED_OBJECT = { id: UNDEFINED_ID, name: null }
 
 export default {
   name: 'VSelectSearch',
@@ -112,7 +112,7 @@ export default {
       type: Array // [ { } ]
     },
     selected: {
-      type: Object,
+      type: Object, // { id: String, name: String }
       default: () => UNDEFINED_OBJECT
     }
   },
@@ -192,7 +192,7 @@ export default {
     },
 
     setSearchTermToSelected () {
-      this.searchTerm = this.selectedInternal.name
+      this.searchTerm = this.selectedInternal.name === null ? this.defaultSearchTerm : this.selectedInternal.name
     },
 
     conditionalOptionClasses (option, index) {
