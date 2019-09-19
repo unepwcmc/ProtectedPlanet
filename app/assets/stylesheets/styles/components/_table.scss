@@ -62,7 +62,7 @@ $table-head-bg-color: $grey-lighter;
           @include shadow--grey-light;
         }
       }
-
+        
         &__row-title {
           @include responsive-styles(display, block, block, none);
           font-size: rem-calc(18);
@@ -86,9 +86,13 @@ $table-head-bg-color: $grey-lighter;
               @include responsive-styles(border, solid 1px $grey-light, solid 1px $grey-light, none);
               @include breakpoint($medium) { box-shadow: none; }
             }
-            
+              
+              &__cell-titles {
+                @include responsive-styles(display, flex, flex, none);
+                justify-content: space-between; //temp refresh
+              }
+
               &__cell-title {
-                @include responsive-styles(display, block, block, none);
                 font-size: rem-calc(17);
                 font-weight: 500;
                 margin-bottom: rem-calc(14);

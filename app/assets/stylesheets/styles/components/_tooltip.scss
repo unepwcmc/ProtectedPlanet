@@ -16,6 +16,9 @@ $tooltip-padding: rem-calc(22 24 20 20);
   }
 
   &__target {
+    @include responsive-styles(left, inherit, 50%, 50%);
+    @include responsive-styles(right, 0, inherit, inherit);
+    @include responsive-styles(transform, none, translateX(-50%), translateX(-50%));
     font-size: rem-calc(15);
     line-height: 1.4;
     padding: $tooltip-padding;
@@ -25,12 +28,12 @@ $tooltip-padding: rem-calc(22 24 20 20);
 
     position: absolute;
     top: 145%;
-    left: 50%;
     z-index: 1;
 
-    transform: translateX(-50%);
-
     &:after {
+      @include responsive-styles(left, inherit, 50%, 50%);
+      @include responsive-styles(right, 0, inherit, inherit);
+      @include responsive-styles(transform, none, translateX(-50%), translateX(-50%));
       border-bottom: $tooltip-border-style $tooltip-background-color;
       border-right: $tooltip-border-style transparent;
       border-left: $tooltip-border-style transparent;
@@ -39,9 +42,6 @@ $tooltip-padding: rem-calc(22 24 20 20);
 
       position: absolute;
       bottom: 100%;
-      left: 50%;
-
-      transform: translateX(-50%);
     }
   }
 
