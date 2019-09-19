@@ -1,9 +1,30 @@
 //--------------------------------------------------
-// settings
+// variables
 //--------------------------------------------------
 $tooltip-background-color: $grey-light;
 $tooltip-border-style: solid rem-calc(10);
-$tooltip-padding: rem-calc(22 24 20 20);
+$tooltip-padding: rem-calc(34 30 28 26);
+$tooltip-end-position: rem-calc(10);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin tooltip-end () {
+  left: inherit;
+  right: -$tooltip-end-position;
+  transform: none;
+}
+
+@mixin tooltip-arrow-end () {
+  @include tooltip-end;
+  right: $tooltip-end-position;
+}
+
+@mixin tooltip-center () {
+  left: 50%;
+  right: inherit;
+  transform: translateX(-50%);
+}
 
 //--------------------------------------------------
 // tooltips
@@ -13,12 +34,14 @@ $tooltip-padding: rem-calc(22 24 20 20);
 
   &__trigger {
     cursor: pointer;
+    opacity: 0.7;
+
+    .tooltip--active & { opacity: 1; }
   }
 
   &__target {
-    @include responsive-styles(left, inherit, 50%, 50%);
-    @include responsive-styles(right, 0, inherit, inherit);
-    @include responsive-styles(transform, none, translateX(-50%), translateX(-50%));
+    @include shadow--grey;
+    @include tooltip-end;
     font-size: rem-calc(15);
     line-height: 1.4;
     padding: $tooltip-padding;
@@ -30,10 +53,15 @@ $tooltip-padding: rem-calc(22 24 20 20);
     top: 145%;
     z-index: 1;
 
+    @include breakpoint($medium) { @include tooltip-center; }
+
+    .tooltip--end & {
+      @include tooltip-end;
+      @include breakpoint($medium) { @include tooltip-end; }
+    }
+
     &:after {
-      @include responsive-styles(left, inherit, 50%, 50%);
-      @include responsive-styles(right, 0, inherit, inherit);
-      @include responsive-styles(transform, none, translateX(-50%), translateX(-50%));
+      @include tooltip-arrow-end;
       border-bottom: $tooltip-border-style $tooltip-background-color;
       border-right: $tooltip-border-style transparent;
       border-left: $tooltip-border-style transparent;
@@ -42,13 +70,20 @@ $tooltip-padding: rem-calc(22 24 20 20);
 
       position: absolute;
       bottom: 100%;
+      
+      @include breakpoint($medium) { @include tooltip-center; }
+
+      .tooltip--end & {
+        @include tooltip-arrow-end;
+        @include breakpoint($medium) { @include tooltip-arrow-end; }
+      }
     }
   }
 
   &__close {
     @include icon-button-reset;
     @include icon-close;
-
+    
     position: absolute;
     top: rem-calc(10);
     right: rem-calc(10);

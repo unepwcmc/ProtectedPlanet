@@ -1,21 +1,27 @@
 <template>
   <div class="table-head">
-    <div v-for="(heading, index) in headings"
+    <div 
+      v-for="(heading, index) in headings"
       :key="getVForKey('row', index)"
       class="table-head__cell"
     >
-      {{ heading.title }}
+      <span class="table-head__title-wrapper">
+        <span class="table-head__title">{{ heading.title }}</span>
 
-      <table-sort :sort-key="heading.id" />
+        <tooltip 
+          v-if="!isFirstHeading(index)"
+          :on-hover="false" 
+          :text="getTooltipText(heading.id)"
+          :class="['carousel__tooltip', { 'tooltip--end': isLastHeading(index) }]"
+        >
+          <i class="icon--info-circle block"></i>
+        </tooltip>
+      </span>
 
-      <tooltip 
+      <table-sort 
         v-if="index !== 0"
-        :on-hover="false" 
-        :text="getTooltipText(heading.id)"
-        class="carousel__tooltip"
-      >
-        <i class="icon--info-circle block"></i>
-      </tooltip>
+        :sort-key="heading.id" 
+      />
     </div>    
   </div>
 </template>
@@ -50,6 +56,14 @@ export default {
       })
       
       return tooltip !== undefined ? tooltip.text : ''
+    },
+
+    isFirstHeading (index) {
+      return 0 === index
+    },
+
+    isLastHeading (index) {
+      return this.headings.length - 1  === index
     }
   }
 }
