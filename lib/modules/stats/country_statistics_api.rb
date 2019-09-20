@@ -11,7 +11,7 @@ module Stats::CountryStatisticsApi
       well_connected: {
         name: 'Well connected',
         slug: 'well_connected',
-        attribuge: STATISTICS_API['well_connected_attribute']
+        attribute: STATISTICS_API['well_connected_attribute']
       },
       importance: {
         name: 'Areas of importance for biodiversity',
