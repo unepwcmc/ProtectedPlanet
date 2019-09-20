@@ -6,17 +6,17 @@ module Stats::CountryStatisticsApi
       representative: {
         name: 'Representative',
         slug: 'representative',
-        field: STATISTICS_API['representative_field']
+        attribute: STATISTICS_API['representative_attribute']
       },
       well_connected: {
         name: 'Well connected',
         slug: 'well_connected',
-        field: STATISTICS_API['well_connected_field']
+        attribuge: STATISTICS_API['well_connected_attribute']
       },
       importance: {
         name: 'Areas of importance for biodiversity',
         slug: 'importance',
-        field: STATISTICS_API['importance_field']
+        attribute: STATISTICS_API['importance_attribute']
       }
     }
 
