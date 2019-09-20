@@ -99,7 +99,11 @@ module Stats::CountryStatisticsApi
 
     # This is only used for global stats
     def format_data(data, endpoint)
-      json = { title: ATTRIBUTES[endpoint.to_sym][:name], charts: [] }
+      json = {
+        id: ATTRIBUTES[endpoint.to_sym][:slug],
+        title: ATTRIBUTES[endpoint.to_sym][:name],
+        charts: []
+      }
       chart_json = Aichi11Target::DEFAULT_CHART_JSON.dup
       attribute = ATTRIBUTES[endpoint.to_sym][:attribute]
 
