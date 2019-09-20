@@ -5,12 +5,14 @@ export const storeTable = {
     sortDirection: '',
     sortField: '', 
     requestedPage: 1,
+    searchId: '',
     searchTerm: ''
   },
 
   actions: {
-    updateSearchTerm ({ commit }, searchTerm) {
-      commit('updateSearchTerm', searchTerm)
+    updateSearchParameters ({ commit }, searchParameters) {
+      commit('updateSearchId', searchParameters.id)
+      commit('updateSearchType', searchParameters.type)
       commit('updateSortDirection', '')
       commit('updateSortField', '')
       commit('updateRequestedPage', 1)
@@ -26,8 +28,11 @@ export const storeTable = {
   },
 
   mutations: {
-    updateSearchTerm (state, searchTerm) {
-      state.searchTerm = searchTerm
+    updateSearchId (state, searchId) {
+      state.searchId = searchId
+    },
+    updateSearchType (state, searchType) {
+      state.searchType = searchType
     },
     updateRequestedPage (state, page) {
       state.requestedPage = page

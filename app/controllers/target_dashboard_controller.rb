@@ -20,7 +20,8 @@ class TargetDashboardController < ApplicationController
         'target_dashboard[per_page]=PERPAGE',
         'target_dashboard[sort_by]=SORTBY',
         'target_dashboard[order]=ORDER',
-        'target_dashboard[search_term]=SEARCHTERM'
+        'target_dashboard[search_term]=SEARCHID',
+        'target_dashboard[search_term]=SEARCHTYPE'
       ]
     }
 
