@@ -12,7 +12,7 @@ export const storeTable = {
   actions: {
     updateSearchParameters ({ commit }, searchParameters) {
       commit('updateSearchId', searchParameters.id)
-      commit('updateSearchType', searchParameters.type)
+      commit('updateSearchType', searchParameters.obj_type)
       commit('updateSortDirection', '')
       commit('updateSortField', '')
       commit('updateRequestedPage', 1)
