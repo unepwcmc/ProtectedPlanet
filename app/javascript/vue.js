@@ -1,3 +1,8 @@
+import { polyfill } from 'es6-object-assign'
+import { findPolyfill } from './utilities/polyfill-find'
+findPolyfill()
+polyfill()
+
 // dependencies
 import Vue from 'vue/dist/vue.esm'
 import Vue2TouchEvents from 'vue2-touch-events'
