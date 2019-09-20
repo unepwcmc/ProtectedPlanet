@@ -112,7 +112,7 @@ export default {
       type: Array // [ { } ]
     },
     selected: {
-      type: Object,
+      type: Object, // { id: String, name: String }
       default: () => UNDEFINED_OBJECT
     }
   },
@@ -129,6 +129,9 @@ export default {
     },
     hasSelectedOption () {
       return this.selectedInternal !== UNDEFINED_OBJECT
+    },
+    defaultSearchTerm () {
+      return this.placeholder ? this.placeholder : 'Select'
     }
   },
 
@@ -192,7 +195,7 @@ export default {
     },
 
     setSearchTermToSelected () {
-      this.searchTerm = this.selectedInternal.name
+      this.searchTerm = this.selectedInternal.name === 'None' ? this.defaultSearchTerm : this.selectedInternal.name
     },
 
     conditionalOptionClasses (option, index) {

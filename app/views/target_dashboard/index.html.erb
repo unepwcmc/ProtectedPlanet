@@ -11,10 +11,9 @@
       <carousel class="carousel--basic" :show-arrows="false" :show-all-indicators="true">
         <% @global_stats.each do |stat| %>
           <carousel-slide>
-
             <tooltip 
               :on-hover="false" 
-              text="<%= t("thematic_area.target_11_dashboard.tooltips.#{stat[:id]}") %>"
+              text="<%= getTooltipText(stat[:id]) %>"
               class="carousel__tooltip"
             >
               <i class="icon--info-circle block"></i>
@@ -43,6 +42,7 @@
         :select="<%= @search %>"
         :table-headings="<%= @country_and_regions_headings %>" 
         :table-data-src="<%= @endpoint.to_json %>"
+        :tooltip-array="<%= t("thematic_area.target_11_dashboard.tooltips").to_json %>"
       >
       </target-11-dashboard>
     </section>

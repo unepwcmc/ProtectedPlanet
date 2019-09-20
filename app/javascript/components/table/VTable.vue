@@ -4,6 +4,7 @@
       v-for="(row, index) in items"
       :key="getVForKey('row', index)"
       :row="row"
+      :tooltipArray="tooltipArray"
     />
 
     <span v-if="triggerElement" v-bind:class="loadingSpinnerClasses"></span>
@@ -28,6 +29,10 @@ export default {
   props: {
     dataSrc: {
       type: Object, // { url: String, params: [ String, String ] }
+      required: true
+    },
+    tooltipArray: {
+      type: Array, // [ { id: String, title: String, text: String } ]
       required: true
     },
     itemsPerPage: {

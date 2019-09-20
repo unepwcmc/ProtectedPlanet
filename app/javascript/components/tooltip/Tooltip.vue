@@ -1,6 +1,6 @@
 <template>
   <div 
-    class="tooltip"
+    :class="['tooltip', { 'tooltip--active': isActive }]"
   >
     <div v-if="onHover"
       v-touch="toggleTooltip"
@@ -37,14 +37,18 @@
         class="tooltip__close"
       />
 
-      {{ text }}
+      <div v-html="text" />
     </div>
   </div>
 </template>
 
 <script>
+import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
+
 export default {
   name: 'Tooltip',
+
+  mixins: [ mixinPopupCloseListeners({ closeCallback: 'closeTooltip' }) ],
 
   props: {
     text: {
@@ -80,6 +84,10 @@ export default {
   methods: {
     toggleTooltip (boolean) {
       this.isActive = typeof boolean == 'boolean' ? boolean : !this.isActive
+    },
+
+    closeTooltip () {
+      this.toggleTooltip(false)
     }
   }
 }  

@@ -5,15 +5,18 @@ module Stats::CountryStatisticsApi
     ATTRIBUTES = {
       representative: {
         name: 'Representative',
-        attribute: STATISTICS_API['representative_attribute']
+        slug: 'representative',
+        field: STATISTICS_API['representative_field']
       },
       well_connected: {
         name: 'Well connected',
-        attribute: STATISTICS_API['well_connected_attribute']
+        slug: 'well_connected',
+        field: STATISTICS_API['well_connected_field']
       },
       importance: {
         name: 'Areas of importance for biodiversity',
-        attribute: STATISTICS_API['importance_attribute']
+        slug: 'importance',
+        field: STATISTICS_API['importance_field']
       }
     }
 
