@@ -34,7 +34,7 @@ $table-head-bg-color: $grey-lighter;
     &__cell {
       @include table-cell-basic;
       align-items: center; //temp-refresh
-      justify-content: space-between; //remp-refresh
+      justify-content: space-between; //temp-refresh
 
       display: flex; //temp-refresh
     }
