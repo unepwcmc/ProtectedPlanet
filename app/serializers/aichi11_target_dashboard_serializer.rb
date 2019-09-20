@@ -35,6 +35,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
 
   def initialize(params={}, data = nil)
     super(params, data)
+    @search_term = sanitise_search_term
   end
 
   def serialize
@@ -65,10 +66,17 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     head.to_json
   end
 
+  def serialize_options
+    @params[:sort_by] ||= 'name'
+    @params[:order] ||= 'asc'
+    sorted.map { |i| {id: i['iso'], name: i['name'], obj_type: i['obj_type'] } }
+  end
+
   private
 
   def sorted
-    query = 'SELECT * FROM aichi11_target_dashboard_view'
+    search = @search_term.present? ? "WHERE iso = '#{@search_term}' LIMIT 1" : ''
+    query = "SELECT * FROM aichi11_target_dashboard_view #{search}"
     _data = ActiveRecord::Base.connection.execute(query)
 
     _data = _data.sort_by { |d| d[sort_by] }
@@ -90,7 +98,11 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     when 'effectively_managed'
       "(pame_#{sort_field_land} + pame_#{sort_field_marine})"
     else
-      _sort_by.present? ? STATS[_sort_by.to_sym][:column_name] : super
+      if _sort_by.present? && STATS[_sort_by.to_sym].present?
+        STATS[_sort_by.to_sym][:column_name]
+      else
+        super
+      end
     end
   end
 
@@ -133,5 +145,10 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
       target: Aichi11Target.instance.public_send(target_column),
       colour: type
     }
+  end
+
+  def sanitise_search_term
+    term = @params[:search_term]
+    ['__UNDEFINED__', '', nil].include?(term) ? '' : term
   end
 end

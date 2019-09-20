@@ -6,12 +6,11 @@ class TargetDashboardController < ApplicationController
     @targets = Aichi11TargetSerializer.new.serialize
     @global_stats = Aichi11Target.get_global_stats
 
-    _countries = Country.all.map { |c| { id: c.iso_3, name: c.name } }
-    _regions = Region.all.map { |r| { id: r.iso, name: r.name } }
+    _options = Aichi11TargetDashboardSerializer.new.serialize_options
 
     @search = {
       config: { id: 'search', placeholder: t('thematic_area.target_11_dashboard.search_config.label') },
-      options: [_countries, _regions].flatten
+      options: _options
     }.to_json
 
     @endpoint = {
@@ -21,7 +20,7 @@ class TargetDashboardController < ApplicationController
         'target_dashboard[per_page]=PERPAGE',
         'target_dashboard[sort_by]=SORTBY',
         'target_dashboard[order]=ORDER',
-        'target_dashboard[search_term]=SEARCHTERM' #TODO @FERDI make this work!
+        'target_dashboard[search_term]=SEARCHTERM'
       ]
     }
 
@@ -39,6 +38,6 @@ class TargetDashboardController < ApplicationController
   private
 
   def target_dashboard_params
-    params.require(:target_dashboard).permit(:per_page, :page, :sort_by, :order)
+    params.require(:target_dashboard).permit(:per_page, :page, :sort_by, :order, :search_term)
   end
 end
