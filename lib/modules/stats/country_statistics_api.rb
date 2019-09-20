@@ -33,7 +33,6 @@ module Stats::CountryStatisticsApi
 
     def import(iso3=nil)
       endpoints = ATTRIBUTES.slice(:well_connected, :importance)
-      data = fetch_national_data(iso3)
       # Get stats for each endpoint
       # Representative stat is exlcuded because that is a global level stat
       # Connect to the API and fetch the data
@@ -103,12 +102,18 @@ module Stats::CountryStatisticsApi
 
       attr_area_sum = total_area_sum = 0
       data.map do |x|
-        attr_area = (x[attribute] ? x[attribute] : 0)
+        attr_area = x[attribute] || 0
         total_area = x[COUNTRY_AREA_ATTRIBUTE] || 0
-        attr_area_sum += (attr_area > 0 && total_area > 0) ? (attr_area * total_area / 100) : 0
+        attr_area_sum += attr_area * total_area / 100
         total_area_sum += total_area
       end
-      value = (attr_area_sum / total_area_sum * 100).round(2)
+      value = 0
+      begin
+        value = (attr_area_sum / total_area_sum * 100).round(2)
+      rescue ZeroDivisionError => e
+        Rails.logger.info(e.backtrace)
+        return { error: ERRORS[:data] }
+      end
       target = Aichi11Target.instance.public_send("#{endpoint.to_s}_global")
       json[:charts] << chart_json.merge!({ value: value, target: target })
       json
