@@ -6,18 +6,12 @@ class TargetDashboardController < ApplicationController
     @targets = Aichi11TargetSerializer.new.serialize
     @global_stats = Aichi11Target.get_global_stats
 
-    @search = { 
+    _countries = Country.all.map { |c| { id: c.iso_3, name: c.name } }
+    _regions = Region.all.map { |r| { id: r.iso, name: r.name } }
+
+    @search = {
       config: { id: 'search', placeholder: t('thematic_area.target_11_dashboard.search_config.label') },
-      options: [ #this should be the list of countries and regions,
-        {
-          id: 'FRA', #TODO @FERDI or whatever you want the ids to be this is what will be sent to the backend (but that can be changed if you need the name as well)
-          name: 'France'
-        },
-        {
-          id: 'ESP',
-          name: 'Spain'
-        }
-      ]
+      options: [_countries, _regions].flatten
     }.to_json
 
     @endpoint = {
