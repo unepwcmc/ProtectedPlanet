@@ -47,9 +47,10 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     }
     # Loop through records
     sorted_and_paginated.map do |record|
+      url = "/#{record['obj_type']}/#{record['iso']}"
       hash = {
         title: record['name'],
-        url: "/country/#{record['iso']}",
+        url: url,
         obj_type: record['obj_type'],
         stats: []
       }
