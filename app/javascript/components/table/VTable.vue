@@ -93,8 +93,7 @@ export default {
         requestedPage = storeTable.requestedPage,
         sortDirection = storeTable.sortDirection,
         sortField = storeTable.sortField,
-        searchId = storeTable.searchId,
-        searchType = storeTable.searchType
+        searchId = storeTable.searchId
       
       let endpoint = `${this.dataSrc.url}`
 
@@ -109,7 +108,7 @@ export default {
       endpoint = endpoint.replace('SORTBY', sortField)
       endpoint = endpoint.replace('ORDER', sortDirection)
       endpoint = endpoint.replace('SEARCHID', searchId)
-      endpoint = endpoint.replace('SEARCHTYPE', searchType)
+
       console.log(endpoint)
       axios.get(endpoint)
         .then(response => {

@@ -64,7 +64,7 @@ export default {
 
   methods: {
     updateTable (newSelectedInternal) {
-      this.$store.dispatch('table/updateSearchParameters', newSelectedInternal)
+      this.$store.dispatch('table/updateSearch', newSelectedInternal.id)
       this.$eventHub.$emit('getNewItems')
     }
   }
