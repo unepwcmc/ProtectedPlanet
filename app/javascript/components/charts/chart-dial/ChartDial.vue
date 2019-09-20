@@ -40,10 +40,9 @@
           />
 
         <polyline 
-          class="chart__arrow-line"
+          class="chart__arrow-line--target"
           :points="arrowPointsTarget" 
           fill="none"
-          stroke-dasharray="6 8"
           />
 
         <circle
@@ -53,13 +52,19 @@
           class="chart__arrow-circle"
         />
       </g>
+      
+      <polyline 
+        :points="getLegendPath()"
+        class="chart__arrow-line--target"
+      />
 
       <text 
         class="chart__title"
-        :x="svgStartX + paddingSides" 
-        :y="paddingBottom - 1"
+        alignment-baseline="middle"
+        :x="legendEndX + 5" 
+        :y="legendY"
       >
-        {{ title }}
+        {{ prettyTitle }}
       </text>
 
       <text 
@@ -68,16 +73,7 @@
         :y="-dialValueLabelArcEndY"
         text-anchor="middle"
       >
-        {{ dialValue }}%
-      </text>
-
-      <text 
-        class="chart__title"
-        :x="-dialTargetLabelArcEndX" 
-        :y="-dialTargetLabelArcEndY"
-        text-anchor="middle"
-      >
-        {{ dialTarget }}%
+        {{ prettyDialValue }}%
       </text>
     </svg>
   </div>  
@@ -123,13 +119,20 @@ export default {
     return {
       dialDiameter: 244,
       paddingTop: 30,
-      paddingBottom: 20,
+      paddingBottom: 30,
       paddingSides: 60,
-      arrowHeadSize: 5
+      arrowHeadSize: 5,
+      legendWidth: 20
     }
   },
 
   computed: {
+    prettyTitle () {
+      return `${this.title} target: ${this.dialTarget}%`
+    },
+    prettyDialValue () {
+      return Math.round(this.dialValue)
+    },
     svgStartX () {
       return -this.dialDiameter/2 - this.paddingSides
     },
@@ -197,6 +200,15 @@ export default {
     },
     arrowPointsTarget () {
       return `0,0 ${this.dialTargetArcEndX},${this.dialTargetArcEndY}`
+    },
+    legendStartX () {
+      return this.svgStartX + this.paddingSides
+    },
+    legendEndX () {
+      return this.legendStartX + this.legendWidth
+    },
+    legendY () {
+      return this.paddingBottom - 8
     }
   },
 
@@ -251,6 +263,10 @@ export default {
 
       return radius * Math[trig]((degrees/100) * 2 * Math.PI)
     },
+
+    getLegendPath () {
+      return `${this.legendStartX},${this.legendY} ${this.legendEndX},${this.legendY}`
+    }
   }
 }
 </script>

@@ -6,7 +6,7 @@
       :row="row"
     />
 
-    <span v-if="triggerElement" :class="[ triggerElement, { 'icon-visible': isLoading }, 'icon--loading-spinner margin-center' ]"></span>
+    <span v-if="triggerElement" v-bind:class="loadingSpinnerClasses"></span>
   </div>
 </template>
 
@@ -45,6 +45,16 @@ export default {
       items: () => {},
       loadedItems: 0,
       isLoading: false
+    }
+  },
+
+  computed: {
+    loadingSpinnerClasses () {
+      return [ 
+        this.triggerElement, 
+        { 'icon-visible': this.isLoading }, 
+        'icon--loading-spinner margin-center'
+      ]
     }
   },
 

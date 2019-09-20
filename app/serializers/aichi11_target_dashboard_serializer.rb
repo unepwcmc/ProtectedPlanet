@@ -1,3 +1,4 @@
+require 'will_paginate/array'
 class Aichi11TargetDashboardSerializer < CountrySerializer
   PER_PAGE = 15.freeze
   STATS = {
@@ -41,13 +42,14 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
       page: page,
       per_page: per_page,
       items: [],
-      total_entries: sorted.count
+      total_entries: sorted.length
     }
     # Loop through records
     sorted_and_paginated.map do |record|
       hash = {
-        title: record.name,
-        url: "/country/#{record.iso_3}",
+        title: record['name'],
+        url: "/country/#{record['iso']}",
+        obj_type: record['obj_type'],
         stats: []
       }
 
@@ -65,9 +67,21 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
 
   private
 
+  def sorted
+    query = 'SELECT * FROM aichi11_target_dashboard_view'
+    _data = ActiveRecord::Base.connection.execute(query)
+
+    _data = _data.sort_by { |d| d[sort_by] }
+    order.downcase == 'desc'? _data.reverse : _data
+  end
+
+  def sorted_and_paginated
+    sorted.paginate(page: page, per_page: per_page)
+  end
+
   def sort_by
     # Splitting by / for the country/region parameter
-    _sort_by = @params[:sort_by].split('/').first
+    _sort_by = @params[:sort_by] ? @params[:sort_by].split('/').first : ''
     sort_field_land = 'percentage_pa_land_cover'
     sort_field_marine = 'percentage_pa_marine_cover'
     case _sort_by
@@ -112,8 +126,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     _column_name = stat[:column_name].gsub(/type/, column_type)
     target_column = "#{stat_name}_#{type}"
 
-    relation = record.public_send(stat[:relation])
-    value = (relation && relation.public_send(_column_name)) || 0
+    value = record[_column_name] || 0
     {
       title: type.capitalize,
       value: value,
