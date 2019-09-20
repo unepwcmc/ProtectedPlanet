@@ -35,7 +35,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
 
   def initialize(params={}, data = nil)
     super(params, data)
-    @search_term = sanitise_search_term
+    @search_id, @search_type = sanitise_search_term
   end
 
   def serialize
@@ -69,13 +69,20 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
   def serialize_options
     @params[:sort_by] ||= 'name'
     @params[:order] ||= 'asc'
-    sorted.map { |i| {id: i['iso'], name: i['name'], obj_type: i['obj_type'] } }
+    sorted.map do |i|
+      id = "#{i['id']}-#{i['obj_type']}"
+      {
+        id: id,
+        name: i['name']
+      }
+    end
   end
 
   private
 
   def sorted
-    search = @search_term.present? ? "WHERE iso = '#{@search_term}' LIMIT 1" : ''
+    obj_type = @search_type == 'id' ? "AND obj_type = 'country'" : ''
+    search = @search_id.present? ? "WHERE #{@search_type} = #{@search_id} #{obj_type}" : ''
     query = "SELECT * FROM aichi11_target_dashboard_view #{search}"
     _data = ActiveRecord::Base.connection.execute(query)
 
@@ -149,7 +156,11 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
   end
 
   def sanitise_search_term
-    term = @params[:search_term]
-    ['__UNDEFINED__', '', nil].include?(term) ? '' : term
+    return ['', ''] unless @params[:search_id]
+    _id, _obj_type = @params[:search_id].split('-')
+    id = ['__UNDEFINED__', 'SEARCHID', '', nil].include?(_id) ? '' : _id
+    obj_type = _obj_type == 'region' ? 'region_id' : 'id'
+
+    [id, obj_type]
   end
 end

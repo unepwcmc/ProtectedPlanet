@@ -39,6 +39,6 @@ class TargetDashboardController < ApplicationController
   private
 
   def target_dashboard_params
-    params.require(:target_dashboard).permit(:per_page, :page, :sort_by, :order, :search_term)
+    params.require(:target_dashboard).permit(:per_page, :page, :sort_by, :order, :search_id)
   end
 end
