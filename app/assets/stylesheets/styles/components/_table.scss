@@ -34,15 +34,27 @@ $table-head-bg-color: $grey-lighter;
     &__cell {
       @include table-cell-basic;
       align-items: center; //temp-refresh
+      justify-content: space-between; //temp-refresh
 
       display: flex; //temp-refresh
     }
+      
+      &__title-wrapper {
+        align-items: center; //temp-refresh
+        flex-wrap: nowrap; //temp-refresh
 
-    &__sort {
-      @include button-plain;
-      @include icon-sort;
-      padding: rem-calc(3 6);
-    }
+        display: flex; //temp-refresh
+      }
+
+        &__title {
+          margin-right: rem-calc(6); 
+        }
+
+      &__sort {
+        @include button-plain;
+        @include icon-sort;
+        padding: rem-calc(3 6);
+      }
   }
 }
 
@@ -62,7 +74,7 @@ $table-head-bg-color: $grey-lighter;
           @include shadow--grey-light;
         }
       }
-
+        
         &__row-title {
           @include responsive-styles(display, block, block, none);
           font-size: rem-calc(18);
@@ -85,10 +97,21 @@ $table-head-bg-color: $grey-lighter;
               @include shadow--grey-light;
               @include responsive-styles(border, solid 1px $grey-light, solid 1px $grey-light, none);
               @include breakpoint($medium) { box-shadow: none; }
+              display: flex; //temp-refresh
+              flex-direction: column; //temp-refresh
+
+              &:first-child {
+                @include responsive-styles(display, none, none, flex);
+              }
             }
-            
+              
+              &__cell-titles {
+                @include responsive-styles(display, flex, flex, none);
+                justify-content: space-between; //temp refresh
+                margin-bottom: rem-calc(10);
+              }
+
               &__cell-title {
-                @include responsive-styles(display, block, block, none);
                 font-size: rem-calc(17);
                 font-weight: 500;
                 margin-bottom: rem-calc(14);
@@ -99,6 +122,13 @@ $table-head-bg-color: $grey-lighter;
               }
 
               &__cell-chart:nth-child(2) { margin-bottom: rem-calc(12); }
+
+              &__cell-index {
+                @include responsive-styles(display, block, block, none);
+                font-size: rem-calc(12);
+                font-weight: 500;
+                margin-top: auto;
+              }
     }
   }
 }

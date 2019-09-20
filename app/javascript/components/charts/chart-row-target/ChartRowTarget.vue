@@ -15,7 +15,7 @@
       />
 
       <polyline 
-        :points="getRowPath(valueX)" 
+        :points="getRowPath(valueX)"
         :stroke-width="rowHeight" 
         :class="`chart__stroke--${colour}`"
       />
