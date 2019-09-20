@@ -195,7 +195,7 @@ export default {
     },
 
     setSearchTermToSelected () {
-      this.searchTerm = this.selectedInternal.name === 'None' ? defaultSearchTerm : this.selectedInternal.name
+      this.searchTerm = this.selectedInternal.name === 'None' ? this.defaultSearchTerm : this.selectedInternal.name
     },
 
     conditionalOptionClasses (option, index) {
