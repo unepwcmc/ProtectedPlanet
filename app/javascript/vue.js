@@ -1,4 +1,6 @@
 import { polyfill } from 'es6-object-assign'
+import { findPolyfill } from './utilities/polyfill-find'
+findPolyfill()
 polyfill()
 
 // dependencies
