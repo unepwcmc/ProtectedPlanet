@@ -2,7 +2,7 @@ module Stats::CountryStatisticsApi
   class << self
     STATISTICS_API = Rails.application.secrets[:country_statistics_api].freeze
     BASE_URL = STATISTICS_API['url'].freeze
-    ENDPOINTS = {
+    ATTRIBUTES = {
       representative: {
         name: 'Representative',
         slug: 'representative',
@@ -18,7 +18,7 @@ module Stats::CountryStatisticsApi
         slug: 'importance',
         field: STATISTICS_API['importance_field']
       }
-    }.freeze
+    }
 
     ERRORS = {
       representative: """
@@ -29,57 +29,65 @@ module Stats::CountryStatisticsApi
       data: 'We are sorry but something went wrong while processing the data from the API.'
     }.freeze
 
-    ISO3_ATTRIBUTE = 'country_iso3'.freeze
-    NAME_ATTRIBUTE = 'country_name'.freeze
+    ISO3_ATTRIBUTE = STATISTICS_API['iso3_attribute'].freeze
+    NAME_ATTRIBUTE = STATISTICS_API['country_name_attribute'].freeze
+    COUNTRY_AREA_ATTRIBUTE = STATISTICS_API['jrc_country_area_attribute'].freeze
+
 
     def import(iso3=nil)
-      endpoints = ENDPOINTS.slice(:well_connected, :importance)
+      endpoints = ATTRIBUTES.slice(:well_connected, :importance)
       # Get stats for each endpoint
       # Representative stat is exlcuded because that is a global level stat
-      endpoints.each do |name, attributes|
-        # Connect to the API and fetch the data
-        data = fetch_national_data(iso3)
+      # Connect to the API and fetch the data
+      data = fetch_national_data(iso3)
 
-        # Return if there's an error
-        return data if data.is_a?(Hash) && data.key?(:error)
+      # Return if there's an error
+      return data if data.is_a?(Hash) && data.key?(:error)
 
-        # Update stat for each country
-        countries_not_found = []
-        statistics_not_found = []
-        data.each do |stat|
-          _iso3 = stat[ISO3_ATTRIBUTE]
-          next if _iso3.split('|').length > 1
+      countries_not_found = []
+      statistics_not_found = []
 
-          country = Country.find_by_iso_3(_iso3)
-          unless country
-            countries_not_found << _iso3
-            next
-          end
+      # Update stat for each country
+      data.each do |stat|
 
-          field = attributes[:field]
-          country_statistic = country.country_statistic
-          unless country_statistic
-            statistics_not_found << _iso3
-            next
-          end
+        _iso3 = stat[ISO3_ATTRIBUTE]
+        next if _iso3.split('|').length > 1
 
-          attr_name = "percentage_#{name}"
-          country_statistic.update_attributes("#{attr_name}" => stat[field])
+        country = Country.find_by_iso_3(_iso3)
+        unless country
+          countries_not_found << _iso3
+          next
         end
 
-        log_not_found_objects('country', countries_not_found)
-        log_not_found_objects('statistic', statistics_not_found)
+        country_statistic = country.country_statistic
+        unless country_statistic
+          statistics_not_found << _iso3
+          next
+        end
+
+        attrs = { jrc_country_area: stat[COUNTRY_AREA_ATTRIBUTE] }
+        endpoints.each do |name, attributes|
+          attribute = attributes[:attribute]
+          attr_name = "percentage_#{name}"
+
+          attrs[attr_name] = stat[attribute]
+        end
+
+        country_statistic.update_attributes(attrs)
       end
+
+      log_not_found_objects('country', countries_not_found)
+      log_not_found_objects('statistic', statistics_not_found)
     end
 
     def get_global_stats(endpoint=nil)
-      endpoints = endpoint ? ENDPOINTS.slice(endpoint.to_sym) : ENDPOINTS
+      endpoints = endpoint ? ATTRIBUTES.slice(endpoint.to_sym) : ATTRIBUTES
       global_stats = []
       endpoints.each do |name, attributes|
         data = fetch_global_data
 
         # Return if there's an error
-        return data if data.is_a?(Hash) && data.key?(:error)
+        return data if data.nil? || (data.is_a?(Hash) && data.key?(:error))
 
         data = data.reject { |stat| contains_exception?(stat) }
         global_stats << format_data(data, name)
@@ -91,15 +99,24 @@ module Stats::CountryStatisticsApi
 
     # This is only used for global stats
     def format_data(data, endpoint)
-      stat = ENDPOINTS[endpoint.to_sym]
-      json = { id: stat[:slug], title: stat[:name], charts: [] }
+      json = { title: ATTRIBUTES[endpoint.to_sym][:name], charts: [] }
       chart_json = Aichi11Target::DEFAULT_CHART_JSON.dup
-      field = stat[:field]
+      attribute = ATTRIBUTES[endpoint.to_sym][:attribute]
 
-      _sum = data.inject(0) do |sum, x|
-        sum + (x[field] ? x[field] : 0)
+      attr_area_sum = total_area_sum = 0
+      data.map do |x|
+        attr_area = x[attribute] || 0
+        total_area = x[COUNTRY_AREA_ATTRIBUTE] || 0
+        attr_area_sum += attr_area * total_area / 100
+        total_area_sum += total_area
       end
-      value = (_sum / data.length).round(2)
+      value = 0
+      begin
+        value = (attr_area_sum / total_area_sum * 100).round(2)
+      rescue ZeroDivisionError => e
+        Rails.logger.info(e.backtrace)
+        return { error: ERRORS[:data] }
+      end
       target = Aichi11Target.instance.public_send("#{endpoint.to_s}_global")
       json[:charts] << chart_json.merge!({ value: value, target: target })
       json

@@ -29,7 +29,6 @@ class Region < ApplicationRecord
 
   def protected_areas_per_governance
     region_data = {}
-    processed_data = []
     total_region_count = []
 
     countries.each do |country|
@@ -42,13 +41,14 @@ class Region < ApplicationRecord
       end
     end
 
-    processed_data = region_data.map{ |key,value| {
-          "governance_name" => key,
-          "governance_type" => value["governance_type"],
-          "count" => value["count"],
-          "percentage" => 100 * value["count"] / total_region_count.reduce(0, :+)
-        }
-    }
+    region_data.map do |key,value|
+      {
+        "governance_name" => key,
+        "governance_type" => value["governance_type"],
+        "count" => value["count"],
+        "percentage" => 100 * value["count"] / total_region_count.reduce(0, :+)
+      }
+    end
   end
 
   def protected_areas_per_iucn_category
