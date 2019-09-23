@@ -13,6 +13,7 @@ $chart-dial-font-size-desktop: rem-calc(26);
 //--------------------------------------------------
 &--dial {
   font: $chart-dial-font;
+  margin: rem-calc(10 0);
   width: 100%;
 
   .chart {

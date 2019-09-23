@@ -29,40 +29,28 @@
 }
 
 //--------------------------------------------------
-// site structure - reusable styles
-//--------------------------------------------------
-%container {
-  @include gutters('both', 'padding');
-
-  margin: 0 auto;
-  width: 100%;
-}
-
-//--------------------------------------------------
 // site structure
 //--------------------------------------------------
-.site-width {
-  width: 100%;
-  @include breakpoint($xlarge){ width: $site-width; }
-}
+.site-width { @include site-width; }
 
 .gutter {
-  &-left {
-    @include gutters('left');
-  }
+  &-left { @include gutters('left'); }
 
-  &-right {
-    @include gutters('right');
-  }
+  &-right { @include gutters('right'); }
 }
 
-.gutters {
-  @include gutters;
-}
+.gutters { @include gutters; }
 
 .container {
-  @extend .site-width;
-  @extend %container;
+  @include site-width;
+  @include container;
+}
+
+.container--desktop-up {
+  @include breakpoint($medium) {
+    @include site-width;
+    @include container;
+  }
 }
 
 //--------------------------------------------------

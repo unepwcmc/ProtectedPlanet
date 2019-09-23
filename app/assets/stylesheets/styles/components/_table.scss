@@ -4,13 +4,22 @@
 $table-font: $header-font;
 $table-head-bg-color: $grey-lighter;
 
+$table-horizontal-scroll-cell-width-mobile: 86vw;
+$table-horizontal-scroll-cell-width-tablet: 40vw;
+$table-horizontal-scroll-cell-width-desktop: 80vw;
+
+$table-horizontal-scroll-row-width-mobile: $table-horizontal-scroll-cell-width-mobile * 4;
+$table-horizontal-scroll-row-width-tablet: $table-horizontal-scroll-cell-width-tablet * 4;
+$table-horizontal-scroll-row-width-desktop: 80vw;
+
+
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
 @mixin table-cell-basic() {
   @include responsive-styles(margin-right, rem-calc(20), rem-calc(20), 0);
   @include responsive-styles(padding, rem-calc(8 10), rem-calc(8 10), rem-calc(18 20));
-  @include responsive-styles(width, 25%, 25%, 20%);
+  @include responsive-styles(width, $table-horizontal-scroll-cell-width-mobile, $table-horizontal-scroll-cell-width-tablet, 20%);
 }
 
 @mixin table-row-spacing() {
@@ -76,6 +85,8 @@ $table-head-bg-color: $grey-lighter;
       }
         
         &__row-title {
+          @include responsive-styles(margin-left, $gutter-small, $gutter-medium, 0);
+          @include responsive-styles(margin-right, $gutter-small, $gutter-medium, 0);
           @include responsive-styles(display, block, block, none);
           font-size: rem-calc(18);
           font-weight: 700;
@@ -88,7 +99,7 @@ $table-head-bg-color: $grey-lighter;
 
           &__scroll {
             @include flex-nowrap;
-            @include responsive-styles(width, 380%, 140%, 100%);
+            @include responsive-styles(width, $table-horizontal-scroll-row-width-mobile, $table-horizontal-scroll-row-width-tablet, 100%);
             @include responsive-styles(display, flex, flex, flex);
           }
 
@@ -103,18 +114,21 @@ $table-head-bg-color: $grey-lighter;
               &:first-child {
                 @include responsive-styles(display, none, none, flex);
               }
+
+              &:nth-child(2) {
+                @include responsive-styles(margin-left, $gutter-small, $gutter-medium, 0);
+              }
             }
               
               &__cell-titles {
+                @include responsive-styles(margin-left, $gutter-small, $gutter-medium, 0);
                 @include responsive-styles(display, flex, flex, none);
                 justify-content: space-between; //temp refresh
-                margin-bottom: rem-calc(10);
               }
 
               &__cell-title {
                 font-size: rem-calc(17);
                 font-weight: 500;
-                margin-bottom: rem-calc(14);
               }
 
               &__cell-link {

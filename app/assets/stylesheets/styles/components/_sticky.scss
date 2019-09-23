@@ -9,7 +9,10 @@ $sticky-bar-padding: rem-calc(10);
 //----------------------------------------
 .sticky-bar {
   &--basic {
+    @include gutters;
     width: 100%;
+
+    @include breakpoint($medium) { padding: 0; }
 
     .sticky-bar {
       &__wrapper {

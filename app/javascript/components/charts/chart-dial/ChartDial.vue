@@ -213,30 +213,7 @@ export default {
     }
   },
 
-  mounted () {
-    // this.applyGradient()
-  },
-
   methods: {
-    // applyGradient () {
-    //   const gp = new GradientPath({
-    //     path: document.getElementById('marine'),
-    //     segments: 100,
-    //     samples: 3,
-    //     strokeWidth: 0.5,
-    //     precision: 2
-    //   })
-
-    //   gp.render({
-    //     type: 'path',
-    //     fill: [
-    //       { color: '#4D98BF', pos: 0 },
-    //       { color: '#54B7EB', pos: 1 }
-    //     ],
-    //     width: 10
-    //   })
-    // },
-
     getArcPath(degrees) {
       const 
         start = 0,

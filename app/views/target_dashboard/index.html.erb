@@ -1,50 +1,60 @@
-<div class="new-styles container page-padding--bottom">
-  <header class="hero--thematic-area center">
-    <%= image_tag 'icons/aichi-11.svg', alt: 'Aichi 11 icon', class: 'icon--aichi margin-center' %>
-    <h1 class="hero__title hero__title--article"><%= t('thematic_area.target_11_dashboard.title') %></h1> 
-  </header>
+<div class="new-styles page-padding--bottom">
+  <div class="container">
+    <header class="hero--thematic-area center">
+      <%= image_tag 'icons/aichi-11.svg', alt: 'Aichi 11 icon', class: 'icon--aichi margin-center' %>
+      <h1 class="hero__title hero__title--article"><%= t('thematic_area.target_11_dashboard.title') %></h1> 
+    </header>
+  </div>
 
   <main>
-    <section class="section-padding--top">
-      <h2><%= t('thematic_area.target_11_dashboard.subtitle_1') %></h2>
+    <section class="section-padding bg--grey-lighter">
+      <div class="container">
+        <h2><%= t('thematic_area.target_11_dashboard.subtitle_1') %></h2>
+      </div>
+      
+      <div class="container--desktop-up">
+        <carousel class="carousel--basic" :show-arrows="false" :show-all-indicators="true">
+          <% @global_stats.each do |stat| %>
+            <carousel-slide>
+              <tooltip 
+                :on-hover="false" 
+                text="<%= getTooltipText(stat[:id]) %>"
+                class="carousel__tooltip"
+              >
+                <i class="icon--info-circle block"></i>
+              </tooltip>
 
-      <carousel class="carousel--basic" :show-arrows="false" :show-all-indicators="true">
-        <% @global_stats.each do |stat| %>
-          <carousel-slide>
-            <tooltip 
-              :on-hover="false" 
-              text="<%= getTooltipText(stat[:id]) %>"
-              class="carousel__tooltip"
-            >
-              <i class="icon--info-circle block"></i>
-            </tooltip>
-
-            <h3 class="carousel__slide-title"><%= stat[:title] %></h3>
-            
-            <% stat[:charts].each do |chart| %>
-              <chart-dial
-                title="<%= chart[:title] %>"
-                colour="<%= chart[:colour] %>"
-                :dial-value="<%= chart[:value] %>"
-                :dial-target="<%= chart[:target] %>" 
-              ></chart-dial>
-            <% end %>
-          </carousel-slide>
-        <% end %>
-      </carousel>
+              <h3 class="carousel__slide-title"><%= stat[:title] %></h3>
+              
+              <% stat[:charts].each do |chart| %>
+                <chart-dial
+                  title="<%= chart[:title] %>"
+                  colour="<%= chart[:colour] %>"
+                  :dial-value="<%= chart[:value] %>"
+                  :dial-target="<%= chart[:target] %>" 
+                ></chart-dial>
+              <% end %>
+            </carousel-slide>
+          <% end %>
+        </carousel>
+      </div>
     </section>
 
-    <section class="section-padding--top">
-      <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
-
-      <target-11-dashboard
-        class="sm-trigger-sticky-bar"
-        :select="<%= @search %>"
-        :table-headings="<%= @country_and_regions_headings %>" 
-        :table-data-src="<%= @endpoint.to_json %>"
-        :tooltip-array="<%= t("thematic_area.target_11_dashboard.tooltips").to_json %>"
-      >
-      </target-11-dashboard>
+    <section class="section-padding">
+      <div class="container">
+        <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
+      </div>
+        
+      <div class="container--desktop-up">
+        <target-11-dashboard
+          class="sm-trigger-sticky-bar"
+          :select="<%= @search %>"
+          :table-headings="<%= @country_and_regions_headings %>" 
+          :table-data-src="<%= @endpoint.to_json %>"
+          :tooltip-array="<%= t("thematic_area.target_11_dashboard.tooltips").to_json %>"
+        >
+        </target-11-dashboard>
+      </div>
     </section>
   </main>
 </div>

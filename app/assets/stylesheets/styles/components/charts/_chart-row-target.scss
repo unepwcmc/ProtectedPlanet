@@ -9,6 +9,8 @@ $chart-row-target-font-size: $chart-font-size;
 // row target charts
 //--------------------------------------------------
 &--row-target {
+  margin: rem-calc(10) 0;
+
   .chart {
     &__marker {
       &--target { 

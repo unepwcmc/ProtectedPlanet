@@ -26,8 +26,9 @@
 @import './resources/mixins/flexbox';
 @import './resources/mixins/helpers';
 @import './resources/mixins/layout';
+@import './resources/mixins/text';
 @import './resources/base-variables';
-@import './resources/variables/**/*';
+// @import './resources/variables/**/*';
 
 // development mixins
 @import 'utilities/flexbox';

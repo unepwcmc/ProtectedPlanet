@@ -26,8 +26,8 @@
 //--------------------------------------------------
 // colours
 //--------------------------------------------------
-// $white: #ffffff;
-// $black: #000000;
+$white: #ffffff;
+$black: #000000;
 
 $grey-lighter: #F5F5F5;
 $grey-light: #e1e1e1;
@@ -131,12 +131,12 @@ $page-padding-bottom-mobile: rem-calc(32);
 $page-padding-bottom-tablet: rem-calc(60);
 $page-padding-bottom-desktop: rem-calc(80);
 
-$section-padding-top-mobile: rem-calc(20);
-$section-padding-top-tablet: rem-calc(40);
+$section-padding-top-mobile: rem-calc(24);
+$section-padding-top-tablet: rem-calc(30);
 $section-padding-top-desktop: rem-calc(40);
 
 $section-padding-bottom-mobile: rem-calc(30);
-$section-padding-bottom-tablet: rem-calc(60);
+$section-padding-bottom-tablet: rem-calc(40);
 $section-padding-bottom-desktop: rem-calc(60);
 
 $item-spacing-small: rem-calc(14);

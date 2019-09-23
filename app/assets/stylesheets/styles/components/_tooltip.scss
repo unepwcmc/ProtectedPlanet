@@ -3,6 +3,7 @@
 //--------------------------------------------------
 $tooltip-background-color: $grey-light;
 $tooltip-border-style: solid rem-calc(10);
+$tooltip-padding-mobile: rem-calc(34 30 22 22);
 $tooltip-padding: rem-calc(34 30 28 26);
 $tooltip-end-position: rem-calc(10);
 
@@ -42,10 +43,10 @@ $tooltip-end-position: rem-calc(10);
   &__target {
     @include shadow--grey;
     @include tooltip-end;
-    font-size: rem-calc(15);
+    @include responsive-styles(font-size, rem-calc(14), rem-calc(14), rem-calc(15));
+    @include responsive-styles(padding, $tooltip-padding-mobile, $tooltip-padding-mobile, $tooltip-padding);
+    @include responsive-styles(width, 78vw, rem-calc(260), rem-calc(300));
     line-height: 1.4;
-    padding: $tooltip-padding;
-    width: rem-calc(300);
 
     background-color: $tooltip-background-color;
 
