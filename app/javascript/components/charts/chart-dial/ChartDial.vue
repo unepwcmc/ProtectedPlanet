@@ -120,7 +120,7 @@ export default {
     return {
       dialDiameter: 244,
       paddingTop: 30,
-      paddingBottom: 30,
+      paddingBottom: 40,
       paddingSides: 60,
       arrowHeadSize: 5,
       legendWidth: 20
@@ -209,7 +209,7 @@ export default {
       return this.legendStartX + this.legendWidth
     },
     legendY () {
-      return this.paddingBottom - 8
+      return this.paddingBottom - 14
     }
   },
 

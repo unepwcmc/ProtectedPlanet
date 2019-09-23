@@ -33,13 +33,9 @@
 
     <div v-if="hasMutlipleSlides" class="carousel__control-bar">
       <template v-if="showIndicators">
-        <button
+        <span
           v-for="slide in totalSlides"
-          :title="indicatorTitle(slide)"
-          aria-controls="carousel-slides"
-          :aria-pressed="isCurrentSlide(slide)"
-          :class="['carousel__indicator', selectedSlideClass(slide)]"
-          @click="changeSlide(slide)"></button>
+          :class="['carousel__indicator', selectedSlideClass(slide)]"></span>
       </template>
 
       <button :title="pauseTitle" v-if="slideIntervalLength" class="carousel__pause" @click="toggleSlideInterval">
