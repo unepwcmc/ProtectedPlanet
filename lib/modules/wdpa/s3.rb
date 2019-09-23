@@ -21,7 +21,7 @@ class Wdpa::S3
 
   def download_current_wdpa_to filename
     File.open(filename, 'w:ASCII-8BIT') do |file|
-      file.write current_wdpa.read
+      file.write current_wdpa.get
     end
   end
 
