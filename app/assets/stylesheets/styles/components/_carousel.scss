@@ -80,6 +80,7 @@ $transition-options: 0.6s ease-in-out;
 
     display: flex;
     align-items: center;
+    justify-content: center;
   }
 
     &__pause {
@@ -113,7 +114,7 @@ $carousel-basic-slide-margin-mobile: rem-calc(20);
 $carousel-basic-slide-margin-tablet: rem-calc(5);
 $carousel-basic-slide-margin-desktop: rem-calc(10);
 
-$carousel-basic-indicator-size: rem-calc(20);
+$carousel-basic-indicator-size: rem-calc(13);
 
   &--basic {
     padding-top: 0;
@@ -149,10 +150,10 @@ $carousel-basic-indicator-size: rem-calc(20);
 
     .carousel-slide {
       @include shadow--grey-light;
-      @include responsive-styles(font-size, rem-calc(18), rem-calc(18), rem-calc(22));
       @include responsive-styles(width, calc(96% - #{$carousel-basic-slide-margin-mobile}), calc(40% - #{$carousel-basic-slide-margin-tablet}), calc(20% - #{$carousel-basic-slide-margin-desktop}));
       @include responsive-styles(margin-right, $carousel-basic-slide-margin-mobile, $carousel-basic-slide-margin-tablet, $carousel-basic-slide-margin-desktop);
       border: solid 1px $grey-light;
+      font-size: rem-calc(18);
       padding: rem-calc(16);
 
       position: relative;

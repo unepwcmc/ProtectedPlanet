@@ -7,7 +7,14 @@
 
     <div class="carousel__slides-container">
 
-      <ul id="carousel-slides" class="carousel__slides transition" aria-live="off" aria-atomic="true">
+      <ul 
+        id="carousel-slides" 
+        class="carousel__slides transition" 
+        aria-live="off" 
+        aria-atomic="true"
+        v-touch:swipe.right="slideToPrevious" 
+        v-touch:swipe.left="slideToNext"
+      >
         <template v-for="n in 3">
           <slot :slidesScope="slidesScope"></slot>
         </template>
