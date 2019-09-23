@@ -2,23 +2,6 @@ module Stats::CountryStatisticsApi
   class << self
     STATISTICS_API = Rails.application.secrets[:country_statistics_api].freeze
     BASE_URL = STATISTICS_API['url'].freeze
-    ATTRIBUTES = {
-      representative: {
-        name: 'Representative',
-        slug: 'representative',
-        attribute: STATISTICS_API['representative_attribute']
-      },
-      well_connected: {
-        name: 'Well connected',
-        slug: 'well_connected',
-        attribute: STATISTICS_API['well_connected_attribute']
-      },
-      importance: {
-        name: 'Areas of importance for biodiversity',
-        slug: 'importance',
-        attribute: STATISTICS_API['importance_attribute']
-      }
-    }
 
     ERRORS = {
       representative: """
@@ -35,7 +18,7 @@ module Stats::CountryStatisticsApi
 
 
     def import(iso3=nil)
-      endpoints = ATTRIBUTES.slice(:well_connected, :importance)
+      endpoints = ['well_connected', 'importance']
       # Get stats for each endpoint
       # Representative stat is exlcuded because that is a global level stat
       # Connect to the API and fetch the data
@@ -66,8 +49,8 @@ module Stats::CountryStatisticsApi
         end
 
         attrs = { jrc_country_area: stat[COUNTRY_AREA_ATTRIBUTE] }
-        endpoints.each do |name, attributes|
-          attribute = attributes[:attribute]
+        endpoints.each do |name|
+          attribute = STATISTICS_API["#{name}_attribute"]
           attr_name = "percentage_#{name}"
 
           attrs[attr_name] = stat[attribute]
@@ -80,32 +63,45 @@ module Stats::CountryStatisticsApi
       log_not_found_objects('statistic', statistics_not_found)
     end
 
-    def get_global_stats(endpoint=nil)
-      endpoints = endpoint ? ATTRIBUTES.slice(endpoint.to_sym) : ATTRIBUTES
+    def global_stats_for_import
+      global_stats = fetch_global_stats do |data, attr_name|
+        column_name = "#{attr_name}_global_value"
+        { "#{column_name}" => calculate_value(data, attr_name) }
+      end
+      global_stats.inject(:merge)
+    end
+
+    def get_global_stats
+      fetch_global_stats do |data, attr_name|
+        format_data(data, attr_name)
+      end
+    end
+
+    def fetch_global_stats(endpoint=nil)
+      endpoints = endpoint ? Aichi11Target::ATTRIBUTES.slice(endpoint.to_sym) : Aichi11Target::ATTRIBUTES
       global_stats = []
-      endpoints.each do |name, attributes|
+      endpoints.keys.each do |name|
         data = fetch_global_data
 
         # Return if there's an error
         return data if data.nil? || (data.is_a?(Hash) && data.key?(:error))
 
         data = data.reject { |stat| contains_exception?(stat) }
-        global_stats << format_data(data, name)
+        global_stats << yield(data, name)
       end
       global_stats
     end
 
+    def format_data(data, endpoint)
+      Aichi11Target.format_data(endpoint) do
+        calculate_value(data, endpoint)
+      end
+    end
+
     private
 
-    # This is only used for global stats
-    def format_data(data, endpoint)
-      json = {
-        id: ATTRIBUTES[endpoint.to_sym][:slug],
-        title: ATTRIBUTES[endpoint.to_sym][:name],
-        charts: []
-      }
-      chart_json = Aichi11Target::DEFAULT_CHART_JSON.dup
-      attribute = ATTRIBUTES[endpoint.to_sym][:attribute]
+    def calculate_value(data, attr_name)
+      attribute = STATISTICS_API["#{attr_name}_attribute"]
 
       attr_area_sum = total_area_sum = 0
       data.map do |x|
@@ -114,16 +110,12 @@ module Stats::CountryStatisticsApi
         attr_area_sum += attr_area * total_area / 100
         total_area_sum += total_area
       end
-      value = 0
       begin
-        value = (attr_area_sum / total_area_sum * 100).round(2)
+        (attr_area_sum / total_area_sum * 100).round(2)
       rescue ZeroDivisionError => e
         Rails.logger.info(e.backtrace)
         return { error: ERRORS[:data] }
       end
-      target = Aichi11Target.instance.public_send("#{endpoint.to_s}_global")
-      json[:charts] << chart_json.merge!({ value: value, target: target })
-      json
     end
 
     def national_endpoint_url

@@ -5,6 +5,22 @@ class Aichi11Target < ActiveRecord::Base
     first || import
   end
 
+  # Refresh representative, well_connected and importance values
+  # by fetching data again from the API
+  def self.refresh_values
+    obj = first
+    unless obj
+      import
+      return
+    end
+    obj.update_attributes(Stats::CountryStatisticsApi.global_stats_for_import)
+  end
+
+  ATTRIBUTES = {
+    representative: 'Representative',
+    well_connected: 'Well connected',
+    importance: 'Areas of importance for biodiversity'
+  }.freeze
   TERRESTRIAL = {
     title: 'Terrestrial',
     colour: 'terrestrial'
@@ -22,7 +38,13 @@ class Aichi11Target < ActiveRecord::Base
     target: nil
   }.freeze
   def self.get_global_stats
-    global_stats = Stats::CountryStatisticsApi.get_global_stats
+    # Get global stats saved in this db table and format accordingly
+    global_stats = ATTRIBUTES.keys.map do |attr_name|
+      format_data(attr_name) do
+        instance.public_send("#{attr_name}_global_value")
+      end
+    end
+
     pp_global_stats = []
     stats.each do |name, attributes|
       json = { id: attributes[:slug], title: attributes[:name], charts: [] }
@@ -35,8 +57,11 @@ class Aichi11Target < ActiveRecord::Base
   end
 
   def self.import
+    # Import representative, well_connected and importance values from API
+    global_values = Stats::CountryStatisticsApi.global_stats_for_import
+    # Import targets from file
     CSV.foreach(aichi11_target_csv_path, headers: true) do |row|
-      return create({}.merge(row))
+      return create({}.merge(row).merge(global_values))
     end
   end
 
@@ -71,6 +96,24 @@ class Aichi11Target < ActiveRecord::Base
         }
       }
     }
+  end
+
+  # This is only used for global stats
+  # It's a shared method between this model and the API module
+  # The value is fetched from the db if used here,
+  # otherwise it is fetched from the API
+  def self.format_data(endpoint)
+    json = {
+      id: endpoint,
+      title: ATTRIBUTES[endpoint.to_sym],
+      charts: []
+    }
+    chart_json = DEFAULT_CHART_JSON.dup
+
+    value = yield
+    target = instance.public_send("#{endpoint.to_s}_global")
+    json[:charts] << chart_json.merge!({ value: value, target: target })
+    json
   end
 
   private_class_method :import, :aichi11_target_csv_path, :stats
