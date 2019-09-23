@@ -35,6 +35,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
 
   def initialize(params={}, data = nil)
     super(params, data)
+    @search_id, @search_type = sanitise_search_term
   end
 
   def serialize
@@ -46,9 +47,10 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     }
     # Loop through records
     sorted_and_paginated.map do |record|
+      url = "/#{record['obj_type']}/#{record['iso']}"
       hash = {
         title: record['name'],
-        url: "/country/#{record['iso']}",
+        url: url,
         obj_type: record['obj_type'],
         stats: []
       }
@@ -65,10 +67,24 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     head.to_json
   end
 
+  def serialize_options
+    @params[:sort_by] ||= 'name'
+    @params[:order] ||= 'asc'
+    sorted.map do |i|
+      id = "#{i['id']}-#{i['obj_type']}"
+      {
+        id: id,
+        name: i['name']
+      }
+    end
+  end
+
   private
 
   def sorted
-    query = 'SELECT * FROM aichi11_target_dashboard_view'
+    obj_type = @search_type == 'id' ? "AND obj_type = 'country'" : ''
+    search = @search_id.present? ? "WHERE #{@search_type} = #{@search_id} #{obj_type}" : ''
+    query = "SELECT * FROM aichi11_target_dashboard_view #{search}"
     _data = ActiveRecord::Base.connection.execute(query)
 
     _data = _data.sort_by { |d| d[sort_by] }
@@ -90,7 +106,11 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     when 'effectively_managed'
       "(pame_#{sort_field_land} + pame_#{sort_field_marine})"
     else
-      _sort_by.present? ? STATS[_sort_by.to_sym][:column_name] : super
+      if _sort_by.present? && STATS[_sort_by.to_sym].present?
+        STATS[_sort_by.to_sym][:column_name]
+      else
+        super
+      end
     end
   end
 
@@ -134,5 +154,14 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
       target: Aichi11Target.instance.public_send(target_column),
       colour: type
     }
+  end
+
+  def sanitise_search_term
+    return ['', ''] unless @params[:search_id]
+    _id, _obj_type = @params[:search_id].split('-')
+    id = ['__UNDEFINED__', 'SEARCHID', '', nil].include?(_id) ? '' : _id
+    obj_type = _obj_type == 'region' ? 'region_id' : 'id'
+
+    [id, obj_type]
   end
 end

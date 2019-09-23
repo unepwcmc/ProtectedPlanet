@@ -2,7 +2,7 @@ class RegionPresenter
   def initialize region
     @region = region
     @countries = @region.countries
-    @statistics = @countries.map(&:statistic)
+    @statistics = @countries.map(&:statistic).compact
   end
 
   def geometry_ratio
@@ -11,9 +11,10 @@ class RegionPresenter
     total = 0
 
     @countries.each do |country|
-      polygons_count += country.statistic.polygons_count || 0
-      points_count += country.statistic.points_count || 0
-      total += (country.statistic.polygons_count || 0) + (country.statistic.points_count || 0)
+      statistic = country.statistic
+      polygons_count += (statistic && statistic.polygons_count) || 0
+      points_count += (statistic && statistic.points_count) || 0
+      total += polygons_count + points_count
     end
     {
       polygons: (((polygons_count/total.to_f)*100).round rescue 0),

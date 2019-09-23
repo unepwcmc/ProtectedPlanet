@@ -13,7 +13,7 @@ $search-icon-padding-left: $select-padding-side;
 $select-input-padding-right: #{$search-icon-padding-right} + #{$search-icon-padding-left} + #{$icon-search-width};
 
 $select-hover-color: $grey-light;
-$select-selected-color: $grey;
+$select-selected-color: $grey-light;
 
 //--------------------------------------------------
 // mixins

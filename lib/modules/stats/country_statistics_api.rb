@@ -6,17 +6,17 @@ module Stats::CountryStatisticsApi
       representative: {
         name: 'Representative',
         slug: 'representative',
-        field: STATISTICS_API['representative_field']
+        attribute: STATISTICS_API['representative_attribute']
       },
       well_connected: {
         name: 'Well connected',
         slug: 'well_connected',
-        field: STATISTICS_API['well_connected_field']
+        attribute: STATISTICS_API['well_connected_attribute']
       },
       importance: {
         name: 'Areas of importance for biodiversity',
         slug: 'importance',
-        field: STATISTICS_API['importance_field']
+        attribute: STATISTICS_API['importance_attribute']
       }
     }
 
@@ -99,7 +99,11 @@ module Stats::CountryStatisticsApi
 
     # This is only used for global stats
     def format_data(data, endpoint)
-      json = { title: ATTRIBUTES[endpoint.to_sym][:name], charts: [] }
+      json = {
+        id: ATTRIBUTES[endpoint.to_sym][:slug],
+        title: ATTRIBUTES[endpoint.to_sym][:name],
+        charts: []
+      }
       chart_json = Aichi11Target::DEFAULT_CHART_JSON.dup
       attribute = ATTRIBUTES[endpoint.to_sym][:attribute]
 
