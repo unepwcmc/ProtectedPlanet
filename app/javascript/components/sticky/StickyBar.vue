@@ -1,10 +1,12 @@
 <template>
   <div class="sticky-bar" v-bind:style="{ height: stickyBarHeight }">
     <div 
-      ref="stickyBarContent"
-      :class="[targetElementClass, id, 'sticky-bar__content']"
+      ref="stickyBarWrapper"
+      :class="[targetElementClass, id, 'sticky-bar__wrapper']"
     >
-      <slot />
+      <div class="sticky-bar__content">
+        <slot />
+      </div>
     </div>
   </div>
 </template>
@@ -56,7 +58,7 @@ export default {
     },
 
     calculateStickyBarHeight () {
-      this.stickyHeight = this.$refs.stickyBarContent.clientHeight
+      this.stickyHeight = this.$refs.stickyBarWrapper.clientHeight
     }
   }
 }
