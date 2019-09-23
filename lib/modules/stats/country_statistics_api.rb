@@ -93,7 +93,7 @@ module Stats::CountryStatisticsApi
     end
 
     def format_data(data, endpoint)
-      Aichi11Target.format_data(endpoint) do
+      Aichi11TargetSerializer.new.format_data(endpoint) do
         calculate_value(data, endpoint)
       end
     end
