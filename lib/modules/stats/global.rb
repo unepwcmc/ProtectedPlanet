@@ -36,11 +36,11 @@ class Stats::Global
   end
 
   def self.calculate_stats_for(klass, field_name)
-    stats = klass.where.not(country_id: nil)
-    sum =
-      stats.map(&field_name.to_sym).inject(0) do |_sum, x|
-        _sum + (x || 0)
-      end
-    (sum / Country.count).round(2)
+    # Statistics with no country id belong to ABNJ and ATA
+    # which should be included in the global stat calculation
+    stats = klass.all
+    stats.map(&field_name.to_sym).inject(0) do |_sum, x|
+      _sum + (x || 0)
+    end
   end
 end
