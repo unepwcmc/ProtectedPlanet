@@ -17,13 +17,13 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
 // mixins
 //--------------------------------------------------
 @mixin table-cell-basic() {
-  @include responsive-styles(margin-right, rem-calc(20), rem-calc(20), 0);
-  @include responsive-styles(padding, rem-calc(8 10), rem-calc(8 10), rem-calc(18 20));
-  @include responsive-styles(width, $table-horizontal-scroll-cell-width-mobile, $table-horizontal-scroll-cell-width-tablet, 20%);
+  @include responsive-styles(margin-right, rem-calc(20), rem-calc(20), rem-calc(20), 0);
+  @include responsive-styles(padding, rem-calc(8 10), rem-calc(8 10), rem-calc(8 10), rem-calc(18 20));
+  @include responsive-styles(width, $table-horizontal-scroll-cell-width-mobile, $table-horizontal-scroll-cell-width-tablet, $table-horizontal-scroll-cell-width-tablet, 20%);
 }
 
 @mixin table-row-spacing() {
-  @include responsive-styles(margin-bottom, rem-calc(30), rem-calc(32), rem-calc(16));
+  @include responsive-styles(margin-bottom, rem-calc(30), rem-calc(32), rem-calc(32), rem-calc(16));
 }
 
 //--------------------------------------------------
@@ -31,7 +31,7 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
 //--------------------------------------------------
 .table-head {
   &--horizontal-scroll {
-    @include responsive-styles(display, none, none, flex);
+    @include responsive-styles(display, none, none, none, flex);
     @include flex-nowrap;
     @include shadow--grey;
     background-color: $table-head-bg-color;
@@ -77,17 +77,18 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
     .table {      
       &__row {
         @include table-row-spacing;
-        @include responsive-styles(border, none, none, solid 1px $grey-light);
+        border: none; //temp-refresh needed to override conflicting old styles
 
-        @include breakpoint($medium) {
+        @include breakpoint($large) {
           @include shadow--grey-light;
+          border: solid 1px $grey-light;
         }
       }
         
         &__row-title {
-          @include responsive-styles(margin-left, $gutter-small, $gutter-medium, 0);
-          @include responsive-styles(margin-right, $gutter-small, $gutter-medium, 0);
-          @include responsive-styles(display, block, block, none);
+          @include responsive-styles(margin-left, $gutter-small, $gutter-medium, $gutter-medium, 0);
+          @include responsive-styles(margin-right, $gutter-small, $gutter-medium, $gutter-medium, 0);
+          @include responsive-styles(display, block, block, block, none);
           font-size: rem-calc(18);
           font-weight: 700;
           margin-bottom: rem-calc(10);
@@ -95,34 +96,40 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
         
         &__scroll-wrapper {
           overflow-x: scroll;
+          @include breakpoint($large) { overflow-x: inherit; }
         }
 
           &__scroll {
             @include flex-nowrap;
-            @include responsive-styles(width, $table-horizontal-scroll-row-width-mobile, $table-horizontal-scroll-row-width-tablet, 100%);
-            @include responsive-styles(display, flex, flex, flex);
+            @include responsive-styles(width, $table-horizontal-scroll-row-width-mobile, $table-horizontal-scroll-row-width-tablet, $table-horizontal-scroll-row-width-tablet, 100%);
+            display: flex;
           }
 
             &__cell {
               @include table-cell-basic;
               @include shadow--grey-light;
-              @include responsive-styles(border, solid 1px $grey-light, solid 1px $grey-light, none);
-              @include breakpoint($medium) { box-shadow: none; }
+              border: solid 1px $grey-light;
+              
               display: flex; //temp-refresh
               flex-direction: column; //temp-refresh
 
+              @include breakpoint($large) { 
+                border: none;
+                box-shadow: none; 
+              }
+
               &:first-child {
-                @include responsive-styles(display, none, none, flex);
+                @include responsive-styles(display, none, none, none, flex);
               }
 
               &:nth-child(2) {
-                @include responsive-styles(margin-left, $gutter-small, $gutter-medium, 0);
+                @include responsive-styles(margin-left, $gutter-small, $gutter-medium, $gutter-medium, 0);
               }
             }
               
               &__cell-titles {
-                @include responsive-styles(margin-left, $gutter-small, $gutter-medium, 0);
-                @include responsive-styles(display, flex, flex, none);
+                @include responsive-styles(margin-left, $gutter-small, $gutter-medium, $gutter-medium, 0);
+                @include responsive-styles(display, flex, flex, flex, none);
                 justify-content: space-between; //temp refresh
               }
 
@@ -138,7 +145,7 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
               &__cell-chart:nth-child(2) { margin-bottom: rem-calc(12); }
 
               &__cell-index {
-                @include responsive-styles(display, block, block, none);
+                @include responsive-styles(display, block, block, block, none);
                 font-size: rem-calc(12);
                 font-weight: 500;
                 margin-top: auto;

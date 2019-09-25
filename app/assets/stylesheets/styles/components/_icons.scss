@@ -13,7 +13,7 @@ $icon-search-width: rem-calc(21);
 }
 
 @mixin icon-button-reset() {
-  background-color: transparent;
+  background-color: transparent !important; //temp-refresh good god i don't like to do it but the old base stylesheet is overwriting this
   border: none;
   cursor: pointer;
   padding: 0;
@@ -58,11 +58,14 @@ $icon-search-width: rem-calc(21);
 
 @mixin icon-search() {
   @include icon-basic;
+  @include icon-button-reset;
   background-image: image-url('icons/search.svg');
   width: $icon-search-width; height: rem-calc(23); 
 }
 
 @mixin icon-sort() {
+  @include icon-button-reset;
+
   &::before {
     @include triangle(rem-calc(8), rem-calc(7), $grey); // ($base, $height, $color, $direction:'up')
     content: '';

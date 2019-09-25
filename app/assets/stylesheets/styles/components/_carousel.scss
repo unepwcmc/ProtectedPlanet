@@ -125,7 +125,7 @@ $carousel-basic-indicator-size: rem-calc(13);
 
     .carousel {
       &__control-bar {
-        @include breakpoint($medium) { display: none; }
+        @include breakpoint($large) { display: none; }
       }
 
         &__indicator {
@@ -141,7 +141,7 @@ $carousel-basic-indicator-size: rem-calc(13);
         }
 
         &__slide-title {
-          @include responsive-styles(margin, 0, rem-calc(0 5), rem-calc(0 10));
+          @include responsive-styles(margin, 0, rem-calc(0 5), rem-calc(0 5), rem-calc(0 10));
           font-family: $header-font;
         }
 
@@ -154,8 +154,8 @@ $carousel-basic-indicator-size: rem-calc(13);
 
     .carousel-slide {
       @include shadow--grey-light;
-      @include responsive-styles(width, $carousel-basic-slide-width-mobile, $carousel-basic-slide-width-tablet, $carousel-basic-slide-width-desktop);
-      @include responsive-styles(margin, 0 $carousel-basic-slide-margin-mobile, 0 $carousel-basic-slide-margin-tablet, 0 $carousel-basic-slide-margin-desktop);
+      @include responsive-styles(width, $carousel-basic-slide-width-mobile, $carousel-basic-slide-width-tablet, $carousel-basic-slide-width-tablet, $carousel-basic-slide-width-desktop);
+      @include responsive-styles(margin, 0 $carousel-basic-slide-margin-mobile, 0 $carousel-basic-slide-margin-tablet, 0 $carousel-basic-slide-margin-tablet, 0 $carousel-basic-slide-margin-desktop);
       background-color: $white; 
       border: solid 1px $grey-light;
       font-size: rem-calc(18);

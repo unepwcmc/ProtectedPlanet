@@ -47,7 +47,7 @@
 }
 
 .container--desktop-up {
-  @include breakpoint($medium) {
+  @include breakpoint($large) {
     @include site-width;
     @include container;
   }

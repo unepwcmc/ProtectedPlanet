@@ -12,7 +12,7 @@
     #{$type}-#{$s}: $gutter-small;
 
     @include breakpoint($small) { #{$type}-#{$s}: $gutter-medium; }
-    @include breakpoint($medium) { #{$type}-#{$s}: $gutter-large; }
+    @include breakpoint($large) { #{$type}-#{$s}: $gutter-large; }
   }
 }
 

@@ -41,9 +41,9 @@ $tooltip-end-position: rem-calc(10);
   }
 
   &__target {
+    @include text-tooltip;
     @include shadow--grey;
     @include tooltip-end;
-    @include responsive-styles(font-size, rem-calc(14), rem-calc(14), rem-calc(15));
     @include responsive-styles(padding, $tooltip-padding-mobile, $tooltip-padding-mobile, $tooltip-padding);
     @include responsive-styles(width, 78vw, rem-calc(260), rem-calc(300));
     line-height: 1.4;
