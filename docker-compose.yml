@@ -12,11 +12,15 @@ services:
       - "3000:3000"
     env_file:
       - '.env'
+    environment:
+      - NODE_ENV=development
+      - RAILS_ENV=${RAILS_ENV:-development}
+      - WEBPACKER_DEV_SERVER_HOST=webpacker
     depends_on:
       - db
       - redis
       - elasticsearch
-      - webpacker
+      
   db:
     container_name: protectedplanet-db
     image: kartoza/postgis
@@ -75,6 +79,10 @@ services:
       - protectedplanet_bundler:/usr/local/bundle
     ports:
       - '3035:3035'
+    environment:
+      - NODE_ENV=${NODE_ENV:-development}
+      - RAILS_ENV=${RAILS_ENV:-development}
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0 
 
 volumes:
   protectedplanet_pg_data:

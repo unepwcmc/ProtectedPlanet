@@ -2,4 +2,4 @@
 
 yarn check || yarn install
 bundle check || bundle install
-WEBPACKER_DEV_SERVER_HOST=0.0.0.0 /ProtectedPlanet/bin/webpack-dev-server
+/ProtectedPlanet/bin/webpack-dev-server
