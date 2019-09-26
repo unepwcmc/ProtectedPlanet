@@ -49,6 +49,7 @@ RAILS_ENV=development
 ELASTIC_SEARCH_URL=http://elastic:elastic@elasticsearch:9200
 xpack.security.enabled=false
 discovery.type=single-node
+WEBPACKER_DEV_SERVER_HOST=webpacker
 ```
 
 The database is in a separate repo at the moment:
