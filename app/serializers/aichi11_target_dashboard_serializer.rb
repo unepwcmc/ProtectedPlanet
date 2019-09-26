@@ -83,12 +83,17 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
 
   def sorted
     obj_type = @search_type == 'id' ? "AND obj_type = 'country'" : ''
+    default_order = 'ORDER BY region_id, obj_type DESC, name'
     search = @search_id.present? ? "WHERE #{@search_type} = #{@search_id} #{obj_type}" : ''
-    query = "SELECT * FROM aichi11_target_dashboard_view #{search}"
+    query = "SELECT * FROM aichi11_target_dashboard_view #{search} #{default_order}"
     _data = ActiveRecord::Base.connection.execute(query)
 
-    _data = _data.sort_by { |d| d[sort_by] }
-    order.downcase == 'desc'? _data.reverse : _data
+    if @params[:sort_by].present?
+      _data = _data.sort_by { |d| d[sort_by] }
+      order.downcase == 'desc'? _data.reverse : _data
+    else
+      _data.to_a
+    end
   end
 
   def sorted_and_paginated
@@ -96,7 +101,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
   end
 
   def sort_by
-    # Splitting by / for the country/region parameter
+    # Splitting by / because of the country/region parameter
     _sort_by = @params[:sort_by] ? @params[:sort_by].split('/').first : ''
     sort_field_land = 'percentage_pa_land_cover'
     sort_field_marine = 'percentage_pa_marine_cover'
