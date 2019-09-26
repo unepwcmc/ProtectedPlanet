@@ -15,7 +15,7 @@ en:
         -
           id: effectively_managed
           title: Effectively managed
-          text: "Proportion of a country's terrestrial or marine protected area network where management effectiveness evaluations have been reported as being undertaken. Statistics updated monthly. Source: <a href='https://www.protectedplanet.net/' title='View source' target'_blank'>WDPA</a> and <a href='https://pame.protectedplanet.net/' title='View GD-PAME' target'_blank'>GD-PAME</a> (UNEP-WCMC & IUCN)"
+          text: "Proportion of a country's terrestrial or marine area covered by protected areas where management effectiveness evaluations have been reported as being undertaken. Statistics updated monthly. Source: <a href='https://www.protectedplanet.net/' title='View source' target'_blank'>WDPA</a> and <a href='https://pame.protectedplanet.net/' title='View GD-PAME' target'_blank'>GD-PAME</a> (UNEP-WCMC & IUCN)"
         -
           id: representative
           title: Representative
