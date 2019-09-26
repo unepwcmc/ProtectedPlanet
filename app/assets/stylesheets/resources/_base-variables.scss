@@ -26,8 +26,8 @@
 //--------------------------------------------------
 // colours
 //--------------------------------------------------
-// $white: #ffffff;
-// $black: #000000;
+$white: #ffffff;
+$black: #000000;
 
 $grey-lighter: #F5F5F5;
 $grey-light: #e1e1e1;
@@ -98,11 +98,17 @@ $medium: 768px; //tablet portrait
 $large: 1024px; //tablet landscape
 $xlarge: 1704px; //monitor
 
-@mixin responsive-styles ($property, $mobile, $tablet, $laptop) {
+// $target-11-dashboard: ;
+
+@mixin responsive-styles ($property, $mobile, $tablet-portrait, $tablet-landscape, $laptop: false) {
   #{$property}: $mobile;
 
-  @include breakpoint($small) { #{$property}: $tablet; }
-  @include breakpoint($medium) { #{$property}: $laptop; }
+  @include breakpoint($small) { #{$property}: $tablet-portrait; }
+  @include breakpoint($medium) { #{$property}: $tablet-landscape; }
+
+  @if $laptop {
+    @include breakpoint($large) { #{$property}: $laptop; }
+  }
 }
 
 //--------------------------------------------------
@@ -128,15 +134,15 @@ $page-padding-top-tablet: rem-calc(24);
 $page-padding-top-desktop: rem-calc(36);
 
 $page-padding-bottom-mobile: rem-calc(32);
-$page-padding-bottom-tablet: rem-calc(60);
+$page-padding-bottom-tablet: rem-calc(40);
 $page-padding-bottom-desktop: rem-calc(80);
 
-$section-padding-top-mobile: rem-calc(20);
-$section-padding-top-tablet: rem-calc(40);
+$section-padding-top-mobile: rem-calc(24);
+$section-padding-top-tablet: rem-calc(30);
 $section-padding-top-desktop: rem-calc(40);
 
 $section-padding-bottom-mobile: rem-calc(30);
-$section-padding-bottom-tablet: rem-calc(60);
+$section-padding-bottom-tablet: rem-calc(40);
 $section-padding-bottom-desktop: rem-calc(60);
 
 $item-spacing-small: rem-calc(14);

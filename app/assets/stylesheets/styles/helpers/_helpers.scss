@@ -71,6 +71,8 @@
 //--------------------------------------------------
 $image-placeholder: black;
 
+.bg--grey-lighter { background-color: $grey-lighter; }
+
 .bg-img {
   background-color: $image-placeholder;
   background-size: cover;

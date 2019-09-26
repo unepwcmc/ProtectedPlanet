@@ -1,3 +1,10 @@
+@mixin container {
+  @include gutters('both', 'padding');
+
+  margin: 0 auto;
+  width: 100%;  
+}
+
 @mixin gutters($sides:'both', $type:'padding') {
   $sides: if($sides == 'both', ('left', 'right'), ($sides));
 
@@ -5,6 +12,11 @@
     #{$type}-#{$s}: $gutter-small;
 
     @include breakpoint($small) { #{$type}-#{$s}: $gutter-medium; }
-    @include breakpoint($medium) { #{$type}-#{$s}: $gutter-large; }
+    @include breakpoint($large) { #{$type}-#{$s}: $gutter-large; }
   }
+}
+
+@mixin site-width {
+  width: 100%;
+  @include breakpoint($xlarge){ width: $site-width; }
 }
