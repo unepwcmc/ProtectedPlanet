@@ -33,16 +33,14 @@ class CountriesGeometryImporter
   end
 
   def download
-    File.open(FILEPATH, 'w:ASCII-8BIT') do |file|
-      file.write compressed_geometries
-    end
+    compressed_geometries.get(response_target: FILEPATH)
   end
 
   def compressed_geometries
     bucket_name = Rails.application.secrets.aws_datasets_bucket
     filename = File.basename(FILEPATH)
 
-    @s3.buckets[bucket_name].objects[filename].read
+    @s3.buckets[bucket_name].objects[filename]
   end
 
   def restore_to_temporary_table
