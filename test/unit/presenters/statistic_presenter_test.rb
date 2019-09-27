@@ -11,6 +11,7 @@ class StatisticPresenterTest < ActiveSupport::TestCase
   test '.percentage_of_global_pas returns the percentage of global PAs' do
     global_statistic = FactoryGirl.create(:regional_statistic, pa_area: 25)
     FactoryGirl.create(:region, iso: 'GL', regional_statistic: global_statistic)
+    Region.where(iso: 'GL').first.regional_statistic = global_statistic
 
     @statistic.stubs(:pa_area).returns(10)
 
@@ -34,4 +35,23 @@ class StatisticPresenterTest < ActiveSupport::TestCase
     Country.any_instance.expects(:designations)
     @presenter.designations
   end
+
+  test 'percentage total pa cover correctly calculated based on areas' do
+    CountryStatistic.any_instance.stubs(:pa_land_area).returns(50)
+    CountryStatistic.any_instance.stubs(:land_area).returns(100)
+
+    CountryStatistic.any_instance.stubs(:pa_marine_area).returns(50)
+    CountryStatistic.any_instance.stubs(:marine_area).returns(100)
+    assert_equal 50, @presenter.percentage_total_pa_cover
+  end
+
+  test 'percentage total pa cover upper-bounded by 100' do
+    CountryStatistic.any_instance.stubs(:pa_land_area).returns(50)
+    CountryStatistic.any_instance.stubs(:land_area).returns(50)
+
+    CountryStatistic.any_instance.stubs(:pa_marine_area).returns(110)
+    CountryStatistic.any_instance.stubs(:marine_area).returns(100)
+    assert_equal 100, @presenter.percentage_total_pa_cover
+  end
+
 end
