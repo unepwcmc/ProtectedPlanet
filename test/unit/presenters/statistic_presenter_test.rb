@@ -54,4 +54,13 @@ class StatisticPresenterTest < ActiveSupport::TestCase
     assert_equal 100, @presenter.percentage_total_pa_cover
   end
 
+  test 'percentage total pa cover can cope even when country has no area' do
+    CountryStatistic.any_instance.stubs(:pa_land_area).returns(50)
+    CountryStatistic.any_instance.stubs(:land_area).returns(0)
+
+    CountryStatistic.any_instance.stubs(:pa_marine_area).returns(50)
+    CountryStatistic.any_instance.stubs(:marine_area).returns(0)
+    assert_equal 100, @presenter.percentage_total_pa_cover
+  end
+
 end
