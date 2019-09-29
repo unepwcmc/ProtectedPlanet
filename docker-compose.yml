@@ -13,9 +13,9 @@ services:
     env_file:
       - '.env'
     environment:
-      - NODE_ENV=development
-      - RAILS_ENV=${RAILS_ENV:-development}
-      - WEBPACKER_DEV_SERVER_HOST=webpacker
+      - "NODE_ENV=${NODE_ENV:-development}"
+      - "RAILS_ENV=${RAILS_ENV:-development}"
+      - "WEBPACKER_DEV_SERVER_HOST=webpacker"
     depends_on:
       - db
       - redis
@@ -80,9 +80,9 @@ services:
     ports:
       - '3035:3035'
     environment:
-      - NODE_ENV=${NODE_ENV:-development}
-      - RAILS_ENV=${RAILS_ENV:-development}
-      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0 
+      - "NODE_ENV=${NODE_ENV:-development}"
+      - "RAILS_ENV=${RAILS_ENV:-development}"
+      - "WEBPACKER_DEV_SERVER_HOST=0.0.0.0"
 
 volumes:
   protectedplanet_pg_data:
