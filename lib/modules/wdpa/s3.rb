@@ -20,7 +20,7 @@ class Wdpa::S3
   end
 
   def download_current_wdpa_to filename
-    current_wdpa.get(response_target: filename)
+    current_wdpa.get(response_target: filename, response_content_encoding: 'ASCII_8BIT')
   end
 
   def new_wdpa? since
