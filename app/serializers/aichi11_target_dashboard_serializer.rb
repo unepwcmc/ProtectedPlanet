@@ -83,7 +83,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
 
   def sorted
     obj_type = @search_type == 'id' ? "AND obj_type = 'country'" : ''
-    default_order = 'ORDER BY region_id, obj_type DESC, name'
+    default_order = 'ORDER BY region_name, obj_type DESC, name ASC NULLS LAST'
     search = @search_id.present? ? "WHERE #{@search_type} = #{@search_id} #{obj_type}" : ''
     query = "SELECT * FROM aichi11_target_dashboard_view #{search} #{default_order}"
     _data = ActiveRecord::Base.connection.execute(query)
