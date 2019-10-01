@@ -5,5 +5,4 @@ production:
 staging:
   :concurrency: 25
 :queues:
-  - default
-
+  - import

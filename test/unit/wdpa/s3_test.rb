@@ -27,23 +27,23 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
     file_contents = "\x9B".force_encoding(Encoding::ASCII_8BIT)
 
     latest_file_mock = mock()
+    latest_file_mock.stubs(:object).returns(latest_file_mock)
     latest_file_mock.stubs(:last_modified).returns(2.days.ago)
-    latest_file_mock.expects(:read).returns(file_contents)
+    latest_file_mock.expects(:get).returns(file_contents)
 
     @bucket_mock.stubs(:objects).returns([latest_file_mock])
     Aws::S3::Resource.stubs(:new).returns(@s3_mock)
 
     Wdpa::S3.download_current_wdpa_to filename
-    File.delete filename
   end
 
   test '.download_current_wdpa_to retrieves the latest WDPA from S3, and saves it to the
    given filename' do
     filename = 'hey_this_is_a_filename.zip'
-
     latest_file_mock = mock()
+    latest_file_mock.stubs(:object).returns(latest_file_mock)
     latest_file_mock.stubs(:last_modified).returns(2.days.ago)
-    latest_file_mock.expects(:read).returns("")
+    latest_file_mock.expects(:get).returns("")
 
     oldest_file_mock = mock()
     oldest_file_mock.stubs(:last_modified).returns(10.days.ago)
@@ -55,13 +55,6 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
     ])
 
     Aws::S3::Resource.stubs(:new).returns(@s3_mock)
-
-    file_write_mock = mock()
-    file_write_mock.stubs(:write)
-
-    File.expects(:open).
-      with(filename, 'w:ASCII-8BIT').
-      yields(file_write_mock)
 
     Wdpa::S3.download_current_wdpa_to filename
   end

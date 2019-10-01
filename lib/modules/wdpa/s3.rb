@@ -20,9 +20,7 @@ class Wdpa::S3
   end
 
   def download_current_wdpa_to filename
-    File.open(filename, 'w:ASCII-8BIT') do |file|
-      file.write current_wdpa.read
-    end
+    current_wdpa.get(response_target: filename, response_content_encoding: 'ASCII_8BIT')
   end
 
   def new_wdpa? since
@@ -37,7 +35,7 @@ class Wdpa::S3
   private
 
   def current_wdpa
-    available_wdpa_databases.sort_by(&:last_modified).last
+    available_wdpa_databases.sort_by(&:last_modified).last.object
   end
 
   def available_wdpa_databases
