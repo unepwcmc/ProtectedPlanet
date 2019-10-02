@@ -1,3 +1,11 @@
+### 3.1.0
+
+**Bug fixes**
+
+* Fix wdpa release import after aws gem upgrade
+* Fix over-100% coverage statistics
+* Add country, pame_country and marine stats (WDPA October 2019 release).
+
 ### 3.0.0
 
 * Upgrade to Rails 5.0.5

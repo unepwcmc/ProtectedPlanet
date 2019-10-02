@@ -44,8 +44,10 @@ class S3
 
   def delete_all path
     bucket = @s3.bucket(Rails.application.secrets.aws_downloads_bucket)
-    objects = bucket.objects.with_prefix(path)
+    objects = bucket.objects(prefix: path)
 
-    objects.delete_all
+    objects.each do |objs|
+      objs.object.delete
+    end
   end
 end
