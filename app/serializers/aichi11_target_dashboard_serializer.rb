@@ -89,7 +89,14 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     _data = ActiveRecord::Base.connection.execute(query)
 
     if @params[:sort_by].present?
-      _data = _data.sort_by { |d| d[sort_by] }
+      sort_terms = sort_by.split('+')
+      _data = _data.sort_by do |d|
+        if sort_terms.length > 1
+          sort_terms.inject(0.0) { |sum, x| sum + (d[x] || 0.0) }
+        else
+          d[sort_terms.first]
+        end
+      end
       order.downcase == 'desc'? _data.reverse : _data
     else
       _data.to_a
@@ -107,9 +114,9 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     sort_field_marine = 'percentage_pa_marine_cover'
     case _sort_by
     when 'coverage'
-      "(#{sort_field_land} + #{sort_field_marine})"
+      "#{sort_field_land}+#{sort_field_marine}"
     when 'effectively_managed'
-      "(pame_#{sort_field_land} + pame_#{sort_field_marine})"
+      "pame_#{sort_field_land}+pame_#{sort_field_marine}"
     else
       if _sort_by.present? && STATS[_sort_by.to_sym].present?
         STATS[_sort_by.to_sym][:column_name]
