@@ -91,7 +91,11 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     if @params[:sort_by].present?
       sort_terms = sort_by.split('+')
       _data = _data.sort_by do |d|
-        sort_terms.inject(0.0) { |sum, x| sum + (d[x].to_f || 0.0) }
+        if sort_terms.length > 1
+          sort_terms.inject(0.0) { |sum, x| sum + (d[x] || 0.0) }
+        else
+          d[sort_terms.first]
+        end
       end
       order.downcase == 'desc'? _data.reverse : _data
     else
