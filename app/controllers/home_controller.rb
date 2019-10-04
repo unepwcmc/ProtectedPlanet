@@ -4,6 +4,12 @@ class HomeController < ApplicationController
 
     @thematicAreas = [
       {
+        title: "Aichi Target 11 Dashboard",
+        content: "",
+        image: "target-11-dashboard.jpg",
+        url: target_dashboard_path
+      },
+      {
         title: "WDPA",
         content: "The World Database on Protected Areas (WDPA) is the most
                   comprehensive global database on terrestrial and marine protected
