@@ -11,6 +11,24 @@ class TestCountryStatisticsApi < ActiveSupport::TestCase
     @iso3_attr = @singleton_class::ISO3_ATTRIBUTE
   end
 
+  test "fetch_global_endpoint performs request to national endpoint" do
+    global_endpoint = @singleton_class::STATISTICS_API['global_endpoint']
+    base_url = @singleton_class::BASE_URL
+    global_url = "#{base_url}#{global_endpoint}?format=json"
+    HTTParty.expects(:public_send).with('get', global_url).returns(true)
+
+    Stats::CountryStatisticsApi.send(:fetch_global_data)
+  end
+
+  test "fetch_national_endpoint performs request to national endpoint" do
+    national_endpoint = @singleton_class::STATISTICS_API['national_endpoint']
+    base_url = @singleton_class::BASE_URL
+    national_url = "#{base_url}#{national_endpoint}?format=json"
+    HTTParty.expects(:public_send).with('get', national_url).returns(true)
+
+    Stats::CountryStatisticsApi.send(:fetch_national_data)
+  end
+
   test 'import populates country statistics records' do
     importance_attr = @singleton_class::STATISTICS_API['importance_attribute']
     data = [
