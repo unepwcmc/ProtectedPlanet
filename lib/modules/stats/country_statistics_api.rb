@@ -50,7 +50,7 @@ module Stats::CountryStatisticsApi
 
         attrs = { jrc_country_area: stat[COUNTRY_AREA_ATTRIBUTE] }
         endpoints.each do |name|
-          attribute = STATISTICS_API["#{name}_attribute"]
+          attribute = STATISTICS_API[name.to_s]["attribute"]
           attr_name = "percentage_#{name}"
 
           attrs[attr_name] = stat[attribute]
