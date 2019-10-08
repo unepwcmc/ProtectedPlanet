@@ -1,5 +1,5 @@
 set :stage, :staging
-set :branch, "t11-tooltips"
+set :branch, "t11-tracking"
 
 server 'new-web.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
