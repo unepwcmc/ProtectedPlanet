@@ -81,12 +81,11 @@ module Stats::CountryStatisticsApi
       endpoints = endpoint ? Aichi11Target::ATTRIBUTES.slice(endpoint.to_sym) : Aichi11Target::ATTRIBUTES
       global_stats = []
       endpoints.keys.each do |name|
-        data = fetch_global_data
+        data = fetch_national_data
 
         # Return if there's an error
         return data if data.nil? || (data.is_a?(Hash) && data.key?(:error))
 
-        data = data.reject { |stat| contains_exception?(stat) }
         global_stats << yield(data, name)
       end
       global_stats
@@ -101,13 +100,16 @@ module Stats::CountryStatisticsApi
     private
 
     def calculate_value(data, attr_name)
-      attribute = STATISTICS_API["#{attr_name}_attribute"]
+      stat_attributes = STATISTICS_API[attr_name.to_s]
+      attribute = stat_attributes["attribute"]
+      area_attribute = stat_attributes["area_attribute"] || COUNTRY_AREA_ATTRIBUTE
 
       attr_area_sum = total_area_sum = 0
       data.map do |x|
-        attr_area = x[attribute] || 0
-        total_area = x[COUNTRY_AREA_ATTRIBUTE] || 0
-        attr_area_sum += attr_area * total_area / 100
+        next if contains_exception?(x, attr_name)
+        attr_perc = x[attribute] || 0
+        total_area = x[area_attribute] || 0
+        attr_area_sum += attr_perc * total_area / 100
         total_area_sum += total_area
       end
       begin
@@ -150,15 +152,8 @@ module Stats::CountryStatisticsApi
       data
     end
 
-    EXCEPTIONS = {
-      eco_name: ['Lake', 'Rock and Ice', 'Antarctic'],
-      realm_name: ['Antarctic']
-    }.freeze
-    def contains_exception?(stat)
-      EXCEPTIONS.map do |field, values|
-        return true if values.include?(stat[field.to_s])
-      end
-      false
+    def contains_exception?(stat, attr_name)
+      attr_name.to_s == 'well_connected' && stat[ISO3_ATTRIBUTE] == 'ATA'
     end
 
     def log_not_found_objects(obj, records)
