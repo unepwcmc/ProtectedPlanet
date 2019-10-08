@@ -2,6 +2,8 @@ en:
   thematic_area:
     target_11_dashboard:
       title: Aichi Target 11 Dashboard
+      description: Dive into the summary of our progress towards the Aichi Target 11 in the Dashboard
+      thematic_image: target-11-dashboard.jpg
       subtitle_1: Global Level
       subtitle_2: Country & Regions
       search_config: 

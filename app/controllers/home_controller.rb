@@ -4,9 +4,9 @@ class HomeController < ApplicationController
 
     @thematicAreas = [
       {
-        title: "Aichi Target 11 Dashboard",
-        content: "",
-        image: "target-11-dashboard.jpg",
+        title: t('thematic_area.target_11_dashboard.title'),
+        content: t('thematic_area.target_11_dashboard.description'),
+        image: t('thematic_area.target_11_dashboard.thematic_image'),
         url: target_dashboard_path
       },
       {
