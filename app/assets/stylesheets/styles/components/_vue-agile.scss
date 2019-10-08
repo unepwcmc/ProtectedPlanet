@@ -13,6 +13,8 @@ $agile-basic-slide-width-desktop: calc(20% - 2*#{$agile-basic-slide-margin-deskt
 //--------------------------------------------------
 .agile {
   &--basic {
+    overflow: hidden;
+    
     .agile {
       &__dots {
         margin: rem-calc(30) auto 0 auto;
