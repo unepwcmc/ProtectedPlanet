@@ -7,6 +7,7 @@ polyfill()
 import Vue from 'vue/dist/vue.esm'
 import Vue2TouchEvents from 'vue2-touch-events'
 import ScrollMagic from 'scrollmagic'
+import VueAgile from 'vue-agile'
 
 // store
 import store from './store/store.js'
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Vue.prototype.$eventHub = new Vue()
 
     Vue.use(Vue2TouchEvents)
+    Vue.use(VueAgile)
     
     const app = new Vue({
       el: '#v-app',

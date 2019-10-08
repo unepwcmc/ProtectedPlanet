@@ -27,6 +27,14 @@ $tooltip-end-position: rem-calc(10);
   transform: translateX(-50%);
 }
 
+@mixin tooltip-last-slide () {
+  .tooltip__target {
+    @include tooltip-end;
+
+    &:after { @include tooltip-arrow-end; }
+  }
+}
+
 //--------------------------------------------------
 // tooltips
 //--------------------------------------------------

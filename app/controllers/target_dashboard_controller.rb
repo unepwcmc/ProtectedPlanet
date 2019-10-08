@@ -25,6 +25,34 @@ class TargetDashboardController < ApplicationController
 
     @country_and_regions_headings =
       Aichi11TargetDashboardSerializer.new.serialize_head
+
+    @config_carousel_global = {
+      navButtons: false,
+      infinite: true,
+      responsive: [
+      {
+          breakpoint: 628,
+          settings: {
+            dots: true,
+            slidesToShow: 1,
+          }
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            dots: true,
+            slidesToShow: 2,
+          }
+        },
+        {
+          breakpoint: 1024,
+          settings: {
+            dots: false,
+            slidesToShow: 5
+          }
+        }
+      ]
+    }.to_json
   end
 
   def load_countries

@@ -1,4 +1,4 @@
-<div class="new-styles page-padding--bottom">
+<div v-cloak class="new-styles page-padding--bottom">
   <div class="container">
     <header class="hero--thematic-area center">
       <%= image_tag 'icons/aichi-11.svg', alt: 'Aichi 11 icon', class: 'icon--aichi margin-center' %>
@@ -7,36 +7,39 @@
   </div>
 
   <main>
-    <section class="section-padding--top section-padding--bottom-desktop bg--grey-lighter">
+    <section class="section-padding bg--grey-lighter">
       <div class="container">
         <h2><%= t('thematic_area.target_11_dashboard.subtitle_1') %></h2>
       </div>
       
       <div class="container--desktop-up">
-        <carousel class="carousel--basic" :show-arrows="false" :show-all-indicators="true">
-          <% @global_stats.each do |stat| %>
-            <carousel-slide>
-              <tooltip 
-                :on-hover="false" 
-                text="<%= getTooltipText(stat[:id]) %>"
-                class="carousel__tooltip"
-              >
-                <i class="icon--info-circle block"></i>
-              </tooltip>
 
-              <h3 class="carousel__slide-title"><%= stat[:title] %></h3>
-              
-              <% stat[:charts].each do |chart| %>
-                <chart-dial
-                  title="<%= chart[:title] %>"
-                  colour="<%= chart[:colour] %>"
-                  :dial-value="<%= chart[:value] %>"
-                  :dial-target="<%= chart[:target] %>" 
-                ></chart-dial>
-              <% end %>
-            </carousel-slide>
+        <agile class="agile--basic" :options="<%= @config_carousel_global %>" >
+          <% @global_stats.each do |stat| %>
+            <div class="agile__slide">
+              <div class="agile__slide-content">
+                <tooltip 
+                  :on-hover="false" 
+                  text="<%= getTooltipText(stat[:id]) %>"
+                  class="agile__tooltip"
+                >
+                  <i class="icon--info-circle block"></i>
+                </tooltip>
+
+                <h3 class="agile__slide-title"><%= stat[:title] %></h3>
+                
+                <% stat[:charts].each do |chart| %>
+                  <chart-dial
+                    title="<%= chart[:title] %>"
+                    colour="<%= chart[:colour] %>"
+                    :dial-value="<%= chart[:value] %>"
+                    :dial-target="<%= chart[:target] %>" 
+                  ></chart-dial>
+                <% end %>
+              </div>
+            </div>
           <% end %>
-        </carousel>
+        </agile>
       </div>
     </section>
 

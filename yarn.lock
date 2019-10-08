@@ -7088,6 +7088,13 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-agile@^1.0.11:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/vue-agile/-/vue-agile-1.0.11.tgz#4f0e74a5fb6ff41564d74bbf76e3c7dc06b5d1a0"
+  integrity sha512-iOc3qkTjJx5HldP3e9KGYtrYOg/1TG1FpcJQOQKGXHxPO2WAS0MU10tA4ydNbrTM7DTBaIo8RReZsxevFordNg==
+  dependencies:
+    vue "^2.6.10"
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
