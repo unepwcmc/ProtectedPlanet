@@ -20,7 +20,7 @@ module Stats::CountryStatisticsApi
     def import(iso3=nil)
       endpoints = ['well_connected', 'importance']
       # Get stats for each endpoint
-      # Representative stat is exlcuded because that is a global level stat
+      # Representative stat is exlcuded because that is a global level stat only
       # Connect to the API and fetch the data
       data = fetch_national_data(iso3)
 
@@ -124,16 +124,8 @@ module Stats::CountryStatisticsApi
       "#{BASE_URL}#{STATISTICS_API['national_endpoint']}?format=json"
     end
 
-    def global_endpoint_url
-      "#{BASE_URL}#{STATISTICS_API['global_endpoint']}?format=json"
-    end
-
     def fetch_national_data(iso3=nil)
       fetch('national', iso3)
-    end
-
-    def fetch_global_data
-      fetch('global')
     end
 
     def fetch(endpoint, iso3 = nil)
