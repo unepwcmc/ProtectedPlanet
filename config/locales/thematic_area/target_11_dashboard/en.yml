@@ -27,4 +27,4 @@ en:
         -
           id: importance
           title: Areas of importance for biodiversity
-          text: "The average proportion of a country’s terrestrial and marine key biodiversity areas that are covered with protected areas. Statistics updated 2018. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B3%20Key%20Biodiversity%20Areas_0.pdf' title='View source' target='_blank'>Birdlife</a> (EU Joint Research Centre)"
+          text: "The average proportion of a country's KBAs that overlap with protected areas, averaged regionally/globally. Statistics updated 2018. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B3%20Key%20Biodiversity%20Areas_0.pdf' title='View source' target='_blank'>Birdlife</a> (EU Joint Research Centre)"
