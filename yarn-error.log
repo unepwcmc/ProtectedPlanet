@@ -1,33 +1,48 @@
 Arguments: 
-  /usr/bin/node /usr/bin/yarn install
+  /usr/local/Cellar/node/12.6.0/bin/node /usr/local/Cellar/yarn/1.17.3/libexec/bin/yarn.js add webpack-dev-sever
 
 PATH: 
-  /home/unepwcmc/.rvm/gems/ruby-2.6.3/bin:/home/unepwcmc/.rvm/gems/ruby-2.6.3@global/bin:/home/unepwcmc/.rvm/rubies/ruby-2.6.3/bin:/home/unepwcmc/.rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/bin
+  /Users/stacytalbot/.rvm/gems/ruby-2.6.3/bin:/Users/stacytalbot/.rvm/gems/ruby-2.6.3@global/bin:/Users/stacytalbot/.rvm/rubies/ruby-2.6.3/bin:/Users/stacytalbot/.rvm/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Postgres.app/Contents/Versions/latest/bin
 
 Yarn version: 
   1.17.3
 
 Node version: 
-  10.8.0
+  12.6.0
 
 Platform: 
-  linux x64
+  darwin x64
 
 Trace: 
-  Error: ENOENT: no such file or directory, lstat '/ProtectedPlanet/node_modules/pseudomap/'
+  Error: https://registry.yarnpkg.com/webpack-dev-sever: Not found
+      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.17.3/libexec/lib/cli.js:66830:18)
+      at Request.self.callback (/usr/local/Cellar/yarn/1.17.3/libexec/lib/cli.js:140464:22)
+      at Request.emit (events.js:203:13)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.17.3/libexec/lib/cli.js:141436:10)
+      at Request.emit (events.js:203:13)
+      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.17.3/libexec/lib/cli.js:141358:12)
+      at Object.onceWrapper (events.js:291:20)
+      at IncomingMessage.emit (events.js:208:15)
+      at endReadableNT (_stream_readable.js:1154:12)
+      at processTicksAndRejections (internal/process/task_queues.js:77:11)
 
 npm manifest: 
   {
+    "scripts": {
+      "start": "webpack-dev-server --host 0.0.0.0 --inline --content-base ."
+    },
     "dependencies": {
       "@rails/webpacker": "^4.0.2",
       "axios": "^0.19.0",
       "bourbon": "^5.1.0",
       "bourbon-neat": "^1.9.0",
       "d3": "^5.9.2",
+      "es6-object-assign": "^1.1.0",
       "es6-promise": "^4.2.6",
       "leaflet": "^1.4.0",
       "scrollmagic": "^2.0.6",
       "vue": "^2.6.10",
+      "vue-agile": "^1.0.11",
       "vue-loader": "^15.7.0",
       "vue-template-compiler": "^2.6.10",
       "vue2-touch-events": "^2.0.0",
@@ -2761,6 +2776,11 @@ Lockfile:
       is-callable "^1.1.4"
       is-date-object "^1.0.1"
       is-symbol "^1.0.2"
+  
+  es6-object-assign@^1.1.0:
+    version "1.1.0"
+    resolved "https://registry.yarnpkg.com/es6-object-assign/-/es6-object-assign-1.1.0.tgz#c2c3582656247c39ea107cb1e6652b6f9f24523c"
+    integrity sha1-wsNYJlYkfDnqEHyx5mUrb58kUjw=
   
   es6-promise@^4.2.6:
     version "4.2.6"
@@ -7126,6 +7146,13 @@ Lockfile:
     integrity sha1-XX6kW7755Kb/ZflUOOCofDV9WnM=
     dependencies:
       indexof "0.0.1"
+  
+  vue-agile@^1.0.11:
+    version "1.0.11"
+    resolved "https://registry.yarnpkg.com/vue-agile/-/vue-agile-1.0.11.tgz#4f0e74a5fb6ff41564d74bbf76e3c7dc06b5d1a0"
+    integrity sha512-iOc3qkTjJx5HldP3e9KGYtrYOg/1TG1FpcJQOQKGXHxPO2WAS0MU10tA4ydNbrTM7DTBaIo8RReZsxevFordNg==
+    dependencies:
+      vue "^2.6.10"
   
   vue-hot-reload-api@^2.3.0:
     version "2.3.3"

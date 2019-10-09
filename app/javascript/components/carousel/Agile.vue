@@ -1,7 +1,15 @@
 <template>
   <div class="agile" :class="{'agile--auto-play': settings.autoplay, 'agile--disabled': settings.unagile, 'agile--fade': settings.fade && !settings.unagile, 'agile--rtl': settings.rtl}">
     <div ref="list" class="agile__list">
-      <div ref="track" class="agile__track" :style="{transform: `translate(${translateX + marginX}px)`, transition: `transform ${settings.timing} ${transitionDelay}ms`}" @mouseover="handleMouseOver('track')" @mouseout="handleMouseOut('track')">
+      <div 
+        ref="track" 
+        class="agile__track" 
+        :style="{transform: `translate(${translateX + marginX}px)`, transition: `transform ${settings.timing} ${transitionDelay}ms`}" 
+        @mouseover="handleMouseOver('track')" 
+        @mouseout="handleMouseOut('track')"
+        v-touch:swipe.right="goToPrev"
+        v-touch:swipe.left="goToNext"
+      >
         <div class="agile__slides agile__slides--cloned" ref="slidesClonedBefore" v-if="clonedSlides">
           <slot></slot>
         </div>
@@ -138,18 +146,20 @@
 
     mounted () {
       // Windows resize listener
-      window.addEventListener('resize', this.getWidth)
+      window.addEventListener('resize', this.reload)
 
       // // Mouse and touch events
-      // if ('ontouchstart' in window) {
-        this.$refs.track.addEventListener('touchstart', this.handleMouseDown)
-        this.$refs.track.addEventListener('touchend', this.handleMouseUp)
-        this.$refs.track.addEventListener('touchmove', this.handleMouseMove)
-      // } else {
+      if ('ontouchstart' in window) {
+        this.enableScroll()
+        
+        // this.$refs.track.addEventListener('touchstart', this.handleMouseDown)
+        // this.$refs.track.addEventListener('touchend', this.handleMouseUp)
+        // this.$refs.track.addEventListener('touchmove', this.handleMouseMove)
+      } else {
         this.$refs.track.addEventListener('mousedown', this.handleMouseDown)
         this.$refs.track.addEventListener('mouseup', this.handleMouseUp)
         this.$refs.track.addEventListener('mousemove', this.handleMouseMove)
-      // }
+      }
 
       // Init
       this.reload()
@@ -218,7 +228,7 @@
       },
 
       disableScroll () {
-        document.ontouchmove = (e) => e.preventDefault()
+        document.ontouchmove = (e) => e.preventDefault
       },
 
       enableScroll () {
@@ -247,6 +257,7 @@
 
       // Go to next slide
       goToNext () {
+        console.log('next', this.canGoToNext)
         if (this.canGoToNext) {
           this.goTo(this.currentSlide + 1)
         }
@@ -254,6 +265,7 @@
 
       // Go to previous slide
       goToPrev () {
+        console.log('prev', this.canGoToPrev)
         if (this.canGoToPrev) {
           this.goTo(this.currentSlide - 1)
         }
