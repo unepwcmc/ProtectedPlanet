@@ -1,3 +1,13 @@
+### 3.2.0
+
+**New Feature**
+
+* Add Aichi 11 Target Dashboard
+
+**Amendments**
+
+* Regional statistics calculated using a view
+
 ### 3.1.0
 
 **Bug fixes**
