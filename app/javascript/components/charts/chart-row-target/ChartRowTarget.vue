@@ -31,21 +31,25 @@
         :points="getMarkerPath(targetX, 'target')"
         class="chart__marker--target"
       />
-
-      <polyline 
-        :points="getLegendPath()"
-        class="chart__marker--target"
-      />
-
-      <text
-        v-if="title" 
-        class="chart__title"
-        alignment-baseline="middle"
-        :x="legendWidth + 5" 
-        :y="legendY"
+      
+      <template 
+        v-if="target"
       >
-        {{ prettyTitle }}
-      </text>
+        <polyline 
+          :points="getLegendPath()"
+          class="chart__marker--target"
+        />
+
+        <text
+          v-if="title" 
+          class="chart__title"
+          alignment-baseline="middle"
+          :x="legendWidth + 5" 
+          :y="legendY"
+        >
+          {{ prettyTitle }}
+        </text>
+      </template>
       
       <text 
         class="chart__marker-title"
