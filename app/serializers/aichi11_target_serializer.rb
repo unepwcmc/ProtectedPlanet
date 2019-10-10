@@ -52,8 +52,9 @@ class Aichi11TargetSerializer
     chart_json = DEFAULT_CHART_JSON.dup
 
     value = yield
-    target = instance.public_send("#{endpoint.to_s}_global")
-    json[:charts] << chart_json.merge!({ value: value, target: target })
+    target = endpoint.to_s == 'importance' ? nil : instance.public_send("#{endpoint.to_s}_global")
+    chart_hash = { value: value, target: target }
+    json[:charts] << chart_json.merge!(chart_hash)
     json
   end
 
