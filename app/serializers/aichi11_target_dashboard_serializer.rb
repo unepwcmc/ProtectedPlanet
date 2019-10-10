@@ -160,10 +160,11 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     target_column = "#{stat_name}_#{type}"
 
     value = record[_column_name] || 0
+    target = is_importance_region?(stat_name, record) ? nil : Aichi11Target.instance.public_send(target_column)
     {
       title: type.capitalize,
       value: value,
-      target: Aichi11Target.instance.public_send(target_column),
+      target: target,
       colour: type
     }
   end
@@ -175,5 +176,9 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     obj_type = _obj_type == 'region' ? 'region_id' : 'id'
 
     [id, obj_type]
+  end
+
+  def is_importance_region?(stat_name, record)
+    (stat_name.to_s == 'importance' && record['obj_type'] == 'region')
   end
 end
