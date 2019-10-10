@@ -68,6 +68,16 @@ module ApplicationHelper
     World Database on Protected Areas (WDPA), and the most comprehensive
     global database on terrestrial and marine protected areas.
   """
+
+  def yml_key
+    case controller_name
+    when 'target_dashboard'
+      'thematic_area.target_11_dashboard'
+    else 
+      nil
+    end
+  end
+
   def seo_description
     if content_for?(:seo)
       content_for(:seo)
@@ -79,6 +89,8 @@ module ApplicationHelper
   def twitter_card
     if content_for?(:twitter_card)
       content_for(:twitter_card)
+    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_twitter_card")
+      t("#{yml_key}.social_twitter_card")
     else
       "summary"
     end
@@ -87,6 +99,8 @@ module ApplicationHelper
   def social_title
     if content_for?(:social_title)
       sanitize content_for(:social_title)
+    elsif yml_key.present? && I18n.exists?("#{yml_key}.title")
+      t("#{yml_key}.title")
     else
       page_title 'Protected Planet'
     end
@@ -95,6 +109,8 @@ module ApplicationHelper
   def social_description
     if content_for?(:social_description)
       sanitize content_for(:social_description)
+    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_description")
+      t("#{yml_key}.social_description")
     else
       seo_description
     end
@@ -103,6 +119,8 @@ module ApplicationHelper
   def social_image
     if content_for?(:social_image)
       content_for(:social_image)
+    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_image")
+      t("#{yml_key}.social_image")
     else
       URI.join(root_url, image_path('social.png'))
     end
@@ -111,6 +129,8 @@ module ApplicationHelper
   def social_image_alt
     if content_for?(:social_image_alt)
       content_for(:social_image_alt)
+    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_image_alt")
+      t("#{yml_key}.social_image_alt")
     else
       "Screenshot of the Protected Planet website which shows the menu bar and a map of the world that has protected areas highlighted in green."
     end
