@@ -2,6 +2,8 @@ en:
   thematic_area:
     target_11_dashboard:
       title: Aichi Target 11 Dashboard
+      description: Dive into the summary of our progress towards Aichi Target 11 at global, regional and national scales with the Dashboard.
+      thematic_image: target-11-dashboard.jpg
       social_title: Aichi Target 11 Dashboard
       social_description: Dive into the summary of our progress towards Aichi Target 11 at global, regional and national scales with the Dashboard.
       social_image: social-sharing-target-dashboard-banff-canada.jpg
@@ -24,12 +26,12 @@ en:
         -
           id: representative
           title: Representative
-          text: "TEXT TBC. Statistics updated 2018. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B1%20Terrestrial%20Coverage%20by%20Protected%20Areas_0.pdf' title='View source' target='_blank'>DOPA</a>"
+          text: "Average proportion to which the world's ecoregions (terrestrial and marine) are covered by protected areas. Statistics updated 2019. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B1%20Terrestrial%20Coverage%20by%20Protected%20Areas_0.pdf' title='View source' target='_blank'>DOPA</a>"
         -
           id: well_connected
           title: Well connected
-          text: "Proportion to which a country's terrestrial protected area network is designed to promote connectivity (note: no connectivity dataset is yet available for marine protected areas). Statistics updated 2018. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20C1%20Connectivity.pdf' title='View source' target='_blank'>DOPA</a>"
+          text: "Proportion to which a country's terrestrial protected area network is designed to promote connectivity (note: no connectivity dataset is yet available for marine protected areas). Statistics updated 2019. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20C1%20Connectivity.pdf' title='View source' target='_blank'>DOPA</a>"
         -
           id: importance
           title: Areas of importance for biodiversity
-          text: "The average proportion of a country’s terrestrial and marine key biodiversity areas that are covered with protected areas. Statistics updated 2018. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B3%20Key%20Biodiversity%20Areas_0.pdf' title='View source' target='_blank'>Birdlife</a> (EU Joint Research Centre)"
+          text: "The average proportion of a country’s terrestrial and marine key biodiversity areas that are covered with protected areas. Statistics updated 2019. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B3%20Key%20Biodiversity%20Areas_0.pdf' title='View source' target='_blank'>Birdlife</a> (EU Joint Research Centre)"
