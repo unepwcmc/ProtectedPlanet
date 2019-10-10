@@ -21,14 +21,19 @@
 // // maps
 @import 'leaflet/dist/leaflet';
 
-@import './resources/**/*';
+@import './resources/mixins/rem-calc';
+@import './resources/mixins/media-queries';
+@import './resources/mixins/flexbox';
+@import './resources/mixins/helpers';
+@import './resources/mixins/layout';
+@import './resources/mixins/text';
+@import './resources/base-variables';
+// @import './resources/variables/**/*';
 
 // development mixins
 @import 'utilities/flexbox';
 @import 'utilities/accessibility';
 @import 'utilities/bem';
-@import 'utilities/rem-calc';
-@import 'utilities/responsive';
 
 // variables
 @import 'variables/colors';
@@ -41,12 +46,10 @@
 // atoms
 @import 'atoms/fonts';
 @import 'atoms/fa';
-
 @import 'atoms/colors';
 @import 'atoms/buttons';
 @import 'atoms/disclaimer';
 @import 'atoms/headers';
-@import 'atoms/icons';
 @import 'atoms/label';
 @import 'atoms/leaflet-controls';
 @import 'atoms/links';
@@ -64,7 +67,6 @@
 @import 'molecules/big-button';
 @import 'molecules/breadcrumbs';
 @import 'molecules/burger';
-@import 'molecules/carousel';
 @import 'molecules/circle-story';
 @import 'molecules/close-button';
 @import 'molecules/counter';
@@ -92,7 +94,7 @@
 @import 'molecules/sticky-nav';
 @import 'molecules/sticky-tab';
 @import 'molecules/table';
-@import 'molecules/tooltip';
+@import 'molecules/tooltip-old';
 @import 'molecules/twitter-share';
 @import 'molecules/uservoice';
 @import 'molecules/value';
@@ -153,17 +155,21 @@
 @import 'templates/site';
 //templates
 
-//charts 
-@import 'charts/horizontal-bar-chart';
-@import 'charts/interactive-multiline';
-@import 'charts/interactive-treemap';
-@import 'charts/sunburst';
-//charts
-
 @import 'utilities/u-classes';
 
 @import 'custom';
 
 @import './map/custom-leaflet';
 
-@import './helpers/*';
+@import './styles/base';
+@import './styles/helpers/**/*';
+@import './styles/components/icons';
+@import './styles/components/carousel';
+@import './styles/components/charts';
+@import './styles/components/hero';
+@import './styles/components/form';
+@import './styles/components/sticky';
+@import './styles/components/table';
+@import './styles/components/tooltip';
+@import './styles/components/vue-agile';
+// @import './styles/pages/**/*';

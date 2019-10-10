@@ -12,7 +12,7 @@
     margin-bottom: rem-calc(14);
 
     @include breakpoint($small) {
-      @include text(large, thin)
+      @include text(large, thin);
     }
   }
 

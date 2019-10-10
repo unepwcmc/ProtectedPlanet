@@ -1,16 +1,45 @@
+//--------------------------------------------------
+// settings
+//--------------------------------------------------
 $padding-top-bottom: rem-calc(25);
-$padding-side: rem-calc(40);
+
+$padding-side-mobile: rem-calc(16);
+$padding-side-tablet: rem-calc(16);
+$padding-side-desktop: rem-calc(40);
+
+$padding-side: rem-calc(40); //old
+
+@mixin padding-side() {
+  padding-left: $padding-side-mobile;
+  padding-right: $padding-side-mobile;
+
+  @include breakpoint($small) {
+    padding-left: $padding-side-tablet;
+    padding-right: $padding-side-tablet;    
+  }
+
+  @include breakpoint($medium) {
+    padding-left: $padding-side-desktop;
+    padding-right: $padding-side-desktop;    
+  }
+}
 
 $indicator-height: rem-calc(14);
 $indicator-row-height: $indicator-height + $padding-top-bottom * 2;
 $transition-options: 0.6s ease-in-out;
 
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
 .transition {
   &.carousel__slides {
     transition: transform $transition-options;
   }
 }
 
+//--------------------------------------------------
+// news banner carousel
+//--------------------------------------------------
 .carousel {
   padding-top: $padding-top-bottom;
 
@@ -45,12 +74,13 @@ $transition-options: 0.6s ease-in-out;
       }
 
   &__control-bar {    
+    @include padding-side();
     color: white;
-    padding: rem-calc(0 $padding-side);
     height: $indicator-row-height;
 
     display: flex;
     align-items: center;
+    justify-content: center;
   }
 
     &__pause {

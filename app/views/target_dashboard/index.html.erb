@@ -1,0 +1,65 @@
+<div v-cloak class="new-styles page-padding--bottom">
+  <div class="container">
+    <header class="hero--thematic-area center">
+      <%= image_tag 'icons/aichi-11.svg', alt: 'Aichi 11 icon', class: 'icon--aichi margin-center' %>
+      <h1 class="hero__title hero__title--article"><%= t('thematic_area.target_11_dashboard.title') %></h1>
+    </header>
+  </div>
+
+  <main>
+    <section class="section-padding bg--grey-lighter">
+      <div class="container">
+        <h2><%= t('thematic_area.target_11_dashboard.subtitle_1') %></h2>
+      </div>
+      
+      <div class="container--desktop-up">
+
+        <agile class="agile--basic" :options="<%= get_config_carousel_global %>" >
+          <% @global_stats.each do |stat| %>
+            <div class="agile__slide">
+              <div class="agile__slide-content">
+                <tooltip 
+                  :on-hover="false" 
+                  text="<%= getTooltipText(stat[:id]) %>"
+                  class="agile__tooltip"
+                >
+                  <i class="icon--info-circle block"></i>
+                </tooltip>
+
+                <h3 class="agile__slide-title"><%= stat[:title] %></h3>
+                
+                <% stat[:charts].each do |chart| %>
+                  <chart-dial
+                    title="<%= chart[:title] %>"
+                    colour="<%= chart[:colour] %>"
+                    :dial-value="<%= chart[:value] %>"
+                    <% if chart[:target] != nil %>
+                      :dial-target="<%= chart[:target] %>" 
+                    <% end %> 
+                  ></chart-dial>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </agile>
+      </div>
+    </section>
+
+    <section class="section-padding">
+      <div class="container">
+        <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
+      </div>
+        
+      <div class="container--desktop-up">
+        <target-11-dashboard
+          class="sm-trigger-sticky-bar"
+          :select="<%= @search %>"
+          :table-headings="<%= @country_and_regions_headings %>" 
+          :table-data-src="<%= @endpoint.to_json %>"
+          :tooltip-array="<%= t("thematic_area.target_11_dashboard.tooltips").to_json %>"
+        >
+        </target-11-dashboard>
+      </div>
+    </section>
+  </main>
+</div>
