@@ -15,7 +15,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     },
     effectively_managed: {
       id: 'effectively_managed',
-      name: 'Effectiveley managed',
+      name: 'Effectively managed',
       relation: 'pame_statistic',
       column_name: 'pame_percentage_pa_type_cover'
     },
