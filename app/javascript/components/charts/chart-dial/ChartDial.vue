@@ -39,8 +39,9 @@
           fill="none"
           marker-end="url(#arrow)"
           />
-
+        
         <polyline 
+          v-if="dialTarget"
           class="chart__arrow-line--target"
           :points="arrowPointsTarget" 
           fill="none"
@@ -54,19 +55,23 @@
         />
       </g>
       
-      <polyline 
-        :points="getLegendPath()"
-        class="chart__arrow-line--target"
-      />
-
-      <text 
-        class="chart__title"
-        alignment-baseline="middle"
-        :x="legendEndX + 5" 
-        :y="legendY"
+      <template 
+        v-if="dialTarget"
       >
-        {{ prettyTitle }}
-      </text>
+        <polyline 
+          :points="getLegendPath()"
+          class="chart__arrow-line--target"
+        />
+
+        <text 
+          class="chart__title"
+          alignment-baseline="middle"
+          :x="legendEndX + 5" 
+          :y="legendY"
+        >
+          {{ prettyTitle }}
+        </text>
+      </template>
 
       <text 
         class="chart__title"
