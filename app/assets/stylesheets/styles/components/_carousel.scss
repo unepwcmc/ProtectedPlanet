@@ -106,64 +106,6 @@ $transition-options: 0.6s ease-in-out;
         background-color: $white;
       }
     }
-
-//--------------------------------------------------
-// basic carousel
-//--------------------------------------------------
-$carousel-basic-slide-margin-mobile: rem-calc(5);
-$carousel-basic-slide-margin-tablet: rem-calc(10);
-$carousel-basic-slide-margin-desktop: rem-calc(10);
-
-$carousel-basic-slide-width-mobile: calc(92% - 2*#{$carousel-basic-slide-margin-mobile});
-$carousel-basic-slide-width-tablet: calc(38% - 2*#{$carousel-basic-slide-margin-tablet});
-$carousel-basic-slide-width-desktop: calc(20% - 2*#{$carousel-basic-slide-margin-desktop});
-
-$carousel-basic-indicator-size: rem-calc(13);
-
-  &--basic {
-    padding-top: 0;
-
-    .carousel {
-      &__control-bar {
-        @include breakpoint($large) { display: none; }
-      }
-
-        &__indicator {
-          background-color: $grey-light;
-          margin-right: $carousel-basic-indicator-size/2;
-          width: $carousel-basic-indicator-size; height: $carousel-basic-indicator-size;
-
-          &--selected { background-color: $grey; }
-        }
-
-        &__slide {
-          width: 50%;
-        }
-
-        &__slide-title {
-          @include responsive-styles(margin, 0, rem-calc(0 5), rem-calc(0 5), rem-calc(0 10));
-          font-family: $header-font;
-        }
-
-        &__tooltip {
-          position: absolute;
-          top: rem-calc(10);
-          right: rem-calc(10);
-        }
-    }
-
-    .carousel-slide {
-      @include shadow--grey-light;
-      @include responsive-styles(width, $carousel-basic-slide-width-mobile, $carousel-basic-slide-width-tablet, $carousel-basic-slide-width-tablet, $carousel-basic-slide-width-desktop);
-      @include responsive-styles(margin, 0 $carousel-basic-slide-margin-mobile, 0 $carousel-basic-slide-margin-tablet, 0 $carousel-basic-slide-margin-tablet, 0 $carousel-basic-slide-margin-desktop);
-      background-color: $white; 
-      border: solid 1px $grey-light;
-      font-size: rem-calc(18);
-      padding: rem-calc(16);
-
-      position: relative;
-    }
-  }
 }
 
 .carousel-slide {

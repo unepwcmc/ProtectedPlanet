@@ -8,11 +8,13 @@ import Vue from 'vue/dist/vue.esm'
 import VueAnalytics from 'vue-analytics'
 import Vue2TouchEvents from 'vue2-touch-events'
 import ScrollMagic from 'scrollmagic'
+// import VueAgile from 'vue-agile'
 
 // store
 import store from './store/store.js'
 
 // components
+import Agile from './components/carousel/Agile'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
@@ -45,12 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
     Vue.prototype.$eventHub = new Vue()
 
     Vue.use(Vue2TouchEvents)
+    // Vue.use(VueAgile)
     
     const app = new Vue({
       el: '#v-app',
       store,
 
       components: {
+        Agile,
         Carousel,
         CarouselSlide,
         Counter,

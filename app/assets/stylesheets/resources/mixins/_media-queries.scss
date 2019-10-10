@@ -13,7 +13,7 @@
   } 
 }
 
-@mixin between($breakpoint_1, $breakpoint_2) {
+@mixin breakpoint-between($breakpoint_1, $breakpoint_2) {
   @media screen and (max-width: $breakpoint_2) and (min-width: $breakpoint_1 + 1px) {
     @content;
   } 
