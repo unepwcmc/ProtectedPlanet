@@ -192,6 +192,8 @@ export default {
       this.selectedInternal = option
       this.closeSelect()
       document.activeElement.blur()
+      
+      this.$ga.event('SELECT - Select Country/Region', 'click', option.name)
     },
 
     setSearchTermToSelected () {

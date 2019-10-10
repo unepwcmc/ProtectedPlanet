@@ -5,6 +5,7 @@ polyfill()
 
 // dependencies
 import Vue from 'vue/dist/vue.esm'
+import VueAnalytics from 'vue-analytics'
 import Vue2TouchEvents from 'vue2-touch-events'
 import ScrollMagic from 'scrollmagic'
 
@@ -37,6 +38,9 @@ import VTable from './components/table/VTable'
 
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
+
+    Vue.use(VueAnalytics, { id: 'UA-12920389-5' }) // staging
+    // Vue.use(VueAnalytics, { id: 'UA-12920389-2' }) // production
 
     Vue.prototype.$eventHub = new Vue()
 
