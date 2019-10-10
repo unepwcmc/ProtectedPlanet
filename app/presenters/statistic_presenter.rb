@@ -24,7 +24,15 @@ class StatisticPresenter
   end
 
   def percentage_total_pa_cover
-    percentage_pa_land_cover + percentage_pa_marine_cover
+    perc = ((pa_land_area + pa_marine_area).to_f / ( land_area + marine_area ) * 100).round(2)
+    # force percentage to be between 0 and 100!
+    if (perc > 100)
+      return 100
+    elsif (perc < 0)
+      return 0
+    else
+      return perc
+    end
   end
 
   def nr_report_url
