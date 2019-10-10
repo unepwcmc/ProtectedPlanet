@@ -9,6 +9,7 @@ class StatisticPresenterTest < ActiveSupport::TestCase
   end
 
   test '.percentage_of_global_pas returns the percentage of global PAs' do
+    skip("Regional statistics calculations need to be revisited and are now calculated via SQL view")
     global_statistic = FactoryGirl.create(:regional_statistic, pa_area: 25)
     FactoryGirl.create(:region, iso: 'GL', regional_statistic: global_statistic)
     Region.where(iso: 'GL').first.regional_statistic = global_statistic

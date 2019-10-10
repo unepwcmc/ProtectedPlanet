@@ -5,7 +5,6 @@ class RegionControllerTest < ActionController::TestCase
   test ".show action returns 200" do
 
     region = FactoryGirl.create(:region, iso: 'EU')
-    FactoryGirl.create(:regional_statistic, region: region, pa_area: 100)
 
     country = FactoryGirl.create(:country, name: 'Belgium', iso_3: 'BEL', region: region)
 
