@@ -31,7 +31,9 @@
                   title="<%= chart[:title] %>"
                   colour="<%= chart[:colour] %>"
                   :dial-value="<%= chart[:value] %>"
-                  :dial-target="<%= chart[:target] %>" 
+                  <% if chart[:target] != nil %>
+                    :dial-target="<%= chart[:target] %>" 
+                  <% end %>
                 ></chart-dial>
               <% end %>
             </carousel-slide>
