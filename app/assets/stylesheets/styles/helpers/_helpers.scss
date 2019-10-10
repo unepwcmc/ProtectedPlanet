@@ -1,18 +1,4 @@
 //--------------------------------------------------
-// helpers
-//--------------------------------------------------
-// - fouc
-// - font
-// - lists
-// - display
-// - dimensions
-// - positioning
-// - margin & padding
-// - backgrounds
-// - user interaction
-// - shapes
-//
-//--------------------------------------------------
 // fouc (flash of unstyled content)
 //--------------------------------------------------
 [v-cloak] { display: none; }
@@ -44,6 +30,7 @@
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-left { text-align: left; }
+.text-thin { font-weight: $thin; }
 
 .relative { position: relative; }
 
@@ -83,6 +70,8 @@
 // backgrounds
 //--------------------------------------------------
 $image-placeholder: black;
+
+.bg--grey-lighter { background-color: $grey-lighter; }
 
 .bg-img {
   background-color: $image-placeholder;
@@ -147,4 +136,27 @@ $image-placeholder: black;
   position: absolute;
   white-space: nowrap;
   width: rem-calc(1);
+}
+
+//--------------------------------------------------
+// media queries
+//--------------------------------------------------
+.breakpoint-small-up {
+  display: none;
+  @include breakpoint($small) { display: block; }
+}
+
+.breakpoint-medium-up {
+  display: none;
+  @include breakpoint($medium) { display: block; }
+}
+
+.breakpoint-small-down {
+  display: block;
+  @include breakpoint($small) { display: none; }
+}
+
+.breakpoint-medium-down {
+  display: block;
+  @include breakpoint($medium) { display: none; }
 }

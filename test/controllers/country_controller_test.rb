@@ -2,11 +2,9 @@ require 'test_helper'
 
 class CountryControllerTest < ActionController::TestCase
   test '.show returns a 200 HTTP code' do
-    global_region = FactoryGirl.create(:region, iso: 'GL')
-    FactoryGirl.create(:regional_statistic, region: global_region, pa_area: 100)
+    FactoryGirl.create(:region, iso: 'GL')
 
     region = FactoryGirl.create(:region)
-    FactoryGirl.create(:regional_statistic, region: region, pa_area: 100)
 
     country = FactoryGirl.create(:country, name: 'Orange Emirate', iso_3: 'PUM', region: region)
 

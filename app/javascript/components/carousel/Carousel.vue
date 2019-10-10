@@ -7,7 +7,14 @@
 
     <div class="carousel__slides-container">
 
-      <ul id="carousel-slides" class="carousel__slides transition" aria-live="off" aria-atomic="true">
+      <ul 
+        id="carousel-slides" 
+        class="carousel__slides transition" 
+        aria-live="off" 
+        aria-atomic="true"
+        v-touch:swipe.right="slideToPrevious" 
+        v-touch:swipe.left="slideToNext"
+      >
         <template v-for="n in 3">
           <slot :slidesScope="slidesScope"></slot>
         </template>
@@ -26,13 +33,9 @@
 
     <div v-if="hasMutlipleSlides" class="carousel__control-bar">
       <template v-if="showIndicators">
-        <button
+        <span
           v-for="slide in totalSlides"
-          :title="indicatorTitle(slide)"
-          aria-controls="carousel-slides"
-          :aria-pressed="isCurrentSlide(slide)"
-          :class="['carousel__indicator', selectedSlideClass(slide)]"
-          @click="changeSlide(slide)"></button>
+          :class="['carousel__indicator', selectedSlideClass(slide)]"></span>
       </template>
 
       <button :title="pauseTitle" v-if="slideIntervalLength" class="carousel__pause" @click="toggleSlideInterval">

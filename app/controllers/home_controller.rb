@@ -4,6 +4,12 @@ class HomeController < ApplicationController
 
     @thematicAreas = [
       {
+        title: t('thematic_area.target_11_dashboard.title'),
+        content: t('thematic_area.target_11_dashboard.description'),
+        image: t('thematic_area.target_11_dashboard.thematic_image'),
+        url: target_dashboard_path
+      },
+      {
         title: "WDPA",
         content: "The World Database on Protected Areas (WDPA) is the most
                   comprehensive global database on terrestrial and marine protected

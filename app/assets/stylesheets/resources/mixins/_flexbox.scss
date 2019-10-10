@@ -85,3 +85,11 @@
 @mixin flex-vm-between { align-content: space-between; }
 @mixin flex-vm-around { align-content: space-around; }
 @mixin flex-vm-stretch { align-content: stretch; }
+
+//--------------------------------------------------
+// helpers
+//--------------------------------------------------
+@mixin flex-center {
+  @include flex-h-center;
+  @include flex-v-center;
+}
