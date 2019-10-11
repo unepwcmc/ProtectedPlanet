@@ -41,13 +41,12 @@ import VTable from './components/table/VTable'
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
 
-    Vue.use(VueAnalytics, { id: 'UA-12920389-5' }) // staging
-    // Vue.use(VueAnalytics, { id: 'UA-12920389-2' }) // production
+    // Vue.use(VueAnalytics, { id: 'UA-12920389-5' }) // staging
+    Vue.use(VueAnalytics, { id: 'UA-12920389-2' }) // production
 
     Vue.prototype.$eventHub = new Vue()
 
     Vue.use(Vue2TouchEvents)
-    // Vue.use(VueAgile)
     
     const app = new Vue({
       el: '#v-app',
