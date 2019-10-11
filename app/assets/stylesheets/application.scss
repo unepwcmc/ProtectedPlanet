@@ -28,7 +28,7 @@
 @import './resources/mixins/layout';
 @import './resources/mixins/text';
 @import './resources/base-variables';
-// @import './resources/variables/**/*';
+@import './resources/variables/**/*';
 
 // development mixins
 @import 'utilities/flexbox';
@@ -151,11 +151,8 @@
 // utilities
 
 //templates
-@import 'templates/marine';
 @import 'templates/site';
 //templates
-
-@import 'utilities/u-classes';
 
 @import 'custom';
 
@@ -172,4 +169,6 @@
 @import './styles/components/table';
 @import './styles/components/tooltip';
 @import './styles/components/vue-agile';
-// @import './styles/pages/**/*';
+@import './styles/pages/*';
+
+@import 'utilities/u-classes';
