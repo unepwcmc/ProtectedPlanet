@@ -364,7 +364,7 @@
 
   .agile__slide {
     display: block;
-    flex-grow: 1;
+    flex-grow: 0;
     flex-shrink: 0;
   }
 
