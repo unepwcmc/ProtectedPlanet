@@ -1,5 +1,5 @@
 module Wdpa::BiopamaCountriesImporter
-  BIOPAMA_COUNTRIES_CSV = "#{Rails.root}/lib/data/seeds/biopama_countries_iso_codes.csv"
+  BIOPAMA_COUNTRIES_CSV = "#{Rails.root}/lib/data/seeds/biopama_countries.csv"
   extend self
 
   def import
@@ -7,12 +7,13 @@ module Wdpa::BiopamaCountriesImporter
       csv = CSV.read(BIOPAMA_COUNTRIES_CSV)
       csv.shift # remove headers
 
-      csv.each do |row|
-        iso = row[0]
+      CSV.foreach(BIOPAMA_COUNTRIES_CSV, headers: true) do |row|
+        iso = row['iso3']
+        region = row['acp_region']
         country = Country.find_by_iso_3(iso)
         if country
-          country.update_attributes(is_biopama: true)
-          puts "#{country.name} has been flagged as BIOPAMA country"
+          country.update_attributes(acp_region: region)
+          puts "#{country.name} has been flagged as an ACP country"
         else
           puts "Country with iso_3 #{iso} does not exist"
         end
