@@ -4,9 +4,6 @@ module Wdpa::BiopamaCountriesImporter
 
   def import
     ActiveRecord::Base.transaction do
-      csv = CSV.read(BIOPAMA_COUNTRIES_CSV)
-      csv.shift # remove headers
-
       CSV.foreach(BIOPAMA_COUNTRIES_CSV, headers: true) do |row|
         iso = row['iso3']
         region = row['acp_region']
