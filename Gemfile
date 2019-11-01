@@ -45,6 +45,7 @@ group :development do
   gem 'capistrano-passenger', '0.2.0', require: false
   gem 'capistrano-sidekiq','1.0.2'
   gem 'capistrano-git-with-submodules', '2.0.3'
+  gem 'capistrano-service'
   # gem 'listen', '~> 3.1.5'
   # gem 'spring-watcher-listen', '~> 2.0.0'
   #

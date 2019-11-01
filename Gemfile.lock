@@ -794,6 +794,8 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-service (0.0.2)
+      capistrano (>= 3.0.0.pre)
     capistrano-sidekiq (1.0.2)
       capistrano (>= 3.9.0)
       sidekiq (>= 3.4)
@@ -1128,6 +1130,7 @@ DEPENDENCIES
   capistrano-passenger (= 0.2.0)
   capistrano-rails (= 1.4.0)
   capistrano-rvm (= 0.1.2)
+  capistrano-service
   capistrano-sidekiq (= 1.0.2)
   capybara (~> 2.3.0)
   coffee-rails (~> 4.2.2)
