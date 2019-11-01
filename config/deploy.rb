@@ -5,7 +5,8 @@ set :application, 'ProtectedPlanet'
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
 
 set :init_system, :systemd
-set :service_unit_name, "sidekiq_#{fetch(:application)}.service"
+set :service_unit_name, "sidekiq_pp.service"
+set :service_unit_name, "sidekiq_import_pp.service"
 
 set :deploy_user, 'wcmc'
 set :deploy_to, "/home/#{fetch(:deploy_user)}/#{fetch(:application)}"
