@@ -4,10 +4,6 @@ lock '3.11.0'
 set :application, 'ProtectedPlanet'
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
 
-set :init_system, :systemd
-set :service_unit_name, "sidekiq_pp.service"
-set :service_unit_name, "sidekiq_import_pp.service"
-
 set :deploy_user, 'wcmc'
 set :deploy_to, "/home/#{fetch(:deploy_user)}/#{fetch(:application)}"
 
@@ -32,3 +28,8 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 set :keep_releases, 5
 
 set :passenger_restart_with_touch, false
+
+
+namespace :deploy do
+  after :publishing, 'service:sidekiq_pp:restart'
+end

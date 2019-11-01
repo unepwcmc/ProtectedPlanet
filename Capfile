@@ -40,11 +40,12 @@ require "capistrano/rails/migrations"
 require "capistrano/passenger"
 require 'capistrano/maintenance'
 require 'whenever/capistrano'
-require 'capistrano/sidekiq'
+#require 'capistrano/sidekiq'
 
 
 
-
+set :services, [:sidekiq_pp]
+require 'capistrano/service'
 
 
 
