@@ -1,5 +1,9 @@
 ### 3.2.1
 
+* Update reference on Target 11 Dashboard to DOPA
+
+### 3.2.1
+
 * Add country, pame_country and marine stats (WDPA November 2019 release).
 
 ### 3.2.0
