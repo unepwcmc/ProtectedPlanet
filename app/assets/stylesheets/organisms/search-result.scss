@@ -1,6 +1,6 @@
-@include b(search-result) {
+.search-result {
   @extend %color-base;
-  @extend %clearfix;
+  
 
   border-bottom: solid rem-calc(1) $grey-5;
   padding: {
@@ -14,25 +14,25 @@
       padding-right: 0;
   }
 
-  @include e(title) {
-    @include color($search-result-title__color);
+  &__title {
+    color: $search-result-title__color;
     @include text(headline);
 
     margin-bottom: rem-calc(16);
   }
 
-  @include e(body) {
+  &__body {
     @include text(body, thin);
     margin-bottom: rem-calc(24);
   }
 
-  @include e(details) {
+  &__details {
     list-style: none;
   }
 
-  @include e(detail) {
+  &__detail {
     @include text--alt(body, thin);
-    @include color($grey-55);
+    color: $grey-55;
 
     border-right: solid rem-calc(1) $grey-5;
     float: left;
@@ -43,7 +43,7 @@
 
   }
 
-  @include e(tag) {
+  &__tag {
     @include text(small);
     @extend %color-base;
 

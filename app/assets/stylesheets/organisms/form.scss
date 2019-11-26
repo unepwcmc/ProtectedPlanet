@@ -1,15 +1,15 @@
-@include b(form) {
+.form {
   @include text(body);
   @extend %color-base;
 
-  @include e(label) {
+  &__label {
     @include text(body, bold);
 
     display: block;
     margin-bottom: rem-calc(4);
   }
 
-  @include e(input) {
+  &__input {
     &:focus { outline: none; border-width: rem-calc(2); }
 
     @extend %color-base;
@@ -20,22 +20,22 @@
     padding: rem-calc(8);
     border: solid rem-calc(1) $grey-15;
 
-    @include m(big) {
+    &--big {
       min-height: rem-calc(40);
       min-width: 75%;
     }
 
-    @include m(textarea) {
+    &--textarea {
       min-height: rem-calc(112);
       min-width: 100%;
     }
   }
 
-  @include e(fieldset) {
+  &__fieldset {
     margin-bottom: rem-calc(16);
   }
 
-  @include e(select-container) {
+  &__select-container {
     position: relative;
 
     &:after {

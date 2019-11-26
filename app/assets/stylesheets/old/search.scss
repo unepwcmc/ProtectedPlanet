@@ -238,7 +238,7 @@ $width--search-sidebar: 270px;
 
   p {
     @include text--alt(small, thin);
-    @include color($white);
+    color: $white;
     position: absolute;
     left: 8px;
     right: 8px;
@@ -264,6 +264,6 @@ $width--search-sidebar: 270px;
 
   .current {
     @include text(body, bold);
-    @include color($green);
+    color: $green;
   }
 }

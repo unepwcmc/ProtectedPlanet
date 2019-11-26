@@ -59,7 +59,7 @@
     @extend .flex-row-wrap;
 
     @include only-desktop {
-      @include flex-flow(row nowrap);
+      @include flex-nowrap;
     }
   }
 

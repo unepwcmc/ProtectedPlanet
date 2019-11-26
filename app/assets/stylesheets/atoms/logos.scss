@@ -1,5 +1,5 @@
-@include b(logos) {
-  @include e(logo) {
+.logos {
+  &__logo {
     margin: rem-calc(0 10);
   }
 }
@@ -42,7 +42,7 @@
 .protectedplanet-logo {
   @include protectedplanet-logo;
 
-  @include e(registered) {
+  &__registered {
     position: relative;
     font-size: rem-calc(8);
     top: -.5rem;

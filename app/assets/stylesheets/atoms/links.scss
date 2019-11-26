@@ -23,7 +23,7 @@
   }
 
   &--page-anchor {
-    @include color($link--color);
+    color: $link--color;
     @include font-weight(normal);
   }
 }

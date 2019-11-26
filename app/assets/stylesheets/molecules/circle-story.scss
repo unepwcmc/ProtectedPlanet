@@ -1,5 +1,5 @@
 .circle-story {
-  @include flexbox;
+  @include flex;
   flex-flow: row wrap;
   padding: rem-calc(0 0 28 0);
 
@@ -48,7 +48,7 @@
   
     &__title {
       @include text(medium, bold);
-      @include color($green);
+      color: $green;
       line-height: 1.1;
 
       margin-bottom: rem-calc(8);

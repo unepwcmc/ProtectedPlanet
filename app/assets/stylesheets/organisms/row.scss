@@ -1,19 +1,19 @@
-@include b(row) {
-  @extend %clearfix;
+.row {
+  
 
-  @include m(no-push) {
+  &--no-push {
     margin-bottom: 0;
   }
 
-  @include m(push) {
+  &--push {
     margin-bottom: rem-calc(80);
   }
 
-  @include m(push2x) {
+  &--push2x {
     margin-bottom: 2em;
   }
 
-  @include m(with-border-top) {
+  &--with-border-top {
     border-top: solid rem-calc(1) $grey-5;
   }
 

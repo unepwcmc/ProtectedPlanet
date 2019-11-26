@@ -6,19 +6,19 @@
   }
 }
 
-@include b(half) {
+.half {
   @include span-columns(6);
 
   @include only-mobile {
     @include span-columns(12);
   }
 
-  @include m(no-margin) {
+  &--no-margin {
     width: 50%;
     margin: 0;
   }
 
-  @include m(with-separator) {
+  &--with-separator {
     position: relative;
     border-right: solid rem-calc(2) $grey-15;
 
@@ -36,10 +36,10 @@
   }
 }
 
-@include b(one-thirds) {
+.one-thirds {
   @include span-columns(4);
 
-  @include m(no-margin) {
+  &--no-margin {
     width: 33.33%;
     margin: 0;
   }
@@ -47,18 +47,18 @@
   @media (max-width: 769px) { @include span-columns(12); }
 }
 
-@include b(two-thirds) {
+.two-thirds {
   @include span-columns(8);
   @media (max-width: 769px) { @include span-columns(12); }
 }
 
-@include b(one-fourths) {
+.one-fourths {
   @include span-columns(3);
 
   @media (max-width: 769px) { @include span-columns(12); }
 }
 
-@include b(three-fourths) {
+.three-fourths {
   @include span-columns(9);
   @media (max-width: 769px) { @include span-columns(12); }
 }
@@ -79,55 +79,55 @@
 // sure you test it in IE before deploying
 //----------------------------------------
 
-@include b(flex-start) {
-  @extend %flexbox;
+.flex-start {
+  @include flex;
 
   @include only-mobile {
     flex-direction: column;
   }
 }
 
-@include b(space-between) {
-  @extend %flexbox;
-  @include justify-content(space-between);
+.space-between {
+  @include flex;
+  @include flex-h-between;
 }
 
 .space-around {
-  @include justify-content(space-around);
+  @include flex-h-around;
 }
 
-@include b(right-padded) {
+.right-padded {
   padding-right: 5%;
 }
 
-.justify-content-between { @include justify-content(space-between); }
-.justify-content-center { @include justify-content(center); }
+.justify-content-between { @include flex-h-between; }
+.justify-content-center { @include flex-h-center; }
 
 .justify-content-end {
   @extend .justify-content-center;
-  @include breakpoint($large){ @include justify-content(flex-end); }
+  @include breakpoint($large){ @include flex-h-end; }
 }
 
 
-.align-items-end { @include align-items(flex-end); }
-.align-items-center { @include align-items(center); }
+.align-items-end { @include flex-v-end; }
+.align-items-center { @include flex-v-center; }
 
 //----------------------------------------
 // rows
 //----------------------------------------
 
 .flex-row {
-  @extend %flexbox;
-  @include flex-flow(row nowrap);
+  @include flex;
+  @include flex-nowrap;
 }
 
 .flex-row-wrap {
-  @extend %flexbox;
-  @include flex-flow(row wrap);
+  @include flex;
+  @include flex-wrap;
 }
 
 .flex-row-responsive {
-  @extend %flexbox;
+  @include flex;
   flex-flow: row wrap;    
 
   @include breakpoint($medium){ flex-flow: row nowrap; } //required for IE 11

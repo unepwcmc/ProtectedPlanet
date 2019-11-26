@@ -1,7 +1,7 @@
-@include b(expandable-section) {
+.expandable-section {
   margin-bottom: rem-calc(10);
 
-  @include e(header) {
+  &__header {
     &:hover { background-color: $grey-15; }
 
     @extend %color-base;
@@ -11,10 +11,10 @@
     cursor: pointer;
     padding: rem-calc(8 20);
 
-    @include m(no-bg) { background-color: inherit; }
+    &--no-bg { background-color: inherit; }
 }
 
-  @include e(switch) {
+  &__switch {
     float: right;
 
     &:after { @extend %color-base; }
@@ -28,7 +28,7 @@
     }
   }
 
-  @include e(body) {
+  &__body {
     border: solid rem-calc(1) $grey-5;
     padding: rem-calc(20);
   }

@@ -4,8 +4,8 @@
 }
 
 .attribute {
-  @extend .flex-row;
-  @extend .align-items-end;
+  @include flex;
+  @include flex-v-end;
 
   border-bottom: solid rem-calc(1) $attribute-border-color;
   margin-top: rem-calc(18);

@@ -1,5 +1,5 @@
 .info-box {
-  @extend %clearfix;
+  
   @extend %color-base;
 
   padding: $info-box__padding;
@@ -73,41 +73,41 @@
     font-size: rem-calc(18);
   }
 
-  @include e(body) {
-    @extend %clearfix;
+  &__body {
+    
   
-    @include m(no-padding) { padding: 0; }
-    @include m(inherit) { font: inherit; }
+    &--no-padding { padding: 0; }
+    &--inherit { font: inherit; }
     @include text(body, thin);
   
-    @include m(flex) { @include flexbox; }
+    &--flex { @include flex; }
   
     padding: $info-box-body__padding;
   }
   
-  @include e(column) {
+  &__column {
     @extend .one-thirds;
   }
   
-  @include e(header) {
+  &__header {
     border-bottom: solid $fact-header__border-bottom-color $fact-header__border-bottom-size;
   
-    @include m(white) {
+    &--white {
       color: $white;
       border-bottom: solid $white $fact-header__border-bottom-size;
     }
   
-    @include m(with-padding) {
+    &--with-padding {
       padding-bottom: rem-calc(12);
     }
   }
   
-  @include e(link-icon) {
+  &__link-icon {
     color: $info-box-link__color;
     margin-right: $info-box-link-icon__margin-right;
   }
   
-  @include e(link) {
+  &__link {
     @include text(body, bold);
     color: $info-box-link__color;
     cursor: pointer;
@@ -116,23 +116,23 @@
     display: block;
   }
 
-  @include e(row) {
+  &__row {
     width: 100%;
 
     padding-top: rem-calc(16);
     border-bottom: solid rem-calc(1) $info-box-row__border-bottom;
 
-    @include m(around-padding) {
+    &--around-padding {
       padding: rem-calc(32 0);
     }
 
-    @include m(light-border) {
+    &--light-border {
       &:not(:last-child) {
         border-bottom: solid rem-calc(1) $grey-15;
       }
     }
 
-    @include m(no-border) {
+    &--no-border {
       border: none;
     }
   }

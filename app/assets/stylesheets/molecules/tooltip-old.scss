@@ -39,12 +39,12 @@
     margin-left: rem-calc(-11);
   }
 
-  @include e(trigger) {
+  &__trigger {
     display: inline-block;
     position: relative;
   }
 
-  @include e(element) {
+  &__element {
     @extend %acts-as-link;
     display:block;
     width: 100;

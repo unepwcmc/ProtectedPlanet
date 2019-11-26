@@ -1,24 +1,24 @@
-@include b(search-bar) {
-  @include flexbox;
-  @include justify-content(center);
-  @include align-items(stretch);
+.search-bar {
+  @include flex;
+  @include flex-h-center;
+  @include flex-v-stretch;
 
   padding: rem-calc(0 2);
   height: $search-bar__height;
   width: 100%;
 
-  @include m(bigger) {
+  &--bigger {
     height: $search-bar--bigger__height;
   }
 
-  @include m(push) {
+  &--push {
     margin-bottom: rem-calc(20);
   }
 
-  @include e(form) {
+  &__form {
     @include only-desktop {
-      @include flexbox;
-      @include flex(1);
+      @include flex;
+      @include flex-grow;
       &:not(:last-child) {
         border-right: solid rem-calc(1) $grey-15;
         margin-right: rem-calc(14);
@@ -41,7 +41,7 @@
     }
   }
 
-  @include e(input) {
+  &__input {
     @include text(body, thin);
     box-sizing: border-box;
     height: 100%;
@@ -61,7 +61,7 @@
     }
   }
 
-  @include e(submit) {
+  &__submit {
     @include color-with-state($big-button__bg-color, (
       hover: $big-button__bg-color--hover,
       active: $big-button__bg-color--pressed,

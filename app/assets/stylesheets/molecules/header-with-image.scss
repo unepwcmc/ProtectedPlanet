@@ -1,18 +1,18 @@
-@include b(header) {
-  @include e(text) {
+.header {
+  &__text {
     @extend %color-base;
     @include text(medium, thin);
     margin-bottom: rem-calc(20);
   }
 
-  @include e(sup) {
+  &__sup {
     vertical-align: super;
 
     @include text(small, bold);
-    @include color($green);
+    color: $green;
   }
 
-  @include e(image) {
+  &__image {
     float: left;
     margin-right: rem-calc(15);
   }

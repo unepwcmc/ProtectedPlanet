@@ -101,7 +101,7 @@ $navHeightMobile: rem-calc(48);
     }
 
     &__menu {
-      @include flex-flow(row wrap);
+      @include flex-wrap;
       height: 100%;
 
       display: none;
@@ -111,7 +111,7 @@ $navHeightMobile: rem-calc(48);
       left: 0;
 
       @include breakpoint($large){
-        @include flex-flow(row nowrap);
+        @include flex-nowrap;
         width: 100%;
       
         display: flex;

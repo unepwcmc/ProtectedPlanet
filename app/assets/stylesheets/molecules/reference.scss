@@ -1,25 +1,25 @@
-@include b(reference) {
+.reference {
   &:not(:last-child) {
     margin-bottom: $reference__margin-bottom;
   }
 
-  @include e(title) {
+  &__title {
     float: left;
     font-weight: bolder;
 
     margin-right: $reference-title__margin-right;
   }
 
-  @include e(body) {
+  &__body {
     margin-bottom: $reference-body__margin-bottom;
   }
 
-  @include e(link) {
+  &__link {
     @include text(body, bold);
     color: $reference-link__color;
   }
 
-  @include e(link-icon) {
+  &__link-icon {
     color: $reference-link-icon__color;
     margin-right: $reference-link-icon__margin-right;
   }

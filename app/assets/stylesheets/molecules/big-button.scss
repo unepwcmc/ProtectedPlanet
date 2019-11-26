@@ -1,4 +1,4 @@
-@include b(big-button) {
+.big-button {
   text-align: center;
   @include text--alt(body, bold);
 
@@ -14,15 +14,15 @@
   min-height: rem-calc(40);
   min-width:  rem-calc(40);
 
-  @include e(icon) {
+  &__icon {
     margin-right: $big-button-icon__margin-right;
 
-    @include m(closer) {
+    &--closer {
       margin-right: $big-button-icon__margin-right - rem-calc(4);
     }
   }
 
-  @include m(alt-colors) {
+  &--alt-colors {
     background-color: $big-button__color;
     border: solid rem-calc(1) $grey-15;
 
@@ -33,7 +33,7 @@
     ));
   }
 
-  @include m(danger) {
+  &--danger {
     border: solid rem-calc(1) $grey-15;
 
     @include color-with-state($big-button-danger__bg-color, (
@@ -43,7 +43,7 @@
     ), background-color);
   }
 
-  @include m(compact) {
+  &--compact {
     padding: $big-button-compact__padding;
   }
 }

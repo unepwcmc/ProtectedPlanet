@@ -4,45 +4,45 @@
 
   cursor: pointer;
 
-  @include e(icon) {
+  &__icon {
     margin-right: $icon__margin-sides;
 
-    @include m(after) {
+    &--after {
       margin-left: $icon__margin-sides;
       margin-right: 0;
     }
 
-    @include m(above) {
+    &--above {
       display: block !important;
       margin-bottom: $icon__margin-sides;
     }
 
-    @include m(absolute) {
+    &--absolute {
       position: absolute;
       left: 0; top: 0;
     }
   }
 
-  @include m(inherit) {
+  &--inherit {
     font: inherit;
   }
 
-  @include m(no-push) {
+  &--no-push {
     margin-bottom: 0;
   }
 
-  @include m(push) {
+  &--push {
     &:not(:last-child) { margin-bottom: rem-calc(8); }
   }
 
-  @include m(no-color) {
+  &--no-color {
     color: inherit !important;
     font-weight: inherit;
   }
 
-  @include m(bold) { @include font-weight(bold); }
+  &--bold { @include font-weight(bold); }
 
-  @include m(pull-right) {
+  &--pull-right {
     position: relative;
     padding-left: rem-calc(24);
   }
@@ -54,6 +54,6 @@
   }
 }
 
-@include b(link-with-icon) {
+.link-with-icon {
   @include link-with-icon;
 }

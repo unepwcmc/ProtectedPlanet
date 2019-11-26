@@ -1,5 +1,5 @@
-@include b(gallery) {
-  @include e(body) {
+.gallery {
+  &__body {
     position: relative;
   
     height: $gallery-body__height;
@@ -9,7 +9,7 @@
     margin-bottom: rem-calc(10);
   }
   
-  @include e(body-inner) {
+  &__body-inner {
     position: absolute;
     top: 0;
     left: 0;
@@ -17,7 +17,7 @@
     height: 100%;
   }
   
-  @include e(photo) {
+  &__photo {
     display: inline-block;
   
     height: 100%;
@@ -30,23 +30,23 @@
     }
   }
   
-  @include e(controls) {
+  &__controls {
     @extend .u-center;
   
     background-color: $gallery-controls__bg-color;
     line-height: rem-calc(50);
   }
   
-  @include e(control) {
+  &__control {
     padding: $gallery-control__padding;
   }
   
-  @include e(counter) {
+  &__counter {
     @include text(body);
     @extend %color-base;
   }
   
-  @include e(current-index) {
+  &__current-index {
     color: $gallery-current-index__color;
     background-color: $gallery-current-index__bg-color;
     padding: $gallery-current-index__padding;

@@ -1,47 +1,47 @@
-@include b(fact) { $block: &;
+.fact { $block: &;
   margin-bottom: .666em;
 
-  @include e(header) {
+  &__header {
     @include header-with-delimiter($border-bottom: (
       color: $fact-header__border-bottom-color,
       size: $fact-header__border-bottom-size
     ));
   }
 
-  @include e(subheader) {
-    @include color($grey-100);
+  &__subheader {
+    color: $grey-100;
     @include text(body);
     margin-bottom: .5em;
   }
 
-  @include e(body) {
+  &__body {
     width: 100%;
     padding: $fact-body__padding-top-bottom  0;
 
-    @include m(no-padding) {
+    &--no-padding {
       padding: 0;
     }
 
-    @include m(lateral-padding) {
+    &--lateral-padding {
       padding-left: rem-calc(16);
       padding-right: rem-calc(16);
     }
   }
 
-  @include e(single-figure) {
+  &__single-figure {
     @include text--alt(xxxxlarge, bold);
-    @include color($green);
+    color: $green;
 
     @media print {
       @include text--alt(large, bold);
     }
 
-    @include m(push-down) {
+    &--push-down {
       margin-bottom: .4em;
     }
   }
 
-  @include e(external-link) {
+  &__external-link {
     margin-left: .25em;
     color: $fact-external-link__color;
   }

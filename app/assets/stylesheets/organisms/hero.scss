@@ -1,45 +1,45 @@
 @mixin _top {
-  @include e(top) {
-    @include flexbox;
-    @include align-items(baseline);
-    @include justify-content(space-between);
+  &__top {
+    @include flex;
+    @include flex-v-baseline;
+    @include flex-h-between;
 
     padding: rem-calc(0 20);
     margin-bottom: .666rem;
 
-    @include m(centered) {
-      @include justify-content(center);
+    &--centered {
+      @include flex-h-center;
     }
 
-    @include m(flex-start) {
-      @include justify-content(flex-start);
+    &--flex-start {
+      @include flex-h-start;
     }
   }
 
-  @include e(title) {
+  &__title {
     @include text(large);
-    @include color($hero-title__color);
+    color: $hero-title__color;
 
-    @include m(thin) {
+    &--thin {
       @include text(large, thin);
     }
 
-    @include m(base) {
-      @include color($color--base);
+    &--base {
+      color: $color--base;
     }
 
-    @include m(bigger) {
+    &--bigger {
       @include text(xxlarge);
     }
 
-    @include m(article) {
+    &--article {
       padding: {
         left: rem-calc(8);
         right: rem-calc(8);
       }
 
       @include text(xxlarge, thin);
-      @include color($color--base);
+      color: $color--base;
 
       @include only-mobile {
         @include text(xlarge, thin);
@@ -47,17 +47,17 @@
       }
     }
 
-    @include m(push) {
+    &--push {
       padding-bottom: rem-calc(24);
       margin-bottom: rem-calc(40);
     }
 
-    @include m(with-border) {
+    &--with-border {
       border-bottom: solid rem-calc(1) $grey-15;
     }
 
-    @include m(nowrap) {
-      @include flex(1);
+    &--nowrap {
+      @include flex-grow;
 
       @include only-desktop {
         white-space: nowrap;
@@ -66,10 +66,10 @@
     }
   }
 
-  @include e(link) {
+  &__link {
     @extend %acts-as-link;
-    @include color($hero-title__color);
-    @include flex(2);
+    color: $hero-title__color;
+    
 
     @include only-desktop {
       white-space: nowrap;
@@ -81,7 +81,7 @@
   }
 }
 
-@include b(hero) {
+.hero {
   font-size: rem-calc(16);
   margin: {
     top: 2em;
@@ -93,28 +93,28 @@
   }
 
   @include only-mobile {
-    @include m(overflow) {
+    &--overflow {
       margin-left: rem-calc(-36);
       margin-right: rem-calc(-36);
     }
   }
 
-  @include m(no-margin-top) {
+  &--no-margin-top {
     margin-top: 0;
   }
 
-  @include m(no-margin-bottom) {
+  &--no-margin-bottom {
     margin-bottom: 0;
   }
 
 
   @include _top;
 
-  @include e(cover) {
-    @extend %flexbox;
-    @include justify-content(center);
-    @include align-items(center);
-    @include flex-direction(column);
+  &__cover {
+    @include flex;
+    @include flex-h-center;
+    @include flex-v-center;
+    @include flex-column;
 
 
     height: 300px;
@@ -128,15 +128,15 @@
     }
   }
 
-  @include e(cover-text) {
+  &__cover-text {
     @include text(xxlarge, normal);
-    @include color($white);
+    color: $white;
 
     @include only-mobile {
       @include text(xlarge, normal);
     }
 
-    @include m(alt) {
+    &--alt {
       @include text--alt(xxlarge, x-bold);
 
       @include only-mobile {
@@ -145,7 +145,7 @@
     }
   }
 
-  @include e(logo) {
+  &__logo {
   }
 }
 

@@ -23,11 +23,11 @@
     padding: rem-calc(20);
   }
 
-  @include e(body) {
+  &__body {
     padding: rem-calc(16 0);
   }
   
-  @include e(clear) {
+  &__clear {
     color: $white;
     @include text--alt(small, bold);
   
@@ -37,17 +37,17 @@
     float: right;
   }
   
-  @include e(count) {
-    @include color($green);
+  &__count {
+    color: $green;
     @include font-weight(bold);
   }
   
-  @include e(group) {
+  &__group {
     line-height: form-factor(headline, line-height);
     margin-bottom: rem-calc(8);
   }
   
-  @include e(group-title) {
+  &__group-title {
     @include text(body);
     @include color-with-state($color--base, (
       hover: $link__color--hover,
@@ -61,7 +61,7 @@
     margin-bottom: rem-calc(8);
     width: 100%;
   
-    @include m(no-border) {
+    &--no-border {
       border: 0;
     }
   
@@ -74,7 +74,7 @@
     }
   }
   
-  @include e(header) {
+  &__header {
     @include text(headline);
   }
   

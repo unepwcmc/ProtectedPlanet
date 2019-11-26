@@ -3,6 +3,9 @@ Rails.application.routes.draw do
     resources :home_carousel_slides
   end
 
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/admin/sidekiq'
+
   devise_for :users
 
   root to: 'home#index'
@@ -29,17 +32,27 @@ Rails.application.routes.draw do
 
   resources :projects, only: [:create, :index, :update, :destroy]
 
-  require 'sidekiq/web'
-  mount Sidekiq::Web => '/admin/sidekiq'
+  get '/resources', to: 'cms/resources#index'
 
-  get '/terms', to: redirect("/c/terms-and-conditions")
+  get '/marine', to: 'marine#index'
+  get '/marine/download_designations', to: 'marine#download_designations'
+  get '/green_list/:id', to: 'green_list#show', as: 'green_list'
+  get '/target-11-dashboard', to: 'target_dashboard#index', as: 'target_dashboard'
+  get '/target-11-dashboard/load-countries', to: 'target_dashboard#load_countries',
+    as: 'target_dashboard_load_countries'
+
+  get '/region/:iso', to: 'region#show', as: 'region'
 
   get '/country/:iso', to: 'country#show', as: 'country'
   get '/country/:iso/pdf', to: 'country#pdf', as: 'country_pdf'
   get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
   get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
-  get '/region/:iso', to: 'region#show', as: 'region'
+  get '/:id', to: 'protected_areas#show', as: 'protected_area'
+  get '/sites/:id', to: 'sites#show'
+  get '/sites/:id/*other', to: 'sites#show'
+
+  get '/terms', to: redirect("/c/terms-and-conditions")  
 
   get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
   resources :downloads, only: [:show, :create, :update]
@@ -49,23 +62,8 @@ Rails.application.routes.draw do
   get '/search/autocomplete', to: 'search#autocomplete'
   post '/search', to: 'search#create'
 
-  get '/sites/:id', to: 'sites#show'
-  get '/sites/:id/*other', to: 'sites#show'
-
   get '/country_codes', to: 'country#codes', as: 'country_codes'
-
-  get '/resources', to: 'cms/resources#index'
-
-  get '/marine', to: 'marine#index'
-  get '/marine/download_designations', to: 'marine#download_designations'
-
-  get '/target-11-dashboard', to: 'target_dashboard#index', as: 'target_dashboard'
-  get '/target-11-dashboard/load-countries', to: 'target_dashboard#load_countries',
-    as: 'target_dashboard_load_countries'
 
   comfy_route :cms_admin, path: '/admin'
   comfy_route :cms, path: '/c', sitemap: false
-
-  get '/:id', to: 'protected_areas#show', as: 'protected_area'
-  get '/green_list/:id', to: 'green_list#show', as: 'green_list'
 end

@@ -1,4 +1,4 @@
-@include b(horizontal-bar) {
+.horizontal-bar {
   position: relative;
   height: $horizontal-bar__height;
   width: 100%;
@@ -6,7 +6,7 @@
 
   margin-bottom: $horizontal-bar__margin-bottom;
 
-  @include e(inner) {
+  &__inner {
     position: absolute;
     top: 0;
     left: 0;

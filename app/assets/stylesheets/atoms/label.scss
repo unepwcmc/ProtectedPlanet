@@ -1,4 +1,4 @@
-@include b(label) {
+.label {
   @include text(small);
   @extend %color-base;
 
@@ -8,7 +8,7 @@
   margin-right: rem-calc(20);
   padding: rem-calc(5 16);
 
-  @include m(code) {
+  &--code {
     font-size: inherit;
     font-family: monospace;
     font-style: normal;

@@ -1,4 +1,4 @@
-@include b(autocompletion) {
+.autocompletion {
   display: none;
 
   width: 100%;
@@ -7,14 +7,14 @@
   padding: rem-calc(15 0);
   z-index: 300;
 
-  @include e(image) {
+  &__image {
     float: left;
     height: 100%;
     width: auto;
     margin-right: rem-calc(20);
   }
 
-  @include e(result) {
+  &__result {
     @include text(body);
     display: block;
     height: rem-calc(100);
@@ -25,16 +25,16 @@
     }
   }
 
-  @include e(body) {
+  &__body {
     height: 100%;
 
-    @include flexbox;
-    @include flex-direction(column);
-    @include justify-content(center);
-    @include align-items(flex-start);
+    @include flex;
+    @include flex-column;
+    @include flex-h-center;
+    @include flex-v-start;
   }
 
-  @include e(type) {
+  &__type {
     @include text(small);
     font-style: italic;
     padding: rem-calc(0 12);

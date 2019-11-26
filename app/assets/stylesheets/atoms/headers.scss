@@ -9,19 +9,19 @@
     map-get($border-bottom, size);
 }
 
-@include b(header-with-delimiter) {
+.header-with-delimiter {
   margin-bottom: rem-calc(10);
   @include header-with-delimiter(
     $border-bottom: (color: $grey-33, size: 1px)
   );
 
-  @include m(bold) { @include font-weight(normal); }
-  @include m(smaller) { @include text(body, null); }
-  @include m(bigger) { @include text(medium, null); }
+  &--bold { @include font-weight(normal); }
+  &--smaller { @include text(body, null); }
+  &--bigger { @include text(medium, null); }
 
-  @include m(no-margin-bottom) { margin-bottom: 0; }
+  &--no-margin-bottom { margin-bottom: 0; }
 
-  @include m(same-padding-margin) {
+  &--same-padding-margin {
     margin-bottom: rem-calc(12);
     padding-bottom: rem-calc(12);
   }
@@ -60,7 +60,7 @@
   }
 
   &--h1-small {
-    @include color($color--base);
+    color: $color--base;
     @include text(large);
 
     margin-top: rem-calc(30);

@@ -30,11 +30,11 @@
 .u-hide             { display: none;                       }
 .u-hide-mobile      { @media only screen and (max-width: $small) { display: none; } }
 .u-show-desktop     { display: none; @include breakpoint($large){ display: block; } }
-.u-clearfix         { @extend %clearfix;                   }
-.u-flex             { @include flexbox;                    }
+.u-clearfix         {                    }
+.u-flex             { @include flex;                    }
 
 // colors
-.u-link-color       { @include color($link__color);        }
+.u-link-color       { color: $link__color;        }
 .u-base-color       { @extend %color-base;                 }
 
 // sizes

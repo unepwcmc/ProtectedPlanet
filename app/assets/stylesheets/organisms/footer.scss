@@ -1,6 +1,6 @@
 .footer {
-  @extend %flexbox;
-  @include align-items(center);
+  @include flex;
+  @include flex-v-center;
 
   background-color: $navbar__bg-color;
   flex-direction: column;
@@ -16,7 +16,7 @@
   }
 
   &__element {
-    @include color($navbar-element__color);
+    color: $navbar-element__color;
     @include line-height(null);
     @include text(body);
     

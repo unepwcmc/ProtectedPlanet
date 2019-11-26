@@ -1,4 +1,4 @@
-@include b(article) {
+.article {
   padding: {
     left: rem-calc(16);
     right: rem-calc(16);
@@ -7,81 +7,81 @@
     padding: 0;
   }
 
-  @include e(title) {
+  &__title {
     margin-bottom: rem-calc(40);
     &:not(:first-child) { margin-top: rem-calc(40); }
 
     @include text(xxlarge, thin);
-    @include color($color--base);
+    color: $color--base;
 
     @include only-mobile {
       margin-bottom: rem-calc(24);
       @include text(large, thin);
     }
 
-    @include m(smaller) {
+    &--smaller {
       @include text(xlarge, thin);
     }
 
-    @include m(paragraph) {
+    &--paragraph {
       @include text(medium);
       margin-bottom: rem-calc(16);
     }
 
-    @include m(subparagraph) {
+    &--subparagraph {
       @include text(headline);
       margin-bottom: rem-calc(16);
     }
 
-    @include m(no-push) {
+    &--no-push {
       margin-bottom: 0;
     }
   }
 
-  @include e(paragraph) {
+  &__paragraph {
     margin-bottom: rem-calc(20);
 
     @include text(body, thin);
     @extend %color-base;
 
-    @include m(bigger) {
+    &--bigger {
       @include text--alt(headline, thin);
     }
   }
 
-  @include e(bold-text) {
+  &__bold-text {
     @include text--alt(body, bold);
   }
 
-  @include e(cursive-text) {
+  &__cursive-text {
     font-style: italic;
   }
 
-  @include e(link) {
+  &__link {
     @include text(body, bold);
     @extend %acts-as-link;
 
     &.is-external {
       &:after {
-        @include fa(external-link-square, (direction: left, value: 3px))
+        @include fa(external-link-square, (direction: left, value: 3px));
       }
     }
   }
 
-  @include e(image) {
+  &__image {
     display: block;
     margin: auto;
   }
 
-  @include e(list) {
+  &__list {
     margin-left: rem-calc(40);
 
-    @include m(less-margin) {
+    &--less-margin {
       margin-left: rem-calc(16);
     }
   }
 
-  @include e(list-item) {
+  &__list-item {
     @extend .article__paragraph;
 
     position: relative;

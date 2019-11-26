@@ -1,50 +1,50 @@
-@include b(alert) {
-  @include m(flex) {
-    @extend %flexbox;
-    @include align-items(flex-start);
+.alert {
+  &--flex {
+    @include flex;
+    @include flex-v-start;
   }
 
-  @include m(push) {
+  &--push {
     margin-bottom: rem-calc(40);
   }
 
   background-color: $alert__bg-color;
   padding: rem-calc(10);
 
-  @include e(body) {
+  &__body {
     @include text(body);
     @extend %color-base;
   }
   
-  @include e(icon) {
+  &__icon {
     float: left;
   
     min-width: rem-calc(40) !important;
     @include text--icon(body, thin);
   
-    @include m(warning) { color: $alert-warning--color; }
-    @include m(info) { color: $alert-info--color; }
-    @include m(success) { color: $alert-success--color; }
+    &--warning { color: $alert-warning--color; }
+    &--info { color: $alert-info--color; }
+    &--success { color: $alert-success--color; }
   }
   
-  @include e(icon-inner) {
+  &__icon-inner {
     box-sizing: content-box;
     @include text--icon(small, thin);
   
-    @include m(warning) { color: $alert__bg-color; }
-    @include m(info) { color: $alert__bg-color; }
-    @include m(success) { color: $alert__bg-color; }
+    &--warning { color: $alert__bg-color; }
+    &--info { color: $alert__bg-color; }
+    &--success { color: $alert__bg-color; }
   }
   
-  @include e(title) {
+  &__title {
     @include text--alt(headline, bold);
     @include line-height(2rem);
   
     margin-bottom: rem-calc(8);
   
-    @include m(warning) { color: $alert-warning--color; }
-    @include m(success) { color: $alert-success--color; }
-    @include m(info) { color: $alert-info--color; }
+    &--warning { color: $alert-warning--color; }
+    &--success { color: $alert-success--color; }
+    &--info { color: $alert-info--color; }
   }
   
 }

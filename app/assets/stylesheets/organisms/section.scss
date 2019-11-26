@@ -1,4 +1,4 @@
-@include b(section) {
+.section {
   max-width: $max-width--desktop;
   padding: rem-calc(0 16);
   margin-bottom: rem-calc(16);
@@ -6,11 +6,11 @@
 
   @include breakpoint($large){ padding: rem-calc(0 112); }
 
-  @include m(padding-top) {
+  &--padding-top {
     padding-top: rem-calc(32);
   }
 
-  @include e(header) {
+  &__header {
     @extend %color-base;
     @include text(xlarge, thin);
 
@@ -21,8 +21,8 @@
     border-bottom: solid rem-calc(1) $grey-15;
   }
 
-  @include e(body) {
-    @extend %clearfix;
+  &__body {
+    
     padding: rem-calc(0 20);
   }
 }

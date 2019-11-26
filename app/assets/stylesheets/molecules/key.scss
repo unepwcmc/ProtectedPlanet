@@ -10,7 +10,7 @@
 }
 
 .key {
-  @extend %clearfix;
+  
 
   &--hidden {
     visibility: hidden;
@@ -33,7 +33,7 @@
   }
 
     &__item {
-      @include flexbox;
+      @include flex;
       
       color: $key__title-color;
       font-family: 'MuseoSans';

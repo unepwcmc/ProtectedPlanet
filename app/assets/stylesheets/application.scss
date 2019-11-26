@@ -15,7 +15,7 @@
  */
 
 // grids
-@import 'bourbon/core/bourbon';
+// @import 'bourbon/core/bourbon';
 @import 'bourbon-neat/app/assets/stylesheets/neat';
 
 // // maps
@@ -31,9 +31,9 @@
 @import './resources/variables/**/*';
 
 // development mixins
-@import 'utilities/flexbox';
-@import 'utilities/accessibility';
-@import 'utilities/bem';
+// @import 'utilities/flexbox';
+// @import 'utilities/accessibility';
+// @import 'utilities/bem';
 
 // variables
 @import 'variables/colors';
@@ -123,19 +123,19 @@
 // organisms
 
 // old pp assets
-@import 'old/neat-grid';
-@import 'old/transitions';
-@import 'old/leaflet_overrides';
-@import 'old/map';
-@import 'old/base';
-@import 'old/search_bar';
-@import 'old/buttons';
-@import 'old/home';
-@import 'old/protected_areas';
-@import 'old/projects';
-@import 'old/search';
-@import 'old/devise';
-@import 'old/static_pages';
+// @import 'old/neat-grid';
+// @import 'old/transitions';
+// @import 'old/leaflet_overrides';
+// @import 'old/map';
+// @import 'old/base';
+// @import 'old/search_bar';
+// @import 'old/buttons';
+// @import 'old/home';
+// @import 'old/protected_areas';
+// @import 'old/projects';
+// @import 'old/search';
+// @import 'old/devise';
+// @import 'old/static_pages';
 // old pp assets
 
 // scopes
@@ -144,10 +144,10 @@
 // scopes
 
 // utilities
-@import 'utilities/keyframes';
-@import 'utilities/reset';
-@import 'utilities/grid';
-@import 'utilities/html-elements';
+// @import 'utilities/keyframes';
+// @import 'utilities/reset';
+@import 'utilities/grid';            
+// @import 'utilities/html-elements';
 // utilities
 
 //templates

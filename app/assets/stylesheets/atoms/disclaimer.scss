@@ -1,7 +1,7 @@
-@include b(disclaimer) {
+.disclaimer {
   cursor: pointer;
 
-  @include color($color--map-disclaimer-text);
+  color: $color--map-disclaimer-text;
   @include text--alt(small, thin);
 
   background: $color--map-disclaimer-bg;
@@ -17,7 +17,7 @@
     line-height: 1.5;
   }
 
-  @include e(arrow) {
+  &__arrow {
     content: "";
     width: 0;
     height: 0;
@@ -37,7 +37,7 @@
     }
   }
 
-  @include e(arrow-inner) {
+  &__arrow-inner {
     position: relative;
 
     &:before {

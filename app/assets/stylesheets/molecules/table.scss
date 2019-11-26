@@ -1,61 +1,61 @@
-@include b(table) {
+.table {
   @extend %color-base;
   width: 100%;
 
-  @include e(column) {
+  &__column {
     cursor: pointer;
   
     @include text--alt(body, x-thin);
     text-align: right;
     &:first-child { text-align: left; }
   
-    @include m(align-left) {
+    &--align-left {
       text-align: left;
     }
   
     padding-bottom: 0.5em;
   
-    @include m(with-sorting) {
+    &--with-sorting {
       &:after {
-        @include color($green);
+        color: $green;
         @include fa(arrow-both, $margin: (direction: left, value: 7px));
       }
     }
   
     &.is-sorted-asc {
       &:after {
-        @include color($green);
+        color: $green;
         @include fa(arrow-up, $margin: (direction: left, value: 7px));
       }
     }
   
     &.is-sorted-desc {
       &:after {
-        @include color($green);
+        color: $green;
         @include fa(arrow-down, $margin: (direction: left, value: 7px));
       }
     }
   
-    @include m(no-arrows) {
+    &--no-arrows {
       &:before, &:after { content: null; }
     }
   }
 
-  @include e(header) {
+  &__header {
     line-height: rem-calc(32);
     border-bottom: solid rem-calc(1) $grey-33;
     th { padding-right: 0.625rem; }
   };
   
-  @include e(label) {
+  &__label {
     @include text(body, thin);
     @include line-height(1.666em);
   
-    @include m(link) {
+    &--link {
       color: $table-link__color;
     }
   
-    @include m(align-top) {
+    &--align-top {
       vertical-align: top;
     }
   
@@ -65,23 +65,23 @@
     text-align: left;
   };
   
-  @include e(row) {
+  &__row {
     @include text(body, thin);
     border-bottom: solid rem-calc(1) $grey-15;
     margin-bottom: rem-calc(10);
     padding: rem-calc(5 0);
   
-    @include m(last) {
+    &--last {
       td { padding-top: 1em; }
       font-weight: bolder;
     }
   
-    @include m(first) {
+    &--first {
       td { padding-top: rem-calc(24); }
     }
   };
   
-  @include e(value) {
+  &__value {
     text-align: right;
   
     @include line-height(1.666em);
@@ -89,7 +89,7 @@
     padding-right: 0.625rem;
     padding-top: rem-calc(10);
   
-    @include m(link) {
+    &--link {
       color: $table-link__color;
     }
   }

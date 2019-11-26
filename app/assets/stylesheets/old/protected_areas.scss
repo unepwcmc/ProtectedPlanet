@@ -179,7 +179,7 @@
 
   h3 {
     @include text(body, bold);
-    @include color(white)
+    color: white;
   }
 
   & ul {
@@ -198,7 +198,7 @@
   width: 100%;
   text-align: center;
   @include text(body);
-  @include color($white);
+  color: $white;
   &.is-closed:after { @include fa(chevron-down); }
   &.is-open:after { @include fa(chevron-up);   }
 }

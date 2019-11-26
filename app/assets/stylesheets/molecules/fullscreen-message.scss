@@ -1,16 +1,16 @@
-@include b(fullscreen-message) {
+.fullscreen-message {
   text-align: center;
 
   width: 75%;
   margin: auto;
   margin-top: rem-calc(112);
 
-  @include e(header) {
+  &__header {
     @include text--alt(xlarge, x-bold);
     margin-bottom: rem-calc(16);
   }
 
-  @include e(body) {
+  &__body {
     @extend %color-base;
 
     @include text(headline, thin);

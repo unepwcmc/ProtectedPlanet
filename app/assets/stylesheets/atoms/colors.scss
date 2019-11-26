@@ -12,7 +12,7 @@
   }
 }
 
-%color-base { @include color($color--base); }
+%color-base { color: $color--base; }
 %acts-as-link {
   &:hover, &:active { text-decoration: underline; }
   @include color-with-state($link__color, (

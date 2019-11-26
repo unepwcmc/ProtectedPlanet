@@ -1,5 +1,5 @@
-@include b(close-button) {
-  @include e(container) {
+.close-button {
+  &__container {
     position: relative;
   }
 
