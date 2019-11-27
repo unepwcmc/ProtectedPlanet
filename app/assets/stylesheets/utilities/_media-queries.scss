@@ -20,6 +20,29 @@
 }
 
 //--------------------------------------------------
+// classes
+//--------------------------------------------------
+.breakpoint-small-up {
+  display: none;
+  @include breakpoint($small) { display: block; }
+}
+
+.breakpoint-medium-up {
+  display: none;
+  @include breakpoint($medium) { display: block; }
+}
+
+.breakpoint-small-down {
+  display: block;
+  @include breakpoint($small) { display: none; }
+}
+
+.breakpoint-medium-down {
+  display: block;
+  @include breakpoint($medium) { display: none; }
+}
+
+//--------------------------------------------------
 // mixins - old
 //--------------------------------------------------
 //keep old responsive mixins with old breakpoints to avoid breaking styles across the existing site

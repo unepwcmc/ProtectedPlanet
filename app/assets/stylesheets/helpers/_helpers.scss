@@ -1,3 +1,71 @@
+@mixin limit_lines($number, $line-height: 1.25) {
+  overflow-y: hidden;
+  max-height: calc(#{($number * $line-height) + em} - 1px);
+}
+
+@mixin prevent-text-highlighting {
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /*Chrome/Opera */
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+}
+
+
+//--------------------------------------------------
+// accessibility
+//--------------------------------------------------
+@import './accessibility';
+
+//--------------------------------------------------
+// backgrounds
+//--------------------------------------------------
+$image-placeholder: black;
+
+.bg--grey-lighter { background-color: $grey-lighter; }
+
+.bg-img {
+  background-color: $image-placeholder;
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-image-overlay {
+  position: relative;
+  z-index: 1;
+
+  &:before {
+    background-color: rgba(black, 0.4);
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+}
+
+//--------------------------------------------------
+// borders and shadows
+//--------------------------------------------------
+@mixin box-shadow($colour){
+  box-shadow: 2px 2px 4px $colour;
+}
+
+@mixin shadow--grey-light { @include box-shadow($grey-light); }
+@mixin shadow--grey { @include box-shadow($grey); }
+
+//--------------------------------------------------
+// display
+//--------------------------------------------------
+.block { display: block; }
+.inline-block { display: inline-block; }
+
+.full-height {
+  height: 100vh;
+}
+
 //--------------------------------------------------
 // fouc (flash of unstyled content)
 //--------------------------------------------------
@@ -12,21 +80,24 @@
 //--------------------------------------------------
 // lists
 //--------------------------------------------------
-.ul--inline li { display: inline-block; }
-
-//--------------------------------------------------
-// display
-//--------------------------------------------------
-.block { display: block; }
-.inline-block { display: inline-block; }
-
-.full-height {
-  height: 100vh;
+@mixin ul--unstyled {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
+
+.ul--inline li { display: inline-block; }
 
 //--------------------------------------------------
 // positioning
 //--------------------------------------------------
+@mixin item-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+}
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-left { text-align: left; }
@@ -67,46 +138,53 @@
 .no-padding { padding: 0; }
 
 //--------------------------------------------------
-// backgrounds
+// shapes
 //--------------------------------------------------
-$image-placeholder: black;
+@mixin triangle ($base, $height, $color, $direction:'up') {
+  content: '';
+  width: 0; 
+  height: 0; 
+  border-left: $base/2 solid transparent;
+  border-right: $base/2 solid transparent;
+  
+  border-bottom: $height solid $color;
 
-.bg--grey-lighter { background-color: $grey-lighter; }
+  display: block;
 
-.bg-img {
-  background-color: $image-placeholder;
-  background-size: cover;
-  background-position: center;
-}
-
-.bg-image-overlay {
-  position: relative;
-  z-index: 1;
-
-  &:before {
-    background-color: rgba(black, 0.4);
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
+  @if ($direction == 'right') {
+    transform: rotate(90deg);
+  }
+  @if ($direction == 'down') {
+    transform: rotate(180deg);
+  }
+  @if ($direction == 'left') {
+    transform: rotate(270deg);
   }
 }
 
 //--------------------------------------------------
-// screen overlay
+// spacing
 //--------------------------------------------------
-.screen-overlay {
-  background: rgba(black, 0.5);
+@mixin gutters($sides:'both', $type:'padding') {
+  $sides: if($sides == 'both', ('left', 'right'), ($sides));
 
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 300;
+  @each $s in $sides {
+    #{$type}-#{$s}: $gutter-small;
+
+    @include breakpoint($medium) { #{$type}-#{$s}: $gutter-medium; }
+    @include breakpoint($large) { #{$type}-#{$s}: $gutter-large; }
+  }
+}
+
+@mixin item-spacing($sides:'all', $type:'padding') {
+  $sides: if($sides == 'all', ('top','bottom','left','right'), ($sides));
+
+  @each $s in $sides {
+    #{$type}-#{$s}: $item-spacing-small;
+
+    @include breakpoint($medium) { #{$type}-#{$s}: $item-spacing-medium; }
+    @include breakpoint($large) { #{$type}-#{$s}: $item-spacing-large; }
+  }
 }
 
 //--------------------------------------------------
@@ -124,39 +202,4 @@ $image-placeholder: black;
   &:hover {
     cursor: pointer;
   }
-}
-
-.screen-reader {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: rem-calc(1);
-  margin: rem-calc(-1);
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  white-space: nowrap;
-  width: rem-calc(1);
-}
-
-//--------------------------------------------------
-// media queries
-//--------------------------------------------------
-.breakpoint-small-up {
-  display: none;
-  @include breakpoint($small) { display: block; }
-}
-
-.breakpoint-medium-up {
-  display: none;
-  @include breakpoint($medium) { display: block; }
-}
-
-.breakpoint-small-down {
-  display: block;
-  @include breakpoint($small) { display: none; }
-}
-
-.breakpoint-medium-down {
-  display: block;
-  @include breakpoint($medium) { display: none; }
 }
