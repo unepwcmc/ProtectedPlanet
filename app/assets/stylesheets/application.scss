@@ -14,21 +14,19 @@
  * *= require_self
  */
 
+@import './base-variables';
+@import './utilities/*';
+@import './base/*';
+@import './helpers/*';
+@import './components/*';
+@import './pages/*';
+
 // // grids
 // // @import 'bourbon/core/bourbon';
 // @import 'bourbon-neat/app/assets/stylesheets/neat';
 
 // // // maps
 // @import 'leaflet/dist/leaflet';
-
-@import './resources/mixins/rem-calc';
-@import './resources/mixins/media-queries';
-@import './resources/mixins/flexbox';
-@import './resources/mixins/helpers';
-@import './resources/mixins/layout';
-@import './resources/mixins/text';
-@import './resources/base-variables';
-@import './resources/variables/**/*';
 
 // development mixins
 // @import 'utilities/flexbox';
@@ -158,18 +156,19 @@
 
 // @import './map/custom-leaflet';
 
-@import './styles/base';
-@import './styles/helpers/**/*';
-@import './styles/mixins/**/*';
-@import './styles/components/icons';
-@import './styles/components/carousel';
-@import './styles/components/charts';
-@import './styles/components/hero';
-@import './styles/components/form';
-@import './styles/components/sticky';
-@import './styles/components/table';
-@import './styles/components/tooltip';
-@import './styles/components/vue-agile';
-@import './styles/pages/*';
+
+
+// @import './resources/variables/**/*';
+
+
+// @import './components/carousel';
+// @import './components/charts';
+// @import './components/hero';
+// @import './components/form';
+// @import './components/sticky';
+// @import './components/table';
+// @import './components/tooltip';
+// @import './components/vue-agile';
+
 
 // @import 'utilities/u-classes';

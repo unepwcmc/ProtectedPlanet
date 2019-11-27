@@ -1,3 +1,9 @@
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@import './mixins/*';
+
 .new-styles { //temp-refresh
   color: $body-font-color; //temp-refresh
   font-family: $body-font; //temp-refresh
