@@ -14,12 +14,12 @@
  * *= require_self
  */
 
-@import './base-variables';
+@import './settings';
 @import './utilities/*';
+@import './helpers/helpers';
 @import './base/*';
 @import './components/*';
 @import './pages/*';
-@import './helpers/helpers';
 
 // // grids
 // // @import 'bourbon/core/bourbon';
