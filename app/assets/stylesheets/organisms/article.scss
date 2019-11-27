@@ -11,25 +11,25 @@
     margin-bottom: rem-calc(40);
     &:not(:first-child) { margin-top: rem-calc(40); }
 
-    @include text(xxlarge, thin);
-    color: $color--base;
+    //@include text(xxlarge, thin);
+    color: $grey-darker;
 
     @include only-mobile {
       margin-bottom: rem-calc(24);
-      @include text(large, thin);
+      //@include text(large, thin);
     }
 
     &--smaller {
-      @include text(xlarge, thin);
+      //@include text(xlarge, thin);
     }
 
     &--paragraph {
-      @include text(medium);
+      //@include text(medium);
       margin-bottom: rem-calc(16);
     }
 
     &--subparagraph {
-      @include text(headline);
+      //@include text(headline);
       margin-bottom: rem-calc(16);
     }
 
@@ -41,16 +41,16 @@
   &__paragraph {
     margin-bottom: rem-calc(20);
 
-    @include text(body, thin);
-    @extend %color-base;
+    //@include text(body, thin);
+    color: $grey-darker;
 
     &--bigger {
-      @include text--alt(headline, thin);
+      //@include text--alt(headline, thin);
     }
   }
 
   &__bold-text {
-    @include text--alt(body, bold);
+    //@include text--alt(body, bold);
   }
 
   &__cursive-text {
@@ -58,7 +58,7 @@
   }
 
   &__link {
-    @include text(body, bold);
+    //@include text(body, bold);
     @extend %acts-as-link;
 
     &.is-external {

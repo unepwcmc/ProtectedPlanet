@@ -1,5 +1,5 @@
 @mixin link-with-icon($color: $link-with-icon__color, $bg-color: $link-with-icon__bg-color, $icon__margin-sides: $link-with-icon-icon__margin-sides) {
-  @include text(body, thin);
+  //@include text(body, thin);
   @extend %acts-as-link;
 
   cursor: pointer;
@@ -40,7 +40,7 @@
     font-weight: inherit;
   }
 
-  &--bold { @include font-weight(bold); }
+  &--bold { font-weight: bold; }
 
   &--pull-right {
     position: relative;

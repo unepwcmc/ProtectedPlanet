@@ -12,7 +12,7 @@
   padding-bottom: rem-calc(2);
 
   &--bold {
-    @include font-weight(bold);
+    font-weight: bold;
   }
 
   &--large {

@@ -1,11 +1,11 @@
 .table {
-  @extend %color-base;
+  color: $grey-darker;
   width: 100%;
 
   &__column {
     cursor: pointer;
   
-    @include text--alt(body, x-thin);
+    //@include text--alt(body, x-thin);
     text-align: right;
     &:first-child { text-align: left; }
   
@@ -43,13 +43,13 @@
 
   &__header {
     line-height: rem-calc(32);
-    border-bottom: solid rem-calc(1) $grey-33;
+    border-bottom: solid rem-calc(1) $grey;
     th { padding-right: 0.625rem; }
   };
   
   &__label {
-    @include text(body, thin);
-    @include line-height(1.666em);
+    //@include text(body, thin);
+    //@include line-height(1.666em);
   
     &--link {
       color: $table-link__color;
@@ -66,7 +66,7 @@
   };
   
   &__row {
-    @include text(body, thin);
+    //@include text(body, thin);
     border-bottom: solid rem-calc(1) $grey-15;
     margin-bottom: rem-calc(10);
     padding: rem-calc(5 0);
@@ -84,7 +84,7 @@
   &__value {
     text-align: right;
   
-    @include line-height(1.666em);
+    //@include line-height(1.666em);
     vertical-align: middle;
     padding-right: 0.625rem;
     padding-top: rem-calc(10);
@@ -104,7 +104,7 @@
 // - used on the marine page
 //----------------------------------------
 .table--grey {
-  @extend .u-text-sans;
+  //@extend .u-text-sans;
 
   text-align: left;
   width: 100%;
@@ -135,7 +135,7 @@
     }
 
     &:nth-child(even) {
-      background-color: $grey-5;
+      background-color: $grey-lighter;
     }
   }
 

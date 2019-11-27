@@ -1,5 +1,5 @@
 .select-with-content {
-  @include text(body, thin);
+  //@include text(body, thin);
   @extend .u-base-color;
 
   select {

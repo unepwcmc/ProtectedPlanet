@@ -17,8 +17,8 @@
   &__inner {
     background-color: $grey-3;
 
-    @include text(body);
-    @extend %color-base;
+    //@include text(body);
+    color: $grey-darker;
 
     padding: rem-calc(20);
   }
@@ -29,7 +29,7 @@
   
   &__clear {
     color: $white;
-    @include text--alt(small, bold);
+    //@include text--alt(small, bold);
   
     background-color: $green;
     padding: rem-calc(0 4);
@@ -39,7 +39,7 @@
   
   &__count {
     color: $green;
-    @include font-weight(bold);
+    font-weight: bold;
   }
   
   &__group {
@@ -48,8 +48,8 @@
   }
   
   &__group-title {
-    @include text(body);
-    @include color-with-state($color--base, (
+    //@include text(body);
+    @include color-with-state($grey-darker, (
       hover: $link__color--hover,
       active: $link__color--pressed,
     ));
@@ -75,11 +75,11 @@
   }
   
   &__header {
-    @include text(headline);
+    //@include text(headline);
   }
   
   &__value {
-    @include color-with-state($color--base, (
+    @include color-with-state($grey-darker, (
       hover: $link__color--hover,
       active: $link__color--pressed,
     ));
@@ -90,7 +90,7 @@
     cursor: pointer;
   
     &--smaller {
-      @include text(small);
+      //@include text(small);
     }
   }
   

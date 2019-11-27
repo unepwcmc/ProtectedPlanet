@@ -14,7 +14,7 @@
   }
 
   &__title {
-    @include text(large, x-bold);
+    //@include text(large, x-bold);
     color: $white;
     margin: rem-calc(40 0);
 
@@ -22,11 +22,11 @@
       padding: 0 rem-calc(40);
     }
     @include breakpoint($medium) {
-      @include text(xxlarge, x-bold);
+      //@include text(xxlarge, x-bold);
       padding: 0 rem-calc(60);
     }
     @include breakpoint($large) {
-      @include text(xxxxlarge, x-bold);
+      //@include text(xxxxlarge, x-bold);
       padding: rem-calc(0 100);  
       width: rem-calc(1200);
     }

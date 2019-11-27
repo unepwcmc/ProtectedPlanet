@@ -4,15 +4,15 @@
 
     &__number {
       color: $number__color;
-      @include text--alt(medium, bold);
+      //@include text--alt(medium, bold);
 
       &--inherit   { font: inherit;                            }
-      &--xxlarge   { @include text--alt(xxlarge, bold);        }
+      // &--xxlarge   { @include text--alt(xxlarge, bold);        }
       &--xxxxlarge {
-        @include text--alt(xxxxlarge, bold);
-        @media print { @include text--alt(large, bold); }
+        //@include text--alt(xxxxlarge, bold);
+        // @media print { @include text--alt(large, bold); }
       }
-      &--large     { @include text(xlarge, bold);              }
+      // &--large     { @include text(xlarge, bold);              }
 
       &--alt-color { color: $number-alt-color__color; }
 
@@ -22,8 +22,8 @@
     }
 
     &__label {
-      @extend %color-base;
-      @include text(body, thin);
+      color: $grey-darker;
+      //@include text(body, thin);
 
       &--right {
         float: right;

@@ -1,9 +1,9 @@
 .form {
-  @include text(body);
-  @extend %color-base;
+  //@include text(body);
+  color: $grey-darker;
 
   &__label {
-    @include text(body, bold);
+    //@include text(body, bold);
 
     display: block;
     margin-bottom: rem-calc(4);
@@ -12,7 +12,7 @@
   &__input {
     &:focus { outline: none; border-width: rem-calc(2); }
 
-    @extend %color-base;
+    color: $grey-darker;
     font: inherit;
 
     min-height: rem-calc(30);

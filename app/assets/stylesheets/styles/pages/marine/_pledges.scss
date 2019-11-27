@@ -2,7 +2,7 @@
   position: relative;
 
   &-title {
-    @extend .u-text-sans;
+    //@extend .u-text-sans;
     border-bottom: solid rem-calc(1) $blue--marine-5;
     color: $blue--marine-5;
     margin-bottom: rem-calc(20);

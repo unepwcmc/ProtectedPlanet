@@ -4,8 +4,8 @@
       color: $white;
     }
 
-    @include text(small, bold);
-    @include line-height(2rem);
+    //@include text(small, bold);
+    //@include line-height(2rem);
   }
 
   @content;

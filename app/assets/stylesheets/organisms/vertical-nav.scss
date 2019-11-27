@@ -4,15 +4,15 @@
   &__element {
     display: block;
 
-    @include text(body, thin);
-    @include line-height(1.5rem);
+    //@include text(body, thin);
+    //@include line-height(1.5rem);
 
-    @include color-with-state($color--base, (
+    @include color-with-state($grey-darker, (
       hover: $link__color--hover,
       active: $link__color--pressed,
     ));
 
-    border-bottom: solid rem-calc(1) $grey-5;
+    border-bottom: solid rem-calc(1) $grey-lighter;
     padding: {
       left: rem-calc(20);
       top: rem-calc(8);
@@ -40,14 +40,14 @@
     }
 
     &--selected {
-      @include font-weight(normal);
+      font-weight: normal;
       color: $vertical-nav-element-selected__color;
       border-left: solid rem-calc(5) $grey-15;
       padding-left: rem-calc(16);
     }
 
     &--active {
-      @include font-weight(normal);
+      font-weight: normal;
       color: $vertical-nav-element-selected__color;
     }
 

@@ -35,6 +35,13 @@ $grey: #505050;
 $grey-dark: #8f8f8f;
 $grey-darker: #44483E;
 
+//used on marine insights page
+$blue--marine-1: #bfe5e9; 
+$blue--marine-2: #A1D8DE;
+$blue--marine-3: #90BDC4;
+$blue--marine-4: #729099;
+$blue--marine-5: #444955;
+
 // $blue-light: #54B7EB; //can't use these until the refresh because of old colours
 // $blue: #4D98BF;
 // $green-light: #B1D680;
@@ -80,18 +87,20 @@ $terrestrial: #B1D680;
 //--------------------------------------------------
 // fonts
 //--------------------------------------------------
+$fontAwesome: normal normal normal 14px/1 FontAwesome;
+
 $body-font: 'MuseoSlab', serif;
 $body-font-color: $grey-darker;
 
 $header-font: 'Museo Sans', sans-serif;
 $header-font-color: $grey-darker;
 
-// $thin: 100;
-// $light: 300;
-// $regular: 400;
-// $bold: 500;
-// $semi-bold: 600;
-// $bolder: 700;
+$thin: 100;
+$light: 300;
+$regular: 400;
+$bold: 500;
+$semi-bold: 600;
+$bolder: 700;
 
 $line-height-headings: 1.25;
 // $line-height-p: 1.3;
@@ -121,9 +130,9 @@ $xlarge: 1704px; //monitor
 //--------------------------------------------------
 // z-indices
 //--------------------------------------------------
-// $z-100: 100;
-// $z-200: 200;
-// $z-300: 300;
+$z-100: 100;
+$z-200: 200;
+$z-300: 300;
 
 //--------------------------------------------------
 // padding

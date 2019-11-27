@@ -1,6 +1,6 @@
 .key-container {
   border: solid rem-calc(1) $grey-15;
-  box-shadow: 0px 0px 2px 1px $grey-5;
+  box-shadow: 0px 0px 2px 1px $grey-lighter;
   padding: rem-calc(25 20 20 20);
 
   @include only-desktop {
@@ -49,7 +49,7 @@
         position: relative;
 
         &:before {
-          border: solid rem-calc(1) $grey-33;
+          border: solid rem-calc(1) $grey;
           color: $key__tick-color;
           content: "";
           font-size: rem-calc(18);

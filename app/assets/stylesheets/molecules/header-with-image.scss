@@ -1,14 +1,14 @@
 .header {
   &__text {
-    @extend %color-base;
-    @include text(medium, thin);
+    color: $grey-darker;
+    //@include text(medium, thin);
     margin-bottom: rem-calc(20);
   }
 
   &__sup {
     vertical-align: super;
 
-    @include text(small, bold);
+    //@include text(small, bold);
     color: $green;
   }
 

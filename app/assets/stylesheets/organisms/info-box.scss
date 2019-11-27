@@ -1,6 +1,6 @@
 .info-box {
   
-  @extend %color-base;
+  color: $grey-darker;
 
   padding: $info-box__padding;
   margin-bottom: $info-box__margin-bottom;
@@ -46,7 +46,7 @@
   }
 
   &--small {
-    @include font-weight(thin);
+    //@include font-weight(thin);
     
     color: $grey-100;
     font-family: 'MuseoSans';
@@ -60,14 +60,14 @@
 
   &--factsheet {
     h3 {
-      @include font-weight(bold);
+      font-weight: bold;
       
       color: $info-box__icon-color;
       margin-bottom: rem-calc(18);
       padding-bottom: rem-calc(4);
     }
     
-    @include font-weight(normal);
+    font-weight: normal;
 
     color: $grey-100;
     font-size: rem-calc(18);
@@ -78,7 +78,7 @@
   
     &--no-padding { padding: 0; }
     &--inherit { font: inherit; }
-    @include text(body, thin);
+    //@include text(body, thin);
   
     &--flex { @include flex; }
   
@@ -108,7 +108,7 @@
   }
   
   &__link {
-    @include text(body, bold);
+    //@include text(body, bold);
     color: $info-box-link__color;
     cursor: pointer;
   

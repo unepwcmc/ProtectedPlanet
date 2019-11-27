@@ -1,6 +1,6 @@
-@mixin color($color) {
-  color: $color;
-}
+// @mixin color($color) {
+//   color: $color;
+// }
 
 @mixin color-with-state($base-color, $states: (), $property: color) {
   #{$property}: $base-color;
@@ -12,7 +12,7 @@
   }
 }
 
-%color-base { color: $color--base; }
+// %color-base { color: $color--base; }
 %acts-as-link {
   &:hover, &:active { text-decoration: underline; }
   @include color-with-state($link__color, (

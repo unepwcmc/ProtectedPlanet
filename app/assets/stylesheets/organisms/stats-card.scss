@@ -44,7 +44,7 @@ $card-number-config: (
     
     &__number--#{$font-size}-#{$name} {
       color: $colour;
-      @include text--alt($font-size, $font-weight);
+      //@include text--alt($font-size, $font-weight);
 
       display: block;
     }
@@ -61,12 +61,12 @@ $card-number-config: (
 // card--stats used on country page
 //--------------------------------------------------
   &--stats {
-    @include text(body, thin);
+    //@include text(body, thin);
     color: $grey-77;
     padding: rem-calc(30 0);
 
     &:not(:last-child) {
-      border-bottom: dashed rem-calc(1) $grey-33;
+      border-bottom: dashed rem-calc(1) $grey;
     }
 
     .card {

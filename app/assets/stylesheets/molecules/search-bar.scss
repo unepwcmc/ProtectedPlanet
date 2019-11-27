@@ -42,7 +42,7 @@
   }
 
   &__input {
-    @include text(body, thin);
+    //@include text(body, thin);
     box-sizing: border-box;
     height: 100%;
     border: solid rem-calc(1) $grey-15;

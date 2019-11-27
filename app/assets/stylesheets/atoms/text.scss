@@ -38,7 +38,7 @@
   }
 
   &--standard {
-    @include text(body, thin);
+    //@include text(body, thin);
     line-height: 1.3;
     margin-bottom: rem-calc(20);
   }

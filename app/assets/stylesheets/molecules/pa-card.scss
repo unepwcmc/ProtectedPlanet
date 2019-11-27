@@ -9,13 +9,13 @@
 
   &__name {
     @extend %acts-as-link;
-    @include text(body, bold);
+    //@include text(body, bold);
 
     margin-bottom: rem-calc(12);
   }
 
   &__subtitle {
-    @include text(body);
+    //@include text(body);
     color: $pa-card-subtitle__color;
     margin-bottom: rem-calc(16);
   }
@@ -30,7 +30,7 @@
   }
 
   &__detail {
-    @include text(body);
+    //@include text(body);
     font-size: inherit;
     margin-bottom: rem-calc(12);
 
@@ -48,13 +48,13 @@
 
   &__detail-link {
     @extend %acts-as-link;
-    @include font-weight(thin);
+    //@include font-weight(thin);
 
     font-family: 'MuseoSlab';
   }
 
   &__detail-value {
-    @include font-weight(thin);
+    //@include font-weight(thin);
 
     font-family: 'MuseoSlab';
   }

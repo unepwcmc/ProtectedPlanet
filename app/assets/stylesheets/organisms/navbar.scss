@@ -60,7 +60,7 @@
   }
 
   &__element {
-    @include text(body);
+    //@include text(body);
 
     align-items: center;
     cursor: pointer;
@@ -140,13 +140,13 @@
     }
     // ok to change to logo?
     &--bigger {
-      @include text(headline);
-      @include line-height($navbar__height);
+      //@include text(headline);
+      //@include line-height($navbar__height);
     }
     // delete?
     &--thinner {
-      @include text(small);
-      @include line-height($navbar__height--thinner);
+      //@include text(small);
+      //@include line-height($navbar__height--thinner);
     }
     // delete?
     &--larger {

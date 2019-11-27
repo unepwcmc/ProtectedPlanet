@@ -14,12 +14,12 @@
  * *= require_self
  */
 
-// grids
-// @import 'bourbon/core/bourbon';
-@import 'bourbon-neat/app/assets/stylesheets/neat';
+// // grids
+// // @import 'bourbon/core/bourbon';
+// @import 'bourbon-neat/app/assets/stylesheets/neat';
 
-// // maps
-@import 'leaflet/dist/leaflet';
+// // // maps
+// @import 'leaflet/dist/leaflet';
 
 @import './resources/mixins/rem-calc';
 @import './resources/mixins/media-queries';
@@ -35,92 +35,92 @@
 // @import 'utilities/accessibility';
 // @import 'utilities/bem';
 
-// variables
-@import 'variables/colors';
-@import 'variables/dimensions';
-@import 'variables/font-faces';
-@import 'variables/fonts';
-@import 'variables/z-index';
-// variables
+// // variables
+// @import 'variables/colors';
+// @import 'variables/dimensions';
+// // @import 'variables/font-faces';
+// // @import 'variables/fonts';
+// // @import 'variables/z-index';
+// // variables
 
-// atoms
-@import 'atoms/fonts';
-@import 'atoms/fa';
-@import 'atoms/colors';
-@import 'atoms/buttons';
-@import 'atoms/disclaimer';
-@import 'atoms/headers';
-@import 'atoms/label';
-@import 'atoms/leaflet-controls';
-@import 'atoms/links';
-@import 'atoms/logos';
-@import 'atoms/overlay';
-@import 'atoms/small-text';
-@import 'atoms/text';
-// atoms
+// // atoms
+// @import 'atoms/fonts';
+// @import 'atoms/fa';
+// @import 'atoms/colors';
+// @import 'atoms/buttons';
+// @import 'atoms/disclaimer';
+// @import 'atoms/headers';
+// @import 'atoms/label';
+// @import 'atoms/leaflet-controls';
+// @import 'atoms/links';
+// @import 'atoms/logos';
+// @import 'atoms/overlay';
+// @import 'atoms/small-text';
+// @import 'atoms/text';
+// // atoms
 
-// molecules
-@import 'molecules/accordion';
-@import 'molecules/animated-loader';
-@import 'molecules/alert';
-@import 'molecules/attribute';
-@import 'molecules/big-button';
-@import 'molecules/breadcrumbs';
-@import 'molecules/burger';
-@import 'molecules/circle-story';
-@import 'molecules/close-button';
-@import 'molecules/counter';
-@import 'molecules/cube';
-@import 'molecules/dropdown';
-@import 'molecules/expandable-section'; // DEPRECATED, use accordion
-@import 'molecules/fullscreen';
-@import 'molecules/fullscreen-message';
-@import 'molecules/header-with-image';
-@import 'molecules/home-banner';
-@import 'molecules/home-carousel';
-@import 'molecules/horizontal-bar';
-@import 'molecules/horizontal-bars';
-@import 'molecules/key';
-@import 'molecules/link-with-icon';
-@import 'molecules/map';
-@import 'molecules/modal';
-@import 'molecules/pa-card';
-@import 'molecules/rectangles';
-@import 'molecules/reference';
-@import 'molecules/select-with-content';
-@import 'molecules/search-bar';
-@import 'molecules/social';
-@import 'molecules/stats';
-@import 'molecules/sticky-nav';
-@import 'molecules/sticky-tab';
-@import 'molecules/table';
-@import 'molecules/tooltip-old';
-@import 'molecules/twitter-share';
-@import 'molecules/uservoice';
-@import 'molecules/value';
-// molecules
+// // molecules
+// @import 'molecules/accordion';
+// @import 'molecules/animated-loader';
+// @import 'molecules/alert';
+// @import 'molecules/attribute';
+// @import 'molecules/big-button';
+// @import 'molecules/breadcrumbs';
+// @import 'molecules/burger';
+// @import 'molecules/circle-story';
+// @import 'molecules/close-button';
+// @import 'molecules/counter';
+// @import 'molecules/cube';
+// @import 'molecules/dropdown';
+// @import 'molecules/expandable-section'; // DEPRECATED, use accordion
+// @import 'molecules/fullscreen';
+// @import 'molecules/fullscreen-message';
+// @import 'molecules/header-with-image';
+// @import 'molecules/home-banner';
+// @import 'molecules/home-carousel';
+// @import 'molecules/horizontal-bar';
+// @import 'molecules/horizontal-bars';
+// @import 'molecules/key';
+// @import 'molecules/link-with-icon';
+// @import 'molecules/map';
+// @import 'molecules/modal';
+// @import 'molecules/pa-card';
+// @import 'molecules/rectangles';
+// @import 'molecules/reference';
+// @import 'molecules/select-with-content';
+// @import 'molecules/search-bar';
+// @import 'molecules/social';
+// @import 'molecules/stats';
+// @import 'molecules/sticky-nav';
+// @import 'molecules/sticky-tab';
+// @import 'molecules/table';
+// @import 'molecules/tooltip-old';
+// @import 'molecules/twitter-share';
+// @import 'molecules/uservoice';
+// @import 'molecules/value';
+// // molecules
 
-// organisms
-@import 'organisms/hero';
-@import 'organisms/cover-story';
-@import 'organisms/section';
-@import 'organisms/navbar';
-@import 'organisms/autocompletion';
-@import 'organisms/fact';
-@import 'organisms/filter-bar';
-@import 'organisms/footer';
-@import 'organisms/form';
-@import 'organisms/info-box';
-@import 'organisms/gallery';
-@import 'organisms/key-records';
-@import 'organisms/search-result';
-@import 'organisms/stats-card';
-@import 'organisms/row';
-@import 'organisms/article';
-@import 'organisms/vertical-nav';
-@import 'organisms/container';
-@import 'organisms/tabs';
-// organisms
+// // organisms
+// @import 'organisms/hero';
+// @import 'organisms/cover-story';
+// @import 'organisms/section';
+// @import 'organisms/navbar';
+// @import 'organisms/autocompletion';
+// @import 'organisms/fact';
+// @import 'organisms/filter-bar';
+// @import 'organisms/footer';
+// @import 'organisms/form';
+// @import 'organisms/info-box';
+// @import 'organisms/gallery';
+// @import 'organisms/key-records';
+// @import 'organisms/search-result';
+// @import 'organisms/stats-card';
+// @import 'organisms/row';
+// @import 'organisms/article';
+// @import 'organisms/vertical-nav';
+// @import 'organisms/container';
+// @import 'organisms/tabs';
+// // organisms
 
 // old pp assets
 // @import 'old/neat-grid';
@@ -139,27 +139,28 @@
 // old pp assets
 
 // scopes
-@import 'scopes/article';
-@import 'scopes/form';
-// scopes
+// @import 'scopes/article';
+// @import 'scopes/form';
+// // scopes
 
-// utilities
-// @import 'utilities/keyframes';
-// @import 'utilities/reset';
-@import 'utilities/grid';            
-// @import 'utilities/html-elements';
-// utilities
+// // utilities
+// // @import 'utilities/keyframes';
+// // @import 'utilities/reset';
+// @import 'utilities/grid';            
+// // @import 'utilities/html-elements';
+// // utilities
 
 //templates
-@import 'templates/site';
+// @import 'templates/site';
 //templates
 
-@import 'custom';
+// @import 'custom';
 
-@import './map/custom-leaflet';
+// @import './map/custom-leaflet';
 
 @import './styles/base';
 @import './styles/helpers/**/*';
+@import './styles/mixins/**/*';
 @import './styles/components/icons';
 @import './styles/components/carousel';
 @import './styles/components/charts';
@@ -171,4 +172,4 @@
 @import './styles/components/vue-agile';
 @import './styles/pages/*';
 
-@import 'utilities/u-classes';
+// @import 'utilities/u-classes';

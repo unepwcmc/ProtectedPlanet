@@ -6,18 +6,18 @@
   flex-direction: column;
   
   &__title {
-    @include text(headline, thin);
+    ////@include text(headline, thin);
     overflow-wrap: break-word;
 
     margin-bottom: rem-calc(14);
 
     @include breakpoint($small) {
-      @include text(large, thin);
+      //@include text(large, thin);
     }
   }
 
   &__description {
-    @include text(body, thin);
+    //@include text(body, thin);
     overflow-wrap: break-word;
     
     display: none;
@@ -26,7 +26,7 @@
   }
 
   &__link {
-    @include text(body, bold);
+    //@include text(body, bold);
     line-height: 1;
     margin-top: auto;
     margin-right: auto;

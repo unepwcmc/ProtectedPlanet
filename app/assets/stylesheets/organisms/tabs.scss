@@ -9,7 +9,7 @@
     }
 
       &__title {
-        @include font-weight(x-bold);
+        //@include font-weight(x-bold);
         
         color: $tabs__title-color;
         cursor: pointer;

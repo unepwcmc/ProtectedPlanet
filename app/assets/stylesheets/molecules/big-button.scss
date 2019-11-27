@@ -1,6 +1,6 @@
 .big-button {
   text-align: center;
-  @include text--alt(body, bold);
+  //@include text--alt(body, bold);
 
   color: $big-button__color;
   @include color-with-state($big-button__bg-color, (

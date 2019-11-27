@@ -2,7 +2,7 @@
   color: $info-box-link__color;
   font-family: 'MuseoSans';
   font-size: rem-calc(15);
-  @include font-weight(normal);
+  font-weight: normal;
 
   &--hero-download {
     cursor: pointer;
@@ -24,6 +24,6 @@
 
   &--page-anchor {
     color: $link--color;
-    @include font-weight(normal);
+    font-weight: normal;
   }
 }

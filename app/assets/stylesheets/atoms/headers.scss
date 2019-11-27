@@ -1,6 +1,6 @@
 @mixin header-with-delimiter($border-bottom: ($color, $size)) {
-  @extend %color-base;
-  @include text(headline, thin);
+  color: $grey-darker;
+  ////@include text(headline, thin);
 
   padding-bottom: rem-calc(4);
 
@@ -12,12 +12,12 @@
 .header-with-delimiter {
   margin-bottom: rem-calc(10);
   @include header-with-delimiter(
-    $border-bottom: (color: $grey-33, size: 1px)
+    $border-bottom: (color: $grey, size: 1px)
   );
 
-  &--bold { @include font-weight(normal); }
-  &--smaller { @include text(body, null); }
-  &--bigger { @include text(medium, null); }
+  &--bold { font-weight: normal; }
+  // &--smaller { //@include text(body, null); }
+  // &--bigger { //@include text(medium, null); }
 
   &--no-margin-bottom { margin-bottom: 0; }
 
@@ -60,8 +60,8 @@
   }
 
   &--h1-small {
-    color: $color--base;
-    @include text(large);
+    color: $grey-darker;
+    // //@include text(large);
 
     margin-top: rem-calc(30);
     margin-bottom: rem-calc(10);
@@ -88,7 +88,7 @@
   }
 
   &--small {
-    border-bottom: solid $grey-33 rem-calc(1);
+    border-bottom: solid $grey rem-calc(1);
     font-family: 'MuseoSans';
     font-size: rem-calc(16);   
   }

@@ -51,7 +51,7 @@
     &:hover { background-color: $dropdown-element-hover__bg-color; }
 
     color: $white;
-    @include text(body);
+    //@include text(body);
 
     display: block;
     padding: rem-calc(10 20);

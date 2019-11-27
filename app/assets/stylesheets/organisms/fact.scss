@@ -10,7 +10,7 @@
 
   &__subheader {
     color: $grey-100;
-    @include text(body);
+    //@include text(body);
     margin-bottom: .5em;
   }
 
@@ -29,11 +29,11 @@
   }
 
   &__single-figure {
-    @include text--alt(xxxxlarge, bold);
+    //@include text--alt(xxxxlarge, bold);
     color: $green;
 
     @media print {
-      @include text--alt(large, bold);
+      //@include text--alt(large, bold);
     }
 
     &--push-down {

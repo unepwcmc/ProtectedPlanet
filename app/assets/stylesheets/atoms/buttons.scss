@@ -1,5 +1,5 @@
 %show-hide-styles {
-  @include font-weight(bold);
+  font-weight: bold;
 
   border: solid rem-calc(2) $button--hide-border-color;
   border-radius: rem-calc(4);
@@ -9,7 +9,7 @@
   padding: rem-calc(0 18);
 
   &:before {
-    @include text--icon(body);
+    // //@include text--icon(body);
 
     margin-right: rem-calc(8);
   }
@@ -40,7 +40,7 @@
   }
 
   &--grey {
-    @include font-weight(bold);
+    font-weight: bold;
 
     border: solid rem-calc(2) $button--grey-border-color;
     border-radius: rem-calc(4);

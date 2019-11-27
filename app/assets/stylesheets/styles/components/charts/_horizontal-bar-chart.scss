@@ -28,7 +28,7 @@
     }
 
     .bar-label {
-      @extend .u-text-sans;
+      //@extend .u-text-sans;
       fill: $white;
       font-size: rem-calc(14);
       opacity: 0;

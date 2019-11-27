@@ -12,15 +12,15 @@
   padding: rem-calc(10);
 
   &__body {
-    @include text(body);
-    @extend %color-base;
+    //@include text(body);
+    color: $grey-darker;
   }
   
   &__icon {
     float: left;
   
     min-width: rem-calc(40) !important;
-    @include text--icon(body, thin);
+    //@include text--icon(body, thin);
   
     &--warning { color: $alert-warning--color; }
     &--info { color: $alert-info--color; }
@@ -29,7 +29,7 @@
   
   &__icon-inner {
     box-sizing: content-box;
-    @include text--icon(small, thin);
+    //@include text--icon(small, thin);
   
     &--warning { color: $alert__bg-color; }
     &--info { color: $alert__bg-color; }
@@ -37,8 +37,8 @@
   }
   
   &__title {
-    @include text--alt(headline, bold);
-    @include line-height(2rem);
+    //@include text--alt(headline, bold);
+    //@include line-height(2rem);
   
     margin-bottom: rem-calc(8);
   

@@ -28,7 +28,7 @@ $navHeightMobile: rem-calc(48);
 // sticky nav styles
 //----------------------------------------
 .v-sticky-nav {
-  @extend .u-text-sans;
+  //@extend .u-text-sans;
 
   @include breakpoint($large){ 
     margin: auto;

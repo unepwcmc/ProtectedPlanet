@@ -40,14 +40,14 @@
     }
 
   &__body {
-    @include text(body, thin);
+    //@include text(body, thin);
 
     padding-left: rem-calc(8);
   }
 
   
     &__title {
-      @include text(medium, bold);
+      //@include text(medium, bold);
       color: $green;
       line-height: 1.1;
 

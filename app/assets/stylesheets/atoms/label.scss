@@ -1,10 +1,10 @@
 .label {
-  @include text(small);
-  @extend %color-base;
+  //@include text(small);
+  color: $grey-darker;
 
   font-style: italic;
 
-  background-color: $grey-5;
+  background-color: $grey-lighter;
   margin-right: rem-calc(20);
   padding: rem-calc(5 16);
 

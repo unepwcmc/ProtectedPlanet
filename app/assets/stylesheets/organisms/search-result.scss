@@ -1,8 +1,8 @@
 .search-result {
-  @extend %color-base;
+  color: $grey-darker;
   
 
-  border-bottom: solid rem-calc(1) $grey-5;
+  border-bottom: solid rem-calc(1) $grey-lighter;
   padding: {
     top: rem-calc(16);
     bottom: rem-calc(16);
@@ -16,13 +16,13 @@
 
   &__title {
     color: $search-result-title__color;
-    @include text(headline);
+    //@include text(headline);
 
     margin-bottom: rem-calc(16);
   }
 
   &__body {
-    @include text(body, thin);
+    //@include text(body, thin);
     margin-bottom: rem-calc(24);
   }
 
@@ -31,10 +31,10 @@
   }
 
   &__detail {
-    @include text--alt(body, thin);
-    color: $grey-55;
+    //@include text--alt(body, thin);
+    color: $grey-darker;
 
-    border-right: solid rem-calc(1) $grey-5;
+    border-right: solid rem-calc(1) $grey-lighter;
     float: left;
     padding: rem-calc(0 20);
 
@@ -44,12 +44,12 @@
   }
 
   &__tag {
-    @include text(small);
-    @extend %color-base;
+    //@include text(small);
+    color: $grey-darker;
 
     font-style: italic;
 
-    background-color: $grey-5;
+    background-color: $grey-lighter;
     margin-right: rem-calc(20);
     padding: rem-calc(5 16);
   }

@@ -17,19 +17,19 @@
   }
 
   &__title {
-    @include text(large);
+    // //@include text(large);
     color: $hero-title__color;
 
     &--thin {
-      @include text(large, thin);
+      // //@include text(large, thin);
     }
 
     &--base {
-      color: $color--base;
+      color: $grey-darker;
     }
 
     &--bigger {
-      @include text(xxlarge);
+      // //@include text(xxlarge);
     }
 
     &--article {
@@ -38,11 +38,11 @@
         right: rem-calc(8);
       }
 
-      @include text(xxlarge, thin);
-      color: $color--base;
+      // //@include text(xxlarge, thin);
+      color: $grey-darker;
 
       @include only-mobile {
-        @include text(xlarge, thin);
+        // //@include text(xlarge, thin);
         line-height: 1.5;
       }
     }
@@ -129,18 +129,18 @@
   }
 
   &__cover-text {
-    @include text(xxlarge, normal);
+    // //@include text(xxlarge, normal);
     color: $white;
 
     @include only-mobile {
-      @include text(xlarge, normal);
+      // //@include text(xlarge, normal);
     }
 
     &--alt {
-      @include text--alt(xxlarge, x-bold);
+      // //@include text--alt(xxlarge, x-bold);
 
       @include only-mobile {
-        @include text--alt(xlarge, x-bold);
+        // //@include text--alt(xlarge, x-bold);
       }
     }
   }

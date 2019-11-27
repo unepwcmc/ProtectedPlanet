@@ -17,8 +17,8 @@
 
   &__element {
     color: $navbar-element__color;
-    @include line-height(null);
-    @include text(body);
+    //@include line-height(null);
+    //@include text(body);
     
     align-content: center;
     font-size: rem-calc(14);

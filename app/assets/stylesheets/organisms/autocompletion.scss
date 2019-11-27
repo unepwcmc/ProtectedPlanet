@@ -15,7 +15,7 @@
   }
 
   &__result {
-    @include text(body);
+    //@include text(body);
     display: block;
     height: rem-calc(100);
     padding: rem-calc(20) 0;
@@ -35,11 +35,11 @@
   }
 
   &__type {
-    @include text(small);
+    //@include text(small);
     font-style: italic;
     padding: rem-calc(0 12);
     margin-top: rem-calc(4);
 
-    background-color: $grey-5;
+    background-color: $grey-lighter;
   }
 }

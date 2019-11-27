@@ -11,8 +11,8 @@
   }
 
   &__header {
-    @extend %color-base;
-    @include text(xlarge, thin);
+    color: $grey-darker;
+    //@include text(xlarge, thin);
 
     margin-bottom: rem-calc(40);
     padding-left: rem-calc(20);

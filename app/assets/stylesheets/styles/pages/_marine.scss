@@ -66,7 +66,7 @@
   }
 
   .section--block-color {
-    @extend .u-bg--marine-2;
+    //@extend .u-bg--marine-2;
 
     a { 
       color: $blue--marine-5; 
@@ -107,7 +107,7 @@
   }
 
     &__section__introduction {
-      @extend .text--standard;
+      //@extend .text--standard;
       line-height: 1.7;
       margin-bottom: 2.25em;
 

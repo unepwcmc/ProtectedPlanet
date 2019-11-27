@@ -42,8 +42,8 @@
   }
   
   &__counter {
-    @include text(body);
-    @extend %color-base;
+    //@include text(body);
+    color: $grey-darker;
   }
   
   &__current-index {
