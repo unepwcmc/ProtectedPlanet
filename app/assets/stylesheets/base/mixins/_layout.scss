@@ -18,5 +18,5 @@
 
 @mixin site-width {
   width: 100%;
-  @include breakpoint($xlarge){ width: $site-width; }
+  @include breakpoint($large){ width: $site-width-rem; }
 }

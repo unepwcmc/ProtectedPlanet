@@ -1,20 +1,7 @@
 <% unless @for_pdf %>
-  <footer style="<%#= yield :footer_style %>" class="footer bg--primary <%#= yield :footer_classes %>">
+  <footer style="<%#= yield :footer_style %>" class="footer bg--primary section-padding <%#= yield :footer_classes %>">
     <div class="container footer__container">
-      <div>
-        site logo
-        <i class="fa fa-copyright"></i> ProtectedPlanet 2014-<%= Date.today.year %>. All rights reserved
-
-        <div>
-          <%= link_to 'http://unep-wcmc.org', title: '', class: '' do %>
-            wcmc logo
-          <% end %>
-          <%= link_to 'http://www.iucn.org', title: '', class: '' do %>
-            wcmc logo
-          <% end %>
-        </div>
-      </div>
-      <div>
+      <div class="footer__col1">
         <% unless @for_pdf %>
           <%= link_to 'Send Feedback', 'mailto:protectedareas@unep-wcmc.org', title: '', class: 'button--comment' %>
         <% end %>
@@ -22,6 +9,22 @@
         <div>
           social
         </div>
+      </div>
+
+      <div class="footer__col2">
+        <%= image_tag 'logos/site.png', alt: 'Protected Planet logo', class: 'footer__logo-site' %>
+
+        <div>
+          <%= link_to 'http://unep-wcmc.org', title: 'here', target: '_blank' do %>
+            <%= image_tag 'https://s3.amazonaws.com/wcmc.logo/UNEP_WCMC_logo_white.svg', alt: 'UN Environment World Conservation Monitoring logo', class: 'footer__logo-partner' %>
+          <% end %>
+
+          <%= link_to 'http://www.iucn.org', title: 'here', target: '_blank' do %>
+            <%= image_tag 'logos/iucn.png', alt: 'IUCN logo', class: 'footer__logo-partner' %>
+          <% end %>
+        </div>
+
+        <span>&copy; ProtectedPlanet 2014-<%= Date.today.year %>. All rights reserved</span>
       </div>
     </div>
   </footer>

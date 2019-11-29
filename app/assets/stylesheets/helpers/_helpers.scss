@@ -22,7 +22,10 @@
 //--------------------------------------------------
 $image-placeholder: black;
 
-.bg--primary { background-color: $primary; }
+.bg--primary { 
+  background-color: $primary; 
+  color: white;
+}
 .bg--grey-lighter { background-color: $grey-lighter; }
 
 .bg-img {

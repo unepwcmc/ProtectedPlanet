@@ -43,8 +43,6 @@ em { font-style: italic; }
   &-right { @include gutters('right'); }
 }
 
-.gutters { @include gutters; }
-
 .container {
   @include site-width;
   @include container;
@@ -91,8 +89,6 @@ em { font-style: italic; }
   padding-bottom: $section-padding-bottom-mobile;
   @include breakpoint($small) { padding-bottom: $section-padding-bottom-tablet; }
   @include breakpoint($medium) { padding-bottom: $section-padding-bottom-desktop; }
-
-  &-desktop { @include breakpoint($medium) { padding-bottom: $section-padding-bottom-desktop; } }
 }
 
 .section-padding {

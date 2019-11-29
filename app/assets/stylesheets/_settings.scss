@@ -39,7 +39,8 @@ $grey-darker: #44483E;
 // $blue: #4D98BF;
 // $green-light: #B1D680;
 $green: #71A32B;
-$green--darker: #415519; 
+$green-dark: #567C21;
+$green--darker: #415519;
 
 $orange: #ef5833;
 $orange--dark: #de522f;
@@ -110,23 +111,9 @@ $line-height-headings: 1.25;
 // breakpoints
 //--------------------------------------------------
 // must be in px not rem!
-$small: 628px; //mobile
-$medium: 768px; //tablet portrait
-$large: 1024px; //tablet landscape
-$xlarge: 1704px; //monitor
-
-// $target-11-dashboard: ;
-
-@mixin responsive-styles ($property, $mobile, $tablet-portrait, $tablet-landscape, $laptop: false) {
-  #{$property}: $mobile;
-
-  @include breakpoint($small) { #{$property}: $tablet-portrait; }
-  @include breakpoint($medium) { #{$property}: $tablet-landscape; }
-
-  @if $laptop {
-    @include breakpoint($large) { #{$property}: $laptop; }
-  }
-}
+$small: 628px; 
+$medium: 1024px;
+$large: 1200px;
 
 //--------------------------------------------------
 // z-indices
@@ -140,11 +127,7 @@ $z-300: 300;
 //--------------------------------------------------
 $gutter-small: rem-calc(16);
 $gutter-medium: rem-calc(24);
-$gutter-large: rem-calc(32);
-
-// $container-width-small: rem-calc(600);
-// $container-width-medium: rem-calc(1120);
-// $container-width-large: rem-calc(800);
+$gutter-large: rem-calc(30);
 
 $page-padding-top-mobile: rem-calc(16);
 $page-padding-top-tablet: rem-calc(24);
@@ -170,8 +153,9 @@ $item-spacing-xlarge: rem-calc(56);
 //--------------------------------------------------
 // dimensions
 //--------------------------------------------------
-// $site-width-min: rem-calc(1440); //13" macbook
-$site-width: $xlarge;
+$site-width: $large;
+$site-width-rem: rem-calc($site-width);
+
 // $site-width-medium-tablet: 80%;
 // $site-width-medium-laptop: 78%;
 // $site-width-medium-desktop: 62%;
