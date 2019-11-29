@@ -3,6 +3,7 @@
 
   &__container {
     @include flex;
+    @include responsive-styles(flex-direction, column, row, row);
     @include responsive-styles(justify-content, initial, space-between, space-between);
   }
 

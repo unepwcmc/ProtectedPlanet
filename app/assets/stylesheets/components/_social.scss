@@ -10,7 +10,7 @@
   background-size: contain;
   margin-top: 26px;
 
-  display: block;
+  display: inline-block;
 
   &:first-child { 
     margin-top: 0;
@@ -21,7 +21,6 @@
   @include breakpoint($medium) { 
     margin-top: 0;
     margin-left: 16px;
-    display: inline-block; 
   }  
 }
 //--------------------------------------------------
