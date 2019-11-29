@@ -6,8 +6,11 @@
           <%= link_to 'Send Feedback', 'mailto:protectedareas@unep-wcmc.org', title: '', class: 'button--comment' %>
         <% end %>
 
-        <div>
-          social
+        <div class="social--share">
+          <%= create_sharing_twitter_link %>
+          <%= create_sharing_facebook_link %>
+          <%= create_sharing_linkedin_link %>
+          <%= create_sharing_email_link %>
         </div>
       </div>
 
