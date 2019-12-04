@@ -87,6 +87,7 @@
 // helpers
 //--------------------------------------------------
 @mixin flex-center {
+  @include flex;
   @include flex-h-center;
   @include flex-v-center;
 }

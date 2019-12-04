@@ -1,4 +1,40 @@
-@mixin button-plain () {
+//--------------------------------------------------
+// shared mixins
+//--------------------------------------------------
+@mixin button-plain () { //delete
   border: none;
   padding: 0;
+}
+
+@mixin button-basic {
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover { text-decoration: none; }
+}
+
+@mixin button-outline-primary {
+  border: solid 2px $primary;
+}
+
+@mixin button-radius {
+  border-radius: $button-radius;
+}
+
+//--------------------------------------------------
+// specific mixins
+//--------------------------------------------------
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.button {
+  &--outline {
+    @include button-basic;
+    @include button-outline-primary;
+    @include button-radius;
+  }
 }

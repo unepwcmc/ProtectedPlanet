@@ -1,0 +1,29 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$circle-large-mobile: rem-calc(233);
+$circle-large-tablet: rem-calc(261);
+$circle-large-desktop: rem-calc(344);
+
+//--------------------------------------------------
+// shared mixins
+//--------------------------------------------------
+@mixin circle-basic {
+  @include flex-center;
+  border-radius: 100%;
+}
+
+@mixin circle-large {
+  @include responsive-styles(width, $circle-large-mobile, $circle-large-tablet, $circle-large-desktop);
+  @include responsive-styles(height, $circle-large-mobile, $circle-large-tablet, $circle-large-desktop);
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.circle--grey {
+  @include circle-basic;
+  @include circle-large;
+  background-color: $grey;
+  color: $white;
+}

@@ -1,13 +1,13 @@
-<header class="hero--home">
-  <div class="hero__container">
+<header class="hero--home section-padding">
+  <div class="hero__container container">
     <div>
       <h1><%= t('home.title') %></h1>
       <p><%= t('home.intro') %></p>
 
-      <% link_to t('home.title'), '/', title: t('home.title'), class: 'button--outline' %>
+      <%= link_to t('home.title'), '/', title: t('home.title'), class: 'button--outline' %>
     </div>
     <div>
-      <div class="header__stats">
+      <div class="header__stats circle--grey">
         <span><%= @total_pas %></span>
         <span><%= t('home.stat_text_1') %></span>
         <span><%= @total_oecms %></span>

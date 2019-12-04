@@ -73,7 +73,7 @@ $marine-accent-color: $orange--lighest;
 //--------------------------------------------------
 // buttons
 //--------------------------------------------------
-// $button-radius: 2em;
+$button-radius: 3px;
 // $button-font-size: rem-calc(25);
 // $button-default-color: $grey;
 
@@ -139,7 +139,7 @@ $page-padding-bottom-desktop: rem-calc(80);
 
 $section-padding-top-mobile: rem-calc(24);
 $section-padding-top-tablet: rem-calc(30);
-$section-padding-top-desktop: rem-calc(40);
+$section-padding-top-desktop: rem-calc(85);
 
 $section-padding-bottom-mobile: rem-calc(30);
 $section-padding-bottom-tablet: rem-calc(40);
