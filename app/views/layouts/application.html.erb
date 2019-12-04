@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <%= render "layouts/application/head" %>
+    <%= render "layouts/partials/head" %>
   </head>
 
   <body>
     <div id="v-app">
-      <main class="body-container <%= controller_name %>-parent">
+      <!-- <main class="body-container <%= controller_name %>-parent">
         <header class="js-expandable-section">
-          <%= render 'layouts/application/navbar' %>
-          <%= yield :header %>
-        </header>
+          <%#= render 'layouts/partials/navbar' %>
+          <%#= yield :header %>
+        </header> -->
 
-          <%= yield %>
-      </main>
+      <%= render "layouts/partials/topbar" %>
+      <%= render "layouts/partials/hero-home" %>
+        
+      <%= yield %>
+      
+      <%= render "layouts/partials/footer" %>  
     </div>
-
-    <%= render "shared/ctas/api" %>
-    <%= render "shared/ctas/live-report" %>
-    <%= render "layouts/application/footer" %>
 
     <%= render 'shared/download_modal' %>
 

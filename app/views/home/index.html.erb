@@ -1,15 +1,43 @@
-<%= render partial: "home_banner" %>
-<div class="container--fullscreen container--push-bottom">
-  <% render layout: "banner" do %>
-    <span class="alert__title alert__title--success">The Protected Planet API is live! 🌍</span>
+<%#= render partial: "home_banner" %>
+
+  <%# render layout: "banner" do %>
+    <!-- <span class="alert__title alert__title--success">The Protected Planet API is live! 🌍</span>
     <br>
     <span>
       <a class="link-with-icon" href="http://api.protectedplanet.net/request">Request a token now</a>
       and
       <a class="link-with-icon" href="http://api.protectedplanet.net/documentation">discover all its functionalities</a>
-    </span>
-  <% end %>
-  <%= render partial: "hero" %>
-  <%= render partial: "thematic_areas" %>
-  <%= render partial: "statistics_cover" %>
-</div>
+    </span> -->
+  <%# end %>
+  <%#= render partial: "hero" %>
+  <%#= render partial: "thematic_areas" %>
+  <%#= render partial: "statistics_cover" %>
+
+<section>
+  PA search
+</section>
+
+<section>
+  circle
+  squares
+</section>
+
+<section>
+  map main
+</section>
+
+<section>
+  thematic areas carousel
+</section>
+
+<%= render "shared/ctas/api" %>
+    
+<section>
+  resources carousel
+</section>
+
+<section>
+  news & stories carousel
+</section>
+
+<%= render "shared/ctas/live-report" %>

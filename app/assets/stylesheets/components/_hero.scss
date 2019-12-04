@@ -13,6 +13,14 @@ $hero-padding-bottom-desktop: rem-calc(60);
 // classes
 //--------------------------------------------------
 .hero {
+  &--basic {
+
+  }
+
+  &--home {
+    
+  }
+
   &--thematic-area {
     @include responsive-styles(padding-top, $hero-padding-top-mobile, $hero-padding-top-tablet, $hero-padding-top-desktop);
     @include responsive-styles(padding-bottom, $hero-padding-bottom-mobile, $hero-padding-bottom-tablet, $hero-padding-bottom-desktop);
