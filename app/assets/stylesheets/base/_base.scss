@@ -18,6 +18,11 @@ body {
   margin: 0;
 }
 
+section {
+  padding: rem-calc(30) 0;
+  border: solid 4px black;
+}
+
 h1 { @include h1; }
 h2 { @include h2; }
   

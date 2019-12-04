@@ -1,5 +1,8 @@
 class HomeController < ApplicationController
   def index
+    @total_pas = 'XXXXXX' #TODO replace with correct integer
+    @total_oecms = 'XXXXXX' #TODO replace with correct integer
+
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 
     @thematicAreas = [
