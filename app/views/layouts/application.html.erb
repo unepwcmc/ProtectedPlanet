@@ -20,14 +20,14 @@
       <%= render "layouts/partials/footer" %>  
     </div>
 
-    <%= render 'shared/download_modal' %>
+    <%= render 'partials/download_modal' %>
 
     <%= javascript_include_tag controller_name %>
 
     <% if Rails.env == 'production' %>
-      <%= render 'shared/hotjar' %>
-      <%= render 'shared/mouseflow' %>
-      <%= render 'shared/uservoice' %>
+      <%= render 'partials/hotjar' %>
+      <%= render 'partials/mouseflow' %>
+      <%= render 'partials/uservoice' %>
     <% end %>
   </body>
 </html>
