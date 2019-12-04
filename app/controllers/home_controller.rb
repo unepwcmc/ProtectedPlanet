@@ -3,6 +3,20 @@ class HomeController < ApplicationController
     @total_pas = 'XXXXXX' #TODO replace with correct integer
     @total_oecms = 'XXXXXX' #TODO replace with correct integer
 
+    @cards_levels = [
+      {
+        title: 'Regional level'
+      },
+      {
+        title: 'Country level'
+      },
+      {
+        title: 'Individual area'
+      }
+    ]
+
+    @cards_categories = [] 
+
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 
     @thematicAreas = [

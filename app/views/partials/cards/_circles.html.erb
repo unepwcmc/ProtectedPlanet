@@ -1,0 +1,15 @@
+<section class="container">
+  <div class="cards--circles">
+    <h2 class="cards__title"></h2>
+    
+    <div class="cards__cards">
+      <% cards.each do |card| %>
+        <div class="card">
+          <i class="card__icon"></i>
+          <h3 class="card__title"><%= card[:title] %></h3>
+          <%= link_to '>', '/', class: 'card__link' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
