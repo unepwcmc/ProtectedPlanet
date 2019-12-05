@@ -24,4 +24,24 @@
       @include flex-column;
     }
   }
+//--------------------------------------------------
+// class - squares
+//--------------------------------------------------
+  &--squares {
+    .cards {
+      &__cards {
+        @include flex;
+        @include flex-h-between;
+      }
+    }
+
+    .card {
+      @include flex;
+      @include flex-column;
+      @include flex-center;
+      background-color: $grey-dark;
+      color: $white;
+      width: 30%;
+    }
+  }
 }

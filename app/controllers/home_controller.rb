@@ -1,21 +1,14 @@
 class HomeController < ApplicationController
   def index
+    home_yml = I18n.t('home')
+
     @total_pas = 'XXXXXX' #TODO replace with correct integer
     @total_oecms = 'XXXXXX' #TODO replace with correct integer
 
-    @cards_levels = [
-      {
-        title: 'Regional level'
-      },
-      {
-        title: 'Country level'
-      },
-      {
-        title: 'Individual area'
-      }
-    ]
-
-    @cards_categories = [] 
+    @pas_title = home_yml[:pas][:title]
+    @pas_button = home_yml[:pas][:button]
+    @pas_levels = home_yml[:pas][:levels]
+    @pas_categories = home_yml[:pas][:categories]
 
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 

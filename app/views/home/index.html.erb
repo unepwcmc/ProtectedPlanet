@@ -15,11 +15,14 @@
 
 <%= render "partials/search/protected-areas" %>
 
-<%= render partial: "partials/cards/circles", locals: { cards: @cards_levels } %>
+<section class="container section-padding">
+  <h2><%= @pas_title %></h2>
 
-<section>
+  <%= render partial: "partials/cards/circles", locals: { cards: @pas_levels } %>
+
+  <%= render partial: "partials/cards/squares", locals: { cards: @pas_categories } %>
   
-  squares
+  <%= link_to @pas_button, '/', title: @pas_button, class: 'button--outline' %>
 </section>
 
 <section>

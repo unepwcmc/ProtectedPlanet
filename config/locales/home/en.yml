@@ -5,3 +5,20 @@ en:
     button: Explore Protected Areas
     stat_text_1: Protected Areas
     stat_text_2: Other effective area-based conservation measures
+    pas:
+      title: Explore Protected Areas by...
+      button: Explore All
+      levels:
+        - 
+          title: Regional level
+        - 
+          title: Country level
+        - 
+          title: Indiviual Area
+      categories:
+        - 
+          title: Marine Protected Areas
+        - 
+          title: Terrerstrial Protected Areas
+        - 
+          title: Green List Protected Areas
