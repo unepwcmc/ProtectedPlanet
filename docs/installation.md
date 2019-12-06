@@ -45,21 +45,6 @@ package manager. For example, on OS X:
   yarn install
 ```
 
-⚠️ **Take this advice with caution - it might not work...**
-If you are installing gdal for the first time, you will need to install an older version as follows:
-
-```
-git -C "$(brew --repo homebrew/core)" fetch --unshallow
-cd "$(brew --repo homebrew/core)"
-git checkout db0b0e61ec51a1b3ccc9977d00bc00374700d396
-HOMEBREW_NO_AUTO_UPDATE=1 brew install gdal --with-postgresql
-```
-
-This is the latest commit pre gdal2, but you can use a different commit. git log master -- Formula/package_name.rb can be used to search commits 
-
-To install a new brew version over an old: brew unpin old, brew unlink old, brew install new --force. Brew switch can be used to link and change versions. 
-⚠️ **end**
-
 Use `brew services` to start `redis`, `elasticsearch`, and `postgres`.
 
 If you are running Ubuntu or another Linux distribution, see "GEOS and

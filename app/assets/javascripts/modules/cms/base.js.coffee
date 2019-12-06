@@ -1,10 +1,13 @@
 $(document).ready( ->
-  require(['cms:article_navigation', 'cms:external_links'], (ArticleNavigation, ExternalLinks) ->
+  require(['cms:article_navigation', 'cms:external_links', 'cms:tracked_download_links'], (ArticleNavigation, ExternalLinks, TrackedDownloadLinks) ->
     if $verticalNav = $('.vertical-nav')
       ArticleNavigation.initialize($verticalNav)
 
     if $links = $('.article a')
       ExternalLinks.initialize($links)
+
+    if $trackedDownloadLinks = $('[data-track]')
+      TrackedDownloadLinks.initialize($trackedDownloadLinks)
 
     $cover = $('.hero__cover')
 
