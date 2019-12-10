@@ -1,0 +1,24 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.topbar {
+  background-color: $white;
+
+  &__container {
+    @include flex;
+    @include flex-h-between;
+  }
+
+    &__logo {
+      @include responsive-styles(order, 1, 1, 1); 
+      background-color: $primary;
+    }
+
+    &__nav {
+      @include responsive-styles(order, 2, 1, 1); 
+    }
+
+    &__search {
+      @include responsive-styles(order, 1, 2, 2); 
+    }
+}

@@ -222,4 +222,36 @@ module ApplicationHelper
   def is_regional_page controller_name
     controller_name == 'region'
   end
+
+  def get_nav_primary_links 
+    [ 
+      {
+        id: 'about',
+        label: 'About', #TODO make this pull from the CMS
+        url: '/c/about'
+      },
+      {
+        id: 'news-and-stories',
+        label: 'News & Stories',
+        url: '/c/news-and-stories'
+      },
+      {
+        id: 'resources',
+        label: 'Resources',
+        url: '/c/resources'
+      },
+      {
+        id: 'thematic-areas',
+        label: 'Thematic Areas',
+        url: '/c/thematic-areas',
+        children: [
+          {
+            id: 'marine-protected-areas',
+            label: 'Marine Protected Areas',
+            url: '/marine'
+          },
+        ]
+      }
+    ].to_json
+  end
 end

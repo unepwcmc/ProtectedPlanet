@@ -1,0 +1,88 @@
+//--------------------------------------------------
+// settings
+//--------------------------------------------------
+// $dropdown-width: rem-calc(240);
+
+$pane-color: $white;
+$pane-side-padding: 42px;
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.nav {
+//--------------------------------------------------
+// primary
+//--------------------------------------------------
+  &--primary
+
+  .nav {
+    &__burger {
+      @include responsive-styles(display, block, none, none);
+      background-color: blue;
+    }
+
+    &__close {
+      @include responsive-styles(display, block, none, none);
+      background-color: red;
+    }
+
+    &__pane {
+      background-color: $pane-color;
+      width: 100%;
+          
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      z-index: $z-300;
+
+      transform: translateX(100%);
+
+      transition: transform 0.4s ease-in-out;
+
+      @include breakpoint($small) {
+        position: initial;
+        top: unset;
+        right: unset;
+        bottom: unset;
+
+        transform: none;
+        transition: none
+      }
+
+      &.nav-pane--active {
+        transform: translateX(0);
+
+        @include breakpoint($small) { transform: none; }
+      }
+
+      &.nav__item-container {
+        padding: 0 $pane-side-padding;
+      }
+    }
+      
+      &__ul {
+        @include responsive-styles(flex-direction, column, row, row);
+        @include flex;
+        @include ul-unstyled;
+      }
+
+        &__li, &__dropdown-item {
+          @include responsive-styles('font-size', 25px, 30px, 30px);
+          cursor: pointer;
+          margin-bottom: 20px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+
+          &__a {
+            @include text-nav-link;
+          }
+
+        &__dropdown-item {
+          display: block;
+        }
+  }
+}

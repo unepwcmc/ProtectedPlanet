@@ -26,7 +26,8 @@
 }
 
 @mixin text-4 {
-  // @include responsive-styles(font-size, rem-calc(18), rem-calc(20));
+  @include responsive-styles(font-size, rem-calc(18), rem-calc(18), rem-calc(18));
+  font-weight: 500;
 }
 
 //--------------------------------------------------
@@ -43,6 +44,11 @@
   color: $primary;
   line-height: $line-height-headings;
   text-align: center;
+}
+
+@mixin text-nav-link {
+  @include text-4;
+  text-decoration: none;
 }
 
 @mixin text-tooltip {

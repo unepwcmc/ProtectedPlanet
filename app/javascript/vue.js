@@ -27,6 +27,7 @@ import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTree
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
+import NavBurger from './components/nav/NavBurger'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
@@ -41,7 +42,6 @@ import VTable from './components/table/VTable'
 document.addEventListener('DOMContentLoaded', () => { 
   if(document.getElementById('v-app')) {
 
-    // Vue.use(VueAnalytics, { id: 'UA-12920389-5' }) // staging
     Vue.use(VueAnalytics, { id: 'UA-12920389-2' }) // production
 
     Vue.prototype.$eventHub = new Vue()
@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRectangles,
         ChartRowTarget,
         ChartSunburst,
+        NavBurger,
         SelectWithContent,
         StickyBar,
         StickyNav,
