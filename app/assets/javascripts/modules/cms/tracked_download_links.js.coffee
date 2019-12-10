@@ -11,7 +11,7 @@ define('cms:tracked_download_links', [], ->
 
         link.addEventListener('click', ->
           if ga?
-            ga('send', 'event', "Downloads - OECM", 'click', label)
+            ga('send', 'event', "Downloads - CMS", 'click', label)
         )
       )
 )
