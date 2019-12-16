@@ -1,3 +1,7 @@
+### 3.2.2
+
+* Add download tracking for links in CMS (e.g. OECM downloads)
+
 ### 3.2.1
 
 * Update reference on Target 11 Dashboard to DOPA
