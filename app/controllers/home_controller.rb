@@ -14,8 +14,12 @@ class HomeController < ApplicationController
     @news_articles_title = comfy_news.label
     @news_articles_url = comfy_news.full_path
     @news_articles = comfy_news.children.published.order(created_at: :desc).limit(2) #TODO replace with correct pages #TODO get ordering to work
-    
 
+    comfy_news = Comfy::Cms::Page.find_by_slug("resources")
+    @resources_title = comfy_news.label
+    @resources_url = comfy_news.full_path
+    @resources = comfy_news.children.published.order(created_at: :desc).limit(4) #TODO replace with correct pages #TODO get ordering to work
+    
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 
     @thematicAreas = [

@@ -35,8 +35,14 @@
 
 <%= render "partials/ctas/api" %>
     
-<section>
-  resources carousel
+<section class="container section-padding">
+  <%= render partial: "partials/cards/articles", locals: 
+    { 
+      title: @resources_title, 
+      cards: @resources, 
+      url: @resources_url
+    }
+  %>
 </section>
 
 <section class="container section-padding">

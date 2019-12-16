@@ -40,6 +40,24 @@
       @include flex-column;
     }
   }
+
+//--------------------------------------------------
+// class - resources
+//--------------------------------------------------
+  &--resources {
+    .cards {
+      &__cards {
+        @include flex;
+        @include responsive-styles(flex-wrap, wrap, nowrap, nowrap);
+      }
+    }
+
+    .card {
+      @include responsive-styles(width, 100%, 25%, 25%);
+    }
+  }
+
+
 //--------------------------------------------------
 // class - squares
 //--------------------------------------------------

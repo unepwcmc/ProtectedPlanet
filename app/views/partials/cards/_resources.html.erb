@@ -1,0 +1,18 @@
+<div class="cards--resources">
+
+  <h3><%= title %></h3>
+
+  <%= link_to t('global.view_all'), url, target: '_blank', title: t('global.view_all') %>
+
+  <div class="cards__cards">
+    <% cards.each do |card| %>
+      <div class="card">
+        <p><%= card.created_at %></p>
+        <h3><%= card.label %></h3>
+        <p>intro field needs creating</p>
+        
+        links to download or new page
+      </div>
+    <% end %>
+  </div>
+</div>
