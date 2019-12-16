@@ -39,8 +39,14 @@
   resources carousel
 </section>
 
-<section>
-  news & stories carousel
+<section class="container section-padding">
+  <%= render partial: "partials/cards/articles", locals: 
+    { 
+      title: @news_articles_title, 
+      cards: @news_articles, 
+      url: @news_articles_url
+    }
+  %>
 </section>
 
 <%= render "partials/ctas/live-report" %>

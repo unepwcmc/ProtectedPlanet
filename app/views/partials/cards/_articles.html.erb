@@ -1,0 +1,19 @@
+<div class="cards--articles">
+
+  <h3><%= title %></h3>
+
+  <%= link_to t('global.view_all'), url, target: '_blank', title: t('global.view_all') %>
+
+  <div class="cards__cards">
+    <% cards.each do |card| %>
+      <div class="card">
+        image 
+        <div>
+          <p><%= card.created_at %></p>
+          <h3><%= card.label %></h3>
+          <p>intro field needs creating</p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

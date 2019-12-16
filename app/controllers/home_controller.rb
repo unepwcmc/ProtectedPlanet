@@ -10,6 +10,12 @@ class HomeController < ApplicationController
     @pas_levels = home_yml[:pas][:levels]
     @pas_categories = home_yml[:pas][:categories]
 
+    comfy_news = Comfy::Cms::Page.find_by_slug("blog")
+    @news_articles_title = comfy_news.label
+    @news_articles_url = comfy_news.full_path
+    @news_articles = comfy_news.children.published.order(created_at: :desc).limit(2) #TODO replace with correct pages #TODO get ordering to work
+    
+
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 
     @thematicAreas = [
@@ -76,5 +82,6 @@ class HomeController < ApplicationController
     ]
 
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
+
   end
 end
