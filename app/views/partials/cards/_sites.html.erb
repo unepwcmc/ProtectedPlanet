@@ -1,0 +1,25 @@
+<div class="cards--sites">
+
+  <h3><%#= title %></h3>
+
+  <%#= link_to t('global.view_all'), url, target: '_blank', title: t('global.view_all') %>
+
+  <div class="cards__cards">
+    <% cards.each do |card| %>
+      <%= link_to protected_area_path(card.wdpa_id), title: "View more about the site: #{card.name}", class: "card" do %>
+        <%= cover card %>
+
+        <h3><%= card.name %></h3>
+        <div>
+          <p>
+            <% card.countries_for_index.each do |country| %>
+              <span><%= country.iso_3 %></span>
+              <%= country.name %>
+            <% end %>
+          </p>
+        </div>
+      </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -56,3 +56,10 @@
 </section>
 
 <%= render "partials/ctas/live-report" %>
+
+<%= render partial: "partials/cards/sites", locals: 
+  { 
+    title: 'title', 
+    cards: @temp_pas
+  }
+%>
