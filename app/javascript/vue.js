@@ -27,6 +27,7 @@ import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTree
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
+import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
@@ -66,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRectangles,
         ChartRowTarget,
         ChartSunburst,
+        MapInteractive,
         NavBurger,
         SelectWithContent,
         StickyBar,
