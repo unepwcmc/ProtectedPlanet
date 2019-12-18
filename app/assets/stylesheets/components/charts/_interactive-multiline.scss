@@ -1,6 +1,6 @@
 .v-interactive-multiline {
   &__tabs {
-    border-bottom: solid rem-calc(1) $grey-darker;
+    border-bottom: solid rem-calc(1) $grey-xdark;
     font-family: 'MuseoSans';
     font-weight: thin;
   }
@@ -21,7 +21,7 @@
 
       &.active { 
         background-color: transparent; 
-        border: solid rem-calc(1) $grey-darker;
+        border: solid rem-calc(1) $grey-xdark;
         border-bottom: 0;
 
         &:after {
@@ -53,7 +53,7 @@
     }
 
       &__axis {
-        .domain { stroke: $grey-darker; }
+        .domain { stroke: $grey-xdark; }
 
         .tick {
           line { stroke-width: 0; }

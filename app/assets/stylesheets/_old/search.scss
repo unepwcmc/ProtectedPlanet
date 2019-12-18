@@ -101,7 +101,7 @@
 //       a {
 //         float: right;
 //         color: $white;
-//         background: $grey-darker;
+//         background: $grey-xdark;
 //         padding: 3px 5px;
 //         font-size: 13px;
 //         margin: 0 10px 0 0;
@@ -169,7 +169,7 @@
 // .search-grid {
 //   @include clearfix;
 
-//   background-color: $grey-lighter;
+//   background-color: $grey-xlight;
 //   padding: 1rem;
 
 //   @include only-desktop {
@@ -199,7 +199,7 @@
 // }
 
 // .inner-result {
-//   color: $grey-darker;
+//   color: $grey-xdark;
 //   //@include text(body);
 //   padding: 8px;
 //   position: relative;
@@ -251,7 +251,7 @@
 
 // .pagination {
 //   //@include text(body, thin);
-//   color: $grey-darker;
+//   color: $grey-xdark;
 //   margin: 0 auto;
 //   width: 100%;
 //   text-align: center;

@@ -18,7 +18,7 @@
     background-color: $grey-3;
 
     //@include text(body);
-    color: $grey-darker;
+    color: $grey-xdark;
 
     padding: rem-calc(20);
   }
@@ -49,7 +49,7 @@
   
   &__group-title {
     //@include text(body);
-    @include color-with-state($grey-darker, (
+    @include color-with-state($grey-xdark, (
       hover: $link__color--hover,
       active: $link__color--pressed,
     ));
@@ -79,7 +79,7 @@
   }
   
   &__value {
-    @include color-with-state($grey-darker, (
+    @include color-with-state($grey-xdark, (
       hover: $link__color--hover,
       active: $link__color--pressed,
     ));

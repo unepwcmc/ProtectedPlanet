@@ -21,6 +21,8 @@ class HomeController < ApplicationController
     @resources = comfy_resources.children.published.order(created_at: :desc).limit(4) #TODO replace with correct pages #TODO get ordering to work
 
     @temp_pas = ProtectedArea.first(4)
+
+    @temp_themes = Comfy::Cms::Page.find_by_slug("equity").children.order(created_at: :desc)
     
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 

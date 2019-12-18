@@ -7,12 +7,12 @@
     //@include text(body, thin);
     //@include line-height(1.5rem);
 
-    @include color-with-state($grey-darker, (
+    @include color-with-state($grey-xdark, (
       hover: $link__color--hover,
       active: $link__color--pressed,
     ));
 
-    border-bottom: solid rem-calc(1) $grey-lighter;
+    border-bottom: solid rem-calc(1) $grey-xlight;
     padding: {
       left: rem-calc(20);
       top: rem-calc(8);

@@ -12,7 +12,7 @@
     &:not(:first-child) { margin-top: rem-calc(40); }
 
     //@include text(xxlarge, thin);
-    color: $grey-darker;
+    color: $grey-xdark;
 
     @include only-mobile {
       margin-bottom: rem-calc(24);
@@ -42,7 +42,7 @@
     margin-bottom: rem-calc(20);
 
     //@include text(body, thin);
-    color: $grey-darker;
+    color: $grey-xdark;
 
     &--bigger {
       //@include text--alt(headline, thin);

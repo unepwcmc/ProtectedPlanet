@@ -17,7 +17,7 @@ $chart-row-target-font-size: $chart-font-size;
         @include chart-target-line;
       }
 
-      &--value { stroke: $grey-darker; }
+      &--value { stroke: $grey-xdark; }
     }
 
     &__marker-title {

@@ -25,7 +25,7 @@
     }
 
     &--base {
-      color: $grey-darker;
+      color: $grey-xdark;
     }
 
     &--bigger {
@@ -39,7 +39,7 @@
       }
 
       // //@include text(xxlarge, thin);
-      color: $grey-darker;
+      color: $grey-xdark;
 
       @include only-mobile {
         // //@include text(xlarge, thin);

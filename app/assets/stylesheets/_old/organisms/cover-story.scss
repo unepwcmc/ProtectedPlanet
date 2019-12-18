@@ -33,7 +33,7 @@
   }
   
   &__story-border {
-    border-bottom: solid rem-calc(20) $grey-lighter;
+    border-bottom: solid rem-calc(20) $grey-xlight;
     margin-top: rem-calc(20);
     width: 100%;
   }
@@ -45,7 +45,7 @@
   }
   
   &__story-content {
-    color: $grey-darker;
+    color: $grey-xdark;
     //@include text(body, thin);
     margin-bottom: rem-calc(32);
   }

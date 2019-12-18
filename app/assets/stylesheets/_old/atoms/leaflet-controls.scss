@@ -1,7 +1,7 @@
 @mixin leaflet-control-zoom($color: $leaflet-control__color, $bg-color: $leaflet-control__bg-color, $font-size: $leaflet-control__font-size) {
   .leaflet-control-layers-base {
     //@include text(small);
-    color: $grey-darker;
+    color: $grey-xdark;
 
     & .is-selected {
       //@include text(small, bold);

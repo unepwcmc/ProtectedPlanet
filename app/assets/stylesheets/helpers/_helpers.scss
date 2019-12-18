@@ -25,7 +25,7 @@ $image-placeholder: black;
   background-color: $primary; 
   color: white;
 }
-.bg--grey-lighter { background-color: $grey-lighter; }
+.bg--grey-lighter { background-color: $grey-xlight; }
 
 .bg-img {
   background-color: $image-placeholder;
@@ -59,6 +59,8 @@ $image-placeholder: black;
 @mixin box-shadow($colour){
   box-shadow: 2px 2px 4px $colour;
 }
+
+@mixin border-radius { border-radius: $radius-global; }
 
 @mixin border-grey-light { @include border($grey-light); }
 

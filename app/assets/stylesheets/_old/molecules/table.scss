@@ -1,5 +1,5 @@
 .table {
-  color: $grey-darker;
+  color: $grey-xdark;
   width: 100%;
 
   &__column {
@@ -135,7 +135,7 @@
     }
 
     &:nth-child(even) {
-      background-color: $grey-lighter;
+      background-color: $grey-xlight;
     }
   }
 

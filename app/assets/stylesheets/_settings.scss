@@ -1,27 +1,7 @@
 //--------------------------------------------------
-// variables
-//--------------------------------------------------
-// - borders
-// - colours
-// - buttons
-// - shadows
-// - fonts
-// - breakpoints
-// - z-indices
-// - dimensions
-// - padding
-// - tables
-// - topbars and footers
-// - branding
-
-//--------------------------------------------------
 // borders
 //--------------------------------------------------
-// $border-width-thin: rem-calc(1);
-// $border-width-regular: rem-calc(2);
-
-// $border-thin: solid $border-width-thin;
-// $border-regular: solid $border-width-regular;
+$radius-global: rem-calc(10);
 
 //--------------------------------------------------
 // colours
@@ -29,11 +9,11 @@
 $white: #ffffff;
 $black: #000000;
 
-$grey-lighter: #F5F5F5;
+$grey-xlight: #F5F5F5;
 $grey-light: #e1e1e1;
 $grey: #505050;
 $grey-dark: #8f8f8f;
-$grey-darker: #44483E;
+$grey-xdark: #404040;
 
 // $blue-light: #54B7EB; //can't use these until the refresh because of old colours
 // $blue: #4D98BF;
@@ -92,10 +72,10 @@ $button-radius: 3px;
 $fontAwesome: normal normal normal 14px/1 FontAwesome;
 
 $body-font: 'MuseoSlab', serif;
-$body-font-color: $grey-darker;
+$body-font-color: $grey-xdark;
 
 $header-font: 'Museo Sans', sans-serif;
-$header-font-color: $grey-darker;
+$header-font-color: $grey-xdark;
 
 $thin: 100;
 $light: 300;

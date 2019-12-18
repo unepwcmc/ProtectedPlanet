@@ -27,7 +27,7 @@
       font-size: rem-calc(14);
       padding: rem-calc(14 12 16 12);
 
-      &:nth-child(even){ background-color: $grey-lighter; }
+      &:nth-child(even){ background-color: $grey-xlight; }
 
       @include breakpoint($medium){ padding: rem-calc(14 12 2 12); }
     }
@@ -43,7 +43,7 @@
       }
 
       &__title {
-        border-bottom: solid rem-calc(1) $grey-darker; 
+        border-bottom: solid rem-calc(1) $grey-xdark; 
         color: $blue--marine-4;
         font-size: rem-calc(24);
         line-height: 1;

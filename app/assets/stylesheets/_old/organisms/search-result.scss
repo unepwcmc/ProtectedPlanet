@@ -1,8 +1,8 @@
 .search-result {
-  color: $grey-darker;
+  color: $grey-xdark;
   
 
-  border-bottom: solid rem-calc(1) $grey-lighter;
+  border-bottom: solid rem-calc(1) $grey-xlight;
   padding: {
     top: rem-calc(16);
     bottom: rem-calc(16);
@@ -32,9 +32,9 @@
 
   &__detail {
     //@include text--alt(body, thin);
-    color: $grey-darker;
+    color: $grey-xdark;
 
-    border-right: solid rem-calc(1) $grey-lighter;
+    border-right: solid rem-calc(1) $grey-xlight;
     float: left;
     padding: rem-calc(0 20);
 
@@ -45,11 +45,11 @@
 
   &__tag {
     //@include text(small);
-    color: $grey-darker;
+    color: $grey-xdark;
 
     font-style: italic;
 
-    background-color: $grey-lighter;
+    background-color: $grey-xlight;
     margin-right: rem-calc(20);
     padding: rem-calc(5 16);
   }

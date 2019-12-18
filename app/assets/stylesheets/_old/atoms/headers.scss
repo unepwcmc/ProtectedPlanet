@@ -1,5 +1,5 @@
 @mixin header-with-delimiter($border-bottom: ($color, $size)) {
-  color: $grey-darker;
+  color: $grey-xdark;
   ////@include text(headline, thin);
 
   padding-bottom: rem-calc(4);
@@ -60,7 +60,7 @@
   }
 
   &--h1-small {
-    color: $grey-darker;
+    color: $grey-xdark;
     // //@include text(large);
 
     margin-top: rem-calc(30);

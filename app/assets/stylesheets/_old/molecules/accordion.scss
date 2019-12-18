@@ -4,10 +4,10 @@
   &__header {
     &:hover { background-color: $grey-15; }
 
-    color: $grey-darker;
+    color: $grey-xdark;
     //@include text(headline);
 
-    background-color: $grey-lighter;
+    background-color: $grey-xlight;
     cursor: pointer;
     padding: rem-calc(8 20);
 
@@ -17,7 +17,7 @@
   &__switch {
     float: right;
 
-    &:after { color: $grey-darker; }
+    &:after { color: $grey-xdark; }
 
     &.is-open {
       &:after { @include fa(minus-circle); }
@@ -29,8 +29,8 @@
   }
 
   &__body {
-    color: $grey-darker;
-    border: solid rem-calc(1) $grey-lighter;
+    color: $grey-xdark;
+    border: solid rem-calc(1) $grey-xlight;
     padding: rem-calc(20);
   }
 }
