@@ -57,6 +57,31 @@
     }
   }
 
+//--------------------------------------------------
+// class - sites
+//--------------------------------------------------
+  &--sites {
+    .cards {
+      &__cards {
+        @include flex;
+        @include flex-wrap;
+        @include flex-h-between;
+      }
+    }
+
+    .card {
+      @include border-grey-light;
+      @include box-shadow-grey-light;
+      @include responsive-styles(width, 100%, 50%, calc(33% - 7.5px));
+      background-color: $white;
+      margin-bottom: rem-calc(30);
+      padding: rem-calc(14 12);
+
+      .image {
+        width: 100%;
+      }
+    }
+  }
 
 //--------------------------------------------------
 // class - squares

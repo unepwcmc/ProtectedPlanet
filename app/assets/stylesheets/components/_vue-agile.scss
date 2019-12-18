@@ -50,7 +50,7 @@ $agile-basic-slide-width-desktop: calc(20% - 2*#{$agile-basic-slide-margin-deskt
           }
 
             &__slide-content {
-              @include shadow--grey-light;
+              @include box-shadow-grey-light;
               @include responsive-styles(margin, 0 $agile-basic-slide-margin-mobile, 0 $agile-basic-slide-margin-tablet, 0 $agile-basic-slide-margin-tablet, 0 $agile-basic-slide-margin-desktop);
               background-color: $white; 
               border: solid 1px $grey-light;

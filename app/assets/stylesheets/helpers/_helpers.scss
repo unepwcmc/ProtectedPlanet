@@ -52,12 +52,18 @@ $image-placeholder: black;
 //--------------------------------------------------
 // borders and shadows
 //--------------------------------------------------
+@mixin border($colour){
+  border: solid 1px $colour;
+}
+
 @mixin box-shadow($colour){
   box-shadow: 2px 2px 4px $colour;
 }
 
-@mixin shadow--grey-light { @include box-shadow($grey-light); }
-@mixin shadow--grey { @include box-shadow($grey); }
+@mixin border-grey-light { @include border($grey-light); }
+
+@mixin box-shadow-grey-light { @include box-shadow($grey-light); }
+@mixin box-shadow-grey { @include box-shadow($grey); }
 
 //--------------------------------------------------
 // display

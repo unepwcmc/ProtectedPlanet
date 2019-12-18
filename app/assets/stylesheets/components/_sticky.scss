@@ -22,7 +22,7 @@ $sticky-bar-padding: rem-calc(10);
         z-index: 1;
         
         &.sticky-bar--stuck {
-          @include shadow--grey-light;
+          @include box-shadow-grey-light;
           width: 100%;
 
           display: block;

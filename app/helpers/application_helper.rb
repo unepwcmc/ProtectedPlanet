@@ -36,6 +36,7 @@ module ApplicationHelper
       "search-placeholder-country.png",
       alt: protected_area.name,
       data: {async: tiles_path(image_params)},
+      class: 'image' #TODO find a way to add classes via parameters
     )
   end
 
