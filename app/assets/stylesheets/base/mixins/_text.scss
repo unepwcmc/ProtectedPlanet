@@ -27,23 +27,23 @@
 //--------------------------------------------------
 @mixin h1 {
   @include text-1;
-  @include responsive-styles(font-size, rem-calc(40), rem-calc(40), rem-calc(25));
+  @include responsive-styles(font-size, rem-calc(25), rem-calc(40), rem-calc(40));
   color: $white;
 }
 
 @mixin h1-home {
   @include text-1;
-  @include responsive-styles(font-size, rem-calc(70), rem-calc(70), rem-calc(40));
+  @include responsive-styles(font-size, rem-calc(40), rem-calc(70), rem-calc(70));
 }
 
 @mixin h1-landing {
   @include text-1;
-  @include responsive-styles(font-size, rem-calc(50), rem-calc(50), rem-calc(30));
+  @include responsive-styles(font-size, rem-calc(30), rem-calc(50), rem-calc(50));
 }
 
 @mixin h2 {
   @include text-1;
-  @include responsive-styles(font-size, rem-calc(25), rem-calc(25), rem-calc(20));
+  @include responsive-styles(font-size, rem-calc(20), rem-calc(25), rem-calc(25));
   color: $header-font-color;
 }
 
@@ -65,7 +65,7 @@
 
 @mixin text-intro {
   @include text-2;
-  @include responsive-styles(font-size, rem-calc(20), rem-calc(20), rem-calc(18));
+  @include responsive-styles(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
   line-height: 1.5;
 }
 
@@ -75,7 +75,7 @@
 }
 
 @mixin text-nav-link {
-  @include responsive-styles(font-size, rem-calc(18), rem-calc(18), rem-calc(18));
+  font-size: rem-calc(18);
   font-weight: 500;
   text-decoration: none;
 }
