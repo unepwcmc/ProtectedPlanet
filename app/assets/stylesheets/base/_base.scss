@@ -1,4 +1,5 @@
 
+
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
@@ -13,6 +14,7 @@
 }
 
 body {
+  @include text-body;
   color: $body-font-color;
   font-family: $body-font;
   margin: 0;

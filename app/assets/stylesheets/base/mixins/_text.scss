@@ -6,18 +6,15 @@
 // base mixins
 //--------------------------------------------------
 @mixin text-1 {
-  @include responsive-styles(font-size, rem-calc(30), rem-calc(38), rem-calc(38));
-  color: $header-font-color;
-  font-weight: 500;
-  line-height: $line-height-headings;
+  font-family: $header-font;
+  font-weight: $bold;
+  line-height: $header-font-line-height;
 }
 
 @mixin text-2 {
-  @include responsive-styles(font-size, rem-calc(22), rem-calc(22), rem-calc(22)); 
-  font-family: $header-font;
-  font-weight: 700;
-  line-height: $line-height-headings;
-  margin-bottom: rem-calc(24);
+  color: $body-font-color;
+  font-family: $body-font;
+  line-height: $body-font-line-height;
 }
 
 @mixin text-3 {
@@ -25,29 +22,61 @@
   font-family: $header-font;
 }
 
-@mixin text-4 {
-  @include responsive-styles(font-size, rem-calc(18), rem-calc(18), rem-calc(18));
-  font-weight: 500;
-}
-
 //--------------------------------------------------
 // mixins used in classes
 //--------------------------------------------------
-@mixin h1 { //temp-refresh
+@mixin h1 {
   @include text-1;
-  line-height: $line-height-headings;
-  text-align: center;
+  @include responsive-styles(font-size, rem-calc(40), rem-calc(40), rem-calc(25));
+  color: $white;
+}
+
+@mixin h1-home {
+  @include text-1;
+  @include responsive-styles(font-size, rem-calc(70), rem-calc(70), rem-calc(40));
+}
+
+@mixin h1-landing {
+  @include text-1;
+  @include responsive-styles(font-size, rem-calc(50), rem-calc(50), rem-calc(30));
 }
 
 @mixin h2 {
+  @include text-1;
+  @include responsive-styles(font-size, rem-calc(25), rem-calc(25), rem-calc(20));
+  color: $header-font-color;
+}
+
+@mixin h3 {
   @include text-2;
-  color: $primary;
-  line-height: $line-height-headings;
-  text-align: center;
+  @include responsive-styles(font-size, rem-calc(25), rem-calc(25), rem-calc(20));
+  font-weight: $bold;
+}
+
+@mixin h4 {
+  @include text-2;
+  @include responsive-styles(font-size, rem-calc(18), rem-calc(18), rem-calc(16));
+}
+
+@mixin text-small {
+  @include text-2;
+  font-size: rem-calc(14);
+}
+
+@mixin text-intro {
+  @include text-2;
+  @include responsive-styles(font-size, rem-calc(20), rem-calc(20), rem-calc(18));
+  line-height: 1.5;
+}
+
+@mixin text-body {
+  @include text-2;
+  font-size: rem-calc(16);
 }
 
 @mixin text-nav-link {
-  @include text-4;
+  @include responsive-styles(font-size, rem-calc(18), rem-calc(18), rem-calc(18));
+  font-weight: 500;
   text-decoration: none;
 }
 
