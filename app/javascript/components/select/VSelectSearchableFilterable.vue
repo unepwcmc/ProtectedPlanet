@@ -1,6 +1,6 @@
 <template>
   <div
-    class="select select--search relative"
+    class="select--searchable-filterable relative"
     :class="{'select--disabled': isDisabled}"
   >
     <input
@@ -9,17 +9,6 @@
       type="hidden"
       :name="config.id"
     >
-
-    <div
-      v-if="config.label"
-      class="select__label"
-    >
-      <label
-        :for="toggleId"
-        class="select__selection"
-      >{{ config.label }}</label>
-      <slot name="label-icon" />
-    </div>
 
     <div :class="['select__search relative', {'select__search--active': isActive}]">
       <label
@@ -85,17 +74,39 @@
         {{ option.name }}
       </li>
     </ul>
+
+    <div class="select__categories">
+      <div 
+        class="select__category-label"
+        @click="toggleCategories"
+      >
+        {{ selectedCategoryName }}
+      </div>
+
+      <ul :class="['select__category-wrapper', {'active': categoriesActive}]">
+        <li 
+          v-for="category, index in categories"
+          class="select__category"
+          @click="updateCategory(index)"
+        >
+          {{ category.name }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
 import mixinSelectShared from '../../mixins/mixin-select-shared'
+import VSelectSearchable from './VSelectSearchable'
 const UNDEFINED_ID = '__UNDEFINED__'
 const UNDEFINED_OBJECT = { id: UNDEFINED_ID, name: 'None' }
 
 export default {
-  name: 'VSelectSearch',
+  name: 'VSelectSearchableFilterable',
+
+  components: { VSelectSearchable },
 
   mixins: [
     mixinPopupCloseListeners({closeCallback: 'closeSelect'}),
@@ -107,9 +118,9 @@ export default {
       required: true,
       type: Object // { id: String, label: String, placeholder: String }
     },
-    options: {
+    categories: {
       default: () => [],
-      type: Array // [ { } ]
+      type: Array // [ { name: String, options: [ { id: Number, name: String } ] } ]
     },
     selected: {
       type: Object, // { id: String, name: String }
@@ -120,6 +131,8 @@ export default {
   data () {
     return {
       selectedInternal: null,
+      categoryIndex: 0,
+      categoriesActive: false
     }
   },
 
@@ -132,6 +145,12 @@ export default {
     },
     defaultSearchTerm () {
       return this.placeholder ? this.placeholder : 'Select'
+    },
+    selectedCategoryName () {
+      return this.categories[this.categoryIndex].name
+    },
+    options () {
+      return this.categories[this.categoryIndex].options
     }
   },
 
@@ -175,6 +194,14 @@ export default {
       this.highlightedOptionIndex = 0
     },
 
+    updateCategory (index) {
+      this.categoryIndex = index
+    },
+
+    toggleCategories () {
+      this.categoriesActive = !this.categoriesActive
+    },
+
     initializeSelectedInternal () {
       if (this.selected === null) {
         this.selectedInternal = UNDEFINED_OBJECT
@@ -193,7 +220,7 @@ export default {
       this.closeSelect()
       document.activeElement.blur()
       
-      this.$ga.event('SELECT - Select Country/Region', 'click', option.name)
+      // this.$ga.event('SELECT - Select Country/Region', 'click', option.name)
     },
 
     setSearchTermToSelected () {

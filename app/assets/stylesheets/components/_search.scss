@@ -23,16 +23,14 @@ $search-input-size-desktop: 547px; //px
 // class - protected areas
 //--------------------------------------------------
   &--pa {
+    height: 0;
+
     .search {
       &__container {
-        background-color: $primary;
-        border-radius: $button-radius;
-        padding: rem-calc(16) calc((100% - #{$search-input-size-desktop})/2);
-        width: 100%; height: rem-calc(75);
-      }
+        @include flex;
+        @include flex-h-center;
 
-      &__input {
-        width: 100%; height: 100%;
+        transform: translateY(-50%);
       }
     }
   }

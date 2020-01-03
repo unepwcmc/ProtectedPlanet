@@ -5,6 +5,14 @@ class HomeController < ApplicationController
     @total_pas = 'XXXXXX' #TODO replace with correct integer
     @total_oecms = 'XXXXXX' #TODO replace with correct integer
 
+    search_pas = ProtectedArea.first(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} } #TODO make this ALL the pas
+    search_oecms = ProtectedArea.last(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} } #TODO make this ALL the OECMS
+    @search_pas_categories = [
+      { name: 'Protected Areas', placeholder: 'Search for a Protected Area', options: search_pas },
+      { name: 'OECMs', placeholder: 'Search for an OECM', options: search_oecms }
+    ].to_json
+    @search_pas_config = { id: 'search-pas' }.to_json
+
     @pas_title = home_yml[:pas][:title]
     @pas_button = home_yml[:pas][:button]
     @pas_levels = home_yml[:pas][:levels]

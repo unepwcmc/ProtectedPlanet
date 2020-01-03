@@ -9,7 +9,8 @@
       :aria-expanded="isActive"
       :aria-controls="mixinModalId"
       class="nav__dropdown-toggle hover--pointer flex-inline flex-v-center"
-      @click="toggleDropdown"
+      @mouseenter="openDropdown"
+      v-touch="toggleDropdown"
     >
       <label
         :for="mixinModalId"
@@ -21,6 +22,7 @@
       :id="mixinModalId"
       class="nav__dropdown-wrapper"
       :class="{'active': isActive}"
+      @mouseleave="closeDropdown"
     >
       <nav-link
         v-for="dropdownLink in link.children"

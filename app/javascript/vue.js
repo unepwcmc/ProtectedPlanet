@@ -38,6 +38,7 @@ import TableHead from './components/table/TableHead'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
 import VSelectSearchable from './components/select/VSelectSearchable'
+import VSelectSearchableFilterable from './components/select/VSelectSearchableFilterable'
 import VTable from './components/table/VTable'
 
 document.addEventListener('DOMContentLoaded', () => { 
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Target11Dashboard,
         Tooltip,
         VSelectSearchable,
+        VSelectSearchableFilterable,
         VTable
       }
     })
