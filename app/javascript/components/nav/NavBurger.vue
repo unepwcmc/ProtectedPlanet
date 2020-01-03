@@ -6,7 +6,10 @@
 
       <ul aria-label="nav" role="menubar" class="nav__ul">
         <li role="none" class="nav__li" v-for="link in links" :key="link.id">
-          <nav-link :link="link" />
+          
+          <nav-dropdown v-if="hasChildren(link)" :link="link" />
+
+          <nav-link v-else :link="link" />
         </li>
       </ul>
 
@@ -17,6 +20,7 @@
 </template>
 
 <script>
+import NavDropdown from "./NavDropdown"
 import NavLink from "./NavLink"
 import mixinResponsive from "../../mixins/mixin-responsive"
 import mixinPopupCloseListeners from "../../mixins/mixin-popup-close-listeners"
@@ -27,7 +31,7 @@ export default {
   name: 'nav-burger',
 
   components: {
-    NavLink
+    NavDropdown, NavLink
   },
 
   mixins: [
@@ -72,6 +76,10 @@ export default {
     clickNavLink (id) {
       this.closeNavPane()
       this.scroll(id)
+    },
+
+    hasChildren (link) {
+      return link.hasOwnProperty('children')
     }
   },
 

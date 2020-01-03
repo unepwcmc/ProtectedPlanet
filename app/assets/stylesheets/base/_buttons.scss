@@ -16,11 +16,12 @@ $padding-medium: rem-calc(27);
 }
 
 @mixin button-basic {
-  @include responsive-styles(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
+  @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
   background-color: transparent;
   border: none;
   color: inherit;
   cursor: pointer;
+  font-family: $body-font;
   padding: 0;
   text-decoration: none;
 
@@ -28,7 +29,7 @@ $padding-medium: rem-calc(27);
 }
 
 @mixin button-height { 
-  @include responsive-styles(height, $height-small, $height-medium, $height-medium);
+  @include responsive(height, $height-small, $height-medium, $height-medium);
 
   display: inline-flex;
   align-items: center;
@@ -44,8 +45,8 @@ $padding-medium: rem-calc(27);
 }
 
 @mixin button-padding {
-  @include responsive-styles(padding-right, $padding-small, $padding-medium, $padding-medium);
-  @include responsive-styles(padding-left, $padding-small, $padding-medium, $padding-medium);
+  @include responsive(padding-right, $padding-small, $padding-medium, $padding-medium);
+  @include responsive(padding-left, $padding-small, $padding-medium, $padding-medium);
 }
 
 @mixin button-radius {

@@ -34,7 +34,7 @@ $select-selected-color: $grey-light;
 //--------------------------------------------------
 .v-select {
   &--searchable {
-    @include responsive-styles(width, 100%, $select-width-desktop, $select-width-desktop);
+    @include responsive(width, 100%, $select-width-desktop, $select-width-desktop);
 
     position: relative;
 

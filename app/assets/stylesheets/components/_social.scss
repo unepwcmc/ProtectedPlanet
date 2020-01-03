@@ -2,8 +2,8 @@
 // mixins
 //--------------------------------------------------
 @mixin social-icon ($image) {
-  @include responsive-styles(width, rem-calc(30), rem-calc(50), rem-calc(50));
-  @include responsive-styles(height, rem-calc(30), rem-calc(50), rem-calc(50));
+  @include responsive(width, rem-calc(30), rem-calc(50), rem-calc(50));
+  @include responsive(height, rem-calc(30), rem-calc(50), rem-calc(50));
   background-image: image-url($image);
   background-position: center;
   background-repeat: no-repeat;

@@ -73,7 +73,7 @@ $card-number-config: (
       &__body {
         @include flex-h-start;
         @include flex-wrap;
-        @include responsive-styles(flex-wrap, wrap, wrap, nowrap);
+        @include responsive(flex-wrap, wrap, wrap, nowrap);
         
         display: flex;
       }
@@ -99,7 +99,7 @@ $card-number-config: (
           }
 
             &__element {
-              @include responsive-styles(width, 100%, 30%, 30%);
+              @include responsive(width, 100%, 30%, 30%);
               margin: rem-calc(0 0 10 0);
 
               &:last-child {

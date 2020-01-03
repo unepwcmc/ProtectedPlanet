@@ -10,15 +10,16 @@
   }
 
     &__logo {
-      @include responsive-styles(order, 1, 1, 1); 
+      @include responsive(height, rem-calc(52), rem-calc(56), rem-calc(67)); 
+      @include responsive(order, 1, 1, 1);
       background-color: $primary;
     }
 
     &__nav {
-      @include responsive-styles(order, 2, 1, 1); 
+      @include responsive(order, 2, 1, 1); 
     }
 
     &__search {
-      @include responsive-styles(order, 1, 2, 2); 
+      @include responsive(order, 1, 2, 2); 
     }
 }

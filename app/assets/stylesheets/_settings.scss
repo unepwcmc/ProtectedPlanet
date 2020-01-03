@@ -13,7 +13,7 @@ $grey-xlight: #F5F5F5;
 $grey-light: rgba(#242424, .05);
 $grey: rgba(#242424, .05);
 $grey-dark: #666666;
-$grey-xdark: #424242;
+$grey-xdark: #242424;
 
 $blue: #2C10A3;
 
@@ -101,7 +101,7 @@ $fw-black: 900;
 // breakpoints
 //--------------------------------------------------
 // must be in px not rem!
-$small: 628px; 
+$small: 768px; 
 $medium: 1024px;
 $large: 1200px;
 
@@ -115,8 +115,8 @@ $z-300: 300;
 //--------------------------------------------------
 // padding
 //--------------------------------------------------
-$gutter-small: rem-calc(16);
-$gutter-medium: rem-calc(24);
+$gutter-small: rem-calc(25);
+$gutter-medium: rem-calc(25);
 $gutter-large: rem-calc(30);
 
 $page-padding-top-mobile: rem-calc(16);

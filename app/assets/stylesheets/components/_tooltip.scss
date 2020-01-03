@@ -53,8 +53,8 @@ $tooltip-end-position: rem-calc(10);
     @include text-tooltip;
     @include box-shadow-grey;
     @include tooltip-end;
-    @include responsive-styles(padding, $tooltip-padding-mobile, $tooltip-padding-mobile, $tooltip-padding);
-    @include responsive-styles(width, 78vw, rem-calc(260), rem-calc(300));
+    @include responsive(padding, $tooltip-padding-mobile, $tooltip-padding-mobile, $tooltip-padding);
+    @include responsive(width, 78vw, rem-calc(260), rem-calc(300));
     line-height: 1.4;
 
     background-color: $tooltip-background-color;

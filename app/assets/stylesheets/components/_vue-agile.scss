@@ -30,8 +30,8 @@ $agile-basic-slide-width-desktop: calc(20% - 2*#{$agile-basic-slide-margin-deskt
       }
 
       &__list {
-        @include responsive-styles(margin-right, 10%, 25%, 25%, 0);
-        @include responsive-styles(overflow, visible, visible, visible, hidden);
+        @include responsive(margin-right, 10%, 25%, 25%, 0);
+        @include responsive(overflow, visible, visible, visible, hidden);
         width: auto;
       }
 
@@ -51,7 +51,7 @@ $agile-basic-slide-width-desktop: calc(20% - 2*#{$agile-basic-slide-margin-deskt
 
             &__slide-content {
               @include box-shadow-grey-light;
-              @include responsive-styles(margin, 0 $agile-basic-slide-margin-mobile, 0 $agile-basic-slide-margin-tablet, 0 $agile-basic-slide-margin-tablet, 0 $agile-basic-slide-margin-desktop);
+              @include responsive(margin, 0 $agile-basic-slide-margin-mobile, 0 $agile-basic-slide-margin-tablet, 0 $agile-basic-slide-margin-tablet, 0 $agile-basic-slide-margin-desktop);
               background-color: $white; 
               border: solid 1px $grey-light;
               font-size: rem-calc(18);
@@ -62,7 +62,7 @@ $agile-basic-slide-width-desktop: calc(20% - 2*#{$agile-basic-slide-margin-deskt
             }
 
               &__slide-title {
-                @include responsive-styles(margin, 0, rem-calc(0 5), rem-calc(0 5), rem-calc(0 10));
+                @include responsive(margin, 0, rem-calc(0 5), rem-calc(0 5), rem-calc(0 10));
                 font-family: $header-font;
               }
 

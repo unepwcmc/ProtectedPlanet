@@ -19,7 +19,7 @@
   } 
 }
 
-@mixin responsive-styles ($property, $mobile, $tablet-portrait, $tablet-landscape, $laptop: false) {
+@mixin responsive ($property, $mobile, $tablet-portrait, $tablet-landscape, $laptop: false) {
   #{$property}: $mobile;
 
   @include breakpoint($small) { #{$property}: $tablet-portrait; }

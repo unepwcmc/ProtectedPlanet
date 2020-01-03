@@ -24,15 +24,42 @@ $hero-padding-bottom-desktop: rem-calc(60);
 // class - home
 //--------------------------------------------------
   &--home {
+    background: $grey-light;
+
     .hero {
       &__container {
         @include flex;
         @include flex-h-between;
+        @include responsive(flex-direction, column, column, row);
       }
 
-      &__stats {
-        
-      }
+        &__text {
+          @include breakpoint($large) { width: 58%; }
+        }
+
+          &__intro {
+            @include text-intro;
+            @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+          }
+
+        &__stats {
+          @include flex;
+          @include flex-column;
+          @include responsive(margin, rem-calc(22) auto 0 auto, 0 0 0 auto, 0 0 0 0);
+        }
+
+          &__stat-number {
+            @include text-accent;
+          }
+
+          &__stat-text {
+            @include text-intro;
+            color: $white;
+            font-weight: $bold;
+            line-height: 1;
+            margin-bottom: 1em;
+            text-align: center;
+          }
     }
   }
 
@@ -40,7 +67,7 @@ $hero-padding-bottom-desktop: rem-calc(60);
 // class - thematic
 //--------------------------------------------------
   &--thematic-area {
-    @include responsive-styles(padding-top, $hero-padding-top-mobile, $hero-padding-top-tablet, $hero-padding-top-desktop);
-    @include responsive-styles(padding-bottom, $hero-padding-bottom-mobile, $hero-padding-bottom-tablet, $hero-padding-bottom-desktop);
+    @include responsive(padding-top, $hero-padding-top-mobile, $hero-padding-top-tablet, $hero-padding-top-desktop);
+    @include responsive(padding-bottom, $hero-padding-bottom-mobile, $hero-padding-bottom-tablet, $hero-padding-bottom-desktop);
   }
 }

@@ -25,7 +25,12 @@ section {
   border: solid 4px black;
 }
 
-h1 { @include h1; }
+h1 { 
+  @include h1; 
+
+  &.h1-home { @include h1-home; }
+}
+
 h2 { @include h2; }
   
 p,a { color: inherit; }
@@ -35,6 +40,8 @@ a {
 
   &:hover { text-decoration: none; }
 }
+
+label { cursor: pointer; }
 
 em { font-style: italic; }
 

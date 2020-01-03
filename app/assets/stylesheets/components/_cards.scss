@@ -13,12 +13,12 @@
     .cards {
       &__cards {
         @include flex;
-        @include responsive-styles(flex-wrap, wrap, nowrap, nowrap);
+        @include responsive(flex-wrap, wrap, nowrap, nowrap);
       }
     }
 
     .card {
-      @include responsive-styles(width, 100%, 50%, 50%);
+      @include responsive(width, 100%, 50%, 50%);
     }
   }
 
@@ -48,12 +48,12 @@
     .cards {
       &__cards {
         @include flex;
-        @include responsive-styles(flex-wrap, wrap, nowrap, nowrap);
+        @include responsive(flex-wrap, wrap, nowrap, nowrap);
       }
     }
 
     .card {
-      @include responsive-styles(width, 100%, 25%, 25%);
+      @include responsive(width, 100%, 25%, 25%);
     }
   }
 
@@ -72,7 +72,7 @@
     .card {
       @include border-grey-light;
       @include box-shadow-grey-light;
-      @include responsive-styles(width, 100%, 50%, calc(33% - 7.5px));
+      @include responsive(width, 100%, 50%, calc(33% - 7.5px));
       background-color: $white;
       margin-bottom: rem-calc(30);
       padding: rem-calc(14 12);
@@ -121,8 +121,8 @@
       @include flex;
       @include flex-column;
       @include flex-h-end;
-      @include responsive-styles(width, 100%, 100%, calc(50% - 10px));
-      @include responsive-styles(height, rem-calc(460), rem-calc(460), rem-calc(760));
+      @include responsive(width, 100%, 100%, calc(50% - 10px));
+      @include responsive(height, rem-calc(460), rem-calc(460), rem-calc(760));
       background-color: $grey-dark;
       color: $white;
       margin-bottom: rem-calc(20);

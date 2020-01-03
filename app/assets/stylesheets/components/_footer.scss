@@ -3,12 +3,12 @@
 
   &__container {
     @include flex;
-    @include responsive-styles(flex-direction, column, row, row);
-    @include responsive-styles(justify-content, initial, space-between, space-between);
+    @include responsive(flex-direction, column, row, row);
+    @include responsive(justify-content, initial, space-between, space-between);
   }
 
     &__col1 {
-      @include responsive-styles(order, 0, 1, 1);
+      @include responsive(order, 0, 1, 1);
     }
 
       &__logo-partner {

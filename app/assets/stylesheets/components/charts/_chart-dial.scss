@@ -38,7 +38,7 @@ $chart-dial-font-size-desktop: rem-calc(26);
     }
 
     &__title {
-      @include responsive-styles(font-size, $chart-dial-font-size, $chart-dial-font-size-tablet, $chart-dial-font-size-desktop);  
+      @include responsive(font-size, $chart-dial-font-size, $chart-dial-font-size-tablet, $chart-dial-font-size-desktop);  
       fill: $chart-text-color;
       font-family: $chart-dial-font;
       font-weight: $bold;

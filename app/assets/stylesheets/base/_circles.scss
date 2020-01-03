@@ -5,8 +5,8 @@ $circle-medium-mobile: rem-calc(217);
 $circle-medium-tablet: rem-calc(217);
 $circle-medium-desktop: rem-calc(249);
 
-$circle-large-mobile: rem-calc(233);
-$circle-large-tablet: rem-calc(261);
+$circle-large-mobile: rem-calc(238);
+$circle-large-tablet: rem-calc(303);
 $circle-large-desktop: rem-calc(344);
 
 //--------------------------------------------------
@@ -18,13 +18,13 @@ $circle-large-desktop: rem-calc(344);
 }
 
 @mixin circle-large {
-  @include responsive-styles(width, $circle-large-mobile, $circle-large-tablet, $circle-large-desktop);
-  @include responsive-styles(height, $circle-large-mobile, $circle-large-tablet, $circle-large-desktop);
+  @include responsive(width, $circle-large-mobile, $circle-large-tablet, $circle-large-desktop);
+  @include responsive(height, $circle-large-mobile, $circle-large-tablet, $circle-large-desktop);
 }
 
 @mixin circle-medium {
-  @include responsive-styles(width, $circle-medium-mobile, $circle-medium-tablet, $circle-medium-desktop);
-  @include responsive-styles(height, $circle-medium-mobile, $circle-medium-tablet, $circle-medium-desktop);
+  @include responsive(width, $circle-medium-mobile, $circle-medium-tablet, $circle-medium-desktop);
+  @include responsive(height, $circle-medium-mobile, $circle-medium-tablet, $circle-medium-desktop);
 }
 
 //--------------------------------------------------
@@ -39,10 +39,10 @@ $circle-large-desktop: rem-calc(344);
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-.circle--grey {
+.circle--grey-dark {
   @include circle-basic;
   @include circle-large;
-  background-color: $grey;
+  background-color: $grey-xdark;
   color: $white;
 }
 
