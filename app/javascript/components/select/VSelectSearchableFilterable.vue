@@ -11,11 +11,6 @@
     >
 
     <div :class="['select__search relative', {'select__search--active': isActive}]">
-      <label
-        v-if="config.label"
-        class="screen-reader"
-        :for="searchId"
-      >{{ config.label }} search</label>
       <input
         :id="searchId"
         v-model="searchTerm"
@@ -31,28 +26,6 @@
         :disabled="isDisabled"
         @focus="openSelect"
       >
-
-      <span class="select__search-icons">
-        <button
-          v-show="!showResetIcon && !hasSelectedOption"
-          class="select__search-icon"
-        />
-        <button 
-          v-show="showResetIcon"
-          :id="searchResetId"
-          class="select__search-icon select__search-icon--delete"
-          @click="resetSearchTerm"
-        />
-        <button 
-          v-show="hasSelectedOption"
-          class="select__search-icon--reset"
-          @click="resetSelect"
-        />
-        <span 
-          class="drop-arrow drop-arrow--margin-right arrow-svg hover--pointer"
-          @click="toggleSelect"
-        />
-      </span>
     </div>
 
     <ul 
@@ -93,6 +66,28 @@
         </li>
       </ul>
     </div>
+
+    <span class="select__search-icons">
+        <button
+          v-show="!showResetIcon && !hasSelectedOption"
+          class="select__search-icon"
+        />
+        <button 
+          v-show="showResetIcon"
+          :id="searchResetId"
+          class="select__search-icon select__search-icon--delete"
+          @click="resetSearchTerm"
+        />
+        <button 
+          v-show="hasSelectedOption"
+          class="select__search-icon--reset"
+          @click="resetSelect"
+        />
+        <span 
+          class="drop-arrow drop-arrow--margin-right arrow-svg hover--pointer"
+          @click="toggleSelect"
+        />
+      </span>
   </div>
 </template>
 

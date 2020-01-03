@@ -34,6 +34,7 @@ $circle-large-desktop: rem-calc(344);
   @include circle-basic;
   @include circle-medium;
   background-color: $grey-light;
+  border: solid 2px $grey-light;
 }
 
 //--------------------------------------------------

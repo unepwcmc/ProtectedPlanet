@@ -4,8 +4,9 @@
   <div class="cards__cards">
     <% cards.each do |card| %>
       <div class="card">
-        <h3 class="card__title"><%= card[:title] %></h3>
-        <%= link_to '>', '/', class: 'card__link' %>
+        <%= link_to card[:url], title: '', class: 'card__link' do %>
+          <h3 class="card__title"><%= card[:title] %></h3>
+        <% end %>
       </div>
     <% end %>
   </div>

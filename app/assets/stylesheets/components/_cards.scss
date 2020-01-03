@@ -31,6 +31,7 @@
       &__cards {
         @include flex;
         @include flex-h-around;
+        @include responsive(flex-wrap, wrap, nowrap, nowrap);
       }
     }
 
@@ -38,6 +39,10 @@
       @include circle-grey-light;
       @include flex;
       @include flex-column;
+      @include responsive(margin-bottom, rem-calc(14), 0, 0);
+      text-decoration: none;
+
+      &:hover { border: solid 2px $primary; }
     }
   }
 
@@ -64,8 +69,8 @@
     .cards {
       &__cards {
         @include flex;
-        @include flex-wrap;
         @include flex-h-between;
+        @include flex-wrap;
       }
     }
 
@@ -91,16 +96,30 @@
       &__cards {
         @include flex;
         @include flex-h-between;
+        @include responsive(flex-wrap, wrap, nowrap, nowrap);
       }
     }
 
     .card {
-      @include flex;
-      @include flex-column;
-      @include flex-center;
+      @include responsive(margin-bottom, rem-calc(14), rem-calc(28), 0);
+      @include responsive(padding-top, 100%, 50%, 30%);
+      @include responsive(width, 100%, 50%, 30%);
       background-color: $grey-dark;
       color: $white;
-      width: 30%;
+
+      position: relative;
+
+      &__link {
+        @include flex;
+        @include flex-column;
+        @include flex-center;
+        text-decoration: none;
+        width: 100%; height: 100%;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
     }
   }
 

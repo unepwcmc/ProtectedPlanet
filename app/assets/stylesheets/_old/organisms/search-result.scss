@@ -2,7 +2,7 @@
   color: $grey-xdark;
   
 
-  border-bottom: solid rem-calc(1) $grey-xlight;
+  border-bottom: solid rem-calc(1) $grey-light;
   padding: {
     top: rem-calc(16);
     bottom: rem-calc(16);
@@ -34,7 +34,7 @@
     //@include text--alt(body, thin);
     color: $grey-xdark;
 
-    border-right: solid rem-calc(1) $grey-xlight;
+    border-right: solid rem-calc(1) $grey-light;
     float: left;
     padding: rem-calc(0 20);
 
@@ -49,7 +49,7 @@
 
     font-style: italic;
 
-    background-color: $grey-xlight;
+    background-color: $grey-light;
     margin-right: rem-calc(20);
     padding: rem-calc(5 16);
   }

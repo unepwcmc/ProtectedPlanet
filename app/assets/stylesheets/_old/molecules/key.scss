@@ -1,6 +1,6 @@
 .key-container {
   border: solid rem-calc(1) $grey-15;
-  box-shadow: 0px 0px 2px 1px $grey-xlight;
+  box-shadow: 0px 0px 2px 1px $grey-light;
   padding: rem-calc(25 20 20 20);
 
   @include only-desktop {

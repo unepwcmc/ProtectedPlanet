@@ -7,7 +7,7 @@
     color: $grey-xdark;
     //@include text(headline);
 
-    background-color: $grey-xlight;
+    background-color: $grey-light;
     cursor: pointer;
     padding: rem-calc(8 20);
 
@@ -29,7 +29,7 @@
   }
 
   &__body {
-    border: solid rem-calc(1) $grey-xlight;
+    border: solid rem-calc(1) $grey-light;
     padding: rem-calc(20);
   }
 }

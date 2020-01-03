@@ -11,10 +11,16 @@ en:
       levels:
         - 
           title: Regional level
+          url: #TODO
+          icon: worldwide
         - 
           title: Country level
+          url: #TODO
+          icon: worldwide
         - 
           title: Indiviual Area
+          url: #TODO
+          icon: worldwide 
       categories:
         - 
           title: Marine Protected Areas

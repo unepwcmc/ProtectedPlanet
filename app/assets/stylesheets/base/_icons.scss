@@ -123,6 +123,12 @@ $icon-search-width: rem-calc(21);
 
   &--sort { @include icon-sort; }
 
+  &--worldwide {
+    @include icon-basic;
+    background-image: image-url('icons/worldwide.svg');
+    width: rem-calc(60); height: rem-calc(60);
+  }
+
 //--------------------------------------------------
 // helpers
 //--------------------------------------------------
