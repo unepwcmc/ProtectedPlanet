@@ -1,0 +1,29 @@
+.cta {
+  &--api {
+    color: $white;
+
+    .cta {
+      &__container {
+        margin-top: rem-calc(30);
+        padding: rem-calc(30 24 34 34);
+
+        position: relative;
+
+        &::after {
+          @include responsive(top, 0, -6%, -11%);
+          @include responsive(display, none, block, block);
+          background-image: image-url('icons/key.svg');
+          content: '';
+          width: rem-calc(360); height: rem-calc(360);
+
+          position: absolute;
+          right: 0;
+        }
+      }
+
+        &__content { 
+          @include responsive(width, 100%, 70%, 64%);
+        }
+    }
+  }
+}

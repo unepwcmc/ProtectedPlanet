@@ -30,9 +30,18 @@ h1 {
   &.h1-home { @include h1-home; }
 }
 
-h2 { @include h2; }
+h2 { 
+  @include h2; 
   
-p,a { color: inherit; }
+  &.h2-big { @include h2-big;  }
+  &.h2-big-white { @include h2-big; color: $white; }
+}
+  
+p,a { 
+  color: inherit; 
+
+  &.text-intro { @include text-intro; }
+}
   
 a { 
   text-decoration: underline; 

@@ -19,35 +19,7 @@
 //--------------------------------------------------
 // backgrounds
 //--------------------------------------------------
-$image-placeholder: black;
-
-.bg--primary { 
-  background-color: $primary; 
-  color: white;
-}
-.bg--grey-lighter { background-color: $grey-light; }
-
-.bg-img {
-  background-color: $image-placeholder;
-  background-size: cover;
-  background-position: center;
-}
-
-.bg-image-overlay {
-  position: relative;
-  z-index: 1;
-
-  &:before {
-    background-color: rgba(black, 0.4);
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-  }
-}
+@import './background';
 
 //--------------------------------------------------
 // borders and shadows

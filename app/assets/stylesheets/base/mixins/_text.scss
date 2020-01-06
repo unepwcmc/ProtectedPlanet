@@ -8,12 +8,10 @@
 @mixin text-1 {
   color: $header-font-color;
   font-family: $header-font;
-  font-weight: $bold;
   line-height: $header-font-line-height;
 }
 
 @mixin text-2 {
-  color: $body-font-color;
   font-family: $body-font;
   line-height: $body-font-line-height;
 }
@@ -29,11 +27,13 @@
 @mixin h1 {
   @include text-1;
   @include responsive(font-size, rem-calc(25), rem-calc(40), rem-calc(40));
+  font-weight: $bold;
 }
 
 @mixin h1-home {
   @include text-1;
   @include responsive(font-size, rem-calc(40), rem-calc(70), rem-calc(70));
+  font-weight: $bold;
   margin-top: 0;
   margin-bottom: .35em;
 }
@@ -41,12 +41,21 @@
 @mixin h1-landing {
   @include text-1;
   @include responsive(font-size, rem-calc(30), rem-calc(50), rem-calc(50));
+  font-weight: $bold;
 }
 
 @mixin h2 {
   @include text-1;
   @include responsive(font-size, rem-calc(20), rem-calc(25), rem-calc(25));
   color: $header-font-color;
+}
+
+@mixin h2-big {
+  @include text-1;
+  @include responsive(font-size, rem-calc(25), rem-calc(40), rem-calc(40));
+  font-weight: $regular;
+  color: $header-font-color;
+  margin: 0 0 .5em 0;
 }
 
 @mixin h3 {
