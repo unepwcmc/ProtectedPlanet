@@ -13,12 +13,25 @@
     .cards {
       &__cards {
         @include flex;
+        @include flex-h-between;
         @include responsive(flex-wrap, wrap, nowrap, nowrap);
       }
     }
 
     .card {
-      @include responsive(width, 100%, 50%, 50%);
+      @include responsive(width, 100%, 48%, 48%);
+
+      &:first-child { @include responsive(margin-bottom, rem-calc(20), 0, 0); }
+
+      &__content {
+        @include responsive(padding, rem-calc(26 20), rem-calc(28 20), rem-calc(30 20));
+      }
+
+      &__image {
+        background-position: center;
+        background-size: cover;
+        width: 100%; height: rem-calc(265);
+      }
     }
   }
 
@@ -62,6 +75,11 @@
     .card {
       @include responsive(width, 100%, 25%, 25%);
       padding: rem-calc(10);
+
+      &:nth-child(3),
+      :nth-child(4) {
+        @include responsive(display, none, none, block);
+      }
 
       &--link {
         border: solid 1px $white;

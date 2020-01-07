@@ -15,7 +15,7 @@ $image-placeholder: black;
 // classes
 //--------------------------------------------------
 .bg--primary { @include bg-colour($primary, $white); }
-.bg--grey-lighter { background-color: $grey-light; }
+.bg--grey-light { @include bg-colour($grey-light, $grey-xdark); }
 .bg--grey-xdark { @include bg-colour($grey-xdark, $white); }
 
 .bg-img {

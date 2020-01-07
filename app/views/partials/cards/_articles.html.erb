@@ -7,9 +7,10 @@
 
   <div class="cards__cards">
     <% cards.each do |card| %>
-      <div class="card">
-        image 
-        <div>
+      <div class="card bg--grey-light">
+        <div class="card__image" style="background-image: <%= card[:image] %>"></div>
+
+        <div class="card__content">
           <p class="card__date"><%= card[:created_at] %></p>
           <h3><%= card[:label] %></h3>
           <p><%= card[:intro] %></p>
