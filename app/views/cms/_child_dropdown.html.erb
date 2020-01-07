@@ -7,7 +7,7 @@
   object = {}
 
   object[:title] = child.label
-  object[:text] = cms_fragment_content_render(:text, child)
+  object[:text] = cms_fragment_content(:text, child)
   object[:url] = cms_fragment_content(:url, child)
 
   if(cms_fragment_content(:image, child).try(:file) && cms_fragment_content(:image, child).file.url(:dropdownImage))
