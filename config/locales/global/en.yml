@@ -1,3 +1,6 @@
 en:
   global:
-    view_all: View all
+    button:
+      all: View all
+      download: PDF Download
+      link: Link

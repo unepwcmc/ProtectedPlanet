@@ -15,7 +15,7 @@
 
 body {
   @include text-body;
-  color: $body-font-color;
+  color: $body-font-colour;
   font-family: $body-font;
   margin: 0;
 }
@@ -35,6 +35,10 @@ h2 {
   
   &.h2-big { @include h2-big;  }
   &.h2-big-white { @include h2-big; color: $white; }
+}
+
+h3 {
+  @include h3;
 }
   
 p,a { 

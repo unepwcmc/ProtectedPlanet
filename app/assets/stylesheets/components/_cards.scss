@@ -61,6 +61,17 @@
 
     .card {
       @include responsive(width, 100%, 25%, 25%);
+      padding: rem-calc(10);
+
+      &--link {
+        border: solid 1px $white;
+        cursor: pointer;
+        text-decoration: none;
+
+        &:hover { border-color: $body-font-colour; }
+      }
+
+        &__date { @include text-small; }
     }
   }
 

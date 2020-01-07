@@ -53,6 +53,19 @@ $padding-medium: rem-calc(27);
   border-radius: $button-radius;
 }
 
+@mixin button-with-icon {
+  @include button-basic;
+  @include flex;
+  @include flex-v-center;
+
+  &::after {
+    content: '';
+    margin-left: rem-calc(10);
+
+    display: inline-block;
+  }
+}
+
 //--------------------------------------------------
 // specific mixins
 //--------------------------------------------------
@@ -65,16 +78,20 @@ $padding-medium: rem-calc(27);
   &--outline-white { @include button-outline($white); }
 
   &--all {
-    @include button-basic;
-    @include flex;
-    @include flex-v-center;
+    @include button-with-icon;
     
-    &::after {
-      @include icon-circle-chevron-black;
-      content: '';
-      margin-left: rem-calc(10);
+    &::after { @include icon-circle-chevron-black; }
+  }
 
-      display: inline-block;
-    }
+  &--download {
+    @include button-with-icon;
+    
+    &::after { @include icon-download; }
+  }
+
+  &--link-external {
+    @include button-with-icon;
+    
+    &::after { @include icon-arrow-external; }
   }
 }

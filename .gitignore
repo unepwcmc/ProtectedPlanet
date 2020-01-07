@@ -30,3 +30,6 @@ node_modules
 yarn-debug.log*
 .yarn-integrity
 tmp/cache/webpacker
+
+.byebug_history
+db

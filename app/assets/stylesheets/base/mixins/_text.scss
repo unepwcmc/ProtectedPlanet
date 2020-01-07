@@ -71,6 +71,7 @@
 
 @mixin text-small {
   @include text-2;
+  color: $grey;
   font-size: rem-calc(14);
 }
 

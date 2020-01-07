@@ -255,4 +255,8 @@ module ApplicationHelper
       }
     ].to_json
   end
+
+  def link_to_page? card 
+    !card[:pdf].present? && !card[:external_link].present?
+  end
 end

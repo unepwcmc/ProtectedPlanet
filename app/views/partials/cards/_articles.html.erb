@@ -1,17 +1,18 @@
 <div class="cards--articles">
+  <div class="flex flex-v-center flex-h-between">
+    <h2><%= title %></h2>
 
-  <h3><%= title %></h3>
-
-  <%= link_to t('global.view_all'), url, target: '_blank', title: t('global.view_all'), class: 'button--all' %>
+    <%= link_to t('global.button.all'), all_url, target: '_blank', title: t('global.button.all'), class: 'button--all' %>
+  </div>
 
   <div class="cards__cards">
     <% cards.each do |card| %>
       <div class="card">
         image 
         <div>
-          <p><%= card.created_at %></p>
-          <h3><%= card.label %></h3>
-          <p>intro field needs creating</p>
+          <p class="card__date"><%= card[:created_at] %></p>
+          <h3><%= card[:label] %></h3>
+          <p><%= card[:intro] %></p>
         </div>
       </div>
     <% end %>
