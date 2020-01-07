@@ -1,10 +1,14 @@
-<section class="cta--live-report">
+<section class="cta--live-report bg--grey-xdark">
   <div class="container cta__container">
-    <div>
-      <h2><%= t('ctas.live_report.title') %></h2>
-      <p><%= t('ctas.live_report.intro') %></p>
-    </div>
+    <div class="cta__content">
+      <span class="cta__ribbon"><%= t('global.status.updated') %></span>
 
-    <%= link_to t('ctas.live_report.button'), t('ctas.live_report.url'), target: '_blank', class: 'button--outline' %>
+      <div>
+        <h2 class="cta__title h2-big"><%= t('ctas.live_report.title') %></h2>
+        <p class="text-intro"><%= t('ctas.live_report.intro') %></p>
+      </div>
+
+      <%= link_to t('ctas.live_report.button'), t('ctas.live_report.url'), target: '_blank', class: 'button--outline-white' %>
+    </div>
   </div>
 </section>

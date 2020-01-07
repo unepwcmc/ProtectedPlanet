@@ -1,4 +1,10 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
 .cta {
+//--------------------------------------------------
+// api
+//--------------------------------------------------
   &--api {
     color: $white;
 
@@ -24,6 +30,42 @@
         &__content { 
           @include responsive(width, 100%, 70%, 64%);
         }
+    }
+  }
+
+//--------------------------------------------------
+// live report
+//--------------------------------------------------
+  &--live-report {
+    color: $white; 
+
+    .cta {
+      &__container {
+        
+      }
+
+        &__content {
+          @include flex;
+          @include responsive(align-items, flex-start, center, center);
+          @include responsive(flex-direction, column, row, row);
+          @include responsive(justify-content, normal, space-between, space-between);
+          @include responsive(padding, rem-calc(60 0 35 0), rem-calc(60 0 20 0), rem-calc(70 0 40 0));
+          height: 100%;
+
+          position: relative;
+        }
+
+          &__ribbon {
+            @include text-alert;
+
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+
+          &__title {
+            @include responsive(width, 100%, rem-calc(370), rem-calc(370));
+          }
     }
   }
 }
