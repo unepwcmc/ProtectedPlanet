@@ -89,6 +89,7 @@ Rails.application.configure do
     :password => secrets['password']
   }
 
+  config.active_storage.service = :local
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 end
 

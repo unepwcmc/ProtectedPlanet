@@ -117,4 +117,6 @@ Rails.application.configure do
     :user_name => secrets['username'],
     :password => secrets['password']
   }
+
+  config.active_storage.service = :local
 end
