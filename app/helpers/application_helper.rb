@@ -55,7 +55,7 @@ module ApplicationHelper
     end
   end
 
-  def url_encode (text)
+  def url_encode(text)
     ERB::Util.url_encode(text)
   end
 
