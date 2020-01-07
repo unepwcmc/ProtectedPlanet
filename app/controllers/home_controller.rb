@@ -24,6 +24,7 @@ class HomeController < ApplicationController
     @news_articles = comfy_news.children.published.order(created_at: :desc).limit(2).map{ |page| { 
       "label": page.label, 
       "created_at": page.created_at.strftime('%d %B %y'),
+      "url": page.url,
       "intro": "field needs created in the CMS", #TODO create field in CMS
       "image": "field needs created in the CMS" #TODO create field in CMS
       }

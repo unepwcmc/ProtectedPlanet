@@ -20,6 +20,7 @@
 
     .card {
       @include responsive(width, 100%, 48%, 48%);
+      text-decoration: none;
 
       &:first-child { @include responsive(margin-bottom, rem-calc(20), 0, 0); }
 
