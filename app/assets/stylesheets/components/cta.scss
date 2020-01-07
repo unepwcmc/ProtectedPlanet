@@ -12,7 +12,7 @@
         &::after {
           @include responsive(top, 0, -6%, -11%);
           @include responsive(display, none, block, block);
-          background-image: image-url('icons/key.svg');
+          background-image: image_url('icons/key.svg');
           content: '';
           width: rem-calc(360); height: rem-calc(360);
 

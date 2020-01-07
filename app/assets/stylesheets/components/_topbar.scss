@@ -12,7 +12,10 @@
     &__logo {
       @include responsive(height, rem-calc(52), rem-calc(56), rem-calc(67)); 
       @include responsive(order, 1, 1, 1);
+      @include flex;
+      @include flex-center;
       background-color: $primary;
+      padding: rem-calc(0 10);
     }
 
     &__nav {

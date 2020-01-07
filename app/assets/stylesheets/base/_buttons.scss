@@ -66,5 +66,15 @@ $padding-medium: rem-calc(27);
 
   &--all {
     @include button-basic;
+    @include flex;
+    @include flex-v-center;
+    
+    &::after {
+      @include icon-circle-chevron-black;
+      content: '';
+      margin-left: rem-calc(10);
+
+      display: inline-block;
+    }
   }
 }

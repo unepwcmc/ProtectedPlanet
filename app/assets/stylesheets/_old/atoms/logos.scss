@@ -33,13 +33,13 @@
 }
 .iucn-logo { @include iucn-logo; }
 
-@mixin protectedplanet-logo {
-  padding-left: 2.5rem;
-  content: "";
+@mixin logo-protectedplanet {
+  background-image: image_url('logos/protected-planet.svg');
+  width: rem-calc(239); height: rem-calc(60);
+  
   display: block;
-  background: image_url('hand-solo.png') center left/2rem no-repeat;
 }
-.protectedplanet-logo {
+.logo-protectedplanet {
   @include protectedplanet-logo;
 
   &__registered {

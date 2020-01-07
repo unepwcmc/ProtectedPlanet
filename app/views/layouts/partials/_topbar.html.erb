@@ -1,10 +1,8 @@
 <div class="topbar">
   <div class="topbar__container container">
-    <div class="topbar__logo">
-      <%= link_to root_path, class: 'protectedplanet-logo' do %>
-        LOGO
-      <% end %>
-    </div>
+    <%= link_to root_path, title: '#TODO', class: 'topbar__logo' do %>
+      <i class="logo--protected-planet"></i>  
+    <% end %>
 
     <% unless @for_pdf %>
 

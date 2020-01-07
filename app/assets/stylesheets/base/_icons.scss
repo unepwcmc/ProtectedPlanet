@@ -1,88 +1,4 @@
 //--------------------------------------------------
-// variables
-//--------------------------------------------------
-$icon-search-width: rem-calc(21);
-
-//--------------------------------------------------
-// shared mixins
-//--------------------------------------------------
-@mixin icon-basic() {
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-@mixin icon-button-reset() {
-  background-color: transparent !important; //temp-refresh good god i don't like to do it but the old base stylesheet is overwriting this
-  border: none;
-  cursor: pointer;
-  padding: 0;
-}
-
-//--------------------------------------------------
-// mixins for specific classes
-//--------------------------------------------------
-@mixin icon-aichi() {
-  @include responsive(width, rem-calc(85), rem-calc(85), rem-calc(110));
-  @include responsive(height, rem-calc(85), rem-calc(85), rem-calc(110));
-  margin-bottom: rem-calc(20);
-
-  display: block;
-}
-
-@mixin icon-close() {
-  @include icon-basic;
-  background-image: image-url('icons/close.svg');
-  width: rem-calc(29); height: rem-calc(29);
-}
-
-@mixin icon-cross() {
-  @include icon-basic;
-  background-image: image-url('icons/cross.svg');
-  width: rem-calc(20); height: rem-calc(20);
-}
-
-@mixin icon-info() {
-  @include icon-basic;
-  background-image: image-url('icons/info.svg');
-  width: rem-calc(23); height: rem-calc(23);
-}
-
-@mixin icon-loading-spinner() {
-  @include icon-basic;
-  background-image: image-url('icons/loading-spinner.svg');
-  width: rem-calc(40); height: rem-calc(40);
-
-  display: block;
-}
-
-@mixin icon-search() {
-  @include icon-basic;
-  @include icon-button-reset;
-  background-image: image-url('icons/search.svg');
-  width: $icon-search-width; height: rem-calc(23); 
-}
-
-@mixin icon-sort() {
-  @include icon-button-reset;
-
-  &::before {
-    @include triangle(rem-calc(8), rem-calc(7), $grey); // ($base, $height, $color, $direction:'up')
-    content: '';
-    margin-bottom: rem-calc(1);
-
-    display: block;
-  }
-
-  &::after {
-    @include triangle(rem-calc(8), rem-calc(7), $grey, 'down'); // ($base, $height, $color, $direction:'up')
-    content: '';
-
-    display: block;
-  }
-}
-
-//--------------------------------------------------
 // classes
 //--------------------------------------------------
 .icon {
@@ -91,6 +7,8 @@ $icon-search-width: rem-calc(21);
   &--close { @include icon-close; }
 
   &--cross { @include icon-cross; }
+
+  &--circle-chevron-black { @include icon-circle-chevron-black; }
   
   &--info-circle { @include icon-info; }
 

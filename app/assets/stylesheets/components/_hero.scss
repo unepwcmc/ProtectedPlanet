@@ -25,6 +25,8 @@ $hero-padding-bottom-desktop: rem-calc(60);
 //--------------------------------------------------
   &--home {
     background: $grey-light;
+    padding-top: rem-calc(100);
+    padding-bottom: rem-calc(166);
 
     .hero {
       &__container {
