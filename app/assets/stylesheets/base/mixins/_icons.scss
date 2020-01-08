@@ -10,6 +10,8 @@ $icon-search-width: rem-calc(21);
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+  
+  display: block;
 }
 
 @mixin icon-button-reset() {
@@ -57,6 +59,18 @@ $icon-search-width: rem-calc(21);
 @mixin icon-circle-chevron-black() {
   @include icon-basic;
   background-image: image-url('icons/circle-chevron-black.svg');
+  width: rem-calc(34); height: rem-calc(34);
+}
+
+@mixin icon-circle-chevron-green() {
+  @include icon-basic;
+  background-image: image-url('icons/circle-chevron-green.svg');
+  width: rem-calc(72); height: rem-calc(72);
+}
+
+@mixin icon-circle-chevron-white() {
+  @include icon-basic;
+  background-image: image-url('icons/circle-chevron-white.svg');
   width: rem-calc(34); height: rem-calc(34);
 }
 

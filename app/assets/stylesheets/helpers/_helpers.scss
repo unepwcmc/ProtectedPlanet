@@ -113,7 +113,10 @@
 //--------------------------------------------------
 .no-margin--top { margin-top: 0; }
 .no-margin { margin: 0; }
-.margin-center { margin: 0 auto; }
+.margin-center { 
+  margin-right: auto; 
+  margin-left: auto; 
+}
 
 .margin-space--right { margin-right: rem-calc(14); }
 .margin-space--left { margin-left: rem-calc(14); }

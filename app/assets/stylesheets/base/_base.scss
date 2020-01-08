@@ -33,12 +33,14 @@ h1 {
 h2 { 
   @include h2; 
   
-  &.h2-big { @include h2-big;  }
-  &.h2-big-white { @include h2-big; color: $white; }
+  &.h2-big { @include h-big;  }
+  &.h2-big-white { @include h-big; color: $white; }
 }
 
 h3 {
   @include h3;
+
+  &.h3-big-white { @include h-big; color: $white; }
 }
   
 p,a { 

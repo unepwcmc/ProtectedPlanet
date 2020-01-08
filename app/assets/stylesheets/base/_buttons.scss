@@ -69,7 +69,17 @@ $padding-medium: rem-calc(27);
 //--------------------------------------------------
 // specific mixins
 //--------------------------------------------------
+@mixin button-next {
+  @include button-basic;
+  @include icon-circle-chevron-green;
+}
 
+@mixin button-prev {
+  @include button-basic;
+  @include icon-circle-chevron-green;
+
+  transform: rotate(180deg);
+}
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
