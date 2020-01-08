@@ -1,0 +1,73 @@
+$agile-themes-margin-sides-mobile: 10%;
+$agile-themes-margin-sides-tablet: 14%;
+$agile-themes-margin-sides-desktop: 8%;
+
+&--themes {
+  color: $white;
+  overflow: hidden;
+  
+  .agile {
+    &__dots {
+      display: none;
+    }
+
+    &__actions {
+      @include responsive(padding-right, $agile-themes-margin-sides-mobile, $agile-themes-margin-sides-tablet, $agile-themes-margin-sides-desktop);
+      @include responsive(padding-left, $agile-themes-margin-sides-mobile, $agile-themes-margin-sides-tablet, $agile-themes-margin-sides-desktop);
+      width: 100%;
+
+      position: absolute;
+      top: 50%;
+
+      transform: translateY(-50%);
+    }
+
+      &__nav-button--prev { 
+        @include button-prev; 
+
+        transform: translateX(-50%);
+      }
+
+      &__nav-button--next { 
+        @include button-next; 
+
+        transform: translateX(50%);
+      }
+
+    &__list {
+      @include responsive(margin-right, $agile-themes-margin-sides-mobile, $agile-themes-margin-sides-tablet, $agile-themes-margin-sides-desktop);
+      @include responsive(margin-left, $agile-themes-margin-sides-mobile, $agile-themes-margin-sides-tablet, $agile-themes-margin-sides-desktop);
+      overflow: visible;
+      width: auto;
+    }
+
+      &__slides {
+        align-items: stretch;
+      }
+
+        &__slide {
+          @include responsive(padding-right, rem-calc(5), rem-calc(10), rem-calc(10));
+          @include responsive(padding-left, rem-calc(5), rem-calc(10), rem-calc(10));
+        }
+
+          &__slide-link {
+            @include border-radius;
+            @include responsive(height, rem-calc(460), rem-calc(460), rem-calc(760));
+            background-color: $grey-dark;
+            padding: rem-calc(22 26);
+            text-decoration: none;
+            width: 100%;
+
+            display: flex;
+
+            &:hover::before { background-color: rgba(black, 0.6);  }
+
+            &::before { @include border-radius; }
+          }
+
+            &__slide-content {
+              @include flex-vs-end;
+              width: 100%;
+            }
+  }
+}

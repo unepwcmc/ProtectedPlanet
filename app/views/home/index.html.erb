@@ -16,7 +16,7 @@
 <%= render "partials/search/protected-areas" %>
 
 <section class="container section-padding">
-  <h2><%= @pas_title %></h2>
+  <h2 class="text-center"><%= @pas_title %></h2>
 
   <%= render partial: "partials/cards/circles", locals: { cards: @pas_levels } %>
 
@@ -30,7 +30,13 @@
 </section>
 
 <section>
-  thematic areas carousel
+  <%= render partial: "partials/carousels/themes", locals: 
+    { 
+      title: @themes_title, 
+      slides: @themes,
+      url: @themes_url
+    }
+  %>
 </section>
 
 <%= render "partials/ctas/api" %>
@@ -38,7 +44,6 @@
 <section class="container section-padding">
   <%= render partial: "partials/cards/resources", locals: 
     { 
-      all_url: 'link to resources page', #TODO add url 
       title: @resources_title, 
       cards: @resources, 
       url: @resources_url
@@ -49,7 +54,6 @@
 <section class="container section-padding">
   <%= render partial: "partials/cards/articles", locals: 
     { 
-      all_url: 'link to news page', #TODO add url
       title: @news_articles_title, 
       cards: @news_articles, 
       url: @news_articles_url

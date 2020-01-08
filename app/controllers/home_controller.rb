@@ -18,9 +18,19 @@ class HomeController < ApplicationController
     @pas_levels = home_yml[:pas][:levels]
     @pas_categories = home_yml[:pas][:categories]
 
+    comfy_themes = Comfy::Cms::Page.find_by_slug("thematic-areas") 
+    @themes_title = comfy_themes.label
+    @themes_url = comfy_themes.full_path
+    @themes = comfy_themes.children.published.map{ |page| {
+        "label": page.label, 
+        "url": page.url,
+        "intro": "field needs created in the CMS", #TODO create field in CMS
+        "image": "field needs created in the CMS" #TODO create field in CMS  
+      }
+    }
+
     comfy_news = Comfy::Cms::Page.find_by_slug("blog")
     @news_articles_title = comfy_news.label
-    @news_articles_url = comfy_news.full_path
     @news_articles = comfy_news.children.published.order(created_at: :desc).limit(2).map{ |page| { 
       "label": page.label, 
       "created_at": page.created_at.strftime('%d %B %y'),
@@ -32,7 +42,6 @@ class HomeController < ApplicationController
 
     comfy_resources = Comfy::Cms::Page.find_by_slug("resources")
     @resources_title = comfy_resources.label
-    @resources_url = comfy_resources.full_path
     @resources = comfy_resources.children.published.order(created_at: :desc).limit(4).map{ |page| { 
       "label": page.label, 
       "created_at": page.created_at.strftime('%d %B %y'),

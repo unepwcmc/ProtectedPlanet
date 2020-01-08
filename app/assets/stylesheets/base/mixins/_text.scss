@@ -50,14 +50,6 @@
   color: $header-font-color;
 }
 
-@mixin h2-big {
-  @include text-1;
-  @include responsive(font-size, rem-calc(25), rem-calc(40), rem-calc(40));
-  font-weight: $regular;
-  color: inherit;
-  margin: 0 0 .5em 0;
-}
-
 @mixin h3 {
   @include text-2;
   @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
@@ -67,6 +59,14 @@
 @mixin h4 {
   @include text-2;
   @include responsive(font-size, rem-calc(18), rem-calc(18), rem-calc(16));
+}
+
+@mixin h-big {
+  @include text-1;
+  @include responsive(font-size, rem-calc(25), rem-calc(40), rem-calc(40));
+  font-weight: $regular;
+  color: inherit;
+  margin: 0 0 .5em 0;
 }
 
 @mixin text-small {
