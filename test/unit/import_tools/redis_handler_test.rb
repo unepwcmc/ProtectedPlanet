@@ -24,7 +24,7 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
   end
 
   test '.current_token gets the token of the current import from redis' do
-    expected_key = "#{Rails.application.secrets.redis['wdpa_imports_prefix']}:current"
+    expected_key = "#{Rails.application.secrets.redis[:wdpa_imports_prefix]}:current"
 
     $redis.expects(:get).with(expected_key)
     @redis_handler.current_token
@@ -53,7 +53,7 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
   end
 
   test '.set_property sets a redis key with the given property and value' do
-    prefix = Rails.application.secrets.redis['wdpa_imports_prefix']
+    prefix = Rails.application.secrets.redis[:wdpa_imports_prefix]
     token = "token"
     property = "property"
     value = "value"
@@ -64,7 +64,7 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
   end
 
   test '.get_property gets the value for the given redis key' do
-    prefix = Rails.application.secrets.redis['wdpa_imports_prefix']
+    prefix = Rails.application.secrets.redis[:wdpa_imports_prefix]
     token = "token"
     property = "property"
     value = "value"
@@ -77,7 +77,7 @@ class ImportToolsRedisHandlerTest < ActiveSupport::TestCase
   end
 
   test '.delete_property deletes the given property from redis' do
-    prefix = Rails.application.secrets.redis['wdpa_imports_prefix']
+    prefix = Rails.application.secrets.redis[:wdpa_imports_prefix]
     token = "token"
     property = "property"
 
