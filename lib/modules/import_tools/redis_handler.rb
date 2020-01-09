@@ -70,6 +70,7 @@ class ImportTools::RedisHandler
   end
 
   def redis_prefix
-    Rails.application.secrets.redis[:wdpa_imports_prefix]
+    redis_keys = Rails.application.secrets.redis
+    redis_keys[:wdpa_imports_prefix] || redis_keys['wdpa_imports_prefix']
   end
 end
