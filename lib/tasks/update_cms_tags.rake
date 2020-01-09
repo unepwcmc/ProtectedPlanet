@@ -11,6 +11,8 @@ namespace :cms_update_2 do
       layout.content = layout.content.gsub(/\{\{ ?cms:page:([\w]+):rich_text ?\}\}/, '{{ cms:wysiwyg \1 }}') if layout.content.is_a? String
       layout.content = layout.content.gsub(/\{\{ ?cms:page:([\w]+):([^:]*) ?\}\}/, '{{ cms:\2 \1 }}') if layout.content.is_a? String
       layout.content = layout.content.gsub(/\{\{ ?cms:field:([\w]+):string ?\}\}/, '{{ cms:text \1, render: false }}') if layout.content.is_a? String
+      # convert boolean to checkbox
+      layout.content = layout.content.gsub(/\{\{ ?cms:field:([\w]+):boolean ?\}\}/, '{{ cms:checkbox \1, render: false }}') if layout.content.is_a? String
       layout.content = layout.content.gsub(/\{\{ ?cms:field:([\w]+):([^:]*) ?\}\}/, '{{ cms:\2 \1, render: false }}') if layout.content.is_a? String
 
       # {{ cms:partial:main/homepage }} -> {{ cms:partial "main/homepage" }}
