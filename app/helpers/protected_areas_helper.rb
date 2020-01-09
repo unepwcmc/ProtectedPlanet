@@ -14,7 +14,7 @@ module ProtectedAreasHelper
 
   def url_for_related_source source, protected_area
     File.join(
-      Rails.application.secrets.related_sources_base_urls[source],
+      Rails.application.secrets.related_sources_base_urls[source.to_sym],
       protected_area.wdpa_id.to_s
     )
   end
