@@ -56,7 +56,7 @@ class Search
 
   def elastic_search
     @elastic_search ||= Elasticsearch::Client.new(
-      url: Rails.application.secrets.elasticsearch['url']
+      url: Rails.application.secrets.elasticsearch[:url]
     )
   end
 
@@ -67,7 +67,7 @@ class Search
       # This line helps countries come first in search, may need tweaking as initial weights are dependent on the relative
       # frequency of terms in the countries and PA indices which is hard to anticipate!
       indices_boost: [{COUNTRY_INDEX => 3}, {PA_INDEX => 1} ],
-  
+
       query: Search::Query.new(search_term, options).to_h,
     }.tap( &method(:optional_queries) )
   end

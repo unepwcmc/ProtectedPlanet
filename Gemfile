@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.0.5'
+gem 'rails', '5.2.0'
 gem 'webpacker', '~> 4.0.2'
 
 gem 'pg', '~> 0.21'
-gem 'activerecord-postgis-adapter', '4.1.0'
+gem 'activerecord-postgis-adapter', '5.1.0'
 gem 'dbf', '~> 2.0.7'
 #
 gem 'elasticsearch', '~> 7.2.0'
@@ -102,7 +102,7 @@ gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
 gem 'devise', '~> 4.7.1' # MAJOR VERSION CHANGE, CHECK DOCS
 
-gem 'comfortable_mexican_sofa', '1.12.10'
+gem 'comfortable_mexican_sofa', '~> 2.0.0'
 gem 'nokogiri', '~> 1.10.4'
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'
