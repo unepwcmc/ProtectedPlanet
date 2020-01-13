@@ -263,7 +263,7 @@ module ApplicationHelper
   def get_agile_config_themes
     {
       navButtons: true,
-      infinite: false,
+      infinite: true,
       responsive: [
       {
           breakpoint: 628,
