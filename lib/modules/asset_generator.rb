@@ -28,8 +28,9 @@ module AssetGenerator
   private
 
   def self.mapbox_url geojson
-    access_token = Rails.application.secrets.mapbox['access_token']
-    uri = URI(Rails.application.secrets.mapbox['base_url'])
+    mapbox_config = Rails.application.secrets.mapbox
+    access_token = mapbox_config[:access_token] || mapbox_config['access_token']
+    uri = URI(mapbox_config[:base_url] || mapbox_config['base_url'])
     size = {y: 128, x: 256}
 
     raise AssetGenerationFailedError unless geojson.present?

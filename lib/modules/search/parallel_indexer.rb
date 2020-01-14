@@ -63,10 +63,10 @@ class Search::ParallelIndexer
   end
 
   def concurrency_level
-    Rails.application.secrets.elasticsearch['indexing']['concurrency_level'] || 1
+    Rails.application.secrets.elasticsearch[:indexing][:concurrency_level] || 1
   end
 
   def batch_size
-    Rails.application.secrets.elasticsearch['indexing']['batch_size'] || 500
+    Rails.application.secrets.elasticsearch[:indexing][:batch_size] || 500
   end
 end

@@ -25,6 +25,8 @@ coverage
 node_modules
 /public/packs
 /public/packs-test
+/public/system
+/storage
 /node_modules
 /yarn-error.log
 yarn-debug.log*
@@ -33,3 +35,4 @@ tmp/cache/webpacker
 
 .byebug_history
 db
+

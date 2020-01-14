@@ -1,4 +1,4 @@
-<% if cms_block_content(:display_version_alert) == "1" %>
+<% if cms_fragment_content(:display_version_alert) %>
   <aside class="alert alert--flex alert--push">
     <% if CmsPresenter.new(@cms_page).most_recent_version? %>
       <span class="fa-stack alert__icon alert__icon--success">

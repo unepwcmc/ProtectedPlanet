@@ -1,3 +1,11 @@
+### 3.2.5
+
+* Add download tracking for links in CMS (e.g. OECM downloads)
+
+### 3.2.4
+
+* Add country, pame_country and marine stats (WDPA December 2019 release).
+
 ### 3.2.3
 
 * Update reference on Target 11 Dashboard to DOPA - again

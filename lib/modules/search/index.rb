@@ -20,7 +20,7 @@ class Search::Index
     pa_index.index
   end
 
-  def self.count 
+  def self.count
     self.new(Search::COUNTRY_INDEX).count + self.new(Search::PA_INDEX).count
   end
 
@@ -33,27 +33,27 @@ class Search::Index
 
 
   def initialize index_name, collection=nil
-    @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch['url'])
+    @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch[:url])
     @index_name = index_name
     @collection = collection
   end
 
   def create
-    @client.indices.create index: @index_name, body:  mappings 
+    @client.indices.create index: @index_name, body:  mappings
   end
-  
+
   def index
     documents_in_batches { |batch| @client.bulk body: batch }
   end
 
   def delete
     @client.indices.delete index: @index_name
-    
+
   rescue Elasticsearch::Transport::Transport::Errors::NotFound
     Rails.logger.warn("Index #{@index_name} not found. Skipping")
   end
 
-  def count 
+  def count
     @client.count(index: @index_name)['count']
   end
 

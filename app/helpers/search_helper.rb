@@ -99,7 +99,7 @@ module SearchHelper
   end
 
   def pa_autocomplete_link result
-    version = Rails.application.secrets.mapbox['version']
+    version = Rails.application.secrets.mapbox[:version]
     image_params = {id: result[:identifier], type: result[:type], version: version}
 
     link_to protected_area_url(result[:identifier]), class: "autocompletion__result" do
@@ -118,7 +118,7 @@ module SearchHelper
   end
 
   def country_autocomplete_link result
-    version = Rails.application.secrets.mapbox['version']
+    version = Rails.application.secrets.mapbox[:version]
     image_params = {id: result[:identifier], type: result[:type], version: version}
     type = (result[:type] == "country" ? "country/territory" : result[:type])
 

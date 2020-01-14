@@ -1,10 +1,13 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.0.5'
+gem 'rails', '5.2.0'
 gem 'webpacker', '~> 4.0.2'
 
+gem 'bourbon'
+gem "neat"
+
 gem 'pg', '~> 0.21'
-gem 'activerecord-postgis-adapter', '4.1.0'
+gem 'activerecord-postgis-adapter', '5.1.0'
 gem 'dbf', '~> 2.0.7'
 #
 gem 'elasticsearch', '~> 7.2.0'
@@ -12,7 +15,7 @@ gem 'elasticsearch', '~> 7.2.0'
 gem 'sass-rails', '~> 5.0.7'
 gem 'sprockets-rails', '~> 3.2.1'
 
-gem 'uglifier', '~> 2.7.2'
+gem 'uglifier', '~> 4.1.17'
 gem 'coffee-rails', '~> 4.2.2'
 gem "autoprefixer-rails"
 gem "exception_notification", '~> 4.3.0'
@@ -101,9 +104,9 @@ gem 'turnout', '~> 2.5.0'
 
 gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
-gem 'devise', '~> 4.6.2' # MAJOR VERSION CHANGE, CHECK DOCS
+gem 'devise', '~> 4.7.1' # MAJOR VERSION CHANGE, CHECK DOCS
 
-gem 'comfortable_mexican_sofa', '1.12.10'
-gem 'nokogiri', '~> 1.10.1'
+gem 'comfortable_mexican_sofa', '~> 2.0.0'
+gem 'nokogiri', '~> 1.10.4'
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'

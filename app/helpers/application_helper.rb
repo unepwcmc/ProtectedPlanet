@@ -29,7 +29,7 @@ module ApplicationHelper
   end
 
   def protected_area_cover protected_area
-    version = Rails.application.secrets.mapbox['version']
+    version = Rails.application.secrets.mapbox[:version]
     image_params = {id: protected_area.wdpa_id, type: "protected_area", version: version}
 
     image_tag(
@@ -41,7 +41,7 @@ module ApplicationHelper
   end
 
   def country_cover country
-    version = Rails.application.secrets.mapbox['version']
+    version = Rails.application.secrets.mapbox[:version]
     image_params = {id: country.iso, type: "country", version: version}
 
     image_tag(
@@ -73,7 +73,7 @@ module ApplicationHelper
     end
   end
 
-  def url_encode (text)
+  def url_encode(text)
     ERB::Util.url_encode(text)
   end
 
@@ -106,7 +106,7 @@ module ApplicationHelper
     World Database on Protected Areas (WDPA), and the most comprehensive
     global database on terrestrial and marine protected areas.
   """
-
+  
   def seo_description
     if content_for?(:seo)
       content_for(:seo)
