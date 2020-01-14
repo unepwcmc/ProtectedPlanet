@@ -1,3 +1,7 @@
+### 3.2.6
+
+* Add country, pame_country and marine stats (WDPA January 2020 release).
+
 ### 3.2.5
 
 * Add download tracking for links in CMS (e.g. OECM downloads)
