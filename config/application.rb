@@ -12,6 +12,9 @@ Bundler.require(*Rails.groups)
 
 module ProtectedPlanet
   class Application < Rails::Application
+    # Ensuring that ActiveStorage routes are loaded before Comfy's globbing
+    # route. Without this file serving routes are inaccessible.
+    config.railties_order = [ActiveStorage::Engine, :main_app, :all]
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

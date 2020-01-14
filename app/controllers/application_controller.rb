@@ -6,6 +6,15 @@ class ApplicationController < ActionController::Base
   after_action :store_location
   before_action :load_cms_pages
   before_action :check_for_pdf
+  before_action :set_locale
+
+  def set_locale
+    if params[:locale].present?
+      I18n.locale = params[:locale]
+    else
+      I18n.locale = I18n.default_locale
+    end
+  end
 
   def raise_404
     raise PageNotFound

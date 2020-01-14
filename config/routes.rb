@@ -64,6 +64,6 @@ Rails.application.routes.draw do
 
   get '/country_codes', to: 'country#codes', as: 'country_codes'
 
-  comfy_route :cms_admin, path: '/admin'
-  comfy_route :cms, path: '/c', sitemap: false
+  comfy_route :cms_admin, path: "/admin"
+  comfy_route :cms, path: "/:locale/"
 end
