@@ -16,11 +16,11 @@
 
 // grids
 // Temporarily comment bourbon
-@import '../../../node_modules/bourbon/core/bourbon';
-@import '../../../node_modules/bourbon-neat/app/assets/stylesheets/neat';
+@import '../../../node_modules/bourbon/core/bourbon.scss';
+@import '../../../node_modules/bourbon-neat/app/assets/stylesheets/neat.scss';
 
 // maps
-@import '../../../node_modules/leaflet/dist/leaflet';
+@import '../../../node_modules/leaflet/dist/leaflet.css';
 
 @import './resources/mixins/rem-calc';
 @import './resources/mixins/media-queries';
