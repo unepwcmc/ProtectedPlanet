@@ -16,10 +16,10 @@
 
 // grids
 // Temporarily comment bourbon
-//@import 'bourbon/core/bourbon';
-//@import 'bourbon-neat/app/assets/stylesheets/neat';
+@import 'bourbon/core/bourbon';
+@import 'bourbon-neat/app/assets/stylesheets/neat';
 
-// // maps
+// maps
 @import 'leaflet/dist/leaflet';
 
 @import './resources/mixins/rem-calc';
