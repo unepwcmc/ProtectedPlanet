@@ -3,6 +3,9 @@ source 'https://rubygems.org'
 gem 'rails', '5.2.0'
 gem 'webpacker', '~> 4.0.2'
 
+gem 'bourbon'
+gem "neat"
+
 gem 'pg', '~> 0.21'
 gem 'activerecord-postgis-adapter', '5.1.0'
 gem 'dbf', '~> 2.0.7'

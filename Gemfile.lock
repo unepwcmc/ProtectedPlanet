@@ -771,6 +771,9 @@ GEM
     best_in_place (3.0.3)
       actionpack (>= 3.2)
       railties (>= 3.2)
+    bourbon (4.2.3)
+      sass (~> 3.4)
+      thor
     builder (3.2.4)
     byebug (9.1.0)
     capistrano (3.11.0)
@@ -929,6 +932,9 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     mustermann (1.0.3)
+    neat (1.7.4)
+      bourbon (>= 4.0)
+      sass (>= 3.3)
     net-scp (2.0.0)
       net-ssh (>= 2.6.5, < 6.0.0)
     net-ssh (5.2.0)
@@ -1111,6 +1117,7 @@ DEPENDENCIES
   autoprefixer-rails
   aws-sdk (= 3.0.1)
   best_in_place (~> 3.0.1)
+  bourbon
   byebug (~> 9.0, >= 9.0.5)
   bystander (= 2.0.0)!
   capistrano (= 3.11.0)
@@ -1142,6 +1149,7 @@ DEPENDENCIES
   levenshtein (~> 0.2.2)
   minitest (~> 5.10, != 5.10.2)
   mocha (~> 1.0.0)
+  neat
   nokogiri (~> 1.10.4)
   pg (~> 0.21)
   phantompdf (~> 1.2.2)
