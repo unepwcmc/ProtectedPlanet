@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   after_action :store_location
-  before_action :load_cms_pages
+  # before_action :load_cms_pages
   before_action :check_for_pdf
   before_action :set_locale
 
@@ -47,14 +47,18 @@ class ApplicationController < ActionController::Base
     "/users/sign_out"
   ]
 
-  def load_cms_pages
-    @updates_and_news  = Comfy::Cms::Category.find_by_label("Updates & News")
-    @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
-    @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
-    @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
-    @green_list_page   = Comfy::Cms::Page.find_by_slug("green-list")
-    @equity_page       = Comfy::Cms::Page.find_by_slug("equity")
+  def load_cms_content label
+    @cms_page = Comfy::Cms::Page.find_by_label(label)
   end
+
+  # def load_cms_pages
+  #   @updates_and_news  = Comfy::Cms::Category.find_by_label("Updates & News")
+  #   @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
+  #   @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
+  #   @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
+  #   @green_list_page   = Comfy::Cms::Page.find_by_slug("green-list")
+  #   @equity_page       = Comfy::Cms::Page.find_by_slug("equity")
+  # end
 
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?

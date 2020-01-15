@@ -1,8 +1,8 @@
 <header class="hero--home">
   <div class="hero__container container">
     <div class="hero__text">
-      <h1 class="h1-home"><%= t('home.title') %></h1>
-      <p class="hero__intro"><%= t('home.intro') %></p>
+      <h1 class="h1-home"><%= cms_fragment_content("title") %></h1>
+      <p class="hero__intro"><%= cms_fragment_content("introduction") %></p>
 
       <%= link_to t('home.button'), '/', title: t('home.button'), class: 'button--outline-black' %>
     </div>

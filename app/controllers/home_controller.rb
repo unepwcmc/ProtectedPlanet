@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  before_action { load_cms_content :home }
+
   def index
     home_yml = I18n.t('home')
 
@@ -122,6 +124,5 @@ class HomeController < ApplicationController
     ]
 
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
-
   end
 end
