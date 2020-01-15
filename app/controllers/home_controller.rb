@@ -77,7 +77,7 @@ class HomeController < ApplicationController
         title: "Marine Protected Areas",
         content: "Explore the World's marine protected areas",
         image: "marine.png",
-        url: marine_path
+        # url: marine_path
       },
       {
         title: "ICCAs",

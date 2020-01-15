@@ -224,35 +224,33 @@ module ApplicationHelper
     controller_name == 'region'
   end
 
-  def get_nav_primary_links 
-    [ 
-      {
-        id: 'about',
-        label: 'About', #TODO make this pull from the CMS
-        url: '/c/about'
-      },
-      {
-        id: 'news-and-stories',
-        label: 'News & Stories',
-        url: '/c/news-and-stories'
-      },
-      {
-        id: 'resources',
-        label: 'Resources',
-        url: '/c/resources'
-      },
-      {
-        id: 'thematic-areas',
-        label: 'Thematic Areas',
-        url: '/c/thematic-areas',
-        children: [
-          {
-            id: 'marine-protected-areas',
-            label: 'Marine Protected Areas',
-            url: '/marine'
-          },
-        ]
+  def get_nav_primary
+    def map_page(slug, map_children = false)
+      cms_page = Comfy::Cms::Page.find_by_slug(slug)
+
+      mapped_page = { 
+        "id": cms_page.slug,
+        "label": cms_page.label, 
+        "url": cms_page.url,
       }
+
+      if map_children
+        mapped_page["children"] = cms_page.children.published.map{ |page| {
+            "id": page.slug,
+            "label": page.label, 
+            "url": page.url,
+          }
+        }
+      end
+
+      return mapped_page
+    end
+
+    return [ 
+      map_page('about'),
+      map_page('news-and-stories'),
+      map_page('resources'),
+      map_page('thematical-areas', true),
     ].to_json
   end
 
