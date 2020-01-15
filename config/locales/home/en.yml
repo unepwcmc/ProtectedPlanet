@@ -1,0 +1,30 @@
+en:
+  home:
+    title: Discover the world’s protected areas
+    intro: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+    button: Explore Protected Areas
+    stat_text_1: Protected Areas
+    stat_text_2: Other effective area-based conservation measures
+    pas:
+      title: Explore Protected Areas by...
+      button: Explore All
+      levels:
+        - 
+          title: Regional level
+          url: #TODO
+          icon: worldwide
+        - 
+          title: Country level
+          url: #TODO
+          icon: worldwide
+        - 
+          title: Indiviual Area
+          url: #TODO
+          icon: worldwide 
+      categories:
+        - 
+          title: Marine Protected Areas
+        - 
+          title: Terrerstrial Protected Areas
+        - 
+          title: Green List Protected Areas

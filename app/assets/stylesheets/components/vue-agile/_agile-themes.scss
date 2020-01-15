@@ -1,0 +1,93 @@
+$agile-themes-slide-padding-desktop: rem-calc(10);
+
+$agile-themes-slides-margin-mobile: 10%;
+$agile-themes-slides-margin-tablet: 14%;
+$agile-themes-slides-margin-desktop: 4%;
+$agile-themes-slides-margin-monitor: calc((100% - #{$site-width-rem} + 2*#{$gutter-large} - 2*#{$agile-themes-slide-padding-desktop} )/2);
+
+&--themes {
+  color: $white;
+  overflow: hidden;
+  
+  .agile {
+    &__dots {
+      display: none;
+    }
+
+    &__actions {
+      @include responsive(padding-right, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
+      @include responsive(padding-left, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
+      width: 100%;
+
+      position: absolute;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      @include breakpoint($large) {
+        width: $site-width;
+
+        left: 50%;
+
+        transform: translate(-50%);
+      }
+    }
+
+      &__nav-button--prev { 
+        @include button-prev; 
+
+        transform: translateX(-50%);
+
+        @include breakpoint($large) { transform: translateX(-100%); }
+      }
+
+      &__nav-button--next { 
+        @include button-next; 
+
+        transform: translateX(50%);
+
+        @include breakpoint($large) { transform: translateX(100%); }
+      }
+
+    &__list {
+      @include responsive(margin-right, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
+      @include responsive(margin-left, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
+      overflow: visible;
+      width: auto;
+
+      @include breakpoint($large) {
+        margin-right: $agile-themes-slides-margin-monitor;
+        margin-left: $agile-themes-slides-margin-monitor;
+      }
+    }
+
+      &__slides {
+        align-items: stretch;
+      }
+
+        &__slide {
+          @include responsive(padding-right, rem-calc(5), rem-calc(10), $agile-themes-slide-padding-desktop);
+          @include responsive(padding-left, rem-calc(5), rem-calc(10), $agile-themes-slide-padding-desktop);
+        }
+
+          &__slide-link {
+            @include border-radius;
+            @include responsive(height, rem-calc(460), rem-calc(460), rem-calc(760));
+            background-color: $grey-dark;
+            padding: rem-calc(22 26);
+            text-decoration: none;
+            width: 100%;
+
+            display: flex;
+
+            &:hover::before { background-color: rgba(black, 0.6);  }
+
+            &::before { @include border-radius; }
+          }
+
+            &__slide-content {
+              @include flex-vs-end;
+              width: 100%;
+            }
+  }
+}

@@ -1,0 +1,7 @@
+en:
+  ctas:
+    api:
+      title: An API to access the world's protected areas
+      intro: If you know you need an API to access the Word’s protected areas, or want to find out more information, please view the API page.
+      url: /
+      button: API Access Key

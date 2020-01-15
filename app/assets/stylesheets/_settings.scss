@@ -1,0 +1,173 @@
+//--------------------------------------------------
+// borders
+//--------------------------------------------------
+$radius-global: rem-calc(10);
+
+//--------------------------------------------------
+// colours
+//--------------------------------------------------
+$white: #ffffff;
+$black: #000000;
+
+$grey-light: #f2f2f2;
+$grey: #242424;
+$grey-dark: #666666;
+$grey-xdark: #242424;
+
+$blue: #2C10A3;
+
+$green: #71A32B;
+$green-dark: #527B19;
+$green--darker: #415519;
+
+$orange: #D9B143;
+
+$pink: #F84489;
+
+$red: #FA3232;
+
+$map-oecm: rgba($orange, .8);
+$map-marine: rgba($blue, .8);
+$map-terrestrial: rgba($pink, .8);
+
+$orange--dark: #de522f;
+$orange--lighter: #f16e4d;
+$orange--lighest: #F5A623; //highlight color on the marine page
+$brown-bg: #fcded6;
+$yellow: #ffe600;
+
+$purple: #9691D1;
+$purple-dark: #794B9D;
+
+$alert: $red;
+$primary: $green;
+$primary-dark: $green--darker;
+
+
+
+// $accent-light: lighten($green, 15%);
+// $accent: $green;
+
+$global: $purple;
+$marine: #54B7EB;
+$terrestrial: #B1D680;
+
+//used on marine insights page
+$blue--marine-1: #bfe5e9; 
+$blue--marine-2: #A1D8DE;
+$blue--marine-3: #90BDC4;
+$blue--marine-4: #729099;
+$blue--marine-5: #444955;
+$marine-accent-color: $orange--lighest;
+
+//--------------------------------------------------
+// buttons
+//--------------------------------------------------
+$button-radius: 3px;
+// $button-font-size: rem-calc(25);
+// $button-default-color: $grey;
+
+// $button-padding-small: rem-calc(12 15);
+// $button-padding-medium: rem-calc(20 30);
+
+//--------------------------------------------------
+// shadows
+//--------------------------------------------------
+// $shadow-light: rem-calc(0 1 2 1) rgba($black, 0.3);
+// $shadow-dark: rem-calc(2 3 3 2) rgba($black, 0.5);
+
+//--------------------------------------------------
+// fonts
+//--------------------------------------------------
+$fontAwesome: normal normal normal 14px/1 FontAwesome;
+$playfair-display: 'Playfair Display';
+$hind-siliguri: 'Hind Siliguri';
+
+$body-font: $hind-siliguri, sans-serif;
+$body-font-colour: $grey-xdark;
+$body-font-line-height: 1.3;
+
+$header-font: $playfair-display, serif;
+$header-font-color: $grey-xdark;
+$header-font-line-height: 1.1;
+
+$thin: 100;
+$extra-light: 300;
+$fw-light: 300;
+$regular: 400;
+$fw-medium: 500;
+$semi-bold: 600;
+$bold: 700;
+$extra-bold: 800;
+$fw-black: 900;
+
+//--------------------------------------------------
+// breakpoints
+//--------------------------------------------------
+// must be in px not rem!
+$small: 768px; 
+$medium: 1024px;
+$large: 1200px;
+
+//--------------------------------------------------
+// z-indices
+//--------------------------------------------------
+$z-100: 100;
+$z-200: 200;
+$z-300: 300;
+
+//--------------------------------------------------
+// padding
+//--------------------------------------------------
+$gutter-small: rem-calc(25);
+$gutter-medium: rem-calc(25);
+$gutter-large: rem-calc(30);
+
+$page-padding-top-mobile: rem-calc(16);
+$page-padding-top-tablet: rem-calc(24);
+$page-padding-top-desktop: rem-calc(36);
+
+$page-padding-bottom-mobile: rem-calc(32);
+$page-padding-bottom-tablet: rem-calc(40);
+$page-padding-bottom-desktop: rem-calc(80);
+
+$section-padding-top-mobile: rem-calc(24);
+$section-padding-top-tablet: rem-calc(30);
+$section-padding-top-desktop: rem-calc(85);
+
+$section-padding-bottom-mobile: rem-calc(30);
+$section-padding-bottom-tablet: rem-calc(40);
+$section-padding-bottom-desktop: rem-calc(60);
+
+$item-spacing-small: rem-calc(14);
+$item-spacing-medium: rem-calc(20);
+$item-spacing-large: rem-calc(32);
+$item-spacing-xlarge: rem-calc(56);
+
+//--------------------------------------------------
+// dimensions
+//--------------------------------------------------
+$site-width: $large;
+$site-width-rem: rem-calc($site-width);
+
+// $site-width-medium-tablet: 80%;
+// $site-width-medium-laptop: 78%;
+// $site-width-medium-desktop: 62%;
+
+//--------------------------------------------------
+// tables
+//--------------------------------------------------
+// $collapse-table-borders: true;
+// $table-cell-padding: rem-calc(8);
+
+//--------------------------------------------------
+// topbars and footers
+//--------------------------------------------------
+// $navbar-height-small: rem-calc(90);
+// $topbar-height-laptop: rem-calc(90);
+// $topbar-height-desktop: rem-calc(118);
+
+//--------------------------------------------------
+// branding
+//--------------------------------------------------
+// $unepwcmc-w-to-h-ratio: 118/27;

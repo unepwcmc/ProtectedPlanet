@@ -1,0 +1,71 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin breakpoint($breakpoint) {
+  @media screen and (min-width: $breakpoint + 1px) {
+    @content;
+  } 
+}
+
+@mixin breakpoint-down($breakpoint) {
+  @media screen and (max-width: $breakpoint) {
+    @content;
+  } 
+}
+
+@mixin breakpoint-between($breakpoint_1, $breakpoint_2) {
+  @media screen and (max-width: $breakpoint_2) and (min-width: $breakpoint_1 + 1px) {
+    @content;
+  } 
+}
+
+@mixin responsive ($property, $mobile, $tablet-portrait, $tablet-landscape, $laptop: false) {
+  #{$property}: $mobile;
+
+  @include breakpoint($small) { #{$property}: $tablet-portrait; }
+  @include breakpoint($medium) { #{$property}: $tablet-landscape; }
+
+  @if $laptop {
+    @include breakpoint($large) { #{$property}: $laptop; }
+  }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.breakpoint-small-up {
+  display: none;
+  @include breakpoint($small) { display: block; }
+}
+
+.breakpoint-medium-up {
+  display: none;
+  @include breakpoint($medium) { display: block; }
+}
+
+.breakpoint-small-down {
+  display: block;
+  @include breakpoint($small) { display: none; }
+}
+
+.breakpoint-medium-down {
+  display: block;
+  @include breakpoint($medium) { display: none; }
+}
+
+//--------------------------------------------------
+// mixins - old
+//--------------------------------------------------
+//keep old responsive mixins with old breakpoints to avoid breaking styles across the existing site
+
+@mixin only-mobile {
+  @media only screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin only-desktop {
+  @media only screen and (min-width: 768px) {
+    @content;
+  }
+}

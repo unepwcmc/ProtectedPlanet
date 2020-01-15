@@ -1,0 +1,50 @@
+.logos {
+  &__logo {
+    margin: rem-calc(0 10);
+  }
+}
+@mixin unepwcmc-logo {
+  width: 121px;
+  height: 52px;
+
+  @include only-mobile {
+    width: 45px;
+    height: 30px;
+  }
+
+  background: url('https://s3.amazonaws.com/wcmc.logo/UNEP_WCMC_logo_white.svg') no-repeat;
+  background-size: 80%;
+  background-position: center;
+}
+.unepwcmc-logo { @include unepwcmc-logo; }
+
+@mixin iucn-logo {
+  width: 50px;
+  height: 50px;
+
+  @include only-mobile {
+    width: 30px;
+    height: 30px;
+  }
+
+  background: image_url('IUCN_logo@2x.png') no-repeat;
+  background-size: 65%;
+  background-position: center;
+}
+.iucn-logo { @include iucn-logo; }
+
+@mixin logo-protectedplanet {
+  background-image: image_url('logos/protected-planet.svg');
+  width: rem-calc(239); height: rem-calc(60);
+  
+  display: block;
+}
+.logo-protectedplanet {
+  @include protectedplanet-logo;
+
+  &__registered {
+    position: relative;
+    font-size: rem-calc(8);
+    top: -.5rem;
+  }
+}

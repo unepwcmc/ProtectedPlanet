@@ -1,0 +1,49 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$circle-medium-mobile: rem-calc(217);
+$circle-medium-tablet: rem-calc(217);
+$circle-medium-desktop: rem-calc(249);
+
+$circle-large-mobile: rem-calc(238);
+$circle-large-tablet: rem-calc(303);
+$circle-large-desktop: rem-calc(344);
+
+//--------------------------------------------------
+// shared mixins
+//--------------------------------------------------
+@mixin circle-basic {
+  @include flex-center;
+  border-radius: 100%;
+}
+
+@mixin circle-large {
+  @include responsive(width, $circle-large-mobile, $circle-large-tablet, $circle-large-desktop);
+  @include responsive(height, $circle-large-mobile, $circle-large-tablet, $circle-large-desktop);
+}
+
+@mixin circle-medium {
+  @include responsive(width, $circle-medium-mobile, $circle-medium-tablet, $circle-medium-desktop);
+  @include responsive(height, $circle-medium-mobile, $circle-medium-tablet, $circle-medium-desktop);
+}
+
+//--------------------------------------------------
+// specific mixins
+//--------------------------------------------------
+@mixin circle-grey-light {
+  @include circle-basic;
+  @include circle-medium;
+  background-color: $grey-light;
+  border: solid 2px $grey-light;
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.circle--grey-dark {
+  @include circle-basic;
+  @include circle-large;
+  background-color: $grey-xdark;
+  color: $white;
+}
+

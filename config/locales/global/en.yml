@@ -1,0 +1,8 @@
+en:
+  global:
+    button:
+      all: View all
+      download: PDF Download
+      link: Link
+    status:
+      updated: Updated

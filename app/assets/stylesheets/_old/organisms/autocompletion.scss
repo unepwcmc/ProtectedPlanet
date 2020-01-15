@@ -1,0 +1,45 @@
+.autocompletion {
+  display: none;
+
+  width: 100%;
+  max-height: 15em;
+  overflow: auto;
+  padding: rem-calc(15 0);
+  z-index: 300;
+
+  &__image {
+    float: left;
+    height: 100%;
+    width: auto;
+    margin-right: rem-calc(20);
+  }
+
+  &__result {
+    //@include text(body);
+    display: block;
+    height: rem-calc(100);
+    padding: rem-calc(20) 0;
+
+    &:hover {
+      background-color: $grey-3;
+    }
+  }
+
+  &__body {
+    height: 100%;
+
+    @include flex;
+    @include flex-column;
+    @include flex-h-center;
+    @include flex-v-start;
+  }
+
+  &__type {
+    //@include text(small);
+    font-style: italic;
+    padding: rem-calc(0 12);
+    margin-top: rem-calc(4);
+
+    background-color: $grey-light;
+  }
+}

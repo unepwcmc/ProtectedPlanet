@@ -15,6 +15,15 @@ module ApplicationHelper
     number_with_delimiter(number, delimeter: ' ')
   end
 
+  def yml_key
+    case controller_name
+    when 'target_dashboard'
+      'thematic_area.target_11_dashboard'
+    else 
+      nil
+    end
+  end
+
   def cover item
     send COVER_HELPERS[item.class], item
   end
@@ -27,6 +36,7 @@ module ApplicationHelper
       "search-placeholder-country.png",
       alt: protected_area.name,
       data: {async: tiles_path(image_params)},
+      class: 'image' #TODO find a way to add classes via parameters
     )
   end
 
@@ -45,13 +55,21 @@ module ApplicationHelper
     image_tag("search-placeholder-region.png", alt: region.name)
   end
 
-  def page_title base_title
+  def site_title 
+    'Protected Planet'
+  end
+
+  def site_description
+    "Discover the world's protected areas"
+  end
+
+  def page_title(here= false)
     custom_title = content_for(:page_title)
 
     if custom_title
-      "#{custom_title} | #{base_title}".html_safe
+      "#{custom_title} | #{site_title}".html_safe
     else
-      base_title
+      site_title
     end
   end
 
@@ -63,21 +81,32 @@ module ApplicationHelper
     url_encode(request.original_url)
   end
 
+  def social_image
+    if content_for?(:social_image)
+      content_for(:social_image)
+    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_image")
+      t("#{yml_key}.social_image")
+    else
+      URI.join(root_url, image_path('social.png'))
+    end
+  end
+
+  def social_image_alt
+    if content_for?(:social_image_alt)
+      content_for(:social_image_alt)
+    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_image_alt")
+      t("#{yml_key}.social_image_alt")
+    else
+      "Screenshot of the Protected Planet website which shows the menu bar and a map of the world that has protected areas highlighted in green."
+    end
+  end
+
   DEFAULT_SEO_DESC = """
     Protected Planet is the online interface for the
     World Database on Protected Areas (WDPA), and the most comprehensive
     global database on terrestrial and marine protected areas.
   """
-
-  def yml_key
-    case controller_name
-    when 'target_dashboard'
-      'thematic_area.target_11_dashboard'
-    else
-      nil
-    end
-  end
-
+  
   def seo_description
     if content_for?(:seo)
       content_for(:seo)
@@ -116,30 +145,39 @@ module ApplicationHelper
     end
   end
 
-  def social_image
-    if content_for?(:social_image)
-      content_for(:social_image)
-    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_image")
-      t("#{yml_key}.social_image")
-    else
-      URI.join(root_url, image_path('social.png'))
-    end
+  def create_sharing_facebook_link
+    title = url_encode('Share ' + page_title + ' on Facebook')
+    url = encoded_page_url
+    href = 'https://facebook.com/sharer/sharer.php?u=' + url
+
+    link_to '', href, title: title, class: 'social__icon--facebook', target: '_blank'
   end
 
-  def social_image_alt
-    if content_for?(:social_image_alt)
-      content_for(:social_image_alt)
-    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_image_alt")
-      t("#{yml_key}.social_image_alt")
-    else
-      "Screenshot of the Protected Planet website which shows the menu bar and a map of the world that has protected areas highlighted in green."
-    end
+  def create_sharing_twitter_link
+    title = url_encode('Share ' + page_title + ' on Twitter')
+    text = url_encode('Read about a year of impact in @unepwcmc’s 2018/19 Annual Review')
+    url = encoded_page_url
+    href = 'https://twitter.com/intent/tweet/?text=' + text + '&url=' + url
+    
+    link_to '', href, title: title, class: 'social__icon--twitter', target: '_blank'
   end
 
-  def create_social_link network, url, title, target
-    classes = 'social--share social--' + network
+  def create_sharing_linkedin_link
+    title = url_encode('Share ' + page_title + ' on LinkedIn')
+    url = encoded_page_url
+    href = 'https://www.linkedin.com/shareArticle?url=' + url
 
-    link_to '', url, class: classes, target: target, title: title
+    link_to '', href, title: title, class: 'social__icon--linkedin', target: '_blank'
+  end
+
+  def create_sharing_email_link
+    title = url_encode('Share ' + page_title + ' via Email')
+    url = encoded_page_url
+    subject = url_encode("")
+    body = url_encode("") + url
+    href = 'mailto:?subject=' + subject + '&body=' + body
+
+    link_to '', href, title: title, class: 'social__icon--email', target: '_self'
   end
 
   DOWNLOAD_TYPES = {
@@ -184,5 +222,71 @@ module ApplicationHelper
 
   def is_regional_page controller_name
     controller_name == 'region'
+  end
+
+  def get_nav_primary_links 
+    [ 
+      {
+        id: 'about',
+        label: 'About', #TODO make this pull from the CMS
+        url: '/c/about'
+      },
+      {
+        id: 'news-and-stories',
+        label: 'News & Stories',
+        url: '/c/news-and-stories'
+      },
+      {
+        id: 'resources',
+        label: 'Resources',
+        url: '/c/resources'
+      },
+      {
+        id: 'thematic-areas',
+        label: 'Thematic Areas',
+        url: '/c/thematic-areas',
+        children: [
+          {
+            id: 'marine-protected-areas',
+            label: 'Marine Protected Areas',
+            url: '/marine'
+          },
+        ]
+      }
+    ].to_json
+  end
+
+  def link_to_page? card 
+    !card[:pdf].present? && !card[:external_link].present?
+  end
+
+  def get_agile_config_themes
+    {
+      navButtons: true,
+      infinite: false,
+      responsive: [
+      {
+          breakpoint: 628,
+          settings: {
+            dots: false,
+            slidesToShow: 1,
+          }
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            dots: false,
+            slidesToShow: 1,
+          }
+        },
+        {
+          breakpoint: 1024,
+          settings: {
+            dots: false,
+            slidesToShow: 2
+          }
+        }
+      ]
+    }.to_json
   end
 end

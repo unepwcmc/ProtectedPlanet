@@ -1,0 +1,75 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$hero-padding-top-mobile: rem-calc(34);
+$hero-padding-top-tablet: rem-calc(70);
+$hero-padding-top-desktop: rem-calc(60);
+
+$hero-padding-bottom-mobile: rem-calc(32);
+$hero-padding-bottom-tablet: rem-calc(70);
+$hero-padding-bottom-desktop: rem-calc(60);
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.hero {
+//--------------------------------------------------
+// class - basic
+//--------------------------------------------------
+  &--basic {
+
+  }
+
+//--------------------------------------------------
+// class - home
+//--------------------------------------------------
+  &--home {
+    background: $grey-light;
+    padding-top: rem-calc(100);
+    padding-bottom: rem-calc(166);
+
+    .hero {
+      &__container {
+        @include flex;
+        @include flex-h-between;
+        @include responsive(flex-direction, column, column, row);
+      }
+
+        &__text {
+          @include breakpoint($large) { width: 58%; }
+        }
+
+          &__intro {
+            @include text-intro;
+            @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+          }
+
+        &__stats {
+          @include flex;
+          @include flex-column;
+          @include responsive(margin, rem-calc(22) auto 0 auto, 0 0 0 auto, 0 0 0 0);
+        }
+
+          &__stat-number {
+            @include text-accent;
+          }
+
+          &__stat-text {
+            @include text-intro;
+            color: $white;
+            font-weight: $bold;
+            line-height: 1;
+            margin-bottom: 1em;
+            text-align: center;
+          }
+    }
+  }
+
+//--------------------------------------------------
+// class - thematic
+//--------------------------------------------------
+  &--thematic-area {
+    @include responsive(padding-top, $hero-padding-top-mobile, $hero-padding-top-tablet, $hero-padding-top-desktop);
+    @include responsive(padding-bottom, $hero-padding-bottom-mobile, $hero-padding-bottom-tablet, $hero-padding-bottom-desktop);
+  }
+}

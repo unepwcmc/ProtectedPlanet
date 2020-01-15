@@ -1,0 +1,41 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$image-placeholder: black;
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin bg-colour($bg, $text) {
+  background-color: $bg;
+  color: $text;
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.bg--primary { @include bg-colour($primary, $white); }
+.bg--grey-light { @include bg-colour($grey-light, $grey-xdark); }
+.bg--grey-xdark { @include bg-colour($grey-xdark, $white); }
+
+.bg-img {
+  background-color: $image-placeholder;
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-image-overlay {
+  position: relative;
+  z-index: 1;
+
+  &:before {
+    background-color: rgba(black, 0.4);
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+}

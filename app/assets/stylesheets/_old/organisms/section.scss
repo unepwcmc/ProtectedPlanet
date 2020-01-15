@@ -1,0 +1,28 @@
+.section {
+  max-width: $max-width--desktop;
+  padding: rem-calc(0 16);
+  margin-bottom: rem-calc(16);
+  margin: {left: auto; right: auto;}
+
+  @include breakpoint($large){ padding: rem-calc(0 112); }
+
+  &--padding-top {
+    padding-top: rem-calc(32);
+  }
+
+  &__header {
+    color: $grey-xdark;
+    //@include text(xlarge, thin);
+
+    margin-bottom: rem-calc(40);
+    padding-left: rem-calc(20);
+    padding-bottom: rem-calc(24);
+
+    border-bottom: solid rem-calc(1) $grey-15;
+  }
+
+  &__body {
+    
+    padding: rem-calc(0 20);
+  }
+}

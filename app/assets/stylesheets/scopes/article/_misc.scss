@@ -1,9 +1,0 @@
-hr {
-  border: solid rem-calc(1) $grey-5;
-  margin: rem-calc(32) auto;
-  width: 80%;
-}
-
-img {
-  @extend .article__image;
-}

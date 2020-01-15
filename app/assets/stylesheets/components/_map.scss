@@ -1,0 +1,12 @@
+.map {
+  &--main {
+    @include gutters;
+    
+    .map {
+
+      &__mapbox {
+        height: rem-calc(700);
+      }
+    }
+  }
+}

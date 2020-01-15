@@ -1,0 +1,55 @@
+.gallery {
+  &__body {
+    position: relative;
+  
+    height: $gallery-body__height;
+    overflow: hidden;
+    white-space: nowrap;
+  
+    margin-bottom: rem-calc(10);
+  }
+  
+  &__body-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+  
+    height: 100%;
+  }
+  
+  &__photo {
+    display: inline-block;
+  
+    height: 100%;
+    width: auto;
+  
+    margin-right: rem-calc(6);
+  
+    &.is-blurred {
+      opacity: .4;
+    }
+  }
+  
+  &__controls {
+    @extend .u-center;
+  
+    background-color: $gallery-controls__bg-color;
+    line-height: rem-calc(50);
+  }
+  
+  &__control {
+    padding: $gallery-control__padding;
+  }
+  
+  &__counter {
+    //@include text(body);
+    color: $grey-xdark;
+  }
+  
+  &__current-index {
+    color: $gallery-current-index__color;
+    background-color: $gallery-current-index__bg-color;
+    padding: $gallery-current-index__padding;
+    border-radius: $gallery-current-index__border-radius;
+  }
+}

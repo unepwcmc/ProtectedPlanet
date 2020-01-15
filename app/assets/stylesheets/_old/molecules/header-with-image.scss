@@ -1,0 +1,19 @@
+.header {
+  &__text {
+    color: $grey-xdark;
+    //@include text(medium, thin);
+    margin-bottom: rem-calc(20);
+  }
+
+  &__sup {
+    vertical-align: super;
+
+    //@include text(small, bold);
+    color: $green;
+  }
+
+  &__image {
+    float: left;
+    margin-right: rem-calc(15);
+  }
+}

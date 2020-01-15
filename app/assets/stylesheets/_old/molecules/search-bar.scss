@@ -1,0 +1,79 @@
+.search-bar {
+  @include flex;
+  @include flex-h-center;
+  @include flex-v-stretch;
+
+  padding: rem-calc(0 2);
+  height: $search-bar__height;
+  width: 100%;
+
+  &--bigger {
+    height: $search-bar--bigger__height;
+  }
+
+  &--push {
+    margin-bottom: rem-calc(20);
+  }
+
+  &__form {
+    @include only-desktop {
+      @include flex;
+      @include flex-grow;
+      &:not(:last-child) {
+        border-right: solid rem-calc(1) $grey-15;
+        margin-right: rem-calc(14);
+        padding-right: rem-calc(14);
+      }
+    }
+
+    @include only-mobile {
+      &:after {
+        @include fa(search);
+        position: absolute;
+        top: rem-calc(12); // required for IE11
+        right: 0;
+        margin-right: 5%;
+        color: $grey-15;
+        pointer-events: none;
+      }
+      width: 100%;
+      height: rem-calc(40);
+    }
+  }
+
+  &__input {
+    //@include text(body, thin);
+    box-sizing: border-box;
+    height: 100%;
+    border: solid rem-calc(1) $grey-15;
+
+    @include only-desktop {
+      &:focus { outline: none; }
+      padding: rem-calc(0 8);
+      flex-grow: 1;
+      margin-right: rem-calc(10);
+    }
+    @include only-mobile {
+      -webkit-appearance: none;
+      border-radius: 0;
+      width: 100%;
+      padding: rem-calc(0 16);
+    }
+  }
+
+  &__submit {
+    @include color-with-state($big-button__bg-color, (
+      hover: $big-button__bg-color--hover,
+      active: $big-button__bg-color--pressed,
+      disabled: $big-button__bg-color--disabled
+    ), background-color);
+
+    height: 100%;
+    width: $search-bar__height;
+    line-height: $search-bar__height;
+    box-sizing: border-box;
+
+    border-radius: $big-button__border-radius;
+    color: $big-button__color;
+  }
+}

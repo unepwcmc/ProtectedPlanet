@@ -1,0 +1,34 @@
+<% unless @for_pdf %>
+  <footer class="footer bg--primary section-padding">
+    <div class="container footer__container">
+      <div class="footer__col1">
+        <% unless @for_pdf %>
+          <%= link_to 'Send Feedback', 'mailto:protectedareas@unep-wcmc.org', title: '', class: 'button--comment' %>
+        <% end %>
+
+        <div class="social--share">
+          <%= create_sharing_twitter_link %>
+          <%= create_sharing_facebook_link %>
+          <%= create_sharing_linkedin_link %>
+          <%= create_sharing_email_link %>
+        </div>
+      </div>
+
+      <div class="footer__col2">
+        <%= image_tag 'logos/protected-planet.svg', alt: 'Protected Planet logo', class: 'footer__logo-site' %>
+
+        <div>
+          <%= link_to 'http://unep-wcmc.org', title: 'here', target: '_blank' do %>
+            <%= image_tag 'https://s3.amazonaws.com/wcmc.logo/UNEP_WCMC_logo_white.svg', alt: 'UN Environment World Conservation Monitoring logo', class: 'footer__logo-partner' %>
+          <% end %>
+
+          <%= link_to 'http://www.iucn.org', title: 'here', target: '_blank' do %>
+            <%= image_tag 'logos/iucn.png', alt: 'IUCN logo', class: 'footer__logo-partner' %>
+          <% end %>
+        </div>
+
+        <span>&copy; ProtectedPlanet 2014-<%= Date.today.year %>. All rights reserved</span>
+      </div>
+    </div>
+  </footer>
+<% end %>

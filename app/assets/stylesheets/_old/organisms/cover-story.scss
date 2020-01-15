@@ -1,0 +1,88 @@
+.cover-story {
+  @include flex;
+
+  @include only-mobile {
+    @include flex-column;
+  }
+
+
+  &__cover {
+    &--above {
+      width: 100%;
+      margin-bottom: rem-calc(48);
+    }
+  
+    height: 100%;
+    width: 65%;
+  
+    @include only-mobile {
+      width: 100%;
+      margin-bottom: rem-calc(8);
+    }
+  }
+  
+  &__story {
+    @include flex;
+    @include flex-column;
+  
+    width: 35%;
+  
+    @include only-mobile {
+      width: 100%;
+    }
+  }
+  
+  &__story-border {
+    border-bottom: solid rem-calc(20) $grey-light;
+    margin-top: rem-calc(20);
+    width: 100%;
+  }
+  
+  &__story-title {
+    //@include text(medium, bold);
+    color: $green;
+    margin-bottom: rem-calc(16);
+  }
+  
+  &__story-content {
+    color: $grey-xdark;
+    //@include text(body, thin);
+    margin-bottom: rem-calc(32);
+  }
+  
+  &__story-body {
+    background-color: $white;
+    z-index: 100;
+  
+    @include flex-grow;
+    height: 100%;
+  
+    padding-top: rem-calc(40);
+  
+    @include only-mobile {
+      padding-top: 0;
+    }
+  
+    &--left {
+      margin-right: rem-calc(-96);
+      padding-right: rem-calc(40);
+  
+      @include only-mobile {
+        margin-right: 0;
+        padding-left: 0;
+      }
+    }
+  
+    &--right {
+      margin-left: rem-calc(-96);
+      padding-left: rem-calc(40);
+  
+      @include only-mobile {
+        margin-left: 0;
+        padding-left: 0;
+      }
+    }
+  }
+  
+  
+}

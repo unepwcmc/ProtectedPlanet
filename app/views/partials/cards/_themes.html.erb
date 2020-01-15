@@ -1,0 +1,19 @@
+<div class="cards--themes container">
+
+  <h3><%#= title %></h3>
+
+  <div class="cards__cards">
+    <% cards.each do |card| %>
+      <%= link_to '', title: "View the #{card.label} page", class: "card" do %>
+        <div class="card__ribbon">
+          <span class="card__icon">icon hc</span>
+          <span class="card__number">000000 hc</span>
+          <span>Protected Areas hc</span>
+        </div>
+
+        <h3><%= card.label %></h3>
+        <p>intro field needs creating hc</p>
+      <% end %>
+    <% end %>
+  </div>
+</div>

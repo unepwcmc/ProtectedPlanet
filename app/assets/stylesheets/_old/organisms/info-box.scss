@@ -1,0 +1,139 @@
+.info-box {
+  
+  color: $grey-xdark;
+
+  padding: $info-box__padding;
+  margin-bottom: $info-box__margin-bottom;
+
+  &--fill-color {
+    background-color: $info-box__bg-color;
+  }
+
+  &--overflow {
+    margin: { left: rem-calc(-16); right: rem-calc(-16); }
+
+    @include only-mobile {
+      margin: 0;
+    }
+
+  }
+
+  &--alt-color {
+    background-color: $green;
+    color: $white;
+  }
+
+  &--fff {
+    background-color: $white;
+  }
+
+  &--hero {
+    min-width: rem-calc(500);
+    padding: rem-calc(20);
+    z-index: 400;
+  }
+
+  &--shadow {
+    box-shadow: rem-calc(2 2 4) rgba(0, 0, 0, 0.3);
+  }
+
+  &--padding-top-bottom {
+    padding: $info-box-padding-top-bottom__padding;
+  }
+
+  &--margin-top {
+    margin-top: rem-calc(28);
+  }
+
+  &--small {
+    //@include font-weight(thin);
+    
+    color: $grey-100;
+    font-family: 'MuseoSans';
+    font-size: .9375rem;
+    margin-right: rem-calc(16);
+    margin-bottom: rem-calc(4);
+    padding: rem-calc(10);
+
+    display: inline-block;
+  }
+
+  &--factsheet {
+    h3 {
+      font-weight: bold;
+      
+      color: $info-box__icon-color;
+      margin-bottom: rem-calc(18);
+      padding-bottom: rem-calc(4);
+    }
+    
+    font-weight: normal;
+
+    color: $grey-100;
+    font-size: rem-calc(18);
+  }
+
+  &__body {
+    
+  
+    &--no-padding { padding: 0; }
+    &--inherit { font: inherit; }
+    //@include text(body, thin);
+  
+    &--flex { @include flex; }
+  
+    padding: $info-box-body__padding;
+  }
+  
+  &__column {
+    @extend .one-thirds;
+  }
+  
+  &__header {
+    border-bottom: solid $fact-header__border-bottom-color $fact-header__border-bottom-size;
+  
+    &--white {
+      color: $white;
+      border-bottom: solid $white $fact-header__border-bottom-size;
+    }
+  
+    &--with-padding {
+      padding-bottom: rem-calc(12);
+    }
+  }
+  
+  &__link-icon {
+    color: $info-box-link__color;
+    margin-right: $info-box-link-icon__margin-right;
+  }
+  
+  &__link {
+    //@include text(body, bold);
+    color: $info-box-link__color;
+    cursor: pointer;
+  
+    padding-bottom: $info-box-link__padding-bottom;
+    display: block;
+  }
+
+  &__row {
+    width: 100%;
+
+    padding-top: rem-calc(16);
+    border-bottom: solid rem-calc(1) $info-box-row__border-bottom;
+
+    &--around-padding {
+      padding: rem-calc(32 0);
+    }
+
+    &--light-border {
+      &:not(:last-child) {
+        border-bottom: solid rem-calc(1) $grey-15;
+      }
+    }
+
+    &--no-border {
+      border: none;
+    }
+  }
+}

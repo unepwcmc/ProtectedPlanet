@@ -1,0 +1,238 @@
+%clearfix {
+  &:after {
+    clear: both;
+    content: "";
+    display: table;
+  }
+}
+
+.half {
+  @include span-columns(6);
+
+  @include only-mobile {
+    @include span-columns(12);
+  }
+
+  &--no-margin {
+    width: 50%;
+    margin: 0;
+  }
+
+  &--with-separator {
+    position: relative;
+    border-right: solid rem-calc(2) $grey-15;
+
+    &:before { top: 0;    }
+    &:after  { bottom: 0; }
+    &:before, &:after {
+      background-color: $grey-light;
+
+      content: "";
+      width: rem-calc(4);
+      height: rem-calc(8);
+      position: absolute;
+      right: -.25rem;
+    }
+  }
+}
+
+.one-thirds {
+  @include span-columns(4);
+
+  &--no-margin {
+    width: 33.33%;
+    margin: 0;
+  }
+
+  @media (max-width: 769px) { @include span-columns(12); }
+}
+
+.two-thirds {
+  @include span-columns(8);
+  @media (max-width: 769px) { @include span-columns(12); }
+}
+
+.one-fourths {
+  @include span-columns(3);
+
+  @media (max-width: 769px) { @include span-columns(12); }
+}
+
+.three-fourths {
+  @include span-columns(9);
+  @media (max-width: 769px) { @include span-columns(12); }
+}
+
+//----------------------------------------
+// flex positioning
+//----------------------------------------
+// ***************************************
+// NB: IMPORTANT NOTE
+// ***************************************
+//
+// Flexbox has unexpected results in IE
+// it calculates percentage width using
+// the box-sizing: content-box instead of
+// border-box. 
+// 
+// If you are using borders or padding make 
+// sure you test it in IE before deploying
+//----------------------------------------
+
+.flex-start {
+  @include flex;
+
+  @include only-mobile {
+    flex-direction: column;
+  }
+}
+
+.space-between {
+  @include flex;
+  @include flex-h-between;
+}
+
+.space-around {
+  @include flex-h-around;
+}
+
+.right-padded {
+  padding-right: 5%;
+}
+
+.justify-content-between { @include flex-h-between; }
+.justify-content-center { @include flex-h-center; }
+
+.justify-content-end {
+  @extend .justify-content-center;
+  @include breakpoint($large){ @include flex-h-end; }
+}
+
+
+.align-items-end { @include flex-v-end; }
+.align-items-center { @include flex-v-center; }
+
+//----------------------------------------
+// rows
+//----------------------------------------
+
+.flex-row {
+  @include flex;
+  @include flex-nowrap;
+}
+
+.flex-row-wrap {
+  @include flex;
+  @include flex-wrap;
+}
+
+.flex-row-responsive {
+  @include flex;
+  flex-flow: row wrap;    
+
+  @include breakpoint($medium){ flex-flow: row nowrap; } //required for IE 11
+}
+
+//----------------------------------------
+// column spacing
+//----------------------------------------
+.flex-column-gap--left {
+  @include breakpoint($medium){ padding-left: rem-calc(12); }
+}
+
+.flex-column-gap--right {
+  @include breakpoint($medium){ padding-right: rem-calc(12); }
+}
+
+//----------------------------------------
+// 2 columns
+//----------------------------------------
+.flex-column-2 {
+  flex: 0 0 50%;
+
+  @include only-mobile { flex: 0 0 100%; }
+}
+
+.flex-1-half {
+  flex: 0 0 100%;
+  margin-bottom: rem-calc(10);
+
+  @include breakpoint($medium){ 
+    flex: 0 1 50%; //shrink true required for IE
+    margin-bottom: 0;
+  }
+}
+
+//----------------------------------------
+// 3 columns
+//----------------------------------------
+.flex-column-3 {
+  flex: 0 0 100%;
+
+  @include breakpoint($medium){ flex: 0 0 33.3%; }
+}
+
+.flex-1-third {
+  flex: 0 0 100%;
+
+  @include breakpoint($medium){ flex: 0 0 33.3%; }
+}
+
+.flex-2-thirds {
+  flex: 0 0 100%;
+
+  @include breakpoint($medium){ flex: 0 0 66.6%; }
+}
+
+//----------------------------------------
+// 4 columns
+//----------------------------------------
+.flex-1-quarter {
+  @include only-mobile { flex: 0 0 100%; }
+
+  flex: 0 0 25%;
+}
+
+.flex-3-quarters {
+  @include only-mobile { flex: 0 0 100%; }
+
+  flex: 0 0 75%;
+}
+
+//----------------------------------------
+// 5 columns
+//----------------------------------------
+.flex-1-fith {
+  @include only-mobile { flex: 0 0 100%; }
+
+  flex: 0 0 20%;
+}
+
+.flex-2-fiths {
+  @include only-mobile { flex: 0 0 100%; }
+
+  flex: 0 0 40%;
+}
+
+
+.flex-3-fiths {
+  @include only-mobile { flex: 0 0 100%; }
+
+  flex: 0 0 60%;
+}
+
+.flex-4-fiths {
+  @include only-mobile { flex: 0 0 100%; }
+
+  flex: 0 0 80%;
+}
+
+//----------------------------------------
+// mobile
+//----------------------------------------
+.flex-column-mobile {
+  @media only screen and (max-width: $small) {
+    flex: 0 0 100%;
+    margin-bottom: rem-calc(10);
+  }
+}

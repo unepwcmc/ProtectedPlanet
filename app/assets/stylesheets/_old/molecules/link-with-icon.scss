@@ -1,0 +1,59 @@
+@mixin link-with-icon($color: $link-with-icon__color, $bg-color: $link-with-icon__bg-color, $icon__margin-sides: $link-with-icon-icon__margin-sides) {
+  //@include text(body, thin);
+  @extend %acts-as-link;
+
+  cursor: pointer;
+
+  &__icon {
+    margin-right: $icon__margin-sides;
+
+    &--after {
+      margin-left: $icon__margin-sides;
+      margin-right: 0;
+    }
+
+    &--above {
+      display: block !important;
+      margin-bottom: $icon__margin-sides;
+    }
+
+    &--absolute {
+      position: absolute;
+      left: 0; top: 0;
+    }
+  }
+
+  &--inherit {
+    font: inherit;
+  }
+
+  &--no-push {
+    margin-bottom: 0;
+  }
+
+  &--push {
+    &:not(:last-child) { margin-bottom: rem-calc(8); }
+  }
+
+  &--no-color {
+    color: inherit !important;
+    font-weight: inherit;
+  }
+
+  &--bold { font-weight: bold; }
+
+  &--pull-right {
+    position: relative;
+    padding-left: rem-calc(24);
+  }
+
+  @content;
+
+  &--no-underline {
+    &:hover { text-decoration: none; }
+  }
+}
+
+.link-with-icon {
+  @include link-with-icon;
+}

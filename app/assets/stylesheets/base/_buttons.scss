@@ -1,0 +1,99 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$height-small: rem-calc(46);
+$height-medium: rem-calc(56);
+
+$padding-small: rem-calc(20);
+$padding-medium: rem-calc(27);
+
+//--------------------------------------------------
+// shared mixins
+//--------------------------------------------------
+@mixin button-plain () { //delete
+  border: none;
+  padding: 0;
+}
+
+@mixin button-basic {
+  @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
+  background-color: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-family: $body-font;
+  padding: 0;
+  text-decoration: none;
+
+  &:hover { text-decoration: none; }
+}
+
+@mixin button-height { 
+  @include responsive(height, $height-small, $height-medium, $height-medium);
+
+  display: inline-flex;
+  align-items: center;
+}
+
+@mixin button-outline ($colour: $black) {
+  @include button-basic;
+  @include button-height;
+  @include button-padding;
+  @include button-radius;
+  border: solid 2px $colour;
+  color: $colour;
+}
+
+@mixin button-padding {
+  @include responsive(padding-right, $padding-small, $padding-medium, $padding-medium);
+  @include responsive(padding-left, $padding-small, $padding-medium, $padding-medium);
+}
+
+@mixin button-radius {
+  border-radius: $button-radius;
+}
+
+@mixin button-with-icon {
+  @include button-basic;
+  @include flex;
+  @include flex-v-center;
+
+  &::after {
+    content: '';
+    margin-left: rem-calc(10);
+
+    display: inline-block;
+  }
+}
+
+//--------------------------------------------------
+// specific mixins
+//--------------------------------------------------
+@mixin button-next { @include button-basic; }
+@mixin button-prev { @include button-basic; }
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.button {
+  &--outline-black { @include button-outline($black); }
+  &--outline-white { @include button-outline($white); }
+
+  &--all {
+    @include button-with-icon;
+    
+    &::after { @include icon-circle-chevron-black; }
+  }
+
+  &--download {
+    @include button-with-icon;
+    
+    &::after { @include icon-download; }
+  }
+
+  &--link-external {
+    @include button-with-icon;
+    
+    &::after { @include icon-arrow-external; }
+  }
+}

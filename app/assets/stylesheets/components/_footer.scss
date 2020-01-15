@@ -1,0 +1,21 @@
+.footer {
+  border-bottom: solid rem-calc(17) $green-dark;
+
+  &__container {
+    @include flex;
+    @include responsive(flex-direction, column, row, row);
+    @include responsive(justify-content, initial, space-between, space-between);
+  }
+
+    &__col1 {
+      @include responsive(order, 0, 1, 1);
+    }
+
+      &__logo-partner {
+        width: auto; height: rem-calc(30);
+      }
+
+      &__logo-site {
+        width: auto; height: rem-calc(40);
+      }
+}

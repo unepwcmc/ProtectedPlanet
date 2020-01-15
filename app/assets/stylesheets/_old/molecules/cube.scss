@@ -1,0 +1,18 @@
+@mixin cube($size, $bg-color: $grey-100, $fill-color: $green) {
+  .cube {
+    position: relative;
+    height: $size;
+    width: $size;
+    @include flex-vs-start;
+
+    background-color: $bg-color;
+
+    &__inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      background-color: $fill-color;
+    }
+  }
+}
