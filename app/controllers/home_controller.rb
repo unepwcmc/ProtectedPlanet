@@ -1,6 +1,4 @@
 class HomeController < ApplicationController
-  before_action { load_cms_content :home }
-
   def index
     home_yml = I18n.t('home')
 
@@ -20,7 +18,7 @@ class HomeController < ApplicationController
     @pas_levels = home_yml[:pas][:levels]
     @pas_categories = home_yml[:pas][:categories]
 
-    comfy_themes = Comfy::Cms::Page.find_by_slug("thematic-areas") 
+    comfy_themes = Comfy::Cms::Page.find_by_slug("thematical-areas") 
     @themes_title = comfy_themes.label
     @themes_url = comfy_themes.full_path
     @themes = comfy_themes.children.published.map{ |page| {
@@ -31,7 +29,7 @@ class HomeController < ApplicationController
       }
     }
 
-    comfy_news = Comfy::Cms::Page.find_by_slug("blog")
+    comfy_news = Comfy::Cms::Page.find_by_slug("news-and-stories")
     @news_articles_title = comfy_news.label
     @news_articles = comfy_news.children.published.order(created_at: :desc).limit(2).map{ |page| { 
       "label": page.label, 

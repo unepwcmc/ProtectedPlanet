@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   after_action :store_location
-  # before_action :load_cms_pages
+  before_action :load_cms_content
   before_action :check_for_pdf
   before_action :set_locale
 
@@ -47,8 +47,8 @@ class ApplicationController < ActionController::Base
     "/users/sign_out"
   ]
 
-  def load_cms_content label
-    @cms_page = Comfy::Cms::Page.find_by_label(label)
+  def load_cms_content
+    @cms_page = Comfy::Cms::Page.find_by_full_path(request.path)
   end
 
   # def load_cms_pages
