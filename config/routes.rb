@@ -33,8 +33,7 @@ Rails.application.routes.draw do
   resources :projects, only: [:create, :index, :update, :destroy]
 
   get '/resources', to: 'cms/resources#index'
-
-  get '/marine', to: 'marine#index'
+  
   get '/marine/download_designations', to: 'marine#download_designations'
   get '/green_list/:id', to: 'green_list#show', as: 'green_list'
   get '/target-11-dashboard', to: 'target_dashboard#index', as: 'target_dashboard'
@@ -64,6 +63,10 @@ Rails.application.routes.draw do
 
   get '/country_codes', to: 'country#codes', as: 'country_codes'
 
+  scope "(:locale)", locale: /en/ do
+    get '/thematical-areas/marine-protected-areas', to: 'marine#index' #TODO - Ferdi this relies on the slug of the pages - is there a better way to do this?
+  end
+
   comfy_route :cms_admin, path: "/admin"
-  comfy_route :cms, path: "/:locale/"
+  comfy_route :cms, path: "/"
 end
