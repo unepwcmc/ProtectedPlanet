@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  scope "(:locale)", locale: /en, es, fr/ do
+  scope "(:locale)", locale: /en|es|fr/ do
 
     get '/en', to: 'home#index'
     get '/', to: redirect('/en')
@@ -36,7 +36,7 @@ Rails.application.routes.draw do
     resources :projects, only: [:create, :index, :update, :destroy]
 
     get '/resources', to: 'cms/resources#index'
-    
+
     get '/marine/download_designations', to: 'marine#download_designations'
     get '/green_list/:id', to: 'green_list#show', as: 'green_list'
     get '/target-11-dashboard', to: 'target_dashboard#index', as: 'target_dashboard'
@@ -54,7 +54,7 @@ Rails.application.routes.draw do
     get '/sites/:id', to: 'sites#show'
     get '/sites/:id/*other', to: 'sites#show'
 
-    get '/terms', to: redirect("/c/terms-and-conditions")  
+    get '/terms', to: redirect("/c/terms-and-conditions")
 
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
     resources :downloads, only: [:show, :create, :update]
@@ -65,13 +65,14 @@ Rails.application.routes.draw do
     post '/search', to: 'search#create'
 
     get '/country_codes', to: 'country#codes', as: 'country_codes'
-  
+
     get '/thematical-areas/marine-protected-areas', to: 'marine#index'
     get '/thematical-areas/world-database-on-protected-areas', to: 'wdpa#index'
-  
-    # Ensure that this route is defined last
-    comfy_route :cms_admin, path: "/admin"
-    comfy_route :cms, path: "/:locale/"
 
   end
+
+  # Ensure that this route is defined last
+  comfy_route :cms_admin, path: "/admin"
+  comfy_route :cms, path: "/:locale/c"
+
 end
