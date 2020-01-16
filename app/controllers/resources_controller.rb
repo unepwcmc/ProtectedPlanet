@@ -1,4 +1,4 @@
-class Cms::ResourcesController < ApplicationController
+class ResourcesController < ApplicationController
   before_action :load_category
 
   def index

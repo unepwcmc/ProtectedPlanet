@@ -33,9 +33,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :projects, only: [:create, :index, :update, :destroy]
-
-    get '/resources', to: 'cms/resources#index'
+    # resources :projects, only: [:create, :index, :update, :destroy]
 
     get '/marine/download_designations', to: 'marine#download_designations'
     get '/green_list/:id', to: 'green_list#show', as: 'green_list'
@@ -67,12 +65,15 @@ Rails.application.routes.draw do
     get '/country_codes', to: 'country#codes', as: 'country_codes'
 
     get '/thematical-areas/marine-protected-areas', to: 'marine#index'
+    get '/resources', to: 'resources#index'
     get '/thematical-areas/world-database-on-protected-areas', to: 'wdpa#index'
 
+    # Ensure that this route is defined last
+    
+    comfy_route :cms_admin, path: "/admin"
+    comfy_route :cms, path: "/"
   end
 
-  # Ensure that this route is defined last
-  comfy_route :cms_admin, path: "/admin"
-  comfy_route :cms, path: "/:locale/c"
+  
 
 end

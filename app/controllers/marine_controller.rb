@@ -13,6 +13,8 @@ class MarineController < ApplicationController
   before_action :designations, only: [:index, :download_designations]
   before_action :green_list_areas, only: [:index]
 
+  before_action :load_cms_content
+
   COUNTRIES = [
     "United States of America",
     "France",

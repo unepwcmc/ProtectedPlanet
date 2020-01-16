@@ -18,7 +18,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    I18n.locale = params[:locale] || I18n.default_locale
+    if params[:locale].present?
+      I18n.locale = params[:locale]
+    else
+      I18n.locale = I18n.default_locale
+    end
   end
 
   def raise_404
@@ -53,9 +57,14 @@ class ApplicationController < ActionController::Base
   ]
 
   def load_cms_content
-    cms_path = params[:cms_path]
-    full_path = "/#{cms_path}"
-    @cms_page = Comfy::Cms::Page.find_by_full_path(full_path)
+    cms_path = request.original_fullpath
+    locale = request.params["locale"]
+
+    if locale != nil
+      cms_path = cms_path.gsub("/#{locale}", "")
+    end
+    
+    @cms_page = Comfy::Cms::Page.find_by_full_path(cms_path)
   end
 
   # def load_cms_pages
