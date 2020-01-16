@@ -3,21 +3,22 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  after_action :store_location
+  before_action :set_cms_site
   before_action :set_locale
   before_action :load_cms_content
   before_action :check_for_pdf
+  after_action :store_location
+
+  def set_cms_site
+      @cms_site ||= Comfy::Cms::Site.first
+  end
 
   def default_url_options
     { locale: I18n.locale }
   end
 
   def set_locale
-    if params[:locale].present?
-      I18n.locale = params[:locale]
-    else
-      I18n.locale = I18n.default_locale
-    end
+    I18n.locale = params[:locale] || I18n.default_locale
   end
 
   def raise_404
