@@ -8,8 +8,8 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  get '/:locale', to: 'home#index'
   root to: 'home#index'
-  get '/', to: 'home#index'
 
   put '/admin/maintenance', as: 'maintenance'
   put '/admin/clear_cache', as: 'clear_cache'
@@ -63,10 +63,11 @@ Rails.application.routes.draw do
 
   get '/country_codes', to: 'country#codes', as: 'country_codes'
 
-  scope "(:locale)", locale: /en/ do
-    get '/thematical-areas/marine-protected-areas', to: 'marine#index' #TODO - Ferdi this relies on the slug of the pages - is there a better way to do this?
+  scope "(:locale)", locale: /en, es, fr/ do
+    get '/thematical-areas/marine-protected-areas', to: 'marine#index'
+    get '/thematical-areas/world-database-on-protected-areas', to: 'wdpa#index'
   end
 
   comfy_route :cms_admin, path: "/admin"
-  comfy_route :cms, path: "/"
+  comfy_route :cms, path: "/:locale/"
 end

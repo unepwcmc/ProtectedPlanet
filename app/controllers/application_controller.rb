@@ -4,9 +4,13 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   after_action :store_location
+  before_action :set_locale
   before_action :load_cms_content
   before_action :check_for_pdf
-  before_action :set_locale
+
+  def default_url_options
+    { locale: I18n.locale }
+  end
 
   def set_locale
     if params[:locale].present?
@@ -48,7 +52,9 @@ class ApplicationController < ActionController::Base
   ]
 
   def load_cms_content
-    @cms_page = Comfy::Cms::Page.find_by_full_path(request.path)
+    cms_path = params[:cms_path]
+    full_path = "/#{cms_path}"
+    @cms_page = Comfy::Cms::Page.find_by_full_path(full_path)
   end
 
   # def load_cms_pages
