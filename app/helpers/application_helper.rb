@@ -231,14 +231,14 @@ module ApplicationHelper
       mapped_page = { 
         "id": cms_page.slug,
         "label": cms_page.label, 
-        "url": root_path + cms_page.full_path,
+        "url": root_path + '/c' + cms_page.full_path,
       }
 
       if map_children
         mapped_page["children"] = cms_page.children.published.map{ |page| {
             "id": page.slug,
             "label": page.label, 
-            "url": root_path + page.full_path,
+            "url": root_path + '/c' + page.full_path,
           }
         }
       end

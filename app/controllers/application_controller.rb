@@ -57,11 +57,12 @@ class ApplicationController < ActionController::Base
   ]
 
   def load_cms_content
+    # byebug
     cms_path = request.original_fullpath
     locale = request.params["locale"]
 
     if locale != nil
-      cms_path = cms_path.gsub("/#{locale}", "")
+      cms_path = cms_path.gsub("/#{locale}/c", "")
     end
     
     @cms_page = Comfy::Cms::Page.find_by_full_path(cms_path)

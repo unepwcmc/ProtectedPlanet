@@ -21,9 +21,9 @@
           <button class="navbar__submenu__title js-trigger">Resources</button>
 
           <div class="u-hide js-target navbar__submenu dropdown">
-            <% Comfy::Cms::Category.of_type("Comfy::Cms::Page").all.each do |category| %>
-              <a class="navbar__submenu__link" href="<%= resources_path(category_id: category.id) %>"><%= category.label %></a>
-            <% end %>
+            <% #Comfy::Cms::Category.of_type("Comfy::Cms::Page").all.each do |category| %>
+              <a class="navbar__submenu__link" href="<%#= resources_path(category_id: category.id) %>"><%#= category.label %></a>
+            <% #end %>
 
             <a class="navbar__submenu__link" href="//api.protectedplanet.net">Protected Planet API</a>
           </div>

@@ -14,6 +14,9 @@ Rails.application.routes.draw do
     get '/', to: redirect('/en')
     root to: 'home#index'
 
+    # root to: 'home#index'
+    # get '/', to: 'home#index'
+
     put '/admin/maintenance', as: 'maintenance'
     put '/admin/clear_cache', as: 'clear_cache'
 
@@ -64,16 +67,14 @@ Rails.application.routes.draw do
 
     get '/country_codes', to: 'country#codes', as: 'country_codes'
 
-    get '/thematical-areas/marine-protected-areas', to: 'marine#index'
-    get '/resources', to: 'resources#index'
-    get '/thematical-areas/world-database-on-protected-areas', to: 'wdpa#index'
+    get '/c/thematical-areas/marine-protected-areas', to: 'marine#index'
+    get '/c/resources', to: 'resources#index'
+    get '/c/thematical-areas/world-database-on-protected-areas', to: 'wdpa#index'
 
     # Ensure that this route is defined last
     
     comfy_route :cms_admin, path: "/admin"
-    comfy_route :cms, path: "/"
+    comfy_route :cms, path: "/c"
   end
-
-  
 
 end
