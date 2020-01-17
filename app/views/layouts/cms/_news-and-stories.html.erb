@@ -1,3 +1,5 @@
+<% get_news_cards %>
+
 <%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label } %>
 
 <div class="container">
@@ -5,4 +7,5 @@
   <h2>list of news articles</h2>  
 </div>
 
+<%= render "partials/cards/articles" %>
 <%= render "partials/ctas/live-report" %>
