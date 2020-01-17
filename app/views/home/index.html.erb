@@ -43,37 +43,18 @@
 <%= render "partials/ctas/api" %>
     
 <section class="container section-padding">
-  <%= render partial: "partials/cards/resources", locals: 
-    { 
-      title: @resources_title, 
-      cards: @resources, 
-      url: @resources_url
-    }
-  %>
+  <%= render "partials/cards/resources" %>
 </section>
 
 <section class="container section-padding">
-  <%= render partial: "partials/cards/articles", locals: 
-    { 
-      title: @news_articles_title, 
-      cards: @news_articles, 
-      url: @news_articles_url
-    }
-  %>
+  <%= render "partials/cards/articles" %>
 </section>
 
 <%= render "partials/ctas/live-report" %>
 
-<%= render partial: "partials/cards/sites", locals: 
-  { 
-    title: 'title', 
-    cards: @temp_pas
-  }
-%>
-
-<%= render partial: "partials/cards/themes", locals: 
-  { 
-    title: 'title', 
-    cards: @temp_themes
-  }
-%>
+<%#= render partial: "partials/cards/sites", locals: 
+#   { 
+#     title: 'title', 
+#     cards: @temp_pas
+#   }
+# %>

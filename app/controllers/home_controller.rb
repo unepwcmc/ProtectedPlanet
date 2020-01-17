@@ -29,29 +29,6 @@ class HomeController < ApplicationController
       }
     }
 
-    comfy_news = Comfy::Cms::Page.find_by_slug("news-and-stories")
-    @news_articles_title = comfy_news.label
-    @news_articles = comfy_news.children.published.order(created_at: :desc).limit(2).map{ |page| { 
-      "label": page.label, 
-      "created_at": page.created_at.strftime('%d %B %y'),
-      "url": page.url,
-      "intro": "field needs created in the CMS", #TODO create field in CMS
-      "image": "field needs created in the CMS" #TODO create field in CMS
-      }
-    } #TODO replace with correct pages #TODO get ordering to work
-
-    comfy_resources = Comfy::Cms::Page.find_by_slug("resources")
-    @resources_title = comfy_resources.label
-    @resources = comfy_resources.children.published.order(created_at: :desc).limit(4).map{ |page| { 
-      "label": page.label, 
-      "created_at": page.created_at.strftime('%d %B %y'),
-      "url": page.url,
-      "intro": "field needs created in the CMS", #TODO create field in CMS
-      "pdf": 'yes', #TODO create field in CMS
-      "external_link": nil #TODO create field in CMS
-      }
-    } #TODO replace with correct pages #TODO get ordering to work
-
     @temp_pas = ProtectedArea.first(4)
 
     @temp_themes = Comfy::Cms::Page.find_by_slug("equity").children.order(created_at: :desc)

@@ -313,12 +313,28 @@ module ApplicationHelper
     @cards = {
       "title": news_page.label,
       "url": root_url + '/c' + news_page.full_path,
-      "cards": news_page.children.published.order(created_at: :desc).map{ |page| 
+      "cards": news_page.children.published.order(created_at: :desc).limit(2).map{ |page| 
         { 
           "label": page.label, 
           "created_at": page.created_at.strftime('%d %B %y'),
-          "url": page.url,
+          "url": root_url + '/c' + page.full_path,
           "intro": "field needs created in the CMS", #TODO create field in CMS
+          "image": "field needs created in the CMS" #TODO create field in CMS
+        }
+      }
+    }
+  end
+
+  def get_thematical_area_cards
+    thematical_page = @cms_site.pages.find_by_slug('thematical-areas')
+    
+    @cards = {
+      "title": thematical_page.label,
+      "cards": thematical_page.children.published.map{ |page| 
+        { 
+          "label": page.label, 
+          "url": root_url + '/c' + page.full_path,
+          "summary": 'summary', #page.introduction,
           "image": "field needs created in the CMS" #TODO create field in CMS
         }
       }
