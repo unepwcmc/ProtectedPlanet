@@ -1,12 +1,14 @@
+<% get_resource_cards %>
+
 <div class="cards--resources">
   <div class="flex flex-v-center flex-h-between">
-    <h2><%= title %></h2>
+    <h2><%= @resources[:title] %></h2>
 
-    <%= link_to t('global.button.all'), url, target: '_blank', title: t('global.button.all'), class: 'button--all' %>
+    <%= link_to t('global.button.all'), @resources[:url], title: t('global.button.all'), class: 'button--all' %>
   </div>
 
   <div class="cards__cards">
-    <% cards.each do |card| %>
+    <% @resources[:cards].each do |card| %>
       <% if link_to_page?(card) %>
         <%= link_to card[:url], title: card[:label], class: 'card card--link' do %>
           <p class="card__date"><%= card[:created_at] %></p>

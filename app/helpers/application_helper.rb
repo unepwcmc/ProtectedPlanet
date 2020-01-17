@@ -287,4 +287,23 @@ module ApplicationHelper
       ]
     }.to_json
   end
+
+  def get_resource_cards
+    resources_page = @cms_site.pages.find_by_slug('resources')
+    
+    @resources = {
+      "title": resources_page.label,
+      "url": root_url + '/c' + resources_page.full_path,
+      "cards": resources_page.children.published.order(created_at: :desc).limit(4).map{ |page| 
+        { 
+          "label": page.label, 
+          "created_at": page.created_at.strftime('%d %B %y'),
+          "url": root_url + '/c' + page.full_path,
+          "intro": "field needs created in the CMS", #TODO create field in CMS
+          "pdf": false, #TODO create field in CMS
+          "external_link": nil #TODO create field in CMS
+        }
+      }
+    }
+  end
 end

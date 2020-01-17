@@ -5,11 +5,12 @@
   <h2>list of resources</h2>
 </div>
 
+<%= render "partials/cards/resources" %>
 <%= render "partials/ctas/live-report" %>
 
 <main class="container--profile container--right-padded container--push-bottom">
   <nav class="breadcrumbs">
-    <a class="breadcrumbs__link" href="/">Home</a> > Resources: <%= @category.label %>
+    <a class="breadcrumbs__link" href="/">Home</a> > Resources: <%#= @category.label %>
   </nav>
 
   <div class="hero">
@@ -27,12 +28,12 @@
       <div class="js-expandable-section filter-bar__group">
         <h3 class="js-trigger js-switch filter-bar__group-title is-open">Time period</h3>
         <div class="js-target">
-          <% CmsPresenter.all_by_year(@resources).each do |(year, dates)| %>
-            <a class="filter-bar__value" href="<%= resources_path(category_id: @category.id, year: year) %>">
-              <%= year %>
-              <strong class="filter-bar__count">(<%= dates.length %>)</strong>
+          <%# CmsPresenter.all_by_year(@resources).each do |(year, dates)| %>
+            <a class="filter-bar__value" href="<%#= resources_path(category_id: @category.id, year: year) %>">
+              <%#= year %>
+              <strong class="filter-bar__count">(<%#= dates.length %>)</strong>
             </a>
-          <% end %>
+          <%# end %>
         </div>
       </div>
     </div>
@@ -41,7 +42,7 @@
 
 
   <div class="three-fourths">
-    <p class="header-with-delimiter header-with-delimiter--smaller header-with-delimiter--bold">Showing 1-10 of <%= @resources.size %> hits.</p>
+    <p class="header-with-delimiter header-with-delimiter--smaller header-with-delimiter--bold">Showing 1-10 of <%#= @resources.size %> hits.</p>
 
     <div class="right-padded">
 
