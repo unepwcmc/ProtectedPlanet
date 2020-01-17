@@ -57,11 +57,13 @@ class ApplicationController < ActionController::Base
   ]
 
   def load_cms_content
-    # byebug
     cms_path = request.original_fullpath
-    locale = request.params["locale"]
+    locale = I18n.locale.to_s
+    home_page = "/#{locale}"
 
-    if locale != nil
+    if cms_path == home_page
+      cms_path = '/'
+    else
       cms_path = cms_path.gsub("/#{locale}/c", "")
     end
     
