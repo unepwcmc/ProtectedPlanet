@@ -307,13 +307,14 @@ module ApplicationHelper
     }
   end
 
-  def get_news_cards
+  def get_news_items all = false
     news_page = @cms_site.pages.find_by_slug('news-and-stories')
+    limit = all ? false : 2
     
-    @cards = {
+    @items = {
       "title": news_page.label,
-      "url": root_url + '/c' + news_page.full_path,
-      "cards": news_page.children.published.order(created_at: :desc).limit(2).map{ |page| 
+      "url": all ? false : root_url + '/c' + news_page.full_path,
+      "cards": news_page.children.published.order(created_at: :desc).limit(limit).map{ |page| 
         { 
           "label": page.label, 
           "created_at": page.created_at.strftime('%d %B %y'),

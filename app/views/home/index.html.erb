@@ -30,14 +30,8 @@
   <%= render partial: "partials/maps/main" %>
 </section>
 
-<section>
-  <%= render partial: "partials/carousels/themes", locals: 
-    { 
-      title: @themes_title, 
-      slides: @themes,
-      url: @themes_url
-    }
-  %>
+<section class="section-padding">
+  <%= render "partials/carousels/themes" %>
 </section>
 
 <%= render "partials/ctas/api" %>
