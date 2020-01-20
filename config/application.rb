@@ -29,6 +29,7 @@ module ProtectedPlanet
 
     config.autoload_paths += %W(
       #{config.root}/lib/modules
+      #{config.root}/lib/cms_tags
       #{config.root}/app/presenters
       #{config.root}/app/serializers
     )

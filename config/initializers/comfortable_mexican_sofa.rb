@@ -1,3 +1,4 @@
+require_relative '../../lib/cms_tags/not_null_text'
 # encoding: utf-8
 
 ComfortableMexicanSofa.configure do |config|
