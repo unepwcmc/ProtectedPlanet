@@ -40,7 +40,7 @@ class HomeController < ApplicationController
         title: t('thematic_area.target_11_dashboard.title'),
         content: t('thematic_area.target_11_dashboard.description'),
         image: t('thematic_area.target_11_dashboard.thematic_image'),
-        url: target_dashboard_path
+        url: 'target_dashboard_path'
       },
       {
         title: "WDPA",
