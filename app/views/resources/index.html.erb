@@ -1,11 +1,18 @@
 <%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label } %>
 
-<div class="container">
-  <h2>filters</h2>
-  <h2>list of resources</h2>
-</div>
+<section class="container">
+  <div>
+    <h2>filters</h2>
+  </div>
 
---- old resources page ---
+  <div>
+    <%= render partial: "partials/cards/resources", locals: { get_all: true } %>
+  </div>
+</section>
+
+<%= render "partials/ctas/live-report" %>
+
+<!-- 
 
 <main class="container--profile container--right-padded container--push-bottom">
   <nav class="breadcrumbs">
@@ -49,5 +56,4 @@
   </div>
 </main>
 
-<%= render "partials/cards/resources" %>
-<%= render "partials/ctas/live-report" %>
+ -->

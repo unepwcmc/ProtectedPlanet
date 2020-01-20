@@ -14,7 +14,6 @@
       &__cards {
         @include flex;
         @include flex-h-between;
-        // @include responsive(flex-wrap, wrap, nowrap, nowrap);
         @include flex-wrap;
       }
     }
@@ -69,11 +68,12 @@
     .cards {
       &__cards {
         @include flex;
-        @include responsive(flex-wrap, wrap, nowrap, nowrap);
+        @include flex-wrap;
       }
     }
 
     .card {
+      @include responsive(margin-bottom, rem-calc(20), rem-calc(50), rem-calc(50));
       @include responsive(width, 100%, 25%, 25%);
       padding: rem-calc(10);
 

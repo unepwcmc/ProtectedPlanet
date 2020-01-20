@@ -288,13 +288,14 @@ module ApplicationHelper
     }.to_json
   end
 
-  def get_resource_cards
+  def get_resource_cards  all = false
     resources_page = @cms_site.pages.find_by_slug('resources')
+    limit = all ? false : 4
     
-    @cards = {
+    @items = {
       "title": resources_page.label,
-      "url": root_url + '/c' + resources_page.full_path,
-      "cards": resources_page.children.published.order(created_at: :desc).limit(4).map{ |page| 
+      "url": all ? false : root_url + '/c' + resources_page.full_path,
+      "cards": resources_page.children.published.order(created_at: :desc).limit(limit).map{ |page| 
         { 
           "label": page.label, 
           "created_at": page.created_at.strftime('%d %B %y'),
