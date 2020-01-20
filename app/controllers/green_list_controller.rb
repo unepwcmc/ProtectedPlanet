@@ -6,6 +6,9 @@ class GreenListController < ApplicationController
   after_action :record_visit
   after_action :enable_caching
 
+  def index
+  end
+
   def show
     @presenter = ProtectedAreaPresenter.new @protected_area
     @countries = @protected_area.countries.without_geometry

@@ -39,8 +39,8 @@ Rails.application.routes.draw do
     # resources :projects, only: [:create, :index, :update, :destroy]
 
     get '/marine/download_designations', to: 'marine#download_designations'
-    get '/green_list/:id', to: 'green_list#show', as: 'green_list'
-    get '/target-11-dashboard', to: 'target_dashboard#index', as: 'target_dashboard'
+    # get '/green_list/:id', to: 'green_list#show', as: 'green_list'
+    
     get '/target-11-dashboard/load-countries', to: 'target_dashboard#load_countries',
       as: 'target_dashboard_load_countries'
 
@@ -67,8 +67,13 @@ Rails.application.routes.draw do
 
     get '/country_codes', to: 'country#codes', as: 'country_codes'
 
-    get '/c/thematical-areas/marine-protected-areas', to: 'marine#index'
     get '/c/resources', to: 'resources#index'
+
+    get '/c/thematical-areas/green-list', to: 'green_list#index'
+    get '/c/thematical-areas/other-effective-area-based-conservation-measures', to: 'oecm#index'
+    get '/c/thematical-areas/protected-areas-management-effectiveness-pame', to: 'pame#index'
+    get '/c/thematical-areas/marine-protected-areas', to: 'marine#index'
+    get '/c/thematical-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
     get '/c/thematical-areas/world-database-on-protected-areas', to: 'wdpa#index'
 
     # Ensure that this route is defined last
