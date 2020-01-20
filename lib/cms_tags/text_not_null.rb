@@ -1,4 +1,4 @@
-class NotNullText < ComfortableMexicanSofa::Content::Tag::Fragment
+class TextNotNull < ComfortableMexicanSofa::Content::Tag::Fragment
 
   def form_field(object_name, view, index)
     name    = "#{object_name}[fragments_attributes][#{index}][content]"
@@ -10,5 +10,5 @@ class NotNullText < ComfortableMexicanSofa::Content::Tag::Fragment
 end
 
 ComfortableMexicanSofa::Content::Renderer.register_tag(
-  :not_null_text, NotNullText
+  :text_not_null, TextNotNull
 )
