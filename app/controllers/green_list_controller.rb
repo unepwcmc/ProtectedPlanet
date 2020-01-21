@@ -1,10 +1,13 @@
 class GreenListController < ApplicationController
   # Show page for green listed protected areas
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
-  before_action :find_protected_area
-  before_action :redirect_if_not_green_listed
-  after_action :record_visit
-  after_action :enable_caching
+  # before_action :find_protected_area
+  # before_action :redirect_if_not_green_listed
+  # after_action :record_visit
+  # after_action :enable_caching
+
+  def index
+  end
 
   def show
     @presenter = ProtectedAreaPresenter.new @protected_area

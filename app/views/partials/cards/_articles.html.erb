@@ -1,12 +1,17 @@
+<% get_all = false if local_assigns[:get_all].nil? %>
+<% get_news_items get_all %>
+
 <div class="cards--articles">
   <div class="flex flex-v-center flex-h-between">
-    <h2><%= title %></h2>
-
-    <%= link_to t('global.button.all'), url, target: '_blank', title: t('global.button.all'), class: 'button--all' %>
+    <h2><%= @items[:title] %></h2>
+    
+    <% if @items[:url] %>
+      <%= link_to t('global.button.all'), @items[:url], target: '_blank', title: t('global.button.all'), class: 'button--all' %>
+    <% end %>
   </div>
 
   <div class="cards__cards">
-    <% cards.each do |card| %>
+    <% @items[:cards].each do |card| %>
       <%= link_to card[:url], title: card[:label], class: 'card bg--grey-light' do %>
         <div class="card__image" style="background-image: <%= card[:image] %>"></div>
 

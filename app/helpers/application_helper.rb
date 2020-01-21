@@ -19,7 +19,7 @@ module ApplicationHelper
     case controller_name
     when 'target_dashboard'
       'thematic_area.target_11_dashboard'
-    else 
+    else
       nil
     end
   end
@@ -55,7 +55,7 @@ module ApplicationHelper
     image_tag("search-placeholder-region.png", alt: region.name)
   end
 
-  def site_title 
+  def site_title
     'Protected Planet'
   end
 
@@ -106,7 +106,7 @@ module ApplicationHelper
     World Database on Protected Areas (WDPA), and the most comprehensive
     global database on terrestrial and marine protected areas.
   """
-  
+
   def seo_description
     if content_for?(:seo)
       content_for(:seo)
@@ -158,7 +158,7 @@ module ApplicationHelper
     text = url_encode('Read about a year of impact in @unepwcmc’s 2018/19 Annual Review')
     url = encoded_page_url
     href = 'https://twitter.com/intent/tweet/?text=' + text + '&url=' + url
-    
+
     link_to '', href, title: title, class: 'social__icon--twitter', target: '_blank'
   end
 
@@ -224,39 +224,37 @@ module ApplicationHelper
     controller_name == 'region'
   end
 
-  def get_nav_primary_links 
-    [ 
-      {
-        id: 'about',
-        label: 'About', #TODO make this pull from the CMS
-        url: '/c/about'
-      },
-      {
-        id: 'news-and-stories',
-        label: 'News & Stories',
-        url: '/c/news-and-stories'
-      },
-      {
-        id: 'resources',
-        label: 'Resources',
-        url: '/c/resources'
-      },
-      {
-        id: 'thematic-areas',
-        label: 'Thematic Areas',
-        url: '/c/thematic-areas',
-        children: [
-          {
-            id: 'marine-protected-areas',
-            label: 'Marine Protected Areas',
-            url: '/marine'
-          },
-        ]
+  def get_nav_primary
+    def map_page(slug, map_children = false)
+      cms_page = Comfy::Cms::Page.find_by_slug(slug)
+
+      mapped_page = {
+        "id": cms_page.slug,
+        "label": cms_page.label,
+        "url": root_path + cms_page.full_path,
       }
+
+      if map_children
+        mapped_page["children"] = cms_page.children.published.map{ |page| {
+            "id": page.slug,
+            "label": page.label,
+            "url": root_path + page.full_path,
+          }
+        }
+      end
+
+      return mapped_page
+    end
+
+    return [
+      map_page('about'),
+      map_page('news-and-stories'),
+      map_page('resources'),
+      map_page('thematical-areas', true),
     ].to_json
   end
 
-  def link_to_page? card 
+  def link_to_page? card
     !card[:pdf].present? && !card[:external_link].present?
   end
 
@@ -288,5 +286,53 @@ module ApplicationHelper
         }
       ]
     }.to_json
+  end
+
+  def get_resource_cards  all = false
+    resources_page = @cms_site.pages.find_by_slug('resources')
+    limit = all ? false : 4
+
+    @items = {
+      "title": resources_page.label,
+      "url": all ? false : root_url + resources_page.full_path,
+      "cards": resources_page.children.published.order(created_at: :desc).limit(limit).map{ |page|
+        {
+          "label": page.label,
+          "created_at": page.created_at.strftime('%d %B %y'),
+          "url": root_url + page.full_path,
+          "intro": "field needs created in the CMS", #TODO create field in CMS
+          "pdf": false, #TODO create field in CMS
+          "external_link": nil #TODO create field in CMS
+        }
+      }
+    }
+  end
+
+  def get_news_items all = false
+    news_page = @cms_site.pages.find_by_slug('news-and-stories')
+    limit = all ? false : 2
+
+    @items = {
+      "title": news_page.label,
+      "url": all ? false : root_url + news_page.full_path,
+      "cards": news_page.children.published.order(created_at: :desc).limit(limit).map{ |page|
+        {
+          "label": page.label,
+          "created_at": page.created_at.strftime('%d %B %y'),
+          "url": root_url + page.full_path,
+          "intro": "field needs created in the CMS", #TODO create field in CMS
+          "image": "field needs created in the CMS" #TODO create field in CMS
+        }
+      }
+    }
+  end
+
+  def get_thematical_areas
+    thematical_page = @cms_site.pages.find_by_slug('thematical-areas')
+
+    @items = {
+      "title": thematical_page.label,
+      "cards": thematical_page.children.published
+    }
   end
 end

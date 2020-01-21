@@ -3,9 +3,27 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  after_action :store_location
-  before_action :load_cms_pages
+  before_action :set_cms_site
+  before_action :set_locale
+  before_action :load_cms_content
   before_action :check_for_pdf
+  after_action :store_location
+
+  def set_cms_site
+      @cms_site ||= Comfy::Cms::Site.first
+  end
+
+  def default_url_options
+    { locale: I18n.locale }
+  end
+
+  def set_locale
+    if params[:locale].present?
+      I18n.locale = params[:locale]
+    else
+      I18n.locale = I18n.default_locale
+    end
+  end
 
   def raise_404
     raise PageNotFound
@@ -38,14 +56,28 @@ class ApplicationController < ActionController::Base
     "/users/sign_out"
   ]
 
-  def load_cms_pages
-    @updates_and_news  = Comfy::Cms::Category.find_by_label("Updates & News")
-    @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
-    @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
-    @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
-    @green_list_page   = Comfy::Cms::Page.find_by_slug("green-list")
-    @equity_page       = Comfy::Cms::Page.find_by_slug("equity")
+  def load_cms_content
+    cms_path = request.original_fullpath
+    locale = I18n.locale.to_s
+    home_page = "/#{locale}"
+
+    if cms_path == home_page
+      cms_path = '/'
+    else
+      cms_path = cms_path.gsub("/#{locale}", "")
+    end
+
+    @cms_page = Comfy::Cms::Page.find_by_full_path(cms_path)
   end
+
+  # def load_cms_pages
+  #   @updates_and_news  = Comfy::Cms::Category.find_by_label("Updates & News")
+  #   @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
+  #   @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
+  #   @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
+  #   @green_list_page   = Comfy::Cms::Page.find_by_slug("green-list")
+  #   @equity_page       = Comfy::Cms::Page.find_by_slug("equity")
+  # end
 
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?
