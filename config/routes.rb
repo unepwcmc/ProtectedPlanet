@@ -8,14 +8,18 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  get '/en', to: 'home#index'
+  get '/', to: redirect('/en')
+  get '/admin', to: redirect('/admin/sites')
+  #root to: 'home#index'
+
+  #TODO
+  get '/:id', to: 'protected_areas#show', as: 'protected_area'
+
   scope "(:locale)", locale: /en|es|fr/ do
 
-    get '/en', to: 'home#index'
-    get '/', to: redirect('/en')
     root to: 'home#index'
-
-    # root to: 'home#index'
-    # get '/', to: 'home#index'
+    get '/', to: 'home#index'
 
     put '/admin/maintenance', as: 'maintenance'
     put '/admin/clear_cache', as: 'clear_cache'
@@ -40,7 +44,7 @@ Rails.application.routes.draw do
 
     get '/marine/download_designations', to: 'marine#download_designations'
     # get '/green_list/:id', to: 'green_list#show', as: 'green_list'
-    
+
     get '/target-11-dashboard/load-countries', to: 'target_dashboard#load_countries',
       as: 'target_dashboard_load_countries'
 
@@ -51,7 +55,6 @@ Rails.application.routes.draw do
     get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
     get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
-    get '/:id', to: 'protected_areas#show', as: 'protected_area'
     get '/sites/:id', to: 'sites#show'
     get '/sites/:id/*other', to: 'sites#show'
 
@@ -67,19 +70,19 @@ Rails.application.routes.draw do
 
     get '/country_codes', to: 'country#codes', as: 'country_codes'
 
-    get '/c/resources', to: 'resources#index'
+    get '/resources', to: 'resources#index'
 
-    get '/c/thematical-areas/green-list', to: 'green_list#index'
-    get '/c/thematical-areas/other-effective-area-based-conservation-measures', to: 'oecm#index'
-    get '/c/thematical-areas/protected-areas-management-effectiveness-pame', to: 'pame#index'
-    get '/c/thematical-areas/marine-protected-areas', to: 'marine#index'
-    get '/c/thematical-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
-    get '/c/thematical-areas/world-database-on-protected-areas', to: 'wdpa#index'
+    get '/thematical-areas/green-list', to: 'green_list#index'
+    get '/thematical-areas/other-effective-area-based-conservation-measures', to: 'oecm#index'
+    get '/thematical-areas/protected-areas-management-effectiveness-pame', to: 'pame#index'
+    get '/thematical-areas/marine-protected-areas', to: 'marine#index'
+    get '/thematical-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
+    get '/thematical-areas/world-database-on-protected-areas', to: 'wdpa#index'
 
     # Ensure that this route is defined last
-    
+
     comfy_route :cms_admin, path: "/admin"
-    comfy_route :cms, path: "/c"
+    comfy_route :cms, path: "/", sitemap: false
   end
 
 end

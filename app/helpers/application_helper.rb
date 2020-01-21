@@ -19,7 +19,7 @@ module ApplicationHelper
     case controller_name
     when 'target_dashboard'
       'thematic_area.target_11_dashboard'
-    else 
+    else
       nil
     end
   end
@@ -55,7 +55,7 @@ module ApplicationHelper
     image_tag("search-placeholder-region.png", alt: region.name)
   end
 
-  def site_title 
+  def site_title
     'Protected Planet'
   end
 
@@ -106,7 +106,7 @@ module ApplicationHelper
     World Database on Protected Areas (WDPA), and the most comprehensive
     global database on terrestrial and marine protected areas.
   """
-  
+
   def seo_description
     if content_for?(:seo)
       content_for(:seo)
@@ -158,7 +158,7 @@ module ApplicationHelper
     text = url_encode('Read about a year of impact in @unepwcmc’s 2018/19 Annual Review')
     url = encoded_page_url
     href = 'https://twitter.com/intent/tweet/?text=' + text + '&url=' + url
-    
+
     link_to '', href, title: title, class: 'social__icon--twitter', target: '_blank'
   end
 
@@ -228,17 +228,17 @@ module ApplicationHelper
     def map_page(slug, map_children = false)
       cms_page = Comfy::Cms::Page.find_by_slug(slug)
 
-      mapped_page = { 
+      mapped_page = {
         "id": cms_page.slug,
-        "label": cms_page.label, 
-        "url": root_path + '/c' + cms_page.full_path,
+        "label": cms_page.label,
+        "url": root_path + cms_page.full_path,
       }
 
       if map_children
         mapped_page["children"] = cms_page.children.published.map{ |page| {
             "id": page.slug,
-            "label": page.label, 
-            "url": root_path + '/c' + page.full_path,
+            "label": page.label,
+            "url": root_path + page.full_path,
           }
         }
       end
@@ -246,7 +246,7 @@ module ApplicationHelper
       return mapped_page
     end
 
-    return [ 
+    return [
       map_page('about'),
       map_page('news-and-stories'),
       map_page('resources'),
@@ -254,7 +254,7 @@ module ApplicationHelper
     ].to_json
   end
 
-  def link_to_page? card 
+  def link_to_page? card
     !card[:pdf].present? && !card[:external_link].present?
   end
 
@@ -291,15 +291,15 @@ module ApplicationHelper
   def get_resource_cards  all = false
     resources_page = @cms_site.pages.find_by_slug('resources')
     limit = all ? false : 4
-    
+
     @items = {
       "title": resources_page.label,
-      "url": all ? false : root_url + '/c' + resources_page.full_path,
-      "cards": resources_page.children.published.order(created_at: :desc).limit(limit).map{ |page| 
-        { 
-          "label": page.label, 
+      "url": all ? false : root_url + resources_page.full_path,
+      "cards": resources_page.children.published.order(created_at: :desc).limit(limit).map{ |page|
+        {
+          "label": page.label,
           "created_at": page.created_at.strftime('%d %B %y'),
-          "url": root_url + '/c' + page.full_path,
+          "url": root_url + page.full_path,
           "intro": "field needs created in the CMS", #TODO create field in CMS
           "pdf": false, #TODO create field in CMS
           "external_link": nil #TODO create field in CMS
@@ -311,15 +311,15 @@ module ApplicationHelper
   def get_news_items all = false
     news_page = @cms_site.pages.find_by_slug('news-and-stories')
     limit = all ? false : 2
-    
+
     @items = {
       "title": news_page.label,
-      "url": all ? false : root_url + '/c' + news_page.full_path,
-      "cards": news_page.children.published.order(created_at: :desc).limit(limit).map{ |page| 
-        { 
-          "label": page.label, 
+      "url": all ? false : root_url + news_page.full_path,
+      "cards": news_page.children.published.order(created_at: :desc).limit(limit).map{ |page|
+        {
+          "label": page.label,
           "created_at": page.created_at.strftime('%d %B %y'),
-          "url": root_url + '/c' + page.full_path,
+          "url": root_url + page.full_path,
           "intro": "field needs created in the CMS", #TODO create field in CMS
           "image": "field needs created in the CMS" #TODO create field in CMS
         }
