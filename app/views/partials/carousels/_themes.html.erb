@@ -12,10 +12,10 @@
 
   <% @items[:cards].each do |slide| %>
     <div class="agile__slide">
-      <%= link_to slide[:url], title: slide[:label], class: "agile__slide-link bg-image-overlay" do %>
+      <%= link_to root_url + slide[:full_path], title: slide[:label], class: "agile__slide-link bg-image-overlay" do %>
         <div class="agile__slide-content">
           <h3 class="agile__slide-title h3-big-white"><%= slide[:label] %></h3>
-          <p class="agile__slide-intro"><%= slide[:summary] %></p>
+          <p class="agile__slide-intro"><%= cms_fragment_content(:summary, slide) %></p>
           <i class="agile__slide-icon icon--circle-chevron-white %>"></i>
         </div>
       <% end %>
