@@ -1,12 +1,12 @@
-<% get_thematical_area_cards %>
+<% get_thematical_areas %>
 
 <div class="cards--themes container">
 
-  <h3><%= @cards[:title] %></h3>
+  <h3><%= @items[:title] %></h3>
 
   <div class="cards__cards">
-    <% @cards[:cards].each do |card| %>
-      <%= link_to '', title: "View the #{card[:label]} page", class: "card" do %>
+    <% @items[:cards].each do |card| %>
+      <%= link_to root_url + '/c' + card[:full_path], title: "View the #{card[:label]} page", class: "card" do %>
         <div class="card__ribbon">
           <span class="card__icon">icon hc</span>
           <span class="card__number">000000 hc</span>
@@ -14,7 +14,7 @@
         </div>
 
         <h3><%= card[:label] %></h3>
-        <p>summary field needs creating</p>
+        <p><%= cms_fragment_content(:summary, card) %></p>
       <% end %>
     <% end %>
   </div>

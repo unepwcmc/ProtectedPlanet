@@ -329,17 +329,10 @@ module ApplicationHelper
 
   def get_thematical_areas
     thematical_page = @cms_site.pages.find_by_slug('thematical-areas')
-    
+
     @items = {
       "title": thematical_page.label,
-      "cards": thematical_page.children.published.map{ |page| 
-        { 
-          "label": page.label, 
-          "url": root_url + '/c' + page.full_path,
-          "summary": 'summary', #page.introduction,
-          "image": "field needs created in the CMS" #TODO create field in CMS
-        }
-      }
+      "cards": thematical_page.children.published
     }
   end
 end
