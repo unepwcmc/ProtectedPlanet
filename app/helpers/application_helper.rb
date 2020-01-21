@@ -315,15 +315,7 @@ module ApplicationHelper
     @items = {
       "title": news_page.label,
       "url": all ? false : root_url + news_page.full_path,
-      "cards": news_page.children.published.order(created_at: :desc).limit(limit).map{ |page|
-        {
-          "label": page.label,
-          "created_at": page.created_at.strftime('%d %B %y'),
-          "url": root_url + page.full_path,
-          "intro": "field needs created in the CMS", #TODO create field in CMS
-          "image": "field needs created in the CMS" #TODO create field in CMS
-        }
-      }
+      "cards": news_page.children.published.order(created_at: :desc).limit(limit)
     }
   end
 

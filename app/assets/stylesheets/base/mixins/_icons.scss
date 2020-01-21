@@ -90,6 +90,12 @@ $icon-search-width: rem-calc(21);
   width: rem-calc(23); height: rem-calc(23);
 }
 
+@mixin icon-image() {
+  @include icon-basic;
+  background-image: image-url('icons/image.svg');
+  width: rem-calc(114); height: rem-calc(91);
+}
+
 @mixin icon-loading-spinner() {
   @include icon-basic;
   background-image: image-url('icons/loading-spinner.svg');
