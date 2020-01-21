@@ -64,9 +64,9 @@ class ApplicationController < ActionController::Base
     if cms_path == home_page
       cms_path = '/'
     else
-      cms_path = cms_path.gsub("/#{locale}/c", "")
+      cms_path = cms_path.gsub("/#{locale}", "")
     end
-    
+
     @cms_page = Comfy::Cms::Page.find_by_full_path(cms_path)
   end
 

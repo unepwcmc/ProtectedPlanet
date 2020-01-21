@@ -18,21 +18,21 @@ class HomeController < ApplicationController
     @pas_levels = home_yml[:pas][:levels]
     @pas_categories = home_yml[:pas][:categories]
 
-    comfy_themes = Comfy::Cms::Page.find_by_slug("thematical-areas") 
+    comfy_themes = Comfy::Cms::Page.find_by_slug("thematical-areas")
     @themes_title = comfy_themes.label
     @themes_url = comfy_themes.full_path
     @themes = comfy_themes.children.published.map{ |page| {
-        "label": page.label, 
+        "label": page.label,
         "url": page.url,
         "intro": "field needs created in the CMS", #TODO create field in CMS
-        "image": "field needs created in the CMS" #TODO create field in CMS  
+        "image": "field needs created in the CMS" #TODO create field in CMS
       }
     }
 
     @temp_pas = ProtectedArea.first(4)
 
     @temp_themes = Comfy::Cms::Page.find_by_slug("equity").children.order(created_at: :desc)
-    
+
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
