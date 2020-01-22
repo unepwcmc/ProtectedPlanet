@@ -8,7 +8,7 @@ $padding-small: rem-calc(20);
 $padding-medium: rem-calc(27);
 
 //--------------------------------------------------
-// shared mixins
+// base mixins
 //--------------------------------------------------
 @mixin button-plain () { //delete
   border: none;
@@ -35,15 +35,6 @@ $padding-medium: rem-calc(27);
   align-items: center;
 }
 
-@mixin button-outline ($colour: $black) {
-  @include button-basic;
-  @include button-height;
-  @include button-padding;
-  @include button-radius;
-  border: solid 2px $colour;
-  color: $colour;
-}
-
 @mixin button-padding {
   @include responsive(padding-right, $padding-small, $padding-medium, $padding-medium);
   @include responsive(padding-left, $padding-small, $padding-medium, $padding-medium);
@@ -51,6 +42,19 @@ $padding-medium: rem-calc(27);
 
 @mixin button-radius {
   border-radius: $button-radius;
+}
+
+
+//--------------------------------------------------
+// shared mixins
+//--------------------------------------------------
+@mixin button-block ($bg: $purple, $text: $white) {
+  @include button-basic;
+  @include button-height;
+  @include button-padding;
+  @include button-radius;
+  background-color: $bg;
+  color: $text;
 }
 
 @mixin button-with-icon {
@@ -66,8 +70,17 @@ $padding-medium: rem-calc(27);
   }
 }
 
+@mixin button-outline ($colour: $black) {
+  @include button-basic;
+  @include button-height;
+  @include button-padding;
+  @include button-radius;
+  border: solid 2px $colour;
+  color: $colour;
+}
+
 //--------------------------------------------------
-// specific mixins
+// mixins for classes
 //--------------------------------------------------
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }
@@ -76,9 +89,6 @@ $padding-medium: rem-calc(27);
 // classes
 //--------------------------------------------------
 .button {
-  &--outline-black { @include button-outline($black); }
-  &--outline-white { @include button-outline($white); }
-
   &--all {
     @include button-with-icon;
     
@@ -96,4 +106,9 @@ $padding-medium: rem-calc(27);
     
     &::after { @include icon-arrow-external; }
   }
+
+  &--outline-black { @include button-outline($black); }
+  &--outline-white { @include button-outline($white); }
+
+  &--primary { @include button-block; }
 }
