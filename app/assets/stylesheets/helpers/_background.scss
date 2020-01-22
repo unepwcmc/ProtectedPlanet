@@ -1,3 +1,4 @@
+
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
@@ -9,6 +10,22 @@ $image-placeholder: black;
 @mixin bg-colour($bg, $text) {
   background-color: $bg;
   color: $text;
+}
+
+@mixin bg-image-overlay($colour: rgba($black, 0.4)) {
+  position: relative;
+  z-index: 1;
+
+  &:before {
+    background-color: $colour;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
 }
 
 //--------------------------------------------------
@@ -24,18 +41,5 @@ $image-placeholder: black;
   background-position: center;
 }
 
-.bg-image-overlay {
-  position: relative;
-  z-index: 1;
-
-  &:before {
-    background-color: rgba(black, 0.4);
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -1;
-  }
-}
+.bg-image-overlay { @include bg-image-overlay; }
+.bg-image-overlay--white { @include bg-image-overlay(rgba($white, 0.8)); }

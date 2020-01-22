@@ -24,10 +24,11 @@ $hero-padding-bottom-desktop: rem-calc(60);
 // class - home
 //--------------------------------------------------
   &--home {
-    background: $grey-light;
+    background: $grey-light image_url('hero/home.png') center no-repeat;
     padding-top: rem-calc(100);
     padding-bottom: rem-calc(166);
-
+    z-index: 0;
+    
     .hero {
       &__container {
         @include flex;
