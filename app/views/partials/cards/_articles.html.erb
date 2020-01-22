@@ -23,9 +23,11 @@
         <% end %>
 
         <div class="card__content">
-          <p class="card__date"><%= card[:created_at].strftime('%d %B %y') %></p><!-- TODO swap this out for new date field -->
-          <h3 class="card__h3"><%= card[:label] %></h3>
-          <p class="card__summary"><%= cms_fragment_content(:summary, card) %></p>
+          <% if cms_fragment_content(:published_date, card).present? %>
+            <p class="card__date"><%= cms_fragment_content(:published_date, card).strftime('%d %B %y') %></p>
+          <% end %>
+          <h3 class="card__h3"><%= card[:label].truncate(59, separator: ' '); %></h3>
+          <p class="card__summary"><%= cms_fragment_content(:summary, card).truncate(167, separator: ' '); %></p>
         </div>
       <% end %>
     <% end %>
