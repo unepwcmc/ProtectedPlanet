@@ -14,6 +14,11 @@ $icon-search-width: rem-calc(21);
   display: block;
 }
 
+@mixin icon-image($filename, $width, $height) {
+  background-image: image_url("icons/#{$filename}");
+  width: $width; height: $height;
+}
+
 @mixin icon-button-reset() {
   background-color: transparent !important; //temp-refresh good god i don't like to do it but the old base stylesheet is overwriting this
   border: none;
@@ -40,75 +45,70 @@ $icon-search-width: rem-calc(21);
 
 @mixin icon-arrow-external() {
   @include icon-basic;
-  background-image: image-url('icons/arrow-external.svg');
-  width: rem-calc(17); height: rem-calc(12);
+  @include icon-image('arrow-external.svg', rem-calc(17), rem-calc(12));
 }
 
 @mixin icon-close() {
   @include icon-basic;
-  background-image: image-url('icons/close.svg');
-  width: rem-calc(29); height: rem-calc(29);
+  @include icon-image('close.svg', rem-calc(29), rem-calc(29));
 }
 
 @mixin icon-cross() {
   @include icon-basic;
-  background-image: image-url('icons/cross.svg');
-  width: rem-calc(20); height: rem-calc(20);
+  @include icon-image('cross.svg', rem-calc(20), rem-calc(20));
 }
 
 @mixin icon-download() {
   @include icon-basic;
-  background-image: image-url('icons/download.svg');
-  width: rem-calc(20); height: rem-calc(19);
+  @include icon-image('download.svg', rem-calc(20), rem-calc(19));
 }
 
 @mixin icon-circle-chevron-black() {
   @include icon-basic;
-  background-image: image-url('icons/circle-chevron-black.svg');
-  width: rem-calc(34); height: rem-calc(34);
+  @include icon-image('circle-chevron-black.svg', rem-calc(34), rem-calc(34));
 }
 
 @mixin icon-circle-chevron-green-left() {
   @include icon-circle-chevron;
-  background-image: image-url('icons/circle-chevron-green-left.svg');
+  background-image: image_url('chevron-green-left.svg');
 }
 
 @mixin icon-circle-chevron-green-right() {
   @include icon-circle-chevron;
-  background-image: image-url('icons/circle-chevron-green-right.svg');
+  background-image: image_url('chevron-green-right.svg');
 }
 
 @mixin icon-circle-chevron-white() {
   @include icon-basic;
-  background-image: image-url('icons/circle-chevron-white.svg');
-  width: rem-calc(34); height: rem-calc(34);
+  @include icon-image('circle-chevron-white.svg', rem-calc(34), rem-calc(34));
 }
 
 @mixin icon-info() {
   @include icon-basic;
-  background-image: image-url('icons/info.svg');
-  width: rem-calc(23); height: rem-calc(23);
+  @include icon-image('info.svg', rem-calc(23), rem-calc(23));
 }
 
-@mixin icon-image() {
+@mixin icon-placeholder-image() {
   @include icon-basic;
-  background-image: image-url('icons/image.svg');
-  width: rem-calc(114); height: rem-calc(91);
+  @include icon-image('image.svg', rem-calc(114), rem-calc(91));
 }
 
 @mixin icon-loading-spinner() {
   @include icon-basic;
-  background-image: image-url('icons/loading-spinner.svg');
-  width: rem-calc(40); height: rem-calc(40);
-
-  display: block;
+  @include icon-image('loading-spinner.svg', rem-calc(40), rem-calc(40));
 }
 
 @mixin icon-search() {
   @include icon-basic;
   @include icon-button-reset;
-  background-image: image-url('icons/search.svg');
-  width: $icon-search-width; height: rem-calc(23); 
+  @include icon-image('search.svg', $icon-search-width, rem-calc(23));
+}
+
+@mixin icon-shield() {
+  @include icon-basic;
+  @include responsive(width, rem-calc(23), rem-calc(40), rem-calc(40));
+  @include responsive(height, rem-calc(27), rem-calc(48), rem-calc(48));
+  background-image: image_url('icons/shield.svg');
 }
 
 @mixin icon-sort() {
