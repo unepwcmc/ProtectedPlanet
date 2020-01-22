@@ -1,0 +1,20 @@
+//----------------------------------------
+// classes
+//----------------------------------------
+.page--news {
+
+  .page {
+    &__container {
+      @include flex;
+      @include responsive(flex-wrap, wrap, wrap, no-wrap);
+    }
+
+      &__col-1 {
+        @include responsive(width, 100%, 100%, 30%);
+      }
+
+      &__col-2 {
+        @include responsive(width, 100%, 100%, 70%);
+      }
+  }
+}
