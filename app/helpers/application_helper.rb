@@ -315,7 +315,7 @@ module ApplicationHelper
     @items = {
       "title": news_page.label,
       "url": all ? false : root_url + news_page.full_path,
-      "cards": news_page.children.published.order(created_at: :desc).limit(limit)
+      "cards": news_page.children.published.order(created_at: :desc).limit(limit) ##TODO change to published_date
     }
   end
 
