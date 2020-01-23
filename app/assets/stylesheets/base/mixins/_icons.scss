@@ -70,12 +70,12 @@ $icon-search-width: rem-calc(21);
 
 @mixin icon-circle-chevron-green-left() {
   @include icon-circle-chevron;
-  background-image: image_url('chevron-green-left.svg');
+  background-image: image_url('icons/circle-chevron-green-left.svg');
 }
 
 @mixin icon-circle-chevron-green-right() {
   @include icon-circle-chevron;
-  background-image: image_url('chevron-green-right.svg');
+  background-image: image_url('icons/circle-chevron-green-right.svg');
 }
 
 @mixin icon-circle-chevron-white() {

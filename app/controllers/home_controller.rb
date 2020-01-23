@@ -2,8 +2,8 @@ class HomeController < ApplicationController
   def index
     home_yml = I18n.t('home')
 
-    @total_pas = 'XXXXXX' #TODO replace with correct integer
-    @total_oecms = 'XXXXXX' #TODO replace with correct integer
+    @total_pas = 9999999 #TODO replace with correct integer
+    @total_oecms = 9876543 #TODO replace with correct integer
 
     search_pas = ProtectedArea.first(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} } #TODO make this ALL the pas
     search_oecms = ProtectedArea.last(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} } #TODO make this ALL the OECMS

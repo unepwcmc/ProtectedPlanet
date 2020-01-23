@@ -1,18 +1,3 @@
-<%#= render partial: "home_banner" %>
-
-  <%# render layout: "banner" do %>
-    <!-- <span class="alert__title alert__title--success">The Protected Planet API is live! 🌍</span>
-    <br>
-    <span>
-      <a class="link-with-icon" href="http://api.protectedplanet.net/request">Request a token now</a>
-      and
-      <a class="link-with-icon" href="http://api.protectedplanet.net/documentation">discover all its functionalities</a>
-    </span> -->
-  <%# end %>
-  <%#= render partial: "hero" %>
-  <%#= render partial: "thematic_areas" %>
-  <%#= render partial: "statistics_cover" %>
-
 <%= render "./layouts/partials/hero-home" %>
 <%= render "partials/search/protected-areas" %>
 
@@ -45,10 +30,3 @@
 </section>
 
 <%= render "partials/ctas/live-report" %>
-
-<%#= render partial: "partials/cards/sites", locals: 
-#   { 
-#     title: 'title', 
-#     cards: @temp_pas
-#   }
-# %>
