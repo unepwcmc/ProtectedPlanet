@@ -2,7 +2,7 @@
   <a 
     :id="link.id" 
     role="menuitem" 
-    class="nav__a" 
+    :class="[{'is-current-page': link.is_current_page}, 'nav__a']" 
     :href="link.url" 
   >
     {{link.label}}

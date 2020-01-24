@@ -24,6 +24,10 @@ module ApplicationHelper
     end
   end
 
+  def active_nav_item?(test_path)
+    request.fullpath == test_path
+  end
+
   def cover item
     send COVER_HELPERS[item.class], item
   end
@@ -232,6 +236,7 @@ module ApplicationHelper
         "id": cms_page.slug,
         "label": cms_page.label,
         "url": root_path + cms_page.full_path,
+        "is_current_page": active_nav_item?(root_path + cms_page.full_path)
       }
 
       if map_children
@@ -239,6 +244,7 @@ module ApplicationHelper
             "id": page.slug,
             "label": page.label,
             "url": root_path + page.full_path,
+            "is_current_page": active_nav_item?(root_path + page.full_path)
           }
         }
       end
