@@ -48,6 +48,11 @@ $icon-search-width: rem-calc(21);
   @include icon-image('arrow-external.svg', rem-calc(17), rem-calc(12));
 }
 
+@mixin icon-burger() {
+  @include icon-basic;
+  @include icon-image('burger.svg', rem-calc(24), rem-calc(15));
+}
+
 @mixin icon-close() {
   @include icon-basic;
   @include icon-image('close.svg', rem-calc(29), rem-calc(29));

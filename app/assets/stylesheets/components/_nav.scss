@@ -30,7 +30,7 @@ $pane-side-padding: 42px;
   .nav {
     &__burger {
       @include responsive(display, block, none, none);
-      background-color: blue;
+      @include button-burger;
     }
 
     &__close {
@@ -97,17 +97,7 @@ $pane-side-padding: 42px;
             height: 100%;
 
             position: relative;
-
-            .nav__a {
-              margin-right: 0;
-              padding: rem-calc(6 10);
-              width: $dropdown-width;
-
-              &:hover { 
-                background-color: $dropdown-bg-colour-hover;
-                color: $white;
-              }
-            }
+            z-index: 1;
           }
 
             &__dropdown-toggle {
@@ -127,5 +117,16 @@ $pane-side-padding: 42px;
                 display: block;
               }
             }
+
+            &__dropdown-a {
+                margin-right: 0;
+                padding: rem-calc(6 10);
+                width: $dropdown-width;
+
+                &:hover { 
+                  background-color: $dropdown-bg-colour-hover;
+                  color: $white;
+                }
+              }
   }
 }

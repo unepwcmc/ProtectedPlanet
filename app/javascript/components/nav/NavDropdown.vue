@@ -12,10 +12,9 @@
       @mouseenter="openDropdown"
       v-touch="toggleDropdown"
     >
-      <label
-        :for="mixinModalId"
-        class="nav__select nav__select--dropdown"
-      >{{ link.label }}</label>
+      <label :for="mixinModalId">
+        <nav-link :link="link" />
+      </label>
       <span class="drop-arrow arrow-svg" />
     </button>
     <nav
@@ -27,7 +26,7 @@
       <nav-link
         v-for="dropdownLink in link.children"
         :key="dropdownLink.id"
-        class="nav__dropdown-link"
+        class="nav__dropdown-a"
         :link="dropdownLink"
       />
     </nav>

@@ -7,7 +7,7 @@
     <% unless @for_pdf %>
       <nav-burger :links="<%= get_nav_primary %>" class="topbar__nav nav--primary"></nav-burger>
     
-        <div data-dropdown-switch data-dropdown-switch-text class="topbar__search js-switch js-dropdown <%= bem("navbar__element", "with-separator", "for-search-dropdown") %>">
+        <!-- <div data-dropdown-switch data-dropdown-switch-text class="topbar__search js-switch js-dropdown <%= bem("navbar__element", "with-separator", "for-search-dropdown") %>">
           <button class="js-trigger link-with-icon link-with-icon--no-color link-with-icon--no-underline navbar__element--search"><i class="fa fa-search"></i></button>
           <div class="u-hide js-target dropdown dropdown--search-dropdown u-font-inherit">
             <form action='/search' method='get' class="search-bar" id="search-form">
@@ -15,7 +15,7 @@
               <button class="search-bar__submit" type="submit"><i class="fa fa-search"></i></button>
             </form>
           </div>
-        </div>
+        </div> -->
       <!-- </div> -->
     <% end %>
   </div>
