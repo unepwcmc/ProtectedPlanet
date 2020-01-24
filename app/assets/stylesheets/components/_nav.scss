@@ -128,7 +128,7 @@ $pane-side-padding: 42px;
               }
               
               &__dropdown-a {
-                @include responsive(padding, rem-calc(9 24 9 34), rem-calc(6 10), rem-calc(6 10));
+                @include responsive(padding, rem-calc(9 24 9 48), rem-calc(6 10), rem-calc(6 10));
                 margin-right: 0;
                 width: $dropdown-width;
 
