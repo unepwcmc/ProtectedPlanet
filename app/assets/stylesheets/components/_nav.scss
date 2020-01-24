@@ -25,108 +25,111 @@ $pane-side-padding: 42px;
 //--------------------------------------------------
 // primary
 //--------------------------------------------------
-  &--primary
+  &--primary {
+    @include flex;
 
-  .nav {
-    &__burger {
-      @include responsive(display, block, none, none);
-      @include button-burger;
-    }
-
-    &__close {
-      @include responsive(display, block, none, none);
-      background-color: red;
-    }
-
-    &__pane {
-      background-color: $pane-color;
-      width: 100%; height: 100%;
-          
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      z-index: $z-300;
-
-      transform: translateX(100%);
-
-      transition: transform 0.4s ease-in-out;
-
-      @include breakpoint($small) {
-        position: initial;
-        top: unset;
-        right: unset;
-        bottom: unset;
-
-        transform: none;
-        transition: none
+    .nav {
+      &__burger {
+        @include button-burger;
+        @include flex-vs-center;
+        @include responsive(display, block, none, none);
       }
 
-      &.nav-pane--active {
-        transform: translateX(0);
-
-        @include breakpoint($small) { transform: none; }
+      &__close {
+        @include responsive(display, block, none, none);
+        background-color: red;
       }
 
-      &.nav__item-container {
-        padding: 0 $pane-side-padding;
-      }
-    }
-      
-      &__ul {
-        @include responsive(flex-direction, column, row, row);
-        @include flex;
-        @include ul-unstyled;
-        height: 100%;
-      }
+      &__pane {
+        background-color: $pane-color;
+        width: 100%; height: 100%;
+            
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        z-index: $z-300;
 
-        &__li {
-          height: 100%;
+        transform: translateX(100%);
 
-          &:last-child {
-            margin-bottom: 0;
-          }
+        transition: transform 0.4s ease-in-out;
+
+        @include breakpoint($small) {
+          position: initial;
+          top: unset;
+          right: unset;
+          bottom: unset;
+
+          transform: none;
+          transition: none
         }
 
-          &__a {
-            @include nav-a;
-            margin-right: rem-calc(60);
-          }
+        &.nav-pane--active {
+          transform: translateX(0);
 
-          &__dropdown {
+          @include breakpoint($small) { transform: none; }
+        }
+
+        &.nav__item-container {
+          padding: 0 $pane-side-padding;
+        }
+      }
+        
+        &__ul {
+          @include responsive(flex-direction, column, row, row);
+          @include flex;
+          @include ul-unstyled;
+          height: 100%;
+        }
+
+          &__li {
             height: 100%;
 
-            position: relative;
-            z-index: 1;
+            &:last-child {
+              margin-bottom: 0;
+            }
           }
 
-            &__dropdown-toggle {
-              @include button-basic;
+            &__a {
               @include nav-a;
+              margin-right: rem-calc(60);
             }
 
-            &__dropdown-wrapper {
-              background-color: $dropdown-bg-colour;
+            &__dropdown {
+              height: 100%;
 
-              display: none;
-              position: absolute;
-              top: 100%;
-              left: 0;
+              position: relative;
+              z-index: 1;
+            }
 
-              &.active {
-                display: block;
+              &__dropdown-toggle {
+                @include button-basic;
+                @include nav-a;
               }
-            }
 
-            &__dropdown-a {
-                margin-right: 0;
-                padding: rem-calc(6 10);
-                width: $dropdown-width;
+              &__dropdown-wrapper {
+                background-color: $dropdown-bg-colour;
 
-                &:hover { 
-                  background-color: $dropdown-bg-colour-hover;
-                  color: $white;
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+
+                &.active {
+                  display: block;
                 }
               }
+
+              &__dropdown-a {
+                  margin-right: 0;
+                  padding: rem-calc(6 10);
+                  width: $dropdown-width;
+
+                  &:hover { 
+                    background-color: $dropdown-bg-colour-hover;
+                    color: $white;
+                  }
+                }
+    }
   }
 }

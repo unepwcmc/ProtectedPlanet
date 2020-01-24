@@ -82,6 +82,10 @@ $padding-medium: rem-calc(27);
 //--------------------------------------------------
 // mixins for classes
 //--------------------------------------------------
+@mixin button-burger { 
+  @include button-basic; 
+  @include icon-burger;
+}
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }
 
