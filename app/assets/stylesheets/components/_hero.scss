@@ -17,7 +17,8 @@ $hero-padding-bottom-desktop: rem-calc(60);
 // class - basic
 //--------------------------------------------------
   &--basic {
-
+    @include responsive(padding-top, rem-calc(28), rem-calc(35), rem-calc(100));
+    @include responsive(padding-bottom, rem-calc(48), rem-calc(80), rem-calc(166));
   }
 
 //--------------------------------------------------
