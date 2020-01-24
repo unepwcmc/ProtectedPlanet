@@ -13,7 +13,10 @@
       v-touch="toggleDropdown"
     >
       <label :for="mixinModalId">
-        <nav-link :link="link" />
+        <nav-link 
+          :link="link" 
+          :class="[{'active': isActive}, 'nav__dropdown-toggle-a']" 
+        />
       </label>
       <span class="drop-arrow arrow-svg" />
     </button>

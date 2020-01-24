@@ -15,6 +15,7 @@ $pane-side-padding: 42px;
   @include text-nav-link;
   @include flex;
   @include flex-v-center;
+  @include responsive(padding, rem-calc(9 24), rem-calc(0 12), rem-calc(0 60 0 0));
   height: 100%;
 }
 
@@ -36,8 +37,9 @@ $pane-side-padding: 42px;
       }
 
       &__close {
+        @include button-close;
         @include responsive(display, block, none, none);
-        background-color: red;
+        margin: rem-calc(20 20 0) auto;
       }
 
       &__pane {
@@ -83,7 +85,7 @@ $pane-side-padding: 42px;
         }
 
           &__li {
-            height: 100%;
+            @include responsive(height, auto, 100%, 100%);
 
             &:last-child {
               margin-bottom: 0;
@@ -92,7 +94,6 @@ $pane-side-padding: 42px;
 
             &__a {
               @include nav-a;
-              margin-right: rem-calc(60);
             }
 
             &__dropdown {
@@ -107,6 +108,12 @@ $pane-side-padding: 42px;
                 @include nav-a;
               }
 
+              &__dropdown-toggle-a {
+                @include button-dropdown;
+                
+                &.active { @include button-dropdown-up; }
+              }
+
               &__dropdown-wrapper {
                 background-color: $dropdown-bg-colour;
 
@@ -119,17 +126,17 @@ $pane-side-padding: 42px;
                   display: block;
                 }
               }
-
+              
               &__dropdown-a {
-                  margin-right: 0;
-                  padding: rem-calc(6 10);
-                  width: $dropdown-width;
+                @include responsive(padding, rem-calc(9 24 9 34), rem-calc(6 10), rem-calc(6 10));
+                margin-right: 0;
+                width: $dropdown-width;
 
-                  &:hover { 
-                    background-color: $dropdown-bg-colour-hover;
-                    color: $white;
-                  }
+                &:hover { 
+                  background-color: $dropdown-bg-colour-hover;
+                  color: $white;
                 }
+              }
     }
   }
 }

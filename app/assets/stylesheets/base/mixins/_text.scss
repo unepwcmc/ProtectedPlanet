@@ -95,7 +95,7 @@
 }
 
 @mixin text-nav-link {
-  font-size: rem-calc(18);
+  @include responsive(font-size, rem-calc(16), rem-calc(16), rem-calc(18));
   font-weight: 500;
   text-decoration: none;
 }
