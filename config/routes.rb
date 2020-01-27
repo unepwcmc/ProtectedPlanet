@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
   #TODO
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
+  get '/sites/:id', to: 'sites#show', as: 'sites'
+  get '/sites/:id/*other', to: 'sites#show', as: 'sites_other'
 
   scope "(:locale)", locale: /en|es|fr/ do
 
@@ -54,9 +56,6 @@ Rails.application.routes.draw do
     get '/country/:iso/pdf', to: 'country#pdf', as: 'country_pdf'
     get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
     get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
-
-    get '/sites/:id', to: 'sites#show'
-    get '/sites/:id/*other', to: 'sites#show'
 
     get '/terms', to: redirect("/c/terms-and-conditions")
 
