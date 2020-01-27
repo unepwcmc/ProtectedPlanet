@@ -8,12 +8,8 @@ class SitesTest < ActionDispatch::IntegrationTest
       :protected_area, wdpa_id: wdpa_id, slug: 'slugger'
     )
 
-    legacy_protected_area = FactoryGirl.create(
-      :legacy_protected_area, wdpa_id: wdpa_id, slug: 'slug'
-    )
+    get "/sites/#{wdpa_id}"
 
-    get "/sites/#{legacy_protected_area.slug}/hey_this_cant_possibly_exist"
-
-    assert_redirected_to "/#{protected_area.slug}"
+    assert_redirected_to protected_area_path(id: protected_area.slug)
   end
 end
