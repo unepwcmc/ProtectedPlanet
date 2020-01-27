@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  # Clumsy rescue from fragments custom not null database errors
+  rescue_from ActiveRecord::StatementInvalid, :with => :record_invalid_error
   class PageNotFound < StandardError; end;
 
   protect_from_forgery with: :exception
@@ -42,6 +44,30 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def record_invalid_error
+    message = "We're sorry, but something went wrong"
+
+    fragments_params = params[:page][:fragments_attributes]
+    if fragments_params.present? && is_comfy_page_edit?
+      null_fragments = []
+      # Only get custom not null cms tags
+      # Currently only works with dates but it's already more generalised to work with texts
+      fragments_params.values.select { |v| v['tag'].include?('not_null') }.map do |fragment|
+        if fragment['tag'].include?('date') && fragment['datetime'].blank? ||
+            fragment['tag'].include?('text') && fragment['content'].blank?
+          null_fragments << fragment['identifier']
+        end
+      end
+      message = "The following fields cannot be empty: #{null_fragments.join(', ')}"
+    end
+
+    redirect_to request.referrer, alert: message
+  end
+
+  def is_comfy_page_edit?
+    params[:controller] == 'comfy/admin/cms/pages' && params[:action] == 'update'
+  end
 
   def render_404
     render file: Rails.root.join("/public/404.html"), layout: false, status: :not_found
