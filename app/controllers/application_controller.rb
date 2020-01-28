@@ -52,6 +52,7 @@ class ApplicationController < ActionController::Base
     if fragments_params.present? && is_comfy_page_edit?
       null_fragments = []
       # Only get custom not null cms tags
+      # Currently only works with dates but it's already more generalised to work with texts
       fragments_params.values.select { |v| v['tag'].include?('not_null') }.map do |fragment|
         if fragment['tag'].include?('date') && fragment['datetime'].blank? ||
             fragment['tag'].include?('text') && fragment['content'].blank?
