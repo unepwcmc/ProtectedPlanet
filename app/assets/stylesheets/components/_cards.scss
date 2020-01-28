@@ -40,7 +40,7 @@
       }
 
       &__icon {
-        @include icon-image;
+        @include icon-placeholder-image;
       }
     }
   }

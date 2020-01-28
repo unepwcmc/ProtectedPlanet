@@ -2,10 +2,10 @@ class HomeController < ApplicationController
   def index
     home_yml = I18n.t('home')
 
-    @total_pas = 'XXXXXX' #TODO replace with correct integer
-    @total_oecms = 'XXXXXX' #TODO replace with correct integer
+    @total_pas = ProtectedArea.count
+    @total_oecms = 9876543 #TODO replace with correct integer
 
-    search_pas = ProtectedArea.first(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} } #TODO make this ALL the pas
+    search_pas = ProtectedArea.all.map{ |pa| {"id": pa.wdpa_id, "name": pa.name} }
     search_oecms = ProtectedArea.last(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} } #TODO make this ALL the OECMS
     @search_pas_categories = [
       { name: 'Protected Areas', placeholder: 'Search for a Protected Area', options: search_pas },

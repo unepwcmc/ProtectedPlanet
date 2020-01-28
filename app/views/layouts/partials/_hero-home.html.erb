@@ -1,16 +1,17 @@
-<header class="hero--home">
+<header class="hero--home bg-image-overlay--white">
   <div class="hero__container container">
     <div class="hero__text">
       <h1 class="h1-home"><%= cms_fragment_content("title") %></h1>
       <p class="hero__intro"><%= cms_fragment_content("introduction") %></p>
 
-      <%= link_to t('home.button'), '/', title: t('home.button'), class: 'button--outline-black' %>
+      <%= link_to t('home.button'), '/', title: t('home.button'), class: 'button--primary' %>
     </div>
     <div>
-      <div class="hero__stats circle--grey-dark">
-        <span class="hero__stat-number"><%= @total_pas %></span>
+      <div class="hero__stats circle--grey-dark sm-home-hero-stats">
+        <i class="hero__icon icon--shield"></i>
+        <counter class="hero__stat-number" :total="<%= @total_pas %>" trigger="sm-home-hero-stats" :decimal="0"></counter>
         <span class="hero__stat-text"><%= t('home.stat_text_1') %></span>
-        <span class="hero__stat-number"><%= @total_oecms %></span>
+        <counter class="hero__stat-number" :total="<%= @total_oecms %>" trigger="sm-home-hero-stats" :decimal="0"></counter>
         <span class="hero__stat-text"><%= t('home.stat_text_2') %></span>
       </div>
     </div>
