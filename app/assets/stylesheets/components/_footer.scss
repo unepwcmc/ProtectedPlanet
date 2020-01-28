@@ -8,8 +8,29 @@
   }
 
     &__col1 {
-      @include responsive(order, 0, 1, 1);
+      @include responsive(display, none, none, block);
+      width: 28%;
     }
+
+    &__col2 {
+      width: 14%;
+    }
+
+    &__col3 {
+      width: 14%;
+    }
+
+    &__col4 {
+      width: 24%;
+    }
+
+    &__col5 {
+      width: 20%;
+    }
+
+      &__link {
+        display: block;
+      }
 
       &__logo-partner {
         width: auto; height: rem-calc(30);

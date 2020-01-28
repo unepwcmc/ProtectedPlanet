@@ -54,6 +54,7 @@
   @include text-2;
   @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
   font-weight: $bold;
+  margin-top: 0;
 }
 
 @mixin h4 {
