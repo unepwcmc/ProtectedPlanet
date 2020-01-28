@@ -24,8 +24,8 @@ module ApplicationHelper
     end
   end
 
-  def active_nav_item?(test_path)
-    request.fullpath == test_path
+  def active_nav_item?(current_path)
+    request.fullpath == current_path
   end
 
   def cover item
