@@ -15,8 +15,6 @@ Rails.application.routes.draw do
 
   #TODO
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
-  get '/sites/:id', to: 'sites#show', as: 'sites'
-  get '/sites/:id/*other', to: 'sites#show', as: 'sites_other'
 
   scope "(:locale)", locale: /en|es|fr/ do
 
