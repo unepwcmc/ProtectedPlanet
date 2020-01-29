@@ -2,13 +2,12 @@
 // mixins
 //--------------------------------------------------
 @mixin social-icon ($image) {
-  @include responsive(width, rem-calc(30), rem-calc(50), rem-calc(50));
-  @include responsive(height, rem-calc(30), rem-calc(50), rem-calc(50));
   background-image: image-url($image);
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  margin-top: 26px;
+  margin: rem-calc(0 14 24 0);
+  width: rem-calc(26); height: rem-calc(30);
 
   display: inline-block;
 
@@ -16,12 +15,7 @@
     margin-top: 0;
   }
 
-  &:hover { opacity: .75; }
-
-  @include breakpoint($medium) { 
-    margin-top: 0;
-    margin-left: 16px;
-  }  
+  &:hover { opacity: .75; } 
 }
 //--------------------------------------------------
 // classes
