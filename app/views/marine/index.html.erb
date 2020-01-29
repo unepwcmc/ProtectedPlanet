@@ -1,4 +1,7 @@
-<%= content_for :twitter_card, "summary_large_image" %>
+  <%= render partial: "./layouts/partials/hero-thematic", locals: { title: @cms_page.label, classes: @cms_page.slug } %>
+  <%= render partial: "marine/sections/header" %>
+
+  <%= content_for :twitter_card, "summary_large_image" %>
 <%= content_for :social_title, "Explore the World's Marine Protected Areas" %>
 <%= content_for :social_description, "Over 70% of the surface of Earth is ocean, comprised of highly diverse ecosystems, and providing a wide range of marine ecosystem services that support human society, health and the economy. This website presents the most recent official coverage statistics for marine protected areas, updated monthly from the World Database on Protected Areas." %>
 <%= content_for :social_image, image_url('social-marine.png') %>
@@ -10,9 +13,6 @@
   </sticky-tab>
 
   <social-share-text></social-share-text>
-
-  <%= render partial: "./layouts/partials/hero-thematic", locals: { title: @cms_page.label } %>
-  <%= render partial: "marine/sections/header" %>
 
   <div class="container--push-bottom">
 

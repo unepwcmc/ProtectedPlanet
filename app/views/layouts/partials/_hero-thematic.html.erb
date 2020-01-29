@@ -1,4 +1,6 @@
-<header class="hero--thematic">
+<% classes = '' if local_assigns[:classes].nil? %>
+
+<header class="hero--thematic bg-image-overlay--white <%= classes %>">
   <div class="hero__container container">
     <h1><%= title %></h1>
   </div>

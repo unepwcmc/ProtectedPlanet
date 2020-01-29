@@ -1,3 +1,3 @@
-<%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label } %>
+<%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label, classes: "#{@cms_page.slug} bg-image-overlay--white" } %>
 
 <%= render "partials/ctas/live-report" %>

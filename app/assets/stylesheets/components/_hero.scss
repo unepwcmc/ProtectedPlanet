@@ -1,13 +1,15 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$hero-padding-top-mobile: rem-calc(34);
-$hero-padding-top-tablet: rem-calc(70);
-$hero-padding-top-desktop: rem-calc(60);
 
-$hero-padding-bottom-mobile: rem-calc(32);
-$hero-padding-bottom-tablet: rem-calc(70);
-$hero-padding-bottom-desktop: rem-calc(60);
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin hero-medium {
+  @include responsive(height, rem-calc(150), rem-calc(505), rem-calc(505));
+  background: $grey-light center no-repeat;
+  background-size: cover;
+}
 
 //--------------------------------------------------
 // classes
@@ -17,14 +19,16 @@ $hero-padding-bottom-desktop: rem-calc(60);
 // class - basic
 //--------------------------------------------------
   &--basic {
+    @include hero-medium;
     @include flex;
     @include flex-v-center;
-    @include responsive(height, rem-calc(150), rem-calc(505), rem-calc(505));
-    background: $grey-light center no-repeat;
-    background-size: cover;
     
     &.about { background-image: image_url('hero/about.png'); }
-    &.indigenous-and-community-conserved-areas { background-image: image_url('hero/icca.png'); }
+    &.equity { background-image: image_url('hero/equity.png'); }
+    &.indigenous-and-community-conserved-areas,
+    &.oecms,
+    &.wdpa { background-image: image_url('hero/icca.png'); }
+    &.protected-areas-management-effectiveness-pame { background-image: image_url('hero/pame.png'); }
   }
 
 //--------------------------------------------------
@@ -89,15 +93,16 @@ $hero-padding-bottom-desktop: rem-calc(60);
     
     &.news-and-stories { background-image: image_url('hero/news-and-stories.png'); }
     &.resources { background-image: image_url('hero/resources.png'); }
-    &.thematical-area { background-image: image_url('hero/thematical-areas.png'); }
+    &.thematical-area,
     &.thematical-areas { background-image: image_url('hero/thematical-areas.png'); }
   }
 
 //--------------------------------------------------
 // class - thematic
 //--------------------------------------------------
-  &--thematic-area {
-    @include responsive(padding-top, $hero-padding-top-mobile, $hero-padding-top-tablet, $hero-padding-top-desktop);
-    @include responsive(padding-bottom, $hero-padding-bottom-mobile, $hero-padding-bottom-tablet, $hero-padding-bottom-desktop);
+  &--thematic {
+    @include hero-medium;
+
+    &.marine-protected-areas { background-image: image_url('hero/marine.png'); }
   }
 }
