@@ -17,8 +17,14 @@ $hero-padding-bottom-desktop: rem-calc(60);
 // class - basic
 //--------------------------------------------------
   &--basic {
-    @include responsive(padding-top, rem-calc(28), rem-calc(35), rem-calc(100));
-    @include responsive(padding-bottom, rem-calc(48), rem-calc(80), rem-calc(166));
+    @include flex;
+    @include flex-v-center;
+    @include responsive(height, rem-calc(150), rem-calc(505), rem-calc(505));
+    background: $grey-light center no-repeat;
+    background-size: cover;
+    
+    &.about { background-image: image_url('hero/about.png'); }
+    &.indigenous-and-community-conserved-areas { background-image: image_url('hero/icca.png'); }
   }
 
 //--------------------------------------------------
@@ -80,9 +86,11 @@ $hero-padding-bottom-desktop: rem-calc(60);
     @include responsive(height, rem-calc(150), rem-calc(315), rem-calc(315));
     background: $grey-light center no-repeat;
     background-size: cover;
-
+    
     &.news-and-stories { background-image: image_url('hero/news-and-stories.png'); }
     &.resources { background-image: image_url('hero/resources.png'); }
+    &.thematical-area { background-image: image_url('hero/thematical-areas.png'); }
+    &.thematical-areas { background-image: image_url('hero/thematical-areas.png'); }
   }
 
 //--------------------------------------------------
