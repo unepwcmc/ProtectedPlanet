@@ -29,6 +29,13 @@
     &.oecms,
     &.wdpa { background-image: image_url('hero/icca.png'); }
     &.protected-areas-management-effectiveness-pame { background-image: image_url('hero/pame.png'); }
+
+    .hero {
+      &__intro {
+        @include text-intro;
+        @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+      }
+    }
   }
 
 //--------------------------------------------------

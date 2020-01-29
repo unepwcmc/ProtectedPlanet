@@ -1,7 +1,17 @@
 <% classes = '' if local_assigns[:classes].nil? %>
+<% summary = false if local_assigns[:summary].nil? %>
+<% button_link = false if local_assigns[:button_link].nil? %>
 
 <header class="hero--basic <%= classes %>">
   <div class="hero__container container">
     <h1><%= title %></h1>
+
+    <% if summary %>
+      <p class="hero__intro"><%= summary %></p>
+    <% end %>
+    
+    <% if button_link %>
+      <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'button--external' %>
+    <% end %>
   </div>
 </header>
