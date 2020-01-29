@@ -4,14 +4,17 @@
 
 <header class="hero--basic <%= classes %>">
   <div class="hero__container container">
-    <h1><%= title %></h1>
 
-    <% if summary %>
-      <p class="hero__intro"><%= summary %></p>
-    <% end %>
-    
-    <% if button_link %>
-      <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'button--external' %>
-    <% end %>
+    <div class="hero__content">
+      <h1><%= title %></h1>
+
+      <% if summary %>
+        <p class="hero__intro"><%= summary %></p>
+      <% end %>
+      
+      <% if button_link %>
+        <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'button--external' %>
+      <% end %>
+    </div>
   </div>
 </header>

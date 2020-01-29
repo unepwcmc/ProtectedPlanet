@@ -6,7 +6,8 @@
 // mixins
 //--------------------------------------------------
 @mixin hero-medium {
-  @include responsive(height, rem-calc(200), rem-calc(350), rem-calc(505));
+  @include responsive(min-height, rem-calc(200), rem-calc(350), rem-calc(505));
+  @include responsive(padding, rem-calc(30 0 40 0), rem-calc(40 0 40 0), rem-calc(50 0 60 0));
   background: $grey-light center no-repeat;
   background-size: cover;
 }
@@ -31,10 +32,14 @@
     &.protected-areas-management-effectiveness-pame { background-image: image_url('hero/pame.png'); }
 
     .hero {
-      &__intro {
-        @include text-intro;
-        @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+      &__content {
+        @include responsive(padding-right, 0, 5%, 25%); 
       }
+
+        &__intro {
+          @include text-intro;
+          @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+        }
     }
   }
 
