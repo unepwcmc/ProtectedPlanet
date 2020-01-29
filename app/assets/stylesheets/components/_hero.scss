@@ -71,6 +71,19 @@ $hero-padding-bottom-desktop: rem-calc(60);
           }
     }
   }
+//--------------------------------------------------
+// class - small
+//--------------------------------------------------
+  &--small {
+    @include flex;
+    @include flex-v-center;
+    @include responsive(height, rem-calc(150), rem-calc(315), rem-calc(315));
+    background: $grey-light center no-repeat;
+    background-size: cover;
+
+    &.news-and-stories { background-image: image_url('hero/news-and-stories.png'); }
+    &.resources { background-image: image_url('hero/resources.png'); }
+  }
 
 //--------------------------------------------------
 // class - thematic
