@@ -330,16 +330,23 @@ module ApplicationHelper
   end
 
   def get_footer_links
-    page_slugs = ['about', 'legal', 'resources', 'oecms', 'wdpa']
-    @links = {}
+    def make_links slug_array
+      array = []
+      
+      slug_array.each { |slug|
+        page = @cms_site.pages.find_by_slug(slug)
 
-    page_slugs.each { |slug|
-      page = @cms_site.pages.find_by_slug(slug)
-
-      @links["#{slug}"] = {
-        "title": page.label,
-        "url": page.url
+        array << {
+          "title": page.label,
+          "url": get_cms_url(page.full_path)  
+        }
       }
-    }
+
+      array
+    end
+
+    @links = {}
+    @links["links1"] = make_links(['resources', 'oecms', 'wdpa'])
+    @links["links2"] = make_links(['about', 'legal'])
   end
 end

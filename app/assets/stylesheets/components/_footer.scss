@@ -40,12 +40,16 @@
         display: block;
       }
 
-      &__logo-partner {
-        margin-bottom: rem-calc(12);
-        width: auto; height: rem-calc(30);
+      &__link-partner {
+        text-decoration: none;
 
         &:first-child() { margin-right: rem-calc(24); } 
       }
+
+        &__logo-partner {
+          margin-bottom: rem-calc(12);
+          width: auto; height: rem-calc(30);
+        }
 
       &__logo-site {
         width: auto; height: rem-calc(40);
