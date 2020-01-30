@@ -312,6 +312,10 @@ module ApplicationHelper
     @links["links2"] = make_footer_links(['about', 'legal'])
   end
 
+  def get_local_classes local_assigns
+    (local_assigns.has_key? :classes) ? local_assigns[:classes] : ''
+  end
+
   private
 
   def make_footer_links slug_array

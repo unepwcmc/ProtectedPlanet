@@ -11,7 +11,7 @@
         <h3><%= t('global.footer.title1') %></h3>
 
         <% @links["links1"].each do |link| %>
-          <%= link_to link[:title], link[:url], title: t('global.links.cms_page', page: link[:title]), class: 'footer__link' %>
+          <%= link_to link[:title], link[:url], title: t('global.links.visit', link: link[:title]), class: 'footer__link' %>
         <% end %>
       </div>
 
@@ -19,7 +19,7 @@
         <h3><%= t('global.footer.title2') %></h3>
         
         <% @links["links2"].each do |link| %>
-          <%= link_to link[:title], link[:url], title: t('global.links.cms_page', page: link[:title]), class: 'footer__link' %>
+          <%= link_to link[:title], link[:url], title: t('global.links.visit', link: link[:title]), class: 'footer__link' %>
         <% end %>
       </div>
 

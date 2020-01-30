@@ -17,5 +17,5 @@ en:
       pp: Protected Planet logo
       wcmc: UN Environment World Conservation Monitoring logo
     links: 
-      cms_page: "Visit: %{page}"
+      visit: "Visit: %{link}"
       email: "Email: %{email}"

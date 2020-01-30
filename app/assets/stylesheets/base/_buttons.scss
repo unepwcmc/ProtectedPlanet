@@ -117,6 +117,14 @@ $padding-medium: rem-calc(27);
     &::after { @include icon-download; }
   }
 
+  &--external {
+    @include button-with-icon;
+    @include button-block;
+    font-weight: $bold;
+    
+    &::after { @include icon-arrow-external-white; }
+  }
+
   &--link-external {
     @include button-with-icon;
     

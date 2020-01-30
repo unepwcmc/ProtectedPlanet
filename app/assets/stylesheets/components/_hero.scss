@@ -1,13 +1,16 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$hero-padding-top-mobile: rem-calc(34);
-$hero-padding-top-tablet: rem-calc(70);
-$hero-padding-top-desktop: rem-calc(60);
 
-$hero-padding-bottom-mobile: rem-calc(32);
-$hero-padding-bottom-tablet: rem-calc(70);
-$hero-padding-bottom-desktop: rem-calc(60);
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin hero-medium {
+  @include responsive(min-height, rem-calc(200), rem-calc(350), rem-calc(505));
+  @include responsive(padding, rem-calc(30 0 40 0), rem-calc(40 0 40 0), rem-calc(50 0 60 0));
+  background: $grey-light center no-repeat;
+  background-size: cover;
+}
 
 //--------------------------------------------------
 // classes
@@ -17,8 +20,27 @@ $hero-padding-bottom-desktop: rem-calc(60);
 // class - basic
 //--------------------------------------------------
   &--basic {
-    @include responsive(padding-top, rem-calc(28), rem-calc(35), rem-calc(100));
-    @include responsive(padding-bottom, rem-calc(48), rem-calc(80), rem-calc(166));
+    @include hero-medium;
+    @include flex;
+    @include flex-v-center;
+    
+    &.about { background-image: image_url('hero/about.png'); }
+    &.equity { background-image: image_url('hero/equity.png'); }
+    &.indigenous-and-community-conserved-areas,
+    &.oecms,
+    &.wdpa { background-image: image_url('hero/icca.png'); }
+    &.protected-areas-management-effectiveness-pame { background-image: image_url('hero/pame.png'); }
+
+    .hero {
+      &__content {
+        @include responsive(padding-right, 0, 5%, 25%); 
+      }
+
+        &__intro {
+          @include text-intro;
+          @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+        }
+    }
   }
 
 //--------------------------------------------------
@@ -71,12 +93,28 @@ $hero-padding-bottom-desktop: rem-calc(60);
           }
     }
   }
+//--------------------------------------------------
+// class - small
+//--------------------------------------------------
+  &--small {
+    @include flex;
+    @include flex-v-center;
+    @include responsive(height, rem-calc(150), rem-calc(210), rem-calc(315));
+    background: $grey-light center no-repeat;
+    background-size: cover;
+    
+    &.news-and-stories { background-image: image_url('hero/news-and-stories.png'); }
+    &.resources { background-image: image_url('hero/resources.png'); }
+    &.thematical-area,
+    &.thematical-areas { background-image: image_url('hero/thematical-areas.png'); }
+  }
 
 //--------------------------------------------------
 // class - thematic
 //--------------------------------------------------
-  &--thematic-area {
-    @include responsive(padding-top, $hero-padding-top-mobile, $hero-padding-top-tablet, $hero-padding-top-desktop);
-    @include responsive(padding-bottom, $hero-padding-bottom-mobile, $hero-padding-bottom-tablet, $hero-padding-bottom-desktop);
+  &--thematic {
+    @include hero-medium;
+
+    &.marine-protected-areas { background-image: image_url('hero/marine.png'); }
   }
 }

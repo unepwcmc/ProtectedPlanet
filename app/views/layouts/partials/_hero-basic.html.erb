@@ -1,5 +1,16 @@
-<header class="hero--basic">
+<header class="hero--basic <%= get_local_classes local_assigns %>">
   <div class="hero__container container">
-    <h1><%= title %></h1>
+
+    <div class="hero__content">
+      <h1><%= title %></h1>
+
+      <% if local_assigns.has_key? :summary %>
+        <p class="hero__intro"><%= summary %></p>
+      <% end %>
+      
+      <% if local_assigns.has_key? :button_link %>
+        <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'button--external' %>
+      <% end %>
+    </div>
   </div>
 </header>

@@ -1,5 +1,5 @@
 <div class="page--news">
-  <%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label } %>
+  <%= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: @cms_page[:slug] } %>
 
   <div class="page__container container section-padding">
     <div class="page__col-1">
