@@ -1,18 +1,14 @@
-<% classes = '' if local_assigns[:classes].nil? %>
-<% summary = false if local_assigns[:summary].nil? %>
-<% button_link = false if local_assigns[:button_link].nil? %>
-
-<header class="hero--basic <%= classes %>">
+<header class="hero--basic <%= get_local_classes local_assigns %>">
   <div class="hero__container container">
 
     <div class="hero__content">
       <h1><%= title %></h1>
 
-      <% if summary %>
+      <% if local_assigns.has_key? :summary %>
         <p class="hero__intro"><%= summary %></p>
       <% end %>
       
-      <% if button_link %>
+      <% if local_assigns.has_key? :button_link %>
         <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'button--external' %>
       <% end %>
     </div>
