@@ -55,9 +55,6 @@ Rails.application.routes.draw do
     get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
     get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
-    get '/sites/:id', to: 'sites#show'
-    get '/sites/:id/*other', to: 'sites#show'
-
     get '/terms', to: redirect("/c/terms-and-conditions")
 
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
