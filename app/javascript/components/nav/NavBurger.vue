@@ -4,7 +4,7 @@
 
       <button id="close-nav-pane" class="nav__close" v-show="isBurgerNav" @click="closeNavPane"></button>
 
-      <ul aria-label="nav" role="menubar" class="nav__ul">
+      <ul aria-label="nav" role="menubar" class="nav__ul v-nav-pane-target">
         <li role="none" class="nav__li" v-for="link in links" :key="link.id">
           
           <nav-dropdown v-if="hasChildren(link)" :link="link" />
@@ -25,7 +25,7 @@ import NavLink from "./NavLink"
 import mixinResponsive from "../../mixins/mixin-responsive"
 import mixinPopupCloseListeners from "../../mixins/mixin-popup-close-listeners"
 import mixinFocusCapture from "../../mixins/mixin-focus-capture"
-// import { disableTabbing, reenableTabbing } from '../../helpers/focus-helpers';
+import { disableTabbing, reenableTabbing } from '../../helpers/focus-helpers';
 
 export default {
   name: 'nav-burger',
@@ -61,7 +61,7 @@ export default {
   },
 
   mounted () {
-    // this.areNavPaneItemsVisible ? reenableTabbing(this.navPaneItemContainer) : disableTabbing(this.navPaneItemContainer)
+    this.areNavPaneItemsVisible ? reenableTabbing(this.navPaneItemContainer) : disableTabbing(this.navPaneItemContainer)
   },
 
   methods: {
@@ -95,7 +95,7 @@ export default {
     },
 
     navPaneItemContainer () {
-      return this.$el.querySelector('.nav__item-container')
+      return this.$el.querySelector('.v-nav-pane-target')
     },
 
     isNavPaneActive () {

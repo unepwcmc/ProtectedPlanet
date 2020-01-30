@@ -10,12 +10,14 @@
       :aria-controls="mixinModalId"
       class="nav__dropdown-toggle hover--pointer flex-inline flex-v-center"
       @mouseenter="openDropdown"
-      v-touch="toggleDropdown"
     >
-      <label
-        :for="mixinModalId"
-        class="nav__select nav__select--dropdown"
-      >{{ link.label }}</label>
+      <label :for="mixinModalId">
+        <nav-link 
+          :link="link" 
+          :class="[{'active': isActive}, 'nav__dropdown-toggle-a']"
+          v-touch="toggleDropdown"
+        />
+      </label>
       <span class="drop-arrow arrow-svg" />
     </button>
     <nav
@@ -27,7 +29,7 @@
       <nav-link
         v-for="dropdownLink in link.children"
         :key="dropdownLink.id"
-        class="nav__dropdown-link"
+        class="nav__dropdown-a"
         :link="dropdownLink"
       />
     </nav>
@@ -82,6 +84,7 @@ export default {
       this.isActive = true
     },
     toggleDropdown (e) {
+      e.preventDefault()
       this.isActive ? this.closeDropdown(e) : this.openDropdown(e)
     }
   }
