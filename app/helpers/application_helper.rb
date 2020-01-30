@@ -223,7 +223,7 @@ module ApplicationHelper
   end
 
   def get_nav_primary
-    return [
+    [
       map_page('about'),
       map_page('news-and-stories'),
       map_page('resources'),
@@ -313,37 +313,39 @@ module ApplicationHelper
   end
 
   private
-    def make_footer_links slug_array
-      slug_array.map do |slug|
-        page = @cms_site.pages.find_by_slug(slug)
 
-        {
-          "title": page.label,
-          "url": get_cms_url(page.full_path)  
-        }
-      end
-    end
+  def make_footer_links slug_array
+    slug_array.map do |slug|
+      page = @cms_site.pages.find_by_slug(slug)
 
-    def map_page(slug, map_children = false)
-      cms_page = Comfy::Cms::Page.find_by_slug(slug)
-
-      mapped_page = {
-        "id": cms_page.slug,
-        "label": cms_page.label,
-        "url": get_cms_url(cms_page.full_path),
-        "is_current_page": active_nav_item?(get_cms_url cms_page.full_path)
+      {
+        "title": page.label,
+        "url": get_cms_url(page.full_path)
       }
+    end
+  end
 
-      if map_children
-        mapped_page["children"] = cms_page.children.published.map{ |page| {
-            "id": page.slug,
-            "label": page.label,
-            "url": get_cms_url(page.full_path),
-            "is_current_page": active_nav_item?(get_cms_url page.full_path)
-          }
+  def map_page(slug, map_children = false)
+    cms_page = Comfy::Cms::Page.find_by_slug(slug)
+
+    mapped_page = {
+      "id": cms_page.slug,
+      "label": cms_page.label,
+      "url": get_cms_url(cms_page.full_path),
+      "is_current_page": active_nav_item?(get_cms_url cms_page.full_path)
+    }
+
+    if map_children
+      mapped_page["children"] = cms_page.children.published.map do |page|
+        {
+          "id": page.slug,
+          "label": page.label,
+          "url": get_cms_url(page.full_path),
+          "is_current_page": active_nav_item?(get_cms_url page.full_path)
         }
       end
-
-      return mapped_page
     end
+
+    mapped_page
+  end
 end
