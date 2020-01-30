@@ -20,9 +20,6 @@
     "vue2-touch-events": "^2.0.0",
     "vuex": "^3.1.0"
   },
-  "bin": {
-    "shajs": "./bin.js"
-  },
   "devDependencies": {
     "webpack-dev-server": "^3.8.2"
   }
