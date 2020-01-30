@@ -54,6 +54,8 @@
   @include text-2;
   @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
   font-weight: $bold;
+  margin-top: 0;
+  margin-bottom: .5em;
 }
 
 @mixin h4 {
@@ -69,16 +71,11 @@
   margin: 0 0 .5em 0;
 }
 
-@mixin text-small {
-  @include text-2;
-  color: $grey;
-  font-size: rem-calc(14);
-}
-
-@mixin text-intro {
-  @include text-2;
-  @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
-  line-height: 1.35;
+@mixin text-accent {
+  @include responsive(font-size, rem-calc(30), rem-calc(50), rem-calc(60));
+  color: $primary;
+  font-weight: $bold;
+  line-height: 1;
 }
 
 @mixin text-alert {
@@ -94,6 +91,18 @@
   font-size: rem-calc(16);
 }
 
+@mixin text-footer-links {
+  @include text-2;
+  @include responsive(font-size, rem-calc(16), rem-calc(16), rem-calc(18));
+  text-decoration: none;
+}
+
+@mixin text-intro {
+  @include text-2;
+  @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
+  line-height: 1.35;
+}
+
 @mixin text-nav-link {
   @include responsive(font-size, rem-calc(16), rem-calc(16), rem-calc(18));
   font-weight: 500;
@@ -104,9 +113,8 @@
   @include text-3;
 }
 
-@mixin text-accent {
-  @include responsive(font-size, rem-calc(30), rem-calc(50), rem-calc(60));
-  color: $primary;
-  font-weight: $bold;
-  line-height: 1;
+@mixin text-small {
+  @include text-2;
+  color: $grey;
+  font-size: rem-calc(14);
 }
