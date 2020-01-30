@@ -223,29 +223,6 @@ module ApplicationHelper
   end
 
   def get_nav_primary
-    def map_page(slug, map_children = false)
-      cms_page = Comfy::Cms::Page.find_by_slug(slug)
-
-      mapped_page = {
-        "id": cms_page.slug,
-        "label": cms_page.label,
-        "url": get_cms_url(cms_page.full_path),
-        "is_current_page": active_nav_item?(get_cms_url cms_page.full_path)
-      }
-
-      if map_children
-        mapped_page["children"] = cms_page.children.published.map{ |page| {
-            "id": page.slug,
-            "label": page.label,
-            "url": get_cms_url(page.full_path),
-            "is_current_page": active_nav_item?(get_cms_url page.full_path)
-          }
-        }
-      end
-
-      return mapped_page
-    end
-
     return [
       map_page('about'),
       map_page('news-and-stories'),
@@ -330,23 +307,43 @@ module ApplicationHelper
   end
 
   def get_footer_links
-    def make_links slug_array
-      array = []
-      
-      slug_array.each { |slug|
+    @links = {}
+    @links["links1"] = make_footer_links(['resources', 'oecms', 'wdpa'])
+    @links["links2"] = make_footer_links(['about', 'legal'])
+  end
+
+  private
+    def make_footer_links slug_array
+      slug_array.map do |slug|
         page = @cms_site.pages.find_by_slug(slug)
 
-        array << {
+        {
           "title": page.label,
           "url": get_cms_url(page.full_path)  
         }
-      }
-
-      array
+      end
     end
 
-    @links = {}
-    @links["links1"] = make_links(['resources', 'oecms', 'wdpa'])
-    @links["links2"] = make_links(['about', 'legal'])
-  end
+    def map_page(slug, map_children = false)
+      cms_page = Comfy::Cms::Page.find_by_slug(slug)
+
+      mapped_page = {
+        "id": cms_page.slug,
+        "label": cms_page.label,
+        "url": get_cms_url(cms_page.full_path),
+        "is_current_page": active_nav_item?(get_cms_url cms_page.full_path)
+      }
+
+      if map_children
+        mapped_page["children"] = cms_page.children.published.map{ |page| {
+            "id": page.slug,
+            "label": page.label,
+            "url": get_cms_url(page.full_path),
+            "is_current_page": active_nav_item?(get_cms_url page.full_path)
+          }
+        }
+      end
+
+      return mapped_page
+    end
 end
