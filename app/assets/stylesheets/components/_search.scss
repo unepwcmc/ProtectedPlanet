@@ -9,56 +9,8 @@ $search-input-size-desktop: 547px; //px
 // classes
 //--------------------------------------------------
 .search {
-
-//--------------------------------------------------
-// class - main
-//--------------------------------------------------
-  &--main {
-    position: relative;
-
-    .search {
-      &__pane {
-        width: rem-calc(600);
-
-        display: none;
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: $z-300;
-        
-        &.active { display: block; }
-      }
-
-        &__close {
-          @include button-close;
-
-          position: absolute;
-          top: 50%;
-          right: rem-calc(16);
-
-          transform: scale(.7) translateY(-50%);
-        }
-
-        &__icon {
-          @include icon-search-green;
-
-          position: absolute;
-          top: 50%;
-          left: rem-calc(16);
-
-          transform: translateY(-50%);
-        }
-
-        &__input {
-          padding-left: rem-calc(50);
-          width: 100%;
-        }
-
-      &__trigger {
-        @include button-search;
-      }
-    }
-  }
+  @import './search/search-autocomplete';
+  @import './search/search-main';
 
 //--------------------------------------------------
 // class - protected areas

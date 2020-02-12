@@ -30,7 +30,7 @@ import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import Search from './components/search/Search'
-import SearchAutocompleteCategories from './components/search/SearchAutocompleteCategories'
+import SearchAutocompleteTypes from './components/search/SearchAutocompleteTypes'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         MapInteractive,
         NavBurger,
         Search,
-        SearchAutocompleteCategories,
+        SearchAutocompleteTypes,
         SelectWithContent,
         StickyBar,
         StickyNav,

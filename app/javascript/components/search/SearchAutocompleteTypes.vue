@@ -1,13 +1,13 @@
 <template>
   <div
-    class="select--autocomplete"
+    class="search--autocomplete"
   >
-    <div class="select__search">
-      <i class="select__search-icon" /> 
+    <div class="search__search">
+      <i class="search__search-icon" /> 
 
       <input
         v-model="searchTerm"
-        class="select__search-input"
+        class="search__search-input"
         type="text"
         placeholder="placeholder"
         v-on:keyup="updateAutocomplete"
@@ -16,44 +16,44 @@
 
     <button 
       v-show="showResetIcon"
-      class="select__search-icon--delete"
+      class="search__search-icon--delete"
       @click="resetSearchTerm"
     />
 
     <ul 
       v-show="autocomplete.length > 0" 
       role="listbox" 
-      class="select__dropdown"
+      class="search__dropdown"
     >
       <li
         v-for="(option, index) in autocomplete"
         :key="option.id"
-        class="select__li"
+        class="search__li"
         role="option"
       >
         <a 
-          class="select__a"
-          href="option.url"
+          class="search__a"
+          :href="option.url"
           v-html="option.title"
         />
       </li>
     </ul>
 
-    <div class="select--categories">
+    <div class="select--types">
       <div 
-        class="select__label"
-        @click="toggleCategories"
+        :class="['select__label', {'active': typeDropdownActive}]"
+        @click="toggleTypes"
       >
-        {{ selectedCategoryName }}
+        {{ selectedTypeName }}
       </div>
 
-      <ul :class="['select__ul', {'active': categoriesActive}]">
+      <ul :class="['select__ul', {'active': typeDropdownActive}]">
         <li 
-          v-for="category, index in categories"
+          v-for="type, index in types"
           class="select__li"
-          @click="updateCategory(index)"
+          @click="updateType(index)"
         >
-          {{ category.name }}
+          {{ type.name }}
         </li>
       </ul>
     </div>
@@ -66,14 +66,14 @@ import { setCsrfToken } from '../../helpers/request-helpers'
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
 
 export default {
-  name: 'SearchAutocompleteCategories',
+  name: 'SearchAutocompleteTypes',
 
   mixins: [
     mixinPopupCloseListeners({closeCallback: 'closeSelect'}),
   ],
 
   props: {
-    categories: {
+    types: {
       default: () => [],
       type: Array // [ { name: String, options: [ { id: Number, name: String } ] } ]
     },
@@ -85,8 +85,8 @@ export default {
 
   data () {
     return {
-      categoryIndex: 0,
-      categoriesActive: false,
+      typeIndex: 0,
+      typeDropdownActive: false,
       searchTerm: '',
       autocomplete: [] // [ { title: String, url: String ]
     }
@@ -97,10 +97,10 @@ export default {
       this.autocomplete.length > 0
     },
     options () {
-      return this.categories[this.categoryIndex].options
+      return this.types[this.typeIndex].options
     },
-    selectedCategoryName () {
-      return this.categories[this.categoryIndex].name
+    selectedTypeName () {
+      return this.types[this.typeIndex].name
     },
     showResetIcon () {
       return this.searchTerm.length != 0
@@ -127,35 +127,30 @@ export default {
 
       let data = {
         params: {
-          type: this.selectedCategoryName,
+          type: this.selectedTypeName,
           search_term: this.searchTerm
         }
       }
 
-      // axios.post(this.endpoint, data)
-      // .then(response => {
-      //   console.log(success)
-      //   this.autocomplete = response.data.autocomplete
-      // })
-      // .catch(function (error) {
-      //   console.log(error)
-      // })
-
-      this.autocomplete = [
-        { title: 'option 1', url: '/en/1'},
-        { title: 'option 2', url: '/en/2'}
-      ]
+      axios.post(this.endpoint, data)
+      .then(response => {
+        console.log(success)
+        this.autocomplete = response.data.autocomplete
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
     },
 
-    updateCategory (index) {
-      this.categoryIndex = index
-      this.toggleCategories()
+    updateType (index) {
+      this.typeIndex = index
+      this.toggleTypes()
       this.resetSearchTerm()
       this.resetAutocomplete()
     },
 
-    toggleCategories () {
-      this.categoriesActive = !this.categoriesActive
+    toggleTypes () {
+      this.typeDropdownActive = !this.typeDropdownActive
     },
 
     resetSearchTerm () {

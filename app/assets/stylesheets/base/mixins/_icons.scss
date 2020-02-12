@@ -78,6 +78,16 @@ $icon-search-width: rem-calc(21);
   @include icon-image('chevron-black-up.svg', rem-calc(14), rem-calc(8));
 }
 
+@mixin icon-chevron-white-down() {
+  @include icon-basic;
+  @include icon-image('chevron-white-down.svg', rem-calc(14), rem-calc(8));
+}
+
+@mixin icon-chevron-white-up() {
+  @include icon-basic;
+  @include icon-image('chevron-white-up.svg', rem-calc(14), rem-calc(8));
+}
+
 @mixin icon-circle-chevron-black() {
   @include icon-basic;
   @include icon-image('circle-chevron-black.svg', rem-calc(34), rem-calc(34));
