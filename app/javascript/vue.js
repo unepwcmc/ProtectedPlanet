@@ -38,8 +38,8 @@ import SocialShareText from './components/social/SocialShareText'
 import TableHead from './components/table/TableHead'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
+import VSelectAutocomplete from './components/select/VSelectAutocomplete'
 import VSelectSearchable from './components/select/VSelectSearchable'
-import VSelectSearchableFilterable from './components/select/VSelectSearchableFilterable'
 import VTable from './components/table/VTable'
 
 document.addEventListener('DOMContentLoaded', () => { 
@@ -80,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
         TableHead,
         Target11Dashboard,
         Tooltip,
+        VSelectAutocomplete,
         VSelectSearchable,
-        VSelectSearchableFilterable,
         VTable
       }
     })

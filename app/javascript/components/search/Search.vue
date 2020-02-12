@@ -8,19 +8,20 @@
     <div 
       :class="['search__pane', { 'active': isActive }]"
       >
-      <button 
-        class="search__close"
-        @click="closeInput"
-      />
-
-      <i class="search__icon" />
-
+      
       <input 
         v-model="searchTerm"
         type="text"
         class="search__input"
         :placeholder="placeholder" 
         v-on:keyup.enter="submit"
+      />
+
+      <i class="search__icon" />
+
+      <button 
+        class="search__close"
+        @click="closeInput"
       />
     </div>
   </div>

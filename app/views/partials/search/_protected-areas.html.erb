@@ -1,9 +1,9 @@
 <section class="search--pa container">
   <div class="search__container">
-    <!-- <input type="text" class="search__input" placeholder="Search for a protected area..."> -->
-    <v-select-searchable-filterable 
+    <v-select-autocomplete 
       :config="<%= @search_pas_config %>"
-      :categories="<%= @search_pas_categories %>" 
+      :categories="<%= @search_pas_categories %>"
+      endpoint="wdpa"
     >
   </div>
 </section>

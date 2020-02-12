@@ -31,13 +31,12 @@ $search-input-size-desktop: 547px; //px
 
         &__close {
           @include button-close;
-          width: rem-calc(14); height: rem-calc(14);
 
           position: absolute;
           top: 50%;
           right: rem-calc(16);
 
-          transform: translateY(-50%);
+          transform: scale(.7) translateY(-50%);
         }
 
         &__icon {

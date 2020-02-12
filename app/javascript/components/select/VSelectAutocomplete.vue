@@ -1,6 +1,6 @@
 <template>
   <div
-    class="select--searchable-filterable relative"
+    class="select--autocomplete relative"
     :class="{'select--disabled': isDisabled}"
   >
     <input
@@ -11,6 +11,8 @@
     >
 
     <div :class="['select__search relative', {'select__search--active': isActive}]">
+      <i class="select__search-icon" /> 
+
       <input
         :id="searchId"
         v-model="searchTerm"
@@ -28,6 +30,13 @@
       >
     </div>
 
+    <button 
+      v-show="showResetIcon"
+      :id="searchResetId"
+      class="select__search-icon--delete"
+      @click="resetSearchTerm"
+    />
+
     <ul 
       v-show="showOptions" 
       :id="dropdownId" 
@@ -39,7 +48,7 @@
         v-show="matchesSearchTerm(option)"
         :id="getOptionInputId(option)"
         :key="option.id"
-        :class="['select__option hover--pointer', conditionalOptionClasses(option, index)]"
+        :class="['select__li hover--pointer', conditionalOptionClasses(option, index)]"
         role="option"
         :aria-selected="isHighlighted(index).toString()"
         @click="selectOption(option)"
@@ -48,18 +57,18 @@
       </li>
     </ul>
 
-    <div class="select__categories">
+    <div class="select--categories">
       <div 
-        class="select__category-label"
+        class="select__label"
         @click="toggleCategories"
       >
         {{ selectedCategoryName }}
       </div>
 
-      <ul :class="['select__category-wrapper', {'active': categoriesActive}]">
+      <ul :class="['select__ul', {'active': categoriesActive}]">
         <li 
           v-for="category, index in categories"
-          class="select__category"
+          class="select__li"
           @click="updateCategory(index)"
         >
           {{ category.name }}
@@ -68,16 +77,6 @@
     </div>
 
     <span class="select__search-icons">
-        <button
-          v-show="!showResetIcon && !hasSelectedOption"
-          class="select__search-icon"
-        />
-        <button 
-          v-show="showResetIcon"
-          :id="searchResetId"
-          class="select__search-icon select__search-icon--delete"
-          @click="resetSearchTerm"
-        />
         <button 
           v-show="hasSelectedOption"
           class="select__search-icon--reset"
