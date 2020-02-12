@@ -3,7 +3,7 @@ class HomeController < ApplicationController
     home_yml = I18n.t('home')
 
     @total_pas = ProtectedArea.count
-    @total_oecms = 9876543 #TODO replace with correct integer
+    @total_oecms = 9876543 #TODO FERDI replace with correct integer
 
     search_pas = ProtectedArea.first(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} }
     search_oecms = ProtectedArea.last(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} } #TODO make this ALL the OECMS
