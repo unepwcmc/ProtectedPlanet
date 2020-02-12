@@ -1,10 +1,10 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$form-radius: rem-calc(7);
+$form-radius: $button-radius;
 $form-font-color: $body-font-colour;
-$form-input-font: $header-font;
-$form-input-font-size: rem-calc(16);
+$form-input-font: $body-font;
+$form-input-font-size: rem-calc(18);
 $form-input-padding: rem-calc(6 8);
 
 //--------------------------------------------------
@@ -16,7 +16,7 @@ $form-input-padding: rem-calc(6 8);
 }
 
 @mixin input-basic() {
-  border: solid 1px $grey-light;
+  border: solid 1px $grey;
   border-radius: $form-radius;
   padding: $form-input-padding;
 }
@@ -34,3 +34,4 @@ $form-input-padding: rem-calc(6 8);
 //--------------------------------------------------
 // form fields
 //--------------------------------------------------
+@import "./form/input.scss"

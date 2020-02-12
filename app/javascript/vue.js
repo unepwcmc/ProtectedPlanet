@@ -29,6 +29,7 @@ import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
+import Search from './components/search/Search'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
@@ -70,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartSunburst,
         MapInteractive,
         NavBurger,
+        Search,
         SelectWithContent,
         StickyBar,
         StickyNav,
