@@ -30,6 +30,7 @@ import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import Search from './components/search/Search'
+import SearchAutocompleteCategories from './components/search/SearchAutocompleteCategories'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
@@ -38,7 +39,6 @@ import SocialShareText from './components/social/SocialShareText'
 import TableHead from './components/table/TableHead'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
-import VSelectAutocomplete from './components/select/VSelectAutocomplete'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
 
@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         MapInteractive,
         NavBurger,
         Search,
+        SearchAutocompleteCategories,
         SelectWithContent,
         StickyBar,
         StickyNav,
@@ -80,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
         TableHead,
         Target11Dashboard,
         Tooltip,
-        VSelectAutocomplete,
         VSelectSearchable,
         VTable
       }

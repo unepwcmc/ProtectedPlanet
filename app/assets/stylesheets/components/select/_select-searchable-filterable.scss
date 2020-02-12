@@ -5,6 +5,7 @@ $select-search-filter-border: solid 2px $grey;
 $select-search-filter-height-mobile: rem-calc(75);
 $select-search-filter-height-tablet: rem-calc(75);
 $select-search-filter-width-tablet: rem-calc(760);
+$select-search-filter-border-radius: calc(#{$select-search-filter-height-tablet}/2);
 $categories-width: rem-calc(222);
 
 //--------------------------------------------------
@@ -34,7 +35,7 @@ $categories-width: rem-calc(222);
         @include input-text;
         @include responsive(height, $select-search-filter-height-mobile, $select-search-filter-height-tablet, $select-search-filter-height-tablet);
         border: $select-search-filter-border;
-        border-radius: $select-search-filter-height-tablet;
+        border-radius: $select-search-filter-border-radius;
         padding-right: rem-calc(200);
         padding-left: rem-calc(60);
         width: 100%; 
@@ -85,9 +86,9 @@ $categories-width: rem-calc(222);
       @include ul-unstyled;
       background-color: $white;
       border: $select-search-filter-border;
-      border-bottom-left-radius: $select-search-filter-height-tablet;
-      border-bottom-right-radius: $select-search-filter-height-tablet;
-      padding: rem-calc(36 0 24 0);
+      border-bottom-left-radius: $select-search-filter-border-radius;
+      border-bottom-right-radius: $select-search-filter-border-radius;
+      padding: rem-calc(50 0 34 0);
       width: 100%;
 
       position: absolute;
@@ -97,13 +98,19 @@ $categories-width: rem-calc(222);
     }
 
       &__li {
-        @include input-text;
-        padding: rem-calc(10 40);
-
-        &:hover {
-          background-color: $select-hover-color;
-        }
+        
       }
+
+        &__a {
+          @include input-text;
+          padding: rem-calc(10 40);
+          text-decoration: none;
+          width: 100%;
+
+          display: block;
+
+          &:hover { background-color: $select-hover-color; }
+        }
 
       &__option--selected {
         background: $select-selected-color;
@@ -123,6 +130,7 @@ $categories-width: rem-calc(222);
   border-radius: $select-search-filter-height-tablet;
   color: $white;
   font-size: rem-calc(18);
+  padding: rem-calc(0 20);
   width: $categories-width; height: $select-search-filter-height-tablet;
 
   position: absolute;
@@ -138,15 +146,22 @@ $categories-width: rem-calc(222);
 
     &__ul {
       @include ul-unstyled;
-      background-color: $grey;
+      background-color: $grey-dark;
       border-radius: $button-radius;
-      overflow: hidden;
 
       display: none;
       position: absolute;
-      top: calc(100% + rem-calc(10));
+      top: calc(100% + #{rem-calc(7)});
 
       &.active { display: block; }
+
+      &:before {
+        @include triangle (rem-calc(38), rem-calc(11), $grey-dark);
+
+        position: absolute;
+        top: rem-calc(-11);
+        right: rem-calc(8);
+      } 
     }
 
       &__li {
@@ -154,6 +169,9 @@ $categories-width: rem-calc(222);
         padding: rem-calc(9 16);
 
         &:hover { background-color: $grey; }
+
+        &:first-child { @include border-radius-top($button-radius); }
+        &:last-child { @include border-radius-bottom($button-radius); }
       }
   }
 }
