@@ -1,0 +1,38 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin tabs-fake-hover {
+  border-bottom: solid $primary 2px;  
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.tabs {
+  &--fake {
+    @include ul-unstyled;
+    @include ul-inline;
+    margin: rem-calc(26 0 32 0);
+
+    .tab {
+      &__trigger {
+        @include text-tabs-fake;
+        border-bottom: solid transparent 2px;
+        cursor: pointer;
+        margin-right: rem-calc(46);
+        padding-bottom: rem-calc(3);
+
+        &:hover { @include tabs-fake-hover; }
+
+        &.active {
+          @include tabs-fake-hover;
+          font-weight: $bold;
+        }
+      }
+    }
+  }
+}

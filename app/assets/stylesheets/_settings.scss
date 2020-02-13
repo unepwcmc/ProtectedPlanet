@@ -154,7 +154,7 @@ $site-width-rem: rem-calc($site-width);
 
 // $site-width-medium-tablet: 80%;
 // $site-width-medium-laptop: 78%;
-// $site-width-medium-desktop: 62%;
+$site-width-medium-desktop: rem-calc(750);
 
 //--------------------------------------------------
 // tables

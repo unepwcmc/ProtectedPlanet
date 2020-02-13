@@ -1,11 +1,42 @@
 class SearchController < ApplicationController
   after_action :enable_caching
 
-  before_action :ignore_empty_query, only: [:index, :map]
+  # before_action :ignore_empty_query, only: [:index, :map] ## FERDI - I commented this out so the page would load
   before_action :load_search, only: [:index, :map]
 
   def index
-    render partial: 'grid' if request.xhr?
+    #render partial: 'grid' if request.xhr? ## FERDI - I think we can delete this?
+  end
+
+  def search_results
+    @results = {
+      search_term: 'My search', # I might not need this but just put it in for now
+      categories: [
+        { id: 0, title: 'All' },
+        { id: 0, title: 'News & Stories' }, # Pull id and title from CMS
+        { id: 0, title: 'Resources' } # Pull id and title from CMS
+      ],
+      current_page: 1,
+      page_items_start: 1,
+      page_items_end: 15,
+      total_items: 45, # Total items for selected category
+      results: [
+        {
+          title: 'Protected area coverage per country/territory by UN Environment Regions',
+          url: 'http://google.com',
+          summary: 'This page provides access to national statistics for every country and territory classified under the UN Environment Regions.The regions listed below are based upon UN Environment’s Global Environment Outlook (GEO) process.',
+          image: 'image url'
+        },
+        {
+          title: 'Protected area coverage per country/territory by UN Environment Regions',
+          url: 'http://google.com',
+          summary: 'This page provides access to national statistics for every country and territory classified under the UN Environment Regions.The regions listed below are based upon UN Environment’s Global Environment Outlook (GEO) process.',
+          image: 'image url'
+        }
+      ]
+    }.to_json
+
+    render json: @results
   end
 
   def map

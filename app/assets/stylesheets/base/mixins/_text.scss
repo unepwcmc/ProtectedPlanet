@@ -109,6 +109,11 @@
   text-decoration: none;
 }
 
+@mixin text-tabs-fake {
+  @include text-2;
+  @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
+}
+
 @mixin text-tooltip {
   @include text-3;
 }

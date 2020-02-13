@@ -6,15 +6,19 @@
 
   .search {
     &__pane {
-      width: rem-calc(600);
-
-      display: none;
-      position: absolute;
-      top: 0;
-      right: 0;
-      z-index: $z-300;
+      width: 100%;
       
-      &.active { display: block; }
+      &.popout { 
+        width: rem-calc(600);
+
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: $z-300;
+      }
+
+      &.popout.active { display: block; }
     }
 
       &__close {

@@ -1,6 +1,14 @@
-<%= content_for :page_title, search_title(params, true) %>
+<div class="container--medium section-padding--top">
+  <search 
+    endpoint="/search-site"
+    placeholder="<%= t('global.placeholder.search-site') %>"
+  >
+  </search>
 
-<div class="container--fullscreen container--push-bottom">
+  <search-results endpoint="/search-results"></search-results>
+</div>
+
+<!-- <div class="container--fullscreen container--push-bottom">
 
   <% if @search.present? && @search.results.count > 0 %>
     <div class="u-only-desktop js-download-btn hero__top u-center">
@@ -40,3 +48,4 @@
     <%= render partial: 'grid' %>
   </div>
 </div>
+ -->

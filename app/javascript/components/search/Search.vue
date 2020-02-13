@@ -1,12 +1,13 @@
 <template>
   <div class="search search--main">
     <button 
+      v-if="popout"
       class="search__trigger"
       @click="toggleInput"
     />
 
     <div 
-      :class="['search__pane', { 'active': isActive }]"
+      :class="['search__pane', { 'active': isActive, 'popout': popout }]"
       >
       
       <input 
@@ -42,14 +43,22 @@ export default {
     placeholder: {
       type: String,
       required: true
+    },
+    popout: {
+      type: Boolean,
+      default: false
     }
   },
 
   data () {
     return {
-      isActive: false,
+      isActive: true,
       searchTerm: ''
     }
+  },
+
+  created () {
+    if(this.popout) { this.isActive = false }
   },
 
   methods: {
@@ -58,7 +67,8 @@ export default {
     openInput () { this.isActive = true },
 
     closeInput () { 
-      this.isActive = false 
+      if(this.popout) { this.isActive = false }
+
       this.searchTerm = ''
     },
 

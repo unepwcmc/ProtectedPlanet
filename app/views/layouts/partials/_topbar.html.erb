@@ -5,9 +5,17 @@
     <% end %>
 
     <% unless @for_pdf %>
-      <nav-burger :links="<%= get_nav_primary %>" class="topbar__nav nav--primary"></nav-burger>
+      <nav-burger 
+        :links="<%= get_nav_primary %>" 
+        class="topbar__nav nav--primary"
+      ></nav-burger>
     <% end %>
 
-    <search class="topbar__search" endpoint="search_site" placeholder="<%= t('global.placeholder.search-site') %>"></search>
+    <search 
+      class="topbar__search" 
+      endpoint="search_site"
+      placeholder="<%= t('global.placeholder.search-site') %>"
+      :popout="true"
+    ></search>
   </div>
 </div>

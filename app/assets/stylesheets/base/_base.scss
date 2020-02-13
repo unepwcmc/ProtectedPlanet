@@ -75,6 +75,11 @@ em { font-style: italic; }
   @include container;
 }
 
+.container--medium {
+  @include container;
+  width: $site-width-medium-desktop;
+}
+
 .container--desktop-up {
   @include breakpoint($large) {
     @include site-width;
