@@ -71,7 +71,7 @@ $search-autocomplete-select-width: rem-calc(222);
           top: 50%;
           right: calc(#{$search-autocomplete-select-width} + 16px);
 
-          transform: scale(.7) translateY(-50%);
+          transform: translateY(-50%) scale(.7);
         }
 
     &__dropdown {

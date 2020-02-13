@@ -2,10 +2,12 @@
   <search 
     endpoint="/search-site"
     placeholder="<%= t('global.placeholder.search-site') %>"
-  >
-  </search>
+  ></search>
 
-  <search-results endpoint="/search-results"></search-results>
+  <search-results 
+    endpoint="/search-results"
+    no-results-text="<%= t('global.search.no-results') %>"
+  ></search-results>
 </div>
 
 <!-- <div class="container--fullscreen container--push-bottom">

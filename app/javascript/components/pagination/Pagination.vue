@@ -19,7 +19,10 @@
     </div>
 
     <div v-else class="left">
-      <p>There are no projects matching the selected filters options.</p>
+      <p 
+        v-html="noResultsText"
+        class="pagination__no-results"
+      />
     </div>
   </div>
 </template>
@@ -33,11 +36,15 @@ export default {
       type: Number,
       required: true
     },
-    pageItemsStart: {
+    noResultsText: {
+      type: String,
+      required: true  
+    },
+    pageItemsEnd: {
       type: Number,
       required: true
     },
-    pageItemsEnd: {
+    pageItemsStart: {
       type: Number,
       required: true
     },

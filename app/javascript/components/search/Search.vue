@@ -21,6 +21,7 @@
       <i class="search__icon" />
 
       <button 
+        v-show="showClose"
         class="search__close"
         @click="closeInput"
       />
@@ -59,6 +60,14 @@ export default {
 
   created () {
     if(this.popout) { this.isActive = false }
+  },
+
+  computed: {
+    showClose () {
+      const hasSearchTerm = this.searchTerm.length != 0
+
+      return this.popout ? true : hasSearchTerm
+    }
   },
 
   methods: {

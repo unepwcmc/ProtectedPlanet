@@ -28,7 +28,7 @@
         top: 50%;
         right: rem-calc(16);
 
-        transform: scale(.7) translateY(-50%);
+        transform: translateY(-50%) scale(.7);
       }
 
       &__icon {

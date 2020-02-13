@@ -8,17 +8,18 @@
       <card-search-result
         v-for="result, index in results"
         :key="index"
-        :title="result.title"
         :image="result.image"
         :summary="result.summary"
+        :title="result.title"
         :url="result.url"
       />
     </div>
 
     <pagination 
       :currentPage="currentPage"
-      :pageItemsStart="pageItemsStart" 
       :pageItemsEnd="pageItemsEnd" 
+      :pageItemsStart="pageItemsStart" 
+      :noResultsText="noResultsText"
       :totalItems="totalItems">
     </pagination>
   </div>
@@ -44,17 +45,17 @@ export default {
     items_per_page: {
       type: Number,
       default: 15
+    },
+    noResultsText: {
+      type: String,
+      required: true
     }
   },
 
   data () {
     return {
       categoryId: '',
-      categories: [
-        { id: 0, title: 'All' },
-        { id: 0, title: 'News & Stories' },
-        { id: 0, title: 'Resources' }
-      ], // [ String ]
+      categories: [], // [ String ]
       currentPage: 0,
       pageItemsStart: 0,
       pageItemsEnd: 0,
@@ -69,6 +70,12 @@ export default {
   created () {
     this.categoryId = this.categories[0].id
     this.ajaxSubmission()
+  },
+
+  computed: {
+    hasResults () {
+      return this.results.length > 0
+    }
   },
 
   methods: {

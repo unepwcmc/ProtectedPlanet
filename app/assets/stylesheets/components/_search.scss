@@ -11,6 +11,7 @@ $search-input-size-desktop: 547px; //px
 .search {
   @import './search/search-autocomplete';
   @import './search/search-main';
+  @import './search/search-results';
 
 //--------------------------------------------------
 // class - protected areas
