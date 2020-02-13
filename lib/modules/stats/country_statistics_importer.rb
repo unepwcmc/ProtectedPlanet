@@ -17,12 +17,25 @@ module Stats::CountryStatisticsImporter
 
     CSV.foreach(path, headers: true) do |row|
       country_iso3 = row.delete('iso3').last
+      country_id = countries[country_iso3]
       # If the value is na (not applicable) use nil
       row.each { |key, value| row[key] = nil if value && value.downcase == 'na' }
-      attrs = {country_id: countries[country_iso3]}.merge(row)
+      attrs = {country_id: country_id}.merge(row)
+      attrs = attrs.merge(pame_assessments(country_id)) if model == PameStatistic
 
       model.create(attrs)
     end
+  end
+
+  def self.pame_assessments(country_id)
+    return {} unless country_id
+
+    country = Country.find(country_id)
+
+    {
+      assessments: country.assessments,
+      assessed_pas: country.assessed_pas
+    }
   end
 
   def self.stats_csv_path
