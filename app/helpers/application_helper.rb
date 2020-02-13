@@ -24,8 +24,8 @@ module ApplicationHelper
     end
   end
 
-  def active_nav_item?(test_path)
-    request.fullpath == test_path
+  def active_nav_item?(current_path)
+    request.fullpath == current_path
   end
 
   def cover item
@@ -174,16 +174,6 @@ module ApplicationHelper
     link_to '', href, title: title, class: 'social__icon--linkedin', target: '_blank'
   end
 
-  def create_sharing_email_link
-    title = url_encode('Share ' + page_title + ' via Email')
-    url = encoded_page_url
-    subject = url_encode("")
-    body = url_encode("") + url
-    href = 'mailto:?subject=' + subject + '&body=' + body
-
-    link_to '', href, title: title, class: 'social__icon--email', target: '_self'
-  end
-
   DOWNLOAD_TYPES = {
     csv: {
       content: '.CSV',
@@ -228,31 +218,12 @@ module ApplicationHelper
     controller_name == 'region'
   end
 
+  def get_cms_url path
+    root_path + path
+  end
+
   def get_nav_primary
-    def map_page(slug, map_children = false)
-      cms_page = Comfy::Cms::Page.find_by_slug(slug)
-
-      mapped_page = {
-        "id": cms_page.slug,
-        "label": cms_page.label,
-        "url": root_path + cms_page.full_path,
-        "is_current_page": active_nav_item?(root_path + cms_page.full_path)
-      }
-
-      if map_children
-        mapped_page["children"] = cms_page.children.published.map{ |page| {
-            "id": page.slug,
-            "label": page.label,
-            "url": root_path + page.full_path,
-            "is_current_page": active_nav_item?(root_path + page.full_path)
-          }
-        }
-      end
-
-      return mapped_page
-    end
-
-    return [
+    [
       map_page('about'),
       map_page('news-and-stories'),
       map_page('resources'),
@@ -300,12 +271,12 @@ module ApplicationHelper
 
     @items = {
       "title": resources_page.label,
-      "url": all ? false : root_url + resources_page.full_path,
+      "url": all ? false : get_cms_url(resources_page.full_path),
       "cards": resources_page.children.published.order(created_at: :desc).limit(limit).map{ |page|
         {
           "label": page.label,
           "created_at": page.created_at.strftime('%d %B %y'),
-          "url": root_url + page.full_path,
+          "url": get_cms_url(page.full_path),
           "intro": "field needs created in the CMS", #TODO create field in CMS
           "pdf": false, #TODO create field in CMS
           "external_link": nil #TODO create field in CMS
@@ -321,7 +292,7 @@ module ApplicationHelper
 
     @items = {
       "title": news_page.label,
-      "url": all ? false : root_url + news_page.full_path,
+      "url": all ? false : get_cms_url(news_page.full_path),
       "cards": all ? sorted_cards : sorted_cards.first(2)
     }
   end
@@ -333,5 +304,52 @@ module ApplicationHelper
       "title": thematical_page.label,
       "cards": thematical_page.children.published
     }
+  end
+
+  def get_footer_links
+    @links = {}
+    @links["links1"] = make_footer_links(['resources', 'oecms', 'wdpa'])
+    @links["links2"] = make_footer_links(['about', 'legal'])
+  end
+
+  def get_local_classes local_assigns
+    (local_assigns.has_key? :classes) ? local_assigns[:classes] : ''
+  end
+
+  private
+
+  def make_footer_links slug_array
+    slug_array.map do |slug|
+      page = @cms_site.pages.find_by_slug(slug)
+
+      {
+        "title": page.label,
+        "url": get_cms_url(page.full_path)
+      }
+    end
+  end
+
+  def map_page(slug, map_children = false)
+    cms_page = Comfy::Cms::Page.find_by_slug(slug)
+
+    mapped_page = {
+      "id": cms_page.slug,
+      "label": cms_page.label,
+      "url": get_cms_url(cms_page.full_path),
+      "is_current_page": active_nav_item?(get_cms_url cms_page.full_path)
+    }
+
+    if map_children
+      mapped_page["children"] = cms_page.children.published.map do |page|
+        {
+          "id": page.slug,
+          "label": page.label,
+          "url": get_cms_url(page.full_path),
+          "is_current_page": active_nav_item?(get_cms_url page.full_path)
+        }
+      end
+    end
+
+    mapped_page
   end
 end

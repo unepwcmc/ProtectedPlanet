@@ -1,5 +1,9 @@
 <template>
-  <div class="sticky-tab" @click="toggleTab" :class="{ 'sticky-tab--open' : isActive }">
+  <div 
+    class="sticky-tab" 
+    @click="toggleTab" 
+    :class="{ 'sticky-tab--open' : isActive }"
+  >
     <div class="sticky-tab__text">
       <slot></slot>
     </div>

@@ -55,9 +55,6 @@ Rails.application.routes.draw do
     get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
     get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
-    get '/sites/:id', to: 'sites#show'
-    get '/sites/:id/*other', to: 'sites#show'
-
     get '/terms', to: redirect("/c/terms-and-conditions")
 
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
@@ -73,11 +70,11 @@ Rails.application.routes.draw do
     get '/resources', to: 'resources#index'
 
     get '/thematical-areas/green-list', to: 'green_list#index'
-    get '/thematical-areas/other-effective-area-based-conservation-measures', to: 'oecm#index'
+    get '/thematical-areas/oecms', to: 'oecm#index'
     get '/thematical-areas/protected-areas-management-effectiveness-pame', to: 'pame#index'
     get '/thematical-areas/marine-protected-areas', to: 'marine#index'
     get '/thematical-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
-    get '/thematical-areas/world-database-on-protected-areas', to: 'wdpa#index'
+    get '/thematical-areas/wdpa', to: 'wdpa#index'
 
     # Ensure that this route is defined last
 
