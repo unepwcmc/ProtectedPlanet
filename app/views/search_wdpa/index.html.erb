@@ -23,27 +23,7 @@
       <h2>Regions</h2>
       <button>View All</button>
 
-      <div class="cards--search-results-areas">
-        <% @results[:countries].each do |result| %>
-        <a class="card__link">
-          <i class="card__icon--region-large" /></i>
-          <p>image</p>
-          <h3>title</h3>
-          <p>text</p>
-
-          <div class="card__groups">
-            <p class="card__group flex flex-v-center">
-              <i class="card__icon--region"></i>
-              <span>Europe</span>
-            </p>
-            <p class="card__group flex flex-v-center">
-              <i class="card__icon--flag"></i>
-              <span>France</span>
-            </p>
-          </div>
-        </a>
-        <% end %>
-      </div>
+      <search-results-areas></search-results-areas>
     </div>
   </div>
 </div>
