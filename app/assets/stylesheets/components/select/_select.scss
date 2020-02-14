@@ -52,6 +52,7 @@ $select-types-height: rem-calc(75);
 
       &__li {
         color: $white;
+        cursor: pointer;
         padding: rem-calc(9 16);
 
         &:hover { background-color: $grey; }

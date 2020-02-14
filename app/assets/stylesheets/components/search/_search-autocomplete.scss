@@ -43,17 +43,6 @@ $search-autocomplete-select-width: rem-calc(222);
         &::-ms-clear { display: none; }
       }
 
-      &__search-icons {
-        display: flex; //temp-refresh
-        align-items: center; //temp-refresh
-        justify-content: center; //temp-refresh
-        height: 100%;
-
-        position: absolute;
-        top: 0;
-        right: 0;
-      }
-
         &__search-icon {
           @include icon-search;
 

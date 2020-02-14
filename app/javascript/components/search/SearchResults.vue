@@ -1,8 +1,11 @@
 <template>
   <div class="search--results">
-    <tabs-fake v-on:tab-clicked="updateCategory" :children="categories"></tabs-fake>
+    <tabs-fake 
+      v-on:tab-clicked="updateCategory" 
+      :children="categories"
+    />
     
-    <p class="search__total">({{ totalItems }} results)</p>
+    <p class="search__total">({{ totalItems }} {{ resultsText }})</p>
 
     <div class="cards--search-results">
       <card-search-result
@@ -16,12 +19,13 @@
     </div>
 
     <pagination 
+      v-on:change-page="changePage" 
       :currentPage="currentPage"
       :pageItemsEnd="pageItemsEnd" 
       :pageItemsStart="pageItemsStart" 
       :noResultsText="noResultsText"
-      :totalItems="totalItems">
-    </pagination>
+      :totalItems="totalItems"
+    />
   </div>
 </template>
 
@@ -49,6 +53,10 @@ export default {
     noResultsText: {
       type: String,
       required: true
+    },
+    resultsText: {
+      type: String,
+      required: true
     }
   },
 
@@ -56,19 +64,21 @@ export default {
     return {
       categoryId: '',
       categories: [], // [ String ]
-      currentPage: 1,
-      pageItemsStart: 1,
-      pageItemsEnd: 10,
-      requestedPage: 1,
+      currentPage: 0,
+      defaultCategory: this.categories[0].id,
+      defaultPage: 1,
+      pageItemsStart: 0,
+      pageItemsEnd: 0,
+      requestedPage: 0,
       results: [], // [ { title: String, url: String, summary: String, image: 'String' } ]
       searchTerm: '',
-      totalItems: 45,
-      totalPages: 3,
+      totalItems: 0,
     }
   },
 
   created () {
-    this.categoryId = this.categories[0].id
+    this.categoryId = this.defaultCategory
+    this.requestedPage = this.defaultPage
     this.ajaxSubmission()
   },
 
@@ -98,8 +108,14 @@ export default {
         })
     },
 
+    changePage (newPage) {
+      this.categoryId = this.defaultCategory
+      this.requestedPage = newPage
+    },
+
     updateCategory (categoryId) {
       this.categoryId = categoryId
+      this.requestedPage = this.defaultPage
     },
 
     updateProperties (data) {
@@ -110,7 +126,6 @@ export default {
       this.results = data.results
       this.searchTerm = data.search_term
       this.totalItems = data.total_items
-      this.totalPages = data.total_pages
     },
   }
 }

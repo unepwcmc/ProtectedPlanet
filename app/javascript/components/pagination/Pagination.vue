@@ -4,7 +4,7 @@
       v-if="haveResults"
       class="pagination__content"
     >
-      <span class="bold">{{ pageItemsStart }} - {{ pageItemsEnd }} of {{ totalItems }}</span>
+      <span>{{ pageItemsStart }} - {{ pageItemsEnd }} of {{ totalItems }}</span>
 
       <button 
         v-bind="{ 'disabled' : !previousIsActive }"
@@ -74,8 +74,7 @@ export default {
       if (isActive) {
         const newPage = direction == 'next' ? this.currentPage + 1 : this.currentPage - 1
         
-        this.$store.commit('updateRequestedPage', newPage)
-        eventHub.$emit('getNewItems')
+        this.$emit('change-page', newPage);
       }
     }
   }

@@ -22,6 +22,7 @@ en:
       search-pas: Search for a protected area...
       search-site: Search...
     search:
+      results: results
       no-results: No results. Please search again.
     status:
       updated: Updated
