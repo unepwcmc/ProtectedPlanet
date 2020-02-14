@@ -1,29 +1,30 @@
 <template>
-  <div>
-    <div v-if="haveResults" class="right">
+  <div class="pagination">
+    <div 
+      v-if="haveResults"
+      class="pagination__content"
+    >
       <span class="bold">{{ pageItemsStart }} - {{ pageItemsEnd }} of {{ totalItems }}</span>
 
       <button 
         v-bind="{ 'disabled' : !previousIsActive }"
         @click="changePage(previousIsActive, 'previous')"
-        class="button button--previous"
-        :class="{ 'button--disabled': !previousIsActive }">
-      </button>
+        :class="['pagination__button--previous', { 'button--disabled': !previousIsActive }]"
+      />
 
       <button 
         v-bind="{ 'disabled' : !nextIsActive }"
         @click="changePage(nextIsActive, 'next')"
-        class="button button--next"
-        :class="{ 'button--disabled': !nextIsActive }">
-      </button>
-    </div>
-
-    <div v-else class="left">
-      <p 
-        v-html="noResultsText"
-        class="pagination__no-results"
+        :class="['pagination__button--next', { 'button--disabled': !nextIsActive }]"
       />
     </div>
+
+    <p 
+      v-else
+      v-html="noResultsText"
+      class="pagination__no-results"
+    />
+    
   </div>
 </template>
 

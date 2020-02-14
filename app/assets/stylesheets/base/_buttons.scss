@@ -28,6 +28,8 @@ $padding-medium: rem-calc(27);
   &:hover { text-decoration: none; }
 }
 
+@mixin button-disabled { cursor: disabled; }
+
 @mixin button-height { 
   @include responsive(height, $height-small, $height-medium, $height-medium);
 

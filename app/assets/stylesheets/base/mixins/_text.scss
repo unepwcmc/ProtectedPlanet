@@ -109,6 +109,11 @@
   text-decoration: none;
 }
 
+@mixin text-pagination {
+  @include text-2;
+  @include responsive(font-size, rem-calc(16), rem-calc(16), rem-calc(18));
+}
+
 @mixin text-pagination-no-results {
   @include text-2;
   @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));

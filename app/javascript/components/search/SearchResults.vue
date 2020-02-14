@@ -56,14 +56,14 @@ export default {
     return {
       categoryId: '',
       categories: [], // [ String ]
-      currentPage: 0,
-      pageItemsStart: 0,
-      pageItemsEnd: 0,
+      currentPage: 1,
+      pageItemsStart: 1,
+      pageItemsEnd: 10,
       requestedPage: 1,
       results: [], // [ { title: String, url: String, summary: String, image: 'String' } ]
       searchTerm: '',
-      totalItems: 0,
-      totalPages: 0,
+      totalItems: 45,
+      totalPages: 3,
     }
   },
 
