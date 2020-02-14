@@ -1,0 +1,49 @@
+<%#= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: "#{@cms_page.slug }" %>
+
+<div>
+  <div class="container flex flex-v-center">
+    <button>filter button</button>
+
+    <search-autocomplete-types
+      :types="<%= @search_pas_categories %>"
+      endpoint="search-areas"
+    />
+    </search-autocomplete-types>
+
+    <button>map</button>
+
+    <button>download</button>
+  </div>
+</div>
+
+<div>
+  <div class="container">
+    
+    <div class="">
+      <h2>Regions</h2>
+      <button>View All</button>
+
+      <div class="cards--search-results-areas">
+        <% @results[:countries].each do |result| %>
+        <a class="card__link">
+          <i class="card__icon--region-large" /></i>
+          <p>image</p>
+          <h3>title</h3>
+          <p>text</p>
+
+          <div class="card__groups">
+            <p class="card__group flex flex-v-center">
+              <i class="card__icon--region"></i>
+              <span>Europe</span>
+            </p>
+            <p class="card__group flex flex-v-center">
+              <i class="card__icon--flag"></i>
+              <span>France</span>
+            </p>
+          </div>
+        </a>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -66,8 +66,9 @@ Rails.application.routes.draw do
 
     get '/country_codes', to: 'country#codes', as: 'country_codes'
 
-    get '/resources', to: 'resources#index'
 
+    # routes worked on so far as part of the refresh
+    get '/resources', to: 'resources#index'
     get '/search', to: 'search#index'
 
     get '/thematical-areas/green-list', to: 'green_list#index'
@@ -76,6 +77,9 @@ Rails.application.routes.draw do
     get '/thematical-areas/marine-protected-areas', to: 'marine#index'
     get '/thematical-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
     get '/thematical-areas/wdpa', to: 'wdpa#index'
+
+    get '/wdpa/search', to: 'search_wdpa#index' #TODO Ferdi change this if it makes more sense to do it a different way 
+    get '/oecm/search', to: 'search_oecm#index' #TODO Ferdi change this if it makes more sense to do it a different way 
 
     post '/search-results', to: 'search#search_results'
 

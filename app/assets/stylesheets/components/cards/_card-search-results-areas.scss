@@ -1,0 +1,44 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--search-results-areas {
+  @include flex;
+  @include flex-h-between;
+  @include flex-wrap;
+
+  .card {
+    &__link {
+      @include border-grey-light;
+      @include box-shadow-grey-light;
+      @include responsive('width', 100%, 50%, 30%);
+      margin-bottom: rem-calc(30);
+      padding: rem-calc(16 22);
+      text-decoration: none; 
+
+      display: block;
+
+      // &:last-child() { margin-right: auto; }
+    }
+
+      &__content {
+        width: rem-calc(550);
+      }
+
+        &__image {
+          width: 100%; height: rem-calc(114);
+        }
+
+        &__title {
+
+        }
+
+        &__icon--region { @include icon-region; }
+        &__icon--region-large { @include icon-region-large; }
+
+      &__groups {
+        
+      }
+
+        &__group {}
+  }
+}

@@ -40,14 +40,22 @@
     </ul>
 
     <div class="select--types">
-      <div 
+      <label 
+        v-if="hasMultipleTypes"
         :class="['select__label', {'active': typeDropdownActive}]"
         @click="toggleTypes"
-      >
-        {{ selectedTypeName }}
-      </div>
+        v-html="selectedTypeName"
+      />
+      <p 
+        v-else
+        class="select__label-fake"
+        v-html="selectedTypeName"
+      />
 
-      <ul :class="['select__ul', {'active': typeDropdownActive}]">
+      <ul 
+        v-if="hasMultipleTypes"
+        :class="['select__ul', {'active': typeDropdownActive}]"
+      >
         <li 
           v-for="type, index in types"
           class="select__li"
@@ -95,6 +103,9 @@ export default {
   computed: {
     hasAutocompleteOptions () {
       this.autocomplete.length > 0
+    },
+    hasMultipleTypes () {
+      this.types.length > 1
     },
     options () {
       return this.types[this.typeIndex].options
@@ -150,6 +161,8 @@ export default {
     },
 
     toggleTypes () {
+      if(!this.hasMultipleTypes) { return false }
+
       this.typeDropdownActive = !this.typeDropdownActive
     },
 

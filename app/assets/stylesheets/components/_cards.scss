@@ -5,14 +5,4 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-.cards {
-  
-@import './cards/card-articles';
-@import './cards/card-circles';
-@import './cards/card-resources';
-@import './cards/card-search-results';
-@import './cards/card-sites';
-@import './cards/card-squares';
-@import './cards/card-themes';
-
-}
+.cards { @import './cards/*'; }

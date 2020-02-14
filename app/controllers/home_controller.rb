@@ -11,7 +11,6 @@ class HomeController < ApplicationController
       { name: 'Protected Areas', placeholder: 'Search for a Protected Area', options: search_pas },
       { name: 'OECMs', placeholder: 'Search for an OECM', options: search_oecms }
     ].to_json
-    @search_pas_config = { id: 'search-pas' }.to_json
 
     @pas_title = home_yml[:pas][:title]
     @pas_button = home_yml[:pas][:button]
