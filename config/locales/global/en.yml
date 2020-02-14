@@ -4,18 +4,25 @@ en:
       all: View all
       download: PDF Download
       link: Link
-    status:
-      updated: Updated
     footer:
+      copyright: "ProtectedPlanet 2014-%{date}. All rights reserved"
       title1: Explore
       title2: General Info
       title3: Follow us
       title4: Get in touch
-      copyright: "ProtectedPlanet 2014-%{date}. All rights reserved"
     logos:
       iucn: IUCN logo
       pp: Protected Planet logo
       wcmc: UN Environment World Conservation Monitoring logo
     links: 
-      visit: "Visit: %{link}"
       email: "Email: %{email}"
+      visit: "Visit: %{link}"
+    placeholder:
+      search-oecms: Search for OECMs...
+      search-pas: Search for a protected area...
+      search-site: Search...
+    search:
+      results: results
+      no-results: No results. Please search again.
+    status:
+      updated: Updated

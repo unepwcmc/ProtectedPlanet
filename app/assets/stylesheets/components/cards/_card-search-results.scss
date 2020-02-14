@@ -1,0 +1,30 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--search-results {
+
+  .card {
+    &__link {
+      @include flex;
+      @include flex-h-between;
+      margin: rem-calc(20 0);
+      text-decoration: none; 
+    }
+
+      &__content {
+        width: rem-calc(550);
+      }
+
+        &__summary {
+
+        }
+
+        &__title {
+
+        }
+
+      &__image {
+        width: rem-calc(165); height: rem-calc(130);
+      }
+  }
+}

@@ -1,0 +1,34 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--squares {
+  .cards {
+    &__cards {
+      @include flex;
+      @include flex-h-between;
+      @include responsive(flex-wrap, wrap, nowrap, nowrap);
+    }
+  }
+
+  .card {
+    @include responsive(margin-bottom, rem-calc(14), rem-calc(28), 0);
+    @include responsive(padding-top, 100%, 50%, 30%);
+    @include responsive(width, 100%, 50%, 30%);
+    background-color: $grey-dark;
+    color: $white;
+
+    position: relative;
+
+    &__link {
+      @include flex;
+      @include flex-column;
+      @include flex-center;
+      text-decoration: none;
+      width: 100%; height: 100%;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+  }
+}

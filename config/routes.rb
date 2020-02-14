@@ -60,7 +60,6 @@ Rails.application.routes.draw do
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
     resources :downloads, only: [:show, :create, :update]
 
-    get '/search', to: 'search#index'
     get '/search/map', to: 'search#map'
     get '/search/autocomplete', to: 'search#autocomplete'
     post '/search', to: 'search#create'
@@ -69,12 +68,16 @@ Rails.application.routes.draw do
 
     get '/resources', to: 'resources#index'
 
+    get '/search', to: 'search#index'
+
     get '/thematical-areas/green-list', to: 'green_list#index'
     get '/thematical-areas/oecms', to: 'oecm#index'
     get '/thematical-areas/protected-areas-management-effectiveness-pame', to: 'pame#index'
     get '/thematical-areas/marine-protected-areas', to: 'marine#index'
     get '/thematical-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
     get '/thematical-areas/wdpa', to: 'wdpa#index'
+
+    post '/search-results', to: 'search#search_results'
 
     # Ensure that this route is defined last
 

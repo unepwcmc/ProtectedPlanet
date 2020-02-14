@@ -28,6 +28,8 @@ $padding-medium: rem-calc(27);
   &:hover { text-decoration: none; }
 }
 
+@mixin button-disabled { cursor: disabled; }
+
 @mixin button-height { 
   @include responsive(height, $height-small, $height-medium, $height-medium);
 
@@ -100,6 +102,19 @@ $padding-medium: rem-calc(27);
 }
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }
+
+@mixin button-search {
+  @include button-basic;
+  @include button-radius;
+  @include flex-center;
+  background-color: $primary;
+  width: rem-calc(47); height: rem-calc(47);
+
+  &:before {
+    @include icon-search-white;
+    content: '';
+  }
+}
 
 //--------------------------------------------------
 // classes
