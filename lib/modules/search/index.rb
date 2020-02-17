@@ -20,12 +20,19 @@ class Search::Index
     pa_index.index
   end
 
+  def self.create_cms_fragments
+    cms_index = Search::Index.new Search::CMS_INDEX, Comfy::Cms::SearchableFragment.all
+    cms_index.create
+    cms_index.index
+  end
+
   def self.count
-    self.new(Search::COUNTRY_INDEX).count + self.new(Search::PA_INDEX).count
+    self.new(Search::COUNTRY_INDEX).count + self.new(Search::PA_INDEX).count +
+      self.new(Search::CMS_INDEX).count
   end
 
   def self.delete
-    [Search::COUNTRY_INDEX, Search::PA_INDEX].each do |index_name|
+    [Search::COUNTRY_INDEX, Search::PA_INDEX, Search::CMS_INDEX].each do |index_name|
       index = self.new index_name
       index.delete
     end

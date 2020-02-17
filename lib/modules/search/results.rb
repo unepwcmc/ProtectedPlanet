@@ -1,7 +1,11 @@
 class Search::Results
   def initialize query_results
     @query_results = query_results
-    @type_index_map = {Search::COUNTRY_INDEX => "Country", Search::PA_INDEX => "ProtectedArea"}
+    @type_index_map = {
+      Search::COUNTRY_INDEX => "Country",
+      Search::PA_INDEX => "ProtectedArea",
+      Search::CMS_INDEX => "Comfy::Cms::Fragment"
+    }
   end
 
   def pluck key
@@ -14,7 +18,7 @@ class Search::Results
   }
 
 
-  
+
  def objects
    by_type_and_id = matches.group_by { |match|
       match["_index"]

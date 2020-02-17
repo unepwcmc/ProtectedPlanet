@@ -20,7 +20,8 @@ class Search::Matcher
           "filter" => {"match" => {"type" => "region"}},
           "weight" => 10
         }]
-      }
+      },
+      { type: 'multi_match', path: 'content', fields: ['content'] }
     ]
   }
 
