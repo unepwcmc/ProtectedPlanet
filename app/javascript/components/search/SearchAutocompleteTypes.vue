@@ -83,14 +83,10 @@ export default {
 
   props: {
     types: {
-      default: () => [],
+      required: true,
       type: Array // [ { name: String, options: [ { id: Number, name: String } ] } ]
     },
     endpointAutocomplete: {
-      required: true,
-      type: String
-    },
-    endpointSearch: {
       required: true,
       type: String
     }
@@ -116,19 +112,17 @@ export default {
     options () {
       return this.types[this.typeIndex].options
     },
+    searchParams () {
+      return {
+        type: this.selectedTypeName,
+        search_term: this.searchTerm
+      }
+    },
     selectedTypeName () {
       return this.types[this.typeIndex].name
     },
     showResetIcon () {
       return this.searchTerm.length != 0
-    },
-    axiosDataParams () {
-      return {
-        params: {
-          type: this.selectedTypeName,
-          search_term: this.searchTerm
-        }
-      }
     }
   },
 
@@ -147,7 +141,7 @@ export default {
         return false
       }
 
-      let data = this.axiosDataParams
+      let data = { params: this.searchParams }
 
       axios.post(this.endpointAutocomplete, data)
       .then(response => {
@@ -182,16 +176,8 @@ export default {
       this.autocomplete = []
     },
 
-    submitSearch () {
-      let data = this.axiosDataParams
-
-      axios.post(this.endpointSearch, data)
-      .then(response => {
-        console.log(success)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    submit () {
+      this.$emit('submit-search', this.searchParams)
     }
   }
 }

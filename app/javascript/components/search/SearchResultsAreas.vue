@@ -2,6 +2,12 @@
   <div>
     <div class="container flex flex-v-center">
       <button>filter button</button>
+      
+      <search-autocomplete-types
+        :endpoint-autocomplete="endpointAutocomplete"
+        :types="autocompleteAreaTypes"
+        v-on:submit-search="updateSearchTerm"
+      />
 
       <button>map</button>
 
@@ -11,22 +17,15 @@
     <div class="container">
       <filters-search />
 
-      <div class="search--results-areas">
-        <div>
-          <h2>title(<!--{{ totalItems }}-->)</h2>
-          <button>View All</button>
-        </div>
-        <div class="cards--search-results-areas">
-          <card-search-result-area
-            v-for="result, index in results.regions"
-            :key="index"
-            :image="result.image"
-            :summary="result.summary"
-            :title="result.title"
-            :url="result.url"
-          />
-        </div>
-      </div>
+      <search-results-area 
+        v-for="result, index in data.results"
+        class="search--results-areas"
+        :areas="result.areas"
+        :geo-type="result.geo_type"
+        :total="result.total"
+        :title="result.title"
+        v-on:request-more="requestMore"
+      />
     </div>
   </div>
 </template>
@@ -34,23 +33,36 @@
 <script>
 import axios from 'axios'
 import { setCsrfToken } from '../../helpers/request-helpers'
-import CardSearchResultArea from '../card/CardSearchResultArea.vue'
 import FiltersSearch from '../filters/FiltersSearch.vue'
+import SearchAutocompleteTypes from '../search/SearchAutocompleteTypes.vue'
+import SearchResultsArea from '../search/SearchResultsArea.vue'
 
 export default {
   name: 'SearchResultsAreas',
 
-  components: { CardSearchResultArea, FiltersSearch },
+  components: { FiltersSearch, SearchAutocompleteTypes, SearchResultsArea },
 
   props: {
-    endpoint: {
+    autocompleteAreaTypes: {
+      type: Array, // [ { name: String, options: [ { id: Number, name: String } ] } ]
+      required: true
+    },
+    endpointAutocomplete: {
       type: String,
       required: true
     },
-    // items_per_page: {
-    //   type: Number,
-    //   default: 15
-    // },
+    endpointPagination: {
+      type: String,
+      required: true
+    },
+    endpointSearch: {
+      type: String,
+      required: true
+    },
+    items_per_page: {
+      type: Number,
+      default: 3
+    },
     // noResultsText: {
     //   type: String,
     //   required: true
@@ -63,10 +75,8 @@ export default {
 
   data () {
     return {
-      categoryId: '',
-      categories: [], // [ String ]
+      areaType: '',
       currentPage: 0,
-      // defaultCategory: this.categories[0].id,
       defaultPage: 1,
       pageItemsStart: 0,
       pageItemsEnd: 0,
@@ -74,46 +84,63 @@ export default {
       // results: {}, // { regions: [{ title: String, url: String}], countries: [{ areas: String, region: String, title: String, url: String}], sites: [{ areas: String, country: String, image: String, region: String, title: String, url: String}] }
       searchTerm: '',
       totalItems: 0,
-      results: { 
-        regions: [
+      data: {
+        results: [
           {
-            title: 'Asia & Pacific',
-            url: 'url to page'
-          }
-        ],
-        countries: [
-          {
-            areas: 5908,
-            region: 'America',
-            title: 'United States of America',
-            url: 'url to page'
+            geo_type: 'region',
+            title: 'Regions',
+            total: 10,
+            areas: [
+              {
+                title: 'Asia & Pacific',
+                url: 'url to page'
+              }
+            ]
           },
           {
-            areas: 508,
-            regions: 'Europe',
-            title: 'United Kingdom',
-            url: 'url to page'
+            geo_type: 'country',
+            title: 'Countries',
+            total: 10,
+            areas: [
+              {
+                areas: 5908,
+                region: 'America',
+                title: 'United States of America',
+                url: 'url to page'
+              },
+              {
+                areas: 508,
+                regions: 'Europe',
+                title: 'United Kingdom',
+                url: 'url to page'
+              },
+              {
+                areas: 508,
+                regions: 'Europe',
+                title: 'United Kingdom',
+                url: 'url to page'
+              },
+              {
+                areas: 508,
+                regions: 'Europe',
+                title: 'United Kingdom',
+                url: 'url to page'
+              }
+            ]
           },
           {
-            areas: 508,
-            regions: 'Europe',
-            title: 'United Kingdom',
-            url: 'url to page'
-          },
-          {
-            areas: 508,
-            regions: 'Europe',
-            title: 'United Kingdom',
-            url: 'url to page'
-          }
-        ],
-        sites: [
-          {
-            country: 'France',
-            image: 'url to generated map of PA location',
-            region: 'Europe',
-            title: 'Avenc De Fra Rafel',
-            url: 'url to page'
+            geo_type: 'site',
+            title: 'Protected Areas',
+            total: 30,
+            areas: [
+              {
+                country: 'France',
+                image: 'url to generated map of PA location',
+                region: 'Europe',
+                title: 'Avenc De Fra Rafel',
+                url: 'url to page'
+              }
+            ]
           }
         ]
       }
@@ -133,17 +160,17 @@ export default {
   },
 
   methods: {
-    ajaxSubmission () {
+    ajaxSubmission (callback) {
       let data = {
         params: {
-          category_id: this.categoryId,
+          type: this.type,
           items_per_page: this.itemsPerPage,
           requested_page: this.requestedPage,
           searchTerm: this.searchTerm
         }
       }
 
-      axios.post(this.endpoint, data)
+      axios.post(this.endpointSearch, data)
         .then(response => {
           this.updateProperties(response.data)
         })
@@ -171,6 +198,38 @@ export default {
       this.searchTerm = data.search_term
       this.totalItems = data.total_items
     },
+
+    updateSearchTerm (searchParams) {
+      console.log('updateSearchTerm', searchParams)
+      this.areaType = searchParams.type
+      this.searchTerm = searchParams.search_term
+      this.ajaxSubmission()
+    },
+
+    requestMore (paginationParams) {
+      let data = {
+        params: {
+          area_type: this.areaType,
+          geo_type: paginationParams.geoType,
+          items_per_page: 6,
+          requested_page: paginationParams.requestedPage,
+          searchTerm: this.searchTerm
+        }
+      }
+
+      console.log('data', data)
+
+      axios.post(this.endpointPagination, data)
+        .then(response => {
+          this.data.results.find(object => object.geo_type === 'paginationParams.geoType').areas.concat(data.results);
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+
+
+      // this.ajaxRequest((data) => { this.results = this.results.concat(data.items) })
+    }
   }
 }
 </script>

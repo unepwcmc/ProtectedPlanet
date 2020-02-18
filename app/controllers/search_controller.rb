@@ -50,6 +50,48 @@ class SearchController < ApplicationController
     render json: @results
   end
 
+  def search_areas
+    #for searching for OECMs or WDPAs
+    @results = [].to_json
+
+    render json: @results
+  end
+
+   def search_areas_pagination
+    #for specific page of OECMs or WDPAs
+
+    #if regions
+    @results = [
+      {
+        title: 'Asia & Pacific',
+        url: 'url to page'
+      }
+    ].to_json
+
+    #if countries
+    @results = [
+      {
+        areas: 5908,
+        region: 'America',
+        title: 'United States of America',
+        url: 'url to page'
+      }
+    ]
+
+    #if sites
+    @results = [
+      {
+        country: 'France',
+        image: 'url to generated map of PA location',
+        region: 'Europe',
+        title: 'Avenc De Fra Rafel',
+        url: 'url to page'
+      }
+    ]
+
+    render json: @results
+  end
+
   private
 
   def ignore_empty_query
