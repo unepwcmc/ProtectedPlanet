@@ -10,9 +10,12 @@
 // classes
 //--------------------------------------------------
 &--results-areas {
+  @include bg-grey-xlight;
+
   .search {
     &__bar {
       @include box-shadow-bottom-grey;
+      background-color: $white;
       border-bottom: solid 1px $grey;
     }
 
@@ -23,25 +26,25 @@
         @include flex-v-center;
       }
 
-    &__results-wrapper {
-      @include bg-grey-xlight;
+    &__main {
+      @include container;
+      @include flex;
+      @include site-width;
     }
 
-      &__results {
-        @include container;
-        @include site-width;
+      &__filters {
+        @include flex-no-shrink;
+        width: 25%;
       }
 
-        &__results-bar {
-          @include flex;
-          @include flex-h-between;
-          @include flex-v-center;
-        }
-
-    &__total {
-      @include text-tabs-fake;
-      font-weight: bold;
-      color: $grey;
-    }
+      &__results {
+        
+      }
+      
+      &__results-bar {
+        @include flex;
+        @include flex-h-between;
+        @include flex-v-center;
+      }
   }
 }

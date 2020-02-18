@@ -3,12 +3,9 @@ class HomeController < ApplicationController
     home_yml = I18n.t('home')
 
     @total_pas = ProtectedArea.count
-    @total_oecms = 9876543 #TODO FERDI replace with correct integer
+    @total_oecms = 9876543 
 
-    search_pas = ProtectedArea.first(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} }
-    search_oecms = ProtectedArea.last(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} } #TODO make this ALL the OECMS
-
-    @search_pas_categories = [
+    @search_area_types = [
       { name: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.wdpa') },
       { name: I18n.t('global.area-types.oecm'), placeholder: I18n.t('global.placeholder.oecm') }
     ].to_json

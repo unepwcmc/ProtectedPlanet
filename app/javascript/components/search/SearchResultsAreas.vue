@@ -2,7 +2,9 @@
   <div class="search--results-areas">
     <div class="search__bar">
       <div class="search__bar-content">
-        <button>filter button</button>
+        <filter-trigger
+          v-on:toggle-filter-pane="toggleFilterPane"
+        />
         
         <search-autocomplete-types
           :endpoint-autocomplete="endpointAutocomplete"
@@ -16,13 +18,14 @@
       </div>
     </div>
 
-    <div class="search__results-wrapper">
+    <div class="search__main">
+      <filters-search 
+        class="search__filters"
+        :isActive="isfilterPaneActive"
+      />
       <div class="search__results">
-        <filters-search />
-
         <search-geo-type
           v-for="result, index in data.results"
-          class="search--results-areas"
           :areas="result.areas"
           :geo-type="result.geo_type"
           :total="result.total"
@@ -37,6 +40,7 @@
 <script>
 import axios from 'axios'
 import { setCsrfToken } from '../../helpers/request-helpers'
+import FilterTrigger from '../filters/FilterTrigger.vue'
 import FiltersSearch from '../filters/FiltersSearch.vue'
 import SearchAutocompleteTypes from '../search/SearchAutocompleteTypes.vue'
 import SearchGeoType from '../search/SearchGeoType.vue'
@@ -44,7 +48,7 @@ import SearchGeoType from '../search/SearchGeoType.vue'
 export default {
   name: 'SearchResultsAreas',
 
-  components: { FiltersSearch, SearchAutocompleteTypes, SearchGeoType },
+  components: { FilterTrigger, FiltersSearch, SearchAutocompleteTypes, SearchGeoType },
 
   props: {
     autocompleteAreaTypes: {
@@ -82,6 +86,7 @@ export default {
       areaType: '',
       currentPage: 0,
       defaultPage: 1,
+      isfilterPaneActive: false,
       pageItemsStart: 0,
       pageItemsEnd: 0,
       requestedPage: 0,
@@ -233,6 +238,10 @@ export default {
 
 
       // this.ajaxRequest((data) => { this.results = this.results.concat(data.items) })
+    },
+
+    toggleFilterPane () {
+      this.isfilterPaneActive = !this.isfilterPaneActive
     }
   }
 }

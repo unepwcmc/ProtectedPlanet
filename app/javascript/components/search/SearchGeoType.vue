@@ -4,6 +4,7 @@
       <h2>{{ title }} ({{ total }})</h2>
       
       <pagination-more
+        smTriggerElement="todo"
         text="View All"
         v-on:request-more="requestMore"
       />
