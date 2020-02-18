@@ -1,3 +1,7 @@
+### 3.2.8
+
+* Calculate and populate assessments and assessed_pas fields for PameStatisic during import
+
 ### 3.2.7
 
 * Add country, pame_country and marine stats (WDPA February 2020 release).
@@ -5,6 +9,7 @@
 ### 3.2.6
 
 * Add country, pame_country and marine stats (WDPA January 2020 release).
+* Update rack, nokogiri and rubyzip gems
 
 ### 3.2.5
 
