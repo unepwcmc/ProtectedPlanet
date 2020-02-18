@@ -1,5 +1,8 @@
 en:
   global:
+    area-types:
+      wdpa: Protected Areas
+      oecm: OECMs
     button:
       all: View all
       download: PDF Download

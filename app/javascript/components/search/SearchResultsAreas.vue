@@ -1,26 +1,33 @@
 <template>
-  <div class="search--results-areas">
-    <!-- <p class="search__total">({{ totalItems }} {{ resultsText }})</p> -->
+  <div>
+    <div class="container flex flex-v-center">
+      <button>filter button</button>
 
-    <div class="cards--search-results-areas">
-      <card-search-result-area
-        v-for="result, index in results.regions"
-        :key="index"
-        :image="result.image"
-        :summary="result.summary"
-        :title="result.title"
-        :url="result.url"
-      />
+      <button>map</button>
+
+      <button>download</button>
     </div>
 
-    <!-- <pagination 
-      v-on:change-page="changePage" 
-      :currentPage="currentPage"
-      :pageItemsEnd="pageItemsEnd" 
-      :pageItemsStart="pageItemsStart" 
-      :noResultsText="noResultsText"
-      :totalItems="totalItems"
-    /> -->
+    <div class="container">
+      <filters-search />
+
+      <div class="search--results-areas">
+        <div>
+          <h2>title(<!--{{ totalItems }}-->)</h2>
+          <button>View All</button>
+        </div>
+        <div class="cards--search-results-areas">
+          <card-search-result-area
+            v-for="result, index in results.regions"
+            :key="index"
+            :image="result.image"
+            :summary="result.summary"
+            :title="result.title"
+            :url="result.url"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -28,18 +35,18 @@
 import axios from 'axios'
 import { setCsrfToken } from '../../helpers/request-helpers'
 import CardSearchResultArea from '../card/CardSearchResultArea.vue'
-import Pagination from '../pagination/Pagination.vue'
+import FiltersSearch from '../filters/FiltersSearch.vue'
 
 export default {
   name: 'SearchResultsAreas',
 
-  components: { CardSearchResultArea, Pagination },
+  components: { CardSearchResultArea, FiltersSearch },
 
   props: {
-    // endpoint: {
-    //   type: String,
-    //   required: true
-    // },
+    endpoint: {
+      type: String,
+      required: true
+    },
     // items_per_page: {
     //   type: Number,
     //   default: 15

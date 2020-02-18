@@ -1,29 +1,14 @@
 <%#= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: "#{@cms_page.slug }" %>
 
 <div>
-  <div class="container flex flex-v-center">
-    <button>filter button</button>
+  <search-autocomplete-types
+    endpoint-autocomplete="/search/autocomplete"
+    endpoint-search="/search-results"
+    :types="<%= @search_pas_categories %>"
+  ></search-autocomplete-types>
 
-    <search-autocomplete-types
-      :types="<%= @search_pas_categories %>"
-      endpoint="search-areas"
-    />
-    </search-autocomplete-types>
+  <search-results-areas
+    endpoint="/search-wdpa/results"
+  ></search-results-areas>
 
-    <button>map</button>
-
-    <button>download</button>
-  </div>
-</div>
-
-<div>
-  <div class="container">
-    
-    <div class="">
-      <h2>Regions</h2>
-      <button>View All</button>
-
-      <search-results-areas></search-results-areas>
-    </div>
-  </div>
 </div>

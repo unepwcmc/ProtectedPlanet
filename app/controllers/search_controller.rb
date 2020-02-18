@@ -10,9 +10,9 @@ class SearchController < ApplicationController
 
   def search_results
     @results = {
-      search_term: 'My search', # I might not need this but just put it in for now
+      search_term: 'My search',
       categories: [
-        { id: 0, title: 'All' },
+        { id: 0, title: 'All' }, # Pull id from CMS
         { id: 0, title: 'News & Stories' }, # Pull id and title from CMS
         { id: 0, title: 'Resources' } # Pull id and title from CMS
       ],
@@ -45,8 +45,9 @@ class SearchController < ApplicationController
 
   def autocomplete
     @results = Autocompletion.lookup params[:q]
-
-    render partial: 'search/autocomplete'
+    ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
+    # render partial: 'search/autocomplete'
+    render json: @results
   end
 
   private

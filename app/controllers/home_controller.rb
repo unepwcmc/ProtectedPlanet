@@ -7,9 +7,10 @@ class HomeController < ApplicationController
 
     search_pas = ProtectedArea.first(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} }
     search_oecms = ProtectedArea.last(4).map{ |pa| {"id": pa.wdpa_id, "name": pa.name} } #TODO make this ALL the OECMS
+
     @search_pas_categories = [
-      { name: 'Protected Areas', placeholder: 'Search for a Protected Area', options: search_pas },
-      { name: 'OECMs', placeholder: 'Search for an OECM', options: search_oecms }
+      { name: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.wdpa') },
+      { name: I18n.t('global.area-types.oecm'), placeholder: I18n.t('global.placeholder.oecm') }
     ].to_json
 
     @pas_title = home_yml[:pas][:title]
