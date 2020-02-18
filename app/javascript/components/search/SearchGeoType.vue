@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div>
+    <div class="search__results-bar">
       <h2>{{ title }} ({{ total }})</h2>
       
       <pagination-more
-        text="View more"
+        text="View All"
         v-on:request-more="requestMore"
       />
     </div>
@@ -26,7 +26,7 @@ import CardSearchResultArea from '../card/CardSearchResultArea.vue'
 import PaginationMore from '../pagination/PaginationMore.vue'
 
 export default {
-  name: 'search-results-area',
+  name: 'search-geo-type',
 
   components: { CardSearchResultArea, PaginationMore },
 

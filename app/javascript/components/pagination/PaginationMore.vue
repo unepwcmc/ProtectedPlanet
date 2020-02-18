@@ -1,6 +1,7 @@
 <template>
   <button
     v-html="text"
+    class="button--all"
     @click="submit"
   />
 </template>

@@ -1,31 +1,35 @@
 <template>
-  <div>
-    <div class="container flex flex-v-center">
-      <button>filter button</button>
-      
-      <search-autocomplete-types
-        :endpoint-autocomplete="endpointAutocomplete"
-        :types="autocompleteAreaTypes"
-        v-on:submit-search="updateSearchTerm"
-      />
+  <div class="search--results-areas">
+    <div class="search__bar">
+      <div class="search__bar-content">
+        <button>filter button</button>
+        
+        <search-autocomplete-types
+          :endpoint-autocomplete="endpointAutocomplete"
+          :types="autocompleteAreaTypes"
+          v-on:submit-search="updateSearchTerm"
+        />
 
-      <button>map</button>
+        <button>map</button>
 
-      <button>download</button>
+        <button>download</button>
+      </div>
     </div>
 
-    <div class="container">
-      <filters-search />
+    <div class="search__results-wrapper">
+      <div class="search__results">
+        <filters-search />
 
-      <search-results-area 
-        v-for="result, index in data.results"
-        class="search--results-areas"
-        :areas="result.areas"
-        :geo-type="result.geo_type"
-        :total="result.total"
-        :title="result.title"
-        v-on:request-more="requestMore"
-      />
+        <search-geo-type
+          v-for="result, index in data.results"
+          class="search--results-areas"
+          :areas="result.areas"
+          :geo-type="result.geo_type"
+          :total="result.total"
+          :title="result.title"
+          v-on:request-more="requestMore"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -35,12 +39,12 @@ import axios from 'axios'
 import { setCsrfToken } from '../../helpers/request-helpers'
 import FiltersSearch from '../filters/FiltersSearch.vue'
 import SearchAutocompleteTypes from '../search/SearchAutocompleteTypes.vue'
-import SearchResultsArea from '../search/SearchResultsArea.vue'
+import SearchGeoType from '../search/SearchGeoType.vue'
 
 export default {
   name: 'SearchResultsAreas',
 
-  components: { FiltersSearch, SearchAutocompleteTypes, SearchResultsArea },
+  components: { FiltersSearch, SearchAutocompleteTypes, SearchGeoType },
 
   props: {
     autocompleteAreaTypes: {

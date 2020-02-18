@@ -11,6 +11,7 @@
       @include border-grey-light;
       @include box-shadow-grey-light;
       @include responsive('width', 100%, 50%, 30%);
+      background-color: $white;
       margin-bottom: rem-calc(30);
       padding: rem-calc(16 22);
       text-decoration: none; 
