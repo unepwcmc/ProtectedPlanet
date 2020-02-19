@@ -9,6 +9,8 @@ class SearchController < ApplicationController
   end
 
   def search_results
+    search = Search.search(params['params']['search_term'])
+    results = search.results
     @results = {
       search_term: 'My search',
       categories: [
@@ -17,23 +19,17 @@ class SearchController < ApplicationController
         { id: 0, title: 'Resources' } # Pull id and title from CMS
       ],
       current_page: 1,
-      page_items_start: 1,
-      page_items_end: 15,
-      total_items: 45, # Total items for selected category
-      results: [
+      page_items_start: results.page_items_start(page: 1, for_display: true),
+      page_items_end: results.page_items_end(page: 1, for_display: true),
+      total_items: results.count , # Total items for selected category
+      results: results.paginate(page: 1).map do |record|
         {
-          title: 'Protected area coverage per country/territory by UN Environment Regions',
-          url: 'http://google.com',
-          summary: 'This page provides access to national statistics for every country and territory classified under the UN Environment Regions.The regions listed below are based upon UN Environment’s Global Environment Outlook (GEO) process.',
-          image: 'image url'
-        },
-        {
-          title: 'Protected area coverage per country/territory by UN Environment Regions',
-          url: 'http://google.com',
-          summary: 'This page provides access to national statistics for every country and territory classified under the UN Environment Regions.The regions listed below are based upon UN Environment’s Global Environment Outlook (GEO) process.',
+          title: record.title || 'title',
+          url: 'url',
+          summary: record.content || 'content',
           image: 'image url'
         }
-      ]
+      end
     }.to_json
 
     render json: @results

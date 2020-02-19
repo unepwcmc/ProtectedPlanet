@@ -125,3 +125,13 @@ ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = ENV["COMFY
 #     return true
 #   end
 # end
+
+Comfy::Cms::Page.class_eval do
+  %w(title content).each do |name|
+    define_method(name) do
+      text = self.fragments.where(identifier: name).first.content
+      # TODO Currently getting the first 100 characters of the string to make a summary
+      text.length > 100 ? text[0..99] : text
+    end
+  end
+end

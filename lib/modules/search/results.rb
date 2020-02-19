@@ -22,18 +22,37 @@ class Search::Results
       match["_index"]
     }.each_with_object({}) { |(index, objs), final|
       ids = objs.map { |obj| obj["_source"]["id"] }
-      type = @type_index_map[index].classify.constantize
-      records = type.respond_to?('without_geometry') ? type.without_geometry : type
+      type = @type_index_map[index]
+      records = type == Search::CMS_INDEX ? type.classify.constantize.without_geometry : type.classify.constantize
       final[type] = records.
         where(id: ids).
-        includes(INCLUDES[type]).
+        includes(INCLUDES[type.underscore]).
         group_by(&:id)
     }
     @objects ||= matches.map do |result|
       id = result["_source"]["id"]
-      type = @type_index_map[result["_index"]].constantize
-      by_type_and_id[type][id].first
+      type = @type_index_map[result["_index"]]
+      obj = by_type_and_id[type][id].first
+      obj.is_a?(Comfy::Cms::Fragment) ? obj.record.page : obj
     end
+  end
+
+  PAGE = 1.freeze
+  PER_PAGE = 8.freeze
+  def paginate(page: PAGE, per_page: PER_PAGE)
+    offset = page_items_start(page: page, per_page: per_page)
+    limit = page_items_end(page: page, per_page: per_page)
+    objects[offset..limit]
+  end
+
+  def page_items_start(page: PAGE, per_page: PER_PAGE, for_display: false)
+    n = (page - 1) * per_page
+    for_display ? n + 1 : n
+  end
+
+  def page_items_end(page: PAGE, per_page: PER_PAGE, for_display: false)
+    n = page * per_page - 1
+    for_display ? n + 1 : n
   end
 
   def raw
