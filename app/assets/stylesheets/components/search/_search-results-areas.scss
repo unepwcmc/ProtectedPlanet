@@ -17,6 +17,7 @@
       @include box-shadow-bottom-grey;
       background-color: $white;
       border-bottom: solid 1px $grey;
+      padding: rem-calc(20 0); 
     }
 
       &__bar-content {
@@ -46,5 +47,10 @@
         @include flex-h-between;
         @include flex-v-center;
       }
+
+    &__map {
+      @include container;
+      @include site-width;
+    }
   }
 }

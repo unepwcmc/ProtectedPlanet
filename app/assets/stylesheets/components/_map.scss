@@ -9,4 +9,17 @@
       }
     }
   }
+
+ &__trigger {
+    @include button-map-trigger;
+    margin-right: rem-calc(16);
+  }
+
+  &--search {
+    
+
+    .map {
+      &__map {height: rem-calc(460);}
+    }
+  }
 }

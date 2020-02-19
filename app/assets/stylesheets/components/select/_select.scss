@@ -16,6 +16,8 @@ $select-types-height: rem-calc(75);
   top: 0;
   right: 0;
 
+  .search__bar & { @include responsive(height, rem-calc(49), rem-calc(49), rem-calc(49)); }
+
   .select {
     &__label {
       @include button-with-icon;
