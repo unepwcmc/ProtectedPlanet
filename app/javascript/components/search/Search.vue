@@ -31,10 +31,12 @@
 
 <script>
 import axios from 'axios'
-import { setCsrfToken } from '../../helpers/request-helpers'
+import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 
 export default {
   name: 'search',
+
+  mixins: [ mixinAxiosHelpers ],
 
   props: {
     endpoint: {
@@ -87,7 +89,9 @@ export default {
           search_term: this.searchTerm
         }
       }
-        
+
+      this.axiosSetHeaders()
+
       axios.post(this.endpoint, data)
       .then(response => {
         console.log(success)

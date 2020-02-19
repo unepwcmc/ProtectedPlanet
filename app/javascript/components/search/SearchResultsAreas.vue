@@ -49,7 +49,7 @@
 
 <script>
 import axios from 'axios'
-import { setCsrfToken } from '../../helpers/request-helpers'
+import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import FilterTrigger from '../filters/FilterTrigger.vue'
 import FiltersSearch from '../filters/FiltersSearch.vue'
 import MapTrigger from '../map/MapTrigger.vue'
@@ -61,6 +61,8 @@ export default {
   name: 'SearchResultsAreas',
 
   components: { FilterTrigger, FiltersSearch, MapTrigger, MapSearch, SearchAutocompleteTypes, SearchGeoType },
+
+  mixins: [ mixinAxiosHelpers ],
 
   props: {
     autocompleteAreaTypes: {
@@ -191,6 +193,8 @@ export default {
           searchTerm: this.searchTerm
         }
       }
+
+      this.axiosSetHeaders()
 
       axios.post(this.endpointSearch, data)
         .then(response => {

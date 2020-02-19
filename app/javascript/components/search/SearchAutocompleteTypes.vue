@@ -71,13 +71,14 @@
 
 <script>
 import axios from 'axios'
-import { setCsrfToken } from '../../helpers/request-helpers'
+import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
 
 export default {
   name: 'SearchAutocompleteTypes',
 
   mixins: [
+    mixinAxiosHelpers,
     mixinPopupCloseListeners({closeCallback: 'closeSelect'}),
   ],
 
@@ -142,6 +143,8 @@ export default {
       }
 
       let data = { params: this.searchParams }
+
+      this.axiosSetHeaders()
 
       axios.post(this.endpointAutocomplete, data)
       .then(response => {
