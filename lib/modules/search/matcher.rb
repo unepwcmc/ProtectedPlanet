@@ -21,7 +21,11 @@ class Search::Matcher
           "weight" => 10
         }]
       },
-      { type: 'multi_match', path: 'content', fields: ['content'] }
+      {
+        type: 'multi_match',
+        path: 'content',
+        fields: ['content', 'content.english', 'content.french', 'content.spanish']
+      }
     ]
   }
 

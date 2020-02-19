@@ -45,7 +45,7 @@ class SearchController < ApplicationController
 
   def autocomplete
     @results = Autocompletion.lookup params[:q] ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
-    
+
     # render partial: 'search/autocomplete'
     render json: @results
   end
@@ -118,7 +118,7 @@ class SearchController < ApplicationController
     render json: @results
   end
 
-   def search_areas_pagination
+  def search_areas_pagination
     #for specific page of OECMs or WDPAs
 
     #if regions
