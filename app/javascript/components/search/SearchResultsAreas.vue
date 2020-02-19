@@ -31,11 +31,13 @@
     <div class="search__main">
       <filters-search 
         class="search__filters"
+        :filter-groups="filterGroups"
         :isActive="isFilterPaneActive"
+        v-on:update:filter-group="updateFilters"
       />
       <div class="search__results">
         <search-geo-type
-          v-for="result, index in data.results"
+          v-for="result, index in results"
           :areas="result.areas"
           :geo-type="result.geo_type"
           :total="result.total"
@@ -81,6 +83,10 @@ export default {
       type: String,
       required: true
     },
+    filterGroups: {
+      type: Array, // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
+      required: true
+    },
     items_per_page: {
       type: Number,
       default: 3
@@ -97,6 +103,7 @@ export default {
 
   data () {
     return {
+      activeFilterOptions: ['to be done'],
       areaType: '',
       currentPage: 0,
       defaultPage: 1,
@@ -105,69 +112,9 @@ export default {
       pageItemsStart: 0,
       pageItemsEnd: 0,
       requestedPage: 0,
-      // results: {}, // { regions: [{ title: String, url: String}], countries: [{ areas: String, region: String, title: String, url: String}], sites: [{ areas: String, country: String, image: String, region: String, title: String, url: String}] }
+      results: [], // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }] }]
       searchTerm: '',
       totalItems: 0,
-      data: {
-        results: [
-          {
-            geo_type: 'region',
-            title: 'Regions',
-            total: 10,
-            areas: [
-              {
-                title: 'Asia & Pacific',
-                url: 'url to page'
-              }
-            ]
-          },
-          {
-            geo_type: 'country',
-            title: 'Countries',
-            total: 10,
-            areas: [
-              {
-                areas: 5908,
-                region: 'America',
-                title: 'United States of America',
-                url: 'url to page'
-              },
-              {
-                areas: 508,
-                regions: 'Europe',
-                title: 'United Kingdom',
-                url: 'url to page'
-              },
-              {
-                areas: 508,
-                regions: 'Europe',
-                title: 'United Kingdom',
-                url: 'url to page'
-              },
-              {
-                areas: 508,
-                regions: 'Europe',
-                title: 'United Kingdom',
-                url: 'url to page'
-              }
-            ]
-          },
-          {
-            geo_type: 'site',
-            title: 'Protected Areas',
-            total: 30,
-            areas: [
-              {
-                country: 'France',
-                image: 'url to generated map of PA location',
-                region: 'Europe',
-                title: 'Avenc De Fra Rafel',
-                url: 'url to page'
-              }
-            ]
-          }
-        ]
-      }
     }
   },
 
@@ -187,9 +134,10 @@ export default {
     ajaxSubmission (callback) {
       let data = {
         params: {
-          type: this.type,
+          area_type: this.areaType,
+          filters: this.activeFilterOptions,
           items_per_page: this.itemsPerPage,
-          requested_page: this.requestedPage,
+          // requested_page: this.requestedPage,
           searchTerm: this.searchTerm
         }
       }
@@ -215,14 +163,15 @@ export default {
       this.requestedPage = this.defaultPage
     },
 
+    updateFilters (filters) {
+      console.log('update filters and do new search', filters)
+      this.requestedFilters = filters
+      this.ajaxSubmission()
+    },
+
     updateProperties (data) {
-      this.categories = data.categories
-      this.currentPage = data.current_page
-      this.pageItemsStart = data.page_items_start
-      this.pageItemsEnd = data.page_items_end
       this.results = data.results
       this.searchTerm = data.search_term
-      this.totalItems = data.total_items
     },
 
     updateSearchTerm (searchParams) {
@@ -236,6 +185,7 @@ export default {
       let data = {
         params: {
           area_type: this.areaType,
+          filters: this.activeFilterOptions,
           geo_type: paginationParams.geoType,
           items_per_page: 6,
           requested_page: paginationParams.requestedPage,
@@ -247,7 +197,7 @@ export default {
 
       axios.post(this.endpointPagination, data)
         .then(response => {
-          this.data.results.find(object => object.geo_type === 'paginationParams.geoType').areas.concat(data.results);
+          this.data.results.find(object => object.geo_type === paginationParams.geoType).areas.concat(data.results);
         })
         .catch(function (error) {
           console.log(error)

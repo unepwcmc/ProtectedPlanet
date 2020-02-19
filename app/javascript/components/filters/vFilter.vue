@@ -8,8 +8,8 @@
     <checkboxes 
       v-if="type == 'checkbox'"
       :id="id"
-      :name="name"
       :options="options"
+      v-on:update:options="updateFilter"
     />
 
     <radio-buttons 
@@ -17,6 +17,7 @@
       :id="id"
       :name="name"
       :options="options"
+      v-on:update:options="updateFilter"
     />
   </div>
 </template>
@@ -36,7 +37,6 @@ export default {
       type: String
     },
     name: {
-      required: true,
       type: String
     },
     options: {
@@ -49,6 +49,19 @@ export default {
     type: {
       required: true,
       type: String
+    }
+  },
+
+  methods: {
+    updateFilter(updatedOptions) {
+      const data = {
+        id: this.id,
+        options: updatedOptions
+      }
+
+      console.log('updateFilter data', data)
+
+      this.$emit('update:filter', data)
     }
   }
 }

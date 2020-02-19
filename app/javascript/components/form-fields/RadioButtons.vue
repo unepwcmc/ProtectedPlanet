@@ -63,18 +63,10 @@ export default {
       return `${this.name}-${option.id}}`
     },
 
-    friendly (string) {
-      return string.toLowerCase().replace(' ', '-')
-    },
-
-    labelClass (string) {
-      return 'radio-button__label-' + this.friendly(string)
-    },
-
     changeInput (id) {
       this.input = id
 
-      this.$emit('update:selected-option', id)
+      this.$emit('update:options', this.input)
     },
 
     reset () {

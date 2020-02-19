@@ -6,15 +6,15 @@
         :key="inputId(option)"
         class="checkbox no-margin"
       >
+
         <input
           :id="inputId(option)"
-          v-model="input"
-          required
-          type="checkbox"
+          @change="changeInput($eventHub)"
           class="checkbox__input"
+          type="checkbox"
           :value="option.id"
-          :name="name"
-          @click="changeInput(option.id)"
+          v-model="input"
+          
         >
 
         <label
@@ -40,45 +40,30 @@ export default {
     options: { 
       type: Array, // { id: String, title: String }
       required: true 
-    },
-    name: { 
-      type: String,
-      required: true 
     }
   },
 
   data () {
     return {
-      input: ''
+      input: []
     }
   },
 
   created () {
-    this.changeInput(this.options[0].id, this.options[0].slug)
     this.$eventHub.$on('resetForm', this.reset)
   },
 
   methods: {
     inputId (option) {
-      return `${this.name}-${option.id}}`
+      return `${this.name}-${option.id}`
     },
 
-    friendly (string) {
-      return string.toLowerCase().replace(' ', '-')
-    },
-
-    labelClass (string) {
-      return 'radio-button__label-' + this.friendly(string)
-    },
-
-    changeInput (id) {
-      this.input = id
-
-      this.$emit('update:selected-option', id)
+    changeInput () {
+      this.$emit('update:options', this.input)
     },
 
     reset () {
-      this.changeInput(this.options[0].id)
+      this.changeInput(this.input = [])
     }
   }
 }

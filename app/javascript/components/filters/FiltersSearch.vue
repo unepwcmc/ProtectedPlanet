@@ -15,6 +15,7 @@
             :options="filter.options"
             :title="filter.title"
             :type="filter.type"
+            v-on:update:filter="updateFilterGroup"
           />
         </div>
       </div>
@@ -31,6 +32,10 @@ export default {
   components: { vFilter },
 
   props: {
+    filterGroups: {
+      required: true,
+      type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
+    },
     isActive: {
       required: true,
       type: Boolean
@@ -39,52 +44,23 @@ export default {
 
   data () {
     return {
-      filterGroups: [
-        {
-          title: 'View by',
-          filters: [
-            {
-              id: 'type',
-              name: 'type',
-              options: [ { id: 'all', title: 'All' }, { id: 'regions', title: 'Regions' } ],
-              type: 'radio'
-            }
-          ]
-        },
-        {
-          title: 'Filter by',
-          filters: [
-            {
-              id: 'type',
-              name: 'type',
-              options: [ { id: 'marine', title: 'Marine' }, { id: 'terrestrial', title: 'Terrestrial' }, { id: 'green-list', title: 'Green List' } ],
-              title: 'Type',
-              type: 'checkbox'
-            },
-            {
-              id: 'designation',
-              name: 'designation',
-              options: [ { id: 'designation-1', title: 'Designation 1' }, { id: 'designation-2', title: 'Designation 2' } ],
-              title: 'Designation',
-              type: 'checkbox'
-            },
-            {
-              id: 'governance',
-              name: 'governance',
-              options: [ { id: 'governance-1', title: 'Governance 1' }, { id: 'governance-2', title: 'Governance 2' } ],
-              title: 'Governance',
-              type: 'checkbox'
-            },
-            {
-              id: 'iucn-category',
-              name: 'iucn-category',
-              options: [ { id: 'iucn-category-1', title: 'IUCN Category 1' }, { id: 'iucn-category-2', title: 'IUCN Category 2' } ],
-              title: 'IUCN Category',
-              type: 'checkbox'
-            }
-          ]
-        }
-      ]
+      activeFilterOptions: []
+    }
+  },
+
+  methods: {
+    updateFilterGroup (updatedFilter) {
+      const filterToUpdate = this.activeFilterOptions.find(filter => {
+        return filter.id === updatedFilter.id
+      })
+
+      if(filterToUpdate === undefined) {
+        this.activeFilterOptions.push(updatedFilter)
+      } else {
+        filterToUpdate.options = updatedFilter.options
+      }
+
+      this.$emit('update:filter-group', this.activeFilterOptions)
     }
   }
 }
