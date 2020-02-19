@@ -12,16 +12,26 @@
           v-on:submit-search="updateSearchTerm"
         />
 
-        <button>map</button>
+        <map-trigger
+          v-on:toggle-map-pane="toggleMapPane"
+        />
 
-        <button>download</button>
+        <button
+          class="download__trigger"
+          text="download"
+        />
       </div>
     </div>
+    
+    <map-search 
+      class="search__map"
+      :isActive="isMapPaneActive"
+    />
 
     <div class="search__main">
       <filters-search 
         class="search__filters"
-        :isActive="isfilterPaneActive"
+        :isActive="isFilterPaneActive"
       />
       <div class="search__results">
         <search-geo-type
@@ -39,16 +49,20 @@
 
 <script>
 import axios from 'axios'
-import { setCsrfToken } from '../../helpers/request-helpers'
+import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import FilterTrigger from '../filters/FilterTrigger.vue'
 import FiltersSearch from '../filters/FiltersSearch.vue'
+import MapTrigger from '../map/MapTrigger.vue'
+import MapSearch from '../map/MapSearch.vue'
 import SearchAutocompleteTypes from '../search/SearchAutocompleteTypes.vue'
 import SearchGeoType from '../search/SearchGeoType.vue'
 
 export default {
   name: 'SearchResultsAreas',
 
-  components: { FilterTrigger, FiltersSearch, SearchAutocompleteTypes, SearchGeoType },
+  components: { FilterTrigger, FiltersSearch, MapTrigger, MapSearch, SearchAutocompleteTypes, SearchGeoType },
+
+  mixins: [ mixinAxiosHelpers ],
 
   props: {
     autocompleteAreaTypes: {
@@ -86,7 +100,8 @@ export default {
       areaType: '',
       currentPage: 0,
       defaultPage: 1,
-      isfilterPaneActive: false,
+      isFilterPaneActive: false,
+      isMapPaneActive: false,
       pageItemsStart: 0,
       pageItemsEnd: 0,
       requestedPage: 0,
@@ -179,6 +194,8 @@ export default {
         }
       }
 
+      this.axiosSetHeaders()
+
       axios.post(this.endpointSearch, data)
         .then(response => {
           this.updateProperties(response.data)
@@ -241,7 +258,11 @@ export default {
     },
 
     toggleFilterPane () {
-      this.isfilterPaneActive = !this.isfilterPaneActive
+      this.isFilterPaneActive = !this.isFilterPaneActive
+    },
+
+    toggleMapPane () {
+      this.isMapPaneActive = !this.isMapPaneActive
     }
   }
 }
