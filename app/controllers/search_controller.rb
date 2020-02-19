@@ -44,8 +44,8 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @results = Autocompletion.lookup params[:q]
-    ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
+    @results = Autocompletion.lookup params[:q] ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
+    
     # render partial: 'search/autocomplete'
     render json: @results
   end
