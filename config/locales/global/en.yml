@@ -13,6 +13,9 @@ en:
       title2: General Info
       title3: Follow us
       title4: Get in touch
+    geo-types:
+      countries: Countries
+      regions: Regions
     logos:
       iucn: IUCN logo
       pp: Protected Planet logo

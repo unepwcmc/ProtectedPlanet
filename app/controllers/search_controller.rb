@@ -52,7 +52,68 @@ class SearchController < ApplicationController
 
   def search_areas
     #for searching for OECMs or WDPAs
-    @results = [].to_json
+    #this one is likely to change as it doesn't have any of the filtering in yet - but i could do with some data to work with
+    @results = {
+      filters: [],
+      results: [
+        {
+          geo_type: 'region',
+          title: I18n.t('global.geo_types.regions'),
+          total: 10,
+          areas: [
+            {
+              title: 'Asia & Pacific',
+              url: 'url to page'
+            }
+          ]
+        },
+        {
+          geo_type: 'country',
+          title: I18n.t('global.geo_types.countries'),
+          total: 10,
+          areas: [
+            {
+              areas: 5908,
+              region: 'America',
+              title: 'United States of America',
+              url: 'url to page'
+            },
+            {
+              areas: 508,
+              regions: 'Europe',
+              title: 'United Kingdom',
+              url: 'url to page'
+            },
+            {
+              areas: 508,
+              regions: 'Europe',
+              title: 'United Kingdom',
+              url: 'url to page'
+            },
+            {
+              areas: 508,
+              regions: 'Europe',
+              title: 'United Kingdom',
+              url: 'url to page'
+            }
+          ]
+        },
+        {
+          geo_type: 'site',
+          title: I18n.t('global.area_types.wdpa'), ## OR I18n.t('global.area_types.oecm')
+          total: 30,
+          areas: [
+            {
+              country: 'France',
+              image: 'url to generated map of PA location',
+              region: 'Europe',
+              title: 'Avenc De Fra Rafel',
+              url: 'url to page'
+            }
+          ]
+        }
+      ]
+    }.to_json
 
     render json: @results
   end
