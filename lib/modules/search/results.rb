@@ -17,23 +17,21 @@ class Search::Results
     "protected_area" => [:designation, {countries_for_index: :region_for_index}]
   }
 
-
-
- def objects
-   by_type_and_id = matches.group_by { |match|
+  def objects
+    by_type_and_id = matches.group_by { |match|
       match["_index"]
     }.each_with_object({}) { |(index, objs), final|
       ids = objs.map { |obj| obj["_source"]["id"] }
-      type = @type_index_map[index]
-      final[type] = type.classify.constantize.
-        without_geometry.
+      type = @type_index_map[index].classify.constantize
+      records = type.respond_to?('without_geometry') ? type.without_geometry : type
+      final[type] = records.
         where(id: ids).
         includes(INCLUDES[type]).
         group_by(&:id)
     }
     @objects ||= matches.map do |result|
       id = result["_source"]["id"]
-      type = @type_index_map[result["_index"]]
+      type = @type_index_map[result["_index"]].constantize
       by_type_and_id[type][id].first
     end
   end
