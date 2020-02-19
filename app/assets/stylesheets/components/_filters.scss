@@ -1,4 +1,17 @@
 .filter {
+  &__pane {
+    border-right: solid 1px $grey-light;
+    margin-right: rem-calc(24);
+  }
+
+    &__filter-groups {
+      padding: rem-calc(24 22 24 0);
+    }
+
+      &__filter-group {
+        
+      }
+
   &__trigger {
     @include button-filter-trigger;
   }

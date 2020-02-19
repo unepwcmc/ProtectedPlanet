@@ -100,7 +100,7 @@ export default {
       areaType: '',
       currentPage: 0,
       defaultPage: 1,
-      isFilterPaneActive: false,
+      isFilterPaneActive: true,
       isMapPaneActive: false,
       pageItemsStart: 0,
       pageItemsEnd: 0,
