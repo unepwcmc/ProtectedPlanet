@@ -25,14 +25,29 @@ export default {
 
   data () {
     return {
-      currentPage: 1
+      currentPage: 1,
+      resetting: false
     }
+  },
+
+  created () {
+    this.$eventHub.$on('reset-search', this.reset)
   },
 
   methods: {
     requestMore () {
       console.log('request more')
+      if(this.resetting) { 
+        this.resetting = false
+        return false
+      }
+      
       this.$emit('request-more', this.currentPage + 1)
+    },
+
+    reset () {
+      this.resetting = true
+      this.currentPage = 1 
     },
 
     scrollMagicHandlers () {

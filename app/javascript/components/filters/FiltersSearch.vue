@@ -44,12 +44,23 @@ export default {
 
   data () {
     return {
-      activeFilterOptions: []
+      activeFilterOptions: [],
+      resetting: false
     }
   },
 
   methods: {
+    reset () {
+      this.resetting = true
+      this.activeFilterOptions = []
+    },
+
     updateFilterGroup (updatedFilter) {
+      if(this.resetting) {
+        this.resetting = false
+        return false
+      }
+
       const filterToUpdate = this.activeFilterOptions.find(filter => {
         return filter.id === updatedFilter.id
       })

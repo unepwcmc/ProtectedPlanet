@@ -50,13 +50,13 @@ class SearchController < ApplicationController
     render json: @results
   end
 
-  def search_areas
-    #for searching for OECMs or WDPAs
-    #this one is likely to change as it doesn't have any of the filtering in yet - but i could do with some data to work with
+  def search_results_areas
+    #for searching for OECMs or WDPAs - hooked it up with the front end - if it is working the page should requeste these results on first load
+
     @results = [
       {
         geo_type: 'region',
-        title: I18n.t('global.geo_types.regions'),
+        title: I18n.t('global.geo-types.regions'),
         total: 10,
         areas: [
           {
@@ -67,7 +67,7 @@ class SearchController < ApplicationController
       },
       {
         geo_type: 'country',
-        title: I18n.t('global.geo_types.countries'),
+        title: I18n.t('global.geo-types.countries'),
         total: 10,
         areas: [
           {
@@ -98,7 +98,7 @@ class SearchController < ApplicationController
       },
       {
         geo_type: 'site',
-        title: I18n.t('global.area_types.wdpa'), ## OR I18n.t('global.area_types.oecm')
+        title: I18n.t('global.area-types.wdpa'), ## OR I18n.t('global.area_types.oecm')
         total: 30,
         areas: [
           {

@@ -103,7 +103,7 @@ export default {
 
   data () {
     return {
-      activeFilterOptions: ['to be done'],
+      activeFilterOptions: [],
       areaType: '',
       currentPage: 0,
       defaultPage: 1,
@@ -137,7 +137,6 @@ export default {
           area_type: this.areaType,
           filters: this.activeFilterOptions,
           items_per_page: this.itemsPerPage,
-          // requested_page: this.requestedPage,
           searchTerm: this.searchTerm
         }
       }
@@ -146,6 +145,7 @@ export default {
 
       axios.post(this.endpointSearch, data)
         .then(response => {
+          console.log('success', response)
           this.updateProperties(response.data)
         })
         .catch(function (error) {
@@ -165,20 +165,25 @@ export default {
 
     updateFilters (filters) {
       console.log('update filters and do new search', filters)
-      this.requestedFilters = filters
+      this.activeFilterOptions = filters
       this.ajaxSubmission()
     },
 
     updateProperties (data) {
-      this.results = data.results
-      this.searchTerm = data.search_term
+      this.results = data
+      // this.searchTerm = data.search_term
     },
 
     updateSearchTerm (searchParams) {
-      console.log('updateSearchTerm', searchParams)
+      this.resetAll()
       this.areaType = searchParams.type
       this.searchTerm = searchParams.search_term
       this.ajaxSubmission()
+    },
+
+    resetAll () {
+      this.activeFilterOptions = []
+      this.$eventHub.$emit('reset-search')
     },
 
     requestMore (paginationParams) {

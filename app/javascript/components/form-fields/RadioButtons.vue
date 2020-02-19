@@ -49,27 +49,34 @@ export default {
 
   data () {
     return {
-      input: ''
+      input: '',
+      resetting: false
     }
   },
 
   created () {
-    this.changeInput(this.options[0].id, this.options[0].slug)
-    this.$eventHub.$on('resetForm', this.reset)
+    this.changeInput(this.options[0].id)
+    this.$eventHub.$on('reset-search', this.reset)
   },
 
   methods: {
-    radioId (option) {
-      return `${this.name}-${option.id}}`
-    },
-
     changeInput (id) {
+      if(this.resetting) { 
+        this.resetting = false
+        return false
+      }
+
       this.input = id
 
       this.$emit('update:options', this.input)
     },
 
+    radioId (option) {
+      return `${this.name}-${option.id}}`
+    },
+
     reset () {
+      this.resetting = true
       this.changeInput(this.options[0].id)
     }
   }

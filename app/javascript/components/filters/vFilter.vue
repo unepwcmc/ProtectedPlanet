@@ -43,6 +43,7 @@ export default {
       required: true,
       type: Array // [ { id: String, title: String } ]
     },
+    resetting: true,
     title: {
       type: String
     },

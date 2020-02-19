@@ -82,6 +82,7 @@ Rails.application.routes.draw do
 
     post '/search/autocomplete', to: 'search#autocomplete'
     post '/search-results', to: 'search#search_results'
+    post '/search-results-areas', to: 'search#search_results_areas'
     post '/search-areas-pagination', to: 'search#search_areas_pagination'
 
     # Ensure that this route is defined last

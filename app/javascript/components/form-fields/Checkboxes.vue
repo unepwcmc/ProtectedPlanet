@@ -45,24 +45,31 @@ export default {
 
   data () {
     return {
-      input: []
+      input: [],
+      resetting: false
     }
   },
 
   created () {
-    this.$eventHub.$on('resetForm', this.reset)
+    this.$eventHub.$on('reset-search', this.reset)
   },
 
   methods: {
+    changeInput () {
+      if(this.resetting) { 
+        this.resetting = false
+        return false
+      }
+
+      this.$emit('update:options', this.input)
+    },
+    
     inputId (option) {
       return `${this.name}-${option.id}`
     },
 
-    changeInput () {
-      this.$emit('update:options', this.input)
-    },
-
     reset () {
+      this.resetting = true
       this.changeInput(this.input = [])
     }
   }
