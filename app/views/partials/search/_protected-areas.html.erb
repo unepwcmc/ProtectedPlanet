@@ -1,8 +1,8 @@
 <section class="search--pa container">
   <div class="search__container">
     <search-autocomplete-types 
-      :types="<%= @search_pas_categories %>"
-      endpoint="search-areas"
+      endpoint="search/autocomplete"
+      :types="<%= @search_area_types %>"
     >
   </div>
 </section>

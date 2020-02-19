@@ -100,6 +100,12 @@ $padding-medium: rem-calc(27);
   @include button-with-icon;
   &::after { @include icon-chevron-black-up; }
 }
+
+@mixin button-filter-trigger {
+  @include button-with-icon;
+  &::after { @include icon-filters; }
+}
+
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }
 

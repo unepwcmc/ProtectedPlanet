@@ -1,0 +1,50 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--results-areas {
+  @include bg-grey-xlight;
+
+  .search {
+    &__bar {
+      @include box-shadow-bottom-grey;
+      background-color: $white;
+      border-bottom: solid 1px $grey;
+    }
+
+      &__bar-content {
+        @include container;
+        @include site-width;
+        @include flex;
+        @include flex-v-center;
+      }
+
+    &__main {
+      @include container;
+      @include flex;
+      @include site-width;
+    }
+
+      &__filters {
+        @include flex-no-shrink;
+        width: 25%;
+      }
+
+      &__results {
+        
+      }
+      
+      &__results-bar {
+        @include flex;
+        @include flex-h-between;
+        @include flex-v-center;
+      }
+  }
+}

@@ -9,8 +9,9 @@
         v-model="searchTerm"
         class="search__search-input"
         type="text"
-        placeholder="placeholder"
+        :placeholder="placeholder"
         v-on:keyup="updateAutocomplete"
+        v-on:keyup.enter="submit"
       >
     </div>
 
@@ -59,7 +60,7 @@
         <li 
           v-for="type, index in types"
           class="select__li"
-          @click="updateType(index)"
+          @click="updateType(type)"
         >
           {{ type.name }}
         </li>
@@ -82,10 +83,10 @@ export default {
 
   props: {
     types: {
-      default: () => [],
+      required: true,
       type: Array // [ { name: String, options: [ { id: Number, name: String } ] } ]
     },
-    endpoint: {
+    endpointAutocomplete: {
       required: true,
       type: String
     }
@@ -93,22 +94,29 @@ export default {
 
   data () {
     return {
-      typeIndex: 0,
-      typeDropdownActive: false,
+      autocomplete: [], // [ { title: String, url: String } ]
+      placeholder: '',
       searchTerm: '',
-      autocomplete: [] // [ { title: String, url: String ]
+      typeDropdownActive: false,
+      typeIndex: 0,
     }
   },
 
   computed: {
     hasAutocompleteOptions () {
-      this.autocomplete.length > 0
+      return this.autocomplete.length > 0
     },
     hasMultipleTypes () {
-      this.types.length > 1
+      return this.types.length > 1
     },
     options () {
       return this.types[this.typeIndex].options
+    },
+    searchParams () {
+      return {
+        type: this.selectedTypeName,
+        search_term: this.searchTerm
+      }
     },
     selectedTypeName () {
       return this.types[this.typeIndex].name
@@ -127,23 +135,15 @@ export default {
   },
 
   methods: {
-    updateAutocomplete () {
-      if(this.searchTerm.length == 0) { 
+    updateAutocomplete (e) {
+      if(this.searchTerm.length < 3 || e.key == 'Enter') { 
         this.resetAutocomplete() 
         return false
       }
 
-      //axios 
-      console.log('update')
+      let data = { params: this.searchParams }
 
-      let data = {
-        params: {
-          type: this.selectedTypeName,
-          search_term: this.searchTerm
-        }
-      }
-
-      axios.post(this.endpoint, data)
+      axios.post(this.endpointAutocomplete, data)
       .then(response => {
         console.log(success)
         this.autocomplete = response.data.autocomplete
@@ -153,8 +153,9 @@ export default {
       })
     },
 
-    updateType (index) {
-      this.typeIndex = index
+    updateType (type) {
+      this.type = type.name
+      this.placeholder = type.placeholder
       this.toggleTypes()
       this.resetSearchTerm()
       this.resetAutocomplete()
@@ -173,6 +174,10 @@ export default {
 
     resetAutocomplete () {
       this.autocomplete = []
+    },
+
+    submit () {
+      this.$emit('submit-search', this.searchParams)
     }
   }
 }
