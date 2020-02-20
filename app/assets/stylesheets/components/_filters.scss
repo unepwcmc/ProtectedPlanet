@@ -12,6 +12,20 @@
         
       }
 
+        &__options {
+          @include text-filter;
+          overflow-y: scroll;
+          max-height: rem-calc(250);
+        }
+
+          &__checkbox {
+
+          }
+
+          &__radio {
+            
+          }
+
   &__trigger {
     @include button-filter-trigger;
   }

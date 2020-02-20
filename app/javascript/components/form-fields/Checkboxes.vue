@@ -6,21 +6,21 @@
         :key="inputId(option)"
         class="checkbox no-margin"
       >
-
-        <input
-          :id="inputId(option)"
-          @change="changeInput($eventHub)"
-          class="checkbox__input"
-          type="checkbox"
-          :value="option.id"
-          v-model="input"
-          
-        >
-
         <label
           :for="inputId(option)"
           class="checkbox__label no-margin flex flex-v-center"
         >
+          <input
+            :id="inputId(option)"
+            @change="changeInput($eventHub)"
+            class="checkbox__input"
+            type="checkbox"
+            :value="option.id"
+            v-model="input"
+          >
+          
+          <span class="checkbox__input-fake" />
+        
           {{ option.title }}
         </label>
       </p>

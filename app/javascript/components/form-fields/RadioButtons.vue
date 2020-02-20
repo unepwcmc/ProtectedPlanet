@@ -6,21 +6,24 @@
         :key="radioId(option)"
         class="radio no-margin"
       >
-        <input
-          :id="radioId(option)"
-          v-model="input"
-          required
-          type="radio"
-          class="radio__input"
-          :value="option.id"
-          :name="name"
-          @click="changeInput(option.id)"
-        >
-
+        
         <label
           :for="radioId(option)"
           class="radio__label no-margin flex flex-v-center"
         >
+          <input
+            :id="radioId(option)"
+            v-model="input"
+            required
+            type="radio"
+            class="radio__input"
+            :value="option.id"
+            :name="name"
+            @click="changeInput(option.id)"
+          />
+          
+          <span class="radio__input-fake" />
+          
           {{ option.title }}
         </label>
       </p>

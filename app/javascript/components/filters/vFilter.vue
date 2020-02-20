@@ -4,21 +4,23 @@
       v-if="title" 
       v-html="title"
     />
+    
+    <div class="filter__options">
+      <checkboxes 
+        v-if="type == 'checkbox'"
+        :id="id"
+        :options="options"
+        v-on:update:options="updateFilter"
+      />
 
-    <checkboxes 
-      v-if="type == 'checkbox'"
-      :id="id"
-      :options="options"
-      v-on:update:options="updateFilter"
-    />
-
-    <radio-buttons 
-      v-if="type == 'radio'"
-      :id="id"
-      :name="name"
-      :options="options"
-      v-on:update:options="updateFilter"
-    />
+      <radio-buttons 
+        v-if="type == 'radio'"
+        :id="id"
+        :name="name"
+        :options="options"
+        v-on:update:options="updateFilter"
+      />
+    </div>
   </div>
 </template>
 

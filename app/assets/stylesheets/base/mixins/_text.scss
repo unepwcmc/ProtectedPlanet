@@ -91,6 +91,11 @@
   font-size: rem-calc(16);
 }
 
+@mixin text-filter {
+  @include text-2;
+  font-size: rem-calc(14);
+}
+
 @mixin text-footer-links {
   @include text-2;
   @include responsive(font-size, rem-calc(16), rem-calc(16), rem-calc(18));
