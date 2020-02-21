@@ -2,6 +2,7 @@
   &__pane {
     border-right: solid 1px $grey;
     margin-right: rem-calc(24);
+    height: 100%;
   }
 
     &__filter-groups {
@@ -23,7 +24,7 @@
           }
 
           &__radio {
-            
+
           }
 
   &__trigger {

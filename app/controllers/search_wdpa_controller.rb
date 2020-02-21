@@ -36,7 +36,20 @@ class SearchWdpaController < ApplicationController
           },
           {
             id: 'designation',
-            options: [ { id: 'designation-1', title: 'Designation 1' }, { id: 'designation-2', title: 'Designation 2' } ], #Ferdi pull from DB
+            options: [  #Ferdi pull from DB
+              { id: 'designation-1', title: 'Designation 1' }, 
+              { id: 'designation-2', title: 'Designation 2' },
+              { id: 'designation-3', title: 'Designation 3' },
+              { id: 'designation-4', title: 'Designation 4' },
+              { id: 'designation-5', title: 'Designation 5' },
+              { id: 'designation-6', title: 'Designation 6' },
+              { id: 'designation-7', title: 'Designation 7' },
+              { id: 'designation-8', title: 'Designation 8' },
+              { id: 'designation-9', title: 'Designation 9' },
+              { id: 'designation-10', title: 'Designation 10' },
+              { id: 'designation-11', title: 'Designation 11' },
+              { id: 'designation-12', title: 'Designation 12' }
+            ],
             title: 'Designation', #Stacy get from yml
             type: 'checkbox'
           },

@@ -39,7 +39,7 @@
         <search-geo-type
           v-for="result, index in results"
           :areas="result.areas"
-          :geo-type="result.geo_type"
+          :geo-type="result.geoType"
           :total="result.total"
           :title="result.title"
           v-on:request-more="requestMore"
@@ -137,7 +137,7 @@ export default {
           area_type: this.areaType,
           filters: this.activeFilterOptions,
           items_per_page: this.itemsPerPage,
-          searchTerm: this.searchTerm
+          search_term: this.searchTerm
         }
       }
 
@@ -194,7 +194,7 @@ export default {
           geo_type: paginationParams.geoType,
           items_per_page: 6,
           requested_page: paginationParams.requestedPage,
-          searchTerm: this.searchTerm
+          search_term: this.searchTerm
         }
       }
 
