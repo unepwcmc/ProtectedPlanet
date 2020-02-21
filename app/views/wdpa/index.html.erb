@@ -1,9 +1,9 @@
-<%= render partial: "./layouts/partials/hero-basic", locals: { 
+<%= render partial: "./layouts/partials/hero-area-types", locals: { 
     title: @cms_page.label, 
     classes: "#{@cms_page.slug} bg-image-overlay--white",
     summary: cms_fragment_render("summary"),
-    button_link: wdpa_search_path,
-    button_text: cms_fragment_render("button-text")
+    button_area_search_url: wdpa_search_path,
+    button_area_search_text: t('thematic_area.wdpa.button-area-search-text')
   }
 %>
 
