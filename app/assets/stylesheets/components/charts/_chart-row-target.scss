@@ -3,7 +3,7 @@
 //--------------------------------------------------
 $chart-row-target-font: $chart-font;
 $chart-row-target-font-color: $chart-font-color;
-$chart-row-target-font-size: $chart-font-size;
+$chart-row-target-font-size: rem-calc(18);
 
 //--------------------------------------------------
 // row target charts
@@ -24,7 +24,7 @@ $chart-row-target-font-size: $chart-font-size;
       fill: $chart-row-target-font-color;
       font-family: $chart-row-target-font;
       font-size: $chart-row-target-font-size;
-      font-weight: 900;
+      font-weight: $bold;
     }
 
     &__stroke {
@@ -38,7 +38,7 @@ $chart-row-target-font-size: $chart-font-size;
       fill: $chart-row-target-font-color;
       font-size: $chart-row-target-font-size;
       font-family: $chart-row-target-font;
-      font-weight: 700;
+      font-weight: $bold;
     }
   }
 }

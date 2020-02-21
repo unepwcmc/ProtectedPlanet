@@ -1,6 +1,6 @@
 <template>
   <div
-    class="select select--search relative"
+    class="select--searchable relative"
     :class="{'select--disabled': isDisabled}"
   >
     <input

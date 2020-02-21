@@ -30,20 +30,20 @@ $circle-large-desktop: rem-calc(344);
 //--------------------------------------------------
 // specific mixins
 //--------------------------------------------------
-@mixin circle-grey-light {
+@mixin circle-grey-xlight {
   @include circle-basic;
   @include circle-medium;
-  background-color: $grey-light;
-  border: solid 2px $grey-light;
+  background-color: $grey-xlight;
+  border: solid 2px $grey-xlight;
 }
 
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-.circle--grey-dark {
+.circle--grey-black {
   @include circle-basic;
   @include circle-large;
-  background-color: $grey-xdark;
+  background-color: $grey-black;
   color: $white;
 }
 

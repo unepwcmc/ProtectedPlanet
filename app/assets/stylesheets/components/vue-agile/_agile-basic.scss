@@ -36,7 +36,6 @@
         }
 
           &__slide-content {
-            @include box-shadow-grey-light;
             @include responsive(margin, 0 $agile-basic-slide-margin-mobile, 0 $agile-basic-slide-margin-tablet, 0 $agile-basic-slide-margin-tablet, 0 $agile-basic-slide-margin-desktop);
             background-color: $white; 
             border: solid 1px $grey-light;
@@ -49,7 +48,6 @@
 
             &__slide-title {
               @include responsive(margin, 0, rem-calc(0 5), rem-calc(0 5), rem-calc(0 10));
-              font-family: $header-font;
             }
 
             &__tooltip {

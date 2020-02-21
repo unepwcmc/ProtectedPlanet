@@ -6,7 +6,6 @@
     >
       
       <v-select-searchable 
-        class="v-select--searchable"
         :config="select.config" 
         :options="select.options"
       >

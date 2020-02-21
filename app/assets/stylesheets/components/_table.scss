@@ -1,8 +1,7 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$table-font: $header-font;
-$table-head-bg-color: $grey-light;
+$table-head-bg-color: $grey-xdark;
 
 $table-horizontal-scroll-cell-width-mobile: 86vw;
 $table-horizontal-scroll-cell-width-tablet: 40vw;
@@ -35,7 +34,7 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
     @include flex-nowrap;
     @include box-shadow-grey;
     background-color: $table-head-bg-color;
-    font-family: $table-font;
+    color: $white;
     margin-top: rem-calc(26);
   }
 
@@ -72,7 +71,6 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
 // tables
 //--------------------------------------------------
   &--horizontal-scroll {
-    font-family: $table-font;
 
     .table {      
       &__row {
@@ -80,8 +78,7 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
         border: none; //temp-refresh needed to override conflicting old styles
 
         @include breakpoint($large) {
-          @include box-shadow-grey-light;
-          border: solid 1px $grey-light;
+          border: solid 1px $grey;
         }
       }
         

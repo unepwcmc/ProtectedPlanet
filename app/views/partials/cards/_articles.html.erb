@@ -12,7 +12,7 @@
 
   <div class="cards__cards">
     <% @items[:cards].each do |card| %>
-      <%= link_to root_path + card[:full_path], title: card[:label], class: 'card bg--grey-light' do %>
+      <%= link_to root_path + card[:full_path], title: card[:label], class: 'card bg--grey-xlight' do %>
         
         <% if cms_fragment_content(:image, card).present? %>
           <div class="card__image" style="background-image: url(<%= cms_fragment_render(:image, card) %>);"></div>

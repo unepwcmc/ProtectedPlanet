@@ -141,6 +141,8 @@ $padding-medium: rem-calc(27);
 // classes
 //--------------------------------------------------
 .button {
+  &--accent { @include button-block; }
+
   &--all {
     @include button-with-icon;
     
