@@ -6,32 +6,32 @@ class SearchWdpaController < ApplicationController
 
     @filter_groups = [
       {
-        title: 'View by', #Stacy get from yml
+        title: I18n.t('global.search.view-by'),
         filters: [
           {
             id: 'geo_type',
             name: 'geo_type',
             options: [ 
-              { id: 'all', title: 'All' }, #Stacy get title from yml
-              { id: 'regions', title: 'Regions' }, #Stacy get title from yml
-              { id: 'countries', title: 'Countries' }, #Stacy get title from yml
-              { id: 'sites', title: 'Protected Areas' } #Stacy get title from yml
+              { id: 'all', title: I18n.t('global.search.view-group-geo-type.options')[0] },
+              { id: 'regions', title: I18n.t('global.search.view-group-geo-type.options')[1] },
+              { id: 'countries', title: I18n.t('global.search.view-group-geo-type.options')[2] },
+              { id: 'sites', title: I18n.t('global.area-types.wdpa') } ## OR I18n.t('global.area-types.oecm')
             ],
             type: 'radio'
           }
         ]
       },
       {
-        title: 'Filter by', #Stacy get from yml
+        title: I18n.t('global.search.filter-by'),
         filters: [
           {
             id: 'type',
             options: [ 
-              { id: 'marine', title: 'Marine' },  #Stacy get title from yml
-              { id: 'terrestrial', title: 'Terrestrial' }, #Stacy get title from yml
-              { id: 'green-list', title: 'Green List' } #Stacy get title from yml
+              { id: 'marine', title: I18n.t('global.search.filter-group-type.options')[0] },
+              { id: 'terrestrial', title: I18n.t('global.search.filter-group-type.options')[1] },
+              { id: 'green-list', title: I18n.t('global.search.filter-group-type.options')[2] }
             ],
-            title: 'Type', #Stacy get from yml
+            title: I18n.t('global.search.filter-group-type.title'),
             type: 'checkbox'
           },
           {
@@ -50,19 +50,19 @@ class SearchWdpaController < ApplicationController
               { id: 'designation-11', title: 'Designation 11' },
               { id: 'designation-12', title: 'Designation 12' }
             ],
-            title: 'Designation', #Stacy get from yml
+            title: I18n.t('global.search.filter-group-designation.title'),
             type: 'checkbox'
           },
           {
             id: 'governance',
             options: [ { id: 'governance-1', title: 'Governance 1' }, { id: 'governance-2', title: 'Governance 2' } ], #Ferdi pull from DB            
-            title: 'Governance', #Stacy get from yml
+            title: I18n.t('global.search.filter-group-governance.title'),
             type: 'checkbox'
           },
           {
             id: 'iucn-category',
             options: [ { id: 'iucn-category-1', title: 'IUCN Category 1' }, { id: 'iucn-category-2', title: 'IUCN Category 2' } ], #Ferdi pull from DB
-            title: 'IUCN Category', #Stacy get from yml
+            title: I18n.t('global.search.filter-group-iucn-category.title'),
             type: 'checkbox'
           }
         ]

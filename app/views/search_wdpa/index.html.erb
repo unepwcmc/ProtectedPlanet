@@ -3,10 +3,14 @@
 
 <div>
   <search-results-areas
+    :autocomplete-area-types="<%= @search_area_types %>"
     endpoint-autocomplete="/search/autocomplete"
     endpoint-pagination="/search-areas-pagination"
     endpoint-search="/search-results-areas"
     :filter-groups="<%= @filter_groups %>"
-    :autocomplete-area-types="<%= @search_area_types %>"
+    text-download="<%= t('global.search.filters') %>"
+    text-filters="<%= t('global.search.filters') %>"
+    text-map="<%= t('global.search.map') %>"
+    
   ></search-results-areas>
 </div>

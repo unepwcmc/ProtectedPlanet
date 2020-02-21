@@ -28,7 +28,29 @@ en:
       search-pas: Search for a protected area...
       search-site: Search...
     search:
+      download: Download
+      filters: Filters
+      filter-by: Filter by
+      filter-group-designation:
+        title: Designations
+      filter-group-governance:
+        title: Governance
+      filter-group-iucn-category:
+        title: IUCN Category
+      filter-group-type:
+        title: Type
+        options:
+          - Marine
+          - Terrestrial
+          - Green List
+      map: Map
       results: results
       no-results: No results. Please search again.
+      view-by: View by
+      view-group-geo-type:
+        options: 
+          - All
+          - Regions
+          - Countries
     status:
       updated: Updated

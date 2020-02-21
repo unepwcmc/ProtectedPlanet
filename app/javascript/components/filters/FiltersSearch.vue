@@ -3,7 +3,8 @@
     <div class="filter__pane">
       <div class="filter__filter-groups">
         <div 
-          v-for="filterGroup in filterGroups"
+          v-for="filterGroup, index in filterGroups"
+          :key="index"
           class="filter__group"
         >
           <h3>{{ filterGroup.title }}</h3>

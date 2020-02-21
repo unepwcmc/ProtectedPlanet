@@ -3,6 +3,7 @@
     <div class="search__bar">
       <div class="search__bar-content">
         <filter-trigger
+          :text="textFilters"
           v-on:toggle-filter-pane="toggleFilterPane"
         />
         
@@ -13,12 +14,12 @@
         />
 
         <map-trigger
+          :text="textMap"
           v-on:toggle-map-pane="toggleMapPane"
         />
 
-        <button
-          class="download__trigger"
-          text="download"
+        <download-trigger
+          :text="textDownload"
         />
       </div>
     </div>
@@ -38,6 +39,7 @@
       <div class="search__results">
         <search-geo-type
           v-for="result, index in results"
+          :key="index"
           :areas="result.areas"
           :geo-type="result.geoType"
           :total="result.total"
@@ -52,6 +54,7 @@
 <script>
 import axios from 'axios'
 import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
+import DownloadTrigger from '../download/DownloadTrigger.vue'
 import FilterTrigger from '../filters/FilterTrigger.vue'
 import FiltersSearch from '../filters/FiltersSearch.vue'
 import MapTrigger from '../map/MapTrigger.vue'
@@ -62,7 +65,15 @@ import SearchGeoType from '../search/SearchGeoType.vue'
 export default {
   name: 'SearchResultsAreas',
 
-  components: { FilterTrigger, FiltersSearch, MapTrigger, MapSearch, SearchAutocompleteTypes, SearchGeoType },
+  components: { 
+    DownloadTrigger,
+    FilterTrigger, 
+    FiltersSearch, 
+    MapTrigger, 
+    MapSearch, 
+    SearchAutocompleteTypes, 
+    SearchGeoType 
+  },
 
   mixins: [ mixinAxiosHelpers ],
 
@@ -90,6 +101,18 @@ export default {
     items_per_page: {
       type: Number,
       default: 3
+    },
+    textDownload: {
+      type: String,
+      required: true
+    },
+    textFilters: {
+      type: String,
+      required: true
+    },
+    textMap: {
+      type: String,
+      required: true
     },
     // noResultsText: {
     //   type: String,
