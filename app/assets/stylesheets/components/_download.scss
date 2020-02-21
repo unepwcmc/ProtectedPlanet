@@ -1,0 +1,5 @@
+.download {
+  &__trigger {
+    @include button-download-trigger;
+  }
+}

@@ -92,14 +92,35 @@ $padding-medium: rem-calc(27);
   @include button-basic; 
   @include icon-cross;
 }
+
+@mixin button-download-trigger {
+  @include button-with-icon;
+  @include button-block($primary, $body-font-colour);
+  &::after { @include icon-download-black; }
+}
+
 @mixin button-dropdown {
   @include button-with-icon;
   &::after { @include icon-chevron-black-down; }
 }
+
 @mixin button-dropdown-up {
   @include button-with-icon;
   &::after { @include icon-chevron-black-up; }
 }
+
+@mixin button-filter-trigger {
+  @include button-with-icon;
+  @include button-outline;
+  &::after { @include icon-filters; }
+}
+
+@mixin button-map-trigger {
+  @include button-with-icon;
+  @include button-outline;
+  &::after { @include icon-pin; }
+}
+
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }
 

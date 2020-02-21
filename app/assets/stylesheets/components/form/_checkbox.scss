@@ -1,0 +1,36 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.checkbox {
+  &__label {
+    @include flex;
+    @include flex-v-center;
+    @include text-filter;
+
+    position: relative;
+  }
+
+    &__input {
+      @include input-hidden;
+
+      &:checked + .checkbox__input-fake {
+        @include input-custom-checkbox-selected();
+      }
+
+      &:focus + .checkbox__input-fake { @include input-custom-focus; } 
+    }
+
+    &__input-fake {
+      @include input-custom-checkbox(rem-calc(20)); 
+    }
+}

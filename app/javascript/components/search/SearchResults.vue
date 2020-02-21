@@ -31,7 +31,7 @@
 
 <script>
 import axios from 'axios'
-import { setCsrfToken } from '../../helpers/request-helpers'
+import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import CardSearchResult from '../card/CardSearchResult.vue'
 import Pagination from '../pagination/Pagination.vue'
 import TabsFake from '../tabs/TabsFake.vue'
@@ -40,6 +40,8 @@ export default {
   name: 'SearchResults',
 
   components: { CardSearchResult, Pagination, TabsFake },
+
+  mixins: [ mixinAxiosHelpers ],
 
   props: {
     endpoint: {
@@ -98,6 +100,8 @@ export default {
           searchTerm: this.searchTerm
         }
       }
+
+      this.axiosSetHeaders()
 
       axios.post(this.endpoint, data)
         .then(response => {

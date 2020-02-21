@@ -5,7 +5,7 @@
 $image-placeholder: black;
 
 //--------------------------------------------------
-// mixins
+// mixins - shared
 //--------------------------------------------------
 @mixin bg-colour($bg, $text) {
   background-color: $bg;
@@ -29,10 +29,17 @@ $image-placeholder: black;
 }
 
 //--------------------------------------------------
+// mixins - specific
+//--------------------------------------------------
+@mixin bg-grey-xlight { @include bg-colour($grey-xlight, $grey-xdark); }
+@mixin bg-grey-light { @include bg-colour($grey-light, $grey-xdark); }
+
+//--------------------------------------------------
 // classes
 //--------------------------------------------------
 .bg--primary { @include bg-colour($primary, $white); }
-.bg--grey-light { @include bg-colour($grey-light, $grey-xdark); }
+.bg--grey-xlight { @include bg-grey-xlight; }
+.bg--grey-light { @include bg-grey-light; }
 .bg--grey-xdark { @include bg-colour($grey-xdark, $white); }
 
 .bg-img {

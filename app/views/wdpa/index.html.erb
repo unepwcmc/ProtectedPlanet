@@ -1,4 +1,3 @@
-
 <%= render partial: "./layouts/partials/hero-basic", locals: { 
     title: @cms_page.label, 
     classes: "#{@cms_page.slug} bg-image-overlay--white",
@@ -7,6 +6,8 @@
     button_text: cms_fragment_render("button-text")
   }
 %>
+
+<%#= link_to 'WDPA Search page', wdpa_search_path %>
 
 <section class="container">
   <%= cms_fragment_render("content") %>

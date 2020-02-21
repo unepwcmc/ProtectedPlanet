@@ -36,6 +36,11 @@ $icon-search-width: rem-calc(21);
   @include icon-circle-chevron(rem-calc(50), rem-calc(72), rem-calc(72));
 }
 
+@mixin icon-earth($size: rem-calc(22)) {
+  @include icon-basic;
+  @include icon-image('earth.svg', $size, $size); 
+}
+
 //--------------------------------------------------
 // mixins for specific classes
 //--------------------------------------------------
@@ -70,11 +75,6 @@ $icon-search-width: rem-calc(21);
 @mixin icon-cross() {
   @include icon-basic;
   @include icon-image('cross.svg', rem-calc(20), rem-calc(20));
-}
-
-@mixin icon-download() {
-  @include icon-basic;
-  @include icon-image('download.svg', rem-calc(20), rem-calc(19));
 }
 
 @mixin icon-chevron-black-down() {
@@ -137,9 +137,34 @@ $icon-search-width: rem-calc(21);
   @include icon-image('circle-chevron-white.svg', rem-calc(34), rem-calc(34));
 }
 
+@mixin icon-download() {
+  @include icon-basic;
+  @include icon-image('download.svg', rem-calc(20), rem-calc(19));
+}
+
+@mixin icon-download-black() {
+  @include icon-basic;
+  @include icon-image('download-black.svg', rem-calc(20), rem-calc(19));
+}
+
+@mixin icon-filters() {
+  @include icon-basic;
+  @include icon-image('filter.svg', rem-calc(19), rem-calc(13));
+}
+
 @mixin icon-info() {
   @include icon-basic;
   @include icon-image('info.svg', rem-calc(23), rem-calc(23));
+}
+
+@mixin icon-loading-spinner() {
+  @include icon-basic;
+  @include icon-image('loading-spinner.svg', rem-calc(40), rem-calc(40));
+}
+
+@mixin icon-pin() {
+  @include icon-basic;
+  @include icon-image('pin.svg', rem-calc(14), rem-calc(20));
 }
 
 @mixin icon-placeholder-image() {
@@ -147,10 +172,7 @@ $icon-search-width: rem-calc(21);
   @include icon-image('image.svg', rem-calc(114), rem-calc(91));
 }
 
-@mixin icon-loading-spinner() {
-  @include icon-basic;
-  @include icon-image('loading-spinner.svg', rem-calc(40), rem-calc(40));
-}
+@mixin icon-region() { @include icon-earth(); }
 
 @mixin icon-search() {
   @include icon-basic;

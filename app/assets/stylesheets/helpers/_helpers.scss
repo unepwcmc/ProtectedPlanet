@@ -1,3 +1,8 @@
+@import './accessibility';
+@import './background';
+@import './border-and-shadows';
+@import './form-fields';
+
 @mixin limit_lines($number, $line-height: 1.25) {
   overflow-y: hidden;
   max-height: calc(#{($number * $line-height) + em} - 1px);
@@ -10,44 +15,6 @@
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
 }
-
-//--------------------------------------------------
-// accessibility
-//--------------------------------------------------
-@import './accessibility';
-
-//--------------------------------------------------
-// backgrounds
-//--------------------------------------------------
-@import './background';
-
-//--------------------------------------------------
-// borders and shadows
-//--------------------------------------------------
-@mixin border($colour){
-  border: solid 1px $colour;
-}
-
-@mixin box-shadow($colour){
-  box-shadow: 2px 2px 4px $colour;
-}
-
-@mixin border-radius { border-radius: $radius-global; }
-
-@mixin border-radius-top($radius) {
-  border-top-right-radius: $radius;
-  border-top-left-radius: $radius;
-}
-
-@mixin border-radius-bottom($radius) {
-  border-bottom-right-radius: $radius;
-  border-bottom-left-radius: $radius;
-}
-
-@mixin border-grey-light { @include border($grey-light); }
-
-@mixin box-shadow-grey-light { @include box-shadow($grey-light); }
-@mixin box-shadow-grey { @include box-shadow($grey); }
 
 //--------------------------------------------------
 // display

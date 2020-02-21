@@ -16,6 +16,8 @@ $select-types-height: rem-calc(75);
   top: 0;
   right: 0;
 
+  .search__bar & { @include responsive(height, rem-calc(49), rem-calc(49), rem-calc(49)); }
+
   .select {
     &__label {
       @include button-with-icon;
@@ -28,6 +30,12 @@ $select-types-height: rem-calc(75);
       &.active::after { @include icon-chevron-white-up; }
 
       &::after { @include icon-chevron-white-down; }
+    }
+
+    &__label-fake {
+      @include flex-center;
+      margin: 0;
+      height: 100%;      
     }
 
     &__ul {
