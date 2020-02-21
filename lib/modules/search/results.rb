@@ -33,7 +33,9 @@ class Search::Results
       id = result["_source"]["id"]
       type = @type_index_map[result["_index"]]
       obj = by_type_and_id[type][id].first
-      obj.is_a?(Comfy::Cms::Fragment) ? obj.record.page : obj
+      # TODO Improve the following
+      obj = obj.is_a?(Comfy::Cms::Fragment) ? obj.record : obj
+      obj.is_a?(Comfy::Cms::Translation) ? obj.page : obj
     end
   end
 

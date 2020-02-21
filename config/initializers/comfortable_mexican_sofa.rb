@@ -129,9 +129,10 @@ ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = ENV["COMFY
 Comfy::Cms::Page.class_eval do
   %w(title content).each do |name|
     define_method(name) do
-      text = self.fragments.where(identifier: name).first.content
+      fragment = self.fragments.where(identifier: name).first
+      return '' unless fragment
       # TODO Currently getting the first 100 characters of the string to make a summary
-      text.length > 100 ? text[0..99] : text
+      fragment.content.length > 100 ? fragment.content[0..99] : fragment.content
     end
   end
 end
