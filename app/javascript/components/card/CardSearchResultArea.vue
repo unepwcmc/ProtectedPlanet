@@ -1,10 +1,19 @@
 <template>
     <a 
-      class="card__link"
+      :class="`card__link card--${geoType}`"
       :href="url"
       title=""
     >
-      <i class="card__icon--region-large" />
+      <i 
+        v-if="!hasCountryOrRegion"
+        class="card__icon--region-large" 
+      />
+
+      <i
+        v-if="isCountry" 
+        class="card__icon--flag-large"
+        :style="{ backgroundImage: `url(${imageFlag})` }"
+      />
       
       <img 
         v-if="image" 
@@ -19,18 +28,34 @@
         class="card__title"
       />
       <p
+        v-if="areas"
         v-html="areas"
       />
     </div>
 
-    <div class="card__groups">
-      <p class="card__group flex flex-v-center">
-        <i class="card__icon--region" />
-        <span>Europe</span>
+    <div 
+      v-if="hasCountryOrRegion"
+      class="card__groups"
+    >
+      <p 
+        v-if="hasCountry"
+        class="card__group flex flex-v-center"
+      >
+        <i 
+          class="card__icon--flag" 
+          :style="{ backgroundImage: `url(${imageFlag})` }"
+        />
+        <span 
+          v-html="country"
+        />
       </p>
-      <p class="card__group flex flex-v-center">
-        <i class="card__icon--flag" />
-        <span>France</span>
+
+      <p 
+        v-if="hasRegion"
+        class="card__group flex flex-v-center"
+      >
+        <i class="card__icon--region" />
+        <span v-html="region" />
       </p>
     </div>
   </a>
@@ -41,21 +66,43 @@ export default {
   name: 'CardSearchResultArea',
 
   props: {
-    title: {
-      type: String,
-      required: true
-    },
-    image: {
-      type: String,
-      required: false
-    },
     areas: {
       type: String,
       required: false
     },
+    country: String,
+    geoType: {
+      type: String,
+      required: true
+    },
+    image: String,
+    imageFlag: String,
+    region: String,
+    title: {
+      type: String,
+      required: true
+    },
     url: {
       type: String,
       required: true
+    }
+  },
+
+  computed: {
+    hasCountry () {
+      return this.country
+    },
+
+    hasCountryOrRegion () {
+      return this.hasCountry || this.hasRegion
+    },
+
+    hasRegion () {
+      return this.region
+    },
+
+    isCountry () {
+      return this.imageFlag && !this.hasCountry
     }
   }
 }

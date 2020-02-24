@@ -173,7 +173,6 @@ $icon-search-width: rem-calc(21);
 }
 
 @mixin icon-region() { @include icon-earth(); }
-@mixin icon-region-large() { @include icon-earth(rem-calc(60)); }
 
 @mixin icon-search() {
   @include icon-basic;
