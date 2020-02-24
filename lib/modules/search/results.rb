@@ -18,6 +18,7 @@ class Search::Results
   }
 
   def objects
+    return @objects if @objects
     by_type_and_id = matches.group_by { |match|
       match["_index"]
     }.each_with_object({}) { |(index, objs), final|
@@ -54,7 +55,11 @@ class Search::Results
 
   def page_items_end(page: PAGE, per_page: PER_PAGE, for_display: false)
     n = page * per_page - 1
-    for_display ? n + 1 : n
+    if for_display
+      n >= objects.count ? objects.count : n + 1
+    else
+      n
+    end
   end
 
   def raw
