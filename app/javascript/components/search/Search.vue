@@ -1,26 +1,26 @@
 <template>
   <div class="search search--main">
-    <button 
+    <button
       v-if="popout"
       class="search__trigger"
       @click="toggleInput"
     />
 
-    <div 
+    <div
       :class="['search__pane', { 'active': isActive, 'popout': popout }]"
       >
-      
-      <input 
+
+      <input
         v-model="searchTerm"
         type="text"
         class="search__input"
-        :placeholder="placeholder" 
+        :placeholder="placeholder"
         v-on:keyup.enter="submit"
       />
 
       <i class="search__icon" />
 
-      <button 
+      <button
         v-show="showClose"
         class="search__close"
         @click="closeInput"
@@ -77,7 +77,7 @@ export default {
 
     openInput () { this.isActive = true },
 
-    closeInput () { 
+    closeInput () {
       if(this.popout) { this.isActive = false }
 
       this.searchTerm = ''
@@ -94,7 +94,7 @@ export default {
 
       axios.post(this.endpoint, data)
       .then(response => {
-        console.log(success)
+        console.log(response)
       })
       .catch(function (error) {
         console.log(error)
