@@ -1,39 +1,14 @@
 class SearchController < ApplicationController
   after_action :enable_caching
 
-  # before_action :ignore_empty_query, only: [:index, :map] ## FERDI - I commented this out so the page would load
-  before_action :load_search, only: [:index, :map]
+  before_action :ignore_empty_query, only: [:search_results]
+  before_action :load_search, only: [:search_results]
 
   def index
-    #render partial: 'grid' if request.xhr? ## FERDI - I think we can delete this?
   end
 
   def search_results
-    search_term = params['params']['search_term']
-    search = Search.search(search_term)
-    results = search.results
-    @results = {
-      search_term: search_term,
-      categories: [
-        { id: 0, title: 'All' }, # Pull id from CMS
-        { id: 0, title: 'News & Stories' }, # Pull id and title from CMS
-        { id: 0, title: 'Resources' } # Pull id and title from CMS
-      ],
-      # TODO get page from params
-      current_page: 1,
-      page_items_start: results.page_items_start(page: 1, for_display: true),
-      page_items_end: results.page_items_end(page: 1, for_display: true),
-      total_items: results.count , # Total items for selected category
-      # TODO get page from params
-      results: results.paginate(page: 1).map do |record|
-        {
-          title: record.respond_to?(:title) ? record.title : record.name,
-          url: 'url',
-          summary: record.respond_to?(:content) ? record.content : record.name,
-          image: 'image url'
-        }
-      end
-    }.to_json
+    @results = Search::FullSerializer.new(@search).serialize
 
     render json: @results
   end
@@ -43,78 +18,15 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @results = Autocompletion.lookup params[:q] ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
+    @results = Autocompletion.lookup params['params']['search'] ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
 
     # render partial: 'search/autocomplete'
     render json: @results
   end
 
   def search_results_areas
-    #for searching for OECMs or WDPAs - hooked it up with the front end - if it is working the page should requeste these results on first load
-
-    @results = [
-      {
-        geoType: 'region',
-        title: I18n.t('global.geo-types.regions'),
-        total: 10,
-        areas: [
-          {
-            title: 'Asia & Pacific',
-            url: 'url to page'
-          }
-        ]
-      },
-      {
-        geoType: 'country',
-        title: I18n.t('global.geo-types.countries'),
-        total: 10,
-        areas: [
-          {
-            areas: 5908,
-            imageFlag: ActionController::Base.helpers.image_url('flags/united-states-of-america.svg'),
-            region: 'America',
-            title: 'United States of America',
-            url: 'url to page'
-          },
-          {
-            areas: 508,
-            imageFlag: ActionController::Base.helpers.image_url('flags/united-kingdom.svg'),
-            region: 'Europe',
-            title: 'United Kingdom',
-            url: 'url to page'
-          },
-          {
-            areas: 508,
-            imageFlag: ActionController::Base.helpers.image_url('flags/germany.svg'),
-            region: 'Europe',
-            title: 'Germany',
-            url: 'url to page'
-          },
-          {
-            areas: 508,
-            imageFlag: ActionController::Base.helpers.image_url('flags/germany.svg'),
-            region: 'Europe',
-            title: 'Germany',
-            url: 'url to page'
-          }
-        ]
-      },
-      {
-        geoType: 'site',
-        title: I18n.t('global.area-types.wdpa'), ## OR I18n.t('global.area_types.oecm')
-        total: 30,
-        areas: [
-          {
-            country: 'Germany',
-            image: '/assets/tiles/FR?type=country&version=1', ##TODO Ferdi fill in with correct image url
-            imageFlag: ActionController::Base.helpers.image_url('flags/germany.svg'),
-            region: 'Europe',
-            title: 'Avenc De Fra Rafel',
-            url: 'url to page'
-          }
-        ]
-      }
-    ].to_json
+    #for searching for OECMs or WDPAs - hooked it up with the front end - if it is working the page should request these results on first load
+    @results = Search::AreasSerializer.new(@search).serialize
 
     render json: @results
   end
@@ -157,13 +69,13 @@ class SearchController < ApplicationController
   private
 
   def ignore_empty_query
-    @query = params[:q]
+    @query = params['params']['search_term'] rescue nil
     redirect_to :root if @query.blank? && filters.empty?
   end
 
   def load_search
     begin
-      @search = Search.search(@query, search_options)
+      @search = Search.search(@query, search_options, search_index)
     rescue => e
       Rails.logger.warn("error in search controller: #{e.message}")
       @search = nil
@@ -176,6 +88,11 @@ class SearchController < ApplicationController
     options = {filters: filters}
     options[:page] = params[:page].to_i if params[:page].present?
     options
+  end
+
+  def search_index
+    # TODO Define mapping for index between FE and BE
+    Search::DEFAULT_INDEX_NAME
   end
 
   def filters

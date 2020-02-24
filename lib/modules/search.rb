@@ -4,14 +4,15 @@ class Search
   ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance, :is_green_list]
   COUNTRY_INDEX = 'countries_'+Rails.env
   PA_INDEX = 'protectedareas_'+Rails.env
-  CMS_INDEX= 'cms_'+Rails.env
+  CMS_INDEX = 'cms_'+Rails.env
+  DEFAULT_INDEX_NAME = [PA_INDEX, COUNTRY_INDEX, CMS_INDEX].join(',')
   attr_reader :search_term, :options
 
   def self.configuration
     @@configuration ||= YAML.load(CONFIGURATION_FILE)
   end
 
-  def self.search search_term, options={}, index_name=PA_INDEX+','+COUNTRY_INDEX+','+CMS_INDEX
+  def self.search search_term, options={}, index_name=DEFAULT_INDEX_NAME
     # after receiving some crazy long search terms that crash elasticsearch
     # we are limiting this to 128 characters
     instance = self.new (search_term.present? ? search_term[0..127] : search_term), options, index_name
