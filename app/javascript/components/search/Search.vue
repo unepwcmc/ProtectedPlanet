@@ -73,33 +73,19 @@ export default {
   },
 
   methods: {
-    toggleInput () { this.isActive = !this.isActive },
-
-    openInput () { this.isActive = true },
-
     closeInput () {
       if(this.popout) { this.isActive = false }
 
       this.searchTerm = ''
     },
 
+    openInput () { this.isActive = true },
+
     submit () {
-      let data = {
-        params: {
-          search_term: this.searchTerm
-        }
-      }
+      this.$emit('submit:search', this.searchTerm)
+    },
 
-      this.axiosSetHeaders()
-
-      axios.post(this.endpoint, data)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
-    }
+    toggleInput () { this.isActive = !this.isActive }
   }
 }
 </script>

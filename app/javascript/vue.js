@@ -33,6 +33,7 @@ import Search from './components/search/Search'
 import SearchAutocompleteTypes from './components/search/SearchAutocompleteTypes'
 import SearchResults from './components/search/SearchResults'
 import SearchResultsAreas from './components/search/SearchResultsAreas'
+import SearchSite from './components/search/SearchSite'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
@@ -77,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         SearchAutocompleteTypes,
         SearchResults,
         SearchResultsAreas,
+        SearchSite,
         SelectWithContent,
         StickyBar,
         StickyNav,

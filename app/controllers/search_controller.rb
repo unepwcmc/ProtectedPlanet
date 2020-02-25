@@ -5,6 +5,9 @@ class SearchController < ApplicationController
   before_action :load_search, only: [:search_results]
 
   def index
+    @categories = [
+      ''
+    ]
   end
 
   def search_results
@@ -69,7 +72,7 @@ class SearchController < ApplicationController
   private
 
   def ignore_empty_query
-    @query = params['params']['search_term'] rescue nil
+    @query = params['search_term'] rescue nil
     redirect_to :root if @query.blank? && filters.empty?
   end
 

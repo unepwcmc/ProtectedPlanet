@@ -154,7 +154,7 @@ export default {
   },
 
   methods: {
-    ajaxSubmission (callback) {
+    ajaxSubmission () {
       let data = {
         params: {
           area_type: this.areaType,

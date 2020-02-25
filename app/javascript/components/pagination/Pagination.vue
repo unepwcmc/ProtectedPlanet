@@ -72,9 +72,9 @@ export default {
   methods: {
     changePage (isActive, direction) {
       if (isActive) {
-        const newPage = direction == 'next' ? this.currentPage + 1 : this.currentPage - 1
+        const requestedPage = direction == 'next' ? this.currentPage + 1 : this.currentPage - 1
         
-        this.$emit('change-page', newPage);
+        this.$emit('update:page', requestedPage);
       }
     }
   }
