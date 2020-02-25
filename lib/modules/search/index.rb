@@ -21,7 +21,11 @@ class Search::Index
   end
 
   def self.create_cms_fragments
-    cms_index = Search::Index.new Search::CMS_INDEX, Comfy::Cms::SearchableFragment.all
+    page_relation = Comfy::Cms::SearchablePage.includes([
+      :fragments_for_index,
+      {:translations_for_index => :fragments_for_index}
+    ])
+    cms_index = Search::Index.new Search::CMS_INDEX, page_relation
     cms_index.create
     cms_index.index
   end

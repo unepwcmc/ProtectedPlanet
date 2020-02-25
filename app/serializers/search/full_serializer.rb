@@ -15,7 +15,7 @@ class Search::FullSerializer < Search::BaseSerializer
       # TODO get page from params
       results: @results.paginate(page: @page).map do |record|
         {
-          title: strip_html(record.respond_to?(:title) ? record.label : record.name),
+          title: strip_html(record.respond_to?(:label) ? record.label : record.name),
           url: 'url',
           summary: strip_html(record.respond_to?(:content) ? record.content : record.name),
           image: 'image url'

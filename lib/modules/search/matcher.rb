@@ -23,9 +23,27 @@ class Search::Matcher
       },
       {
         type: 'multi_match',
-        path: 'content',
-        fields: ['content', 'content.english', 'content.french', 'content.spanish']
-      }
+        path: 'label',
+        fields: ['label', 'label.english', 'label.french', 'label.spanish']
+      },
+      {
+        type: 'nested',
+        path: 'fragments_for_index',
+        fields: %w(
+          fragments_for_index.content fragments_for_index.content.english
+          fragments_for_index.content.french fragments_for_index.content.spanish
+        )
+      },
+      {
+        type: 'nested',
+        path: 'translations_for_index.fragments_for_index',
+        fields: %w(
+          translations_for_index.fragments_for_index.content
+          translations_for_index.fragments_for_index.content.english
+          translations_for_index.fragments_for_index.content.french
+          translations_for_index.fragments_for_index.content.spanish
+        )
+      },
     ]
   }
 

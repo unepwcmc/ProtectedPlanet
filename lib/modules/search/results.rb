@@ -4,7 +4,7 @@ class Search::Results
     @type_index_map = {
       Search::COUNTRY_INDEX => "Country",
       Search::PA_INDEX => "ProtectedArea",
-      Search::CMS_INDEX => "Comfy::Cms::Fragment"
+      Search::CMS_INDEX => "Comfy::Cms::SearchablePage"
     }
   end
 
@@ -33,10 +33,7 @@ class Search::Results
     @objects ||= matches.map do |result|
       id = result["_source"]["id"]
       type = @type_index_map[result["_index"]]
-      obj = by_type_and_id[type][id].first
-      # TODO Improve the following
-      obj = obj.is_a?(Comfy::Cms::Fragment) ? obj.record : obj
-      obj.is_a?(Comfy::Cms::Translation) ? obj.page : obj
+      by_type_and_id[type][id].first
     end
   end
 
