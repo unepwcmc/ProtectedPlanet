@@ -12,7 +12,6 @@
     />
 
     <search-results
-      :noResultsText="noResultsText"
       :results="results"
       :resultsText="resultsText"
       :totalItems="totalItems"
@@ -44,38 +43,41 @@ export default {
   mixins: [ mixinAxiosHelpers ],
 
   props: {
+    categories: {
+      required: true,
+      type: Array // [ { id: Number, title: String } ] 
+    },
     endpoint: {
-      type: String,
-      required: true
+      required: true,
+      type: String
     },
     itemsPerPage: {
-      type: Number,
-      default: 15
+      default: 15,
+      type: Number
     },
     noResultsText: {
-      type: String,
-      required: true
+      required: true,
+      type: String
     },
     placeholder: {
-      type: String,
-      required: true
+      required: true,
+      type: String
     },
     resultsText: {
-      type: String,
-      required: true
+      required: true,
+      type: String
     }
   },
 
   data () {
     return {
       categoryId: '',
-      categories: [], // [ String ]
       currentPage: 0,
-      // defaultCategory: this.categories[0].id,
+      defaultCategory: this.categories[0].id,
       defaultPage: 1,
       pageItemsStart: 0,
       pageItemsEnd: 0,
-      requestedPage: 0,
+      requestedPage: 1,
       results: [], // [ { title: String, url: String, summary: String, image: 'String' } ]
       searchTerm: '',
       totalItems: 0,
@@ -83,12 +85,11 @@ export default {
   },
 
   mounted () {
-    // this.categoryId = this.defaultCategory
+    this.categoryId = this.defaultCategory
   },
 
   mounted () { 
-    console.log('this.requestedPage', this.requestedPage)
-    this.ajaxSubmission()
+    // this.ajaxSubmission()
   },
 
   methods: {
@@ -112,17 +113,23 @@ export default {
         })
     },
 
+    resetAll () {
+      this.categoryId = this.defaultCategory
+      this.requestedPage = this.defaultPage
+    },
+
     updateCategory (categoryId) {
       this.categoryId = categoryId
       this.requestedPage = this.defaultPage
+      this.ajaxSubmission()
     },
 
     updatePage (requestedPage) {
       this.requestedPage = requestedPage
+      this.ajaxSubmission()
     },
 
     updateProperties (data) {
-      this.categories = data.categories
       this.currentPage = data.current_page
       this.pageItemsStart = data.page_items_start
       this.pageItemsEnd = data.page_items_end

@@ -1,6 +1,11 @@
 <template>
   <div class="search--results">
-    <p class="search__total">({{ totalItems }} {{ resultsText }})</p>
+    <p 
+      class="search__total"
+      v-show="hasResults"
+    >
+      ({{ totalItems }} {{ resultsText }})
+    </p>
 
     <div class="cards--search-results">
       <card-search-result
@@ -12,11 +17,6 @@
         :url="result.url"
       />
     </div>
-
-    <p 
-      v-show="!hasResults" 
-      v-html="noResultsText"
-    />
   </div>
 </template>
 
@@ -29,12 +29,7 @@ export default {
   components: { CardSearchResult },
 
   props: {
-    noResultsText: {
-      required: true,
-      type: String
-    },
     results: {
-      required: true,
       type: Array // [ { title: String, url: String, summary: String, image: 'String' } ]
     },
     resultsText: {
@@ -49,7 +44,7 @@ export default {
 
   computed: {
     hasResults () {
-      return this.results.length > 0
+      return this.results != undefined &&  0
     }
   }
 }

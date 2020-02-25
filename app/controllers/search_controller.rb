@@ -6,8 +6,10 @@ class SearchController < ApplicationController
 
   def index
     @categories = [
-      ''
-    ]
+      { id: 0, title: 'All' }, # Pull id from CMS
+      { id: 1, title: 'News & Stories' }, # Pull id and title from CMS
+      { id: 2, title: 'Resources' } # Pull id and title from CMS
+    ].to_json
   end
 
   def search_results

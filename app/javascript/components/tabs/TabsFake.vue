@@ -28,7 +28,7 @@ export default {
         child.isActive = child.id === selectedId
       })
 
-      this.$emit('tab-clicked', selectedId)
+      this.$emit('click:tab', selectedId)
     },
 
     getId (index) {
