@@ -7,12 +7,14 @@ module Autocompletion
     $redis.zrangebylex(AUTOCOMPLETION_KEY, "(#{term.downcase}", "+", limit).map do |result|
       result = result.split("||")
 
-      {
-        term: result[0],
-        name: result[1],
-        type: result[2],
-        identifier: result[3]
-      }
+      term = result[0]
+      name = result[1]
+      type = result[2]
+      identifier = result[3]
+
+      url = type == 'protected_area' ? "/#{identifier}" : "/country/#{identifier}"
+
+      { title: name, url: url }
     end
   end
 

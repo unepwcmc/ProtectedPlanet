@@ -10,6 +10,8 @@ class SearchController < ApplicationController
       { id: 1, title: 'News & Stories' }, # Pull id and title from CMS
       { id: 2, title: 'Resources' } # Pull id and title from CMS
     ].to_json
+
+    @query = params['search_term']
   end
 
   def search_results
@@ -23,7 +25,7 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @results = Autocompletion.lookup params['params']['search'] ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
+    @results = Autocompletion.lookup params['params']['search_term'] ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
 
     # render partial: 'search/autocomplete'
     render json: @results
