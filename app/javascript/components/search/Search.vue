@@ -30,19 +30,10 @@
 </template>
 
 <script>
-import axios from 'axios'
-import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
-
 export default {
   name: 'search',
 
-  mixins: [ mixinAxiosHelpers ],
-
   props: {
-    endpoint: {
-      type: String,
-      required: true
-    },
     placeholder: {
       type: String,
       required: true

@@ -55,6 +55,9 @@ export default {
       default: 15,
       type: Number
     },
+    query: {
+      type: String
+    },
     noResultsText: {
       required: true,
       type: String
@@ -89,7 +92,11 @@ export default {
   },
 
   mounted () { 
-    // this.ajaxSubmission()
+    if(this.query) {
+      console.log('here')
+      this.searchTerm = this.query
+      this.ajaxSubmission()
+    }
   },
 
   methods: {

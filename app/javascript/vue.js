@@ -31,9 +31,9 @@ import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import Search from './components/search/Search'
 import SearchAutocompleteTypes from './components/search/SearchAutocompleteTypes'
-import SearchResults from './components/search/SearchResults'
 import SearchResultsAreas from './components/search/SearchResultsAreas'
 import SearchSite from './components/search/SearchSite'
+import SearchTopbar from './components/search/SearchTopbar'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
@@ -76,9 +76,9 @@ document.addEventListener('DOMContentLoaded', () => {
         NavBurger,
         Search,
         SearchAutocompleteTypes,
-        SearchResults,
         SearchResultsAreas,
         SearchSite,
+        SearchTopbar,
         SelectWithContent,
         StickyBar,
         StickyNav,
