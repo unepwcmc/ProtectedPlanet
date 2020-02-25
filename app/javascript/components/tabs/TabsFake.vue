@@ -33,7 +33,8 @@ export default {
   },
 
   created () {
-    this.selectedId = this.children[0].id
+    this.setDefaultTab()
+    this.$eventHub.$on('reset-search', this.reset)
   },
 
   methods: {
@@ -41,6 +42,14 @@ export default {
       this.selectedId = selectedId
 
       this.$emit('click:tab', selectedId)
+    },
+
+    setDefaultTab () {
+      this.selectedId = this.children[0].id
+    },
+
+    reset () {
+      this.setDefaultTab()
     }
   }
 }

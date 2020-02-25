@@ -116,6 +116,7 @@ export default {
     resetAll () {
       this.categoryId = this.defaultCategory
       this.requestedPage = this.defaultPage
+      this.$eventHub.$emit('reset-search')
     },
 
     updateCategory (categoryId) {
@@ -139,7 +140,7 @@ export default {
     },
 
     updateSearchTerm (searchTerm) {
-      // this.resetAll()
+      this.resetAll()
       this.searchTerm = searchTerm
       this.ajaxSubmission()
     },
