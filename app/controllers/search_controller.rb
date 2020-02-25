@@ -13,7 +13,7 @@ class SearchController < ApplicationController
   end
 
   def search_results
-    @results = Search::FullSerializer.new(@search).serialize
+    @results = Search::FullSerializer.new(@search, {page: params['requested_page']}).serialize
 
     render json: @results
   end
