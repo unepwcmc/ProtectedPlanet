@@ -1,4 +1,6 @@
 class Search::FullSerializer < Search::BaseSerializer
+  include Routeable
+
   def initialize(search, opts={})
     super(search, opts)
     @page = @options[:page] || 1
@@ -16,7 +18,7 @@ class Search::FullSerializer < Search::BaseSerializer
       results: @results.paginate(page: @page).map do |record|
         {
           title: strip_html(record.respond_to?(:label) ? record.label : record.name),
-          url: 'url',
+          url: url(record),
           summary: strip_html(record.respond_to?(:content) ? record.content : record.name),
           image: 'image url'
         }
@@ -28,5 +30,18 @@ class Search::FullSerializer < Search::BaseSerializer
 
   def strip_html(text)
     ActionView::Base.full_sanitizer.sanitize(text)
+  end
+
+  def url(obj)
+    if obj.is_a?(Comfy::Cms::SearchablePage)
+      path = obj.full_path
+      path[0] == '/' ? path[1..-1] : path
+    elsif obj.is_a?(ProtectedArea)
+      protected_area_path(obj.wdpa_id)
+    elsif obj.is_a?(Country)
+      country_path(iso: obj.iso_3)
+    else
+      '#'
+    end
   end
 end
