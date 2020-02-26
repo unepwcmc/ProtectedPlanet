@@ -46,7 +46,7 @@
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
 
 export default {
-  name: 'Tooltip',
+  name: 'tooltip',
 
   mixins: [ mixinPopupCloseListeners({ closeCallback: 'closeTooltip' }) ],
 

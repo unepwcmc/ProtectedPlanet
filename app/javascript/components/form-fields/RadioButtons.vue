@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: 'RadioButtons',
+  name: 'radio-buttons',
 
   props: {
     id: { 

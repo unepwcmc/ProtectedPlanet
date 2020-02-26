@@ -7,8 +7,8 @@
           v-on:toggle-filter-pane="toggleFilterPane"
         />
         
-        <search-autocomplete-types
-          :endpoint-autocomplete="endpointAutocomplete"
+        <search-areas-input-autocomplete
+          :endpoint="endpointAutocomplete"
           :types="autocompleteAreaTypes"
           v-on:submit-search="updateSearchTerm"
         />
@@ -37,13 +37,8 @@
         v-on:update:filter-group="updateFilters"
       />
       <div class="search__results">
-        <search-geo-type
-          v-for="result, index in results"
-          :key="index"
-          :areas="result.areas"
-          :geo-type="result.geoType"
-          :total="result.total"
-          :title="result.title"
+        <search-areas-results
+          :results="results"
           v-on:request-more="requestMore"
         />
       </div>
@@ -59,11 +54,11 @@ import FilterTrigger from '../filters/FilterTrigger.vue'
 import FiltersSearch from '../filters/FiltersSearch.vue'
 import MapTrigger from '../map/MapTrigger.vue'
 import MapSearch from '../map/MapSearch.vue'
-import SearchAutocompleteTypes from '../search/SearchAutocompleteTypes.vue'
-import SearchGeoType from '../search/SearchGeoType.vue'
+import SearchAreasInputAutocomplete from '../search/SearchAreasInputAutocomplete.vue'
+import SearchAreasResults from '../search/SearchAreasResults.vue'
 
 export default {
-  name: 'SearchResultsAreas',
+  name: 'search-areas',
 
   components: { 
     DownloadTrigger,
@@ -71,8 +66,8 @@ export default {
     FiltersSearch, 
     MapTrigger, 
     MapSearch, 
-    SearchAutocompleteTypes, 
-    SearchGeoType 
+    SearchAreasInputAutocomplete,
+    SearchAreasResults
   },
 
   mixins: [ mixinAxiosHelpers ],
@@ -221,8 +216,6 @@ export default {
         }
       }
 
-      console.log('data', data)
-
       axios.post(this.endpointPagination, data)
         .then(response => {
           this.data.results.find(object => object.geo_type === paginationParams.geoType).areas.concat(data.results);
@@ -230,9 +223,6 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
-
-
-      // this.ajaxRequest((data) => { this.results = this.results.concat(data.items) })
     },
 
     toggleFilterPane () {

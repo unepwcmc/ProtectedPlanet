@@ -13,7 +13,7 @@ import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import SearchSiteInput from './SearchSiteInput.vue'
 
 export default {
-  name: 'search-topbar',
+  name: 'search-site-topbar',
 
   components: { SearchSiteInput },
 

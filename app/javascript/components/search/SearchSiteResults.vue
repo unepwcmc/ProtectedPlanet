@@ -24,7 +24,7 @@
 import CardSearchResult from '../card/CardSearchResult.vue'
 
 export default {
-  name: 'SearchSiteResults',
+  name: 'search-site-results',
 
   components: { CardSearchResult },
 

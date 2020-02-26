@@ -29,10 +29,10 @@ import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
-import SearchAutocompleteTypes from './components/search/SearchAutocompleteTypes'
-import SearchResultsAreas from './components/search/SearchResultsAreas'
+import SearchAreas from './components/search/SearchAreas'
+import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
-import SearchTopbar from './components/search/SearchTopbar'
+import SearchSiteTopbar from './components/search/SearchSiteTopbar'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
@@ -73,10 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartSunburst,
         MapInteractive,
         NavBurger,
-        SearchAutocompleteTypes,
-        SearchResultsAreas,
+        SearchAreas,
+        SearchAreasHome,
         SearchSite,
-        SearchTopbar,
+        SearchSiteTopbar,
         SelectWithContent,
         StickyBar,
         StickyNav,

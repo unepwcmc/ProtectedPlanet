@@ -2,7 +2,7 @@
 <%= render partial: "./layouts/partials/hero-small", locals: { title: 'needs pulling in from cms', classes: ""} %>
 
 <div>
-  <search-results-areas
+  <search-areas
     :autocomplete-area-types="<%= @search_area_types %>"
     endpoint-autocomplete="/search/autocomplete"
     endpoint-pagination="/search-areas-pagination"
@@ -12,5 +12,5 @@
     text-filters="<%= t('global.search.filters') %>"
     text-map="<%= t('global.search.map') %>"
     
-  ></search-results-areas>
+  ></search-areas>
 </div>
