@@ -30,7 +30,7 @@ import CardSearchResultArea from '../card/CardSearchResultArea.vue'
 import PaginationMore from '../pagination/PaginationMore.vue'
 
 export default {
-  name: 'search-geo-type',
+  name: 'search-areas-geo-type',
 
   components: { CardSearchResultArea, PaginationMore },
 

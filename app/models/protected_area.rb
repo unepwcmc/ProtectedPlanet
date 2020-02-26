@@ -70,7 +70,7 @@ class ProtectedArea < ApplicationRecord
   end
 
   def as_indexed_json options={}
-    js = self.as_json(
+    self.as_json(
       only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list],
       methods: [:coordinates],
       include: {
@@ -84,7 +84,6 @@ class ProtectedArea < ApplicationRecord
         governance: { only: [:id, :name] }
       }
     )
-    return js
   end
 
   def as_api_feeder

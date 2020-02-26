@@ -75,7 +75,7 @@ import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
 
 export default {
-  name: 'SearchAutocompleteTypes',
+  name: 'search-areas-input-autocomplete',
 
   mixins: [
     mixinAxiosHelpers,
@@ -87,7 +87,7 @@ export default {
       required: true,
       type: Array // [ { name: String, options: [ { id: Number, name: String } ] } ]
     },
-    endpointAutocomplete: {
+    endpoint: {
       required: true,
       type: String
     }
@@ -127,8 +127,6 @@ export default {
     }
   },
 
- 
-
   mounted () {
     // this.addTabFromSearchListener()
     // this.addArrowKeyListeners()
@@ -146,10 +144,13 @@ export default {
 
       this.axiosSetHeaders()
 
-      axios.post(this.endpointAutocomplete, data)
+      axios.post(this.endpoint, data)
       .then(response => {
-        console.log(success)
-        this.autocomplete = response.data.autocomplete
+        if ('autocomplete' in response.data) {
+          this.autocomplete = response.data.autocomplete
+        } else {
+          this.autocomplete = []
+        }
       })
       .catch(function (error) {
         console.log(error)

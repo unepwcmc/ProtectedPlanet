@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'CardSearchResult',
+  name: 'card-search-result',
 
   props: {
     title: {

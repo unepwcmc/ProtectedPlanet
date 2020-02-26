@@ -1,19 +1,23 @@
 <template>
   <ul class="tabs--fake">
-    <li 
+    <tab-fake
       v-for="(child, index) in children" 
-      :key="getId(index)"
-      :class="['tab__trigger', { 'active': child.isActive }]"
-      @click="click(child.id)"
-    >
-      {{ child.title }}
-    </li>
+      :key="index"
+      :id="child.id"
+      :selectedId="selectedId"
+      :title="child.title"
+      v-on:click:tab="click"
+    />
   </ul>
 </template>
 
 <script>
+import TabFake from './TabFake.vue'
+
 export default {
-  name: 'TabsFake',
+  name: 'tabs-fake',
+
+  components: { TabFake },
 
   props: {
     children: {
@@ -22,17 +26,30 @@ export default {
     }
   },
 
+  data () {
+    return {
+      selectedId: 0
+    }
+  },
+
+  created () {
+    this.setDefaultTab()
+    this.$eventHub.$on('reset-search', this.reset)
+  },
+
   methods: {
     click (selectedId) {
-      this.children.forEach(child => {
-        child.isActive = child.id === selectedId
-      })
+      this.selectedId = selectedId
 
-      this.$emit('tab-clicked', selectedId)
+      this.$emit('click:tab', selectedId)
     },
 
-    getId (index) {
-      return `tab-${this.id}-${index}`
+    setDefaultTab () {
+      this.selectedId = this.children[0].id
+    },
+
+    reset () {
+      this.setDefaultTab()
     }
   }
 }

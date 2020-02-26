@@ -39,16 +39,11 @@
 
     visibility: hidden;
   }
-
+  
+  &--region { @include icon-region; }
   &--search { @include icon-search; }
   &--shield { @include icon-shield; }
   &--sort { @include icon-sort; }
-
-  &--worldwide {
-    @include icon-basic;
-    background-image: image-url('icons/worldwide.svg');
-    width: rem-calc(60); height: rem-calc(60);
-  }
 
 //--------------------------------------------------
 // helpers

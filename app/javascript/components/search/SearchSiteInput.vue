@@ -1,26 +1,26 @@
 <template>
   <div class="search search--main">
-    <button 
+    <button
       v-if="popout"
       class="search__trigger"
       @click="toggleInput"
     />
 
-    <div 
+    <div
       :class="['search__pane', { 'active': isActive, 'popout': popout }]"
       >
-      
-      <input 
+
+      <input
         v-model="searchTerm"
         type="text"
         class="search__input"
-        :placeholder="placeholder" 
+        :placeholder="placeholder"
         v-on:keyup.enter="submit"
       />
 
       <i class="search__icon" />
 
-      <button 
+      <button
         v-show="showClose"
         class="search__close"
         @click="closeInput"
@@ -30,19 +30,10 @@
 </template>
 
 <script>
-import axios from 'axios'
-import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
-
 export default {
-  name: 'search',
-
-  mixins: [ mixinAxiosHelpers ],
+  name: 'search-site-input',
 
   props: {
-    endpoint: {
-      type: String,
-      required: true
-    },
     placeholder: {
       type: String,
       required: true
@@ -73,33 +64,19 @@ export default {
   },
 
   methods: {
-    toggleInput () { this.isActive = !this.isActive },
-
-    openInput () { this.isActive = true },
-
-    closeInput () { 
+    closeInput () {
       if(this.popout) { this.isActive = false }
 
       this.searchTerm = ''
     },
 
+    openInput () { this.isActive = true },
+
     submit () {
-      let data = {
-        params: {
-          search_term: this.searchTerm
-        }
-      }
+      this.$emit('submit:search', this.searchTerm)
+    },
 
-      this.axiosSetHeaders()
-
-      axios.post(this.endpoint, data)
-      .then(response => {
-        console.log(success)
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
-    }
+    toggleInput () { this.isActive = !this.isActive }
   }
 }
 </script>

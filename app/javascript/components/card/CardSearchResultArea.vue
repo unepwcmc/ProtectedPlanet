@@ -63,7 +63,7 @@
 
 <script>
 export default {
-  name: 'CardSearchResultArea',
+  name: 'card-search-result-area',
 
   props: {
     areas: {

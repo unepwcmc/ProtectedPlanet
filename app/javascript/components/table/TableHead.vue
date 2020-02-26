@@ -32,7 +32,7 @@ import TableSort from './TableSort'
 import Tooltip from '../tooltip/Tooltip'
 
 export default {
-  name: 'TableHead',
+  name: 'table-head',
 
   components: { TableSort, Tooltip },
 
