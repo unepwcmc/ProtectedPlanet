@@ -31,7 +31,7 @@ class SearchController < ApplicationController
     render json: @results
   end
 
-  def search_results_areas
+  def search_results_areas 
     #for searching for OECMs or WDPAs - hooked it up with the front end - if it is working the page should request these results on first load
     @results = Search::AreasSerializer.new(@search).serialize
 

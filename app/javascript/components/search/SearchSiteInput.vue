@@ -31,7 +31,7 @@
 
 <script>
 export default {
-  name: 'search',
+  name: 'search-site-input',
 
   props: {
     placeholder: {

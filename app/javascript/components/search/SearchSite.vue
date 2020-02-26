@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search 
+    <search-site-input 
       :endpoint="endpoint"
       :placeholder="placeholder"
       v-on:submit:search="updateSearchTerm"
@@ -11,7 +11,7 @@
       v-on:click:tab="updateCategory" 
     />
 
-    <search-results
+    <search-site-results
       :results="results"
       :resultsText="resultsText"
       :totalItems="totalItems"
@@ -31,14 +31,14 @@
 import axios from 'axios'
 import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import Pagination from '../pagination/Pagination.vue'
-import Search from './Search.vue'
-import SearchResults from './SearchResults.vue'
+import SearchSiteInput from './SearchSiteInput.vue'
+import SearchSiteResults from './SearchSiteResults.vue'
 import TabsFake from '../tabs/TabsFake.vue'
 
 export default {
   name: 'search-site',
 
-  components: { Pagination, Search, SearchResults, TabsFake },
+  components: { Pagination, SearchSiteInput , SearchSiteResults, TabsFake },
 
   mixins: [ mixinAxiosHelpers ],
 

@@ -29,7 +29,6 @@ import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
-import Search from './components/search/Search'
 import SearchAutocompleteTypes from './components/search/SearchAutocompleteTypes'
 import SearchResultsAreas from './components/search/SearchResultsAreas'
 import SearchSite from './components/search/SearchSite'
@@ -74,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartSunburst,
         MapInteractive,
         NavBurger,
-        Search,
         SearchAutocompleteTypes,
         SearchResultsAreas,
         SearchSite,

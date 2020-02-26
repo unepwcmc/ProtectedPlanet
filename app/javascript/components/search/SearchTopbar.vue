@@ -1,6 +1,6 @@
 <template>
   <div>
-    <search 
+    <search-site-input
       :placeholder="placeholder"
       :popout="true"
       v-on:submit:search="updateSearchTerm"
@@ -10,12 +10,12 @@
 <script>
 import axios from 'axios'
 import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
-import Search from './Search.vue'
+import SearchSiteInput from './SearchSiteInput.vue'
 
 export default {
   name: 'search-topbar',
 
-  components: { Search },
+  components: { SearchSiteInput },
 
   mixins: [ mixinAxiosHelpers ],
 
@@ -38,13 +38,11 @@ export default {
 
   methods: {
     ajaxSubmission () {
-      let data = {
-        search_term: this.searchTerm
-      }
-
       this.axiosSetHeaders()
 
-      axios.post(this.endpoint, data)
+      const endpoint = this.endpoint + this.searchTerm
+
+      axios.get(endpoint)
         .then(response => {
           console.log('success')
         })
