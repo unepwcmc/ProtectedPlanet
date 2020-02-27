@@ -51,7 +51,7 @@ export default {
       endpoint = endpoint.replace('SEARCHTERM', this.searchTerm)
       endpoint = endpoint.replace('TYPE', this.areaType)
 
-      axios.get(endpoint)
+      axios.post(endpoint)
         .then(response => {
           console.log('success', response)
         })
