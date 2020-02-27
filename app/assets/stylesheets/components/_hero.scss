@@ -2,6 +2,7 @@
 // variables
 //--------------------------------------------------
 
+
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
@@ -12,10 +13,63 @@
   background-size: cover;
 }
 
+@mixin hero-stat-bubble {
+  .hero__stats {
+    @include flex;
+    @include flex-column;
+    @include responsive(margin, rem-calc(22) auto 0 auto, 0 0 0 auto, 0 0 0 0);
+  }
+
+    .hero__icon { 
+      @include responsive(margin-bottom, rem-calc(8), rem-calc(10), rem-calc(16));
+    }
+
+    .hero__stat-number {
+      @include text-accent;
+    }
+
+    .hero__stat-text { 
+      @include responsive(width, 90%, 78%, 60%);
+      @include text-intro;
+      color: $white;
+      font-weight: $bold;
+      line-height: 1;
+      margin-bottom: 1em;
+      text-align: center;
+    }  
+}
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
 .hero {
+//--------------------------------------------------
+// class - area type
+//--------------------------------------------------
+  &--area-type {
+    @include hero-medium;
+    @include hero-stat-bubble;
+    
+    &.wdpa { background-image: image_url('hero/icca.png'); }
+    
+    .hero {
+      &__container {
+        @include flex;
+        @include flex-h-between;
+        @include flex-v-center;
+        @include responsive(flex-direction, column, column, row);
+      }
+
+        &__content {
+          margin-right: 20%;          
+        }
+
+          &__buttons {
+            @include flex;
+          }
+    }
+  }
+
 //--------------------------------------------------
 // class - basic
 //--------------------------------------------------
@@ -47,6 +101,7 @@
 // class - home
 //--------------------------------------------------
   &--home {
+    @include hero-stat-bubble;
     @include responsive(padding-top, rem-calc(28), rem-calc(35), rem-calc(100));
     @include responsive(padding-bottom, rem-calc(48), rem-calc(80), rem-calc(166));
     background: $grey-light image_url('hero/home.png') center no-repeat;
@@ -66,30 +121,6 @@
           &__intro {
             @include text-intro;
             @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
-          }
-
-        &__stats {
-          @include flex;
-          @include flex-column;
-          @include responsive(margin, rem-calc(22) auto 0 auto, 0 0 0 auto, 0 0 0 0);
-        }
-
-          &__icon { 
-            @include responsive(margin-bottom, rem-calc(8), rem-calc(10), rem-calc(16));
-          }
-
-          &__stat-number {
-            @include text-accent;
-          }
-
-          &__stat-text {
-            @include text-intro;
-            @include responsive(width, 90%, 78%, 100%);
-            color: $white;
-            font-weight: $bold;
-            line-height: 1;
-            margin-bottom: 1em;
-            text-align: center;
           }
     }
   }

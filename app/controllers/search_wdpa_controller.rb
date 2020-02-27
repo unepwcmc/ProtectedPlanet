@@ -1,5 +1,7 @@
 class SearchWdpaController < ApplicationController
   def index
+    @pas_percentage_coverage = 30
+
     @search_area_types = [
       { name: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.wdpa') }
     ].to_json

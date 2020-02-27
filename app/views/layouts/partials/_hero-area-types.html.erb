@@ -1,4 +1,4 @@
-<header class="hero--basic <%= get_local_classes local_assigns %>">
+<header class="hero--area-type <%= get_local_classes local_assigns %>">
   <div class="hero__container container">
 
     <div class="hero__content">
@@ -7,12 +7,28 @@
       <% if local_assigns.has_key? :summary %>
         <p class="hero__intro"><%= summary %></p>
       <% end %>
-      
-      <% if local_assigns.has_key? :button_area_search_url %>
-        <%= link_to button_area_search_text, button_area_search_url, title: t('global.links.visit', link: button_area_search_url), class: 'button--primary' %>
-      <% end %>
 
-      <div>Download vue component</div>
+      <div class="hero__buttons">
+        <% if local_assigns.has_key? :button_area_search_url %>
+          <%= link_to button_area_search_text, button_area_search_url, title: t('global.links.visit', link: button_area_search_url), class: 'button--primary' %>
+        <% end %>
+
+        <div>Download vue component</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="hero__stats circle--grey-dark sm-home-hero-stats">
+        <i class="hero__icon icon--shield"></i>
+        <div class="hero__stat-number">
+          <counter 
+            :total="30" 
+            trigger="sm-home-hero-stats" 
+            :decimal="1"
+          ></counter>%
+        </div>
+        <span class="hero__stat-text"><%= t('thematic_area.wdpa.hero-stat-text') %></span>
+      </div>
     </div>
   </div>
 </header>
