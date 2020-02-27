@@ -1,16 +1,65 @@
 <%= render partial: "./layouts/partials/hero-area-types", locals: { 
-    title: @cms_page.label, 
+    button_download_text: cms_fragment_render("button-download"),
+    button_download_url: '', ##TODO this will prob come out because it will be a vue component
+    button_search_text: cms_fragment_render("button-search"),
+    button_search_url: oecm_search_path,
     classes: "#{@cms_page.slug} bg-image-overlay--white",
     summary: cms_fragment_render("summary"),
-    button_area_search_url: oecm_search_path,
-    button_area_search_text: t('thematic_area.oecm.button-area-search-text')
+    title: @cms_page.label
   }
 %>
 
-<section class="container">
-  <%= cms_fragment_render("content") %>
+<%
 
-  <%#= render "partials/search/protected-areas" %>
+@tabs = [
+  {
+    id: 1,
+    title: cms_fragment_render("tab-title-1")
+  },
+  {
+    id: 2,
+    title: cms_fragment_render("tab-title-2")
+  },
+  {
+    id: 3,
+    title: cms_fragment_render("tab-title-3")
+  }   
+].to_json
+%>
+
+<section class="container">
+  <tabs
+    class="tabs--hero"
+    :tab-triggers="<%= @tabs %>"
+  >
+    <template slot-scope="{ selectedId }">
+      <tab-target :id="1" :selected-id="selectedId">
+        <section class="container--medium section-padding--bottom">
+          <%= cms_fragment_render("tab-content-1") %>
+        </section>
+
+        <section class="section-padding--bottom">
+          <%= render "partials/search/protected-areas" %>
+        </section>
+
+        <section>
+          <%= render partial: "partials/maps/main" %>
+        </section>
+      </tab-target>
+
+      <tab-target :id="2" :selected-id="selectedId">
+        <section class="container">
+          <%= cms_fragment_render("tab-content-2") %>
+        </section>
+      </tab-target>
+
+      <tab-target :id="3" :selected-id="selectedId">
+        <section class="container">
+          <%= cms_fragment_render("tab-content-3") %>
+        </section>
+      </tab-target>
+    </template>
+  </tabs>
 </section>
 
 <section>

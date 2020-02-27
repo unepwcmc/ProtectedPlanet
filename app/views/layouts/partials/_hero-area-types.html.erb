@@ -9,11 +9,17 @@
       <% end %>
 
       <div class="hero__buttons">
-        <% if local_assigns.has_key? :button_area_search_url %>
-          <%= link_to button_area_search_text, button_area_search_url, title: t('global.links.visit', link: button_area_search_url), class: 'button--primary' %>
-        <% end %>
+        <%= link_to button_search_text, 
+          button_search_url, 
+          title: t('global.links.visit', link: button_search_url), 
+          class: 'button--primary' 
+        %>
 
-        <div>Download vue component</div>
+        <%= link_to button_download_text, 
+          button_download_url, 
+          title: t('global.links.download', link: button_download_url), 
+          class: 'button--download' 
+        %>
       </div>
     </div>
 
