@@ -49,9 +49,8 @@
   &--area-type {
     @include hero-medium;
     @include hero-stat-bubble;
-    z-index: -1;
-    
-    &.wdpa { background-image: image_url('hero/icca.png'); }
+    background-image: image_url('hero/icca.png');
+    z-index: 0;
     
     .hero {
       &__container {
@@ -65,9 +64,9 @@
           margin-right: 20%;          
         }
 
-          &__buttons {
-            @include flex;
-          }
+          &__buttons { @include flex; }
+
+            &__button-1 { margin-right: rem-calc(28); }
     }
   }
 
@@ -82,8 +81,6 @@
     &.about { background-image: image_url('hero/about.png'); }
     &.equity { background-image: image_url('hero/equity.png'); }
     &.indigenous-and-community-conserved-areas,
-    &.oecms,
-    &.wdpa { background-image: image_url('hero/icca.png'); }
     &.protected-areas-management-effectiveness-pame { background-image: image_url('hero/pame.png'); }
 
     .hero {

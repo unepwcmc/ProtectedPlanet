@@ -12,7 +12,7 @@
         <%= link_to button_search_text, 
           button_search_url, 
           title: t('global.links.visit', link: button_search_url), 
-          class: 'button--primary' 
+          class: 'hero__button-1 button--primary' 
         %>
 
         <%= link_to button_download_text, 
@@ -33,7 +33,7 @@
             :decimal="1"
           ></counter>%
         </div>
-        <span class="hero__stat-text"><%= t('thematic_area.wdpa.hero-stat-text') %></span>
+        <span class="hero__stat-text"><%= hero_stat_text %></span>
       </div>
     </div>
   </div>
