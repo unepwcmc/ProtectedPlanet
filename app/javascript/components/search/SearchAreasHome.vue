@@ -1,5 +1,5 @@
 <template>
-  <div class="search--results-areas">
+  <div class="search--home">
     <search-areas-input-autocomplete
       :endpoint="endpointAutocomplete"
       :types="autocompleteAreaTypes"

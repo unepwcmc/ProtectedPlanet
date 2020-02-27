@@ -146,11 +146,7 @@ export default {
 
       axios.post(this.endpoint, data)
       .then(response => {
-        if ('autocomplete' in response.data) {
-          this.autocomplete = response.data.autocomplete
-        } else {
-          this.autocomplete = []
-        }
+        this.autocomplete = response.data
       })
       .catch(function (error) {
         console.log(error)
