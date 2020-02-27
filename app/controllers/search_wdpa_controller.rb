@@ -1,7 +1,7 @@
 class SearchWdpaController < ApplicationController
   def index
     @search_area_types = [
-      { name: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.wdpa') }
+      { id: 'wdpa', title: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.search-wdpa') }
     ].to_json
 
     @filter_groups = [
