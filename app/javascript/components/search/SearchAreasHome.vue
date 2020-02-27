@@ -9,16 +9,12 @@
 </template>
 
 <script>
-import axios from 'axios'
-import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import SearchAreasInputAutocomplete from '../search/SearchAreasInputAutocomplete.vue'
 
 export default {
   name: 'search-areas-home',
 
   components: { SearchAreasInputAutocomplete },
-
-  mixins: [ mixinAxiosHelpers ],
 
   props: {
     autocompleteAreaTypes: {
@@ -44,20 +40,12 @@ export default {
 
   methods: {
     ajaxSubmission () {
-      this.axiosSetHeaders()
-
       let endpoint = this.endpointSearch
 
       endpoint = endpoint.replace('SEARCHTERM', this.searchTerm)
       endpoint = endpoint.replace('TYPE', this.areaType)
-
-      axios.post(endpoint)
-        .then(response => {
-          console.log('success', response)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+      
+      window.location.href = endpoint
     },
 
     updateSearchTerm (searchParams) {
