@@ -1,33 +1,29 @@
 <template>
   <div class="tabs">
-    <tab-trigger
-      v-for="tab in tabs.triggers"
-      :id="tab.id"
-      :selected-id="selectedId"
-      :title="tab.title"
-      v-on:click:tab="click"
-    />
+    <ul class="tabs__triggers">
+      <tab-trigger
+        v-for="tab in tabTriggers"
+        :id="tab.id"
+        :selected-id="selectedId"
+        :title="tab.title"
+        v-on:click:tab="click"
+      />
+    </ul>
 
-    <tab-target
-      v-for="tab in tabs.targets"
-      :id="tab.id"
-      :selected-id="selectedId"
-      :content="tab.content"
-    />
+    <slot :selected-id="selectedId" />
   </div>
 </template>
 <script>
-import TabTarget from './TabTarget.vue'
 import TabTrigger from './TabTrigger.vue'
 
 export default {
   name: 'tabs',
 
-  components: { TabTarget, TabTrigger },
+  components: { TabTrigger },
 
   props: {
-    tabs: {
-      type: Object, 
+    tabTriggers: {
+      type: Array, // [ { id: Number, title: String } ] 
       required: true
     }
   },
@@ -48,7 +44,7 @@ export default {
     },
 
     setDefaultTab () {
-      this.selectedId = this.tabs.triggers[0].id
+      this.selectedId = this.tabTriggers[0].id
     },
   }
 }

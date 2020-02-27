@@ -49,6 +49,7 @@
   &--area-type {
     @include hero-medium;
     @include hero-stat-bubble;
+    z-index: -1;
     
     &.wdpa { background-image: image_url('hero/icca.png'); }
     

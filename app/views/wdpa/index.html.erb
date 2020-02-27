@@ -9,54 +9,55 @@
 
 <%
 
-@tabs = {
-  triggers: [
-    {
-      id: 1,
-      title: cms_fragment_render("tab-title-1")
-    },
-    {
-      id: 2,
-      title: cms_fragment_render("tab-title-2")
-    },
-    {
-      id: 3,
-      title: cms_fragment_render("tab-title-3")
-    }   
-  ],
-  targets: [
-    {
-      id: 1,
-      content: cms_fragment_render("tab-content-1")
-    },
-    {
-      id: 2,
-      content: cms_fragment_render("tab-content-2")
-    },
-    {
-      id: 3,
-      content: cms_fragment_render("tab-content-3")
-    }   
-  ]
-}
-
+@tabs = [
+  {
+    id: 1,
+    title: cms_fragment_render("tab-title-1")
+  },
+  {
+    id: 2,
+    title: cms_fragment_render("tab-title-2")
+  },
+  {
+    id: 3,
+    title: cms_fragment_render("tab-title-3")
+  }   
+].to_json
 %>
 
 <section class="container">
   <tabs
-    :tabs="<%= @tabs.to_json %>"
+    class="tabs--hero"
+    :tab-triggers="<%= @tabs %>"
   >
+    <template slot-scope="{ selectedId }">
+      <tab-target :id="1" :selected-id="selectedId">
+        <section class="container--medium section-padding--bottom">
+          <%= cms_fragment_render("tab-content-1") %>
+        </section>
+
+        <section class="section-padding--bottom">
+          <%= render "partials/search/protected-areas" %>
+        </section>
+
+        <section>
+          <%= render partial: "partials/maps/main" %>
+        </section>
+      </tab-target>
+
+      <tab-target :id="2" :selected-id="selectedId">
+        <section class="container">
+          <%= cms_fragment_render("tab-content-2") %>
+        </section>
+      </tab-target>
+
+      <tab-target :id="3" :selected-id="selectedId">
+        <section class="container">
+          <%= cms_fragment_render("tab-content-3") %>
+        </section>
+      </tab-target>
+    </template>
   </tabs>
-</section>
-
-<section class="container">
-  <%= cms_fragment_render("content") %>
-
-  <%#= render "partials/search/protected-areas" %>
-</section>
-
-<section>
-  <%= render partial: "partials/maps/main" %>
 </section>
 
 <section class="container section-padding">

@@ -1,8 +1,7 @@
 <template>
-  <div
-    :class="['tab__target', { 'active': isActive }]"
-    v-html="content"
-  />
+  <div :class="['tab__target', { 'active': isActive }]" >
+    <slot></slot>
+  </div>
 </template>
 
 <script>
@@ -16,10 +15,6 @@ export default {
     },
     selectedId: {
       type: Number,
-      required: true
-    },
-    content: {
-      type: String,
       required: true
     }
   },
