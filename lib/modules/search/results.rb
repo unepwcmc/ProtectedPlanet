@@ -37,28 +37,6 @@ class Search::Results
     end
   end
 
-  PAGE = 1.freeze
-  PER_PAGE = 8.freeze
-  def paginate(page: PAGE, per_page: PER_PAGE)
-    offset = page_items_start(page: page, per_page: per_page)
-    limit = page_items_end(page: page, per_page: per_page)
-    objects[offset..limit]
-  end
-
-  def page_items_start(page: PAGE, per_page: PER_PAGE, for_display: false)
-    n = (page - 1) * per_page
-    for_display ? n + 1 : n
-  end
-
-  def page_items_end(page: PAGE, per_page: PER_PAGE, for_display: false)
-    n = page * per_page - 1
-    if for_display
-      n >= objects.count ? objects.count : n + 1
-    else
-      n
-    end
-  end
-
   def raw
     @raw ||= matches.map { |result| result['_source'] }
   end

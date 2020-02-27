@@ -50,6 +50,20 @@ class Search
     (results.count / RESULTS_SIZE).ceil
   end
 
+  def page_items_start(page: 1, per_page: RESULTS_SIZE, for_display: false)
+    n = (page - 1) * per_page
+    for_display ? n + 1 : n
+  end
+
+  def page_items_end(page: 1, per_page: RESULTS_SIZE, for_display: false)
+    n = page * per_page - 1
+    if for_display
+      n >= results.count ? results.count : n + 1
+    else
+      n
+    end
+  end
+
   private
   attr_writer :search_term, :options
 
