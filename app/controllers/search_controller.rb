@@ -1,8 +1,8 @@
 class SearchController < ApplicationController
   after_action :enable_caching
 
-  before_action :ignore_empty_query, only: [:search_results]
-  before_action :load_search, only: [:search_results]
+  before_action :ignore_empty_query, only: [:search_results, :search_results_areas]
+  before_action :load_search, only: [:search_results, :search_results_areas]
 
   def index
     @categories = [
@@ -31,7 +31,7 @@ class SearchController < ApplicationController
     render json: @results
   end
 
-  def search_results_areas 
+  def search_results_areas
     #for searching for OECMs or WDPAs - hooked it up with the front end - if it is working the page should request these results on first load
     @results = Search::AreasSerializer.new(@search).serialize
 

@@ -19,8 +19,8 @@ class Search::AreasSerializer < Search::BaseSerializer
     {
       geoType: 'region',
       title: I18n.t('global.geo-types.regions'),
-      total: regions.length,
-      areas: regions.map do |region|
+      total: _regions.length,
+      areas: _regions.map do |region|
         {
           title: region,
           url: 'url to page' # TODO
@@ -36,10 +36,10 @@ class Search::AreasSerializer < Search::BaseSerializer
       title: I18n.t('global.geo-types.countries'),
       total: _countries.length,
       areas: _countries.map do |country|
-        slug = country[:identifier].underscore.gsub(' ', '-')
+        _slug = slug(country[:identifier])
         {
           areas: country[:count],
-          imageFlag: ActionController::Base.helpers.image_url("flags/#{slug}.svg"),
+          imageFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
           region: 'America', # TODO
           title: country[:identifier],
           url: 'url to page' # TODO
@@ -56,16 +56,21 @@ class Search::AreasSerializer < Search::BaseSerializer
       total: _sites.count,
       areas: _sites.map do |site|
         _countries = site.countries
+        _slugs = _countries.map { |c| slug(c.name) }
         _regions = _countries.map(&:region).map(&:name).uniq
         {
           country: _countries.map(&:name).join(','),
-          image: '/assets/tiles/FR?type=country&version=1', ##TODO Ferdi fill in with correct image url
-          imageFlag: ActionController::Base.helpers.image_url('flags/germany.svg'), # TODO Could be more than 1 flag
+          image: '/assets/tiles/FR?type=country&version=1', # TODO This should be a mapbox internal asset
+          imageFlag: _slugs.map { |s| ActionController::Base.helpers.image_url("flags/#{s}.svg") },
           region: _regions.join(','),
           title: site.name,
           url: 'url to page' # TODO
         }
       end
     }
+  end
+
+  def slug(name)
+    name.underscore.gsub(' ', '-')
   end
 end
