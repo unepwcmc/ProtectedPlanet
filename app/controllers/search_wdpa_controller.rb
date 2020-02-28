@@ -7,8 +7,6 @@ class SearchWdpaController < ApplicationController
   before_action :load_filters, only: [:index]
 
   def index
-    @pas_percentage_coverage = 30
-
     @search_area_types = [
       { id: 'wdpa', title: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.search-wdpa') }
     ].to_json

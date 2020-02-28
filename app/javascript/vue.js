@@ -27,6 +27,7 @@ import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTree
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
+import DownloadTrigger from './components/download/DownloadTrigger'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import SearchAreas from './components/search/SearchAreas'
@@ -73,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRectangles,
         ChartRowTarget,
         ChartSunburst,
+        DownloadTrigger,
         MapInteractive,
         NavBurger,
         SearchAreas,
