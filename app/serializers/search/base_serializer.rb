@@ -7,6 +7,7 @@ class Search::BaseSerializer
     @results = search.results
     @search_term = search.search_term
     @options = opts
+    @page = @search.current_page
   end
 
   def serialize

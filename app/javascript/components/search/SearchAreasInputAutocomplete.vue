@@ -9,7 +9,7 @@
         v-model="searchTerm"
         class="search__search-input"
         type="text"
-        :placeholder="placeholder"
+        :placeholder="selectedPlaceholder"
         v-on:keyup="updateAutocomplete"
         v-on:keyup.enter="submit"
       >
@@ -45,12 +45,12 @@
         v-if="hasMultipleTypes"
         :class="['select__label', {'active': typeDropdownActive}]"
         @click="toggleTypes"
-        v-html="selectedTypeName"
+        v-html="selectedTypeTitle"
       />
       <p 
         v-else
         class="select__label-fake"
-        v-html="selectedTypeName"
+        v-html="selectedTypeTitle"
       />
 
       <ul 
@@ -60,9 +60,9 @@
         <li 
           v-for="type, index in types"
           class="select__li"
-          @click="updateType(type)"
+          @click="updateType(type, index)"
         >
-          {{ type.name }}
+          {{ type.title }}
         </li>
       </ul>
     </div>
@@ -85,7 +85,7 @@ export default {
   props: {
     types: {
       required: true,
-      type: Array // [ { name: String, options: [ { id: Number, name: String } ] } ]
+      type: Array // [ { id: String, title: String, placeholder: String } ] } ]
     },
     endpoint: {
       required: true,
@@ -96,10 +96,9 @@ export default {
   data () {
     return {
       autocomplete: [], // [ { title: String, url: String } ]
-      placeholder: '',
       searchTerm: '',
       typeDropdownActive: false,
-      typeIndex: 0,
+      selectedTypeIndex: 0,
     }
   },
 
@@ -110,17 +109,20 @@ export default {
     hasMultipleTypes () {
       return this.types.length > 1
     },
-    options () {
-      return this.types[this.typeIndex].options
-    },
     searchParams () {
       return {
-        type: this.selectedTypeName,
+        type: this.selectedTypeId,
         search_term: this.searchTerm
       }
     },
-    selectedTypeName () {
-      return this.types[this.typeIndex].name
+    selectedPlaceholder () {
+      return this.types[this.selectedTypeIndex].placeholder
+    },
+    selectedTypeId () {
+      return this.types[this.selectedTypeIndex].id
+    },
+    selectedTypeTitle () {
+      return this.types[this.selectedTypeIndex].title
     },
     showResetIcon () {
       return this.searchTerm.length != 0
@@ -153,8 +155,9 @@ export default {
       })
     },
 
-    updateType (type) {
-      this.type = type.name
+    updateType (type, index) {
+      this.selectedTypeIndex = index
+      this.type = type.id
       this.placeholder = type.placeholder
       this.toggleTypes()
       this.resetSearchTerm()
