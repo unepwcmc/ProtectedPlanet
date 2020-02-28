@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'TableSort',
+  name: 'table-sort',
 
   props: {
     sortKey: {

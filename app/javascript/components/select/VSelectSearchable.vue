@@ -95,7 +95,7 @@ const UNDEFINED_ID = '__UNDEFINED__'
 const UNDEFINED_OBJECT = { id: UNDEFINED_ID, name: 'None' }
 
 export default {
-  name: 'VSelectSearch',
+  name: 'v-select-search',
 
   mixins: [
     mixinPopupCloseListeners({closeCallback: 'closeSelect'}),

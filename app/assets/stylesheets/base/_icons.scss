@@ -43,10 +43,12 @@
 
     visibility: hidden;
   }
-
+  
+  &--region { @include icon-region; }
   &--search { @include icon-search; }
   &--shield { @include icon-shield; }
   &--sort { @include icon-sort; }
+
 //--------------------------------------------------
 // helpers
 //--------------------------------------------------

@@ -3,11 +3,10 @@ require 'test_helper'
 class AutocompletionTest < ActiveSupport::TestCase
   test '.lookup, given a search term, returns an array of results' do
     term = 'san guill'
+
     expected_response = [{
-      term: 'san guillermo',
-      name: 'San Guillermo',
-      type: 'protected_area',
-      identifier: '1'
+      title: 'San Guillermo',
+      url: '/1'
     }]
 
     $redis.stubs(:zrangebylex).returns(["san guillermo||San Guillermo||protected_area||1"])

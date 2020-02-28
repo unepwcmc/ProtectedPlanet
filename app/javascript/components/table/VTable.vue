@@ -20,7 +20,7 @@ import mixinId from '../../mixins/mixin-ids'
 import TableRow from './TableRow'
 
 export default {
-  name: 'VTable',
+  name: 'v-table',
 
   components: { TableRow },
 

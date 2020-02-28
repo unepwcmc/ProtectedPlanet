@@ -27,18 +27,21 @@ import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTree
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
+import DownloadTrigger from './components/download/DownloadTrigger'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
-import Search from './components/search/Search'
-import SearchAutocompleteTypes from './components/search/SearchAutocompleteTypes'
-import SearchResults from './components/search/SearchResults'
-import SearchResultsAreas from './components/search/SearchResultsAreas'
+import SearchAreas from './components/search/SearchAreas'
+import SearchAreasHome from './components/search/SearchAreasHome'
+import SearchSite from './components/search/SearchSite'
+import SearchSiteTopbar from './components/search/SearchSiteTopbar'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
 import StickyTab from './components/sticky/StickyTab'
 import SocialShareText from './components/social/SocialShareText'
 import TableHead from './components/table/TableHead'
+import Tabs from './components/tabs/Tabs'
+import TabTarget from './components/tabs/TabTarget'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
 import VSelectSearchable from './components/select/VSelectSearchable'
@@ -71,18 +74,21 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRectangles,
         ChartRowTarget,
         ChartSunburst,
+        DownloadTrigger,
         MapInteractive,
         NavBurger,
-        Search,
-        SearchAutocompleteTypes,
-        SearchResults,
-        SearchResultsAreas,
+        SearchAreas,
+        SearchAreasHome,
+        SearchSite,
+        SearchSiteTopbar,
         SelectWithContent,
         StickyBar,
         StickyNav,
         StickyTab,
         SocialShareText,
         TableHead,
+        Tabs,
+        TabTarget,
         Target11Dashboard,
         Tooltip,
         VSelectSearchable,

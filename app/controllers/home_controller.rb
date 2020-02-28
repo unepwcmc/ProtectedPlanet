@@ -6,8 +6,8 @@ class HomeController < ApplicationController
     @total_oecms = 9876543 
 
     @search_area_types = [
-      { name: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.wdpa') },
-      { name: I18n.t('global.area-types.oecm'), placeholder: I18n.t('global.placeholder.oecm') }
+      { id: 'wdpa', title: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.search-wdpa') },
+      { id: 'oecm', title: I18n.t('global.area-types.oecm'), placeholder: I18n.t('global.placeholder.search-oecms') }
     ].to_json
 
     @pas_title = home_yml[:pas][:title]

@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name: 'Checkboxes',
+  name: 'checkboxes',
 
   props: {
     id: { 

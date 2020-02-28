@@ -34,7 +34,7 @@ import TableHead from '../table/TableHead'
 import VTable from '../table/VTable'
 
 export default {
-  name: 'Target11Dashboard',
+  name: 'target-11-dashboard',
 
   components: { StickyBar, TableHead, VSelectSearchable, VTable },
 

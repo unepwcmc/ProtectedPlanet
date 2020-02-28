@@ -1,16 +1,17 @@
-
 class Search
   CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml'))
   ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance, :is_green_list]
   COUNTRY_INDEX = 'countries_'+Rails.env
   PA_INDEX = 'protectedareas_'+Rails.env
+  CMS_INDEX = 'cms_'+Rails.env
+  DEFAULT_INDEX_NAME = [PA_INDEX, COUNTRY_INDEX, CMS_INDEX].join(',')
   attr_reader :search_term, :options
 
   def self.configuration
     @@configuration ||= YAML.load(CONFIGURATION_FILE)
   end
 
-  def self.search search_term, options={}, index_name=PA_INDEX+','+COUNTRY_INDEX
+  def self.search search_term, options={}, index_name=DEFAULT_INDEX_NAME
     # after receiving some crazy long search terms that crash elasticsearch
     # we are limiting this to 128 characters
     instance = self.new (search_term.present? ? search_term[0..127] : search_term), options, index_name
@@ -47,6 +48,20 @@ class Search
 
   def total_pages
     (results.count / RESULTS_SIZE).ceil
+  end
+
+  def page_items_start(page: 1, per_page: RESULTS_SIZE, for_display: false)
+    n = (page - 1) * per_page
+    for_display ? n + 1 : n
+  end
+
+  def page_items_end(page: 1, per_page: RESULTS_SIZE, for_display: false)
+    n = page * per_page - 1
+    if for_display
+      n >= results.count ? results.count : n + 1
+    else
+      n
+    end
   end
 
   private

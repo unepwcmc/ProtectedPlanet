@@ -49,7 +49,6 @@ $card-search-results-areas-flag-size: rem-calc(60);
 
         &__icon--region-large { 
           @include icon-region;
-          @include card-search-results-areas-flag-size;
         }
 
         &__icon--flag-large { 
@@ -76,6 +75,7 @@ $card-search-results-areas-flag-size: rem-calc(60);
           &__icon--region { 
             @include icon-region; 
             margin-right: rem-calc(6);
+            width: rem-calc(22); height: rem-calc(22);
           }
   }
 }

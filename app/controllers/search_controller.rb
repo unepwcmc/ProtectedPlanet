@@ -1,40 +1,22 @@
 class SearchController < ApplicationController
+  include Concerns::Searchable
   after_action :enable_caching
 
-  # before_action :ignore_empty_query, only: [:index, :map] ## FERDI - I commented this out so the page would load
-  before_action :load_search, only: [:index, :map]
+  before_action :ignore_empty_query, only: [:search_results, :search_results_areas]
+  before_action :load_search, only: [:search_results, :search_results_areas]
 
   def index
-    #render partial: 'grid' if request.xhr? ## FERDI - I think we can delete this?
+    @categories = [
+      { id: 0, title: 'All' }, # Pull id from CMS
+      { id: 1, title: 'News & Stories' }, # Pull id and title from CMS
+      { id: 2, title: 'Resources' } # Pull id and title from CMS
+    ].to_json
+
+    @query = params['search_term']
   end
 
   def search_results
-    @results = {
-      search_term: 'My search',
-      categories: [
-        { id: 0, title: 'All' }, # Pull id from CMS
-        { id: 0, title: 'News & Stories' }, # Pull id and title from CMS
-        { id: 0, title: 'Resources' } # Pull id and title from CMS
-      ],
-      current_page: 1,
-      page_items_start: 1,
-      page_items_end: 15,
-      total_items: 45, # Total items for selected category
-      results: [
-        {
-          title: 'Protected area coverage per country/territory by UN Environment Regions',
-          url: 'http://google.com',
-          summary: 'This page provides access to national statistics for every country and territory classified under the UN Environment Regions.The regions listed below are based upon UN Environment’s Global Environment Outlook (GEO) process.',
-          image: 'image url'
-        },
-        {
-          title: 'Protected area coverage per country/territory by UN Environment Regions',
-          url: 'http://google.com',
-          summary: 'This page provides access to national statistics for every country and territory classified under the UN Environment Regions.The regions listed below are based upon UN Environment’s Global Environment Outlook (GEO) process.',
-          image: 'image url'
-        }
-      ]
-    }.to_json
+    @results = Search::FullSerializer.new(@search, {page: params['requested_page']}).serialize
 
     render json: @results
   end
@@ -44,78 +26,15 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @results = Autocompletion.lookup params[:q] ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
-    
+    @results = Autocompletion.lookup params['params']['search_term'] ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
+
     # render partial: 'search/autocomplete'
     render json: @results
   end
 
   def search_results_areas
-    #for searching for OECMs or WDPAs - hooked it up with the front end - if it is working the page should requeste these results on first load
-
-    @results = [
-      {
-        geoType: 'region',
-        title: I18n.t('global.geo-types.regions'),
-        total: 10,
-        areas: [
-          {
-            title: 'Asia & Pacific',
-            url: 'url to page'
-          }
-        ]
-      },
-      {
-        geoType: 'country',
-        title: I18n.t('global.geo-types.countries'),
-        total: 10,
-        areas: [
-          {
-            areas: 5908,
-            imageFlag: ActionController::Base.helpers.image_url('flags/united-states-of-america.svg'),
-            region: 'America',
-            title: 'United States of America',
-            url: 'url to page'
-          },
-          {
-            areas: 508,
-            imageFlag: ActionController::Base.helpers.image_url('flags/united-kingdom.svg'),
-            region: 'Europe',
-            title: 'United Kingdom',
-            url: 'url to page'
-          },
-          {
-            areas: 508,
-            imageFlag: ActionController::Base.helpers.image_url('flags/germany.svg'),
-            region: 'Europe',
-            title: 'Germany',
-            url: 'url to page'
-          },
-          {
-            areas: 508,
-            imageFlag: ActionController::Base.helpers.image_url('flags/germany.svg'),
-            region: 'Europe',
-            title: 'Germany',
-            url: 'url to page'
-          }
-        ]
-      },
-      {
-        geoType: 'site',
-        title: I18n.t('global.area-types.wdpa'), ## OR I18n.t('global.area_types.oecm')
-        total: 30,
-        areas: [
-          {
-            country: 'Germany',
-            image: '/assets/tiles/FR?type=country&version=1', ##TODO Ferdi fill in with correct image url
-            imageFlag: ActionController::Base.helpers.image_url('flags/germany.svg'),
-            region: 'Europe',
-            title: 'Avenc De Fra Rafel',
-            url: 'url to page'
-          }
-        ]
-      }
-    ].to_json
+    #for searching for OECMs or WDPAs - hooked it up with the front end - if it is working the page should request these results on first load
+    @results = Search::AreasSerializer.new(@search).serialize
 
     render json: @results
   end
@@ -153,33 +72,5 @@ class SearchController < ApplicationController
     ]
 
     render json: @results
-  end
-
-  private
-
-  def ignore_empty_query
-    @query = params[:q]
-    redirect_to :root if @query.blank? && filters.empty?
-  end
-
-  def load_search
-    begin
-      @search = Search.search(@query, search_options)
-    rescue => e
-      Rails.logger.warn("error in search controller: #{e.message}")
-      @search = nil
-    end
-
-    @main_filter = params[:main]
-  end
-
-  def search_options
-    options = {filters: filters}
-    options[:page] = params[:page].to_i if params[:page].present?
-    options
-  end
-
-  def filters
-    params.stringify_keys.slice(*Search::ALLOWED_FILTERS)
   end
 end
