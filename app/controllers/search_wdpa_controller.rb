@@ -12,6 +12,7 @@ class SearchWdpaController < ApplicationController
     ].to_json
 
     @results = Search::AreasSerializer.new(@search).serialize
+    @query = params['search_term']
 
     render json: @results
   end
