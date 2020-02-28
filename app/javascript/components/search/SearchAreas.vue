@@ -142,6 +142,14 @@ export default {
     // this.ajaxSubmission()
   },
 
+  mounted () { 
+    if(this.query) {
+      console.log('here')
+      this.searchTerm = this.query.searchTerm
+      this.ajaxSubmission()
+    }
+  },
+
   computed: {
     hasResults () {
       return this.results.length > 0
