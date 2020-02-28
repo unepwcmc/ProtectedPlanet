@@ -11,26 +11,8 @@
   }
 %>
 
-<%
-
-@tabs = [ #TODO needs moving out the view
-  {
-    id: 1,
-    title: cms_fragment_render("tab-title-1")
-  },
-  {
-    id: 2,
-    title: cms_fragment_render("tab-title-2")
-  },
-  {
-    id: 3,
-    title: cms_fragment_render("tab-title-3")
-  }   
-].to_json
-%>
-
 <section class="container">
-  <%= render partial: "partials/tabs/tabs-thematic-area-database" %>
+  <%= render partial: "partials/tabs/tabs-thematic-area-database", locals: { tabs: @tabs } %>
 </section>
 
 <section class="container section-padding">
