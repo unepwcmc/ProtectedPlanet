@@ -2,6 +2,15 @@ class RegionController < ApplicationController
   before_action :load_vars
 
   def show
+    @iucn_categories = @region.protected_areas_per_iucn_category
+
+    @sources = [
+      {
+        title: 'Source name',
+        date_updated: '2019',
+        url: 'http://link-to-source.com'
+      }
+    ]
   end
 
   private

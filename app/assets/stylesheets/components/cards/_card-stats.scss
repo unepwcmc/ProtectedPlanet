@@ -1,0 +1,21 @@
+&--stats {
+  background-color: $white;
+  margin-bottom: rem-calc(30);
+  padding: rem-calc(40 48);
+
+  .card {
+    &__content {
+      @include flex;
+    }
+    
+      &__stat-box {
+        @include bg-grey-xdark;
+        @include flex;
+        @include flex-center;
+        font-size: rem-calc(20);
+        font-weight: $bold;
+        margin-right: rem-calc(20);
+        width: 30%; height: rem-calc(280);
+      }
+  }
+}

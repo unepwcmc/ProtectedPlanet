@@ -1,0 +1,17 @@
+<div class="cards--stats">
+  <h2>IUCN Management Categories</h2>
+
+  <ul>
+    <% iucn_categories.each do |category| %>
+      <li>
+        <i></i>
+        <span><%= category['iucn_category_name'] %></span>
+        <span><%= category['count'] %></span>, 
+        <span><%= category['percentage'].to_f.round(2) %>&</span>
+        <%= link_to 'View list', '', title: '' %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<!-- search_url("#{location.class.name.downcase}" => location.name, iucn_category: row["iucn_category_name"], main: location.class.name.downcase.to_sym) -->

@@ -1,0 +1,28 @@
+<div class="cards--stats sm-sources">
+  <h2 class="card">Sources</h2>
+  
+  <div card__content>
+    <div class="card__stat-box">
+      <span>Total Sources</span>  
+      
+      <counter 
+        class="" 
+        :total="<%= sources.count %>"
+        trigger="sm-sources" 
+        :decimal="0"
+      ></counter>
+    </div>
+
+    <div>
+      <ol>
+        <% sources.each do |source| %>
+          <li>
+            <span><%= source['title'] %></span>
+            <span>Updated: <%= source['date_updated'] %></span>
+            <span><%= link_to 'Details', source['url'], title: '' %></span>
+          </li>
+        <% end %>
+      </ol>
+    </div>
+  </div>
+</div>
