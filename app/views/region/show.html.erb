@@ -1,124 +1,122 @@
 <div class="bg--grey-xlight">
-  <div class="container--profile container--push-bottom">
-    <section class="container">
-      <div class="bg--grey">
-        <%= @region.name %>
-        <section class="fact">
-      <h2 class="fact__header">Number of Countries</h2>
-      <p class="fact__body fact__single-figure"><%= spaceify(@region.countries.count) %></p>
-    </section>
-    <%= render "partials/stats/facts/number_of_pas", {location: @region} %>
-    <%= render "partials/stats/facts/polygons_points_ratio" %>
-      </div>
-      <div>
-        <% unless @for_pdf %>
-          <h1>map</h1>
-          <div class="js-resizable map map--hero" id="map" data-mobile-height=33 data-bound-from="<%= @region.bounds.first %>" data-bound-to="<%= @region.bounds.last %>" data-iso3="<%= @region.iso %>"
-          data-control-position="bottomleft"></div>
+  <section class="container">
+    <div class="bg--grey">
+      <%= @region.name %>
+      <section class="fact">
+    <h2 class="fact__header">Number of Countries</h2>
+    <p class="fact__body fact__single-figure"><%= spaceify(@region.countries.count) %></p>
+  </section>
+  <%= render "partials/stats/facts/number_of_pas", {location: @region} %>
+  <%= render "partials/stats/facts/polygons_points_ratio" %>
+    </div>
+    <div>
+      <% unless @for_pdf %>
+        <h1>map</h1>
+        <div class="js-resizable map map--hero" id="map" data-mobile-height=33 data-bound-from="<%= @region.bounds.first %>" data-bound-to="<%= @region.bounds.last %>" data-iso3="<%= @region.iso %>"
+        data-control-position="bottomleft"></div>
 
-          <div class="disclaimer">
-            The designations employed and the presentation of material on this map do not
-            imply the expression of any opinion whatsoever on the part of the Secretariat
-            of the United Nations concerning the legal status of any country, territory,
-            city or area or of its authorities, or concerning the delimitation of its
-            frontiers or boundaries.
-          </div>
-        <% end %>
-      </div>
-    </section>
-
-    <section class="container">
-
-      <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
-      <%= render "region/facts/pame_statistics" %>
-    <% end %>
-
-      <% if has_restricted_sites? %>
-        <p class="article__paragraph u-bold">Part of the protected areas dataset for <%= @country.name %> is restricted.</p>
+        <div class="disclaimer">
+          The designations employed and the presentation of material on this map do not
+          imply the expression of any opinion whatsoever on the part of the Secretariat
+          of the United Nations concerning the legal status of any country, territory,
+          city or area or of its authorities, or concerning the delimitation of its
+          frontiers or boundaries.
+        </div>
       <% end %>
+    </div>
+  </section>
+
+  <section class="container">
+
+    <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
+    <%= render "region/facts/pame_statistics" %>
+  <% end %>
+
+    <% if has_restricted_sites? %>
+      <p class="article__paragraph u-bold">Part of the protected areas dataset for <%= @country.name %> is restricted.</p>
+    <% end %>
 
 <!--         <% unless @for_pdf %>
-          <p>
-            <a href="/c/calculating-protected-area-coverage" class="link-with-icon"> Learn how we calculate protected area coverage statistics</a>
-          </p>
-        <% end %> -->
+        <p>
+          <a href="/c/calculating-protected-area-coverage" class="link-with-icon"> Learn how we calculate protected area coverage statistics</a>
+        </p>
+      <% end %> -->
 
-    </section>
+  </section>
 
-    
-    <section class="container">
-      <div class="flex flex-h-between">
-        <%= render partial: "partials/stats/stats-coverage", locals: { 
-          stats: @terrestrial_stats, 
-          type: 'terrestrial' 
-        } %>
+  
+  <section class="container">
+    <div class="flex flex-h-between">
+      <%= render partial: "partials/stats/stats-coverage", locals: { 
+        stats: @terrestrial_stats, 
+        type: 'terrestrial' 
+      } %>
 
-        <%= render partial: "partials/stats/stats-coverage", locals: { 
-          stats: @marine_stats, 
-          type: 'marine' 
-        } %>
-      </div>
-    </section>
+      <%= render partial: "partials/stats/stats-coverage", locals: { 
+        stats: @marine_stats, 
+        type: 'marine' 
+      } %>
+    </div>
+  </section>
 
-    <section class="container">
-      <div class="cards--message">
-        <p><%= t('stats.warning').html_safe %></p>
+  <section class="container">
+    <div class="cards--message">
+      <p><%= t('stats.warning').html_safe %></p>
 
-        <% unless @for_pdf || is_regional_page(controller_name) %>
-          <% if @presenter.nr_report_url.present? %>
-            <span class="red bold"></span>
-            <%= link_to "Download the country's latest national report (pdf)", @presenter.nr_report_url, title: "Dowload the national report for #{@country.name}", class: 'link-with-icon bold' %>
-          <% end %>
+      <% unless @for_pdf || is_regional_page(controller_name) %>
+        <% if @presenter.nr_report_url.present? %>
+          <span class="red bold"></span>
+          <%= link_to "Download the country's latest national report (pdf)", @presenter.nr_report_url, title: "Dowload the national report for #{@country.name}", class: 'link-with-icon bold' %>
         <% end %>
-      </p>
-    </section>
-    
-    <section class="container">
-      <div class="flex flex-h-between">
-        <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
-        
-        <%= render "partials/stats/stats-governance", { governance_types: @governance_types} %>
-      </div>
-
-      <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
+      <% end %>
+    </p>
+  </section>
+  
+  <section class="container">
+    <div class="flex flex-h-between">
+      <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
       
-      <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
-    </section>
+      <%= render "partials/stats/stats-governance", { governance_types: @governance_types} %>
+    </div>
 
-    <section>
-      <h2 class="fact__header">Countries & territories</h2>
-  <div class="fact__body">
+    <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
+    
+    <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
+  </section>
 
-    <% if countries_and_territories.any? %>
-      <p class="fact__subheader"><i class="fa fa-level-down"></i> Countries & territories</p>
-      <div class="u-scrollable-wrapper">
-        <table class="table js-sortable-table">
-          <thead>
-            <tr class="table__header">
-              <th class="table__column table__column--with-sorting">Name</th>
-              <th class="table__column table__column--with-sorting">Code</th>
+  <section>
+    <h2 class="fact__header">Countries & territories</h2>
+<div class="fact__body">
+
+  <% if countries_and_territories.any? %>
+    <p class="fact__subheader"><i class="fa fa-level-down"></i> Countries & territories</p>
+    <div class="u-scrollable-wrapper">
+      <table class="table js-sortable-table">
+        <thead>
+          <tr class="table__header">
+            <th class="table__column table__column--with-sorting">Name</th>
+            <th class="table__column table__column--with-sorting">Code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% countries_and_territories.each do |country| %>
+            <tr class="table__row">
+              <td class="table__label table__label--link"><%= link_to country.name, country_path(country.iso) %></td>
+              <td class="table__value table__value--link"><%= link_to country.iso_3, country_path(country.iso) %></td>
             </tr>
-          </thead>
-          <tbody>
-            <% countries_and_territories.each do |country| %>
-              <tr class="table__row">
-                <td class="table__label table__label--link"><%= link_to country.name, country_path(country.iso) %></td>
-                <td class="table__value table__value--link"><%= link_to country.iso_3, country_path(country.iso) %></td>
-              </tr>
-            <% end %>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
-  </div>
-    </section>
+          <% end %>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>
+  </section>
 
-    <section class="container">
-      <div class="cards--message">
-        <h2>citation</h2>
-        <p>UNEP-WCMC (<%= Date.today.year %>). Protected Area Profile for <%= @region.name %> from the World Database of Protected Areas, <%= Date.today.strftime("%B %Y") %>. Available at: <a href="/">www.protectedplanet.net</a></p>
-      </div>
-    </section>
-  </div>
+  <section class="container">
+    <div class="cards--message">
+      <h2>citation</h2>
+      <p>UNEP-WCMC (<%= Date.today.year %>). Protected Area Profile for <%= @region.name %> from the World Database of Protected Areas, <%= Date.today.strftime("%B %Y") %>. Available at: <a href="/">www.protectedplanet.net</a></p>
+    </div>
+  </section>
 </div>

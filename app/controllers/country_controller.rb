@@ -3,6 +3,20 @@ class CountryController < ApplicationController
   before_action :load_vars, except: [:codes, :compare]
 
   def show
+    presenter = StatisticPresenter.new @country
+    
+    @marine_stats = {
+      protected_km2: presenter.pa_marine_area.round(0),
+      protected_percentage: presenter.percentage_pa_marine_cover.round(2),
+      total_km2: presenter.marine_area.round(0)
+    }
+
+    @terrestrial_stats = {
+      protected_km2: presenter.pa_land_area.round(0),
+      protected_percentage: presenter.percentage_pa_land_cover.round(2),
+      total_km2: presenter.land_area.round(0)
+    }
+
     respond_to do |format|
       format.html
       format.pdf {
@@ -50,7 +64,6 @@ class CountryController < ApplicationController
 
     @country or raise_404
 
-    @presenter = StatisticPresenter.new @country
     @pame_statistics = @country.pame_statistic
     @designations_by_jurisdiction = @country.designations.group_by { |design|
       design.jurisdiction.name rescue "Not Reported"
