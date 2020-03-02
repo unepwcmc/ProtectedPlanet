@@ -97,6 +97,9 @@ export default {
       type: Number,
       default: 3
     },
+    query: {
+      type: String
+    },
     textDownload: {
       type: String,
       required: true
@@ -145,7 +148,7 @@ export default {
   mounted () { 
     if(this.query) {
       console.log('here')
-      this.searchTerm = this.query.searchTerm
+      this.searchTerm = this.query
       this.ajaxSubmission()
     }
   },
@@ -196,7 +199,8 @@ export default {
     },
 
     updateProperties (data) {
-      this.results = data
+      this.results = []
+      // data
       // this.searchTerm = data.search_term
     },
 

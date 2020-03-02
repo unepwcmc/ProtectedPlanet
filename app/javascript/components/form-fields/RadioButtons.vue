@@ -58,7 +58,7 @@ export default {
   },
 
   created () {
-    this.changeInput(this.options[0].id)
+    // this.changeInput(this.options[0].id)
     this.$eventHub.$on('reset-search', this.reset)
   },
 
