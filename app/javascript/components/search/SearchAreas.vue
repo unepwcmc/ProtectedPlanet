@@ -6,7 +6,7 @@
           :text="textFilters"
           v-on:toggle-filter-pane="toggleFilterPane"
         />
-        
+
         <search-areas-input-autocomplete
           :endpoint="endpointAutocomplete"
           :types="autocompleteAreaTypes"
@@ -23,14 +23,14 @@
         />
       </div>
     </div>
-    
-    <map-search 
+
+    <map-search
       class="search__map"
       :isActive="isMapPaneActive"
     />
 
     <div class="search__main">
-      <filters-search 
+      <filters-search
         class="search__filters"
         :filter-groups="filterGroups"
         :isActive="isFilterPaneActive"
@@ -60,12 +60,12 @@ import SearchAreasResults from '../search/SearchAreasResults.vue'
 export default {
   name: 'search-areas',
 
-  components: { 
+  components: {
     DownloadTrigger,
-    FilterTrigger, 
-    FiltersSearch, 
-    MapTrigger, 
-    MapSearch, 
+    FilterTrigger,
+    FiltersSearch,
+    MapTrigger,
+    MapSearch,
     SearchAreasInputAutocomplete,
     SearchAreasResults
   },
@@ -145,7 +145,7 @@ export default {
     // this.ajaxSubmission()
   },
 
-  mounted () { 
+  mounted () {
     if(this.query) {
       console.log('here')
       this.searchTerm = this.query
@@ -172,7 +172,7 @@ export default {
 
       this.axiosSetHeaders()
 
-      axios.post(this.endpointSearch, data)
+      axios.get(this.endpointSearch, data)
         .then(response => {
           console.log('success', response)
           this.updateProperties(response.data)

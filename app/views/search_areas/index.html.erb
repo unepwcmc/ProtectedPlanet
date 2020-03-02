@@ -5,8 +5,8 @@
   <search-areas
     :autocomplete-area-types="<%= @search_area_types %>"
     endpoint-autocomplete="/search/autocomplete"
-    endpoint-pagination="/search-areas-pagination"
-    endpoint-search="/search-results-areas"
+    endpoint-pagination=<%= "/#{@area_type}/search-results" %>
+    endpoint-search=<%= "/#{@area_type}/search-results" %>
     :filter-groups="<%= @filter_groups %>"
     query="<%= @query %>"
     text-download="<%= t('global.search.filters') %>"

@@ -78,6 +78,7 @@ Rails.application.routes.draw do
     get '/thematical-areas/wdpa', to: 'wdpa#index'
 
     get '/:area_type/search', to: 'search_areas#index'
+    get '/:area_type/search-results', to: 'search_areas#search_results'
 
     post '/search/autocomplete', to: 'search#autocomplete'
     post '/search-results', to: 'search#search_results'
