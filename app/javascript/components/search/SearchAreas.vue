@@ -199,7 +199,7 @@ export default {
     },
 
     updateProperties (data) {
-      this.results = []
+      this.results = data
       // data
       // this.searchTerm = data.search_term
     },
