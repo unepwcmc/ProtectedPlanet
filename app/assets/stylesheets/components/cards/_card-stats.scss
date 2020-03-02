@@ -12,6 +12,11 @@
       @include flex;
     }
 
+      &__chart-square {
+        margin-right: rem-calc(24);
+        width: 30%;
+      }
+
       &__stat-box {
         @include bg-grey-xdark;
         @include flex;

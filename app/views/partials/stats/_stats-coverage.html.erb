@@ -1,0 +1,43 @@
+<div class="cards--stats cards--stats--half">
+  <h3><%= t("stats.#{type}-title") %></h3>
+
+  <div class="flex">
+    <div class="card__chart-square">
+      
+    </div>
+
+    <div>
+      <div data-fill-value="<%= @presenter.percentage_pa_marine_cover %>" class="cube__inner card__cube-inner"></div>
+      
+      <%= stats[:protected_percentage] %>% <%= t("stats.coverage") %>
+
+      <div>
+        <p>
+          <span><%= commaify stats[:protected_km2] %> km<sup>2</sup></span> <%= t("stats.#{type}-protected") %>
+        </p>
+        
+        <p>
+          <span><%= stats[:total_km2] %> km<sup>2</sup></span> <%= t("stats.#{type}-total") %>
+        </p>
+        
+        <% if !is_regional_page(controller_name) %>
+          <p>
+            <span><%= stats[:protected_national_report] %>%</span>
+            <%= stats[:national_report_version] %><%= t("stats.nr-report-title") %>
+          </p>
+        <% end %>
+        
+        <% if !is_regional_page(controller_name) && stats[:has_pame_stats] %>
+          <div class="card__pame">
+            <p>
+              <span><%= stats[:pame_protected_percentage] %>%</span> <%= t("stats.pame") %>
+            </p>
+            <p>
+              <span><%= stats[:pame_protected_km2] %> km<sup>2</sup></span> <%= t("stats.pame-assessed") %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

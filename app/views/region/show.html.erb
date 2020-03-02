@@ -47,13 +47,16 @@
 
     
     <section class="container">
-      <div class="cards--stats">
-        <h1>terrestrial</h1>
-        <%= render "partials/stats/stats-coverage-terrestrial" %>
-      </div>
-      <div class="cards--stats">
-        <h1>marine</h1>
-        <%= render "partials/stats/stats-coverage-marine" %>
+      <div class="flex flex-h-between">
+        <%= render partial: "partials/stats/stats-coverage", locals: { 
+          stats: @terrestrial_stats, 
+          type: 'terrestrial' 
+        } %>
+
+        <%= render partial: "partials/stats/stats-coverage", locals: { 
+          stats: @marine_stats, 
+          type: 'marine' 
+        } %>
       </div>
     </section>
 
