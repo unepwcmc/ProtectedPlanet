@@ -1,6 +1,10 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
+$circle-small-mobile: rem-calc(16);
+$circle-small-tablet: rem-calc(16);
+$circle-small-desktop: rem-calc(16);
+
 $circle-medium-mobile: rem-calc(217);
 $circle-medium-tablet: rem-calc(217);
 $circle-medium-desktop: rem-calc(249);
@@ -27,6 +31,11 @@ $circle-large-desktop: rem-calc(344);
   @include responsive(height, $circle-medium-mobile, $circle-medium-tablet, $circle-medium-desktop);
 }
 
+@mixin circle-small {
+  @include responsive(width, $circle-small-mobile, $circle-small-tablet, $circle-small-desktop);
+  @include responsive(height, $circle-small-mobile, $circle-small-tablet, $circle-small-desktop);
+}
+
 //--------------------------------------------------
 // specific mixins
 //--------------------------------------------------
@@ -35,6 +44,11 @@ $circle-large-desktop: rem-calc(344);
   @include circle-medium;
   background-color: $grey-xlight;
   border: solid 2px $grey-xlight;
+}
+
+@mixin circle-icon {
+  @include circle-basic;
+  @include circle-small;
 }
 
 //--------------------------------------------------
@@ -46,4 +60,3 @@ $circle-large-desktop: rem-calc(344);
   background-color: $grey-black;
   color: $white;
 }
-

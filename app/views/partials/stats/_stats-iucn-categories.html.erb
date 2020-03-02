@@ -1,14 +1,13 @@
-<div class="cards--stats">
-  <h2>IUCN Management Categories</h2>
+<div class="cards--stats cards--stats--half">
+  <h3>IUCN Management Categories</h3>
 
-  <ul>
+  <ul class="card__ul">
     <% iucn_categories.each do |category| %>
-      <li>
-        <i></i>
-        <span><%= category['iucn_category_name'] %></span>
-        <span><%= category['count'] %></span>, 
-        <span><%= category['percentage'].to_f.round(2) %>&</span>
-        <%= link_to 'View list', '', title: '' %>
+      <li class="card__li">
+        <i class="card__li-icon"></i>
+        <span class="card__li-title"><%= category['iucn_category_name'] %></span>
+        <span><%= category['count'] %>, <%= category['percentage'].to_f.round(2) %>%</span>
+        <%= link_to 'View list', '', title: '', class: 'card__li-a' %>
       </li>
     <% end %>
   </ul>

@@ -1,13 +1,17 @@
 &--stats {
   background-color: $white;
-  margin-bottom: rem-calc(30);
+  margin: rem-calc(30 0);
   padding: rem-calc(40 48);
+
+  &--half {
+    @include responsive(width, 100%, calc(50% - 15px), calc(50% - 15px));
+  }
 
   .card {
     &__content {
       @include flex;
     }
-    
+
       &__stat-box {
         @include bg-grey-xdark;
         @include flex;
@@ -17,5 +21,30 @@
         margin-right: rem-calc(20);
         width: 30%; height: rem-calc(280);
       }
+
+      &__ul { 
+        @include ul-unstyled;
+      }
+
+        &__li {
+          @include flex;
+          border-top: solid 1px $grey-light;
+          padding: rem-calc(14 0);
+
+          &:first-child { border-top: none; }
+        }
+
+          &__li-a { margin-left: auto; }
+
+          &__li-title { 
+            font-weight: $bold;
+            margin-right: rem-calc(24);
+          }
+
+          &__li-icon {
+            @include circle-icon;
+            background-color: $grey;
+            margin-right: rem-calc(24);
+          }
   }
 }

@@ -1,0 +1,23 @@
+<div class="cards--stats cards--stats--half">
+  <h3>Governance types</h3>
+
+  <div>
+    Chart
+    <% governance_types.each do |type| %>
+      <p><%= type["percentage"].to_f.round(2) %>%</p>
+    <% end %>
+  </div>
+
+  <ul class="card__ul">
+    <% governance_types.each do |type| %>
+      <li class="card__li">
+        <i class="card__li-icon"></i>
+        <span class="card__li-title"><%= type['governance_name'] %></span>
+        <span><%= type['count'] %>, <%= type['percentage'].to_f.round(2) %>%</span>
+        <%= link_to 'View list', '', title: '', class: 'card__li-a' %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+  
+<%#= link_to row["governance_name"], search_url("#{location.class.name.downcase}" => location.name, governance: row["governance_name"], main: location.class.name.downcase.to_sym) %>
