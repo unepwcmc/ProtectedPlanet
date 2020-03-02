@@ -2,6 +2,7 @@ class SearchAreasController < ApplicationController
   include Concerns::Searchable
   include Concerns::Filterable
 
+  before_action :check_area_type, only: [:index]
   before_action :ignore_empty_query, only: [:index]
   before_action :load_search, only: [:index]
   before_action :load_filters, only: [:index]
@@ -9,8 +10,6 @@ class SearchAreasController < ApplicationController
   def index
     @results = Search::AreasSerializer.new(@search).serialize
     @query = params['search_term']
-
-    render json: @results
   end
 
   private

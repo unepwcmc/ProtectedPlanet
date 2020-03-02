@@ -31,6 +31,11 @@ module Concerns::Searchable
       Search::DEFAULT_INDEX_NAME
     end
 
+    AREA_TYPES = %w(wdpa oecm).freeze
+    def check_area_type
+      redirect_to :root unless AREA_TYPES.include?(params[:area_type].downcase)
+    end
+
     def filters
       params.stringify_keys.slice(*Search::ALLOWED_FILTERS)
     end
