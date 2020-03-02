@@ -1,4 +1,4 @@
-class SearchWdpaController < ApplicationController
+class SearchAreasController < ApplicationController
   include Concerns::Searchable
   include Concerns::Filterable
 
