@@ -1,6 +1,6 @@
 ### 3.2.9
 
-* Add country, pame_country and marine stats (WDPA February 2020 release).
+* Add country, pame_country and marine stats (WDPA March 2020 release).
 
 ### 3.2.8
 
