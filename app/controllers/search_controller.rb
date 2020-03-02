@@ -6,11 +6,10 @@ class SearchController < ApplicationController
   before_action :load_search, only: [:search_results, :search_results_areas]
 
   def index
-    @categories = [
-      { id: 0, title: 'All' }, # Pull id from CMS
-      { id: 1, title: 'News & Stories' }, # Pull id and title from CMS
-      { id: 2, title: 'Resources' } # Pull id and title from CMS
-    ].to_json
+    categories = Comfy::Cms::Page.where(parent_id: Comfy::Cms::Page.root.id)
+    @categories = categories.map do |c|
+      { id: c.id, title: c.label }
+    end.to_json
 
     @query = params['search_term']
   end
