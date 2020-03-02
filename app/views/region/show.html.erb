@@ -82,7 +82,7 @@
 
       <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
       
-      <%= render "partials/stats/stats-designations", { location: @region } %>
+      <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
     </section>
 
     <section>

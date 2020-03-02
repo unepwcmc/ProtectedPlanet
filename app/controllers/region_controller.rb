@@ -19,6 +19,27 @@ class RegionController < ApplicationController
       total_km2: presenter.land_area.round(0)
     }
 
+    @designations = [
+      {
+        title: 'National designations',
+        total: get_designation_total('National'),
+        has_jurisdiction: has_jurisdiction('National'),
+        jurisdictions: get_jurisdictions('National')
+      }, 
+      {
+        title: 'Regional designations',
+        total: get_designation_total('Regional'),
+        has_jurisdiction: has_jurisdiction('Regional'),
+        jurisdictions: get_jurisdictions('Regional')
+      },
+      {
+        title: 'International designations',
+        total: get_designation_total('International'),
+        has_jurisdiction: has_jurisdiction('International'),
+        jurisdictions: get_jurisdictions('International')
+      }
+    ]
+
     # protected_national_report: presenter.percentage_nr_marine_cover,
     # national_report_version: presenter.nr_version,
 
@@ -43,9 +64,33 @@ class RegionController < ApplicationController
     @region = Region.where(iso: params[:iso].upcase).first
     @region or raise_404
     @presenter = RegionPresenter.new @region
-    @designations_by_jurisdiction = @region.designations.group_by { |design|
+  end
+
+  def designations
+    designations_by_jurisdiction = @region.designations.group_by { |design|
       design.jurisdiction.name rescue "Not Reported"
     }
   end
 
+  def has_jurisdiction type 
+    Jurisdiction.find_by_name(type)
+  end
+
+  def get_designation_total type
+    if designations.include? type then
+      designations[type].count
+    else
+      0
+    end
+  end
+
+  def get_jurisdictions type
+    jurisdiction = has_jurisdiction type
+    
+    if jurisdiction
+      @region.protected_areas_per_designation(jurisdiction)
+    else
+      []
+    end
+  end
 end
