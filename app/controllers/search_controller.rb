@@ -6,9 +6,11 @@ class SearchController < ApplicationController
   before_action :load_search, only: [:search_results, :search_results_areas]
 
   def index
-    @categories = Comfy::Cms::Page.root.children.map do |c|
-      { id: c.id, title: c.label }
-    end.concat([{ id: -1, title: 'All'}]).to_json
+    @categories = [{ id: -1, title: 'All' }]
+    Comfy::Cms::Page.root.children.map do |c|
+      @categories << { id: c.id, title: c.label }
+    end
+    @categories = @categories.to_json
 
     @query = params['search_term']
   end

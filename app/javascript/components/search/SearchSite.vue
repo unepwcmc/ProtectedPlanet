@@ -102,13 +102,14 @@ export default {
   methods: {
     ajaxSubmission () {
       let data = {
+        ancestor: this.categoryId,
         items_per_page: this.itemsPerPage,
         requested_page: this.requestedPage,
         search_term: this.searchTerm
       }
 
-      if(this.categoryId > 0) {
-        data['ancestor'] = this.categoryId
+      if(this.categoryId <= 0) {
+        data['ancestor'] = this.categories.map(c => c[1])
       }
 
       this.axiosSetHeaders()
