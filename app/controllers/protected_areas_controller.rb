@@ -17,6 +17,73 @@ class ProtectedAreasController < ApplicationController
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
 
+    @attributes = [
+      {
+        title: 'Original Name',
+        value: @protected_area.original_name
+      },
+      {
+        title: 'English Designation',
+        value: @protected_area.designation.try(:name) || "Not Reported"
+      },
+      {
+        title: 'IUCN Management Category',
+        value: @protected_area.iucn_category.try(:name) || "Not Reported"
+      },
+      {
+        title: 'Status',
+        value: @protected_area.legal_status.try(:name) || "Not Reported"
+      },
+      {
+        title: 'Type of Designation',
+        value: @protected_area.designation.try(:jurisdiction).try(:name) || "Not Reported"
+      },
+      {
+        title: 'Status Year',
+        value: @protected_area.legal_status_updated_at.try(:strftime, '%Y') || "Not Reported"
+      },
+      {
+        title: 'Sublocation',
+        value: @protected_area.sub_locations.map(&:iso).join(', ')
+      },
+      {
+        title: 'Governance Type',
+        value: @protected_area.governance.try(:name) || "Not Reported"
+      },
+      {
+        title: 'Management Authority',
+        value: @protected_area.management_authority.try(:name) || "Not Reported"
+      },
+      {
+        title: 'Management Plan',
+        value: 'TODO'
+        # value: parse_management_plan(@protected_area.management_plan)
+      },
+      {
+        title: 'International Criteria',
+        value: @protected_area.international_criteria || "Not Reported"
+      }
+    ]
+
+    @locations = get_locations
+
+    @sources = [
+      {
+        title: 'Source name',
+        date_updated: '2019',
+        url: 'http://link-to-source.com'
+      }
+    ]
+
+    @wdpa_other = [] ## 3 other PAs from ...?
+
+
+
+
+
+
+
+
     respond_to do |format|
       format.html
       format.pdf {
@@ -32,6 +99,19 @@ class ProtectedAreasController < ApplicationController
 
   private
 
+  def get_locations
+    locations = []
+    
+    if @countries.any?
+      @countries.each_with_index do |country, i|
+        locations << ActionController::Base.helpers.link_to(country.name, country_path(country.iso))
+      end
+    else
+      locations << 'Areas Beyond National Jurisdiction'
+    end
+    
+    locations.join(', ')
+  end
 
   def record_visit
     return if @protected_area.nil?
