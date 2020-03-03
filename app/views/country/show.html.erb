@@ -11,6 +11,26 @@
         type: 'marine' 
       } %>
     </div>
+
+    <%= render "partials/messages/message-warning-stats" %>
+
+    <div class="flex flex-h-between">
+      <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
+      
+      <%= render "partials/stats/stats-governance", { governance_types: @governance_types} %>
+    </div>
+
+    <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
+
+    <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
+
+    <div class="cards--stats">
+      <h1>Chart - Growth in protected area coverage</h1>
+    </div>
+    <!-- PAs in that country -->
+    <%#= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
+
+    <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
   </section>
 </div>
 

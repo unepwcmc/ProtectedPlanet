@@ -4,21 +4,6 @@ class RegionController < ApplicationController
   def show
     presenter = RegionPresenter.new @region
 
-    @iucn_categories = @region.protected_areas_per_iucn_category
-    @governance_types = @region.protected_areas_per_governance
-
-    @marine_stats = {
-      protected_km2: presenter.pa_marine_area.round(0),
-      protected_percentage: presenter.percentage_pa_marine_cover.round(2),
-      total_km2: presenter.marine_area.round(0)
-    }
-
-    @terrestrial_stats = {
-      protected_km2: presenter.pa_land_area.round(0),
-      protected_percentage: presenter.percentage_pa_land_cover.round(2),
-      total_km2: presenter.land_area.round(0)
-    }
-
     @designations = [
       {
         title: 'National designations',
@@ -40,13 +25,15 @@ class RegionController < ApplicationController
       }
     ]
 
-    # protected_national_report: presenter.percentage_nr_marine_cover,
-    # national_report_version: presenter.nr_version,
+    @iucn_categories = @region.protected_areas_per_iucn_category
 
-    # if(has_pame_stats) {
-    #   @marine_stats['pame_protected_km2'] = presenter.pame_statistic.pame_percentage_pa_marine_cover.round(2)
-    #   @marine_stats['pame_protected_percentage'] = presenter.pame_statistic.pame_pa_marine_area,
-    # }
+    @governance_types = @region.protected_areas_per_governance
+
+    @marine_stats = {
+      protected_km2: presenter.pa_marine_area.round(0),
+      protected_percentage: presenter.percentage_pa_marine_cover.round(2),
+      total_km2: presenter.marine_area.round(0)
+    }
 
     @sources = [
       {
@@ -55,6 +42,12 @@ class RegionController < ApplicationController
         url: 'http://link-to-source.com'
       }
     ]
+
+    @terrestrial_stats = {
+      protected_km2: presenter.pa_land_area.round(0),
+      protected_percentage: presenter.percentage_pa_land_cover.round(2),
+      total_km2: presenter.land_area.round(0)
+    }
   end
 
   private
@@ -66,7 +59,7 @@ class RegionController < ApplicationController
     @presenter = RegionPresenter.new @region
   end
 
-  def designations
+  def designations ##FERDI I am assuming a lot of this will be moved as it is used across region and countries
     designations_by_jurisdiction = @region.designations.group_by { |design|
       design.jurisdiction.name rescue "Not Reported"
     }

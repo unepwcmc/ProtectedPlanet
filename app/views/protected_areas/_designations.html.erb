@@ -5,9 +5,10 @@
 
   <p class="article__paragraph u-margin--page"></p>
   
-  <div class="flex-row-wrap u-pdf-no-break">
-    <% @other_designations.each do |pa| %>
-      <%= render partial: "pa_card", locals: {protected_area: pa} %>
-    <% end %>
+    <div class="flex-row-wrap u-pdf-no-break">
+      <% @other_designations.each do |pa| %>
+        <%= render partial: "pa_card", locals: {protected_area: pa} %>
+      <% end %>
+    </div>
   </div>
 </section>
