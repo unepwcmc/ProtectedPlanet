@@ -113,3 +113,8 @@ filters:
       path: 'categories'
       field: 'categories.id'
       required: true
+    ancestor:
+      type: 'nested'
+      path: 'ancestors'
+      field: 'ancestors.id'
+      required: true

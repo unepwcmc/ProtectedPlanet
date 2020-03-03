@@ -6,7 +6,7 @@ class SearchController < ApplicationController
   before_action :load_search, only: [:search_results, :search_results_areas]
 
   def index
-    @categories = Comfy::Cms::Category.where(categorized_type: 'Comfy::Cms::Page').map do |c|
+    @categories = Comfy::Cms::Page.root.children.map do |c|
       { id: c.id, title: c.label }
     end.to_json
 

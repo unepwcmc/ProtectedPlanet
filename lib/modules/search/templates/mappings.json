@@ -192,6 +192,17 @@
           }
         }
       },
+      "ancestors": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "keyword"
+          }
+        }
+      },
       "categories": {
         "type": "nested",
         "properties": {
