@@ -37,7 +37,7 @@ titles:
     model: "Governance"
     property: "name"
     template: "Protected Areas with Governance '%s'"
-  categories:
+  category:
     type: "model"
     model: "Comfy::Cms::Category"
     property: "label"
@@ -58,7 +58,7 @@ aggregations:
   iucn_category:
     type: "model"
     class: "IucnCategory"
-  categories:
+  category:
     type: "model"
     class: "Comfy::Cms::Category"
 filters:
@@ -108,8 +108,8 @@ filters:
       path: 'countries_for_index.region_for_index'
       field: 'countries_for_index.region_for_index.name'
       required: true
-    categories:
+    category:
       type: 'nested'
       path: 'categories'
-      field: 'categories.label'
+      field: 'categories.id'
       required: true

@@ -1,6 +1,6 @@
 class Search
   CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml'))
-  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance, :is_green_list, :categories]
+  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance, :is_green_list, :category]
   COUNTRY_INDEX = 'countries_'+Rails.env
   PA_INDEX = 'protectedareas_'+Rails.env
   CMS_INDEX = 'cms_'+Rails.env
