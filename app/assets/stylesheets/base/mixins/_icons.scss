@@ -152,6 +152,12 @@ $icon-search-width: rem-calc(21);
   @include icon-image('filter.svg', rem-calc(19), rem-calc(13));
 }
 
+@mixin icon-flag () {
+  @include icon-basic;
+  border-radius: 50%;
+  width: rem-calc(35); height: rem-calc(35);
+}
+
 @mixin icon-info() {
   @include icon-basic;
   @include icon-image('info.svg', rem-calc(23), rem-calc(23));

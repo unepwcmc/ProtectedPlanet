@@ -35,8 +35,6 @@ class RegionController < ApplicationController
       total_km2: presenter.marine_area.round(0)
     }
 
-    @pas = get_pas
-
     @sources = [
       {
         title: 'Source name',
@@ -50,6 +48,13 @@ class RegionController < ApplicationController
       protected_percentage: presenter.percentage_pa_land_cover.round(2),
       total_km2: presenter.land_area.round(0)
     }
+
+    @total_oecm = 0 ##TODO
+    @total_points_percentage = presenter.geometry_ratio[:points]
+    @total_polygons_percentage = presenter.geometry_ratio[:polygons] 
+    @total_wdpa = @region.protected_areas.count
+
+    @wdpa = get_wdpa
   end
 
   private
@@ -89,7 +94,7 @@ class RegionController < ApplicationController
     end
   end
 
-  def get_pas
+  def get_wdpa
     id = @region.id
 
     ProtectedArea.joins(:countries).where("countries.region_id = #{id}").order(:name).first(3)

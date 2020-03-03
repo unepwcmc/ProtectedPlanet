@@ -25,6 +25,8 @@ class CountryController < ApplicationController
         jurisdictions: get_jurisdictions('International')
       }
     ]
+
+    @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
     
     @iucn_categories = @country.protected_areas_per_iucn_category
 
@@ -35,8 +37,6 @@ class CountryController < ApplicationController
       protected_percentage: presenter.percentage_pa_marine_cover.round(2),
       total_km2: presenter.marine_area.round(0)
     }
-
-    @pas = get_pas
 
     @sources = [
       {
@@ -51,6 +51,15 @@ class CountryController < ApplicationController
       protected_percentage: presenter.percentage_pa_land_cover.round(2),
       total_km2: presenter.land_area.round(0)
     }
+
+    @total_oecm = 0 ##TODO
+    @total_pame = @country.protected_areas.with_pame_evaluations.count
+    @total_points_percentage = presenter.geometry_ratio[:points]
+    @total_polygons_percentage = presenter.geometry_ratio[:polygons] 
+    @total_wdpa = @country.protected_areas.count
+
+    @wdpa = get_wdpa
+
     ## Move the has_pame_statistics_for function
     # if(has_pame_stats) { 
     #   @marine_stats['pame_protected_km2'] = presenter.pame_statistic.pame_percentage_pa_marine_cover.round(2)
@@ -140,7 +149,7 @@ class CountryController < ApplicationController
     end
   end
 
-  def get_pas
+  def get_wdpa
     iso = params[:iso].upcase
 
     if iso.size == 2

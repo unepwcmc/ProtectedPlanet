@@ -1,8 +1,24 @@
 <div class="bg--grey-xlight">
   <div class="container">
     
-    <section>
-      
+    <section class="flex">
+      <div class="card--stats card--stats--dark">
+        <div class="flex flex-v-center">
+          <i class="card__flag icon--flag-outline" style="background-image:url('<%= @flag_path[0] %>');"></i>
+          <h1><%= @country.name %></h1>
+        </div>
+        
+        <%= render partial: "partials/stats/stats-general", locals: { 
+          total_oecm: @total_oecm,
+          total_pame: @total_pame,
+          total_points_percentage: @total_points_percentage,
+          total_polygons_percentage: @total_polygons_percentage,
+          total_wdpa: @total_wdpa,
+        } %>
+      </div>
+      <div>
+        MAP
+      </div>
     </section>
 
     <section>
@@ -30,11 +46,11 @@
 
       <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
 
-      <div class="cards--stats">
+      <div class="card--stats">
         <h1>Chart - Growth in protected area coverage</h1>
       </div>
       
-      <%= render partial: "partials/cards/sites", locals: { cards: @pas } %>
+      <%= render partial: "partials/cards/sites", locals: { cards: @wdpa } %>
 
       <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
     </section>

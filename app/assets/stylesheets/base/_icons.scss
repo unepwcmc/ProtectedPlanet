@@ -13,10 +13,15 @@
   &--circle-chevron-green-large-prev { @include icon-circle-chevron-green-large-left; }
   &--circle-chevron-green-large-next { @include icon-circle-chevron-green-large-right; }
 
-  &--earth {
-    @include icon-earth(rem-calc(60));
-  }
+  &--earth { @include icon-earth(rem-calc(60)); }
   
+  &--flag { @include icon-flag; }
+  
+  &--flag-outline { 
+    @include icon-flag; 
+    border: solid 2px $white;
+  }
+
   &--info-circle { @include icon-info; }
 
   &--info { //temp-refresh
