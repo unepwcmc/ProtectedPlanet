@@ -67,6 +67,7 @@ class ProtectedAreasController < ApplicationController
 
     @locations = get_locations
 
+    # @protected_area.sources
     @sources = [
       {
         title: 'Source name',
