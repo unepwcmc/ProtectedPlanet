@@ -14,6 +14,7 @@ $search-autocomplete-select-width: rem-calc(222);
   @include responsive(width, 100%, $search-autocomplete-width-tablet, $search-autocomplete-width-tablet);
 
   position: relative;
+  z-index: 1;
 
   .search__bar & { margin: rem-calc(0 120 0 20); }
 
