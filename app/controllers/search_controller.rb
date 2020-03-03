@@ -8,7 +8,7 @@ class SearchController < ApplicationController
   def index
     @categories = Comfy::Cms::Page.root.children.map do |c|
       { id: c.id, title: c.label }
-    end.to_json
+    end.concat([{ id: -1, title: 'All'}]).to_json
 
     @query = params['search_term']
   end
