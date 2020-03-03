@@ -44,6 +44,7 @@ class Search::Matcher
           translations_for_index.fragments_for_index.content.spanish
         )
       },
+      { type: 'nested', path: 'categories', fields: ['categories.label'] },
     ]
   }
 

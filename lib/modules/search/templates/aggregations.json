@@ -73,6 +73,19 @@
         }
       }
     }
+  },
+  "categories": {
+    "nested": {
+      "path": "categories"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "categories.id",
+          "size": 500
+        }
+      }
+    }
   }
 
 }

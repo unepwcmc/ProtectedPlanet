@@ -15,7 +15,8 @@ class Comfy::Cms::SearchablePage < Comfy::Cms::Page
         translations_for_index: {
           only: [:id, :page_id],
           include: { fragments_for_index: { only: [:id, :content] } }
-        }
+        },
+        categories: { only: [:id, :label] }
       }
     )
   end
