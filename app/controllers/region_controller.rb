@@ -35,6 +35,8 @@ class RegionController < ApplicationController
       total_km2: presenter.marine_area.round(0)
     }
 
+    @pas = get_pas
+
     @sources = [
       {
         title: 'Source name',
@@ -85,5 +87,11 @@ class RegionController < ApplicationController
     else
       []
     end
+  end
+
+  def get_pas
+    id = @region.id
+
+    ProtectedArea.joins(:countries).where("countries.region_id = #{id}").order(:name).first(3)
   end
 end

@@ -1,37 +1,44 @@
 <div class="bg--grey-xlight">
-  <section class="container">
-    <div class="flex flex-h-between">
-      <%= render partial: "partials/stats/stats-coverage", locals: { 
-        stats: @terrestrial_stats, 
-        type: 'terrestrial' 
-      } %>
-
-      <%= render partial: "partials/stats/stats-coverage", locals: { 
-        stats: @marine_stats, 
-        type: 'marine' 
-      } %>
-    </div>
-
-    <%= render "partials/messages/message-warning-stats" %>
-
-    <div class="flex flex-h-between">
-      <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
+  <div class="container">
+    
+    <section>
       
-      <%= render "partials/stats/stats-governance", { governance_types: @governance_types} %>
-    </div>
+    </section>
 
-    <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
+    <section>
+      <div class="flex flex-h-between">
+        <%= render partial: "partials/stats/stats-coverage", locals: { 
+          stats: @terrestrial_stats, 
+          type: 'terrestrial' 
+        } %>
 
-    <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
+        <%= render partial: "partials/stats/stats-coverage", locals: { 
+          stats: @marine_stats, 
+          type: 'marine' 
+        } %>
+      </div>
 
-    <div class="cards--stats">
-      <h1>Chart - Growth in protected area coverage</h1>
-    </div>
-    <!-- PAs in that country -->
-    <%#= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
+      <%= render "partials/messages/message-warning-stats" %>
 
-    <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
-  </section>
+      <div class="flex flex-h-between">
+        <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
+        
+        <%= render "partials/stats/stats-governance", { governance_types: @governance_types} %>
+      </div>
+
+      <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
+
+      <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
+
+      <div class="cards--stats">
+        <h1>Chart - Growth in protected area coverage</h1>
+      </div>
+      
+      <%= render partial: "partials/cards/sites", locals: { cards: @pas } %>
+
+      <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
+    </section>
+  </div>
 </div>
 
 

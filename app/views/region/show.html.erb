@@ -78,6 +78,8 @@
     <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
     
     <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
+
+    <%= render partial: "partials/cards/sites", locals: { cards: @pas } %>
   
     <%= render partial: "partials/messages/message-citation", locals: { title: @region.name } %>
   </section>
