@@ -41,6 +41,24 @@
       margin-right: rem-calc(14);
     }
 
+    &__logos {
+      @include flex;
+      @include ul-unstyled;
+    }
+
+      &__logo {
+        margin-left: rem-calc(24);
+
+        &:first-child { margin-left: 0; }
+      }
+
+        &__logo-image {
+          
+          width: rem-calc(100); height: auto;
+
+          display: block;
+        }
+
     &__third {
       width: calc(33% - 16px);
     }

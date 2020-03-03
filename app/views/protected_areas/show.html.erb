@@ -45,12 +45,8 @@
       </div>
       
       <div class="flex flex-column card--stats--half">
-        
         <%= render "partials/stats/stats-pame" %>
-
-        <div class="card--stats">
-          <h2>Lorem Ipsum</h2>
-        </div>
+        <%= render partial: "partials/stats/stats-external", locals: { external_links: @external_links } %>
       </div>
     </section>
 
@@ -121,30 +117,6 @@
   </div>
 
 </section>
-
-
-<% if @protected_area.has_parcc_info %>
-  <h2 class="header--section u-margin--page">Vulnerability Assessment</h2>
-  <p class="u-margin--page attribute__value attribute--bold flex-row-wrap align-items-center">
-    <%= image_tag "parcc-logo-title.png", width: "80", height: "auto", alt: "PARCC Logo" %>
-    <%= link_to url_for_related_source('parcc_info', @protected_area), class: "attribute__link-margin", title: "View the climate change vulnerability assessments for #{@protected_area.name}" do %>
-      Present
-      <i class="fa fa-external-link attribute__icon"></i>
-    <% end %>
-  </p>
-<% end %>
-
-<% if @protected_area.is_green_list %>
-  <h2 class="header--section u-margin--page">Green List</h2>
-  <p class="u-margin--page attribute__value attribute--bold flex-row-wrap align-items-center">
-    <%= image_tag "green_list/logo.png", width: '80' %>
-
-    <%= link_to green_list_path(@protected_area.slug), class: "attribute__link-margin", title: "View the Green List page for #{@protected_area.name}" do %>
-      View Green List page
-      <i class="fa fa-external-link attribute__icon"></i>
-    <% end %>
-  </p>
-<% end %>
 
 <% if @protected_area.story_map_links.any? %>
     <h2 class="header--section u-margin--page">Link to story map</h2>
@@ -231,24 +203,6 @@
 </section>
   <% end %>
 
-  <aside class="info-box info-box--fill-color">
-  <section class="info-box__column">
-    <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Citation</h2>
-    <p class="info-box__body">
-    UNEP-WCMC (<%= Date.today.year %>). Protected Area Profile for <%= @protected_area.name %> from the World Database of Protected Areas, <%= Date.today.strftime("%B %Y") %>. Available at: <a href="/">www.protectedplanet.net</a>
-    </p>
-  </section>
-
-  <section class="info-box__column">
-    <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">References</h2>
-    <div class="info-box__body">
-      <div class="reference">
-        <%#<h3 id="ref1" class="reference__title">(Ref 1)</h3>%>
-        <%#<p class="reference__body"> Nam vitae dolor iaculis lectus commodo tincidunt ut eget risus. Sed et lobortis tellus.</p>%>
-      </div>
-    </div>
-  </section>
-
   <section class="info-box__column">
     <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Downloads</h2>
     <div class="info-box__body info-box__body--no-padding">
@@ -263,7 +217,6 @@
       </div>
     </div>
   </section>
-</aside>
 
 <% if management_plan_document %>
   <section class="fact">
