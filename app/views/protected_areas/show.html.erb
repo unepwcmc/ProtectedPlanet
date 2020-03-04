@@ -2,29 +2,14 @@
   <div class="container">
 
     <section class="flex">
-      <div class="card--stats card--stats--dark">
-        <h1><%= @protected_area.name %></h1>
-        
-        <p>
-          <span><%= @protected_area.wdpa_id %></span>
-          <span><%= t('stats.wdpa.id') %></span>
-        </p>
+      <%= render partial: "partials/stats/stats-overview", locals: { 
+        area: reported_area,
+        location: @locations.html_safe,
+        title: @protected_area.name,
+        type: 'TODO',
+        wdpa_id: @protected_area.wdpa_id,
+      } %>
 
-        <p>
-          <span><%= reported_area %></span>
-          <span><%= t('stats.reported-area') %></span>
-        </p>
-
-        <p>
-          <span><%= t('stats.type') %></span>
-          <span><%#= type %></span>
-        </p>
-
-        <p>
-          <span><%= t('stats.location') %></span>
-          <span><%= @locations.html_safe %></span>
-        </p>
-      </div>
       <div>
         MAP
       </div>

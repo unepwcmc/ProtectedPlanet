@@ -2,7 +2,13 @@
 // mixins
 //--------------------------------------------------
 @mixin card-stats-padding {
-  padding: rem-calc(40 48); 
+  padding: rem-calc(28 30); 
+}
+
+@mixin card-stats-number {
+  color: $primary;
+  font-weight: $bold;
+  line-height: 1;
 }
 
 //--------------------------------------------------
@@ -17,16 +23,6 @@
     @include responsive(width, 100%, calc(50% - 15px), calc(50% - 15px));
   }
 
-  &--dark {
-    @include bg-grey-xdark;
-
-    h1 { 
-    color: $white;
-    font-size: rem-calc(25);
-    margin: 0;
-    }
-  }
-
   .card {
 
     h2 {
@@ -35,10 +31,6 @@
 
     &__content {
       @include flex;
-    }
-
-    &__flag {
-      margin-right: rem-calc(14);
     }
 
     &__logos {
@@ -78,18 +70,62 @@
         width: 30%; height: rem-calc(280);
       }
 
-      &__stat-number {
-        @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(40));
-        color: $primary;
-        font-weight: $bold;
-        line-height: 1;
+      
 
-        display: block;
-      }
+      
+  }
+}
 
-      &__stat-text {
-        font-size: rem-calc(20);
-        font-weight: $bold;
-      }
+&--stats-overview {
+  @include bg-grey-black;
+  @include card-stats-padding;
+  @include responsive(width, 100%, 33%, 33%);
+  margin-right: rem-calc(30);
+
+  .card {
+    &__flag {
+      margin-right: rem-calc(14);
+    }
+
+    &__heading {
+      @include flex;
+      @include flex-v-center;
+      margin-bottom: rem-calc(18);
+    }
+
+    &__h1 { 
+      color: $white;
+      font-size: rem-calc(25);
+      margin: 0;
+    }
+
+    &__number {
+      @include card-stats-number;
+      @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(40));
+
+      display: block;
+    }
+
+    &__number--small {
+      @include card-stats-number;
+      @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(30));
+      margin-right: rem-calc(10);
+    }
+
+    &__section {
+      margin-top: rem-calc(30);
+    }
+
+    &__text {
+      font-size: rem-calc(20);
+    }
+
+    &__text-bold {
+      font-size: rem-calc(20);
+      font-weight: $bold;
+      margin-bottom: rem-calc(6);
+
+      display: block;
+    }
   }
 }

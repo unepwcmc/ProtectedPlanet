@@ -2,20 +2,16 @@
   <div class="container">
     
     <section class="flex">
-      <div class="card--stats card--stats--dark">
-        <div class="flex flex-v-center">
-          <i class="card__flag icon--flag-outline" style="background-image:url('<%= @flag_path[0] %>');"></i>
-          <h1><%= @country.name %></h1>
-        </div>
-        
-        <%= render partial: "partials/stats/stats-general", locals: { 
-          total_oecm: @total_oecm,
-          total_pame: @total_pame,
-          total_points_percentage: @total_points_percentage,
-          total_polygons_percentage: @total_polygons_percentage,
-          total_wdpa: @total_wdpa,
-        } %>
-      </div>
+      <%= render partial: "partials/stats/stats-overview", locals: { 
+        flag: @flag_path[0],
+        title: @country.name,
+        total_oecm: @total_oecm,
+        total_pame: @total_pame,
+        total_points_percentage: @total_points_percentage,
+        total_polygons_percentage: @total_polygons_percentage,
+        total_wdpa: @total_wdpa,
+      } %>
+
       <div>
         MAP
       </div>
