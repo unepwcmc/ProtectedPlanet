@@ -28,11 +28,16 @@ $card-search-results-areas-flag-size: rem-calc(60);
       @include box-shadow-grey-light;
       @include flex;
       @include flex-column;
-      @include responsive('width', 100%, 50%, 30%);
+      @include responsive('width', 100%, 40%, 30%);
       background-color: $white;
       margin-bottom: rem-calc(30);
       padding: rem-calc(18 18 16 18);
       text-decoration: none;
+
+      &:not(:nth-child(3n)):last-child { 
+        margin-left: 5%;
+        margin-right: auto; 
+      }
     }
 
       &__content {

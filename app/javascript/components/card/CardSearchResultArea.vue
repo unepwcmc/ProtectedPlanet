@@ -38,15 +38,16 @@
       class="card__groups"
     >
       <p 
-        v-if="hasCountry"
+        v-if="hasCountries"
+        v-for="country in countries"
         class="card__group flex flex-v-center"
       >
         <i 
           class="card__icon--flag" 
-          :style="{ backgroundImage: `url(${imageFlag})` }"
+          :style="{ backgroundImage: `url(${country.flag})` }"
         />
         <span 
-          v-html="country"
+          v-html="country.title"
         />
       </p>
 
@@ -76,7 +77,8 @@ export default {
       required: true
     },
     image: String,
-    imageFlag: String,
+    countryFlag: String,
+    countries: Array,
     region: String,
     title: {
       type: String,
@@ -89,21 +91,15 @@ export default {
   },
 
   computed: {
-    hasCountry () {
-      return this.country
-    },
+    hasCountries () { return this.countries },
 
     hasCountryOrRegion () {
       return this.hasCountry || this.hasRegion
     },
 
-    hasRegion () {
-      return this.region
-    },
+    hasRegion () { return this.region },
 
-    isCountry () {
-      return this.imageFlag && !this.hasCountry
-    }
+    isCountry () { return this.countryFlag }
   }
 }
 </script>

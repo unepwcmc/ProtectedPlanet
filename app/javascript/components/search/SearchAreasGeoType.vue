@@ -16,7 +16,7 @@
         :country="area.country"
         :geo-type="geoType"
         :image="area.image"
-        :image-flag="area.imageFlag"
+        :countries="area.countries"
         :region="area.region"
         :title="area.title"
         :url="area.url"

@@ -39,7 +39,7 @@ class Search::AreasSerializer < Search::BaseSerializer
         _slug = slug(country[:identifier])
         {
           areas: country[:count],
-          imageFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
+          countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
           region: 'America', # TODO
           title: country[:identifier],
           url: 'url to page' # TODO
@@ -56,12 +56,15 @@ class Search::AreasSerializer < Search::BaseSerializer
       total: _sites.count,
       areas: _sites.map do |site|
         _countries = site.countries
-        _slugs = _countries.map { |c| slug(c.name) }
         _regions = _countries.map(&:region).map(&:name).uniq
         {
-          country: _countries.map(&:name).join(','),
+          countries: _countries.map { |country| 
+            {
+              title: country[:name],
+              flag: ActionController::Base.helpers.image_url("flags/#{slug(country.name)}.svg"),
+            }
+          },
           image: '/assets/tiles/FR?type=country&version=1', # TODO This should be a mapbox internal asset
-          imageFlag: _slugs.map { |s| ActionController::Base.helpers.image_url("flags/#{s}.svg") },
           region: _regions.join(','),
           title: site.name,
           url: 'url to page' # TODO
