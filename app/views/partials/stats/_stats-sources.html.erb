@@ -1,9 +1,9 @@
 <div class="card--stats sm-sources">
-  <h2 class="card">Sources</h2>
+  <h2 class="card"><%= t('stats.sources.title') %></h2>
   
-  <div card__content>
+  <div class="card__content flex">
     <div class="card__stat-box">
-      <span>Total Sources</span>  
+      <span><%= t('stats.sources.total') %></span>  
       
       <counter 
         class="" 
@@ -14,12 +14,12 @@
     </div>
 
     <div>
-      <ol>
+      <ol class="list--underline">
         <% sources.each do |source| %>
-          <li>
-            <span><%= source['title'] %></span>
-            <span>Updated: <%= source['date_updated'] %></span>
-            <span><%= link_to 'Details', source['url'], title: '' %></span>
+          <li class="list__li fle">
+            <span class="list__title"><%= source[:title] %></span>
+            <span class="list__value"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
+            <span class="list__a"><%= link_to 'Details', source[:url], title: '' %></span>
           </li>
         <% end %>
       </ol>

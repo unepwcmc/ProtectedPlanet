@@ -1,5 +1,5 @@
 <div class="card--stats">
-  <h2>Designations</h2>
+  <h2><%= t('stats.designations.title') %></h2>
 
   <div>
     Chart
@@ -14,10 +14,10 @@
         </div>
 
         <% if designation[:has_jurisdiction] %>
-          <ul class="card__ul">
+          <ul class="list--underline">
             <% designation[:jurisdictions].each do |jurisdiction| %>
-              <li class="card__li flex flex-h-between">
-                <%= jurisdiction["designation_name"] %>
+              <li class="list__li flex flex-h-between">
+                <span><%= jurisdiction["designation_name"] %></span>
                 <%#= link_to jurisdiction["designation_name"], search_url("#{location.class.name.downcase}" => location.name, designation: jurisdiction["designation_name"], main: location.class.name.downcase.to_sym) %>
                 <span><%= jurisdiction["count"] %></span>
               </li>

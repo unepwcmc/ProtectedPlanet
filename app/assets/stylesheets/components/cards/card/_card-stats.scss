@@ -91,32 +91,5 @@
         font-size: rem-calc(20);
         font-weight: $bold;
       }
-
-      &__ul { 
-        @include ul-unstyled;
-        max-height: rem-calc(280);
-        overflow-y: scroll;
-      }
-
-        &__li {
-          @include flex;
-          border-top: solid 1px $grey-light;
-          padding: rem-calc(14 0);
-
-          &:first-child { border-top: none; }
-        }
-
-          &__li-a { margin-left: auto; }
-
-          &__li-title { 
-            font-weight: $bold;
-            margin-right: rem-calc(24);
-          }
-
-          &__li-icon {
-            @include circle-icon;
-            background-color: $grey;
-            margin-right: rem-calc(24);
-          }
   }
 }

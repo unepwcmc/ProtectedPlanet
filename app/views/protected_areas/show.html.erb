@@ -7,21 +7,21 @@
         
         <p>
           <span><%= @protected_area.wdpa_id %></span>
-          <span>WDPA ID</span>
+          <span><%= t('stats.wdpa.id') %></span>
         </p>
 
         <p>
           <span><%= reported_area %></span>
-          <span>Reported Area</span>
+          <span><%= t('stats.reported-area') %></span>
         </p>
 
         <p>
-          <span>Type</span>
+          <span><%= t('stats.type') %></span>
           <span><%#= type %></span>
         </p>
 
         <p>
-          <span>Location</span>
+          <span><%= t('stats.location') %></span>
           <span><%= @locations.html_safe %></span>
         </p>
       </div>
