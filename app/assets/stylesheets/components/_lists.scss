@@ -1,0 +1,26 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.list {
+  &--stripes {
+    @include ul-unstyled;
+
+    .list {
+
+      &__li {
+        padding: rem-calc(16 14);
+
+        &:nth-child(odd) { background-color: $grey-xlight; }
+      }
+
+        &__title {
+          font-weight: $bold;
+          margin-right: rem-calc(14);
+        } 
+    }
+  }
+}

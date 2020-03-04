@@ -31,17 +31,8 @@
     </section>
 
     <section class="flex">
-      <div class="card--stats card--stats--half">
-        <h2>Attributes</h2>
-
-        <ul>
-          <% @attributes.each do |attribute| %>
-            <li>
-              <span class="text-bold"><%= attribute[:title] %></span>
-              <span><%= attribute[:value] %></span>
-            </li>
-          <% end %>
-        </ul>
+      <div class="card--stats--half">
+        <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @attributes } %>
       </div>
       
       <div class="flex flex-column card--stats--half">

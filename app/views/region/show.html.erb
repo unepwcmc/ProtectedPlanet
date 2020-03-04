@@ -1,6 +1,6 @@
 <div class="bg--grey-xlight">
   <section class="container">
-    <div class="card--stats bg--grey">
+    <div class="card--stats card--stats--dark">
       <h1><%= @region.name %></h1>
       
       <h2 class="fact__header">Number of Countries</h2>
@@ -13,12 +13,10 @@
         total_wdpa: @total_wdpa,
       } %>
     </div>
-  </section>
 
-  <%= render "partials/stats/facts/number_of_pas", {location: @region} %>
-  <%= render "partials/stats/facts/polygons_points_ratio" %>
+  <%#= render "partials/stats/facts/number_of_pas", {location: @region} %>
+  <%#= render "partials/stats/facts/polygons_points_ratio" %>
 
-    </div>
     <div>
       <% unless @for_pdf %>
         <h1>map</h1>
