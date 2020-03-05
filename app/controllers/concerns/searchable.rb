@@ -44,25 +44,11 @@ module Concerns::Searchable
 
     def sanitise_filters
       _filters = JSON.parse(params['filters'])
-      return _filters unless _filters['is_type']
-
+      #TODO green list filter to be added
       is_type = _filters.delete('is_type')
-      terrestrial = is_type.include?('Terrestrial')
-      marine = is_type.include?('Marine')
+      return _filters if is_type == 'all' || !is_type
 
-      # TODO Not ideal. It would be good to have seperate filters for these
-      # The way this works now is the following:
-      # - both marine and terrestial unselected will return all areas (otherwise always returns empty results)
-      # - both marine and terrestrial selected will return all areas
-      # - only marine selected will return only marine areas
-      # - only terrestrial selected will return only terrestrial areas
-      # - green-list selected returns only green-listed areas regardless of marine/terrestrial
-      # - green-list unselected returns only non green-listed areas regardless of marine/terrestrial
-
-      _filters[:marine] = true if marine && !terrestrial
-      _filters[:marine] = false if terrestrial && !marine
-
-      _filters[:is_green_list] = is_type.include?('Green List')
+      _filters[:marine] = is_type == 'marine'
 
       _filters
     end

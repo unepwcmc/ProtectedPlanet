@@ -33,12 +33,12 @@ module Concerns::Filterable
             {
               id: 'is_type',
               options: [
-                { id: 'marine', title: I18n.t('global.search.filter-group-type.options')[0] },
+                { id: 'all', title: I18n.t('global.search.filter-group-type.options')[0] },
                 { id: 'terrestrial', title: I18n.t('global.search.filter-group-type.options')[1] },
-                { id: 'green-list', title: I18n.t('global.search.filter-group-type.options')[2] }
+                { id: 'marine', title: I18n.t('global.search.filter-group-type.options')[2] }
               ],
               title: I18n.t('global.search.filter-group-type.title'),
-              type: 'checkbox'
+              type: 'radio'
             },
             {
               id: 'designation',
