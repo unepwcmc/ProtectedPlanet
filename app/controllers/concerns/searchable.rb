@@ -37,6 +37,7 @@ module Concerns::Searchable
     end
 
     def filters
+      return '' unless params['filters'].present?
       JSON.parse(params['filters']).symbolize_keys.slice(*Search::ALLOWED_FILTERS)
     end
   end
