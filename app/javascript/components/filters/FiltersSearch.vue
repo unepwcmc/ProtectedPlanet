@@ -62,13 +62,11 @@ export default {
         return false
       }
 
-      const filterToUpdate = this.activeFilterOptions[updatedFilter.id]
+      console.log('updatedFilter', updatedFilter)
 
-      if(filterToUpdate === undefined) {
-        this.activeFilterOptions[updatedFilter.id] = updatedFilter.options
-      } else {
-        filterToUpdate.options = updatedFilter.options
-      }
+      this.activeFilterOptions[updatedFilter.id] = updatedFilter.options
+      
+      console.log('this.activeFilterOptions', this.activeFilterOptions)
 
       this.$emit('update:filter-group', this.activeFilterOptions)
     }
