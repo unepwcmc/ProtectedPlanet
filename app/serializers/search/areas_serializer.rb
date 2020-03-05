@@ -1,15 +1,19 @@
 class Search::AreasSerializer < Search::BaseSerializer
-  def initialize(search)
+  def initialize(search, filters={})
     super(search)
     @aggregations = @search.aggregations
+    @filters = filters
   end
 
   def serialize
-    [
-      regions,
-      countries,
-      sites
-    ].to_json
+    {
+      results: [
+        regions,
+        countries,
+        sites
+      ],
+      filters: @filters
+    }
   end
 
   private
@@ -58,7 +62,7 @@ class Search::AreasSerializer < Search::BaseSerializer
         _countries = site.countries
         _regions = _countries.map(&:region).map(&:name).uniq
         {
-          countries: _countries.map { |country| 
+          countries: _countries.map { |country|
             {
               title: country[:name],
               flag: ActionController::Base.helpers.image_url("flags/#{slug(country.name)}.svg"),

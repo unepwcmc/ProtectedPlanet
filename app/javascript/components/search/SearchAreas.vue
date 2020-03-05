@@ -175,7 +175,7 @@ export default {
       axios.get(this.endpointSearch, data)
         .then(response => {
           console.log('success', response)
-          this.updateProperties(response.data)
+          this.updateProperties(response.data.results)
         })
         .catch(function (error) {
           console.log(error)

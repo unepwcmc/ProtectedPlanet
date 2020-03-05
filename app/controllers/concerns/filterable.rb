@@ -69,7 +69,10 @@ module Concerns::Filterable
     end
 
     def objs_for(model)
-      model.all.map { |d| { id: d.name, title: d.name } }
+      return model.all.map { |obj| { id: obj.name, title: obj.name } } unless @search
+      identifier = model.name.underscore
+
+      @search.aggregations[identifier].map { |obj| { id: obj[:label], title: obj[:label] } }
     end
   end
 end
