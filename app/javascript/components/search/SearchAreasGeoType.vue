@@ -13,7 +13,7 @@
       <card-search-result-area
         v-for="area, index in areas"
         :key="index"
-        :country="area.country"
+        :country-flag="area.countryFlag"
         :geo-type="geoType"
         :image="area.image"
         :countries="area.countries"
