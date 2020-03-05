@@ -5,9 +5,13 @@ module Concerns::Filterable
     private
 
     def load_filters
+      @area_type = search_params[:area_type]
       @search_area_types = [
-        { id: 'wdpa', title: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.search-wdpa') },
-        { id: 'oecm', title: I18n.t('global.area-types.oecm'), placeholder: I18n.t('global.placeholder.search-oecm') }
+        {
+          id: @area_type,
+          title: I18n.t("global.area-types.#{@area_type}"),
+          placeholder: I18n.t("global.placeholder.search-#{@area_type}")
+        }
       ].to_json
 
       @filter_groups = [
