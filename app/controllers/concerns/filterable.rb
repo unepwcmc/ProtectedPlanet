@@ -31,7 +31,7 @@ module Concerns::Filterable
           title: I18n.t('global.search.filter-by'),
           filters: [
             {
-              id: 'type',
+              id: 'is_type',
               options: [
                 { id: 'marine', title: I18n.t('global.search.filter-group-type.options')[0] },
                 { id: 'terrestrial', title: I18n.t('global.search.filter-group-type.options')[1] },
