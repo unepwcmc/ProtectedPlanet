@@ -2,14 +2,14 @@
   <div v-show="isActive">
     <div class="filter__pane">
       <div class="filter__filter-groups">
-        <div 
+        <div
           v-for="filterGroup, index in filterGroups"
           :key="index"
           class="filter__group"
         >
           <h3>{{ filterGroup.title }}</h3>
 
-          <v-filter 
+          <v-filter
             v-for="filter in filterGroup.filters"
             :id="filter.id"
             :name="filter.name"
@@ -45,7 +45,7 @@ export default {
 
   data () {
     return {
-      activeFilterOptions: [],
+      activeFilterOptions: {},
       resetting: false
     }
   },
@@ -53,7 +53,7 @@ export default {
   methods: {
     reset () {
       this.resetting = true
-      this.activeFilterOptions = []
+      this.activeFilterOptions = {}
     },
 
     updateFilterGroup (updatedFilter) {
@@ -62,12 +62,10 @@ export default {
         return false
       }
 
-      const filterToUpdate = this.activeFilterOptions.find(filter => {
-        return filter.id === updatedFilter.id
-      })
+      const filterToUpdate = this.activeFilterOptions[updatedFilter.id]
 
       if(filterToUpdate === undefined) {
-        this.activeFilterOptions.push(updatedFilter)
+        this.activeFilterOptions[updatedFilter.id] = updatedFilter.options
       } else {
         filterToUpdate.options = updatedFilter.options
       }

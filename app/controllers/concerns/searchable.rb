@@ -37,7 +37,7 @@ module Concerns::Searchable
     end
 
     def filters
-      params.stringify_keys.slice(*Search::ALLOWED_FILTERS)
+      JSON.parse(params['filters']).symbolize_keys.slice(*Search::ALLOWED_FILTERS)
     end
   end
 end

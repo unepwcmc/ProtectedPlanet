@@ -64,7 +64,7 @@ module Concerns::Filterable
     end
 
     def objs_for(model)
-      model.all.map { |d| { id: d.id, title: d.name } }
+      model.all.map { |d| { id: d.name, title: d.name } }
     end
   end
 end
