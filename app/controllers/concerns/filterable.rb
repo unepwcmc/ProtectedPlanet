@@ -36,6 +36,7 @@ module Concerns::Filterable
           filters: [
             {
               id: 'is_type',
+              name: 'is_type',
               options: [
                 { id: 'all', title: I18n.t('global.search.filter-group-type.options')[0] },
                 { id: 'terrestrial', title: I18n.t('global.search.filter-group-type.options')[1] },

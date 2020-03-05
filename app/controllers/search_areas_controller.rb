@@ -9,7 +9,6 @@ class SearchAreasController < ApplicationController
 
   def index
     @query = search_params[:search_term]
-    @area_type = search_params[:area_type]
   end
 
   def search_results
