@@ -5,14 +5,14 @@
       title=""
     >
       <i 
-        v-if="!hasCountryOrRegion"
+        v-if="!hasCountriesOrRegion"
         class="card__icon--region-large" 
       />
 
       <i
         v-if="isCountry" 
         class="card__icon--flag-large"
-        :style="{ backgroundImage: `url(${imageFlag})` }"
+        :style="{ backgroundImage: `url(${countryFlag})` }"
       />
       
       <img 
@@ -34,7 +34,7 @@
     </div>
 
     <div 
-      v-if="hasCountryOrRegion"
+      v-if="hasCountriesOrRegion"
       class="card__groups"
     >
       <p 
@@ -71,7 +71,6 @@ export default {
       type: String,
       required: false
     },
-    country: String,
     geoType: {
       type: String,
       required: true
@@ -93,8 +92,8 @@ export default {
   computed: {
     hasCountries () { return this.countries },
 
-    hasCountryOrRegion () {
-      return this.hasCountry || this.hasRegion
+    hasCountriesOrRegion () {
+      return this.hasCountries || this.hasRegion
     },
 
     hasRegion () { return this.region },
