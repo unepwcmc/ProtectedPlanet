@@ -65,7 +65,7 @@ module Concerns::Filterable
             }
           ]
         }
-      ].to_json
+      ]
     end
 
     def objs_for(model)

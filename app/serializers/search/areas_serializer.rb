@@ -13,7 +13,7 @@ class Search::AreasSerializer < Search::BaseSerializer
         sites
       ],
       filters: @filters
-    }
+    }.to_json
   end
 
   private

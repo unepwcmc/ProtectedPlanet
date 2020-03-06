@@ -89,10 +89,10 @@ export default {
       type: String,
       required: true
     },
-    filterGroups: {
-      type: Array, // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
-      required: true
-    },
+    // filterGroups: {
+    //   type: Array, // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
+    //   required: true
+    // },
     items_per_page: {
       type: Number,
       default: 3
@@ -128,6 +128,7 @@ export default {
       areaType: '',
       currentPage: 0,
       defaultPage: 1,
+      filterGroups: [],
       isFilterPaneActive: true,
       isMapPaneActive: false,
       pageItemsStart: 0,
@@ -176,6 +177,7 @@ export default {
         .then(response => {
           console.log('success', response)
           this.updateProperties(response.data.results)
+          this.filterGroups = response.data.filters
         })
         .catch(function (error) {
           console.log(error)
@@ -230,7 +232,9 @@ export default {
 
       axios.get(this.endpointPagination, data)
         .then(response => {
-          response.data.results.find(object => object.geoType === paginationParams.geoType).areas.concat(response.data.results);
+          response.data.results.find(object => 
+            object.geoType === paginationParams.geoType
+          ).areas.concat(response.data.results)
         })
         .catch(function (error) {
           console.log(error)
