@@ -1,8 +1,9 @@
 class Search::AreasSerializer < Search::BaseSerializer
-  def initialize(search, filters={})
+  def initialize(search, filters={}, more=false)
     super(search)
     @aggregations = @search.aggregations
     @filters = filters
+    @more = more
   end
 
   def serialize
@@ -19,7 +20,8 @@ class Search::AreasSerializer < Search::BaseSerializer
   private
 
   def regions
-    _regions = @aggregations['region'].first(3).map { |obj| obj[:identifier] }
+    _regions = @aggregations['region'].map { |obj| obj[:identifier] }
+    _regions = _regions.first(3) unless @more
     {
       geoType: 'region',
       title: I18n.t('global.geo-types.regions'),
@@ -35,7 +37,8 @@ class Search::AreasSerializer < Search::BaseSerializer
   end
 
   def countries
-    _countries = @aggregations['country'].first(3)
+    _countries = @aggregations['country']
+    _countries = _countries.first(3) unless @more
     {
       geoType: 'country',
       title: I18n.t('global.geo-types.countries'),
@@ -55,7 +58,8 @@ class Search::AreasSerializer < Search::BaseSerializer
   end
 
   def sites
-    _sites = @results.select { |record| record.is_a?(ProtectedArea) }.first(3)
+    _sites = @results.select { |record| record.is_a?(ProtectedArea) }
+    _sites = _sites.first(3) unless @more
     _total_count = @aggregations['region'].inject(0) { |sum, r| sum + r[:count] }
     {
       geoType: 'site',

@@ -212,7 +212,7 @@ export default {
           area_type: this.areaType,
           filters: this.activeFilterOptions,
           geo_type: paginationParams.geoType,
-          items_per_page: 6,
+          items_per_page: 9,
           requested_page: paginationParams.requestedPage,
           search_term: this.searchTerm
         }
@@ -220,7 +220,7 @@ export default {
 
       axios.get(this.endpointPagination, data)
         .then(response => {
-          response.data.results.find(object => 
+          response.data.results.find(object =>
             object.geoType === paginationParams.geoType
           ).areas.concat(response.data.results)
         })

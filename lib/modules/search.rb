@@ -76,9 +76,10 @@ class Search
   end
 
   def query
+    size = options[:size] || RESULTS_SIZE
     {
-      size: options[:size] || RESULTS_SIZE,
-      from: options[:offset] || offset,
+      size: size,
+      from: options[:offset] || offset(size),
       # This line helps countries come first in search, may need tweaking as initial weights are dependent on the relative
       # frequency of terms in the countries and PA indices which is hard to anticipate!
       indices_boost: [{COUNTRY_INDEX => 3}, {PA_INDEX => 1} ],
@@ -96,7 +97,7 @@ class Search
     end
   end
 
-  def offset
-    RESULTS_SIZE * (current_page - 1)
+  def offset(size=RESULTS_SIZE)
+    size * (current_page - 1)
   end
 end

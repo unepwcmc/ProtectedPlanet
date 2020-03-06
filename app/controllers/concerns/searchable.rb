@@ -23,6 +23,7 @@ module Concerns::Searchable
     def search_options
       options = {filters: filters}
       options[:page] = params['requested_page'].to_i if params['requested_page'].present?
+      options[:size] = params['items_per_page'].to_i if params['items_per_page'].present?
       options
     end
 
