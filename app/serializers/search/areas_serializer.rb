@@ -19,7 +19,7 @@ class Search::AreasSerializer < Search::BaseSerializer
   private
 
   def regions
-    _regions = @aggregations['region'].map { |obj| obj[:identifier] }
+    _regions = @aggregations['region'].first(3).map { |obj| obj[:identifier] }
     {
       geoType: 'region',
       title: I18n.t('global.geo-types.regions'),
@@ -34,7 +34,7 @@ class Search::AreasSerializer < Search::BaseSerializer
   end
 
   def countries
-    _countries = @aggregations['country']
+    _countries = @aggregations['country'].first(3)
     {
       geoType: 'country',
       title: I18n.t('global.geo-types.countries'),
