@@ -89,6 +89,10 @@ export default {
       type: String,
       required: true
     },
+    filterGroups: {
+      type: Array, // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
+      required: true
+    },
     items_per_page: {
       type: Number,
       default: 3
@@ -124,7 +128,6 @@ export default {
       areaType: '',
       currentPage: 0,
       defaultPage: 1,
-      filterGroups: [], // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
       isFilterPaneActive: true,
       isMapPaneActive: false,
       pageItemsStart: 0,
@@ -172,7 +175,8 @@ export default {
       axios.get(this.endpointSearch, data)
         .then(response => {
           console.log('success', response.data)
-          this.updateProperties(response.data)
+
+          this.updateProperties(response)
         })
         .catch(function (error) {
           console.log(error)
@@ -194,8 +198,10 @@ export default {
       this.ajaxSubmission()
     },
 
-    updateProperties (data) {
-      this.results = data
+    updateProperties (response) {
+      const results = ('data' in response && Array.isArray(response.data)) ? response.data : []
+
+      this.results = results
     },
 
     updateSearchTerm (searchParams) {
