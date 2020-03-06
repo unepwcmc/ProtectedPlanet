@@ -25,6 +25,7 @@ class Search::AreasSerializer < Search::BaseSerializer
       areas: _regions.map do |region|
         {
           title: region,
+          totalAreas: "#{987654321} #{I18n.t('global.search.protected-areas')}" , # TODO
           url: 'url to page' # TODO
         }
       end
@@ -43,7 +44,8 @@ class Search::AreasSerializer < Search::BaseSerializer
         {
           areas: country[:count],
           countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
-          region: 'America', # TODO
+          # region: 'America', # TODO
+          totalAreas: "#{987654321} #{I18n.t('global.search.protected-areas')}" , # TODO
           title: country[:identifier],
           url: 'url to page' # TODO
         }
@@ -60,17 +62,17 @@ class Search::AreasSerializer < Search::BaseSerializer
       title: I18n.t('global.area-types.wdpa'), ## OR I18n.t('global.area_types.oecm')
       total: _total_count,
       areas: _sites.map do |site|
-        _countries = site.countries
-        _regions = _countries.map(&:region).map(&:name).uniq
+        # _countries = site.countries
+        # _regions = _countries.map(&:region).map(&:name).uniq
         {
-          countries: _countries.map { |country|
-            {
-              title: country[:name],
-              flag: ActionController::Base.helpers.image_url("flags/#{slug(country.name)}.svg"),
-            }
-          },
+          # countries: _countries.map { |country|
+          #   {
+          #     title: country[:name],
+          #     flag: ActionController::Base.helpers.image_url("flags/#{slug(country.name)}.svg"),
+          #   }
+          # },
           image: '/assets/tiles/FR?type=country&version=1', # TODO This should be a mapbox internal asset
-          region: _regions.join(','),
+          # region: _regions.join(','),
           title: site.name,
           url: 'url to page' # TODO
         }
