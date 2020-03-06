@@ -1,20 +1,16 @@
 class Search::AreasSerializer < Search::BaseSerializer
-  def initialize(search, filters={}, more=false)
+  def initialize(search, more=false)
     super(search)
     @aggregations = @search.aggregations
-    @filters = filters
     @more = more
   end
 
   def serialize
-    {
-      results: [
-        regions,
-        countries,
-        sites
-      ],
-      filters: @filters
-    }.to_json
+    [
+      regions,
+      countries,
+      sites
+    ].to_json
   end
 
   private

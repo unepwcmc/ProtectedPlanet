@@ -14,7 +14,7 @@ class SearchAreasController < ApplicationController
   def search_results
     @query = search_params[:search_term]
     @area_type = search_params[:area_type]
-    @results = Search::AreasSerializer.new(@search, @filter_groups, request_more?).serialize
+    @results = Search::AreasSerializer.new(@search, request_more?).serialize
 
     render json: @results
   end

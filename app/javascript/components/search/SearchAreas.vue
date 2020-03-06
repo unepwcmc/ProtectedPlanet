@@ -195,8 +195,7 @@ export default {
     },
 
     updateProperties (data) {
-      this.filterGroups = ('filters' in data && Array.isArray(data.filters)) ? data.filters : []
-      this.results = ('results' in data && Array.isArray(data.results)) ? data.results : []
+      this.results = data
     },
 
     updateSearchTerm (searchParams) {
@@ -220,9 +219,9 @@ export default {
 
       axios.get(this.endpointPagination, data)
         .then(response => {
-          response.data.results.find(object =>
+          response.data.find(object =>
             object.geoType === paginationParams.geoType
-          ).areas.concat(response.data.results)
+          ).areas.concat(response.data)
         })
         .catch(function (error) {
           console.log(error)
