@@ -228,9 +228,9 @@ export default {
         }
       }
 
-      axios.post(this.endpointPagination, data)
+      axios.get(this.endpointPagination, data)
         .then(response => {
-          this.data.results.find(object => object.geo_type === paginationParams.geoType).areas.concat(data.results);
+          response.data.results.find(object => object.geoType === paginationParams.geoType).areas.concat(response.data.results);
         })
         .catch(function (error) {
           console.log(error)
