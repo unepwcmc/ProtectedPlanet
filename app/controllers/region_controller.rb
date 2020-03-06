@@ -30,6 +30,8 @@ class RegionController < ApplicationController
     @governance_types = @region.protected_areas_per_governance
 
     @marine_stats = {
+      pame_km2: 'XXXXX', ##TODO FERDI
+      pame_percentage: 'XXXXX', ##TODO FERDI
       protected_km2: presenter.pa_marine_area.round(0),
       protected_percentage: presenter.percentage_pa_marine_cover.round(2),
       total_km2: presenter.marine_area.round(0)
@@ -44,6 +46,8 @@ class RegionController < ApplicationController
     ]
 
     @terrestrial_stats = {
+      pame_km2: 'XXXXX', ##TODO FERDI
+      pame_percentage: 'XXXXX', ##TODO FERDI
       protected_km2: presenter.pa_land_area.round(0),
       protected_percentage: presenter.percentage_pa_land_cover.round(2),
       total_km2: presenter.land_area.round(0)

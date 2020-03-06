@@ -33,6 +33,8 @@ class CountryController < ApplicationController
     @governance_types = @country.protected_areas_per_governance
 
     @marine_stats = {
+      pame_km2: presenter.pame_statistic.pame_pa_marine_area,
+      pame_percentage: presenter.pame_statistic.pame_percentage_pa_marine_cover.round(2),
       protected_km2: presenter.pa_marine_area.round(0),
       protected_percentage: presenter.percentage_pa_marine_cover.round(2),
       total_km2: presenter.marine_area.round(0)
@@ -47,6 +49,8 @@ class CountryController < ApplicationController
     ]
 
     @terrestrial_stats = {
+      pame_km2: presenter.pame_statistic.pame_pa_land_area,
+      pame_percentage: presenter.pame_statistic.pame_percentage_pa_land_cover.round(2),
       protected_km2: presenter.pa_land_area.round(0),
       protected_percentage: presenter.percentage_pa_land_cover.round(2),
       total_km2: presenter.land_area.round(0)
@@ -59,16 +63,9 @@ class CountryController < ApplicationController
     @total_wdpa = @country.protected_areas.count
 
     @wdpa = get_wdpa
-
-    ## Move the has_pame_statistics_for function
-    # if(has_pame_stats) { 
-    #   @marine_stats['pame_protected_km2'] = presenter.pame_statistic.pame_percentage_pa_marine_cover.round(2)
-    #   @marine_stats['pame_protected_percentage'] = presenter.pame_statistic.pame_pa_marine_area,
-    #   @terrestrial_stats['pame_protected_km2'] = presenter.pame_statistic.pame_percentage_pa_terrestrial_cover.round(2)
-    #   @terrestrial_stats['pame_protected_percentage'] = presenter.pame_statistic.pame_pa_terrestrial_area,
-    # }
     
-    # protected_national_report: presenter.percentage_nr_marine_cover,
+    ##TODO need adding
+    # protected_national_report: presenter.percentage_nr_marine_cover, 
     # national_report_version: presenter.nr_version,
 
     respond_to do |format|
