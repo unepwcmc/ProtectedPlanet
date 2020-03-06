@@ -53,11 +53,12 @@ class Search::AreasSerializer < Search::BaseSerializer
   end
 
   def sites
-    _sites = @results.select { |record| record.is_a?(ProtectedArea) }
+    _sites = @results.select { |record| record.is_a?(ProtectedArea) }.first(3)
+    _total_count = @aggregations['region'].inject(0) { |sum, r| sum + r[:count] }
     {
       geoType: 'site',
       title: I18n.t('global.area-types.wdpa'), ## OR I18n.t('global.area_types.oecm')
-      total: _sites.count,
+      total: _total_count,
       areas: _sites.map do |site|
         _countries = site.countries
         _regions = _countries.map(&:region).map(&:name).uniq
