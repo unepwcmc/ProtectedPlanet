@@ -44,6 +44,7 @@ en:
           - Terrestrial
           - Marine
       map: Map
+      protected-areas: Protected Areas
       results: results
       no-results: No results. Please search again.
       view-by: View by
