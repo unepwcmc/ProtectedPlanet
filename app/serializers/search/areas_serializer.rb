@@ -8,7 +8,7 @@ class Search::AreasSerializer < Search::BaseSerializer
   def serialize
     if @geo_type
       areas = @geo_type == 'site' ? @results.protected_areas : paginate(@aggregations[@geo_type])
-      return areas_ary(@geo_type, areas)
+      return areas_ary(@geo_type, areas).to_json
     end
 
     [
