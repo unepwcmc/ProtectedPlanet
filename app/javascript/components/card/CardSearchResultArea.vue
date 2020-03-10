@@ -27,7 +27,7 @@
         v-html="title"
         class="card__title"
       />
-      <p
+      <span
         v-if="totalAreas"
         v-html="totalAreas"
       />

@@ -112,7 +112,14 @@ $padding-medium: rem-calc(27);
 @mixin button-filter-trigger {
   @include button-with-icon;
   @include button-outline;
-  &::after { @include icon-filters; }
+  @include breakpoint-down($small) { padding: rem-calc(0 12); }
+
+  &::after { 
+    @include icon-filters; 
+    @include breakpoint-down($small) { margin: 0; }
+  }
+
+  .button__text { @include responsive(display, none, inline, inline); }
 }
 
 @mixin button-map-trigger {

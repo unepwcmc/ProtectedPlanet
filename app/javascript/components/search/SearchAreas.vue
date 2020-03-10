@@ -32,9 +32,12 @@
     <div class="search__main">
       <filters-search
         class="search__filters"
+        :filter-close-text="filterCloseText"
         :filter-groups="filterGroups"
         :isActive="isFilterPaneActive"
+        :title="textFilters"
         v-on:update:filter-group="updateFilters"
+        v-on:toggle-filter-pane="toggleFilterPane"X
       />
       <div class="search__results">
         <search-areas-results
@@ -88,6 +91,10 @@ export default {
       required: true
     },
     endpointSearch: {
+      type: String,
+      required: true
+    },
+    filterCloseText: {
       type: String,
       required: true
     },

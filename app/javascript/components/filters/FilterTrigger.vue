@@ -2,8 +2,12 @@
   <button
     class="filter__trigger"
     @click="toggleFilterPane"
-    v-html="text"
-  />
+  >
+    <span
+      v-html="text"
+      class="button__text"
+    />
+  </button>
 </template>
 <script>
 export default {

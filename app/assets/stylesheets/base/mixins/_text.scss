@@ -91,6 +91,11 @@
   font-size: rem-calc(16);
 }
 
+@mixin text-card-title {
+  font-size: rem-calc(20);
+  font-weight: $bold;
+}
+
 @mixin text-filter {
   @include text-2;
   font-size: rem-calc(14);

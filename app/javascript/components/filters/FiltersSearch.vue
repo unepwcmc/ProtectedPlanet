@@ -1,6 +1,11 @@
 <template>
   <div v-show="isActive">
     <div class="filter__pane">
+      <span 
+        class="filter__pane-title"
+        v-html="title"
+      />
+
       <div class="filter__filter-groups">
         <div
           v-for="filterGroup, index in filterGroups"
@@ -20,6 +25,12 @@
           />
         </div>
       </div>
+
+      <span 
+        class="filter__pane-close"
+        v-html="filterCloseText"
+        @click="toggleFilterPane"
+      />
     </div>
   </div>
 </template>
@@ -33,6 +44,10 @@ export default {
   components: { vFilter },
 
   props: {
+    filterCloseText: {
+      required: true,
+      type: String
+    },
     filterGroups: {
       required: true,
       type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
@@ -40,6 +55,10 @@ export default {
     isActive: {
       required: true,
       type: Boolean
+    },
+    title: {
+      required: true,
+      type: String
     }
   },
 
@@ -54,6 +73,10 @@ export default {
     reset () {
       this.resetting = true
       this.activeFilterOptions = {}
+    },
+
+    toggleFilterPane () {
+      this.$emit('toggle-filter-pane')
     },
 
     updateFilterGroup (updatedFilter) {
