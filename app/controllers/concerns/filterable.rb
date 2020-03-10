@@ -58,7 +58,7 @@ module Concerns::Filterable
               type: 'checkbox'
             },
             {
-              id: 'iucn-category',
+              id: 'iucn_category',
               options: objs_for(IucnCategory),
               title: I18n.t('global.search.filter-group-iucn-category.title'),
               type: 'checkbox'
