@@ -15,11 +15,6 @@
         :style="{ backgroundImage: `url(${countryFlag})` }"
       />
 
-      <p
-        v-if="totalAreas"
-        b-html="totalAreas"
-      />
-      
       <img 
         v-if="image" 
         :src="image" 
@@ -33,8 +28,8 @@
         class="card__title"
       />
       <p
-        v-if="areas"
-        v-html="areas"
+        v-if="totalAreas"
+        v-html="totalAreas"
       />
     </div>
 
@@ -72,10 +67,6 @@ export default {
   name: 'card-search-result-area',
 
   props: {
-    areas: {
-      type: String,
-      required: false
-    },
     geoType: {
       type: String,
       required: true

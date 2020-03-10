@@ -38,6 +38,7 @@
       />
       <div class="search__results">
         <search-areas-results
+          :no-results-text="noResultsText"
           :results="results"
           v-on:request-more="requestMore"
         />
@@ -112,14 +113,10 @@ export default {
       type: String,
       required: true
     },
-    // noResultsText: {
-    //   type: String,
-    //   required: true
-    // },
-    // resultsText: {
-    //   type: String,
-    //   required: true
-    // }
+    noResultsText: {
+      required: true,
+      type: String
+    }
   },
 
   data () {

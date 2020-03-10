@@ -41,6 +41,13 @@
       &__results {
         @include flex-grow;
       }
+
+        &__results-none {
+          font-size: rem-calc(20);
+          font-weight: $bold;
+          padding: rem-calc(30 0);
+          text-align: center; 
+        }
       
       &__results-bar {
         @include flex;

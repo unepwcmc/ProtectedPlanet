@@ -1,5 +1,6 @@
 <template>
   <button
+    v-show="hasResults"
     v-html="text"
     class="button--all"
     @click="viewAll"
@@ -13,12 +14,16 @@ export default {
   name: 'pagination-more',
 
   props: {
+    smTriggerElement: {
+      type: String,
+      required: true
+    },
     text: {
       type: String,
       required: true
     },
-    smTriggerElement: {
-      type: String,
+    total: {
+      type: Number,
       required: true
     }
   }, 
@@ -32,6 +37,12 @@ export default {
 
   created () {
     this.$eventHub.$on('reset-search', this.reset)
+  },
+
+  computed: {
+    hasResults () {
+      return this.total > 0
+    }
   },
 
   methods: {

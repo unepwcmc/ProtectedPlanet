@@ -1,9 +1,9 @@
 <template>
   <div 
-    v-show="hasResults" 
     class="search__results"
   >
     <search-areas-geo-type
+      v-show="hasResults" 
       v-for="result, index in results"
       :key="index"
       :areas="result.areas"
@@ -11,6 +11,12 @@
       :total="result.total"
       :title="result.title"
       v-on:request-more="requestMore"
+    />
+
+    <p 
+      v-show="!hasResults"
+      v-html="noResultsText"
+      class="search__results-none"
     />
   </div>
 </template>
@@ -26,6 +32,10 @@ export default {
   },
   
   props: {
+    noResultsText: {
+      required: true,
+      type: String
+    },
     results: {
       type: Array
     }
@@ -33,7 +43,11 @@ export default {
 
   computed: {
     hasResults () {
-      return this.results.length > 0
+      let totalResults = 0
+
+      this.results.map( result => totalResults = totalResults + result.total )
+
+      return totalResults > 0
     }
   },
 

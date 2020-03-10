@@ -216,3 +216,8 @@ $icon-search-width: rem-calc(21);
     display: block;
   }
 }
+
+@mixin icon-tick {
+  @include icon-basic;
+  background-image: image-url('icons/tick.svg');
+}

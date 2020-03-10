@@ -6,6 +6,7 @@
       <pagination-more
         smTriggerElement="todo"
         text="View All"
+        :total="total"
         v-on:request-more="requestMore"
       />
     </div>

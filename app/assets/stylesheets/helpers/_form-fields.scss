@@ -74,5 +74,5 @@
 }
 
 @mixin input-custom-checkbox-selected() {
-  background-image: image-url('icons/pin.svg');
+  @include icon-tick;
 }
