@@ -79,7 +79,6 @@ Rails.application.routes.draw do
 
     get '/:area_type/search', to: 'search_areas#index', as: :search_areas
     get '/:area_type/search-results', to: 'search_areas#search_results', as: :search_areas_results
-    get '/:area_type/search-pagination', to: 'search_areas#search_pagination', as: :search_areas_pagination
 
     post '/search/autocomplete', to: 'search#autocomplete'
     post '/search-results', to: 'search#search_results'

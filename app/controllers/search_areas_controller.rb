@@ -4,10 +4,10 @@ class SearchAreasController < ApplicationController
 
   after_action :enable_caching
 
-  before_action :check_area_type, only: [:index, :search_results, :search_pagination]
-  before_action :ignore_empty_query, only: [:search_results, :search_pagination]
-  before_action :load_search, only: [:search_results, :search_pagination]
-  before_action :load_filters, only: [:index, :search_results, :search_pagination]
+  before_action :check_area_type, only: [:index, :search_results]
+  before_action :ignore_empty_query, only: [:search_results]
+  before_action :load_search, only: [:search_results]
+  before_action :load_filters, only: [:index, :search_results]
 
   def index
     @query = search_params[:search_term]
@@ -16,16 +16,8 @@ class SearchAreasController < ApplicationController
   def search_results
     @query = search_params[:search_term]
     @area_type = search_params[:area_type]
-    @results = Search::AreasSerializer.new(@search).serialize
-
-    render json: @results
-  end
-
-  def search_pagination
-    @query = search_params[:search_term]
-    @area_type = search_params[:area_type]
     geo_type = search_params[:geo_type]
-    @results = Search::AreasPaginationSerializer.new(@search, geo_type).serialize
+    @results = Search::AreasSerializer.new(@search, geo_type).serialize
 
     render json: @results
   end
