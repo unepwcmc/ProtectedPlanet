@@ -5,10 +5,10 @@
   <search-areas
     :autocomplete-area-types="<%= @search_area_types %>"
     endpoint-autocomplete="/search/autocomplete"
-    endpoint-pagination="<%= "/#{@area_type}/search-results" %>"
-    endpoint-search="<%= "/#{@area_type}/search-results" %>"
+    endpoint-pagination="<%= search_areas_pagination_path(@area_type) %>"
+    endpoint-search="<%= search_areas_results_path(@area_type) %>"
     filter-close-text="View Results"
-    :filter-groups="<%= @filter_groups %>" 
+    :filter-groups="<%= @filter_groups %>"
     query="<%= @query %>"
     no-results-text="<%= t('global.search.no-results') %>"
     sm-trigger-element="sm-trigger-infinite-scroll"

@@ -28,8 +28,7 @@ module Concerns::Searchable
     end
 
     def search_index
-      # TODO Define mapping for index between FE and BE
-      Search::DEFAULT_INDEX_NAME
+      controller_name.include?('area') ? Search::AREAS_INDEX_NAME : Search::DEFAULT_INDEX_NAME
     end
 
     AREA_TYPES = %w(wdpa oecm).freeze

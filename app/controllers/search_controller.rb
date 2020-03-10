@@ -12,11 +12,11 @@ class SearchController < ApplicationController
     end
     @categories = @categories.to_json
 
-    @query = params['search_term']
+    @query = search_params[:search_term]
   end
 
   def search_results
-    @results = Search::FullSerializer.new(@search, {page: params['requested_page']}).serialize
+    @results = Search::FullSerializer.new(@search, {page: search_params[:requested_page]}).serialize
 
     render json: @results
   end
@@ -26,51 +26,14 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @results = Autocompletion.lookup params['params']['search_term'] ## TODO Ferdi this needs to return // [ { title: String, url: String } ]
-
-    # render partial: 'search/autocomplete'
-    render json: @results
-  end
-
-  def search_results_areas
-    #for searching for OECMs or WDPAs - hooked it up with the front end - if it is working the page should request these results on first load
-    @results = Search::AreasSerializer.new(@search).serialize
+    @results = Autocompletion.lookup search_params[:search_term]
 
     render json: @results
   end
 
-  def search_areas_pagination
-    #for specific page of OECMs or WDPAs
+  private
 
-    #if regions
-    @results = [
-      {
-        title: 'Asia & Pacific',
-        url: 'url to page'
-      }
-    ].to_json
-
-    #if countries
-    @results = [
-      {
-        areas: 5908,
-        region: 'America',
-        title: 'United States of America',
-        url: 'url to page'
-      }
-    ]
-
-    #if sites
-    @results = [
-      {
-        country: 'France',
-        image: 'url to generated map of PA location',
-        region: 'Europe',
-        title: 'Avenc De Fra Rafel',
-        url: 'url to page'
-      }
-    ]
-
-    render json: @results
+  def search_params
+    params.permit(:search_term, :type, :requested_page, :items_per_page)
   end
 end

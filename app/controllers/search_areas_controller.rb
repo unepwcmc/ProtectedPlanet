@@ -2,10 +2,12 @@ class SearchAreasController < ApplicationController
   include Concerns::Searchable
   include Concerns::Filterable
 
-  before_action :check_area_type, only: [:index, :search_results]
-  before_action :ignore_empty_query, only: [:search_results]
-  before_action :load_search, only: [:search_results]
-  before_action :load_filters, only: [:index, :search_results]
+  after_action :enable_caching
+
+  before_action :check_area_type, only: [:index, :search_results, :search_pagination]
+  before_action :ignore_empty_query, only: [:search_results, :search_pagination]
+  before_action :load_search, only: [:search_results, :search_pagination]
+  before_action :load_filters, only: [:index, :search_results, :search_pagination]
 
   def index
     @query = search_params[:search_term]
@@ -14,7 +16,16 @@ class SearchAreasController < ApplicationController
   def search_results
     @query = search_params[:search_term]
     @area_type = search_params[:area_type]
-    @results = Search::AreasSerializer.new(@search, request_more?).serialize
+    @results = Search::AreasSerializer.new(@search).serialize
+
+    render json: @results
+  end
+
+  def search_pagination
+    @query = search_params[:search_term]
+    @area_type = search_params[:area_type]
+    geo_type = search_params[:geo_type]
+    @results = Search::AreasPaginationSerializer.new(@search, geo_type).serialize
 
     render json: @results
   end
@@ -22,7 +33,7 @@ class SearchAreasController < ApplicationController
   private
 
   def search_params
-    params.permit(:search_term, :filters, :area_type, :items_per_page, :requested_page)
+    params.permit(:search_term, :filters, :area_type, :geo_type, :items_per_page, :requested_page)
   end
 
   def request_more?
