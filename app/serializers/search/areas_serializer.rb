@@ -16,7 +16,7 @@ class Search::AreasSerializer < Search::BaseSerializer
   private
 
   def regions
-    _regions = @aggregations['region'].map { |obj| obj[:identifier] }
+    _regions = @aggregations['region']
     _regions = _regions.first(3) unless @more
     {
       geoType: 'region',
@@ -24,8 +24,8 @@ class Search::AreasSerializer < Search::BaseSerializer
       total: _regions.length,
       areas: _regions.map do |region|
         {
-          title: region,
-          totalAreas: "#{987654321} #{I18n.t('global.search.protected-areas')}" , # TODO
+          title: region[:identifier],
+          totalAreas: "#{region[:count]} #{I18n.t('global.search.protected-areas')}" , # TODO
           url: 'url to page' # TODO
         }
       end
@@ -42,10 +42,9 @@ class Search::AreasSerializer < Search::BaseSerializer
       areas: _countries.map do |country|
         _slug = slug(country[:identifier])
         {
-          areas: country[:count],
           countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
           # region: 'America', # TODO
-          totalAreas: "#{987654321} #{I18n.t('global.search.protected-areas')}" , # TODO
+          totalAreas: "#{country[:count]} #{I18n.t('global.search.protected-areas')}" , # TODO
           title: country[:identifier],
           url: 'url to page' # TODO
         }
