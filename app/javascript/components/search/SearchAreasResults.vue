@@ -8,6 +8,7 @@
       :key="index"
       :areas="result.areas"
       :geo-type="result.geoType"
+      :sm-trigger-element="uniqueSmTriggerElement(result.geoType)"
       :total="result.total"
       :title="result.title"
       v-on:request-more="requestMore"
@@ -38,6 +39,10 @@ export default {
     },
     results: {
       type: Array
+    },
+    smTriggerElement: {
+      required: true,
+      type: String
     }
   },
 
@@ -54,6 +59,10 @@ export default {
   methods: {
     requestMore (paginationParams) {
       this.$emit('request-more', paginationParams)
+    },
+    
+    uniqueSmTriggerElement (geoType) {
+      return `${this.smTriggerElement}-${geoType}`
     }
   }
 }

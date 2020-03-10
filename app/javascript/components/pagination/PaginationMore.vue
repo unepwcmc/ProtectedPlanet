@@ -3,7 +3,7 @@
     v-show="hasResults"
     v-html="text"
     class="button--all"
-    @click="viewAll"
+    @click="requestMore"
   />
 </template>
 
@@ -39,6 +39,10 @@ export default {
     this.$eventHub.$on('reset-search', this.reset)
   },
 
+  mounted () {
+    this.scrollMagicHandlers()
+  },
+
   computed: {
     hasResults () {
       return this.total > 0
@@ -70,12 +74,6 @@ export default {
         .on('enter', () => {
           this.requestMore()
         })
-    },
-
-    viewAll () {
-      console.log('submit view all')
-
-      this.scrollMagicHandlers()
     }
   }
 } 

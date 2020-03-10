@@ -40,6 +40,7 @@
         <search-areas-results
           :no-results-text="noResultsText"
           :results="results"
+          :sm-trigger-element="smTriggerElement"
           v-on:request-more="requestMore"
         />
       </div>
@@ -96,9 +97,17 @@ export default {
     },
     items_per_page: {
       type: Number,
-      default: 3
+      default: 9
     },
     query: {
+      type: String
+    },
+    noResultsText: {
+      required: true,
+      type: String
+    },
+    smTriggerElement: {
+      required: true,
       type: String
     },
     textDownload: {
@@ -112,10 +121,6 @@ export default {
     textMap: {
       type: String,
       required: true
-    },
-    noResultsText: {
-      required: true,
-      type: String
     }
   },
 
@@ -144,7 +149,6 @@ export default {
 
   mounted () {
     if(this.query) {
-      console.log('here')
       this.searchTerm = this.query
       this.ajaxSubmission()
     }
@@ -162,7 +166,7 @@ export default {
         params: {
           area_type: this.areaType,
           filters: this.activeFilterOptions,
-          items_per_page: this.itemsPerPage,
+          items_per_page: 3,
           search_term: this.searchTerm
         }
       }
@@ -214,7 +218,7 @@ export default {
           area_type: this.areaType,
           filters: this.activeFilterOptions,
           geo_type: paginationParams.geoType,
-          items_per_page: 9,
+          items_per_page: this.items_per_page,
           requested_page: paginationParams.requestedPage,
           search_term: this.searchTerm
         }
@@ -222,6 +226,7 @@ export default {
 
       axios.get(this.endpointPagination, data)
         .then(response => {
+          console.log('requestMore response', response)
           response.data.find(object =>
             object.geoType === paginationParams.geoType
           ).areas.concat(response.data)

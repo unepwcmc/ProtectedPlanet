@@ -55,8 +55,7 @@ $card-search-results-areas-flag-size: rem-calc(60);
         }
 
         &__icon--flag-large { 
-          @include card-search-results-areas-flag-size;
-          display: block;
+          @include icon-flag;
         }
 
       &__groups {

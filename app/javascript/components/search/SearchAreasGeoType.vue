@@ -4,7 +4,7 @@
       <h2>{{ title }} ({{ total }})</h2>
       
       <pagination-more
-        smTriggerElement="todo"
+        :sm-trigger-element="smTriggerElement"
         text="View All"
         :total="total"
         v-on:request-more="requestMore"
@@ -21,6 +21,8 @@
         :title="area.title"
         :url="area.url"
       />
+
+      <span v-if="smTriggerElement" :class="smTriggerElement"></span>
     </div>
   </div>
 </template>
@@ -50,6 +52,10 @@ export default {
     total: {
       required: true,
       type: Number
+    },
+    smTriggerElement: {
+      required: true,
+      type: String
     },
     title: {
       required: true,
