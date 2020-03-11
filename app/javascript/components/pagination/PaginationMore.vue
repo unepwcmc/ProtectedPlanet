@@ -34,15 +34,13 @@ export default {
 
   data () {
     return {
-      currentPage: 1,
+      currentPage: 0,
       getMoreBoolean: true,
-      resetting: false,
       scrollMagicHandlersActive: false
     }
   },
 
   mounted () {
-    // console.log(this.resetting)
     this.scrollMagicHandlerInit()
     this.$eventHub.$on('reset-search', this.reset)
   },
@@ -63,21 +61,13 @@ export default {
     },
 
     requestMore () {
-      // console.log('request more', this.resetting)
-      // if(this.resetting) { 
-      //   this.resetting = false
-      //   return false
-      // }
-
-      if(!this.scrollMagicHandlersActive) { 
-        this.scrollMagicHandlerAdd()
-        this.currentPage = 0
-      }
-
       this.currentPage = this.currentPage + 1
       
-      console.log(this.currentPage)
       this.$emit('request-more', this.currentPage)
+      
+      if(!this.scrollMagicHandlersActive) { 
+        this.scrollMagicHandlerAdd()
+      }
 
       if(this.currentPage == this.totalPages) { 
         this.scrollMagicHandlerRemove()
@@ -86,10 +76,8 @@ export default {
     },
 
     reset () {
-      console.log('reset')
       this.scrollMagicHandlerRemove()
-      // this.resetting = true
-      this.currentPage = 1 
+      this.currentPage = 0
       this.getMoreBoolean = true
       this.$emit('reset-pagination')
     },

@@ -79,7 +79,7 @@ export default {
       this.$emit('request-more', params)
     },
 
-    resetPagination () {
+    resetPagination (geoType) {
       this.$emit('reset-pagination', this.geoType)
     }
   }

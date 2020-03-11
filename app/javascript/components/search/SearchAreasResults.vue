@@ -13,6 +13,7 @@
       :total-pages="result.totalPages"
       :title="result.title"
       v-on:request-more="requestMore"
+      v-on:reset-pagination="resetPagination"
     />
 
     <p 
@@ -60,6 +61,10 @@ export default {
   methods: {
     requestMore (paginationParams) {
       this.$emit('request-more', paginationParams)
+    },
+
+    resetPagination (geoType) {
+      this.$emit('reset-pagination', geoType)
     },
     
     uniqueSmTriggerElement (geoType) {

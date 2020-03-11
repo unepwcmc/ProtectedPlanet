@@ -213,6 +213,19 @@ export default {
       this.results = results
     },
 
+    updateResults (newResults, geoType, isFirstPage) {
+      this.results.map(result => { 
+        if(result.geoType == geoType) { 
+          if(isFirstPage) {
+            result.areas.splice(0, result.areas.length, ...newResults)
+          } else {
+            result.areas = result.areas.concat(newResults)
+          }
+        }
+        return result
+      })
+    },
+
     updateSearchTerm (searchParams) {
       this.resetAll()
       this.areaType = searchParams.type
@@ -221,6 +234,8 @@ export default {
     },
 
     requestMore (paginationParams) {
+      const isFirstPage = paginationParams.requestedPage == 1
+
       let data = {
         params: {
           area_type: this.areaType,
@@ -232,16 +247,9 @@ export default {
         }
       }
 
-      console.log(data.params)
-
       axios.get(this.endpointPagination, data)
         .then(response => {
-          this.results.map(result => { 
-            if(result.geoType == paginationParams.geoType) { 
-              result.areas = paginationParams.requestedPage == 1 ? response.data : result.areas.concat(response.data)
-            }
-            return result
-          })
+          this.updateResults(response.data, paginationParams.geoType, isFirstPage)
         })
         .catch(function (error) {
           console.log(error)
@@ -249,14 +257,12 @@ export default {
     },
 
     resetPagination (geoType) {
-      console.log('resetPagination')
       this.results.map(result => { 
         if(result.geoType == geoType) { 
           result.areas.splice(3)
         }
         return result
       })
-      console.log('this.results', this.results)
     },
 
     resetAll () {
