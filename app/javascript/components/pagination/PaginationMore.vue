@@ -31,16 +31,13 @@ export default {
   data () {
     return {
       currentPage: 1,
-      resetting: false
+      resetting: false,
+      scrollMagicHandlersActive: false
     }
   },
 
   created () {
     this.$eventHub.$on('reset-search', this.reset)
-  },
-
-  mounted () {
-    this.scrollMagicHandlers()
   },
 
   computed: {
@@ -51,13 +48,20 @@ export default {
 
   methods: {
     requestMore () {
-      console.log('request more')
       if(this.resetting) { 
         this.resetting = false
         return false
       }
-      
-      this.$emit('request-more', this.currentPage + 1)
+
+      if(!this.scrollMagicHandlersActive) { 
+        this.scrollMagicHandlersActive = true
+        this.scrollMagicHandlers()
+        this.currentPage = 0
+      }
+
+      this.currentPage = this.currentPage + 1
+      console.log(this.currentPage)
+      this.$emit('request-more', this.currentPage)
     },
 
     reset () {

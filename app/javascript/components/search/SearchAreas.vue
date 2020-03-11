@@ -231,12 +231,16 @@ export default {
         }
       }
 
+      console.log(data.params)
+
       axios.get(this.endpointPagination, data)
         .then(response => {
-          console.log('requestMore response', response)
-          response.data.find(object =>
-            object.geoType === paginationParams.geoType
-          ).areas.concat(response.data)
+          this.results.map(result => { 
+            if(result.geoType == paginationParams.geoType) { 
+              result.areas = result.areas.concat(response.data)
+            }
+            return result
+          })
         })
         .catch(function (error) {
           console.log(error)

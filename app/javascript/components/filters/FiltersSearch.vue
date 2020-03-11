@@ -85,12 +85,8 @@ export default {
         return false
       }
 
-      console.log('updatedFilter', updatedFilter)
-
       this.activeFilterOptions[updatedFilter.id] = updatedFilter.options
       
-      console.log('this.activeFilterOptions', this.activeFilterOptions)
-
       this.$emit('update:filter-group', this.activeFilterOptions)
     }
   }
