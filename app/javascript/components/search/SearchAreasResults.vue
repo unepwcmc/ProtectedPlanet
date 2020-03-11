@@ -10,6 +10,7 @@
       :geo-type="result.geoType"
       :sm-trigger-element="uniqueSmTriggerElement(result.geoType)"
       :total="result.total"
+      :total-pages="result.totalPages"
       :title="result.title"
       v-on:request-more="requestMore"
     />

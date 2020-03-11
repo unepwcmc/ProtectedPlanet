@@ -45,6 +45,7 @@
           :results="results"
           :sm-trigger-element="smTriggerElement"
           v-on:request-more="requestMore"
+          v-on:reset-pagination="resetPagination"
         />
       </div>
     </div>
@@ -237,7 +238,7 @@ export default {
         .then(response => {
           this.results.map(result => { 
             if(result.geoType == paginationParams.geoType) { 
-              result.areas = result.areas.concat(response.data)
+              result.areas = paginationParams.requestedPage == 1 ? response.data : result.areas.concat(response.data)
             }
             return result
           })
@@ -245,6 +246,17 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+
+    resetPagination (geoType) {
+      console.log('resetPagination')
+      this.results.map(result => { 
+        if(result.geoType == geoType) { 
+          result.areas.splice(3)
+        }
+        return result
+      })
+      console.log('this.results', this.results)
     },
 
     resetAll () {

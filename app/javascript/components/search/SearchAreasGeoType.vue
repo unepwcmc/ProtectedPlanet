@@ -7,7 +7,9 @@
         :sm-trigger-element="smTriggerElement"
         text="View All"
         :total="total"
+        :total-pages="totalPages"
         v-on:request-more="requestMore"
+        v-on:reset-pagination="resetPagination"
       />
     </div>
     <div class="cards--search-results-areas">
@@ -21,9 +23,9 @@
         :title="area.title"
         :url="area.url"
       />
-
-      <span v-if="smTriggerElement" :class="smTriggerElement"></span>
     </div>
+
+    <span v-if="smTriggerElement" :class="smTriggerElement"></span>
   </div>
 </template>
 
@@ -53,6 +55,10 @@ export default {
       required: true,
       type: Number
     },
+    totalPages: {
+      required: true,
+      type: Number
+    },
     smTriggerElement: {
       required: true,
       type: String
@@ -71,6 +77,10 @@ export default {
       }
 
       this.$emit('request-more', params)
+    },
+
+    resetPagination () {
+      this.$emit('reset-pagination', this.geoType)
     }
   }
 }
