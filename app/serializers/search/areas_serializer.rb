@@ -86,7 +86,8 @@ class Search::AreasSerializer < Search::BaseSerializer
     name.underscore.gsub(' ', '-')
   end
 
+  DEFAULT_PAGE_SIZE = 9.0.freeze
   def total_pages(items_no)
-    (items_no / @search.options[:size]).ceil
+    (items_no / DEFAULT_PAGE_SIZE).ceil
   end
 end
