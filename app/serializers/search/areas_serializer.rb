@@ -22,16 +22,14 @@ class Search::AreasSerializer < Search::BaseSerializer
 
   def regions
     _regions = @aggregations['region']
-    _regions = _regions.first(3)
 
-    geo_hash('region', _regions)
+    geo_hash('region', _regions.first(3), _regions.length)
   end
 
   def countries
     _countries = @aggregations['country']
-    _countries = _countries.first(3)
 
-    geo_hash('country', _countries)
+    geo_hash('country', _countries.first(3), _countries.length)
   end
 
   def sites
@@ -48,6 +46,7 @@ class Search::AreasSerializer < Search::BaseSerializer
       geoType: geo_type,
       title: I18n.t("global.#{geo_type_locale}"),
       total: total || areas.length,
+      totalPages: total_pages(total),
       areas: areas_ary(geo_type, areas)
     }
   end
@@ -85,5 +84,9 @@ class Search::AreasSerializer < Search::BaseSerializer
 
   def slug(name)
     name.underscore.gsub(' ', '-')
+  end
+
+  def total_pages(items_no)
+    (items_no / @search.options[:size]).ceil
   end
 end
