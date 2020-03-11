@@ -23,24 +23,25 @@ class Search::AreasSerializer < Search::BaseSerializer
   def regions
     _regions = @aggregations['region']
 
-    geo_hash('region', _regions.first(3), _regions.length)
+    geo_hash('region', _regions, _regions.length)
   end
 
   def countries
     _countries = @aggregations['country']
 
-    geo_hash('country', _countries.first(3), _countries.length)
+    geo_hash('country', _countries, _countries.length)
   end
 
   def sites
     _sites = @results.protected_areas
-    _sites = _sites.first(3)
+    _sites = _sites
     _total_count = @aggregations['region'].inject(0) { |sum, r| sum + r[:count] }
 
     geo_hash('site', _sites, _total_count)
   end
 
   def geo_hash(geo_type, areas, total=nil)
+    areas = areas.present? ? areas.first(3) : []
     geo_type_locale = geo_type == 'site' ? 'area-types.wdpa' : "geo-types.#{geo_type.pluralize}"
     {
       geoType: geo_type,
@@ -52,6 +53,7 @@ class Search::AreasSerializer < Search::BaseSerializer
   end
 
   def areas_ary(geo_type, areas)
+    return [] if areas.blank?
     areas.map { |a| send("#{geo_type}_hash", a) }
   end
 
