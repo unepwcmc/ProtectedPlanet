@@ -4,7 +4,7 @@
       <div class="search__bar-content">
         <filter-trigger
           :text="textFilters"
-          v-on:toggle-filter-pane="toggleFilterPane"
+          v-on:toggle:filter-pane="toggleFilterPane"
         />
 
         <search-areas-input-autocomplete
@@ -37,7 +37,7 @@
         :isActive="isFilterPaneActive"
         :title="textFilters"
         v-on:update:filter-group="updateFilters"
-        v-on:toggle-filter-pane="toggleFilterPane"X
+        v-on:toggle:filter-pane="toggleFilterPane"
       />
       <div class="search__results">
         <search-areas-results
@@ -203,6 +203,7 @@ export default {
     },
 
     updateFilters (filters) {
+      this.$eventHub.$emit('reset-pagination')
       this.activeFilterOptions = filters
       this.ajaxSubmission()
     },
@@ -227,7 +228,8 @@ export default {
     },
 
     updateSearchTerm (searchParams) {
-      this.resetAll()
+      this.resetFilters()
+      this.$eventHub.$emit('reset-pagination')
       this.areaType = searchParams.type
       this.searchTerm = searchParams.search_term
       this.ajaxSubmission()
@@ -265,9 +267,11 @@ export default {
       })
     },
 
-    resetAll () {
+    resetFilters () {
+      console.log('reset filers')
       this.activeFilterOptions = []
-      this.$eventHub.$emit('reset-search')
+      this.$eventHub.$emit('reset:filter-options')
+      console.log('filter-options', this.activeFilterOptions)
     },
 
     toggleFilterPane () {

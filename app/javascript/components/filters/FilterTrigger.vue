@@ -19,7 +19,7 @@ export default {
 
   methods: {
     toggleFilterPane () {
-      this.$emit('toggle-filter-pane')
+      this.$emit('toggle:filter-pane')
     }
   }
 }

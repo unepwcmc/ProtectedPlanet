@@ -45,22 +45,16 @@ export default {
 
   data () {
     return {
-      input: [],
-      resetting: false
+      input: []
     }
   },
 
   created () {
-    this.$eventHub.$on('reset-search', this.reset)
+    this.$eventHub.$on('reset:filter-options', this.reset)
   },
 
   methods: {
     changeInput () {
-      if(this.resetting) { 
-        this.resetting = false
-        return false
-      }
-
       this.$emit('update:options', this.input)
     },
     
@@ -69,8 +63,8 @@ export default {
     },
 
     reset () {
-      this.resetting = true
-      this.changeInput(this.input = [])
+      console.log('reset checkbox')
+      this.input = []
     }
   }
 }

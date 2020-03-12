@@ -42,7 +42,7 @@ export default {
 
   mounted () {
     this.scrollMagicHandlerInit()
-    this.$eventHub.$on('reset-search', this.reset)
+    this.$eventHub.$on('reset-pagination', this.reset)
   },
 
   computed: {
