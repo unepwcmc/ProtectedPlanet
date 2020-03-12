@@ -53,22 +53,15 @@ export default {
   data () {
     return {
       input: '',
-      resetting: false
     }
   },
 
   created () {
-    this.changeInput(this.options[0].id)
-    this.$eventHub.$on('reset-search', this.reset)
+    this.$eventHub.$on('reset:filter-options', this.reset)
   },
 
   methods: {
     changeInput (id) {
-      if(this.resetting) { 
-        this.resetting = false
-        return false
-      }
-
       this.input = id
 
       this.$emit('update:options', this.input)
@@ -79,8 +72,7 @@ export default {
     },
 
     reset () {
-      this.resetting = true
-      this.changeInput(this.options[0].id)
+      this.input = ''
     }
   }
 }

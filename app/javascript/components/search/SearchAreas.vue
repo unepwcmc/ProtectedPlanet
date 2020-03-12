@@ -4,11 +4,12 @@
       <div class="search__bar-content">
         <filter-trigger
           :text="textFilters"
-          v-on:toggle-filter-pane="toggleFilterPane"
+          v-on:toggle:filter-pane="toggleFilterPane"
         />
-        
+
         <search-areas-input-autocomplete
           :endpoint="endpointAutocomplete"
+          :pre-populated-search-term="searchTerm"
           :types="autocompleteAreaTypes"
           v-on:submit-search="updateSearchTerm"
         />
@@ -23,23 +24,29 @@
         />
       </div>
     </div>
-    
-    <map-search 
+
+    <map-search
       class="search__map"
       :isActive="isMapPaneActive"
     />
 
     <div class="search__main">
-      <filters-search 
+      <filters-search
         class="search__filters"
+        :filter-close-text="filterCloseText"
         :filter-groups="filterGroups"
         :isActive="isFilterPaneActive"
+        :title="textFilters"
         v-on:update:filter-group="updateFilters"
+        v-on:toggle:filter-pane="toggleFilterPane"
       />
       <div class="search__results">
         <search-areas-results
+          :no-results-text="noResultsText"
           :results="results"
+          :sm-trigger-element="smTriggerElement"
           v-on:request-more="requestMore"
+          v-on:reset-pagination="resetPagination"
         />
       </div>
     </div>
@@ -60,12 +67,12 @@ import SearchAreasResults from '../search/SearchAreasResults.vue'
 export default {
   name: 'search-areas',
 
-  components: { 
+  components: {
     DownloadTrigger,
-    FilterTrigger, 
-    FiltersSearch, 
-    MapTrigger, 
-    MapSearch, 
+    FilterTrigger,
+    FiltersSearch,
+    MapTrigger,
+    MapSearch,
     SearchAreasInputAutocomplete,
     SearchAreasResults
   },
@@ -89,13 +96,28 @@ export default {
       type: String,
       required: true
     },
+    filterCloseText: {
+      type: String,
+      required: true
+    },
     filterGroups: {
       type: Array, // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
       required: true
     },
     items_per_page: {
       type: Number,
-      default: 3
+      default: 9
+    },
+    query: {
+      type: String
+    },
+    noResultsText: {
+      required: true,
+      type: String
+    },
+    smTriggerElement: {
+      required: true,
+      type: String
     },
     textDownload: {
       type: String,
@@ -108,15 +130,7 @@ export default {
     textMap: {
       type: String,
       required: true
-    },
-    // noResultsText: {
-    //   type: String,
-    //   required: true
-    // },
-    // resultsText: {
-    //   type: String,
-    //   required: true
-    // }
+    }
   },
 
   data () {
@@ -125,7 +139,7 @@ export default {
       areaType: '',
       currentPage: 0,
       defaultPage: 1,
-      isFilterPaneActive: true,
+      isFilterPaneActive: false,
       isMapPaneActive: false,
       pageItemsStart: 0,
       pageItemsEnd: 0,
@@ -137,17 +151,11 @@ export default {
   },
 
   created () {
-    // this.categoryId = this.defaultCategory
-    // this.requestedPage = this.defaultPage
-    // this.ajaxSubmission()
+    if(this.query) { this.searchTerm = this.query }
   },
 
-  mounted () { 
-    if(this.query) {
-      console.log('here')
-      this.searchTerm = this.query.searchTerm
-      this.ajaxSubmission()
-    }
+  mounted () {
+    if(this.query) { this.ajaxSubmission() }
   },
 
   computed: {
@@ -162,17 +170,18 @@ export default {
         params: {
           area_type: this.areaType,
           filters: this.activeFilterOptions,
-          items_per_page: this.itemsPerPage,
+          items_per_page: 3,
           search_term: this.searchTerm
         }
       }
 
       this.axiosSetHeaders()
 
-      axios.post(this.endpointSearch, data)
+      axios.get(this.endpointSearch, data)
         .then(response => {
-          console.log('success', response)
-          this.updateProperties(response.data)
+          console.log('success', response.data)
+
+          this.updateProperties(response)
         })
         .catch(function (error) {
           console.log(error)
@@ -190,47 +199,73 @@ export default {
     },
 
     updateFilters (filters) {
-      console.log('update filters and do new search', filters)
+      this.$eventHub.$emit('reset-pagination')
       this.activeFilterOptions = filters
       this.ajaxSubmission()
     },
 
-    updateProperties (data) {
-      this.results = data
-      // this.searchTerm = data.search_term
+    updateProperties (response) {
+      const results = ('data' in response && Array.isArray(response.data)) ? response.data : []
+
+      this.results = results
+    },
+
+    updateResults (newResults, geoType, isFirstPage) {
+      this.results.map(result => { 
+        if(result.geoType == geoType) { 
+          if(isFirstPage) {
+            result.areas.splice(0, result.areas.length, ...newResults)
+          } else {
+            result.areas = result.areas.concat(newResults)
+          }
+        }
+        return result
+      })
     },
 
     updateSearchTerm (searchParams) {
-      this.resetAll()
+      this.resetFilters()
+      this.$eventHub.$emit('reset-pagination')
       this.areaType = searchParams.type
       this.searchTerm = searchParams.search_term
       this.ajaxSubmission()
     },
 
-    resetAll () {
-      this.activeFilterOptions = []
-      this.$eventHub.$emit('reset-search')
-    },
-
     requestMore (paginationParams) {
+      const isFirstPage = paginationParams.requestedPage == 1
+
       let data = {
         params: {
           area_type: this.areaType,
           filters: this.activeFilterOptions,
           geo_type: paginationParams.geoType,
-          items_per_page: 6,
+          items_per_page: this.items_per_page,
           requested_page: paginationParams.requestedPage,
           search_term: this.searchTerm
         }
       }
 
-      axios.post(this.endpointPagination, data)
+      axios.get(this.endpointPagination, data)
         .then(response => {
-          this.data.results.find(object => object.geo_type === paginationParams.geoType).areas.concat(data.results);
+          this.updateResults(response.data, paginationParams.geoType, isFirstPage)
         })
         .catch(function (error) {
           console.log(error)
         })
+    },
+
+    resetPagination (geoType) {
+      this.results.map(result => { 
+        if(result.geoType == geoType) { 
+          result.areas.splice(3)
+        }
+        return result
+      })
+    },
+
+    resetFilters () {
+      this.activeFilterOptions = []
+      this.$eventHub.$emit('reset:filter-options')
     },
 
     toggleFilterPane () {

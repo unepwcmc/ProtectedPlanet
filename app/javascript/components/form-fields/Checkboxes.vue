@@ -2,20 +2,20 @@
   <div>
     <div class="flex flex-wrap flex-column">
       <p 
-        v-for="option in options"
-        :key="inputId(option)"
+        v-for="option, index in options"
+        :key="index"
         class="checkbox no-margin"
       >
         <label
-          :for="inputId(option)"
+          :for="inputId(option.title)"
           class="checkbox__label no-margin flex flex-v-center"
         >
           <input
-            :id="inputId(option)"
+            :id="inputId(option.title)"
             @change="changeInput($eventHub)"
             class="checkbox__input"
             type="checkbox"
-            :value="option.id"
+            :value="option.title"
             v-model="input"
           >
           
@@ -38,39 +38,32 @@ export default {
       required: true 
     },
     options: { 
-      type: Array, // { id: String, title: String }
+      type: Array, // { title: String }
       required: true 
     }
   },
 
   data () {
     return {
-      input: [],
-      resetting: false
+      input: []
     }
   },
 
   created () {
-    this.$eventHub.$on('reset-search', this.reset)
+    this.$eventHub.$on('reset:filter-options', this.reset)
   },
 
   methods: {
     changeInput () {
-      if(this.resetting) { 
-        this.resetting = false
-        return false
-      }
-
       this.$emit('update:options', this.input)
     },
     
-    inputId (option) {
-      return `${this.name}-${option.id}`
+    inputId (title) {
+      return `${this.id}-${title}`
     },
 
     reset () {
-      this.resetting = true
-      this.changeInput(this.input = [])
+      this.input = []
     }
   }
 }

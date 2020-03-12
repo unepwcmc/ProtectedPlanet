@@ -37,6 +37,11 @@ titles:
     model: "Governance"
     property: "name"
     template: "Protected Areas with Governance '%s'"
+  category:
+    type: "model"
+    model: "Comfy::Cms::Category"
+    property: "label"
+    template: "Pages with Categories '%s'"
 aggregations:
   country:
     type: "model"
@@ -53,6 +58,9 @@ aggregations:
   iucn_category:
     type: "model"
     class: "IucnCategory"
+  category:
+    type: "model"
+    class: "Comfy::Cms::Category"
 filters:
     type:
       type: 'type'
@@ -99,4 +107,14 @@ filters:
       type: 'nested'
       path: 'countries_for_index.region_for_index'
       field: 'countries_for_index.region_for_index.name'
+      required: true
+    category:
+      type: 'nested'
+      path: 'categories'
+      field: 'categories.id'
+      required: true
+    ancestor:
+      type: 'nested'
+      path: 'ancestors'
+      field: 'ancestors.id'
       required: true

@@ -13,4 +13,15 @@ class Search::BaseSerializer
   def serialize
     raise NotImplementedError
   end
+
+  private
+
+  def paginate(items)
+    size = @search.options[:size]
+    page = @search.options[:page]
+    offset = size * (page - 1)
+    last_item = size * page - 1
+
+    items[offset..last_item].presence || []
+  end
 end

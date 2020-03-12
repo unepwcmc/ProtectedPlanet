@@ -1,10 +1,16 @@
 class Search::AreasSerializer < Search::BaseSerializer
-  def initialize(search)
+  def initialize(search, geo_type=nil)
     super(search)
     @aggregations = @search.aggregations
+    @geo_type = geo_type
   end
 
   def serialize
+    if @geo_type
+      areas = @geo_type == 'site' ? @results.protected_areas : paginate(@aggregations[@geo_type])
+      return areas_ary(@geo_type, areas).to_json
+    end
+
     [
       regions,
       countries,
@@ -15,62 +21,77 @@ class Search::AreasSerializer < Search::BaseSerializer
   private
 
   def regions
-    _regions = @aggregations['region'].map { |obj| obj[:identifier] }
-    {
-      geoType: 'region',
-      title: I18n.t('global.geo-types.regions'),
-      total: _regions.length,
-      areas: _regions.map do |region|
-        {
-          title: region,
-          url: 'url to page' # TODO
-        }
-      end
-    }
+    _regions = @aggregations['region']
+
+    geo_hash('region', _regions, _regions.length)
   end
 
   def countries
     _countries = @aggregations['country']
-    {
-      geoType: 'country',
-      title: I18n.t('global.geo-types.countries'),
-      total: _countries.length,
-      areas: _countries.map do |country|
-        _slug = slug(country[:identifier])
-        {
-          areas: country[:count],
-          imageFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
-          region: 'America', # TODO
-          title: country[:identifier],
-          url: 'url to page' # TODO
-        }
-      end
-    }
+
+    geo_hash('country', _countries, _countries.length)
   end
 
   def sites
-    _sites = @results.select { |record| record.is_a?(ProtectedArea) }
+    _sites = @results.protected_areas
+    _sites = _sites
+    # Counting by governance has every PA must have one.
+    # Counting by country or region is not reliable as a PA might belong to more than one country.
+    _total_count = @aggregations['governance'].inject(0) { |sum, r| sum + r[:count] }
+
+    geo_hash('site', _sites, _total_count)
+  end
+
+  def geo_hash(geo_type, areas, total=nil)
+    areas = areas.present? ? areas.first(3) : []
+    geo_type_locale = geo_type == 'site' ? 'area-types.wdpa' : "geo-types.#{geo_type.pluralize}"
     {
-      geoType: 'site',
-      title: I18n.t('global.area-types.wdpa'), ## OR I18n.t('global.area_types.oecm')
-      total: _sites.count,
-      areas: _sites.map do |site|
-        _countries = site.countries
-        _slugs = _countries.map { |c| slug(c.name) }
-        _regions = _countries.map(&:region).map(&:name).uniq
-        {
-          country: _countries.map(&:name).join(','),
-          image: '/assets/tiles/FR?type=country&version=1', # TODO This should be a mapbox internal asset
-          imageFlag: _slugs.map { |s| ActionController::Base.helpers.image_url("flags/#{s}.svg") },
-          region: _regions.join(','),
-          title: site.name,
-          url: 'url to page' # TODO
-        }
-      end
+      geoType: geo_type,
+      title: I18n.t("global.#{geo_type_locale}"),
+      total: total || areas.length,
+      totalPages: total_pages(total),
+      areas: areas_ary(geo_type, areas)
+    }
+  end
+
+  def areas_ary(geo_type, areas)
+    return [] if areas.blank?
+    areas.map { |a| send("#{geo_type}_hash", a) }
+  end
+
+  def region_hash(region)
+    {
+      title: region[:identifier],
+      totalAreas: "#{region[:count]} #{I18n.t('global.search.protected-areas')}" , # TODO
+      url: 'url to page' # TODO
+    }
+  end
+
+  def country_hash(country)
+    _slug = slug(country[:identifier])
+    {
+      countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
+      # region: 'America', # TODO
+      totalAreas: "#{country[:count]} #{I18n.t('global.search.protected-areas')}" , # TODO
+      title: country[:identifier],
+      url: 'url to page' # TODO
+    }
+  end
+
+  def site_hash(site)
+    {
+      image: '/assets/tiles/FR?type=country&version=1', # TODO This should be a mapbox internal asset
+      title: site.name,
+      url: 'url to page' # TODO
     }
   end
 
   def slug(name)
     name.underscore.gsub(' ', '-')
+  end
+
+  DEFAULT_PAGE_SIZE = 9.0.freeze
+  def total_pages(items_no)
+    (items_no / DEFAULT_PAGE_SIZE).ceil
   end
 end

@@ -62,8 +62,6 @@ export default {
         options: updatedOptions
       }
 
-      console.log('updateFilter data', data)
-
       this.$emit('update:filter', data)
     }
   }
