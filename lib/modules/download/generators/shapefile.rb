@@ -31,7 +31,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
           shapefile_paths |= export_component name, props, i
         end
 
-        system("zip -j #{zip_path(i)} #{shapefile_paths.join(' ')}")
+        return false unless system("zip -j #{zip_path(i)} #{shapefile_paths.join(' ')}")
       end
     end
     merge_files
@@ -57,9 +57,9 @@ class Download::Generators::Shapefile < Download::Generators::Base
     sql = """
       SELECT *
       FROM #{view_name}
-      #{order_by if name == 'polygons'}
+      #{order_by if name.to_s == 'polygons'}
       LIMIT #{limit} OFFSET #{offset}
-    """
+    """.squish
 
     export_success = Ogr::Postgres.export(
       :shapefile,
