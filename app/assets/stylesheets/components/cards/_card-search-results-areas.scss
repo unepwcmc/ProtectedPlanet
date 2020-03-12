@@ -32,7 +32,7 @@ $card-search-results-areas-flag-size: rem-calc(60);
       text-decoration: none;
       height: rem-calc(300);
 
-      &:not(:first-child):not(:nth-child(3n)):last-child { 
+      &:not(:first-child):not(:nth-child(3n+1)):not(:nth-child(3n)):last-child { 
         margin-left: 5%;
         margin-right: auto; 
       }
