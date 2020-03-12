@@ -27,8 +27,4 @@ class SearchAreasController < ApplicationController
   def search_params
     params.permit(:search_term, :filters, :area_type, :geo_type, :items_per_page, :requested_page)
   end
-
-  def request_more?
-    search_params[:requested_page] && search_params[:requested_page].to_i > 0
-  end
 end

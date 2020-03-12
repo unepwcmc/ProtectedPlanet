@@ -35,7 +35,9 @@ class Search::AreasSerializer < Search::BaseSerializer
   def sites
     _sites = @results.protected_areas
     _sites = _sites
-    _total_count = @aggregations['region'].inject(0) { |sum, r| sum + r[:count] }
+    # Counting by governance has every PA must have one.
+    # Counting by country or region is not reliable as a PA might belong to more than one country.
+    _total_count = @aggregations['governance'].inject(0) { |sum, r| sum + r[:count] }
 
     geo_hash('site', _sites, _total_count)
   end
