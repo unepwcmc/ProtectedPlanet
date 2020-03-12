@@ -1,9 +1,9 @@
 <section class="search--pa container">
   <div class="search__container">
-    <!-- <input type="text" class="search__input" placeholder="Search for a protected area..."> -->
-    <v-select-searchable-filterable 
-      :config="<%= @search_pas_config %>"
-      :categories="<%= @search_pas_categories %>" 
+    <search-areas-home
+      :autocomplete-area-types="<%= @search_area_types %>"
+      endpoint-autocomplete="/search/autocomplete"
+      endpoint-search="/<%= locale %>/TYPE/search?search_term=SEARCHTERM"
     >
   </div>
 </section>

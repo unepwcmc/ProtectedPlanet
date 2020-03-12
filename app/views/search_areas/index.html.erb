@@ -1,0 +1,19 @@
+<%#= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: "#{@cms_page.slug }" %>
+<%= render partial: "./layouts/partials/hero-small", locals: { title: 'needs pulling in from cms', classes: ""} %>
+
+<div>
+  <search-areas
+    :autocomplete-area-types="<%= @search_area_types %>"
+    endpoint-autocomplete="/search/autocomplete"
+    endpoint-pagination="<%= search_areas_results_path(@area_type) %>"
+    endpoint-search="<%= search_areas_results_path(@area_type) %>"
+    filter-close-text="View Results"
+    :filter-groups="<%= @filter_groups %>"
+    query="<%= @query %>"
+    no-results-text="<%= t('global.search.no-results') %>"
+    sm-trigger-element="sm-trigger-infinite-scroll"
+    text-download="<%= t('global.search.download') %>"
+    text-filters="<%= t('global.search.filters') %>"
+    text-map="<%= t('global.search.map') %>"
+  ></search-areas>
+</div>

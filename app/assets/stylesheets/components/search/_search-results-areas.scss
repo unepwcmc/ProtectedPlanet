@@ -1,0 +1,64 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--results-areas {
+  @include bg-grey-xlight;
+
+  .search {
+    &__bar {
+      @include box-shadow-bottom-grey;
+      background-color: $white;
+      border-bottom: solid 1px $grey;
+      padding: rem-calc(20 0); 
+    }
+
+      &__bar-content {
+        @include container;
+        @include site-width;
+        @include flex;
+        @include flex-v-center;
+      }
+
+    &__main {
+      @include container;
+      @include flex;
+      @include site-width;
+    }
+
+      &__filters {
+        @include flex-no-shrink;
+        @include responsive(padding-right, 0, rem-calc(24), rem-calc(24));
+        @include responsive(width, 0, 33%, 25%);
+      }
+
+      &__results {
+        @include flex-grow;
+      }
+
+        &__results-none {
+          font-size: rem-calc(20);
+          font-weight: $bold;
+          padding: rem-calc(30 0);
+          text-align: center; 
+        }
+      
+      &__results-bar {
+        @include flex;
+        @include flex-h-between;
+        @include flex-v-center;
+      }
+
+    &__map {
+      @include container;
+      @include site-width;
+    }
+  }
+}

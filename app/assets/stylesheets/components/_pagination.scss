@@ -1,0 +1,42 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.pagination {
+  &__content {
+    @include flex;
+    @include flex-h-end;
+    @include flex-v-center;
+    @include text-pagination;
+  }
+
+    &__button--next {
+      @include button-next;
+      @include icon-circle-chevron-green-right;
+
+      &.button--disabled { @include icon-circle-chevron-grey-right; }
+    }
+
+    &__button--previous {
+      @include button-prev;
+      @include icon-circle-chevron-green-left; 
+      margin: rem-calc(0 6 0 10);
+
+      &.button--disabled { @include icon-circle-chevron-grey-left; }
+    }
+
+  &__no-results {
+    @include text-pagination-no-results;
+    color: $grey-dark;
+    font-weight: bold;
+    margin: rem-calc(60 0);
+    text-align: center;
+  }
+}

@@ -12,15 +12,15 @@ en:
         - 
           title: Regional level
           url: #TODO
-          icon: worldwide
+          icon: region
         - 
           title: Country level
           url: #TODO
-          icon: worldwide
+          icon: region
         - 
           title: Indiviual Area
           url: #TODO
-          icon: worldwide 
+          icon: region 
       categories:
         - 
           title: Marine Protected Areas

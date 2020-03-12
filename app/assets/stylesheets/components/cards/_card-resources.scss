@@ -1,0 +1,32 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--resources {
+  .cards {
+    &__cards {
+      @include flex;
+      @include flex-wrap;
+    }
+  }
+
+  .card {
+    @include responsive(margin-bottom, rem-calc(20), rem-calc(50), rem-calc(50));
+    @include responsive(width, 100%, 25%, 25%);
+    padding: rem-calc(10);
+
+    &:nth-child(3),
+    :nth-child(4) {
+      @include responsive(display, none, none, block);
+    }
+
+    &--link {
+      border: solid 1px $white;
+      cursor: pointer;
+      text-decoration: none;
+
+      &:hover { border-color: $body-font-colour; }
+    }
+
+      &__date { @include text-small; }
+  }
+}

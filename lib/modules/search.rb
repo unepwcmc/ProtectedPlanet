@@ -1,16 +1,18 @@
-
 class Search
-  CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml'))
-  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance, :is_green_list]
-  COUNTRY_INDEX = 'countries_'+Rails.env
-  PA_INDEX = 'protectedareas_'+Rails.env
+  CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml')).freeze
+  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance, :is_green_list, :category, :ancestor].freeze
+  COUNTRY_INDEX = "countries_#{Rails.env}".freeze
+  PA_INDEX = "protectedareas_#{Rails.env}".freeze
+  CMS_INDEX = "cms_#{Rails.env}".freeze
+  DEFAULT_INDEX_NAME = [PA_INDEX, COUNTRY_INDEX, CMS_INDEX].join(',').freeze
+  AREAS_INDEX_NAME = [PA_INDEX, COUNTRY_INDEX].join(',').freeze
   attr_reader :search_term, :options
 
   def self.configuration
     @@configuration ||= YAML.load(CONFIGURATION_FILE)
   end
 
-  def self.search search_term, options={}, index_name=PA_INDEX+','+COUNTRY_INDEX
+  def self.search search_term, options={}, index_name=DEFAULT_INDEX_NAME
     # after receiving some crazy long search terms that crash elasticsearch
     # we are limiting this to 128 characters
     instance = self.new (search_term.present? ? search_term[0..127] : search_term), options, index_name
@@ -49,6 +51,20 @@ class Search
     (results.count / RESULTS_SIZE).ceil
   end
 
+  def page_items_start(page: 1, per_page: RESULTS_SIZE, for_display: false)
+    n = (page - 1) * per_page
+    for_display ? n + 1 : n
+  end
+
+  def page_items_end(page: 1, per_page: RESULTS_SIZE, for_display: false)
+    n = page * per_page - 1
+    if for_display
+      n >= results.count ? results.count : n + 1
+    else
+      n
+    end
+  end
+
   private
   attr_writer :search_term, :options
 
@@ -61,9 +77,10 @@ class Search
   end
 
   def query
+    size = options[:size] || RESULTS_SIZE
     {
-      size: options[:size] || RESULTS_SIZE,
-      from: options[:offset] || offset,
+      size: size,
+      from: options[:offset] || offset(size),
       # This line helps countries come first in search, may need tweaking as initial weights are dependent on the relative
       # frequency of terms in the countries and PA indices which is hard to anticipate!
       indices_boost: [{COUNTRY_INDEX => 3}, {PA_INDEX => 1} ],
@@ -81,7 +98,7 @@ class Search
     end
   end
 
-  def offset
-    RESULTS_SIZE * (current_page - 1)
+  def offset(size=RESULTS_SIZE)
+    size * (current_page - 1)
   end
 end

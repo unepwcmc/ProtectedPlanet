@@ -60,14 +60,15 @@ Rails.application.routes.draw do
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
     resources :downloads, only: [:show, :create, :update]
 
-    get '/search', to: 'search#index'
     get '/search/map', to: 'search#map'
-    get '/search/autocomplete', to: 'search#autocomplete'
     post '/search', to: 'search#create'
 
     get '/country_codes', to: 'country#codes', as: 'country_codes'
 
+
+    # routes worked on so far as part of the refresh
     get '/resources', to: 'resources#index'
+    get '/search', to: 'search#index'
 
     get '/thematical-areas/green-list', to: 'green_list#index'
     get '/thematical-areas/oecms', to: 'oecm#index'
@@ -75,6 +76,13 @@ Rails.application.routes.draw do
     get '/thematical-areas/marine-protected-areas', to: 'marine#index'
     get '/thematical-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
     get '/thematical-areas/wdpa', to: 'wdpa#index'
+
+    get '/:area_type/search', to: 'search_areas#index', as: :search_areas
+    get '/:area_type/search-results', to: 'search_areas#search_results', as: :search_areas_results
+
+    post '/search/autocomplete', to: 'search#autocomplete'
+    post '/search-results', to: 'search#search_results'
+    post '/search-results-areas', to: 'search#search_results_areas'
 
     # Ensure that this route is defined last
 

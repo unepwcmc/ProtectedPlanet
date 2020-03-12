@@ -1,11 +1,24 @@
 class SearchController < ApplicationController
+  include Concerns::Searchable
   after_action :enable_caching
 
-  before_action :ignore_empty_query, only: [:index, :map]
-  before_action :load_search, only: [:index, :map]
+  before_action :ignore_empty_query, only: [:search_results, :search_results_areas]
+  before_action :load_search, only: [:search_results, :search_results_areas]
 
   def index
-    render partial: 'grid' if request.xhr?
+    @categories = [{ id: -1, title: 'All' }]
+    Comfy::Cms::Page.root.children.map do |c|
+      @categories << { id: c.id, title: c.label }
+    end
+    @categories = @categories.to_json
+
+    @query = search_params[:search_term]
+  end
+
+  def search_results
+    @results = Search::FullSerializer.new(@search, {page: search_params[:requested_page]}).serialize
+
+    render json: @results
   end
 
   def map
@@ -13,36 +26,14 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @results = Autocompletion.lookup params[:q]
+    @results = Autocompletion.lookup search_params[:search_term]
 
-    render partial: 'search/autocomplete'
+    render json: @results
   end
 
   private
 
-  def ignore_empty_query
-    @query = params[:q]
-    redirect_to :root if @query.blank? && filters.empty?
-  end
-
-  def load_search
-    begin
-      @search = Search.search(@query, search_options)
-    rescue => e
-      Rails.logger.warn("error in search controller: #{e.message}")
-      @search = nil
-    end
-
-    @main_filter = params[:main]
-  end
-
-  def search_options
-    options = {filters: filters}
-    options[:page] = params[:page].to_i if params[:page].present?
-    options
-  end
-
-  def filters
-    params.stringify_keys.slice(*Search::ALLOWED_FILTERS)
+  def search_params
+    params.permit(:search_term, :type, :requested_page, :items_per_page)
   end
 end

@@ -29,6 +29,10 @@ import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
+import SearchAreas from './components/search/SearchAreas'
+import SearchAreasHome from './components/search/SearchAreasHome'
+import SearchSite from './components/search/SearchSite'
+import SearchSiteTopbar from './components/search/SearchSiteTopbar'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
@@ -38,7 +42,6 @@ import TableHead from './components/table/TableHead'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
 import VSelectSearchable from './components/select/VSelectSearchable'
-import VSelectSearchableFilterable from './components/select/VSelectSearchableFilterable'
 import VTable from './components/table/VTable'
 
 document.addEventListener('DOMContentLoaded', () => { 
@@ -70,6 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartSunburst,
         MapInteractive,
         NavBurger,
+        SearchAreas,
+        SearchAreasHome,
+        SearchSite,
+        SearchSiteTopbar,
         SelectWithContent,
         StickyBar,
         StickyNav,
@@ -79,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
         Target11Dashboard,
         Tooltip,
         VSelectSearchable,
-        VSelectSearchableFilterable,
         VTable
       }
     })

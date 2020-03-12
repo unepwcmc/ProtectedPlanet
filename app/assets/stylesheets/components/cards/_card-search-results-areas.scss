@@ -1,0 +1,84 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$card-search-results-areas-flag-size: rem-calc(60);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin card-search-results-areas-flag-size {
+  width: $card-search-results-areas-flag-size;
+  height: $card-search-results-areas-flag-size;
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--search-results-areas {
+  @include flex;
+  @include flex-h-between;
+  @include flex-wrap;
+
+  .card {
+    &__link {
+      @include border-grey-light;
+      @include box-shadow-grey-light;
+      @include flex;
+      @include flex-column;
+      @include responsive('width', 100%, 48%, 30%);
+      background-color: $white;
+      margin-bottom: rem-calc(30);
+      padding: rem-calc(18 18 16 18);
+      text-decoration: none;
+      height: rem-calc(300);
+
+      &:not(:first-child):not(:nth-child(3n+1)):not(:nth-child(3n)):last-child { 
+        margin-left: 5%;
+        margin-right: auto; 
+      }
+    }
+
+      &__content {
+        font-size: rem-calc(18);
+      }
+
+        &__image {
+          width: 100%; height: rem-calc(114);
+        }
+
+        &__title {
+          @include text-card-title;
+          margin: rem-calc(12 0 2 0);
+        }
+
+        &__icon--region-large { 
+          @include icon-region;
+        }
+
+        &__icon--flag-large { 
+          @include icon-flag;
+        }
+
+      &__groups {
+        margin-top: auto; 
+      }
+
+        &__group {
+          margin: rem-calc(10 0);
+        }
+          
+          // &__icon--flag { 
+          //   background-size: 100%;
+          //   margin-right: rem-calc(6);
+          //   width: rem-calc(22); height: rem-calc(22);
+
+          //   display: block;
+          // }
+
+          // &__icon--region { 
+          //   @include icon-region; 
+          //   margin-right: rem-calc(6);
+          //   width: rem-calc(22); height: rem-calc(22);
+          // }
+  }
+}

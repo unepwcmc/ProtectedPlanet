@@ -28,6 +28,8 @@ $padding-medium: rem-calc(27);
   &:hover { text-decoration: none; }
 }
 
+@mixin button-disabled { cursor: disabled; }
+
 @mixin button-height { 
   @include responsive(height, $height-small, $height-medium, $height-medium);
 
@@ -90,16 +92,57 @@ $padding-medium: rem-calc(27);
   @include button-basic; 
   @include icon-cross;
 }
+
+@mixin button-download-trigger {
+  @include button-with-icon;
+  @include button-block($primary, $body-font-colour);
+  &::after { @include icon-download-black; }
+}
+
 @mixin button-dropdown {
   @include button-with-icon;
   &::after { @include icon-chevron-black-down; }
 }
+
 @mixin button-dropdown-up {
   @include button-with-icon;
   &::after { @include icon-chevron-black-up; }
 }
+
+@mixin button-filter-trigger {
+  @include button-with-icon;
+  @include button-outline;
+  @include breakpoint-down($small) { padding: rem-calc(0 12); }
+
+  &::after { 
+    @include icon-filters; 
+    @include breakpoint-down($small) { margin: 0; }
+  }
+
+  .button__text { @include responsive(display, none, inline, inline); }
+}
+
+@mixin button-map-trigger {
+  @include button-with-icon;
+  @include button-outline;
+  &::after { @include icon-pin; }
+}
+
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }
+
+@mixin button-search {
+  @include button-basic;
+  @include button-radius;
+  @include flex-center;
+  background-color: $primary;
+  width: rem-calc(47); height: rem-calc(47);
+
+  &:before {
+    @include icon-search-white;
+    content: '';
+  }
+}
 
 //--------------------------------------------------
 // classes

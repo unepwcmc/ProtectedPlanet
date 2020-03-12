@@ -9,9 +9,10 @@ $radius-global: rem-calc(10);
 $white: #ffffff;
 $black: #000000;
 
+$grey-xlight: #F7F7F7;
 $grey-light: #f2f2f2;
-$grey: #242424;
-$grey-dark: #666666;
+$grey: #666666;
+$grey-dark: #242424;
 $grey-xdark: #242424;
 
 $grey-1: #C8C8C8;
@@ -154,7 +155,7 @@ $site-width-rem: rem-calc($site-width);
 
 // $site-width-medium-tablet: 80%;
 // $site-width-medium-laptop: 78%;
-// $site-width-medium-desktop: 62%;
+$site-width-medium-desktop: rem-calc(750);
 
 //--------------------------------------------------
 // tables

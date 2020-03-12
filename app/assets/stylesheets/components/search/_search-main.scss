@@ -1,0 +1,53 @@
+//--------------------------------------------------
+// class - main
+//--------------------------------------------------
+&--main {
+  position: relative;
+
+  .search {
+    &__pane {
+      width: 100%;
+      
+      &.popout { 
+        width: rem-calc(600);
+
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: $z-300;
+      }
+
+      &.popout.active { display: block; }
+    }
+
+      &__close {
+        @include button-close;
+
+        position: absolute;
+        top: 50%;
+        right: rem-calc(16);
+
+        transform: translateY(-50%) scale(.7);
+      }
+
+      &__icon {
+        @include icon-search-green;
+
+        position: absolute;
+        top: 50%;
+        left: rem-calc(16);
+
+        transform: translateY(-50%);
+      }
+
+      &__input {
+        padding-left: rem-calc(50);
+        width: 100%;
+      }
+
+    &__trigger {
+      @include button-search;
+    }
+  }
+}

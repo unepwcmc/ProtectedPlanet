@@ -1,0 +1,72 @@
+$select-types-width: rem-calc(222);
+$select-types-height: rem-calc(75);
+
+//--------------------------------------------------
+// types - used with search--autocomplete
+//--------------------------------------------------
+&--types {
+  background-color: $grey;
+  border-radius: $select-types-height;
+  color: $white;
+  font-size: rem-calc(18);
+  padding: rem-calc(0 20);
+  width: $select-types-width; height: $select-types-height;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  .search__bar & { @include responsive(height, rem-calc(49), rem-calc(49), rem-calc(49)); }
+
+  .select {
+    &__label {
+      @include button-with-icon;
+      @include flex;
+      @include flex-h-end;
+      @include flex-v-center;
+      padding-right: rem-calc(20);
+      height: 100%;
+
+      &.active::after { @include icon-chevron-white-up; }
+
+      &::after { @include icon-chevron-white-down; }
+    }
+
+    &__label-fake {
+      @include flex-center;
+      margin: 0;
+      height: 100%;      
+    }
+
+    &__ul {
+      @include ul-unstyled;
+      background-color: $grey-dark;
+      border-radius: $button-radius;
+
+      display: none;
+      position: absolute;
+      top: calc(100% + #{rem-calc(7)});
+
+      &.active { display: block; }
+
+      &:before {
+        @include triangle (rem-calc(38), rem-calc(11), $grey-dark);
+
+        position: absolute;
+        top: rem-calc(-11);
+        right: rem-calc(8);
+      } 
+    }
+
+      &__li {
+        color: $white;
+        cursor: pointer;
+        padding: rem-calc(9 16);
+
+        &:hover { background-color: $grey; }
+
+        &:first-child { @include border-radius-top($button-radius); }
+        &:last-child { @include border-radius-bottom($button-radius); }
+      }
+  }
+}

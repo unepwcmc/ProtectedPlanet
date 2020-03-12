@@ -3,7 +3,8 @@ module Search::Aggregators::Model
     model = (config['class'] || name.classify).constantize
 
     raw_aggregations[name]['aggregation']['buckets'].map do |info|
-      label = model.select(:name).find(info['key']).name
+      column_name = model.has_attribute?(:name) ? :name : :label
+      label = model.select(column_name).find(info['key']).send(column_name)
       {
         identifier: label,
         query: config['query'] || name,

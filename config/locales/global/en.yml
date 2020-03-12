@@ -1,21 +1,57 @@
 en:
   global:
+    area-types:
+      wdpa: Protected Areas
+      oecm: OECMs
     button:
       all: View all
       download: PDF Download
       link: Link
-    status:
-      updated: Updated
     footer:
+      copyright: "ProtectedPlanet 2014-%{date}. All rights reserved"
       title1: Explore
       title2: General Info
       title3: Follow us
       title4: Get in touch
-      copyright: "ProtectedPlanet 2014-%{date}. All rights reserved"
+    geo-types:
+      countries: Countries
+      regions: Regions
     logos:
       iucn: IUCN logo
       pp: Protected Planet logo
       wcmc: UN Environment World Conservation Monitoring logo
-    links: 
-      visit: "Visit: %{link}"
+    links:
       email: "Email: %{email}"
+      visit: "Visit: %{link}"
+    placeholder:
+      search-oecms: Search for OECMs...
+      search-wdpa: Search for a protected area...
+      search-site: Search...
+    search:
+      download: Download
+      filters: Filters
+      filter-by: Filter by
+      filter-group-designation:
+        title: Designations
+      filter-group-governance:
+        title: Governance
+      filter-group-iucn-category:
+        title: IUCN Category
+      filter-group-type:
+        title: Type
+        options:
+          - All
+          - Terrestrial
+          - Marine
+      map: Map
+      protected-areas: Protected Areas
+      results: results
+      no-results: No results. Please search again.
+      view-by: View by
+      view-group-geo-type:
+        options:
+          - All
+          - Regions
+          - Countries
+    status:
+      updated: Updated
