@@ -83,13 +83,14 @@ export default {
   ],
 
   props: {
-    types: {
-      required: true,
-      type: Array // [ { id: String, title: String, placeholder: String } ] } ]
-    },
     endpoint: {
       required: true,
       type: String
+    },
+    prePopulatedSearchTerm: String,
+    types: {
+      required: true,
+      type: Array // [ { id: String, title: String, placeholder: String } ] } ]
     }
   },
 
@@ -130,6 +131,7 @@ export default {
   },
 
   mounted () {
+    if(this.prePopulatedSearchTerm) { this.searchTerm = this.prePopulatedSearchTerm }
     // this.addTabFromSearchListener()
     // this.addArrowKeyListeners()
     // this.addTabForwardFromResetListener()

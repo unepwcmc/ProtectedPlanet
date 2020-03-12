@@ -9,6 +9,7 @@
 
         <search-areas-input-autocomplete
           :endpoint="endpointAutocomplete"
+          :pre-populated-search-term="searchTerm"
           :types="autocompleteAreaTypes"
           v-on:submit-search="updateSearchTerm"
         />
@@ -150,16 +151,11 @@ export default {
   },
 
   created () {
-    // this.categoryId = this.defaultCategory
-    // this.requestedPage = this.defaultPage
-    // this.ajaxSubmission()
+    if(this.query) { this.searchTerm = this.query }
   },
 
   mounted () {
-    if(this.query) {
-      this.searchTerm = this.query
-      this.ajaxSubmission()
-    }
+    if(this.query) { this.ajaxSubmission() }
   },
 
   computed: {
@@ -268,10 +264,8 @@ export default {
     },
 
     resetFilters () {
-      console.log('reset filers')
       this.activeFilterOptions = []
       this.$eventHub.$emit('reset:filter-options')
-      console.log('filter-options', this.activeFilterOptions)
     },
 
     toggleFilterPane () {
