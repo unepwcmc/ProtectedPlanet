@@ -1,4 +1,6 @@
 class Search::BaseSerializer
+  include Routeable
+
   def initialize(search, opts={})
     unless search.is_a?(Search)
       raise ArgumentError, 'Results argument must be of type Search'
