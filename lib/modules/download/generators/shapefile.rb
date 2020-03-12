@@ -53,7 +53,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
     limit = (total_count / @number_of_pieces.to_f).ceil
     offset = limit * piece_index
-    order_by = "ORDER BY '\"GIS_AREA\"' DESC"
+    order_by = 'ORDER BY \""GIS_AREA"\" DESC'
     sql = """
       SELECT *
       FROM #{view_name}

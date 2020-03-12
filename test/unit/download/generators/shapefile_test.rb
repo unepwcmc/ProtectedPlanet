@@ -29,7 +29,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_point_query).returns(view_name_point)
 
     ActiveRecord::Base.connection.stubs(:select_value).returns(2)
-    poly_query = "SELECT * FROM #{view_name_poly} ORDER BY '\"GIS_AREA\"' DESC"
+    poly_query = "SELECT * FROM #{view_name_poly}" << ' ORDER BY \""GIS_AREA"\" DESC'
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "#{poly_query} LIMIT 1 OFFSET 0").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "#{poly_query} LIMIT 1 OFFSET 1").returns(true)
     point_query = "SELECT * FROM #{view_name_point}"
@@ -140,7 +140,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_point_query).returns(view_name_point)
 
     ActiveRecord::Base.connection.stubs(:select_value).returns(1).times(4)
-    poly_query = "SELECT * FROM #{view_name_poly} ORDER BY '\"GIS_AREA\"' DESC"
+    poly_query = "SELECT * FROM #{view_name_poly}" << ' ORDER BY \""GIS_AREA"\" DESC'
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "#{poly_query} LIMIT 1 OFFSET 0").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "#{poly_query} LIMIT 1 OFFSET 1").returns(true)
     point_query = "SELECT * FROM #{view_name_point}"
