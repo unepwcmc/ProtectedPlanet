@@ -63,7 +63,7 @@ class Search::AreasSerializer < Search::BaseSerializer
   def region_hash(region)
     {
       title: region[:label],
-      totalAreas: "#{region[:count]} #{I18n.t('global.search.protected-areas')}" , # TODO
+      totalAreas: "#{region[:count]} #{I18n.t('global.search.protected-areas')}",
       url: region_path(iso: region[:identifier])
     }
   end
@@ -72,8 +72,7 @@ class Search::AreasSerializer < Search::BaseSerializer
     _slug = slug(country[:label])
     {
       countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
-      # region: 'America', # TODO
-      totalAreas: "#{country[:count]} #{I18n.t('global.search.protected-areas')}" , # TODO
+      totalAreas: "#{country[:count]} #{I18n.t('global.search.protected-areas')}",
       title: country[:label],
       url: country_path(iso: country[:identifier])
     }
