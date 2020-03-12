@@ -63,7 +63,6 @@ export default {
     },
 
     reset () {
-      console.log('reset checkbox')
       this.input = []
     }
   }

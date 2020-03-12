@@ -72,7 +72,6 @@ export default {
     },
 
     reset () {
-      console.log('reset radio')
       this.input = ''
     }
   }
