@@ -6,7 +6,7 @@
   <% unless get_all %>
     <div class="flex flex-v-center flex-h-between">
       <h2><%= @items[:title] %></h2>
-      <%= link_to t('global.button.all'), @items[:url], target: '_blank', title: t('global.button.all'), class: 'button--all' %>
+      <%= link_to t('global.button.all'), @items[:url], title: t('global.button.all'), class: 'button--all' %>
     </div>
   <% end %>
 
@@ -27,7 +27,7 @@
             <p class="card__date"><%= cms_fragment_content(:published_date, card).strftime('%d %B %y') %></p>
           <% end %>
           <h3 class="card__h3"><%= card[:label].truncate(59, separator: ' '); %></h3>
-          <p class="card__summary"><%= cms_fragment_content(:summary, card) %></p>
+          <p class="card__summary"><%= cms_fragment_content(:summary, card).truncate(170, separator: ' '); %></p>
         </div>
       <% end %>
     <% end %>
