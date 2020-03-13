@@ -1,6 +1,4 @@
 class Search::FullSerializer < Search::BaseSerializer
-  include Routeable
-
   def serialize
     all_objects = @results.objects.values.compact.flatten
     {

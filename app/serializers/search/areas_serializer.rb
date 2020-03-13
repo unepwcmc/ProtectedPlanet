@@ -1,4 +1,5 @@
 class Search::AreasSerializer < Search::BaseSerializer
+
   def initialize(search, geo_type=nil)
     super(search)
     @aggregations = @search.aggregations
@@ -61,20 +62,19 @@ class Search::AreasSerializer < Search::BaseSerializer
 
   def region_hash(region)
     {
-      title: region[:identifier],
-      totalAreas: "#{region[:count]} #{I18n.t('global.search.protected-areas')}" , # TODO
-      url: 'url to page' # TODO
+      title: region[:label],
+      totalAreas: "#{region[:count]} #{I18n.t('global.search.protected-areas')}",
+      url: region_path(iso: region[:identifier])
     }
   end
 
   def country_hash(country)
-    _slug = slug(country[:identifier])
+    _slug = slug(country[:label])
     {
       countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
-      # region: 'America', # TODO
-      totalAreas: "#{country[:count]} #{I18n.t('global.search.protected-areas')}" , # TODO
-      title: country[:identifier],
-      url: 'url to page' # TODO
+      totalAreas: "#{country[:count]} #{I18n.t('global.search.protected-areas')}",
+      title: country[:label],
+      url: country_path(iso: country[:identifier])
     }
   end
 
@@ -82,7 +82,7 @@ class Search::AreasSerializer < Search::BaseSerializer
     {
       image: '/assets/tiles/FR?type=country&version=1', # TODO This should be a mapbox internal asset
       title: site.name,
-      url: 'url to page' # TODO
+      url: protected_area_path(site.wdpa_id)
     }
   end
 
