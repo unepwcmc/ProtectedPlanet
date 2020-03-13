@@ -77,13 +77,12 @@ Rails.application.routes.draw do
     get '/thematical-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
     get '/thematical-areas/wdpa', to: 'wdpa#index'
 
-    get '/wdpa/search', to: 'search_wdpa#index' #TODO Ferdi change this if it makes more sense to do it a different way 
-    get '/oecm/search', to: 'search_oecm#index' #TODO Ferdi change this if it makes more sense to do it a different way 
+    get '/:area_type/search', to: 'search_areas#index', as: :search_areas
+    get '/:area_type/search-results', to: 'search_areas#search_results', as: :search_areas_results
 
     post '/search/autocomplete', to: 'search#autocomplete'
     post '/search-results', to: 'search#search_results'
     post '/search-results-areas', to: 'search#search_results_areas'
-    post '/search-areas-pagination', to: 'search#search_areas_pagination'
 
     # Ensure that this route is defined last
 

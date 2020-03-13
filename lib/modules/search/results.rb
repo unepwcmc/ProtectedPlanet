@@ -30,11 +30,24 @@ class Search::Results
         includes(INCLUDES[type.underscore]).
         group_by(&:id)
     }
-    @objects ||= matches.map do |result|
-      id = result["_source"]["id"]
-      type = @type_index_map[result["_index"]]
-      by_type_and_id[type][id].first
+    @objects ||= {}
+    @type_index_map.each do |key, _type|
+      objs = by_type_and_id[_type]
+      @objects[_type] = objs && objs.values.flatten
     end
+    @objects
+  end
+
+  def protected_areas
+    @protected_areas ||= objects[@type_index_map[Search::PA_INDEX]]
+  end
+
+  def countries
+    @countries ||= objects[@type_index_map[Search::COUNTRY_INDEX]]
+  end
+
+  def cms_pages
+    @cms_pages ||= objects[@type_index_map[Search::CMS_INDEX]]
   end
 
   def raw

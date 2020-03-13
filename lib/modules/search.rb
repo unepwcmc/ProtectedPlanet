@@ -1,10 +1,11 @@
 class Search
-  CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml'))
-  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance, :is_green_list]
-  COUNTRY_INDEX = 'countries_'+Rails.env
-  PA_INDEX = 'protectedareas_'+Rails.env
-  CMS_INDEX = 'cms_'+Rails.env
-  DEFAULT_INDEX_NAME = [PA_INDEX, COUNTRY_INDEX, CMS_INDEX].join(',')
+  CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml')).freeze
+  ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance, :is_green_list, :category, :ancestor].freeze
+  COUNTRY_INDEX = "countries_#{Rails.env}".freeze
+  PA_INDEX = "protectedareas_#{Rails.env}".freeze
+  CMS_INDEX = "cms_#{Rails.env}".freeze
+  DEFAULT_INDEX_NAME = [PA_INDEX, COUNTRY_INDEX, CMS_INDEX].join(',').freeze
+  AREAS_INDEX_NAME = [PA_INDEX, COUNTRY_INDEX].join(',').freeze
   attr_reader :search_term, :options
 
   def self.configuration
@@ -76,9 +77,10 @@ class Search
   end
 
   def query
+    size = options[:size] || RESULTS_SIZE
     {
-      size: options[:size] || RESULTS_SIZE,
-      from: options[:offset] || offset,
+      size: size,
+      from: options[:offset] || offset(size),
       # This line helps countries come first in search, may need tweaking as initial weights are dependent on the relative
       # frequency of terms in the countries and PA indices which is hard to anticipate!
       indices_boost: [{COUNTRY_INDEX => 3}, {PA_INDEX => 1} ],
@@ -96,7 +98,7 @@ class Search
     end
   end
 
-  def offset
-    RESULTS_SIZE * (current_page - 1)
+  def offset(size=RESULTS_SIZE)
+    size * (current_page - 1)
   end
 end
