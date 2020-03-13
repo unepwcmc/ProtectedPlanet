@@ -1,4 +1,9 @@
-<%= render "./layouts/partials/hero-home" %>
+<%= render partial: "./layouts/partials/hero-home", locals: { 
+    button: t('home.hero.button'),
+    hero_stat_percentage: @pa_coverage_percentage,
+    hero_stat_text: t('home.hero.stat-text')
+  } 
+%>
 <%= render "partials/search/protected-areas" %>
 
 <section class="container section-padding">
