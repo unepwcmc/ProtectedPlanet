@@ -3,7 +3,7 @@
     class="search--autocomplete"
   >
     <div class="search__search">
-      <i class="search__search-icon" /> 
+      <i class="search__search-icon" />
 
       <input
         v-model="searchTerm"
@@ -15,15 +15,15 @@
       >
     </div>
 
-    <button 
+    <button
       v-show="showResetIcon"
       class="search__search-icon--delete"
       @click="resetSearchTerm"
     />
 
-    <ul 
-      v-show="autocomplete.length > 0" 
-      role="listbox" 
+    <ul
+      v-show="autocomplete.length > 0"
+      role="listbox"
       class="search__dropdown"
     >
       <li
@@ -32,7 +32,7 @@
         class="search__li"
         role="option"
       >
-        <a 
+        <a
           class="search__a"
           :href="option.url"
           v-html="option.title"
@@ -41,23 +41,23 @@
     </ul>
 
     <div class="select--types">
-      <label 
+      <label
         v-if="hasMultipleTypes"
         :class="['select__label', {'active': typeDropdownActive}]"
         @click="toggleTypes"
         v-html="selectedTypeTitle"
       />
-      <p 
+      <p
         v-else
         class="select__label-fake"
         v-html="selectedTypeTitle"
       />
 
-      <ul 
+      <ul
         v-if="hasMultipleTypes"
         :class="['select__ul', {'active': typeDropdownActive}]"
       >
-        <li 
+        <li
           v-for="type, index in types"
           class="select__li"
           @click="updateType(type, index)"
@@ -83,13 +83,14 @@ export default {
   ],
 
   props: {
-    types: {
-      required: true,
-      type: Array // [ { id: String, title: String, placeholder: String } ] } ]
-    },
     endpoint: {
       required: true,
       type: String
+    },
+    prePopulatedSearchTerm: String,
+    types: {
+      required: true,
+      type: Array // [ { id: String, title: String, placeholder: String } ] } ]
     }
   },
 
@@ -130,6 +131,7 @@ export default {
   },
 
   mounted () {
+    if(this.prePopulatedSearchTerm) { this.searchTerm = this.prePopulatedSearchTerm }
     // this.addTabFromSearchListener()
     // this.addArrowKeyListeners()
     // this.addTabForwardFromResetListener()
@@ -137,12 +139,12 @@ export default {
 
   methods: {
     updateAutocomplete (e) {
-      if(this.searchTerm.length < 3 || e.key == 'Enter') { 
-        this.resetAutocomplete() 
+      if(this.searchTerm.length < 3 || e.key == 'Enter') {
+        this.resetAutocomplete()
         return false
       }
 
-      let data = { params: this.searchParams }
+      let data = this.searchParams
 
       this.axiosSetHeaders()
 

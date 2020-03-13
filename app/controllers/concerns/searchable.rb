@@ -23,16 +23,34 @@ module Concerns::Searchable
     def search_options
       options = {filters: filters}
       options[:page] = params['requested_page'].to_i if params['requested_page'].present?
+      options[:size] = params['items_per_page'].to_i if params['items_per_page'].present?
       options
     end
 
     def search_index
-      # TODO Define mapping for index between FE and BE
-      Search::DEFAULT_INDEX_NAME
+      controller_name.include?('area') ? Search::AREAS_INDEX_NAME : Search::DEFAULT_INDEX_NAME
+    end
+
+    AREA_TYPES = %w(wdpa oecm).freeze
+    def check_area_type
+      redirect_to :root unless AREA_TYPES.include?(params[:area_type].downcase)
     end
 
     def filters
-      params.stringify_keys.slice(*Search::ALLOWED_FILTERS)
+      return '' unless params['filters'].present?
+      _filters = sanitise_filters
+      _filters.symbolize_keys.slice(*Search::ALLOWED_FILTERS)
+    end
+
+    def sanitise_filters
+      _filters = JSON.parse(params['filters'])
+      #TODO green list filter to be added
+      is_type = _filters.delete('is_type')
+      return _filters if is_type == 'all' || !is_type
+
+      _filters[:marine] = is_type == 'marine'
+
+      _filters
     end
   end
 end

@@ -20,7 +20,7 @@ en:
       iucn: IUCN logo
       pp: Protected Planet logo
       wcmc: UN Environment World Conservation Monitoring logo
-    links: 
+    links:
       email: "Email: %{email}"
       visit: "Visit: %{link}"
     placeholder:
@@ -40,15 +40,16 @@ en:
       filter-group-type:
         title: Type
         options:
-          - Marine
+          - All
           - Terrestrial
-          - Green List
+          - Marine
       map: Map
+      protected-areas: Protected Areas
       results: results
       no-results: No results. Please search again.
       view-by: View by
       view-group-geo-type:
-        options: 
+        options:
           - All
           - Regions
           - Countries

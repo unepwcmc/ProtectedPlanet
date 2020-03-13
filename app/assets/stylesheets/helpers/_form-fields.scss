@@ -51,6 +51,7 @@
 }
 
 @mixin input-custom-radio-selected($width, $colour) {
+  @include flex-no-shrink;
   @include item-center;
   background: $colour;
   border-radius: 50%;
@@ -73,5 +74,5 @@
 }
 
 @mixin input-custom-checkbox-selected() {
-  background-image: image-url('icons/pin.svg');
+  @include icon-tick;
 }

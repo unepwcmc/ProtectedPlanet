@@ -4,24 +4,28 @@
       <h2>{{ title }} ({{ total }})</h2>
       
       <pagination-more
-        smTriggerElement="todo"
+        :sm-trigger-element="smTriggerElement"
         text="View All"
+        :total="total"
+        :total-pages="totalPages"
         v-on:request-more="requestMore"
+        v-on:reset-pagination="resetPagination"
       />
     </div>
     <div class="cards--search-results-areas">
       <card-search-result-area
         v-for="area, index in areas"
         :key="index"
-        :country="area.country"
+        :country-flag="area.countryFlag"
         :geo-type="geoType"
         :image="area.image"
-        :image-flag="area.imageFlag"
-        :region="area.region"
+        :total-areas="area.totalAreas"
         :title="area.title"
         :url="area.url"
       />
     </div>
+
+    <span v-if="smTriggerElement" :class="smTriggerElement"></span>
   </div>
 </template>
 
@@ -51,6 +55,14 @@ export default {
       required: true,
       type: Number
     },
+    totalPages: {
+      required: true,
+      type: Number
+    },
+    smTriggerElement: {
+      required: true,
+      type: String
+    },
     title: {
       required: true,
       type: String
@@ -65,6 +77,10 @@ export default {
       }
 
       this.$emit('request-more', params)
+    },
+
+    resetPagination (geoType) {
+      this.$emit('reset-pagination', this.geoType)
     }
   }
 }

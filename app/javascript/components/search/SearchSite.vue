@@ -1,14 +1,14 @@
 <template>
   <div>
-    <search-site-input 
+    <search-site-input
       :endpoint="endpoint"
       :placeholder="placeholder"
       v-on:submit:search="updateSearchTerm"
     />
-    
-    <tabs-fake 
+
+    <tabs-fake
       :children="categories"
-      v-on:click:tab="updateCategory" 
+      v-on:click:tab="updateCategory"
     />
 
     <search-site-results
@@ -17,10 +17,10 @@
       :totalItems="totalItems"
     />
 
-    <pagination 
+    <pagination
       :currentPage="currentPage"
-      :pageItemsEnd="pageItemsEnd" 
-      :pageItemsStart="pageItemsStart" 
+      :pageItemsEnd="pageItemsEnd"
+      :pageItemsStart="pageItemsStart"
       :noResultsText="noResultsText"
       :totalItems="totalItems"
       v-on:update:page="updatePage"
@@ -45,7 +45,7 @@ export default {
   props: {
     categories: {
       required: true,
-      type: Array // [ { id: Number, title: String } ] 
+      type: Array // [ { id: Number, title: String } ]
     },
     endpoint: {
       required: true,
@@ -91,7 +91,7 @@ export default {
     this.categoryId = this.defaultCategory
   },
 
-  mounted () { 
+  mounted () {
     if(this.query) {
       console.log('here')
       this.searchTerm = this.query
@@ -102,10 +102,14 @@ export default {
   methods: {
     ajaxSubmission () {
       let data = {
-        category_id: this.categoryId,
+        ancestor: this.categoryId,
         items_per_page: this.itemsPerPage,
         requested_page: this.requestedPage,
         search_term: this.searchTerm
+      }
+
+      if(this.categoryId <= 0) {
+        data['ancestor'] = this.categories.map(c => c[1])
       }
 
       this.axiosSetHeaders()
@@ -152,5 +156,5 @@ export default {
       this.ajaxSubmission()
     },
   }
-}  
+}
 </script>

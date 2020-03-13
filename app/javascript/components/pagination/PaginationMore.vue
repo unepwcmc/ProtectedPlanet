@@ -1,8 +1,9 @@
 <template>
   <button
-    v-html="text"
+    v-show="hasMoreResults"
+    v-html="buttonText"
     class="button--all"
-    @click="viewAll"
+    @click="click()"
   />
 </template>
 
@@ -13,58 +14,92 @@ export default {
   name: 'pagination-more',
 
   props: {
+    smTriggerElement: {
+      type: String,
+      required: true
+    },
     text: {
       type: String,
       required: true
     },
-    smTriggerElement: {
-      type: String,
+    total: {
+      type: Number,
+      required: true
+    },
+    totalPages: {
+      type: Number,
       required: true
     }
   }, 
 
   data () {
     return {
-      currentPage: 1,
-      resetting: false
+      currentPage: 0,
+      getMoreBoolean: true,
+      scrollMagicHandlersActive: false
     }
   },
 
-  created () {
-    this.$eventHub.$on('reset-search', this.reset)
+  mounted () {
+    this.scrollMagicHandlerInit()
+    this.$eventHub.$on('reset-pagination', this.reset)
+  },
+
+  computed: {
+    buttonText () {
+      return this.getMoreBoolean ? this.text : 'View less'
+    },
+
+    hasMoreResults () {
+      return this.total > 0
+    }
   },
 
   methods: {
+    click () {
+      this.getMoreBoolean == true ? this.requestMore() : this.reset()
+    },
+
     requestMore () {
-      console.log('request more')
-      if(this.resetting) { 
-        this.resetting = false
-        return false
-      }
+      this.currentPage = this.currentPage + 1
       
-      this.$emit('request-more', this.currentPage + 1)
+      this.$emit('request-more', this.currentPage)
+      
+      if(!this.scrollMagicHandlersActive) { 
+        this.scrollMagicHandlerAdd()
+      }
+
+      if(this.currentPage == this.totalPages) { 
+        this.scrollMagicHandlerRemove()
+        this.getMoreBoolean = false 
+      }
     },
 
     reset () {
-      this.resetting = true
-      this.currentPage = 1 
+      this.scrollMagicHandlerRemove()
+      this.currentPage = 0
+      this.getMoreBoolean = true
+      this.$emit('reset-pagination')
     },
 
-    scrollMagicHandlers () {
-      let scrollMagicInfiniteScroll = new ScrollMagic.Controller()
+    scrollMagicHandlerAdd () {
+      this.scrollMagicController.addScene(this.scrollMagicScene)
+      this.scrollMagicHandlersActive = true
+    },
 
-      new ScrollMagic.Scene({ triggerElement: `.${this.smTriggerElement}` })
+    scrollMagicHandlerInit () {
+      this.scrollMagicController = new ScrollMagic.Controller()
+
+      this.scrollMagicScene = new ScrollMagic.Scene({ triggerElement: `.${this.smTriggerElement}` })
         .triggerHook('onEnter')
-        .addTo(scrollMagicInfiniteScroll)
         .on('enter', () => {
           this.requestMore()
         })
     },
 
-    viewAll () {
-      console.log('submit view all')
-
-      this.scrollMagicHandlers()
+    scrollMagicHandlerRemove () {
+      this.scrollMagicController.removeScene(this.scrollMagicScene)
+      this.scrollMagicHandlersActive = false
     }
   }
 } 

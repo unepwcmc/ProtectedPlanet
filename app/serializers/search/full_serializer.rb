@@ -1,7 +1,6 @@
 class Search::FullSerializer < Search::BaseSerializer
-  include Routeable
-
   def serialize
+    all_objects = @results.objects.values.compact.flatten
     {
       search_term: @search_term,
       # TODO get page from params
@@ -10,7 +9,7 @@ class Search::FullSerializer < Search::BaseSerializer
       page_items_end: @search.page_items_end(page: @page, for_display: true),
       total_items: @results.count || 0,
       # TODO get page from params
-      results: @results.objects.map do |record|
+      results: all_objects.map do |record|
         {
           title: strip_html(record.respond_to?(:label) ? record.label : record.name),
           url: url(record),
