@@ -22,5 +22,7 @@ class WdpaController < ApplicationController
 
       tabs << tab
     end
+
+    tabs
   end
 end
