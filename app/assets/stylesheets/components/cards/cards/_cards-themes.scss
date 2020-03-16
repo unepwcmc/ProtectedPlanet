@@ -11,6 +11,7 @@
   }
 
   .card {
+    @include bg-image-overlay;
     @include border-radius;
     @include flex;
     @include flex-column;
@@ -18,6 +19,8 @@
     @include responsive(width, 100%, 100%, calc(50% - 10px));
     @include responsive(height, rem-calc(460), rem-calc(460), rem-calc(760));
     background-color: $grey-dark;
+    background-position: center;
+    background-size: cover;
     color: $white;
     margin-bottom: rem-calc(20);
     padding: rem-calc(32 30);
@@ -25,6 +28,8 @@
     position: relative;
 
     &:nth-child(3n) { width: 100%; height: rem-calc(460); }
+
+    &:hover::before { background-color: rgba(0,0,0,0.7); }
 
     &__ribbon {
       @include flex;

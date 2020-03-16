@@ -16,7 +16,7 @@ $image-placeholder: black;
   position: relative;
   z-index: 1;
 
-  &:before {
+  &::before {
     background-color: $colour;
     content: '';
     position: absolute;
