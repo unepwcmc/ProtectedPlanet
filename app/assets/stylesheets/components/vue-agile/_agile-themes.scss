@@ -71,16 +71,19 @@ $agile-themes-slides-margin-monitor: calc((100% - #{$site-width-rem} + 2*#{$gutt
         }
 
           &__slide-link {
+            @include bg-image-overlay;
             @include border-radius;
             @include responsive(height, rem-calc(460), rem-calc(460), rem-calc(760));
             background-color: $grey-dark;
+            background-position: center;
+            background-size: cover;
             padding: rem-calc(22 26);
             text-decoration: none;
             width: 100%;
 
             display: flex;
 
-            &:hover::before { background-color: rgba(black, 0.6);  }
+            &:hover::before { background-color: rgba(black, 0.7);  }
 
             &::before { @include border-radius; }
           }
