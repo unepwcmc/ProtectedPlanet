@@ -49,7 +49,6 @@
   &--area-type {
     @include hero-medium;
     @include hero-stat-bubble;
-    background-image: image_url('hero/icca.png');
     z-index: 0;
     
     .hero {
@@ -134,7 +133,6 @@
     
     &.news-and-stories { background-image: image_url('hero/news-and-stories.png'); }
     &.resources { background-image: image_url('hero/resources.png'); }
-    &.thematical-area,
     &.thematical-areas { background-image: image_url('hero/thematical-areas.png'); }
   }
 
@@ -143,7 +141,5 @@
 //--------------------------------------------------
   &--thematic {
     @include hero-medium;
-
-    &.marine-protected-areas { background-image: image_url('hero/marine.png'); }
   }
 }
