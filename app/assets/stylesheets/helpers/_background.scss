@@ -47,6 +47,7 @@ $image-placeholder: black;
 .bg--grey { @include bg-grey; }
 .bg--grey-dark { @include bg-grey-dark; }
 .bg--grey-xdark { @include bg-grey-xdark; }
+.bg--grey-black { @include bg-grey-black; }
 
 .bg-img {
   background-color: $image-placeholder;
