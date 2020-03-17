@@ -8,13 +8,14 @@
     <% @items[:cards].each do |card| %>
       <%= link_to root_url + card[:full_path], title: "View the #{card[:label]} page", class: "card", style: "background-image: url('#{cms_fragment_render(:theme_image, card)}')" do %>
         <div class="card__ribbon">
-          <span class="card__icon">icon</span>
-          <span class="card__number">000000</span>
-          <span>Protected Areas hc</span>
+          <span class="card__icon icon--pin-green <%= card[:slug] %>"></span>
+          <span class="card__number">000000</span> <!-- TODO FERDI can you fill in this bit - not needed for ICCA registry --> 
+          <span class="card__number-text"><%= t('global.area-types.wdpa') %></span>
         </div>
 
-        <h3><%= card[:label] %></h3>
+        <h3 class="card__title"><%= card[:label] %></h3>
         <p><%= cms_fragment_content(:summary, card) %></p>
+        <i class="icon--circle-chevron-white"></i>
       <% end %>
     <% end %>
   </div>

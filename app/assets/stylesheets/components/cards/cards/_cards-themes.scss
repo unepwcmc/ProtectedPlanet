@@ -18,12 +18,13 @@
     @include flex-h-end;
     @include responsive(width, 100%, 100%, calc(50% - 10px));
     @include responsive(height, rem-calc(460), rem-calc(460), rem-calc(760));
-    background-color: $grey-dark;
+    background-color: $grey-black;
     background-position: center;
     background-size: cover;
     color: $white;
     margin-bottom: rem-calc(20);
     padding: rem-calc(32 30);
+    text-decoration: none;
 
     position: relative;
 
@@ -37,16 +38,30 @@
       @include flex-h-between;
       @include flex-v-center;
       background-color: $grey-xdark;
-      padding: rem-calc(24 22);
+      padding: rem-calc(18 14);
       width: rem-calc(150); height: rem-calc(150);
 
       position: absolute;
       top: 0;
       right: rem-calc(44);
-    }
+    } 
+
+      &__icon {
+        &.marine-protected-areas {
+          @include icon-pin-blue;
+        }
+      }
 
       &__number {
         color: $primary;
+        font-size: rem-calc(40);
+        font-weight: $bold;
       }
+
+        &__number-text { line-height: 1; }
+
+    &__title {
+      @include text-theme-cards;
+    }
   }
 }
