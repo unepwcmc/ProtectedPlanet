@@ -12,22 +12,17 @@ class HomeController < ApplicationController
     @pas_title = home_yml[:pas][:title]
     @pas_button = home_yml[:pas][:button]
     @pas_levels = home_yml[:pas][:levels]
-    @pas_categories = home_yml[:pas][:categories]
+    
+    @pas_categories = home_yml[:pas][:categories].map{ |category| {
+        image: '', ##cms_fragment_render(:theme_image, Comfy::Cms::Page.find_by_slug(category[:slug])), ##TODO FERDI can you get image here?
+        title: category[:title],
+        url: 'filtered wdpa page' ##TODO filtered WDPA results page 
+      }
+    }
 
     comfy_themes = Comfy::Cms::Page.find_by_slug("thematical-areas")
     @themes_title = comfy_themes.label
     @themes_url = comfy_themes.full_path
-    @themes = comfy_themes.children.published.map{ |page| {
-        "label": page.label,
-        "url": page.url,
-        "intro": "field needs created in the CMS", #TODO create field in CMS
-        "image": "field needs created in the CMS" #TODO create field in CMS
-      }
-    }
-
-    @temp_pas = ProtectedArea.first(4)
-
-    @temp_themes = Comfy::Cms::Page.find_by_slug("equity").children.order(created_at: :desc)
 
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 
