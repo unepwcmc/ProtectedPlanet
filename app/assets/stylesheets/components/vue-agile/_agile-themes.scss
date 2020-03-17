@@ -1,10 +1,38 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
 $agile-themes-slide-padding-desktop: rem-calc(10);
 
 $agile-themes-slides-margin-mobile: 10%;
 $agile-themes-slides-margin-tablet: 14%;
 $agile-themes-slides-margin-desktop: 4%;
 $agile-themes-slides-margin-monitor: calc((100% - #{$site-width-rem} + 2*#{$gutter-large} - 2*#{$agile-themes-slide-padding-desktop} )/2);
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin agile-theme-margin-left {
+  @include responsive(margin-left, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
 
+  @include breakpoint($large) { margin-left: $agile-themes-slides-margin-monitor; }
+}
+
+@mixin agile-theme-margin-right {
+  @include responsive(margin-right, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
+
+  @include breakpoint($large) { margin-right: $agile-themes-slides-margin-monitor; }
+}
+
+@mixin agile-theme-button {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+
+  &:disabled { visibility: hidden; }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
 &--themes {
   color: $white;
   overflow: hidden;
@@ -14,51 +42,34 @@ $agile-themes-slides-margin-monitor: calc((100% - #{$site-width-rem} + 2*#{$gutt
       display: none;
     }
 
-    &__actions {
-      @include responsive(padding-right, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
-      @include responsive(padding-left, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
-      width: 100%;
-
-      position: absolute;
-      top: 50%;
-
-      transform: translateY(-50%);
-
-      @include breakpoint($large) {
-        width: $site-width;
-
-        left: 50%;
-
-        transform: translate(-50%);
-      }
-    }
+    &__actions { }
 
       &__nav-button--prev { 
-        @include button-prev; 
+        @include button-prev;
+        @include agile-theme-button;
+        @include agile-theme-margin-left;
 
-        transform: translateX(-50%);
+        transform: translate(-50%, -50%);
 
-        @include breakpoint($large) { transform: translateX(-100%); }
+        left: 0;
       }
 
       &__nav-button--next { 
-        @include button-next; 
+        @include button-next;
+        @include agile-theme-button;
+        @include agile-theme-margin-right;
 
-        transform: translateX(50%);
-
-        @include breakpoint($large) { transform: translateX(100%); }
+        transform: translate(50%, -50%);
+        
+        right: 0;
       }
 
     &__list {
-      @include responsive(margin-right, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
-      @include responsive(margin-left, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
+      @include agile-theme-margin-left;
+      @include agile-theme-margin-right;
+      
       overflow: visible;
       width: auto;
-
-      @include breakpoint($large) {
-        margin-right: $agile-themes-slides-margin-monitor;
-        margin-left: $agile-themes-slides-margin-monitor;
-      }
     }
 
       &__slides {
@@ -69,28 +80,5 @@ $agile-themes-slides-margin-monitor: calc((100% - #{$site-width-rem} + 2*#{$gutt
           @include responsive(padding-right, rem-calc(5), rem-calc(10), $agile-themes-slide-padding-desktop);
           @include responsive(padding-left, rem-calc(5), rem-calc(10), $agile-themes-slide-padding-desktop);
         }
-
-          &__slide-link {
-            @include bg-image-overlay;
-            @include border-radius;
-            @include responsive(height, rem-calc(460), rem-calc(460), rem-calc(760));
-            background-color: $grey-dark;
-            background-position: center;
-            background-size: cover;
-            padding: rem-calc(22 26);
-            text-decoration: none;
-            width: 100%;
-
-            display: flex;
-
-            &:hover::before { background-color: rgba(black, 0.7);  }
-
-            &::before { @include border-radius; }
-          }
-
-            &__slide-content {
-              @include flex-vs-end;
-              width: 100%;
-            }
   }
 }

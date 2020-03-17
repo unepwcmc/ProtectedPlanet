@@ -3,19 +3,7 @@
 <div class="cards--themes container">
   <div class="cards__cards">
     <% @items[:cards].each do |card| %>
-      <%= link_to root_url + card[:full_path], title: "View the #{card[:label]} page", class: "card", style: "background-image: url('#{cms_fragment_render(:theme_image, card)}')" do %>
-        <div class="card__ribbon">
-          <span class="card__icon icon--pin-green <%= card[:slug] %>"></span>
-          <p class="no-margin">
-            <span class="card__number">000000</span> <!-- TODO FERDI can you fill in this bit - not needed for ICCA registry --> 
-            <span class="card__number-text"><%= t('global.area-types.wdpa') %></span>
-          </p>
-        </div>
-
-        <h3 class="card__title"><%= card[:label] %></h3>
-        <p class="card__summary"><%= cms_fragment_content(:summary, card) %></p>
-        <i class="icon--circle-chevron-white"></i>
-      <% end %>
+      <%= render partial: 'partials/sub_partials/themes', locals: { theme: card } %>
     <% end %>
   </div>
 </div>

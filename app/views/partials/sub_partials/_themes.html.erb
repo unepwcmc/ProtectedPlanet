@@ -1,0 +1,16 @@
+<%= link_to root_url + theme[:full_path], 
+  title: "View the #{theme[:label]} page", 
+  class: "card--theme", 
+  style: "background-image: url('#{cms_fragment_render(:theme_image, theme)}')" do %>
+  <div class="card__ribbon">
+    <span class="card__icon icon--pin-green <%= theme[:slug] %>"></span>
+    <p class="no-margin">
+      <span class="card__number">000000</span> <!-- TODO FERDI can you fill in this bit - not needed for ICCA registry --> 
+      <span class="card__number-text"><%= t('global.area-types.wdpa') %></span>
+    </p>
+  </div>
+
+  <h3 class="card__title"><%= theme[:label] %></h3>
+  <p class="card__summary"><%= cms_fragment_content(:summary, theme) %></p>
+  <i class="icon--circle-chevron-white"></i>
+<% end %>

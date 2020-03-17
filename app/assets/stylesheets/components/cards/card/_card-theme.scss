@@ -1,0 +1,66 @@
+&--theme {
+  @include bg-image-overlay;
+  @include border-radius;
+  @include flex;
+  @include flex-column;
+  @include flex-h-end;
+  @include responsive(height, rem-calc(460), rem-calc(460), rem-calc(760));
+  background-color: $grey-dark;
+  background-position: center;
+  background-size: cover;
+  color: $white;
+  margin-bottom: rem-calc(20);
+  padding: rem-calc(32 30);
+  text-decoration: none;
+
+  position: relative;
+
+  &:nth-child(3n) { width: 100%; height: rem-calc(460); }
+
+  &:hover::before { background-color: rgba(0,0,0,0.7); }
+
+  &::before { @include border-radius; }
+
+  .card {
+    &__ribbon {
+      @include flex;
+      @include flex-column;
+      @include flex-h-between;
+      @include flex-v-center;
+      @include responsive(width, rem-calc(134), rem-calc(150), rem-calc(150));
+      @include responsive(height, rem-calc(134), rem-calc(150), rem-calc(150));
+      background-color: $grey-black;
+      padding: rem-calc(20 10);
+      text-align: center;
+      
+      @include responsive(right, rem-calc(22), rem-calc(26), rem-calc(44));
+      position: absolute;
+      top: 0;
+    } 
+
+      &__icon {
+        &.marine-protected-areas {
+          @include icon-pin-blue;
+        }
+      }
+
+      &__number {
+        @include responsive(font-size, rem-calc(20), rem-calc(30), rem-calc(40));
+        color: $primary;
+        font-weight: $bold;
+      }
+
+        &__number-text { 
+          @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
+          line-height: 1; 
+        }
+
+    &__summary {
+      @include responsive(display, none, block, block);
+    }
+
+    &__title {
+      @include text-theme-cards;
+    }
+  }
+}

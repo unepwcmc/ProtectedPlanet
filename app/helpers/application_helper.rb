@@ -300,7 +300,7 @@ module ApplicationHelper
   def get_thematical_areas
     thematical_page = @cms_site.pages.find_by_slug('thematical-areas')
     ##TODO FERDI can you fill in this bit - not needed for ICCA registry
-    ## Update variable in the view /partials/cards/_themes.html.erb
+    ## Update variable in the view /partials/sub_partials/_themes.html.erb
     @items = {
       "title": thematical_page.label,
       "cards": thematical_page.children.published

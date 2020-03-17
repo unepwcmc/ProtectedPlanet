@@ -28,6 +28,24 @@ $image-placeholder: black;
   }
 }
 
+@mixin bg-gradient-overlay($colour: #ffffff) {
+  position: relative;
+  
+  &:after {
+    @include breakpoint($small) {
+      background: linear-gradient(to right, rgba($colour,0%) 80%, $colour);
+      content: '';
+      pointer-events: none;
+      width: 100%; height: 100%;
+      
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+}
+
 //--------------------------------------------------
 // mixins - specific
 //--------------------------------------------------
@@ -57,3 +75,5 @@ $image-placeholder: black;
 
 .bg-image-overlay { @include bg-image-overlay; }
 .bg-image-overlay--white { @include bg-image-overlay(rgba($white, 0.8)); }
+
+.bg-gradient-overlay--white { @include bg-gradient-overlay; }

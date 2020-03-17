@@ -2,23 +2,17 @@
 
 <h2 class="text-center"><%= @items[:title] %></h2>
 
-<agile class="agile--themes" :options="<%= get_agile_config_themes %>">
+<agile class="agile--themes bg-gradient-overlay--white" :options="<%= get_agile_config_themes %>">
   <template slot="prevButton">
     <i class="icon--circle-chevron-green-large-prev"></i>
   </template>
   <template slot="nextButton">
     <i class="icon--circle-chevron-green-large-next"></i>
   </template>
-
+  
   <% @items[:cards].each do |slide| %>
     <div class="agile__slide">
-      <%= link_to root_url + slide[:full_path], title: slide[:label], class: "agile__slide-link bg-image-overlay--black", style: "background-image: url('#{cms_fragment_render(:theme_image, slide)}')" do %>
-        <div class="agile__slide-content">
-          <h3 class="agile__slide-title h3-big-white"><%= slide[:label] %></h3>
-          <p class="agile__slide-intro"><%= cms_fragment_content(:summary, slide) %></p>
-          <i class="agile__slide-icon icon--circle-chevron-white %>"></i>
-        </div>
-      <% end %>
+      <%= render partial: 'partials/sub_partials/themes', locals: { theme: slide } %>
     </div>
   <% end %>
 </agile>
