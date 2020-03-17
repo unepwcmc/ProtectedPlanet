@@ -1,11 +1,6 @@
 <% get_thematical_areas %>
 
 <div class="cards--themes container">
-  
-  <% if local_assigns.has_key? :show_title %>
-    <h3><%= @items[:show_title] %></h3>
-  <% end %>
-
   <div class="cards__cards">
     <% @items[:cards].each do |card| %>
       <%= link_to root_url + card[:full_path], title: "View the #{card[:label]} page", class: "card", style: "background-image: url('#{cms_fragment_render(:theme_image, card)}')" do %>
