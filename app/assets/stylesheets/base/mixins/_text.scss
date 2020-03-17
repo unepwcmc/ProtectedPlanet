@@ -142,10 +142,10 @@
 
 @mixin text-theme-cards {
   @include text-1;
+  @include responsive(font-size, rem-calc(25), rem-calc(40), rem-calc(40));
+  @include responsive(margin-bottom, rem-calc(14), rem-calc(4), rem-calc(4));
   color: $white;
-  font-size: rem-calc(40);
   font-weight: $regular;
-  margin-bottom: rem-calc(4);
 }
 
 @mixin text-tooltip {
