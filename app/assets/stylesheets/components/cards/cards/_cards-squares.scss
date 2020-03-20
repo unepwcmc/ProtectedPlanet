@@ -1,4 +1,16 @@
 //--------------------------------------------------
+// mixins
+//--------------------------------------------------
+$cards-squares-width-tablet: 48%;
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin cards-squares-card { 
+  @include border-radius;
+  @include responsive(margin, rem-calc(10 0), rem-calc(14 0), rem-calc(17 0));
+}
+
+//--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--squares {
@@ -6,20 +18,38 @@
     &__cards {
       @include flex;
       @include flex-h-between;
-      @include responsive(flex-wrap, wrap, nowrap, nowrap);
+      @include flex-wrap;
     }
+
+    &__button-wrapper { 
+      @include cards-squares-card;
+      @include flex;
+      @include flex-center;
+      @include responsive(background-color, transparent, $grey-xlight, transparent);
+      @include responsive(width, 100%, $cards-squares-width-tablet, 100%);
+    }
+
+      &__button {
+        @include responsive(margin, rem-calc(10 auto 20 auto), rem-calc(28 0), 0);
+
+      }
   }
 
   .card {
-    @include responsive(margin-bottom, rem-calc(14), rem-calc(28), 0);
-    @include responsive(padding-top, 100%, 50%, 30%);
-    @include responsive(width, 100%, 50%, 30%);
+    @include bg-image-overlay;
+    @include cards-squares-card;
+    @include responsive(padding-top, 100%, 48%, 30%);
+    @include responsive(width, 100%, $cards-squares-width-tablet, 31%);
     background-color: $grey-dark;
     background-position: center;
     background-size: cover;
     color: $white;
 
     position: relative;
+
+    &:hover::before { background-color: rgba(0,0,0,0.7); }
+
+    &::before { @include border-radius; }
 
     &__link {
       @include flex;
