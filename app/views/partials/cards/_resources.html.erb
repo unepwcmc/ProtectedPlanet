@@ -22,12 +22,12 @@
         <div class="card">
           <p class="card__date"><%= card[:created_at] %></p>
           <h3><%= card[:label] %></h3>
-          <p><%= card[:intro] %></p>
+          <p><%= card[:summary] %></p>
           
-          <% if card[:pdf] %>
-            <%= link_to t('global.button.download'), card[:pdf], title: t('global.button.download'), class: 'button--download' %>
-          <% elsif card[:external_link] %>
-            <%= link_to t('global.button.link'), card[:external_linkd], title: card[:external_link_title], class: 'button--link-external' %>
+          <% if card[:file] %>
+            <%= link_to t('global.button.download'), card[:file], title: t('global.button.download'), class: 'button--download' %>
+          <% elsif card[:link] %>
+            <%= link_to t('global.button.link'), card[:link], title: card[:link_title], class: 'button--link-external' %>
           <% end %>
         </div>
       <% end %>

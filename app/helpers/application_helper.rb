@@ -277,9 +277,11 @@ module ApplicationHelper
           "label": page.label,
           "created_at": page.created_at.strftime('%d %B %y'),
           "url": get_cms_url(page.full_path),
-          "intro": "field needs created in the CMS", #TODO create field in CMS
-          "pdf": false, #TODO create field in CMS
-          "external_link": nil #TODO create field in CMS
+          "page": page,
+          "summary": cms_fragment_render(:summary, page), ##TODO not pulling through
+          "file": cms_fragment_render(:file, page), ##TODO not pulling through
+          "link": cms_fragment_render(:link, page), ##TODO not pulling through
+          "link_title": cms_fragment_render(:link_title, page), ##TODO not pulling through
         }
       }
     }
