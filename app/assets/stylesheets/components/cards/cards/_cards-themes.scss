@@ -10,7 +10,9 @@
     }
   }
 
-  .card {
+  .card--theme {
     @include responsive(width, 100%, 100%, calc(50% - 10px));
+
+    &:nth-child(3n) { width: 100%; height: rem-calc(460); }
   }
 }
