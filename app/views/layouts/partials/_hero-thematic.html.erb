@@ -5,12 +5,28 @@
   <% end %>
 >
   <div class="hero__container container">
-    <h1><%= title %></h1>
+    <div class="hero__content">
+      <h1><%= title %></h1>
 
-    <% if local_assigns.has_key? :summary %>
-      <p class="hero__intro"><%= summary %></p>
-    <% end %>
+      <% if local_assigns.has_key? :summary %>
+        <p class="hero__intro"><%= summary %></p>
+      <% end %>
 
-    <%= link_to button_text, button_url, title: button_text, class: 'button--primary' %>
+      <%= link_to button_text, button_url, title: button_text, class: 'button--primary' %>
+    </div>
+
+    <div class="hero__stats bg--grey-black sm-home-hero-stats">
+      <div class="hero__stats-ribbon">
+        Last update: Month Year
+      </div>
+      <div class="hero__stat-number">
+        <!-- <counter 
+          :total="<%  %>" 
+          trigger="sm-home-hero-stats" 
+          :decimal="1"
+        ></counter>% -->
+      </div>
+      <!-- <span class="hero__stat-text"><%#= hero_stat_text %></span> -->
+    </div>
   </div>
 </header>
