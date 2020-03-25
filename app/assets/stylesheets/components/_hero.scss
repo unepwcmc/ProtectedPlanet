@@ -119,4 +119,17 @@
           }
     }
   }
+//--------------------------------------------------
+// class - thematic
+//--------------------------------------------------
+  &--thematic {
+    @include hero-medium;
+    
+    .hero {
+      &__intro {
+        @include text-intro;
+        @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+      }
+    }
+  }
 }

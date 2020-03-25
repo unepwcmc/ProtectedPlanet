@@ -1,0 +1,31 @@
+<section class="container section-padding bg--grey-xlight">
+  <div class="container--medium">
+    <h2><%= cms_fragment_render(:section_ocean_title, @cms_page) %></h2>
+    <div><%= cms_fragment_render(:section_ocean_content, @cms_page) %></div>
+    <div>
+      <h3>National waters</h3>
+      <div>
+        <div class="infographic__bar infographic__bar--national">
+          <span class="infographic__bar-layer infographic__bar--pa" style="width: <%= marine_stats('national_waters_pa_coverage_percentage') %>%"></span>
+        </div>
+
+        <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= marine_stats('national_waters_pa_coverage_percentage') %>"></counter>%</span>
+
+        <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= marine_stats('national_waters_pa_coverage_area') %>"></counter>km<sup>2</sup>)</span>
+      </div>
+
+      <h3>High seas</h3>
+      <div>
+        <div class="infographic__bar infographic__bar">
+          <span class="infographic__bar-layer infographic__bar-layer--highseas infographic__bar--pa" style="width: <%= marine_stats('high_seas_pa_coverage_percentage') %>%"></span>
+        </div>
+
+        <span class="text--60 u-marine-accent-color infographic__pa"><counter class="sm-infographic-counter" :total="<%= marine_stats('high_seas_pa_coverage_percentage') %>"></counter>%</span>
+
+        <span class="infographic__km u-marine-accent-color">(<counter class="sm-infographic-counter" :total="<%= marine_stats('high_seas_pa_coverage_area') %>"></counter>km<sup>2</sup>)</span>
+      </div>
+      </div>
+      <div>key</div>
+    </div>
+  </div>
+</section>

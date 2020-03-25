@@ -6,5 +6,11 @@
 >
   <div class="hero__container container">
     <h1><%= title %></h1>
+
+    <% if local_assigns.has_key? :summary %>
+      <p class="hero__intro"><%= summary %></p>
+    <% end %>
+
+    <%= link_to button_text, button_url, title: button_text, class: 'button--primary' %>
   </div>
 </header>
