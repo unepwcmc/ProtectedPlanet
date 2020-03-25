@@ -11,22 +11,20 @@
 
   .card {
     @include responsive(margin-bottom, rem-calc(20), rem-calc(50), rem-calc(50));
-    @include responsive(width, 100%, 25%, 25%);
-    padding: rem-calc(10);
-
-    &:nth-child(3),
-    :nth-child(4) {
-      @include responsive(display, none, none, block);
-    }
+    @include responsive(width, 100%, 50%, 25%);
+    padding: rem-calc(12 10);
 
     &--link {
       border: solid 1px $white;
       cursor: pointer;
       text-decoration: none;
 
-      &:hover { border-color: $body-font-colour; }
+      &:hover { border-color: $grey-dark; }
     }
 
-      &__date { @include text-small; }
+      &__date { 
+        @include text-small; 
+        margin-top: 0;
+      }
   }
 }

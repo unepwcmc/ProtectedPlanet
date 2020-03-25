@@ -159,7 +159,10 @@ $padding-medium: rem-calc(27);
   &--download {
     @include button-with-icon;
     
-    &::after { @include icon-download; }
+    &::after { 
+      @include icon-download; 
+      display: inline-block;
+    }
   }
 
   &--external {
@@ -173,7 +176,10 @@ $padding-medium: rem-calc(27);
   &--link-external {
     @include button-with-icon;
     
-    &::after { @include icon-arrow-external; }
+    &::after { 
+      @include icon-arrow-external; 
+      display: inline-block;
+    }
   }
 
   &--outline-black { @include button-outline($black); }
