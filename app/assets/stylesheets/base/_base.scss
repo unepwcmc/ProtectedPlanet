@@ -45,6 +45,7 @@ h3 {
   
 p,a { 
   color: inherit; 
+  line-height: $p-font-line-height;
 
   &.text-intro { @include text-intro; }
 }
@@ -77,10 +78,7 @@ img { max-width: 100%; }
   @include container;
 }
 
-.container--medium {
-  @include container;
-  width: $site-width-medium-desktop;
-}
+.container--medium { @include container-medium; }
 
 .container--desktop-up {
   @include breakpoint($large) {
