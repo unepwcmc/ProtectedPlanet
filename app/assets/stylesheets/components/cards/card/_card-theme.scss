@@ -10,12 +10,11 @@
   background-size: cover;
   color: $white;
   margin-bottom: rem-calc(20);
+  margin-left: 0;
   padding: rem-calc(32 30);
   text-decoration: none;
 
   position: relative;
-
-  &:nth-child(3n) { width: 100%; height: rem-calc(460); }
 
   &:hover::before { background-color: rgba(0,0,0,0.7); }
 
