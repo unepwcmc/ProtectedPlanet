@@ -66,7 +66,11 @@
       </div>
     </div>
 
-    <chart-legend v-if="legend" :show-numbers="true" :rows="legend" :colours="legendColours"></chart-legend>
+    <chart-legend 
+      v-if="showLegend"
+      :colours="legendColours"
+      :rows="getLegend()"
+    />
   </div>  
 </template>
 
@@ -75,7 +79,7 @@
   import ChartLineTab from './ChartLineTab'
   // import ChartLineTargetX from './ChartLineTargetX'
   // import ChartLineTargetY from './ChartLineTargetY'
-  // import ChartLegend from './ChartLegend'
+  import ChartLegend from './ChartLegend'
 
   export default {
     name: 'chart-line',
@@ -83,8 +87,8 @@
     components: { 
       // ChartLineTargetX, ChartLineTargetY, 
       ChartLineDataset, 
-      ChartLineTab
-      // ChartLegend 
+      ChartLineTab,
+      ChartLegend 
     },
 
     props: {
@@ -95,7 +99,10 @@
       targets: Array,
       axis: Object,
       commitments: Array,
-      legend: Array
+      showLegend: {
+        default: true,
+        type: Boolean
+      }
     },
 
     data () {
@@ -139,8 +146,9 @@
             text: '#000000'
           }
         ],
+        legend: [],
         legendColours: ['#207D94', '#6FD9F2', '#86BF37'],
-        targetColours: ['rgba(29, 125, 166, 0.4)', 'rgba(113, 163, 43, 0.4)']
+        // targetColours: ['rgba(29, 125, 166, 0.4)', 'rgba(113, 163, 43, 0.4)']
       }
     },
 
@@ -177,6 +185,14 @@
     },
 
     methods: {
+      getLegend (){
+        const legend = this.lines.map((dataset) => {
+          return { title: dataset.id }
+        })
+
+        return legend
+      },
+
       getPath(dataset) {
         let path = ''
         
