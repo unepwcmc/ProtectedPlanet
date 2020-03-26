@@ -1,0 +1,54 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-dial-color: $grey-black;
+$chart-text-color: $chart-font-color;
+$chart-dial-font: $chart-font;
+$chart-dial-font-size: rem-calc(20);
+$chart-dial-font-size-tablet: rem-calc(22);
+$chart-dial-font-size-desktop: rem-calc(26);
+
+//--------------------------------------------------
+// pa row charts
+//--------------------------------------------------
+&--row-pa {
+  padding: rem-calc(40 0 20 0);
+
+  .chart {
+    &__row {
+      background-color: $white;
+      height: rem-calc(52);  
+    }
+
+      &__bar {
+        @include flex;
+        @include flex-h-between;
+        @include flex-v-center;
+        background-color: $purple;
+        height: rem-calc(52);
+      }
+
+      &__bar-label {
+        color: $white;
+        font-size: rem-calc(20);
+        font-weight: $bold;
+        margin-right: rem-calc(10);
+      }
+
+      &__coverage {
+        background-color: $chart-aqua;
+        height: rem-calc(52);
+        position: relative;
+      }
+
+      &__coverage-label {
+        @include chart-tooltip('bottom', $black);
+        position: absolute;
+
+        bottom: calc(100% + 2px);
+        left: 50%;
+
+        transform: translateX(-50%);
+      }
+  }
+}
