@@ -23,4 +23,15 @@
   </p>
 </div> -->
 
-<%= render partial: "marine/sections/ocean" %>
+<%= render partial: "marine/sections/ocean", locals: {
+  national: marine_stats('national_waters_percentage'),
+  national_coverage: marine_stats('national_waters_pa_coverage_percentage'),
+  high_seas: marine_stats('global_ocean_percentage'),
+  high_seas_coverage: marine_stats('high_seas_pa_coverage_percentage')
+} %>
+
+
+<%= render partial: "marine/sections/coverage", locals: {
+  cms_page: @cms_page,
+  
+} %>

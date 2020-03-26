@@ -81,14 +81,23 @@ $chart-target-stroke-width: rem-calc(3);
   @import './charts/chart-dial';
   @import './charts/chart-row-pa';
   @import './charts/chart-row-target';
+  
+  &__legend-item {
+    @include flex;
+    @include flex-v-center;
+  } 
 
-  &__key {
-    background-color: $chart-aqua;
-    border-radius: 100%;
-    width: rem-calc(24); height: rem-calc(24);
+    &__legend-key  {
+      background-color: $chart-aqua;
+      border-radius: 100%;
+      width: rem-calc(24); height: rem-calc(24);
 
-    display: block;
-  }
+      display: block;
+    }
+
+    &__legend-text {
+      margin-left: rem-calc(6);
+    }
 }
 
 @import './charts/horizontal-bar-chart';

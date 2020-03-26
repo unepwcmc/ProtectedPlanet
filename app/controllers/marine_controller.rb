@@ -156,232 +156,232 @@ class MarineController < ApplicationController
     @protectedAreasGrowth = [
       {
         id: "Global",
-        dataset: [
+        datapoints: [
           {
-            year: 2000,
-            percent: 0.67
+            x: 2000,
+            y: 0.67
           },
           {
-            year: 2001,
-            percent: 0.73
+            x: 2001,
+            y: 0.73
           },
           {
-            year: 2002,
-            percent: 0.99
+            x: 2002,
+            y: 0.99
           },
           {
-            year: 2003,
-            percent: 1.00
+            x: 2003,
+            y: 1.00
           },
           {
-            year: 2004,
-            percent: 1.11
+            x: 2004,
+            y: 1.11
           },
           {
-            year: 2005,
-            percent: 1.13
+            x: 2005,
+            y: 1.13
           },
           {
-            year: 2006,
-            percent: 1.05
+            x: 2006,
+            y: 1.05
           },
           {
-            year: 2007,
-            percent: 1.43
+            x: 2007,
+            y: 1.43
           },
           {
-            year: 2008,
-            percent: 1.85
+            x: 2008,
+            y: 1.85
           },
           {
-            year: 2009,
-            percent: 2.32
+            x: 2009,
+            y: 2.32
           },
           {
-            year: 2010,
-            percent: 2.50
+            x: 2010,
+            y: 2.50
           },
           {
-            year: 2011,
-            percent: 2.53
+            x: 2011,
+            y: 2.53
           },
           {
-            year: 2012,
-            percent: 3.38
+            x: 2012,
+            y: 3.38
           },
           {
-            year: 2013,
-            percent: 3.47
+            x: 2013,
+            y: 3.47
           },
           {
-            year: 2014,
-            percent: 4.15
+            x: 2014,
+            y: 4.15
           },
           {
-            year: 2015,
-            percent: 4.43
+            x: 2015,
+            y: 4.43
           },
           {
-            year: 2016,
-            percent: 5.01
+            x: 2016,
+            y: 5.01
           },
           {
-            year: 2017,
-            percent: 6.4
+            x: 2017,
+            y: 6.4
           }
         ]
       },
       {
         id: "National",
-        dataset: [
+        datapoints: [
           {
-            year: 2000,
-            percent: 1.72
+            x: 2000,
+            y: 1.72
           },
           {
-            year: 2001,
-            percent: 1.88
+            x: 2001,
+            y: 1.88
           },
           {
-            year: 2002,
-            percent: 2.54
+            x: 2002,
+            y: 2.54
           },
           {
-            year: 2003,
-            percent: 2.57
+            x: 2003,
+            y: 2.57
           },
           {
-            year: 2004,
-            percent: 2.86
+            x: 2004,
+            y: 2.86
           },
           {
-            year: 2005,
-            percent: 2.89
+            x: 2005,
+            y: 2.89
           },
           {
-            year: 2006,
-            percent: 2.70
+            x: 2006,
+            y: 2.70
           },
           {
-            year: 2007,
-            percent: 3.68
+            x: 2007,
+            y: 3.68
           },
           {
-            year: 2008,
-            percent: 3.93
+            x: 2008,
+            y: 3.93
           },
           {
-            year: 2009,
-            percent: 5.13
+            x: 2009,
+            y: 5.13
           },
           {
-            year: 2010,
-            percent: 5.88
+            x: 2010,
+            y: 5.88
           },
           {
-            year: 2011,
-            percent: 5.94
+            x: 2011,
+            y: 5.94
           },
           {
-            year: 2012,
-            percent: 8.43
+            x: 2012,
+            y: 8.43
           },
           {
-            year: 2013,
-            percent: 8.65
+            x: 2013,
+            y: 8.65
           },
           {
-            year: 2014,
-            percent: 9.66
+            x: 2014,
+            y: 9.66
           },
           {
-            year: 2015,
-            percent: 10.36
+            x: 2015,
+            y: 10.36
           },
           {
-            year: 2016,
-            percent: 12.74
+            x: 2016,
+            y: 12.74
           },
           {
-            year: 2017,
-            percent: 16.02
+            x: 2017,
+            y: 16.02
           }
         ]
       },
       {
         id: "ABNJ",
-        dataset: [
+        datapoints: [
           {
-            year: 2000,
-            percent: 0.00
+            x: 2000,
+            y: 0.00
           },
           {
-            year: 2001,
-            percent: 0.00
+            x: 2001,
+            y: 0.00
           },
           {
-            year: 2002,
-            percent: 0.00
+            x: 2002,
+            y: 0.00
           },
           {
-            year: 2003,
-            percent: 0.00
+            x: 2003,
+            y: 0.00
           },
           {
-            year: 2004,
-            percent: 0.00
+            x: 2004,
+            y: 0.00
           },
           {
-            year: 2005,
-            percent: 0.00
+            x: 2005,
+            y: 0.00
           },
           {
-            year: 2006,
-            percent: 0.00
+            x: 2006,
+            y: 0.00
           },
           {
-            year: 2007,
-            percent: 0.00
+            x: 2007,
+            y: 0.00
           },
           {
-            year: 2008,
-            percent: 0.00
+            x: 2008,
+            y: 0.00
           },
           {
-            year: 2009,
-            percent: 0.00
+            x: 2009,
+            y: 0.00
           },
           {
-            year: 2010,
-            percent: 0.17
+            x: 2010,
+            y: 0.17
           },
           {
-            year: 2011,
-            percent: 0.17
+            x: 2011,
+            y: 0.17
           },
           {
-            year: 2012,
-            percent: 0.17
+            x: 2012,
+            y: 0.17
           },
           {
-            year: 2013,
-            percent: 0.17
+            x: 2013,
+            y: 0.17
           },
           {
-            year: 2014,
-            percent: 0.25
+            x: 2014,
+            y: 0.25
           },
           {
-            year: 2015,
-            percent: 0.25
+            x: 2015,
+            y: 0.25
           },
           {
-            year: 2016,
-            percent: 0.25
+            x: 2016,
+            y: 0.25
           },
           {
-            year: 2017,
-            percent: 1.18
+            x: 2017,
+            y: 1.18
           }
         ]
       }
