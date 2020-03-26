@@ -18,11 +18,11 @@
 
     props: {
       coverage: {
-        type: Number,
+        type: String,
         required: true
       },
       percent: {
-        type: Number,
+        type: String,
         required: true
       }
     }
