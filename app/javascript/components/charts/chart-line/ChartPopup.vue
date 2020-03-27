@@ -3,34 +3,34 @@
     <circle
       :fill="colour"
       :cx="x" 
-      :cy="y" 
+      :cy="y"
       r="8"
       @mouseover="togglePopup()"
       @mouseleave="togglePopup()"
     />
     
-    <!-- <polyline 
-      v-show="showPopup"
-      :points="xAxisLine" 
-      fill="none" 
-      stroke="black" 
-    /> -->
     <g
       v-show="showPopup"
       :transform="`translate(${coordX}, ${coordY})`"
     >
+      <rect 
+        fill="#000"
+        height="46"
+        rx="4"
+        width="74"    
+        x="-36"
+        y="-58"
+      />
       <path 
-        d="m-1.5,-8.54687c-3,-22 -50,-14 -50.5,-14.45313c0.5,0.45313 -0.5,-58.54687 -0.5,-58.54687c0,0 104,1 104,1c0,0 1,57 0.5,56.54687c0.5,0.45313 -43.5,2.45313 -44,2c0.5,0.45313 -6.5,35.45313 -9.5,13.45313z" 
-        stroke-width="1.5" 
-        stroke="#000" 
+        d="m-17,-13l17.132,12.2l16.04,-12.2l-33.172,0z" 
         fill="#000"
       />
       <text
         font-size="26"
-        font-weight="500"
+        font-weight="700"
         fill="#fff"
         text-anchor="middle"
-        dy="-30"
+        dy="-27"
       >
         {{ text }}
       </text>
@@ -43,16 +43,13 @@ export default {
   name: 'chart-popup',
 
   props: {
-    // showPopup: {
-    //   type: Boolean
-    // },
     colour: {
       required: true,
       type: String
     },
     text: {
       required: true,
-      type: Number
+      type: String
     },
     x: {
       required: true,
