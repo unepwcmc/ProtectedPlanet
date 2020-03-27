@@ -6,13 +6,13 @@
       :stroke="colour.line" 
       stroke-width="2" 
     />
-
-    <circle 
+    
+    <chart-popup
       v-for="datapoint in datapoints"
-      :fill="colour.line"
-      :cx="datapoint.x" 
-      :cy="datapoint.y" 
-      r="8" 
+      :colour="colour.line"
+      :x="datapoint.x" 
+      :y="datapoint.y" 
+      :text="datapoint.value"
     />
     
     <template v-if="hasLegend">
@@ -37,8 +37,12 @@
 </template>
 
 <script>
+  import ChartPopup from './ChartPopup.vue'
+
   export default {
     name: 'chart-line-dataset',
+
+    components: { ChartPopup },
 
     props: {
       colour: {

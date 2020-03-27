@@ -113,7 +113,7 @@
           paddingTop: 50
         },
         x: {
-          axisMarks: 6,
+          axisMarks: 8,
           chartPadding: 24,
           chartWidth: 890,
           max: 0,
@@ -243,7 +243,11 @@
       normaliseDataset (dataset) {
         console.log(dataset)
         const normalisedDataset = dataset.map((datapoint) => {
-          return { x: this.normaliseX(datapoint.x), y: this.normaliseY(datapoint.y) }
+          return { 
+            value: datapoint.y + '%',
+            x: this.normaliseX(datapoint.x),
+            y: this.normaliseY(datapoint.y)
+          }
         })
         console.log(normalisedDataset)
         return normalisedDataset
