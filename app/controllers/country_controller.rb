@@ -77,14 +77,17 @@ class CountryController < ApplicationController
     @pame_statistics = @country.pame_statistic
   end
 
-  def get_wdpa
+  def pas_sample(size=3)
     iso = params[:iso].upcase
+    pas = nil
 
     if iso.size == 2
-      ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'").order(:name).first(3)
+      pas = ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
     else
-      ProtectedArea.joins(:countries).where("countries.iso_3 = '#{iso}'").order(:name).first(3)
+      pas = ProtectedArea.joins(:countries).where("countries.iso_3 = '#{iso}'")
     end
+
+    pas.order(:name).first(size)
   end
 
 end

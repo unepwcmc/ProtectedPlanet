@@ -2,8 +2,6 @@ class RegionController < ApplicationController
   before_action :load_vars
 
   def show
-    @presenter = RegionPresenter.new @region
-
     @iucn_categories = @region.protected_areas_per_iucn_category
 
     @governance_types = @region.protected_areas_per_governance
@@ -19,7 +17,7 @@ class RegionController < ApplicationController
     @total_oecm = 0 ##TODO
     @total_wdpa = @region.protected_areas.count
 
-    @wdpa = get_wdpa
+    @wdpa = pas_sample
   end
 
   private
@@ -31,9 +29,9 @@ class RegionController < ApplicationController
     @presenter = RegionPresenter.new @region
   end
 
-  def get_wdpa
-    id = @region.id
-
-    ProtectedArea.joins(:countries).where("countries.region_id = #{id}").order(:name).first(3)
+  def pas_sample(size=3)
+    ProtectedArea.joins(:countries).
+      where("countries.region_id = #{@region.id}").
+      order(:name).first(size)
   end
 end
