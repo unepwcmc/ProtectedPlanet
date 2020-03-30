@@ -5,14 +5,50 @@
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
-@mixin tabs-fake-hover {
-  border-bottom: solid $primary 2px;  
+@mixin tab-trigger {
+  @include text-tabs-fake;
+  border-bottom: solid transparent 2px;
+  cursor: pointer;
+  margin-right: rem-calc(46);
+  padding-bottom: rem-calc(3);
+
+  &:hover { border-bottom: solid $primary 2px; }
+
+  &.active { 
+    border-bottom: solid $primary 2px; 
+    font-weight: $bold;
+  }
 }
 
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
 .tabs {
+  &--hero {
+    .tabs {
+      &__triggers {
+        @include ul-unstyled;
+        @include ul-inline;
+
+        transform: translateY(-100%);
+      }
+    }
+
+    .tab {
+      &__target {
+        display: none;
+
+        &.active { display: block; }
+      }
+
+      &__trigger {
+        @include tab-trigger;
+
+        &.active { color: $primary; }
+      }
+    }
+  }
+
   &--fake {
     @include ul-unstyled;
     @include ul-inline;
@@ -20,18 +56,7 @@
 
     .tab {
       &__trigger {
-        @include text-tabs-fake;
-        border-bottom: solid transparent 2px;
-        cursor: pointer;
-        margin-right: rem-calc(46);
-        padding-bottom: rem-calc(3);
-
-        &:hover { @include tabs-fake-hover; }
-
-        &.active {
-          @include tabs-fake-hover;
-          font-weight: $bold;
-        }
+        @include tab-trigger;
       }
     }
   }

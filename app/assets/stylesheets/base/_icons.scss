@@ -40,6 +40,8 @@
     visibility: hidden;
   }
   
+  &--pin-green { @include icon-pin-green; }
+
   &--region { @include icon-region; }
   &--search { @include icon-search; }
   &--shield { @include icon-shield; }

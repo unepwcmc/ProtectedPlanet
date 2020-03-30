@@ -15,7 +15,7 @@ $pane-side-padding: 42px;
   @include text-nav-link;
   @include flex;
   @include flex-v-center;
-  @include responsive(padding, rem-calc(9 24), rem-calc(0 12), rem-calc(0 60 0 0));
+  @include responsive(padding, rem-calc(9 24), rem-calc(0 12), rem-calc(0 30));
   height: 100%;
 
   &.is-current-page { font-weight: $bold; }
@@ -30,6 +30,7 @@ $pane-side-padding: 42px;
 //--------------------------------------------------
   &--primary {
     @include flex;
+    @include flex-vs-stretch;
 
     .nav {
       &__burger {
