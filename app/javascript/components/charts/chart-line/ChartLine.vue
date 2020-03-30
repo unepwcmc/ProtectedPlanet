@@ -93,7 +93,7 @@
 
     props: {
       lines: {
-        type: Array, // [ { x: Number, y: Number } ]
+        type: Array, // [ id: String, datapoints: { x: Number, y: Number } ]
         required: true
       },
       targets: Array,
@@ -113,7 +113,6 @@
           paddingTop: 50
         },
         x: {
-          axisMarks: 8,
           chartPadding: 24,
           chartWidth: 890,
           max: 0,
@@ -123,7 +122,6 @@
           precision: 1,
         },
         y: {
-          axisMarks: 8,
           chartHeight: 500,
           chartPadding: 34,
           max: 0,
@@ -180,10 +178,6 @@
       this.y.maxNormalised = this.normaliseY(this.y.max)
     },
 
-    mounted () {
-      
-    },
-
     methods: {
       getLegend (){
         const legend = this.lines.map((dataset) => {
@@ -213,13 +207,19 @@
       },
 
       getAxis (axis) {
-        let array = [], n = this[axis].min
-        const incrementor = (this[axis].max - this[axis].min)/ this[axis].axisMarks
+        const 
+          totalDatapoints = this.lines[0].datapoints.length,
+          axisMarks = totalDatapoints % 2 == 0 ? (totalDatapoints + 1)/2 : totalDatapoints/2,
+          min = Math.floor(this[axis].min),
+          max = Math.ceil(this[axis].max),
+          incrementor = (max - min)/(axisMarks - 1)
+        
+        let array = [], n = min
 
-        while( n < this[axis].max + incrementor) {
+        while( n < (max + incrementor)) {
           array.push({
             coord: this[`normalise${axis.toUpperCase()}`](n),
-            labelText: Math.ceil(n/this[axis].precision)*this[axis].precision
+            labelText: n
           })
 
           n += incrementor
@@ -241,7 +241,6 @@
       },
 
       normaliseDataset (dataset) {
-        console.log(dataset)
         const normalisedDataset = dataset.map((datapoint) => {
           return { 
             value: datapoint.y + '%',
@@ -249,7 +248,6 @@
             y: this.normaliseY(datapoint.y)
           }
         })
-        console.log(normalisedDataset)
         return normalisedDataset
       },
 
