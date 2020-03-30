@@ -12,13 +12,6 @@ module ProtectedAreasHelper
     !!protected_area.wikipedia_article
   end
 
-  def url_for_related_source source, protected_area
-    File.join(
-      Rails.application.secrets.related_sources_base_urls[source.to_sym],
-      protected_area.wdpa_id.to_s
-    )
-  end
-
   def completion_attribute label, complete
     if complete
       content_tag(:li, class: 'complete') do
@@ -27,14 +20,6 @@ module ProtectedAreasHelper
       end
     else
       content_tag(:li, label, class: 'non-complete')
-    end
-  end
-
-  def parse_management_plan management_plan
-    if (management_plan.is_a? String) && (management_plan.starts_with?("http"))
-      link_to("View Management Plan", management_plan)
-    else
-      management_plan
     end
   end
 
