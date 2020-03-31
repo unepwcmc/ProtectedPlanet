@@ -17,70 +17,6 @@ class ProtectedAreasController < ApplicationController
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
 
-    @attributes = [
-      {
-        title: 'Original Name',
-        value: @protected_area.original_name
-      },
-      {
-        title: 'English Designation',
-        value: @protected_area.designation.try(:name) || "Not Reported"
-      },
-      {
-        title: 'IUCN Management Category',
-        value: @protected_area.iucn_category.try(:name) || "Not Reported"
-      },
-      {
-        title: 'Status',
-        value: @protected_area.legal_status.try(:name) || "Not Reported"
-      },
-      {
-        title: 'Type of Designation',
-        value: @protected_area.designation.try(:jurisdiction).try(:name) || "Not Reported"
-      },
-      {
-        title: 'Status Year',
-        value: @protected_area.legal_status_updated_at.try(:strftime, '%Y') || "Not Reported"
-      },
-      {
-        title: 'Sublocation',
-        value: @protected_area.sub_locations.map(&:iso).join(', ')
-      },
-      {
-        title: 'Governance Type',
-        value: @protected_area.governance.try(:name) || "Not Reported"
-      },
-      {
-        title: 'Management Authority',
-        value: @protected_area.management_authority.try(:name) || "Not Reported"
-      },
-      {
-        title: 'Management Plan',
-        value: 'TODO'
-        # value: parse_management_plan(@protected_area.management_plan)
-      },
-      {
-        title: 'International Criteria',
-        value: @protected_area.international_criteria || "Not Reported"
-      }
-    ]
-
-    @external_links = [
-      {
-        title: 'View more',
-        image_url: ActionController::Base.helpers.image_url('logos/green-list.png'),
-        link_title: "View the Green List page for #{@protected_area.name}",
-        url: '' ##TODO links needed from CSV provided by IUCN.
-      },
-      {
-        title: 'View more',
-        image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
-        link_title: "View the climate change vulnerability assessments for #{@protected_area.name}",
-        link_url: '' #TODO make below work
-        #link_url: url_for_related_source('parcc_info', @protected_area)
-      }
-    ]
-
     @locations = get_locations
 
     # @protected_area.sources
@@ -93,13 +29,6 @@ class ProtectedAreasController < ApplicationController
     ]
 
     @wdpa_other = [] ## 3 other PAs from ...?
-
-
-
-
-
-
-
 
     respond_to do |format|
       format.html
