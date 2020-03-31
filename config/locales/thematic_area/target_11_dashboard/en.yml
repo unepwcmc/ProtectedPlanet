@@ -1,7 +1,6 @@
 en:
   thematic_area:
     target_11_dashboard:
-      title: Aichi Target 11 Dashboard
       description: Dive into the summary of our progress towards Aichi Target 11 at global, regional and national scales with the Dashboard.
       thematic_image: target-11-dashboard.jpg
       social_title: Aichi Target 11 Dashboard
@@ -9,8 +8,6 @@ en:
       social_image: social-sharing-target-dashboard-banff-canada.jpg
       social_image_alt: Landscape photograph of Banff National Park of Canada
       social_twitter_card: summary_large_image
-      subtitle_1: Global Level
-      subtitle_2: Country & Regions
       search_config: 
         label: Search by country/region
         placeholder: Search by country/region

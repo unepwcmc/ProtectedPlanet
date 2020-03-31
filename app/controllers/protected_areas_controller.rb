@@ -17,6 +17,19 @@ class ProtectedAreasController < ApplicationController
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
 
+    @locations = get_locations
+
+    # @protected_area.sources
+    @sources = [
+      {
+        title: 'Source name',
+        date_updated: '2019',
+        url: 'http://link-to-source.com'
+      }
+    ]
+
+    @wdpa_other = [] ## 3 other PAs from ...?
+
     respond_to do |format|
       format.html
       format.pdf {
@@ -32,6 +45,19 @@ class ProtectedAreasController < ApplicationController
 
   private
 
+  def get_locations
+    locations = []
+    
+    if @countries.any?
+      @countries.each_with_index do |country, i|
+        locations << ActionController::Base.helpers.link_to(country.name, country_path(country.iso))
+      end
+    else
+      locations << 'Areas Beyond National Jurisdiction'
+    end
+    
+    locations.join(', ')
+  end
 
   def record_visit
     return if @protected_area.nil?

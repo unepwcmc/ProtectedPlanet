@@ -1,0 +1,60 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.list {
+  &--stripes {
+    @include ul-unstyled;
+
+    .list {
+      &__li {
+        padding: rem-calc(16 14);
+
+        &:nth-child(odd) { background-color: $grey-xlight; }
+      }
+
+        &__title {
+          font-weight: $bold;
+          margin-right: rem-calc(14);
+        } 
+    }
+  }
+
+  &--underline {
+    @include ul-unstyled;
+    max-height: rem-calc(280);
+    overflow-y: scroll;
+
+    .list {
+      &__li {
+        @include flex;
+        border-top: solid 1px $grey-light;
+        padding: rem-calc(14 0);
+
+        &:first-child { border-top: none; }
+      }
+
+        &__a {
+          margin-left: auto;
+        }
+
+        &__icon {
+          @include circle-icon;
+          background-color: $grey;
+          margin-right: rem-calc(24);
+        }
+
+        &__title {
+          font-weight: $bold;
+          margin-right: rem-calc(24);
+        } 
+
+        &__value {
+
+        }
+    }
+  }
+}

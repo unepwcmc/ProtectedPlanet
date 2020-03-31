@@ -1,0 +1,28 @@
+<div class="card--stats sm-sources">
+  <h2 class="card"><%= t('stats.sources.title') %></h2>
+  
+  <div class="card__content flex">
+    <div class="card__stat-box">
+      <span><%= t('stats.sources.total') %></span>  
+      
+      <counter 
+        class="" 
+        :total="<%= sources.count %>"
+        trigger="sm-sources" 
+        :decimal="0"
+      ></counter>
+    </div>
+
+    <div>
+      <ol class="list--underline">
+        <% sources.each do |source| %>
+          <li class="list__li fle">
+            <span class="list__title"><%= source[:title] %></span>
+            <span class="list__value"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
+            <span class="list__a"><%= link_to 'Details', source[:url], title: '' %></span>
+          </li>
+        <% end %>
+      </ol>
+    </div>
+  </div>
+</div>

@@ -60,6 +60,72 @@ class ProtectedAreaPresenter
     }
   end
 
+  def attributes
+    [
+      {
+        title: 'Original Name',
+        value: protected_area.original_name
+      },
+      {
+        title: 'English Designation',
+        value: protected_area.designation.try(:name) || "Not Reported"
+      },
+      {
+        title: 'IUCN Management Category',
+        value: protected_area.iucn_category.try(:name) || "Not Reported"
+      },
+      {
+        title: 'Status',
+        value: protected_area.legal_status.try(:name) || "Not Reported"
+      },
+      {
+        title: 'Type of Designation',
+        value: protected_area.designation.try(:jurisdiction).try(:name) || "Not Reported"
+      },
+      {
+        title: 'Status Year',
+        value: protected_area.legal_status_updated_at.try(:strftime, '%Y') || "Not Reported"
+      },
+      {
+        title: 'Sublocation',
+        value: protected_area.sub_locations.map(&:iso).join(', ')
+      },
+      {
+        title: 'Governance Type',
+        value: protected_area.governance.try(:name) || "Not Reported"
+      },
+      {
+        title: 'Management Authority',
+        value: protected_area.management_authority.try(:name) || "Not Reported"
+      },
+      {
+        title: 'Management Plan',
+        value: parse_management_plan(protected_area.management_plan)
+      },
+      {
+        title: 'International Criteria',
+        value: protected_area.international_criteria || "Not Reported"
+      }
+    ]
+  end
+
+  def external_links
+    [
+      {
+        title: 'View more',
+        image_url: ActionController::Base.helpers.image_url('logos/green-list.png'),
+        link_title: "View the Green List page for #{protected_area.name}",
+        url: '' ##TODO links needed from CSV provided by IUCN.
+      },
+      {
+        title: 'View more',
+        image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
+        link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
+        link_url: url_for_related_source('parcc_info', protected_area)
+      }
+    ]
+  end
+
   private
 
   def protected_area
@@ -91,6 +157,21 @@ class ProtectedAreaPresenter
         protected_area, standard_attr[:name]
       )
     end
+  end
+
+  def parse_management_plan management_plan
+    if (management_plan.is_a? String) && (management_plan.starts_with?("http"))
+      link_to("View Management Plan", management_plan)
+    else
+      management_plan
+    end
+  end
+
+  def url_for_related_source source, protected_area
+    File.join(
+      Rails.application.secrets.related_sources_base_urls[source.to_sym],
+      protected_area.wdpa_id.to_s
+    )
   end
 
   def all_fields

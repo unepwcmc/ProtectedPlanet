@@ -12,7 +12,7 @@
   }
 
   .card {
-    @include circle-grey-light;
+    @include circle-grey-xlight;
     @include flex;
     @include flex-column;
     @include responsive(margin-bottom, rem-calc(14), 0, 0);

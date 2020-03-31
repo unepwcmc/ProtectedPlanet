@@ -3,7 +3,7 @@
 
   position: relative;
 
-  .v-select {
+  .select {
 
     &__label { }
 
@@ -57,6 +57,7 @@
 
     &__dropdown {
       @include input-basic;
+      @include ul-unstyled;
       background-color: $white;
       border-top-left-radius: 0;
       border-top-right-radius: 0;

@@ -3,6 +3,30 @@ class CountryController < ApplicationController
   before_action :load_vars, except: [:codes, :compare]
 
   def show
+    @country_presenter = CountryPresenter.new @country
+
+    @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
+    @iucn_categories = @country.protected_areas_per_iucn_category
+    @governance_types = @country.protected_areas_per_governance
+
+    @sources = [
+      {
+        title: 'Source name',
+        date_updated: '2019',
+        url: 'http://link-to-source.com'
+      }
+    ]
+
+    @total_oecm = 0 ##TODO
+    @total_pame = @country.protected_areas.with_pame_evaluations.count
+    @total_wdpa = @country.protected_areas.count
+
+    @wdpa = get_wdpa
+    
+    ##TODO need adding
+    # protected_national_report: statistic_presenter.percentage_nr_marine_cover, 
+    # national_report_version: statistic_presenter.nr_version,
+
     respond_to do |format|
       format.html
       format.pdf {
@@ -50,10 +74,20 @@ class CountryController < ApplicationController
 
     @country or raise_404
 
-    @presenter = StatisticPresenter.new @country
     @pame_statistics = @country.pame_statistic
-    @designations_by_jurisdiction = @country.designations.group_by { |design|
-      design.jurisdiction.name rescue "Not Reported"
-    }
   end
+
+  def pas_sample(size=3)
+    iso = params[:iso].upcase
+    pas = nil
+
+    if iso.size == 2
+      pas = ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
+    else
+      pas = ProtectedArea.joins(:countries).where("countries.iso_3 = '#{iso}'")
+    end
+
+    pas.order(:name).first(size)
+  end
+
 end

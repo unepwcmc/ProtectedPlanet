@@ -33,6 +33,10 @@ $image-placeholder: black;
 //--------------------------------------------------
 @mixin bg-grey-xlight { @include bg-colour($grey-xlight, $grey-xdark); }
 @mixin bg-grey-light { @include bg-colour($grey-light, $grey-xdark); }
+@mixin bg-grey { @include bg-colour($grey, $white); }
+@mixin bg-grey-dark { @include bg-colour($grey-dark, $white); }
+@mixin bg-grey-xdark { @include bg-colour($grey-xdark, $white); }
+@mixin bg-grey-black { @include bg-colour($grey-black, $white); }
 
 //--------------------------------------------------
 // classes
@@ -40,7 +44,9 @@ $image-placeholder: black;
 .bg--primary { @include bg-colour($primary, $white); }
 .bg--grey-xlight { @include bg-grey-xlight; }
 .bg--grey-light { @include bg-grey-light; }
-.bg--grey-xdark { @include bg-colour($grey-xdark, $white); }
+.bg--grey { @include bg-grey; }
+.bg--grey-dark { @include bg-grey-dark; }
+.bg--grey-xdark { @include bg-grey-xdark; }
 
 .bg-img {
   background-color: $image-placeholder;
