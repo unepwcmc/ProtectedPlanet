@@ -12,22 +12,23 @@
 
   <div class="cards__cards">
     <% @items[:cards].each do |card| %>
-      <% if link_to_page?(card) %>
+      <% if !card[:url].nil? %>
         <%= link_to card[:url], title: card[:label], class: 'card card--link' do %>
-          <p class="card__date"><%= card[:created_at] %></p>
+          <p class="card__date"><%= DateTime.parse(card[:published_date]).strftime('%d %B %y') %></p>
           <h3><%= card[:label] %></h3>
-          <p><%= card[:intro] %></p>
+          <p><%= card[:summary] %></p>
         <% end %>
       <% else %>
         <div class="card">
-          <p class="card__date"><%= card[:created_at] %></p>
+          <p class="card__date"><%= DateTime.parse(card[:published_date]).strftime('%d %B %y') %></p>
           <h3><%= card[:label] %></h3>
-          <p><%= card[:intro] %></p>
+          <p><%= card[:summary] %></p>
           
-          <% if card[:pdf] %>
-            <%= link_to t('global.button.download'), card[:pdf], title: t('global.button.download'), class: 'button--download' %>
-          <% elsif card[:external_link] %>
-            <%= link_to t('global.button.link'), card[:external_linkd], title: card[:external_link_title], class: 'button--link-external' %>
+          <% if card[:file].present? %>
+            <%= link_to t('global.button.download'), card[:file], title: t('global.button.download'), class: 'button--download', target: '_blank' %>
+          <% end %>
+          <% if card[:link].present? %>
+            <%= link_to t('global.button.link'), card[:link], title: card[:link_title], class: 'button--link-external', target: '_blank' %>
           <% end %>
         </div>
       <% end %>

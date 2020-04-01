@@ -231,9 +231,9 @@ module ApplicationHelper
     ].to_json
   end
 
-  def link_to_page? card
-    !card[:pdf].present? && !card[:external_link].present?
-  end
+  # def link_to_page? card
+  #   !card[:pdf].present? && !card[:external_link].present?
+  # end
 
   def get_agile_config_themes
     {
@@ -265,24 +265,28 @@ module ApplicationHelper
     }.to_json
   end
 
-  def get_resource_cards  all = false
-    resources_page = @cms_site.pages.find_by_slug('resources')
-    limit = all ? false : 4
+  def get_resource_cards(all=false)
+    presenter = ResourcesPresenter.new(@cms_site, all)
+    _resources = presenter.resources
 
-    @items = {
-      "title": resources_page.label,
-      "url": all ? false : get_cms_url(resources_page.full_path),
-      "cards": resources_page.children.published.order(created_at: :desc).limit(limit).map{ |page|
-        {
-          "label": page.label,
-          "created_at": page.created_at.strftime('%d %B %y'),
-          "url": get_cms_url(page.full_path),
-          "intro": "field needs created in the CMS", #TODO create field in CMS
-          "pdf": false, #TODO create field in CMS
-          "external_link": nil #TODO create field in CMS
-        }
-      }
-    }
+    _resources[:url] = get_cms_url(_resources[:url])
+    _resources[:cards].map! do |c|
+      page = c[:page]
+      file = cms_fragment_render(:file, page)
+      link = cms_fragment_render(:link, page)
+      url = file.present? || link.present? ? nil : get_cms_url(page.full_path)
+
+      c.merge(
+        published_date: cms_fragment_render(:published_date, page),
+        url: url,
+        summary: cms_fragment_render(:summary, page),
+        file: file,
+        link: link,
+        link_title: cms_fragment_render(:link_title, page)
+      )
+    end
+
+    @items = _resources
   end
 
   def get_news_items all = false
