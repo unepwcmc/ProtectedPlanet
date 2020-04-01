@@ -1,0 +1,17 @@
+<section class="container section-padding bg--grey-xlight">
+  <div class="container--medium">
+    <h2><%= cms_fragment_render(:section_ocean_title, @cms_page) %></h2>
+    <div><%= cms_fragment_render(:section_ocean_content, @cms_page) %></div>
+    <div>
+      <h3>National waters</h3>
+      <chart-row-pa percent="60" coverage="15" ></chart-row-pa>
+
+      <h3>High seas</h3>
+      <chart-row-pa percent="40" coverage="10" ></chart-row-pa>
+      <div class="flex flex-v-center">
+        <span class="chart__key"></span>
+        <span>% of Protected Area Coverage</span>
+      </div>
+    </div>
+  </div>
+</section>

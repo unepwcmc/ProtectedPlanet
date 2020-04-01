@@ -32,6 +32,10 @@ $map-oecm: rgba($orange, .8);
 $map-marine: rgba($blue, .8);
 $map-terrestrial: rgba($pink, .8);
 
+$chart-aqua: #65C9B2;
+$chart-blue: #5F81CB;
+$chart-pink: #D63B7B;
+
 $orange--dark: #de522f;
 $orange--lighter: #f16e4d;
 $orange--lighest: #F5A623; //highlight color on the marine page
@@ -85,13 +89,15 @@ $fontAwesome: normal normal normal 14px/1 FontAwesome;
 $playfair-display: 'Playfair Display';
 $hind-siliguri: 'Hind Siliguri';
 
+$header-font: $playfair-display, serif;
+$header-font-color: $grey-black;
+$header-font-line-height: 1.1;
+
 $body-font: $hind-siliguri, sans-serif;
 $body-font-colour: $grey-black;
 $body-font-line-height: 1.3;
 
-$header-font: $playfair-display, serif;
-$header-font-color: $grey-black;
-$header-font-line-height: 1.1;
+$p-font-line-height: 1.6;
 
 $thin: 100;
 $extra-light: 300;

@@ -25,6 +25,7 @@ import ChartDial from './components/charts/chart-dial/ChartDial'
 import ChartLine from './components/charts/chart-line/ChartLine'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
+import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import DownloadTrigger from './components/download/DownloadTrigger'
@@ -72,6 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartLine,
         ChartTreemapInteractive,
         ChartRectangles,
+        ChartRowPa,
         ChartRowTarget,
         ChartSunburst,
         DownloadTrigger,

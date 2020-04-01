@@ -19,12 +19,76 @@ $chart-target-stroke-width: rem-calc(3);
   stroke-width: $chart-target-stroke-width;
 }
 
+@mixin chart-tooltip($arrow, $bg-colour: $black, $text-color: $white) {
+  @extend .flex;
+  @extend .flex-center;
+  background-color: $bg-colour;
+  border: solid rem-calc(2) $bg-colour;
+  border-radius: $radius-global;
+  color: $text-color;
+  font-size: rem-calc(18);
+  font-weight: $fw-black;
+  padding: rem-calc(0 4 0 4);
+  width: auto; height: rem-calc(30);
+  min-width: rem-calc(40);
+
+  &::before {
+    border-right: 13px solid transparent;
+    border-left: 13px solid transparent;
+    content: '';
+    width: 0; height: 0;
+
+    position: absolute;
+    
+    @if $arrow == 'bottom' {
+      border-top: 13px solid $bg-colour; 
+      top: 100%;
+    }
+
+    @if $arrow == 'top' {
+      border-bottom: 13px solid $bg-colour; 
+      bottom: 100%;
+    }
+  }
+
+  &::after {
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    content: '';
+    width: 0; height: 0;
+
+    position: absolute;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    @if $arrow == 'bottom' { 
+      border-top: 10px solid $bg-colour; 
+      top: 100%;
+    }
+
+    @if $arrow == 'top' { 
+      border-bottom: 10px solid $bg-colour; 
+      bottom: 100%;
+    }
+  }
+}
+
 .chart {
 //--------------------------------------------------
 // charts
 //--------------------------------------------------
   @import './charts/chart-dial';
+  @import './charts/chart-row-pa';
   @import './charts/chart-row-target';
+
+  &__key {
+    background-color: $chart-aqua;
+    border-radius: 100%;
+    width: rem-calc(24); height: rem-calc(24);
+
+    display: block;
+  }
 }
 
 @import './charts/horizontal-bar-chart';

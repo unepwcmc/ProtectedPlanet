@@ -119,4 +119,35 @@
           }
     }
   }
+//--------------------------------------------------
+// class - thematic
+//--------------------------------------------------
+  &--thematic {
+    @include hero-medium;
+
+    .hero {
+      &__container {
+        @include flex;
+        @include flex-h-between;
+        @include responsive(flex-direction, column, column, row);
+      }
+
+      &__content {
+        @include responsive(margin-right, 0, 0, 10%);    
+      }
+
+      &__intro {
+        @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+        @include text-intro;
+      }
+
+      &__stats {
+        @include border-radius;
+        @include flex-no-shrink;
+        @include responsive(margin-top, rem-calc(20), rem-clac(28), 0);
+        @include responsive(width, 100%, 100%, 33%); 
+        padding: rem-calc(28);
+      }
+    }
+  }
 }
