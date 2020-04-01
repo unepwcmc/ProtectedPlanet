@@ -265,32 +265,28 @@ module ApplicationHelper
     }.to_json
   end
 
-  def get_resource_cards  all = false
-    resources_page = @cms_site.pages.find_by_slug('resources')
-    published_pages = resources_page.children.published
-    sorted_cards = published_pages.sort_by { |c| c.fragments.where(identifier: 'published_date').first.datetime }.reverse
-    selected_cards = limit = all ? sorted_cards : sorted_cards.first(4)
+  def get_resource_cards(all=false)
+    presenter = ResourcesPresenter.new(@cms_site, all)
+    _resources = presenter.resources
 
-    @items = {
-      "title": resources_page.label,
-      "url": all ? false : get_cms_url(resources_page.full_path),
-      "cards": selected_cards.map{ |page|
-        file = cms_fragment_render(:file, page)
-        link = cms_fragment_render(:link, page)
-        url = file.present? || link.present? ? nil : get_cms_url(page.full_path)
+    _resources[:url] = get_cms_url(_resources[:url])
+    _resources[:cards].map! do |c|
+      page = c[:page]
+      file = cms_fragment_render(:file, page)
+      link = cms_fragment_render(:link, page)
+      url = file.present? || link.present? ? nil : get_cms_url(page.full_path)
 
-        {
-          "label": page.label,
-          "published_date": cms_fragment_render(:published_date, page),
-          "url": url,
-          "page": page,
-          "summary": cms_fragment_render(:summary, page),
-          "file": file,
-          "link": link,
-          "link_title": cms_fragment_render(:link_title, page), ##TODO not pulling through
-        }
-      }
-    }
+      c.merge(
+        published_date: cms_fragment_render(:published_date, page),
+        url: url,
+        summary: cms_fragment_render(:summary, page),
+        file: file,
+        link: link,
+        link_title: cms_fragment_render(:link_title, page)
+      )
+    end
+
+    @items = _resources
   end
 
   def get_news_items all = false
@@ -306,13 +302,7 @@ module ApplicationHelper
   end
 
   def get_thematical_areas
-    thematical_page = @cms_site.pages.find_by_slug('thematical-areas')
-    ##TODO FERDI can you fill in this bit - not needed for ICCA registry
-    ## Update variable in the view /partials/sub_partials/_themes.html.erb
-    @items = {
-      "title": thematical_page.label,
-      "cards": thematical_page.children.published
-    }
+    @items = ThematicalAreasPresenter.new(@cms_site).thematical_areas
   end
 
   def get_footer_links

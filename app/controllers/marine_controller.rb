@@ -136,7 +136,7 @@ class MarineController < ApplicationController
       name: "ocean areas",
       children:
         Country.where(name: COUNTRIES).map do |country|
-          CountryPresenter.new(country).marine_statistics
+          CountryPresenter.new(country).marine_page_statistics
         end
     }.to_json
   end
