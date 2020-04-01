@@ -15,7 +15,7 @@
               <tspan v-for="t in axis.y" x="-70" :dy="24">{{ t }}</tspan>
             </text>
 
-            <text v-for="y in yAxis" 
+            <text v-for="y in getAxisLabels('y')" 
               :x="-x.chartPadding" 
               :y="y.coord "
               text-anchor="end"
@@ -23,15 +23,15 @@
               font-weight="300"
               transform="translate(0, 5)">{{ y.labelText }}%</text>
 
-            <text v-for="x in xAxis" 
+            <text v-for="x in getAxisLabels('x')"             
               :x="x.coord" 
               :y="y.chartHeight + y.chartPadding" 
               font-size="18"
               font-weight="300"
               text-anchor="middle">{{ x.labelText }}</text>
 
-            <polyline :points="xAxisLine" fill="none" stroke="black" />
-            <polyline :points="yAxisLine" fill="none" stroke="black" />
+            <polyline :points="getAxisLine('x')" fill="none" stroke="black" />
+            <polyline :points="getAxisLine('y')" fill="none" stroke="black" />
 
             <chart-line-dataset 
               v-for="line, index in lines"
@@ -41,26 +41,6 @@
               :middle="getPathMiddle(line.datapoints)"
               :colour="colours[index]">
             </chart-line-dataset>
-
-<!--             <template v-if="targets">
-              <chart-line-target-y v-for="target, index in targets"
-                :minX="normaliseX(x.min)" 
-                :maxX="normaliseX(x.max)" 
-                :y="normaliseY(target.y)" 
-                :title="target.title"
-                :colour="targetColours[index]">
-              </chart-line-target-y>
-            </template>
-
-            <template v-if="commitments">
-              <chart-line-target-x v-for="commitment, index in commitments"
-                :minY="normaliseY(y.min)" 
-                :maxY="normaliseY(y.max)" 
-                :x="normaliseX(commitment.x)"
-                :line="commitment.line"
-                :label="commitment.label">
-              </chart-line-target-x>
-            </template> -->
           </svg>
         </div>
       </div>
@@ -77,15 +57,12 @@
 <script>
   import ChartLineDataset from './ChartLineDataset'
   import ChartLineTab from './ChartLineTab'
-  // import ChartLineTargetX from './ChartLineTargetX'
-  // import ChartLineTargetY from './ChartLineTargetY'
   import ChartLegend from './ChartLegend'
 
   export default {
     name: 'chart-line',
 
     components: { 
-      // ChartLineTargetX, ChartLineTargetY, 
       ChartLineDataset, 
       ChartLineTab,
       ChartLegend 
@@ -96,9 +73,7 @@
         type: Array, // [ id: String, datapoints: { x: Number, y: Number } ]
         required: true
       },
-      targets: Array,
       axis: Object,
-      commitments: Array,
       showLegend: {
         default: true,
         type: Boolean
@@ -115,20 +90,18 @@
         x: {
           chartPadding: 24,
           chartWidth: 890,
-          max: 0,
-          maxNormalised: 0,
-          min:0,
-          minNormalised:0,
+          incrementor: 0,
           precision: 1,
+          max: 0,
+          min: 0
         },
         y: {
           chartHeight: 500,
           chartPadding: 34,
+          incrementor: 0,
+          precision: 1,
           max: 0,
-          maxNormalised: 0,
-          min:0,
-          minNormalised:0,
-          precision: 1
+          min: 0
         },
         colours: [
           {
@@ -150,32 +123,8 @@
       }
     },
 
-    computed: {
-      xAxis () {
-        return this.getAxis('x')
-      },
-
-      yAxis () {
-        return this.getAxis('y')
-      },
-
-      xAxisLine () {
-        return `${this.x.minNormalised},${this.y.minNormalised} ${this.x.maxNormalised},${this.y.minNormalised}`
-      },
-
-      yAxisLine () {
-        return `${this.x.minNormalised},${this.y.minNormalised} ${this.x.minNormalised},${this.y.maxNormalised}`
-      }
-    },
-
     created () {
-      this.x.min = this.getMinMax('min', 'x')
-      this.x.max = this.getMinMax('max', 'x')
-      this.y.max = this.getMinMax('max', 'y')
-      this.x.minNormalised = this.normaliseX(this.x.min)
-      this.x.maxNormalised = this.normaliseX(this.x.max)
-      this.y.minNormalised = this.normaliseY(this.y.min)
-      this.y.maxNormalised = this.normaliseY(this.y.max)
+      this.setAxisVariables()
     },
 
     methods: {
@@ -206,17 +155,14 @@
         return { x: this.normaliseX(middle.x), y: this.normaliseY(middle.y) }
       },
 
-      getAxis (axis) {
-        const 
-          totalDatapoints = this.lines[0].datapoints.length,
-          axisMarks = totalDatapoints % 2 == 0 ? (totalDatapoints + 1)/2 : totalDatapoints/2,
-          min = Math.floor(this[axis].min),
-          max = Math.ceil(this[axis].max),
-          incrementor = (max - min)/(axisMarks - 1)
-        
-        let array = [], n = min
+      getAxisLabels (axis) {
+        const incrementor = this[axis].incrementor,
+          min = this[axis].min,
+          max = this[axis].max
 
-        while( n < (max + incrementor)) {
+        let n = min, array = []
+          
+        while( n <= max) {
           array.push({
             coord: this[`normalise${axis.toUpperCase()}`](n),
             labelText: n
@@ -228,16 +174,28 @@
         return array
       },
 
+      getAxisLine (axis) {
+        const minX = this.normaliseX(this.x.min),
+          minY = this.normaliseY(this.y.min),
+          maxX = this.normaliseX(this.x.max),
+          maxY = this.normaliseY(this.y.max)
+
+        const axisLine = axis == 'x' ? `${minX},${minY} ${maxX},${minY}` : `${minX},${minY} ${minX},${maxY}`
+        
+        return axisLine
+      },
+
       getMinMax(type, prop) {
         let array = []
+        const rounding = type == 'min' ? 'floor' : 'ceil'
 
         this.lines.forEach(line => {
           array.push(Math[type](...line.datapoints.map((t) => {
-            return t[prop]
+            return Math[rounding](t[prop])
           })))
         }) 
       
-        return Math.max(...array)
+        return Math[type](...array)
       },
 
       normaliseDataset (dataset) {
@@ -260,6 +218,23 @@
         // y origin is at the top so subtract axis value from height
         // subtract the min value incase the axis doesn't start at 0
         return (this.y.chartHeight - ((value - this.y.min) / (this.y.max - this.y.min)) * this.y.chartHeight)
+      },
+
+      setAxisVariables () {
+        const totalDatapoints = this.lines[0].datapoints.length,
+          evenTotal = totalDatapoints % 2 == 0,
+          xMin = this.getMinMax('min', 'x'),
+          xMax = this.getMinMax('max', 'x'),
+          yMin = this.getMinMax('min', 'y'),
+          yMax = this.getMinMax('max', 'y'),
+          axisMarks = evenTotal ? totalDatapoints/2 : (totalDatapoints - 1)/2
+          
+        this.x.incrementor = evenTotal ? (xMax - xMin)/(axisMarks - .5) : (xMax - xMin)/(axisMarks)
+        this.y.incrementor = evenTotal ? (yMax - yMin)/(axisMarks - .5) : (yMax - yMin)/(axisMarks)
+        this.x.min = xMin
+        this.y.min = yMin
+        this.x.max = xMin + (this.x.incrementor * axisMarks)
+        this.y.max = yMin + (this.y.incrementor * axisMarks)
       }
     }
   }
