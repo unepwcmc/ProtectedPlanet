@@ -2,8 +2,7 @@ class HomeController < ApplicationController
   def index
     home_yml = I18n.t('home')
 
-    @total_pas = ProtectedArea.count
-    @total_oecms = 9876543 
+    @pa_coverage_percentage = 9999 #TODO Total PA coverage in %
 
     @search_area_types = [
       { id: 'wdpa', title: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.search-wdpa') },
