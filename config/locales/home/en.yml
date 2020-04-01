@@ -22,7 +22,10 @@ en:
       categories:
         - 
           title: Marine Protected Areas
+          slug: /marine-protected-areas
         - 
           title: Terrerstrial Protected Areas
+          slug: /marine-protected-areas
         - 
           title: Green List Protected Areas
+          slug: /green-list
