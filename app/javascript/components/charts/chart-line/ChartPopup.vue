@@ -17,8 +17,8 @@
         fill="#000"
         height="46"
         rx="4"
-        width="74"    
-        x="-36"
+        :width="popupWidth"    
+        :x="-popupWidth/2"
         y="-58"
       />
       <path 
@@ -73,6 +73,9 @@ export default {
     },
     coordY () {
       return this.y - 10
+    },
+    popupWidth () {
+      return (this.text.replace('.', '').length * 20) + 20
     }
   },
 
