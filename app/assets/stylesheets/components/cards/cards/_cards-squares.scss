@@ -55,6 +55,7 @@ $cards-squares-width-tablet: 48%;
       @include flex;
       @include flex-column;
       @include flex-center;
+      background-size: cover;
       text-decoration: none;
       width: 100%; height: 100%;
 

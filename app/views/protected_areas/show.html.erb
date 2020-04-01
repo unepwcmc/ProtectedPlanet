@@ -17,12 +17,12 @@
 
     <section class="flex">
       <div class="card--stats--half">
-        <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @attributes } %>
+        <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
       </div>
       
       <div class="flex flex-column card--stats--half">
         <%= render "partials/stats/stats-pame" %>
-        <%= render partial: "partials/stats/stats-external", locals: { external_links: @external_links } %>
+        <%= render partial: "partials/stats/stats-external", locals: { external_links: @presenter.external_links } %>
       </div>
     </section>
 
