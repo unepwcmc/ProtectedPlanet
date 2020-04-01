@@ -235,7 +235,6 @@
       },
 
       popupHide () {
-        console.log('here')
         this.popup.show = false
         this.popup.text = ''
         this.popup.x = 0
@@ -243,12 +242,10 @@
       },
 
       popupShow (datapoint) {
-        console.log('here')
         this.popup.show = true
         this.popup.text = datapoint.value 
         this.popup.x = datapoint.x
         this.popup.y = datapoint.y
-        console.log('popup tex', this.popup.text)
       },
 
       setAxisVariables () {
