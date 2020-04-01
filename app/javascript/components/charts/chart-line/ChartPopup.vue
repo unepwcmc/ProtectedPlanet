@@ -1,40 +1,29 @@
 <template>
-  <g>
-    <circle
-      :fill="colour"
-      :cx="x" 
-      :cy="y"
-      r="7"
-      @mouseover="togglePopup()"
-      @mouseleave="togglePopup()"
+  <g
+    v-show="showPopup"
+    :transform="`translate(${x}, ${coordY})`"
+  >
+    <rect 
+      fill="#000"
+      height="46"
+      rx="4"
+      :width="popupWidth"    
+      :x="-popupWidth/2"
+      y="-58"
     />
-    
-    <g
-      v-show="showPopup"
-      :transform="`translate(${coordX}, ${coordY})`"
+    <path 
+      d="m-17,-13l17.132,12.2l16.04,-12.2l-33.172,0z" 
+      fill="#000"
+    />
+    <text
+      font-size="20"
+      font-weight="700"
+      fill="#fff"
+      text-anchor="middle"
+      dy="-27"
     >
-      <rect 
-        fill="#000"
-        height="46"
-        rx="4"
-        :width="popupWidth"    
-        :x="-popupWidth/2"
-        y="-58"
-      />
-      <path 
-        d="m-17,-13l17.132,12.2l16.04,-12.2l-33.172,0z" 
-        fill="#000"
-      />
-      <text
-        font-size="20"
-        font-weight="700"
-        fill="#fff"
-        text-anchor="middle"
-        dy="-27"
-      >
-        {{ text }}
-      </text>
-    </g>
+      {{ text }}
+    </text>
   </g>
 </template>
 
@@ -43,10 +32,6 @@ export default {
   name: 'chart-popup',
 
   props: {
-    colour: {
-      required: true,
-      type: String
-    },
     text: {
       required: true,
       type: String
@@ -68,9 +53,6 @@ export default {
   },
 
   computed: {
-    coordX () {
-      return this.x
-    },
     coordY () {
       return this.y - 10
     },

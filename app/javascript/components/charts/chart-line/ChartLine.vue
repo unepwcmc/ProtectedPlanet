@@ -36,8 +36,17 @@
               :key="`yline-${index}`"
               :datapoints="normaliseDataset(line.datapoints)"
               :path="getPath(line.datapoints)"
-              :colour="colours[index]">
-            </chart-line-dataset>
+              :colour="colours[index]"
+              v-on:datapoint:mouseleave="popupHide"
+              v-on:datapoint:mouseover="popupShow" 
+            />
+
+            <chart-popup
+              v-show="popup.show"
+              :x="popup.x" 
+              :y="popup.y" 
+              :text="popup.text"
+            />
           </svg>
         </div>
       </div>
@@ -55,6 +64,7 @@
   import ChartLineDataset from './ChartLineDataset'
   import ChartLineTab from './ChartLineTab'
   import ChartLegend from './ChartLegend'
+  import ChartPopup from './ChartPopup.vue'
 
   export default {
     name: 'chart-line',
@@ -62,7 +72,8 @@
     components: { 
       ChartLineDataset, 
       ChartLineTab,
-      ChartLegend 
+      ChartLegend,
+      ChartPopup
     },
 
     props: {
@@ -78,9 +89,29 @@
 
     data () {
       return {
+        colours: [
+          {
+            line: '#207D94',
+            text: '#ffffff'
+          },
+          {
+            line: '#6FD9F2',
+            text: '#000000'
+          },
+          {
+            line: '#86BF37',
+            text: '#000000'
+          }
+        ],
+        popup: {
+          show: false,
+          text: '',
+          x: 0,
+          y: 0,
+        },
         svg: {
-          width: 780,
-          height: 370,
+          width: 740,
+          height: 400,
           paddingTop: 46,
           paddingRight: 44,
           paddingBottom: 60,
@@ -98,20 +129,6 @@
           max: 0,
           min: 0,
         },
-        colours: [
-          {
-            line: '#207D94',
-            text: '#ffffff'
-          },
-          {
-            line: '#6FD9F2',
-            text: '#000000'
-          },
-          {
-            line: '#86BF37',
-            text: '#000000'
-          }
-        ],
         legend: [],
         legendColours: ['#207D94', '#6FD9F2', '#86BF37'],
       }
@@ -215,6 +232,23 @@
         // y origin is at the top so subtract axis value from height
         // subtract the min value incase the axis doesn't start at 0
         return this.svg.paddingTop + (this.chartHeight - ((value - this.y.min) / (this.y.max - this.y.min)) * this.chartHeight)
+      },
+
+      popupHide () {
+        console.log('here')
+        this.popup.show = false
+        this.popup.text = ''
+        this.popup.x = 0
+        this.popup.y = 0
+      },
+
+      popupShow (datapoint) {
+        console.log('here')
+        this.popup.show = true
+        this.popup.text = datapoint.value 
+        this.popup.x = datapoint.x
+        this.popup.y = datapoint.y
+        console.log('popup tex', this.popup.text)
       },
 
       setAxisVariables () {
