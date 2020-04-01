@@ -1,8 +1,41 @@
 class RegionPresenter
-  def initialize region
+  def initialize(region)
     @region = region
     @countries = @region.countries
     @statistics = @countries.map(&:statistic).compact
+    @designations_presenter = DesignationsPresenter.new(region)
+  end
+
+  def designations
+    @designations_presenter.designations
+  end
+
+  def marine_stats
+    {
+      pame_km2: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat 
+      pame_percentage: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat
+      protected_km2: pa_marine_area.round(0),
+      protected_percentage: percentage_pa_marine_cover.round(2),
+      total_km2: marine_area.round(0)
+    }
+  end
+
+  def terrestrial_stats
+    {
+      pame_km2: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat
+      pame_percentage: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat
+      protected_km2: pa_land_area.round(0),
+      protected_percentage: percentage_pa_land_cover.round(2),
+      total_km2: land_area.round(0)
+    }
+  end
+
+  def total_points_percentage
+    geometry_ratio[:points]
+  end
+
+  def total_polygons_percentage
+    geometry_ratio[:polygons]
   end
 
   def geometry_ratio
