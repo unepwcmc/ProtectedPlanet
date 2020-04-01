@@ -129,17 +129,25 @@
   @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
 }
 
+@mixin text-small {
+  @include text-2;
+  color: $grey;
+  font-size: rem-calc(14);
+}
+
 @mixin text-tabs-fake {
   @include text-2;
   @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
 }
 
-@mixin text-tooltip {
-  @include text-3;
+@mixin text-theme-cards {
+  @include text-1;
+  @include responsive(font-size, rem-calc(25), rem-calc(40), rem-calc(40));
+  @include responsive(margin-bottom, rem-calc(14), rem-calc(4), rem-calc(4));
+  color: $white;
+  font-weight: $regular;
 }
 
-@mixin text-small {
-  @include text-2;
-  color: $grey;
-  font-size: rem-calc(14);
+@mixin text-tooltip {
+  @include text-3;
 }

@@ -1,21 +1,9 @@
 <% get_thematical_areas %>
 
 <div class="cards--themes container">
-
-  <h3><%= @items[:title] %></h3>
-
   <div class="cards__cards">
     <% @items[:cards].each do |card| %>
-      <%= link_to root_url + card[:full_path], title: "View the #{card[:label]} page", class: "card" do %>
-        <div class="card__ribbon">
-          <span class="card__icon">icon</span>
-          <span class="card__number">000000</span>
-          <span>Protected Areas hc</span>
-        </div>
-
-        <h3><%= card[:label] %></h3>
-        <p><%= cms_fragment_content(:summary, card) %></p>
-      <% end %>
+      <%= render partial: 'partials/sub_partials/themes', locals: { theme: card } %>
     <% end %>
   </div>
 </div>

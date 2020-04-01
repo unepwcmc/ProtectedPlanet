@@ -1,4 +1,8 @@
-  <%= render partial: "./layouts/partials/hero-thematic", locals: { title: @cms_page.label, classes: @cms_page.slug } %>
+<%= render partial: "./layouts/partials/hero-thematic", locals: { 
+  classes: @cms_page.slug,
+  hero_image: cms_fragment_render(:theme_image, @cms_page),
+  title: @cms_page.label
+} %>
   <%= render partial: "marine/sections/header" %>
 
   <%= content_for :twitter_card, "summary_large_image" %>

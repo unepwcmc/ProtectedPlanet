@@ -10,38 +10,9 @@
     }
   }
 
-  .card {
-    @include border-radius;
-    @include flex;
-    @include flex-column;
-    @include flex-h-end;
+  .card--theme {
     @include responsive(width, 100%, 100%, calc(50% - 10px));
-    @include responsive(height, rem-calc(460), rem-calc(460), rem-calc(760));
-    background-color: $grey-dark;
-    color: $white;
-    margin-bottom: rem-calc(20);
-    padding: rem-calc(32 30);
-
-    position: relative;
 
     &:nth-child(3n) { width: 100%; height: rem-calc(460); }
-
-    &__ribbon {
-      @include flex;
-      @include flex-column;
-      @include flex-h-between;
-      @include flex-v-center;
-      background-color: $grey-xdark;
-      padding: rem-calc(24 22);
-      width: rem-calc(150); height: rem-calc(150);
-
-      position: absolute;
-      top: 0;
-      right: rem-calc(44);
-    }
-
-      &__number {
-        color: $primary;
-      }
   }
 }

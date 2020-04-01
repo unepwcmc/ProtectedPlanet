@@ -1,0 +1,18 @@
+<%= link_to root_url + theme[:obj][:full_path], 
+  title: "View the #{theme[:obj][:label]} page", 
+  class: "card--theme", 
+  style: "background-image: url('#{cms_fragment_render(:theme_image, theme[:obj])}')" do %>
+  <% unless theme[:pas_no] == -1 %>
+    <div class="card__ribbon">
+      <span class="card__icon icon--pin-green <%= theme[:obj][:slug] %>"></span>
+      <p class="no-margin">
+          <span class="card__number"><%= theme[:pas_no] %></span>
+          <span class="card__number-text"><%= t('global.area-types.wdpa') %></span>
+      </p>
+    </div>
+  <% end %>
+
+  <h3 class="card__title"><%= theme[:obj][:label] %></h3>
+  <p class="card__summary"><%= cms_fragment_content(:summary, theme[:obj]) %></p>
+  <i class="icon--circle-chevron-white"></i>
+<% end %>

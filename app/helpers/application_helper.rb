@@ -298,12 +298,7 @@ module ApplicationHelper
   end
 
   def get_thematical_areas
-    thematical_page = @cms_site.pages.find_by_slug('thematical-areas')
-
-    @items = {
-      "title": thematical_page.label,
-      "cards": thematical_page.children.published
-    }
+    @items = ThematicalAreasPresenter.new(@cms_site).thematical_areas
   end
 
   def get_footer_links

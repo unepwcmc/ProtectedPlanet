@@ -1,4 +1,7 @@
-<%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label } %>
+<%= render partial: "./layouts/partials/hero-thematic", locals: {
+  hero_image: cms_fragment_render(:theme_image, @cms_page),
+  title: @cms_page.label
+} %>
 
 <section class="container">
   <%= cms_fragment_render("content") %>
