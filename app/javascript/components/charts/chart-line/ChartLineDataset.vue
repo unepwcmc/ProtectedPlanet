@@ -8,7 +8,8 @@
     />
     
     <chart-popup
-      v-for="datapoint in datapoints"
+      v-for="datapoint, index in datapoints"
+      :key="`popup-${index}`"
       :colour="colour.line"
       :x="datapoint.x" 
       :y="datapoint.y" 
@@ -55,14 +56,6 @@
       hasLegend: {
         default: false,
         type: Boolean
-      },
-      index: {
-        type: Number,
-        required: true
-      },
-      middle: {
-        type: Object,
-        required: true
       },
       path: {
         type: String,

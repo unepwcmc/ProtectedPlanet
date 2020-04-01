@@ -3,30 +3,28 @@
     <div class="chart__wrapper-ie11">
       <div class="chart__scrollable">
         <div v-if="lines" class="chart__chart" style="width:100%;">
-          <svg width="100%" height="100%" :viewBox="`-70 -80 ${svg.width} ${svg.height}`" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" class="chart__svg">
+          <svg width="100%" height="100%" :viewBox="`0 0 ${svg.width} ${svg.height}`" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" class="chart__svg">
             <rect 
-              :x="-70"
-              :y="-30" 
+              :x="0"
+              :y="0" 
               :width="svg.width" 
-              :height="svg.height - svg.paddingTop" 
+              :height="svg.height" 
               fill="#fff" />
 
-            <text v-if="axis" x="-70" y="-90" font-size="18">
-              <tspan v-for="t in axis.y" x="-70" :dy="24">{{ t }}</tspan>
-            </text>
-
-            <text v-for="y in getAxisLabels('y')" 
-              :x="-x.chartPadding" 
+            <text v-for="y, index in getAxisLabels('y')" 
+              :key="`y-${index}`"
+              :x="svg.paddingLeft - x.axisLabelMargin" 
               :y="y.coord "
               text-anchor="end"
-              font-size="18"
+              font-size="14"
               font-weight="300"
               transform="translate(0, 5)">{{ y.labelText }}%</text>
 
-            <text v-for="x in getAxisLabels('x')"             
+            <text v-for="x, index in getAxisLabels('x')"  
+              :key="`x-${index}`"      
               :x="x.coord" 
-              :y="y.chartHeight + y.chartPadding" 
-              font-size="18"
+              :y="chartHeight + svg.paddingTop + y.axisLabelMargin" 
+              font-size="14"
               font-weight="300"
               text-anchor="middle">{{ x.labelText }}</text>
 
@@ -35,10 +33,9 @@
 
             <chart-line-dataset 
               v-for="line, index in lines"
-              :index="index"
+              :key="`yline-${index}`"
               :datapoints="normaliseDataset(line.datapoints)"
               :path="getPath(line.datapoints)"
-              :middle="getPathMiddle(line.datapoints)"
               :colour="colours[index]">
             </chart-line-dataset>
           </svg>
@@ -73,7 +70,6 @@
         type: Array, // [ id: String, datapoints: { x: Number, y: Number } ]
         required: true
       },
-      axis: Object,
       showLegend: {
         default: true,
         type: Boolean
@@ -83,25 +79,24 @@
     data () {
       return {
         svg: {
-          width: 1030,
-          height: 650,
-          paddingTop: 50
+          width: 780,
+          height: 370,
+          paddingTop: 46,
+          paddingRight: 44,
+          paddingBottom: 60,
+          paddingLeft: 60,
         },
         x: {
-          chartPadding: 24,
-          chartWidth: 890,
+          axisLabelMargin: 10, 
           incrementor: 0,
-          precision: 1,
           max: 0,
-          min: 0
+          min: 0,
         },
         y: {
-          chartHeight: 500,
-          chartPadding: 34,
+          axisLabelMargin: 30, 
           incrementor: 0,
-          precision: 1,
           max: 0,
-          min: 0
+          min: 0,
         },
         colours: [
           {
@@ -119,12 +114,21 @@
         ],
         legend: [],
         legendColours: ['#207D94', '#6FD9F2', '#86BF37'],
-        // targetColours: ['rgba(29, 125, 166, 0.4)', 'rgba(113, 163, 43, 0.4)']
       }
     },
 
     created () {
       this.setAxisVariables()
+    },
+
+    computed: {
+      chartHeight () {
+        return this.svg.height - this.svg.paddingTop - this.svg.paddingBottom
+      },
+
+      chartWidth () {
+        return this.svg.width - this.svg.paddingLeft - this.svg.paddingRight
+      }
     },
 
     methods: {
@@ -146,13 +150,6 @@
         })
 
         return path
-      },
-
-      getPathMiddle (dataset) {
-        //used to add circle to a dataset with key used in the legend
-        let middle = dataset[Math.floor(dataset.length/2)]
-
-        return { x: this.normaliseX(middle.x), y: this.normaliseY(middle.y) }
       },
 
       getAxisLabels (axis) {
@@ -211,13 +208,13 @@
 
       normaliseX (value) {
         // subtract the min value in case the axis doesn't start at 0
-        return (((value - this.x.min) / (this.x.max - this.x.min)) * this.x.chartWidth)
+        return this.svg.paddingLeft + (((value - this.x.min) / (this.x.max - this.x.min)) * this.chartWidth)
       },
 
       normaliseY (value) {
         // y origin is at the top so subtract axis value from height
         // subtract the min value incase the axis doesn't start at 0
-        return (this.y.chartHeight - ((value - this.y.min) / (this.y.max - this.y.min)) * this.y.chartHeight)
+        return this.svg.paddingTop + (this.chartHeight - ((value - this.y.min) / (this.y.max - this.y.min)) * this.chartHeight)
       },
 
       setAxisVariables () {

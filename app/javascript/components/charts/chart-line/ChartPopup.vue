@@ -4,7 +4,7 @@
       :fill="colour"
       :cx="x" 
       :cy="y"
-      r="8"
+      r="7"
       @mouseover="togglePopup()"
       @mouseleave="togglePopup()"
     />
@@ -26,7 +26,7 @@
         fill="#000"
       />
       <text
-        font-size="26"
+        font-size="20"
         font-weight="700"
         fill="#fff"
         text-anchor="middle"
@@ -75,7 +75,7 @@ export default {
       return this.y - 10
     },
     popupWidth () {
-      return (this.text.replace('.', '').length * 20) + 20
+      return (this.text.replace('.', '').length * 12) + 20
     }
   },
 
