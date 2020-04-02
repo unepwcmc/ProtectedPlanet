@@ -16,8 +16,7 @@ $chart-dial-font-size-desktop: rem-calc(26);
 
   .chart {
     &__row {
-      background-color: $white;
-      height: rem-calc(52);  
+      @include chart-row;
     }
 
       &__bar {
@@ -25,7 +24,7 @@ $chart-dial-font-size-desktop: rem-calc(26);
         @include flex-h-between;
         @include flex-v-center;
         background-color: $purple;
-        height: rem-calc(52);
+        height: $chart-row-height;
       }
 
       &__bar-label {

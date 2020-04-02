@@ -1,0 +1,12 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--scrollable {
+  @include flex;
+  @include flex-wrap;
+  @include flex-h-between;
+  
+  .cards__card {
+    @include responsive(width, 17%, 50%, 48%);
+  }
+}

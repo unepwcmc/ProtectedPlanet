@@ -1,0 +1,23 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+//--------------------------------------------------
+// row charts
+//--------------------------------------------------
+&--row {
+  .chart__row {
+    @include chart-row;
+    @include flex;
+  }
+
+  .chart__bar {
+    background-color: $blue;
+    height: $chart-row-height;
+  }
+
+  .chart__bar-overseas {
+    background-color: $orange;
+    height: $chart-row-height;
+  }
+}

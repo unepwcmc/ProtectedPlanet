@@ -2,8 +2,36 @@
   <div class="container--medium">
     <h2><%= cms_fragment_render(:section_national_title, @cms_page) %></h2>
     <div><%= cms_fragment_render(:section_national_content, @cms_page) %></div>
-    <div>
-      <div>chart</div>
+
+    <div class="cards--scrollable">
+      <% @nationalProtectedAreas[:children].each do |country| %>
+      <div class="cards__card">
+        <div class="card__heading">
+          <i class="card__flag icon--flag-outline" style="background-image:url('<% country[:flag] %>');"></i>
+          <h3 class="card__h3"><%= country[:title] %></h3>
+        </div>
+        
+        <div class="chart--row">
+          <div class="chart__row">
+            <div class="chart__bar" style="width: <%= country[:nationalPercentage] %>%;"></div>
+            <div class="chart__bar-overseas" style="width: <%= country[:overseasPercentage] %>%;"></div>
+          </div>
+
+          <div>
+            <p><%= country[:title] %> and its <%= country[:totalOverseasTerritories] %> overseas countries and territories have a combined area of <%= country[:totalMarineArea] %>km<sup>2</sup></p>
+            <div>
+              <p><%= country[:nationalPercentage] %>% (<%= country[:nationalKm] %>)km<sup>2</sup></p>
+              <p>of their national waters are protected</p>
+            </div>
+
+            <div>
+              <p><%= country[:overseasPercentage] %>% (<%= country[:overseasKm] %>)km<sup>2</sup></p>
+              <p>of their overseas territories waters are protected</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% end %>
     </div>
   </div>
 </section>

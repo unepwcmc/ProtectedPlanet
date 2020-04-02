@@ -6,6 +6,8 @@ $chart-font: $body-font;
 $chart-font-color: $grey-xdark;
 $chart-font-size: rem-calc(14);
 
+$chart-row-height: rem-calc(52);
+
 $chart-target-color: $purple-dark;
 $chart-target-dasharray: 2;
 $chart-target-stroke-width: rem-calc(3);
@@ -13,6 +15,11 @@ $chart-target-stroke-width: rem-calc(3);
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
+@mixin chart-row {
+  background-color: $white;
+  height: $chart-row-height;
+}
+
 @mixin chart-target-line() {
   stroke: $chart-target-color;
   stroke-dasharray: $chart-target-dasharray;
@@ -81,6 +88,7 @@ $chart-target-stroke-width: rem-calc(3);
   @import './charts/chart-dial';
   @import './charts/chart-legend';
   @import './charts/chart-line';
+  @import './charts/chart-row';
   @import './charts/chart-row-pa';
   @import './charts/chart-row-target';
 }

@@ -132,13 +132,14 @@ class MarineController < ApplicationController
   end
 
   def national_statistics
+    ##TODO - FERDI i believe these should be the top 6 countries with the most coverage but at the moment it is a hard coded list of countries.
     @nationalProtectedAreas = {
       name: "ocean areas",
       children:
         Country.where(name: COUNTRIES).map do |country|
           CountryPresenter.new(country).marine_page_statistics
         end
-    }.to_json
+    }
   end
 
   def designations
