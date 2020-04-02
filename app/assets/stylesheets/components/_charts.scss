@@ -79,19 +79,12 @@ $chart-target-stroke-width: rem-calc(3);
 // charts
 //--------------------------------------------------
   @import './charts/chart-dial';
+  @import './charts/chart-legend';
+  @import './charts/chart-line';
   @import './charts/chart-row-pa';
   @import './charts/chart-row-target';
-
-  &__key {
-    background-color: $chart-aqua;
-    border-radius: 100%;
-    width: rem-calc(24); height: rem-calc(24);
-
-    display: block;
-  }
 }
 
 @import './charts/horizontal-bar-chart';
-@import './charts/interactive-multiline';
 @import './charts/interactive-treemap';
 @import './charts/sunburst';

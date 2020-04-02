@@ -1,0 +1,28 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+  &--legend {
+    @include flex;
+    @include flex-wrap;
+    @include ul-unstyled;
+    margin: rem-calc(14 0);
+  }
+
+    &__legend-item {
+      @include flex;
+      @include flex-v-center;
+      margin-right: rem-calc(14);
+    } 
+
+      &__legend-key  {
+        @include flex-no-shrink;
+        background-color: $chart-aqua;
+        border-radius: 100%;
+        width: rem-calc(24); height: rem-calc(24);
+
+        display: block;
+      }
+
+      &__legend-text {
+        margin-left: rem-calc(6);
+      }

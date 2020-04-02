@@ -1,231 +1,268 @@
 <template>
-  <div class="v-interactive-multiline sm-multiline">
-    <div class="v-interactive-multiline__tabs">
+  <div class="chart--line">
+    <div class="chart__wrapper-ie11">
+      <div class="chart__scrollable">
+        <div v-if="lines" class="chart__chart" style="width:100%;">
+          <svg width="100%" height="100%" :viewBox="`0 0 ${svg.width} ${svg.height}`" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" class="chart__svg">
+            <rect 
+              :x="0"
+              :y="0" 
+              :width="svg.width" 
+              :height="svg.height" 
+              fill="#fff" />
 
-      <chart-line-tab v-for="name, key in datasetNames" 
-        :key="key"
-        :name="name"
-        :selected="selectedTab"
-        class="v-interactive-multiline__tab-title" 
-        v-on:tabClicked="draw(name)"
-      ></chart-line-tab>
+            <text v-for="y, index in getAxisLabels('y')" 
+              :key="`y-${index}`"
+              :x="svg.paddingLeft - x.axisLabelMargin" 
+              :y="y.coord "
+              text-anchor="end"
+              font-size="14"
+              font-weight="300"
+              transform="translate(0, 5)">{{ y.labelText }}%</text>
 
+            <text v-for="x, index in getAxisLabels('x')"  
+              :key="`x-${index}`"      
+              :x="x.coord" 
+              :y="chartHeight + svg.paddingTop + y.axisLabelMargin" 
+              font-size="14"
+              font-weight="300"
+              text-anchor="middle">{{ x.labelText }}</text>
+
+            <polyline :points="getAxisLine('x')" fill="none" stroke="black" />
+            <polyline :points="getAxisLine('y')" fill="none" stroke="black" />
+
+            <chart-line-dataset 
+              v-for="line, index in lines"
+              :key="`yline-${index}`"
+              :datapoints="normaliseDataset(line.datapoints)"
+              :path="getPath(line.datapoints)"
+              :colour="colours[index]"
+              v-on:datapoint:mouseleave="popupHide"
+              v-on:datapoint:mouseover="popupShow" 
+            />
+
+            <chart-popup
+              v-show="popup.show"
+              :x="popup.x" 
+              :y="popup.y" 
+              :text="popup.text"
+            />
+          </svg>
+        </div>
+      </div>
     </div>
 
-    <div class="d3-svg v-interactive-multiline__chart"  :style="{ paddingTop: paddingTop }"></div>
-
-  </div>
+    <chart-legend 
+      v-if="showLegend"
+      :colours="legendColours"
+      :rows="getLegend()"
+    />
+  </div>  
 </template>
 
 <script>
-  import ScrollMagic from 'scrollmagic'
-  import * as d3 from 'd3'
-
+  import ChartLineDataset from './ChartLineDataset'
   import ChartLineTab from './ChartLineTab'
+  import ChartLegend from './ChartLegend'
+  import ChartPopup from './ChartPopup.vue'
 
   export default {
     name: 'chart-line',
 
-    components: { ChartLineTab },
+    components: { 
+      ChartLineDataset, 
+      ChartLineTab,
+      ChartLegend,
+      ChartPopup
+    },
 
     props: {
-      json: { required: true }
+      lines: {
+        type: Array, // [ id: String, datapoints: { x: Number, y: Number } ]
+        required: true
+      },
+      showLegend: {
+        default: true,
+        type: Boolean
+      }
     },
 
     data () {
       return {
-        config: {
-          width: 860,
-          height: 370,
-          margin: 80,
-          datapointRadius: 4,
-          yAxisMaxValue: 20,
-          xAxisNumberOfTicks: 8
+        colours: [
+          {
+            line: '#207D94',
+            text: '#ffffff'
+          },
+          {
+            line: '#6FD9F2',
+            text: '#000000'
+          },
+          {
+            line: '#86BF37',
+            text: '#000000'
+          }
+        ],
+        popup: {
+          show: false,
+          text: '',
+          x: 0,
+          y: 0,
         },
-        svg:'',
-        chart: '',
-        chartWidth: 0,
-        chartHeight: 0,
-        datasetNames: [],
-        scaleX: '',
-        scaleY: '',
-        selectedTab: ''
+        svg: {
+          width: 740,
+          height: 400,
+          paddingTop: 46,
+          paddingRight: 44,
+          paddingBottom: 60,
+          paddingLeft: 60,
+        },
+        x: {
+          axisLabelMargin: 10, 
+          incrementor: 0,
+          max: 0,
+          min: 0,
+        },
+        y: {
+          axisLabelMargin: 30, 
+          incrementor: 0,
+          max: 0,
+          min: 0,
+        },
+        legend: [],
+        legendColours: ['#207D94', '#6FD9F2', '#86BF37'],
       }
     },
 
     created () {
-      this.chartWidth = this.config.width - this.config.margin
-      this.chartHeight = this.config.height - this.config.margin
-    },
-
-    mounted () {
-      this.createButtons()
-      this.renderChart()
-
-      // animate in the first series so that chart isn't  empty
-      const multilineController = new ScrollMagic.Controller()
-
-      new ScrollMagic.Scene({ triggerElement: '.sm-multiline', reverse: false })
-        .on('start', () => {
-          this.draw(this.datasetNames[0])
-        })
-        .addTo(multilineController)
-    },
-
-    methods: {
-      createButtons (){
-        this.json.forEach((dataset) => {
-          this.datasetNames.push(dataset.id)
-        })
-      },
-
-      renderChart (){
-        const data = this.json
-        const parseTime = d3.timeParse("%Y")
-
-        // set the ranges
-        const x = d3.scaleTime().range([0, this.chartWidth])
-        const y = d3.scaleLinear().range([this.chartHeight, 0])
-
-        // define the line
-        const line = d3.line()
-          .x(function(d) { return x(parseTime(d.year)) })
-          .y(function(d) { return y(d.percent) })
-
-        // Scale the range of the data
-        x.domain([
-          d3.min(data, function(c) { 
-            return d3.min(c.dataset, function(d){ return parseTime(d.year) })
-          }),
-          d3.max(data, function(c) { 
-            return d3.max(c.dataset, function(d){ return parseTime(d.year) })
-          })
-        ])
-
-        y.domain([0, this.config.yAxisMaxValue])
-
-        // create svg
-        this.svg = this.createSVG()
-
-        // create chart group
-        this.chart = this.svg.append('g')
-          .attr('class', 'chart')
-          .attr('width', this.chartWidth)
-          .attr('height', this.chartHeight)
-          .attr('transform', 'translate(' + this.config.margin/2 + ',' + this.config.margin/2 + ')')
-
-        // add y gridlines
-        this.chart.append('g')
-          .attr('class', 'v-interactive-multiline__gridlines')
-          .call(d3.axisLeft(y).tickSize(-this.chartWidth, 0, 0).tickFormat(''))
-
-        // add x axis
-        this.chart.append('g')
-          .attr('class', 'v-interactive-multiline__axis')
-          .attr('transform', 'translate(0,' + this.chartHeight + ')')
-          .call(d3.axisBottom(x).ticks(this.config.xAxisNumberOfTicks))
-
-        // add y axis
-        this.chart.append('g')
-          .attr('class', 'v-interactive-multiline__axis')
-          .call(d3.axisLeft(y).tickFormat(function(d){ return d + '%'}))
-
-        this.scaleX = x
-        this.scaleY = y
-
-        // add data path
-        const dataset = this.chart
-          .selectAll('.dataset')
-          .data(data)
-          .enter().append('path')
-          .attr('class', 'v-interactive-multiline__line')
-          .attr('data-name', function(d) { return d.id })
-          .attr('d', function(d) { return line(d.dataset) })
-          .attr('stroke', 'black')
-          .attr('fill', 'none')
-
-        // add a group for each set of datapoints
-        const datapointWrappers = this.chart
-          .selectAll('.datapoint-wrappers')
-          .data(data)
-          .enter()
-          .append('g')
-          .attr('class', 'v-interactive-multiline__datapoints')
-          .attr('data-datapoints', function(d) { return d.id })
-
-        // add a group for each data point
-        const datapoints = datapointWrappers.selectAll('.datapoints')
-          .data(function(d){ return d.dataset })
-          .enter()
-          .append('g')
-          .attr('class', 'datapoint-group')
-
-        // add the tooltip
-        datapoints.append('text')
-          .text(function (d) { return d.percent + '%' })
-          .attr('data-tooltip', function(d) { 
-            return d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
-          })
-          .attr('class', 'v-interactive-multiline__tooltip')
-          .attr('transform', function (d) { 
-            return 'translate(' + x(parseTime(d.year)) + ', ' + (y(d.percent) - 20) + ')' 
-          })
-
-        // add the circle datapoint
-        datapoints.append('circle')
-          .attr('cx', (d) => { return this.scaleX(parseTime(d.year)) })
-          .attr('cy', (d) => { return this.scaleY(d.percent) })
-          .attr('r', this.config.datapointRadius)
-          .attr('class', 'v-interactive-multiline__datapoint')
-          .on('mouseenter', function (d) {
-            const id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
-
-            $('[data-tooltip="' + id + '"]')
-              .attr('class', 'v-interactive-multiline__tooltip v-interactive-multiline__tooltip-active')
-            }
-          )
-          .on('mouseleave', function (d) {
-            const id = d3.select(this.parentNode.parentNode).datum().id + '-' + d.year
-
-            $('[data-tooltip="' + id + '"]')
-              .attr('class', 'v-interactive-multiline__tooltip')
-            }
-          )
-      },
-
-      createSVG (){
-        const svg = d3.select('.d3-svg')
-          .append('svg')
-          .attr('class', 'v-interactive-multiline__svg')
-          .attr('xmlns', 'http://www.w3.org/1999/xhtml')
-          .attr('viewBox', '0 0 ' + this.config.width + ' ' + this.config.height)
-          .attr('viewport', this.config.width + 'x' + this.config.height)
-          .attr('preserveAspectRatio', 'xMidYMid')
-          .attr('width', '100%')
-          .attr('height', '100%')
-
-        return svg
-      },
-
-      draw (name){
-        this.selectedTab = name
-
-        const lineClass = 'v-interactive-multiline__line',
-          activeLineClasses = lineClass + ' v-interactive-multiline__line-active',
-          datapointClass = 'v-interactive-multiline__datapoints',
-          activeDatapointClasses = datapointClass + ' v-interactive-multiline__datapoints-active'
-
-        $('.' + lineClass).attr('class', lineClass)
-        $('[data-name="' + name + '"]').attr('class', activeLineClasses)
-
-        $('.' + datapointClass).attr('class', datapointClass)
-        $('[data-datapoints="' + name + '"]').attr('class', activeDatapointClasses)
-      }
+      this.setAxisVariables()
     },
 
     computed: {
-      paddingTop: function () {
-        return (this.config.height / this.config.width) * 100 + '%'
+      chartHeight () {
+        return this.svg.height - this.svg.paddingTop - this.svg.paddingBottom
+      },
+
+      chartWidth () {
+        return this.svg.width - this.svg.paddingLeft - this.svg.paddingRight
+      }
+    },
+
+    methods: {
+      getLegend (){
+        const legend = this.lines.map((dataset) => {
+          return { title: dataset.id }
+        })
+
+        return legend
+      },
+
+      getPath(dataset) {
+        let path = ''
+        
+        dataset.forEach((point, index) => {
+          let command = index == 0 ? 'M' : 'L'
+
+          path += ` ${command} ${this.normaliseX(point.x)} ${this.normaliseY(point.y)}`
+        })
+
+        return path
+      },
+
+      getAxisLabels (axis) {
+        const incrementor = this[axis].incrementor,
+          min = this[axis].min,
+          max = this[axis].max
+
+        let n = min, array = []
+          
+        while( n <= max) {
+          array.push({
+            coord: this[`normalise${axis.toUpperCase()}`](n),
+            labelText: n
+          })
+
+          n += incrementor
+        }
+
+        return array
+      },
+
+      getAxisLine (axis) {
+        const minX = this.normaliseX(this.x.min),
+          minY = this.normaliseY(this.y.min),
+          maxX = this.normaliseX(this.x.max),
+          maxY = this.normaliseY(this.y.max)
+
+        const axisLine = axis == 'x' ? `${minX},${minY} ${maxX},${minY}` : `${minX},${minY} ${minX},${maxY}`
+        
+        return axisLine
+      },
+
+      getMinMax(type, prop) {
+        let array = []
+        const rounding = type == 'min' ? 'floor' : 'ceil'
+
+        this.lines.forEach(line => {
+          array.push(Math[type](...line.datapoints.map((t) => {
+            return Math[rounding](t[prop])
+          })))
+        }) 
+      
+        return Math[type](...array)
+      },
+
+      normaliseDataset (dataset) {
+        const normalisedDataset = dataset.map((datapoint) => {
+          return { 
+            value: datapoint.y + '%',
+            x: this.normaliseX(datapoint.x),
+            y: this.normaliseY(datapoint.y)
+          }
+        })
+        return normalisedDataset
+      },
+
+      normaliseX (value) {
+        // subtract the min value in case the axis doesn't start at 0
+        return this.svg.paddingLeft + (((value - this.x.min) / (this.x.max - this.x.min)) * this.chartWidth)
+      },
+
+      normaliseY (value) {
+        // y origin is at the top so subtract axis value from height
+        // subtract the min value incase the axis doesn't start at 0
+        return this.svg.paddingTop + (this.chartHeight - ((value - this.y.min) / (this.y.max - this.y.min)) * this.chartHeight)
+      },
+
+      popupHide () {
+        this.popup.show = false
+        this.popup.text = ''
+        this.popup.x = 0
+        this.popup.y = 0
+      },
+
+      popupShow (datapoint) {
+        this.popup.show = true
+        this.popup.text = datapoint.value 
+        this.popup.x = datapoint.x
+        this.popup.y = datapoint.y
+      },
+
+      setAxisVariables () {
+        const totalDatapoints = this.lines[0].datapoints.length,
+          evenTotal = totalDatapoints % 2 == 0,
+          xMin = this.getMinMax('min', 'x'),
+          xMax = this.getMinMax('max', 'x'),
+          yMin = this.getMinMax('min', 'y'),
+          yMax = this.getMinMax('max', 'y'),
+          axisMarks = evenTotal ? totalDatapoints/2 : (totalDatapoints - 1)/2
+          
+        this.x.incrementor = evenTotal ? (xMax - xMin)/(axisMarks - .5) : (xMax - xMin)/(axisMarks)
+        this.y.incrementor = evenTotal ? (yMax - yMin)/(axisMarks - .5) : (yMax - yMin)/(axisMarks)
+        this.x.min = xMin
+        this.y.min = yMin
+        this.x.max = xMin + (this.x.incrementor * axisMarks)
+        this.y.max = yMin + (this.y.incrementor * axisMarks)
       }
     }
   }
