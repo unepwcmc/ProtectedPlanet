@@ -4,11 +4,11 @@
       <span class="cta__ribbon"><%= t('global.status.updated') %></span>
 
       <div>
-        <h2 class="cta__title h2-big"><%= t('ctas.live_report.title') %></h2>
-        <p class="text-intro"><%= t('ctas.live_report.intro') %></p>
+        <h2 class="cta__title h2-big"><%= cms_fragment_render(:title, cta_live_report) %></h2>
+        <p class="text-intro"><%= cms_fragment_render(:summary, cta_live_report) %></p>
       </div>
 
-      <%= link_to t('ctas.live_report.button'), t('ctas.live_report.url'), target: '_blank', class: 'button--accent' %>
+      <%= link_to t('ctas.live_report.button'), cms_fragment_render(:link, cta_live_report), target: '_blank', class: 'button--accent' %>
     </div>
   </div>
 </section>

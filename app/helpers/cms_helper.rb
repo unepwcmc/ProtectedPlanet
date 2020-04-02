@@ -72,4 +72,12 @@ module CmsHelper
 
     pages
   end
+
+  def cta_api
+    @cta_api ||= Comfy::Cms::Page.find_by_slug('cta-api')
+  end
+
+  def cta_live_report
+    @cta_live_report ||= Comfy::Cms::Page.find_by_slug('cta-live-report')
+  end
 end
