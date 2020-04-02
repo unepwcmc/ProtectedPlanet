@@ -33,14 +33,14 @@ class CountryPresenter
     {
       title: country.name,
       iso: country.iso, ## not needed on frontend
-      totalMarineArea: statistic.total_marine_area,
+      totalMarineArea: statistic.total_marine_area.round,
       totalOverseasTerritories: country.children.count,
       overseasTerritoriesURL: overseas_territories_url,
       flag: '', ##TODO FERDI
-      nationalKm: statistic.pa_marine_area,
-      nationalPercentage: statistic.percentage_pa_marine_cover,
-      overseasKm: statistic.overseas_total_protected_marine_area, ##check how this is being calculated
-      overseasPercentage: statistic.overseas_percentage ##check how this is being calculated - discuss
+      nationalKm: statistic.pa_marine_area.round,
+      nationalPercentage: statistic.percentage_pa_marine_cover.round(2),
+      overseasKm: statistic.overseas_total_protected_marine_area.round, ##check how this is being calculated
+      overseasPercentage: statistic.overseas_percentage.round(2) ##check how this is being calculated - discuss
     }
   end
 

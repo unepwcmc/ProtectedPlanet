@@ -132,7 +132,8 @@ class MarineController < ApplicationController
   end
 
   def national_statistics
-    ##TODO - FERDI i believe these should be the top 6 countries with the most coverage but at the moment it is a hard coded list of countries.
+    ##TODO - FERDI i believe these should be the top 6!! countries with the most coverage but at the moment it is a hard coded list of countries.
+    ## Can we rename the variable as well to match its purpose - it will now include ABNJ as well
     @nationalProtectedAreas = {
       name: "ocean areas",
       children:

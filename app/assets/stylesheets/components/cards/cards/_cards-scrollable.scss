@@ -9,4 +9,26 @@
   .cards__card {
     @include responsive(width, 17%, 50%, 48%);
   }
+
+  .card__heading {
+    @include flex;
+    @include flex-v-center; 
+  }
+  
+  .card__stats {
+    @include flex;
+    @include flex-h-between;
+  }
+  
+  .card__stat {
+    width: 46%;
+  }
+
+  .card__stat-bold {
+    font-size: rem-calc(20);
+    font-weight: $bold;
+    line-height: 1.1;
+
+    display: block;
+  }
 }
