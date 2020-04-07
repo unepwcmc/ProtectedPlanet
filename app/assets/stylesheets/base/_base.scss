@@ -66,6 +66,7 @@ img { max-width: 100%; }
 // site structure
 //--------------------------------------------------
 .site-width { @include site-width; }
+.site-width-medium { @include site-width-medium; }
 
 .gutter {
   &-left { @include gutters('left'); }
