@@ -74,10 +74,10 @@ module CmsHelper
   end
 
   def cta_api
-    @cta_api ||= Cta.find_by_klass('api')
+    @cta_api ||= CallToAction.find_by_css_class('api')
   end
 
   def cta_live_report
-    @cta_live_report ||= Cta.find_by_klass('live-report')
+    @cta_live_report ||= CallToAction.find_by_css_class('live-report')
   end
 end

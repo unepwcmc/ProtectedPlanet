@@ -1,5 +1,5 @@
-class Cta < ActiveRecord::Base
-  self.table_name = "comfy_cms_cta"
+class CallToAction < ActiveRecord::Base
+  self.table_name = "comfy_cms_call_to_actions"
 
   validates :title,
     presence: true,

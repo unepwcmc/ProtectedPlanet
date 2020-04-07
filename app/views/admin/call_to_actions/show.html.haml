@@ -1,9 +1,9 @@
 .page-header
-  %h2 CTA
+  %h2 Call To Action
 
 %p
-  %strong Class:
-  = @cta.klass
+  %strong CSS Class:
+  = @cta.css_class
 %p
   %strong Title:
   = @cta.title
@@ -17,4 +17,4 @@
   %strong Updated:
   = @cta.updated.to_s
 
-= link_to 'CTAs', admin_ctas_path, :class => 'btn btn-primary'
+= link_to 'Call To Actions', admin_call_to_actions_path, :class => 'btn btn-primary'
