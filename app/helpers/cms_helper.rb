@@ -74,10 +74,10 @@ module CmsHelper
   end
 
   def cta_api
-    @cta_api ||= Comfy::Cms::Page.find_by_slug('cta-api')
+    @cta_api ||= Cta.find_by_klass('api')
   end
 
   def cta_live_report
-    @cta_live_report ||= Comfy::Cms::Page.find_by_slug('cta-live-report')
+    @cta_live_report ||= Cta.find_by_klass('live-report')
   end
 end
