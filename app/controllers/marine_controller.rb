@@ -22,6 +22,8 @@ class MarineController < ApplicationController
     "United Kingdom of Great Britain and Northern Ireland",
     "New Zealand",
     "Denmark",
+    "Norway",
+    "Netherlands"
   ]
 
   def index
