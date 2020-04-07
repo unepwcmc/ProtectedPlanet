@@ -3,6 +3,8 @@
     <h2><%= cms_fragment_render(:section_national_title, @cms_page) %></h2>
     <div><%= cms_fragment_render(:section_national_content, @cms_page) %></div>
 
+    <h3>Top 6 countries</h3>
+
     <div class="cards--scrollable">
       <% @nationalProtectedAreas[:children].each do |country| %>
       <div class="cards__card">
@@ -18,19 +20,19 @@
           </div>
 
           <div>
-            <p><%= country[:title] %> and its <%= country[:totalOverseasTerritories] %> overseas countries and territories have a combined area of <%=  number_with_delimiter(country[:totalMarineArea]) %>km<sup>2</sup></p>
+            <p class="card__text"><%= country[:title] %> and its <%= country[:totalOverseasTerritories] %> overseas countries and territories have a combined area of <%=  number_with_delimiter(country[:totalMarineArea]) %>km<sup>2</sup></p>
 
             <div class="card__stats">
               <p class="card__stat">
                 <span class="card__stat-bold"><%=country[:nationalPercentage] %>%</span>
                 <span class="card__stat-bold">(<%=  number_with_delimiter(country[:nationalKm]) %>km<sup>2</sup>)</span>
-                <span>of their national waters are protected</span>
+                <span class="card__stat-text">of their national waters are protected</span>
               </p>
 
-              <p class="card__stat">
+              <p class="card__stat-overseas">
                 <span class="card__stat-bold"><%=country[:overseasPercentage] %>%</span>
                 <span class="card__stat-bold">(<%= number_with_delimiter(country[:overseasKm]) %>km<sup>2</sup>)</span>
-                <span>of their overseas territories waters are protected</span>
+                <span class="card__stat-text">of their overseas territories waters are protected</span>
               </p>
             </div>
           </div>
