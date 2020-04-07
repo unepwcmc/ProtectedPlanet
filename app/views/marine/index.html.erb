@@ -1,4 +1,4 @@
-<%#= render partial: "./layouts/partials/hero-thematic", locals: { 
+<%= render partial: "./layouts/partials/hero-thematic", locals: { 
   button_text: 'Explore marine protected areas', ##TODO put in yml
   button_url: search_areas_path('wdpa'), ##TODO add params to filter marine sites
   classes: @cms_page.slug,
@@ -7,12 +7,12 @@
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
-<%#= link_to 'Learn how we calculate protected area coverage statistics', '/c/calculating-protected-area-coverage' %>
+<%= link_to 'Learn how we calculate protected area coverage statistics', '/c/calculating-protected-area-coverage' %>
 
-<!-- <section class="container--medium">
-  <h2><%#= cms_fragment_render(:section_distribution_title, @cms_page) %></h2>
-  <div><%#= cms_fragment_render(:section_distribution_content, @cms_page) %></div>
-</section> -->
+<section class="container--medium">
+  <h2><%= cms_fragment_render(:section_distribution_title, @cms_page) %></h2>
+  <div><%= cms_fragment_render(:section_distribution_content, @cms_page) %></div>
+</section>
 
 <!-- <div class="template--marine__section__introduction">
   <p>
@@ -23,7 +23,7 @@
   </p>
 </div> -->
 
-<%#= render partial: "marine/sections/ocean", locals: {
+<%= render partial: "marine/sections/ocean", locals: {
   national: marine_stats('national_waters_percentage'),
   national_coverage: marine_stats('national_waters_pa_coverage_percentage'),
   high_seas: marine_stats('global_ocean_percentage'),
@@ -31,7 +31,7 @@
 } %>
 
 
-<%#= render partial: "marine/sections/coverage", locals: {
+<%= render partial: "marine/sections/coverage", locals: {
   cms_page: @cms_page,
   
 } %>
