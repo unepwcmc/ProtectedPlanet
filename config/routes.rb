@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :admin do
     resources :home_carousel_slides
+    resources :ctas
   end
 
   require 'sidekiq/web'

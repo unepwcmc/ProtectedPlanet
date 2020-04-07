@@ -1,0 +1,27 @@
+.page-header
+  = link_to 'New CTA', new_admin_cta_path, :class => 'btn btn-default pull-right'
+  %h2= 'CTAs'
+
+= will_paginate @ctas, :theme => 'comfy'
+
+%table.table.table-hover.table-bordered.wrap
+  %tr
+    %th.wrap Class (Max characters: 75)
+    %th.wrap Title (Max characters: 75)
+    %th.wrap Summary (Max characters: 150)
+    %th Url
+    %th Updated
+    %th
+  - @ctas.each do |cta|
+    %tr
+      %td.wrap= cta.klass
+      %td.wrap= cta.title
+      %td.wrap= cta.summary
+      %td= cta.url
+      %td= cta.updated.to_s
+      %td
+        .btn-group.btn-group-sm
+          = link_to 'Edit', edit_admin_cta_path(cta), :class => 'btn btn-default'
+          = link_to 'Delete', admin_cta_path(cta), :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-danger'
+
+= will_paginate @ctas, :theme => 'comfy'

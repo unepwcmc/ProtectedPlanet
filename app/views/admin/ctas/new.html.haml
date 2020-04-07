@@ -1,0 +1,5 @@
+.page-header
+  %h2 New CTA
+
+= comfy_form_with model: @cta, url: {action: :create} do |form|
+  = render form

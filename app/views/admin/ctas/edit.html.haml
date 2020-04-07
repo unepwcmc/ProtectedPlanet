@@ -1,0 +1,5 @@
+.page-header
+  %h2 Edit CTA
+
+= comfy_form_with model: @cta, url: {action: :update} do |form|
+  = render form
