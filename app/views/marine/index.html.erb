@@ -4,6 +4,9 @@
   classes: @cms_page.slug,
   hero_image: cms_fragment_render(:theme_image, @cms_page),
   title: @cms_page.label,
+  stat_pas_km: @pas_km,
+  stat_pas_percent: @pas_percent,
+  stat_pas_total: @pas_total,
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
