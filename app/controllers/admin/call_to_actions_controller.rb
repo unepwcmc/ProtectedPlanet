@@ -21,25 +21,25 @@ class Admin::CallToActionsController < Comfy::Admin::Cms::BaseController
   def create
     @cta.save!
     flash[:success] = 'Call To Action created'
-    redirect_to :action => :show, :id => @cta
+    redirect_to action: :show, id: @cta
   rescue ActiveRecord::RecordInvalid
     flash.now[:danger] = 'Failed to create Call To Action'
-    render :action => :new
+    render action: :new
   end
 
   def update
     @cta.update_attributes!(cta_params)
-    flash[:success] = 'Call To action updated'
-    redirect_to :action => :show, :id => @cta
+    flash[:success] = 'Call To Action updated'
+    redirect_to action: :show, id: @cta
   rescue ActiveRecord::RecordInvalid
     flash.now[:danger] = 'Failed to update Call To Action'
-    render :action => :edit
+    render action: :edit
   end
 
   def destroy
     @cta.destroy
-    flash[:success] = 'CTA deleted'
-    redirect_to :action => :index
+    flash[:success] = 'Call To Action deleted'
+    redirect_to action: :index
   end
 
   protected
@@ -51,8 +51,8 @@ class Admin::CallToActionsController < Comfy::Admin::Cms::BaseController
   def load_cta
     @cta = CallToAction.find(params[:id])
   rescue ActiveRecord::RecordNotFound
-    flash[:danger] = 'CTA not found'
-    redirect_to :action => :index
+    flash[:danger] = 'Call To Action not found'
+    redirect_to action: :index
   end
 
   def cta_params
