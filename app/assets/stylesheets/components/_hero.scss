@@ -145,7 +145,7 @@
     @include flex-h-between;
     @include flex-no-shrink;
     @include responsive(margin-top, rem-calc(20), rem-calc(28), 0);
-    @include responsive(padding, rem-calc(40), rem-calc(44), rem-calc(50));
+    @include responsive(padding, rem-calc(40), rem-calc(44), rem-calc(44));
     @include responsive(width, 100%, 100%, 33%); 
   }
 

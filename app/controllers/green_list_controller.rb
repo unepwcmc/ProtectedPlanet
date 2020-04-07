@@ -7,6 +7,9 @@ class GreenListController < ApplicationController
   # after_action :enable_caching
 
   def index
+    @pas_km = 000 #TODO
+    @pas_percent = 000 #TODO
+    @pas_total = 000 #TODO
   end
 
   def show

@@ -1,6 +1,16 @@
-<%= render partial: "./layouts/partials/hero-thematic", locals: {
+<%= render partial: "./layouts/partials/hero-thematic", locals: { 
+  button_text: t('thematic_area.green_list.hero.button_text'),
+  button_url: search_areas_path('wdpa'), ##TODO add params to filter green list sites
+  classes: @cms_page.slug,
   hero_image: cms_fragment_render(:theme_image, @cms_page),
-  title: @cms_page.label
+  title: @cms_page.label,
+  stat_pas_km: @pas_km,
+  stat_pas_percent: @pas_percent,
+  stat_pas_total: @pas_total,
+  stat_text_1: t('thematic_area.green_list.hero.stat_text_1'),
+  stat_text_2: t('thematic_area.green_list.hero.stat_text_2'),
+  stat_text_3: t('thematic_area.green_list.hero.stat_text_3'),
+  summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
 <section class="container">
