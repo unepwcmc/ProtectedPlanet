@@ -1,7 +1,9 @@
-<section class="cta--live-report bg--grey-xdark">
+<section class="cta--<%= cta_live_report.css_class %> bg--grey-xdark">
   <div class="container cta__container">
     <div class="cta__content">
-      <span class="cta__ribbon"><%= t('global.status.updated') %></span>
+      <% if cta_live_report.updated %>
+        <span class="cta__ribbon"><%= t('global.status.updated') %></span>
+      <% end %>
 
       <div>
         <h2 class="cta__title h2-big"><%= cta_live_report.title %></h2>
