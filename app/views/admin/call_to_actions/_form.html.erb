@@ -1,0 +1,10 @@
+<p>The title may have up to 75 characters and the description may have up to 150.</p>
+
+<%= form.text_field :css_class, maxlength: 75 %>
+<%= form.text_field :title, maxlength: 75 %>
+<%= form.text_field :summary, maxlength: 150 %>
+<%= form.text_field :url, maxlength: 255 %>
+<%= form.check_box :updated %>
+<%= form.form_group class: 'form-actions' do %>
+  <%= form.submit class: 'btn btn-primary' %>
+<% end %>
