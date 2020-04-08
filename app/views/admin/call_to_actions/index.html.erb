@@ -1,0 +1,30 @@
+<div class="page-header">
+  <%= link_to 'New Call To Action', new_admin_call_to_action_path, class: 'btn btn-secondary float-right', title: 'Create new call to action' %>
+  <h2>Call To Actions</h2>
+</div>
+
+<table class="table table-hover table-bordered wrap">
+  <tr>
+    <th class="wrap">Class (Max characters: 75)</th>
+    <th class="wrap">Title (Max characters: 75)</th>
+    <th class="wrap">Summary (Max characters: 150)</th>
+    <th class="wrap">Url</th>
+    <th>Updated</th>
+    <th></th>
+  </tr>
+  <% @ctas.each do |cta| %>
+    <tr>
+      <td class="wrap"><%= cta.css_class %></td>
+      <td class="wrap"><%= cta.title %></td>
+      <td class="wrap"><%= cta.summary %></td>
+      <td class="wrap"><%= cta.url %></td>
+      <td><%= cta.updated.to_s %></td>
+      <td>
+        <div class="btn-group btn-group-sm">
+          <%= link_to 'Edit', edit_admin_call_to_action_path(cta), :class => 'btn btn-outline-secondary' %>
+          <%= link_to 'Delete', admin_call_to_action_path(cta), :method => :delete, :data => { :confirm => 'Are you sure?' }, :class => 'btn btn-danger' %>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+</table>

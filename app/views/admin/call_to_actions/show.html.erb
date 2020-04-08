@@ -1,0 +1,24 @@
+<div class="page-header">
+  <h2>Call To Action</h2>
+</div>
+<p>
+  <strong>CSS Class:</strong>
+  <%= @cta.css_class %>
+</p>
+<p>
+  <strong>Title:</strong>
+  <%= @cta.title %>
+</p>
+<p>
+  <strong>Summary:</strong>
+  <%= @cta.summary %>
+</p>
+<p>
+  <strong>Url:</strong>
+  <%= @cta.url %>
+</p>
+<p>
+  <strong>Updated:</strong>
+  <%= @cta.updated.to_s %>
+</p>
+<%= link_to 'View all', admin_call_to_actions_path, class: 'btn btn-primary' %>
