@@ -1,10 +1,22 @@
 <template>
   <ul class="chart--legend">
-    <li v-for="row, index in rows" class="chart__legend-item" :class="themeClass">
-      <span v-if="row.line" class="chart__legend-key" :style="lineStyle"></span>
-      <span v-else class="chart__legend-key" :style="style(index)"></span>
-      <span v-if="showNumbers" class="chart__legend-text">{{ index + 1 }}.</span> 
-      <span class="chart__legend-text">{{ row.title }}</span>
+    <li v-for="row, index in rows" class="chart__legend-li" :class="themeClass">
+      <p class="chart__legend-item">
+        <template v-if="showIcons">
+          <span v-if="row.line" class="chart__legend-key" :style="lineStyle"></span>
+          <span v-else class="chart__legend-key" :style="style(index)"></span>
+        </template>
+
+        <span v-if="showNumbers" class="chart__legend-index">{{ index + 1 }}.</span> 
+
+        <span class="chart__legend-title">{{ row.title }}</span>
+      </p>
+
+      <span 
+        v-if="row.subtitle" 
+        class="chart__legend-subtitle"
+        v-html="row.subtitle"
+      />
     </li>
   </ul>
 </template>
@@ -16,7 +28,11 @@
     props: {
       rows: {
         required: true,
-        type: Array //[ { title: String } ]
+        type: Array //[ { title: String, subtitle: String } ]
+      },
+      showIcons: {
+        default: true,
+        type: Boolean
       },
       showNumbers: {
         default: false,

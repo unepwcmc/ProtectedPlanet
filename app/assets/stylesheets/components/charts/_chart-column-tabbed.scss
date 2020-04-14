@@ -7,7 +7,17 @@ $chart-column-width: rem-calc(48);
 // classes
 //--------------------------------------------------
 &--column-tabbed {
+
+  .chart__tab-target {
+    @include flex;
+  }
+
   .chart__chart {
     width: 75%;
+  }
+
+  .chart__legend {
+    @include responsive(padding-left, 0, 0, rem-calc(30));
+    width: 25%;
   }
 }

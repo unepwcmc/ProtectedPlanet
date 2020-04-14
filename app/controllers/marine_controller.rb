@@ -1,5 +1,6 @@
 class MarineController < ApplicationController
-
+  include ActionView::Helpers::NumberHelper
+  
   #Static stats
   before_action :marine_statistics, only: [:index, :download_designations]
   before_action :growth, only: [:index]
@@ -135,21 +136,21 @@ class MarineController < ApplicationController
           {
             title: 'PA 1',
             percentage: 100,
-            km: 1000000,
+            km: number_with_delimiter(1000000),
             iso3: 'FRA'
           },
-          {title: 'PA 2',percentage: 90,km: 900000,iso3: 'ESP'},
-          {title: 'PA 3',percentage: 80,km: 800000,iso3: 'ESP'},
-          {title: 'PA 4',percentage: 70,km: 700000,iso3: 'ESP'},
-          {title: 'PA 5',percentage: 60,km: 600000,iso3: 'ESP'},
-          {title: 'PA 6',percentage: 50,km: 500000,iso3: 'ESP'},
-          {title: 'PA 7',percentage: 40,km: 400000,iso3: 'ESP'},
-          {title: 'PA 8',percentage: 30,km: 300000,iso3: 'ESP'},
-          {title: 'PA 9',percentage: 20,km: 200000,iso3: 'ESP'},
-          {title: 'PA 10',percentage: 10,km: 100000,iso3: 'ESP'}
+          {title: 'PA 2',percentage: 90,km: number_with_delimiter(900000),iso3: 'ESP'},
+          {title: 'PA 3',percentage: 80,km: number_with_delimiter(800000),iso3: 'ESP'},
+          {title: 'PA 4',percentage: 70,km: number_with_delimiter(700000),iso3: 'ESP'},
+          {title: 'PA 5',percentage: 60,km: number_with_delimiter(600000),iso3: 'ESP'},
+          {title: 'PA 6',percentage: 50,km: number_with_delimiter(500000),iso3: 'ESP'},
+          {title: 'PA 7',percentage: 40,km: number_with_delimiter(400000),iso3: 'ESP'},
+          {title: 'PA 8',percentage: 30,km: number_with_delimiter(300000),iso3: 'ESP'},
+          {title: 'PA 9',percentage: 20,km: number_with_delimiter(200000),iso3: 'ESP'},
+          {title: 'PA 10',percentage: 10,km: number_with_delimiter(100000),iso3: 'ESP'}
         ]
       },
-      {regionTitle:'Asia',pas:[{title:'PA 1',percentage:100,km:1000000,iso3:'FRA'},{title:'PA 2',percentage:90,km:900000,iso3:'ESP'},{title:'PA 3',percentage:80,km:800000,iso3:'ESP'},{title:'PA 4',percentage:70,km:700000,iso3:'ESP'},{title:'PA 5',percentage:60,km:600000,iso3:'ESP'},{title:'PA 6',percentage:50,km:500000,iso3:'ESP'},{title:'PA 7',percentage:40,km:400000,iso3:'ESP'},{title:'PA 8',percentage:30,km:300000,iso3:'ESP'},{title:'PA 9',percentage:20,km:200000,iso3:'ESP'},{title:'PA 10',percentage:10,km:100000,iso3:'ESP'}]
+      {regionTitle:'Asia',pas:[{title:'PA 1',percentage:100,km:number_with_delimiter(1000000),iso3:'FRA'},{title:'PA 2',percentage:90,km:number_with_delimiter(900000),iso3:'ESP'},{title:'PA 3',percentage:80,km:number_with_delimiter(800000),iso3:'ESP'},{title:'PA 4',percentage:70,km:number_with_delimiter(700000),iso3:'ESP'},{title:'PA 5',percentage:60,km:number_with_delimiter(600000),iso3:'ESP'},{title:'PA 6',percentage:50,km:number_with_delimiter(500000),iso3:'ESP'},{title:'PA 7',percentage:40,km:number_with_delimiter(400000),iso3:'ESP'},{title:'PA 8',percentage:30,km:number_with_delimiter(300000),iso3:'ESP'},{title:'PA 9',percentage:20,km:number_with_delimiter(200000),iso3:'ESP'},{title:'PA 10',percentage:10,km:number_with_delimiter(100000),iso3:'ESP'}]
       }
     ].to_json
   end

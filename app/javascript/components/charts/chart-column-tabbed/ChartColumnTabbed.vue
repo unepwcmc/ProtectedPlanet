@@ -2,21 +2,30 @@
   <div class="chart--column-tabbed">
     chart tabs
     
-    <div class="chart__chart">
-      <chart-column :columns="selectedDataset" />
-    </div>
+    <div class="chart__tab-target">
+      <chart-column 
+        class="chart__chart"
+        :columns="selectedDataset" 
+      />
 
-    chart legend
+      <chart-legend 
+        class="chart__legend chart--legend--vertical"
+        :showIcons="false"
+        :showNumbers="true" 
+        :rows="legend" 
+      />
+    </div>
   </div>
 </template>
 
 <script>
   import ChartColumn from './ChartColumn.vue'
+  import ChartLegend from '../chart-line/ChartLegend.vue'
 
   export default {
     name: 'chart-column-tabbed',
 
-    components: { ChartColumn },
+    components: { ChartColumn, ChartLegend },
 
     props: {
       json: {
@@ -27,10 +36,23 @@
 
     data () {
       return {
-        selectedDataset: this.json[0].pas
+        selectedDatasetIndex: 0
       }
     },
 
+    computed: {
+      legend () {
+        return this.selectedDataset.map((column) => {
+          return { 
+            title: column.title,
+            subtitle: `${column.percentage}%, (${column.km}km<sup>2</sup>)`
+          }
+        })
+      },
 
+      selectedDataset () {
+        return this.json[this.selectedDatasetIndex].pas
+      }
+    }
   }
 </script>
