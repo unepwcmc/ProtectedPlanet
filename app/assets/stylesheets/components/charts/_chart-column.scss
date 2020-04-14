@@ -1,0 +1,38 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-column-height: rem-calc(450);
+$chart-column-width: rem-calc(48);
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--column {
+  @include flex;
+  @include flex-h-between;
+  width: 100%;
+
+  .chart__column {
+
+  }
+
+  .chart__bar {
+    @include flex;
+    @include flex-v-end;
+    background-color: $white;
+    width: $chart-column-width; height: $chart-column-height;
+  }
+
+  .chart__coverage {
+    background-color: $orange;
+    width: $chart-column-width;
+  }
+
+  .chart__label {
+    font-weight: $bold;
+    padding: rem-calc(10 0);
+    text-align: center;
+
+    display: block;
+  }
+}

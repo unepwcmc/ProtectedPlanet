@@ -78,6 +78,8 @@ $chart-target-stroke-width: rem-calc(3);
 //--------------------------------------------------
 // charts
 //--------------------------------------------------
+  @import './charts/chart-column';
+  @import './charts/chart-column-tabbed';
   @import './charts/chart-dial';
   @import './charts/chart-legend';
   @import './charts/chart-line';

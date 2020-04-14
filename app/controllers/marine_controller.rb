@@ -71,56 +71,85 @@ class MarineController < ApplicationController
     #  end.to_json
     #  Use hardcoded data until we fix the issue on the source
 
+    ## FERDI - can the above be used and made dynamic?
+    ## FERDI - I have commented out the below which was 
+    ##         being used and set the new json format below it.
+
+    # @top10ProtectedAreas = [
+    #   {
+    #     name: 'Ross Sea Region Marine Protected Area',
+    #     url: '/555624810',
+    #     km: 2060058
+    #   },
+    #   {
+    #     name: 'Marae Moana',
+    #     url: '/555624907',
+    #     km: 1981965
+    #   },
+    #   {
+    #     name: 'Réserve Naturelle Nationale des Terres australes françaises',
+    #     url: '/345888',
+    #     km: 1654999
+    #   },
+    #   {
+    #     name: 'Papahānaumokuākea Marine National Monument',
+    #     url: '/220201',
+    #     km: 1516557
+    #   },
+    #   {
+    #     name: 'Parc Naturel de la Mer de Corail',
+    #     url: '/555577562',
+    #     km: 1291643
+    #   },
+    #   {
+    #     name: 'Pacific Remote Islands',
+    #     url: '/400011',
+    #     km: 1277784
+    #   },
+    #   {
+    #     name: 'South Georgia and South Sandwich Islands Marine Protected Area',
+    #     url: '/555547601',
+    #     km: 1069872
+    #   },
+    #   {
+    #     name: 'Coral Sea',
+    #     url: '/555556875',
+    #     km: 995251
+    #   },
+    #   {
+    #     name: 'Steller Sea Lion Protection Areas, Gulf',
+    #     url: '/555586970',
+    #     km: 866717
+    #   },
+    #   {
+    #     name: 'Pitcairn Islands Marine Reserve',
+    #     url: '/555624172',
+    #     km: 839568
+    #   }
+    # ].to_json
+
     @top10ProtectedAreas = [
       {
-        name: 'Ross Sea Region Marine Protected Area',
-        url: '/555624810',
-        km: 2060058
+        regionTitle: 'Europe',
+        pas: [
+          {
+            title: 'PA 1',
+            percentage: 100,
+            km: 1000000,
+            iso3: 'FRA'
+          },
+          {title: 'PA 2',percentage: 90,km: 900000,iso3: 'ESP'},
+          {title: 'PA 3',percentage: 80,km: 800000,iso3: 'ESP'},
+          {title: 'PA 4',percentage: 70,km: 700000,iso3: 'ESP'},
+          {title: 'PA 5',percentage: 60,km: 600000,iso3: 'ESP'},
+          {title: 'PA 6',percentage: 50,km: 500000,iso3: 'ESP'},
+          {title: 'PA 7',percentage: 40,km: 400000,iso3: 'ESP'},
+          {title: 'PA 8',percentage: 30,km: 300000,iso3: 'ESP'},
+          {title: 'PA 9',percentage: 20,km: 200000,iso3: 'ESP'},
+          {title: 'PA 10',percentage: 10,km: 100000,iso3: 'ESP'}
+        ]
       },
-      {
-        name: 'Marae Moana',
-        url: '/555624907',
-        km: 1981965
-      },
-      {
-        name: 'Réserve Naturelle Nationale des Terres australes françaises',
-        url: '/345888',
-        km: 1654999
-      },
-      {
-        name: 'Papahānaumokuākea Marine National Monument',
-        url: '/220201',
-        km: 1516557
-      },
-      {
-        name: 'Parc Naturel de la Mer de Corail',
-        url: '/555577562',
-        km: 1291643
-      },
-      {
-        name: 'Pacific Remote Islands',
-        url: '/400011',
-        km: 1277784
-      },
-      {
-        name: 'South Georgia and South Sandwich Islands Marine Protected Area',
-        url: '/555547601',
-        km: 1069872
-      },
-      {
-        name: 'Coral Sea',
-        url: '/555556875',
-        km: 995251
-      },
-      {
-        name: 'Steller Sea Lion Protection Areas, Gulf',
-        url: '/555586970',
-        km: 866717
-      },
-      {
-        name: 'Pitcairn Islands Marine Reserve',
-        url: '/555624172',
-        km: 839568
+      {regionTitle:'Asia',pas:[{title:'PA 1',percentage:100,km:1000000,iso3:'FRA'},{title:'PA 2',percentage:90,km:900000,iso3:'ESP'},{title:'PA 3',percentage:80,km:800000,iso3:'ESP'},{title:'PA 4',percentage:70,km:700000,iso3:'ESP'},{title:'PA 5',percentage:60,km:600000,iso3:'ESP'},{title:'PA 6',percentage:50,km:500000,iso3:'ESP'},{title:'PA 7',percentage:40,km:400000,iso3:'ESP'},{title:'PA 8',percentage:30,km:300000,iso3:'ESP'},{title:'PA 9',percentage:20,km:200000,iso3:'ESP'},{title:'PA 10',percentage:10,km:100000,iso3:'ESP'}]
       }
     ].to_json
   end

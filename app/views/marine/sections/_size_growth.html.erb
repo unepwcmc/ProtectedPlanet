@@ -2,15 +2,14 @@
   <div class="container--medium">
     <h2><%= cms_fragment_render(:section_size_growth_title, @cms_page) %></h2>
     <div><%= cms_fragment_render(:section_size_growth_content, @cms_page) %></div>
-    <div>
-      <div class="flex-1-half flex-column-gap--right">
-    <h3 class="header--h3-insights">Top 10 Marine Protected Areas by size</h3>
-    <chart-bar-simple :json="<%= @top10ProtectedAreas %>"></chart-bar-simple>
+    
+    <chart-column-tabbed :json="<%= @top10ProtectedAreas %>"></chart-column-tabbed>
   </div>
-  <div class="flex-1-half flex-column-gap--left">
+
+  <!-- <div class="flex-1-half flex-column-gap--left">
     <h3 class="header--h3-insights">Top 20 Marine Protected Areas by size</h3>
     <chart-rectangles :json="<%= @coverageOfTop20ProtectedAreas %>"></chart-rectangles>
   </div>
     </div>
-  </div>
+  </div> -->
 </section>
