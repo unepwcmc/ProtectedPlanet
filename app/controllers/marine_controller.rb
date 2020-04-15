@@ -129,7 +129,7 @@ class MarineController < ApplicationController
     #   }
     # ].to_json
 
-    @top10ProtectedAreas = [ ## FERDI - can we have regions in alphabetical order?
+    @regionsTopCountries = [ ## FERDI - can we have regions in alphabetical order?
       {
         regionTitle: 'Europe',
         pas: [
