@@ -47,7 +47,12 @@
   display: block;
 }
 
-.chart__legend-li { margin-bottom: rem-calc(14); }
+.chart__legend-li { 
+  @include responsive(width, 100%, 50%, 100%);
+  margin-bottom: rem-calc(14); 
+
+  display: inline-block;
+}
 
 .chart__legend-item { 
   @include chart-legend-item; 

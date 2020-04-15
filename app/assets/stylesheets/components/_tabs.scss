@@ -50,12 +50,14 @@
   }
 
   &--fake {
+    @include flex;
     @include ul-unstyled;
-    @include ul-inline;
     margin: rem-calc(26 0 32 0);
+    overflow-x: scroll;
 
     .tab {
       &__trigger {
+        @include flex-no-shrink;
         @include tab-trigger;
       }
     }

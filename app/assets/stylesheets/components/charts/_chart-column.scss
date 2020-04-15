@@ -1,8 +1,7 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$chart-column-height: rem-calc(450);
-$chart-column-width: rem-calc(48);
+$chart-column-width: 9%;
 
 //--------------------------------------------------
 // classes
@@ -13,19 +12,19 @@ $chart-column-width: rem-calc(48);
   width: 100%;
 
   .chart__column {
-
+    width: $chart-column-width;
   }
 
   .chart__bar {
     @include flex;
     @include flex-v-end;
+    @include responsive(height, rem-calc(300), rem-calc(450), rem-calc(450));
     background-color: $white;
-    width: $chart-column-width; height: $chart-column-height;
   }
 
   .chart__coverage {
     background-color: $orange;
-    width: $chart-column-width;
+    width: 100%;
   }
 
   .chart__label {
