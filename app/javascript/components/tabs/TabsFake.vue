@@ -21,7 +21,7 @@ export default {
 
   props: {
     children: {
-      type: Array, 
+      type: Array, // [{ id: Number, selectedId: Number, title: String }]
       required: true
     }
   },

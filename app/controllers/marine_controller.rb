@@ -150,7 +150,7 @@ class MarineController < ApplicationController
           {title: 'PA 10',percentage: 10,km: number_with_delimiter(100000),iso3: 'ESP'}
         ]
       },
-      {regionTitle:'Asia',pas:[{title:'PA 1',percentage:100,km:number_with_delimiter(1000000),iso3:'FRA'},{title:'PA 2',percentage:90,km:number_with_delimiter(900000),iso3:'ESP'},{title:'PA 3',percentage:80,km:number_with_delimiter(800000),iso3:'ESP'},{title:'PA 4',percentage:70,km:number_with_delimiter(700000),iso3:'ESP'},{title:'PA 5',percentage:60,km:number_with_delimiter(600000),iso3:'ESP'},{title:'PA 6',percentage:50,km:number_with_delimiter(500000),iso3:'ESP'},{title:'PA 7',percentage:40,km:number_with_delimiter(400000),iso3:'ESP'},{title:'PA 8',percentage:30,km:number_with_delimiter(300000),iso3:'ESP'},{title:'PA 9',percentage:20,km:number_with_delimiter(200000),iso3:'ESP'},{title:'PA 10',percentage:10,km:number_with_delimiter(100000),iso3:'ESP'}]
+      {regionTitle:'Asia',pas:[{title:'PA 1',percentage:10,km:number_with_delimiter(10000),iso3:'FRA'},{title:'PA 2',percentage:9,km:number_with_delimiter(9000),iso3:'ESP'},{title:'PA 3',percentage:8,km:number_with_delimiter(8000),iso3:'ESP'},{title:'PA 4',percentage:7,km:number_with_delimiter(7000),iso3:'ESP'},{title:'PA 5',percentage:6,km:number_with_delimiter(6000),iso3:'ESP'},{title:'PA 6',percentage:5,km:number_with_delimiter(5000),iso3:'ESP'},{title:'PA 7',percentage:4,km:number_with_delimiter(4000),iso3:'ESP'},{title:'PA 8',percentage:3,km:number_with_delimiter(3000),iso3:'ESP'},{title:'PA 9',percentage:2,km:number_with_delimiter(2000),iso3:'ESP'},{title:'PA 10',percentage:1,km:number_with_delimiter(1000),iso3:'ESP'}]
       }
     ].to_json
   end
