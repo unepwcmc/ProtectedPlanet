@@ -50,7 +50,7 @@
       legend () {
         return this.selectedDataset.map((column) => {
           return { 
-            title: column.title,
+            title: `${column.title} (${column.iso3})`,
             subtitle: `${column.percentage}%, (${column.km}km<sup>2</sup>)`
           }
         })
