@@ -12,7 +12,6 @@ class MarineController < ApplicationController
   before_action :most_protected_areas, only: [:index]
   before_action :national_statistics, only: [:index]
   before_action :designations, only: [:index, :download_designations]
-  before_action :green_list_areas, only: [:index]
 
   before_action :load_cms_content
 
@@ -41,6 +40,10 @@ class MarineController < ApplicationController
         km: number_with_delimiter(2456000)
       }
     ]
+
+    
+    @marineSites = ProtectedArea.marine_areas.limit(3) ## FERDI 3 marine PAs
+    @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
   end
 
   def download_designations
@@ -388,9 +391,5 @@ class MarineController < ApplicationController
         }
       ]
     }.to_json
-  end
-
-  def green_list_areas
-    @green_list_areas = ProtectedArea.marine_areas.green_list_areas
   end
 end
