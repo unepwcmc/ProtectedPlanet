@@ -28,6 +28,19 @@ class MarineController < ApplicationController
   ]
 
   def index
+    ##FERDI - all regions in alpahbetical order
+    @regionCoverage = [
+      {
+        title: 'Europe',
+        percentage: 30,
+        km: number_with_delimiter(1000000)
+      },
+      {
+        title: 'West Asia',
+        percentage: 20,
+        km: number_with_delimiter(2456000)
+      }
+    ]
   end
 
   def download_designations
