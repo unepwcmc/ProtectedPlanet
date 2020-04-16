@@ -13,7 +13,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
     }
   }
 
-  def initialize zip_path, wdpa_ids, number_of_pieces=2
+  def initialize zip_path, wdpa_ids, number_of_pieces=3
     @path = File.dirname(zip_path)
     @filename = File.basename(zip_path, File.extname(zip_path))
     @wdpa_ids = wdpa_ids
