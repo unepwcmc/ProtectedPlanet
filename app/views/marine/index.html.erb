@@ -10,15 +10,9 @@
 
 <social-share-text></social-share-text>
 
-<div class="js-download-btn tooltip-old__trigger marine-download">
-<button href="#" class="js-trigger btn-map-download btn-map-download--marine">
-<i class="fa fa-download big-button__icon"></i>Download the marine dataset
-</button>
-
-<%= download_dropdown("marine", "general", [:csv, :shp, :pdf]) %>
-</div>
-
 <%= link_to 'Learn how we calculate protected area coverage statistics', '/c/calculating-protected-area-coverage' %>
+
+<%= render partial: "./partials/bars/topbar-secondary" %>
 
 <%= render partial: "./layouts/partials/hero-thematic", locals: { 
   button_text: 'Explore marine protected areas', ##TODO put in yml
