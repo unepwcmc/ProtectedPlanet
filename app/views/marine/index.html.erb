@@ -1,71 +1,3 @@
-<%= render partial: "./layouts/partials/hero-thematic", locals: { 
-  button_text: 'Explore marine protected areas', ##TODO put in yml
-  button_url: search_areas_path('wdpa'), ##TODO add params to filter marine sites
-  classes: @cms_page.slug,
-  hero_image: cms_fragment_render(:theme_image, @cms_page),
-  title: @cms_page.label,
-  summary: cms_fragment_render(:summary, @cms_page)
-} %>
-
-<%= link_to 'Learn how we calculate protected area coverage statistics', '/c/calculating-protected-area-coverage' %>
-
-<section class="container--medium">
-  <h2><%= cms_fragment_render(:section_distribution_title, @cms_page) %></h2>
-  <div><%= cms_fragment_render(:section_distribution_content, @cms_page) %></div>
-</section>
-
-<!-- <div class="template--marine__section__introduction">
-  <p>
-    The global coverage of marine protected areas (MPAs) is <%#= marine_stats("total_ocean_pa_coverage_percentage") %>%. The Global Ocean can be divided into areas within national jurisdiction (National Waters) and those in international waters (Areas Beyond National Jurisdiction (ABNJ))
-  </p>
-  <p>
-    MPAs can be more easily created by governments in national waters where there are dedicated legal systems in place. In ABNJ it is more difficult to create MPAs due to the complex legal framework in place. As such, the percentage of MPAs created within national waters is much higher than that for ABNJ. National waters represent 39% of the global ocean and at present, <%#= marine_stats("national_waters_pa_coverage_percentage") %>% of these waters are designated as protected areas. In contrast, only <#= marine_stats("high_seas_pa_coverage_percentage") %>% of ABNJ, which makes up the remaining 61% of the global ocean, has been established as protected areas. At present, international discussions are underway to establish ways of simplifying the process to create MPAs in ABNJ. For more information on this, please see the <%#= link_to 'DOALOS website', 'http://www.un.org/Depts/los/biodiversityworkinggroup/marine_biodiversity.htm' %>.
-  </p>
-</div> -->
-
-<%= render partial: "marine/sections/ocean", locals: {
-  national: marine_stats('national_waters_percentage'),
-  national_coverage: marine_stats('national_waters_pa_coverage_percentage'),
-  high_seas: marine_stats('global_ocean_percentage'),
-  high_seas_coverage: marine_stats('high_seas_pa_coverage_percentage')
-} %>
-
-
-<%= render partial: "marine/sections/coverage", locals: {
-  cms_page: @cms_page  
-} %>
-
-<%= 
-  render partial: "marine/sections/national" 
-%>
-
-<section class="container--medium">
-  <h2><%= cms_fragment_render(:section_size_title, @cms_page) %></h2>
-  <div><%= cms_fragment_render(:section_size_content, @cms_page) %></div>
-</section>
-
-<%= render partial: "marine/sections/size_growth", locals: {
-  regionsTopCountries: @regionsTopCountries,
-} %>
-
-<%= render partial: "marine/sections/coverage_growth", locals: {
-  regionCoverage: @regionCoverage,
-} %>
-
-<%= render partial: "marine/sections/coverage_map" %>
-
-<section class="container">
-  <%= render partial: "partials/cards/sites", locals: { 
-    cards: cards, 
-    title: "#{t('global.area-types.wdpa')} (#{wdpaMarineTotal})",
-    url: urlViewAll
-  } %>
-</section>
-
-<%= render "partials/carousels/themes" %>
-
-<%= render "partials/ctas/live-report" %>
-
 <%= content_for :twitter_card, "summary_large_image" %>
 <%= content_for :social_title, "Explore the World's Marine Protected Areas" %>
 <%= content_for :social_description, "Over 70% of the surface of Earth is ocean, comprised of highly diverse ecosystems, and providing a wide range of marine ecosystem services that support human society, health and the economy. This website presents the most recent official coverage statistics for marine protected areas, updated monthly from the World Database on Protected Areas." %>
@@ -86,6 +18,58 @@
 <%= download_dropdown("marine", "general", [:csv, :shp, :pdf]) %>
 </div>
 
-<footer class="template--marine__section container--profile template--marine__footer">
-<%= render partial: "marine/sections/footer" %>
-</footer>
+<%= link_to 'Learn how we calculate protected area coverage statistics', '/c/calculating-protected-area-coverage' %>
+
+<%= render partial: "./layouts/partials/hero-thematic", locals: { 
+  button_text: 'Explore marine protected areas', ##TODO put in yml
+  button_url: search_areas_path('wdpa'), ##TODO add params to filter marine sites
+  classes: @cms_page.slug,
+  hero_image: cms_fragment_render(:theme_image, @cms_page),
+  title: @cms_page.label,
+  summary: cms_fragment_render(:summary, @cms_page)
+} %>
+
+<section class="container--medium">
+  <h2><%= cms_fragment_render(:section_distribution_title, @cms_page) %></h2>
+  <div><%= cms_fragment_render(:section_distribution_content, @cms_page) %></div>
+</section>
+
+<%= render partial: "marine/sections/ocean", locals: {
+  national: marine_stats('national_waters_percentage'),
+  national_coverage: marine_stats('national_waters_pa_coverage_percentage'),
+  high_seas: marine_stats('global_ocean_percentage'),
+  high_seas_coverage: marine_stats('high_seas_pa_coverage_percentage')
+} %>
+
+<%= render partial: "marine/sections/coverage", locals: {
+  cms_page: @cms_page  
+} %>
+
+<%= render partial: "marine/sections/national" %>
+
+<section class="container--medium">
+  <h2><%= cms_fragment_render(:section_size_title, @cms_page) %></h2>
+  <div><%= cms_fragment_render(:section_size_content, @cms_page) %></div>
+</section>
+
+<%= render partial: "marine/sections/size_growth", locals: {
+  regionsTopCountries: @regionsTopCountries,
+} %>
+
+<%= render partial: "marine/sections/coverage_growth", locals: {
+  regionCoverage: @regionCoverage,
+} %>
+
+<%= render partial: "marine/sections/map" %>
+
+<section class="container">
+  <%= render partial: "partials/cards/sites", locals: { 
+    cards: @marineSites, 
+    title: "#{t('global.area-types.wdpa')} (#{@marineSitesTotal})",
+    url: @marineViewAllUrl
+  } %>
+</section>
+
+<%= render "partials/carousels/themes" %>
+
+<%= render "partials/ctas/live-report" %>
