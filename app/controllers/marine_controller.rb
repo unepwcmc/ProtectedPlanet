@@ -44,6 +44,7 @@ class MarineController < ApplicationController
     
     @marineSites = ProtectedArea.marine_areas.limit(3) ## FERDI 3 marine PAs
     @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
+    @marineViewAllUrl = '/' #TODO URL to filtered search results page
   end
 
   def download_designations
