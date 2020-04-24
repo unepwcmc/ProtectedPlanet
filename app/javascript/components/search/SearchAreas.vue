@@ -19,7 +19,7 @@
           v-on:toggle-map-pane="toggleMapPane"
         />
 
-        <download-trigger
+        <download
           :text="textDownload"
         />
       </div>
@@ -56,7 +56,7 @@
 <script>
 import axios from 'axios'
 import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
-import DownloadTrigger from '../download/DownloadTrigger.vue'
+import Download from '../download/Download.vue'
 import FilterTrigger from '../filters/FilterTrigger.vue'
 import FiltersSearch from '../filters/FiltersSearch.vue'
 import MapTrigger from '../map/MapTrigger.vue'
@@ -68,7 +68,7 @@ export default {
   name: 'search-areas',
 
   components: {
-    DownloadTrigger,
+    Download,
     FilterTrigger,
     FiltersSearch,
     MapTrigger,

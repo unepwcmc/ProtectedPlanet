@@ -36,6 +36,8 @@
 // sharing
 //--------------------------------------------------
   &--share {
+    @include flex;
+    margin-right: rem-calc(20);
     position: relative;
 
     .social__icon {

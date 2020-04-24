@@ -29,7 +29,7 @@ import ChartRectangles from './components/charts/chart-rectangles/ChartRectangle
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
-import DownloadTrigger from './components/download/DownloadTrigger'
+import Download from './components/download/Download'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import SearchAreas from './components/search/SearchAreas'
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowPa,
         ChartRowTarget,
         ChartSunburst,
-        DownloadTrigger,
+        Download,
         MapInteractive,
         NavBurger,
         SearchAreas,
