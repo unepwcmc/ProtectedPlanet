@@ -14,8 +14,9 @@
 
 @mixin social-icon ($image) {
   @include social-basic($image);
-  margin-right: rem-calc(14);
-  width: rem-calc(41); height: rem-calc(41);
+  @include responsive(margin-right, rem-calc(10), rem-calc(14), rem-calc(14));
+  @include responsive(width, rem-calc(31), rem-calc(41), rem-calc(41));
+  @include responsive(height, rem-calc(31), rem-calc(41), rem-calc(41));
 }
 
 @mixin social-icon-white ($image) {
@@ -37,7 +38,7 @@
 //--------------------------------------------------
   &--share {
     @include flex;
-    margin-right: rem-calc(20);
+    @include responsive(margin-right, rem-calc(3), rem-calc(14), rem-calc(20));
     position: relative;
 
     .social__icon {

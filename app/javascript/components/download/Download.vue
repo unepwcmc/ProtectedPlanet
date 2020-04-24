@@ -3,8 +3,9 @@
     <button
       class="download__trigger"
       @click="toggleDownloadPane"
-      v-html="text"
-    />
+    >
+      <span class="download__trigger-text">{{ text }}</span>
+    </button>
 
     <div :class="['download__target', { 'active': isActive }]">
       <slot />

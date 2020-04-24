@@ -5,6 +5,10 @@
     @include button-download-trigger;
   }
 
+    &__trigger-text {
+      @include responsive(display, none, initial, initial);
+    }
+
   &__target {
     @include ul-unstyled;
     background-color: $grey-dark;
