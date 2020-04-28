@@ -1,0 +1,25 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-row-height: rem-calc(40);
+
+//--------------------------------------------------
+// row charts
+//--------------------------------------------------
+&--row {
+  .chart__row {
+    @include flex;
+    background-color: $white;
+    height: $chart-row-height;
+  }
+
+  .chart__bar {
+    background-color: $blue;
+    height: $chart-row-height;
+  }
+
+  .chart__bar-overseas {
+    background-color: $orange;
+    height: $chart-row-height;
+  }
+}

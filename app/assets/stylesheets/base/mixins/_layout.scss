@@ -25,3 +25,8 @@
   width: 100%;
   @include breakpoint($large){ width: $site-width-rem; }
 }
+
+@mixin site-width-medium {
+  width: 100%;
+  @include breakpoint($large){ width: $site-width-medium-desktop; }
+}

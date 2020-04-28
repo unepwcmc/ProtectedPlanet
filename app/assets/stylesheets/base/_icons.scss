@@ -18,7 +18,7 @@
   &--flag { @include icon-flag; }
   
   &--flag-outline { 
-    @include icon-flag; 
+    @include icon-flag;
     border: solid 2px $white;
   }
 

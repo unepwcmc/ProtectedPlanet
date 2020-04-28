@@ -31,15 +31,15 @@ class CountryPresenter
 
   def marine_page_statistics
     {
-      name: country.name,
-      iso: country.iso,
-      totalMarineArea: statistic.total_marine_area,
+      title: country.name,
+      totalMarineArea: statistic.total_marine_area.round,
       totalOverseasTerritories: country.children.count,
       overseasTerritoriesURL: overseas_territories_url,
-      national: statistic.pa_marine_area,
-      nationalPercentage: statistic.percentage_pa_marine_cover,
-      overseas: statistic.overseas_total_protected_marine_area,
-      overseasPercentage: statistic.overseas_percentage
+      flag: '', ##TODO FERDI
+      nationalKm: statistic.pa_marine_area.round,
+      nationalPercentage: statistic.percentage_pa_marine_cover.round(2),
+      overseasKm: statistic.overseas_total_protected_marine_area.round, ##check how this is being calculated
+      overseasPercentage: statistic.overseas_percentage.round(2) ##check how this is being calculated - discuss
     }
   end
 

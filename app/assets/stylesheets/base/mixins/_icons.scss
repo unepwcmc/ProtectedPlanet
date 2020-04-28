@@ -147,12 +147,6 @@ $icon-search-width: rem-calc(21);
   @include icon-image('download-black.svg', rem-calc(20), rem-calc(19));
 }
 
-@mixin icon-flag() {
-  @include icon-basic;
-  border-radius: 100%;
-  width: rem-calc(60); height: rem-calc(60);
-}
-
 @mixin icon-filters() {
   @include icon-basic;
   @include icon-image('filter.svg', rem-calc(19), rem-calc(13));
@@ -160,7 +154,8 @@ $icon-search-width: rem-calc(21);
 
 @mixin icon-flag () {
   @include icon-basic;
-  border-radius: 50%;
+  @include flex-no-shrink;
+  border-radius: 100%;
   width: rem-calc(35); height: rem-calc(35);
 }
 

@@ -1,12 +1,7 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$chart-dial-color: $grey-black;
-$chart-text-color: $chart-font-color;
-$chart-dial-font: $chart-font;
-$chart-dial-font-size: rem-calc(20);
-$chart-dial-font-size-tablet: rem-calc(22);
-$chart-dial-font-size-desktop: rem-calc(26);
+$chart-row-pa-height: rem-calc(52);
 
 //--------------------------------------------------
 // pa row charts
@@ -17,7 +12,7 @@ $chart-dial-font-size-desktop: rem-calc(26);
   .chart {
     &__row {
       background-color: $white;
-      height: rem-calc(52);  
+      height: $chart-row-pa-height;
     }
 
       &__bar {
@@ -25,7 +20,7 @@ $chart-dial-font-size-desktop: rem-calc(26);
         @include flex-h-between;
         @include flex-v-center;
         background-color: $purple;
-        height: rem-calc(52);
+        height: $chart-row-pa-height;
       }
 
       &__bar-label {

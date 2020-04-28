@@ -16,10 +16,10 @@
 
 <!-- <div class="template--marine__section__introduction">
   <p>
-    The global coverage of marine protected areas (MPAs) is <%= marine_stats("total_ocean_pa_coverage_percentage") %>%. The Global Ocean can be divided into areas within national jurisdiction (National Waters) and those in international waters (Areas Beyond National Jurisdiction (ABNJ))
+    The global coverage of marine protected areas (MPAs) is <%#= marine_stats("total_ocean_pa_coverage_percentage") %>%. The Global Ocean can be divided into areas within national jurisdiction (National Waters) and those in international waters (Areas Beyond National Jurisdiction (ABNJ))
   </p>
   <p>
-    MPAs can be more easily created by governments in national waters where there are dedicated legal systems in place. In ABNJ it is more difficult to create MPAs due to the complex legal framework in place. As such, the percentage of MPAs created within national waters is much higher than that for ABNJ. National waters represent 39% of the global ocean and at present, <%= marine_stats("national_waters_pa_coverage_percentage") %>% of these waters are designated as protected areas. In contrast, only <%= marine_stats("high_seas_pa_coverage_percentage") %>% of ABNJ, which makes up the remaining 61% of the global ocean, has been established as protected areas. At present, international discussions are underway to establish ways of simplifying the process to create MPAs in ABNJ. For more information on this, please see the <%= link_to 'DOALOS website', 'http://www.un.org/Depts/los/biodiversityworkinggroup/marine_biodiversity.htm' %>.
+    MPAs can be more easily created by governments in national waters where there are dedicated legal systems in place. In ABNJ it is more difficult to create MPAs due to the complex legal framework in place. As such, the percentage of MPAs created within national waters is much higher than that for ABNJ. National waters represent 39% of the global ocean and at present, <%#= marine_stats("national_waters_pa_coverage_percentage") %>% of these waters are designated as protected areas. In contrast, only <#= marine_stats("high_seas_pa_coverage_percentage") %>% of ABNJ, which makes up the remaining 61% of the global ocean, has been established as protected areas. At present, international discussions are underway to establish ways of simplifying the process to create MPAs in ABNJ. For more information on this, please see the <%#= link_to 'DOALOS website', 'http://www.un.org/Depts/los/biodiversityworkinggroup/marine_biodiversity.htm' %>.
   </p>
 </div> -->
 
@@ -36,9 +36,9 @@
   
 } %>
 
-
-
-<%= render partial: "marine/sections/national" %>
+<%= 
+  render partial: "marine/sections/national" 
+%>
 
 <section class="container--medium">
   <h2><%= cms_fragment_render(:section_size_title, @cms_page) %></h2>

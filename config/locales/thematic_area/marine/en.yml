@@ -1,0 +1,8 @@
+en:
+  thematic_area:
+    marine:
+      national:
+        sub_title: Top 6 countries
+        chart_text: "%{country} and its %{overseas} overseas countries and territories have a combined area of %{km}km<sup>2</sup>"
+        chart_stat_text: of their national waters are protected
+        chart_stat_text_overseas: of their overseas territories waters are protected
