@@ -13,6 +13,15 @@
   background-size: cover;
 }
 
+@mixin hero-stat-text {
+  @include text-intro;
+  color: $white;
+  font-weight: $bold;
+  line-height: 1;
+  margin-bottom: 1em;
+  
+}
+
 @mixin hero-stat-bubble {
   .hero__stats {
     @include flex;
@@ -29,12 +38,8 @@
     }
 
     .hero__stat-text { 
+      @include hero-stat-text;
       @include responsive(width, 90%, 78%, 60%);
-      @include text-intro;
-      color: $white;
-      font-weight: $bold;
-      line-height: 1;
-      margin-bottom: 1em;
       text-align: center;
     }  
 }
@@ -42,112 +47,124 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-.hero {
 //--------------------------------------------------
 // class - area type
 //--------------------------------------------------
-  &--area-type {
-    @include hero-medium;
-    @include hero-stat-bubble;
-    z-index: 0;
+.hero--area-type {
+  @include hero-medium;
+  @include hero-stat-bubble;
+  z-index: 0;
     
-    .hero {
-      &__container {
-        @include flex;
-        @include flex-h-between;
-        @include flex-v-center;
-        @include responsive(flex-direction, column, column, row);
-      }
-
-        &__content {
-          margin-right: 20%;          
-        }
-
-          &__buttons { @include flex; }
-
-            &__button-1 { margin-right: rem-calc(28); }
-    }
+  .hero__container {
+    @include flex;
+    @include flex-h-between;
+    @include flex-v-center;
+    @include responsive(flex-direction, column, column, row);
   }
+
+  .hero__content {
+    margin-right: 20%;          
+  }
+
+  .hero__buttons { @include flex; }
+
+  .hero__button-1 { margin-right: rem-calc(28); }
+}
 
 //--------------------------------------------------
 // class - basic
 //--------------------------------------------------
-  &--basic {
-    @include hero-medium;
-    @include flex;
-    @include flex-v-center;
-    
-    &.about { background-image: image_url('hero/about.png'); }
-    &.equity { background-image: image_url('hero/equity.png'); }
+.hero--basic {
+  @include hero-medium;
+  @include flex;
+  @include flex-v-center;
+  
+  &.about { background-image: image_url('hero/about.png'); }
+  &.equity { background-image: image_url('hero/equity.png'); }
 
-    .hero {
-      &__content {
-        @include responsive(padding-right, 0, 5%, 25%); 
-      }
-
-        &__intro {
-          @include text-intro;
-          @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
-        }
-    }
+  .hero__content {
+    @include responsive(padding-right, 0, 5%, 25%); 
   }
+
+  .hero__intro {
+    @include text-intro;
+    @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+  }
+}
 
 //--------------------------------------------------
 // class - home
 //--------------------------------------------------
-  &--home {
-    @include hero-stat-bubble;
-    @include responsive(padding-top, rem-calc(28), rem-calc(35), rem-calc(100));
-    @include responsive(padding-bottom, rem-calc(48), rem-calc(80), rem-calc(166));
-    background: $grey-light image_url('hero/home.png') center no-repeat;
-    z-index: 0;
-    
-    .hero {
-      &__container {
-        @include flex;
-        @include flex-h-between;
-        @include responsive(flex-direction, column, column, row);
-      }
+.hero--home {
+  @include hero-stat-bubble;
+  @include responsive(padding-top, rem-calc(28), rem-calc(35), rem-calc(100));
+  @include responsive(padding-bottom, rem-calc(48), rem-calc(80), rem-calc(166));
+  background: $grey-light image_url('hero/home.png') center no-repeat;
+  z-index: 0;
 
-        &__text {
-          @include breakpoint($large) { width: 58%; }
-        }
-
-          &__intro {
-            @include text-intro;
-            @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
-          }
-    }
+  .hero__container {
+    @include flex;
+    @include flex-h-between;
+    @include responsive(flex-direction, column, column, row);
   }
+
+  .hero__text {
+    @include breakpoint($large) { width: 58%; }
+  }
+
+  .hero__intro {
+    @include text-intro;
+    @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+  }
+}
 //--------------------------------------------------
 // class - thematic
 //--------------------------------------------------
-  &--thematic {
-    @include hero-medium;
+.hero--thematic {
+  @include hero-medium;
 
-    .hero {
-      &__container {
-        @include flex;
-        @include flex-h-between;
-        @include responsive(flex-direction, column, column, row);
-      }
+  .hero__container {
+    @include flex;
+    @include flex-h-between;
+    @include responsive(flex-direction, column, column, row);
+  }
 
-      &__content {
-        @include responsive(margin-right, 0, 0, 10%);    
-      }
+  .hero__content {
+    @include responsive(margin-right, 0, 0, 10%);    
+  }
 
-      &__intro {
-        @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
-        @include text-intro;
-      }
+  .hero__intro {
+    @include responsive(margin-bottom, 1.2em, 1.7em, 1.7em);
+    @include text-intro;
+  }
 
-      &__stats {
-        @include border-radius;
-        @include flex-no-shrink;
-        @include responsive(margin-top, rem-calc(20), rem-clac(28), 0);
-        @include responsive(width, 100%, 100%, 33%); 
-        padding: rem-calc(28);
-      }
-    }
+  .hero__stats {
+    @include border-radius;
+    @include flex;
+    @include flex-column;
+    @include flex-h-between;
+    @include flex-no-shrink;
+    @include responsive(margin-top, rem-calc(20), rem-calc(28), 0);
+    @include responsive(padding, rem-calc(40), rem-calc(44), rem-calc(44));
+    @include responsive(width, 100%, 100%, 33%); 
+  }
+
+  .hero__stat-number {
+    @include text-accent;
+  }
+
+  .hero__stat-number-small {
+    @include text-accent;
+    @include responsive(font-size, rem-calc(30), rem-calc(40), rem-calc(40));
+    padding-top: rem-calc(20);
+
+    display: block;
+  }
+
+  .hero__stat-text { 
+    @include hero-stat-text;
+    margin-bottom: 0;
+
+    display: block;
   }
 }
