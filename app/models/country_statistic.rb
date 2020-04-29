@@ -1,9 +1,7 @@
 class CountryStatistic < ApplicationRecord
   belongs_to :country
 
-  def national_percentage
-    (pa_marine_area / marine_area) * 100
-  end
+  scope :top_marine_coverage, -> { order('percentage_pa_marine_cover DESC NULLS LAST').limit(6) }
 
   def total_marine_area
     marine_area + overseas_total_marine_area
