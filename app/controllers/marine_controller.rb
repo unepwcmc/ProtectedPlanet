@@ -58,7 +58,7 @@ class MarineController < ApplicationController
   end
 
   def most_protected_areas
-    @regionsTopCountries = Region.order(:name).map do |region|
+    @regionsTopCountries = Region.without_global.map do |region|
       RegionPresenter.new(region).top_marine_coverage_countries
     end.to_json
   end
