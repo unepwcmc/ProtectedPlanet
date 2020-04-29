@@ -15,17 +15,6 @@ class MarineController < ApplicationController
 
   before_action :load_cms_content
 
-  COUNTRIES = [
-    "United States of America",
-    "France",
-    "Australia",
-    "United Kingdom of Great Britain and Northern Ireland",
-    "New Zealand",
-    "Denmark",
-    "Norway",
-    "Netherlands"
-  ]
-
   def index
     ##FERDI - all regions in alpahbetical order
     @regionCoverage = [
@@ -40,11 +29,14 @@ class MarineController < ApplicationController
         km: number_with_delimiter(2456000)
       }
     ]
-
     
     @marineSites = ProtectedArea.marine_areas.limit(3) ## FERDI 3 marine PAs
     @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
     @marineViewAllUrl = '/' #TODO URL to filtered search results page
+
+    @pas_km = @marine_statistics['total_ocean_area_protected']
+    @pas_percent = @marine_statistics['total_ocean_pa_coverage_percentage']
+    @pas_total = @marine_statistics['total_marine_protected_areas']
   end
 
   def download_designations
@@ -189,13 +181,13 @@ class MarineController < ApplicationController
   end
 
   def national_statistics
-    ##TODO - FERDI i believe these should be the top 6!! countries with the most coverage but at the moment it is a hard coded list of countries.
-    ## Can we rename the variable as well to match its purpose - it will now include ABNJ as well
-    @nationalProtectedAreas = {
+    ## TODO it should take into account ABNJ as well
+    @top_marine_coverage_countries = {
       name: "ocean areas",
       children:
-        Country.where(name: COUNTRIES).map do |country|
-          CountryPresenter.new(country).marine_page_statistics
+        CountryStatistic.top_marine_coverage.map do |country_statistic|
+          ## TODO if country is nil check if that corresponds to ABNJ
+          CountryPresenter.new(country_statistic.country).marine_page_statistics
         end
     }
   end

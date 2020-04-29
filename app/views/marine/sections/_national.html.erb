@@ -7,13 +7,13 @@
 
     <div class="cards--scrollable">
       <div class="cards">
-        <% @nationalProtectedAreas[:children].each do |country| %>
+        <% countries[:children].each do |country| %>
           <div class="cards__card">
             <div class="card__heading">
               <i class="card__flag icon--flag-outline" style="background-image:url('<% country[:flag] %>');"></i>
               <h3 class="card__h3"><%= country[:title] %></h3>
             </div>
-            
+
             <div class="chart--row">
               <div class="chart__row">
                 <div class="chart__bar" style="width: <%= country[:nationalPercentage] %>%;"></div>
@@ -22,9 +22,9 @@
 
               <div>
                 <p class="card__text">
-                  <%= t('thematic_area.marine.national.chart_text', 
-                    country: country[:title], 
-                    overseas: country[:totalOverseasTerritories], 
+                  <%= t('thematic_area.marine.national.chart_text',
+                    country: country[:title],
+                    overseas: country[:totalOverseasTerritories],
                     km: number_with_delimiter(country[:totalMarineArea])
                   ).html_safe %>
                 </p>
@@ -35,7 +35,7 @@
                     <span class="card__stat-bold">(<%=  number_with_delimiter(country[:nationalKm]) %>km<sup>2</sup>)</span>
                     <span class="card__stat-text"><%= t('thematic_area.marine.national.chart_stat_text') %></span>
                   </p>
-                  
+
                   <% if country[:overseasPercentage] > 0 %>
                     <p class="card__stat-overseas">
                       <span class="card__stat-bold"><%= country[:overseasPercentage] %>%</span>
