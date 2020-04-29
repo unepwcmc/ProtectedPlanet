@@ -43,4 +43,9 @@ class Stats::Global
       _sum + (x || 0)
     end
   end
+
+  # TODO Double check calculations
+  def self.global_area
+    CountryStatistic.global_land_area + CountryStatistic.global_marine_area
+  end
 end
