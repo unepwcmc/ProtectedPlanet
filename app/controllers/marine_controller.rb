@@ -1,6 +1,6 @@
 class MarineController < ApplicationController
   include ActionView::Helpers::NumberHelper
-  
+
   #Static stats
   before_action :marine_statistics, only: [:index, :download_designations]
   before_action :growth, only: [:index]
@@ -28,19 +28,9 @@ class MarineController < ApplicationController
   ]
 
   def index
-    ##FERDI - all regions in alpahbetical order
-    @regionCoverage = [
-      {
-        title: 'Europe',
-        percentage: 30,
-        km: number_with_delimiter(1000000)
-      },
-      {
-        title: 'West Asia',
-        percentage: 20,
-        km: number_with_delimiter(2456000)
-      }
-    ]
+    @regionCoverage = Region.without_global.map do |region|
+      RegionPresenter.new(region).marine_coverage
+    end
   end
 
   def download_designations
@@ -86,7 +76,7 @@ class MarineController < ApplicationController
     #  Use hardcoded data until we fix the issue on the source
 
     ## FERDI - can the above be used and made dynamic?
-    ## FERDI - I have commented out the below which was 
+    ## FERDI - I have commented out the below which was
     ##         being used and set the new json format below it.
 
     # @top10ProtectedAreas = [
