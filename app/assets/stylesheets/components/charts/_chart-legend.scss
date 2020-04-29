@@ -44,13 +44,14 @@
 //--------------------------------------------------
 .chart--legend--vertical {
   @include ul-unstyled;
+  @include responsive(column-count, 1, 2, 1);
   font-size: rem-calc(14);
 
   display: block;
   
   .chart__legend-li { 
-    @include responsive(width, 100%, 50%, 100%);
     margin-bottom: rem-calc(14); 
+    width: 100%;
 
     display: inline-block;
   }
