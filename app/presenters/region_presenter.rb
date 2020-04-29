@@ -23,7 +23,7 @@ class RegionPresenter
   end
 
   def percentage_pa_land_cover
-    @statistics.map(&:percentage_pa_land_cover).compact.reduce(:+)/@countries.count
+    (pa_land_area / land_area * 100).round(2)
   end
 
   def pa_land_area
@@ -35,7 +35,7 @@ class RegionPresenter
   end
 
   def percentage_pa_marine_cover
-    @statistics.map(&:percentage_pa_marine_cover).compact.reduce(:+)/@countries.count
+    (pa_marine_area / marine_area * 100).round(2)
   end
 
   def pa_marine_area
