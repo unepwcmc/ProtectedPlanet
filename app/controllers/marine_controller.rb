@@ -1,6 +1,6 @@
 class MarineController < ApplicationController
   include ActionView::Helpers::NumberHelper
-  
+
   #Static stats
   before_action :marine_statistics, only: [:index, :download_designations]
   before_action :growth, only: [:index]
@@ -58,103 +58,9 @@ class MarineController < ApplicationController
   end
 
   def most_protected_areas
-    #@top10ProtectedAreas =
-    #  ProtectedArea.without_proposed.most_protected_marine_areas(10).map do |pa|
-    #    ProtectedAreaPresenter.new(pa).name_size
-    #  end.to_json
-    #  Use hardcoded data until we fix the issue on the source
-
-    ## FERDI - can the above be used and made dynamic?
-    ## FERDI - I have commented out the below which was 
-    ##         being used and set the new json format below it.
-
-    # @top10ProtectedAreas = [
-    #   {
-    #     name: 'Ross Sea Region Marine Protected Area',
-    #     url: '/555624810',
-    #     km: 2060058
-    #   },
-    #   {
-    #     name: 'Marae Moana',
-    #     url: '/555624907',
-    #     km: 1981965
-    #   },
-    #   {
-    #     name: 'Réserve Naturelle Nationale des Terres australes françaises',
-    #     url: '/345888',
-    #     km: 1654999
-    #   },
-    #   {
-    #     name: 'Papahānaumokuākea Marine National Monument',
-    #     url: '/220201',
-    #     km: 1516557
-    #   },
-    #   {
-    #     name: 'Parc Naturel de la Mer de Corail',
-    #     url: '/555577562',
-    #     km: 1291643
-    #   },
-    #   {
-    #     name: 'Pacific Remote Islands',
-    #     url: '/400011',
-    #     km: 1277784
-    #   },
-    #   {
-    #     name: 'South Georgia and South Sandwich Islands Marine Protected Area',
-    #     url: '/555547601',
-    #     km: 1069872
-    #   },
-    #   {
-    #     name: 'Coral Sea',
-    #     url: '/555556875',
-    #     km: 995251
-    #   },
-    #   {
-    #     name: 'Steller Sea Lion Protection Areas, Gulf',
-    #     url: '/555586970',
-    #     km: 866717
-    #   },
-    #   {
-    #     name: 'Pitcairn Islands Marine Reserve',
-    #     url: '/555624172',
-    #     km: 839568
-    #   }
-    # ].to_json
-
-    @regionsTopCountries = [ ## FERDI - can we have regions in alphabetical order?
-      {
-        regionTitle: 'Europe',
-        pas: [
-          {
-            title: 'Country 1',
-            percentage: 100,
-            km: number_with_delimiter(1000000),
-            iso3: 'FRA'
-          },
-          {title: 'Country 2',percentage: 90,km: number_with_delimiter(900000),iso3: 'ESP'},
-          {title: 'Country 3',percentage: 80,km: number_with_delimiter(800000),iso3: 'ESP'},
-          {title: 'Country 4',percentage: 70,km: number_with_delimiter(700000),iso3: 'ESP'},
-          {title: 'Country 5',percentage: 60,km: number_with_delimiter(600000),iso3: 'ESP'},
-          {title: 'Country 6',percentage: 50,km: number_with_delimiter(500000),iso3: 'ESP'},
-          {title: 'Country 7',percentage: 40,km: number_with_delimiter(400000),iso3: 'ESP'},
-          {title: 'Country 8',percentage: 30,km: number_with_delimiter(300000),iso3: 'ESP'},
-          {title: 'Country 9',percentage: 20,km: number_with_delimiter(200000),iso3: 'ESP'},
-          {title: 'Country 10',percentage: 10,km: number_with_delimiter(100000),iso3: 'ESP'}
-        ]
-      },
-      {regionTitle:'Asia & Pacific',pas:[{title:'Country 1',percentage:10,km:number_with_delimiter(10000),iso3:'FRA'},{title:'Country 2',percentage:9,km:number_with_delimiter(9000),iso3:'ESP'},{title:'Country 3',percentage:8,km:number_with_delimiter(8000),iso3:'ESP'},{title:'Country 4',percentage:7,km:number_with_delimiter(7000),iso3:'ESP'},{title:'Country 5',percentage:6,km:number_with_delimiter(6000),iso3:'ESP'},{title:'Country 6',percentage:5,km:number_with_delimiter(5000),iso3:'ESP'},{title:'Country 7',percentage:4,km:number_with_delimiter(4000),iso3:'ESP'},{title:'Country 8',percentage:3,km:number_with_delimiter(3000),iso3:'ESP'},{title:'Country 9',percentage:2,km:number_with_delimiter(2000),iso3:'ESP'},{title:'Country 10',percentage:1,km:number_with_delimiter(1000),iso3:'ESP'}]
-      },
-      {regionTitle:'Africa',pas:[{title:'Country 1',percentage:10,km:number_with_delimiter(10000),iso3:'FRA'},{title:'Country 2',percentage:9,km:number_with_delimiter(9000),iso3:'ESP'},{title:'Country 3',percentage:8,km:number_with_delimiter(8000),iso3:'ESP'},{title:'Country 4',percentage:7,km:number_with_delimiter(7000),iso3:'ESP'},{title:'Country 5',percentage:6,km:number_with_delimiter(6000),iso3:'ESP'},{title:'Country 6',percentage:5,km:number_with_delimiter(5000),iso3:'ESP'},{title:'Country 7',percentage:4,km:number_with_delimiter(4000),iso3:'ESP'},{title:'Country 8',percentage:3,km:number_with_delimiter(3000),iso3:'ESP'},{title:'Country 9',percentage:2,km:number_with_delimiter(2000),iso3:'ESP'},{title:'Country 10',percentage:1,km:number_with_delimiter(1000),iso3:'ESP'}]
-      },
-      {regionTitle:'Polar',pas:[{title:'Country 1',percentage:10,km:number_with_delimiter(10000),iso3:'FRA'},{title:'Country 2',percentage:9,km:number_with_delimiter(9000),iso3:'ESP'},{title:'Country 3',percentage:8,km:number_with_delimiter(8000),iso3:'ESP'},{title:'Country 4',percentage:7,km:number_with_delimiter(7000),iso3:'ESP'},{title:'Country 5',percentage:6,km:number_with_delimiter(6000),iso3:'ESP'},{title:'Country 6',percentage:5,km:number_with_delimiter(5000),iso3:'ESP'},{title:'Country 7',percentage:4,km:number_with_delimiter(4000),iso3:'ESP'},{title:'Country 8',percentage:3,km:number_with_delimiter(3000),iso3:'ESP'},{title:'Country 9',percentage:2,km:number_with_delimiter(2000),iso3:'ESP'},{title:'Country 10',percentage:1,km:number_with_delimiter(1000),iso3:'ESP'}]
-      },
-      {regionTitle:'Latin America & Caribbean',pas:[{title:'Country 1',percentage:10,km:number_with_delimiter(10000),iso3:'FRA'},{title:'Country 2',percentage:9,km:number_with_delimiter(9000),iso3:'ESP'},{title:'Country 3',percentage:8,km:number_with_delimiter(8000),iso3:'ESP'},{title:'Country 4',percentage:7,km:number_with_delimiter(7000),iso3:'ESP'},{title:'Country 5',percentage:6,km:number_with_delimiter(6000),iso3:'ESP'},{title:'Country 6',percentage:5,km:number_with_delimiter(5000),iso3:'ESP'},{title:'Country 7',percentage:4,km:number_with_delimiter(4000),iso3:'ESP'},{title:'Country 8',percentage:3,km:number_with_delimiter(3000),iso3:'ESP'},{title:'Country 9',percentage:2,km:number_with_delimiter(2000),iso3:'ESP'},{title:'Country 10',percentage:1,km:number_with_delimiter(1000),iso3:'ESP'}]
-      },
-      {regionTitle:'North America',pas:[{title:'Country 1',percentage:10,km:number_with_delimiter(10000),iso3:'FRA'},{title:'Country 2',percentage:9,km:number_with_delimiter(9000),iso3:'ESP'},{title:'Country 3',percentage:8,km:number_with_delimiter(8000),iso3:'ESP'},{title:'Country 4',percentage:7,km:number_with_delimiter(7000),iso3:'ESP'},{title:'Country 5',percentage:6,km:number_with_delimiter(6000),iso3:'ESP'},{title:'Country 6',percentage:5,km:number_with_delimiter(5000),iso3:'ESP'},{title:'Country 7',percentage:4,km:number_with_delimiter(4000),iso3:'ESP'},{title:'Country 8',percentage:3,km:number_with_delimiter(3000),iso3:'ESP'},{title:'Country 9',percentage:2,km:number_with_delimiter(2000),iso3:'ESP'},{title:'Country 10',percentage:1,km:number_with_delimiter(1000),iso3:'ESP'}]
-      },
-      {regionTitle:'West Asia',pas:[{title:'Country 1',percentage:10,km:number_with_delimiter(10000),iso3:'FRA'},{title:'Country 2',percentage:9,km:number_with_delimiter(9000),iso3:'ESP'},{title:'Country 3',percentage:8,km:number_with_delimiter(8000),iso3:'ESP'},{title:'Country 4',percentage:7,km:number_with_delimiter(7000),iso3:'ESP'},{title:'Country 5',percentage:6,km:number_with_delimiter(6000),iso3:'ESP'},{title:'Country 6',percentage:5,km:number_with_delimiter(5000),iso3:'ESP'},{title:'Country 7',percentage:4,km:number_with_delimiter(4000),iso3:'ESP'},{title:'Country 8',percentage:3,km:number_with_delimiter(3000),iso3:'ESP'},{title:'Country 9',percentage:2,km:number_with_delimiter(2000),iso3:'ESP'},{title:'Country 10',percentage:1,km:number_with_delimiter(1000),iso3:'ESP'}]
-      }
-    ].to_json
+    @regionsTopCountries = Region.order(:name).map do |region|
+      RegionPresenter.new(region).top_marine_coverage_countries
+    end.to_json
   end
 
   def least_protected_areas

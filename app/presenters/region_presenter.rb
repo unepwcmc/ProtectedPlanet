@@ -1,4 +1,6 @@
 class RegionPresenter
+  include ActionView::Helpers::NumberHelper
+
   def initialize(region)
     @region = region
     @countries = @region.countries
@@ -12,7 +14,7 @@ class RegionPresenter
 
   def marine_stats
     {
-      pame_km2: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat 
+      pame_km2: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat
       pame_percentage: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat
       protected_km2: pa_marine_area.round(0),
       protected_percentage: percentage_pa_marine_cover.round(2),
@@ -77,6 +79,24 @@ class RegionPresenter
 
   def marine_area
     @statistics.map(&:marine_area).compact.reduce(:+)
+  end
+
+  def top_marine_coverage_countries
+    sorted_stats = @statistics.sort_by do |s|
+      s.percentage_pa_marine_cover ? -s.percentage_pa_marine_cover : 0.0
+    end.first(10)
+
+    {
+      regionTitle: region.name,
+      countries: sorted_stats.map do |stat|
+        {
+          title: stat.country.name,
+          percentage: stat.percentage_pa_marine_cover,
+          km: number_with_delimiter(stat.pa_marine_area),
+          iso3: stat.country.iso_3
+        }
+      end
+    }
   end
 
   private
