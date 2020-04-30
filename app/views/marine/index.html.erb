@@ -14,7 +14,7 @@
 
 <%= render partial: "./partials/bars/topbar-secondary" %>
 
-<%= render partial: "./layouts/partials/hero-thematic", locals: { 
+<%= render partial: "./layouts/partials/hero-thematic", locals: {
   button_text: t('thematic_area.marine.hero.button_text'),
   button_url: search_areas_path('wdpa'), ##TODO add params to filter marine sites
   classes: @cms_page.slug,
@@ -42,11 +42,12 @@
 } %>
 
 <%= render partial: "marine/sections/coverage", locals: {
-  cms_page: @cms_page  
+  cms_page: @cms_page
 } %>
 
-<%= render partial: "marine/sections/national",
-  countries: @top_marine_coverage_countries
+<%= render partial: "marine/sections/national", locals: {
+    countries: @top_marine_coverage_countries
+  }
 %>
 
 <section class="container--medium">
@@ -65,8 +66,8 @@
 <%= render partial: "marine/sections/map" %>
 
 <section class="container">
-  <%= render partial: "partials/cards/sites", locals: { 
-    cards: @marineSites, 
+  <%= render partial: "partials/cards/sites", locals: {
+    cards: @marineSites,
     title: "#{t('global.area-types.wdpa')} (#{@marineSitesTotal})",
     url: @marineViewAllUrl
   } %>

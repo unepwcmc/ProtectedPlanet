@@ -35,7 +35,7 @@ class CountryPresenter
       totalMarineArea: statistic.total_marine_area.round,
       totalOverseasTerritories: country.children.count,
       overseasTerritoriesURL: overseas_territories_url,
-      flag: '', ##TODO FERDI
+      flag: "flags/#{flag_name}",
       nationalKm: statistic.pa_marine_area.round,
       nationalPercentage: statistic.percentage_pa_marine_cover.round(2),
       overseasKm: statistic.overseas_total_protected_marine_area.round, ##check how this is being calculated
@@ -64,5 +64,9 @@ class CountryPresenter
   def overseas_territories_url
     overseas_territories = country.children.map(&:iso_3).join(',')
     "search?q=#{overseas_territories}&type=country"
+  end
+
+  def flag_name
+    country.name.underscore.gsub(' ', '-').gsub(/"/, '').gsub(',','').gsub(/'/,'')
   end
 end
