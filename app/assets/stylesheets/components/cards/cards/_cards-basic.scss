@@ -4,6 +4,7 @@
 &--basic {
   @include flex-h-between;
   @include responsive(display, block, flex, flex);
+  @include responsive(flex-wrap, none, wrap, wrap);
 
   .cards__card {
     @include responsive(width, 100%, 46%, 47%);
