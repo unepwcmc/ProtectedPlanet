@@ -32,7 +32,6 @@ class CountryPresenter
   def marine_page_statistics
     {
       title: country.name,
-      iso: country.iso, ## not needed on frontend
       totalMarineArea: statistic.total_marine_area.round,
       totalOverseasTerritories: country.children.count,
       overseasTerritoriesURL: overseas_territories_url,

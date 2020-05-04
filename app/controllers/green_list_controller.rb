@@ -7,6 +7,9 @@ class GreenListController < ApplicationController
   # after_action :enable_caching
 
   def index
+    @pas_km = ProtectedArea.green_list_total_km
+    @pas_percent = ProtectedArea.green_list_protected_percentage
+    @pas_total = ProtectedArea.green_list_areas.count
   end
 
   def show
@@ -26,16 +29,17 @@ class GreenListController < ApplicationController
   end
 
   private
-    def redirect_if_not_green_listed
-      redirect_to protected_area_path(@protected_area) unless @protected_area.is_green_list
-    end
 
-    def find_protected_area
-      id = params[:id]
-      @protected_area = ProtectedArea.
-        where("slug = ? OR wdpa_id = ?", id, id.to_i).
-        first
+  def redirect_if_not_green_listed
+    redirect_to protected_area_path(@protected_area) unless @protected_area.is_green_list
+  end
 
-      @protected_area or raise_404
-    end
+  def find_protected_area
+    id = params[:id]
+    @protected_area = ProtectedArea.
+      where("slug = ? OR wdpa_id = ?", id, id.to_i).
+      first
+
+    @protected_area or raise_404
+  end
 end

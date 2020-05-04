@@ -89,6 +89,24 @@ class RegionPresenter
     }
   end
 
+  def top_marine_coverage_countries
+    sorted_stats = @statistics.sort_by do |s|
+      s.percentage_pa_marine_cover ? -s.percentage_pa_marine_cover : 0.0
+    end.first(10)
+
+    {
+      regionTitle: region.name,
+      countries: sorted_stats.map do |stat|
+        {
+          title: stat.country.name,
+          percentage: stat.percentage_pa_marine_cover,
+          km: number_with_delimiter(stat.pa_marine_area),
+          iso3: stat.country.iso_3
+        }
+      end
+    }
+  end
+
   private
 
   def region
