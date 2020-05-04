@@ -66,8 +66,8 @@
 <%= render partial: "marine/sections/map" %>
 
 <section class="container">
-  <%= render partial: "partials/cards/sites", locals: {
-    cards: @marineSites,
+  <%= render partial: "partials/cards/sites", locals: { 
+    cards: @marineSites, 
     title: "#{t('global.area-types.wdpa')} (#{@marineSitesTotal})",
     url: @marineViewAllUrl
   } %>

@@ -1,6 +1,7 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
+$chart-column-margin: 1%;
 $chart-column-width: 9%;
 
 //--------------------------------------------------
@@ -8,11 +9,13 @@ $chart-column-width: 9%;
 //--------------------------------------------------
 &--column {
   @include flex;
-  @include flex-h-between;
   width: 100%;
 
   .chart__column {
+    margin-left: $chart-column-margin;
     width: $chart-column-width;
+
+    &:first-child() { margin-left: 0; }
   }
 
   .chart__bar {
