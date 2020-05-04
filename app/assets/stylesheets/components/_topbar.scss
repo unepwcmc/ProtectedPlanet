@@ -4,13 +4,13 @@
 .topbar {
   background-color: $white;
 
-  &__container {
+  .topbar__container {
     @include flex;
     @include flex-h-between;
     @include flex-v-center;
   }
 
-    &__logo {
+    .topbar__logo {
       @include responsive(height, rem-calc(52), rem-calc(56), rem-calc(67)); 
       @include responsive(padding, rem-calc(0 16), rem-calc(0 20), rem-calc(0 30)); 
       @include responsive(order, 1, 1, 1);
@@ -19,11 +19,11 @@
       background-color: $primary;
     }
 
-    &__nav {
+    .topbar__nav {
       @include responsive(order, 2, 1, 1); 
     }
 
-    &__search {
+    .topbar__search {
       @include responsive(order, 1, 2, 2); 
     }
 }
@@ -33,13 +33,15 @@
 //--------------------------------------------------
 .topbar--secondary {
   @include box-shadow-bottom-grey;
-  @include flex;
-  @include flex-h-end;
-  @include flex-v-center;
-  @include gutters;
-  @include responsive(padding-top, rem-calc(6), rem-calc(10), rem-calc(14));
-  @include responsive(padding-bottom, rem-calc(6), rem-calc(10), rem-calc(14));
 
   position: relative; //to make box shadow appear over hero
   z-index: 2; //to make box shadow appear over hero
+
+  .topbar__container {
+    @include flex;
+    @include flex-h-end;
+    @include flex-v-center;
+    @include responsive(padding-top, rem-calc(6), rem-calc(10), rem-calc(14));
+    @include responsive(padding-bottom, rem-calc(6), rem-calc(10), rem-calc(14));
+  }
 }

@@ -39,8 +39,6 @@ import SearchSiteTopbar from './components/search/SearchSiteTopbar'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
-import StickyTab from './components/sticky/StickyTab'
-import SocialShareText from './components/social/SocialShareText'
 import TableHead from './components/table/TableHead'
 import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
@@ -88,8 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
         SelectWithContent,
         StickyBar,
         StickyNav,
-        StickyTab,
-        SocialShareText,
         TableHead,
         Tabs,
         TabTarget,
