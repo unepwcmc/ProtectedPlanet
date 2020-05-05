@@ -38,8 +38,7 @@
 
 
 <%= render partial: "marine/sections/coverage", locals: {
-  cms_page: @cms_page,
-  
+  cms_page: @cms_page  
 } %>
 
 <%= 
@@ -51,7 +50,9 @@
   <div><%= cms_fragment_render(:section_size_content, @cms_page) %></div>
 </section>
 
-<%= render partial: "marine/sections/size_growth" %>
+<%= render partial: "marine/sections/size_growth", locals: {
+  regionsTopCountries: @regionsTopCountries,
+} %>
 
 <%= render partial: "marine/sections/coverage_growth" %>
 

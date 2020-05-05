@@ -8,6 +8,8 @@ class Region < ApplicationRecord
 
   has_one :regional_statistic
 
+  scope :without_global, -> { where.not(name: 'Global').order(:name) }
+
   def wdpa_ids
     protected_areas.map(&:wdpa_id)
   end

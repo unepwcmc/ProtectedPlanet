@@ -1,28 +1,74 @@
 //--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin chart-legend-index {
+  margin-right: rem-calc(6);
+}
+
+@mixin chart-legend-item {
+  @include flex;
+  @include flex-v-center;
+}
+
+@mixin chart-legend-key {
+  @include flex-no-shrink;
+  background-color: $chart-aqua;
+  border-radius: 100%;
+  margin-right: rem-calc(8);
+  width: rem-calc(24); height: rem-calc(24);
+
+  display: block;
+}
+
+//--------------------------------------------------
 // classes
 //--------------------------------------------------
-  &--legend {
-    @include flex;
-    @include flex-wrap;
-    @include ul-unstyled;
-    margin: rem-calc(14 0);
+//--------------------------------------------------
+// default
+//--------------------------------------------------
+.chart--legend {
+  @include flex;
+  @include flex-wrap;
+  @include ul-unstyled;
+  margin: rem-calc(14 0);
+  
+  .chart__legend-li { margin-right: rem-calc(14); }
+  .chart__legend-item { @include chart-legend-item; }
+  .chart__legend-index { @include chart-legend-index; }
+  .chart__legend-key { @include chart-legend-key; }
+  .chart__legend-title { line-height: 1; }
+}
+
+//--------------------------------------------------
+// default
+//--------------------------------------------------
+.chart--legend--vertical {
+  @include ul-unstyled;
+  @include responsive(column-count, 1, 2, 1);
+  font-size: rem-calc(14);
+
+  display: block;
+  
+  .chart__legend-li { 
+    margin-bottom: rem-calc(14); 
+    width: 100%;
+
+    display: inline-block;
   }
 
-    &__legend-item {
-      @include flex;
-      @include flex-v-center;
-      margin-right: rem-calc(14);
-    } 
+  .chart__legend-item { 
+    @include chart-legend-item; 
+    line-height: 1;
+    margin: 0;
+  }
 
-      &__legend-key  {
-        @include flex-no-shrink;
-        background-color: $chart-aqua;
-        border-radius: 100%;
-        width: rem-calc(24); height: rem-calc(24);
+  .chart__legend-index { @include chart-legend-index; }
+  .chart__legend-key { @include chart-legend-key; }
 
-        display: block;
-      }
+  .chart__legend-subtitle {
+    font-weight: $bold;
+    line-height: 1;
 
-      &__legend-text {
-        margin-left: rem-calc(6);
-      }
+    display: block;
+  }
+}

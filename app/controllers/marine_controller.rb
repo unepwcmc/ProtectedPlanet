@@ -1,4 +1,5 @@
 class MarineController < ApplicationController
+  include ActionView::Helpers::NumberHelper
 
   #Static stats
   before_action :marine_statistics, only: [:index, :download_designations]
@@ -57,64 +58,9 @@ class MarineController < ApplicationController
   end
 
   def most_protected_areas
-    #@top10ProtectedAreas =
-    #  ProtectedArea.without_proposed.most_protected_marine_areas(10).map do |pa|
-    #    ProtectedAreaPresenter.new(pa).name_size
-    #  end.to_json
-    #  Use hardcoded data until we fix the issue on the source
-
-    @top10ProtectedAreas = [
-      {
-        name: 'Ross Sea Region Marine Protected Area',
-        url: '/555624810',
-        km: 2060058
-      },
-      {
-        name: 'Marae Moana',
-        url: '/555624907',
-        km: 1981965
-      },
-      {
-        name: 'Réserve Naturelle Nationale des Terres australes françaises',
-        url: '/345888',
-        km: 1654999
-      },
-      {
-        name: 'Papahānaumokuākea Marine National Monument',
-        url: '/220201',
-        km: 1516557
-      },
-      {
-        name: 'Parc Naturel de la Mer de Corail',
-        url: '/555577562',
-        km: 1291643
-      },
-      {
-        name: 'Pacific Remote Islands',
-        url: '/400011',
-        km: 1277784
-      },
-      {
-        name: 'South Georgia and South Sandwich Islands Marine Protected Area',
-        url: '/555547601',
-        km: 1069872
-      },
-      {
-        name: 'Coral Sea',
-        url: '/555556875',
-        km: 995251
-      },
-      {
-        name: 'Steller Sea Lion Protection Areas, Gulf',
-        url: '/555586970',
-        km: 866717
-      },
-      {
-        name: 'Pitcairn Islands Marine Reserve',
-        url: '/555624172',
-        km: 839568
-      }
-    ].to_json
+    @regionsTopCountries = Region.without_global.map do |region|
+      RegionPresenter.new(region).top_marine_coverage_countries
+    end.to_json
   end
 
   def least_protected_areas
