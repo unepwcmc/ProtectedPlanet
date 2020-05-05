@@ -1,0 +1,26 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--basic {
+  @include flex-h-between;
+  @include responsive(display, block, flex, flex);
+  @include responsive(flex-wrap, none, wrap, wrap);
+
+  .cards__card {
+    @include responsive(width, 100%, 46%, 47%);
+    margin-bottom: rem-calc(24);
+  }
+
+  .card__title {
+    font-size: rem-calc(20);
+    font-weight: $regular;
+    margin: 0;
+  }
+
+  .card__subtitle {
+    font-size: rem-calc(20);
+    font-weight: $bold;
+    line-height: 1;
+    margin: rem-calc(0 0 10 0);
+  }
+}

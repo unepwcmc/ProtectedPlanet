@@ -1,7 +1,9 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$chart-row-height: rem-calc(40);
+@mixin chart-row-height {
+  @include responsive(height, rem-calc(34), rem-calc(40), rem-calc(40));
+}
 
 //--------------------------------------------------
 // row charts
@@ -9,17 +11,17 @@ $chart-row-height: rem-calc(40);
 &--row {
   .chart__row {
     @include flex;
+    @include chart-row-height;
     background-color: $white;
-    height: $chart-row-height;
   }
 
   .chart__bar {
+    @include chart-row-height;
     background-color: $blue;
-    height: $chart-row-height;
   }
 
   .chart__bar-overseas {
+    @include chart-row-height;
     background-color: $orange;
-    height: $chart-row-height;
   }
 }

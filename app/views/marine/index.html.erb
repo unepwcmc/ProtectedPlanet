@@ -54,7 +54,9 @@
   regionsTopCountries: @regionsTopCountries,
 } %>
 
-<%= render partial: "marine/sections/coverage_growth" %>
+<%= render partial: "marine/sections/coverage_growth", locals: {
+  regionCoverage: @regionCoverage,
+} %>
 
 <%= render partial: "marine/sections/coverage_map" %>
 

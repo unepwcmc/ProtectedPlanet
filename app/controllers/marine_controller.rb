@@ -17,6 +17,10 @@ class MarineController < ApplicationController
   before_action :load_cms_content
 
   def index
+    @regionCoverage = Region.without_global.map do |region|
+      RegionPresenter.new(region).marine_coverage
+    end
+
     @pas_km = @marine_statistics['total_ocean_area_protected']
     @pas_percent = @marine_statistics['total_ocean_pa_coverage_percentage']
     @pas_total = @marine_statistics['total_marine_protected_areas']
