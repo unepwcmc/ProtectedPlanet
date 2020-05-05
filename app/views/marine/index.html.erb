@@ -60,7 +60,13 @@
 
 <%= render partial: "marine/sections/coverage_map" %>
 
-<%#= render partial: "partials/cards/sites", locals: { cards: @wdpa } %>
+<section class="container">
+  <%= render partial: "partials/cards/sites", locals: { 
+    cards: @marineSites, 
+    title: "#{t('global.area-types.wdpa')} (#{@marineSitesTotal})",
+    url: @marineViewAllUrl
+  } %>
+</section>
 
 <%= render "partials/carousels/themes" %>
 

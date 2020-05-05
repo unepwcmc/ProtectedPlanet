@@ -8,6 +8,7 @@ import Vue from 'vue/dist/vue.esm'
 import VueAnalytics from 'vue-analytics'
 import Vue2TouchEvents from 'vue2-touch-events'
 import ScrollMagic from 'scrollmagic'
+import VueLazyload from 'vue-lazyload'
 // import VueAgile from 'vue-agile'
 
 // store
@@ -49,7 +50,7 @@ import Tooltip from './components/tooltip/Tooltip'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
 
-document.addEventListener('DOMContentLoaded', () => { 
+document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
 
     Vue.use(VueAnalytics, { id: 'UA-12920389-2' }) // production
@@ -57,7 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
     Vue.prototype.$eventHub = new Vue()
 
     Vue.use(Vue2TouchEvents)
-    
+
+    Vue.use(VueLazyload)
+
     const app = new Vue({
       el: '#v-app',
       store,

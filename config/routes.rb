@@ -17,6 +17,8 @@ Rails.application.routes.draw do
   #TODO
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 
+  get '/assets/tiles/:id', to: 'assets#tiles', as: 'tiles'
+
   scope "(:locale)", locale: /en|es|fr/ do
 
     root to: 'home#index'
@@ -25,7 +27,6 @@ Rails.application.routes.draw do
     put '/admin/maintenance', as: 'maintenance'
     put '/admin/clear_cache', as: 'clear_cache'
 
-    get '/assets/tiles/:id', to: 'assets#tiles', as: 'tiles'
 
     namespace :api do
       namespace :v3 do
