@@ -37,11 +37,15 @@
 // live report
 //--------------------------------------------------
   &--live-report {
+    @include bg-image-overlay;
+    background-image: image_url('cta/live-report.jpg');
+    background-position: center;
+    background-size: cover;
     color: $white; 
 
     .cta {
       &__container {
-        
+
       }
 
         &__content {
