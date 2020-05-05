@@ -9,7 +9,7 @@ class SearchWdpaController < ApplicationController
   def index
     @config_search_areas = {
       id: 'all',
-      placeholder: I18n.t('global.placeholder.search-wdpa')
+      placeholder: I18n.t('global.placeholder.search-oecm-wdpa')
     }.to_json
 
     @results = Search::AreasSerializer.new(@search).serialize

@@ -10,6 +10,11 @@ class SearchAreasController < ApplicationController
   before_action :load_filters, only: [:index, :search_results]
 
   def index
+    @config_search_areas = {
+      id: 'all',
+      placeholder: I18n.t('global.placeholder.search-oecm-wdpa')
+    }.to_json
+
     @query = search_params[:search_term]
   end
 
