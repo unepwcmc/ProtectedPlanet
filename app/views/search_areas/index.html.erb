@@ -3,7 +3,7 @@
 
 <div>
   <search-areas
-    :autocomplete-area-types="<%= @search_area_types %>"
+    :config-autocomplete="<%= @config_search_areas %>"
     endpoint-autocomplete="/search/autocomplete"
     endpoint-pagination="<%= search_areas_results_path(@area_type) %>"
     endpoint-search="<%= search_areas_results_path(@area_type) %>"

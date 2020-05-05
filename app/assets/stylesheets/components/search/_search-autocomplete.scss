@@ -62,7 +62,7 @@ $search-autocomplete-select-width: rem-calc(222);
 
           position: absolute;
           top: 50%;
-          right: calc(#{$search-autocomplete-select-width} + 16px);
+          right: rem-calc(26);
 
           transform: translateY(-50%) scale(.7);
         }

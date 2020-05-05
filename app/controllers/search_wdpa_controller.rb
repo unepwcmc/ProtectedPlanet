@@ -7,9 +7,10 @@ class SearchWdpaController < ApplicationController
   before_action :load_filters, only: [:index]
 
   def index
-    @search_area_types = [
-      { id: 'wdpa', title: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.search-wdpa') }
-    ].to_json
+    @config_search_areas = {
+      id: 'all',
+      placeholder: I18n.t('global.placeholder.search-wdpa')
+    }.to_json
 
     @results = Search::AreasSerializer.new(@search).serialize
     @query = params['search_term']

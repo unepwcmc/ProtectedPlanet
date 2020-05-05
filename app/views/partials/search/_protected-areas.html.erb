@@ -1,7 +1,7 @@
 <section class="search--pa container">
   <div class="search__container">
     <search-areas-home
-      :autocomplete-area-types="<%= @search_area_types %>"
+      :config="<%= config %>"
       endpoint-autocomplete="/search/autocomplete"
       endpoint-search="/<%= locale %>/TYPE/search?search_term=SEARCHTERM"
     >

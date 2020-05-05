@@ -8,9 +8,9 @@
         />
 
         <search-areas-input-autocomplete
+          :config="configAutocomplete"
           :endpoint="endpointAutocomplete"
           :pre-populated-search-term="searchTerm"
-          :types="autocompleteAreaTypes"
           v-on:submit-search="updateSearchTerm"
         />
 
@@ -80,9 +80,9 @@ export default {
   mixins: [ mixinAxiosHelpers ],
 
   props: {
-    autocompleteAreaTypes: {
-      type: Array, // [ { name: String, options: [ { id: Number, name: String } ] } ]
-      required: true
+    configAutocomplete: {
+      required: true,
+      type: Object // { id: String, placeholder: String }
     },
     endpointAutocomplete: {
       type: String,
@@ -136,7 +136,6 @@ export default {
   data () {
     return {
       activeFilterOptions: [],
-      areaType: '',
       currentPage: 0,
       defaultPage: 1,
       isFilterPaneActive: false,
@@ -168,7 +167,6 @@ export default {
     ajaxSubmission () {
       let data = {
         params: {
-          area_type: this.areaType,
           filters: this.activeFilterOptions,
           items_per_page: 3,
           search_term: this.searchTerm
@@ -226,7 +224,6 @@ export default {
     updateSearchTerm (searchParams) {
       this.resetFilters()
       this.$eventHub.$emit('reset-pagination')
-      this.areaType = searchParams.type
       this.searchTerm = searchParams.search_term
       this.ajaxSubmission()
     },
@@ -236,7 +233,6 @@ export default {
 
       let data = {
         params: {
-          area_type: this.areaType,
           filters: this.activeFilterOptions,
           geo_type: paginationParams.geoType,
           items_per_page: this.items_per_page,

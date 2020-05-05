@@ -20,6 +20,9 @@ $search-input-size-desktop: 547px; //px
   &--pa {
     height: 0;
 
+    position: relative; //make sure the dropdown sits on top of map
+    z-index: 1; //make sure the dropdown sits on top of map
+
     .search {
       &__container {
         @include flex;

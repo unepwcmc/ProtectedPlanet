@@ -9,7 +9,7 @@
         v-model="searchTerm"
         class="search__search-input"
         type="text"
-        :placeholder="selectedPlaceholder"
+        :placeholder="config.placeholder"
         v-on:keyup="updateAutocomplete"
         v-on:keyup.enter="submit"
       >
@@ -39,33 +39,6 @@
         />
       </li>
     </ul>
-
-    <div class="select--types">
-      <label
-        v-if="hasMultipleTypes"
-        :class="['select__label', {'active': typeDropdownActive}]"
-        @click="toggleTypes"
-        v-html="selectedTypeTitle"
-      />
-      <p
-        v-else
-        class="select__label-fake"
-        v-html="selectedTypeTitle"
-      />
-
-      <ul
-        v-if="hasMultipleTypes"
-        :class="['select__ul', {'active': typeDropdownActive}]"
-      >
-        <li
-          v-for="type, index in types"
-          class="select__li"
-          @click="updateType(type, index)"
-        >
-          {{ type.title }}
-        </li>
-      </ul>
-    </div>
   </div>
 </template>
 
@@ -83,23 +56,21 @@ export default {
   ],
 
   props: {
+    config: {
+      required: true,
+      type: Object // { id: String, placeholder: String }
+    },
     endpoint: {
       required: true,
       type: String
     },
-    prePopulatedSearchTerm: String,
-    types: {
-      required: true,
-      type: Array // [ { id: String, title: String, placeholder: String } ] } ]
-    }
+    prePopulatedSearchTerm: String
   },
 
   data () {
     return {
       autocomplete: [], // [ { title: String, url: String } ]
-      searchTerm: '',
-      typeDropdownActive: false,
-      selectedTypeIndex: 0,
+      searchTerm: ''
     }
   },
 
@@ -107,23 +78,11 @@ export default {
     hasAutocompleteOptions () {
       return this.autocomplete.length > 0
     },
-    hasMultipleTypes () {
-      return this.types.length > 1
-    },
     searchParams () {
       return {
-        type: this.selectedTypeId,
-        search_term: this.searchTerm
+        search_term: this.searchTerm,
+        type: this.config.id
       }
-    },
-    selectedPlaceholder () {
-      return this.types[this.selectedTypeIndex].placeholder
-    },
-    selectedTypeId () {
-      return this.types[this.selectedTypeIndex].id
-    },
-    selectedTypeTitle () {
-      return this.types[this.selectedTypeIndex].title
     },
     showResetIcon () {
       return this.searchTerm.length != 0
@@ -132,9 +91,6 @@ export default {
 
   mounted () {
     if(this.prePopulatedSearchTerm) { this.searchTerm = this.prePopulatedSearchTerm }
-    // this.addTabFromSearchListener()
-    // this.addArrowKeyListeners()
-    // this.addTabForwardFromResetListener()
   },
 
   methods: {
@@ -155,21 +111,6 @@ export default {
       .catch(function (error) {
         console.log(error)
       })
-    },
-
-    updateType (type, index) {
-      this.selectedTypeIndex = index
-      this.type = type.id
-      this.placeholder = type.placeholder
-      this.toggleTypes()
-      this.resetSearchTerm()
-      this.resetAutocomplete()
-    },
-
-    toggleTypes () {
-      if(!this.hasMultipleTypes) { return false }
-
-      this.typeDropdownActive = !this.typeDropdownActive
     },
 
     resetSearchTerm () {

@@ -13,7 +13,10 @@
 %>
 
 <section class="container">
-  <%= render partial: "partials/tabs/tabs-thematic-area-database", locals: { tabs: @tabs } %>
+  <%= render partial: "partials/tabs/tabs-thematic-area-database", locals: { 
+    config_search: @config_search_areas,
+    tabs: @tabs
+  } %>
 </section>
 
 <section class="container section-padding">

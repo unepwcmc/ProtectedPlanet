@@ -1,8 +1,8 @@
 <template>
   <div class="search--home">
     <search-areas-input-autocomplete
+      :config="config"
       :endpoint="endpointAutocomplete"
-      :types="autocompleteAreaTypes"
       v-on:submit-search="updateSearchTerm"
     />
   </div>
@@ -17,23 +17,22 @@ export default {
   components: { SearchAreasInputAutocomplete },
 
   props: {
-    autocompleteAreaTypes: {
-      type: Array, // [ { name: String, options: [ { id: Number, name: String } ] } ]
-      required: true
+    config: {
+      required: true,
+      type: Object // { id: String, placeholder: String }
     },
     endpointAutocomplete: {
-      type: String,
-      required: true
+      required: true,
+      type: String
     },
     endpointSearch: {
-      type: String,
-      required: true
+      required: true,
+      type: String
     }
   },
 
   data () {
     return {
-      areaType: '',
       searchTerm: '',
     }
   },
@@ -43,13 +42,12 @@ export default {
       let endpoint = this.endpointSearch
 
       endpoint = endpoint.replace('SEARCHTERM', this.searchTerm)
-      endpoint = endpoint.replace('TYPE', this.areaType)
+      endpoint = endpoint.replace('TYPE', this.config.id)
       
       window.location.href = endpoint
     },
 
     updateSearchTerm (searchParams) {
-      this.areaType = searchParams.type
       this.searchTerm = searchParams.search_term
       this.ajaxSubmission()
     }

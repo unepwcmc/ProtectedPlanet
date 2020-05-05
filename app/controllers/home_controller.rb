@@ -4,10 +4,10 @@ class HomeController < ApplicationController
 
     @pa_coverage_percentage = 9999 #TODO Total PA coverage in %
 
-    @search_area_types = [
-      { id: 'wdpa', title: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.search-wdpa') },
-      { id: 'oecm', title: I18n.t('global.area-types.oecm'), placeholder: I18n.t('global.placeholder.search-oecms') }
-    ].to_json
+    @config_search_areas = {
+      id: 'all',
+      placeholder: I18n.t('global.placeholder.search-oecm-wdpa')
+    }.to_json
 
     @pas_title = home_yml[:pas][:title]
     @pas_button = home_yml[:pas][:button]

@@ -4,7 +4,8 @@
     hero_stat_text: t('home.hero.stat-text')
   } 
 %>
-<%= render "partials/search/protected-areas" %>
+
+<%= render "partials/search/protected-areas", locals: { config: @config_search_areas } %>
 
 <section class="container section-padding">
   <h2 class="text-center"><%= @pas_title %></h2>
