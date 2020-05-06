@@ -5,7 +5,13 @@ module ApplicationHelper
     ProtectedArea => :protected_area_cover,
     Country => :country_cover,
     Region => :region_cover
-  }
+  }.freeze
+
+  PLACEHOLDERS = {
+    ProtectedArea => "search-placeholder-country.png",
+    Country => "search-placeholder-country.png",
+    Region => "search-placeholder-region.png"
+  }.freeze
 
   def commaify number
     number_with_delimiter(number, delimeter: ',')
@@ -32,31 +38,49 @@ module ApplicationHelper
     send COVER_HELPERS[item.class], item
   end
 
+  def cover_placeholder klass
+    PLACEHOLDERS[klass]
+  end
+
+  def cover_data(image_params, item_class)
+    placeholder = cover_placeholder(item_class)
+    {
+      'data-src': tiles_path(image_params),
+      'data-error': image_path(placeholder),
+      'data-loading': image_path(placeholder),
+    }
+  end
+
   def protected_area_cover protected_area
     version = Rails.application.secrets.mapbox[:version]
     image_params = {id: protected_area.wdpa_id, type: "protected_area", version: version}
+    data = cover_data(image_params, protected_area.class)
 
     image_tag(
-      "search-placeholder-country.png",
-      alt: protected_area.name,
-      data: {async: tiles_path(image_params)},
-      class: 'image' #TODO find a way to add classes via parameters
+      cover_placeholder(protected_area.class),
+      {
+        alt: protected_area.name,
+        class: 'image' #TODO find a way to add classes via parameters
+      }.merge(data)
     )
   end
 
   def country_cover country
     version = Rails.application.secrets.mapbox[:version]
     image_params = {id: country.iso, type: "country", version: version}
+    data = cover_data(image_params, country.class)
 
     image_tag(
-      "search-placeholder-country.png",
-      alt: country.name,
-      data: {async: tiles_path(image_params)},
+      cover_placeholder(country.class),
+      {alt: country.name}.merge(data)
     )
   end
 
   def region_cover region
-    image_tag("search-placeholder-region.png", alt: region.name)
+    image_tag(
+      cover_placeholder(region.class),
+      alt: region.name
+    )
   end
 
   def site_title
