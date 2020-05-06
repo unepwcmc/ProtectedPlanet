@@ -24,12 +24,15 @@ class Download::Requesters::Search < Download::Requesters::Base
 
   def token
     @token ||= begin
-      filters_dump = Marshal.dump filters.sort.to_json
+      filters_dump = Marshal.dump filters.to_hash.sort.to_json
       Digest::SHA256.hexdigest(@search_term.to_s + filters_dump)
     end
   end
+  
   private
+
   def filters
     @filters
   end
+
 end
