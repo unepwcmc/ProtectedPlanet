@@ -94,9 +94,22 @@ $padding-medium: rem-calc(27);
 }
 
 @mixin button-download-trigger {
-  @include button-with-icon;
-  @include button-block($primary, $body-font-colour);
-  &::after { @include icon-download-black; }
+  @include button-basic;
+  @include button-radius;
+  @include flex;
+  @include flex-center;
+  @include responsive(padding, 0, 0 $padding-medium, 0 $padding-medium);
+  @include responsive(width, rem-calc(38), auto, auto);
+  @include responsive(height, rem-calc(38), $height-medium, $height-medium);
+  background-color: $primary;
+
+  &::after { 
+    @include icon-download-black; 
+    @include responsive(margin-left, 0, rem-calc(10), rem-calc(10)); 
+    content: '';
+
+    display: inline-block;
+  }
 }
 
 @mixin button-dropdown {

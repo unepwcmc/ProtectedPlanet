@@ -6,12 +6,6 @@
 
   <body>
     <div id="v-app">
-      <!-- <main class="body-container <%= controller_name %>-parent">
-        <header class="js-expandable-section">
-          <%#= render 'layouts/partials/navbar' %>
-          <%#= yield :header %>
-        </header> -->
-
       <%= render "layouts/partials/topbar" %>
         
       <%= yield %>
@@ -20,13 +14,5 @@
     </div>
 
     <%= render 'partials/download_modal' %>
-
-    <%#= javascript_include_tag controller_name %>
-
-    <% if Rails.env == 'production' %>
-      <%= render 'partials/hotjar' %>
-      <%= render 'partials/mouseflow' %>
-      <%= render 'partials/uservoice' %>
-    <% end %>
   </body>
 </html>

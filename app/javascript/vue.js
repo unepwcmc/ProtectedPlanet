@@ -30,7 +30,7 @@ import ChartRectangles from './components/charts/chart-rectangles/ChartRectangle
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
-import DownloadTrigger from './components/download/DownloadTrigger'
+import Download from './components/download/Download'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import SearchAreas from './components/search/SearchAreas'
@@ -40,8 +40,6 @@ import SearchSiteTopbar from './components/search/SearchSiteTopbar'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
-import StickyTab from './components/sticky/StickyTab'
-import SocialShareText from './components/social/SocialShareText'
 import TableHead from './components/table/TableHead'
 import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
@@ -81,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowPa,
         ChartRowTarget,
         ChartSunburst,
-        DownloadTrigger,
+        Download,
         MapInteractive,
         NavBurger,
         SearchAreas,
@@ -91,8 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
         SelectWithContent,
         StickyBar,
         StickyNav,
-        StickyTab,
-        SocialShareText,
         TableHead,
         Tabs,
         TabTarget,

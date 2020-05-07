@@ -88,6 +88,19 @@ img { max-width: 100%; }
   }
 }
 
+.container--component {
+  $container-component-padding: calc((100% - #{$site-width-medium-desktop})/2);
+  $cc-padding-small: rem-calc(20 $gutter-small 24);
+  $cc-padding-medium: rem-calc(20 $gutter-medium 24);
+  $cc-padding-large: rem-calc(30 $container-component-padding 34);
+
+  @include bg-grey-xlight;
+  @include border-radius;
+  @include responsive(margin-top, rem-calc(26), rem-calc(30), rem-calc(36));
+  @include responsive(margin-bottom, rem-calc(26), rem-calc(30), rem-calc(36));
+  @include responsive(padding, $cc-padding-small, $cc-padding-medium, $cc-padding-large);
+}
+
 //--------------------------------------------------
 // page padding
 //--------------------------------------------------

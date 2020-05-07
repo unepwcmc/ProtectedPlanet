@@ -5,7 +5,8 @@ en:
       oecm: OECMs
     button:
       all: View all
-      download: PDF Download
+      download-pdf: PDF Download
+      download: Download
       link: Link
     footer:
       copyright: "ProtectedPlanet 2014-%{date}. All rights reserved"
