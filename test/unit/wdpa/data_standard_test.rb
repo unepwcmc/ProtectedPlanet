@@ -34,9 +34,27 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
-   when marine is true' do
+   when marine is true when coastal' do
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({marine: '1'})
     assert_equal({marine: true}, attributes)
+  end
+
+  test '.attributes_from_standards_hash returns the correct attribute
+   when marine is true' do
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({marine: '2'})
+    assert_equal({marine: true}, attributes)
+  end
+
+  test '.attributes_from_standards_hash returns the correct attribute
+   when is_oecm is false' do
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({pa_def: '1'})
+    assert_equal({is_oecm: false}, attributes)
+  end
+
+  test '.attributes_from_standards_hash returns the correct attribute
+   when is_oecm is true' do
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({pa_def: '0'})
+    assert_equal({is_oecm: true}, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute

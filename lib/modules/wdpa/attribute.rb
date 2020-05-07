@@ -3,6 +3,7 @@ class Wdpa::Attribute
     geometry: -> (value) { RGeo::WKRep::WKBParser.new.parse(value).to_s },
     # Need to match the number 2 as well as this is used as marine type
     boolean:  -> (value) { value.match(/^(true|t|1|2)$/i) != nil },
+    oecm:     -> (value) { value.match(/^0$/i) != nil },
     integer:  -> (value) { value.to_i },
     string:   -> (value) { value.to_s },
     float:    -> (value) { value.to_f },

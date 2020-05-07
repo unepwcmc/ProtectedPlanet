@@ -24,7 +24,8 @@ class Wdpa::DataStandard
     :desig_type   => {name: :jurisdiction, type: :string, label: 'Jurisdiction'},
     :wkb_geometry => {name: :the_geom, type: :geometry, label: 'Geometry'},
     :metadataid   => {name: :sources, type: :integer, label: 'Source'},
-    :own_type     => {name: :owner_type, type: :string, label: 'Owner Type'}
+    :own_type     => {name: :owner_type, type: :string, label: 'Owner Type'},
+    :pa_def       => {name: :is_oecm, type: :oecm, label: 'PA Def'}
   }
 
   POLYGON_ATTRIBUTES = [
@@ -35,9 +36,9 @@ class Wdpa::DataStandard
   ]
 
   module Matchers
-    GEOMETRY_TABLE = /wdpa_?po/i
+    GEOMETRY_TABLE = /wdpa_?(wdoecm_)?po/i
     POLYGON_TABLE  = /poly/i
-    SOURCE_TABLE   = /wdpa_?source/i
+    SOURCE_TABLE   = /wdpa_?(wdoecm_)?source/i
   end
 
   #
