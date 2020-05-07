@@ -25,10 +25,9 @@
 
       <div class="footer__col">
         <h3><%= t('global.footer.title3') %></h3>
-        <div class="social--share">
-          <%= create_sharing_twitter_link %>
-          <%= create_sharing_facebook_link %>
-          <%= create_sharing_linkedin_link %>
+        
+        <div class="social--share-white">
+          <%= render "partials/social/sharing" %>
         </div>
 
         <h3><%= t('global.footer.title4') %></h3>

@@ -25,7 +25,7 @@
           <p><%= card[:summary] %></p>
           
           <% if card[:file].present? %>
-            <%= link_to t('global.button.download'), card[:file], title: t('global.button.download'), class: 'button--download', target: '_blank' %>
+            <%= link_to t('global.button.download-pdf'), card[:file], title: t('global.button.download'), class: 'button--download', target: '_blank' %>
           <% end %>
           <% if card[:link].present? %>
             <%= link_to t('global.button.link'), card[:link], title: card[:link_title], class: 'button--link-external', target: '_blank' %>
