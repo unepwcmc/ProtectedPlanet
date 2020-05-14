@@ -1,3 +1,8 @@
+### 3.2.12
+
+* Fix PAME evaluations count mismatch between country page and API
+* Fix data download bug sometimes downloading incorrect files
+
 ### 3.2.11
 
 * Add country, pame_country and marine stats (WDPA May 2020 release).
