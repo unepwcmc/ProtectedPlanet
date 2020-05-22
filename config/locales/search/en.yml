@@ -1,0 +1,27 @@
+en:
+  search:
+    download: Download
+    filters: Filters
+    filter-by: Filter by
+    filter-group-designation:
+      title: Designations
+    filter-group-governance:
+      title: Governance
+    filter-group-iucn-category:
+      title: IUCN Category
+    filter-group-type:
+      title: Type
+      options:
+        - All
+        - Terrestrial
+        - Marine
+    geo-types:
+      - All
+      - Regions
+      - Countries
+      - Individual Areas
+    map: Map
+    protected-areas: Protected Areas
+    results: results
+    no-results: No results. Please search again.
+    view-by: View by

@@ -10,10 +10,11 @@
     filter-close-text="View Results"
     :filter-groups="<%= @filter_groups %>"
     query="<%= @query %>"
-    no-results-text="<%= t('global.search.no-results') %>"
+    no-results-text="<%= t('search.no-results') %>"
     sm-trigger-element="sm-trigger-infinite-scroll"
-    text-download="<%= t('global.search.download') %>"
-    text-filters="<%= t('global.search.filters') %>"
-    text-map="<%= t('global.search.map') %>"
+    :tabs="<%= @tabs.to_json %>"
+    text-download="<%= t('search.download') %>"
+    text-filters="<%= t('search.filters') %>"
+    text-map="<%= t('search.map') %>"
   ></search-areas>
 </div>

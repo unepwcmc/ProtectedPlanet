@@ -2,16 +2,14 @@
   <div 
     class="search__results"
   >
-    <search-areas-geo-type
+    <search-areas-results-items
       v-show="hasResults" 
-      v-for="result, index in results"
-      :key="index"
-      :areas="result.areas"
-      :geo-type="result.geoType"
-      :sm-trigger-element="uniqueSmTriggerElement(result.geoType)"
-      :total="result.total"
-      :total-pages="result.totalPages"
-      :title="result.title"
+      sm-trigger-element="test"
+      :areas="results.areas"
+      :geo-type="results.geoType"
+      :total="results.total"
+      :total-pages="results.totalPages"
+      :title="results.title"
       v-on:request-more="requestMore"
       v-on:reset-pagination="resetPagination"
     />
@@ -25,13 +23,13 @@
 </template>
 
 <script>
-import SearchAreasGeoType from '../search/SearchAreasGeoType.vue'
+import SearchAreasResultsItems from '../search/SearchAreasResultsItems.vue'
 
 export default {
   name: 'search-areas-results',
 
   components: { 
-    SearchAreasGeoType 
+    SearchAreasResultsItems 
   },
   
   props: {
@@ -40,7 +38,7 @@ export default {
       type: String
     },
     results: {
-      type: Array
+      type: Object
     },
     smTriggerElement: {
       required: true,
@@ -50,11 +48,11 @@ export default {
 
   computed: {
     hasResults () {
-      let totalResults = 0
+      // let totalResults = 0
 
-      this.results.map( result => totalResults = totalResults + result.total )
+      // this.results.map( result => totalResults = totalResults + result.total )
 
-      return totalResults > 0
+      return this.results.total > 0
     }
   },
 

@@ -27,7 +27,7 @@
 
     <map-search
       class="search__map"
-      :isActive="isMapPaneActive"
+      :is-active="isMapPaneActive"
     />
 
     <div class="search__main">
@@ -35,12 +35,17 @@
         class="search__filters"
         :filter-close-text="filterCloseText"
         :filter-groups="filterGroups"
-        :isActive="isFilterPaneActive"
+        :is-active="isFilterPaneActive"
         :title="textFilters"
         v-on:update:filter-group="updateFilters"
         v-on:toggle:filter-pane="toggleFilterPane"
       />
       <div class="search__results">
+        <tabs-fake
+          :children="tabs"
+          class="flex flex-h-center"
+        />
+
         <search-areas-results
           :no-results-text="noResultsText"
           :results="results"
@@ -63,6 +68,7 @@ import MapTrigger from '../map/MapTrigger.vue'
 import MapSearch from '../map/MapSearch.vue'
 import SearchAreasInputAutocomplete from '../search/SearchAreasInputAutocomplete.vue'
 import SearchAreasResults from '../search/SearchAreasResults.vue'
+import TabsFake from '../tabs/TabsFake.vue'
 
 export default {
   name: 'search-areas',
@@ -74,7 +80,8 @@ export default {
     MapTrigger,
     MapSearch,
     SearchAreasInputAutocomplete,
-    SearchAreasResults
+    SearchAreasResults,
+    TabsFake
   },
 
   mixins: [ mixinAxiosHelpers ],
@@ -119,6 +126,10 @@ export default {
       required: true,
       type: String
     },
+    tabs: {
+      required: true,
+      type: Array // [{ id: Number, title: String }]
+    },
     textDownload: {
       type: String,
       required: true
@@ -143,7 +154,7 @@ export default {
       pageItemsStart: 0,
       pageItemsEnd: 0,
       requestedPage: 0,
-      results: [], // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }] }]
+      results: {}, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }] }]
       searchTerm: '',
       totalItems: 0,
     }
@@ -203,7 +214,7 @@ export default {
     },
 
     updateProperties (response) {
-      const results = ('data' in response && Array.isArray(response.data)) ? response.data : []
+      const results = ('data' in response && Array.isArray(response.data)) ? response.data[0] : {}
 
       this.results = results
     },

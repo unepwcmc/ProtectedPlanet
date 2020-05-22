@@ -3,14 +3,14 @@
     <div class="search__results-bar">
       <h2>{{ title }} ({{ total }})</h2>
       
-      <pagination-more
+<!--       <pagination-more
         :sm-trigger-element="smTriggerElement"
         text="View All"
         :total="total"
         :total-pages="totalPages"
         v-on:request-more="requestMore"
         v-on:reset-pagination="resetPagination"
-      />
+      /> -->
     </div>
     <div class="cards--search-results-areas">
       <card-search-result-area
@@ -34,7 +34,7 @@ import CardSearchResultArea from '../card/CardSearchResultArea.vue'
 import PaginationMore from '../pagination/PaginationMore.vue'
 
 export default {
-  name: 'search-areas-geo-type',
+  name: 'search-areas-results-items',
 
   components: { CardSearchResultArea, PaginationMore },
 
@@ -43,13 +43,17 @@ export default {
       required: true,
       type: Array
     },
+    currentPage: {
+      default: 1,
+      type: Number
+    },
     geoType: {
       required: true,
       type: String
     },
-    currentPage: {
-      default: 1,
-      type: Number
+    smTriggerElement: {
+      required: true,
+      type: String
     },
     total: {
       required: true,
@@ -58,10 +62,6 @@ export default {
     totalPages: {
       required: true,
       type: Number
-    },
-    smTriggerElement: {
-      required: true,
-      type: String
     },
     title: {
       required: true,

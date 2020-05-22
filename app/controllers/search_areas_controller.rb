@@ -15,6 +15,14 @@ class SearchAreasController < ApplicationController
       placeholder: I18n.t('global.placeholder.search-oecm-wdpa')
     }.to_json
 
+    @tabs = []
+
+    I18n.t('search.geo-types').each_with_index.map do |type, i|
+      @tabs << { id: i, title: type }
+    end
+
+    @tabs.to_json
+
     @query = search_params[:search_term]
   end
 
