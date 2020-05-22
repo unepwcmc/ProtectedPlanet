@@ -51,20 +51,24 @@ module Concerns::Filterable
             },
             {
               id: 'geo_type',
+              name: 'geo_type',
               options: [
                 { 
                   id: 'country', 
                   title: I18n.t('search.filter-group-geo-type.options')[0],
-                  autocomplete: [ { id: 'whatever you need', title: 'United Kingdom' }]
+                  autocomplete: [ 
+                    { id: 'ferdi - whatever you need', title: 'United Kingdom' },
+                    { id: 'ferdi - whatever you need', title: 'United Arab Emirates' }
+                  ]
                 },
                 { 
                   id: 'region', 
                   title: I18n.t('search.filter-group-geo-type.options')[1],
-                  autocomplete: [ { id: 'whatever you need', title: 'Europe' }]
+                  autocomplete: [ { id: 'ferdi - whatever you need', title: 'Europe' }]
                 }
               ],
               title: I18n.t('search.filter-group-geo-type.title'),
-              type: 'tabs-search'
+              type: 'radio-search'
             },
             {
               id: 'designation',

@@ -18,7 +18,7 @@ class SearchAreasController < ApplicationController
     @tabs = []
 
     I18n.t('search.geo-types').each_with_index.map do |type, i|
-      @tabs << { id: i, title: type }
+      @tabs << { id: "geo-type-#{i}", title: type }
     end
 
     @tabs.to_json

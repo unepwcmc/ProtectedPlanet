@@ -128,7 +128,7 @@ export default {
     },
     tabs: {
       required: true,
-      type: Array // [{ id: Number, title: String }]
+      type: Array // [{ id: String, title: String }]
     },
     textDownload: {
       type: String,

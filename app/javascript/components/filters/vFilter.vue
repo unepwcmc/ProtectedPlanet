@@ -20,6 +20,14 @@
         :options="options"
         v-on:update:options="updateFilter"
       />
+
+      <radio-buttons-search
+        v-if="type == 'radio-search'"
+        :id="id"
+        :name="name"
+        :options="options"
+        v-on:update:options="updateFilter"
+      />
     </div>
   </div>
 </template>
@@ -27,11 +35,12 @@
 <script>
 import Checkboxes from '../form-fields/Checkboxes'
 import RadioButtons from '../form-fields/RadioButtons'
+import RadioButtonsSearch from '../form-fields/RadioButtonsSearch'
 
 export default {
   name: 'v-filter',
 
-  components: { Checkboxes, RadioButtons },
+  components: { Checkboxes, RadioButtons, RadioButtonsSearch },
 
   props: {
     id: {
