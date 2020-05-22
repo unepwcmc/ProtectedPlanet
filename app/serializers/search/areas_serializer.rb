@@ -12,11 +12,7 @@ class Search::AreasSerializer < Search::BaseSerializer
       return areas_ary(@geo_type, areas).to_json
     end
 
-    [
-      regions,
-      countries,
-      sites
-    ].to_json
+    sites.to_json
   end
 
   private

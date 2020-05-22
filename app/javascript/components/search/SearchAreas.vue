@@ -154,7 +154,7 @@ export default {
       pageItemsStart: 0,
       pageItemsEnd: 0,
       requestedPage: 0,
-      results: {}, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }] }]
+      results: {}, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
       searchTerm: '',
       totalItems: 0,
     }
@@ -214,9 +214,9 @@ export default {
     },
 
     updateProperties (response) {
-      const results = ('data' in response && Array.isArray(response.data)) ? response.data[0] : {}
+      // const results = ('data' in response && Array.isArray(response.data)) ? response.data : {}
 
-      this.results = results
+      this.results = response.data
     },
 
     updateResults (newResults, geoType, isFirstPage) {

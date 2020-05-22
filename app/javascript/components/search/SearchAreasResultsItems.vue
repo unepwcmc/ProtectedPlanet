@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search__results-bar">
-      <h2>{{ title }} ({{ total }})</h2>
+      <h2>{{ results.title }} ({{ results.total }})</h2>
       
 <!--       <pagination-more
         :sm-trigger-element="smTriggerElement"
@@ -14,10 +14,10 @@
     </div>
     <div class="cards--search-results-areas">
       <card-search-result-area
-        v-for="area, index in areas"
+        v-for="area, index in results.areas"
         :key="index"
         :country-flag="area.countryFlag"
-        :geo-type="geoType"
+        :geo-type="results.geoType"
         :image="area.image"
         :total-areas="area.totalAreas"
         :title="area.title"
@@ -39,31 +39,15 @@ export default {
   components: { CardSearchResultArea, PaginationMore },
 
   props: {
-    areas: {
+    results: {
       required: true,
-      type: Array
+      type: Object // { geo_type: String, title: String, total: Number, totalPages: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
     },
     currentPage: {
       default: 1,
       type: Number
     },
-    geoType: {
-      required: true,
-      type: String
-    },
     smTriggerElement: {
-      required: true,
-      type: String
-    },
-    total: {
-      required: true,
-      type: Number
-    },
-    totalPages: {
-      required: true,
-      type: Number
-    },
-    title: {
       required: true,
       type: String
     }

@@ -5,11 +5,7 @@
     <search-areas-results-items
       v-show="hasResults" 
       sm-trigger-element="test"
-      :areas="results.areas"
-      :geo-type="results.geoType"
-      :total="results.total"
-      :total-pages="results.totalPages"
-      :title="results.title"
+      :results="results"
       v-on:request-more="requestMore"
       v-on:reset-pagination="resetPagination"
     />
@@ -38,7 +34,7 @@ export default {
       type: String
     },
     results: {
-      type: Object
+      type: Object // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
     },
     smTriggerElement: {
       required: true,
