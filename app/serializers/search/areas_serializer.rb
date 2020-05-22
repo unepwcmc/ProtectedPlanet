@@ -40,7 +40,7 @@ class Search::AreasSerializer < Search::BaseSerializer
   end
 
   def geo_hash(geo_type, areas, total=nil)
-    areas = areas.present? ? areas.first(3) : []
+    areas = areas.present? ? areas.first(9) : []
     geo_type_locale = geo_type == 'site' ? 'area-types.wdpa' : "geo-types.#{geo_type.pluralize}"
     {
       geoType: geo_type,

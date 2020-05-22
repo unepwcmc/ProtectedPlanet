@@ -25,18 +25,24 @@
       />
     </div>
 
-    <span v-if="smTriggerElement" :class="smTriggerElement"></span>
+    <pagination-infinity-scroll 
+      v-if="smTriggerElement" 
+      :smTriggerElement="smTriggerElement"
+      :total="results.total"
+      :total-pages="results.totalPages"
+      v-on:request-more="requestMore"
+    />
   </div>
 </template>
 
 <script>
 import CardSearchResultArea from '../card/CardSearchResultArea.vue'
-import PaginationMore from '../pagination/PaginationMore.vue'
+import PaginationInfinityScroll from '../pagination/PaginationInfinityScroll.vue'
 
 export default {
   name: 'search-areas-results-items',
 
-  components: { CardSearchResultArea, PaginationMore },
+  components: { CardSearchResultArea, PaginationInfinityScroll },
 
   props: {
     results: {

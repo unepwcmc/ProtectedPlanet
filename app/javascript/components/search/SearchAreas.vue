@@ -179,7 +179,7 @@ export default {
       let data = {
         params: {
           filters: this.activeFilterOptions,
-          items_per_page: 3,
+          items_per_page: 9,
           search_term: this.searchTerm
         }
       }
@@ -219,19 +219,6 @@ export default {
       this.results = response.data
     },
 
-    updateResults (newResults, geoType, isFirstPage) {
-      this.results.map(result => { 
-        if(result.geoType == geoType) { 
-          if(isFirstPage) {
-            result.areas.splice(0, result.areas.length, ...newResults)
-          } else {
-            result.areas = result.areas.concat(newResults)
-          }
-        }
-        return result
-      })
-    },
-
     updateSearchTerm (searchParams) {
       this.resetFilters()
       this.$eventHub.$emit('reset-pagination')
@@ -240,8 +227,6 @@ export default {
     },
 
     requestMore (paginationParams) {
-      const isFirstPage = paginationParams.requestedPage == 1
-
       let data = {
         params: {
           filters: this.activeFilterOptions,
@@ -254,7 +239,7 @@ export default {
 
       axios.get(this.endpointPagination, data)
         .then(response => {
-          this.updateResults(response.data, paginationParams.geoType, isFirstPage)
+          this.results.areas = this.results.areas.concat(response.data)
         })
         .catch(function (error) {
           console.log(error)
