@@ -28,13 +28,15 @@ export default {
 
   data () {
     return {
-      selectedId: 0
+      defaultId: this.children[0].id,
+      selectedId: ''
     }
   },
 
   created () {
-    this.setDefaultTab()
     this.$eventHub.$on('reset:tabs', this.reset)
+
+    this.click(this.defaultId)
   },
 
   methods: {
@@ -44,12 +46,8 @@ export default {
       this.$emit('click:tab', selectedId)
     },
 
-    setDefaultTab () {
-      this.selectedId = this.children[0].id
-    },
-
     reset () {
-      this.setDefaultTab()
+      this.selectedId = this.defaultId
     }
   }
 }

@@ -92,7 +92,7 @@ export default {
   methods: {
     reset () {
       this.searchTerm = ''
-      this.selectedOptionId = this.options[0].id
+      this.selectedOptionId = ''
     },
 
     updateSelectedOption (id) {

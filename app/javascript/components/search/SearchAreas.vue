@@ -249,11 +249,11 @@ console.log('search params', data.params)
 
     resetSearchTerm () {
       this.searchTerm = searchParams.search_term
-    }
+    },
 
     resetTabs () {
       this.$eventHub.$emit('reset:tabs')
-    }
+    },
 
     toggleFilterPane () {
       this.isFilterPaneActive = !this.isFilterPaneActive
