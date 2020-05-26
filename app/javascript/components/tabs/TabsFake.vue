@@ -34,7 +34,7 @@ export default {
 
   created () {
     this.setDefaultTab()
-    this.$eventHub.$on('reset-search', this.reset)
+    this.$eventHub.$on('reset:tabs', this.reset)
   },
 
   methods: {

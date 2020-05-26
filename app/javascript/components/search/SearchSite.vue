@@ -127,7 +127,7 @@ export default {
     resetAll () {
       this.categoryId = this.defaultCategory
       this.requestedPage = this.defaultPage
-      this.$eventHub.$emit('reset-search')
+      this.$eventHub.$emit('reset:tabs')
     },
 
     updateCategory (categoryId) {

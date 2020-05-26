@@ -44,6 +44,7 @@
         <tabs-fake
           :children="tabs"
           class="flex flex-h-center"
+          v-on:click:tab="updateSelectedTab"
         />
 
         <search-areas-results
@@ -147,16 +148,11 @@ export default {
   data () {
     return {
       activeFilterOptions: [],
-      currentPage: 0,
-      defaultPage: 1,
       isFilterPaneActive: false,
       isMapPaneActive: false,
-      pageItemsStart: 0,
-      pageItemsEnd: 0,
-      requestedPage: 0,
       results: {}, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
       searchTerm: '',
-      totalItems: 0,
+      selectedTab: ''
     }
   },
 
@@ -180,10 +176,11 @@ export default {
         params: {
           filters: this.activeFilterOptions,
           items_per_page: 9,
-          search_term: this.searchTerm
+          search_term: this.searchTerm,
+          geo_type: this.selectedTab
         }
       }
-
+console.log('search params', data.params)
       this.axiosSetHeaders()
 
       axios.get(this.endpointSearch, data)
@@ -197,32 +194,27 @@ export default {
         })
     },
 
-    changePage (newPage) {
-      this.categoryId = this.defaultCategory
-      this.requestedPage = newPage
-    },
-
-    updateCategory (categoryId) {
-      this.categoryId = categoryId
-      this.requestedPage = this.defaultPage
-    },
-
     updateFilters (filters) {
-      this.$eventHub.$emit('reset-pagination')
+      this.$eventHub.$emit('reset:pagination')
       this.activeFilterOptions = filters
       this.ajaxSubmission()
     },
 
     updateProperties (response) {
-      // const results = ('data' in response && Array.isArray(response.data)) ? response.data : {}
-
       this.results = response.data
+    },
+
+    updateSelectedTab (selectedTab) {
+      this.selectedTab = selectedTab
+      this.resetPagination()
+      this.ajaxSubmission()
     },
 
     updateSearchTerm (searchParams) {
       this.resetFilters()
-      this.$eventHub.$emit('reset-pagination')
-      this.searchTerm = searchParams.search_term
+      this.resetPagination()
+      this.resetSearchTerm()
+      this.resetTabs()
       this.ajaxSubmission()
     },
 
@@ -246,19 +238,22 @@ export default {
         })
     },
 
-    resetPagination (geoType) {
-      this.results.map(result => { 
-        if(result.geoType == geoType) { 
-          result.areas.splice(3)
-        }
-        return result
-      })
-    },
-
     resetFilters () {
       this.activeFilterOptions = []
       this.$eventHub.$emit('reset:filter-options')
     },
+
+    resetPagination () {
+      this.$eventHub.$emit('reset:pagination')
+    },
+
+    resetSearchTerm () {
+      this.searchTerm = searchParams.search_term
+    }
+
+    resetTabs () {
+      this.$eventHub.$emit('reset:tabs')
+    }
 
     toggleFilterPane () {
       this.isFilterPaneActive = !this.isFilterPaneActive

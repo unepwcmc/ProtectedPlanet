@@ -33,7 +33,7 @@ export default {
   mounted () {
     this.scrollMagicHandlerInit()
     this.scrollMagicHandlerAdd()
-    this.$eventHub.$on('reset-pagination', this.reset)
+    this.$eventHub.$on('reset:pagination', this.reset)
   },
 
   computed: {
@@ -61,7 +61,6 @@ export default {
     reset () {
       this.scrollMagicHandlerRemove()
       this.currentPage = 0
-      this.$emit('reset-pagination')
     },
 
     scrollMagicHandlerAdd () {
