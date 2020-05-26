@@ -57,14 +57,14 @@ module Concerns::Filterable
                   id: 'country', 
                   title: I18n.t('search.filter-group-geo-type.options')[0],
                   autocomplete: [ 
-                    { id: 'ferdi - whatever you need', title: 'United Kingdom' },
-                    { id: 'ferdi - whatever you need', title: 'United Arab Emirates' }
+                    { id: '1 ferdi - whatever you need', title: 'United Kingdom' },
+                    { id: '2 ferdi - whatever you need', title: 'United Arab Emirates' }
                   ]
                 },
                 { 
                   id: 'region', 
                   title: I18n.t('search.filter-group-geo-type.options')[1],
-                  autocomplete: [ { id: 'ferdi - whatever you need', title: 'Europe' }]
+                  autocomplete: [ { id: '3 ferdi - whatever you need', title: 'Europe' }]
                 }
               ],
               title: I18n.t('search.filter-group-geo-type.title'),

@@ -5,6 +5,12 @@
       v-on:click:tab="updateSelectedOption"
     />
     
+    <input 
+      class="margin-space--bottom"
+      type="text" 
+      v-model="searchTerm"
+    />
+    
     <div>
       <radio-buttons 
         :id="id"
@@ -42,6 +48,7 @@ export default {
 
   data () {
     return {
+      searchTerm: '',
       selectedOptionId: ''
     }
   },
@@ -56,12 +63,22 @@ export default {
 
   computed: {
     autocomplete () {
-      console.log('autocomplete', this.options)
-      console.log('autocomplete', this.selectedOptionId)
-      return this.options
+      // if(!this.options) { return [] }
+
+      let autocompleteOptions = this.options
         .filter(option => option.id == this.selectedOptionId)
         .map(option => option.autocomplete)
         [0]
+
+      if(this.searchTerm !== '') {
+        const regex = new RegExp(`${this.searchTerm}`, 'i')
+        
+        autocompleteOptions = autocompleteOptions.filter(option => {
+          return option.title.match(regex)
+        })
+      }
+      
+      return autocompleteOptions
     },
 
     tabs () {
@@ -76,6 +93,7 @@ export default {
 
   methods: {
     reset () {
+      this.searchTerm = ''
       this.selectedOptionId = this.options[0].id
     },
 
@@ -89,7 +107,7 @@ export default {
         id: selectedRadioId
       }
 
-      this.$emit('update:options', data)
+      this.$emit('update:options', updatedOptions)
     }
   }
 }
