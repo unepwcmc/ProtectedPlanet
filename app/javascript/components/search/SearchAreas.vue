@@ -184,8 +184,6 @@ export default {
         }
       }
 
-      console.log('ajaxSubmission params', data)
-
       this.axiosSetHeaders()
 
       axios.get(this.endpointSearch, data)

@@ -63,8 +63,6 @@ export default {
 
   computed: {
     autocomplete () {
-      // if(!this.options) { return [] }
-
       let autocompleteOptions = this.options
         .filter(option => option.id == this.selectedOptionId)
         .map(option => option.autocomplete)
