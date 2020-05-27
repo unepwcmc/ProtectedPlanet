@@ -19,6 +19,7 @@
             :id="filter.id"
             :name="filter.name"
             :options="filter.options"
+            :pre-selected="filter.preSelected"
             :title="filter.title"
             :type="filter.type"
             v-on:update:filter="updateFilterGroup"

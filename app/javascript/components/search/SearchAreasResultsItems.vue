@@ -2,15 +2,6 @@
   <div>
     <div class="search__results-bar">
       <h2>{{ results.title }} ({{ results.total }})</h2>
-      
-<!--       <pagination-more
-        :sm-trigger-element="smTriggerElement"
-        text="View All"
-        :total="total"
-        :total-pages="totalPages"
-        v-on:request-more="requestMore"
-        v-on:reset-pagination="resetPagination"
-      /> -->
     </div>
     <div class="cards--search-results-areas">
       <card-search-result-area

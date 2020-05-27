@@ -34,7 +34,7 @@
       <filters-search
         class="search__filters"
         :filter-close-text="filterCloseText"
-        :filter-groups="filterGroups"
+        :filterGroups="filterGroupsWithPreSelected"
         :is-active="isFilterPaneActive"
         :title="textFilters"
         v-on:update:filter-group="updateFilters"
@@ -147,7 +147,11 @@ export default {
 
   data () {
     return {
+      config: {
+        queryStringParams: ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category']
+      },
       activeFilterOptions: [],
+      filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
       isMapPaneActive: false,
       results: {}, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
@@ -158,6 +162,8 @@ export default {
 
   created () {
     if(this.query) { this.searchTerm = this.query }
+
+    this.handleQueryString()
   },
 
   mounted () {
@@ -177,7 +183,7 @@ export default {
           filters: this.activeFilterOptions,
           items_per_page: 9,
           search_term: this.searchTerm,
-          geo_type: this.selectedTab
+          // geo_type: this.selectedTab
         }
       }
 console.log('search params', data.params)
@@ -190,8 +196,32 @@ console.log('search params', data.params)
           this.updateProperties(response)
         })
         .catch(function (error) {
-          console.log(error)
+          console.log('error', error)
         })
+    },
+
+    handleQueryString () {
+      const paramsFromUrl = new URLSearchParams(window.location.search)
+
+      let params = []
+
+      this.config.queryStringParams.forEach(param => {
+        if(paramsFromUrl.has(param)) { params.push(param) }
+      })
+      console.log(params)
+      this.filterGroups.map(filterGroup => {
+        return filterGroup.filters.map(filter => {
+          params.forEach(key => {
+            if(filter.id == key) { 
+              filter.preSelected = paramsFromUrl.get(key)
+            }
+          })
+
+          return filter
+        })
+      })
+      
+      this.filterGroupsWithPreSelected = this.filterGroups
     },
 
     updateFilters (filters) {

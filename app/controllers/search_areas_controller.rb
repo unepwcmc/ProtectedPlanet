@@ -18,7 +18,7 @@ class SearchAreasController < ApplicationController
     @tabs = []
 
     I18n.t('search.geo-types').each_with_index.map do |type, i|
-      @tabs << { id: "geo-type-#{i}", title: type } #FERDI need you to update the ids here to what you need
+      @tabs << { id: "geo-type-#{i}", title: type } #FERDI update the ids here to what you need
     end
 
     @tabs.to_json

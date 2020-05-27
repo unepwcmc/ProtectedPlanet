@@ -1,5 +1,8 @@
 <template>
-  <span :class="smTriggerElement"></span>
+  <span 
+    :class="smTriggerElement"
+    v-show="total > 0"
+  />
 </template>
 
 <script>
@@ -32,7 +35,9 @@ export default {
 
   mounted () {
     this.scrollMagicHandlerInit()
-    this.scrollMagicHandlerAdd()
+
+    if(this.total > 0) { this.scrollMagicHandlerAdd() }
+
     this.$eventHub.$on('reset:pagination', this.reset)
   },
 

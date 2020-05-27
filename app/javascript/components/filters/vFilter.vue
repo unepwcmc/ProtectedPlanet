@@ -10,6 +10,7 @@
         v-if="type == 'checkbox'"
         :id="id"
         :options="options"
+        :pre-selected="preSelected"
         v-on:update:options="updateFilter"
       />
 
@@ -53,6 +54,9 @@ export default {
     options: {
       required: true,
       type: Array // [ { id: String, title: String } ]
+    },
+    preSelected: {
+      type: String
     },
     resetting: true,
     title: {
