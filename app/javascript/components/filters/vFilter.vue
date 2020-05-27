@@ -56,7 +56,7 @@ export default {
       type: Array // [ { id: String, title: String } ]
     },
     preSelected: {
-      type: String
+      type: Array // [ String ]
     },
     resetting: true,
     title: {

@@ -213,7 +213,7 @@ console.log('search params', data.params)
         return filterGroup.filters.map(filter => {
           params.forEach(key => {
             if(filter.id == key) { 
-              filter.preSelected = paramsFromUrl.get(key)
+              filter.preSelected = paramsFromUrl.getAll(key)
             }
           })
 

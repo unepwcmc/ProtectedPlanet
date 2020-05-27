@@ -43,7 +43,7 @@ export default {
       required: true 
     },
     preSelected: {
-      type: String
+      type: Array // [ String ]
     }
   },
 
@@ -53,10 +53,16 @@ export default {
     }
   },
 
+  computed: {
+    hasPreSelectedOptions () {
+      return Array.isArray(this.preSelected) && this.preSelected.length
+    }
+  },
+
   created () {
-    if(this.preSelected) { 
-      this.input.push(this.preSelected)
-      this.changeInput(this.preSelected) 
+    if(this.hasPreSelectedOptions) { 
+      this.input = (this.preSelected)
+      this.changeInput()
     }
 
     this.$eventHub.$on('reset:filter-options', this.reset)
@@ -72,7 +78,9 @@ export default {
     },
 
     isChecked (id) {
-      return this.preSelected == id
+      if(!this.hasPreSelectedOptions) { return false }
+      
+      return this.preSelected.includes(id)
     },
 
     reset () {
