@@ -16,13 +16,13 @@
             class="checkbox__input"
             :checked="isChecked(option.id)"
             type="checkbox"
-            :value="option.title"
+            :value="option.id"
             v-model="input"
           >
-          <input type="checkbox" :checked="isChecked(option.id)" />
+          
           <span class="checkbox__input-fake" />
         
-          {{ option.title }}
+          <span class="checkbox__text">{{ option.title }}</span>
         </label>
       </p>
     </div>

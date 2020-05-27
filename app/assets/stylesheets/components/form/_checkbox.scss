@@ -24,13 +24,31 @@
       @include input-hidden;
 
       &:checked + .checkbox__input-fake {
-        @include input-custom-checkbox-selected();
+        // @include input-custom-checkbox-selected();
+        background-color: $primary;
       }
 
       &:focus + .checkbox__input-fake { @include input-custom-focus; } 
     }
 
     &__input-fake {
-      @include input-custom-checkbox(rem-calc(20)); 
+      // @include input-custom-checkbox(rem-calc(20)); 
+      background-color: $white;
+      border-radius: $radius-global;
+      width: 100%; height: calc(100% - 5px);
+
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    &__text {
+      min-height: rem-calc(34);
+      margin-bottom: rem-calc(5);
+      padding: rem-calc(10 6);
+
+      display: block;
+      z-index: 1;
     }
 }
