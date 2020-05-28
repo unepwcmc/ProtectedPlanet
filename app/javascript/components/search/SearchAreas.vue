@@ -41,11 +41,11 @@
         v-on:toggle:filter-pane="toggleFilterPane"
       />
       <div class="search__results">
-        <tabs-fake
+        <!-- <tabs-fake
           :children="tabs"
           class="flex flex-h-center"
           v-on:click:tab="updateSelectedTab"
-        />
+        /> -->
 
         <search-areas-results
           :no-results-text="noResultsText"
@@ -148,7 +148,7 @@ export default {
   data () {
     return {
       config: {
-        queryStringParams: ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category']
+        queryStringParams: ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category', 'location_id']
       },
       activeFilterOptions: [],
       filterGroupsWithPreSelected: [],
@@ -186,13 +186,11 @@ export default {
           // geo_type: this.selectedTab
         }
       }
-console.log('search params', data.params)
+
       this.axiosSetHeaders()
 
       axios.get(this.endpointSearch, data)
         .then(response => {
-          console.log('success', response.data)
-
           this.updateProperties(response)
         })
         .catch(function (error) {
@@ -208,12 +206,21 @@ console.log('search params', data.params)
       this.config.queryStringParams.forEach(param => {
         if(paramsFromUrl.has(param)) { params.push(param) }
       })
-      console.log(params)
+      
       this.filterGroups.map(filterGroup => {
         return filterGroup.filters.map(filter => {
           params.forEach(key => {
-            if(filter.id == key) { 
-              filter.preSelected = paramsFromUrl.getAll(key)
+            if(key == 'location_id') { 
+              if(filter.id == 'location') { 
+                filter.preSelected = [{
+                  id: paramsFromUrl.get('location_id'),
+                  type: paramsFromUrl.get('location_type')
+                }]
+              }
+            } else {
+              if(filter.id == key) { 
+                filter.preSelected = paramsFromUrl.getAll(key)
+              }
             }
           })
 

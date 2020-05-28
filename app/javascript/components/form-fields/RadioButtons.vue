@@ -41,13 +41,17 @@ export default {
       type: String,
       required: true 
     },
+    name: { 
+      type: String,
+      required: true 
+    },
     options: { 
       default: () => [],
       type: Array // { id: String, title: String }
     },
-    name: { 
-      type: String,
-      required: true 
+    preSelected: {
+      default: '',
+      type: String
     }
   },
 
@@ -58,6 +62,8 @@ export default {
   },
 
   created () {
+    this.changeInput(this.preSelected)  
+
     this.$eventHub.$on('reset:filter-options', this.reset)
   },
 

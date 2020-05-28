@@ -27,6 +27,7 @@
         :id="id"
         :name="name"
         :options="options"
+        :pre-selected="preSelectedRadioButtonsSearch"
         v-on:update:options="updateFilter"
       />
     </div>
@@ -65,6 +66,12 @@ export default {
     type: {
       required: true,
       type: String
+    }
+  },
+
+  computed: {
+    preSelectedRadioButtonsSearch () {
+      return Array.isArray(this.preSelected) && this.preSelected.length ? this.preSelected[0] : ''
     }
   },
 

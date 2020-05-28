@@ -2,7 +2,8 @@
   <div>
     <tabs-fake 
       :children="tabs"
-      v-on:click:tab="updateSelectedOption"
+      :pre-selected="preSelectedTabId"
+      v-on:click:tab="updateSelectedTab"
     />
     
     <input 
@@ -16,7 +17,8 @@
         :id="id"
         :name="name"
         :options="autocomplete"
-        v-on:update:options="updateSelectedAutocompleteOption"
+        :pre-selected="preSelectedRadioId"
+        v-on:update:options="updateSelectedRadioId"
       />
     </div>
   </div>
@@ -40,6 +42,9 @@ export default {
       type: Array, // { id: String, title: String, autocomplete: [ id: String, title: String ] }
       required: true 
     },
+    preSelected: {
+      type: Object // { id: String, type: String }
+    },
     name: { 
       type: String,
       required: true 
@@ -48,23 +53,23 @@ export default {
 
   data () {
     return {
-      searchTerm: '',
-      selectedOptionId: ''
+      preSelectedRadioId: '',
+      preSelectedTabId: '',
+      selectedTabId: '',
+      searchTerm: ''
     }
   },
 
   created () {
-    this.$eventHub.$on('reset:filter-options', this.reset)
-  },
+    if(this.hasPreSelectedOptions) { this.handlePreSelectedOptions() }
 
-  mounted () {
-    this.reset()
+    this.$eventHub.$on('reset:filter-options', this.reset)
   },
 
   computed: {
     autocomplete () {
       let autocompleteOptions = this.options
-        .filter(option => option.id == this.selectedOptionId)
+        .filter(option => option.id == this.selectedTabId)
         .map(option => option.autocomplete)
         [0]
 
@@ -79,6 +84,12 @@ export default {
       return autocompleteOptions
     },
 
+    hasPreSelectedOptions () {
+      const isObject = typeof this.preSelected == 'object'
+
+      return isObject ? 'id' in this.preSelected && 'type' in this.preSelected : false
+    },
+
     tabs () {
       return this.options.map(option => {
         return {
@@ -90,18 +101,26 @@ export default {
   },
 
   methods: {
+    handlePreSelectedOptions () {
+      this.hasPreSelectedTabId = this.preSelected.type
+      this.preSelectedRadioId = this.preSelected.id
+    },
+
     reset () {
+      this.preSelectedRadioId = ''
+      this.hasPreSelectedTabId = ''
+      this.selectedTabId = ''
       this.searchTerm = ''
-      this.selectedOptionId = ''
     },
 
-    updateSelectedOption (id) {
-      this.selectedOptionId = id
+    updateSelectedTab (id) {
+      this.reset()
+      this.selectedTabId = id
     },
 
-    updateSelectedAutocompleteOption (selectedRadioId) {
+    updateSelectedRadioId (selectedRadioId) {
       const updatedOptions = {
-        type: this.selectedOptionId,
+        type: this.selectedTabId,
         id: selectedRadioId
       }
 

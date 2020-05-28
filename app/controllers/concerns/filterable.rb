@@ -50,14 +50,14 @@ module Concerns::Filterable
               type: 'checkbox'
             },
             {
-              id: 'geo_type',
-              name: 'geo_type',
+              id: 'location',
+              name: 'location',
               options: [
                 { 
                   id: 'country', 
                   title: I18n.t('search.filter-group-geo-type.options')[0],
                   autocomplete: [ 
-                    { id: '1 ferdi - whatever you need', title: 'United Kingdom' },
+                    { id: 'uk', title: 'United Kingdom' },
                     { id: '2 ferdi - whatever you need', title: 'United Arab Emirates' }
                   ]
                 },

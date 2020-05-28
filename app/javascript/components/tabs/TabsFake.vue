@@ -23,6 +23,10 @@ export default {
     children: {
       type: Array, // [{ id: String, title: String }]
       required: true
+    },
+    preSelected: {
+      default: '',
+      type: String
     }
   },
 
@@ -34,9 +38,8 @@ export default {
   },
 
   created () {
+    this.setInitialTab()
     this.$eventHub.$on('reset:tabs', this.reset)
-
-    this.click(this.defaultId)
   },
 
   methods: {
@@ -48,6 +51,18 @@ export default {
 
     reset () {
       this.selectedId = this.defaultId
+    },
+
+    setInitialTab () {
+      let tabId = this.defaultId
+
+      if(this.preSelected !== '') {
+        if(this.children.filter(child.id == this.preSelected)) { 
+          tabId = this.preSelected 
+        }
+      }
+      
+      this.click(tabId)
     }
   }
 }
