@@ -97,6 +97,9 @@ incorrectly for RGeo's use. You can fix this easily:
   ln -s /usr/lib/libgeos-3.4.2.so /usr/lib/libgeos.so
 ```
 
+**Update by J. Feist**
+If you are using Ubuntu and are having issues installing GEOS (via GDAL that you will notice after failure to `bundle _1.17.3_ install` then see [this](https://stackoverflow.com/questions/12141422/error-gdal-config-not-found) SO question - you can install the library required with `sudo apt update && sudo apt install libgdal-dev`.
+
 Please note, if you experience an error when viewing the regions or countries pages like this:
 
 ```
