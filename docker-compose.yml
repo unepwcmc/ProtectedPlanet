@@ -1,49 +1,84 @@
-version: '3'
+version: "3.8"
+
 services:
+
   web:
-    build: .
-    command: /bin/bash -l -c "bundle exec rails s -p 3000 -b '0.0.0.0'"
-    user: unepwcmc
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: bash -l -c "bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
-      - .:/ProtectedPlanet
-      - protectedplanet_import_data:/import_data
-      - protectedplanet_bundler:/usr/local/bundle
+      - .:/var/www
     ports:
-      - "3000:3000"
+      - "3001:3000"
     env_file:
-      - '.env'
+      - ".env"
     depends_on:
       - db
       - redis
       - elasticsearch
-      - webpacker
+      # - webpacker
+    networks:
+      - webapp_network
+
+  webpacker: 
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    env_file: 
+      - ".env"
+    command: bash -l -c "rm -rf /var/www/app/public/packs; \
+      rm -rf /var/www/tmp/cache/webpacker; \
+      /var/www/bin/webpack-dev-server;"
+    volumes: 
+      - .:/var/www
+    ports:
+      - "3036:3035"
+    networks:
+      - webapp_network
+
+  # node:
+  #   image: node:10.21-alpine
+  #   volumes:
+  #     - .:/var/www
+  #   command: bash -l -c ""
+
   db:
     container_name: protectedplanet-db
     image: kartoza/postgis
     ports:
-      - "5432:5432"
+      - "5433:5432"
     env_file:
-      - '.env'
+      - ".env"
     volumes:
-      - protectedplanet_pg_data:/var/lib/postgresql
+      - pg_data_volume:/var/lib/postgresql
+    networks:
+      - webapp_network
+
   redis:
     image: redis
     env_file:
-      - '.env'
+      - ".env"
     volumes:
-      - protectedplanet_redis_data:/data
+      - redis_data_volume:/data
+    networks:
+      - webapp_network
+
   sidekiq:
-     build: .
-     volumes:
-       - .:/ProtectedPlanet
-       - protectedplanet_import_data:/import_data
-     links:
-       - db
-       - redis
-     command: /bin/bash -l -c "bundle exec sidekiq"
-     user: unepwcmc
-     env_file:
-       - '.env'
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/var/www
+    command: bash -l -c "bundle exec sidekiq"
+    env_file:
+      - ".env"
+    depends_on:
+      - redis
+      - db
+    networks:
+      - webapp_network
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
     environment:
@@ -55,35 +90,27 @@ services:
         soft: -1
         hard: -1
     ports:
-      - "9200:9200"
+      - "9201:9200"
     env_file:
-      - '.env'
+      - ".env"
     volumes:
-      - 'protectedplanet_es_data:/usr/share/elasticsearch/data'
+      - "es_data_volume:/usr/share/elasticsearch/data"
+    networks:
+      - webapp_network
+
   kibana:
     image: docker.elastic.co/kibana/kibana:7.0.0
     ports:
-      - "5601:5601"
-  webpacker: 
-    build: .
-    env_file: 
-      - '.env'
-    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
-    user: unepwcmc
-    volumes: 
-      - .:/ProtectedPlanet
-      - protectedplanet_bundler:/usr/local/bundle
-    ports:
-      - '3035:3035'
+      - "5602:5601"
+    networks:
+      - webapp_network
+
+networks:
+  webapp_network:
+    driver: bridge
 
 volumes:
-  protectedplanet_pg_data:
-    driver: local
-  protectedplanet_redis_data:
-    driver: local
-  protectedplanet_import_data:
-    driver: local
-  protectedplanet_es_data:
-    driver: local
-  protectedplanet_bundler:
-    driver: local
+  pg_data_volume:
+  redis_data_volume:
+  import_data_volume:
+  es_data_volume:
