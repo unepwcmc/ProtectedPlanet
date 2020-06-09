@@ -44,13 +44,13 @@ docker-compose up
 
 Visit: `http://localhost:3001`
 
-To set-up the database
-`docker-compose run web /bin/bash -l -c "rake db:create"`
-
 To import the database sql dump:
 ```
 psql -d protectedplanet-db -f /path/to/pp_development.sql -U postgres -h localhost -p 5433
 ```
+
+Or...To set-up the database
+`docker-compose run web /bin/bash -l -c "rake db:create"`
 
 ```
 docker-compose run web /bin/bash -l -c "rake db:migrate"
