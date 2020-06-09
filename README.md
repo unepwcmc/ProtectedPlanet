@@ -15,6 +15,7 @@ If you already cloned it:
 git submodule update --init --recursive
 ```
 
+To clone the repository, and setup the .env file:
 ```
 git clone --recurse-submodules git@github.com:unepwcmc/ProtectedPlanet.git ProtectedPlanet
 cd ProtectedPlanet
@@ -32,12 +33,7 @@ discovery.type=single-node
 EOENV
 ```
 
-To prepare the Docker environment:
-```
-docker-compose build
-```
-
-To bring up the ProtectedPlanet website locally:
+To bring up the website locally:
 ```
 docker-compose up
 ```
