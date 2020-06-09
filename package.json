@@ -1,5 +1,5 @@
 {
-  "license": "UNLICENSED",
+  "license": "BSD-3-Clause",
   "scripts": {
     "start": "webpack-dev-server --host 0.0.0.0 --inline --content-base ."
   },
