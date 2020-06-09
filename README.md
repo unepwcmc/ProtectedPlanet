@@ -42,6 +42,7 @@ Visit: `http://localhost:3001`
 
 To import the database sql dump:
 ```
+sudo apt-get install postgresql-client # Ubuntu
 psql -d protectedplanet-db -f /path/to/pp_development.sql -U postgres -h localhost -p 5433
 ```
 
