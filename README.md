@@ -35,12 +35,30 @@ EOENV
 
 To bring up the website locally:
 ```
+docker-compose build
+docker-compose run --rm web yarn
 docker-compose up
 ```
 
 Visit: `http://localhost:3001`
 
 To import the database sql dump:
+
+**You can obtain a database dump from S3**. One way is with [Cyberduck](https://trac.cyberduck.io/wiki/help/en/howto/cli). 
+
+Credentials can be found for the S3 in the shared LastPass account. There should be a `access_key_id` and a `secret_access_key` under the name `ROOT AWS Access Key`. Using duck through command line you could download e.g. 
+
+```
+duck --username=AWSACCESSKEY -vd s3:/protectedplanet.bkp/path/to/pp_development.tar
+```
+
+You can then extract the file in two steps:
+
+```
+tar -vxf pp_development.tar`
+bzip2 -d pp_development/databases/PostgreSQL.sql.bz2
+```
+
 ```
 sudo apt-get install postgresql-client # Ubuntu
 psql -d protectedplanet-db -f /path/to/pp_development.sql -U postgres -h localhost -p 5433

@@ -32,8 +32,6 @@ RUN bundle _1.17.3_ install
 
 COPY . .
 
-RUN yarn
-
 EXPOSE 3000
 
 CMD ["rails", "server", "-b", "0.0.0.0"]

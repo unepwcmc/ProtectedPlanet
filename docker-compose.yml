@@ -26,12 +26,10 @@ services:
       - ".env"
     environment:
       WEBPACKER_DEV_SERVER_HOST: webpacker
-    command: 
-      - ./bin/webpack-dev-server
-      - --inline=true
-      - --host=webpacker
+    command: ./bin/webpack-dev-server --inline=true --host=webpacker
     volumes: 
       - .:/opt/www
+      - /opt/www/node_modules
     ports:
       - "3036:3035"
     networks:
