@@ -1,14 +1,12 @@
 version: "3.8"
 
 services:
-
   web:
-    build: 
-      context: .
-      dockerfile: Dockerfile
-    command: bash -l -c "bundle exec rails s -p 3000 -b '0.0.0.0'"
+    container_name: web
+    build: .
+    command: rails s -p 3000 -b '0.0.0.0'
     volumes:
-      - .:/var/www
+      - .:/opt/www
     ports:
       - "3001:3000"
     env_file:
@@ -16,70 +14,80 @@ services:
     depends_on:
       - db
       - redis
-      - elasticsearch
-      # - webpacker
+      - es
+      - webpacker
     networks:
-      - webapp_network
+      - app-network
 
   webpacker: 
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    container_name: webpacker
+    build: .
     env_file: 
       - ".env"
-    command: bash -l -c "rm -rf /var/www/app/public/packs; \
-      rm -rf /var/www/tmp/cache/webpacker; \
-      /var/www/bin/webpack-dev-server;"
+    environment:
+      WEBPACKER_DEV_SERVER_HOST: webpacker
+    command: 
+      - ./bin/webpack-dev-server
+      - --inline=true
+      - --host=webpacker
     volumes: 
-      - .:/var/www
+      - .:/opt/www
     ports:
       - "3036:3035"
     networks:
-      - webapp_network
-
-  # node:
-  #   image: node:10.21-alpine
-  #   volumes:
-  #     - .:/var/www
-  #   command: bash -l -c ""
+      - app-network
 
   db:
-    container_name: protectedplanet-db
+    container_name: postgres
     image: kartoza/postgis
     ports:
       - "5433:5432"
     env_file:
       - ".env"
+    environment:
+      DATADIR: /opt/postgres/data
+      DEFAULT_ENCODING: UTF8
+      DEFAULT_COLLATION: id_ID.utf8
+      DEFAULT_CTYPE: id_ID.utf8
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_HOST: postgres
+      POSTGRES_DBNAME: protectedplanet-db
+      POSTGRES_MULTIPLE_EXTENSIONS: postgis,hstore,postgis_topology
     volumes:
-      - pg_data_volume:/var/lib/postgresql
+      - postgres-data:/var/lib/postgresql
+      # - postgres-data:/opt/postgres/data
     networks:
-      - webapp_network
+      - app-network
 
   redis:
+    container_name: redis
     image: redis
+    ports:
+      - "6380:6379"
     env_file:
       - ".env"
     volumes:
-      - redis_data_volume:/data
+      - redis-data:/data
     networks:
-      - webapp_network
+      - app-network
 
   sidekiq:
-    build: 
-      context: .
-      dockerfile: Dockerfile
+    container_name: sidekiq
+    build: .
     volumes:
-      - .:/var/www
-    command: bash -l -c "bundle exec sidekiq"
+      - .:/opt/www
+    command: bundle exec sidekiq
     env_file:
       - ".env"
     depends_on:
       - redis
       - db
     networks:
-      - webapp_network
+      - app-network
 
-  elasticsearch:
+  es:
+    container_name: es
     image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
     environment:
       - cluster.name=docker-cluster
@@ -94,23 +102,23 @@ services:
     env_file:
       - ".env"
     volumes:
-      - "es_data_volume:/usr/share/elasticsearch/data"
+      - "elastic-data:/usr/share/elasticsearch/data"
     networks:
-      - webapp_network
+      - app-network
 
   kibana:
+    container_name: kibana
     image: docker.elastic.co/kibana/kibana:7.0.0
     ports:
       - "5602:5601"
     networks:
-      - webapp_network
+      - app-network
 
 networks:
-  webapp_network:
+  app-network:
     driver: bridge
 
 volumes:
-  pg_data_volume:
-  redis_data_volume:
-  import_data_volume:
-  es_data_volume:
+  postgres-data:
+  redis-data:
+  elastic-data:

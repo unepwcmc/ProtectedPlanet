@@ -7,53 +7,29 @@
 You can check out the previous version of Protected Planet on
 [GitHub](https://github.com/unepwcmc/ppe).
 
-## Topics
 
-When you clone this repo please do it recursively. For the first time:
-```
-git clone --recurse-submodules
-```
+## Development Setup
 
 If you already cloned it:
 ```
 git submodule update --init --recursive
 ```
 
-1. [Getting Started and Configuration](docs/installation.md)
-2. [Importing and Managing the WDPA](docs/wdpa.md)
-    * [Automatic Import](docs/automatic_import.md)
-3. [Deployment](docs/deployment.md)
-4. [Development workflow, conventions and tips](docs/workflow.md)
-5. [Search](docs/search.md)
-6. [Background Workers](docs/workers.md)
-7. [Downloads](docs/downloads.md)
-8. [Statistics](docs/statistics.md)
-9. [Caching](docs/caching.md)
-
-## Licence
-
-Protected Planet is released under the [BSD
-3-Clause](http://opensource.org/licenses/BSD-3-Clause) License.
-
-## Docker
-
-You need a `.env` file similar to this:
-
 ```
+git clone --recurse-submodules git@github.com:unepwcmc/ProtectedPlanet.git ProtectedPlanet
+cd ProtectedPlanet
+cat << EOENV > .env
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=postgres
-POSTGRES_HOST=protectedplanet-db
+POSTGRES_HOST=postgres
+POSTGRES_DBNAME=protectedplanet-db
 POSTGRES_MULTIPLE_EXTENSIONS=postgis,hstore,postgis_topology
 REDIS_URL=redis://redis:6379/0
 RAILS_ENV=development
 ELASTIC_SEARCH_URL=http://elastic:elastic@elasticsearch:9200
 xpack.security.enabled=false
 discovery.type=single-node
-```
-
-The database is in a separate repo at the moment:
-```
-git submodule foreach git pull origin master
+EOENV
 ```
 
 To prepare the Docker environment:
@@ -61,12 +37,19 @@ To prepare the Docker environment:
 docker-compose build
 ```
 
+To bring up the ProtectedPlanet website locally:
+```
+docker-compose up
+```
+
+Visit: `http://localhost:3001`
+
 To set-up the database
 `docker-compose run web /bin/bash -l -c "rake db:create"`
 
 To import the database sql dump:
 ```
-docker-compose run -v ~/path/to/sql/dump:/import_database web bash -c "psql protectedplanet-db < /import_database/pp_development.sql -U postgres -h protectedplanet-db"
+psql -d protectedplanet-db -f /path/to/pp_development.sql -U postgres -h localhost -p 5433
 ```
 
 ```
@@ -82,18 +65,6 @@ docker-compose run web /bin/bash -l -c "yarn install"
 To precompile the assets
 ```
 docker-compose run web /bin/bash -l -c "rake assets:precompile"
-```
-
-To bring up the ProtectedPlanet website locally:
-```
-docker-compose up
-```
-
-Visit: `http://localhost:3000`
-
-To shutdown:
-```
-docker-compose down
 ```
 
 To rebuild the Docker container after making changes:
@@ -139,3 +110,22 @@ You can then share this exact tar file with anyone else and they will have an ex
 ```
 docker load < protectedplanet_web.tar.gz
 ```
+
+## Topics
+
+1. [Getting Started and Configuration](docs/installation.md)
+2. [Importing and Managing the WDPA](docs/wdpa.md)
+    * [Automatic Import](docs/automatic_import.md)
+3. [Deployment](docs/deployment.md)
+4. [Development workflow, conventions and tips](docs/workflow.md)
+5. [Search](docs/search.md)
+6. [Background Workers](docs/workers.md)
+7. [Downloads](docs/downloads.md)
+8. [Statistics](docs/statistics.md)
+9. [Caching](docs/caching.md)
+
+## Licence
+
+Protected Planet is released under the [BSD
+3-Clause](http://opensource.org/licenses/BSD-3-Clause) License.
+
