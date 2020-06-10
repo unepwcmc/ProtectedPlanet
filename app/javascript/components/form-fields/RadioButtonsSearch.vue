@@ -6,7 +6,7 @@
       v-on:click:tab="updateSelectedTab"
     />
     
-    <input 
+    <input
       class="margin-space--bottom"
       type="text" 
       v-model="searchTerm"
@@ -43,7 +43,9 @@ export default {
       required: true 
     },
     preSelected: {
-      type: Object // { id: String, type: String }
+      type: Object, // { id: String, type: String },
+      validator: o => o === null || (o.hasOwnProperty('id') && typeof o.id === 'string'
+        && o.hasOwnProperty('type') && typeof o.type === 'string')
     },
     name: { 
       type: String,
@@ -85,9 +87,7 @@ export default {
     },
 
     hasPreSelectedOptions () {
-      const isObject = typeof this.preSelected == 'object'
-
-      return isObject ? 'id' in this.preSelected && 'type' in this.preSelected : false
+      return typeof this.preSelected === 'object'
     },
 
     tabs () {
@@ -102,6 +102,7 @@ export default {
 
   methods: {
     handlePreSelectedOptions () {
+      if (this.preSelected === null) return
       this.hasPreSelectedTabId = this.preSelected.type
       this.preSelectedRadioId = this.preSelected.id
     },

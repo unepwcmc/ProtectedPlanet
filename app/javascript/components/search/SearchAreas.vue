@@ -250,7 +250,7 @@ export default {
     updateSearchTerm (searchParams) {
       this.resetFilters()
       this.resetPagination()
-      this.resetSearchTerm()
+      this.resetSearchTerm(searchParams)
       this.resetTabs()
       this.ajaxSubmission()
     },
@@ -284,7 +284,7 @@ export default {
       this.$eventHub.$emit('reset:pagination')
     },
 
-    resetSearchTerm () {
+    resetSearchTerm (searchParams) {
       this.searchTerm = searchParams.search_term
     },
 

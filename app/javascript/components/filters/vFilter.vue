@@ -71,7 +71,7 @@ export default {
 
   computed: {
     preSelectedRadioButtonsSearch () {
-      return Array.isArray(this.preSelected) && this.preSelected.length ? this.preSelected[0] : ''
+      return Array.isArray(this.preSelected) && this.preSelected.length ? this.preSelected[0] : null
     }
   },
 
