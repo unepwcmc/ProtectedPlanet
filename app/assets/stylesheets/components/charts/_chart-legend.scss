@@ -24,9 +24,9 @@
 // classes
 //--------------------------------------------------
 //--------------------------------------------------
-// default
+// horizontal
 //--------------------------------------------------
-.chart--legend {
+.chart--legend--horizontal {
   @include flex;
   @include flex-wrap;
   @include ul-unstyled;
@@ -57,7 +57,7 @@
   }
 
   .chart__legend-item { 
-    @include chart-legend-item; 
+    // @include chart-legend-item; 
     line-height: 1;
     margin: 0;
   }
