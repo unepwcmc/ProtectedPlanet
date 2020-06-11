@@ -181,6 +181,7 @@ $padding-medium: rem-calc(27);
 
   &--all {
     @include button-with-icon;
+    @include flex-no-shrink;
     
     &::after { @include icon-circle-chevron-black; }
   }
