@@ -1,6 +1,5 @@
 class SearchAreasController < ApplicationController
   include Concerns::Searchable
-  include Concerns::Filterable
 
   after_action :enable_caching
 
@@ -32,7 +31,7 @@ class SearchAreasController < ApplicationController
     geo_type = search_params[:geo_type]
     @results = Search::AreasSerializer.new(@search, geo_type).serialize
 
-    render json: @results
+    render json: { areas: @results, filters: @filter_groups }.to_json
   end
 
   private

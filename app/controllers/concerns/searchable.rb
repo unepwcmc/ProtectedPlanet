@@ -52,5 +52,18 @@ module Concerns::Searchable
 
       _filters
     end
+
+    def load_filters
+      @area_type = search_params[:area_type]
+      @search_area_types = [
+        {
+          id: @area_type,
+          title: I18n.t("global.area-types.#{@area_type}"),
+          placeholder: I18n.t("global.placeholder.search-#{@area_type}")
+        }
+      ].to_json
+
+      @filter_groups = @search ? Search::FiltersSerializer.new(@search).serialize : []
+    end
   end
 end

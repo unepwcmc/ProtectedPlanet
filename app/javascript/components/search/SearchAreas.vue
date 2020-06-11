@@ -167,7 +167,7 @@ export default {
   },
 
   mounted () {
-    if(this.query) { this.ajaxSubmission() }
+    if(this.query) { this.ajaxSubmission(true) }
   },
 
   computed: {
@@ -177,7 +177,7 @@ export default {
   },
 
   methods: {
-    ajaxSubmission () {
+    ajaxSubmission (resetFilters=false) {
       let data = {
         params: {
           filters: this.activeFilterOptions,
@@ -191,7 +191,7 @@ export default {
 
       axios.get(this.endpointSearch, data)
         .then(response => {
-          this.updateProperties(response)
+          this.updateProperties(response, resetFilters)
         })
         .catch(function (error) {
           console.log('error', error)
@@ -237,8 +237,9 @@ export default {
       this.ajaxSubmission()
     },
 
-    updateProperties (response) {
-      this.results = response.data
+    updateProperties (response, resetFilters) {
+      this.results = response.data.areas
+      if(resetFilters) this.filterGroupsWithPreSelected = response.data.filters
     },
 
     updateSelectedTab (selectedTab) {
@@ -252,7 +253,7 @@ export default {
       this.resetPagination()
       this.resetSearchTerm(searchParams)
       this.resetTabs()
-      this.ajaxSubmission()
+      this.ajaxSubmission(true)
     },
 
     requestMore (paginationParams) {
@@ -268,7 +269,7 @@ export default {
 
       axios.get(this.endpointPagination, data)
         .then(response => {
-          this.results.areas = this.results.areas.concat(response.data)
+          this.results.areas = this.results.areas.concat(response.data.areas)
         })
         .catch(function (error) {
           console.log(error)
