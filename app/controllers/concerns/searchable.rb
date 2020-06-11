@@ -36,6 +36,10 @@ module Concerns::Searchable
       redirect_to :root unless AREA_TYPES.include?(params[:area_type].downcase)
     end
 
+    #
+    # Retrieves the filters from params if present,
+    # and sanitizes them from escaped string format
+    #
     def filters
       return '' unless params['filters'].present?
       _filters = sanitise_filters
@@ -44,6 +48,10 @@ module Concerns::Searchable
 
     def sanitise_filters
       _filters = JSON.parse(params['filters'])
+      #{'location' => {'type' => 'country', 'id' => 'Italy'}}
+      if _filters['location'].present? && _filters['location']['id'].present?
+        _filters[_filters['location']['type'].to_sym] = _filters['location']['id']
+      end
       #TODO green list filter to be added
       is_type = _filters.delete('is_type')
       return _filters if is_type == 'all' || !is_type

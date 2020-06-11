@@ -167,7 +167,7 @@ export default {
   },
 
   mounted () {
-    if(this.query) { this.ajaxSubmission(true) }
+    if(this.query) { this.getSearchResults() }
   },
 
   computed: {
@@ -177,6 +177,14 @@ export default {
   },
 
   methods: {
+    getSearchResults() {
+      this.ajaxSubmission(true)
+    },
+
+    getFilteredSearchResults() {
+      this.ajaxSubmission()
+    },
+
     ajaxSubmission (resetFilters=false) {
       let data = {
         params: {
@@ -198,6 +206,11 @@ export default {
         })
     },
 
+    /**
+     * If a query string is present in the URL,
+     * Initialise the state of the component based on its parameters
+     * @see created()
+     */
     handleQueryString () {
       const paramsFromUrl = new URLSearchParams(window.location.search)
 
@@ -234,7 +247,7 @@ export default {
     updateFilters (filters) {
       this.$eventHub.$emit('reset:pagination')
       this.activeFilterOptions = filters
-      this.ajaxSubmission()
+      this.getFilteredSearchResults()
     },
 
     updateProperties (response, resetFilters) {
@@ -245,7 +258,7 @@ export default {
     updateSelectedTab (selectedTab) {
       this.selectedTab = selectedTab
       this.resetPagination()
-      this.ajaxSubmission()
+      this.getFilteredSearchResults()
     },
 
     updateSearchTerm (searchParams) {
@@ -253,7 +266,7 @@ export default {
       this.resetPagination()
       this.resetSearchTerm(searchParams)
       this.resetTabs()
-      this.ajaxSubmission(true)
+      this.getSearchResults()
     },
 
     requestMore (paginationParams) {

@@ -4,6 +4,7 @@ class Search::FiltersSerializer < Search::BaseSerializer
     @aggregations = @search.aggregations
   end
 
+
   def serialize
     [
       {
@@ -47,15 +48,12 @@ class Search::FiltersSerializer < Search::BaseSerializer
               { 
                 id: 'country', 
                 title: I18n.t('search.filter-group-geo-type.options')[0],
-                autocomplete: [ 
-                  { id: 'uk', title: 'United Kingdom' },
-                  { id: '2 ferdi - whatever you need', title: 'United Arab Emirates' }
-                ]
+                autocomplete: objs_for('country'),
               },
               { 
                 id: 'region', 
                 title: I18n.t('search.filter-group-geo-type.options')[1],
-                autocomplete: [ { id: '3 ferdi - whatever you need', title: 'Europe' }]
+                autocomplete: objs_for('region'),
               }
             ],
             title: I18n.t('search.filter-group-geo-type.title'),
