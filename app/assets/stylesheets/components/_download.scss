@@ -1,15 +1,32 @@
-.download {
-  position: relative;
-
-  &__trigger {
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+//--------------------------------------------------
+// download hero
+//--------------------------------------------------
+.download--hero {
+  .download__trigger {
     @include button-download-trigger;
   }
+}
 
-    &__trigger-text {
-      @include responsive(display, none, initial, initial);
-    }
+//--------------------------------------------------
+// download search
+//--------------------------------------------------
+.download--search {
+  position: relative;
 
-  &__target {
+  .download__trigger {
+    @include button-download-trigger-small;
+  }
+
+  .download__target {
     @include ul-unstyled;
     background-color: $grey-dark;
     border-radius: $button-radius;
@@ -29,19 +46,31 @@
     &.active { display: block; }
   } 
 
-    &__target-ul {
-      
-    }
-
-      &__li {
-        color: $white;
-        cursor: pointer;
-        padding: rem-calc(9 16);
-
-        &:hover { background-color: $grey; }
-
-        &:first-child { @include border-radius-top($button-radius); }
-        &:last-child { @include border-radius-bottom($button-radius); }
-      }
+  .download__target-ul {
     
+  }
+
+  .download__li {
+    color: $white;
+    cursor: pointer;
+    padding: rem-calc(9 16);
+
+    &:hover { background-color: $grey; }
+
+    &:first-child { @include border-radius-top($button-radius); }
+    &:last-child { @include border-radius-bottom($button-radius); }
+  }   
+}
+
+//--------------------------------------------------
+// download small
+//--------------------------------------------------
+.download--small {
+  .download__trigger {
+    @include button-download-trigger-small;
+
+    @include breakpoint-down($small) { 
+      width: rem-calc(38); height: rem-calc(38);
+    }
+  }
 }
