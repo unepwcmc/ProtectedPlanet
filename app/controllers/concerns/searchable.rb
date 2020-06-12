@@ -52,11 +52,11 @@ module Concerns::Searchable
       if _filters['location'].present? && _filters['location']['id'].present?
         _filters[_filters['location']['type'].to_sym] = _filters['location']['id']
       end
-      #TODO green list filter to be added
-      is_type = _filters.delete('is_type')
-      return _filters if is_type == 'all' || !is_type
 
-      _filters[:marine] = is_type == 'marine'
+      # ['marine', 'terrestrial', 'all']
+      is_type = _filters.delete('is_type')
+      return _filters if is_type.include?('all') || is_type.length != 1
+      _filters[:marine] = is_type.first == 'marine'
 
       _filters
     end
