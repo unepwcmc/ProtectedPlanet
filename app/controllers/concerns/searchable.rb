@@ -53,10 +53,24 @@ module Concerns::Searchable
         _filters[_filters['location']['type'].to_sym] = _filters['location']['id']
       end
 
+      _filters = sanitise_type_filter(_filters)
+      sanitise_special_status_filter(_filters)
+    end
+
+    def sanitise_type_filter(_filters)
       # ['marine', 'terrestrial', 'all']
       is_type = _filters.delete('is_type')
-      return _filters if is_type.include?('all') || is_type.length != 1
+      return _filters if !is_type || is_type.include?('all') || is_type.length != 1
       _filters[:marine] = is_type.first == 'marine'
+      _filters
+    end
+
+    def sanitise_special_status_filter(_filters)
+      # ['has_parcc_info', 'is_green_list', 'irreplacibility']
+      special_status = _filters.delete('special_status')
+      special_status.map do |status|
+        _filters[status.to_sym] = true
+      end
 
       _filters
     end
