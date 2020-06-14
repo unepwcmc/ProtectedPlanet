@@ -68,6 +68,8 @@ module Concerns::Searchable
     def sanitise_special_status_filter(_filters)
       # ['has_parcc_info', 'is_green_list', 'irreplacibility']
       special_status = _filters.delete('special_status')
+      return _filters unless special_status
+      
       special_status.map do |status|
         _filters[status.to_sym] = true
       end
