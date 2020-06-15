@@ -23,7 +23,6 @@ en:
       options:
         - Green Listed
         - PARCC
-        - Transboundary
     filter-group-type:
       title: Type
       options:

@@ -76,7 +76,7 @@ module Concerns::Searchable
     end
 
     def sanitise_special_status_filter(_filters)
-      # ['has_parcc_info', 'is_green_list', 'irreplacibility']
+      # ['has_parcc_info', 'is_green_list']
       special_status = _filters.delete('special_status')
       return _filters unless special_status
 

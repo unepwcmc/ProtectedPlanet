@@ -35,8 +35,7 @@ class Search::FiltersSerializer < Search::BaseSerializer
             name: 'special_status',
             options: [
               { id: 'is_green_list', title: I18n.t('search.filter-group-special-status.options')[0] },
-              { id: 'has_parcc_info', title: I18n.t('search.filter-group-special-status.options')[1] },
-              { id: 'has_irreplaceability_info', title: I18n.t('search.filter-group-special-status.options')[2] },
+              { id: 'has_parcc_info', title: I18n.t('search.filter-group-special-status.options')[1] }
             ],
             title: I18n.t('search.filter-group-special-status.title'),
             type: 'checkbox'
