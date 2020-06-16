@@ -21,16 +21,17 @@ $card-search-results-areas-flag-size: rem-calc(60);
 
   .card {
     &__link {
-      @include border-grey-light;
-      @include box-shadow-grey-light;
+      @include border-grey-xlight;
+      @include box-shadow-grey-xlight;
       @include flex;
       @include flex-column;
       @include responsive('width', 100%, 48%, 30%);
+      @include responsive('height', auto, rem-calc(360), rem-calc(360));
       background-color: $white;
       margin-bottom: rem-calc(30);
+      min-height: rem-calc(280);
       padding: rem-calc(18 18 16 18);
       text-decoration: none;
-      height: rem-calc(300);
 
       &:not(:first-child):not(:nth-child(3n+1)):not(:nth-child(3n)):last-child { 
         margin-left: 5%;
