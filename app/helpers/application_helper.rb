@@ -259,33 +259,9 @@ module ApplicationHelper
   #   !card[:pdf].present? && !card[:external_link].present?
   # end
 
-  def get_agile_config_themes
+  def flickity_options_themes
     {
-      navButtons: true,
-      infinite: false,
-      responsive: [
-      {
-          breakpoint: 628,
-          settings: {
-            dots: false,
-            slidesToShow: 1,
-          }
-        },
-        {
-          breakpoint: 768,
-          settings: {
-            dots: false,
-            slidesToShow: 1,
-          }
-        },
-        {
-          breakpoint: 1024,
-          settings: {
-            dots: false,
-            slidesToShow: 2
-          }
-        }
-      ]
+      large: { groupCells: 2 }
     }.to_json
   end
 

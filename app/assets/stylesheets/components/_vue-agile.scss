@@ -13,5 +13,7 @@ $agile-basic-slide-width-desktop: calc(20% - 2*#{$agile-basic-slide-margin-deskt
 //--------------------------------------------------
 .agile {
   @import './vue-agile/agile-basic';
-  @import './vue-agile/agile-themes';
+  
 }
+
+@import './vue-agile/agile-themes';

@@ -1,84 +1,100 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$agile-themes-slide-padding-desktop: rem-calc(10);
+$flickity-theme-cell-spacing: rem-calc(10);
 
-$agile-themes-slides-margin-mobile: 10%;
-$agile-themes-slides-margin-tablet: 14%;
-$agile-themes-slides-margin-desktop: 4%;
-$agile-themes-slides-margin-monitor: calc((100% - #{$site-width-rem} + 2*#{$gutter-large} - 2*#{$agile-themes-slide-padding-desktop} )/2);
+$flickity-themes-width-mobile: 80%;
+$flickity-themes-width-tablet: 74%;
+$flickity-themes-width-laptop: calc((100% - #{$gutter-large}*4 - #{$flickity-theme-cell-spacing}*2)/2);
+$flickity-themes-width-desktop: calc((#{$site-width-rem} - #{$gutter-large}*2)/2);
+
+$flickity-theme-slider-margin-mobile: calc((100% - #{$flickity-themes-width-mobile})/2);
+$flickity-theme-slider-margin-tablet: calc((100% - #{$flickity-themes-width-tablet})/2);
+$flickity-theme-slider-margin-laptop: calc((100% - #{$flickity-themes-width-laptop}*2)/2);
+$flickity-theme-slider-margin-desktop: calc((100% - #{$flickity-themes-width-desktop}*2)/2);
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
-@mixin agile-theme-margin-left {
-  @include responsive(margin-left, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
-
-  @include breakpoint($large) { margin-left: $agile-themes-slides-margin-monitor; }
+@mixin flickity-theme-margin-left {
+  margin-left: $flickity-theme-slider-margin-mobile;
+  
+  @include breakpoint($small) { margin-left: $flickity-theme-slider-margin-tablet; }
+  @include breakpoint($medium) { margin-left: $flickity-theme-slider-margin-laptop; } 
+  @include breakpoint($large) { margin-left: $flickity-theme-slider-margin-desktop; }
 }
 
-@mixin agile-theme-margin-right {
-  @include responsive(margin-right, $agile-themes-slides-margin-mobile, $agile-themes-slides-margin-tablet, $agile-themes-slides-margin-desktop);
-
-  @include breakpoint($large) { margin-right: $agile-themes-slides-margin-monitor; }
-}
-
-@mixin agile-theme-button {
-  position: absolute;
-  top: 50%;
-  z-index: 1;
-
-  &:disabled { visibility: hidden; }
+@mixin flickity-theme-margin-right {
+  margin-right: $flickity-theme-slider-margin-mobile;
+  
+  @include breakpoint($small) { margin-right: $flickity-theme-slider-margin-tablet; }
+  @include breakpoint($medium) { margin-right: $flickity-theme-slider-margin-laptop; } 
+  @include breakpoint($large) { margin-right: $flickity-theme-slider-margin-desktop; }
 }
 
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-&--themes {
+.flickity--themes {
   color: $white;
   overflow: hidden;
-  
-  .agile {
-    &__dots {
-      display: none;
+
+  .flickity-prev-next-button {
+    &:disabled { visibility: hidden; }
+
+    .flickity-button-icon { display: none; }
+  }
+
+  .flickity-prev-next-button.previous { 
+    @include button-prev;
+    @include flickity-theme-margin-left;
+    @include icon-circle-chevron-green-large-left();
+
+    left: 0;
+
+    transform: translate(-50%, -50%);
+  }
+
+  .flickity-prev-next-button.next { 
+    @include button-next;
+    @include flickity-theme-margin-right;
+    @include icon-circle-chevron-green-large-right();
+
+    right: 0;
+
+    transform: translate(50%, -50%);
+  }
+
+  .flickity-slider {
+    @include breakpoint($medium) {
+      margin-left: calc((100% - #{$gutter-large}*4 - #{$flickity-themes-width-laptop} - #{$flickity-theme-cell-spacing}*2)/-2);
+    } 
+
+    @include breakpoint($large) { 
+      margin-left: calc((#{$site-width-rem} - #{$gutter-large}*2 - #{$flickity-themes-width-desktop})/-2);
+    }
+  }
+
+  .carousel-cell {
+    padding-right: rem-calc(5);
+    padding-left: rem-calc(5);
+    width: $flickity-themes-width-mobile;
+    
+    @include breakpoint($small) {
+      padding-right: $flickity-theme-cell-spacing;
+      padding-left: $flickity-theme-cell-spacing;
+      width: $flickity-themes-width-tablet;
     }
 
-    &__actions { }
-
-      &__nav-button--prev { 
-        @include button-prev;
-        @include agile-theme-button;
-        @include agile-theme-margin-left;
-
-        transform: translate(-50%, -50%);
-
-        left: 0;
-      }
-
-      &__nav-button--next { 
-        @include button-next;
-        @include agile-theme-button;
-        @include agile-theme-margin-right;
-
-        transform: translate(50%, -50%);
-        
-        right: 0;
-      }
-
-    &__list {
-      @include agile-theme-margin-left;
-      @include agile-theme-margin-right;
-      
-      overflow: visible;
-      width: auto;
+    @include breakpoint($medium) {
+      padding-right: $flickity-theme-cell-spacing;
+      padding-left: $flickity-theme-cell-spacing;
+      width: $flickity-themes-width-laptop;
     }
 
-      &__slides {
-        align-items: stretch;
-      }
-
-        &__slide {
-          @include responsive(padding-right, rem-calc(5), rem-calc(10), $agile-themes-slide-padding-desktop);
-          @include responsive(padding-left, rem-calc(5), rem-calc(10), $agile-themes-slide-padding-desktop);
-        }
+    @include breakpoint($large) {
+      padding-right: $flickity-theme-cell-spacing;
+      padding-left: $flickity-theme-cell-spacing;
+      width: $flickity-themes-width-desktop;
+    }
   }
 }
