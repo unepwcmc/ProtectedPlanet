@@ -259,12 +259,6 @@ module ApplicationHelper
   #   !card[:pdf].present? && !card[:external_link].present?
   # end
 
-  def flickity_options_themes
-    {
-      large: { groupCells: 2 }
-    }.to_json
-  end
-
   def get_resource_cards(all=false)
     presenter = ResourcesPresenter.new(@cms_site, all)
     _resources = presenter.resources

@@ -1,7 +1,21 @@
+$flickity-basic-dot-size: rem-calc(13);
+
+$flickity-basic-slide-margin-mobile: rem-calc(5);
+$flickity-basic-slide-margin-tablet: rem-calc(10);
+$flickity-basic-slide-margin-desktop: rem-calc(10);
+
+$flickity-basic-slide-width-mobile: calc(92% - 2*#{$flickity-basic-slide-margin-mobile});
+$flickity-basic-slide-width-tablet: calc(38% - 2*#{$flickity-basic-slide-margin-tablet});
+$flickity-basic-slide-width-desktop: calc(20% - 2*#{$flickity-basic-slide-margin-desktop});
+
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
 &--basic {
   overflow: hidden;
   
-  .agile {
+  .flickity {
     &__dots {
       margin: rem-calc(30) auto 0 auto;
     }
@@ -9,8 +23,8 @@
     &__dot {
       background-color: $grey-light;
       border-radius: 100%;
-      margin-right: $agile-basic-dot-size/2;
-      width: $agile-basic-dot-size; height: $agile-basic-dot-size;
+      margin-right: $flickity-basic-dot-size/2;
+      width: $flickity-basic-dot-size; height: $flickity-basic-dot-size;
 
       &--current { background-color: $grey; }
     }
@@ -30,13 +44,13 @@
           
           &:last-child {
             @include breakpoint($large) {
-              @include tooltip-last-slide;
+              // @include tooltip-last-slide;
             }
           }
         }
 
           &__slide-content {
-            @include responsive(margin, 0 $agile-basic-slide-margin-mobile, 0 $agile-basic-slide-margin-tablet, 0 $agile-basic-slide-margin-tablet, 0 $agile-basic-slide-margin-desktop);
+            @include responsive(margin, 0 $flickity-basic-slide-margin-mobile, 0 $flickity-basic-slide-margin-tablet, 0 $flickity-basic-slide-margin-tablet, 0 $flickity-basic-slide-margin-desktop);
             background-color: $white; 
             border: solid 1px $grey-light;
             font-size: rem-calc(18);
