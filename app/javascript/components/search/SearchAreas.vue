@@ -167,7 +167,7 @@ export default {
   },
 
   mounted () {
-    if(this.query) { this.getSearchResults() }
+    this.getSearchResults()
   },
 
   computed: {
@@ -252,6 +252,7 @@ export default {
 
     updateProperties (response, resetFilters) {
       this.results = response.data.areas
+      // TODO @Stacy Country/Region filters don't seem to be updating correctly after the first search
       if(resetFilters) this.filterGroupsWithPreSelected = response.data.filters
     },
 

@@ -4,12 +4,8 @@ module Concerns::Searchable
   included do
     private
 
-    def ignore_empty_query
-      @query = params['search_term'] rescue nil
-      redirect_to :root if @query.blank? && filters.empty?
-    end
-
     def load_search
+      @query = search_params[:search_term]
       begin
         @search = Search.search(@query, search_options, search_index)
       rescue => e
@@ -89,6 +85,7 @@ module Concerns::Searchable
 
     def load_filters
       @area_type = search_params[:area_type]
+      @query ||= search_params[:search_term]
       @search_area_types = [
         {
           id: @area_type,

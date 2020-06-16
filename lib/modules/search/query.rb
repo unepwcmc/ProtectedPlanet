@@ -7,12 +7,10 @@ class Search::Query
   def to_h
     base_query = {}
 
-    if @term.present?
-      base_query["bool"] ||= {}
-      base_query["bool"]["must"] = {
-        "bool" => Search::Matcher.from_params(@term)
-      }
-    end
+    base_query["bool"] ||= {}
+    base_query["bool"]["must"] = {
+      "bool" => Search::Matcher.from_params(@term)
+    }
 
     if @options[:filters].present?
       base_query["bool"] ||= {}

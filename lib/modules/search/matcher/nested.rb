@@ -3,14 +3,26 @@ class Search::Matcher::Nested < Search::Matcher
     {
       "nested" => {
         "path" => @options[:path],
-        "query" => {
-          "multi_match" => {
-            "query" => @term,
-            "fields" => @options[:fields],
-            "fuzziness" => "0"
-          }
-        }
+        "query" => query
       }
     }
+  end
+
+  private
+
+  def query
+    if @term.blank?
+      {
+        "match_all" => {}
+      }
+    else
+      {
+        "multi_match" => {
+          "query" => @term,
+          "fields" => @options[:fields],
+          "fuzziness" => "0"
+        }
+      }
+    end
   end
 end

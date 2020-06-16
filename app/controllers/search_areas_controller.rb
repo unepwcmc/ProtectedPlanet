@@ -4,7 +4,6 @@ class SearchAreasController < ApplicationController
   after_action :enable_caching
 
   before_action :check_area_type, only: [:index, :search_results]
-  before_action :ignore_empty_query, only: [:search_results]
   before_action :load_search, only: [:search_results]
   before_action :load_filters, only: [:index, :search_results]
 
@@ -21,8 +20,6 @@ class SearchAreasController < ApplicationController
     end
 
     @tabs.to_json
-
-    @query = search_params[:search_term]
   end
 
   def search_results

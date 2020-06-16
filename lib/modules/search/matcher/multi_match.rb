@@ -20,12 +20,18 @@ class Search::Matcher::MultiMatch < Search::Matcher
   end
 
   def query
-    {
-      "multi_match" => {
-        "query" => "#{@term}",
-        "fields" => @options[:fields],
-        "fuzziness" => "0"
+    if @term.blank?
+      {
+        "match_all" => {}
       }
-    }
+    else
+      {
+        "multi_match" => {
+          "query" => "#{@term}",
+          "fields" => @options[:fields],
+          "fuzziness" => "0"
+        }
+      }
+    end
   end
 end
