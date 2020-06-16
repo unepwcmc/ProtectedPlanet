@@ -27,7 +27,7 @@ class Aichi11Target < ActiveRecord::Base
     global_values = Stats::CountryStatisticsApi.global_stats_for_import
     global_values = {} if global_values.is_a?(Array)
     # Import targets from file
-    CSV.forVeach(aichi11_target_csv_path, headers: true) do |row|
+    CSV.foreach(aichi11_target_csv_path, headers: true) do |row|
       return create({}.merge(row).merge(global_values))
     end
   end
