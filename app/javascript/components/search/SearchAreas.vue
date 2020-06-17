@@ -196,11 +196,13 @@ export default {
         params: {
           filters: this.activeFilterOptions,
           items_per_page: 9,
+          requested_page: 1,
           search_term: this.searchTerm,
           geo_type: this.selectedTab
         }
       }
 
+      console.log('data', data.params.filters)
       this.axiosSetHeaders()
 
       axios.get(this.endpointSearch, data)

@@ -14,20 +14,20 @@
         v-on:update:options="updateFilter"
       />
 
+      <checkbox-search
+        v-if="type == 'checkbox-search'"
+        :id="id"
+        :name="name"
+        :options="options"
+        :pre-selected="preSelectedCheckboxSearch"
+        v-on:update:options="updateFilter"
+      />
+
       <radio-buttons 
         v-if="type == 'radio'"
         :id="id"
         :name="name"
         :options="options"
-        v-on:update:options="updateFilter"
-      />
-
-      <radio-buttons-search
-        v-if="type == 'radio-search'"
-        :id="id"
-        :name="name"
-        :options="options"
-        :pre-selected="preSelectedRadioButtonsSearch"
         v-on:update:options="updateFilter"
       />
     </div>
@@ -37,12 +37,12 @@
 <script>
 import Checkboxes from '../form-fields/Checkboxes'
 import RadioButtons from '../form-fields/RadioButtons'
-import RadioButtonsSearch from '../form-fields/RadioButtonsSearch'
+import CheckboxSearch from '../form-fields/CheckboxSearch'
 
 export default {
   name: 'v-filter',
 
-  components: { Checkboxes, RadioButtons, RadioButtonsSearch },
+  components: { Checkboxes, RadioButtons, CheckboxSearch },
 
   props: {
     id: {
@@ -70,7 +70,7 @@ export default {
   },
 
   computed: {
-    preSelectedRadioButtonsSearch () {
+    preSelectedCheckboxSearch () {
       return Array.isArray(this.preSelected) && this.preSelected.length ? this.preSelected[0] : null
     }
   },
