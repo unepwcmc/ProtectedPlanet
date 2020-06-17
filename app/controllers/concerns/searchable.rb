@@ -27,7 +27,7 @@ module Concerns::Searchable
       controller_name.include?('area') ? Search::AREAS_INDEX_NAME : Search::DEFAULT_INDEX_NAME
     end
 
-    AREA_TYPES = %w(wdpa oecm).freeze
+    AREA_TYPES = %w(wdpa oecm all).freeze
     def check_area_type
       redirect_to :root unless AREA_TYPES.include?(params[:area_type].downcase)
     end

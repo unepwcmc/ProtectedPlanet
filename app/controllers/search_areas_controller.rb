@@ -8,9 +8,10 @@ class SearchAreasController < ApplicationController
   before_action :load_filters, only: [:index, :search_results]
 
   def index
+    placeholder = @area_type == 'all' ? 'oecm-wdpa' : @area_type
     @config_search_areas = {
-      id: 'all',
-      placeholder: I18n.t('global.placeholder.search-oecm-wdpa')
+      id: @area_type,
+      placeholder: I18n.t("global.placeholder.search-#{placeholder}")
     }.to_json
 
     @tabs = []

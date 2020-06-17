@@ -2,8 +2,8 @@ class SearchController < ApplicationController
   include Concerns::Searchable
   after_action :enable_caching
 
-  before_action :ignore_empty_query, only: [:search_results, :search_results_areas]
-  before_action :load_search, only: [:search_results, :search_results_areas]
+  before_action :ignore_empty_query, only: [:search_results]
+  before_action :load_search, only: [:search_results]
 
   def index
     @categories = [{ id: -1, title: 'All' }]
@@ -26,7 +26,7 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @results = Autocompletion.lookup search_params[:search_term]
+    @results = Autocompletion.lookup(search_params[:search_term], search_params[:type])
 
     render json: @results
   end
