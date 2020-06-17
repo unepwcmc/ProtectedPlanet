@@ -56,7 +56,7 @@ class Search::FiltersSerializer < Search::BaseSerializer
               }
             ],
             title: I18n.t('search.filter-group-geo-type.title'),
-            type: 'radio-search'
+            type: 'checkbox-search'
           },
           {
             id: 'designation',
