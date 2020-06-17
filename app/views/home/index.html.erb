@@ -5,7 +5,7 @@
   } 
 %>
 
-<%= render "partials/search/protected-areas", locals: { config: @config_search_areas } %>
+<%= render partial: "partials/search/protected-areas", locals: { config: @config_search_areas } %>
 
 <section class="container section-padding">
   <h2 class="text-center"><%= @pas_title %></h2>
