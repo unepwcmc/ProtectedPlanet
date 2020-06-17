@@ -24,7 +24,7 @@ module Concerns::Searchable
     end
 
     def search_index
-      controller_name.include?('area') ? Search::AREAS_INDEX_NAME : Search::DEFAULT_INDEX_NAME
+      controller_name.include?('area') ? Search::PA_INDEX : Search::DEFAULT_INDEX_NAME
     end
 
     DB_TYPES = %w(wdpa oecm all).freeze
