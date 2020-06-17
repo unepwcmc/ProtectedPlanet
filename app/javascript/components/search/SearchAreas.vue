@@ -41,11 +41,11 @@
         v-on:toggle:filter-pane="toggleFilterPane"
       />
       <div class="search__results">
-        <!-- <tabs-fake
+        <tabs-fake
           :children="tabs"
           class="flex flex-h-center"
           v-on:click:tab="updateSelectedTab"
-        /> -->
+        />
 
         <search-areas-results
           :no-results-text="noResultsText"
@@ -53,7 +53,10 @@
           :sm-trigger-element="smTriggerElement"
           v-on:request-more="requestMore"
           v-on:reset-pagination="resetPagination"
+          v-show="!loadingResults"
         />
+
+        <span :class="['icon--loading-spinner margin-center', { 'icon-visible': loadingResults } ]" />
       </div>
     </div>
   </div>
@@ -154,6 +157,7 @@ export default {
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
       isMapPaneActive: false,
+      loadingResults: false,
       results: {}, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
       searchTerm: '',
       selectedTab: ''
@@ -186,6 +190,8 @@ export default {
     },
 
     ajaxSubmission (resetFilters=false) {
+      this.loadingResults = true
+
       let data = {
         params: {
           filters: this.activeFilterOptions,
@@ -200,6 +206,7 @@ export default {
       axios.get(this.endpointSearch, data)
         .then(response => {
           this.updateProperties(response, resetFilters)
+          this.loadingResults = false
         })
         .catch(function (error) {
           console.log('error', error)
