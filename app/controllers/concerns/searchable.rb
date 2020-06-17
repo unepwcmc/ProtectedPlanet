@@ -44,43 +44,49 @@ module Concerns::Searchable
 
     def sanitise_filters
       _filters = JSON.parse(params['filters'])
-      #{'location' => {'type' => 'country', 'id' => 'Italy'}}
-      if _filters['location'].present? && _filters['location']['id'].present?
-        _filters[_filters['location']['type'].to_sym] = _filters['location']['id']
-      end
 
+      _filters = sanitise_location_filter(_filters)
       _filters = sanitise_db_type_filter(_filters)
       _filters = sanitise_type_filter(_filters)
       sanitise_special_status_filter(_filters)
     end
 
-    def sanitise_db_type_filter(_filters)
-      db_type = _filters.delete('db_type')
-      return _filters if !db_type || db_type.length > 1
-
-      _filters[:is_oecm] = true if db_type.first == 'oecm'
-      _filters
-    end
-
-    def sanitise_type_filter(_filters)
-      # ['marine', 'terrestrial', 'all']
-      is_type = _filters.delete('is_type')
-      return _filters if !is_type || is_type.include?('all') || is_type.length != 1
-
-      _filters[:marine] = is_type.first == 'marine'
-      _filters
-    end
-
-    def sanitise_special_status_filter(_filters)
-      # ['has_parcc_info', 'is_green_list']
-      special_status = _filters.delete('special_status')
-      return _filters unless special_status
-
-      special_status.map do |status|
-        _filters[status.to_sym] = true
+    #{'location' => {'type' => 'country', 'options' => ['Italy']}}
+    def sanitise_location_filter(filters)
+      if filters['location'].present? && filters['location']['options'].present?
+        filters[filters['location']['type'].to_sym] = filters['location']['options']
       end
 
-      _filters
+      filters
+    end
+
+    def sanitise_db_type_filter(filters)
+      db_type = filters.delete('db_type')
+      return filters if !db_type || db_type.length > 1
+
+      filters[:is_oecm] = true if db_type.first == 'oecm'
+      filters
+    end
+
+    def sanitise_type_filter(filters)
+      # ['marine', 'terrestrial', 'all']
+      is_type = filters.delete('is_type')
+      return filters if !is_type || is_type.include?('all') || is_type.length != 1
+
+      filters[:marine] = is_type.first == 'marine'
+      filters
+    end
+
+    def sanitise_special_status_filter(filters)
+      # ['has_parcc_info', 'is_green_list']
+      special_status = filters.delete('special_status')
+      return filters unless special_status
+
+      special_status.map do |status|
+        filters[status.to_sym] = true
+      end
+
+      filters
     end
 
     def load_filters
