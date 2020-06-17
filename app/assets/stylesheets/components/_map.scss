@@ -13,6 +13,8 @@
  &__trigger {
     @include button-map-trigger;
     margin-right: rem-calc(16);
+
+    @include breakpoint-down($small) { display: none; }
   }
 
   &--search {

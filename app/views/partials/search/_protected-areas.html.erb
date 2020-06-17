@@ -1,9 +1,8 @@
-<section class="search--pa container">
-  <div class="search__container">
-    <search-areas-home
-      :config="<%= config %>"
-      endpoint-autocomplete="/search/autocomplete"
-      endpoint-search="/<%= locale %>/TYPE/search?search_term=SEARCHTERM"
-    >
-  </div>
+<section class="container section-padding--top">
+  <search-areas-home
+    :config="<%= config %>"
+    endpoint-autocomplete="/search/autocomplete"
+    endpoint-search="/<%= locale %>/TYPE/search?search_term=SEARCHTERM"
+  >
+  </search-areas-home>
 </section>

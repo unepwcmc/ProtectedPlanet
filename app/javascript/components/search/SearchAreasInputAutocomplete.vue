@@ -20,25 +20,29 @@
       class="search__search-icon--delete"
       @click="resetSearchTerm"
     />
-
-    <ul
-      v-show="autocomplete.length > 0"
-      role="listbox"
+    
+    <div
       class="search__dropdown"
+      v-show="autocomplete.length > 0"
     >
-      <li
-        v-for="(option, index) in autocomplete"
-        :key="option.id"
-        class="search__li"
-        role="option"
+      <ul
+        class="search__ul"
+        role="listbox"
       >
-        <a
-          class="search__a"
-          :href="option.url"
-          v-html="option.title"
-        />
-      </li>
-    </ul>
+        <li
+          v-for="(option, index) in autocomplete"
+          :key="option.id"
+          class="search__li"
+          role="option"
+        >
+          <a
+            class="search__a"
+            :href="option.url"
+            v-html="option.title"
+          />
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
