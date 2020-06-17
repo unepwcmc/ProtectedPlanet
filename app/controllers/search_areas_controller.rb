@@ -3,14 +3,14 @@ class SearchAreasController < ApplicationController
 
   after_action :enable_caching
 
-  before_action :check_area_type, only: [:index, :search_results]
+  before_action :check_db_type, only: [:index, :search_results]
   before_action :load_search, only: [:search_results]
   before_action :load_filters, only: [:index, :search_results]
 
   def index
-    placeholder = @area_type == 'all' ? 'oecm-wdpa' : @area_type
+    placeholder = @db_type == 'all' ? 'oecm-wdpa' : @db_type
     @config_search_areas = {
-      id: @area_type,
+      id: @db_type,
       placeholder: I18n.t("global.placeholder.search-#{placeholder}")
     }.to_json
 
@@ -25,7 +25,7 @@ class SearchAreasController < ApplicationController
 
   def search_results
     @query = search_params[:search_term]
-    @area_type = search_params[:area_type]
+    @db_type = search_params[:db_type]
     geo_type = search_params[:geo_type]
     @results = Search::AreasSerializer.new(@search, geo_type).serialize
 
@@ -35,6 +35,6 @@ class SearchAreasController < ApplicationController
   private
 
   def search_params
-    params.permit(:search_term, :filters, :area_type, :geo_type, :items_per_page, :requested_page)
+    params.permit(:search_term, :filters, :db_type, :geo_type, :items_per_page, :requested_page)
   end
 end

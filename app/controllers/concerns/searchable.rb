@@ -27,9 +27,9 @@ module Concerns::Searchable
       controller_name.include?('area') ? Search::AREAS_INDEX_NAME : Search::DEFAULT_INDEX_NAME
     end
 
-    AREA_TYPES = %w(wdpa oecm all).freeze
-    def check_area_type
-      redirect_to :root unless AREA_TYPES.include?(params[:area_type].downcase)
+    DB_TYPES = %w(wdpa oecm all).freeze
+    def check_db_type
+      redirect_to :root unless DB_TYPES.include?(params[:db_type].downcase)
     end
 
     #
@@ -84,13 +84,13 @@ module Concerns::Searchable
     end
 
     def load_filters
-      @area_type = search_params[:area_type]
+      @db_type = search_params[:db_type]
       @query ||= search_params[:search_term]
-      @search_area_types = [
+      @search_db_types = [
         {
-          id: @area_type,
-          title: I18n.t("global.area-types.#{@area_type}"),
-          placeholder: I18n.t("global.placeholder.search-#{@area_type}")
+          id: @db_type,
+          title: I18n.t("global.area-types.#{@db_type}"),
+          placeholder: I18n.t("global.placeholder.search-#{@db_type}")
         }
       ].to_json
 
