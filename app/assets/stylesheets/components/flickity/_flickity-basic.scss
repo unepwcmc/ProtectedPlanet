@@ -6,7 +6,7 @@ $flickity-basic-cell-spacing-desktop: rem-calc(10);
 
 $flickity-basic-slide-width-mobile: calc(92% - 2*#{$flickity-basic-cell-spacing-mobile});
 $flickity-basic-slide-width-tablet: calc(40% - 2*#{$flickity-basic-cell-spacing-tablet});
-$flickity-basic-slide-width-desktop: calc(20% - 2*#{$flickity-basic-cell-spacing-desktop});
+$flickity-basic-slide-width-desktop: 20%;
 
 
 //--------------------------------------------------
@@ -20,6 +20,8 @@ $flickity-basic-slide-width-desktop: calc(20% - 2*#{$flickity-basic-cell-spacing
 
     position: relative;
     bottom: initial;
+
+    @include breakpoint($medium) { display: none; }
 
     .dot {
       background-color: $grey-light;
@@ -49,13 +51,13 @@ $flickity-basic-slide-width-desktop: calc(20% - 2*#{$flickity-basic-cell-spacing
     @include breakpoint($small) { 
       padding-right: $flickity-basic-cell-spacing-tablet;
       padding-left: $flickity-basic-cell-spacing-tablet;
-      width: $flickity-basic-slide-width-tablet; 
+      width: $flickity-basic-slide-width-tablet;
     }
 
     @include breakpoint($medium) { 
       padding-left: $flickity-basic-cell-spacing-desktop;
       padding-left: $flickity-basic-cell-spacing-desktop;
-      width: $flickity-basic-slide-width-desktop; 
+      width: $flickity-basic-slide-width-desktop; height: rem-calc(312);
     }
 
     
@@ -67,7 +69,6 @@ $flickity-basic-slide-width-desktop: calc(20% - 2*#{$flickity-basic-cell-spacing
   }
 
   .carousel-cell__content {
-    // @include responsive(margin, 0 $flickity-basic-slide-margin-mobile, 0 $flickity-basic-slide-margin-tablet, 0 $flickity-basic-slide-margin-tablet, 0 $flickity-basic-slide-margin-desktop);
     background-color: $white; 
     border: solid 1px $grey-light;
     font-size: rem-calc(18);
@@ -75,12 +76,11 @@ $flickity-basic-slide-width-desktop: calc(20% - 2*#{$flickity-basic-cell-spacing
     width: 100%; height: 100%;
 
     position: relative;
-
-    
   }
 
   .carousel-cell__title {
-    @include responsive(margin, 0, rem-calc(0 5), rem-calc(0 5), rem-calc(0 10));
+    @include breakpoint($small) { margin: rem-calc(0 5); }
+    @include breakpoint($large) { margin: rem-calc(0 10); }
   }
 
   .carousel-cell__tooltip {
