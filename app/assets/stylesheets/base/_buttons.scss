@@ -163,13 +163,13 @@ $padding-medium: rem-calc(27);
 @mixin button-search {
   @include button-basic;
   @include button-radius;
-  @include flex-center;
   background-color: $primary;
   width: rem-calc(47); height: rem-calc(47);
 
   &:before {
     @include icon-search-white;
     content: '';
+    margin: 0 auto;
   }
 }
 
