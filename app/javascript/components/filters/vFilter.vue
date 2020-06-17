@@ -14,15 +14,6 @@
         v-on:update:options="updateFilter"
       />
 
-      <checkbox-search
-        v-if="type == 'checkbox-search'"
-        :id="id"
-        :name="name"
-        :options="options"
-        :pre-selected="preSelectedCheckboxSearch"
-        v-on:update:options="updateFilter"
-      />
-
       <radio-buttons 
         v-if="type == 'radio'"
         :id="id"
@@ -31,6 +22,15 @@
         v-on:update:options="updateFilter"
       />
     </div>
+
+    <checkbox-search
+      v-if="type == 'checkbox-search'"
+      :id="id"
+      :name="name"
+      :options="options"
+      :pre-selected="preSelectedCheckboxSearch"
+      v-on:update:options="updateFilter"
+    />
   </div>
 </template>
 

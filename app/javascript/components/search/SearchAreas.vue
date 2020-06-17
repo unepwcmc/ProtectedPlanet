@@ -43,7 +43,7 @@
       <div class="search__results">
         <tabs-fake
           :children="tabs"
-          class="flex flex-h-center"
+          class="tabs--rounded"
           v-on:click:tab="updateSelectedTab"
         />
 

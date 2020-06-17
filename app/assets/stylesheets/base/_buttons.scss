@@ -16,7 +16,6 @@ $padding-medium: rem-calc(27);
 }
 
 @mixin button-basic {
-  @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
   background-color: transparent;
   border: none;
   color: inherit;
@@ -28,6 +27,10 @@ $padding-medium: rem-calc(27);
   &:hover { text-decoration: none; }
 }
 
+@mixin button-font {
+  @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
+}
+
 @mixin button-disabled { cursor: disabled; }
 
 @mixin button-height { 
@@ -37,7 +40,7 @@ $padding-medium: rem-calc(27);
   align-items: center;
 }
 
-@mixin button-padding {
+@mixin button-padding($size: default) {
   @include responsive(padding-right, $padding-small, $padding-medium, $padding-medium);
   @include responsive(padding-left, $padding-small, $padding-medium, $padding-medium);
 }
@@ -53,6 +56,7 @@ $padding-medium: rem-calc(27);
 @mixin button-block ($bg: $purple, $text: $white) {
   @include button-basic;
   @include button-height;
+  @include button-font;
   @include button-padding;
   @include button-radius;
   background-color: $bg;
@@ -61,6 +65,7 @@ $padding-medium: rem-calc(27);
 
 @mixin button-with-icon {
   @include button-basic;
+  @include button-font;
   @include flex;
   @include flex-v-center;
 
@@ -74,6 +79,7 @@ $padding-medium: rem-calc(27);
 
 @mixin button-outline ($colour: $black) {
   @include button-basic;
+  @include button-font;
   @include button-height;
   @include button-padding;
   @include button-radius;
@@ -95,6 +101,7 @@ $padding-medium: rem-calc(27);
 
 @mixin button-download-trigger {
   @include button-basic;
+  @include button-font;
   @include button-radius;
   @include flex;
   @include flex-center;
@@ -146,6 +153,7 @@ $padding-medium: rem-calc(27);
 
 @mixin button-search {
   @include button-basic;
+  @include button-font;
   @include button-radius;
   @include flex-center;
   background-color: $primary;
@@ -154,6 +162,28 @@ $padding-medium: rem-calc(27);
   &:before {
     @include icon-search-white;
     content: '';
+  }
+}
+
+@mixin button-tab-rounded($size: default) {
+  @include button-basic;
+  border: solid transparent 1px;
+  border-radius: rem-calc(20);
+  
+  @if $size == 'small' {
+    font-size: rem-calc(14);
+    padding: rem-calc(6 16);
+  } @else {
+    @include text-tabs-fake;
+    padding: rem-calc(5 26);
+  }
+
+  &:hover,
+  .active { border-color: $primary; }
+  
+  &.active { 
+    background-color: $primary;
+    color: $white;
   }
 }
 

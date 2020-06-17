@@ -1,5 +1,5 @@
 <template>
-  <ul class="tabs--fake">
+  <ul>
     <tab-fake
       v-for="(child, index) in children" 
       :key="index"

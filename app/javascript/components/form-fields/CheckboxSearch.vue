@@ -2,17 +2,18 @@
   <div>
     <tabs-fake 
       :children="tabs"
+      class="tabs--rounded-small"
       :pre-selected="preSelectedTabId"
       v-on:click:tab="updateSelectedTab"
     />
     
     <input
-      class="margin-space--bottom"
+      class="input--search margin-space--bottom"
       type="text" 
       v-model="searchTerm"
     />
     
-    <div>
+    <div class="filter__options">
       <checkboxes 
         :id="id"
         :options="autocomplete"
