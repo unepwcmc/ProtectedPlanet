@@ -197,7 +197,7 @@ export default {
           filters: this.activeFilterOptions,
           items_per_page: 9,
           search_term: this.searchTerm,
-          // geo_type: this.selectedTab
+          geo_type: this.selectedTab
         }
       }
 

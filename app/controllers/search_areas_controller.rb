@@ -7,6 +7,7 @@ class SearchAreasController < ApplicationController
   before_action :load_search, only: [:search_results]
   before_action :load_filters, only: [:index, :search_results]
 
+  TABS = %w(region country site).freeze
   def index
     placeholder = @db_type == 'all' ? 'oecm-wdpa' : @db_type
     @config_search_areas = {
@@ -16,11 +17,9 @@ class SearchAreasController < ApplicationController
 
     @tabs = []
 
-    I18n.t('search.geo-types').each_with_index.map do |type, i|
-      @tabs << { id: "geo-type-#{i}", title: type } #FERDI update the ids here to what you need
+    TABS.each do |tab|
+      @tabs << { id: tab, title: I18n.t("search.geo-types.#{tab}") }
     end
-
-    @tabs.to_json
   end
 
   def search_results
