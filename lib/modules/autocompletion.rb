@@ -5,8 +5,9 @@ module Autocompletion
     'country' => :iso_3
   }.freeze
 
-  def self.lookup(term, search_index=Search::PA_INDEX)
-    search = Search.search(term.downcase, {}, search_index)
+  def self.lookup(term, area_type='wdpa', search_index=Search::PA_INDEX)
+    filters = { filters: { is_oecm: area_type == 'oecm' } }
+    search = Search.search(term.downcase, filters, search_index)
 
     results = search.results.objects.values.compact.flatten
 

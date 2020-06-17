@@ -9,6 +9,11 @@
       "field": "has_irreplaceability_info"
     }
   },
+  "is_oecm": {
+    "terms": {
+      "field": "is_oecm"
+    }
+  },
   "country": {
     "nested": {
       "path": "countries_for_index"

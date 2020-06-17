@@ -92,7 +92,10 @@
 	    },
 	    "has_parcc_info": {
         "type": "boolean"
-	    },
+      },
+      "is_oecm": {
+        "type": "boolean"
+      },
 	    "coordinates": {
         "type": "geo_point"
 	    },
