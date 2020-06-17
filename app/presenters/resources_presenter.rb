@@ -12,7 +12,7 @@ class ResourcesPresenter
 
     {
       title: resources_page.label,
-      url: all ? false : resources_page.full_path,
+      url: all ? '' : resources_page.full_path,
       cards: selected_cards.map do |page|
         {
           label: page.label,
