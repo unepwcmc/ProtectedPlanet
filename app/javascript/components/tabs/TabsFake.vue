@@ -24,6 +24,10 @@ export default {
       type: Array, // [{ id: String, title: String }]
       required: true
     },
+    defaultSelectedId: {
+      default: '',
+      type: String
+    },
     preSelected: {
       default: '',
       type: String
@@ -54,11 +58,15 @@ export default {
     },
 
     setInitialTab () {
+      if(this.defaultSelectedId) {
+        this.defaultId = this.defaultSelectedId
+      }
+
       let tabId = this.defaultId
 
       if(this.preSelected !== '') {
         if(this.children.filter(child.id == this.preSelected)) { 
-          tabId = this.preSelected 
+          tabId = this.preSelected.id 
         }
       }
       

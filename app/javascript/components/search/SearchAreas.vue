@@ -44,6 +44,7 @@
         <tabs-fake
           :children="tabs"
           class="tabs--rounded"
+          :defaultSelectedId="tabs[2].id"
           v-on:click:tab="updateSelectedTab"
         />
 
