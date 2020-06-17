@@ -198,7 +198,7 @@ export default {
           items_per_page: 9,
           requested_page: 1,
           search_term: this.searchTerm,
-          // geo_type: this.selectedTab
+          geo_type: this.selectedTab
         }
       }
 

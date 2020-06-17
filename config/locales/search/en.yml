@@ -30,10 +30,9 @@ en:
         - Terrestrial
         - Marine
     geo-types:
-      - All
-      - Regions
-      - Countries
-      - Individual Areas
+      region: Regions
+      country: Countries
+      site: Individual Areas
     map: Map
     protected-areas: Protected Areas
     results: results

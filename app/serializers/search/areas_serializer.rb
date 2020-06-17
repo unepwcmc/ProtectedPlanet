@@ -7,12 +7,7 @@ class Search::AreasSerializer < Search::BaseSerializer
   end
 
   def serialize
-    if @geo_type
-      areas = @geo_type == 'site' ? @results.protected_areas : paginate(@aggregations[@geo_type])
-      return areas_ary(@geo_type, areas).to_json
-    end
-
-    sites
+    send(@geo_type.pluralize)
   end
 
   private
@@ -20,13 +15,13 @@ class Search::AreasSerializer < Search::BaseSerializer
   def regions
     _regions = @aggregations['region']
 
-    geo_hash('region', _regions, _regions.length)
+    geo_hash('region', paginate(_regions), _regions.length)
   end
 
   def countries
     _countries = @aggregations['country']
 
-    geo_hash('country', _countries, _countries.length)
+    geo_hash('country', paginate(_countries), _countries.length)
   end
 
   def sites
@@ -39,7 +34,7 @@ class Search::AreasSerializer < Search::BaseSerializer
     geo_hash('site', _sites, _total_count)
   end
 
-  def geo_hash(geo_type, areas, total=nil)
+  def geo_hash(geo_type, areas, total=0)
     areas = areas.present? ? areas.first(9) : []
     geo_type_locale = geo_type == 'site' ? 'area-types.wdpa' : "geo-types.#{geo_type.pluralize}"
     {
