@@ -127,5 +127,38 @@
 
       display: block;
     }
+
+    &__story_map_link {
+      margin-bottom: rem-calc(6);
+      font-size: rem-calc(20);
+
+      display: flex;
+      justify-content: space-between;
+
+      &__label {
+        &__title {
+          font-weight: $bold;
+        }
+        &__link-type {
+          font-weight: normal;
+          &::before {
+            content: "(";
+          }
+          &::after {
+            content: ")";
+          }
+        }
+      }
+
+      &__download-link {
+        font-weight: normal;
+        &::after {
+          @include icon-arrow-external-white;
+          svg {
+            stroke: $green;
+          }
+        }
+      }
+    }
   }
 }
