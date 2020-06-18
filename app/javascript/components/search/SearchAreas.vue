@@ -269,7 +269,7 @@ export default {
       this.$eventHub.$emit('reset:pagination')
       this.activeFilterOptions = filters
       this.getFilteredSearchResults()
-      // this.updateQueryString(filters)
+      this.updateQueryString({ filters: filters })
     },
 
     updateProperties (response, resetFilters) {
@@ -279,35 +279,49 @@ export default {
     },
 
     updateQueryString (params) {
-      console.log(params)
-      const currentQueryStringParams = new URLSearchParams(window.location.search)
-      
-      console.log('current', currentQueryStringParams)
+      let searchParams = new URLSearchParams(window.location.search)
 
-      const paramKeys = Object.keys(params)
-      
-      paramKeys.forEach(key => {
-        console.log('key', key)  
+      const key = Object.keys(params)[0]
 
-        if(currentQueryStringParams.has(key)) {
-          currentQueryStringParams.set(key, params[key])
-        } else {
-          currentQueryStringParams.append(key, params[key])
-        }
-      })
-      console.log('new string', currentQueryStringParams.toString())
+      console.log('params', params)
+      console.log('key', key)
 
-      const newUrl = `${window.location.pathname}?${currentQueryStringParams.toString()}`
+      if(key == 'filters') {
+        const filters = params.filters
+
+        Object.keys(filters).forEach(key => {
+
+          if(key == 'db_type') {
+            filters[key].length > 1 ? searchParams.set(key, 'all') : searchParams.set(key, filters[key]) 
+          } else {
+            console.log('db values', filters[key])
+            if(searchParams.has(key)) { searchParams.delete(key) }
+
+            filters[key].forEach(value => {
+              searchParams.append(key, value)
+            })
+          }
+        })
+      }
+
+      if(key == 'search_term' || key == 'geo_type') {
+        this.updateQueryStringParam(searchParams, key, params[key])
+      }
+
+      const newUrl = `${window.location.pathname}?${searchParams.toString()}`
 
       window.history.pushState({ query: 1 }, null, newUrl)
-      // window.location.hash = currentQueryStringParams.toString()
+    },
+
+    updateQueryStringParam (params, key, value) {
+      params.has(key) ? params.set(key, value) : params.append(key, value)
     },
 
     updateSelectedTab (selectedTabId) {
       this.tabIdSelected = selectedTabId
       this.resetPagination()
       this.getFilteredSearchResults()
-      // this.updateQueryString({ 'geo_type': selectedTabId })
+      this.updateQueryString({ geo_type: selectedTabId })
     },
 
     updateSearchTerm (searchParams) {
