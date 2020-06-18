@@ -9,7 +9,7 @@ class SearchAreasController < ApplicationController
 
   TABS = %w(region country site).freeze
   def index
-    placeholder = @db_type == 'all' ? 'oecm-wdpa' : @db_type
+    placeholder = ['all', nil].include?(@db_type) ? 'oecm-wdpa' : @db_type
     
     @config_search_areas = {
       id: @db_type,
