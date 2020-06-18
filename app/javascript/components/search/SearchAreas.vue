@@ -201,7 +201,7 @@ export default {
         }
       }
 
-      console.log('data', data.params)
+// console.log('data', data.params)
       this.axiosSetHeaders()
 
       axios.get(this.endpointSearch, data)
@@ -269,6 +269,7 @@ export default {
       this.$eventHub.$emit('reset:pagination')
       this.activeFilterOptions = filters
       this.getFilteredSearchResults()
+      // this.updateQueryString(filters)
     },
 
     updateProperties (response, resetFilters) {
@@ -277,10 +278,36 @@ export default {
       if(resetFilters) this.filterGroupsWithPreSelected = response.data.filters
     },
 
+    updateQueryString (params) {
+      console.log(params)
+      const currentQueryStringParams = new URLSearchParams(window.location.search)
+      
+      console.log('current', currentQueryStringParams)
+
+      const paramKeys = Object.keys(params)
+      
+      paramKeys.forEach(key => {
+        console.log('key', key)  
+
+        if(currentQueryStringParams.has(key)) {
+          currentQueryStringParams.set(key, params[key])
+        } else {
+          currentQueryStringParams.append(key, params[key])
+        }
+      })
+      console.log('new string', currentQueryStringParams.toString())
+
+      const newUrl = `${window.location.pathname}?${currentQueryStringParams.toString()}`
+
+      window.history.pushState({ query: 1 }, null, newUrl)
+      // window.location.hash = currentQueryStringParams.toString()
+    },
+
     updateSelectedTab (selectedTabId) {
       this.tabIdSelected = selectedTabId
       this.resetPagination()
       this.getFilteredSearchResults()
+      // this.updateQueryString({ 'geo_type': selectedTabId })
     },
 
     updateSearchTerm (searchParams) {
@@ -289,6 +316,7 @@ export default {
       this.resetSearchTerm(searchParams)
       this.resetTabs()
       this.getSearchResults()
+      this.updateQueryString({ search_term: searchParams.search_term })
     },
 
     requestMore (paginationParams) {
