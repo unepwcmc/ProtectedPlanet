@@ -8,7 +8,7 @@
     endpoint-pagination="<%= search_areas_results_path(db_type: @db_type) %>"
     endpoint-search="<%= search_areas_results_path(db_type: @db_type) %>"
     filter-close-text="View Results"
-    :filter-groups="<%= @filter_groups %>"
+    :filter-groups="<%= @filter_groups.to_json %>"
     query="<%= @query %>"
     no-results-text="<%= t('search.no-results') %>"
     sm-trigger-element="sm-trigger-infinite-scroll"

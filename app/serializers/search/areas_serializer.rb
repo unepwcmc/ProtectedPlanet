@@ -7,7 +7,7 @@ class Search::AreasSerializer < Search::BaseSerializer
   end
 
   def serialize
-    send(@geo_type.pluralize)
+    @geo_type.present? ? send(@geo_type.pluralize) : {}
   end
 
   private

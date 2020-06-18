@@ -4,7 +4,7 @@ class SearchAreasController < ApplicationController
   after_action :enable_caching
 
   before_action :check_db_type, only: [:index, :search_results]
-  before_action :load_search, only: [:search_results]
+  before_action :load_search, only: [:index, :search_results]
   before_action :load_filters, only: [:index, :search_results]
 
   TABS = %w(region country site).freeze
