@@ -120,9 +120,6 @@ export default {
       type: Number,
       default: 9
     },
-    query: {
-      type: String
-    },
     noResultsText: {
       required: true,
       type: String
@@ -166,8 +163,6 @@ export default {
   },
 
   created () {
-    if(this.query) { this.searchTerm = this.query }
-
     this.handleQueryString()
   },
 
@@ -203,7 +198,7 @@ export default {
         }
       }
 
-      console.log('data', data.params.filters)
+      // console.log('data', data.params.filters)
       this.axiosSetHeaders()
 
       axios.get(this.endpointSearch, data)
@@ -230,18 +225,30 @@ export default {
         if(paramsFromUrl.has(param)) { params.push(param) }
       })
       
+      console.log('paramsFromUrl', paramsFromUrl)
+      console.log('params', params)
+      
       this.filterGroups.map(filterGroup => {
         return filterGroup.filters.map(filter => {
           params.forEach(key => {
-            if(key == 'location_id') { 
-              if(filter.id == 'location') { 
-                filter.preSelected = [{
-                  id: paramsFromUrl.get('location_id'),
-                  type: paramsFromUrl.get('location_type')
-                }]
-              }
-            } else {
-              if(filter.id == key) { 
+            if(filter.id == key) { 
+              if(key == 'location_id') { 
+                if(filter.id == 'location') { 
+                  filter.preSelected = [{
+                    id: paramsFromUrl.get('location_id'),
+                    type: paramsFromUrl.get('location_type')
+                  }]
+                }
+              } else if(key == 'db_type' && paramsFromUrl.get('db_type') == 'all') { 
+                console.log('db_type', key)
+                filter.preSelected = []
+                filter.options.forEach((option) => { filter.preSelected.push(option.id) })
+                console.log('db type preSelected', filter.preSelected)
+              } else if(key == 'search_term') { 
+                console.log('search_term', key)
+                this.searchTerm = paramsFromUrl.get('search_term')
+              } else {
+                console.log('default', key)
                 filter.preSelected = paramsFromUrl.getAll(key)
               }
             }

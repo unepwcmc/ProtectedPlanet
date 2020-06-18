@@ -8,6 +8,7 @@
 
     <tabs-fake
       :children="categories"
+      class="tabs--rounded"
       v-on:click:tab="updateCategory"
     />
 
@@ -93,7 +94,7 @@ export default {
 
   mounted () {
     if(this.query) {
-      console.log('here')
+      
       this.searchTerm = this.query
       this.ajaxSubmission()
     }
