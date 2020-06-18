@@ -35,6 +35,7 @@ module Concerns::Searchable
 
     DB_TYPES = %w(wdpa oecm all).freeze
     def check_db_type
+      return unless params[:db_type]
       redirect_to :root unless DB_TYPES.include?(params[:db_type].downcase)
     end
 
