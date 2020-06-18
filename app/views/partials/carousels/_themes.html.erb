@@ -2,19 +2,12 @@
 
 <section class="section-padding">
   <h2 class="text-center"><%= @items[:title] %></h2>
-
-  <agile class="agile--themes bg-gradient-overlay--white" :options="<%= get_agile_config_themes %>">
-    <template slot="prevButton">
-      <i class="icon--circle-chevron-green-large-prev"></i>
-    </template>
-    <template slot="nextButton">
-      <i class="icon--circle-chevron-green-large-next"></i>
-    </template>
-    
+  
+  <flickity ref="flickity" class="flickity--themes">
     <% @items[:cards].each do |slide| %>
-      <div class="agile__slide">
+      <div class="carousel-cell">
         <%= render partial: 'partials/sub_partials/themes', locals: { theme: slide } %>
       </div>
     <% end %>
-  </agile>
+  </flickity>
 </section>
