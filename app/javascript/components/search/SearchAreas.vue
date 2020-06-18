@@ -293,8 +293,17 @@ export default {
 
           if(key == 'db_type') {
             filters[key].length > 1 ? searchParams.set(key, 'all') : searchParams.set(key, filters[key]) 
+          } else if (key == 'location') {
+            console.log('location')
+            this.updateQueryStringParam(searchParams, 'location_type', filters[key].type)
+
+            if(searchParams.has(key)) { searchParams.delete(key) }
+
+            filters[key].options.forEach(value => {
+              searchParams.append(key, value)
+            })
+
           } else {
-            console.log('db values', filters[key])
             if(searchParams.has(key)) { searchParams.delete(key) }
 
             filters[key].forEach(value => {
@@ -304,7 +313,14 @@ export default {
         })
       }
 
-      if(key == 'search_term' || key == 'geo_type') {
+      if(key == 'search_term') {
+        searchParams = new URLSearchParams()
+
+        this.updateQueryStringParam(searchParams, key, params[key])
+        this.updateQueryStringParam(searchParams, 'geo_type', 'site')
+      }
+
+      if(key == 'geo_type') {
         this.updateQueryStringParam(searchParams, key, params[key])
       }
 
