@@ -103,10 +103,14 @@ export default {
   methods: {
     ajaxSubmission () {
       let data = {
-        ancestor: this.categoryId,
-        items_per_page: this.itemsPerPage,
-        requested_page: this.requestedPage,
-        search_term: this.searchTerm
+        params: {
+          filters: {
+            ancestor: this.categoryId,
+          },
+          items_per_page: this.itemsPerPage,
+          requested_page: this.requestedPage,
+          search_term: this.searchTerm
+        }
       }
 
       if(this.categoryId <= 0) {
@@ -115,7 +119,7 @@ export default {
 
       this.axiosSetHeaders()
 
-      axios.post(this.endpoint, data)
+      axios.get(this.endpoint, data)
         .then(response => {
           console.log('success', response)
           this.updateProperties(response.data)

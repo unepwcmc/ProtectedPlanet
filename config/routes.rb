@@ -83,7 +83,7 @@ Rails.application.routes.draw do
     get '/search-areas-results', to: 'search_areas#search_results', as: :search_areas_results
 
     post '/search/autocomplete', to: 'search#autocomplete'
-    post '/search-results', to: 'search#search_results'
+    get '/search-results', to: 'search#search_results', as: :search_results
 
     # Ensure that this route is defined last
 
