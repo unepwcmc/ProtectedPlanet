@@ -26,9 +26,8 @@ en:
     filter-group-type:
       title: Type
       options:
-        - All
-        - Terrestrial
-        - Marine
+        terrestrial: 'Terrestrial'
+        marine: 'Marine'
     geo-types:
       region: Regions
       country: Countries

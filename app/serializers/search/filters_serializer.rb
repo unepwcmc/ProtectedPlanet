@@ -23,9 +23,8 @@ class Search::FiltersSerializer < Search::BaseSerializer
             id: 'is_type',
             name: 'is_type',
             options: [
-              { id: 'all', title: I18n.t('search.filter-group-type.options')[0] },
-              { id: 'terrestrial', title: I18n.t('search.filter-group-type.options')[1] },
-              { id: 'marine', title: I18n.t('search.filter-group-type.options')[2] }
+              { id: 'terrestrial', title: I18n.t('search.filter-group-type.options.terrestrial') },
+              { id: 'marine', title: I18n.t('search.filter-group-type.options.marine') }
             ],
             title: I18n.t('search.filter-group-type.title'),
             type: 'checkbox'
