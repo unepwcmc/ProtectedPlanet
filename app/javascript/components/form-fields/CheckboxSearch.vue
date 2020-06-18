@@ -3,7 +3,7 @@
     <tabs-fake 
       :children="tabs"
       class="tabs--rounded-small"
-      :pre-selected="selectedTabId"
+      :pre-selected-id="selectedTabId"
       v-on:click:tab="updateSelectedTab"
     />
     
@@ -17,7 +17,7 @@
       <checkboxes 
         :id="id"
         :options="autocomplete"
-        :pre-selected="preSelected"
+        :pre-selected="preSelectedCheckboxes"
         ref="checkboxes"
         v-on:update:options="updateSelectedCheckboxes"
       />
@@ -44,9 +44,9 @@ export default {
       required: true 
     },
     preSelected: {
-      type: Object, // { id: String, type: String },
-      validator: o => o === null || (o.hasOwnProperty('id') && typeof o.id === 'string'
-        && o.hasOwnProperty('type') && typeof o.type === 'string')
+      type: Object, // { type: String, options: Array },
+      // validator: o => o === null || (o.hasOwnProperty('options') && typeof o.options === 'array'
+      //   && o.hasOwnProperty('type') && typeof o.type === 'string')
     },
     name: { 
       type: String,
@@ -56,21 +56,21 @@ export default {
 
   data () {
     return {
-      defaultTabId: '',
-      preSelectedCheckboxes: '',
+      defaultTabId: this.options[0].id,
+      preSelectedCheckboxes: null,
       selectedTabId: '',
       searchTerm: ''
     }
   },
 
   created () {
-    this.$eventHub.$on('reset:filter-options', this.reset)
+    this.handlePreSelectedOptions()    
   },
 
   mounted () {
-    this.defaultTabId = this.options[0].id
+    this.$eventHub.$on('reset:filter-options', this.reset)
 
-    this.handlePreSelectedOptions()
+    this.defaultTabId = this.options[0].id
   },
 
   computed: {
@@ -116,7 +116,7 @@ export default {
     },
 
     reset () {
-      this.preSelectedCheckboxes = ''
+      this.preSelectedCheckboxes = null
       this.selectedTabId = this.defaultTabId
       this.searchTerm = ''
     },

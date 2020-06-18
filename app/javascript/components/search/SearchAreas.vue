@@ -150,7 +150,8 @@ export default {
   data () {
     return {
       config: {
-        queryStringParams: ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category', 'location_id', 'search_term', 'geo_type']
+        queryStringParams: ['search_term', 'geo_type'],
+        queryStringParamsFilters: ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category', 'location_id', 'location_type']
       },
       activeFilterOptions: [],
       filterGroupsWithPreSelected: [],
@@ -227,37 +228,41 @@ export default {
       this.config.queryStringParams.forEach(param => {
         if(paramsFromUrl.has(param)) { params.push(param) }
       })
-
-      if(params.includes('search_term')) { 
+    
+      if(params.includes('search_term')) {
         this.searchTerm = paramsFromUrl.get('search_term')
       }
 
       if(params.includes('geo_type')) { 
         this.tabIdPreSelected = paramsFromUrl.get('geo_type')
       }
+
+      let filterParams = []
+
+      this.config.queryStringParamsFilters.forEach(param => {
+        if(paramsFromUrl.has(param)) { filterParams.push(param) }
+      })
       
       this.filterGroups.map(filterGroup => {
         return filterGroup.filters.map(filter => {
-          params.forEach(key => {
-            if(key == 'search_term' || key == 'geo_type') { return false }
-            
-            if(filter.id == key) { 
-              if(key == 'location_id') { 
-                if(filter.id == 'location') { 
-                  filter.preSelected = [{
-                    id: paramsFromUrl.get('location_id'),
-                    type: paramsFromUrl.get('location_type')
-                  }]
-                }
-              } else if(key == 'db_type' && paramsFromUrl.get('db_type') == 'all') { 
+          filterParams.forEach(key => {
+            if(filter.id == key){
+              if(key == 'db_type') {
                 filter.preSelected = []
                 filter.options.forEach((option) => { filter.preSelected.push(option.id) })
               } else {
                 filter.preSelected = paramsFromUrl.getAll(key)
               }
             }
-          })
 
+            if(filter.id == 'location' && key == 'location_type') { 
+              filter.preSelected = [{
+                type: paramsFromUrl.get('location_type'),
+                options: paramsFromUrl.getAll('location_id')
+              }]
+            }
+          })
+          
           return filter
         })
       })
@@ -283,9 +288,6 @@ export default {
 
       const key = Object.keys(params)[0]
 
-      console.log('params', params)
-      console.log('key', key)
-
       if(key == 'filters') {
         const filters = params.filters
 
@@ -294,13 +296,12 @@ export default {
           if(key == 'db_type') {
             filters[key].length > 1 ? searchParams.set(key, 'all') : searchParams.set(key, filters[key]) 
           } else if (key == 'location') {
-            console.log('location')
             this.updateQueryStringParam(searchParams, 'location_type', filters[key].type)
 
-            if(searchParams.has(key)) { searchParams.delete(key) }
+            if(searchParams.has('location_id')) { searchParams.delete('location_id') }
 
             filters[key].options.forEach(value => {
-              searchParams.append(key, value)
+              searchParams.append('location_id', value)
             })
 
           } else {

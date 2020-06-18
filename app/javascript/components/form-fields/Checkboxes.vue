@@ -59,10 +59,9 @@ export default {
     }
   },
 
-  created () {
+  mounted () {
     if(this.hasPreSelectedOptions) { 
-      this.input = (this.preSelected)
-      this.changeInput()
+      this.input = this.preSelected
     }
 
     this.$eventHub.$on('reset:filter-options', this.reset)
