@@ -45,7 +45,7 @@
           :children="tabs"
           class="tabs--rounded"
           :defaultSelectedId="tabIdDefault"
-          :preSelectedId="tabIdPreSelected"
+          :preSelectedId="tabIdSelected"
           v-on:click:tab="updateSelectedTab"
         />
 
@@ -161,8 +161,7 @@ export default {
       results: {}, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
       searchTerm: '',
       tabIdDefault: this.tabs[2].id,
-      tabIdPreSelected: '',
-      tabIdSelected: ''
+      tabIdSelected: this.tabs[2].id
     }
   },
 
@@ -234,7 +233,7 @@ export default {
       }
 
       if(params.includes('geo_type')) { 
-        this.tabIdPreSelected = paramsFromUrl.get('geo_type')
+        this.tabIdSelected = paramsFromUrl.get('geo_type')
       }
 
       let filterParams = []
