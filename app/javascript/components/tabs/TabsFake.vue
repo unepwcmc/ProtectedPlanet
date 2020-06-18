@@ -42,8 +42,11 @@ export default {
   },
 
   created () {
-    this.setInitialTab()
     this.$eventHub.$on('reset:tabs', this.reset)
+  },
+
+  mounted () {
+    this.setInitialTab()  
   },
 
   methods: {

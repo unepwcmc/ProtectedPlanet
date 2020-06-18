@@ -3,7 +3,7 @@
     <tabs-fake 
       :children="tabs"
       class="tabs--rounded-small"
-      :pre-selected="preSelectedTabId"
+      :pre-selected="selectedTabId"
       v-on:click:tab="updateSelectedTab"
     />
     
@@ -56,18 +56,21 @@ export default {
 
   data () {
     return {
+      defaultTabId: '',
       preSelectedCheckboxes: '',
-      preSelectedTabId: '',
       selectedTabId: '',
       searchTerm: ''
     }
   },
 
   created () {
-    if(this.hasPreSelectedOptions) { this.handlePreSelectedOptions() 
-    }
-
     this.$eventHub.$on('reset:filter-options', this.reset)
+  },
+
+  mounted () {
+    this.defaultTabId = this.options[0].id
+
+    this.handlePreSelectedOptions()
   },
 
   computed: {
@@ -92,10 +95,6 @@ export default {
       return autocompleteOptions
     },
 
-    hasPreSelectedOptions () {
-      return typeof this.preSelected === 'object'
-    },
-
     tabs () {
       return this.options.map(option => {
         return {
@@ -108,15 +107,17 @@ export default {
 
   methods: {
     handlePreSelectedOptions () {
-      if (this.preSelected === null) return
-      this.hasPreSelectedTabId = this.preSelected.type
-      this.preSelectedCheckboxes = this.preSelected.options
+      if (this.preSelected) {
+        this.selectedTabId = this.preSelected.type
+        this.preSelectedCheckboxes = this.preSelected.options
+      } else {
+        this.selectedTabId = this.defaultTabId
+      } 
     },
 
     reset () {
       this.preSelectedCheckboxes = ''
-      this.hasPreSelectedTabId = ''
-      this.selectedTabId = ''
+      this.selectedTabId = this.defaultTabId
       this.searchTerm = ''
     },
 
