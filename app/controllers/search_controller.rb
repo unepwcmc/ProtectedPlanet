@@ -6,16 +6,28 @@ class SearchController < ApplicationController
   before_action :load_search, only: [:index, :search_results]
 
   def index
-    @categories = [{ id: '', title: 'All' }]
-    Comfy::Cms::Page.root.children.map do |c|
-      @categories << { id: c.id.to_s, title: c.label }
+    categories = I18n.t('search.categories')
+    cms_root_pages = Comfy::Cms::Page.root.children
+    @categories = []
+
+    categories.map do |category|
+      cms_page = cms_root_pages.find_by(slug: category)
+      if cms_page
+        @categories << { id: cms_page.id.to_s, title: cms_page.label}
+      else
+        @categories << { id: category, title: category.capitalize }
+      end
     end
 
     @query = search_params[:search_term]
   end
 
   def search_results
-    @results = Search::FullSerializer.new(@search, {page: search_params[:requested_page]}).serialize
+    _options = {
+      page: search_params[:requested_page],
+      per_page: search_params[:items_per_page]
+    }
+    @results = Search::FullSerializer.new(@search, _options).serialize
 
     render json: @results
   end
@@ -33,6 +45,6 @@ class SearchController < ApplicationController
   private
 
   def search_params
-    params.permit(:search_term, :type, :requested_page, :items_per_page, filters: {})
+    params.permit(:search_term, :type, :requested_page, :items_per_page, :filters)
   end
 end
