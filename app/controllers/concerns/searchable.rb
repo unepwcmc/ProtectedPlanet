@@ -28,7 +28,9 @@ module Concerns::Searchable
     end
 
     def search_index
-      controller_name.include?('area') ? Search::PA_INDEX : Search::DEFAULT_INDEX_NAME
+      _filters = search_params[:filters] ? JSON.parse(search_params[:filters]) : nil
+      is_area_category = _filters && _filters['ancestor'] == 'areas'
+      (controller_name.include?('area') || is_area_category) ? Search::PA_INDEX : Search::DEFAULT_INDEX_NAME
     end
 
     DB_TYPES = %w(wdpa oecm all).freeze
@@ -82,11 +84,14 @@ module Concerns::Searchable
       filters
     end
 
+    FAKE_CATEGORIES = %w(all areas).freeze
     def sanitise_ancestor_filter(filters)
-      if filters['ancestor'].present?
-        filters['ancestor'] = filters['ancestor'].to_i
-      else
+      return filters unless filters['ancestor']
+
+      if FAKE_CATEGORIES.include? filters['ancestor']
         filters.delete('ancestor')
+      else
+        filters['ancestor'] = filters['ancestor'].to_i
       end
 
       filters

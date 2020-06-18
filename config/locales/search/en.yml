@@ -26,9 +26,8 @@ en:
     filter-group-type:
       title: Type
       options:
-        - All
-        - Terrestrial
-        - Marine
+        terrestrial: 'Terrestrial'
+        marine: 'Marine'
     geo-types:
       region: Regions
       country: Countries
@@ -37,3 +36,8 @@ en:
     protected-areas: Protected Areas
     results: results
     no-results: No results. Please search again.
+    categories:
+      - all
+      - news-and-stories
+      - resources
+      - areas

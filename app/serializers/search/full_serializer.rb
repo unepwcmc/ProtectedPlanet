@@ -19,13 +19,14 @@ class Search::FullSerializer < Search::BaseSerializer
     return DEFAULT_OBJ.to_json unless @search
 
     all_objects = @results.objects.values.compact.flatten
+    per_page = @options[:per_page].to_i
     DEFAULT_OBJ.merge(
       {
         search_term: @search_term,
         # TODO get page from params
         current_page: @page,
-        page_items_start: @search.page_items_start(page: @page, for_display: true),
-        page_items_end: @search.page_items_end(page: @page, for_display: true),
+        page_items_start: @search.page_items_start(page: @page, per_page: per_page, for_display: true),
+        page_items_end: @search.page_items_end(page: @page, per_page: per_page, for_display: true),
         total_items: @results.count || 0,
         # TODO get page from params
         results: all_objects.map do |record|
