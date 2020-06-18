@@ -45,8 +45,8 @@ export default {
     },
     preSelected: {
       type: Object, // { id: String, type: String },
-      // validator: o => o === null || (o.hasOwnProperty('id') && typeof o.id === 'string'
-      //   && o.hasOwnProperty('type') && typeof o.type === 'string')
+      validator: o => o === null || (o.hasOwnProperty('id') && typeof o.id === 'string'
+        && o.hasOwnProperty('type') && typeof o.type === 'string')
     },
     name: { 
       type: String,

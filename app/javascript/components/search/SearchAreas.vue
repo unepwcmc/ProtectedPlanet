@@ -149,7 +149,7 @@ export default {
   data () {
     return {
       config: {
-        queryStringParams: ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category', 'location_id']
+        queryStringParams: ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category', 'location_id', 'search_term']
       },
       activeFilterOptions: [],
       filterGroupsWithPreSelected: [],
@@ -225,12 +225,17 @@ export default {
         if(paramsFromUrl.has(param)) { params.push(param) }
       })
       
-      console.log('paramsFromUrl', paramsFromUrl)
       console.log('params', params)
+
+      if(params.includes('search_term')) { 
+        this.searchTerm = paramsFromUrl.get('search_term')
+      }
       
       this.filterGroups.map(filterGroup => {
         return filterGroup.filters.map(filter => {
           params.forEach(key => {
+            if(key == 'search_term') { return false }
+            
             if(filter.id == key) { 
               if(key == 'location_id') { 
                 if(filter.id == 'location') { 
@@ -240,15 +245,9 @@ export default {
                   }]
                 }
               } else if(key == 'db_type' && paramsFromUrl.get('db_type') == 'all') { 
-                console.log('db_type', key)
                 filter.preSelected = []
                 filter.options.forEach((option) => { filter.preSelected.push(option.id) })
-                console.log('db type preSelected', filter.preSelected)
-              } else if(key == 'search_term') { 
-                console.log('search_term', key)
-                this.searchTerm = paramsFromUrl.get('search_term')
               } else {
-                console.log('default', key)
                 filter.preSelected = paramsFromUrl.getAll(key)
               }
             }
@@ -269,7 +268,7 @@ export default {
 
     updateProperties (response, resetFilters) {
       this.results = response.data.areas
-      // TODO @Stacy Country/Region filters don't seem to be updating correctly after the first search
+      
       if(resetFilters) this.filterGroupsWithPreSelected = response.data.filters
     },
 
