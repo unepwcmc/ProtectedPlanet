@@ -45,6 +45,7 @@
           :children="tabs"
           class="tabs--rounded"
           :defaultSelectedId="tabs[2].id"
+          :preSelectedId="preSelectedTabId"
           v-on:click:tab="updateSelectedTab"
         />
 
@@ -149,13 +150,14 @@ export default {
   data () {
     return {
       config: {
-        queryStringParams: ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category', 'location_id', 'search_term']
+        queryStringParams: ['db_type', 'is_type', 'special_status', 'designation', 'governance', 'iucn_category', 'location_id', 'search_term', 'geo_type']
       },
       activeFilterOptions: [],
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
       isMapPaneActive: false,
       loadingResults: false,
+      preSelectedTabId: '',
       results: {}, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
       searchTerm: '',
       selectedTab: ''
@@ -230,11 +232,15 @@ export default {
       if(params.includes('search_term')) { 
         this.searchTerm = paramsFromUrl.get('search_term')
       }
+
+      if(params.includes('geo_type')) { 
+        this.preSelectedTabId = paramsFromUrl.get('geo_type')
+      }
       
       this.filterGroups.map(filterGroup => {
         return filterGroup.filters.map(filter => {
           params.forEach(key => {
-            if(key == 'search_term') { return false }
+            if(key == 'search_term' || key == 'geo_type') { return false }
             
             if(filter.id == key) { 
               if(key == 'location_id') { 

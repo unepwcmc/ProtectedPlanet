@@ -28,7 +28,7 @@ export default {
       default: '',
       type: String
     },
-    preSelected: {
+    preSelectedId: {
       default: '',
       type: String
     }
@@ -67,12 +67,14 @@ export default {
 
       let tabId = this.defaultId
 
-      if(this.preSelected !== '') {
-        if(this.children.filter(child.id == this.preSelected)) { 
-          tabId = this.preSelected.id 
-        }
+      if(this.preSelectedId !== '') {
+        this.children.filter(child => {
+          if(child.id == this.preSelectedId) { 
+            tabId = this.preSelectedId
+          }
+        })
       }
-      
+
       this.click(tabId)
     }
   }
