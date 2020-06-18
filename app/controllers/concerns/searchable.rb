@@ -4,6 +4,10 @@ module Concerns::Searchable
   included do
     private
 
+    def ignore_empty_query
+      return render json: {} if search_params[:search_term].blank?
+    end
+
     def load_search
       @query = search_params[:search_term]
       begin
@@ -48,6 +52,7 @@ module Concerns::Searchable
       _filters = sanitise_location_filter(_filters)
       _filters = sanitise_db_type_filter(_filters)
       _filters = sanitise_type_filter(_filters)
+      _filters = sanitise_ancestor_filter(_filters)
       sanitise_special_status_filter(_filters)
     end
 
@@ -74,6 +79,16 @@ module Concerns::Searchable
       return filters if !is_type || is_type.include?('all') || is_type.length != 1
 
       filters[:marine] = is_type.first == 'marine'
+      filters
+    end
+
+    def sanitise_ancestor_filter(filters)
+      if filters['ancestor'].present?
+        filters['ancestor'] = filters['ancestor'].to_i
+      else
+        filters.delete('ancestor')
+      end
+
       filters
     end
 

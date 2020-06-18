@@ -2,15 +2,14 @@ class SearchController < ApplicationController
   include Concerns::Searchable
   after_action :enable_caching
 
-  before_action :ignore_empty_query, only: [:search_results]
-  before_action :load_search, only: [:search_results]
+  before_action :ignore_empty_query, only: [:index, :search_results]
+  before_action :load_search, only: [:index, :search_results]
 
   def index
-    @categories = [{ id: -1, title: 'All' }]
+    @categories = [{ id: '', title: 'All' }]
     Comfy::Cms::Page.root.children.map do |c|
-      @categories << { id: c.id, title: c.label }
+      @categories << { id: c.id.to_s, title: c.label }
     end
-    @categories = @categories.to_json
 
     @query = search_params[:search_term]
   end
@@ -34,6 +33,6 @@ class SearchController < ApplicationController
   private
 
   def search_params
-    params.permit(:search_term, :type, :requested_page, :items_per_page)
+    params.permit(:search_term, :type, :requested_page, :items_per_page, filters: {})
   end
 end
