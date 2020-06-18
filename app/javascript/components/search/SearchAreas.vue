@@ -44,8 +44,8 @@
         <tabs-fake
           :children="tabs"
           class="tabs--rounded"
-          :defaultSelectedId="tabs[2].id"
-          :preSelectedId="preSelectedTabId"
+          :defaultSelectedId="tabIdDefault"
+          :preSelectedId="tabIdPreSelected"
           v-on:click:tab="updateSelectedTab"
         />
 
@@ -157,10 +157,11 @@ export default {
       isFilterPaneActive: false,
       isMapPaneActive: false,
       loadingResults: false,
-      preSelectedTabId: '',
       results: {}, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
       searchTerm: '',
-      selectedTab: ''
+      tabIdDefault: this.tabs[2].id,
+      tabIdPreSelected: '',
+      tabIdSelected: ''
     }
   },
 
@@ -196,11 +197,11 @@ export default {
           items_per_page: 9,
           requested_page: 1,
           search_term: this.searchTerm,
-          geo_type: this.selectedTab
+          geo_type: this.tabIdSelected
         }
       }
 
-      // console.log('data', data.params.filters)
+      console.log('data', data.params)
       this.axiosSetHeaders()
 
       axios.get(this.endpointSearch, data)
@@ -226,15 +227,13 @@ export default {
       this.config.queryStringParams.forEach(param => {
         if(paramsFromUrl.has(param)) { params.push(param) }
       })
-      
-      console.log('params', params)
 
       if(params.includes('search_term')) { 
         this.searchTerm = paramsFromUrl.get('search_term')
       }
 
       if(params.includes('geo_type')) { 
-        this.preSelectedTabId = paramsFromUrl.get('geo_type')
+        this.tabIdPreSelected = paramsFromUrl.get('geo_type')
       }
       
       this.filterGroups.map(filterGroup => {
@@ -278,8 +277,8 @@ export default {
       if(resetFilters) this.filterGroupsWithPreSelected = response.data.filters
     },
 
-    updateSelectedTab (selectedTab) {
-      this.selectedTab = selectedTab
+    updateSelectedTab (selectedTabId) {
+      this.tabIdSelected = selectedTabId
       this.resetPagination()
       this.getFilteredSearchResults()
     },
@@ -326,6 +325,7 @@ export default {
     },
 
     resetTabs () {
+      this.tabIdSelected = this.tabIdDefault
       this.$eventHub.$emit('reset:tabs')
     },
 
