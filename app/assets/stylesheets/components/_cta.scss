@@ -70,6 +70,10 @@
           &__title {
             @include responsive(width, 100%, rem-calc(370), rem-calc(370));
           }
+
+          &__intro {
+            @include responsive(width, 100%, 75%, 90%);
+          }
     }
   }
 }
