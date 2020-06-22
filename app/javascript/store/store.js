@@ -14,5 +14,10 @@ import { storeTable } from './_store-table.js'
 export default new Vuex.Store({
   modules: {
     table: storeTable
-  }
+  },
+    mutations: {
+	setFilterOptions (state, options) {
+	    this.state.selectedFilterOptions = options
+	},
+    }
 })

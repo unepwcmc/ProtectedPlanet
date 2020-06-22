@@ -5,7 +5,7 @@ gem 'rails', '5.2.0'
 gem 'webpacker', '~> 4.0.2'
 
 #gem 'wcmc-components', path: "../web-components/gems/wcmc_components"
-gem 'wcmc-components', '~>0.0.3'
+gem 'wcmc-components', '~>0.0.4'
 
 
 gem 'bourbon'

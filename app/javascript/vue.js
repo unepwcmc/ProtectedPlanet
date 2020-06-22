@@ -31,6 +31,7 @@ import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Download from './components/download/Download'
+import FilteredTable from './components/FilteredTable'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import SearchAreas from './components/search/SearchAreas'
@@ -47,6 +48,8 @@ import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
+
+export const eventHub = new Vue()
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
@@ -80,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowTarget,
         ChartSunburst,
         Download,
+	FilteredTable,
         MapInteractive,
         NavBurger,
         SearchAreas,

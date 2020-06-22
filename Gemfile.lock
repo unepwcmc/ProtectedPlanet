@@ -1365,7 +1365,7 @@ DEPENDENCIES
   turnout (~> 2.5.0)
   uglifier (~> 4.1.17)
   vuejs-rails (~> 2.3.2)
-  wcmc-components (~> 0.0.3)
+  wcmc-components (~> 0.0.4)
   webmock (~> 1.22.0)
   webpacker (~> 4.0.2)
   whenever

@@ -8,9 +8,14 @@ class PameEvaluation < ApplicationRecord
   belongs_to :pame_source
   has_and_belongs_to_many :countries
 
-  ignore_column :designation
-  import_by protected_area: :wdpa_id
   validates :methodology, :year, :metadata_id, presence: true
+
+  # config for loadable mixin
+  ignore_column :designation
+
+  import_by protected_area: :wdpa_id
+  import_by country: :iso_3
+  
 
   TABLE_ATTRIBUTES = [
     {
