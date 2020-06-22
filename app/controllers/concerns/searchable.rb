@@ -16,8 +16,6 @@ module Concerns::Searchable
         Rails.logger.warn("error in search controller: #{e.message}")
         @search = nil
       end
-
-      @main_filter = params[:main]
     end
 
     def search_options
@@ -28,7 +26,8 @@ module Concerns::Searchable
     end
 
     def search_index
-      _filters = search_params[:filters] ? JSON.parse(search_params[:filters]) : nil
+      _filters = search_params[:filters]
+      _filters = _filters.is_a?(String) ? JSON.parse(_filters) : _filters
       is_area_category = _filters && _filters['ancestor'] == 'areas'
       (controller_name.include?('area') || is_area_category) ? Search::PA_INDEX : Search::DEFAULT_INDEX_NAME
     end
@@ -39,18 +38,35 @@ module Concerns::Searchable
       redirect_to :root unless DB_TYPES.include?(params[:db_type].downcase)
     end
 
+    def load_search_from_query_string
+      @query = search_params[:search_term]
+      begin
+        if search_params[:filters].present?
+          @search = Search.search(@query, {}, search_index)
+          load_filters
+          @search = Search.search(@query, search_options, search_index)
+        else
+          @search = Search.search(@query, search_options, search_index)
+        end
+      rescue => e
+        Rails.logger.warn("error in search controller: #{e.message}")
+        @search = nil
+      end
+    end
+
     #
     # Retrieves the filters from params if present,
     # and sanitizes them from escaped string format
     #
     def filters
-      return '' unless params['filters'].present?
+      return '' unless search_params[:filters].present?
       _filters = sanitise_filters
-      _filters.symbolize_keys.slice(*Search::ALLOWED_FILTERS)
+      _filters.to_hash.symbolize_keys.slice(*Search::ALLOWED_FILTERS)
     end
 
     def sanitise_filters
-      _filters = JSON.parse(params['filters'])
+      _filters = search_params[:filters]
+      _filters = _filters.is_a?(String) ? JSON.parse(_filters) : _filters
 
       _filters = sanitise_location_filter(_filters)
       _filters = sanitise_db_type_filter(_filters)
@@ -111,6 +127,8 @@ module Concerns::Searchable
     end
 
     def load_filters
+      return if @filter_groups
+
       @db_type = search_params[:db_type]
       @query ||= search_params[:search_term]
       @search_db_types = [

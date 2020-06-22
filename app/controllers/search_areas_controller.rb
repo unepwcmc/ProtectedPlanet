@@ -4,7 +4,8 @@ class SearchAreasController < ApplicationController
   after_action :enable_caching
 
   before_action :check_db_type, only: [:index, :search_results]
-  before_action :load_search, only: [:index, :search_results]
+  before_action :load_search, only: [:search_results]
+  before_action :load_search_from_query_string, only: [:index]
   before_action :load_filters, only: [:index, :search_results]
 
   TABS = %w(region country site).freeze
@@ -21,6 +22,9 @@ class SearchAreasController < ApplicationController
     TABS.each do |tab|
       @tabs << { id: tab, title: I18n.t("search.geo-types.#{tab}") }
     end
+
+    geo_type = search_params[:geo_type] || 'site'
+    @results = Search::AreasSerializer.new(@search, geo_type).serialize
   end
 
   def search_results
@@ -34,6 +38,9 @@ class SearchAreasController < ApplicationController
   private
 
   def search_params
-    params.permit(:search_term, :filters, :db_type, :geo_type, :items_per_page, :requested_page)
+    params.permit(
+      :search_term, :db_type, :geo_type, :items_per_page, :requested_page, :filters,
+      filters: [special_status: [], location: [:type, options: []]]
+    )
   end
 end
