@@ -51,7 +51,7 @@
 
         <search-areas-results
           :no-results-text="noResultsText"
-          :results="newResults"
+          :results="results"
           :sm-trigger-element="smTriggerElement"
           v-on:request-more="requestMore"
           v-on:reset-pagination="resetPagination"
@@ -144,10 +144,6 @@ export default {
     textMap: {
       type: String,
       required: true
-    },
-    results: {
-      type: Object,
-      required: true
     }
   },
 
@@ -162,7 +158,7 @@ export default {
       isFilterPaneActive: false,
       isMapPaneActive: false,
       loadingResults: false,
-      newResults: this.results, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
+      results: {}, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
       searchTerm: '',
       tabIdDefault: this.tabs[2].id,
       tabIdSelected: this.tabs[2].id
@@ -174,12 +170,12 @@ export default {
   },
 
   mounted () {
-    //this.getSearchResults()
+    this.getSearchResults()
   },
 
   computed: {
     hasResults () {
-      return this.newResults.length > 0
+      return this.results.length > 0
     }
   },
 
@@ -279,7 +275,7 @@ export default {
     },
 
     updateProperties (response, resetFilters) {
-      this.newResults = response.data.areas
+      this.results = response.data.areas
       
       if(resetFilters) this.filterGroupsWithPreSelected = response.data.filters
     },
@@ -369,7 +365,7 @@ export default {
 
       axios.get(this.endpointPagination, data)
         .then(response => {
-          this.newResults.areas = this.newResults.areas.concat(response.data.areas)
+          this.results.areas = this.results.areas.concat(response.data.areas)
         })
         .catch(function (error) {
           console.log(error)
