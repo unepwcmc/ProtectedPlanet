@@ -124,12 +124,14 @@
 
         @include flex;
         @include flex-h-between;
-
+        
+        &__label {
+          padding-right: rem-calc(8);
+        }
         
         &__link {
           @include button-with-icon;
           font-size: rem-calc(16) !important;
-          padding-left: rem-calc(16);
           
           &::after { 
             @include icon-arrow-external; 
@@ -142,13 +144,6 @@
           
           &__label {
             margin-bottom: rem-calc(8);
-          }
-
-          &__link {
-            @include button-with-icon;
-            @include button-block;
-            
-            &::after { @include icon-arrow-external-white; }
           }
         }
   
