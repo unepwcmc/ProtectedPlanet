@@ -2,7 +2,8 @@
   <div class="tabs">
     <ul class="tabs__triggers">
       <tab-trigger
-        v-for="tab in tabTriggers"
+        v-for="tab, index in tabTriggers"
+        :key="`${tab.id}-${index}`"
         :id="tab.id"
         :selected-id="selectedId"
         :title="tab.title"

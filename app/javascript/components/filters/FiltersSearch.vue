@@ -15,7 +15,8 @@
           <h3>{{ filterGroup.title }}</h3>
 
           <v-filter
-            v-for="filter in filterGroup.filters"
+            v-for="filter, index in filterGroup.filters"
+            :key="`${filter.id}-${index}`"
             :id="filter.id"
             :name="filter.name"
             :options="filter.options"
