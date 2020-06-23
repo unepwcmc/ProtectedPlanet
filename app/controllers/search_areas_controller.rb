@@ -39,7 +39,8 @@ class SearchAreasController < ApplicationController
   def search_params
     params.permit(
       :search_term, :db_type, :geo_type, :items_per_page, :requested_page, :filters,
-      filters: [db_type: [], is_type: [], special_status: [], location: [:type, options: []]]
+      filters: [db_type: [], is_type: [], special_status: [], designation: [], governance: [],
+      location: [:type, options: []]]
     )
   end
 end
