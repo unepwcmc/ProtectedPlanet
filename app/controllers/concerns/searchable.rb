@@ -26,9 +26,7 @@ module Concerns::Searchable
     end
 
     def search_index
-      _filters = search_params[:filters]
-      _filters = _filters.is_a?(String) ? JSON.parse(_filters) : _filters
-      is_area_category = _filters && _filters['ancestor'] == 'areas'
+      is_area_category = parsed_filters && parsed_filters['ancestor'] == 'areas'
       (controller_name.include?('area') || is_area_category) ? Search::PA_INDEX : Search::DEFAULT_INDEX_NAME
     end
 
@@ -65,10 +63,7 @@ module Concerns::Searchable
     end
 
     def sanitise_filters
-      _filters = search_params[:filters]
-      _filters = _filters.is_a?(String) ? JSON.parse(_filters) : _filters
-
-      _filters = sanitise_location_filter(_filters)
+      _filters = sanitise_location_filter(parsed_filters)
       _filters = sanitise_db_type_filter(_filters)
       _filters = sanitise_type_filter(_filters)
       _filters = sanitise_ancestor_filter(_filters)
@@ -129,9 +124,7 @@ module Concerns::Searchable
     def load_filters
       return if @filter_groups
 
-      _filters = search_params[:filters]
-      _filters = _filters.is_a?(String) ? JSON.parse(_filters) : _filters
-      @db_type = (_filters.present? && _filters[:db_type].try(:first)) || 'all'
+      @db_type = (parsed_filters.present? && parsed_filters[:db_type].try(:first)) || 'all'
       @query ||= search_params[:search_term]
       @search_db_types = [
         {
@@ -142,6 +135,13 @@ module Concerns::Searchable
       ].to_json
 
       @filter_groups = @search ? Search::FiltersSerializer.new(@search).serialize : []
+    end
+
+    def parsed_filters
+      return @parsed_filters if @parsed_filters
+
+      _filters = search_params[:filters]
+      @parsed_filters = _filters.is_a?(String) ? JSON.parse(_filters) : _filters
     end
   end
 end
