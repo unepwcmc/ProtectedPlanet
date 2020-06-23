@@ -14,10 +14,20 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
+&--stats-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include breakpoint($small) { 
+    flex-wrap: nowrap;
+    justify-content: space-between; 
+  }
+}
+
 &--stats {
   @include card-stats-padding;
   background-color: $white;
-  margin: rem-calc(30 0);
+  margin-top: rem-calc(30);
 
   &--half {
     @include responsive(width, 100%, calc(50% - 15px), calc(50% - 15px));
