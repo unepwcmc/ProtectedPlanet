@@ -2,7 +2,7 @@
     button_download_text: cms_fragment_render("button-download"),
     button_download_url: '', ##TODO this will prob come out because it will be a vue component
     button_search_text: cms_fragment_render("button-search"),
-    button_search_url: search_areas_path(db_type: 'wdpa'),
+    button_search_url: search_areas_path(filters: {db_type: ['wdpa']}),
     hero_image: cms_fragment_render(:theme_image, @cms_page),
     hero_stat_text: t('thematic_area.wdpa.hero-stat-text'),
     hero_stat_percentage: @pa_coverage_percentage,

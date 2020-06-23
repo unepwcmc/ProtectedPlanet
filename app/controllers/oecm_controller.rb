@@ -8,6 +8,7 @@ class OecmController < ApplicationController
     }.to_json
 
     @tabs = get_tabs(3).to_json
+    @filters = { db_type: ['oecm'] }
   end
 
   private
