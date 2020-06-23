@@ -206,7 +206,6 @@ export default {
         }
       }
 
-// console.log('data', data.params)
       this.axiosSetHeaders()
 
       axios.get(this.endpointSearch, data)
@@ -254,12 +253,7 @@ export default {
         return filterGroup.filters.map(filter => {
           filterParams.forEach(key => {
             if(filter.id == key){
-              if(key == 'db_type') {
-                filter.preSelected = []
-                filter.options.forEach((option) => { filter.preSelected.push(option.id) })
-              } else {
-                filter.preSelected = paramsFromUrl.getAll(key)
-              }
+              filter.preSelected = paramsFromUrl.getAll('filters['+key+'][]')
             }
 
             if(filter.id == 'location' && key == 'location[type]') { 
@@ -269,8 +263,7 @@ export default {
               }]
             }
           })
-          
-          //this.activeFilterOptions[filter.id] = filter.preSelected
+
           return filter
         })
       })
@@ -301,22 +294,26 @@ export default {
 
         Object.keys(filters).forEach(key => {
 
-          if(key == 'db_type') {
-            filters[key].length > 1 ? searchParams.set(key, 'all') : searchParams.set(key, filters[key]) 
-          } else if (key == 'location') {
+          //if(key == 'db_type') {
+            //filters[key].length > 1 ? searchParams.set(key, 'all') : searchParams.set(key, filters[key]) 
+          if (key == 'location') {
             this.updateQueryStringParam(searchParams, 'filters[location][type]', filters[key].type)
 
-            if(searchParams.has('location_id')) { searchParams.delete('location_id') }
+            //if(searchParams.has('location_id')) { searchParams.delete('location_id') }
+
+            const optionsKey = 'filters[location][options][]'
+            if(searchParams.has(optionsKey)) { searchParams.delete(optionsKey) }
 
             filters[key].options.forEach(value => {
-              searchParams.append('filters[location][options][]', value)
+              searchParams.append(optionsKey, value)
             })
 
           } else {
-            if(searchParams.has(key)) { searchParams.delete(key) }
+            const customKey = 'filters['+key+'][]'
+            if(searchParams.has(customKey)) { searchParams.delete(customKey) }
 
             filters[key].forEach(value => {
-              searchParams.append('filters['+key+'][]', value)
+              searchParams.append(customKey, value)
             })
           }
         })

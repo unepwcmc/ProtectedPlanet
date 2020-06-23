@@ -9,17 +9,17 @@ module HomeHelper
       {
         image: cms_fragment_render(:theme_image, cms_page),
         title: category[:title],
-        url: search_areas_path(db_type: 'wdpa', filters: get_filter(category[:filter]))
+        url: search_areas_path(filters: get_filters(category[:filter]))
       }
     end
   end
 
-  def get_filter(filter)
+  def get_filters(filter)
     if filter == 'is_green_list'
       { special_status: [filter] }
     else
       { is_type: [filter] }
-    end
+    end.merge(db_type: ['wdpa'])
   end
 
 end
