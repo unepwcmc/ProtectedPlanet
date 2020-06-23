@@ -5,6 +5,7 @@ class SearchAreasController < ApplicationController
 
   before_action :check_db_type, only: [:index, :search_results]
   before_action :load_search, only: [:search_results]
+  before_action :load_search_from_query_string, only: [:index]
   before_action :load_filters, only: [:index, :search_results]
 
   TABS = %w(region country site).freeze
@@ -21,6 +22,9 @@ class SearchAreasController < ApplicationController
     TABS.each do |tab|
       @tabs << { id: tab, title: I18n.t("search.geo-types.#{tab}") }
     end
+
+    geo_type = search_params[:geo_type] || 'site'
+    @results = Search::AreasSerializer.new(@search, geo_type).serialize
   end
 
   def search_results
