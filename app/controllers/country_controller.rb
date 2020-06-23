@@ -21,7 +21,7 @@ class CountryController < ApplicationController
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.count
 
-    @wdpa = get_wdpa
+    @wdpa = [] #get_wdpa TODO ??
     
     ##TODO need adding
     # protected_national_report: statistic_presenter.percentage_nr_marine_cover, 
