@@ -193,7 +193,7 @@ export default {
     },
 
     ajaxSubmission (resetFilters=false, pagination=false, requestedPage=1) {
-      this.loadingResults = true
+      if(!pagination) { this.loadingResults = true }
 
       let data = {
         params: {
@@ -353,7 +353,7 @@ console.log('pagination', pagination)
       this.getSearchResults()
       this.updateQueryString({ search_term: searchParams.search_term })
     },
-    
+
     requestMore (requestedPage) {
       this.ajaxSubmission(false, true, requestedPage)
     },
