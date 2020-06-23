@@ -173,10 +173,6 @@ export default {
     this.handleQueryString()
   },
 
-  mounted () {
-    //this.getSearchResults()
-  },
-
   computed: {
     hasResults () {
       return this.newResults.length > 0
@@ -184,10 +180,6 @@ export default {
   },
 
   methods: {
-    getSearchResults() {
-      this.ajaxSubmission(true)
-    },
-
     getFilteredSearchResults() {
       this.ajaxSubmission()
     },
@@ -206,12 +198,9 @@ export default {
       }
 
       this.axiosSetHeaders()
-console.log('params', data.params)
-console.log('resetfilters', resetFilters)
-console.log('pagination', pagination)
+
       axios.get(this.endpointSearch, data)
         .then(response => {
-          console.log(response.data)
           if(pagination){
             this.newResults.areas = this.newResults.areas.concat(response.data.areas.areas)
           } else {
@@ -350,7 +339,7 @@ console.log('pagination', pagination)
       this.resetPagination()
       this.resetSearchTerm(searchParams)
       this.resetTabs()
-      this.getSearchResults()
+      this.ajaxSubmission(true)
       this.updateQueryString({ search_term: searchParams.search_term })
     },
 

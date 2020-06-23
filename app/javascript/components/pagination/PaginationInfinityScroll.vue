@@ -47,23 +47,20 @@ export default {
     }
   },
 
+  watch: {
+    showTrigger () {
+      this.showTrigger ? this.scrollMagicHandlerAdd() : this.scrollMagicHandlerRemove()
+    }
+  },
+
   methods: {
     requestMore () {
       this.currentPage = this.currentPage + 1
       
       this.$emit('request-more', this.currentPage)
-      
-      if(!this.scrollMagicHandlersActive) { 
-        this.scrollMagicHandlerAdd()
-      }
-
-      if(this.currentPage == this.totalPages) { 
-        this.scrollMagicHandlerRemove()
-      }
     },
 
     reset () {
-      this.scrollMagicHandlerRemove()
       this.currentPage = 1
     },
 
@@ -73,7 +70,6 @@ export default {
     },
 
     scrollMagicHandlerInit () {
-      console.log('init')
       this.scrollMagicController = new ScrollMagic.Controller()
 
       this.scrollMagicScene = new ScrollMagic.Scene({ triggerElement: `.${this.smTriggerElement}` })
