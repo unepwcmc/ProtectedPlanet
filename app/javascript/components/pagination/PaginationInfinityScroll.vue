@@ -1,7 +1,7 @@
 <template>
   <span 
     :class="smTriggerElement"
-    v-show="total > 0"
+    v-show="showTrigger"
   />
 </template>
 
@@ -28,7 +28,7 @@ export default {
 
   data () {
     return {
-      currentPage: 0,
+      currentPage: 1,
       scrollMagicHandlersActive: false
     }
   },
@@ -36,20 +36,19 @@ export default {
   mounted () {
     this.scrollMagicHandlerInit()
 
-    if(this.total > 0) { this.scrollMagicHandlerAdd() }
+    if(this.showTrigger) { this.scrollMagicHandlerAdd() }
 
     this.$eventHub.$on('reset:pagination', this.reset)
   },
 
   computed: {
-    hasMoreResults () {
-      return this.total > 0
+    showTrigger () {
+      return this.currentPage < this.totalPages
     }
   },
 
   methods: {
     requestMore () {
-      console.log('request more')
       this.currentPage = this.currentPage + 1
       
       this.$emit('request-more', this.currentPage)
@@ -65,7 +64,7 @@ export default {
 
     reset () {
       this.scrollMagicHandlerRemove()
-      this.currentPage = 0
+      this.currentPage = 1
     },
 
     scrollMagicHandlerAdd () {

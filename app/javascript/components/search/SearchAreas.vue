@@ -192,25 +192,32 @@ export default {
       this.ajaxSubmission()
     },
 
-    ajaxSubmission (resetFilters=false) {
+    ajaxSubmission (resetFilters=false, pagination=false, requestedPage=1) {
       this.loadingResults = true
 
-      console.log(this.activeFilterOptions)
       let data = {
         params: {
           filters: this.activeFilterOptions,
           items_per_page: 9,
-          requested_page: 1,
+          requested_page: requestedPage,
           search_term: this.searchTerm,
           geo_type: this.tabIdSelected
         }
       }
 
       this.axiosSetHeaders()
-
+console.log('params', data.params)
+console.log('resetfilters', resetFilters)
+console.log('pagination', pagination)
       axios.get(this.endpointSearch, data)
         .then(response => {
-          this.updateProperties(response, resetFilters)
+          console.log(response.data)
+          if(pagination){
+            this.newResults.areas = this.newResults.areas.concat(response.data.areas.areas)
+          } else {
+            this.updateProperties(response, resetFilters)
+          }
+
           this.loadingResults = false
         })
         .catch(function (error) {
@@ -346,26 +353,9 @@ export default {
       this.getSearchResults()
       this.updateQueryString({ search_term: searchParams.search_term })
     },
-
-    requestMore (paginationParams) {
-      //return // TODO Needs fixing 
-      let data = {
-        params: {
-          filters: this.activeFilterOptions,
-          geo_type: paginationParams.geoType,
-          items_per_page: this.items_per_page,
-          requested_page: paginationParams.requestedPage,
-          search_term: this.searchTerm
-        }
-      }
-
-      axios.get(this.endpointPagination, data)
-        .then(response => {
-          this.newResults.areas = this.newResults.areas.concat(response.data.areas)
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+    
+    requestMore (requestedPage) {
+      this.ajaxSubmission(false, true, requestedPage)
     },
 
     resetFilters () {

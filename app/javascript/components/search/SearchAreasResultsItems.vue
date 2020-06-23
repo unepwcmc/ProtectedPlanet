@@ -40,10 +40,6 @@ export default {
       required: true,
       type: Object // { geo_type: String, title: String, total: Number, totalPages: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
     },
-    currentPage: {
-      default: 1,
-      type: Number
-    },
     smTriggerElement: {
       required: true,
       type: String
@@ -52,16 +48,7 @@ export default {
 
   methods: {
     requestMore (requestedPage) {
-      const params = {
-        geoType: this.geoType,
-        requestedPage: requestedPage
-      }
-
-      this.$emit('request-more', params)
-    },
-
-    resetPagination (geoType) {
-      this.$emit('reset-pagination', this.geoType)
+      this.$emit('request-more', requestedPage)
     }
   }
 }
