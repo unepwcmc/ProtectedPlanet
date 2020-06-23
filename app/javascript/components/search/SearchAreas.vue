@@ -243,7 +243,7 @@ export default {
       let filterParams = []
 
       this.config.queryStringParamsFilters.forEach(param => {
-        if(paramsFromUrl.has('filters['+param+'][]')) { filterParams.push(param) }
+        if(paramsFromUrl.has(`filters[${param}][]`)) { filterParams.push(param) }
       })
 
       if(paramsFromUrl.has('filters[location][type]')) { filterParams.push('location[type]') }
@@ -253,9 +253,9 @@ export default {
         return filterGroup.filters.map(filter => {
           filterParams.forEach(key => {
             if(filter.id == key){
-              filter.preSelected = paramsFromUrl.getAll('filters['+key+'][]')
+              filter.preSelected = paramsFromUrl.getAll(`filters[${key}][]`)
             }
-
+            
             if(filter.id == 'location' && key == 'location[type]') { 
               filter.preSelected = [{
                 type: paramsFromUrl.get('filters[location][type]'),
@@ -293,29 +293,21 @@ export default {
         const filters = params.filters
 
         Object.keys(filters).forEach(key => {
-
-          //if(key == 'db_type') {
-            //filters[key].length > 1 ? searchParams.set(key, 'all') : searchParams.set(key, filters[key]) 
-          if (key == 'location') {
+          let queryKey = `filters[${key}][]`
+          let queryValues = filters[key]
+          
+          if(key == 'location') {
             this.updateQueryStringParam(searchParams, 'filters[location][type]', filters[key].type)
 
-            //if(searchParams.has('location_id')) { searchParams.delete('location_id') }
-
-            const optionsKey = 'filters[location][options][]'
-            if(searchParams.has(optionsKey)) { searchParams.delete(optionsKey) }
-
-            filters[key].options.forEach(value => {
-              searchParams.append(optionsKey, value)
-            })
-
-          } else {
-            const customKey = 'filters['+key+'][]'
-            if(searchParams.has(customKey)) { searchParams.delete(customKey) }
-
-            filters[key].forEach(value => {
-              searchParams.append(customKey, value)
-            })
+            queryKey = 'filters[location][options][]'
+            queryValues = filters[key].options
           }
+
+          if(searchParams.has(queryKey)) { searchParams.delete(queryKey) }
+          
+          queryValues.forEach(value => {
+            searchParams.append(queryKey, value)
+          })
         })
       }
 
