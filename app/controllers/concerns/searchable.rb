@@ -131,7 +131,7 @@ module Concerns::Searchable
 
       _filters = search_params[:filters]
       _filters = _filters.is_a?(String) ? JSON.parse(_filters) : _filters
-      @db_type = _filters[:db_type].try(:first) || 'all'
+      @db_type = (_filters.present? && _filters[:db_type].try(:first)) || 'all'
       @query ||= search_params[:search_term]
       @search_db_types = [
         {
