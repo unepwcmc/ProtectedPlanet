@@ -22,6 +22,9 @@ class ProtectedArea < ApplicationRecord
 
   after_create :create_slug
 
+  scope :oecms, -> { where(is_oecm: true) }
+  scope :wdpas, -> { where(is_oecm: false) }
+
   scope :marine_areas, -> {
     where(marine: true)
   }
