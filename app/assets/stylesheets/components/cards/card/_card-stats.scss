@@ -1,13 +1,8 @@
-$sm-factor: 11;
-$md-factor: 12;
-$lg-factor: 14;
-
-
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
 @mixin card-stats-padding {
-  padding: rem-calc(($lg-factor * 1.4) ($lg-factor * 1.5)); 
+  padding: rem-calc(28 30); 
 }
 
 @mixin card-stats-number {
@@ -22,7 +17,7 @@ $lg-factor: 14;
 &--stats {
   @include card-stats-padding;
   background-color: $white;
-  margin: rem-calc(($lg-factor * 1.5) 0);
+  margin: rem-calc(30 0);
 
   &--half {
     @include responsive(width, 100%, calc(50% - 15px), calc(50% - 15px));
@@ -31,7 +26,7 @@ $lg-factor: 14;
   .card {
 
     h2 {
-      font-size: rem-calc($lg-factor);
+      font-size: rem-calc(20);
     }
 
     &__content {
@@ -44,7 +39,7 @@ $lg-factor: 14;
     }
 
       &__logo {
-        margin-left: rem-calc($lg-factor * 1.2);
+        margin-left: rem-calc(24);
 
         &:first-child { margin-left: 0; }
       }
@@ -61,7 +56,7 @@ $lg-factor: 14;
     }
 
       &__chart-square {
-        margin-right: rem-calc($lg-factor * 1.2);
+        margin-right: rem-calc(24);
         width: 30%;
       }
 
@@ -69,10 +64,10 @@ $lg-factor: 14;
         @include bg-grey-xdark;
         @include flex;
         @include flex-center;
-        font-size: rem-calc($lg-factor);
+        font-size: rem-calc(20);
         font-weight: $bold;
-        margin-right: rem-calc($lg-factor);
-        width: 30%; height: rem-calc($lg-factor * 14);
+        margin-right: rem-calc(20);
+        width: 30%; height: rem-calc(280);
       }
 
       
@@ -85,57 +80,76 @@ $lg-factor: 14;
   @include bg-grey-black;
   @include card-stats-padding;
   @include responsive(width, 100%, 33%, 33%);
-  margin-right: rem-calc($lg-factor * 1.5);
+  margin-right: rem-calc(30);
 
   .card {
     &__flag {
-      margin-right: rem-calc($md-factor);
+      margin-right: rem-calc(14);
     }
 
     &__heading {
       @include flex;
       @include flex-v-center;
-      margin-bottom: rem-calc($lg-factor);
+      margin-bottom: rem-calc(18);
     }
 
     &__h1 { 
       color: $white;
-      font-size: rem-calc($lg-factor * 1.25);
+      @include responsive(font-size, rem-calc(20), rem-calc(22), rem-calc(30));
       margin: 0;
     }
 
     &__number {
       @include card-stats-number;
-      @include responsive(font-size, rem-calc($md-factor), rem-calc($lg-factor), rem-calc($lg-factor * 2));
+      @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(30));
 
       display: block;
     }
 
     &__number--small {
       @include card-stats-number;
-      @include responsive(font-size, rem-calc($md-factor), rem-calc($lg-factor), rem-calc($lg-factor * 1.5));
+      @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(30));
       margin-right: rem-calc(10);
     }
 
     &__section {
-      margin-top: rem-calc($lg-factor * 1.5);
+      margin-top: rem-calc(30);
     }
 
     &__story-map-links {
       margin-top: 3rem;
       .story-map-link {
-        margin-bottom: rem-calc($sm-factor / 2);
+        font-size: rem-calc(16);
+        margin-bottom: rem-calc(8);
 
-        display: flex;
-        justify-content: space-between;
-  
-        @include only-mobile() {
-          display: block;
+        @include flex;
+        @include flex-h-between;
+
+        
+        &__link {
+          @include button-with-icon;
+          font-size: rem-calc(16) !important;
+          padding-left: rem-calc(16);
+          
+          &::after { 
+            @include icon-arrow-external; 
+            display: inline-block;
+          }
         }
+        
+        @include breakpoint-down($medium) {
+          @include flex-column;
+          
+          &__label {
+            margin-bottom: rem-calc(8);
+          }
 
-        &,
-        &__link .button.button--link-external {
-          @include responsive(font-size, rem-calc($sm-factor), rem-calc($md-factor), rem-calc($lg-factor));
+          &__link {
+            @include button-with-icon;
+            @include button-block;
+            
+            &::after { @include icon-arrow-external-white; }
+          }
         }
   
         &__title {
@@ -145,13 +159,13 @@ $lg-factor: 14;
     }
 
     &__text {
-      font-size: rem-calc($lg-factor);
+      font-size: rem-calc(16);
     }
 
     &__text-bold {
-      font-size: rem-calc($lg-factor);
+      font-size: rem-calc(16);
       font-weight: $bold;
-      margin-bottom: rem-calc($sm-factor / 3);
+      margin-bottom: rem-calc(6);
 
       display: block;
     }

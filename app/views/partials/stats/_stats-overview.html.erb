@@ -46,11 +46,9 @@
             (<%= t('stats.story_map.' + story_map_link.link_type.gsub(/\s/, '_').parameterize, 
               default: story_map_link.link_type) %>)
           </span>
-          <span class="story-map-link__link">
-            <a class="button button--link-external" href="<%= story_map_link.link %>" target="_blank">
-              <%= t('stats.story_map.link', default: 'Link') %>
-            </a>
-          </span>
+          <a class="story-map-link__link" href="<%= story_map_link.link %>" target="_blank">
+            <%= t('stats.story_map.link', default: 'Link') %>
+          </a>
         </div>
       <% end %>
     </div>
