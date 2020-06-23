@@ -13,18 +13,14 @@
     .topbar__logo {
       @include responsive(height, rem-calc(52), rem-calc(56), rem-calc(67)); 
       @include responsive(padding, rem-calc(0 16), rem-calc(0 20), rem-calc(0 30)); 
-      @include responsive(order, 1, 1, 1);
+      // @include responsive(order, 1, 1, 1);
       @include flex;
       @include flex-center;
       background-color: $primary;
     }
 
     .topbar__nav {
-      @include responsive(order, 2, 1, 1); 
-    }
-
-    .topbar__search {
-      @include responsive(order, 1, 2, 2); 
+      margin-left: auto;
     }
 }
 

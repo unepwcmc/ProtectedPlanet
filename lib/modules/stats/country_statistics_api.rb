@@ -1,7 +1,7 @@
 module Stats::CountryStatisticsApi
   class << self
     STATISTICS_API = Rails.application.secrets[:country_statistics_api].freeze
-    BASE_URL = STATISTICS_API['url'].freeze
+    BASE_URL = STATISTICS_API[:url].freeze
 
     ERRORS = {
       representative: """
@@ -12,10 +12,10 @@ module Stats::CountryStatisticsApi
       data: 'We are sorry but something went wrong while processing the data from the API.'
     }.freeze
 
-    ISO3_ATTRIBUTE = STATISTICS_API['iso3_attribute'].freeze
-    NAME_ATTRIBUTE = STATISTICS_API['country_name_attribute'].freeze
-    COUNTRY_AREA_ATTRIBUTE = STATISTICS_API['jrc_country_area_attribute'].freeze
-    TERR_AREA_ATTRIBUTE = STATISTICS_API['jrc_terr_area_attribute'].freeze
+    ISO3_ATTRIBUTE = STATISTICS_API[:iso3_attribute].freeze
+    NAME_ATTRIBUTE = STATISTICS_API[:country_name_attribute].freeze
+    COUNTRY_AREA_ATTRIBUTE = STATISTICS_API[:jrc_country_area_attribute].freeze
+    TERR_AREA_ATTRIBUTE = STATISTICS_API[:jrc_terr_area_attribute].freeze
 
 
     def import(iso3=nil)
@@ -54,7 +54,7 @@ module Stats::CountryStatisticsApi
           jrc_terr_area: stat[TERR_AREA_ATTRIBUTE]
         }
         endpoints.each do |name|
-          attribute = STATISTICS_API[name.to_s]["attribute"]
+          attribute = STATISTICS_API[name][:attribute]
           attr_name = "percentage_#{name}"
 
           attrs[attr_name] = stat[attribute]
@@ -104,7 +104,7 @@ module Stats::CountryStatisticsApi
     private
 
     def calculate_value(data, attr_name)
-      stat_attributes = STATISTICS_API[attr_name.to_s]
+      stat_attributes = STATISTICS_API[attr_name]
       attribute = stat_attributes["attribute"]
       area_attribute = stat_attributes["area_attribute"] || COUNTRY_AREA_ATTRIBUTE
 
@@ -125,7 +125,7 @@ module Stats::CountryStatisticsApi
     end
 
     def national_endpoint_url
-      "#{BASE_URL}#{STATISTICS_API['national_endpoint']}?format=json"
+      "#{BASE_URL}#{STATISTICS_API[:national_endpoint]}?format=json"
     end
 
     def fetch_national_data(iso3=nil)

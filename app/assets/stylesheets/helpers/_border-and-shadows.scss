@@ -17,6 +17,7 @@
   border-bottom-left-radius: $radius;
 }
 
+@mixin border-grey-xlight { @include border($grey-xlight); }
 @mixin border-grey-light { @include border($grey-light); }
 
 //--------------------------------------------------
@@ -28,6 +29,7 @@
 //--------------------------------------------------
 // box shadows - specific mixins
 //--------------------------------------------------
+@mixin box-shadow-grey-xlight { @include box-shadow($grey-xlight); }
 @mixin box-shadow-grey-light { @include box-shadow($grey-light); }
 @mixin box-shadow-grey { @include box-shadow($grey); }
 

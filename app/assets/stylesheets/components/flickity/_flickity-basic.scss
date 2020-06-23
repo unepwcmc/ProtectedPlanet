@@ -1,0 +1,91 @@
+$flickity-basic-dot-size: rem-calc(13);
+
+$flickity-basic-cell-spacing-mobile: rem-calc(5);
+$flickity-basic-cell-spacing-tablet: rem-calc(10);
+$flickity-basic-cell-spacing-desktop: rem-calc(10);
+
+$flickity-basic-slide-width-mobile: calc(92% - 2*#{$flickity-basic-cell-spacing-mobile});
+$flickity-basic-slide-width-tablet: calc(40% - 2*#{$flickity-basic-cell-spacing-tablet});
+$flickity-basic-slide-width-desktop: 20%;
+
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--basic {
+  overflow: hidden;
+  
+  .flickity-page-dots {
+    margin: rem-calc(30) auto 0 auto;
+
+    position: relative;
+    bottom: initial;
+
+    @include breakpoint($medium) { display: none; }
+
+    .dot {
+      background-color: $grey-light;
+      border-radius: 100%;
+      margin-right: $flickity-basic-dot-size/2;
+      width: $flickity-basic-dot-size; height: $flickity-basic-dot-size;
+    }
+
+    .dot.is-selected { background-color: $grey; }
+  }
+
+  .flickity-viewport {
+    
+    @include responsive(overflow, visible, visible, visible, hidden);
+    width: auto;
+  }
+
+  .flickity-slides {
+    align-items: stretch;
+  }
+
+  .carousel-cell {
+    padding-right: $flickity-basic-cell-spacing-mobile;
+    padding-left: $flickity-basic-cell-spacing-mobile;
+    width: $flickity-basic-slide-width-mobile;
+
+    @include breakpoint($small) { 
+      padding-right: $flickity-basic-cell-spacing-tablet;
+      padding-left: $flickity-basic-cell-spacing-tablet;
+      width: $flickity-basic-slide-width-tablet;
+    }
+
+    @include breakpoint($medium) { 
+      padding-left: $flickity-basic-cell-spacing-desktop;
+      padding-left: $flickity-basic-cell-spacing-desktop;
+      width: $flickity-basic-slide-width-desktop; height: rem-calc(312);
+    }
+
+    
+    &:last-child {
+      @include breakpoint($large) {
+        // @include tooltip-last-slide;
+      }
+    }
+  }
+
+  .carousel-cell__content {
+    background-color: $white; 
+    border: solid 1px $grey-light;
+    font-size: rem-calc(18);
+    padding: rem-calc(16);
+    width: 100%; height: 100%;
+
+    position: relative;
+  }
+
+  .carousel-cell__title {
+    @include breakpoint($small) { margin: rem-calc(0 5); }
+    @include breakpoint($large) { margin: rem-calc(0 10); }
+  }
+
+  .carousel-cell__tooltip {
+    position: absolute;
+    top: rem-calc(10);
+    right: rem-calc(10);
+  }
+}

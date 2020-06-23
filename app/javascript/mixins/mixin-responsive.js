@@ -4,10 +4,9 @@ export default {
       windowWidth: 0,
       currentBreakpoint: '',
       breakpoints: {
-        small: 628, //must match variables in assets/stylesheets/resources/_base-varibles
-        medium: 768,
-        large: 1024,
-        xlarge: 1704,
+        small: 768, //must match variables in assets/stylesheets/resources/_base-varibles
+        medium: 1024,
+        large: 1200
       }
     }
   },
@@ -16,7 +15,7 @@ export default {
     this.updateWindowSize()
 
     // allow for multiple functions to be called on window resize
-    window.addEventListener('resize', () => this.$eventHub.$emit('windowResized'))
+    // window.addEventListener('resize', () => this.$eventHub.$emit('windowResized'))
 
     this.$eventHub.$on('windowResized', this.updateWindowSize)
   },
