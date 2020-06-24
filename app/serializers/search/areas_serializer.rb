@@ -26,7 +26,6 @@ class Search::AreasSerializer < Search::BaseSerializer
 
   def sites
     _sites = @results.protected_areas
-    _sites = _sites
     # Counting by governance has every PA must have one.
     # Counting by country or region is not reliable as a PA might belong to more than one country.
     _total_count = @aggregations['governance'].inject(0) { |sum, r| sum + r[:count] }

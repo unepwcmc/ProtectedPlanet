@@ -18,10 +18,14 @@ module Concerns::Searchable
       end
     end
 
+    DEFAULT_PAGE = 1.freeze
+    DEFAULT_SIZE = 9.freeze
     def search_options
       options = {filters: filters}
-      options[:page] = params['requested_page'].to_i if params['requested_page'].present?
-      options[:size] = params['items_per_page'].to_i if params['items_per_page'].present?
+      requested_page = search_params[:requested_page].try(:to_i) || DEFAULT_PAGE
+      items_per_page = search_params[:items_per_page].try(:to_i) || DEFAULT_SIZE
+      options[:page] = requested_page
+      options[:size] = items_per_page
       options
     end
 
