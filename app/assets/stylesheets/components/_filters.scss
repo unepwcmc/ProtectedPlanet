@@ -7,6 +7,8 @@ $filters-title-height: 54;
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
+@import './filters/filters-pame.scss';
+
 .filter {
   &__pane {
     @include responsive(background-color, $grey-xlight, transparent, transparent);
