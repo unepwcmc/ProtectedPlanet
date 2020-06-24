@@ -1,3 +1,7 @@
+### 3.2.14
+
+* Allow to split data into multiple shapefiles
+
 ### 3.2.13
 
 * Add country, pame_country and marine stats (WDPA June 2020 release).
