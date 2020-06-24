@@ -75,7 +75,17 @@ export default {
     }
   },
 
+  created () {
+    if(this.preSelected) { this.addPreSelectedToActiveOptions() }
+  },
+
   methods: {
+    addPreSelectedToActiveOptions () {
+      const preselected = this.preSelectedCheckboxSearch ? this.preSelectedCheckboxSearch : this.preSelected
+      
+      this.updateFilter(preselected)
+    },
+
     updateFilter(updatedOptions) {
       const data = {
         id: this.id,

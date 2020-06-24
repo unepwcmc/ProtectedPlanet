@@ -198,7 +198,7 @@ export default {
       }
 
       this.axiosSetHeaders()
-
+      
       axios.get(this.endpointSearch, data)
         .then(response => {
           if(pagination){
