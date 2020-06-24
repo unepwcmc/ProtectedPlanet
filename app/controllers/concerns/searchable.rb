@@ -84,7 +84,8 @@ module Concerns::Searchable
     end
 
     def sanitise_db_type_filter(filters)
-      db_type = filters.delete('db_type').reject { |i| i == 'all' }
+      db_type = filters.delete('db_type')
+      db_type = db_type && db_type.reject { |i| i == 'all' }
       return filters if db_type.blank? || db_type.length != 1
 
       filters[:is_oecm] = true if db_type.first == 'oecm'
