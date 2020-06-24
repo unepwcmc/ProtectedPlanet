@@ -81,7 +81,7 @@ export default {
 
   methods: {
     addPreSelectedToActiveOptions () {
-      const preselected = this.preSelectedCheckboxSearch ? this.preSelectedCheckboxSearch : this.preSelected
+      const preselected = this.type == 'checkbox-search' ? this.preSelectedCheckboxSearch : this.preSelected
       
       this.updateFilter(preselected)
     },
