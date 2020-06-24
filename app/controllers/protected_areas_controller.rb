@@ -4,8 +4,9 @@ class ProtectedAreasController < ApplicationController
 
   def show
     id = params[:id]
+    wdpa_id = id.match(/\D/).present? ? 0 : id.to_i
     @protected_area = ProtectedArea.
-      where("slug = ? OR wdpa_id = ?", id, id.to_i).
+      where("slug = ? OR wdpa_id = ?", id, wdpa_id).
       first
 
     @protected_area or raise_404
