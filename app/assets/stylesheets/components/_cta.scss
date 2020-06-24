@@ -19,17 +19,15 @@
           display: none;
 
           @include breakpoint($small) { 
+            height: 122%;
+            
             display: block;
             position: absolute;
             top: -6%; 
             right: 0;
           }
 
-          @include breakpoint($medium) { 
-            height: 122%;
-
-            top: -11%; 
-          }
+          @include breakpoint($medium) { top: -11%; }
         }
 
         &__content { 
