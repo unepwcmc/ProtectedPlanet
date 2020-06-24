@@ -23,45 +23,49 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-.tabs {
-  &--hero {
-    .tabs {
-      &__triggers {
-        @include ul-unstyled;
-        @include ul-inline;
+//--------------------------------------------------
+// tabs hero
+//--------------------------------------------------
+.tabs--hero {
+  .tabs__scrollable {
+    overflow-x: scroll;
 
-        transform: translateY(-100%);
-      }
-    }
-
-    .tab {
-      &__target {
-        display: none;
-
-        &.active { display: block; }
-      }
-
-      &__trigger {
-        @include tab-trigger;
-
-        &.active { color: $primary; }
-      }
-    }
+    transform: translateY(-100%);
   }
 
-  &--fake {
-    @include flex;
+  .tabs__triggers {
     @include ul-unstyled;
-    @include responsive(flex-wrap, nowrap, nowrap, wrap);
-    @include responsive(overflow-x, scroll, scroll, initial);
-    @include responsive(margin, rem-calc(26 0), rem-calc(26 0 32 0), rem-calc(30 0 10 0));
+    @include ul-inline;
+    width: fit-content;
 
-    .tab {
-      &__trigger {
-        @include flex-no-shrink;
-        @include tab-trigger;
-        @include responsive(margin-bottom, 0, 0, rem-calc(10));
-      }
-    }
+    display: flex;
+  }
+
+  .tab__target {
+    display: none;
+
+    &.active { display: block; }
+  }
+
+  .tab__trigger {
+    @include tab-trigger;
+
+    &.active { color: $primary; }
+  }
+}
+//--------------------------------------------------
+// tabs fake
+//--------------------------------------------------
+.tabs--fake {
+  @include flex;
+  @include ul-unstyled;
+  @include responsive(flex-wrap, nowrap, nowrap, wrap);
+  @include responsive(overflow-x, scroll, scroll, initial);
+  @include responsive(margin, rem-calc(26 0), rem-calc(26 0 32 0), rem-calc(30 0 10 0));
+
+  .tab__trigger {
+    @include flex-no-shrink;
+    @include tab-trigger;
+    @include responsive(margin-bottom, 0, 0, rem-calc(10));
   }
 }

@@ -26,7 +26,7 @@
 //--------------------------------------------------
 @mixin h1 {
   @include text-1;
-  @include responsive(font-size, rem-calc(25), rem-calc(40), rem-calc(40));
+  @include responsive(font-size, rem-calc(30), rem-calc(40), rem-calc(40));
   font-weight: $bold;
 }
 

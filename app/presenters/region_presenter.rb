@@ -99,8 +99,8 @@ class RegionPresenter
       countries: sorted_stats.map do |stat|
         {
           title: stat.country.name,
-          percentage: stat.percentage_pa_marine_cover,
-          km: number_with_delimiter(stat.pa_marine_area),
+          percentage: stat.percentage_pa_marine_cover.round(1),
+          km: number_with_delimiter(stat.pa_marine_area.round(0)),
           iso3: stat.country.iso_3
         }
       end

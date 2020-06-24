@@ -8,25 +8,25 @@
   <section class="section-padding">
     <div class="container--desktop-up">
 
-      <agile class="agile--basic" :options="<%= get_config_carousel_global %>" >
+      <flickity ref="flickity" :options="<%= get_config_carousel_global %>" class="flickity--basic">
         <% @global_stats.each do |stat| %>
-          <div class="agile__slide">
-            <div class="agile__slide-content">
+          <div class="carousel-cell">
+            <div class="carousel-cell__content">
               <tooltip 
                 :on-hover="false" 
                 text="<%= getTooltipText(stat[:id]) %>"
-                class="agile__tooltip"
+                class="carousel-cell__tooltip"
               >
                 <i class="icon--info-circle block"></i>
               </tooltip>
 
-              <h3 class="agile__slide-title"><%= stat[:title] %></h3>
+              <h3 class="carousel-cell__title"><%= stat[:title] %></h3>
               
               <% stat[:charts].each do |chart| %>
                 <chart-dial
                   title="<%= chart[:title] %>"
                   colour="<%= chart[:colour] %>"
-                  :dial-value="<%= chart[:value] %>"
+                  :dial-value="<%= chart[:value] == nil ? 0 : chart[:value] %>"
                   <% if chart[:target] != nil %>
                     :dial-target="<%= chart[:target] %>" 
                   <% end %> 
@@ -35,7 +35,7 @@
             </div>
           </div>
         <% end %>
-      </agile>
+      </flickity>
     </div>
   </section>
 

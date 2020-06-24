@@ -10,7 +10,7 @@
         <% countries[:children].each do |country| %>
           <div class="cards__card">
             <div class="card__heading">
-              <i class="card__flag icon--flag-outline" style="background-image:url('<%= image_url(country[:flag]) %>');"></i>
+              <i class="card__flag icon--flag-outline" style="background-image:url('<%= image_url("#{country[:flag]}.svg") %>');"></i>
               <h3 class="card__h3"><%= country[:title] %></h3>
             </div>
 

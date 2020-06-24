@@ -260,36 +260,6 @@ module ApplicationHelper
   #   !card[:pdf].present? && !card[:external_link].present?
   # end
 
-  def get_agile_config_themes
-    {
-      navButtons: true,
-      infinite: false,
-      responsive: [
-      {
-          breakpoint: 628,
-          settings: {
-            dots: false,
-            slidesToShow: 1,
-          }
-        },
-        {
-          breakpoint: 768,
-          settings: {
-            dots: false,
-            slidesToShow: 1,
-          }
-        },
-        {
-          breakpoint: 1024,
-          settings: {
-            dots: false,
-            slidesToShow: 2
-          }
-        }
-      ]
-    }.to_json
-  end
-
   def get_resource_cards(all=false)
     presenter = ResourcesPresenter.new(@cms_site, all)
     _resources = presenter.resources

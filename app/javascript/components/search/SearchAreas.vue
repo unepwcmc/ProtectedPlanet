@@ -20,6 +20,7 @@
         />
 
         <download
+          class="download--search"
           :text="textDownload"
         />
       </div>
