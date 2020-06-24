@@ -43,17 +43,17 @@ class ThematicalAreasPresenter
     when theme(:green_list)
       pas.where(is_green_list: true)
     when theme(:wdpa)
-      pas#pas.where(pa_def: '1') TODO Needs OECM db to be merged in
+      pas#.where(is_oecm: false) TODO Needs OECM db to be merged in
     when theme(:oecm)
-      pas#pas.where(pa_def: '0') TODO Needs OECM db to be merged in
+      pas#.where(is_oecm: true) TODO Needs OECM db to be merged in
     when theme(:connectivity)
-      pas#TODO checking with CLS
+      -1 #Not applicable - hide ribbon
     when theme(:pame)
       pas.with_pame_evaluations
     when theme(:equity)
-      pas#TODO checking with CLS
+      -1 #Not applicable - hide ribbon
     when theme(:aichi11)
-      pas#TODO checking with CLS
+      -1 #Not applicable - hide ribbon
     else
       -1 #Not applicable - hide ribbon
     end
