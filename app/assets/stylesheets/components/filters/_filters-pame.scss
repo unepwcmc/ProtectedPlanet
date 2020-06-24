@@ -24,14 +24,9 @@ $focus-outline-margin: rem-calc(4);
 // button
 //**************************************************
   &__button {
-    @include button-dropdown;
-    
-    // border: solid rem-calc(1) $black;
-    // color: $black;
-    // cursor: pointer;
-    // font-weight: $bold;
-    // margin: 0;
-    // padding:rem-calc(9 39 10 13);
+    @include button-dropdown-filter;
+    color: $black;
+    cursor: pointer;
 
     position: relative;
 
@@ -40,17 +35,17 @@ $focus-outline-margin: rem-calc(4);
       border-color: $activeBackgroundColour;
       color: $activeTextColour;
 
-      &:after { background-image: image-url('icons/arrow-down-white.svg'); }
+      // &:after { background-image: image-url('icons/arrow-down-white.svg'); }
     }
 
-    &:after {
-      @include flex-v-center;
-      background-image: image-url('icons/arrow-down-black.svg');
-      content: '';
-      width: rem-calc(8); height: rem-calc(6);
+    // &:after {
+    //   @include flex-v-center;
+    //   background-image: image-url('icons/arrow-down-black.svg');
+    //   content: '';
+    //   width: rem-calc(8); height: rem-calc(6);
 
-      right: rem-calc(24);
-    }
+    //   right: rem-calc(24);
+    // }
     
     &--active {
       background-color: $activeBackgroundColour;
@@ -66,7 +61,7 @@ $focus-outline-margin: rem-calc(4);
       color: $activeTextColour;
       
       &:after,
-      &:hover:after { content: none; }
+      &:hover:after { visibility: hidden; }
     }
 
       &-total {
@@ -80,11 +75,11 @@ $focus-outline-margin: rem-calc(4);
         line-height: $total-width;
         text-align: center;
         width: $total-width; height: $total-width;
-
+      
         display: block;
 
         position: absolute;
-        right: rem-calc(9);
+        right: rem-calc(16);
       }
   }
 
@@ -182,7 +177,11 @@ $focus-outline-margin: rem-calc(4);
       }
 
   &__buttons {
+    @include flex;
+    @include flex-h-between;
     margin-top: rem-calc(18);
     text-align: right;
   }
+
+    &__button-cancel { margin: rem-calc(0 20 0) auto; }
 }

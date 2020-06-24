@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="flex flex-v-center flex-between">
     <span class="filter__title bold">Filters:</span>
 
     <data-filter v-for="filter in filters"
@@ -9,7 +9,7 @@
       :type="filter.type">
     </data-filter>
 
-    <download-csv class="inline-block"  :total-items="totalItems"></download-csv>
+    <download-csv class=""  :total-items="totalItems"></download-csv>
   </div>
 </template>
 

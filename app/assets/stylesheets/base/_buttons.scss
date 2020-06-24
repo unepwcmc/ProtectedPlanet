@@ -89,12 +89,12 @@ $padding-medium: rem-calc(27);
   }
 }
 
-@mixin button-outline ($colour: $black) {
+@mixin button-outline ($colour: $black, $border-size: 2px) {
   @include button-basic;
   @include button-height;
   @include button-padding;
   @include button-radius;
-  border: solid 2px $colour;
+  border: solid $border-size $colour;
   color: $colour;
 }
 
@@ -138,6 +138,11 @@ $padding-medium: rem-calc(27);
   &::after { @include icon-chevron-black-up; }
 }
 
+@mixin button-dropdown-filter {
+  @include button-dropdown;
+  @include button-outline($black, 1px);
+}
+
 @mixin button-filter-trigger {
   @include button-with-icon;
   @include button-outline;
@@ -149,6 +154,13 @@ $padding-medium: rem-calc(27);
   }
 
   .button__text { @include responsive(display, none, inline, inline); }
+}
+
+@mixin button-link {
+  @include button-basic;
+  font-size: rem-calc(18);
+
+  &:hover { text-decoration: underline;}
 }
 
 @mixin button-map-trigger {
@@ -210,6 +222,13 @@ $padding-medium: rem-calc(27);
       @include icon-arrow-external; 
       display: inline-block;
     }
+  }
+
+  &--link { @include button-link; }
+
+  &--link-bold {
+    @include button-link;
+    font-weight: $bold;
   }
 
   &--outline-black { @include button-outline($black); }
