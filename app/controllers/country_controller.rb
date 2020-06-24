@@ -8,6 +8,7 @@ class CountryController < ApplicationController
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
     @iucn_categories = @country.protected_areas_per_iucn_category
     @governance_types = @country.protected_areas_per_governance
+    @coverage_growth = @country.coverage_growth
 
     @sites = [] ##TODO 
 
@@ -22,8 +23,6 @@ class CountryController < ApplicationController
     @total_oecm = 0 ##TODO
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.count
-
-    
     
     ##TODO need adding
     # protected_national_report: statistic_presenter.percentage_nr_marine_cover, 
