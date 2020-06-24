@@ -1,9 +1,9 @@
 <template>
-  <thead id="sticky" :class="{ 'table__head--stuck' : isSticky }">
-    <tr>
+  <div id="sticky" :class="{ 'table-head--stuck' : isSticky }">
+    <div class="table-head__row">
       <table-header v-for="filter, index in filters" :filter="filter" :key="index"></table-header>
-    </tr>
-  </thead>
+    </div>
+  </div>
 </template>
 
 <script>

@@ -2,19 +2,16 @@
   <div class="filtered-table relative">
     <filters :filters="filters" :total-items="totalItems"></filters>
 
-    <table class="table table--head">
-      <pame-table-head :filters="attributes">
-      </pame-table-head>
-    </table>
+    <div class="table-head--pame">
+      <pame-table-head :filters="attributes" />
+    </div>
 
-    <table class="table table--body">
-      <tbody>
-        <row v-for="item, key in items"
-          :key="key"
-          :item="item">
-        </row>
-      </tbody>
-    </table>
+    <div class="table--pame">
+      <row v-for="item, key in items"
+        :key="key"
+        :item="item">
+      </row>
+    </div>
 
     <pame-pagination :current-page="currentPage" :items-per-page="itemsPerPage" :total-items="totalItems" :total-pages="totalPages"></pame-pagination>
   </div>

@@ -1,0 +1,35 @@
+&--horizontal-scroll {
+  @include responsive(display, none, none, none, flex);
+  @include flex-nowrap;
+  @include box-shadow-grey;
+  background-color: $table-head-bg-color;
+  color: $white;
+  margin-top: rem-calc(26);
+
+  .table-head {
+    &__cell {
+      @include table-cell-basic;
+      align-items: center; //temp-refresh
+      justify-content: space-between; //temp-refresh
+
+      display: flex; //temp-refresh
+    }
+      
+      &__title-wrapper {
+        align-items: center; //temp-refresh
+        flex-wrap: nowrap; //temp-refresh
+
+        display: flex; //temp-refresh
+      }
+
+        &__title {
+          margin-right: rem-calc(6); 
+        }
+
+      &__sort {
+        @include button-plain;
+        @include icon-sort;
+        padding: rem-calc(3 6);
+      }
+  }
+}

@@ -24,12 +24,14 @@ $focus-outline-margin: rem-calc(4);
 // button
 //**************************************************
   &__button {
-    border: solid rem-calc(1) $black;
-    color: $black;
-    cursor: pointer;
-    font-weight: $bold;
-    margin: 0;
-    padding:rem-calc(9 39 10 13);
+    @include button-dropdown;
+    
+    // border: solid rem-calc(1) $black;
+    // color: $black;
+    // cursor: pointer;
+    // font-weight: $bold;
+    // margin: 0;
+    // padding:rem-calc(9 39 10 13);
 
     position: relative;
 

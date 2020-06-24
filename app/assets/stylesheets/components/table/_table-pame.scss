@@ -1,0 +1,52 @@
+//----------------------------------------
+// classes
+//----------------------------------------
+&--pame { 
+  margin-bottom: rem-calc(24);
+
+  .table {
+    &__row {
+      @include flex;
+
+      &:nth-child(odd) { background-color: $grey-xlight; }
+    }
+
+      &__cell {
+        @include table-pame-column-widths;
+        border-left: dotted white 2px;
+        margin: 0;
+        padding: 1rem 0.875rem;
+
+        display: inline-block;
+
+        &:first-child { border-left: none; }
+      }
+
+    &__sorting {
+      opacity: .7;
+      vertical-align: middle;
+
+      display: inline-block;
+
+      &:hover { opacity: .9; }
+    }
+
+      &__sort {
+        cursor: pointer;
+        width: rem-calc(8); height: rem-calc(6);
+
+        display: block;
+
+        &--ascending {
+          background-image: image-url('icons/arrow-up-white.svg');
+          margin-bottom: rem-calc(1);
+        }
+
+        &--descending {
+          background-image: image-url('icons/arrow-down-white.svg');
+        }
+      }
+
+    &__note { font-size: rem-calc(14); }
+  }
+}  

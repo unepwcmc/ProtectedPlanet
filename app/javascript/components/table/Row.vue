@@ -1,18 +1,26 @@
 <template>
-<tr>
-    <td>{{ item.name }}</td>
-    <td>{{ item.designation }}</td>
-    <td>
+  <div class="table__row">
+    <p class="table__cell">{{ item.name }}</p>
+    <p class="table__cell">{{ item.designation }}</p>
+    <p class="table__cell">
       <template v-if="item.restricted">{{ item.wdpa_id }}</template>
       <a v-else :href="wdpaUrl(item.wdpa_id)" title="View protected area on Protected Planet" target="_blank">{{ item.wdpa_id }}</a>
-    </td>
-    <td>{{ item.id }}</td>
-    <td>{{ checkForMultiples('iso3') }}</td>
-    <td>{{ item.methodology }}</td>
-    <td>{{ item.year }}</td>
-    <td v-html="assessmentUrl(item.url)"></td>
-    <td @click="openModal()" class="modal__trigger">{{ item.metadata_id }}</td>
-  </tr>
+    </p>
+    <p class="table__cell">{{ item.id }}</p>
+    <p class="table__cell">{{ checkForMultiples('iso3') }}</p>
+    <p class="table__cell">{{ item.methodology }}</p>
+    <p class="table__cell">{{ item.year }}</p>
+    <p 
+      v-html="assessmentUrl(item.url)"
+      class="table__cell"
+    />
+    <p 
+      @click="openModal()" 
+      class="table__cell modal__trigger"
+    >
+      {{ item.metadata_id }}
+    </p>
+  </div>
 </template>
 
 <script>

@@ -11,7 +11,6 @@ $table-horizontal-scroll-row-width-mobile: $table-horizontal-scroll-cell-width-m
 $table-horizontal-scroll-row-width-tablet: $table-horizontal-scroll-cell-width-tablet * 4;
 $table-horizontal-scroll-row-width-desktop: 80vw;
 
-
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
@@ -25,128 +24,39 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
   @include responsive(margin-bottom, rem-calc(30), rem-calc(32), rem-calc(32), rem-calc(16));
 }
 
+// fix the columns widths so that they don't change
+// size when you use the pagination
+@mixin table-pame-column-widths() {
+  &:first-child { width: 142px; }
+  &:nth-child(2) { width: 138px; }
+  &:nth-child(3) { width: 127px; }
+  &:nth-child(4) { width: 128px; }
+  &:nth-child(5) { width: 100px; }
+  &:nth-child(6) { width: 138px; }
+  &:nth-child(7) { width: 128px; }
+  &:nth-child(8) { width: 128px; }
+  &:nth-child(9) { width: 110px; }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.filtered-table {
+  min-height: $filters-menu-max-height + rem-calc(80);
+}
+
 //--------------------------------------------------
 // table head
 //--------------------------------------------------
 .table-head {
-  &--horizontal-scroll {
-    @include responsive(display, none, none, none, flex);
-    @include flex-nowrap;
-    @include box-shadow-grey;
-    background-color: $table-head-bg-color;
-    color: $white;
-    margin-top: rem-calc(26);
-  }
-
-  .table-head {
-    &__cell {
-      @include table-cell-basic;
-      align-items: center; //temp-refresh
-      justify-content: space-between; //temp-refresh
-
-      display: flex; //temp-refresh
-    }
-      
-      &__title-wrapper {
-        align-items: center; //temp-refresh
-        flex-wrap: nowrap; //temp-refresh
-
-        display: flex; //temp-refresh
-      }
-
-        &__title {
-          margin-right: rem-calc(6); 
-        }
-
-      &__sort {
-        @include button-plain;
-        @include icon-sort;
-        padding: rem-calc(3 6);
-      }
-  }
+  @import './table/table-head-horizontal-scroll';
+  @import './table/table-head-pame';
 }
 
+//--------------------------------------------------
+// table body
+//--------------------------------------------------
 .table {
-//--------------------------------------------------
-// tables
-//--------------------------------------------------
-  &--horizontal-scroll {
-
-    .table {      
-      &__row {
-        @include table-row-spacing;
-        border: none; //temp-refresh needed to override conflicting old styles
-
-        @include breakpoint($large) {
-          border: solid 1px $grey;
-        }
-      }
-        
-        &__row-title {
-          @include responsive(margin-left, $gutter-small, $gutter-medium, $gutter-medium, 0);
-          @include responsive(margin-right, $gutter-small, $gutter-medium, $gutter-medium, 0);
-          @include responsive(display, block, block, block, none);
-          font-size: rem-calc(18);
-          font-weight: 700;
-          margin-bottom: rem-calc(10);
-        }
-        
-        &__scroll-wrapper {
-          overflow-x: scroll;
-          @include breakpoint($large) { overflow-x: inherit; }
-        }
-
-          &__scroll {
-            @include flex-nowrap;
-            @include responsive(width, $table-horizontal-scroll-row-width-mobile, $table-horizontal-scroll-row-width-tablet, $table-horizontal-scroll-row-width-tablet, 100%);
-            display: flex;
-          }
-
-            &__cell {
-              @include table-cell-basic;
-              @include box-shadow-grey-light;
-              border: solid 1px $grey-light;
-              
-              display: flex; //temp-refresh
-              flex-direction: column; //temp-refresh
-
-              @include breakpoint($large) { 
-                border: none;
-                box-shadow: none; 
-              }
-
-              &:first-child {
-                @include responsive(display, none, none, none, flex);
-              }
-
-              &:nth-child(2) {
-                @include responsive(margin-left, $gutter-small, $gutter-medium, $gutter-medium, 0);
-              }
-            }
-              
-              &__cell-titles {
-                @include responsive(margin-left, $gutter-small, $gutter-medium, $gutter-medium, 0);
-                @include responsive(display, flex, flex, flex, none);
-                justify-content: space-between; //temp refresh
-              }
-
-              &__cell-title {
-                font-size: rem-calc(17);
-                font-weight: 500;
-              }
-
-              &__cell-link {
-                font-weight: 900;
-              }
-
-              &__cell-chart:nth-child(2) { margin-bottom: rem-calc(12); }
-
-              &__cell-index {
-                @include responsive(display, block, block, block, none);
-                font-size: rem-calc(12);
-                font-weight: 500;
-                margin-top: auto;
-              }
-    }
-  }
+  @import './table/table-horizontal-scroll';
+  @import './table/table-pame';
 }

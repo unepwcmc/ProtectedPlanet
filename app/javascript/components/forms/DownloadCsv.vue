@@ -2,7 +2,7 @@
   <button
     @click="download"
     title="Download CSV file of filtered protected area management effectiveness evaluations"
-    class="button button--download button--green"
+    class="button--download"
     :class="{ 'button--disabled' : noResults }"
     v-bind="{ 'disabled' : noResults }">
     CSV
