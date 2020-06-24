@@ -10,10 +10,10 @@ class SearchAreasController < ApplicationController
 
   TABS = %w(region country site).freeze
   def index
-    placeholder = ['all', nil].include?(@db_type) ? 'oecm-wdpa' : @db_type
+    placeholder = @db_type ? @db_type : 'oecm-wdpa'
     
     @config_search_areas = {
-      id: @db_type,
+      id: @db_type || 'all',
       placeholder: I18n.t("global.placeholder.search-#{placeholder}")
     }.to_json
 
@@ -24,6 +24,7 @@ class SearchAreasController < ApplicationController
     end
 
     geo_type = search_params[:geo_type] || 'site'
+    @filters = @db_type ? { db_type: @db_type } : {}
     @results = Search::AreasSerializer.new(@search, geo_type).serialize
   end
 
@@ -38,7 +39,7 @@ class SearchAreasController < ApplicationController
 
   def search_params
     params.permit(
-      :search_term, :db_type, :geo_type, :items_per_page, :requested_page, :filters,
+      :search_term, :geo_type, :items_per_page, :requested_page, :filters,
       filters: [db_type: [], is_type: [], special_status: [], designation: [], governance: [],
       location: [:type, options: []]]
     )

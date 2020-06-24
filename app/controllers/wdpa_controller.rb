@@ -7,6 +7,7 @@ class WdpaController < ApplicationController
       placeholder: I18n.t('global.placeholder.search-wdpa')
     }.to_json
 
+    @filters = { db_type: ['wdpa'] }
     @tabs = get_tabs(3).to_json
   end
 

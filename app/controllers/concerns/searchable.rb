@@ -80,8 +80,8 @@ module Concerns::Searchable
     end
 
     def sanitise_db_type_filter(filters)
-      db_type = filters.delete('db_type')
-      return filters if !db_type || db_type.length != 1
+      db_type = filters.delete('db_type').reject { |i| i == 'all' }
+      return filters if db_type.blank? || db_type.length != 1
 
       filters[:is_oecm] = true if db_type.first == 'oecm'
       filters
@@ -124,13 +124,14 @@ module Concerns::Searchable
     def load_filters
       return if @filter_groups
 
-      @db_type = (parsed_filters.present? && parsed_filters[:db_type].try(:first)) || 'all'
+      @db_type = parsed_filters.present? && parsed_filters[:db_type].try(:first)
+      _db_type_id = @db_type || 'all'
       @query ||= search_params[:search_term]
       @search_db_types = [
         {
-          id: @db_type,
-          title: I18n.t("global.area-types.#{@db_type}"),
-          placeholder: I18n.t("global.placeholder.search-#{@db_type}")
+          id: _db_type_id,
+          title: I18n.t("global.area-types.#{_db_type_id}"),
+          placeholder: I18n.t("global.placeholder.search-#{_db_type_id}")
         }
       ].to_json
 

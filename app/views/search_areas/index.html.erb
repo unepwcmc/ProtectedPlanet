@@ -5,8 +5,8 @@
   <search-areas
     :config-autocomplete="<%= @config_search_areas %>"
     endpoint-autocomplete="/search/autocomplete"
-    endpoint-pagination="<%= search_areas_results_path(filters: {db_type: @db_type}) %>"
-    endpoint-search="<%= search_areas_results_path(filters: {db_type: @db_type}) %>"
+    endpoint-pagination="<%= search_areas_results_path(filters: @filters) %>"
+    endpoint-search="<%= search_areas_results_path(filters: @filters) %>"
     filter-close-text="View Results"
     :filter-groups="<%= @filter_groups.to_json %>"
     no-results-text="<%= t('search.no-results') %>"

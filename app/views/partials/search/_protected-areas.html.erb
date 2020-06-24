@@ -2,7 +2,7 @@
   <search-areas-home
     :config="<%= config %>"
     endpoint-autocomplete="<%= search_autocomplete_path %>"
-    endpoint-search="<%= search_areas_path(search_term: "SEARCHTERM", filters: { db_type: ["TYPE"] }) %>"
+    endpoint-search="<%= search_areas_path(search_term: "SEARCHTERM", filters: @filters) %>"
   >
   </search-areas-home>
 </section>
