@@ -14,24 +14,21 @@
         padding: rem-calc(30 24 34 34);
 
         position: relative;
-
-        &::after {
-          background-image: image_url('icons/key.svg');
-          content: '';
-          width: rem-calc(360); height: rem-calc(360);
-          
+      }
+        &__bg {
           display: none;
-          position: absolute;
-          right: 0;
 
           @include breakpoint($small) { 
+            height: 122%;
+            
             display: block;
+            position: absolute;
             top: -6%; 
+            right: 0;
           }
 
           @include breakpoint($medium) { top: -11%; }
         }
-      }
 
         &__content { 
           @include breakpoint($small) { width: 70%; }
