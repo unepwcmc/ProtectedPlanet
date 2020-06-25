@@ -33,7 +33,7 @@ class Search::FullSerializer < Search::BaseSerializer
           {
             title: strip_html(record.respond_to?(:label) ? record.label : record.name),
             url: url(record),
-            summary: strip_html(record.respond_to?(:content) ? record.content : record.name),
+            summary: strip_html(record.respond_to?(:summary) ? record.summary : record.name),
             image: 'image url'
           }
         end
