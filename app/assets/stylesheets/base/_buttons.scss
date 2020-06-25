@@ -3,10 +3,8 @@
 //--------------------------------------------------
 $height-small: rem-calc(46);
 $height-medium: rem-calc(56);
-
 $padding-small: rem-calc(20);
 $padding-medium: rem-calc(27);
-
 //--------------------------------------------------
 // base mixins
 //--------------------------------------------------
@@ -14,7 +12,6 @@ $padding-medium: rem-calc(27);
   border: none;
   padding: 0;
 }
-
 @mixin button-basic {
   background-color: transparent;
   border: none;
@@ -23,33 +20,24 @@ $padding-medium: rem-calc(27);
   font-family: $body-font;
   padding: 0;
   text-decoration: none;
-
   &:hover { text-decoration: none; }
 }
-
 @mixin button-font {
   @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
 }
-
 @mixin button-disabled { cursor: disabled; }
-
 @mixin button-height { 
   @include responsive(height, $height-small, $height-medium, $height-medium);
-
   display: inline-flex;
   align-items: center;
 }
-
 @mixin button-padding($size: default) {
   @include responsive(padding-right, $padding-small, $padding-medium, $padding-medium);
   @include responsive(padding-left, $padding-small, $padding-medium, $padding-medium);
 }
-
 @mixin button-radius {
   border-radius: $button-radius;
 }
-
-
 //--------------------------------------------------
 // shared mixins
 //--------------------------------------------------
@@ -62,21 +50,31 @@ $padding-medium: rem-calc(27);
   background-color: $bg;
   color: $text;
 }
-
+@mixin button-download {
+  @include button-basic;
+  @include button-height;
+  @include button-radius;
+  @include flex-center;
+  background-color: $primary;
+  padding: 0 $padding-medium;
+  &::after { 
+    @include icon-download-black; 
+    content: '';
+    margin-left: rem-calc(10); 
+    display: inline-block;
+  }
+}
 @mixin button-with-icon {
   @include button-basic;
   @include button-font;
   @include flex;
   @include flex-v-center;
-
   &::after {
     content: '';
     margin-left: rem-calc(10);
-
     display: inline-block;
   }
 }
-
 @mixin button-outline ($colour: $black) {
   @include button-basic;
   @include button-font;
@@ -86,7 +84,6 @@ $padding-medium: rem-calc(27);
   border: solid 2px $colour;
   color: $colour;
 }
-
 //--------------------------------------------------
 // mixins for classes
 //--------------------------------------------------
@@ -98,78 +95,61 @@ $padding-medium: rem-calc(27);
   @include button-basic; 
   @include icon-cross;
 }
-
 @mixin button-download-trigger {
-  @include button-basic;
-  @include button-font;
-  @include button-radius;
-  @include flex;
-  @include flex-center;
+  @include button-download;
+}
+@mixin button-download-trigger-small {
+  @include button-download;
   @include responsive(padding, 0, 0 $padding-medium, 0 $padding-medium);
-  @include responsive(width, rem-calc(38), auto, auto);
-  @include responsive(height, rem-calc(38), $height-medium, $height-medium);
-  background-color: $primary;
-
+  @include responsive(width, $height-small, auto, auto);
   &::after { 
-    @include icon-download-black; 
     @include responsive(margin-left, 0, rem-calc(10), rem-calc(10)); 
-    content: '';
-
-    display: inline-block;
+  }
+  .download__trigger-text {
+    @include responsive(display, none, initial, initial);
   }
 }
-
 @mixin button-dropdown {
   @include button-with-icon;
   &::after { @include icon-chevron-black-down; }
 }
-
 @mixin button-dropdown-up {
   @include button-with-icon;
   &::after { @include icon-chevron-black-up; }
 }
-
 @mixin button-filter-trigger {
   @include button-with-icon;
   @include button-outline;
   @include breakpoint-down($small) { padding: rem-calc(0 12); }
-
   &::after { 
     @include icon-filters; 
     @include breakpoint-down($small) { margin: 0; }
   }
-
   .button__text { @include responsive(display, none, inline, inline); }
 }
-
 @mixin button-map-trigger {
   @include button-with-icon;
   @include button-outline;
   &::after { @include icon-pin; }
 }
-
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }
-
 @mixin button-search {
   @include button-basic;
   @include button-font;
   @include button-radius;
-  @include flex-center;
   background-color: $primary;
   width: rem-calc(47); height: rem-calc(47);
-
   &:before {
     @include icon-search-white;
     content: '';
+    margin: 0 auto;
   }
 }
-
 @mixin button-tab-rounded($size: default) {
   @include button-basic;
   border: solid transparent 1px;
   border-radius: rem-calc(20);
-  
   @if $size == 'small' {
     font-size: rem-calc(14);
     padding: rem-calc(6 16);
@@ -177,56 +157,44 @@ $padding-medium: rem-calc(27);
     @include text-tabs-fake;
     padding: rem-calc(5 26);
   }
-
   &:hover,
   .active { border-color: $primary; }
-  
   &.active { 
     background-color: $primary;
     color: $white;
   }
 }
-
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
 .button {
   &--accent { @include button-block; }
-
   &--all {
     @include button-with-icon;
-    
+    @include flex-no-shrink;
     &::after { @include icon-circle-chevron-black; }
   }
-
   &--download {
     @include button-with-icon;
-    
     &::after { 
       @include icon-download; 
       display: inline-block;
     }
   }
-
   &--external {
     @include button-with-icon;
     @include button-block;
     font-weight: $bold;
-    
     &::after { @include icon-arrow-external-white; }
   }
-
   &--link-external {
     @include button-with-icon;
-    
     &::after { 
       @include icon-arrow-external; 
       display: inline-block;
     }
   }
-
   &--outline-black { @include button-outline($black); }
   &--outline-white { @include button-outline($white); }
-
   &--primary { @include button-block; }
 }

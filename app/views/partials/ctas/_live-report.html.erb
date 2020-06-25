@@ -7,10 +7,10 @@
 
       <div>
         <h2 class="cta__title h2-big"><%= cta_live_report.title %></h2>
-        <p class="text-intro"><%= cta_live_report.summary %></p>
+        <p class="cta__intro text-intro"><%= cta_live_report.summary %></p>
       </div>
 
-      <%= link_to t('ctas.live_report.button'), cta_live_report.url, target: '_blank', class: 'button--accent' %>
+      <%= link_to t('ctas.live_report.button'), cta_live_report.url, target: '_blank', class: 'button--accent flex-no-shrink' %>
     </div>
   </div>
 </section>

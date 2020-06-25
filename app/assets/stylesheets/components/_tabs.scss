@@ -1,7 +1,6 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
@@ -11,59 +10,53 @@
   cursor: pointer;
   margin-right: rem-calc(46);
   padding-bottom: rem-calc(3);
-
   &:hover { border-bottom: solid $primary 2px; }
-
   &.active { 
     border-bottom: solid $primary 2px; 
     font-weight: $bold;
   }
 }
-
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
 .tabs {
+//--------------------------------------------------
+// tabs hero
+//--------------------------------------------------
   &--hero {
-    .tabs {
-      &__triggers {
-        @include ul-unstyled;
-        @include ul-inline;
-
-        transform: translateY(-100%);
-      }
+    .tabs__scrollable {
+      overflow-x: scroll;
+      transform: translateY(-100%);
     }
-
-    .tab {
-      &__target {
-        display: none;
-
-        &.active { display: block; }
-      }
-
+    .tabs__triggers {
+      @include ul-unstyled;
+      @include ul-inline;
+      width: fit-content;
+      display: flex;
+    }
       &__trigger {
         @include tab-trigger-underlined;
-
-        &.active { color: $primary; }
       }
-    }
+      .tab__target {
+        display: none;
+        &.active { display: block; }
+      }
   }
-
+//--------------------------------------------------
+// tabs rounded
+//--------------------------------------------------
   &--rounded {
     @include flex;
     @include flex-h-center;
     @include ul-unstyled;
     margin: rem-calc(26 0);
     overflow-x: scroll;
-
     @include breakpoint($medium) { margin: rem-calc(26 0 32 0); }
-
     @include breakpoint($medium) {
       @include flex-wrap;
       margin: rem-calc(30 0 10 0);
       overflow-x: initial;
     }
-
     .tab {
       &__trigger {
         @include button-tab-rounded;
@@ -72,18 +65,33 @@
       }
     }
   }
-
+//--------------------------------------------------
+// tabs small
+//--------------------------------------------------
   &--rounded-small {
     @include ul-unstyled;
     margin: rem-calc(0 0 10 0);
-
     .tab {
       &__trigger {
         @include button-tab-rounded(small);
         margin: rem-calc(0 4);
-
         display: inline-block;
       }
+    }
+  }
+//--------------------------------------------------
+// tabs underlined
+//--------------------------------------------------
+  &--underlined {
+    @include flex;
+    @include ul-unstyled;
+    @include responsive(flex-wrap, nowrap, nowrap, wrap);
+    @include responsive(overflow-x, scroll, scroll, initial);
+    @include responsive(margin, rem-calc(26 0), rem-calc(26 0 32 0), rem-calc(30 0 10 0));
+    .tab__trigger {
+      @include flex-no-shrink;
+      @include tab-trigger-underlined;
+      @include responsive(margin-bottom, 0, 0, rem-calc(10));
     }
   }
 }

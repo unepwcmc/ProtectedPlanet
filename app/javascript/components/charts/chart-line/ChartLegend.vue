@@ -1,5 +1,5 @@
 <template>
-  <ul class="chart--legend">
+  <ul>
     <li v-for="row, index in rows" class="chart__legend-li" :class="themeClass">
       <p class="chart__legend-item">
         <template v-if="showIcons">

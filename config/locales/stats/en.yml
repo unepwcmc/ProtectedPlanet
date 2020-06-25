@@ -35,3 +35,9 @@ en:
     wdpa:
       id: WDPA ID
       total: Total Protected Areas
+    story_map:
+      title: Story Map
+      link_type:
+        english_version: English Version
+        arabic_version: Arabic Version
+

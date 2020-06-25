@@ -38,6 +38,8 @@
     } 
 
       &__icon {
+        flex-shrink: 0;
+
         &.marine-protected-areas {
           @include icon-pin-blue;
         }
@@ -47,6 +49,10 @@
         @include responsive(font-size, rem-calc(20), rem-calc(30), rem-calc(40));
         color: $primary;
         font-weight: $bold;
+        line-height: 1;
+        margin-top: rem-calc(10);
+
+        display: block;
       }
 
         &__number-text { 

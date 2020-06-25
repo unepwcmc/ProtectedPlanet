@@ -9,13 +9,11 @@ import VueAnalytics from 'vue-analytics'
 import Vue2TouchEvents from 'vue2-touch-events'
 import ScrollMagic from 'scrollmagic'
 import VueLazyload from 'vue-lazyload'
-// import VueAgile from 'vue-agile'
 
 // store
 import store from './store/store.js'
 
 // components
-import Agile from './components/carousel/Agile'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
@@ -30,6 +28,7 @@ import ChartRectangles from './components/charts/chart-rectangles/ChartRectangle
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
+import Flickity from 'vue-flickity';
 import Download from './components/download/Download'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
@@ -64,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
       store,
 
       components: {
-        Agile,
         Carousel,
         CarouselSlide,
         Counter,
@@ -80,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowTarget,
         ChartSunburst,
         Download,
+        Flickity,
         MapInteractive,
         NavBurger,
         SearchAreas,

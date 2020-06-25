@@ -13,37 +13,43 @@
       <% end %>
 
       <%= link_to button_text, button_url, title: button_text, class: 'button--primary' %>
-    </div>
 
-    <div class="hero__stats bg--grey-black sm-home-hero-stats">
-      <div>
-        <div class="hero__stat-number">
-          <counter 
-            :total="<%= stat_pas_percent %>" 
-            trigger="sm-home-hero-stats" 
-            :decimal="2"
-          ></counter>%
+      <% if (local_assigns.has_key? :hero_small_text) && (local_assigns.has_key? :hero_small_text_url) %>
+        <%= link_to hero_small_text, hero_small_text_url, class: 'hero__small-text', title: 'hero_small_text' %>
+      <% end %>
+    </div>
+    
+    <div class="hero__stats">
+      <div class="hero__stats-content bg--grey-black sm-home-hero-stats">
+        <div>
+          <div class="hero__stat-number">
+            <counter 
+              :total="<%= stat_pas_percent %>" 
+              trigger="sm-home-hero-stats" 
+              :decimal="2"
+            ></counter>%
+          </div>
+          <span class="hero__stat-text"><%= stat_text_1 %></span>
         </div>
-        <span class="hero__stat-text"><%= stat_text_1 %></span>
-      </div>
-      <div>
-        <counter 
-          class="hero__stat-number-small"
-          :total="<%= stat_pas_total %>" 
-          trigger="sm-home-hero-stats" 
-          :decimal="0"
-        ></counter>
-        <span class="hero__stat-text"><%= stat_text_2 %></span>
-      </div>
-      <div>
-        <div class="hero__stat-number-small">
+        <div>
           <counter 
-            :total="<%= stat_pas_km %>" 
+            class="hero__stat-number-small"
+            :total="<%= stat_pas_total %>" 
             trigger="sm-home-hero-stats" 
             :decimal="0"
-          ></counter>km<sup>2</sup>
+          ></counter>
+          <span class="hero__stat-text"><%= stat_text_2 %></span>
         </div>
-        <span class="hero__stat-text"><%= stat_text_3 %></span>
+        <div>
+          <div class="hero__stat-number-small">
+            <counter 
+              :total="<%= stat_pas_km %>" 
+              trigger="sm-home-hero-stats" 
+              :decimal="0"
+            ></counter>km<sup>2</sup>
+          </div>
+          <span class="hero__stat-text"><%= stat_text_3 %></span>
+        </div>
       </div>
     </div>
   </div>

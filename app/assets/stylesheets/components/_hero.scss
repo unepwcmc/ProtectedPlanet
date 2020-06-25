@@ -60,15 +60,23 @@
     @include flex-h-between;
     @include flex-v-center;
     @include responsive(flex-direction, column, column, row);
+    @include responsive(margin-bottom, rem-calc(20), rem-calc(20), 0);
   }
 
   .hero__content {
     margin-right: 20%;          
   }
 
-  .hero__buttons { @include flex; }
+  .hero__buttons { 
+    @include flex; 
+    @include responsive(flex-direction, column, row, row);
+    @include responsive(margin-bottom, 0, rem-calc(30), 0);
+  }
 
-  .hero__button-1 { margin-right: rem-calc(28); }
+  .hero__button-1 { 
+    @include responsive(margin-right, 0, rem-calc(28), rem-calc(28));
+    @include responsive(margin-bottom, rem-calc(22), 0, 0);
+  }
 }
 
 //--------------------------------------------------
@@ -131,6 +139,8 @@
 
   .hero__content {
     @include responsive(margin-right, 0, 0, 10%);    
+    @include responsive(padding-right, 0, rem-calc(35),0); 
+    @include responsive(padding-left, 0, rem-calc(35), 0); 
   }
 
   .hero__intro {
@@ -138,15 +148,29 @@
     @include text-intro;
   }
 
+  .hero__small-text {
+    font-weight: $bold;
+    margin-top: rem-calc(24);
+
+    display: block;
+  }
+  
   .hero__stats {
+    @include flex;
+    @include flex-no-shrink;
+    @include responsive(padding-right, 0, rem-calc(35),0); 
+    @include responsive(padding-left, 0, rem-calc(35), 0); 
+    @include responsive(width, 100%, 100%, 33%);
+  }
+
+  .hero__stats-content {
     @include border-radius;
     @include flex;
     @include flex-column;
     @include flex-h-between;
-    @include flex-no-shrink;
     @include responsive(margin-top, rem-calc(20), rem-calc(28), 0);
-    @include responsive(padding, rem-calc(40), rem-calc(44), rem-calc(44));
-    @include responsive(width, 100%, 100%, 33%); 
+    @include responsive(padding, rem-calc(40), rem-calc(44), rem-calc(44)); 
+    width: 100%;
   }
 
   .hero__stat-number {

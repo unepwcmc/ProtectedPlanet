@@ -8,6 +8,7 @@
         title: @protected_area.name,
         type: 'TODO',
         wdpa_id: @protected_area.wdpa_id,
+        story_map_links: @protected_area.story_map_links
       } %>
 
       <div>
@@ -15,7 +16,7 @@
       </div>
     </section>
 
-    <section class="flex">
+    <div class="card--stats-wrapper">
       <div class="card--stats--half">
         <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
       </div>
@@ -24,7 +25,7 @@
         <%= render "partials/stats/stats-pame" %>
         <%= render partial: "partials/stats/stats-external", locals: { external_links: @presenter.external_links } %>
       </div>
-    </section>
+    </div>
 
     <div class="card--stats">
       <h1>Chart - overlaps</h1>

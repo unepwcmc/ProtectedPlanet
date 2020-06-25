@@ -9,7 +9,7 @@
       width: 100%;
       
       &.popout { 
-        width: rem-calc(600);
+        @include responsive(width, calc(100vw - 2*#{$gutter-small}), rem-calc(600), rem-calc(600));
 
         display: none;
         position: absolute;

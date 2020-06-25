@@ -54,6 +54,7 @@
 
     <chart-legend 
       v-if="showLegend"
+      class="chart--legend--horizontal"
       :colours="legendColours"
       :rows="getLegend()"
     />
