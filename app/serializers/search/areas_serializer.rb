@@ -70,7 +70,7 @@ class Search::AreasSerializer < Search::BaseSerializer
 
   def site_hash(site)
     {
-      image: '/assets/tiles/FR?type=country&version=1', # TODO This should be a mapbox internal asset
+      image: ApplicationController.helpers.protected_area_cover(site, with_tag: false),
       title: site.name,
       url: protected_area_path(site.wdpa_id)
     }
