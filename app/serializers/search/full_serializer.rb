@@ -64,7 +64,7 @@ class Search::FullSerializer < Search::BaseSerializer
     if obj.is_a?(ProtectedArea)
       ApplicationController.helpers.protected_area_cover(obj, with_tag: false)
     elsif obj.is_a?(Comfy::Cms::SearchablePage)
-      'page_image' #TODO
+      obj.image
     else
       'placeholder_image' #TODO
     end
