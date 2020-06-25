@@ -109,7 +109,7 @@
       margin: 0;
 
       @include breakpoint($small) { font-size: rem-calc(22); }
-      @include breakpoint($small) { font-size: rem-calc(30); }
+      @include breakpoint($medium) { font-size: rem-calc(30); }
     }
 
     &__number {
@@ -119,7 +119,7 @@
       display: block;
 
       @include breakpoint($small) { font-size: rem-calc(20); }
-      @include breakpoint($small) { font-size: rem-calc(40); }
+      @include breakpoint($medium) { font-size: rem-calc(30); }
     }
 
     &__number--small {
@@ -128,7 +128,7 @@
       margin-right: rem-calc(10);
 
       @include breakpoint($small) { font-size: rem-calc(20); }
-      @include breakpoint($small) { font-size: rem-calc(30); }
+      @include breakpoint($medium) { font-size: rem-calc(30); }
     }
 
     &__section {
