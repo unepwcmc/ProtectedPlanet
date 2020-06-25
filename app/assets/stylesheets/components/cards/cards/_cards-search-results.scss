@@ -29,7 +29,9 @@ $search-results-image-width: rem-calc(165);
 
       &__image {
         background-color: $grey-light;
-        width: $search-results-image-width; height: auto;
+        background-position: center;
+        background-size: cover;
+        width: $search-results-image-width; height: rem-calc(130);
 
         display: none;
 
