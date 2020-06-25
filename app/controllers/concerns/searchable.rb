@@ -103,13 +103,11 @@ module Concerns::Searchable
 
     FAKE_CATEGORIES = %w(all areas).freeze
     def sanitise_ancestor_filter(filters)
-      return filters unless filters['ancestor']
+      ancestor = filters.delete('ancestor')
 
-      if FAKE_CATEGORIES.include? filters['ancestor']
-        filters.delete('ancestor')
-      else
-        filters['ancestor'] = filters['ancestor'].to_i
-      end
+      return filters if ancestor.blank? || FAKE_CATEGORIES.include?(ancestor)
+
+      filters['ancestor'] = ancestor.to_i
 
       filters
     end

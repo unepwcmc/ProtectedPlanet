@@ -3,7 +3,7 @@ class SearchController < ApplicationController
   after_action :enable_caching
 
   before_action :ignore_empty_query, only: [:index, :search_results]
-  before_action :load_search, only: [:index, :search_results]
+  before_action :load_search, only: [:search_results]
 
   def index
     categories = I18n.t('search.categories')
