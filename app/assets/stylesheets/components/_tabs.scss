@@ -4,6 +4,17 @@
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
+@mixin tabs-horizontal-scroll {
+  @include flex;
+  overflow-x: scroll;
+
+  @include breakpoint($medium){ 
+    overflow-x: initial;
+      
+    flex-wrap: wrap;
+  }
+}
+
 @mixin tab-trigger-underlined {
   @include text-tabs-fake;
   border-bottom: solid transparent 2px;
@@ -16,6 +27,7 @@
     font-weight: $bold;
   }
 }
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
@@ -24,39 +36,40 @@
 // tabs hero
 //--------------------------------------------------
   &--hero {
-    .tabs__scrollable {
-      overflow-x: scroll;
-      transform: translateY(-100%);
-    }
     .tabs__triggers {
       @include ul-unstyled;
       @include ul-inline;
-      width: fit-content;
-      display: flex;
+      @include tabs-horizontal-scroll;
+
+      transform: translateY(-100%);
     }
-      &__trigger {
-        @include tab-trigger-underlined;
-      }
-      .tab__target {
-        display: none;
-        &.active { display: block; }
+
+      .tab {
+        &__trigger { @include tab-trigger-underlined; }
+
+        &__target {
+          display: none;
+
+          &.active { display: block; }
+        }
       }
   }
 //--------------------------------------------------
 // tabs rounded
 //--------------------------------------------------
   &--rounded {
-    @include flex;
-    @include flex-h-center;
     @include ul-unstyled;
+    @include tabs-horizontal-scroll;
     margin: rem-calc(26 0);
-    overflow-x: scroll;
-    @include breakpoint($medium) { margin: rem-calc(26 0 32 0); }
-    @include breakpoint($medium) {
-      @include flex-wrap;
-      margin: rem-calc(30 0 10 0);
-      overflow-x: initial;
+    
+    @include breakpoint($small) { 
+      margin: rem-calc(26 0 32 0);
+      
+      justify-content: center;
     }
+
+    @include breakpoint($medium) { margin: rem-calc(30 0 10 0); }
+
     .tab {
       &__trigger {
         @include button-tab-rounded;
@@ -71,6 +84,7 @@
   &--rounded-small {
     @include ul-unstyled;
     margin: rem-calc(0 0 10 0);
+
     .tab {
       &__trigger {
         @include button-tab-rounded(small);
@@ -83,15 +97,19 @@
 // tabs underlined
 //--------------------------------------------------
   &--underlined {
-    @include flex;
+    @include tabs-horizontal-scroll;
     @include ul-unstyled;
-    @include responsive(flex-wrap, nowrap, nowrap, wrap);
-    @include responsive(overflow-x, scroll, scroll, initial);
-    @include responsive(margin, rem-calc(26 0), rem-calc(26 0 32 0), rem-calc(30 0 10 0));
-    .tab__trigger {
-      @include flex-no-shrink;
-      @include tab-trigger-underlined;
-      @include responsive(margin-bottom, 0, 0, rem-calc(10));
+    margin: rem-calc(26 0);
+    
+    @include breakpoint($small){ margin: rem-calc(26 0 32 0); }
+    @include breakpoint($medium){ margin: rem-calc(30 0 10 0); }
+
+    .tab {
+      &__trigger {
+        @include flex-no-shrink;
+        @include tab-trigger-underlined;
+        @include breakpoint($medium){ margin-bottom: rem-calc(10); }
+      }
     }
   }
 }

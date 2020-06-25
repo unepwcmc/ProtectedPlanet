@@ -2,7 +2,7 @@
   <div class="chart--column-tabbed">
 
     <tabs-fake
-      class="chart__tabs"
+      class="chart__tabs tabs--underlined"
       :children="tabs"
       v-on:click:tab="changeTab"
     />
