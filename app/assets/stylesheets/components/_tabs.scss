@@ -2,7 +2,7 @@
 // variables
 //--------------------------------------------------
 //--------------------------------------------------
-// mixins
+// mixins for tabs
 //--------------------------------------------------
 @mixin tabs-horizontal-scroll {
   @include flex;
@@ -15,13 +15,34 @@
   }
 }
 
+@mixin tabs-rounded {
+  @include ul-unstyled;
+  @include tabs-horizontal-scroll;
+  margin: rem-calc(26 0);
+  
+  @include breakpoint($small) { margin: rem-calc(26 0 32 0); }
+  @include breakpoint($medium) { margin: rem-calc(30 0 10 0); }
+
+  .tab {
+    &__trigger {
+      @include button-tab-rounded;
+      @include flex-no-shrink;
+      margin: rem-calc(0 10);
+    }
+  }
+}
+//--------------------------------------------------
+// mixins for tab
+//--------------------------------------------------
 @mixin tab-trigger-underlined {
   @include text-tabs-fake;
   border-bottom: solid transparent 2px;
   cursor: pointer;
   margin-right: rem-calc(46);
   padding-bottom: rem-calc(3);
+
   &:hover { border-bottom: solid $primary 2px; }
+
   &.active { 
     border-bottom: solid $primary 2px; 
     font-weight: $bold;
@@ -55,29 +76,25 @@
       }
   }
 //--------------------------------------------------
-// tabs rounded
+// tabs search main
 //--------------------------------------------------
-  &--rounded {
-    @include ul-unstyled;
-    @include tabs-horizontal-scroll;
-    margin: rem-calc(26 0);
-    
-    @include breakpoint($small) { 
-      margin: rem-calc(26 0 32 0);
-      
-      justify-content: center;
-    }
+&--search-main {
+  @include tabs-rounded;
 
-    @include breakpoint($medium) { margin: rem-calc(30 0 10 0); }
-
-    .tab {
-      &__trigger {
-        @include button-tab-rounded;
-        @include flex-no-shrink;
-        margin: rem-calc(0 10);
-      }
+  .tab {
+    &__trigger {
+      &:first-child { margin-left: 0; }
     }
   }
+}
+//--------------------------------------------------
+// tabs search areas
+//--------------------------------------------------
+&--search-areas {
+  @include tabs-rounded;
+  @include flex-h-center;
+}
+
 //--------------------------------------------------
 // tabs small
 //--------------------------------------------------
