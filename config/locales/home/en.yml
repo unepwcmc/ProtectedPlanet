@@ -9,15 +9,15 @@ en:
       levels:
         - 
           title: Regional level
-          url: #TODO
+          geo_type: region
           icon: region
         - 
           title: Country level
-          url: #TODO
+          geo_type: country
           icon: region
         - 
           title: Indiviual Area
-          url: #TODO
+          geo_type: site
           icon: region 
       categories:
         - 
