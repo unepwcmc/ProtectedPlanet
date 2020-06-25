@@ -34,7 +34,7 @@ class Search::FullSerializer < Search::BaseSerializer
             title: strip_html(record.respond_to?(:label) ? record.label : record.name),
             url: url(record),
             summary: strip_html(record.respond_to?(:summary) ? record.summary : record.name),
-            image: 'image url'
+            image: image(record)
           }
         end
       }
@@ -57,6 +57,16 @@ class Search::FullSerializer < Search::BaseSerializer
       country_path(iso: obj.iso_3)
     else
       '#'
+    end
+  end
+
+  def image(obj)
+    if obj.is_a?(ProtectedArea)
+      ApplicationController.helpers.protected_area_cover(obj, with_tag: false)
+    elsif obj.is_a?(Comfy::Cms::SearchablePage)
+      'page_image' #TODO
+    else
+      'placeholder_image' #TODO
     end
   end
 end
