@@ -15,6 +15,7 @@
       @include text-tabs-fake;
       font-weight: bold;
       color: $grey;
+      margin: rem-calc(24 0 24 0);
     }
   }
 }

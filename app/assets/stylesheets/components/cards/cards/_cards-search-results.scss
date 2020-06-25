@@ -29,7 +29,7 @@ $search-results-image-width: rem-calc(165);
 
       &__image {
         background-color: $grey-light;
-        width: $search-results-image-width; height: rem-calc(130);
+        width: $search-results-image-width; height: auto;
 
         display: none;
 

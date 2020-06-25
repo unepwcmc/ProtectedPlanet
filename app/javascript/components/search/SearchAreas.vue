@@ -44,7 +44,7 @@
       <div class="search__results">
         <tabs-fake
           :children="tabs"
-          class="tabs--rounded"
+          class="tabs--search-areas"
           :defaultSelectedId="tabIdDefault"
           :preSelectedId="tabIdSelected"
           v-on:click:tab="updateSelectedTab"
@@ -267,6 +267,7 @@ export default {
       
       this.filterGroupsWithPreSelected = this.filterGroups
     },
+
 
     updateFilters (filters) {
       this.$eventHub.$emit('reset:pagination')

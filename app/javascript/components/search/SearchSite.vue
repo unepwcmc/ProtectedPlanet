@@ -8,7 +8,7 @@
 
     <tabs-fake
       :children="categories"
-      class="tabs--rounded"
+      class="tabs--search-main"
       v-on:click:tab="updateCategory"
     />
 
