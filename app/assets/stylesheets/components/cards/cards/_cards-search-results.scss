@@ -1,4 +1,8 @@
 //--------------------------------------------------
+// variables
+//--------------------------------------------------
+$search-results-image-width: rem-calc(165);
+//--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--search-results {
@@ -12,7 +16,7 @@
     }
 
       &__content {
-        width: rem-calc(550);
+        @include breakpoint($small) { width: calc(100% - #{$search-results-image-width} - 20px); }
       }
 
         &__summary {
@@ -24,7 +28,12 @@
         }
 
       &__image {
-        width: rem-calc(165); height: rem-calc(130);
+        background-color: $grey-light;
+        width: $search-results-image-width; height: rem-calc(130);
+
+        display: none;
+
+        @include breakpoint($small) { display: block; }
       }
   }
 }
