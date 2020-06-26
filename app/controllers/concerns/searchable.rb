@@ -29,9 +29,18 @@ module Concerns::Searchable
       options
     end
 
+    INDEX_BY_TYPE = {
+      'site' => Search::PA_INDEX,
+      'country' => Search::COUNTRY_INDEX,
+      'region' => Search::REGION_INDEX,
+      'all' => Search::DEFAULT_INDEX_NAME,
+      'areas' => Search::PA_INDEX
+    }.freeze
     def search_index
-      is_area_category = parsed_filters && parsed_filters['ancestor'] == 'areas'
-      (controller_name.include?('area') || is_area_category) ? Search::PA_INDEX : Search::DEFAULT_INDEX_NAME
+      _index = INDEX_BY_TYPE[parsed_filters['ancestor']] if parsed_filters
+      return _index if _index
+
+      INDEX_BY_TYPE[search_params[:geo_type]] || Search::DEFAULT_INDEX_NAME
     end
 
     DB_TYPES = %w(wdpa oecm all).freeze
@@ -62,6 +71,7 @@ module Concerns::Searchable
     #
     def filters
       return '' unless search_params[:filters].present?
+      return '' if %w(country region).include?(search_params[:geo_type])
       _filters = sanitise_filters
       _filters.to_hash.symbolize_keys.slice(*Search::ALLOWED_FILTERS)
     end

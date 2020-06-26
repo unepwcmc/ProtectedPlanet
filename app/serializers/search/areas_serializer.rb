@@ -13,13 +13,13 @@ class Search::AreasSerializer < Search::BaseSerializer
   private
 
   def regions
-    _regions = @aggregations['region']
+    _regions = @results.regions || []
 
     geo_hash('region', paginate(_regions), _regions.length)
   end
 
   def countries
-    _countries = @aggregations['country']
+    _countries = @results.countries || []
 
     geo_hash('country', paginate(_countries), _countries.length)
   end
@@ -52,19 +52,19 @@ class Search::AreasSerializer < Search::BaseSerializer
 
   def region_hash(region)
     {
-      title: region[:label],
-      totalAreas: "#{region[:count]} #{I18n.t('search.protected-areas')}",
-      url: region_path(iso: region[:identifier])
+      title: region.name,
+      totalAreas: "#{region.protected_areas.count} #{I18n.t('search.protected-areas')}",
+      url: region_path(iso: region.iso)
     }
   end
 
   def country_hash(country)
-    _slug = slug(country[:label])
+    _slug = slug(country.name)
     {
       countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
-      totalAreas: "#{country[:count]} #{I18n.t('search.protected-areas')}",
-      title: country[:label],
-      url: country_path(iso: country[:identifier])
+      totalAreas: "#{country.protected_areas.count} #{I18n.t('search.protected-areas')}",
+      title: country.name,
+      url: country_path(iso: country.iso_3)
     }
   end
 

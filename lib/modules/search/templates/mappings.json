@@ -115,7 +115,6 @@
         "type": "text",
         "analyzer": "english"
 	    },
-
 	    "countries_for_index": {
         "type": "nested",
         "properties": {
@@ -143,7 +142,23 @@
             }
           }
         }
-	    },
+      },
+      "regions_for_index": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "text",
+            "analyzer": "english"
+          },
+          "iso": {
+            "type": "keyword",
+            "normalizer": "lc_normalizer"
+          }
+        }
+      },
 	    "iucn_category": {
         "type": "nested",
         "properties": {

@@ -2,9 +2,10 @@ class Search
   CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml')).freeze
   ALLOWED_FILTERS = [:type, :country, :iucn_category, :designation, :region, :marine, :has_irreplaceability_info, :has_parcc_info, :governance, :is_green_list, :category, :ancestor, :is_oecm].freeze
   COUNTRY_INDEX = "countries_#{Rails.env}".freeze
+  REGION_INDEX = "regions_#{Rails.env}".freeze
   PA_INDEX = "protectedareas_#{Rails.env}".freeze
   CMS_INDEX = "cms_#{Rails.env}".freeze
-  DEFAULT_INDEX_NAME = [PA_INDEX, COUNTRY_INDEX, CMS_INDEX].join(',').freeze
+  DEFAULT_INDEX_NAME = [PA_INDEX, CMS_INDEX].join(',').freeze
   AREAS_INDEX_NAME = [PA_INDEX, COUNTRY_INDEX].join(',').freeze
   attr_reader :search_term, :options
 

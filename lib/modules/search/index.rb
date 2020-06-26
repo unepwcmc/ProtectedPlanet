@@ -12,10 +12,13 @@ class Search::Index
     ])
 
 
+    region_index = Search::Index.new Search::REGION_INDEX, Region.without_geometry.all
+    region_index.create
     country_index = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
     country_index.create
     pa_index = Search::Index.new Search::PA_INDEX, pa_relation
     pa_index.create
+    region_index.index
     country_index.index
     pa_index.index
   end
