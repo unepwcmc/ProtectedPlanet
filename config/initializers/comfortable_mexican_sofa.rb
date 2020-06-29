@@ -129,7 +129,12 @@ ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = ENV['COMFY
 
 module ComfortableMexicanSofa
   module ExtraModels
-    COMFY_CMS_INCLUDED_EXPORT_MODELS = ENV['COMFY_CMS_INCLUDED_EXPORT_MODELS'].split(' ')
+    begin
+      COMFY_CMS_INCLUDED_EXPORT_MODELS = ENV['COMFY_CMS_INCLUDED_EXPORT_MODELS'].split(' ')
+    rescue NoMethodError
+      raise $ERROR_INFO, "COMFY_CMS_INCLUDED_EXPORT_MODELS has not been set in .env - see .env.example: #{$ERROR_INFO}",
+            $ERROR_INFO.backtrace
+    end
   end
 
   module Seeds
