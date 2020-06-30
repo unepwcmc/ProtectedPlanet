@@ -1,6 +1,10 @@
 <template>
   <div class="filtered-table relative">
-    <filters :filters="filters" :total-items="totalItems"></filters>
+    <filters 
+      class="filters--pame"
+      :filters="filters" 
+      :total-items="totalItems"
+    />
 
     <div class="table-head--pame">
       <pame-table-head :filters="attributes" />

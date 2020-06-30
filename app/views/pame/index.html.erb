@@ -7,7 +7,11 @@
   >
     <template slot-scope="{ selectedId }">
       <tab-target :id="1" :selected-id="selectedId">
-        <filtered-table :filters="<%= @filters %>" :json="<%= @json %>" :attributes="<%= @table_attributes %>">
+        <filtered-table 
+          :attributes="<%= @table_attributes %>"
+          :filters="<%= @filters %>" 
+          :json="<%= @json %>" 
+        >
         </filtered-table>
       </tab-target>
 

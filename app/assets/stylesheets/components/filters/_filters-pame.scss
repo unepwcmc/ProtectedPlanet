@@ -1,187 +1,192 @@
-//**************************************************
+//--------------------------------------------------
 // variables
-//**************************************************
+//--------------------------------------------------
 $activeBackgroundColour: $primary;
 $activeTextColour: white;
 $checkbox-height: rem-calc(22);
 $focus-outline-margin: rem-calc(4);
 
-//**************************************************
-// filters
-//**************************************************
-.filter {
-  margin-right: rem-calc(20);
-
-  display: inline-block;
-  position: relative;
-
-  &__title {
-    font-size: rem-calc(20);
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--pame {
+  .filter {
     margin-right: rem-calc(20);
-  }
 
-//**************************************************
-// button
-//**************************************************
-  &__button {
-    @include button-dropdown-filter;
-    color: $black;
-    cursor: pointer;
-
+    display: inline-block;
     position: relative;
 
-    &:hover { 
-      background-color: $activeBackgroundColour;
-      border-color: $activeBackgroundColour;
-      color: $activeTextColour;
-
-      // &:after { background-image: image-url('icons/arrow-down-white.svg'); }
+    &__title {
+      font-size: rem-calc(20);
+      margin-right: rem-calc(20);
     }
 
-    // &:after {
-    //   @include flex-v-center;
-    //   background-image: image-url('icons/arrow-down-black.svg');
-    //   content: '';
-    //   width: rem-calc(8); height: rem-calc(6);
+  //**************************************************
+  // button
+  //**************************************************
+    &__button {
+      @include button-dropdown-filter;
+      color: $black;
+      cursor: pointer;
+      margin: 0;
 
-    //   right: rem-calc(24);
-    // }
-    
-    &--active {
-      background-color: $activeBackgroundColour;
-      border-color: $activeBackgroundColour;
-      color: $activeTextColour;     
-
-      &:after,
-      &:hover:after { background-image: image-url('icons/arrow-up-white.svg'); }
-    }
-
-    &--has-selected {
-      background-color: $activeBackgroundColour;
-      color: $activeTextColour;
-      
-      &:after,
-      &:hover:after { visibility: hidden; }
-    }
-
-      &-total {
-        $total-width: rem-calc(24);
-
-        @include flex-v-center;
-        background-color: $activeTextColour;
-        border-radius: 100%;
-        color: $activeBackgroundColour;
-        font-size: rem-calc(18);
-        line-height: $total-width;
-        text-align: center;
-        width: $total-width; height: $total-width;
-      
-        display: block;
-
-        position: absolute;
-        right: rem-calc(16);
-      }
-  }
-
-//**************************************************
-// options
-//**************************************************
-  &__options {
-    background-color: white;
-    border: solid rem-calc(1) $black;
-    border-radius: $radius-global;
-    font-size: rem-calc(16);
-    margin-top: rem-calc(18);
-    padding: rem-calc(30 25);
-    min-width: rem-calc(300);
-
-    display: none;
-    position: absolute;
-    z-index: 1;
-
-    &--active {
-      display: block;
-    }
-
-    &-list {
-      padding: $focus-outline-margin;
-      margin-bottom: rem-calc(20);
-      max-height: $filters-menu-max-height;
-      overflow-y: scroll;
-      overflow-x: hidden; //for IE11
-      white-space: nowrap; 
-    }
-
-    &--donors {
-      column-count: 2;
-      flex-wrap: wrap;
-      width: 928px;
-      white-space: normal;
-
-      display: flex;
-
-      li {
-        flex: 1 0 50%;
-
-        float: left;
-      }
-    }
-    
-    &--category { max-width: rem-calc(803); }
-    &--country { max-width: rem-calc(480); }
-    &--ocean-region { max-width: rem-calc(300); }
-  }
-
-    &__option {
-      font-size: rem-calc(16);
-      margin-bottom: rem-calc(16);
-      width: 100%;
-
-      display: block;
       position: relative;
 
-      label { cursor: pointer; }
+      &:hover { 
+        background-color: $activeBackgroundColour;
+        border-color: $activeBackgroundColour;
+        color: $activeTextColour;
+
+        &:after { background-image: image-url('icons/chevron-white-down.svg'); }
+      }
+
+      &:after {
+        @include flex-v-center;
+        content: '';
+        width: rem-calc(8); height: rem-calc(6);
+
+        right: rem-calc(24);
+      }
+      
+      &--active {
+        background-color: $activeBackgroundColour;
+        border-color: $activeBackgroundColour;
+        color: $activeTextColour;     
+
+        &:after,
+        &:hover:after { background-image: image-url('icons/chevron-white-up.svg'); }
+      }
+
+      &--has-selected {
+        background-color: $activeBackgroundColour;
+        color: $activeTextColour;
+        
+        &:after,
+        &:hover:after { visibility: hidden; }
+      }
+
+        &-total {
+          $total-width: rem-calc(24);
+
+          @include flex-v-center;
+          background-color: $activeTextColour;
+          border-radius: 100%;
+          color: $activeBackgroundColour;
+          font-size: rem-calc(18);
+          line-height: $total-width;
+          text-align: center;
+          width: $total-width; height: $total-width;
+        
+          display: block;
+
+          position: absolute;
+          right: rem-calc(16);
+        }
     }
 
-//**************************************************
-// checkbox
-//**************************************************
-      &__checkbox {
-        border: solid rem-calc(1) $grey;
-        cursor: pointer;
-        margin: 0;
-        width: $checkbox-height; height: $checkbox-height;
+  //**************************************************
+  // options
+  //**************************************************
+    &__options {
+      background-color: white;
+      border: solid rem-calc(1) $black;
+      border-radius: $radius-global;
+      font-size: rem-calc(16);
+      margin-top: rem-calc(18);
+      padding: rem-calc(30 25);
+      min-width: rem-calc(300);
 
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        -ms-appearance: none;
+      display: none;
+      position: absolute;
+      z-index: 1;
 
+      &--active {
         display: block;
-        position: absolute;
-        left: 0;
+      }
 
-        &--active:after {
-          background: $primary image-url('icons/tick.svg') center no-repeat;
-          content: '';
-          width: rem-calc(20); height: rem-calc(20);
+      &-list {
+        padding: $focus-outline-margin;
+        margin-bottom: rem-calc(20);
+        max-height: $filters-menu-max-height;
+        overflow-y: scroll;
+        overflow-x: hidden; //for IE11
+        white-space: nowrap; 
+      }
 
-          display: block;
+      &--donors {
+        column-count: 2;
+        flex-wrap: wrap;
+        width: 928px;
+        white-space: normal;
+
+        display: flex;
+
+        li {
+          flex: 1 0 50%;
+
+          float: left;
         }
       }
+      
+      &--category { max-width: rem-calc(803); }
+      &--country { max-width: rem-calc(480); }
+      &--ocean-region { max-width: rem-calc(300); }
+    }
 
-      &__checkbox-label {
-        line-height: $checkbox-height;
-        padding: rem-calc(0 20 0 38);
+      &__option {
+        font-size: rem-calc(16);
+        margin-bottom: rem-calc(16);
+        width: 100%;
 
-        display: inline-block;
+        display: block;
+        position: relative;
+
+        label { cursor: pointer; }
       }
 
-  &__buttons {
-    @include flex;
-    @include flex-h-between;
-    margin-top: rem-calc(18);
-    text-align: right;
-  }
+  //**************************************************
+  // checkbox
+  //**************************************************
+        &__checkbox {
+          border: solid rem-calc(1) $grey;
+          cursor: pointer;
+          margin: 0;
+          padding: 0; 
+          width: $checkbox-height; height: $checkbox-height;
 
-    &__button-cancel { margin: rem-calc(0 20 0) auto; }
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          -ms-appearance: none;
+
+          display: block;
+          position: absolute;
+          left: 0;
+
+          &--active:after {
+            @include icon-tick;
+            content: '';
+            width: rem-calc(20); height: rem-calc(20);
+
+            display: block;
+            top: 0;
+            left: 0;
+          }
+        }
+
+        &__checkbox-label {
+          line-height: $checkbox-height;
+          padding: rem-calc(0 20 0 38);
+
+          display: inline-block;
+        }
+
+    &__buttons {
+      @include flex;
+      @include flex-h-between;
+      margin-top: rem-calc(18);
+      text-align: right;
+    }
+
+      &__button-cancel { margin: rem-calc(0 20 0) auto; }
+  }
 }

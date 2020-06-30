@@ -1,7 +1,14 @@
 <template>
-  <div id="sticky" :class="{ 'table-head--stuck' : isSticky }">
+  <div 
+    id="sticky" 
+    :class="{ 'table-head--stuck' : isSticky }"
+  >
     <div class="table-head__row">
-      <table-header v-for="filter, index in filters" :filter="filter" :key="index"></table-header>
+      <table-header 
+        :filter="filter" 
+        :key="index"
+        v-for="filter, index in filters" 
+      />
     </div>
   </div>
 </template>

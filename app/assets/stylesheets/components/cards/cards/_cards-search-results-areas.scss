@@ -67,19 +67,5 @@ $card-search-results-areas-flag-size: rem-calc(60);
         &__group {
           margin: rem-calc(10 0);
         }
-          
-          // &__icon--flag { 
-          //   background-size: 100%;
-          //   margin-right: rem-calc(6);
-          //   width: rem-calc(22); height: rem-calc(22);
-
-          //   display: block;
-          // }
-
-          // &__icon--region { 
-          //   @include icon-region; 
-          //   margin-right: rem-calc(6);
-          //   width: rem-calc(22); height: rem-calc(22);
-          // }
   }
 }
