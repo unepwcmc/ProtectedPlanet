@@ -28,6 +28,10 @@
     max-height: rem-calc(280);
     overflow-y: scroll;
 
+    @include beautify-scrollbar;
+    padding: 1rem;
+
+
     .list {
       &__li {
         @include flex;
