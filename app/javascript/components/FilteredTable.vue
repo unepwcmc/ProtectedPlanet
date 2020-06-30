@@ -17,7 +17,12 @@
       </row>
     </div>
 
-    <pame-pagination :current-page="currentPage" :items-per-page="itemsPerPage" :total-items="totalItems" :total-pages="totalPages"></pame-pagination>
+    <pame-pagination 
+      :current-page="currentPage" 
+      :items-per-page="itemsPerPage" 
+      :total-items="totalItems" 
+      :total-pages="totalPages"
+    />
   </div>
 </template>
 
@@ -35,6 +40,10 @@
     components: { Filters, PameTableHead, Row, PamePagination },
 
     props: {
+      endpoint: {
+        required: true,
+        type: String
+      },
       filters: { type: Array },
       attributes: { type: Array },
       json: { type: Object }
@@ -78,7 +87,7 @@
         axios.defaults.headers.common['X-CSRF-Token'] = csrf
         axios.defaults.headers.common['Accept'] = 'application/json'
 
-        axios.post('/list', data)
+        axios.post(this.endpoint, data)
         .then(response => {
           this.updateProperties(response.data)
         })

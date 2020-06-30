@@ -90,6 +90,7 @@
   
   &.about { background-image: image_url('hero/about.png'); }
   &.equity { background-image: image_url('hero/equity.png'); }
+  &.protected-areas-management-effectiveness-pame { background-image: image_url('hero/pame.png'); }
 
   .hero__content {
     @include responsive(padding-right, 0, 5%, 25%); 

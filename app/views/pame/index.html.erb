@@ -1,6 +1,6 @@
 <%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label, classes: "#{@cms_page.slug} bg-image-overlay--white" } %>
 
-<section class="container">
+<section class="container page-padding--bottom">
   <tabs
     class="tabs--hero"
     :tab-triggers="<%= @tabs %>"
@@ -9,6 +9,7 @@
       <tab-target :id="1" :selected-id="selectedId">
         <filtered-table 
           :attributes="<%= @table_attributes %>"
+          endpoint="/pame/list"
           :filters="<%= @filters %>" 
           :json="<%= @json %>" 
         >

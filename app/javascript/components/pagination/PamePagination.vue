@@ -1,19 +1,22 @@
 <template>
-  <div class="right">
-    <div v-if="haveResults">
+  <div class="pagination right">
+    <div 
+      class="pagination__content"
+      v-if="haveResults"
+    >
       <span class="bold">{{ firstItem }} - {{ lastItem }} of {{ totalItems }}</span>
 
       <button
         v-bind="{ 'disabled' : !previousIsActive }"
         @click="changePage(previousIsActive, 'previous')"
-        class="button button--previous"
+        class="pagination__button--previous"
         :class="{ 'button--disabled' : !previousIsActive }">
       </button>
 
       <button
         v-bind="{ 'disabled' : !nextIsActive }"
         @click="changePage(nextIsActive, 'next')"
-        class="button button--next"
+        class="pagination__button--next"
         :class="{ 'button--disabled' : !nextIsActive }">
       </button>
     </div>
