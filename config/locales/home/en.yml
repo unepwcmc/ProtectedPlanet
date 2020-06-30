@@ -14,11 +14,11 @@ en:
         - 
           title: Country level
           url: #TODO
-          icon: region
+          icon: country
         - 
           title: Indiviual Area
           url: #TODO
-          icon: region 
+          icon: area 
       categories:
         - 
           title: Marine Protected Areas
