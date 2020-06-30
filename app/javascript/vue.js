@@ -14,6 +14,7 @@ import VueLazyload from 'vue-lazyload'
 import store from './store/store.js'
 
 // components
+import AmChartLine from './components/charts/am-chart-line/AmChartLine'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
       store,
 
       components: {
+        AmChartLine,
         Carousel,
         CarouselSlide,
         Counter,
