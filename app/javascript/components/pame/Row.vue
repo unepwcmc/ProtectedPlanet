@@ -53,7 +53,7 @@
       openModal () {
         this.$store.commit('updateModalContent', this.item)
 
-        eventHub.$emit('openModal')
+        this.$eventHub.$emit('openModal')
       },
 
       checkForMultiples (field) {

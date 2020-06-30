@@ -22,22 +22,25 @@
       :items-per-page="itemsPerPage" 
       :total-items="totalItems" 
       :total-pages="totalPages"
+      v-on:updated:page="getNewItems"
     />
   </div>
 </template>
 
 <script>
   import axios from 'axios'
-  import { eventHub } from '../vue.js'
-  import Filters from './pame-filters/Filters.vue'
-  import PameTableHead from './table/PameTableHead.vue'
-  import Row from './table/Row.vue'
-  import PamePagination from './pagination/PamePagination.vue'
+  import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
+  import Filters from './Filters.vue'
+  import PameTableHead from './PameTableHead.vue'
+  import Row from './Row.vue'
+  import PamePagination from './PamePagination.vue'
 
   export default {
     name: 'filtered-table',
 
     components: { Filters, PameTableHead, Row, PamePagination },
+
+    mixins: [ mixinAxiosHelpers ],
 
     props: {
       endpoint: {
@@ -52,7 +55,7 @@
     data () {
       return {
         currentPage: 1,
-        itemsPerPage: 0,
+        itemsPerPage: 50,
         totalItems: 0,
         totalPages: 0,
         items: [],
@@ -65,7 +68,7 @@
     },
 
     mounted () {
-      eventHub.$on('getNewItems', this.getNewItems)
+      this.$eventHub.$on('getNewItems', this.getNewItems)
     },
 
     methods: {
@@ -83,9 +86,7 @@
           filters: this.$store.state.selectedFilterOptions
         }
 
-        const csrf = document.querySelectorAll('meta[name="csrf-token"]')[0].getAttribute('content')
-        axios.defaults.headers.common['X-CSRF-Token'] = csrf
-        axios.defaults.headers.common['Accept'] = 'application/json'
+        this.axiosSetHeaders()
 
         axios.post(this.endpoint, data)
         .then(response => {

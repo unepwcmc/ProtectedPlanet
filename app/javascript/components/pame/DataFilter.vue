@@ -95,7 +95,7 @@
         if(this.isOpen){
           this.isOpen = false
         } else {
-          eventHub.$emit('clickDropdown', this.name)  
+          this.$eventHub.$emit('clickDropdown', this.name)  
         }
       },
 
@@ -121,7 +121,6 @@
 
       apply () {
         this.closeSelect()
-
         //update the active filters array
         this.activeOptions = this.selectedOptions
 
@@ -131,8 +130,8 @@
         }
 
         this.$store.commit('updateFilterOptions', newFilterOptions)
-
-        eventHub.$emit('filtersChanged')
+        this.$store.commit('updateRequestedPage', 1)
+        this.$eventHub.$emit('getNewItems')
       }
     }
   }

@@ -72,7 +72,7 @@ class PameEvaluation < ApplicationRecord
   def self.structure_data(page, items)
     {
       current_page: page,
-      per_page: 100,
+      per_page: 50,
       total_entries: (items.count > 0 ? items[0][:total_entries] : 0),
       total_pages:   (items.count > 0 ? items[0][:total_pages] : 0),
       items: items
@@ -81,7 +81,7 @@ class PameEvaluation < ApplicationRecord
 
   def self.generate_query(page, filter_params)
     # if params are empty then return the paginated results without filtering
-    return PameEvaluation.where('protected_area_id IS NOT NULL OR restricted').order('id ASC').paginate(page: page || 1, per_page: 100) if filter_params.empty?
+    return PameEvaluation.where('protected_area_id IS NOT NULL OR restricted').order('id ASC').paginate(page: page || 1, per_page: 50) if filter_params.empty?
 
     filters = filter_params.select { |hash| hash["options"].present? }
 
@@ -126,7 +126,7 @@ class PameEvaluation < ApplicationRecord
       .where(where_params[:year])
     end
     .where("protected_area_id IS NOT NULL OR restricted")
-    .paginate(page: page || 1, per_page: 100).order('id ASC')
+    .paginate(page: page || 1, per_page: 50).order('id ASC')
   end
 
   def self.pame_evaluations_from_pa_query(where_params)

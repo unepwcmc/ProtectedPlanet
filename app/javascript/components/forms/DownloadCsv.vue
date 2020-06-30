@@ -41,7 +41,7 @@
             }
           }
 
-        axios.post('/download', data, config)
+        axios.post('/pame/download', data, config)
           .then((response) => {
             console.log('post successful')
             const date = new Date().toJSON().slice(0,10),

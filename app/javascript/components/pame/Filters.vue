@@ -2,12 +2,14 @@
   <div class="flex flex-v-center flex-between">
     <span class="filter__title bold">Filters:</span>
 
-    <data-filter v-for="filter in filters"
+    <data-filter 
+      v-for="filter, index in filters"
+      :key="`${filter.name}-${index}`"
       :name="filter.name"
       :title="filter.title" 
       :options="filter.options"
-      :type="filter.type">
-    </data-filter>
+      :type="filter.type" 
+    />
 
     <download-csv class=""  :total-items="totalItems"></download-csv>
   </div>
@@ -43,7 +45,7 @@
     mounted () {
       this.createSelectedFilterOptions()
       
-      eventHub.$on('clickDropdown', this.updateDropdowns)
+      this.$eventHub.$on('clickDropdown', this.updateDropdowns)
     },
 
     methods: {

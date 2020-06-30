@@ -39,7 +39,7 @@
 
     methods: {
       sort () {
-        eventHub.$emit('sort', this.filter.name)
+        this.$eventHub.$emit('sort', this.filter.name)
       }
     }
   }
