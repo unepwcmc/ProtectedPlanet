@@ -7,7 +7,6 @@ polyfill()
 import Vue from 'vue/dist/vue.esm'
 import VueAnalytics from 'vue-analytics'
 import Vue2TouchEvents from 'vue2-touch-events'
-import ScrollMagic from 'scrollmagic'
 import VueLazyload from 'vue-lazyload'
 
 // store
@@ -30,7 +29,6 @@ import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Flickity from 'vue-flickity';
 import Download from './components/download/Download'
-import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
@@ -44,6 +42,9 @@ import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
+import VMap from './components/map/VMap'
+import VMapFilters from './components/map/VMapFilters'
+import VMapSearch from './components/map-search/VMapSearch'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
 
@@ -79,7 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartSunburst,
         Download,
         Flickity,
-        MapInteractive,
         NavBurger,
         SearchAreas,
         SearchAreasHome,
@@ -93,6 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
         TabTarget,
         Target11Dashboard,
         Tooltip,
+        VMap,
+        VMapFilters,
+        VMapSearch,
         VSelectSearchable,
         VTable
       }

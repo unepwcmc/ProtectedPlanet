@@ -1,25 +1,19 @@
 <template>
   <div 
-    :id="id" 
+    :id="id"
+    class="map__mapbox" 
   />
 </template>
 
 <script>
 export default {
-  name: 'v-map',
-
-  props: {
-    mapboxToken: {
-      type: String,
-      required: true
-    }
-  },
+  name: 'VMap',
 
   data () {
     return {
       id: 'map-target',
       mapbox: {
-        accessToken: this.mapboxToken,
+        accessToken: process.env.MAPBOX_ACCESS_TOKEN,
       }
     }
   },
