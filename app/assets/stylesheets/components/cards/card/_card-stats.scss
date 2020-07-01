@@ -67,6 +67,10 @@
       width: calc(33% - 16px);
     }
 
+    &__two-thirds { 
+      width: calc(100% - 33%);
+    }
+
       &__chart-square {
         margin-right: rem-calc(24);
         width: 30%;
@@ -79,7 +83,7 @@
         font-size: rem-calc(20);
         font-weight: $bold;
         margin-right: rem-calc(20);
-        width: 30%; height: rem-calc(280);
+        height: rem-calc(280);
       }
   }
 }
