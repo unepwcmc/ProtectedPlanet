@@ -12,7 +12,6 @@
 
 @mixin chart-legend-key {
   @include flex-no-shrink;
-  background-color: $chart-aqua;
   border-radius: 100%;
   margin-right: rem-calc(8);
   width: rem-calc(24); height: rem-calc(24);
@@ -40,7 +39,7 @@
 }
 
 //--------------------------------------------------
-// default
+// vertical
 //--------------------------------------------------
 .chart--legend--vertical {
   @include ul-unstyled;

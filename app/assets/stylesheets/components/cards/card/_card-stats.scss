@@ -67,10 +67,14 @@
       width: calc(33% - 16px);
     }
 
-      &__chart {
-        margin-right: rem-calc(20);
-        width: 30%;
-      }
+    &__two-thirds { 
+      width: calc(100% - 33%);
+    }
+
+    &__chart {
+      width: 30%;
+      margin-right: rem-calc(20);
+    }
 
       &__stat-box {
         @include bg-grey-xdark;
@@ -79,7 +83,7 @@
         font-size: rem-calc(20);
         font-weight: $bold;
         margin-right: rem-calc(20);
-        width: 30%; height: rem-calc(280);
+        height: rem-calc(280);
       }
   }
 }
