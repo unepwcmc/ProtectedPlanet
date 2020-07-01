@@ -1,0 +1,64 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-row-stacked-height-mobile: rem-calc(44);
+$chart-row-stacked-height-tablet: rem-calc(82);
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--row-stacked {
+  margin-bottom: rem-calc(60);
+
+  @include breakpoint($small) { margin-bottom: rem-calc(70); }
+
+  &.theme--designation {
+    .chart__bar {
+      @for $i from 1 through length($theme-designation) {
+        &:nth-child(#{$i}) {
+          background-color: nth($theme-designation, $i);
+        }
+      }
+    }
+  }
+
+  .chart {
+    &__chart {
+      margin-top: rem-calc(54);
+      width: 100%; height: $chart-row-stacked-height-mobile;
+
+      @include breakpoint($small) { 
+        height: $chart-row-stacked-height-tablet;
+      }
+    }
+
+      &__bar {
+        margin-bottom: 0;
+        height: 100%;
+
+        position: relative;
+
+        &:nth-child(even) {
+          .chart__percent {
+            bottom: unset;
+            top: calc(100% + 14px);
+          }
+        }
+      }
+
+        &__percent {
+          @include chart-tooltip('bottom');
+          
+          position: absolute;
+          bottom: calc(100% + 14px);
+          left: 50%;
+
+          transform: translateX(-50%);
+        }
+    
+    &__legend {
+      margin-top: rem-calc(70);
+
+      @include breakpoint($small) { margin-top: rem-calc(90); }
+    }      
+  }
+}

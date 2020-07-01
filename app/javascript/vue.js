@@ -26,6 +26,7 @@ import ChartLine from './components/charts/chart-line/ChartLine'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
+import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Flickity from 'vue-flickity';
@@ -75,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartTreemapInteractive,
         ChartRectangles,
         ChartRowPa,
+        ChartRowStacked,
         ChartRowTarget,
         ChartSunburst,
         Download,

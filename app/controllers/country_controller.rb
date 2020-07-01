@@ -8,8 +8,15 @@ class CountryController < ApplicationController
     @country_presenter = CountryPresenter.new @country
 
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
-                 @iucn_categories = @country.protected_areas_per_iucn_category
+    @iucn_categories = @country.protected_areas_per_iucn_category
     @governance_types = @country.protected_areas_per_governance
+
+    #TODO - these percent can be added to the designation hash - talk to Stacy for explanation
+    @designation_percentages = [
+      { percent: 40 },
+      { percent: 35 },
+      { percent: 25 }
+    ].to_json
 
     @sites = [] # #TODO
 

@@ -2,7 +2,11 @@
   <h2><%= t('stats.designations.title') %></h2>
 
   <div>
-    Chart
+    <chart-row-stacked 
+      :rows="<%= @designation_percentages %>"
+      theme="designation"
+    >
+    </chart-row-stacked>
   </div>
   
   <div class="flex flex-h-between">
