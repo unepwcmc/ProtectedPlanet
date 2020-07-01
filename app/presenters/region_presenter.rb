@@ -85,7 +85,7 @@ class RegionPresenter
     {
       title: region.name,
       percentage: percentage_pa_marine_cover,
-      km: number_with_delimiter(pa_marine_area)
+      km: number_with_delimiter(pa_marine_area.round(0))
     }
   end
 

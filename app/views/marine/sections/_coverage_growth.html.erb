@@ -9,10 +9,13 @@
       <% regionCoverage.each do |region| %>
         <div class="cards__card">
           <h3 class="card__title"><%= region[:title] %></h3>
-          <p class="card__subtitle"><%= region[:percentage] %>% (<%= region[:km] %>)km<sup>2</sup></p>
+          <p class="card__subtitle"><%= region[:percentage] %>% (<%= region[:km] %>km<sup>2</sup>)</p>
           <div class="chart--row">
             <div class="chart__row">
-              <div class="chart__bar" style="width: <%= region[:percentage] %>%;"></div>
+              <div 
+                class="chart__bar theme--blue" 
+                style="width: <%= region[:percentage] %>%;"
+              ></div>
             </div>
           </div>
         </div>

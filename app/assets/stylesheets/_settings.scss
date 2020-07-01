@@ -32,9 +32,10 @@ $map-oecm: rgba($orange, .8);
 $map-marine: rgba($blue, .8);
 $map-terrestrial: rgba($pink, .8);
 
-$chart-aqua: #65C9B2;
+$chart-aqua: #64BAD9;
 $chart-blue: #5F81CB;
-$chart-pink: #D63B7B;
+$chart-green: #65C9B2;
+$chart-purple: #A54897;
 
 $orange--dark: #de522f;
 $orange--lighter: #f16e4d;
@@ -113,7 +114,7 @@ $fw-black: 900;
 // breakpoints
 //--------------------------------------------------
 // must be in px not rem!
-$small: 768px; 
+$small: 767px; 
 $medium: 1024px;
 $large: 1200px;
 

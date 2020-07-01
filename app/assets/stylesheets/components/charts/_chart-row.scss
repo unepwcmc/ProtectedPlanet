@@ -17,11 +17,10 @@
 
   .chart__bar {
     @include chart-row-height;
-    background-color: $blue;
   }
 
   .chart__bar-overseas {
     @include chart-row-height;
-    background-color: $orange;
+    background-color: $chart-green;
   }
 }
