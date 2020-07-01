@@ -29,7 +29,7 @@
     overflow-y: scroll;
 
     @include beautify-scrollbar;
-    padding: 1rem;
+    padding-right: rem-calc(9);
 
 
     .list {
@@ -61,6 +61,14 @@
         }
 
         &__a {
+          @include button-with-icon;
+          @include flex-no-shrink;
+          
+          &::after {
+            @include icon-circle-chevron-black;
+            height: rem-calc(21);
+            width: rem-calc(21);
+          }
         }
     }
   }

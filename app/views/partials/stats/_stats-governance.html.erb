@@ -14,7 +14,7 @@
         <i class="list__icon"></i>
         <span class="list__title"><%= type['governance_name'] %></span>
         <span class="list__value"><%= type['count'] %>, <%= type['percentage'].to_f.round(2) %>%</span>
-        <%= link_to 'View list', '', title: '', class: 'list__a button--all' %>
+        <%= link_to 'View list', '', title: '', class: 'list__a' %>
       </li>
     <% end %>
   </ul>
