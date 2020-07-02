@@ -40,7 +40,7 @@ export default {
       yearAxis.renderer.line.strokeOpacity = 1
       yearAxis.renderer.line.strokeWidth = 1
       yearAxis.renderer.line.stroke = am4core.color("#c8c8c8")
-      yearAxis.renderer.minGridDistance = 20;
+      yearAxis.renderer.minGridDistance = 50;
 
       let countAxis = chart.yAxes.push(new am4charts.ValueAxis())
       countAxis.title.text = "[bold]Number[/]"
@@ -52,8 +52,6 @@ export default {
       countAxis.renderer.line.strokeOpacity = 1
       countAxis.renderer.line.strokeWidth = 1
       countAxis.renderer.line.stroke = am4core.color("#c8c8c8")
-
-      
 
       let areaAxis = chart.yAxes.push(new am4charts.ValueAxis())
       areaAxis.renderer.opposite = true
@@ -76,7 +74,6 @@ export default {
       series.tooltipText = "[bold]{valueY}[/]"
       series.yAxis = countAxis
       
-
       var series2 = chart.series.push(new am4charts.LineSeries())
       series2.dataFields.valueY = "area"
       series2.dataFields.dateX = "year"
