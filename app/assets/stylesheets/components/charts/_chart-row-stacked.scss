@@ -3,6 +3,30 @@
 //--------------------------------------------------
 $chart-row-stacked-height-mobile: rem-calc(44);
 $chart-row-stacked-height-tablet: rem-calc(82);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin chart-bars ($theme) {
+  @for $i from 1 through length($theme) {
+    &:nth-child(#{$i}) {
+      background-color: nth($theme, $i);
+
+      .chart__percent {
+        @if $i%2 != 0 { 
+          @include chart-tooltip('bottom'); 
+          bottom: 100%;
+        }
+
+        @if $i%2 == 0 { 
+          @include chart-tooltip('top'); 
+          top: 100%;
+        }
+      }
+    }
+  }
+}
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
@@ -13,11 +37,7 @@ $chart-row-stacked-height-tablet: rem-calc(82);
 
   &.theme--designation {
     .chart__bar {
-      @for $i from 1 through length($theme-designation) {
-        &:nth-child(#{$i}) {
-          background-color: nth($theme-designation, $i);
-        }
-      }
+      @include chart-bars($theme-designation);
     }
   }
 
@@ -36,20 +56,10 @@ $chart-row-stacked-height-tablet: rem-calc(82);
         height: 100%;
 
         position: relative;
-
-        &:nth-child(even) {
-          .chart__percent {
-            bottom: unset;
-            top: calc(100% + 14px);
-          }
-        }
       }
 
         &__percent {
-          @include chart-tooltip('bottom');
-          
           position: absolute;
-          bottom: calc(100% + 14px);
           left: 50%;
 
           transform: translateX(-50%);

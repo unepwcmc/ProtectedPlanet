@@ -13,9 +13,9 @@ class CountryController < ApplicationController
 
     #TODO - these percent can be added to the designation hash - talk to Stacy for explanation
     @designation_percentages = [
-      { percent: 40 },
-      { percent: 35 },
-      { percent: 25 }
+      { percent: 40.44 },
+      { percent: 35.44 },
+      { percent: 25.44 }
     ].to_json
 
     @sites = [] # #TODO

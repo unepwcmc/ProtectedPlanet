@@ -22,6 +22,45 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
+.chart--legend--designation {
+  @include flex;
+  flex-direction: column;
+
+  @include breakpoint($small) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .chart__legend-group {
+    margin-bottom: rem-calc(40);
+    
+    @include breakpoint($small) { 
+      margin-bottom: 0;
+      width: calc(33% - 12px); 
+    }
+
+    @for $i from 1 through length($theme-designation) {
+      &:nth-child(#{$i}) { 
+        .chart__legend-key { background-color: nth($theme-designation, $i); }
+      }
+    }
+  }
+
+  .chart__legend-item {
+    @include flex;
+    @include flex-v-start;
+    margin-bottom: rem-calc(18);
+    padding-right: rem-calc(27);
+  }
+  
+  .chart__legend-title { margin: 0;}
+
+  .chart__legend-key { @include chart-legend-key;  }
+
+  .chart__legend-total { 
+    margin: rem-calc(0 30 0) auto; 
+  }
+}
 //--------------------------------------------------
 // horizontal
 //--------------------------------------------------
