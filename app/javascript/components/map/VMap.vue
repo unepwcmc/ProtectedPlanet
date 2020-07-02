@@ -1,6 +1,6 @@
 <template>
   <div 
-    :id="mapboxOptions.container"
+    :id="containerId"
     class="map__mapbox" 
   />
 </template>
@@ -8,29 +8,47 @@
 <script>
 import { getFirstForegroundLayerId } from './helpers/map-helpers'
 import mixinAddLayers from './mixins/mixin-add-layers'
+import mixinControls from './mixins/mixin-controls'
+
+const MAP_OPTIONS_DEFAULT = {
+  container: 'map-target',
+  style: 'mapbox://styles/mapbox/streets-v11',
+  //bounds: [[xmin,ymin],[xmax,ymax]],
+}
+const CONTROLS_OPTIONS_DEFAULT = {
+  showZoom: true,
+  showCompass: false
+}
+const EMPTY_OPTIONS = {
+  map: {},
+  controls: {}
+}
 
 export default {
   name: 'VMap',
 
-  mixins: [mixinAddLayers],
+  mixins: [mixinAddLayers, mixinControls],
 
   props: {
-    initBoundingBox: {
-      type: Array, // e.g. [[xmin,ymin],[xmax,ymax]]
-      default: null
+    options: {
+      type: Object,
+      default: () => EMPTY_OPTIONS
     }
   },
 
   data () {
     return {
       accessToken: process.env.MAPBOX_ACCESS_TOKEN,
+      containerId: MAP_OPTIONS_DEFAULT.container,
       firstForegroundLayerId: '',
       map: {},
-      mapboxOptions: {
-        container: 'map-target',
-        style: 'mapbox://styles/mapbox/streets-v11'
-      }
+      mapOptions: {},
+      controlsOptions: {}
     }
+  },
+
+  created () {
+    this.setOptions()
   },
 
   mounted () {
@@ -38,18 +56,22 @@ export default {
   },
 
   methods: {
-    initMap () {
-      this.setMapOptions()
-      this.map = new mapboxgl.Map(this.mapboxOptions)
-      this.addEventHandlersToMap()
+    setOptions () {
+      mapboxgl.accessToken =  this.accessToken
+      this.mapOptions = {
+        ...MAP_OPTIONS_DEFAULT,
+        ...this.options.map
+      }
+      this.controlsOptions = {
+        ...CONTROLS_OPTIONS_DEFAULT,
+        ...this.options.controls
+      }
     },
 
-    setMapOptions () {
-      mapboxgl.accessToken =  this.accessToken
-
-      if (this.initBoundingBox) { 
-        this.mapboxOptions.bounds = this.initBoundingBox 
-      }
+    initMap () {
+      this.map = new mapboxgl.Map(this.mapOptions)
+      this.addControls()
+      this.addEventHandlersToMap()
     },
 
     addEventHandlersToMap () {
