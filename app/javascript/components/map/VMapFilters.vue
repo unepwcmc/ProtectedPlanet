@@ -14,10 +14,8 @@
     </div>
 
     <div class="disclaimer" v-if="disclaimer">
-      <slot name="disclaimer">
-        <div class="disclaimer--heading">{{ disclaimer.heading }}}</div>
-        <div class="disclaimer--body" v-html="disclaimer.body"></div>
-      </slot>
+      <div class="disclaimer--heading">{{ disclaimer.heading }}}</div>
+      <div class="disclaimer--body" v-html="disclaimer.body"></div>
     </div>
   </div>
 </template>
