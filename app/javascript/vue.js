@@ -44,7 +44,7 @@ import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
 import VMap from './components/map/VMap'
 import VMapFilters from './components/map/VMapFilters'
-import VMapSearch from './components/map-search/VMapSearch'
+import VMapPASearch from './components/map/VMapPASearch'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
 
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Tooltip,
         VMap,
         VMapFilters,
-        VMapSearch,
+        VMapPASearch,
         VSelectSearchable,
         VTable
       }
