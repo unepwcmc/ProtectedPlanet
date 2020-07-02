@@ -1,0 +1,24 @@
+.map {
+    &--main {
+        position: relative;
+    }
+    &--filters {
+        position: absolute;
+        width: 26.56%;
+        height: calc(75% - #{rem-calc(42 * 2)});
+        z-index: 1;
+        overflow-y: scroll;
+
+        top: rem-calc(42);
+        left: $gutter-small * 2;
+        @include breakpoint($small) { left: $gutter-medium * 2; }
+        @include breakpoint($large) { left: $gutter-large * 2; }
+
+        background-color: $grey-dark;
+        color: $grey-light;
+    }
+    
+    bottom: rem-calc(42);
+
+    //   @include '../helpers/beautify-scrollbar';
+}

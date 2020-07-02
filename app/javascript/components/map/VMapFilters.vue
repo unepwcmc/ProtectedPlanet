@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="map--filters">
     FILTERS
     <slot />
   </div>

@@ -1,3 +1,5 @@
+@import 'maps/filters';
+
 .map {
   &--main {
     @include gutters;
