@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import { getFirstForegroundLayerId } from './helpers/map-helpers'
 import VMapBaselayerControls from './VMapBaselayerControls'
 import mixinAddLayers from './mixins/mixin-add-layers'
 import mixinControls from './mixins/mixin-controls'
+import mixinLayers from './mixins/mixin-layers'
 import mixinPaPopup from './mixins/mixin-pa-popup'
 
 const MAP_OPTIONS_DEFAULT = {
@@ -41,7 +41,12 @@ export default {
 
   components: {VMapBaselayerControls},
 
-  mixins: [mixinAddLayers, mixinControls, mixinPaPopup],
+  mixins: [
+    mixinAddLayers,
+    mixinControls,
+    mixinPaPopup,
+    mixinLayers
+  ],
 
   props: {
     options: {
@@ -54,7 +59,6 @@ export default {
     return {
       accessToken: process.env.MAPBOX_ACCESS_TOKEN,
       containerId: MAP_OPTIONS_DEFAULT.container,
-      firstForegroundLayerId: '',
       map: {},
     }
   },
@@ -106,10 +110,6 @@ export default {
         // this.addLoads(100)
         // this.addSingleArea(555557228)
       })
-    },
-
-    setFirstForegroundLayerId () {
-      this.firstForegroundLayerId = getFirstForegroundLayerId(this.map)
     },
 
     updateBaselayer (baselayer) {
