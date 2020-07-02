@@ -1,5 +1,18 @@
 en:
   home:
+    facts: 
+      -
+        theme: terrestrial
+        title: Terrestrial Protected Area Coverage
+      -
+        theme: marine
+        title: Marine Protected Area Coverage
+      -
+        theme: oecm
+        title: Terrestrial OECM & Protected Area Coverage
+      -
+        theme: oecm
+        title: Marine OECM & Protected Area Coverage
     hero:
       button: Explore Protected Areas
       stat-text: Global Coverage of Protected Areas
@@ -29,3 +42,5 @@ en:
         - 
           title: Green List Protected Areas
           slug: /green-list
+    total_pas: Total Protected Areas
+    total_oecms: Total OECMs

@@ -49,7 +49,9 @@
     visibility: hidden;
   }
   
-  &--pin-green { @include icon-pin-green; }
+  &--pin-terrestrial { @include icon-pin-terrestrial; }
+  &--pin-marine { @include icon-pin-marine; }
+  &--pin-oecm { @include icon-pin-oecm; }
 
   &--region { @include icon-region; }
   &--search { @include icon-search; }

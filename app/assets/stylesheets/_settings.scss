@@ -16,8 +16,9 @@ $grey-dark: #666666;
 $grey-xdark: #404040;
 $grey-black: #242424;
 
-$blue: #2C10A3;
+$blue: #004DA8;
 
+$green-bright: #38A800;
 $green: #71A32B;
 $green-dark: #527B19;
 $green--darker: #415519;
@@ -50,14 +51,13 @@ $alert: $red;
 $primary: $green;
 $primary-dark: $green--darker;
 
-
-
-// $accent-light: lighten($green, 15%);
-// $accent: $green;
-
 $global: $purple;
-$marine: #54B7EB;
-$terrestrial: #B1D680;
+$marine: $blue;
+$terrestrial: $green-bright;
+
+$pin-marine: $marine;
+$pin-oecm: $orange;
+$pin-terrestrial: $terrestrial;
 
 //used on marine insights page
 $blue--marine-1: #bfe5e9; 
