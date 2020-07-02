@@ -1,3 +1,8 @@
+import axios from 'axios'
+import { setAxiosHeaders } from '../../../helpers/axios-helpers'
+
+setAxiosHeaders(axios)
+
 export default {
   methods: {
     onClick (e) {
@@ -8,10 +13,20 @@ export default {
         distance: 1
       }
 
-      console.log('Now I would check for pas with these params', params)
-      const popup = new mapboxgl.Popup({className: 'v-map-pa-popup'})
-        .setLngLat(e.lngLat)
-        .setHTML("<div>Here be a Protected Area</div>")
+      axios.get('/api/v3/search/by_point', params)
+        .then(res => {
+          if (res.data.length > 0) {
+            this.addPopup(coords, res.data[0])
+          } else { //TODO: remove when we know the api works
+            this.addPopup(coords, {wdpa_id: '1', name: 'A protected area'})
+          }
+        })
+    },
+
+    addPopup (coords, pa) {
+      new mapboxgl.Popup({className: 'v-map-pa-popup'})
+        .setLngLat(coords)
+        .setHTML(`<a href="/${pa.wdpa_id}">${pa.name}</a>`)
         .setMaxWidth("300px")
         .addTo(this.map);
     }
