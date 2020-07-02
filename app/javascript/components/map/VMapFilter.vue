@@ -1,12 +1,19 @@
 <template>
   <div>
-    Toggle
+    Filter
   </div>
 </template>
 
 <script>
 export default {
-  name: 'VMapToggle',
+  name: 'VMapFilter',
+
+  props: {
+    overlay: {
+      type: Object,
+      required: true
+    }
+  },
 
   data () {
     return {
