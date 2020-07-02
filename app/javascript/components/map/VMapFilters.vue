@@ -8,8 +8,8 @@
       <map-search />
     </div>
     <div class="overlays">
-      <div class="overlays--layer" v-for="(layer, index) in overlays" :key="index">
-        <v-map-filter-layer :layer="layer" />
+      <div class="overlays--overlay" v-for="(overlay, index) in overlays" :key="index">
+        <v-map-filter :overlay="overlay" />
       </div>
     </div>
 
