@@ -17,6 +17,7 @@ import { getFirstForegroundLayerId } from './helpers/map-helpers'
 import VMapBaselayerControls from './VMapBaselayerControls'
 import mixinAddLayers from './mixins/mixin-add-layers'
 import mixinControls from './mixins/mixin-controls'
+import mixinPaPopup from './mixins/mixin-pa-popup'
 
 const MAP_OPTIONS_DEFAULT = {
   container: 'map-target',
@@ -40,7 +41,7 @@ export default {
 
   components: {VMapBaselayerControls},
 
-  mixins: [mixinAddLayers, mixinControls],
+  mixins: [mixinAddLayers, mixinControls, mixinPaPopup],
 
   props: {
     options: {
