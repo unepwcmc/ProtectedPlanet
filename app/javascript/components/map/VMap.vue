@@ -1,12 +1,20 @@
 <template>
-  <div 
-    :id="containerId"
-    class="map__mapbox" 
-  />
+  <div>
+    <div 
+      :id="containerId"
+      class="map__mapbox" 
+    />
+    <v-map-baselayer-controls 
+      v-if="controlsOptions.showBaselayerControls"
+      :baselayers="baselayers"
+      @update:baselayer="updateBaselayer" 
+    />
+  </div>
 </template>
 
 <script>
 import { getFirstForegroundLayerId } from './helpers/map-helpers'
+import VMapBaselayerControls from './VMapBaselayerControls'
 import mixinAddLayers from './mixins/mixin-add-layers'
 import mixinControls from './mixins/mixin-controls'
 
@@ -17,15 +25,20 @@ const MAP_OPTIONS_DEFAULT = {
 }
 const CONTROLS_OPTIONS_DEFAULT = {
   showZoom: true,
-  showCompass: false
+  showCompass: false,
+  showBaselayerControls: true
 }
+const BASELAYERS_DEFAULT = [{id: 'Terrain'}, {id: 'Satellite'}]
 const EMPTY_OPTIONS = {
-  map: {},
-  controls: {}
+  map: null,
+  controls: null,
+  baselayers: null
 }
 
 export default {
   name: 'VMap',
+
+  components: {VMapBaselayerControls},
 
   mixins: [mixinAddLayers, mixinControls],
 
@@ -42,13 +55,27 @@ export default {
       containerId: MAP_OPTIONS_DEFAULT.container,
       firstForegroundLayerId: '',
       map: {},
-      mapOptions: {},
-      controlsOptions: {}
     }
   },
 
-  created () {
-    this.setOptions()
+  computed: {
+    baselayers () {
+      return this.options.baselayers || BASELAYERS_DEFAULT
+    },
+    
+    controlsOptions () {
+      return {
+        ...CONTROLS_OPTIONS_DEFAULT,
+        ...this.options.controls
+      }
+    },
+
+    mapOptions () {
+      return {
+        ...MAP_OPTIONS_DEFAULT,
+        ...this.options.map
+      }
+    }
   },
 
   mounted () {
@@ -56,19 +83,8 @@ export default {
   },
 
   methods: {
-    setOptions () {
-      mapboxgl.accessToken =  this.accessToken
-      this.mapOptions = {
-        ...MAP_OPTIONS_DEFAULT,
-        ...this.options.map
-      }
-      this.controlsOptions = {
-        ...CONTROLS_OPTIONS_DEFAULT,
-        ...this.options.controls
-      }
-    },
-
     initMap () {
+      mapboxgl.accessToken = this.accessToken
       this.map = new mapboxgl.Map(this.mapOptions)
       this.addControls()
       this.addEventHandlersToMap()
@@ -93,6 +109,10 @@ export default {
 
     setFirstForegroundLayerId () {
       this.firstForegroundLayerId = getFirstForegroundLayerId(this.map)
+    },
+
+    updateBaselayer (baselayer) {
+      console.log(`New baselayer: ${baselayer.id}`)
     },
 
     showLayers(layerIds) {
