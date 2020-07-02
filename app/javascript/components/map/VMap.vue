@@ -72,6 +72,29 @@ export default {
     setFirstForegroundLayerId () {
       this.firstForegroundLayerId = getFirstForegroundLayerId(this.map)
     },
+
+    showLayers(layerIds) {
+      this.setLayerVisibilities(layerIds, true)
+    },
+
+    hideLayers(layerIds) {
+      this.setLayerVisibilities(layerIds, false)
+    },
+
+    setLayerVisibilities(layerIds, isVisible) {
+      layerIds.forEach(id => {
+        this.setLayerVisibility(id, isVisible)
+      })
+    },
+
+    setLayerVisibility(layerId, isVisible) {
+      const visibility = isVisible ? 'visible' : 'none'
+
+      if (this.map.getLayer(layerId)) {
+        this.map.setLayoutProperty(layerId, 'visibility', visibility)
+      }
+    },
+
   }
 }
 </script>
