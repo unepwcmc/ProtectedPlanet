@@ -1,11 +1,11 @@
 <template>
-  <div class="map--filters">
+  <div class="map--filters" v-if="show">
     <div class="header">
       <div class="header--title">{{ title }}</div>
-      <div class="header--close-button"></div>
+      <div class="header--close-button" @click="onClose" />
     </div>
     <div class="search">
-      <map-search />
+      <v-map-pa-search />
     </div>
     <div class="overlays">
       <div class="overlays--overlay" v-for="(overlay, index) in overlays" :key="index">
@@ -19,13 +19,21 @@
     </div>
   </div>
 </template>
-
 <script>
+import VMapFilter from './VMapFilter'
+import VMapPASearch from './VMapPASearch'
+
 export default {
   name: 'VMapFilters',
 
-  data () {
+  components: {
+    VMapFilter,
+    'v-map-pa-search': VMapPASearch,
+  },
+
+  data: function () {
     return {
+      show: true
     }
   },
 
@@ -45,6 +53,13 @@ export default {
         return type.hasOwnProperty('heading') && typeof type.heading === 'string'
           && type.hasOwnProperty('body') && typeof type.heading === 'string'
       }
+    }
+  },
+
+  methods: {
+    onClose: function () {
+      this.show = false
+      this.$emit('show', this.show)
     }
   }
 

@@ -8,8 +8,15 @@
     </div>
 </template>
 <script>
+import VMapToggler from './VMapToggler'
+
 export default {
     name: 'VMapFilter',
+
+    components: {
+        VMapToggler,
+    },
+    
     props: {
         color: {
             type: String,

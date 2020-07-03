@@ -7,15 +7,54 @@
         width: 26.56%;
         height: calc(75% - #{rem-calc(42 * 2)});
         z-index: 1;
-        overflow-y: scroll;
+        overflow-y: hidden;
 
         top: rem-calc(42);
         left: $gutter-small * 2;
-        @include breakpoint($small) { left: $gutter-medium * 2; }
-        @include breakpoint($large) { left: $gutter-large * 2; }
+        @include breakpoint($small) {
+            left: $gutter-medium * 2;
+        }
+        @include breakpoint($large) {
+            left: $gutter-large * 2;
+        }
 
-        background-color: $grey-dark;
+        background-color: $grey-xdark;
         color: $grey-light;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+
+        .header {
+            background-color: $grey-black;
+            color: $grey-xlight;
+            display: flex;
+            font-family: $header-font;
+            font-size: rem-calc(25);
+            font-weight: 600;
+            justify-content: space-between;
+            line-height: $header-font-line-height;
+            padding: rem-calc(14 24);
+
+            &--close-button {
+                &::after {
+                    content: "⨯";
+                    font-weight: 600;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .disclaimer {
+            justify-self: flex-end;
+            padding: rem-calc(24);
+            font-size: rem-calc(14);
+            &--heading {
+                font-weight: 600;
+                line-height: rem-calc(26);
+            }
+        }
     }
     
     bottom: rem-calc(42);
