@@ -9,7 +9,7 @@
     </div>
     <div class="overlays">
       <div class="overlays--overlay" v-for="(overlay, index) in overlays" :key="index">
-        <v-map-filter :overlay="overlay" />
+        <v-map-filter v-bind="overlay" />
       </div>
     </div>
 
@@ -38,8 +38,8 @@ export default {
       type: Object,
       required: false,
       validator: type => {
-        return type.hasOwnProperty('heading') && type.heading instanceof String
-          && type.hasOwnProperty('body') && type.heading instanceof String
+        return type.hasOwnProperty('heading') && typeof type.heading === 'string'
+          && type.hasOwnProperty('body') && typeof type.heading === 'string'
       }
     }
   }

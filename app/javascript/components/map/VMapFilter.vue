@@ -1,32 +1,38 @@
 <template>
-    <div class="filter-overlay">
-        <div class="representative-colour" :style="{ backgroundColor: overlay.colour }"></div>
-        <div class="description">{{ overlay.description }}</div>
-        <div class="active-toggler" v-if="overlay.isToggleable"></div>
+    <div class="v-map-filter">
+        <div class="color" :style="{ backgroundColor: color }"></div>
+        <div class="description">{{ description }}</div>
+        <div class="active-toggler" v-if="isToggleable">
+            <v-map-toggler v-model="isActive" @change="$emit('isActive', $event)" />
+        </div>
     </div>
 </template>
 <script>
 export default {
     name: 'VMapFilter',
-    model: {
-        event: 'change',
-        prop: 'overlay'
-    },
     props: {
-        overlay: {
-            type: Object,
-            required: true,
-            validator: overlay => {
-                return overlay.hasOwnProperty('colour') && overlay.colour instanceof String
-                    && overlay.hasOwnProperty('description') && overlay.description instanceof String
-                    && overlay.hasOwnProperty('isToggleable') && overlay.isToggleable instanceof Boolean
-            }
+        color: {
+            type: String,
+            default: '#cccccc'
+        },
+        description: {
+            type: String,
+            required: true
+        },
+        isShownByDefault: {
+            type: Boolean,
+            default: true
+        },
+        isToggleable: {
+            type: Boolean,
+            default: true
         }
+
     },
     data: function () {
-      return {
-
-      }
+        return {
+            isActive: this.isShownByDefault === true
+        }
     }
 }
 </script>
