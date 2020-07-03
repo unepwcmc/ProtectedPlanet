@@ -4,18 +4,20 @@
       <div class="header--title">{{ title }}</div>
       <div class="header--close-button" @click="onClose" />
     </div>
-    <div class="search">
-      <v-map-pa-search />
-    </div>
-    <div class="overlays">
-      <div class="overlays--overlay" v-for="(overlay, index) in overlays" :key="index">
-        <v-map-filter v-bind="overlay" />
+    <div class="body">
+      <div class="search">
+        <v-map-pa-search />
       </div>
-    </div>
+      <div class="overlays">
+        <div class="overlays--overlay" v-for="(overlay, index) in overlays" :key="index">
+          <v-map-filter v-bind="overlay" />
+        </div>
+      </div>
 
-    <div class="disclaimer" v-if="disclaimer">
-      <div class="disclaimer--heading">{{ disclaimer.heading }}</div>
-      <div class="disclaimer--body" v-html="disclaimer.body"></div>
+      <div class="disclaimer" v-if="disclaimer">
+        <div class="disclaimer--heading">{{ disclaimer.heading }}</div>
+        <div class="disclaimer--body" v-html="disclaimer.body"></div>
+      </div>
     </div>
   </div>
 </template>

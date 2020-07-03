@@ -1,5 +1,10 @@
 <template>
-    <div class="v-map-toggler" @click="$emit('change', !active)"></div>
+    <div class="v-map-toggler" 
+        :class="{ 'v-map-toggler__active': active }"
+        @click.stop="$emit('change', !active)"
+    >
+        <div class="switch">{{ actionText }}</div>
+    </div>
 </template>
 <script>
 export default {
@@ -11,7 +16,28 @@ export default {
         active: {
             type: Boolean,
             required: true
+        },
+        onText: {
+            type: String,
+            default: 'ON',
+        },
+        offText: {
+            type: String,
+            default: 'OFF'
+        }
+    },
+    computed: {
+        actionText: function () {
+            if (this.active) {
+                return this.onText
+            }
+            return this.offText
         }
     }
 }
 </script>
+<style lang="scss" scoped>
+.v-map-toggler {
+    cursor: pointer;
+}
+</style>

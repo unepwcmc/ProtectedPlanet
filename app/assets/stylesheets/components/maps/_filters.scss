@@ -3,11 +3,11 @@
         position: relative;
     }
     &--filters {
+        // height: calc(75% - #{rem-calc(42 * 2)});
+        // overflow-y: hidden;
         position: absolute;
         width: 26.56%;
-        height: calc(75% - #{rem-calc(42 * 2)});
         z-index: 1;
-        overflow-y: hidden;
 
         top: rem-calc(42);
         left: $gutter-small * 2;
@@ -21,11 +21,6 @@
         background-color: $grey-xdark;
         color: $grey-light;
 
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-
-
         .header {
             background-color: $grey-black;
             color: $grey-xlight;
@@ -35,7 +30,6 @@
             font-weight: 600;
             justify-content: space-between;
             line-height: $header-font-line-height;
-            padding: rem-calc(14 24);
 
             &--close-button {
                 &::after {
@@ -46,10 +40,21 @@
             }
         }
 
+        .body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .header,
+        .body {
+            padding: rem-calc(14 24);
+        }
+
         .disclaimer {
-            justify-self: flex-end;
-            padding: rem-calc(24);
             font-size: rem-calc(14);
+            justify-self: flex-end;
+            margin-top: rem-calc(24);
             &--heading {
                 font-weight: 600;
                 line-height: rem-calc(26);

@@ -1,0 +1,49 @@
+.v-map-toggler {
+    border: 1px solid $grey-xlight;
+    cursor: pointer;
+    min-width: rem-calc(75);
+    padding: rem-calc(2);
+    user-select: none;
+    display: inline-flex;
+    justify-content: flex-start;
+    
+    &,
+    .switch {
+        border-radius: rem-calc(14);
+    }
+    .switch {
+        background-color: $grey;
+        color: $grey-xdark;
+        display: inline-block;
+        font-size: rem-calc(14);
+        font-weight: 600;
+        margin-left: auto;
+        margin-right: 0;
+        padding: rem-calc(0 12);
+    }
+
+    &__active {
+        justify-content: flex-end;
+        .switch {
+            background-color: $grey-xlight;
+            color: $grey-dark;
+            margin-left: 0;
+            margin-right: auto;
+            transition: all 100ms ease-in-out;
+        }
+    }
+
+    &:hover {
+        .switch {
+            background-color: lighten($grey, 10%);
+            color: lighten($grey-xdark, 10%);
+        }
+    
+        &__active {
+            .switch {
+                color: lighten($grey-dark, 10%);
+                background-color: lighten($grey-xlight, 10%);
+            }
+        }
+    }
+}
