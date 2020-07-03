@@ -14,7 +14,7 @@
     </div>
 
     <div class="disclaimer" v-if="disclaimer">
-      <div class="disclaimer--heading">{{ disclaimer.heading }}}</div>
+      <div class="disclaimer--heading">{{ disclaimer.heading }}</div>
       <div class="disclaimer--body" v-html="disclaimer.body"></div>
     </div>
   </div>
