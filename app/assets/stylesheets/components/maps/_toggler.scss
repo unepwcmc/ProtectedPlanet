@@ -1,22 +1,26 @@
 .v-map-toggler {
+    align-items: center;
     border: 1px solid $grey-xlight;
     cursor: pointer;
+    display: inline-flex;
+    height: rem-calc(27);
+    justify-content: flex-start;
     min-width: rem-calc(75);
     padding: rem-calc(2);
     user-select: none;
-    display: inline-flex;
-    justify-content: flex-start;
     
     &,
     .switch {
         border-radius: rem-calc(14);
     }
     .switch {
+        align-items: center;
         background-color: $grey;
         color: $grey-xdark;
-        display: inline-block;
+        display: inline-flex;
         font-size: rem-calc(14);
         font-weight: 600;
+        height: 100%;
         margin-left: auto;
         margin-right: 0;
         padding: rem-calc(0 12);
