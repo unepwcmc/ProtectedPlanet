@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'VMapSearch',
+  name: 'VMapPASearch',
 
   data () {
     return {
