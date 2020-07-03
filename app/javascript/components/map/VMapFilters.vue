@@ -30,6 +30,10 @@ export default {
   },
 
   props: {
+    overlays: {
+      type: Array,
+      required: true
+    },
     title: {
       type: String,
       required: true
