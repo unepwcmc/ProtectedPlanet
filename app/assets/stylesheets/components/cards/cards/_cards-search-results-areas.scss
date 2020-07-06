@@ -2,6 +2,8 @@
 // variables
 //--------------------------------------------------
 $card-search-results-areas-flag-size: rem-calc(60);
+$card-search-results-areas-width: 100%;
+$card-search-results-areas-height: rem-calc(155);
 
 //--------------------------------------------------
 // mixins
@@ -44,7 +46,13 @@ $card-search-results-areas-flag-size: rem-calc(60);
       }
 
         &__image {
-          width: 100%; height: auto;
+          background-position: center;
+          background-size: cover;
+          width: $card-search-results-areas-width; height: $card-search-results-areas-height;
+        }
+
+        &__image-placeholder { 
+          @include image-placeholder($card-search-results-areas-width, $card-search-results-areas-height); 
         }
 
         &__title {

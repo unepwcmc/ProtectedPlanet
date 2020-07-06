@@ -2,6 +2,7 @@
 @import './background';
 @import './border-and-shadows';
 @import './form-fields';
+@import './images';
 
 @mixin limit_lines($number, $line-height: 1.25) {
   overflow-y: hidden;

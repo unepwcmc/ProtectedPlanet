@@ -2,6 +2,7 @@
 // variables
 //--------------------------------------------------
 $search-results-image-width: rem-calc(165);
+$search-results-image-height: rem-calc(130);
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
@@ -28,14 +29,17 @@ $search-results-image-width: rem-calc(165);
         }
 
       &__image {
-        background-color: $grey-light;
         background-position: center;
         background-size: cover;
-        width: $search-results-image-width; height: rem-calc(130);
+        width: $search-results-image-width; height: $search-results-image-height;
 
         display: none;
 
         @include breakpoint($small) { display: block; }
+      }
+
+      &__image-placeholder { 
+        @include image-placeholder($search-results-image-width, $search-results-image-height); 
       }
   }
 }

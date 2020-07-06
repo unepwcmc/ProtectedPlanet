@@ -1,26 +1,30 @@
 <template>
-    <a 
-      :class="`card__link card--${geoType}`"
-      :href="url"
-      title=""
-    >
-      <i 
-        v-if="isRegion"
-        class="card__icon--region-large" 
-      />
+  <a 
+    :class="`card__link card--${geoType}`"
+    :href="url"
+    title=""
+  >
+    <i 
+      v-if="isRegion"
+      class="card__icon--region-large" 
+    />
 
-      <i
-        v-if="isCountry" 
-        class="card__icon--flag-large"
-        :style="{ backgroundImage: `url(${countryFlag})` }"
-      />
+    <i
+      v-if="isCountry" 
+      class="card__icon--flag-large"
+      :style="{ backgroundImage: `url(${countryFlag})` }"
+    />
 
-      <img 
-        v-if="image" 
-        :src="image" 
-        alt=""
-        class="card__image"
-      >
+    <div 
+      v-if="image" 
+      :alt="title"
+      class="card__image"
+      :style="{ backgroundImage: `url(${image})` }"
+    />
+    <div 
+      v-else 
+      class="card__image-placeholder"
+    />
 
     <div class="card__content">
       <h3 
