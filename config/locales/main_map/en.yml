@@ -1,0 +1,11 @@
+en:
+  main_map:
+     layers:
+       terrestrial_wdpa:
+         title: Terrestrial Protected Areas
+       marine_wdpa:
+         title: Coastal and Marine Protected Areas
+       oecm:
+         title: Other effective area-based conservation measures
+     disclaimer: The designations employed and the presentation of material on this map do not imply the expression of any opinion whatsoever on the part of the Secretariat of the United Nations concerning the legal status of any country, territory, city or area or of its authorities, or concerning the delimitation of its frontiers or boundaries.
+      
