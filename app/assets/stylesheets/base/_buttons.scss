@@ -25,7 +25,10 @@ $padding-medium: rem-calc(27);
 @mixin button-font {
   @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
 }
-@mixin button-disabled { cursor: disabled; }
+@mixin button-disabled { 
+  cursor: not-allowed; 
+  opacity: .2;
+}
 @mixin button-height { 
   @include responsive(height, $height-small, $height-medium, $height-medium);
   display: inline-flex;

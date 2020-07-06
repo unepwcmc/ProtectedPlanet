@@ -3,6 +3,7 @@
     <div class="search__bar">
       <div class="search__bar-content">
         <filter-trigger
+          :is-disabled="isFilterPaneDisabled"
           :text="textFilters"
           v-on:toggle:filter-pane="toggleFilterPane"
         />
@@ -15,8 +16,9 @@
         />
 
         <map-trigger
+          :is-disabled="isMapPaneDisabled"
           :text="textMap"
-          v-on:toggle-map-pane="toggleMapPane"
+          v-on:toggle:map-pane="toggleMapPane"
         />
 
         <download
@@ -161,7 +163,9 @@ export default {
       activeFilterOptions: [],
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
+      isFilterPaneDisabled: false,
       isMapPaneActive: false,
+      isMapPaneDisabled: false,
       loadingResults: false,
       newResults: this.results, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
       searchTerm: '',
@@ -181,10 +185,6 @@ export default {
   },
 
   methods: {
-    getFilteredSearchResults() {
-      this.ajaxSubmission()
-    },
-
     ajaxSubmission (resetFilters=false, pagination=false, requestedPage=1) {
       if(!pagination) { this.loadingResults = true }
 
@@ -213,6 +213,28 @@ export default {
         .catch(function (error) {
           console.log('error', error)
         })
+    },
+
+    disableFilters () {
+      this.isFilterPaneActive = false
+      this.isFilterPaneDisabled = true
+    },
+
+    disableMap () {
+      this.isFilterPaneActive = false
+      this.isMapPaneDisabled = true
+    },
+
+    enableFilters () {
+      this.isFilterPaneDisabled = false
+    },
+
+    enableMap () {
+      this.isMapPaneDisabled = false
+    },
+
+    getFilteredSearchResults() {
+      this.ajaxSubmission()
     },
 
     /**
@@ -266,8 +288,19 @@ export default {
       })
       
       this.filterGroupsWithPreSelected = this.filterGroups
+
+      this.updateDisabledComponents()
     },
 
+    updateDisabledComponents (selectedTabId) {
+      if(selectedTabId == 'site') {
+        this.enableFilters()
+        this.enableMap()
+      } else {
+        this.disableFilters()
+        this.disableMap()
+      }
+    },
 
     updateFilters (filters) {
       this.$eventHub.$emit('reset:pagination')
@@ -330,6 +363,7 @@ export default {
     },
 
     updateSelectedTab (selectedTabId) {
+      this.updateDisabledComponents(selectedTabId)
       this.tabIdSelected = selectedTabId
       this.resetPagination()
       this.getFilteredSearchResults()

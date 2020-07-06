@@ -76,5 +76,7 @@ $filters-title-height: 54;
 
   &__trigger {
     @include button-filter-trigger;
+
+    &.disabled { @include button-disabled; }
   }
 }

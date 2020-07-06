@@ -1,6 +1,6 @@
 <template>
   <button
-    class="map__trigger"
+    :class="['map__trigger', { 'disabled': isDisabled }]"
     @click="toggleMapPane"
     v-html="text"
   />
@@ -10,12 +10,18 @@ export default {
   name: 'map-trigger',
 
   props: {
-    text: String
+    isDisabled: {
+      type: Boolean,
+      default: false
+    },
+    text: String 
   },
 
   methods: {
     toggleMapPane () {
-      this.$emit('toggle-map-pane')
+      if(this.isDisabled) { return false }
+      
+      this.$emit('toggle:map-pane')
     }
   }
 }
