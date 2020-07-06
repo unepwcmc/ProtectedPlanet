@@ -4,7 +4,6 @@
   @include flex;
   @include flex-column;
   @include flex-h-end;
-  @include responsive(height, rem-calc(460), rem-calc(460), rem-calc(760));
   background-color: $grey-dark;
   background-position: center;
   background-size: cover;
@@ -13,8 +12,11 @@
   margin-left: 0;
   padding: rem-calc(32 30);
   text-decoration: none;
+  height: rem-calc(460);
 
   position: relative;
+
+  @include breakpoint($medium) { height: rem-calc(760); }
 
   &:hover::before { background-color: rgba(0,0,0,0.7); }
 
@@ -26,15 +28,23 @@
       @include flex-column;
       @include flex-h-between;
       @include flex-v-center;
-      @include responsive(width, rem-calc(134), rem-calc(150), rem-calc(150));
-      @include responsive(height, rem-calc(134), rem-calc(150), rem-calc(150));
       background-color: $grey-black;
       padding: rem-calc(20 10);
       text-align: center;
-      
-      @include responsive(right, rem-calc(22), rem-calc(26), rem-calc(44));
+      width: rem-calc(134); height: rem-calc(134); 
+
       position: absolute;
       top: 0;
+
+      @include breakpoint ($small) { 
+        width: rem-calc(150); height: rem-calc(150); 
+
+        right: rem-calc(26);
+      }
+
+      @include breakpoint ($medium) { 
+        right: rem-calc(244);
+      }
     } 
 
       &__icon {
@@ -46,22 +56,29 @@
       }
 
       &__number {
-        @include responsive(font-size, rem-calc(20), rem-calc(30), rem-calc(40));
         color: $primary;
+        font-size: rem-calc(20);
         font-weight: $bold;
         line-height: 1;
         margin-top: rem-calc(10);
 
         display: block;
+
+        @include breakpoint ($small) { font-size: rem-calc(30); }
+        @include breakpoint ($medium) { font-size: rem-calc(40); }
       }
 
         &__number-text { 
-          @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
+          font-size: rem-calc(16);
           line-height: 1; 
+
+          @include breakpoint ($small) { font-size: rem-calc(18); }
         }
 
     &__summary {
-      @include responsive(display, none, block, block);
+      display: none;
+
+      @include breakpoint($small) { display: block; }
     }
 
     &__title {
