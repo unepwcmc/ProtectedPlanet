@@ -73,14 +73,14 @@ export default {
     }
   },
 
-  data: function () {
+  data () {
     return {
       show: true
     }
   },
 
   methods: {
-    onClose: function () {
+    onClose () {
       this.show = false
       this.$emit('show', this.show)
     }

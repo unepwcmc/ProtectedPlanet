@@ -25,16 +25,16 @@ export const storeMap = {
       pushIfUniqueId(state.visibleOverlays, overlay)
     },
 
-    removeOverlay (state, overlayId) {
-      spliceByObjectId(state.visibleOverlays, overlayId)
+    removeOverlay (state, overlay) {
+      spliceByObjectId(state.visibleOverlays, overlay.id)
     },
     
     addLayer (state, layer) {
       pushIfUniqueId(state.visibleLayers, layer)
     },
 
-    removeLayer (state, layerId) {
-      spliceByObjectId(state.visibleLayers, layerId)
+    removeLayer (state, layer) {
+      spliceByObjectId(state.visibleLayers, layer.id)
     }
   },
 }

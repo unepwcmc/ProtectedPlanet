@@ -139,16 +139,29 @@ export default {
     },
 
     showLayer(layer) {
-      if (this.map.getLayer(layer.id)) {
+      if (this.map.getLayer(layer.id)) { //TODO: Should I check if already visible and not bother if it is... will this save time
         this.setLayerVisibility(layer, true)
       } else {
-        this.addLayer(layer)
+        this.addLayerBeneathBoundariesAndLabels(layer)
       }
+    },
+
+    addLayerBeneathBoundariesAndLabels (layer) {
+      let attempts = 0
+
+      const interval = setInterval(() => {
+        attempts++
+
+        if (this.firstForegroundLayerd || attempts > 10) {
+          clearInterval(interval)
+          this.addLayer(layer)
+        }
+      }, 200)
     },
 
     addLayer(layer) {
       if (true) {//layer type goes here
-        this.addLayerType(layer)
+        this.addTypeLayer(layer)
       }
     },
 

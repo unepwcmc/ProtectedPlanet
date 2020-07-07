@@ -4,21 +4,21 @@ OVERLAYS = [
     isToggleable: false,
     layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
     color: "#38A800",
-    isShownByDefault: true
+    isShown: true
   },
   {
     id: 'marine_wdpa',
     isToggleable: false,
     layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
     color: "#004DA8",
-    isShownByDefault: true
+    isShown: true
   },
   {
     id: 'oecm',
     isToggleable: true,
     layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/MapServer/tile/{z}/{y}/{x}"],
     color: "#D9B143",
-    isShownByDefault: true
+    isShown: true
   }
 ].freeze
 
