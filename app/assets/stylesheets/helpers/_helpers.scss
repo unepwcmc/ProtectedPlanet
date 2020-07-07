@@ -1,5 +1,6 @@
 @import './accessibility';
 @import './background';
+@import './beautify-scrollbar';
 @import './border-and-shadows';
 @import './form-fields';
 @import './images';
@@ -37,6 +38,7 @@
 //--------------------------------------------------
 .red { color: red; }
 .white { color: white; }
+.bold { font-weight: $bold; }
 
 //--------------------------------------------------
 // lists

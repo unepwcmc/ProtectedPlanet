@@ -73,10 +73,12 @@
 }
 
 @mixin text-accent {
-  @include responsive(font-size, rem-calc(30), rem-calc(50), rem-calc(60));
   color: $primary;
+  font-size: rem-calc(30);
   font-weight: $bold;
   line-height: 1;
+
+  @include breakpoint($small) { font-size: rem-calc(60); }
 }
 
 @mixin text-alert {

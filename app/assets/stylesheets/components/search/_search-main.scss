@@ -48,6 +48,7 @@
 
     &__trigger {
       @include button-search;
+      display: block;
     }
   }
 }
