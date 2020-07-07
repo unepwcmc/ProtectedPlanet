@@ -20,6 +20,34 @@ class MarineController < ApplicationController
     @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
     @marineViewAllUrl = '/' #TODO URL to filtered search results page
 
+    @download_options = [
+      {
+        title: 'CSV',
+        commerical_available: true,
+        params: '' #FERDI add whatever you need here to generate the correct file
+      },
+      {
+        title: 'SHP',
+        commerical_available: true,
+        params: '' #FERDI add whatever you need here to generate the correct file
+      },
+      {
+        title: 'File Geodatabase',
+        commerical_available: true,
+        params: '' #FERDI add whatever you need here to generate the correct file
+      },
+      {
+        title: 'ESRI Web Service',
+        commerical_available: true,
+        params: '' #FERDI add whatever you need here to generate the correct file
+      },
+      {
+        title: 'PDF',
+        commerical_available: false,
+        params: '' #FERDI add whatever you need here to generate the correct file
+      }
+    ].to_json
+
     @regionCoverage = Region.without_global.map do |region|
       RegionPresenter.new(region).marine_coverage
     end

@@ -4,6 +4,9 @@
       <%= render "partials/social/sharing" %>
     </div>
 
-    <%= render partial: "partials/download/download", locals: { classes: 'download--small' } %>
+    <%= render partial: "partials/download/download", locals: { 
+      classes: 'download--small', 
+      options: download_options
+    } %>
   </div>
 </div>
