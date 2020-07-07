@@ -1,3 +1,27 @@
+OVERLAYS = [
+  {
+    id: 'terrestrial_wdpa',
+    isToggleable: false,
+    layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
+    color: "#38A800",
+    isShownByDefault: true
+  },
+  {
+    id: 'marine_wdpa',
+    isToggleable: false,
+    layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
+    color: "#004DA8",
+    isShownByDefault: true
+  },
+  {
+    id: 'oecm',
+    isToggleable: true,
+    layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/MapServer/tile/{z}/{y}/{x}"],
+    color: "#D9B143",
+    isShownByDefault: true
+  }
+].freeze
+
 class HomeController < ApplicationController
   def index
     home_yml = I18n.t('home')
@@ -21,36 +45,11 @@ class HomeController < ApplicationController
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
+
     @main_map = {
       disclaimer: map_yml[:disclaimer],
       title: map_yml[:title],
-      overlays:
-        [
-          {
-            id: 'terrestrial-wdpa',
-            title: map_yml[:overlays][:terrestrial_wdpa][:title],
-            isToggleable: false,
-            layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
-            color: "#38A800",
-            isShownByDefault: true
-          },
-          {
-            id: 'marine-wdpa',
-            title: map_yml[:overlays][:marine_wdpa][:title],
-            isToggleable: false,
-            layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
-            color: "#004DA8",
-            isShownByDefault: true
-          },
-          {
-            id: 'oecm',
-            title: map_yml[:overlays][:oecm][:title],
-            isToggleable: true,
-            layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/MapServer/tile/{z}/{y}/{x}"],
-            color: "#D9B143",
-            isShownByDefault: true
-          }
-        ]
+      overlays: MapOverlaysSerializer.new(OVERLAYS, map_yml).serialize
     }
   end
 end
