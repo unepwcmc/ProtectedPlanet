@@ -1,17 +1,4 @@
 //--------------------------------------------------
-// mixins
-//--------------------------------------------------
-@mixin card-stats-padding {
-  padding: rem-calc(28 30); 
-}
-
-@mixin card-stats-number {
-  color: $primary;
-  font-weight: $bold;
-  line-height: 1;
-}
-
-//--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--stats-wrapper {
@@ -36,13 +23,22 @@
   }
 
   .card {
+    &__chart {
+      margin-bottom: rem-calc(14);
+      width: 50%;
 
-    h2 {
-      font-size: rem-calc(20);
+      @include breakpoint($small) { 
+        margin-right: rem-calc(20);
+        margin-bottom: 0;
+        width: 30%;
+      }
     }
 
     &__content {
       @include flex;
+      @include flex-column;
+
+      @include breakpoint($small) { @include flex-row; }
     }
 
     &__logos {
@@ -50,142 +46,58 @@
       @include ul-unstyled;
     }
 
-      &__logo {
-        margin-left: rem-calc(24);
+    &__logo {
+      margin-left: rem-calc(24);
 
-        &:first-child { margin-left: 0; }
-      }
-
-        &__logo-image {
-          
-          width: rem-calc(100); height: auto;
-
-          display: block;
-        }
-
-    &__third {
-      width: calc(33% - 16px);
+      &:first-child { margin-left: 0; }
     }
 
-    &__two-thirds { 
-      width: calc(100% - 33%);
+    &__logo-image {
+      width: rem-calc(100); height: auto;
+
+      display: block;
     }
 
-      &__chart-square {
-        margin-right: rem-calc(24);
-        width: 30%;
-      }
-
-      &__stat-box {
-        @include bg-grey-xdark;
-        @include flex;
-        @include flex-center;
-        font-size: rem-calc(20);
-        font-weight: $bold;
-        margin-right: rem-calc(20);
-        height: rem-calc(280);
-      }
-  }
-}
-
-&--stats-overview {
-  @include bg-grey-black;
-  @include card-stats-padding;
-  margin-right: rem-calc(30);
-  width: 100%;
-
-  @include breakpoint($small) { width: 33%; }
-
-  .card {
-    &__flag {
-      margin-right: rem-calc(14);
+    &__number { 
+      font-size: rem-calc(16);
+      font-weight: $bold; 
+    }
+    
+    &__number-large { 
+      font-size: rem-calc(40);
+      font-weight: $bold; 
     }
 
-    &__heading {
+    &__stat-box {
+      @include bg-grey-xdark;
       @include flex;
-      @include flex-v-center;
-      margin-bottom: rem-calc(18);
-    }
-
-    &__h1 { 
-      color: $white;
+      @include flex-center;
       font-size: rem-calc(20);
-      margin: 0;
-
-      @include breakpoint($small) { font-size: rem-calc(22); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
-    }
-
-    &__number {
-      @include card-stats-number;
-      font-size: rem-calc(18);
-
-      display: block;
-
-      @include breakpoint($small) { font-size: rem-calc(20); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
-    }
-
-    &__number--small {
-      @include card-stats-number;
-      font-size: rem-calc(18);
-      margin-right: rem-calc(10);
-
-      @include breakpoint($small) { font-size: rem-calc(20); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
-    }
-
-    &__section {
-      margin-top: rem-calc(30);
-    }
-
-    &__story-map-links {
-      margin-top: 3rem;
-      .story-map-link {
-        font-size: rem-calc(16);
-        margin-bottom: rem-calc(8);
-
-        @include flex;
-        @include flex-h-between;
-        
-        &__label {
-          padding-right: rem-calc(8);
-        }
-        
-        &__link {
-          @include button-with-icon;
-          font-size: rem-calc(16) !important;
-          
-          &::after { 
-            @include icon-arrow-external; 
-            display: inline-block;
-          }
-        }
-        
-        @include breakpoint-down($medium) {
-          @include flex-column;
-          
-          &__label {
-            margin-bottom: rem-calc(8);
-          }
-        }
-  
-        &__title {
-          font-weight: $bold;
-        }
-      }
-    }
-
-    &__text {
-      font-size: rem-calc(16);
-    }
-
-    &__text-bold {
-      font-size: rem-calc(16);
       font-weight: $bold;
-      margin-bottom: rem-calc(6);
-
-      display: block;
+      margin-right: rem-calc(20);
+      height: rem-calc(280);
     }
+
+    &__stat {
+      font-size: rem-calc(14);
+      line-height: 1.3;
+      margin: rem-calc(6 0 14 0);
+    }
+
+    &__subsection { border-top: solid 1px $grey-light; }
+
+    &__subtitle {
+      font-size: rem-calc(20);
+      font-weight: $bold;
+      margin: rem-calc(12 0 0 0);
+    }
+
+    &__title {
+      margin-top: 0;
+    }
+
+    &__third { width: calc(33% - 16px); }
+    &__two-thirds {  width: calc(100% - 33%); }
   }
 }
+

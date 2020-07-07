@@ -1,4 +1,6 @@
 class CountryPresenter
+  include ActionView::Helpers::NumberHelper
+  
   def initialize country
     @country = country
     @statistic = StatisticPresenter.new(country)
@@ -11,21 +13,21 @@ class CountryPresenter
 
   def marine_stats
     {
-      pame_km2: statistic.pame_statistic.pame_pa_marine_area,
+      pame_km2: number_with_delimiter(statistic.pame_statistic.pame_pa_marine_area.round(0)),
       pame_percentage: statistic.pame_statistic.pame_percentage_pa_marine_cover.round(2),
-      protected_km2: statistic.pa_marine_area.round(0),
+      protected_km2: number_with_delimiter(statistic.pa_marine_area.round(0)),
       protected_percentage: statistic.percentage_pa_marine_cover.round(2),
-      total_km2: statistic.marine_area.round(0)
+      total_km2: number_with_delimiter(statistic.marine_area.round(0))
     }
   end
 
   def terrestrial_stats
     {
-      pame_km2: statistic.pame_statistic.pame_pa_land_area,
+      pame_km2: number_with_delimiter(statistic.pame_statistic.pame_pa_land_area.round(0)),
       pame_percentage: statistic.pame_statistic.pame_percentage_pa_land_cover.round(2),
-      protected_km2: statistic.pa_land_area.round(0),
+      protected_km2: number_with_delimiter(statistic.pa_land_area.round(0)),
       protected_percentage: statistic.percentage_pa_land_cover.round(2),
-      total_km2: statistic.land_area.round(0)
+      total_km2: number_with_delimiter(statistic.land_area.round(0))
     }
   end
 
