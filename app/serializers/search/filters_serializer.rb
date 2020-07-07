@@ -81,7 +81,15 @@ class Search::FiltersSerializer < Search::BaseSerializer
   end
 
   def objs_for(aggregation)
-    records = @aggregations[aggregation]
+    records = sorted_records(@aggregations[aggregation], aggregation)
     records.map { |obj| { id: obj[:label], title: obj[:label] } }
+  end
+
+  def sorted_records(records, agg_type)
+    if agg_type == 'iucn_category'
+      records.sort_by { |r| r[:identifier] }
+    else
+      records.sort_by { |r| r[:label] }
+    end
   end
 end
