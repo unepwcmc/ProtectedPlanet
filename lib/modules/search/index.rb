@@ -35,12 +35,19 @@ class Search::Index
   end
 
   def self.count
-    self.new(Search::COUNTRY_INDEX).count + self.new(Search::PA_INDEX).count +
-      self.new(Search::CMS_INDEX).count
+    self.new(Search::REGION_INDEX).count +
+    self.new(Search::COUNTRY_INDEX).count +
+    self.new(Search::PA_INDEX).count +
+    self.new(Search::CMS_INDEX).count
   end
 
   def self.delete
-    [Search::COUNTRY_INDEX, Search::PA_INDEX, Search::CMS_INDEX].each do |index_name|
+    [
+      Search::REGION_INDEX,
+      Search::COUNTRY_INDEX,
+      Search::PA_INDEX,
+      Search::CMS_INDEX
+    ].each do |index_name|
       index = self.new index_name
       index.delete
     end
