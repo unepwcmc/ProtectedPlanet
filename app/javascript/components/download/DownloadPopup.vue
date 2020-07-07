@@ -4,7 +4,11 @@
       <li 
         v-for="option in options"
       >
-        <span class="popup__link" v-html="option.title"></span>
+        <span 
+          class="popup__link" 
+          @click="clickOption(option)"
+          v-html="option.title"
+        />
       </li>
     </ul>
   </div>
@@ -15,6 +19,12 @@ export default {
 
   props: {
     options: Array
+  },
+
+  methods: {
+    clickOption (option) {
+      this.$emit('click:download:option', option)
+    }
   }
 }
 </script>

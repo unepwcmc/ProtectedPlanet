@@ -2,11 +2,10 @@
   <% if local_assigns.has_key? :classes %>
     class="<%= classes %>"
   <% end %>
-  
+
+  :options="<%= options %>"
   text="<%= t('global.button.download') %>"
 >
-<download-popup
-  :options="<%= options %>"
-/>
-</download-popup>
 </download>
+
+<download-modal></download-modal>

@@ -23,27 +23,27 @@ class MarineController < ApplicationController
     @download_options = [
       {
         title: 'CSV',
-        commerical_available: true,
+        commericalAvailable: true,
         params: '' #FERDI add whatever you need here to generate the correct file
       },
       {
         title: 'SHP',
-        commerical_available: true,
+        commericalAvailable: true,
         params: '' #FERDI add whatever you need here to generate the correct file
       },
       {
         title: 'File Geodatabase',
-        commerical_available: true,
+        commericalAvailable: true,
         params: '' #FERDI add whatever you need here to generate the correct file
       },
       {
         title: 'ESRI Web Service',
-        commerical_available: true,
+        commericalAvailable: true,
         params: '' #FERDI add whatever you need here to generate the correct file
       },
       {
         title: 'PDF',
-        commerical_available: false,
+        commericalAvailable: false,
         params: '' #FERDI add whatever you need here to generate the correct file
       }
     ].to_json
