@@ -52,6 +52,11 @@ $icon-search-width: rem-calc(21);
   display: block;
 }
 
+@mixin icon-area() { 
+  @include icon-basic;
+  @include icon-image('area.svg', rem-calc(52), rem-calc(52)); 
+}
+
 @mixin icon-arrow-external() {
   @include icon-basic;
   @include icon-image('arrow-external.svg', rem-calc(17), rem-calc(12));
@@ -135,6 +140,11 @@ $icon-search-width: rem-calc(21);
 @mixin icon-circle-chevron-white() {
   @include icon-basic;
   @include icon-image('circle-chevron-white.svg', rem-calc(34), rem-calc(34));
+}
+
+@mixin icon-country() { 
+  @include icon-basic;
+  @include icon-image('country.svg', rem-calc(65), rem-calc(50)); 
 }
 
 @mixin icon-download() {
