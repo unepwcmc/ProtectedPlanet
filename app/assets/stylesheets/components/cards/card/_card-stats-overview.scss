@@ -67,7 +67,7 @@
         
         &__link {
           @include button-with-icon;
-          font-size: rem-calc(16) !important;
+          @include breakpoint($small) { font-size: rem-calc(16); }
           
           &::after { 
             @include icon-arrow-external; 
