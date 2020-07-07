@@ -28,9 +28,9 @@
       width: 50%;
 
       @include breakpoint($small) { 
-        width: 30%;
         margin-right: rem-calc(20);
         margin-bottom: 0;
+        width: 30%;
       }
     }
 
