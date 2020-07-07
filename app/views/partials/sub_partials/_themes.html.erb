@@ -4,7 +4,9 @@
   style: "background-image: url('#{cms_fragment_render(:theme_image, theme[:obj])}')" do %>
   <% unless theme[:pas_no] == -1 %>
     <div class="card__ribbon">
-      <span class="card__icon icon--pin-green <%= theme[:obj][:slug] %>"></span>
+      <i class="card__icon <%= theme[:obj][:slug] %>">
+        <%= render '/partials/svgs/pin.svg' %>
+      </i>
       <p class="no-margin">
           <span class="card__number"><%= theme[:pas_no] %></span>
           <span class="card__number-text"><%= t('global.area-types.wdpa') %></span>
