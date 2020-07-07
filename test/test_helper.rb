@@ -52,23 +52,24 @@ end
 
 class ActionController::TestCase
   include Devise::TestHelpers
-# helper method to seed cms pages required for header/footer
-# any test that tries to render a view will need to call this first
-def seed_cms
-  @site = FactoryGirl.create(:cms_site)
-  @layout = FactoryGirl.create(:cms_layout, site: @site)
-  FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'about')
-  FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'news-and-stories')
-  FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'resources')
-  FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'thematical-areas')
-  FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'oecms')
-  FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'wdpa')
-  FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'legal')
-end
-
 
 end
 
+class ActiveSupport::TestCase
+  # helper method to seed cms pages required for header/footer
+  # any test that tries to render a view will need to call this first
+  def seed_cms
+    @site = FactoryGirl.create(:cms_site)
+    @layout = FactoryGirl.create(:cms_layout, site: @site)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'about')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'news-and-stories')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'resources')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'thematical-areas')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'oecms')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'wdpa')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'legal')
+  end
+end
 
 # shut up, Sidekiq
 Sidekiq.configure_client do |config|
