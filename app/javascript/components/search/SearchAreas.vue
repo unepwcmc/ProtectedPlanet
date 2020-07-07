@@ -61,7 +61,7 @@
           v-show="!loadingResults"
         />
 
-        <span :class="['icon--loading-spinner margin-center', { 'icon-visible': loadingResults } ]" />
+        <span :class="['icon--loading-spinner margin-center search__spinner', { 'icon-visible': loadingResults } ]" />
       </div>
     </div>
   </div>
