@@ -67,7 +67,7 @@ class TestWdpaRelease < ActiveSupport::TestCase
     ogr_info_mock = mock()
     ogr_info_mock.
       expects(:layers_matching).
-      with(/wdpa_?po/i).
+      with(/wdpa_?(wdoecm_)?po/i).
       returns(geometry_tables)
     Ogr::Info.expects(:new).with(gdb_path).returns(ogr_info_mock)
 
