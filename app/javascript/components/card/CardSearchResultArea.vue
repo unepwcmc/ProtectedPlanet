@@ -4,17 +4,6 @@
     :href="url"
     title=""
   >
-    <i 
-      v-if="isRegion"
-      class="card__icon--region-large" 
-    />
-
-    <i
-      v-if="isCountry" 
-      class="card__icon--flag-large"
-      :style="{ backgroundImage: `url(${countryFlag})` }"
-    />
-
     <div 
       v-if="image" 
       :alt="title"
@@ -36,33 +25,6 @@
         v-html="totalAreas"
       />
     </div>
-
-    <!-- <div 
-      v-if="hasCountriesOrRegion"
-      class="card__groups"
-    >
-      <p 
-        v-if="hasCountries"
-        v-for="country in countries"
-        class="card__group flex flex-v-center"
-      >
-        <i 
-          class="card__icon--flag" 
-          :style="{ backgroundImage: `url(${country.flag})` }"
-        />
-        <span 
-          v-html="country.title"
-        />
-      </p>
-
-      <p 
-        v-if="hasRegion"
-        class="card__group flex flex-v-center"
-      >
-        <i class="card__icon--region" />
-        <span v-html="region" />
-      </p>
-    </div> -->
   </a>
 </template>
 
@@ -77,8 +39,6 @@ export default {
     },
     image: String,
     countryFlag: String,
-    // countries: Array,
-    // region: String,
     totalAreas: String,
     title: {
       type: String,
@@ -91,12 +51,6 @@ export default {
   },
 
   computed: {
-    // hasCountries () { return this.countries },
-
-    // hasCountriesOrRegion () {
-    //   return this.hasCountries || this.hasRegion
-    // },
-
     isRegion () { return this.geoType == 'region' },
 
     isCountry () { return this.countryFlag }
