@@ -289,7 +289,7 @@ export default {
       
       this.filterGroupsWithPreSelected = this.filterGroups
 
-      this.updateDisabledComponents()
+      this.updateDisabledComponents('site')
     },
 
     updateDisabledComponents (selectedTabId) {
