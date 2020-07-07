@@ -21,33 +21,33 @@ class HomeController < ApplicationController
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
-
     @main_map = {
       disclaimer: map_yml[:disclaimer],
-      layers:
+      title: map_yml[:title],
+      overlays:
         [
           {
-            title: map_yml[:layers][:terrestrial_wdpa][:title],
-            is_togglable: false,
-            layer: "https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}",
+            title: map_yml[:overlays][:terrestrial_wdpa][:title],
+            isToggleable: false,
+            layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
             color: "#38A800",
-            is_shown_by_default: true
+            isShownByDefault: true
           },
           {
-            title: map_yml[:layers][:marine_wdpa][:title],
-            is_togglable: false,
-            layer: "https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}",
+            title: map_yml[:overlays][:marine_wdpa][:title],
+            isToggleable: false,
+            layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
             color: "#004DA8",
-            is_shown_by_default: true
+            isShownByDefault: true
           },
           {
-            title: map_yml[:layers][:terrestrial_wdpa][:title],
-            is_togglable: true,
-            layer: "https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/MapServer/tile/{z}/{y}/{x}",
+            title: map_yml[:overlays][:terrestrial_wdpa][:title],
+            isToggleable: true,
+            layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/MapServer/tile/{z}/{y}/{x}"],
             color: "#D9B143",
-            is_shown_by_default: true
+            isShownByDefault: true
           }
         ]
-    }.to_json
+    }
   end
 end

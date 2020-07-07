@@ -1,6 +1,6 @@
 en:
   main_map:
-    layers:
+    overlays:
       terrestrial_wdpa:
         title: Terrestrial Protected Areas
       marine_wdpa:
@@ -9,6 +9,6 @@ en:
         title: Other effective area-based conservation measures
     title: Discover Protected Areas
     disclaimer: 
-      title: Map Disclaimer
-      disclaimer: The designations employed and the presentation of material on this map do not imply the expression of any opinion whatsoever on the part of the Secretariat of the United Nations concerning the legal status of any country, territory, city or area or of its authorities, or concerning the delimitation of its frontiers or boundaries.
+      heading: Map Disclaimer
+      body: The designations employed and the presentation of material on this map do not imply the expression of any opinion whatsoever on the part of the Secretariat of the United Nations concerning the legal status of any country, territory, city or area or of its authorities, or concerning the delimitation of its frontiers or boundaries.
       

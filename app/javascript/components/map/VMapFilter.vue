@@ -9,7 +9,7 @@
       :style="{ backgroundColor: color }"
     />
     <div class="description">
-      {{ description }}
+      {{ title }}
     </div>
     <div
       v-if="isToggleable"
@@ -34,7 +34,7 @@ export default {
       type: String,
       default: '#cccccc'
     },
-    description: {
+    title: {
       type: String,
       required: true
     },
