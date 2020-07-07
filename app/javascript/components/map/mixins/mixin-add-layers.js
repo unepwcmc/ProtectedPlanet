@@ -12,6 +12,9 @@ export default {
           tiles: [layer.url],
           tileSize: 256,
         },
+        layout: {
+          visibility: 'visible'
+        },
         // paint: {
         //   'raster-opacity': 1
         // },
