@@ -1,41 +1,21 @@
 export default {
   //THESE METHODS ARE FOR TESTING ONLY
   methods: {
-    addTypeLayer () {
-      console.log('adding a layer of type type beneath layer', this.firstForegroundLayerId)
-
-      // const options = {
-      //   'id': layer.id,
-      //   'type': 'raster',
-      //   'minzoom': 0,
-      //   'maxzoom': 22,
-      //   'source': {
-      //     'type': 'raster',
-      //     'tiles': [layer.tileset],
-      //     'tileSize': 64
-      //   },
-      //   'paint': {
-      //     'raster-hue-rotate': 0
-      //   }
-      // }
-
-      // this.map.addLayer(options, nextLayerId)
-    },
-
-    mapServer() {
+    addTypeLayer (layer) {
       this.map.addLayer({
-        id: 'dynamic-demo',
+        id: layer.id,
         type: 'raster',
         minzoom: 0,
         maxzoom: 22,
         source: {
           type: 'raster',
-          tiles: [
-            'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}',
-          ],
+          tiles: [layer.url],
           tileSize: 256,
         },
-      })
+        // paint: {
+        //   'raster-opacity': 1
+        // },
+      }, this.firstForegroundLayerId)
     },
 
     addSingleArea(wdpaid) {

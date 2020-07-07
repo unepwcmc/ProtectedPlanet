@@ -1,4 +1,4 @@
-import { pushIfUniqueId, spliceByObjectId } from '../helpers/array-helpers'
+import { addObjectToArrayIfAbsent } from '../helpers/array-helpers'
 
 export const storeMap = {
   namespaced: true,
@@ -22,19 +22,19 @@ export const storeMap = {
 
   mutations: {
     addOverlay (state, overlay) {
-      pushIfUniqueId(state.visibleOverlays, overlay)
+      state.visibleOverlays = addObjectToArrayIfAbsent(state.visibleOverlays, overlay)
     },
 
     removeOverlay (state, overlay) {
-      spliceByObjectId(state.visibleOverlays, overlay.id)
+      state.visibleOverlays = state.visibleOverlays.filter( x => x.id !== overlay.id)
     },
     
     addLayer (state, layer) {
-      pushIfUniqueId(state.visibleLayers, layer)
+      state.visibleLayers = addObjectToArrayIfAbsent(state.visibleLayers, layer)
     },
 
     removeLayer (state, layer) {
-      spliceByObjectId(state.visibleLayers, layer.id)
+      state.visibleLayers = state.visibleLayers.filter( x => x.id !== layer.id)
     }
   },
 }

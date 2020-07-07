@@ -92,7 +92,7 @@ export default {
   watch: {
     visibleLayers(newLayers, oldLayers) {
       const layersToHide = oldLayers.filter(oL => 
-        containsObjectWithId(newLayers, oL.id)
+        !containsObjectWithId(newLayers, oL.id)
       )
 
       this.hideLayers(layersToHide)
@@ -121,13 +121,6 @@ export default {
       if(this.onClick) {
         this.map.on('click', e => { this.onClick(e) })
       }
-
-      //FOR TESTING ONLY!
-      this.map.on('load', () => {
-        this.mapServer()
-        // this.addLoads(100)
-        // this.addSingleArea(555557228)
-      })
     },
 
     updateBaselayer (baselayer) {
@@ -139,10 +132,13 @@ export default {
     },
 
     showLayer(layer) {
-      if (this.map.getLayer(layer.id)) { //TODO: Should I check if already visible and not bother if it is... will this save time
-        this.setLayerVisibility(layer, true)
-      } else {
+      const mapboxLayer = this.map.getLayer(layer.id)
+      const isVisible = mapboxLayer && mapboxLayer.visibility === 'visible'
+
+      if (!mapboxLayer) {
         this.addLayerBeneathBoundariesAndLabels(layer)
+      } else if (!isVisible) {
+        this.setLayerVisibility(layer, true)
       }
     },
 
@@ -152,7 +148,7 @@ export default {
       const interval = setInterval(() => {
         attempts++
 
-        if (this.firstForegroundLayerd || attempts > 10) {
+        if (this.firstForegroundLayerId || attempts > 10) {
           clearInterval(interval)
           this.addLayer(layer)
         }
