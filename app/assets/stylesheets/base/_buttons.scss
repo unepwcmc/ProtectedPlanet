@@ -59,6 +59,7 @@ $padding-medium: rem-calc(27);
   @include button-radius;
   @include flex-center;
   background-color: $primary;
+  font-size: rem-calc(18);
   padding: 0 $padding-medium;
   &::after { 
     @include icon-download-black; 
