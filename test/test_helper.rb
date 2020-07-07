@@ -69,6 +69,18 @@ class ActiveSupport::TestCase
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'wdpa')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'legal')
   end
+
+  # and home page needs some extra cms bits
+  def seed_cms_home
+    seed_cms
+    # we need to add extra pages for pa categories on the home page
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'marine-protected-areas')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'green-list')
+    # and the CTAs
+    FactoryGirl.create(:cms_cta, css_class: 'api')
+    FactoryGirl.create(:cms_cta, css_class: 'live-report')
+
+  end
 end
 
 # shut up, Sidekiq
