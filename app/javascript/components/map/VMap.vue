@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { containsObjectWithId } from '../../helpers/array-helpers'
+
 import VMapBaselayerControls from './VMapBaselayerControls'
 import mixinAddLayers from './mixins/mixin-add-layers'
 import mixinControls from './mixins/mixin-controls'
@@ -80,6 +82,21 @@ export default {
         ...MAP_OPTIONS_DEFAULT,
         ...this.options.map
       }
+    },
+
+    visibleLayers () {
+      return this.$store.state.map.visibleLayers
+    }
+  },
+
+  watch: {
+    visibleLayers(newLayers, oldLayers) {
+      const layersToHide = oldLayers.filter(oL => 
+        containsObjectWithId(newLayers, oL.id)
+      )
+
+      this.hideLayers(layersToHide)
+      this.showLayers(newLayers)
     }
   },
 
@@ -89,6 +106,7 @@ export default {
 
   methods: {
     initMap () {
+      /* eslint-disable no-undef */
       mapboxgl.accessToken = this.accessToken
       this.map = new mapboxgl.Map(this.mapOptions)
       this.addControls()
@@ -116,21 +134,36 @@ export default {
       console.log(`New baselayer: ${baselayer.id}`)
     },
 
-    showLayers(layerIds) {
-      this.setLayerVisibilities(layerIds, true)
+    showLayers (layers) {
+      layers.forEach(l => this.showLayer(l))
     },
 
-    hideLayers(layerIds) {
-      this.setLayerVisibilities(layerIds, false)
+    showLayer(layer) {
+      if (this.map.getLayer(layer.id)) {
+        this.setLayerVisibility(layer, true)
+      } else {
+        this.addLayer(layer)
+      }
     },
 
-    setLayerVisibilities(layerIds, isVisible) {
-      layerIds.forEach(id => {
-        this.setLayerVisibility(id, isVisible)
+    addLayer(layer) {
+      if (true) {//layer type goes here
+        this.addLayerType(layer)
+      }
+    },
+
+    hideLayers(layers) {
+      this.setLayerVisibilities(layers, false)
+    },
+
+    setLayerVisibilities(layers, isVisible) {
+      layers.forEach(l => {
+        this.setLayerVisibility(l, isVisible)
       })
     },
 
-    setLayerVisibility(layerId, isVisible) {
+    setLayerVisibility(layer, isVisible) {
+      const layerId = layer.id
       const visibility = isVisible ? 'visible' : 'none'
 
       if (this.map.getLayer(layerId)) {

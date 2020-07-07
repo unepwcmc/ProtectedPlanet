@@ -24,11 +24,12 @@ export default {
     },
 
     addPopup (coords, pa) {
+      // eslint-disable-next-line no-undef
       new mapboxgl.Popup({className: 'v-map-pa-popup'})
         .setLngLat(coords)
         .setHTML(`<a href="/${pa.wdpa_id}">${pa.name}</a>`)
-        .setMaxWidth("300px")
-        .addTo(this.map);
+        .setMaxWidth('300px')
+        .addTo(this.map)
     }
   }
 }
