@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "./bin/webpack-dev-server --host 0.0.0.0 --inline --content-base ."
+    "start": "./bin/webpack-dev-server --host 0.0.0.0 --inline --content-base .",
+    "lint": "eslint --ext .js,.vue"
   },
   "dependencies": {
     "@rails/webpacker": "^4.0.2",

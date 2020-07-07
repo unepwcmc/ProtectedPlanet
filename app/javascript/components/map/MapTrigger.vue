@@ -7,10 +7,13 @@
 </template>
 <script>
 export default {
-  name: 'map-trigger',
+  name: 'MapTrigger',
 
   props: {
-    text: String
+    text: {
+      type: String,
+      default: ''
+    }
   },
 
   methods: {

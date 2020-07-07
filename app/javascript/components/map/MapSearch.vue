@@ -1,5 +1,8 @@
 <template>
-  <div class="map--search" v-show="isActive">
+  <div
+    v-show="isActive"
+    class="map--search"
+  >
     <div class="map__map">
       <h1>map here</h1>
     </div>
@@ -8,7 +11,7 @@
 
 <script>
 export default {
-  name: 'map-search',
+  name: 'MapSearch',
 
   props: {
     isActive: {
