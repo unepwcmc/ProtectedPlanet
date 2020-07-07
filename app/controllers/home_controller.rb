@@ -27,6 +27,7 @@ class HomeController < ApplicationController
       overlays:
         [
           {
+            id: 'terrestrial-wdpa',
             title: map_yml[:overlays][:terrestrial_wdpa][:title],
             isToggleable: false,
             layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
@@ -34,6 +35,7 @@ class HomeController < ApplicationController
             isShownByDefault: true
           },
           {
+            id: 'marine-wdpa',
             title: map_yml[:overlays][:marine_wdpa][:title],
             isToggleable: false,
             layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
@@ -41,7 +43,8 @@ class HomeController < ApplicationController
             isShownByDefault: true
           },
           {
-            title: map_yml[:overlays][:terrestrial_wdpa][:title],
+            id: 'oecm',
+            title: map_yml[:overlays][:oecm][:title],
             isToggleable: true,
             layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/MapServer/tile/{z}/{y}/{x}"],
             color: "#D9B143",
