@@ -14,12 +14,12 @@
 }
 
 @mixin hero-stat-text {
-  @include text-intro;
   color: $white;
   font-weight: $bold;
   line-height: 1;
   margin-bottom: 1em;
   
+  @include breakpoint($small) { font-size: rem-calc(20); }
 }
 
 @mixin hero-stat-bubble {
@@ -39,8 +39,10 @@
 
     .hero__stat-text { 
       @include hero-stat-text;
-      @include responsive(width, 90%, 78%, 60%);
       text-align: center;
+      width: 80%;
+
+      @include breakpoint($medium) { width: 60%; }
     }  
 }
 
