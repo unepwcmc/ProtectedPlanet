@@ -69,7 +69,7 @@ export default {
         return type.hasOwnProperty('heading') && typeof type.heading === 'string'
           && type.hasOwnProperty('body') && typeof type.heading === 'string'
       },
-      default: () => {}
+      default: () => ({})
     }
   },
 
