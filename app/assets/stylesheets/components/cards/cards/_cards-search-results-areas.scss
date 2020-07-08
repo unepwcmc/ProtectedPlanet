@@ -21,11 +21,11 @@ $card-search-results-areas-flag-size: rem-calc(60);
 
   .card {
     &__link {
-      @include border-grey-xlight;
-      @include box-shadow-grey-xlight;
+      @include border-grey-light;
+      @include box-shadow-grey-light;
       @include flex;
       @include flex-column;
-      @include responsive('width', 100%, 48%, 30%);
+      @include responsive('width', 100%, 48%, 31.5%);
       @include responsive('height', auto, rem-calc(360), rem-calc(360));
       background-color: $white;
       margin-bottom: rem-calc(30);

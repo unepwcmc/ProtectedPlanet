@@ -14,6 +14,10 @@ module ApplicationHelper
     Region => "search-placeholder-region.png"
   }.freeze
 
+  def get_square_side area
+    Math.sqrt(area/100) * 100
+  end
+
   def commaify number
     number_with_delimiter(number, delimeter: ',')
   end

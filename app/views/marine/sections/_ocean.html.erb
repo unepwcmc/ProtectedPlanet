@@ -3,14 +3,25 @@
     <h2><%= cms_fragment_render(:section_ocean_title, @cms_page) %></h2>
     <div><%= cms_fragment_render(:section_ocean_content, @cms_page) %></div>
     <div>
-      <h3>National waters</h3>
-      <chart-row-pa percent="<%= national %>" coverage="<%= national_coverage %>" ></chart-row-pa>
+      <h3><%= t('thematic_area.marine.ocean.national-title') %></h3>
+      <chart-row-pa 
+        coverage="<%= national_coverage %>" 
+        percent="<%= national %>" 
+        theme="theme--purple"
+      ></chart-row-pa>
 
-      <h3>High seas</h3>
-      <chart-row-pa percent="<%= high_seas %>" coverage="<%= high_seas_coverage %>" ></chart-row-pa>
-      <div class="chart__legend-item">
-        <span class="chart__legend-key"></span>
-        <span class="chart__legend-text">% of Protected Area Coverage</span>
+      <h3><%= t('thematic_area.marine.ocean.high-title') %></h3>
+      <chart-row-pa 
+        coverage="<%= high_seas_coverage %>" 
+        percent="<%= high_seas %>" 
+        theme="theme--blue"
+      ></chart-row-pa>
+
+      <div class="chart--legend--horizontal">
+        <div class="chart__legend-item">
+          <span class="chart__legend-key theme--green"></span>
+          <span class="chart__legend-text"><%= t('thematic_area.marine.ocean.legend-text') %></span>
+        </div>
       </div>
     </div>
   </div>
