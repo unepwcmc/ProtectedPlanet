@@ -15,6 +15,7 @@
         background-color: $grey;
         border-radius: rem-calc(19);
         border: 1px solid $white;
+        flex-shrink: 0;
         height: rem-calc(19);
         width: rem-calc(19);
     }
