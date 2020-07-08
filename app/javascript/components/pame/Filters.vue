@@ -1,7 +1,5 @@
 <template>
   <div class="flex flex-v-center flex-between">
-    <span class="filter__title bold">Filters:</span>
-
     <data-filter 
       v-for="filter, index in filters"
       :key="`${filter.name}-${index}`"

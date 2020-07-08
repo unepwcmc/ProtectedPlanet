@@ -48,7 +48,7 @@ class PameEvaluation < ApplicationRecord
       field: 'year'
     },
     {
-      title: 'Link To Assessment',
+      title: 'Link to assessment',
       field: 'url'
     },
     {
