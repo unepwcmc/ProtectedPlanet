@@ -10,11 +10,22 @@ $focus-outline-margin: rem-calc(4);
 // classes
 //--------------------------------------------------
 &--pame {
+  @include breakpoint($medium) {
+    @include flex;
+    @include flex-v-center;
+  }
+
   .filter {
-    margin-right: rem-calc(20);
+    margin-right: rem-calc(10);
+    margin-bottom: rem-calc(10);
 
     display: inline-block;
     position: relative;
+
+    @include breakpoint($medium) { 
+      margin-right: rem-calc(20); 
+      margin-bottom: 0;
+    }
 
     &__title {
       font-size: rem-calc(20);
@@ -89,16 +100,29 @@ $focus-outline-margin: rem-calc(4);
   //**************************************************
     &__options {
       background-color: white;
-      border: solid rem-calc(1) $black;
-      border-radius: $radius-global;
       font-size: rem-calc(16);
-      margin-top: rem-calc(18);
       padding: rem-calc(30 25);
-      min-width: rem-calc(300);
-
+      
       display: none;
-      position: absolute;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
       z-index: 1;
+
+      @include breakpoint($small) {
+        border: solid rem-calc(1) $black;
+        border-radius: $radius-global;
+        margin-top: rem-calc(18);
+        min-width: rem-calc(300);
+
+        position: absolute;
+        top: unset;
+        right: unset;
+        bottom: unset;
+        left: unset;
+      }
 
       &--active {
         display: block;

@@ -48,7 +48,7 @@
       }
 
       // Add copy for the table header
-      // These are shown on mobile only
+      // These are shown on mobile and tablet
       // Check pame_evalutation.rb for the copy
       &:nth-child(1) { &:before { content: 'Name:'; } }
       &:nth-child(2) { &:before { content: 'Designation:'; } }
