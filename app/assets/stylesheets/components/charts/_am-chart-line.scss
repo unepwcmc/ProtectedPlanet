@@ -1,6 +1,9 @@
 &--line {
   .chart {
-    background-color: $grey-xlight;
-    height: rem-calc(420);
+    @include chart-scrollable($width: 690, $height: 420);
+    
+    &__svg { 
+      background-color: $grey-xlight;
+    }
   }
 }

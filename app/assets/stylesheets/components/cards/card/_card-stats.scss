@@ -13,7 +13,8 @@
 
 &--stats-wrapper-chart {
   @include container-medium;
-  background-color: $white;
+
+  @include breakpoint-down($small) { padding: 0; }
 }
 
 &--stats {
