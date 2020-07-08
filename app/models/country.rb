@@ -129,8 +129,10 @@ class Country < ApplicationRecord
     _area = 'SUM(reported_area + reported_marine_area) AS area'
     ActiveRecord::Base.connection.execute(
       <<-SQL
-        SELECT date_part::INT AS year, count, area
+        SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count,
+          SUM(area) OVER (ORDER BY date_part::INT) AS area
         FROM (#{protected_areas_inner_join(_year, _area)}) t
+        ORDER BY year
       SQL
     )
   end

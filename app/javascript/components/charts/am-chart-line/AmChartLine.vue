@@ -87,7 +87,7 @@ export default {
     formatData () {
       this.data.map(dataset => {
         console.log(dataset)
-        return dataset.year = dataset.year ? new Date(dataset.year, 1, 1) : null
+        return dataset.year = dataset.year ? dataset.year : null
       })
     }
   }
