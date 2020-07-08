@@ -23,25 +23,15 @@ export default {
     }
   },
 
-  data () {
-    return {
-      selectedBaselayerInternal: null
-    }
-  },
-
   computed: {
-    selectedBaselayer () {
-      return this.$store.state.map.selectedBaselayer
-    }
-  },
+    selectedBaselayer: {
+      get () {
+        return this.$store.state.map.selectedBaselayer
+      },
 
-  watch: {
-    selectedBaselayer () {
-      this.selectedBaselayerInternal = this.selectedBaselayer
-    },
-
-    selectedBaselayerInternal () {
-      this.updateBaselayerInStore()
+      set (layer) {
+        this.$store.dispatch('map/updateSelelectedBaselayer', layer)
+      }
     }
   },
 
@@ -55,11 +45,7 @@ export default {
     },
 
     selectBaselayer (layer) {
-      this.selectedBaselayerInternal = layer
-    },
-
-    updateBaselayerInStore () {
-      this.$store.dispatch('map/updateSelelectedBaselayer', this.selectedBaselayerInternal)
+      this.selectedBaselayer = layer
     }
   }
 }
