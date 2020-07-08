@@ -35,6 +35,7 @@ const BASELAYERS_DEFAULT = [
 ]
 const MAP_OPTIONS_DEFAULT = {
   container: 'map-target',
+  scrollZoom: false
   //bounds: [[xmin,ymin],[xmax,ymax]],
 }
 const CONTROLS_OPTIONS_DEFAULT = {
