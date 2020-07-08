@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    actionText: function () {
+    actionText () {
       if (this.active) {
         return this.onText
       }

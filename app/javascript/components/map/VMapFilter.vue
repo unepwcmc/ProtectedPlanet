@@ -15,7 +15,7 @@
       v-if="isToggleable"
       class="active-toggler"
     >
-      <v-map-toggler v-model="isShownInternal" />
+      <v-map-toggler v-model="isShown" />
     </div>
   </div>
 </template>
@@ -56,12 +56,6 @@ export default {
     }
   },
 
-  data () {
-    return {
-      isShownInternal: false
-    }
-  },
-
   computed: {
     overlayForStore () {
       return {layers: this.layers, id: this.id}
@@ -71,29 +65,25 @@ export default {
       return this.$store.state.map.visibleOverlays
     },
 
-    isShown () {
-      return Boolean(this.visibleOverlays.filter(o => o.id === this.id).length)
-    }
-  },
+    isShown: {
+      get () {
+        return Boolean(this.visibleOverlays.filter(o => o.id === this.id).length)
+      },
 
-  watch: {
-    isShownInternal () {
-      this.isShownInternal ? this.addToStore() : this.removeFromStore()
-    },
-
-    isShown () {
-      this.isShownInternal = this.isShown
+      set (isShown) {
+        isShown ? this.addToStore() : this.removeFromStore()
+      }
     }
   },
 
   created () {
-    this.isShownInternal = this.isShownByDefault
+    this.isShown = this.isShownByDefault
   },
 
   methods: {
     onClick () {
       if (this.isToggleable) {
-        this.isShownInternal = !this.isShownInternal
+        this.isShown = !this.isShown
       }
     },
 
