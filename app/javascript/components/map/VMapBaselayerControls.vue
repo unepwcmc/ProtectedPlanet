@@ -4,8 +4,10 @@
       v-for="layer in baselayers"
       :key="`baselayer-toggle-${layer.id}`"
       class="v-map-baselayer-controls__control"
-      :class="{'selected': isSelected(layer)}"
-      @click="selectBaselayer(layer)"
+      :class="{
+        selected: layer.id === selectedBaselayer.id
+      }"
+      @click="selectedBaselayer = layer"
     >
       {{ layer.name }}
     </button>
@@ -36,17 +38,7 @@ export default {
   },
 
   created () {
-    this.selectBaselayer(this.baselayers[0])
-  },
-
-  methods: {
-    isSelected (layer) {
-      return layer.id === this.selectedBaselayer.id
-    },
-
-    selectBaselayer (layer) {
-      this.selectedBaselayer = layer
-    }
+    this.selectedBaselayer = this.baselayers[0]
   }
 }
 </script>
