@@ -17,6 +17,10 @@
   margin-top: rem-calc(30);
   height: rem-calc(56);
 
+  display: none;
+
+  @include breakpoint($medium) { display: block; }
+
   .table-head {
     &--stuck {
       position: fixed;
