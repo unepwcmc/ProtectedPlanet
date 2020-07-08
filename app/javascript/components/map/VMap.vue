@@ -14,40 +14,13 @@
 <script>
 import { containsObjectWithId } from '../../helpers/array-helpers'
 import { executeAfterCondition } from '../../helpers/timing-helpers'
+import { BASELAYERS_DEFAULT, CONTROLS_OPTIONS_DEFAULT, EMPTY_OPTIONS, MAP_OPTIONS_DEFAULT } from './default-options'
 
 import VMapBaselayerControls from './VMapBaselayerControls'
 import mixinAddLayers from './mixins/mixin-add-layers'
 import mixinControls from './mixins/mixin-controls'
 import mixinLayers from './mixins/mixin-layers'
 import mixinPaPopup from './mixins/mixin-pa-popup'
-
-const BASELAYERS_DEFAULT = [
-  {
-    id: 'terrain',
-    name: 'Terrain',
-    style: 'mapbox://styles/unepwcmc/ck6hsqzns0vx31iqxdcgccgow'
-  }, 
-  {
-    id: 'satellite',
-    name: 'Satellite',
-    style: 'mapbox://styles/unepwcmc/ckc4wrxs114iq1in4u273ks4q'
-  }
-]
-const MAP_OPTIONS_DEFAULT = {
-  container: 'map-target',
-  scrollZoom: false
-  //bounds: [[xmin,ymin],[xmax,ymax]],
-}
-const CONTROLS_OPTIONS_DEFAULT = {
-  showZoom: true,
-  showCompass: false,
-  showBaselayerControls: true
-}
-const EMPTY_OPTIONS = {
-  map: null,
-  controls: null,
-  baselayers: null
-}
 
 export default {
   name: 'VMap',
