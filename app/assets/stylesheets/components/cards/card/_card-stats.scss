@@ -11,6 +11,11 @@
   }
 }
 
+&--stats-wrapper-chart {
+  @include container-medium;
+  background-color: $white;
+}
+
 &--stats {
   @include card-stats-padding;
   background-color: $white;

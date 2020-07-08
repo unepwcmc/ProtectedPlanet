@@ -28,11 +28,17 @@ export default {
 
   methods: {
     createChart () {
-      let chart = am4core.create("chartdiv", am4charts.XYChart)
+      const container = am4core.create("chartdiv", am4core.Container);
+      
+      container.width = am4core.percent(112);
+      container.height = am4core.percent(100);
+      container.layout = "vertical";
+
+      let chart = container.createChild(am4charts.XYChart)
 
       chart.data = this.data
-      chart.paddingTop = 80;
-      chart.paddingLeft = 0;
+      chart.paddingTop = 70;
+      chart.paddingLeft = -40;
 
       let yearAxis = chart.xAxes.push(new am4charts.DateAxis())
       yearAxis.renderer.grid.template.disabled = true
@@ -46,7 +52,7 @@ export default {
       countAxis.title.rotation = 0
       countAxis.title.valign = "top"
       countAxis.title.dy = -50
-      countAxis.title.dx = 50
+      countAxis.title.dx = 60
       countAxis.renderer.grid.template.disabled = true
       countAxis.renderer.line.strokeOpacity = 1
       countAxis.renderer.line.strokeWidth = 1
@@ -58,7 +64,7 @@ export default {
       areaAxis.title.rotation = 0
       areaAxis.title.valign = "top"
       areaAxis.title.dy = -50
-      areaAxis.title.dx = -50
+      areaAxis.title.dx = -78
       areaAxis.renderer.grid.template.disabled = true
       areaAxis.renderer.line.strokeOpacity = 1
       areaAxis.renderer.line.strokeWidth = 1
