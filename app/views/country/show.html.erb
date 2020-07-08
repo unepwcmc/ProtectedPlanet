@@ -18,7 +18,7 @@
     </section>
 
     <section>
-      <div class="flex flex-h-between">
+      <div class="card--stats-wrapper">
         <%= render partial: "partials/stats/stats-coverage", locals: { 
           stats: @country_presenter.terrestrial_stats, 
           type: 'terrestrial' 
@@ -42,12 +42,14 @@
 
       <%= render partial: "partials/stats/stats-designations", locals: { designations: @country_presenter.designations } %>
 
-      <div class="card--stats">
-        <div class="container--medium">
+      <div class="card--stats-wrapper">
+        <div>
           <h1>Growth in protected area coverage</h1>
 
           <am-chart-line :data="<%= @coverage_growth.to_json %>">
           </am-chart-line>
+          
+          <p class="text--small"><%= t('stats.coverage-chart-smallprint') %></p>
         </div>
       </div>
       

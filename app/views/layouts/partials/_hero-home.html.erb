@@ -8,7 +8,9 @@
     </div>
     <div>
       <div class="hero__stats circle--grey-black sm-home-hero-stats">
-        <i class="hero__icon icon--pin-green"></i>
+        <i class="hero__icon icon--pin-terrestrial-light">
+          <%= render '/partials/svgs/pin.svg' %>
+        </i>
         <div class="hero__stat-number">
           <counter 
             :total="<%= hero_stat_percentage %>" 

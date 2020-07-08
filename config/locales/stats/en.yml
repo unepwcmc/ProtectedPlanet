@@ -3,7 +3,8 @@ en:
     attributes: 
       title: Attributes
     citation: Citation Text
-    coverage: coverage
+    coverage: Coverage
+    coverage-chart-smallprint: The graph excludes status years with no information reported (STAT_YR = 0).
     designatons:
       title: Designations
     governance: 
@@ -31,7 +32,17 @@ en:
     terrestrial-title: Terrestrial Protected Areas Coverage
     terrestrial-total: Total Land Area
     type: Type
-    warning: "<strong>Warning:</strong> These statistics might differ from those reported officially by countries due to difference in methodologies and datasets used to assess protected area coverage and differences in the base maps used to measure terrestrial and marine area of a country or territory."
+    warning: "<span class='card__title'>Disclaimer:</span> These statistics might differ from those reported officially by countries due to difference in methodologies and datasets used to assess protected area coverage and differences in the base maps used to measure terrestrial and marine area of a country or territory. Download the country's latest national report (pdf)."
     wdpa:
       id: WDPA ID
+<<<<<<< Updated upstream
       total: Total Protected Areas
+    story_map:
+      title: Story Map
+      link_type:
+        english_version: English Version
+        arabic_version: Arabic Version
+
+=======
+      total: Total Protected Areas
+>>>>>>> Stashed changes

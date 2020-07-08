@@ -4,6 +4,11 @@
     hero_stat_text: t('home.hero.stat-text')
   } 
 %>
+
+<section class="container section-padding">
+  <%= render partial: "partials/cards/facts", locals: { cards: @site_facts } %>
+</section>
+
 <%= render "partials/search/protected-areas" %>
 
 <section class="container section-padding">
