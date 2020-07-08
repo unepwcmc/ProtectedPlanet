@@ -128,19 +128,24 @@ ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = ENV['COMFY
 # end
 
 module ComfortableMexicanSofa
+  # ------------------------------------------------------------- #
+  # ADD ADDITIONAL MODELS HERE THAT SHOULD BE INCLUDED IN EXPORTS #
+  # ------------------------------------------------------------- #
+  #
+  # THE EXPORT OF MODEL DATA IS IN A SIMPLE JSON FORMAT.
+  #
+  # PLEASE TAKE THIS INTO CONSIDERATION IF YOU INTEND TO RESTORE MORE COMPLEX
+  # MODEL DATA. YOU MAY NEED TO ENHANCE THIS EXTENDED FUNCTIONALITY IF SO.
+  # ------------------------------------------------------------- #
   module ExtraModels
-    begin
-      COMFY_CMS_INCLUDED_EXPORT_MODELS = ENV['COMFY_CMS_INCLUDED_EXPORT_MODELS'].split(' ')
-    rescue NoMethodError
-      raise $ERROR_INFO, "COMFY_CMS_INCLUDED_EXPORT_MODELS has not been set in .env - see .env.example: #{$ERROR_INFO}",
-            $ERROR_INFO.backtrace
-    end
+    COMFY_CMS_INCLUDED_EXPORT_MODELS = %w[CallToAction].freeze
   end
 
   module Seeds
     class Importer
       old_import = instance_method(:import!)
 
+      # RUN THE EXISTING IMPORT, THEN RUN THE EXTENDED IMPORT BEHAVIOUR.
       define_method(:import!) do |*args|
         ActiveRecord::Base.transaction do
           old_import.bind(self).call(*args)
@@ -165,6 +170,7 @@ module ComfortableMexicanSofa
     class Exporter
       old_export = instance_method(:export!)
 
+      # RUN THE EXISTING EXPORT, THEN RUN THE EXTENDED EXPORT BEHAVIOUR.
       define_method(:export!) do |*args|
         ActiveRecord::Base.transaction do
           old_export.bind(self).call(*args)
