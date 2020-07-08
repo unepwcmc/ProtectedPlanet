@@ -23,7 +23,6 @@ export default {
   },
 
   mounted() {
-    this.formatData()
     this.createChart()
   },
 
@@ -82,13 +81,6 @@ export default {
       series2.yAxis = areaAxis
 
       chart.legend = new am4charts.Legend();
-    },
-
-    formatData () {
-      this.data.map(dataset => {
-        console.log(dataset)
-        return dataset.year = dataset.year ? dataset.year : null
-      })
     }
   }
 }
