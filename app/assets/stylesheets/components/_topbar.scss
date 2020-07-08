@@ -6,21 +6,46 @@
 
   .topbar__container {
     @include flex;
-    @include flex-h-between;
     @include flex-v-center;
   }
 
     .topbar__logo {
-      @include responsive(height, rem-calc(52), rem-calc(56), rem-calc(67)); 
-      @include responsive(padding, rem-calc(0 16), rem-calc(0 20), rem-calc(0 30)); 
-      // @include responsive(order, 1, 1, 1);
       @include flex;
       @include flex-center;
       background-color: $primary;
+      order: 1;
+      padding: rem-calc(0 16);
+      height: rem-calc(52);
+
+      @include breakpoint($small) { 
+        padding: rem-calc(0 20);
+        height: rem-calc(56);
+      }; 
+
+      @include breakpoint($medium) { 
+        padding: rem-calc(0 30);
+        height: rem-calc(67);
+      }; 
     }
 
     .topbar__nav {
+      order: 2;
+      @include breakpoint($small) { 
+        margin-left: auto;
+        order: 1; 
+      }
+    }
+
+    .topbar__search {	
       margin-left: auto;
+      order: 1;
+      
+      @include breakpoint($small) { 
+        margin-left: rem-calc(14);
+        order: 2; 
+      }
+
+      @include breakpoint($medium) { margin-left: rem-calc(30); }
     }
 }
 

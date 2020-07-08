@@ -1,10 +1,13 @@
+<% if cta_api %>
 <section class="cta--api container">
   <div class="cta__container bg--grey-black">
+    <%= image_tag 'icons/key.svg', alt: 'key icon', class: 'cta__bg' %>
     <div class="cta__content">
       <h2 class="h2-big-white"><%= cta_api.title %></h2>
-      <p class="text-intro"><%= cta_api.summary %></p>
+      <p class="cta__intro text-intro"><%= cta_api.summary %></p>
 
       <%= link_to t('ctas.api.button'), cta_api.url, target: '_blank', class: 'button--outline-white' %>
     </div>
   </div>
 </section>
+<% end %>

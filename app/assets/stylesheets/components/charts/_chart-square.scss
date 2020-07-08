@@ -1,0 +1,16 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--square {
+  border: solid 1px $grey-black;
+  padding-top: 100%;
+
+  position: relative;
+
+  .chart__area {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
