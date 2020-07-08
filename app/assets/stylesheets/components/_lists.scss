@@ -28,6 +28,10 @@
     max-height: rem-calc(280);
     overflow-y: scroll;
 
+    @include beautify-scrollbar;
+    padding-right: rem-calc(19);
+
+
     .list {
       &__li {
         @include flex;
@@ -54,6 +58,17 @@
 
         &__value {
 
+        }
+
+        &__a {
+          @include button-with-icon;
+          @include flex-no-shrink;
+          
+          &::after {
+            @include icon-circle-chevron-black;
+            height: rem-calc(21);
+            width: rem-calc(21);
+          }
         }
     }
   }

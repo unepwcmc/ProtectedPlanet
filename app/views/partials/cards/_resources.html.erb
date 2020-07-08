@@ -5,12 +5,12 @@
   <div class="flex flex-v-center flex-h-between">
     <h2><%= @items[:title] %></h2>
     
-    <% if @items[:url] %>
+    <% if @items[:url] && !get_all %>
       <%= link_to t('global.button.all'), @items[:url], title: t('global.button.all'), class: 'button--all' %>
     <% end %>
   </div>
 
-  <div class="cards__cards">
+  <div class="cards__cards <%= !get_all ? 'preview' : '' %>">
     <% @items[:cards].each do |card| %>
       <% if !card[:url].nil? %>
         <%= link_to card[:url], title: card[:label], class: 'card card--link' do %>

@@ -19,7 +19,6 @@ $chart-row-pa-height: rem-calc(52);
         @include flex;
         @include flex-h-between;
         @include flex-v-center;
-        background-color: $purple;
         height: $chart-row-pa-height;
       }
 
@@ -31,7 +30,7 @@ $chart-row-pa-height: rem-calc(52);
       }
 
       &__coverage {
-        background-color: $chart-aqua;
+        background-color: $chart-green;
         height: rem-calc(52);
         position: relative;
       }

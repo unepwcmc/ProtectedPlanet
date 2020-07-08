@@ -14,21 +14,25 @@
         padding: rem-calc(30 24 34 34);
 
         position: relative;
-
-        &::after {
-          @include responsive(top, 0, -6%, -11%);
-          @include responsive(display, none, block, block);
-          background-image: image_url('icons/key.svg');
-          content: '';
-          width: rem-calc(360); height: rem-calc(360);
-
-          position: absolute;
-          right: 0;
-        }
       }
+        &__bg {
+          display: none;
+
+          @include breakpoint($small) { 
+            height: 122%;
+            
+            display: block;
+            position: absolute;
+            top: -6%; 
+            right: 0;
+          }
+
+          @include breakpoint($medium) { top: -11%; }
+        }
 
         &__content { 
-          @include responsive(width, 100%, 70%, 64%);
+          @include breakpoint($small) { width: 70%; }
+          @include breakpoint($medium) { width: 64%; }
         }
     }
   }
@@ -50,13 +54,25 @@
 
         &__content {
           @include flex;
-          @include responsive(align-items, flex-start, center, center);
-          @include responsive(flex-direction, column, row, row);
-          @include responsive(justify-content, normal, space-between, space-between);
-          @include responsive(padding, rem-calc(60 0 35 0), rem-calc(60 0 20 0), rem-calc(70 0 40 0));
+          padding: rem-calc(60 0 35 0);
           height: 100%;
-
+          
+          align-items: flex-start;
+          flex-direction: column;
+          justify-content: normal;
           position: relative;
+
+          @include breakpoint($small) {
+            padding: rem-calc(60 0 20 0);
+
+            align-items: center;
+            flex-direction: row;
+            justify-content: space-between;
+          }
+
+          @include breakpoint($medium) {
+            padding: rem-calc(70 0 40 0);
+          }
         }
 
           &__ribbon {
@@ -68,7 +84,12 @@
           }
 
           &__title {
-            @include responsive(width, 100%, rem-calc(370), rem-calc(370));
+            @include breakpoint($small) { width: rem-calc(370); }
+          }
+
+          &__intro {
+            @include breakpoint($small) { width: 75%; }
+            @include breakpoint($medium) { width: 90%; }
           }
     }
   }
