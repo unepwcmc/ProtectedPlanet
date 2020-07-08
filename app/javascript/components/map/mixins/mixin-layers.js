@@ -1,3 +1,5 @@
+import { executeAfterCondition } from '../../../helpers/timing-helpers'
+
 export default {
   data () {
     return {
@@ -24,6 +26,13 @@ export default {
       }
     
       return firstBoundaryId || firstSymbolId
+    },
+
+    executeAfterStyleLoad (cb) {
+      executeAfterCondition(
+        () => this.map.isStyleLoaded(), 
+        cb
+      )
     }
   }
 }

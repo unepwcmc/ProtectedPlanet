@@ -7,13 +7,13 @@
     <v-map-baselayer-controls 
       v-if="controlsOptions.showBaselayerControls"
       :baselayers="baselayers"
-      @update:baselayer="updateBaselayer" 
     />
   </div>
 </template>
 
 <script>
 import { containsObjectWithId } from '../../helpers/array-helpers'
+import { executeAfterCondition } from '../../helpers/timing-helpers'
 
 import VMapBaselayerControls from './VMapBaselayerControls'
 import mixinAddLayers from './mixins/mixin-add-layers'
@@ -21,9 +21,20 @@ import mixinControls from './mixins/mixin-controls'
 import mixinLayers from './mixins/mixin-layers'
 import mixinPaPopup from './mixins/mixin-pa-popup'
 
+const BASELAYERS_DEFAULT = [
+  {
+    id: 'terrain',
+    name: 'Terrain',
+    style: 'mapbox://styles/unepwcmc/ck6hsqzns0vx31iqxdcgccgow'
+  }, 
+  {
+    id: 'satellite',
+    name: 'Satellite',
+    style: 'mapbox://styles/unepwcmc/ckc4wrxs114iq1in4u273ks4q'
+  }
+]
 const MAP_OPTIONS_DEFAULT = {
   container: 'map-target',
-  style: 'mapbox://styles/mapbox/streets-v11',
   //bounds: [[xmin,ymin],[xmax,ymax]],
 }
 const CONTROLS_OPTIONS_DEFAULT = {
@@ -31,7 +42,6 @@ const CONTROLS_OPTIONS_DEFAULT = {
   showCompass: false,
   showBaselayerControls: true
 }
-const BASELAYERS_DEFAULT = [{id: 'Terrain'}, {id: 'Satellite'}]
 const EMPTY_OPTIONS = {
   map: null,
   controls: null,
@@ -80,8 +90,13 @@ export default {
     mapOptions () {
       return {
         ...MAP_OPTIONS_DEFAULT,
-        ...this.options.map
+        ...this.options.map,
+        style: this.baselayers[0].style
       }
+    },
+
+    selectedBaselayer () {
+      return this.$store.state.map.selectedBaselayer
     },
 
     visibleLayers () {
@@ -90,13 +105,20 @@ export default {
   },
 
   watch: {
-    visibleLayers(newLayers, oldLayers) {
+    visibleLayers (newLayers, oldLayers) {
       const layersToHide = oldLayers.filter(oL => 
         !containsObjectWithId(newLayers, oL.id)
       )
 
       this.hideLayers(layersToHide)
       this.showLayers(newLayers)
+    },
+
+    selectedBaselayer () {
+      this.executeAfterStyleLoad(() => {
+        this.map.setStyle(this.selectedBaselayer.style)
+        this.showLayers(this.visibleLayers)
+      })
     }
   },
 
@@ -123,12 +145,10 @@ export default {
       }
     },
 
-    updateBaselayer (baselayer) {
-      console.log(`New baselayer: ${baselayer.id}`)
-    },
-
     showLayers (layers) {
-      layers.forEach(l => this.showLayer(l))
+      this.executeAfterStyleLoad(() => {
+        layers.forEach(l => this.showLayer(l))
+      })
     },
 
     showLayer(layer) {
@@ -143,16 +163,11 @@ export default {
     },
 
     addLayerBeneathBoundariesAndLabels (layer) {
-      let attempts = 0
-
-      const interval = setInterval(() => {
-        attempts++
-
-        if (this.firstForegroundLayerId || attempts > 10) {
-          clearInterval(interval)
-          this.addLayer(layer)
-        }
-      }, 200)
+      executeAfterCondition(
+        () => this.firstForegroundLayerId,
+        () => { this.addLayer(layer) },
+        10
+      )
     },
 
     addLayer(layer) {
