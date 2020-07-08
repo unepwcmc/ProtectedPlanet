@@ -32,7 +32,7 @@ export default {
       },
 
       set (layer) {
-        this.$store.dispatch('map/updateSelelectedBaselayer', layer)
+        this.$store.dispatch('map/updateSelectedBaselayer', layer)
       }
     }
   },

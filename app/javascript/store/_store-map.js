@@ -20,8 +20,8 @@ export const storeMap = {
       overlay.layers.forEach(l => commit('removeLayer', l))
     },
 
-    updateSelelectedBaselayer ({ commit }, layer) {
-      commit('updateSelelectedBaselayer', layer)
+    updateSelectedBaselayer ({ commit }, layer) {
+      commit('updateSelectedBaselayer', layer)
     }
   },
 
@@ -42,7 +42,7 @@ export const storeMap = {
       state.visibleLayers = state.visibleLayers.filter( x => x.id !== layer.id)
     },
 
-    updateSelelectedBaselayer (state, layer) {
+    updateSelectedBaselayer (state, layer) {
       state.selectedBaselayer = layer
     }
   },
