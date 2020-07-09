@@ -16,6 +16,7 @@
 
     <download-commercial 
       :isActive="showCommercialModal"
+      v-on:click:close-modal="closeModal"
       v-on:click:non-commercial="clickNonCommercial"
       />
 
@@ -59,9 +60,13 @@ export default {
     },
 
     clickNonCommercial () {
-      this.showCommercialModal = false
+      this.closeModal()
       this.showDownloadModal = true
       alert('download data - HOOK BACK END UP')
+    },
+
+    closeModal () {
+      this.showCommercialModal = false
     },
 
     toggleDownloadPane () {
