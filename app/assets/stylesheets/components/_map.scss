@@ -5,11 +5,13 @@
 @import "maps/v-map-toggler";
 
 .map {
-  &--main {
+  &--container {
     @include gutters;
 
     .map {
       &__mapbox {
+        position: relative;
+
         height: rem-calc(360);
         @include breakpoint($medium) {
           height: rem-calc(700);
@@ -17,13 +19,16 @@
       }
     }
 
-    // ---- BEGIN ONLY SHOW IMMEDIATE HEADER AT MOBILE BREAKPOINT ---- //
+    /**
+     * The following is part of a quick solution to the problem of having
+     * the header component within the filters component when it must 
+     * appear above the map and filters below on mobile devices. 
+     */
     @include breakpoint($medium) {
       & > .v-map-header {
         display: none;
       }
     }
-    // ---- ENDOF ONLY SHOW IMMEDIATE HEADER AT MOBILE BREAKPOINT ---- //
 
     // --------- BEGIN VMAPFILTERS GROUP --------- //
     @include breakpoint($medium) {
@@ -32,12 +37,12 @@
 
     .v-map-filters {
       @include breakpoint($medium) {
-        position: absolute;
         width: 33.33%;
-        z-index: 1;
 
+        position: absolute;
         top: rem-calc(42);
         left: $gutter-medium * 2;
+        z-index: 1;
       }
       @include breakpoint($large) {
         left: $gutter-large * 2;

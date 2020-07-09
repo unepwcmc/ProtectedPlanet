@@ -1,11 +1,11 @@
 <template>
   <div class="v-map-header">
-    <div class="title">
+    <div class="v-map-header__title">
       {{ title }}
     </div>
     <div
       v-if="closeable"
-      class="close-button"
+      class="v-map-header__close"
       @click="onClose"
     />
   </div>

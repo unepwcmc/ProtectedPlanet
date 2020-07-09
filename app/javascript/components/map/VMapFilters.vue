@@ -3,22 +3,18 @@
     v-if="show"
     class="v-map-filters"
   >
-    <div class="header">
-      <v-map-header 
-        closeable
-        v-model="title"
-        @close="onClose"
-      />
-    </div>
-    <div class="body">
-      <div class="search">
-        <v-map-pa-search />
-      </div>
-      <div class="overlays">
+    <v-map-header 
+      closeable
+      v-model="title"
+      @close="onClose"
+    />
+    <div class="v-map-filters__body">
+      <v-map-pa-search />
+      <div class="v-map-filters__overlays">
         <div
           v-for="(overlay, index) in overlays"
           :key="index"
-          class="overlays--overlay"
+          class="v-map-filters__overlay"
         >
           <v-map-filter v-bind="overlay" />
         </div>
@@ -26,13 +22,13 @@
 
       <div
         v-if="disclaimer"
-        class="disclaimer"
+        class="v-map-disclaimer"
       >
-        <div class="disclaimer--heading">
+        <div class="v-map-disclaimer__heading">
           {{ disclaimer.heading }}
         </div>
         <div
-          class="disclaimer--body"
+          class="v-map-disclaimer__body"
           v-html="disclaimer.body"
         />
       </div>

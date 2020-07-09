@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="v-map">
     <div 
       :id="containerId"
       class="map__mapbox" 

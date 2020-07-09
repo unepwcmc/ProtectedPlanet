@@ -2,37 +2,61 @@
 // classes
 //--------------------------------------------------
 .icon {
-  &--aichi { @include icon-aichi; }
-  
-  &--close { @include icon-close; }
+  &--aichi {
+    @include icon-aichi;
+  }
 
-  &--cross { @include icon-cross; }
+  &--close {
+    @include icon-close;
+  }
 
-  &--circle-chevron-black { @include icon-circle-chevron-black; }
-  &--circle-chevron-white { @include icon-circle-chevron-white; }
-  &--circle-chevron-green-large-prev { @include icon-circle-chevron-green-large-left; }
-  &--circle-chevron-green-large-next { @include icon-circle-chevron-green-large-right; }
+  &--cross {
+    @include icon-cross;
+  }
+  &--cross-white {
+    @include icon-cross-white;
+  }
 
-  &--earth { @include icon-earth(rem-calc(60)); }
-  
-  &--flag { @include icon-flag; }
-  
-  &--flag-outline { 
+  &--circle-chevron-black {
+    @include icon-circle-chevron-black;
+  }
+  &--circle-chevron-white {
+    @include icon-circle-chevron-white;
+  }
+  &--circle-chevron-green-large-prev {
+    @include icon-circle-chevron-green-large-left;
+  }
+  &--circle-chevron-green-large-next {
+    @include icon-circle-chevron-green-large-right;
+  }
+
+  &--earth {
+    @include icon-earth(rem-calc(60));
+  }
+
+  &--flag {
+    @include icon-flag;
+  }
+
+  &--flag-outline {
     @include icon-flag;
     border: solid 2px $white;
   }
 
-  &--info-circle { @include icon-info; }
+  &--info-circle {
+    @include icon-info;
+  }
 
-  &--info { //temp-refresh
+  &--info {
+    //temp-refresh
     padding-left: rem-calc(24);
     position: relative;
 
     &:before {
       color: #317fce;
-      content: '\f05a';
-      font-family: 'FontAwesome';
-      font-size: rem-calc(16),;
+      content: "\f05a";
+      font-family: "FontAwesome";
+      font-size: rem-calc(16);
       font-weight: normal;
       line-height: rem-calc(21);
 
@@ -43,21 +67,33 @@
     }
   }
 
-  &--loading-spinner { 
-    @include icon-loading-spinner; 
+  &--loading-spinner {
+    @include icon-loading-spinner;
 
     visibility: hidden;
   }
-  
-  &--pin-green { @include icon-pin-green; }
 
-  &--region { @include icon-region; }
-  &--search { @include icon-search; }
-  &--shield { @include icon-shield; }
-  &--sort { @include icon-sort; }
+  &--pin-green {
+    @include icon-pin-green;
+  }
 
-//--------------------------------------------------
-// helpers
-//--------------------------------------------------
-  &-visible { visibility: visible; }
+  &--region {
+    @include icon-region;
+  }
+  &--search {
+    @include icon-search;
+  }
+  &--shield {
+    @include icon-shield;
+  }
+  &--sort {
+    @include icon-sort;
+  }
+
+  //--------------------------------------------------
+  // helpers
+  //--------------------------------------------------
+  &-visible {
+    visibility: visible;
+  }
 }

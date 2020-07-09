@@ -1,10 +1,10 @@
 <template>
   <div
     class="v-map-toggler" 
-    :class="{ 'v-map-toggler__active': active }"
+    :class="{ 'v-map-toggler--active': active }"
     @click.stop="$emit('change', !active)"
   >
-    <div class="switch">
+    <div class="v-map-toggler__switch">
       {{ actionText }}
     </div>
   </div>
@@ -40,8 +40,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.v-map-toggler {
-    cursor: pointer;
-}
-</style>

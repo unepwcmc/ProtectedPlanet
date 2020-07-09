@@ -1,5 +1,37 @@
-.v-map-baselayer-controls__control {
-  &.selected {
-    background: greenyellow;
+.v-map {
+  position: relative;
+}
+.v-map-baselayer-controls {
+  position: absolute;
+  right: rem-calc(46);
+  bottom: rem-calc(32);
+
+  display: flex;
+  align-content: flex-end;
+
+  &__control {
+    min-width: rem-calc(100);
+
+    border: 1px solid darken($grey-xlight, 5%);
+    border-radius: 0;
+    color: $black;
+    cursor: pointer;
+    padding: rem-calc(12 25);
+
+    &:not(:last-child) {
+      border-right: none;
+    }
+    &.selected {
+      background-color: darken($grey-xlight, 5%);
+    }
+    &:focus {
+      outline: none;
+    }
+    &:hover {
+      background-color: darken($grey-xlight, 10%);
+    }
+    &:active {
+      background-color: $grey-xlight;
+    }
   }
 }
