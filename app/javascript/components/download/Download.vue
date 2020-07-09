@@ -82,7 +82,7 @@ export default {
     },
 
     clickNonCommercial () {
-      this.closeModal()
+      this.closeCommercialModal()
       this.showDownloadModal = true
       alert('download data - HOOK BACK END UP')
     },
