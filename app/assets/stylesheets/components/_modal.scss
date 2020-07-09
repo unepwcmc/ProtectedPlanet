@@ -17,7 +17,9 @@
     border-right: solid 1px $grey-black;
     border-left: solid 1px $grey-black;
 
+    display: none;
     position: fixed;
+    right: 0;
     bottom: 0;
 
     @include breakpoint($small) {
@@ -25,6 +27,8 @@
     }
 
     @include breakpoint($medium) { width: rem-calc(748); }
+
+    &.active { display: block; }
 
     .modal {
       &__topbar {
@@ -51,6 +55,8 @@
         @include breakpoint($small) {
           padding: rem-calc(24 26);
         }
+
+        &.minimised { display: none; }
       }
 
       &__title {
@@ -73,6 +79,32 @@
           padding: rem-calc(0 22);
           height: rem-calc(62);
         }
+      }
+    }
+  }
+//--------------------------------------------------
+// download modal
+//--------------------------------------------------
+  &--download-commerical {
+    background-color: $white;
+
+    @include breakpoint($medium) { width: rem-calc(748); }
+
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    &.active { display: block; }
+
+    .modal {
+      &__link-green {
+        background-color: $primary;
+        padding: rem-calc(16);
+        text-align: center;
+        width: rem-calc(310);
       }
     }
   }

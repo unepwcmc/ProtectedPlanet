@@ -7,21 +7,32 @@
       <span class="download__trigger-text">{{ text }}</span>
     </button>
 
-    <div :class="['download__target', { 'active': isActive }]">
+    <div :class="['download__target', { 'active': showPopup }]">
       <download-popup
         :options="options"
         v-on:click:download:option="clickDownloadOption"
       />
     </div>
+
+    <download-commercial 
+      :isActive="showCommercialModal"
+      v-on:click:non-commercial="clickNonCommercial"
+      />
+
+    <download-modal 
+      :isActive="showDownloadModal"
+    />
   </div>
 </template>
 <script>
+import DownloadCommercial from './DownloadCommercial.vue'
+import DownloadModal from './DownloadModal.vue'
 import DownloadPopup from './DownloadPopup.vue'
 
 export default {
   name: 'download',
 
-  components: { DownloadPopup },
+  components: { DownloadCommercial, DownloadModal, DownloadPopup },
 
   props: {
     options: Array, //[ { title: String, commercialAvailable: Boolean, params: Object } ]
@@ -30,22 +41,31 @@ export default {
 
   data () {
     return {
-      isActive: false
+      showCommercialModal: false,
+      showDownloadModal: false,
+      showPopup: false
     }
   },
 
   methods: {
     clickDownloadOption (option) {
-      if(option.commercialAvailable == true) {
-        console.log('show commerical modal')
+      this.showPopup = false
+
+      if(option.commercialAvailable) {
+        this.showCommercialModal = true
       } else {
-        console.log('start download')
+        this.showDownloadModal = true
       }
     },
 
+    clickNonCommercial () {
+      this.showCommercialModal = false
+      this.showDownloadModal = true
+      alert('download data - HOOK BACK END UP')
+    },
+
     toggleDownloadPane () {
-      // this.$emit('toggle-download-pane')
-      this.isActive = !this.isActive
+      this.showPopup = !this.showPopup
     },
   }
 }
