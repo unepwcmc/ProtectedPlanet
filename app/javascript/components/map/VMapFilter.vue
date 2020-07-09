@@ -5,15 +5,15 @@
     @click.stop="onClick"
   >
     <div
-      class="color"
+      class="v-map-filter__color"
       :style="{ backgroundColor: color }"
     />
-    <div class="description">
+    <div class="v-map-filter__description">
       {{ title }}
     </div>
     <div
       v-if="isToggleable"
-      class="active-toggler"
+      class="v-map-filter__active-toggler"
     >
       <v-map-toggler v-model="isShown" />
     </div>

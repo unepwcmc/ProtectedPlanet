@@ -1,30 +1,66 @@
-@import 'maps/filters';
-@import 'maps/filter';
-@import 'maps/toggler';
-@import 'maps/v-map-baselayer-controls';
+@import "maps/v-map-baselayer-controls";
+@import "maps/v-map-filter";
+@import "maps/v-map-filters";
+@import "maps/v-map-header";
+@import "maps/v-map-toggler";
 
 .map {
-  &--main {
+  &--container {
     @include gutters;
-    
-    .map {
 
+    .map {
       &__mapbox {
-        height: rem-calc(700);
+        position: relative;
+
+        height: rem-calc(360);
+        @include breakpoint($medium) {
+          height: rem-calc(700);
+        }
       }
     }
+
+    /**
+     * The following is part of a quick solution to the problem of having
+     * the header component within the filters component when it must 
+     * appear above the map and filters below on mobile devices. 
+     */
+    @include breakpoint($medium) {
+      & > .v-map-header {
+        display: none;
+      }
+    }
+
+    // --------- BEGIN VMAPFILTERS GROUP --------- //
+    @include breakpoint($medium) {
+      position: relative;
+    }
+
+    .v-map-filters {
+      @include breakpoint($medium) {
+        width: 33.33%;
+
+        position: absolute;
+        top: rem-calc(42);
+        left: $gutter-medium * 2;
+        z-index: 1;
+      }
+      @include breakpoint($large) {
+        left: $gutter-large * 2;
+      }
+    }
+    // --------- ENDOF VMAPFILTERS GROUP --------- //
   }
 
- &__trigger {
+  &__trigger {
     @include button-map-trigger;
     margin-right: rem-calc(16);
   }
 
   &--search {
-    
-
     .map {
-      &__map {height: rem-calc(460);}
+      &__map {
+        height: rem-calc(460);
+      }
     }
   }
 }

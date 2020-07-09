@@ -1,10 +1,9 @@
-<div class="map--main">
+<div class="map--container">
+  <v-map-header title="<%= @main_map[:title] %>"></v-map-header>
+  <v-map></v-map>
   <v-map-filters
     title="<%= @main_map[:title] %>"
     :overlays="<%= @main_map[:overlays].to_json %>"
     :disclaimer="<%= @main_map[:disclaimer].to_json %>"
-  >
-    <v-map-p-a-search></v-map-p-a-search>
-  </v-map-filters>
-  <v-map></v-map>
+  ></v-map-filters>
 </div>
