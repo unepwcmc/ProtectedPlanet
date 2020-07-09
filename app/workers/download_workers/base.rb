@@ -32,7 +32,7 @@ class DownloadWorkers::Base
   end
 
   def links
-    ['csv', 'shp'].each_with_object({}) do |type, hash|
+    ['csv', 'shp', 'gdb', 'pdf'].each_with_object({}) do |type, hash|
       hash[type] = Download.link_to filename, type
     end.to_json
   end

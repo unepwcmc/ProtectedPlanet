@@ -1,5 +1,6 @@
 class DownloadWorkers::Search < DownloadWorkers::Base
-  def perform token, search_term, filters
+  def perform format, token, search_term, filters
+    @format = format
     @token = token
     @search_term = search_term
     @filters_json = filters
@@ -18,7 +19,7 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   end
 
   def generate_download
-    Download.generate(filename(ids_digest), {wdpa_ids: protected_area_ids})
+    Download.generate(@format, filename(ids_digest), {wdpa_ids: protected_area_ids})
     send_completion_email unless email.blank?
   end
 

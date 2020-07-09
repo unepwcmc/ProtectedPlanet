@@ -1,5 +1,6 @@
 class Download::Requesters::General < Download::Requesters::Base
-  def initialize token
+  def initialize format, token
+    @format = format
     @token = token
   end
 
@@ -10,7 +11,7 @@ class Download::Requesters::General < Download::Requesters::Base
              else
                (identifier == "all" ? "general" :  "country")
              end
-      DownloadWorkers::General.perform_async type, identifier
+      DownloadWorkers::General.perform_async(format, type, identifier)
     end
 
     {'token' => identifier}.merge(generation_info)
