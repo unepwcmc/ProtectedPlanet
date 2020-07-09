@@ -24,27 +24,31 @@ module Download
   CURRENT_PREFIX = 'current/'
   IMPORT_PREFIX = 'import/'
 
-  GENERATORS = [
-    Download::Generators::Csv,
-    Download::Generators::Shapefile,
-    Download::Generators::Gdb
-  ]
+  GENERATORS = {
+    shapefile: Download::Generators::Shapefile,
+    csv:       Download::Generators::Csv,
+    gdb:       Download::Generators::Gdb,
+    pdf:       Download::Generators::Pdf
+  }.freeze
 
-  # TODO This behaviour might need to be changed
-  def self.generate download_name, opts={}
-    GENERATORS.each do |generator|
-      zip_path = Utils.zip_path_for_type(download_name, generator::TYPE)
+  def self.generate format, download_name, opts={}
+    generator = GENERATORS[format.to_sym]
 
-      generated = generator.generate zip_path, opts[:wdpa_ids]
+    zip_path = Utils.zip_path_for_type(download_name, generator::TYPE)
 
-      if generated
-        upload_to_s3 zip_path, opts[:for_import]
-        clean_up zip_path
-      end
+    generated = generator.generate zip_path, opts[option(format)]
+
+    if generated
+      upload_to_s3 zip_path, opts[:for_import]
+      clean_up zip_path
     end
   end
 
   private
+
+  def self.option(format)
+    format.to_s == 'pdf' ? :identifier : :wdpa_ids
+  end
 
   def self.upload_to_s3 zip_path, for_import
     download_name = File.basename(zip_path)

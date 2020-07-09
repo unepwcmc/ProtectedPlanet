@@ -53,6 +53,8 @@ module Download
         "downloads:general:#{identifier}"
       when 'protected_area'
         "downloads:protected_area:#{identifier}"
+      when 'pdf'
+        "downloads:pdf:#{identifier}"
       end
     end
 

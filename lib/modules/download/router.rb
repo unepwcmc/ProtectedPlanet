@@ -1,5 +1,5 @@
 module Download::Router
-  # params['format'] to be one of csv, shp, gdb, pdf
+  # params['format'] to be one of csv, shp, gdb
   def self.request domain, params
     case domain
     when 'general'
@@ -8,6 +8,8 @@ module Download::Router
       Download::Requesters::Search.request(params['format'], params['q'], extract_filters(params))
     when 'protected_area'
       Download::Requesters::ProtectedArea.request(params['format'], params['wdpa_id'])
+    when 'pdf'
+      Download::Requesters::Pdf.request(params['id'])
     end
   end
 
@@ -19,6 +21,8 @@ module Download::Router
       Download::Pollers::Search.poll(params['token'])
     when 'protected_area'
       Download::Pollers::ProtectedArea.poll(params['token'])
+    when 'pdf'
+      Download::Pollers::Pdf.poll(params['token'])
     end
   end
 
