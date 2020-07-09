@@ -1,30 +1,58 @@
-@import 'maps/filters';
-@import 'maps/filter';
-@import 'maps/toggler';
-@import 'maps/v-map-baselayer-controls';
+@import "maps/v-map-baselayer-controls";
+@import "maps/v-map-filter";
+@import "maps/v-map-filters";
+@import "maps/v-map-header";
+@import "maps/v-map-toggler";
 
 .map {
   &--main {
     @include gutters;
-    
-    .map {
 
+    .map {
       &__mapbox {
         height: rem-calc(700);
       }
     }
+
+    // ---- BEGIN ONLY SHOW IMMEDIATE HEADER AT MOBILE BREAKPOINT ---- //
+    @include breakpoint($medium) {
+      & > .v-map-header {
+        display: none;
+      }
+    }
+    // ---- ENDOF ONLY SHOW IMMEDIATE HEADER AT MOBILE BREAKPOINT ---- //
+
+    // --------- BEGIN VMAPFILTERS GROUP --------- //
+    @include breakpoint($medium) {
+      position: relative;
+    }
+
+    .v-map-filters {
+      @include breakpoint($medium) {
+        position: absolute;
+        width: 33.33%;
+        z-index: 1;
+
+        top: rem-calc(42);
+        left: $gutter-medium * 2;
+      }
+      @include breakpoint($large) {
+        left: $gutter-large * 2;
+      }
+    }
+    // --------- ENDOF VMAPFILTERS GROUP --------- //
   }
 
- &__trigger {
+  &__trigger {
     @include button-map-trigger;
     margin-right: rem-calc(16);
   }
 
   &--search {
-    
-
     .map {
-      &__map {height: rem-calc(460);}
+      &__map {
+        height: rem-calc(460);
+      }
     }
   }
 }

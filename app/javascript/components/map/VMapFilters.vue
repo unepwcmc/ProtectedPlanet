@@ -1,15 +1,13 @@
 <template>
   <div
     v-if="show"
-    class="map--filters"
+    class="v-map-filters"
   >
     <div class="header">
-      <div class="header--title">
-        {{ title }}
-      </div>
-      <div
-        class="header--close-button"
-        @click="onClose"
+      <v-map-header 
+        closeable
+        v-model="title"
+        @close="onClose"
       />
     </div>
     <div class="body">
@@ -43,6 +41,7 @@
 </template>
 <script>
 import VMapFilter from './VMapFilter'
+import VMapHeader from './VMapHeader'
 import VMapPASearch from './VMapPASearch'
 
 export default {
@@ -50,6 +49,7 @@ export default {
 
   components: {
     VMapFilter,
+    VMapHeader,
     'v-map-pa-search': VMapPASearch,
   },
 
@@ -82,7 +82,7 @@ export default {
   methods: {
     onClose () {
       this.show = false
-      this.$emit('show', this.show)
+      this.$emit('show', false)
     }
   }
 

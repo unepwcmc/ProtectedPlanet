@@ -1,0 +1,20 @@
+.v-map-header {
+  background-color: $grey-black;
+  color: $grey-xlight;
+  display: flex;
+  font-family: $header-font;
+  font-size: rem-calc(25);
+  font-weight: 600;
+  justify-content: space-between;
+  line-height: $header-font-line-height;
+  padding: rem-calc(14 24);
+
+  .close-button {
+    margin-left: rem-calc(12);
+    &::after {
+      content: "⨯";
+      font-weight: 600;
+      cursor: pointer;
+    }
+  }
+}

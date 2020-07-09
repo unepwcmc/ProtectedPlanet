@@ -1,0 +1,30 @@
+.v-map-filters {
+  background-color: $grey-xdark;
+  color: $grey-light;
+
+  .header {
+    @include breakpoint-down($medium) {
+      display: none;
+    }
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .body {
+    padding: rem-calc(14 24);
+  }
+
+  .disclaimer {
+    font-size: rem-calc(14);
+    justify-self: flex-end;
+    margin-top: rem-calc(24);
+    &--heading {
+      font-weight: 600;
+      line-height: rem-calc(26);
+    }
+  }
+}
