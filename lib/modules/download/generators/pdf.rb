@@ -1,4 +1,6 @@
 class Download::Generators::Pdf < Download::Generators::Base
+  include ActionController::UrlFor
+
   TYPE = 'pdf'
 
   def initialize(zip_path, identifier)
@@ -8,7 +10,7 @@ class Download::Generators::Pdf < Download::Generators::Base
 
   def generate
     rasterizer = Rails.root.join('vendor/assets/javascripts/rasterize.js')
-    url = url_for(action: :show, params)
+    url = url_for(params)
 
     `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
   end
@@ -22,13 +24,19 @@ class Download::Generators::Pdf < Download::Generators::Base
 
   def params
     { 
-      key => @identifier
+      'controller' => controller,
+      'action' => :show,
+      key => @identifier,
       'for_pdf' => true
     }
   end
 
   def key
     id_is_integer? ? 'id' : 'iso' 
+  end
+
+  def controller
+    id_is_integer? ? 'protected_areas' : 'country'
   end
 
   def id_is_integer?
