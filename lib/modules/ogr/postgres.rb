@@ -4,7 +4,8 @@ class Ogr::Postgres
   WRONG_ARGUMENTS_MSG = 'Given new table name, but no original table name'
   DRIVERS = {
     shapefile: 'ESRI Shapefile',
-    csv:       'CSV'
+    csv:       'CSV',
+    gdb:       'FileGDB'
   }
 
   TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'command_templates')
