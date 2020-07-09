@@ -13,6 +13,11 @@ class SearchAggregationTest < ActiveSupport::TestCase
           "field" => "has_irreplaceability_info"
         }
       },
+      "is_oecm"=> {
+        "terms" => {
+          "field" => "is_oecm"
+        }
+      },
       "country" => {
         "nested" => {
           "path" => "countries_for_index"
@@ -77,11 +82,24 @@ class SearchAggregationTest < ActiveSupport::TestCase
             }
           }
         }
+      },
+      "category" => {
+        "nested" => {
+          "path" => "categories"
+        },
+        "aggs" => {
+          "aggregation" => {
+            "terms" => {
+              "field" => "categories.id",
+              "size"=>500
+            }
+          }
+        }
       }
     }
 
     aggregations = Search::Aggregation.all
-
+    
     assert_equal expected_aggregations, aggregations
   end
 
@@ -92,7 +110,11 @@ class SearchAggregationTest < ActiveSupport::TestCase
     governance = FactoryGirl.create(:governance)
     country_1 = FactoryGirl.create(:country)
     country_2 = FactoryGirl.create(:country)
+    site = FactoryGirl.create(:cms_site)
+    cat_1 = FactoryGirl.create(:cms_category, id: 12, site: site, label: 'cat_1')
+    cat_2 = FactoryGirl.create(:cms_category, id: 13, site: site, label: 'cat_2')
 
+    
     aggregations_hash = {
       'designation' => {
         'doc_count'=> 100,
@@ -137,14 +159,24 @@ class SearchAggregationTest < ActiveSupport::TestCase
       },
       'has_irreplaceability_info' => {
         'doc_count'=> 12,
-        'buckets'=> [
-          {'key' => 'T', 'doc_count' => 2},
-          {'key' => 'F', 'doc_count' => 10}
-        ]
+        'aggregation' => {
+          'buckets'=> [
+            {'key' => 'T', 'doc_count' => 2},
+            {'key' => 'F', 'doc_count' => 10}
+          ]
+        }
+      },
+      'category' => {
+        'doc_count'=> 12,
+        'aggregation' => {
+          'buckets'=> [
+            {'key' => cat_1.id, 'doc_count' => 2},
+            {'key' => cat_2.id, 'doc_count' => 10}
+          ]
+        }
       }
     }
-    expected_response =
-{"country"=>[{:identifier=>"MyText", :query=>"country", :label=>"MyText", :count=>64}, {:identifier=>"MyText", :query=>"country", :label=>"MyText", :count=>17}], "region"=>[{:identifier=>"Global", :query=>"region", :label=>"Global", :count=>100}], "designation"=>[{:identifier=>"MyString", :query=>"designation", :label=>"MyString", :count=>100}], "governance"=>[{:identifier=>"MyString", :query=>"governance", :label=>"MyString", :count=>100}], "iucn_category"=>[{:identifier=>"MyString", :query=>"iucn_category", :label=>"MyString", :count=>100}]}
+    expected_response = {"country"=>[{:identifier=>"MyString", :query=>"country", :label=>"MyText", :count=>64}, {:identifier=>"MyString", :query=>"country", :label=>"MyText", :count=>17}], "region"=>[{:identifier=>"GLB", :query=>"region", :label=>"Global", :count=>100}], "designation"=>[{:identifier=>designation.id, :query=>"designation", :label=>"MyString", :count=>100}], "governance"=>[{:identifier=>governance.id, :query=>"governance", :label=>"MyString", :count=>100}], "iucn_category"=>[{:identifier=>iucn_category.id, :query=>"iucn_category", :label=>"MyString", :count=>100}], "category"=>[{:identifier=>cat_1.id, :query=>"category", :label=>"cat_1", :count=>2}, {:identifier=>cat_2.id, :query=>"category", :label=>"cat_2", :count=>10}]}
     aggregations = Search::Aggregation.parse(aggregations_hash)
     assert_equal expected_response, aggregations
   end
