@@ -10,7 +10,10 @@
 
     .map {
       &__mapbox {
-        height: rem-calc(700);
+        height: rem-calc(360);
+        @include breakpoint($medium) {
+          height: rem-calc(700);
+        }
       }
     }
 
