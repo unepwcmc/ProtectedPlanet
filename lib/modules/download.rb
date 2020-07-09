@@ -26,9 +26,11 @@ module Download
 
   GENERATORS = [
     Download::Generators::Csv,
-    Download::Generators::Shapefile
+    Download::Generators::Shapefile,
+    Download::Generators::Gdb
   ]
 
+  # TODO This behaviour might need to be changed
   def self.generate download_name, opts={}
     GENERATORS.each do |generator|
       zip_path = Utils.zip_path_for_type(download_name, generator::TYPE)
