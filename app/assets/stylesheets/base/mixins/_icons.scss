@@ -179,6 +179,11 @@ $icon-search-width: rem-calc(21);
   @include icon-image('loading-spinner.svg', rem-calc(40), rem-calc(40));
 }
 
+@mixin icon-minus {
+  @include icon-basic;
+  @include icon-image('minus.svg', rem-calc(34), rem-calc(7));
+}
+
 @mixin icon-pin ($circle: #ccc, $outline: #000) {
   @include icon-basic;
   width: rem-calc(29); height: rem-calc(38);
@@ -248,4 +253,9 @@ $icon-search-width: rem-calc(21);
 @mixin icon-tick {
   @include icon-basic;
   background-image: image-url('icons/tick.svg');
+}
+
+@mixin icon-warning() {
+  @include icon-basic;
+  @include icon-image('warning.svg', rem-calc(22), rem-calc(19));
 }

@@ -11,11 +11,12 @@
       />
 
       <h4 class="modal__title">Download Options</h4>
-      
+
       <div class="modal__links">
         <a 
           class="modal__link-commercial"
           href="https://ibat-alliance.org/"
+          target="_blank"
         >
           <span class="modal__link-title">Commercial Use</span>
           <span>Commercial use of the WDPA will redirect you to the IBAT website.</span>

@@ -4,6 +4,7 @@
       <ul class="tabs__triggers">
         <tab-trigger
           v-for="tab in tabTriggers"
+          :key="tab._uid"
           :id="tab.id"
           :selected-id="selectedId"
           :title="tab.title"

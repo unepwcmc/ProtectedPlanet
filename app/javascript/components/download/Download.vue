@@ -16,12 +16,14 @@
 
     <download-commercial 
       :isActive="showCommercialModal"
-      v-on:click:close-modal="closeModal"
+      v-on:click:close-modal="closeCommercialModal"
       v-on:click:non-commercial="clickNonCommercial"
       />
 
     <download-modal 
+      :downloads="downloads"
       :isActive="showDownloadModal"
+      v-on:deleted:all="closeDownloadModal"
     />
   </div>
 </template>
@@ -42,6 +44,26 @@ export default {
 
   data () {
     return {
+      downloads: [
+        {
+          id: 1,
+          title: 'Filename 1',
+          url: 'http://google.com',
+          hasFailed: false
+        },
+        {
+          id: 2,
+          title: 'Filename 2',
+          url: '',
+          hasFailed: true
+        },
+        {
+          id: 3,
+          title: 'Filename 3',
+          url: '',
+          hasFailed: false
+        },
+      ],
       showCommercialModal: false,
       showDownloadModal: false,
       showPopup: false
@@ -65,8 +87,13 @@ export default {
       alert('download data - HOOK BACK END UP')
     },
 
-    closeModal () {
+    closeCommercialModal () {
       this.showCommercialModal = false
+    },
+
+    closeDownloadModal () {
+      console.log('close')
+      this.showDownloadModal = false
     },
 
     toggleDownloadPane () {

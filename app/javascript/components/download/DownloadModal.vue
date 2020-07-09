@@ -5,8 +5,9 @@
     <div class="modal__topbar">
       <span>Downloads</span>
       <span
+        class="modal__minimise"
         @click="toggle"
-      >-</span>
+      />
     </div>
     <div 
       :class="['modal__content', { 'minimised': isMinimised }]"
@@ -15,22 +16,30 @@
       <p>UNEP-WCMC (2019). Protected Area Profile for France from the World Database of Protected Areas, December 2019. Available at: www.protectedplanet.net</p>
 
       <ul class="modal__ul">
-        <li class="modal__li">
-          <span modal__li-title>Filename</span>
-          <span modal__li-icon>O</span>
-          <a href="/" class="modal__a button--download-small" />
-          <span modal__li-delete>x</span>
-        </li>
+        <download-item 
+          v-for="download in activeDownloads"
+          class="modal__li"
+          :id="download.id"
+          :has-failed="download.hasFailed"
+          :key="download._uid"
+          :title="download.title"
+          :url="download.url"
+          v-on:click:delete="deleteItem"
+        />
       </ul>
     </div>
   </div>
 </template>
 <script>
+import DownloadItem from './DownloadItem.vue'
+
 export default {
   name: 'download-modal',
 
+  components: { DownloadItem },
+
   props: {
-    // options: Array, //[ { title: String, commercialAvailable: Boolean, params: Object } ]
+    downloads: Array, //[ { title: String, url: String, hasFailed: Boolean } ]
     isActive: {
       default: false,
       type: Boolean
@@ -39,13 +48,27 @@ export default {
 
   data () {
     return {
-      isMinimised: false
+      isMinimised: false,
+      activeDownloads: []
     }
+  },
+
+  mounted () {
+    this.activeDownloads = this.downloads
   },
 
   methods: {
     toggle () {
       this.isMinimised = !this.isMinimised
+    },
+
+    deleteItem (downloadId) {
+      this.activeDownloads = this.activeDownloads.filter(download => download.id != downloadId )
+      
+      if(this.activeDownloads.length == 0) { 
+        this.$emit('deleted:all')
+        this.isMinimised = false
+      }
     }
   }
 }

@@ -37,6 +37,7 @@ $modal-commercial-link-height: rem-calc(107);
     border-top: solid 1px $grey-black;
     border-right: solid 1px $grey-black;
     border-left: solid 1px $grey-black;
+    width: 100%;
 
     display: none;
     position: fixed;
@@ -80,6 +81,10 @@ $modal-commercial-link-height: rem-calc(107);
         &.minimised { display: none; }
       }
 
+      &__minimise {
+        @include icon-minus;
+      }
+
       &__title {
         font-size: rem-calc(20);
         font-weight: $bold;
@@ -91,6 +96,7 @@ $modal-commercial-link-height: rem-calc(107);
 
       &__li {
         @include flex;
+        @include flex-h-end;
         @include flex-v-center;
         background-color: $grey-xlight;
         margin-bottom: rem-calc(10);
@@ -101,10 +107,52 @@ $modal-commercial-link-height: rem-calc(107);
           height: rem-calc(62);
         }
       }
+
+      &__li-delete {
+        @include icon-close;
+        cursor: pointer;
+      }
+
+      &__li-download {
+        @include button-download-trigger-small;
+        margin-right: rem-calc(20);
+      }
+
+      &__li-failed {
+        @include flex;
+        @include flex-v-center;
+        margin-right: rem-calc(20);
+
+        &:before { 
+          @include icon-warning;
+          content: '';
+          margin-right: rem-calc(14);
+
+          display: inline-block;
+        }
+      }
+
+      &__li-generating {
+        @include flex;
+        @include flex-v-center;
+        margin-right: rem-calc(20);
+
+        &:before {
+          @include icon-loading-spinner;
+          content: '';
+          margin-right: rem-calc(14);
+
+          display: inline-block;
+        }
+      }
+
+      &__li-title {
+        margin-right: auto;
+      }
     }
   }
 //--------------------------------------------------
-// download modal
+// commercial download modal
 //--------------------------------------------------
   &-wrapper--download-commerical {
 
