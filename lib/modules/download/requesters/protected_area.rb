@@ -6,7 +6,7 @@ class Download::Requesters::ProtectedArea < Download::Requesters::Base
 
   def request
     unless ['ready', 'generating'].include? generation_info['status']
-      DownloadWorkers::ProtectedArea.perform_async(format, identifier)
+      DownloadWorkers::ProtectedArea.perform_async(@format, identifier)
     end
 
     {'token' => identifier}.merge(generation_info)

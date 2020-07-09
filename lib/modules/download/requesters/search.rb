@@ -7,7 +7,7 @@ class Download::Requesters::Search < Download::Requesters::Base
 
   def request
     unless ['ready', 'generating'].include? generation_info['status']
-      DownloadWorkers::Search.perform_async(format, token, @search_term, filters.to_json)
+      DownloadWorkers::Search.perform_async(@format, token, @search_term, filters.to_json)
     end
 
     {'token' => token}.merge(generation_info)
