@@ -84,12 +84,11 @@ Rails.application.routes.draw do
     get '/thematical-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
     get '/thematical-areas/wdpa', to: 'wdpa#index'
 
-    get '/:area_type/search', to: 'search_areas#index', as: :search_areas
-    get '/:area_type/search-results', to: 'search_areas#search_results', as: :search_areas_results
+    get '/search-areas', to: 'search_areas#index', as: :search_areas
+    get '/search-areas-results', to: 'search_areas#search_results', as: :search_areas_results
 
     post '/search/autocomplete', to: 'search#autocomplete'
-    post '/search-results', to: 'search#search_results'
-    post '/search-results-areas', to: 'search#search_results_areas'
+    get '/search-results', to: 'search#search_results', as: :search_results
 
     # Ensure that this route is defined last
 

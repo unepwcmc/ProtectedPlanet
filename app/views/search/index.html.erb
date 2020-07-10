@@ -1,10 +1,10 @@
 <div class="container--medium section-padding">
   <search-site
-    :categories="<%= @categories %>"
-    endpoint="/search-results"
+    :categories="<%= @categories.to_json %>"
+    endpoint="<%= search_results_path %>"
     placeholder="<%= t('global.placeholder.search-site') %>"
     query="<%= @query %>"
-    no-results-text="<%= t('global.search.no-results') %>"
-    results-text="<%= t('global.search.results') %>"
+    no-results-text="<%= t('search.no-results') %>"
+    results-text="<%= t('search.results') %>"
   ></search-site>
 </div>

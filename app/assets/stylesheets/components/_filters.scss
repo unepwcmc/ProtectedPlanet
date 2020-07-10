@@ -1,7 +1,84 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
+
 .filters {
   @import './filters/filters-pame';
   @import './filters/filters-sidebar';
+}
+
+.filter {
+  &__pane {
+    @include responsive(background-color, $grey-xlight, transparent, transparent);
+    @include responsive(top, 0, unset, unset);
+    @include responsive(left, 0, unset, unset);
+    width: 100%; height: 100vh;
+
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: $z-100;
+
+    @include breakpoint($small) {
+      border-right: solid 1px $grey;
+      margin-right: rem-calc(24);
+      height: 100%;
+
+      position: initial;
+      top: unset;
+      bottom: unset;
+    }
+  }
+
+  &__pane-view {
+    @include flex;
+    @include flex-center;
+    background-color: $grey-xdark;
+    color: $white;
+    font-size: rem-calc(20);
+    font-weight: $bold;
+    width: 100%; height: rem-calc(63);
+
+    position: absolute;
+    bottom: 0;
+
+    @include breakpoint($small) { display: none; }
+  }
+
+  &__pane-topbar {
+    @include flex;
+    @include flex-v-center;
+    border-bottom: solid 1px $grey;
+    padding-right: rem-calc(24);
+    padding-left: rem-calc(24);
+    width: 100%; height: calc(#{$filters-title-height}px);
+
+    @include breakpoint($small) { display: none; }
+  }
+
+  &__pane-title { font-size: rem-calc(18); }
+
+  &__filter-groups {
+    @include responsive(overflow, scroll, initial, initial);
+    @include responsive(padding, rem-calc(24 22), rem-calc(24 22 24 0), rem-calc(24 22 24 0));
+    @include responsive(height, calc(100vh - #{$filters-title-height}px - #{$filters-button-close}px), 100%, 100%);
+    width: 100%;
+  }
+
+  &__group {
+    margin-bottom: rem-calc(24);  
+  }
+
+  &__options {
+    @include text-filter;
+    overflow-y: scroll;
+    max-height: rem-calc(250);
+  }
+
+  &__trigger {
+    @include button-filter-trigger;
+
+    &.disabled { @include button-disabled; }
+  }
+>>>>>>> refresh
 }

@@ -28,15 +28,7 @@
       &__summary { margin: 0 }
 
     &__image {
-      @include flex-center;
-      background-color: $grey-light;
-      background-position: center;
-      background-size: cover;
-      width: 100%; height: rem-calc(265);
-    }
-
-    &__icon {
-      // @include icon-placeholder-image;
+      @include image-placeholder();
     }
   }
-}
+} 
