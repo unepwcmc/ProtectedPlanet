@@ -40,10 +40,10 @@
 }
 
 .v-map-disclaimer {
-  justify-self: flex-end;
-
   font-size: rem-calc(14);
   margin-top: rem-calc(24);
+
+  justify-self: flex-end;
 
   &__heading {
     color: $white;
