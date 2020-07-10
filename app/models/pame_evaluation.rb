@@ -55,9 +55,7 @@ class PameEvaluation < ApplicationRecord
       title: 'Metadata ID',
       field: 'metadata_id'
     }
-  ]
-
-  SORTING = ['']
+  ].freeze
 
   def self.paginate_evaluations(json=nil, order=nil)
     json_params = json.nil? ? nil : JSON.parse(json)
@@ -218,19 +216,6 @@ class PameEvaluation < ApplicationRecord
       }
     ].to_json
   end
-
-SELECT_STATEMENT = [
-    'DISTINCT pame_evaluations.id AS assessment_id', 'pame_evaluations.metadata_id AS metadata_id',
-    'pame_evaluations.url AS url', 'pame_evaluations.year AS year',
-    'pame_evaluations.methodology AS methodology', 'pame_evaluations.wdpa_id AS wdpa_id',
-    'pame_sources.data_title AS source_data_title', 'pame_sources.resp_party AS source_resp_party',
-    'pame_sources.year AS source_year', 'pame_sources.language AS source_language',
-    'pame_evaluations.protected_area_id AS protected_area_id', 'protected_areas.name AS protected_area_name',
-    'designations.name AS designation', 'ARRAY_TO_STRING(ARRAY_AGG(countries.iso_3),\';\') AS countries'
-].freeze
-
-GROUP_BY = "pame_evaluations.id, protected_areas.wdpa_id, protected_areas.name, designation, pame_sources.data_title,
-            pame_sources.resp_party, pame_sources.year, pame_sources.language".freeze
 
   def self.generate_csv(where_statement, restricted_where_statement)
     where_statement = where_statement.empty? ? '' : "WHERE #{where_statement}"
