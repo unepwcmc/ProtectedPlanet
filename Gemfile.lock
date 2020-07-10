@@ -5,6 +5,11 @@ GIT
     bystander (2.0.0)
       slack-notifier (~> 1.5.1)
 
+PATH
+  remote: ../web-components/gems/wcmc_components
+  specs:
+    wcmc-components (0.0.5)
+
 GEM
   remote: https://rubygems.org/
   remote: https://wcmc-gems:SDvUM6ZG@gem-server.unep-wcmc.org/
@@ -1282,7 +1287,6 @@ GEM
     vuejs-rails (2.3.2)
     warden (1.2.8)
       rack (>= 2.0.6)
-    wcmc-components (0.0.4)
     webmock (1.22.6)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -1365,7 +1369,7 @@ DEPENDENCIES
   turnout (~> 2.5.0)
   uglifier (~> 4.1.17)
   vuejs-rails (~> 2.3.2)
-  wcmc-components (~> 0.0.4)
+  wcmc-components!
   webmock (~> 1.22.0)
   webpacker (~> 4.0.2)
   whenever
