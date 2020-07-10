@@ -45,12 +45,12 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_index 1, 0
   end
 
-  test 'search single country on name' do
+  test 'search single country on whole name' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
 
     assert_index 1, 0
-    search = Search.search 'land', {}
+    search = Search.search 'manbone land', {}, Search::COUNTRY_INDEX
     assert_equal 1, search.results.count
   end
 
@@ -58,20 +58,12 @@ class SearchTest < ActionDispatch::IntegrationTest
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
     assert_index 1, 0
-    search = Search.search 'nonexistent', {}
+    search = Search.search 'nonexistent', {}, Search::COUNTRY_INDEX
     assert_equal 0, search.results.count
   end
 
-  
-  test 'search single country on region' do
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
-    assert_index 1, 0
-    search = Search.search 'north', {}
-    assert_equal 1, search.results.count
-  end
-
   test 'search single country on iso3' do
+    skip ('currently not searching on iso3')
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
 
@@ -81,6 +73,7 @@ class SearchTest < ActionDispatch::IntegrationTest
   end
     
   test 'rank iso3 above country, above region' do
+    skip ('currently not searching on iso3 or region')
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     region2 = FactoryGirl.create(:region, id: 988, name: 'Bel')
     # make sure they aren't in index/id order so we are truly sorting
@@ -113,27 +106,6 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_equal 1, search.results.count
   end
   
-  test 'search  ProtectedArea and country on exact country name' do
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
-    
-    pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
-    
-    assert_index 1, 1
-    search = Search.search 'Manbone land', {}
-    assert_equal 2, search.results.count
-  end
-
-  test 'search ProtectedArea and country on case-insensitive country name' do
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
-    
-    pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
-    
-    assert_index 1, 1
-    search = Search.search 'manbone LAND', {}
-    assert_equal 2, search.results.count
-  end
 
   test 'search single ProtectedArea on wdpa name' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
@@ -146,16 +118,6 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_equal 1, search.results.count
   end
 
-  test 'search ProtectedArea and country on exact region name' do
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
-    
-    pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
-    
-    assert_index 1, 1
-    search = Search.search 'North Manmerica', {}
-    assert_equal 2, search.results.count
-  end
 
   test 'search single ProtectedArea on name with params to restrict to one of two PAs' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
@@ -200,18 +162,6 @@ class SearchTest < ActionDispatch::IntegrationTest
   end
 
 
-  test 'search country and  ProtectedArea on match name' do
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'South Manbone land', region: region)
-    country_north = FactoryGirl.create(:country, id: 124, iso_3: 'MBN', name: 'North Manbone land', region: region)
-    
-    pa = FactoryGirl.create(:protected_area, name: "South Protected Forest", countries: [country_north])
-
-    assert_index 2, 1
-
-    search = Search.search 'south', {}
-    assert_equal 2, search.results.count
-  end
 
   test 'search ProtectedArea on  name with designation params to restrict to one of two PAs' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
@@ -315,34 +265,34 @@ class SearchTest < ActionDispatch::IntegrationTest
 
     # a bunch of tests to check stemming/fuzzy/partial matching is sane
     
-  test 'search single country on stemmed name' do
+  test 'search single country on stemmed query' do
     region = FactoryGirl.create(:region, id: 987, name: 'Europe')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'Belgium', region: region)
 
     assert_index 1, 0
-    search = Search.search 'belgiums', {}
+    search = Search.search 'belgiums', {}, Search::COUNTRY_INDEX
     assert_equal 1, search.results.count
   end
 
-  test 'search single pa on stemmed country name' do
+  test 'search single country on one word of two word name' do
     region = FactoryGirl.create(:region, id: 987, name: 'Europe')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'Belgium', region: region)
-    pa = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country])
-    assert_index 1, 1
-    search = Search.search 'belgiums', {}
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'United States', region: region)
+
+    assert_index 1, 0
+    search = Search.search 'United', {}, Search::COUNTRY_INDEX
     assert_equal 1, search.results.count
   end
 
-  test 'stemmed search single pa on country name' do
+  test 'search single country on stemmed version of name' do
     region = FactoryGirl.create(:region, id: 987, name: 'Europe')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'United States of America', region: region)
-    pa = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 1, countries: [country])
-    assert_index 1, 1
-    search = Search.search 'state', {}
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'United States', region: region)
+
+    assert_index 1, 0
+    search = Search.search 'Unite', {}, Search::COUNTRY_INDEX
     assert_equal 1, search.results.count
   end
 
-  
+
   test 'search areas on stemmed name both-ways-round' do
     region = FactoryGirl.create(:region, id: 987, name: 'Europe')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'Belgium', region: region)
@@ -369,33 +319,6 @@ class SearchTest < ActionDispatch::IntegrationTest
     assert_equal 1, search.results.count
   end
 
-  test 'search should put countries first' do
-    region = FactoryGirl.create(:region, id: 987, name: 'Europe')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'BEL', name: 'Belgium', region: region)
-    pa1 = FactoryGirl.create(:protected_area, name: "Belgium Forest", wdpa_id: 1, countries: [country])
-    pa2 = FactoryGirl.create(:protected_area, name: "Forests of Belgium", wdpa_id: 2, countries: [country])
-
-    assert_index 1, 2
-    search = Search.search 'belgium', {}
-    assert_equal 3, search.results.count
-    assert_equal 'Belgium', search.results[0].name
-  end
-
-  test 'search should put france countries first' do
-    region = FactoryGirl.create(:region, id: 987, name: 'Europe')
-    france = FactoryGirl.create(:country, id: 123, iso_3: 'FRA', name: 'France', region: region)
-    usa = FactoryGirl.create(:country, id: 124, iso_3: 'USA', name: 'United States of America', region: region)
-    pa1 = FactoryGirl.create(:protected_area, name: "Oise-Pays de France", wdpa_id: 1, countries: [france])
-    pa2 = FactoryGirl.create(:protected_area, name: "Frances Mesa", wdpa_id: 2, countries: [usa])
-    (1..20).each do |ii|
-      FactoryGirl.create(:protected_area, name: "Area #{ii}", wdpa_id: 10+ii, countries:[usa])
-    end
-
-    assert_index 2, 22
-    search = Search.search 'france', {}
-    assert_equal 3, search.results.count
-    assert_equal 'France', search.results[0].name
-  end
 
   
 end

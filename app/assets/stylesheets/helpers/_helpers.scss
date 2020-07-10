@@ -3,6 +3,7 @@
 @import './beautify-scrollbar';
 @import './border-and-shadows';
 @import './form-fields';
+@import './images';
 
 @mixin limit_lines($number, $line-height: 1.25) {
   overflow-y: hidden;
@@ -103,6 +104,7 @@
 }
 
 .margin-space--right { margin-right: rem-calc(14); }
+.margin-space--bottom { margin-bottom: rem-calc(14); }
 .margin-space--left { margin-left: rem-calc(14); }
 
 .no-padding { padding: 0; }

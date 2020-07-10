@@ -1,17 +1,15 @@
 class HomeController < ApplicationController
   def index
-    home_yml = I18n.t('home')
-
     @pa_coverage_percentage = 9999 #TODO Total PA coverage in %
 
-    @search_area_types = [
-      { id: 'wdpa', title: I18n.t('global.area-types.wdpa'), placeholder: I18n.t('global.placeholder.search-wdpa') },
-      { id: 'oecm', title: I18n.t('global.area-types.oecm'), placeholder: I18n.t('global.placeholder.search-oecms') }
-    ].to_json
+    @config_search_areas = {
+      id: 'all',
+      placeholder: I18n.t('global.placeholder.search-oecm-wdpa')
+    }.to_json
 
     @pas_title = home_yml[:pas][:title]
     @pas_button = home_yml[:pas][:button]
-    @pas_levels = home_yml[:pas][:levels]
+    @pas_levels = levels
 
     @site_facts = [
       {
@@ -76,4 +74,20 @@ class HomeController < ApplicationController
 
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
   end
+
+  private
+
+  def levels
+    _levels = home_yml[:pas][:levels]
+    _levels.map do |level|
+      geo_type = level.delete(:geo_type)
+      level[:url] = search_areas_path({geo_type: geo_type, filters: {db_type: ['wdpa']}})
+      level
+    end
+  end
+
+  def home_yml
+    @home_yml ||= I18n.t('home')
+  end
+
 end

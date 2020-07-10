@@ -24,12 +24,12 @@ class SearchAggregatorsModel < ActiveSupport::TestCase
 
     expected_response = [{
       query: 'country',
-      identifier: country_1.name,
+      identifier: country_1.iso_3,
       label: country_1.name,
       count: 64
     }, {
       query: 'country',
-      identifier: country_2.name,
+      identifier: country_2.iso_3,
       label: country_2.name,
       count: 17
     }]
