@@ -2,14 +2,36 @@
   background-color: $grey-xdark;
   color: $grey-light;
 
+  @include breakpoint($small) {
+    width: rem-calc(340);
+
+    position: absolute;
+    top: rem-calc(17);
+    left: rem-calc(18);
+    z-index: 1;
+  }
+
+  @include breakpoint($medium) {
+    width: rem-calc(496);
+    
+    top: rem-calc(32);
+    left: rem-calc(43);
+  }
+
   .v-map-header {
-    @include breakpoint-down($medium) {
+    @include breakpoint-down($small) {
       display: none;
     }
   }
 
   &__body {
-    padding: rem-calc(14 24);
+    @include responsive(
+      padding,
+      rem-calc(30 18),
+      rem-calc(18 18 40),
+      rem-calc(18 18 40),
+      rem-calc(25 25 60),
+    );
 
     display: flex;
     flex-direction: column;
@@ -18,10 +40,11 @@
 }
 
 .v-map-disclaimer {
-  justify-self: flex-end;
-
   font-size: rem-calc(14);
   margin-top: rem-calc(24);
+
+  justify-self: flex-end;
+
   &__heading {
     color: $white;
     font-weight: $semi-bold;
