@@ -1,0 +1,75 @@
+.selector {
+    border: rem-calc(1) solid $grey-xlight;
+    border-radius: 0;
+    
+    position: relative;
+    z-index: 100;
+    
+    display: block;
+
+    &__selected {
+        cursor: default;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        &:focus {
+            box-shadow: 0 0 0 rem-calc(2) rgba($grey-light, 0.25);
+        }
+    }
+    &__label {
+        flex: 1;
+    }
+    &__caret {
+        @include icon-chevron-white-down;
+        &--active {
+            @include icon-chevron-white-up;
+        }
+    }
+    &__selected,
+    &__option {
+        padding: rem-calc(16);
+    }
+    &__options {
+        background-color: $grey-black;        
+        border-top: rem-calc(1) solid $grey-xlight;
+        border-bottom: rem-calc(1) solid $grey-xlight;
+        color: $white;
+
+        position: absolute;
+        top: rem-calc(52);
+        left: 0;
+        width: 100%;
+        height: rem-calc(100);
+        overflow-y: scroll;
+    }
+    &__option {
+        user-select: none;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $grey;
+        }
+        &--active {
+            &:hover {
+                background-color: $grey-light;
+            }
+            &:focus {
+                background-color: $grey-light;
+                outline: none;
+            }
+        }
+        &:first-child {
+            border-top: rem-calc(1) solid rgba($black, 0);
+        }
+        &:last-child {
+            border-bottom: rem-calc(1) solid rgba($black, 0);
+        }
+        &:focus {
+            background-color: $grey-xlight;
+            color: $grey-black;
+            outline: none;
+        }
+    }
+}

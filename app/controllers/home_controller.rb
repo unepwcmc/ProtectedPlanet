@@ -48,8 +48,10 @@ class HomeController < ApplicationController
 
     @main_map = {
       disclaimer: map_yml[:disclaimer],
-      title: map_yml[:title],
-      overlays: MapOverlaysSerializer.new(OVERLAYS, map_yml).serialize
+      dropdown_label: I18n.t('main_map.dropdown_label'),
+      overlays: MapOverlaysSerializer.new(OVERLAYS, map_yml).serialize,
+      search_types: I18n.t('main_map.search_types'),
+      title: map_yml[:title]
     }
   end
 end

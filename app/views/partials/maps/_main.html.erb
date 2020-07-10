@@ -2,8 +2,10 @@
   <v-map-header title="<%= @main_map[:title] %>"></v-map-header>
   <v-map></v-map>
   <v-map-filters
-    title="<%= @main_map[:title] %>"
-    :overlays="<%= @main_map[:overlays].to_json %>"
     :disclaimer="<%= @main_map[:disclaimer].to_json %>"
+    :dropdown-label="<%= @main_map[:dropdown_label].to_json %>"
+    :overlays="<%= @main_map[:overlays].to_json %>"
+    :search-types="<%= @main_map[:search_types].to_json %>"
+    :title="<%= @main_map[:title].to_json %>"
   ></v-map-filters>
 </div>

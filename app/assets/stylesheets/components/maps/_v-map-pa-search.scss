@@ -1,0 +1,37 @@
+.v-map-pa-search {
+  margin-bottom: rem-calc(12);
+
+  position: relative;
+
+  display: flex;
+
+  &__input {
+    background-color: rgba($black, 0);
+    border-radius: rem-calc(32);
+    border: rem-calc(1) solid $white;
+    outline: none;
+    padding-left: rem-calc(50);
+    color: $white;
+    font-size: rem-calc(18);
+    
+    display: flex;
+    flex: 1;
+
+    // &:focus {
+    //   background-color: rgba($black, .25);
+    // }
+
+  }
+  
+  &__search_icon {
+    @include icon-search-white;  
+    
+    height: 100%;
+
+    position: absolute;
+    left: rem-calc(16);
+
+    align-self: center;
+  }
+  
+}
