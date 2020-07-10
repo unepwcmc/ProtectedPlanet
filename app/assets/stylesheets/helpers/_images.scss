@@ -1,26 +1,25 @@
 //--------------------------------------------------
-// settings
+// variables
 //--------------------------------------------------
+
+
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
-@mixin card-stats-padding {
-  padding: rem-calc(28 30); 
-}
+@mixin image-placeholder($width: 100%, $height: rem-calc(265)) {
+  @include flex-center;
+  background-color: $grey-light;
+  background-position: center;
+  background-size: cover;
+  width: $width; height: $height;
 
-@mixin card-stats-number {
-  color: $primary;
-  font-weight: $bold;
-  line-height: 1;
+  &::after { 
+    @include icon-placeholder-image; 
+    width: 30%;
+    content: '';
+  }
 }
 
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-.cards { 
-  @import './cards/cards/*'; 
-}
-
-.card {
-  @import './cards/card/*';
-}

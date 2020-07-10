@@ -92,15 +92,15 @@
       return {
         colours: [
           {
-            line: '#207D94',
+            line: '#65C9B2',
             text: '#ffffff'
           },
           {
-            line: '#6FD9F2',
+            line: '#A54897',
             text: '#000000'
           },
           {
-            line: '#86BF37',
+            line: '#5F81CB',
             text: '#000000'
           }
         ],
@@ -131,7 +131,7 @@
           min: 0,
         },
         legend: [],
-        legendColours: ['#207D94', '#6FD9F2', '#86BF37'],
+        legendColours: ['#65C9B2', '#A54897', '#5F81CB'],
       }
     },
 

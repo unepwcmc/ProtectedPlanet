@@ -25,7 +25,10 @@ $padding-medium: rem-calc(27);
 @mixin button-font {
   @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
 }
-@mixin button-disabled { cursor: disabled; }
+@mixin button-disabled { 
+  cursor: not-allowed; 
+  opacity: .2;
+}
 @mixin button-height { 
   @include responsive(height, $height-small, $height-medium, $height-medium);
   display: inline-flex;
@@ -56,6 +59,7 @@ $padding-medium: rem-calc(27);
   @include button-radius;
   @include flex-center;
   background-color: $primary;
+  font-size: rem-calc(18);
   padding: 0 $padding-medium;
   &::after { 
     @include icon-download-black; 
@@ -130,7 +134,7 @@ $padding-medium: rem-calc(27);
 @mixin button-map-trigger {
   @include button-with-icon;
   @include button-outline;
-  &::after { @include icon-pin; }
+  &::after { @include icon-pin-outline; }
 }
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }

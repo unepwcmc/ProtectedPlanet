@@ -11,6 +11,61 @@ class HomeController < ApplicationController
     @pas_button = home_yml[:pas][:button]
     @pas_levels = levels
 
+    @site_facts = [
+      {
+        percentage: 00, #total percentage coverage of terrestrial pas
+        theme: I18n.t('home.facts')[0][:theme],
+        title: I18n.t('home.facts')[0][:title],
+        totals: [
+          {
+            number: 00, #total terrestrial pas
+            text: I18n.t('home.total_pas')
+          }
+        ]
+      },
+      {
+        percentage: 00, #total percentage coverage of marine pas
+        theme: I18n.t('home.facts')[1][:theme],
+        title: I18n.t('home.facts')[1][:title],
+        totals: [
+          {
+            number: 00, #total marine pas
+            text: I18n.t('home.total_pas')
+          }
+        ]
+      },
+      {
+        percentage: 00, #total percentage coverage of terrestrial pas and OECMs
+        theme: I18n.t('home.facts')[2][:theme],
+        title: I18n.t('home.facts')[2][:title],
+        totals: [
+          {
+            number: 00, #total terrestrial pas
+            text: I18n.t('home.total_pas')
+          },
+          {
+            number: 00, #total terrestrial oecms
+            text: I18n.t('home.total_oecms')
+          }
+        ]
+      },
+      {
+        percentage: 00, #total percentage coverage of marine pas and OECMs
+        theme: I18n.t('home.facts')[3][:theme],
+        title: I18n.t('home.facts')[3][:title],
+        totals: [
+          {
+            number: 00, #total marine pas
+            text: I18n.t('home.total_pas')
+          },
+          {
+            number: 00, #total marine oecms
+            text: I18n.t('home.total_oecms')
+          }
+        ]
+      }
+    ]
+
     comfy_themes = Comfy::Cms::Page.find_by_slug("thematical-areas")
     @themes_title = comfy_themes.label
     @themes_url = comfy_themes.full_path

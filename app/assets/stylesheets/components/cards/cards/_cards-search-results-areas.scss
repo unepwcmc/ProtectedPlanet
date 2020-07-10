@@ -1,15 +1,12 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$card-search-results-areas-flag-size: rem-calc(60);
+$card-search-results-areas-width: 100%;
+$card-search-results-areas-height: rem-calc(155);
 
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
-@mixin card-search-results-areas-flag-size {
-  width: $card-search-results-areas-flag-size;
-  height: $card-search-results-areas-flag-size;
-}
 
 //--------------------------------------------------
 // classes
@@ -21,11 +18,11 @@ $card-search-results-areas-flag-size: rem-calc(60);
 
   .card {
     &__link {
-      @include border-grey-xlight;
-      @include box-shadow-grey-xlight;
+      @include border-grey-light;
+      @include box-shadow-grey-light;
       @include flex;
       @include flex-column;
-      @include responsive('width', 100%, 48%, 30%);
+      @include responsive('width', 100%, 48%, 31.5%);
       @include responsive('height', auto, rem-calc(360), rem-calc(360));
       background-color: $white;
       margin-bottom: rem-calc(30);
@@ -44,42 +41,18 @@ $card-search-results-areas-flag-size: rem-calc(60);
       }
 
         &__image {
-          width: 100%; height: auto;
+          background-position: center;
+          background-size: cover;
+          width: $card-search-results-areas-width; height: $card-search-results-areas-height;
+        }
+
+        &__image-placeholder { 
+          @include image-placeholder($card-search-results-areas-width, $card-search-results-areas-height); 
         }
 
         &__title {
           @include text-card-title;
           margin: rem-calc(12 0 2 0);
         }
-
-        &__icon--region-large { 
-          @include icon-region;
-        }
-
-        &__icon--flag-large { 
-          @include icon-flag;
-        }
-
-      &__groups {
-        margin-top: auto; 
-      }
-
-        &__group {
-          margin: rem-calc(10 0);
-        }
-          
-          // &__icon--flag { 
-          //   background-size: 100%;
-          //   margin-right: rem-calc(6);
-          //   width: rem-calc(22); height: rem-calc(22);
-
-          //   display: block;
-          // }
-
-          // &__icon--region { 
-          //   @include icon-region; 
-          //   margin-right: rem-calc(6);
-          //   width: rem-calc(22); height: rem-calc(22);
-          // }
   }
 }

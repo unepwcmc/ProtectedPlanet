@@ -92,7 +92,14 @@
 //--------------------------------------------------
 &--search-areas {
   @include tabs-rounded;
-  @include flex-h-center;
+
+  @include breakpoint($small) { justify-content: center; }
+
+  .tab {
+    &__trigger {
+      &:first-child { margin-left: 0; }
+    }
+  }
 }
 
 //--------------------------------------------------

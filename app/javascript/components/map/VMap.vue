@@ -9,6 +9,7 @@ export default {
   name: 'v-map',
 
   props: {
+    
     // mapboxToken: {
     //   type: String,
     //   required: true

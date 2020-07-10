@@ -23,6 +23,10 @@
       class="card__image"
       :style="{ backgroundImage: `url(${image})` }"
     />
+    <div 
+      v-else 
+      class="card__image-placeholder"
+    />
   </a>
 </template>
 
