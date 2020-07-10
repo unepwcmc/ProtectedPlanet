@@ -3,35 +3,48 @@
 }
 .v-map-baselayer-controls {
   position: absolute;
-  right: rem-calc(46);
-  bottom: rem-calc(32);
+  bottom: rem-calc(10);
+  right: rem-calc(10);
 
-  display: flex;
-  align-content: flex-end;
+  @include breakpoint($small) {
+    bottom: rem-calc(16);
+  }
+
+  @include breakpoint($medium) {
+    right: rem-calc(16);
+  }
 
   &__control {
     min-width: rem-calc(100);
 
-    border: 1px solid darken($grey-xlight, 5%);
+    background-color: $white;
+    border: rem-calc(1px) solid $grey-dark;
     border-radius: 0;
     color: $black;
     cursor: pointer;
-    padding: rem-calc(12 25);
+    font-size: rem-calc(14);
+    width: rem-calc(82); height: rem-calc(35);
+
+    @include breakpoint($small) {
+      font-size: rem-calc(16);
+      width: rem-calc(140); height: rem-calc(46);
+    }
 
     &:not(:last-child) {
       border-right: none;
     }
+
     &.selected {
-      background-color: darken($grey-xlight, 5%);
+      background: $grey-dark;
+      color: $white;
     }
-    &:focus {
-      outline: none;
-    }
-    &:hover {
-      background-color: darken($grey-xlight, 10%);
-    }
-    &:active {
+
+    &:hover:not(.selected) {
       background-color: $grey-xlight;
+    }
+
+    &:active {
+      background-color: darken($grey-xlight, 10%);
     }
   }
 }

@@ -12,13 +12,15 @@ export const BASELAYERS_DEFAULT = [
 ]
 export const MAP_OPTIONS_DEFAULT = {
   container: 'map-target',
-  scrollZoom: false
+  scrollZoom: false,
+  attributionControl: false,
   //bounds: [[xmin,ymin],[xmax,ymax]],
 }
 export const CONTROLS_OPTIONS_DEFAULT = {
   showZoom: true,
   showCompass: false,
-  showBaselayerControls: true
+  showBaselayerControls: true,
+  attributionLocation: 'bottom-left'
 }
 export const EMPTY_OPTIONS = {
   map: null,
