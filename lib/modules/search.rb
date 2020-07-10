@@ -66,7 +66,7 @@ class Search
     end
   end
 
-  private
+
   attr_writer :search_term, :options
 
   RESULTS_SIZE = 20.0

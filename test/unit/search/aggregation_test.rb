@@ -176,7 +176,7 @@ class SearchAggregationTest < ActiveSupport::TestCase
         }
       }
     }
-    expected_response = {"country"=>[{:identifier=>"MyString", :query=>"country", :label=>"MyText", :count=>64}, {:identifier=>"MyString", :query=>"country", :label=>"MyText", :count=>17}], "region"=>[{:identifier=>"GLB", :query=>"region", :label=>"Global", :count=>100}], "designation"=>[{:identifier=>designation.id, :query=>"designation", :label=>"MyString", :count=>100}], "governance"=>[{:identifier=>governance.id, :query=>"governance", :label=>"MyString", :count=>100}], "iucn_category"=>[{:identifier=>iucn_category.id, :query=>"iucn_category", :label=>"MyString", :count=>100}], "category"=>[{:identifier=>cat_1.id, :query=>"category", :label=>"cat_1", :count=>2}, {:identifier=>cat_2.id, :query=>"category", :label=>"cat_2", :count=>10}]}
+    expected_response = {"country"=>[{:identifier=>"MTX", :query=>"country", :label=>"MyText", :count=>64}, {:identifier=>"MTX", :query=>"country", :label=>"MyText", :count=>17}], "region"=>[{:identifier=>"GLB", :query=>"region", :label=>"Global", :count=>100}], "designation"=>[{:identifier=>designation.id, :query=>"designation", :label=>"MyString", :count=>100}], "governance"=>[{:identifier=>governance.id, :query=>"governance", :label=>"MyString", :count=>100}], "iucn_category"=>[{:identifier=>iucn_category.id, :query=>"iucn_category", :label=>"MyString", :count=>100}], "category"=>[{:identifier=>cat_1.id, :query=>"category", :label=>"cat_1", :count=>2}, {:identifier=>cat_2.id, :query=>"category", :label=>"cat_2", :count=>10}]}
     aggregations = Search::Aggregation.parse(aggregations_hash)
     assert_equal expected_response, aggregations
   end

@@ -74,6 +74,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       "has_irreplaceability_info" => true,
       "has_parcc_info" => false,
       "is_green_list"=>false,
+      "is_oecm"=>false,
       "coordinates" => [2.0, 1.0],
       "sub_locations" => [
         {
@@ -84,7 +85,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
         {
           "id" => 123,
           "name" => "Manboneland",
-          "iso_3" => "MyString",
+          "iso_3" => "MTX",
           "region_for_index" => {
             "id" => 987,
             "name" => "North Manmerica"
