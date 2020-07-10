@@ -92,6 +92,11 @@
       width: 42px; height: 45px;
     }
 
+    &:focus:first-child,
+    &:focus:last-child {
+      border-radius: 0;
+    }
+
     &:hover {
       background-color: $grey-xlight;
     }
