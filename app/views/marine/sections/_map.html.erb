@@ -1,13 +1,7 @@
 <section class="container">
-  <div class="map--main">
-    <v-map-header title="<%= map[:title] %>"></v-map-header>
-    <v-map></v-map>
-    <v-map-filters
-      title="<%= map[:title] %>"
-      :overlays="<%= map[:overlays].to_json %>"
-      :disclaimer="<%= map[:disclaimer].to_json %>"
-    ></v-map-filters>
-  </div>
+  <%= render partial: 'partials/maps/main', locals: {
+    map: map
+  } %>
 
   <div class="u-bg--marine-1">
     <p class="container--profile template--marine__map-disclaimer text--standard">
