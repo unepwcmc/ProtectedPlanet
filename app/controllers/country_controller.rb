@@ -11,8 +11,8 @@ class CountryController < ApplicationController
     @iucn_categories = @country.protected_areas_per_iucn_category
     @governance_types = @country.protected_areas_per_governance
 
-    #TODO - these percent can be added to the designation hash - talk to Stacy for explanation
-    @designation_percentages = @country_presenter.designations.map do |designation|
+    designations = @country_presenter.designations
+    @designation_percentages = designations.map do |designation|
       { percent: designation[:percent] }
     end.to_json
 
