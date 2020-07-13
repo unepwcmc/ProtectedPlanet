@@ -2,6 +2,7 @@ class Search::Results
   def initialize query_results
     @query_results = query_results
     @type_index_map = {
+      Search::REGION_INDEX => "Region",
       Search::COUNTRY_INDEX => "Country",
       Search::PA_INDEX => "ProtectedArea",
       Search::CMS_INDEX => "Comfy::Cms::SearchablePage"
@@ -44,6 +45,10 @@ class Search::Results
 
   def countries
     @countries ||= objects[@type_index_map[Search::COUNTRY_INDEX]]
+  end
+
+  def regions
+    @regions ||= objects[@type_index_map[Search::REGION_INDEX]]
   end
 
   def cms_pages

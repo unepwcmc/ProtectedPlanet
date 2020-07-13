@@ -86,6 +86,7 @@ $chart-target-stroke-width: rem-calc(3);
   @import './charts/chart-row-pa';
   @import './charts/chart-row-stacked';
   @import './charts/chart-row-target';
+  @import './charts/chart-square';
 }
 
 @import './charts/chart-legend';
@@ -99,4 +100,4 @@ $chart-target-stroke-width: rem-calc(3);
 .theme--aqua { background-color: $chart-aqua; }
 .theme--blue { background-color: $chart-blue; }
 .theme--green { background-color: $chart-green; }
-.theme--purple { background-color: $chart-purple; }
+.theme--purple { background-color: $chart-purple; } 

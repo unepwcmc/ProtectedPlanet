@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :country do
     name "MyText"
-    iso "MyString"
-    iso_3 "MyString"
+    iso "MT"
+    iso_3 "MTX"
   end
 end

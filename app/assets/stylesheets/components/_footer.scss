@@ -10,7 +10,7 @@
     &__col {
       @include responsive(margin, rem-calc(0 0 34 0), rem-calc(0 0 30 0), rem-calc(0 30));
 
-      &:first-child() { 
+      &:first-child { 
         @include responsive(display, none, none, block);
         margin-left: 0; 
       }
@@ -24,7 +24,7 @@
         @include responsive(width, 100%, 46%, auto);
       }
 
-      &:last-child() { 
+      &:last-child { 
         @include text-small;
         @include responsive(width, auto, auto, rem-calc(186)); 
         color: white;
@@ -43,7 +43,7 @@
       &__link-partner {
         text-decoration: none;
 
-        &:first-child() { margin-right: rem-calc(24); } 
+        &:first-child { margin-right: rem-calc(24); } 
       }
 
         &__logo-partner {

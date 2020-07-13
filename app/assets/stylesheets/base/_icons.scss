@@ -4,14 +4,18 @@
 .icon {
   &--aichi { @include icon-aichi; }
   
-  &--close { @include icon-close; }
-
-  &--cross { @include icon-cross; }
-
+  &--area { @include icon-area; }
+  
   &--circle-chevron-black { @include icon-circle-chevron-black; }
   &--circle-chevron-white { @include icon-circle-chevron-white; }
   &--circle-chevron-green-large-prev { @include icon-circle-chevron-green-large-left; }
   &--circle-chevron-green-large-next { @include icon-circle-chevron-green-large-right; }
+
+  &--close { @include icon-close; }
+
+  &--country { @include icon-country; }
+
+  &--cross { @include icon-cross; }
 
   &--earth { @include icon-earth(rem-calc(60)); }
   
@@ -49,7 +53,11 @@
     visibility: hidden;
   }
   
-  &--pin-green { @include icon-pin-green; }
+  &--pin-terrestrial { @include icon-pin-terrestrial; }
+  &--pin-marine { @include icon-pin-marine; }
+  &--pin-oecm { @include icon-pin-oecm; }
+
+  &--pin-terrestrial-light { @include icon-pin-terrestrial-light; }
 
   &--region { @include icon-region; }
   &--search { @include icon-search; }
