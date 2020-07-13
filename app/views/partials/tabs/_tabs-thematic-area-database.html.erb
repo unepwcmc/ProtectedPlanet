@@ -4,29 +4,35 @@
 >
   <template slot-scope="{ selectedId }">
     <tab-target :id="1" :selected-id="selectedId">
-      <section class="container--medium section-padding--bottom">
-        <%= cms_fragment_render("tab-content-1") %>
-      </section>
+      <div class="container">
+        <section class="container--medium section-padding--bottom">
+          <%= cms_fragment_render("tab-content-1") %>
+        </section>
 
-      <section class="section-padding--bottom">
-        <%= render "partials/search/protected-areas" %>
-      </section>
+        <section class="section-padding--bottom">
+          <%= render "partials/search/protected-areas" %>
+        </section>
+      </div>
 
-      <section>
-        <%= render partial: "partials/maps/main" %>
-      </section>
+      <%= render partial: "partials/maps/main", locals: {
+        map: map
+      } %>
     </tab-target>
 
     <tab-target :id="2" :selected-id="selectedId">
-      <section class="container--medium">
-        <%= cms_fragment_render("tab-content-2") %>
-      </section>
+      <div class="container">
+        <section class="container--medium">
+          <%= cms_fragment_render("tab-content-2") %>
+        </section>
+      </div>
     </tab-target>
 
     <tab-target :id="3" :selected-id="selectedId">
-      <section class="container--medium">
-        <%= cms_fragment_render("tab-content-3") %>
-      </section>
+      <div class="container">
+        <section class="container--medium">
+          <%= cms_fragment_render("tab-content-3") %>
+        </section>
+      </div>
     </tab-target>
   </template>
 </tabs>

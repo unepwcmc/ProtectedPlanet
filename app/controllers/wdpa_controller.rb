@@ -1,4 +1,6 @@
 class WdpaController < ApplicationController
+  include MapHelper
+
   def index
     @pa_coverage_percentage = 20 ##TODO FERDI - percentage of the world covered by PAs
 
@@ -7,9 +9,19 @@ class WdpaController < ApplicationController
     ].to_json
 
     @tabs = get_tabs(3).to_json
+
+    @map = {
+      disclaimer: map_yml[:disclaimer],
+      title: map_yml[:title],
+      overlays: MapOverlaysSerializer.new(wdpa_overlays, map_yml).serialize
+    }
   end
 
   private
+
+  def wdpa_overlays
+    overlays(['marine_wdpa', 'terrestrial_wdpa'])
+  end
 
   def get_tabs total_tabs
     tabs = []

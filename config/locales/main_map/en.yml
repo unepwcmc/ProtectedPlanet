@@ -1,5 +1,5 @@
 en:
-  main_map:
+  map:
     overlays:
       terrestrial_wdpa:
         title: Terrestrial Protected Areas

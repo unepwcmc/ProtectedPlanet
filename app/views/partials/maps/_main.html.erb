@@ -1,9 +1,11 @@
-<div class="map--main">
-  <v-map-header title="<%= @main_map[:title] %>"></v-map-header>
-  <v-map></v-map>
-  <v-map-filters
-    title="<%= @main_map[:title] %>"
-    :overlays="<%= @main_map[:overlays].to_json %>"
-    :disclaimer="<%= @main_map[:disclaimer].to_json %>"
-  ></v-map-filters>
-</div>
+<section class="map-section">
+  <div class="map--main">
+    <v-map-header title="<%= map[:title] %>"></v-map-header>
+    <v-map></v-map>
+    <v-map-filters
+      title="<%= map[:title] %>"
+      :overlays="<%= map[:overlays].to_json %>"
+      :disclaimer="<%= map[:disclaimer].to_json %>"
+    ></v-map-filters>
+  </div>
+</section>
