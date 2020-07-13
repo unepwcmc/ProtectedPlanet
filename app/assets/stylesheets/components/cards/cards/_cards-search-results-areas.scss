@@ -16,6 +16,12 @@ $card-search-results-areas-height: rem-calc(155);
   @include flex-h-between;
   @include flex-wrap;
 
+  &.preview {
+    .card__link:nth-child(3) { 
+      @include breakpoint-down($medium) { display: none; }
+    }
+  }
+
   .card {
     &__link {
       @include box-shadow-grey-light;
