@@ -9,7 +9,7 @@ class DesignationsPresenter
     JURISDICTIONS.map do |j|
       {
         title: designation_title(j),
-        total: designation_total(designations_by_jurisdiction, j),
+        total: designation_total(j),
         has_jurisdiction: get_jurisdiction(j),
         jurisdictions: jurisdictions(j)
       }
@@ -36,8 +36,9 @@ class DesignationsPresenter
     "#{jurisdiction} designations"
   end
 
-  def designation_total(designations, jurisdiction)
-    (designations[jurisdiction] && designations[jurisdiction].count) || 0
+  def designation_total(jurisdiction)
+    designations_per_jurisdiction = jurisdictions(jurisdiction).to_a
+    designations_per_jurisdiction.reduce(0) { |sum, desig| sum += desig["count"] }
   end
 
   def jurisdictions(jurisdiction)
