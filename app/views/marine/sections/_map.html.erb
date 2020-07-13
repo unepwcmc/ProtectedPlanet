@@ -1,17 +1,12 @@
 <section class="container">
-  <h1>MAP</h1>
-
-  <div class="u-relative">
-    <div
-      id="map-marine"
-      class="map map--marine"
-      data-style="marine"
-      data-bound-from="<%= map_bounds['from'] %>"
-      data-bound-to="<%= map_bounds['to'] %>"
-      data-hide-control="true"
-      data-zoom-position="bottomleft"
-      data-pa-colors='{ "terrestrial": { "line": "95d0c1", "fill": "a4d6c9" }, "marine": { "line": "004280", "fill": "004a8f" } }'>
-    </div>
+  <div class="map--main">
+    <v-map-header title="<%= map[:title] %>"></v-map-header>
+    <v-map></v-map>
+    <v-map-filters
+      title="<%= map[:title] %>"
+      :overlays="<%= map[:overlays].to_json %>"
+      :disclaimer="<%= map[:disclaimer].to_json %>"
+    ></v-map-filters>
   </div>
 
   <div class="u-bg--marine-1">
