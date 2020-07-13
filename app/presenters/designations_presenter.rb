@@ -10,6 +10,7 @@ class DesignationsPresenter
       {
         title: designation_title(j),
         total: designation_total(j),
+        percent: percent_of_total(j),
         has_jurisdiction: get_jurisdiction(j),
         jurisdictions: jurisdictions(j)
       }
@@ -34,6 +35,15 @@ class DesignationsPresenter
 
   def designation_title(jurisdiction)
     "#{jurisdiction} designations"
+  end
+
+  def total_number_of_designations
+    JURISDICTIONS.reduce(0) { |sum, jurisdiction| sum += designation_total(jurisdiction) }
+  end
+
+  def percent_of_total(jurisdiction)
+    total_per_jurisdiction = designation_total(jurisdiction)
+    (( total_per_jurisdiction.to_f / total_number_of_designations.to_f ) * 100).round(2)
   end
 
   def designation_total(jurisdiction)

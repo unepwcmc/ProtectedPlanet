@@ -12,11 +12,9 @@ class CountryController < ApplicationController
     @governance_types = @country.protected_areas_per_governance
 
     #TODO - these percent can be added to the designation hash - talk to Stacy for explanation
-    @designation_percentages = [
-      { percent: 40.44 },
-      { percent: 35.44 },
-      { percent: 25.44 }
-    ].to_json
+    @designation_percentages = @country_presenter.designations.map do |designation|
+      { percent: designation[:percent] }
+    end.to_json
 
     @sites = [] # #TODO
 
