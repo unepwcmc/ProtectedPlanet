@@ -27,7 +27,9 @@ module MapHelper
     includedOverlays = OVERLAYS.select {|o| ids.include?(o[:id])}
   
     includedOverlays.map do |defaultOptions|
-      defaultOptions.merge(options[defaultOptions[:id].to_sym] || {})
+      overlayOptions = options[defaultOptions[:id].to_sym]
+
+      overlayOptions.nil? ? defaultOptions : defaultOptions.merge(overlayOptions)
     end
   end
 
