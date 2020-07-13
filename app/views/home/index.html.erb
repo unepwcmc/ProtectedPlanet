@@ -15,7 +15,9 @@
 </section>
 
 <section class="map-section">
-  <%= render partial: "partials/maps/main" %>
+  <%= render partial: "partials/maps/main", locals: {
+    map: @main_map
+  } %>
 </section>
 
 <%= render "partials/carousels/themes" %>

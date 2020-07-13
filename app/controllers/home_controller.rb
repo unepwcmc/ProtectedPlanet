@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  include MapHelpers
+  include MapHelper
 
   def index
     home_yml = I18n.t('home')
@@ -33,6 +33,6 @@ class HomeController < ApplicationController
   private
 
   def home_overlays
-    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa']),
+    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
   end
 end
