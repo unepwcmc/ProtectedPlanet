@@ -18,7 +18,6 @@ $card-search-results-areas-height: rem-calc(155);
 
   .card {
     &__link {
-      @include border-grey-light;
       @include box-shadow-grey-light;
       @include flex;
       @include flex-column;
