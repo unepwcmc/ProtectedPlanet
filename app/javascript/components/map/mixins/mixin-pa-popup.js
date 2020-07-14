@@ -5,11 +5,11 @@ const wdpaFeatureServerPointUrl = wdpaFeatureServerUrl + '0/'
 const wdpaFeatureServerPolyUrl  = wdpaFeatureServerUrl + '1/'
 const oecmFeatureServerPolyUrl = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/FeatureServer/0/'
 
-const getQueryString = (coords, distance=null) => {
-  let queryString = `query?geometry=${coords.lng}%2C+${coords.lat}&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&outFields=wdpaid%2Cname&f=json`
+const getQueryString = (coords, distanceInMiles=null) => {
+  let queryString = `query?geometry=${coords.lng}%2C+${coords.lat}&geometryType=esriGeometryPoint&returnGeometry=false&inSR=4326&outFields=wdpaid%2Cname&f=json`
 
-  if (distance) {
-    queryString += `&distance=${distance}&units=esriSRUnit_StatuteMile&returnGeometry=false`
+  if (distanceInMiles) {
+    queryString += `&distance=${distanceInMiles}&units=esriSRUnit_StatuteMile`
   }
 
   return queryString
