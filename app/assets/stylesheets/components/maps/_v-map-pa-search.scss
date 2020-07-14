@@ -1,18 +1,25 @@
 .v-map-pa-search {
+  background-color: $grey-dark;
+  border: rem-calc(1) solid $white;
+  border-radius: rem-calc(32);
+  border-radius: rem-calc(32);
   margin-bottom: rem-calc(12);
 
   position: relative;
-
+  z-index: 2;
+  
   display: flex;
+  
+  &__container {
+    position: relative;
+  }
 
   &__input {
     background-color: rgba($black, 0);
-    border-radius: rem-calc(32);
-    border: rem-calc(1) solid $white;
-    outline: none;
-    padding-left: rem-calc(50);
+    border: none;
     color: $white;
     font-size: rem-calc(18);
+    padding-left: rem-calc(50);
     
     display: flex;
     flex: 1;
@@ -23,7 +30,7 @@
 
   }
   
-  &__search_icon {
+  &__magnifying-glass {
     @include icon-search-white;  
     
     height: 100%;
@@ -32,6 +39,31 @@
     left: rem-calc(16);
 
     align-self: center;
+  }
+
+  &__results-container {
+    background-color: $grey-dark;
+    border: rem-calc(1) solid $white;
+    border-bottom-left-radius: rem-calc(24);
+    border-bottom-right-radius: rem-calc(24);
+    padding-top: rem-calc(25);
+    padding-bottom: rem-calc(25);
+
+    width: 100%;
+  
+    position: absolute;
+    top: 50%;
+    left: 0;
+  }
+
+  &__results {
+    overflow-y: scroll;
+
+    height: rem-calc(150);
+  }
+
+  &__result {
+    padding: rem-calc(12 16);
   }
   
 }

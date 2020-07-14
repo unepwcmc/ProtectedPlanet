@@ -1,15 +1,30 @@
 <template>
-  <div class="v-map-pa-search">
-    <input
-      ref="input"
-      class="v-map-pa-search__input"
-      type="text"
-      :placeholder="type.placeholder"
-      v-model="query"
-      @input="onInput"
-      @keyup.enter.prevent="onEnter"
-    />
-    <div class="v-map-pa-search__search_icon" @click="onIconClick" />
+  <div class="v-map-pa-search__container">
+    <div class="v-map-pa-search" @focus="onElementFocus">
+      <input
+        ref="input"
+        class="v-map-pa-search__input"
+        type="text"
+        :placeholder="type.placeholder"
+        v-model="query"
+        @input="onInput"
+        @keyup.enter.prevent="onEnter"
+        @keyup.esc.prevent="onEscape"
+      />
+      <div class="v-map-pa-search__magnifying-glass" @click="onIconClick" />
+    </div>
+    <div class="v-map-pa-search__results-container" v-if="hasResults">
+      <div class="v-map-pa-search__results">
+        <div
+          class="v-map-pa-search__result"
+          v-for="(result, index) in autocompleteResults"
+          tabindex="0"
+          :key="index"
+        >
+          <span v-html="result"></span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -27,7 +42,7 @@ export default {
   data() {
     return {
       query: "",
-      autocompleteResults: [],
+      autocompleteResults: []
     };
   },
 
@@ -36,8 +51,7 @@ export default {
       type: Object,
       required: true,
       validator: type => {
-        return type.hasOwnProperty('id') &&
-          type.hasOwnProperty('placeholder')
+        return type.hasOwnProperty("id") && type.hasOwnProperty("placeholder");
       }
     }
   },
@@ -45,12 +59,23 @@ export default {
   computed: {
     hasValidQuery() {
       return this.query && this.query.length > 2;
+    },
+    hasResults() {
+      return this.autocompleteResults.length > 0;
     }
   },
 
   methods: {
     onInput(e) {
       this.$emit("input", e.target.value);
+    },
+
+    onEscape() {
+      this.resetAutocompleteResults();
+    },
+
+    resetAutocompleteResults() {
+      this.autocompleteResults = [];
     },
 
     focusInput() {
@@ -63,6 +88,10 @@ export default {
       } else {
         this.focusInput();
       }
+    },
+
+    onElementFocus() {
+      this.$refs.input.focus();
     },
 
     onEnter() {
@@ -78,10 +107,29 @@ export default {
     },
 
     submitSearch() {
-      return axios.post("/search/autocomplete", {
-        type: this.type.id,
-        search_term: this.query
+      return new Promise(resolve => {
+        // TESTING
+        setTimeout(function() {
+          resolve([
+            "a",
+            "abc",
+            "abcde",
+            "a",
+            "abc",
+            "abcde",
+            "a",
+            "abc",
+            "abcde",
+            "a",
+            "abc",
+            "abcde"
+          ]);
+        }, 500);
       });
+      // return axios.post("/search/autocomplete", {
+      //   type: this.type.id,
+      //   search_term: this.query
+      // });
     }
   }
 };
