@@ -1,5 +1,5 @@
 <div class="map--header">
-  <v-map></v-map>
+  <v-map :options="<%= map_options.to_json %>"></v-map>
   <v-map-filters
     title="<%= map[:title] %>"
     :overlays="<%= map[:overlays].to_json %>"

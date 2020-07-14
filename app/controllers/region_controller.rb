@@ -25,6 +25,10 @@ class RegionController < ApplicationController
       title: map_yml[:title],
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
     }
+
+    @map_options = {
+      map: { boundingRegion: @region.name }
+    }
   end
 
   private

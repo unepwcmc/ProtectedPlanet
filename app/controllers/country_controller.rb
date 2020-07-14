@@ -29,6 +29,10 @@ class CountryController < ApplicationController
       title: map_yml[:title],
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
     }
+
+    @map_options = {
+      map: { boundingISO: @country.iso_3 }
+    }
     
     ##TODO need adding
     # protected_national_report: statistic_presenter.percentage_nr_marine_cover, 
