@@ -1,4 +1,4 @@
-import { getCountryExtentByISO3, getRegionExtentByName } from '../helpers/request-helpers'
+import { getCountryExtentByISO3, getPAExtentByWDPAId, getRegionExtentByName } from '../helpers/request-helpers'
 
 export default {
   data () {
@@ -10,32 +10,39 @@ export default {
   methods: {
     initBoundingBoxAndMap () {  
       if (this.mapOptions.boundingISO) {
-        getCountryExtentByISO3(this.mapOptions.boundingISO, this.handleExtentResponse)
+        getCountryExtentByISO3(this.mapOptions.boundingISO, this.getExtentResponseHandler())
       } else if (this.mapOptions.boundingRegion) {
-        getRegionExtentByName(this.mapOptions.boundingRegion, this.handleExtentResponse)
+        getRegionExtentByName(this.mapOptions.boundingRegion, this.getExtentResponseHandler())
+      } else if (this.mapOptions.boundingWDPAId) {
+        getPAExtentByWDPAId(
+          this.mapOptions.boundingWDPAId, 
+          this.mapOptions.isPoint,
+          this.getExtentResponseHandler(1)
+        )
       } else {
         this.initMap()
       }
     },
 
-    handleExtentResponse (res) {
-      const extent = res.data.extent
-      const padding = 5
-
-      if (extent) {
-        this.initBounds = [
-          [
-            Math.max(extent.xmin - padding, -180), 
-            Math.max(extent.ymin - padding, -90)
-          ],
-          [
-            Math.min(extent.xmax + padding, 180), 
-            Math.min(extent.ymax + padding, 90)
+    getExtentResponseHandler (padding=5) {
+      return res => {
+        const extent = res.data.extent
+  
+        if (extent) {
+          this.initBounds = [
+            [
+              Math.max(extent.xmin - padding, -180), 
+              Math.max(extent.ymin - padding, -90)
+            ],
+            [
+              Math.min(extent.xmax + padding, 180), 
+              Math.min(extent.ymax + padding, 90)
+            ]
           ]
-        ]
+        }
+  
+        this.initMap()
       }
-
-      this.initMap()
     }
   }
 }
