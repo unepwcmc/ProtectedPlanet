@@ -49,8 +49,8 @@ $image-placeholder: black;
 //--------------------------------------------------
 // mixins - specific
 //--------------------------------------------------
-@mixin bg-grey-xlight { @include bg-colour($grey-xlight, $grey-xdark); }
-@mixin bg-grey-light { @include bg-colour($grey-light, $grey-xdark); }
+@mixin bg-grey-xlight { @include bg-colour($grey-xlight, $body-font-colour); }
+@mixin bg-grey-light { @include bg-colour($grey-light, $body-font-colour); }
 @mixin bg-grey { @include bg-colour($grey, $white); }
 @mixin bg-grey-dark { @include bg-colour($grey-dark, $white); }
 @mixin bg-grey-xdark { @include bg-colour($grey-xdark, $white); }
