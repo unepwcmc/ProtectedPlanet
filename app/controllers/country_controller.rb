@@ -1,6 +1,7 @@
 class CountryController < ApplicationController
   after_action :enable_caching
   before_action :load_vars, except: [:codes, :compare]
+  include MapHelper
 
   def show
     @country_presenter = CountryPresenter.new @country
@@ -23,7 +24,15 @@ class CountryController < ApplicationController
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.count
 
-    
+    @map = {
+      disclaimer: map_yml[:disclaimer],
+      title: map_yml[:title],
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+    }
+
+    @map_options = {
+      map: { boundingISO: @country.iso_3 }
+    }
     
     ##TODO need adding
     # protected_national_report: statistic_presenter.percentage_nr_marine_cover, 
@@ -66,6 +75,10 @@ class CountryController < ApplicationController
   end
 
   private
+
+  def map_overlays
+    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+  end
 
   def load_vars
     @country = if params[:iso].size == 2

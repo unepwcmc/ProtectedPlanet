@@ -87,10 +87,16 @@
 &--stats-overview {
   @include bg-grey-black;
   @include card-stats-padding;
-  margin-right: rem-calc(30);
+  margin-bottom: rem-calc(15);
   width: 100%;
 
-  @include breakpoint($small) { width: 33%; }
+  flex-shrink: 0;
+
+  @include breakpoint($small) { 
+    margin-right: rem-calc(30);
+    margin-bottom: 0;
+    width: 33%; 
+  }
 
   .card {
     &__flag {

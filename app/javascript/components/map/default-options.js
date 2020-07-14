@@ -14,7 +14,8 @@ export const MAP_OPTIONS_DEFAULT = {
   container: 'map-target',
   scrollZoom: false,
   attributionControl: false,
-  //bounds: [[xmin,ymin],[xmax,ymax]],
+  //boundingISO: ISO3,
+  //boundingRegion; Name e.g. Europe,
 }
 export const CONTROLS_OPTIONS_DEFAULT = {
   showZoom: true,

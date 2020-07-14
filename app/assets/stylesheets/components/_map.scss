@@ -1,4 +1,5 @@
 @import "maps/v-map-baselayer-controls";
+@import "maps/v-map-disclaimer";
 @import "maps/v-map-filter";
 @import "maps/v-map-filters";
 @import "maps/v-map-header";
@@ -36,6 +37,20 @@
 
       @include breakpoint($small) {
         height: rem-calc(700);
+      }
+    }
+  }
+
+  &--header {
+    width: 100%;
+
+    .map__mapbox {
+      height: rem-calc(400);
+
+      position: relative;
+
+      @include breakpoint($small) {
+        height: rem-calc(425);
       }
     }
   }
