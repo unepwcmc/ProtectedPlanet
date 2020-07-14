@@ -10,7 +10,7 @@ $focus-outline-margin: rem-calc(4);
 // classes
 //--------------------------------------------------
 &--pame {
-  @include breakpoint($medium) {
+  @include breakpoint($small) {
     @include flex;
     @include flex-v-center;
   }
@@ -102,20 +102,21 @@ $focus-outline-margin: rem-calc(4);
       background-color: white;
       font-size: rem-calc(16);
       padding: rem-calc(30 25);
+      width: 100%; height: 100vh;
       
       display: none;
       position: fixed;
       top: 0;
-      right: 0;
-      bottom: 0;
       left: 0;
+      
       z-index: 1;
 
       @include breakpoint($small) {
         border: solid rem-calc(1) $black;
         border-radius: $radius-global;
         margin-top: rem-calc(18);
-        min-width: rem-calc(300);
+        min-width: rem-calc(460);
+        width: auto; height: auto;
 
         position: absolute;
         top: unset;
@@ -131,10 +132,14 @@ $focus-outline-margin: rem-calc(4);
       &-list {
         padding: $focus-outline-margin;
         margin-bottom: rem-calc(20);
-        max-height: $filters-menu-max-height;
+        max-height: 85vh;
         overflow-y: scroll;
         overflow-x: hidden; //for IE11
         white-space: nowrap; 
+
+        @include breakpoint($small) {
+          max-height: $filters-menu-max-height;
+        }
       }
 
       &--donors {
@@ -168,9 +173,9 @@ $focus-outline-margin: rem-calc(4);
         label { cursor: pointer; }
       }
 
-  //**************************************************
-  // checkbox
-  //**************************************************
+//**************************************************
+// checkbox
+//**************************************************
         &__checkbox {
           border: solid rem-calc(1) $grey;
           cursor: pointer;
@@ -203,7 +208,9 @@ $focus-outline-margin: rem-calc(4);
 
           display: inline-block;
         }
-
+//**************************************************
+// button
+//**************************************************
     &__buttons {
       @include flex;
       @include flex-h-between;
@@ -211,6 +218,17 @@ $focus-outline-margin: rem-calc(4);
       text-align: right;
     }
 
-      &__button-cancel { margin: rem-calc(0 20 0) auto; }
+    &__button-apply { @include button-primary; }
+
+    &__button-download {
+      @include breakpoint($small) { margin-left: auto; }
+    }
+
+    &__button-cancel { 
+      @include button-outline;
+      margin: rem-calc(0 20 0) auto; 
+    }
+
+    &__button-clear { @include button-outline; }
   }
 }

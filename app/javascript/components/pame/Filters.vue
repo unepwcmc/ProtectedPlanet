@@ -9,7 +9,10 @@
       :type="filter.type" 
     />
 
-    <download-csv class=""  :total-items="totalItems"></download-csv>
+    <download-csv 
+      class="filter__button-download"  
+      :total-items="totalItems" 
+    />
   </div>
 </template>
 

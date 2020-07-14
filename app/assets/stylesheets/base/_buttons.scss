@@ -79,7 +79,7 @@ $padding-medium: rem-calc(27);
     display: inline-block;
   }
 }
-@mixin button-outline ($colour: $black, $border-size: 2px) {
+@mixin button-outline ($colour: $black, $border-size: 1px) {
   @include button-basic;
   @include button-font;
   @include button-height;
@@ -151,6 +151,7 @@ $padding-medium: rem-calc(27);
   @include button-outline;
   &::after { @include icon-pin-outline; }
 }
+@mixin button-primary { @include button-block; }
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }
 @mixin button-search {
@@ -222,5 +223,5 @@ $padding-medium: rem-calc(27);
   }
   &--outline-black { @include button-outline($black); }
   &--outline-white { @include button-outline($white); }
-  &--primary { @include button-block; }
+  &--primary { @include button-primary; }
 }

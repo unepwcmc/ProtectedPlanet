@@ -17,9 +17,9 @@
       </ul>
 
       <div class="filter__buttons">
-        <button @click="clear()" class="button--link-bold">Clear</button>
-        <button @click="cancel()" class="button--link filter__button-cancel">Cancel</button>
-        <button @click="apply()" class="button--link-bold">Apply</button>
+        <button @click="clear()" class="filter__button-clear">Clear</button>
+        <button @click="cancel()" class="filter__button-cancel">Cancel</button>
+        <button @click="apply()" class="filter__button-apply">Apply</button>
       </div>
     </div>
   </div>
