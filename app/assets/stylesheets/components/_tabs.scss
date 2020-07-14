@@ -28,6 +28,9 @@
 //--------------------------------------------------
 .tabs--hero {
   .tabs__scrollable {
+    @include site-width;
+    @include container;
+    
     overflow-x: scroll;
 
     transform: translateY(-100%);

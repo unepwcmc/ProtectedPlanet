@@ -14,8 +14,10 @@
   <%= render partial: "partials/cards/squares", locals: { cards: pas_categories } %>
 </section>
 
-<section>
-  <%= render partial: "partials/maps/main" %>
+<section class="map-section">
+  <%= render partial: "partials/maps/main", locals: {
+    map: @main_map
+  } %>
 </section>
 
 <%= render "partials/carousels/themes" %>
