@@ -1,41 +1,63 @@
 <template>
-  <div v-if="show" class="v-map-filters">
-    <v-map-header closeable v-model="title" @close="onClose" />
+  <div
+    v-if="show"
+    class="v-map-filters"
+  >
+    <v-map-header
+      v-model="title"
+      closeable
+      @close="onClose"
+    />
     <div class="v-map-filters__body">
       <v-map-pa-search-dropdown
-        :state="convertSearchTypeToDropdownOption(searchType)"
         :label="dropdownLabel"
         :options="dropdownOptions"
+        :value="searchType.id"
         @change="onDropdownChange"
       />
-      <v-map-pa-search @search="onSearch" :type="searchType" />
+      <v-map-pa-search
+        :type="searchType"
+        @search="onSearch"
+      />
       <div class="v-map-filters__overlays">
-        <div v-for="(overlay, index) in overlays" :key="index" class="v-map-filters__overlay">
+        <div
+          v-for="(overlay, index) in overlays"
+          :key="index"
+          class="v-map-filters__overlay"
+        >
           <v-map-filter v-bind="overlay" />
         </div>
       </div>
 
-      <div v-if="disclaimer" class="v-map-disclaimer">
-        <div class="v-map-disclaimer__heading">{{ disclaimer.heading }}</div>
-        <div class="v-map-disclaimer__body" v-html="disclaimer.body" />
+      <div
+        v-if="disclaimer"
+        class="v-map-disclaimer"
+      >
+        <div class="v-map-disclaimer__heading">
+          {{ disclaimer.heading }}
+        </div>
+        <div
+          class="v-map-disclaimer__body"
+          v-html="disclaimer.body"
+        />
       </div>
     </div>
   </div>
 </template>
 <script>
-import VMapFilter from "./VMapFilter";
-import VMapHeader from "./VMapHeader";
-import VMapPASearch from "./VMapPASearch";
-import VMapPASearchDropdown from "./VMapPASearchDropdown";
+import VMapFilter from './VMapFilter'
+import VMapHeader from './VMapHeader'
+import VMapPASearch from './VMapPASearch'
+import VMapPASearchDropdown from './VMapPASearchDropdown'
 
 export default {
-  name: "VMapFilters",
+  name: 'VMapFilters',
 
   components: {
     VMapFilter,
     VMapHeader,
-    "v-map-pa-search": VMapPASearch,
-    "v-map-pa-search-dropdown": VMapPASearchDropdown
+    'v-map-pa-search': VMapPASearch,
+    'v-map-pa-search-dropdown': VMapPASearchDropdown
   },
 
   props: {
@@ -53,14 +75,14 @@ export default {
     },
     disclaimer: {
       type: Object,
-      required: false,
+      required: true,
       validator: type => {
         return (
-          type.hasOwnProperty("heading") &&
-          typeof type.heading === "string" &&
-          type.hasOwnProperty("body") &&
-          typeof type.heading === "string"
-        );
+          type.hasOwnProperty('heading') &&
+          typeof type.heading === 'string' &&
+          type.hasOwnProperty('body') &&
+          typeof type.heading === 'string'
+        )
       }
     },
     searchTypes: {
@@ -69,22 +91,14 @@ export default {
       validator: types =>
         types.every(type => {
           return (
-            type.hasOwnProperty("id") &&
-            type.hasOwnProperty("title") &&
-            type.hasOwnProperty("placeholder") &&
-            typeof type.id === "string" &&
-            typeof type.title === "string" &&
-            typeof type.placeholder === "string"
-          );
+            type.hasOwnProperty('id') &&
+            type.hasOwnProperty('title') &&
+            type.hasOwnProperty('placeholder') &&
+            typeof type.id === 'string' &&
+            typeof type.title === 'string' &&
+            typeof type.placeholder === 'string'
+          )
         }),
-    }
-  },
-
-  computed: {
-    dropdownOptions() {
-      return this.searchTypes.map(type =>
-        this.convertSearchTypeToDropdownOption(type)
-      );
     }
   },
 
@@ -92,7 +106,15 @@ export default {
     return {
       show: true,
       searchType: this.searchTypes[0]
-    };
+    }
+  },
+
+  computed: {
+    dropdownOptions() {
+      return this.searchTypes.map(type =>
+        this.convertSearchTypeToDropdownOption(type)
+      )
+    }
   },
 
   methods: {
@@ -100,23 +122,24 @@ export default {
       return {
         label: searchType.title,
         value: searchType.id
-      };
+      }
     },
+
     onClose() {
-      this.show = false;
-      this.$emit("show", false);
+      this.show = false
+      this.$emit('show', false)
     },
 
     onSearch(query) {
-      console.log({ query });
+      console.log({ query })
     },
 
     onDropdownChange(value) {
       // set the original search type from its dropdown-compatible option
       this.searchType = this.searchTypes[
         this.searchTypes.map(type => type.id).indexOf(value)
-      ];
+      ]
     }
   }
-};
+}
 </script>
