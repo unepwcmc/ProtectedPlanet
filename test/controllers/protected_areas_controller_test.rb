@@ -8,6 +8,8 @@ class ProtectedAreasControllerTest < ActionController::TestCase
 
     search_mock = mock().tap { |m| m.stubs(:results).returns([]) }
     Search.stubs(:search).returns(search_mock)
+
+    seed_cms
   end
 
   test '#show returns a 200 HTTP code' do

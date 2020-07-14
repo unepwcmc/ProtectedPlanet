@@ -10,6 +10,10 @@ class GreenListController < ApplicationController
     @pas_km = ProtectedArea.green_list_total_km
     @pas_percent = ProtectedArea.green_list_protected_percentage
     @pas_total = ProtectedArea.green_list_areas.count
+    @filters = {
+      db_type: ['wdpa'],
+      special_status: ['is_green_list']
+    }
   end
 
   def show

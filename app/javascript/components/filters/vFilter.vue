@@ -10,6 +10,7 @@
         v-if="type == 'checkbox'"
         :id="id"
         :options="options"
+        :pre-selected="preSelected"
         v-on:update:options="updateFilter"
       />
 
@@ -21,17 +22,27 @@
         v-on:update:options="updateFilter"
       />
     </div>
+
+    <checkbox-search
+      v-if="type == 'checkbox-search'"
+      :id="id"
+      :name="name"
+      :options="options"
+      :pre-selected="preSelectedCheckboxSearch"
+      v-on:update:options="updateFilter"
+    />
   </div>
 </template>
 
 <script>
 import Checkboxes from '../form-fields/Checkboxes'
 import RadioButtons from '../form-fields/RadioButtons'
+import CheckboxSearch from '../form-fields/CheckboxSearch'
 
 export default {
   name: 'v-filter',
 
-  components: { Checkboxes, RadioButtons },
+  components: { Checkboxes, RadioButtons, CheckboxSearch },
 
   props: {
     id: {
@@ -45,6 +56,9 @@ export default {
       required: true,
       type: Array // [ { id: String, title: String } ]
     },
+    preSelected: {
+      type: Array // [ String ]
+    },
     resetting: true,
     title: {
       type: String
@@ -55,7 +69,23 @@ export default {
     }
   },
 
+  computed: {
+    preSelectedCheckboxSearch () {
+      return Array.isArray(this.preSelected) && this.preSelected.length ? this.preSelected[0] : null
+    }
+  },
+
+  created () {
+    if(this.preSelected) { this.addPreSelectedToActiveOptions() }
+  },
+
   methods: {
+    addPreSelectedToActiveOptions () {
+      const preselected = this.type == 'checkbox-search' ? this.preSelectedCheckboxSearch : this.preSelected
+      
+      this.updateFilter(preselected)
+    },
+
     updateFilter(updatedOptions) {
       const data = {
         id: this.id,

@@ -1,4 +1,9 @@
 //--------------------------------------------------
+// variables
+//--------------------------------------------------
+$search-results-image-width: rem-calc(165);
+$search-results-image-height: rem-calc(130);
+//--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--search-results {
@@ -12,7 +17,7 @@
     }
 
       &__content {
-        width: rem-calc(550);
+        @include breakpoint($small) { width: calc(100% - #{$search-results-image-width} - 20px); }
       }
 
         &__summary {
@@ -24,7 +29,17 @@
         }
 
       &__image {
-        width: rem-calc(165); height: rem-calc(130);
+        background-position: center;
+        background-size: cover;
+        width: $search-results-image-width; height: $search-results-image-height;
+
+        display: none;
+
+        @include breakpoint($small) { display: block; }
+      }
+
+      &__image-placeholder { 
+        @include image-placeholder($search-results-image-width, $search-results-image-height); 
       }
   }
 }

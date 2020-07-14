@@ -14,14 +14,15 @@
             :id="inputId(option.title)"
             @change="changeInput($eventHub)"
             class="checkbox__input"
+            :checked="isChecked(option.id)"
             type="checkbox"
-            :value="option.title"
+            :value="option.id"
             v-model="input"
           >
           
           <span class="checkbox__input-fake" />
         
-          {{ option.title }}
+          <span class="checkbox__text">{{ option.title }}</span>
         </label>
       </p>
     </div>
@@ -40,6 +41,9 @@ export default {
     options: { 
       type: Array, // { title: String }
       required: true 
+    },
+    preSelected: {
+      type: Array // [ String ]
     }
   },
 
@@ -49,7 +53,17 @@ export default {
     }
   },
 
-  created () {
+  computed: {
+    hasPreSelectedOptions () {
+      return Array.isArray(this.preSelected) && this.preSelected.length
+    }
+  },
+
+  mounted () {
+    if(this.hasPreSelectedOptions) { 
+      this.input = this.preSelected
+    }
+
     this.$eventHub.$on('reset:filter-options', this.reset)
   },
 
@@ -60,6 +74,12 @@ export default {
     
     inputId (title) {
       return `${this.id}-${title}`
+    },
+
+    isChecked (id) {
+      if(!this.hasPreSelectedOptions) { return false }
+      
+      return this.preSelected.includes(id)
     },
 
     reset () {

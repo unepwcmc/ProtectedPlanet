@@ -2,12 +2,17 @@
 // classes
 //--------------------------------------------------
 &--circles {
+  
   .cards {
-
     &__cards {
-      @include flex;
-      @include flex-h-around;
-      @include responsive(flex-wrap, wrap, nowrap, nowrap);
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+
+      @include breakpoint($small) { 
+        flex-direction: row;
+        justify-content: space-around;
+      }
     }
   }
 

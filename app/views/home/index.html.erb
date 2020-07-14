@@ -1,12 +1,17 @@
-<%= render partial: "./layouts/partials/hero-home", locals: { 
+<%= render partial: "./layouts/partials/hero-home", locals: {
     button: t('home.hero.button'),
     hero_stat_percentage: @pa_coverage_percentage,
     hero_stat_text: t('home.hero.stat-text')
-  } 
+  }
 %>
-<%= render "partials/search/protected-areas" %>
 
-<section class="container section-padding">
+<section class="container page-padding--top">
+  <%= render partial: "partials/cards/facts", locals: { cards: @site_facts } %>
+</section>
+
+<%= render partial: "partials/search/protected-areas", locals: { config: @config_search_areas } %>
+
+<section class="container page-padding">
   <h2 class="text-center"><%= @pas_title %></h2>
 
   <%= render partial: "partials/cards/circles", locals: { cards: @pas_levels } %>
@@ -21,7 +26,7 @@
 <%= render "partials/carousels/themes" %>
 
 <%= render "partials/ctas/api" %>
-    
+
 <section class="container section-padding">
   <%= render "partials/cards/resources" %>
 </section>
