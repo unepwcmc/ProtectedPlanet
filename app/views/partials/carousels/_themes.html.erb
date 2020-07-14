@@ -1,17 +1,15 @@
 <% get_thematical_areas %>
 
-<section class="section-padding">
-  <h2 class="text-center"><%= @items[:title] %></h2>
-  
-  <flickity 
-    class="flickity--themes"
-    :options="<%= get_config_carousel_themes %>"
-    ref="flickity"
-  >
-    <% @items[:cards].each do |slide| %>
-      <div class="carousel-cell">
-        <%= render partial: 'partials/sub_partials/themes', locals: { theme: slide } %>
-      </div>
-    <% end %>
-  </flickity>
-</section>
+<h2 class="text-center"><%= @items[:title] %></h2>
+
+<flickity 
+  class="flickity--themes"
+  :options="<%= get_config_carousel_themes %>"
+  ref="flickity"
+>
+  <% @items[:cards].each do |slide| %>
+    <div class="carousel-cell">
+      <%= render partial: 'partials/sub_partials/themes', locals: { theme: slide } %>
+    </div>
+  <% end %>
+</flickity>

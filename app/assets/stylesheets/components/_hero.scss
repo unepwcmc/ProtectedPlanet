@@ -93,7 +93,8 @@
   &.equity { background-image: image_url('hero/equity.png'); }
 
   .hero__content {
-    @include responsive(padding-right, 0, 5%, 25%); 
+    @include breakpoint($small) { width: 80%; }
+    @include breakpoint($medium) { width: 63%; }
   }
 
   .hero__intro {
