@@ -183,9 +183,7 @@ export default {
     },
     select(value) {
       this.$emit("change", value);
-      if (this.dropdownEnabled === true) {
-        this.showDropdown(false);
-      }
+      this.showDropdown(false);
     },
     isSelected(value) {
       return this.state === value;
