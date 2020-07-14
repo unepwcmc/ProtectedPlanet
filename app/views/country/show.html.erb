@@ -1,7 +1,7 @@
 <div class="bg--grey-xlight">
   <div class="container">
     
-    <section class="flex">
+    <section class="flex-stack-mobile">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         flag: @flag_path[0],
         title: @country.name,
@@ -12,9 +12,10 @@
         total_wdpa: @total_wdpa,
       } %>
 
-      <div>
-        MAP
-      </div>
+      <%= render partial: "partials/maps/header", locals: {
+        map: @map,
+        map_options: @map_options
+      } %>
     </section>
 
     <section>
@@ -53,11 +54,6 @@
 
 <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
 <%= download_dropdown(@country.iso_3, 'general', (types rescue [:csv, :shp])) %>
-
-  
-<div class="js-resizable map map--hero" id="map" data-mobile-height=33 data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>"
-data-control-position="bottomleft"></div>
-
 
 <h1>related countries</h1>      
 <% if @country.children.any? || @country.parent.present? %>

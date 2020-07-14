@@ -1,6 +1,16 @@
 <template>
   <div v-if="show" class="v-map-filters">
     <v-map-header closeable v-model="title" @close="onClose" />
+  <div
+    v-if="show"
+    class="v-map-filters"
+    :class="{'v-map-filters--hidden': isHidden}"
+  >
+    <v-map-header 
+      v-model="title"
+      closeable
+      @close="onClose"
+    />
     <div class="v-map-filters__body">
       <v-map-pa-search-dropdown
         :state="convertSearchTypeToDropdownOption(searchType)"
@@ -15,23 +25,30 @@
         </div>
       </div>
 
-      <div v-if="disclaimer" class="v-map-disclaimer">
-        <div class="v-map-disclaimer__heading">{{ disclaimer.heading }}</div>
-        <div class="v-map-disclaimer__body" v-html="disclaimer.body" />
-      </div>
+
+      <v-map-disclaimer
+        v-if="disclaimer"
+        class="v-map-disclaimer--embedded"
+        :disclaimer="disclaimer"
+      />
     </div>
   </div>
 </template>
 <script>
+import VMapDisclaimer from './VMapDisclaimer'
 import VMapFilter from "./VMapFilter";
 import VMapHeader from "./VMapHeader";
 import VMapPASearch from "./VMapPASearch";
 import VMapPASearchDropdown from "./VMapPASearchDropdown";
 
+
+import { disableTabbing } from '../../helpers/focus-helpers'
+
 export default {
   name: "VMapFilters",
 
   components: {
+    VMapDisclaimer,
     VMapFilter,
     VMapHeader,
     "v-map-pa-search": VMapPASearch,
@@ -77,6 +94,11 @@ export default {
             typeof type.placeholder === "string"
           );
         }),
+      default: null
+    },
+    isHidden: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -93,6 +115,10 @@ export default {
       show: true,
       searchType: this.searchTypes[0]
     };
+  },
+  
+  mounted () {
+    disableTabbing(this.$el)
   },
 
   methods: {

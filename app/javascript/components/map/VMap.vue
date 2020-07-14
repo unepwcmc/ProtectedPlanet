@@ -21,6 +21,7 @@ import mixinAddLayers from './mixins/mixin-add-layers'
 import mixinControls from './mixins/mixin-controls'
 import mixinLayers from './mixins/mixin-layers'
 import mixinPaPopup from './mixins/mixin-pa-popup'
+import mixinBoundingBox from './mixins/mixin-bounding-box'
 
 export default {
   name: 'VMap',
@@ -29,6 +30,7 @@ export default {
 
   mixins: [
     mixinAddLayers,
+    mixinBoundingBox,
     mixinControls,
     mixinPaPopup,
     mixinLayers
@@ -62,11 +64,17 @@ export default {
     },
 
     mapOptions () {
-      return {
+      const options = {
         ...MAP_OPTIONS_DEFAULT,
         ...this.options.map,
-        style: this.baselayers[0].style
+        style: this.baselayers[0].style,
       }
+      
+      if (this.initBounds) {
+        options.bounds = this.initBounds
+      }
+
+      return  options
     },
 
     selectedBaselayer () {
@@ -97,7 +105,7 @@ export default {
   },
 
   mounted () {
-    this.initMap()
+    this.initBoundingBoxAndMap() 
   },
 
   methods: {

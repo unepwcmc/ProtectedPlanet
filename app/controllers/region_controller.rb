@@ -1,5 +1,6 @@
 class RegionController < ApplicationController
   before_action :load_vars
+  include MapHelper
 
   def show
     @iucn_categories = @region.protected_areas_per_iucn_category
@@ -18,9 +19,23 @@ class RegionController < ApplicationController
     @total_wdpa = @region.protected_areas.count
 
     @wdpa = pas_sample
+
+    @map = {
+      disclaimer: map_yml[:disclaimer],
+      title: map_yml[:title],
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+    }
+
+    @map_options = {
+      map: { boundingRegion: @region.name }
+    }
   end
 
   private
+
+  def map_overlays
+    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+  end
 
   def load_vars
     params[:iso]!="GL" or raise_404

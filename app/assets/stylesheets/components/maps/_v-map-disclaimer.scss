@@ -1,0 +1,26 @@
+.v-map-disclaimer {
+  background: $white;
+  color: $grey-xdark;
+  font-size: rem-calc(14);
+  padding: rem-calc(17, 17);
+  
+  justify-self: flex-end;
+
+  @include breakpoint($small) {
+    padding: rem-calc(12 22);
+  }
+
+  &__heading {
+    font-weight: $semi-bold;
+    line-height: rem-calc(26);
+  }
+
+  &--embedded {
+    &.v-map-disclaimer {
+      background: transparent;
+      color: $white;
+      margin-top: rem-calc(24);
+      padding: 0;
+    }
+  }
+}

@@ -37,18 +37,9 @@
     flex-direction: column;
     justify-content: space-between;
   }
-}
 
-.v-map-disclaimer {
-  font-size: rem-calc(14);
-  margin-top: rem-calc(24);
-
-  justify-self: flex-end;
-
-  &__heading {
-    color: $white;
-    font-weight: $semi-bold;
-    line-height: rem-calc(26);
+  &--hidden {
+    @include screen-reader;
   }
 }
 

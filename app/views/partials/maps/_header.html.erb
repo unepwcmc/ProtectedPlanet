@@ -1,0 +1,9 @@
+<div class="map--header">
+  <v-map :options="<%= map_options.to_json %>"></v-map>
+  <v-map-filters
+    title="<%= map[:title] %>"
+    :overlays="<%= map[:overlays].to_json %>"
+    :is-hidden="true"
+  ></v-map-filters>
+  <v-map-disclaimer :disclaimer="<%= map[:disclaimer].to_json %>"></v-map-disclaimer>
+</div> 

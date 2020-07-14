@@ -42,6 +42,7 @@ import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
+import VMapDisclaimer from './components/map/VMapDisclaimer'
 import VMap from './components/map/VMap'
 import VMapHeader from './components/map/VMapHeader'
 import VMapFilters from './components/map/VMapFilters'
@@ -94,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Target11Dashboard,
         Tooltip,
         VMap,
+        VMapDisclaimer,
         VMapHeader,
         VMapFilters,
         VSelectSearchable,
