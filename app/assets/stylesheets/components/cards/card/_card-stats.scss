@@ -1,4 +1,36 @@
 //--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin card-stats-padding {
+  padding: rem-calc(28 30); 
+}
+
+@mixin card-stats-number {
+  color: $primary;
+  font-weight: $bold;
+  line-height: 1;
+}
+
+@mixin card-stats {
+  @include card-stats-padding;
+  background-color: $white;
+  margin-top: rem-calc(30);
+}
+
+@mixin card-stats-h2 { margin-top: 0; } 
+
+@mixin card-button-external {
+  @include button-with-icon;
+  @include flex-no-shrink;
+  
+  &::after {
+    @include icon-circle-chevron-black;
+    height: rem-calc(21);
+    width: rem-calc(21);
+  }
+}
+
+//--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--stats-wrapper {
@@ -11,10 +43,11 @@
   }
 }
 
+@import './stats/card-stats-affiliations';
+@import './stats/card-stats-overview';
+
 &--stats {
-  @include card-stats-padding;
-  background-color: $white;
-  margin-top: rem-calc(30);
+  @include card-stats;
 
   &--half {
     width: 100%; 
@@ -39,23 +72,6 @@
       @include flex-column;
 
       @include breakpoint($small) { @include flex-row; }
-    }
-
-    &__logos {
-      @include flex;
-      @include ul-unstyled;
-    }
-
-    &__logo {
-      margin-left: rem-calc(24);
-
-      &:first-child { margin-left: 0; }
-    }
-
-    &__logo-image {
-      width: rem-calc(100); height: auto;
-
-      display: block;
     }
 
     &__number { 

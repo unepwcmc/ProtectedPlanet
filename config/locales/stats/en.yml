@@ -6,8 +6,14 @@ en:
     coverage: Coverage
     designatons:
       title: Designations
+    external:
+      title: Affiliations
     governance: 
       title: Governance types
+    green-list:
+      intro: This site is part of the IUCN Green List Community
+      type: Governance Type
+      date: Certification Expiry Date
     iucn-categories: 
       title: IUCN Management Categories
     location: Location

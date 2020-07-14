@@ -112,13 +112,14 @@ class ProtectedAreaPresenter
   def external_links
     [
       {
-        title: 'View more',
+        affiliation: 'greenlist',
+        date: '00/00/00', ## TODO status date -- should already be in CSV thats provided
         image_url: ActionController::Base.helpers.image_url('logos/green-list.png'),
         link_title: "View the Green List page for #{protected_area.name}",
+        type: 'TODO TYPE', ## TODO type = Green Listed/Relisted/Candidate needed from CSV provided by IUCN
         url: '' ##TODO links needed from CSV provided by IUCN.
       },
       {
-        title: 'View more',
         image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
         link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
         link_url: url_for_related_source('parcc_info', protected_area)

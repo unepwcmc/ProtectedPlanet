@@ -8,6 +8,7 @@ en:
       download-pdf: PDF Download
       download: Download
       link: Link
+      more: More info
     footer:
       copyright: "ProtectedPlanet 2014-%{date}. All rights reserved"
       title1: Explore
