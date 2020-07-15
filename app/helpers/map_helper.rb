@@ -22,6 +22,15 @@ OVERLAYS = [
   }
 ].freeze
 
+WDPA_FEATURE_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/FeatureServer/'
+OECM_FEATURE_SERVER_LAYER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/FeatureServer/0/'
+
+SERVICES_FOR_POINT_QUERY = [
+  { url: OECM_FEATURE_SERVER_LAYER_URL, isPoint: false },
+  { url: WDPA_FEATURE_SERVER_URL + '0/', isPoint: true },
+  { url: WDPA_FEATURE_SERVER_URL + '1/', isPoint: false }
+].freeze
+
 module MapHelper
   def overlays (ids, options={})
     includedOverlays = OVERLAYS.select {|o| ids.include?(o[:id])}
@@ -35,5 +44,9 @@ module MapHelper
 
   def map_yml
     I18n.t('map')
+  end
+
+  def services_for_point_query
+    SERVICES_FOR_POINT_QUERY
   end
 end
