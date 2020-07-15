@@ -1,0 +1,15 @@
+.select-equity {
+    @include flex;
+
+    &__content {
+        border: 1px solid $grey-med-dark;
+        width: 50%;
+    }
+
+    &__panel {
+        background-color: $grey-med-light;
+        padding-left: rem-calc(57);
+        padding-right: rem-calc(40);
+        width: 50%;
+    }
+}

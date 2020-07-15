@@ -1,10 +1,11 @@
 <template>
-  <div class="equity-select">
-    <div class="equity-select__content">
+  <div class="select-equity">
+    <div class="select-equity__content">
       <!-- <img :src="selected.image" :alt="'Visual results for ' + selected.title" /> -->
     </div>
 
-    <div class="equity-select__panel">
+    <div class="select-equity__panel">
+      <h2>Results from study sites</h2>
       <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse recusandae deserunt saepe placeat ut architecto optio nostrum dolorem, laudantium ullam provident similique consectetur id eligendi praesentium labore quisquam atque vel?</p>
       <select v-model="selected">
         <option v-for="(option, index) in options" :key="index" :value="option">{{ option.label }}</option>
@@ -16,7 +17,7 @@
 
 <script>
 export default {
-  name: "equity-select",
+  name: "select-equity",
 
   props: {
     options: {

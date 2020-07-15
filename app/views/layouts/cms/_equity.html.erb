@@ -1,7 +1,7 @@
 <%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label, classes: "#{@cms_page.slug} bg-image-overlay--white" } %>
 
 <section class="container">
-  <equity-select
+  <select-equity
     :options="<%= options.to_json %>"
   />
 </section>
