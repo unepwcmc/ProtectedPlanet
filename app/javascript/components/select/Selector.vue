@@ -41,9 +41,10 @@
   </div>
 </template>
 <script>
-import { delay, debounce, intersectionBy } from 'lodash'
+import { delay } from 'lodash'
 
 export default {
+  name: 'Selector',
   model: {
     event: 'change',
     prop: 'value'
@@ -94,6 +95,7 @@ export default {
     onDocumentClick(e) {
       e.preventDefault()
       e.stopPropagation()
+      // close the dropdown options if a click is registered outside of the component
       if (this.$el.contains(document.activeElement) === false) {
         this.showDropdown(false)
       }

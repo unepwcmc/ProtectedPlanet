@@ -9,15 +9,9 @@
       @close="onClose"
     />
     <div class="v-map-filters__body">
-      <v-map-pa-search-dropdown
-        :label="dropdownLabel"
-        :options="dropdownOptions"
-        :value="searchType.id"
-        @change="onDropdownChange"
-      />
       <v-map-pa-search
-        :type="searchType"
-        @search="onSearch"
+        v-bind="{ searchTypes, dropdownLabel }"
+        @change="onSearch"
       />
       <div class="v-map-filters__overlays">
         <div
@@ -48,16 +42,14 @@
 import VMapFilter from './VMapFilter'
 import VMapHeader from './VMapHeader'
 import VMapPASearch from './VMapPASearch'
-import VMapPASearchDropdown from './VMapPASearchDropdown'
 
 export default {
   name: 'VMapFilters',
 
   components: {
-    VMapFilter,
-    VMapHeader,
-    'v-map-pa-search': VMapPASearch,
-    'v-map-pa-search-dropdown': VMapPASearchDropdown
+    'v-map-filter': VMapFilter,
+    'v-map-header': VMapHeader,
+    'v-map-pa-search': VMapPASearch
   },
 
   props: {
@@ -73,6 +65,10 @@ export default {
       type: String,
       required: true
     },
+    searchTypes: {
+      type: Array,
+      required: true
+    },
     disclaimer: {
       type: Object,
       required: true,
@@ -84,61 +80,24 @@ export default {
           typeof type.heading === 'string'
         )
       }
-    },
-    searchTypes: {
-      type: Array,
-      required: true,
-      validator: types =>
-        types.every(type => {
-          return (
-            type.hasOwnProperty('id') &&
-            type.hasOwnProperty('title') &&
-            type.hasOwnProperty('placeholder') &&
-            typeof type.id === 'string' &&
-            typeof type.title === 'string' &&
-            typeof type.placeholder === 'string'
-          )
-        }),
     }
   },
 
   data() {
     return {
-      show: true,
-      searchType: this.searchTypes[0]
-    }
-  },
-
-  computed: {
-    dropdownOptions() {
-      return this.searchTypes.map(type =>
-        this.convertSearchTypeToDropdownOption(type)
-      )
+      show: true
     }
   },
 
   methods: {
-    convertSearchTypeToDropdownOption(searchType) {
-      return {
-        label: searchType.title,
-        value: searchType.id
-      }
-    },
-
     onClose() {
       this.show = false
       this.$emit('show', false)
     },
 
-    onSearch(query) {
-      console.log({ query })
-    },
-
-    onDropdownChange(value) {
-      // set the original search type from its dropdown-compatible option
-      this.searchType = this.searchTypes[
-        this.searchTypes.map(type => type.id).indexOf(value)
-      ]
+    onSearch(search) {
+      // LOGIC GOES HERE FOR INITIATING MAP CHANGE
+      console.log({ search })
     }
   }
 }
