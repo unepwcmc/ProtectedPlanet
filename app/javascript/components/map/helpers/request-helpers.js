@@ -4,7 +4,7 @@ const instance = axios.create()
 
 delete instance.defaults.headers.common['X-CSRF-Token']
 
-export const getWithoutCSRF = (url, cb) => {
+export const axiosGetWithoutCSRF = (url, cb) => {
   instance.get(url).then(cb)
 }
 

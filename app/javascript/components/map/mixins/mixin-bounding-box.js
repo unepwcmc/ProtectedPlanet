@@ -1,4 +1,4 @@
-import { getWithoutCSRF } from '../helpers/request-helpers'
+import { axiosGetWithoutCSRF } from '../helpers/request-helpers'
 
 export default {
   data () {
@@ -10,7 +10,7 @@ export default {
   methods: {
     initBoundingBoxAndMap () {  
       if (this.mapOptions.boundsUrl) {
-        getWithoutCSRF(
+        axiosGetWithoutCSRF(
           this.mapOptions.boundsUrl.url, 
           this.getExtentResponseHandler(this.mapOptions.boundsUrl.padding)
         )
