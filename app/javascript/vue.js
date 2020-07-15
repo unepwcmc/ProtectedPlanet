@@ -30,6 +30,7 @@ import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
+import SelectEquity from './components/select/SelectEquity'
 import Flickity from 'vue-flickity';
 import Download from './components/download/Download'
 import MapInteractive from './components/map/MapInteractive'
@@ -89,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         SearchAreasHome,
         SearchSite,
         SearchSiteTopbar,
+        SelectEquity,
         SelectWithContent,
         StickyBar,
         StickyNav,

@@ -12,6 +12,10 @@
   } 
 %>
 
+<select-equity
+  :options="<%= options.to_json %>"
+/>
+
 <section class="container">
   <%= render partial: "partials/tabs/tabs-equity", locals: { 
     tabs: @tabs
