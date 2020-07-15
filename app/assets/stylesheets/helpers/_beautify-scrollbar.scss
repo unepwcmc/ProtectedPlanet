@@ -1,0 +1,34 @@
+@mixin beautify-scrollbar {
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-button {
+    width: rem-calc(9);
+    height: rem-calc(9);
+  }
+  &::-webkit-scrollbar-thumb,
+  &::-webkit-scrollbar-track {
+    background-clip: padding-box;
+    border-radius: rem-calc(9);
+    border: rem-calc(1) solid $grey-xdark;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $grey-black;
+    &:hover {
+      background: $grey-black;
+    }
+    &:active {
+      background-color: $white;
+    }
+  }
+  &::-webkit-scrollbar-track {
+    background: $white;
+    &:hover {
+      background: $white;
+    }
+    &:active {
+      background: $grey-black;
+    }
+  }
+  &::-webkit-scrollbar-corner {
+      background: transparent;
+  }
+}

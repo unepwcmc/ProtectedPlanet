@@ -61,6 +61,8 @@
   }
 
   &__results {
+    @include beautify-scrollbar;
+    
     overflow-y: scroll;
 
     height: rem-calc(150);
