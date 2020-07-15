@@ -11,8 +11,10 @@ class CountryController < ApplicationController
     @iucn_categories = @country.protected_areas_per_iucn_category
     @governance_types = @country.protected_areas_per_governance
 
-    designations = @country_presenter.designations
-    @designation_percentages = designations.map do |designation|
+    @country_designations = @country_presenter.designations
+
+    # For the stacked row chart percentages
+    @designation_percentages = @country_designations.map do |designation|
       { percent: designation[:percent] }
     end.to_json
 

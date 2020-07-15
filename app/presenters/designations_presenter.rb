@@ -37,9 +37,12 @@ class DesignationsPresenter
     "#{jurisdiction} designations"
   end
 
+  def all_pas
+    @all_pas ||= geo_entity.protected_areas_per_jurisdiction 
+  end
+
   def total_number_of_designations
-    all_pas = geo_entity.protected_areas_per_jurisdiction.to_a
-    all_pas.reduce(0) { |count, j| count += j["count"] }
+    all_pas.reduce(0) { |count, j| count + j["count"] }
   end
 
   def percent_of_total(jurisdiction)
@@ -48,7 +51,6 @@ class DesignationsPresenter
   end
 
   def designation_total(jurisdiction)
-    all_pas = geo_entity.protected_areas_per_jurisdiction
     all_pas.find { |result| result["name"] == jurisdiction }["count"]
   end
 

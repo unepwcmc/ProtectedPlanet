@@ -48,7 +48,7 @@
 
   .chart__legend-item {
     @include flex;
-    @include flex-v-start;
+    @include flex-v-center;
     margin-bottom: rem-calc(18);
     padding-right: rem-calc(27);
   }
@@ -58,7 +58,7 @@
   .chart__legend-key { @include chart-legend-key;  }
 
   .chart__legend-total { 
-    margin: rem-calc(0 30 0) auto; 
+    margin: rem-calc(0 3% 0) auto; 
   }
 }
 //--------------------------------------------------
