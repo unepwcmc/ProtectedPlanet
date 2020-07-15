@@ -30,7 +30,7 @@ export default {
 
     executeAfterStyleLoad (cb) {
       executeAfterCondition(
-        () => this.map.isStyleLoaded(), 
+        () => typeof this.map.isStyleLoaded === 'function' && this.map.isStyleLoaded(), 
         cb
       )
     }

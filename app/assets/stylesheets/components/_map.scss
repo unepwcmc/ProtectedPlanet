@@ -1,67 +1,128 @@
 @import 'maps/v-map-baselayer-controls';
+@import "maps/v-map-disclaimer";
 @import 'maps/v-map-filter';
 @import 'maps/v-map-filters';
 @import 'maps/v-map-header';
 @import 'maps/v-map-pa-search';
 @import 'maps/v-map-toggler';
 
+.map-section {
+  @include gutters;
+
+  @include breakpoint-down($small) {
+    padding: 0;
+  }
+}
+
 .map {
-  &--container {
-    @include gutters;
-
-    .map {
-      &__mapbox {
-        position: relative;
-
-        height: rem-calc(360);
-        @include breakpoint($medium) {
-          height: rem-calc(700);
-        }
-      }
+  &--main {
+    @include breakpoint($small) {
+      position: relative;
     }
 
     /**
-     * The following is part of a quick solution to the problem of having
-     * the header component within the filters component when it must 
-     * appear above the map and filters below on mobile devices. 
-     */
-    @include breakpoint($medium) {
+      * The following is part of a quick solution to the problem of having
+      * the header component within the filters component when it must 
+      * appear above the map and filters below on mobile devices. 
+      */
+    @include breakpoint($small) {
       & > .v-map-header {
         display: none;
       }
     }
 
-    // --------- BEGIN VMAPFILTERS GROUP --------- //
-    @include breakpoint($medium) {
+    .map__mapbox {
+      height: rem-calc(360);
+
       position: relative;
-    }
 
-    .v-map-filters {
-      @include breakpoint($medium) {
-        width: 33.33%;
-
-        position: absolute;
-        top: rem-calc(42);
-        left: $gutter-medium * 2;
-        z-index: 1;
-      }
-      @include breakpoint($large) {
-        left: $gutter-large * 2;
+      @include breakpoint($small) {
+        height: rem-calc(700);
       }
     }
-    // --------- ENDOF VMAPFILTERS GROUP --------- //
   }
 
+  &--header {
+    width: 100%;
+
+    .map__mapbox {
+      height: rem-calc(400);
+
+      position: relative;
+
+      @include breakpoint($small) {
+        height: rem-calc(425);
+      }
+    }
+  }
+
+  &--search {
+    .map__map {
+      height: rem-calc(460);
+    }
+  }
+}
+
+.map {
   &__trigger {
     @include button-map-trigger;
     margin-right: rem-calc(16);
   }
+}
 
-  &--search {
-    .map {
-      &__map {
-        height: rem-calc(460);
-      }
+.mapboxgl-ctrl-top-right .mapboxgl-ctrl.mapboxgl-ctrl-group {
+  margin-top: rem-calc(13);
+  margin-right: rem-calc(10);
+  
+  @include breakpoint($small) {
+    margin-top: rem-calc(17);
+  }
+
+  @include breakpoint($medium) {
+    margin-top: rem-calc(32);
+    margin-right: rem-calc(16);
+  }
+}
+
+.mapboxgl-ctrl-bottom-left {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.mapboxgl-ctrl.mapboxgl-ctrl-group:not(:empty) {
+  box-shadow: none;
+}
+
+.mapboxgl-ctrl-group {
+  .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-in,
+  .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-out {
+    border: solid rem-calc(1) $grey-dark;
+    background-color: $white;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: rem-calc(12 12);
+    width: 30px; height: 33px;
+    
+    @include breakpoint($medium) {
+      background-size: rem-calc(20 20);
+      width: 42px; height: 45px;
     }
+
+    &:focus:first-child,
+    &:focus:last-child {
+      border-radius: 0;
+    }
+
+    &:hover {
+      background-color: $grey-xlight;
+    }
+  }
+
+  .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-in {
+    background-image: image-url('icons/plus.svg');
+  }
+
+  .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-out {
+    background-image: image-url('icons/minus.svg');
   }
 }

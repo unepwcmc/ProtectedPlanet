@@ -12,9 +12,7 @@
   }
 %>
 
-<section class="container">
-  <%= render partial: "partials/tabs/tabs-thematic-area-database", locals: { tabs: @tabs } %>
-</section>
+<%= render partial: "partials/tabs/tabs-thematic-area-database", locals: { tabs: @tabs, map: @map } %>
 
 <section class="container section-padding">
   <%= render "partials/cards/resources" %>

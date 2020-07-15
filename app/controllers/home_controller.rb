@@ -1,31 +1,8 @@
-OVERLAYS = [
-  {
-    id: 'terrestrial_wdpa',
-    isToggleable: false,
-    layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
-    color: "#38A800",
-    isShownByDefault: true
-  },
-  {
-    id: 'marine_wdpa',
-    isToggleable: false,
-    layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/MapServer/tile/{z}/{y}/{x}"],
-    color: "#004DA8",
-    isShownByDefault: true
-  },
-  {
-    id: 'oecm',
-    isToggleable: true,
-    layers: ["https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/MapServer/tile/{z}/{y}/{x}"],
-    color: "#D9B143",
-    isShownByDefault: true
-  }
-].freeze
-
 class HomeController < ApplicationController
+  include MapHelper
+
   def index
     home_yml = I18n.t('home')
-    map_yml = I18n.t('main_map')
 
     @pa_coverage_percentage = 9999 #TODO Total PA coverage in %
 
@@ -49,9 +26,15 @@ class HomeController < ApplicationController
     @main_map = {
       disclaimer: map_yml[:disclaimer],
       dropdown_label: I18n.t('main_map.dropdown_label'),
-      overlays: MapOverlaysSerializer.new(OVERLAYS, map_yml).serialize,
+      overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize,
       search_types: I18n.t('main_map.search_types'),
       title: map_yml[:title]
     }
+  end
+
+  private
+
+  def home_overlays
+    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
   end
 end

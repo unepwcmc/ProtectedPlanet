@@ -2,6 +2,7 @@
   <div
     v-if="show"
     class="v-map-filters"
+    :class="{'v-map-filters--hidden': isHidden}"
   >
     <v-map-header
       v-model="title"
@@ -23,33 +24,30 @@
         </div>
       </div>
 
-      <div
+      <v-map-disclaimer
         v-if="disclaimer"
-        class="v-map-disclaimer"
-      >
-        <div class="v-map-disclaimer__heading">
-          {{ disclaimer.heading }}
-        </div>
-        <div
-          class="v-map-disclaimer__body"
-          v-html="disclaimer.body"
-        />
-      </div>
+        class="v-map-disclaimer--embedded"
+        :disclaimer="disclaimer"
+      />
     </div>
   </div>
 </template>
 <script>
+import VMapDisclaimer from './VMapDisclaimer'
 import VMapFilter from './VMapFilter'
 import VMapHeader from './VMapHeader'
 import VMapPASearch from './VMapPASearch'
+
+import { disableTabbing } from '../../helpers/focus-helpers'
 
 export default {
   name: 'VMapFilters',
 
   components: {
-    'v-map-filter': VMapFilter,
-    'v-map-header': VMapHeader,
-    'v-map-pa-search': VMapPASearch
+    VMapDisclaimer,
+    VMapFilter,
+    VMapHeader,
+    'v-map-pa-search': VMapPASearch,
   },
 
   props: {
@@ -71,15 +69,11 @@ export default {
     },
     disclaimer: {
       type: Object,
-      required: true,
-      validator: type => {
-        return (
-          type.hasOwnProperty('heading') &&
-          typeof type.heading === 'string' &&
-          type.hasOwnProperty('body') &&
-          typeof type.heading === 'string'
-        )
-      }
+      default: null
+    },
+    isHidden: {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -87,6 +81,10 @@ export default {
     return {
       show: true
     }
+  },
+
+  mounted () {
+    disableTabbing(this.$el)
   },
 
   methods: {
