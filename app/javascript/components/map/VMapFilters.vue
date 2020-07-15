@@ -85,7 +85,9 @@ export default {
   },
 
   mounted () {
-    disableTabbing(this.$el)
+    if (this.isHidden) {
+      disableTabbing(this.$el)
+    }
   },
 
   methods: {
