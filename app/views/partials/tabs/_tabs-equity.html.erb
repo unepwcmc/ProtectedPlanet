@@ -5,7 +5,9 @@
   <template slot-scope="{ selectedId }">
     <tab-target :id="1" :selected-id="selectedId">
       <section class="section-padding--bottom">
-        <h1>STANLEY PUT COMPONENT HERE</h1>
+        <select-equity
+          :options="<%= options.to_json %>"
+        />
       </section>
   
       <section class="container--medium section-padding--bottom">

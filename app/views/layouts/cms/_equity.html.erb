@@ -1,8 +1,3 @@
-<%
-  ##TODO Stanley - can you put this in the helper
-
-  @tabs = get_cms_tabs(2).to_json
-%>
 
 <%= render partial: "./layouts/partials/hero-basic", locals: { 
     classes: "#{@cms_page.slug} bg-image-overlay--white" ,
@@ -12,13 +7,9 @@
   } 
 %>
 
-<select-equity
-  :options="<%= options.to_json %>"
-/>
-
 <section class="container">
   <%= render partial: "partials/tabs/tabs-equity", locals: { 
-    tabs: @tabs
+    tabs: tabs
   } %>
 </section>
 

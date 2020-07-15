@@ -1,4 +1,8 @@
 module EquityHelper
+    def tabs
+        @tabs = get_cms_tabs(2).to_json
+    end
+    
     # To be updated once the PA pages are actually fleshed out
     def options
         @options = []
