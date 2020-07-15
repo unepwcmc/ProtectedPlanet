@@ -12,7 +12,9 @@
     </div>
 
     <div>
-      <span class="card__number-large block"><%= stats[:protected_percentage] %>%</span> <%= t("stats.coverage") %>
+      <div class="card__stat-large">
+        <span class="card__number-large block"><%= stats[:protected_percentage] %>%</span> <%= t("stats.coverage") %>
+      </div>
 
       <div>
         <p class="card__stat">

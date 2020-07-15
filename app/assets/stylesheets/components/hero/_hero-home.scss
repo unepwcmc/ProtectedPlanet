@@ -1,0 +1,28 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--home {
+  @include hero-stat-bubble;
+  background: $grey-light image_url('hero/home.png') center no-repeat;
+  padding-top: rem-calc(28);
+  padding-bottom: rem-calc(48);
+  z-index: 0;
+
+  @include breakpoint($small) { 
+    padding-top: rem-calc(35);
+    padding-bottom: rem-calc(80);
+  }
+
+  @include breakpoint($medium) { 
+    padding-top: rem-calc(100);
+    padding-bottom: rem-calc(166);
+  }
+
+  .hero__container { @include hero-container; }
+
+  .hero__intro { @include hero-intro; }
+
+  .hero__text {
+    @include breakpoint($large) { width: 58%; }
+  }
+}
