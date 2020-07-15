@@ -41,12 +41,13 @@ class Country < ApplicationRecord
     js = self.as_json(
       only: [:name, :iso_3, :id],
       include: {
-        region_for_index: { only: [ :name] }
+        region_for_index: { only: [:name] }
       }
     )
     #crude remapping to flatten
-    js['region_name'] = js['region_for_index']['name']
-    return js
+    # TODO This line is now breaking the indexing. It looks like it's not require anymore
+    #js['region_name'] = js['region_for_index']['name']
+    js
   end
 
   def random_protected_areas wanted=1

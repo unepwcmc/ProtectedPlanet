@@ -11,7 +11,8 @@ module Concerns::Searchable
     def load_search
       @query = search_params[:search_term]
       begin
-        @search = Search.search(@query, search_options, search_index)
+        _index = search_index
+        @search = Search.search(@query, search_options, _index)
       rescue => e
         Rails.logger.warn("error in search controller: #{e.message}")
         @search = nil
