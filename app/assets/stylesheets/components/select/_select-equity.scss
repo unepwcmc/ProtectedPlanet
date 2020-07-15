@@ -28,26 +28,86 @@
         width: 50%;
     }
 
-    &__select {
+    
+}
+
+// Custom select for this component
+&--dropdown {
+    &__custom-select {
+        position: relative;
+        user-select: none;
+        width: 100%;
+        margin-top: rem-calc(14);
+        margin-bottom: rem-calc(19);
+    }
+
+    &__custom-select-box {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__selected {
         @include text-body;
         -webkit-appearance: none;
+        background: $white;
+        border: 1px solid $grey-black;
+        cursor: pointer;
         line-height: 1.9;
         padding-top: rem-calc(22);
         padding-bottom: rem-calc(17);
         padding-left: rem-calc(29);
-        margin-top: rem-calc(14);
-        margin-bottom: rem-calc(19);
+        padding-right: rem-calc(24);
         width: 100%;
-        display: block;
+        height: 60px;
+
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         position: relative;
-        
-            &:after {
-                @include icon-chevron-black-down;
-                content: '';
-                height: rem-calc(18);
-                width: rem-calc(10);
-                position: absolute;
-                right: rem-calc(24);
-            }
+    }
+
+    &__options {
+        display: none;
+
+        &--active {
+            height: rem-calc(500);
+            overflow: scroll;
+            position: absolute;
+            display: block;
+            top: 100%;
+            left: 0;
+            right: 0;
+            border: 1px solid $grey-black;
+            border-top: 0;
+            background: $white;
+            z-index: 2;
+        }
+    }
+
+    &__option {
+        @include text-body;
+        position: relative;
+        display: block;
+        padding-left: rem-calc(29);
+        padding-right: rem-calc(24);
+        line-height: 1.9;
+
+        &:hover {
+            background-color: $grey-light;
+        }
+    }
+
+    &__dropdown {
+        @include icon-chevron-black-down;
+        height: rem-calc(10);
+        width: rem-calc(18);
+        transform: rotate(0deg);
+
+        &--active {
+            @extend .select--dropdown__dropdown;
+            transform: rotate(180deg);
+        }
     }
 }
