@@ -1,15 +1,53 @@
-.select-equity {
+&--equity {
     @include flex;
+    height: rem-calc(507);
 
     &__content {
         border: 1px solid $grey-med-dark;
         width: 50%;
     }
 
+    &__description {
+        @include flex-grow;
+    }
+
+    &__header {
+        margin-top: 0;
+        margin-bottom: rem-calc(14);
+    }
+
     &__panel {
+        @include flex;
+        @include flex-column;
         background-color: $grey-med-light;
-        padding-left: rem-calc(57);
+        font-size: rem-calc(17);
+        padding-top: rem-calc(41);
         padding-right: rem-calc(40);
+        padding-bottom: rem-calc(29);
+        padding-left: rem-calc(57);
         width: 50%;
+    }
+
+    &__select {
+        @include text-body;
+        -webkit-appearance: none;
+        line-height: 1.9;
+        padding-top: rem-calc(22);
+        padding-bottom: rem-calc(17);
+        padding-left: rem-calc(29);
+        margin-top: rem-calc(14);
+        margin-bottom: rem-calc(19);
+        width: 100%;
+        display: block;
+        position: relative;
+        
+            &:after {
+                @include icon-chevron-black-down;
+                content: '';
+                height: rem-calc(18);
+                width: rem-calc(10);
+                position: absolute;
+                right: rem-calc(24);
+            }
     }
 }
