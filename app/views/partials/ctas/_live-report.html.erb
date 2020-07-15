@@ -1,18 +1,18 @@
 <% if cta_live_report %>
-<section class="cta--<%= cta_live_report.css_class %> bg--grey-xdark">
-  <div class="container cta__container">
-    <div class="cta__content">
-      <% if cta_live_report.updated %>
-        <span class="cta__ribbon"><%= t('global.status.updated') %></span>
-      <% end %>
+  <section class="cta--<%= cta_live_report.css_class %> bg--grey-xdark">
+    <div class="container cta__container">
+      <div class="cta__content">
+        <% if cta_live_report.updated %>
+          <span class="cta__ribbon"><%= t('global.status.updated') %></span>
+        <% end %>
 
-      <div>
-        <h2 class="cta__title h2-big"><%= cta_live_report.title %></h2>
-        <p class="cta__intro text-intro"><%= cta_live_report.summary %></p>
+        <div>
+          <h2 class="cta__title h2-big"><%= cta_live_report.title %></h2>
+          <p class="cta__intro text-intro"><%= cta_live_report.summary %></p>
+        </div>
+
+        <%= link_to t('ctas.live_report.button'), cta_live_report.url, target: '_blank', class: 'button--accent flex-no-shrink' %>
       </div>
-
-      <%= link_to t('ctas.live_report.button'), cta_live_report.url, target: '_blank', class: 'button--accent flex-no-shrink' %>
     </div>
-  </div>
-</section>
+  </section>
 <% end %>

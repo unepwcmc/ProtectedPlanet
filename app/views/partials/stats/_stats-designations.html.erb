@@ -2,24 +2,29 @@
   <h2 class="card__h2"><%= t('stats.designations.title') %></h2>
 
   <div>
-    Chart
+    <chart-row-stacked 
+      :rows="<%= @designation_percentages %>"
+      theme="designation"
+    >
+    </chart-row-stacked>
   </div>
   
-  <div class="flex flex-h-between">
+  <div class="chart--legend--designation">
     <% designations.each do |designation| %>
-      <div class="card__third">
-        <div class="flex flex-h-between flex-v-center">
-          <h3><%= designation[:title] %></h3>
-          <span><%= designation[:total] %></span>
+      <div class="chart__legend-group">
+        <div class="chart__legend-item">
+          <span class="chart__legend-key"></span>
+          <h3 class="chart__legend-title"><%= designation[:title] %></h3>
+          <span class="chart__legend-total"><%= designation[:total] %></span>
         </div>
 
         <% if designation[:has_jurisdiction] %>
           <ul class="list--underline">
             <% designation[:jurisdictions].each do |jurisdiction| %>
-              <li class="list__li flex flex-h-between">
+              <li class="list__li flex flex-v-start">
                 <span><%= jurisdiction["designation_name"] %></span>
-                <%#= link_to jurisdiction["designation_name"], search_url("#{location.class.name.downcase}" => location.name, designation: jurisdiction["designation_name"], main: location.class.name.downcase.to_sym) %>
-                <span><%= jurisdiction["count"] %></span>
+                <span class="list__right"><%= jurisdiction["count"] %></span>
+                <%= link_to '', '/', title: jurisdiction["designation_name"], class: 'list__a' %>
               </li>
             <% end %>
           </ul>

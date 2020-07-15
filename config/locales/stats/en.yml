@@ -4,10 +4,13 @@ en:
       title: Attributes
     citation: Citation Text
     coverage: Coverage
-    designatons:
+    coverage-chart-smallprint: The graph excludes status years with no information reported (STAT_YR = 0).
+    designations:
       title: Designations
     external:
       title: Affiliations
+    growth:
+      title: Growth in protected area coverage
     governance: 
       title: Governance types
     green-list:
