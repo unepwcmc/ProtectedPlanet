@@ -14,17 +14,17 @@
       <autocomplete
         v-model="autoCompleteResults"
         :placeholder="searchType.placeholder"
-        @search="getAutocompleteResults"
+        :autocomplete-callback="autocompleteCallback"
+        @submit="submitSearch"
       />
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import Autocomplete from '../autocomplete/Autocomplete'
 import Selector from '../select/Selector'
-
-import axios from 'axios'
 
 export default {
   name: 'VMapPASearch',
@@ -62,6 +62,34 @@ export default {
   },
 
   computed: {
+    autocompleteCallback() {
+      return searchTerm => {
+        return new Promise(resolve => { // TESTING
+          setTimeout(() => {
+            resolve([
+              'a',
+              'abc',
+              'abcde',
+              'a',
+              'abc',
+              'abcde',
+              'a',
+              'abc',
+              'abcde',
+              'a',
+              'abc',
+              'abcde'
+            ])
+          }, 500)
+        })
+
+        // return axios.post('/search/autocomplete', {
+        //   type: this.searchType.id,
+        //   search_term: searchTerm
+        // })
+      }
+    },
+
     dropdownOptions() {
       return this.searchTypes.map(type =>
         this.convertSearchTypeToDropdownOption(type)
@@ -75,32 +103,6 @@ export default {
         label: searchType.title,
         value: searchType.id
       }
-    },
-
-    getAutocompleteResults(searchTerm) {
-      console.log({searchTerm})
-      setTimeout(() => {
-        this.autoCompleteResults = [
-          'a',
-          'abc',
-          'abcde',
-          'a',
-          'abc',
-          'abcde',
-          'a',
-          'abc',
-          'abcde',
-          'a',
-          'abc',
-          'abcde'
-        ]
-      }, 500)
-      // axios.post('/search/autocomplete', {
-      //   type: this.searchType.id,
-      //   search_term: searchTerm
-      // }).then(results => {
-      //   this.autoCompleteResults = results
-      // })
     },
 
     onDropdownChange(value) {

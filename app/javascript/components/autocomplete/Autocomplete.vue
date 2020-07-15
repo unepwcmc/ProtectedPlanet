@@ -7,8 +7,9 @@
         type="text"
         :disabled="busy"
         :placeholder="placeholder"
-        v-model="search"
+        :value="search"
         @input="onInput"
+        @keyup.enter.prevent.stop="onEnter"
         @keyup.esc.prevent.stop="onEscape"
       />
       <div class="autocomplete__magnifying-glass" @click="onIconClick" />
@@ -21,8 +22,8 @@
           :key="index"
           class="autocomplete__result"
           tabindex="0"
-          @click="selectResult(result)"
-          @keyup.enter.stop.prevent="selectResult(result)"
+          @click="submit(result)"
+          @keyup.enter.stop.prevent="submit(result)"
         >{{ result }}</div>
       </div>
     </div>
@@ -35,24 +36,20 @@ import { debounce } from 'lodash'
 export default {
   name: 'Autocomplete',
 
-  model: {
-    prop: 'results',
-    event: 'change'
-  },
-
   data() {
     return {
+      busy: false,
+      results: [],
       search: '',
-      busy: false
     }
   },
 
   props: {
+    autocompleteCallback: {
+      type: Function,
+      required: true
+    },
     placeholder: String,
-    results: {
-      type: Array,
-      default: []
-    }
   },
 
   computed: {
@@ -62,45 +59,67 @@ export default {
   },
 
   methods: {
-    runSearch: debounce(function () {
-      this.$emit('search', this.search)
-    }, 1000),
-
     onEscape() {
       this.resetAutocompleteResults()
     },
 
-    onIconClick() {
-      if (!this.search) {
-        this.focusInput()
-      } else {
-        this.$emit('search', this.search)
+    onEnter() {
+      if (!this.hasResults) {
+        this.submit()
       }
     },
 
-    onInput() {
+    onIconClick() {
+      if (this.search) {
+        this.submit()
+      } else {
+        this.focusInput()
+      }
+    },
+
+    onInput(e) {
+      console.log(e.target.value)
+      this.updateSearch(e.target.value)
       if (!this.busy) {
-        this.runSearch()
+        this.autocomplete()
       }
     },
 
     resetAutocompleteResults() {
-      this.$emit('change', [])
+      this.results = []
     },
 
     focusInput() {
       this.$refs.input.focus()
     },
 
-    selectResult(result) {
-      this.busy = true
-      this.search = result
-      this.$emit('search', this.search)
-      this.resetAutocompleteResults()
-      setTimeout(() => {
-        this.busy = false
-      }, 3000)
+    updateSearch(value) {
+      this.search = value
     },
+
+    delayUnbusy(delay = 3000) {
+      setTimeout(() => this.busy = false, delay)
+    },
+
+    autocomplete: debounce(function () {
+      if (this.busy) {
+        return
+      }
+      this.busy = true
+      this.autocompleteCallback(this.search).then(results => {
+        this.results = results
+      }).finally(() => this.delayUnbusy())
+    }, 3000),
+
+    submit(search) {
+      this.busy = true
+      if (search) {
+        this.updateSearch(search)
+      }
+      this.resetAutocompleteResults()
+      this.$emit('submit', this.search)
+      this.delayUnbusy()
+    }
   }
 }
 </script>
