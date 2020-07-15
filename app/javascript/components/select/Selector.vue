@@ -33,6 +33,7 @@
           @keyup.enter.stop="select(option.value)"
           @keyup.esc.stop="showDropdown(false)"
           @keyup="onKeyup"
+          @mouseover="onOptionMouseover"
         >
           {{ option.label }}
         </div>
@@ -45,15 +46,18 @@ import { delay } from 'lodash'
 
 export default {
   name: 'Selector',
+
   model: {
     event: 'change',
     prop: 'value'
   },
+
   props: {
     value: {
       required: true,
       type: String
     },
+
     options: {
       type: Array,
       required: true,
@@ -66,6 +70,7 @@ export default {
         )
     }
   },
+
   data () {
     return {
       dropdownEnabled: false,
@@ -78,6 +83,7 @@ export default {
       searchClear: undefined
     }
   },
+
   computed: {
     /**
      * The selected value will always resolve to an option. If there is no value,
@@ -95,18 +101,21 @@ export default {
       return this.options[0]
     }
   },
+
   created () {
     /**
      * @see [onDocumentClick]
      */
     document.documentElement.addEventListener('click', this.onDocumentClick)
   },
+
   beforeDestroy () {
     /**
      * @see [onDocumentClick]
      */
     document.documentElement.removeEventListener('click', this.onDocumentClick)
   },
+
   methods: {
     /**
      * Determine if a click occurred outside of the component.
@@ -121,6 +130,7 @@ export default {
         this.showDropdown(false)
       }
     },
+
     onKeyup (e) {
       if (this.searchClear) {
         // if there's a timeout ID, clear it
@@ -158,6 +168,10 @@ export default {
       }, 250)
     },
 
+    onOptionMouseover (e) {
+      e.target.focus()
+    },
+
     /**
      * Submit the selected value to the parent component.
      * @param value the value to be submitted from the options.
@@ -167,9 +181,11 @@ export default {
       this.$emit('change', value)
       this.showDropdown(false)
     },
+
     isSelected (value) {
       return this.selected.value === value
     },
+
     showDropdown (value) {
       if (typeof value === 'boolean') {
         this.dropdownEnabled = value

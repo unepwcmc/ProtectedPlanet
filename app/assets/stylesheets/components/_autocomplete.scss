@@ -1,14 +1,18 @@
 .autocomplete {
   background-color: $grey-dark;
+  border-radius: rem-calc(32);
+  border-radius: rem-calc(32);
   border: rem-calc(1) solid $white;
-  border-radius: rem-calc(32);
-  border-radius: rem-calc(32);
   margin-bottom: rem-calc(12);
 
+  display: flex;
+  
   position: relative;
   z-index: 2;
-  
-  display: flex;
+
+  ::placeholder {
+    color: $grey-light;
+  }
   
   &__container {
     position: relative;
@@ -64,9 +68,11 @@
 
   &__result {
     padding: rem-calc(12 16);
-    &:focus {
-      background-color: $grey-xlight;
-      color: $grey;
+
+    &:focus,
+    &:hover {
+        background-color: $grey-xlight;
+        color: $grey-black;
     }
   }
   

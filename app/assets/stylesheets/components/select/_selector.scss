@@ -2,10 +2,10 @@
     border: rem-calc(1) solid $grey-xlight;
     border-radius: 0;
     
+    display: block;
+    
     position: relative;
     z-index: 100;
-    
-    display: block;
 
     &__selected {
         cursor: default;
@@ -18,21 +18,25 @@
             box-shadow: 0 0 0 rem-calc(2) rgba($grey-light, 0.25);
         }
     }
+
     &__label {
         flex: 1;
     }
+
     &__caret {
         @include icon-chevron-white-down;
         &--active {
             @include icon-chevron-white-up;
         }
     }
+
     &__selected,
     &__option {
         padding: rem-calc(12 16);
     }
+
     &__options {
-        background-color: $grey-black;        
+        background-color: $grey;        
         border-top: rem-calc(1) solid $grey-xlight;
         border-bottom: rem-calc(1) solid $grey-xlight;
         color: $white;
@@ -44,32 +48,37 @@
         height: rem-calc(100);
         overflow-y: scroll;
     }
+
     &__option {
         user-select: none;
         cursor: pointer;
 
+        &:focus {
+            outline: none;
+        }
+        
+        &:focus,
         &:hover {
-            background-color: $grey;
+            background-color: $grey-xlight;
+            color: $grey-black;
         }
+
         &--active {
+            background-color: $grey-light;
+            color: $grey-dark;
+
+            &:focus,
             &:hover {
-                background-color: $grey-light;
-            }
-            &:focus {
-                background-color: $grey-light;
-                outline: none;
+                background-color: lighten($grey-light, 5%);
             }
         }
+
         &:first-child {
             border-top: rem-calc(1) solid rgba($black, 0);
         }
+
         &:last-child {
             border-bottom: rem-calc(1) solid rgba($black, 0);
-        }
-        &:focus {
-            background-color: $grey-xlight;
-            color: $grey-black;
-            outline: none;
         }
     }
 }

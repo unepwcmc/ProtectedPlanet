@@ -33,6 +33,7 @@
           tabindex="0"
           @click="submit(result)"
           @keyup.enter.stop.prevent="submit(result)"
+          @mouseover="onResultMouseover"
         >{{ result }}</div>
       </div>
     </div>
@@ -131,6 +132,10 @@ export default {
       if (!this.busy) {
         this.autocomplete()
       }
+    },
+
+    onResultMouseover (e) {
+      e.target.focus()
     },
 
     resetAutocompleteResults () {
