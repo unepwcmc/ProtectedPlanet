@@ -22,13 +22,13 @@ OVERLAYS = [
   }
 ].freeze
 
-WDPA_FEATURE_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/FeatureServer/'
-OECM_FEATURE_SERVER_LAYER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/FeatureServer/0/'
+WDPA_FEATURE_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/FeatureServer'
+OECM_FEATURE_SERVER_LAYER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/FeatureServer/0'
 
 SERVICES_FOR_POINT_QUERY = [
   { url: OECM_FEATURE_SERVER_LAYER_URL, isPoint: false },
-  { url: WDPA_FEATURE_SERVER_URL + '0/', isPoint: true },
-  { url: WDPA_FEATURE_SERVER_URL + '1/', isPoint: false }
+  { url: WDPA_FEATURE_SERVER_URL + '/0/', isPoint: true },
+  { url: WDPA_FEATURE_SERVER_URL + '/1/', isPoint: false }
 ].freeze
 
 module MapHelper
@@ -51,16 +51,25 @@ module MapHelper
   end
 
   def country_extent_url (iso3)
-    "https://data-gis.unep-wcmc.org/server/rest/services/AdministrativeUnits/GADM_EEZ_Layer/FeatureServer/0/query?where=GID_0+%3D+%27#{iso3}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson"
+    {
+      url: "https://data-gis.unep-wcmc.org/server/rest/services/AdministrativeUnits/GADM_EEZ_Layer/FeatureServer/0/query?where=GID_0+%3D+%27#{iso3}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson", 
+      padding: 5
+    }
   end
   
   def region_extent_url (name)
-    "https://data-gis.unep-wcmc.org/server/rest/services/AdministrativeUnits/GADM_EEZ_Layer/FeatureServer/0/query?where=region+%3D+%27#{CGI.escape(name)}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson"
+    {
+      url: "https://data-gis.unep-wcmc.org/server/rest/services/AdministrativeUnits/GADM_EEZ_Layer/FeatureServer/0/query?where=region+%3D+%27#{CGI.escape(name)}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson", 
+      padding: 5
+    }
   end
   
   def pa_extent_url (wdpa_id, is_point)
     layer_number = is_point ? 0 : 1
   
-    "https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/FeatureServer/#{layer_number}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson"
+    {
+      url: "#{WDPA_FEATURE_SERVER_URL}/#{layer_number}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson", 
+      padding: 1
+    }
   end
 end

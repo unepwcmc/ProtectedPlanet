@@ -39,10 +39,7 @@ class ProtectedAreasController < ApplicationController
 
     @map_options = {
       map: { 
-        boundsUrl: { 
-          url: pa_extent_url(@protected_area.wdpa_id, is_point_geom),
-          isPoint: is_point_geom
-        }
+        boundsUrl: pa_extent_url(@protected_area.wdpa_id, is_point_geom)
       }
     }
 

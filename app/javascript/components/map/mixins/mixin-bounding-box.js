@@ -12,16 +12,14 @@ export default {
       if (this.mapOptions.boundsUrl) {
         getWithoutCSRF(
           this.mapOptions.boundsUrl.url, 
-          this.getExtentResponseHandler(this.mapOptions.boundsUrl.isPoint)
+          this.getExtentResponseHandler(this.mapOptions.boundsUrl.padding)
         )
       } else {
         this.initMap()
       }
     },
 
-    getExtentResponseHandler (isPoint=false) {
-      const padding = isPoint ? 5 : 0
-      
+    getExtentResponseHandler (padding=5) {      
       return res => {
         const extent = res.data.extent
   
