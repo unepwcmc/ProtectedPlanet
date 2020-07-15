@@ -45,10 +45,6 @@
         &:first-child { border-top: none; }
       }
 
-        &__a {
-          margin-left: auto;
-        }
-
         &__icon {
           @include circle-icon;
           background-color: $grey;
@@ -60,14 +56,17 @@
           margin-right: rem-calc(24);
         } 
 
-        &__value {
+        &__right {
+          margin-left: auto;
 
+          justify-content: flex-end;
         }
 
         &__a {
           @include button-with-icon;
           @include flex-no-shrink;
-          
+          font-size: rem-calc(16);
+
           &::after {
             @include icon-circle-chevron-black;
             height: rem-calc(21);
