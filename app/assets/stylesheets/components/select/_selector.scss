@@ -37,16 +37,17 @@
 
     &__options {
         background-color: $grey;        
-        border-top: rem-calc(1) solid $grey-xlight;
         border-bottom: rem-calc(1) solid $grey-xlight;
+        border-top: rem-calc(1) solid $grey-xlight;
         color: $white;
+        overflow-y: scroll;
+        
+        height: rem-calc(100);
+        width: 100%;
 
         position: absolute;
         top: rem-calc(44);
         left: 0;
-        width: 100%;
-        height: rem-calc(100);
-        overflow-y: scroll;
     }
 
     &__option {
