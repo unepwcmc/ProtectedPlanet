@@ -130,6 +130,7 @@ $chart-target-stroke-width: rem-calc(3);
   @import './charts/chart-line';
   @import './charts/chart-row';
   @import './charts/chart-row-pa';
+  @import './charts/chart-row-stacked';
   @import './charts/chart-row-target';
   @import './charts/chart-square';
 }
