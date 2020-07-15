@@ -78,7 +78,7 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       show: true
     }
@@ -91,12 +91,12 @@ export default {
   },
 
   methods: {
-    onClose() {
+    onClose () {
       this.show = false
       this.$emit('show', false)
     },
 
-    onSearch(search) {
+    onSearch (search) {
       // LOGIC GOES HERE FOR INITIATING MAP CHANGE
       console.log({ search })
     }

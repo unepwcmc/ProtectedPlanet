@@ -1,6 +1,9 @@
 <template>
   <div class="autocomplete__container">
-    <div class="autocomplete" @focus="focusInput">
+    <div
+      class="autocomplete"
+      @focus="focusInput"
+    >
       <input
         ref="input"
         class="autocomplete__input"
@@ -12,9 +15,15 @@
         @keyup.enter.prevent.stop="onEnter"
         @keyup.esc.prevent.stop="onEscape"
       />
-      <div class="autocomplete__magnifying-glass" @click="onMagnifyingGlassClick" />
+      <div
+        class="autocomplete__magnifying-glass"
+        @click="onMagnifyingGlassClick"
+      />
     </div>
-    <div v-if="hasResults" class="autocomplete__results-container">
+    <div
+      v-if="hasResults"
+      class="autocomplete__results-container"
+    >
       <div class="autocomplete__results">
         <div
           v-for="(result, index) in results"
@@ -36,7 +45,7 @@ import { debounce } from 'lodash'
 export default {
   name: 'Autocomplete',
 
-  data() {
+  data () {
     return {
       /**
        * Determine whether to prevent an autocomplete.
@@ -73,13 +82,13 @@ export default {
   },
 
   computed: {
-    hasResults() {
+    hasResults () {
       return this.results.length > 0
     }
   },
 
   methods: {
-    onEscape() {
+    onEscape () {
       this.resetAutocompleteResults()
     },
 
@@ -89,7 +98,7 @@ export default {
      * If there are no results then submit the search.
      * @return void
      */
-    onEnter() {
+    onEnter () {
       if (this.search) {
         if (this.hasResults) {
           this.$refs.results[0].focus()
@@ -105,7 +114,7 @@ export default {
      * Focus the first result if they are available.
      * @return void
      */
-    onMagnifyingGlassClick() {
+    onMagnifyingGlassClick () {
       if (this.search) {
         if (this.hasResults) {
           this.$refs.results[0].focus()
@@ -117,22 +126,22 @@ export default {
       }
     },
 
-    onInput(e) {
+    onInput (e) {
       this.updateSearch(e.target.value)
       if (!this.busy) {
         this.autocomplete()
       }
     },
 
-    resetAutocompleteResults() {
+    resetAutocompleteResults () {
       this.results = []
     },
 
-    focusInput() {
+    focusInput () {
       this.$refs.input.focus()
     },
 
-    updateSearch(value) {
+    updateSearch (value) {
       this.search = value
     },
 
@@ -140,7 +149,7 @@ export default {
      * Helper for the easing-off of the [busy] state.
      * @return void
      */
-    delayUnbusy(delay = 3000) {
+    delayUnbusy (delay = 3000) {
       setTimeout(() => this.busy = false, delay)
     },
 
@@ -171,7 +180,7 @@ export default {
      * @param search an overriding search term to be used if present
      * @return void
      */
-    submit(search) {
+    submit (search) {
       this.busy = true
       if (search) {
         this.updateSearch(search)

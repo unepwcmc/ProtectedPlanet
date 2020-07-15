@@ -66,7 +66,7 @@ export default {
         )
     }
   },
-  data() {
+  data () {
     return {
       dropdownEnabled: false,
       search: undefined,
@@ -84,7 +84,7 @@ export default {
      * then the selected option is the first in the array.
      * @return Object selected option
      */
-    selected() {
+    selected () {
       // if a value is present, get the corresponding option or otherwise just get the first one
       if (this.value) {
         return this.options.filter(
@@ -95,13 +95,13 @@ export default {
       return this.options[0]
     }
   },
-  created() {
+  created () {
     /**
      * @see [onDocumentClick]
      */
     document.documentElement.addEventListener('click', this.onDocumentClick)
   },
-  beforeDestroy() {
+  beforeDestroy () {
     /**
      * @see [onDocumentClick]
      */
@@ -113,7 +113,7 @@ export default {
      * If it did, assume the dropdown is no-longer being used, and hide it.
      * @return void
      */
-    onDocumentClick(e) {
+    onDocumentClick (e) {
       e.preventDefault()
       e.stopPropagation()
       // close the dropdown options if a click is registered outside of the component
@@ -121,7 +121,7 @@ export default {
         this.showDropdown(false)
       }
     },
-    onKeyup(e) {
+    onKeyup (e) {
       if (this.searchClear) {
         // if there's a timeout ID, clear it
         clearTimeout(this.searchClear)
@@ -163,14 +163,14 @@ export default {
      * @param value the value to be submitted from the options.
      * @return void
      */
-    select(value) {
+    select (value) {
       this.$emit('change', value)
       this.showDropdown(false)
     },
-    isSelected(value) {
+    isSelected (value) {
       return this.selected.value === value
     },
-    showDropdown(value) {
+    showDropdown (value) {
       if (typeof value === 'boolean') {
         this.dropdownEnabled = value
       } else {

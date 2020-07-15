@@ -54,7 +54,7 @@ export default {
     }
   },
 
-  data() {
+  data () {
     return {
       /**
        * The array of strings to be populated from an autocomplete response.
@@ -76,7 +76,7 @@ export default {
      * It must return a Promise that resolves to an array of strings.
      * @return Function
      */
-    autocompleteCallback() {
+    autocompleteCallback () {
       return searchTerm => {
         return new Promise(resolve => { // TESTING
           setTimeout(() => {
@@ -109,7 +109,7 @@ export default {
      * do not have a compatible object structure with a label and value.
      * @return Array dropdown-compatible searchTypes
      */
-    dropdownOptions() {
+    dropdownOptions () {
       return this.searchTypes.map(type =>
         this.convertSearchTypeToDropdownOption(type)
       )
@@ -122,7 +122,7 @@ export default {
      * @param searchType the searchType to convert to a dropdown option.
      * @return Object dropdown option
      */
-    convertSearchTypeToDropdownOption(searchType) {
+    convertSearchTypeToDropdownOption (searchType) {
       return {
         label: searchType.title,
         value: searchType.id
@@ -134,7 +134,7 @@ export default {
      * @param value the [id] of a searchType
      * @return void
      */
-    onDropdownChange(value) {
+    onDropdownChange (value) {
       this.searchType = this.searchTypes.filter(type => type.id === value)[0]
     },
 
@@ -143,7 +143,7 @@ export default {
      * @param search the search term to be used with the map query
      * @return void
      */
-    submitSearch(search) {
+    submitSearch (search) {
       this.$emit('change', search)
     }
   }
