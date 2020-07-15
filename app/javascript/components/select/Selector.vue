@@ -70,10 +70,20 @@ export default {
     return {
       dropdownEnabled: false,
       search: undefined,
+      /**
+       * Contains a timeout ID used in conjunction with building up a string to match against option labels.
+       * As you type, the search term is built up. When you pause, if you delay too long, the search term is reset.
+       * @type Number
+       */
       searchClear: undefined
     }
   },
   computed: {
+    /**
+     * The selected value will always resolve to an option. If there is no value,
+     * then the selected option is the first in the array.
+     * @return Object selected option
+     */
     selected() {
       // if a value is present, get the corresponding option or otherwise just get the first one
       if (this.value) {
@@ -86,12 +96,23 @@ export default {
     }
   },
   created() {
+    /**
+     * @see [onDocumentClick]
+     */
     document.documentElement.addEventListener('click', this.onDocumentClick)
   },
   beforeDestroy() {
+    /**
+     * @see [onDocumentClick]
+     */
     document.documentElement.removeEventListener('click', this.onDocumentClick)
   },
   methods: {
+    /**
+     * Determine if a click occurred outside of the component.
+     * If it did, assume the dropdown is no-longer being used, and hide it.
+     * @return void
+     */
     onDocumentClick(e) {
       e.preventDefault()
       e.stopPropagation()
@@ -136,6 +157,12 @@ export default {
         this.search = undefined
       }, 250)
     },
+
+    /**
+     * Submit the selected value to the parent component.
+     * @param value the value to be submitted from the options.
+     * @return void
+     */
     select(value) {
       this.$emit('change', value)
       this.showDropdown(false)

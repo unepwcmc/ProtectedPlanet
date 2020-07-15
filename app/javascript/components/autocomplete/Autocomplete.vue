@@ -12,7 +12,7 @@
         @keyup.enter.prevent.stop="onEnter"
         @keyup.esc.prevent.stop="onEscape"
       />
-      <div class="autocomplete__magnifying-glass" @click="onIconClick" />
+      <div class="autocomplete__magnifying-glass" @click="onMagnifyingGlassClick" />
     </div>
     <div v-if="hasResults" class="autocomplete__results-container">
       <div class="autocomplete__results">
@@ -38,17 +38,37 @@ export default {
 
   data() {
     return {
+      /**
+       * Determine whether to prevent an autocomplete.
+       * @type Boolean
+       */
       busy: false,
+      /**
+       * Autocomplete results.
+       * @type Array
+       */
       results: [],
+      /**
+       * The search term. Replaced by an autocomplete result when selected.
+       * @type String
+       */
       search: '',
     }
   },
 
   props: {
+    /**
+     * The autocomplete depends on a callback to fetch its results.
+     * The callback should be a function with a parameter for the search term.
+     * It should return a Promise that resolves to an array of strings.
+     */
     autocompleteCallback: {
       type: Function,
       required: true
     },
+    /**
+     * The placeholder to be seen before any input has been entered.
+     */
     placeholder: String,
   },
 
@@ -63,22 +83,41 @@ export default {
       this.resetAutocompleteResults()
     },
 
+    /**
+     * When [enter] is triggered by the input, focus on the first result 
+     * so it can be used on the next trigger if there are any.
+     * If there are no results then submit the search.
+     * @return void
+     */
     onEnter() {
-      if (!this.hasResults) {
-        this.submit()
+      if (this.search) {
+        if (this.hasResults) {
+          this.$refs.results[0].$el.focus()
+        } else {
+          this.submit()
+        }
       }
     },
 
-    onIconClick() {
+    /**
+     * When the search icon is clicked, search if there's a term and there
+     * aren't autocomplete results. Otherwise focus the input.
+     * Focus the first result if they are available.
+     * @return void
+     */
+    onMagnifyingGlassClick() {
       if (this.search) {
-        this.submit()
+        if (this.hasResults) {
+          this.$refs.results[0].$el.focus()
+        } else {
+          this.submit()
+        }
       } else {
         this.focusInput()
       }
     },
 
     onInput(e) {
-      console.log(e.target.value)
       this.updateSearch(e.target.value)
       if (!this.busy) {
         this.autocomplete()
@@ -97,10 +136,22 @@ export default {
       this.search = value
     },
 
+    /**
+     * Helper for the easing-off of the [busy] state.
+     * @return void
+     */
     delayUnbusy(delay = 3000) {
       setTimeout(() => this.busy = false, delay)
     },
 
+    /**
+     * The autocomplete is a debounced function.
+     * @see https://lodash.com/docs/4.17.15#debounce
+     * If in a [busy] state, do not run the autocomplete.
+     * Otherwise, run the [autocompleteCallback] function and expect it
+     * to return a Promise that resolves to an array of [result] strings.
+     * @return void
+     */
     autocomplete: debounce(function () {
       if (this.busy) {
         return
@@ -111,6 +162,14 @@ export default {
       }).finally(() => this.delayUnbusy())
     }, 3000),
 
+    /**
+     * When used, this will submit the present [search] term.
+     * If supplied with the [search] argument, it will be used in place of it.
+     * Autocomplete results are cleared when a submit occurs and the search
+     * term will be emitted from the component to be used by the parent.
+     * @param search an overriding search term to be used if present
+     * @return void
+     */
     submit(search) {
       this.busy = true
       if (search) {

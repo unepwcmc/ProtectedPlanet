@@ -56,12 +56,26 @@ export default {
 
   data() {
     return {
+      /**
+       * The array of strings to be populated from an autocomplete response.
+       * @type Array
+       */
       autoCompleteResults: [],
+      /**
+       * The search type should be an object with an id, title and placeholder text.
+       * @type Object
+       */
       searchType: this.searchTypes[0],
     }
   },
 
   computed: {
+    /**
+     * The callback is used with the autocomplete component to fetch results.
+     * It will receive the search to be used in the fetch as an argument.
+     * It must return a Promise that resolves to an array of strings.
+     * @return Function
+     */
     autocompleteCallback() {
       return searchTerm => {
         return new Promise(resolve => { // TESTING
@@ -90,6 +104,11 @@ export default {
       }
     },
 
+    /**
+     * Dropdown options are computed because their searchType equivalents
+     * do not have a compatible object structure with a label and value.
+     * @return Array dropdown-compatible searchTypes
+     */
     dropdownOptions() {
       return this.searchTypes.map(type =>
         this.convertSearchTypeToDropdownOption(type)
@@ -98,6 +117,11 @@ export default {
   },
 
   methods: {
+    /**
+     * The dropdown expects an array with objects containing a label and value.
+     * @param searchType the searchType to convert to a dropdown option.
+     * @return Object dropdown option
+     */
     convertSearchTypeToDropdownOption(searchType) {
       return {
         label: searchType.title,
@@ -105,11 +129,20 @@ export default {
       }
     },
 
+    /**
+     * Update the search type based on the selector's choice.
+     * @param value the [id] of a searchType
+     * @return void
+     */
     onDropdownChange(value) {
-      console.log({onDropdownChange: value})
       this.searchType = this.searchTypes.filter(type => type.id === value)[0]
     },
 
+    /**
+     * Emit the search term refined by the autocomplete.
+     * @param search the search term to be used with the map query
+     * @return void
+     */
     submitSearch(search) {
       this.$emit('change', search)
     }
