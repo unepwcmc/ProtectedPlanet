@@ -21,8 +21,6 @@ class RegionController < ApplicationController
     @wdpa = pas_sample
 
     @map = {
-      disclaimer: map_yml[:disclaimer],
-      title: map_yml[:title],
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
     }
 

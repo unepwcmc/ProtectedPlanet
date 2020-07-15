@@ -25,8 +25,6 @@ class CountryController < ApplicationController
     @total_wdpa = @country.protected_areas.count
 
     @map = {
-      disclaimer: map_yml[:disclaimer],
-      title: map_yml[:title],
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
     }
 

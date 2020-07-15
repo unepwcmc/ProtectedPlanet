@@ -11,6 +11,7 @@
     />
     <div class="v-map-filters__body">
       <v-map-pa-search
+        v-if="searchTypes.length"
         v-bind="{ searchTypes, dropdownLabel }"
         @change="onSearch"
       />
@@ -61,11 +62,11 @@ export default {
     },
     dropdownLabel: {
       type: String,
-      required: true
+      default: ''
     },
     searchTypes: {
       type: Array,
-      required: true
+      default: () => []
     },
     disclaimer: {
       type: Object,

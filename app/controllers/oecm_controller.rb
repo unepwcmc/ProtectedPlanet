@@ -11,8 +11,6 @@ class OecmController < ApplicationController
     @tabs = get_tabs(3).to_json
 
     @map = {
-      disclaimer: map_yml[:disclaimer],
-      title: map_yml[:title],
       overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize
     }
   end
