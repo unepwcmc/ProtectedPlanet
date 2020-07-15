@@ -1,6 +1,6 @@
 <template>
   <div
-    class="v-map-filter" 
+    class="v-map-filter"
     :class="{ 'v-map-filter--toggleable': isToggleable }"
     @click.stop="onClick"
   >
@@ -58,7 +58,7 @@ export default {
 
   computed: {
     overlayForStore () {
-      return {layers: this.layers, id: this.id}
+      return { layers: this.layers, id: this.id }
     },
 
     visibleOverlays () {

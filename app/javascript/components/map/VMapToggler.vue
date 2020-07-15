@@ -1,6 +1,6 @@
 <template>
   <div
-    class="v-map-toggler" 
+    class="v-map-toggler"
     :class="{ 'v-map-toggler--active': active }"
     @click.stop="$emit('change', !active)"
   >
