@@ -36,7 +36,7 @@
     }
 
     &__icon {
-      // @include icon-placeholder-image;
+      @include image-placeholder();
     }
   }
-}
+} 

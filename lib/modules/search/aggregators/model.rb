@@ -1,7 +1,6 @@
 module Search::Aggregators::Model
   def self.build name, raw_aggregations, config
     model = (config['class'] || name.classify).constantize
-
     raw_aggregations[name]['aggregation']['buckets'].map do |info|
       column_name = model.has_attribute?(:name) ? :name : :label
       label = select_attribute(model, column_name, info)

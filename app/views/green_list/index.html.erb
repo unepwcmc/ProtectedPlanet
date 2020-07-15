@@ -1,6 +1,6 @@
 <%= render partial: "./layouts/partials/hero-thematic", locals: { 
   button_text: t('thematic_area.green_list.hero.button_text'),
-  button_url: search_areas_path('wdpa'), ##TODO add params to filter green list sites
+  button_url: search_areas_path(filters: @filters),
   classes: @cms_page.slug,
   hero_image: cms_fragment_render(:theme_image, @cms_page),
   title: @cms_page.label,

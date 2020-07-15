@@ -1,15 +1,12 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$card-search-results-areas-flag-size: rem-calc(60);
+$card-search-results-areas-width: 100%;
+$card-search-results-areas-height: rem-calc(155);
 
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
-@mixin card-search-results-areas-flag-size {
-  width: $card-search-results-areas-flag-size;
-  height: $card-search-results-areas-flag-size;
-}
 
 //--------------------------------------------------
 // classes
@@ -19,9 +16,14 @@ $card-search-results-areas-flag-size: rem-calc(60);
   @include flex-h-between;
   @include flex-wrap;
 
+  &.preview {
+    .card__link:nth-child(3) { 
+      @include breakpoint-down($medium) { display: none; }
+    }
+  }
+
   .card {
     &__link {
-      @include border-grey-light;
       @include box-shadow-grey-light;
       @include flex;
       @include flex-column;
@@ -44,42 +46,18 @@ $card-search-results-areas-flag-size: rem-calc(60);
       }
 
         &__image {
-          width: 100%; height: rem-calc(114);
+          background-position: center;
+          background-size: cover;
+          width: $card-search-results-areas-width; height: $card-search-results-areas-height;
+        }
+
+        &__image-placeholder { 
+          @include image-placeholder($card-search-results-areas-width, $card-search-results-areas-height); 
         }
 
         &__title {
           @include text-card-title;
           margin: rem-calc(12 0 2 0);
         }
-
-        &__icon--region-large { 
-          @include icon-region;
-        }
-
-        &__icon--flag-large { 
-          @include icon-flag;
-        }
-
-      &__groups {
-        margin-top: auto; 
-      }
-
-        &__group {
-          margin: rem-calc(10 0);
-        }
-          
-          // &__icon--flag { 
-          //   background-size: 100%;
-          //   margin-right: rem-calc(6);
-          //   width: rem-calc(22); height: rem-calc(22);
-
-          //   display: block;
-          // }
-
-          // &__icon--region { 
-          //   @include icon-region; 
-          //   margin-right: rem-calc(6);
-          //   width: rem-calc(22); height: rem-calc(22);
-          // }
   }
 }
