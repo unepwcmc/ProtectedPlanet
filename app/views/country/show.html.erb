@@ -44,7 +44,7 @@
 
       <div class="card--stats">
         <div class="card--stats-wrapper-chart">
-          <h1>Growth in protected area coverage</h1>
+          <h2><%= t('stats.growth.title') %></h2>
 
           <am-chart-line :data="<%= @coverage_growth.to_json %>">
           </am-chart-line>

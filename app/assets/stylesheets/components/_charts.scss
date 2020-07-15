@@ -20,12 +20,12 @@ $chart-target-stroke-width: rem-calc(3);
 }
 
 @mixin chart-scrollable($width: 750, $height: 405) {
-  $ie11: calc((#{$height}/#{$width})*1%);
+  $ie11-padding: calc((#{$height}/#{$width})*1%);
   $mobile-width: calc((#{$width}/#{$height})*100%);
   
   &__wrapper-ie11 { // do not remove - this is required to set the sizing for ie11
     @include breakpoint($small) { 
-      padding-bottom: $ie11;
+      padding-bottom: $ie11-padding;
       width: 100%;
 
       position: relative;
