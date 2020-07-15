@@ -26,6 +26,7 @@ module Search::Aggregators::Model
   end
 
   def self.select_attribute(model, column_name, info)
-    model.select(column_name).find(info['key']).send(column_name)
+    _record = model.select(column_name).find_by(id: info['key'])
+    _record && _record.send(column_name)
   end
 end

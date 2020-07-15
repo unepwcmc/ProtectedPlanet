@@ -143,11 +143,18 @@ $padding-medium: rem-calc(27);
   @include button-font;
   @include button-radius;
   background-color: $primary;
-  width: rem-calc(47); height: rem-calc(47);
+  width: rem-calc(35); height: rem-calc(35);
   &:before {
     @include icon-search-white;
     content: '';
     margin: 0 auto;
+
+    @include breakpoint-down($small) {
+      width: rem-calc(15); height: rem-calc(15);  
+    }
+  }
+  @include breakpoint($small) {
+    width: rem-calc(47); height: rem-calc(47);
   }
 }
 @mixin button-tab-rounded($size: default) {

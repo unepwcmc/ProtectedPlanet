@@ -3,9 +3,12 @@ en:
     attributes: 
       title: Attributes
     citation: Citation Text
-    coverage: coverage
+    coverage: Coverage
+    coverage-chart-smallprint: The graph excludes status years with no information reported (STAT_YR = 0).
     designations:
       title: Designations
+    growth:
+      title: Growth in protected area coverage
     governance: 
       title: Governance types
     iucn-categories: 

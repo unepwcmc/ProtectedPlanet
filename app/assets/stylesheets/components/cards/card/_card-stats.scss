@@ -26,6 +26,12 @@
   }
 }
 
+&--stats-wrapper-chart {
+  @include container-medium;
+
+  @include breakpoint-down($small) { padding: 0; }
+}
+
 &--stats {
   @include card-stats-padding;
   background-color: $white;
@@ -76,11 +82,13 @@
     &__number { 
       font-size: rem-calc(16);
       font-weight: $bold; 
+      line-height: .9;
     }
     
     &__number-large { 
       font-size: rem-calc(40);
       font-weight: $bold; 
+      line-height: .9;
     }
 
     &__stat-box {
@@ -98,6 +106,8 @@
       line-height: 1.3;
       margin: rem-calc(6 0 14 0);
     }
+
+    &__stat-large { margin-bottom: rem-calc(14); }
 
     &__subsection { border-top: solid 1px $grey-light; }
 
