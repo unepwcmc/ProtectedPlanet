@@ -92,7 +92,7 @@ export default {
     onEnter() {
       if (this.search) {
         if (this.hasResults) {
-          this.$refs.results[0].$el.focus()
+          this.$refs.results[0].focus()
         } else {
           this.submit()
         }
@@ -108,7 +108,7 @@ export default {
     onMagnifyingGlassClick() {
       if (this.search) {
         if (this.hasResults) {
-          this.$refs.results[0].$el.focus()
+          this.$refs.results[0].focus()
         } else {
           this.submit()
         }
@@ -159,6 +159,7 @@ export default {
       this.busy = true
       this.autocompleteCallback(this.search).then(results => {
         this.results = results
+        this.$nextTick(() => this.$refs.results[0].focus())
       }).finally(() => this.delayUnbusy())
     }, 3000),
 

@@ -64,6 +64,10 @@
 
   &__result {
     padding: rem-calc(12 16);
+    &:focus {
+      background-color: $grey-xlight;
+      color: $grey;
+    }
   }
   
 }
