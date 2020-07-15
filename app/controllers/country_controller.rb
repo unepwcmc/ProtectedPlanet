@@ -31,7 +31,7 @@ class CountryController < ApplicationController
     }
 
     @map_options = {
-      map: { boundingISO: @country.iso_3 }
+      map: { boundsUrl: { url: country_extent_url(@country.iso_3) } }
     }
     
     ##TODO need adding

@@ -1,4 +1,4 @@
-import { getCountryExtentByISO3, getPAExtentByWDPAId, getRegionExtentByName } from '../helpers/request-helpers'
+import { getWithoutCSRF } from '../helpers/request-helpers'
 
 export default {
   data () {
@@ -9,22 +9,19 @@ export default {
 
   methods: {
     initBoundingBoxAndMap () {  
-      if (this.mapOptions.boundingISO) {
-        getCountryExtentByISO3(this.mapOptions.boundingISO, this.getExtentResponseHandler())
-      } else if (this.mapOptions.boundingRegion) {
-        getRegionExtentByName(this.mapOptions.boundingRegion, this.getExtentResponseHandler())
-      } else if (this.mapOptions.boundingWDPAId) {
-        getPAExtentByWDPAId(
-          this.mapOptions.boundingWDPAId, 
-          this.mapOptions.isPoint,
-          this.getExtentResponseHandler(1)
+      if (this.mapOptions.boundsUrl) {
+        getWithoutCSRF(
+          this.mapOptions.boundsUrl.url, 
+          this.getExtentResponseHandler(this.mapOptions.boundsUrl.isPoint)
         )
       } else {
         this.initMap()
       }
     },
 
-    getExtentResponseHandler (padding=5) {
+    getExtentResponseHandler (isPoint=false) {
+      const padding = isPoint ? 5 : 0
+      
       return res => {
         const extent = res.data.extent
   
