@@ -28,6 +28,7 @@ import ChartRectangles from './components/charts/chart-rectangles/ChartRectangle
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
+import EquitySelect from './components/select/EquitySelect'
 import Flickity from 'vue-flickity';
 import Download from './components/download/Download'
 import MapInteractive from './components/map/MapInteractive'
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowTarget,
         ChartSunburst,
         Download,
+        EquitySelect,
         Flickity,
         MapInteractive,
         NavBurger,
