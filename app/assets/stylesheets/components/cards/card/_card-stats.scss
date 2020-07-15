@@ -11,6 +11,12 @@
   }
 }
 
+&--stats-wrapper-chart {
+  @include container-medium;
+
+  @include breakpoint-down($small) { padding: 0; }
+}
+
 &--stats {
   @include card-stats-padding;
   background-color: $white;

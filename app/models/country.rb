@@ -125,11 +125,25 @@ class Country < ApplicationRecord
     """)
   end
 
+  def coverage_growth
+    _year = 'EXTRACT(year from legal_status_updated_at)'
+    _area = 'SUM(reported_area + reported_marine_area) AS area'
+    ActiveRecord::Base.connection.execute(
+      <<-SQL
+        SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count,
+          SUM(area) OVER (ORDER BY date_part::INT) AS area
+        FROM (#{protected_areas_inner_join(_year, _area)}) t
+        ORDER BY year
+      SQL
+    )
+  end
+
   private
 
-  def protected_areas_inner_join group_by
+  def protected_areas_inner_join(group_by, extra_aggregation=nil)
+    _extra_aggr = extra_aggregation ? extra_aggregation.insert(0, ',') : nil
     """
-      SELECT #{group_by}, COUNT(protected_areas.id) AS count
+      SELECT #{group_by}, COUNT(protected_areas.id) AS count #{_extra_aggr}
       FROM protected_areas
       INNER JOIN countries_protected_areas
         ON protected_areas.id = countries_protected_areas.protected_area_id
