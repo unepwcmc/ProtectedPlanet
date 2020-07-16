@@ -9,7 +9,7 @@
       <h2 class="select--equity__header">Results from study sites</h2>
       <p
         class="select--equity__description"
-      >Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse recusandae deserunt saepe placeat ut architecto optio nostrum dolorem, laudantium ullam provident similique consectetur id eligendi praesentium labore quisquam atque vel?</p>
+      >{{ selected.text }}</p>
       <select-dropdown 
         :protected-areas="protectedAreas"
         @pa-selected="changeSelection"
