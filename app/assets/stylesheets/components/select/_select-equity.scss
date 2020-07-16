@@ -40,15 +40,8 @@
         margin-bottom: rem-calc(19);
     }
 
-    &__custom-select-box {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-    }
-
     &__selected {
         @include text-body;
-        -webkit-appearance: none;
         background: $white;
         border: 1px solid $grey-black;
         cursor: pointer;
@@ -57,9 +50,6 @@
         padding-bottom: rem-calc(17);
         padding-left: rem-calc(29);
         padding-right: rem-calc(24);
-        width: 100%;
-        height: 60px;
-
 
         display: flex;
         align-items: center;
