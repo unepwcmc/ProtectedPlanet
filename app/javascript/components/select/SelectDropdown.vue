@@ -9,11 +9,11 @@
       </div>
       <div :class="[ isActive ? 'select--dropdown__options--active' : 'select--dropdown__options' ]">
         <span
-          v-for="(option, index) in options"
+          v-for="(area, index) in protectedAreas"
           :key="index"
           class="select--dropdown__option"
-          @click="selectOption(index)"
-        >{{ option.title }}</span>
+          @click="selectArea(index)"
+        >{{ area.title }}</span>
       </div>
     </div>
   </div>
@@ -26,7 +26,7 @@ export default {
   name: "SelectDropdown",
   mixins: [ mixinPopupCloseListeners({closeCallback: 'close', toggleVariable: 'isActive'}) ],
   props: {
-    options: {
+    protectedAreas: {
       type: Array
     }
   },
@@ -34,7 +34,7 @@ export default {
   data() {
     return {
       isActive: false,
-      selected: this.options[0]
+      selected: this.protectedAreas[0]
     };
   },
   methods: {
@@ -47,8 +47,8 @@ export default {
     open() {
       this.isActive = true;
     },
-    selectOption(index) {
-        this.selected = this.options[index];
+    selectArea(index) {
+        this.selected = this.protectedAreas[index];
         this.close();
         this.$emit('pa-selected', this.selected);
     }

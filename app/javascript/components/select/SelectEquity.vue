@@ -11,7 +11,7 @@
         class="select--equity__description"
       >Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse recusandae deserunt saepe placeat ut architecto optio nostrum dolorem, laudantium ullam provident similique consectetur id eligendi praesentium labore quisquam atque vel?</p>
       <select-dropdown 
-        :options="options"
+        :protected-areas="protectedAreas"
         @pa-selected="changeSelection"
       />
       <a
@@ -30,14 +30,14 @@ export default {
   name: "select-equity",
   components: { SelectDropdown },
   props: {
-    options: {
+    protectedAreas: {
       type: Array
     }
   },
 
   data() {
     return {
-      selected: this.options[0]
+      selected: this.protectedAreas[0]
     };
   },
   methods: {
