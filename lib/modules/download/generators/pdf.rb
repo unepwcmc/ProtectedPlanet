@@ -1,5 +1,5 @@
 class Download::Generators::Pdf < Download::Generators::Base
-  include ActionController::UrlFor
+  include Routeable
 
   TYPE = 'pdf'
 
@@ -13,6 +13,9 @@ class Download::Generators::Pdf < Download::Generators::Base
     url = url_for(params)
 
     `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
+
+    # Can reuse shared methods? TODO
+    system("zip -j #{@zip_path} #{dest_pdf}") and system("zip -ru #{@zip_path} *", chdir: ATTACHMENTS_PATH)
   end
 
   private
