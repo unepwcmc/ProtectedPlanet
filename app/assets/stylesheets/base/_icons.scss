@@ -26,20 +26,17 @@
     border: solid 2px $white;
   }
 
-  &--info-circle {
-    @include icon-info;
-  }
+  &--info-circle { @include icon-info; }
 
-  &--info {
-    //temp-refresh
+  &--info { //temp-refresh
     padding-left: rem-calc(24);
     position: relative;
 
     &:before {
       color: #317fce;
-      content: "\f05a";
-      font-family: "FontAwesome";
-      font-size: rem-calc(16);
+      content: '\f05a';
+      font-family: 'FontAwesome';
+      font-size: rem-calc(16),;
       font-weight: normal;
       line-height: rem-calc(21);
 
@@ -50,33 +47,25 @@
     }
   }
 
-  &--loading-spinner {
-    @include icon-loading-spinner;
+  &--loading-spinner { 
+    @include icon-loading-spinner; 
 
     visibility: hidden;
   }
+  
+  &--pin-terrestrial { @include icon-pin-terrestrial; }
+  &--pin-marine { @include icon-pin-marine; }
+  &--pin-oecm { @include icon-pin-oecm; }
 
-  &--pin-green {
-    @include icon-pin-green;
-  }
+  &--pin-terrestrial-light { @include icon-pin-terrestrial-light; }
 
-  &--region {
-    @include icon-region;
-  }
-  &--search {
-    @include icon-search;
-  }
-  &--shield {
-    @include icon-shield;
-  }
-  &--sort {
-    @include icon-sort;
-  }
+  &--region { @include icon-region; }
+  &--search { @include icon-search; }
+  &--shield { @include icon-shield; }
+  &--sort { @include icon-sort; }
 
-  //--------------------------------------------------
-  // helpers
-  //--------------------------------------------------
-  &-visible {
-    visibility: visible;
-  }
+//--------------------------------------------------
+// helpers
+//--------------------------------------------------
+  &-visible { visibility: visible; }
 }
