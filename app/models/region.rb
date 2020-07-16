@@ -102,7 +102,7 @@ class Region < ApplicationRecord
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:id, :name]
+      only: [:id, :name, :iso]
     )
   end
 

@@ -7,35 +7,25 @@ class Search::AreasSerializer < Search::BaseSerializer
   end
 
   def serialize
-    if @geo_type
-      areas = @geo_type == 'site' ? @results.protected_areas : paginate(@aggregations[@geo_type])
-      return areas_ary(@geo_type, areas).to_json
-    end
-
-    [
-      regions,
-      countries,
-      sites
-    ].to_json
+    @geo_type.present? ? send(@geo_type.pluralize) : {}
   end
 
   private
 
   def regions
-    _regions = @aggregations['region']
+    _regions = @results.regions || []
 
-    geo_hash('region', _regions, _regions.length)
+    geo_hash('region', paginate(_regions), _regions.length)
   end
 
   def countries
-    _countries = @aggregations['country']
+    _countries = @results.countries || []
 
-    geo_hash('country', _countries, _countries.length)
+    geo_hash('country', paginate(_countries), _countries.length)
   end
 
   def sites
     _sites = @results.protected_areas
-    _sites = _sites
     # Counting by governance has every PA must have one.
     # Counting by country or region is not reliable as a PA might belong to more than one country.
     _total_count = @aggregations['governance'].inject(0) { |sum, r| sum + r[:count] }
@@ -43,8 +33,8 @@ class Search::AreasSerializer < Search::BaseSerializer
     geo_hash('site', _sites, _total_count)
   end
 
-  def geo_hash(geo_type, areas, total=nil)
-    areas = areas.present? ? areas.first(3) : []
+  def geo_hash(geo_type, areas, total=0)
+    areas = areas.present? ? areas.first(9) : []
     geo_type_locale = geo_type == 'site' ? 'area-types.wdpa' : "geo-types.#{geo_type.pluralize}"
     {
       geoType: geo_type,
@@ -62,25 +52,25 @@ class Search::AreasSerializer < Search::BaseSerializer
 
   def region_hash(region)
     {
-      title: region[:label],
-      totalAreas: "#{region[:count]} #{I18n.t('global.search.protected-areas')}",
-      url: region_path(iso: region[:identifier])
+      title: region.name,
+      totalAreas: "#{region.protected_areas.count} #{I18n.t('search.protected-areas')}",
+      url: region_path(iso: region.iso)
     }
   end
 
   def country_hash(country)
-    _slug = slug(country[:label])
+    _slug = slug(country.name)
     {
       countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
-      totalAreas: "#{country[:count]} #{I18n.t('global.search.protected-areas')}",
-      title: country[:label],
-      url: country_path(iso: country[:identifier])
+      totalAreas: "#{country.protected_areas.count} #{I18n.t('search.protected-areas')}",
+      title: country.name,
+      url: country_path(iso: country.iso_3)
     }
   end
 
   def site_hash(site)
     {
-      image: '/assets/tiles/FR?type=country&version=1', # TODO This should be a mapbox internal asset
+      image: ApplicationController.helpers.protected_area_cover(site, with_tag: false),
       title: site.name,
       url: protected_area_path(site.wdpa_id)
     }

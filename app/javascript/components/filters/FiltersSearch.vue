@@ -1,10 +1,12 @@
 <template>
   <div v-show="isActive">
     <div class="filter__pane">
-      <span 
-        class="filter__pane-title"
-        v-html="title"
-      />
+      <div class="filter__pane-topbar">
+        <span 
+          class="filter__pane-title"
+          v-html="title"
+        />
+      </div>
 
       <div class="filter__filter-groups">
         <div
@@ -20,6 +22,7 @@
             :id="filter.id"
             :name="filter.name"
             :options="filter.options"
+            :pre-selected="filter.preSelected"
             :title="filter.title"
             :type="filter.type"
             v-on:update:filter="updateFilterGroup"
@@ -28,7 +31,7 @@
       </div>
 
       <span 
-        class="filter__pane-close"
+        class="filter__pane-view"
         v-html="filterCloseText"
         @click="toggleFilterPane"
       />

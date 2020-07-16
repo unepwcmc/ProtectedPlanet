@@ -35,9 +35,6 @@ class ImportWorkers::FinaliserWorker
     Search::Index.delete
     Search::Index.create
     
-    Autocompletion.drop
-    Autocompletion.populate
-
     # Here for historical reasons. Country stats are no more generated
     # dynamically, but received by the PA programme every month.
     # Geospatial::Calculator.calculate_statistics

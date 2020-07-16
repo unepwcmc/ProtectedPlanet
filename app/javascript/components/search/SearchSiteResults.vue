@@ -44,7 +44,7 @@ export default {
 
   computed: {
     hasResults () {
-      return this.results != undefined &&  0
+      return this.results != undefined && this.results.length > 0
     }
   }
 }

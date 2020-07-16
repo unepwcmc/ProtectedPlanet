@@ -3,7 +3,8 @@ require 'test_helper'
 class RegionControllerTest < ActionController::TestCase
 
   test ".show action returns 200" do
-
+    seed_cms
+    
     region = FactoryGirl.create(:region, iso: 'EU')
 
     country = FactoryGirl.create(:country, name: 'Belgium', iso_3: 'BEL', region: region)

@@ -1,6 +1,6 @@
 en:
   home:
-    facts: 
+    facts:
       -
         theme: terrestrial
         title: Terrestrial Protected Area Coverage
@@ -20,27 +20,30 @@ en:
       title: Explore Protected Areas by...
       button: Explore All
       levels:
-        - 
+        -
           title: Regional level
-          url: #TODO
+          geo_type: region
           icon: region
-        - 
+        -
           title: Country level
-          url: #TODO
+          geo_type: country
           icon: country
-        - 
-          title: Individual Area
-          url: #TODO
-          icon: area 
+        -
+          title: Indiviual Area
+          geo_type: site
+          icon: area
       categories:
-        - 
+        -
           title: Marine Protected Areas
           slug: /marine-protected-areas
-        - 
+          filter: 'marine'
+        -
           title: Terrerstrial Protected Areas
           slug: /marine-protected-areas
-        - 
+          filter: 'terrestrial'
+        -
           title: Green List Protected Areas
           slug: /green-list
+          filter: 'is_green_list'
     total_pas: Total Protected Areas
     total_oecms: Total OECMs

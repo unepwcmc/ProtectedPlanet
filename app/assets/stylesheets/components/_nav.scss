@@ -37,7 +37,7 @@ $pane-side-padding: 42px;
         @include button-burger;
         @include flex-vs-center;
         @include responsive(display, block, none, none);
-        margin: rem-calc(10 14);
+        margin: rem-calc(10 0 10 14);
       }
 
       &__close {

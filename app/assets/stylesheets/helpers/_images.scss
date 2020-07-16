@@ -1,0 +1,25 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin image-placeholder($width: 100%, $height: rem-calc(265)) {
+  @include flex-center;
+  background-color: $grey-light;
+  background-position: center;
+  background-size: cover;
+  width: $width; height: $height;
+
+  &::after { 
+    @include icon-placeholder-image; 
+    width: 30%;
+    content: '';
+  }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------

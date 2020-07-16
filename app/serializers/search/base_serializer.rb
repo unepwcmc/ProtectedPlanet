@@ -19,11 +19,11 @@ class Search::BaseSerializer
   private
 
   def paginate(items)
-    size = @search.options[:size]
-    page = @search.options[:page]
+    size = @search.options[:size] || 1
+    page = @search.options[:page] || 1
     offset = size * (page - 1)
     last_item = size * page - 1
 
-    items[offset..last_item].presence || []
+    items && items[offset..last_item].presence || []
   end
 end

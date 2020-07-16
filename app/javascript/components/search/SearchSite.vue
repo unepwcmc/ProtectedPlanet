@@ -3,11 +3,13 @@
     <search-site-input
       :endpoint="endpoint"
       :placeholder="placeholder"
+      :pre-populated-search-term="searchTerm"
       v-on:submit:search="updateSearchTerm"
     />
 
     <tabs-fake
       :children="categories"
+      class="tabs--search-main"
       v-on:click:tab="updateCategory"
     />
 
@@ -55,9 +57,6 @@ export default {
       default: 15,
       type: Number
     },
-    query: {
-      type: String
-    },
     noResultsText: {
       required: true,
       type: String
@@ -75,6 +74,9 @@ export default {
   data () {
     return {
       categoryId: '',
+      config: {
+        queryStringParams: ['search_term']
+      },
       currentPage: 0,
       defaultCategory: this.categories[0].id,
       defaultPage: 1,
@@ -87,25 +89,25 @@ export default {
     }
   },
 
-  mounted () {
-    this.categoryId = this.defaultCategory
+  created () {
+    this.handleQueryString()
   },
 
   mounted () {
-    if(this.query) {
-      console.log('here')
-      this.searchTerm = this.query
-      this.ajaxSubmission()
-    }
+    this.categoryId = this.defaultCategory
   },
 
   methods: {
     ajaxSubmission () {
       let data = {
-        ancestor: this.categoryId,
-        items_per_page: this.itemsPerPage,
-        requested_page: this.requestedPage,
-        search_term: this.searchTerm
+        params: {
+          filters: {
+            ancestor: this.categoryId,
+          },
+          items_per_page: this.itemsPerPage,
+          requested_page: this.requestedPage,
+          search_term: this.searchTerm
+        }
       }
 
       if(this.categoryId <= 0) {
@@ -114,7 +116,7 @@ export default {
 
       this.axiosSetHeaders()
 
-      axios.post(this.endpoint, data)
+      axios.get(this.endpoint, data)
         .then(response => {
           console.log('success', response)
           this.updateProperties(response.data)
@@ -124,10 +126,24 @@ export default {
         })
     },
 
+    handleQueryString () {
+      const paramsFromUrl = new URLSearchParams(window.location.search)
+
+      let params = []
+
+      this.config.queryStringParams.forEach(param => {
+        if(paramsFromUrl.has(param)) { params.push(param) }
+      })
+
+      if(params.includes('search_term')) {
+        this.searchTerm = paramsFromUrl.get('search_term')
+      }
+    },
+
     resetAll () {
       this.categoryId = this.defaultCategory
       this.requestedPage = this.defaultPage
-      this.$eventHub.$emit('reset-search')
+      this.$eventHub.$emit('reset:tabs')
     },
 
     updateCategory (categoryId) {
