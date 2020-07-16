@@ -83,8 +83,6 @@ export default {
 
   methods: {
     toggleTooltip (boolean) {
-      console.log('click', this.id)
-      console.log('click', boolean)
       this.isActive = typeof boolean == 'boolean' ? boolean : !this.isActive
     },
 

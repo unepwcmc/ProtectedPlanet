@@ -15,9 +15,11 @@
         :headings="tableHeadings"
         :tooltipArray="tooltipArray"
         class="table-head--horizontal-scroll"
-      ></table-head>
+      >
+        <slot />
+      </table-head>
     </sticky-bar>
-        
+
     <v-table 
       :data-src="tableDataSrc"
       :tooltipArray="tooltipArray"

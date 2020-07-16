@@ -18,7 +18,9 @@
                 text="<%= getTooltipText(stat[:id]) %>"
                 class="carousel-cell__tooltip"
               >
-                <i class="icon--info-circle block"></i>
+                <i class="svg--info block">
+                  <%= render '/partials/svgs/info.svg' %>
+                </i>
               </tooltip>
 
               <h3 class="carousel-cell__title"><%= stat[:title] %></h3>
@@ -48,7 +50,12 @@
         :table-headings="<%= @country_and_regions_headings %>" 
         :table-data-src="<%= @endpoint.to_json %>"
         :tooltip-array="<%= t("thematic_area.target_11_dashboard.tooltips").to_json %>"
-      >
+      > 
+        <slot>
+          <i class="svg--info-light block">
+            <%= render '/partials/svgs/info.svg' %>
+          </i>
+        </slot>
       </target-11-dashboard>
     </div>
   </section>
