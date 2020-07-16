@@ -23,10 +23,9 @@ module EquityHelper
     end
     
     def include_image(pa_page)
-        # At the moment, the image URLs returns a very long string which seems
-        # to be an encrypted hash, not sure how to decrypt it to get the URL
+        # At the moment, there are no images, just a reference to a formerly 
+        # existing image in the content of the fragments
         nil
-        # Nokogiri::HTML(text).css('img')[0].attributes['src'].value
     end
 
     def parsed_text(text)
