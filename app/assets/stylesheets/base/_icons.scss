@@ -2,43 +2,26 @@
 // classes
 //--------------------------------------------------
 .icon {
-  &--aichi {
-    @include icon-aichi;
-  }
+  &--aichi { @include icon-aichi; }
+  
+  &--area { @include icon-area; }
+  
+  &--circle-chevron-black { @include icon-circle-chevron-black; }
+  &--circle-chevron-white { @include icon-circle-chevron-white; }
+  &--circle-chevron-green-large-prev { @include icon-circle-chevron-green-large-left; }
+  &--circle-chevron-green-large-next { @include icon-circle-chevron-green-large-right; }
 
-  &--close {
-    @include icon-close;
-  }
+  &--close { @include icon-close; }
 
-  &--cross {
-    @include icon-cross;
-  }
-  &--cross-white {
-    @include icon-cross-white;
-  }
+  &--country { @include icon-country; }
 
-  &--circle-chevron-black {
-    @include icon-circle-chevron-black;
-  }
-  &--circle-chevron-white {
-    @include icon-circle-chevron-white;
-  }
-  &--circle-chevron-green-large-prev {
-    @include icon-circle-chevron-green-large-left;
-  }
-  &--circle-chevron-green-large-next {
-    @include icon-circle-chevron-green-large-right;
-  }
+  &--cross { @include icon-cross; }
 
-  &--earth {
-    @include icon-earth(rem-calc(60));
-  }
-
-  &--flag {
-    @include icon-flag;
-  }
-
-  &--flag-outline {
+  &--earth { @include icon-earth(rem-calc(60)); }
+  
+  &--flag { @include icon-flag; }
+  
+  &--flag-outline { 
     @include icon-flag;
     border: solid 2px $white;
   }

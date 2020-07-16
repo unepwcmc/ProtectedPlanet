@@ -13,6 +13,10 @@ module ApplicationHelper
     Region => "search-placeholder-region.png"
   }.freeze
 
+  def get_square_side area
+    Math.sqrt(area/100) * 100
+  end
+
   def commaify number
     number_with_delimiter(number, delimeter: ',')
   end
@@ -42,6 +46,10 @@ module ApplicationHelper
     PLACEHOLDERS[klass]
   end
 
+  def tiles_path(params)
+    Rails.application.routes.url_helpers.tiles_path(params)
+  end
+
   def cover_data(image_params, item_class)
     placeholder = cover_placeholder(item_class)
     {
@@ -51,10 +59,12 @@ module ApplicationHelper
     }
   end
 
-  def protected_area_cover protected_area
+  def protected_area_cover(protected_area, with_tag: true)
     version = Rails.application.secrets.mapbox[:version]
     image_params = {id: protected_area.wdpa_id, type: "protected_area", version: version}
     data = cover_data(image_params, protected_area.class)
+
+    return tiles_path(image_params) unless with_tag
 
     image_tag(
       cover_placeholder(protected_area.class),
@@ -65,10 +75,12 @@ module ApplicationHelper
     )
   end
 
-  def country_cover country
+  def country_cover(country, with_tag: true)
     version = Rails.application.secrets.mapbox[:version]
     image_params = {id: country.iso, type: "country", version: version}
     data = cover_data(image_params, country.class)
+
+    return tiles_path(image_params) unless with_tag
 
     image_tag(
       cover_placeholder(country.class),
@@ -76,7 +88,9 @@ module ApplicationHelper
     )
   end
 
-  def region_cover region
+  def region_cover(region, with_tag: true)
+    return tiles_path(image_params) unless with_tag
+
     image_tag(
       cover_placeholder(region.class),
       alt: region.name
@@ -320,6 +334,12 @@ module ApplicationHelper
         "url": get_cms_url(page.full_path)
       }
     end
+  end
+
+  def get_config_carousel_themes
+    {
+      wrapAround: true
+    }.to_json
   end
 
   def map_page(slug, map_children = false)

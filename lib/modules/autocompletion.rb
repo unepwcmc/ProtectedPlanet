@@ -1,34 +1,30 @@
 module Autocompletion
-  AUTOCOMPLETION_KEY = "autocompletion"
+  AUTOCOMPLETION_KEY = "autocompletion".freeze
+  IDENTIFIER_FIELDS = {
+    'protected_area' => :wdpa_id,
+    'country' => :iso_3
+  }.freeze
 
-  def self.lookup term
-    limit = {limit: [0, 5]}
+  def self.lookup(term, db_type='wdpa', search_index=Search::PA_INDEX)
+    filters = { filters: { is_oecm: db_type == 'oecm' } }
+    search = Search.search(term.downcase, filters, search_index)
 
-    $redis.zrangebylex(AUTOCOMPLETION_KEY, "(#{term.downcase}", "+", limit).map do |result|
-      result = result.split("||")
+    results = search.results.objects.values.compact.flatten
 
-      term = result[0]
-      name = result[1]
-      type = result[2]
-      identifier = result[3]
+    results.map do |result|
+      name = result.name
+      type = result.class.name.underscore
+      identifier = result.send(identifier_field(type))
 
-      url = type == 'protected_area' ? "/#{identifier}" : "/country/#{identifier}"
+      url = type == 'country' ? "/country/#{identifier}" : "/#{identifier}"
 
       { title: name, url: url }
     end
   end
 
-  def self.populate
-    ProtectedArea.pluck(:name, :wdpa_id).each do |name, wdpa_id|
-      $redis.zadd(AUTOCOMPLETION_KEY, 0, "#{name.downcase}||#{name}||protected_area||#{wdpa_id}")
-    end
+  private
 
-    Country.pluck(:name, :iso).each do |name, iso|
-      $redis.zadd(AUTOCOMPLETION_KEY, 0, "#{name.downcase}||#{name}||country||#{iso}")
-    end
-  end
-
-  def self.drop
-    $redis.del(AUTOCOMPLETION_KEY)
+  def self.identifier_field(type)
+    IDENTIFIER_FIELDS[type] || :id
   end
 end

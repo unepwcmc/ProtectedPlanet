@@ -56,11 +56,11 @@
   }
   
   .card__stat {
-    @include card-scrollable-stat($blue);
+    @include card-scrollable-stat($chart-purple);
   }
 
   .card__stat-overseas {
-    @include card-scrollable-stat($orange);
+    @include card-scrollable-stat($chart-green);
   }
 
   .card__stat-bold {

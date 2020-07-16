@@ -37,7 +37,7 @@ $pane-side-padding: 42px;
         @include button-burger;
         @include flex-vs-center;
         @include responsive(display, block, none, none);
-        margin: rem-calc(10 14);
+        margin: rem-calc(10 0 10 14);
       }
 
       &__close {
@@ -114,8 +114,12 @@ $pane-side-padding: 42px;
 
               &__dropdown-toggle-a {
                 @include button-dropdown;
+                @include text-nav-link;
                 
-                &.active { @include button-dropdown-up; }
+                &.active { 
+                  @include button-dropdown-up; 
+                  @include text-nav-link;
+                }
               }
 
               &__dropdown-wrapper {
@@ -124,7 +128,7 @@ $pane-side-padding: 42px;
                 display: none;
                 position: absolute;
                 top: 100%;
-                right: 0;
+                left: 0;
 
                 &.active {
                   display: block;
@@ -132,9 +136,11 @@ $pane-side-padding: 42px;
               }
               
               &__dropdown-a {
-                @include responsive(padding, rem-calc(9 24 9 48), rem-calc(6 10), rem-calc(6 10));
                 margin-right: 0;
+                padding: rem-calc(9 24 9 48);
                 width: $dropdown-width;
+
+                @include breakpoint($small) { padding: rem-calc(6 10); }
 
                 &:hover { 
                   background-color: $dropdown-bg-colour-hover;

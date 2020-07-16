@@ -15,6 +15,8 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     @psi.create
     @csi = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
     @csi.create
+
+    seed_cms
     
   end
 
@@ -39,26 +41,26 @@ class SearchPageTest < ActionDispatch::IntegrationTest
   end
 
   
-  test 'search without query or filter redirects to home page' do
-    get '/search'
-    assert_redirected_to "/"
+  test 'search without query or filter loads page' do
+    get '/en/search'
+    assert_response :success
   end
 
-  test 'search query that returns no results returns success' do
-    get '/search?q=nonexistent'
+  test 'search with query with loads page' do
+    get '/en/search?search_term=nonexistent'
     assert_response :success
-    assert_select "h1", "No results found"
   end
   
-
-  test 'search query that returns single country returns success' do
+  # test json endpoint for ajax search
+  test 'search query that would hit country, doesnt as we dont return countries in main search' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
+    country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone', region: region)
     assert_index 2, 1
 
-    get '/search?q=land'
+    get '/en/search-results?search_term=Manbone'
     assert_response :success
-    assert_select "h3>a", "Manbone land"
+    json = JSON.parse response.body
+    assert_equal 0, json['total_items']
   end
 
   test 'search query that returns single protected area returns success' do
@@ -67,42 +69,24 @@ class SearchPageTest < ActionDispatch::IntegrationTest
     pa = FactoryGirl.create(:protected_area, name: "Protected Forest", countries: [country])
     assert_index 2, 2
 
-    get '/search?q=forest'
+    get '/en/search-results?search_term=forest'
 
     assert_response :success
-    assert_select "h3>a", "Protected Forest"
+    json = JSON.parse response.body
+    assert_equal 1, json['total_items']
   end
 
-  test 'search query that returns PA and country returns success' do
+  test 'search query that matches PA and country only returns PA' do
+
     region = FactoryGirl.create(:region, id: 987, name: 'Manmerica')
     country = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'North Manbone land', region: region)
     pa = FactoryGirl.create(:protected_area, name: "North Protected Forest", countries: [country])
     assert_index 2, 2
 
-    get '/search?q=north'
+    get '/en/search-results?search_term=north'
 
     assert_response :success
-    assert_select "h3>a", 2
+    json = JSON.parse response.body
+    assert_equal 1, json['total_items']
   end
-
-  test 'search with country filter' do
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
-    country1 = FactoryGirl.create(:country, id: 123, iso_3: 'MBN', name: 'Manbone land', region: region)
-    country2 = FactoryGirl.create(:country, id: 124, iso_3: 'MBA', name: 'Sweden', region: region)
-
-    pa1 = FactoryGirl.create(:protected_area, name: "Protected Forest", wdpa_id: 21, countries: [country1])
-    pa2 = FactoryGirl.create(:protected_area, name: "Blue Forest", wdpa_id: 25, countries: [country2])
-    pa3 = FactoryGirl.create(:protected_area, name: "Bob Forest", wdpa_id: 23, countries: [country2])
-    
-    assert_index 3, 4
-
-    get '/search?q=forest&country=Sweden'
-
-    assert_response :success
-    assert_select "h3>a", 2
-
-
-  end  
-
-  
 end

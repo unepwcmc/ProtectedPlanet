@@ -4,7 +4,7 @@
     class="map--search"
   >
     <div class="map__map">
-      <h1>map here</h1>
+      <h1>map component here</h1>
     </div>
   </div>
 </template>

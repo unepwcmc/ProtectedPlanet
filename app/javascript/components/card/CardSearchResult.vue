@@ -2,7 +2,7 @@
   <a 
     class="card__link"
     :href="url"
-    title=""
+    :title="title"
   >
     <div class="card__content">
       <h3 
@@ -17,12 +17,16 @@
       />
     </div>
 
-    <img 
+    <div 
       v-if="image" 
-      :src="image" 
-      alt=""
+      :alt="title"
       class="card__image"
-    >
+      :style="{ backgroundImage: `url(${image})` }"
+    />
+    <div 
+      v-else 
+      class="card__image-placeholder"
+    />
   </a>
 </template>
 
