@@ -2,7 +2,7 @@
   <h2 class="card"><%= t('stats.sources.title') %></h2>
   
   <div class="card__content flex">
-    <div class="card__stat-box">
+    <div class="card__stat-box card__third">
       <span><%= t('stats.sources.total') %></span>  
       
       <counter 
@@ -13,13 +13,13 @@
       ></counter>
     </div>
 
-    <div>
+    <div class="card__two-thirds">
       <ol class="list--underline">
         <% sources.each do |source| %>
           <li class="list__li fle">
             <span class="list__title"><%= source[:title] %></span>
             <span class="list__value"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
-            <span class="list__a"><%= link_to 'Details', source[:url], title: '' %></span>
+            <span class="list__a list__right"><%= link_to 'Details', source[:url], title: '' %></span>
           </li>
         <% end %>
       </ol>

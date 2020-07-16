@@ -1,5 +1,5 @@
 <template>
-  <ul class="tabs--fake">
+  <ul>
     <tab-fake
       v-for="(child, index) in children" 
       :key="index"
@@ -21,20 +21,34 @@ export default {
 
   props: {
     children: {
-      type: Array, // [{ id: Number, selectedId: Number, title: String }]
+      type: Array, // [{ id: String, title: String }]
       required: true
+    },
+    defaultSelectedId: {
+      default: '',
+      type: String
+    },
+    preSelectedId: {
+      default: '',
+      type: String
     }
   },
 
   data () {
     return {
-      selectedId: 0
+      defaultId: this.children[0].id,
+      selectedId: ''
     }
   },
 
   created () {
-    this.setDefaultTab()
-    this.$eventHub.$on('reset-search', this.reset)
+    this.$eventHub.$on('reset:tabs', this.reset)
+
+    this.setInitialTab()
+  },
+
+  mounted () {
+    
   },
 
   methods: {
@@ -44,12 +58,26 @@ export default {
       this.$emit('click:tab', selectedId)
     },
 
-    setDefaultTab () {
-      this.selectedId = this.children[0].id
+    reset () {
+      this.selectedId = this.defaultId
     },
 
-    reset () {
-      this.setDefaultTab()
+    setInitialTab () {
+      if(this.defaultSelectedId) {
+        this.defaultId = this.defaultSelectedId
+      }
+
+      let tabId = this.defaultId
+
+      if(this.preSelectedId !== '') {
+        this.children.filter(child => {
+          if(child.id == this.preSelectedId) { 
+            tabId = this.preSelectedId
+          }
+        })
+      }
+
+      this.selectedId = tabId
     }
   }
 }

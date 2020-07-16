@@ -52,6 +52,35 @@ end
 
 class ActionController::TestCase
   include Devise::TestHelpers
+
+end
+
+class ActiveSupport::TestCase
+  # helper method to seed cms pages required for header/footer
+  # any test that tries to render a view will need to call this first
+  def seed_cms
+    @site = FactoryGirl.create(:cms_site)
+    @layout = FactoryGirl.create(:cms_layout, site: @site)
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'about')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'news-and-stories')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'resources')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'thematical-areas')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'oecms')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'wdpa')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'legal')
+  end
+
+  # and home page needs some extra cms bits
+  def seed_cms_home
+    seed_cms
+    # we need to add extra pages for pa categories on the home page
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'marine-protected-areas')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'green-list')
+    # and the CTAs
+    FactoryGirl.create(:cms_cta, css_class: 'api')
+    FactoryGirl.create(:cms_cta, css_class: 'live-report')
+
+  end
 end
 
 # shut up, Sidekiq

@@ -1,13 +1,15 @@
 class Search::Matcher
   MATCHERS = {
     should: [
-      { type: 'nested', path: 'countries_for_index', fields: ['countries_for_index.name'] },
-      { type: 'nested', path: 'countries_for_index.region_for_index', fields: ['countries_for_index.region_for_index.name'] },
+      # Commented lines are about searching also across nested elements (e.g. countries and regions).
+      # Leaving it commented for reference mainly
+      #{ type: 'nested', path: 'countries_for_index', fields: ['countries_for_index.name'] },
+      #{ type: 'nested', path: 'countries_for_index.region_for_index', fields: ['countries_for_index.region_for_index.name'] },
       { type: 'nested', path: 'sub_location', fields: ['sub_location.english_name'] },
       { type: 'nested', path: 'designation', fields: ['designation.name'] },
       { type: 'nested', path: 'iucn_category', fields: ['iucn_category.name'] },
       { type: 'nested', path: 'governance', fields: ['governance.name'] },
-      { type: 'multi_match', fields: ["name^2", "iso_3^3", "countries_for_index", "region_name"] },
+      #{ type: 'multi_match', fields: ["name^2", "iso_3^3", "countries_for_index", "region_name"] },
       { type: 'terms',  path: 'wdpa_id'},
       {
         type: 'multi_match',

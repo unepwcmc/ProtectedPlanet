@@ -31,6 +31,7 @@ class MarineController < ApplicationController
     @map = {
       overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize
     }
+    @filters = { db_type: ['wdpa'], is_marine: true }
   end
 
   def download_designations

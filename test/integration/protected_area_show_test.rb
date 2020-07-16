@@ -10,6 +10,8 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
 
     search_mock = mock().tap { |m| m.stubs(:results).returns([]) }
     Search.stubs(:search).returns(search_mock)
+
+    seed_cms
   end
 
   test 'renders the Protected Area name' do

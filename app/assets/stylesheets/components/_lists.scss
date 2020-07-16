@@ -19,6 +19,10 @@
         &__title {
           font-weight: $bold;
           margin-right: rem-calc(14);
+
+          display: block;
+
+          @include breakpoint($medium) { display: inline; }
         } 
     }
   }
@@ -28,6 +32,10 @@
     max-height: rem-calc(280);
     overflow-y: scroll;
 
+    @include beautify-scrollbar;
+    padding-right: rem-calc(19);
+
+
     .list {
       &__li {
         @include flex;
@@ -36,10 +44,6 @@
 
         &:first-child { border-top: none; }
       }
-
-        &__a {
-          margin-left: auto;
-        }
 
         &__icon {
           @include circle-icon;
@@ -52,8 +56,22 @@
           margin-right: rem-calc(24);
         } 
 
-        &__value {
+        &__right {
+          margin-left: auto;
 
+          justify-content: flex-end;
+        }
+
+        &__a {
+          @include button-with-icon;
+          @include flex-no-shrink;
+          font-size: rem-calc(16);
+
+          &::after {
+            @include icon-circle-chevron-black;
+            height: rem-calc(21);
+            width: rem-calc(21);
+          }
         }
     }
   }
