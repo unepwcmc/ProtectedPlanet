@@ -88,9 +88,6 @@ class HomeController < ApplicationController
   def home_overlays
     overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
   end
-<<<<<<< HEAD
-end
-=======
 
   private
 
@@ -108,4 +105,3 @@ end
   end
 
 end
->>>>>>> refresh
