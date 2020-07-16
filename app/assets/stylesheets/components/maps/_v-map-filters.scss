@@ -54,9 +54,15 @@
     .selector {
       margin-left: rem-calc(16);
 
-      max-width: rem-calc(200);
+      max-width: rem-calc(162);
       
       flex: 1;
+
+      &__options {
+        overflow-y: auto;
+
+        height: auto;
+      }
     }
   }
 }

@@ -1,12 +1,15 @@
 <template>
-  <div class="selector">
+  <div
+    class="selector"
+    tabindex="0"
+    @focus="showDropdown(!dropdownEnabled)"
+  >
     <div
       ref="selected"
       class="selector__selected"
       tabindex="0"
-      @click="showDropdown(true)"
-      @focus="showDropdown(true)"
-      @keyup.enter="showDropdown(true)"
+      @click="showDropdown(!dropdownEnabled)"
+      @keyup.enter="showDropdown(!dropdownEnabled)"
       @keyup="onKeyup"
     >
       <div class="selector__label">

@@ -9,6 +9,7 @@
 
     &__selected {
         cursor: default;
+        user-select: none;
 
         display: flex;
         align-items: center;
@@ -20,6 +21,8 @@
     }
 
     &__label {
+        color: $white;
+        
         flex: 1;
     }
 
@@ -32,24 +35,23 @@
 
     &__selected,
     &__option {
-        padding: rem-calc(12 16);
+        padding: rem-calc(10 16);
     }
 
     &__options {
         @include beautify-scrollbar;
         
         background-color: $grey;        
-        border-bottom: rem-calc(1) solid $grey-xlight;
-        border-top: rem-calc(1) solid $grey-xlight;
+        border: rem-calc(1) solid $grey-xlight;
         color: $white;
         overflow-y: scroll;
         
         height: rem-calc(100);
-        width: 100%;
 
         position: absolute;
         top: rem-calc(44);
-        left: 0;
+        right: - rem-calc(1);
+        left: - rem-calc(1);
     }
 
     &__option {
