@@ -22,9 +22,12 @@
 </template>
 
 <script>
+import { setAxiosHeaders } from '../../helpers/axios-helpers'
 import axios from 'axios'
 import Autocomplete from '../autocomplete/Autocomplete'
 import Selector from '../select/Selector'
+
+setAxiosHeaders(axios)
 
 export default {
   name: 'VMapPASearch',
@@ -78,29 +81,10 @@ export default {
      */
     autocompleteCallback () {
       return searchTerm => {
-        return new Promise(resolve => { // TESTING
-          setTimeout(() => {
-            resolve([
-              'a',
-              'abc',
-              'abcde',
-              'a',
-              'abc',
-              'abcde',
-              'a',
-              'abc',
-              'abcde',
-              'a',
-              'abc',
-              'abcde'
-            ])
-          }, 500)
+        return axios.post('/search/autocomplete', {
+          type: this.searchType.id,
+          search_term: searchTerm
         })
-
-        // return axios.post('/search/autocomplete', {
-        //   type: this.searchType.id,
-        //   search_term: searchTerm
-        // })
       }
     },
 
