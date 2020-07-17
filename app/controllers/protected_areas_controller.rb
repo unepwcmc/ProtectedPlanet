@@ -39,7 +39,7 @@ class ProtectedAreasController < ApplicationController
 
     @map_options = {
       map: { 
-        boundsUrl: pa_extent_url(@protected_area.wdpa_id, is_point_geom)
+        boundsUrl: @protected_area.extent_url
       }
     }
 
@@ -60,10 +60,6 @@ class ProtectedAreasController < ApplicationController
 
   def map_overlays
     overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
-  end
-
-  def is_point_geom
-    @protected_area.the_geom.geometry_type.type_name === 'MultiPoint'
   end
 
   def get_locations

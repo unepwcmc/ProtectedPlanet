@@ -63,13 +63,4 @@ module MapHelper
       padding: 5
     }
   end
-  
-  def pa_extent_url (wdpa_id, is_point)
-    layer_number = is_point ? 0 : 1
-  
-    {
-      url: "#{WDPA_FEATURE_SERVER_URL}/#{layer_number}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson", 
-      padding: 1
-    }
-  end
 end
