@@ -16,9 +16,15 @@ module Autocompletion
       type = result.class.name.underscore
       identifier = result.send(identifier_field(type))
 
+      geom_type = result.is_a?(ProtectedArea) ? result.the_geom.geometry_type.to_s : 'N/A'
       url = type == 'country' ? "/country/#{identifier}" : "/#{identifier}"
 
-      { title: name, url: url }
+      {
+        id: identifier,
+        geom_type: geom_type,
+        title: name,
+        url: url,
+      }
     end
   end
 
