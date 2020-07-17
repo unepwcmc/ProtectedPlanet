@@ -17,13 +17,13 @@ module EquityHelper
                 title: child.label,
                 text: parsed_text(text),
                 url: child.full_path,
-                image: include_image(text)
+                image: include_image(cms_fragment_content(:text, child))
             }          
         end
     end
     
-    def include_image(text)
-        Nokogiri::HTML(text).css("img").attr('src').value
+    def include_image(pa_page)
+        Nokogiri::HTML(pa_page).css("img").attr('src').value
     end
 
     def parsed_text(text)

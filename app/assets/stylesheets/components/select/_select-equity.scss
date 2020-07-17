@@ -2,8 +2,13 @@
     @include flex;
 
     &__content {
+        @include flex;
         border: 1px solid $grey-med-dark;
         width: 50%;
+
+        img {
+            object-fit: none;
+        }
     }
 
     &__description {

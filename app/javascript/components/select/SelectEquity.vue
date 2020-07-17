@@ -1,7 +1,7 @@
 <template>
   <div class="select--equity">
     <div class="select--equity__content">
-      <!-- <img :src="selected.image" :alt="'Visual results for ' + selected.title" /> -->
+      <img :src="selected.image" :alt="'Visual results for ' + selected.title" />
     </div>
 
     <div class="select--equity__panel">
