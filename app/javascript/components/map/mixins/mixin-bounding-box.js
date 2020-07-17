@@ -31,8 +31,21 @@ export default {
       }
     },
 
-    zoomToExtent (extent, padding) {
-      this.map.fitBounds(this.getBoundsFromExtent(extent, padding))
+    zoomTo (boundsUrl) {
+      axiosGetWithoutCSRF(
+        boundsUrl.url, 
+        this.getExtentResponseZoomToHandler(boundsUrl.padding)
+      )
+    },
+
+    getExtentResponseZoomToHandler (padding) {
+      return res => {
+        const extent = res.data.extent
+  
+        if (extent) {
+          this.map.fitBounds(this.getBoundsFromExtent(extent, padding))
+        }
+      }
     },
 
     getBoundsFromExtent (extent, padding=5) {  
