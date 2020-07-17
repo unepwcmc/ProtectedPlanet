@@ -1,7 +1,6 @@
 <template>
   <div class="select--equity">
     <div class="select--equity__content">
-      <!-- Todo: Images aren't present in the CMS pages as of yet, might need to rescue with a placeholder -->
       <!-- <img :src="selected.image" :alt="'Visual results for ' + selected.title" /> -->
     </div>
 
