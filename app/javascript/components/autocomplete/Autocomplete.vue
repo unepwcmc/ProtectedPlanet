@@ -14,14 +14,14 @@
         @input="onInput"
         @keyup.enter.prevent.stop="onEnter"
         @keyup.esc.prevent.stop="onEscape"
-      />
+      >
       <div
         class="autocomplete__magnifying-glass"
         @click="onMagnifyingGlassClick"
       />
     </div>
     <div
-      v-if="hasResults"
+      v-show="hasResults"
       class="autocomplete__results-container"
     >
       <div class="autocomplete__results">
@@ -34,17 +34,71 @@
           @click="submit(result)"
           @keyup.enter.stop.prevent="submit(result)"
           @mouseover="onResultMouseover"
-        >{{ result }}</div>
+        >
+          {{ result }}
+        </div>
       </div>
     </div>
+    <div tabindex="0" />
   </div>
 </template>
 
 <script>
 import { debounce } from 'lodash'
+import eventHandler from '../../mixins/mixin-element-event-handler'
 
 export default {
   name: 'Autocomplete',
+
+  mixins: [
+    /**
+     * Determine if a tab keyup occurred outside of the component.
+     * If it did, reset the component.
+     * @return void
+     */
+    eventHandler(document, 'keyup', function (e) {
+      if (e.key.toLowerCase() === 'tab') {
+        if (!this.$el.contains(document.activeElement)) {
+          this.reset()
+        }
+      }
+    }),
+    /**
+     * Determine if a click occurred outside of the component.
+     * If it did, reset the component.
+     * @return void
+     */
+    eventHandler(document, 'click', function () {
+      if (this.$el.contains(document.activeElement) === false) {
+        this.reset()
+      }
+    })
+  ],
+
+  props: {
+    /**
+     * The autocomplete depends on a callback to fetch its results.
+     * The callback should be a function with a parameter for the search term.
+     * It should return a Promise that resolves to an array of strings.
+     */
+    autocompleteCallback: {
+      type: Function,
+      required: true
+    },
+    /**
+     * The placeholder to be seen before any input has been entered.
+     */
+    placeholder: {
+      default: '...',
+      type: String,
+      required: false
+    },
+
+    resetEventName: {
+      default: 'autocompleteReset',
+      type: String
+    }
+  },
 
   data () {
     return {
@@ -66,22 +120,6 @@ export default {
     }
   },
 
-  props: {
-    /**
-     * The autocomplete depends on a callback to fetch its results.
-     * The callback should be a function with a parameter for the search term.
-     * It should return a Promise that resolves to an array of strings.
-     */
-    autocompleteCallback: {
-      type: Function,
-      required: true
-    },
-    /**
-     * The placeholder to be seen before any input has been entered.
-     */
-    placeholder: String,
-  },
-
   computed: {
     hasResults () {
       return this.results.length > 0
@@ -90,7 +128,7 @@ export default {
 
   methods: {
     onEscape () {
-      this.resetAutocompleteResults()
+      this.reset()
     },
 
     /**
@@ -134,6 +172,13 @@ export default {
       }
     },
 
+    reset () {
+      this.busy = true
+      this.resetAutocompleteResults()
+      this.updateSearch('')
+      this.busy = false
+    },
+
     onResultMouseover (e) {
       e.target.focus()
     },
@@ -151,14 +196,6 @@ export default {
     },
 
     /**
-     * Helper for the easing-off of the [busy] state.
-     * @return void
-     */
-    delayUnbusy (delay = 3000) {
-      setTimeout(() => this.busy = false, delay)
-    },
-
-    /**
      * The autocomplete is a debounced function.
      * @see https://lodash.com/docs/4.17.15#debounce
      * If in a [busy] state, do not run the autocomplete.
@@ -173,9 +210,12 @@ export default {
       this.busy = true
       this.autocompleteCallback(this.search).then(results => {
         this.results = results
-        this.$nextTick(() => this.$refs.results[0].focus())
-      }).finally(() => this.delayUnbusy())
-    }, 3000),
+        setTimeout(() => this.focusInput(), 0)
+      }).catch(e => {
+        console.error({e})
+        this.resetAutocompleteResults()
+      }).finally(() => this.busy = false)
+    }, 250),
 
     /**
      * When used, this will submit the present [search] term.
@@ -192,7 +232,7 @@ export default {
       }
       this.resetAutocompleteResults()
       this.$emit('submit', this.search)
-      this.delayUnbusy()
+      this.busy = false
     }
   }
 }

@@ -46,9 +46,35 @@
 </template>
 <script>
 import { delay } from 'lodash'
+import eventHandler from '../../mixins/mixin-element-event-handler'
 
 export default {
   name: 'Selector',
+
+  mixins: [
+    /**
+     * Determine if a tab keyup occurred outside of the component.
+     * If it did, assume the dropdown is no-longer being used, and hide it.
+     * @return void
+     */
+    eventHandler(document, 'keyup', function (e) {
+      if (e.key.toLowerCase() === 'tab') {
+        if (!this.$el.contains(document.activeElement)) {
+          this.showDropdown(false)
+        }
+      }
+    }),
+    /**
+     * Determine if a click occurred outside of the component.
+     * If it did, assume the dropdown is no-longer being used, and hide it.
+     * @return void
+     */
+    eventHandler(document, 'click', function () {
+      if (!this.$el.contains(document.activeElement)) {
+        this.showDropdown(false)
+      }
+    })
+  ],
 
   model: {
     event: 'change',
@@ -105,35 +131,7 @@ export default {
     }
   },
 
-  created () {
-    /**
-     * @see [onDocumentClick]
-     */
-    document.documentElement.addEventListener('click', this.onDocumentClick)
-  },
-
-  beforeDestroy () {
-    /**
-     * @see [onDocumentClick]
-     */
-    document.documentElement.removeEventListener('click', this.onDocumentClick)
-  },
-
   methods: {
-    /**
-     * Determine if a click occurred outside of the component.
-     * If it did, assume the dropdown is no-longer being used, and hide it.
-     * @return void
-     */
-    onDocumentClick (e) {
-      e.preventDefault()
-      e.stopPropagation()
-      // close the dropdown options if a click is registered outside of the component
-      if (this.$el.contains(document.activeElement) === false) {
-        this.showDropdown(false)
-      }
-    },
-
     onKeyup (e) {
       if (this.searchClear) {
         // if there's a timeout ID, clear it

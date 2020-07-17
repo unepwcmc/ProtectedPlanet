@@ -13,6 +13,11 @@
   ::placeholder {
     color: $grey-light;
   }
+
+  &--error {
+    background-color: $red;
+    color: $white;
+  }
   
   &__container {
     position: relative;

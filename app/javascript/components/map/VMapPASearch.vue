@@ -81,9 +81,18 @@ export default {
      */
     autocompleteCallback () {
       return searchTerm => {
-        return axios.post('/search/autocomplete', {
-          type: this.searchType.id,
-          search_term: searchTerm
+        return new Promise((resolve, reject) => {
+          axios.post('/search/autocomplete', {
+            type: this.searchType.id,
+            search_term: searchTerm
+          })
+            .then(response => {
+              const results = response.data
+              // .map(result => result.title)
+
+              resolve(Promise.resolve(results))
+            })
+            .catch(e => reject(Promise.reject(e)))
         })
       }
     },
