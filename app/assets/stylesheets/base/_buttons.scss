@@ -208,8 +208,4 @@ $padding-medium: rem-calc(27);
   &--outline-black { @include button-outline($black); }
   &--outline-white { @include button-outline($white); }
   &--primary { @include button-block; }
-  &--view-pa { 
-    @include button-block;
-    @include flex-vs-start;
-  }
 }

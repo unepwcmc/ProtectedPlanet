@@ -1,13 +1,19 @@
 &--equity {
-    @include flex;
+    @include responsive(display, block, block, flex);
+
+    &__button {
+        @include flex-vs-start;
+    }
 
     &__content {
+        @include responsive(width, 100%, 100%, 50%);
+        @include responsive(height, rem-calc(271), rem-calc(507), auto);
         @include flex;
-        border: 1px solid $grey-med-dark;
-        width: 50%;
+        border: 1px solid $grey-dark;
 
         img {
-            object-fit: none;
+            margin: 0 auto;
+            object-fit: contain;
         }
     }
 
@@ -16,20 +22,16 @@
     }
 
     &__header {
+        @include responsive(margin-bottom, 0, rem-calc(8), rem-calc(14));
         margin-top: 0;
-        margin-bottom: rem-calc(14);
     }
 
     &__panel {
+        @include responsive(width, 100%, 100%, 50%);
+        @include responsive(padding, rem-calc(32 13 29 18), rem-calc(50 44 62 49), rem-calc(41 40 29 57));
         @include flex;
         @include flex-column;
-        background-color: $grey-med-light;
-        font-size: rem-calc(17);
-        padding-top: rem-calc(41);
-        padding-right: rem-calc(40);
-        padding-bottom: rem-calc(29);
-        padding-left: rem-calc(57);
-        width: 50%;
+        background-color: $grey-xlight;
     }
 
     
@@ -38,27 +40,22 @@
 // Custom select for this component
 &--dropdown {
     &__custom-select {
+        @include responsive(margin, rem-calc(0 0 27), rem-calc(30 0 36), rem-calc(14 0 19));
         position: relative;
         user-select: none;
         width: 100%;
-        margin-top: rem-calc(14);
-        margin-bottom: rem-calc(19);
     }
 
     &__selected {
+        @include flex;
+        @include flex-v-center;
+        @include flex-h-between;
+        @include responsive(padding, rem-calc(14 10 15 18), rem-calc(22 17 29 24), rem-calc(22 17 29 24));
         @include text-body;
         background: $white;
         border: 1px solid $grey-black;
         cursor: pointer;
         line-height: 1.9;
-        padding-top: rem-calc(22);
-        padding-bottom: rem-calc(17);
-        padding-left: rem-calc(29);
-        padding-right: rem-calc(24);
-
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
         position: relative;
     }
 
@@ -66,27 +63,26 @@
         display: none;
 
         &--active {
-            height: rem-calc(500);
+            @include responsive(height, rem-calc(200), rem-calc(300), rem-calc(500));
+            background: $white;
+            border: 1px solid $grey-black;
+            border-top: 0;
             overflow: scroll;
-            position: absolute;
             display: block;
+            position: absolute;
             top: 100%;
             left: 0;
             right: 0;
-            border: 1px solid $grey-black;
-            border-top: 0;
-            background: $white;
             z-index: 2;
         }
     }
 
     &__option {
+        @include responsive(padding, rem-calc(0 10 0 18), rem-calc(0 24 0 29), rem-calc(0 24 0 29));
         @include text-body;
-        position: relative;
-        display: block;
-        padding-left: rem-calc(29);
-        padding-right: rem-calc(24);
         line-height: 1.9;
+        display: block;
+        position: relative;
 
         &:hover {
             background-color: $grey-light;

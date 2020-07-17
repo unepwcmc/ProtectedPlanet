@@ -15,7 +15,7 @@
       />
       <a
         :href="selected.url"
-        class="button--view-pa"
+        class="button--primary select--equity__button"
         title="View the protected area"
       >View Protected Area</a>
     </div>
