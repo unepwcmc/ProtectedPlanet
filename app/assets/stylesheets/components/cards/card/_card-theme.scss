@@ -38,11 +38,11 @@
     } 
 
       &__icon {
+        @include icon-pin-terrestrial-light;
         flex-shrink: 0;
 
-        &.marine-protected-areas {
-          @include icon-pin-blue;
-        }
+        &.marine-protected-areas { @include icon-pin-marine-light; }
+        &.oecms { @include icon-pin-oecm-light; }
       }
 
       &__number {

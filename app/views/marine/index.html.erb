@@ -8,7 +8,7 @@
 
 <%= render partial: "./layouts/partials/hero-thematic", locals: {
   button_text: t('thematic_area.marine.hero.button_text'),
-  button_url: search_areas_path('wdpa'), ##TODO add params to filter marine sites
+  button_url: search_areas_path(filters: @filters),
   classes: @cms_page.slug,
   hero_image: cms_fragment_render(:theme_image, @cms_page),
   hero_small_text: cms_fragment_render(:hero_small_text, @cms_page),
@@ -69,6 +69,8 @@
   } %>
 </section>
 
-<%= render "partials/carousels/themes" %>
+<section class="section-padding">
+  <%= render "partials/carousels/themes" %>
+</section>
 
 <%= render "partials/ctas/live-report" %>

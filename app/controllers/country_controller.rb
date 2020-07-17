@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class CountryController < ApplicationController
   after_action :enable_caching
-  before_action :load_vars, except: [:codes, :compare]
+  before_action :load_vars, except: %i[codes compare]
   include MapHelper
 
   def show
@@ -9,8 +11,16 @@ class CountryController < ApplicationController
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
     @iucn_categories = @country.protected_areas_per_iucn_category
     @governance_types = @country.protected_areas_per_governance
+    @coverage_growth = @country.coverage_growth #[{year: , count: , area: }]
 
-    @sites = [] ##TODO 
+    @country_designations = @country_presenter.designations
+
+    # For the stacked row chart percentages
+    @designation_percentages = @country_designations.map do |designation|
+      { percent: designation[:percent] }
+    end.to_json
+
+    @sites = [] # #TODO
 
     @sources = [
       {
@@ -20,7 +30,7 @@ class CountryController < ApplicationController
       }
     ]
 
-    @total_oecm = 0 ##TODO
+    @total_oecm = 0 # #TODO
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.count
 
@@ -40,14 +50,14 @@ class CountryController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.pdf {
-        rasterizer = Rails.root.join("vendor/assets/javascripts/rasterize.js")
+      format.pdf do
+        rasterizer = Rails.root.join('vendor/assets/javascripts/rasterize.js')
         url = url_for(action: :pdf, iso: @country.iso)
         dest_pdf = Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s
 
         `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
         send_file dest_pdf, type: 'application/pdf'
-      }
+      end
     end
   end
 
@@ -57,10 +67,10 @@ class CountryController < ApplicationController
 
   def codes
     countries = Country.order(:name).pluck(:name, :iso_3)
-    csv = CSV.generate { |rows|
-      rows << ["Name", "ISO3"]
+    csv = CSV.generate do |rows|
+      rows << %w[Name ISO3]
       countries.each(&rows.method(:<<))
-    }
+    end
 
     send_data csv, filename: 'protectedplanet-country-codes.csv'
   end
@@ -71,7 +81,7 @@ class CountryController < ApplicationController
   end
 
   def protected_areas
-    redirect_to search_path(main: "country", country: @country.id)
+    redirect_to search_path(main: 'country', country: @country.id)
   end
 
   private
@@ -82,9 +92,9 @@ class CountryController < ApplicationController
 
   def load_vars
     @country = if params[:iso].size == 2
-      Country.where(iso: params[:iso].upcase).first
-    else
-      Country.where(iso_3: params[:iso].upcase).first
+                 Country.where(iso: params[:iso].upcase).first
+               else
+                 Country.where(iso_3: params[:iso].upcase).first
     end
 
     @country or raise_404
@@ -92,17 +102,16 @@ class CountryController < ApplicationController
     @pame_statistics = @country.pame_statistic
   end
 
-  def pas_sample(size=3)
+  def pas_sample(size = 3)
     iso = params[:iso].upcase
     pas = nil
 
-    if iso.size == 2
-      pas = ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
-    else
-      pas = ProtectedArea.joins(:countries).where("countries.iso_3 = '#{iso}'")
-    end
+    pas = if iso.size == 2
+            ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
+          else
+            ProtectedArea.joins(:countries).where("countries.iso_3 = '#{iso}'")
+          end
 
     pas.order(:name).first(size)
   end
-
 end

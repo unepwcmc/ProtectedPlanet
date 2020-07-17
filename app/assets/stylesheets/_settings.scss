@@ -9,15 +9,16 @@ $radius-global: rem-calc(5);
 $white: #ffffff;
 $black: #000000;
 
-$grey-xlight: #f2f2f2;
+$grey-xlight: #f4f4f4;
 $grey-light: #c8c8c8;
 $grey: #919191;
 $grey-dark: #666666;
 $grey-xdark: #404040;
 $grey-black: #242424;
 
-$blue: #2C10A3;
+$blue: #004DA8;
 
+$green-bright: #38A800;
 $green: #71A32B;
 $green-dark: #527B19;
 $green--darker: #415519;
@@ -32,9 +33,10 @@ $map-oecm: rgba($orange, .8);
 $map-marine: rgba($blue, .8);
 $map-terrestrial: rgba($pink, .8);
 
-$chart-aqua: #65C9B2;
+$chart-aqua: #64BAD9;
 $chart-blue: #5F81CB;
-$chart-pink: #D63B7B;
+$chart-green: #65C9B2;
+$chart-purple: #A54897;
 
 $orange--dark: #de522f;
 $orange--lighter: #f16e4d;
@@ -49,14 +51,13 @@ $alert: $red;
 $primary: $green;
 $primary-dark: $green--darker;
 
-
-
-// $accent-light: lighten($green, 15%);
-// $accent: $green;
-
 $global: $purple;
-$marine: #54B7EB;
-$terrestrial: #B1D680;
+$marine: $blue;
+$terrestrial: $green-bright;
+
+$pin-marine: $marine;
+$pin-oecm: $orange;
+$pin-terrestrial: $terrestrial;
 
 //used on marine insights page
 $blue--marine-1: #bfe5e9; 
@@ -65,6 +66,8 @@ $blue--marine-3: #90BDC4;
 $blue--marine-4: #729099;
 $blue--marine-5: #444955;
 $marine-accent-color: $orange--lighest;
+
+$theme-designation: [$chart-purple, $chart-aqua, $chart-blue];
 
 //--------------------------------------------------
 // buttons
@@ -113,7 +116,7 @@ $fw-black: 900;
 // breakpoints
 //--------------------------------------------------
 // must be in px not rem!
-$small: 768px; 
+$small: 767px; 
 $medium: 1024px;
 $large: 1200px;
 

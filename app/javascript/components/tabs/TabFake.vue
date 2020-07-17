@@ -14,11 +14,11 @@ export default {
 
   props: {
     id: {
-      type: Number,
+      type: String,
       required: true
     },
     selectedId: {
-      type: Number,
+      type: String,
       required: true
     },
     title: {
@@ -29,7 +29,7 @@ export default {
 
   computed: {
     isActive () {
-      return this.id == this.selectedId
+      return this.id === this.selectedId
     }
   },
 

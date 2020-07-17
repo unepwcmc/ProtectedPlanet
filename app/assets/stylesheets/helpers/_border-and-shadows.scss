@@ -23,7 +23,7 @@
 //--------------------------------------------------
 // box shadows - mixins
 //--------------------------------------------------
-@mixin box-shadow($colour){ box-shadow: 2px 2px 4px $colour; }
+@mixin box-shadow($colour){ box-shadow: 2px 2px 6px $colour; }
 @mixin box-shadow-bottom($colour){ box-shadow: 0 3px 3px $colour; }
 
 //--------------------------------------------------

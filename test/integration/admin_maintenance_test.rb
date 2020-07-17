@@ -23,7 +23,8 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
   test 'PUT /admin/maintenance mode, given a false mode status, turns
    off maintenance mode' do
     key = Rails.application.secrets.maintenance_mode_key
-
+    seed_cms_home
+    
     put(
       '/admin/maintenance',
       params: { maintenance_mode_on: true },
@@ -38,7 +39,7 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
     )
     assert_response :success
 
-    get '/'
+    get '/en'
     assert_response :success
 
     assert_no_match(/Down for Maintenance/, @response.body)
