@@ -4,20 +4,10 @@ class FilterCheckboxes < ComfortableMexicanSofa::Content::Tag::Fragment
     @custom_categories = options['options'].split(',').map do |category|
       category = category.strip
     end
-
-    @custom_categories.each do |category|
-      class_eval { attr_accessor category }
-      instance_variable_set :"@#{category}", false
-    end
-  end
-
-  def content(category)
-    self.send(category)
   end
   
-
   def form_field(object_name, view, index)
-    name = "#{object_name}[fragments_attributes][#{index}][boolean]"
+    name = "#{object_name}[fragments_attributes][#{index}][content]"
 
     
     
@@ -26,11 +16,11 @@ class FilterCheckboxes < ComfortableMexicanSofa::Content::Tag::Fragment
           
                   options = { 
                       id: form_field_id, 
-                      class: "form-check-input"                
+                      class: "form-check-input"               
                   } 
 
                   view.concat view.hidden_field_tag(name, "0", id: nil)
-                  view.concat view.check_box_tag(name, "1", content(category), options)
+                  view.concat view.check_box_tag(name, "1", false, options)
                   view.concat view.label_tag(category, nil, class: 'form-check-label pr-3')
                 end
               end
