@@ -15,6 +15,7 @@
         v-model="autoCompleteResults"
         :placeholder="searchType.placeholder"
         :autocomplete-callback="autocompleteCallback"
+        :error-messages="autocompleteErrorMessages"
         @submit="submitSearch"
       />
     </div>
@@ -36,6 +37,11 @@ export default {
     Selector
   },
   props: {
+    autocompleteErrorMessages: {
+      required: false,
+      type: Object,
+      default: undefined
+    },
     dropdownLabel: {
       type: String,
       required: true
@@ -87,8 +93,14 @@ export default {
             search_term: searchTerm
           })
             .then(response => {
-              const results = response.data
-              // .map(result => result.title)
+              /**
+               * Map results to autocomplete-compatible objects.
+               * Autocomplete expects an array of label/value objects.
+               */ 
+              const results = response.data.map(item => ({
+                label: item.title,
+                value: item
+              }))
 
               resolve(Promise.resolve(results))
             })

@@ -12,7 +12,11 @@
     <div class="v-map-filters__body">
       <v-map-pa-search
         v-if="searchTypes.length"
-        v-bind="{ searchTypes, dropdownLabel }"
+        v-bind="{
+          autocompleteErrorMessages,
+          searchTypes,
+          dropdownLabel
+        }"
         @change="onSearch"
       />
       <div class="v-map-filters__overlays">
@@ -52,6 +56,11 @@ export default {
   },
 
   props: {
+    autocompleteErrorMessages: {
+      required: false,
+      type: Object,
+      default: undefined,
+    },
     overlays: {
       type: Array,
       required: true

@@ -14,11 +14,18 @@ en:
     dropdown_label: Search for a
     search_types:
       -
-        id: location
-        title: Location
+        id: country
+        title: Country
+        placeholder: Search...
+      -
+        id: region
+        title: Region
         placeholder: Search...
       -
         id: wdpa
         title: Protected Area
         placeholder: Search...
+    autocomplete_error_messages:
+      no_results: Sorry, we could not find anything with this search term.
+        Please try something else!
       

@@ -17,6 +17,12 @@
   &--error {
     background-color: $red;
     color: $white;
+
+
+    ::placeholder {
+      color: $white;
+    }
+  
   }
   
   &__container {
@@ -41,6 +47,18 @@
 
     position: absolute;
     left: rem-calc(16);
+
+    align-self: center;
+  }
+
+  &__delete {
+    @include button-basic; 
+    @include icon-cross-white;
+
+    height: 100%;
+
+    position: absolute;
+    right: rem-calc(16);
 
     align-self: center;
   }

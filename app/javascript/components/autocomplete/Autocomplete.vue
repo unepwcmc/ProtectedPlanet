@@ -2,22 +2,27 @@
   <div class="autocomplete__container">
     <div
       class="autocomplete"
+      :class="{ 'autocomplete--error': errors.any() }"
       @focus="focusInput"
     >
+      <button
+        class="autocomplete__magnifying-glass"
+        @click="onMagnifyingGlassClick"
+      />
       <input
         ref="input"
         class="autocomplete__input"
         type="text"
-        :disabled="busy"
         :placeholder="placeholder"
         :value="search"
         @input="onInput"
-        @keyup.enter.prevent.stop="onEnter"
+        @keyup.enter.prevent.stop="onInputEnter"
         @keyup.esc.prevent.stop="onEscape"
       >
-      <div
-        class="autocomplete__magnifying-glass"
-        @click="onMagnifyingGlassClick"
+      <button
+        v-if="search"
+        class="autocomplete__delete"
+        @click="onDeleteClick"
       />
     </div>
     <div
@@ -35,16 +40,15 @@
           @keyup.enter.stop.prevent="submit(result)"
           @mouseover="onResultMouseover"
         >
-          {{ result }}
+          {{ result.label }}
         </div>
       </div>
     </div>
-    <div tabindex="0" />
   </div>
 </template>
 
 <script>
-import { debounce } from 'lodash'
+import ErrorBag from '../../classes/ErrorBag'
 import eventHandler from '../../mixins/mixin-element-event-handler'
 
 export default {
@@ -59,10 +63,11 @@ export default {
     eventHandler(document, 'keyup', function (e) {
       if (e.key.toLowerCase() === 'tab') {
         if (!this.$el.contains(document.activeElement)) {
-          this.reset()
+          this.resetAutocompleteResults()
         }
       }
     }),
+
     /**
      * Determine if a click occurred outside of the component.
      * If it did, reset the component.
@@ -70,7 +75,7 @@ export default {
      */
     eventHandler(document, 'click', function () {
       if (this.$el.contains(document.activeElement) === false) {
-        this.reset()
+        this.resetAutocompleteResults()
       }
     })
   ],
@@ -85,6 +90,16 @@ export default {
       type: Function,
       required: true
     },
+
+    errorMessages: {
+      type: Object,
+      required: false,
+      default: () => ({
+        no_results: 'Sorry, we could not find anything with this search term. \
+          Please try something else.'
+      })
+    },
+
     /**
      * The placeholder to be seen before any input has been entered.
      */
@@ -103,15 +118,17 @@ export default {
   data () {
     return {
       /**
-       * Determine whether to prevent an autocomplete.
-       * @type Boolean
+       * Container for errors.
+       * @type ErrorBag
        */
-      busy: false,
+      errors: new ErrorBag,
+
       /**
-       * Autocomplete results.
+       * MUST BE AN ARRAY OF STRINGS OR LABEL/VALUE OBJECTS.
        * @type Array
        */
       results: [],
+
       /**
        * The search term. Replaced by an autocomplete result when selected.
        * @type String
@@ -137,12 +154,14 @@ export default {
      * If there are no results then submit the search.
      * @return void
      */
-    onEnter () {
+    onInputEnter () {
       if (this.search) {
         if (this.hasResults) {
           this.$refs.results[0].focus()
         } else {
-          this.submit()
+          this.resetErrors({
+            no_results: [this.errorMessages.no_results]
+          })
         }
       }
     },
@@ -165,18 +184,23 @@ export default {
       }
     },
 
+    onDeleteClick () {
+      this.reset()
+    },
+
     onInput (e) {
       this.updateSearch(e.target.value)
-      if (!this.busy) {
-        this.autocomplete()
-      }
+      this.autocomplete()
     },
 
     reset () {
-      this.busy = true
+      this.resetErrors()
       this.resetAutocompleteResults()
       this.updateSearch('')
-      this.busy = false
+    },
+
+    resetErrors (errors) {
+      this.errors = new ErrorBag(errors)
     },
 
     onResultMouseover (e) {
@@ -196,43 +220,31 @@ export default {
     },
 
     /**
-     * The autocomplete is a debounced function.
-     * @see https://lodash.com/docs/4.17.15#debounce
-     * If in a [busy] state, do not run the autocomplete.
-     * Otherwise, run the [autocompleteCallback] function and expect it
+     * Run the [autocompleteCallback] function and expect it
      * to return a Promise that resolves to an array of [result] strings.
      * @return void
      */
-    autocomplete: debounce(function () {
-      if (this.busy) {
-        return
-      }
-      this.busy = true
+    autocomplete() {
+      this.resetErrors()
       this.autocompleteCallback(this.search).then(results => {
         this.results = results
         setTimeout(() => this.focusInput(), 0)
       }).catch(e => {
-        console.error({e})
+        console.error({ e })
         this.resetAutocompleteResults()
-      }).finally(() => this.busy = false)
-    }, 250),
+      })
+    },
 
     /**
-     * When used, this will submit the present [search] term.
-     * If supplied with the [search] argument, it will be used in place of it.
-     * Autocomplete results are cleared when a submit occurs and the search
-     * term will be emitted from the component to be used by the parent.
-     * @param search an overriding search term to be used if present
+     * When used, this will submit a result.
+     * 
+     * @param result
      * @return void
      */
-    submit (search) {
-      this.busy = true
-      if (search) {
-        this.updateSearch(search)
-      }
+    submit (result) {
+      this.updateSearch(result.label)
       this.resetAutocompleteResults()
-      this.$emit('submit', this.search)
-      this.busy = false
+      this.$emit('submit', result)
     }
   }
 }

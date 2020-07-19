@@ -3,6 +3,7 @@
     <v-map-header title="<%= map_yml[:title] %>"></v-map-header>
     <v-map></v-map>
     <v-map-filters
+      :autocomplete-error-messages="<%= map_yml[:autocomplete_error_messages].to_json %>"
       :disclaimer="<%= map_yml[:disclaimer].to_json %>"
       :dropdown-label="<%= map_yml[:dropdown_label].to_json %>"
       :overlays="<%= map[:overlays].to_json %>"
