@@ -38,13 +38,13 @@ describe("SelectDropdown.vue", () => {
     expect(newSelection.text()).toEqual(protectedAreas[2].title);
 
     // Updates the 'selected' property of data
-    newSelection.trigger('click');
+    await newSelection.trigger('click');
     expect(component.vm.selected).toEqual(protectedAreas[2]);
   });
 
   it("emits the selected option", async () => {
     await select.trigger('click');
-    newSelection.trigger('click');
+    await newSelection.trigger('click');
     expect(component.emitted('pa-selected')).toBeTruthy;
   });
 });
