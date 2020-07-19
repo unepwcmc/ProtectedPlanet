@@ -228,6 +228,11 @@ export default {
       this.resetErrors()
       this.autocompleteCallback(this.search).then(results => {
         this.results = results
+        if (results.length === 0) {
+          this.resetErrors({
+            no_results: [this.errorMessages.no_results]
+          })
+        }
         setTimeout(() => this.focusInput(), 0)
       }).catch(e => {
         console.error({ e })
