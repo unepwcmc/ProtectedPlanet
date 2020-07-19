@@ -39,7 +39,7 @@ describe("SelectDropdown.vue", () => {
     const newSelection = component.find('span.select--dropdown__option:last-child');
     
     newSelection.trigger('click');
-    expect(component.emitted().pa-selected).toBe(protectedAreas[2]);
+    expect(component.emitted('pa-selected')).toBeTruthy;
   });
 });
 
