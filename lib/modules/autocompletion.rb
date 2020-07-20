@@ -17,8 +17,13 @@ module Autocompletion
       identifier = result.send(identifier_field(type))
 
       url = type == 'country' ? "/country/#{identifier}" : "/#{identifier}"
+      extent_url = result.respond_to?(:extent_url) ? result.extent_url : 'N/A'
 
-      { title: name, url: url }
+      {
+        title: name,
+        url: url,
+        pa_extent_url: extent_url
+      }
     end
   end
 

@@ -1,7 +1,7 @@
 <section class="map-section">
   <div class="map--main">
     <v-map-header title="<%= map[:title] %>"></v-map-header>
-    <v-map></v-map>
+    <v-map :services-for-point-query="<%= services_for_point_query.to_json %>"></v-map>
     <v-map-filters
       title="<%= map[:title] %>"
       :overlays="<%= map[:overlays].to_json %>"

@@ -27,7 +27,7 @@ class RegionController < ApplicationController
     }
 
     @map_options = {
-      map: { boundingRegion: @region.name }
+      map: { boundsUrl: region_extent_url(@region.name) }
     }
   end
 

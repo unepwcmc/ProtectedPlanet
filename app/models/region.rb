@@ -80,6 +80,8 @@ class Region < ApplicationRecord
     processed_data
   end
 
+
+
   def sources_per_jurisdiction
     ActiveRecord::Base.connection.execute("""
       SELECT jurisdictions.name, COUNT(DISTINCT protected_areas_sources.source_id)
@@ -117,6 +119,24 @@ class Region < ApplicationRecord
       #{"WHERE designations.jurisdiction_id = #{jurisdiction.id}" if jurisdiction}
     """)
   end
+
+  # TODO: Need to create a join table between regions and protected areas
+
+  # def protected_areas_per_jurisdiction
+  #   ActiveRecord::Base.connection.execute("""
+  #     SELECT jurisdictions.name, COUNT(*)
+  #     FROM jurisdictions
+  #     INNER JOIN designations ON jurisdictions.id = designations.jurisdiction_id
+  #     INNER JOIN (
+  #       SELECT protected_areas.designation_id
+  #       FROM protected_areas
+  #       INNER JOIN countries_protected_areas
+  #         ON protected_areas.id = countries_protected_areas.protected_area_id
+  #         AND countries_protected_areas.country_id = #{self.id}
+  #     ) AS pas_for_country ON pas_for_country.designation_id = designations.id
+  #     GROUP BY jurisdictions.name
+  #   """)
+  # end
 
   def countries_and_territories
     countries = self.countries
