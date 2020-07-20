@@ -13,7 +13,7 @@
         :text="getTooltipText(heading.id)"
         :class="['table-head__tooltip', { 'tooltip--end': isLastHeading(index) }]"
       >
-          <slot />  
+        <slot />  
       </tooltip>
 
       <table-sort 

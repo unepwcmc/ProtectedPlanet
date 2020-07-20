@@ -60,10 +60,19 @@ $flickity-basic-slide-width-desktop: 20%;
       width: $flickity-basic-slide-width-desktop; height: rem-calc(312);
     }
 
-    
     &:last-child {
-      @include breakpoint($large) {
-        // @include tooltip-last-slide;
+      @include breakpoint($medium) {
+        .tooltip__target {
+          left: inherit;
+          right: rem-calc(-10);
+          transform: none;
+
+          &::after {
+            left: inherit;
+            right: rem-calc(10);
+            transform: none;
+          }
+        }
       }
     }
   }
