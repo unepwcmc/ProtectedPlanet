@@ -10,7 +10,7 @@
 </style>
 <g>
 	<defs>
-		<path id="SVGID_1_" d="M59,60H1c-0.6,0-1-0.4-1-1V1c0-0.6,0.4-1,1-1h58c0.6,0,1,0.4,1,1v58C60,59.6,59.6,60,59,60z"/>
+		<path id="SVGID_1_" d="M59,60H1c-0.6,0-1-0.4-1-1V1c0-0.6,0.4-1,1-1h58c0.6,0,1,0.4,1,1v58C60,59.6,59.6,60,59,60z"></path>
 	</defs>
 	<clipPath id="SVGID_2_">
 		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
@@ -18,16 +18,16 @@
 </g>
 <g>
 	<defs>
-		<path id="SVGID_3_" d="M59,60H1c-0.6,0-1-0.4-1-1V1c0-0.6,0.4-1,1-1h58c0.6,0,1,0.4,1,1v58C60,59.6,59.6,60,59,60z"/>
+		<path id="SVGID_3_" d="M59,60H1c-0.6,0-1-0.4-1-1V1c0-0.6,0.4-1,1-1h58c0.6,0,1,0.4,1,1v58C60,59.6,59.6,60,59,60z"></path>
 	</defs>
 	<clipPath id="SVGID_4_">
 		<use xlink:href="#SVGID_3_"  style="overflow:visible;"/>
 	</clipPath>
 	<g class="st0">
-		<path class="st1" d="M-10.1,0h90v60h-90V0z"/>
+		<path class="st1" d="M-10.1,0h90v60h-90V0z"></path>
 		<path class="st2" d="M19.9,0v60h60V0H19.9z M10,7.5l-1.7,5.2H2.8l4.5,3.2l-1.7,5.2l4.4-3.2l4.4,3.2l-1.7-5.2l4.4-3.2h-5.4L10,7.5z
 			"/>
-		<path class="st3" d="M79.9,60h-90V30h90"/>
+		<path class="st3" d="M79.9,60h-90V30h90"></path>
 	</g>
 </g>
 </svg>
