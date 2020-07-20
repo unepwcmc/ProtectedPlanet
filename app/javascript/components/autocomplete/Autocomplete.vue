@@ -26,7 +26,7 @@
       />
     </div>
     <div
-      v-show="hasResults"
+      v-show="showResults"
       class="autocomplete__results-container"
     >
       <div class="autocomplete__results">
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { debounce } from 'lodash'
 import ErrorBag from '../../classes/ErrorBag'
 import eventHandler from '../../mixins/mixin-element-event-handler'
 
@@ -61,11 +62,7 @@ export default {
      * @return void
      */
     eventHandler(document, 'keyup', function (e) {
-      if (e.key.toLowerCase() === 'tab') {
-        if (!this.$el.contains(document.activeElement)) {
-          this.resetAutocompleteResults()
-        }
-      }
+      if (e.key.toLowerCase() === 'tab') this.onFocusCheck()
     }),
 
     /**
@@ -74,9 +71,7 @@ export default {
      * @return void
      */
     eventHandler(document, 'click', function () {
-      if (this.$el.contains(document.activeElement) === false) {
-        this.resetAutocompleteResults()
-      }
+      this.onFocusCheck()
     })
   ],
 
@@ -118,6 +113,12 @@ export default {
   data () {
     return {
       /**
+       * To be used to prevent parallel calls to the autocomplete callback.
+       * @type Boolean
+       */
+      busy: false,
+
+      /**
        * Container for errors.
        * @type ErrorBag
        */
@@ -134,12 +135,25 @@ export default {
        * @type String
        */
       search: '',
+
+      /**
+       * Mainly used when the component loses focus so that the results are not
+       * cleared and can be shown again when the component is back in focus.
+       * @type Boolean
+       */
+      shouldShowResults: false,
     }
   },
 
   computed: {
     hasResults () {
       return this.results.length > 0
+    },
+    hasSearchString () {
+      return this.search.length > 0
+    },
+    showResults () {
+      return this.hasResults && this.shouldShowResults === true
     }
   },
 
@@ -149,13 +163,21 @@ export default {
     },
 
     /**
+     * Don't remove the results only if the component loses focus.
+     * @return void
+     */
+    onFocusCheck () {
+      this.shouldShowResults = this.$el.contains(document.activeElement)
+    },
+
+    /**
      * When [enter] is triggered by the input, focus on the first result 
      * so it can be used on the next trigger if there are any.
      * If there are no results then submit the search.
      * @return void
      */
     onInputEnter () {
-      if (this.search) {
+      if (this.hasSearchString) {
         if (this.hasResults) {
           this.$refs.results[0].focus()
         } else {
@@ -173,7 +195,7 @@ export default {
      * @return void
      */
     onMagnifyingGlassClick () {
-      if (this.search) {
+      if (this.hasSearchString) {
         if (this.hasResults) {
           this.$refs.results[0].focus()
         } else {
@@ -190,7 +212,11 @@ export default {
 
     onInput (e) {
       this.updateSearch(e.target.value)
-      this.autocomplete()
+      if (this.hasSearchString) {
+        this.autocomplete()
+      } else {
+        this.resetAutocompleteResults()
+      }
     },
 
     reset () {
@@ -224,7 +250,9 @@ export default {
      * to return a Promise that resolves to an array of [result] strings.
      * @return void
      */
-    autocomplete() {
+    autocomplete: debounce(function () {
+      if (this.busy) return
+      this.busy = true
       this.resetErrors()
       this.autocompleteCallback(this.search).then(results => {
         this.results = results
@@ -237,8 +265,8 @@ export default {
       }).catch(e => {
         console.error({ e })
         this.resetAutocompleteResults()
-      })
-    },
+      }).finally(() => (this.busy = false))
+    }, 100),
 
     /**
      * When used, this will submit a result.
@@ -247,9 +275,11 @@ export default {
      * @return void
      */
     submit (result) {
+      this.busy = true
       this.updateSearch(result.label)
       this.resetAutocompleteResults()
       this.$emit('submit', result)
+      this.busy = false
     }
   }
 }
