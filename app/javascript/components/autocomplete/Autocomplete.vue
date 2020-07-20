@@ -125,7 +125,7 @@ export default {
       errors: new ErrorBag,
 
       /**
-       * MUST BE AN ARRAY OF STRINGS OR LABEL/VALUE OBJECTS.
+       * MUST BE AN ARRAY OF LABEL/VALUE OBJECTS.
        * @type Array
        */
       results: [],
