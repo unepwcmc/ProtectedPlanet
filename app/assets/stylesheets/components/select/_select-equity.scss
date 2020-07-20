@@ -3,6 +3,7 @@
 
     &__button {
         @include flex-vs-start;
+        border-radius: rem-calc(4);
     }
 
     &__content {
@@ -50,7 +51,7 @@
         @include flex;
         @include flex-v-center;
         @include flex-h-between;
-        @include responsive(padding, rem-calc(14 10 15 18), rem-calc(22 17 29 24), rem-calc(22 17 29 24));
+        @include responsive(padding, rem-calc(14 18 10 15), rem-calc(22 24 17 29), rem-calc(22 24 17 29));
         @include text-body;
         background: $white;
         border: 1px solid $grey-black;
@@ -78,7 +79,7 @@
     }
 
     &__option {
-        @include responsive(padding, rem-calc(0 10 0 18), rem-calc(0 24 0 29), rem-calc(0 24 0 29));
+        @include responsive(padding, rem-calc(0 18 0 15), rem-calc(0 24 0 29), rem-calc(0 24 0 29));
         @include text-body;
         line-height: 1.9;
         display: block;
