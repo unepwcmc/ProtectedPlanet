@@ -51,8 +51,8 @@
 		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
 	</clipPath>
 	<g class="st0">
-		<path class="st1" d="M-17.9999428,0h95.9996948v59.9998093h-95.9996948V0z"/>
-		<path class="st2" d="M13.9999561,0H45.999855v59.9998093H13.9999561V0z"/>
+		<path class="st1" d="M-17.9999428,0h95.9996948v59.9998093h-95.9996948V0z"></path>
+		<path class="st2" d="M13.9999561,0H45.999855v59.9998093H13.9999561V0z"></path>
 		<g transform="translate(0 .007)">
 			<g>
 				<g>
