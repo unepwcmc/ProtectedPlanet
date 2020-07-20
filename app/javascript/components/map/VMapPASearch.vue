@@ -12,6 +12,7 @@
     </div>
     <div class="v-map-pa-search__autocomplete">
       <autocomplete
+        :key="autocompleteKey"
         v-model="autoCompleteResults"
         :placeholder="searchType.placeholder"
         :autocomplete-callback="autocompleteCallback"
@@ -74,6 +75,11 @@ export default {
        * @type Object
        */
       searchType: this.searchTypes[0],
+
+      /**
+       * Key used to determine whether to refresh the autocomplete component.
+       */
+      autocompleteKey: 0
     }
   },
 
@@ -118,6 +124,12 @@ export default {
         this.convertSearchTypeToDropdownOption(type)
       )
     },
+  },
+
+  watch: {
+    searchType () {
+      this.autocompleteKey ++
+    }
   },
 
   methods: {
