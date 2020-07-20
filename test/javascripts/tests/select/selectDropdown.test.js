@@ -1,7 +1,6 @@
 import { mount } from "vue-test-utils";
 import SelectDropdown from "components/select/SelectDropdown.vue";
 
-
 describe("SelectDropdown.vue", () => {
   // Set up props
   const protectedAreas = [
@@ -48,4 +47,3 @@ describe("SelectDropdown.vue", () => {
     expect(component.emitted('pa-selected')).toBeTruthy;
   });
 });
-
