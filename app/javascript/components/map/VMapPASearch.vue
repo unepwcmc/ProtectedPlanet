@@ -38,9 +38,8 @@ export default {
   },
   props: {
     autocompleteErrorMessages: {
-      required: false,
-      type: Object,
-      default: undefined
+      required: true,
+      type: Object
     },
     dropdownLabel: {
       type: String,
