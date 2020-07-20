@@ -11,7 +11,7 @@ class FilterCheckboxes < ComfortableMexicanSofa::Content::Tag::Fragment
     end
   end
 
-  def content(category)
+  def value_of_content(category)
     self.send(category)
   end
   
@@ -28,7 +28,7 @@ class FilterCheckboxes < ComfortableMexicanSofa::Content::Tag::Fragment
                       class: "form-check-input"               
                   } 
 
-                  view.concat view.hidden_field_tag(name, "#{category}: #{content(category)}", id: nil)
+                  view.concat view.hidden_field_tag(name, "#{category}", id: nil)
                   view.concat view.check_box_tag(name, "1", parse_content(category), options)
                   view.concat view.label_tag(category, nil, class: 'form-check-label pr-3')
                 end
@@ -41,6 +41,7 @@ class FilterCheckboxes < ComfortableMexicanSofa::Content::Tag::Fragment
   private
 
   def parse_content
+    return if self.content == ""
     # TODO: Need to write a function to parse the content attribute of the fragment that is submitted via the form.
     false
   end
