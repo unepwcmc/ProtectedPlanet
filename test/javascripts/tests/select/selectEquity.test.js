@@ -1,7 +1,7 @@
 import { mount } from "vue-test-utils";
 import SelectEquity from "components/select/SelectEquity.vue";
 import SelectDropdown from "components/select/SelectDropdown.vue";
-import image from "__mocks__/fileMock.js";
+import image from "../assets/images/background.jpg";
 
 
 describe("SelectEquity.vue", () => {
