@@ -14,6 +14,7 @@ import VueLazyload from 'vue-lazyload'
 import store from './store/store.js'
 
 // components
+import AmChartLine from './components/charts/am-chart-line/AmChartLine'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
@@ -26,6 +27,7 @@ import ChartLine from './components/charts/chart-line/ChartLine'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
+import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Flickity from 'vue-flickity';
@@ -66,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
       store,
 
       components: {
+        AmChartLine,
         Carousel,
         CarouselSlide,
         Counter,
@@ -78,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartTreemapInteractive,
         ChartRectangles,
         ChartRowPa,
+        ChartRowStacked,
         ChartRowTarget,
         ChartSunburst,
         Download,

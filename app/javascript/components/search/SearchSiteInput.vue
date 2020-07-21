@@ -41,7 +41,8 @@ export default {
     popout: {
       type: Boolean,
       default: false
-    }
+    },
+    prePopulatedSearchTerm: String
   },
 
   data () {
@@ -53,6 +54,10 @@ export default {
 
   created () {
     if(this.popout) { this.isActive = false }
+  },
+
+  mounted () {
+    if(this.prePopulatedSearchTerm) { this.searchTerm = this.prePopulatedSearchTerm }
   },
 
   computed: {

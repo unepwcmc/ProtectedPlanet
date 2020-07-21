@@ -8,8 +8,16 @@ class CountryController < ApplicationController
     @country_presenter = CountryPresenter.new @country
 
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
-                 @iucn_categories = @country.protected_areas_per_iucn_category
+    @iucn_categories = @country.protected_areas_per_iucn_category
     @governance_types = @country.protected_areas_per_governance
+    @coverage_growth = @country.coverage_growth #[{year: , count: , area: }]
+
+    @country_designations = @country_presenter.designations
+
+    # For the stacked row chart percentages
+    @designation_percentages = @country_designations.map do |designation|
+      { percent: designation[:percent] }
+    end.to_json
 
     @sites = [] # #TODO
 
@@ -24,11 +32,9 @@ class CountryController < ApplicationController
     @total_oecm = 0 # #TODO
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.count
-
-    #@wdpa = [] #get_wdpa TODO ??
-
+    
     ##TODO need adding
-    # protected_national_report: statistic_presenter.percentage_nr_marine_cover,
+    # protected_national_report: statistic_presenter.percentage_nr_marine_cover, 
     # national_report_version: statistic_presenter.nr_version,
 
     respond_to do |format|

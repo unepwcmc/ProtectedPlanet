@@ -9,7 +9,8 @@ class DesignationsPresenter
     JURISDICTIONS.map do |j|
       {
         title: designation_title(j),
-        total: designation_total(designations_by_jurisdiction, j),
+        total: designation_total(j),
+        percent: percent_of_total(j),
         has_jurisdiction: get_jurisdiction(j),
         jurisdictions: jurisdictions(j)
       }
@@ -36,8 +37,22 @@ class DesignationsPresenter
     "#{jurisdiction} designations"
   end
 
-  def designation_total(designations, jurisdiction)
-    (designations[jurisdiction] && designations[jurisdiction].count) || 0
+  def all_pas
+    @all_pas ||= geo_entity.protected_areas_per_jurisdiction 
+  end
+
+  def total_number_of_designations
+    all_pas.reduce(0) { |count, j| count + j["count"] }
+  end
+
+  def percent_of_total(jurisdiction)
+    total_per_jurisdiction = designation_total(jurisdiction)
+    (( total_per_jurisdiction.to_f / total_number_of_designations.to_f ) * 100).round(2)
+  end
+
+  def designation_total(jurisdiction)
+    designations = all_pas.find { |result| result["name"] == jurisdiction }
+    designations ? designations['count'] : 0
   end
 
   def jurisdictions(jurisdiction)

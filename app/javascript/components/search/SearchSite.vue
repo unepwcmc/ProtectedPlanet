@@ -3,6 +3,7 @@
     <search-site-input
       :endpoint="endpoint"
       :placeholder="placeholder"
+      :pre-populated-search-term="searchTerm"
       v-on:submit:search="updateSearchTerm"
     />
 
@@ -56,9 +57,6 @@ export default {
       default: 15,
       type: Number
     },
-    query: {
-      type: String
-    },
     noResultsText: {
       required: true,
       type: String
@@ -76,6 +74,9 @@ export default {
   data () {
     return {
       categoryId: '',
+      config: {
+        queryStringParams: ['search_term']
+      },
       currentPage: 0,
       defaultCategory: this.categories[0].id,
       defaultPage: 1,
@@ -88,16 +89,12 @@ export default {
     }
   },
 
-  mounted () {
-    this.categoryId = this.defaultCategory
+  created () {
+    this.handleQueryString()
   },
 
   mounted () {
-    if(this.query) {
-      
-      this.searchTerm = this.query
-      this.ajaxSubmission()
-    }
+    this.categoryId = this.defaultCategory
   },
 
   methods: {
@@ -127,6 +124,20 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+
+    handleQueryString () {
+      const paramsFromUrl = new URLSearchParams(window.location.search)
+
+      let params = []
+
+      this.config.queryStringParams.forEach(param => {
+        if(paramsFromUrl.has(param)) { params.push(param) }
+      })
+
+      if(params.includes('search_term')) {
+        this.searchTerm = paramsFromUrl.get('search_term')
+      }
     },
 
     resetAll () {

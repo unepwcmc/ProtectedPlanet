@@ -1,6 +1,10 @@
-<header class="hero--basic <%= get_local_classes local_assigns %>">
-  <div class="hero__container container">
+<% if local_assigns.has_key? :hero_image %>
+  <header class="hero--basic bg-image-overlay--white" style="background-image: url(<%= hero_image %>)">
+<% else %>
+  <header class="hero--basic bg-image-overlay--white <%= get_local_classes local_assigns %>">
+<% end %>
 
+  <div class="hero__container container">
     <div class="hero__content">
       <h1><%= title %></h1>
 

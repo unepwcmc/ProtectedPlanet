@@ -1019,7 +1019,7 @@ GEM
       rails (>= 5.2.0)
       rails-i18n (>= 5.0.0)
       sassc-rails (>= 2.0.0)
-    comfy_bootstrap_form (4.0.8)
+    comfy_bootstrap_form (4.0.7)
       rails (>= 5.0.0)
     concurrent-ruby (1.1.5)
     connection_pool (2.2.2)
