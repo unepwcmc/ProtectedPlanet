@@ -35,3 +35,4 @@ tmp/cache/webpacker
 
 .byebug_history
 
+.vscode/
