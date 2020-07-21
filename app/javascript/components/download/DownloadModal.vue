@@ -39,7 +39,7 @@ export default {
   components: { DownloadItem },
 
   props: {
-    downloads: Array, //[ { title: String, url: String, hasFailed: Boolean } ]
+    newDownload: Object, //{ title: String, url: String, hasFailed: Boolean }
     isActive: {
       default: false,
       type: Boolean
@@ -54,7 +54,14 @@ export default {
   },
 
   mounted () {
-    this.activeDownloads = this.downloads
+    
+  },
+
+  watch: {
+    newDownload () {
+      console.log('new', this.activeDownloads)
+      this.activeDownloads.push(this.newDownload)
+    }
   },
 
   methods: {

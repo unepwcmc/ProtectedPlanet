@@ -3,6 +3,7 @@
     <ul class="popup__ul">
       <li 
         v-for="option in options"
+        :key="option._uid"
       >
         <span 
           class="popup__link" 

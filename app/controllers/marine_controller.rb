@@ -24,27 +24,26 @@ class MarineController < ApplicationController
       {
         title: 'CSV',
         commercialAvailable: true,
-        params: '' #FERDI add whatever you need here to generate the correct file
+        params: { domain: 'csv', token: 'marine' }
       },
       {
         title: 'SHP',
         commercialAvailable: true,
-        params: '' #FERDI add whatever you need here to generate the correct file
+        params: { domain: 'shp', token: 'marine' }
       },
       {
         title: 'File Geodatabase',
         commercialAvailable: true,
-        params: '' #FERDI add whatever you need here to generate the correct file
+        params: { domain: 'gdb', token: 'marine' }
       },
       {
         title: 'ESRI Web Service',
-        commercialAvailable: true,
-        params: '' #FERDI add whatever you need here to generate the correct file
+        url: ''
       },
       {
         title: 'PDF',
         commercialAvailable: false,
-        params: '' #FERDI add whatever you need here to generate the correct file
+        params: { domain: 'pdf', token: 'marine' }
       }
     ].to_json
 
