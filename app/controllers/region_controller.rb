@@ -6,6 +6,13 @@ class RegionController < ApplicationController
 
     @governance_types = @region.protected_areas_per_governance
 
+    @designations = @presenter.designations
+
+    # For the stacked row chart percentages
+    @designation_percentages = @designations.map do |designation|
+      { percent: designation[:percent] }
+    end.to_json
+
     @sources = [
       {
         title: 'Source name',
