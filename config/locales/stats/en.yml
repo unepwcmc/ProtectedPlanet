@@ -15,7 +15,7 @@ en:
       title: Governance types
     green-list:
       intro: This site is part of the IUCN Green List Community
-      type: Governance Type
+      type: Green List Status
       date: Certification Expiry Date
     iucn-categories: 
       title: IUCN Management Categories

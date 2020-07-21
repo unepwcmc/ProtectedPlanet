@@ -9,6 +9,8 @@
       @include card-button-external;
       margin-top: auto;
       padding-top: rem-calc(14);
+
+      display: none; //to be added later
     }
 
     &__h2 { @include card-stats-h2; }
