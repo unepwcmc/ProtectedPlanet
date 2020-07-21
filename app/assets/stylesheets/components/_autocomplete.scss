@@ -55,7 +55,10 @@
     @include button-basic; 
     @include icon-cross-white;
 
-    height: 100%;
+    background-color: inherit;
+    border-radius: rem-calc(14);
+
+    height: rem-calc(14);
     width: rem-calc(14);
 
     position: absolute;
