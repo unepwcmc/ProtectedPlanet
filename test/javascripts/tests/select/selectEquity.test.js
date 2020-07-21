@@ -1,13 +1,15 @@
 import { mount } from "vue-test-utils";
 import SelectEquity from "components/select/SelectEquity.vue";
 import SelectDropdown from "components/select/SelectDropdown.vue";
-import image from "../assets/images/background.jpg";
+import image from "__mocks__/fileMock.js";
 
 
 describe("SelectEquity.vue", () => {
   // Set up props
+  const imageURL = "http://localhost/" + image
+
   const protectedAreas = [
-    { title: "test message 1", text: "sample text 1", image: image }, 
+    { title: "test message 1", text: "sample text 1", image: imageURL }, 
     { title: "test message 2", text: "sample text 2" }, 
     { title: "test message 3", text: "sample text 3" }
   ];
