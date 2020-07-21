@@ -1,4 +1,7 @@
 &--equity {
+    @include breakpoint-down($small) {
+        max-width: rem-calc(685);
+    }
     @include breakpoint-down($large) {
         display: block;
     }
@@ -15,10 +18,18 @@
         @include breakpoint-down($small) {
             height: rem-calc(271);
             padding: rem-calc(20 0);
+
+            img {
+                object-fit: contain;
+            }
         }
         @include breakpoint($small) {
             height: rem-calc(507);
             padding: rem-calc(30 0);
+
+            img {
+                object-fit: cover; 
+            }
         }
         @include breakpoint($large) {
             width: 50%;
@@ -31,8 +42,7 @@
        
 
         img {
-            margin: 0 auto;
-            object-fit: cover;          
+            margin: 0 auto;                 
         }
     }
 
