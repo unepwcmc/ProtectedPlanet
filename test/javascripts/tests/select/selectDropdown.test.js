@@ -27,7 +27,7 @@ describe("SelectDropdown.vue", () => {
 
   it("initially renders the first prop it is passed", () => {
     const selectedTitle = component.find('div.select--dropdown__selected > span')
-    expect(selectedTitle.text()).toBe("test message 1");
+    expect(selectedTitle.text()).toBe(protectedAreas[0].title);
   });
 
   it("allows selections to be made", async () => {

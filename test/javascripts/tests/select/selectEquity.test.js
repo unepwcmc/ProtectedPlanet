@@ -46,7 +46,7 @@ describe("SelectEquity.vue", () => {
 
   it("displays the correct text", () => {
     const text = component.find('p')
-    expect(text.text()).toEqual('sample text 1');
+    expect(text.text()).toEqual(protectedAreas[0].text);
   });
 
   it("shows the correct image", () => {
