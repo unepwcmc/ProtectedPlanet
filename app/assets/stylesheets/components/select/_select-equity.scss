@@ -14,21 +14,25 @@
     &__content {
         @include breakpoint-down($small) {
             height: rem-calc(271);
+            padding: rem-calc(20 0);
         }
         @include breakpoint($small) {
             height: rem-calc(507);
+            padding: rem-calc(30 0);
         }
         @include breakpoint($large) {
             width: 50%;
             height: auto;
+            padding: rem-calc(60 0);
         }
 
         @include flex;
         border: 1px solid $grey-dark;
+       
 
         img {
             margin: 0 auto;
-            object-fit: contain;
+            object-fit: cover;          
         }
     }
 
@@ -136,7 +140,7 @@
         }
    
         @include text-body;
-        
+
         line-height: 1.9;
         display: block;
         position: relative;
