@@ -49,7 +49,9 @@
 
 <%= render partial: "partials/charts/chart-coverage-growth", locals: {
   cms_page: @cms_page,
-  lines: @protectedAreasGrowth
+  content: cms_fragment_render(:section_coverage_content, @cms_page),
+  lines: @protectedAreasGrowth,
+  title: cms_fragment_render(:section_coverage_title, @cms_page)
 } %>
 
 <%= render partial: "marine/sections/national", locals: {
@@ -63,7 +65,9 @@
 </section>
 
 <%= render partial: "partials/charts/chart-top-ten", locals: {
+  content: cms_fragment_render(:section_size_growth_content, @cms_page),
   regionsTopCountries: @regionsTopCountries,
+  title: cms_fragment_render(:section_size_growth_title, @cms_page)
 } %>
 
 <%= render partial: "marine/sections/coverage_growth", locals: {

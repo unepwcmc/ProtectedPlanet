@@ -32,11 +32,15 @@
 
 <%= render partial: "partials/charts/chart-coverage-growth", locals: {
   cms_page: @cms_page,
-  lines: @protectedAreaGrowth
+  content: cms_fragment_render(:section_coverage_content, @cms_page),
+  lines: @protectedAreaGrowth,
+  title: cms_fragment_render(:section_coverage_title, @cms_page)
 } %>
 
 <%= render partial: "partials/charts/chart-top-ten", locals: {
+  content: cms_fragment_render(:section_size_content, @cms_page),
   regionsTopCountries: @regionsTopCountries,
+  title: cms_fragment_render(:section_size_title, @cms_page)
 } %>
 
 <section class="section-padding">

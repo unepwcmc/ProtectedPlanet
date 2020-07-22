@@ -1,7 +1,7 @@
 <section class="container">
   <div class="container--component">
-    <h2><%= cms_fragment_render(:section_coverage_title, cms_page) %></h2>
-    <div><%= cms_fragment_render(:section_coverage_content, cms_page) %></div>
+    <h2><%= title %></h2>
+    <div><%= content %></div>
     <div>
       <chart-line 
         :lines="<%= lines %>"
