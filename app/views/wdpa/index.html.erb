@@ -1,6 +1,6 @@
-<%= render partial: "./layouts/partials/hero-area-types", locals: { 
-    button_download_text: cms_fragment_render("button-download"),
-    button_download_url: '', ##TODO this will prob come out because it will be a vue component
+<%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
+
+<%= render partial: "./layouts/partials/hero-area-types", locals: {
     button_search_text: cms_fragment_render("button-search"),
     button_search_url: search_areas_path(filters: {db_type: ['wdpa']}),
     hero_image: cms_fragment_render(:theme_image, @cms_page),

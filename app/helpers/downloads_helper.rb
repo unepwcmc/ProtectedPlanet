@@ -41,7 +41,7 @@ module DownloadsHelper
       )
     end
 
-    if options_array.include? 'gdb'
+    if options_array.include? 'pdf'
       download_options.push(
         {
           title: 'PDF',
