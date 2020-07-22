@@ -18,7 +18,7 @@ class MarineController < ApplicationController
   def index
     @marineSites = ProtectedArea.marine_areas.limit(3) ## FERDI 3 marine PAs
     @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
-    @marineViewAllUrl = '/' #TODO URL to filtered search results page
+    @marineViewAllUrl = search_areas_path(filters: { db_type: ['wdpa'], is_type: ['marine']}) 
 
     @regionCoverage = Region.without_global.map do |region|
       RegionPresenter.new(region).marine_coverage
