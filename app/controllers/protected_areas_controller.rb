@@ -13,8 +13,11 @@ class ProtectedAreasController < ApplicationController
     @presenter = ProtectedAreaPresenter.new @protected_area
     @countries = @protected_area.countries.without_geometry
     @other_designations = load_other_designations
-    # @networks = load_networks
-    @networks = get_other_sites
+    @networks = load_networks
+    # @other_sites = get_other_sites
+
+    # TODO: Add is_transboundary column to protected area model
+    # @transboundaryViewAll = search_areas_path(filters)
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
 
@@ -82,15 +85,7 @@ class ProtectedAreasController < ApplicationController
   end
 
   def get_other_sites
-    return ProtectedArea.take(3) if @countries.count == 1
-    transboundary_sites = ActiveRecord::Base.connection.execute("""
-      SELECT pa.name, count(country_id) 
-      FROM countries_protected_areas 
-      JOIN protected_areas AS pa ON pa.id = protected_area_id 
-      GROUP BY pa.name 
-      HAVING count(country_id) > 1
-      LIMIT 3;
-    """)
-    transboundary_sites.to_a.map { |result| ProtectedArea.where(name: result['name']) }
+    return ProtectedArea.take(3) if @countries.count <= 1
+    ProtectedArea.where(is_transboundary: true).take(3)
   end
 end
