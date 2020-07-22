@@ -18,12 +18,13 @@ module Autocompletion
 
       geom_type = result.is_a?(ProtectedArea) ? result.the_geom.geometry_type.to_s : 'N/A'
       url = type == 'country' ? "/country/#{identifier}" : "/#{identifier}"
+      extent_url = result.respond_to?(:extent_url) ? result.extent_url : 'N/A'
 
       {
         id: identifier,
-        geom_type: geom_type,
+        pa_extent_url: extent_url,
         title: name,
-        url: url,
+        url: url
       }
     end
   end

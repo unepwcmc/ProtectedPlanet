@@ -37,8 +37,7 @@ class ProtectedAreasController < ApplicationController
 
     @map_options = {
       map: { 
-        boundingWDPAId: @protected_area.wdpa_id,
-        isPoint: @protected_area.the_geom.geometry_type.type_name === 'MultiPoint' 
+        boundsUrl: @protected_area.extent_url
       }
     }
 

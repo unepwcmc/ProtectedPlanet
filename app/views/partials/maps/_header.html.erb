@@ -1,5 +1,8 @@
 <div class="map--header">
-  <v-map :options="<%= map_options.to_json %>"></v-map>
+  <v-map 
+    :options="<%= map_options.to_json %>"
+    :services-for-point-query="<%= services_for_point_query.to_json %>"
+  ></v-map>
   <v-map-filters
     title="<%= map_yml[:title] %>"
     :overlays="<%= map[:overlays].to_json %>"

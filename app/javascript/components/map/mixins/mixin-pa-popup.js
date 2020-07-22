@@ -1,38 +1,37 @@
-import { getOECMFromCoords, getWDPAPointFromCoords, getWDPAPolyFromCoords } from '../helpers/request-helpers'
+import { PointQuery } from '../helpers/request-helpers'
 
 export default {
+  props: {
+    servicesForPointQuery: {
+      type: Array,
+      default: () => []
+    }
+  },
+
   methods: {
     onClick (e) {
       const coords = e.lngLat
 
-      getOECMFromCoords(coords, res => {
-        const oecm = this.addPopupIfFound(res, coords)
-
-        if (!oecm) {
-          getWDPAPointFromCoords(coords, res => {
-            const pa = this.addPopupIfFound(res, coords)
-
-            if(!pa) {
-              getWDPAPolyFromCoords(coords, res => {
-                this.addPopupIfFound(res, coords)
-              })
-            }
-          })
-        }
-      })
+      new PointQuery(
+        this.servicesForPointQuery, 
+        coords, 
+        this.addPopupIfFound(coords)
+      ).queryAllServices()
     },
 
-    addPopupIfFound (res, coords) {
-      const features = res.data.features
-      let pa = null
+    addPopupIfFound (coords) {
+      return res => {
+        const features = res.data.features
+        let pa = null
+  
+        if (features.length) {
+          pa = features[0].attributes
+  
+          this.addPopup(coords, pa)
+        }
 
-      if (features.length) {
-        pa = features[0].attributes
-
-        this.addPopup(coords, pa)
+        return pa !== null
       }
-
-      return pa
     },
 
     addPopup (coords, pa) {

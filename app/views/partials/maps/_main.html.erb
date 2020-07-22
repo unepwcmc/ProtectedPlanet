@@ -1,7 +1,7 @@
 <section class="map-section">
   <div class="map--main">
     <v-map-header title="<%= map_yml[:title] %>"></v-map-header>
-    <v-map></v-map>
+    <v-map :services-for-point-query="<%= services_for_point_query.to_json %>"></v-map>
     <v-map-filters
       :autocomplete-error-messages="<%= map_yml[:autocomplete_error_messages].to_json %>"
       :disclaimer="<%= map_yml[:disclaimer].to_json %>"
