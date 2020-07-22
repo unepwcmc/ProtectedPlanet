@@ -63,7 +63,7 @@
       tabs () {
         return this.json.map((region, index) => {
           return {
-            id: index,
+            id: index.toString(),
             selectedId: this.selectedDatasetIndex,
             title: region.regionTitle
           }

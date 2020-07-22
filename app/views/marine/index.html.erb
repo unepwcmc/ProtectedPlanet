@@ -28,15 +28,28 @@
   <div><%= cms_fragment_render(:section_distribution_content, @cms_page) %></div>
 </section>
 
-<%= render partial: "marine/sections/ocean", locals: {
-  national: marine_stats('national_waters_percentage'),
-  national_coverage: marine_stats('national_waters_pa_coverage_percentage'),
-  high_seas: marine_stats('global_ocean_percentage'),
-  high_seas_coverage: marine_stats('high_seas_pa_coverage_percentage')
+<%= render partial: "partials/charts/chart-row-pa", locals: {
+  charts: [
+    {
+      coverage: marine_stats('national_waters_pa_coverage_percentage'),
+      theme: 'theme--purple',
+      title: t('thematic_area.marine.ocean.national-title'),
+      total: marine_stats('national_waters_percentage')
+    },
+    {
+      coverage: marine_stats('high_seas_pa_coverage_percentage'),
+      theme: 'theme--blue',
+      title: t('thematic_area.marine.ocean.high-title'),
+      total: marine_stats('global_ocean_percentage')
+    }
+  ],
+  content: cms_fragment_render(:section_ocean_content, @cms_page),
+  title: cms_fragment_render(:section_ocean_title, @cms_page)
 } %>
 
-<%= render partial: "marine/sections/coverage", locals: {
-  cms_page: @cms_page
+<%= render partial: "partials/charts/chart-coverage-growth", locals: {
+  cms_page: @cms_page,
+  lines: @protectedAreasGrowth
 } %>
 
 <%= render partial: "marine/sections/national", locals: {
@@ -49,7 +62,7 @@
   <div><%= cms_fragment_render(:section_size_content, @cms_page) %></div>
 </section>
 
-<%= render partial: "marine/sections/size_growth", locals: {
+<%= render partial: "partials/charts/chart-top-ten", locals: {
   regionsTopCountries: @regionsTopCountries,
 } %>
 

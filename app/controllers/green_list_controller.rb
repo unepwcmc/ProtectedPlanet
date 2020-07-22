@@ -10,6 +10,33 @@ class GreenListController < ApplicationController
     @pas_km = ProtectedArea.green_list_total_km
     @pas_percent = ProtectedArea.green_list_protected_percentage
     @pas_total = ProtectedArea.green_list_areas.count
+
+    @protectedAreaGrowth = [
+      {
+        id: "Global",
+        datapoints: [
+          { x: 2000, y: 0.67 }
+        ]
+      },
+      {
+        id: "National",
+        datapoints: [
+          { x: 2000, y: 0.67 }
+        ]
+      },
+      {
+        id: "ABNJ",
+        datapoints: [
+          { x: 2000, y: 0.67 }
+        ]
+      }
+    ].to_json ##TODO See marine page for example - data needed from CLS
+
+    @regionsTopCountries = [] ##TODO See marine page for example
+
+    @total_area_percent = 20 ##TODO total percentage coverage of the worlds PAs
+    @total_greenlist_percent = 5 ##TODO total percentage coverage of the worlds Greenlist PAs
+
     @filters = {
       db_type: ['wdpa'],
       special_status: ['is_green_list']

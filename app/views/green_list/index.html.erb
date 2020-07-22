@@ -13,8 +13,34 @@
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
-<section class="container">
-  <%= cms_fragment_render("content") %>
+<section class="container--medium page-padding--top">
+  <h2><%= cms_fragment_render(:section_about_title, @cms_page) %></h2>
+  <div><%= cms_fragment_render(:section_about_content, @cms_page) %></div>
+</section>
+
+<%= render partial: "partials/charts/chart-row-pa", locals: {
+  charts: [
+    {
+      coverage: @total_greenlist_percent,
+      theme: 'theme--blue',
+      total: @total_area_percent
+    }
+  ],
+  content: cms_fragment_render(:section_percentage_content, @cms_page),
+  title: cms_fragment_render(:section_percentage_title, @cms_page)
+} %>
+
+<%= render partial: "partials/charts/chart-coverage-growth", locals: {
+  cms_page: @cms_page,
+  lines: @protectedAreaGrowth
+} %>
+
+<%= render partial: "partials/charts/chart-top-ten", locals: {
+  regionsTopCountries: @regionsTopCountries,
+} %>
+
+<section class="section-padding">
+  <%= render "partials/carousels/themes" %>
 </section>
 
 <%= render "partials/ctas/live-report" %>
