@@ -25,7 +25,7 @@ class RegionController < ApplicationController
     }
 
     @map_options = {
-      map: { boundsUrl: region_extent_url(@region.name) }
+      #map: { bounds: Region.bounding_box } TODO: import bounding box
     }
   end
 

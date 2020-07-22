@@ -57,6 +57,8 @@ module MapHelper
     }
   end
   
+  #TODO: REMOVE this once hardcoded bounding boxes are used
+  #TODO: Add endpoint to get bounding box of region (if not already present) and change this to match that endpoint
   def region_extent_url (name)
     {
       url: "https://data-gis.unep-wcmc.org/server/rest/services/AdministrativeUnits/GADM_EEZ_Layer/FeatureServer/0/query?where=region+%3D+%27#{CGI.escape(name)}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson", 
