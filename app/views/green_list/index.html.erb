@@ -1,3 +1,5 @@
+<%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
+
 <%= render partial: "./layouts/partials/hero-thematic", locals: { 
   button_text: t('thematic_area.green_list.hero.button_text'),
   button_url: search_areas_path(filters: @filters),

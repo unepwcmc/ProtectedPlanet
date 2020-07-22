@@ -4,6 +4,9 @@ class ProtectedAreasController < ApplicationController
 
   def show
     id = params[:id]
+    
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], id)
+
     @protected_area = ProtectedArea.
       where("slug = ? OR wdpa_id = ?", id, id.to_i).
       first

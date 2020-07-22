@@ -2,6 +2,8 @@ class RegionController < ApplicationController
   before_action :load_vars
 
   def show
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], params[:iso].upcase)
+
     @iucn_categories = @region.protected_areas_per_iucn_category
 
     @governance_types = @region.protected_areas_per_governance

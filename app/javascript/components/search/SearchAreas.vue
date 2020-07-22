@@ -23,6 +23,7 @@
 
         <download
           class="download--search"
+          :options="downloadOptions"
           :text="textDownload"
         />
       </div>
@@ -99,6 +100,10 @@ export default {
     configAutocomplete: {
       required: true,
       type: Object // { id: String, placeholder: String }
+    },
+    downloadOptions: {
+      required: true, 
+      type: Array //[ { title: String, commercialAvailable: Boolean, params: Object } ]
     },
     endpointAutocomplete: {
       type: String,

@@ -4,6 +4,7 @@
 <div>
   <search-areas
     :config-autocomplete="<%= @config_search_areas %>"
+    :download-options="<%= @download_options %>"
     endpoint-autocomplete="/search/autocomplete"
     endpoint-pagination="<%= search_areas_results_path(filters: @filters) %>"
     endpoint-search="<%= search_areas_results_path(filters: @filters) %>"

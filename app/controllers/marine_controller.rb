@@ -20,32 +20,7 @@ class MarineController < ApplicationController
     @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
     @marineViewAllUrl = '/' #TODO URL to filtered search results page
 
-    @download_options = [
-      {
-        title: 'CSV',
-        commercialAvailable: true,
-        params: { domain: 'csv', token: 'marine' }
-      },
-      {
-        title: 'SHP',
-        commercialAvailable: true,
-        params: { domain: 'shp', token: 'marine' }
-      },
-      {
-        title: 'File Geodatabase',
-        commercialAvailable: true,
-        params: { domain: 'gdb', token: 'marine' }
-      },
-      {
-        title: 'ESRI Web Service',
-        url: ''
-      },
-      {
-        title: 'PDF',
-        commercialAvailable: false,
-        params: { domain: 'pdf', token: 'marine' }
-      }
-    ].to_json
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'marine')
 
     @regionCoverage = Region.without_global.map do |region|
       RegionPresenter.new(region).marine_coverage
