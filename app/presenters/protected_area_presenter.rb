@@ -1,5 +1,6 @@
 class ProtectedAreaPresenter
   include ActionView::Helpers::NumberHelper
+  include ActionView::Helpers::UrlHelper
 
   POLYGON = -> (pa, _property) {
     type = ProtectedArea.select("ST_GeometryType(the_geom) AS type").where(id: pa.id).first.type
