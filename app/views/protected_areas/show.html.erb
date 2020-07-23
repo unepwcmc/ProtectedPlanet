@@ -138,9 +138,9 @@
 
   <section class="container">
     <%= render partial: "partials/cards/sites", locals: { 
-      cards: @marineSites, 
-      title: "#{t('global.area-types.wdpa')} (#{@marineSitesTotal})",
-      url: @areasViewAllUrl
+      cards: @wdpa_other, 
+      title: t('thematic_area.wdpa.other_protected_areas'),
+      url: @otherWdpasViewAllUrl
     } %>
   </section>
 

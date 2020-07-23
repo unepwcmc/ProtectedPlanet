@@ -14,7 +14,6 @@ class ProtectedAreasController < ApplicationController
     @countries = @protected_area.countries.without_geometry
     @other_designations = load_other_designations
     @networks = load_networks
-    # @other_sites = get_other_sites
 
     # TODO: Add is_transboundary column to protected area model
     # @transboundaryViewAll = search_areas_path(filters)
@@ -32,7 +31,10 @@ class ProtectedAreasController < ApplicationController
       }
     ]
 
-    @wdpa_other = [] ## 3 other PAs from ...?
+    @wdpa_other = get_other_sites
+
+    # At the moment, displaying all WDPAs in the same/first country (if transboundary) as the current site
+    @otherWdpasViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@countries.first.name}"] } })
 
     respond_to do |format|
       format.html
@@ -85,7 +87,9 @@ class ProtectedAreasController < ApplicationController
   end
 
   def get_other_sites
-    return ProtectedArea.take(3) if @countries.count <= 1
-    ProtectedArea.where(is_transboundary: true).take(3)
+    ProtectedArea.joins(:countries).where(countries: {id: @protected_area.countries.first.id}).take(3)
+    # TODO: Need to get the update of the relevant records correct
+    # return ProtectedArea.take(3) if @countries.count <= 1
+    # ProtectedArea.where(is_transboundary: true).take(3)
   end
 end

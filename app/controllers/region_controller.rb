@@ -24,8 +24,8 @@ class RegionController < ApplicationController
     @total_oecm = 0 ##TODO
     @total_wdpa = @region.protected_areas.count
 
-    @wdpa = pas_sample
-    @wdpaViewAllUrl = search_areas_path(filters: { location: { type: 'region', options: ["#{@region.name}"] } })
+    @region_pas = pas_sample
+    @regionPasViewAllUrl = search_areas_path(filters: { location: { type: 'region', options: ["#{@region.name}"] } })
   end
 
   private
