@@ -152,6 +152,9 @@ export default {
     hasSearchString () {
       return this.search.length > 0
     },
+    isValidSearchString () {
+      return this.search.length > 2
+    },
     showResults () {
       return this.hasResults && this.shouldShowResults === true
     }
@@ -177,7 +180,7 @@ export default {
      * @return void
      */
     onInputEnter () {
-      if (this.hasSearchString) {
+      if (this.hasSearchString && this.isValidSearchString) {
         if (this.hasResults) {
           this.$refs.results[0].focus()
         } else {
@@ -212,7 +215,7 @@ export default {
 
     onInput (e) {
       this.updateSearch(e.target.value)
-      if (this.hasSearchString) {
+      if (this.hasSearchString && this.isValidSearchString) {
         this.autocomplete()
       } else {
         this.resetAutocompleteResults()
