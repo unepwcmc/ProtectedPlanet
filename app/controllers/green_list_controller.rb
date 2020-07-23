@@ -25,6 +25,8 @@ class GreenListController < ApplicationController
     @networks = []
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
+    @example_greenlist = get_green_list_sites
+    @greenListViewAllUrl = search_areas_path(filters: { special_status: ['is_green_list']} )
   end
 
   def record_visit
