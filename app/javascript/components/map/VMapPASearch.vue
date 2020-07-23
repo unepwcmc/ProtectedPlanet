@@ -17,7 +17,7 @@
         :placeholder="searchType.placeholder"
         :autocomplete-callback="autocompleteCallback"
         :error-messages="autocompleteErrorMessages"
-        @submit="submitSearch"
+        @submit="emitZoomToEvent"
       />
     </div>
   </div>
@@ -155,12 +155,16 @@ export default {
     },
 
     /**
-     * Emit the search term refined by the autocomplete.
+     * Initiate the event for pan & zoom.
      * @param search the search term to be used with the map query
      * @return void
      */
-    submitSearch (search) {
-      this.$emit('change', search)
+    emitZoomToEvent (search) {
+      this.$eventHub.$emit('map:zoom-to', {
+        addPopup: search.value.is_pa, 
+        name: search.value.title,
+        ...search.value
+      })
     }
   }
 }

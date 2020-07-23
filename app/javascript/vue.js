@@ -46,6 +46,7 @@ import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
 import VMapDisclaimer from './components/map/VMapDisclaimer'
 import VMap from './components/map/VMap'
+import VMapPASearch from './components/map/VMapPASearch'
 import VMapHeader from './components/map/VMapHeader'
 import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
@@ -99,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Target11Dashboard,
         Tooltip,
         VMap,
+        'v-map-pa-search': VMapPASearch,
         VMapDisclaimer,
         VMapHeader,
         VMapFilters,

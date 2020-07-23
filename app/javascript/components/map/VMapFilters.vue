@@ -10,15 +10,8 @@
       @close="onClose"
     />
     <div class="v-map-filters__body">
-      <v-map-pa-search
-        v-if="searchTypes.length"
-        v-bind="{
-          autocompleteErrorMessages,
-          searchTypes,
-          dropdownLabel
-        }"
-        @change="onSearch"
-      />
+      <slot name="top" />
+      <slot />
       <div class="v-map-filters__overlays">
         <div
           v-for="(overlay, index) in overlays"
@@ -28,20 +21,13 @@
           <v-map-filter v-bind="overlay" />
         </div>
       </div>
-
-      <v-map-disclaimer
-        v-if="disclaimer"
-        class="v-map-disclaimer--embedded"
-        :disclaimer="disclaimer"
-      />
+      <slot name="bottom" />
     </div>
   </div>
 </template>
 <script>
-import VMapDisclaimer from './VMapDisclaimer'
 import VMapFilter from './VMapFilter'
 import VMapHeader from './VMapHeader'
-import VMapPASearch from './VMapPASearch'
 
 import { disableTabbing } from '../../helpers/focus-helpers'
 
@@ -49,18 +35,11 @@ export default {
   name: 'VMapFilters',
 
   components: {
-    VMapDisclaimer,
     VMapFilter,
     VMapHeader,
-    'v-map-pa-search': VMapPASearch,
   },
 
   props: {
-    autocompleteErrorMessages: {
-      required: false,
-      type: Object,
-      default: undefined,
-    },
     overlays: {
       type: Array,
       required: true
@@ -68,18 +47,6 @@ export default {
     title: {
       type: String,
       required: true
-    },
-    dropdownLabel: {
-      type: String,
-      default: ''
-    },
-    searchTypes: {
-      type: Array,
-      default: () => []
-    },
-    disclaimer: {
-      type: Object,
-      default: null
     },
     isHidden: {
       type: Boolean,
@@ -103,14 +70,6 @@ export default {
     onClose () {
       this.show = false
       this.$emit('show', false)
-    },
-
-    onSearch (search) {
-      this.$eventHub.$emit('map:zoom-to', {
-        addPopup: search.value.is_pa, 
-        name: search.value.title,
-        ...search.value
-      })
     }
   }
 }
