@@ -90,8 +90,8 @@ export default {
       type: Object,
       required: false,
       default: () => ({
-        no_results: 'Sorry, we could not find anything with this search term. \
-          Please try something else.'
+        no_results: 'The search term has no results.',
+        invalid_search_string: 'The search term has too few characters.'
       })
     },
 
@@ -180,7 +180,7 @@ export default {
      * @return void
      */
     onInputEnter () {
-      if (this.hasSearchString && this.isValidSearchString) {
+      if (this.hasSearchString) {
         if (this.hasResults) {
           this.$refs.results[0].focus()
         } else {
@@ -215,7 +215,7 @@ export default {
 
     onInput (e) {
       this.updateSearch(e.target.value)
-      if (this.hasSearchString && this.isValidSearchString) {
+      if (this.hasSearchString) {
         this.autocomplete()
       } else {
         this.resetAutocompleteResults()
@@ -255,10 +255,22 @@ export default {
      */
     autocomplete: debounce(function () {
       if (this.busy) return
+      if (!this.isValidSearchString) {
+        this.resetErrors({
+          invalid_search_string: [this.errorMessages.invalid_search_string]
+        })
+        return
+      }
       this.busy = true
       const searchTerm = this.search
       this.resetErrors()
       this.autocompleteCallback(searchTerm).then(results => {
+        /**
+         * If the term has changed since fetching results, skip to final callback...
+         */
+        if (this.search !== searchTerm) {
+          return
+        }
         this.results = results
         if (results.length === 0) {
           this.resetErrors({
@@ -272,10 +284,12 @@ export default {
       }).finally(() => {
         this.busy = false
         /**
-         * If the term has changed since fetching results, run another search immediately.
+         * If the term has changed since fetching results, prepare to search again...
          */
         if (this.search !== searchTerm) {
+          this.resetAutocompleteResults()
           this.autocomplete()
+          return
         }
       })
     }, 500),
