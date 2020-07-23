@@ -256,8 +256,9 @@ export default {
     autocomplete: debounce(function () {
       if (this.busy) return
       this.busy = true
+      const searchTerm = this.search
       this.resetErrors()
-      this.autocompleteCallback(this.search).then(results => {
+      this.autocompleteCallback(searchTerm).then(results => {
         this.results = results
         if (results.length === 0) {
           this.resetErrors({
@@ -268,8 +269,16 @@ export default {
       }).catch(e => {
         console.error({ e })
         this.resetAutocompleteResults()
-      }).finally(() => (this.busy = false))
-    }, 100),
+      }).finally(() => {
+        this.busy = false
+        /**
+         * If the term has changed since fetching results, run another search immediately.
+         */
+        if (this.search !== searchTerm) {
+          this.autocomplete()
+        }
+      })
+    }, 500),
 
     /**
      * When used, this will submit a result.
