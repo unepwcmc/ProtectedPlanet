@@ -50,7 +50,9 @@ export default {
       return res => {
         const extent = res.data.extent
 
-        if (!extent) { return }
+        if (!extent) { 
+          return 
+        }
 
         this.fitMapToBounds(extent, options.extent_url.padding)
 
