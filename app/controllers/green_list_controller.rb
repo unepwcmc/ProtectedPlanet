@@ -15,7 +15,7 @@ class GreenListController < ApplicationController
       special_status: ['is_green_list']
     }
     @example_greenlist = get_green_list_sites 
-    @greenListViewAllUrl = search_areas_path()
+    @greenListViewAllUrl = search_areas_path(filters: { special_status: ['is_green_list']} )
   end
 
   def show
