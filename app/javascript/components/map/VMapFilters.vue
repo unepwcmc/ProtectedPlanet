@@ -106,8 +106,11 @@ export default {
     },
 
     onSearch (search) {
-      // LOGIC GOES HERE FOR INITIATING MAP CHANGE
-      console.log({ search })
+      this.$eventHub.$emit('map:zoom-to', {
+        addPopup: search.value.is_pa, 
+        name: search.value.title,
+        ...search.value
+      })
     }
   }
 }

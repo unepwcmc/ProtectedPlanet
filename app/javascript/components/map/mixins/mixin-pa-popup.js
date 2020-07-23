@@ -27,7 +27,10 @@ export default {
         if (features.length) {
           pa = features[0].attributes
   
-          this.addPopup(coords, pa)
+          this.addPopup(coords, {
+            url: `/${pa.wdpaid}`,
+            name: pa.name
+          })
         }
 
         return pa !== null
@@ -35,8 +38,8 @@ export default {
     },
 
     addPopup (coords, pa) {
-      const html = pa.wdpaid ? 
-        `<a href="/${pa.wdpaid}">${pa.name}</a>` :
+      const html = pa.url ? 
+        `<a href="${pa.url}">${pa.name}</a>` :
         `<a>${pa.name}</a>`
 
       // eslint-disable-next-line no-undef
