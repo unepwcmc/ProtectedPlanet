@@ -84,7 +84,11 @@
     
     <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
 
-    <%= render partial: "partials/cards/sites", locals: { cards: @wdpa } %>
+    <%= render partial: "partials/cards/sites", locals: { 
+      cards: @wdpa,
+      title: @region.name + ' ' + t('thematic_area.wdpa.protected_areas'),
+      url: @wdpaViewAllUrl
+    } %>
   
     <%= render partial: "partials/messages/message-citation", locals: { title: @region.name } %>
   </section>
