@@ -22,7 +22,8 @@ module Autocompletion
 
       {
         id: identifier,
-        pa_extent_url: extent_url,
+        is_pa: result.is_a?(ProtectedArea),
+        extent_url: extent_url,
         title: name,
         url: url
       }
