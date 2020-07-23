@@ -51,7 +51,8 @@ class DesignationsPresenter
   end
 
   def designation_total(jurisdiction)
-    all_pas.find { |result| result["name"] == jurisdiction }["count"]
+    designations = all_pas.find { |result| result["name"] == jurisdiction }
+    designations ? designations['count'] : 0
   end
 
   def jurisdictions(jurisdiction)

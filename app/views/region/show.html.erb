@@ -71,9 +71,8 @@
     </div>
 
     <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
-
-    <!-- See todo in region.rb to get designations back online -->
-    <%#= render partial: "partials/stats/stats-designations", locals: { designations: @presenter.designations } %>
+    
+    <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
 
     <%= render partial: "partials/cards/sites", locals: { cards: @wdpa } %>
   

@@ -33,6 +33,6 @@ $select-selected-color: $grey-light;
 // selects
 //--------------------------------------------------
 .select {
-  @import './select/select';
+  @import './select/select-equity';
   @import './select/select-searchable';
 }
