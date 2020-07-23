@@ -26,6 +26,6 @@ en:
         title: Protected Area
         placeholder: Search...
     autocomplete_error_messages:
-      no_results: Sorry, we could not find anything with this search term.
-        Please try something else!
+      no_results: The search term has no results.
+      invalid_search_string: The search term has too few characters.
       
