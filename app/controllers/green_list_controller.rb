@@ -14,6 +14,8 @@ class GreenListController < ApplicationController
       db_type: ['wdpa'],
       special_status: ['is_green_list']
     }
+    @example_greenlist = get_green_list_sites 
+    @greenListViewAllUrl = search_areas_path()
   end
 
   def show
@@ -45,5 +47,9 @@ class GreenListController < ApplicationController
       first
 
     @protected_area or raise_404
+  end
+
+  def get_green_list_sites
+    ProtectedArea.where(is_green_list: true).take(3)
   end
 end

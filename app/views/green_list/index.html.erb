@@ -15,6 +15,12 @@
 
 <section class="container">
   <%= cms_fragment_render("content") %>
+  <%= render partial: "partials/cards/sites", locals: { 
+        cards: @example_greenlist,
+        title: t('thematic_area.green_list.card_text') + " (#{@pas_total})",
+        url: @greenListViewAllUrl
+  } %>
 </section>
+
 
 <%= render "partials/ctas/live-report" %>
