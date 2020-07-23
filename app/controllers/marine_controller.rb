@@ -24,6 +24,20 @@ class MarineController < ApplicationController
       RegionPresenter.new(region).marine_coverage
     end
 
+    opengraph.content 'og', 'title': t('thematic_area.marine.social.title'),
+                            'description': t('thematic_area.marine.social.description'),
+                            'image': helpers.image_path(t('thematic_area.marine.social.image')),
+                            'image:alt': t(
+                              'thematic_area.marine.social.image_alt',
+                              total_marine_protected_areas: @marine_statistics['total_marine_protected_areas'],
+                              total_ocean_pa_coverage_percentage:
+                                @marine_statistics['total_ocean_pa_coverage_percentage']
+                            )
+
+    opengraph.content 'twitter', 'card': t('thematic_area.marine.social.twitter.card'),
+                                 'site': t('thematic_area.marine.social.twitter.site'),
+                                 'creator': t('thematic_area.marine.social.twitter.creator')
+
     @pas_km = @marine_statistics['total_ocean_area_protected']
     @pas_percent = @marine_statistics['total_ocean_pa_coverage_percentage']
     @pas_total = @marine_statistics['total_marine_protected_areas']

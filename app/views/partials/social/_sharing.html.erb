@@ -1,3 +1,15 @@
-<%= create_sharing_twitter_link %>
-<%= create_sharing_facebook_link %>
-<%= create_sharing_linkedin_link %>
+<%= link_to "", "https://twitter.com/intent/tweet/?url=" + request.original_url, 
+        title: url_encode("Share on Twitter"), 
+        class: "social__icon--twitter", 
+        target: "_blank"
+%>
+<%= link_to "", "https://facebook.com/sharer/sharer.php?u=" + request.original_url,
+        title: url_encode("Share on Facebook"), 
+        class: "social__icon--facebook", 
+        target: "_blank"
+%>
+<%= link_to "", "https://www.linkedin.com/shareArticle?url=" + request.original_url, 
+        title: url_encode("Share on LinkedIn"), 
+        class: "social__icon--linkedin", 
+        target: "_blank"
+%>

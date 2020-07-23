@@ -15,3 +15,23 @@ en:
         chart_text: "%{country} and its %{overseas} overseas countries and territories have a combined area of %{km}km<sup>2</sup>"
         chart_stat_text: of their national waters are protected
         chart_stat_text_overseas: of their overseas territories waters are protected
+
+      social:
+        title: Explore the World's Marine Protected Areas
+        description: >-
+          Over 70% of the surface of Earth is ocean, comprised of highly diverse 
+          ecosystems, and providing a wide range of marine ecosystem services that 
+          support human society, health and the economy. This website presents 
+          the most recent official coverage statistics for marine protected areas, 
+          updated monthly from the World Database on Protected Areas.
+        image: social-marine.png
+        image_alt: >- 
+            A map of the world with highlighted areas that represent protected areas.
+            The following statistics are shown: there are %{total_marine_protected_areas}
+            marine protected areas, %{total_ocean_pa_coverage_percentage}
+            of the ocean is covered by protected areas and the total area protected is 23,036,078km²
+            These statistics are for 2017.
+        twitter:
+          card: summary_large_image
+          site: "@protectedplanet"
+          creator: "@protectedplanet"

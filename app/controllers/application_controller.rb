@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
+  helper_method :opengraph
+
   before_action :set_cms_site
   before_action :set_locale
   before_action :load_cms_content
@@ -12,6 +14,20 @@ class ApplicationController < ActionController::Base
   #Temporary fix for development. To test if it is required on staging/production
   before_action :set_host_for_local_storage
   after_action :store_location
+
+  def opengraph
+    @opengraph ||= OpengraphBuilder.new({
+      'og': {
+        'site_name': t('opengraph.defaults.site_name'),
+        'title': t('opengraph.defaults.title'),
+        'description': t('opengraph.defaults.description'),
+        'url': request.original_url,
+        'type': 'website',
+        'image': URI.join(root_url, helpers.image_path(t('opengraph.defaults.image'))),
+        'image:alt': t('opengraph.defaults.image_alt')
+      }
+    })
+  end
 
   def set_cms_site
       @cms_site ||= Comfy::Cms::Site.first
