@@ -8,10 +8,6 @@
 
 .map-section {
   @include gutters;
-
-  @include breakpoint-down($small) {
-    padding: 0;
-  }
 }
 
 .map {

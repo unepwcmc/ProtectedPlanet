@@ -61,6 +61,8 @@
       @include ul-unstyled;
       @include ul-inline;
       @include tabs-horizontal-scroll;
+      @include container;
+      @include site-width;
 
       transform: translateY(-100%);
     }
