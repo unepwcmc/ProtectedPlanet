@@ -7,7 +7,15 @@ export default {
     }
   },
 
+  created () {
+    this.addZoomEventListener()
+  },
+
   methods: {
+    addZoomEventListener () {
+      this.$eventHub.$on('map:zoom-to', this.zoomTo)
+    },
+
     initBoundingBoxAndMap () {  
       if (this.mapOptions.boundsUrl) {
         axiosGetWithoutCSRF(
@@ -31,21 +39,41 @@ export default {
       }
     },
 
-    zoomTo (boundsUrl) {
+    zoomTo (options) {
       axiosGetWithoutCSRF(
-        boundsUrl.url, 
-        this.getExtentResponseZoomToHandler(boundsUrl.padding)
+        options.extent_url.url, 
+        this.getZoomAndPopupHandler(options)
       )
     },
 
-    getExtentResponseZoomToHandler (padding) {
+    getZoomAndPopupHandler (options) {
       return res => {
         const extent = res.data.extent
-  
-        if (extent) {
-          this.map.fitBounds(this.getBoundsFromExtent(extent, padding))
+
+        if (!extent) { 
+          return 
+        }
+
+        this.fitMapToBounds(extent, options.extent_url.padding)
+
+        if (options.name && options.addPopup) {
+          this.addPopupFromExtent(extent, options)
         }
       }
+    },
+
+    fitMapToBounds (extent, padding) {
+      this.map.fitBounds(this.getBoundsFromExtent(extent, padding))
+    },
+
+    addPopupFromExtent (extent, options) {
+      const coords = {
+        lng: (extent.xmin + extent.xmax)/2,
+        lat: (extent.ymin + extent.ymax)/2
+      }
+
+      //Requires mixin-pa-popup.js
+      this.addPopup(coords, options)
     },
 
     getBoundsFromExtent (extent, padding=5) {  

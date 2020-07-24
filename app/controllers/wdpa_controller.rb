@@ -14,8 +14,6 @@ class WdpaController < ApplicationController
     @tabs = helpers.get_cms_tabs(3).to_json
 
     @map = {
-      disclaimer: map_yml[:disclaimer],
-      title: map_yml[:title],
       overlays: MapOverlaysSerializer.new(wdpa_overlays, map_yml).serialize
     }
   end

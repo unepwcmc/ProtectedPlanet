@@ -1,8 +1,10 @@
 <template>
   <div
-    class="v-map-toggler" 
+    class="v-map-toggler"
+    tabindex="0"
     :class="{ 'v-map-toggler--active': active }"
-    @click.stop="$emit('change', !active)"
+    @keyup.enter.stop.prevent="toggle"
+    @click.stop="toggle"
   >
     <div class="v-map-toggler__switch">
       {{ actionText }}
@@ -36,6 +38,15 @@ export default {
       }
 
       return this.offText
+    }
+  },
+  methods: {
+    toggle (newState) {
+      if (typeof newState === 'boolean') {
+        this.$emit('change', newState)
+      } else {
+        this.$emit('change', !this.active)
+      }
     }
   }
 }

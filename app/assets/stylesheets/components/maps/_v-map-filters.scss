@@ -42,3 +42,27 @@
     @include screen-reader;
   }
 }
+
+.v-map-pa-search {
+  &__dropdown {
+    margin-bottom: rem-calc(16);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .selector {
+      margin-left: rem-calc(16);
+
+      max-width: rem-calc(162);
+      
+      flex: 1;
+
+      &__options {
+        overflow-y: auto;
+
+        height: auto;
+      }
+    }
+  }
+}

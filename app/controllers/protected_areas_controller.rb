@@ -32,8 +32,6 @@ class ProtectedAreasController < ApplicationController
     @wdpa_other = [] ## 3 other PAs from ...?
 
     @map = {
-      disclaimer: map_yml[:disclaimer],
-      title: map_yml[:title],
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
     }
 

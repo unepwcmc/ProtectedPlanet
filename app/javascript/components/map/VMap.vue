@@ -1,10 +1,10 @@
 <template>
   <div class="v-map">
-    <div 
+    <div
       :id="containerId"
-      class="map__mapbox" 
+      class="map__mapbox"
     />
-    <v-map-baselayer-controls 
+    <v-map-baselayer-controls
       v-if="controlsOptions.showBaselayerControls"
       :baselayers="baselayers"
     />
@@ -26,7 +26,7 @@ import mixinBoundingBox from './mixins/mixin-bounding-box'
 export default {
   name: 'VMap',
 
-  components: {VMapBaselayerControls},
+  components: { VMapBaselayerControls },
 
   mixins: [
     mixinAddLayers,
@@ -55,7 +55,7 @@ export default {
     baselayers () {
       return this.options.baselayers || BASELAYERS_DEFAULT
     },
-    
+
     controlsOptions () {
       return {
         ...CONTROLS_OPTIONS_DEFAULT,
@@ -69,12 +69,12 @@ export default {
         ...this.options.map,
         style: this.baselayers[0].style,
       }
-      
+
       if (this.initBounds) {
         options.bounds = this.initBounds
       }
 
-      return  options
+      return options
     },
 
     selectedBaselayer () {
@@ -88,7 +88,7 @@ export default {
 
   watch: {
     visibleLayers (newLayers, oldLayers) {
-      const layersToHide = oldLayers.filter(oL => 
+      const layersToHide = oldLayers.filter(oL =>
         !containsObjectWithId(newLayers, oL.id)
       )
 
@@ -105,7 +105,7 @@ export default {
   },
 
   mounted () {
-    this.initBoundingBoxAndMap() 
+    this.initBoundingBoxAndMap()
   },
 
   methods: {
@@ -122,7 +122,7 @@ export default {
         this.setFirstForegroundLayerId()
       })
 
-      if(this.onClick) {
+      if (this.onClick) {
         this.map.on('click', e => { this.onClick(e) })
       }
     },
@@ -133,7 +133,7 @@ export default {
       })
     },
 
-    showLayer(layer) {
+    showLayer (layer) {
       const mapboxLayer = this.map.getLayer(layer.id)
       const isVisible = mapboxLayer && mapboxLayer.visibility === 'visible'
 
@@ -152,23 +152,23 @@ export default {
       )
     },
 
-    addLayer(layer) {
+    addLayer (layer) {
       if (true) {//layer type goes here
         this.addTypeLayer(layer)
       }
     },
 
-    hideLayers(layers) {
+    hideLayers (layers) {
       this.setLayerVisibilities(layers, false)
     },
 
-    setLayerVisibilities(layers, isVisible) {
+    setLayerVisibilities (layers, isVisible) {
       layers.forEach(l => {
         this.setLayerVisibility(l, isVisible)
       })
     },
 
-    setLayerVisibility(layer, isVisible) {
+    setLayerVisibility (layer, isVisible) {
       const layerId = layer.id
       const visibility = isVisible ? 'visible' : 'none'
 

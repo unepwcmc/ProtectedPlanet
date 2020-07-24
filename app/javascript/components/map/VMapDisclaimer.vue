@@ -19,10 +19,12 @@ export default {
     disclaimer: {
       type: Object,
       required: true,
-      validator: type => {
-        return type.hasOwnProperty('heading') && typeof type.heading === 'string'
-          && type.hasOwnProperty('body') && typeof type.heading === 'string'
-      },
+      validator: type => (
+        type.hasOwnProperty('heading') &&
+        typeof type.heading === 'string' &&
+        type.hasOwnProperty('body') &&
+        typeof type.heading === 'string'
+      )
     },
   }
 }

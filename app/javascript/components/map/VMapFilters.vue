@@ -4,13 +4,14 @@
     class="v-map-filters"
     :class="{'v-map-filters--hidden': isHidden}"
   >
-    <v-map-header 
+    <v-map-header
       v-model="title"
       closeable
       @close="onClose"
     />
     <div class="v-map-filters__body">
-      <v-map-pa-search />
+      <slot name="top" />
+      <slot />
       <div class="v-map-filters__overlays">
         <div
           v-for="(overlay, index) in overlays"
@@ -20,20 +21,13 @@
           <v-map-filter v-bind="overlay" />
         </div>
       </div>
-
-      <v-map-disclaimer
-        v-if="disclaimer"
-        class="v-map-disclaimer--embedded"
-        :disclaimer="disclaimer"
-      />
+      <slot name="bottom" />
     </div>
   </div>
 </template>
 <script>
-import VMapDisclaimer from './VMapDisclaimer'
 import VMapFilter from './VMapFilter'
 import VMapHeader from './VMapHeader'
-import VMapPASearch from './VMapPASearch'
 
 import { disableTabbing } from '../../helpers/focus-helpers'
 
@@ -41,10 +35,8 @@ export default {
   name: 'VMapFilters',
 
   components: {
-    VMapDisclaimer,
     VMapFilter,
     VMapHeader,
-    'v-map-pa-search': VMapPASearch,
   },
 
   props: {
@@ -55,10 +47,6 @@ export default {
     title: {
       type: String,
       required: true
-    },
-    disclaimer: {
-      type: Object,
-      default: null
     },
     isHidden: {
       type: Boolean,
@@ -84,6 +72,5 @@ export default {
       this.$emit('show', false)
     }
   }
-
 }
 </script>

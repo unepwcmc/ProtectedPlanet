@@ -16,13 +16,16 @@ module Autocompletion
       type = result.class.name.underscore
       identifier = result.send(identifier_field(type))
 
+      geom_type = result.is_a?(ProtectedArea) ? result.the_geom.geometry_type.to_s : 'N/A'
       url = type == 'country' ? "/country/#{identifier}" : "/#{identifier}"
       extent_url = result.respond_to?(:extent_url) ? result.extent_url : 'N/A'
 
       {
+        id: identifier,
+        is_pa: result.is_a?(ProtectedArea),
+        extent_url: extent_url,
         title: name,
-        url: url,
-        pa_extent_url: extent_url
+        url: url
       }
     end
   end

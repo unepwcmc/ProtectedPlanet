@@ -1,5 +1,9 @@
 export const setAxiosHeaders = axios => {
-  const csrf = document.querySelectorAll('meta[name="csrf-token"]')[0].getAttribute('content')
+  const token = document.head.querySelector('meta[name="csrf-token"]')
 
-  axios.defaults.headers.common['X-CSRF-Token'] = csrf
+  if (token) {
+    axios.defaults.headers.common['X-CSRF-Token'] = token.content
+  } else {
+    console.error('CSRF token not found')
+  }
 }

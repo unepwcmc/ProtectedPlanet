@@ -77,8 +77,6 @@ class HomeController < ApplicationController
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
 
     @main_map = {
-      disclaimer: map_yml[:disclaimer],
-      title: map_yml[:title],
       overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize
     }
   end

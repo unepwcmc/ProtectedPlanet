@@ -15,6 +15,7 @@
   &__switch {
     border-radius: rem-calc(14);
   }
+  
   &__switch {
     background-color: $grey;
     color: $grey-xdark;
@@ -24,10 +25,10 @@
     margin-right: 0;
     padding: rem-calc(0 12);
 
+    height: 100%;
+    
     display: inline-flex;
     align-items: center;
-
-    height: 100%;
   }
 
   &--active {
