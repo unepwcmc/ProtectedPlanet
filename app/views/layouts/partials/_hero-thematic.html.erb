@@ -24,7 +24,7 @@
         <div>
           <div class="hero__stat-number">
             <counter 
-              :total="<%= 10 %>" 
+              :total="<%= stat_pas_percentage %>" 
               trigger="sm-home-hero-stats" 
               :decimal="2"
             ></counter>%
@@ -34,7 +34,7 @@
         <div>
           <counter 
             class="hero__stat-number-small"
-            :total="<%= 10 %>" 
+            :total="<%= stat_pas_total %>" 
             trigger="sm-home-hero-stats" 
             :decimal="0"
           ></counter>
@@ -43,7 +43,7 @@
         <div>
           <div class="hero__stat-number-small">
             <counter 
-              :total="<%= 10 %>" 
+              :total="<%= stat_pas_km %>" 
               trigger="sm-home-hero-stats" 
               :decimal="0"
             ></counter>km<sup>2</sup>
