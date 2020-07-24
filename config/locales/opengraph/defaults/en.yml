@@ -11,3 +11,6 @@ en:
       image_alt: >-
         Screenshot of the Protected Planet website which shows the menu bar
         and a map of the world that has protected areas highlighted in green.
+      twitter:
+        site: "@protectedplanet"
+        creator: "@protectedplanet"
