@@ -1,25 +1,26 @@
 <div class="form--api">
   <div class="form--api__text">
-    <%= form_text_heading %>
-    <%= form_text_instructions %>
+    <p><%= cms_fragment_render('form_text_heading', @cms_page) %></p>
+    <p><%= cms_fragment_render('form_text', @cms_page) %></p>
   </div>
 
   <small>*Required fields</small>
-  <%= form_for @request, url: '/api/create' do |f| %>
+  <%# Not sure about the actual endpoint of this form %>
+  <%= form_tag 'api/create' do %>
 
     <div class='form-group'>
-      <%= f.label :full_name %>
-      <%= f.full_name_field :full_name, autofocus: true %>
+      <%= label_tag 'full_name', 'Full Name*' %>
+      <%= text_field_tag 'full_name', nil,  autofocus: true , required: true %>
     </div>
 
     <div class='form-group'>
-      <%= f.label :email %>
-      <%= f.email_field :email, autofocus: true %>
+      <%= label_tag 'email', 'Email*' %>
+      <%= text_field_tag 'email', nil, required: true %>
     </div>
 
     <div class='form-group'>
-      <%= f.label :company %>
-      <%= f.company_field :company, autofocus: true %>
+      <%= label_tag 'company', 'Company' %>
+      <%= text_field_tag 'company' %>
     </div>
 
     <div class='form-group'>
@@ -28,19 +29,19 @@
     </div>
 
     <div class="form-group">
-      <%= f.label :license, 'Do you have a license to use the API?*'  %>
-      <%= f.radio_button :license, true %>
-      <%= f.label :license, 'Yes', value: true %>
-      <%= f.radio_button :license, false %>
-      <%= f.label :license, 'No', value: false %>
+      <%= label_tag :license, 'Do you have a license to use the API?*'  %>
+      <%= radio_button_tag :license, true %>
+      <%= label_tag :license, 'Yes', value: true %>
+      <%= radio_button_tag :license, false %>
+      <%= label_tag :license, 'No', value: false %>
     </div>
     
     <div class="form-group">
-      <%= f.label :reason, 'Please provide a brief description of how you intend to use the API*' %>
-      <%= f.text_area :reason  %>
+      <%= label_tag :reason, 'Please provide a brief description of how you intend to use the API*' %>
+      <%= text_area_tag :reason, 'E.g who is the audience, what type of service is being provided, how will the data be used: visualisation only, download, reposting'  %>
     </div>
 
-    <div><%= f.submit "Send Request", class: 'button--primary' %></div>
+    <div><%= submit_tag "Send Request", class: 'button--primary' %></div>
   <% end %>
 
 
