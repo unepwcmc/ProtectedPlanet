@@ -11,6 +11,7 @@
       >
 
       <input
+        ref="input"
         v-model="searchTerm"
         type="text"
         class="search__input"
@@ -81,7 +82,10 @@ export default {
       this.$emit('submit:search', this.searchTerm)
     },
 
-    toggleInput () { this.isActive = !this.isActive }
+    toggleInput () {
+      this.isActive = !this.isActive
+      setTimeout(() => this.$refs.input.focus(), 0)
+    }
   }
 }
 </script>
