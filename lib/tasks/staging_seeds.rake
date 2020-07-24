@@ -6,34 +6,46 @@ namespace :comfy do
     task :seed_import => :environment do |_t|
       require 'net/ssh'
       require 'net/scp'
-
+      
+      def check_timestamp(file, session, local, local_file, remote_file)     
+        newer = Time.at(file.attributes.mtime) >= File.stat(local_file).mtime 
+        if newer 
+          puts "#{file.name} is newer than the local copy, downloading..."
+          session.scp.download!(remote_file, local)
+        end
+      end
+      
+      # Locally stored seeds - assumes you already have the local folder - 
+      # it won't create it 
+      local = ComfortableMexicanSofa.config.seeds_path + '/protected-planet'
+      remote = 'ProtectedPlanet/current/db/cms_seeds/protected-planet'
+      
       puts "Importing CMS Seed data from Staging Folder to #{local} ..."
-      
-      # Locally stored seeds
-      local = ComfortableMexicanSofa.config.seeds_path
-      
+
       # SSH into staging server with Net::SSH
-      # Check to see if local CMS seeds are newer than local and download any
-      Net::SSH.start(ENV['PP_STAGING'], ENV['PP_USER']) do |ssh|
-        ssh.sftp.dir.foreach('ProtectedPlanet/current/db/cms_seeds/protected-planet') do |f|
+      Net::SSH.start(ENV['PP_STAGING'], ENV['PP_USER']) do |session|
+        session.sftp.dir.glob(remote, '**/*').each do |file|
           # Go through the various files and folders and check to see if they exist locally
-          if Dir.children(local).include?(f)
-            if File.stat(f).file?
-              local_file_changed = File.stat(f).mtime > Time.at(sftp.stat(f).mtime)
-            elsif File.stat(f).directory
-              ssh.sftp.dir.foreach(f) do |file|
-                local_file_changed = File.stat(file).mtime > Time.at(sftp.stat(file).mtime)
-              end
+          remote_file = File.join(remote, file.name)
+          local_file = File.join(local, file.name)
+
+          # There are files with non-ASCII characters (i.e. accented) in the CMS files
+          if Dir.glob('**/*', base: local).include?(file.name.force_encoding('UTF-8'))
+            if File.file?(File.join(local, file.name))
+              check_timestamp(file, session, local, local_file, remote_file)  
             end
           else
-            
+            puts "#{file.name} doesn\'t exist locally, downloading"
+            # File doesn't exist locally, so download it (in any folder required)
+            session.scp.download!(remote_file, local, recursive: true)
           end
         end
-        # ssh.scp.download!('ProtectedPlanet/current/db/cms_seeds', local, recursive: true)
       end
 
-      puts "Replacing your local seed data..."
+      puts "Finished downloads, now replacing your local seed data..."
 
       Rake::Task["comfy:cms_seeds:import[protected-planet, protectedplanet]"].invoke
+
+      
     end
 end
