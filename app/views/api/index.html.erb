@@ -1,6 +1,9 @@
-<%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label } %>
+<%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label, classes: "#{@cms_page.slug} bg-image-overlay--white" } %>
 
-<%= render "partials/forms/api-form" %>
+<%= render "partials/forms/api-form", locals: {
+  form_text_heading: cms_fragment_render(:form_text_heading, @cms_page),
+  form_text_instructions: cms_fragment_render(:form_text, @cms_page)
+} %>
 
 <section class="container">
   <%= cms_fragment_render("content") %>

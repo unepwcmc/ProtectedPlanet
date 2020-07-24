@@ -1,0 +1,47 @@
+<div class="form--api">
+  <div class="form--api__text">
+    <%= form_text_heading %>
+    <%= form_text_instructions %>
+  </div>
+
+  <small>*Required fields</small>
+  <%= form_for @request, url: '/api/create' do |f| %>
+
+    <div class='form-group'>
+      <%= f.label :full_name %>
+      <%= f.full_name_field :full_name, autofocus: true %>
+    </div>
+
+    <div class='form-group'>
+      <%= f.label :email %>
+      <%= f.email_field :email, autofocus: true %>
+    </div>
+
+    <div class='form-group'>
+      <%= f.label :company %>
+      <%= f.company_field :company, autofocus: true %>
+    </div>
+
+    <div class='form-group'>
+      <%# Select goes here %>
+
+    </div>
+
+    <div class="form-group">
+      <%= f.label :license, 'Do you have a license to use the API?*'  %>
+      <%= f.radio_button :license, true %>
+      <%= f.label :license, 'Yes', value: true %>
+      <%= f.radio_button :license, false %>
+      <%= f.label :license, 'No', value: false %>
+    </div>
+    
+    <div class="form-group">
+      <%= f.label :reason, 'Please provide a brief description of how you intend to use the API*' %>
+      <%= f.text_area :reason  %>
+    </div>
+
+    <div><%= f.submit "Send Request", class: 'button--primary' %></div>
+  <% end %>
+
+
+</div>
