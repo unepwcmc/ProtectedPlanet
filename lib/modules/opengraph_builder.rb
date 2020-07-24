@@ -52,7 +52,7 @@ class OpengraphBuilder
     data.each do |key, value|
       arr << format(
         '<meta property="%<prefix>s:%<key>s" content="%<value>s">',
-        { prefix: prefix, key: key, value: CGI.escapeHTML(value.to_s) }
+        { prefix: prefix, key: key, value: value.to_s }
       )
     end
     arr.join("\n")
