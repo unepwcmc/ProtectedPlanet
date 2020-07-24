@@ -18,6 +18,7 @@
         <map-trigger
           :is-disabled="isMapPaneDisabled"
           :text="textMap"
+          :is-active="isMapPaneActive"
           v-on:toggle:map-pane="toggleMapPane"
         />
 
