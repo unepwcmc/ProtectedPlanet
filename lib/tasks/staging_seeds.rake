@@ -11,7 +11,7 @@ namespace :comfy do
         newer = Time.at(file.attributes.mtime) >= File.stat(local_file).mtime 
         if newer 
           puts "#{file.name} is newer than the local copy, downloading..."
-          session.scp.download!(remote_file, local)
+          session.scp.download!(remote_file, local_file)
         end
       end
       
@@ -28,7 +28,7 @@ namespace :comfy do
           # Go through the various files and folders and check to see if they exist locally
           remote_file = File.join(remote, file.name)
           local_file = File.join(local, file.name)
-
+          
           # There are files with non-ASCII characters (i.e. accented) in the CMS files
           if Dir.glob('**/*', base: local).include?(file.name.force_encoding('UTF-8'))
             if File.file?(File.join(local, file.name))
@@ -37,7 +37,7 @@ namespace :comfy do
           else
             puts "#{file.name} doesn\'t exist locally, downloading"
             # File doesn't exist locally, so download it (in any folder required)
-            session.scp.download!(remote_file, local, recursive: true)
+            session.scp.download!(remote_file, local_file)
           end
         end
       end
