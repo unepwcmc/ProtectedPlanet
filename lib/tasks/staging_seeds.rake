@@ -31,7 +31,7 @@ namespace :comfy do
           
           # There are files with non-ASCII characters (i.e. accented) in the CMS files
           if Dir.glob('**/*', base: local).include?(file.name.force_encoding('UTF-8'))
-            if File.file?(File.join(local, file.name))
+            if File.file?(local_file)
               check_timestamp(file, session, local, local_file, remote_file)  
             end
           else
@@ -44,7 +44,7 @@ namespace :comfy do
 
       puts "Finished downloads, now replacing your local seed data..."
 
-      Rake::Task["comfy:cms_seeds:import[protected-planet, protectedplanet]"].invoke
+      Rake::Task["'comfy:cms_seeds:import[protected-planet, protectedplanet]'"].invoke
 
       
     end
