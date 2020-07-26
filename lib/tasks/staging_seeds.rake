@@ -44,8 +44,6 @@ namespace :comfy do
 
       puts "Finished downloads, now replacing your local seed data..."
 
-      Rake::Task["'comfy:cms_seeds:import[protected-planet, protectedplanet]'"].invoke
-
-      
+      Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
     end
 end
