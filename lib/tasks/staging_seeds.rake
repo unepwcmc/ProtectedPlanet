@@ -7,7 +7,7 @@ namespace :comfy do
       require 'net/ssh'
       require 'net/scp'
       
-      def check_timestamp(file, session, local, local_file, remote_file)     
+      def check_timestamp(file, session, local_file, remote_file)     
         newer = Time.at(file.attributes.mtime) >= File.stat(local_file).mtime 
         if newer 
           puts "#{file.name} is newer than the local copy, downloading..."
@@ -32,7 +32,7 @@ namespace :comfy do
           # There are files with non-ASCII characters (i.e. accented) in the CMS files
           if Dir.glob('**/*', base: local).include?(file.name.force_encoding('UTF-8'))
             if File.file?(local_file)
-              check_timestamp(file, session, local, local_file, remote_file)  
+              check_timestamp(file, session, local_file, remote_file)  
             end
           else
             puts "#{file.name} doesn\'t exist locally, downloading"
