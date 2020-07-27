@@ -154,3 +154,8 @@
 @mixin text-tooltip {
   @include text-3;
 }
+
+@mixin textarea {
+  @include text-2;
+  color: $grey-light;
+}

@@ -21,6 +21,14 @@ $form-input-padding: rem-calc(6 8);
   padding: $form-input-padding;
 }
 
+@mixin input-plain() {
+  display: block;
+  width: 100%;
+  border: solid 1px $grey-xdark;
+  border-radius: 0px;
+  height: rem-calc(52);
+}
+
 @mixin input-text() {
   color: $form-font-color;
   font-family: $form-input-font;
@@ -31,7 +39,57 @@ $form-input-padding: rem-calc(6 8);
   margin-bottom: rem-calc(14);
 }
 
+
 //--------------------------------------------------
 // form fields
 //--------------------------------------------------
 @import './form/**/*';
+
+//--------------------------------------------------
+// api request form
+//--------------------------------------------------
+.form--api {
+  margin-top: rem-calc(50);
+  
+  form {
+    margin-top: rem-calc(14);
+  }
+
+  &__small {
+    color: $red;
+  }
+
+  &__asterisk {
+    font-weight: bold;
+  }
+
+  &__label {
+    @include h3;
+    line-height: 2;
+  }
+
+  &__text-input {
+    @include input-plain();
+
+    &--textarea {
+      @extend .form--api__text-input;
+      @include textarea;
+    }
+  }
+
+  &__group {
+    margin-bottom: rem-calc(23);
+  }
+  
+  &__radio {
+    @include flex;
+    @include flex-v-center;
+  }
+
+  &__label--radio {
+    @extend .form--api__label;
+    font-size: rem-calc(18);
+    margin-right: rem-calc(25);
+  }
+
+}

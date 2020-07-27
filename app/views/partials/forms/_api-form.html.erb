@@ -1,44 +1,52 @@
 <div class="form--api">
   <div class="form--api__text">
-    <p><%= cms_fragment_render('form_text_heading', @cms_page) %></p>
+    <h3><%= cms_fragment_render('form_text_heading', @cms_page) %></h3>
     <p><%= cms_fragment_render('form_text', @cms_page) %></p>
   </div>
 
-  <small>*Required fields</small>
-  <%# Not sure about the actual endpoint of this form %>
+  <p class="form--api__small">
+    <span class="form--api__asterisk">*</span>
+    Required fields
+  </p>
+  <%# Not sure about the actual endpoint of this form - may need to save it to the CMS and also send emails simultaneously %>
   <%= form_tag 'api/create' do %>
 
-    <div class='form-group'>
-      <%= label_tag 'full_name', 'Full Name*' %>
-      <%= text_field_tag 'full_name', nil,  autofocus: true , required: true %>
+    <div class='form--api__group'>
+      <%= label_tag 'full_name', 'Full Name*', class: 'form--api__label' %>
+      <%= text_field_tag 'full_name', nil,  autofocus: true , required: true, class: 'form--api__text-input' %>
     </div>
 
-    <div class='form-group'>
-      <%= label_tag 'email', 'Email*' %>
-      <%= text_field_tag 'email', nil, required: true %>
+    <div class='form--api__group'>
+      <%= label_tag 'email', 'Email*', class: 'form--api__label' %>
+      <%= text_field_tag 'email', nil, required: true, class: 'form--api__text-input' %>
     </div>
 
-    <div class='form-group'>
-      <%= label_tag 'company', 'Company' %>
-      <%= text_field_tag 'company' %>
+    <div class='form--api__group'>
+      <%= label_tag 'company', 'Company', class: 'form--api__label' %>
+      <%= text_field_tag 'company', nil, class: 'form--api__text-input' %>
     </div>
 
-    <div class='form-group'>
-      <%# Select goes here %>
-
+    <div class='form--api__group'>
+      <%= label_tag 'user_type', 'Type of user*', class: 'form--api__label' %>
+      <%# Select goes here - how to pass selected value from custom dropdown to form params? probably need to use JS %>
+      <>
     </div>
 
-    <div class="form-group">
-      <%= label_tag :license, 'Do you have a license to use the API?*'  %>
-      <%= radio_button_tag :license, true %>
-      <%= label_tag :license, 'Yes', value: true %>
-      <%= radio_button_tag :license, false %>
-      <%= label_tag :license, 'No', value: false %>
+    <div class="form--api__group">
+      <%= label_tag :license, 'Do you have a license to use the API?*', class: 'form--api__label'  %>
+      <div class="form--api__radio">
+        <%= radio_button_tag :license, true %>
+        <%= label_tag :license, 'Yes', value: true, class: 'form--api__label--radio' %>
+        <%= radio_button_tag :license, false %>
+        <%= label_tag :license, 'No', value: false, class: 'form--api__label--radio' %>
+      </div>
     </div>
     
-    <div class="form-group">
-      <%= label_tag :reason, 'Please provide a brief description of how you intend to use the API*' %>
-      <%= text_area_tag :reason, 'E.g who is the audience, what type of service is being provided, how will the data be used: visualisation only, download, reposting'  %>
+    <div class="form--api__group">
+      <%= label_tag :reason, 'Please provide a brief description of how you intend to use the API*', class: 'form--api__label' %>
+      <%= text_area_tag :reason, 
+      'E.g who is the audience, what type of service is being provided, how will the data be used: visualisation only, download, reposting', 
+      class: 'form--api__text-input--textarea' %>
     </div>
 
     <div><%= submit_tag "Send Request", class: 'button--primary' %></div>
