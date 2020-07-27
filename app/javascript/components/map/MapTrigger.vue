@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="['map__trigger', { 'disabled': isDisabled }]"
+    :class="['map__trigger', buttonStateClass]"
     @click="toggleMapPane"
     v-html="text"
   />
@@ -9,8 +9,17 @@
 export default {
   name: 'MapTrigger',
 
+  model: {
+    event: 'toggle:map-pane',
+    prop: 'isActive'
+  },
+
   props: {
     isDisabled: {
+      type: Boolean,
+      default: false
+    },
+    isActive: {
       type: Boolean,
       default: false
     },
@@ -20,11 +29,20 @@ export default {
     }
   },
 
+  computed: {
+    buttonStateClass () {
+      return {
+        'disabled': this.isDisabled,
+        'active': this.isActive
+      }
+    }
+  },
+
   methods: {
     toggleMapPane () {
       if(this.isDisabled) { return false }
       
-      this.$emit('toggle:map-pane')
+      this.$emit('toggle:map-pane', this.isActive)
     }
   }
 }

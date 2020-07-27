@@ -14,9 +14,11 @@
         </section>
       </div>
 
-      <%= render partial: "partials/maps/main", locals: {
-        map: map
-      } %>
+      <section class="map-section">
+        <%= render partial: "partials/maps/main", locals: {
+          map: map
+        } %>
+      </section>
     </tab-target>
 
     <tab-target :id="2" :selected-id="selectedId">

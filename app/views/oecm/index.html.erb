@@ -12,13 +12,11 @@
   }
 %>
 
-<section class="container">
-  <%= render partial: "partials/tabs/tabs-thematic-area-database", locals: { 
-    config_search: @config_search_areas,
-    map: @map,
-    tabs: @tabs
-  } %>
-</section>
+<%= render partial: "partials/tabs/tabs-thematic-area-database", locals: { 
+  config_search: @config_search_areas,
+  map: @map,
+  tabs: @tabs
+} %>
 
 <section class="container section-padding">
   <%= render "partials/cards/resources" %>

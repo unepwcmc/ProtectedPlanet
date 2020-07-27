@@ -4,14 +4,11 @@
 @import 'maps/v-map-filters';
 @import 'maps/v-map-header';
 @import 'maps/v-map-pa-search';
+@import 'maps/v-map-popup';
 @import 'maps/v-map-toggler';
 
 .map-section {
   @include gutters;
-
-  @include breakpoint-down($small) {
-    padding: 0;
-  }
 }
 
 .map {
