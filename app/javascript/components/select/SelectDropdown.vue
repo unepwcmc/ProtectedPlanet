@@ -29,14 +29,14 @@ export default {
     options: {
       type: Array
     },
-    initMessage: String
+    initMessage: Object
   },
 
   data() {
     return {
       isActive: false,
-      initialMessage: this.initMessage,
-      selected: this.options[0]
+      // selected: this.options[0]
+      selected: this.initMessage.title
     };
   },
   methods: {

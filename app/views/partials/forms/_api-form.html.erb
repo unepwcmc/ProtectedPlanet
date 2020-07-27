@@ -32,7 +32,7 @@
       <%# Also, what values does this take? %>
       <select-dropdown
         :options="[{title: 'Admin'}, {title: 'Normal User'}, {title: 'Test user'}]"
-        :init-message="'Select option'"
+        :init-message="{ title: 'Select option' }.to_json"
       >
     </div>
 
