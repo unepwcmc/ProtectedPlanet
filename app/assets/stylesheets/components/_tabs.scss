@@ -58,11 +58,11 @@
 //--------------------------------------------------
   &--hero {
     .tabs__triggers {
-      @include ul-unstyled;
-      @include ul-inline;
-      @include tabs-horizontal-scroll;
       @include container;
       @include site-width;
+      @include tabs-horizontal-scroll;
+      @include ul-unstyled;
+      @include ul-inline;
 
       transform: translateY(-100%);
     }
