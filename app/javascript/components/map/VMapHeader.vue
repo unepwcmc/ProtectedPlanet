@@ -5,17 +5,18 @@
     </div>
     <div
       v-if="closeable"
-      class="v-map-header__close"
-      @click="onClose"
+      :class="['v-map-header__close', closeStateClass]"
+      @click="toggle"
     />
   </div>
 </template>
 <script>
 export default {
   model: {
-    event: 'change',
-    prop: 'title'
+    event: 'toggle',
+    prop: 'filtersShown'
   },
+
   props: {
     title: {
       type: String,
@@ -24,11 +25,24 @@ export default {
     closeable: {
       type: Boolean,
       default: false
+    },
+    filtersShown: {
+      type: Boolean,
+      default: true
     }
   },
+
+  computed: {
+    closeStateClass () {
+      return {
+        'closed': !this.filtersShown
+      } 
+    }
+  },
+
   methods: {
-    onClose() {
-      this.$emit('close')
+    toggle() {
+      this.$emit('toggle')
     }
   }
 }

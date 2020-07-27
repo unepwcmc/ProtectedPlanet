@@ -1,15 +1,17 @@
 <template>
   <div
-    v-if="show"
     class="v-map-filters"
     :class="{'v-map-filters--hidden': isHidden}"
   >
     <v-map-header
-      v-model="title"
+      :title="title"
+      :filters-shown="show"
       closeable
-      @close="onClose"
+      @toggle="onToggle"
     />
-    <div class="v-map-filters__body">
+    <div
+      v-show="show"
+      class="v-map-filters__body">
       <slot name="top" />
       <slot />
       <div class="v-map-filters__overlays">
@@ -67,9 +69,8 @@ export default {
   },
 
   methods: {
-    onClose () {
-      this.show = false
-      this.$emit('show', false)
+    onToggle () {
+      this.show = !this.show
     }
   }
 }

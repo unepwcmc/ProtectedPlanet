@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: flex-start;
 
-  min-width: rem-calc(75);
+  min-width: rem-calc(53);
   height: rem-calc(27);
 
   &,
@@ -23,7 +23,7 @@
     font-weight: 600;
     margin-left: auto;
     margin-right: 0;
-    padding: rem-calc(0 12);
+    padding: rem-calc(2 4 0);
 
     height: 100%;
     
@@ -36,7 +36,6 @@
 
     .v-map-toggler__switch {
       background-color: $grey-xlight;
-      color: $grey-dark;
       margin-left: 0;
       margin-right: auto;
 

@@ -2,9 +2,9 @@
   <v-map-header title="<%= map_yml[:title] %>"></v-map-header>
   <v-map :services-for-point-query="<%= services_for_point_query.to_json %>"></v-map>
   <v-map-filters
+    :is-hidden="<%= !!map[:areFiltersHidden] %>"
     :overlays="<%= map[:overlays].to_json %>"
     title="<%= map_yml[:title] %>"
-    :is-hidden="<%= !!map[:areFiltersHidden] %>"
   >
     <template v-slot:top>
       <v-map-pa-search
