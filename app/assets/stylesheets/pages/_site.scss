@@ -1,0 +1,38 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.page--site {
+
+  .page {
+    &__container {
+      @include breakpoint($small) { 
+        @include flex;
+        @include flex-wrap;
+      }
+    }
+
+      &__col-1 {
+        @include breakpoint($medium) { width: calc(50% - 15px); }
+      }
+
+      &__col-2 {
+        width: 100%;
+
+        @include breakpoint($small) { 
+          @include flex;
+          @include flex-h-between;
+        }
+
+        @include breakpoint($medium) { 
+          margin-left: auto;
+          width: calc(50% - 15px);
+
+          display: block;
+        }
+      }
+
+      &__col-child {
+        @include breakpoint-between($small, $medium) { width: calc(50% - 15px); }
+      }
+  }
+}
