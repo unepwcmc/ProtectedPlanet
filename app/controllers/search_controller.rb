@@ -37,7 +37,18 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @results = Autocompletion.lookup(search_params[:search_term], search_params[:type])
+    db_type = search_params[:type]
+
+    case db_type
+      when 'country'
+        index = Search::COUNTRY_INDEX
+      when 'region'
+        index = Search::REGION_INDEX
+      else
+        index = Search::PA_INDEX
+    end
+
+    @results = Autocompletion.lookup(search_params[:search_term], db_type, index)
 
     render json: @results
   end

@@ -17,7 +17,7 @@ module Autocompletion
       identifier = result.send(identifier_field(type))
 
       geom_type = result.is_a?(ProtectedArea) ? result.the_geom.geometry_type.to_s : 'N/A'
-      url = type == 'country' ? "/country/#{identifier}" : "/#{identifier}"
+      url = get_type(type, identifier)
       extent_url = result.respond_to?(:extent_url) ? result.extent_url : 'N/A'
 
       {
@@ -31,6 +31,14 @@ module Autocompletion
   end
 
   private
+
+  def self.get_type(type, identifier)
+    if type == 'country' || type == 'region'
+      "/#{type}/#{identifier}"
+    else
+      "/#{identifier}"
+    end
+  end
 
   def self.identifier_field(type)
     IDENTIFIER_FIELDS[type] || :id
