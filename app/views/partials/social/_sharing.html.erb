@@ -1,15 +1,8 @@
-<%= link_to "", "https://twitter.com/intent/tweet/?url=" + request.original_url, 
-        title: url_encode("Share on Twitter"), 
-        class: "social__icon--twitter", 
-        target: "_blank"
-%>
-<%= link_to "", "https://facebook.com/sharer/sharer.php?u=" + request.original_url,
-        title: url_encode("Share on Facebook"), 
-        class: "social__icon--facebook", 
-        target: "_blank"
-%>
-<%= link_to "", "https://www.linkedin.com/shareArticle?url=" + request.original_url, 
-        title: url_encode("Share on LinkedIn"), 
-        class: "social__icon--linkedin", 
-        target: "_blank"
-%>
+<% %w[twitter facebook linkedin].each do |social_medium| %>
+  <% translate_path = format('social.share.%<key>s', { key: social_medium }) %>
+  <%= link_to '', t("#{translate_path}.url", url: request.original_url),
+                  title: t("#{translate_path}.title"),
+                  class: "social__icon--#{social_medium}",
+                  target: '_blank'
+  %>
+<% end %>
