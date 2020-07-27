@@ -27,23 +27,35 @@ class OpengraphBuilder
   # To load this content into a layout view, you would then simply call...
   #
   # <%== og.content %> to get all of the content in the store, or...
+  # <%== og %> as it has a to_s method, or...
   #
   # <%== og.content('twitter') %> to get only the content for a specific prefix.
   #
   def content(prefix = nil, options = nil)
     if options.nil?
-      return meta_tags(@data[prefix], prefix) if prefix
-
-      arr = []
-      @data.each { |p, data| arr << meta_tags(data, p) }
-      arr.join("\n")
+      html(prefix)
     else
-      prefix = prefix ? prefix.to_s : 'og'
-      @data[prefix] = @data[prefix].merge(options.deep_stringify_keys)
+      save_options_at_prefix(prefix ? prefix.to_s : 'og', options)
     end
   end
 
+  def to_s
+    html
+  end
+
   private
+
+  def html(prefix = nil)
+    return meta_tags(@data[prefix], prefix) if prefix
+
+    arr = []
+    @data.each { |p, data| arr << meta_tags(data, p) }
+    arr.join("\n")
+  end
+
+  def save_options_at_prefix(prefix, options)
+    @data[prefix.to_s].merge!(options.deep_stringify_keys)
+  end
 
   def meta_tags(data, prefix)
     arr = []
