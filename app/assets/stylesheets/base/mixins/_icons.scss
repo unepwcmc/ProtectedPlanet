@@ -184,6 +184,11 @@ $icon-search-width: rem-calc(21);
   @include icon-image('loading-spinner.svg', rem-calc(40), rem-calc(40));
 }
 
+@mixin icon-minus-white() {
+  @include icon-basic;
+  @include icon-image('minus-white.svg', rem-calc(22), rem-calc(20));
+}
+
 @mixin icon-pin ($circle: #ccc, $outline: #000) {
   @include icon-basic;
   width: rem-calc(29); height: rem-calc(38);
