@@ -14,7 +14,7 @@ class OpengraphBuilder
   #   { og: { title: 'my title' }, twitter: { card: 'my_card' } }
   # )
   def initialize(content = {})
-    @data = Hash.new({}).merge(content.stringify_keys)
+    @data = Hash.new({}).merge(content.deep_stringify_keys)
   end
 
   # Use og.content with a prefix and hash to store, for example...
@@ -41,7 +41,7 @@ class OpengraphBuilder
       arr.join("\n")
     else
       prefix = prefix ? prefix.to_s : 'og'
-      @data.store(prefix, @data[prefix].merge(options))
+      @data[prefix] = @data[prefix].merge(options.deep_stringify_keys)
     end
   end
 
