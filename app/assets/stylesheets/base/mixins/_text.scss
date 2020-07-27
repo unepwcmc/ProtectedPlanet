@@ -155,7 +155,7 @@
   @include text-3;
 }
 
-@mixin textarea {
+@mixin text-textarea {
   @include text-2;
   color: $grey-light;
 }

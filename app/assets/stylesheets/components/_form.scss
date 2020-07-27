@@ -78,18 +78,36 @@ $form-input-padding: rem-calc(6 8);
 
     &--textarea {
       @extend .form--api__text-input;
-      @include textarea;
+      @include text-textarea;
+      height: rem-calc(181);
+      padding: rem-calc(13) rem-calc(16);
     }
   }
 
   &__group {
     margin-bottom: rem-calc(23);
+
+    // The dropdown group
+    &--dropdown {
+      margin-bottom: rem-calc(28);
+    }
+
+    // The radio button group (question and inputs)
+    &--radio {
+      margin-bottom: rem-calc(33);
+    }
+  }
+
+  // The dropdown element itself (in this context)
+  &__dropdown-elem {
+    margin-top: rem-calc(9);
   }
   
-  &__radio, &__radio-group {
+  &__radio, &__radio-input {
     @include flex;
     @include flex-v-center;
   }
+  
 
   &__label--radio {
     @extend .form--api__label;
@@ -99,6 +117,8 @@ $form-input-padding: rem-calc(6 8);
     margin-left: rem-calc(9);
   }
 
-
+  &__submit {
+    margin-top: rem-calc(43);
+  }
 
 }
