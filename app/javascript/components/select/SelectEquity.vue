@@ -7,7 +7,7 @@
     <div class="select--equity__panel">
       <h2 class="select--equity__header">Results from study sites</h2>
       <p class="select--equity__description">{{ selected.text }}</p>
-      <select-dropdown :options="protectedAreas" @pa-selected="changeSelection" />
+      <select-dropdown :options="protectedAreasTitles" @pa-selected="changeSelection" />
       <a
         :href="selected.url"
         class="button--primary select--equity__button"
@@ -34,9 +34,14 @@ export default {
       selected: this.protectedAreas[0]
     };
   },
+  computed: {
+    protectedAreasTitles() {
+      return this.protectedAreas.map((area) =>  area.title );
+    }
+  },
   methods: {
     changeSelection(selected) {
-      this.selected = selected;
+      this.selected = this.protectedAreas.find((area) => area.title == selected );
     }
   }
 };

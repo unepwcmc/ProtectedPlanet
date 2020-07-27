@@ -2,7 +2,7 @@
   <div class="select--dropdown__custom-select">
     <div class="select--dropdown__custom-select-box">
       <div class="select--dropdown__selected" @click="toggleVis">
-        <span>{{ selected.title }}</span>
+        <span>{{ selected }}</span>
         <div
           :class="[ isActive ? 'select--dropdown__dropdown--active' : 'select--dropdown__dropdown' ]"
         ></div>
@@ -13,7 +13,7 @@
           :key="index"
           class="select--dropdown__option"
           @click="selectOption(index)"
-        >{{ option.title }}</span>
+        >{{ option }}</span>
       </div>
     </div>
   </div>
@@ -27,17 +27,21 @@ export default {
   mixins: [ mixinPopupCloseListeners({closeCallback: 'close', toggleVariable: 'isActive'}) ],
   props: {
     options: {
-      type: Array
+      type: Array, 
+      required: true
     },
-    initMessage: Object
+    initMessage: {
+      type: String
+    }    
   },
-
   data() {
     return {
       isActive: false,
-      // selected: this.options[0]
-      selected: this.initMessage.title
+      selected: undefined
     };
+  },
+  beforeMount() {
+    this.initMessage ? this.selected = this.initMessage : this.selected = this.options[0]
   },
   methods: {
     toggleVis() {

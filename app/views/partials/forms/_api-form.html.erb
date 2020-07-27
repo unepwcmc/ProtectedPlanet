@@ -31,8 +31,8 @@
       <%# Select goes here - how to pass selected value from custom dropdown to form params? probably need to use JS %>
       <%# Also, what values does this take? %>
       <select-dropdown
-        :options="[{title: 'Admin'}, {title: 'Normal User'}, {title: 'Test user'}]"
-        :init-message="{ title: 'Select option' }.to_json"
+        :options="['Admin', 'Standard User', 'Superuser', 'Student']"
+        :init-message="'Select option'"
       >
     </div>
 
