@@ -7,7 +7,7 @@
     <div class="select--equity__panel">
       <h2 class="select--equity__header">Results from study sites</h2>
       <p class="select--equity__description">{{ selected.text }}</p>
-      <select-dropdown :protected-areas="protectedAreas" @pa-selected="changeSelection" />
+      <select-dropdown :options="protectedAreas" @pa-selected="changeSelection" />
       <a
         :href="selected.url"
         class="button--primary select--equity__button"

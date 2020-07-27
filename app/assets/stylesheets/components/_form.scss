@@ -55,6 +55,10 @@ $form-input-padding: rem-calc(6 8);
     margin-top: rem-calc(14);
   }
 
+  input[type="radio"] {
+    width: rem-calc(28);
+  }
+
   &__small {
     color: $red;
   }
@@ -81,7 +85,7 @@ $form-input-padding: rem-calc(6 8);
     margin-bottom: rem-calc(23);
   }
   
-  &__radio {
+  &__radio, &__radio-group {
     @include flex;
     @include flex-v-center;
   }
@@ -90,6 +94,8 @@ $form-input-padding: rem-calc(6 8);
     @extend .form--api__label;
     font-size: rem-calc(18);
     margin-right: rem-calc(25);
+    margin-bottom: 0;
+    margin-left: rem-calc(9);
   }
 
 }

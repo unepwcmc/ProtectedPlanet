@@ -38,6 +38,7 @@ import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
 import SearchSiteTopbar from './components/search/SearchSiteTopbar'
+import SelectDropdown from './components/select/SelectDropdown'
 import SelectEquity from './components/select/SelectEquity'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
@@ -90,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         SearchAreasHome,
         SearchSite,
         SearchSiteTopbar,
+        SelectDropdown,
         SelectEquity,
         SelectWithContent,
         StickyBar,

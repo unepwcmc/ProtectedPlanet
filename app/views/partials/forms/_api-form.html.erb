@@ -29,19 +29,28 @@
     <div class='form--api__group'>
       <%= label_tag 'user_type', 'Type of user*', class: 'form--api__label' %>
       <%# Select goes here - how to pass selected value from custom dropdown to form params? probably need to use JS %>
-      <>
+      <%# Also, what values does this take? %>
+      <select-dropdown
+        :options="[{title: 'Admin'}, {title: 'Normal User'}, {title: 'Test user'}]"
+        :init-message="'Select option'"
+      >
     </div>
 
     <div class="form--api__group">
       <%= label_tag :license, 'Do you have a license to use the API?*', class: 'form--api__label'  %>
       <div class="form--api__radio">
-        <%= radio_button_tag :license, true %>
-        <%= label_tag :license, 'Yes', value: true, class: 'form--api__label--radio' %>
-        <%= radio_button_tag :license, false %>
-        <%= label_tag :license, 'No', value: false, class: 'form--api__label--radio' %>
+        <div class="form--api__radio-group">
+          <%= radio_button_tag :license, true %>
+          <%= label_tag :license, 'Yes', value: true, class: 'form--api__label--radio' %>
+        </div>
+        <div class="form--api__radio-group">
+          <%= radio_button_tag :license, false %>
+          <%= label_tag :license, 'No', value: false, class: 'form--api__label--radio' %>
+        </div>
       </div>
     </div>
     
+    <%# Not sure if the label text should be a CMS fragment of some kind - it's too long %>
     <div class="form--api__group">
       <%= label_tag :reason, 'Please provide a brief description of how you intend to use the API*', class: 'form--api__label' %>
       <%= text_area_tag :reason, 
