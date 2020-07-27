@@ -6,8 +6,6 @@
 class OpengraphBuilder
   attr_accessor :data
 
-  # Create an instance e.g. og = OpengraphBuilder.new
-
   # The initializer accepts a hash with the starting structure for example...
   #
   # og = OpengraphBuilder.new(
