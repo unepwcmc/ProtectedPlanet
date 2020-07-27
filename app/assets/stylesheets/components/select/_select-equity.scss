@@ -94,6 +94,10 @@
         width: 100%;
     }
 
+    &__message {
+        color: $grey-light;
+    }
+    
     &__selected {
         @include breakpoint($small) {
             padding: rem-calc(20 24);
