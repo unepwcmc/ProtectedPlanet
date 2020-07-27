@@ -32,8 +32,8 @@ class OpengraphBuilder
   #
   # <%== og.content('twitter') %> to get only the content for a specific prefix.
   #
-  def content(prefix = nil, **options)
-    if options.empty?
+  def content(prefix = nil, options = nil)
+    if options.nil?
       return meta_tags(@data[prefix], prefix) if prefix
 
       arr = []
