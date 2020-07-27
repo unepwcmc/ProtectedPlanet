@@ -64,6 +64,7 @@ $form-input-padding: rem-calc(6 8);
   }
 
   &__asterisk {
+    color: red;
     font-weight: bold;
   }
 
@@ -96,6 +97,10 @@ $form-input-padding: rem-calc(6 8);
     margin-right: rem-calc(25);
     margin-bottom: 0;
     margin-left: rem-calc(9);
+  }
+
+  &__message {
+    color: $grey-light;
   }
 
 }

@@ -28,11 +28,11 @@
 
     <div class='form--api__group'>
       <%= label_tag 'user_type', 'Type of user*', class: 'form--api__label' %>
-      <%# Select goes here - how to pass selected value from custom dropdown to form params? probably need to use JS %>
+      <%# Select goes here - how to pass selected value from custom dropdown to form params? probably need to use JS e.g. localStorage %>
       <%# Also, what values does this take? %>
       <select-dropdown
         :options="['Admin', 'Standard User', 'Superuser', 'Student']"
-        :init-message="'Select option'"
+        <%# :init-message="'Select option'" %>
       >
     </div>
 
