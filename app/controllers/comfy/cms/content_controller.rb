@@ -18,12 +18,8 @@ class Comfy::Cms::ContentController < Comfy::Cms::BaseController
     ############################
     # ADD CUSTOM FUNCTIONALITY #
     ############################
-    copengraph = ComfyOpengraph.new({
-                                      'social-title': 'title',
-                                      'social-description': 'description',
-                                      'theme_image': 'image'
-                                    })
-    copengraph.parse(opengraph: opengraph, page: @cms_page)
+    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' })
+                  .parse(opengraph: opengraph, page: @cms_page)
     ############################
     # END CUSTOM FUNCTIONALITY #
     ############################
