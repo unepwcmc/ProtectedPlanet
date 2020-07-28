@@ -29,7 +29,7 @@ en:
           geo_type: country
           icon: country
         -
-          title: Indiviual Area
+          title: Individual Area
           geo_type: site
           icon: area
       categories:

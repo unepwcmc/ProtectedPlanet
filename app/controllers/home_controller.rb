@@ -80,8 +80,7 @@ class HomeController < ApplicationController
   def levels
     _levels = home_yml[:pas][:levels]
     _levels.map do |level|
-      geo_type = level.delete(:geo_type)
-      level[:url] = search_areas_path({geo_type: geo_type, filters: {db_type: ['wdpa']}})
+      level[:url] = search_areas_path(geo_type: level[:geo_type])
       level
     end
   end
