@@ -10,7 +10,7 @@ namespace :comfy do
     PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
     PP_USER = 'wcmc'.freeze
 
-    task :seed_import => :environment do |_t|
+    task :staging_import => :environment do |_t|
       require 'net/ssh'
       require 'net/scp'  
       
