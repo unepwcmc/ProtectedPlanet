@@ -33,12 +33,13 @@ module Autocompletion
   private
 
   def self.get_filters(type)
-    if type == 'wdpa'
-      { filters: { is_oecm: false } }
-    elsif type == 'oecm'
-      { filters: { is_oecm: true } }
-    else
-      {}
+    case type
+      when 'wdpa'
+        { filters: { is_oecm: false } }
+      when 'oecm'
+        { filters: { is_oecm: true } }
+      else
+        {}
     end
   end
 
