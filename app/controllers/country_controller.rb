@@ -37,6 +37,8 @@ class CountryController < ApplicationController
     # protected_national_report: statistic_presenter.percentage_nr_marine_cover, 
     # national_report_version: statistic_presenter.nr_version,
 
+    helpers.opengraph_title_and_description_with_suffix(@country.name)
+
     respond_to do |format|
       format.html
       format.pdf do
