@@ -1,4 +1,6 @@
 class WdpaController < ApplicationController
+  include Concerns::Tabs
+
   def index
     @pa_coverage_percentage = 20 ##TODO FERDI - percentage of the world covered by PAs
 
@@ -8,6 +10,6 @@ class WdpaController < ApplicationController
     }.to_json
 
     @filters = { db_type: ['wdpa'] }
-    @tabs = helpers.get_cms_tabs(3).to_json
+    @tabs = get_tabs(3).to_json
   end
 end
