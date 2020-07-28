@@ -3,14 +3,6 @@
 namespace :comfy do
     desc "Import CMS Seed data from staging"
 
-    def check_timestamp(file, session, local_file, remote_file)     
-      is_newer = Time.at(file.attributes.mtime) >= File.stat(local_file).mtime 
-      if is_newer 
-        puts "#{file.name} is newer than the local copy, downloading..."
-        session.scp.download!(remote_file, local_file)
-      end
-    end
-
     # Locally stored seeds - assumes you already have the local folder - 
     # it won't create it 
     LOCAL = (ComfortableMexicanSofa.config.seeds_path + '/protected-planet').freeze
@@ -20,32 +12,59 @@ namespace :comfy do
       require 'net/ssh'
       require 'net/scp'  
       
-      puts "Importing CMS Seed data from Staging Folder to #{local} ..."
+      puts "Importing CMS Seed data from Staging Folder to #{LOCAL} ..."
 
       # SSH into staging server with Net::SSH
       Net::SSH.start(ENV['PP_STAGING'], ENV['PP_USER']) do |session|
-        session.sftp.dir.glob(REMOTE, '**/*').each do |file|
-          # Go through the various files and folders and check to see if they exist locally
-          remote_file = File.join(remote, file.name)
-          local_file = File.join(LOCAL, file.name)
-          
-          # There are files with non-ASCII characters (i.e. accented) in the CMS files
-          if Dir.glob('**/*', base: LOCAL).include?(file.name.force_encoding('UTF-8'))
-            if File.file?(local_file)
-              check_timestamp(file, session, local_file, remote_file)  
-            end
-          else
-            puts "#{file.name} doesn\'t exist locally, downloading"
-            # File doesn't exist locally, so download it (in any folder required)
-            session.scp.download!(remote_file, local_file)
+        # Map the top-level folders and check top-level files
+        top_level_folders = session.sftp.dir.glob(REMOTE,'*').filter do |item| 
+                              item.attributes.directory?
+                            end
+        
+        session.sftp.dir.glob(REMOTE, '*').each do |file|
+          remote_folder = File.join(REMOTE, file.name)
+          local_folder = File.join(LOCAL, file.name)
+
+          unless top_level_folders.include?(file)
+            is_newer = Time.at(file.attributes.mtime) >= File.stat(local_folder).mtime 
+            session.scp.download!(remote_folder, local_folder) if is_newer
           end
         end
-      end
 
-      puts "Finished downloads, now replacing your local seed data..."
+        top_level_folders.each do |folder|
+          parent_remote = File.join(REMOTE, folder.name)
+          parent_local = File.join(LOCAL, folder.name)
 
-      Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
+          unless Dir.glob('**/*', base: LOCAL).include?(folder.name.force_encoding('UTF-8'))
+            puts "#{folder.name} doesn\'t exist locally, downloading"
+            # Folder doesn't exist locally, so download it 
+            session.scp.download!(parent_remote, parent_local, recursive: true)
+          end
+
+          files = []
+
+          session.sftp.dir.glob(parent_remote, '**/*').each do |file|
+            # Go through the various files and folders and check to see if they exist locally
+            local_folder = File.join(LOCAL, file.name)
+            
+            # There are files with non-ASCII characters (i.e. accented) in the CMS files
+            if Dir.glob('**/*', base: local_folder).include?(file.name.force_encoding('UTF-8'))
+                is_newer = Time.at(file.attributes.mtime) >= File.stat(local_folder).mtime  
+                files << file if is_newer                 
+            end
+          end
+
+          if files.length >= 1
+            puts "Downloading a newer version of #{folder.name}"
+            session.scp.download!(parent_local, parent_remote, recursive: true)
+          end
+        end
+
+      # puts "Finished downloads, now replacing your local seed data..."
+
+      # Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
 
       # Todo: get this working with AWS bucket
     end
+  end
 end
