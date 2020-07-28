@@ -27,6 +27,8 @@ en:
       with-assessments: With management effectiveness evaluation
     related-countries:
       title: Related countries & territories
+      title-child: Child countries & territories
+      title-parent: Parent country
     reported-area: Reported Area
     sources: 
       title: Sources

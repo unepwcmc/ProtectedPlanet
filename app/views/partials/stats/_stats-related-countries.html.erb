@@ -2,7 +2,7 @@
   <h2><%= t('stats.related-countries.title') %></h2>
 
   <% if country_children %>
-    <h3>Child countries & territories</h3>
+    <h3 class="stats__subtitle"><%= t('stats.related-countries.title-child') %></h3>
     <ul class="list--underline">
       <% country_children.each do |child| %>
         <li class="list__li">
@@ -15,7 +15,7 @@
   <% end %>
 
   <% if country_parent %>
-    <h3>Parent country</h3>
+    <h3 class="stats__subtitle"><%= t('stats.related-countries.title-parent') %></h3>
     <ul class="list--underline">
       <li class="list__li">
         <span class="list__title"><%= country_parent['name'] %></span>
