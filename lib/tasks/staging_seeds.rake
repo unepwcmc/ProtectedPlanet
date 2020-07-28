@@ -7,6 +7,8 @@ namespace :comfy do
     # it won't create it 
     LOCAL = (ComfortableMexicanSofa.config.seeds_path + '/protected-planet').freeze
     REMOTE = 'ProtectedPlanet/current/db/cms_seeds/protected-planet'.freeze
+    PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
+    PP_USER = 'wcmc'.freeze
 
     task :seed_import => :environment do |_t|
       require 'net/ssh'
@@ -15,7 +17,7 @@ namespace :comfy do
       puts "Importing CMS Seed data from Staging Folder to #{LOCAL} ..."
 
       # SSH into staging server with Net::SSH
-      Net::SSH.start(ENV['PP_STAGING'], ENV['PP_USER']) do |session|
+      Net::SSH.start(PP_STAGING, PP_USER) do |session|
         # Map the top-level folders and check top-level files
         top_level_folders = session.sftp.dir.glob(REMOTE,'*').filter do |item| 
                               item.attributes.directory?
