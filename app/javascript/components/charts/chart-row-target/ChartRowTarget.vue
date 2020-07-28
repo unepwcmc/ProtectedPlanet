@@ -89,8 +89,8 @@ export default {
   data () {
     return {
       rowHeight: 24,
-      svgStartX: -10,
-      svgStartY: -40,
+      svgStartX: -15,
+      svgStartY: -42,
       svgWidth: 230,
       svgHeight: 80,
       chartWidth: 200,
