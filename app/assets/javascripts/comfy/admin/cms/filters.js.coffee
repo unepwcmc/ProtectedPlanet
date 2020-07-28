@@ -4,11 +4,11 @@ $(document).ready( ->
   ['WDPA', 'OECM', 'PAME'].forEach((el) =>
     $('#fragment-topic_'+el).change((event) =>
       $content = $('#fragment-topic_content')
-      _val = $content.val()  
+      _val = $content.val()
       if (event.target.checked)
         $content.val(_val+' '+el)
       else
-        $content.val(_val.replace(' '+el, ''))
+        $content.val(_val.replace(el, '').trim())
     )
   )
 )
