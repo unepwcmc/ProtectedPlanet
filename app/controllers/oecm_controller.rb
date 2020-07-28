@@ -19,7 +19,7 @@ class OecmController < ApplicationController
     total_tabs.times do |i|
       tab = {
         id: i+1,
-        title: @cms_page.fragments.where(identifier: "tab-title-#{i+1}").first&.content
+        title: @cms_page.fragments.where(identifier: "tab-title-#{i+1}").first.content
       }
 
       tabs << tab
