@@ -22,7 +22,7 @@ class FilterCheckboxes < ComfortableMexicanSofa::Content::Tag::Fragment
 
                   # filter-checkbox name is just a dummy name which is not actually used
                   view.concat view.check_box_tag("filter-checkbox", category, parse_content(category), options) 
-                  view.concat view.label_tag(name, category, class: 'form-check-label pr-3')
+                  view.concat view.label_tag(name, category, class: 'form-check-label filter-checkbox pr-3')
                 end
               end
             
