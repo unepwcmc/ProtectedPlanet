@@ -120,10 +120,10 @@
         display: none;
 
         &--active {
-            max-height: 40vh;
             background: $white;
             border: 1px solid $grey-black;
             border-top: 0;
+            max-height: 40vh;
             overflow: scroll;
             display: block;
             position: absolute;

@@ -1,4 +1,7 @@
-<%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label, classes: "#{@cms_page.slug} bg-image-overlay--white" } %>
+<%= render partial: "./layouts/partials/hero-basic", locals: { 
+  title: @cms_page.label, 
+  classes: "#{@cms_page.slug} bg-image-overlay--white" 
+} %>
 
 <section class="container flex-center">
   <%= render "partials/forms/api-form" %> 

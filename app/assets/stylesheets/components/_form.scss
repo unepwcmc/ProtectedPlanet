@@ -80,7 +80,7 @@ $form-input-padding: rem-calc(6 8);
       @extend .form--api__text-input;
       @include text-textarea;
       height: rem-calc(181);
-      padding: rem-calc(13) rem-calc(16);
+      padding: rem-calc(13 16);
     }
   }
 
@@ -111,7 +111,7 @@ $form-input-padding: rem-calc(6 8);
 
   
 
-  &__radio, &__radio-input{
+  &__radio, &__radio-input {
     @include flex;
     @include flex-v-center;
   }

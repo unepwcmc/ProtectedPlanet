@@ -2,7 +2,7 @@
   <div class="select--dropdown__custom-select">
     <div class="select--dropdown__custom-select-box">
       <div class="select--dropdown__selected" @click="toggleVis">
-        <span :class="{ 'select--dropdown__message': this.selected == this.initMessage }">{{ selected }}</span>
+        <span :class="{ 'select--dropdown__message': isInitMessageSelected }">{{ selected }}</span>
         <div
           :class="[ isActive ? 'select--dropdown__dropdown--active' : 'select--dropdown__dropdown' ]"
         ></div>
@@ -44,6 +44,11 @@ export default {
   },
   mounted() {
     !this.initMessage ? this.selected = this.options[0] : this.selected = this.initMessage
+  },
+  computed: {
+    isInitMessageSelected() {
+      this.selected == this.initMessage
+    }
   },
   methods: {
     toggleVis() {
