@@ -31,7 +31,8 @@ class ApplicationController < ActionController::Base
                                             'url': request.original_url,
                                             'type': 'website',
                                             'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
-                                            'image:alt': t('meta.image_alt')
+                                            'image:alt': t('meta.image_alt'),
+                                            'locale': I18n.locale
                                           },
                                           'twitter': {
                                             'site': t('meta.twitter.site'),
@@ -80,6 +81,8 @@ class ApplicationController < ActionController::Base
     return if admin_path?
 
     @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath.gsub(%r{\A/#{I18n.locale}/?}, '/'))
+
+    return unless @cms_page
 
     ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' })
                   .parse(opengraph: opengraph, page: @cms_page)

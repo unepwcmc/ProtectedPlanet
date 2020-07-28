@@ -2,7 +2,9 @@ en:
   meta:
     site:
       name: Protected Planet
+      name_with_suffix: Protected Planet | %{suffix}
       title: Explore the World's Protected Areas
+      title_with_suffix: Explore the World's Protected Areas in %{suffix}
       description: >-
         Protected Planet is the online interface for the
         World Database on Protected Areas (WDPA), and the most comprehensive

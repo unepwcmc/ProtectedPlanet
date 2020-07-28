@@ -25,6 +25,8 @@ class RegionController < ApplicationController
     @total_wdpa = @region.protected_areas.count
 
     @wdpa = pas_sample
+
+    helpers.opengraph_title_and_description_with_suffix(@region.name)
   end
 
   private

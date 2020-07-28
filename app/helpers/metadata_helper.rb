@@ -8,4 +8,10 @@ module MetadataHelper
       site_title
     end
   end
+
+  def opengraph_title_and_description_with_suffix(suffix)
+    opengraph.content('og',
+                      title: t('meta.site.name_with_suffix', suffix: suffix),
+                      description: t('meta.site.title_with_suffix', suffix: suffix))
+  end
 end
