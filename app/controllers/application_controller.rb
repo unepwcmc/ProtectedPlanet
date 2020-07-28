@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   after_action :store_location
 
   def admin_path?
-    request.original_fullpath.match(%r{\/admin\/?})
+    request.original_fullpath =~ %r{/(?:#{I18n.locale}/)?admin/?}
   end
 
   def opengraph
@@ -79,7 +79,7 @@ class ApplicationController < ActionController::Base
   def load_cms_content
     return if admin_path?
 
-    @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath.gsub(/\A\/#{I18n.locale}\/?/, '/'))
+    @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath.gsub(%r{\A/#{I18n.locale}/?}, '/'))
 
     ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' })
                   .parse(opengraph: opengraph, page: @cms_page)
