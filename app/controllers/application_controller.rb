@@ -69,7 +69,10 @@ class ApplicationController < ActionController::Base
   end
 
   def load_cms_content
-    @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath.gsub(/\A\/#{I18n.locale}\//, '/'))
+    @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath.gsub(/\A\/#{I18n.locale}\/?/, '/'))
+
+    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' })
+                  .parse(opengraph: opengraph, page: @cms_page)
   end
 
   def record_invalid_error
