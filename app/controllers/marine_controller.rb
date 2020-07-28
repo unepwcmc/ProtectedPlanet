@@ -1,5 +1,6 @@
-class MarineController < ApplicationController
+class MarineController < Comfy::Cms::ContentController
   include ActionView::Helpers::NumberHelper
+  before_action :load_cms_page, only: :index
 
   #Static stats
   before_action :marine_statistics, only: [:index, :download_designations]
@@ -13,7 +14,6 @@ class MarineController < ApplicationController
   before_action :national_statistics, only: [:index]
   before_action :designations, only: [:index, :download_designations]
 
-  before_action :load_cms_content
 
   def index
     @marineSites = ProtectedArea.marine_areas.limit(3) ## FERDI 3 marine PAs
@@ -23,20 +23,6 @@ class MarineController < ApplicationController
     @regionCoverage = Region.without_global.map do |region|
       RegionPresenter.new(region).marine_coverage
     end
-
-    opengraph.content 'og', 'title': t('thematic_area.marine.social.title'),
-                            'description': t('thematic_area.marine.social.description'),
-                            'image': helpers.image_path(t('thematic_area.marine.social.image')),
-                            'image:alt': t(
-                              'thematic_area.marine.social.image_alt',
-                              total_marine_protected_areas: @marine_statistics['total_marine_protected_areas'],
-                              total_ocean_pa_coverage_percentage:
-                                @marine_statistics['total_ocean_pa_coverage_percentage']
-                            )
-
-    opengraph.content 'twitter', 'card': t('thematic_area.marine.social.twitter.card'),
-                                 'site': t('thematic_area.marine.social.twitter.site'),
-                                 'creator': t('thematic_area.marine.social.twitter.creator')
 
     @pas_km = @marine_statistics['total_ocean_area_protected']
     @pas_percent = @marine_statistics['total_ocean_pa_coverage_percentage']

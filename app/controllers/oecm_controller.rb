@@ -1,4 +1,6 @@
-class OecmController < ApplicationController
+class OecmController < Comfy::Cms::ContentController
+  before_action :load_cms_page
+
   def index
     @oecm_coverage_percentage = 10 ##TODO FERDI - percentage of the world covered by OECMs
 
@@ -19,7 +21,7 @@ class OecmController < ApplicationController
     total_tabs.times do |i|
       tab = {
         id: i+1,
-        title: @cms_page.fragments.where(identifier: "tab-title-#{i+1}").first.content
+        title: @cms_page.fragments.where(identifier: "tab-title-#{i+1}").first&.content
       }
 
       tabs << tab

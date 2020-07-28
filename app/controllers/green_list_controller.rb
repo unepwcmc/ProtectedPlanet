@@ -1,4 +1,6 @@
-class GreenListController < ApplicationController
+class GreenListController < Comfy::Cms::ContentController
+  before_action :load_cms_page
+
   # Show page for green listed protected areas
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
   # before_action :find_protected_area

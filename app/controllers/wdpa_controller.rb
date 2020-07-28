@@ -1,4 +1,6 @@
-class WdpaController < ApplicationController
+class WdpaController < Comfy::Cms::ContentController
+  before_action :load_cms_page
+
   def index
     @pa_coverage_percentage = 20 ##TODO FERDI - percentage of the world covered by PAs
 
@@ -19,7 +21,7 @@ class WdpaController < ApplicationController
     total_tabs.times do |i|
       tab = {
         id: i+1,
-        title: @cms_page.fragments.where(identifier: "tab-title-#{i+1}").first.content
+        title: @cms_page.fragments.where(identifier: "tab-title-#{i+1}").first&.content
       }
 
       tabs << tab

@@ -7,9 +7,7 @@ class ApplicationController < ActionController::Base
 
   helper_method :opengraph
 
-  before_action :set_cms_site
   before_action :set_locale
-  before_action :load_cms_content
   before_action :check_for_pdf
   #Temporary fix for development. To test if it is required on staging/production
   before_action :set_host_for_local_storage
@@ -31,10 +29,6 @@ class ApplicationController < ActionController::Base
         'creator': t('opengraph.defaults.twitter.creator')
       }
     })
-  end
-
-  def set_cms_site
-      @cms_site ||= Comfy::Cms::Site.first
   end
 
   def default_url_options
@@ -103,29 +97,6 @@ class ApplicationController < ActionController::Base
     "/users/confirmation",
     "/users/sign_out"
   ]
-
-  def load_cms_content
-    cms_path = request.original_fullpath
-    locale = I18n.locale.to_s
-    home_page = "/#{locale}"
-
-    if cms_path == home_page
-      cms_path = '/'
-    else
-      cms_path = cms_path.gsub("/#{locale}", "")
-    end
-
-    @cms_page = Comfy::Cms::Page.find_by_full_path(cms_path)
-  end
-
-  # def load_cms_pages
-  #   @updates_and_news  = Comfy::Cms::Category.find_by_label("Updates & News")
-  #   @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
-  #   @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
-  #   @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
-  #   @green_list_page   = Comfy::Cms::Page.find_by_slug("green-list")
-  #   @equity_page       = Comfy::Cms::Page.find_by_slug("equity")
-  # end
 
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?

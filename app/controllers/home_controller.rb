@@ -1,4 +1,6 @@
-class HomeController < ApplicationController
+class HomeController < Comfy::Cms::ContentController
+  before_action :load_cms_page
+
   def index
     @pa_coverage_percentage = 9999 #TODO Total PA coverage in %
 

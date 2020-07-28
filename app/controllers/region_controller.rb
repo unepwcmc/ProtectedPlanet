@@ -1,4 +1,6 @@
-class RegionController < ApplicationController
+class RegionController < Comfy::Cms::ContentController
+  before_action :load_cms_page
+
   before_action :load_vars
 
   def show
