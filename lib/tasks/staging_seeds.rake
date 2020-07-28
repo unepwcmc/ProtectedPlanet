@@ -24,10 +24,17 @@ namespace :comfy do
         session.sftp.dir.glob(REMOTE, '*').each do |file|
           remote_folder = File.join(REMOTE, file.name)
           local_folder = File.join(LOCAL, file.name)
-
-          unless top_level_folders.include?(file)
-            is_newer = Time.at(file.attributes.mtime) >= File.stat(local_folder).mtime 
-            session.scp.download!(remote_folder, local_folder) if is_newer
+          
+          # only files 
+          unless top_level_folders.find { |f| file.name == f.name }
+            if File.exist?(local_folder) 
+                is_newer = Time.at(file.attributes.mtime) >= File.stat(local_folder).mtime 
+                puts "Downloading a newer version of #{file.name}"
+                session.scp.download!(remote_folder, local_folder) if is_newer
+            else
+              puts "#{file.name} doesn't exist locally, downloading..."
+              session.scp.download!(remote_folder, local_folder)
+            end
           end
         end
 
@@ -38,7 +45,7 @@ namespace :comfy do
           unless Dir.glob('**/*', base: LOCAL).include?(folder.name.force_encoding('UTF-8'))
             puts "#{folder.name} doesn\'t exist locally, downloading"
             # Folder doesn't exist locally, so download it 
-            session.scp.download!(parent_remote, parent_local, recursive: true)
+            session.scp.download!(parent_remote, LOCAL, recursive: true)
           end
 
           files = []
@@ -51,18 +58,20 @@ namespace :comfy do
             if Dir.glob('**/*', base: local_folder).include?(file.name.force_encoding('UTF-8'))
                 is_newer = Time.at(file.attributes.mtime) >= File.stat(local_folder).mtime  
                 files << file if is_newer                 
+            else
+              files << file
             end
           end
 
           if files.length >= 1
             puts "Downloading a newer version of #{folder.name}"
-            session.scp.download!(parent_local, parent_remote, recursive: true)
+            session.scp.download!(parent_remote, LOCAL, recursive: true)
           end
         end
 
-      # puts "Finished downloads, now replacing your local seed data..."
+      puts "Finished downloads, now replacing your local seed data..."
 
-      # Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
+      Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
 
       # Todo: get this working with AWS bucket
     end
