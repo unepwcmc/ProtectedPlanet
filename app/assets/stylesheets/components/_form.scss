@@ -102,7 +102,7 @@ $form-input-padding: rem-calc(6 8);
   &__dropdown-elem {
     margin-top: rem-calc(9);
   }
-  
+
   &__radio, &__radio-input {
     @include flex;
     @include flex-v-center;

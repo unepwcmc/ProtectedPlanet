@@ -120,7 +120,7 @@
         display: none;
 
         &--active {
-            height: 40vh;
+            max-height: 40vh;
             background: $white;
             border: 1px solid $grey-black;
             border-top: 0;
