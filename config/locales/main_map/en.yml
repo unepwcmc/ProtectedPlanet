@@ -22,8 +22,8 @@ en:
         title: Region
         placeholder: Search...
       -
-        id: wdpa
-        title: Protected Area
+        id: site
+        title: Protected Area or OECM
         placeholder: Search...
     autocomplete_error_messages:
       no_results: The search term has no results.
