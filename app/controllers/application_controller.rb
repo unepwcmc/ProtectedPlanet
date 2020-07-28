@@ -16,22 +16,28 @@ class ApplicationController < ActionController::Base
   before_action :set_host_for_local_storage
   after_action :store_location
 
+  def admin_path?
+    request.original_fullpath.match(%r{\/admin\/?})
+  end
+
   def opengraph
+    return if admin_path?
+
     @opengraph ||= OpengraphBuilder.new({
-      'og': {
-        'site_name': t('meta.site.name'),
-        'title': t('meta.site.title'),
-        'description': t('meta.site.description'),
-        'url': request.original_url,
-        'type': 'website',
-        'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
-        'image:alt': t('meta.image_alt')
-      },
-      'twitter': {
-        'site': t('meta.twitter.site'),
-        'creator': t('meta.twitter.creator')
-      }
-    })
+                                          'og': {
+                                            'site_name': t('meta.site.name'),
+                                            'title': t('meta.site.title'),
+                                            'description': t('meta.site.description'),
+                                            'url': request.original_url,
+                                            'type': 'website',
+                                            'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
+                                            'image:alt': t('meta.image_alt')
+                                          },
+                                          'twitter': {
+                                            'site': t('meta.twitter.site'),
+                                            'creator': t('meta.twitter.creator')
+                                          }
+                                        })
   end
 
   def default_url_options
@@ -65,10 +71,14 @@ class ApplicationController < ActionController::Base
   private
 
   def load_cms_site
+    return if admin_path?
+
     @cms_site ||= Comfy::Cms::Site.first
   end
 
   def load_cms_content
+    return if admin_path?
+
     @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath.gsub(/\A\/#{I18n.locale}\/?/, '/'))
 
     ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' })
