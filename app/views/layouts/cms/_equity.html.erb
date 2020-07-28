@@ -1,8 +1,21 @@
-<%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label, classes: "#{@cms_page.slug} bg-image-overlay--white" } %>
+
+<%= render partial: "./layouts/partials/hero-basic", locals: { 
+    classes: "#{@cms_page.slug} bg-image-overlay--white" ,
+    hero_image: cms_fragment_render(:theme_image, @cms_page),
+    summary: cms_fragment_render("summary"),
+    title: @cms_page.label
+  } 
+%>
 
 <section class="container">
-  <%= cms_fragment_render("content") %>
+  <%= render partial: "partials/tabs/tabs-equity", locals: { 
+    tabs: tabs
+  } %>
 </section>
 
-<%#= render "partials/carousels/themes" %>
+<section class="container">
+  <%= render "partials/cards/resources" %>
+</section>
+
+<%= render "partials/carousels/themes" %>
 <%= render "partials/ctas/live-report" %>
