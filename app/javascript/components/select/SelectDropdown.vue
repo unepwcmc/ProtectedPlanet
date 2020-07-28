@@ -21,13 +21,11 @@
 
 <script>
 import mixinPopupCloseListeners from "../../mixins/mixin-popup-close-listeners"
-import mixinRestrictDropdownHeight from "../../mixins/mixin-restrict-dropdown-height"
 
 export default {
   name: "SelectDropdown",
   mixins: [ 
     mixinPopupCloseListeners({closeCallback: 'close', toggleVariable: 'isActive'}), 
-    mixinRestrictDropdownHeight
   ],
   props: {
     options: {
