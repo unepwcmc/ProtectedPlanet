@@ -1,5 +1,5 @@
 <template>
-  <div class="select--dropdown__custom-select" :class="cssClass">
+  <div class="select--dropdown__custom-select">
     <div class="select--dropdown__custom-select-box">
       <div class="select--dropdown__selected" @click="toggleVis">
         <span :class="{ 'select--dropdown__message': this.selected == this.initMessage }">{{ selected }}</span>
@@ -34,8 +34,7 @@ export default {
     },
     initMessage: {
       type: String
-    },
-    cssClass: String    
+    }  
   },
   data() {
     return {

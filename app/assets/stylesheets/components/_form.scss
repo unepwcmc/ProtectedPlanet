@@ -90,6 +90,17 @@ $form-input-padding: rem-calc(6 8);
     // The dropdown group
     &--dropdown {
       margin-bottom: rem-calc(28);
+
+      // Overrides for the dropdown element itself (being used in this context)
+      & > .select--dropdown__custom-select {
+        margin-top: 0px;
+
+        & > .select--dropdown__custom-select-box > .select--dropdown__selected {
+          @include breakpoint($small) {
+            padding: rem-calc(12 15);
+          }
+        }
+      }
     }
 
     // The radio button group (question and inputs)
@@ -98,12 +109,9 @@ $form-input-padding: rem-calc(6 8);
     }
   }
 
-  // The dropdown element itself (in this context)
-  &__dropdown-elem {
-    margin-top: rem-calc(9);
-  }
+  
 
-  &__radio, &__radio-input {
+  &__radio, &__radio-input{
     @include flex;
     @include flex-v-center;
   }
