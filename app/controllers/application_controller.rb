@@ -16,17 +16,17 @@ class ApplicationController < ActionController::Base
   def opengraph
     @opengraph ||= OpengraphBuilder.new({
       'og': {
-        'site_name': t('opengraph.defaults.site_name', default: 'Protected Planet'),
-        'title': t('opengraph.defaults.title', default: 'Protected Planet'),
-        'description': t('opengraph.defaults.description'),
+        'site_name': t('meta.site.name'),
+        'title': t('meta.site.title'),
+        'description': t('meta.site.description'),
         'url': request.original_url,
         'type': 'website',
-        'image': URI.join(root_url, helpers.image_path(t('opengraph.defaults.image'))),
-        'image:alt': t('opengraph.defaults.image_alt')
+        'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
+        'image:alt': t('meta.image_alt')
       },
       'twitter': {
-        'site': t('opengraph.defaults.twitter.site'),
-        'creator': t('opengraph.defaults.twitter.creator')
+        'site': t('meta.twitter.site'),
+        'creator': t('meta.twitter.creator')
       }
     })
   end
