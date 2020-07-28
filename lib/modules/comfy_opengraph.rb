@@ -14,7 +14,7 @@ class ComfyOpengraph
   # })
   def initialize(mappings)
     throw 'Mappings must be in hash format.' unless mappings.is_a?(Hash)
-    @mappings = mappings.stringify_keys
+    @mappings = mappings.deep_stringify_keys
   end
 
   # Iterate over the fragments of a CMS page and set their Opengraph values
