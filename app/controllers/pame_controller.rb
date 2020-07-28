@@ -1,6 +1,4 @@
-class PameController < Comfy::Cms::ContentController
-  before_action :load_cms_page
-
+class PameController < ApplicationController
   def index
   end
 end

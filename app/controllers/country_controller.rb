@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class CountryController < Comfy::Cms::ContentController
-  before_action :load_cms_page
-
+class CountryController < ApplicationController
   after_action :enable_caching
   before_action :load_vars, except: %i[codes compare]
 

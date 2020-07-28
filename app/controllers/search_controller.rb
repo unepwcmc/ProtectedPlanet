@@ -1,6 +1,4 @@
-class SearchController < Comfy::Cms::ContentController
-  before_action :load_cms_page
-  
+class SearchController < ApplicationController
   include Concerns::Searchable
   after_action :enable_caching
 

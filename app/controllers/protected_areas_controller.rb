@@ -1,6 +1,4 @@
-class ProtectedAreasController < Comfy::Cms::ContentController
-  before_action :load_cms_page
-
+class ProtectedAreasController < ApplicationController
   after_action :record_visit
   after_action :enable_caching
 

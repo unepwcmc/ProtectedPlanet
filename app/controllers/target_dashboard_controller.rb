@@ -1,6 +1,4 @@
-class TargetDashboardController < Comfy::Cms::ContentController
-  before_action :load_cms_page
-
+class TargetDashboardController < ApplicationController
   def index
     countries = Country.paginate(per_page: CountrySerializer::PER_PAGE, page: 1)
     @countries = CountrySerializer.new({}, countries).serialize

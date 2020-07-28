@@ -1,6 +1,4 @@
-class WdpaController < Comfy::Cms::ContentController
-  before_action :load_cms_page
-
+class WdpaController < ApplicationController
   def index
     @pa_coverage_percentage = 20 ##TODO FERDI - percentage of the world covered by PAs
 

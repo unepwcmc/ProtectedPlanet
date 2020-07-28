@@ -1,6 +1,4 @@
-class OecmController < Comfy::Cms::ContentController
-  before_action :load_cms_page
-
+class OecmController < ApplicationController
   def index
     @oecm_coverage_percentage = 10 ##TODO FERDI - percentage of the world covered by OECMs
 

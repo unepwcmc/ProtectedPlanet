@@ -1,6 +1,5 @@
-class MarineController < Comfy::Cms::ContentController
+class MarineController < ApplicationController
   include ActionView::Helpers::NumberHelper
-  before_action :load_cms_page, only: :index
 
   #Static stats
   before_action :marine_statistics, only: [:index, :download_designations]

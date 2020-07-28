@@ -1,5 +1,4 @@
-class ResourcesController < Comfy::Cms::ContentController
-  before_action :load_cms_page
+class ResourcesController < ApplicationController
   before_action :load_category
 
   def index

@@ -7,6 +7,9 @@ class ApplicationController < ActionController::Base
 
   helper_method :opengraph
 
+  before_action :load_cms_site
+  before_action :load_cms_content
+
   before_action :set_locale
   before_action :check_for_pdf
   #Temporary fix for development. To test if it is required on staging/production
@@ -60,6 +63,14 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def load_cms_site
+    @cms_site ||= Comfy::Cms::Site.first
+  end
+
+  def load_cms_content
+    @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath.gsub(/\A\/#{I18n.locale}\//, '/'))
+  end
 
   def record_invalid_error
     message = "We're sorry, but something went wrong"
