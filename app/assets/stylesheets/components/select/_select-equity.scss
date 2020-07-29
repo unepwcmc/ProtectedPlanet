@@ -100,7 +100,7 @@
     
     &__selected {
         @include breakpoint($small) {
-            padding: rem-calc(20 24);
+            padding: rem-calc(12 15);
         }
 
         @include flex;
@@ -136,7 +136,7 @@
 
     &__option {
         @include breakpoint($small) {
-            padding: rem-calc(5 24);
+            padding: rem-calc(5 15);
         }
         
         @include text-body;

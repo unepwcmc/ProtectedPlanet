@@ -94,12 +94,6 @@ $form-input-padding: rem-calc(6 8);
       // Overrides for the dropdown element itself (being used in this context)
       & > .select--dropdown__custom-select {
         margin-top: 0px;
-
-        & > .select--dropdown__custom-select-box > .select--dropdown__selected {
-          @include breakpoint($small) {
-            padding: rem-calc(12 15);
-          }
-        }
       }
     }
 
