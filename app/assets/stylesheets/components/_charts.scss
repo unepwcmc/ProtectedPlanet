@@ -146,4 +146,7 @@ $chart-target-stroke-width: rem-calc(3);
 .theme--aqua { background-color: $chart-aqua; }
 .theme--blue { background-color: $chart-blue; }
 .theme--green { background-color: $chart-green; }
-.theme--purple { background-color: $chart-purple; } 
+.theme--purple { background-color: $chart-purple; }
+
+.theme--primary { background-color: $primary; }
+.theme--primary-dark { background-color: $primary-dark; }

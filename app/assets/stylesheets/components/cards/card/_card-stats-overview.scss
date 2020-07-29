@@ -4,10 +4,12 @@
 &--stats-overview {
   @include bg-grey-black;
   @include card-stats-padding;
-  margin-right: rem-calc(30);
   width: 100%;
 
-  @include breakpoint($small) { width: 33%; }
+  @include breakpoint($small) { 
+    margin-right: rem-calc(30);
+    width: 33%; 
+  }
 
   .card {
     &__flag {
@@ -25,27 +27,17 @@
       font-size: rem-calc(20);
       margin: 0;
 
-      @include breakpoint($small) { font-size: rem-calc(22); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
+      @include breakpoint($medium) { font-size: rem-calc(25); }
     }
 
     &__number {
       @include card-stats-number;
-      font-size: rem-calc(18);
+      font-size: rem-calc(30);
+      margin-right: rem-calc(10);
 
       display: block;
 
-      @include breakpoint($small) { font-size: rem-calc(20); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
-    }
-
-    &__number--small {
-      @include card-stats-number;
-      font-size: rem-calc(18);
-      margin-right: rem-calc(10);
-
-      @include breakpoint($small) { font-size: rem-calc(20); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
+      @include breakpoint($medium) { font-size: rem-calc(40); }
     }
 
     &__section {
@@ -54,16 +46,13 @@
 
     &__story-map-links {
       margin-top: 3rem;
-      .story-map-link {
-        font-size: rem-calc(16);
-        margin-bottom: rem-calc(8);
 
+      .story-map-link {
         @include flex;
         @include flex-h-between;
-        
-        &__label {
-          padding-right: rem-calc(8);
-        }
+        @include flex-v-center;
+        font-size: rem-calc(16);
+        margin-bottom: rem-calc(8);
         
         &__link {
           @include button-with-icon;
@@ -72,14 +61,6 @@
           &::after { 
             @include icon-arrow-external; 
             display: inline-block;
-          }
-        }
-        
-        @include breakpoint-down($medium) {
-          @include flex-column;
-          
-          &__label {
-            margin-bottom: rem-calc(8);
           }
         }
   

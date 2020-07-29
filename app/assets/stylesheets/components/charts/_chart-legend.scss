@@ -10,11 +10,11 @@
   @include flex-v-center;
 }
 
-@mixin chart-legend-key {
+@mixin chart-legend-key($size: 24) {
   @include flex-no-shrink;
   border-radius: 100%;
   margin-right: rem-calc(8);
-  width: rem-calc(24); height: rem-calc(24);
+  width: rem-calc($size); height: rem-calc($size);
 
   display: block;
 }
@@ -68,12 +68,27 @@
   @include flex;
   @include flex-wrap;
   @include ul-unstyled;
+  font-size: rem-calc(14);
   margin: rem-calc(14 0);
   
   .chart__legend-li { margin-right: rem-calc(14); }
   .chart__legend-item { @include chart-legend-item; }
   .chart__legend-index { @include chart-legend-index; }
   .chart__legend-key { @include chart-legend-key; }
+  .chart__legend-title { line-height: 1; }
+}
+
+//--------------------------------------------------
+// overview
+//--------------------------------------------------
+.chart--legend--overview {
+  @include flex;
+  @include ul-unstyled;
+  margin: rem-calc(14 0);
+  
+  .chart__legend-li { margin-right: rem-calc(20); }
+  .chart__legend-item { @include chart-legend-item; }
+  .chart__legend-key { @include chart-legend-key($size: 16); }
   .chart__legend-title { line-height: 1; }
 }
 

@@ -1,0 +1,8 @@
+<div class="<%= get_local_classes local_assigns %>">
+  <% rows.each do |row| %>
+    <div class="chart__legend-item">
+      <span class="chart__legend-key <%= row[:theme] %>"></span>
+      <span class="chart__legend-text"><%= row[:title] %> <%= row[:percentage] %>%</span>
+    </div>
+  <% end %>
+</div

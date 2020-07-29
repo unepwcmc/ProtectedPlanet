@@ -61,7 +61,7 @@
 
       <% unless local_assigns[:total_pame].nil? %>
         <div class="flex">
-          <span class="card__number--small"><%= total_pame %></span>
+          <span class="card__number"><%= total_pame %></span>
           <span class="card__text"><%= t('stats.pame.with-assessments') %></span>
         </div>
       <% end %>
@@ -75,11 +75,16 @@
     </div>
   <% end %>
 
-  <% if local_assigns[:total_polygons_percentage] %>
+  <% if local_assigns[:chart_point_poly] %>
     <div class="card__section">
       <span class="card__text-bold">Polygons/Points ratio</span>
-      <span>Polygons <%= total_polygons_percentage %>%</span>
-      <span>Points <%= total_points_percentage %>%</span>
+
+      <%= render partial: 'partials/charts/chart-row', locals: { rows: local_assigns[:chart_point_poly] } %>
+
+      <%= render partial: 'partials/charts/chart-legend', locals: { 
+        classes: 'chart--legend--overview',
+        rows: local_assigns[:chart_point_poly] 
+      } %>
     </div>
   <% end %>
 </div>

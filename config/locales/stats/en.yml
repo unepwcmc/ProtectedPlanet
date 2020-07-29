@@ -25,6 +25,8 @@ en:
       no-results: No information available
       title: Management Effectiveness Evaluations
       with-assessments: With management effectiveness evaluation
+    points: Points
+    polygons: Polygons
     reported-area: Reported Area
     sources: 
       title: Sources
