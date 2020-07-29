@@ -1,4 +1,14 @@
 //--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin card-stats-overview-subtitle {
+  font-size: rem-calc(16);
+  font-weight: $bold;
+
+  display: block;
+}
+
+//--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--stats-overview {
@@ -7,6 +17,11 @@
   width: 100%;
 
   @include breakpoint($small) { 
+    margin-right: rem-calc(30);
+    width: calc(50% - 15px); 
+  }
+
+  @include breakpoint($medium) { 
     margin-right: rem-calc(30);
     width: 33%; 
   }
@@ -41,7 +56,9 @@
     }
 
     &__section {
-      margin-top: rem-calc(30);
+      margin-top: rem-calc(20);
+
+      @include breakpoint($small) { margin-top: rem-calc(30); }
     }
 
     &__story-map-links {
@@ -52,7 +69,6 @@
         @include flex-h-between;
         @include flex-v-center;
         font-size: rem-calc(16);
-        margin-bottom: rem-calc(8);
         
         &__link {
           @include button-with-icon;
@@ -70,16 +86,19 @@
       }
     }
 
-    &__text {
-      font-size: rem-calc(16);
+    &__subtitle {
+      @include card-stats-overview-subtitle;
+      width: 70%;
     }
 
-    &__text-bold {
-      font-size: rem-calc(16);
-      font-weight: $bold;
+    &__subtitle-margined {
+      @include card-stats-overview-subtitle;
       margin-bottom: rem-calc(6);
+    }
 
-      display: block;
+    &__text {
+      font-size: rem-calc(16);
+      width: 68%;
     }
   }
 }

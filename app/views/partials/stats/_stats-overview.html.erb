@@ -8,28 +8,51 @@
   <% else %>
     <h1 class="card__h1"><%= title %></h1>
   <% end %>
+
+  <% if local_assigns[:total_wdpa] %>
+    <div class="card__section">
+      <span class="card__number"><%= total_wdpa %></span>
+      <span class="card__subtitle-margined"><%= t('stats.wdpa.total') %></span>
+
+      <% unless local_assigns[:total_pame].nil? %>
+        <div class="flex">
+          <span class="card__number"><%= total_pame %></span>
+          <span class="card__text"><%= t('stats.pame.with-assessments') %></span>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
   
   
   <% if local_assigns[:wdpa_id] && local_assigns[:area] %>
     <div class="card__section">
       <span class="card__number"><%= wdpa_id %></span>
-      <span class="card__text-bold"><%= t('stats.wdpa.id') %></span>
+      <span class="card__subtitle"><%= t('stats.wdpa.id') %></span>
     </div>
     <div class="card__section">
       <span class="card__number"><%= area %></span>
-      <span class="card__text-bold"><%= t('stats.reported-area') %></span>
+      <span class="card__subtitle"><%= t('stats.reported-area') %></span>
+    </div>
+  <% end %>
+
+  <% if local_assigns[:legend_map] %>
+    <div class="card__section">
+      <%= render partial: 'partials/charts/chart-legend', locals: { 
+        classes: 'chart--legend--map',
+        rows: local_assigns[:legend_map] 
+      } %>
     </div>
   <% end %>
 
   <% if local_assigns[:type] && local_assigns[:location]%>
     <div class="card__section">
       <p>
-        <span class="card__text-bold"><%= t('stats.type') %></span>
+        <span class="card__subtitle"><%= t('stats.type') %></span>
         <span class="card__text"><%= type %></span>
       </p>
     
       <p>
-        <span class="card__text-bold"><%= t('stats.location') %></span>
+        <span class="card__subtitle"><%= t('stats.location') %></span>
         <span class="card__text"><%= location %></span>
       </p>
     </div>
@@ -54,35 +77,21 @@
     </div>
   <% end %>
   
-  <% if local_assigns[:total_wdpa] %>
-    <div class="card__section">
-      <span class="card__number"><%= total_wdpa %></span>
-      <span class="card__text-bold"><%= t('stats.wdpa.total') %></span>
-
-      <% unless local_assigns[:total_pame].nil? %>
-        <div class="flex">
-          <span class="card__number"><%= total_pame %></span>
-          <span class="card__text"><%= t('stats.pame.with-assessments') %></span>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
-  
   <% if local_assigns[:total_oecm] %>
     <div class="card__section">
       <span class="card__number">4<%= total_oecm %></span>
-      <span class="card__text-bold"><%= t('stats.oecm.title') %></span>
+      <span class="card__subtitle"><%= t('stats.oecm.title') %></span>
     </div>
   <% end %>
 
   <% if local_assigns[:chart_point_poly] %>
     <div class="card__section">
-      <span class="card__text-bold">Polygons/Points ratio</span>
+      <span class="card__subtitle-margined">Polygons/Points ratio</span>
 
       <%= render partial: 'partials/charts/chart-row', locals: { rows: local_assigns[:chart_point_poly] } %>
 
       <%= render partial: 'partials/charts/chart-legend', locals: { 
-        classes: 'chart--legend--overview',
+        classes: 'chart--legend--points-poly',
         rows: local_assigns[:chart_point_poly] 
       } %>
     </div>

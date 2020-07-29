@@ -136,17 +136,3 @@ $chart-target-stroke-width: rem-calc(3);
 }
 
 @import './charts/chart-legend';
-@import './charts/horizontal-bar-chart';
-@import './charts/interactive-treemap';
-@import './charts/sunburst';
-
-//--------------------------------------------------
-// chart helpers
-//--------------------------------------------------
-.theme--aqua { background-color: $chart-aqua; }
-.theme--blue { background-color: $chart-blue; }
-.theme--green { background-color: $chart-green; }
-.theme--purple { background-color: $chart-purple; }
-
-.theme--primary { background-color: $primary; }
-.theme--primary-dark { background-color: $primary-dark; }

@@ -1,10 +1,11 @@
-<div class="bg--grey-xlight">
+<div class="page--country bg--grey-xlight">
   <div class="container">
     
-    <section class="">
+    <section class="page__section--overview-map">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         flag: @flag_path[0],
         chart_point_poly: @country_presenter.chart_point_poly,
+        legend_map: @country_presenter.legend_map,
         title: @country.name,
         total_oecm: @total_oecm,
         total_pame: @total_pame,
@@ -13,7 +14,7 @@
         total_wdpa: @total_wdpa,
       } %>
 
-      <div>
+      <div class="page__map">
         MAP
       </div>
     </section>

@@ -2,7 +2,7 @@
   <% rows.each do |row| %>
     <div class="chart__legend-item">
       <span class="chart__legend-key <%= row[:theme] %>"></span>
-      <span class="chart__legend-text"><%= row[:title] %> <%= row[:percentage] %>%</span>
+      <span class="chart__legend-title"><%= row[:title] %></span>
     </div>
   <% end %>
-</div
+</div>
