@@ -1,0 +1,15 @@
+en:
+  api_request:
+    title: Request API Key
+    instruction: To request an API Key you’ll need to fill and submit the form below.
+    required_fields: '<span class="form--api__asterisk">*</span>Required fields'
+    full_name: 'Full Name<span class="form--api__asterisk">*</span>'
+    email: 'Email<span class="form--api__asterisk">*</span>'
+    company: 'Company'
+    user_type: 'Type of user<span class="form--api__asterisk">*</span>'
+    license: 'Do you have a license to use the API?<span class="form--api__asterisk">*</span>'
+    reason: 
+      question: 'Please provide a brief description of how you intend to use the API<span class="form--api__asterisk">*</span>'
+      placeholder: 'E.g who is the audience, what type of service is being provided, how will the data be used: visualisation only, download, reposting'
+    submit: Send Request
+    
