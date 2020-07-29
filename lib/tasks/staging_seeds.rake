@@ -10,22 +10,23 @@ namespace :comfy do
     PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
     PP_USER = 'wcmc'.freeze
 
-    def delete_top_level_files(remote_list)
-      files = Dir.glob('*', base: LOCAL) - remote_list.map { |f| f.name }
-      
+    def delete_files(files)
       files.each do |file| 
         puts "Removing #{file} as it no longer exists remotely"
         FileUtils.rm_rf(File.join(LOCAL, file)) 
       end
     end
 
-    def delete_files_recursively(parent_remote, parent_local)
-      files = Dir.glob('**/*', base: parent_local) - session.sftp.dir.glob(parent_remote, '**/*').map { |f| f.name }
+    def delete_top_level_files(local_list, remote_list)
+      files = local_list - remote_list.map { |f| f.name }
+      
+      delete_files(files)
+    end
 
-      files.each do |file| 
-        puts "Removing #{file} as it no longer exists remotely"
-        FileUtils.rm_rf(File.join(LOCAL, file)) 
-      end
+    def delete_files_recursively(parent_local, remote_folder_content)
+      files = Dir.glob('**/*', base: parent_local) - remote_folder_content.map { |f| f.name }
+
+      delete_files(files)
     end
 
     task :staging_import => :environment do |_t|
@@ -36,11 +37,12 @@ namespace :comfy do
 
       # SSH into staging server with Net::SSH
       Net::SSH.start(PP_STAGING, PP_USER) do |session|
-        remote_list = session.sftp.dir.glob(REMOTE,'*')
+        remote_list = session.sftp.dir.glob(REMOTE, '*')
+        local_list = Dir.glob('*', base: LOCAL)
 
         # First get rid of any local top-level (i.e. which exist in the main 
         # directory of REMOTE) folders/files that don't exist remotely
-        delete_top_level_files(remote_list)
+        delete_top_level_files(local_list, remote_list)
 
         # Map the top-level folders and check top-level files
         top_level_folders = remote_list.filter { |item| item.attributes.directory? }
@@ -65,17 +67,18 @@ namespace :comfy do
         top_level_folders.each do |folder|
           parent_remote = File.join(REMOTE, folder.name)
           parent_local = File.join(LOCAL, folder.name)
+          remote_folder_content = session.sftp.dir.glob(parent_remote, '**/*')
 
-          delete_files_recursively(parent_remote, parent_local)
+          delete_files_recursively(parent_local, remote_folder_content)
 
-          unless Dir.glob('*', base: LOCAL).include?(folder.name)
+          unless local_list.include?(folder.name)
             puts "#{folder.name} doesn\'t exist locally, downloading"
             session.scp.download!(parent_remote, LOCAL, recursive: true)
           end
 
           files = []
 
-          session.sftp.dir.glob(parent_remote, '**/*').each do |file|
+          remote_folder.each do |file|
             # Go through the various files and folders and check to see if they exist locally
             local_folder = File.join(folder.name, file.name)
             
@@ -88,6 +91,7 @@ namespace :comfy do
             end
           end
 
+          # If there are any outdated files, will trigger download
           if files.length >= 1
             puts "Downloading a newer version of #{folder.name}"
             session.scp.download!(parent_remote, LOCAL, recursive: true)
