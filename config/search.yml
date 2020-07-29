@@ -116,6 +116,11 @@ filters:
       path: 'categories'
       field: 'categories.id'
       required: true
+    topic:
+      type: 'nested'
+      path: 'topics'
+      field: 'topics.id'
+      required: true
     ancestor:
       type: 'nested'
       path: 'ancestors'
