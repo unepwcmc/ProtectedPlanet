@@ -10,6 +10,11 @@ namespace :comfy do
     PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
     PP_USER = 'wcmc'.freeze
 
+    def files_to_be_deleted(remote_list)
+      files = Dir.glob('*', base: LOCAL) - remote_list.map { |f| f.name }
+      files.each { |file| FileUtils.rm_rf(File.join(LOCAL, file)) }
+    end
+
     task :staging_import => :environment do |_t|
       require 'net/ssh'
       require 'net/scp'  
@@ -18,28 +23,32 @@ namespace :comfy do
 
       # SSH into staging server with Net::SSH
       Net::SSH.start(PP_STAGING, PP_USER) do |session|
+        remote_list = session.sftp.dir.glob(REMOTE,'*')
+
+        # First get rid of any local top-level (i.e. which exist in the main 
+        # directory of REMOTE) folders/files that don't exist remotely
+        files_to_be_deleted(remote_list)
+
         # Map the top-level folders and check top-level files
-        top_level_folders = session.sftp.dir.glob(REMOTE,'*').filter do |item| 
-                              item.attributes.directory?
-                            end
-        
-        session.sftp.dir.glob(REMOTE, '*').each do |file|
-          remote_folder = File.join(REMOTE, file.name)
-          local_folder = File.join(LOCAL, file.name)
-          
-          # only files 
-          unless top_level_folders.find { |f| file.name == f.name }
-            if File.exist?(local_folder) 
-                is_newer = Time.at(file.attributes.mtime) >= File.stat(local_folder).mtime 
-                puts "Downloading a newer version of #{file.name}"
-                session.scp.download!(remote_folder, local_folder) if is_newer
-            else
-              puts "#{file.name} doesn't exist locally, downloading..."
-              session.scp.download!(remote_folder, local_folder)
-            end
-          end
+        top_level_folders = remote_list.filter { |item| item.attributes.directory? }
+        top_level_files = remote_list.filter { |item| item.attributes.file? }
+                           
+        # download only files 
+        top_level_files.each do |file|
+          remote_file = File.join(REMOTE, file.name)
+          local_file = File.join(LOCAL, file.name)
+
+          if File.exist?(local_file) 
+            is_newer = Time.at(file.attributes.mtime) >= File.stat(local_file).mtime 
+            puts "Downloading a newer version of #{file.name}"
+            session.scp.download!(remote_file, local_file) if is_newer
+          else
+            puts "#{file.name} doesn't exist locally, downloading..."
+            session.scp.download!(remote_file, local_file)
+          end 
         end
 
+        # Start recursively delving into the folders
         top_level_folders.each do |folder|
           parent_remote = File.join(REMOTE, folder.name)
           parent_local = File.join(LOCAL, folder.name)
