@@ -41,3 +41,7 @@ en:
       - news-and-stories
       - resources
       - areas
+    topics:
+      wdpa: WDPA
+      oecm: OECM
+      pame: PAME

@@ -5,12 +5,6 @@ class Comfy::Cms::SearchablePage < Comfy::Cms::Page
   has_many :translations_for_index, -> { select(:id, :page_id).includes(:fragments_for_index) },
     class_name: 'Comfy::Cms::SearchableTranslation', foreign_key: 'page_id'
 
-  has_many :pages_categories, foreign_key: 'page_id'
-  has_many :page_categories, through: :pages_categories, foreign_key: 'page_id'
-
-  has_many :topics, -> { where(group_name: 'topic') }, through: :pages_categories,
-    class_name: 'Comfy::Cms::PageCategory', source: :page_category
-
   def as_indexed_json
     self.as_json(
       only: [:id, :label],
