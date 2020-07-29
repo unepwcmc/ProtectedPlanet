@@ -10,9 +10,22 @@ namespace :comfy do
     PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
     PP_USER = 'wcmc'.freeze
 
-    def files_to_be_deleted(remote_list)
+    def delete_top_level_files(remote_list)
       files = Dir.glob('*', base: LOCAL) - remote_list.map { |f| f.name }
-      files.each { |file| FileUtils.rm_rf(File.join(LOCAL, file)) }
+      
+      files.each do |file| 
+        puts "Removing #{file} as it no longer exists remotely"
+        FileUtils.rm_rf(File.join(LOCAL, file)) 
+      end
+    end
+
+    def delete_files_recursively(parent_remote, parent_local)
+      files = Dir.glob('**/*', base: parent_local) - session.sftp.dir.glob(parent_remote, '**/*').map { |f| f.name }
+
+      files.each do |file| 
+        puts "Removing #{file} as it no longer exists remotely"
+        FileUtils.rm_rf(File.join(LOCAL, file)) 
+      end
     end
 
     task :staging_import => :environment do |_t|
@@ -27,7 +40,7 @@ namespace :comfy do
 
         # First get rid of any local top-level (i.e. which exist in the main 
         # directory of REMOTE) folders/files that don't exist remotely
-        files_to_be_deleted(remote_list)
+        delete_top_level_files(remote_list)
 
         # Map the top-level folders and check top-level files
         top_level_folders = remote_list.filter { |item| item.attributes.directory? }
@@ -53,9 +66,10 @@ namespace :comfy do
           parent_remote = File.join(REMOTE, folder.name)
           parent_local = File.join(LOCAL, folder.name)
 
-          unless Dir.glob('**/*', base: LOCAL).include?(folder.name.force_encoding('UTF-8'))
+          delete_files_recursively(parent_remote, parent_local)
+
+          unless Dir.glob('*', base: LOCAL).include?(folder.name)
             puts "#{folder.name} doesn\'t exist locally, downloading"
-            # Folder doesn't exist locally, so download it 
             session.scp.download!(parent_remote, LOCAL, recursive: true)
           end
 
@@ -63,12 +77,12 @@ namespace :comfy do
 
           session.sftp.dir.glob(parent_remote, '**/*').each do |file|
             # Go through the various files and folders and check to see if they exist locally
-            local_folder = File.join(LOCAL, file.name)
+            local_folder = File.join(folder.name, file.name)
             
             # There are files with non-ASCII characters (i.e. accented) in the CMS files
-            if Dir.glob('**/*', base: local_folder).include?(file.name.force_encoding('UTF-8'))
-                is_newer = Time.at(file.attributes.mtime) >= File.stat(local_folder).mtime  
-                files << file if is_newer                 
+            if Dir.glob('**/*', base: LOCAL).include?(local_folder.force_encoding('UTF-8'))
+              is_newer = Time.at(file.attributes.mtime) >= File.stat(File.join(LOCAL, local_folder)).mtime  
+              files << file if is_newer                 
             else
               files << file
             end
