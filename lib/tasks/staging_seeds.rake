@@ -73,7 +73,7 @@ namespace :comfy do
 
           files = []
 
-          remote_folder.each do |file|
+          remote_folder_content.each do |file|
             # Go through the various files and folders and check to see if they exist locally
             local_folder = File.join(folder.name, file.name)
             
@@ -101,3 +101,10 @@ namespace :comfy do
     end
   end
 end
+
+# Start from the top-level folder, and check each object in the folder in turn
+# If the object is a folder, check each object within, if it is a folder check it and so on.
+# For both files and folders, 
+# if it exists on remote and local, check the timestamp of the local version
+# if it exists on remote, but not locally, download it
+# if it doesn't exist on remote, but exists locally, delete it
