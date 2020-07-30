@@ -10,23 +10,17 @@ namespace :comfy do
     PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
     PP_USER = 'wcmc'.freeze
 
-    def delete_files(files)
+    def delete_files(files, location)
       files.each do |file| 
         puts "Removing #{file} as it no longer exists remotely"
-        FileUtils.rm_rf(File.join(LOCAL, file)) 
+        FileUtils.rm_rf(File.join(location, file)) 
       end
     end
 
-    def delete_top_level_files(local_list, remote_list)
-      files = local_list - remote_list.map { |f| f.name }
+    def delete_files(list_of_files_1, list_of_files_2, location = LOCAL)
+      files = list_of_files_1 - list_of_files_2.map { |f| f.name }
       
-      delete_files(files)
-    end
-
-    def delete_files_recursively(parent_local, remote_folder_content)
-      files = Dir.glob('**/*', base: parent_local) - remote_folder_content.map { |f| f.name }
-
-      delete_files(files)
+      delete_files(files, location)
     end
 
     task :staging_import => :environment do |_t|
@@ -42,7 +36,7 @@ namespace :comfy do
 
         # First get rid of any local top-level (i.e. which exist in the main 
         # directory of REMOTE) folders/files that don't exist remotely
-        delete_top_level_files(local_list, remote_list)
+        delete_files(local_list, remote_list)
 
         # Map the top-level folders and check top-level files
         top_level_folders = remote_list.filter { |item| item.attributes.directory? }
@@ -67,9 +61,10 @@ namespace :comfy do
         top_level_folders.each do |folder|
           parent_remote = File.join(REMOTE, folder.name)
           parent_local = File.join(LOCAL, folder.name)
+          local_folder_content = Dir.glob('**/*', base: parent_local)
           remote_folder_content = session.sftp.dir.glob(parent_remote, '**/*')
 
-          delete_files_recursively(parent_local, remote_folder_content)
+          delete_files(local_folder_content, remote_folder_content, parent_local)
 
           unless local_list.include?(folder.name)
             puts "#{folder.name} doesn\'t exist locally, downloading"
