@@ -35,21 +35,22 @@
     </div>
   <% end %>
 
-  <% if local_assigns[:story_map_links] && story_map_links.any? %>
+  <% if local_assigns[:external_links] %>
+  
     <div class="card__story-map-links">
-      <% story_map_links.each do |story_map_link| %>
+      <% external_links.each do |link| %>
         <div class="story-map-link">
           <span class="story-map-link__label">
-            <span class="story-map-link__title">
-              <%= t('stats.story_map.title', default: 'Story Map') %>
-            </span>
-            (<%= t('stats.story_map.' + story_map_link.link_type.gsub(/\s/, '_').parameterize, 
-              default: story_map_link.link_type) %>)
+            <span class="story-map-link__title"><%#= link.link %></span>
+            <span class="story-map-link__text"><%= link[:text] %></span>
           </span>
-          <a class="story-map-link__link" href="<%= story_map_link.link %>" target="_blank">
+          
+          <a class="story-map-link__link" href="<%= link[:link] %>" target="_blank">
             <%= t('stats.story_map.link', default: 'Link') %>
           </a>
         </div>
+
+        <p><%= link.inspect %></p>
       <% end %>
     </div>
   <% end %>

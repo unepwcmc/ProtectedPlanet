@@ -8,7 +8,7 @@
         title: @protected_area.name,
         type: 'TODO',
         wdpa_id: @protected_area.wdpa_id,
-        story_map_links: @protected_area.story_map_links
+        external_links: @presenter.external_links
       } %>
 
       <div>
@@ -22,9 +22,9 @@
       </div>
       <div class="page__col-2">
         <%= render partial: "partials/stats/stats-pame" , locals: { classes: 'page__col-child' } %>
-        <%= render partial: "partials/stats/stats-external", locals: { 
+        <%= render partial: "partials/stats/stats-affiliations", locals: { 
           classes: 'page__col-child',
-          external_links: @presenter.external_links 
+          affiliations: @presenter.affiliations 
         } %>
       </div>
     </div>
