@@ -6,9 +6,7 @@ class Categories < ComfortableMexicanSofa::Content::Tag::Fragment
   end
   
   def form_field(object_name, view, index)
-    options = { id: form_field_id, class: "form-control" }
-  
-    input = view.collection_check_boxes(:page, :page_category_ids, @categories, :id, :label, options) do |b|
+    input = view.collection_check_boxes(:page, :page_category_ids, @categories, :id, :label) do |b|
       view.content_tag(:div, class: "form-check form-check-inline") do
         view.concat b.check_box(class: "form-check-input") 
         view.concat b.label(class: "form-check-label")
