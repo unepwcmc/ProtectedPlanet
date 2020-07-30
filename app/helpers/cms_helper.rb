@@ -88,6 +88,31 @@ module CmsHelper
     pages
   end
 
+  def load_categories
+    return [] unless @cms_page
+    layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: @cms_page.layout_id)
+
+    # TODO This is a workaround to load the custom categories also based on child pages
+    # in case the categories for the given page are empty.
+    # This seems to be necessary now because the layout used for the main page
+    # can be different from the layout used in the child pages
+    if layouts_categories.blank?
+      children_layouts = @cms_page.children.map(&:layout_id)
+      layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
+    end
+
+    layouts_categories.map do |lc|
+      name = lc.layout_category.label
+      page_categories = lc.layout_category.page_categories.map(&:label).map(&:to_sym)
+      localised_pcs = I18n.t('search')[:custom_categories][name.to_sym].slice(*page_categories)
+
+      {
+        name: name,
+        items: localised_pcs
+      }
+    end
+  end
+
   def cta_api
     @cta_api ||= CallToAction.find_by_css_class('api')
   end
