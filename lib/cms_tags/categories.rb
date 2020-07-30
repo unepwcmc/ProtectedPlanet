@@ -1,8 +1,8 @@
 class Categories < ComfortableMexicanSofa::Content::Tag::Fragment
   def initialize(context:, params: [], source: nil)
     super
-    @group_name = options['group_name']
-    @categories = Comfy::Cms::PageCategory.where(group_name: @group_name)
+    @group_name = params.first
+    @categories = Comfy::Cms::LayoutCategory.find_by(label: @group_name).page_categories
   end
   
   def form_field(object_name, view, index)
@@ -12,14 +12,6 @@ class Categories < ComfortableMexicanSofa::Content::Tag::Fragment
             
     yield input
   end
-
-  private
-
-  def parse_content(category)
-    return false if fragment.content.blank?
-    fragment.content.split(' ').include?(category)
-  end
-
 end
 
 ComfortableMexicanSofa::Content::Renderer.register_tag(
