@@ -14,6 +14,9 @@ en:
     iucn-categories: 
       title: IUCN Management Categories
     location: Location
+    management-plan:
+      button: View Management Plan
+      button-title: Download the Management Plan for %{site}
     marine-protected: Marine and Coastal Area Protected
     marine-title: Marine Protected Areas Coverage
     marine-total: Marine Area Protected
