@@ -218,7 +218,9 @@ $padding-medium: rem-calc(27);
     font-weight: $bold;
     &::after { @include icon-arrow-external-white; }
   }
+
   &--link-external { @include button-external; }
+  
   &--link-external-primary {
     @include button-external;
     color: $primary;

@@ -128,8 +128,10 @@ class ProtectedAreaPresenter
 
   def external_links
     links = []
-    # links + story_map_links
-    links.push(dopa_link)
+    
+    if(dopa_link) then links.push(dopa_link) end
+    if(story_map_links) then links = links + story_map_links end
+
     links
   end
 
@@ -202,7 +204,7 @@ class ProtectedAreaPresenter
     @protected_area.story_map_links.map { |link|
       {
         title: I18n.t('stats.story_map.title'),
-        text: I18n.t('stats.story_map.' + link.link_type.gsub(/\s/, '_').parameterize),
+        text: I18n.t('stats.story_map.link_type.' + link.link_type.gsub(/\s/, '_').parameterize),
         link: link.link
       }
     }

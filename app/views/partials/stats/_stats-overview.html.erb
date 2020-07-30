@@ -36,21 +36,18 @@
   <% end %>
 
   <% if local_assigns[:external_links] %>
-  
-    <div class="card__story-map-links">
+    <div class="card__section">
       <% external_links.each do |link| %>
-        <div class="story-map-link">
-          <span class="story-map-link__label">
-            <span class="story-map-link__title"><%#= link.link %></span>
-            <span class="story-map-link__text"><%= link[:text] %></span>
+        <div class="card__external-link">
+          <span class="card__external-label">
+            <span class="card__external-title"><%= link[:title] %></span>
+            <span class="card__external-text"><%= link[:text] %></span>
           </span>
           
-          <a class="story-map-link__link" href="<%= link[:link] %>" target="_blank">
+          <a class="card__external-button" href="<%= link[:link] %>" target="_blank">
             <%= t('stats.story_map.link', default: 'Link') %>
           </a>
         </div>
-
-        <p><%= link.inspect %></p>
       <% end %>
     </div>
   <% end %>
