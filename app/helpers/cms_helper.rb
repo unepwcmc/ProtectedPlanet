@@ -103,12 +103,21 @@ module CmsHelper
 
     layouts_categories.map do |lc|
       name = lc.layout_category.label
-      page_categories = lc.layout_category.page_categories.map(&:label).map(&:to_sym)
-      localised_pcs = I18n.t('search')[:custom_categories][name.to_sym].slice(*page_categories)
+      page_categories = lc.layout_category.page_categories
+      localised_pcs = I18n.t('search')[:custom_categories][name.to_sym]
 
+      items = page_categories.map do |pc|
+        {
+          id: pc.id,
+          name: localised_pcs[pc.label.to_sym]
+        }
+      end
+
+      # frontend should return the list of selected categories as follows:
+      # 'group_name' => [category_ids] ; e.g. 'topics' => [1,2,3]
       {
         name: name,
-        items: localised_pcs
+        items: items
       }
     end
   end
