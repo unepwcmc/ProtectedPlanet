@@ -23,13 +23,12 @@
     </div>
   <% end %>
   
-  
   <% if local_assigns[:wdpa_id] && local_assigns[:area] %>
     <div class="card__section">
       <span class="card__number"><%= wdpa_id %></span>
       <span class="card__subtitle"><%= t('stats.wdpa.id') %></span>
     </div>
-    <div class="card__section">
+    <div class="card__section-with-border">
       <span class="card__number"><%= area %></span>
       <span class="card__subtitle"><%= t('stats.reported-area') %></span>
     </div>
@@ -39,7 +38,7 @@
     <div class="card__section">
       <%= render partial: 'partials/charts/chart-legend', locals: { 
         classes: 'chart--legend--map',
-        rows: local_assigns[:legend_map] 
+        rows: legend_map
       } %>
     </div>
   <% end %>
@@ -88,11 +87,11 @@
     <div class="card__section">
       <span class="card__subtitle-margined">Polygons/Points ratio</span>
 
-      <%= render partial: 'partials/charts/chart-row', locals: { rows: local_assigns[:chart_point_poly] } %>
+      <%= render partial: 'partials/charts/chart-row', locals: { rows: chart_point_poly } %>
 
       <%= render partial: 'partials/charts/chart-legend', locals: { 
         classes: 'chart--legend--points-poly',
-        rows: local_assigns[:chart_point_poly] 
+        rows: chart_point_poly
       } %>
     </div>
   <% end %>

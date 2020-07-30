@@ -1,6 +1,12 @@
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
+@mixin card-stats-overview-section {
+  margin-top: rem-calc(20);
+
+  @include breakpoint($small) { margin-top: rem-calc(30); }
+}
+
 @mixin card-stats-overview-subtitle {
   font-size: rem-calc(16);
   font-weight: $bold;
@@ -55,10 +61,12 @@
       @include breakpoint($medium) { font-size: rem-calc(40); }
     }
 
-    &__section {
-      margin-top: rem-calc(20);
-
-      @include breakpoint($small) { margin-top: rem-calc(30); }
+    &__section { @include card-stats-overview-section; }
+      
+    &__section-with-border {
+      @include card-stats-overview-section;
+      border-bottom: solid 1px $grey-light;
+      padding-bottom: rem-calc(20);
     }
 
     &__story-map-links {
