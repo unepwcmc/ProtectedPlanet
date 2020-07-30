@@ -20,7 +20,7 @@ namespace :comfy do
     def delete_files(list_of_files_1, list_of_files_2, location = LOCAL)
       files = list_of_files_1 - list_of_files_2.map { |f| f.name }
       
-      delete_files(files, location)
+      delete_files(files, location) unless files.empty?
     end
 
     task :staging_import => :environment do |_t|
