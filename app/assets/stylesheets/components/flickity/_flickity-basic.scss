@@ -60,10 +60,19 @@ $flickity-basic-slide-width-desktop: 20%;
       width: $flickity-basic-slide-width-desktop; height: rem-calc(312);
     }
 
-    
     &:last-child {
-      @include breakpoint($large) {
-        // @include tooltip-last-slide;
+      @include breakpoint($medium) {
+        .tooltip__target {
+          left: inherit;
+          right: rem-calc(-10);
+          transform: none;
+
+          &::after {
+            left: inherit;
+            right: rem-calc(10);
+            transform: none;
+          }
+        }
       }
     }
   }
@@ -76,10 +85,16 @@ $flickity-basic-slide-width-desktop: 20%;
     width: 100%; height: 100%;
 
     position: relative;
+
+    @include breakpoint($medium) { padding: rem-calc(16 12); }
   }
 
   .carousel-cell__title {
     @include breakpoint($small) { margin: rem-calc(0 5); }
+    @include breakpoint($small) { 
+      font-size: rem-calc(16);
+      margin: rem-calc(0 20 0 10);
+    }
     @include breakpoint($large) { margin: rem-calc(0 10); }
   }
 

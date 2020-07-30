@@ -1,13 +1,13 @@
-<%= render partial: "./layouts/partials/hero-small", locals: { 
+<%= render partial: "./layouts/partials/hero-basic", locals: { 
   classes: 'thematical-area' ,
   hero_image: cms_fragment_render(:theme_image, @cms_page),
+  summary: cms_fragment_render("summary"),
   title: @cms_page.label
 } %>
 
-<section class="container">
+<section class="container--medium page-padding">
   <%= cms_fragment_render("content") %>
 </section>
 
-<%#= render "partials/cards/themes" %>
-<%#= render "partials/cards/resources" %>
+<%= render "partials/carousels/themes" %>
 <%= render "partials/ctas/live-report" %>
