@@ -41,7 +41,13 @@ en:
       - news-and-stories
       - resources
       - areas
-    topics:
-      wdpa: WDPA
-      oecm: OECM
-      pame: PAME
+    custom_categories:
+      topics:
+        wdpa: WDPA
+        oecm: OECM
+        pame: PAME
+      types:
+        publications: 'Publications'
+        statistics: 'Statistics'
+        technical: 'Technical'
+        training: 'Training'

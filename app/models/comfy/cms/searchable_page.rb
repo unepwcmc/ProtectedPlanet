@@ -18,6 +18,7 @@ class Comfy::Cms::SearchablePage < Comfy::Cms::Page
         },
         categories: { only: [:id, :label] },
         topics: { only: [:id, :label] },
+        page_types: { only: [:id, :label] },
         ancestors: { only: [:id, :label] }
       }
     )
