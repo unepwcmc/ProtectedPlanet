@@ -5,12 +5,10 @@
       <%= render partial: "partials/stats/stats-overview", locals: { 
         flag: @flag_path[0],
         chart_point_poly: @country_presenter.chart_point_poly,
-        legend_map: @country_presenter.legend_map,
+        legend_map: map_legend,
         title: @country.name,
         total_oecm: @total_oecm,
         total_pame: @total_pame,
-        total_points_percentage: @country_presenter.total_points_percentage,
-        total_polygons_percentage: @country_presenter.total_polygons_percentage,
         total_wdpa: @total_wdpa,
       } %>
 

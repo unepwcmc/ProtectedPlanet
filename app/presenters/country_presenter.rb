@@ -26,14 +26,6 @@ class CountryPresenter
     @designations_presenter.designations
   end
 
-  def legend_map
-    [
-      { theme: 'theme--terrestrial', title: I18n.t('map.overlays.terrestrial_wdpa.title') },
-      { theme: 'theme--marine', title: I18n.t('map.overlays.marine_wdpa.title') },
-      { theme: 'theme--oecm', title: I18n.t('map.overlays.oecm.title') }
-    ]
-  end
-
   def marine_stats
     {
       pame_km2: number_with_delimiter(statistic.pame_statistic.pame_pa_marine_area.round(0)),

@@ -29,7 +29,7 @@ class CountryController < ApplicationController
       }
     ]
 
-    @total_oecm = 0 # #TODO
+    @total_oecm = 0 #TODO
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.count
     

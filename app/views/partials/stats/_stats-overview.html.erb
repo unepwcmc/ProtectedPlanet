@@ -78,8 +78,15 @@
   
   <% if local_assigns[:total_oecm] %>
     <div class="card__section">
-      <span class="card__number">4<%= total_oecm %></span>
+      <span class="card__number"><%= total_oecm %></span>
       <span class="card__subtitle"><%= t('stats.oecm.title') %></span>
+    </div>
+  <% end %>
+
+  <% if local_assigns[:total_countries] %>
+    <div class="card__section">
+      <span class="card__number"><%= total_countries %></span>
+      <span class="card__subtitle"><%= t('stats.countries') %></span>
     </div>
   <% end %>
 
