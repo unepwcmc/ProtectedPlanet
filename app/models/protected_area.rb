@@ -157,7 +157,7 @@ class ProtectedArea < ApplicationRecord
 
     {
       url: "#{WDPA_FEATURE_SERVER_URL}/#{layer_number}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
-      padding: 1
+      padding: 0.2
     }
   end
 
