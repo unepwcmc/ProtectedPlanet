@@ -11,7 +11,7 @@
         v-if="<%= !map[:areFiltersHidden] %>"
         :autocomplete-error-messages="<%= map_yml[:autocomplete_error_messages].to_json %>"
         :dropdown-label="<%= map_yml[:dropdown_label].to_json %>"
-        :search-types="<%= map_yml[:search_types].to_json %>"
+        :search-types="<%= map_search_types.to_json %>"
       />
     </template>
     <template v-slot:bottom>

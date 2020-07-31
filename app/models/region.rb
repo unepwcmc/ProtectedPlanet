@@ -1,5 +1,6 @@
 class Region < ApplicationRecord
   include GeometryConcern
+  include MapHelper
 
   has_many :countries
   has_many :protected_areas, through: :countries
@@ -106,6 +107,10 @@ class Region < ApplicationRecord
     self.as_json(
       only: [:id, :name, :iso]
     )
+  end
+
+  def extent_url
+    region_extent_url(name)
   end
 
   def protected_areas_per_designation(jurisdiction=nil)
