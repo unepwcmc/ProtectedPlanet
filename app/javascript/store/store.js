@@ -10,9 +10,11 @@ Vue.use(Vuex)
 
 // stores
 import { storeTable } from './_store-table.js'
+import { storeMap } from './_store-map.js'
 
 export default new Vuex.Store({
   modules: {
-    table: storeTable
+    table: storeTable,
+    map: storeMap
   }
 })

@@ -1,4 +1,4 @@
-.screen-reader {
+@mixin screen-reader {
 	border: 0;
 	clip: rect(0 0 0 0);
 	height: rem-calc(1);
@@ -8,4 +8,8 @@
 	position: absolute;
 	white-space: nowrap;
 	width: rem-calc(1);
+}
+
+.screen-reader {
+  @include screen-reader;
 }

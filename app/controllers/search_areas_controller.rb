@@ -1,5 +1,6 @@
 class SearchAreasController < ApplicationController
   include Concerns::Searchable
+  include MapHelper
 
   after_action :enable_caching
 
@@ -26,6 +27,11 @@ class SearchAreasController < ApplicationController
     geo_type = search_params[:geo_type] || 'site'
     @filters = @db_type ? { db_type: @db_type } : {}
     @results = Search::AreasSerializer.new(@search, geo_type).serialize
+
+    @map = {
+      overlays: MapOverlaysSerializer.new(search_overlays, map_yml).serialize,
+      areFiltersHidden: true
+    }
   end
 
   def search_results
@@ -36,6 +42,10 @@ class SearchAreasController < ApplicationController
   end
 
   private
+
+  def search_overlays
+    overlays(['marine_wdpa', 'terrestrial_wdpa'])
+  end
 
   def search_params
     params.permit(

@@ -1,5 +1,6 @@
 class Country < ApplicationRecord
   include GeometryConcern
+  include MapHelper
 
   has_and_belongs_to_many :protected_areas
 
@@ -48,6 +49,10 @@ class Country < ApplicationRecord
     # TODO This line is now breaking the indexing. It looks like it's not require anymore
     #js['region_name'] = js['region_for_index']['name']
     js
+  end
+
+  def extent_url
+    country_extent_url(iso_3)
   end
 
   def random_protected_areas wanted=1
