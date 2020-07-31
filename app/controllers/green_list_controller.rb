@@ -1,4 +1,5 @@
 class GreenListController < ApplicationController
+  include MapHelper
   # Show page for green listed protected areas
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
   # before_action :find_protected_area
@@ -41,6 +42,10 @@ class GreenListController < ApplicationController
       db_type: ['wdpa'],
       special_status: ['is_green_list']
     }
+
+    @map = {
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+    }
   end
 
   def show
@@ -60,6 +65,14 @@ class GreenListController < ApplicationController
   end
 
   private
+
+  def map_overlays
+    overlays(['greenlist'], {
+      greenlist: {
+        queryString: greenlist_query_string([61502,2065,13396, 145153])
+      }
+    })
+  end
 
   def redirect_if_not_green_listed
     redirect_to protected_area_path(@protected_area) unless @protected_area.is_green_list

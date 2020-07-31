@@ -44,7 +44,11 @@ class MarineController < ApplicationController
   private
 
   def marine_overlays
-    overlays(['oecm', 'marine_wdpa'])
+    overlays(['oecm', 'marine_wdpa'], {
+      marine_wdpa: {
+        isShownByDefault: true
+      }
+    })
   end
 
   def generate_designations_csv

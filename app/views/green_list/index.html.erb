@@ -43,6 +43,12 @@
   title: cms_fragment_render(:section_size_title, @cms_page)
 } %>
 
+<section class="map-section">
+  <%= render partial: "partials/maps/main", locals: {
+    map: @map
+  } %>
+</section>
+
 <section class="section-padding">
   <%= render "partials/carousels/themes" %>
 </section>

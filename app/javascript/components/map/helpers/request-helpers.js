@@ -33,7 +33,7 @@ export class PointQuery {
   }
 
   getQueryString (isPoint) {
-    let queryString = `query?geometry=${this.coords.lng}%2C+${this.coords.lat}&geometryType=esriGeometryPoint&returnGeometry=false&inSR=4326&outFields=wdpaid%2Cname&f=json`
+    let queryString = `/query?geometry=${this.coords.lng}%2C+${this.coords.lat}&geometryType=esriGeometryPoint&returnGeometry=false&inSR=4326&outFields=wdpaid%2Cname&f=json`
   
     if (isPoint) {
       const distanceInMiles = 5
