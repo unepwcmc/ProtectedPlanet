@@ -104,6 +104,11 @@ class Download::Generators::Shapefile < Download::Generators::Base
     range = (0..@number_of_pieces-1)
     files_paths = range.map { |i| zip_path(i) }.join(' ')
     system("zip -j #{zip_path} #{files_paths}") and system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
+    system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
     range.each { |i| FileUtils.rm_rf(zip_path(i)) }
+  end
+
+  def sources_path
+    File.join(File.dirname(zip_path), "WDPA_sources.csv")
   end
 end
