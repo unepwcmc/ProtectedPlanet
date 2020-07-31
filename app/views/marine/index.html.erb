@@ -68,7 +68,11 @@
   regionCoverage: @regionCoverage,
 } %>
 
-<%= render partial: "marine/sections/map" %>
+<section class="map-section">
+  <%= render partial: "partials/maps/main", locals: {
+    map: @map
+  } %>
+</section>
 
 <section class="container">
   <%= render partial: "partials/cards/sites", locals: { 

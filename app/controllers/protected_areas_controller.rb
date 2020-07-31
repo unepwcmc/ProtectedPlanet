@@ -1,6 +1,7 @@
 class ProtectedAreasController < ApplicationController
   after_action :record_visit
   after_action :enable_caching
+  include MapHelper
 
   def show
     id = params[:id]
@@ -30,6 +31,16 @@ class ProtectedAreasController < ApplicationController
 
     @wdpa_other = [] ## 3 other PAs from ...?
 
+    @map = {
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+    }
+
+    @map_options = {
+      map: { 
+        boundsUrl: @protected_area.extent_url
+      }
+    }
+
     helpers.opengraph_title_and_description_with_suffix(@protected_area.name)
 
     respond_to do |format|
@@ -46,6 +57,10 @@ class ProtectedAreasController < ApplicationController
   end
 
   private
+
+  def map_overlays
+    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+  end
 
   def get_locations
     locations = []
