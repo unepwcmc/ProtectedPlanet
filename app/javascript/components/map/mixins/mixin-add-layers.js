@@ -54,7 +54,6 @@ export default {
       }
 
       addPaintOptions(options, layer)
-      console.log('here', options)
       this.map.addLayer(options, this.firstForegroundLayerId)
     },
   },
