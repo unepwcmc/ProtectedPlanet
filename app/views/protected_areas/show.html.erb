@@ -1,7 +1,7 @@
 <div class="page--site bg--grey-xlight">
   <div class="container">
 
-    <section class="flex">
+    <section class="flex-stack-mobile">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         area: reported_area,
         location: @locations.html_safe,
@@ -11,9 +11,10 @@
         story_map_links: @protected_area.story_map_links
       } %>
 
-      <div>
-        MAP
-      </div>
+      <%= render partial: "partials/maps/header", locals: {
+        map: @map,
+        map_options: @map_options
+      } %>
     </section>
 
     <div class="page__container">
