@@ -15,9 +15,6 @@ class ProtectedAreasController < ApplicationController
     @other_designations = load_other_designations
     # @networks = load_networks
 
- 
-    # @transboundaryViewAll = search_areas_path(filters)
-
     @wikipedia_article = @protected_area.try(:wikipedia_article)
 
     @locations = get_locations
@@ -98,7 +95,6 @@ class ProtectedAreasController < ApplicationController
 
   def determine_search_path(area)
     if area.is_transboundary
-      # TODO: Need to add transboundary to special statuses
       search_areas_path(geo_type: 'transboundary')
     else
       search_areas_path(filters: { location: { type: 'site', options: ["#{@countries.first.name}"] } })
