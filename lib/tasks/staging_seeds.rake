@@ -17,10 +17,51 @@ namespace :comfy do
       end
     end
 
-    def delete_files(list_of_files_1, list_of_files_2, location = LOCAL)
-      files = list_of_files_1 - list_of_files_2.map { |f| f.name }
-      
-      delete_files(files, location) unless files.empty?
+    def files_for_deletion(list_of_files_1, list_of_files_2, location = LOCAL)
+      files = list_of_files_1 - list_of_files_2
+
+      begin
+        delete_files(files, location)
+      rescue TypeError
+        puts 'Nothing to delete locally, moving on to the next set of files'
+      end
+    end
+
+    def download_file(source, dest, session)
+      puts "Downloading #{source} as it's newer or not found locally"
+      return session.scp.download!(source, dest) if File.file?(dest)
+      session.scp.download!(source, dest, recursive: true)
+    end
+    
+    def create_paths(relative_path)
+      { local_path: File.join(LOCAL, relative_path), remote_path: File.join(REMOTE, relative_path) }
+    end
+
+    def folder_delving(folder, local_list, session)
+      paths = create_paths(folder)
+      local_folder_content = Dir.glob('**/*', base: paths[:local_path])
+
+      remote_folder_content = session.sftp.dir.glob(paths[:remote_path], '**/*')
+
+      remote_content_names = remote_folder_content.map {|f| f.name.force_encoding('UTF-8') }
+
+      files_for_deletion(local_folder_content, remote_content_names, paths[:local_path])
+
+      files = []
+
+      remote_folder_content.each do |file|
+        # Go through the various files and folders and check to see if they exist locally
+        local_folder = File.join(folder, file.name)
+        
+        # There are files with non-ASCII characters (i.e. accented) in the CMS files
+        if Dir.glob('**/*', base: LOCAL).include?(local_folder)
+          is_newer = Time.at(file.attributes.mtime) >= File.stat(File.join(LOCAL, local_folder)).mtime  
+          # If there are any outdated files, will trigger download
+          download_file(paths[:remote_path], LOCAL, session) if is_newer                 
+        else
+          download_file(paths[:local_path], LOCAL, session)
+        end
+      end
     end
 
     task :staging_import => :environment do |_t|
@@ -34,62 +75,27 @@ namespace :comfy do
         remote_list = session.sftp.dir.glob(REMOTE, '*')
         local_list = Dir.glob('*', base: LOCAL)
 
+        remote_list_names = remote_list.map { |f| f.name }
+
         # First get rid of any local top-level (i.e. which exist in the main 
         # directory of REMOTE) folders/files that don't exist remotely
-        delete_files(local_list, remote_list)
+        files_for_deletion(local_list, remote_list_names)
 
-        # Map the top-level folders and check top-level files
-        top_level_folders = remote_list.filter { |item| item.attributes.directory? }
-        top_level_files = remote_list.filter { |item| item.attributes.file? }
-                           
-        # download only files 
-        top_level_files.each do |file|
-          remote_file = File.join(REMOTE, file.name)
-          local_file = File.join(LOCAL, file.name)
+        remote_list.each do |object|
+          name = object.name.force_encoding('UTF-8')
+          paths = create_paths(name)
 
-          if File.exist?(local_file) 
-            is_newer = Time.at(file.attributes.mtime) >= File.stat(local_file).mtime 
-            puts "Downloading a newer version of #{file.name}"
-            session.scp.download!(remote_file, local_file) if is_newer
-          else
-            puts "#{file.name} doesn't exist locally, downloading..."
-            session.scp.download!(remote_file, local_file)
-          end 
-        end
-
-        # Start recursively delving into the folders
-        top_level_folders.each do |folder|
-          parent_remote = File.join(REMOTE, folder.name)
-          parent_local = File.join(LOCAL, folder.name)
-          local_folder_content = Dir.glob('**/*', base: parent_local)
-          remote_folder_content = session.sftp.dir.glob(parent_remote, '**/*')
-
-          delete_files(local_folder_content, remote_folder_content, parent_local)
-
-          unless local_list.include?(folder.name)
-            puts "#{folder.name} doesn\'t exist locally, downloading"
-            session.scp.download!(parent_remote, LOCAL, recursive: true)
-          end
-
-          files = []
-
-          remote_folder_content.each do |file|
-            # Go through the various files and folders and check to see if they exist locally
-            local_folder = File.join(folder.name, file.name)
-            
-            # There are files with non-ASCII characters (i.e. accented) in the CMS files
-            if Dir.glob('**/*', base: LOCAL).include?(local_folder.force_encoding('UTF-8'))
-              is_newer = Time.at(file.attributes.mtime) >= File.stat(File.join(LOCAL, local_folder)).mtime  
-              files << file if is_newer                 
-            else
-              files << file
+          if local_list.include?(name)
+            # If folder, look inside it to any files that don't exist any more remotely and delete them
+            if object.attributes.directory?
+              folder_delving(name, local_list, session)
             end
-          end
 
-          # If there are any outdated files, will trigger download
-          if files.length >= 1
-            puts "Downloading a newer version of #{folder.name}"
-            session.scp.download!(parent_remote, LOCAL, recursive: true)
+            is_newer = Time.at(object.attributes.mtime) >= File.stat(paths[:local_path]).mtime 
+            download_file(paths[:remote_path], paths[:local_path], session) if is_newer
+          else
+            # file doesn't exist locally so download it
+            download_file(paths[:remote_path], LOCAL, session)
           end
         end
 
@@ -101,10 +107,3 @@ namespace :comfy do
     end
   end
 end
-
-# Start from the top-level folder, and check each object in the folder in turn
-# If the object is a folder, check each object within, if it is a folder check it and so on.
-# For both files and folders, 
-# if it exists on remote and local, check the timestamp of the local version
-# if it exists on remote, but not locally, download it
-# if it doesn't exist on remote, but exists locally, delete it
