@@ -125,11 +125,16 @@ class ProtectedAreaPresenter
     {
       affiliation: 'greenlist',
       date: gls.expiry_date,
-      image_url: ActionController::Base.helpers.image_url('logos/green-list.png'),
+      image_url: green_list_logo(gls.status),
       link_title: "View the Green List page for #{protected_area.name}",
       type: gls.status,
       url: '' ##TODO links needed from CSV provided by IUCN.
     }
+  end
+
+  def green_list_logo(status)
+    logo = status.downcase == 'candidate' ? 'green-list-black' : 'green-list'
+    ActionController::Base.helpers.image_url("logos/#{logo}.png")
   end
 
   def parcc_info
