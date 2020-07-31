@@ -63,4 +63,14 @@ module MapHelper
       padding: 5
     }
   end
+
+  def map_search_types
+    arr = []
+
+    t('map.search_types').each do |id, translations|
+      arr.push(translations.merge({id: id}))
+    end
+
+    arr
+  end
 end
