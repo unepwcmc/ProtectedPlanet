@@ -34,6 +34,8 @@ class RegionController < ApplicationController
     @map_options = {
       map: { boundsUrl: @region.extent_url }
     }
+
+    helpers.opengraph_title_and_description_with_suffix(@region.name)
   end
 
   private

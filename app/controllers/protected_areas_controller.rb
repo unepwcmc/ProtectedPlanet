@@ -41,6 +41,8 @@ class ProtectedAreasController < ApplicationController
       }
     }
 
+    helpers.opengraph_title_and_description_with_suffix(@protected_area.name)
+
     respond_to do |format|
       format.html
       format.pdf {

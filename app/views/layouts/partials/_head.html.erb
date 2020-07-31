@@ -1,23 +1,9 @@
 <meta charset="utf-8">
-<title><%= page_title('Protected Planet') %></title>
-<meta name="description" content="<%= seo_description %>">
+<title><%= page_title %></title>
+<meta name="description" content="<%= t('meta.site.description') %>">
 
-<!--  social meta tags -->
-<meta property="og:site_name" content="Protected Planet">
-<meta property="og:title" content="<%= social_title %>">
-<meta property="og:description" content="<%= social_description %>">
-<meta property="og:url" content="<%= request.original_url %>">
-<meta property="og:type" content="website">
-<meta property="og:image" content="<%= social_image %>">
-<meta property="og:image:alt" content="<%= social_image_alt %>">
-
-<meta name="twitter:card" content="<%= twitter_card %>" />
-<meta name="twitter:title" content="<%= social_title %>">
-<meta name="twitter:description" content="<%= social_description %>">
-<meta name="twitter:site" content="@protectedplanet">
-<meta name="twitter:creator" content="@protectedplanet">
-<meta name="twitter:image" content="<%= social_image %>">
-<meta name="twitter:image:alt" content="<%= social_image_alt %>">
+<!-- social meta tags -->
+<%== opengraph %>
 <!-- end social meta tags -->
 
 <!-- IE stuff -->
