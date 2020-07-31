@@ -33,10 +33,6 @@ class ProtectedArea < ApplicationRecord
     where(is_green_list: true)
   }
 
-  scope :transboundary_areas, -> {
-    where(is_transboundary: true)
-  }
-
   scope :most_protected_marine_areas, -> (limit) {
     where("gis_marine_area IS NOT NULL").
     order(gis_marine_area: :desc).limit(limit)
@@ -86,7 +82,8 @@ class ProtectedArea < ApplicationRecord
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list, :is_oecm],
+      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list, :is_oecm,
+      :is_transboundary],
       methods: [:coordinates],
       include: {
         countries_for_index: {
@@ -156,6 +153,16 @@ class ProtectedArea < ApplicationRecord
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
+  def self.transboundary_sites    
+    ProtectedArea.joins(:countries)
+    .group('protected_areas.id')
+    .having('COUNT(countries_protected_areas.country_id) > 1')
+  end
+
+  def is_transboundary
+    self.countries.count > 1
+  end
+
   private
 
   def bounding_box_query
@@ -216,4 +223,8 @@ class ProtectedArea < ApplicationRecord
       "iucn_categories.name IN (#{valid_categories})"
     )
   end
+
+
+
+
 end

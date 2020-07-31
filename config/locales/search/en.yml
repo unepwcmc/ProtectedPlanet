@@ -32,6 +32,7 @@ en:
       region: Regions
       country: Countries
       site: Individual Areas
+      transboundary: Transboundary Sites
     map: Map
     protected-areas: Protected Areas
     results: results

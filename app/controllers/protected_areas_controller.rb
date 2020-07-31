@@ -13,9 +13,9 @@ class ProtectedAreasController < ApplicationController
     @presenter = ProtectedAreaPresenter.new @protected_area
     @countries = @protected_area.countries.without_geometry
     @other_designations = load_other_designations
-    @networks = load_networks
+    # @networks = load_networks
 
-    # TODO: Add is_transboundary column to protected area model
+ 
     # @transboundaryViewAll = search_areas_path(filters)
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
@@ -33,8 +33,9 @@ class ProtectedAreasController < ApplicationController
 
     @wdpa_other = get_other_sites
 
-    # At the moment, displaying all WDPAs in the same/first country (if transboundary) as the current site
-    @otherWdpasViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@countries.first.name}"] } })
+
+    @otherWdpasViewAllUrl = determine_search_path(@protected_area)
+  
 
     respond_to do |format|
       format.html
@@ -79,17 +80,26 @@ class ProtectedAreasController < ApplicationController
     other_designations.reject { |pa| pa.id == @protected_area.id }
   end
 
-  TRANSBOUNDARY_SITES = "Transboundary sites".freeze
-  def load_networks
-    networks = @protected_area.networks.reject(&:designation)
-    # ensure that transboundary sites network always appears first
-    networks.sort { |a,b| a.name == TRANSBOUNDARY_SITES ? -1 : a.name <=> b.name }
-  end
+  # TODO: Methods, models, controllers, modules related to Networks are slated for removal
+
+  # TRANSBOUNDARY_SITES = "Transboundary sites".freeze
+  # def load_networks
+  #   networks = @protected_area.networks.reject(&:designation)
+  #   # ensure that transboundary sites network always appears first
+  #   networks.sort { |a,b| a.name == TRANSBOUNDARY_SITES ? -1 : a.name <=> b.name }
+  # end
 
   def get_other_sites
-    ProtectedArea.joins(:countries).where(countries: {id: @protected_area.countries.first.id}).take(3)
-    # TODO: Need to get the update of the relevant records correct
-    # return ProtectedArea.take(3) if @countries.count <= 1
-    # ProtectedArea.where(is_transboundary: true).take(3)
+    return ProtectedArea.take(3) if @countries.count <= 1
+    ProtectedArea.transboundary_sites.take(3)
+  end
+
+  def determine_search_path(area)
+    if area.is_transboundary
+      # TODO: Need to add transboundary to special statuses
+      search_areas_path(geo_type: 'transboundary')
+    else
+      search_areas_path(filters: { location: { type: 'site', options: ["#{@countries.first.name}"] } })
+    end
   end
 end
