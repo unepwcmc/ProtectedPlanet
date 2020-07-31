@@ -29,9 +29,9 @@ $chart-row-target-font-size: rem-calc(18);
 
     &__stroke {
       &--default { stroke: $chart-item-background; }
-      &--marine { stroke: $marine; }
-      &--global { stroke: $global; }
-      &--terrestrial { stroke: $terrestrial; }
+      &--marine { stroke: $chart-aqua; }
+      &--global { stroke: $chart-purple; }
+      &--terrestrial { stroke: $chart-green; }
     }
 
     &__title {

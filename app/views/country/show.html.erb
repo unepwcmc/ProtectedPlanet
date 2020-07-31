@@ -119,20 +119,6 @@ data-control-position="bottomleft"></div>
   </section>
 <% end %>
 
-
-<h1>malaysia docs</h1>
-<% if is_malaysia? %>
-  <div class="info-box__row">
-    <div class='header-with-delimiter no-border'>Protected areas documentation</div>
-    <% malaysia_documents.map do |doc| %>
-      <a href="<%= doc[:url] %>" class="info-box__link">
-        <i class="info-box__link-icon fa fa-file-pdf-o"></i><%= doc[:name] %>
-      </a>
-    <% end %>
-  </div>
-<% end %>
-
-
 <aside class="info-box info-box--fill-color">
   <section class="info-box__column">
     <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Citation</h2>

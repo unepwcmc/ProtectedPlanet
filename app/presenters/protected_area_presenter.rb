@@ -162,7 +162,12 @@ class ProtectedAreaPresenter
 
   def parse_management_plan management_plan
     if (management_plan.is_a? String) && (management_plan.starts_with?("http"))
-      link_to("View Management Plan", management_plan)
+      ActionController::Base.helpers.link_to(
+        I18n.t('stats.management-plan.button'), 
+        management_plan, 
+        target: '_blank',
+        title: I18n.t('stats.management-plan.button-title', site: @protected_area.name)
+      )
     else
       management_plan
     end
