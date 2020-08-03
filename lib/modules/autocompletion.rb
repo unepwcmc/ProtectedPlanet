@@ -11,8 +11,16 @@ module Autocompletion
 
     results = search.results.objects.values.compact.flatten
 
+    # Count the number of items with the same name
+    # and store it in an hash
+    names_counts = {}
+    results.map do |r|
+      names_counts[r.name] ||= 0
+      names_counts[r.name] += 1
+    end
+
     results.map do |result|
-      name = result.name
+      name = computed_name(result, names_counts)
       type = result.class.name.underscore
       identifier = result.send(identifier_field(type))
 
@@ -53,5 +61,17 @@ module Autocompletion
 
   def self.identifier_field(type)
     IDENTIFIER_FIELDS[type] || :id
+  end
+
+  # If more than one item with the same name has been counted
+  # and it's a PA, add the designation name in brackets
+  def self.computed_name(item, names_counts)
+    return item.name unless item.is_a?(ProtectedArea)
+
+    if names_counts[item.name] > 1
+      "#{item.name} (#{item.designation.name})"
+    else
+      item.name
+    end
   end
 end
