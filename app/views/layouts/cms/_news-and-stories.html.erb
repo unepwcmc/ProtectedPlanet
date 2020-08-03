@@ -1,15 +1,15 @@
 <div class="page--news">
   <%= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: @cms_page[:slug] } %>
 
-  <div class="page__container container section-padding">
-    <div class="page__col-1">
-      <h2>filters</h2>
-    </div>
-    
-    <div class="page__col-2">
+  <listing-page
+    :filter-groups="<%= news_filters %>"
+    text-filters="Fitler by:"
+    text-filters-close="View Results"
+  ></listing-page>
+
+  <div class="page__col-2">
       <%= render partial: "partials/cards/articles", locals: { get_all: true} %>
     </div>
-  </div>
 
   <%= render "partials/ctas/live-report" %>
 </div>

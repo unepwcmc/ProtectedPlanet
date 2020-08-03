@@ -109,15 +109,16 @@ module CmsHelper
       items = page_categories.map do |pc|
         {
           id: pc.id,
-          name: localised_pcs[pc.label.to_sym]
+          title: localised_pcs[pc.label.to_sym]
         }
       end
 
       # frontend should return the list of selected categories as follows:
       # 'group_name' => [category_ids] ; e.g. 'topics' => [1,2,3]
       {
-        name: name,
-        items: items
+        id: name,
+        items: items,
+        title: name
       }
     end
   end

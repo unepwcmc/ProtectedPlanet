@@ -1,0 +1,46 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.listing {
+  &__bar {
+    @include box-shadow-bottom-grey;
+    background-color: $white;
+    border-bottom: solid 1px $grey;
+    padding: rem-calc(20 0); 
+  }
+
+  &__bar-content {
+    @include container;
+    @include site-width;
+    @include flex;
+    @include flex-v-center;
+  }
+
+  &__filters {
+    @include flex-no-shrink;
+    @include responsive(padding-right, 0, rem-calc(24), rem-calc(24));
+    @include responsive(width, 0, 33%, 25%);
+  }
+
+  &__main {
+    @include container;
+    @include site-width;
+
+    @include breakpoint($small) { display: flex; }
+  }
+  
+  &__results {
+    @include flex-grow;
+    min-height: rem-calc(300);
+
+    @include breakpoint($small) { min-height: rem-calc(600); }
+  }
+}

@@ -1,0 +1,183 @@
+<template>
+  <div>
+    <div class="listing__bar">
+      <div class="listing__bar-content">
+        <filter-trigger
+          :text="textFilters"
+          v-on:toggle:filter-pane="toggleFilterPane"
+        />
+    </div>
+    </div>
+
+    <div class="listing__main">
+      <filters-search
+        class="listing__filters"
+        :filter-close-text="textFiltersClose"
+        :filter-groups="filterGroupsWithPreSelected"
+        :is-active="isFilterPaneActive"
+        :title="textFilters"
+        v-on:update:filter-group="updateFilters"
+        v-on:toggle:filter-pane="toggleFilterPane"
+      />
+      
+
+      
+        <!-- <listing-page-results
+          :text-no-results="noResultsText"
+          :results="newResults"
+          :sm-trigger-element="smTriggerElement"
+          v-on:request-more="requestMore"
+          v-on:reset-pagination="resetPagination"
+          v-show="!loadingResults"
+        /> -->
+      
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from 'axios'
+import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
+import FilterTrigger from '../filters/FilterTrigger.vue'
+import FiltersSearch from '../filters/FiltersSearch.vue'
+import ListingPageResults from '../listing/ListingPageResults.vue'
+
+export default {
+  name: 'ListingPage',
+
+  components: { FilterTrigger, FiltersSearch, ListingPageResults },
+
+  props: {
+    filterGroups: {
+      required: true,
+      type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
+    },
+    textFilters: {
+      required: true,
+      type: String
+    },
+    textFiltersClose: {
+      required: true,
+      type: String
+    }
+  },
+
+  data () {
+    return {
+      config: {
+        queryStringParams: ['topics', 'types']
+      },
+      filterGroupsWithPreSelected: [],
+      isFilterPaneActive: true,
+    }
+  },
+
+  mounted() {
+    this.filterGroupsWithPreSelected = this.filterGroups
+  },
+
+  methods: {
+    ajaxSubmission (resetFilters=false, pagination=false, requestedPage=1) {
+      // if(!pagination) { this.loadingResults = true }
+
+      let data = {
+        // params: {
+        //   filters: this.activeFilterOptions,
+        //   items_per_page: 9,
+        //   requested_page: requestedPage,
+        //   search_term: this.searchTerm,
+        //   geo_type: this.tabIdSelected
+        // }
+      }
+
+      this.axiosSetHeaders()
+      
+      // axios.get(this.endpointSearch, data)
+      //   .then(response => {
+      //     if(pagination){
+      //       this.newResults.areas = this.newResults.areas.concat(response.data.areas.areas)
+      //     } else {
+      //       this.updateProperties(response, resetFilters)
+      //     }
+
+      //     this.loadingResults = false
+      //   })
+      //   .catch(function (error) {
+      //     console.log('error', error)
+      //   })
+    },
+
+    /**
+     * If a query string is present in the URL,
+     * Initialise the state of the component based on its parameters
+     * @see created()
+     */
+    handleQueryString () {
+      const paramsFromUrl = new URLSearchParams(window.location.search)
+
+      let params = []
+
+      this.config.queryStringParams.forEach(param => {
+        if(paramsFromUrl.has(param)) { params.push(param) }
+      })
+
+      let filterParams = []
+
+      this.config.queryStringParamsFilters.forEach(param => {
+        if(paramsFromUrl.has(`filters[${param}][]`)) { filterParams.push(param) }
+      })
+
+      this.filterGroups.map(filterGroup => {
+        return filterGroup.filters.map(filter => {
+          filterParams.forEach(key => {
+            if(filter.id == key){
+              filter.preSelected = paramsFromUrl.getAll(`filters[${key}][]`)
+            }
+          })
+
+          return filter
+        })
+      })
+      
+      this.filterGroupsWithPreSelected = this.filterGroups
+    },
+
+    getFilteredSearchResults() {
+      this.ajaxSubmission()
+    },
+
+    toggleFilterPane () {
+      this.isFilterPaneActive = !this.isFilterPaneActive
+    },
+
+    updateFilters (filters) {
+      this.$eventHub.$emit('reset:pagination')
+      this.activeFilterOptions = filters
+      this.getFilteredSearchResults()
+      this.updateQueryString({ filters: filters })
+    },
+
+    updateQueryString (params) {
+      let searchParams = new URLSearchParams(window.location.search)
+
+      const key = Object.keys(params)[0]
+
+      if(key == 'filters') {
+        const filters = params.filters
+
+        Object.keys(filters).forEach(key => {
+          let queryKey = `filters[${key}][]`
+          let queryValues = filters[key]
+          
+          if(searchParams.has(queryKey)) { searchParams.delete(queryKey) }
+          
+          queryValues.forEach(value => {
+            searchParams.append(queryKey, value)
+          })
+        })
+      }
+    }
+  }
+}
+</script>
+

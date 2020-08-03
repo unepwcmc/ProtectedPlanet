@@ -30,8 +30,9 @@ import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
-import Flickity from 'vue-flickity';
 import Download from './components/download/Download'
+import Flickity from 'vue-flickity'
+import ListingPage from './components/listing/ListingPage.vue'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import SearchAreas from './components/search/SearchAreas'
@@ -84,6 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartSunburst,
         Download,
         Flickity,
+        ListingPage,
         MapInteractive,
         NavBurger,
         SearchAreas,
