@@ -20,17 +20,14 @@
         v-on:toggle:filter-pane="toggleFilterPane"
       />
       
-
-      
-        <!-- <listing-page-results
-          :text-no-results="noResultsText"
-          :results="newResults"
-          :sm-trigger-element="smTriggerElement"
-          v-on:request-more="requestMore"
-          v-on:reset-pagination="resetPagination"
-          v-show="!loadingResults"
-        /> -->
-      
+      <listing-page-list
+        :text-no-results="textNoResults"
+        :results="newResults"
+        :sm-trigger-element="smTriggerElement"
+        v-on:request-more="requestMore"
+        v-on:reset-pagination="resetPagination"
+        v-show="!loadingResults"
+      />
     </div>
   </div>
 </template>
@@ -40,17 +37,27 @@ import axios from 'axios'
 import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import FilterTrigger from '../filters/FilterTrigger.vue'
 import FiltersSearch from '../filters/FiltersSearch.vue'
-import ListingPageResults from '../listing/ListingPageResults.vue'
+import ListingPageList from '../listing/ListingPageList.vue'
 
 export default {
   name: 'ListingPage',
 
-  components: { FilterTrigger, FiltersSearch, ListingPageResults },
+  components: { FilterTrigger, FiltersSearch, ListingPageList },
+  
+  mixins: [ mixinAxiosHelpers ],
 
   props: {
     filterGroups: {
       required: true,
       type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
+    },
+    results: {
+      required: true,
+      type: Object // { title: String, total: Number, items: [{ date: String, image: String, summary: String, title: String, url: String }
+    },
+    smTriggerElement: {
+      type: String,
+      required: true
     },
     textFilters: {
       required: true,
@@ -59,17 +66,28 @@ export default {
     textFiltersClose: {
       required: true,
       type: String
+    },
+    textNoResults: {
+      required: true,
+      type: String
     }
   },
 
   data () {
     return {
       config: {
-        queryStringParams: ['topics', 'types']
+        queryStringParams: [],
+        queryStringParamsFilters: ['topics', 'types']
       },
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: true,
+      loadingResults: false,
+      newResults: this.results
     }
+  },
+  created () {
+    this.handleQueryString()
+    this.ajaxSubmission()
   },
 
   mounted() {
@@ -91,6 +109,16 @@ export default {
       }
 
       this.axiosSetHeaders()
+
+      this.newResults.items = [
+        { 
+          title: 'Title', 
+          total: 1, 
+          items: [
+            { date: '00/00/0000', image: 'image', summary: 'summary', title: 'title', url: 'http://google.com' }
+          ]
+        }
+      ]
       
       // axios.get(this.endpointSearch, data)
       //   .then(response => {
@@ -144,6 +172,14 @@ export default {
 
     getFilteredSearchResults() {
       this.ajaxSubmission()
+    },
+
+    requestMore (requestedPage) {
+      this.ajaxSubmission(false, true, requestedPage)
+    },
+
+    resetPagination () {
+      this.$eventHub.$emit('reset:pagination')
     },
 
     toggleFilterPane () {

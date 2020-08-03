@@ -1,15 +1,30 @@
+<%
+results = {
+  title: 'title', 
+  total: 1, 
+  items: [
+    { 
+      title: 'Title', 
+      total: 1, 
+      items: [
+        { date: '00/00/0000', image: 'image', summary: 'summary', title: 'title', url: 'http://google.com' }
+      ]
+    }
+  ]
+}.to_json
+%>
+
 <div class="page--news">
   <%= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: @cms_page[:slug] } %>
 
   <listing-page
     :filter-groups="<%= news_filters %>"
-    text-filters="Fitler by:"
+    :results="<%= results %>"
+    sm-trigger-element="sm-listing"
+    text-filters="is this used?"
     text-filters-close="View Results"
+    text-no-results="No Results"
   ></listing-page>
-
-  <div class="page__col-2">
-      <%= render partial: "partials/cards/articles", locals: { get_all: true} %>
-    </div>
 
   <%= render "partials/ctas/live-report" %>
 </div>

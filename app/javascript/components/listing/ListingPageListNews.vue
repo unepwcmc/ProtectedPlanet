@@ -1,6 +1,6 @@
 <template>
   <a 
-    :class="`card__link card--news`"
+    class="card bg--grey-xlight"
     :href="url"
     title=""
   >
@@ -12,17 +12,24 @@
     />
     <div 
       v-else 
-      class="card__image-placeholder"
-    />
+      class="card__image"
+    >
+      <i class="card__icon icon--image" />
+    </div>
 
     <div class="card__content">
+      <p 
+        v-if="date"
+        class="card__date"
+        v-html="date"
+      >
       <h3 
+        class="card__h3"
         v-html="title"
-        class="card__title"
       />
-      <span
-        v-if="totalAreas"
-        v-html="totalAreas"
+      <p
+        class="card__summary"
+        v-html="summary"
       />
     </div>
   </a>
@@ -30,16 +37,12 @@
 
 <script>
 export default {
-  name: 'card-search-result-news',
+  name: 'listing-page-list-news',
 
   props: {
-    geoType: {
-      type: String,
-      required: true
-    },
+    date: String,
     image: String,
-    countryFlag: String,
-    totalAreas: String,
+    summary: String,
     title: {
       type: String,
       required: true
@@ -48,12 +51,6 @@ export default {
       type: String,
       required: true
     }
-  },
-
-  computed: {
-    isRegion () { return this.geoType == 'region' },
-
-    isCountry () { return this.countryFlag }
   }
 }
 </script>
