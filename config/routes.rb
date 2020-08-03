@@ -70,7 +70,6 @@ Rails.application.routes.draw do
 
     # routes worked on so far as part of the refresh
 
-    get '/pame', to: 'pame#index'
     post '/pame/download', to: 'pame#download'
     post '/pame/list', to: 'pame#list'
 

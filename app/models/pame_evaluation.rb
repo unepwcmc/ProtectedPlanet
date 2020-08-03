@@ -79,7 +79,7 @@ class PameEvaluation < ApplicationRecord
 
   def self.generate_query(page, filter_params)
     # if params are empty then return the paginated results without filtering
-    return PameEvaluation.where('protected_area_id IS NOT NULL OR restricted').order('id ASC').paginate(page: page || 1, per_page: 50) if filter_params.empty?
+    return PameEvaluation.where('protected_area_id IS NOT NULL AND restricted = false').order('id ASC').paginate(page: page || 1, per_page: 50) if filter_params.empty?
 
     filters = filter_params.select { |hash| hash["options"].present? }
 
@@ -123,7 +123,7 @@ class PameEvaluation < ApplicationRecord
       .where(where_params[:methodology])
       .where(where_params[:year])
     end
-    .where("protected_area_id IS NOT NULL OR restricted")
+    .where("protected_area_id IS NOT NULL AND restricted = false")
     .paginate(page: page || 1, per_page: 50).order('id ASC')
   end
 
@@ -267,7 +267,6 @@ class PameEvaluation < ApplicationRecord
                GROUP BY pame_evaluations.id, wdpa_id, pame_evaluations.name, designation, pame_sources.data_title,
                         pame_sources.resp_party, pame_sources.year, pame_sources.language;
       SQL
-
     evaluations = ActiveRecord::Base.connection.execute(query)
 
     csv_string = CSV.generate(encoding: 'UTF-8') do |csv_line|
@@ -313,7 +312,7 @@ class PameEvaluation < ApplicationRecord
   def self.to_csv(json = nil)
     json_params = json.nil? ? nil : JSON.parse(json)
     filter_params = json_params["_json"].nil? ? nil : json_params["_json"]
-
+    
     where_statement = []
     restricted_where_statement = []
     where_params = parse_filters(filter_params)
@@ -322,10 +321,10 @@ class PameEvaluation < ApplicationRecord
       restricted_where_statement << v if !v.nil? && k != :sites
     end
 
-    where_statement << '(pame_evaluations.protected_area_id IS NOT NULL OR restricted)'
+    where_statement << '(pame_evaluations.protected_area_id IS NOT NULL AND restricted = false)'
     where_statement = where_statement.join(' AND ')
 
-    restricted_where_statement << '(pame_evaluations.protected_area_id IS NOT NULL OR restricted)'
+    restricted_where_statement << '(pame_evaluations.protected_area_id IS NULL AND restricted = false)'
     restricted_where_statement = restricted_where_statement.join(' AND ')
 
     generate_csv(where_statement, restricted_where_statement)
