@@ -1,15 +1,16 @@
 # frozen_string_literal: true
 
 namespace :comfy do
-    desc "Import CMS Seed data from staging"
+  
+  # Locally stored seeds - assumes you already have the local folder - 
+  # it won't create it 
+  LOCAL = (ComfortableMexicanSofa.config.seeds_path + '/protected-planet').freeze
+  REMOTE = 'ProtectedPlanet/current/db/cms_seeds/protected-planet'.freeze
+  PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
+  PP_USER = 'wcmc'.freeze
 
-    # Locally stored seeds - assumes you already have the local folder - 
-    # it won't create it 
-    LOCAL = (ComfortableMexicanSofa.config.seeds_path + '/protected-planet').freeze
-    REMOTE = 'ProtectedPlanet/current/db/cms_seeds/protected-planet'.freeze
-    PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
-    PP_USER = 'wcmc'.freeze
-
+  desc "Import CMS Seed data from staging"
+  
     def delete_files(files, location)
       files.each do |file| 
         puts "Removing #{file} as it no longer exists remotely"
@@ -27,7 +28,7 @@ namespace :comfy do
       end
     end
 
-    def download_file(source, dest, session)
+    def download_files(source, dest, session)
       puts "Downloading #{source} as it's newer or not found locally"
       return session.scp.download!(source, dest) if File.file?(dest)
       session.scp.download!(source, dest, recursive: true)
@@ -37,7 +38,27 @@ namespace :comfy do
       { local_path: File.join(LOCAL, relative_path), remote_path: File.join(REMOTE, relative_path) }
     end
 
-    def folder_delving(folder, local_list, session)
+    def check_if_newer(parent_folder, local_item, remote_item, remote_path, local_path, session, downloaded = false)
+      if parent_folder.include?(local_item)
+        yield if block_given?
+
+        is_newer = Time.at(remote_item.attributes.mtime) >= File.stat(local_path).mtime  
+        # If there are any outdated files, will trigger download
+        if is_newer
+          if Dir.glob('*', base: LOCAL).include?(local_item)
+            download_files(remote_path, local_path, session) 
+          elsif Dir.glob('**/*', base: LOCAL).include?(local_item)
+            download_files(remote_path, LOCAL, session)
+            downloaded = true  
+          end                
+        end
+      else
+        download_files(remote_path, LOCAL, session)
+        downloaded = true
+      end
+    end
+
+    def check_inside_folder(folder, local_list, session)
       paths = create_paths(folder)
       local_folder_content = Dir.glob('**/*', base: paths[:local_path])
 
@@ -47,20 +68,18 @@ namespace :comfy do
 
       files_for_deletion(local_folder_content, remote_content_names, paths[:local_path])
 
-      files = []
-
       remote_folder_content.each do |file|
         # Go through the various files and folders and check to see if they exist locally
-        local_folder = File.join(folder, file.name)
+        local_file = file.name
+        absolute_path = File.join(paths[:local_path], file.name)
+
+        # We don't want to download the whole folder again if it's already been re-downloaded once
+        downloaded_once = false
         
-        # There are files with non-ASCII characters (i.e. accented) in the CMS files
-        if Dir.glob('**/*', base: LOCAL).include?(local_folder)
-          is_newer = Time.at(file.attributes.mtime) >= File.stat(File.join(LOCAL, local_folder)).mtime  
-          # If there are any outdated files, will trigger download
-          download_file(paths[:remote_path], LOCAL, session) if is_newer                 
-        else
-          download_file(paths[:local_path], LOCAL, session)
-        end
+        check_if_newer(local_folder_content, local_file, file, paths[:remote_path], absolute_path, session, downloaded_once)
+
+        # Break out of loop if already downloaded
+        break if downloaded_once == true
       end
     end
 
@@ -82,28 +101,22 @@ namespace :comfy do
         files_for_deletion(local_list, remote_list_names)
 
         remote_list.each do |object|
+          # There are files with non-ASCII characters (i.e. accented) in the CMS files
           name = object.name.force_encoding('UTF-8')
           paths = create_paths(name)
-
-          if local_list.include?(name)
-            # If folder, look inside it to any files that don't exist any more remotely and delete them
-            if object.attributes.directory?
-              folder_delving(name, local_list, session)
-            end
-
-            is_newer = Time.at(object.attributes.mtime) >= File.stat(paths[:local_path]).mtime 
-            download_file(paths[:remote_path], paths[:local_path], session) if is_newer
-          else
-            # file doesn't exist locally so download it
-            download_file(paths[:remote_path], LOCAL, session)
+          
+          check_if_newer(local_list, name, object, paths[:remote_path], paths[:local_path], session) do 
+            check_inside_folder(name, local_list, session) if object.attributes.directory?
           end
         end
 
-      puts "Finished downloads, now replacing your local seed data..."
+      # puts "Finished downloads, now replacing your local seed data..."
 
-      Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
+      # Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
 
       # Todo: get this working with AWS bucket
     end
   end
+
+  desc ""
 end
