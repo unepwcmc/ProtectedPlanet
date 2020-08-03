@@ -160,6 +160,7 @@ class PameEvaluation < ApplicationRecord
         total_pages: evaluations.total_pages,
         id: evaluation.id,
         wdpa_id: wdpa_id,
+        wdpa_url: Rails.application.routes.url_helpers.protected_area_path(wdpa_id),
         restricted: evaluation.restricted,
         iso3: iso3,
         methodology: evaluation.methodology,
@@ -192,7 +193,7 @@ class PameEvaluation < ApplicationRecord
 
   def self.filters_to_json
     unique_methodologies = PameEvaluation.pluck(:methodology).uniq.sort
-    unique_iso3 = Country.pluck(:iso_3).uniq.sort
+    unique_iso3 = Country.pluck(:iso_3).compact.uniq.sort
     unique_year = PameEvaluation.pluck(:year).uniq.map(&:to_s).sort
 
     [

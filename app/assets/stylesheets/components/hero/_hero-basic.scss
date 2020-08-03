@@ -5,10 +5,9 @@
   @include hero-medium;
   @include flex;
   @include flex-v-center;
+  z-index: 0;
   
   &.about { background-image: image_url('hero/about.png'); }
-  &.equity { background-image: image_url('hero/equity.png'); }
-  &.protected-areas-management-effectiveness-pame { background-image: image_url('hero/pame.png'); }
 
   .hero__content {
     @include breakpoint($small) { width: 80%; }
