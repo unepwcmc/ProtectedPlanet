@@ -10,8 +10,11 @@
           <p><%= t('stats.green-list.intro') %>
           <p class="card__subtitle"><%= t('stats.green-list.type') %></p>
           <span><%= link[:type] %></span>
-          <p class="card__subtitle"><%= t('stats.green-list.date') %></p>
-          <span><%= link[:date] %></span>
+
+          <% if link[:date] %>
+            <p class="card__subtitle"><%= t('stats.green-list.date') %></p>
+            <span><%= link[:date] %></span>
+          <% end %>
         <% end %>
   
         <%= link_to t('global.button.more'), link[:link_url], title: link[:link_title], target: '_blank', class: 'card__button' %>
