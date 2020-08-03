@@ -91,6 +91,18 @@ namespace :comfy do
       end
     end
 
+    def main_task(local_list, remote_list, session)
+      remote_list.each do |object|
+        # There are files with non-ASCII characters (i.e. accented) in the CMS files
+        name = object.name.force_encoding('UTF-8')
+        paths = create_paths(name)
+        
+        check_if_newer(local_list, name, object, paths[:remote_path], paths[:local_path], session) do 
+          check_inside_folder(name, local_list, session) if object.attributes.directory?
+        end
+      end
+    end
+
     task :staging_import => :environment do |_t|
       require 'net/ssh'
       require 'net/scp'  
@@ -102,17 +114,28 @@ namespace :comfy do
          # First get rid of any local top-level (i.e. which exist in the main 
         # directory of REMOTE) folders/files that don't exist remotely
         compare_folders('*', LOCAL, REMOTE)
-        
-        remote_list.each do |object|
-          # There are files with non-ASCII characters (i.e. accented) in the CMS files
-          name = object.name.force_encoding('UTF-8')
-          paths = create_paths(name)
-          
-          check_if_newer(local_list, name, object, paths[:remote_path], paths[:local_path], session) do 
-            check_inside_folder(name, local_list, session) if object.attributes.directory?
-          end
+
+        puts question = "What would you like to import? 'All/Files/Layouts' or 'Nothing' to quit"
+        valid_answers = ['All', 'Files', 'Layouts', 'Pages', 'Nothing']
+        answer = STDIN.gets.chomp.downcase.capitalise
+        until valid_answers.include?(answer)
+          puts question
+          answer = STDIN.gets.chomp.downcase.capitalise
         end
 
+        local_list = Dir.glob('*', base: LOCAL)
+        remote_list = session.sftp.dir.glob(LOCAL, '*')
+        
+        case answer
+        when 'All'
+          main_task(local_list, remote_list, session)
+        when 'Nothing'
+          abort('Goodbye')
+        else
+          remote_list.filter! { |f| f == answer.downcase }
+          main_task(local_list, remote_list, session)
+        end
+      end
       # puts "Finished downloads, now replacing your local seed data..."
 
       # Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
@@ -121,5 +144,4 @@ namespace :comfy do
     end
   end
 
-  desc ""
 end
