@@ -7,6 +7,7 @@ namespace :comfy do
   LOCAL = (ComfortableMexicanSofa.config.seeds_path + '/protected-planet').freeze
   REMOTE = 'ProtectedPlanet/current/db/cms_seeds/protected-planet'.freeze
   PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
+  PP_PRODUCTION = 'new-web.pp-production.linode.protectedplanet.net'.freeze
   PP_USER = 'wcmc'.freeze
 
   desc "Import CMS Seed data from staging"
@@ -18,7 +19,7 @@ namespace :comfy do
       end
     end
 
-    def files_for_deletion(list_of_files_1, list_of_files_2, location = LOCAL)
+    def files_for_deletion(list_of_files_1, list_of_files_2, location)
       files = list_of_files_1 - list_of_files_2
 
       begin
@@ -47,26 +48,33 @@ namespace :comfy do
         if is_newer
           if Dir.glob('*', base: LOCAL).include?(local_item)
             download_files(remote_path, local_path, session) 
+          # Will be hit if local_item is a file or folder inside a directory
           elsif Dir.glob('**/*', base: LOCAL).include?(local_item)
             download_files(remote_path, LOCAL, session)
             downloaded = true  
           end                
         end
       else
+        # Just download it if it doesn't exist at all
         download_files(remote_path, LOCAL, session)
         downloaded = true
       end
     end
 
+    def compare_folders(wildcard, local, remote, base = LOCAL)
+      remote_list = session.sftp.dir.glob(remote, wildcard).map do |f|  
+        f.name.force_encoding('UTF-8')
+      end
+
+      local_list = Dir.glob(wildcard, base: local)
+
+      files_for_deletion(local_list, remote_list_names, base)
+    end
+
     def check_inside_folder(folder, local_list, session)
       paths = create_paths(folder)
-      local_folder_content = Dir.glob('**/*', base: paths[:local_path])
 
-      remote_folder_content = session.sftp.dir.glob(paths[:remote_path], '**/*')
-
-      remote_content_names = remote_folder_content.map {|f| f.name.force_encoding('UTF-8') }
-
-      files_for_deletion(local_folder_content, remote_content_names, paths[:local_path])
+      compare_folders('**/*', paths[:local_path], paths[:remote_path], paths[:local_path])
 
       remote_folder_content.each do |file|
         # Go through the various files and folders and check to see if they exist locally
@@ -91,15 +99,10 @@ namespace :comfy do
 
       # SSH into staging server with Net::SSH
       Net::SSH.start(PP_STAGING, PP_USER) do |session|
-        remote_list = session.sftp.dir.glob(REMOTE, '*')
-        local_list = Dir.glob('*', base: LOCAL)
-
-        remote_list_names = remote_list.map { |f| f.name }
-
-        # First get rid of any local top-level (i.e. which exist in the main 
+         # First get rid of any local top-level (i.e. which exist in the main 
         # directory of REMOTE) folders/files that don't exist remotely
-        files_for_deletion(local_list, remote_list_names)
-
+        compare_folders('*', LOCAL, REMOTE)
+        
         remote_list.each do |object|
           # There are files with non-ASCII characters (i.e. accented) in the CMS files
           name = object.name.force_encoding('UTF-8')
