@@ -48,6 +48,10 @@ export default {
   mixins: [ mixinAxiosHelpers ],
 
   props: {
+    endpointSearch: {
+      required: true,
+      type: String
+    },
     filterGroups: {
       required: true,
       type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
@@ -57,8 +61,8 @@ export default {
       type: Object // { title: String, total: Number, items: [{ date: String, image: String, summary: String, title: String, url: String }
     },
     smTriggerElement: {
-      type: String,
-      required: true
+      required: true,
+      type: String
     },
     template: {
       required: true,
@@ -102,7 +106,7 @@ export default {
 
   methods: {
     ajaxSubmission (resetFilters=false, pagination=false, requestedPage=1) {
-      // if(!pagination) { this.loadingResults = true }
+      if(!pagination) { this.loadingResults = true }
 
       let data = {
         params: {
@@ -119,19 +123,20 @@ export default {
 
       console.log(this.newResults)
       
-      // axios.get(this.endpointSearch, data)
-      //   .then(response => {
-      //     if(pagination){
-      //       this.newResults.cards = this.newResults.cards.concat(response.data.cards.cards)
-      //     } else {
-      //       this.updateProperties(response, resetFilters)
-      //     }
+      axios.get(this.endpointSearch, data)
+        .then(response => {
+          console.log('response', response)
+          if(pagination){
+            this.newResults.cards = this.newResults.cards.concat(response.data.cards.cards)
+          } else {
+            this.updateProperties(response, resetFilters)
+          }
 
-      //     this.loadingResults = false
-      //   })
-      //   .catch(function (error) {
-      //     console.log('error', error)
-      //   })
+          this.loadingResults = false
+        })
+        .catch(function (error) {
+          console.log('error', error)
+        })
     },
 
     /**

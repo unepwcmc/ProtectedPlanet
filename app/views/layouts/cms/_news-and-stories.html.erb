@@ -12,6 +12,7 @@ results = {
   <%= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: @cms_page[:slug] } %>
 
   <listing-page
+    endpoint-search="/search-cms"
     :filter-groups="<%= get_category_filters %>"
     :results="<%= results %>"
     sm-trigger-element="sm-listing"
