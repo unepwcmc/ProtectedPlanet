@@ -84,6 +84,7 @@ export default {
         queryStringParams: [],
         queryStringParamsFilters: ['topics', 'types']
       },
+      activeFilterOptions: [],
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: true,
       loadingResults: false,

@@ -8,7 +8,7 @@
     >
       <template v-if="template == 'news'">
         <div class="listing__cards cards--articles">
-          <listing-page-list-news
+          <listing-page-card-news
             v-for="card, index in results.cards"
             :key="card._uid"
             :date="card.date"
@@ -22,7 +22,7 @@
 
       <template v-if="template == 'resources'">
         <div class="listing__cards-resources cards--resources">
-          <listing-page-list-resources
+          <listing-page-card-resources
             v-for="card, index in results.cards"
             :key="card._uid"
             :date="card.date"
@@ -54,16 +54,16 @@
 </template>
 
 <script>
-import ListingPageListNews from '../listing/ListingPageListNews.vue'
-import ListingPageListResources from '../listing/ListingPageListResources.vue'
+import ListingPageCardNews from '../listing/ListingPageCardNews.vue'
+import ListingPageCardResources from '../listing/ListingPageCardResources.vue'
 import PaginationInfinityScroll from '../pagination/PaginationInfinityScroll.vue'
 
 export default {
   name: 'listing-page-list',
 
   components: { 
-    ListingPageListNews,
-    ListingPageListResources,
+    ListingPageCardNews,
+    ListingPageCardResources,
     PaginationInfinityScroll
   },
   

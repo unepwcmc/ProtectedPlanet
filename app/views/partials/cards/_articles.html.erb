@@ -11,25 +11,16 @@
   <% end %>
 
   <div class="cards__cards">
-    <% @items[:cards].each do |card| %>
-      <%= link_to root_path + card[:full_path], title: card[:label], class: 'card bg--grey-xlight' do %>
-        
-        <% if cms_fragment_content(:image, card).present? %>
-          <div class="card__image" style="background-image: url(<%= cms_fragment_render(:image, card) %>);"></div>
-        <% else %>
-          <div class="card__image">
-            <i class="card__icon icon--image"></i>
-          </div>
-        <% end %>
-
-        <div class="card__content">
-          <% if cms_fragment_content(:published_date, card).present? %>
-            <p class="card__date"><%= cms_fragment_content(:published_date, card).strftime('%d %B %y') %></p>
-          <% end %>
-          <h3 class="card__h3"><%= card[:label].truncate(59, separator: ' '); %></h3>
-          <p class="card__summary"><%= cms_fragment_content(:summary, card) %></p>
-        </div>
-      <% end %>
+    <% @items[:cards].each_with_index do |card, index| %>
+      <listing-page-card-news
+        key="<%= index %>"
+        date="<%= cms_fragment_content(:published_date, card).strftime('%d %B %y') %>"
+        image="<%= cms_fragment_content(:image, card) %>"
+        summary="<%= cms_fragment_content(:summary, card) %>"
+        title="<%= card[:label].truncate(59, separator: ' ') %>"
+        url="<%= card[:url] %>"
+      >
+      </listing-page-card-news>
     <% end %>
   </div>
 </div>

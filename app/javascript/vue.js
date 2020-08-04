@@ -33,6 +33,8 @@ import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Download from './components/download/Download'
 import Flickity from 'vue-flickity'
 import ListingPage from './components/listing/ListingPage.vue'
+import ListingPageCardNews from './components/listing/ListingPageCardNews.vue'
+import ListingPageCardResources from './components/listing/ListingPageCardResources.vue'
 import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import SearchAreas from './components/search/SearchAreas'
@@ -86,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         Download,
         Flickity,
         ListingPage,
+        ListingPageCardNews,
+        ListingPageCardResources,
         MapInteractive,
         NavBurger,
         SearchAreas,
