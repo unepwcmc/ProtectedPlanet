@@ -18,6 +18,7 @@ results = {
   <listing-page
     endpoint-search="/en/search-cms"
     :filter-groups="<%= get_category_filters %>"
+    :page-id="<%= @cms_page.id %>"
     :results="<%= results %>"
     sm-trigger-element="sm-listing"
     template="news"
