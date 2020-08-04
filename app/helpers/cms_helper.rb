@@ -120,10 +120,11 @@ module CmsHelper
         .map(&:layout_category).uniq
     end
 
-    layout_categories.map do |lc|
-      name = lc.label
-      page_categories = lc.page_categories
-      localised_pcs = I18n.t('search')[:custom_categories][name.to_sym]
+    categories_yml = I18n.t('search')[:custom_categories]
+    layouts_categories.map do |lc|
+      name = categories_yml[lc.layout_category.label.to_sym][:name]
+      page_categories = lc.layout_category.page_categories
+      localised_pcs = categories_yml[name.to_sym][:items]
 
       items = page_categories.map do |pc|
         {

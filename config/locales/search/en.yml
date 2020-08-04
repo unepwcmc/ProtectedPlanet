@@ -43,11 +43,15 @@ en:
       - areas
     custom_categories:
       topics:
-        wdpa: WDPA
-        oecm: OECM
-        pame: PAME
+        name: 'topics'
+        items:
+          wdpa: WDPA
+          oecm: OECM
+          pame: PAME
       types:
-        publications: 'Publications'
-        statistics: 'Statistics'
-        technical: 'Technical'
-        training: 'Training'
+        name: 'types'
+        items:
+          publications: 'Publications'
+          statistics: 'Statistics'
+          technical: 'Technical'
+          training: 'Training'
