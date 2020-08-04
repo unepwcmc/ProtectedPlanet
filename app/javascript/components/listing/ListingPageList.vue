@@ -9,13 +9,13 @@
       <template v-if="template == 'news'">
         <div class="listing__cards cards--articles">
           <listing-page-card-news
-            v-for="card, index in results.cards"
-            :key="card._uid"
-            :date="card.date"
-            :image="card.image"
-            :summary="card.summary"
-            :title="card.title"
-            :url="card.url"
+            v-for="results, index in results.results"
+            :key="results._uid"
+            :date="results.date"
+            :image="results.image"
+            :summary="results.summary"
+            :title="results.title"
+            :url="results.url"
           />
         </div>
       </template>
@@ -23,15 +23,15 @@
       <template v-if="template == 'resources'">
         <div class="listing__cards-resources cards--resources">
           <listing-page-card-resources
-            v-for="card, index in results.cards"
-            :key="card._uid"
-            :date="card.date"
-            :fileUrl="card.fileUrl"
-            :linkTitle="card.linkTitle"
-            :linkUrl="card.linkUrl"
-            :summary="card.summary"
-            :title="card.title"
-            :url="card.url"
+            v-for="result, index in results.results"
+            :key="result._uid"
+            :date="result.date"
+            :fileUrl="result.fileUrl"
+            :linkTitle="result.linkTitle"
+            :linkUrl="result.linkUrl"
+            :summary="result.summary"
+            :title="result.title"
+            :url="result.url"
           />
         </div>
       </template>
@@ -69,7 +69,7 @@ export default {
   
   props: {
     results: {
-      type: Object // { title: String, total: Number, items: [{ date: String, image: String, summary: String, title: String, url: String }
+      type: Object // { title: String, total: Number, results: [{ date: String, image: String, summary: String, title: String, url: String }
     },
     smTriggerElement: {
       required: true,
@@ -87,7 +87,7 @@ export default {
 
   computed: {
     hasResults () {
-      return this.results.total > 0
+      return this.results.total_items > 0
     }
   },
 

@@ -127,7 +127,7 @@ export default {
         .then(response => {
           console.log('response', response)
           if(pagination){
-            this.newResults.cards = this.newResults.cards.concat(response.data.cards.cards)
+            this.newResults.cards = this.newResults.results.concat(response.data.results)
           } else {
             this.updateProperties(response, resetFilters)
           }
@@ -195,6 +195,12 @@ export default {
       this.activeFilterOptions = filters
       this.getFilteredSearchResults()
       this.updateQueryString({ filters: filters })
+    },
+
+    updateProperties (response, resetFilters) {
+      this.newResults = response.data
+      
+      if(resetFilters) this.filterGroupsWithPreSelected = response.data.filters
     },
 
     updateQueryString (params) {

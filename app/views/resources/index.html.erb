@@ -1,7 +1,7 @@
 <%= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: @cms_page[:slug] } %>
 
 <listing-page
-  endpoint-search="/search-cms"
+  endpoint-search="/en/search-cms"
   :filter-groups="<%= get_category_filters %>"
   :results="<%= get_resource_cards.to_json %>"
   sm-trigger-element="sm-listing"
