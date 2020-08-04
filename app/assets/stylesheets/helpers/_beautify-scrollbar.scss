@@ -1,13 +1,13 @@
-@mixin beautify-scrollbar {
+@mixin beautify-scrollbar($width: 9) {
   &::-webkit-scrollbar,
   &::-webkit-scrollbar-button {
-    width: rem-calc(9);
-    height: rem-calc(9);
+    width: rem-calc($width);
+    height: rem-calc($width);
   }
   &::-webkit-scrollbar-thumb,
   &::-webkit-scrollbar-track {
     background-clip: padding-box;
-    border-radius: rem-calc(9);
+    border-radius: rem-calc($width);
     border: rem-calc(1) solid $grey-xdark;
   }
   &::-webkit-scrollbar-thumb {

@@ -1,0 +1,35 @@
+&--horizontal-scroll {
+  display: none;
+
+  @include breakpoint($large) { 
+    @include flex;
+    @include flex-nowrap;
+    @include box-shadow-grey;
+    background-color: $table-head-bg-color;
+    color: $white;
+    margin-top: rem-calc(26);
+  }
+
+  .table-head {
+    &__cell {
+      @include flex;
+      @include flex-h-start;
+      @include flex-v-start;
+      @include table-cell-basic;
+    }
+
+    &__title { margin-right: rem-calc(6); }
+
+    &__tooltip { margin-left: auto; }
+
+    &__sort {
+      @include button-plain;
+      @include icon-sort;
+      padding: rem-calc(3 6);
+    }
+  }
+
+  .tooltip__target {
+    color: $grey-xdark;
+  }
+}

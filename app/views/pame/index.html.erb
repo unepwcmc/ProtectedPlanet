@@ -1,3 +1,34 @@
 <%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label, classes: "#{@cms_page.slug} bg-image-overlay--white" } %>
 
-<%= render "partials/ctas/live-report" %>
+<section class="container page-padding--bottom">
+  <tabs
+    class="tabs--hero"
+    :tab-triggers="<%= @tabs %>"
+  >
+    <template slot-scope="{ selectedId }">
+      <tab-target :id="1" :selected-id="selectedId">
+        <filtered-table 
+          :attributes="<%= @table_attributes %>"
+          endpoint="/pame/list"
+          :filters="<%= @filters %>" 
+          :json="<%= @json %>" 
+        >
+        </filtered-table>
+      </tab-target>
+
+      <tab-target :id="2" :selected-id="selectedId">
+        <section class="container--medium page-padding">
+          <%= cms_fragment_render("tab-content-2") %>
+        </section>
+      </tab-target>
+
+      <tab-target :id="3" :selected-id="selectedId">
+        <section class="container--medium page-padding">
+          <%= cms_fragment_render("tab-content-3") %>
+        </section>
+      </tab-target>
+    </template>
+  </tabs>
+</section>
+
+<%= render "partials/ctas/live-report" %> 
