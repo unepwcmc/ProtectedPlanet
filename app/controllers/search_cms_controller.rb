@@ -8,7 +8,7 @@ class SearchCmsController < ApplicationController
       page: search_params[:requested_page],
       per_page: search_params[:items_per_page]
     }
-    @results = Search::FullSerializer.new(@search, _options).serialize
+    @results = Search::CmsSerializer.new(@search, _options).serialize
 
     render json: @results
   end
