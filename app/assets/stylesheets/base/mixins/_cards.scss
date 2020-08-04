@@ -1,0 +1,66 @@
+//--------------------------------------------------
+// shared mixins
+//--------------------------------------------------
+@mixin card-news {
+  .card {
+    margin-bottom: rem-calc(20);
+    text-decoration: none;
+    width: 100%;
+
+    @include breakpoint($small) {
+      margin-bottom: rem-calc(30);
+      width: 48.5%;
+    }
+  }
+  
+  .card__content {
+    @include responsive(padding, rem-calc(26 20), rem-calc(28 20), rem-calc(30 20));
+  }
+    
+  .card__date { 
+    font-size: rem-calc(14);
+    margin: 0; 
+  }
+
+  .card__h3 { margin: .5em 0; }
+
+  .card__icon { @include image-placeholder(); }
+  
+  .card__image {
+    @include flex-center;
+    background-color: $grey-light;
+    background-position: center;
+    background-size: cover;
+    width: 100%; height: rem-calc(265);
+  }
+
+  .card__summary { margin: 0 }
+}
+
+@mixin card-resource {
+  .card {
+    margin-bottom: rem-calc(20);
+    padding: rem-calc(12 10);
+    width: 100%;
+
+    @include breakpoint($small) {
+      margin-bottom: rem-calc(50);
+      width: 50%;
+    }
+
+    @include breakpoint($medium) { width: 25%; }
+  }
+
+  .card__date { 
+    @include text-small; 
+    margin-top: 0;
+  }
+
+  .card--link {
+    border: solid 1px $white;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover { border-color: $grey-dark; }
+  }
+}

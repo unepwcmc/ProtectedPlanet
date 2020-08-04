@@ -1,5 +1,5 @@
 <template>
-  <div class="listing__card card">
+  <div class="card">
     <a
       v-if="url" 
       :href="url"
