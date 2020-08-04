@@ -119,10 +119,6 @@ export default {
 
       this.axiosSetHeaders()
 
-      this.newResults.cards.concat({ date: '00/00/0000', image: 'image', summary: 'summary', title: 'title', url: 'http://google.com' })
-
-      console.log(this.newResults)
-      
       axios.get(this.endpointSearch, data)
         .then(response => {
           console.log('response', response)
