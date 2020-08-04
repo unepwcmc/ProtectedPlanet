@@ -3,7 +3,7 @@
     <div class="listing__bar">
       <div class="listing__bar-content">
         <filter-trigger
-          :text="textFilters"
+          :text="textFilterTrigger"
           v-on:toggle:filter-pane="toggleFilterPane"
         />
     </div>
@@ -15,15 +15,16 @@
         :filter-close-text="textFiltersClose"
         :filter-groups="filterGroupsWithPreSelected"
         :is-active="isFilterPaneActive"
-        :title="textFilters"
+        :title="textFilterTrigger"
         v-on:update:filter-group="updateFilters"
         v-on:toggle:filter-pane="toggleFilterPane"
       />
       
       <listing-page-list
-        :text-no-results="textNoResults"
         :results="newResults"
         :sm-trigger-element="smTriggerElement"
+        :template="template"
+        :text-no-results="textNoResults"
         v-on:request-more="requestMore"
         v-on:reset-pagination="resetPagination"
         v-show="!loadingResults"
@@ -59,11 +60,15 @@ export default {
       type: String,
       required: true
     },
-    textFilters: {
+    template: {
       required: true,
       type: String
     },
     textFiltersClose: {
+      required: true,
+      type: String
+    },
+    textFilterTrigger: {
       required: true,
       type: String
     },
@@ -110,15 +115,7 @@ export default {
 
       this.axiosSetHeaders()
 
-      this.newResults.items = [
-        { 
-          title: 'Title', 
-          total: 1, 
-          items: [
-            { date: '00/00/0000', image: 'image', summary: 'summary', title: 'title', url: 'http://google.com' }
-          ]
-        }
-      ]
+      this.newResults.cards.concat({ date: '00/00/0000', image: 'image', summary: 'summary', title: 'title', url: 'http://google.com' })
       
       // axios.get(this.endpointSearch, data)
       //   .then(response => {

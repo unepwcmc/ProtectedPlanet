@@ -1,20 +1,40 @@
 <template>
   <div 
-    class="search__results"
+    class="listing__results"
   >
     <div
       v-show="hasResults" 
       sm-trigger-element="test"
     >
-      <listing-page-list-news
-        v-for="item, index in results.items"
-        :key="item._uid"
-        :date="item.date"
-        :image="item.image"
-        :summary="item.summarye"
-        :title="item.title"
-        :url="item.url"
-      />
+      <template v-if="template == 'news'">
+        <div class="listing__cards cards--articles">
+          <listing-page-list-news
+            v-for="card, index in results.cards"
+            :key="card._uid"
+            :date="card.date"
+            :image="card.image"
+            :summary="card.summary"
+            :title="card.title"
+            :url="card.url"
+          />
+        </div>
+      </template>
+
+      <template v-if="template == 'resources'">
+        <div class="listing__cards-resources cards--resources">
+          <listing-page-list-resources
+            v-for="card, index in results.cards"
+            :key="card._uid"
+            :date="card.date"
+            :fileUrl="card.fileUrl"
+            :linkTitle="card.linkTitle"
+            :linkUrl="card.linkUrl"
+            :summary="card.summary"
+            :title="card.title"
+            :url="card.url"
+          />
+        </div>
+      </template>
 
       <pagination-infinity-scroll 
         v-if="smTriggerElement" 
@@ -35,6 +55,7 @@
 
 <script>
 import ListingPageListNews from '../listing/ListingPageListNews.vue'
+import ListingPageListResources from '../listing/ListingPageListResources.vue'
 import PaginationInfinityScroll from '../pagination/PaginationInfinityScroll.vue'
 
 export default {
@@ -42,6 +63,7 @@ export default {
 
   components: { 
     ListingPageListNews,
+    ListingPageListResources,
     PaginationInfinityScroll
   },
   
@@ -50,6 +72,10 @@ export default {
       type: Object // { title: String, total: Number, items: [{ date: String, image: String, summary: String, title: String, url: String }
     },
     smTriggerElement: {
+      required: true,
+      type: String
+    },
+    template: {
       required: true,
       type: String
     },

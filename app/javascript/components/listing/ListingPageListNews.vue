@@ -1,6 +1,6 @@
 <template>
   <a 
-    class="card bg--grey-xlight"
+    class="listing__card cards__card bg--grey-xlight"
     :href="url"
     title=""
   >

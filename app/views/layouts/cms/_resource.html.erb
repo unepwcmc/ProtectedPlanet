@@ -1,8 +1,0 @@
-<%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label, classes: @cms_page[:slug] } %>
-
-<section class="container">
-  <%= cms_fragment_render("content") %>
-</section>
-
-<%= render "partials/cards/resources" %>
-<%= render "partials/ctas/live-report" %>

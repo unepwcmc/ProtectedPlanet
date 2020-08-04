@@ -1,15 +1,9 @@
 <%
 results = {
-  title: 'title', 
+  title: 'Title', 
   total: 1, 
-  items: [
-    { 
-      title: 'Title', 
-      total: 1, 
-      items: [
-        { date: '00/00/0000', image: 'image', summary: 'summary', title: 'title', url: 'http://google.com' }
-      ]
-    }
+  cards: [
+    { date: '02 December 2019', image: 'image', summary: 'summary', title: 'title', url: 'http://google.com' }
   ]
 }.to_json
 %>
@@ -18,11 +12,12 @@ results = {
   <%= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: @cms_page[:slug] } %>
 
   <listing-page
-    :filter-groups="<%= news_filters %>"
+    :filter-groups="<%= get_category_filters %>"
     :results="<%= results %>"
     sm-trigger-element="sm-listing"
-    text-filters="is this used?"
+    template="news"
     text-filters-close="View Results"
+    text-filter-trigger="Filters"
     text-no-results="No Results"
   ></listing-page>
 

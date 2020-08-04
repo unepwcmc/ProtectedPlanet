@@ -36,6 +36,24 @@ module CmsHelper
     "#"
   end
 
+  def get_category_filters
+    category_groups = load_categories
+
+    [
+      {
+        title: I18n.t('search.filter-by'),
+        filters: category_groups.map do |group|
+          {
+            id: group[:id],
+            options: group[:items],
+            title: group[:title],
+            type: 'checkbox'
+          }
+        end
+      }
+    ].to_json
+  end
+
   def get_cms_tabs total_tabs
     tabs = []
 

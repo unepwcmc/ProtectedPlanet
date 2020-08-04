@@ -38,9 +38,21 @@
   }
   
   &__results {
-    @include flex-grow;
-    min-height: rem-calc(300);
+    // @extend .cards--articles;
+    // @include flex-grow;
+    // min-height: rem-calc(300);
 
-    @include breakpoint($small) { min-height: rem-calc(600); }
+    // @include breakpoint($small) { min-height: rem-calc(600); }
+  }
+
+  // &__card {
+  //   width: 50%;
+
+  //   display: block;
+  // }
+
+  &__cards-resources {
+    @include flex;
+    @include flex-wrap;
   }
 }
