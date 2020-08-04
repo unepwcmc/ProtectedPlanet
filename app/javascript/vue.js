@@ -32,7 +32,6 @@ import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Flickity from 'vue-flickity';
 import Download from './components/download/Download'
 import FilteredTable from './components/pame/FilteredTable'
-import MapInteractive from './components/map/MapInteractive'
 import NavBurger from './components/nav/NavBurger'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
