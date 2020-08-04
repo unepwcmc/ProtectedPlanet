@@ -1,7 +1,7 @@
 <div class="page--site bg--grey-xlight">
   <div class="container">
 
-    <section class="flex">
+    <section class="flex-stack-mobile">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         area: reported_area,
         location: @locations.html_safe,
@@ -11,9 +11,10 @@
         story_map_links: @protected_area.story_map_links
       } %>
 
-      <div>
-        MAP
-      </div>
+      <%= render partial: "partials/maps/header", locals: {
+        map: @map,
+        map_options: @map_options
+      } %>
     </section>
 
     <div class="page__container">
@@ -196,14 +197,4 @@
       </div>
     </div>
   </section>
-
-<% if management_plan_document %>
-  <section class="fact">
-    <h2 class="fact__header">Management Plan</h2>
-
-    <a href="<%= management_plan_document %>" class="info-box--margin-top info-box__link">
-      <i class="info-box__link-icon fa fa-file-pdf-o"></i><%= "#{@protected_area.name} Management Plan" %>
-    </a>
-  </section>
-<% end %>
 </div>

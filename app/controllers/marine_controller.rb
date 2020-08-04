@@ -1,5 +1,6 @@
 class MarineController < ApplicationController
   include ActionView::Helpers::NumberHelper
+  include MapHelper
 
   #Static stats
   before_action :marine_statistics, only: [:index, :download_designations]
@@ -13,7 +14,6 @@ class MarineController < ApplicationController
   before_action :national_statistics, only: [:index]
   before_action :designations, only: [:index, :download_designations]
 
-  before_action :load_cms_content
 
   def index
     @marineSites = ProtectedArea.marine_areas.limit(3) ## FERDI 3 marine PAs
@@ -27,6 +27,9 @@ class MarineController < ApplicationController
     @pas_km = @marine_statistics['total_ocean_area_protected']
     @pas_percent = @marine_statistics['total_ocean_pa_coverage_percentage']
     @pas_total = @marine_statistics['total_marine_protected_areas']
+    @map = {
+      overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize
+    }
     @filters = { db_type: ['wdpa'], is_marine: true }
   end
 
@@ -39,6 +42,10 @@ class MarineController < ApplicationController
   end
 
   private
+
+  def marine_overlays
+    overlays(['oecm', 'marine_wdpa'])
+  end
 
   def generate_designations_csv
     columns = ["PA name", "Country", "Size", "Date of designation"]

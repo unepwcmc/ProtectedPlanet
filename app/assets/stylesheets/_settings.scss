@@ -116,6 +116,7 @@ $fw-black: 900;
 // breakpoints
 //--------------------------------------------------
 // must be in px not rem!
+// IF MODIFIED, PLEASE CHECK ELSEWHERE IN PROJECT e.g. in mixin-responsive.js
 $small: 767px; 
 $medium: 1024px;
 $large: 1200px;
@@ -130,7 +131,7 @@ $z-300: 300;
 //--------------------------------------------------
 // padding
 //--------------------------------------------------
-$gutter-small: rem-calc(25);
+$gutter-small: rem-calc(20);
 $gutter-medium: rem-calc(25);
 $gutter-large: rem-calc(30);
 

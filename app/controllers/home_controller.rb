@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  include MapHelper
+
   def index
     @pa_coverage_percentage = 9999 #TODO Total PA coverage in %
 
@@ -73,6 +75,16 @@ class HomeController < ApplicationController
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
+
+    @main_map = {
+      overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize
+    }
+  end
+
+  private
+
+  def home_overlays
+    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
   end
 
   private

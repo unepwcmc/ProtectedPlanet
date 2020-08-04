@@ -72,7 +72,7 @@
           }
         })
 
-        this.$store.commit('setFilterOptions', array)
+        this.$store.commit('pame/setFilterOptions', array)
       },
     }
   }

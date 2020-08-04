@@ -100,7 +100,7 @@
         if (isActive) {
           const newPage = direction == 'next' ? this.currentPage + 1 : this.currentPage - 1
 
-          this.$store.commit('updateRequestedPage', newPage)
+          this.$store.commit('pame/updateRequestedPage', newPage)
           this.$emit('updated:page')
         }
       }

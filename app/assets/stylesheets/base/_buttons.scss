@@ -159,7 +159,17 @@ $padding-medium: rem-calc(27);
 @mixin button-map-trigger {
   @include button-with-icon;
   @include button-outline;
+  white-space: nowrap;
+  
   &::after { @include icon-pin-outline; }
+
+  &.active {
+    &::after { 
+      @include icon-cross-small; 
+      
+      width: rem-calc(14);
+    }
+  }
 }
 @mixin button-primary { @include button-block; }
 @mixin button-next { @include button-basic; }

@@ -129,8 +129,8 @@
           options: this.activeOptions
         }
 
-        this.$store.commit('updateFilterOptions', newFilterOptions)
-        this.$store.commit('updateRequestedPage', 1)
+        this.$store.commit('pame/updateFilterOptions', newFilterOptions)
+        this.$store.commit('pame/updateRequestedPage', 1)
         this.$eventHub.$emit('getNewItems')
       }
     }

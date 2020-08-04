@@ -82,8 +82,8 @@
 
       getNewItems () {
         let data = {
-          requested_page: this.$store.state.requestedPage,
-          filters: this.$store.state.selectedFilterOptions
+          requested_page: this.$store.state.pame.requestedPage,
+          filters: this.$store.state.pame.selectedFilterOptions
         }
 
         this.axiosSetHeaders()

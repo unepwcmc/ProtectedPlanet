@@ -47,7 +47,7 @@
       },
 
       openModal () {
-        this.$store.commit('updateModalContent', this.item)
+        this.$store.commit('pame/updateModalContent', this.item)
 
         this.$eventHub.$emit('openModal')
       },

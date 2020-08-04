@@ -5,16 +5,40 @@ class ApplicationController < ActionController::Base
 
   protect_from_forgery with: :exception
 
-  before_action :set_cms_site
-  before_action :set_locale
+  helper_method :opengraph
+
+  before_action :load_cms_site
   before_action :load_cms_content
+
+  before_action :set_locale
   before_action :check_for_pdf
   #Temporary fix for development. To test if it is required on staging/production
   before_action :set_host_for_local_storage
   after_action :store_location
 
-  def set_cms_site
-      @cms_site ||= Comfy::Cms::Site.first
+  def admin_path?
+    request.original_fullpath =~ %r{/(?:#{I18n.locale}/)?admin/?}
+  end
+
+  def opengraph
+    return if admin_path?
+
+    @opengraph ||= OpengraphBuilder.new({
+                                          'og': {
+                                            'site_name': t('meta.site.name'),
+                                            'title': t('meta.site.title'),
+                                            'description': t('meta.site.description'),
+                                            'url': request.original_url,
+                                            'type': 'website',
+                                            'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
+                                            'image:alt': t('meta.image_alt'),
+                                            'locale': I18n.locale
+                                          },
+                                          'twitter': {
+                                            'site': t('meta.twitter.site'),
+                                            'creator': t('meta.twitter.creator')
+                                          }
+                                        })
   end
 
   def default_url_options
@@ -46,6 +70,23 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def load_cms_site
+    return if admin_path?
+
+    @cms_site ||= Comfy::Cms::Site.first
+  end
+
+  def load_cms_content
+    return if admin_path?
+
+    @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath.gsub(%r{\A/#{I18n.locale}/?}, '/'))
+
+    return unless @cms_page
+
+    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' })
+                  .parse(opengraph: opengraph, page: @cms_page)
+  end
 
   def record_invalid_error
     message = "We're sorry, but something went wrong"
@@ -83,29 +124,6 @@ class ApplicationController < ActionController::Base
     "/users/confirmation",
     "/users/sign_out"
   ]
-
-  def load_cms_content
-    cms_path = request.original_fullpath
-    locale = I18n.locale.to_s
-    home_page = "/#{locale}"
-
-    if cms_path == home_page
-      cms_path = '/'
-    else
-      cms_path = cms_path.gsub("/#{locale}", "")
-    end
-
-    @cms_page = Comfy::Cms::Page.find_by_full_path(cms_path)
-  end
-
-  # def load_cms_pages
-  #   @updates_and_news  = Comfy::Cms::Category.find_by_label("Updates & News")
-  #   @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
-  #   @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
-  #   @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
-  #   @green_list_page   = Comfy::Cms::Page.find_by_slug("green-list")
-  #   @equity_page       = Comfy::Cms::Page.find_by_slug("equity")
-  # end
 
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?

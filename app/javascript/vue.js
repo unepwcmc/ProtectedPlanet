@@ -7,7 +7,6 @@ polyfill()
 import Vue from 'vue/dist/vue.esm'
 import VueAnalytics from 'vue-analytics'
 import Vue2TouchEvents from 'vue2-touch-events'
-import ScrollMagic from 'scrollmagic'
 import VueLazyload from 'vue-lazyload'
 
 // store
@@ -48,6 +47,11 @@ import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
+import VMapDisclaimer from './components/map/VMapDisclaimer'
+import VMap from './components/map/VMap'
+import VMapPASearch from './components/map/VMapPASearch'
+import VMapHeader from './components/map/VMapHeader'
+import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
 
@@ -88,7 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
         Download,
 	      FilteredTable,
         Flickity,
-        MapInteractive,
         NavBurger,
         SearchAreas,
         SearchAreasHome,
@@ -103,6 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
         TabTarget,
         Target11Dashboard,
         Tooltip,
+        VMap,
+        'v-map-pa-search': VMapPASearch,
+        VMapDisclaimer,
+        VMapHeader,
+        VMapFilters,
         VSelectSearchable,
         VTable
       }

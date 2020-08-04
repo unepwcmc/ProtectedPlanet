@@ -27,6 +27,14 @@
       @include flex-v-center;
     }
 
+    &__map-container {
+      @include container;
+      @include site-width;
+
+      padding-top: rem-calc(28);
+      padding-bottom: rem-calc(28);
+    }
+
     &__main {
       @include container;
       @include site-width;

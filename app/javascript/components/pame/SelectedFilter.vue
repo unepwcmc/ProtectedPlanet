@@ -27,7 +27,7 @@
     methods: {
       deselectOption () {
         // remove this option from the active filter list and update results
-        this.$store.commit('removeFilterOption', { name: this.name, option: this.option })
+        this.$store.commit('pame/removeFilterOption', { name: this.name, option: this.option })
         this.$eventHub.$emit('deselectOption', { name: this.name, option: this.option })
         this.$eventHub.$emit('filtersChanged')
       }
