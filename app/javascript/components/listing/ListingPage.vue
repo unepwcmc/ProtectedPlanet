@@ -104,23 +104,24 @@ export default {
       // if(!pagination) { this.loadingResults = true }
 
       let data = {
-        // params: {
-        //   filters: this.activeFilterOptions,
-        //   items_per_page: 9,
-        //   requested_page: requestedPage,
-        //   search_term: this.searchTerm,
-        //   geo_type: this.tabIdSelected
-        // }
+        params: {
+          filters: this.activeFilterOptions,
+          items_per_page: 9,
+          requested_page: requestedPage
+        }
       }
+      console.log('params', data.params)
 
       this.axiosSetHeaders()
 
       this.newResults.cards.concat({ date: '00/00/0000', image: 'image', summary: 'summary', title: 'title', url: 'http://google.com' })
+
+      console.log(this.newResults)
       
       // axios.get(this.endpointSearch, data)
       //   .then(response => {
       //     if(pagination){
-      //       this.newResults.areas = this.newResults.areas.concat(response.data.areas.areas)
+      //       this.newResults.cards = this.newResults.cards.concat(response.data.cards.cards)
       //     } else {
       //       this.updateProperties(response, resetFilters)
       //     }

@@ -19,7 +19,7 @@
       />
     </a>
 
-    <template else>
+    <template v-else>
       <p 
         class="card__date"
         v-html="date"
