@@ -142,8 +142,8 @@ module Concerns::Searchable
 
       return filters if topics.blank? && types.blank?
 
-      filters[:topic] = topics
-      filters[:page_type] = types
+      filters[:topic] = topics if topics.present?
+      filters[:page_type] = types if types.present?
       filters
     end
 
