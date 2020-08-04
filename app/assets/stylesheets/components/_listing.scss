@@ -38,21 +38,22 @@
   }
   
   &__results {
+    @include flex-grow;
     margin-top: rem-calc(24);
-    // @extend .cards--articles;
-    // @include flex-grow;
-    // min-height: rem-calc(300);
+    min-height: rem-calc(300);
 
-    // @include breakpoint($small) { min-height: rem-calc(600); }
+    @include breakpoint($small) { min-height: rem-calc(600); }
   }
 
-  // &__card {
-  //   width: 50%;
-
-  //   display: block;
-  // }
+  &__cards-news {
+    @include card-news;
+    @include flex;
+    @include flex-h-between;
+    @include flex-wrap;
+  }
 
   &__cards-resources {
+    @include card-resource;
     @include flex;
     @include flex-wrap;
   }

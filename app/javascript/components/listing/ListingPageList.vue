@@ -7,7 +7,7 @@
       sm-trigger-element="test"
     >
       <template v-if="template == 'news'">
-        <div class="listing__cards cards--articles">
+        <div class="listing__cards-news">
           <listing-page-card-news
             v-for="results, index in results.results"
             :key="results._uid"
@@ -21,7 +21,7 @@
       </template>
 
       <template v-if="template == 'resources'">
-        <div class="listing__cards-resources cards--resources">
+        <div class="listing__cards-resources">
           <listing-page-card-resources
             v-for="result, index in results.results"
             :key="result._uid"
