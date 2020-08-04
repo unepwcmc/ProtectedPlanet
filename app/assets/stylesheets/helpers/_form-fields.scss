@@ -25,14 +25,8 @@
 }
 
 @mixin input-custom-focus {
-  outline-width: rem-calc(2);
-  outline-style: solid;
-  outline-color: Highlight;
-  
-  @media (-webkit-min-device-pixel-ratio:0) {
-    outline-color: -webkit-focus-ring-color;
-    outline-style: auto;
-  }
+  border: solid 2px $black;
+  outline: 0;
 }
 
 //--------------------------------------------------

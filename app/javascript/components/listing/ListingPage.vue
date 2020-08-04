@@ -57,6 +57,10 @@ export default {
       required: true,
       type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
     },
+    pageId: {
+      required: true,
+      type: Number
+    },
     results: {
       required: true,
       type: Object // { title: String, total: Number, items: [{ date: String, image: String, summary: String, title: String, url: String }
@@ -109,9 +113,12 @@ export default {
     ajaxSubmission (resetFilters=false, pagination=false, requestedPage=1) {
       if(!pagination) { this.loadingResults = true }
 
+      let filters = this.activeFilterOptions
+      filters.ancestor = this.pageId
+
       let data = {
         params: {
-          filters: this.activeFilterOptions,
+          filters: filters,
           items_per_page: 9,
           requested_page: requestedPage
         }

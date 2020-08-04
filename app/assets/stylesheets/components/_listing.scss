@@ -14,7 +14,7 @@
     @include box-shadow-bottom-grey;
     background-color: $white;
     border-bottom: solid 1px $grey;
-    padding: rem-calc(20 0); 
+    padding: rem-calc(12 0); 
   }
 
   &__bar-content {
@@ -26,8 +26,13 @@
 
   &__filters {
     @include flex-no-shrink;
-    @include responsive(padding-right, 0, rem-calc(24), rem-calc(24));
-    @include responsive(width, 0, 33%, 25%);
+    
+    @include breakpoint($small) { 
+      padding-right: rem-calc(24); 
+      width: 33%;
+    }
+
+    @include breakpoint($medium) { width: 25%; }
   }
 
   &__filters-trigger { @include button-filter-trigger; }
@@ -55,7 +60,7 @@
   }
 
   &__cards-resources {
-    @include card-resource;
+    @include card-resource($per-row: 3);
     @include flex;
     @include flex-wrap;
   }
