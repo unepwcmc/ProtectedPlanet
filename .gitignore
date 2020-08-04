@@ -37,6 +37,3 @@ tmp/cache/webpacker
 
 .vscode/
 
-# TODO: Get rid of this if/when I fix the issue with gdal
-Gemfile
-Gemfile.lock
