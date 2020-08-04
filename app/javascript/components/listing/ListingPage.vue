@@ -95,7 +95,7 @@ export default {
       },
       activeFilterOptions: [],
       filterGroupsWithPreSelected: [],
-      isFilterPaneActive: true,
+      isFilterPaneActive: false,
       loadingResults: false,
       newResults: this.results
     }
