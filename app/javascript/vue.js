@@ -31,6 +31,7 @@ import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Flickity from 'vue-flickity';
 import Download from './components/download/Download'
+import FilteredTable from './components/pame/FilteredTable'
 import NavBurger from './components/nav/NavBurger'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
@@ -52,6 +53,8 @@ import VMapHeader from './components/map/VMapHeader'
 import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
+
+export const eventHub = new Vue()
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
@@ -86,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowTarget,
         ChartSunburst,
         Download,
+	      FilteredTable,
         Flickity,
         NavBurger,
         SearchAreas,

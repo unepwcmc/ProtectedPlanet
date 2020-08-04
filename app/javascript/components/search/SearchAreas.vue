@@ -3,6 +3,7 @@
     <div class="search__bar">
       <div class="search__bar-content">
         <filter-trigger
+          class="search__filter-trigger"
           :is-disabled="isFilterPaneDisabled"
           :text="textFilters"
           v-on:toggle:filter-pane="toggleFilterPane"

@@ -87,17 +87,7 @@
           justify-content: flex-end;
         }
 
-        &__a {
-          @include button-with-icon;
-          @include flex-no-shrink;
-          font-size: rem-calc(16);
-
-          &::after {
-            @include icon-circle-chevron-black;
-            height: rem-calc(21);
-            width: rem-calc(21);
-          }
-        }
+        &__a { @include button-all($small: true); }
     }
   }
 }
