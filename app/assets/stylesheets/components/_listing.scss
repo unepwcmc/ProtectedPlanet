@@ -30,6 +30,8 @@
     @include responsive(width, 0, 33%, 25%);
   }
 
+  &__filters-trigger { @include button-filter-trigger; }
+
   &__main {
     @include container;
     @include site-width;

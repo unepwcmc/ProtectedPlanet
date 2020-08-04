@@ -21,11 +21,20 @@
 }
 
 @mixin hero-medium {
-  @include responsive(min-height, rem-calc(200), rem-calc(350), rem-calc(505));
-  @include responsive(padding, rem-calc(30 0 40 0), rem-calc(40 0 40 0), rem-calc(50 0 60 0));
+  min-height: rem-calc(200);
+  @include breakpoint($small) { min-height: rem-calc(350); }
+  @include breakpoint($medium) { min-height: rem-calc(505); }
+}
+
+@mixin hero-padding {
   background: $grey-light center no-repeat;
   background-size: cover;
+  padding: rem-calc(30 0 40 0);
+
+  @include breakpoint($small) { padding: rem-calc(40 0 40 0); }
+  @include breakpoint($medium) { padding: em-calc(50 0 60 0); }
 }
+
 
 @mixin hero-stat-text {
   color: $white;
@@ -67,5 +76,6 @@
   @import './hero/hero-area-type';
   @import './hero/hero-basic';
   @import './hero/hero-home';
+  @import './hero/hero-small';
   @import './hero/hero-thematic';
 }

@@ -9,7 +9,11 @@ results = {
 %>
 
 <div class="page--news">
-  <%= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: @cms_page[:slug] } %>
+  <%= render partial: "./layouts/partials/hero-small", locals: { 
+    classes: @cms_page[:slug],
+    hero_image: cms_fragment_render(:hero_image, @cms_page),
+    title: @cms_page.label
+  } %>
 
   <listing-page
     endpoint-search="/en/search-cms"

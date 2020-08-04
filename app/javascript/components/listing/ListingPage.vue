@@ -3,6 +3,7 @@
     <div class="listing__bar">
       <div class="listing__bar-content">
         <filter-trigger
+          class="listing__filters-trigger"
           :text="textFilterTrigger"
           v-on:toggle:filter-pane="toggleFilterPane"
         />

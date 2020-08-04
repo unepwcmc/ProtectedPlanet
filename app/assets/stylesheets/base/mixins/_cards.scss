@@ -3,6 +3,7 @@
 //--------------------------------------------------
 @mixin card-news {
   .card {
+    background-color: $grey-xlight;
     margin-bottom: rem-calc(20);
     text-decoration: none;
     width: 100%;
