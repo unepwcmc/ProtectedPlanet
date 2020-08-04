@@ -28,6 +28,15 @@
   height: 100vh;
 }
 
+.flex-stack-mobile {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include breakpoint($small) {
+    flex-wrap: nowrap;
+  }
+}
+
 //--------------------------------------------------
 // fouc (flash of unstyled content)
 //--------------------------------------------------

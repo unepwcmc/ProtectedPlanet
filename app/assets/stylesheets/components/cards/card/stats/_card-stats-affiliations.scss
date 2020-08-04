@@ -1,0 +1,42 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--stats-affliations {
+  @include card-stats;
+
+  .card {
+    &__button {
+      @include card-button-external;
+      margin-top: auto;
+      padding-top: rem-calc(14);
+
+      display: none; //to be added later
+    }
+
+    &__h2 { @include card-stats-h2; }
+
+    &__logos {
+      @include flex;
+      @include ul-unstyled;
+    }
+
+    &__logo {
+      margin-left: rem-calc(30);
+      max-width: rem-calc(200);
+
+      &:first-child { margin-left: 0; }
+    }
+
+    &__logo-image {
+      width: rem-calc(100); height: auto;
+
+      display: block;
+    }
+
+    &__subtitle {
+      font-weight: $bold;
+      line-height: 1.2;
+      margin: rem-calc(14 0 0 0);
+    }
+  }
+}

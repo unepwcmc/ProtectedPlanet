@@ -1,0 +1,12 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--stats-designations {
+  @include card-stats;
+
+  .card {
+    &__h2 { @include card-stats-h2; }
+
+    &__third { @include card-stats-third; }
+  }
+}

@@ -41,7 +41,7 @@ class ThematicalAreasPresenter
     when theme(:marine)
       pas.where(marine: true)
     when theme(:green_list)
-      pas.where(is_green_list: true)
+      pas.where.not(green_list_status_id: nil)
     when theme(:wdpa)
       pas.wdpas
     when theme(:oecm)

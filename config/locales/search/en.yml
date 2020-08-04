@@ -32,7 +32,7 @@ en:
       region: Regions
       country: Countries
       site: Individual Areas
-    map: Map
+    map: Map View
     protected-areas: Protected Areas
     results: results
     no-results: No results. Please search again.

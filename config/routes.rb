@@ -41,7 +41,7 @@ Rails.application.routes.draw do
         get '/search/by_point', to: 'search#by_point'
       end
     end
-
+    
     # resources :projects, only: [:create, :index, :update, :destroy]
 
     get '/marine/download_designations', to: 'marine#download_designations'
@@ -69,6 +69,10 @@ Rails.application.routes.draw do
 
 
     # routes worked on so far as part of the refresh
+
+    post '/pame/download', to: 'pame#download'
+    post '/pame/list', to: 'pame#list'
+
     get '/resources', to: 'resources#index'
     get '/search', to: 'search#index'
 
