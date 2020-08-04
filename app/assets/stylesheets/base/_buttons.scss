@@ -79,15 +79,16 @@ $padding-medium: rem-calc(27);
     display: inline-block;
   }
 }
-@mixin button-outline ($colour: $black) {
+@mixin button-outline ($colour: $black, $border-size: 1px) {
   @include button-basic;
   @include button-font;
   @include button-height;
   @include button-padding;
   @include button-radius;
-  border: solid 2px $colour;
+  border: solid $border-size $colour;
   color: $colour;
 }
+
 //--------------------------------------------------
 // mixins for classes
 //--------------------------------------------------
@@ -121,11 +122,28 @@ $padding-medium: rem-calc(27);
   @include button-with-icon;
   &::after { @include icon-chevron-black-up; }
 }
+
+@mixin button-dropdown-filter {
+  @include button-dropdown;
+  @include button-outline($black, 1px);
+
+  @include breakpoint-down($medium) {
+    font-size: rem-calc(16);
+    padding: rem-calc(1 11);
+    height: rem-calc(34);
+  }
+
+  &:after {
+    @include breakpoint-down($medium) { display: none; }
+  }
+}
+
 @mixin button-external {
   @include button-with-icon;
   &::after { 
     @include icon-arrow-external; 
     display: inline-block;
+
   }
 }
 @mixin button-filter-trigger {
@@ -153,6 +171,7 @@ $padding-medium: rem-calc(27);
     }
   }
 }
+@mixin button-primary { @include button-block; }
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }
 @mixin button-search {
@@ -239,5 +258,5 @@ $padding-medium: rem-calc(27);
   }
   &--outline-black { @include button-outline($black); }
   &--outline-white { @include button-outline($white); }
-  &--primary { @include button-block; }
+  &--primary { @include button-primary; }
 }

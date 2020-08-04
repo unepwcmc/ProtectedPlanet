@@ -1,0 +1,91 @@
+//----------------------------------------
+// classes
+//----------------------------------------
+&--pame { 
+  margin-top: rem-calc(30);
+  margin-bottom: rem-calc(24);
+
+  @include breakpoint($medium) { margin-top: 0; }
+
+  .table {
+    &__row {
+      background-color: $grey-xlight;
+      margin-bottom: rem-calc(18);
+      padding: rem-calc(6 0);      
+
+      @include breakpoint($medium) { 
+        margin: 0;
+        padding: 0;
+
+        display: flex;
+      }
+
+      &:nth-child(even) { 
+        @include breakpoint($medium) { background-color: $white; }
+      }
+    }
+
+    &__cell {
+      margin: 0;
+      padding: rem-calc(4 14);
+      width: 100%;
+
+      @include breakpoint($medium) {
+        @include table-pame-column-widths;
+        border-left: dotted white 2px;
+        padding: rem-calc(16 14);
+
+        display: inline-block;
+      }
+
+      &:first-child { border-left: none; }
+
+      &:before {
+        font-weight: bold; 
+        margin-right: rem-calc(6);
+
+        @include breakpoint($medium){ display: none; }
+      }
+
+      // Add copy for the table header
+      // These are shown on mobile and tablet
+      // Check pame_evalutation.rb for the copy
+      &:nth-child(1) { &:before { content: 'Name:'; } }
+      &:nth-child(2) { &:before { content: 'Designation:'; } }
+      &:nth-child(3) { &:before { content: 'WDPA ID:'; } }
+      &:nth-child(4) { &:before { content: 'Assessment ID:'; } }
+      &:nth-child(5) { &:before { content: 'Country:'; } }
+      &:nth-child(6) { &:before { content: 'Methodology:'; } }
+      &:nth-child(7) { &:before { content: 'Year of assessment:'; } }
+      &:nth-child(8) { &:before { content: 'Link to assessment:'; } }
+      &:nth-child(9) { &:before { content: 'Metadata ID:'; } }
+    }
+
+    &__sorting {
+      opacity: .7;
+      vertical-align: middle;
+
+      display: inline-block;
+
+      &:hover { opacity: .9; }
+    }
+
+    &__sort {
+      cursor: pointer;
+      width: rem-calc(8); height: rem-calc(6);
+
+      display: block;
+
+      &--ascending {
+        background-image: image-url('icons/arrow-up-white.svg');
+        margin-bottom: rem-calc(1);
+      }
+
+      &--descending {
+        background-image: image-url('icons/arrow-down-white.svg');
+      }
+    }
+
+    &__note { font-size: rem-calc(14); }
+  }
+}  
