@@ -101,10 +101,11 @@ module CmsHelper
       layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
     end
 
+    categories_yml = I18n.t('search')[:custom_categories]
     layouts_categories.map do |lc|
-      name = lc.layout_category.label
+      name = categories_yml[lc.layout_category.label.to_sym][:name]
       page_categories = lc.layout_category.page_categories
-      localised_pcs = I18n.t('search')[:custom_categories][name.to_sym]
+      localised_pcs = categories_yml[name.to_sym][:items]
 
       items = page_categories.map do |pc|
         {
