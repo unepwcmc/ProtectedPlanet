@@ -82,6 +82,7 @@ module Concerns::Searchable
       _filters = sanitise_db_type_filter(_filters)
       _filters = sanitise_type_filter(_filters)
       _filters = sanitise_ancestor_filter(_filters)
+      _filters = sanitise_categories_filter(_filters)
       sanitise_special_status_filter(_filters)
     end
 
@@ -132,6 +133,17 @@ module Concerns::Searchable
         filters[status.to_sym] = true
       end
 
+      filters
+    end
+
+    def sanitise_categories_filter(filters)
+      topics = filters.delete('topics')
+      types = filters.delete('types')
+
+      return filters if topics.blank? && types.blank?
+
+      filters[:topic] = topics
+      filters[:page_type] = types
       filters
     end
 

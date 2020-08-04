@@ -41,7 +41,7 @@ class Comfy::Cms::SearchablePage < Comfy::Cms::Page
   # TODO Consider lazy loading
   def image
     fragment = self.fragments.find_by(identifier: 'image')
-    return '' unless fragment
+    return '' unless fragment && fragment.attachments_blobs.first
 
     Rails.application.routes.url_helpers.rails_blob_path(fragment.attachments_blobs.first)
   end

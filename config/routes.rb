@@ -85,6 +85,8 @@ Rails.application.routes.draw do
     post '/search/autocomplete', to: 'search#autocomplete'
     get '/search-results', to: 'search#search_results', as: :search_results
 
+    get '/search-cms', to: 'search_cms#index', as: :search_cms
+
     # Ensure that this route is defined last
 
     comfy_route :cms_admin, path: "/admin"
