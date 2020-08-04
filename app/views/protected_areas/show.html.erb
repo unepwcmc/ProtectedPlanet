@@ -17,7 +17,6 @@
       } %>
     </section>
 
-<<<<<<< HEAD
     <div class="card--stats-wrapper">
       <div class="card--stats-half">
         <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
@@ -26,18 +25,6 @@
       <div class="flex flex-column card--stats-half">
         <%= render "partials/stats/stats-pame" %>
         <%= render partial: "partials/stats/stats-external", locals: { external_links: @presenter.external_links } %>
-=======
-    <div class="page__container">
-      <div class="page__col-1">
-        <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
-      </div>
-      <div class="page__col-2">
-        <%= render partial: "partials/stats/stats-pame" , locals: { classes: 'page__col-child' } %>
-        <%= render partial: "partials/stats/stats-external", locals: { 
-          classes: 'page__col-child',
-          external_links: @presenter.external_links 
-        } %>
->>>>>>> refresh
       </div>
     </div>
 
