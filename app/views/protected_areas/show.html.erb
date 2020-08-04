@@ -1,7 +1,7 @@
-<div class="bg--grey-xlight">
+<div class="page--site bg--grey-xlight">
   <div class="container">
 
-    <section class="flex">
+    <section class="flex-stack-mobile">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         area: reported_area,
         location: @locations.html_safe,
@@ -11,11 +11,13 @@
         story_map_links: @protected_area.story_map_links
       } %>
 
-      <div>
-        MAP
-      </div>
+      <%= render partial: "partials/maps/header", locals: {
+        map: @map,
+        map_options: @map_options
+      } %>
     </section>
 
+<<<<<<< HEAD
     <div class="card--stats-wrapper">
       <div class="card--stats-half">
         <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
@@ -24,6 +26,18 @@
       <div class="flex flex-column card--stats-half">
         <%= render "partials/stats/stats-pame" %>
         <%= render partial: "partials/stats/stats-external", locals: { external_links: @presenter.external_links } %>
+=======
+    <div class="page__container">
+      <div class="page__col-1">
+        <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
+      </div>
+      <div class="page__col-2">
+        <%= render partial: "partials/stats/stats-pame" , locals: { classes: 'page__col-child' } %>
+        <%= render partial: "partials/stats/stats-external", locals: { 
+          classes: 'page__col-child',
+          external_links: @presenter.external_links 
+        } %>
+>>>>>>> refresh
       </div>
     </div>
 
@@ -84,7 +98,6 @@
     </section>
   <% end %>
 
-
 <% if management_plan_document %>
   <section class="fact">
     <h2 class="fact__header">Management Plan</h2>
@@ -94,4 +107,5 @@
     </a>
   </section>
 <% end %>
+
 </div>

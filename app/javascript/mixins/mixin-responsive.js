@@ -4,7 +4,7 @@ export default {
       windowWidth: 0,
       currentBreakpoint: '',
       breakpoints: {
-        small: 768, //must match variables in assets/stylesheets/resources/_base-varibles
+        small: 767, // MUST MATCH VARIABLES IN assets/stylesheets/_settings
         medium: 1024,
         large: 1200
       }

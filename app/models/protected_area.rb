@@ -157,7 +157,20 @@ class ProtectedArea < ApplicationRecord
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
+  def extent_url
+    layer_number = is_point? ? 0 : 1
+
+    {
+      url: "#{WDPA_FEATURE_SERVER_URL}/#{layer_number}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      padding: 1
+    }
+  end
+
   private
+
+  def is_point?
+    the_geom.geometry_type.type_name.match('Point').present?
+  end
 
   def bounding_box_query
     dirty_query = """

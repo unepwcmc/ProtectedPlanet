@@ -1,7 +1,9 @@
 &--searchable {
-  @include responsive(width, 100%, $select-width-desktop, $select-width-desktop);
-
+  width: 100%;
+  
   position: relative;
+
+  @include breakpoint($small) { width: $select-width-desktop; }
 
   .select {
 

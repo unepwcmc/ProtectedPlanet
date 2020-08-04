@@ -40,30 +40,23 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
 
   .table-head {
     &__cell {
+      @include flex;
+      @include flex-h-start;
+      @include flex-v-start;
       @include table-cell-basic;
-      align-items: center; //temp-refresh
-      justify-content: space-between; //temp-refresh
-
-      display: flex; //temp-refresh
     }
-      
-      &__title-wrapper {
-        align-items: center; //temp-refresh
-        flex-wrap: nowrap; //temp-refresh
 
-        display: flex; //temp-refresh
-      }
+    &__title { margin-right: rem-calc(6); }
 
-        &__title {
-          margin-right: rem-calc(6); 
-        }
+    &__tooltip { margin-left: auto; }
 
-      &__sort {
-        @include button-plain;
-        @include icon-sort;
-        padding: rem-calc(3 6);
-      }
+    &__sort {
+      @include button-plain;
+      @include icon-sort;
+      padding: rem-calc(3 6);
+    }
   }
+
   .tooltip__target {
     color: $grey-xdark;
   }

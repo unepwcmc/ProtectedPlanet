@@ -1,7 +1,7 @@
 <div class="bg--grey-xlight">
   <div class="container">
     
-    <section class="flex">
+    <section class="flex-stack-mobile">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         flag: @flag_path[0],
         title: @country.name,
@@ -12,9 +12,10 @@
         total_wdpa: @total_wdpa,
       } %>
 
-      <div>
-        MAP
-      </div>
+      <%= render partial: "partials/maps/header", locals: {
+        map: @map,
+        map_options: @map_options
+      } %>
     </section>
 
     <section>

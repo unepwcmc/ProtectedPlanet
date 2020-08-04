@@ -135,6 +135,13 @@ $padding-medium: rem-calc(27);
   @include button-with-icon;
   &::after { @include icon-chevron-black-up; }
 }
+@mixin button-external {
+  @include button-with-icon;
+  &::after { 
+    @include icon-arrow-external; 
+    display: inline-block;
+  }
+}
 @mixin button-filter-trigger {
   @include button-with-icon;
   @include button-outline;
@@ -148,7 +155,17 @@ $padding-medium: rem-calc(27);
 @mixin button-map-trigger {
   @include button-with-icon;
   @include button-outline;
+  white-space: nowrap;
+  
   &::after { @include icon-pin-outline; }
+
+  &.active {
+    &::after { 
+      @include icon-cross-small; 
+      
+      width: rem-calc(14);
+    }
+  }
 }
 @mixin button-next { @include button-basic; }
 @mixin button-prev { @include button-basic; }
@@ -202,18 +219,33 @@ $padding-medium: rem-calc(27);
       display: inline-block;
     }
   }
+  &--download-pdf {
+    @include button-with-icon;
+    color: $primary;
+    font-size: rem-calc(16);
+    font-weight: $bold;
+    @include breakpoint($small) { font-size: rem-calc(16); }
+    @include breakpoint($medium) { font-size: rem-calc(16); }
+    
+    &::after { 
+      @include icon-download; 
+      display: inline-block;
+    }
+  }
   &--external {
     @include button-with-icon;
     @include button-block;
     font-weight: $bold;
     &::after { @include icon-arrow-external-white; }
   }
-  &--link-external {
-    @include button-with-icon;
-    &::after { 
-      @include icon-arrow-external; 
-      display: inline-block;
-    }
+  &--link-external { @include button-external; }
+  &--link-external-primary {
+    @include button-external;
+    color: $primary;
+    font-size: rem-calc(16);
+    font-weight: $bold;
+    @include breakpoint($small) { font-size: rem-calc(16); }
+    @include breakpoint($medium) { font-size: rem-calc(16); }
   }
   &--outline-black { @include button-outline($black); }
   &--outline-white { @include button-outline($white); }
