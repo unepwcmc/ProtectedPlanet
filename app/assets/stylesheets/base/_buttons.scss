@@ -92,6 +92,20 @@ $padding-medium: rem-calc(27);
 //--------------------------------------------------
 // mixins for classes
 //--------------------------------------------------
+@mixin button-all($small: false) {
+  @include button-with-icon;
+  @include flex-no-shrink;
+  &::after { @include icon-circle-chevron-black; }
+
+  @if $small {
+    @include breakpoint($medium) { font-size: rem-calc(16); }
+
+    &::after {
+      height: rem-calc(21);
+      width: rem-calc(21);
+    }
+  }
+}
 @mixin button-burger { 
   @include button-basic; 
   @include icon-burger;
@@ -216,11 +230,7 @@ $padding-medium: rem-calc(27);
 //--------------------------------------------------
 .button {
   &--accent { @include button-block; }
-  &--all {
-    @include button-with-icon;
-    @include flex-no-shrink;
-    &::after { @include icon-circle-chevron-black; }
-  }
+  &--all { @include button-all; }
   &--download {
     @include button-with-icon;
     &::after { 

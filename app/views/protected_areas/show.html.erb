@@ -17,6 +17,16 @@
       } %>
     </section>
 
+<<<<<<< HEAD
+    <div class="card--stats-wrapper">
+      <div class="card--stats-half">
+        <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
+      </div>
+      
+      <div class="flex flex-column card--stats-half">
+        <%= render "partials/stats/stats-pame" %>
+        <%= render partial: "partials/stats/stats-external", locals: { external_links: @presenter.external_links } %>
+=======
     <div class="page__container">
       <div class="page__col-1">
         <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
@@ -27,12 +37,11 @@
           classes: 'page__col-child',
           external_links: @presenter.external_links 
         } %>
+>>>>>>> refresh
       </div>
     </div>
 
-    <div class="card--stats">
-      <h1>Chart - overlaps</h1>
-    </div>
+    <%= render partial: "partials/stats/stats-overlap" %>
 
     <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
     
@@ -40,70 +49,20 @@
   </div>  
 </div>
 
-
-
-
-
 <%= content_for :seo, "Learn about and visualise the protected area #{@protected_area.name} (#{@protected_area.designation.try(:name)}), situated in #{@countries.map(&:name).join("; ") rescue "Areas Beyond National Jurisdiction"}" %>
 <%= content_for :seo_image, tiles_url(type: "protected_area", id: @protected_area.wdpa_id, version: 1) %>
 <%= content_for :page_title, @protected_area.name %>
 
 <% has_designations = @protected_area.networks.detect(&:designation).present? %>
 
-<div class="template--site container--profile container--push-bottom pdf--protected-area">
-  <h1 class="header--h1-small">
-    
-    
-  </h1>
-
-  <% if has_designations %>
-    <div class="info-box info-box--fill-color info-box--small">
-      <p class="icon--info">
-        This site has multiple designations. <%= link_to raw('(See all details &#8595;)'), '#anchor-designations', class: 'link--page-anchor' %>
-      </p>
-    </div>
-  <% end %>
-
-  
-
-<%= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class: 'link link--hero-download' do %>
-<i class="fa fa-file-pdf-o"></i>Download site
+<% if has_designations %>
+  <div class="info-box info-box--fill-color info-box--small">
+    <p class="icon--info">
+      This site has multiple designations. <%= link_to raw('(See all details &#8595;)'), '#anchor-designations', class: 'link--page-anchor' %>
+    </p>
+  </div>
 <% end %>
 
-
-<section class="js-fullscreen-target fullscreen" data-id="map-site-target">
-  
-  <button 
-    class="button--fullscreen js-fullscreen-button js-fullscreen-button-site fa fa-expand fullscreen__button-site u-only-desktop" 
-    data-id="map-site"
-    data-type="expand">
-  </button>
-
-  <div 
-    id="map-site" 
-    class="map map--hero"
-    data-bound-from="<%= @protected_area.bounds.first %>"
-    data-bound-to="<%= @protected_area.bounds.last %>"
-    data-wdpa-ids="<%= [@protected_area.wdpa_id] %>"
-    data-control-position="bottomleft">
-  </div>
-
-  <div class="disclaimer">
-    The designations employed and the presentation of material on this map do not
-    imply the expression of any opinion whatsoever on the part of the Secretariat
-    of the United Nations concerning the legal status of any country, territory,
-    city or area or of its authorities, or concerning the delimitation of its
-    frontiers or boundaries.
-  </div>
-
-</section>
-
-<% if @protected_area.story_map_links.any? %>
-    <h2 class="header--section u-margin--page">Link to story map</h2>
-    <% @protected_area.story_map_links.each do |story_map_link| %>
-      <p class="u-margin--page"><%= link_to "Story Map(#{story_map_link.link_type})", story_map_link.link, class: 'link is-external', title: 'view the Story map', target: '_blank'%></p>
-    <% end %>
-<% end %>
 
   <% if has_designations %>
     <section id="anchor-designations">
@@ -139,62 +98,14 @@
     </section>
   <% end %>
 
-  <% if @networks.any? %>
-    <% unless @for_pdf %>
-      <%= render partial: "map_connections" %>
-    <% end %>
+<% if management_plan_document %>
+  <section class="fact">
+    <h2 class="fact__header">Management Plan</h2>
 
-    <section>
-  <h2 class="header--section u-margin--page">Site network breakdown</h2>
-
-  <div class="js-tabs-network tab-container">
-    <% unless @for_pdf %>
-      <ul class="tab__titles u-margin--page">
-        <% @networks.each_with_index do |network, i| %>
-          <li data-id="tab-<%= i+1 %>" class="tab__title js-tab-title <%= "tab__title--active" if i.zero? %>"><%= network.name %></li>
-        <% end %>
-      </ul>
-    <% end %>
-
-    <% @networks.each_with_index do |network, i| %>
-      <div data-id="tab-<%= i+1 %>-content" class="tab__content js-tab-content <%= "u-hide" unless i.zero? %>">
-        
-        <% if @for_pdf %>
-          <span class="tab__title tab__title--active"><%= network.name %></span>
-        <% end %>
-        
-        <p class="article__paragraph u-margin--page"></p>
-        
-        <div class="js-show-hide-wrapper">
-          
-          <div class="flex-row-wrap u-pdf-no-break js-show-hide-targets">
-            <% network.protected_areas.each do |protected_area| %>
-              <% next if protected_area.id == @protected_area.id %>
-              <%= render partial: "pa_card", locals: { protected_area: protected_area, comparison_protected_area: @protected_area } %>
-            <% end %>
-          </div>
-
-          <button data-type="show" class="button--grey u-margin-auto u-block js-show-hide">Show all</button>
-        </div>
-      </div>
-    <% end %>
-  </div>
-  
-</section>
-  <% end %>
-
-  <section class="info-box__column">
-    <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Downloads</h2>
-    <div class="info-box__body info-box__body--no-padding">
-      <div class="info-box__row">
-        <button class="js-download-btn info-box__link u-only-desktop tooltip-old__trigger js-trigger">
-          <i class="info-box__link-icon fa fa-download"></i>Download site GIS file
-          <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :shp])) %>
-        </button>
-        <%= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class: 'info-box__link' do %>
-          <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download site
-        <% end %>
-      </div>
-    </div>
+    <a href="<%= management_plan_document %>" class="info-box--margin-top info-box__link">
+      <i class="info-box__link-icon fa fa-file-pdf-o"></i><%= "#{@protected_area.name} Management Plan" %>
+    </a>
   </section>
+<% end %>
+
 </div>
