@@ -120,7 +120,8 @@ export default {
         params: {
           filters: filters,
           items_per_page: 9,
-          requested_page: requestedPage
+          requested_page: requestedPage,
+          search_index: 'cms'
         }
       }
       console.log('params', data.params)
