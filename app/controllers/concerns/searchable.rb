@@ -35,9 +35,13 @@ module Concerns::Searchable
       'country' => Search::COUNTRY_INDEX,
       'region' => Search::REGION_INDEX,
       'all' => Search::DEFAULT_INDEX_NAME,
-      'areas' => Search::PA_INDEX
+      'areas' => Search::PA_INDEX,
+      'cms' => Search::CMS_INDEX
     }.freeze
     def search_index
+      _index = search_params[:search_index]
+      return INDEX_BY_TYPE[_index] if _index.present?
+
       _index = INDEX_BY_TYPE[parsed_filters['ancestor']] if parsed_filters
       return _index if _index
 
