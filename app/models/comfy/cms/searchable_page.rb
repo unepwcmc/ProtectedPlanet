@@ -23,9 +23,24 @@ class Comfy::Cms::SearchablePage < Comfy::Cms::Page
   end
 
   def content
-    fragment = self.fragments.where(identifier: 'content').first
+    fragment = self.fragments.find_by(identifier: 'content')
     return '' unless fragment
     # TODO Currently getting the first 100 characters of the string to make a summary
     fragment.content.length > 100 ? fragment.content[0..99] : fragment.content
+  end
+
+  def summary
+    fragment = self.fragments.find_by(identifier: 'summary')
+    return '' unless fragment
+
+    fragment.content
+  end
+
+  # TODO Consider lazy loading
+  def image
+    fragment = self.fragments.find_by(identifier: 'image')
+    return '' unless fragment
+
+    Rails.application.routes.url_helpers.rails_blob_path(fragment.attachments_blobs.first)
   end
 end

@@ -1,14 +1,15 @@
-<%= render partial: "./layouts/partials/hero-small", locals: { 
+<%= render partial: "./layouts/partials/hero-basic", locals: { 
   classes: 'thematical-area' ,
   hero_image: cms_fragment_render(:theme_image, @cms_page),
+  summary: cms_fragment_render("summary"),
   title: @cms_page.label
 } %>
 
 <main v-cloak>
-  <section class="section-padding">
+  <section class="page-padding--top">
     <div class="container--desktop-up">
 
-      <flickity ref="flickity" :options="<%= get_config_carousel_global %>" class="flickity--basic">
+      <flickity ref="flickity" :options="<%= get_config_carousel_t11 %>" class="flickity--basic">
         <% @global_stats.each do |stat| %>
           <div class="carousel-cell">
             <div class="carousel-cell__content">
@@ -17,7 +18,9 @@
                 text="<%= getTooltipText(stat[:id]) %>"
                 class="carousel-cell__tooltip"
               >
-                <i class="icon--info-circle block"></i>
+                <i class="svg--info block">
+                  <%= render '/partials/svgs/info.svg' %>
+                </i>
               </tooltip>
 
               <h3 class="carousel-cell__title"><%= stat[:title] %></h3>
@@ -39,7 +42,7 @@
     </div>
   </section>
 
-  <section class="section-padding--bottom">
+  <section class="page-padding--top section-padding--bottom">
     <div class="container--desktop-up">
       <target-11-dashboard
         class="sm-trigger-sticky-bar"
@@ -47,7 +50,12 @@
         :table-headings="<%= @country_and_regions_headings %>" 
         :table-data-src="<%= @endpoint.to_json %>"
         :tooltip-array="<%= t("thematic_area.target_11_dashboard.tooltips").to_json %>"
-      >
+      > 
+        <slot>
+          <i class="svg--info-light block">
+            <%= render '/partials/svgs/info.svg' %>
+          </i>
+        </slot>
       </target-11-dashboard>
     </div>
   </section>

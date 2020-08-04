@@ -61,6 +61,7 @@
 @mixin h4 {
   @include text-2;
   @include responsive(font-size, rem-calc(18), rem-calc(18), rem-calc(16));
+  margin: 1.5em 0 .8em 0;
 }
 
 @mixin h-big {
@@ -72,10 +73,12 @@
 }
 
 @mixin text-accent {
-  @include responsive(font-size, rem-calc(30), rem-calc(50), rem-calc(60));
   color: $primary;
+  font-size: rem-calc(30);
   font-weight: $bold;
   line-height: 1;
+
+  @include breakpoint($small) { font-size: rem-calc(60); }
 }
 
 @mixin text-alert {

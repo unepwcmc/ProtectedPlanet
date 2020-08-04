@@ -6,6 +6,29 @@
 // classes
 //--------------------------------------------------
 .list {
+//--------------------------------------------------
+// links
+//--------------------------------------------------
+  &--links {
+    @include ul-unstyled;
+
+    .list {
+      &__li {
+        @include flex;
+        @include flex-h-between;
+        @include flex-v-center;
+        background-color: $grey-xlight;
+        margin-top: rem-calc(10);
+        padding: rem-calc(14 20);
+        max-width: rem-calc(700);
+      }
+
+      &__a { margin-left: rem-calc(14); }
+    }
+  }
+//--------------------------------------------------
+// stripes
+//--------------------------------------------------
   &--stripes {
     @include ul-unstyled;
 
@@ -19,10 +42,16 @@
         &__title {
           font-weight: $bold;
           margin-right: rem-calc(14);
+
+          display: block;
+
+          @include breakpoint($medium) { display: inline; }
         } 
     }
   }
-
+//--------------------------------------------------
+// underline
+//--------------------------------------------------
   &--underline {
     @include ul-unstyled;
     max-height: rem-calc(280);
@@ -41,10 +70,6 @@
         &:first-child { border-top: none; }
       }
 
-        &__a {
-          margin-left: auto;
-        }
-
         &__icon {
           @include circle-icon;
           background-color: $grey;
@@ -56,20 +81,13 @@
           margin-right: rem-calc(24);
         } 
 
-        &__value {
+        &__right {
+          margin-left: auto;
 
+          justify-content: flex-end;
         }
 
-        &__a {
-          @include button-with-icon;
-          @include flex-no-shrink;
-          
-          &::after {
-            @include icon-circle-chevron-black;
-            height: rem-calc(21);
-            width: rem-calc(21);
-          }
-        }
+        &__a { @include button-all($small: true); }
     }
   }
 }

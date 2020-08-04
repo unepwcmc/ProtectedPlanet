@@ -1,5 +1,5 @@
-<div class="card--stats sm-sources">
-  <h2 class="card"><%= t('stats.sources.title') %></h2>
+<div class="card--stats-sources sm-sources">
+  <h2 class="card__h2"><%= t('stats.sources.title') %></h2>
   
   <div class="card__content flex">
     <div class="card__stat-box card__third">
@@ -19,7 +19,7 @@
           <li class="list__li fle">
             <span class="list__title"><%= source[:title] %></span>
             <span class="list__value"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
-            <span class="list__a"><%= link_to 'Details', source[:url], title: '' %></span>
+            <span class="list__a list__right"><%= link_to 'Details', source[:url], title: '' %></span>
           </li>
         <% end %>
       </ol>

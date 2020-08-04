@@ -7,13 +7,13 @@ polyfill()
 import Vue from 'vue/dist/vue.esm'
 import VueAnalytics from 'vue-analytics'
 import Vue2TouchEvents from 'vue2-touch-events'
-import ScrollMagic from 'scrollmagic'
 import VueLazyload from 'vue-lazyload'
 
 // store
 import store from './store/store.js'
 
 // components
+import AmChartLine from './components/charts/am-chart-line/AmChartLine'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
@@ -26,16 +26,18 @@ import ChartLine from './components/charts/chart-line/ChartLine'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
+import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Flickity from 'vue-flickity';
 import Download from './components/download/Download'
-import MapInteractive from './components/map/MapInteractive'
+import FilteredTable from './components/pame/FilteredTable'
 import NavBurger from './components/nav/NavBurger'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
 import SearchSiteTopbar from './components/search/SearchSiteTopbar'
+import SelectEquity from './components/select/SelectEquity'
 import SelectWithContent from './components/select/SelectWithContent'
 import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
@@ -44,8 +46,15 @@ import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
+import VMapDisclaimer from './components/map/VMapDisclaimer'
+import VMap from './components/map/VMap'
+import VMapPASearch from './components/map/VMapPASearch'
+import VMapHeader from './components/map/VMapHeader'
+import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
+
+export const eventHub = new Vue()
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
@@ -63,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
       store,
 
       components: {
+        AmChartLine,
         Carousel,
         CarouselSlide,
         Counter,
@@ -75,16 +85,18 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartTreemapInteractive,
         ChartRectangles,
         ChartRowPa,
+        ChartRowStacked,
         ChartRowTarget,
         ChartSunburst,
         Download,
+	      FilteredTable,
         Flickity,
-        MapInteractive,
         NavBurger,
         SearchAreas,
         SearchAreasHome,
         SearchSite,
         SearchSiteTopbar,
+        SelectEquity,
         SelectWithContent,
         StickyBar,
         StickyNav,
@@ -93,6 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
         TabTarget,
         Target11Dashboard,
         Tooltip,
+        VMap,
+        'v-map-pa-search': VMapPASearch,
+        VMapDisclaimer,
+        VMapHeader,
+        VMapFilters,
         VSelectSearchable,
         VTable
       }

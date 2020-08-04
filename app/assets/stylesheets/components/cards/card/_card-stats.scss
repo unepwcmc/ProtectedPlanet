@@ -1,8 +1,17 @@
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
+@mixin card-stat-content {
+  @include flex;
+  @include flex-column;
+
+  @include breakpoint($small) { @include flex-row; }
+}
+
 @mixin card-stats-padding {
-  padding: rem-calc(28 30); 
+  padding: rem-calc(16 18); 
+
+  @include breakpoint($small) { padding: rem-calc(28 30); }
 }
 
 @mixin card-stats-number {
@@ -11,9 +20,27 @@
   line-height: 1;
 }
 
+@mixin card-stats {
+  @include card-stats-padding;
+  background-color: $white;
+  margin-top: rem-calc(30);
+}
+
+@mixin card-stats-h2 { margin-top: 0; } 
+
+@mixin card-stats-third { width: calc(33% - 16px); }
+
+@mixin card-button-external { @include button-all($small: true); }
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
+&--stats-wrapper-chart {
+  @include container-medium;
+
+  @include breakpoint-down($small) { padding: 0; }
+}
+
 &--stats-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -24,168 +51,18 @@
   }
 }
 
-&--stats {
-  @include card-stats-padding;
-  background-color: $white;
-  margin-top: rem-calc(30);
+&--stats-half {
+  width: 100%; 
 
-  &--half {
-    width: 100%; 
-
-    @include breakpoint($small) { width: calc(50% - 15px); }
-  }
-
-  .card {
-
-    h2 {
-      font-size: rem-calc(20);
-    }
-
-    &__content {
-      @include flex;
-    }
-
-    &__logos {
-      @include flex;
-      @include ul-unstyled;
-    }
-
-      &__logo {
-        margin-left: rem-calc(24);
-
-        &:first-child { margin-left: 0; }
-      }
-
-        &__logo-image {
-          
-          width: rem-calc(100); height: auto;
-
-          display: block;
-        }
-
-    &__third {
-      width: calc(33% - 16px);
-    }
-
-    &__two-thirds { 
-      width: calc(100% - 33%);
-    }
-
-      &__chart-square {
-        margin-right: rem-calc(24);
-        width: 30%;
-      }
-
-      &__stat-box {
-        @include bg-grey-xdark;
-        @include flex;
-        @include flex-center;
-        font-size: rem-calc(20);
-        font-weight: $bold;
-        margin-right: rem-calc(20);
-        height: rem-calc(280);
-      }
-  }
+  @include breakpoint($small) { width: calc(50% - 15px); }
 }
 
-&--stats-overview {
-  @include bg-grey-black;
-  @include card-stats-padding;
-  margin-right: rem-calc(30);
-  width: 100%;
-
-  @include breakpoint($small) { width: 33%; }
-
-  .card {
-    &__flag {
-      margin-right: rem-calc(14);
-    }
-
-    &__heading {
-      @include flex;
-      @include flex-v-center;
-      margin-bottom: rem-calc(18);
-    }
-
-    &__h1 { 
-      color: $white;
-      font-size: rem-calc(20);
-      margin: 0;
-
-      @include breakpoint($small) { font-size: rem-calc(22); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
-    }
-
-    &__number {
-      @include card-stats-number;
-      font-size: rem-calc(18);
-
-      display: block;
-
-      @include breakpoint($small) { font-size: rem-calc(20); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
-    }
-
-    &__number--small {
-      @include card-stats-number;
-      font-size: rem-calc(18);
-      margin-right: rem-calc(10);
-
-      @include breakpoint($small) { font-size: rem-calc(20); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
-    }
-
-    &__section {
-      margin-top: rem-calc(30);
-    }
-
-    &__story-map-links {
-      margin-top: 3rem;
-      .story-map-link {
-        font-size: rem-calc(16);
-        margin-bottom: rem-calc(8);
-
-        @include flex;
-        @include flex-h-between;
-        
-        &__label {
-          padding-right: rem-calc(8);
-        }
-        
-        &__link {
-          @include button-with-icon;
-          font-size: rem-calc(16) !important;
-          
-          &::after { 
-            @include icon-arrow-external; 
-            display: inline-block;
-          }
-        }
-        
-        @include breakpoint-down($medium) {
-          @include flex-column;
-          
-          &__label {
-            margin-bottom: rem-calc(8);
-          }
-        }
-  
-        &__title {
-          font-weight: $bold;
-        }
-      }
-    }
-
-    &__text {
-      font-size: rem-calc(16);
-    }
-
-    &__text-bold {
-      font-size: rem-calc(16);
-      font-weight: $bold;
-      margin-bottom: rem-calc(6);
-
-      display: block;
-    }
-  }
-}
+@import './stats/card-stats-affiliations';
+@import './stats/card-stats-attributes';
+@import './stats/card-stats-coverage';
+@import './stats/card-stats-designations';
+@import './stats/card-stats-governance';
+@import './stats/card-stats-iucn';
+@import './stats/card-stats-management';
+@import './stats/card-stats-overview';
+@import './stats/card-stats-sources';

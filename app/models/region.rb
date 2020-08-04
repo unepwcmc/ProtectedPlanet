@@ -1,5 +1,6 @@
 class Region < ApplicationRecord
   include GeometryConcern
+  include MapHelper
 
   has_many :countries
   has_many :protected_areas, through: :countries
@@ -80,6 +81,8 @@ class Region < ApplicationRecord
     processed_data
   end
 
+
+
   def sources_per_jurisdiction
     ActiveRecord::Base.connection.execute("""
       SELECT jurisdictions.name, COUNT(DISTINCT protected_areas_sources.source_id)
@@ -102,8 +105,12 @@ class Region < ApplicationRecord
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:id, :name]
+      only: [:id, :name, :iso]
     )
+  end
+
+  def extent_url
+    region_extent_url(name)
   end
 
   def protected_areas_per_designation(jurisdiction=nil)
@@ -115,6 +122,22 @@ class Region < ApplicationRecord
       ) AS pas_per_designations
         ON pas_per_designations.designation_id = designations.id
       #{"WHERE designations.jurisdiction_id = #{jurisdiction.id}" if jurisdiction}
+    """)
+  end
+
+  def protected_areas_per_jurisdiction
+    ActiveRecord::Base.connection.execute("""
+      SELECT jurisdictions.name, COUNT(*)
+      FROM jurisdictions
+      INNER JOIN designations ON jurisdictions.id = designations.jurisdiction_id
+      INNER JOIN (
+        SELECT protected_areas.designation_id
+        FROM protected_areas
+        INNER JOIN countries_protected_areas
+          ON protected_areas.id = countries_protected_areas.protected_area_id
+          AND countries_protected_areas.country_id IN (#{self.countries.pluck(:id).join(",")})
+      ) AS pas_for_country ON pas_for_country.designation_id = designations.id
+      GROUP BY jurisdictions.name
     """)
   end
 

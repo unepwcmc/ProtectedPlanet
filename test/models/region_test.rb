@@ -90,11 +90,12 @@ class RegionTest < ActiveSupport::TestCase
   end
 
   test '.as_indexed_json returns the region as JSON' do
-    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
+    region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica', iso: 'NMM')
 
     expected_json = {
       "id" => 987,
-      "name" => "North Manmerica"
+      "name" => "North Manmerica",
+      "iso" => 'NMM'
     }
 
     assert_equal expected_json, region.as_indexed_json

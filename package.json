@@ -1,8 +1,10 @@
 {
   "scripts": {
-    "start": "webpack-dev-server --host 0.0.0.0 --inline --content-base ."
+    "start": "./bin/webpack-dev-server --host 0.0.0.0 --inline --content-base .",
+    "lint": "eslint --ext .js,.vue"
   },
   "dependencies": {
+    "@amcharts/amcharts4": "^4.9.28",
     "@rails/webpacker": "^4.0.2",
     "axios": "^0.19.0",
     "d3": "^5.9.2",
@@ -21,5 +23,9 @@
     "vue2-touch-events": "^2.0.0",
     "vuex": "^3.1.0",
     "webpack-dev-server": "^3.8.2"
+  },
+  "devDependencies": {
+    "eslint": "~5.16.0",
+    "eslint-plugin-vue": "^5.2.3"
   }
 }

@@ -1,11 +1,40 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
+//--------------------------------------------------
+// mixins for tabs
+//--------------------------------------------------
+@mixin tabs-horizontal-scroll {
+  @include flex;
+  overflow-x: scroll;
 
+  @include breakpoint($medium){ 
+    overflow-x: initial;
+      
+    flex-wrap: wrap;
+  }
+}
+
+@mixin tabs-rounded {
+  @include ul-unstyled;
+  @include tabs-horizontal-scroll;
+  margin: rem-calc(26 0);
+  
+  @include breakpoint($small) { margin: rem-calc(26 0 32 0); }
+  @include breakpoint($medium) { margin: rem-calc(30 0 10 0); }
+
+  .tab {
+    &__trigger {
+      @include button-tab-rounded;
+      @include flex-no-shrink;
+      margin: rem-calc(0 10);
+    }
+  }
+}
 //--------------------------------------------------
-// mixins
+// mixins for tab
 //--------------------------------------------------
-@mixin tab-trigger {
+@mixin tab-trigger-underlined {
   @include text-tabs-fake;
   border-bottom: solid transparent 2px;
   cursor: pointer;
@@ -23,49 +52,90 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
+.tabs {
 //--------------------------------------------------
 // tabs hero
 //--------------------------------------------------
-.tabs--hero {
-  .tabs__scrollable {
-    overflow-x: scroll;
+  &--hero {
+    .tabs__triggers {
+      @include container;
+      @include site-width;
+      @include tabs-horizontal-scroll;
+      @include ul-unstyled;
+      @include ul-inline;
 
-    transform: translateY(-100%);
+      transform: translateY(-100%);
+    }
+
+      .tab {
+        &__trigger { @include tab-trigger-underlined; }
+
+        &__target {
+          display: none;
+
+          &.active { display: block; }
+        }
+      }
   }
+//--------------------------------------------------
+// tabs search main
+//--------------------------------------------------
+&--search-main {
+  @include tabs-rounded;
 
-  .tabs__triggers {
-    @include ul-unstyled;
-    @include ul-inline;
-    width: fit-content;
-
-    display: flex;
-  }
-
-  .tab__target {
-    display: none;
-
-    &.active { display: block; }
-  }
-
-  .tab__trigger {
-    @include tab-trigger;
-
-    &.active { color: $primary; }
+  .tab {
+    &__trigger {
+      &:first-child { margin-left: 0; }
+    }
   }
 }
 //--------------------------------------------------
-// tabs fake
+// tabs search areas
 //--------------------------------------------------
-.tabs--fake {
-  @include flex;
-  @include ul-unstyled;
-  @include responsive(flex-wrap, nowrap, nowrap, wrap);
-  @include responsive(overflow-x, scroll, scroll, initial);
-  @include responsive(margin, rem-calc(26 0), rem-calc(26 0 32 0), rem-calc(30 0 10 0));
+&--search-areas {
+  @include tabs-rounded;
 
-  .tab__trigger {
-    @include flex-no-shrink;
-    @include tab-trigger;
-    @include responsive(margin-bottom, 0, 0, rem-calc(10));
+  @include breakpoint($small) { justify-content: center; }
+
+  .tab {
+    &__trigger {
+      &:first-child { margin-left: 0; }
+    }
+  }
+}
+
+//--------------------------------------------------
+// tabs small
+//--------------------------------------------------
+  &--rounded-small {
+    @include ul-unstyled;
+    margin: rem-calc(0 0 10 0);
+
+    .tab {
+      &__trigger {
+        @include button-tab-rounded(small);
+        margin: rem-calc(0 4);
+        display: inline-block;
+      }
+    }
+  }
+//--------------------------------------------------
+// tabs underlined
+//--------------------------------------------------
+  &--underlined {
+    @include tabs-horizontal-scroll;
+    @include ul-unstyled;
+    margin: rem-calc(26 0);
+    
+    @include breakpoint($small){ margin: rem-calc(26 0 32 0); }
+    @include breakpoint($medium){ margin: rem-calc(30 0 10 0); }
+
+    .tab {
+      &__trigger {
+        @include flex-no-shrink;
+        @include tab-trigger-underlined;
+        @include breakpoint($medium){ margin-bottom: rem-calc(10); }
+      }
+    }
   }
 }

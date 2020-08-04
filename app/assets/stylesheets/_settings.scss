@@ -16,8 +16,9 @@ $grey-dark: #666666;
 $grey-xdark: #404040;
 $grey-black: #242424;
 
-$blue: #2C10A3;
+$blue: #004DA8;
 
+$green-bright: #38A800;
 $green: #71A32B;
 $green-dark: #527B19;
 $green--darker: #415519;
@@ -50,14 +51,13 @@ $alert: $red;
 $primary: $green;
 $primary-dark: $green--darker;
 
-
-
-// $accent-light: lighten($green, 15%);
-// $accent: $green;
-
 $global: $purple;
-$marine: #54B7EB;
-$terrestrial: #B1D680;
+$marine: $blue;
+$terrestrial: $green-bright;
+
+$pin-marine: $marine;
+$pin-oecm: $orange;
+$pin-terrestrial: $terrestrial;
 
 //used on marine insights page
 $blue--marine-1: #bfe5e9; 
@@ -66,6 +66,8 @@ $blue--marine-3: #90BDC4;
 $blue--marine-4: #729099;
 $blue--marine-5: #444955;
 $marine-accent-color: $orange--lighest;
+
+$theme-designation: [$chart-purple, $chart-aqua, $chart-blue];
 
 //--------------------------------------------------
 // buttons
@@ -114,6 +116,7 @@ $fw-black: 900;
 // breakpoints
 //--------------------------------------------------
 // must be in px not rem!
+// IF MODIFIED, PLEASE CHECK ELSEWHERE IN PROJECT e.g. in mixin-responsive.js
 $small: 767px; 
 $medium: 1024px;
 $large: 1200px;
@@ -128,7 +131,7 @@ $z-300: 300;
 //--------------------------------------------------
 // padding
 //--------------------------------------------------
-$gutter-small: rem-calc(25);
+$gutter-small: rem-calc(20);
 $gutter-medium: rem-calc(25);
 $gutter-large: rem-calc(30);
 
@@ -162,6 +165,8 @@ $site-width-rem: rem-calc($site-width);
 // $site-width-medium-tablet: 80%;
 // $site-width-medium-laptop: 78%;
 $site-width-medium-desktop: rem-calc(750);
+
+$filters-menu-max-height: rem-calc(300);
 
 //--------------------------------------------------
 // tables

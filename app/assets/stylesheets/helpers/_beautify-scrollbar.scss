@@ -1,34 +1,34 @@
-@mixin beautify-scrollbar {
-    &::-webkit-scrollbar,
-    &::-webkit-scrollbar-button {
-        width: rem-calc(9);
-        height: rem-calc(9);
+@mixin beautify-scrollbar($width: 9) {
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-button {
+    width: rem-calc($width);
+    height: rem-calc($width);
+  }
+  &::-webkit-scrollbar-thumb,
+  &::-webkit-scrollbar-track {
+    background-clip: padding-box;
+    border-radius: rem-calc($width);
+    border: rem-calc(1) solid $grey-xdark;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $grey-black;
+    &:hover {
+      background: $grey-black;
     }
-    &::-webkit-scrollbar-thumb,
-    &::-webkit-scrollbar-track {
-        background-clip: padding-box;
-        border-radius: rem-calc(9);
-        border: rem-calc(1) solid $grey-xdark;
+    &:active {
+      background-color: $white;
     }
-    &::-webkit-scrollbar-thumb {
-        background: $grey-dark;
-        &:hover {
-            background: $grey-dark;
-        }
-        &:active {
-            background: lighten($grey-light, 25%);
-        }
+  }
+  &::-webkit-scrollbar-track {
+    background: $white;
+    &:hover {
+      background: $white;
     }
-    &::-webkit-scrollbar-track {
-        background: $grey-xlight;
-        &:hover {
-            background: $grey-xlight;
-        }
-        &:active {
-            background: $grey-dark;
-        }
+    &:active {
+      background: $grey-black;
     }
-    &::-webkit-scrollbar-corner {
-        background: transparent;
-    }
+  }
+  &::-webkit-scrollbar-corner {
+      background: transparent;
+  }
 }

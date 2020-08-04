@@ -3,13 +3,22 @@
 class CountryController < ApplicationController
   after_action :enable_caching
   before_action :load_vars, except: %i[codes compare]
+  include MapHelper
 
   def show
     @country_presenter = CountryPresenter.new @country
 
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
-                 @iucn_categories = @country.protected_areas_per_iucn_category
+    @iucn_categories = @country.protected_areas_per_iucn_category
     @governance_types = @country.protected_areas_per_governance
+    @coverage_growth = @country.coverage_growth #[{year: , count: , area: }]
+
+    @country_designations = @country_presenter.designations
+
+    # For the stacked row chart percentages
+    @designation_percentages = @country_designations.map do |designation|
+      { percent: designation[:percent] }
+    end.to_json
 
     @sites = [] # #TODO
 
@@ -25,9 +34,19 @@ class CountryController < ApplicationController
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.count
 
-    # #TODO need adding
-    # protected_national_report: statistic_presenter.percentage_nr_marine_cover,
+    @map = {
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+    }
+
+    @map_options = {
+      map: { boundsUrl: @country.extent_url }
+    }
+    
+    ##TODO need adding
+    # protected_national_report: statistic_presenter.percentage_nr_marine_cover, 
     # national_report_version: statistic_presenter.nr_version,
+
+    helpers.opengraph_title_and_description_with_suffix(@country.name)
 
     respond_to do |format|
       format.html
@@ -66,6 +85,10 @@ class CountryController < ApplicationController
   end
 
   private
+
+  def map_overlays
+    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+  end
 
   def load_vars
     @country = if params[:iso].size == 2

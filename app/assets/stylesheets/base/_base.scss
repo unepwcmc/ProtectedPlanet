@@ -42,6 +42,10 @@ h3 {
 
   &.h3-big-white { @include h-big; color: $white; }
 }
+
+h4 {
+  @include h4;
+}
   
 p,a { 
   color: inherit; 
@@ -61,6 +65,10 @@ label { cursor: pointer; }
 em { font-style: italic; }
 
 img { max-width: 100%; }
+
+sup {
+  font-size: .6em;
+}
 
 //--------------------------------------------------
 // site structure

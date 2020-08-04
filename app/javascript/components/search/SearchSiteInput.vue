@@ -11,6 +11,7 @@
       >
 
       <input
+        ref="input"
         v-model="searchTerm"
         type="text"
         class="search__input"
@@ -41,7 +42,8 @@ export default {
     popout: {
       type: Boolean,
       default: false
-    }
+    },
+    prePopulatedSearchTerm: String
   },
 
   data () {
@@ -53,6 +55,10 @@ export default {
 
   created () {
     if(this.popout) { this.isActive = false }
+  },
+
+  mounted () {
+    if(this.prePopulatedSearchTerm) { this.searchTerm = this.prePopulatedSearchTerm }
   },
 
   computed: {
@@ -76,7 +82,10 @@ export default {
       this.$emit('submit:search', this.searchTerm)
     },
 
-    toggleInput () { this.isActive = !this.isActive }
+    toggleInput () {
+      this.isActive = !this.isActive
+      setTimeout(() => this.$refs.input.focus(), 0)
+    }
   }
 }
 </script>

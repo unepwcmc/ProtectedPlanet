@@ -2,21 +2,32 @@ class SearchController < ApplicationController
   include Concerns::Searchable
   after_action :enable_caching
 
-  before_action :ignore_empty_query, only: [:search_results, :search_results_areas]
-  before_action :load_search, only: [:search_results, :search_results_areas]
+  before_action :ignore_empty_query, only: [ :search_results]
+  before_action :load_search, only: [:search_results]
 
   def index
-    @categories = [{ id: -1, title: 'All' }]
-    Comfy::Cms::Page.root.children.map do |c|
-      @categories << { id: c.id, title: c.label }
+    categories = I18n.t('search.categories')
+    cms_root_pages = Comfy::Cms::Page.root.children
+    @categories = []
+
+    categories.map do |category|
+      cms_page = cms_root_pages.find_by(slug: category)
+      if cms_page
+        @categories << { id: cms_page.id.to_s, title: cms_page.label}
+      else
+        @categories << { id: category, title: category.capitalize }
+      end
     end
-    @categories = @categories.to_json
 
     @query = search_params[:search_term]
   end
 
   def search_results
-    @results = Search::FullSerializer.new(@search, {page: search_params[:requested_page]}).serialize
+    _options = {
+      page: search_params[:requested_page],
+      per_page: search_params[:items_per_page]
+    }
+    @results = Search::FullSerializer.new(@search, _options).serialize
 
     render json: @results
   end
@@ -26,14 +37,26 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @results = Autocompletion.lookup search_params[:search_term]
+    db_type = search_params[:type]
+    @results = Autocompletion.lookup(search_params[:search_term], db_type, search_index(db_type))
 
     render json: @results
   end
 
   private
 
+  def search_index db_type
+    case db_type
+      when 'country'
+        Search::COUNTRY_INDEX
+      when 'region'
+        Search::REGION_INDEX
+      else
+        Search::PA_INDEX
+    end
+  end
+
   def search_params
-    params.permit(:search_term, :type, :requested_page, :items_per_page)
+    params.permit(:search_term, :type, :requested_page, :items_per_page, :filters)
   end
 end

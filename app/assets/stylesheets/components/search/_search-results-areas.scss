@@ -20,41 +20,63 @@
       padding: rem-calc(20 0); 
     }
 
-      &__bar-content {
-        @include container;
-        @include site-width;
-        @include flex;
-        @include flex-v-center;
-      }
+    &__bar-content {
+      @include container;
+      @include site-width;
+      @include flex;
+      @include flex-v-center;
+    }
+
+    &__map-container {
+      @include container;
+      @include site-width;
+
+      padding-top: rem-calc(28);
+      padding-bottom: rem-calc(28);
+    }
 
     &__main {
       @include container;
-      @include flex;
       @include site-width;
+
+      @include breakpoint($small) { display: flex; }
     }
 
-      &__filters {
-        @include flex-no-shrink;
-        @include responsive(padding-right, 0, rem-calc(24), rem-calc(24));
-        @include responsive(width, 0, 33%, 25%);
-      }
+    &__filter-trigger {
+      @include button-filter-trigger;
 
-      &__results {
-        @include flex-grow;
-      }
+      &.disabled { @include button-disabled; }
+    }
 
-        &__results-none {
-          font-size: rem-calc(20);
-          font-weight: $bold;
-          padding: rem-calc(30 0);
-          text-align: center; 
-        }
+    &__filters {
+      @include flex-no-shrink;
+      @include responsive(padding-right, 0, rem-calc(24), rem-calc(24));
+      @include responsive(width, 0, 33%, 25%);
+    }
+
+    &__results {
+      @include flex-grow;
+      min-height: rem-calc(300);
+
+      @include breakpoint($small) { min-height: rem-calc(600); }
+    }
+
+    &__results-none {
+      font-size: rem-calc(20);
+      font-weight: $bold;
+      padding: rem-calc(30 0);
+      text-align: center; 
+    }
       
-      &__results-bar {
-        @include flex;
-        @include flex-h-between;
-        @include flex-v-center;
-      }
+    &__results-bar {
+      @include flex;
+      @include flex-h-between;
+      @include flex-v-center;
+    }
+
+    &__spinner {
+      padding-top: rem-calc(55);
+    }
 
     &__map {
       @include container;

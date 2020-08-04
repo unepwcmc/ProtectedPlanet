@@ -1,14 +1,17 @@
 <template>
-  <div class="map--search" v-show="isActive">
+  <div
+    v-show="isActive"
+    class="map--search"
+  >
     <div class="map__map">
-      <h1>map here</h1>
+      <h1>map component here</h1>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'map-search',
+  name: 'MapSearch',
 
   props: {
     isActive: {

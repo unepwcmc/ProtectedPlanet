@@ -12,10 +12,13 @@ class Search::Index
     ])
 
 
+    region_index = Search::Index.new Search::REGION_INDEX, Region.without_geometry.all
+    region_index.create
     country_index = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
     country_index.create
     pa_index = Search::Index.new Search::PA_INDEX, pa_relation
     pa_index.create
+    region_index.index
     country_index.index
     pa_index.index
   end
@@ -32,12 +35,19 @@ class Search::Index
   end
 
   def self.count
-    self.new(Search::COUNTRY_INDEX).count + self.new(Search::PA_INDEX).count +
-      self.new(Search::CMS_INDEX).count
+    self.new(Search::REGION_INDEX).count +
+    self.new(Search::COUNTRY_INDEX).count +
+    self.new(Search::PA_INDEX).count +
+    self.new(Search::CMS_INDEX).count
   end
 
   def self.delete
-    [Search::COUNTRY_INDEX, Search::PA_INDEX, Search::CMS_INDEX].each do |index_name|
+    [
+      Search::REGION_INDEX,
+      Search::COUNTRY_INDEX,
+      Search::PA_INDEX,
+      Search::CMS_INDEX
+    ].each do |index_name|
       index = self.new index_name
       index.delete
     end

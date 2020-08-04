@@ -1,5 +1,18 @@
 en:
   home:
+    facts:
+      -
+        theme: terrestrial
+        title: Terrestrial Protected Area Coverage
+      -
+        theme: marine
+        title: Marine Protected Area Coverage
+      -
+        theme: oecm
+        title: Terrestrial OECM & Protected Area Coverage
+      -
+        theme: oecm
+        title: Marine OECM & Protected Area Coverage
     hero:
       button: Explore Protected Areas
       stat-text: Global Coverage of Protected Areas
@@ -7,25 +20,30 @@ en:
       title: Explore Protected Areas by...
       button: Explore All
       levels:
-        - 
+        -
           title: Regional level
-          url: #TODO
+          geo_type: region
           icon: region
-        - 
+        -
           title: Country level
-          url: #TODO
-          icon: region
-        - 
-          title: Indiviual Area
-          url: #TODO
-          icon: region 
+          geo_type: country
+          icon: country
+        -
+          title: Individual Area
+          geo_type: site
+          icon: area
       categories:
-        - 
+        -
           title: Marine Protected Areas
           slug: /marine-protected-areas
-        - 
+          filter: 'marine'
+        -
           title: Terrerstrial Protected Areas
           slug: /marine-protected-areas
-        - 
+          filter: 'terrestrial'
+        -
           title: Green List Protected Areas
           slug: /green-list
+          filter: 'is_green_list'
+    total_pas: Total Protected Areas
+    total_oecms: Total OECMs

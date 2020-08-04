@@ -2,21 +2,29 @@
 // variables
 //--------------------------------------------------
 $search-autocomplete-border: solid 2px $grey;
-$search-autocomplete-height-mobile: rem-calc(75);
+$search-autocomplete-height-mobile: rem-calc(46);
 $search-autocomplete-height-tablet: rem-calc(75);
 $search-autocomplete-width-tablet: rem-calc(760);
 $search-autocomplete-border-radius: calc(#{$search-autocomplete-height-tablet}/2);
 $search-autocomplete-select-width: rem-calc(222);
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--autocomplete {
-  @include responsive(width, 100%, $search-autocomplete-width-tablet, $search-autocomplete-width-tablet);
+  margin: 0 auto;
+  width: 100%;
 
   position: relative;
   z-index: 1;
 
-  .search__bar & { margin: rem-calc(0 120 0 20); }
+  @include breakpoint($small) { width: $search-autocomplete-width-tablet; }
+
+  .search__bar & { 
+    margin: rem-calc(0 20 0 20); 
+
+    @include breakpoint($small) { margin: rem-calc(0 120 0 20); }
+  }
 
   .search {
 
@@ -24,58 +32,66 @@ $search-autocomplete-select-width: rem-calc(222);
 
     &__search {
       &--active { 
-        .search__search-input { 
+      .search__search-input { 
           border-bottom-left-radius: 0;
           border-bottom-right-radius: 0;
         }
       } 
     }
 
-      &__search-input {
-        @include input-plain;
-        @include input-basic;
-        @include input-text;
-        @include responsive(height, $search-autocomplete-height-mobile, $search-autocomplete-height-tablet, $search-autocomplete-height-tablet);
-        border: $search-autocomplete-border;
-        border-radius: $search-autocomplete-border-radius;
-        padding-right: rem-calc(200);
-        padding-left: rem-calc(60);
-        width: 100%; 
-        
-        .search__bar & { @include responsive(height, rem-calc(49), rem-calc(49), rem-calc(49)); }
+    &__search-input {
+      @include input-plain;
+      @include input-basic;
+      @include input-text;
+      border: $search-autocomplete-border;
+      border-radius: $search-autocomplete-border-radius;
+      padding-right: rem-calc(20);
+      padding-left: rem-calc(60);
+      width: 100%; height: $search-autocomplete-height-mobile;
+      
+      @include breakpoint($small) { height: $search-autocomplete-height-tablet; }
 
-        &::-ms-clear { display: none; }
+      &:focus {
+        outline: none;
+        border-color: $black;
       }
 
-        &__search-icon {
-          @include icon-search;
+      .search__bar & { 
+        height: rem-calc(49);
+      }
 
-          position: absolute;
-          top: 50%;
-          left: rem-calc(16);
+      &::-ms-clear { display: none; }
+    }
 
-          transform: translateY(-50%);
-        }
+    &__search-icon {
+      @include icon-search;
 
-        &__search-icon--delete {
-          @include button-close;
+      position: absolute;
+      top: 50%;
+      left: rem-calc(16);
 
-          position: absolute;
-          top: 50%;
-          right: calc(#{$search-autocomplete-select-width} + 16px);
+      transform: translateY(-50%);
+    }
 
-          transform: translateY(-50%) scale(.7);
-        }
+    &__search-icon--delete {
+      @include button-close;
+
+      position: absolute;
+      top: 50%;
+      right: rem-calc(26);
+
+      transform: translateY(-50%) scale(.7);
+    }
 
     &__dropdown {
       @include input-basic;
-      @include ul-unstyled;
       background-color: $white;
       border: $search-autocomplete-border;
       border-bottom-left-radius: $search-autocomplete-border-radius;
       border-bottom-right-radius: $search-autocomplete-border-radius;
-      padding: rem-calc(50 0 34 0);
-      width: 100%;
+      overflow-y: scroll;
+      padding: rem-calc(36 0 34 0);
+      width: 100%; 
 
       position: absolute;
       top: 50%;
@@ -83,19 +99,26 @@ $search-autocomplete-select-width: rem-calc(222);
       z-index: -1;
     }
 
-      &__li {
-        
+    &__ul {
+      @include ul-unstyled;
+      overflow-y: scroll;
+      padding-top: rem-calc(14);
+      max-height: rem-calc(240);
+    }
+
+    &__li {
+
+    }
+
+    &__a {
+      @include input-text;
+      padding: rem-calc(10 40);
+      text-decoration: none;
+      width: 100%;
+
+      display: block;
+
+        &:hover { background-color: $grey-light; }
       }
-
-        &__a {
-          @include input-text;
-          padding: rem-calc(10 40);
-          text-decoration: none;
-          width: 100%;
-
-          display: block;
-
-          &:hover { background-color: $grey-light; }
-        }
+    }
   }
-}

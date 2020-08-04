@@ -2,7 +2,7 @@
     button_download_text: cms_fragment_render("button-download"),
     button_download_url: '', ##TODO this will prob come out because it will be a vue component
     button_search_text: cms_fragment_render("button-search"),
-    button_search_url: search_areas_path('oecm'),
+    button_search_url: search_areas_path(filters: @filters),
     hero_image: cms_fragment_render(:theme_image, @cms_page),
     hero_stat_text: t('thematic_area.oecm.hero-stat-text'),
     hero_stat_percentage: @oecm_coverage_percentage,
@@ -12,9 +12,11 @@
   }
 %>
 
-<section class="container">
-  <%= render partial: "partials/tabs/tabs-thematic-area-database", locals: { tabs: @tabs } %>
-</section>
+<%= render partial: "partials/tabs/tabs-thematic-area-database", locals: { 
+  config_search: @config_search_areas,
+  map: @map,
+  tabs: @tabs
+} %>
 
 <section class="container section-padding">
   <%= render "partials/cards/resources" %>

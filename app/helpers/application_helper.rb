@@ -1,3 +1,4 @@
+# coding: utf-8
 module ApplicationHelper
   include BemHelper
 
@@ -12,6 +13,10 @@ module ApplicationHelper
     Country => "search-placeholder-country.png",
     Region => "search-placeholder-region.png"
   }.freeze
+
+  def get_square_side area
+    Math.sqrt(area/100) * 100
+  end
 
   def commaify number
     number_with_delimiter(number, delimeter: ',')
@@ -42,6 +47,10 @@ module ApplicationHelper
     PLACEHOLDERS[klass]
   end
 
+  def tiles_path(params)
+    Rails.application.routes.url_helpers.tiles_path(params)
+  end
+
   def cover_data(image_params, item_class)
     placeholder = cover_placeholder(item_class)
     {
@@ -51,10 +60,12 @@ module ApplicationHelper
     }
   end
 
-  def protected_area_cover protected_area
+  def protected_area_cover(protected_area, with_tag: true)
     version = Rails.application.secrets.mapbox[:version]
     image_params = {id: protected_area.wdpa_id, type: "protected_area", version: version}
     data = cover_data(image_params, protected_area.class)
+
+    return tiles_path(image_params) unless with_tag
 
     image_tag(
       cover_placeholder(protected_area.class),
@@ -65,10 +76,12 @@ module ApplicationHelper
     )
   end
 
-  def country_cover country
+  def country_cover(country, with_tag: true)
     version = Rails.application.secrets.mapbox[:version]
     image_params = {id: country.iso, type: "country", version: version}
     data = cover_data(image_params, country.class)
+
+    return tiles_path(image_params) unless with_tag
 
     image_tag(
       cover_placeholder(country.class),
@@ -76,126 +89,17 @@ module ApplicationHelper
     )
   end
 
-  def region_cover region
+  def region_cover(region, with_tag: true)
+    return tiles_path(image_params) unless with_tag
+
     image_tag(
       cover_placeholder(region.class),
       alt: region.name
     )
   end
 
-  def site_title
-    'Protected Planet'
-  end
-
-  def site_description
-    "Discover the world's protected areas"
-  end
-
-  def page_title(here= false)
-    custom_title = content_for(:page_title)
-
-    if custom_title
-      "#{custom_title} | #{site_title}".html_safe
-    else
-      site_title
-    end
-  end
-
   def url_encode(text)
     ERB::Util.url_encode(text)
-  end
-
-  def encoded_page_url
-    url_encode(request.original_url)
-  end
-
-  def social_image
-    if content_for?(:social_image)
-      content_for(:social_image)
-    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_image")
-      t("#{yml_key}.social_image")
-    else
-      URI.join(root_url, image_path('social.png'))
-    end
-  end
-
-  def social_image_alt
-    if content_for?(:social_image_alt)
-      content_for(:social_image_alt)
-    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_image_alt")
-      t("#{yml_key}.social_image_alt")
-    else
-      "Screenshot of the Protected Planet website which shows the menu bar and a map of the world that has protected areas highlighted in green."
-    end
-  end
-
-  DEFAULT_SEO_DESC = """
-    Protected Planet is the online interface for the
-    World Database on Protected Areas (WDPA), and the most comprehensive
-    global database on terrestrial and marine protected areas.
-  """
-
-  def seo_description
-    if content_for?(:seo)
-      content_for(:seo)
-    else
-      DEFAULT_SEO_DESC
-    end
-  end
-
-  def twitter_card
-    if content_for?(:twitter_card)
-      content_for(:twitter_card)
-    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_twitter_card")
-      t("#{yml_key}.social_twitter_card")
-    else
-      "summary"
-    end
-  end
-
-  def social_title
-    if content_for?(:social_title)
-      sanitize content_for(:social_title)
-    elsif yml_key.present? && I18n.exists?("#{yml_key}.title")
-      t("#{yml_key}.title")
-    else
-      page_title 'Protected Planet'
-    end
-  end
-
-  def social_description
-    if content_for?(:social_description)
-      sanitize content_for(:social_description)
-    elsif yml_key.present? && I18n.exists?("#{yml_key}.social_description")
-      t("#{yml_key}.social_description")
-    else
-      seo_description
-    end
-  end
-
-  def create_sharing_facebook_link
-    title = url_encode('Share ' + page_title + ' on Facebook')
-    url = encoded_page_url
-    href = 'https://facebook.com/sharer/sharer.php?u=' + url
-
-    link_to '', href, title: title, class: 'social__icon--facebook', target: '_blank'
-  end
-
-  def create_sharing_twitter_link
-    title = url_encode('Share ' + page_title + ' on Twitter')
-    text = url_encode('Read about a year of impact in @unepwcmc’s 2018/19 Annual Review')
-    url = encoded_page_url
-    href = 'https://twitter.com/intent/tweet/?text=' + text + '&url=' + url
-
-    link_to '', href, title: title, class: 'social__icon--twitter', target: '_blank'
-  end
-
-  def create_sharing_linkedin_link
-    title = url_encode('Share ' + page_title + ' on LinkedIn')
-    url = encoded_page_url
-    href = 'https://www.linkedin.com/shareArticle?url=' + url
-
-    link_to '', href, title: title, class: 'social__icon--linkedin', target: '_blank'
   end
 
   DOWNLOAD_TYPES = {
@@ -320,6 +224,12 @@ module ApplicationHelper
         "url": get_cms_url(page.full_path)
       }
     end
+  end
+
+  def get_config_carousel_themes
+    {
+      wrapAround: true
+    }.to_json
   end
 
   def map_page(slug, map_children = false)

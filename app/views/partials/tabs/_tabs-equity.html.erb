@@ -1,0 +1,24 @@
+<tabs
+  class="tabs--hero"
+  :tab-triggers="<%= tabs %>"
+>
+  <template slot-scope="{ selectedId }">
+    <tab-target :id="1" :selected-id="selectedId">
+      <section class="container--medium section-padding--bottom">
+        <%= cms_fragment_render("tab-content-1") %>
+      </section>
+  
+      <section class="section-padding--bottom">
+        <select-equity
+          :protected-areas="<%= protected_areas.to_json %>"
+        />
+      </section>
+    </tab-target>
+
+    <tab-target :id="2" :selected-id="selectedId">
+      <section class="container--medium">
+        <%= cms_fragment_render("tab-content-2") %>
+      </section>
+    </tab-target>
+  </template>
+</tabs>
