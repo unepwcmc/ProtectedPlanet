@@ -116,12 +116,13 @@ module CmsHelper
     # can be different from the layout used in the child pages
     if layouts_categories.blank?
       children_layouts = @cms_page.children.map(&:layout_id)
-      layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
+      layout_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
+        .map(&:layout_category).uniq
     end
 
-    layouts_categories.map do |lc|
-      name = lc.layout_category.label
-      page_categories = lc.layout_category.page_categories
+    layout_categories.map do |lc|
+      name = lc.label
+      page_categories = lc.page_categories
       localised_pcs = I18n.t('search')[:custom_categories][name.to_sym]
 
       items = page_categories.map do |pc|
