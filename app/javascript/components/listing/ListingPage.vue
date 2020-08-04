@@ -113,8 +113,7 @@ export default {
     ajaxSubmission (resetFilters=false, pagination=false, requestedPage=1) {
       if(!pagination) { this.loadingResults = true }
 
-      let filters = this.activeFilterOptions
-      filters.ancestor = this.pageId
+      let filters = {...this.activeFilterOptions, ...{ ancestor: this.pageId }}
 
       let data = {
         params: {
@@ -124,13 +123,11 @@ export default {
           search_index: 'cms'
         }
       }
-      console.log('params', data.params)
 
       this.axiosSetHeaders()
 
       axios.get(this.endpointSearch, data)
         .then(response => {
-          console.log('response', response)
           if(pagination){
             this.newResults.cards = this.newResults.results.concat(response.data.results)
           } else {
@@ -196,6 +193,7 @@ export default {
     },
 
     updateFilters (filters) {
+      console.log('updateFilters', filters)
       this.$eventHub.$emit('reset:pagination')
       this.activeFilterOptions = filters
       this.getFilteredSearchResults()
@@ -210,23 +208,30 @@ export default {
 
     updateQueryString (params) {
       let searchParams = new URLSearchParams(window.location.search)
-
       const key = Object.keys(params)[0]
-
+  
       if(key == 'filters') {
         const filters = params.filters
 
+        console.log('params.filters', params.filters)
+
         Object.keys(filters).forEach(key => {
+          console.log('key', key)
           let queryKey = `filters[${key}][]`
           let queryValues = filters[key]
           
           if(searchParams.has(queryKey)) { searchParams.delete(queryKey) }
           
           queryValues.forEach(value => {
+            console.log('append')
             searchParams.append(queryKey, value)
           })
         })
       }
+
+      const newUrl = `${window.location.pathname}?${searchParams.toString()}`
+
+      window.history.pushState({ query: 1 }, null, newUrl)
     }
   }
 }
