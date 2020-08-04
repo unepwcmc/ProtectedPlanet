@@ -10,7 +10,7 @@ class GreenListController < ApplicationController
   def index
     @pas_km = ProtectedArea.green_list_total_km
     @pas_percent = ProtectedArea.green_list_protected_percentage
-    @pas_total = ProtectedArea.green_list_areas.count
+    @pas_total = green_list_areas.count
 
     @protectedAreaGrowth = [
       {
@@ -69,7 +69,7 @@ class GreenListController < ApplicationController
   def map_overlays
     overlays(['greenlist'], {
       greenlist: {
-        queryString: greenlist_query_string([61502,2065,13396, 145153])
+        queryString: greenlist_query_string(green_list_areas.map(&:id))
       }
     })
   end
@@ -85,5 +85,9 @@ class GreenListController < ApplicationController
       first
 
     @protected_area or raise_404
+  end
+
+  def green_list_areas
+    @green_list_areas ||= ProtectedArea.green_list_areas
   end
 end
