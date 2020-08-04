@@ -73,7 +73,6 @@ Rails.application.routes.draw do
     post '/pame/download', to: 'pame#download'
     post '/pame/list', to: 'pame#list'
 
-    get '/resources', to: 'resources#index'
     get '/search', to: 'search#index'
 
     get '/thematical-areas/green-list', to: 'green_list#index'
