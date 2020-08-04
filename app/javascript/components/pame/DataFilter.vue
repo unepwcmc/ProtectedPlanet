@@ -10,7 +10,9 @@
     
     <div class="filter__options" :class="{ 'filter__options--active' : isOpen }">
       <ul class="ul-unstyled filter__options-list" :class="filterClass">
-        <data-filter-option v-for="option in options" 
+        <data-filter-option 
+          v-for="option in options" 
+          :key="option._uid"
           :option="option"
           :selected="false">
         </data-filter-option>

@@ -32,7 +32,7 @@
       download () {
         console.log('download')
         const csrf = document.querySelectorAll('meta[name="csrf-token"]')[0].getAttribute('content'),
-          data = this.$store.state.selectedFilterOptions,
+          data = this.$store.state.pame.selectedFilterOptions,
           config = {
             headers: {
               'X-CSRF-Token': csrf,

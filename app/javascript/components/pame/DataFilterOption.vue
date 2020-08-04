@@ -6,8 +6,6 @@
 </template>
 
 <script>
-  import { eventHub } from '../../vue.js'
-
   export default {
     name: 'data-filter-option',
 

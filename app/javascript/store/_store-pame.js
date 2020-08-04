@@ -11,20 +11,20 @@ export const storePame = {
 
   mutations: {
     updateRequestedPage (state, page) {
-      this.state.requestedPage = page
+      state.requestedPage = page
     },
 
     updateTotalItemsOnCurrentPage (state, total) {
-      this.state.totalItemsOnCurrentPage = total
+      state.totalItemsOnCurrentPage = total
     },
 
     setFilterOptions (state, options) {
-      this.state.selectedFilterOptions = options
+      state.selectedFilterOptions = options
     },
 
     updateFilterOptions (state, newOptions) {
       // find the correct filter to update
-      this.state.selectedFilterOptions.forEach(filter => {
+      state.selectedFilterOptions.forEach(filter => {
         if(filter.name == newOptions.filter){
 
           // replace filter options array with newOptions array
@@ -33,14 +33,14 @@ export const storePame = {
       })
     },
 
-    clearFilterOptions () {
-      this.state.selectedFilterOptions.forEach(filter => {
+    clearFilterOptions (state) {
+      state.selectedFilterOptions.forEach(filter => {
         filter.options = []
       })
     },
 
     removeFilterOption (state, removeOption) {
-      this.state.selectedFilterOptions.forEach(filter => {
+      state.selectedFilterOptions.forEach(filter => {
         if(filter.name == removeOption.name){ 
           filter.options.forEach(option => {
             if(option == removeOption.option){
@@ -54,11 +54,11 @@ export const storePame = {
     },
 
     updateModalContent (state, content) {
-      this.state.modalContent = content
+      state.modalContent = content
     },
 
     updateSortDirection (state, direction) {
-      this.state.sortDirection = direction
+      state.sortDirection = direction
     }
   }
 }
