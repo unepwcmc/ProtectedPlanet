@@ -5,6 +5,24 @@ class Stats::Global
     ProtectedArea.count
   end
 
+  def self.terrestrial_pa_count
+    ProtectedArea.where(marine: false).count
+  end
+
+  def self.marine_pa_count
+    ProtectedArea.where(marine: true).count
+  end
+
+  def self.terrestrial_oecm_count
+    ProtectedArea.where(marine: false, is_oecm: true).count
+  end
+
+  def self.marine_oecm_count
+    ProtectedArea.where(marine: true, is_oecm: true).count
+  end
+
+
+
   def self.percentage_pa_cover
     RegionalStatistic.joins(:region)
                      .where('regions.iso' => 'GLOBAL')
@@ -48,4 +66,14 @@ class Stats::Global
   def self.global_area
     CountryStatistic.global_land_area + CountryStatistic.global_marine_area
   end
+
+  def self.percentage_land_cover
+    CountryStatistic.global_percentage_pa_land_cover
+  end
+
+  def self.percentage_marine_cover
+    CountryStatistic.global_percentage_pa_marine_cover
+  end
+
+  
 end
