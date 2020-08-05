@@ -25,13 +25,12 @@ class Search::CmsSerializer < Search::BaseSerializer
   def serialize
     return DEFAULT_OBJ.to_json unless @search
 
-    all_objects = @results.objects.values.compact.flatten
     per_page = @options[:per_page].to_i
     DEFAULT_OBJ.merge(
       {
         total: total,
         totalPages: total_pages,
-        results: all_objects.map do |record|
+        results: sorted_pages.map do |record|
           {
             date: date(record),
             fileUrl: file(record),
@@ -48,6 +47,12 @@ class Search::CmsSerializer < Search::BaseSerializer
   end
 
   private
+
+  def sorted_pages
+    @results.cms_pages.sort_by do |p|
+      p.fragments.find_by(identifier: 'published_date').datetime
+    end.reverse
+  end
 
   def date(page)
     _date = cms_fragment_content(:published_date, page)
