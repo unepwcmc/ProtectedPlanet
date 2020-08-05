@@ -9,7 +9,7 @@ module Wdpa::DopaImporter
 
       # Read the CSV to get the WDPA IDs
       CSV.foreach(DOPA_LIST, headers: true) do |row| 
-        
+        byebug
         # Find the associated Protected Area with each WDPA ID mentioned and update the is_dopa column to true
         dopa_pa = ProtectedArea.where(wdpa_id: row['wdpaid'])
         
