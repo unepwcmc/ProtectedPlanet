@@ -19,6 +19,7 @@ class ProtectedArea < ApplicationRecord
   belongs_to :designation
   delegate :jurisdiction, to: :designation, allow_nil: true
   belongs_to :wikipedia_article
+  belongs_to :green_list_status
 
   after_create :create_slug
 
@@ -30,7 +31,7 @@ class ProtectedArea < ApplicationRecord
   }
 
   scope :green_list_areas, -> {
-    where(is_green_list: true)
+    where.not(green_list_status_id: nil)
   }
 
   scope :most_protected_marine_areas, -> (limit) {
@@ -74,6 +75,10 @@ class ProtectedArea < ApplicationRecord
 
   def self.green_list_total_km
     green_list_areas.inject(0) { |_sum, pa| _sum + pa.gis_area }
+  end
+
+  def is_green_list
+    green_list_status_id.present?
   end
 
   def wdpa_ids
@@ -152,7 +157,20 @@ class ProtectedArea < ApplicationRecord
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
+  def extent_url
+    layer_number = is_point? ? 0 : 1
+
+    {
+      url: "#{WDPA_FEATURE_SERVER_URL}/#{layer_number}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      padding: 1
+    }
+  end
+
   private
+
+  def is_point?
+    the_geom.geometry_type.type_name.match('Point').present?
+  end
 
   def bounding_box_query
     dirty_query = """
