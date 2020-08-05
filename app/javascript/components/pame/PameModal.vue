@@ -1,10 +1,25 @@
 <template>
-  <div class="modal-wrapper" :class="{ 'modal--active' : isActive }" @click.self="closeModal()">
-    <div id="modal" :style="styleObject" class="modal--pame">
-      <div class="modal__content">
-        <button class="modal__close" @click="closeModal()"></button>
+  <div 
+    :class="['modal-wrapper', { 'modal--active' : isActive }]"
+    @click.self="closeModal()"
+  >
+    <div 
+      class="modal-overlay" 
+    />
+    <div 
+      class="modal--pame"
+      id="modal"
+      :style="styleObject" 
+    >
+      <div 
+        class="modal__content"
+      >
+        <button 
+          class="modal__close" 
+          @click="closeModal()"
+        />
 
-        <h2>Source details</h2>
+        <h2 class="modal__title">Source details</h2>
 
         <template v-if="hasContent(modalContent.metadata_id)">
           <p><strong>MetadataID:</strong> {{ modalContent.metadata_id }}</p>
@@ -51,7 +66,6 @@
 
     methods: {
       openModal () {
-        console.log('optn')
         this.modalContent = this.$store.state.pame.modalContent
 
         // delay calculating the modal height so that the data can update which will increase the height of the modal

@@ -2,17 +2,20 @@
 // classes
 //--------------------------------------------------
 .modal-wrapper {
+  display: none;
+
+  &.modal--active { display: block; }
+}
+
+.modal-overlay {
   background-color: rgba($grey, .8);
 
-  display: none;
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 2;
-
-  &.modal--active { display: block; }
+  z-index: $z-300;
 }
 
 .modal--pame {
@@ -24,32 +27,20 @@
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: $z-400;
 
-  &--active {
-    display: block;
-  }
+  .modal__title { margin-top: 0; }
 
-  h2 { margin-top: 0; }
-
-  &__content {
+  .modal__content {
     position: relative;
   }
 
-  &__close {
+  .modal__close {
     @include button-close;
     cursor: pointer;
     
     position: absolute;
     top: rem-calc(-18);
     right: rem-calc(-16);
-  }
-
-  &__trigger {
-    color: $primary;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: underline;
-
-    &:hover { text-decoration: none; }
   }
 }

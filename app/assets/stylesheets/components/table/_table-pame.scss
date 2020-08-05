@@ -61,6 +61,15 @@
       &:nth-child(9) { &:before { content: 'Metadata ID:'; } }
     }
 
+    &__cell-modal-trigger { 
+      color: $primary;
+      cursor: pointer;
+      font-weight: bold;
+      text-decoration: underline;
+  
+      &:hover { text-decoration: none; }
+    }
+
     &__sorting {
       opacity: .7;
       vertical-align: middle;
