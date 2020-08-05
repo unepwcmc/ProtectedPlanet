@@ -17,10 +17,8 @@ class Search::CmsSerializer < Search::BaseSerializer
   }.freeze
 
   DEFAULT_OBJ = {
-    current_page: 1,
-    page_items_start: 1,
-    page_items_end: 1,
-    total_items: 0,
+    total: 0,
+    totalPages: 1,
     results: [DEFAULT_RESULT]
   }.freeze
 
@@ -31,10 +29,8 @@ class Search::CmsSerializer < Search::BaseSerializer
     per_page = @options[:per_page].to_i
     DEFAULT_OBJ.merge(
       {
-        current_page: @page,
-        page_items_start: @search.page_items_start(page: @page, per_page: per_page, for_display: true),
-        page_items_end: @search.page_items_end(page: @page, per_page: per_page, for_display: true),
-        total_items: @results.count || 0,
+        total: total,
+        totalPages: total_pages,
         results: all_objects.map do |record|
           {
             date: date(record),
@@ -68,5 +64,26 @@ class Search::CmsSerializer < Search::BaseSerializer
 
   def link_title(page)
     cms_fragment_render(:link_title, page)
+  end
+
+  def total
+    @total ||= @results.count || 0
+  end
+
+  DEFAULT_PAGE_SIZE = {
+    resources: 9.0,
+    news_and_stories: 6.0
+  }.freeze
+  def total_pages
+    (total / default_page_size(cms_root_page.try(:slug))).ceil
+  end
+
+  def default_page_size(slug)
+    DEFAULT_PAGE_SIZE[slug.underscore.to_sym] || 9
+  end
+
+  def cms_root_page
+    _root_page_id = @search.options.dig(:filters, :ancestor)
+    @cms_root_page ||= Comfy::Cms::Page.find_by(id: _root_page_id)
   end
 end
