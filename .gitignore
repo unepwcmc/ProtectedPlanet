@@ -36,3 +36,6 @@ tmp/cache/webpacker
 .byebug_history
 
 .vscode/
+
+# Special gemfile with GDAL v3
+Gemfile_GDALV3
