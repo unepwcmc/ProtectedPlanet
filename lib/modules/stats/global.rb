@@ -1,6 +1,10 @@
 class Stats::Global
   IUCN_CATEGORIES = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
 
+  def self.pa_count
+    ProtectedArea.count
+  end
+
   def self.percentage_pa_cover
     RegionalStatistic.joins(:region)
                      .where('regions.iso' => 'GLOBAL')
