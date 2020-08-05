@@ -63,7 +63,8 @@ class Search::CmsSerializer < Search::BaseSerializer
   end
 
   def file(page)
-    cms_fragment_content(:file, page)
+    attachments = page.fragments.where(identifier: 'file').first.try(:attachments)
+    attachments.attachments.first.blob.service_url if attachments.present?
   end
 
   def link(page)
