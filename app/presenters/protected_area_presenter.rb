@@ -48,6 +48,10 @@ class ProtectedAreaPresenter
     }
   end
 
+  def dopa_status
+    protected_area.is_dopa
+  end
+
   def marine_designation
     size = protected_area.reported_area.to_f.round(2)
     {
