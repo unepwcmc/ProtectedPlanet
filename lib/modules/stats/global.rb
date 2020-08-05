@@ -1,25 +1,6 @@
 class Stats::Global
   IUCN_CATEGORIES = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
 
-  def self.pa_count
-    ProtectedArea.count
-  end
-
-  def self.terrestrial_pa_count
-    ProtectedArea.where(marine: false).count
-  end
-
-  def self.marine_pa_count
-    ProtectedArea.where(marine: true).count
-  end
-
-  def self.terrestrial_oecm_count
-    ProtectedArea.where(marine: false, is_oecm: true).count
-  end
-
-  def self.marine_oecm_count
-    ProtectedArea.where(marine: true, is_oecm: true).count
-  end
 
 
 
@@ -74,6 +55,5 @@ class Stats::Global
   def self.percentage_marine_cover
     CountryStatistic.global_percentage_pa_marine_cover
   end
-
   
 end

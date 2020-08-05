@@ -5,27 +5,35 @@ class HomePresenter
   end
 
   def terrestrial_pas
-    @terrestrial_pas ||= number_with_delimiter(Stats::Global.terrestrial_pa_count)
+    @terrestrial_pas ||= number_with_delimiter(ProtectedArea.where(marine: false).count)
   end
   
   def marine_pas
-    @marine_pas ||= number_with_delimiter(Stats::Global.marine_pa_count)
+    @marine_pas ||= number_with_delimiter(ProtectedArea.where(marine: true).count)
   end
 
   def terrestrial_oecms
-    @terrestrial_oecms = number_with_delimiter(Stats::Global.terrestrial_oecm_count)
+    number_with_delimiter(ProtectedArea.where(marine: false, is_oecm: true).count)
   end
 
   def marine_oecms
-    @marine_oecms = number_with_delimiter(Stats::Global.marine_oecm_count)
+    number_with_delimiter(ProtectedArea.where(marine: true, is_oecm: true).count)
   end
 
   def terrestrial_cover
-    @terrestrial_cover = CountryStatistic.global_percentage_pa_land_cover
+    CountryStatistic.global_percentage_pa_land_cover
   end
 
   def marine_cover
-    @marine_cover = CountryStatistic.global_percentage_pa_marine_cover
+    CountryStatistic.global_percentage_pa_marine_cover
+  end
+
+  def oecm_pa_land_cover
+    ProtectedArea.global_terrestrial_oecm_coverage
+  end
+
+  def oecm_pa_marine_cover
+    ProtectedArea.global_marine_oecm_coverage
   end
   
   def fact_card_stats
@@ -53,7 +61,7 @@ class HomePresenter
         ]
       },
       {
-        percentage: 00, #total percentage coverage of terrestrial pas and OECMs
+        percentage: oecm_pa_land_cover,
         theme: I18n.t('home.facts')[2][:theme],
         title: I18n.t('home.facts')[2][:title],
         totals: [
@@ -68,7 +76,7 @@ class HomePresenter
         ]
       },
       {
-        percentage: 00, #total percentage coverage of marine pas and OECMs
+        percentage: oecm_pa_marine_cover,
         theme: I18n.t('home.facts')[3][:theme],
         title: I18n.t('home.facts')[3][:title],
         totals: [
