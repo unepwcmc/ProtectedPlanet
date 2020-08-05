@@ -1,0 +1,55 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.modal-wrapper {
+  background-color: rgba($grey, .8);
+
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+
+  &.modal--active { display: block; }
+}
+
+.modal--pame {
+  background-color: white;
+  border-radius: $radius-global;
+  padding: rem-calc(34 32);
+  width: 60%;
+
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  &--active {
+    display: block;
+  }
+
+  h2 { margin-top: 0; }
+
+  &__content {
+    position: relative;
+  }
+
+  &__close {
+    @include button-close;
+    cursor: pointer;
+    
+    position: absolute;
+    top: rem-calc(-18);
+    right: rem-calc(-16);
+  }
+
+  &__trigger {
+    color: $primary;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: underline;
+
+    &:hover { text-decoration: none; }
+  }
+}
