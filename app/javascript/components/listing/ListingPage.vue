@@ -93,7 +93,7 @@ export default {
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
       loadingResults: false,
-      newResults: {} // { title: String, total: Number, items: [{ date: String, image: String, summary: String, title: String, url: String }
+      newResults: {} // { title: String, total: Number, results: [{ date: String, image: String, summary: String, title: String, url: String }
     }
   },
   created () {
@@ -107,6 +107,7 @@ export default {
 
   methods: {
     ajaxSubmission (resetFilters=false, pagination=false, requestedPage=1) {
+      
       if(!pagination) { this.loadingResults = true }
 
       let filters = {...this.activeFilterOptions, ...{ ancestor: this.pageId }}
@@ -124,8 +125,9 @@ export default {
 
       axios.get(this.endpointSearch, data)
         .then(response => {
+          
           if(pagination){
-            this.newResults.cards = this.newResults.results.concat(response.data.results)
+            this.newResults.results = this.newResults.results.concat(response.data.results)
           } else {
             this.updateProperties(response, resetFilters)
           }

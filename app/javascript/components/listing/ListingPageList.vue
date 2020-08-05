@@ -87,7 +87,7 @@ export default {
 
   computed: {
     hasResults () {
-      return this.results.total_items > 0
+      return this.results.total > 0
     }
   },
 
