@@ -98,7 +98,6 @@ export default {
   },
   created () {
     this.handleQueryString()
-    this.ajaxSubmission()
   },
 
   mounted() {
