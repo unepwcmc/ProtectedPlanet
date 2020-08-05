@@ -37,7 +37,7 @@ gem 'sprockets-vue', '~> 0.1.0'
 gem 'rails-controller-testing'
 
 # gem 'gdal', '~> 2.0'
-# TODO Stanley - Need to change this version of gdal back to 2.0 (and remove from gitignore) when I reinstall GDAL to 2.4.4
+# TODO Stanley - Need to remove the below
 gem 'gdal', '~> 3.0'
 #
 group :production, :staging do
