@@ -36,7 +36,7 @@ gem 'sprockets-vue', '~> 0.1.0'
 
 gem 'rails-controller-testing'
 
-gem 'gdal', '>= 2.0'
+gem 'gdal', '~> 2.0'
 #
 group :production, :staging do
 #  gem 'unicorn'
