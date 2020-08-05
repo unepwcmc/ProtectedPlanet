@@ -26,19 +26,20 @@ namespace :comfy do
     # Fast-tracked unhappy path
     abort('Goodbye') if answer == 'Nothing'
 
-    SyncSeeds.start_session(PP_STAGING, PP_USER)
+    new_session =  SyncSeeds.new(PP_STAGING, PP_USER)
 
     # SSH into staging server with Net::SSH
-    Net::SSH.start(PP_STAGING, PP_USER) do |session|
+    new_session.start_session do |session|
       # First get rid of any local top-level (i.e. which exist in the main 
       # directory of REMOTE) folders/files that don't exist remotely
-      SyncSeeds.compare_folders('*', LOCAL, REMOTE, session)
+      new_session.compare_folders('*', LOCAL, REMOTE)
 
-      local_list = Dir.glob('*', base: LOCAL)
-      remote_list = session.sftp.dir.glob(REMOTE, '*')
+      
+      local_list = new_session.list_local_files(LOCAL)
+      remote_list = new_session.list_remote_files(REMOTE)
 
       if answer == 'All'
-        SyncSeeds.main_task(local_list, remote_list, session) 
+        new_session.main_task(local_list, remote_list) 
       else
         local_list.filter! { |f| f == answer.downcase } 
         remote_list.filter! do |f|
@@ -47,7 +48,7 @@ namespace :comfy do
 
         puts "Downloading a new set of #{answer.downcase}..."
 
-        SyncSeeds.main_task(local_list, remote_list, session)
+        new_session.main_task(local_list, remote_list)
       end
   
     
@@ -56,7 +57,7 @@ namespace :comfy do
     # Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
 
     # Todo: get this working with AWS bucket
-  end
+    end
   end
 
 end

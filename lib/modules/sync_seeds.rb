@@ -2,6 +2,26 @@ class SyncSeeds
   require 'net/ssh'
   require 'net/scp' 
 
+  def initialize(server, username)
+    @username = username
+    @server = server
+  end
+
+  def start_session
+    Net::SSH.start(@server, @username) do |session| 
+      @session = session
+      yield
+    end
+  end
+
+  def list_local_files(location)
+    Dir.glob('*', base: location)
+  end
+
+  def list_remote_files(location)
+    @session.sftp.dir.glob(location, '*')
+  end
+
   def delete_files(files, location)
     files.each do |file| 
       puts "Removing #{file} as it no longer exists remotely"
@@ -19,17 +39,17 @@ class SyncSeeds
     end
   end
 
-  def download_files(source, dest, session)
+  def download_files(source, dest)
     puts "Downloading #{source} as it's newer or not found locally"
-    return session.scp.download!(source, dest) if File.file?(dest)
-    session.scp.download!(source, dest, recursive: true)
+    return @session.scp.download!(source, dest) if File.file?(dest)
+    @session.scp.download!(source, dest, recursive: true)
   end
   
   def create_paths(relative_path)
     { local_path: File.join(LOCAL, relative_path), remote_path: File.join(REMOTE, relative_path) }
   end
 
-  def check_if_newer(parent_folder, local_item, remote_item, remote_path, local_path, session, base = LOCAL)
+  def check_if_newer(parent_folder, local_item, remote_item, remote_path, local_path, base = LOCAL)
     if parent_folder.include?(local_item)
       yield if block_given?
 
@@ -37,26 +57,26 @@ class SyncSeeds
       # If there are any outdated files, will trigger download
       if is_newer
         if Dir.glob('*', base: LOCAL).include?(local_item)
-          download_files(remote_path, local_path, session) 
+          download_files(remote_path, local_path) 
         # Will be hit if local_item is a file or folder inside a directory
         elsif Dir.glob('**/*', base: base).include?(local_item)
-          download_files(remote_path, base, session)
+          download_files(remote_path, base)
           downloaded = true  
         end              
       end
     else
       # Just download it if it doesn't exist at all
-      download_files(remote_path, LOCAL, session)
+      download_files(remote_path, LOCAL)
       downloaded = true
     end
 
     downloaded
   end
 
-  def compare_folders(wildcard, local, remote, session, base = LOCAL)
+  def compare_folders(wildcard, local, remote, base = LOCAL)
     puts "Checking to see what files need to be deleted from #{base}" 
 
-    remote_list = session.sftp.dir.glob(remote, wildcard).map do |f|  
+    remote_list = @session.sftp.dir.glob(remote, wildcard).map do |f|  
       f.name.force_encoding('UTF-8')
     end
 
@@ -65,13 +85,13 @@ class SyncSeeds
     files_for_deletion(local_list, remote_list, base)
   end
 
-  def check_inside_folder(folder, local_list, session)
+  def check_inside_folder(folder, local_list)
     paths = create_paths(folder)
 
-    compare_folders('**/*', paths[:local_path], paths[:remote_path], session, paths[:local_path])
+    compare_folders('**/*', paths[:local_path], paths[:remote_path], paths[:local_path])
 
     local_folder_content = Dir.glob('**/*', base: paths[:local_path])
-    remote_folder_content = session.sftp.dir.glob(paths[:remote_path], '**/*')
+    remote_folder_content = @session.sftp.dir.glob(paths[:remote_path], '**/*')
     
     # We don't want to download the whole folder again if it's already been re-downloaded once
 
@@ -81,27 +101,26 @@ class SyncSeeds
       local_file = file.name
       absolute_path = File.join(paths[:local_path], file.name)
       
-      check = check_if_newer(local_folder_content, local_file, file, paths[:remote_path], absolute_path, session, paths[:local_path])
+      check = check_if_newer(local_folder_content, local_file, file, paths[:remote_path], absolute_path, paths[:local_path])
       
       # Break out of loop if already downloaded
       break if check == true
     end
   end
 
-  def main_task(local_list, remote_list, session)
+  def main_task(local_list, remote_list)
     remote_list.each do |object|
       # There are files with non-ASCII characters (i.e. accented) in the CMS files
       name = object.name.force_encoding('UTF-8')
       paths = create_paths(name)
       
       
-      check_if_newer(local_list, name, object, paths[:remote_path], paths[:local_path], session) do 
-        check_inside_folder(name, local_list, session) if object.attributes.directory?
+      check_if_newer(local_list, name, object, paths[:remote_path], paths[:local_path]) do 
+        check_inside_folder(name, local_list) if object.attributes.directory?
       end
     end
   end
 
-  def start_session(server, username)
-    Net::SSH.start(server, username) { yield }
-  end
+
+  
 end
