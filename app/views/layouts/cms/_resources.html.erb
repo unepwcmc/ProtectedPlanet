@@ -8,7 +8,7 @@
   endpoint-search="/en/search-cms"
   :filter-groups="<%= get_category_filters %>"
   :page-id="<%= @cms_page.id %>"
-  :results="<%= get_resource_cards.to_json %>"
+  :results="<%= cms_pages_for_search %>"
   sm-trigger-element="sm-listing"
   template="resources"
   text-filters-close="View Results"

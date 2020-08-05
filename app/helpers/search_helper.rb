@@ -52,6 +52,17 @@ module SearchHelper
     only_text ? strip_tags(title) : title
   end
 
+  def cms_pages_for_search
+    _filters = {filters: {ancestor: @cms_page.id } }
+    _options = {
+      page: 1,
+      per_page: 9
+    }
+    _search = Search.search('', _filters, Search::CMS_INDEX)
+
+    Search::CmsSerializer.new(_search, _options).serialize
+  end
+
   private
 
   def title_with_query query

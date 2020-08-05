@@ -1,13 +1,3 @@
-<%
-results = {
-  title: 'Title', 
-  total: 1, 
-  cards: [
-    { date: '02 December 2019', image: 'image', summary: 'summary', title: 'title', url: 'http://google.com' }
-  ]
-}.to_json
-%>
-
 <div class="page--news">
   <%= render partial: "./layouts/partials/hero-small", locals: { 
     classes: @cms_page[:slug],
@@ -19,7 +9,7 @@ results = {
     endpoint-search="/en/search-cms"
     :filter-groups="<%= get_category_filters %>"
     :page-id="<%= @cms_page.id %>"
-    :results="<%= results %>"
+    :results="<%= cms_pages_for_search %>"
     sm-trigger-element="sm-listing"
     template="news"
     text-filters-close="View Results"
