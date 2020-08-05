@@ -61,6 +61,10 @@ export default {
       required: true,
       type: Number
     },
+    results: {
+      required: true,
+      type: Object // { title: String, total: Number, results: [{ date: String, image: String, summary: String, title: String, url: String }
+    },
     smTriggerElement: {
       required: true,
       type: String
@@ -93,9 +97,10 @@ export default {
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
       loadingResults: false,
-      newResults: {} // { title: String, total: Number, results: [{ date: String, image: String, summary: String, title: String, url: String }
+      newResults: this.results
     }
   },
+
   created () {
     this.handleQueryString()
   },
