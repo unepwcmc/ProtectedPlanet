@@ -6,6 +6,8 @@ class Comfy::Cms::SearchablePage < Comfy::Cms::Page
     class_name: 'Comfy::Cms::SearchableTranslation', foreign_key: 'page_id'
 
   def as_indexed_json
+    # index only published pages
+    return unless is_published
     self.as_json(
       only: [:id, :label],
       include: {
