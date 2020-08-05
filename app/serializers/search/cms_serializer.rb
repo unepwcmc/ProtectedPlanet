@@ -63,15 +63,15 @@ class Search::CmsSerializer < Search::BaseSerializer
   end
 
   def file(page)
-    cms_fragment_render(:file, page)
+    cms_fragment_content(:file, page)
   end
 
   def link(page)
-    cms_fragment_render(:link, page)
+    cms_fragment_content(:link, page)
   end
 
   def link_title(page)
-    cms_fragment_render(:link_title, page)
+    cms_fragment_content(:link_title, page)
   end
 
   def total
