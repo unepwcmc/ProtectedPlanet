@@ -79,7 +79,7 @@ class Search::CmsSerializer < Search::BaseSerializer
   end
 
   def default_page_size(slug)
-    DEFAULT_PAGE_SIZE[slug.underscore.to_sym] || 9
+    DEFAULT_PAGE_SIZE[slug.underscore.to_sym] || 9.0
   end
 
   def cms_root_page
