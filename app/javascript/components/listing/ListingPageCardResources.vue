@@ -6,7 +6,7 @@
       v-if="url" 
       class="card__link"
       :href="url"
-      title=""
+      title="title"
     >
       <p 
         class="card__date"
@@ -38,16 +38,16 @@
       <a
         v-if="fileUrl"
         class="button--download"
-        href="fileUrl"
+        :href="fileUrl"
         target="_blank"
-        title=""
+        title="title"
       />
       <a
         v-if="linkUrl"
         class="button--link-external"
-        href="linkUrl"
+        :href="linkUrl"
         target="_blank"
-        title=""
+        title="title"
         v-html="linkTitle"
       />
     </template>
