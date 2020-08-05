@@ -6,7 +6,7 @@ class TestDopaImporter < ActiveSupport::TestCase
 
     wdpa_ids = [1, 2, 4, 6]
     wdpa_ids.each do |wdpa_id|
-      FactoryGirl.create(:protected_area, wdpa_id: wdpa_id)
+      FactoryGirl.create(:protected_area, wdpa_id: wdpa_id, reported_area: 0.6e2)
     end
 
     Wdpa::DopaImporter.import
