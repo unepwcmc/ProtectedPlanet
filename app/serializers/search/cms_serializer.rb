@@ -75,6 +75,10 @@ class Search::CmsSerializer < Search::BaseSerializer
     cms_fragment_content(:link_title, page)
   end
 
+  def url(page)
+    file(page).present? || link(page).present? ? nil : super(page)
+  end
+
   def total
     @total ||= @results.count || 0
   end
