@@ -25,7 +25,6 @@ class Search::CmsSerializer < Search::BaseSerializer
   def serialize
     return DEFAULT_OBJ.to_json unless @search
 
-    per_page = @options[:per_page].to_i
     DEFAULT_OBJ.merge(
       {
         total: total,

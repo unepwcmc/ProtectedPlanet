@@ -57,8 +57,8 @@ module SearchHelper
     _options = {
       page: 1,
       size: 9
-    }.merge(_filters)
-    _search = Search.search('', _options, Search::CMS_INDEX)
+    }
+    _search = Search.search('', _options.merge(_filters), Search::CMS_INDEX)
 
     Search::CmsSerializer.new(_search, _options).serialize
   end
