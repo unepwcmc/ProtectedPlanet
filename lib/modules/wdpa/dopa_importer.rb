@@ -6,19 +6,24 @@ module Wdpa::DopaImporter
     ActiveRecord::Base.transaction do
       # Clear all previously set DOPA areas
       ProtectedArea.update_all(is_dopa: false)
+      logger = Logger.new(STDOUT)
+
+      pas_to_update = []
 
       # Read the CSV to get the WDPA IDs
       CSV.foreach(DOPA_LIST, headers: true) do |row| 
         # Find the associated Protected Area with each WDPA ID mentioned and update the is_dopa column to true
-        dopa_pa = ProtectedArea.where(wdpa_id: row['wdpaid'])
-        
+        dopa_pa = ProtectedArea.find_by_wdpa_id(row['wdpaid'])
+
         if dopa_pa.nil? 
-          logger.info "#{row['wdpaid']} not present in DB"
+          logger.info "DOPA site #{row['wdpaid']} not present in DB"
           next
         end
-        
-        dopa_pa.update(is_dopa: true)
+
+       pas_to_update << ProtectedArea.find_by_wdpa_id(row['wdpaid'])
       end
+      
+      ProtectedArea.where(id: pas_to_update.map(&:id)).update_all(is_dopa: true)
     end
   end
 
