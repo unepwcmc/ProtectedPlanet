@@ -189,7 +189,6 @@ export default {
     },
 
     updateFilters (filters) {
-      console.log('updateFilters', filters)
       this.$eventHub.$emit('reset:pagination')
       this.activeFilterOptions = filters
       this.getFilteredSearchResults()
@@ -209,18 +208,14 @@ export default {
       if(key == 'filters') {
         const filters = params.filters
 
-        console.log('params.filters', params.filters)
-
         Object.keys(filters).forEach(key => {
-          console.log('key', key)
           let queryKey = `filters[${key}][]`
           let queryValues = filters[key]
           
           if(searchParams.has(queryKey)) { searchParams.delete(queryKey) }
           
           queryValues.forEach(value => {
-            console.log('append')
-            searchParams.append(queryKey, value)
+              searchParams.append(queryKey, value)
           })
         })
       }

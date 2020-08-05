@@ -1,7 +1,10 @@
 <template>
-  <div class="card">
+  <div 
+    :class="['card', { 'card--link': url }]"
+  >
     <a
       v-if="url" 
+      class="card__link"
       :href="url"
       title=""
     >
@@ -66,6 +69,12 @@ export default {
       required: true
     },
     url: String
+  },
+
+  computed: {
+    class () {
+      
+    }
   }
 }
 </script>

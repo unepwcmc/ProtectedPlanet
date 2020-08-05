@@ -52,7 +52,15 @@
     @include breakpoint($medium) { 
       @if $per-row == 3 { width: 33%; }
       @if $per-row == 4 { width: 25%; }
+      min-height: rem-calc(200);
     }
+  }
+
+  .card--link {
+    border: solid 1px $white;
+    cursor: pointer;
+
+    &:hover { border-color: $grey-dark; }
   }
 
   .card__date { 
@@ -60,11 +68,5 @@
     margin-top: 0;
   }
 
-  .card--link {
-    border: solid 1px $white;
-    cursor: pointer;
-    text-decoration: none;
-
-    &:hover { border-color: $grey-dark; }
-  }
+  .card__link { text-decoration: none; }
 }
