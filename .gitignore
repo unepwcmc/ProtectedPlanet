@@ -37,8 +37,5 @@ tmp/cache/webpacker
 
 .vscode/
 
-<<<<<<< HEAD
-=======
 # Special gemfile with GDAL v3
 Gemfile_GDALV3
->>>>>>> refresh
