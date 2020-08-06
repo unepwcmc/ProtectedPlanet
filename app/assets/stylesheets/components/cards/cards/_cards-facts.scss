@@ -4,6 +4,7 @@
 $cards-facts-margin: rem-calc(10);
 $cards-facts-width-mobile: rem-calc(240);
 $cards-facts-width-tablet: rem-calc(274);
+$cards-facts-height-tablet: rem-calc(294);
 
 //--------------------------------------------------
 // classes
@@ -24,7 +25,7 @@ $cards-facts-width-tablet: rem-calc(274);
 
       @include breakpoint($small) {
         padding: rem-calc(22);
-        width: $cards-facts-width-tablet; height: $cards-facts-width-tablet;
+        width: $cards-facts-width-tablet; height: $cards-facts-height-tablet;
       }
     }
 

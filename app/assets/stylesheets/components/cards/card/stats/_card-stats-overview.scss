@@ -1,13 +1,36 @@
 //--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin card-stats-overview-section {
+  margin-top: rem-calc(20);
+
+  @include breakpoint($small) { margin-top: rem-calc(30); }
+}
+
+@mixin card-stats-overview-subtitle {
+  font-size: rem-calc(16);
+  font-weight: $bold;
+
+  display: block;
+}
+
+//--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--stats-overview {
   @include bg-grey-black;
   @include card-stats-padding;
-  margin-right: rem-calc(30);
   width: 100%;
 
-  @include breakpoint($small) { width: 33%; }
+  @include breakpoint($small) { 
+    margin-right: rem-calc(30);
+    width: calc(50% - 15px); 
+  }
+
+  @include breakpoint($medium) { 
+    margin-right: rem-calc(30);
+    width: 33%; 
+  }
 
   .card {
     &__external-button { @extend .button--link-external; }
@@ -40,43 +63,39 @@
       font-size: rem-calc(20);
       margin: 0;
 
-      @include breakpoint($small) { font-size: rem-calc(22); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
+      @include breakpoint($medium) { font-size: rem-calc(25); }
     }
 
     &__number {
       @include card-stats-number;
-      font-size: rem-calc(18);
+      font-size: rem-calc(30);
+      margin-right: rem-calc(10);
 
       display: block;
 
-      @include breakpoint($small) { font-size: rem-calc(20); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
+      @include breakpoint($medium) { font-size: rem-calc(40); }
     }
 
-    &__number--small {
-      @include card-stats-number;
-      font-size: rem-calc(18);
-      margin-right: rem-calc(10);
-
-      @include breakpoint($small) { font-size: rem-calc(20); }
-      @include breakpoint($medium) { font-size: rem-calc(30); }
-    }
-
-    &__section {
-      margin-top: rem-calc(30);
+    &__section { @include card-stats-overview-section; }
+      
+    &__section-with-border {
+      @include card-stats-overview-section;
+      border-bottom: solid 1px $grey-light;
+      padding-bottom: rem-calc(20);
     }
 
     &__text {
       font-size: rem-calc(16);
     }
 
-    &__text-bold {
-      font-size: rem-calc(16);
-      font-weight: $bold;
+    &__subtitle-margined {
+      @include card-stats-overview-subtitle;
       margin-bottom: rem-calc(6);
+    }
 
-      display: block;
+    &__text {
+      font-size: rem-calc(16);
+      width: 68%;
     }
   }
 }

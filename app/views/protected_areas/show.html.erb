@@ -1,21 +1,22 @@
 <div class="page--site bg--grey-xlight">
   <div class="container">
-
     <section class="flex-stack-mobile">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         area: reported_area,
         dopa_link: 'http://google.com',
         location: @locations.html_safe,
         title: @protected_area.name,
-        type: 'TODO',
+        type: map_layer_type,
         wdpa_id: @protected_area.wdpa_id,
         external_links: @presenter.external_links
       } %>
-
-      <%= render partial: "partials/maps/header", locals: {
+      
+      <div class="">
+        <%= render partial: "partials/maps/header", locals: {
         map: @map,
         map_options: @map_options
       } %>
+      </div>
     </section>
 
     <div class="card--stats-wrapper">
