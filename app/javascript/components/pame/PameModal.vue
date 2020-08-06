@@ -15,26 +15,26 @@
           @click="closeModal()"
         />
 
-        <h2 class="modal__title">Source details</h2>
+        <h2 class="modal__title">{{ text.modal_title }}</h2>
 
         <template v-if="hasContent(modalContent.metadata_id)">
-          <p><strong>MetadataID:</strong> {{ modalContent.metadata_id }}</p>
+          <p><strong>{{ text.id }}:</strong> {{ modalContent.metadata_id }}</p>
         </template>
 
         <template v-if="hasContent(modalContent.data_title)">
-          <p><strong>Data title:</strong> {{ modalContent.data_title }}</p>
+          <p><strong>{{ text.id }}:</strong> {{ modalContent.data_title }}</p>
         </template>
 
         <template v-if="hasContent(modalContent.resp_party)">
-          <p><strong>Responsible party:</strong> {{ modalContent.resp_party }}</p>
+          <p><strong>{{ text.responsible }}:</strong> {{ modalContent.resp_party }}</p>
         </template>
 
         <template v-if="hasContent(modalContent.year)">
-          <p><strong>Year of submission:</strong> {{ modalContent.source_year }}</p>
+          <p><strong>{{ text.year }}:</strong> {{ modalContent.source_year }}</p>
         </template>
 
         <template v-if="hasContent(modalContent.language)">
-          <p><strong>Language:</strong> {{ modalContent.language }}</p>
+          <p><strong>{{ text.language }}:</strong> {{ modalContent.language }}</p>
         </template>
       </div>
     </div>
@@ -44,6 +44,13 @@
 <script>
   export default {
     name: 'modal',
+
+    props: {
+      text: {
+        required: true,
+        type: Object // { modal_title: String, id: String, title: String, responsible: String, year: String, language: String }
+      }
+    },
 
     data () {
       return {
