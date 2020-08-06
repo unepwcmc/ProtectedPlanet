@@ -7,7 +7,6 @@
     <div 
       class="modal--pame"
       id="modal"
-      :style="styleObject" 
     >
       <div class="modal__content">
         <button 
@@ -70,31 +69,12 @@
     methods: {
       openModal () {
         this.modalContent = this.$store.state.pame.modalContent
-
-        // delay calculating the modal height so that the data can update which will increase the height of the modal
-        window.setTimeout(() => {
-          // calculate modal offset
-          var modalHeight = document.getElementById('modal').clientHeight
-          var windowHeight = window.innerHeight
-
-          // if the modal is smaller than the screen it is being viewed on
-          // then vertically centre it on the screen
-          if (modalHeight < windowHeight) {
-            var modalOffset = (windowHeight - modalHeight) / 2
-
-            this.modalOffset = window.pageYOffset + modalOffset
-          } else {
-            this.modalOffset = window.pageYOffset
-          }
-
-          this.styleObject.top = this.modalOffset + 'px'
-
-          this.isActive = !this.isActive
-        }, 100)
+        
+        this.isActive = true
       },
 
       closeModal () {
-        this.isActive = !this.isActive
+        this.isActive = false
       },
 
       printMultiple (field) {
