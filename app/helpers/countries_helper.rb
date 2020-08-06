@@ -3,6 +3,10 @@ module CountriesHelper
     @country && @country.iso_3 == "MYS"
   end
 
+  def has_related_countries?
+    @country.children.any? || @country.parent.present?
+  end
+
   def has_restricted_sites?
     restricted_iso3 = ["RUS", "EST", "CHN", "GBR"]
     

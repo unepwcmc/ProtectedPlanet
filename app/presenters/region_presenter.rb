@@ -8,6 +8,21 @@ class RegionPresenter
     @designations_presenter = DesignationsPresenter.new(region)
   end
 
+  def chart_point_poly
+    [
+      { 
+        percentage: total_polygons_percentage, 
+        theme: 'theme--primary', 
+        title: "#{I18n.t('stats.polygons')} #{total_polygons_percentage}%" 
+      },
+      { 
+        percentage: total_points_percentage, 
+        theme: 'theme--primary-dark', 
+        title: "#{I18n.t('stats.points')} #{total_points_percentage}%" 
+      }
+    ]
+  end
+  
   def designations
     @designations_presenter.designations
   end
