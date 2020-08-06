@@ -1,0 +1,13 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.page--country {
+  .page {
+    &__section--overview-map {
+      @include flex;
+      @include flex-wrap;
+
+      @include breakpoint($small) { @include flex-nowrap; }
+    }
+  }
+}

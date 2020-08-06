@@ -1,42 +1,33 @@
 <div class="bg--grey-xlight">
-  <div class="container">
+  <section class="container flex-stack-mobile">
+    <%= render partial: "partials/stats/stats-overview", locals: { 
+      title: @region.name,
+      chart_point_poly: @presenter.chart_point_poly,
+      legend_map: map_legend,
+      total_countries: spaceify(@region.countries.count),
+      total_oecm: @total_oecm,
+      total_pame: @total_pame,
+      total_points_percentage: @presenter.total_points_percentage,
+      total_polygons_percentage: @presenter.total_polygons_percentage,
+      total_wdpa: @total_wdpa,
+    } %>
 
-    <section class="flex-stack-mobile">
-      <%= render partial: "partials/stats/stats-overview", locals: { 
-        title: @region.name,
-        total_oecm: @total_oecm,
-        total_points_percentage: @presenter.total_points_percentage,
-        total_polygons_percentage: @presenter.total_polygons_percentage,
-        total_wdpa: @total_wdpa,
-        total_countries: spaceify(@region.countries.count)
-      } %>
-
-      <%#= render "partials/stats/facts/number_of_pas", {location: @region} %>
-      <%#= render "partials/stats/facts/polygons_points_ratio" %>
-
+    <div>
       <%= render partial: "partials/maps/header", locals: {
         map: @map,
         map_options: @map_options
       } unless @for_pdf %>
-    </section>
-  </div>
+    </div>
+  </section>
 
   <section class="container">
-
     <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
-    <%= render "region/facts/pame_statistics" %>
-  <% end %>
+      <%= render "region/facts/pame_statistics" %>
+    <% end %>
 
     <% if has_restricted_sites? %>
       <p class="article__paragraph u-bold">Part of the protected areas dataset for <%= @country.name %> is restricted.</p>
     <% end %>
-
-<!--         <% unless @for_pdf %>
-        <p>
-          <a href="/c/calculating-protected-area-coverage" class="link-with-icon"> Learn how we calculate protected area coverage statistics</a>
-        </p>
-      <% end %> -->
-
   </section>
 
   

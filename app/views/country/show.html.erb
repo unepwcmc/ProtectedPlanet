@@ -1,21 +1,22 @@
-<div class="bg--grey-xlight">
+<div class="page--country bg--grey-xlight">
   <div class="container">
-    
-    <section class="flex-stack-mobile">
+    <section class="page__section--overview-map flex-stack-mobile">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         flag: @flag_path[0],
+        chart_point_poly: @country_presenter.chart_point_poly,
+        legend_map: map_legend,
         title: @country.name,
         total_oecm: @total_oecm,
         total_pame: @total_pame,
-        total_points_percentage: @country_presenter.total_points_percentage,
-        total_polygons_percentage: @country_presenter.total_polygons_percentage,
         total_wdpa: @total_wdpa,
       } %>
 
-      <%= render partial: "partials/maps/header", locals: {
-        map: @map,
-        map_options: @map_options
-      } %>
+      <div class="page__map">
+        <%= render partial: "partials/maps/header", locals: {
+          map: @map,
+          map_options: @map_options
+        } %>
+      </div>
     </section>
 
     <section>
@@ -43,8 +44,8 @@
 
       <%= render partial: "partials/stats/stats-designations", locals: { designations: @country_designations } %>
 
-      <div class="card--stats">
-        <div class="card--stats-wrapper-chart">
+      <div class="card--stats-growth-chart">
+        <div class="card__chart-wrapper">
           <h2><%= t('stats.growth.title') %></h2>
 
           <am-chart-line :data="<%= @coverage_growth.to_json %>">
@@ -53,6 +54,15 @@
           <p class="text--small"><%= t('stats.coverage-chart-smallprint') %></p>
         </div>
       </div>
+
+      <% if has_related_countries? %>
+
+        <%= render partial: "partials/stats/stats-related-countries", locals: { 
+          country_children: @country.children.any? ? @country.children : nil,
+          country_parent: @country.parent.present? ? @country.parent : nil
+        } %>
+      
+      <% end %>
       
       <%= render partial: "partials/cards/sites", locals: { 
         cards: @sites,
@@ -65,64 +75,3 @@
     </section>
   </div>
 </div>
-
-<h1>related countries</h1>      
-<% if @country.children.any? || @country.parent.present? %>
-  <section class="fact">
-    <h2 class="fact__header">Related countries & territories</h2>
-    <div class="fact__body">
-
-      <% if @country.children.any? %>
-        <p class="fact__subheader"><i class="fa fa-level-down"></i> Child countries & territories</p>
-        <table class="table js-sortable-table">
-          <thead>
-            <tr class="table__header">
-              <th class="table__column table__column--with-sorting">Name</th>
-              <th class="table__column table__column--with-sorting">Code</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @country.children.each do |child_country| %>
-              <tr class="table__row">
-                <td class="table__label table__label--link"><%= link_to child_country.name, country_path(child_country.iso) %></td>
-                <td class="table__value table__value--link"><%= link_to child_country.iso_3, country_path(child_country.iso) %></td>
-              </tr>
-            <% end %>
-            </tr>
-          </tbody>
-        </table>
-      <% end %>
-
-      <% if @country.parent.present? %>
-        <p class="fact__subheader"><i class="fa fa-level-down"></i> Parent countries & territories</p>
-        <table class="table js-sortable-table">
-          <thead>
-            <tr class="table__header">
-              <th class="table__column table__column--with-sorting">Name</th>
-              <th class="table__column table__column--with-sorting">Code</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="table__row">
-              <td class="table__label table__label--link"><%= link_to @country.parent.name, country_path(@country.parent.iso) %></td>
-              <td class="table__value table__value--link"><%= link_to @country.parent.iso_3, country_path(@country.parent.iso) %></td>
-            </tr>
-          </tbody>
-        </table>
-      <% end %>
-    </div>
-  </section>
-<% end %>
-
-
-<h1>malaysia docs</h1>
-<% if is_malaysia? %>
-  <div class="info-box__row">
-    <div class='header-with-delimiter no-border'>Protected areas documentation</div>
-    <% malaysia_documents.map do |doc| %>
-      <a href="<%= doc[:url] %>" class="info-box__link">
-        <i class="info-box__link-icon fa fa-file-pdf-o"></i><%= doc[:name] %>
-      </a>
-    <% end %>
-  </div>
-<% end %>

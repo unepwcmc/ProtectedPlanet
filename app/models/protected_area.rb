@@ -28,6 +28,10 @@ class ProtectedArea < ApplicationRecord
   scope :oecms, -> { where(is_oecm: true) }
   scope :wdpas, -> { where(is_oecm: false) }
 
+  scope :terrestrial_areas, -> {
+    where(marine: false)
+  }
+
   scope :marine_areas, -> {
     where(marine: true)
   }
@@ -148,6 +152,18 @@ class ProtectedArea < ApplicationRecord
     overlap["percentage"] = (overlap["percentage"].to_f*100).to_i
     overlap["sqm"] = (overlap["sqm"].to_f / 1000000).round(2)
     overlap
+  end
+
+  def self.global_terrestrial_oecm_coverage
+    land_oecms = self.oecms.terrestrial_areas.pluck(:reported_area)
+    total_oecm_area = land_oecms.inject(0) { |sum, area| sum + area.to_i }
+    ((total_oecm_area.to_f / CountryStatistic.global_land_area.to_f) * 100).round(2)
+  end
+
+  def self.global_marine_oecm_coverage
+    marine_oecms = self.oecms.marine_areas.pluck(:reported_marine_area)
+    total_oecm_area = marine_oecms.inject(0) { |sum, area| sum + area.to_i }
+    ((total_oecm_area.to_f / CountryStatistic.global_marine_area.to_f) * 100).round(2)
   end
 
   def self.global_marine_coverage

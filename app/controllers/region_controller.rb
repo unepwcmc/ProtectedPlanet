@@ -22,8 +22,9 @@ class RegionController < ApplicationController
       }
     ]
 
-    @total_oecm = 0 ##TODO
-    @total_wdpa = @region.protected_areas.count
+    @total_oecm = @region.protected_areas.oecms.count
+    @total_pame = @region.protected_areas.with_pame_evaluations.count
+    @total_wdpa = @region.protected_areas.wdpas.count
 
 
     @region_pas = pas_sample
