@@ -51,4 +51,14 @@ module ProtectedAreasHelper
   def management_plan_document
     MP_DOCUMENTS[@protected_area.wdpa_id]
   end
+
+  def map_layer_type
+    if @protected_area.is_oecm 
+      I18n.t('map.overlays.oecm.title')
+    elsif @protected_area.marine
+      I18n.t('map.overlays.marine_wdpa.title')
+    else
+      I18n.t('map.overlays.terrestrial_wdpa.title')
+    end
+  end
 end
