@@ -19,6 +19,7 @@ class ProtectedArea < ApplicationRecord
   belongs_to :designation
   delegate :jurisdiction, to: :designation, allow_nil: true
   belongs_to :wikipedia_article
+  belongs_to :green_list_status
 
   after_create :create_slug
 
@@ -30,7 +31,7 @@ class ProtectedArea < ApplicationRecord
   }
 
   scope :green_list_areas, -> {
-    where(is_green_list: true)
+    where.not(green_list_status_id: nil)
   }
 
   scope :most_protected_marine_areas, -> (limit) {
@@ -74,6 +75,10 @@ class ProtectedArea < ApplicationRecord
 
   def self.green_list_total_km
     green_list_areas.inject(0) { |_sum, pa| _sum + pa.gis_area }
+  end
+
+  def is_green_list
+    green_list_status_id.present?
   end
 
   def wdpa_ids

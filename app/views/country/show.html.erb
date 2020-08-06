@@ -62,10 +62,9 @@
       
 
       <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
-
-
-<i class="link-with-icon__icon fa fa-download"></i>Download this dataset
-<%= download_dropdown(@country.iso_3, 'general', (types rescue [:csv, :shp])) %>
+    </section>
+  </div>
+</div>
 
 <h1>related countries</h1>      
 <% if @country.children.any? || @country.parent.present? %>
@@ -115,38 +114,15 @@
   </section>
 <% end %>
 
-<aside class="info-box info-box--fill-color">
-  <section class="info-box__column">
-    <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Citation</h2>
-    <p class="info-box__body">
-    UNEP-WCMC (<%= Date.today.year %>). Protected Area Profile for <%= @country.name %> from the World Database of Protected Areas, <%= Date.today.strftime("%B %Y") %>. Available at: <a href="/">www.protectedplanet.net</a>
-    </p>
-  </section>
 
-  <section class="info-box__column">
-    <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Downloads</h2>
-    <div class="info-box__body info-box__body--no-padding">
-      <div class="js-download-btn info-box__row">
-        <div class="js-trigger tooltip-old__trigger info-box__link">
-          <i class="info-box__link-icon fa fa-download"></i>Download this dataset
-          <%= download_dropdown(@country.iso_3, 'general', (types rescue [:csv, :shp])) %>
-        </div>
-        <a href="<%= url_for(action: :show, iso: @country.iso, format: :pdf) %>" class="info-box__link">
-          <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download this page as a PDF
-        </a>
-      </div>
-
-      <%#= render 'documentation' %>
-
-      <div class="<%= bem('info-box__row', 'no-border') %>">
-        <button class="big-button" onclick="window.location.href='<%= search_url(country: @country.name, main: :country) %>'">
-          <i class="fa fa-link big-button__icon"></i>Protected Area list of the country
-        </button>
-      </div>
-    </div>
-  </section>
-</aside>
-
-    </section>
+<h1>malaysia docs</h1>
+<% if is_malaysia? %>
+  <div class="info-box__row">
+    <div class='header-with-delimiter no-border'>Protected areas documentation</div>
+    <% malaysia_documents.map do |doc| %>
+      <a href="<%= doc[:url] %>" class="info-box__link">
+        <i class="info-box__link-icon fa fa-file-pdf-o"></i><%= doc[:name] %>
+      </a>
+    <% end %>
   </div>
-</div>
+<% end %>

@@ -42,6 +42,12 @@
       @include breakpoint($small) { display: flex; }
     }
 
+    &__filter-trigger {
+      @include button-filter-trigger;
+
+      &.disabled { @include button-disabled; }
+    }
+
     &__filters {
       @include flex-no-shrink;
       @include responsive(padding-right, 0, rem-calc(24), rem-calc(24));
