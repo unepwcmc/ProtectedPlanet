@@ -48,4 +48,13 @@ class Stats::Global
   def self.global_area
     CountryStatistic.global_land_area + CountryStatistic.global_marine_area
   end
+
+  def self.percentage_land_cover
+    CountryStatistic.global_percentage_pa_land_cover
+  end
+
+  def self.percentage_marine_cover
+    CountryStatistic.global_percentage_pa_marine_cover
+  end
+  
 end
