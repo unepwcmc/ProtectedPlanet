@@ -245,7 +245,7 @@ class PameEvaluation < ApplicationRecord
                GROUP BY pame_evaluations.id, protected_areas.wdpa_id, protected_areas.name, designation, pame_sources.data_title,
                         pame_sources.resp_party, pame_sources.year, pame_sources.language
 
-               UNION
+       /*        UNION
 
         SELECT pame_evaluations.id AS id,
                pame_evaluations.metadata_id AS metadata_id,
@@ -267,6 +267,7 @@ class PameEvaluation < ApplicationRecord
                #{restricted_where_statement}
                GROUP BY pame_evaluations.id, wdpa_id, pame_evaluations.name, designation, pame_sources.data_title,
                         pame_sources.resp_party, pame_sources.year, pame_sources.language;
+      */
       SQL
     evaluations = ActiveRecord::Base.connection.execute(query)
 
