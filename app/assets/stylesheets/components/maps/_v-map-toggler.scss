@@ -1,0 +1,59 @@
+.v-map-toggler {
+  border: 1px solid $grey-xlight;
+  cursor: pointer;
+  padding: rem-calc(2);
+  user-select: none;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  min-width: rem-calc(53);
+  height: rem-calc(27);
+
+  &,
+  &__switch {
+    border-radius: rem-calc(14);
+  }
+  
+  &__switch {
+    background-color: $grey;
+    color: $grey-xdark;
+    font-size: rem-calc(14);
+    font-weight: 600;
+    margin-left: auto;
+    margin-right: 0;
+    padding: rem-calc(2 4 0);
+
+    height: 100%;
+    
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &--active {
+    justify-content: flex-end;
+
+    .v-map-toggler__switch {
+      background-color: $grey-xlight;
+      margin-left: 0;
+      margin-right: auto;
+
+      transition: all 100ms ease-in-out;
+    }
+  }
+
+  &:hover {
+    &__switch {
+      background-color: lighten($grey, 10%);
+      color: lighten($grey-xdark, 10%);
+    }
+
+    &__active {
+      .v-map-toggler__switch {
+        color: lighten($grey-dark, 10%);
+        background-color: lighten($grey-xlight, 10%);
+      }
+    }
+  }
+}

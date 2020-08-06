@@ -32,7 +32,7 @@ en:
       region: Regions
       country: Countries
       site: Individual Areas
-    map: Map
+    map: Map View
     protected-areas: Protected Areas
     results: results
     no-results: No results. Please search again.
@@ -41,3 +41,17 @@ en:
       - news-and-stories
       - resources
       - areas
+    custom_categories:
+      topics:
+        name: 'topics'
+        items:
+          wdpa: WDPA
+          oecm: OECM
+          pame: PAME
+      types:
+        name: 'types'
+        items:
+          publications: 'Publications'
+          statistics: 'Statistics'
+          technical: 'Technical'
+          training: 'Training'

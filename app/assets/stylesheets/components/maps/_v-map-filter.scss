@@ -1,0 +1,30 @@
+.v-map-filter {
+  color: $white;
+  margin-bottom: rem-calc(15);
+  user-select: none;
+  
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-start;
+
+  &--toggleable {
+    cursor: pointer;
+  }
+
+  &__color {
+    background-color: $grey;
+    border-radius: rem-calc(19);
+    border: 1px solid $white;
+    
+    height: rem-calc(19);
+    width: rem-calc(19);
+    
+    flex-shrink: 0;
+  }
+
+  &__color,
+  &__description {
+    margin-right: rem-calc(12);
+  }
+}
