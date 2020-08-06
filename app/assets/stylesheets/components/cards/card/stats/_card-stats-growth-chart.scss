@@ -1,6 +1,10 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-&--stats-iucn {
+&--stats-growth-chart {
   @include card-stats;
+
+  .card {
+    &__chart-wrapper { @include card-chart-wrapper; }
+  }
 }

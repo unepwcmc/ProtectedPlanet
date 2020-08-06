@@ -43,8 +43,8 @@
 
       <%= render partial: "partials/stats/stats-designations", locals: { designations: @country_designations } %>
 
-      <div class="card--stats">
-        <div class="card--stats-wrapper-chart">
+      <div class="card--stats-growth-chart">
+        <div class="card__chart-wrapper">
           <h2><%= t('stats.growth.title') %></h2>
 
           <am-chart-line :data="<%= @coverage_growth.to_json %>">

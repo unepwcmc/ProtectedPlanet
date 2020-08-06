@@ -32,15 +32,14 @@
 
 @mixin card-button-external { @include button-all($small: true); }
 
-//--------------------------------------------------
-// classes
-//--------------------------------------------------
-&--stats-wrapper-chart {
+@mixin card-chart-wrapper {
   @include container-medium;
-
   @include breakpoint-down($small) { padding: 0; }
 }
 
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
 &--stats-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -62,7 +61,9 @@
 @import './stats/card-stats-coverage';
 @import './stats/card-stats-designations';
 @import './stats/card-stats-governance';
+@import './stats/card-stats-growth-chart';
 @import './stats/card-stats-iucn';
 @import './stats/card-stats-management';
 @import './stats/card-stats-overview';
+@import './stats/card-stats-related';
 @import './stats/card-stats-sources';
