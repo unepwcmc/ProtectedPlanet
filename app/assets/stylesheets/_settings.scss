@@ -110,6 +110,7 @@ $fw-black: 900;
 // breakpoints
 //--------------------------------------------------
 // must be in px not rem!
+// IF MODIFIED, PLEASE CHECK ELSEWHERE IN PROJECT e.g. in mixin-responsive.js
 $small: 767px; 
 $medium: 1024px;
 $large: 1200px;
@@ -124,7 +125,7 @@ $z-300: 300;
 //--------------------------------------------------
 // padding
 //--------------------------------------------------
-$gutter-small: rem-calc(25);
+$gutter-small: rem-calc(20);
 $gutter-medium: rem-calc(25);
 $gutter-large: rem-calc(30);
 
@@ -158,6 +159,8 @@ $site-width-rem: rem-calc($site-width);
 // $site-width-medium-tablet: 80%;
 // $site-width-medium-laptop: 78%;
 $site-width-medium-desktop: rem-calc(750);
+
+$filters-menu-max-height: rem-calc(300);
 
 //--------------------------------------------------
 // tables

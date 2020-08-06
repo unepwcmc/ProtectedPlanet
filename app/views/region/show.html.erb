@@ -1,5 +1,5 @@
 <div class="bg--grey-xlight">
-  <section class="container">
+  <section class="container flex-stack-mobile">
     <%= render partial: "partials/stats/stats-overview", locals: { 
       title: @region.name,
       chart_point_poly: @presenter.chart_point_poly,
@@ -13,38 +13,21 @@
     } %>
 
     <div>
-      <% unless @for_pdf %>
-        <h1>map</h1>
-        <div class="js-resizable map map--hero" id="map" data-mobile-height=33 data-bound-from="<%= @region.bounds.first %>" data-bound-to="<%= @region.bounds.last %>" data-iso3="<%= @region.iso %>"
-        data-control-position="bottomleft"></div>
-
-        <div class="disclaimer">
-          The designations employed and the presentation of material on this map do not
-          imply the expression of any opinion whatsoever on the part of the Secretariat
-          of the United Nations concerning the legal status of any country, territory,
-          city or area or of its authorities, or concerning the delimitation of its
-          frontiers or boundaries.
-        </div>
-      <% end %>
+      <%= render partial: "partials/maps/header", locals: {
+        map: @map,
+        map_options: @map_options
+      } unless @for_pdf %>
     </div>
   </section>
 
   <section class="container">
-
     <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
-    <%= render "region/facts/pame_statistics" %>
-  <% end %>
+      <%= render "region/facts/pame_statistics" %>
+    <% end %>
 
     <% if has_restricted_sites? %>
       <p class="article__paragraph u-bold">Part of the protected areas dataset for <%= @country.name %> is restricted.</p>
     <% end %>
-
-<!--         <% unless @for_pdf %>
-        <p>
-          <a href="/c/calculating-protected-area-coverage" class="link-with-icon"> Learn how we calculate protected area coverage statistics</a>
-        </p>
-      <% end %> -->
-
   </section>
 
   

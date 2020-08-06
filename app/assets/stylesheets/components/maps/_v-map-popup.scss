@@ -1,0 +1,42 @@
+.v-map-pin {
+  @include icon-pin-map;
+}
+
+.mapboxgl-popup-anchor-top,
+.mapboxgl-popup-anchor-top-right,
+.mapboxgl-popup-anchor-top-left {
+  .mapboxgl-popup-tip {
+    border-bottom-color: $grey-xdark !important;
+    border-bottom-width: 6px;
+  }
+}
+
+.mapboxgl-popup-anchor-right {
+  .mapboxgl-popup-tip {
+    border-left-color: $grey-xdark !important;
+    border-left-width: 6px;
+  }
+}
+.mapboxgl-popup-anchor-left {
+  .mapboxgl-popup-tip {
+    border-right-color: $grey-xdark !important;
+    border-right-width: 6px;
+  }
+}
+.mapboxgl-popup-anchor-bottom,
+.mapboxgl-popup-anchor-bottom-right,
+.mapboxgl-popup-anchor-bottom-left {
+  .mapboxgl-popup-tip {
+    border-top-color: $grey-xdark !important;
+    border-top-width: 6px;
+  }
+}
+
+.mapboxgl-popup-content {
+  background-color: $grey-xdark !important;
+  color: $white !important;
+}
+
+.mapboxgl-popup-close-button {
+  display: none !important;
+}
