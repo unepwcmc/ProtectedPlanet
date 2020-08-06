@@ -41,7 +41,7 @@
       &:first-child { border-left: none; }
 
       &:before {
-        font-weight: bold; 
+        font-weight: $bold; 
         margin-right: rem-calc(6);
 
         @include breakpoint($medium){ display: none; }
@@ -64,7 +64,7 @@
     &__cell-modal-trigger { 
       color: $primary;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: $bold;
       text-decoration: underline;
   
       &:hover { text-decoration: none; }

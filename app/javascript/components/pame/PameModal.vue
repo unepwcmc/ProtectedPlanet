@@ -3,17 +3,13 @@
     :class="['modal-wrapper', { 'modal--active' : isActive }]"
     @click.self="closeModal()"
   >
-    <div 
-      class="modal-overlay" 
-    />
+    <div class="modal-overlay" />
     <div 
       class="modal--pame"
       id="modal"
       :style="styleObject" 
     >
-      <div 
-        class="modal__content"
-      >
+      <div class="modal__content">
         <button 
           class="modal__close" 
           @click="closeModal()"
