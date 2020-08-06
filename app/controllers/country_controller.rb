@@ -30,9 +30,9 @@ class CountryController < ApplicationController
       }
     ]
 
-    @total_oecm = 0 # #TODO
+    @total_oecm = @country.protected_areas.oecms.count
     @total_pame = @country.protected_areas.with_pame_evaluations.count
-    @total_wdpa = @country.protected_areas.count
+    @total_wdpa = @country.protected_areas.wdpas.count
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
