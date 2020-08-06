@@ -7,14 +7,13 @@
 
 @mixin chart-legend-item {
   @include flex;
-  @include flex-v-center;
 }
 
-@mixin chart-legend-key {
+@mixin chart-legend-key($size: 24) {
   @include flex-no-shrink;
   border-radius: 100%;
   margin-right: rem-calc(8);
-  width: rem-calc(24); height: rem-calc(24);
+  width: rem-calc($size); height: rem-calc($size);
 
   display: block;
 }
@@ -68,6 +67,7 @@
   @include flex;
   @include flex-wrap;
   @include ul-unstyled;
+  font-size: rem-calc(14);
   margin: rem-calc(14 0);
   
   .chart__legend-li { margin-right: rem-calc(14); }
@@ -75,6 +75,50 @@
   .chart__legend-index { @include chart-legend-index; }
   .chart__legend-key { @include chart-legend-key; }
   .chart__legend-title { line-height: 1; }
+}
+
+//--------------------------------------------------
+// points polygon ratio
+//--------------------------------------------------
+.chart--legend--points-poly {
+  @include flex;
+  font-size: rem-calc(14);
+  margin: rem-calc(14 0);
+  
+  .chart__legend-item { 
+    @include chart-legend-item;
+    @include flex-v-center; 
+    margin-right: rem-calc(20);
+  }
+
+  .chart__legend-key { @include chart-legend-key($size: 16); }
+  .chart__legend-title { line-height: 1; }
+}
+
+
+//--------------------------------------------------
+// map
+//--------------------------------------------------
+.chart--legend--map {
+  font-size: rem-calc(14);
+  margin: rem-calc(14 0);
+  
+  .chart__legend-item { 
+    @include chart-legend-item;
+    margin-bottom: rem-calc(10);
+  }
+
+  .chart__legend-key { 
+    @include chart-legend-key($size: 15); 
+    border: solid 1px $white;
+
+    transform: translateY(1px);
+  }
+
+  .chart__legend-title { 
+    line-height: 1; 
+    width: rem-calc(220);
+  }
 }
 
 //--------------------------------------------------
@@ -95,7 +139,6 @@
   }
 
   .chart__legend-item { 
-    // @include chart-legend-item; 
     line-height: 1;
     margin: 0;
   }
