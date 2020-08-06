@@ -51,7 +51,7 @@ class GreenListController < ApplicationController
     @protected_area or raise_404
   end
 
-  def get_green_list_sites
-    ProtectedArea.where(is_green_list: true).take(3)
+  def green_list_sites
+    ProtectedArea.green_list_areas.take(3)
   end
 end
