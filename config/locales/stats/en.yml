@@ -35,6 +35,10 @@ en:
       no-results: No information available
       title: Management Effectiveness Evaluations
       with-assessments: With management effectiveness evaluation
+    related-countries:
+      title: Related countries & territories
+      title-child: Child countries & territories
+      title-parent: Parent country
     points: Points
     polygons: Polygons
     reported-area: Reported Area
