@@ -17,23 +17,23 @@
 
         <h2 class="modal__title">{{ text.modal_title }}</h2>
 
-        <template v-if="hasContent(modalContent.metadata_id)">
+        <template v-if="modalContent.metadata_id">
           <p><strong>{{ text.id }}:</strong> {{ modalContent.metadata_id }}</p>
         </template>
 
-        <template v-if="hasContent(modalContent.data_title)">
+        <template v-if="modalContent.data_title">
           <p><strong>{{ text.id }}:</strong> {{ modalContent.data_title }}</p>
         </template>
 
-        <template v-if="hasContent(modalContent.resp_party)">
+        <template v-if="modalContent.resp_party">
           <p><strong>{{ text.responsible }}:</strong> {{ modalContent.resp_party }}</p>
         </template>
 
-        <template v-if="hasContent(modalContent.year)">
+        <template v-if="modalContent.year">
           <p><strong>{{ text.year }}:</strong> {{ modalContent.source_year }}</p>
         </template>
 
-        <template v-if="hasContent(modalContent.language)">
+        <template v-if="modalContent.language">
           <p><strong>{{ text.language }}:</strong> {{ modalContent.language }}</p>
         </template>
       </div>
@@ -104,10 +104,6 @@
         if (array !== undefined) {
           return array.join(', ')
         }
-      },
-
-      hasContent (property) {
-        return !!property
       }
     }
   }
