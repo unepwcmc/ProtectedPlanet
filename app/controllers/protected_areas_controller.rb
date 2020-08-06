@@ -104,8 +104,8 @@ class ProtectedAreasController < ApplicationController
   # end
 
   def get_other_sites
-    return ProtectedArea.take(3) if @countries.count <= 1
-    ProtectedArea.transboundary_sites.take(3)
+    return ProtectedArea.all_except(@protected_area).take(3) if @countries.length <= 1
+    ProtectedArea.all_except(@protected_area).transboundary_sites.take(3)
   end
 
   def determine_search_path(area)
