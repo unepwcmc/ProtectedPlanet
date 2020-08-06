@@ -86,3 +86,29 @@ Search.search 'manbone', filters: {type: 'country', country: 123}
 # Search with pagination
 Search.search 'manbone', page: 3
 ```
+
+
+### Troubleshooting
+
+* You may have to rebuild the search indices on staging/production on occasion: 
+
+Run this in the console:
+
+```
+  > Search::Index.delete
+  > reload!
+  > Search::Index.create
+  > Search::Index.create_cms_fragments
+```
+This procedure is not error-proof either, as `reload!` might not work properly itself. So you may have to re-index manually:
+
+`Search::Index.new(Search::<NAME OF INDEX IN CAPS>_INDEX).create` 
+
+before running:
+
+```
+  > Search::Index.delete
+  > Search::Index.create
+  > Search::Index.create_cms_fragments
+```
+again.

@@ -1,0 +1,234 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$activeBackgroundColour: $primary;
+$activeTextColour: white;
+$checkbox-height: rem-calc(22);
+$focus-outline-margin: rem-calc(4);
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--pame {
+  @include breakpoint($small) {
+    @include flex;
+    @include flex-v-center;
+  }
+
+  .filter {
+    margin-right: rem-calc(10);
+    margin-bottom: rem-calc(10);
+
+    display: inline-block;
+    position: relative;
+
+    @include breakpoint($medium) { 
+      margin-right: rem-calc(20); 
+      margin-bottom: 0;
+    }
+
+    &__title {
+      font-size: rem-calc(20);
+      margin-right: rem-calc(20);
+    }
+
+  //**************************************************
+  // button
+  //**************************************************
+    &__button {
+      @include button-dropdown-filter;
+      color: $black;
+      cursor: pointer;
+      margin: 0;
+
+      position: relative;
+
+      &:hover { 
+        background-color: $activeBackgroundColour;
+        border-color: $activeBackgroundColour;
+        color: $activeTextColour;
+
+        &:after { background-image: image-url('icons/chevron-white-down.svg'); }
+      }
+
+      &:after {
+        @include flex-v-center;
+        content: '';
+        width: rem-calc(8); height: rem-calc(6);
+
+        right: rem-calc(24);
+      }
+      
+      &--active {
+        background-color: $activeBackgroundColour;
+        border-color: $activeBackgroundColour;
+        color: $activeTextColour;     
+
+        &:after,
+        &:hover:after { background-image: image-url('icons/chevron-white-up.svg'); }
+      }
+
+      &--has-selected {
+        background-color: $activeBackgroundColour;
+        color: $activeTextColour;
+        
+        &:after,
+        &:hover:after { visibility: hidden; }
+      }
+
+        &-total {
+          $total-width: rem-calc(24);
+
+          @include flex-v-center;
+          background-color: $activeTextColour;
+          border-radius: 100%;
+          color: $activeBackgroundColour;
+          font-size: rem-calc(18);
+          line-height: $total-width;
+          text-align: center;
+          width: $total-width; height: $total-width;
+        
+          display: block;
+
+          position: absolute;
+          right: rem-calc(16);
+        }
+    }
+
+  //**************************************************
+  // options
+  //**************************************************
+    &__options {
+      background-color: white;
+      font-size: rem-calc(16);
+      padding: rem-calc(30 25);
+      width: 100%; height: 100vh;
+      
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      
+      z-index: 1;
+
+      @include breakpoint($small) {
+        border: solid rem-calc(1) $black;
+        border-radius: $radius-global;
+        margin-top: rem-calc(18);
+        min-width: rem-calc(460);
+        width: auto; height: auto;
+
+        position: absolute;
+        top: unset;
+        right: unset;
+        bottom: unset;
+        left: unset;
+      }
+
+      &--active {
+        display: block;
+      }
+
+      &-list {
+        padding: $focus-outline-margin;
+        margin-bottom: rem-calc(20);
+        max-height: 85vh;
+        overflow-y: scroll;
+        overflow-x: hidden; //for IE11
+        white-space: nowrap; 
+
+        @include breakpoint($small) {
+          max-height: $filters-menu-max-height;
+        }
+      }
+
+      &--donors {
+        column-count: 2;
+        flex-wrap: wrap;
+        width: 928px;
+        white-space: normal;
+
+        display: flex;
+
+        li {
+          flex: 1 0 50%;
+
+          float: left;
+        }
+      }
+      
+      &--category { max-width: rem-calc(803); }
+      &--country { max-width: rem-calc(480); }
+      &--ocean-region { max-width: rem-calc(300); }
+    }
+
+      &__option {
+        font-size: rem-calc(16);
+        margin-bottom: rem-calc(16);
+        width: 100%;
+
+        display: block;
+        position: relative;
+
+        label { cursor: pointer; }
+      }
+
+//**************************************************
+// checkbox
+//**************************************************
+        &__checkbox {
+          border: solid rem-calc(1) $grey;
+          cursor: pointer;
+          margin: 0;
+          padding: 0; 
+          width: $checkbox-height; height: $checkbox-height;
+
+          -webkit-appearance: none;
+          -moz-appearance: none;
+          -ms-appearance: none;
+
+          display: block;
+          position: absolute;
+          left: 0;
+
+          &--active:after {
+            @include icon-tick;
+            content: '';
+            width: rem-calc(20); height: rem-calc(20);
+
+            display: block;
+            top: 0;
+            left: 0;
+          }
+        }
+
+        &__checkbox-label {
+          line-height: $checkbox-height;
+          padding: rem-calc(0 20 0 38);
+
+          display: inline-block;
+        }
+//**************************************************
+// button
+//**************************************************
+    &__buttons {
+      @include flex;
+      @include flex-h-between;
+      margin-top: rem-calc(18);
+      text-align: right;
+    }
+
+    &__button-apply { @include button-primary; }
+
+    &__button-download {
+      @include breakpoint($small) { margin-left: auto; }
+    }
+
+    &__button-cancel { 
+      @include button-outline;
+      margin: rem-calc(0 20 0) auto; 
+    }
+
+    &__button-clear { @include button-outline; }
+  }
+}

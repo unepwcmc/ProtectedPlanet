@@ -14,9 +14,16 @@ en:
       title: Growth in protected area coverage
     governance: 
       title: Governance types
+    green-list:
+      intro: This site is part of the IUCN Green List Community
+      type: Green List Status
+      date: Certification Expiry Date
     iucn-categories: 
       title: IUCN Management Categories
     location: Location
+    management-plan:
+      button: View Management Plan
+      button-title: Download the Management Plan for %{site}
     marine-protected: Marine and Coastal Area Protected
     marine-title: Marine Protected Areas Coverage
     marine-total: Marine Area Protected

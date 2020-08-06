@@ -127,15 +127,42 @@ class ProtectedAreaPresenter
   end
 
   def external_links
-    links = []
-    
-    if(dopa_link) then links.push(dopa_link) end
-    if(story_map_links) then links = links + story_map_links end
-
-    links
+    [
+      green_list_status_info,
+      parcc_info
+    ].compact
   end
 
   private
+
+  def green_list_status_info
+    return unless protected_area.green_list_status_id
+
+    gls = protected_area.green_list_status
+    {
+      affiliation: 'greenlist',
+      date: gls.expiry_date,
+      image_url: green_list_logo(gls.status),
+      link_title: "View the Green List page for #{protected_area.name}",
+      type: gls.status,
+      url: '' ##TODO links needed from CSV provided by IUCN.
+    }
+  end
+
+  def green_list_logo(status)
+    logo = status.downcase == 'candidate' ? 'green-list-black' : 'green-list'
+    ActionController::Base.helpers.image_url("logos/#{logo}.png")
+  end
+
+  def parcc_info
+    return unless protected_area.has_parcc_info
+
+    {
+      image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
+      link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
+      link_url: url_for_related_source('parcc_info', protected_area)
+    }
+  end
 
   def protected_area
     @protected_area
@@ -179,7 +206,7 @@ class ProtectedAreaPresenter
 
   def parse_management_plan management_plan
     if (management_plan.is_a? String) && (management_plan.starts_with?("http"))
-      link_to("View Management Plan", management_plan)
+      ActionController::Base.helpers.link_to("View Management Plan", management_plan)
     else
       management_plan
     end
