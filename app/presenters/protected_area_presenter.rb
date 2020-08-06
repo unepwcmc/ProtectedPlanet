@@ -65,9 +65,6 @@ class ProtectedAreaPresenter
     }
   end
 
-  def dopa_status
-    protected_area.is_dopa
-  end
 
   def marine_designation
     size = protected_area.reported_area.to_f.round(2)
@@ -189,8 +186,8 @@ class ProtectedAreaPresenter
     end
   end
 
-  def dopa_link
-    ## TODO - If protected_area.wdpa_id is present in the DOPA CSV then return below otherwise return nil
+  def dopa_link 
+    return nil unless protected_area.is_dopa
     {
       link: "https://dopa-explorer.jrc.ec.europa.eu/wdpa/#{protected_area.wdpa_id}",
       text: I18n.t('stats.dopa.title'),
