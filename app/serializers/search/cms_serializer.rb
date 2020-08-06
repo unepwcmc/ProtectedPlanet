@@ -84,18 +84,20 @@ class Search::CmsSerializer < Search::BaseSerializer
 
   DEFAULT_PAGE_SIZE = {
     resources: 9.0,
-    news_and_stories: 6.0
+    news_and_stories: 6.0,
+    default: 9.0
   }.freeze
   def total_pages
-    (total / default_page_size(cms_root_page.try(:slug))).ceil
+    (total / default_page_size(cms_root_page_slug)).ceil
   end
 
   def default_page_size(slug)
-    DEFAULT_PAGE_SIZE[slug.underscore.to_sym] || 9.0
+    DEFAULT_PAGE_SIZE[slug] || 9.0
   end
 
-  def cms_root_page
+  def cms_root_page_slug
     _root_page_id = @search.options.dig(:filters, :ancestor)
-    @cms_root_page ||= Comfy::Cms::Page.find_by(id: _root_page_id)
+    _cms_root_page = Comfy::Cms::Page.find_by(id: _root_page_id)
+    _cms_root_page ? _cms_root_page.slug.underscore.to_sym : :default
   end
 end
