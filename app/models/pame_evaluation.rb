@@ -2,20 +2,11 @@ require 'csv'
 require 'wcmc_components'
 
 class PameEvaluation < ApplicationRecord
-  include WcmcComponents::Loadable
-
   belongs_to :protected_area, optional: true
   belongs_to :pame_source
   has_and_belongs_to_many :countries
 
   validates :methodology, :year, :metadata_id, presence: true
-
-  # config for loadable mixin
-  ignore_column :designation
-
-  import_by protected_area: :wdpa_id
-  import_by countries: :iso_3
-  
 
   TABLE_ATTRIBUTES = [
     {
