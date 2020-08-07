@@ -9,7 +9,7 @@ namespace :comfy do
   PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
   PP_USER = 'wcmc'.freeze
 
-  desc "Import CMS Seed data from staging. Can be run with user inputs or arguments"
+  desc "Import CMS Seed data from staging. Can be run with argument or can accept user input if no argument is supplied"
   task :staging_import, [:seed_type] => [:environment] do |_t, args| 
     answer = args[:seed_type]
     
