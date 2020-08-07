@@ -2,16 +2,16 @@
 
 namespace :comfy do
   # The methods that this rake task calls are in lib/modules/sync_seeds.rb
-  LOCAL = (ComfortableMexicanSofa.config.seeds_path + '/protected-planet').freeze
-  REMOTE = 'ProtectedPlanet/current/db/cms_seeds/protected-planet'.freeze
+  FROM  = 'ProtectedPlanet/current/db/cms_seeds/protected-planet'.freeze
   PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
   PP_USER = 'wcmc'.freeze
 
-  desc "Import CMS Seed data from staging. Can be run with argument (files/layouts/pages/all) or can accept user input if no argument is supplied"
-  task :staging_import, [:seed_type] => [:environment] do |_t, args| 
-    answer = args[:seed_type]
+  desc "Import CMS Seed data from staging. Can be run with arguments (<destination>, files/pages/layouts/all) or can accept user input if no argument is supplied"
+  task :staging_import, %i[to folder] => [:environment] do |_t, args| 
+    to    = File.join(ComfortableMexicanSofa.config.seeds_path, args[:to])
+    answer = args[:folder]
     
-    if answer.nil?
+    if args.nil?
       puts question = "What would you like to import? 'All/Files/Layouts/Pages' or 'Nothing' to quit"
       valid_answers = ['All', 'Files', 'Layouts', 'Pages', 'Nothing']
       answer = STDIN.gets.chomp.downcase.capitalize
@@ -25,7 +25,7 @@ namespace :comfy do
       answer = answer.downcase.capitalize!
     end
     
-    puts "Importing CMS Seed data from Staging Folder to #{LOCAL} ..."
+    puts "Importing CMS Seed data from Staging Folder to #{to} ..."
 
     new_session =  SyncSeeds.new(PP_STAGING, PP_USER)
 
@@ -33,10 +33,10 @@ namespace :comfy do
     new_session.start_session do |session|
       # First get rid of any local top-level (i.e. which exist in the main 
       # directory of REMOTE) folders/files that don't exist remotely
-      new_session.compare_folders('*', LOCAL, REMOTE)
+      new_session.compare_folders('*', to, FROM)
 
-      local_list = new_session.list_local_files(LOCAL)
-      remote_list = new_session.list_remote_files(REMOTE)
+      local_list = new_session.list_local_files(to)
+      remote_list = new_session.list_remote_files(FROM)
 
       if answer == 'All'
         new_session.main_task(local_list, remote_list)
