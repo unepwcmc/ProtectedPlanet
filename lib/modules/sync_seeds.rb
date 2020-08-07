@@ -60,14 +60,12 @@ class SyncSeeds
           download_files(remote_path, local_path) 
           # Will be hit if local_item is a file or folder inside a directory
         elsif Dir.glob('**/*', base: base).include?(local_item)
-          byebug
           download_files(remote_path, local_path)
           downloaded = true  
         end              
       end
     else
       # Just download it if it doesn't exist at all
-      byebug
       download_files(remote_path, LOCAL)
       downloaded = true
     end
