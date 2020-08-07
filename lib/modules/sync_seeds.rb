@@ -122,6 +122,18 @@ class SyncSeeds
     end
   end
 
+  def commence_import(answer)
+    logger = ComfortableMexicanSofa.logger
+    ComfortableMexicanSofa.logger = Logger.new(STDOUT)
 
+    if answer == 'All'
+      Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
+    else
+      module_name = "ComfortableMexicanSofa::Seeds::#{answer.singularize}::Importer".constantize
+      module_name.new('protected-planet', 'protectedplanet').import!
+    end
+    
+    ComfortableMexicanSofa.logger = logger
+  end
   
 end

@@ -41,7 +41,7 @@ namespace :comfy do
       remote_list = new_session.list_remote_files(REMOTE)
 
       if answer == 'All'
-        new_session.main_task(local_list, remote_list) 
+        new_session.main_task(local_list, remote_list)
       else
         local_list.filter! { |f| f == answer.downcase } 
         remote_list.filter! do |f|
@@ -52,21 +52,11 @@ namespace :comfy do
 
         new_session.main_task(local_list, remote_list)
       end
-    end
-  
-    puts "Finished downloads, now replacing your local seed data with your selection..."
 
-    logger = ComfortableMexicanSofa.logger
-    ComfortableMexicanSofa.logger = Logger.new(STDOUT)
+      puts "Finished downloads, now replacing your local seed data with your selection..."
 
-    if answer == 'All'
-      Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
-    else
-      module_name = "ComfortableMexicanSofa::Seeds::#{answer.singularize}::Importer".constantize
-      module_name.new('protected-planet', 'protectedplanet').import!
+      new_session.commence_import(answer) 
     end
-    
-    ComfortableMexicanSofa.logger = logger
   end
 
 end
