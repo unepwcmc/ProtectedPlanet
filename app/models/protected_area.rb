@@ -69,13 +69,14 @@ class ProtectedArea < ApplicationRecord
     }
   end
 
-  def self.green_list_protected_percentage
-    (green_list_total_km / Stats::Global.global_area * 100).to_f.round(2)
-  end
+  # TODO - Not sure we need this anymore now that we have Ed's stats - SL
+  # def self.green_list_protected_percentage
+  #   (green_list_total_km / Stats::Global.global_area * 100).to_f.round(2)
+  # end
 
-  def self.green_list_total_km
-    green_list_areas.inject(0) { |_sum, pa| _sum + pa.gis_area }
-  end
+  # def self.green_list_total_km
+  #   green_list_areas.inject(0) { |_sum, pa| _sum + pa.gis_area }
+  # end
 
   def is_green_list
     green_list_status_id.present?

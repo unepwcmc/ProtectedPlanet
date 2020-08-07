@@ -8,9 +8,9 @@ class GreenListController < ApplicationController
   # after_action :enable_caching
 
   def index
-    @pas_km = ProtectedArea.green_list_total_km
-    @pas_percent = ProtectedArea.green_list_protected_percentage
-    @pas_total = green_list_areas.count
+    @pas_km = @green_list_statistics['green_list_area']
+    @pas_percent = @green_list_statistics['green_list_perc']
+    @pas_total = @green_list_statistics['green_list_count']
 
     @protectedAreaGrowth = [
       {
@@ -65,6 +65,10 @@ class GreenListController < ApplicationController
   end
 
   private
+
+  def green_list_statistics
+    @green_list_statistics = $redis.hgetall('green_list_stats')
+  end
 
   def map_overlays
     overlays(['greenlist'], {
