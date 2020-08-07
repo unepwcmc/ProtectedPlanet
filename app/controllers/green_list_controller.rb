@@ -36,8 +36,8 @@ class GreenListController < ApplicationController
 
     @regionsTopCountries = [] ##TODO See marine page for example
 
-    @total_area_percent = 20 ##TODO total percentage coverage of the worlds PAs
-    @total_greenlist_percent = 5 ##TODO total percentage coverage of the worlds Greenlist PAs
+    @total_area_percent = Stats::Global.percentage_pa_cover 
+
 
     @filters = {
       db_type: ['wdpa'],
