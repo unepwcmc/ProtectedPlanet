@@ -33,6 +33,7 @@ import Flickity from 'vue-flickity';
 import Download from './components/download/Download'
 import FilteredTable from './components/pame/FilteredTable'
 import NavBurger from './components/nav/NavBurger'
+import PameModal from './components/pame/PameModal'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
@@ -92,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	      FilteredTable,
         Flickity,
         NavBurger,
+        PameModal,
         SearchAreas,
         SearchAreasHome,
         SearchSite,

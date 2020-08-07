@@ -1,0 +1,47 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.modal-wrapper {
+  display: none;
+
+  &.modal--active { display: block; }
+}
+
+.modal-overlay {
+  background-color: rgba($grey, .8);
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: $z-300;
+}
+
+.modal--pame {
+  background-color: white;
+  border-radius: $radius-global;
+  padding: rem-calc(34 32);
+  width: 60%;
+
+  position: absolute;
+  left: 50%;
+  z-index: $z-400;
+
+  transform: translate(-50%, -50%);
+
+  .modal__title { margin-top: 0; }
+
+  .modal__content {
+    position: relative;
+  }
+
+  .modal__close {
+    @include button-close;
+    cursor: pointer;
+    
+    position: absolute;
+    top: rem-calc(-18);
+    right: rem-calc(-16);
+  }
+}

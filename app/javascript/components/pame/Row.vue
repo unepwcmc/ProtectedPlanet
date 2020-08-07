@@ -16,7 +16,7 @@
     />
     <p 
       @click="openModal()" 
-      class="table__cell modal__trigger"
+      class="table__cell table__cell-modal-trigger"
     >
       {{ item.metadata_id }}
     </p>

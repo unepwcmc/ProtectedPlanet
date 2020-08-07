@@ -5,6 +5,7 @@ en:
     citation: Citation Text
     coverage: Coverage
     coverage-chart-smallprint: The graph excludes status years with no information reported (STAT_YR = 0).
+    countries: Number of countries
     designations:
       title: Designations
     external:
@@ -28,12 +29,18 @@ en:
     marine-total: Marine Area Protected
     nr-report-title: th National Report Coverage
     oecm:
-      title: Other effective area-based conservation measures
+      title: Total Other effective area-based conservation measures
     pame:
       areas-assessed: Areas Assessed
       no-results: No information available
       title: Management Effectiveness Evaluations
-      with-assessments: With management effectiveness evaluation
+      with-assessments: With management effectiveness evaluations
+    points: Points
+    polygons: Polygons
+    related-countries:
+      title: Related countries & territories
+      title-child: Child countries & territories
+      title-parent: Parent country
     reported-area: Reported Area
     sources: 
       title: Sources

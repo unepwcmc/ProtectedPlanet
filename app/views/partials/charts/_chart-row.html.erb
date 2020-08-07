@@ -1,0 +1,7 @@
+<div class="chart--row">
+  <div class="chart__row">
+    <% rows.each do |row| %>
+      <div class="chart__bar <%= row[:theme] %>" style="width: <%= row[:percentage] %>%;"></div>
+    <% end %>
+  </div>
+</div>
