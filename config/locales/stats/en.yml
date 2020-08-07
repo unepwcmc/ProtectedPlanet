@@ -8,8 +8,9 @@ en:
     countries: Number of countries
     designations:
       title: Designations
-    external:
-      title: Affiliations
+    dopa: 
+      title: Find even more information by visiting the Digital Observatory for Protected Areas (DOPA)
+      button-title: View information about %{name} on DOPA
     growth:
       title: Growth in protected area coverage
     governance: 

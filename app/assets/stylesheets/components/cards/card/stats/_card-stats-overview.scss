@@ -33,9 +33,24 @@
   }
 
   .card {
-    &__flag {
-      margin-right: rem-calc(14);
+    &__external-button { @extend .button--link-external; }
+
+    &__external-label {
+      margin-right: 4%;
+      width: 74%;
     }
+
+    &__external-link {
+      @include flex;
+      @include flex-h-between;
+      @include flex-v-start;
+      font-size: rem-calc(16);
+      margin-bottom: rem-calc(20);
+    }
+  
+    &__external-title { font-weight: $bold; }
+
+    &__flag { margin-right: rem-calc(14); }
 
     &__heading {
       @include flex;
@@ -69,34 +84,8 @@
       padding-bottom: rem-calc(20);
     }
 
-    &__story-map-links {
-      margin-top: 3rem;
-
-      .story-map-link {
-        @include flex;
-        @include flex-h-between;
-        @include flex-v-center;
-        font-size: rem-calc(16);
-        
-        &__link {
-          @include button-with-icon;
-          @include breakpoint($small) { font-size: rem-calc(16); }
-          
-          &::after { 
-            @include icon-arrow-external; 
-            display: inline-block;
-          }
-        }
-  
-        &__title {
-          font-weight: $bold;
-        }
-      }
-    }
-
-    &__subtitle {
-      @include card-stats-overview-subtitle;
-      width: 70%;
+    &__text {
+      font-size: rem-calc(16);
     }
 
     &__subtitle-margined {
