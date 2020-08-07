@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 namespace :comfy do
-  
-  # Locally stored seeds - assumes you already have the local folder - 
-  # it won't create it 
+  # The methods that this rake task calls are in lib/modules/sync_seeds.rb
   LOCAL = (ComfortableMexicanSofa.config.seeds_path + '/protected-planet').freeze
   REMOTE = 'ProtectedPlanet/current/db/cms_seeds/protected-planet'.freeze
   PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
   PP_USER = 'wcmc'.freeze
 
-  desc "Import CMS Seed data from staging. Can be run with argument or can accept user input if no argument is supplied"
+  desc "Import CMS Seed data from staging. Can be run with argument (files/layouts/pages/all) or can accept user input if no argument is supplied"
   task :staging_import, [:seed_type] => [:environment] do |_t, args| 
     answer = args[:seed_type]
     
