@@ -3,19 +3,11 @@
 namespace :comfy do
   FROM  = 'storage'
   TO    = ENV['PP_FILES_STAGING']
-  CLIENT = Aws::S3::Client.new(
-    access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-    secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-    region: ENV['AWS_REGION']
-  )
-  SESSION = Aws::S3::Resource.new(client: CLIENT)
-
 
   desc "Export local Activestorage files to S3 PP staging bucket"
   task :export_to_s3 => :environment do |_t|
+    s3 = S3.new(ENV['AWS_REGION'])
     # abort("Sorry, you can't run this in development") if Rails.env.development?
-
-    bucket = SESSION.bucket("#{ENV["PP_FILES_#{Rails.env.upcase}"]}")
 
     puts "Exporting CMS data from local ActiveStorage folder [#{FROM}] to Bucket [#{TO}] ..."
 
@@ -30,9 +22,7 @@ namespace :comfy do
       )
       source = File.join(source_dir, filename)
       
-      target_object = bucket.object(filename)
-
-      target_object.upload_file(Pathname.new(source)) 
+      s3.upload(filename, Pathname.new(source), bucket: TO)
     end
 
     puts "Finished exports, now syncing up production with staging..."
