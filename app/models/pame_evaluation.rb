@@ -1,5 +1,4 @@
 require 'csv'
-require 'wcmc_components'
 
 class PameEvaluation < ApplicationRecord
   belongs_to :protected_area, optional: true
