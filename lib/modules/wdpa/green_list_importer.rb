@@ -46,8 +46,8 @@ module Wdpa::GreenListImporter
   def import_global_data
     stats = {}
     CSV.foreach(GREEN_LIST_DATA_CSV, headers: true) do |row|
-      stats[row["type"]] = value
-      $redis.hmset('green_list_stats', row["type"], value)
+      stats[row["type"]] = row["value"]
+      $redis.hmset('green_list_stats', row["type"], row["value"])
     end
     stats
   end
