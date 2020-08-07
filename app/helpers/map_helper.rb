@@ -81,16 +81,6 @@ module MapHelper
     '/query?where=wdpaid+IN+%28' + wdpaids.join('%2C+') + '%29&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
   end
 
-  def map_search_types
-    arr = []
-
-    t('map.search_types').each do |id, translations|
-      arr.push(translations.merge({id: id}))
-    end
-
-    arr
-  end
-  
   def services_for_point_query
     SERVICES_FOR_POINT_QUERY
   end
