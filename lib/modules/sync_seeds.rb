@@ -52,20 +52,22 @@ class SyncSeeds
   def check_if_newer(parent_folder, local_item, remote_item, remote_path, local_path, base = LOCAL)
     if parent_folder.include?(local_item)
       yield if block_given?
-
+      
       is_newer = Time.at(remote_item.attributes.mtime) >= File.stat(local_path).mtime  
       # If there are any outdated files, will trigger download
       if is_newer
         if Dir.glob('*', base: LOCAL).include?(local_item)
           download_files(remote_path, local_path) 
-        # Will be hit if local_item is a file or folder inside a directory
+          # Will be hit if local_item is a file or folder inside a directory
         elsif Dir.glob('**/*', base: base).include?(local_item)
-          download_files(remote_path, base)
+          byebug
+          download_files(remote_path, local_path)
           downloaded = true  
         end              
       end
     else
       # Just download it if it doesn't exist at all
+      byebug
       download_files(remote_path, LOCAL)
       downloaded = true
     end
@@ -98,11 +100,10 @@ class SyncSeeds
 
     remote_folder_content.each do |file|
       # Go through the various files and folders and check to see if they exist locally
-      local_file = file.name
-      absolute_path = File.join(paths[:local_path], file.name)
-      
-      check = check_if_newer(local_folder_content, local_file, file, paths[:remote_path], absolute_path, paths[:local_path])
-      
+      local_file = file.name.force_encoding('UTF-8')
+
+      check = check_if_newer(local_folder_content, local_file, file, paths[:remote_path], paths[:local_path], paths[:local_path])
+  
       # Break out of loop if already downloaded
       break if check == true
     end
