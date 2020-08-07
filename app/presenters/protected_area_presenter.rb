@@ -129,6 +129,7 @@ class ProtectedAreaPresenter
 
   def external_links
     [
+      dopa_link,
       green_list_status_info,
       parcc_info
     ].compact
