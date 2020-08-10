@@ -73,7 +73,7 @@ class SyncSeeds
     downloaded
   end
 
-  def compare_folders(wildcard, local, remote, base = LOCAL)
+  def compare_folders(wildcard, local, remote, base)
     puts "Checking to see what files need to be deleted from #{base}" 
 
     remote_list = @session.sftp.dir.glob(remote, wildcard).map do |f|  
