@@ -5,26 +5,43 @@ en:
     citation: Citation Text
     coverage: Coverage
     coverage-chart-smallprint: The graph excludes status years with no information reported (STAT_YR = 0).
+    countries: Number of countries
     designations:
       title: Designations
+    dopa: 
+      title: Find even more information by visiting the Digital Observatory for Protected Areas (DOPA)
+      button-title: View information about %{name} on DOPA
     growth:
       title: Growth in protected area coverage
     governance: 
       title: Governance types
+    green-list:
+      intro: This site is part of the IUCN Green List Community
+      type: Green List Status
+      date: Certification Expiry Date
     iucn-categories: 
       title: IUCN Management Categories
     location: Location
+    management-plan:
+      button: View Management Plan
+      button-title: Download the Management Plan for %{site}
     marine-protected: Marine and Coastal Area Protected
     marine-title: Marine Protected Areas Coverage
     marine-total: Marine Area Protected
     nr-report-title: th National Report Coverage
     oecm:
-      title: Other effective area-based conservation measures
+      title: Total Other effective area-based conservation measures
     pame:
       areas-assessed: Areas Assessed
       no-results: No information available
       title: Management Effectiveness Evaluations
-      with-assessments: With management effectiveness evaluation
+      with-assessments: With management effectiveness evaluations
+    points: Points
+    polygons: Polygons
+    related-countries:
+      title: Related countries & territories
+      title-child: Child countries & territories
+      title-parent: Parent country
     reported-area: Reported Area
     sources: 
       title: Sources

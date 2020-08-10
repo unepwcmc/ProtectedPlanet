@@ -1,5 +1,8 @@
 <template>
-  <div v-show="isActive">
+  <div 
+    class="filters--sidebar"
+    v-show="isActive"
+  >
     <div class="filter__pane">
       <div class="filter__pane-topbar">
         <span 

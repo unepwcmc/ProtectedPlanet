@@ -2,6 +2,7 @@
 
 require 'cms_tags/date_not_null'
 require 'cms_tags/text_custom'
+require 'cms_tags/categories'
 # encoding: utf-8
 
 ComfortableMexicanSofa.configure do |config|

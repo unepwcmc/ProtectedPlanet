@@ -17,5 +17,11 @@
     text-filters="<%= t('search.filters') %>"
     text-map="<%= t('search.map') %>"
     :results="<%= @results.to_json %>"
-  ></search-areas>
+  >
+    <template v-slot:map>
+      <%= render partial: "partials/maps/main", locals: {
+        map: @map
+      } %>
+    </template>
+  </search-areas>
 </div>

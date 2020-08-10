@@ -5,7 +5,8 @@
 // mixins
 //--------------------------------------------------
 @mixin card-stats-padding {
-  padding: rem-calc(28 30); 
+  padding: rem-calc(24 25); 
+  @include breakpoint($small) { padding: rem-calc(28 30); }
 }
 
 @mixin card-stats-number {

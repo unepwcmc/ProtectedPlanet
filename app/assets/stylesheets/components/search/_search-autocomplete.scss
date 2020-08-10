@@ -51,6 +51,11 @@ $search-autocomplete-select-width: rem-calc(222);
       
       @include breakpoint($small) { height: $search-autocomplete-height-tablet; }
 
+      &:focus {
+        outline: none;
+        border-color: $black;
+      }
+
       .search__bar & { 
         height: rem-calc(49);
       }

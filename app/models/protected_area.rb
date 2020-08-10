@@ -19,18 +19,23 @@ class ProtectedArea < ApplicationRecord
   belongs_to :designation
   delegate :jurisdiction, to: :designation, allow_nil: true
   belongs_to :wikipedia_article
+  belongs_to :green_list_status
 
   after_create :create_slug
 
   scope :oecms, -> { where(is_oecm: true) }
   scope :wdpas, -> { where(is_oecm: false) }
 
+  scope :terrestrial_areas, -> {
+    where(marine: false)
+  }
+
   scope :marine_areas, -> {
     where(marine: true)
   }
 
   scope :green_list_areas, -> {
-    where(is_green_list: true)
+    where.not(green_list_status_id: nil)
   }
 
   scope :most_protected_marine_areas, -> (limit) {
@@ -74,6 +79,10 @@ class ProtectedArea < ApplicationRecord
 
   def self.green_list_total_km
     green_list_areas.inject(0) { |_sum, pa| _sum + pa.gis_area }
+  end
+
+  def is_green_list
+    green_list_status_id.present?
   end
 
   def wdpa_ids
@@ -142,6 +151,18 @@ class ProtectedArea < ApplicationRecord
     overlap
   end
 
+  def self.global_terrestrial_oecm_coverage
+    land_oecms = self.oecms.terrestrial_areas.pluck(:reported_area)
+    total_oecm_area = land_oecms.inject(0) { |sum, area| sum + area.to_i }
+    ((total_oecm_area.to_f / CountryStatistic.global_land_area.to_f) * 100).round(2)
+  end
+
+  def self.global_marine_oecm_coverage
+    marine_oecms = self.oecms.marine_areas.pluck(:reported_marine_area)
+    total_oecm_area = marine_oecms.inject(0) { |sum, area| sum + area.to_i }
+    ((total_oecm_area.to_f / CountryStatistic.global_marine_area.to_f) * 100).round(2)
+  end
+
   def self.global_marine_coverage
     reported_areas = marine_areas.pluck(:reported_marine_area)
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
@@ -152,7 +173,20 @@ class ProtectedArea < ApplicationRecord
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
+  def extent_url
+    layer_number = is_point? ? 0 : 1
+
+    {
+      url: "#{MapHelper::WDPA_FEATURE_SERVER_URL}/#{layer_number}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      padding: 1
+    }
+  end
+
   private
+
+  def is_point?
+    the_geom.geometry_type.type_name.match('Point').present?
+  end
 
   def bounding_box_query
     dirty_query = """
