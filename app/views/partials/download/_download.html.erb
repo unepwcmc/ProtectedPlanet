@@ -1,9 +1,11 @@
 <download 
+  button-text="<%= t('global.button.download') %>"
+
   <% if local_assigns.has_key? :classes %>
     class="<%= classes %>"
   <% end %>
 
   :options="<%= options %>"
-  text="<%= t('global.button.download') %>"
+  :text="<%= download_text %>"
 >
 </download>

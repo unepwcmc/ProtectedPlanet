@@ -4,7 +4,7 @@
       class="download__trigger"
       @click="toggleDownloadPane"
     >
-      <span class="download__trigger-text">{{ text }}</span>
+      <span class="download__trigger-text">{{ buttonText }}</span>
     </button>
 
     <div :class="['download__target', { 'active': showPopup }]">
@@ -16,13 +16,16 @@
 
     <download-commercial 
       :isActive="showCommercialModal"
+      :text="text.commercial"
       v-on:click:close-modal="closeCommercialModal"
       v-on:click:non-commercial="clickNonCommercial"
       />
 
     <download-modal 
-      :newDownload="newDownload"
       :isActive="showDownloadModal"
+      :newDownload="newDownload"
+      :text="text.download"
+      :textStatus="text.status"
       v-on:deleted:all="closeDownloadModal"
     />
   </div>
@@ -42,8 +45,12 @@ export default {
   mixins: [ mixinAxiosHelpers ],
 
   props: {
+    buttonText: String,
     options: Array, //[ { title: String, commercialAvailable: Boolean, params: Object } ]
-    text: String
+    text: {
+      required: true,
+      type: Object //See download_text in downloads_helper.rb
+    }
   },
 
   data () {

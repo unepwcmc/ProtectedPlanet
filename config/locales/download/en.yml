@@ -1,0 +1,16 @@
+en:
+  download:
+    modal-commercial:
+      commercial-text: Commercial use of the WDPA will redirect you to the IBAT website.
+      commercial-title: Commercial Use
+      non-commercial-text: Download WDPA straight from the site.
+      non-commercial-title: Non Commercial Use
+      title: Download Options
+    modal-download: 
+      citation-text: "UNEP-WCMC (2019). Protected Area Profile for France from the World Database of Protected Areas, December 2019. Available at: www.protectedplanet.net"
+      citation-title: Citation
+      title: Downloads
+    status:
+      download: Download
+      failed: Download Failed
+      generating: Generating...

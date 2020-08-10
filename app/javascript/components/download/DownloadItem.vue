@@ -5,18 +5,18 @@
     <span 
       class="modal__li-failed"
       v-show="hasFailed"
-    >Download Failed</span>
+    >{{ text.failed }}</span>
 
     <span 
       class="modal__li-generating"
       v-show="isGenerating"
-    >Generating...</span>
+    >{{ text.generating }}</span>
 
     <a 
       class="modal__li-download"
       :href="url"  
       v-show="isReady"
-    >Download</a>
+    >{{ text.download }}</a>
 
     <span 
       class="modal__li-delete" 
@@ -37,8 +37,9 @@ export default {
       required: true,
       type: Boolean
     },
-    title: {
-      type: String
+    text: {
+      required: true,
+      type: Object //{ download: String, failed: String, generating: String }
     },
     url: {
       type: String

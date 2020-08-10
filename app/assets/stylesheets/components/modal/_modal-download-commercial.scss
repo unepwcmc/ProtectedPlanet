@@ -28,7 +28,7 @@ $modal-commercial-link-height: rem-calc(107);
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-.modal-wrapper--download-commerical {
+.modal-wrapper--download-commercial {
 
   &.active::before { display: block; }
 
@@ -45,7 +45,7 @@ $modal-commercial-link-height: rem-calc(107);
   }
 }
 
-.modal--download-commerical {
+.modal--download-commercial {
   @include border-radius;
   background-color: $white;
   padding: rem-calc(34 26 14 26);
