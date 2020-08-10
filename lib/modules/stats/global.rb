@@ -6,9 +6,14 @@ class Stats::Global
   end
 
   def self.percentage_pa_cover
-    RegionalStatistic.joins(:region)
-                     .where('regions.iso' => 'GLOBAL')
-                     .first[:percentage_pa_cover]
+    # Method doesn't work as global is not included in the list of regional statistics
+    # Todo - link up global with its regional statistic if it has one
+    # RegionalStatistic.joins(:region)
+    #                  .where('regions.iso' => 'GLOBAL')
+    #                  .first[:percentage_pa_cover]
+    # Temporary method below
+    total_pa_area = RegionalStatistic.all.reduce(0) { |sum, region| sum + region.pa_area }
+    ((total_pa_area / self.global_area).to_f * 100).round(2)
   end
 
   def self.pas_with_iucn_category
