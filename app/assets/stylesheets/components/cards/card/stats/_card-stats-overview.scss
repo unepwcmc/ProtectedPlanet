@@ -22,7 +22,8 @@
   @include card-stats-padding;
   width: 100%;
 
-  @include breakpoint($small) { 
+  @include breakpoint($small) {
+    @include flex-no-shrink; 
     margin-right: rem-calc(30);
     width: calc(50% - 15px); 
   }
@@ -33,7 +34,10 @@
   }
 
   .card {
-    &__external-button { @extend .button--link-external; }
+    &__external-button { 
+      @extend .button--link-external; 
+      line-height: 1;
+    }
 
     &__external-label {
       margin-right: 4%;

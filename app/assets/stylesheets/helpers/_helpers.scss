@@ -28,7 +28,7 @@
   height: 100vh;
 }
 
-.flex-stack-mobile {
+@mixin flex-stack-mobile {
   display: flex;
   flex-wrap: wrap;
 

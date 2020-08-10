@@ -53,6 +53,13 @@ class ProtectedAreaPresenter
     end
   end
 
+  def external_links
+    links = []
+    links.push(dopa_link)
+    links = links + story_map_links
+    links
+  end
+
   def percentage_complete
     ((num_fields_with_data.to_f / all_fields.count) * 100).round(2)
   end
@@ -125,13 +132,6 @@ class ProtectedAreaPresenter
         value: protected_area.international_criteria || "Not Reported"
       }
     ]
-  end
-
-  def external_links
-    [
-      green_list_status_info,
-      parcc_info
-    ].compact
   end
 
   private
