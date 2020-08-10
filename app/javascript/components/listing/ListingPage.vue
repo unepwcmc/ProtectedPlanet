@@ -21,15 +21,19 @@
         v-on:toggle:filter-pane="toggleFilterPane"
       />
       
-      <listing-page-list
-        :results="newResults"
-        :sm-trigger-element="smTriggerElement"
-        :template="template"
-        :text-no-results="textNoResults"
-        v-on:request-more="requestMore"
-        v-on:reset-pagination="resetPagination"
-        v-show="!loadingResults"
-      />
+      <div class="listing__results-wrapper">
+        <listing-page-list
+          :results="newResults"
+          :sm-trigger-element="smTriggerElement"
+          :template="template"
+          :text-no-results="textNoResults"
+          v-on:request-more="requestMore"
+          v-on:reset-pagination="resetPagination"
+          v-show="!loadingResults"
+        />
+        <span :class="['icon--loading-spinner margin-center listing__spinner', { 'icon-visible': loadingResults } ]" />
+      </div>
+      
     </div>
   </div>
 </template>
@@ -115,7 +119,6 @@ export default {
 
   methods: {
     ajaxSubmission (resetFilters=false, pagination=false, requestedPage=1) {
-      
       if(!pagination) { this.loadingResults = true }
 
       let filters = {...this.activeFilterOptions, ...{ ancestor: this.pageId }}
