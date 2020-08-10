@@ -133,7 +133,7 @@ class ProtectedAreaPresenter
       }
     ]
   end
-
+  
   private
 
   def green_list_status_info
