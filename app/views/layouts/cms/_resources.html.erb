@@ -7,6 +7,7 @@
 <listing-page
   endpoint-search="/en/search-cms"
   :filter-groups="<%= get_category_filters %>"
+  :items-per-page="9"
   :page-id="<%= @cms_page.id %>"
   :results="<%= cms_pages_for_search %>"
   sm-trigger-element="sm-listing"

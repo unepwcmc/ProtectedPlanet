@@ -57,6 +57,10 @@ export default {
       required: true,
       type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
     },
+    itemsPerPage: {
+      default: 6,
+      type: Number
+    },
     pageId: {
       required: true,
       type: Number
@@ -119,7 +123,7 @@ export default {
       let data = {
         params: {
           filters: filters,
-          items_per_page: 9,
+          items_per_page: this.itemsPerPage,
           requested_page: requestedPage,
           search_index: 'cms'
         }
