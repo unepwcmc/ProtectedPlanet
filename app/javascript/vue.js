@@ -36,6 +36,7 @@ import ListingPageCardNews from './components/listing/ListingPageCardNews.vue'
 import ListingPageCardResources from './components/listing/ListingPageCardResources.vue'
 import FilteredTable from './components/pame/FilteredTable'
 import NavBurger from './components/nav/NavBurger'
+import PameModal from './components/pame/PameModal'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
@@ -98,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ListingPageCardNews,
         ListingPageCardResources,
         NavBurger,
+        PameModal,
         SearchAreas,
         SearchAreasHome,
         SearchSite,

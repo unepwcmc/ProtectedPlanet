@@ -1,6 +1,10 @@
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
-&--stats-iucn {
-  @include card-stats;
+.page--country {
+  .page {
+    &__section--overview-map {
+      @include flex-stack-mobile;
+    }
+  }
 }

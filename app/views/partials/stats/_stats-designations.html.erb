@@ -19,7 +19,7 @@
         </div>
 
         <% if designation[:has_jurisdiction] %>
-          <ul class="list--underline">
+          <ul class="list--underline-scrollbar">
             <% designation[:jurisdictions].each do |jurisdiction| %>
               <li class="list__li flex flex-v-start">
                 <span><%= jurisdiction["designation_name"] %></span>
