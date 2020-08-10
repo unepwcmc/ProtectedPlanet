@@ -54,10 +54,9 @@ class ProtectedAreaPresenter
   end
 
   def external_links
-    links = []
-    links.push(dopa_link)
-    links = links + story_map_links
-    links
+    # In the event that the link to the equivalent site on the DOPA explorer is a 404
+    return [dopa_link, story_map_links].flatten unless dopa_link.nil?
+    story_map_links
   end
 
   def percentage_complete
@@ -187,7 +186,7 @@ class ProtectedAreaPresenter
   end
 
   def dopa_link 
-    return nil unless protected_area.is_dopa
+    return unless protected_area.is_dopa
     {
       link: "https://dopa-explorer.jrc.ec.europa.eu/wdpa/#{protected_area.wdpa_id}",
       text: I18n.t('stats.dopa.title'),
