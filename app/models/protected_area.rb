@@ -86,6 +86,8 @@ class ProtectedArea < ApplicationRecord
     green_list_status_id.present?
   end
 
+
+
   def wdpa_ids
     wdpa_id
   end

@@ -15,7 +15,7 @@ class Stats::Global
     total_pa_area = RegionalStatistic.all.reduce(0) { |sum, region| sum + region.pa_area }
     ((total_pa_area / self.global_area).to_f * 100).round(2)
 
-    # Another method
+    # Another method - gives a different figure
     # total_pa_land_cover =  (CountryStatistic.global_percentage_pa_land_cover / 100) * CountryStatistic.global_land_area
     # total_pa_marine_cover =  (CountryStatistic.global_percentage_pa_marine_cover / 100) * CountryStatistic.global_marine_area
     # (((total_pa_land_cover + total_pa_marine_cover )/ Stats::Global.global_area ).to_f * 100).round(2)

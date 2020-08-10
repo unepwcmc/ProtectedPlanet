@@ -36,7 +36,7 @@ class GreenListController < ApplicationController
 
     @regionsTopCountries = [] ##TODO See marine page for example
 
-    @total_area_percent = Stats::Global.percentage_pa_cover 
+    @total_area_percent = Stats::Global.percentage_pa_cover.to_f - @pas_percent.to_f
 
 
     @filters = {
@@ -94,5 +94,11 @@ class GreenListController < ApplicationController
 
   def green_list_areas
     @green_list_areas ||= ProtectedArea.green_list_areas
+  end
+
+  def most_protected_gl_areas
+    @regionsTopCountries = Region.without_global.map do |region|
+      RegionPresenter.new(region).top_gl_coverage_countries
+    end.to_json
   end
 end

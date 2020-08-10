@@ -105,6 +105,7 @@ class RegionPresenter
   end
 
   def top_marine_coverage_countries
+    raise
     sorted_stats = @statistics.sort_by do |s|
       s.percentage_pa_marine_cover ? -s.percentage_pa_marine_cover : 0.0
     end.first(10)
@@ -120,6 +121,10 @@ class RegionPresenter
         }
       end
     }
+  end
+
+  def top_gl_coverage_countries
+   
   end
 
   private
