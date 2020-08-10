@@ -1,13 +1,13 @@
 <div class="page--site bg--grey-xlight">
   <div class="container">
-    <section class="flex-stack-mobile">
+    <section class="page__section--overview-map">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         area: reported_area,
         location: @locations.html_safe,
         title: @protected_area.name,
         type: map_layer_type,
         wdpa_id: @protected_area.wdpa_id,
-        story_map_links: @protected_area.story_map_links
+        external_links: @presenter.external_links
       } %>
       
       <div class="">
@@ -22,10 +22,12 @@
       <div class="card--stats-half">
         <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
       </div>
-      
-      <div class="flex flex-column card--stats-half">
-        <%= render "partials/stats/stats-pame" %>
-        <%= render partial: "partials/stats/stats-external", locals: { external_links: @presenter.external_links } %>
+      <div class="page__col-2">
+        <%= render partial: "partials/stats/stats-pame" , locals: { classes: 'page__col-child' } %>
+        <%= render partial: "partials/stats/stats-affiliations", locals: { 
+          classes: 'page__col-child',
+          affiliations: @presenter.affiliations 
+        } %>
       </div>
     </div>
 
