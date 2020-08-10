@@ -34,7 +34,7 @@ class GreenListController < ApplicationController
       }
     ].to_json ##TODO See marine page for example - data needed from CLS
 
-    @regionsTopCountries = [] ##TODO See marine page for example
+    # @regionsTopCountries = [] ##TODO See marine page for example
 
     @total_area_percent = Stats::Global.percentage_pa_cover.to_f - @pas_percent.to_f
 
@@ -77,6 +77,12 @@ class GreenListController < ApplicationController
         queryString: greenlist_query_string(green_list_areas.map(&:id))
       }
     })
+  end
+
+  def most_protected_areas
+    @regionsTopCountries = Region.without_global.map do |region|
+      RegionPresenter.new(region).top_gl_coverage_countries
+    end.to_json
   end
 
   def redirect_if_not_green_listed

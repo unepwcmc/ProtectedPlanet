@@ -105,7 +105,6 @@ class RegionPresenter
   end
 
   def top_marine_coverage_countries
-    raise
     sorted_stats = @statistics.sort_by do |s|
       s.percentage_pa_marine_cover ? -s.percentage_pa_marine_cover : 0.0
     end.first(10)
@@ -124,7 +123,26 @@ class RegionPresenter
   end
 
   def top_gl_coverage_countries
-   
+  # List of all countries with at least one green list PA
+    countries = Country.countries_with_gl
+
+    # Group them by region
+    countries_in_region = countries.select { |country| country.region == region }
+    all_gls = countries_in_region.map do |country|
+      country.protected_areas.green_list_areas
+    end.flatten.sort_by(&:reported_area)
+
+    {
+      regionTitle: region.name,
+      countries: all_gls.map do |stat|
+        {
+          title: stat.name,
+          # percentage: stat.percentage_pa_marine_cover.round(1),
+          km: number_with_delimiter(stat.reported_area.round(0)),
+          iso3: stat.country.iso_3
+        }
+      end
+    }
   end
 
   private
