@@ -1,4 +1,6 @@
 class ThematicalAreasPresenter
+  include ActionView::Helpers::NumberHelper
+
   def initialize(cms_site)
     @cms_site = cms_site
   end
@@ -52,7 +54,7 @@ class ThematicalAreasPresenter
       -1 #Not applicable - hide ribbon
     end
 
-    pas.respond_to?(:count) ? pas.count : pas
+    pas.respond_to?(:count) ? number_with_delimiter(pas.count) : pas
   end
 
   def theme(key)

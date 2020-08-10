@@ -8,8 +8,9 @@ en:
     countries: Number of countries
     designations:
       title: Designations
-    external:
-      title: Affiliations
+    dopa: 
+      title: Find even more information by visiting the Digital Observatory for Protected Areas (DOPA)
+      button-title: View information about %{name} on DOPA
     growth:
       title: Growth in protected area coverage
     governance: 
@@ -29,18 +30,18 @@ en:
     marine-total: Marine Area Protected
     nr-report-title: th National Report Coverage
     oecm:
-      title: Other effective area-based conservation measures
+      title: Total Other effective area-based conservation measures
     pame:
       areas-assessed: Areas Assessed
       no-results: No information available
       title: Management Effectiveness Evaluations
-      with-assessments: With management effectiveness evaluation
+      with-assessments: With management effectiveness evaluations
+    points: Points
+    polygons: Polygons
     related-countries:
       title: Related countries & territories
       title-child: Child countries & territories
       title-parent: Parent country
-    points: Points
-    polygons: Polygons
     reported-area: Reported Area
     sources: 
       title: Sources

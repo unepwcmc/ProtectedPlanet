@@ -41,7 +41,7 @@
       &:first-child { border-left: none; }
 
       &:before {
-        font-weight: bold; 
+        font-weight: $bold; 
         margin-right: rem-calc(6);
 
         @include breakpoint($medium){ display: none; }
@@ -59,6 +59,15 @@
       &:nth-child(7) { &:before { content: 'Year of assessment:'; } }
       &:nth-child(8) { &:before { content: 'Link to assessment:'; } }
       &:nth-child(9) { &:before { content: 'Metadata ID:'; } }
+    }
+
+    &__cell-modal-trigger { 
+      color: $primary;
+      cursor: pointer;
+      font-weight: $bold;
+      text-decoration: underline;
+  
+      &:hover { text-decoration: none; }
     }
 
     &__sorting {
