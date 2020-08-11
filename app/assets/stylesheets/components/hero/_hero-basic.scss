@@ -3,6 +3,7 @@
 //--------------------------------------------------
 &--basic {
   @include hero-medium;
+  @include hero-padding;
   @include flex;
   @include flex-v-center;
   z-index: 0;

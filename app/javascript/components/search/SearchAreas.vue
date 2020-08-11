@@ -37,7 +37,7 @@
     <div class="search__main">
       <filters-search
         class="search__filters"
-        :filter-close-text="filterCloseText"
+        :filter-close-text="textFiltersClose"
         :filterGroups="filterGroupsWithPreSelected"
         :is-active="isFilterPaneActive"
         :title="textFilters"
@@ -113,10 +113,6 @@ export default {
       type: String,
       required: true
     },
-    filterCloseText: {
-      type: String,
-      required: true
-    },
     filterGroups: {
       type: Array, // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
       required: true
@@ -142,6 +138,10 @@ export default {
       required: true
     },
     textFilters: {
+      type: String,
+      required: true
+    },
+    textFiltersClose: {
       type: String,
       required: true
     },

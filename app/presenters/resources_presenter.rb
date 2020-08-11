@@ -13,9 +13,10 @@ class ResourcesPresenter
     {
       title: resources_page.label,
       url: all ? '' : resources_page.full_path,
+      total: 4,
       cards: selected_cards.map do |page|
         {
-          label: page.label,
+          title: page.label,
           page: page
         }
       end

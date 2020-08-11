@@ -38,14 +38,14 @@ class SearchController < ApplicationController
 
   def autocomplete
     db_type = search_params[:type]
-    @results = Autocompletion.lookup(search_params[:search_term], db_type, search_index(db_type))
+    @results = Autocompletion.lookup(search_params[:search_term], db_type, autocomplete_search_index(db_type))
 
     render json: @results
   end
 
   private
 
-  def search_index db_type
+  def autocomplete_search_index db_type
     case db_type
       when 'country'
         Search::COUNTRY_INDEX
@@ -57,6 +57,6 @@ class SearchController < ApplicationController
   end
 
   def search_params
-    params.permit(:search_term, :type, :requested_page, :items_per_page, :filters)
+    params.permit(:search_term, :type, :requested_page, :items_per_page, :search_index, :filters)
   end
 end

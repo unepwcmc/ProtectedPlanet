@@ -1,0 +1,20 @@
+<%= render partial: "./layouts/partials/hero-small", locals: { 
+  classes: @cms_page[:slug],
+  hero_image: cms_fragment_render(:hero_image, @cms_page),
+  title: @cms_page.label
+} %>
+
+<listing-page
+  endpoint-search="/en/search-cms"
+  :filter-groups="<%= get_category_filters %>"
+  :items-per-page="9"
+  :page-id="<%= @cms_page.id %>"
+  :results="<%= cms_pages_for_search %>"
+  sm-trigger-element="sm-listing"
+  template="resources"
+  text-filters-close="View Results"
+  text-filter-trigger="Filters"
+  text-no-results="No Results"
+></listing-page>
+
+<%= render "partials/ctas/live-report" %>
