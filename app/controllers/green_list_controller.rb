@@ -3,6 +3,7 @@ class GreenListController < ApplicationController
   # Show page for green listed protected areas
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
   # before_action :find_protected_area
+  before_action :most_protected_areas, only: [:index]
   # before_action :redirect_if_not_green_listed
   # after_action :record_visit
   # after_action :enable_caching
@@ -100,11 +101,5 @@ class GreenListController < ApplicationController
 
   def green_list_areas
     @green_list_areas ||= ProtectedArea.green_list_areas
-  end
-
-  def most_protected_gl_areas
-    @regionsTopCountries = Region.without_global.map do |region|
-      RegionPresenter.new(region).top_gl_coverage_countries
-    end.to_json
   end
 end

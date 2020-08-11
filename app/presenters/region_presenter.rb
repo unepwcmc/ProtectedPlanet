@@ -129,17 +129,25 @@ class RegionPresenter
     # Group them by region
     countries_in_region = countries.select { |country| country.region == region }
     all_gls = countries_in_region.map do |country|
-      country.protected_areas.green_list_areas
-    end.flatten.sort_by(&:reported_area)
+      total_gl_area = country.protected_areas.green_list_areas.reduce(0) do |sum, x|
+                        sum + x.reported_area
+                      end
+      total_area = country.country_statistic.land_area + country.country_statistic.marine_area
+      [country, total_gl_area, ((total_gl_area / total_area ).to_f * 100).round(2)]
+    end.sort! { |a, b| b[2] <=> a[2] }
+  
+    # all_gls = countries_in_region.map do |country|
+    #   country.protected_areas.green_list_areas
+    # end.flatten.sort_by(&:reported_area)
 
     {
       regionTitle: region.name,
       countries: all_gls.map do |stat|
         {
-          title: stat.name,
-          # percentage: stat.percentage_pa_marine_cover.round(1),
-          km: number_with_delimiter(stat.reported_area.round(0)),
-          iso3: stat.country.iso_3
+          title: stat[0].name,
+          percentage: stat[2],
+          km: number_with_delimiter(stat[1].round(0)),
+          iso3: stat[0].iso_3
         }
       end
     }
