@@ -20,7 +20,16 @@
     height: rem-calc(19);
     width: rem-calc(19);
     
+    align-self: flex-start;
     flex-shrink: 0;
+  }
+
+  &__description {
+    font-size: rem-calc(14);
+
+    @include breakpoint($small) {
+      font-size: rem-calc(16);
+    }
   }
 
   &__color,

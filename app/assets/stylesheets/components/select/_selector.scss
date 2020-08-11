@@ -1,6 +1,6 @@
 .selector {
     border: rem-calc(1) solid $grey-xlight;
-    border-radius: 0;
+    border-radius: $radius-global;
     
     display: block;
     
