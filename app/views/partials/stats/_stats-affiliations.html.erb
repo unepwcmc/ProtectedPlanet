@@ -1,0 +1,14 @@
+<div class="card--stats-affiliations <%= get_local_classes local_assigns %>">
+  <h2>Lorem Ipsum</h2>
+
+  <ul class="card__logos">
+    <% affiliations.each do |affiliation| %>
+      <li class="card__logo">
+        <%= link_to affiliation[:link_url], title: affiliation[:link_title] do %>
+          <%= image_tag affiliation[:image_url], alt: affiliation[:image_alt], class: 'card__logo-image' %>
+          <span><%= affiliation[:title] %></span>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>

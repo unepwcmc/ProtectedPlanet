@@ -4,11 +4,14 @@
 .page--site {
 
   .page {
+    &__section--overview-map {
+      @include flex-stack-mobile;
+    }
+
     &__container {
       @include breakpoint($small) { 
         @include flex;
         @include flex-wrap;
-        
       }
     }
 

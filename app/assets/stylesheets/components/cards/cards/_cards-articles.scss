@@ -2,6 +2,8 @@
 // classes
 //--------------------------------------------------
 &--articles {
+  @include card-news;
+  
   .cards {
     &__cards {
       @include flex;
@@ -9,34 +11,4 @@
       @include flex-wrap;
     }
   }
-
-  .card {
-    @include responsive(margin-bottom, rem-calc(20), rem-calc(30), rem-calc(30));
-    @include responsive(width, 100%, 48.5%, 48.5%);
-    text-decoration: none;
-
-    &__content {
-      @include responsive(padding, rem-calc(26 20), rem-calc(28 20), rem-calc(30 20));
-    }
-      
-      &__date { 
-        font-size: rem-calc(14);
-        margin: 0; 
-      }
-
-      &__h3 { margin: .5em 0; }
-      &__summary { margin: 0 }
-
-    &__image {
-      @include flex-center;
-      background-color: $grey-light;
-      background-position: center;
-      background-size: cover;
-      width: 100%; height: rem-calc(265);
-    }
-
-    &__icon {
-      @include image-placeholder();
-    }
-  }
-} 
+}

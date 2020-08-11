@@ -36,6 +36,24 @@ module CmsHelper
     "#"
   end
 
+  def get_category_filters
+    category_groups = load_categories
+
+    [
+      {
+        title: I18n.t('search.filter-by'),
+        filters: category_groups.map do |group|
+          {
+            id: group[:id],
+            options: group[:items],
+            title: group[:title],
+            type: 'checkbox'
+          }
+        end
+      }
+    ].to_json
+  end
+
   def get_cms_tabs total_tabs
     tabs = []
 
@@ -98,27 +116,29 @@ module CmsHelper
     # can be different from the layout used in the child pages
     if layouts_categories.blank?
       children_layouts = @cms_page.children.map(&:layout_id)
-      layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
+      layout_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
+        .map(&:layout_category).uniq
     end
 
     categories_yml = I18n.t('search')[:custom_categories]
-    layouts_categories.map do |lc|
-      name = categories_yml[lc.layout_category.label.to_sym][:name]
-      page_categories = lc.layout_category.page_categories
+    layout_categories.map do |lc|
+      name = categories_yml[lc.label.to_sym][:name]
+      page_categories = lc.page_categories
       localised_pcs = categories_yml[name.to_sym][:items]
 
       items = page_categories.map do |pc|
         {
           id: pc.id,
-          name: localised_pcs[pc.label.to_sym]
+          title: localised_pcs[pc.label.to_sym]
         }
       end
 
       # frontend should return the list of selected categories as follows:
       # 'group_name' => [category_ids] ; e.g. 'topics' => [1,2,3]
       {
-        name: name,
-        items: items
+        id: name,
+        items: items,
+        title: name
       }
     end
   end

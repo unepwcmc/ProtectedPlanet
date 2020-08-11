@@ -35,9 +35,13 @@ module Concerns::Searchable
       'country' => Search::COUNTRY_INDEX,
       'region' => Search::REGION_INDEX,
       'all' => Search::DEFAULT_INDEX_NAME,
-      'areas' => Search::PA_INDEX
+      'areas' => Search::PA_INDEX,
+      'cms' => Search::CMS_INDEX
     }.freeze
     def search_index
+      _index = search_params[:search_index]
+      return INDEX_BY_TYPE[_index] if _index.present?
+
       _index = INDEX_BY_TYPE[parsed_filters['ancestor']] if parsed_filters
       return _index if _index
 
@@ -82,6 +86,7 @@ module Concerns::Searchable
       _filters = sanitise_db_type_filter(_filters)
       _filters = sanitise_type_filter(_filters)
       _filters = sanitise_ancestor_filter(_filters)
+      _filters = sanitise_categories_filter(_filters)
       sanitise_special_status_filter(_filters)
     end
 
@@ -132,6 +137,17 @@ module Concerns::Searchable
         filters[status.to_sym] = true
       end
 
+      filters
+    end
+
+    def sanitise_categories_filter(filters)
+      topics = filters.delete('topics')
+      types = filters.delete('types')
+
+      return filters if topics.blank? && types.blank?
+
+      filters[:topic] = topics if topics.present?
+      filters[:page_type] = types if types.present?
       filters
     end
 

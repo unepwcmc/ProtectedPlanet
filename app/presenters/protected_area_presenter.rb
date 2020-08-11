@@ -30,10 +30,33 @@ class ProtectedAreaPresenter
     @protected_area = protected_area
   end
 
+  def affiliations
+    [
+      {
+        title: 'View more',
+        image_url: ActionController::Base.helpers.image_url('logos/green-list.png'),
+        link_title: "View the Green List page for #{protected_area.name}",
+        url: '' ##TODO links needed from CSV provided by IUCN.
+      },
+      {
+        title: 'View more',
+        image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
+        link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
+        link_url: url_for_related_source('parcc_info', protected_area)
+      }
+    ]
+  end
+
   def data_info
     SECTIONS.each_with_object({}) do |section, all_info|
       all_info[section[:name]] = completeness_for(section[:fields])
     end
+  end
+
+  def external_links
+    # In the event that the link to the equivalent site on the DOPA explorer is a 404
+    return [dopa_link, story_map_links].flatten unless dopa_link.nil?
+    story_map_links
   end
 
   def percentage_complete
@@ -47,6 +70,7 @@ class ProtectedAreaPresenter
       km: protected_area.gis_marine_area.to_i
     }
   end
+
 
   def marine_designation
     size = protected_area.reported_area.to_f.round(2)
@@ -108,14 +132,7 @@ class ProtectedAreaPresenter
       }
     ]
   end
-
-  def external_links
-    [
-      green_list_status_info,
-      parcc_info
-    ].compact
-  end
-
+  
   private
 
   def green_list_status_info
@@ -168,6 +185,15 @@ class ProtectedAreaPresenter
     end
   end
 
+  def dopa_link 
+    return unless protected_area.is_dopa
+    {
+      link: "https://dopa-explorer.jrc.ec.europa.eu/wdpa/#{protected_area.wdpa_id}",
+      text: I18n.t('stats.dopa.title'),
+      button_title: I18n.t('stats.dopa.button-title'),
+    }
+  end
+
   def num_fields_with_data
     all_fields.count do |attribute|
       standard_attr = standard_attributes[attribute[:field]]
@@ -199,5 +225,15 @@ class ProtectedAreaPresenter
 
   def standard_attributes
     Wdpa::DataStandard::STANDARD_ATTRIBUTES
+  end
+
+  def story_map_links
+    @protected_area.story_map_links.map { |link|
+      {
+        title: I18n.t('stats.story_map.title'),
+        text: I18n.t('stats.story_map.link_type.' + link.link_type.gsub(/\s/, '_').parameterize),
+        link: link.link
+      }
+    }
   end
 end
