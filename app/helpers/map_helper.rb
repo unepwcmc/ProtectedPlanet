@@ -33,6 +33,15 @@ OVERLAYS = [
     type: 'raster_tile'
   },
   {
+    id: 'oecm_marine',
+    isToggleable: true,
+    layers: [{url: OECM_MAP_SERVER_URL + '/0'}],
+    color: "#D9B143",
+    isShownByDefault: true,
+    type: 'raster_data',
+    queryString: MARINE_QUERY_STRING
+  },
+  {
     id: 'greenlist',
     isToggleable: false,
     layers: [{url: WDPA_MAP_SERVER_URL + '/0', isPoint: true}, {url: WDPA_MAP_SERVER_URL + '/1'}],
