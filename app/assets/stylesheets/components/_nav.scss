@@ -61,7 +61,7 @@ $pane-side-padding: 42px;
         transition: transform 0.4s ease-in-out;
 
         @include breakpoint($small) {
-          position: initial;
+          position: static; //initial doesn't work in IE11
           top: unset;
           right: unset;
           bottom: unset;
