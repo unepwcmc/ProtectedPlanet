@@ -1,7 +1,9 @@
-import { polyfill } from 'es6-object-assign'
+// import { polyfill } from 'es6-object-assign'
+import 'babel-polyfill'
 import { findPolyfill } from './utilities/polyfill-find'
 findPolyfill()
-polyfill()
+// polyfill()
+
 
 // dependencies
 import Vue from 'vue/dist/vue.esm'

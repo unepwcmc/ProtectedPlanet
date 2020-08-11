@@ -14,7 +14,6 @@
             :id="inputId(option.title)"
             @change="changeInput($eventHub)"
             class="checkbox__input"
-            :checked="isChecked(option.id)"
             type="checkbox"
             :value="option.id"
             v-model="input"
@@ -75,13 +74,7 @@ export default {
     inputId (title) {
       return `${this.id}-${title}`
     },
-
-    isChecked (id) {
-      if(!this.hasPreSelectedOptions) { return false }
-      
-      return this.preSelected.includes(id)
-    },
-
+    
     reset () {
       this.input = []
     }

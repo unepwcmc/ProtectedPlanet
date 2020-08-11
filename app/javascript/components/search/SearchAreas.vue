@@ -23,10 +23,7 @@
           v-on:toggle:map-pane="toggleMapPane"
         />
 
-        <download
-          class="download--search"
-          :text="textDownload"
-        />
+        <slot name="download"/>
       </div>
     </div>
 
