@@ -85,6 +85,7 @@ class SyncSeeds
     files_for_deletion(local_list, remote_list, base)
   end
 
+  # When folders need to be checked recursively
   def check_inside_folder(folder, local_list)
     paths = create_paths(folder)
 
@@ -93,13 +94,10 @@ class SyncSeeds
     local_folder_content = Dir.glob('**/*', base: paths[:local_path])
     remote_folder_content = @session.sftp.dir.glob(paths[:remote_path], '**/*')
     
-    # We don't want to download the whole folder again if it's already been re-downloaded once
-
-
     remote_folder_content.each do |file|
       # Go through the various files and folders and check to see if they exist locally
       local_file = file.name.force_encoding('UTF-8')
-
+      
       check = check_if_newer(
         parent_folder: local_folder_content, 
         local_item: local_file, 
@@ -108,7 +106,8 @@ class SyncSeeds
         local_path: paths[:local_path], 
         base: paths[:local_path]
       )
-  
+      
+      # We don't want to download the whole folder again if it's already been re-downloaded once
       # Break out of loop if already downloaded
       break if check == true
     end
