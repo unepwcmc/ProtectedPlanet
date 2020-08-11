@@ -74,7 +74,7 @@ export default {
     inputId (title) {
       return `${this.id}-${title}`
     },
-
+    
     reset () {
       this.input = []
     }

@@ -60,19 +60,19 @@ export default {
       isMinimised: false,
       activeDownloads: [
         {
-          id: 1,
+          id: '1',
           title: 'Filename 1',
           url: 'http://google.com',
           hasFailed: false
         },
         {
-          id: 2,
+          id: '2',
           title: 'Filename 2',
           url: '',
           hasFailed: true
         },
         {
-          id: 3,
+          id: '3',
           title: 'Filename 3',
           url: '',
           hasFailed: false

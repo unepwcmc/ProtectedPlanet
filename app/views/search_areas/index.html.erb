@@ -18,6 +18,13 @@
     text-map="<%= t('search.map') %>"
     :results="<%= @results.to_json %>"
   >
+    <template v-slot:download>
+      <%= render partial: "partials/download/download", locals: {
+        classes: 'download--search',
+        options: @download_options
+      } %>
+    </template>
+
     <template v-slot:map>
       <%= render partial: "partials/maps/main", locals: {
         map: @map

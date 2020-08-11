@@ -41,6 +41,7 @@ export default {
       required: true,
       type: Object //{ download: String, failed: String, generating: String }
     },
+    title: String,
     url: {
       type: String
     }

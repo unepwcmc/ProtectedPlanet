@@ -18,7 +18,7 @@
         @input="onInput"
         @keyup.enter.prevent.stop="onInputEnter"
         @keyup.esc.prevent.stop="onEscape"
-      >
+      />
       <button
         v-if="search"
         class="autocomplete__delete"
