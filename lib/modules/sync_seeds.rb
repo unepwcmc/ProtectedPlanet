@@ -73,8 +73,8 @@ class SyncSeeds
     downloaded
   end
 
-  def compare_folders(wildcard, local, remote, base)
-    puts "Checking to see what files need to be deleted from #{base}" 
+  def compare_folders(wildcard, local, remote)
+    puts "Checking to see what files need to be deleted from #{local}" 
 
     remote_list = @session.sftp.dir.glob(remote, wildcard).map do |f|  
       f.name.force_encoding('UTF-8')
@@ -82,7 +82,7 @@ class SyncSeeds
 
     local_list = Dir.glob(wildcard, base: local)
 
-    files_for_deletion(local_list, remote_list, base)
+    files_for_deletion(local_list, remote_list, local)
   end
 
   def check_inside_folder(folder, local_list)
@@ -120,7 +120,8 @@ class SyncSeeds
     end
   end
 
-  def commence_import(answer)
+  # Piggybacks on existing Comfy modules 
+  def commence_comfy_import(answer)
     logger = ComfortableMexicanSofa.logger
     ComfortableMexicanSofa.logger = Logger.new(STDOUT)
 
