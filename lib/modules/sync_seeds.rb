@@ -29,8 +29,8 @@ class SyncSeeds
     end
   end
 
-  def files_for_deletion(list_of_files_1, list_of_files_2, location)
-    files = list_of_files_1 - list_of_files_2
+  def files_for_deletion(local_list, remote_list, location)
+    files = local_list - remote_list
 
     if files.empty?
       puts "No files to delete"
@@ -49,7 +49,7 @@ class SyncSeeds
     { local_path: File.join(@local_base, relative_path), remote_path: File.join(@remote_base, relative_path) }
   end
 
-  def check_if_newer(parent_folder, local_item, remote_item, remote_path, local_path, base = @local_base)
+  def check_if_newer(parent_folder:, local_item:, remote_item:, remote_path:, local_path:, base: @local_base)
     if parent_folder.include?(local_item)
       yield if block_given?
       
@@ -73,7 +73,7 @@ class SyncSeeds
     downloaded
   end
 
-  def compare_folders(wildcard, local, remote, base = @local_base)
+  def compare_folders(wildcard:, local:, remote:, base: @local_base)
     puts "Checking to see what files need to be deleted from #{local}" 
 
     remote_list = @session.sftp.dir.glob(remote, wildcard).map do |f|  
@@ -88,7 +88,7 @@ class SyncSeeds
   def check_inside_folder(folder, local_list)
     paths = create_paths(folder)
 
-    compare_folders('**/*', paths[:local_path], paths[:remote_path], paths[:local_path])
+    compare_folders(wildcard: '**/*', local: paths[:local_path], remote: paths[:remote_path], base: paths[:local_path])
 
     local_folder_content = Dir.glob('**/*', base: paths[:local_path])
     remote_folder_content = @session.sftp.dir.glob(paths[:remote_path], '**/*')
@@ -100,14 +100,21 @@ class SyncSeeds
       # Go through the various files and folders and check to see if they exist locally
       local_file = file.name.force_encoding('UTF-8')
 
-      check = check_if_newer(local_folder_content, local_file, file, paths[:remote_path], paths[:local_path], paths[:local_path])
+      check = check_if_newer(
+        parent_folder: local_folder_content, 
+        local_item: local_file, 
+        remote_item: file, 
+        remote_path: paths[:remote_path], 
+        local_path: paths[:local_path], 
+        base: paths[:local_path]
+      )
   
       # Break out of loop if already downloaded
       break if check == true
     end
   end
 
-  def main_task(local_list, remote_list, local_base, remote_base)
+  def main_task(local_list:, remote_list:, local_base:, remote_base:)
     @local_base = local_base
     @remote_base = remote_base
 
@@ -115,9 +122,15 @@ class SyncSeeds
       # There are files with non-ASCII characters (i.e. accented) in the CMS files
       name = object.name.force_encoding('UTF-8')
       paths = create_paths(name)
-      
-      
-      check_if_newer(local_list, name, object, paths[:remote_path], paths[:local_path]) do 
+         
+      check_if_newer(
+        parent_folder: local_list, 
+        local_item: name, 
+        remote_item: object, 
+        remote_path: paths[:remote_path], 
+        local_path: paths[:local_path]
+      ) 
+      do 
         check_inside_folder(name, local_list) if object.attributes.directory?
       end
     end

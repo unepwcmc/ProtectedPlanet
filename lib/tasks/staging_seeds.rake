@@ -43,13 +43,13 @@ namespace :comfy do
     new_session.start_session do |session|
       # First get rid of any local top-level (i.e. which exist in the main 
       # directory of REMOTE) folders/files that don't exist remotely
-      new_session.compare_folders('*', to, FROM)
+      new_session.compare_folders(wildcard: '*', local: to, remote: FROM)
 
       local_list = new_session.list_local_files(to)
       remote_list = new_session.list_remote_files(FROM)
 
       if answer == 'all'
-        new_session.main_task(local_list, remote_list, to, FROM)
+        puts "Downloading all folders..."
       else
         local_list.filter! { |f| f == answer } 
         remote_list.filter! do |f|
@@ -57,10 +57,10 @@ namespace :comfy do
         end
 
         puts "Downloading a new set of #{answer}..."
-
-        new_session.main_task(local_list, remote_list, to, FROM)
       end
-
+      
+      new_session.main_task(local_list: local_list, remote_list: remote_list, local_base: to, remote_base: FROM)
+      
       puts "Finished downloads, now replacing your local seed data with your selection..."
 
       # new_session.commence_comfy_import(answer) 
