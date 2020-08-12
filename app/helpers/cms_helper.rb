@@ -163,26 +163,25 @@ module CmsHelper
   private
   
   def get_resource_link
-    # byebug
-    if cms_fragment_content(:link_text, @cms_page) && cms_fragment_content(:link_url, @cms_page)
+    if cms_fragment_content(:resource_link_text, @cms_page) && cms_fragment_content(:resource_link_url, @cms_page)
       link = {
         button: I18n.t('global.button.link'),
         classes: 'button--link-external',
-        text: cms_fragment_render(:link_text, @cms_page),
-        title: cms_fragment_render(:link_text, @cms_page),
-        url: cms_fragment_render(:link_url, @cms_page)
+        text: cms_fragment_render(:resource_link_text, @cms_page),
+        title: cms_fragment_render(:resource_link_text, @cms_page),
+        url: cms_fragment_render(:resource_link_url, @cms_page)
       }
     end
   end
 
   def get_resource_file
-    if cms_fragment_content(:file_title, @cms_page) && cms_fragment_content(:file, @cms_page)
+    if cms_fragment_content(:resource_file_title, @cms_page) && cms_fragment_content(:resource_file, @cms_page)
       link = {
         button: I18n.t('global.button.download'),
         classes: 'button--download',
-        text: cms_fragment_render(:file_title, @cms_page),
-        title: cms_fragment_render(:file_title, @cms_page),
-        url: cms_fragment_render(:file, @cms_page)
+        text: cms_fragment_render(:resource_file_title, @cms_page),
+        title: cms_fragment_render(:resource_file_title, @cms_page),
+        url: cms_fragment_render(:resource_file, @cms_page)
       }
     end
   end
