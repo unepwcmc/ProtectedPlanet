@@ -152,38 +152,30 @@ module CmsHelper
   end
 
   def get_resource_links 
+    resources = [
+      get_resource(:link_text, :link_url, 'link', 'link-external'),
+      get_resource(:file_title, :file, 'download', 'download')
+    ]
     links = []
 
-    if get_resource_link then links.push(get_resource_link) end
-    if get_resource_file then links.push(get_resource_file) end
-    
+    resources.each { |resource| links << resource unless resource == false }
+
     links
   end
 
   private
-  
-  def get_resource_link
-    # byebug
-    if cms_fragment_content(:link_text, @cms_page) && cms_fragment_content(:link_url, @cms_page)
-      link = {
-        button: I18n.t('global.button.link'),
-        classes: 'button--link-external',
-        text: cms_fragment_render(:link_text, @cms_page),
-        title: cms_fragment_render(:link_text, @cms_page),
-        url: cms_fragment_render(:link_url, @cms_page)
-      }
-    end
-  end
 
-  def get_resource_file
-    if cms_fragment_content(:file_title, @cms_page) && cms_fragment_content(:file, @cms_page)
-      link = {
-        button: I18n.t('global.button.download'),
-        classes: 'button--download',
-        text: cms_fragment_render(:file_title, @cms_page),
-        title: cms_fragment_render(:file_title, @cms_page),
-        url: cms_fragment_render(:file, @cms_page)
-      }
+  def get_resource(fragment_text, fragment_link, button_text, button_class)
+    if cms_fragment_content(fragment_text, @cms_page) && cms_fragment_content(fragment_link, @cms_page)
+      false
     end
+
+    {
+      button: I18n.t("global.button.#{button_text}"),
+      classes: "button--#{button_class}",
+      text: cms_fragment_render(fragment_text, @cms_page),
+      title: cms_fragment_render(fragment_text, @cms_page),
+      url: cms_fragment_render(fragment_link, @cms_page)
+    }
   end
 end
