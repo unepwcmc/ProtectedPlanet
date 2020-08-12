@@ -150,4 +150,40 @@ module CmsHelper
   def cta_live_report
     @cta_live_report ||= CallToAction.find_by_css_class('live-report')
   end
+
+  def get_resource_links 
+    links = []
+
+    if get_resource_link then links.push(get_resource_link) end
+    if get_resource_file then links.push(get_resource_file) end
+    
+    links
+  end
+
+  private
+  
+  def get_resource_link
+    # byebug
+    if cms_fragment_content(:link_text, @cms_page) && cms_fragment_content(:link_url, @cms_page)
+      link = {
+        button: I18n.t('global.button.link'),
+        classes: 'button--link-external',
+        text: cms_fragment_render(:link_text, @cms_page),
+        title: cms_fragment_render(:link_text, @cms_page),
+        url: cms_fragment_render(:link_url, @cms_page)
+      }
+    end
+  end
+
+  def get_resource_file
+    if cms_fragment_content(:file_title, @cms_page) && cms_fragment_content(:file, @cms_page)
+      link = {
+        button: I18n.t('global.button.download'),
+        classes: 'button--download',
+        text: cms_fragment_render(:file_title, @cms_page),
+        title: cms_fragment_render(:file_title, @cms_page),
+        url: cms_fragment_render(:file, @cms_page)
+      }
+    end
+  end
 end
