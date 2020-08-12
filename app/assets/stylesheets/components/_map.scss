@@ -102,11 +102,11 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: rem-calc(15 15);
-    width: 30px; height: 33px;
+    width: 31px; height: 32px;
     
     @include breakpoint($small) {
       background-size: rem-calc(20 20);
-      width: 42px; height: 45px;
+      width: 42px; height: 44px;
     }
 
     &:first-child {
