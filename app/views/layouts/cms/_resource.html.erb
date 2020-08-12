@@ -1,0 +1,16 @@
+<div class="page--resource page-padding">
+  <div class="container--medium">
+    <p><%= cms_fragment_content(:published_date, @cms_page).strftime('%d %B %y') %></p>
+    <h1 class="page__h1"><%= @cms_page.label %></h1>
+  </div>
+
+  <section class="container--medium cms-wysiwyg">
+    <%= cms_fragment_render("content") %>
+  </section>
+</div>
+
+<section class="container section-padding--bottom">
+  <%= render "partials/cards/articles" %>
+</section>
+
+<%= render "partials/ctas/live-report" %>
