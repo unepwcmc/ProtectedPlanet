@@ -12,7 +12,11 @@
 
   &__heading {
     font-weight: $semi-bold;
-    line-height: rem-calc(26);
+    margin-bottom: 0.8em;
+
+    @include breakpoint($small) {
+      margin-bottom: 0.5em;
+    }
   }
 
   &--embedded {
