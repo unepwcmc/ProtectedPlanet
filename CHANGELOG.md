@@ -1,3 +1,8 @@
+### 3.2.15
+
+* Added assorted statistics for August 2020 release.
+* Shapefile README included. 
+
 ### 3.2.14
 
 * Allow to split data into multiple shapefiles
