@@ -20,8 +20,11 @@
     height: rem-calc(19);
     width: rem-calc(19);
     
-    align-self: flex-start;
     flex-shrink: 0;
+    
+    @include breakpoint-down($medium)  {
+      align-self: flex-start;
+    }
   }
 
   &__description {
