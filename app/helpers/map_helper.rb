@@ -2,6 +2,7 @@ OECM_FEATURE_SERVER_LAYER_URL = 'https://data-gis.unep-wcmc.org/server/rest/serv
 OECM_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/MapServer'
 WDPA_FEATURE_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_of_Protected_Areas/FeatureServer'
 WDPA_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_of_Protected_Areas/MapServer'
+MARINE_WDPA_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/WDPA_Marine_and_Coastal/MapServer'
 TILE_PATH = "/tile/{z}/{y}/{x}"
 
 MARINE_QUERY_STRING = '/query?where=marine+IN+%28%271%27%2C+%272%27%29&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
@@ -18,11 +19,10 @@ OVERLAYS = [
   {
     id: 'marine_wdpa',
     isToggleable: false,
-    layers: [{url: WDPA_MAP_SERVER_URL + '/0', isPoint: true}, {url: WDPA_MAP_SERVER_URL + '/1'}],
+    layers: [{url: MARINE_WDPA_MAP_SERVER_URL }],
     color: "#004DA8",
     isShownByDefault: false,
-    type: 'raster_data',
-    queryString: MARINE_QUERY_STRING
+    type: 'raster_tile'
   },
   {
     id: 'oecm',
