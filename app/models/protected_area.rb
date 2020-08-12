@@ -188,7 +188,7 @@ class ProtectedArea < ApplicationRecord
   end
 
   def create_slug
-    updated_slug = [name, designation.try(:name)].join(' ').parameterize
+    updated_slug = [wdpa_id, name, designation.try(:name)].join(' ').parameterize
     update_attributes(slug: updated_slug)
   end
 
