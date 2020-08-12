@@ -156,11 +156,8 @@ module CmsHelper
       get_resource(:link_text, :link_url, 'link', 'link-external'),
       get_resource(:file_title, :file, 'download', 'download')
     ]
-    links = []
 
-    resources.each { |resource| links << resource unless resource == false }
-
-    links
+    resources.map { |resource| resource unless resource == false }
   end
 
   private
