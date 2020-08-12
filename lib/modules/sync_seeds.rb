@@ -128,8 +128,7 @@ class SyncSeeds
         remote_item: object, 
         remote_path: paths[:remote_path], 
         local_path: paths[:local_path]
-      ) 
-      do 
+      ) do 
         check_inside_folder(name, local_list) if object.attributes.directory?
       end
     end
