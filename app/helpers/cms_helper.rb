@@ -153,8 +153,8 @@ module CmsHelper
 
   def get_resource_links 
     resources = [
-      get_resource(:link_text, :link_url, 'link', 'link-external'),
-      get_resource(:file_title, :file, 'download', 'download')
+      get_resource(:resource_link_text, :resource_link_url, 'link', 'link-external'),
+      get_resource(:resource_file_title, :resource_file, 'download', 'download')
     ]
 
     resources.map { |resource| resource unless resource == false }
