@@ -11,27 +11,17 @@
   </div>
 
   <div class="cards__cards <%= !get_all ? 'preview' : '' %>">
-    <% @items[:cards].each do |card| %>
-      <% if !card[:url].nil? %>
-        <%= link_to card[:url], title: card[:label], class: 'card card--link' do %>
-          <p class="card__date"><%= DateTime.parse(card[:published_date]).strftime('%d %B %y') %></p>
-          <h3><%= card[:label] %></h3>
-          <p><%= card[:summary] %></p>
-        <% end %>
-      <% else %>
-        <div class="card">
-          <p class="card__date"><%= DateTime.parse(card[:published_date]).strftime('%d %B %y') %></p>
-          <h3><%= card[:label] %></h3>
-          <p><%= card[:summary] %></p>
-          
-          <% if card[:file].present? %>
-            <%= link_to t('global.button.download-pdf'), card[:file], title: t('global.button.download'), class: 'button--download', target: '_blank' %>
-          <% end %>
-          <% if card[:link].present? %>
-            <%= link_to t('global.button.link'), card[:link], title: card[:link_title], class: 'button--link-external', target: '_blank' %>
-          <% end %>
-        </div>
-      <% end %>
+    <% @items[:cards].each_with_index do |card, index| %>
+      <listing-page-card-resources
+        :key="<%= index %>"
+        date="<%= card[:date] %>"
+        file-url="<%= card[:fileUrl] %>"
+        link-title="<%= card[:linkTitle] %>"
+        link-url="<%= card[:linkUrl] %>"
+        summary="<%= card[:summary] %>"
+        title="<%= card[:title] %>"
+        url="<%= card[:url] %>"
+      ></listing-page-card-resources>
     <% end %>
   </div>
 </div>

@@ -1,7 +1,6 @@
 <template>
   <button
     :class="['filter__trigger', { 'disabled': isDisabled }]"
-    class="filter__trigger"
     @click="toggleFilterPane"
   >
     <span

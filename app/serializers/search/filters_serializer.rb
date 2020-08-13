@@ -4,7 +4,6 @@ class Search::FiltersSerializer < Search::BaseSerializer
     @aggregations = @search.aggregations
   end
 
-
   def serialize
     [
       {

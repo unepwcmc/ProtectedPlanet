@@ -1,0 +1,10 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--small {
+  @include hero-padding;
+  min-height: rem-calc(150);
+
+  @include breakpoint($small) { min-height: rem-calc(210); }
+  @include breakpoint($medium) { min-height: rem-calc(315); }
+}
