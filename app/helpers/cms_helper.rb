@@ -165,7 +165,8 @@ module CmsHelper
   # TODO - add validations to Comfy pages controller to make it more robust
   def linkify(url, fragment_link)
     if fragment_link =~ /(file)/ 
-      url = request.base_url + url
+      file = @cms_page.fragments.find { |fragment| fragment.identifier == 'resource_file' }
+      url = request.base_url + rails_blob_path(file.attachments.first, disposition: 'attachment')
     end
     url =~ /(http:|https:)/ ? url : 'https://' + url
   end
