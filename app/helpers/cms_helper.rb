@@ -161,8 +161,12 @@ module CmsHelper
   end
 
   # Turns link[:url] value into a valid link if no http:// or https:// supplied
+  # Also sanitises it in the case of a download link
   # TODO - add validations to Comfy pages controller to make it more robust
-  def linkify(url)
+  def linkify(url, fragment_link)
+    if fragment_link =~ /(file)/ 
+      url = root_url + url
+    end
     url =~ /(http:|https:)/ ? url : 'https://' + url
   end
 
@@ -177,7 +181,7 @@ module CmsHelper
         classes: "button--#{button_class}",
         text: cms_fragment_render(fragment_text, @cms_page),
         title: cms_fragment_render(fragment_text, @cms_page),
-        url: cms_fragment_render(fragment_link, @cms_page)
+        url: linkify(cms_fragment_render(fragment_link, @cms_page), fragment_link)
       }
     else
       false
