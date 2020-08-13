@@ -162,12 +162,13 @@ module CmsHelper
 
   # Turns link[:url] value into a valid link if no http:// or https:// supplied
   # Also sanitises it in the case of a download link
-  # TODO - add validations to Comfy pages controller to make it more robust
   def linkify(url, fragment_link)
     if fragment_link =~ /(file)/ 
       file = @cms_page.fragments.find { |fragment| fragment.identifier == 'resource_file' }
-      url = request.base_url + rails_blob_path(file.attachments.first, disposition: 'attachment')
+      return rails_blob_path(file.attachments.first, disposition: 'attachment')
     end
+    # TODO - add validations to Comfy pages controller to make it more robust 
+    # This is only temporary 
     url =~ /(http:|https:)/ ? url : 'https://' + url
   end
 
