@@ -20,6 +20,7 @@ $padding-medium: rem-calc(27);
   font-family: $body-font;
   padding: 0;
   text-decoration: none;
+  &:focus { @include input-custom-focus; }
   &:hover { text-decoration: none; }
 }
 @mixin button-font {

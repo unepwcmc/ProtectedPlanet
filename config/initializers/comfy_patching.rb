@@ -1,6 +1,6 @@
 Rails.configuration.to_prepare do
   Comfy::Cms::Page.class_eval do
-    has_many :pages_categories, foreign_key: 'page_id'
+    has_many :pages_categories, foreign_key: 'page_id', dependent: :destroy
     has_many :page_categories, through: :pages_categories, foreign_key: 'page_id'
 
     has_many :topics, -> { joins(:layout_category).where("comfy_cms_layout_categories.label = 'topics'") },

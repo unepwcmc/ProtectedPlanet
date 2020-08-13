@@ -40,33 +40,4 @@ class Search::FullSerializer < Search::BaseSerializer
       }
     ).to_json
   end
-
-  private
-
-  def strip_html(text)
-    ActionView::Base.full_sanitizer.sanitize(text)
-  end
-
-  def url(obj)
-    if obj.is_a?(Comfy::Cms::SearchablePage)
-      path = obj.full_path
-      path[0] == '/' ? path[1..-1] : path
-    elsif obj.is_a?(ProtectedArea)
-      protected_area_path(obj.wdpa_id)
-    elsif obj.is_a?(Country)
-      country_path(iso: obj.iso_3)
-    else
-      '#'
-    end
-  end
-
-  def image(obj)
-    if obj.is_a?(ProtectedArea)
-      ApplicationController.helpers.protected_area_cover(obj, with_tag: false)
-    elsif obj.is_a?(Comfy::Cms::SearchablePage)
-      obj.image
-    else
-      'placeholder_image' #TODO
-    end
-  end
 end

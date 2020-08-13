@@ -3,6 +3,7 @@
 //--------------------------------------------------
 &--area-type {
   @include hero-medium;
+  @include hero-padding;
   @include hero-stat-bubble;
   z-index: 0;
     

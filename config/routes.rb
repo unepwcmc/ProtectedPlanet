@@ -73,7 +73,6 @@ Rails.application.routes.draw do
     post '/pame/download', to: 'pame#download'
     post '/pame/list', to: 'pame#list'
 
-    get '/resources', to: 'resources#index'
     get '/search', to: 'search#index'
 
     get '/thematical-areas/green-list', to: 'green_list#index'
@@ -88,6 +87,8 @@ Rails.application.routes.draw do
 
     post '/search/autocomplete', to: 'search#autocomplete'
     get '/search-results', to: 'search#search_results', as: :search_results
+
+    get '/search-cms', to: 'search_cms#index', as: :search_cms
 
     # Ensure that this route is defined last
 
