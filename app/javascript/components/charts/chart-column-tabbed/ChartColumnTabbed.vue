@@ -36,7 +36,7 @@
     props: {
       json: {
         required: true,
-        type: Array //[{ regionTitle: String, countries: [{ title: String, coveragePercentage: Number, coverageKm: number, ios3: String }] }]
+        type: Array //[{ regionTitle: String, countries: [{ title: String, percentage: Number, coverageKm: number, ios3: String }] }]
       }
     },
 
@@ -48,12 +48,17 @@
 
     computed: {
       legend () {
-        return this.selectedDataset.map((column) => {
-          return {
-            title: `${column.title} (${column.iso3})`,
-            subtitle: `${column.percentage}%, (${column.km}km<sup>2</sup>)`
-          }
-        })
+        // there are instances when this chart 
+        // should show a blank column with no data
+        // but it should not appear in the legend
+        return this.selectedDataset
+          .filter(column => Boolean(column.percentage))
+          .map(column => {
+            return {
+              title: `${column.title} (${column.iso3})`,
+              subtitle: `${column.percentage}%, (${column.km}km<sup>2</sup>)`
+            }
+          })
       },
 
       selectedDataset () {
