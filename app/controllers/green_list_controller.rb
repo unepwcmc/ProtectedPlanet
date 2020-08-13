@@ -9,6 +9,7 @@ class GreenListController < ApplicationController
   # after_action :enable_caching
 
   def index
+    # TODO - needs to be reworked by CLS as they are unsure about what the stacked row chart actually represents
     stats = green_list_statistics
     @pas_km = stats['green_list_area']
     @pas_percent = stats['green_list_perc']
@@ -35,8 +36,7 @@ class GreenListController < ApplicationController
       }
     ].to_json ##TODO See marine page for example - data needed from CLS
 
-    # @regionsTopCountries = [] ##TODO See marine page for example
-
+    # TODO - This may need to be reworked by CLS
     @total_area_percent = Stats::Global.percentage_pa_cover.to_f - @pas_percent.to_f
 
 
@@ -82,8 +82,10 @@ class GreenListController < ApplicationController
 
   def most_protected_areas
     @regionsTopCountries = Region.without_global.map do |region|
-      RegionPresenter.new(region).top_gl_coverage_countries
-    end.to_json
+      top_countries = RegionPresenter.new(region).top_gl_coverage_countries
+      next if top_countries[:countries].empty?
+      top_countries
+    end.compact.to_json
   end
 
   def redirect_if_not_green_listed

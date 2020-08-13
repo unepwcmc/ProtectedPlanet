@@ -133,7 +133,7 @@ class RegionPresenter
                         sum + x.reported_area
                       end
       total_area = country.country_statistic.land_area + country.country_statistic.marine_area
-      [country, total_gl_area, ((total_gl_area / total_area ).to_f * 100).round(2)]
+      [country, total_gl_area, ((total_gl_area / total_area ).to_f * 100).round(1)]
     end.sort! { |a, b| b[2] <=> a[2] }
   
     # all_gls = countries_in_region.map do |country|

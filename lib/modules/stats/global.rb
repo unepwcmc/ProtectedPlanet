@@ -12,7 +12,7 @@ class Stats::Global
     #                  .where('regions.iso' => 'GLOBAL')
     #                  .first[:percentage_pa_cover]
     # Temporary method below
-    total_pa_area = RegionalStatistic.all.reduce(0) { |sum, region| sum + region.pa_area }
+    total_pa_area = self.calculate_stats_for(RegionalStatistic, 'pa_area')
     ((total_pa_area / self.global_area).to_f * 100).round(2)
 
     # Another method - gives a different figure
