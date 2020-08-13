@@ -23,6 +23,7 @@ en:
       options:
         - Green Listed
         - PARCC
+        - Transboundary
     filter-group-type:
       title: Type
       options:
@@ -32,7 +33,6 @@ en:
       region: Regions
       country: Countries
       site: Individual Areas
-      transboundary: Transboundary Sites
     map: Map View
     protected-areas: Protected Areas
     results: results
