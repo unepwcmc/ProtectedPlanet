@@ -165,7 +165,7 @@ module CmsHelper
   # TODO - add validations to Comfy pages controller to make it more robust
   def linkify(url, fragment_link)
     if fragment_link =~ /(file)/ 
-      url = root_url + url
+      url = request.base_url + url
     end
     url =~ /(http:|https:)/ ? url : 'https://' + url
   end
