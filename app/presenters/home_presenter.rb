@@ -45,7 +45,7 @@ class HomePresenter
         totals: [
           {
             number: terrestrial_pas,
-            text: I18n.t('home.total_pas')
+            text: I18n.t('global.area-types.wdpa')
           }
         ]
       },
@@ -56,7 +56,7 @@ class HomePresenter
         totals: [
           {
             number: marine_pas,
-            text: I18n.t('home.total_pas')
+            text: I18n.t('global.area-types.oecm')
           }
         ]
       },
@@ -67,11 +67,11 @@ class HomePresenter
         totals: [
           {
             number: terrestrial_pas,
-            text: I18n.t('home.total_pas')
+            text: I18n.t('global.area-types.wdpa')
           },
           {
             number: terrestrial_oecms,
-            text: I18n.t('home.total_oecms')
+            text: I18n.t('global.area-types.oecm')
           }
         ]
       },
@@ -82,11 +82,11 @@ class HomePresenter
         totals: [
           {
             number: marine_pas,
-            text: I18n.t('home.total_pas')
+            text: I18n.t('global.area-types.wdpa')
           },
           {
             number: marine_oecms,
-            text: I18n.t('home.total_oecms')
+            text: I18n.t('global.area-types.oecm')
           }
         ]
       }
