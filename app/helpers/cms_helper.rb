@@ -160,6 +160,12 @@ module CmsHelper
     resources.map { |resource| resource unless resource == false }
   end
 
+  # Turns link[:url] value into a valid link if no http:// or https:// supplied
+  # TODO - add validations to Comfy pages controller to make it more robust
+  def linkify(url)
+    url =~ /(http:|https:)/ ? url : 'https://' + url
+  end
+
   private
 
   #  variation of resource link, if it is just a link, or whether it is a file
