@@ -44,7 +44,7 @@ class MarineController < ApplicationController
   private
 
   def marine_overlays
-    overlays(['oecm', 'marine_wdpa'], {
+    overlays(['oecm_marine', 'marine_wdpa'], {
       marine_wdpa: {
         isShownByDefault: true
       }
