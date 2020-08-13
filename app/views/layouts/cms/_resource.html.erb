@@ -10,9 +10,9 @@
   <section class="container--medium cms-wysiwyg">
     <%= cms_fragment_render("content") %>
   </section>
-
+  
   <section class="container--medium page-padding--top">
-    <% if get_resource_links.length != 0 %>
+    <% unless get_resource_links.empty? %>
       <ul class="list--links">
         <% get_resource_links.each do |link| %>
           <li class="list__li">

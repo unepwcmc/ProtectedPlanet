@@ -162,17 +162,19 @@ module CmsHelper
 
   private
 
+  #  variation of resource link, if it is just a link, or whether it is a file
+  # if those specific fragments for that page are present
   def get_resource(fragment_text, fragment_link, button_text, button_class)
     if cms_fragment_content(fragment_text, @cms_page) && cms_fragment_content(fragment_link, @cms_page)
+      {
+        button: I18n.t("global.button.#{button_text}"),
+        classes: "button--#{button_class}",
+        text: cms_fragment_render(fragment_text, @cms_page),
+        title: cms_fragment_render(fragment_text, @cms_page),
+        url: cms_fragment_render(fragment_link, @cms_page)
+      }
+    else
       false
     end
-
-    {
-      button: I18n.t("global.button.#{button_text}"),
-      classes: "button--#{button_class}",
-      text: cms_fragment_render(fragment_text, @cms_page),
-      title: cms_fragment_render(fragment_text, @cms_page),
-      url: cms_fragment_render(fragment_link, @cms_page)
-    }
   end
 end
