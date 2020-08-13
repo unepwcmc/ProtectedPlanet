@@ -35,6 +35,8 @@
     color: $white;
     font-size: rem-calc(18);
     padding-left: rem-calc(50);
+    padding-right: rem-calc(40);
+    text-overflow: ellipsis;
     
     display: flex;
     flex: 1;
