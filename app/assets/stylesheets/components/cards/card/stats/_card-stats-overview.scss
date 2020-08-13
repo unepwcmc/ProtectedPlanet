@@ -54,11 +54,14 @@
   
     &__external-title { font-weight: $bold; }
 
-    &__flag { margin-right: rem-calc(14); }
+    &__flag { 
+      margin-right: rem-calc(14);
+
+      transform: translateY(-2px);
+    }
 
     &__heading {
       @include flex;
-      @include flex-v-center;
       margin-bottom: rem-calc(18);
     }
 
@@ -67,7 +70,7 @@
       font-size: rem-calc(20);
       margin: 0;
 
-      @include breakpoint($medium) { font-size: rem-calc(25); }
+      @include breakpoint($small) { font-size: rem-calc(25); }
     }
 
     &__number {
@@ -77,7 +80,7 @@
 
       display: block;
 
-      @include breakpoint($medium) { font-size: rem-calc(40); }
+      @include breakpoint($small) { font-size: rem-calc(40); }
     }
 
     &__section { @include card-stats-overview-section; }
@@ -90,6 +93,10 @@
 
     &__text {
       font-size: rem-calc(16);
+    }
+
+    &__subtitle {
+      @include card-stats-overview-subtitle;
     }
 
     &__subtitle-margined {
