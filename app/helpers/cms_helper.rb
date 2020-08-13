@@ -152,4 +152,44 @@ module CmsHelper
   def cta_live_report
     @cta_live_report ||= CallToAction.find_by_css_class('live-report')
   end
+
+  def get_resource_links 
+    resources = [
+      get_resource(:resource_link_text, :resource_link_url, 'link', 'link-external'),
+      get_resource(:resource_file_title, :resource_file, 'download', 'download')
+    ]
+
+    resources.map { |resource| resource unless resource == false }
+  end
+
+  # Turns link[:url] value into a valid link if no http:// or https:// supplied
+  # Also sanitises it in the case of a download link
+  def linkify(url, fragment_link)
+    # If it is a file as opposed to a link
+    if fragment_link =~ /(file)/ 
+      file = @cms_page.fragments.find { |fragment| fragment.tag == 'file' }
+      return rails_blob_path(file.attachments.first, disposition: 'attachment')
+    end
+    # TODO - add validations to Comfy pages controller to make it more robust 
+    # This is only temporary 
+    url =~ /(http:|https:)/ ? url : 'https://' + url
+  end
+
+  private
+
+  #  variation of resource link, if it is just a link, or whether it is a file
+  # if those specific fragments for that page are present
+  def get_resource(fragment_text, fragment_link, button_text, button_class)
+    if cms_fragment_content(fragment_text, @cms_page) && cms_fragment_content(fragment_link, @cms_page)
+      {
+        button: I18n.t("global.button.#{button_text}"),
+        classes: "button--#{button_class}",
+        text: cms_fragment_render(fragment_text, @cms_page),
+        title: cms_fragment_render(fragment_text, @cms_page),
+        url: linkify(cms_fragment_render(fragment_link, @cms_page), fragment_link)
+      }
+    else
+      false
+    end
+  end
 end
