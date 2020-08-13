@@ -1,12 +1,7 @@
 .autocomplete {
-  background-color: $grey-dark;
-  border-radius: rem-calc(32);
-  border-radius: rem-calc(32);
-  border: rem-calc(1) solid $white;
   margin-bottom: rem-calc(12);
 
   display: flex;
-  
   position: relative;
   z-index: 2;
 
@@ -18,11 +13,9 @@
     background-color: $red;
     color: $white;
 
-
     ::placeholder {
       color: $white;
     }
-  
   }
   
   &__container {
@@ -30,14 +23,22 @@
   }
 
   &__input {
-    background-color: rgba($black, 0);
-    border: none;
+    background-color: $grey-dark;
+    border: rem-calc(1) solid $white;
+    border-radius: rem-calc(32);
     color: $white;
     font-size: rem-calc(18);
     padding-left: rem-calc(50);
+    padding-right: rem-calc(40);
+    text-overflow: ellipsis;
     
     display: flex;
     flex: 1;
+
+    &:focus { 
+      outline: none;
+      border-color: $black;
+    }
   }
   
   &__magnifying-glass {
@@ -84,11 +85,8 @@
 
   &__results {
     @include beautify-scrollbar(4);
-    
     margin: 0 rem-calc(25);
-    
     overflow-y: scroll;
-
     height: rem-calc(150);
   }
 

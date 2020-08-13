@@ -1,89 +1,86 @@
 .selector {
+  border: rem-calc(1) solid $grey-xlight;
+  border-radius: $radius-global;
+
+  display: block;
+
+  position: relative;
+  z-index: 100;
+
+  &__selected {
+    cursor: default;
+    user-select: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &:focus {
+      box-shadow: 0 0 0 rem-calc(2) rgba($grey-light, 0.25);
+    }
+  }
+
+  &__label {
+    color: $white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    flex: 1;
+  }
+
+  &__caret {
+    @include icon-chevron-white-down;
+    &--active {
+      @include icon-chevron-white-up;
+    }
+  }
+
+  &__selected,
+  &__option {
+    padding: rem-calc(10 16);
+  }
+
+  &__options {
+    @include beautify-scrollbar;
+
+    background-color: $grey-xdark;
     border: rem-calc(1) solid $grey-xlight;
-    border-radius: 0;
-    
-    display: block;
-    
-    position: relative;
-    z-index: 100;
+    color: $white;
+    overflow-y: scroll;
 
-    &__selected {
-        cursor: default;
-        user-select: none;
+    width: calc(100% + #{rem-calc(2)});
+    height: rem-calc(100);
 
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+    position: absolute;
+    top: rem-calc(40);
+    right: - rem-calc(1);
+    left: - rem-calc(1);
+  }
 
-        &:focus {
-            box-shadow: 0 0 0 rem-calc(2) rgba($grey-light, 0.25);
-        }
+  &__option {
+    user-select: none;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
     }
 
-    &__label {
-        color: $white;
-
-        flex: 1;
+    &:focus,
+    &:hover {
+      background-color: $grey-dark;
     }
 
-    &__caret {
-        @include icon-chevron-white-down;
-        &--active {
-            @include icon-chevron-white-up;
-        }
+    &--active {
+      background-color: $grey-dark;
     }
 
-    &__selected,
-    &__option {
-        padding: rem-calc(10 16);
+    &:first-child {
+      border-top: rem-calc(1) solid rgba($black, 0);
     }
 
-    &__options {
-        @include beautify-scrollbar;
-        
-        background-color: $grey;        
-        border: rem-calc(1) solid $grey-xlight;
-        color: $white;
-        overflow-y: scroll;
-        
-        height: rem-calc(100);
-
-        position: absolute;
-        top: rem-calc(40);
-        right: - rem-calc(1);
-        left: - rem-calc(1);
+    &:last-child {
+      border-bottom: rem-calc(1) solid rgba($black, 0);
     }
-
-    &__option {
-        user-select: none;
-        cursor: pointer;
-
-        &:focus {
-            outline: none;
-        }
-        
-        &:focus,
-        &:hover {
-            background-color: $grey-xlight;
-            color: $grey-black;
-        }
-
-        &--active {
-            background-color: $grey-light;
-            color: $grey-dark;
-
-            &:focus,
-            &:hover {
-                background-color: lighten($grey-light, 5%);
-            }
-        }
-
-        &:first-child {
-            border-top: rem-calc(1) solid rgba($black, 0);
-        }
-
-        &:last-child {
-            border-bottom: rem-calc(1) solid rgba($black, 0);
-        }
-    }
+  }
 }
