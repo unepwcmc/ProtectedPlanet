@@ -128,17 +128,25 @@ class RegionPresenter
 
     # Group them by region
     countries_in_region = countries.select { |country| country.region == region }
+
+
+    region.countries.where.not(id: countries_in_region).to_a.each do |country|
+      break if countries_in_region.length == 10
+      next if country.country_statistic.land_area.nil? && country.country_statistic.marine_area.nil?
+      countries_in_region << country
+    end
+
     all_gls = countries_in_region.map do |country|
-      total_gl_area = country.protected_areas.green_list_areas.reduce(0) do |sum, x|
-                        sum + x.reported_area
-                      end
+      total_gl_area = 0
+      if country.protected_areas.present?
+        total_gl_area = country.protected_areas.green_list_areas.reduce(0) do |sum, x|
+                          sum + x.reported_area
+                        end
+      end
       total_area = country.country_statistic.land_area + country.country_statistic.marine_area
-      [country, total_gl_area, ((total_gl_area / total_area ).to_f * 100).round(1)]
+      percentage_of_total_area = ((total_gl_area / total_area ).to_f * 100).round(1)
+      [country, total_gl_area, percentage_of_total_area]
     end.sort! { |a, b| b[2] <=> a[2] }
-  
-    # all_gls = countries_in_region.map do |country|
-    #   country.protected_areas.green_list_areas
-    # end.flatten.sort_by(&:reported_area)
 
     {
       regionTitle: region.name,
