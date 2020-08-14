@@ -38,6 +38,12 @@ class Country < ApplicationRecord
     joins(:protected_areas).where.not(protected_areas: {green_list_status_id: nil}).uniq
   end
 
+  def total_gl_coverage
+    protected_areas.green_list_areas.reduce(0) do |sum, x|
+      sum + x.reported_area
+    end
+  end
+
   def self.data_providers
     joins(:protected_areas).uniq
   end
