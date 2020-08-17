@@ -60,7 +60,7 @@ $sticky-bar-padding: rem-calc(10);
       &.sticky-bar--stuck {
         @include stick-bar-stuck;
 
-        transition: top ease-in 1s;
+        transition: top linear .2s;
       }
     }
   }
