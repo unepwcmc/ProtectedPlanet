@@ -25,7 +25,7 @@ class SyncSeeds
   def delete_files(files, location)
     files.each do |file| 
       puts "Removing #{file} as it no longer exists remotely"
-      FileUtils.rm_rf(File.join(location, file)) 
+      FileUtils.rm_rf(File.join(location, file))
     end
   end
 
@@ -73,7 +73,7 @@ class SyncSeeds
     downloaded
   end
 
-  def compare_folders(wildcard:, local:, remote:, base: @local_base)
+  def compare_folders(wildcard:, local:, remote:, base:)
     puts "Checking to see what files need to be deleted from #{local}" 
 
     remote_list = @session.sftp.dir.glob(remote, wildcard).map do |f|  
@@ -81,7 +81,7 @@ class SyncSeeds
     end
 
     local_list = Dir.glob(wildcard, base: local)
-
+    
     files_for_deletion(local_list, remote_list, base)
   end
 

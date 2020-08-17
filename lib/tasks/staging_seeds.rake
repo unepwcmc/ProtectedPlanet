@@ -2,7 +2,7 @@
 
 namespace :comfy do
   # The methods that this rake task calls are in lib/modules/sync_seeds.rb
-  FROM  = 'ProtectedPlanet/current/db/cms_seeds/protected-planet'.freeze
+  SOURCE  = 'ProtectedPlanet/current/db/cms_seeds/protected-planet'.freeze
   PP_STAGING = 'new-web.pp-staging.linode.protectedplanet.net'.freeze
   PP_USER = 'wcmc'.freeze
 
@@ -22,20 +22,20 @@ namespace :comfy do
   end
 
   desc "Import CMS Seed data from staging. Can be run with arguments [<destination>, files/pages/layouts/all] or can accept user input if no argument is supplied"
-  task :staging_import, %i[to folder] => [:environment] do |_t, args| 
-    to = nil
+  task :staging_import, %i[dest folder] => [:environment] do |_t, args| 
+    dest = nil
     answer = nil
 
     if args.length.nil?
       answers = user_input
-      to = answers[:destination]
+      dest = answers[:destination]
       answer = answers[:answer]
     else
-      to = File.join(ComfortableMexicanSofa.config.seeds_path, args[:to])
+      dest = File.join(ComfortableMexicanSofa.config.seeds_path, args[:to])
       answer = args[:folder].downcase
     end
       
-    puts "Importing CMS Seed data from Staging Folder to #{to} ..."
+    puts "Importing CMS Seed data from Staging Folder to #{dest} ..."
 
     new_session =  SyncSeeds.new(PP_STAGING, PP_USER)
 
@@ -43,10 +43,10 @@ namespace :comfy do
     new_session.start_session do |session|
       # First get rid of any local top-level (i.e. which exist in the main 
       # directory of REMOTE) folders/files that don't exist remotely
-      new_session.compare_folders(wildcard: '*', local: to, remote: FROM)
+      new_session.compare_folders(wildcard: '*', local: dest, remote: SOURCE, base: dest)
 
-      local_list = new_session.list_local_files(to)
-      remote_list = new_session.list_remote_files(FROM)
+      local_list = new_session.list_local_files(dest)
+      remote_list = new_session.list_remote_files(SOURCE)
 
       if answer == 'all'
         puts "Downloading all folders..."
@@ -59,7 +59,7 @@ namespace :comfy do
         puts "Downloading a new set of #{answer}..."
       end
       
-      new_session.main_task(local_list: local_list, remote_list: remote_list, local_base: to, remote_base: FROM)
+      new_session.main_task(local_list: local_list, remote_list: remote_list, local_base: dest, remote_base: SOURCE)
       
       puts "Finished downloads, now replacing your local seed data with your selection..."
 
