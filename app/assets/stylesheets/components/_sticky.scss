@@ -4,7 +4,7 @@
 $sticky-bar-background-color: $white;
 $sticky-bar-padding: rem-calc(10);
 
-@mixin stick-bar-stuck {
+@mixin sticky-bar-stuck {
   @include box-shadow-grey-light;
   width: 100%;
 
@@ -13,6 +13,11 @@ $sticky-bar-padding: rem-calc(10);
   top: 0;
   right: 0;
   left: 0;
+}
+
+@mixin sticky-bar-wrapper {
+  background-color: $sticky-bar-background-color;
+  z-index: 1;
 }
 
 //----------------------------------------
@@ -26,13 +31,12 @@ $sticky-bar-padding: rem-calc(10);
 
   .sticky-bar {
     &__wrapper {
-      background-color: $sticky-bar-background-color;
+      @include sticky-bar-wrapper;
       padding-top: $sticky-bar-padding;
       padding-bottom: $sticky-bar-padding;
-      z-index: 1;
       
       &.sticky-bar--stuck {
-        @include stick-bar-stuck;
+        @include sticky-bar-stuck;
 
         .sticky-bar__content { @include gutters; }
       }
@@ -48,19 +52,15 @@ $sticky-bar-padding: rem-calc(10);
 .sticky-bar--slide-in {
   width: 100%;
 
-  @include breakpoint($large) { padding: 0; }
-
   .sticky-bar {
     &__wrapper {
-      background-color: $sticky-bar-background-color;
-      
-      top: -100px;
-      z-index: 1;
+      @include sticky-bar-wrapper;
+      top: rem-calc(-200);
       
       &.sticky-bar--stuck {
-        @include stick-bar-stuck;
+        @include sticky-bar-stuck;
 
-        transition: top linear .2s;
+        transition: top linear .25s;
       }
     }
   }
