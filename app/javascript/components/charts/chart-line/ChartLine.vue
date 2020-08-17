@@ -18,7 +18,7 @@
               text-anchor="end"
               font-size="14"
               font-weight="300"
-              transform="translate(0, 5)">{{ y.labelText }}%</text>
+              transform="translate(0, 5)">{{ y.labelText }}{{ units }}</text>
 
             <text v-for="x, index in getAxisLabels('x')"  
               :key="`x-${index}`"      
@@ -81,6 +81,10 @@
       lines: {
         type: Array, // [ id: String, datapoints: { x: Number, y: Number } ]
         required: true
+      },
+      units: {
+        default: '%',
+        type: String
       },
       showLegend: {
         default: true,
