@@ -136,20 +136,20 @@ class RegionPresenter
     
       total_area = country.country_statistic.land_area + country.country_statistic.marine_area
       percentage_of_total_area = ((total_gl_area / total_area ).to_f * 100).round(1)
-      [country, total_gl_area, percentage_of_total_area]
+      { country: country, total_area: total_gl_area, percentage: percentage_of_total_area }
     end.sort! do |a, b|
       # If rounded %s happen to be the same, then sort by area
-      b[2] == a[2] ? b[1] <=> a[1] : b[2] <=> a[2] 
+      b[:percentage] == a[:percentage] ? b[:total_area] <=> a[:total_area] : b[:percentage] <=> a[:percentage] 
     end
 
     {
       regionTitle: region.name,
       countries: all_gls.map do |stat|
         {
-          title: stat[0].name,
-          percentage: stat[2],
-          km: number_with_delimiter(stat[1].round(0)),
-          iso3: stat[0].iso_3
+          title: stat[:country].name,
+          percentage: stat[:percentage],
+          km: number_with_delimiter(stat[:total_area].round(0)),
+          iso3: stat[:country].iso_3
         }
       end
     }
