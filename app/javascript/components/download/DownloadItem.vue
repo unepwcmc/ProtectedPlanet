@@ -79,7 +79,7 @@ export default {
     this.poll.hasFailed = this.hasFailed
     this.poll.url = this.url
 
-    const checkStatus = setInterval(this.ajaxRequestDownloadStatus, 10);
+    const checkStatus = setInterval(this.ajaxRequestDownloadStatus, 100);
   },
 
   methods: {
