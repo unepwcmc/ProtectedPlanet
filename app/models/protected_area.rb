@@ -183,7 +183,7 @@ class ProtectedArea < ApplicationRecord
   end
 
   def is_transboundary
-    self.countries.count > 1
+    countries.count > 1
   end
   
   def extent_url
