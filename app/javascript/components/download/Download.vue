@@ -22,6 +22,7 @@
       />
 
     <download-modal 
+      :endpointPoll="endpointPoll"
       :isActive="showDownloadModal"
       :paramsPoll="selectedDownloadOption"
       :newDownload="newDownload"
