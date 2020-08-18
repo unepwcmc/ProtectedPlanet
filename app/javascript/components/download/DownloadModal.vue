@@ -22,7 +22,7 @@
           :id="download.id"
           :has-failed="download.hasFailed"
           :key="download._uid"
-          :paramsPoll="selectedDownloadOption"
+          :paramsPoll="paramsPoll"
           :text="textStatus"
           :title="download.title"
           :url="download.url"
