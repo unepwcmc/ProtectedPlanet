@@ -12,10 +12,14 @@ module Download::Poller
 
     info = Download.generation_info(_domain, _token)
     {
-      'id' => _token,
-      'title' => info['filename'] || _token,
+      'id' => computed_id(_token, _format),
+      'title' => info['filename'] || computed_id(_token, _format),
       'url' => Download.link_to(info['filename'], _format),
       'hasFailed' => Download.has_failed?(_domain, _token)
     }
+  end
+
+  def self.computed_id(identifier, format)
+    "#{identifier}-#{format}"
   end
 end
