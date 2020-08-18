@@ -21,7 +21,9 @@ namespace :comfy do
     { answer: answer, destination: File.join(ComfortableMexicanSofa.config.seeds_path, 'protected-planet') }
   end
 
-  desc "Import CMS Seed data from staging. Can be run with arguments [<destination>, files/pages/layouts/all] or can accept user input if no argument is supplied"
+  desc "Import CMS Seed data from staging. Can be run with arguments 
+        [destination folder - 'protected-planet' by convention, files/pages/layouts/all] 
+         or can accept user input if no argument is supplied"
   task :staging_import, %i[dest folder] => [:environment] do |_t, args| 
     dest = nil
     answer = nil
@@ -67,6 +69,7 @@ namespace :comfy do
       new_session.main_task(local_list: local_list, remote_list: remote_list, local_base: dest, remote_base: SOURCE)
       
       puts "Finished downloads, now replacing your local seed data with your selection..."
+
 
       # new_session.commence_comfy_import(answer) 
     end

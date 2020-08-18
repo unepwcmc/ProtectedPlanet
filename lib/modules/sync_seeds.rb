@@ -137,6 +137,9 @@ class SyncSeeds
   end
 
   # Piggybacks on existing Comfy modules 
+  # TODO - the arguments used here for the site and folder
+  #  (e.g. protectedplanet or protected-planet) can be different 
+  # for different environments, need to change both this and the staging seeds rake task
   def commence_comfy_import(answer)
     logger = ComfortableMexicanSofa.logger
     ComfortableMexicanSofa.logger = Logger.new(STDOUT)
