@@ -19,6 +19,7 @@
         <download-item 
           v-for="download in activeDownloads"
           class="modal__li"
+          :endpoint="endpointPoll"
           :id="download.id"
           :has-failed="download.hasFailed"
           :key="download._uid"
@@ -41,6 +42,10 @@ export default {
   components: { DownloadItem },
 
   props: {
+    endpointPoll: {
+      required: true,
+      type: String
+    },
     isActive: {
       default: false,
       type: Boolean

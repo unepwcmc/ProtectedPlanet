@@ -34,6 +34,10 @@ export default {
   mixins: [ mixinAxiosHelpers ],
 
   props: {
+    endpoint: {
+      required: true,
+      type: String
+    },
     id: {
       required: true,
       type: String
@@ -58,6 +62,7 @@ export default {
 
   data () {
     return {
+      interval: null,
       poll: {
         hasFailed: false,
         url: ''
@@ -67,11 +72,11 @@ export default {
 
   computed: {
     isGenerating () {
-      return !this.hasFailed && this.url == ''
+      return !this.poll.hasFailed && this.url == ''
     },
     
     isReady () {
-      return this.url != ''
+      return this.poll.url != ''
     }
   },
 
@@ -79,28 +84,41 @@ export default {
     this.poll.hasFailed = this.hasFailed
     this.poll.url = this.url
 
-    const checkStatus = setInterval(this.ajaxRequestDownloadStatus, 100);
+    this.axiosSetHeaders()
+    this.startPolling()
   },
 
   methods: {
     ajaxRequestDownloadStatus () {
-      this.axiosSetHeaders()
-      
+      console.log('isready', this.isReady)
+      console.log('failed', this.poll.hasFailed)
+
+      if(this.isReady || this.poll.hasFailed) { 
+        this.stopPolling() 
+        return false
+      }
+
       axios.get(this.endpointPoll, this.paramsPoll)
         .then(response => {
-          console.log(response)
+          console.log('response', response)
           this.poll.hasFailed = response.data.hasFailed
           this.poll.url = response.data.url
         })
         .catch(error => {
-
+          console.log('error', error)
         })
-
-      if(this.isReady) { clearInterval(checkStatus) }
     },
 
     deleteItem () {
       this.$emit('click:delete', this.id)
+    }, 
+
+    startPolling () {
+      this.interval = window.setInterval(this.ajaxRequestDownloadStatus, 1000)
+    },
+
+    stopPolling () {
+      window.clearInterval(this.interval)
     }
   }
 }
