@@ -51,7 +51,8 @@
     }
 
     &__minimise {
-      @include icon-minus;
+      @include icon-minus-white;
+      cursor: pointer;
     }
 
     &__title {
