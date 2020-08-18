@@ -144,7 +144,7 @@ Rails.configuration.to_prepare do
         fragments_attributes.select { |attr| attr[:tag] == 'categories'}.each do |cat|
           cat[:content].split(' ').each do |label|
             category = Comfy::Cms::PageCategory.where(label: label).first
-            new_categories << category
+            new_categories << category unless category.nil?
           end
         end
 
