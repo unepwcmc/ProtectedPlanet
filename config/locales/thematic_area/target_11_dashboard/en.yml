@@ -27,7 +27,7 @@ en:
         -
           id: well_connected
           title: Well connected
-          text: "Proportion to which the world's terrestrial protected area network is designed to promote connectivity (note: no connectivity dataset is yet available for marine protected areas <a href='/thematical-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a>). Statistics updated 2019. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20C1%20Connectivity.pdf' title='View source' target='_blank'>DOPA</a>"
+          text: "Proportion to which the world's terrestrial protected area and OECM network promotes connectivity (note: no connectivity dataset is yet available for marine protected areas <a href='/thematical-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a>). Statistics updated 2019. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20C1%20Connectivity.pdf' title='View source' target='_blank'>DOPA</a>"
         -
           id: importance
           title: Areas of importance for biodiversity
