@@ -4,7 +4,7 @@ module Download
   end
 
   def self.poll params
-    Download::Router.poll(params.delete('domain'), params)
+    Download::Poller.poll(params['domain'], params['token'])
   end
 
   def self.link_to filename, type
@@ -19,6 +19,14 @@ module Download
     Utils.clear_downloads
   end
 
+  def self.generation_info domain, identifier
+    Download::Utils.properties(Download::Utils.key(domain, identifier))
+  end
+
+  def self.has_failed? domain, identifier
+    status = generation_info(domain, identifier)['status']
+    !%w(generating ready).include?(status)
+  end
 
   TMP_PATH = File.join(Rails.root, 'tmp')
   CURRENT_PREFIX = 'current/'

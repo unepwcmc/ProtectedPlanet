@@ -15,7 +15,7 @@ class Download::Requesters::Base
   protected
 
   def generation_info
-    Download::Utils.properties(Download::Utils.key(domain, identifier))
+    Download.generation_info(domain, identifier)
   end
 
   def json_response
@@ -23,11 +23,7 @@ class Download::Requesters::Base
       'id' => identifier,
       'title' => identifier,
       'url' => '',
-      'hasFailed' => has_failed?,
+      'hasFailed' => Download.has_failed?(domain, identifier),
     }
-  end
-
-  def has_failed?
-    !%w(generating ready).include?(generation_info['status'])
   end
 end
