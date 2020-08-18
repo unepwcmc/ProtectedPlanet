@@ -94,6 +94,9 @@
   box-shadow: none;
 }
 
+//prevent logos sitting over the top of the download modal
+.mapboxgl-control-container .mapboxgl-ctrl-bottom-left { z-index: 1; }
+
 .mapboxgl-ctrl-group {
   .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-in,
   .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-out {
