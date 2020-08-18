@@ -1,5 +1,5 @@
 module DownloadsHelper
-  def download_options options_array, token
+  def download_options options_array, domain, token
     download_options = []
 
     if options_array.include? 'csv'
@@ -7,7 +7,7 @@ module DownloadsHelper
         {
           title: 'CSV',
           commercialAvailable: true,
-          params: { domain: 'csv', token: token }
+          params: { domain: domain, format: 'csv', token: token }
         },
       )
     end
@@ -17,7 +17,7 @@ module DownloadsHelper
         {
           title: 'SHP',
           commercialAvailable: true,
-          params: { domain: 'shp', token: token }
+          params: { domain: domain, format: 'shp', token: token }
         },
       )
     end
@@ -27,7 +27,7 @@ module DownloadsHelper
         {
           title: 'File Geodatabase',
           commercialAvailable: true,
-          params: { domain: 'gdb', token: token }
+          params: { domain: domain, format: 'gdb', token: token }
         },
       )
     end
@@ -46,7 +46,7 @@ module DownloadsHelper
         {
           title: 'PDF',
           commercialAvailable: false,
-          params: { domain: 'pdf', token: token }
+          params: { domain: domain, format: 'pdf', token: token }
         },
       )
     end

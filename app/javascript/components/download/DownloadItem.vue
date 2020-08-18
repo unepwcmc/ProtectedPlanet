@@ -25,8 +25,13 @@
   </li>
 </template>
 <script>
+import axios from 'axios'
+import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
+
 export default {
   name: 'download-item',
+
+  mixins: [ mixinAxiosHelpers ],
 
   props: {
     id: {
@@ -79,6 +84,8 @@ export default {
 
   methods: {
     ajaxRequestDownloadStatus () {
+      this.axiosSetHeaders()
+      
       axios.get(this.endpointPoll, this.paramsPoll)
         .then(response => {
           console.log(response)
