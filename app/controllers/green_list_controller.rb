@@ -19,19 +19,22 @@ class GreenListController < ApplicationController
       {
         id: "Global",
         datapoints: [
-          { x: 2000, y: 0.67 }
+          { x: 2000, y: 10 },
+          { x: 2001, y: 20 }
         ]
       },
       {
         id: "National",
         datapoints: [
-          { x: 2000, y: 0.67 }
+          { x: 2000, y: 10 },
+          { x: 2001, y: 37 }
         ]
       },
       {
         id: "ABNJ",
         datapoints: [
-          { x: 2000, y: 0.67 }
+          { x: 2000, y: 7 },
+          { x: 2001, y: 17 }
         ]
       }
     ].to_json ##TODO See marine page for example - data needed from CLS
