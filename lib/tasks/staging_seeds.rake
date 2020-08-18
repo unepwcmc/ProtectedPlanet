@@ -25,8 +25,9 @@ namespace :comfy do
   task :staging_import, %i[dest folder] => [:environment] do |_t, args| 
     dest = nil
     answer = nil
+    byebug
 
-    if args.length.nil?
+    if args[:dest].nil? && args[:folder].nil?
       answers = user_input
       dest = answers[:destination]
       answer = answers[:answer]
