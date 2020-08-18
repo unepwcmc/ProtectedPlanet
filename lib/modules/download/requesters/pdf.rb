@@ -16,6 +16,10 @@ class Download::Requesters::Pdf < Download::Requesters::Base
     'pdf'
   end
 
+  def format
+    'pdf'
+  end
+
   private
 
   def identifier

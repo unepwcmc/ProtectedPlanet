@@ -19,11 +19,16 @@ class Download::Requesters::Base
   end
 
   def json_response
+    info = Download.generation_info(domain, identifier)
     {
       'id' => identifier,
-      'title' => identifier,
-      'url' => '',
+      'title' => info['filename'] || identifier,
+      'url' => Download.link_to(info['filename'], format),
       'hasFailed' => Download.has_failed?(domain, identifier),
     }
+  end
+
+  def format
+    @format
   end
 end

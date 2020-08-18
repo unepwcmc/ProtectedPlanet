@@ -4,7 +4,7 @@ module Download
   end
 
   def self.poll params
-    Download::Poller.poll(params['domain'], params['token'])
+    Download::Poller.poll(params)
   end
 
   def self.link_to filename, type
