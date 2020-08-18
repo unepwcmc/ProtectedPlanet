@@ -23,6 +23,7 @@
 
     <download-modal 
       :isActive="showDownloadModal"
+      :paramsPoll="selectedDownloadOption"
       :newDownload="newDownload"
       :text="text.download"
       :textStatus="text.status"
@@ -46,6 +47,14 @@ export default {
 
   props: {
     buttonText: String,
+    endpoint: {
+      required: true,
+      type: String
+    },
+    endpointPoll: {
+      required: true,
+      type: String
+    },
     options: Array, //[ { title: String, commercialAvailable: Boolean, params: Object } ]
     text: {
       required: true,
@@ -76,22 +85,16 @@ export default {
     },
 
     ajaxRequest () {
-      console.log('download data - HOOK BACK END UP')
-
-      const endpoint = '/downloads'
-      const poll = '/downloads/poll' // get - send same params in an array
-
       let data = this.selectedDownloadOption.params
-      console.log('data', data)
-
+      
       this.axiosSetHeaders()
 
-      axios.post(endpoint, data)
+      axios.post(this.endpoint, data)
       .then(response => {
         console.log('success', response)
         this.newDownload = response.data
       })
-      .catch(function (error) {
+      .catch(error => {
         console.log(error)
         this.downloadRequestFailed.title = `${data.token} .${data.domain}`
         this.newDownload = this.downloadRequestFailed
@@ -113,7 +116,6 @@ export default {
     },
 
     clickNonCommercial () {
-      console.log('click non commercial')
       this.closeCommercialModal()
       this.showDownloadModal = true
       this.ajaxRequest()

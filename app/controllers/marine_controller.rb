@@ -20,7 +20,7 @@ class MarineController < ApplicationController
     @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
     @marineViewAllUrl = '/' #TODO URL to filtered search results page
 
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'marine')
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general')
 
     @regionCoverage = Region.without_global.map do |region|
       RegionPresenter.new(region).marine_coverage

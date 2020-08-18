@@ -4,7 +4,7 @@
 
     <span 
       class="modal__li-failed"
-      v-show="hasFailed"
+      v-show="poll.hasFailed"
     >{{ text.failed }}</span>
 
     <span 
@@ -14,7 +14,7 @@
 
     <a 
       class="modal__li-download"
-      :href="url"  
+      :href="poll.url"  
       v-show="isReady"
     >{{ text.download }}</a>
 
@@ -37,6 +37,10 @@ export default {
       required: true,
       type: Boolean
     },
+    paramsPoll: {
+      required: true,
+      type: Object //{ domain: String, token: String }
+    },
     text: {
       required: true,
       type: Object //{ download: String, failed: String, generating: String }
@@ -44,6 +48,15 @@ export default {
     title: String,
     url: {
       type: String
+    }
+  },
+
+  data () {
+    return {
+      poll: {
+        hasFailed: false,
+        url: ''
+      }
     }
   },
 
@@ -57,7 +70,28 @@ export default {
     }
   },
 
+  mounted () {
+    this.poll.hasFailed = this.hasFailed
+    this.poll.url = this.url
+
+    const checkStatus = setInterval(this.ajaxRequestDownloadStatus, 10);
+  },
+
   methods: {
+    ajaxRequestDownloadStatus () {
+      axios.get(this.endpointPoll, this.paramsPoll)
+        .then(response => {
+          console.log(response)
+          this.poll.hasFailed = response.data.hasFailed
+          this.poll.url = response.data.url
+        })
+        .catch(error => {
+
+        })
+
+      if(this.isReady) { clearInterval(checkStatus) }
+    },
+
     deleteItem () {
       this.$emit('click:delete', this.id)
     }

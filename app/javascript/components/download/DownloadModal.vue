@@ -22,6 +22,7 @@
           :id="download.id"
           :has-failed="download.hasFailed"
           :key="download._uid"
+          :paramsPoll="selectedDownloadOption"
           :text="textStatus"
           :title="download.title"
           :url="download.url"
@@ -43,6 +44,10 @@ export default {
     isActive: {
       default: false,
       type: Boolean
+    },
+    paramsPoll: {
+      required: true,
+      type: Object //{ domain: String, token: String }
     },
     newDownload: Object, //{ title: String, url: String, hasFailed: Boolean }
     text: {
