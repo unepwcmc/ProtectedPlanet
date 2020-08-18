@@ -7,7 +7,7 @@ class GreenListController < ApplicationController
   # after_action :enable_caching
 
   def index
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'greenlist')
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'greenlist')
     @pas_km = ProtectedArea.green_list_total_km
     @pas_percent = ProtectedArea.green_list_protected_percentage
     @pas_total = ProtectedArea.green_list_areas.count

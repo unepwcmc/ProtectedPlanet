@@ -18,7 +18,7 @@ class SearchAreasController < ApplicationController
       placeholder: I18n.t("global.placeholder.search-#{placeholder}")
     }.to_json
 
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'all')
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'search', 'all')
 
     @tabs = []
 

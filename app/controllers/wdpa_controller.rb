@@ -2,7 +2,7 @@ class WdpaController < ApplicationController
   include MapHelper
 
   def index
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri'], 'wdpa')
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri'], 'general', 'wdpa')
 
     @pa_coverage_percentage = 20 ##TODO FERDI - percentage of the world covered by PAs
 

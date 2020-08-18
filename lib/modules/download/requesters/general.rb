@@ -4,13 +4,9 @@ class Download::Requesters::General < Download::Requesters::Base
     @token = token
   end
 
+  TYPES = %w(marine greenlist oecm wdpa).freeze
   def request
     unless ['ready', 'generating'].include? generation_info['status']
-      type = if identifier == "marine"
-               "marine"
-             else
-               (identifier == "all" ? "general" :  "country")
-             end
       DownloadWorkers::General.perform_async(@format, type, identifier)
     end
 
@@ -25,5 +21,13 @@ class Download::Requesters::General < Download::Requesters::Base
 
   def identifier
     @token
+  end
+
+  def type
+    if TYPES.include?(identifier)
+      identifier
+    else
+      (identifier.length == 2 ? "region" : "country")
+    end
   end
 end

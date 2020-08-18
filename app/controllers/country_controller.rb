@@ -8,7 +8,7 @@ class CountryController < ApplicationController
   def show
     @country_presenter = CountryPresenter.new @country
 
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], @country.iso)
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
 
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
     @iucn_categories = @country.protected_areas_per_iucn_category
