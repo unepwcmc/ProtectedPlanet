@@ -37,7 +37,7 @@ namespace :comfy do
 
     # Creates folder under db/cms_seeds if it doesn't exist
     unless Dir.exist?(dest)
-      FileUtils.mkdir(dest)
+      FileUtils.mkdir_p(dest)
     end
       
     puts "Importing CMS Seed data from Staging Folder to #{dest} ..."
