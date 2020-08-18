@@ -71,9 +71,20 @@
   margin: rem-calc(14 0);
   
   .chart__legend-li { margin-right: rem-calc(14); }
-  .chart__legend-item { @include chart-legend-item; }
+
+  .chart__legend-item { 
+    @include chart-legend-item; 
+    @include flex-v-center;
+  }
+
   .chart__legend-index { @include chart-legend-index; }
-  .chart__legend-key { @include chart-legend-key; }
+
+  .chart__legend-key { 
+    @include chart-legend-key; 
+    @include breakpoint-down($small) { 
+      width: rem-calc(16); height: rem-calc(16);
+    }
+  }
   .chart__legend-title { line-height: 1; }
 }
 
