@@ -2,6 +2,7 @@
 // classes
 //--------------------------------------------------
 .modal--download {
+  @include box-shadow-grey;
   background-color: $white;
   border-top: solid 1px $grey-black;
   border-right: solid 1px $grey-black;
@@ -12,6 +13,7 @@
   position: fixed;
   right: 0;
   bottom: 0;
+  z-index: -1;
 
   @include breakpoint($small) {
     width: rem-calc(600);

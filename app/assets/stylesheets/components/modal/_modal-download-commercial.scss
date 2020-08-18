@@ -100,6 +100,7 @@ $modal-commercial-link-height: rem-calc(107);
     &__link-non-commercial {
       @include modal-commercial-link;
       background-color: $primary;
+      cursor: pointer;
     }
 
     &__link-title {
