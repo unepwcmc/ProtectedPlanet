@@ -148,7 +148,7 @@ Rails.configuration.to_prepare do
           end
         end
 
-        page.page_categories = new_categories
+        page.page_categories = new_categories unless new_categories.empty?
         # END OF CUSTOM CODE
 
         
