@@ -36,11 +36,6 @@ en:
     protected-areas: Protected Areas
     results: results
     no-results: No results. Please search again.
-    categories:
-      - all
-      - news-and-stories
-      - resources
-      - areas
     custom_categories:
       topics:
         name: Topics
