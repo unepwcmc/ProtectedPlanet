@@ -55,6 +55,11 @@ export default {
 
   data () {
     return {
+      downloadRequestFailed: {
+        id: '0',
+        url: '',
+        hasFailed: true
+      },
       newDownload: {},
       selectedDownloadOption: {},
       showCommercialModal: false,
@@ -87,8 +92,9 @@ export default {
         this.newDownload = response.data
       })
       .catch(function (error) {
-        // TODO handle this on the frontend so the user knows it has failed
         console.log(error)
+        this.downloadRequestFailed.title = `${data.token} .${data.domain}`
+        this.newDownload = this.downloadRequestFailed
       })
 
       this.selectedDownloadOption = {}
