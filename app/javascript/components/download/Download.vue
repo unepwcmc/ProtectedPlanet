@@ -56,26 +56,6 @@ export default {
   data () {
     return {
       newDownload: {},
-      // [
-        // {
-        //   id: 1,
-        //   title: 'Filename 1',
-        //   url: 'http://google.com',
-        //   hasFailed: false
-        // },
-        // {
-        //   id: 2,
-        //   title: 'Filename 2',
-        //   url: '',
-        //   hasFailed: true
-        // },
-        // {
-        //   id: 3,
-        //   title: 'Filename 3',
-        //   url: '',
-        //   hasFailed: false
-        // },
-      // ],
       selectedDownloadOption: {},
       showCommercialModal: false,
       showDownloadModal: false,
@@ -84,16 +64,17 @@ export default {
   },
 
   methods: {
-    // addDownload (download) {
-    //   console.log(download)
-    //   this.downloads.push(download)
-    //   console.log(this.downloads)
-    // },
+    addDownload (download) {
+      console.log(download)
+      this.downloads.push(download)
+      console.log(this.downloads)
+    },
 
     ajaxRequest () {
       console.log('download data - HOOK BACK END UP')
 
       const endpoint = '/downloads'
+      const poll = '/downloads/poll' // get - send same params in an array
 
       let data = this.selectedDownloadOption.params
       console.log('data', data)
@@ -106,6 +87,7 @@ export default {
         this.newDownload = response.data
       })
       .catch(function (error) {
+        // TODO handle this on the frontend so the user knows it has failed
         console.log(error)
       })
 

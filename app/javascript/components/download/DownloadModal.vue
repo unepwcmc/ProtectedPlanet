@@ -58,31 +58,8 @@ export default {
   data () {
     return {
       isMinimised: false,
-      activeDownloads: [
-        {
-          id: '1',
-          title: 'Filename 1',
-          url: 'http://google.com',
-          hasFailed: false
-        },
-        {
-          id: '2',
-          title: 'Filename 2',
-          url: '',
-          hasFailed: true
-        },
-        {
-          id: '3',
-          title: 'Filename 3',
-          url: '',
-          hasFailed: false
-        },
-      ],
+      activeDownloads: [],
     }
-  },
-
-  mounted () {
-    
   },
 
   watch: {
