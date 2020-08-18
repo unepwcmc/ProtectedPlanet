@@ -31,7 +31,7 @@ namespace :comfy do
       dest = answers[:destination]
       answer = answers[:answer]
     else
-      dest = File.join(ComfortableMexicanSofa.config.seeds_path, args[:to])
+      dest = File.join(ComfortableMexicanSofa.config.seeds_path, args[:dest])
       answer = args[:folder].downcase
     end
       
