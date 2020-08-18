@@ -4,15 +4,13 @@
 >
   <template slot-scope="{ selectedId }">
     <tab-target :id="1" :selected-id="selectedId">
-      <div class="container">
-        <section class="container--medium section-padding--bottom">
-          <%= cms_fragment_render("tab-content-1") %>
-        </section>
+      <section class="container--medium section-padding--bottom">
+        <%= cms_fragment_render("tab-content-1") %>
+      </section>
 
-        <section class="section-padding--bottom">
-          <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
-        </section>
-      </div>
+      <section class="section-padding--bottom">
+        <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
+      </section>
 
       <section class="map-section">
         <%= render partial: "partials/maps/main", locals: {
@@ -22,19 +20,15 @@
     </tab-target>
 
     <tab-target :id="2" :selected-id="selectedId">
-      <div class="container">
-        <section class="container--medium">
-          <%= cms_fragment_render("tab-content-2") %>
-        </section>
-      </div>
+      <section class="container--medium">
+        <%= cms_fragment_render("tab-content-2") %>
+      </section>
     </tab-target>
 
     <tab-target :id="3" :selected-id="selectedId">
-      <div class="container">
-        <section class="container--medium">
-          <%= cms_fragment_render("tab-content-3") %>
-        </section>
-      </div>
+      <section class="container--medium">
+        <%= cms_fragment_render("tab-content-3") %>
+      </section>
     </tab-target>
   </template>
 </tabs>
