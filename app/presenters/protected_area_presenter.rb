@@ -33,19 +33,9 @@ class ProtectedAreaPresenter
 
   def affiliations
     [
-      {
-        title: 'View more',
-        image_url: ActionController::Base.helpers.image_url('logos/green-list.png'),
-        link_title: "View the Green List page for #{protected_area.name}",
-        url: '' ##TODO links needed from CSV provided by IUCN.
-      },
-      {
-        title: 'View more',
-        image_url: ActionController::Base.helpers.image_url('logos/parcc.png'),
-        link_title: "View the climate change vulnerability assessments for #{protected_area.name}",
-        link_url: url_for_related_source('parcc_info', protected_area)
-      }
-    ]
+      green_list_status_info,
+      parcc_info
+    ].compact
   end
 
   def data_info

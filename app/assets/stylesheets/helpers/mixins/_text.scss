@@ -44,10 +44,23 @@
   font-weight: $bold;
 }
 
+@mixin h1-resource {
+  @include text-1;
+  @include responsive(font-size, rem-calc(20), rem-calc(20), rem-calc(25));
+  font-weight: $bold;
+}
+
 @mixin h2 {
   @include text-1;
   @include responsive(font-size, rem-calc(20), rem-calc(25), rem-calc(25));
   color: $header-font-color;
+}
+
+@mixin h2-wysiwyg {
+  font-family: $body-font;
+  line-height: $header-font-line-height;
+
+  @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
 }
 
 @mixin h3 {
@@ -58,10 +71,24 @@
   margin-bottom: .5em;
 }
 
+@mixin h3-wysiwyg {
+  font-family: $body-font;
+  line-height: $header-font-line-height;
+
+  @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
+}
+
 @mixin h4 {
   @include text-2;
   @include responsive(font-size, rem-calc(18), rem-calc(18), rem-calc(16));
   margin: 1.5em 0 .8em 0;
+}
+
+@mixin h4-wysiwyg {
+  font-family: $body-font;
+  line-height: $header-font-line-height;
+
+  @include responsive(font-size, rem-calc(16), rem-calc(16), rem-calc(16));
 }
 
 @mixin h-big {
