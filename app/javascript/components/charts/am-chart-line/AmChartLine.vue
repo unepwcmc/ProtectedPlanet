@@ -49,6 +49,10 @@ export default {
       yearAxis.renderer.line.strokeWidth = 1
       yearAxis.renderer.line.stroke = am4core.color("#c8c8c8")
       yearAxis.renderer.minGridDistance = 50
+      yearAxis.renderer.ticks.template.disabled = false;
+      yearAxis.renderer.ticks.template.strokeOpacity = 1;
+      yearAxis.renderer.ticks.template.stroke = am4core.color("#c8c8c8");
+      yearAxis.renderer.ticks.template.length = 6;
 
       let countAxis = chart.yAxes.push(new am4charts.ValueAxis())
       countAxis.title.text = "[bold]Number[/]"

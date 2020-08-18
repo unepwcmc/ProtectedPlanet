@@ -1,10 +1,10 @@
 <template>
   <div class="tabs">
-    <div class="tabs__scrollable">
+    <div class="container">
       <ul class="tabs__triggers">
         <tab-trigger
-          v-for="tab in tabTriggers"
-          :key="tab._uid"
+          v-for="tab, index in tabTriggers"
+          :key="`${tab.id}-${index}`"
           :id="tab.id"
           :selected-id="selectedId"
           :title="tab.title"
@@ -12,7 +12,6 @@
         />
       </ul>
     </div>
-
     <slot :selected-id="selectedId" />
   </div>
 </template>

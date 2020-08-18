@@ -1,21 +1,11 @@
 require 'csv'
-require 'wcmc_components'
 
 class PameEvaluation < ApplicationRecord
-  include WcmcComponents::Loadable
-
   belongs_to :protected_area, optional: true
   belongs_to :pame_source
   has_and_belongs_to_many :countries
 
   validates :methodology, :year, :metadata_id, presence: true
-
-  # config for loadable mixin
-  ignore_column :designation
-
-  import_by protected_area: :wdpa_id
-  import_by countries: :iso_3
-  
 
   TABLE_ATTRIBUTES = [
     {
@@ -245,7 +235,7 @@ class PameEvaluation < ApplicationRecord
                GROUP BY pame_evaluations.id, protected_areas.wdpa_id, protected_areas.name, designation, pame_sources.data_title,
                         pame_sources.resp_party, pame_sources.year, pame_sources.language
 
-               UNION
+       /*        UNION
 
         SELECT pame_evaluations.id AS id,
                pame_evaluations.metadata_id AS metadata_id,
@@ -267,6 +257,7 @@ class PameEvaluation < ApplicationRecord
                #{restricted_where_statement}
                GROUP BY pame_evaluations.id, wdpa_id, pame_evaluations.name, designation, pame_sources.data_title,
                         pame_sources.resp_party, pame_sources.year, pame_sources.language;
+      */
       SQL
     evaluations = ActiveRecord::Base.connection.execute(query)
 

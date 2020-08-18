@@ -2,6 +2,8 @@
 // classes
 //--------------------------------------------------
 &--resources {
+  @include card-resource;
+
   .cards {
     &__cards {
       @include flex;
@@ -14,24 +16,5 @@
         }
       }
     }
-  }
-
-  .card {
-    @include responsive(margin-bottom, rem-calc(20), rem-calc(50), rem-calc(50));
-    @include responsive(width, 100%, 50%, 25%);
-    padding: rem-calc(12 10);
-
-    &--link {
-      border: solid 1px $white;
-      cursor: pointer;
-      text-decoration: none;
-
-      &:hover { border-color: $grey-dark; }
-    }
-
-      &__date { 
-        @include text-small; 
-        margin-top: 0;
-      }
   }
 }

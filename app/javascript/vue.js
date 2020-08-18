@@ -33,8 +33,11 @@ import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
 import Download from './components/download/Download'
 import DownloadModal from './components/download/DownloadModal'
+import Flickity from 'vue-flickity'
 import FilteredTable from './components/pame/FilteredTable'
-import Flickity from 'vue-flickity';
+import ListingPage from './components/listing/ListingPage.vue'
+import ListingPageCardNews from './components/listing/ListingPageCardNews.vue'
+import ListingPageCardResources from './components/listing/ListingPageCardResources.vue'
 import NavBurger from './components/nav/NavBurger'
 import PameModal from './components/pame/PameModal'
 import SearchAreas from './components/search/SearchAreas'
@@ -96,6 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
         DownloadModal,
 	      FilteredTable,
         Flickity,
+        ListingPage,
+        ListingPageCardNews,
+        ListingPageCardResources,
         NavBurger,
         PameModal,
         SearchAreas,

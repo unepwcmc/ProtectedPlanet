@@ -7,7 +7,6 @@ GIT
 
 GEM
   remote: https://rubygems.org/
-  remote: https://wcmc-gems:SDvUM6ZG@gem-server.unep-wcmc.org/
   specs:
     actioncable (5.2.0)
       actionpack (= 5.2.0)
@@ -1129,6 +1128,8 @@ GEM
       thor (~> 0.19)
     net-scp (2.0.0)
       net-ssh (>= 2.6.5, < 6.0.0)
+    net-sftp (3.0.0)
+      net-ssh (>= 5.0.0, < 7.0.0)
     net-ssh (5.2.0)
     nio4r (2.5.2)
     nokogiri (1.10.7)
@@ -1282,7 +1283,6 @@ GEM
     vuejs-rails (2.3.2)
     warden (1.2.8)
       rack (>= 2.0.6)
-    wcmc-components (0.0.5)
     webmock (1.22.6)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -1343,6 +1343,7 @@ DEPENDENCIES
   minitest (~> 5.10, != 5.10.2)
   mocha (~> 1.0.0)
   neat
+  net-sftp
   nokogiri (~> 1.10.4)
   pg (~> 0.21)
   phantompdf (~> 1.2.2)
@@ -1365,7 +1366,6 @@ DEPENDENCIES
   turnout (~> 2.5.0)
   uglifier (~> 4.1.17)
   vuejs-rails (~> 2.3.2)
-  wcmc-components (~> 0.0.5)
   webmock (~> 1.22.0)
   webpacker (~> 4.0.2)
   whenever

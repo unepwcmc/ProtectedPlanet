@@ -5,6 +5,8 @@ $activeBackgroundColour: $primary;
 $activeTextColour: white;
 $checkbox-height: rem-calc(22);
 $focus-outline-margin: rem-calc(4);
+$total-width-mobile: rem-calc(20);
+$total-width-desktop: rem-calc(24);
 
 //--------------------------------------------------
 // classes
@@ -71,27 +73,38 @@ $focus-outline-margin: rem-calc(4);
       &--has-selected {
         background-color: $activeBackgroundColour;
         color: $activeTextColour;
+
+        @include breakpoint($small){ padding-right: rem-calc(34); }
         
         &:after,
         &:hover:after { visibility: hidden; }
       }
 
         &-total {
-          $total-width: rem-calc(24);
+          display: none;
 
-          @include flex-v-center;
-          background-color: $activeTextColour;
-          border-radius: 100%;
-          color: $activeBackgroundColour;
-          font-size: rem-calc(18);
-          line-height: $total-width;
-          text-align: center;
-          width: $total-width; height: $total-width;
-        
-          display: block;
+          @include breakpoint($small) {
+            @include flex-v-center;
+            background-color: $activeTextColour;
+            border-radius: 100%;
+            color: $activeBackgroundColour;
+            font-size: rem-calc(14);
+            line-height: $total-width-mobile;
+            text-align: center;
+            width: $total-width-mobile; height: $total-width-mobile;
+          
+            display: block;
+            position: absolute;
+            right: rem-calc(8);
+          }
 
-          position: absolute;
-          right: rem-calc(16);
+          @include breakpoint($medium){ 
+            font-size: rem-calc(18);
+            line-height: $total-width-desktop;
+            width: $total-width-desktop; height: $total-width-desktop;
+
+            right: rem-calc(16); 
+          }
         }
     }
 

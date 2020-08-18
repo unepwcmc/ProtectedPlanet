@@ -25,7 +25,7 @@
         </div>
       </section>
 
-      <section class="container">
+      <section>
         <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
           <%= render "region/facts/pame_statistics" %>
         <% end %>
@@ -36,7 +36,7 @@
       </section>
 
       
-      <section class="container">
+      <section>
         <div class="flex flex-h-between">
           <%= render partial: "partials/stats/stats-coverage", locals: { 
             stats: @presenter.terrestrial_stats, 

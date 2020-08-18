@@ -18,7 +18,7 @@
           class="filter__group"
         >
           <h3>{{ filterGroup.title }}</h3>
-
+          
           <v-filter
             v-for="filter in filterGroup.filters"
             :key="filter._uid"

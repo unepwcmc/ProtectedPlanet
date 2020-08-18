@@ -1,12 +1,16 @@
 <div class="topbar--secondary">
-  <div class="topbar__container container">
-    <div class="social--share">
+  <sticky-bar 
+    class="sticky-bar--slide-in"
+    trigger-element=".sm-trigger-sticky-bar"
+  >
+    <div class="topbar__container container">
       <%= render "partials/social/sharing" %>
-    </div>
 
-    <%= render partial: "partials/download/download", locals: { 
-      classes: 'download--small', 
-      options: download_options
-    } %>
-  </div>
+      <%= render partial: "partials/download/download", locals: { 
+        classes: 'download--small', 
+        options: download_options
+      } %>
+    </div>
+  </sticky-bar>
 </div>
+<span class="sm-trigger-sticky-bar"></span>
