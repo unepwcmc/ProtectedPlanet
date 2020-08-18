@@ -50,6 +50,8 @@ class SyncSeeds
   end
 
   def check_if_newer(parent_folder:, local_item:, remote_item:, remote_path:, local_path:, base: @local_base)
+    downloaded = false
+
     if parent_folder.include?(local_item)
       yield if block_given?
       
