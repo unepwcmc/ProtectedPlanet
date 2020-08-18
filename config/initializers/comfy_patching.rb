@@ -132,6 +132,8 @@ Rails.configuration.to_prepare do
         new_frag_identifiers, fragments_attributes =
           construct_fragments_attributes(fragments_hash, page, path)
 
+        
+        # CUSTOM CODE
         # Destroy existing categories tied to page
         page.page_categories.destroy_all
 
@@ -143,7 +145,10 @@ Rails.configuration.to_prepare do
             new_categories << category
           end
         end
+
         page.page_categories = new_categories
+        # CUSTOM CODE
+
         
         page.fragments_attributes = fragments_attributes
 
