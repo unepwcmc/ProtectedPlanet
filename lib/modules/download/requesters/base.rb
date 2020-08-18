@@ -19,11 +19,11 @@ class Download::Requesters::Base
   end
 
   def json_response
-    info = Download.generation_info(domain, identifier)
+    filename = Download::Utils.filename(domain, identifier)
     {
       'id' => computed_id,
-      'title' => info['filename'] || computed_id,
-      'url' => Download.link_to(info['filename'], format),
+      'title' => filename,
+      'url' => url(filename),
       'hasFailed' => Download.has_failed?(domain, identifier),
     }
   end
@@ -34,5 +34,9 @@ class Download::Requesters::Base
 
   def computed_id
     "#{identifier}-#{format}"
+  end
+
+  def url(filename)
+    generation_info['status'] == 'ready' ? Download.link_to(filename, format) : ''
   end
 end
