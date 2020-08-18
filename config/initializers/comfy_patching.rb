@@ -75,11 +75,13 @@ Rails.configuration.to_prepare do
               end
               attachment.filename
             end.join("\n")
+          # CUSTOM CODE - adding a case for categories to manually populate the content
           when "categories"
             layout_category = Comfy::Cms::LayoutCategory.where(label: frag.identifier).first
             record.page_categories.where(layout_category: layout_category).map do |category|
               category.label
             end.join(' ')
+          # END OF CUSTOM CODE
           else
             frag.content
           end
@@ -147,7 +149,7 @@ Rails.configuration.to_prepare do
         end
 
         page.page_categories = new_categories
-        # CUSTOM CODE
+        # END OF CUSTOM CODE
 
         
         page.fragments_attributes = fragments_attributes
