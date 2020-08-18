@@ -25,7 +25,6 @@ namespace :comfy do
   task :staging_import, %i[dest folder] => [:environment] do |_t, args| 
     dest = nil
     answer = nil
-    byebug
 
     if args[:dest].nil? && args[:folder].nil?
       answers = user_input
@@ -34,6 +33,11 @@ namespace :comfy do
     else
       dest = File.join(ComfortableMexicanSofa.config.seeds_path, args[:dest])
       answer = args[:folder].downcase
+    end
+
+    # Creates folder under db/cms_seeds if it doesn't exist
+    unless Dir.exist?(dest)
+      FileUtils.mkdir(dest)
     end
       
     puts "Importing CMS Seed data from Staging Folder to #{dest} ..."
