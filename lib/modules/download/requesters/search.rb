@@ -10,7 +10,7 @@ class Download::Requesters::Search < Download::Requesters::Base
       DownloadWorkers::Search.perform_async(@format, token, @search_term, filters.to_json)
     end
 
-    {'token' => token}.merge(generation_info)
+    json_response
   end
 
   def domain

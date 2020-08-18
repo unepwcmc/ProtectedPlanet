@@ -14,7 +14,7 @@ class Download::Requesters::General < Download::Requesters::Base
       DownloadWorkers::General.perform_async(@format, type, identifier)
     end
 
-    {'token' => identifier}.merge(generation_info)
+    json_response
   end
 
   def domain

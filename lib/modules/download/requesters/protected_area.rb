@@ -9,7 +9,7 @@ class Download::Requesters::ProtectedArea < Download::Requesters::Base
       DownloadWorkers::ProtectedArea.perform_async(@format, identifier)
     end
 
-    {'token' => identifier}.merge(generation_info)
+    json_response
   end
 
   def domain

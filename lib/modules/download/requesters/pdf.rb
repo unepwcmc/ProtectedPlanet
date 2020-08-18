@@ -9,7 +9,7 @@ class Download::Requesters::Pdf < Download::Requesters::Base
       DownloadWorkers::Pdf.perform_async identifier
     end
 
-    {'token' => identifier}.merge(generation_info)
+    json_response
   end
 
   def domain

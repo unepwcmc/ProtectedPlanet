@@ -9,7 +9,7 @@ module Download::Router
     when 'protected_area'
       Download::Requesters::ProtectedArea.request(params['format'], params['wdpa_id'])
     when 'pdf'
-      Download::Requesters::Pdf.request(params['id'])
+      Download::Requesters::Pdf.request(params['token'])
     end
   end
 
