@@ -36,14 +36,13 @@ class S3
     object = @s3.bucket(bucket).object(object_name)
     object.upload_file(source)
 
-
-    unless bucket == Rails.application.secrets.aws_downloads_bucket
+    if bucket == Rails.application.secrets.aws_downloads_bucket
       @client.put_object_acl({
                           acl: "public-read",
                           bucket: bucket,
                           key: object_name,
                             })
-      end
+    end
     return
   end
 
