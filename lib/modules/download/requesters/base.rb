@@ -15,16 +15,16 @@ class Download::Requesters::Base
   protected
 
   def generation_info
-    Download.generation_info(domain, identifier)
+    Download.generation_info(domain, identifier, format)
   end
 
   def json_response
-    filename = Download::Utils.filename(domain, identifier)
+    filename = Download::Utils.filename(domain, identifier, format)
     {
       'id' => computed_id,
       'title' => filename,
       'url' => url(filename),
-      'hasFailed' => Download.has_failed?(domain, identifier),
+      'hasFailed' => Download.has_failed?(domain, identifier, format),
     }
   end
 

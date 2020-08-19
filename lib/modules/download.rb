@@ -19,12 +19,12 @@ module Download
     Utils.clear_downloads
   end
 
-  def self.generation_info domain, identifier
-    Download::Utils.properties(Download::Utils.key(domain, identifier))
+  def self.generation_info domain, identifier, format
+    Download::Utils.properties(Download::Utils.key(domain, identifier, format))
   end
 
-  def self.has_failed? domain, identifier
-    status = generation_info(domain, identifier)['status']
+  def self.has_failed? domain, identifier, format
+    status = generation_info(domain, identifier, format)['status']
     !%w(generating ready).include?(status)
   end
 
@@ -33,10 +33,10 @@ module Download
   IMPORT_PREFIX = 'import/'
 
   GENERATORS = {
-    shapefile: Download::Generators::Shapefile,
-    csv:       Download::Generators::Csv,
-    gdb:       Download::Generators::Gdb,
-    pdf:       Download::Generators::Pdf
+    shp: Download::Generators::Shapefile,
+    csv: Download::Generators::Csv,
+    gdb: Download::Generators::Gdb,
+    pdf: Download::Generators::Pdf
   }.freeze
 
   def self.generate format, download_name, opts={}

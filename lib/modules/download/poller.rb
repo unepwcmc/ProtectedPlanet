@@ -6,16 +6,16 @@ module Download::Poller
   private
 
   def self.json_response(params)
-    _domain = params['domain']
-    _token = params['token']
-    _format = params['format']
+    domain = params['domain']
+    token = params['token']
+    format = params['format']
 
-    info = Download.generation_info(_domain, _token)
+    filename = Download::Utils.filename(domain, token, format)
     {
-      'id' => computed_id(_token, _format),
-      'title' => info['filename'] || computed_id(_token, _format),
-      'url' => Download.link_to(info['filename'], _format),
-      'hasFailed' => Download.has_failed?(_domain, _token)
+      'id' => computed_id(token, format),
+      'title' => filename,
+      'url' => Download.link_to(filename, format),
+      'hasFailed' => Download.has_failed?(domain, token, format)
     }
   end
 

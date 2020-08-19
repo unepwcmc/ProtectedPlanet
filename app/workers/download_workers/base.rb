@@ -15,16 +15,16 @@ class DownloadWorkers::Base
 
   protected
 
-  def key identifier
-    Download::Utils.key domain, identifier
+  def key identifier, format
+    Download::Utils.key domain, identifier, format
   end
 
-  def filename identifier
-    Download::Utils.filename domain, identifier
+  def filename identifier, format
+    Download::Utils.filename domain, identifier, format
   end
 
   def while_generating key
-    properties = Download::Utils.properties(key(@token))
+    properties = Download::Utils.properties(key)
     generating_properties = properties.merge({'status' => 'generating'})
 
     $redis.set(key, generating_properties.to_json)

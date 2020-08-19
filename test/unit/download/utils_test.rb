@@ -21,8 +21,8 @@ class DownloadUtilsTest < ActiveSupport::TestCase
   end
 
   test '.key, given a domain and an identifier, returns the redis key for the given args' do
-    assert_equal 'downloads:searches:123', Download::Utils.key('search', '123')
-    assert_equal 'downloads:general:USA', Download::Utils.key('general', 'USA')
-    assert_equal 'downloads:projects:123:all', Download::Utils.key('project', '123')
+    assert_equal 'downloads:searches:123', Download::Utils.key('search', '123', 'csv')
+    assert_equal 'downloads:general:USA', Download::Utils.key('general', 'USA', 'csv')
+    assert_equal 'downloads:projects:123:all', Download::Utils.key('project', '123', 'csv')
   end
 end

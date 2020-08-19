@@ -43,25 +43,25 @@ module Download
       JSON.parse($redis.get(key)) rescue {}
     end
 
-    def self.key domain, identifier
+    def self.key domain, identifier, format
       case domain
       when 'search'
-        "downloads:searches:#{identifier}"
+        "downloads:searches:#{format}:#{identifier}"
       when 'project'
-        "downloads:projects:#{identifier}:all"
+        "downloads:projects:#{format}:#{identifier}:all"
       when 'general'
-        "downloads:general:#{identifier}"
+        "downloads:general:#{format}:#{identifier}"
       when 'protected_area'
-        "downloads:protected_area:#{identifier}"
+        "downloads:protected_area:#{format}:#{identifier}"
       when 'pdf'
-        "downloads:pdf:#{identifier}"
+        "downloads:pdf:#{format}:#{identifier}"
       end
     end
 
-    def self.filename domain, identifier
+    def self.filename domain, identifier, format
       "WDPA_#{Wdpa::S3.current_wdpa_identifier}".tap { |base_filename|
         base_filename << "_#{domain}"     if domain != 'general'
-        base_filename << "_#{identifier}" if (identifier != 'all' && identifier.present?)
+        base_filename << "_#{identifier}_#{format}" if (identifier != 'all' && identifier.present?)
       }
     end
   end

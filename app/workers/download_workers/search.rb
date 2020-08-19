@@ -6,9 +6,9 @@ class DownloadWorkers::Search < DownloadWorkers::Base
     @filters_json = filters
     @filters_values = JSON.load(filters).values
 
-    while_generating(key(token)) do
+    while_generating(key(token, format)) do
       generate_download
-      {status: 'ready', filename: filename(ids_digest)}.to_json
+      {status: 'ready', filename: filename(ids_digest, format)}.to_json
     end
   end
 
@@ -19,12 +19,12 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   end
 
   def generate_download
-    Download.generate(@format, filename(ids_digest), {wdpa_ids: protected_area_ids})
+    Download.generate(@format, filename(ids_digest, @format), {wdpa_ids: protected_area_ids})
     send_completion_email unless email.blank?
   end
 
   def send_completion_email
-    DownloadCompleteMailer.create(filename(ids_digest), email).deliver
+    DownloadCompleteMailer.create(filename(ids_digest, @format), email).deliver
   end
 
   def ids_digest

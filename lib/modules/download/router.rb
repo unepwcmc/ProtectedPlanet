@@ -13,23 +13,10 @@ module Download::Router
     end
   end
 
-  def self.poll domain, params
-    case domain
-    when 'general'
-      Download::Pollers::General.poll(params['token'])
-    when 'search'
-      Download::Pollers::Search.poll(params['token'])
-    when 'protected_area'
-      Download::Pollers::ProtectedArea.poll(params['token'])
-    when 'pdf'
-      Download::Pollers::Pdf.poll(params['token'])
-    end
-  end
-
   # TODO This could probably go as should be about the old way of notifying
   # a user about downloads statuses
   def self.set_email domain, params
-    key = Download::Utils.key(domain, params['id'])
+    key = Download::Utils.key(domain, params['id'], params['format'])
 
     Download::Utils.properties(key).tap{ |properties|
       properties['email'] = params['email']
