@@ -79,11 +79,8 @@ export default {
 
   methods: {
     ajaxRequestDownload () {
-      console.log(this.params)
       axios.post(this.endpointCreate, this.params)
       .then(response => {
-        console.log('success', response)
-        
         this.hasFailed = response.data.hasFailed
         this.id = response.data.id
         this.title = response.data.title
@@ -101,9 +98,6 @@ export default {
     },
 
     ajaxRequestDownloadStatus () {
-      console.log('isready', this.isReady)
-      console.log('failed', this.hasFailed)
-
       if(this.isReady || this.hasFailed) { 
         this.stopPolling() 
         return false
@@ -113,7 +107,6 @@ export default {
           params: this.params
         })
         .then(response => {
-          console.log('response', response)
           this.hasFailed = response.data.hasFailed
           this.title = response.data.title
           this.url = response.data.url
@@ -124,11 +117,10 @@ export default {
     },
 
     deleteItem () {
-      this.$emit('click:delete', this.id)
+      this.$store.dispatch('download/deleteDownloadItem', this.params)
     }, 
 
     startPolling () {
-      console.log('here')
       this.interval = window.setInterval(this.ajaxRequestDownloadStatus, 10000)
     },
 

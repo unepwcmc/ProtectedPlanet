@@ -11,6 +11,13 @@
       <%= yield %>
       
       <%= render "layouts/partials/footer" %>  
+
+      <download-modal
+        endpoint-create="/downloads"
+        endpoint-poll="/downloads/poll"
+        :text-download="<%= download_text[:download].to_json %>"
+        :text-status="<%= download_text[:status].to_json %>"
+      /></download-modal>
     </div>
   </body>
 </html>
