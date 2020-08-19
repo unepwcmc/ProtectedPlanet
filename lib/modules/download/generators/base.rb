@@ -47,9 +47,9 @@ class Download::Generators::Base
   end
 
   def zip
-    system("zip -j #{@zip_path} #{path}")
-    system("zip -ru #{@zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
-    system("zip -ru #{@zip_path} *", chdir: ATTACHMENTS_PATH)
+    system("zip -j #{zip_path} #{path}")
+    system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
+    system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
   end
 
   def query conditions=[]
@@ -82,13 +82,17 @@ class Download::Generators::Base
     raise NotImplementedError
   end
 
+  def zip_path
+    @zip_path
+  end
+
   def sources_path
-    File.join(File.dirname(@zip_path), "WDPA_sources.csv")
+    File.join(File.dirname(zip_path), "WDPA_sources.csv")
   end
 
   def path_without_extension
-    filename_without_extension = File.basename(@zip_path, File.extname(@zip_path))
-    File.join(File.dirname(@zip_path), filename_without_extension)
+    filename_without_extension = File.basename(zip_path, File.extname(zip_path))
+    File.join(File.dirname(zip_path), filename_without_extension)
   end
 
   def db

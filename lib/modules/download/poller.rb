@@ -15,7 +15,7 @@ module Download::Poller
     {
       'id' => computed_id(token, format),
       'title' => filename,
-      'url' => is_ready ? Download.link_to(filename, format) : '',
+      'url' => is_ready ? Download.link_to(filename) : '',
       'hasFailed' => Download.has_failed?(domain, token, format)
     }
   end

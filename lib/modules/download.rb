@@ -7,8 +7,8 @@ module Download
     Download::Poller.poll(params)
   end
 
-  def self.link_to filename, type
-    Download::Utils.link_to filename, type
+  def self.link_to filename
+    Download::Utils.link_to filename
   end
 
   def self.set_email params
@@ -46,7 +46,7 @@ module Download
   def self.generate format, download_name, opts={}
     generator = GENERATORS[format.to_sym]
 
-    zip_path = Utils.zip_path_for_type(download_name, generator::TYPE)
+    zip_path = Utils.zip_path(download_name)
 
     generated = generator.generate zip_path, opts[option(format)]
 

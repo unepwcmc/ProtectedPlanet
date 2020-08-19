@@ -10,7 +10,7 @@ class DownloadUtilsTest < ActiveSupport::TestCase
     url = Rails.application.secrets.aws_s3_url
 
     expected_url = "#{url}/#{S3::CURRENT_PREFIX}that-download-csv.zip"
-    url = Download::Utils.link_to download_name, type
+    url = Download::Utils.link_to download_name
 
     assert_equal expected_url, url
   end

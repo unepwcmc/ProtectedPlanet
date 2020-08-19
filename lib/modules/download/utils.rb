@@ -1,7 +1,7 @@
 module Download
   module Utils
-    def self.link_to download_name, type
-      file_name = File.basename zip_path_for_type(download_name, type)
+    def self.link_to download_name
+      file_name = File.basename zip_path(download_name)
       S3.link_to file_name
     end
 
@@ -30,13 +30,9 @@ module Download
       $redis.keys("downloads:*").each { |d| $redis.del d }
     end
 
-    def self.zip_path_for_type download_name, type
-      path = File.join(TMP_PATH, filename_for_type(download_name, type))
+    def self.zip_path download_name
+      path = File.join(TMP_PATH, download_name)
       "#{path}.zip"
-    end
-
-    def self.filename_for_type download_name, type
-      "#{download_name}-#{type}"
     end
 
     def self.properties key
