@@ -84,7 +84,7 @@ export default {
     activeDownloads () {
       if(this.activeDownloads.length == 0) { 
         this.$emit('deleted:all')
-        this.isActive = true
+        this.isActive = false
         this.isMinimised = false
       }
     }

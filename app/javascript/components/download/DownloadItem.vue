@@ -1,6 +1,6 @@
 <template>
   <li>
-    <span class="modal__li-title">{{ title }}</span>
+    <span class="modal__li-title">{{ titleTrimmed }}</span>
 
     <span 
       class="modal__li-failed"
@@ -69,6 +69,10 @@ export default {
     
     isReady () {
       return this.url != ''
+    },
+
+    titleTrimmed () {
+      return this.title.length <= 30 ? this.title : this.title.substring(0,27) + '...'
     }
   },
 
