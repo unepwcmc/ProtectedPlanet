@@ -42,10 +42,6 @@ export default {
       required: true,
       type: String
     },
-    id: {
-      required: true,
-      type: String
-    },
     // hasFailed: {
     //   required: true,
     //   type: Boolean
@@ -67,6 +63,7 @@ export default {
   data () {
     return {
       hasFailed: false,
+      id: '',
       interval: null,
       title: '',
       url: ''
@@ -102,12 +99,14 @@ export default {
         // this.$store.dispatch('download/addNewDownloadItem', response.data)
 
         this.hasFailed = response.data.hasFailed
+        this.id = response.data.id
         this.title = response.data.title
         this.url = response.data.url
       })
       .catch(error => {
         console.log(error)
         this.hasFailed = true
+        // this.id = toString(Math.random)
         this.title = `${this.params.token} .${this.params.format}`
         this.url = ''
 
