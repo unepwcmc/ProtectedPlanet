@@ -3,6 +3,7 @@
 //--------------------------------------------------
 &--thematic {
   @include hero-medium;
+  @include hero-padding;
 
   .hero__container { @include hero-container; }
 

@@ -1,7 +1,9 @@
-import { polyfill } from 'es6-object-assign'
+// import { polyfill } from 'es6-object-assign'
+import 'babel-polyfill'
 import { findPolyfill } from './utilities/polyfill-find'
 findPolyfill()
-polyfill()
+// polyfill()
+
 
 // dependencies
 import Vue from 'vue/dist/vue.esm'
@@ -29,9 +31,14 @@ import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
-import Flickity from 'vue-flickity';
 import Download from './components/download/Download'
+import Flickity from 'vue-flickity'
+import ListingPage from './components/listing/ListingPage.vue'
+import ListingPageCardNews from './components/listing/ListingPageCardNews.vue'
+import ListingPageCardResources from './components/listing/ListingPageCardResources.vue'
+import FilteredTable from './components/pame/FilteredTable'
 import NavBurger from './components/nav/NavBurger'
+import PameModal from './components/pame/PameModal'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
@@ -52,6 +59,8 @@ import VMapHeader from './components/map/VMapHeader'
 import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
+
+export const eventHub = new Vue()
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
@@ -86,8 +95,13 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowTarget,
         ChartSunburst,
         Download,
+	      FilteredTable,
         Flickity,
+        ListingPage,
+        ListingPageCardNews,
+        ListingPageCardResources,
         NavBurger,
+        PameModal,
         SearchAreas,
         SearchAreasHome,
         SearchSite,

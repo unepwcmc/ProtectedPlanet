@@ -47,6 +47,7 @@ class Search::Matcher
         )
       },
       { type: 'nested', path: 'categories', fields: ['categories.label'] },
+      { type: 'nested', path: 'topics', fields: ['topics.label'] },
       { type: 'nested', path: 'ancestors', fields: ['ancestors.label'] }
     ]
   }

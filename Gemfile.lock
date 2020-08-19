@@ -1128,6 +1128,8 @@ GEM
       thor (~> 0.19)
     net-scp (2.0.0)
       net-ssh (>= 2.6.5, < 6.0.0)
+    net-sftp (3.0.0)
+      net-ssh (>= 5.0.0, < 7.0.0)
     net-ssh (5.2.0)
     nio4r (2.5.2)
     nokogiri (1.10.7)
@@ -1341,6 +1343,7 @@ DEPENDENCIES
   minitest (~> 5.10, != 5.10.2)
   mocha (~> 1.0.0)
   neat
+  net-sftp
   nokogiri (~> 1.10.4)
   pg (~> 0.21)
   phantompdf (~> 1.2.2)

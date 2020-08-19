@@ -1,4 +1,6 @@
 class ThematicalAreasPresenter
+  include ActionView::Helpers::NumberHelper
+
   def initialize(cms_site)
     @cms_site = cms_site
   end
@@ -41,7 +43,7 @@ class ThematicalAreasPresenter
     when theme(:marine)
       pas.where(marine: true)
     when theme(:green_list)
-      pas.where(is_green_list: true)
+      pas.where.not(green_list_status_id: nil)
     when theme(:wdpa)
       pas.wdpas
     when theme(:oecm)
@@ -52,7 +54,7 @@ class ThematicalAreasPresenter
       -1 #Not applicable - hide ribbon
     end
 
-    pas.respond_to?(:count) ? pas.count : pas
+    pas.respond_to?(:count) ? number_with_delimiter(pas.count) : pas
   end
 
   def theme(key)

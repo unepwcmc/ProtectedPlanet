@@ -232,6 +232,28 @@
           }
         }
       },
+      "topics": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "keyword"
+          }
+        }
+      },
+      "page_types": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "keyword"
+          }
+        }
+      },
       "fragments_for_index": {
         "type": "nested",
         "properties": {

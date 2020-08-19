@@ -13,7 +13,7 @@ class SearchController < ApplicationController
     categories.map do |category|
       cms_page = cms_root_pages.find_by(slug: category)
       if cms_page
-        @categories << { id: cms_page.id.to_s, title: cms_page.label}
+        @categories << { id: cms_page.id.to_s, title: cms_page.label }
       else
         @categories << { id: category, title: category.capitalize }
       end
@@ -38,14 +38,14 @@ class SearchController < ApplicationController
 
   def autocomplete
     db_type = search_params[:type]
-    @results = Autocompletion.lookup(search_params[:search_term], db_type, search_index(db_type))
+    @results = Autocompletion.lookup(search_params[:search_term], db_type, autocomplete_search_index(db_type))
 
     render json: @results
   end
 
   private
 
-  def search_index db_type
+  def autocomplete_search_index db_type
     case db_type
       when 'country'
         Search::COUNTRY_INDEX
@@ -57,6 +57,6 @@ class SearchController < ApplicationController
   end
 
   def search_params
-    params.permit(:search_term, :type, :requested_page, :items_per_page, :filters)
+    params.permit(:search_term, :type, :requested_page, :items_per_page, :search_index, :filters)
   end
 end

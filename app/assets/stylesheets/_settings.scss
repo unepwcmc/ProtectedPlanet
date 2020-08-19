@@ -48,24 +48,18 @@ $purple: #7B1977;
 $purple-dark: #794B9D;
 
 $alert: $red;
+
 $primary: $green;
 $primary-dark: $green--darker;
 
 $global: $purple;
+$oecm: $orange;
 $marine: $blue;
 $terrestrial: $green-bright;
 
 $pin-marine: $marine;
-$pin-oecm: $orange;
+$pin-oecm: $oecm;
 $pin-terrestrial: $terrestrial;
-
-//used on marine insights page
-$blue--marine-1: #bfe5e9; 
-$blue--marine-2: #A1D8DE;
-$blue--marine-3: #90BDC4;
-$blue--marine-4: #729099;
-$blue--marine-5: #444955;
-$marine-accent-color: $orange--lighest;
 
 $theme-designation: [$chart-purple, $chart-aqua, $chart-blue];
 
@@ -127,6 +121,7 @@ $large: 1200px;
 $z-100: 100;
 $z-200: 200;
 $z-300: 300;
+$z-400: 400;
 
 //--------------------------------------------------
 // padding
@@ -165,6 +160,8 @@ $site-width-rem: rem-calc($site-width);
 // $site-width-medium-tablet: 80%;
 // $site-width-medium-laptop: 78%;
 $site-width-medium-desktop: rem-calc(750);
+
+$filters-menu-max-height: rem-calc(300);
 
 //--------------------------------------------------
 // tables

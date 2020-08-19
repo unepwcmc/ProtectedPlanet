@@ -1,7 +1,49 @@
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
+@mixin list-underline {
+  @include ul-unstyled;
+  padding-right: rem-calc(19);
 
+  .list {
+    &__li {
+      @include flex;
+      border-top: solid 1px $grey-light;
+      padding: rem-calc(14 0);
+
+      &:first-child { border-top: none; }
+    }
+
+    &__icon {
+      @include circle-icon;
+      background-color: $grey;
+      margin-right: rem-calc(24);
+    }
+
+    &__title {
+      font-weight: $bold;
+      margin-right: rem-calc(10);
+    } 
+
+    &__right {
+      margin-left: auto;
+
+      justify-content: flex-end;
+    }
+
+    &__a {
+      @include button-with-icon;
+      @include flex-no-shrink;
+      font-size: rem-calc(16);
+
+      &::after {
+        @include icon-circle-chevron-black;
+        height: rem-calc(21);
+        width: rem-calc(21);
+      }
+    }
+  }
+}
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
@@ -53,51 +95,16 @@
 // underline
 //--------------------------------------------------
   &--underline {
-    @include ul-unstyled;
+    @include list-underline;
+  }
+
+//--------------------------------------------------
+// underline with scrollbar
+//--------------------------------------------------
+  &--underline-scrollbar {
+    @include list-underline;
+    @include beautify-scrollbar;
     max-height: rem-calc(280);
     overflow-y: scroll;
-
-    @include beautify-scrollbar;
-    padding-right: rem-calc(19);
-
-
-    .list {
-      &__li {
-        @include flex;
-        border-top: solid 1px $grey-light;
-        padding: rem-calc(14 0);
-
-        &:first-child { border-top: none; }
-      }
-
-        &__icon {
-          @include circle-icon;
-          background-color: $grey;
-          margin-right: rem-calc(24);
-        }
-
-        &__title {
-          font-weight: $bold;
-          margin-right: rem-calc(24);
-        } 
-
-        &__right {
-          margin-left: auto;
-
-          justify-content: flex-end;
-        }
-
-        &__a {
-          @include button-with-icon;
-          @include flex-no-shrink;
-          font-size: rem-calc(16);
-
-          &::after {
-            @include icon-circle-chevron-black;
-            height: rem-calc(21);
-            width: rem-calc(21);
-          }
-        }
-    }
   }
 }

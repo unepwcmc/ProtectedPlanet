@@ -1,3 +1,4 @@
+# coding: utf-8
 module ApplicationHelper
   include BemHelper
 
@@ -174,12 +175,12 @@ module ApplicationHelper
       url = file.present? || link.present? ? nil : get_cms_url(page.full_path)
 
       c.merge(
-        published_date: cms_fragment_render(:published_date, page),
+        date: DateTime.parse(cms_fragment_render(:published_date, page)).strftime('%d %B %y'),
         url: url,
         summary: cms_fragment_render(:summary, page),
-        file: file,
-        link: link,
-        link_title: cms_fragment_render(:link_title, page)
+        fileUrl: file,
+        linkUrl: link,
+        linktTile: cms_fragment_render(:link_title, page)
       )
     end
 

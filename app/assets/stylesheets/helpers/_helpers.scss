@@ -2,6 +2,7 @@
 @import './background';
 @import './beautify-scrollbar';
 @import './border-and-shadows';
+@import './cms';
 @import './form-fields';
 @import './images';
 
@@ -28,7 +29,7 @@
   height: 100vh;
 }
 
-.flex-stack-mobile {
+@mixin flex-stack-mobile {
   display: flex;
   flex-wrap: wrap;
 

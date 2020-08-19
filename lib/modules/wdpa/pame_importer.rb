@@ -1,7 +1,10 @@
 require 'csv'
 
 module Wdpa::PameImporter
+
   PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2019-08-30.csv".freeze
+  # TODO Restore the following when on production (maybe also staging)
+  #PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data-2020-05-28.csv".freeze
 
   def self.import(csv_file=nil)
     puts "Deleting old PAME evaluations..."
@@ -68,11 +71,12 @@ module Wdpa::PameImporter
       end
       if protected_area.nil?
         hidden_evaluations << wdpa_id unless restricted
-        iso3s.split(",").each do |iso3|
-          country = Country.find_by(iso_3: iso3)
-          if country.present?
-            pame_evaluation.countries << country unless pame_evaluation.countries.include? country
-          end
+      end
+
+      iso3s.split(",").each do |iso3|
+        country = Country.find_by(iso_3: iso3)
+        if country.present?
+          pame_evaluation.countries << country unless pame_evaluation.countries.include? country
         end
       end
     end

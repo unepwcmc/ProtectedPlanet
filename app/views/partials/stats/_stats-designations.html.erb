@@ -1,5 +1,5 @@
-<div class="card--stats">
-  <h2><%= t('stats.designations.title') %></h2>
+<div class="card--stats-designations">
+  <h2 class="card__h2"><%= t('stats.designations.title') %></h2>
 
   <div>
     <chart-row-stacked 
@@ -19,7 +19,7 @@
         </div>
 
         <% if designation[:has_jurisdiction] %>
-          <ul class="list--underline">
+          <ul class="list--underline-scrollbar">
             <% designation[:jurisdictions].each do |jurisdiction| %>
               <li class="list__li flex flex-v-start">
                 <span><%= jurisdiction["designation_name"] %></span>
