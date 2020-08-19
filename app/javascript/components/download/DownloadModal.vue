@@ -3,7 +3,7 @@
     :class="['modal--download', { 'active' : isActive }]"
   >
     <div class="modal__topbar">
-      <span>{{ text.title }}</span>
+      <span>{{ textDownload.title }}</span>
       <span
         class="modal__minimise"
         @click="toggle"
@@ -12,20 +12,18 @@
     <div 
       :class="['modal__content', { 'minimised': isMinimised }]"
     >
-      <span class="modal__title">{{ text.citationTitle }}</span>
-      <p>{{ text.citationText }}</p>
+      <span class="modal__title">{{ textDownload.citationTitle }}</span>
+      <p>{{ textDownload.citationText }}</p>
 
       <ul class="modal__ul">
         <download-item 
-          v-for="download in activeDownloads"
+          v-for="(download, index) in activeDownloads"
           class="modal__li"
           :endpointCreate="endpointCreate"
           :endpointPoll="endpointPoll"
-          id="2"
-          :key="1"
+          :key="index"
           :params="download"
           :text="textStatus"
-          v-on:click:delete="deleteItem"
         />
       </ul>
     </div>
@@ -48,16 +46,7 @@ export default {
       required: true,
       type: String
     },
-    isActive: {
-      default: false,
-      type: Boolean
-    },
-    // paramsPoll: {
-    //   required: true,
-    //   type: Object //{ domain: String, token: String }
-    // },
-    newDownload: Object, //{ title: String, url: String, hasFailed: Boolean }
-    text: {
+    textDownload: {
       required: true,
       type: Object //{ citationText: String, citationTitle: String, title: String }
     },
@@ -74,30 +63,37 @@ export default {
     }
   },
 
+  computed: {
+    isActive: {
+      get () {
+        return this.$store.state.download.isModalActive
+      },
+      set (boolean) {
+        this.$store.dispatch('download/toggleDownloadModal', boolean)
+      }
+    }
+  },
+
   mounted () {
-    console.log('any download', this.activeDownloads.length)
-    if(this.activeDownloads.length > 0) { this.isActive = true }
+    console.log(this.activeDownloads.length)
+    if(this.activeDownloads.length > 0) { 
+      this.isActive = true
+    }
   },
 
   watch: {
-    // newDownload () {
-    //   console.log('new', this.activeDownloads)
-    //   this.activeDownloads.push(this.newDownload)
-    // }
+    activeDownloads () {
+      console.log('active downloads changed')
+      if(this.activeDownloads.length == 0) { 
+        this.$emit('deleted:all')
+        this.isMinimised = false
+      }
+    }
   },
 
   methods: {
     toggle () {
       this.isMinimised = !this.isMinimised
-    },
-
-    deleteItem (downloadId) {
-      this.activeDownloads = this.activeDownloads.filter(download => download.id != downloadId )
-      
-      if(this.activeDownloads.length == 0) { 
-        this.$emit('deleted:all')
-        this.isMinimised = false
-      }
     }
   }
 }

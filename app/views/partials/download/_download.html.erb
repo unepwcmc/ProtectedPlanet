@@ -4,10 +4,8 @@
   <% if local_assigns.has_key? :classes %>
     class="<%= classes %>"
   <% end %>
-
-  endpoint="/downloads"
-  endpoint-poll="/downloads/poll"
+  
   :options="<%= options %>"
-  :text="<%= download_text %>"
+  :text-commercial="<%= download_text[:commercial].to_json %>"
 >
 </download>

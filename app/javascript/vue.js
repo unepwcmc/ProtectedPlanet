@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const app = new Vue({
       el: '#v-app',
       store,
-
       components: {
         AmChartLine,
         Carousel,
@@ -124,7 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
         VMapFilters,
         VSelectSearchable,
         VTable
-      }
+      },
+      beforeCreate() { this.$store.dispatch('download/initialiseStore') },
     })
   }
 })

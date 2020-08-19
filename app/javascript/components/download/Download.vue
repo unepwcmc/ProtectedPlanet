@@ -16,49 +16,29 @@
 
     <download-commercial 
       :isActive="showCommercialModal"
-      :text="text.commercial"
+      :text="textCommercial"
       v-on:click:close-modal="closeCommercialModal"
       v-on:click:non-commercial="clickNonCommercial"
       />
-
-    <download-modal 
-      :endpointCreate="endpoint"
-      :endpointPoll="endpointPoll"
-      :isActive="showDownloadModal"
-      :paramsPoll="selectedDownloadOption"
-      :newDownload="newDownload"
-      :text="text.download"
-      :textStatus="text.status"
-      v-on:deleted:all="closeDownloadModal"
-    />
   </div>
 </template>
 <script>
 import axios from 'axios'
 import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import DownloadCommercial from './DownloadCommercial.vue'
-import DownloadModal from './DownloadModal.vue'
 import DownloadPopup from './DownloadPopup.vue'
 
 export default {
   name: 'download',
 
-  components: { DownloadCommercial, DownloadModal, DownloadPopup },
+  components: { DownloadCommercial, DownloadPopup },
 
   mixins: [ mixinAxiosHelpers ],
 
   props: {
     buttonText: String,
-    endpoint: {
-      required: true,
-      type: String
-    },
-    endpointPoll: {
-      required: true,
-      type: String
-    },
     options: Array, //[ { title: String, commercialAvailable: Boolean, params: Object } ]
-    text: {
+    textCommercial: {
       required: true,
       type: Object //See download_text in downloads_helper.rb
     }
@@ -66,40 +46,15 @@ export default {
 
   data () {
     return {
-      newDownload: {},
       selectedDownloadOption: {},
       showCommercialModal: false,
-      showDownloadModal: false,
       showPopup: false
     }
   },
 
   methods: {
-    addDownload (download) {
-      console.log(download)
-      this.downloads.push(download)
-      console.log(this.downloads)
-    },
-
-    ajaxRequest () {
-      let data = this.selectedDownloadOption.params
-      this.$store.dispatch('download/addNewDownloadItem', data)
-
-      // this.axiosSetHeaders()
-
-      // axios.post(this.endpoint, data)
-      // .then(response => {
-      //   console.log('success', response)
-      //   // this.newDownload = response.data
-      //   this.$store.dispatch('download/addNewDownloadItem', response.data)
-      // })
-      // .catch(error => {
-      //   console.log(error)
-      //   this.downloadRequestFailed.title = `${data.token} .${data.format}`
-      //   this.$store.dispatch('download/addNewDownloadItem', response.data)
-      //   // this.newDownload = this.downloadRequestFailed
-      // })
-
+    addNewDownloadItem () {
+      this.$store.dispatch('download/addNewDownloadItem', this.selectedDownloadOption.params)
       this.selectedDownloadOption = {}
     },
 
@@ -110,15 +65,15 @@ export default {
       if(option.commercialAvailable) {
         this.showCommercialModal = true
       } else {
-        this.showDownloadModal = true
-        this.ajaxRequest()
+        this.toggleDownloadModal(true)
+        this.addNewDownloadItem()
       }
     },
 
     clickNonCommercial () {
       this.closeCommercialModal()
-      this.showDownloadModal = true
-      this.ajaxRequest()
+      this.toggleDownloadModal(true)
+      this.addNewDownloadItem()
     },
 
     closeCommercialModal () {
@@ -126,7 +81,11 @@ export default {
     },
 
     closeDownloadModal () {
-      this.showDownloadModal = false
+      this.toggleDownloadModal(false)
+    },
+
+    toggleDownloadModal (boolean) {
+      this.$store.dispatch('download/toggleDownloadModal', boolean)
     },
 
     toggleDownloadPane () {

@@ -73,6 +73,6 @@ module DownloadsHelper
         failed: I18n.t('download.status.failed'),
         generating: I18n.t('download.status.generating')
       }
-    }.to_json
+    }
   end
 end
