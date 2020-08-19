@@ -46,7 +46,7 @@ module DownloadsHelper
         {
           title: 'PDF',
           commercialAvailable: false,
-          params: { domain: domain, format: 'pdf', token: token }
+          params: { domain: 'pdf', format: 'pdf', token: token }
         },
       )
     end
