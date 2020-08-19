@@ -42,10 +42,6 @@ export default {
       required: true,
       type: String
     },
-    // hasFailed: {
-    //   required: true,
-    //   type: Boolean
-    // },
     params: {
       required: true,
       type: Object //{ domain: String, token: String }
@@ -54,10 +50,6 @@ export default {
       required: true,
       type: Object //{ download: String, failed: String, generating: String }
     },
-    // title: String,
-    // url: {
-    //   type: String
-    // }
   },
 
   data () {
@@ -81,12 +73,8 @@ export default {
   },
 
   mounted () {
-    // this.poll.hasFailed = this.hasFailed
-    // this.poll.url = this.url
-
     this.axiosSetHeaders()
     this.ajaxRequestDownload()
-    // this.startPolling()
   },
 
   methods: {
@@ -95,9 +83,7 @@ export default {
       axios.post(this.endpointCreate, this.params)
       .then(response => {
         console.log('success', response)
-        // this.newDownload = response.data
-        // this.$store.dispatch('download/addNewDownloadItem', response.data)
-
+        
         this.hasFailed = response.data.hasFailed
         this.id = response.data.id
         this.title = response.data.title
@@ -109,9 +95,6 @@ export default {
         // this.id = toString(Math.random)
         this.title = `${this.params.token} .${this.params.format}`
         this.url = ''
-
-        // this.$store.dispatch('download/addNewDownloadItem', response.data)
-        // this.newDownload = this.downloadRequestFailed
       })
 
       this.startPolling()
@@ -126,7 +109,9 @@ export default {
         return false
       }
 
-      axios.get(this.endpointPoll, this.params)
+      axios.get(this.endpointPoll, {
+          params: this.params
+        })
         .then(response => {
           console.log('response', response)
           this.hasFailed = response.data.hasFailed
