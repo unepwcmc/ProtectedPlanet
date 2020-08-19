@@ -25,7 +25,11 @@ module Download
 
   def self.has_failed? domain, identifier, format
     status = generation_info(domain, identifier, format)['status']
-    !%w(generating ready).include?(status)
+    status.present? && !%w(generating ready).include?(status)
+  end
+
+  def self.is_ready? domain, identifier, format
+    generation_info(domain, identifier, format)['status'] == 'ready'
   end
 
   TMP_PATH = File.join(Rails.root, 'tmp')

@@ -11,10 +11,11 @@ module Download::Poller
     format = params['format']
 
     filename = Download::Utils.filename(domain, token, format)
+    is_ready = Download.is_ready?(domain, token, format)
     {
       'id' => computed_id(token, format),
       'title' => filename,
-      'url' => Download.link_to(filename, format),
+      'url' => is_ready ? Download.link_to(filename, format) : '',
       'hasFailed' => Download.has_failed?(domain, token, format)
     }
   end
