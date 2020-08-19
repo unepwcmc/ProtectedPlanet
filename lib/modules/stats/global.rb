@@ -6,19 +6,7 @@ class Stats::Global
   end
 
   def self.percentage_pa_cover
-    # Method doesn't work as global is not included in the list of regional statistics
-    # Todo - link up global with its regional statistic if it has one
-    # RegionalStatistic.joins(:region)
-    #                  .where('regions.iso' => 'GLOBAL')
-    #                  .first[:percentage_pa_cover]
-    # Temporary method below
-    total_pa_area = self.calculate_stats_for(RegionalStatistic, 'pa_area')
-    ((total_pa_area / self.global_area).to_f * 100).round(2)
-
-    # Another method - gives a different figure
-    # total_pa_land_cover =  (CountryStatistic.global_percentage_pa_land_cover / 100) * CountryStatistic.global_land_area
-    # total_pa_marine_cover =  (CountryStatistic.global_percentage_pa_marine_cover / 100) * CountryStatistic.global_marine_area
-    # (((total_pa_land_cover + total_pa_marine_cover )/ Stats::Global.global_area ).to_f * 100).round(2)
+    (((self.pa_land_cover + self.pa_marine_cover )/ Stats::Global.global_area ).to_f * 100).round(2)
   end
 
   def self.pas_with_iucn_category
@@ -61,6 +49,14 @@ class Stats::Global
 
   def self.percentage_land_cover
     CountryStatistic.global_percentage_pa_land_cover
+  end
+
+  def self.pa_land_cover 
+    (self.percentage_land_cover / 100) * CountryStatistic.global_land_area
+  end
+
+  def self.pa_marine_cover
+    (self.percentage_marine_cover / 100) * CountryStatistic.global_marine_area
   end
 
   def self.percentage_marine_cover
