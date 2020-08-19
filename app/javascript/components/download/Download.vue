@@ -22,6 +22,7 @@
       />
 
     <download-modal 
+      :endpointCreate="endpoint"
       :endpointPoll="endpointPoll"
       :isActive="showDownloadModal"
       :paramsPoll="selectedDownloadOption"
@@ -65,11 +66,6 @@ export default {
 
   data () {
     return {
-      downloadRequestFailed: {
-        id: '0',
-        url: '',
-        hasFailed: true
-      },
       newDownload: {},
       selectedDownloadOption: {},
       showCommercialModal: false,
@@ -87,19 +83,22 @@ export default {
 
     ajaxRequest () {
       let data = this.selectedDownloadOption.params
-      
-      this.axiosSetHeaders()
+      this.$store.dispatch('download/addNewDownloadItem', data)
 
-      axios.post(this.endpoint, data)
-      .then(response => {
-        console.log('success', response)
-        this.newDownload = response.data
-      })
-      .catch(error => {
-        console.log(error)
-        this.downloadRequestFailed.title = `${data.token} .${data.domain}`
-        this.newDownload = this.downloadRequestFailed
-      })
+      // this.axiosSetHeaders()
+
+      // axios.post(this.endpoint, data)
+      // .then(response => {
+      //   console.log('success', response)
+      //   // this.newDownload = response.data
+      //   this.$store.dispatch('download/addNewDownloadItem', response.data)
+      // })
+      // .catch(error => {
+      //   console.log(error)
+      //   this.downloadRequestFailed.title = `${data.token} .${data.format}`
+      //   this.$store.dispatch('download/addNewDownloadItem', response.data)
+      //   // this.newDownload = this.downloadRequestFailed
+      // })
 
       this.selectedDownloadOption = {}
     },
@@ -127,7 +126,6 @@ export default {
     },
 
     closeDownloadModal () {
-      console.log('close')
       this.showDownloadModal = false
     },
 

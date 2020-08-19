@@ -19,14 +19,12 @@
         <download-item 
           v-for="download in activeDownloads"
           class="modal__li"
-          :endpoint="endpointPoll"
-          :id="download.id"
-          :has-failed="download.hasFailed"
-          :key="download._uid"
-          :paramsPoll="paramsPoll"
+          :endpointCreate="endpointCreate"
+          :endpointPoll="endpointPoll"
+          id="2"
+          :key="1"
+          :params="download"
           :text="textStatus"
-          :title="download.title"
-          :url="download.url"
           v-on:click:delete="deleteItem"
         />
       </ul>
@@ -42,6 +40,10 @@ export default {
   components: { DownloadItem },
 
   props: {
+    endpointCreate: {
+      required: true,
+      type: String
+    },
     endpointPoll: {
       required: true,
       type: String
@@ -50,10 +52,10 @@ export default {
       default: false,
       type: Boolean
     },
-    paramsPoll: {
-      required: true,
-      type: Object //{ domain: String, token: String }
-    },
+    // paramsPoll: {
+    //   required: true,
+    //   type: Object //{ domain: String, token: String }
+    // },
     newDownload: Object, //{ title: String, url: String, hasFailed: Boolean }
     text: {
       required: true,
@@ -68,15 +70,20 @@ export default {
   data () {
     return {
       isMinimised: false,
-      activeDownloads: [],
+      activeDownloads: this.$store.state.download.downloadItems,
     }
   },
 
+  mounted () {
+    console.log('any download', this.activeDownloads.length)
+    if(this.activeDownloads.length > 0) { this.isActive = true }
+  },
+
   watch: {
-    newDownload () {
-      console.log('new', this.activeDownloads)
-      this.activeDownloads.push(this.newDownload)
-    }
+    // newDownload () {
+    //   console.log('new', this.activeDownloads)
+    //   this.activeDownloads.push(this.newDownload)
+    // }
   },
 
   methods: {

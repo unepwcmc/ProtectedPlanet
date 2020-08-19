@@ -4,7 +4,7 @@
 
     <span 
       class="modal__li-failed"
-      v-show="poll.hasFailed"
+      v-show="hasFailed"
     >{{ text.failed }}</span>
 
     <span 
@@ -14,7 +14,7 @@
 
     <a 
       class="modal__li-download"
-      :href="poll.url"  
+      :href="url"  
       v-show="isReady"
     >{{ text.download }}</a>
 
@@ -34,7 +34,11 @@ export default {
   mixins: [ mixinAxiosHelpers ],
 
   props: {
-    endpoint: {
+    endpointCreate: {
+      required: true,
+      type: String
+    },
+    endpointPoll: {
       required: true,
       type: String
     },
@@ -42,11 +46,11 @@ export default {
       required: true,
       type: String
     },
-    hasFailed: {
-      required: true,
-      type: Boolean
-    },
-    paramsPoll: {
+    // hasFailed: {
+    //   required: true,
+    //   type: Boolean
+    // },
+    params: {
       required: true,
       type: Object //{ domain: String, token: String }
     },
@@ -54,55 +58,81 @@ export default {
       required: true,
       type: Object //{ download: String, failed: String, generating: String }
     },
-    title: String,
-    url: {
-      type: String
-    }
+    // title: String,
+    // url: {
+    //   type: String
+    // }
   },
 
   data () {
     return {
+      hasFailed: false,
       interval: null,
-      poll: {
-        hasFailed: false,
-        url: ''
-      }
+      title: '',
+      url: ''
     }
   },
 
   computed: {
     isGenerating () {
-      return !this.poll.hasFailed && this.url == ''
+      return !this.hasFailed && this.url == ''
     },
     
     isReady () {
-      return this.poll.url != ''
+      return this.url != ''
     }
   },
 
   mounted () {
-    this.poll.hasFailed = this.hasFailed
-    this.poll.url = this.url
+    // this.poll.hasFailed = this.hasFailed
+    // this.poll.url = this.url
 
     this.axiosSetHeaders()
-    this.startPolling()
+    this.ajaxRequestDownload()
+    // this.startPolling()
   },
 
   methods: {
+    ajaxRequestDownload () {
+      console.log(this.params)
+      axios.post(this.endpointCreate, this.params)
+      .then(response => {
+        console.log('success', response)
+        // this.newDownload = response.data
+        // this.$store.dispatch('download/addNewDownloadItem', response.data)
+
+        this.hasFailed = response.data.hasFailed
+        this.title = response.data.title
+        this.url = response.data.url
+      })
+      .catch(error => {
+        console.log(error)
+        this.hasFailed = true
+        this.title = `${this.params.token} .${this.params.format}`
+        this.url = ''
+
+        // this.$store.dispatch('download/addNewDownloadItem', response.data)
+        // this.newDownload = this.downloadRequestFailed
+      })
+
+      this.startPolling()
+    },
+
     ajaxRequestDownloadStatus () {
       console.log('isready', this.isReady)
-      console.log('failed', this.poll.hasFailed)
+      console.log('failed', this.hasFailed)
 
-      if(this.isReady || this.poll.hasFailed) { 
+      if(this.isReady || this.hasFailed) { 
         this.stopPolling() 
         return false
       }
 
-      axios.get(this.endpoint, this.paramsPoll)
+      axios.get(this.endpointPoll, this.params)
         .then(response => {
           console.log('response', response)
-          this.poll.hasFailed = response.data.hasFailed
-          this.poll.url = response.data.url
+          this.hasFailed = response.data.hasFailed
+          this.title = response.data.title
+          this.url = response.data.url
         })
         .catch(error => {
           console.log('error', error)
@@ -114,7 +144,8 @@ export default {
     }, 
 
     startPolling () {
-      this.interval = window.setInterval(this.ajaxRequestDownloadStatus, 1000)
+      console.log('here')
+      this.interval = window.setInterval(this.ajaxRequestDownloadStatus, 10000)
     },
 
     stopPolling () {
