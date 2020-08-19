@@ -11,7 +11,7 @@ class CountryController < ApplicationController
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
     @iucn_categories = @country.protected_areas_per_iucn_category
     @governance_types = @country.protected_areas_per_governance
-    @coverage_growth = @country.coverage_growth #[{year: , count: , area: }]
+    @coverage_growth = @country.coverage_growth #[[<year> , <count>], ...]
 
     @country_designations = @country_presenter.designations
 
