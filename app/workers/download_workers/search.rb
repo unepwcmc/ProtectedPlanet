@@ -20,11 +20,6 @@ class DownloadWorkers::Search < DownloadWorkers::Base
 
   def generate_download
     Download.generate(@format, filename(ids_digest, @format), {wdpa_ids: protected_area_ids})
-    send_completion_email unless email.blank?
-  end
-
-  def send_completion_email
-    DownloadCompleteMailer.create(filename(ids_digest, @format), email).deliver
   end
 
   def ids_digest
@@ -33,10 +28,6 @@ class DownloadWorkers::Search < DownloadWorkers::Base
     return "#{@search_term}_#{sha}".gsub(' ', '_') if @filters_values.empty?
     filter = @filters_values.map { |f| f[0..9] }.join(',')
     "#{@search_term[0..11]}_#{filter}_#{sha}".gsub(' ', '_')
-  end
-
-  def email
-    Download::Utils.properties(key(@token))['email']
   end
 
   def protected_area_ids

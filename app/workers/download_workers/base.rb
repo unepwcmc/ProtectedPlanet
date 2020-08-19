@@ -31,12 +31,6 @@ class DownloadWorkers::Base
     $redis.set(key, yield)
   end
 
-  def links
-    ['csv', 'shp', 'gdb', 'pdf'].each_with_object({}) do |type, hash|
-      hash[type] = Download.link_to filename, type
-    end.to_json
-  end
-
   def self.keep_last_arg args
     self.instance_method(:perform).arity.abs == args.size
   end

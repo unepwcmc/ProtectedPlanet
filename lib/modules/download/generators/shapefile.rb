@@ -1,5 +1,5 @@
 class Download::Generators::Shapefile < Download::Generators::Base
-  TYPE = 'shapefile'
+  TYPE = 'shapefile'.freeze
   SHAPEFILE_PARTS = ['shp', 'shx',  'dbf', 'prj', 'cpg']
 
   QUERY_CONDITIONS = {
@@ -29,6 +29,9 @@ class Download::Generators::Shapefile < Download::Generators::Base
         shapefile_paths |= export_component name, props
       end
 
+      export_sources
+
+      system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
       system("zip -j #{zip_path} #{shapefile_paths.join(' ')}") and system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
     end
   rescue Ogr::Postgres::ExportError

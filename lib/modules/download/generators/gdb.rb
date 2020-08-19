@@ -26,6 +26,9 @@ class Download::Generators::Gdb < Download::Generators::Base
         gdb_path = export_component name, props
       end
 
+      export_sources
+
+      system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
       system("zip -j #{zip_path} #{gdb_path}") and system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
     end
   rescue Ogr::Postgres::ExportError
