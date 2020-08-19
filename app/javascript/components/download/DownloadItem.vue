@@ -98,7 +98,7 @@ export default {
         return false
       }
 
-      axios.get(this.endpointPoll, this.paramsPoll)
+      axios.get(this.endpoint, this.paramsPoll)
         .then(response => {
           console.log('response', response)
           this.poll.hasFailed = response.data.hasFailed
