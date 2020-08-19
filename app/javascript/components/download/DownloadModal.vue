@@ -56,14 +56,11 @@ export default {
     }
   },
 
-  data () {
-    return {
-      isMinimised: false,
-      activeDownloads: this.$store.state.download.downloadItems,
-    }
-  },
-
   computed: {
+    activeDownloads () {
+      return this.$store.state.download.downloadItems
+    },
+
     isActive: {
       get () {
         return this.$store.state.download.isModalActive
@@ -71,24 +68,30 @@ export default {
       set (boolean) {
         this.$store.dispatch('download/toggleDownloadModal', boolean)
       }
-    }
-  },
+    },
 
-  mounted () {
-    console.log(this.activeDownloads.length)
-    if(this.activeDownloads.length > 0) { 
-      this.isActive = true
+    isMinimised: {
+      get () {
+        return this.$store.state.download.isModalMinimised
+      },
+      set (boolean) {
+        this.$store.dispatch('download/minimiseDownloadModal', boolean)
+      }
     }
   },
 
   watch: {
     activeDownloads () {
-      console.log('active downloads changed')
       if(this.activeDownloads.length == 0) { 
         this.$emit('deleted:all')
+        this.isActive = true
         this.isMinimised = false
       }
     }
+  },
+
+  mounted () {
+    if(this.activeDownloads.length > 0) { this.isActive = true }
   },
 
   methods: {

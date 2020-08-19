@@ -73,6 +73,7 @@ export default {
   },
 
   mounted () {
+    this.params.id = Math.round(Math.random(0,1)*100000)
     this.axiosSetHeaders()
     this.ajaxRequestDownload()
   },
@@ -89,7 +90,6 @@ export default {
       .catch(error => {
         console.log(error)
         this.hasFailed = true
-        // this.id = toString(Math.random)
         this.title = `${this.params.token} .${this.params.format}`
         this.url = ''
       })

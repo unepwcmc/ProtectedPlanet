@@ -3,7 +3,8 @@ export const storeDownload = {
 
   state: {
     downloadItems: [],
-    isModalActive: false
+    isModalActive: false,
+    isModalMinimised: false
   },
 
   actions: {
@@ -18,10 +19,17 @@ export const storeDownload = {
     },
 
     initialiseStore ({ commit }) {
-      console.log('initialise', localStorage.getItem('downloadItems'))
       if (localStorage.hasOwnProperty('downloadItems')) {
         commit('initialiseDownloadItems', JSON.parse(localStorage.getItem('downloadItems')))
       }
+
+      if (localStorage.hasOwnProperty('isModalMinimised')) {
+        commit('initialiseModal', JSON.parse(localStorage.getItem('isModalMinimised')))
+      }
+    },
+
+    minimiseDownloadModal ({ commit }, boolean) {
+      boolean ? commit('minimiseDownloadModal') : commit('maximiseDownloadModal')
     },
 
     toggleDownloadModal ({ commit }, boolean) {
@@ -35,7 +43,7 @@ export const storeDownload = {
     },
 
     deleteDownloaditem (state, item) {
-      state.downloadItems = state.downloadItems.filter(download => download.id != item.id )
+      state.downloadItems = state.downloadItems.filter(download => download.id != item.id)
     },
 
     hideDownloadModal (state) {
@@ -44,6 +52,18 @@ export const storeDownload = {
 
     initialiseDownloadItems (state, downloadItems) {
       state.downloadItems = downloadItems
+    },
+
+    initialiseModal (state, isModalMinimised) {
+      state.isModalMinimised = isModalMinimised
+    },
+
+    maximiseDownloadModal (state) {
+      state.isModalMinimised = false
+    },
+
+    minimiseDownloadModal (state) {
+      state.isModalMinimised = true
     },
 
     showDownloadModal (state) {
