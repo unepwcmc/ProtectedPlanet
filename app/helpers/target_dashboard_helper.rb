@@ -1,7 +1,7 @@
 module TargetDashboardHelper
-  def getTooltipText(id)
+  def global_tooltip_text(id)
     tooltip = t("thematic_area.target_11_dashboard.tooltips").select { |_tooltip| _tooltip[:id] == id.to_s }.first
-    tooltip ? t("thematic_area.target_11_dashboard.#{id}_text", geo_type: 'global') : ''
+    tooltip ? t("thematic_area.target_11_dashboard.#{id}_text", geo_type: 'the world\'s') : ''
   end
 
   def region_and_country_tooltips
