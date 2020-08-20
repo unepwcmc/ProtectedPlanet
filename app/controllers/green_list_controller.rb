@@ -9,35 +9,13 @@ class GreenListController < ApplicationController
   # after_action :enable_caching
 
   def index
-    # TODO - needs to be reworked by CLS as they are unsure about what the stacked row chart actually represents
+    # TODO - statistics are not accurate
     stats = green_list_statistics
     @pas_km = stats['green_list_area']
     @pas_percent = stats['green_list_perc']
     @pas_total = stats['green_list_count']
 
-    @protectedAreaGrowth = [
-      {
-        id: "Global",
-        datapoints: [
-          { x: 2000, y: 10 },
-          { x: 2001, y: 20 }
-        ]
-      },
-      {
-        id: "National",
-        datapoints: [
-          { x: 2000, y: 10 },
-          { x: 2001, y: 37 }
-        ]
-      },
-      {
-        id: "ABNJ",
-        datapoints: [
-          { x: 2000, y: 7 },
-          { x: 2001, y: 17 }
-        ]
-      }
-    ].to_json ##TODO See marine page for example - data needed from CLS
+    @protectedAreaGrowth = ProtectedArea.greenlist_coverage_growth.to_json 
 
     # TODO - This may need to be reworked by CLS
     @total_area_percent = Stats::Global.percentage_pa_cover.to_f - @pas_percent.to_f
