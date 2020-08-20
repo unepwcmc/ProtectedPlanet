@@ -142,12 +142,10 @@ class Country < ApplicationRecord
 
   def coverage_growth
     _year = 'EXTRACT(year from legal_status_updated_at)'
-    _area = 'SUM(reported_area + reported_marine_area) AS area'
     ActiveRecord::Base.connection.execute(
       <<-SQL
-        SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count,
-          SUM(area) OVER (ORDER BY date_part::INT) AS area
-        FROM (#{protected_areas_inner_join(_year, _area)}) t
+        SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count
+        FROM (#{protected_areas_inner_join(_year)}) t
         ORDER BY year
       SQL
     )
