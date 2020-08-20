@@ -76,20 +76,11 @@ export default {
 
     clickNonCommercial () {
       this.closeCommercialModal()
-      this.toggleDownloadModal(true)
       this.addNewDownloadItem()
     },
 
     closeCommercialModal () {
       this.showCommercialModal = false
-    },
-
-    closeDownloadModal () {
-      this.toggleDownloadModal(false)
-    },
-
-    toggleDownloadModal (boolean) {
-      this.$store.dispatch('download/toggleDownloadModal', boolean)
     },
 
     toggleDownloadPane () {

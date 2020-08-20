@@ -90,8 +90,9 @@ export default {
     }
   },
 
-  mounted () {
-    if(this.activeDownloads.length > 0) { this.isActive = true }
+  deactivated () {
+    alert('yo')
+    this.$store.dispatch('download/updateLocalStorage')
   },
 
   methods: {
