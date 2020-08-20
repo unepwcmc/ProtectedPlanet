@@ -13,7 +13,7 @@
       :class="['modal__content', { 'minimised': isMinimised }]"
     >
       <span class="modal__title">{{ textDownload.citationTitle }}</span>
-      <p>{{ textDownload.citationText }}</p>
+      <p v-html="textDownload.citationText" />
 
       <ul class="modal__ul">
         <download-item 
