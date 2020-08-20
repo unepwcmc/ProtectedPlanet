@@ -149,6 +149,9 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
         chart_hash(stat, stat_name, record, 'terrestrial'),
         chart_hash(stat, stat_name, record, 'marine')
       ]
+    # elsif stat[:column_name].include?('connected')
+    #   [ chart_hash(stat, stat_name, record, 'terrestrial') ]
+    #   byebug
     else
       [ chart_hash(stat, stat_name, record, 'global') ]
     end
