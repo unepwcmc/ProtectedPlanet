@@ -6,7 +6,7 @@ class Stats::Global
   end
 
   def self.percentage_pa_cover
-    (((self.pa_land_cover + self.pa_marine_cover )/ Stats::Global.global_area ).to_f * 100).round(2)
+    (((self.pa_land_cover + self.pa_marine_cover )/ self.global_area ).to_f * 100).round(2)
   end
 
   def self.pas_with_iucn_category
