@@ -1,5 +1,7 @@
 en:
   stats:
+    affiliations: 
+      title: Affiliations
     attributes: 
       title: Attributes
     citation: Citation Text

@@ -1,0 +1,20 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.cms-wysiwyg { 
+  font-size: rem-calc(14);
+
+  @include breakpoint($small) {
+    font-size: rem-calc(16);
+  }
+
+  h1,
+  h2 { @include h2-wysiwyg; }
+  h3 { @include h3-wysiwyg; }
+  h4 { @include h4-wysiwyg; }
+
+  a, 
+  p, 
+  ul,
+  li { font-size: inherit; }
+}
