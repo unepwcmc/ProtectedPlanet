@@ -44,7 +44,7 @@ export default {
 
       chart.data = this.data.datapoints
       chart.paddingTop = 70
-      chart.paddingRight = -70
+      chart.paddingRight = 40
       chart.paddingLeft = -40
 
       let yearAxis = chart.xAxes.push(new am4charts.DateAxis())
@@ -63,13 +63,13 @@ export default {
       axis.title.rotation = 0
       axis.title.valign = "top"
       axis.title.dy = -50
-      axis.title.dx = 60
+      axis.title.dx = 40
       axis.renderer.grid.template.disabled = true
       axis.renderer.line.strokeOpacity = 1
       axis.renderer.line.strokeWidth = 1
       axis.renderer.line.stroke = am4core.color("#c8c8c8")
 
-      var series = chart.series.push(new am4charts.LineSeries())
+      let series = chart.series.push(new am4charts.LineSeries())
       series.dataFields.valueY = "value"
       series.dataFields.dateX = "year"
       series.name = this.data.title
