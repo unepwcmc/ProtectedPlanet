@@ -69,7 +69,6 @@ export default {
       if(option.commercialAvailable) {
         this.showCommercialModal = true
       } else {
-        this.toggleDownloadModal(true)
         this.addNewDownloadItem()
       }
     },

@@ -89,12 +89,7 @@ export default {
       }
     }
   },
-
-  deactivated () {
-    alert('yo')
-    this.$store.dispatch('download/updateLocalStorage')
-  },
-
+  
   methods: {
     toggle () {
       this.isMinimised = !this.isMinimised

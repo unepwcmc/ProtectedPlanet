@@ -4,7 +4,6 @@ import { findPolyfill } from './utilities/polyfill-find'
 findPolyfill()
 // polyfill()
 
-
 // dependencies
 import Vue from 'vue/dist/vue.esm'
 import VueAnalytics from 'vue-analytics'
@@ -124,7 +123,17 @@ document.addEventListener('DOMContentLoaded', () => {
         VSelectSearchable,
         VTable
       },
-      beforeCreate() { this.$store.dispatch('download/initialiseStore') },
+      beforeCreate() { 
+        this.$store.dispatch('download/initialiseStore')
+      },
+      mounted () {
+        window.addEventListener('beforeunload', e => {
+          this.$store.dispatch('download/updateLocalStorage')
+
+          // the absence of a returnValue property on the event will guarantee the browser unload happens
+          delete e['returnValue'];
+        })
+      }
     })
   }
 })
