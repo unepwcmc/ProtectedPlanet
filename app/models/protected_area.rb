@@ -86,25 +86,29 @@ class ProtectedArea < ApplicationRecord
     green_list_status_id.present?
   end
 
-  def self.greenlist_coverage_growth
-    # Needs to be in this format: [[year: , count: , area: ]]
+  def self.greenlist_coverage_growth(start_year = nil)
+    # Is in this format: {year: area, ...}
+    # Takes an optional start year from which to start counting
     coverage_growth_hash = {}
+
     areas = ProtectedArea.green_list_areas.where.not(legal_status_updated_at: nil)
     
+    if start_year
+      date_from_year = "#{start_year}-01-01 00:00:00".to_time 
+      areas = areas.where("legal_status_updated_at >= ? ", date_from_year)
+    end
+  
     sorted_dates = areas.pluck(:legal_status_updated_at).sort { |a,b| b <=> a }.uniq
 
     sorted_dates.each do |date|
       year = date.to_date.year
       coverage_growth_hash[year] ||= []
       
-      area_count = areas.where("legal_status_updated_at <= ?", date).count
       area_sum = areas.where("legal_status_updated_at <= ?", date).reduce(0) { |sum, x| sum + x.gis_area }
-      coverage_growth_hash[year] << area_count
-      coverage_growth_hash[year] << area_sum
+      coverage_growth_hash[year] = area_sum
     end
 
-
-    coverage_growth_hash.to_a.map { |el| el.flatten }
+    coverage_growth_hash
   end
 
 

@@ -15,8 +15,13 @@ class GreenListController < ApplicationController
     @pas_percent = stats['green_list_perc']
     @pas_total = stats['green_list_count']
 
-    @protectedAreaGrowth = ProtectedArea.greenlist_coverage_growth.to_json 
-
+    # Starts from 2000
+    @protectedAreaGrowth = 
+    [
+      id: 'Global',
+      datapoints: ProtectedArea.greenlist_coverage_growth(2000).map { |el| { x: el[0], y: el[1] } }
+    ].to_json 
+    
     # TODO - This may need to be reworked by CLS
     @total_area_percent = Stats::Global.percentage_pa_cover.to_f - @pas_percent.to_f
 
