@@ -48,7 +48,10 @@
         <div class="card__chart-wrapper">
           <h2><%= t('stats.growth.title') %></h2>
 
-          <am-chart-line :data="<%= @coverage_growth.to_json %>">
+          <am-chart-line 
+            chart-background-colour="f4f4f4"
+            :data="<%= @coverage_growth.to_json %>"
+          >
           </am-chart-line>
           
           <p class="text--small"><%= t('stats.coverage-chart-smallprint') %></p>

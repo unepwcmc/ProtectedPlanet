@@ -22,6 +22,10 @@ export default {
   name: 'AmChartLine',
 
   props: {
+    chartBackgroundColour: {
+      default: '#ffffff',
+      type: String
+    },
     data: {
       required: true,
       type: Object // { title: String units: String, datapoints: { year: Number, value: Number }}
@@ -41,11 +45,11 @@ export default {
       am4core.options.autoSetClassName = true
       
       const chart = am4core.create("chartdiv", am4charts.XYChart)
-
       chart.data = this.data.datapoints
       chart.paddingTop = 70
       chart.paddingRight = 40
-      chart.paddingLeft = -40
+      chart.paddingLeft = -20
+      chart.background.fill = this.chartBackgroundColour
 
       let yearAxis = chart.xAxes.push(new am4charts.DateAxis())
       yearAxis.renderer.grid.template.disabled = true
