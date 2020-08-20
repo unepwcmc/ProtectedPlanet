@@ -1,5 +1,5 @@
 set :stage, :staging
-set :branch, "refresh"
+set :branch, "activestorage-s3"
 
 server 'new-web.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
