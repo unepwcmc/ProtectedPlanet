@@ -72,7 +72,7 @@ export default {
       axis.renderer.line.strokeOpacity = 1
       axis.renderer.line.strokeWidth = 1
       axis.renderer.line.stroke = am4core.color("#c8c8c8")
-
+    
       let series = chart.series.push(new am4charts.LineSeries())
       series.dataFields.valueY = "value"
       series.dataFields.dateX = "year"
