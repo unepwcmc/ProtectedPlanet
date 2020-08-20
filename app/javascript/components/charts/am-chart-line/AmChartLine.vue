@@ -40,7 +40,7 @@ export default {
 
       chart.data = this.data
       chart.paddingTop = 70
-      chart.paddingRight = -70
+      chart.paddingRight = 40
       chart.paddingLeft = -40
 
       let yearAxis = chart.xAxes.push(new am4charts.DateAxis())
@@ -65,18 +65,6 @@ export default {
       countAxis.renderer.line.strokeWidth = 1
       countAxis.renderer.line.stroke = am4core.color("#c8c8c8")
 
-      let areaAxis = chart.yAxes.push(new am4charts.ValueAxis())
-      areaAxis.renderer.opposite = true
-      areaAxis.title.text = "[bold]Area (km2)[/]"
-      areaAxis.title.rotation = 0
-      areaAxis.title.valign = "top"
-      areaAxis.title.dy = -50
-      areaAxis.title.dx = -78
-      areaAxis.renderer.grid.template.disabled = true
-      areaAxis.renderer.line.strokeOpacity = 1
-      areaAxis.renderer.line.strokeWidth = 1
-      areaAxis.renderer.line.stroke = am4core.color("#c8c8c8")
-
       var series = chart.series.push(new am4charts.LineSeries())
       series.dataFields.valueY = "count"
       series.dataFields.dateX = "year"
@@ -84,13 +72,6 @@ export default {
       series.stroke = am4core.color("#65C9B2")
       series.strokeWidth = 3
       series.yAxis = countAxis
-      
-      var series2 = chart.series.push(new am4charts.LineSeries())
-      series2.dataFields.valueY = "area"
-      series2.dataFields.dateX = "year"
-      series2.name = "Total Area in (km2)"
-      series2.strokeWidth = 3
-      series2.yAxis = areaAxis
 
       const legend = chart.legend = new am4charts.Legend()
       legend.maxWidth = undefined
