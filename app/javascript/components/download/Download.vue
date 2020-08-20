@@ -54,7 +54,11 @@ export default {
 
   methods: {
     addNewDownloadItem () {
-      this.$store.dispatch('download/addNewDownloadItem', this.selectedDownloadOption.params)
+      let item = this.selectedDownloadOption.params
+
+      item.id = Math.round(Math.random(0,1)*100000)
+      
+      this.$store.dispatch('download/addNewDownloadItem', item)
       this.selectedDownloadOption = {}
     },
 

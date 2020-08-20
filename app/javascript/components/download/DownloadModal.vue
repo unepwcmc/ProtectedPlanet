@@ -17,11 +17,11 @@
 
       <ul class="modal__ul">
         <download-item 
-          v-for="(download, index) in activeDownloads"
+          v-for="download in activeDownloads"
           class="modal__li"
           :endpointCreate="endpointCreate"
           :endpointPoll="endpointPoll"
-          :key="index"
+          :key="download.id"
           :params="download"
           :text="textStatus"
         />

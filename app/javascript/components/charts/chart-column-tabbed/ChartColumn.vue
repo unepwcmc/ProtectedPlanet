@@ -1,8 +1,9 @@
 <template>
   <div class="chart--column">
     <div 
-      v-for="column, index in columns"
+      v-for="(column, index) in columns"
       class="chart__column"
+      :key="index"
     >
       <div class="chart__bar">
         <span class="chart__coverage" :style="{ height: column.percentage + '%' }" />

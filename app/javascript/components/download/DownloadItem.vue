@@ -77,9 +77,12 @@ export default {
   },
 
   mounted () {
-    this.params.id = Math.round(Math.random(0,1)*100000)
     this.axiosSetHeaders()
     this.ajaxRequestDownload()
+  },
+
+  watch: {
+
   },
 
   methods: {

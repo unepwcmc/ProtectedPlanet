@@ -22,7 +22,7 @@ export const storeDownload = {
       if (localStorage.hasOwnProperty('downloadItems')) {
         commit('initialiseDownloadItems', JSON.parse(localStorage.getItem('downloadItems')))
       }
-
+      
       if (localStorage.hasOwnProperty('isModalMinimised')) {
         commit('initialiseModal', Boolean.valueOf((localStorage.getItem('isModalMinimised'))))
       }
@@ -40,7 +40,9 @@ export const storeDownload = {
 
   mutations: {
     addNewDownloadItem (state, item) {
-      state.downloadItems.push(item)
+      let downloadItems = _.cloneDeep(state.downloadItems)
+      downloadItems.push(item)
+      state.downloadItems = _.cloneDeep(downloadItems)
     },
 
     deleteDownloaditem (state, item) {
