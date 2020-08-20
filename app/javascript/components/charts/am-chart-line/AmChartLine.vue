@@ -22,9 +22,17 @@ export default {
   name: 'AmChartLine',
 
   props: {
+    chartBackgroundColour: {
+      default: '#ffffff',
+      type: String
+    },
     data: {
       required: true,
-      type: Array // [{ year: Number, count: Number, area: Number}]
+      type: Object // { title: String units: String, datapoints: { year: Number, value: Number }}
+    },
+    dots: {
+      default: false,
+      type: Boolean
     }
   },
 
@@ -37,11 +45,11 @@ export default {
       am4core.options.autoSetClassName = true
       
       const chart = am4core.create("chartdiv", am4charts.XYChart)
-
-      chart.data = this.data
+      chart.data = this.data.datapoints
       chart.paddingTop = 70
-      chart.paddingRight = -70
-      chart.paddingLeft = -40
+      chart.paddingRight = 40
+      chart.paddingLeft = -20
+      chart.background.fill = this.chartBackgroundColour
 
       let yearAxis = chart.xAxes.push(new am4charts.DateAxis())
       yearAxis.renderer.grid.template.disabled = true
@@ -54,43 +62,29 @@ export default {
       yearAxis.renderer.ticks.template.stroke = am4core.color("#c8c8c8");
       yearAxis.renderer.ticks.template.length = 6;
 
-      let countAxis = chart.yAxes.push(new am4charts.ValueAxis())
-      countAxis.title.text = "[bold]Number[/]"
-      countAxis.title.rotation = 0
-      countAxis.title.valign = "top"
-      countAxis.title.dy = -50
-      countAxis.title.dx = 60
-      countAxis.renderer.grid.template.disabled = true
-      countAxis.renderer.line.strokeOpacity = 1
-      countAxis.renderer.line.strokeWidth = 1
-      countAxis.renderer.line.stroke = am4core.color("#c8c8c8")
+      let axis = chart.yAxes.push(new am4charts.ValueAxis())
+      axis.title.text = `[bold]${this.data.units}[/]`
+      axis.title.rotation = 0
+      axis.title.valign = "top"
+      axis.title.dy = -50
+      axis.title.dx = 40
+      axis.renderer.grid.template.disabled = true
+      axis.renderer.line.strokeOpacity = 1
+      axis.renderer.line.strokeWidth = 1
+      axis.renderer.line.stroke = am4core.color("#c8c8c8")
 
-      let areaAxis = chart.yAxes.push(new am4charts.ValueAxis())
-      areaAxis.renderer.opposite = true
-      areaAxis.title.text = "[bold]Area (km2)[/]"
-      areaAxis.title.rotation = 0
-      areaAxis.title.valign = "top"
-      areaAxis.title.dy = -50
-      areaAxis.title.dx = -78
-      areaAxis.renderer.grid.template.disabled = true
-      areaAxis.renderer.line.strokeOpacity = 1
-      areaAxis.renderer.line.strokeWidth = 1
-      areaAxis.renderer.line.stroke = am4core.color("#c8c8c8")
-
-      var series = chart.series.push(new am4charts.LineSeries())
-      series.dataFields.valueY = "count"
+      let series = chart.series.push(new am4charts.LineSeries())
+      series.dataFields.valueY = "value"
       series.dataFields.dateX = "year"
-      series.name = "Number of Protected Areas"
+      series.name = this.data.title
       series.stroke = am4core.color("#65C9B2")
       series.strokeWidth = 3
-      series.yAxis = countAxis
-      
-      var series2 = chart.series.push(new am4charts.LineSeries())
-      series2.dataFields.valueY = "area"
-      series2.dataFields.dateX = "year"
-      series2.name = "Total Area in (km2)"
-      series2.strokeWidth = 3
-      series2.yAxis = areaAxis
+      series.yAxis = axis
+
+      if(this.dots) {
+        let bullet = series.bullets.push(new am4charts.CircleBullet());
+        bullet.fill = am4core.color("#65C9B2")
+      }
 
       const legend = chart.legend = new am4charts.Legend()
       legend.maxWidth = undefined

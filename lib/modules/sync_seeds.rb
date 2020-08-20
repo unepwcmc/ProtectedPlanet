@@ -59,10 +59,10 @@ class SyncSeeds
       # If there are any outdated files, will trigger download
       if is_newer
         if Dir.glob('*', base: @local_base).include?(local_item)
-          download_files(remote_path, local_path) 
+          download_files(remote_path, @local_base) 
           # Will be hit if local_item is a file or folder inside a directory
         elsif Dir.glob('**/*', base: base).include?(local_item)
-          download_files(remote_path, local_path)
+          download_files(remote_path, @local_base)
           downloaded = true  
         end              
       end

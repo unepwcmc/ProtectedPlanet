@@ -11,16 +11,16 @@
               :height="svg.height" 
               fill="#fff" />
 
-            <text v-for="y, index in getAxisLabels('y')" 
+            <text v-for="(y, index) in getAxisLabels('y')" 
               :key="`y-${index}`"
               :x="svg.paddingLeft - x.axisLabelMargin" 
               :y="y.coord "
               text-anchor="end"
               font-size="14"
               font-weight="300"
-              transform="translate(0, 5)">{{ y.labelText }}%</text>
+              transform="translate(0, 5)">{{ y.labelText }}{{ units }}</text>
 
-            <text v-for="x, index in getAxisLabels('x')"  
+            <text v-for="(x, index) in getAxisLabels('x')"  
               :key="`x-${index}`"      
               :x="x.coord" 
               :y="chartHeight + svg.paddingTop + y.axisLabelMargin" 
@@ -32,7 +32,7 @@
             <polyline :points="getAxisLine('y')" fill="none" stroke="black" />
 
             <chart-line-dataset 
-              v-for="line, index in lines"
+              v-for="(line, index) in lines"
               :key="`yline-${index}`"
               :datapoints="normaliseDataset(line.datapoints)"
               :path="getPath(line.datapoints)"
@@ -82,6 +82,10 @@
         type: Array, // [ id: String, datapoints: { x: Number, y: Number } ]
         required: true
       },
+      units: {
+        default: '%',
+        type: String
+      },
       showLegend: {
         default: true,
         type: Boolean
@@ -116,7 +120,7 @@
           paddingTop: 46,
           paddingRight: 44,
           paddingBottom: 60,
-          paddingLeft: 60,
+          paddingLeft: 120,
         },
         x: {
           axisLabelMargin: 10, 

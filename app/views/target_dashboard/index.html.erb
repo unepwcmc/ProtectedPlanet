@@ -15,7 +15,7 @@
             <div class="carousel-cell__content">
               <tooltip 
                 :on-hover="false" 
-                text="<%= getTooltipText(stat[:id]) %>"
+                text="<%= global_tooltip_text(stat[:id]) %>"
                 class="carousel-cell__tooltip"
               >
                 <i class="svg--info block">
@@ -49,7 +49,7 @@
         :select="<%= @search %>"
         :table-headings="<%= @country_and_regions_headings %>" 
         :table-data-src="<%= @endpoint.to_json %>"
-        :tooltip-array="<%= t("thematic_area.target_11_dashboard.tooltips").to_json %>"
+        :tooltip-array="<%= region_and_country_tooltips %>"
       > 
         <slot>
           <i class="svg--info-light block">
