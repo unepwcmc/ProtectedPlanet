@@ -185,22 +185,4 @@ Rails.configuration.to_prepare do
       end
     end
   end
-
-  # More Comfy patching, now patching the old Comfy CMS Helper
-  Comfy::CmsHelper.module_eval do 
-    def cms_fragment_content(identifier, page = @cms_page)
-      frag = page&.fragments&.detect { |f| f.identifier == identifier.to_s }
-      return "" unless frag
-      case frag.tag
-      when "date", "datetime", "date_not_null" # date_not_null is our own custom CMS tag
-        frag.datetime
-      when "checkbox"
-        frag.boolean
-      when "file", "files"
-        frag.attachments
-      else
-        frag.content
-      end
-    end
-  end
 end

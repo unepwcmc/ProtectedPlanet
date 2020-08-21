@@ -57,7 +57,7 @@ class Search::CmsSerializer < Search::BaseSerializer
   end
 
   def date(page)
-    _date = cms_fragment_content(:published_date, page)
+    _date = cms_fragment_content_datetime(:published_date, page)
     _date.present? ? _date.strftime('%d %B %y') : _date
   end
 
