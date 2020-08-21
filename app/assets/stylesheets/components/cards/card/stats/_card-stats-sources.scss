@@ -10,11 +10,13 @@
     &__h2 { @include card-stats-h2; }
 
     &__list {
+      @include flex-grow;
       width: 100%;
+      
       @include breakpoint($small) { width: 50%; }
       @include breakpoint($medium) { width: 66%; }
     }
-    
+
     &__number { @include card-stats-number; }
 
     &__stat-box {

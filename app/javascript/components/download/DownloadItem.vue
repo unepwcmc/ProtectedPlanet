@@ -128,7 +128,7 @@ export default {
     }, 
 
     startPolling () {
-      this.interval = window.setInterval(this.ajaxRequestDownloadStatus, 10000)
+      this.interval = window.setInterval(this.ajaxRequestDownloadStatus, 15000)
     },
 
     stopPolling () {

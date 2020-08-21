@@ -1,17 +1,23 @@
 <div class="card--stats-sources sm-sources">
-  <h2 class="card__h2"><%= t('stats.sources.title') %></h2>
+
+  <% unless local_assigns.has_key? :small %>
+    <h2 class="card__h2"><%= t('stats.sources.title') %></h2>
+  <% end %>
   
   <div class="card__content">
-    <div class="card__stat-box">
-      <span class="card__subtitle"><%= t('stats.sources.total') %></span>  
-      
-      <counter 
-        class="card__number" 
-        :total="<%= sources.count %>"
-        trigger="sm-sources" 
-        :decimal="0"
-      ></counter>
-    </div>
+
+    <% unless local_assigns.has_key? :small %>
+      <div class="card__stat-box">
+        <span class="card__subtitle"><%= t('stats.sources.total') %></span>  
+        
+        <counter 
+          class="card__number" 
+          :total="<%= sources.count %>"
+          trigger="sm-sources" 
+          :decimal="0"
+        ></counter>
+      </div>
+    <% end %>
 
     <div class="card__list">
       <ol class="list--underline">
