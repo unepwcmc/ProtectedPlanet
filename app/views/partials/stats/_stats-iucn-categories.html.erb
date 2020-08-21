@@ -1,6 +1,12 @@
 <div class="card--stats-iucn card--stats-half">
   <h2 class="card__h2"><%= t('stats.iucn-categories.title') %></h2>
 
+  <am-chart-pie
+    class="am-chart--pie--iucn"
+    :dataset="<%= @iucn_categories_chart %>"
+    :doughnut="true"
+  ></am-chart-pie>
+
   <ul class="list--underline">
     <% iucn_categories.each do |category| %>
       <li class="list__li">

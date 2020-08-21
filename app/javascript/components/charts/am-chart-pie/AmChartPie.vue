@@ -37,8 +37,6 @@ export default {
 
   methods: {
     createChart () {
-      console.log('create chart', this.dataset)
-
       const chart = am4core.create('chart-pie', am4charts.PieChart);
       chart.data = this.dataset
       chart.radius = am4core.percent(90)
