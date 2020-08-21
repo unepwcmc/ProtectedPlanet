@@ -35,7 +35,7 @@
 
       
       <section>
-        <div class="flex flex-h-between">
+        <div class="page__2cols">
           <%= render partial: "partials/stats/stats-coverage", locals: { 
             stats: @presenter.terrestrial_stats, 
             type: 'terrestrial' 
@@ -58,7 +58,7 @@
           <% end %>
         </p>
       
-        <div class="flex flex-h-between">
+        <div class="page__2cols">
           <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
           
           <%= render "partials/stats/stats-governance", { governance_types: @governance_types} %>
