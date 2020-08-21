@@ -37,6 +37,6 @@ class Download::Requesters::Base
   end
 
   def url(filename)
-    generation_info['status'] == 'ready' ? Download.link_to(filename, format) : ''
+    generation_info['status'] == 'ready' ? Download.link_to(filename) : ''
   end
 end
