@@ -26,8 +26,13 @@
 
 @mixin card-stats-number {
   color: $primary;
+  font-size: rem-calc(30);
   font-weight: $bold;
   line-height: 1;
+  
+  display: block;
+
+  @include breakpoint($small) { font-size: rem-calc(40); }
 }
 
 @mixin card-stats {

@@ -76,12 +76,7 @@
 
     &__number {
       @include card-stats-number;
-      font-size: rem-calc(30);
       margin-right: rem-calc(10);
-
-      display: block;
-
-      @include breakpoint($small) { font-size: rem-calc(40); }
     }
 
     &__section { @include card-stats-overview-section; }

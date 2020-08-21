@@ -9,12 +9,6 @@
   @include breakpoint($small) { padding: rem-calc(28 30); }
 }
 
-@mixin card-stats-number {
-  color: $primary;
-  font-weight: $bold;
-  line-height: 1;
-}
-
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
