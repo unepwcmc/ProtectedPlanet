@@ -59,11 +59,8 @@ class ProtectedAreasController < ApplicationController
   private
 
   def map_overlays
-    overlays(['individual_site'],
-    {
-      'individual_site': {
-        @protected_area.layer_config
-      }
+    overlays(['individual_site'], {
+      individual_site: @protected_area.arcgis_layer_config
     })
   end
 
