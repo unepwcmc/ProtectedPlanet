@@ -5,7 +5,7 @@
   </head>
 
   <body>
-    <div id="v-app">
+    <div id="v-app" class="<%= if @for_pdf then 'pdf' end %>">
       <%= render "layouts/partials/topbar" %>
         
       <%= yield %>

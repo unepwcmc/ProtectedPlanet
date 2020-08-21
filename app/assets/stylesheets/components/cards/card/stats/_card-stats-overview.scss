@@ -19,6 +19,7 @@
 //--------------------------------------------------
 &--stats-overview {
   @include bg-grey-black;
+  @include card-stats-for-pdf;
   @include card-stats-padding;
   width: 100%;
 

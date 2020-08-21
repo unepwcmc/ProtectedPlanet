@@ -31,4 +31,9 @@
   &::-webkit-scrollbar-corner {
       background: transparent;
   }
+
+  .pdf & {
+    overflow: unset;
+    max-height: unset;
+  }
 }

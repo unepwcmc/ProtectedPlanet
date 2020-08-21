@@ -8,6 +8,16 @@
   @include breakpoint($small) { @include flex-row; }
 }
 
+@mixin card-stats-for-pdf {
+  .pdf & {
+    background-color: transparent;
+    border: solid 1px $grey;
+    color: $body-font-colour;
+
+    .card__h1 { color: inherit; }
+  }
+}
+
 @mixin card-stats-padding {
   padding: rem-calc(16 18); 
 
@@ -21,6 +31,7 @@
 }
 
 @mixin card-stats {
+  @include card-stats-for-pdf;
   @include card-stats-padding;
   background-color: $white;
   margin-top: rem-calc(30);

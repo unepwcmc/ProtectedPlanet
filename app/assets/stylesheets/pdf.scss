@@ -1,4 +1,18 @@
+@import 'settings';
+
 .pdf {
+  .topbar,
+  .topbar--secondary,
+  .v-map-baselayer-controls,
+  .mapboxgl-ctrl-top-right,
+  .modal--download.active,
+  .card__stat-box,
+  a { display: none !important; }
+
+  .page--country,
+  .page--site,
+  .page--region { background-color: transparent; }
+  
   &--protected-area {
     .flex-2-fiths,
     .flex-3-fiths {

@@ -19,7 +19,7 @@
           <li class="list__li fle">
             <span class="list__title"><%= source[:title] %></span>
             <span class="list__value"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
-            <span class="list__a list__right"><%= link_to 'Details', source[:url], title: '' %></span>
+            <%= link_to 'Details', source[:url], title: '', class: 'list__a list__right' %>
           </li>
         <% end %>
       </ol>

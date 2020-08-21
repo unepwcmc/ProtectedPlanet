@@ -10,6 +10,8 @@
     padding: rem-calc(12 22);
   }
 
+  .pdf & { border: solid 1px $grey; }
+
   &__heading {
     font-weight: $semi-bold;
     margin-bottom: 0.8em;

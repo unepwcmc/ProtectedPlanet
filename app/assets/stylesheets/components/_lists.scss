@@ -78,7 +78,13 @@
       &__li {
         padding: rem-calc(16 14);
 
-        &:nth-child(odd) { background-color: $grey-xlight; }
+        &:nth-child(odd) { 
+          background-color: $grey-xlight; 
+
+          .pdf & { background-color: transparent;  }
+        }
+
+        .pdf & { border-bottom: solid 1px $grey-light; }
       }
 
         &__title {
