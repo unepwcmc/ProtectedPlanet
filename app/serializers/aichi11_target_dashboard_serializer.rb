@@ -149,9 +149,6 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
         chart_hash(stat, stat_name, record, 'terrestrial'),
         chart_hash(stat, stat_name, record, 'marine')
       ]
-    # elsif stat[:column_name].include?('connected')
-    #   [ chart_hash(stat, stat_name, record, 'terrestrial') ]
-    #   byebug
     else
       [ chart_hash(stat, stat_name, record, 'global') ]
     end
@@ -162,8 +159,20 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     _column_name = stat[:column_name].gsub(/type/, column_type)
     target_column = "#{stat_name}_#{type}"
 
+
     value = record[_column_name] || 0
     target = is_importance_region?(stat_name, record) ? nil : Aichi11Target.instance.public_send(target_column)
+
+    # Hacky fix
+    if stat[:column_name].include?('connected')
+      return  {
+        title: type.capitalize,
+        value: value,
+        target: target,
+        colour: 'terrestrial' 
+      }
+    end
+
     {
       title: type.capitalize,
       value: value,
