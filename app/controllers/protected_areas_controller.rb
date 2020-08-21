@@ -64,7 +64,7 @@ class ProtectedAreasController < ApplicationController
       'individual_site': {
         @protected_area.layer_config
       }
-    }
+    })
   end
 
   def get_locations
