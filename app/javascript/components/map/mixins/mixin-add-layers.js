@@ -16,7 +16,7 @@ const addPaintOptions = (options, layer) => {
     options['type'] = 'fill'
     options['paint'] = {
       'fill-color': layer.color,
-      'fill-opacity': 0.5,
+      'fill-opacity': 0.8,
     }
   }
 }
@@ -25,6 +25,8 @@ export default {
   //THESE METHODS ARE FOR TESTING ONLY
   methods: {
     addRasterTileLayer (layer) {
+      console.log('Adding raster layer:', layer)
+
       this.map.addLayer({
         id: layer.id,
         type: 'raster',
@@ -52,8 +54,9 @@ export default {
           visibility: 'visible'
         }
       }
-
+      
       addPaintOptions(options, layer)
+      console.log('Adding data layer:', layer, options, this.firstForegroundLayerId)
       this.map.addLayer(options, this.firstForegroundLayerId)
     },
   },
