@@ -29,7 +29,7 @@ OVERLAYS = [
     layers: [{url: WDPA_POINT_LAYER_URL, isPoint: true}, {url: WDPA_POLY_LAYER_URL}],
     color: OVERLAY_GREEN,
     isShownByDefault: true,
-    type: 'raster_tile'
+    type: 'raster_data'
   },
   {
     id: 'marine_wdpa',
