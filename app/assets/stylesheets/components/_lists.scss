@@ -1,6 +1,14 @@
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
+@mixin list-theme ($theme) {
+  @for $i from 1 through length($theme) {
+    .list__li:nth-child(#{$i}) {
+      .list__icon { background-color: nth($theme, $i); }
+    }
+  }
+}
+
 @mixin list-underline {
   @include ul-unstyled;
   padding-right: rem-calc(19);
@@ -102,6 +110,8 @@
 //--------------------------------------------------
   &--underline {
     @include list-underline;
+
+    &.theme--governance { @include list-theme($theme-governance); }
   }
 
 //--------------------------------------------------

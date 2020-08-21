@@ -2,13 +2,18 @@
   <h2 class="card__h2"><%= t('stats.governance.title') %></h2>
 
   <div>
-    Chart
-    <% governance_types.each do |type| %>
-      <p><%= type["percentage"].to_f.round(2) %>%</p>
+    <% governance_types.each_with_index do |type, index| %>
+      <% themes = ['blue', 'aqua', 'purple', 'green'] %>
+
+      <chart-row-stacked 
+        class="chart--row-stacked--basic"
+        :rows="<%= [{ percent: type["percentage"].to_f.round(2) }].to_json %>"
+        theme="<%= themes[index] %>"
+      ></chart-row-stacked>
     <% end %>
   </div>
 
-  <ul class="list--underline">
+  <ul class="list--underline theme--governance">
     <% governance_types.each do |type| %>
       <li class="list__li">
         <i class="list__icon"></i>
