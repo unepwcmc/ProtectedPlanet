@@ -40,6 +40,8 @@ module Wdpa::GreenListImporter
       puts "Invalid WDPAIDs found: #{invalid.join(',')}"
       puts "PA with WDPAID not found: #{not_found.join(',')}"
       puts "Statuses rows for same WDPAID found: #{duplicates.join(',')}"
+
+      import_global_data
     end
   end
 
