@@ -224,6 +224,7 @@ class ProtectedArea < ApplicationRecord
       OECM_LAYER_URL
     else
       is_point? ? WDPA_POINT_LAYER_URL : WDPA_POLY_LAYER_URL
+    end
   end
 
   def arcgis_query_string
