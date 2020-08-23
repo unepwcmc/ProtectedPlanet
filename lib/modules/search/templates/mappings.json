@@ -221,6 +221,17 @@
           }
         }
       },
+      "categories": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "keyword"
+          }
+        }
+      },
       "topics": {
         "type": "nested",
         "properties": {
