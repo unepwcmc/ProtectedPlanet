@@ -1,6 +1,8 @@
 module Wdpa::GreenListImporter
   # Make sure headers are: wdpaid,status,expiry_date
   GREEN_LIST_SITES_CSV = "#{Rails.root}/lib/data/seeds/green_list_sites.csv"
+  # TODO - Need to change
+  GREEN_LIST_DATA_CSV = "#{Rails.root}/lib/data/seeds/test_green_list_data.csv"
   extend self
 
   def import
@@ -38,6 +40,17 @@ module Wdpa::GreenListImporter
       puts "Invalid WDPAIDs found: #{invalid.join(',')}"
       puts "PA with WDPAID not found: #{not_found.join(',')}"
       puts "Statuses rows for same WDPAID found: #{duplicates.join(',')}"
+
+      import_global_data
     end
+  end
+
+  def import_global_data
+    stats = {}
+    CSV.foreach(GREEN_LIST_DATA_CSV, headers: true) do |row|
+      stats[row["type"]] = row["value"]
+      $redis.hmset('green_list_stats', row["type"], row["value"])
+    end
+    stats
   end
 end

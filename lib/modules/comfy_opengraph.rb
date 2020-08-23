@@ -36,7 +36,7 @@ class ComfyOpengraph
   private
 
   def get_fragment_value(fragment)
-    if fragment.tag =~ /file/ # get path when fragment is file
+    if fragment.tag =~ /file/ && fragment.attachments.first # get path when fragment is file
       URI.join(root_url, rails_blob_path(fragment.attachments.first.blob, only_path: true))
     else # expect a string by default
       fragment.content&.squish

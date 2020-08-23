@@ -1,0 +1,7 @@
+en:
+  charts:
+    legend:
+      global: Global
+      number-pa: Number of Protected Areas 
+    units:
+      km2: km2

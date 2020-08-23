@@ -123,10 +123,10 @@ module CmsHelper
     categories_yml = I18n.t('search')[:custom_categories]
     layout_categories.map do |lc|
 
-      name = categories_yml[lc.label.to_sym][:name]
-      property = name.downcase
+      title = categories_yml[lc.label.to_sym][:name]
+      name = title.downcase
       page_categories = lc.page_categories
-      localised_pcs = categories_yml[property.to_sym][:items]
+      localised_pcs = categories_yml[name.to_sym][:items]
 
       items = page_categories.map do |pc|
         {
@@ -140,7 +140,7 @@ module CmsHelper
       {
         id: name,
         items: items,
-        title: name
+        title: title
       }
     end
   end

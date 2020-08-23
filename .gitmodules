@@ -1,4 +1,4 @@
 [submodule "db"]
   path = db
   url = https://github.com/unepwcmc/protectedplanet-db.git
-  branch = ticket-13
+  branch = refresh
