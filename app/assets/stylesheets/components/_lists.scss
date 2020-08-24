@@ -112,7 +112,7 @@
   &--underline {
     @include list-underline;
 
-    &.theme--governance { @include list-theme($theme-governance); }
+    &.theme--governance { @include list-theme($theme-chart); }
   }
 
 //--------------------------------------------------

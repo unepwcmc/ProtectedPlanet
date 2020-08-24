@@ -3,7 +3,7 @@
     <div class="chart__chart">
       <div 
         class="chart__svg"
-        id="chart-pie"
+        :id="id"
       />
     </div>
   </div>
@@ -25,6 +25,10 @@ export default {
       default: false,
       type: Boolean
     },
+    id: {
+      required: true,
+      type: String
+    },
     spacers: {
       default: false,
       type: Boolean
@@ -37,7 +41,7 @@ export default {
 
   methods: {
     createChart () {
-      const chart = am4core.create('chart-pie', am4charts.PieChart);
+      const chart = am4core.create(this.id, am4charts.PieChart);
       chart.data = this.dataset
       chart.radius = am4core.percent(90)
 

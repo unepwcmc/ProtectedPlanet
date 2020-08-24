@@ -2,9 +2,10 @@
   <h2 class="card__h2"><%= t('stats.iucn-categories.title') %></h2>
 
   <am-chart-pie
-    class="am-chart--pie--iucn"
+    class="am-chart--pie"
     :dataset="<%= @iucn_categories_chart %>"
     :doughnut="true"
+    id="am-pie-iucn-categories"
   ></am-chart-pie>
 
   <ul class="list--underline">
@@ -20,5 +21,3 @@
     <% end %>
   </ul>
 </div>
-
-<!-- search_url("#{location.class.name.downcase}" => location.name, iucn_category: row["iucn_category_name"], main: location.class.name.downcase.to_sym) -->

@@ -12,8 +12,8 @@ class CountryController < ApplicationController
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
 
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
+   
     @iucn_categories = @country.protected_areas_per_iucn_category
-    
     @iucn_categories_chart = @country.protected_areas_per_iucn_category
       .enum_for(:each_with_index)
       .map do |category, i|
@@ -25,6 +25,16 @@ class CountryController < ApplicationController
     end.to_json
 
     @governance_types = @country.protected_areas_per_governance
+    @governance_chart = @governance_types
+      .enum_for(:each_with_index)
+      .map do |item, i|
+      { 
+        id: i+1,
+        title: item['governance_name'], 
+        value: item['count'] 
+      }
+    end.to_json
+
     @coverage_growth = @country_presenter.coverage_growth 
 
     @country_designations = @country_presenter.designations

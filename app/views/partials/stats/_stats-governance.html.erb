@@ -1,9 +1,12 @@
 <div class="card--stats-governance card--stats-half">
   <h2 class="card__h2"><%= t('stats.governance.title') %></h2>
 
-  <div>
-    
-  </div>
+  <am-chart-pie
+    class="am-chart--pie"
+    :dataset="<%= @governance_chart %>"
+    :doughnut="true"
+    id="am-pie-governance-type"
+  ></am-chart-pie>
 
   <ul class="list--underline theme--governance">
     <% governance_types.each do |type| %>
@@ -16,5 +19,3 @@
     <% end %>
   </ul>
 </div>
-  
-<%#= link_to row["governance_name"], search_url("#{location.class.name.downcase}" => location.name, governance: row["governance_name"], main: location.class.name.downcase.to_sym) %>
