@@ -38,9 +38,9 @@
       width: calc(33% - 12px); 
     }
 
-    @for $i from 1 through length($theme-designation) {
+    @for $i from 1 through length($theme-chart) {
       &:nth-child(#{$i}) { 
-        .chart__legend-key { background-color: nth($theme-designation, $i); }
+        .chart__legend-key { background-color: nth($theme-chart, $i); }
       }
     }
   }

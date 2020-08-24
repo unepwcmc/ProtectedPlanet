@@ -50,6 +50,9 @@ $chart-row-stacked-height-tablet: rem-calc(82);
 
   .chart__percent {
     position: absolute;
+    left: 50%;
+
+    transform: translateX(-50%);
   }
 }
 
@@ -73,13 +76,10 @@ $chart-row-stacked-height-tablet: rem-calc(82);
     @include chart-tooltip('bottom'); 
 
     bottom: 100%;
-    left: 50%;
-
-    transform: translateX(-50%);
   }
 }
 
 &--row-stacked--designation {
   @include chart-row-stacked;
-  @include chart-bars($theme-designation);
+  @include chart-bars($theme-chart);
 }
