@@ -49,8 +49,6 @@ export default {
       pieSeries.dataFields.id = 'id'
       pieSeries.dataFields.category = 'title'
       pieSeries.dataFields.value = 'value'
-      console.log(chart.data)
-      console.log(pieSeries.dataFields)
       
       if(this.spacers) {
         pieSeries.slices.template.stroke = am4core.color('#ffffff')
