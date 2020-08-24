@@ -35,35 +35,69 @@ export default {
     }
   },
 
+  date () {
+    return {
+      chart: {},
+      pieSeries: {}
+    }
+  },
+
   mounted () {
     this.createChart()
   },
 
   methods: {
     createChart () {
-      const chart = am4core.create(this.id, am4charts.PieChart);
-      chart.data = this.dataset
-      chart.radius = am4core.percent(90)
+      this.chart = am4core.create(this.id, am4charts.PieChart);
+      this.chart.data = this.dataset
+      this.chart.radius = am4core.percent(90)
 
-      if(this.doughnut) {
-        chart.innerRadius = am4core.percent(50)
-      }
+      this.createDataFields ()
+      this.removeActiveState()
+      this.removeHoverState()
+      this.removeLabels()
+      this.setPieColours()
+      this.setTooltips()
 
-      const pieSeries = chart.series.push(new am4charts.PieSeries())
-      pieSeries.dataFields.id = 'id'
-      pieSeries.dataFields.category = 'title'
-      pieSeries.dataFields.value = 'value'
-      
-      if(this.spacers) {
-        pieSeries.slices.template.stroke = am4core.color('#ffffff')
-        pieSeries.slices.template.strokeWidth = 2
-        pieSeries.slices.template.strokeOpacity = 1
-      }
+      if(this.spacers) { this.createSpacers() }
+      if(this.doughnut) { this.createDoughnutShape() }
+    },
 
-      pieSeries.labels.template.disabled = true
-      pieSeries.ticks.template.disabled = true
-      //must match $theme-chart in settings.scss
-      pieSeries.colors.list = [
+    createDataFields () {
+      this.pieSeries = this.chart.series.push(new am4charts.PieSeries())
+      this.pieSeries.dataFields.id = 'id'
+      this.pieSeries.dataFields.category = 'title'
+      this.pieSeries.dataFields.value = 'value'
+    },
+
+    createDoughnutShape () {
+      this.chart.innerRadius = am4core.percent(50)
+    },
+
+    createSpacers () {
+      this.pieSeries.slices.template.stroke = am4core.color('#ffffff')
+      this.pieSeries.slices.template.strokeWidth = 2
+      this.pieSeries.slices.template.strokeOpacity = 1
+    },
+
+    removeActiveState () {
+      const activeState = this.pieSeries.slices.template.states.getKey('active')
+      activeState.properties.shiftRadius = 0
+    },
+
+    removeHoverState () {
+      let hoverState = this.pieSeries.slices.template.states.getKey('hover')
+      hoverState.properties.scale = 1
+    },
+
+    removeLabels () {
+      this.pieSeries.labels.template.disabled = true
+      this.pieSeries.ticks.template.disabled = true
+    },
+
+    setPieColours () {
+    //must match $theme-chart in settings.scss
+      this.pieSeries.colors.list = [
         am4core.color('#64BAD9'),
         am4core.color('#A54897'),
         am4core.color('#65C9B2'),
@@ -77,21 +111,17 @@ export default {
         am4core.color('#1A4D9F'),
         am4core.color('#E57133')
       ]
+    },
 
-      pieSeries.slices.template.tooltipText = `{id}. [bold]{category}[/] {value.value}, {value.percent.formatNumber('#.#')}%`
+    setTooltips () {
+      this.pieSeries.slices.template.tooltipText = `{id}. [bold]{category}[/] {value.value}, {value.percent.formatNumber('#.#')}%`
   
-      pieSeries.tooltip.getFillFromObject = false
-      pieSeries.tooltip.background.fill = am4core.color('#000000')
-      pieSeries.tooltip.background.stroke = am4core.color('#000000')
-      pieSeries.tooltip.label.fontSize = 18
-      pieSeries.tooltip.label.fontWeight = 'bold'
-      pieSeries.tooltip.label.textAlign = 'middle'
-
-      const activeState = pieSeries.slices.template.states.getKey('active')
-      activeState.properties.shiftRadius = 0
-
-      let hoverState = pieSeries.slices.template.states.getKey('hover')
-      hoverState.properties.scale = 1
+      this.pieSeries.tooltip.getFillFromObject = false
+      this.pieSeries.tooltip.background.fill = am4core.color('#000000')
+      this.pieSeries.tooltip.background.stroke = am4core.color('#000000')
+      this.pieSeries.tooltip.label.fontSize = 18
+      this.pieSeries.tooltip.label.padding(0,6,6,6)
+      this.pieSeries.tooltip.label.textAlign = 'middle'
     }
   }
 }
