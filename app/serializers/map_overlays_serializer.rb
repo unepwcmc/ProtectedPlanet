@@ -7,8 +7,10 @@ class MapOverlaysSerializer
 
   def serialize
     @overlays.map do |overlay|
+      overlay_yml = @yml[:overlays][overlay[:id].to_sym]
+
       overlay.merge({
-        title: @yml[:overlays][overlay[:id].to_sym][:title],
+        title: overlay_yml.nil? ? '' : overlay_yml[:title],
         layers: get_layers(overlay)      
       })
     end
