@@ -46,8 +46,11 @@ export default {
       }
 
       const pieSeries = chart.series.push(new am4charts.PieSeries())
-      pieSeries.dataFields.value = 'value'
+      pieSeries.dataFields.id = 'id'
       pieSeries.dataFields.category = 'title'
+      pieSeries.dataFields.value = 'value'
+      console.log(chart.data)
+      console.log(pieSeries.dataFields)
       
       if(this.spacers) {
         pieSeries.slices.template.stroke = am4core.color('#ffffff')
@@ -57,7 +60,24 @@ export default {
 
       pieSeries.labels.template.disabled = true
       pieSeries.ticks.template.disabled = true
+      //must match colours in settings.scss
+      pieSeries.colors.list = [
+        am4core.color('#64BAD9'),
+        am4core.color('#5F81CB'),
+        am4core.color('#65C9B2'),
+        am4core.color('#A54897'),
+        am4core.color('#FAA51B'),
+        am4core.color('#EF5F6C'),
+        am4core.color('#151617'),
+        am4core.color('#71A22B'),
+        am4core.color('#F5F58A'),
+        am4core.color('#EF266C'),
+        am4core.color('#1A4D9F'),
+        am4core.color('#E57133')
+      ]
 
+      pieSeries.slices.template.tooltipText = `[bold]{id}. {category}:[/] {value.value}, {value.percent.formatNumber('#.#')}%`
+  
       pieSeries.tooltip.getFillFromObject = false
       pieSeries.tooltip.background.fill = am4core.color('#000000')
       pieSeries.tooltip.background.stroke = am4core.color('#000000')

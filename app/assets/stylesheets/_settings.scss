@@ -27,25 +27,23 @@ $orange: #D9B143;
 
 $pink: #F84489;
 
-$red: #FA3232;
+$purple: #7B1977;
+$purple-dark: #794B9D;
 
-$map-oecm: rgba($orange, .8);
-$map-marine: rgba($blue, .8);
-$map-terrestrial: rgba($pink, .8);
+$red: #FA3232;
 
 $chart-aqua: #64BAD9;
 $chart-blue: #5F81CB;
 $chart-green: #65C9B2;
 $chart-purple: #A54897;
-
-$orange--dark: #de522f;
-$orange--lighter: #f16e4d;
-$orange--lighest: #F5A623; //highlight color on the marine page
-$brown-bg: #fcded6;
-$yellow: #ffe600;
-
-$purple: #7B1977;
-$purple-dark: #794B9D;
+$chart-orange: #FAA51B;
+$chart-peach: #EF5F6C;
+$chart-black: #151617;
+$chart-green: #71A22B;
+$chart-yellow: #F5F58A;
+$chart-pink: #EF266C;
+$chart-blue-dark: #1A4D9F;
+$chart-orange-dark: #E57133;
 
 $alert: $red;
 
@@ -56,6 +54,10 @@ $global: $purple;
 $oecm: $orange;
 $marine: $blue;
 $terrestrial: $green-bright;
+
+$map-oecm: rgba($orange, .8);
+$map-marine: rgba($blue, .8);
+$map-terrestrial: rgba($pink, .8);
 
 $pin-marine: $marine;
 $pin-oecm: $oecm;
