@@ -54,6 +54,11 @@ export default {
 
   data () {
     return {
+      fakeItem: false,
+      fakeItemData: {
+        hasFailed: true,
+        url: ''
+      },
       hasFailed: false,
       id: '',
       interval: null,
@@ -89,16 +94,13 @@ export default {
     ajaxRequestDownload () {
       axios.post(this.endpointCreate, this.params)
       .then(response => {
-        this.hasFailed = response.data.hasFailed
-        this.id = response.data.id
-        this.title = response.data.title
-        this.url = response.data.url
+        this.updateDownloadItem(response.data)
       })
       .catch(error => {
         console.log(error)
-        this.hasFailed = true
-        this.title = `${this.params.token} .${this.params.format}`
-        this.url = ''
+        this.fakeItem = true
+        this.fakeItemData.title = `${this.params.token} .${this.params.format}`
+        this.updateDownloadItem(this.fakeItemData)
       })
 
       this.startPolling()
@@ -114,12 +116,12 @@ export default {
           params: this.params
         })
         .then(response => {
-          this.hasFailed = response.data.hasFailed
-          this.title = response.data.title
-          this.url = response.data.url
+          this.updateDownloadItem(response)
         })
         .catch(error => {
           console.log('error', error)
+          this.stopPolling()
+          this.hasFailed = true
         })
     },
 
@@ -133,6 +135,13 @@ export default {
 
     stopPolling () {
       window.clearInterval(this.interval)
+    },
+
+    updateDownloadItem (data) {
+      this.hasFailed = data.hasFailed
+      this.id = 'id' in data ? data.id : Math.round(Math.random(0,1)*100000)
+      this.title = data.title
+      this.url = data.url
     }
   }
 }
