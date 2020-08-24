@@ -193,8 +193,10 @@ module CmsHelper
     end
   end
 
-  def cms_fragment_content_datetime(identifier, page = @cms_page)
-    return cms_fragment_content(identifier, page) unless page.fragments.pluck(:tag).include?('date_not_null')
-    page.fragments.find_by(tag: 'date_not_null').datetime
+  def cms_fragment_content_datetime(identifier, page)
+    return cms_fragment_content(identifier, page) unless identifier == 'published_date'
+    date_fragments = page.fragments.where(identifier: 'published_date')
+    date_not_null = date_fragments.find_by(tag: 'date_not_null')
+    date_not_null ? date_not_null.datetime : date_fragments.first.datetime
   end
 end
