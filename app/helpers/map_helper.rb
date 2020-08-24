@@ -1,26 +1,41 @@
 OECM_FEATURE_SERVER_LAYER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/FeatureServer/0'
 OECM_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/MapServer'
+OECM_LAYER_URL = OECM_MAP_SERVER_URL + '/0'
 WDPA_FEATURE_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_of_Protected_Areas/FeatureServer'
 WDPA_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_of_Protected_Areas/MapServer'
+WDPA_POINT_LAYER_URL = WDPA_MAP_SERVER_URL + '/0'
+WDPA_POLY_LAYER_URL = WDPA_MAP_SERVER_URL + '/1'
 MARINE_WDPA_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/WDPA_Marine_and_Coastal/MapServer'
-TILE_PATH = "/tile/{z}/{y}/{x}"
 
+TILE_PATH = "/tile/{z}/{y}/{x}"
 MARINE_QUERY_STRING = '/query?where=marine+IN+%28%271%27%2C+%272%27%29&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
+
+OVERLAY_GREEN = "#38A800"
+OVERLAY_BLUE = "#004DA8"
+OVERLAY_YELLOW = "#D9B143"
 
 OVERLAYS = [
   {
     id: 'terrestrial_wdpa',
     isToggleable: false,
     layers: [{url: WDPA_MAP_SERVER_URL}],
-    color: "#38A800",
+    color: OVERLAY_GREEN,
     isShownByDefault: true,
     type: 'raster_tile'
+  },
+  {
+    id: 'individual_site',
+    isToggleable: false,
+    layers: [{url: WDPA_POINT_LAYER_URL, isPoint: true}, {url: WDPA_POLY_LAYER_URL}],
+    color: OVERLAY_GREEN,
+    isShownByDefault: true,
+    type: 'raster_data'
   },
   {
     id: 'marine_wdpa',
     isToggleable: false,
     layers: [{url: MARINE_WDPA_MAP_SERVER_URL }],
-    color: "#004DA8",
+    color: OVERLAY_BLUE,
     isShownByDefault: false,
     type: 'raster_tile'
   },
@@ -28,7 +43,7 @@ OVERLAYS = [
     id: 'oecm',
     isToggleable: true,
     layers: [{url: OECM_MAP_SERVER_URL}],
-    color: "#D9B143",
+    color: OVERLAY_YELLOW,
     isShownByDefault: true,
     type: 'raster_tile'
   },
@@ -36,7 +51,7 @@ OVERLAYS = [
     id: 'oecm_marine',
     isToggleable: true,
     layers: [{url: OECM_MAP_SERVER_URL + '/0'}],
-    color: "#D9B143",
+    color: OVERLAY_YELLOW,
     isShownByDefault: true,
     type: 'raster_data',
     queryString: MARINE_QUERY_STRING
@@ -45,7 +60,7 @@ OVERLAYS = [
     id: 'greenlist',
     isToggleable: false,
     layers: [{url: WDPA_MAP_SERVER_URL + '/0', isPoint: true}, {url: WDPA_MAP_SERVER_URL + '/1'}],
-    color: "#004DA8",
+    color: OVERLAY_BLUE,
     isShownByDefault: true,
     type: 'raster_data'
   },
