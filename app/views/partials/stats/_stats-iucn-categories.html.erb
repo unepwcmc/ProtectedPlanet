@@ -8,11 +8,13 @@
   ></am-chart-pie>
 
   <ul class="list--underline">
-    <% iucn_categories.each do |category| %>
+    <% iucn_categories.each_with_index do |category, i| %>
       <li class="list__li">
         <i class="list__icon"></i>
-        <span class="list__title"><%= category['iucn_category_name'] %></span>
-        <span class="list__value"><%= category['count'] %>, <%= category['percentage'].to_f.round(2) %>%</span>
+        <span class="list__title"><%= "#{i+1}. #{category['iucn_category_name']}" %></span>
+        <span class="list__value">
+          <%= category['count'] %>, <%= category['percentage'].to_f.round(2) %>%
+        </span>
         <%= link_to 'View list', '', title: '', class: 'list__right list__a' %>
       </li>
     <% end %>

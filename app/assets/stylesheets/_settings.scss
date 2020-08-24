@@ -32,18 +32,18 @@ $purple-dark: #794B9D;
 
 $red: #FA3232;
 
-$chart-aqua: #64BAD9;
-$chart-blue: #5F81CB;
-$chart-green: #65C9B2;
-$chart-purple: #A54897;
-$chart-orange: #FAA51B;
-$chart-peach: #EF5F6C;
+$chart-aqua: #65C9B2;
 $chart-black: #151617;
-$chart-green: #71A22B;
-$chart-yellow: #F5F58A;
-$chart-pink: #EF266C;
+$chart-blue-light: #64BAD9;
+$chart-blue: #5F81CB;
 $chart-blue-dark: #1A4D9F;
+$chart-green: #71A22B;
+$chart-orange: #FAA51B;
 $chart-orange-dark: #E57133;
+$chart-pink-light: #EF5F6C;
+$chart-pink: #EF266C;
+$chart-purple: #A54897;
+$chart-yellow: #F5F58A;
 
 $alert: $red;
 
@@ -64,6 +64,20 @@ $pin-oecm: $oecm;
 $pin-terrestrial: $terrestrial;
 
 $theme-designation: [$chart-purple, $chart-aqua, $chart-blue];
+$theme-chart: [
+  $chart-blue-light, 
+  $chart-purple, 
+  $chart-aqua, 
+  $chart-blue, 
+  $chart-orange, 
+  $chart-pink-light, 
+  $chart-black, 
+  $chart-green, 
+  $chart-yellow, 
+  $chart-pink, 
+  $chart-blue-dark, 
+  $chart-orange-dark
+];
 
 //--------------------------------------------------
 // buttons

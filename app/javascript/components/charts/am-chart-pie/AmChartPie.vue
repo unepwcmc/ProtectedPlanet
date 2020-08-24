@@ -60,12 +60,12 @@ export default {
 
       pieSeries.labels.template.disabled = true
       pieSeries.ticks.template.disabled = true
-      //must match colours in settings.scss
+      //must match $theme-chart in settings.scss
       pieSeries.colors.list = [
         am4core.color('#64BAD9'),
-        am4core.color('#5F81CB'),
-        am4core.color('#65C9B2'),
         am4core.color('#A54897'),
+        am4core.color('#65C9B2'),
+        am4core.color('#5F81CB'),
         am4core.color('#FAA51B'),
         am4core.color('#EF5F6C'),
         am4core.color('#151617'),
