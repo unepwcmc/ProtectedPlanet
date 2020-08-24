@@ -36,6 +36,12 @@
       @include breakpoint($small) {
         height: rem-calc(700);
       }
+
+      .search__map-container & {
+        @include breakpoint($small) {
+          height: rem-calc(405);
+        }
+      }
     }
   }
 

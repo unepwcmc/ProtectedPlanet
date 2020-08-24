@@ -201,12 +201,40 @@ class ProtectedArea < ApplicationRecord
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
-  def extent_url
-    layer_number = is_point? ? 0 : 1
-
+  def arcgis_layer_config
     {
-      url: "#{WDPA_FEATURE_SERVER_URL}/#{layer_number}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
-      padding: 1
+      layers: [{url: arcgis_layer, isPoint: is_point?}],
+      color: layer_color,
+      queryString: arcgis_query_string
+    }
+  end
+
+  def layer_color
+    if is_oecm
+      OVERLAY_YELLOW
+    elsif marine
+      OVERLAY_BLUE
+    else
+      OVERLAY_GREEN
+    end
+  end
+
+  def arcgis_layer
+    if is_oecm
+      OECM_LAYER_URL
+    else
+      is_point? ? WDPA_POINT_LAYER_URL : WDPA_POLY_LAYER_URL
+    end
+  end
+
+  def arcgis_query_string
+    "/query?where=wdpaid+%3D+%27#{wdpa_id}%27&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
+  end
+
+  def extent_url
+    {
+      url: "#{arcgis_layer}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      padding: 0.2
     }
   end
 
