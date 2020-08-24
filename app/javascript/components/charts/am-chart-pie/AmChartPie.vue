@@ -74,7 +74,7 @@ export default {
         am4core.color('#E57133')
       ]
 
-      pieSeries.slices.template.tooltipText = `[bold]{id}. {category}:[/] {value.value}, {value.percent.formatNumber('#.#')}%`
+      pieSeries.slices.template.tooltipText = `{id}. [bold]{category}[/] {value.value}, {value.percent.formatNumber('#.#')}%`
   
       pieSeries.tooltip.getFillFromObject = false
       pieSeries.tooltip.background.fill = am4core.color('#000000')
