@@ -13,7 +13,7 @@ class SearchController < ApplicationController
     categories.map do |category|
       cms_page = cms_root_pages.find_by(slug: category)
       if cms_page
-        @categories << { id: cms_page.id.to_s, title: cms_page.label}
+        @categories << { id: cms_page.id.to_s, title: cms_page.label }
       else
         @categories << { id: category, title: category.capitalize }
       end

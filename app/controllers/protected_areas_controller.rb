@@ -63,7 +63,9 @@ class ProtectedAreasController < ApplicationController
   private
 
   def map_overlays
-    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+    overlays(['individual_site'], {
+      individual_site: @protected_area.arcgis_layer_config
+    })
   end
 
   def get_locations

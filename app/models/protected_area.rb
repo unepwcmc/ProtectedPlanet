@@ -75,17 +75,45 @@ class ProtectedArea < ApplicationRecord
     }
   end
 
-  def self.green_list_protected_percentage
-    (green_list_total_km / Stats::Global.global_area * 100).to_f.round(2)
-  end
+  # TODO - Not sure we need this anymore now that we have Ed's stats - SL
+  # def self.green_list_protected_percentage
+  #   (green_list_total_km / Stats::Global.global_area * 100).to_f.round(2)
+  # end
 
-  def self.green_list_total_km
-    green_list_areas.inject(0) { |_sum, pa| _sum + pa.gis_area }
-  end
+  # def self.green_list_total_km
+  #   green_list_areas.inject(0) { |_sum, pa| _sum + pa.gis_area }
+  # end
 
   def is_green_list
     green_list_status_id.present?
   end
+
+  def self.greenlist_coverage_growth(start_year = nil)
+    # Is in this format: {year: area, ...}
+    # Takes an optional start year from which to start counting
+    coverage_growth_hash = {}
+
+    areas = ProtectedArea.green_list_areas.where.not(legal_status_updated_at: nil)
+    
+    if start_year
+      date_from_year = "#{start_year}-01-01 00:00:00".to_time 
+      areas = areas.where("legal_status_updated_at >= ? ", date_from_year)
+    end
+  
+    sorted_dates = areas.pluck(:legal_status_updated_at).sort { |a,b| b <=> a }.uniq
+
+    sorted_dates.each do |date|
+      # year = date.to_date.year
+      coverage_growth_hash[date] ||= []
+      
+      area_sum = areas.where("legal_status_updated_at <= ?", date).reduce(0) { |sum, x| sum + x.gis_area }
+      coverage_growth_hash[date] = area_sum
+    end
+
+    coverage_growth_hash
+  end
+
+
 
   def wdpa_ids
     wdpa_id
@@ -185,12 +213,40 @@ class ProtectedArea < ApplicationRecord
     countries.count > 1
   end
   
-  def extent_url
-    layer_number = is_point? ? 0 : 1
-
+  def arcgis_layer_config
     {
-      url: "#{MapHelper::WDPA_FEATURE_SERVER_URL}/#{layer_number}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
-      padding: 1
+      layers: [{url: arcgis_layer, isPoint: is_point?}],
+      color: layer_color,
+      queryString: arcgis_query_string
+    }
+  end
+
+  def layer_color
+    if is_oecm
+      OVERLAY_YELLOW
+    elsif marine
+      OVERLAY_BLUE
+    else
+      OVERLAY_GREEN
+    end
+  end
+
+  def arcgis_layer
+    if is_oecm
+      OECM_LAYER_URL
+    else
+      is_point? ? WDPA_POINT_LAYER_URL : WDPA_POLY_LAYER_URL
+    end
+  end
+
+  def arcgis_query_string
+    "/query?where=wdpaid+%3D+%27#{wdpa_id}%27&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
+  end
+
+  def extent_url
+    {
+      url: "#{arcgis_layer}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      padding: 0.2
     }
   end
 

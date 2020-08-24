@@ -177,7 +177,7 @@ module ComfortableMexicanSofa
           old_export.bind(self).call(*args)
 
           ExtraModels::COMFY_CMS_INCLUDED_EXPORT_MODELS.each do |model_name|
-            path = ::File.join(ComfortableMexicanSofa.config.seeds_path, from, model_name.underscore + '.json')
+            path = ::File.join(ComfortableMexicanSofa.config.seeds_path, to, model_name.underscore + '.json')
             ::FileUtils.rm_rf(path)
             ::File.open(path, 'w') do |file|
               file.write(model_name.constantize.all.to_json)

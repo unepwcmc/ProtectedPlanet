@@ -5,7 +5,7 @@ module Wdpa::DopaImporter
   def import
     ActiveRecord::Base.transaction do
       # Clear all previously set DOPA areas
-      ProtectedArea.update_all(is_dopa: false)
+      ProtectedArea.in_batches.update_all(is_dopa: false)
       logger = Logger.new(STDOUT)
 
       pas_to_update = []
@@ -21,7 +21,7 @@ module Wdpa::DopaImporter
       # Turn off verbose logging
       ActiveRecord::Base.logger.silence do
         # Update all of them at once
-        areas.update_all(is_dopa: true)
+        areas.in_batches.update_all(is_dopa: true)
       end
 
       # Missing WDPA IDs

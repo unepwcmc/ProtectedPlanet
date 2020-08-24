@@ -1,7 +1,32 @@
+const addPaintOptions = (options, layer) => {
+  if (layer.isPoint) {
+    options['type'] = 'circle'
+    options['paint'] = { 
+      'circle-radius': [
+        'interpolate',
+        ['exponential', 1],
+        ['zoom'],
+        0, 1.5,
+        6, 4
+      ],
+      'circle-color': layer.color,
+      'circle-opacity': 0.7
+    }
+  } else {
+    options['type'] = 'fill'
+    options['paint'] = {
+      'fill-color': layer.color,
+      'fill-opacity': 0.8,
+    }
+  }
+}
+
 export default {
   //THESE METHODS ARE FOR TESTING ONLY
   methods: {
-    addTypeLayer (layer) {
+    addRasterTileLayer (layer) {
+      console.log('Adding raster layer:', layer)
+
       this.map.addLayer({
         id: layer.id,
         type: 'raster',
@@ -14,47 +39,25 @@ export default {
         },
         layout: {
           visibility: 'visible'
-        },
-        // paint: {
-        //   'raster-opacity': 1
-        // },
+        }
       }, this.firstForegroundLayerId)
     },
 
-    addSingleArea(wdpaid) {
-      this.map.addLayer({
-        id: 'dummy',
-        type: 'fill',
+    addRasterDataLayer(layer) {
+      const options = {
+        id: layer.id,
         source: {
           type: 'geojson',
-          data:
-            'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/FeatureServer/1/query?where=wdpaid%3D' +
-            wdpaid +
-            '&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&having=&gdbVersion=&historicMoment=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=xyFootprint&resultOffset=&resultRecordCount=&returnTrueCurves=false&returnExceededLimitFeatures=false&quantizationParameters=&returnCentroid=false&sqlFormat=none&resultType=&featureEncoding=esriDefault&f=geojson',
+          data: layer.url
         },
-        paint: {
-          'fill-color': 'rgba(200, 100, 240, 0.3)',
-          'fill-outline-color': 'rgba(200, 100, 240, 1)',
-        },
-      })
-    },
-
-    addLoads(max) {
-      this.map.addLayer({
-        id: 'dummy',
-        type: 'fill',
-        source: {
-          type: 'geojson',
-          data:
-            'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_Protected_Areas/FeatureServer/1/query?where=wdpaid<' +
-            max +
-            '&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Foot&relationParam=&outFields=&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=&having=&gdbVersion=&historicMoment=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=xyFootprint&resultOffset=&resultRecordCount=&returnTrueCurves=false&returnExceededLimitFeatures=false&quantizationParameters=&returnCentroid=false&sqlFormat=none&resultType=&featureEncoding=esriDefault&f=geojson',
-        },
-        paint: {
-          'fill-color': 'rgba(200, 100, 240, 0.3)',
-          'fill-outline-color': 'rgba(200, 100, 240, 1)',
-        },
-      })
+        layout: {
+          visibility: 'visible'
+        }
+      }
+      
+      addPaintOptions(options, layer)
+      console.log('Adding data layer:', layer, options, this.firstForegroundLayerId)
+      this.map.addLayer(options, this.firstForegroundLayerId)
     },
   },
 }
