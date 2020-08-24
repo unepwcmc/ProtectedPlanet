@@ -1,3 +1,19 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin theme-chart-list-icon($theme) {
+  @for $i from 1 through length($theme) {
+    &:nth-child(#{$i}) {
+      .list__icon {
+        background-color: nth($theme, $i);
+      }
+    }
+  }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
 .theme--aqua { background-color: $chart-aqua; }
 .theme--blue { background-color: $chart-blue; }
 .theme--green { background-color: $chart-green; }

@@ -16,6 +16,7 @@
   .list {
     &__li {
       @include flex;
+      @include theme-chart-list-icon($theme-chart);
       border-top: solid 1px $grey-light;
       padding: rem-calc(14 0);
 
