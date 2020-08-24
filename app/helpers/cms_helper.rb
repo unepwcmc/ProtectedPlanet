@@ -194,9 +194,7 @@ module CmsHelper
   end
 
   def cms_fragment_content_datetime(identifier, page)
-    return cms_fragment_content(identifier, page) unless identifier == 'published_date'
-    date_fragments = page.fragments.where(identifier: 'published_date')
-    date_not_null = date_fragments.find_by(tag: 'date_not_null')
-    date_not_null ? date_not_null.datetime : date_fragments.first.datetime
+    date_not_null = page.fragments.find_by(tag: 'date_not_null', identifier: identifier)
+    date_not_null.datetime 
   end
 end
