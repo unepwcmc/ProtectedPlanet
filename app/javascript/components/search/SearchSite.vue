@@ -166,10 +166,31 @@ export default {
       this.totalItems = data.total_items
     },
 
+    updateQueryString (params) {
+      let searchParams = new URLSearchParams(window.location.search)
+
+      const key = Object.keys(params)[0]
+
+      if(key == 'search_term') {
+        searchParams = new URLSearchParams()
+
+        this.updateQueryStringParam(searchParams, key, params[key])
+      }
+      
+      const newUrl = `${window.location.pathname}?${searchParams.toString()}`
+
+      window.history.pushState({ query: 1 }, null, newUrl)
+    },
+    
+    updateQueryStringParam (params, key, value) {
+      params.has(key) ? params.set(key, value) : params.append(key, value)
+    },
+
     updateSearchTerm (searchTerm) {
       this.resetAll()
       this.searchTerm = searchTerm
       this.ajaxSubmission()
+      this.updateQueryString({ search_term: searchTerm })
     },
   }
 }
