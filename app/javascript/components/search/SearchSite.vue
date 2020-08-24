@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="search--main">
     <search-site-input
       :endpoint="endpoint"
       :placeholder="placeholder"
@@ -17,7 +17,10 @@
       :results="results"
       :resultsText="resultsText"
       :totalItems="totalItems"
+      v-show="!loadingResults"
     />
+
+    <span :class="['icon--loading-spinner margin-center search__spinner', { 'icon-visible': loadingResults } ]" />
 
     <pagination
       :currentPage="currentPage"
@@ -80,6 +83,7 @@ export default {
       currentPage: 0,
       defaultCategory: this.categories[0].id,
       defaultPage: 1,
+      loadingResults: false,
       pageItemsStart: 0,
       pageItemsEnd: 0,
       requestedPage: 1,
@@ -99,6 +103,8 @@ export default {
 
   methods: {
     ajaxSubmission () {
+      this.loadingResults = true
+
       let data = {
         params: {
           filters: {
@@ -118,8 +124,8 @@ export default {
 
       axios.get(this.endpoint, data)
         .then(response => {
-          console.log('success', response)
           this.updateProperties(response.data)
+          this.loadingResults = false
         })
         .catch(function (error) {
           console.log(error)
