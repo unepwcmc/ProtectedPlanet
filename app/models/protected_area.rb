@@ -93,9 +93,8 @@ class ProtectedArea < ApplicationRecord
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list, :is_oecm,
-      :is_transboundary],
-      methods: [:coordinates],
+      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_oecm],
+      methods: [:coordinates, :is_green_list, :is_transboundary],
       include: {
         countries_for_index: {
           only: [:name, :id, :iso_3],
