@@ -164,10 +164,10 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     target = is_importance_region?(stat_name, record) ? nil : Aichi11Target.instance.public_send(target_column)
 
     {
-      title: type.capitalize,
+      # Hacky fix - connectivity only applies to terrestrial regions, not marine
+      title: stat[:name] == 'Well connected' ? 'Terrestrial' : type.capitalize,
       value: value,
       target: target,
-      # Hacky fix - connectivity only applies to terrestrial regions, not marine
       colour: stat[:name] == 'Well connected' ? 'terrestrial' : type
     }
   end

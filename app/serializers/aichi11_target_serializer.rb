@@ -52,7 +52,9 @@ class Aichi11TargetSerializer
     chart_json = DEFAULT_CHART_JSON.dup
 
     # Connectivity is terrestrial only
-    chart_json[:colour] = 'terrestrial' if endpoint.to_s == 'well_connected'
+    if endpoint.to_s == 'well_connected'
+      chart_json.merge!({ colour: 'terrestrial', title: 'Terrestrial' })
+    end
 
     value = yield
     target = endpoint.to_s == 'importance' ? nil : instance.public_send("#{endpoint.to_s}_global")
