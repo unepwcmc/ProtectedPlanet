@@ -39,7 +39,7 @@ namespace :comfy do
 
       old_file = File.join(FILES, old_filename)
       
-      S3.upload(filename, Pathname.new(old_file))
+      S3.upload(filename, Pathname.new(old_file), bucket: TO)
     end
 
     puts "Could not migrate records with IDs: #{unmigrated_files.join(', ')}"

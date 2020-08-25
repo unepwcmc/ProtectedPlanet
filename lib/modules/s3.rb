@@ -30,23 +30,17 @@ class S3
   end
 
   def upload object_name, source, opts
-    # Check to see what environment Rails is currently running in
-    bucket = Rails.application.secrets.aws_downloads_bucket
-
-    if Rails.env.staging? || Rails.env.production?
-      bucket = Rails.application.secrets.aws_files_bucket
-    end
+    # Default to downloads bucket unless specified (e.g. for when uploading CMS files)
+    bucket = opts[:bucket] || Rails.application.secrets.aws_downloads_bucket
 
     object = @s3.bucket(bucket).object(object_name)
     object.upload_file(source)
 
-    if bucket == Rails.application.secrets.aws_downloads_bucket
-      @client.put_object_acl({
-                          acl: "public-read",
-                          bucket: bucket,
-                          key: object_name,
-                            })
-    end
+    @client.put_object_acl({
+      acl: "public-read",
+      bucket: bucket,
+      key: object_name,
+    })
     return
   end
 
