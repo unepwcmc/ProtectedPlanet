@@ -22,8 +22,6 @@ namespace :comfy do
 
   desc "Export local Activestorage files to S3 PP staging bucket"
   task :export_to_s3 => :environment do |_t|
-    s3 = S3.new
-
     puts "Exporting CMS data from local ActiveStorage folder [#{FROM}] to Bucket [#{TO}] ..."
     
     unmigrated_files = []
@@ -41,7 +39,7 @@ namespace :comfy do
 
       old_file = File.join(FILES, old_filename)
       
-      s3.upload(filename, Pathname.new(old_file))
+      S3.upload(filename, Pathname.new(old_file))
     end
 
     puts "Could not migrate records with IDs: #{unmigrated_files.join(', ')}"
