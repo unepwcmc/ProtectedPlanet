@@ -122,6 +122,39 @@ class RegionPresenter
     }
   end
 
+  def top_gl_coverage_countries
+  # List of all countries with at least one green list PA
+    countries = Country.countries_with_gl
+
+    # Group them by region
+    countries_in_region = countries.select { |country| country.region == region }
+
+    countries_in_region.concat(region.countries.where.not(id: countries_in_region).take(10 - countries_in_region.length).to_a)
+
+    all_gls = countries_in_region.map do |country|
+      total_gl_area = country.protected_areas.green_list_areas.present? ? country.total_gl_coverage : 0
+    
+      total_area = country.country_statistic.land_area + country.country_statistic.marine_area
+      percentage_of_total_area = ((total_gl_area / total_area ).to_f * 100).round(1)
+      { country: country, total_area: total_gl_area, percentage: percentage_of_total_area }
+    end.sort! do |a, b|
+      # If rounded %s happen to be the same, then sort by area
+      b[:percentage] == a[:percentage] ? b[:total_area] <=> a[:total_area] : b[:percentage] <=> a[:percentage] 
+    end
+
+    {
+      regionTitle: region.name,
+      countries: all_gls.map do |stat|
+        {
+          title: stat[:country].name,
+          percentage: stat[:percentage],
+          km: number_with_delimiter(stat[:total_area].round(0)),
+          iso3: stat[:country].iso_3
+        }
+      end
+    }
+  end
+
   private
 
   def region

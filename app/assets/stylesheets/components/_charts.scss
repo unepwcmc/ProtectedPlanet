@@ -118,6 +118,7 @@ $chart-target-stroke-width: rem-calc(3);
 //--------------------------------------------------
 .am-chart {
   @import './charts/am-chart-line';
+  @import './charts/am-chart-pie';
 }
 
 //--------------------------------------------------

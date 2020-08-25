@@ -125,7 +125,11 @@ export default {
       })
 
       if (this.onClick) {
-        this.map.on('click', e => { this.onClick(e) })
+        this.map.on('click', e => { 
+          if (e.originalEvent.detail === 1) { 
+            this.onClick(e) 
+          }
+        })
       }
     },
 
@@ -155,8 +159,10 @@ export default {
     },
 
     addLayer (layer) {
-      if (true) {//layer type goes here
-        this.addTypeLayer(layer)
+      if (layer.type === 'raster_tile') {
+        this.addRasterTileLayer(layer)
+      } else if (layer.type === 'raster_data') {
+        this.addRasterDataLayer(layer)
       }
     },
 
