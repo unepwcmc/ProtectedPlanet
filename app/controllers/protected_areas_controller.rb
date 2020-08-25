@@ -20,7 +20,8 @@ class ProtectedAreasController < ApplicationController
 
     @locations = get_locations
 
-    @sources = @protected_area.source_json
+    # In the format [{title: ..., responsible_party: ..., year: ...}, ...]
+    @sources = @protected_area.sources_as_json
 
     @wdpa_other = [] ## 3 other PAs from ...?
 

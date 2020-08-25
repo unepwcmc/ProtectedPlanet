@@ -3,7 +3,7 @@ class Source < ApplicationRecord
   
   def source_json
     self.as_json(
-      only: [:title, :year]
+      only: [:title, :year, :responsible_party]
     )
   end
 end

@@ -111,7 +111,9 @@ class ProtectedArea < ApplicationRecord
     coverage_growth_hash
   end
 
-
+  def sources_as_json
+    sources.map { |source| source.source_json }.uniq
+  end
 
   def wdpa_ids
     wdpa_id
