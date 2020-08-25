@@ -112,7 +112,7 @@ class ProtectedArea < ApplicationRecord
   end
 
   def sources_as_json
-    sources.map { |source| source.source_json }.uniq
+    sources.present? ? sources.map { |source| source.source_json }.uniq.to_json : nil
   end
 
   def wdpa_ids
