@@ -20,14 +20,7 @@ class ProtectedAreasController < ApplicationController
 
     @locations = get_locations
 
-    # @protected_area.sources
-    @sources = [
-      {
-        title: 'Source name',
-        date_updated: '2019',
-        url: 'http://link-to-source.com'
-      }
-    ]
+    @sources = @protected_area.source_json
 
     @wdpa_other = [] ## 3 other PAs from ...?
 
