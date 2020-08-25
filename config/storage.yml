@@ -5,22 +5,14 @@ test:
 local:
  service: Disk
  root: <%= Rails.root.join("storage") %>
-#  root: <%= '/home/wcmc/ProtectedPlanet/shared/storage' %> - only for staging, we will continue to use the above for our own repos
 
-staging_s3:
+# Main service to be used for staging - also backs up to prod
+staging:
   service: S3
   access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
   secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
   region: us-east-1
   bucket: <%= ENV["PP_FILES_STAGING"] %>
-
-# Main service to be used for staging - also backs up to prod
-staging:
-  service: Mirror
-  primary: staging_s3
-  mirrors:
-    - local
-    - production
 
 production:
   service: S3
