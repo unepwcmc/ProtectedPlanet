@@ -137,18 +137,16 @@ class SyncSeeds
   end
 
   # Piggybacks on existing Comfy modules 
-  # TODO - the arguments used here for the site and folder
-  #  (e.g. protectedplanet or protected-planet) can be different 
-  # for different environments, need to change both this and the staging seeds rake task
-  def commence_comfy_import(answer)
+  def commence_comfy_import(answer, destination)
     logger = ComfortableMexicanSofa.logger
     ComfortableMexicanSofa.logger = Logger.new(STDOUT)
+    site = Comfy::Cms::Site.first.identifier
 
     if answer == 'all'
-      Rake::Task["comfy:cms_seeds:import"].invoke('protected-planet', 'protectedplanet')     
+      Rake::Task["comfy:cms_seeds:import"].invoke(destination, site)     
     else
       module_name = "ComfortableMexicanSofa::Seeds::#{answer.singularize}::Importer".constantize
-      module_name.new('protected-planet', 'protectedplanet').import!
+      module_name.new(destination, site).import!
     end
     
     ComfortableMexicanSofa.logger = logger
