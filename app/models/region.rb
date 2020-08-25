@@ -152,9 +152,9 @@ class Region < ApplicationRecord
 
   def region_sources
     protected_areas.map do |area|
-      next if area.sources_as_json.nil?
-      area.sources_as_json
-    end.flatten.uniq.to_json
+      next if area.sources_as_hash.nil?
+      area.sources_as_hash
+    end.flatten.uniq
   end
 
   private
