@@ -137,16 +137,16 @@ class SyncSeeds
   end
 
   # Piggybacks on existing Comfy modules 
-  def commence_comfy_import(answer, destination)
+  def commence_comfy_import(answer, source)
     logger = ComfortableMexicanSofa.logger
     ComfortableMexicanSofa.logger = Logger.new(STDOUT)
     site = Comfy::Cms::Site.first.identifier
 
     if answer == 'all'
-      Rake::Task["comfy:cms_seeds:import"].invoke(destination, site)     
+      Rake::Task["comfy:cms_seeds:import"].invoke(source, site)     
     else
       module_name = "ComfortableMexicanSofa::Seeds::#{answer.singularize}::Importer".constantize
-      module_name.new(destination, site).import!
+      module_name.new(source, site).import!
     end
     
     ComfortableMexicanSofa.logger = logger
