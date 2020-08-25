@@ -19,8 +19,10 @@
   <%= render partial: "partials/cards/squares", locals: { cards: pas_categories } %>
 </section>
 
-<section>
-  <%= render partial: "partials/maps/main" %>
+<section class="map-section">
+  <%= render partial: "partials/maps/main", locals: {
+    map: @main_map
+  } %>
 </section>
 
 <section class="section-padding">
@@ -33,7 +35,7 @@
   <%= render "partials/cards/resources" %>
 </section>
 
-<section class="container section-padding">
+<section class="container section-padding--bottom">
   <%= render "partials/cards/articles" %>
 </section>
 

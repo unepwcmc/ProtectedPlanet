@@ -1,3 +1,5 @@
+<%= render partial: "./partials/bars/topbar-secondary" %>
+
 <%= render partial: "./layouts/partials/hero-thematic", locals: { 
   button_text: t('thematic_area.green_list.hero.button_text'),
   button_url: search_areas_path(filters: @filters),
@@ -13,8 +15,59 @@
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
-<section class="container">
-  <%= cms_fragment_render("content") %>
+<section class="container--medium page-padding--top">
+  <h2><%= cms_fragment_render(:section_about_title, @cms_page) %></h2>
+  <div><%= cms_fragment_render(:section_about_content, @cms_page) %></div>
+</section>
+
+<%= render partial: "partials/charts/chart-row-pa", locals: {
+  charts: [
+    {
+      coverage: @pas_percent,
+      theme: 'theme--blue',
+      total: @total_area_percent
+    }
+  ],
+  content: cms_fragment_render(:section_percentage_content, @cms_page),
+  title: cms_fragment_render(:section_percentage_title, @cms_page)
+} %>
+
+<%#= render partial: "partials/charts/chart-coverage-growth", locals: {
+  cms_page: @cms_page,
+  content: cms_fragment_render(:section_coverage_content, @cms_page),
+  lines: @protectedAreaGrowth,
+  title: cms_fragment_render(:section_coverage_title, @cms_page),
+  units: 'km2'
+} %>
+
+<div class="container">
+  <div class="container--component">
+    <h2><%= cms_fragment_render(:section_coverage_title, @cms_page) %></h2>
+    <div><%= cms_fragment_render(:section_coverage_content, @cms_page) %></div>
+
+    <div>
+      <am-chart-line 
+        :data="<%= @protectedAreaGrowth %>"
+        :dots="true"
+      ></am-chart-line>
+    </div>
+  </div>
+</div>
+
+<%= render partial: "partials/charts/chart-top-ten", locals: {
+  content: cms_fragment_render(:section_size_content, @cms_page),
+  regionsTopCountries: @regionsTopCountries,
+  title: cms_fragment_render(:section_size_title, @cms_page)
+} %>
+
+<section class="map-section">
+  <%= render partial: "partials/maps/main", locals: {
+    map: @map
+  } %>
+</section>
+
+<section class="section-padding">
+  <%= render "partials/carousels/themes" %>
 </section>
 
 <%= render "partials/ctas/live-report" %>

@@ -41,7 +41,7 @@ Rails.application.routes.draw do
         get '/search/by_point', to: 'search#by_point'
       end
     end
-
+    
     # resources :projects, only: [:create, :index, :update, :destroy]
 
     get '/marine/download_designations', to: 'marine#download_designations'
@@ -69,7 +69,10 @@ Rails.application.routes.draw do
 
 
     # routes worked on so far as part of the refresh
-    get '/resources', to: 'resources#index'
+
+    post '/pame/download', to: 'pame#download'
+    post '/pame/list', to: 'pame#list'
+
     get '/search', to: 'search#index'
 
     get '/thematical-areas/green-list', to: 'green_list#index'
@@ -84,6 +87,8 @@ Rails.application.routes.draw do
 
     post '/search/autocomplete', to: 'search#autocomplete'
     get '/search-results', to: 'search#search_results', as: :search_results
+
+    get '/search-cms', to: 'search_cms#index', as: :search_cms
 
     # Ensure that this route is defined last
 

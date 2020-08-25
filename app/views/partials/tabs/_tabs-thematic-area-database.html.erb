@@ -12,8 +12,10 @@
         <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
       </section>
 
-      <section>
-        <%= render partial: "partials/maps/main" %>
+      <section class="map-section">
+        <%= render partial: "partials/maps/main", locals: {
+          map: map
+        } %>
       </section>
     </tab-target>
 

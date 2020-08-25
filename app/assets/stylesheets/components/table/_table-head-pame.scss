@@ -1,0 +1,59 @@
+//----------------------------------------
+// animations
+//----------------------------------------
+@keyframes showHeader {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+//----------------------------------------
+// classes
+//----------------------------------------
+&--pame {
+  margin-top: rem-calc(30);
+  height: rem-calc(56);
+
+  display: none;
+
+  @include breakpoint($medium) { display: block; }
+
+  .table-head {
+    &--stuck {
+      position: fixed;
+      top: 0;
+
+      width: rem-calc(1160);
+
+      animation: showHeader .25s forwards linear;
+    }
+
+    &__row {
+      display: flex;
+    }
+
+    &__cell {
+      @include table-pame-column-widths;
+      background-color: black;
+      border-left: dotted white 2px;
+      color: $white;
+      font-size: rem-calc(18);
+      height: rem-calc(57);
+      padding: rem-calc(8 14 0 14);
+
+      display: inline-block;
+
+      &:first-child { border-left: none; }
+    }
+
+      &__title {
+        margin-right: rem-calc(2);
+        vertical-align: middle;
+  
+        display: inline-block;
+      }
+  }
+}

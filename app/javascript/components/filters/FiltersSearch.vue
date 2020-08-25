@@ -1,5 +1,8 @@
 <template>
-  <div v-show="isActive">
+  <div 
+    class="filters--sidebar"
+    v-show="isActive"
+  >
     <div class="filter__pane">
       <div class="filter__pane-topbar">
         <span 
@@ -15,7 +18,7 @@
           class="filter__group"
         >
           <h3>{{ filterGroup.title }}</h3>
-
+          
           <v-filter
             v-for="filter, index in filterGroup.filters"
             :key="`${filter.id}-${index}`"

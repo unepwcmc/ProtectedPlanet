@@ -27,47 +27,57 @@ $orange: #D9B143;
 
 $pink: #F84489;
 
+$purple: #7B1977;
+$purple-dark: #794B9D;
+
 $red: #FA3232;
+
+$chart-aqua: #65C9B2;
+$chart-black: #151617;
+$chart-blue-light: #64BAD9;
+$chart-blue: #5F81CB;
+$chart-blue-dark: #1A4D9F;
+$chart-green: #71A22B;
+$chart-orange: #FAA51B;
+$chart-orange-dark: #E57133;
+$chart-pink-light: #EF5F6C;
+$chart-pink: #EF266C;
+$chart-purple: #A54897;
+$chart-yellow: #F5F58A;
+
+$alert: $red;
+
+$primary: $green;
+$primary-dark: $green--darker;
+
+$global: $purple;
+$oecm: $orange;
+$marine: $blue;
+$terrestrial: $green-bright;
 
 $map-oecm: rgba($orange, .8);
 $map-marine: rgba($blue, .8);
 $map-terrestrial: rgba($pink, .8);
 
-$chart-aqua: #64BAD9;
-$chart-blue: #5F81CB;
-$chart-green: #65C9B2;
-$chart-purple: #A54897;
-
-$orange--dark: #de522f;
-$orange--lighter: #f16e4d;
-$orange--lighest: #F5A623; //highlight color on the marine page
-$brown-bg: #fcded6;
-$yellow: #ffe600;
-
-$purple: #7B1977;
-$purple-dark: #794B9D;
-
-$alert: $red;
-$primary: $green;
-$primary-dark: $green--darker;
-
-$global: $purple;
-$marine: $blue;
-$terrestrial: $green-bright;
-
 $pin-marine: $marine;
-$pin-oecm: $orange;
+$pin-oecm: $oecm;
 $pin-terrestrial: $terrestrial;
 
-//used on marine insights page
-$blue--marine-1: #bfe5e9; 
-$blue--marine-2: #A1D8DE;
-$blue--marine-3: #90BDC4;
-$blue--marine-4: #729099;
-$blue--marine-5: #444955;
-$marine-accent-color: $orange--lighest;
-
 $theme-designation: [$chart-purple, $chart-aqua, $chart-blue];
+$theme-chart: [
+  $chart-blue-light, 
+  $chart-purple, 
+  $chart-aqua, 
+  $chart-blue, 
+  $chart-orange, 
+  $chart-pink-light, 
+  $chart-black, 
+  $chart-green, 
+  $chart-yellow, 
+  $chart-pink, 
+  $chart-blue-dark, 
+  $chart-orange-dark
+];
 
 //--------------------------------------------------
 // buttons
@@ -116,6 +126,7 @@ $fw-black: 900;
 // breakpoints
 //--------------------------------------------------
 // must be in px not rem!
+// IF MODIFIED, PLEASE CHECK ELSEWHERE IN PROJECT e.g. in mixin-responsive.js
 $small: 767px; 
 $medium: 1024px;
 $large: 1200px;
@@ -126,11 +137,12 @@ $large: 1200px;
 $z-100: 100;
 $z-200: 200;
 $z-300: 300;
+$z-400: 400;
 
 //--------------------------------------------------
 // padding
 //--------------------------------------------------
-$gutter-small: rem-calc(25);
+$gutter-small: rem-calc(20);
 $gutter-medium: rem-calc(25);
 $gutter-large: rem-calc(30);
 
@@ -164,6 +176,8 @@ $site-width-rem: rem-calc($site-width);
 // $site-width-medium-tablet: 80%;
 // $site-width-medium-laptop: 78%;
 $site-width-medium-desktop: rem-calc(750);
+
+$filters-menu-max-height: rem-calc(300);
 
 //--------------------------------------------------
 // tables

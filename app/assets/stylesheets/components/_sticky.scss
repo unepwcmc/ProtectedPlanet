@@ -4,40 +4,63 @@
 $sticky-bar-background-color: $white;
 $sticky-bar-padding: rem-calc(10);
 
+@mixin sticky-bar-stuck {
+  @include box-shadow-grey-light;
+  width: 100%;
+
+  display: block;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+}
+
+@mixin sticky-bar-wrapper {
+  background-color: $sticky-bar-background-color;
+  z-index: 1;
+}
+
 //----------------------------------------
 // sticky bar
 //----------------------------------------
-.sticky-bar {
-  &--basic {
-    @include gutters;
-    width: 100%;
+.sticky-bar--basic {
+  @include gutters;
+  width: 100%;
 
-    @include breakpoint($large) { padding: 0; }
+  @include breakpoint($large) { padding: 0; }
 
-    .sticky-bar {
-      &__wrapper {
-        background-color: $sticky-bar-background-color;
-        padding-top: $sticky-bar-padding;
-        padding-bottom: $sticky-bar-padding;
-        z-index: 1;
-        
-        &.sticky-bar--stuck {
-          @include box-shadow-grey-light;
-          width: 100%;
+  .sticky-bar {
+    &__wrapper {
+      @include sticky-bar-wrapper;
+      padding-top: $sticky-bar-padding;
+      padding-bottom: $sticky-bar-padding;
+      
+      &.sticky-bar--stuck {
+        @include sticky-bar-stuck;
 
-          display: block;
-          position: fixed;
-          top: 0;
-          right: 0;
-          left: 0;
-
-          .sticky-bar__content { @include gutters; }
-        }
+        .sticky-bar__content { @include gutters; }
       }
+    }
 
-      &__content {
-        margin: 0 auto;
-        max-width: $site-width;
+    &__content {
+      margin: 0 auto;
+      max-width: $site-width;
+    }
+  }
+}
+
+.sticky-bar--slide-in {
+  width: 100%;
+
+  .sticky-bar {
+    &__wrapper {
+      @include sticky-bar-wrapper;
+      top: rem-calc(-200);
+      
+      &.sticky-bar--stuck {
+        @include sticky-bar-stuck;
+
+        transition: top linear .25s;
       }
     }
   }

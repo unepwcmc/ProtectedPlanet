@@ -1,0 +1,51 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--stats-coverage {
+  @include card-stats;
+
+  .card {
+    &__chart {
+      margin-bottom: rem-calc(14);
+      width: 50%;
+
+      @include breakpoint($small) { 
+        margin-right: rem-calc(20);
+        margin-bottom: 0;
+        width: 30%;
+      }
+    }
+
+    &__content { @include card-stat-content; }
+
+    &__h2 { @include card-stats-h2; }
+
+    &__number { 
+      font-size: rem-calc(16);
+      font-weight: $bold; 
+      line-height: .9;
+    }
+    
+    &__number-large { 
+      font-size: rem-calc(40);
+      font-weight: $bold; 
+      line-height: .9;
+    }
+
+    &__stat {
+      font-size: rem-calc(14);
+      line-height: 1.3;
+      margin: rem-calc(6 0 14 0);
+    }
+
+    &__stat-large { margin-bottom: rem-calc(14); }
+
+    &__subsection { border-top: solid 1px $grey-light; }
+
+    &__subtitle {
+      font-size: rem-calc(20);
+      font-weight: $bold;
+      margin: rem-calc(12 0 0 0);
+    }
+  }
+}

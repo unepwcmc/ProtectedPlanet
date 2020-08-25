@@ -1,19 +1,46 @@
 &--equity {
-    @include responsive(display, block, block, flex);
+    @include breakpoint($medium) {
+        display: flex;
+        max-width: none;
+    }
+    
+    max-width: rem-calc(685);
+    margin: 0 auto;
+    display: block;
 
     &__button {
         @include flex-vs-start;
+        border-radius: rem-calc(4);
     }
 
     &__content {
-        @include responsive(width, 100%, 100%, 50%);
-        @include responsive(height, rem-calc(271), rem-calc(507), auto);
+        @include breakpoint-down($small) {
+            img {
+                object-fit: contain;
+            }
+        }
+        @include breakpoint($small) {
+            height: rem-calc(507);
+            padding: rem-calc(30 0);
+
+            img {
+                object-fit: cover; 
+            }
+        }
+        @include breakpoint($medium) {
+            width: 50%;
+            height: auto;
+            padding: rem-calc(60 0);
+        }
+
         @include flex;
         border: 1px solid $grey-dark;
+       
+        height: rem-calc(271);
+        padding: rem-calc(20 0);
 
         img {
-            margin: 0 auto;
-            object-fit: contain;
+            margin: 0 auto;                 
         }
     }
 
@@ -22,15 +49,30 @@
     }
 
     &__header {
-        @include responsive(margin-bottom, 0, rem-calc(8), rem-calc(14));
+        @include breakpoint($small) {
+            margin-bottom: rem-calc(8);
+        }
+        @include breakpoint($medium) {
+            margin-bottom: rem-calc(14);
+        }
+
         margin-top: 0;
+        margin-bottom: 0;
     }
 
     &__panel {
-        @include responsive(width, 100%, 100%, 50%);
-        @include responsive(padding, rem-calc(32 13 29 18), rem-calc(50 44 62 49), rem-calc(41 40 29 57));
+        @include breakpoint($small) {
+            padding: rem-calc(50 44 62 49);
+        }
+        @include breakpoint($medium) {
+            padding: rem-calc(41 40 29 57);
+            width: 50%;
+        }
+        padding: rem-calc(32 13 29 18);
+
         @include flex;
         @include flex-column;
+
         background-color: $grey-xlight;
     }
 
@@ -40,22 +82,33 @@
 // Custom select for this component
 &--dropdown {
     &__custom-select {
-        @include responsive(margin, rem-calc(0 0 27), rem-calc(30 0 36), rem-calc(14 0 19));
+        @include breakpoint($small) {
+            margin: rem-calc(30 0 36);
+        }
+        @include breakpoint($medium) {
+            margin: rem-calc(14 0 19);
+        }
+        margin: rem-calc(0 0 27);
         position: relative;
         user-select: none;
         width: 100%;
     }
 
     &__selected {
+        @include breakpoint($small) {
+            padding: rem-calc(20 24);
+        }
+
         @include flex;
         @include flex-v-center;
         @include flex-h-between;
-        @include responsive(padding, rem-calc(14 10 15 18), rem-calc(22 17 29 24), rem-calc(22 17 29 24));
         @include text-body;
+
         background: $white;
         border: 1px solid $grey-black;
         cursor: pointer;
         line-height: 1.9;
+        padding: rem-calc(11 20);
         position: relative;
     }
 
@@ -63,7 +116,7 @@
         display: none;
 
         &--active {
-            @include responsive(height, rem-calc(200), rem-calc(300), rem-calc(500));
+            height: 40vh;
             background: $white;
             border: 1px solid $grey-black;
             border-top: 0;
@@ -78,10 +131,15 @@
     }
 
     &__option {
-        @include responsive(padding, rem-calc(0 10 0 18), rem-calc(0 24 0 29), rem-calc(0 24 0 29));
+        @include breakpoint($small) {
+            padding: rem-calc(5 24);
+        }
+        
         @include text-body;
+
         line-height: 1.9;
         display: block;
+        padding: rem-calc(2 20);
         position: relative;
 
         &:hover {

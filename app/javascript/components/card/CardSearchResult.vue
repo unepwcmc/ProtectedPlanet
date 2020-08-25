@@ -17,16 +17,13 @@
       />
     </div>
 
-    <div 
-      v-if="image" 
-      :alt="title"
-      class="card__image"
-      :style="{ backgroundImage: `url(${image})` }"
-    />
-    <div 
-      v-else 
-      class="card__image-placeholder"
-    />
+    <div class="card__image-placeholder">
+      <div 
+        :alt="title"
+        class="card__image"
+        :style="{ backgroundImage: `url(${image})` }"
+      />
+    </div>
   </a>
 </template>
 

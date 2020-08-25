@@ -9,5 +9,9 @@
       font-size: rem-calc(20); 
       font-weight: $bold;
     }
+
+    &__warning {
+      margin-top: 0;
+    }
   }
 }

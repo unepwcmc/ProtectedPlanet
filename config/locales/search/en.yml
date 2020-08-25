@@ -26,13 +26,13 @@ en:
     filter-group-type:
       title: Type
       options:
-        terrestrial: 'Terrestrial'
-        marine: 'Marine'
+        terrestrial: Terrestrial
+        marine: Marine
     geo-types:
       region: Regions
       country: Countries
       site: Individual Areas
-    map: Map
+    map: Map View
     protected-areas: Protected Areas
     results: results
     no-results: No results. Please search again.
@@ -41,3 +41,17 @@ en:
       - news-and-stories
       - resources
       - areas
+    custom_categories:
+      topics:
+        name: Topics
+        items:
+          wdpa: WDPA
+          oecm: OECM
+          pame: PAME
+      types:
+        name: Types
+        items:
+          publications: Publications
+          statistics: Statistics
+          technical: Technical
+          training: Training

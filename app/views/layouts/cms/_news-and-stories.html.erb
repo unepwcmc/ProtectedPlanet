@@ -1,15 +1,21 @@
 <div class="page--news">
-  <%= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: @cms_page[:slug] } %>
+  <%= render partial: "./layouts/partials/hero-small", locals: { 
+    classes: @cms_page[:slug],
+    hero_image: cms_fragment_render(:hero_image, @cms_page),
+    title: @cms_page.label
+  } %>
 
-  <div class="page__container container section-padding">
-    <div class="page__col-1">
-      <h2>filters</h2>
-    </div>
-    
-    <div class="page__col-2">
-      <%= render partial: "partials/cards/articles", locals: { get_all: true} %>
-    </div>
-  </div>
+  <listing-page
+    endpoint-search="/en/search-cms"
+    :filter-groups="<%= get_category_filters %>"
+    :page-id="<%= @cms_page.id %>"
+    :results="<%= cms_pages_for_search %>"
+    sm-trigger-element="sm-listing"
+    template="news"
+    text-filters-close="View Results"
+    text-filter-trigger="Filters"
+    text-no-results="No Results"
+  ></listing-page>
 
   <%= render "partials/ctas/live-report" %>
 </div>

@@ -24,16 +24,17 @@
       @include input-hidden;
 
       &:checked + .checkbox__input-fake {
-        // @include input-custom-checkbox-selected();
         background-color: $primary;
       }
 
-      &:focus + .checkbox__input-fake { @include input-custom-focus; } 
+      &:focus + .checkbox__input-fake { 
+        @include input-custom-focus;
+      } 
     }
 
     &__input-fake {
-      // @include input-custom-checkbox(rem-calc(20)); 
       background-color: $white;
+      border: solid 1px $grey-light;
       border-radius: $radius-global;
       width: 100%; height: calc(100% - 5px);
 

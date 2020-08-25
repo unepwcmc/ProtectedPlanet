@@ -1,10 +1,18 @@
 class RegionController < ApplicationController
   before_action :load_vars
+  include MapHelper
 
   def show
     @iucn_categories = @region.protected_areas_per_iucn_category
 
     @governance_types = @region.protected_areas_per_governance
+
+    @designations = @presenter.designations
+
+    # For the stacked row chart percentages
+    @designation_percentages = @designations.map do |designation|
+      { percent: designation[:percent] }
+    end.to_json
 
     @sources = [
       {
@@ -14,13 +22,28 @@ class RegionController < ApplicationController
       }
     ]
 
-    @total_oecm = 0 ##TODO
-    @total_wdpa = @region.protected_areas.count
+    @total_oecm = @region.protected_areas.oecms.count
+    @total_pame = @region.protected_areas.with_pame_evaluations.count
+    @total_wdpa = @region.protected_areas.wdpas.count
 
     @wdpa = pas_sample
+
+    @map = {
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+    }
+
+    @map_options = {
+      map: { boundsUrl: @region.extent_url }
+    }
+
+    helpers.opengraph_title_and_description_with_suffix(@region.name)
   end
 
   private
+
+  def map_overlays
+    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+  end
 
   def load_vars
     params[:iso]!="GL" or raise_404

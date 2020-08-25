@@ -1,5 +1,6 @@
 class Country < ApplicationRecord
   include GeometryConcern
+  include MapHelper
 
   has_and_belongs_to_many :protected_areas
 
@@ -33,6 +34,16 @@ class Country < ApplicationRecord
     )
   end
 
+  def self.countries_with_gl
+    joins(:protected_areas).where.not(protected_areas: {green_list_status_id: nil}).uniq
+  end
+
+  def total_gl_coverage
+    protected_areas.green_list_areas.reduce(0) do |sum, x|
+      sum + x.reported_area
+    end
+  end
+
   def self.data_providers
     joins(:protected_areas).uniq
   end
@@ -48,6 +59,10 @@ class Country < ApplicationRecord
     # TODO This line is now breaking the indexing. It looks like it's not require anymore
     #js['region_name'] = js['region_for_index']['name']
     js
+  end
+
+  def extent_url
+    country_extent_url(iso_3)
   end
 
   def random_protected_areas wanted=1
@@ -127,12 +142,10 @@ class Country < ApplicationRecord
 
   def coverage_growth
     _year = 'EXTRACT(year from legal_status_updated_at)'
-    _area = 'SUM(reported_area + reported_marine_area) AS area'
     ActiveRecord::Base.connection.execute(
       <<-SQL
-        SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count,
-          SUM(area) OVER (ORDER BY date_part::INT) AS area
-        FROM (#{protected_areas_inner_join(_year, _area)}) t
+        SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count
+        FROM (#{protected_areas_inner_join(_year)}) t
         ORDER BY year
       SQL
     )

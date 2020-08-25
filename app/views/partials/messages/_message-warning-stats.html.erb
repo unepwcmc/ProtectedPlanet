@@ -1,3 +1,14 @@
 <div class="card--message">
-  <p><%= t('stats.warning').html_safe %></p>
+  <p class="card__warning"><%= t('stats.warning').html_safe %></p>
+
+  <% if is_malaysia? %>
+    <ul class="list--links">
+      <% malaysia_documents.map do |doc| %>
+        <li class="list__li">
+          <span><%= doc[:name] %></span>
+          <%= link_to t('global.button.pdf'), doc[:url], title: doc[:name], class: 'list__a button--download-pdf', target: '_blank' %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
 </div>
