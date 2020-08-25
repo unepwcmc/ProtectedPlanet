@@ -1,5 +1,6 @@
 class Search::CmsSerializer < Search::BaseSerializer
   include Comfy::CmsHelper
+  include CmsHelper
 
   def initialize(search, opts={})
     super(search, opts)
