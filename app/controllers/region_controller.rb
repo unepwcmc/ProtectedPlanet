@@ -17,13 +17,11 @@ class RegionController < ApplicationController
     end.to_json
 
     @governance_types = @region.protected_areas_per_governance
-    @governance_chart = @governance_types
-      .enum_for(:each_with_index)
-      .map do |item, i|
+    @governance_chart = @governance_types.map do |item|
       { 
-        id: i+1,
-        title: item['governance_name'], 
-        value: item['count'] 
+        id: item['governance_id'],
+        title: item['governance_name'],
+        value: item['count']
       }
     end.to_json
 
