@@ -74,6 +74,11 @@ export default {
     },
 
     clickNonCommercial () {
+      if(this.selectedDownloadOption.params.domain == 'search') {
+        this.selectedDownloadOption.params.filters = this.$store.state.download.searchFilters
+        this.selectedDownloadOption.params.search = this.$store.state.download.searchTerm
+      }
+
       this.closeCommercialModal()
       this.addNewDownloadItem()
     },

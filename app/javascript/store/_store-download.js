@@ -4,7 +4,9 @@ export const storeDownload = {
   state: {
     downloadItems: [],
     isModalActive: false,
-    isModalMinimised: false
+    isModalMinimised: false,
+    searchFilters: [],
+    searchTerm: ''
   },
 
   actions: {
@@ -62,6 +64,14 @@ export const storeDownload = {
       commit('updateLocalStorageDownloadItems')
       commit('updateLocalStorageBoolean', 'isModalActive')
       commit('updateLocalStorageBoolean', 'isModalMinimised')
+    },
+
+    updateSearchFilters ({ commit }, filters) {
+      commit('updateSearchFilters', filters)
+    },
+
+    updateSearchTerm ({ commit }, searchTerm) {
+      commit('updateSearchTerm', searchTerm)
     }
   },
 
@@ -114,6 +124,14 @@ export const storeDownload = {
 
     updateLocalStorageBoolean (state, property) {
       localStorage.setItem(property, state[property].toString())
+    },
+
+    updateSearchFilters (state, filters) {
+      state.searchFilters = filters
+    },
+
+    updateSearchTerm (state, searchTerm) {
+      state.searchTerm = searchTerm
     }
   }
 }

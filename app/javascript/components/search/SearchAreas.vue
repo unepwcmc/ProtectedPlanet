@@ -258,7 +258,10 @@ export default {
       })
     
       if(params.includes('search_term')) {
-        this.searchTerm = paramsFromUrl.get('search_term')
+        const searchTerm = paramsFromUrl.get('search_term')
+
+        this.searchTerm = searchTerm
+        this.$store.dispatch('download/updateSearchTerm', searchTerm)
       }
 
       if(params.includes('geo_type')) { 
@@ -294,6 +297,7 @@ export default {
       })
       
       this.filterGroupsWithPreSelected = this.filterGroups
+      this.$store.dispatch('download/updateSearchFilters', this.filterGroups)
 
       this.updateDisabledComponents('site')
     },
@@ -313,6 +317,7 @@ export default {
       this.activeFilterOptions = filters
       this.getFilteredSearchResults()
       this.updateQueryString({ filters: filters })
+      this.$store.dispatch('download/updateSearchFilters', filters)
     },
 
     updateProperties (response, resetFilters) {
@@ -383,6 +388,7 @@ export default {
       this.resetTabs()
       this.ajaxSubmission(true)
       this.updateQueryString({ search_term: searchParams.search_term })
+      this.$store.dispatch('download/updateSearchTerm', searchParams)
     },
 
     requestMore (requestedPage) {
