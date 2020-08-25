@@ -192,4 +192,10 @@ module CmsHelper
       false
     end
   end
+
+  def cms_fragment_content_datetime(identifier, page)
+    # Might not be able to find that particular tag and identifier combo -  hence the try
+    date = page.fragments.find_by(tag: 'date_not_null', identifier: identifier).try(:datetime)
+    date ? date : cms_fragment_content(identifier, page)
+  end
 end
