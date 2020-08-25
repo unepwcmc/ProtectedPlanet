@@ -3,7 +3,6 @@
 namespace :comfy do
   FROM  = 'storage'
   TO    = ENV['PP_FILES_STAGING']
-  TO_SHARED = '/home/wcmc/ProtectedPlanet/shared/storage'
   FILES = File.join(ComfortableMexicanSofa.config.seeds_path, 'protected-planet', 'files')
 
   def check_for_identifiers(attachment)
@@ -43,42 +42,6 @@ namespace :comfy do
       old_file = File.join(FILES, old_filename)
       
       s3.upload(filename, Pathname.new(old_file), bucket: TO)
-    end
-
-    puts "Could not migrate records with IDs: #{unmigrated_files.join(', ')}"
-  end
-
-  desc "Export local ActiveStorage files to shared folder"
-  task :export_to_shared => :environment do |_t|
-    s3 = S3.new(ENV['AWS_REGION'])
-
-    puts "Exporting CMS data from local ActiveStorage folder [#{FROM}] to Bucket [#{TO}] ..."
-    
-    unmigrated_files = []
-
-    ActiveStorage::Attachment.where(record_type: 'Comfy::Cms::File').find_each do |attachment|
-      filename = attachment.blob.key
-      next if attachment.record.nil?
-      
-      old_filename = check_for_identifiers(attachment)
-
-      if old_filename.nil?
-        unmigrated_files << attachment.record.id
-        next
-      end
-
-      source = File.join(FILES, old_filename)
-
-      dest_dir = File.join(
-        TO_SHARED, 
-        filename.first(2),
-        filename.first(4).last(2)
-      )
-      dest = File.join(dest_dir, filename)
-
-      FileUtils.mkdir_p(dest_dir)
-      puts "Moving #{source} to #{dest}"
-      FileUtils.cp(source, dest)
     end
 
     puts "Could not migrate records with IDs: #{unmigrated_files.join(', ')}"
