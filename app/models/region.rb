@@ -150,6 +150,10 @@ class Region < ApplicationRecord
     all_countries_and_territories.flatten.uniq
   end
 
+  def region_sources
+    protected_areas.map { |area| area.sources_as_json }.uniq
+  end
+
   private
 
   def protected_areas_inner_join group_by

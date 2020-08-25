@@ -34,7 +34,7 @@ class CountryController < ApplicationController
 
     @sites = [] # #TODO
 
-
+    @sources = @country.country_sources
 
     @total_oecm = @country.protected_areas.oecms.count
     @total_pame = @country.protected_areas.with_pame_evaluations.count
@@ -106,10 +106,6 @@ class CountryController < ApplicationController
     @country or raise_404
 
     @pame_statistics = @country.pame_statistic
-  end
-
-  def country_sources
-    @sources = @country.protected_areas.map { |area| area.sources_as_json }.uniq
   end
 
   def pas_sample(size = 3)

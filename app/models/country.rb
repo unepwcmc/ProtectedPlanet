@@ -70,6 +70,10 @@ class Country < ApplicationRecord
     protected_areas.offset(random_offset).limit(wanted)
   end
 
+  def country_sources
+    protected_areas.map { |area| area.sources_as_json }.uniq
+  end
+
   def protected_areas_per_designation(jurisdiction=nil)
     ActiveRecord::Base.connection.execute("""
       SELECT designations.id AS designation_id, designations.name AS designation_name, pas_per_designations.count

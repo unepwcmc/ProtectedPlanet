@@ -14,7 +14,7 @@ class RegionController < ApplicationController
       { percent: designation[:percent] }
     end.to_json
 
-
+    @sources = @region.region_sources
 
     @total_oecm = @region.protected_areas.oecms.count
     @total_pame = @region.protected_areas.with_pame_evaluations.count
@@ -52,7 +52,5 @@ class RegionController < ApplicationController
       order(:name).first(size)
   end
 
-  def region_sources
-    @sources = @region.protected_areas.map { |area| area.sources_as_json }.uniq
-  end
+ 
 end
