@@ -20,8 +20,8 @@ $chart-dial-font-size-desktop: rem-calc(26);
     &__arc {
       &--default, &--background { fill: $chart-item-background; }
       &--global { fill: $chart-purple; }
-      &--marine { fill: $chart-aqua; }
-      &--terrestrial { fill: $chart-green; }
+      &--marine { fill: $chart-blue-light; }
+      &--terrestrial { fill: $chart-aqua; }
     }
 
     &__arrow-circle { fill: $chart-dial-color; }
