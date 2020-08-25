@@ -2,7 +2,7 @@
 
 namespace :comfy do
   FROM  = 'storage'
-  TO    = ENV['PP_FILES_STAGING']
+  TO    = Rails.application.secrets.aws_files_bucket
   FILES = File.join(ComfortableMexicanSofa.config.seeds_path, 'protected-planet', 'files')
 
   def check_for_identifiers(attachment)
@@ -22,7 +22,7 @@ namespace :comfy do
 
   desc "Export local Activestorage files to S3 PP staging bucket"
   task :export_to_s3 => :environment do |_t|
-    s3 = S3.new(ENV['AWS_REGION'])
+    s3 = S3.new
 
     puts "Exporting CMS data from local ActiveStorage folder [#{FROM}] to Bucket [#{TO}] ..."
     
@@ -41,7 +41,7 @@ namespace :comfy do
 
       old_file = File.join(FILES, old_filename)
       
-      s3.upload(filename, Pathname.new(old_file), bucket: TO)
+      s3.upload(filename, Pathname.new(old_file))
     end
 
     puts "Could not migrate records with IDs: #{unmigrated_files.join(', ')}"
@@ -49,7 +49,6 @@ namespace :comfy do
 
   desc "Sync up production's ActiveStorage files with staging's"
   task :sync_staging_production => :environment do |_t|
-    prod_bucket = SESSION.bucket("#{ENV["PP_FILES_PRODUCTION"]}")
 
     # TODO: When ActiveStorage is set up on production, try to get it synced up 
   end

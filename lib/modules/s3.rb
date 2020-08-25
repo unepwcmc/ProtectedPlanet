@@ -2,15 +2,13 @@ class S3
   CURRENT_PREFIX = 'current/'
   IMPORT_PREFIX = 'import/'
 
-  def initialize(region = nil)
-    s3_region = region.nil? ? Rails.application.secrets.s3_region :  ENV['AWS_REGION']
-
+  def initialize
     @s3 = Aws::S3::Resource.new({
       access_key_id: Rails.application.secrets.aws_access_key_id,
       secret_access_key: Rails.application.secrets.aws_secret_access_key,
-      region: s3_region
+      region: Rails.application.secrets.s3_region 
                                 })
-    @client = Aws::S3::Client.new(region: s3_region)
+    @client = Aws::S3::Client.new(region: Rails.application.secrets.s3_region)
   end
 
   def self.upload object_name, file_path, opts={}
@@ -32,7 +30,13 @@ class S3
   end
 
   def upload object_name, source, opts
-    bucket = opts[:bucket] ? opts[:bucket] : Rails.application.secrets.aws_downloads_bucket
+    # Check to see what environment Rails is currently running in
+    bucket = Rails.application.secrets.aws_downloads_bucket
+
+    if Rails.env.staging? || Rails.env.production?
+      bucket = Rails.application.secrets.aws_files_bucket
+    end
+
     object = @s3.bucket(bucket).object(object_name)
     object.upload_file(source)
 
