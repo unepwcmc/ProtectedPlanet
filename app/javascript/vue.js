@@ -16,6 +16,7 @@ import store from './store/store.js'
 
 // components
 import AmChartLine from './components/charts/am-chart-line/AmChartLine'
+import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
@@ -79,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       components: {
         AmChartLine,
+        AmChartPie,
         Carousel,
         CarouselSlide,
         Counter,
