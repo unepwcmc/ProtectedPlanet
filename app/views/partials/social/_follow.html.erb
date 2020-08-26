@@ -1,7 +1,7 @@
-<div class="social--share">
+<div class="social--follow">
   <% %w[twitter facebook linkedin].each do |social_medium| %>
-    <% translate_path = format('social.share.%<key>s', { key: social_medium }) %>
-    <%= link_to '', t("#{translate_path}.url", url: request.original_url),
+    <% translate_path = format('social.follow.%<key>s', { key: social_medium }) %>
+    <%= link_to '', t("#{translate_path}.url"),
       title: t("#{translate_path}.title"),
       class: "social__icon--#{social_medium}",
       target: '_blank'
