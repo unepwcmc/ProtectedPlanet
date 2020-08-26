@@ -183,9 +183,9 @@ export default {
     this.handleQueryString()
   },
 
-  computed: {
-    hasResults () {
-      return this.newResults.length > 0
+  watch: {
+    activeFilterOptions () {
+      this.$store.dispatch('download/updateSearchFilters', this.activeFilterOptions)
     }
   },
 
@@ -297,7 +297,6 @@ export default {
       })
       
       this.filterGroupsWithPreSelected = this.filterGroups
-      this.$store.dispatch('download/updateSearchFilters', this.filterGroups)
 
       this.updateDisabledComponents('site')
     },
