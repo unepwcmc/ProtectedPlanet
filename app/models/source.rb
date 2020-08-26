@@ -4,7 +4,8 @@ class Source < ApplicationRecord
   def source_hash
     {
       title: title,
-      date_updated: year,
+      # TODO - sources which have no data for `date_updated` are currently set to '-' 
+      date_updated: year ? year.strftime('%Y') : '-',
       resp_party: responsible_party
     }
   end

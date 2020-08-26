@@ -15,6 +15,13 @@ class RegionController < ApplicationController
     end.to_json
 
     @sources = @region.region_sources
+    # @sources = [
+    #   {
+    #     title: 'sdfsdf',
+    #     date_updated: 'sfsdf',
+    #     resp_party: 'sdfsdf'
+    #   }
+    # ]
 
     @total_oecm = @region.protected_areas.oecms.count
     @total_pame = @region.protected_areas.with_pame_evaluations.count
