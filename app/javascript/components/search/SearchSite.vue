@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="search--main">
     <search-site-input
       :endpoint="endpoint"
       :placeholder="placeholder"
@@ -17,7 +17,10 @@
       :results="results"
       :resultsText="resultsText"
       :totalItems="totalItems"
+      v-show="!loadingResults"
     />
+
+    <span :class="['icon--loading-spinner margin-center search__spinner', { 'icon-visible': loadingResults } ]" />
 
     <pagination
       :currentPage="currentPage"
@@ -84,6 +87,7 @@ export default {
       currentPage: 0,
       defaultCategory: this.categories[0].id,
       defaultPage: 1,
+      loadingResults: false,
       pageItemsStart: 0,
       pageItemsEnd: 0,
       requestedPage: 1,
@@ -104,6 +108,8 @@ export default {
 
   methods: {
     ajaxSubmission () {
+      this.loadingResults = true
+
       let data = {
         params: {
           filters: {
@@ -124,6 +130,7 @@ export default {
       axios.get(this.endpoint, data)
         .then(response => {
           this.updateProperties(response.data)
+          this.loadingResults = false
         })
         .catch(function (error) {
           console.log(error)
@@ -170,10 +177,31 @@ export default {
       this.totalItems = data.total_items
     },
 
+    updateQueryString (params) {
+      let searchParams = new URLSearchParams(window.location.search)
+
+      const key = Object.keys(params)[0]
+
+      if(key == 'search_term') {
+        searchParams = new URLSearchParams()
+
+        this.updateQueryStringParam(searchParams, key, params[key])
+      }
+      
+      const newUrl = `${window.location.pathname}?${searchParams.toString()}`
+
+      window.history.pushState({ query: 1 }, null, newUrl)
+    },
+    
+    updateQueryStringParam (params, key, value) {
+      params.has(key) ? params.set(key, value) : params.append(key, value)
+    },
+
     updateSearchTerm (searchTerm) {
       this.resetAll()
       this.searchTerm = searchTerm
       this.ajaxSubmission()
+      this.updateQueryString({ search_term: searchTerm })
     },
   }
 }
