@@ -49,6 +49,10 @@ export default {
       required: true,
       type: Array // [ { id: Number, title: String } ]
     },
+    dataPageLoad: {
+      type: Object,
+      required: true
+    },
     endpoint: {
       required: true,
       type: String
@@ -69,10 +73,6 @@ export default {
       required: true,
       type: String
     },
-    results: {
-      type: Object,
-      required: true
-    }
   },
 
   data () {
@@ -87,7 +87,7 @@ export default {
       pageItemsStart: 0,
       pageItemsEnd: 0,
       requestedPage: 1,
-      results: this.results, // [ { title: String, url: String, summary: String, image: 'String' } ]
+      results: this.resultsPageLoad, // [ { title: String, url: String, summary: String, image: 'String' } ]
       searchTerm: '',
       totalItems: 0,
     }
@@ -99,6 +99,7 @@ export default {
 
   mounted () {
     this.categoryId = this.defaultCategory
+    this.updateProperties(this.dataPageLoad)
   },
 
   methods: {

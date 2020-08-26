@@ -1,11 +1,11 @@
 <div class="container--medium section-padding">
   <search-site
     :categories="<%= @categories.to_json %>"
+    :data-page-load="<%= @results.to_json %>"
     endpoint="<%= search_results_path %>"
     placeholder="<%= t('global.placeholder.search-site') %>"
     query="<%= @query %>"
     no-results-text="<%= t('search.no-results') %>"
     results-text="<%= t('search.results') %>"
-    :results="<%= @results.to_json %>"
   ></search-site>
 </div>
