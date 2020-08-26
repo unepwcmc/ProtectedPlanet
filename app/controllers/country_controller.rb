@@ -32,7 +32,8 @@ class CountryController < ApplicationController
       { percent: designation[:percent] }
     end.to_json
 
-    @sites = [] # #TODO
+    @sites = @country.protected_areas.take(3)
+    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
 
     @sources = [
       {

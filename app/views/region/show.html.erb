@@ -66,9 +66,14 @@
         
         <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
 
-        <%= render partial: "partials/cards/sites", locals: { cards: @wdpa } %>
-      
-        <%= render partial: "partials/messages/message-citation", locals: { title: @region.name } %>
-      </section>
-    </div>
-  </div>
+    <%= render partial: "partials/cards/sites", locals: { 
+      cards: @region_pas,
+      title: @region.name + ' ' + t('region.protected_areas'),
+      url: @regionPasViewAllUrl
+    } %>
+  
+    <%= render partial: "partials/messages/message-citation", locals: { title: @region.name } %>
+  </section>
+</div>
+</div>
+

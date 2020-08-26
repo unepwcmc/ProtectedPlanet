@@ -1,8 +1,6 @@
 <div class="topbar">
   <div class="topbar__container container">
-    <%= link_to root_path, title: '#TODO', class: 'topbar__logo' do %>
-      <i class="logo--protected-planet"></i>
-    <% end %>
+    <%= render '/partials/global/site-logo' %>
 
     <% unless @for_pdf %>
       <nav-burger 

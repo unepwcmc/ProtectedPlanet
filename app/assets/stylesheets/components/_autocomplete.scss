@@ -9,15 +9,6 @@
     color: $grey-light;
   }
 
-  &--error {
-    background-color: $red;
-    color: $white;
-
-    ::placeholder {
-      color: $white;
-    }
-  }
-  
   &__container {
     position: relative;
   }
@@ -38,6 +29,15 @@
     &:focus { 
       outline: none;
       border-color: $black;
+    }
+
+    .autocomplete--error & {
+      background-color: $alert;
+      color: $white;
+  
+      ::placeholder {
+        color: $white;
+      }
     }
   }
   

@@ -14,7 +14,7 @@ class ProtectedAreasController < ApplicationController
     @presenter = ProtectedAreaPresenter.new @protected_area
     @countries = @protected_area.countries.without_geometry
     @other_designations = load_other_designations
-    @networks = load_networks
+    # @networks = load_networks
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
 
@@ -29,7 +29,11 @@ class ProtectedAreasController < ApplicationController
       }
     ]
 
-    @wdpa_other = [] ## 3 other PAs from ...?
+    @wdpa_other = get_other_sites
+
+
+    @otherWdpasViewAllUrl = determine_search_path(@protected_area)
+  
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
@@ -92,10 +96,25 @@ class ProtectedAreasController < ApplicationController
     other_designations.reject { |pa| pa.id == @protected_area.id }
   end
 
-  TRANSBOUNDARY_SITES = "Transboundary sites".freeze
-  def load_networks
-    networks = @protected_area.networks.reject(&:designation)
-    # ensure that transboundary sites network always appears first
-    networks.sort { |a,b| a.name == TRANSBOUNDARY_SITES ? -1 : a.name <=> b.name }
+  # TODO: Methods, models, controllers, modules related to Networks are slated for removal
+
+  # TRANSBOUNDARY_SITES = "Transboundary sites".freeze
+  # def load_networks
+  #   networks = @protected_area.networks.reject(&:designation)
+  #   # ensure that transboundary sites network always appears first
+  #   networks.sort { |a,b| a.name == TRANSBOUNDARY_SITES ? -1 : a.name <=> b.name }
+  # end
+
+  def get_other_sites
+    return @countries.first.protected_areas.all_except(@protected_area).take(3) if @countries.length <= 1
+    ProtectedArea.all_except(@protected_area).transboundary_sites.take(3)
+  end
+
+  def determine_search_path(area)
+    if area.is_transboundary
+      search_areas_path(filters: { special_status: ['is_transboundary'] })
+    else
+      search_areas_path(filters: { location: { type: 'site', options: ["#{@countries.first.name}"] } })
+    end
   end
 end

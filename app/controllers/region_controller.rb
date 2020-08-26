@@ -36,7 +36,10 @@ class RegionController < ApplicationController
     @total_pame = @region.protected_areas.with_pame_evaluations.count
     @total_wdpa = @region.protected_areas.wdpas.count
 
-    @wdpa = pas_sample
+
+    @region_pas = pas_sample
+    @regionPasViewAllUrl = search_areas_path(filters: { location: { type: 'region', options: ["#{@region.name}"] } })
+
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
