@@ -101,19 +101,11 @@ class ProtectedArea < ApplicationRecord
     sorted_dates = areas.pluck(:legal_status_updated_at).sort { |a,b| b <=> a }.uniq
 
     sorted_dates.each do |date|
-<<<<<<< HEAD
-      year = date.to_date
-      coverage_growth_hash[year] ||= []
-      
-      area_sum = areas.where("legal_status_updated_at <= ?", date).reduce(0) { |sum, x| sum + x.gis_area }
-      coverage_growth_hash[year] = area_sum.round
-=======
       # year = date.to_date.year
       coverage_growth_hash[date] ||= []
       
       area_sum = areas.where("legal_status_updated_at <= ?", date).reduce(0) { |sum, x| sum + x.gis_area }
       coverage_growth_hash[date] = area_sum
->>>>>>> refresh
     end
 
     coverage_growth_hash
