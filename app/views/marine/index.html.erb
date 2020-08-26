@@ -47,11 +47,6 @@
   title: cms_fragment_render(:section_coverage_title, @cms_page)
 } %>
 
-<%= render partial: "marine/sections/national", locals: {
-    countries: @top_marine_coverage_countries
-  }
-%>
-
 <section class="container--medium">
   <h2><%= cms_fragment_render(:section_size_title, @cms_page) %></h2>
   <div><%= cms_fragment_render(:section_size_content, @cms_page) %></div>

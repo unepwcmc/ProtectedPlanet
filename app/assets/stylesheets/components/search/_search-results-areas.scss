@@ -74,9 +74,7 @@
       @include flex-v-center;
     }
 
-    &__spinner {
-      padding-top: rem-calc(55);
-    }
+    &__spinner { @include search-spinner; }
 
     &__map {
       @include container;
