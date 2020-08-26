@@ -6,6 +6,14 @@ $search-input-size-tablet: 547px; //px
 $search-input-size-desktop: 547px; //px
 
 //--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin search-spinner {
+  margin-top: rem-calc(55);
+  margin-bottom: rem-calc(55);
+}
+
+//--------------------------------------------------
 // classes
 //--------------------------------------------------
 .search {
