@@ -7,7 +7,8 @@ module Download::Poller
 
   def self.json_response(params)
     domain = params['domain']
-    token = params['token']
+    filters = params['filters'] && Download::Utils.extract_filters(JSON.parse(params['filters']))
+    token = filters ? Download::Utils.search_token(search_term(params), filters) : params['token']
     format = params['format']
 
     filename = Download::Utils.filename(domain, token, format)
@@ -22,5 +23,9 @@ module Download::Poller
 
   def self.computed_id(identifier, format)
     "#{identifier}-#{format}"
+  end
+
+  def self.search_term(params)
+    params['search'].to_s
   end
 end

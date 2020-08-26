@@ -2,7 +2,7 @@ class Search
   CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml')).freeze
   ALLOWED_FILTERS = %i(
     type country iucn_category designation region marine has_irreplaceability_info
-    has_parcc_info governance is_green_list ancestor is_oecm topic page_type
+    has_parcc_info governance is_green_list ancestor is_oecm topic page_type is_type
   ).freeze
   COUNTRY_INDEX = "countries_#{Rails.env}".freeze
   REGION_INDEX = "regions_#{Rails.env}".freeze

@@ -5,7 +5,7 @@ module Download::Router
     when 'general'
       Download::Requesters::General.request(params['format'], params['token'])
     when 'search'
-      Download::Requesters::Search.request(params['format'], params['q'], extract_filters(params))
+      Download::Requesters::Search.request(params['format'], params['search'], extract_filters(params))
     when 'protected_area'
       Download::Requesters::ProtectedArea.request(params['format'], params['token'])
     when 'pdf'
@@ -27,6 +27,6 @@ module Download::Router
   private
 
   def self.extract_filters params
-    params.stringify_keys.slice(*::Search::ALLOWED_FILTERS)
+    Download::Utils.extract_filters(params['filters'])
   end
 end

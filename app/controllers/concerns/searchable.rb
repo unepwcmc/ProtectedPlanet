@@ -82,73 +82,7 @@ module Concerns::Searchable
     end
 
     def sanitise_filters
-      _filters = sanitise_location_filter(parsed_filters)
-      _filters = sanitise_db_type_filter(_filters)
-      _filters = sanitise_type_filter(_filters)
-      _filters = sanitise_ancestor_filter(_filters)
-      _filters = sanitise_categories_filter(_filters)
-      sanitise_special_status_filter(_filters)
-    end
-
-    #{'location' => {'type' => 'country', 'options' => ['Italy']}}
-    def sanitise_location_filter(filters)
-      if filters['location'].present? && filters['location']['options'].present?
-        filters[filters['location']['type'].to_sym] = filters['location']['options']
-      end
-
-      filters
-    end
-
-    def sanitise_db_type_filter(filters)
-      db_type = filters.delete('db_type')
-      db_type = db_type && db_type.reject { |i| i == 'all' }
-      return filters if db_type.blank? || db_type.length != 1
-
-      filters[:is_oecm] = true if db_type.first == 'oecm'
-      filters
-    end
-
-    def sanitise_type_filter(filters)
-      # ['marine', 'terrestrial', 'all']
-      is_type = filters.delete('is_type')
-      return filters if !is_type || is_type.include?('all') || is_type.length != 1
-
-      filters[:marine] = is_type.first == 'marine'
-      filters
-    end
-
-    FAKE_CATEGORIES = %w(all areas).freeze
-    def sanitise_ancestor_filter(filters)
-      ancestor = filters.delete('ancestor')
-
-      return filters if ancestor.blank? || FAKE_CATEGORIES.include?(ancestor)
-
-      filters['ancestor'] = ancestor.to_i
-
-      filters
-    end
-
-    def sanitise_special_status_filter(filters)
-      # ['has_parcc_info', 'is_green_list']
-      special_status = filters.delete('special_status')
-      return filters unless special_status
-
-      special_status.map do |status|
-        filters[status.to_sym] = true
-      end
-
-      filters
-    end
-
-    def sanitise_categories_filter(filters)
-      topics = filters.delete('topics')
-      types = filters.delete('types')
-
-      return filters if topics.blank? && types.blank?
-
-      filters[:topic] = topics if topics.present?
-      filters[:page_type] = types if types.present?
-      filters
+      Search::FilterParams.standardise(parsed_filters)
     end
 
     def load_filters

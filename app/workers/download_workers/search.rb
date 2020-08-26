@@ -4,7 +4,7 @@ class DownloadWorkers::Search < DownloadWorkers::Base
     @token = token
     @search_term = search_term
     @filters_json = filters
-    @filters_values = JSON.load(filters).values
+    @filters_values = JSON.load(filters).values.flatten
 
     while_generating(key(token, format)) do
       generate_download
@@ -26,7 +26,7 @@ class DownloadWorkers::Search < DownloadWorkers::Base
     sha = Digest::SHA256.hexdigest(protected_area_ids.join)
     return "#{sha}" if @search_term.blank?
     return "#{@search_term}_#{sha}".gsub(' ', '_') if @filters_values.empty?
-    filter = @filters_values.map { |f| f[0..9] }.join(',')
+    filter = @filters_values.map { |f| f.to_s[0..9] }.join(',')
     "#{@search_term[0..11]}_#{filter}_#{sha}".gsub(' ', '_')
   end
 

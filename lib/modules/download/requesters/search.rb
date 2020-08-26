@@ -24,10 +24,7 @@ class Download::Requesters::Search < Download::Requesters::Base
   end
 
   def token
-    @token ||= begin
-      filters_dump = Marshal.dump filters.keys.sort
-      Digest::SHA256.hexdigest(@search_term.to_s + filters_dump)
-    end
+    @token ||= Download::Utils.search_token(@search_term, filters)
   end
 
   def filters

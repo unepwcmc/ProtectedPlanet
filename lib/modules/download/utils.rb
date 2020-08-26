@@ -60,5 +60,18 @@ module Download
         base_filename << "_#{identifier}_#{format}" if (identifier != 'all' && identifier.present?)
       }
     end
+
+    def self.extract_filters filters
+      _filters = Search::FilterParams.standardise(filters)
+      _filters.stringify_keys.slice(*::Search::ALLOWED_FILTERS.map(&:to_s))
+    end
+
+    def self.filters_dump filters
+      filters_dump = Marshal.dump filters.to_hash.sort.to_json
+    end
+
+    def self.search_token term, filters
+      Digest::SHA256.hexdigest(term.to_s + filters_dump(filters))
+    end
   end
 end
