@@ -88,6 +88,15 @@
     </section>
   <% end %>
 
+
+  <section class="container">
+    <%= render partial: "partials/cards/sites", locals: { 
+      cards: @wdpa_other, 
+      title: t('thematic_area.wdpa.other_protected_areas'),
+      url: @otherWdpasViewAllUrl
+    } %>
+  </section>
+
 <% if management_plan_document %>
   <section class="fact">
     <h2 class="fact__header">Management Plan</h2>

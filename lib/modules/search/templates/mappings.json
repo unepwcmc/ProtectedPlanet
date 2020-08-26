@@ -96,6 +96,9 @@
       "is_oecm": {
         "type": "boolean"
       },
+      "is_transboundary": {
+        "type": "boolean"
+      },
 	    "coordinates": {
         "type": "geo_point"
 	    },

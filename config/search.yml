@@ -98,6 +98,9 @@ filters:
     is_green_list:
       type: 'equality'
       path: 'is_green_list'
+    is_transboundary:
+      type: 'equality'
+      path: 'is_transboundary'
     is_oecm:
       type: 'equality'
       path: 'is_oecm'
