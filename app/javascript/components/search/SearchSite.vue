@@ -123,7 +123,6 @@ export default {
 
       axios.get(this.endpoint, data)
         .then(response => {
-          console.log('success', response)
           this.updateProperties(response.data)
         })
         .catch(function (error) {
