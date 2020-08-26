@@ -24,7 +24,7 @@ class RegionController < ApplicationController
       { percent: designation[:percent] }
     end.to_json
 
-    @sources = @region.region_sources
+    @sources = @region.sources_per_region
 
     @total_oecm = @region.protected_areas.oecms.count
     @total_pame = @region.protected_areas.with_pame_evaluations.count

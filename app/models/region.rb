@@ -1,6 +1,7 @@
 class Region < ApplicationRecord
   include GeometryConcern
   include MapHelper
+  include SourceHelper
 
   has_many :countries
   has_many :protected_areas, through: :countries
@@ -150,11 +151,17 @@ class Region < ApplicationRecord
     all_countries_and_territories.flatten.uniq
   end
 
-  def region_sources
-    protected_areas.map do |area|
-      next if area.sources_as_hash.nil?
-      area.sources_as_hash
-    end.flatten.uniq
+  def sources_per_region
+    sources = ActiveRecord::Base.connection.execute("""
+      SELECT sources.title, EXTRACT(YEAR FROM sources.year) AS year, sources.responsible_party 
+      FROM sources
+      INNER JOIN countries_protected_areas
+      ON countries_protected_areas.country_id IN (#{self.countries.pluck(:id).join(",")})
+      INNER JOIN protected_areas_sources 
+      ON protected_areas_sources.protected_area_id = countries_protected_areas.protected_area_id
+      AND protected_areas_sources.source_id = sources.id
+      """)
+    convert_into_hash(sources.uniq)
   end
 
   private
