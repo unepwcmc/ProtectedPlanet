@@ -34,7 +34,7 @@ class CountryController < ApplicationController
 
     @sites = [] # #TODO
 
-    @sources = @country.country_sources
+    @sources = @country.sources_per_country
 
     @total_oecm = @country.protected_areas.oecms.count
     @total_pame = @country.protected_areas.with_pame_evaluations.count

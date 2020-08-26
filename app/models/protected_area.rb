@@ -1,5 +1,6 @@
 class ProtectedArea < ApplicationRecord
   include GeometryConcern
+  include SourceHelper
 
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'
@@ -119,7 +120,8 @@ class ProtectedArea < ApplicationRecord
       ON protected_areas_sources.protected_area_id = #{self.id}
       AND protected_areas_sources.source_id = sources.id
       """)
-    SourceHelper.convert_into_hash(sources)
+      # Helper method
+    convert_into_hash(sources.uniq)
   end
 
   def wdpa_ids

@@ -3,7 +3,7 @@ module SourceHelper
     sources.to_a.map do |source|
       {
         title: source['title'],
-        # TODO - sources which have no data for `date_updated` are currently set to '-' 
+        # sources which have no data for `date_updated` are currently set to '-' 
         date_updated: source['year'] ? source['year'].round : '-',
         resp_party: source['responsible_party']
       }
