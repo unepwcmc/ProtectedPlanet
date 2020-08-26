@@ -18,9 +18,9 @@ class GreenListController < ApplicationController
     # Starts from 2000
     @protectedAreaGrowth = 
     {
-      datapoints: ProtectedArea.greenlist_coverage_growth(2000).map { |el| { year: el[0], value: el[1] } },
-      title: 'Global',
-      units: 'km2'
+      title: I18n.t('charts.legend.number-pa'),
+      units: I18n.t('charts.units.km2'),
+      datapoints: ProtectedArea.greenlist_coverage_growth(2000).map { |el| { year: el[0], value: el[1] } }
     }.to_json 
     
     # TODO - This may need to be reworked by CLS

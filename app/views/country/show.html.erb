@@ -49,8 +49,7 @@
           <h2><%= t('stats.growth.title') %></h2>
 
           <am-chart-line 
-            chart-background-colour="f4f4f4"
-            :data="<%= @coverage_growth.to_json %>"
+            :data="<%= @coverage_growth %>"
           >
           </am-chart-line>
           

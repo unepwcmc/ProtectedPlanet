@@ -34,12 +34,14 @@ $search-results-image-height: rem-calc(130);
         width: $search-results-image-width; height: $search-results-image-height;
 
         display: none;
+        position: absolute;
 
         @include breakpoint($small) { display: block; }
       }
 
       &__image-placeholder { 
         @include image-placeholder($search-results-image-width, $search-results-image-height); 
+        position: relative;
       }
   }
 }
