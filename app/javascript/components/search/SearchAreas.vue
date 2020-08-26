@@ -387,7 +387,7 @@ export default {
       this.resetTabs()
       this.ajaxSubmission(true)
       this.updateQueryString({ search_term: searchParams.search_term })
-      this.$store.dispatch('download/updateSearchTerm', searchParams)
+      this.$store.dispatch('download/updateSearchTerm', searchParams.search_term)
     },
 
     requestMore (requestedPage) {
