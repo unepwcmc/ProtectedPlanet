@@ -6,5 +6,6 @@
     query="<%= @query %>"
     no-results-text="<%= t('search.no-results') %>"
     results-text="<%= t('search.results') %>"
+    :results="<%= @results.to_json %>"
   ></search-site>
 </div>

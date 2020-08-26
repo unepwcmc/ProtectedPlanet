@@ -16,7 +16,7 @@ class Search::FullSerializer < Search::BaseSerializer
   }.freeze
 
   def serialize
-    return DEFAULT_OBJ.to_json unless @search
+    return DEFAULT_OBJ unless @search
 
     all_objects = @results.objects.values.compact.flatten
     per_page = @options[:per_page].to_i
@@ -38,6 +38,6 @@ class Search::FullSerializer < Search::BaseSerializer
           }
         end
       }
-    ).to_json
+    )
   end
 end

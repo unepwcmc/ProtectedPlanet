@@ -68,6 +68,10 @@ export default {
     resultsText: {
       required: true,
       type: String
+    },
+    results: {
+      type: Object,
+      required: true
     }
   },
 
@@ -83,7 +87,7 @@ export default {
       pageItemsStart: 0,
       pageItemsEnd: 0,
       requestedPage: 1,
-      results: [], // [ { title: String, url: String, summary: String, image: 'String' } ]
+      results: this.results, // [ { title: String, url: String, summary: String, image: 'String' } ]
       searchTerm: '',
       totalItems: 0,
     }
