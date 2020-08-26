@@ -41,7 +41,6 @@ module Stats::CountryStatisticsApi
       Country.all.each do |country|
         iso3 = country.iso_3
         country_statistic = country.country_statistic
-        # byebug
 
         unless country_statistic
           statistics_not_found << iso3
@@ -96,8 +95,9 @@ module Stats::CountryStatisticsApi
     def fetch_global_stats(endpoint=nil)
       endpoints = endpoint ? Aichi11Target::ATTRIBUTES.slice(endpoint.to_sym) : Aichi11Target::ATTRIBUTES
       global_stats = []
+
       endpoints.keys.each do |name|
-        data = fetch_national_data
+        data = retrieve_global_data(name)
 
         # Return if there's an error
         return data if data.nil? || (data.is_a?(Hash) && data.key?(:error))
@@ -117,16 +117,16 @@ module Stats::CountryStatisticsApi
 
     def calculate_value(data, attr_name)
       stat_attributes = STATISTICS_API[attr_name]
-      attribute = stat_attributes["attribute"]
-      area_attribute = stat_attributes["area_attribute"] || COUNTRY_AREA_ATTRIBUTE
+      attribute = stat_attributes[:attribute]
+      area_attribute = stat_attributes[:area_attribute] || COUNTRY_AREA_ATTRIBUTE
 
       attr_area_sum = total_area_sum = 0
       data.map do |x|
         next if contains_exception?(x, attr_name)
         attr_perc = x[attribute] || 0
         total_area = x[area_attribute] || 0
-        attr_area_sum += attr_perc * total_area / 100
-        total_area_sum += total_area
+        attr_area_sum += attr_perc.to_f * total_area.to_f / 100
+        total_area_sum += total_area.to_f
       end
       begin
         (attr_area_sum / total_area_sum * 100).round(2)
@@ -134,6 +134,25 @@ module Stats::CountryStatisticsApi
         Rails.logger.info(e.backtrace)
         return { error: ERRORS[:data] }
       end
+    end
+
+    def retrieve_global_data(name)
+      case name
+      when :representative
+        data = fetch_protection_data
+      when :well_connected
+        data = fetch_connection_data + fetch_protection_data.map { |h| h.slice('iso3', 'ter_sqkm') }
+        data = sanitize_global_data(data)
+      when :importance
+        data = fetch_kba_data + fetch_protection_data.map { |h| h.slice('iso3', 'sqkm') }
+        data = sanitize_global_data(data)
+      end
+      data
+    end
+
+    def sanitize_global_data(data)
+      data.group_by { |x| x['iso3'] }.values
+          .map { |x| x.inject(&:merge) }
     end
 
     def endpoint_url(end_type)
