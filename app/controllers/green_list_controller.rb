@@ -99,7 +99,7 @@ class GreenListController < ApplicationController
   end
 
   def get_green_list_sites
-    @example_greenlist ||= ProtectedArea.green_list_areas.take(3)
+    @example_greenlist ||= @green_list_areas.take(3)
   end
   
   def green_list_areas
