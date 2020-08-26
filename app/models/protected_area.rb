@@ -111,8 +111,15 @@ class ProtectedArea < ApplicationRecord
     coverage_growth_hash
   end
 
-  def sources_as_hash
-    sources.present? ? sources.map { |source| source.source_hash }.uniq : nil
+  def sources_per_pa
+    sources = ActiveRecord::Base.connection.execute("""
+      SELECT sources.title, EXTRACT(YEAR FROM sources.year) AS year, sources.responsible_party 
+      FROM sources
+      INNER JOIN protected_areas_sources 
+      ON protected_areas_sources.protected_area_id = #{self.id}
+      AND protected_areas_sources.source_id = sources.id
+      """)
+    SourceHelper.convert_into_hash(sources)
   end
 
   def wdpa_ids

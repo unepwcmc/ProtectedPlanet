@@ -20,8 +20,8 @@ class ProtectedAreasController < ApplicationController
 
     @locations = get_locations
 
-    # In the format [{title: ..., responsible_party: ..., year: ...}, ...]
-    @sources = @protected_area.sources_as_hash
+    # In the format [{title: ..., year: ..., responsible_party: ... }, ...]
+    @sources = @protected_area.sources_per_pa
 
     @wdpa_other = [] ## 3 other PAs from ...?
 
