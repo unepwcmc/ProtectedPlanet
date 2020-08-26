@@ -26,7 +26,6 @@ import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
 import ChartColumnTabbed from './components/charts/chart-column-tabbed/ChartColumnTabbed'
 import ChartDial from './components/charts/chart-dial/ChartDial'
-import ChartLine from './components/charts/chart-line/ChartLine'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
@@ -91,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartBarStacked,
         ChartDial,
         ChartColumnTabbed,
-        ChartLine,
         ChartTreemapInteractive,
         ChartRectangles,
         ChartRowPa,
