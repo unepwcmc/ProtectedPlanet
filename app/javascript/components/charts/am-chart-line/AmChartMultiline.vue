@@ -36,74 +36,86 @@ export default {
     }
   },
 
+  data () {
+    return {
+      chart: null,
+      colours: ['#64BAD9','#A54897','#65C9B2'], // see $theme-chart in settings.scss
+      totalSeries: 0,
+      yAxis: null
+    }
+  },
+
   mounted() {
-    this.createChart()
+    this.chartInit()
   },
 
   methods: {
+    chartInit() {
+      this.totalSeries = Object.keys(this.data.datapoints[0]).length - 1
+
+      this.createChart()
+      this.createAxis()
+      this.createSeries()
+      this.createLegend()
+    },
+
+    createAxis () {
+      let xAxis = this.chart.xAxes.push(new am4charts.DateAxis())
+      xAxis.renderer.grid.template.disabled = true
+      xAxis.renderer.line.strokeOpacity = 1
+      xAxis.renderer.line.strokeWidth = 1
+      xAxis.renderer.line.stroke = am4core.color("#c8c8c8")
+      xAxis.renderer.minGridDistance = 50
+      xAxis.renderer.ticks.template.disabled = false;
+      xAxis.renderer.ticks.template.strokeOpacity = 1;
+      xAxis.renderer.ticks.template.stroke = am4core.color("#c8c8c8");
+      xAxis.renderer.ticks.template.length = 6;
+
+      this.yAxis = this.chart.yAxes.push(new am4charts.ValueAxis())
+      this.yAxis.title.text = `[bold]${this.data.units}[/]`
+      this.yAxis.title.rotation = 0
+      this.yAxis.title.valign = "top"
+      this.yAxis.title.dy = -50
+      this.yAxis.title.dx = 40
+      this.yAxis.renderer.grid.template.disabled = true
+      this.yAxis.renderer.line.strokeOpacity = 1
+      this.yAxis.renderer.line.strokeWidth = 1
+      this.yAxis.renderer.line.stroke = am4core.color("#c8c8c8")
+    },
+
     createChart () {
       am4core.options.autoSetClassName = true
       
-      const chart = am4core.create("chartdiv", am4charts.XYChart)
-      // chart.data = this.data.datapoints
-      chart.paddingTop = 70
-      chart.paddingRight = 40
-      chart.paddingLeft = -20
-      chart.background.fill = this.chartBackgroundColour
+      this.chart = am4core.create("chartdiv", am4charts.XYChart)
+      this.chart.data = this.data.datapoints
+      this.chart.paddingTop = 70
+      this.chart.paddingRight = 40
+      this.chart.paddingLeft = -20
+      this.chart.background.fill = this.chartBackgroundColour
+    },
 
-      let yearAxis = chart.xAxes.push(new am4charts.DateAxis())
-      yearAxis.renderer.grid.template.disabled = true
-      yearAxis.renderer.line.strokeOpacity = 1
-      yearAxis.renderer.line.strokeWidth = 1
-      yearAxis.renderer.line.stroke = am4core.color("#c8c8c8")
-      yearAxis.renderer.minGridDistance = 50
-      yearAxis.renderer.ticks.template.disabled = false;
-      yearAxis.renderer.ticks.template.strokeOpacity = 1;
-      yearAxis.renderer.ticks.template.stroke = am4core.color("#c8c8c8");
-      yearAxis.renderer.ticks.template.length = 6;
+    createDots (series, i) {
+      const bullet = series.bullets.push(new am4charts.CircleBullet());
+      bullet.fill = am4core.color(this.colours[i])
+    },
 
-      let axis = chart.yAxes.push(new am4charts.ValueAxis())
-      axis.title.text = `[bold]${this.data.units}[/]`
-      axis.title.rotation = 0
-      axis.title.valign = "top"
-      axis.title.dy = -50
-      axis.title.dx = 40
-      axis.renderer.grid.template.disabled = true
-      axis.renderer.line.strokeOpacity = 1
-      axis.renderer.line.strokeWidth = 1
-      axis.renderer.line.stroke = am4core.color("#c8c8c8")
-
-      let series1 = chart.series.push(new am4charts.LineSeries())
-        series1.dataFields.valueY = "1"
-        series1.dataFields.dateX = "year"
-        series1.name = this.legend.title
-        series1.stroke = am4core.color("#65C9B2")
-        series1.strokeWidth = 3
-        series1.yAxis = axis
-
-      let series2 = chart.series.push(new am4charts.LineSeries())
-        series2.dataFields.valueY = "2"
-        series2.dataFields.dateX = "year"
-        series2.name = this.data.title
-        series2.stroke = am4core.color("#65C9B2")
-        series2.strokeWidth = 3
-        series2.yAxis = axis
-
-      let series3 = chart.series.push(new am4charts.LineSeries())
-        series3.dataFields.valueY = "3"
-        series3.dataFields.dateX = "year"
-        series3.name = this.data.title
-        series3.stroke = am4core.color("#65C9B2")
-        series3.strokeWidth = 3
-        series3.yAxis = axis
-
-      if(this.dots) {
-        let bullet = series.bullets.push(new am4charts.CircleBullet());
-        bullet.fill = am4core.color("#65C9B2")
-      }
-
-      const legend = chart.legend = new am4charts.Legend()
+    createLegend () {
+      const legend = this.chart.legend = new am4charts.Legend()
       legend.maxWidth = undefined
+    },
+
+    createSeries () {
+      for(let i = 0; i < this.totalSeries; i++) {
+        const series = this.chart.series.push(new am4charts.LineSeries())
+        series.dataFields.valueY = i+1
+        series.dataFields.dateX = "x"
+        series.name = this.data.legend[i]
+        series.stroke = am4core.color(this.colours[i])
+        series.strokeWidth = 3
+        series.yAxis = this.yAxis 
+
+        if(this.dots) { this.createDots(series, i) }
+      }
     }
   }
 }
