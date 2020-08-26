@@ -13,6 +13,7 @@ class HomeController < ApplicationController
 
     @pas_title = home_yml[:pas][:title]
     @pas_button = home_yml[:pas][:button]
+    @pas_link = search_areas_path(geo_type: 'site')
     @pas_levels = levels
 
     @site_facts = @presenter.fact_card_stats
