@@ -6,19 +6,19 @@ local:
  service: Disk
  root: <%= Rails.root.join("storage") %>
 
-# Main service to be used for staging - also backs up to prod
+# Main service to be used for staging 
 staging:
   service: S3
-  access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
-  secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
-  region: us-east-1
-  bucket: <%= ENV["PP_FILES_STAGING"] %>
+  access_key_id: <%= Rails.application.secrets.aws_access_key_id %>
+  secret_access_key: <%= Rails.application.secrets.aws_secret_access_key %>
+  region: <%= Rails.application.secrets.s3_region %>
+  bucket: <%= Rails.application.secrets.aws_files_bucket %>
 
 production:
   service: S3
-  access_key_id: <%= ENV["AWS_ACCESS_KEY_ID"] %>
-  secret_access_key: <%= ENV["AWS_SECRET_ACCESS_KEY"] %>
-  region: us-east-1
-  bucket: <%= ENV["PP_FILES_PRODUCTION"] %>
+  access_key_id: <%= Rails.application.secrets.aws_access_key_id %>
+  secret_access_key: <%= Rails.application.secrets.aws_secret_access_key %>
+  region: <%= Rails.application.secrets.s3_region %>
+  bucket:  <%= Rails.application.secrets.aws_files_bucket %>
 
   
