@@ -12,8 +12,8 @@ module Download::Poller
     format = params['format']
 
     generation_info = Download.generation_info(domain, token, format)
-    filename = generation_info['filename']
     is_ready = generation_info['status'] == 'ready'
+    filename = is_ready ? generation_info['filename'] : Download::Utils.filename(domain, token, format)
     {
       'id' => computed_id(token, format),
       'title' => filename,
