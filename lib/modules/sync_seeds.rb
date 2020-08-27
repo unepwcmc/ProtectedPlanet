@@ -141,12 +141,13 @@ class SyncSeeds
     logger = ComfortableMexicanSofa.logger
     ComfortableMexicanSofa.logger = Logger.new(STDOUT)
     site = Comfy::Cms::Site.find_by_locale(I18n.locale).identifier
+    folder = source.split('/').last
 
     if answer == 'all'
-      Rake::Task["comfy:cms_seeds:import"].invoke(source.split('/').last, site)
+      Rake::Task["comfy:cms_seeds:import"].invoke(folder, site)
     else
       module_name = "ComfortableMexicanSofa::Seeds::#{answer.singularize.capitalize}::Importer".constantize
-      module_name.new(source.split('/').last, site).import!
+      module_name.new(folder, site).import!
     end
     
     ComfortableMexicanSofa.logger = logger
