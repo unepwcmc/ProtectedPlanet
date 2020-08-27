@@ -140,7 +140,7 @@ class SyncSeeds
   def commence_comfy_import(answer, source)
     logger = ComfortableMexicanSofa.logger
     ComfortableMexicanSofa.logger = Logger.new(STDOUT)
-    site = Comfy::Cms::Site.first.identifier
+    site = Comfy::Cms::Site.find_by_locale(I18n.locale).identifier
 
     if answer == 'all'
       Rake::Task["comfy:cms_seeds:import"].invoke(source, site)     
