@@ -86,10 +86,6 @@ export default {
     this.ajaxRequestDownload()
   },
 
-  watch: {
-
-  },
-
   methods: {
     ajaxRequestDownload () {
       axios.post(this.endpointCreate, this.params)
