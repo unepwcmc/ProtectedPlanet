@@ -14,12 +14,21 @@
   display: block;
 }
 
+@mixin card-stats-overview-for-pdf {
+  @include card-stats-for-pdf;
+  
+  .pdf & { 
+    margin-bottom: 30px;
+    width: 376px; 
+  }
+}
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--stats-overview {
   @include bg-grey-black;
-  @include card-stats-for-pdf;
+  @include card-stats-overview-for-pdf;
   @include card-stats-padding;
   width: 100%;
 

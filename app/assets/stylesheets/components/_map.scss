@@ -1,3 +1,17 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin map-for-pdf {
+  .pdf & { 
+    margin-bottom: 30px;
+    margin-left: 30px;
+    width: 734px; 
+  }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
 @import 'maps/v-map-baselayer-controls';
 @import "maps/v-map-disclaimer";
 @import 'maps/v-map-filter';
@@ -6,6 +20,7 @@
 @import 'maps/v-map-pa-search';
 @import 'maps/v-map-popup';
 @import 'maps/v-map-toggler';
+
 
 .map-section {
   @include gutters;
@@ -46,6 +61,7 @@
   }
 
   &--header {
+    @include map-for-pdf;
     width: 100%;
 
     .map__mapbox {

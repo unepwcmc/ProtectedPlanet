@@ -1,8 +1,20 @@
 //--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin card-stats-attributes-for-pdf {
+  .pdf & { 
+    margin-top: 30px;
+    margin-right: 30px;
+    width: 555px; 
+  }
+}
+
+//--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--stats-attributes {
   @include card-stats;
+  @include card-stats-attributes-for-pdf;
 
   .card {
     &__h2 { @include card-stats-h2; }
