@@ -145,8 +145,8 @@ class SyncSeeds
     if answer == 'all'
       Rake::Task["comfy:cms_seeds:import"].invoke(source.split('/').last, site)
     else
-      module_name = "ComfortableMexicanSofa::Seeds::#{answer.singularize}::Importer".constantize
-      module_name.new(source, site).import!
+      module_name = "ComfortableMexicanSofa::Seeds::#{answer.singularize.capitalize}::Importer".constantize
+      module_name.new(source.split('/').last, site).import!
     end
     
     ComfortableMexicanSofa.logger = logger
