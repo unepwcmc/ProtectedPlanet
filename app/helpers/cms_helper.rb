@@ -36,8 +36,8 @@ module CmsHelper
     "#"
   end
 
-  def get_category_filters
-    category_groups = load_categories
+  def get_category_filters(page_type = 'resource')
+    category_groups = load_categories(page_type)
 
     [
       {
@@ -106,7 +106,7 @@ module CmsHelper
     pages
   end
 
-  def load_categories
+  def load_categories(page_type)
     return [] unless @cms_page
     layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: @cms_page.layout_id)
 
@@ -116,12 +116,21 @@ module CmsHelper
     # can be different from the layout used in the child pages
     if layouts_categories.blank?
       children_layouts = @cms_page.children.map(&:layout_id)
-      layout_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
+      raise
+      layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
         .map(&:layout_category).uniq
     end
-
+    
+    # News and stories pages only have types as their categories
     categories_yml = I18n.t('search')[:custom_categories]
-    layout_categories.map do |lc|
+
+    # if page_type == 'news'
+    #   layouts_categories = Comfy::Cms::LayoutCategory.find_by_label('topics') 
+    #   categories_yml = I18n.t('search')[:custom_categories].first
+    # end
+
+
+    layouts_categories.map do |lc|
 
       title = categories_yml[lc.label.to_sym][:name]
       name = title.downcase

@@ -7,7 +7,7 @@
 
   <listing-page
     endpoint-search="/en/search-cms"
-    :filter-groups="<%= get_category_filters %>"
+    :filter-groups="<%= get_category_filters('news') %>"
     :page-id="<%= @cms_page.id %>"
     :results="<%= cms_pages_for_search %>"
     sm-trigger-element="sm-listing"
