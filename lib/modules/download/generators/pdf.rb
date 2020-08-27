@@ -12,8 +12,7 @@ class Download::Generators::Pdf < Download::Generators::Base
     rasterizer = Rails.root.join('vendor/assets/javascripts/rasterize.js')
     url = url_for(params)
 
-    `puppeteer #{rasterizer} '#{url}' #{dest_pdf}`
-
+    `node --trace-warnings #{rasterizer} '#{url}' #{dest_pdf}`
 
     # `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
 

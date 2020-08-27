@@ -20,11 +20,11 @@
       </div>
     </section>
 
-    <div class="card--stats-wrapper">
+    <div class="card--stats-wrapper pdf-break-after">
       <div class="card--stats-half">
         <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
       </div>
-      <div class="page__col-2">
+      <div class="card--stats-half page__col-2">
         <%= render partial: "partials/stats/stats-pame" , locals: { classes: 'page__col-child' } %>
         <%= render partial: "partials/stats/stats-affiliations", locals: { 
           classes: 'page__col-child',

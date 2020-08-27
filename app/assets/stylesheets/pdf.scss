@@ -9,6 +9,12 @@
   .card__stat-box,
   a { display: none !important; }
   
+  .container { width: 100%; }
+
+  .pdf-break-after { page-break-after: always; }
+  .pdf-break-before { page-break-before: always; }
+  .pdf-break-inside-avoid { page-break-inside: avoid; }
+
   .page--country,
   .page--site,
   .page--region { background-color: transparent; }

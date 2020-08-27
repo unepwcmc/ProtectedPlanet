@@ -18,8 +18,10 @@
   @include card-stats-for-pdf;
   
   .pdf & { 
-    margin-bottom: 30px;
+    // margin-bottom: 30px;
+    margin-right: rem-calc(30);
     width: 376px; 
+    // width: 30%;
   }
 }
 
