@@ -16,14 +16,10 @@
           <%= category['count'] %>, <%= category['percentage'].to_f.round(2) %>%
         </span>
         <%= link_to 'View list', 
-        search_areas_path(
-          geo_type: 'site', 
-          filters: { 
-            iucn_category: ["#{category['iucn_category_name']}"],
-            location: { type: 'country', options: ["#{@country.name}"] }
-          }          
-        ), 
-          title: "View the #{category['iucn_category_name']} sites for #{@country.name}", class: 'list__right list__a' %>
+          iucn_link(category)[:link], 
+          title: iucn_link(category)[:title], 
+          class: 'list__right list__a' 
+        %>
       </li>
     <% end %>
   </ul>
