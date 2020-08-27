@@ -9,6 +9,8 @@ class Search::FilterParams
   end
 
   def standardise
+    return {} if filters.blank?
+
     sanitise_location_filter
     sanitise_db_type_filter
     sanitise_type_filter

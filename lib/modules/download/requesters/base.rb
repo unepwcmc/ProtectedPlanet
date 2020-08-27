@@ -25,6 +25,7 @@ class Download::Requesters::Base
       'title' => filename,
       'url' => url(filename),
       'hasFailed' => Download.has_failed?(domain, identifier, format),
+      'token' => identifier
     }
   end
 
