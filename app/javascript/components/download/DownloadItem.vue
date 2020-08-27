@@ -116,7 +116,7 @@ export default {
           params: this.params
         })
         .then(response => {
-          this.updateDownloadItem(response)
+          this.updateDownloadItem(response.data)
         })
         .catch(error => {
           console.log('error', error)
