@@ -13,6 +13,8 @@ module Download::Poller
 
     generation_info = Download.generation_info(domain, token, format)
     is_ready = generation_info['status'] == 'ready'
+    # If not ready, generate the filename again even if won't match the final one.
+    # When ready, get the filename set by the generator
     filename = is_ready ? generation_info['filename'] : Download::Utils.filename(domain, token, format)
     {
       'id' => computed_id(token, format),
@@ -31,6 +33,8 @@ module Download::Poller
     params['search'].to_s
   end
 
+  # TODO Think about having the frontend passing back the generated token within the create request.
+  # This is so to avoid  passing all the filters at every poll request again to regenerate the token in the backend.
   def self.get_filters(params)
     return unless params['search']
     params['filters'] ? Download::Utils.extract_filters(JSON.parse(params['filters'])) : {}
