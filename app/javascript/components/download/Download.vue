@@ -28,7 +28,6 @@ export default {
 
   methods: {
     toggleDownloadPane () {
-      // this.$emit('toggle-download-pane')
       this.isActive = !this.isActive
     }
   }

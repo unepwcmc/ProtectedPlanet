@@ -42,16 +42,10 @@
 } %>
 
 <%= render partial: "partials/charts/chart-coverage-growth", locals: {
-  cms_page: @cms_page,
   content: cms_fragment_render(:section_coverage_content, @cms_page),
-  lines: @protectedAreasGrowth,
+  chart_data: @protectedAreasGrowth,
   title: cms_fragment_render(:section_coverage_title, @cms_page)
 } %>
-
-<%= render partial: "marine/sections/national", locals: {
-    countries: @top_marine_coverage_countries
-  }
-%>
 
 <section class="container--medium">
   <h2><%= cms_fragment_render(:section_size_title, @cms_page) %></h2>
