@@ -190,7 +190,8 @@ module ApplicationHelper
   def get_news_items all = false
     news_page = @cms_site.pages.find_by_slug('news-and-stories')
     published_pages = news_page.children.published
-    sorted_cards = published_pages.sort_by { |c| c.fragments.where(identifier: 'published_date').first.datetime }.reverse
+    # sorted_cards = published_pages.sort_by { |c| c.fragments.where(identifier: 'published_date').first.datetime }.reverse
+    sorted_cards = published_pages
 
     @items = {
       "title": news_page.label,

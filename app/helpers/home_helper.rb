@@ -21,5 +21,4 @@ module HomeHelper
       { is_type: [filter] }
     end.merge(db_type: ['wdpa'])
   end
-
 end
