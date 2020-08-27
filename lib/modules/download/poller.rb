@@ -11,8 +11,9 @@ module Download::Poller
     token = filters ? Download::Utils.search_token(search_term(params), filters) : params['token']
     format = params['format']
 
-    filename = Download::Utils.filename(domain, token, format)
-    is_ready = Download.is_ready?(domain, token, format)
+    generation_info = Download.generation_info(domain, token, format)
+    filename = generation_info['filename']
+    is_ready = generation_info['status'] == 'ready'
     {
       'id' => computed_id(token, format),
       'title' => filename,
