@@ -218,9 +218,9 @@ module ApplicationHelper
   def make_footer_links slug_array
     slug_array.map do |slug|
       page = @cms_site.pages.find_by_slug(slug)
-
+      
       {
-        "title": page.label,
+        "title": page.fragments.find_by(identifier: 'short_title') ? cms_fragment_render(:short_title, page) : page.label,
         "url": get_cms_url(page.full_path)
       }
     end

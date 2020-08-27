@@ -88,8 +88,8 @@ export default {
     },
 
     toggleDownloadPane () {
-      this.showPopup = !this.showPopup
-    },
+      this.isActive = !this.isActive
+    }
   }
 }
 </script>

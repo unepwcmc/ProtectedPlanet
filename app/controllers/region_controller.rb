@@ -16,6 +16,16 @@ class RegionController < ApplicationController
       }
     end.to_json
 
+    @iucn_categories_chart = @region.protected_areas_per_iucn_category
+      .enum_for(:each_with_index)
+      .map do |category, i|
+      { 
+        id: i+1,
+        title: category['iucn_category_name'], 
+        value: category['count'] 
+      }
+    end.to_json
+
     @governance_types = @region.protected_areas_per_governance
     @governance_chart = @governance_types.map do |item|
       { 
@@ -44,7 +54,10 @@ class RegionController < ApplicationController
     @total_pame = @region.protected_areas.with_pame_evaluations.count
     @total_wdpa = @region.protected_areas.wdpas.count
 
-    @wdpa = pas_sample
+
+    @region_pas = pas_sample
+    @regionPasViewAllUrl = search_areas_path(filters: { location: { type: 'region', options: ["#{@region.name}"] } })
+
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize

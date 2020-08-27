@@ -8,7 +8,6 @@
   &::-webkit-scrollbar-track {
     background-clip: padding-box;
     border-radius: rem-calc($width);
-    border: rem-calc(1) solid $grey-xdark;
   }
   &::-webkit-scrollbar-thumb {
     background: $grey-black;
@@ -20,12 +19,9 @@
     }
   }
   &::-webkit-scrollbar-track {
-    background: $white;
+    background-color: $grey-xlight; 
     &:hover {
-      background: $white;
-    }
-    &:active {
-      background: $grey-black;
+      background-color: $grey-xlight; 
     }
   }
   &::-webkit-scrollbar-corner {

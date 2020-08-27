@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="search--main">
     <search-site-input
       :endpoint="endpoint"
       :placeholder="placeholder"
@@ -17,7 +17,10 @@
       :results="results"
       :resultsText="resultsText"
       :totalItems="totalItems"
+      v-show="!loadingResults"
     />
+
+    <span :class="['icon--loading-spinner margin-center search__spinner', { 'icon-visible': loadingResults } ]" />
 
     <pagination
       :currentPage="currentPage"
@@ -49,6 +52,10 @@ export default {
       required: true,
       type: Array // [ { id: Number, title: String } ]
     },
+    dataPageLoad: {
+      type: Object,
+      required: true
+    },
     endpoint: {
       required: true,
       type: String
@@ -68,7 +75,7 @@ export default {
     resultsText: {
       required: true,
       type: String
-    }
+    },
   },
 
   data () {
@@ -80,10 +87,11 @@ export default {
       currentPage: 0,
       defaultCategory: this.categories[0].id,
       defaultPage: 1,
+      loadingResults: false,
       pageItemsStart: 0,
       pageItemsEnd: 0,
       requestedPage: 1,
-      results: [], // [ { title: String, url: String, summary: String, image: 'String' } ]
+      results: this.resultsPageLoad, // [ { title: String, url: String, summary: String, image: 'String' } ]
       searchTerm: '',
       totalItems: 0,
     }
@@ -95,10 +103,13 @@ export default {
 
   mounted () {
     this.categoryId = this.defaultCategory
+    this.updateProperties(this.dataPageLoad)
   },
 
   methods: {
     ajaxSubmission () {
+      this.loadingResults = true
+
       let data = {
         params: {
           filters: {
@@ -118,8 +129,8 @@ export default {
 
       axios.get(this.endpoint, data)
         .then(response => {
-          console.log('success', response)
           this.updateProperties(response.data)
+          this.loadingResults = false
         })
         .catch(function (error) {
           console.log(error)
@@ -166,10 +177,31 @@ export default {
       this.totalItems = data.total_items
     },
 
+    updateQueryString (params) {
+      let searchParams = new URLSearchParams(window.location.search)
+
+      const key = Object.keys(params)[0]
+
+      if(key == 'search_term') {
+        searchParams = new URLSearchParams()
+
+        this.updateQueryStringParam(searchParams, key, params[key])
+      }
+      
+      const newUrl = `${window.location.pathname}?${searchParams.toString()}`
+
+      window.history.pushState({ query: 1 }, null, newUrl)
+    },
+    
+    updateQueryStringParam (params, key, value) {
+      params.has(key) ? params.set(key, value) : params.append(key, value)
+    },
+
     updateSearchTerm (searchTerm) {
       this.resetAll()
       this.searchTerm = searchTerm
       this.ajaxSubmission()
+      this.updateQueryString({ search_term: searchTerm })
     },
   }
 }

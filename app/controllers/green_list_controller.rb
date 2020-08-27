@@ -4,6 +4,7 @@ class GreenListController < ApplicationController
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
   # before_action :find_protected_area
   before_action :most_protected_areas, only: [:index]
+  before_action :get_green_list_sites, only: [:index, :show]
   # before_action :redirect_if_not_green_listed
   # after_action :record_visit
   # after_action :enable_caching
@@ -33,6 +34,8 @@ class GreenListController < ApplicationController
       special_status: ['is_green_list']
     }
 
+    @greenListViewAllUrl = search_areas_path(filters: { special_status: ['is_green_list']} )
+
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
     }
@@ -45,6 +48,8 @@ class GreenListController < ApplicationController
     @networks = []
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
+
+    @greenListViewAllUrl = search_areas_path(filters: { special_status: ['is_green_list']} )
   end
 
   def record_visit
@@ -94,6 +99,10 @@ class GreenListController < ApplicationController
     @protected_area or raise_404
   end
 
+  def get_green_list_sites
+    @example_greenlist ||= green_list_areas.take(3)
+  end
+  
   def green_list_areas
     @green_list_areas ||= ProtectedArea.green_list_areas
   end

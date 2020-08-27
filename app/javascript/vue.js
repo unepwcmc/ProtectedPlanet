@@ -15,6 +15,7 @@ import store from './store/store.js'
 
 // components
 import AmChartLine from './components/charts/am-chart-line/AmChartLine'
+import AmChartMultiline from './components/charts/am-chart-line/AmChartMultiline'
 import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
@@ -24,7 +25,6 @@ import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
 import ChartColumnTabbed from './components/charts/chart-column-tabbed/ChartColumnTabbed'
 import ChartDial from './components/charts/chart-dial/ChartDial'
-import ChartLine from './components/charts/chart-line/ChartLine'
 import ChartTreemapInteractive from './components/charts/chart-treemap/ChartTreemapInteractive'
 import ChartRectangles from './components/charts/chart-rectangles/ChartRectangles'
 import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       store,
       components: {
         AmChartLine,
+        AmChartMultiline,
         AmChartPie,
         Carousel,
         CarouselSlide,
@@ -88,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartBarStacked,
         ChartDial,
         ChartColumnTabbed,
-        ChartLine,
         ChartTreemapInteractive,
         ChartRectangles,
         ChartRowPa,
