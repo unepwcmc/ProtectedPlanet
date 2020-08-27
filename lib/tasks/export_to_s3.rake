@@ -60,7 +60,7 @@ namespace :comfy do
 
       puts "Migrating #{old_filename}[#{filename}]..."
       migrated_count += 1
-      #S3.upload(filename, Pathname.new(old_file), bucket: TO)
+      S3.upload(filename, Pathname.new(old_file), bucket: TO)
     end
 
     puts "Total migrated: #{migrated_count}"
