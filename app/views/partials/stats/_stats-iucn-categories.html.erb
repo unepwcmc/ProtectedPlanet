@@ -17,8 +17,8 @@
           <%= category['count'] %>, <%= category['percentage'].to_f.round(2) %>%
         </span>
         <%= link_to 'View list', 
-          iucn_link(category)[:link], 
-          title: iucn_link(category)[:title], 
+         chart_link(category)[:link], 
+          title:chart_link(category)[:title], 
           class: 'list__right list__a' 
         %>
       </li>
