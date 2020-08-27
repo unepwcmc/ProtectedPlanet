@@ -143,7 +143,7 @@ class SyncSeeds
     site = Comfy::Cms::Site.find_by_locale(I18n.locale).identifier
 
     if answer == 'all'
-      Rake::Task["comfy:cms_seeds:import"].invoke(source, site)     
+      Rake::Task["comfy:cms_seeds:import"].invoke(source.split('/').last, site)
     else
       module_name = "ComfortableMexicanSofa::Seeds::#{answer.singularize}::Importer".constantize
       module_name.new(source, site).import!

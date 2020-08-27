@@ -71,7 +71,7 @@ namespace :comfy do
       puts "Finished downloads, now replacing your local seed data with your selection..."
 
 
-      # new_session.commence_comfy_import(answer, dest) 
+      new_session.commence_comfy_import(answer, dest) 
     end
   end
 
