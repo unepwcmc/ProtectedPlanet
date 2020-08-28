@@ -157,9 +157,7 @@ module CmsHelper
     resources = [
       get_resource(:resource_link_text, :resource_link_url, 'link', 'link-external'),
       get_resource(:resource_file_title, :resource_file, 'download', 'download')
-    ]
-
-    resources.map { |resource| resource unless resource == false }
+    ].compact
   end
 
   # Turns link[:url] value into a valid link if no http:// or https:// supplied
@@ -167,7 +165,8 @@ module CmsHelper
   def linkify(url, fragment_link)
     # If it is a file as opposed to a link
     if fragment_link =~ /(file)/ 
-      file = @cms_page.fragments.find { |fragment| fragment.tag == 'file' }
+      file = @cms_page.fragments.find_by(tag: 'file')
+      return '' if !file || file.attachments.first.blank?
       return rails_blob_path(file.attachments.first, disposition: 'attachment')
     end
     # TODO - add validations to Comfy pages controller to make it more robust 
@@ -189,7 +188,7 @@ module CmsHelper
         url: linkify(cms_fragment_render(fragment_link, @cms_page), fragment_link)
       }
     else
-      false
+      nil
     end
   end
 

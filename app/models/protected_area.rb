@@ -23,6 +23,8 @@ class ProtectedArea < ApplicationRecord
 
   after_create :create_slug
 
+  scope :all_except, -> (pa) { where.not(id: pa) }
+
   scope :oecms, -> { where(is_oecm: true) }
   scope :wdpas, -> { where(is_oecm: false) }
 
@@ -119,8 +121,8 @@ class ProtectedArea < ApplicationRecord
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list, :is_oecm],
-      methods: [:coordinates],
+      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_oecm],
+      methods: [:coordinates, :is_green_list, :is_transboundary],
       include: {
         countries_for_index: {
           only: [:name, :id, :iso_3],
@@ -201,6 +203,16 @@ class ProtectedArea < ApplicationRecord
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
+  def self.transboundary_sites    
+    ProtectedArea.joins(:countries)
+    .group('protected_areas.id')
+    .having('COUNT(countries_protected_areas.country_id) > 1')
+  end
+
+  def is_transboundary
+    countries.count > 1
+  end
+  
   def arcgis_layer_config
     {
       layers: [{url: arcgis_layer, isPoint: is_point?}],
@@ -302,4 +314,8 @@ class ProtectedArea < ApplicationRecord
       "iucn_categories.name IN (#{valid_categories})"
     )
   end
+
+
+
+
 end

@@ -10,7 +10,7 @@
         external_links: @presenter.external_links
       } %>
       
-      <div class="">
+      <div class="map--site">
         <%= render partial: "partials/maps/header", locals: {
         map: @map,
         map_options: @map_options
@@ -35,67 +35,14 @@
 
     <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
     
+    <section class="section-padding--top">
+      <%= render partial: "partials/cards/sites", locals: { 
+        cards: @wdpa_other, 
+        title: t('thematic_area.wdpa.other_protected_areas'),
+        url: @otherWdpasViewAllUrl
+      } %>
+    </section>
+    
     <%= render partial: "partials/messages/message-citation", locals: { title: @protected_area.name } %>
   </div>  
-</div>
-
-<%= content_for :seo, "Learn about and visualise the protected area #{@protected_area.name} (#{@protected_area.designation.try(:name)}), situated in #{@countries.map(&:name).join("; ") rescue "Areas Beyond National Jurisdiction"}" %>
-<%= content_for :seo_image, tiles_url(type: "protected_area", id: @protected_area.wdpa_id, version: 1) %>
-<%= content_for :page_title, @protected_area.name %>
-
-<% has_designations = @protected_area.networks.detect(&:designation).present? %>
-
-<% if has_designations %>
-  <div class="info-box info-box--fill-color info-box--small">
-    <p class="icon--info">
-      This site has multiple designations. <%= link_to raw('(See all details &#8595;)'), '#anchor-designations', class: 'link--page-anchor' %>
-    </p>
-  </div>
-<% end %>
-
-
-  <% if has_designations %>
-    <section id="anchor-designations">
-      <h2 class="header--section">Site multiple designations</h2>
-
-      <% designationCount = @other_designations.count %>
-
-      <div class="flex-row">
-
-        <div class="flex-1-fith stats">
-          <p class="flex-row align-items-center">
-            <span class="stats__number"><%= designationCount %></span>
-            <span>Other designation<%= 's' if designationCount > 1 %></span>
-          </p>
-        </div>
-
-        <div class="flex-4-fiths">
-          <p class="article__paragraph u-margin--page">
-            Lorem ipsum
-          </p>
-        </div>
-
-      </div>
-
-      <p class="article__paragraph u-margin--page"></p>
-      
-        <div class="flex-row-wrap u-pdf-no-break">
-          <% @other_designations.each do |pa| %>
-            <%= render partial: "pa_card", locals: {protected_area: pa} %>
-          <% end %>
-        </div>
-      </div>
-    </section>
-  <% end %>
-
-<% if management_plan_document %>
-  <section class="fact">
-    <h2 class="fact__header">Management Plan</h2>
-
-    <a href="<%= management_plan_document %>" class="info-box--margin-top info-box__link">
-      <i class="info-box__link-icon fa fa-file-pdf-o"></i><%= "#{@protected_area.name} Management Plan" %>
-    </a>
-  </section>
-<% end %>
-
 </div>
