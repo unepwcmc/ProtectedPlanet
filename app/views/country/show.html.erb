@@ -35,10 +35,10 @@
           type: 'marine' 
         } %>
       </div>
-
+      
       <%= render "partials/messages/message-warning-stats" %>
 
-      <div class="page__2cols">
+      <div class="page__2cols pdf-break-before">
         <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
         
         <%= render partial: "partials/stats/stats-governance", locals: { governance_types: @governance_types} %>

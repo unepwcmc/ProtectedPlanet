@@ -1,3 +1,6 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
 .v-map-header {
   background-color: $grey-black;
   padding: rem-calc(14 24);
@@ -5,6 +8,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+
 
   &__title {
     color: $grey-xlight;

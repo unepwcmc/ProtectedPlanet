@@ -64,12 +64,20 @@
     flex-wrap: nowrap;
     justify-content: space-between; 
   }
+
+  .pdf & { justify-content: unset; }
 }
 
 &--stats-half {
   width: 100%; 
 
   @include breakpoint($small) { width: calc(50% - 15px); }
+
+  .pdf & { 
+    width: 555px; 
+  }
+
+  &:first-child { margin-right: rem-calc(30); }
 }
 
 @import './stats/card-stats-affiliations';
