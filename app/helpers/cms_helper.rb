@@ -157,9 +157,7 @@ module CmsHelper
     resources = [
       get_resource(:resource_link_text, :resource_link_url, 'link', 'link-external'),
       get_resource(:resource_file_title, :resource_file, 'download', 'download')
-    ]
-
-    resources.map { |resource| resource unless resource == false }
+    ].compact
   end
 
   # Turns link[:url] value into a valid link if no http:// or https:// supplied
@@ -190,7 +188,7 @@ module CmsHelper
         url: linkify(cms_fragment_render(fragment_link, @cms_page), fragment_link)
       }
     else
-      false
+      nil
     end
   end
 
