@@ -37,7 +37,7 @@ module CmsHelper
   end
 
   def get_category_filters(page_type = 'resource')
-    category_groups = load_categories(page_type)
+    category_groups = page_type == 'news' ? load_categories.slice(0..0) : load_categories 
 
     [
       {
@@ -106,7 +106,7 @@ module CmsHelper
     pages
   end
 
-  def load_categories(page_type)
+  def load_categories
     return [] unless @cms_page
     layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: @cms_page.layout_id)
 
@@ -116,19 +116,12 @@ module CmsHelper
     # can be different from the layout used in the child pages
     if layouts_categories.blank?
       children_layouts = @cms_page.children.map(&:layout_id)
-      raise
       layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
         .map(&:layout_category).uniq
     end
-    
-    # News and stories pages only have types as their categories
+
+
     categories_yml = I18n.t('search')[:custom_categories]
-
-    # if page_type == 'news'
-    #   layouts_categories = Comfy::Cms::LayoutCategory.find_by_label('topics') 
-    #   categories_yml = I18n.t('search')[:custom_categories].first
-    # end
-
 
     layouts_categories.map do |lc|
 
