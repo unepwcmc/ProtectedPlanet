@@ -40,7 +40,7 @@ module CmsHelper
     category_groups = load_categories 
 
     # News and stories only have topics
-    category_groups.filter! { |cat| cat['id'] == 'topics' }
+    category_groups.filter! { |cat| cat[:id] == 'topics' } if page_type == 'news'
 
     [
       {
