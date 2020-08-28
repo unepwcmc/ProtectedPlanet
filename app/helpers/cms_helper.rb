@@ -37,7 +37,10 @@ module CmsHelper
   end
 
   def get_category_filters(page_type = 'resource')
-    category_groups = page_type == 'news' ? load_categories.slice(0..0) : load_categories 
+    category_groups = load_categories 
+
+    # News and stories only have topics
+    category_groups.filter! { |cat| cat['id'] == 'topics' }
 
     [
       {
