@@ -1,7 +1,7 @@
 <header 
   class="hero--thematic bg-image-overlay--white <%= get_local_classes local_assigns %>"
-  <% if local_assigns.has_key? :hero_image %>
-    style="background-image: url('<%= hero_image %>')"
+  <% if local_assigns.has_key? :image %>
+    style="background-image: url('<%= image %>')"
   <% end %>
 >
   <div class="hero__container container">
