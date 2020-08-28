@@ -88,7 +88,7 @@ export default {
     },
 
     toggleDownloadPane () {
-      this.isActive = !this.isActive
+      this.showPopup = !this.showPopup
     }
   }
 }
