@@ -8,6 +8,9 @@ $flickity-basic-slide-width-mobile: calc(92% - 2*#{$flickity-basic-cell-spacing-
 $flickity-basic-slide-width-tablet: calc(40% - 2*#{$flickity-basic-cell-spacing-tablet});
 $flickity-basic-slide-width-desktop: 20%;
 
+$flickity-basic-slide-height-mobile: rem-calc(408);
+$flickity-basic-slide-height-tablet: rem-calc(408);
+$flickity-basic-slide-height-desktop: rem-calc(312);;
 
 //--------------------------------------------------
 // classes
@@ -46,18 +49,21 @@ $flickity-basic-slide-width-desktop: 20%;
   .carousel-cell {
     padding-right: $flickity-basic-cell-spacing-mobile;
     padding-left: $flickity-basic-cell-spacing-mobile;
-    width: $flickity-basic-slide-width-mobile;
+    width: $flickity-basic-slide-width-mobile; 
+    height: $flickity-basic-slide-height-mobile;
 
     @include breakpoint($small) { 
       padding-right: $flickity-basic-cell-spacing-tablet;
       padding-left: $flickity-basic-cell-spacing-tablet;
       width: $flickity-basic-slide-width-tablet;
+      height: $flickity-basic-slide-height-tablet;
     }
 
     @include breakpoint($medium) { 
       padding-left: $flickity-basic-cell-spacing-desktop;
       padding-left: $flickity-basic-cell-spacing-desktop;
-      width: $flickity-basic-slide-width-desktop; height: rem-calc(312);
+      width: $flickity-basic-slide-width-desktop;
+      height: $flickity-basic-slide-height-desktop;
     }
 
     &:last-child {

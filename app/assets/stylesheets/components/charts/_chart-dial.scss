@@ -14,7 +14,9 @@ $chart-dial-font-size-desktop: rem-calc(26);
 &--dial {
   font: $chart-dial-font;
   margin: rem-calc(10 0);
-  width: 100%;
+  width: auto; height: rem-calc(160);
+
+  @include breakpoint($medium) { width: 100%; height: auto; }
 
   .chart {
     &__arc {
