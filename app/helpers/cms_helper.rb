@@ -167,7 +167,11 @@ module CmsHelper
     if fragment_link =~ /(file)/ 
       file = @cms_page.fragments.find_by(tag: 'file')
       return '' if !file || file.attachments.first.blank?
-      return rails_blob_path(file.attachments.first, disposition: 'attachment')
+      if Rails.env.development?
+        return rails_blob_path(file.attachments.first)
+      else
+        return file.attachments.first.service_url&.split('?')&.first
+      end
     end
     # TODO - add validations to Comfy pages controller to make it more robust 
     # This is only temporary 
