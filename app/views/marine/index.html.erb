@@ -4,7 +4,7 @@
   button_text: t('thematic_area.marine.hero.button_text'),
   button_url: search_areas_path(filters: @filters),
   classes: @cms_page.slug,
-  hero_image: cms_fragment_render(:theme_image, @cms_page),
+  image: cms_fragment_render(:image, @cms_page),
   hero_small_text: cms_fragment_render(:hero_small_text, @cms_page),
   hero_small_text_url: cms_fragment_render(:hero_small_text_url, @cms_page),
   title: @cms_page.label,
