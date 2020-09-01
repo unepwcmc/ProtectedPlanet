@@ -34,9 +34,9 @@
 //--------------------------------------------------
 .social {
 //--------------------------------------------------
-// sharing
+// following or sharing via social media 
 //--------------------------------------------------
-  &--share {
+  &--media {
     @include flex;
     @include responsive(margin-right, rem-calc(3), rem-calc(14), rem-calc(20));
     position: relative;
@@ -49,7 +49,7 @@
     }
   }  
 
-  &--share-white {
+  &--media-white {
     .social__icon {
       &--email { @include social-icon-white('icons/email-white.svg'); }
       &--facebook { @include social-icon-white('icons/facebook-white.svg'); }

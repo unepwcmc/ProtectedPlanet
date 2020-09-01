@@ -1,7 +1,7 @@
 <%= link_to root_url + theme[:obj][:full_path], 
   title: "View the #{theme[:obj][:label]} page", 
   class: "card--theme", 
-  style: "background-image: url('#{cms_fragment_render(:theme_image, theme[:obj])}')" do %>
+  style: "background-image: url('#{cms_fragment_render(:image, theme[:obj])}')" do %>
   <% unless theme[:pas_no] == -1 %>
     <div class="card__ribbon">
       <i class="card__icon <%= theme[:obj][:slug] %>">
