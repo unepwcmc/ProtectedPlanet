@@ -54,7 +54,7 @@ Rails.configuration.to_prepare do
         end
       end
 
-      layout_categories.destroy_all
+      layouts_categories.destroy_all
     end
   end
 
