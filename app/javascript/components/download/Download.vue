@@ -89,7 +89,7 @@ export default {
 
     toggleDownloadPane () {
       this.showPopup = !this.showPopup
-    },
+    }
   }
 }
 </script>

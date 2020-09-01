@@ -3,10 +3,7 @@
 //--------------------------------------------------
 @mixin map-for-pdf {
   .pdf & { 
-    // margin-bottom: 30px;
-    // margin-left: 30px;
-    width: 734px; 
-    // width: 60%;
+    width: 734px;
   }
 }
 
