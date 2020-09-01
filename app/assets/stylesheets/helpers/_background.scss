@@ -28,6 +28,22 @@ $image-placeholder: black;
   }
 }
 
+@mixin bg-image-overlay-hover($colour: rgba($black, 0.4)) {
+  position: relative;
+  z-index: 1;
+
+  &:hover::before {
+    background-color: $colour;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+}
+
 @mixin bg-gradient-overlay($colour: #ffffff) {
   position: relative;
   

@@ -257,6 +257,10 @@
           }
         }
       },
+      "published_date": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
       "fragments_for_index": {
         "type": "nested",
         "properties": {
@@ -291,6 +295,10 @@
           },
           "page_id": {
             "type": "integer"
+          },
+          "published_date": {
+            "type": "date",
+            "format": "yyyy-MM-dd"
           },
           "fragments_for_index": {
             "type": "nested",
