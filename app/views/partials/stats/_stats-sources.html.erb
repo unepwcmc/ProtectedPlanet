@@ -2,16 +2,14 @@
   <h2 class="card__h2"><%= t('stats.sources.title') %> (<%= sources.count %>)</h2>
   
   <div class="card__content flex">
-    <div class="card__two-thirds">
-      <ol class="list--underline">
-        <% sources.each do |source| %>
-          <li class="list__li fle">
-            <span class="list__title"><%= source[:title] %></span>
-            <span class="list__value"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
-            <span class="list__right"><%= source[:resp_party] %></span>
-          </li>
-        <% end %>
-      </ol>
-    </div>
+    <ol class="list--underline-sources">
+      <% sources.each do |source| %>
+        <li class="list__li fle">
+          <span class="list__title"><%= source[:title] %></span>
+          <span class="list__date"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
+          <span class="list__party"><%= source[:resp_party] %></span>
+        </li>
+      <% end %>
+    </ol>
   </div>
 </div>

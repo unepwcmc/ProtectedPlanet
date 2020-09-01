@@ -24,7 +24,7 @@
     &__title {
       font-weight: $bold;
       margin-right: rem-calc(10);
-    } 
+    }
 
     &__right {
       margin-left: auto;
@@ -98,6 +98,20 @@
   &--underline {
     @include list-underline;
   }
+
+//--------------------------------------------------
+// underline
+//--------------------------------------------------
+&--underline-sources {
+  @include list-underline;
+
+  .list {
+    &__date { 
+      flex-shrink: 0;
+      margin-right: rem-calc(10);
+    }
+  }
+}
 
 //--------------------------------------------------
 // underline with scrollbar
