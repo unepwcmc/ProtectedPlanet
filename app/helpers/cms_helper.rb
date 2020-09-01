@@ -36,7 +36,7 @@ module CmsHelper
     "#"
   end
 
-  def get_category_filters(page_type = 'resource')
+  def get_category_filters
     category_groups = load_categories 
 
     [
