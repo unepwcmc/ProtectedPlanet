@@ -64,7 +64,7 @@ Rails.configuration.to_prepare do
         header = "#{frag.tag} #{frag.identifier}"
         content =
           case frag.tag
-          when "datetime", "date"
+          when "datetime", "date", "date_not_null"
             frag.datetime
           when "checkbox"
             frag.boolean
