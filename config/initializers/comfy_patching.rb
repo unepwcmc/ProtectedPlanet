@@ -29,7 +29,10 @@ Rails.configuration.to_prepare do
         end
       end
 
-      delete_orphan_categories && return if _categories.blank?
+      layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: self.id)
+      orphan_categories = layouts_categories.to_a - _categories
+
+      delete_orphan_categories(orphan_categories) && return unless orphan_categories.blank?
 
       _categories.each do |cat|
         tag_name = cat[:tag_params].split(',').first
@@ -41,11 +44,9 @@ Rails.configuration.to_prepare do
       end
     end
 
-    def delete_orphan_categories
-      layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: self.id)
-
+    def delete_orphan_categories(orphan_categories)
       self.pages.each do |page|
-        layouts_categories.each do |lc|
+        orphan_categories.each do |lc|
           pcs_ids = page.page_categories.where(layout_category_id: lc.id).map(&:id)
           Comfy::Cms::PagesCategory.where(
             page_id: page.id,
@@ -54,7 +55,7 @@ Rails.configuration.to_prepare do
         end
       end
 
-      layouts_categories.destroy_all
+      orphan_categories.map(&:destroy)
     end
   end
 

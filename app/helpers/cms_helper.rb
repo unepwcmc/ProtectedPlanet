@@ -39,9 +39,6 @@ module CmsHelper
   def get_category_filters(page_type = 'resource')
     category_groups = load_categories 
 
-    # News and stories only have topics
-    category_groups.filter! { |cat| cat[:id] == 'topics' } if page_type == 'news'
-
     [
       {
         title: I18n.t('search.filter-by'),
@@ -122,7 +119,6 @@ module CmsHelper
       layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
         .map(&:layout_category).uniq
     end
-
 
     categories_yml = I18n.t('search')[:custom_categories]
 
