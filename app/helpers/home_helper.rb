@@ -7,7 +7,7 @@ module HomeHelper
       slug = category[:slug].split('/').last
       cms_page = Comfy::Cms::Page.find_by_slug(slug)
       {
-        image: cms_fragment_render(:theme_image, cms_page),
+        image: cms_fragment_render(:image, cms_page),
         title: category[:title],
         url: search_areas_path(filters: get_filters(category[:filter]))
       }
@@ -21,5 +21,4 @@ module HomeHelper
       { is_type: [filter] }
     end.merge(db_type: ['wdpa'])
   end
-
 end

@@ -1,5 +1,5 @@
-<% if local_assigns.has_key? :hero_image %>
-  <header class="hero--basic bg-image-overlay--white" style="background-image: url(<%= hero_image %>)">
+<% if local_assigns.has_key? :image %>
+  <header class="hero--basic bg-image-overlay--white" style="background-image: url(<%= image %>)">
 <% else %>
   <header class="hero--basic bg-image-overlay--white <%= get_local_classes local_assigns %>">
 <% end %>

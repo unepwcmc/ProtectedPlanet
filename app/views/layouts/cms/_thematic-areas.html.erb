@@ -1,4 +1,8 @@
-<%= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: @cms_page[:slug] } %>
+<%= render partial: "./layouts/partials/hero-small", locals: { 
+  classes: @cms_page[:slug],
+  image: cms_fragment_render(:image, @cms_page),
+  title: @cms_page.label
+} %>
 
 <section class="section-padding">
   <%= render "partials/cards/themes" %>

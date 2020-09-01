@@ -1,7 +1,7 @@
 <div class="page--resource page-padding">
   <div class="container--medium">
     <p class="page__date">
-      <%= cms_fragment_content(:published_date, @cms_page).strftime('%d %B %y') %>
+      <%= cms_fragment_content_datetime(:published_date, @cms_page).strftime('%d %B %y') %>
     </p>
 
     <h1 class="page__h1"><%= @cms_page.label %></h1>
@@ -26,7 +26,7 @@
 </div>
 
 <div class="flex flex-h-center page-padding--bottom">
-  <%= render "partials/social/sharing" %>
+  <%= render "partials/social/social-share" %>
 </div>
 
 <section class="container section-padding--bottom">

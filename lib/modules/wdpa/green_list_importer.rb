@@ -31,7 +31,7 @@ module Wdpa::GreenListImporter
             duplicates << wdpa_id
             next
           end
-          gls = GreenListStatus.create(row.to_h.slice('status', 'expiry_date'))
+          gls = GreenListStatus.find_or_create_by(row.to_h.slice('status', 'expiry_date'))
           pa.green_list_status_id = gls.id
           pa.save
         end

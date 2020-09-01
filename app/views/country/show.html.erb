@@ -15,7 +15,7 @@
         total_wdpa: @total_wdpa,
       } %>
 
-      <div class="page__map">
+      <div class="page__map map--country">
         <%= render partial: "partials/maps/header", locals: {
           map: @map,
           map_options: @map_options
@@ -70,7 +70,12 @@
       
       <% end %>
       
-      <%= render partial: "partials/cards/sites", locals: { cards: @sites } %>
+      <%= render partial: "partials/cards/sites", locals: { 
+        cards: @sites,
+        title: @country.name + ' ' + t('country.protected_areas'),
+        url: @sitesViewAllUrl
+      } %>
+      
 
       <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
     </section>

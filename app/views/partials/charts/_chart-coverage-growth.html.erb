@@ -3,13 +3,10 @@
     <h2><%= title %></h2>
     <div><%= content %></div>
     <div>
-      <chart-line 
-        :lines="<%= lines %>"
-        
-        <% if local_assigns.has_key? :units %>
-          units="<%= units %>"
-        <% end %>
-      ></chart-line>
+      <am-chart-multiline 
+        :data="<%= chart_data %>"
+        :dots="true"
+      ></am-chart-multiline>
     </div>
   </div>
 </section>
