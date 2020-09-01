@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const address = process.argv[2];
-const captureDelay = 8000;
+const captureDelay = 10000;
 const output = process.argv[3];
 
 
@@ -14,9 +14,9 @@ const output = process.argv[3];
     height: 1754
   });
 
-  await page.waitFor(captureDelay);
-
   await page.goto(address, {waitUntil: 'networkidle2'});
+
+  await page.waitFor(captureDelay);
 
   const headerHTML = `<div style="padding-top:10px; padding-right:26px; width: 100%;">
     <p style="float:right; margin-bottom:0;">
