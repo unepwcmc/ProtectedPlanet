@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   class PageNotFound < StandardError; end;
 
   protect_from_forgery with: :exception
+  # Required for development
+  before_action :set_host_for_local_storage
 
   helper_method :opengraph
 
@@ -12,8 +14,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
   before_action :check_for_pdf
-  #Temporary fix for development. To test if it is required on staging/production
-  before_action :set_host_for_local_storage
   after_action :store_location
 
   def admin_path?
@@ -141,7 +141,6 @@ class ApplicationController < ActionController::Base
   def set_host_for_local_storage
     Rails.application.routes.default_url_options[:host] = request.base_url if Rails.application.config.active_storage.service == :local
     # TODO Check why this is not set automatically
-    ActiveStorage::Current.host = request.base_url 
-    #ActiveStorage::Current.host = request.base_url if Rails.application.config.active_storage.service == :local
+    ActiveStorage::Current.host = request.base_url if Rails.application.config.active_storage.service == :local
   end
 end

@@ -22,11 +22,8 @@ const addPaintOptions = (options, layer) => {
 }
 
 export default {
-  //THESE METHODS ARE FOR TESTING ONLY
   methods: {
     addRasterTileLayer (layer) {
-      console.log('Adding raster layer:', layer)
-
       this.map.addLayer({
         id: layer.id,
         type: 'raster',

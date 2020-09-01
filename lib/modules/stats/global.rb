@@ -52,11 +52,11 @@ class Stats::Global
   end
 
   def self.pa_land_cover 
-    (self.percentage_land_cover / 100) * CountryStatistic.global_land_area
+    CountryStatistic.global_pa_land_area
   end
 
   def self.pa_marine_cover
-    (self.percentage_marine_cover / 100) * CountryStatistic.global_marine_area
+    CountryStatistic.global_pa_marine_area
   end
 
   def self.percentage_marine_cover
