@@ -1,18 +1,7 @@
 <div class="card--stats-sources sm-sources">
-  <h2 class="card__h2"><%= t('stats.sources.title') %></h2>
+  <h2 class="card__h2"><%= t('stats.sources.title') %>(<%= sources.count %>)</h2>
   
   <div class="card__content flex">
-    <div class="card__stat-box card__third">
-      <span><%= t('stats.sources.total') %></span>  
-      
-      <counter 
-        class="" 
-        :total="<%= sources.count %>"
-        trigger="sm-sources" 
-        :decimal="0"
-      ></counter>
-    </div>
-
     <div class="card__two-thirds">
       <ol class="list--underline">
         <% sources.each do |source| %>
