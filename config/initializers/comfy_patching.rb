@@ -184,5 +184,39 @@ Rails.configuration.to_prepare do
         import_page(page_path, page)
       end
     end
+
+    def construct_fragments_attributes(hash, record, path)
+      frag_identifiers = []
+      frag_attributes = hash.collect do |frag_header, frag_content|
+        tag, identifier = frag_header.split
+        frag_hash = {
+          identifier: identifier,
+          tag:        tag
+        }
+
+        # tracking fragments that need removing later
+        frag_identifiers << identifier
+
+        # based on tag we need to cram content in proper place and proper format
+        case tag
+          ## CUSTOM CODE - need to add 'date not null' tag to importer method as well to get it to import properly
+        when "date", "datetime", "date_not_null"
+          ## END OF CUSTOM CODE
+          frag_hash[:datetime] = frag_content
+        when "checkbox"
+          frag_hash[:boolean] = frag_content
+        when "file", "files"
+          files, file_ids_destroy = files_content(record, identifier, path, frag_content)
+          frag_hash[:files]            = files
+          frag_hash[:file_ids_destroy] = file_ids_destroy
+        else
+          frag_hash[:content] = frag_content
+        end
+
+        frag_hash
+      end
+
+      [frag_identifiers, frag_attributes]
+    end
   end
 end
