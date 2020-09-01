@@ -181,7 +181,7 @@ module CmsHelper
   # Also sanitises it in the case of a download link
   def linkify(fragment_link)
     if fragment_link.tag == 'file'
-      return '' if !fragment_link.attachments || fragment_link.attachments.first.blank?
+      return if !fragment_link.attachments || fragment_link.attachments.first.blank?
       if Rails.env.development?
         return rails_blob_path(fragment_link.attachments.first)
       else
