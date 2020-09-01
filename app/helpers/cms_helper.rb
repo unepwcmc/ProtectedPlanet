@@ -181,6 +181,7 @@ module CmsHelper
   # Also sanitises it in the case of a download link
   def linkify(fragment_link)
     if fragment_link.tag == 'file'
+      return '' if !fragment_link.attachments || fragment_link.attachments.first.blank?
       if Rails.env.development?
         return rails_blob_path(fragment_link.attachments.first)
       else
@@ -189,9 +190,10 @@ module CmsHelper
     else
       begin
         url = URI.parse(fragment_link.content)
-        (url.is_a?(URI::HTTP) && !url.host.nil?) ? url.to_s : 'Invalid or missing URL'
+        (url.is_a?(URI::HTTP) && !url.host.nil?) ? url.to_s : nil
       rescue URI::InvalidURIError
-        'Invalid URL'
+        Rails.logger.info "Invalid or missing URL"
+        return 
       end
     end
   end
