@@ -1,19 +1,8 @@
 //--------------------------------------------------
-// mixins
-//--------------------------------------------------
-@mixin card-stats-affiliations-for-pdf {
-  .pdf & { 
-    // margin-top: 30px;
-    // width: 555px; 
-  }
-}
-
-//--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--stats-affiliations {
   @include card-stats;
-  @include card-stats-affiliations-for-pdf;
 
   .card {
     &__button {
