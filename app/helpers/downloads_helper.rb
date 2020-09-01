@@ -1,57 +1,48 @@
 module DownloadsHelper
+  DEFAULT_OPTIONS = {
+    csv: {
+      title: 'CSV',
+      commercialAvailable: true
+    },
+    shp: {
+      title: 'SHP',
+      commercialAvailable: true
+    },
+    gdb: {
+      title: 'File Geodatabase',
+      commercialAvailable: true
+    },
+    esri: {
+      title: 'ESRI Web Service',
+      url: ''
+    },
+    pdf: {
+      title: 'PDF',
+      commercialAvailable: false
+    }
+  }.freeze
   def download_options options_array, domain, token
     download_options = []
 
-    if options_array.include? 'csv'
+    options_array.map do |option|
       download_options.push(
-        {
-          title: 'CSV',
-          commercialAvailable: true,
-          params: { domain: domain, format: 'csv', token: token }
-        },
-      )
-    end
-
-    if options_array.include? 'shp'
-      download_options.push(
-        {
-          title: 'SHP',
-          commercialAvailable: true,
-          params: { domain: domain, format: 'shp', token: token }
-        },
-      )
-    end
-
-    if options_array.include? 'gdb'
-      download_options.push(
-        {
-          title: 'File Geodatabase',
-          commercialAvailable: true,
-          params: { domain: domain, format: 'gdb', token: token }
-        },
-      )
-    end
-
-    if options_array.include? 'esri'
-      download_options.push(
-        {
-          title: 'ESRI Web Service',
-          url: ''
-        },
-      )
-    end
-
-    if options_array.include? 'pdf'
-      download_options.push(
-        {
-          title: 'PDF',
-          commercialAvailable: false,
-          params: { domain: 'pdf', format: 'pdf', token: token }
-        },
+        DEFAULT_OPTIONS[option.to_sym].merge(download_params(option, domain, token))
       )
     end
 
     @download_options = download_options.to_json
+  end
+
+  def download_params(format, domain, token)
+    return {} if format == 'esri'
+    _domain = format == 'pdf' ? 'pdf' : domain
+    {
+      params: {
+        domain: _domain,
+        format: format,
+        token: token
+      }
+    }
   end
 
   def download_text
