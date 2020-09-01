@@ -56,7 +56,8 @@ module SearchHelper
     _filters = {filters: {ancestor: @cms_page.id } }
     _options = {
       page: 1,
-      size: Search::CmsSerializer::DEFAULT_PAGE_SIZE[@cms_page.slug.underscore.to_sym]
+      size: Search::CmsSerializer::DEFAULT_PAGE_SIZE[@cms_page.slug.underscore.to_sym],
+      sort: {datetime: 'published_date'}
     }
     _search = Search.search('', _options.merge(_filters), Search::CMS_INDEX)
 
