@@ -11,8 +11,8 @@
   <% cards.each do |card| %>
     <%= link_to protected_area_path(card.wdpa_id), title: "View more about the site: #{ card.name }", class: "card__link" do %>
 
-      <div v-lazy-container="{ selector: 'img' }">
-        <%= protected_area_cover(card) %>
+      <div class="card__image-placeholder">
+        <div alt="title" class="card__image" style="background-image: url(<%= protected_area_cover(card, with_tag: false) %>)"></div>
       </div>
 
       <div class="card__content">
