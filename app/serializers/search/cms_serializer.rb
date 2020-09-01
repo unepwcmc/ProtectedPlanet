@@ -52,8 +52,7 @@ class Search::CmsSerializer < Search::BaseSerializer
   def sorted_pages
     return [] if @results.cms_pages.blank?
     @results.cms_pages.sort_by do |p|
-      p.fragments.find_by(identifier: 'published_date')
-        .try(:datetime) || OLDEST_DATE
+      p.published_date || OLDEST_DATE
     end.reverse
   end
 

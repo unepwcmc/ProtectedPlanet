@@ -27,7 +27,7 @@ module Concerns::Searchable
       items_per_page = search_params[:items_per_page].try(:to_i) || DEFAULT_SIZE
       options[:page] = requested_page
       options[:size] = items_per_page
-      options
+      options.merge(@sorter || {})
     end
 
     INDEX_BY_TYPE = {

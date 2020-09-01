@@ -4,4 +4,8 @@ class Comfy::Cms::SearchableFragment < Comfy::Cms::Fragment
       only: [:id, :content]
     )
   end
+
+  def datetime
+    (attributes['datetime'] || DateTime.new(1970)).strftime('%Y-%m-%d')
+  end
 end
