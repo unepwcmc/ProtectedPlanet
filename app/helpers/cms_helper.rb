@@ -187,8 +187,12 @@ module CmsHelper
         return fragment_link.attachments.first.service_url&.split('?')&.first
       end
     else
-      url = URI.parse(fragment_link.content)
-      (url.is_a?(URI::HTTP) && !url.host.nil?) ? url.to_s : 'Invalid URL'
+      begin
+        url = URI.parse(fragment_link.content)
+        (url.is_a?(URI::HTTP) && !url.host.nil?) ? url.to_s : 'Invalid or missing URL'
+      rescue URI::InvalidURIError
+        'Invalid URL'
+      end
     end
   end
 
