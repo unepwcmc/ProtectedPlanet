@@ -45,6 +45,13 @@
     }
   }
 }
+
+@mixin list-scrollbar {
+  @include beautify-scrollbar;
+  max-height: rem-calc(280);
+  overflow-y: scroll;
+}
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
@@ -100,44 +107,43 @@
   }
 
 //--------------------------------------------------
-// underline
-//--------------------------------------------------
-&--underline-sources {
-  @include list-underline;
-  width: 100%;
-
-  .list {
-    &__date { 
-      flex-shrink: 0;
-      margin-right: rem-calc(10);
-
-      @include breakpoint($medium){ width: 15%; }
-    }
-
-    &__li {
-      @include breakpoint-down($medium){ @include flex-column; }
-    }
-
-    &__party {
-      @include breakpoint($medium){ width: 40%; }
-    }
-
-    &__title {
-      font-weight: $bold;
-      margin-right: rem-calc(10);
-
-      @include breakpoint($medium){ width: 45%; }
-    }
-  }
-}
-
-//--------------------------------------------------
 // underline with scrollbar
 //--------------------------------------------------
   &--underline-scrollbar {
+    @include list-scrollbar;
     @include list-underline;
-    @include beautify-scrollbar;
-    max-height: rem-calc(280);
-    overflow-y: scroll;
+  }
+
+//--------------------------------------------------
+// underline with scrollbar - sources
+//--------------------------------------------------
+  &--underline-sources {
+    @include list-scrollbar;
+    @include list-underline;
+    width: 100%;
+
+    .list {
+      &__date { 
+        flex-shrink: 0;
+        margin-right: rem-calc(10);
+
+        @include breakpoint($medium){ width: 15%; }
+      }
+
+      &__li {
+        @include breakpoint-down($medium){ @include flex-column; }
+      }
+
+      &__party {
+        @include breakpoint($medium){ width: 40%; }
+      }
+
+      &__title {
+        font-weight: $bold;
+        margin-right: rem-calc(10);
+
+        @include breakpoint($medium){ width: 45%; }
+      }
+    }
   }
 }
