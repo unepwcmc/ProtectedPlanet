@@ -1,14 +1,17 @@
 module Concerns::Tabs
   extend ActiveSupport::Concern
+  TOTAL_TABS = 3
 
   included do
-    def get_tabs(total_tabs)
+    include Comfy::CmsHelper
+    
+    def get_tabs
       tabs = []
 
-      total_tabs.times do |i|
+      TOTAL_TABS.times do |i|
         tab = {
           id: i+1,
-          title: @cms_page.fragments.where(identifier: "tab-title-#{i+1}").first.content
+          title: cms_fragment_content(:"tab-title-#{i+1}", @cms_page)
         }
 
         tabs << tab
