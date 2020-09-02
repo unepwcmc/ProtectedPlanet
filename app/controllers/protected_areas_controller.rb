@@ -23,14 +23,8 @@ class ProtectedAreasController < ApplicationController
 
     @locations = get_locations
 
-    # @protected_area.sources
-    @sources = [
-      {
-        title: 'Source name',
-        date_updated: '2019',
-        url: 'http://link-to-source.com'
-      }
-    ]
+    # In the format [{title: ..., year: ..., responsible_party: ... }, ...]
+    @sources = @protected_area.sources_per_pa
 
     @wdpa_other = get_other_sites
 
@@ -109,8 +103,8 @@ class ProtectedAreasController < ApplicationController
   # end
 
   def get_other_sites
-    return @countries.first.protected_areas.all_except(@protected_area).take(3) if @countries.length <= 1
-    ProtectedArea.all_except(@protected_area).transboundary_sites.take(3)
+    return @countries.first.protected_areas.without_geometry.all_except(@protected_area.id).take(3) if @countries.length <= 1
+    ProtectedArea.without_geometry.all_except(@protected_area.id).transboundary_sites.take(3)
   end
 
   def determine_search_path(area)

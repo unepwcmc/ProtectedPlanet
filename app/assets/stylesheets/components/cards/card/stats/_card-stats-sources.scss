@@ -8,35 +8,5 @@
     &__content { @include card-stat-content; }
 
     &__h2 { @include card-stats-h2; }
-
-    &__list {
-      @include flex-grow;
-      width: 100%;
-      
-      @include breakpoint($small) { width: 50%; }
-      @include breakpoint($medium) { width: 66%; }
-    }
-
-    &__number { @include card-stats-number; }
-
-    &__stat-box {
-      @include bg-grey-black;
-      @include flex;
-      @include flex-center;
-      @include flex-column;
-      font-size: rem-calc(20);
-      font-weight: $bold;
-      margin-right: rem-calc(20);
-      height: rem-calc(280);
-      width: 100%;
-
-      @include breakpoint($small) { width: 50%; }
-      @include breakpoint($medium) { width: 33%; }
-    }
-
-    &__subtitle {
-      font-size: rem-calc(20);
-      margin-bottom: rem-calc(10);
-    }
   }
 }

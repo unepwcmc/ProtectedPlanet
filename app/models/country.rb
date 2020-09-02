@@ -1,6 +1,7 @@
 class Country < ApplicationRecord
   include GeometryConcern
   include MapHelper
+  include SourceHelper
 
   has_and_belongs_to_many :protected_areas
 
@@ -68,6 +69,19 @@ class Country < ApplicationRecord
   def random_protected_areas wanted=1
     random_offset = rand(protected_areas.count-wanted)
     protected_areas.offset(random_offset).limit(wanted)
+  end
+
+  def sources_per_country
+    sources = ActiveRecord::Base.connection.execute("""
+      SELECT sources.title, EXTRACT(YEAR FROM sources.year) AS year, sources.responsible_party 
+      FROM sources
+      INNER JOIN countries_protected_areas
+      ON countries_protected_areas.country_id = #{self.id}
+      INNER JOIN protected_areas_sources 
+      ON protected_areas_sources.protected_area_id = countries_protected_areas.protected_area_id
+      AND protected_areas_sources.source_id = sources.id
+      """)
+    convert_into_hash(sources.uniq)
   end
 
   def protected_areas_per_designation(jurisdiction=nil)

@@ -1,34 +1,15 @@
 <div class="card--stats-sources sm-sources pdf-break-inside-avoid">
-
-  <% unless local_assigns.has_key? :small %>
-    <h2 class="card__h2"><%= t('stats.sources.title') %></h2>
-  <% end %>
+  <h2 class="card__h2"><%= t('stats.sources.title') %> (<%= sources.count %>)</h2>
   
-  <div class="card__content">
-
-    <% unless local_assigns.has_key? :small %>
-      <div class="card__stat-box">
-        <span class="card__subtitle"><%= t('stats.sources.total') %></span>  
-        
-        <counter 
-          class="card__number" 
-          :total="<%= sources.count %>"
-          trigger="sm-sources" 
-          :decimal="0"
-        ></counter>
-      </div>
-    <% end %>
-
-    <div class="card__list">
-      <ol class="list--underline">
-        <% sources.each do |source| %>
-          <li class="list__li fle">
-            <span class="list__title"><%= source[:title] %></span>
-            <span class="list__value"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
-            <%= link_to 'Details', source[:url], title: '', class: 'list__a list__right' %>
-          </li>
-        <% end %>
-      </ol>
-    </div>
+  <div class="card__content flex">
+    <ol class="list--underline-sources">
+      <% sources.each do |source| %>
+        <li class="list__li">
+          <span class="list__title"><%= source[:title] %></span>
+          <span class="list__date"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
+          <span class="list__party"><%= source[:resp_party] %></span>
+        </li>
+      <% end %>
+    </ol>
   </div>
 </div>
