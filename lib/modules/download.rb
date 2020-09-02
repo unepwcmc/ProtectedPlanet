@@ -44,15 +44,21 @@ module Download
   }.freeze
 
   def self.generate format, download_name, opts={}
-    generator = GENERATORS[format.to_sym]
+    begin
+      generator = GENERATORS[format.to_sym]
 
-    zip_path = Utils.zip_path(download_name)
+      zip_path = Utils.zip_path(download_name)
 
-    generated = generator.generate zip_path, opts[option(format)]
+      generated = generator.generate zip_path, opts[option(format)]
 
-    if generated
-      upload_to_s3 zip_path, opts[:for_import]
-      clean_up zip_path
+      if generated
+        upload_to_s3 zip_path, opts[:for_import]
+        clean_up zip_path
+      end
+    rescue StandardError => e
+      Rails.logger.info("===DOWNLOAD GENERATION ERROR===")
+      Rails.logger.info(e.backtrace)
+      puts(e.backtrace)
     end
   end
 
