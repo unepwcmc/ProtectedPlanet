@@ -9,9 +9,11 @@
   &__title {
     color: $grey-xlight;
     font-family: $header-font;
-    font-size: rem-calc(25);
+    font-size: rem-calc(20);
     font-weight: $bold;
     line-height: $header-font-line-height;
+
+    @include breakpoint($small) { font-size: rem-calc(25); }
   }
 
   &__close {
