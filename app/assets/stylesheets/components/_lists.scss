@@ -3,7 +3,6 @@
 //--------------------------------------------------
 @mixin list-underline {
   @include ul-unstyled;
-  padding-right: rem-calc(19);
 
   .list {
     &__li {
@@ -17,6 +16,7 @@
 
     &__icon {
       @include circle-icon;
+      @include flex-no-shrink;
       background-color: $grey;
       margin-right: rem-calc(24);
     }
@@ -32,10 +32,18 @@
       justify-content: flex-end;
     }
 
+    &__value {
+      margin-right: rem-calc(24);
+    }
+
     &__a {
       @include button-with-icon;
       @include flex-no-shrink;
       font-size: rem-calc(16);
+
+      @include breakpoint-down($small) {
+        text-indent: -9999px;
+      }
 
       &::after {
         @include icon-circle-chevron-black;
@@ -50,6 +58,7 @@
   @include beautify-scrollbar;
   max-height: rem-calc(280);
   overflow-y: scroll;
+  padding-right: rem-calc(19);
 }
 
 //--------------------------------------------------
@@ -110,16 +119,16 @@
 // underline with scrollbar
 //--------------------------------------------------
   &--underline-scrollbar {
-    @include list-scrollbar;
     @include list-underline;
+    @include list-scrollbar;
   }
 
 //--------------------------------------------------
 // underline with scrollbar - sources
 //--------------------------------------------------
   &--underline-sources {
-    @include list-scrollbar;
     @include list-underline;
+    @include list-scrollbar;
     width: 100%;
 
     .list {
