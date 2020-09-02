@@ -16,22 +16,8 @@
           v-on:submit-search="updateSearchTerm"
         />
 
-        <map-trigger
-          :is-disabled="isMapPaneDisabled"
-          :text="textMap"
-          :is-active="isMapPaneActive"
-          v-on:toggle:map-pane="toggleMapPane"
-        />
-
         <slot name="download"/>
       </div>
-    </div>
-
-    <div 
-      v-show="isMapPaneActive"
-      class="search__map-container"
-    >
-      <slot name="map"/>
     </div>
 
     <div class="search__main">
@@ -74,8 +60,6 @@ import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import Download from '../download/Download.vue'
 import FilterTrigger from '../filters/FilterTrigger.vue'
 import FiltersSearch from '../filters/FiltersSearch.vue'
-import MapTrigger from '../map/MapTrigger.vue'
-import MapSearch from '../map/MapSearch.vue'
 import SearchAreasInputAutocomplete from '../search/SearchAreasInputAutocomplete.vue'
 import SearchAreasResults from '../search/SearchAreasResults.vue'
 import TabsFake from '../tabs/TabsFake.vue'
@@ -87,8 +71,6 @@ export default {
     Download,
     FilterTrigger,
     FiltersSearch,
-    MapTrigger,
-    MapSearch,
     SearchAreasInputAutocomplete,
     SearchAreasResults,
     TabsFake
@@ -145,10 +127,6 @@ export default {
       type: String,
       required: true
     },
-    textMap: {
-      type: String,
-      required: true
-    },
     results: {
       type: Object,
       required: true
@@ -165,8 +143,6 @@ export default {
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
       isFilterPaneDisabled: false,
-      isMapPaneActive: false,
-      isMapPaneDisabled: false,
       loadingResults: false,
       newResults: this.results, // { geo_type: String, title: String, total: Number, areas: [{ areas: String, country: String, image: String, region: String, title: String, url: String }
       searchTerm: '',
@@ -221,18 +197,8 @@ export default {
       this.isFilterPaneDisabled = true
     },
 
-    disableMap () {
-      this.isFilterPaneActive = false
-      this.isMapPaneDisabled = true
-      this.isMapPaneActive = false
-    },
-
     enableFilters () {
       this.isFilterPaneDisabled = false
-    },
-
-    enableMap () {
-      this.isMapPaneDisabled = false
     },
 
     getFilteredSearchResults() {
@@ -297,10 +263,8 @@ export default {
     updateDisabledComponents (selectedTabId) {
       if(selectedTabId == 'site') {
         this.enableFilters()
-        this.enableMap()
       } else {
         this.disableFilters()
-        this.disableMap()
       }
     },
 
@@ -405,15 +369,6 @@ export default {
 
     toggleFilterPane () {
       this.isFilterPaneActive = !this.isFilterPaneActive
-    },
-
-    toggleMapPane () {
-      this.isMapPaneActive = !this.isMapPaneActive
-      if (this.isMapPaneActive) {
-        this.$nextTick(() => {
-          this.$eventHub.$emit('map:resize')
-        })
-      }
     }
   }
 }
