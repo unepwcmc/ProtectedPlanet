@@ -217,7 +217,7 @@ $icon-search-width: rem-calc(21);
 
 @mixin icon-pin-map {
   @include icon-basic;
-  @include icon-image('pin.svg', rem-calc(13), rem-calc(18));
+  @include icon-image('pin.svg', rem-calc(22), rem-calc(32));
 }
 
 @mixin icon-placeholder-image() {

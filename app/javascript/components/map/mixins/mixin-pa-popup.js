@@ -17,7 +17,7 @@ export default {
         'top': [0, 1],
         'top-left': [0,1],
         'top-right': [0,1],
-        'bottom': [0, -MARKER_HEIGHT-1],
+        'bottom': [0, -MARKER_HEIGHT-20],
         'bottom-left': [0, -MARKER_HEIGHT-1],
         'bottom-right': [0, -MARKER_HEIGHT-1],
         'left': [MARKER_HALF_WIDTH+1, -MARKER_HEIGHT/2],
