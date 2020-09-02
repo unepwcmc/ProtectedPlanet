@@ -28,6 +28,7 @@ h2 {
   
   &.h2-big { @include h-big;  }
   &.h2-big-white { @include h-big; color: $white; }
+  .container--component & { margin-top: 0; }
 }
 
 h3 {
@@ -95,9 +96,9 @@ input {
 
 .container--component {
   $container-component-padding: calc((100% - #{$site-width-medium-desktop})/2);
-  $cc-padding-small: rem-calc(20 $gutter-small 24);
-  $cc-padding-medium: rem-calc(20 $gutter-medium 24);
-  $cc-padding-large: rem-calc(30 $container-component-padding 34);
+  $cc-padding-small: rem-calc(20 $gutter-small 20);
+  $cc-padding-medium: rem-calc(30 $gutter-medium 30);
+  $cc-padding-large: rem-calc(40 $container-component-padding 40);
 
   @include bg-grey-xlight;
   @include border-radius;
