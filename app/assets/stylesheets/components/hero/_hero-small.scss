@@ -9,4 +9,9 @@
 
   @include breakpoint($small) { min-height: rem-calc(210); }
   @include breakpoint($medium) { min-height: rem-calc(315); }
+
+  .hero__content {
+    @include breakpoint($small) { width: 70%; }
+    @include breakpoint($medium) { width: 50%; }
+  }
 }

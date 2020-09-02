@@ -1,5 +1,6 @@
-<%#= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: "#{@cms_page.slug }" %>
-<%= render partial: "./layouts/partials/hero-small", locals: { title: 'needs pulling in from cms', classes: ""} %>
+<%= render partial: "./layouts/partials/hero-small", locals: { 
+  title: t('search.search-areas-title')
+} %>
 
 <div>
   <search-areas
