@@ -5,6 +5,7 @@
   @include flex;
   @include flex-v-center;
   @include hero-padding;
+  background-color: $white;
   min-height: rem-calc(150);
 
   @include breakpoint($small) { min-height: rem-calc(210); }
