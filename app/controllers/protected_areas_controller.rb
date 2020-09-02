@@ -20,14 +20,8 @@ class ProtectedAreasController < ApplicationController
 
     @locations = get_locations
 
-    # @protected_area.sources
-    @sources = [
-      {
-        title: 'Source name',
-        date_updated: '2019',
-        url: 'http://link-to-source.com'
-      }
-    ]
+    # In the format [{title: ..., year: ..., responsible_party: ... }, ...]
+    @sources = @protected_area.sources_per_pa
 
     @wdpa_other = get_other_sites
 

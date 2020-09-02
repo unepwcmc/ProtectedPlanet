@@ -24,13 +24,7 @@ class RegionController < ApplicationController
       { percent: designation[:percent] }
     end.to_json
 
-    @sources = [
-      {
-        title: 'Source name',
-        date_updated: '2019',
-        url: 'http://link-to-source.com'
-      }
-    ]
+    @sources = @region.sources_per_region
 
     @total_oecm = @region.protected_areas.oecms.count
     @total_pame = @region.protected_areas.with_pame_evaluations.count
@@ -70,4 +64,6 @@ class RegionController < ApplicationController
       where("countries.region_id = #{@region.id}").
       order(:name).first(size)
   end
+
+ 
 end

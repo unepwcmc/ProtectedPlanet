@@ -1,5 +1,6 @@
 class ProtectedArea < ApplicationRecord
   include GeometryConcern
+  include SourceHelper
 
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'
@@ -113,7 +114,17 @@ class ProtectedArea < ApplicationRecord
     coverage_growth_hash
   end
 
-
+  def sources_per_pa
+    sources = ActiveRecord::Base.connection.execute("""
+      SELECT sources.title, EXTRACT(YEAR FROM sources.year) AS year, sources.responsible_party 
+      FROM sources
+      INNER JOIN protected_areas_sources 
+      ON protected_areas_sources.protected_area_id = #{self.id}
+      AND protected_areas_sources.source_id = sources.id
+      """)
+      # Helper method
+    convert_into_hash(sources.uniq)
+  end
 
   def wdpa_ids
     wdpa_id

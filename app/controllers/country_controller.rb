@@ -35,13 +35,7 @@ class CountryController < ApplicationController
     @sites = @country.protected_areas.take(3)
     @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
 
-    @sources = [
-      {
-        title: 'Source name',
-        date_updated: '2019',
-        url: 'http://link-to-source.com'
-      }
-    ]
+    @sources = @country.sources_per_country
 
     @total_oecm = @country.protected_areas.oecms.count
     @total_pame = @country.protected_areas.with_pame_evaluations.count

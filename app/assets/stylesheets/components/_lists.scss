@@ -24,7 +24,7 @@
     &__title {
       font-weight: $bold;
       margin-right: rem-calc(10);
-    } 
+    }
 
     &__right {
       margin-left: auto;
@@ -98,6 +98,38 @@
   &--underline {
     @include list-underline;
   }
+
+//--------------------------------------------------
+// underline
+//--------------------------------------------------
+&--underline-sources {
+  @include list-underline;
+  width: 100%;
+
+  .list {
+    &__date { 
+      flex-shrink: 0;
+      margin-right: rem-calc(10);
+
+      @include breakpoint($medium){ width: 15%; }
+    }
+
+    &__li {
+      @include breakpoint-down($medium){ @include flex-column; }
+    }
+
+    &__party {
+      @include breakpoint($medium){ width: 40%; }
+    }
+
+    &__title {
+      font-weight: $bold;
+      margin-right: rem-calc(10);
+
+      @include breakpoint($medium){ width: 45%; }
+    }
+  }
+}
 
 //--------------------------------------------------
 // underline with scrollbar
