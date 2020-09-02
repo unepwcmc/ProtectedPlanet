@@ -2,6 +2,8 @@
 // classes
 //--------------------------------------------------
 &--small {
+  @include flex;
+  @include flex-v-center;
   @include hero-padding;
   min-height: rem-calc(150);
 
