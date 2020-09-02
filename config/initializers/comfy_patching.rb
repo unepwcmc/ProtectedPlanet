@@ -56,7 +56,7 @@ Rails.configuration.to_prepare do
     def delete_orphan_categories(own_layouts_categories)
       self.pages.each do |page|
         own_layouts_categories.each do |lc|
-          pcs_ids = page.page_categories.where(layout_category_id: lc.id).map(&:id)
+          pcs_ids = page.page_categories.where(layout_category_id: lc.layout_category_id).map(&:id)
           Comfy::Cms::PagesCategory.where(
             page_id: page.id,
             page_category_id: pcs_ids
