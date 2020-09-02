@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const address = process.argv[2];
+const captureDelay = 10000;
 const output = process.argv[3];
 
 (async () => {
@@ -14,6 +15,8 @@ const output = process.argv[3];
   });
 
   await page.goto(address, {waitUntil: 'networkidle2'});
+
+  await page.waitFor(captureDelay);
 
   const headerHTML = `<div style="padding-top:10px; padding-right:26px; width: 100%;">
     <p style="float:right; margin-bottom:0;">
@@ -46,25 +49,3 @@ const output = process.argv[3];
 
   await browser.close();
 })();
-
-
-// "use strict";
-// var page = require('webpage').create(),
-//   system = require('system'),
-//   address, output, size;
-
-// address = system.args[1];
-// output = system.args[2];
-// page.viewportSize = { width: 1200, height: 1697 };
-
-// page.open(address, function (status) {
-//   if (status !== 'success') {
-//       console.log('Unable to load the address!');
-//       phantom.exit(1);
-//   } else {
-//       window.setTimeout(function () {
-//           page.render(output);
-//           phantom.exit();
-//       }, 200);
-//   }
-// });
