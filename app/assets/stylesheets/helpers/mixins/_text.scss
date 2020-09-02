@@ -32,7 +32,7 @@
 
 @mixin h1-home {
   @include text-1;
-  @include responsive(font-size, rem-calc(40), rem-calc(70), rem-calc(70));
+  @include responsive(font-size, rem-calc(40), rem-calc(40), rem-calc(70));
   font-weight: $bold;
   margin-top: 0;
   margin-bottom: .35em;

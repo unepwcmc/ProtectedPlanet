@@ -18,11 +18,15 @@
     padding-bottom: rem-calc(166);
   }
 
-  .hero__container { @include hero-container; }
+  .hero__container { 
+    @include hero-container; 
+    @include breakpoint($small) { flex-direction: row; }
+  }
 
   .hero__intro { @include hero-intro; }
 
   .hero__text {
+    @include breakpoint($small) { width: 50%; }
     @include breakpoint($large) { width: 58%; }
   }
 }
