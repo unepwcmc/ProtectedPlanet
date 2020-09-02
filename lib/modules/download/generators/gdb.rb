@@ -71,7 +71,8 @@ class Download::Generators::Gdb < Download::Generators::Base
 
   def clean_up
     QUERY_CONDITIONS.each do |name, _|
-      FileUtils.rm_rf shapefile_components(name)
+      # TODO Double check an amended version of this is necessary for gdb export
+      #FileUtils.rm_rf shapefile_components(name)
     end
   end
 
