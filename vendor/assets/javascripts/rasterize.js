@@ -3,7 +3,6 @@ const address = process.argv[2];
 const captureDelay = 10000;
 const output = process.argv[3];
 
-
 (async () => {
   // const browser = await puppeteer.launch({headless: false});
   const browser = await puppeteer.launch();
@@ -11,7 +10,8 @@ const output = process.argv[3];
   
   page.setViewport({
     width: 1200,
-    height: 1754
+    height: 1754,
+    deviceScaleFactor: 2
   });
 
   await page.goto(address, {waitUntil: 'networkidle2'});
