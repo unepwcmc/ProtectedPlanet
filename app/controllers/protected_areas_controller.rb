@@ -1,6 +1,7 @@
 class ProtectedAreasController < ApplicationController
   after_action :record_visit
   after_action :enable_caching
+  include MapHelper
 
   def show
     id = params[:id]
@@ -13,22 +14,32 @@ class ProtectedAreasController < ApplicationController
     @presenter = ProtectedAreaPresenter.new @protected_area
     @countries = @protected_area.countries.without_geometry
     @other_designations = load_other_designations
-    @networks = load_networks
+    # @networks = load_networks
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
 
     @locations = get_locations
 
-    # @protected_area.sources
-    @sources = [
-      {
-        title: 'Source name',
-        date_updated: '2019',
-        url: 'http://link-to-source.com'
-      }
-    ]
+    # In the format [{title: ..., year: ..., responsible_party: ... }, ...]
+    @sources = @protected_area.sources_per_pa
 
-    @wdpa_other = [] ## 3 other PAs from ...?
+    @wdpa_other = get_other_sites
+
+
+    @otherWdpasViewAllUrl = determine_search_path(@protected_area)
+  
+
+    @map = {
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+    }
+
+    @map_options = {
+      map: { 
+        boundsUrl: @protected_area.extent_url
+      }
+    }
+
+    helpers.opengraph_title_and_description_with_suffix(@protected_area.name)
 
     respond_to do |format|
       format.html
@@ -44,6 +55,12 @@ class ProtectedAreasController < ApplicationController
   end
 
   private
+
+  def map_overlays
+    overlays(['individual_site'], {
+      individual_site: @protected_area.arcgis_layer_config
+    })
+  end
 
   def get_locations
     locations = []
@@ -73,10 +90,25 @@ class ProtectedAreasController < ApplicationController
     other_designations.reject { |pa| pa.id == @protected_area.id }
   end
 
-  TRANSBOUNDARY_SITES = "Transboundary sites".freeze
-  def load_networks
-    networks = @protected_area.networks.reject(&:designation)
-    # ensure that transboundary sites network always appears first
-    networks.sort { |a,b| a.name == TRANSBOUNDARY_SITES ? -1 : a.name <=> b.name }
+  # TODO: Methods, models, controllers, modules related to Networks are slated for removal
+
+  # TRANSBOUNDARY_SITES = "Transboundary sites".freeze
+  # def load_networks
+  #   networks = @protected_area.networks.reject(&:designation)
+  #   # ensure that transboundary sites network always appears first
+  #   networks.sort { |a,b| a.name == TRANSBOUNDARY_SITES ? -1 : a.name <=> b.name }
+  # end
+
+  def get_other_sites
+    return @countries.first.protected_areas.without_geometry.all_except(@protected_area.id).take(3) if @countries.length <= 1
+    ProtectedArea.without_geometry.all_except(@protected_area.id).transboundary_sites.take(3)
+  end
+
+  def determine_search_path(area)
+    if area.is_transboundary
+      search_areas_path(filters: { special_status: ['is_transboundary'] })
+    else
+      search_areas_path(filters: { location: { type: 'site', options: ["#{@countries.first.name}"] } })
+    end
   end
 end

@@ -1,5 +1,7 @@
 class Region < ApplicationRecord
   include GeometryConcern
+  include MapHelper
+  include SourceHelper
 
   has_many :countries
   has_many :protected_areas, through: :countries
@@ -80,6 +82,8 @@ class Region < ApplicationRecord
     processed_data
   end
 
+
+
   def sources_per_jurisdiction
     ActiveRecord::Base.connection.execute("""
       SELECT jurisdictions.name, COUNT(DISTINCT protected_areas_sources.source_id)
@@ -104,6 +108,10 @@ class Region < ApplicationRecord
     self.as_json(
       only: [:id, :name, :iso]
     )
+  end
+
+  def extent_url
+    region_extent_url(name)
   end
 
   def protected_areas_per_designation(jurisdiction=nil)
@@ -141,6 +149,19 @@ class Region < ApplicationRecord
     countries.each {|country| all_countries_and_territories << country.children }
     all_countries_and_territories << countries
     all_countries_and_territories.flatten.uniq
+  end
+
+  def sources_per_region
+    sources = ActiveRecord::Base.connection.execute("""
+      SELECT sources.title, EXTRACT(YEAR FROM sources.year) AS year, sources.responsible_party 
+      FROM sources
+      INNER JOIN countries_protected_areas
+      ON countries_protected_areas.country_id IN (#{self.countries.pluck(:id).join(",")})
+      INNER JOIN protected_areas_sources 
+      ON protected_areas_sources.protected_area_id = countries_protected_areas.protected_area_id
+      AND protected_areas_sources.source_id = sources.id
+      """)
+    convert_into_hash(sources.uniq)
   end
 
   private

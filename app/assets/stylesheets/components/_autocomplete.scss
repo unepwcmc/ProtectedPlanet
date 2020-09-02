@@ -1,0 +1,103 @@
+.autocomplete {
+  margin-bottom: rem-calc(12);
+
+  display: flex;
+  position: relative;
+  z-index: 2;
+
+  ::placeholder {
+    color: $grey-light;
+  }
+
+  &__container {
+    position: relative;
+  }
+
+  &__input {
+    background-color: $grey-dark;
+    border: rem-calc(1) solid $white;
+    border-radius: rem-calc(32);
+    color: $white;
+    font-size: rem-calc(18);
+    padding-left: rem-calc(50);
+    padding-right: rem-calc(40);
+    text-overflow: ellipsis;
+    
+    display: flex;
+    flex: 1;
+
+    &:focus { 
+      outline: none;
+      border-color: $black;
+    }
+
+    .autocomplete--error & {
+      background-color: $alert;
+      color: $white;
+  
+      ::placeholder {
+        color: $white;
+      }
+    }
+  }
+  
+  &__magnifying-glass {
+    @include icon-search-white;  
+    
+    height: 100%;
+
+    position: absolute;
+    left: rem-calc(16);
+
+    align-self: center;
+  }
+
+  &__delete {
+    @include button-basic; 
+    @include icon-cross-white;
+
+    background-color: inherit;
+    border-radius: rem-calc(14);
+
+    height: rem-calc(14);
+    width: rem-calc(14);
+
+    position: absolute;
+    right: rem-calc(16);
+
+    align-self: center;
+  }
+
+  &__results-container {
+    background-color: $grey-dark;
+    border: rem-calc(1) solid $white;
+    border-bottom-left-radius: rem-calc(24);
+    border-bottom-right-radius: rem-calc(24);
+    padding-top: rem-calc(25);
+    padding-bottom: rem-calc(25);
+
+    width: 100%;
+  
+    position: absolute;
+    top: 50%;
+    left: 0;
+  }
+
+  &__results {
+    @include beautify-scrollbar(4);
+    margin: 0 rem-calc(25);
+    overflow-y: scroll;
+    height: rem-calc(150);
+  }
+
+  &__result {
+    padding: rem-calc(12 16);
+
+    &:focus,
+    &:hover {
+        background-color: $grey-xlight;
+        color: $grey-black;
+    }
+  }
+  
+}

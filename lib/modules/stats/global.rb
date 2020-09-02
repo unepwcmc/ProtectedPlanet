@@ -6,9 +6,7 @@ class Stats::Global
   end
 
   def self.percentage_pa_cover
-    RegionalStatistic.joins(:region)
-                     .where('regions.iso' => 'GLOBAL')
-                     .first[:percentage_pa_cover]
+    (((self.pa_land_cover + self.pa_marine_cover )/ self.global_area ).to_f * 100).round(2)
   end
 
   def self.pas_with_iucn_category
@@ -48,4 +46,21 @@ class Stats::Global
   def self.global_area
     CountryStatistic.global_land_area + CountryStatistic.global_marine_area
   end
+
+  def self.percentage_land_cover
+    CountryStatistic.global_percentage_pa_land_cover
+  end
+
+  def self.pa_land_cover 
+    CountryStatistic.global_pa_land_area
+  end
+
+  def self.pa_marine_cover
+    CountryStatistic.global_pa_marine_area
+  end
+
+  def self.percentage_marine_cover
+    CountryStatistic.global_percentage_pa_marine_cover
+  end
+  
 end

@@ -3,6 +3,7 @@
     <div class="search__bar">
       <div class="search__bar-content">
         <filter-trigger
+          class="search__filter-trigger"
           :is-disabled="isFilterPaneDisabled"
           :text="textFilters"
           v-on:toggle:filter-pane="toggleFilterPane"
@@ -18,25 +19,25 @@
         <map-trigger
           :is-disabled="isMapPaneDisabled"
           :text="textMap"
+          :is-active="isMapPaneActive"
           v-on:toggle:map-pane="toggleMapPane"
         />
 
-        <download
-          class="download--search"
-          :text="textDownload"
-        />
+        <slot name="download"/>
       </div>
     </div>
 
-    <map-search
-      class="search__map"
-      :is-active="isMapPaneActive"
-    />
+    <div 
+      v-show="isMapPaneActive"
+      class="search__map-container"
+    >
+      <slot name="map"/>
+    </div>
 
     <div class="search__main">
       <filters-search
         class="search__filters"
-        :filter-close-text="filterCloseText"
+        :filter-close-text="textFiltersClose"
         :filterGroups="filterGroupsWithPreSelected"
         :is-active="isFilterPaneActive"
         :title="textFilters"
@@ -112,10 +113,6 @@ export default {
       type: String,
       required: true
     },
-    filterCloseText: {
-      type: String,
-      required: true
-    },
     filterGroups: {
       type: Array, // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
       required: true
@@ -141,6 +138,10 @@ export default {
       required: true
     },
     textFilters: {
+      type: String,
+      required: true
+    },
+    textFiltersClose: {
       type: String,
       required: true
     },
@@ -223,6 +224,7 @@ export default {
     disableMap () {
       this.isFilterPaneActive = false
       this.isMapPaneDisabled = true
+      this.isMapPaneActive = false
     },
 
     enableFilters () {
@@ -407,6 +409,11 @@ export default {
 
     toggleMapPane () {
       this.isMapPaneActive = !this.isMapPaneActive
+      if (this.isMapPaneActive) {
+        this.$nextTick(() => {
+          this.$eventHub.$emit('map:resize')
+        })
+      }
     }
   }
 }

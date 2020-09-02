@@ -1,8 +1,0 @@
-<section class="container">
-  <div class="container--component">
-    <h2><%= cms_fragment_render(:section_size_growth_title, @cms_page) %></h2>
-    <div><%= cms_fragment_render(:section_size_growth_content, @cms_page) %></div>
-    
-    <chart-column-tabbed :json="<%= regionsTopCountries %>"></chart-column-tabbed>
-  </div>
-</section>

@@ -1,0 +1,9 @@
+<div class="social--media">
+  <%  t('social.follow').keys.map(&:to_s).each do |social_medium| %>
+    <%= link_to '', t("social.follow.#{social_medium}.url"),
+      title: t("social.follow.#{social_medium}.title"),
+      class: "social__icon--#{social_medium}",
+      target: '_blank'
+    %>
+  <% end %>
+</div>

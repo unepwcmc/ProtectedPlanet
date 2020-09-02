@@ -29,7 +29,7 @@ en:
           geo_type: country
           icon: country
         -
-          title: Indiviual Area
+          title: Individual Area
           geo_type: site
           icon: area
       categories:
@@ -39,11 +39,9 @@ en:
           filter: 'marine'
         -
           title: Terrerstrial Protected Areas
-          slug: /marine-protected-areas
+          slug: 
           filter: 'terrestrial'
         -
           title: Green List Protected Areas
           slug: /green-list
           filter: 'is_green_list'
-    total_pas: Total Protected Areas
-    total_oecms: Total OECMs

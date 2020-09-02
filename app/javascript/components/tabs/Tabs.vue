@@ -1,15 +1,17 @@
 <template>
   <div class="tabs">
-    <ul class="tabs__triggers">
-      <tab-trigger
-        v-for="tab, index in tabTriggers"
-        :key="`${tab.id}-${index}`"
-        :id="tab.id"
-        :selected-id="selectedId"
-        :title="tab.title"
-        v-on:click:tab="click"
-      />
-    </ul>
+    <div class="container">
+      <ul class="tabs__triggers">
+        <tab-trigger
+          v-for="tab, index in tabTriggers"
+          :key="`${tab.id}-${index}`"
+          :id="tab.id"
+          :selected-id="selectedId"
+          :title="tab.title"
+          v-on:click:tab="click"
+        />
+      </ul>
+    </div>
     
     <slot :selected-id="selectedId" />
   </div>

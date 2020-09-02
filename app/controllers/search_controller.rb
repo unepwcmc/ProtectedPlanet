@@ -2,8 +2,7 @@ class SearchController < ApplicationController
   include Concerns::Searchable
   after_action :enable_caching
 
-  before_action :ignore_empty_query, only: [ :search_results]
-  before_action :load_search, only: [:search_results]
+  before_action :load_search, only: [:index, :search_results]
 
   def index
     categories = I18n.t('search.categories')
@@ -13,13 +12,17 @@ class SearchController < ApplicationController
     categories.map do |category|
       cms_page = cms_root_pages.find_by(slug: category)
       if cms_page
-        @categories << { id: cms_page.id.to_s, title: cms_page.label}
+        @categories << { id: cms_page.id.to_s, title: cms_page.label }
       else
         @categories << { id: category, title: category.capitalize }
       end
     end
 
-    @query = search_params[:search_term]
+    _options = {
+      page: search_params[:requested_page],
+      per_page: search_params[:items_per_page]
+    }
+    @results = Search::FullSerializer.new(@search, _options).serialize
   end
 
   def search_results
@@ -29,7 +32,7 @@ class SearchController < ApplicationController
     }
     @results = Search::FullSerializer.new(@search, _options).serialize
 
-    render json: @results
+    render json: @results.to_json
   end
 
   def map
@@ -37,14 +40,26 @@ class SearchController < ApplicationController
   end
 
   def autocomplete
-    @results = Autocompletion.lookup(search_params[:search_term], search_params[:type])
+    db_type = search_params[:type]
+    @results = Autocompletion.lookup(search_params[:search_term], db_type, autocomplete_search_index(db_type))
 
     render json: @results
   end
 
   private
 
+  def autocomplete_search_index db_type
+    case db_type
+      when 'country'
+        Search::COUNTRY_INDEX
+      when 'region'
+        Search::REGION_INDEX
+      else
+        Search::PA_INDEX
+    end
+  end
+
   def search_params
-    params.permit(:search_term, :type, :requested_page, :items_per_page, :filters)
+    params.permit(:search_term, :type, :requested_page, :items_per_page, :search_index, :filters)
   end
 end

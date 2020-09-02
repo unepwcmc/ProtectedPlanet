@@ -7,6 +7,29 @@ class CountryPresenter
     @designations_presenter = DesignationsPresenter.new(country)
   end
 
+  def chart_point_poly
+    [
+      { 
+        percentage: total_polygons_percentage, 
+        theme: 'theme--primary', 
+        title: "#{I18n.t('stats.polygons')} #{total_polygons_percentage}%" 
+      },
+      { 
+        percentage: total_points_percentage, 
+        theme: 'theme--primary-dark', 
+        title: "#{I18n.t('stats.points')} #{total_points_percentage}%" 
+      }
+    ]
+  end
+
+  def coverage_growth
+    {
+      title: I18n.t('charts.legend.number-pa'),
+      units: I18n.t('charts.units.km2'),
+      datapoints: @country.coverage_growth.map { |el| { year: el['year'], value: el['count'] } }
+    }.to_json 
+  end
+
   def designations
     @designations_presenter.designations
   end

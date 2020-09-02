@@ -1,5 +1,6 @@
 class ProtectedArea < ApplicationRecord
   include GeometryConcern
+  include SourceHelper
 
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'
@@ -19,18 +20,25 @@ class ProtectedArea < ApplicationRecord
   belongs_to :designation
   delegate :jurisdiction, to: :designation, allow_nil: true
   belongs_to :wikipedia_article
+  belongs_to :green_list_status
 
   after_create :create_slug
 
+  scope :all_except, -> (pa) { where.not(id: pa) }
+
   scope :oecms, -> { where(is_oecm: true) }
   scope :wdpas, -> { where(is_oecm: false) }
+
+  scope :terrestrial_areas, -> {
+    where(marine: false)
+  }
 
   scope :marine_areas, -> {
     where(marine: true)
   }
 
   scope :green_list_areas, -> {
-    where(is_green_list: true)
+    where.not(green_list_status_id: nil)
   }
 
   scope :most_protected_marine_areas, -> (limit) {
@@ -68,12 +76,54 @@ class ProtectedArea < ApplicationRecord
     }
   end
 
-  def self.green_list_protected_percentage
-    (green_list_total_km / Stats::Global.global_area * 100).to_f.round(2)
+  # TODO - Not sure we need this anymore now that we have Ed's stats - SL
+  # def self.green_list_protected_percentage
+  #   (green_list_total_km / Stats::Global.global_area * 100).to_f.round(2)
+  # end
+
+  # def self.green_list_total_km
+  #   green_list_areas.inject(0) { |_sum, pa| _sum + pa.gis_area }
+  # end
+
+  def is_green_list
+    green_list_status_id.present?
   end
 
-  def self.green_list_total_km
-    green_list_areas.inject(0) { |_sum, pa| _sum + pa.gis_area }
+  def self.greenlist_coverage_growth(start_year = nil)
+    # Is in this format: {year: area, ...}
+    # Takes an optional start year from which to start counting
+    coverage_growth_hash = {}
+
+    areas = ProtectedArea.green_list_areas.where.not(legal_status_updated_at: nil)
+    
+    if start_year
+      date_from_year = "#{start_year}-01-01 00:00:00".to_time 
+      areas = areas.where("legal_status_updated_at >= ? ", date_from_year)
+    end
+  
+    sorted_dates = areas.pluck(:legal_status_updated_at).sort { |a,b| b <=> a }.uniq
+
+    sorted_dates.each do |date|
+      # year = date.to_date.year
+      coverage_growth_hash[date] ||= []
+      
+      area_sum = areas.where("legal_status_updated_at <= ?", date).reduce(0) { |sum, x| sum + x.gis_area }
+      coverage_growth_hash[date] = area_sum
+    end
+
+    coverage_growth_hash
+  end
+
+  def sources_per_pa
+    sources = ActiveRecord::Base.connection.execute("""
+      SELECT sources.title, EXTRACT(YEAR FROM sources.year) AS year, sources.responsible_party 
+      FROM sources
+      INNER JOIN protected_areas_sources 
+      ON protected_areas_sources.protected_area_id = #{self.id}
+      AND protected_areas_sources.source_id = sources.id
+      """)
+      # Helper method
+    convert_into_hash(sources.uniq)
   end
 
   def wdpa_ids
@@ -82,8 +132,8 @@ class ProtectedArea < ApplicationRecord
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list, :is_oecm],
-      methods: [:coordinates],
+      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_oecm],
+      methods: [:coordinates, :is_green_list, :is_transboundary],
       include: {
         countries_for_index: {
           only: [:name, :id, :iso_3],
@@ -142,6 +192,18 @@ class ProtectedArea < ApplicationRecord
     overlap
   end
 
+  def self.global_terrestrial_oecm_coverage
+    land_oecms = self.oecms.terrestrial_areas.pluck(:reported_area)
+    total_oecm_area = land_oecms.inject(0) { |sum, area| sum + area.to_i }
+    ((total_oecm_area.to_f / CountryStatistic.global_land_area.to_f) * 100).round(2)
+  end
+
+  def self.global_marine_oecm_coverage
+    marine_oecms = self.oecms.marine_areas.pluck(:reported_marine_area)
+    total_oecm_area = marine_oecms.inject(0) { |sum, area| sum + area.to_i }
+    ((total_oecm_area.to_f / CountryStatistic.global_marine_area.to_f) * 100).round(2)
+  end
+
   def self.global_marine_coverage
     reported_areas = marine_areas.pluck(:reported_marine_area)
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
@@ -152,7 +214,58 @@ class ProtectedArea < ApplicationRecord
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
+  def self.transboundary_sites    
+    ProtectedArea.joins(:countries)
+    .group('protected_areas.id')
+    .having('COUNT(countries_protected_areas.country_id) > 1')
+  end
+
+  def is_transboundary
+    countries.count > 1
+  end
+  
+  def arcgis_layer_config
+    {
+      layers: [{url: arcgis_layer, isPoint: is_point?}],
+      color: layer_color,
+      queryString: arcgis_query_string
+    }
+  end
+
+  def layer_color
+    if is_oecm
+      OVERLAY_YELLOW
+    elsif marine
+      OVERLAY_BLUE
+    else
+      OVERLAY_GREEN
+    end
+  end
+
+  def arcgis_layer
+    if is_oecm
+      OECM_LAYER_URL
+    else
+      is_point? ? WDPA_POINT_LAYER_URL : WDPA_POLY_LAYER_URL
+    end
+  end
+
+  def arcgis_query_string
+    "/query?where=wdpaid+%3D+%27#{wdpa_id}%27&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
+  end
+
+  def extent_url
+    {
+      url: "#{arcgis_layer}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      padding: 0.2
+    }
+  end
+
   private
+
+  def is_point?
+    the_geom.geometry_type.type_name.match('Point').present?
+  end
 
   def bounding_box_query
     dirty_query = """
@@ -212,4 +325,8 @@ class ProtectedArea < ApplicationRecord
       "iucn_categories.name IN (#{valid_categories})"
     )
   end
+
+
+
+
 end

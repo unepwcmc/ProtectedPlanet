@@ -1,6 +1,10 @@
 class HomeController < ApplicationController
+  include MapHelper
+
   def index
-    @pa_coverage_percentage = 9999 #TODO Total PA coverage in %
+    @presenter = HomePresenter.new
+
+    @pa_coverage_percentage = Stats::Global.percentage_pa_cover
 
     @config_search_areas = {
       id: 'all',
@@ -9,62 +13,10 @@ class HomeController < ApplicationController
 
     @pas_title = home_yml[:pas][:title]
     @pas_button = home_yml[:pas][:button]
+    @pas_link = search_areas_path(geo_type: 'site')
     @pas_levels = levels
 
-    @site_facts = [
-      {
-        percentage: 00, #total percentage coverage of terrestrial pas
-        theme: I18n.t('home.facts')[0][:theme],
-        title: I18n.t('home.facts')[0][:title],
-        totals: [
-          {
-            number: 00, #total terrestrial pas
-            text: I18n.t('home.total_pas')
-          }
-        ]
-      },
-      {
-        percentage: 00, #total percentage coverage of marine pas
-        theme: I18n.t('home.facts')[1][:theme],
-        title: I18n.t('home.facts')[1][:title],
-        totals: [
-          {
-            number: 00, #total marine pas
-            text: I18n.t('home.total_pas')
-          }
-        ]
-      },
-      {
-        percentage: 00, #total percentage coverage of terrestrial pas and OECMs
-        theme: I18n.t('home.facts')[2][:theme],
-        title: I18n.t('home.facts')[2][:title],
-        totals: [
-          {
-            number: 00, #total terrestrial pas
-            text: I18n.t('home.total_pas')
-          },
-          {
-            number: 00, #total terrestrial oecms
-            text: I18n.t('home.total_oecms')
-          }
-        ]
-      },
-      {
-        percentage: 00, #total percentage coverage of marine pas and OECMs
-        theme: I18n.t('home.facts')[3][:theme],
-        title: I18n.t('home.facts')[3][:title],
-        totals: [
-          {
-            number: 00, #total marine pas
-            text: I18n.t('home.total_pas')
-          },
-          {
-            number: 00, #total marine oecms
-            text: I18n.t('home.total_oecms')
-          }
-        ]
-      }
-    ]
+    @site_facts = @presenter.fact_card_stats
 
     comfy_themes = Comfy::Cms::Page.find_by_slug("thematical-areas")
     @themes_title = comfy_themes.label
@@ -73,6 +25,16 @@ class HomeController < ApplicationController
     @regions_page = Comfy::Cms::Page.find_by_slug("unep-regions")
 
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
+
+    @main_map = {
+      overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize
+    }
+  end
+
+  private
+
+  def home_overlays
+    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
   end
 
   private
@@ -80,8 +42,7 @@ class HomeController < ApplicationController
   def levels
     _levels = home_yml[:pas][:levels]
     _levels.map do |level|
-      geo_type = level.delete(:geo_type)
-      level[:url] = search_areas_path({geo_type: geo_type, filters: {db_type: ['wdpa']}})
+      level[:url] = search_areas_path(geo_type: level[:geo_type])
       level
     end
   end

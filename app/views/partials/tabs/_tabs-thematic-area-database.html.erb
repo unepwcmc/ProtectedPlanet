@@ -4,7 +4,7 @@
 >
   <template slot-scope="{ selectedId }">
     <tab-target :id="1" :selected-id="selectedId">
-      <section class="container--medium section-padding--bottom">
+      <section class="container--medium">
         <%= cms_fragment_render("tab-content-1") %>
       </section>
 
@@ -12,8 +12,10 @@
         <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
       </section>
 
-      <section>
-        <%= render partial: "partials/maps/main" %>
+      <section class="map-section">
+        <%= render partial: "partials/maps/main", locals: {
+          map: map
+        } %>
       </section>
     </tab-target>
 

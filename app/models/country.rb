@@ -1,5 +1,7 @@
 class Country < ApplicationRecord
   include GeometryConcern
+  include MapHelper
+  include SourceHelper
 
   has_and_belongs_to_many :protected_areas
 
@@ -33,6 +35,16 @@ class Country < ApplicationRecord
     )
   end
 
+  def self.countries_with_gl
+    joins(:protected_areas).where.not(protected_areas: {green_list_status_id: nil}).uniq
+  end
+
+  def total_gl_coverage
+    protected_areas.green_list_areas.reduce(0) do |sum, x|
+      sum + x.reported_area
+    end
+  end
+
   def self.data_providers
     joins(:protected_areas).uniq
   end
@@ -50,9 +62,26 @@ class Country < ApplicationRecord
     js
   end
 
+  def extent_url
+    country_extent_url(iso_3)
+  end
+
   def random_protected_areas wanted=1
     random_offset = rand(protected_areas.count-wanted)
     protected_areas.offset(random_offset).limit(wanted)
+  end
+
+  def sources_per_country
+    sources = ActiveRecord::Base.connection.execute("""
+      SELECT sources.title, EXTRACT(YEAR FROM sources.year) AS year, sources.responsible_party 
+      FROM sources
+      INNER JOIN countries_protected_areas
+      ON countries_protected_areas.country_id = #{self.id}
+      INNER JOIN protected_areas_sources 
+      ON protected_areas_sources.protected_area_id = countries_protected_areas.protected_area_id
+      AND protected_areas_sources.source_id = sources.id
+      """)
+    convert_into_hash(sources.uniq)
   end
 
   def protected_areas_per_designation(jurisdiction=nil)
@@ -127,12 +156,10 @@ class Country < ApplicationRecord
 
   def coverage_growth
     _year = 'EXTRACT(year from legal_status_updated_at)'
-    _area = 'SUM(reported_area + reported_marine_area) AS area'
     ActiveRecord::Base.connection.execute(
       <<-SQL
-        SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count,
-          SUM(area) OVER (ORDER BY date_part::INT) AS area
-        FROM (#{protected_areas_inner_join(_year, _area)}) t
+        SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count
+        FROM (#{protected_areas_inner_join(_year)}) t
         ORDER BY year
       SQL
     )

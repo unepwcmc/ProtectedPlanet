@@ -1,19 +1,17 @@
 
 <%= render partial: "./layouts/partials/hero-basic", locals: { 
     classes: "#{@cms_page.slug} bg-image-overlay--white" ,
-    hero_image: cms_fragment_render(:theme_image, @cms_page),
+    image: cms_fragment_render(:image, @cms_page),
     summary: cms_fragment_render("summary"),
     title: @cms_page.label
   } 
 %>
 
-<section class="container">
-  <%= render partial: "partials/tabs/tabs-equity", locals: { 
-    tabs: tabs
-  } %>
-</section>
+<%= render partial: "partials/tabs/tabs-equity", locals: { 
+  tabs: tabs
+} %>
 
-<section class="container">
+<section class="container section-padding">
   <%= render "partials/cards/resources" %>
 </section>
 

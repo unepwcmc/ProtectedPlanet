@@ -1,19 +1,21 @@
-<div class="bg--grey-xlight">
+<div class="page--country bg--grey-xlight">
   <div class="container">
-    
-    <section class="flex">
+    <section class="page__section--overview-map">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         flag: @flag_path[0],
+        chart_point_poly: @country_presenter.chart_point_poly,
+        legend_map: map_legend,
         title: @country.name,
         total_oecm: @total_oecm,
         total_pame: @total_pame,
-        total_points_percentage: @country_presenter.total_points_percentage,
-        total_polygons_percentage: @country_presenter.total_polygons_percentage,
         total_wdpa: @total_wdpa,
       } %>
 
-      <div>
-        MAP
+      <div class="page__map map--country">
+        <%= render partial: "partials/maps/header", locals: {
+          map: @map,
+          map_options: @map_options
+        } %>
       </div>
     </section>
 
@@ -42,124 +44,36 @@
 
       <%= render partial: "partials/stats/stats-designations", locals: { designations: @country_designations } %>
 
-      <div class="card--stats">
-        <div class="card--stats-wrapper-chart">
+      <div class="card--stats-growth-chart">
+        <div class="card__chart-wrapper">
           <h2><%= t('stats.growth.title') %></h2>
 
-          <am-chart-line :data="<%= @coverage_growth.to_json %>">
+          <am-chart-line 
+            :data="<%= @coverage_growth %>"
+          >
           </am-chart-line>
           
           <p class="text--small"><%= t('stats.coverage-chart-smallprint') %></p>
         </div>
       </div>
+
+      <% if has_related_countries? %>
+
+        <%= render partial: "partials/stats/stats-related-countries", locals: { 
+          country_children: @country.children.any? ? @country.children : nil,
+          country_parent: @country.parent.present? ? @country.parent : nil
+        } %>
       
-      <%= render partial: "partials/cards/sites", locals: { cards: @sites } %>
+      <% end %>
+      
+      <%= render partial: "partials/cards/sites", locals: { 
+        cards: @sites,
+        title: @country.name + ' ' + t('country.protected_areas'),
+        url: @sitesViewAllUrl
+      } %>
+      
 
       <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
-
-
-<i class="link-with-icon__icon fa fa-download"></i>Download this dataset
-<%= download_dropdown(@country.iso_3, 'general', (types rescue [:csv, :shp])) %>
-
-  
-<div class="js-resizable map map--hero" id="map" data-mobile-height=33 data-bound-from="<%= @country.bounds.first %>" data-bound-to="<%= @country.bounds.last %>" data-iso3="<%= @country.iso_3 %>"
-data-control-position="bottomleft"></div>
-
-
-<h1>related countries</h1>      
-<% if @country.children.any? || @country.parent.present? %>
-  <section class="fact">
-    <h2 class="fact__header">Related countries & territories</h2>
-    <div class="fact__body">
-
-      <% if @country.children.any? %>
-        <p class="fact__subheader"><i class="fa fa-level-down"></i> Child countries & territories</p>
-        <table class="table js-sortable-table">
-          <thead>
-            <tr class="table__header">
-              <th class="table__column table__column--with-sorting">Name</th>
-              <th class="table__column table__column--with-sorting">Code</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @country.children.each do |child_country| %>
-              <tr class="table__row">
-                <td class="table__label table__label--link"><%= link_to child_country.name, country_path(child_country.iso) %></td>
-                <td class="table__value table__value--link"><%= link_to child_country.iso_3, country_path(child_country.iso) %></td>
-              </tr>
-            <% end %>
-            </tr>
-          </tbody>
-        </table>
-      <% end %>
-
-      <% if @country.parent.present? %>
-        <p class="fact__subheader"><i class="fa fa-level-down"></i> Parent countries & territories</p>
-        <table class="table js-sortable-table">
-          <thead>
-            <tr class="table__header">
-              <th class="table__column table__column--with-sorting">Name</th>
-              <th class="table__column table__column--with-sorting">Code</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="table__row">
-              <td class="table__label table__label--link"><%= link_to @country.parent.name, country_path(@country.parent.iso) %></td>
-              <td class="table__value table__value--link"><%= link_to @country.parent.iso_3, country_path(@country.parent.iso) %></td>
-            </tr>
-          </tbody>
-        </table>
-      <% end %>
-    </div>
-  </section>
-<% end %>
-
-
-<h1>malaysia docs</h1>
-<% if is_malaysia? %>
-  <div class="info-box__row">
-    <div class='header-with-delimiter no-border'>Protected areas documentation</div>
-    <% malaysia_documents.map do |doc| %>
-      <a href="<%= doc[:url] %>" class="info-box__link">
-        <i class="info-box__link-icon fa fa-file-pdf-o"></i><%= doc[:name] %>
-      </a>
-    <% end %>
-  </div>
-<% end %>
-
-
-<aside class="info-box info-box--fill-color">
-  <section class="info-box__column">
-    <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Citation</h2>
-    <p class="info-box__body">
-    UNEP-WCMC (<%= Date.today.year %>). Protected Area Profile for <%= @country.name %> from the World Database of Protected Areas, <%= Date.today.strftime("%B %Y") %>. Available at: <a href="/">www.protectedplanet.net</a>
-    </p>
-  </section>
-
-  <section class="info-box__column">
-    <h2 class="info-box__header header-with-delimiter header-with-delimiter--bold">Downloads</h2>
-    <div class="info-box__body info-box__body--no-padding">
-      <div class="js-download-btn info-box__row">
-        <div class="js-trigger tooltip-old__trigger info-box__link">
-          <i class="info-box__link-icon fa fa-download"></i>Download this dataset
-          <%= download_dropdown(@country.iso_3, 'general', (types rescue [:csv, :shp])) %>
-        </div>
-        <a href="<%= url_for(action: :show, iso: @country.iso, format: :pdf) %>" class="info-box__link">
-          <i class="info-box__link-icon fa fa-file-pdf-o"></i>Download this page as a PDF
-        </a>
-      </div>
-
-      <%#= render 'documentation' %>
-
-      <div class="<%= bem('info-box__row', 'no-border') %>">
-        <button class="big-button" onclick="window.location.href='<%= search_url(country: @country.name, main: :country) %>'">
-          <i class="fa fa-link big-button__icon"></i>Protected Area list of the country
-        </button>
-      </div>
-    </div>
-  </section>
-</aside>
-
     </section>
   </div>
 </div>

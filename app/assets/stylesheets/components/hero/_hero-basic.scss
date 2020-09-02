@@ -3,11 +3,10 @@
 //--------------------------------------------------
 &--basic {
   @include hero-medium;
+  @include hero-padding;
   @include flex;
   @include flex-v-center;
   z-index: 0;
-  
-  &.about { background-image: image_url('hero/about.png'); }
 
   .hero__content {
     @include breakpoint($small) { width: 80%; }

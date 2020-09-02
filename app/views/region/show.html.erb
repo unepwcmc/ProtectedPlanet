@@ -1,91 +1,79 @@
-<div class="bg--grey-xlight">
-  <section class="container">
-    <%= render partial: "partials/stats/stats-overview", locals: { 
-      title: @region.name,
-      total_oecm: @total_oecm,
-      total_points_percentage: @presenter.total_points_percentage,
-      total_polygons_percentage: @presenter.total_polygons_percentage,
-      total_wdpa: @total_wdpa,
-    } %>
+  <div class="page--region bg--grey-xlight">
+    <div class="container">
+      <section class="page__section--overview-map">
+        <%= render partial: "partials/stats/stats-overview", locals: { 
+          title: @region.name,
+          chart_point_poly: @presenter.chart_point_poly,
+          legend_map: map_legend,
+          total_countries: spaceify(@region.countries.count),
+          total_oecm: @total_oecm,
+          total_pame: @total_pame,
+          total_points_percentage: @presenter.total_points_percentage,
+          total_polygons_percentage: @presenter.total_polygons_percentage,
+          total_wdpa: @total_wdpa,
+        } %>
 
-    <h2 class="fact__header">Number of Countries</h2>
-    <p class="fact__body fact__single-figure"><%= spaceify(@region.countries.count) %></p>
-
-  <%#= render "partials/stats/facts/number_of_pas", {location: @region} %>
-  <%#= render "partials/stats/facts/polygons_points_ratio" %>
-
-    <div>
-      <% unless @for_pdf %>
-        <h1>map</h1>
-        <div class="js-resizable map map--hero" id="map" data-mobile-height=33 data-bound-from="<%= @region.bounds.first %>" data-bound-to="<%= @region.bounds.last %>" data-iso3="<%= @region.iso %>"
-        data-control-position="bottomleft"></div>
-
-        <div class="disclaimer">
-          The designations employed and the presentation of material on this map do not
-          imply the expression of any opinion whatsoever on the part of the Secretariat
-          of the United Nations concerning the legal status of any country, territory,
-          city or area or of its authorities, or concerning the delimitation of its
-          frontiers or boundaries.
+        <div class="map--region">
+          <%= render partial: "partials/maps/header", locals: {
+            map: @map,
+            map_options: @map_options
+          } unless @for_pdf %>
         </div>
-      <% end %>
-    </div>
-  </section>
+      </section>
 
-  <section class="container">
-
-    <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
-    <%= render "region/facts/pame_statistics" %>
-  <% end %>
-
-    <% if has_restricted_sites? %>
-      <p class="article__paragraph u-bold">Part of the protected areas dataset for <%= @country.name %> is restricted.</p>
-    <% end %>
-
-<!--         <% unless @for_pdf %>
-        <p>
-          <a href="/c/calculating-protected-area-coverage" class="link-with-icon"> Learn how we calculate protected area coverage statistics</a>
-        </p>
-      <% end %> -->
-
-  </section>
-
-  
-  <section class="container">
-    <div class="flex flex-h-between">
-      <%= render partial: "partials/stats/stats-coverage", locals: { 
-        stats: @presenter.terrestrial_stats, 
-        type: 'terrestrial' 
-      } %>
-
-      <%= render partial: "partials/stats/stats-coverage", locals: { 
-        stats: @presenter.marine_stats, 
-        type: 'marine' 
-      } %>
-    </div>
-
-    <%= render "partials/messages/message-warning-stats" %>
-
-    <% unless @for_pdf || is_regional_page(controller_name) %>
-      <p>
-        <% if @presenter.nr_report_url.present? %>
-          <span class="red bold"></span>
-          <%= link_to "Download the country's latest national report (pdf)", @presenter.nr_report_url, title: "Dowload the national report for #{@country.name}", class: 'link-with-icon bold' %>
+      <section>
+        <% if @pame_statistics && Rails.application.secrets.show_pame_statistics %>
+          <%= render "region/facts/pame_statistics" %>
         <% end %>
-      <% end %>
-    </p>
-  
-    <div class="flex flex-h-between">
-      <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
+
+        <% if has_restricted_sites? %>
+          <p class="article__paragraph u-bold">Part of the protected areas dataset for <%= @country.name %> is restricted.</p>
+        <% end %>
+      </section>
+
       
-      <%= render "partials/stats/stats-governance", { governance_types: @governance_types} %>
-    </div>
+      <section>
+        <div class="flex flex-h-between">
+          <%= render partial: "partials/stats/stats-coverage", locals: { 
+            stats: @presenter.terrestrial_stats, 
+            type: 'terrestrial' 
+          } %>
 
-    <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
-    
-    <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
+          <%= render partial: "partials/stats/stats-coverage", locals: { 
+            stats: @presenter.marine_stats, 
+            type: 'marine' 
+          } %>
+        </div>
 
-    <%= render partial: "partials/cards/sites", locals: { cards: @wdpa } %>
+        <%= render "partials/messages/message-warning-stats" %>
+
+        <% unless @for_pdf || is_regional_page(controller_name) %>
+          <p>
+            <% if @presenter.nr_report_url.present? %>
+              <span class="red bold"></span>
+              <%= link_to "Download the country's latest national report (pdf)", @presenter.nr_report_url, title: "Dowload the national report for #{@country.name}", class: 'link-with-icon bold' %>
+            <% end %>
+          <% end %>
+        </p>
+      
+        <div class="flex flex-h-between">
+          <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
+          
+          <%= render "partials/stats/stats-governance", { governance_types: @governance_types} %>
+        </div>
+
+        <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
+        
+        <%= render partial: "partials/stats/stats-designations", locals: { designations: @designations } %>
+
+    <%= render partial: "partials/cards/sites", locals: { 
+      cards: @region_pas,
+      title: @region.name + ' ' + t('region.protected_areas'),
+      url: @regionPasViewAllUrl
+    } %>
   
     <%= render partial: "partials/messages/message-citation", locals: { title: @region.name } %>
   </section>
 </div>
+</div>
+

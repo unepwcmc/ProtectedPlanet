@@ -98,6 +98,9 @@ filters:
     is_green_list:
       type: 'equality'
       path: 'is_green_list'
+    is_transboundary:
+      type: 'equality'
+      path: 'is_transboundary'
     is_oecm:
       type: 'equality'
       path: 'is_oecm'
@@ -115,6 +118,16 @@ filters:
       type: 'nested'
       path: 'categories'
       field: 'categories.id'
+      required: true
+    topic:
+      type: 'nested'
+      path: 'topics'
+      field: 'topics.id'
+      required: true
+    page_type:
+      type: 'nested'
+      path: 'page_types'
+      field: 'page_types.id'
       required: true
     ancestor:
       type: 'nested'

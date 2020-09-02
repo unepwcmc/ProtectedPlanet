@@ -1,0 +1,27 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin theme-chart-list-icon($theme) {
+  @for $i from 1 through length($theme) {
+    &:nth-child(#{$i}) {
+      .list__icon {
+        background-color: nth($theme, $i);
+      }
+    }
+  }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.theme--aqua { background-color: $chart-aqua; }
+.theme--blue { background-color: $chart-blue; }
+.theme--green { background-color: $chart-green; }
+.theme--purple { background-color: $chart-purple; }
+
+.theme--primary { background-color: $primary; }
+.theme--primary-dark { background-color: $primary-dark; }
+
+.theme--oecm { background-color: $oecm; }
+.theme--marine { background-color: $marine; }
+.theme--terrestrial { background-color: $terrestrial; }

@@ -2,8 +2,6 @@
   <div class="container--component">
     <h2><%= cms_fragment_render(:section_coverage_growth_title, @cms_page) %></h2>
     <div><%= cms_fragment_render(:section_coverage_growth_content, @cms_page) %></div>
-
-    <h2><%= cms_fragment_render(:section_coverage_growth_chart_title, @cms_page) %></h2>
     
     <div class="cards--basic">
       <% regionCoverage.each do |region| %>

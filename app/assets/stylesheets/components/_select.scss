@@ -20,6 +20,7 @@ $select-selected-color: $grey-light;
 //--------------------------------------------------
 @mixin vselect-icon-basic() {
   @include button-plain;
+  background-color: transparent;
   margin-right: $search-icon-padding-right;
   margin-left: $search-icon-padding-left;
   padding: 0;
@@ -36,3 +37,6 @@ $select-selected-color: $grey-light;
   @import './select/select-equity';
   @import './select/select-searchable';
 }
+
+
+@import './select/selector';

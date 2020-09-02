@@ -49,10 +49,14 @@ $card-search-results-areas-height: rem-calc(155);
           background-position: center;
           background-size: cover;
           width: $card-search-results-areas-width; height: $card-search-results-areas-height;
+
+          position: absolute;
         }
 
         &__image-placeholder { 
           @include image-placeholder($card-search-results-areas-width, $card-search-results-areas-height); 
+          
+          position: relative;
         }
 
         &__title {
