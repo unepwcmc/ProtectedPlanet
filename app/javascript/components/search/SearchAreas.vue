@@ -23,7 +23,7 @@
     <div class="search__main">
       <filters-search
         class="search__filters"
-        :filter-close-text="textFiltersClose"
+        :filter-close-text="textClose"
         :filterGroups="filterGroupsWithPreSelected"
         :is-active="isFilterPaneActive"
         :title="textFilters"
@@ -123,7 +123,7 @@ export default {
       type: String,
       required: true
     },
-    textFiltersClose: {
+    textClose: {
       type: String,
       required: true
     },
@@ -340,7 +340,6 @@ export default {
       this.resetFilters()
       this.resetPagination()
       this.resetSearchTerm(searchParams)
-      this.resetTabs()
       this.ajaxSubmission(true)
       this.updateQueryString({ search_term: searchParams.search_term })
     },
