@@ -140,7 +140,7 @@ class SyncSeeds
   def commence_comfy_import(answer, source)
     logger = ComfortableMexicanSofa.logger
     ComfortableMexicanSofa.logger = Logger.new(STDOUT)
-    site = Comfy::Cms::Site.first
+    site = Comfy::Cms::Site.first.identifier
     folder = source.split('/').last
 
     if answer == 'all'
