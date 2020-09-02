@@ -33,4 +33,5 @@
 @mixin box-shadow-grey-light { @include box-shadow($grey-light); }
 @mixin box-shadow-grey { @include box-shadow($grey); }
 
+@mixin box-shadow-bottom-grey-light { @include box-shadow-bottom($grey-light); }
 @mixin box-shadow-bottom-grey { @include box-shadow-bottom($grey); }

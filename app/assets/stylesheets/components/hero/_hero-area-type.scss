@@ -11,21 +11,15 @@
     @include hero-container;
     margin-bottom: rem-calc(20);
     
+    @include breakpoint($small) { flex-direction: row; }
     @include breakpoint($medium) { margin-bottom: 0; }
   }
 
   .hero__content {
-    margin-right: 20%;          
-  }
-
-  .hero__buttons { 
-    @include flex; 
-    @include responsive(flex-direction, column, row, row);
-    @include responsive(margin-bottom, 0, rem-calc(30), 0);
-  }
-
-  .hero__button-1 { 
-    @include responsive(margin-right, 0, rem-calc(28), rem-calc(28));
-    @include responsive(margin-bottom, rem-calc(22), 0, 0);
+    @include breakpoint($small) { width: 50%; }
+    @include breakpoint($medium) { 
+      margin-right: 20%;
+      width: 58%; 
+    }
   }
 }

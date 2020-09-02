@@ -1,16 +1,16 @@
 <template>
   <div>
+    <v-select-searchable 
+      :config="select.config" 
+      :options="select.options"
+    />
+    
+    <span class="sm-trigger-sticky-bar" />
+
     <sticky-bar 
       trigger-element=".sm-trigger-sticky-bar" 
-      class="sticky-bar--basic"
+      class="sticky-bar--target-11"
     >
-      
-      <v-select-searchable 
-        :config="select.config" 
-        :options="select.options"
-      >
-      </v-select-searchable>
-        
       <table-head 
         :headings="tableHeadings"
         :tooltipArray="tooltipArray"

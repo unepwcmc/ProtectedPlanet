@@ -5,13 +5,13 @@
   }
 %>
 
-<section class="container page-padding--top">
+<section class="container spacer-small--top">
   <%= render partial: "partials/cards/facts", locals: { cards: @site_facts } %>
 </section>
 
 <%= render partial: "partials/search/protected-areas", locals: { config: @config_search_areas } %>
 
-<section class="container page-padding">
+<section class="container spacer-small--top">
   <h2 class="text-center"><%= @pas_title %></h2>
 
   <%= render partial: "partials/cards/circles", locals: { cards: @pas_levels } %>
@@ -19,23 +19,23 @@
   <%= render partial: "partials/cards/squares", locals: { cards: pas_categories } %>
 </section>
 
-<section class="map-section">
+<section class="map-section spacer-small--top">
   <%= render partial: "partials/maps/main", locals: {
     map: @main_map
   } %>
 </section>
 
-<section class="section-padding">
+<section class="spacer-small--top">
   <%= render "partials/carousels/themes" %>
 </section>
 
 <%= render "partials/ctas/api" %>
 
-<section class="container section-padding">
+<section class="container spacer-medium--top">
   <%= render "partials/cards/resources" %>
 </section>
 
-<section class="container section-padding--bottom">
+<section class="container spacer-medium--bottom">
   <%= render "partials/cards/articles" %>
 </section>
 

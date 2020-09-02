@@ -11,9 +11,9 @@
 //--------------------------------------------------
 .listing {
   &__bar {
-    @include box-shadow-bottom-grey;
+    @include box-shadow-bottom-grey-light;
     background-color: $white;
-    border-bottom: solid 1px $grey;
+    border-bottom: solid 1px $grey-light;
     padding: rem-calc(12 0); 
   }
 

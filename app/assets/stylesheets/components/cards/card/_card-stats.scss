@@ -77,7 +77,9 @@
     width: 555px; 
   }
 
-  &:first-child { margin-right: rem-calc(30); }
+  &:first-child { 
+    @include breakpoint($small) { margin-right: rem-calc(30); }
+  }
 }
 
 @import './stats/card-stats-affiliations';

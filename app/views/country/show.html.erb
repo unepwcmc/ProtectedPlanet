@@ -2,7 +2,7 @@
   download_options: @download_options 
 } %>
 
-<div class="page--country bg--grey-xlight page-padding">
+<div class="page--country bg--grey-xlight spacer-small--top">
   <div class="container">
     <section class="page__section--overview-map">
       <%= render partial: "partials/stats/stats-overview", locals: { 
@@ -38,7 +38,7 @@
       
       <%= render "partials/messages/message-warning-stats" %>
 
-      <div class="page__2cols pdf-break-before">
+      <div class="card--stats-wrapper pdf-break-before">
         <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
         
         <%= render partial: "partials/stats/stats-governance", locals: { governance_types: @governance_types} %>

@@ -1,9 +1,14 @@
 &--searchable {
+  @include gutters;
   width: 100%;
   
   position: relative;
 
   @include breakpoint($small) { width: $select-width-desktop; }
+  @include breakpoint($large) { 
+    padding: 0;
+    margin-bottom: rem-calc(26); 
+  }
 
   .select {
 

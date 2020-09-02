@@ -15,7 +15,7 @@
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
-<section class="container--medium page-padding--top">
+<section class="container--medium spacer-small--top">
   <h2><%= cms_fragment_render(:section_about_title, @cms_page) %></h2>
   <div><%= cms_fragment_render(:section_about_content, @cms_page) %></div>
 </section>
@@ -66,7 +66,7 @@
   } %>
 </section>
 
-<section class="container">
+<section class="container spacer-large--top">
   <%= cms_fragment_render("content") %>
   <%= render partial: "partials/cards/sites", locals: { 
         cards: @example_greenlist,
@@ -75,7 +75,7 @@
   } %>
 </section>
 
-<section class="section-padding">
+<section class="spacer-small--top">
   <%= render "partials/carousels/themes" %>
 </section>
 

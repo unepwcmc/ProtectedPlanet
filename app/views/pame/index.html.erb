@@ -4,7 +4,7 @@
   title: @cms_page.label,
 } %>
 
-<section class="page-padding--bottom">
+<section class="spacer-medium--bottom">
   <tabs
     class="tabs--hero"
     :tab-triggers="<%= @tabs %>"
@@ -23,19 +23,19 @@
       </tab-target>
 
       <tab-target :id="2" :selected-id="selectedId">
-        <section class="container--medium page-padding">
+        <section class="container--medium">
           <%= cms_fragment_render("tab-content-2") %>
         </section>
       </tab-target>
 
       <tab-target :id="3" :selected-id="selectedId">
-        <section class="container--medium page-padding">
+        <section class="container--medium">
           <%= cms_fragment_render("tab-content-3") %>
         </section>
       </tab-target>
 
       <tab-target :id="4" :selected-id="selectedId">
-        <section class="container--medium page-padding">
+        <section class="container--medium">
           <%= cms_fragment_render("tab-content-4") %>
         </section>
       </tab-target>

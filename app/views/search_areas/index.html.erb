@@ -1,5 +1,6 @@
-<%#= render partial: "./layouts/partials/hero-small", locals: { title: @cms_page.label, classes: "#{@cms_page.slug }" %>
-<%= render partial: "./layouts/partials/hero-small", locals: { title: 'needs pulling in from cms', classes: ""} %>
+<%= render partial: "./layouts/partials/hero-small", locals: { 
+  title: t('search.search-areas-title')
+} %>
 
 <div>
   <search-areas
@@ -14,7 +15,7 @@
     :tabs="<%= @tabs.to_json %>"
     text-download="<%= t('search.download') %>"
     text-filters="<%= t('search.filters') %>"
-    text-filters-close="View Results"
+    text-close="View Results"
     text-map="<%= t('search.map') %>"
     :results="<%= @results.to_json %>"
   >

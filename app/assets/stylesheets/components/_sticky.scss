@@ -21,19 +21,19 @@ $sticky-bar-padding: rem-calc(10);
 }
 
 //----------------------------------------
-// sticky bar
+// classes
 //----------------------------------------
-.sticky-bar--basic {
-  @include gutters;
-  width: 100%;
-
-  @include breakpoint($large) { padding: 0; }
+.sticky-bar--target-11 {
+  @include breakpoint-down($large) { display: none; }
 
   .sticky-bar {
     &__wrapper {
       @include sticky-bar-wrapper;
-      padding-top: $sticky-bar-padding;
-      padding-bottom: $sticky-bar-padding;
+
+      @include breakpoint($large) { 
+        padding-top: $sticky-bar-padding;
+        padding-bottom: $sticky-bar-padding;
+      }
       
       &.sticky-bar--stuck {
         @include sticky-bar-stuck;
