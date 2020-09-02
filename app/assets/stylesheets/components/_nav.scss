@@ -110,6 +110,8 @@ $pane-side-padding: 42px;
               &__dropdown-toggle {
                 @include button-basic;
                 @include nav-a;
+
+                &:focus { border: none; }
               }
 
               &__dropdown-toggle-a {
