@@ -96,6 +96,9 @@
       "is_oecm": {
         "type": "boolean"
       },
+      "is_transboundary": {
+        "type": "boolean"
+      },
 	    "coordinates": {
         "type": "geo_point"
 	    },
@@ -254,6 +257,10 @@
           }
         }
       },
+      "published_date": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
       "fragments_for_index": {
         "type": "nested",
         "properties": {
@@ -288,6 +295,10 @@
           },
           "page_id": {
             "type": "integer"
+          },
+          "published_date": {
+            "type": "date",
+            "format": "yyyy-MM-dd"
           },
           "fragments_for_index": {
             "type": "nested",

@@ -1,5 +1,6 @@
 class Search::CmsSerializer < Search::BaseSerializer
   include Comfy::CmsHelper
+  include CmsHelper
 
   def initialize(search, opts={})
     super(search, opts)
@@ -51,14 +52,13 @@ class Search::CmsSerializer < Search::BaseSerializer
   def sorted_pages
     return [] if @results.cms_pages.blank?
     @results.cms_pages.sort_by do |p|
-      p.fragments.find_by(identifier: 'published_date')
-        .try(:datetime) || OLDEST_DATE
+      p.published_date || OLDEST_DATE
     end.reverse
   end
 
   def date(page)
-    _date = cms_fragment_content(:published_date, page)
-    _date.present? ? _date.strftime('%d %B %y') : _date
+    _date = cms_fragment_content_datetime(:published_date, page)
+    _date.present? && _date.respond_to?(:strftime) ? _date.strftime('%d %B %y') : _date
   end
 
   def file(page)

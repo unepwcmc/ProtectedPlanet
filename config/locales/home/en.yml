@@ -39,7 +39,7 @@ en:
           filter: 'marine'
         -
           title: Terrerstrial Protected Areas
-          slug: /marine-protected-areas
+          slug: 
           filter: 'terrestrial'
         -
           title: Green List Protected Areas

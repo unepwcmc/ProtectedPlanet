@@ -1,28 +1,15 @@
 <div class="card--stats-sources sm-sources">
-  <h2 class="card__h2"><%= t('stats.sources.title') %></h2>
+  <h2 class="card__h2"><%= t('stats.sources.title') %> (<%= sources.count %>)</h2>
   
   <div class="card__content flex">
-    <div class="card__stat-box card__third">
-      <span><%= t('stats.sources.total') %></span>  
-      
-      <counter 
-        class="" 
-        :total="<%= sources.count %>"
-        trigger="sm-sources" 
-        :decimal="0"
-      ></counter>
-    </div>
-
-    <div class="card__two-thirds">
-      <ol class="list--underline">
-        <% sources.each do |source| %>
-          <li class="list__li fle">
-            <span class="list__title"><%= source[:title] %></span>
-            <span class="list__value"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
-            <span class="list__a list__right"><%= link_to 'Details', source[:url], title: '' %></span>
-          </li>
-        <% end %>
-      </ol>
-    </div>
+    <ol class="list--underline-sources">
+      <% sources.each do |source| %>
+        <li class="list__li">
+          <span class="list__title"><%= source[:title] %></span>
+          <span class="list__date"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
+          <span class="list__party"><%= source[:resp_party] %></span>
+        </li>
+      <% end %>
+    </ol>
   </div>
 </div>

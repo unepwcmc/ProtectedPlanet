@@ -1,5 +1,6 @@
 class ProtectedArea < ApplicationRecord
   include GeometryConcern
+  include SourceHelper
 
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'
@@ -22,6 +23,8 @@ class ProtectedArea < ApplicationRecord
   belongs_to :green_list_status
 
   after_create :create_slug
+
+  scope :all_except, -> (pa) { where.not(id: pa) }
 
   scope :oecms, -> { where(is_oecm: true) }
   scope :wdpas, -> { where(is_oecm: false) }
@@ -111,7 +114,17 @@ class ProtectedArea < ApplicationRecord
     coverage_growth_hash
   end
 
-
+  def sources_per_pa
+    sources = ActiveRecord::Base.connection.execute("""
+      SELECT sources.title, EXTRACT(YEAR FROM sources.year) AS year, sources.responsible_party 
+      FROM sources
+      INNER JOIN protected_areas_sources 
+      ON protected_areas_sources.protected_area_id = #{self.id}
+      AND protected_areas_sources.source_id = sources.id
+      """)
+      # Helper method
+    convert_into_hash(sources.uniq)
+  end
 
   def wdpa_ids
     wdpa_id
@@ -119,8 +132,8 @@ class ProtectedArea < ApplicationRecord
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list, :is_oecm],
-      methods: [:coordinates],
+      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_oecm],
+      methods: [:coordinates, :is_green_list, :is_transboundary],
       include: {
         countries_for_index: {
           only: [:name, :id, :iso_3],
@@ -201,12 +214,50 @@ class ProtectedArea < ApplicationRecord
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
-  def extent_url
-    layer_number = is_point? ? 0 : 1
+  def self.transboundary_sites    
+    ProtectedArea.joins(:countries)
+    .group('protected_areas.id')
+    .having('COUNT(countries_protected_areas.country_id) > 1')
+  end
 
+  def is_transboundary
+    countries.count > 1
+  end
+  
+  def arcgis_layer_config
     {
-      url: "#{WDPA_FEATURE_SERVER_URL}/#{layer_number}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
-      padding: 1
+      layers: [{url: arcgis_layer, isPoint: is_point?}],
+      color: layer_color,
+      queryString: arcgis_query_string
+    }
+  end
+
+  def layer_color
+    if is_oecm
+      OVERLAY_YELLOW
+    elsif marine
+      OVERLAY_BLUE
+    else
+      OVERLAY_GREEN
+    end
+  end
+
+  def arcgis_layer
+    if is_oecm
+      OECM_LAYER_URL
+    else
+      is_point? ? WDPA_POINT_LAYER_URL : WDPA_POLY_LAYER_URL
+    end
+  end
+
+  def arcgis_query_string
+    "/query?where=wdpaid+%3D+%27#{wdpa_id}%27&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
+  end
+
+  def extent_url
+    {
+      url: "#{arcgis_layer}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      padding: 0.2
     }
   end
 
@@ -274,4 +325,8 @@ class ProtectedArea < ApplicationRecord
       "iucn_categories.name IN (#{valid_categories})"
     )
   end
+
+
+
+
 end

@@ -1,4 +1,8 @@
-<%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label, classes: "#{@cms_page.slug} bg-image-overlay--white" } %>
+<%= render partial: "./layouts/partials/hero-basic", locals: { 
+  classes: "#{@cms_page.slug} bg-image-overlay--white",
+  image: cms_fragment_render(:image, @cms_page),
+  title: @cms_page.label,
+} %>
 
 <section class="page-padding--bottom">
   <tabs

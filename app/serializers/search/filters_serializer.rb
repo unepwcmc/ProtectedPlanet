@@ -14,8 +14,8 @@ class Search::FiltersSerializer < Search::BaseSerializer
             name: 'db_type',
             options: [
               { id: 'oecm', title: I18n.t('search.filter-group-db.options')[0] },
-              { id: 'wdpa', title: I18n.t('search.filter-group-db.options')[1] },
-            ],
+              { id: 'wdpa', title: I18n.t('search.filter-group-db.options')[1] }
+          ],
             type: 'checkbox'
           },
           {
@@ -33,7 +33,8 @@ class Search::FiltersSerializer < Search::BaseSerializer
             name: 'special_status',
             options: [
               { id: 'is_green_list', title: I18n.t('search.filter-group-special-status.options')[0] },
-              { id: 'has_parcc_info', title: I18n.t('search.filter-group-special-status.options')[1] }
+              { id: 'has_parcc_info', title: I18n.t('search.filter-group-special-status.options')[1] },
+              { id: 'is_transboundary', title: I18n.t('search.filter-group-special-status.options')[2] }
             ],
             title: I18n.t('search.filter-group-special-status.title'),
             type: 'checkbox'

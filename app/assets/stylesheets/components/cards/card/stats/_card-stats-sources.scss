@@ -8,18 +8,5 @@
     &__content { @include card-stat-content; }
 
     &__h2 { @include card-stats-h2; }
-
-    &__stat-box {
-      @include bg-grey-black;
-      @include flex;
-      @include flex-center;
-      font-size: rem-calc(20);
-      font-weight: $bold;
-      margin-right: rem-calc(20);
-      height: rem-calc(280);
-    }
-
-    &__third { @include card-stats-third; }
-    &__two-thirds {  width: calc(100% - 33%); }
   }
 }

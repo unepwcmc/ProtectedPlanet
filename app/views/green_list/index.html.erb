@@ -4,7 +4,7 @@
   button_text: t('thematic_area.green_list.hero.button_text'),
   button_url: search_areas_path(filters: @filters),
   classes: @cms_page.slug,
-  hero_image: cms_fragment_render(:theme_image, @cms_page),
+  image: cms_fragment_render(:image, @cms_page),
   title: @cms_page.label,
   stat_pas_km: @pas_km,
   stat_pas_percent: @pas_percent,
@@ -66,8 +66,18 @@
   } %>
 </section>
 
+<section class="container section-padding--top">
+  <%= cms_fragment_render("content") %>
+  <%= render partial: "partials/cards/sites", locals: { 
+        cards: @example_greenlist,
+        title: t('thematic_area.green_list.card_text') + " (#{@pas_total})",
+        url: @greenListViewAllUrl
+  } %>
+</section>
+
 <section class="section-padding">
   <%= render "partials/carousels/themes" %>
 </section>
+
 
 <%= render "partials/ctas/live-report" %>

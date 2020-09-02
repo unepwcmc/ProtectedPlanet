@@ -1,7 +1,7 @@
 <div class="page--resource page-padding">
   <div class="container--medium">
     <p class="page__date">
-      <%= cms_fragment_content(:published_date, @cms_page).strftime('%d %B %y') %>
+      <%= cms_fragment_content_datetime(:published_date, @cms_page).strftime('%d %B %y') %>
     </p>
 
     <h1 class="page__h1"><%= @cms_page.label %></h1>
@@ -15,10 +15,12 @@
     <% unless get_resource_links.empty? %>
       <ul class="list--links">
         <% get_resource_links.each do |link| %>
-          <li class="list__li">
-            <span><%= link[:text] %></span>
-            <%= link_to link[:button], link[:url], title: link[:text], class: "list__a #{link[:classes]}", target: '_blank' %>
-          </li>
+          <% unless link[:url].blank? %>
+            <li class="list__li">
+              <span><%= link[:text] %></span>
+              <% link_to link[:button], link[:url], title: link[:text], class: "list__a #{link[:classes]}", target: '_blank' %>
+            </li>
+          <% end %>
         <% end %>
       </ul>
     <% end %>
@@ -26,7 +28,7 @@
 </div>
 
 <div class="flex flex-h-center page-padding--bottom">
-  <%= render "partials/social/sharing" %>
+  <%= render "partials/social/social-share" %>
 </div>
 
 <section class="container section-padding--bottom">

@@ -4,7 +4,7 @@
   button_text: t('thematic_area.marine.hero.button_text'),
   button_url: search_areas_path(filters: @filters),
   classes: @cms_page.slug,
-  hero_image: cms_fragment_render(:theme_image, @cms_page),
+  image: cms_fragment_render(:image, @cms_page),
   hero_small_text: cms_fragment_render(:hero_small_text, @cms_page),
   hero_small_text_url: cms_fragment_render(:hero_small_text_url, @cms_page),
   title: @cms_page.label,
@@ -17,7 +17,7 @@
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
-<section class="container--medium">
+<section class="container--medium page-padding--top">
   <h2><%= cms_fragment_render(:section_distribution_title, @cms_page) %></h2>
   <div><%= cms_fragment_render(:section_distribution_content, @cms_page) %></div>
 </section>
@@ -42,16 +42,10 @@
 } %>
 
 <%= render partial: "partials/charts/chart-coverage-growth", locals: {
-  cms_page: @cms_page,
   content: cms_fragment_render(:section_coverage_content, @cms_page),
-  lines: @protectedAreasGrowth,
+  chart_data: @protectedAreasGrowth,
   title: cms_fragment_render(:section_coverage_title, @cms_page)
 } %>
-
-<%= render partial: "marine/sections/national", locals: {
-    countries: @top_marine_coverage_countries
-  }
-%>
 
 <section class="container--medium">
   <h2><%= cms_fragment_render(:section_size_title, @cms_page) %></h2>
@@ -68,7 +62,7 @@
   regionCoverage: @regionCoverage,
 } %>
 
-<section class="map-section">
+<section class="map-section section-padding--bottom">
   <%= render partial: "partials/maps/main", locals: {
     map: @map
   } %>

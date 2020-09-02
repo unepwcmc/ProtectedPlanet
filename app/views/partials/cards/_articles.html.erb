@@ -14,8 +14,8 @@
     <% @items[:cards].each_with_index do |card, index| %>
       <listing-page-card-news
         key="<%= index %>"
-        date="<%= cms_fragment_content(:published_date, card).strftime('%d %B %y') %>"
-        image="<%= cms_fragment_content(:image, card) %>"
+        date="<%= cms_fragment_content_datetime(:published_date, card).strftime('%d %B %y') %>"
+        image="<%= cms_fragment_render(:image, card) %>"
         summary="<%= cms_fragment_content(:summary, card) %>"
         title="<%= card[:label].truncate(59, separator: ' ') %>"
         url="<%= card[:url] %>"

@@ -36,6 +36,12 @@
       @include breakpoint($small) {
         height: rem-calc(700);
       }
+
+      .search__map-container & {
+        @include breakpoint($small) {
+          height: rem-calc(405);
+        }
+      }
     }
   }
 
@@ -56,6 +62,27 @@
   &--search {
     .map__map {
       height: rem-calc(460);
+    }
+  }
+
+  &--site {
+    .map__mapbox {
+      @include breakpoint($small) { height: rem-calc(456); }
+      @include breakpoint($medium) { height: rem-calc(465); }
+    }
+  }
+
+  &--country {
+    .map__mapbox {
+      @include breakpoint($small) { height: rem-calc(456); }
+      @include breakpoint($medium) { height: rem-calc(528); }
+    }
+  }
+
+  &--region {
+    .map__mapbox {
+      @include breakpoint($small) { height: rem-calc(520); }
+      @include breakpoint($medium) { height: rem-calc(565); }
     }
   }
 }

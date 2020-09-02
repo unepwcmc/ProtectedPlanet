@@ -21,6 +21,7 @@
       />
 
       <polyline 
+        v-show="showValueMarker(valueX)"
         :points="getMarkerPath(valueX)"
         :stroke-width="3"
         :class="`chart__stroke--${colour}`"
@@ -130,6 +131,10 @@ export default {
 
     getLegendPath () {
       return `0,${this.legendY} ${this.legendWidth},${this.legendY}`
+    },
+
+    showValueMarker(valueX) {
+      return valueX > 1
     }
   }
 }

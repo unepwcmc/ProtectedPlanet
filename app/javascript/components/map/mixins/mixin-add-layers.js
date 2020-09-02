@@ -16,45 +16,56 @@ const addPaintOptions = (options, layer) => {
     options['type'] = 'fill'
     options['paint'] = {
       'fill-color': layer.color,
-      'fill-opacity': 0.5,
+      'fill-opacity': 0.8,
     }
   }
 }
 
 export default {
-  //THESE METHODS ARE FOR TESTING ONLY
+
   methods: {
     addRasterTileLayer (layer) {
-      this.map.addLayer({
-        id: layer.id,
-        type: 'raster',
-        minzoom: 0,
-        maxzoom: 22,
-        source: {
+      if(!this.hasExistingMapLayer(layer.id)) {
+        this.map.addLayer({
+          id: layer.id,
           type: 'raster',
-          tiles: [layer.url],
-          tileSize: 256,
-        },
-        layout: {
-          visibility: 'visible'
-        }
-      }, this.firstForegroundLayerId)
+          minzoom: 0,
+          maxzoom: 22,
+          source: {
+            type: 'raster',
+            tiles: [layer.url],
+            tileSize: 256,
+          },
+          layout: {
+            visibility: 'visible'
+          }
+        }, this.firstForegroundLayerId)
+      }
     },
 
     addRasterDataLayer(layer) {
-      const options = {
-        id: layer.id,
-        source: {
-          type: 'geojson',
-          data: layer.url
-        },
-        layout: {
-          visibility: 'visible'
+      if(!this.hasExistingMapLayer(layer.id)) {
+        const options = {
+          id: layer.id,
+          source: {
+            type: 'geojson',
+            data: layer.url
+          },
+          layout: {
+            visibility: 'visible'
+          }
         }
-      }
+        
+        addPaintOptions(options, layer)
 
-      addPaintOptions(options, layer)
-      this.map.addLayer(options, this.firstForegroundLayerId)
+        this.map.addLayer(options, this.firstForegroundLayerId) 
+      }
     },
+
+    hasExistingMapLayer (id) {
+      const existingMapLayer = this.map.getLayer(id)
+
+      return typeof existingMapLayer !== 'undefined'
+    }
   },
 }

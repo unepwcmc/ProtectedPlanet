@@ -1,5 +1,5 @@
 class Comfy::Cms::SearchablePage < Comfy::Cms::Page
-  has_many :fragments_for_index, -> { select(:id, :record_id, :content) },
+  has_many :fragments_for_index, -> { select(:id, :record_id, :content, :datetime) },
     class_name: 'Comfy::Cms::SearchableFragment', foreign_key: 'record_id'
 
   has_many :translations_for_index, -> { select(:id, :page_id).includes(:fragments_for_index) },
@@ -10,6 +10,7 @@ class Comfy::Cms::SearchablePage < Comfy::Cms::Page
     return unless is_published
     self.as_json(
       only: [:id, :label],
+      methods: [:published_date],
       include: {
         fragments_for_index: {
           only: [:id, :content]
@@ -45,6 +46,15 @@ class Comfy::Cms::SearchablePage < Comfy::Cms::Page
     fragment = self.fragments.find_by(identifier: 'image')
     return '' unless fragment && fragment.attachments_blobs.first
 
-    Rails.application.routes.url_helpers.rails_blob_path(fragment.attachments_blobs.first)
+    if Rails.env.development?
+      Rails.application.routes.url_helpers.rails_blob_path(fragment.attachments_blobs.first)
+    else
+      fragment.attachments_blobs.first.service_url&.split('?')&.first
+    end
+  end
+
+  def published_date
+    fragment = self.fragments_for_index.find_by(identifier: 'published_date')
+    fragment ? fragment.datetime : ''
   end
 end

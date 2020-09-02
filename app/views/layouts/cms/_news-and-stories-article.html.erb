@@ -1,6 +1,9 @@
-<%= render partial: "./layouts/partials/hero-basic", locals: { title: @cms_page.label } %>
+<%= render partial: "./layouts/partials/hero-basic", locals: { 
+  image: cms_fragment_render(:image, @cms_page),
+  title: @cms_page.label 
+} %>
 
-<section class="container section-padding">
+<section class="container--medium section-padding">
   <%= cms_fragment_render("content") %>
 </section>
 

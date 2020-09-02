@@ -1,7 +1,7 @@
 <div class="page--news">
   <%= render partial: "./layouts/partials/hero-small", locals: { 
     classes: @cms_page[:slug],
-    hero_image: cms_fragment_render(:hero_image, @cms_page),
+    image: cms_fragment_render(:image, @cms_page),
     title: @cms_page.label
   } %>
 

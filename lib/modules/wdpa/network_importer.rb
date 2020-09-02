@@ -1,3 +1,5 @@
+#  TODO: Remove NetworkImporter as CSV is no longer being used to import networks
+
 module Wdpa::NetworkImporter
   TRANSBOUNDARY_SITES_CSV = "#{Rails.root}/lib/data/seeds/transboundary_sites.csv".freeze
   extend self

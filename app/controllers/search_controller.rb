@@ -2,8 +2,7 @@ class SearchController < ApplicationController
   include Concerns::Searchable
   after_action :enable_caching
 
-  before_action :ignore_empty_query, only: [ :search_results]
-  before_action :load_search, only: [:search_results]
+  before_action :load_search, only: [:index, :search_results]
 
   def index
     categories = I18n.t('search.categories')
@@ -19,7 +18,11 @@ class SearchController < ApplicationController
       end
     end
 
-    @query = search_params[:search_term]
+    _options = {
+      page: search_params[:requested_page],
+      per_page: search_params[:items_per_page]
+    }
+    @results = Search::FullSerializer.new(@search, _options).serialize
   end
 
   def search_results
@@ -29,7 +32,7 @@ class SearchController < ApplicationController
     }
     @results = Search::FullSerializer.new(@search, _options).serialize
 
-    render json: @results
+    render json: @results.to_json
   end
 
   def map

@@ -6,7 +6,7 @@ class S3
     @s3 = Aws::S3::Resource.new({
       access_key_id: Rails.application.secrets.aws_access_key_id,
       secret_access_key: Rails.application.secrets.aws_secret_access_key,
-      region: Rails.application.secrets.s3_region
+      region: Rails.application.secrets.s3_region 
                                 })
     @client = Aws::S3::Client.new(region: Rails.application.secrets.s3_region)
   end
@@ -30,14 +30,17 @@ class S3
   end
 
   def upload object_name, source, opts
-    bucket = @s3.bucket(Rails.application.secrets.aws_downloads_bucket)
-    object = bucket.object(object_name)
+    # Default to downloads bucket unless specified (e.g. for when uploading CMS files)
+    bucket = opts[:bucket] || Rails.application.secrets.aws_downloads_bucket
+
+    object = @s3.bucket(bucket).object(object_name)
     object.upload_file(source)
+
     @client.put_object_acl({
-                        acl: "public-read",
-                        bucket: Rails.application.secrets.aws_downloads_bucket,
-                        key: object_name,
-                           })
+      acl: "public-read",
+      bucket: bucket,
+      key: object_name,
+    })
     return
   end
 

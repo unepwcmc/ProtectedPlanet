@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'enumerator'
 
 class CountryController < ApplicationController
   after_action :enable_caching
@@ -10,6 +11,17 @@ class CountryController < ApplicationController
 
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
     @iucn_categories = @country.protected_areas_per_iucn_category
+    
+    @iucn_categories_chart = @country.protected_areas_per_iucn_category
+      .enum_for(:each_with_index)
+      .map do |category, i|
+      { 
+        id: i+1,
+        title: category['iucn_category_name'], 
+        value: category['count'] 
+      }
+    end.to_json
+
     @governance_types = @country.protected_areas_per_governance
     @coverage_growth = @country_presenter.coverage_growth 
 
@@ -20,15 +32,10 @@ class CountryController < ApplicationController
       { percent: designation[:percent] }
     end.to_json
 
-    @sites = [] # #TODO
+    @sites = @country.protected_areas.take(3)
+    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
 
-    @sources = [
-      {
-        title: 'Source name',
-        date_updated: '2019',
-        url: 'http://link-to-source.com'
-      }
-    ]
+    @sources = @country.sources_per_country
 
     @total_oecm = @country.protected_areas.oecms.count
     @total_pame = @country.protected_areas.with_pame_evaluations.count
