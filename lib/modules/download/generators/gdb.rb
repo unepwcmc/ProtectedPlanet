@@ -26,11 +26,10 @@ class Download::Generators::Gdb < Download::Generators::Base
         gdb_paths << export_component(name, props)
       end
 
-      gdb_paths = gdb_paths.flatten.compact.uniq.join(' ')
       export_sources
 
       system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
-      system("zip -j #{zip_path} #{gdb_paths}") and system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
+      system("zip -r #{zip_path} #{gdb_filenames(gdb_paths)}", chdir: @path) and system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
     end
   rescue Ogr::Postgres::ExportError
     return false
@@ -83,5 +82,9 @@ class Download::Generators::Gdb < Download::Generators::Base
 
   def gdb_component(name)
     File.join(@path, "#{name}.gdb")
+  end
+
+  def gdb_filenames(gdb_paths)
+    gdb_paths.flatten.compact.uniq.map { |p| p.split('/').last }.join(' ')
   end
 end
