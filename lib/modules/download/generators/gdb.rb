@@ -48,7 +48,8 @@ class Download::Generators::Gdb < Download::Generators::Base
     export_success = Ogr::Postgres.export(
       :gdb,
       component_path,
-      "SELECT * FROM #{view_name}"
+      "SELECT * FROM #{view_name}",
+      name.singularize
     )
 
     raise Ogr::Postgres::ExportError unless export_success
