@@ -28,16 +28,7 @@
 
     &:focus { 
       outline: none;
-      border-color: $black;
-    }
-
-    .autocomplete--error & {
-      background-color: $alert;
-      color: $white;
-  
-      ::placeholder {
-        color: $white;
-      }
+      border-color: $white;
     }
   }
   

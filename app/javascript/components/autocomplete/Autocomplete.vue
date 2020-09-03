@@ -32,13 +32,13 @@
         v-show="errorTooShort"
         class="autocomplete__error-message"
       >
-        Type at least 3 characters to search
+        {{ errorMessages.invalid_search_string }}
       </div>
       <div 
         v-show="errorNoResults"
         class="autocomplete__error-message"
       >
-        No results
+        {{ errorMessages.no_results }}
       </div>
       <div class="autocomplete__results">
         <div
@@ -99,11 +99,7 @@ export default {
 
     errorMessages: {
       type: Object,
-      required: false,
-      default: () => ({
-        no_results: 'The search term has no results.',
-        invalid_search_string: 'The search term has too few characters.'
-      })
+      required: true
     },
 
     /**
