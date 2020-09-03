@@ -29,7 +29,8 @@ class HomeController < ApplicationController
     @main_map = {
       overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
-      type: 'all'
+      type: 'all',
+      point_query_services: all_services_for_point_query
     }
   end
 
