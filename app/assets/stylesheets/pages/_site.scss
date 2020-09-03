@@ -30,9 +30,5 @@
           display: block;
         }
       }
-
-      &__col-child {
-        @include breakpoint($medium) { height: calc(50% - 30px); }
-      }
   }
 }
