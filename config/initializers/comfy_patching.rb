@@ -38,7 +38,6 @@ Rails.configuration.to_prepare do
 
       delete_orphan_categories(own_layouts_categories) unless own_layouts_categories.blank?
       
-
       _categories.each do |cat|
         tag_name = cat[:tag_params]
         _layout_category = Comfy::Cms::LayoutCategory.find_by(label: tag_name)
@@ -50,7 +49,6 @@ Rails.configuration.to_prepare do
     end
     
     def filter_layouts_categories(categories)
-      return if categories.blank?
       # layouts_categories is in the format [{identifier:... label: 'topics'...}, {identifier:..., label: 'types'...}]
       layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: self.id).to_a
 
