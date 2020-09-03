@@ -2,7 +2,7 @@ class WdpaController < ApplicationController
   include MapHelper
 
   def index
-    @pa_coverage_percentage = 20 ##TODO FERDI - percentage of the world covered by PAs
+    @pa_coverage_percentage = Stats::Global.percentage_pa_cover
 
     @config_search_areas = {
       id: 'wdpa',

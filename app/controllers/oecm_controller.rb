@@ -2,7 +2,7 @@ class OecmController < ApplicationController
   include MapHelper
   
   def index
-    @oecm_coverage_percentage = 10 ##TODO FERDI - percentage of the world covered by OECMs
+    @oecm_coverage_percentage = Stats::Global.global_oecm_coverage
 
     @config_search_areas = {
       id: 'oecm',
