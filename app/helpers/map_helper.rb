@@ -57,14 +57,21 @@ OVERLAYS = [
     queryString: MARINE_QUERY_STRING
   },
   {
-    id: 'greenlist',
+    id: 'greenlist_terrestrial',
+    isToggleable: false,
+    layers: [{url: WDPA_MAP_SERVER_URL + '/0', isPoint: true}, {url: WDPA_MAP_SERVER_URL + '/1'}],
+    color: OVERLAY_GREEN,
+    isShownByDefault: true,
+    type: 'raster_data'
+  },
+  {
+    id: 'greenlist_marine',
     isToggleable: false,
     layers: [{url: WDPA_MAP_SERVER_URL + '/0', isPoint: true}, {url: WDPA_MAP_SERVER_URL + '/1'}],
     color: OVERLAY_BLUE,
     isShownByDefault: true,
     type: 'raster_data'
-  },
-  
+  }
 ].freeze
 
 SERVICES_FOR_POINT_QUERY = [
