@@ -81,7 +81,7 @@ class Download::Generators::Gdb < Download::Generators::Base
   end
 
   def gdb_component(name)
-    File.join(@path, "#{name}.gdb")
+    File.join(@path, "#{@filename}_#{name}.gdb")
   end
 
   def gdb_filenames(gdb_paths)
