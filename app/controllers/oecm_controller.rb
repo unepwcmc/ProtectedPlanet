@@ -2,7 +2,7 @@ class OecmController < ApplicationController
   include MapHelper
   
   def index
-    @oecm_coverage_percentage = Stats::Global.percentage_oecm_coverage
+    @oecm_coverage_percentage = Stats::Global.percentage_oecm_cover
 
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri'], 'general', 'oecm')
 

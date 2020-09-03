@@ -6,7 +6,11 @@ class Stats::Global
   end
 
   def self.percentage_pa_cover
-    (((self.pa_land_cover + self.pa_marine_cover )/ self.global_area ).to_f * 100).round(2)
+    (((pa_land_cover + pa_marine_cover )/ global_area ).to_f * 100).round(2)
+  end
+
+  def self.percentage_oecm_cover
+    (((oecms_pa_land_cover + oecms_pa_marine_cover )/ global_area ).to_f * 100).round(2)
   end
 
   def self.pas_with_iucn_category
@@ -42,12 +46,6 @@ class Stats::Global
     end
   end
 
-  def self.percentage_oecm_coverage
-    ((ProtectedArea.global_terrestrial_oecm_coverage 
-    + ProtectedArea.global_marine_oecm_coverage) / self.global_area).to_f * 100
-  end
-
-  # TODO Double check calculations
   def self.global_area
     CountryStatistic.global_land_area + CountryStatistic.global_marine_area
   end
