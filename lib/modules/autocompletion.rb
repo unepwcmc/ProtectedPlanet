@@ -24,7 +24,6 @@ module Autocompletion
       type = result.class.name.underscore
       identifier = result.send(identifier_field(type))
 
-      geom_type = result.is_a?(ProtectedArea) ? result.the_geom.geometry_type.to_s : 'N/A'
       url = get_type(type, identifier)
       extent_url = result.respond_to?(:extent_url) ? result.extent_url : 'N/A'
 
