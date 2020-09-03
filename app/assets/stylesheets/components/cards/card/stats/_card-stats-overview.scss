@@ -14,11 +14,21 @@
   display: block;
 }
 
+@mixin card-stats-overview-for-pdf {
+  @include card-stats-for-pdf;
+  
+  .pdf & { 
+    margin-right: rem-calc(30);
+    width: 376px;
+  }
+}
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
 &--stats-overview {
   @include bg-grey-black;
+  @include card-stats-overview-for-pdf;
   @include card-stats-padding;
   width: 100%;
 
@@ -75,12 +85,7 @@
 
     &__number {
       @include card-stats-number;
-      font-size: rem-calc(30);
       margin-right: rem-calc(10);
-
-      display: block;
-
-      @include breakpoint($small) { font-size: rem-calc(40); }
     }
 
     &__section { @include card-stats-overview-section; }

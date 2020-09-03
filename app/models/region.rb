@@ -32,27 +32,15 @@ class Region < ApplicationRecord
   end
 
   def protected_areas_per_governance
-    region_data = {}
-    total_region_count = []
-
-    countries.each do |country|
-      country.protected_areas_per_governance.each do |protected_area|
-        region_pa_category = region_data[protected_area["governance_name"]] ||= {}
-        region_pa_category["governance_type"] ||= protected_area["governance_type"]
-        region_pa_category["count"] ||= 0
-        region_pa_category["count"] += protected_area["count"].to_i
-        total_region_count << protected_area["count"].to_i
-      end
-    end
-
-    region_data.map do |key,value|
-      {
-        "governance_name" => key,
-        "governance_type" => value["governance_type"],
-        "count" => value["count"],
-        "percentage" => 100 * value["count"] / total_region_count.reduce(0, :+)
-      }
-    end
+    ActiveRecord::Base.connection.execute("""
+      SELECT governances.id AS governance_id, governances.name AS governance_name, governances.governance_type AS governance_type, pas_per_governances.count AS count, round((pas_per_governances.count::decimal/(SUM(pas_per_governances.count) OVER ())::decimal) * 100, 2) AS percentage
+      FROM governances
+      INNER JOIN (
+        #{protected_areas_inner_join(:governance_id)}
+      ) AS pas_per_governances
+        ON pas_per_governances.governance_id = governances.id
+      ORDER BY count DESC
+    """)
   end
 
   def protected_areas_per_iucn_category

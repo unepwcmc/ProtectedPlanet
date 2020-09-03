@@ -2,9 +2,10 @@
   <h2 class="card__h2"><%= t('stats.iucn-categories.title') %></h2>
 
   <am-chart-pie
-    class="am-chart--pie--iucn"
+    class="am-chart--pie"
     :dataset="<%= @iucn_categories_chart %>"
     :doughnut="true"
+    id="am-pie-iucn-categories"
   ></am-chart-pie>
 
   <ul class="list--underline">
@@ -16,8 +17,8 @@
           <%= category['count'] %>, <%= category['percentage'].to_f.round(2) %>%
         </span>
         <%= link_to 'View list', 
-          iucn_link(category)[:link], 
-          title: iucn_link(category)[:title], 
+         chart_link(category)[:link], 
+          title:chart_link(category)[:title], 
           class: 'list__right list__a' 
         %>
       </li>

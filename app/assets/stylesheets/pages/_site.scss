@@ -2,7 +2,6 @@
 // classes
 //--------------------------------------------------
 .page--site {
-
   .page {
     &__section--overview-map {
       @include flex-stack-mobile;
@@ -29,6 +28,8 @@
 
           display: block;
         }
+
+        .pdf & { width: 555px; }
       }
   }
 }

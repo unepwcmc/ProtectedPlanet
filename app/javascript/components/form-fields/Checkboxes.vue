@@ -2,8 +2,8 @@
   <div>
     <div class="flex flex-wrap flex-column">
       <p 
-        v-for="option, index in options"
-        :key="index"
+        v-for="option in options"
+        :key="option.id"
         class="checkbox no-margin"
       >
         <label

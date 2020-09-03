@@ -2,6 +2,8 @@ class OecmController < ApplicationController
   include MapHelper
   
   def index
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri'], 'general', 'oecm')
+
     @oecm_coverage_percentage = 10 ##TODO FERDI - percentage of the world covered by OECMs
 
     @config_search_areas = {

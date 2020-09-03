@@ -1,4 +1,8 @@
-<div class="page--country bg--grey-xlight">
+<%= render partial: "./partials/bars/topbar-secondary", locals: { 
+  download_options: @download_options 
+} %>
+
+<div class="page--country bg--grey-xlight spacer-small--top">
   <div class="container">
     <section class="page__section--overview-map">
       <%= render partial: "partials/stats/stats-overview", locals: { 
@@ -31,13 +35,13 @@
           type: 'marine' 
         } %>
       </div>
-
+      
       <%= render "partials/messages/message-warning-stats" %>
 
-      <div class="card--stats-wrapper">
+      <div class="card--stats-wrapper pdf-break-before">
         <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
         
-        <%= render "partials/stats/stats-governance", { governance_types: @governance_types} %>
+        <%= render partial: "partials/stats/stats-governance", locals: { governance_types: @governance_types} %>
       </div>
 
       <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>

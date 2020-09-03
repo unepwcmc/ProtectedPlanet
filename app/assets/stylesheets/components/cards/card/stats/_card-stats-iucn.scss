@@ -3,4 +3,8 @@
 //--------------------------------------------------
 &--stats-iucn {
   @include card-stats;
+
+  .card {
+    &__h2 { @include card-stats-h2; }
+  }
 }

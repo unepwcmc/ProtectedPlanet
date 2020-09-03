@@ -30,12 +30,12 @@ en:
     marine-protected: Marine and Coastal Area Protected
     marine-title: Marine Protected Areas Coverage
     marine-total: Marine Area Protected
+    no-infomation: No information available
     nr-report-title: th National Report Coverage
     oecm:
       title: Total Other effective area-based conservation measures
     pame:
       areas-assessed: Areas Assessed
-      no-results: No information available
       title: Management Effectiveness Evaluations
       with-assessments: With management effectiveness evaluations
     points: Points
