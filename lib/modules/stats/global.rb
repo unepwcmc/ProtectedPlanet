@@ -42,7 +42,7 @@ class Stats::Global
     end
   end
 
-  def self.global_oecm_coverage
+  def self.percentage_oecm_coverage
     ((ProtectedArea.global_terrestrial_oecm_coverage 
     + ProtectedArea.global_marine_oecm_coverage) / self.global_area).to_f * 100
   end
