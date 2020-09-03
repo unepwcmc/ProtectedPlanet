@@ -39,15 +39,15 @@ module Autocompletion
 
   private
 
+  ALLOWED_FILTERS = {
+    'oecm' => { is_oecm: true },
+    'wdpa' => { is_oecm: false },
+    'marine' => { marine: true },
+    'is_green_list' => { is_green_list: true }
+  }.freeze
   def self.get_filters(type)
-    case type
-      when 'wdpa'
-        { filters: { is_oecm: false } }
-      when 'oecm'
-        { filters: { is_oecm: true } }
-      else
-        type ? { filters: { "#{type}": true } } : {}
-    end
+    filter = ALLOWED_FILTERS[type]
+    filter ? { filters: filter } : {}
   end
 
   def self.get_type(type, identifier)
