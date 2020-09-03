@@ -41,13 +41,11 @@ export default {
     },
 
     removeAllMarkersAndPopups () {
-      console.log('removing markers:', this.markers)
-      console.log('removing popups:', this.popups)
+      this.markers.forEach(marker => { marker.remove() })
+      this.markers = []
 
-      ['markers', 'popups'].forEach(x => {
-        this[x].forEach(y => { y.remove() })
-        this[x] = []
-      })
+      this.popups.forEach(popup => { popup.remove() })
+      this.popups = []
     },
 
     addPopupIfFound (coords) {
@@ -69,10 +67,7 @@ export default {
     },
 
     addPopup (coords, pa) {
-      console.log('Adding popup', pa)
       this.removeAllMarkersAndPopups()
-      console.log('Adding but now markers should be removed. Markers in data:', this.markers)
-      console.log('Popups in data:', this.popups)
 
       const html = pa.url ? 
         `<a href="${pa.url}">${pa.name}</a>` :
@@ -97,8 +92,6 @@ export default {
         .setLngLat(coords)
         .addTo(this.map)
       )
-      console.log('Marker now added:', this.markers)
-      console.log('Popup now added:', this.popups)
     }
   }
 }

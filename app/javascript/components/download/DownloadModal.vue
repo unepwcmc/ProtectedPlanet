@@ -87,7 +87,6 @@ export default {
 
   watch: {
     newDownload () {
-      console.log('new', this.activeDownloads)
       this.activeDownloads.push(this.newDownload)
     }
   },
