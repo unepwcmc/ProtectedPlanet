@@ -35,6 +35,10 @@ export default {
     autocompletePlaceholder: {
       required: true,
       type: String
+    },
+    type: {
+      required: true,
+      type: String
     }
   },
 
@@ -64,7 +68,7 @@ export default {
         return new Promise((resolve, reject) => {
           axios.post('/search/autocomplete', {
             search_term: searchTerm,
-            type: 'all'
+            type: this.type
           })
             .then(response => {
               /**
