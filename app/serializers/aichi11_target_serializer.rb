@@ -71,11 +71,11 @@ class Aichi11TargetSerializer
         name: 'Coverage',
         slug: 'coverage',
         terrestrial: {
-          value: CountryStatistic.global_percentage_pa_land_cover,
+          value: CountryStatistic.global_percentage_oecms_pa_land_cover,
           target: instance.coverage_terrestrial
         },
         marine: {
-          value: CountryStatistic.global_percentage_pa_marine_cover,
+          value: CountryStatistic.global_percentage_oecms_pa_marine_cover,
           target: instance.coverage_marine
         }
       },

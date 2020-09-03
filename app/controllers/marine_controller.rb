@@ -32,7 +32,18 @@ class MarineController < ApplicationController
     @map = {
       overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
-      type: 'marine'
+      type: 'marine',
+      point_query_services: [
+        { 
+          url: OECM_FEATURE_SERVER_LAYER_URL,
+          isPoint: false,
+          queryString: MARINE_WHERE_QUERY
+        },
+        { url: WDPA_POINT_LAYER_URL, isPoint: true, queryString: MARINE_WHERE_QUERY },
+        { url: WDPA_POLY_LAYER_URL, isPoint: false, queryString: MARINE_WHERE_QUERY }
+        # { url: MARINE_WDPA_POINT_LAYER_URL, isPoint: true },
+        # { url: MARINE_WDPA_POLY_LAYER_URL, isPoint: false }
+      ]
     }
     @filters = { db_type: ['wdpa'], is_marine: true }
   end
