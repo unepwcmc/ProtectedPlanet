@@ -1,12 +1,17 @@
 <template>
   <div class="filter">
-    <h4 
-      v-if="title" 
-      v-html="title"
-    />
-    <span
-      @click="clearFilterOptions"
-    >clear</span>
+    <div class="filter__header">
+      <h4 
+        v-if="title" 
+        v-html="title"
+        class="filter__title"
+      />
+      <button
+        class="filter__button-clear"
+        @click="clearFilterOptions"
+        v-html="textClear"
+        />
+    </div>
 
     <div class="filter__options">
       <checkboxes 
@@ -67,6 +72,9 @@ export default {
     },
     resetting: true,
     title: {
+      type: String
+    },
+    textClear: {
       type: String
     },
     type: {
