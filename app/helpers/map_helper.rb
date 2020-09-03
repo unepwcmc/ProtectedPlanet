@@ -57,7 +57,7 @@ OVERLAYS = [
     queryString: MARINE_QUERY_STRING
   },
   {
-    id: 'greenlist_terrestial',
+    id: 'greenlist_terrestrial',
     isToggleable: false,
     layers: [{url: WDPA_MAP_SERVER_URL + '/0', isPoint: true}, {url: WDPA_MAP_SERVER_URL + '/1'}],
     color: OVERLAY_GREEN,
