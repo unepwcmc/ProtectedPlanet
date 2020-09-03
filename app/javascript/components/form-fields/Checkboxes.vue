@@ -33,6 +33,9 @@ export default {
   name: 'checkboxes',
 
   props: {
+    clearIndex: {
+      type: Number
+    },
     id: { 
       type: String,
       required: true 
@@ -55,6 +58,13 @@ export default {
   computed: {
     hasPreSelectedOptions () {
       return Array.isArray(this.preSelected) && this.preSelected.length
+    }
+  },
+
+  watch: {
+    clearIndex () {
+      this.reset()
+      this.changeInput()
     }
   },
 

@@ -27,6 +27,7 @@
             :options="filter.options"
             :pre-selected="filter.preSelected"
             :title="filter.title"
+            :text-clear="textClear"
             :type="filter.type"
             v-on:update:filter="updateFilterGroup"
           />
@@ -62,6 +63,10 @@ export default {
     isActive: {
       required: true,
       type: Boolean
+    },
+    textClear: {
+      required: true,
+      type: String
     },
     title: {
       required: true,

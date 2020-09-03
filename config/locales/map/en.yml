@@ -1,8 +1,10 @@
 en:
   map:
     overlays:
-      greenlist:
-        title: Green Listed Protected Areas
+      greenlist_terrestrial:
+        title: Terrestrial Green Listed Protected Areas
+      greenlist_marine:
+        title: Marine Green Listed Protected Areas
       terrestrial_wdpa:
         title: Terrestrial Protected Areas
       marine_wdpa:

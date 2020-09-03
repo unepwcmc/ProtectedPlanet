@@ -68,9 +68,12 @@ class GreenListController < ApplicationController
   end
 
   def map_overlays
-    overlays(['greenlist'], {
-      greenlist: {
-        queryString: greenlist_query_string(green_list_areas.map(&:id))
+    overlays(['greenlist_terrestrial', 'greenlist_marine'], {
+      greenlist_terrestrial: {
+        queryString: greenlist_query_string(terrestrial_green_list_area_ids)
+      },
+      greenlist_marine: {
+        queryString: greenlist_query_string(marine_green_list_area_ids)
       }
     })
   end
@@ -107,5 +110,13 @@ class GreenListController < ApplicationController
   
   def green_list_areas
     @green_list_areas ||= ProtectedArea.green_list_areas
+  end
+
+  def terrestrial_green_list_area_ids
+    green_list_areas.terrestrial_areas.map(&:id)
+  end
+
+  def marine_green_list_area_ids
+    green_list_areas.marine_areas.map(&:id)
   end
 end

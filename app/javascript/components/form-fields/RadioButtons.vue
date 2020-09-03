@@ -37,6 +37,9 @@ export default {
   name: 'radio-buttons',
 
   props: {
+    clearIndex: {
+      type: Number
+    },
     id: { 
       type: String,
       required: true 
@@ -65,6 +68,13 @@ export default {
     this.changeInput(this.preSelected)  
 
     this.$eventHub.$on('reset:filter-options', this.reset)
+  },
+
+  watch: {
+    clearIndex () {
+      this.reset()
+      this.changeInput()
+    }
   },
 
   methods: {

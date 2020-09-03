@@ -26,6 +26,7 @@
         :filter-close-text="textClose"
         :filterGroups="filterGroupsWithPreSelected"
         :is-active="isFilterPaneActive"
+        :text-clear="textClear"
         :title="textFilters"
         v-on:update:filter-group="updateFilters"
         v-on:toggle:filter-pane="toggleFilterPane"
@@ -118,6 +119,10 @@ export default {
     tabs: {
       required: true,
       type: Array // [{ id: String, title: String }]
+    },
+    textClear: {
+      type: String,
+      required: true
     },
     textDownload: {
       type: String,
