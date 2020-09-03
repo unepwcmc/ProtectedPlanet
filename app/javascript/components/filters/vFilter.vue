@@ -4,10 +4,14 @@
       v-if="title" 
       v-html="title"
     />
-    
+    <span
+      @click="clearFilterOptions"
+    >clear</span>
+
     <div class="filter__options">
       <checkboxes 
         v-if="type == 'checkbox'"
+        :clear-index="clearIndex"
         :id="id"
         :options="options"
         :pre-selected="preSelected"
@@ -16,6 +20,7 @@
 
       <radio-buttons 
         v-if="type == 'radio'"
+        :clear-index="clearIndex"
         :id="id"
         :name="name"
         :options="options"
@@ -25,6 +30,7 @@
 
     <checkbox-search
       v-if="type == 'checkbox-search'"
+      :clear-index="clearIndex"
       :id="id"
       :name="name"
       :options="options"
@@ -69,6 +75,12 @@ export default {
     }
   },
 
+  data () {
+    return {
+      clearIndex: 0
+    }
+  },
+
   computed: {
     preSelectedCheckboxSearch () {
       return Array.isArray(this.preSelected) && this.preSelected.length ? this.preSelected[0] : null
@@ -84,6 +96,10 @@ export default {
       const preselected = this.type == 'checkbox-search' ? this.preSelectedCheckboxSearch : this.preSelected
       
       this.updateFilter(preselected)
+    },
+
+    clearFilterOptions () {
+      this.clearIndex = this.clearIndex + 1
     },
 
     updateFilter(updatedOptions) {

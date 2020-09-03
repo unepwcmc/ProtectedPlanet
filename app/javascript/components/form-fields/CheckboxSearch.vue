@@ -15,6 +15,7 @@
     
     <div class="filter__options">
       <checkboxes 
+        :clear-index="clearIndex"
         :id="id"
         :options="autocomplete"
         :pre-selected="preSelectedCheckboxes"
@@ -35,6 +36,9 @@ export default {
   components: { Checkboxes, TabsFake },
 
   props: {
+    clearIndex: {
+      type: Number
+    },
     id: { 
       type: String,
       required: true 
@@ -71,6 +75,12 @@ export default {
     this.$eventHub.$on('reset:filter-options', this.reset)
 
     this.defaultTabId = this.options[0].id
+  },
+  
+  watch: {
+    clearIndex () {
+      this.reset
+    }
   },
 
   computed: {
