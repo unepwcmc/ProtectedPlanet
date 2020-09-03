@@ -34,14 +34,12 @@ Rails.configuration.to_prepare do
       # Or, _categories consists of tags with entirely new labels, and hence new layouts would have to be created
       # Not handled at present - adding new categories which equates to adding new layout categories which means _layout_category is empty
       
-      # layouts_categories is in the format [{identifier:... label: 'topics'...}, {identifier:..., label: 'types'...}]
-      own_layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: self.id).to_a
+      filter_categories(_categories)
 
-      _categories.each do |_cat| 
-        own_layouts_categories.filter! { |category| _cat[:tag_params] != category.layout_category.label }
+      unless own_layouts_categories.blank?
+        delete_orphan_categories(own_layouts_categories) 
+        return if _categories.blank?
       end
-
-      delete_orphan_categories(own_layouts_categories) unless own_layouts_categories.blank?
 
       _categories.each do |cat|
         tag_name = cat[:tag_params]
@@ -50,6 +48,16 @@ Rails.configuration.to_prepare do
           layout_id: self.id,
           layout_category_id: _layout_category.id
         )
+      end
+    end
+    
+    def filter_categories(categories)
+      return if categories.blank?
+      # layouts_categories is in the format [{identifier:... label: 'topics'...}, {identifier:..., label: 'types'...}]
+      own_layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: self.id).to_a
+
+      categories.each do |_cat| 
+        own_layouts_categories.filter! { |category| _cat[:tag_params] != category.layout_category.label }
       end
     end
 
