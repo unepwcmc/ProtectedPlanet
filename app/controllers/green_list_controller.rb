@@ -39,7 +39,8 @@ class GreenListController < ApplicationController
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
-      type: 'is_green_list'
+      type: 'is_green_list',
+      point_query_services: all_services_for_point_query
     }
   end
 

@@ -16,7 +16,10 @@ class OecmController < ApplicationController
     @map = {
       overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize,
       title: I18n.t('map.title_oecm'),
-      type: 'oecm'
+      type: 'oecm',
+      point_query_services: [
+        { url: OECM_FEATURE_SERVER_LAYER_URL, isPoint: false }
+      ]
     }
     @filters = { db_type: ['oecm'] }
   end
