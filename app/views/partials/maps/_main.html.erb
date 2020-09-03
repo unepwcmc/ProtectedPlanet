@@ -4,7 +4,7 @@
   <v-map-filters
     :is-hidden="<%= !!map[:areFiltersHidden] %>"
     :overlays="<%= map[:overlays].to_json %>"
-    title="<%= map_yml[:title] %>"
+    title="<%= map[:title] %>"
   >
     <template v-slot:top>
       <v-map-pa-search
