@@ -29,7 +29,7 @@
           :text-no-results="textNoResults"
           v-on:request-more="requestMore"
           v-on:reset-pagination="resetPagination"
-          v-show="!loadingResults"
+          v-show="!updatingResults"
         />
         <span :class="['icon--loading-spinner margin-center listing__spinner', { 'icon-visible': loadingResults } ]" />
       </div>
@@ -104,8 +104,15 @@ export default {
       activeFilterOptions: [],
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
-      loadingResults: false,
+      loadingMoreResults: false,
+      updatingResults: false,
       newResults: this.results
+    }
+  },
+
+  computed: {
+    loadingResults () {
+      return this.loadingMoreResults || this.updatingResults
     }
   },
 
@@ -119,7 +126,11 @@ export default {
 
   methods: {
     ajaxSubmission (resetFilters=false, pagination=false, requestedPage=1) {
-      if(!pagination) { this.loadingResults = true }
+      if(pagination) { 
+        this.loadingMoreResults = true 
+      } else {
+        this.updatingResults = true 
+      }
 
       let filters = {...this.activeFilterOptions, ...{ ancestor: this.pageId }}
 
@@ -143,7 +154,8 @@ export default {
             this.updateProperties(response, resetFilters)
           }
 
-          this.loadingResults = false
+          this.loadingMoreResults = false
+          this.updatingResults = false
         })
         .catch(function (error) {
           console.log('error', error)
