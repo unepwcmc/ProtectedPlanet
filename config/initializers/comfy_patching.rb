@@ -33,10 +33,8 @@ Rails.configuration.to_prepare do
       # Two situations for deleting orphan categories, either _categories has no or a restricted set of the currently existing categories
       # Or, _categories consists of tags with entirely new labels, and hence new layouts would have to be created
       # Not handled at present - adding new categories which equates to adding new layout categories which means _layout_category is empty
-      
-      own_layouts_categories = filter_layouts_categories(_categories)
 
-      delete_orphan_categories(own_layouts_categories) unless own_layouts_categories.blank?
+      delete_orphan_categories(_categories)
       
       _categories.each do |cat|
         tag_name = cat[:tag_params]
@@ -59,9 +57,11 @@ Rails.configuration.to_prepare do
       layouts_categories
     end
 
-    def delete_orphan_categories(own_layouts_categories)
+    def delete_orphan_categories(categories)
+      orphan_layouts_categories = filter_layouts_categories(categories)
+
       self.pages.each do |page|
-        own_layouts_categories.each do |lc|
+        orphan_layouts_categories.each do |lc|
           pcs_ids = page.page_categories.where(layout_category_id: lc.layout_category_id).map(&:id)
           Comfy::Cms::PagesCategory.where(
             page_id: page.id,
@@ -70,7 +70,7 @@ Rails.configuration.to_prepare do
         end
       end
 
-      own_layouts_categories.map(&:destroy)
+      orphan_layouts_categories.map(&:destroy)
     end
   end
 
