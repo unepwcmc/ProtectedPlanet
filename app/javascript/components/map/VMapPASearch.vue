@@ -4,6 +4,7 @@
       <autocomplete
         :key="autocompleteKey"
         v-model="autoCompleteResults"
+        :placeholder="autocompletePlaceholder"
         :autocomplete-callback="autocompleteCallback"
         :error-messages="autocompleteErrorMessages"
         @submit="emitZoomToEvent"
@@ -30,6 +31,10 @@ export default {
     autocompleteErrorMessages: {
       required: true,
       type: Object
+    },
+    autocompletePlaceholder: {
+      required: true,
+      type: String
     }
   },
 
@@ -58,7 +63,8 @@ export default {
       return searchTerm => {
         return new Promise((resolve, reject) => {
           axios.post('/search/autocomplete', {
-            search_term: searchTerm
+            search_term: searchTerm,
+            type: 'all'
           })
             .then(response => {
               /**

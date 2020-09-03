@@ -84,8 +84,6 @@
   }
 
   &__results {
-    @include beautify-scrollbar(4);
-    margin: 0 rem-calc(25);
     overflow-y: scroll;
     height: rem-calc(150);
   }
