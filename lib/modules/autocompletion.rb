@@ -46,7 +46,7 @@ module Autocompletion
       when 'oecm'
         { filters: { is_oecm: true } }
       else
-        {}
+        type ? { filters: { "#{type}": true } } : {}
     end
   end
 
