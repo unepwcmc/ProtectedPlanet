@@ -3,7 +3,7 @@
 //--------------------------------------------------
 &--home {
   @include hero-stat-bubble;
-  background: $grey-light image_url('hero/home.png') center no-repeat;
+  background: $grey-light image_url('hero/home.jpg') center no-repeat;
   background-size: cover;
   padding-top: rem-calc(28);
   padding-bottom: rem-calc(48);
