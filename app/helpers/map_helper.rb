@@ -10,7 +10,8 @@ MARINE_WDPA_POINT_LAYER_URL = MARINE_WDPA_MAP_SERVER_URL + '/0'
 MARINE_WDPA_POLY_LAYER_URL = MARINE_WDPA_MAP_SERVER_URL + '/1'
 
 TILE_PATH = "/tile/{z}/{y}/{x}"
-MARINE_QUERY_STRING = '/query?where=marine+IN+%28%271%27%2C+%272%27%29&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
+MARINE_WHERE_QUERY = 'where=marine+IN+%28%271%27%2C+%272%27%29'
+MARINE_QUERY_STRING = '/query?' + MARINE_WHERE_QUERY + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
 
 OVERLAY_GREEN = "#38A800"
 OVERLAY_BLUE = "#004DA8"
@@ -114,8 +115,12 @@ module MapHelper
     }
   end
 
+  def wdpaid_where_query wdpaids
+    'where=wdpaid+IN+%28' + wdpaids.join('%2C+') + '%29'
+  end
+
   def greenlist_query_string wdpaids
-    '/query?where=wdpaid+IN+%28' + wdpaids.join('%2C+') + '%29&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
+    '/query?' + wdpa_where_query(wdpaids) + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
   end
 
   def map_search_types

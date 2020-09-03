@@ -34,7 +34,11 @@ class MarineController < ApplicationController
       title: I18n.t('map.title'),
       type: 'marine',
       point_query_services: [
-        { url: OECM_FEATURE_SERVER_LAYER_URL, isPoint: false },
+        { 
+          url: OECM_FEATURE_SERVER_LAYER_URL,
+          isPoint: false,
+          queryString: MARINE_WHERE_QUERY
+        },
         { url: WDPA_POINT_LAYER_URL, isPoint: true },
         { url: WDPA_POLY_LAYER_URL, isPoint: false }
         # { url: MARINE_WDPA_POINT_LAYER_URL, isPoint: true },

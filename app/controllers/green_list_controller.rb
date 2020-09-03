@@ -40,7 +40,7 @@ class GreenListController < ApplicationController
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
       type: 'is_green_list',
-      point_query_services: all_services_for_point_query
+      point_query_services: point_query_services
     }
   end
 
@@ -77,6 +77,14 @@ class GreenListController < ApplicationController
         queryString: greenlist_query_string(marine_green_list_area_ids)
       }
     })
+  end
+
+  def point_query_services
+    all_services_for_point_query.map do |service|
+      service.merge({
+        queryString: wdpaid_where_query(green_list_areas.map(&:id))
+      )})
+    end
   end
 
   def most_protected_areas
