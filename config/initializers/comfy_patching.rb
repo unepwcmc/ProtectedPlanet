@@ -36,10 +36,8 @@ Rails.configuration.to_prepare do
       
       own_layouts_categories = filter_layouts_categories(_categories)
 
-      unless own_layouts_categories.blank?
-        delete_orphan_categories(own_layouts_categories) 
-        return if _categories.blank?
-      end
+      delete_orphan_categories(own_layouts_categories) unless own_layouts_categories.blank?
+      
 
       _categories.each do |cat|
         tag_name = cat[:tag_params]
