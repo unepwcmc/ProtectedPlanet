@@ -13,6 +13,7 @@ export default {
   data () {
     return {
       markers: [],
+      popups: [],
       popupOffsets: {
         'top': [0, 1],
         'top-left': [0,1],
@@ -28,7 +29,7 @@ export default {
 
   methods: {
     onClick (e) {
-      this.removeAllMarkers()
+      this.removeAllMarkersAndPopups()
 
       const coords = e.lngLat
 
@@ -39,10 +40,14 @@ export default {
       ).queryAllServices()
     },
 
-    removeAllMarkers () {
+    removeAllMarkersAndPopups () {
       console.log('removing markers:', this.markers)
-      this.markers.forEach(marker => { marker.remove() })
-      this.markers = []
+      console.log('removing popups:', this.popups)
+
+      ['markers', 'popups'].forEach(x => {
+        this[x].forEach(y => { y.remove() })
+        this[x] = []
+      })
     },
 
     addPopupIfFound (coords) {
@@ -65,8 +70,9 @@ export default {
 
     addPopup (coords, pa) {
       console.log('Adding popup', pa)
-      this.removeAllMarkers()
+      this.removeAllMarkersAndPopups()
       console.log('Adding but now markers should be removed. Markers in data:', this.markers)
+      console.log('Popups in data:', this.popups)
 
       const html = pa.url ? 
         `<a href="${pa.url}">${pa.name}</a>` :
@@ -76,7 +82,7 @@ export default {
       pin.className = 'v-map-pin'
 
       // eslint-disable-next-line no-undef
-      new mapboxgl.Popup({
+      this.popups.push(new mapboxgl.Popup({
         className: 'v-map-pa-popup', 
         closeButton: false, 
         offset: this.popupOffsets
@@ -84,6 +90,7 @@ export default {
         .setHTML(html)
         .setMaxWidth('300px')
         .addTo(this.map)
+      )
 
       // eslint-disable-next-line no-undef
       this.markers.push(new mapboxgl.Marker({element: pin, anchor: 'bottom'})
@@ -91,6 +98,7 @@ export default {
         .addTo(this.map)
       )
       console.log('Marker now added:', this.markers)
+      console.log('Popup now added:', this.popups)
     }
   }
 }
