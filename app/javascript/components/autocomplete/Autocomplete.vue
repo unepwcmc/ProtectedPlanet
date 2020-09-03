@@ -29,6 +29,7 @@
       v-show="showResults"
       class="autocomplete__results-container"
     >
+      <div v-show="!hasResults">No results</div>
       <div class="autocomplete__results">
         <div
           v-for="(result, index) in results"
@@ -156,7 +157,7 @@ export default {
       return this.search.length > 2
     },
     showResults () {
-      return this.hasResults && this.shouldShowResults === true
+      return this.hasSearchString && this.shouldShowResults === true
     }
   },
 

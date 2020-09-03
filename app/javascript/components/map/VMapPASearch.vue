@@ -4,7 +4,6 @@
       <autocomplete
         :key="autocompleteKey"
         v-model="autoCompleteResults"
-        :placeholder="searchType.placeholder"
         :autocomplete-callback="autocompleteCallback"
         :error-messages="autocompleteErrorMessages"
         @submit="emitZoomToEvent"
