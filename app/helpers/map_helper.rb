@@ -120,7 +120,7 @@ module MapHelper
   end
 
   def greenlist_query_string wdpaids
-    '/query?' + wdpa_where_query(wdpaids) + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
+    '/query?' + wdpaid_where_query(wdpaids) + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
   end
 
   def map_search_types

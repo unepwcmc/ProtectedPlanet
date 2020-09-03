@@ -83,7 +83,7 @@ class GreenListController < ApplicationController
     all_services_for_point_query.map do |service|
       service.merge({
         queryString: wdpaid_where_query(green_list_areas.map(&:id))
-      )})
+      })
     end
   end
 

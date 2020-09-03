@@ -39,8 +39,8 @@ class MarineController < ApplicationController
           isPoint: false,
           queryString: MARINE_WHERE_QUERY
         },
-        { url: WDPA_POINT_LAYER_URL, isPoint: true },
-        { url: WDPA_POLY_LAYER_URL, isPoint: false }
+        { url: WDPA_POINT_LAYER_URL, isPoint: true, queryString: MARINE_WHERE_QUERY },
+        { url: WDPA_POLY_LAYER_URL, isPoint: false, queryString: MARINE_WHERE_QUERY }
         # { url: MARINE_WDPA_POINT_LAYER_URL, isPoint: true },
         # { url: MARINE_WDPA_POLY_LAYER_URL, isPoint: false }
       ]
