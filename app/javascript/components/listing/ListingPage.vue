@@ -16,6 +16,7 @@
         :filter-close-text="textFiltersClose"
         :filter-groups="filterGroupsWithPreSelected"
         :is-active="isFilterPaneActive"
+        :text-clear="textClear"
         :title="textFilterTrigger"
         v-on:update:filter-group="updateFilters"
         v-on:toggle:filter-pane="toggleFilterPane"
@@ -78,6 +79,10 @@ export default {
       type: String
     },
     template: {
+      required: true,
+      type: String
+    },
+    textClear: {
       required: true,
       type: String
     },
