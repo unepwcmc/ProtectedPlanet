@@ -26,7 +26,7 @@ class Download::Generators::Pdf < Download::Generators::Base
   end
 
   def params
-    { 
+    {
       'controller' => controller,
       'action' => :show,
       key => @identifier,
@@ -35,11 +35,12 @@ class Download::Generators::Pdf < Download::Generators::Base
   end
 
   def key
-    id_is_integer? ? 'id' : 'iso' 
+    id_is_integer? ? 'id' : 'iso'
   end
 
   def controller
-    id_is_integer? ? 'protected_areas' : 'country'
+    return 'protected_areas' if id_is_integer?
+    @identifier.length == 3 ? 'country' : 'region'
   end
 
   def id_is_integer?
