@@ -28,7 +28,8 @@ class MarineController < ApplicationController
     @pas_percent = @marine_statistics['total_ocean_pa_coverage_percentage']
     @pas_total = @marine_statistics['total_marine_protected_areas']
     @map = {
-      overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize,
+      type: 'marine'
     }
     @filters = { db_type: ['wdpa'], is_marine: true }
   end

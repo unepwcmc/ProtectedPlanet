@@ -11,6 +11,7 @@
         v-if="<%= !map[:areFiltersHidden] %>"
         :autocomplete-error-messages="<%= map_yml[:autocomplete_error_messages].to_json %>"
         :autocomplete-placeholder="<%= map_yml[:autocomplete_placeholder].to_json %>"
+        type="<%= map[:type] %>"
       ><v-map-pa-search>
     </template>
     <template v-slot:bottom>
