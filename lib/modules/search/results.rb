@@ -49,6 +49,9 @@ class Search::Results
 
   def regions
     @regions ||= objects[@type_index_map[Search::REGION_INDEX]]
+
+    # Remove Global from the list of regions on the pre-filtered search results page
+    @regions.filter { |region| region.name != 'Global' }
   end
 
   def cms_pages
