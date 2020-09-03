@@ -14,7 +14,9 @@ class OecmController < ApplicationController
     @tabs = get_tabs(3).to_json
 
     @map = {
-      overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize,
+      title: I18n.t('map.title_oecm'),
+      type: 'oecm'
     }
     @filters = { db_type: ['oecm'] }
   end

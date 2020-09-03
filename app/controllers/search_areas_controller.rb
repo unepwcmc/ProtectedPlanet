@@ -31,8 +31,9 @@ class SearchAreasController < ApplicationController
     @results = Search::AreasSerializer.new(@search, geo_type).serialize
 
     @map = {
+      areFiltersHidden: true,
       overlays: MapOverlaysSerializer.new(search_overlays, map_yml).serialize,
-      areFiltersHidden: true
+      type: 'all'
     }
   end
 

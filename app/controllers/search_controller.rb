@@ -54,6 +54,8 @@ class SearchController < ApplicationController
         Search::COUNTRY_INDEX
       when 'region'
         Search::REGION_INDEX
+      when 'all'
+        Search::AREAS_INDEX
       else
         Search::PA_INDEX
     end

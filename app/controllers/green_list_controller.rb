@@ -37,7 +37,9 @@ class GreenListController < ApplicationController
     @greenListViewAllUrl = search_areas_path(filters: { special_status: ['is_green_list']} )
 
     @map = {
-      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
+      title: I18n.t('map.title'),
+      type: 'is_green_list'
     }
   end
 

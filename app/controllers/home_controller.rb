@@ -27,7 +27,9 @@ class HomeController < ApplicationController
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
 
     @main_map = {
-      overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize,
+      title: I18n.t('map.title'),
+      type: 'all'
     }
   end
 
