@@ -2,7 +2,6 @@
   <div class="autocomplete__container">
     <div
       class="autocomplete"
-      :class="{ 'autocomplete--error': errors.any() }"
       @focus="focusInput"
     >
       <button
@@ -26,10 +25,21 @@
       />
     </div>
     <div
-      v-show="showResults"
+      v-show="showResultsPane"
       class="autocomplete__results-container"
     >
-      <div v-show="!hasResults">No results</div>
+      <div 
+        v-show="errorTooShort"
+        class="autocomplete__error-message"
+      >
+        Type at least 3 characters to search
+      </div>
+      <div 
+        v-show="errorNoResults"
+        class="autocomplete__error-message"
+      >
+        No results
+      </div>
       <div class="autocomplete__results">
         <div
           v-for="(result, index) in results"
@@ -147,6 +157,12 @@ export default {
   },
 
   computed: {
+    errorTooShort () {
+      return !this.hasResults && !this.isValidSearchString
+    },
+    errorNoResults () {
+      return !this.hasResults && this.isValidSearchString
+    },
     hasResults () {
       return this.results.length > 0
     },
@@ -156,7 +172,7 @@ export default {
     isValidSearchString () {
       return this.search.length > 2
     },
-    showResults () {
+    showResultsPane () {
       return this.hasSearchString && this.shouldShowResults === true
     }
   },
