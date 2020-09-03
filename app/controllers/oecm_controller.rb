@@ -13,6 +13,7 @@ class OecmController < ApplicationController
 
     @map = {
       overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize,
+      title: I18n.t('map.title_oecm'),
       type: 'oecm'
     }
     @filters = { db_type: ['oecm'] }
