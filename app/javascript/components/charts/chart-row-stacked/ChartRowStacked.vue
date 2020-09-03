@@ -1,5 +1,5 @@
 <template>
-  <div :class="['chart--row-stacked', themeClass]">
+  <div :class="themeClass">
     <h3 v-if="title" class="chart__title">{{ title }}</h3>
 
     <ul class="chart__chart ul-unstyled flex">
@@ -7,18 +7,12 @@
         <span v-if="row.percent > 0" class="chart__percent">{{ row.percent}}%</span>
       </li>
     </ul>
-    
-    <!-- <chart-legend v-if="legend" :rows="legend" :theme="theme" class="chart__legend"></chart-legend> -->
   </div>
 </template>
 
 <script>
-  // import ChartLegend from './ChartLegend'
-
   export default {
     name: 'chart-row-stacked',
-
-    // components: { ChartLegend },
 
     props: {
       title: String,
@@ -26,15 +20,12 @@
       rows: {
         type: Array, //[{ percent: Number }]
         required: true
-      },
-      legend: {
-        type: Array
       }
     },
 
     computed: {
       themeClass () {
-        return `theme--${this.theme}`
+        return this.theme ? `theme--${this.theme}` : ''
       }
     }
   }

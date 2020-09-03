@@ -1,13 +1,22 @@
 <template>
   <div class="filter">
-    <h4 
-      v-if="title" 
-      v-html="title"
-    />
-    
+    <div class="filter__header">
+      <h4 
+        v-if="title" 
+        v-html="title"
+        class="filter__title"
+      />
+      <button
+        class="filter__button-clear"
+        @click="clearFilterOptions"
+        v-html="textClear"
+        />
+    </div>
+
     <div class="filter__options">
       <checkboxes 
         v-if="type == 'checkbox'"
+        :clear-index="clearIndex"
         :id="id"
         :options="options"
         :pre-selected="preSelected"
@@ -16,6 +25,7 @@
 
       <radio-buttons 
         v-if="type == 'radio'"
+        :clear-index="clearIndex"
         :id="id"
         :name="name"
         :options="options"
@@ -25,6 +35,7 @@
 
     <checkbox-search
       v-if="type == 'checkbox-search'"
+      :clear-index="clearIndex"
       :id="id"
       :name="name"
       :options="options"
@@ -63,9 +74,18 @@ export default {
     title: {
       type: String
     },
+    textClear: {
+      type: String
+    },
     type: {
       required: true,
       type: String
+    }
+  },
+
+  data () {
+    return {
+      clearIndex: 0
     }
   },
 
@@ -84,6 +104,10 @@ export default {
       const preselected = this.type == 'checkbox-search' ? this.preSelectedCheckboxSearch : this.preSelected
       
       this.updateFilter(preselected)
+    },
+
+    clearFilterOptions () {
+      this.clearIndex = this.clearIndex + 1
     },
 
     updateFilter(updatedOptions) {

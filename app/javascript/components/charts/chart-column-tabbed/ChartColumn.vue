@@ -1,7 +1,7 @@
 <template>
   <div class="chart--column">
     <div 
-      v-for="column, index in columns"
+      v-for="(column, index) in columns"
       :key="`column-${index}`"
       class="chart__column"
     >

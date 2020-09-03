@@ -10,6 +10,8 @@ class GreenListController < ApplicationController
   # after_action :enable_caching
 
   def index
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'greenlist')
+
     # TODO - statistics are not accurate
     stats = green_list_statistics
     @pas_km = stats['green_list_area']
@@ -26,7 +28,6 @@ class GreenListController < ApplicationController
     
     # TODO - This may need to be reworked by CLS
     @total_area_percent = Stats::Global.percentage_pa_cover.to_f - @pas_percent.to_f
-
 
     @filters = {
       db_type: ['wdpa'],
@@ -67,9 +68,12 @@ class GreenListController < ApplicationController
   end
 
   def map_overlays
-    overlays(['greenlist'], {
-      greenlist: {
-        queryString: greenlist_query_string(green_list_areas.map(&:id))
+    overlays(['greenlist_terrestrial', 'greenlist_marine'], {
+      greenlist_terrestrial: {
+        queryString: greenlist_query_string(terrestrial_green_list_area_ids)
+      },
+      greenlist_marine: {
+        queryString: greenlist_query_string(marine_green_list_area_ids)
       }
     })
   end
@@ -106,5 +110,13 @@ class GreenListController < ApplicationController
   
   def green_list_areas
     @green_list_areas ||= ProtectedArea.green_list_areas
+  end
+
+  def terrestrial_green_list_area_ids
+    green_list_areas.terrestrial_areas.map(&:id)
+  end
+
+  def marine_green_list_area_ids
+    green_list_areas.marine_areas.map(&:id)
   end
 end

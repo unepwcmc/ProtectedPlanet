@@ -27,45 +27,23 @@
   }
 
   .download__target {
-    @include ul-unstyled;
-    background-color: $grey-dark;
-    border-radius: $button-radius;
-
     display: none;
-    position: absolute;
-    top: calc(100% + #{rem-calc(7)});
-
-    &:before {
-      @include triangle (rem-calc(38), rem-calc(11), $grey-dark);
-
-      position: absolute;
-      top: rem-calc(-11);
-      right: rem-calc(8);
-    } 
 
     &.active { display: block; }
   } 
-
-  .download__target-ul {
-    
-  }
-
-  .download__li {
-    color: $white;
-    cursor: pointer;
-    padding: rem-calc(9 16);
-
-    &:hover { background-color: $grey; }
-
-    &:first-child { @include border-radius-top($button-radius); }
-    &:last-child { @include border-radius-bottom($button-radius); }
-  }   
 }
 
 //--------------------------------------------------
 // download small
 //--------------------------------------------------
 .download--small {
+  .download__target {
+    display: none;
+    position: relative;
+    
+    &.active { display: block; }
+  } 
+
   .download__trigger {
     @include button-download-trigger-small;
 

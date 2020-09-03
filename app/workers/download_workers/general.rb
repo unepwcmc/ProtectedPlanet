@@ -1,8 +1,10 @@
 class DownloadWorkers::General < DownloadWorkers::Base
-  def perform type, identifier, opts={}
-    while_generating(key(identifier)) do
-      Download.generate filename(identifier), opts.symbolize_keys.merge({wdpa_ids: collect_wdpa_ids(type, identifier)})
-      {status: 'ready', filename: filename(identifier)}.to_json
+  def perform format, type, identifier, opts={}
+    while_generating(key(identifier, format)) do
+      _opts = opts.symbolize_keys.merge({wdpa_ids: collect_wdpa_ids(type, identifier)})
+
+      Download.generate format, filename(identifier, format), _opts
+      {status: 'ready', filename: filename(identifier, format)}.to_json
     end
   end
 
@@ -24,7 +26,13 @@ class DownloadWorkers::General < DownloadWorkers::Base
       region = Region.where(iso: identifier).first
       Set.new(region.countries.flat_map(&wdpa_ids_per_country)).to_a
     when 'marine'
-      ProtectedArea.where(marine: true).pluck(:wdpa_id)
+      ProtectedArea.marine_areas.pluck(:wdpa_id)
+    when 'greenlist'
+      ProtectedArea.green_list_areas.pluck(:wdpa_id)
+    when 'oecm'
+      ProtectedArea.oecms.pluck(:wdpa_id)
+    when 'wdpa'
+      ProtectedArea.wdpas.pluck(:wdpa_id)
     end
   end
 end

@@ -4,13 +4,15 @@ class Ogr::Postgres
   WRONG_ARGUMENTS_MSG = 'Given new table name, but no original table name'
   DRIVERS = {
     shapefile: 'ESRI Shapefile',
-    csv:       'CSV'
+    csv:       'CSV',
+    gdb:       'FileGDB'
   }
 
   TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'command_templates')
   TEMPLATES = {
-    import: File.read(File.join(TEMPLATE_DIRECTORY, 'postgres_import.erb')),
-    export: File.read(File.join(TEMPLATE_DIRECTORY, 'postgres_export.erb')),
+    import:     File.read(File.join(TEMPLATE_DIRECTORY, 'postgres_import.erb')),
+    export:     File.read(File.join(TEMPLATE_DIRECTORY, 'postgres_export.erb')),
+    gdb_export: File.read(File.join(TEMPLATE_DIRECTORY, 'postgres_gdb_export.erb'))
   }
 
   def self.import file_path, original_table_name=nil, table_name=nil
@@ -18,8 +20,9 @@ class Ogr::Postgres
     system ogr_command(TEMPLATES[:import], binding)
   end
 
-  def self.export file_type, file_name, query
-    system ogr_command(TEMPLATES[:export], binding)
+  def self.export file_type, file_name, query, geom_type='polygon'
+    template = file_type == :gdb ? TEMPLATES[:gdb_export] : TEMPLATES[:export]
+    system ogr_command(template, binding)
   end
 
   private

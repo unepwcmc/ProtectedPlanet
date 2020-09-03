@@ -1,9 +1,11 @@
 <download 
+  button-text="<%= t('global.button.download') %>"
+
   <% if local_assigns.has_key? :classes %>
     class="<%= classes %>"
   <% end %>
-
-  text="<%= t('global.button.download') %>"
+  
+  :options="<%= options %>"
+  :text-commercial="<%= download_text[:commercial].to_json %>"
 >
-  <%= download_dropdown("marine", "general", [:csv, :shp, :pdf]) %>
 </download>

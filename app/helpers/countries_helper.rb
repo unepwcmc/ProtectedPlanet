@@ -7,21 +7,28 @@ module CountriesHelper
     @country.children.any? || @country.parent.present?
   end
 
-  def iucn_link(category)
-    type = @country ? 'country' : 'region'
+  def chart_link(category)
+    geo_type = @country ? 'country' : 'region'
     name = @country ? @country.name : @region.name
+    title_variable = ""
+    filters = { location: { type: geo_type, options: [name] } }
+
+    if category.has_key?('governance_name')
+      filters.merge!(governance: ["#{category['governance_name']}"]) 
+      title_variable = category['governance_name']
+    else
+      filters.merge!(iucn_category: ["#{category['iucn_category_name']}"]) 
+      title_variable = category['iucn_category_name']
+    end
     
-    # This hash is used to populate the 'View All' links of the IUCN categories chart for the show pages
-    # depending on whether the page relates to a country or region.
+    # This hash is used to populate the view links of the torus charts for the show pages
+    # depending on whether the chart relates to IUCN category or governance. 
     { 
       link: search_areas_path(
       geo_type: 'site', 
-      filters: { 
-        iucn_category: ["#{category['iucn_category_name']}"],
-        location: { type: type, options: [name] }
-        }          
+      filters: filters        
       ),
-      title: "View the #{category['iucn_category_name']} sites for #{name}"
+      title: "View the #{title_variable} sites for #{name}"
     }
   end
 

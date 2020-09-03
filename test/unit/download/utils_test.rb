@@ -10,7 +10,7 @@ class DownloadUtilsTest < ActiveSupport::TestCase
     url = Rails.application.secrets.aws_s3_url
 
     expected_url = "#{url}/#{S3::CURRENT_PREFIX}that-download-csv.zip"
-    url = Download::Utils.link_to download_name, type
+    url = Download::Utils.link_to download_name
 
     assert_equal expected_url, url
   end
@@ -21,8 +21,8 @@ class DownloadUtilsTest < ActiveSupport::TestCase
   end
 
   test '.key, given a domain and an identifier, returns the redis key for the given args' do
-    assert_equal 'downloads:searches:123', Download::Utils.key('search', '123')
-    assert_equal 'downloads:general:USA', Download::Utils.key('general', 'USA')
-    assert_equal 'downloads:projects:123:all', Download::Utils.key('project', '123')
+    assert_equal 'downloads:searches:123', Download::Utils.key('search', '123', 'csv')
+    assert_equal 'downloads:general:USA', Download::Utils.key('general', 'USA', 'csv')
+    assert_equal 'downloads:projects:123:all', Download::Utils.key('project', '123', 'csv')
   end
 end

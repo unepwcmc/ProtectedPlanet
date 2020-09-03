@@ -5,6 +5,7 @@
 <div>
   <search-areas
     :config-autocomplete="<%= @config_search_areas %>"
+    :download-options="<%= @download_options %>"
     endpoint-autocomplete="/search/autocomplete"
     endpoint-pagination="<%= search_areas_results_path(filters: @filters) %>"
     endpoint-search="<%= search_areas_results_path(filters: @filters) %>"
@@ -14,6 +15,7 @@
     :tabs="<%= @tabs.to_json %>"
     text-download="<%= t('search.download') %>"
     text-filters="<%= t('search.filters') %>"
+    text-clear="<%= t('search.clear') %>"
     text-close="View Results"
     text-map="<%= t('search.map') %>"
     :results="<%= @results.to_json %>"

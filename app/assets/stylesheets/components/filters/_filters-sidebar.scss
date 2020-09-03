@@ -9,6 +9,17 @@ $filters-title-height: 54;
 //--------------------------------------------------
 &--sidebar {
   .filter {
+    &__button-clear {
+      @include button-clear;
+      font-size: rem-calc(14);
+      margin-left: auto;
+    }
+
+    &__header {
+      @include flex;
+      margin: rem-calc(30 0 10 0);
+    }
+
     &__pane {
       background-color: $grey-xlight;
       width: 100%; height: 100vh;
@@ -83,6 +94,10 @@ $filters-title-height: 54;
       @include text-filter;
       overflow-y: scroll;
       max-height: rem-calc(250);
+    }
+
+    &__title {
+      margin: 0;
     }
   }
 }

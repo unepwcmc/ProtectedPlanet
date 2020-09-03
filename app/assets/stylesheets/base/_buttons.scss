@@ -115,6 +115,21 @@ $padding-medium: rem-calc(27);
   @include button-basic; 
   @include icon-cross;
 }
+@mixin button-clear {
+  @include button-basic; 
+  @include flex;
+  @include flex-v-center;
+
+  &::after {
+    @include icon-cross-white;
+    background-color: $black;
+    background-size: 54%;
+    border-radius: 100%;
+    content: '';
+    margin-left: rem-calc(6);
+    width: rem-calc(18); height: rem-calc(18);
+  }
+}
 @mixin button-download-trigger {
   @include button-download;
 }

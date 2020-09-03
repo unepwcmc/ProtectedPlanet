@@ -1,6 +1,14 @@
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
+@mixin list-theme ($theme) {
+  @for $i from 1 through length($theme) {
+    .list__li:nth-child(#{$i}) {
+      .list__icon { background-color: nth($theme, $i); }
+    }
+  }
+}
+
 @mixin list-underline {
   @include ul-unstyled;
 
@@ -41,7 +49,7 @@
       @include flex-no-shrink;
       font-size: rem-calc(16);
 
-      @include breakpoint-down($small) {
+      @include breakpoint-down($medium) {
         text-indent: -9999px;
       }
 
@@ -95,7 +103,13 @@
       &__li {
         padding: rem-calc(16 14);
 
-        &:nth-child(odd) { background-color: $grey-xlight; }
+        &:nth-child(odd) { 
+          background-color: $grey-xlight; 
+
+          .pdf & { background-color: transparent;  }
+        }
+
+        .pdf & { border-bottom: solid 1px $grey-light; }
       }
 
         &__title {
@@ -113,6 +127,8 @@
 //--------------------------------------------------
   &--underline {
     @include list-underline;
+
+    &.theme--governance { @include list-theme($theme-chart); }
   }
 
 //--------------------------------------------------

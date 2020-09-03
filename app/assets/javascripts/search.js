@@ -1,5 +1,0 @@
-//= require 'base'
-//= require 'jquery.infinitescroll'
-//= require 'modules/search/pagination'
-//= require 'modules/dropdown'
-//= require 'modules/search/base'

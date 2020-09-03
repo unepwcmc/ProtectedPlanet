@@ -5,6 +5,7 @@ en:
       - news-and-stories
       - resources
       - areas
+    clear: Clear all
     custom_categories:
       topics:
         name: Topics

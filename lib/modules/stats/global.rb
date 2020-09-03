@@ -56,16 +56,31 @@ class Stats::Global
     CountryStatistic.global_percentage_pa_land_cover
   end
 
-  def self.pa_land_cover 
-    CountryStatistic.global_pa_land_area
+  def self.percentage_oecms_land_cover
+    CountryStatistic.global_percentage_oecms_pa_land_cover
+  end
+
+  def self.pa_land_cover
+    (percentage_land_cover / 100) * CountryStatistic.global_land_area
+  end
+
+  def self.oecms_pa_land_cover
+    (percentage_oecms_land_cover / 100) * CountryStatistic.global_land_area
   end
 
   def self.pa_marine_cover
-    CountryStatistic.global_pa_marine_area
+    (percentage_marine_cover / 100) * CountryStatistic.global_marine_area
+  end
+
+  def self.oecms_pa_marine_cover
+    (percentage_oecms_marine_cover / 100) * CountryStatistic.global_marine_area
   end
 
   def self.percentage_marine_cover
     CountryStatistic.global_percentage_pa_marine_cover
   end
-  
+
+  def self.percentage_oecms_marine_cover
+    CountryStatistic.global_percentage_oecms_pa_marine_cover
+  end
 end

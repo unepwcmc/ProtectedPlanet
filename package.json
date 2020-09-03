@@ -13,6 +13,7 @@
     "es6-object-assign": "^1.1.0",
     "es6-promise": "^4.2.6",
     "leaflet": "^1.6.0",
+    "puppeteer": "^5.2.1",
     "save": "^2.4.0",
     "scrollmagic": "^2.0.6",
     "vue": "^2.6.10",

@@ -4,6 +4,8 @@ class WdpaController < ApplicationController
   def index
     @pa_coverage_percentage = Stats::Global.percentage_pa_cover
 
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri'], 'general', 'wdpa')
+
     @config_search_areas = {
       id: 'wdpa',
       placeholder: I18n.t('global.placeholder.search-wdpa')

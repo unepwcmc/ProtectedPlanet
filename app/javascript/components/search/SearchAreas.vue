@@ -26,6 +26,7 @@
         :filter-close-text="textClose"
         :filterGroups="filterGroupsWithPreSelected"
         :is-active="isFilterPaneActive"
+        :text-clear="textClear"
         :title="textFilters"
         v-on:update:filter-group="updateFilters"
         v-on:toggle:filter-pane="toggleFilterPane"
@@ -83,6 +84,10 @@ export default {
       required: true,
       type: Object // { id: String, placeholder: String }
     },
+    downloadOptions: {
+      required: true, 
+      type: Array //[ { title: String, commercialAvailable: Boolean, params: Object } ]
+    },
     endpointAutocomplete: {
       type: String,
       required: true
@@ -114,6 +119,10 @@ export default {
     tabs: {
       required: true,
       type: Array // [{ id: String, title: String }]
+    },
+    textClear: {
+      type: String,
+      required: true
     },
     textDownload: {
       type: String,
@@ -155,9 +164,9 @@ export default {
     this.handleQueryString()
   },
 
-  computed: {
-    hasResults () {
-      return this.newResults.length > 0
+  watch: {
+    activeFilterOptions () {
+      this.$store.dispatch('download/updateSearchFilters', this.activeFilterOptions)
     }
   },
 
@@ -220,7 +229,10 @@ export default {
       })
     
       if(params.includes('search_term')) {
-        this.searchTerm = paramsFromUrl.get('search_term')
+        const searchTerm = paramsFromUrl.get('search_term')
+
+        this.searchTerm = searchTerm
+        this.$store.dispatch('download/updateSearchTerm', searchTerm)
       }
 
       if(params.includes('geo_type')) { 
@@ -273,6 +285,7 @@ export default {
       this.activeFilterOptions = filters
       this.getFilteredSearchResults()
       this.updateQueryString({ filters: filters })
+      this.$store.dispatch('download/updateSearchFilters', filters)
     },
 
     updateProperties (response, resetFilters) {
@@ -342,6 +355,7 @@ export default {
       this.resetSearchTerm(searchParams)
       this.ajaxSubmission(true)
       this.updateQueryString({ search_term: searchParams.search_term })
+      this.$store.dispatch('download/updateSearchTerm', searchParams.search_term)
     },
 
     requestMore (requestedPage) {
