@@ -1,15 +1,5 @@
 <template>
   <div class="v-map-pa-search">
-    <div class="v-map-pa-search__dropdown">
-      {{ dropdownLabel }}
-      <selector
-        v-bind="{ 
-          options: dropdownOptions, 
-          value: searchType.id 
-        }"
-        @change="onDropdownChange"
-      />
-    </div>
     <div class="v-map-pa-search__autocomplete">
       <autocomplete
         :key="autocompleteKey"
@@ -41,25 +31,6 @@ export default {
     autocompleteErrorMessages: {
       required: true,
       type: Object
-    },
-    dropdownLabel: {
-      type: String,
-      required: true
-    },
-    searchTypes: {
-      type: Array,
-      required: true,
-      validator: types =>
-        types.every(type => {
-          return (
-            type.hasOwnProperty('id') &&
-            type.hasOwnProperty('title') &&
-            type.hasOwnProperty('placeholder') &&
-            typeof type.id === 'string' &&
-            typeof type.title === 'string' &&
-            typeof type.placeholder === 'string'
-          )
-        })
     }
   },
 
@@ -70,12 +41,6 @@ export default {
        * @type Array
        */
       autoCompleteResults: [],
-      /**
-       * The search type should be an object with an id, title and placeholder text.
-       * @type Object
-       */
-      searchType: this.searchTypes[0],
-
       /**
        * Key used to determine whether to refresh the autocomplete component.
        */
@@ -94,7 +59,6 @@ export default {
       return searchTerm => {
         return new Promise((resolve, reject) => {
           axios.post('/search/autocomplete', {
-            type: this.searchType.id,
             search_term: searchTerm
           })
             .then(response => {
@@ -112,18 +76,7 @@ export default {
             .catch(e => reject(Promise.reject(e)))
         })
       }
-    },
-
-    /**
-     * Dropdown options are computed because their searchType equivalents
-     * do not have a compatible object structure with a label and value.
-     * @return Array dropdown-compatible searchTypes
-     */
-    dropdownOptions () {
-      return this.searchTypes.map(type =>
-        this.convertSearchTypeToDropdownOption(type)
-      )
-    },
+    }
   },
 
   watch: {
@@ -133,27 +86,6 @@ export default {
   },
 
   methods: {
-    /**
-     * The dropdown expects an array with objects containing a label and value.
-     * @param searchType the searchType to convert to a dropdown option.
-     * @return Object dropdown option
-     */
-    convertSearchTypeToDropdownOption (searchType) {
-      return {
-        label: searchType.title,
-        value: searchType.id
-      }
-    },
-
-    /**
-     * Update the search type based on the selector's choice.
-     * @param value the [id] of a searchType
-     * @return void
-     */
-    onDropdownChange (value) {
-      this.searchType = this.searchTypes.filter(type => type.id === value)[0]
-    },
-
     /**
      * Initiate the event for pan & zoom.
      * @param search the search term to be used with the map query
