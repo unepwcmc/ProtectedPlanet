@@ -76,15 +76,6 @@ class ProtectedArea < ApplicationRecord
     }
   end
 
-  # TODO - Not sure we need this anymore now that we have Ed's stats - SL
-  # def self.green_list_protected_percentage
-  #   (green_list_total_km / Stats::Global.global_area * 100).to_f.round(2)
-  # end
-
-  # def self.green_list_total_km
-  #   green_list_areas.inject(0) { |_sum, pa| _sum + pa.gis_area }
-  # end
-
   def is_green_list
     green_list_status_id.present?
   end
@@ -190,18 +181,6 @@ class ProtectedArea < ApplicationRecord
     overlap["percentage"] = (overlap["percentage"].to_f*100).to_i
     overlap["sqm"] = (overlap["sqm"].to_f / 1000000).round(2)
     overlap
-  end
-
-  def self.global_terrestrial_oecm_coverage
-    land_oecms = self.oecms.terrestrial_areas.pluck(:reported_area)
-    total_oecm_area = land_oecms.inject(0) { |sum, area| sum + area.to_i }
-    ((total_oecm_area.to_f / CountryStatistic.global_land_area.to_f) * 100).round(2)
-  end
-
-  def self.global_marine_oecm_coverage
-    marine_oecms = self.oecms.marine_areas.pluck(:reported_marine_area)
-    total_oecm_area = marine_oecms.inject(0) { |sum, area| sum + area.to_i }
-    ((total_oecm_area.to_f / CountryStatistic.global_marine_area.to_f) * 100).round(2)
   end
 
   def self.global_marine_coverage

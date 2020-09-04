@@ -29,11 +29,11 @@ class HomePresenter
   end
 
   def oecm_pa_land_cover
-    ProtectedArea.global_terrestrial_oecm_coverage
+    Stats::Global.oecms_pa_land_cover
   end
 
   def oecm_pa_marine_cover
-    ProtectedArea.global_marine_oecm_coverage
+    Stats::Global.oecms_pa_marine_cover
   end
   
   def fact_card_stats
