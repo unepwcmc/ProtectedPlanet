@@ -121,10 +121,24 @@ class ProtectedAreaPresenter
         title: 'International Criteria',
         value: protected_area.international_criteria || "Not Reported"
       }
-    ]
+    ].concat(oecm_attributes)
   end
   
   private
+
+  def oecm_attributes
+    return [] unless protected_area.is_oecm
+    [
+      {
+        title: 'Supplementary Information',
+        value: protected_area.supplementary_info
+      },
+      {
+        title: 'Conservation Objectives',
+        value: protected_area.conservation_objectives
+      }
+    ]
+  end
 
   def green_list_status_info
     return unless protected_area.green_list_status_id
