@@ -37,6 +37,11 @@ class Wdpa::DataStandard
     :shape_length
   ]
 
+  OECM_ATTRIBUTES = [
+    :supp_info,
+    :cons_obj
+  ]
+
   module Matchers
     GEOMETRY_TABLE = /wdpa_?(wdoecm_)?po/i
     POLYGON_TABLE  = /poly/i
@@ -56,8 +61,9 @@ class Wdpa::DataStandard
     STANDARD_ATTRIBUTES
   end
 
+  # TODO Ensure OECM attributes are included when importing a release with OECM areas
   def self.common_attributes
-    STANDARD_ATTRIBUTES.keys - POLYGON_ATTRIBUTES
+    STANDARD_ATTRIBUTES.keys - POLYGON_ATTRIBUTES - OECM_ATTRIBUTES
   end
 
   def self.standard_geometry_attributes
