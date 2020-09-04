@@ -16,6 +16,7 @@ module Concerns::Tabs
 
         tabs << tab
       end
+      tabs
     end
   end
 end
