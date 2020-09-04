@@ -56,7 +56,6 @@ class Wdpa::DataStandard
     STANDARD_ATTRIBUTES
   end
 
-  # TODO Ensure OECM attributes are included when importing a release with OECM areas
   def self.common_attributes
     STANDARD_ATTRIBUTES.keys - POLYGON_ATTRIBUTES
   end
