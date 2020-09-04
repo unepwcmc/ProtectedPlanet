@@ -44,7 +44,7 @@ module DownloadsHelper
   end
 
   def download_params(format, domain, token)
-    return {} if format == 'esri_wdpa' || 'esri_oecm'
+    return {} if %w(esri_wdpa esri_oecm).include?(format)
     _domain = format == 'pdf' ? 'pdf' : domain
     {
       params: {
