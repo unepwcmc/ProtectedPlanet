@@ -115,7 +115,7 @@ module ApplicationHelper
       map_page('about'),
       map_page('news-and-stories'),
       map_page('resources'),
-      map_page('thematical-areas', true),
+      map_page('thematic-areas', true),
     ].to_json
   end
 
@@ -159,8 +159,8 @@ module ApplicationHelper
     }
   end
 
-  def get_thematical_areas
-    @items = ThematicalAreasPresenter.new(@cms_site).thematical_areas
+  def get_thematic_areas
+    @items = ThematicAreasPresenter.new(@cms_site).thematic_areas
   end
 
   def get_footer_links

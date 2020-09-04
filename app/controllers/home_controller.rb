@@ -18,7 +18,7 @@ class HomeController < ApplicationController
 
     @site_facts = @presenter.fact_card_stats
 
-    comfy_themes = Comfy::Cms::Page.find_by_slug("thematical-areas")
+    comfy_themes = Comfy::Cms::Page.find_by_slug("thematic-areas")
     @themes_title = comfy_themes.label
     @themes_url = comfy_themes.full_path
 

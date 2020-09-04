@@ -15,23 +15,23 @@ en:
         -
           id: coverage
           title: Coverage
-          text: &coverage  ! "Proportion of %{geo_type} terrestrial or marine area covered by protected areas <a href='/thematical-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a>. Statistics updated monthly. Source: <a href='https://www.protectedplanet.net/' title='View source' target'_blank'>WDPA and WD-OECM</a> (UNEP-WCMC & IUCN)"
+          text: &coverage  ! "Proportion of %{geo_type} terrestrial or marine area covered by protected areas <a href='/thematic-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a>. Statistics updated monthly. Source: <a href='https://www.protectedplanet.net/' title='View source' target'_blank'>WDPA and WD-OECM</a> (UNEP-WCMC & IUCN)"
         -
           id: effectively_managed
           title: Effectively managed
-          text: &effectively_managed ! "Proportion of %{geo_type} terrestrial or marine area covered by protected areas <a href='/thematical-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a> where management effectiveness evaluations have been reported as being undertaken. Statistics updated monthly. Source: <a href='https://www.protectedplanet.net/' title='View source' target'_blank'>WDPA and WD-OECM</a> and <a href='https://pame.protectedplanet.net/' title='View GD-PAME' target'_blank'>GD-PAME</a> (UNEP-WCMC & IUCN)"
+          text: &effectively_managed ! "Proportion of %{geo_type} terrestrial or marine area covered by protected areas <a href='/thematic-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a> where management effectiveness evaluations have been reported as being undertaken. Statistics updated monthly. Source: <a href='https://www.protectedplanet.net/' title='View source' target'_blank'>WDPA and WD-OECM</a> and <a href='https://pame.protectedplanet.net/' title='View GD-PAME' target'_blank'>GD-PAME</a> (UNEP-WCMC & IUCN)"
         -
           id: representative
           title: Representative
-          text: &representative ! "Average proportion to which %{geo_type} ecoregions (terrestrial and marine) are covered by protected areas <a href='/thematical-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a>. Statistics updated 2019. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B1%20Terrestrial%20Coverage%20by%20Protected%20Areas_0.pdf' title='View source' target='_blank'>DOPA</a>"
+          text: &representative ! "Average proportion to which %{geo_type} ecoregions (terrestrial and marine) are covered by protected areas <a href='/thematic-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a>. Statistics updated 2019. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B1%20Terrestrial%20Coverage%20by%20Protected%20Areas_0.pdf' title='View source' target='_blank'>DOPA</a>"
         -
           id: well_connected
           title: Well connected
-          text: &well_connected ! "Proportion to which %{geo_type} terrestrial protected area and OECM network promotes connectivity (note: no connectivity dataset is yet available for marine protected areas <a href='/thematical-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a>). Statistics updated 2019. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20C1%20Connectivity.pdf' title='View source' target='_blank'>DOPA</a>"
+          text: &well_connected ! "Proportion to which %{geo_type} terrestrial protected area and OECM network promotes connectivity (note: no connectivity dataset is yet available for marine protected areas <a href='/thematic-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a>). Statistics updated 2019. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20C1%20Connectivity.pdf' title='View source' target='_blank'>DOPA</a>"
         -
           id: importance
           title: Areas of importance for biodiversity
-          text: &importance ! "The average proportion of %{geo_type} KBAs that overlap with protected areas <a href='/thematical-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a>, averaged regionally/globally. Statistics updated 2018. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B3%20Key%20Biodiversity%20Areas_0.pdf' title='View source' target='_blank'>BirdLife International (DOPA)</a>"
+          text: &importance ! "The average proportion of %{geo_type} KBAs that overlap with protected areas <a href='/thematic-areas/oecms' title='View OECMs' target='_blank'>and OECMs</a>, averaged regionally/globally. Statistics updated 2018. Source: <a href='https://dopa.jrc.ec.europa.eu/sites/default/files/DOPA%20Factsheet%20B3%20Key%20Biodiversity%20Areas_0.pdf' title='View source' target='_blank'>BirdLife International (DOPA)</a>"
       coverage_text: *coverage
       effectively_managed_text: *effectively_managed
       representative_text: *representative

@@ -1,24 +1,24 @@
-class ThematicalAreasPresenter
+class ThematicAreasPresenter
   include ActionView::Helpers::NumberHelper
 
   def initialize(cms_site)
     @cms_site = cms_site
   end
 
-  def thematical_areas
-    thematical_page = @cms_site.pages.find_by_slug('thematical-areas')
+  def thematic_areas
+    thematic_page = @cms_site.pages.find_by_slug('thematic-areas')
     ##TODO FERDI can you fill in this bit - not needed for ICCA registry
     ## Update variable in the view /partials/sub_partials/_themes.html.erb
     items = {
-      "title": thematical_page.label,
-      "cards": cards(thematical_page)
+      "title": thematic_page.label,
+      "cards": cards(thematic_page)
     }
   end
 
   private
 
-  def cards(thematical_page)
-    _cards = thematical_page.children.published
+  def cards(thematic_page)
+    _cards = thematic_page.children.published
     _cards.map do |c|
       {
         obj: c,
@@ -27,7 +27,7 @@ class ThematicalAreasPresenter
     end
   end
 
-  THEMATICAL_AREAS = {
+  THEMATIC_AREAS = {
     marine: 'Marine Protected Areas',
     green_list: 'The IUCN Green List of Protected and Conserved Areas',
     wdpa: 'WDPA',
@@ -58,6 +58,6 @@ class ThematicalAreasPresenter
   end
 
   def theme(key)
-    THEMATICAL_AREAS[key]
+    THEMATIC_AREAS[key]
   end
 end
