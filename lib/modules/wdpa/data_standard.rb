@@ -25,7 +25,9 @@ class Wdpa::DataStandard
     :wkb_geometry => {name: :the_geom, type: :geometry, label: 'Geometry'},
     :metadataid   => {name: :sources, type: :integer, label: 'Source'},
     :own_type     => {name: :owner_type, type: :string, label: 'Owner Type'},
-    :pa_def       => {name: :is_oecm, type: :oecm, label: 'PA Def'}
+    :pa_def       => {name: :is_oecm, type: :oecm, label: 'PA Def'},
+    :supp_info    => {name: :supp_info, type: :string, label: 'Supplementary Info'},
+    :cons_obj     => {name: :cons_obj, type: :string, label: 'Conservation objectives'}
   }
 
   POLYGON_ATTRIBUTES = [
