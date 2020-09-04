@@ -15,13 +15,13 @@ class Search::AreasSerializer < Search::BaseSerializer
   def regions
     _regions = @results.regions || []
 
-    geo_hash('region', paginate(_regions), _regions.length)
+    geo_hash('region', _regions, @results.count)
   end
 
   def countries
     _countries = @results.countries || []
 
-    geo_hash('country', paginate(_countries), _countries.length)
+    geo_hash('country', _countries, @results.count)
   end
 
   def sites
