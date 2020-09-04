@@ -1,26 +1,32 @@
 module DownloadsHelper
   DEFAULT_OPTIONS = {
     csv: {
+      isDownload: true,
       title: 'CSV',
       commercialAvailable: true
     },
     shp: {
+      isDownload: true,
       title: 'SHP',
       commercialAvailable: true
     },
     gdb: {
+      isDownload: true,
       title: 'File Geodatabase',
       commercialAvailable: true
     },
     esri_wdpa: {
+      isDownload: false,
       title: 'ESRI Web Service',
       url: 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_of_Protected_Areas/FeatureServer'
     },
     esri_oecm: {
+      isDownload: false,
       title: 'ESRI Web Service',
       url: 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/FeatureServer'
     },
     pdf: {
+      isDownload: true,
       title: 'PDF',
       commercialAvailable: false
     }
