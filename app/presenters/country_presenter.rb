@@ -34,6 +34,13 @@ class CountryPresenter
     @designations_presenter.designations
   end
 
+  def documents
+    [
+      national_report,
+      malaysia_documents
+    ].compact.flatten
+  end
+
   def marine_stats
     {
       national_report_version: statistic.nr_version,
@@ -69,6 +76,31 @@ class CountryPresenter
       nationalPercentage: statistic.percentage_pa_marine_cover.round(2),
       overseasKm: statistic.overseas_total_protected_marine_area.round, ##check how this is being calculated
       overseasPercentage: statistic.overseas_percentage.round(2) ##check how this is being calculated - discuss
+    }
+  end
+
+  def malaysia_documents
+    return unless @country && @country.iso_3 == "MYS"
+    [
+      {
+        url: 'https://wdpa.s3.amazonaws.com/Country_informations/MYS/COMMUNICATION%20PLAN%202012-2017.pdf',
+        name: 'Department of Marine Park Malaysia CP',
+        type: 'pdf'
+      },
+      {
+        url: 'https://wdpa.s3.amazonaws.com/Country_informations/MYS/TOTAL%20ECONOMIC%20VALUE%20OF%20MARINE%20BIODIVERSITY.pdf',
+        name: 'Malaysia Marine Parks Biodiversity',
+        type: 'pdf'
+      }
+    ]
+  end
+
+  def national_report
+    return unless @statistic.nr_report_url.present?
+    {
+      url: @statistic.nr_report_url,
+      name: I18n.t('country.link.national_report'),
+      type: 'link'
     }
   end
 

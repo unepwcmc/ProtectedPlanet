@@ -1,3 +1,5 @@
 en:
   country:
     protected_areas: 'Protected Areas'
+    link:
+      national_report: Latest National Report
