@@ -1,4 +1,6 @@
 class PameController < ApplicationController
+  include Concerns::Tabs
+
   DEFAULT_PARAMS =
   {
     requested_page: 1,
@@ -15,22 +17,7 @@ class PameController < ApplicationController
     @json = PameEvaluation.paginate_evaluations(DEFAULT_PARAMS).to_json
     @updated_at = UPDATED_AT
 
-    @tabs = get_tabs(3).to_json
-  end
-
-  def get_tabs total_tabs
-    tabs = []
-
-    total_tabs.times do |i|
-      tab = {
-        id: i+1,
-        title: @cms_page.fragments.where(identifier: "tab-title-#{i+1}").first.content
-      }
-
-      tabs << tab
-    end
-
-    tabs
+    @tabs = get_tabs.to_json
   end
 
   def list

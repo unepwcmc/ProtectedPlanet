@@ -1,6 +1,7 @@
 class OecmController < ApplicationController
+  include Concerns::Tabs
   include MapHelper
-  
+
   def index
     @oecm_coverage_percentage = Stats::Global.percentage_oecm_cover
 
@@ -11,7 +12,7 @@ class OecmController < ApplicationController
       placeholder: I18n.t('global.placeholder.search-oecm')
     }.to_json
 
-    @tabs = get_tabs(3).to_json
+    @tabs = get_tabs.to_json
 
     @map = {
       overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize,
@@ -32,20 +33,5 @@ class OecmController < ApplicationController
         isToggleable: false
       }
     })
-  end
-
-  def get_tabs total_tabs
-    tabs = []
-
-    total_tabs.times do |i|
-      tab = {
-        id: i+1,
-        title: @cms_page.fragments.where(identifier: "tab-title-#{i+1}").first.content
-      }
-
-      tabs << tab
-    end
-
-    tabs
   end
 end
