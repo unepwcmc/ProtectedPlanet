@@ -93,6 +93,9 @@ class Region < ApplicationRecord
   end
 
   def as_indexed_json options={}
+    # Do not include Global region in the search engine
+    return if name == 'Global'
+
     self.as_json(
       only: [:id, :name, :iso]
     )
