@@ -4,7 +4,7 @@ class OecmController < ApplicationController
   def index
     @oecm_coverage_percentage = Stats::Global.percentage_oecm_cover
 
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri'], 'general', 'oecm')
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri_oecm'], 'general', 'oecm')
 
     @config_search_areas = {
       id: 'oecm',

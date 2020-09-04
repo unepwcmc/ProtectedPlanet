@@ -12,9 +12,13 @@ module DownloadsHelper
       title: 'File Geodatabase',
       commercialAvailable: true
     },
-    esri: {
+    esri_wdpa: {
       title: 'ESRI Web Service',
-      url: ''
+      url: 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_of_Protected_Areas/FeatureServer'
+    },
+    esri_oecm: {
+      title: 'ESRI Web Service',
+      url: 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/FeatureServer'
     },
     pdf: {
       title: 'PDF',
@@ -34,7 +38,7 @@ module DownloadsHelper
   end
 
   def download_params(format, domain, token)
-    return {} if format == 'esri'
+    return {} if format == 'esri_wdpa' || 'esri_oecm'
     _domain = format == 'pdf' ? 'pdf' : domain
     {
       params: {
