@@ -36,9 +36,11 @@ class CountryPresenter
 
   def marine_stats
     {
+      national_report_version: statistic.nr_version,
       pame_km2: number_with_delimiter(statistic.pame_statistic.pame_pa_marine_area.round(0)),
       pame_percentage: statistic.pame_statistic.pame_percentage_pa_marine_cover.round(2),
       protected_km2: number_with_delimiter(statistic.pa_marine_area.round(0)),
+      protected_national_report: statistic.percentage_nr_marine_cover,
       protected_percentage: statistic.percentage_pa_marine_cover.round(2),
       total_km2: number_with_delimiter(statistic.marine_area.round(0))
     }
@@ -46,9 +48,11 @@ class CountryPresenter
 
   def terrestrial_stats
     {
+      national_report_version: statistic.nr_version,
       pame_km2: number_with_delimiter(statistic.pame_statistic.pame_pa_land_area.round(0)),
       pame_percentage: statistic.pame_statistic.pame_percentage_pa_land_cover.round(2),
       protected_km2: number_with_delimiter(statistic.pa_land_area.round(0)),
+      protected_national_report: statistic.percentage_nr_land_cover,
       protected_percentage: statistic.percentage_pa_land_cover.round(2),
       total_km2: number_with_delimiter(statistic.land_area.round(0))
     }
