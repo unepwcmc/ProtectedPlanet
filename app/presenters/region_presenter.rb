@@ -58,15 +58,13 @@ class RegionPresenter
   def geometry_ratio
     polygons_count = 0
     points_count = 0
-    total = 0
+    total = polygons_count + points_count
     
     @countries.each do |country|
       statistic = country.statistic
       polygons_count += (statistic && statistic.polygons_count) || 0
       points_count += (statistic && statistic.points_count) || 0
     end
-
-    total = polygons_count + points_count
     
     {
       polygons: (((polygons_count/total.to_f)*100).round rescue 0),
