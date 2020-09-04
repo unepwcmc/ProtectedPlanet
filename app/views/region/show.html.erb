@@ -53,7 +53,7 @@
           <p>
             <% if @presenter.nr_report_url.present? %>
               <span class="red bold"></span>
-              <%= link_to "Download the country's latest national report (pdf)", @presenter.nr_report_url, title: "Dowload the national report for #{@country.name}", class: 'link-with-icon bold' %>
+              <%= link_to "Download the region's latest report (pdf)", @presenter.nr_report_url, title: "Dowload the regional report for #{@region.name}", class: 'link-with-icon bold' %>
             <% end %>
           <% end %>
         </p>
