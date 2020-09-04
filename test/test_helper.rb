@@ -64,7 +64,7 @@ class ActiveSupport::TestCase
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'about')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'news-and-stories')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'resources')
-    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'thematical-areas')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'thematic-areas')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'oecms')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'wdpa')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'legal')

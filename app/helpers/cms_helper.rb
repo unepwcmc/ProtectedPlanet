@@ -37,7 +37,7 @@ module CmsHelper
   end
 
   def get_category_filters
-    category_groups = load_categories
+    category_groups = load_categories 
 
     [
       {
@@ -116,12 +116,13 @@ module CmsHelper
     # can be different from the layout used in the child pages
     if layouts_categories.blank?
       children_layouts = @cms_page.children.map(&:layout_id)
-      layout_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
+      layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: children_layouts)
         .map(&:layout_category).uniq
     end
 
     categories_yml = I18n.t('search')[:custom_categories]
-    layout_categories.map do |lc|
+
+    layouts_categories.map do |lc|
 
       title = categories_yml[lc.label.to_sym][:name]
       name = title.downcase

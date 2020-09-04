@@ -20,6 +20,8 @@ class MarineController < ApplicationController
     @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
     @marineViewAllUrl = search_areas_path(filters: {is_type: ['marine']}) 
 
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'marine')
+
     @regionCoverage = Region.without_global.map do |region|
       RegionPresenter.new(region).marine_coverage
     end
@@ -28,7 +30,20 @@ class MarineController < ApplicationController
     @pas_percent = @marine_statistics['total_ocean_pa_coverage_percentage']
     @pas_total = @marine_statistics['total_marine_protected_areas']
     @map = {
-      overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize,
+      title: I18n.t('map.title'),
+      type: 'marine',
+      point_query_services: [
+        { 
+          url: OECM_FEATURE_SERVER_LAYER_URL,
+          isPoint: false,
+          queryString: MARINE_WHERE_QUERY
+        },
+        { url: WDPA_POINT_LAYER_URL, isPoint: true, queryString: MARINE_WHERE_QUERY },
+        { url: WDPA_POLY_LAYER_URL, isPoint: false, queryString: MARINE_WHERE_QUERY }
+        # { url: MARINE_WDPA_POINT_LAYER_URL, isPoint: true },
+        # { url: MARINE_WDPA_POLY_LAYER_URL, isPoint: false }
+      ]
     }
     @filters = { db_type: ['wdpa'], is_marine: true }
   end

@@ -3,7 +3,7 @@
     :class="['modal--download', { 'active' : isActive }]"
   >
     <div class="modal__topbar">
-      <span>{{ text.title }}</span>
+      <span>{{ textDownload.title }}</span>
       <span
         class="modal__minimise"
         @click="toggle"
@@ -12,20 +12,18 @@
     <div 
       :class="['modal__content', { 'minimised': isMinimised }]"
     >
-      <span class="modal__title">{{ text.citationTitle }}</span>
-      <p>{{ text.citationText }}</p>
+      <span class="modal__title">{{ textDownload.citationTitle }}</span>
+      <p v-html="textDownload.citationText" />
 
       <ul class="modal__ul">
         <download-item 
           v-for="download in activeDownloads"
           class="modal__li"
-          :id="download.id"
-          :has-failed="download.hasFailed"
-          :key="download._uid"
+          :endpointCreate="endpointCreate"
+          :endpointPoll="endpointPoll"
+          :key="download.id"
+          :params="download"
           :text="textStatus"
-          :title="download.title"
-          :url="download.url"
-          v-on:click:delete="deleteItem"
         />
       </ul>
     </div>
@@ -40,12 +38,15 @@ export default {
   components: { DownloadItem },
 
   props: {
-    isActive: {
-      default: false,
-      type: Boolean
+    endpointCreate: {
+      required: true,
+      type: String
     },
-    newDownload: Object, //{ title: String, url: String, hasFailed: Boolean }
-    text: {
+    endpointPoll: {
+      required: true,
+      type: String
+    },
+    textDownload: {
       required: true,
       type: Object //{ citationText: String, citationTitle: String, title: String }
     },
@@ -55,55 +56,43 @@ export default {
     }
   },
 
-  data () {
-    return {
-      isMinimised: false,
-      activeDownloads: [
-        {
-          id: '1',
-          title: 'Filename 1',
-          url: 'http://google.com',
-          hasFailed: false
-        },
-        {
-          id: '2',
-          title: 'Filename 2',
-          url: '',
-          hasFailed: true
-        },
-        {
-          id: '3',
-          title: 'Filename 3',
-          url: '',
-          hasFailed: false
-        },
-      ],
-    }
-  },
+  computed: {
+    activeDownloads () {
+      return this.$store.state.download.downloadItems
+    },
 
-  mounted () {
-    
+    isActive: {
+      get () {
+        return this.$store.state.download.isModalActive
+      },
+      set (boolean) {
+        this.$store.dispatch('download/toggleDownloadModal', boolean)
+      }
+    },
+
+    isMinimised: {
+      get () {
+        return this.$store.state.download.isModalMinimised
+      },
+      set (boolean) {
+        this.$store.dispatch('download/minimiseDownloadModal', boolean)
+      }
+    }
   },
 
   watch: {
-    newDownload () {
-      console.log('new', this.activeDownloads)
-      this.activeDownloads.push(this.newDownload)
+    activeDownloads () {
+      if(this.activeDownloads.length == 0) { 
+        this.$emit('deleted:all')
+        this.isActive = false
+        this.isMinimised = false
+      }
     }
   },
-
+  
   methods: {
     toggle () {
       this.isMinimised = !this.isMinimised
-    },
-
-    deleteItem (downloadId) {
-      this.activeDownloads = this.activeDownloads.filter(download => download.id != downloadId )
-      
-      if(this.activeDownloads.length == 0) { 
-        this.$emit('deleted:all')
-        this.isMinimised = false
-      }
     }
   }
 }

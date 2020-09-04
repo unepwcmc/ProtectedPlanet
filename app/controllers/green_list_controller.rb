@@ -10,6 +10,8 @@ class GreenListController < ApplicationController
   # after_action :enable_caching
 
   def index
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'greenlist')
+
     # TODO - statistics are not accurate
     stats = green_list_statistics
     @pas_km = stats['green_list_area']
@@ -27,7 +29,6 @@ class GreenListController < ApplicationController
     # TODO - This may need to be reworked by CLS
     @total_area_percent = Stats::Global.percentage_pa_cover.to_f - @pas_percent.to_f
 
-
     @filters = {
       db_type: ['wdpa'],
       special_status: ['is_green_list']
@@ -36,7 +37,10 @@ class GreenListController < ApplicationController
     @greenListViewAllUrl = search_areas_path(filters: { special_status: ['is_green_list']} )
 
     @map = {
-      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
+      title: I18n.t('map.title'),
+      type: 'is_green_list',
+      point_query_services: point_query_services
     }
   end
 
@@ -65,11 +69,22 @@ class GreenListController < ApplicationController
   end
 
   def map_overlays
-    overlays(['greenlist'], {
-      greenlist: {
-        queryString: greenlist_query_string(green_list_areas.map(&:id))
+    overlays(['greenlist_terrestrial', 'greenlist_marine'], {
+      greenlist_terrestrial: {
+        queryString: greenlist_query_string(terrestrial_green_list_area_ids)
+      },
+      greenlist_marine: {
+        queryString: greenlist_query_string(marine_green_list_area_ids)
       }
     })
+  end
+
+  def point_query_services
+    all_services_for_point_query.map do |service|
+      service.merge({
+        queryString: wdpaid_where_query(green_list_areas.map(&:wdpa_id))
+      })
+    end
   end
 
   def most_protected_areas
@@ -104,5 +119,13 @@ class GreenListController < ApplicationController
   
   def green_list_areas
     @green_list_areas ||= ProtectedArea.green_list_areas
+  end
+
+  def terrestrial_green_list_area_ids
+    green_list_areas.terrestrial_areas.map(&:wdpa_id)
+  end
+
+  def marine_green_list_area_ids
+    green_list_areas.marine_areas.map(&:wdpa_id)
   end
 end

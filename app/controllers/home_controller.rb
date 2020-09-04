@@ -18,7 +18,7 @@ class HomeController < ApplicationController
 
     @site_facts = @presenter.fact_card_stats
 
-    comfy_themes = Comfy::Cms::Page.find_by_slug("thematical-areas")
+    comfy_themes = Comfy::Cms::Page.find_by_slug("thematic-areas")
     @themes_title = comfy_themes.label
     @themes_url = comfy_themes.full_path
 
@@ -27,7 +27,10 @@ class HomeController < ApplicationController
     @carousel_slides = HomeCarouselSlide.all.select{|slide| slide.published }
 
     @main_map = {
-      overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(home_overlays, map_yml).serialize,
+      title: I18n.t('map.title'),
+      type: 'all',
+      point_query_services: all_services_for_point_query
     }
   end
 

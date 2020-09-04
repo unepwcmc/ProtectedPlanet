@@ -1,7 +1,7 @@
 module Download
   module Utils
-    def self.link_to download_name, type
-      file_name = File.basename zip_path_for_type(download_name, type)
+    def self.link_to download_name
+      file_name = File.basename zip_path(download_name)
       S3.link_to file_name
     end
 
@@ -30,37 +30,48 @@ module Download
       $redis.keys("downloads:*").each { |d| $redis.del d }
     end
 
-    def self.zip_path_for_type download_name, type
-      path = File.join(TMP_PATH, filename_for_type(download_name, type))
+    def self.zip_path download_name
+      path = File.join(TMP_PATH, download_name)
       "#{path}.zip"
-    end
-
-    def self.filename_for_type download_name, type
-      "#{download_name}-#{type}"
     end
 
     def self.properties key
       JSON.parse($redis.get(key)) rescue {}
     end
 
-    def self.key domain, identifier
+    def self.key domain, identifier, format
       case domain
       when 'search'
-        "downloads:searches:#{identifier}"
+        "downloads:searches:#{format}:#{identifier}"
       when 'project'
-        "downloads:projects:#{identifier}:all"
+        "downloads:projects:#{format}:#{identifier}:all"
       when 'general'
-        "downloads:general:#{identifier}"
+        "downloads:general:#{format}:#{identifier}"
       when 'protected_area'
-        "downloads:protected_area:#{identifier}"
+        "downloads:protected_area:#{format}:#{identifier}"
+      when 'pdf'
+        "downloads:pdf:#{format}:#{identifier}"
       end
     end
 
-    def self.filename domain, identifier
+    def self.filename domain, identifier, format
       "WDPA_#{Wdpa::S3.current_wdpa_identifier}".tap { |base_filename|
         base_filename << "_#{domain}"     if domain != 'general'
-        base_filename << "_#{identifier}" if (identifier != 'all' && identifier.present?)
+        base_filename << "_#{identifier}_#{format}" if (identifier != 'all' && identifier.present?)
       }
+    end
+
+    def self.extract_filters filters
+      _filters = Search::FilterParams.standardise(filters)
+      _filters.stringify_keys.slice(*::Search::ALLOWED_FILTERS.map(&:to_s))
+    end
+
+    def self.filters_dump filters
+      filters_dump = Marshal.dump filters.to_hash.sort.to_json
+    end
+
+    def self.search_token term, filters
+      Digest::SHA256.hexdigest(term.to_s + filters_dump(filters))
     end
   end
 end

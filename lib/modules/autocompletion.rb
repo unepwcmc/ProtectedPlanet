@@ -24,7 +24,6 @@ module Autocompletion
       type = result.class.name.underscore
       identifier = result.send(identifier_field(type))
 
-      geom_type = result.is_a?(ProtectedArea) ? result.the_geom.geometry_type.to_s : 'N/A'
       url = get_type(type, identifier)
       extent_url = result.respond_to?(:extent_url) ? result.extent_url : 'N/A'
 
@@ -40,15 +39,15 @@ module Autocompletion
 
   private
 
+  ALLOWED_FILTERS = {
+    'oecm' => { is_oecm: true },
+    'wdpa' => { is_oecm: false },
+    'marine' => { marine: true },
+    'is_green_list' => { is_green_list: true }
+  }.freeze
   def self.get_filters(type)
-    case type
-      when 'wdpa'
-        { filters: { is_oecm: false } }
-      when 'oecm'
-        { filters: { is_oecm: true } }
-      else
-        {}
-    end
+    filter = ALLOWED_FILTERS[type]
+    filter ? { filters: filter } : {}
   end
 
   def self.get_type(type, identifier)

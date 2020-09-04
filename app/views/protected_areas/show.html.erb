@@ -1,4 +1,6 @@
-<div class="page--site bg--grey-xlight">
+<%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
+
+<div class="page--site bg--grey-xlight spacer-small--top">
   <div class="container">
     <section class="page__section--overview-map">
       <%= render partial: "partials/stats/stats-overview", locals: { 
@@ -12,14 +14,14 @@
       
       <div class="map--site">
         <%= render partial: "partials/maps/header", locals: {
-        map: @map,
-        map_options: @map_options
-      } %>
+          map: @map,
+          map_options: @map_options
+        } %>
       </div>
     </section>
 
-    <div class="card--stats-wrapper">
-      <div class="card--stats-half">
+    <div class="page__col-wrapper pdf-break-after">
+      <div class="page__col-1">
         <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
       </div>
       <div class="page__col-2">
@@ -31,11 +33,12 @@
       </div>
     </div>
 
-    <%= render partial: "partials/stats/stats-overlap" %>
-
-    <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
+    <%= render partial: "partials/stats/stats-sources", locals: { 
+      small: true,
+      sources: @sources 
+    } %>
     
-    <section class="section-padding--top">
+    <section class="spacer-large--top">
       <%= render partial: "partials/cards/sites", locals: { 
         cards: @wdpa_other, 
         title: t('thematic_area.wdpa.other_protected_areas'),
@@ -43,6 +46,8 @@
       } %>
     </section>
     
-    <%= render partial: "partials/messages/message-citation", locals: { title: @protected_area.name } %>
+    <section class="spacer-small--bottom">
+      <%= render partial: "partials/messages/message-citation", locals: { title: @protected_area.name } %>
+    </section>
   </div>  
 </div>

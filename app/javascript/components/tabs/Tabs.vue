@@ -12,7 +12,6 @@
         />
       </ul>
     </div>
-    
     <slot :selected-id="selectedId" />
   </div>
 </template>

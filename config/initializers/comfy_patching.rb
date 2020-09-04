@@ -21,6 +21,7 @@ Rails.configuration.to_prepare do
     after_save :assign_layout_categories
 
     def assign_layout_categories
+      # _categories = [{ tag_params: 'topics', tag_class: 'categories'}]
       _categories = self.content_tokens.select do |t|
         unless t.is_a?(Hash)
           false
@@ -29,10 +30,14 @@ Rails.configuration.to_prepare do
         end
       end
 
-      delete_orphan_categories && return if _categories.blank?
+      # Two situations for deleting orphan categories, either _categories has no or a restricted set of the currently existing categories
+      # Or, _categories consists of tags with entirely new labels, and hence new layouts would have to be created
+      # Not handled at present - adding new categories which equates to adding new layout categories which means _layout_category is empty
 
+      delete_orphan_categories(_categories)
+      
       _categories.each do |cat|
-        tag_name = cat[:tag_params].split(',').first
+        tag_name = cat[:tag_params]
         _layout_category = Comfy::Cms::LayoutCategory.find_by(label: tag_name)
         Comfy::Cms::LayoutsCategory.find_or_create_by(
           layout_id: self.id,
@@ -40,13 +45,24 @@ Rails.configuration.to_prepare do
         )
       end
     end
+    
+    def filter_layouts_categories(categories)
+      # layouts_categories is in the format [{identifier:... label: 'topics'...}, {identifier:..., label: 'types'...}]
+      layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: self.id).to_a
 
-    def delete_orphan_categories
-      layouts_categories = Comfy::Cms::LayoutsCategory.where(layout_id: self.id)
+      categories.each do |_cat| 
+        layouts_categories.filter! { |category| _cat[:tag_params] != category.layout_category.label }
+      end
+
+      layouts_categories
+    end
+
+    def delete_orphan_categories(categories)
+      orphan_layouts_categories = filter_layouts_categories(categories)
 
       self.pages.each do |page|
-        layouts_categories.each do |lc|
-          pcs_ids = page.page_categories.where(layout_category_id: lc.id).map(&:id)
+        orphan_layouts_categories.each do |lc|
+          pcs_ids = page.page_categories.where(layout_category_id: lc.layout_category_id).map(&:id)
           Comfy::Cms::PagesCategory.where(
             page_id: page.id,
             page_category_id: pcs_ids
@@ -54,7 +70,7 @@ Rails.configuration.to_prepare do
         end
       end
 
-      layout_categories.destroy_all
+      orphan_layouts_categories.map(&:destroy)
     end
   end
 

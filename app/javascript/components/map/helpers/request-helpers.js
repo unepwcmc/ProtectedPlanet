@@ -19,7 +19,10 @@ export class PointQuery {
   }
 
   queryAllServices () {
-    instance.get(this.currentService.url + this.getQueryString(this.currentService.isPoint))
+    instance.get(this.currentService.url + this.getQueryString(
+        this.currentService.isPoint,
+        this.currentService.queryString || ''
+      ))
       .then(this.handlePointQueryResponse.bind(this))
   }
 
@@ -32,8 +35,12 @@ export class PointQuery {
     }
   }
 
-  getQueryString (isPoint) {
+  getQueryString (isPoint, additionalQueryParams='') {
     let queryString = `/query?geometry=${this.coords.lng}%2C+${this.coords.lat}&geometryType=esriGeometryPoint&returnGeometry=false&inSR=4326&outFields=wdpaid%2Cname&f=json`
+
+    if (additionalQueryParams) { 
+      queryString += '&' + additionalQueryParams
+    }
   
     if (isPoint) {
       const distanceInMiles = 5

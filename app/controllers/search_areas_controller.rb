@@ -18,6 +18,8 @@ class SearchAreasController < ApplicationController
       placeholder: I18n.t("global.placeholder.search-#{placeholder}")
     }.to_json
 
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'search', 'all')
+
     @tabs = []
 
     TABS.each do |tab|
@@ -29,8 +31,9 @@ class SearchAreasController < ApplicationController
     @results = Search::AreasSerializer.new(@search, geo_type).serialize
 
     @map = {
+      areFiltersHidden: true,
       overlays: MapOverlaysSerializer.new(search_overlays, map_yml).serialize,
-      areFiltersHidden: true
+      type: 'all'
     }
   end
 

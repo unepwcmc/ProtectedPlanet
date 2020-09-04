@@ -13,20 +13,21 @@
 
       <div class="filter__filter-groups">
         <div
-          v-for="filterGroup, index in filterGroups"
-          :key="index"
+          v-for="filterGroup in filterGroups"
+          :key="filterGroup._uid"
           class="filter__group"
         >
           <h3>{{ filterGroup.title }}</h3>
           
           <v-filter
-            v-for="filter, index in filterGroup.filters"
-            :key="`${filter.id}-${index}`"
+            v-for="filter in filterGroup.filters"
+            :key="filter._uid"
             :id="filter.id"
             :name="filter.name"
             :options="filter.options"
             :pre-selected="filter.preSelected"
             :title="filter.title"
+            :text-clear="textClear"
             :type="filter.type"
             v-on:update:filter="updateFilterGroup"
           />
@@ -62,6 +63,10 @@ export default {
     isActive: {
       required: true,
       type: Boolean
+    },
+    textClear: {
+      required: true,
+      type: String
     },
     title: {
       required: true,

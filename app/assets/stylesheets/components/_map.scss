@@ -1,3 +1,15 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin map-for-pdf {
+  .pdf & { 
+    width: 734px;
+  }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
 @import 'maps/v-map-baselayer-controls';
 @import "maps/v-map-disclaimer";
 @import 'maps/v-map-filter';
@@ -6,6 +18,7 @@
 @import 'maps/v-map-pa-search';
 @import 'maps/v-map-popup';
 @import 'maps/v-map-toggler';
+
 
 .map-section {
   @include gutters;
@@ -46,6 +59,7 @@
   }
 
   &--header {
+    @include map-for-pdf;
     width: 100%;
 
     .map__mapbox {
@@ -121,6 +135,10 @@
   box-shadow: none;
 }
 
+//prevent controls sitting over the top of the download modal
+.mapboxgl-control-container .mapboxgl-ctrl-bottom-left,
+.mapboxgl-control-container .mapboxgl-ctrl-top-right { z-index: 1; }
+
 .mapboxgl-ctrl-group {
   .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-in,
   .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-out {
@@ -151,10 +169,10 @@
   }
 
   .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-in {
-    background-image: image-url('icons/plus.svg');
+    @include icon-plus-mapbox;
   }
 
   .mapboxgl-ctrl-icon.mapboxgl-ctrl-zoom-out {
-    background-image: image-url('icons/minus.svg');
+    @include icon-minus-mapbox;
   }
 }

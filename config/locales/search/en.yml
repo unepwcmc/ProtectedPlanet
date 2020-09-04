@@ -1,5 +1,25 @@
 en:
   search:
+    categories:
+      - all
+      - news-and-stories
+      - resources
+      - areas
+    clear: Clear all
+    custom_categories:
+      topics:
+        name: Topics
+        items:
+          wdpa: WDPA
+          oecm: OECM
+          pame: PAME
+      types:
+        name: Types
+        items:
+          publications: Publications
+          statistics: Statistics
+          technical: Technical
+          training: Training
     download: Download
     filters: Filters
     filter-by: Filter by
@@ -34,25 +54,8 @@ en:
       country: Countries
       site: Individual Areas
     map: Map View
+    no-results: No results. Please search again.
     protected-areas: Protected Areas
     results: results
-    no-results: No results. Please search again.
-    categories:
-      - all
-      - news-and-stories
-      - resources
-      - areas
-    custom_categories:
-      topics:
-        name: Topics
-        items:
-          wdpa: WDPA
-          oecm: OECM
-          pame: PAME
-      types:
-        name: Types
-        items:
-          publications: Publications
-          statistics: Statistics
-          technical: Technical
-          training: Training
+    search-areas-title: Explore protected areas and OECMs
+    

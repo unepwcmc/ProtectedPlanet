@@ -9,7 +9,8 @@ module Download
       :no_tk_area, :status, :status_yr,
       :gov_type, :own_type, :mang_auth,
       :mang_plan, :verif, :metadataid,
-      :sub_loc, :parent_iso3, :iso3
+      :sub_loc, :parent_iso3, :iso3#,
+      #:supp_info, :cons_obj #TODO Ensure these OECM attributes are working ok here after importing DB with OECMs
     ]
 
     POLYGONS_COLUMNS = POINTS_COLUMNS.clone

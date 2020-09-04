@@ -12,18 +12,11 @@
         <p class="hero__intro"><%= summary %></p>
       <% end %>
 
-      <div class="hero__buttons">
-        <%= link_to button_search_text, 
-          button_search_url, 
-          title: t('global.links.visit', link: button_search_url), 
-          class: 'hero__button-1 button--primary' 
-        %>
-
-        <download
-          class="download--hero hero__button-2"
-          text="<%= button_download_text %>"
-        ></download>
-      </div>
+      <%= link_to button_search_text, 
+        button_search_url, 
+        title: t('global.links.visit', link: button_search_url), 
+        class: 'hero__button-1 button--primary' 
+      %>
     </div>
 
     <div>

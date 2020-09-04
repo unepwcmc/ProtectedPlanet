@@ -26,7 +26,7 @@ namespace :comfy do
          or can accept user input if no argument is supplied"
   task :staging_import, %i[dest folder] => [:environment] do |_t, args| 
     dest = nil
-    answer = nil
+    answer = nil # answer is synonymous with folder 
 
     if args[:dest].nil? && args[:folder].nil?
       answers = user_input
@@ -49,7 +49,7 @@ namespace :comfy do
     # SSH into staging server with Net::SSH
     new_session.start_session do |session|
       # First get rid of any local top-level (i.e. which exist in the main 
-      # directory of REMOTE) folders/files that don't exist remotely
+      # directory of dest) folders/files that don't exist remotely
       new_session.compare_folders(wildcard: '*', local: dest, remote: SOURCE, base: dest)
 
       local_list = new_session.list_local_files(dest)
@@ -71,7 +71,7 @@ namespace :comfy do
       puts "Finished downloads, now replacing your local seed data with your selection..."
 
 
-      # new_session.commence_comfy_import(answer) 
+      new_session.commence_comfy_import(answer, dest) 
     end
   end
 

@@ -1,9 +1,16 @@
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
+@mixin list-theme ($theme) {
+  @for $i from 1 through length($theme) {
+    .list__li:nth-child(#{$i}) {
+      .list__icon { background-color: nth($theme, $i); }
+    }
+  }
+}
+
 @mixin list-underline {
   @include ul-unstyled;
-  padding-right: rem-calc(19);
 
   .list {
     &__li {
@@ -17,6 +24,7 @@
 
     &__icon {
       @include circle-icon;
+      @include flex-no-shrink;
       background-color: $grey;
       margin-right: rem-calc(24);
     }
@@ -32,10 +40,18 @@
       justify-content: flex-end;
     }
 
+    &__value {
+      margin-right: rem-calc(24);
+    }
+
     &__a {
       @include button-with-icon;
       @include flex-no-shrink;
       font-size: rem-calc(16);
+
+      @include breakpoint-down($medium) {
+        text-indent: -9999px;
+      }
 
       &::after {
         @include icon-circle-chevron-black;
@@ -45,6 +61,14 @@
     }
   }
 }
+
+@mixin list-scrollbar {
+  @include beautify-scrollbar;
+  max-height: rem-calc(280);
+  overflow-y: scroll;
+  padding-right: rem-calc(19);
+}
+
 //--------------------------------------------------
 // classes
 //--------------------------------------------------
@@ -79,7 +103,13 @@
       &__li {
         padding: rem-calc(16 14);
 
-        &:nth-child(odd) { background-color: $grey-xlight; }
+        &:nth-child(odd) { 
+          background-color: $grey-xlight; 
+
+          .pdf & { background-color: transparent;  }
+        }
+
+        .pdf & { border-bottom: solid 1px $grey-light; }
       }
 
         &__title {
@@ -97,47 +127,48 @@
 //--------------------------------------------------
   &--underline {
     @include list-underline;
+
+    &.theme--governance { @include list-theme($theme-chart); }
   }
-
-//--------------------------------------------------
-// underline
-//--------------------------------------------------
-&--underline-sources {
-  @include list-underline;
-  width: 100%;
-
-  .list {
-    &__date { 
-      flex-shrink: 0;
-      margin-right: rem-calc(10);
-
-      @include breakpoint($medium){ width: 15%; }
-    }
-
-    &__li {
-      @include breakpoint-down($medium){ @include flex-column; }
-    }
-
-    &__party {
-      @include breakpoint($medium){ width: 40%; }
-    }
-
-    &__title {
-      font-weight: $bold;
-      margin-right: rem-calc(10);
-
-      @include breakpoint($medium){ width: 45%; }
-    }
-  }
-}
 
 //--------------------------------------------------
 // underline with scrollbar
 //--------------------------------------------------
   &--underline-scrollbar {
     @include list-underline;
-    @include beautify-scrollbar;
-    max-height: rem-calc(280);
-    overflow-y: scroll;
+    @include list-scrollbar;
+  }
+
+//--------------------------------------------------
+// underline with scrollbar - sources
+//--------------------------------------------------
+  &--underline-sources {
+    @include list-underline;
+    @include list-scrollbar;
+    width: 100%;
+
+    .list {
+      &__date { 
+        flex-shrink: 0;
+        margin-right: rem-calc(10);
+
+        @include breakpoint($medium){ width: 15%; }
+      }
+
+      &__li {
+        @include breakpoint-down($medium){ @include flex-column; }
+      }
+
+      &__party {
+        @include breakpoint($medium){ width: 40%; }
+      }
+
+      &__title {
+        font-weight: $bold;
+        margin-right: rem-calc(10);
+
+        @include breakpoint($medium){ width: 45%; }
+      }
+    }
   }
 }

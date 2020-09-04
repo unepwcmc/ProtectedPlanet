@@ -9,9 +9,11 @@ class CountryController < ApplicationController
   def show
     @country_presenter = CountryPresenter.new @country
 
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
+
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
+   
     @iucn_categories = @country.protected_areas_per_iucn_category
-    
     @iucn_categories_chart = @country.protected_areas_per_iucn_category
       .enum_for(:each_with_index)
       .map do |category, i|
@@ -23,6 +25,14 @@ class CountryController < ApplicationController
     end.to_json
 
     @governance_types = @country.protected_areas_per_governance
+    @governance_chart = @governance_types.map do |item|
+      { 
+        id: item['governance_id'],
+        title: item['governance_name'],
+        value: item['count']
+      }
+    end.to_json
+
     @coverage_growth = @country_presenter.coverage_growth 
 
     @country_designations = @country_presenter.designations
@@ -42,17 +52,14 @@ class CountryController < ApplicationController
     @total_wdpa = @country.protected_areas.wdpas.count
 
     @map = {
-      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
+      point_query_services: all_services_for_point_query
     }
 
     @map_options = {
       map: { boundsUrl: @country.extent_url }
     }
     
-    ##TODO need adding
-    # protected_national_report: statistic_presenter.percentage_nr_marine_cover, 
-    # national_report_version: statistic_presenter.nr_version,
-
     helpers.opengraph_title_and_description_with_suffix(@country.name)
 
     respond_to do |format|

@@ -75,12 +75,12 @@ Rails.application.routes.draw do
 
     get '/search', to: 'search#index'
 
-    get '/thematical-areas/green-list', to: 'green_list#index'
-    get '/thematical-areas/oecms', to: 'oecm#index'
-    get '/thematical-areas/protected-areas-management-effectiveness-pame', to: 'pame#index'
-    get '/thematical-areas/marine-protected-areas', to: 'marine#index'
-    get '/thematical-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
-    get '/thematical-areas/wdpa', to: 'wdpa#index'
+    get '/thematic-areas/green-list', to: 'green_list#index'
+    get '/thematic-areas/oecms', to: 'oecm#index'
+    get '/thematic-areas/protected-areas-management-effectiveness-pame', to: 'pame#index'
+    get '/thematic-areas/marine-protected-areas', to: 'marine#index'
+    get '/thematic-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
+    get '/thematic-areas/wdpa', to: 'wdpa#index'
 
     get '/search-areas', to: 'search_areas#index', as: :search_areas
     get '/search-areas-results', to: 'search_areas#search_results', as: :search_areas_results

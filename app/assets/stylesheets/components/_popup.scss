@@ -1,0 +1,44 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$popup-download-arrow-height: rem-calc(8); 
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.popup {
+//--------------------------------------------------
+// download popup
+//--------------------------------------------------
+  &--download {
+    @include border-radius;
+    background-color: $grey-dark;
+    padding: rem-calc(10 20);
+    width: max-content;
+
+    position: absolute;
+    top: calc(100% + #{$popup-download-arrow-height});
+    right: 0;
+
+    &:before {
+      @include triangle (rem-calc(38), $popup-download-arrow-height, $grey-dark);
+
+      position: absolute;
+      top: -$popup-download-arrow-height;
+      right: calc(#{$popup-download-arrow-height}*2);
+    } 
+    
+    .popup__ul { @include ul-unstyled; }
+
+    .popup__link {
+      color: $white;
+      cursor: pointer;
+      padding: rem-calc(5 0);
+
+      display: block;
+
+      @include breakpoint($small) { font-size: rem-calc(18); }
+
+      &:hover { text-decoration: underline; }
+    }
+  }
+}

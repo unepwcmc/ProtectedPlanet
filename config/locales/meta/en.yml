@@ -6,13 +6,10 @@ en:
       title: Explore the World's Protected Areas
       title_with_suffix: Explore the World's Protected Areas in %{suffix}
       description: >-
-        Protected Planet is the online interface for the
-        World Database on Protected Areas (WDPA), and the most comprehensive
-        global database on terrestrial and marine protected areas.
+        Protected Planet is the most up to date and complete source of data on protected areas and other effective area-based conservation measures (OECMs), updated monthly with submissions from governments, non-governmental organizations, landowners and communities.
     image: social.png
     image_alt: >-
-      Screenshot of the Protected Planet website which shows the menu bar
-      and a map of the world that has protected areas highlighted in green.
+      Screenshot of the Protected Planet website
     twitter:
       site: "@protectedplanet"
       creator: "@protectedplanet"

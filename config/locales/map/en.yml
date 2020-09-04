@@ -1,8 +1,10 @@
 en:
   map:
     overlays:
-      greenlist:
-        title: Green Listed Protected Areas
+      greenlist_terrestrial:
+        title: Terrestrial Green Listed Protected Areas
+      greenlist_marine:
+        title: Marine Green Listed Protected Areas
       terrestrial_wdpa:
         title: Terrestrial Protected Areas
       marine_wdpa:
@@ -12,21 +14,12 @@ en:
       oecm:
         title: Other effective area-based conservation measures
     title: Discover Protected Areas
+    title_oecm: Discover OECMs
     disclaimer: 
       heading: Map Disclaimer
       body: The designations employed and the presentation of material on this map do not imply the expression of any opinion whatsoever on the part of the Secretariat of the United Nations concerning the legal status of any country, territory, city or area or of its authorities, or concerning the delimitation of its frontiers or boundaries.
-    dropdown_label: Search for a
-    search_types:
-      country:
-        title: Country
-        placeholder: Search...
-      region:
-        title: Region
-        placeholder: Search...
-      site:
-        title: Protected Area or OECM
-        placeholder: Search...
     autocomplete_error_messages:
-      no_results: The search term has no results.
-      invalid_search_string: The search term has too few characters.
+      no_results: No results.
+      invalid_search_string: Type a minimum of 3 characters.
+    autocomplete_placeholder: Search for a Region, Country or Area
       

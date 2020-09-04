@@ -146,21 +146,17 @@ $gutter-small: rem-calc(20);
 $gutter-medium: rem-calc(25);
 $gutter-large: rem-calc(30);
 
-$page-padding-top-mobile: rem-calc(16);
-$page-padding-top-tablet: rem-calc(24);
-$page-padding-top-desktop: rem-calc(36);
+$spacer-small-mobile: rem-calc(16);
+$spacer-small-tablet: rem-calc(24);
+$spacer-small-desktop: rem-calc(36);
 
-$page-padding-bottom-mobile: rem-calc(32);
-$page-padding-bottom-tablet: rem-calc(40);
-$page-padding-bottom-desktop: rem-calc(80);
+$spacer-medium-mobile: rem-calc(24);
+$spacer-medium-tablet: rem-calc(34);
+$spacer-medium-desktop: rem-calc(50);
 
-$section-padding-top-mobile: rem-calc(24);
-$section-padding-top-tablet: rem-calc(30);
-$section-padding-top-desktop: rem-calc(85);
-
-$section-padding-bottom-mobile: rem-calc(30);
-$section-padding-bottom-tablet: rem-calc(40);
-$section-padding-bottom-desktop: rem-calc(60);
+$spacer-large-mobile: rem-calc(30);
+$spacer-large-tablet: rem-calc(60);
+$spacer-large-desktop: rem-calc(80);
 
 $item-spacing-small: rem-calc(14);
 $item-spacing-medium: rem-calc(20);

@@ -1,4 +1,4 @@
-<%= render partial: "./partials/bars/topbar-secondary" %>
+<%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 
 <%= render partial: "./layouts/partials/hero-thematic", locals: {
   button_text: t('thematic_area.marine.hero.button_text'),
@@ -17,7 +17,7 @@
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
-<section class="container--medium">
+<section class="container--medium spacer-small--top">
   <h2><%= cms_fragment_render(:section_distribution_title, @cms_page) %></h2>
   <div><%= cms_fragment_render(:section_distribution_content, @cms_page) %></div>
 </section>
@@ -62,13 +62,13 @@
   regionCoverage: @regionCoverage,
 } %>
 
-<section class="map-section section-padding--bottom">
+<section class="map-section">
   <%= render partial: "partials/maps/main", locals: {
     map: @map
   } %>
 </section>
 
-<section class="container">
+<section class="container spacer-small--top">
   <%= render partial: "partials/cards/sites", locals: { 
     cards: @marineSites, 
     title: "#{t('global.area-types.wdpa')} (#{@marineSitesTotal})",
@@ -76,7 +76,7 @@
   } %>
 </section>
 
-<section class="section-padding">
+<section class="spacer-small--top spacer-small--bottom">
   <%= render "partials/carousels/themes" %>
 </section>
 

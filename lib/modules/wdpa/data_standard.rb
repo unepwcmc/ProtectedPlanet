@@ -25,7 +25,9 @@ class Wdpa::DataStandard
     :wkb_geometry => {name: :the_geom, type: :geometry, label: 'Geometry'},
     :metadataid   => {name: :sources, type: :integer, label: 'Source'},
     :own_type     => {name: :owner_type, type: :string, label: 'Owner Type'},
-    :pa_def       => {name: :is_oecm, type: :oecm, label: 'PA Def'}
+    :pa_def       => {name: :is_oecm, type: :oecm, label: 'PA Def'},
+    :supp_info    => {name: :supp_info, type: :string, label: 'Supplementary Info'},
+    :cons_obj     => {name: :cons_obj, type: :string, label: 'Conservation objectives'}
   }
 
   POLYGON_ATTRIBUTES = [
@@ -33,6 +35,11 @@ class Wdpa::DataStandard
     :gis_area,
     :shape_area,
     :shape_length
+  ]
+
+  OECM_ATTRIBUTES = [
+    :supp_info,
+    :cons_obj
   ]
 
   module Matchers
@@ -54,8 +61,9 @@ class Wdpa::DataStandard
     STANDARD_ATTRIBUTES
   end
 
+  # TODO Ensure OECM attributes are included when importing a release with OECM areas
   def self.common_attributes
-    STANDARD_ATTRIBUTES.keys - POLYGON_ATTRIBUTES
+    STANDARD_ATTRIBUTES.keys - POLYGON_ATTRIBUTES - OECM_ATTRIBUTES
   end
 
   def self.standard_geometry_attributes

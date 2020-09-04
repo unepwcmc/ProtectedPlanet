@@ -1,18 +1,26 @@
 class OecmController < ApplicationController
+  include Concerns::Tabs
   include MapHelper
-  
+
   def index
-    @oecm_coverage_percentage = 10 ##TODO FERDI - percentage of the world covered by OECMs
+    @oecm_coverage_percentage = Stats::Global.percentage_oecm_cover
+
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri_oecm'], 'general', 'oecm')
 
     @config_search_areas = {
       id: 'oecm',
       placeholder: I18n.t('global.placeholder.search-oecm')
     }.to_json
 
-    @tabs = get_tabs(3).to_json
+    @tabs = get_tabs.to_json
 
     @map = {
-      overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize,
+      title: I18n.t('map.title_oecm'),
+      type: 'oecm',
+      point_query_services: [
+        { url: OECM_FEATURE_SERVER_LAYER_URL, isPoint: false }
+      ]
     }
     @filters = { db_type: ['oecm'] }
   end
@@ -25,20 +33,5 @@ class OecmController < ApplicationController
         isToggleable: false
       }
     })
-  end
-
-  def get_tabs total_tabs
-    tabs = []
-
-    total_tabs.times do |i|
-      tab = {
-        id: i+1,
-        title: @cms_page.fragments.where(identifier: "tab-title-#{i+1}").first.content
-      }
-
-      tabs << tab
-    end
-
-    tabs
   end
 end

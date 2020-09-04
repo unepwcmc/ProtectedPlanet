@@ -10,7 +10,7 @@ $cards-facts-height-tablet: rem-calc(294);
 // classes
 //--------------------------------------------------
 &--facts {
-  overflow-x: scroll;
+  @include breakpoint-down($site-width) { overflow-x: scroll; }
 
   .cards {
     &__card {

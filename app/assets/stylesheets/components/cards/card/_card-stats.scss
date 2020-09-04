@@ -8,6 +8,16 @@
   @include breakpoint($small) { @include flex-row; }
 }
 
+@mixin card-stats-for-pdf {
+  .pdf & {
+    background-color: transparent;
+    border: solid 1px $grey;
+    color: $body-font-colour;
+
+    .card__h1 { color: inherit; }
+  }
+}
+
 @mixin card-stats-padding {
   padding: rem-calc(16 18); 
 
@@ -16,11 +26,17 @@
 
 @mixin card-stats-number {
   color: $primary;
+  font-size: rem-calc(30);
   font-weight: $bold;
   line-height: 1;
+  
+  display: block;
+
+  @include breakpoint($small) { font-size: rem-calc(40); }
 }
 
 @mixin card-stats {
+  @include card-stats-for-pdf;
   @include card-stats-padding;
   background-color: $white;
   margin-top: rem-calc(30);
@@ -48,12 +64,22 @@
     flex-wrap: nowrap;
     justify-content: space-between; 
   }
+
+  .pdf & { justify-content: unset; }
 }
 
 &--stats-half {
   width: 100%; 
 
   @include breakpoint($small) { width: calc(50% - 15px); }
+
+  .pdf & { 
+    width: 555px; 
+  }
+
+  &:first-child { 
+    @include breakpoint($small) { margin-right: rem-calc(30); }
+  }
 }
 
 @import './stats/card-stats-affiliations';

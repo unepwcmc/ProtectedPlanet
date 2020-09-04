@@ -28,16 +28,7 @@
 
     &:focus { 
       outline: none;
-      border-color: $black;
-    }
-
-    .autocomplete--error & {
-      background-color: $alert;
-      color: $white;
-  
-      ::placeholder {
-        color: $white;
-      }
+      border-color: $white;
     }
   }
   
@@ -68,6 +59,8 @@
     align-self: center;
   }
 
+  &__error-message { padding: rem-calc(12 16); }
+
   &__results-container {
     background-color: $grey-dark;
     border: rem-calc(1) solid $white;
@@ -84,8 +77,6 @@
   }
 
   &__results {
-    @include beautify-scrollbar(4);
-    margin: 0 rem-calc(25);
     overflow-y: scroll;
     height: rem-calc(150);
   }
@@ -99,5 +90,4 @@
         color: $grey-black;
     }
   }
-  
 }

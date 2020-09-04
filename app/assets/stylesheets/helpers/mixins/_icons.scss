@@ -189,6 +189,10 @@ $icon-search-width: rem-calc(21);
   @include icon-image('loading-spinner.svg', rem-calc(40), rem-calc(40));
 }
 
+@mixin icon-minus-mapbox {
+  background-image: image-url('icons/minus-mapbox.svg');
+}
+
 @mixin icon-minus-white() {
   @include icon-basic;
   @include icon-image('minus-white.svg', rem-calc(22), rem-calc(20));
@@ -217,13 +221,18 @@ $icon-search-width: rem-calc(21);
 
 @mixin icon-pin-map {
   @include icon-basic;
-  @include icon-image('pin.svg', rem-calc(13), rem-calc(18));
+  @include icon-image('pin.svg', rem-calc(22), rem-calc(32));
 }
 
 @mixin icon-placeholder-image() {
   @include icon-basic;
   @include icon-image('image.svg', rem-calc(114), rem-calc(91));
 }
+
+@mixin icon-plus-mapbox {
+  background-image: image-url('icons/plus.svg');
+}
+
 @mixin icon-region() { @include icon-earth(); }
 
 @mixin icon-search() {
@@ -272,4 +281,9 @@ $icon-search-width: rem-calc(21);
 @mixin icon-tick {
   @include icon-basic;
   background-image: image-url('icons/tick.svg');
+}
+
+@mixin icon-warning() {
+  @include icon-basic;
+  @include icon-image('warning.svg', rem-calc(22), rem-calc(19));
 }

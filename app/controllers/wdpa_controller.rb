@@ -1,8 +1,11 @@
 class WdpaController < ApplicationController
+  include Concerns::Tabs
   include MapHelper
 
   def index
-    @pa_coverage_percentage = 20 ##TODO FERDI - percentage of the world covered by PAs
+    @pa_coverage_percentage = Stats::Global.percentage_pa_cover
+
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri_wdpa'], 'general', 'wdpa')
 
     @config_search_areas = {
       id: 'wdpa',
@@ -11,10 +14,16 @@ class WdpaController < ApplicationController
 
     @filters = { db_type: ['wdpa'] }
 
-    @tabs = helpers.get_cms_tabs(3).to_json
+    @tabs = get_tabs.to_json
 
     @map = {
-      overlays: MapOverlaysSerializer.new(wdpa_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(wdpa_overlays, map_yml).serialize,
+      title: I18n.t('map.title'),
+      type: 'wdpa',
+      point_query_services: [
+        { url: WDPA_POINT_LAYER_URL, isPoint: true },
+        { url: WDPA_POLY_LAYER_URL, isPoint: false }
+      ]
     }
   end
 

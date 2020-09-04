@@ -54,7 +54,6 @@ $pane-side-padding: 42px;
         top: 0;
         right: 0;
         bottom: 0;
-        z-index: $z-300;
 
         transform: translateX(100%);
 
@@ -71,6 +70,8 @@ $pane-side-padding: 42px;
         }
 
         &.nav-pane--active {
+          z-index: 3;
+          
           transform: translateX(0);
 
           @include breakpoint($small) { transform: none; }
@@ -104,12 +105,15 @@ $pane-side-padding: 42px;
               height: 100%;
 
               position: relative;
-              z-index: 1;
+              
+              &.active { z-index: 3; }
             }
 
               &__dropdown-toggle {
                 @include button-basic;
                 @include nav-a;
+
+                &:focus { border: none; }
               }
 
               &__dropdown-toggle-a {
@@ -136,11 +140,12 @@ $pane-side-padding: 42px;
               }
               
               &__dropdown-a {
+                line-height: 1.2;
                 margin-right: 0;
                 padding: rem-calc(9 24 9 48);
                 width: $dropdown-width;
 
-                @include breakpoint($small) { padding: rem-calc(6 10); }
+                @include breakpoint($small) { padding: rem-calc(9 10); }
 
                 &:hover { 
                   background-color: $dropdown-bg-colour-hover;

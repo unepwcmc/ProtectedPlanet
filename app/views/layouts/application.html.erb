@@ -5,14 +5,19 @@
   </head>
 
   <body>
-    <div id="v-app">
+    <div id="v-app" class="<%= if @for_pdf then 'pdf' end %>">
       <%= render "layouts/partials/topbar" %>
         
       <%= yield %>
       
       <%= render "layouts/partials/footer" %>  
-    </div>
 
-    <%= render 'partials/download_modal' %>
+      <download-modal
+        endpoint-create="/downloads"
+        endpoint-poll="/downloads/poll"
+        :text-download="<%= download_text[:download].to_json %>"
+        :text-status="<%= download_text[:status].to_json %>"
+      /></download-modal>
+    </div>
   </body>
 </html>

@@ -3,6 +3,12 @@
 //--------------------------------------------------
 .page--region {
   .page {
+    &__2cols {
+      @include flex-stack-mobile;
+
+      @include breakpoint($small) { @include flex-h-between; }
+    }
+    
     &__section--overview-map {
       @include flex-stack-mobile;
     }

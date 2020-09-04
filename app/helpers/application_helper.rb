@@ -102,46 +102,6 @@ module ApplicationHelper
     ERB::Util.url_encode(text)
   end
 
-  DOWNLOAD_TYPES = {
-    csv: {
-      content: '.CSV',
-      attrs: {'data-type' => 'csv', 'class' => 'u-bold tooltip-old__element link-with-icon'}
-    },
-    shp: {
-      content: '.SHP',
-      attrs: {'data-type' => 'shapefile', 'class' => 'u-bold tooltip-old__element link-with-icon'}
-    },
-    gdb: {
-      content: 'File Geodatabase',
-      attrs: {'href' => Rails.application.secrets.wdpa_current_release_url, 'class' => 'u-bold tooltip-old__element link-with-icon'}
-    },
-    esri: {
-      content: 'ESRI Web Service',
-      attrs: {'href' => Rails.application.secrets.esri_web_service_url, 'class' => 'u-bold tooltip-old__element link-with-icon'}
-    },
-    pdf: {
-      content: '.PDF',
-      attrs: {'href' => '/MPA_Map.pdf', 'class' => 'u-bold tooltip-old__element link-with-icon', target: '_blank'}
-    }
-  }
-
-  def download_dropdown item_id, download_type, types
-    download_dropdown_attrs = {
-      'data-item-id' => item_id,
-      'data-download-type' => download_type,
-      'class' => 'js-target tooltip-old download-type-dropdown'
-    }
-
-    content_tag :div, download_dropdown_attrs do
-      types.map do |type|
-        content_tag :a, DOWNLOAD_TYPES[type][:attrs] do
-          concat content_tag(:i, "", {class: "link-with-icon__icon fa fa-download"})
-          concat DOWNLOAD_TYPES[type][:content]
-        end
-      end.join.html_safe
-    end
-  end
-
   def is_regional_page controller_name
     controller_name == 'region'
   end
@@ -155,7 +115,7 @@ module ApplicationHelper
       map_page('about'),
       map_page('news-and-stories'),
       map_page('resources'),
-      map_page('thematical-areas', true),
+      map_page('thematic-areas', true),
     ].to_json
   end
 
@@ -199,8 +159,8 @@ module ApplicationHelper
     }
   end
 
-  def get_thematical_areas
-    @items = ThematicalAreasPresenter.new(@cms_site).thematical_areas
+  def get_thematic_areas
+    @items = ThematicAreasPresenter.new(@cms_site).thematic_areas
   end
 
   def get_footer_links

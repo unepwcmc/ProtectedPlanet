@@ -11,7 +11,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
       id: 'coverage',
       name: 'Coverage',
       relation: 'country_statistic',
-      column_name: 'percentage_pa_type_cover'
+      column_name: 'percentage_oecms_pa_type_cover'
     },
     effectively_managed: {
       id: 'effectively_managed',

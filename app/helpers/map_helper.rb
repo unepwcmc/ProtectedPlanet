@@ -6,9 +6,12 @@ WDPA_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/Prote
 WDPA_POINT_LAYER_URL = WDPA_MAP_SERVER_URL + '/0'
 WDPA_POLY_LAYER_URL = WDPA_MAP_SERVER_URL + '/1'
 MARINE_WDPA_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/WDPA_Marine_and_Coastal/MapServer'
+MARINE_WDPA_POINT_LAYER_URL = MARINE_WDPA_MAP_SERVER_URL + '/0'
+MARINE_WDPA_POLY_LAYER_URL = MARINE_WDPA_MAP_SERVER_URL + '/1'
 
 TILE_PATH = "/tile/{z}/{y}/{x}"
-MARINE_QUERY_STRING = '/query?where=marine+IN+%28%271%27%2C+%272%27%29&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
+MARINE_WHERE_QUERY = 'where=marine+IN+%28%271%27%2C+%272%27%29'
+MARINE_QUERY_STRING = '/query?' + MARINE_WHERE_QUERY + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
 
 OVERLAY_GREEN = "#38A800"
 OVERLAY_BLUE = "#004DA8"
@@ -57,20 +60,27 @@ OVERLAYS = [
     queryString: MARINE_QUERY_STRING
   },
   {
-    id: 'greenlist',
+    id: 'greenlist_terrestrial',
+    isToggleable: false,
+    layers: [{url: WDPA_MAP_SERVER_URL + '/0', isPoint: true}, {url: WDPA_MAP_SERVER_URL + '/1'}],
+    color: OVERLAY_GREEN,
+    isShownByDefault: true,
+    type: 'raster_data'
+  },
+  {
+    id: 'greenlist_marine',
     isToggleable: false,
     layers: [{url: WDPA_MAP_SERVER_URL + '/0', isPoint: true}, {url: WDPA_MAP_SERVER_URL + '/1'}],
     color: OVERLAY_BLUE,
     isShownByDefault: true,
     type: 'raster_data'
-  },
-  
+  }
 ].freeze
 
-SERVICES_FOR_POINT_QUERY = [
+ALL_SERVICES_FOR_POINT_QUERY = [
   { url: OECM_FEATURE_SERVER_LAYER_URL, isPoint: false },
-  { url: WDPA_FEATURE_SERVER_URL + '/0', isPoint: true },
-  { url: WDPA_FEATURE_SERVER_URL + '/1', isPoint: false }
+  { url: WDPA_POINT_LAYER_URL, isPoint: true },
+  { url: WDPA_POLY_LAYER_URL, isPoint: false }
 ].freeze
 
 module MapHelper
@@ -87,8 +97,8 @@ module MapHelper
     I18n.t('map')
   end
 
-  def services_for_point_query
-    SERVICES_FOR_POINT_QUERY
+  def all_services_for_point_query
+    ALL_SERVICES_FOR_POINT_QUERY
   end
 
   def country_extent_url (iso3)
@@ -105,8 +115,12 @@ module MapHelper
     }
   end
 
+  def wdpaid_where_query wdpaids
+    'where=wdpaid+IN+%28' + wdpaids.join('%2C+') + '%29'
+  end
+
   def greenlist_query_string wdpaids
-    '/query?where=wdpaid+IN+%28' + wdpaids.join('%2C+') + '%29&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
+    '/query?' + wdpaid_where_query(wdpaids) + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
   end
 
   def map_search_types

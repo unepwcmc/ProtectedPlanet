@@ -5,6 +5,9 @@ class ProtectedAreasController < ApplicationController
 
   def show
     id = params[:id]
+    
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'protected_area', id)
+
     @protected_area = ProtectedArea.
       where("slug = ? OR wdpa_id = ?", id, id.to_i).
       first
@@ -30,7 +33,8 @@ class ProtectedAreasController < ApplicationController
   
 
     @map = {
-      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
+      point_query_services: point_query_services
     }
 
     @map_options = {
@@ -60,6 +64,14 @@ class ProtectedAreasController < ApplicationController
     overlays(['individual_site'], {
       individual_site: @protected_area.arcgis_layer_config
     })
+  end
+
+  def point_query_services
+    all_services_for_point_query.map do |service|
+      service.merge({
+        queryString: wdpaid_where_query([@protected_area.wdpa_id])
+      })
+    end
   end
 
   def get_locations
