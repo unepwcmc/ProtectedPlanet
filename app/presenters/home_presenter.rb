@@ -29,11 +29,11 @@ class HomePresenter
   end
 
   def oecm_pa_land_cover
-    Stats::Global.oecms_pa_land_cover
+    Stats::Global.percentage_oecms_land_cover.round(2)
   end
 
   def oecm_pa_marine_cover
-    Stats::Global.oecms_pa_marine_cover
+    Stats::Global.percentage_oecms_marine_cover.round(2)
   end
   
   def fact_card_stats
