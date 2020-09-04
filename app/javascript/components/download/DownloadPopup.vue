@@ -5,9 +5,18 @@
         v-for="option in options"
         :key="option._uid"
       >
-        <span 
+        <span
+          v-if="option.isDownload" 
           class="popup__link" 
           @click="clickOption(option)"
+          v-html="option.title"
+        />
+        <a
+          v-else
+          class="popup__link"
+          :href="option.url"
+          target="_blank"
+          :title="option.title"
           v-html="option.title"
         />
       </li>
