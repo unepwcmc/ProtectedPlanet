@@ -17,6 +17,11 @@
       &__col-1 {
         width: 100%;
         @include breakpoint($medium) { width: calc(50% - 15px); }
+
+        .pdf & { 
+          margin-right: 30px;
+          width: 555px; 
+        }
       }
 
       &__col-2 {
