@@ -328,7 +328,7 @@ class ProtectedArea < ApplicationRecord
     )
   end
 
-  OECM_ATTRS_ERROR = "'conservation_objectives' and 'supplementary_info can only be assigned if this is an OECM area".freeze
+  OECM_ATTRS_ERROR = "'conservation_objectives' and 'supplementary_info' can only be assigned if this is an OECM area".freeze
   def oecm_attributes
     return if is_oecm
 
