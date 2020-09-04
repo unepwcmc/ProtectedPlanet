@@ -1,22 +1,27 @@
 module DownloadsHelper
   DEFAULT_OPTIONS = {
     csv: {
+      isDownload: true,
       title: 'CSV',
       commercialAvailable: true
     },
     shp: {
+      isDownload: true,
       title: 'SHP',
       commercialAvailable: true
     },
     gdb: {
+      isDownload: true,
       title: 'File Geodatabase',
       commercialAvailable: true
     },
     esri: {
+      isDownload: false,
       title: 'ESRI Web Service',
       url: ''
     },
     pdf: {
+      isDownload: true,
       title: 'PDF',
       commercialAvailable: false
     }
