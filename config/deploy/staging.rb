@@ -1,7 +1,7 @@
 set :stage, :staging
 set :branch, "refresh-copy"
 
-server 'new-web.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
+server 'new-web-copy.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
 set :application, "protectedplanet-copy"
 set :server_name, "protectedplanet-copy"
