@@ -254,7 +254,7 @@ $padding-medium: rem-calc(27);
       display: inline-block;
     }
   }
-  &--download-pdf {
+  &--pdf {
     @include button-with-icon;
     color: $primary;
     font-size: rem-calc(16);
@@ -272,6 +272,14 @@ $padding-medium: rem-calc(27);
     @include button-block;
     font-weight: $bold;
     &::after { @include icon-arrow-external-white; }
+  }
+  &--link { 
+    @include button-external; 
+    color: $primary;
+    font-size: rem-calc(16);
+    font-weight: $bold;
+    @include breakpoint($small) { font-size: rem-calc(16); }
+    @include breakpoint($medium) { font-size: rem-calc(16); }
   }
 
   &--link-external { @include button-external; }

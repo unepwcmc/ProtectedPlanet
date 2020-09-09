@@ -36,7 +36,9 @@
         } %>
       </div>
       
-      <%= render "partials/messages/message-warning-stats" %>
+      <%= render partial: "partials/messages/message-warning-stats", locals: {
+        documents: @country_presenter.documents
+      } %>
 
       <div class="card--stats-wrapper pdf-break-before">
         <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>

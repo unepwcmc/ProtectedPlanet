@@ -29,8 +29,8 @@ class RegionPresenter
 
   def marine_stats
     {
-      pame_km2: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat
-      pame_percentage: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat
+      pame_km2: nil, ##TODO FERDI - Not sure we have this kind of stat
+      pame_percentage: nil, ##TODO FERDI - Not sure we have this kind of stat
       protected_km2: pa_marine_area.round(0),
       protected_percentage: percentage_pa_marine_cover.round(2),
       total_km2: marine_area.round(0)
@@ -39,8 +39,8 @@ class RegionPresenter
 
   def terrestrial_stats
     {
-      pame_km2: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat
-      pame_percentage: 'XXXXX', ##TODO FERDI - Not sure we have this kind of stat
+      pame_km2: nil, ##TODO FERDI - Not sure we have this kind of stat
+      pame_percentage: nil, ##TODO FERDI - Not sure we have this kind of stat
       protected_km2: pa_land_area.round(0),
       protected_percentage: percentage_pa_land_cover.round(2),
       total_km2: land_area.round(0)
@@ -58,14 +58,15 @@ class RegionPresenter
   def geometry_ratio
     polygons_count = 0
     points_count = 0
-    total = 0
-
+    
     @countries.each do |country|
       statistic = country.statistic
       polygons_count += (statistic && statistic.polygons_count) || 0
       points_count += (statistic && statistic.points_count) || 0
-      total += polygons_count + points_count
     end
+    
+    total = polygons_count + points_count
+    
     {
       polygons: (((polygons_count/total.to_f)*100).round rescue 0),
       points:   (((points_count/total.to_f)*100).round   rescue 0),

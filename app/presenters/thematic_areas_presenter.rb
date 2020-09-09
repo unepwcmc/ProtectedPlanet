@@ -7,8 +7,7 @@ class ThematicAreasPresenter
 
   def thematic_areas
     thematic_page = @cms_site.pages.find_by_slug('thematic-areas')
-    ##TODO FERDI can you fill in this bit - not needed for ICCA registry
-    ## Update variable in the view /partials/sub_partials/_themes.html.erb
+
     items = {
       "title": thematic_page.label,
       "cards": cards(thematic_page)
