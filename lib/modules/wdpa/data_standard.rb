@@ -26,8 +26,8 @@ class Wdpa::DataStandard
     :metadataid   => {name: :sources, type: :integer, label: 'Source'},
     :own_type     => {name: :owner_type, type: :string, label: 'Owner Type'},
     :pa_def       => {name: :is_oecm, type: :oecm, label: 'PA Def'},
-    :supp_info    => {name: :supp_info, type: :string, label: 'Supplementary Info'},
-    :cons_obj     => {name: :cons_obj, type: :string, label: 'Conservation objectives'}
+    :supp_info    => {name: :supplementary_info, type: :string, label: 'Supplementary Info'},
+    :cons_obj     => {name: :conservation_objectives, type: :string, label: 'Conservation objectives'}
   }
 
   POLYGON_ATTRIBUTES = [
