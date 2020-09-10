@@ -22,8 +22,10 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
       ActiveRecord::Base.transaction(requires_new: true) do
         protected_area_id = ProtectedArea.create!(standardised_attributes).id
       end
-    rescue
+    rescue StandardError => e
       Rails.logger.info("ProtectedArea with WDPAID #{attributes[:wdpaid]} not imported")
+      Rails.logger.info(e.message)
+      Rails.logger.info(e.backtrace)
     end
 
     return protected_area_id
