@@ -24,8 +24,6 @@ class ProtectedArea < ApplicationRecord
 
   after_create :create_slug
 
-  validate :oecm_attributes
-
   scope :all_except, -> (pa) { where.not(id: pa) }
 
   scope :oecms, -> { where(is_oecm: true) }
@@ -305,12 +303,5 @@ class ProtectedArea < ApplicationRecord
     joins(:iucn_category).where(
       "iucn_categories.name IN (#{valid_categories})"
     )
-  end
-
-  OECM_ATTRS_ERROR = "'conservation_objectives' and 'supplementary_info' can only be assigned if this is an OECM area".freeze
-  def oecm_attributes
-    return if is_oecm
-
-    errors.add(:oecm_attributes, OECM_ATTRS_ERROR) if supplementary_info || conservation_objectives
   end
 end
