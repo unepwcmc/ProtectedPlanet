@@ -23,6 +23,8 @@ class ImportTools::PostgresHandler
     Rails.logger.info(Rails.configuration.database_configuration)
     Rails.logger.info(ActiveRecord::Base.connection.current_database)
     Rails.logger.info(ProtectedArea.connection.current_database)
+    ProtectedArea.connection.schema_cache.clear!
+    ProtectedArea.reset_column_information
     Rails.logger.info(ProtectedArea.column_names)
     Rails.logger.info("===DB CONFIGS===")
 
@@ -34,6 +36,8 @@ class ImportTools::PostgresHandler
     Rails.logger.info(ActiveRecord::Base.configurations)
     Rails.logger.info(Rails.configuration.database_configuration)
     Rails.logger.info(ActiveRecord::Base.connection.current_database)
+    ProtectedArea.connection.schema_cache.clear!
+    ProtectedArea.reset_column_information
     Rails.logger.info(ProtectedArea.connection.current_database)
     Rails.logger.info(ProtectedArea.column_names)
     Rails.logger.info("===DB CONFIGS===")
