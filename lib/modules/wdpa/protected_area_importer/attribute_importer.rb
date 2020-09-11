@@ -5,7 +5,9 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
       imported_pa_ids = []
       ActiveRecord::Base.transaction do
         protected_areas.each do |protected_area_attributes|
-          imported_pa_ids << create_protected_area(protected_area_attributes)
+          imported_pa_id = create_protected_area(protected_area_attributes)
+          return unless imported_pa_id
+          imported_pa_ids << imported_pa_id
         end
       end
     end
@@ -20,19 +22,20 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
     protected_area_id = nil
     begin
       ActiveRecord::Base.transaction(requires_new: true) do
+        Rails.logger.info("===DB CONFIGS===")
+        Rails.logger.info(ActiveRecord::Base.configurations)
+        Rails.logger.info(Rails.configuration.database_configuration)
+        Rails.logger.info(ActiveRecord::Base.connection.current_database)
+        Rails.logger.info(ProtectedArea.connection.current_database)
+        Rails.logger.info(ProtectedArea.column_names)
+        Rails.logger.info("===DB CONFIGS===")
         protected_area_id = ProtectedArea.create!(standardised_attributes).id
       end
     rescue StandardError => e
       Rails.logger.info("ProtectedArea with WDPAID #{attributes[:wdpaid]} not imported")
       Rails.logger.info(e.message)
       Rails.logger.info(e.backtrace)
-      Rails.logger.info("===DB CONFIGS===")
-      Rails.logger.info(ActiveRecord::Base.configurations)
-      Rails.logger.info(Rails.configuration.database_configuration)
-      Rails.logger.info(ActiveRecord::Base.connection.current_database)
-      Rails.logger.info(ProtectedArea.column_names)
-      Rails.logger.info("===DB CONFIGS===")
-      return
+      return nil
     end
 
     return protected_area_id

@@ -17,8 +17,27 @@ class ImportTools::PostgresHandler
     connection = connect_to('postgres')
     connection.create_database(database_name)
 
+    Rails.logger.info("===CONNECTED TO POSTGRES===")
+    Rails.logger.info("===DB CONFIGS===")
+    Rails.logger.info(ActiveRecord::Base.configurations)
+    Rails.logger.info(Rails.configuration.database_configuration)
+    Rails.logger.info(ActiveRecord::Base.connection.current_database)
+    Rails.logger.info(ProtectedArea.connection.current_database)
+    Rails.logger.info(ProtectedArea.column_names)
+    Rails.logger.info("===DB CONFIGS===")
+
     connect_to(database_name)
     Rails.application.load_tasks
+
+    Rails.logger.info("===CONNECTED TO NEW IMPORT DB===")
+    Rails.logger.info("===DB CONFIGS===")
+    Rails.logger.info(ActiveRecord::Base.configurations)
+    Rails.logger.info(Rails.configuration.database_configuration)
+    Rails.logger.info(ActiveRecord::Base.connection.current_database)
+    Rails.logger.info(ProtectedArea.connection.current_database)
+    Rails.logger.info(ProtectedArea.column_names)
+    Rails.logger.info("===DB CONFIGS===")
+
     Rake::Task['db:migrate'].invoke
   end
 
