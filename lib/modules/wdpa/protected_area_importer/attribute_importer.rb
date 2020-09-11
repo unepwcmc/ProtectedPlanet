@@ -22,6 +22,10 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
     protected_area_id = nil
     begin
       ActiveRecord::Base.transaction(requires_new: true) do
+        Rails.logger.info("===COLUMNS RESET===")
+        ProtectedArea.connection.schema_cache.clear!
+        ProtectedArea.reset_column_information
+        Rails.logger.info(ProtectedArea.column_names)
         protected_area_id = ProtectedArea.create!(standardised_attributes).id
       end
     rescue StandardError => e
