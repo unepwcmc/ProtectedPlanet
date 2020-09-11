@@ -5,9 +5,7 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
       imported_pa_ids = []
       ActiveRecord::Base.transaction do
         protected_areas.each do |protected_area_attributes|
-          imported_pa_id = create_protected_area(protected_area_attributes)
-          return unless imported_pa_id
-          imported_pa_ids << imported_pa_id
+          imported_pa_ids << create_protected_area(protected_area_attributes)
         end
       end
     end
@@ -22,10 +20,8 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
     protected_area_id = nil
     begin
       ActiveRecord::Base.transaction(requires_new: true) do
-        Rails.logger.info("===COLUMNS RESET===")
         ProtectedArea.connection.schema_cache.clear!
         ProtectedArea.reset_column_information
-        Rails.logger.info(ProtectedArea.column_names)
         protected_area_id = ProtectedArea.create!(standardised_attributes).id
       end
     rescue StandardError => e
@@ -41,7 +37,6 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
       ProtectedArea.reset_column_information
       Rails.logger.info(ProtectedArea.column_names)
       Rails.logger.info("===DB CONFIGS===")
-      return nil
     end
 
     return protected_area_id
