@@ -26,6 +26,13 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
       Rails.logger.info("ProtectedArea with WDPAID #{attributes[:wdpaid]} not imported")
       Rails.logger.info(e.message)
       Rails.logger.info(e.backtrace)
+      Rails.logger.info("===DB CONFIGS===")
+      Rails.logger.info(ActiveRecord::Base.configurations)
+      Rails.logger.info(Rails.configuration.database_configuration)
+      Rails.logger.info(ActiveRecord::Base.connection.current_database)
+      Rails.logger.info(ProtectedArea.column_names)
+      Rails.logger.info("===DB CONFIGS===")
+      return
     end
 
     return protected_area_id
