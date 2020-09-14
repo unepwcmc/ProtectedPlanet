@@ -105,6 +105,7 @@ class ProtectedArea < ApplicationRecord
       # year = date.to_date.year
       coverage_growth_hash[date] ||= []
       
+      # TODO - ask Ed how exactly the total GL area in the CSV is calculated...
       area_sum = areas.where("legal_status_updated_at <= ?", date).reduce(0) { |sum, x| sum + x.gis_area }
       coverage_growth_hash[date] = area_sum
     end
