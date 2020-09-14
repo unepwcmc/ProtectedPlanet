@@ -43,6 +43,11 @@ class ProtectedArea < ApplicationRecord
     where.not(green_list_status_id: nil)
   }
 
+  scope :non_candidate_green_list_areas, -> {
+    includes(:green_list_status)
+    .where.not(green_list_statuses: {status: 'Candidate'}, green_list_status_id: nil)
+  }
+
   scope :most_protected_marine_areas, -> (limit) {
     where("gis_marine_area IS NOT NULL").
     order(gis_marine_area: :desc).limit(limit)
@@ -87,7 +92,7 @@ class ProtectedArea < ApplicationRecord
     # Takes an optional start year from which to start counting
     coverage_growth_hash = {}
 
-    areas = ProtectedArea.green_list_areas.where.not(legal_status_updated_at: nil)
+    areas = ProtectedArea.non_candidate_green_list_areas.where.not(legal_status_updated_at: nil)
     
     if start_year
       date_from_year = "#{start_year}-01-01 00:00:00".to_time 
@@ -307,7 +312,7 @@ class ProtectedArea < ApplicationRecord
     )
   end
 
-  OECM_ATTRS_ERROR = "'conservation_objectives' and 'supplementary_info' can only be assigned if this is an OECM area".freeze
+  # OECM_ATTRS_ERROR = "'conservation_objectives' and 'supplementary_info' can only be assigned if this is an OECM area".freeze
   def oecm_attributes
     return if is_oecm
 
