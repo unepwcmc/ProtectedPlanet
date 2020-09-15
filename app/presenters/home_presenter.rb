@@ -56,7 +56,7 @@ class HomePresenter
         totals: [
           {
             number: marine_pas,
-            text: I18n.t('global.area-types.oecm')
+            text: I18n.t('global.area-types.wdpa')
           }
         ]
       },
