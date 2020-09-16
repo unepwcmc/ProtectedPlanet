@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   before_action :set_host_for_local_storage
 
   helper_method :opengraph
+  include OpengraphHelper
 
   before_action :load_cms_site
   before_action :load_cms_content
@@ -23,14 +24,15 @@ class ApplicationController < ActionController::Base
   def opengraph
     return if admin_path?
 
+    # Methods to populate the site name dynamically are found in opengraph_helper
     @opengraph ||= OpengraphBuilder.new({
                                           'og': {
                                             'site_name': t('meta.site.name'),
-                                            'title': t('meta.site.title'),
-                                            'description': t('meta.site.description'),
-                                            'url': request.original_url,
+                                            'title': og_title,
+                                            'description': og_description,
+                                            'url': request.url,
                                             'type': 'website',
-                                            'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
+                                            'image': og_image,
                                             'image:alt': t('meta.image_alt'),
                                             'locale': I18n.locale
                                           },
