@@ -10,8 +10,10 @@ module OpengraphHelper
   end
 
   def og_image
-    image = helpers.url_for(cms_fragment_content(:image, @cms_page).attachments.first)
-    image.blank? ? URI.join(root_url, helpers.image_path(t('meta.image'))) : image
+    image = cms_fragment_content(:image, @cms_page).attachments.first
+    path_to_image = URI.join(root_url, helpers.url_for(image))
+    fallback_image = URI.join(root_url, helpers.image_path(t('meta.image')))
+    image.blank? ? fallback_image : path_to_image
   end
 
   def og_title
