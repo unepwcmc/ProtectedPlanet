@@ -154,7 +154,7 @@ class MarineController < ApplicationController
         { "x": Time.new(2020, 1, 1), "1": 24360975, "2": 2608187, "3": 26969162 }
       ],
       units: "km2",
-      legend: ["Global", "National", "ABNJ"]
+      legend: ["National", "ABNJ", "Global"]
     }.to_json
   end
 
