@@ -1,6 +1,6 @@
 <div class="social--media">
   <% t('social.share').keys.map(&:to_s).each do |social_medium| %>
-    <%= link_to '', t("social.share.#{social_medium}.url", url: social_medium ),
+    <%= link_to '', t("social.share.#{social_medium}.url", url: url_encode(request.base_url) ),
       title: t("social.share.#{social_medium}.title"),
       class: "social__icon--#{social_medium}",
       target: '_blank'
