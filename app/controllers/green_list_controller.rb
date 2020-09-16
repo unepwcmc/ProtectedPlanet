@@ -91,11 +91,10 @@ class GreenListController < ApplicationController
     @regionsTopCountries = Region.without_global.map do |region|
       top_countries = RegionPresenter.new(region).top_gl_coverage_countries
       
-      if region.countries.count < 10
-        # Always return an array 10 items
+      if top_countries.count < 10 # Always return an array 10 items
         top_countries[:countries] = top_countries[:countries].in_groups_of(10, {}).flatten
       end
-
+      
       top_countries
     end.compact.to_json
   end
