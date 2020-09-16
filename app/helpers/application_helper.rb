@@ -1,5 +1,6 @@
 # coding: utf-8
 module ApplicationHelper
+  include ActionView::Helpers::NumberHelper
   include BemHelper
 
   COVER_HELPERS = {
@@ -90,6 +91,8 @@ module ApplicationHelper
   end
 
   def region_cover(region, with_tag: true)
+    version = Rails.application.secrets.mapbox[:version]
+    image_params = {id: region.iso, type: "region", version: version}
     return tiles_path(image_params) unless with_tag
 
     image_tag(
