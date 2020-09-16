@@ -3,8 +3,10 @@ module OpengraphHelper
 
   # Methods which include a fallback if the requested value is blank
   def og_description
-    desc = cms_fragment_content(:summary, @cms_page)
-    desc.blank? ? t('meta.site.description') : desc
+    social_desc = cms_fragment_content(:social_description, @cms_page)
+    summary = cms_fragment_content(:summary, @cms_page)
+    fallback_summary = summary.blank? ? t('meta.site.description') : summary
+    social_desc.blank? ? fallback_summary : social_desc
   end
 
   def og_image
@@ -13,7 +15,9 @@ module OpengraphHelper
   end
 
   def og_title
-    title = cms_fragment_content(:label, @cms_page)
-    title.blank? ? t('meta.site.title') : title
+    social_title = cms_fragment_content(:social_title, @cms_page)
+    title = @cms_page.label
+    fallback_title = title.blank? ? t('meta.site.title') : title
+    social_title.blank? ? fallback_title : social_title
   end
 end
