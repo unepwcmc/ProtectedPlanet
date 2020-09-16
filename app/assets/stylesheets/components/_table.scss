@@ -42,11 +42,7 @@ $table-horizontal-scroll-row-width-desktop: 80vw;
 // classes
 //--------------------------------------------------
 .filtered-table {
-  min-height: $filters-menu-max-height + rem-calc(80);
-
-  @include breakpoint($small) {
-    min-height: $filters-menu-max-height + rem-calc(200);
-  }
+  min-height: $filters-menu-max-height + rem-calc(200);
 }
 
 //--------------------------------------------------
