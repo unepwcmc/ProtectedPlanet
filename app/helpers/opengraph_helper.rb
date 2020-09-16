@@ -8,7 +8,7 @@ module OpengraphHelper
   end
 
   def og_image
-    image = cms_fragment_content(:hero_image, @cms_page)
+    image = cms_fragment_render(:hero_image, @cms_page)
     image.blank? ? URI.join(root_url, helpers.image_path(t('meta.image'))) : image
   end
 
