@@ -1,5 +1,4 @@
 class Search::AreasSerializer < Search::BaseSerializer
-
   def initialize(search, geo_type=nil)
     super(search)
     @aggregations = @search.aggregations
@@ -39,7 +38,7 @@ class Search::AreasSerializer < Search::BaseSerializer
     {
       geoType: geo_type,
       title: I18n.t("global.#{geo_type_locale}"),
-      total: total || areas.length,
+      total: ApplicationController.helpers.commaify(total || areas.length),
       totalPages: total_pages(total),
       areas: areas_ary(geo_type, areas)
     }
@@ -53,7 +52,7 @@ class Search::AreasSerializer < Search::BaseSerializer
   def region_hash(region)
     {
       title: region.name,
-      totalAreas: "#{region.protected_areas.count} #{I18n.t('search.protected-areas')}",
+      totalAreas: "#{areas_count(region)} #{I18n.t('search.protected-areas')}",
       url: region_path(iso: region.iso),
       image: ApplicationController.helpers.region_cover(region, with_tag: false)
     }
@@ -63,7 +62,7 @@ class Search::AreasSerializer < Search::BaseSerializer
     _slug = slug(country.name)
     {
       countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
-      totalAreas: "#{country.protected_areas.count} #{I18n.t('search.protected-areas')}",
+      totalAreas: "#{areas_count(country)} #{I18n.t('search.protected-areas')}",
       title: country.name,
       url: country_path(iso: country.iso_3),
       image: ApplicationController.helpers.country_cover(country, with_tag: false)
@@ -85,5 +84,9 @@ class Search::AreasSerializer < Search::BaseSerializer
   DEFAULT_PAGE_SIZE = 9.0.freeze
   def total_pages(items_no)
     (items_no / DEFAULT_PAGE_SIZE).ceil
+  end
+
+  def areas_count(model)
+    ApplicationController.helpers.commaify(model.protected_areas.count)
   end
 end
