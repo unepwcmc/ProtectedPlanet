@@ -54,7 +54,8 @@ class Search::AreasSerializer < Search::BaseSerializer
     {
       title: region.name,
       totalAreas: "#{region.protected_areas.count} #{I18n.t('search.protected-areas')}",
-      url: region_path(iso: region.iso)
+      url: region_path(iso: region.iso),
+      image: ApplicationController.helpers.region_cover(region, with_tag: false)
     }
   end
 
@@ -64,7 +65,8 @@ class Search::AreasSerializer < Search::BaseSerializer
       countryFlag: ActionController::Base.helpers.image_url("flags/#{_slug}.svg"),
       totalAreas: "#{country.protected_areas.count} #{I18n.t('search.protected-areas')}",
       title: country.name,
-      url: country_path(iso: country.iso_3)
+      url: country_path(iso: country.iso_3),
+      image: ApplicationController.helpers.country_cover(country, with_tag: false)
     }
   end
 
