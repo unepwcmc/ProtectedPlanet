@@ -90,23 +90,23 @@ class ProtectedArea < ApplicationRecord
   def self.greenlist_coverage_growth(start_year = nil)
     # Is in this format: {year: area, ...}
     # Takes an optional start year from which to start counting
-    coverage_growth_hash = {}
-
     areas = ProtectedArea.non_candidate_green_list_areas.where.not(legal_status_updated_at: nil)
     
+    sorted_dates = areas.pluck(:legal_status_updated_at).sort { |a,b| b <=> a }.uniq
+
     if start_year
       date_from_year = "#{start_year}-01-01 00:00:00".to_time 
-      areas = areas.where("legal_status_updated_at >= ? ", date_from_year)
+      sorted_dates.filter! { |date| date >= date_from_year }
     end
-  
-    sorted_dates = areas.pluck(:legal_status_updated_at).sort { |a,b| b <=> a }.uniq
+
+    coverage_growth_hash = {}
 
     sorted_dates.each do |date|
       # year = date.to_date.year
       coverage_growth_hash[date] ||= []
       
-      # TODO - have a look at this again if the staging data is still different 
       area_sum = areas.where("legal_status_updated_at <= ?", date).reduce(0) { |sum, x| sum + x.gis_area }
+      # p "#{date}: #{areas.where("legal_status_updated_at <= ?", date).map { |area| "#{area.name} #{area.gis_area}" }.join(',')}"
       coverage_growth_hash[date] = area_sum
     end
 
