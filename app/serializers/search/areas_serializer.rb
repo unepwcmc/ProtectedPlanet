@@ -38,7 +38,7 @@ class Search::AreasSerializer < Search::BaseSerializer
     {
       geoType: geo_type,
       title: I18n.t("global.#{geo_type_locale}"),
-      total: ApplicationController.helpers.commaify(total || areas.length),
+      total: total || areas.length,
       totalPages: total_pages(total),
       areas: areas_ary(geo_type, areas)
     }
