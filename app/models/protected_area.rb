@@ -105,8 +105,8 @@ class ProtectedArea < ApplicationRecord
       # year = date.to_date.year
       coverage_growth_hash[date] ||= []
       
+      # TODO - Check that chart matches with black box data after re-import finishes on staging copy
       area_sum = areas.where("legal_status_updated_at <= ?", date).reduce(0) { |sum, x| sum + x.gis_area }
-      # p "#{date}: #{areas.where("legal_status_updated_at <= ?", date).map { |area| "#{area.name} #{area.gis_area}" }.join(',')}"
       coverage_growth_hash[date] = area_sum
     end
 
