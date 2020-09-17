@@ -72,7 +72,7 @@ module ApplicationHelper
       cover_placeholder(protected_area.class),
       {
         alt: protected_area.name,
-        class: 'image' #TODO find a way to add classes via parameters
+        class: 'image'
       }.merge(data)
     )
   end
