@@ -88,29 +88,30 @@ class ProtectedArea < ApplicationRecord
   end
 
   def self.greenlist_coverage_growth(start_year = nil)
-    # Is in this format: {year: area, ...}
+    # Is in this format: [{year: year, value: area}...]
     # Takes an optional start year from which to start counting
-    areas = ProtectedArea.non_candidate_green_list_areas.where.not(legal_status_updated_at: nil)
+    growth = <<-SQL
+      SELECT DISTINCT ON(t.year) JSON_BUILD_OBJECT(
+        'year', t.year, 'value', t.area
+      ) AS data
+      FROM (
+        SELECT pa.legal_status_updated_at AS year,
+              SUM(pa.gis_area) OVER(ORDER BY pa.legal_status_updated_at) AS area
+        FROM protected_areas pa
+        JOIN green_list_statuses gls ON gls.id = pa.green_list_status_id
+        WHERE gls.status <> 'Candidate'
+        ORDER BY year
+      ) t
+      WHERE EXTRACT(YEAR FROM t.year) >= ?
+    SQL
     
-    sorted_dates = areas.pluck(:legal_status_updated_at).sort { |a,b| b <=> a }.uniq
+    result = ActiveRecord::Base.connection.execute(
+      ActiveRecord::Base.send(:sanitize_sql_array, [
+        growth, start_year
+      ])
+    )
 
-    if start_year
-      date_from_year = "#{start_year}-01-01 00:00:00".to_time 
-      sorted_dates.filter! { |date| date >= date_from_year }
-    end
-
-    coverage_growth_hash = {}
-
-    sorted_dates.each do |date|
-      # year = date.to_date.year
-      coverage_growth_hash[date] ||= []
-      
-      # TODO - Check that chart matches with black box data after re-import finishes on staging copy
-      area_sum = areas.where("legal_status_updated_at <= ?", date).reduce(0) { |sum, x| sum + x.gis_area }
-      coverage_growth_hash[date] = area_sum
-    end
-
-    coverage_growth_hash
+    result.map { |r| JSON.parse(r['data']) }
   end
 
   def sources_per_pa
