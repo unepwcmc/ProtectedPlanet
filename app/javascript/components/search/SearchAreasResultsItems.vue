@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search__results-bar">
-      <h2>{{ results.title }} ({{ results.total }})</h2>
+      <h2>{{ results.title }} ({{ totalAsString(results.total) }})</h2>
     </div>
     <div class="cards--search-results-areas">
       <card-search-result-area
@@ -49,6 +49,10 @@ export default {
   methods: {
     requestMore (requestedPage) {
       this.$emit('request-more', requestedPage)
+    },
+
+    totalAsString (total) {
+      return parseFloat(total).toLocaleString()
     }
   }
 }

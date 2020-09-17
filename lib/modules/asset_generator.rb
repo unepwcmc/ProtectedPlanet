@@ -20,6 +20,15 @@ module AssetGenerator
     ''#fallback_tile
   end
 
+  def self.region_tile region
+    raise AssetGenerationFailedError if region.nil?
+
+    tile_url = mapbox_url region.geojson({"fill-opacity" => 0, "stroke-width" => 0})
+    request_tile tile_url[:host], tile_url[:path]
+  rescue AssetGenerationFailedError
+    ''#fallback_tile
+  end
+
   def self.link_to asset_id
     file_name = "tiles/#{asset_id}"
     S3.link_to file_name
