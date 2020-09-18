@@ -88,9 +88,15 @@ class GreenListController < ApplicationController
   def most_protected_areas
     @regionsTopCountries = Region.without_global.map do |region|
       top_countries = RegionPresenter.new(region).top_gl_coverage_countries
+      chart_size = 10
       
-      if top_countries.count < 10 # Always return an array 10 items
-        top_countries[:countries] = top_countries[:countries].in_groups_of(10, {}).flatten
+      if top_countries[:countries].count < chart_size # Always return an array 10 items
+        if top_countries[:countries].empty?
+          # Create an array of empty hashes
+          top_countries[:countries] = Array.new(chart_size, {})
+        else
+          top_countries[:countries] = top_countries[:countries].in_groups_of(chart_size, {}).flatten
+        end
       end
       
       top_countries
