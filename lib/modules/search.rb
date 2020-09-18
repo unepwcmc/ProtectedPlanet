@@ -9,8 +9,8 @@ class Search
   REGION_INDEX = "regions_#{Rails.env}".freeze
   PA_INDEX = "protectedareas_#{Rails.env}".freeze
   CMS_INDEX = "cms_#{Rails.env}".freeze
-  DEFAULT_INDEX_NAME = [PA_INDEX, CMS_INDEX].join(',').freeze
   AREAS_INDEX = [PA_INDEX, COUNTRY_INDEX, REGION_INDEX].join(',').freeze
+  DEFAULT_INDEX_NAME = "#{AREAS_INDEX},#{CMS_INDEX}".freeze
   attr_reader :search_term, :options
 
   def self.configuration
@@ -88,7 +88,7 @@ class Search
       from: options[:offset] || offset(size),
       # This line helps countries come first in search, may need tweaking as initial weights are dependent on the relative
       # frequency of terms in the countries and PA indices which is hard to anticipate!
-      indices_boost: [{COUNTRY_INDEX => 3}, {PA_INDEX => 1} ],
+      indices_boost: [{COUNTRY_INDEX => 5}, {PA_INDEX => 1} ],
 
       query: Search::Query.new(search_term, options).to_h,
     }.tap( &method(:optional_queries) )
