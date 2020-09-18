@@ -35,7 +35,7 @@ module Concerns::Searchable
       'country' => Search::COUNTRY_INDEX,
       'region' => Search::REGION_INDEX,
       'all' => Search::DEFAULT_INDEX_NAME,
-      'areas' => Search::PA_INDEX,
+      'areas' => Search::AREAS_INDEX,
       'cms' => Search::CMS_INDEX
     }.freeze
     def search_index
