@@ -87,7 +87,7 @@ class ApplicationController < ActionController::Base
     return unless @cms_page
 
     ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' })
-                  .parse(opengraph: opengraph, page: @cms_page)
+                  .parse(opengraph: opengraph, page: @cms_page, type: 'og')
   end
 
   def record_invalid_error

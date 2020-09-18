@@ -18,7 +18,7 @@ class ComfyOpengraph
   end
 
   # Iterate over the fragments of a CMS page and set their Opengraph values
-  def parse(opengraph: nil, page: nil)
+  def parse(opengraph: nil, page: nil, type: 'og')
     page.fragments.to_a.each do |fragment|
       id = fragment.identifier.to_s
       next unless @mappings.key?(id)
@@ -29,7 +29,7 @@ class ComfyOpengraph
       # set opengraph meta-tag via a new hash
       payload = {}
       payload[@mappings[id]] = value
-      opengraph.content('og', payload)
+      opengraph.content(type, payload)
     end
   end
 
