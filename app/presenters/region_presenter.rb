@@ -133,8 +133,7 @@ class RegionPresenter
 
   def top_gl_coverage_countries
     # List of all countries with at least one green list PA, grouped by region
-    countries = Country.countries_with_gl.where(region_id: region)
-
+    countries = Country.countries_with_gl.where(region: region)
     all_gls = get_gl_data_for_countries(countries)
 
     {
