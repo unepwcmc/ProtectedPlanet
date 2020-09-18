@@ -87,7 +87,7 @@ class ProtectedArea < ApplicationRecord
     green_list_status_id.present?
   end
 
-  def self.greenlist_coverage_growth(start_year = nil)
+  def self.greenlist_coverage_growth(start_year = 0)
     # Is in this format: [{year: year, value: area}...]
     # Takes an optional start year from which to start counting
     growth = <<-SQL
