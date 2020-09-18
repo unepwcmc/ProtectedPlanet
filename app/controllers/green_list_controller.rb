@@ -20,7 +20,7 @@ class GreenListController < ApplicationController
     # Starts from 2000
     @protectedAreaGrowth = 
     {
-      title: I18n.t('charts.legend.number-pa'),
+      title: I18n.t('charts.legend.coverage_km2'),
       units: I18n.t('charts.units.km2'),
       datapoints: ProtectedArea.greenlist_coverage_growth(2000)
     }.to_json 
