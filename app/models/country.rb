@@ -36,7 +36,7 @@ class Country < ApplicationRecord
   end
 
   def self.countries_with_gl
-    joins(:protected_areas).where.not(protected_areas: {green_list_status_id: nil}).uniq
+    joins(:protected_areas).where.not(protected_areas: {green_list_status_id: nil}).distinct
   end
 
   def total_gl_coverage

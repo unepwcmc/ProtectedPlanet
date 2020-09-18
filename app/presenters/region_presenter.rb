@@ -132,20 +132,10 @@ class RegionPresenter
   end
 
   def top_gl_coverage_countries
-    # List of all countries with at least one green list PA
-    countries = Country.countries_with_gl
+    # List of all countries with at least one green list PA, grouped by region
+    countries = Country.countries_with_gl.where(region_id: region)
 
-    # Group them by region
-    countries_in_region = countries.select { |country| country.region == region }
-
-    if countries_in_region.length < 10
-      countries_in_region.concat(region.countries.where
-      .not(id: countries_in_region).take(10 - countries_in_region.length).to_a)
-    # elsif countries_in_region.length > 10
-    #   countries_in_region.slice!(0..9)
-    end
-
-    all_gls = get_gl_data_for_countries(countries_in_region)
+    all_gls = get_gl_data_for_countries(countries)
 
     {
       regionTitle: region.name,
@@ -170,7 +160,7 @@ class RegionPresenter
     end.sort! do |a, b|
       # If rounded %s happen to be the same, then sort by area
       b[:percentage] == a[:percentage] ? b[:total_area] <=> a[:total_area] : b[:percentage] <=> a[:percentage]
-    end
+    end.take(10)
   end
 
   private
