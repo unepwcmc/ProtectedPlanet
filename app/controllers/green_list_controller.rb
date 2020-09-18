@@ -25,7 +25,6 @@ class GreenListController < ApplicationController
       datapoints: ProtectedArea.greenlist_coverage_growth(2000)
     }.to_json 
     
-    # TODO - This may need to be reworked by CLS
     @total_area_percent = (Stats::Global.percentage_pa_cover - @pas_percent.to_f).round(2)
 
     @filters = {
