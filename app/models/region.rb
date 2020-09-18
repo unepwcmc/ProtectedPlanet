@@ -144,7 +144,7 @@ class Region < ApplicationRecord
 
   def sources_per_region
     sources = ActiveRecord::Base.connection.execute("""
-      SELECT sources.title, EXTRACT(YEAR FROM sources.year) AS year, sources.responsible_party 
+      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party 
       FROM sources
       INNER JOIN countries_protected_areas
       ON countries_protected_areas.country_id IN (#{self.countries.pluck(:id).join(",")})

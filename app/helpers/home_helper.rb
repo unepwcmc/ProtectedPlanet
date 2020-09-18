@@ -9,7 +9,7 @@ module HomeHelper
         cms_page = Comfy::Cms::Page.find_by_slug(slug)
         image = cms_fragment_render(:image, cms_page)
       else
-        image = image_path 'terrestrial.png' # this is only here until the terrestrial page is built
+        image = image_path 'terrestrial.jpg' # this is only here until the terrestrial page is built
       end
       {
         image: image,
