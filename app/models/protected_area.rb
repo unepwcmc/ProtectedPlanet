@@ -43,6 +43,11 @@ class ProtectedArea < ApplicationRecord
     where.not(green_list_status_id: nil)
   }
 
+  scope :non_candidate_green_list_areas, -> {
+    includes(:green_list_status)
+    .where.not(green_list_statuses: {status: 'Candidate'}, green_list_status_id: nil)
+  }
+
   scope :most_protected_marine_areas, -> (limit) {
     where("gis_marine_area IS NOT NULL").
     order(gis_marine_area: :desc).limit(limit)
@@ -82,29 +87,31 @@ class ProtectedArea < ApplicationRecord
     green_list_status_id.present?
   end
 
-  def self.greenlist_coverage_growth(start_year = nil)
-    # Is in this format: {year: area, ...}
+  def self.greenlist_coverage_growth(start_year = 0)
+    # Is in this format: [{year: year, value: area}...]
     # Takes an optional start year from which to start counting
-    coverage_growth_hash = {}
-
-    areas = ProtectedArea.green_list_areas.where.not(legal_status_updated_at: nil)
+    growth = <<-SQL
+      SELECT DISTINCT ON(t.year) JSON_BUILD_OBJECT(
+        'year', t.year, 'value', t.area
+      ) AS data
+      FROM (
+        SELECT pa.legal_status_updated_at AS year,
+              SUM(pa.gis_area) OVER(ORDER BY pa.legal_status_updated_at) AS area
+        FROM protected_areas pa
+        JOIN green_list_statuses gls ON gls.id = pa.green_list_status_id
+        WHERE gls.status <> 'Candidate'
+        ORDER BY year
+      ) t
+      WHERE EXTRACT(YEAR FROM t.year) >= ?
+    SQL
     
-    if start_year
-      date_from_year = "#{start_year}-01-01 00:00:00".to_time 
-      areas = areas.where("legal_status_updated_at >= ? ", date_from_year)
-    end
-  
-    sorted_dates = areas.pluck(:legal_status_updated_at).sort { |a,b| b <=> a }.uniq
+    result = ActiveRecord::Base.connection.execute(
+      ActiveRecord::Base.send(:sanitize_sql_array, [
+        growth, start_year
+      ])
+    )
 
-    sorted_dates.each do |date|
-      # year = date.to_date.year
-      coverage_growth_hash[date] ||= []
-      
-      area_sum = areas.where("legal_status_updated_at <= ?", date).reduce(0) { |sum, x| sum + x.gis_area }
-      coverage_growth_hash[date] = area_sum
-    end
-
-    coverage_growth_hash
+    result.map { |r| JSON.parse(r['data']) }
   end
 
   def sources_per_pa
