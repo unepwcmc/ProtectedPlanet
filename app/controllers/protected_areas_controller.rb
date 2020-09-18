@@ -8,9 +8,12 @@ class ProtectedAreasController < ApplicationController
     
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'protected_area', id)
 
-    @protected_area = ProtectedArea.
-      where("slug = ? OR wdpa_id = ?", id, id.to_i).
-      first
+    # If found by slug, redirect to search page
+    # This is to overcome possible issues with PAs with same name/slug and different WDPA ID
+    pa = ProtectedArea.find_by(slug: id)
+    redirect_to search_areas_path(search_term: pa.name) and return if pa
+
+    @protected_area = ProtectedArea.find_by(wdpa_id: id.to_i)
 
     @protected_area or raise_404
 
