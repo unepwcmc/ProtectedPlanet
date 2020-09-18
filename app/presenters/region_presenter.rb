@@ -130,7 +130,9 @@ class RegionPresenter
     # Group them by region
     countries_in_region = countries.select { |country| country.region == region }
 
-    countries_in_region.concat(region.countries.where.not(id: countries_in_region).take(10 - countries_in_region.length).to_a)
+    if countries_in_region.length < 10
+      countries_in_region.concat(region.countries.where.not(id: countries_in_region).take(10 - countries_in_region.length).to_a)
+    end
 
     all_gls = countries_in_region.map do |country|
       total_gl_area = country.protected_areas.green_list_areas.present? ? country.total_gl_coverage : 0

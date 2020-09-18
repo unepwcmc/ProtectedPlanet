@@ -12,7 +12,6 @@ class GreenListController < ApplicationController
   def index
     @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'greenlist')
 
-    # TODO - statistics are not accurate
     stats = green_list_statistics
     @pas_km = stats['green_list_area']
     @pas_percent = stats['green_list_perc']
@@ -23,11 +22,10 @@ class GreenListController < ApplicationController
     {
       title: I18n.t('charts.legend.coverage_km2'),
       units: I18n.t('charts.units.km2'),
-      datapoints: ProtectedArea.greenlist_coverage_growth(2000).map { |el| { year: el[0], value: el[1] } }
+      datapoints: ProtectedArea.greenlist_coverage_growth(2000)
     }.to_json 
     
-    # TODO - This may need to be reworked by CLS
-    @total_area_percent = Stats::Global.percentage_pa_cover.to_f - @pas_percent.to_f
+    @total_area_percent = (Stats::Global.percentage_pa_cover - @pas_percent.to_f).round(2)
 
     @filters = {
       db_type: ['wdpa'],
