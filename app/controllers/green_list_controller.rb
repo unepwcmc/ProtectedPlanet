@@ -4,7 +4,7 @@ class GreenListController < ApplicationController
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
 
   before_action :most_protected_areas, only: [:index]
-  before_action :get_green_list_sites, only: [:index, :show]
+  before_action :get_green_list_sites, only: [:index]
 
   CHART_SIZE = 10
 
@@ -39,13 +39,6 @@ class GreenListController < ApplicationController
       type: 'is_green_list',
       point_query_services: point_query_services
     }
-  end
-
-  def record_visit
-    return if @protected_area.nil?
-
-    year_month = DateTime.now.strftime("%m-%Y")
-    $redis.zincrby(year_month, 1, @protected_area.wdpa_id)
   end
 
   private
@@ -90,12 +83,12 @@ class GreenListController < ApplicationController
     end.compact.to_json
   end
 
-  def get_green_list_sites
-    @example_greenlist ||= green_list_areas.take(3)
-  end
-  
   def green_list_areas
     @green_list_areas ||= ProtectedArea.green_list_areas
+  end
+
+  def get_green_list_sites
+    @example_greenlist ||= green_list_areas.take(3)
   end
 
   def terrestrial_green_list_area_ids
