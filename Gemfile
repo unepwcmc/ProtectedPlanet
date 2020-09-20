@@ -33,6 +33,7 @@ gem 'rails-controller-testing'
 
 gem 'gdal', '~> 2.0'
 gem 'net-sftp'
+gem 'net-scp'
 #
 group :production, :staging do
 #  gem 'unicorn'
