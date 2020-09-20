@@ -79,6 +79,10 @@ export default {
   methods: {
     changeInput () {
       this.$emit('update:options', this.input)
+
+      if(this.gaId) {
+        this.$ga.event(`Checkbox - Filter: ${newBoolean}`, 'click', this.gaId)
+      }
     },
     
     inputId (title) {

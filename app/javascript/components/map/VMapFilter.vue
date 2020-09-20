@@ -15,7 +15,10 @@
       v-if="isToggleable"
       class="v-map-filter__active-toggler"
     >
-      <v-map-toggler v-model="isShown" />
+      <v-map-toggler 
+        :gaId="id"
+        v-model="isShown" 
+      />
     </div>
   </div>
 </template>
