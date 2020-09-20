@@ -70,13 +70,13 @@ class RegionPresenter
     {
       polygons: begin
                   ((polygons_count / total.to_f) * 100).round
-      rescue StandardError
-        0
+                rescue StandardError
+                  0
                 end,
       points: begin
                 ((points_count / total.to_f) * 100).round
-      rescue StandardError
-        0
+              rescue StandardError
+                0
               end
     }
   end
@@ -134,11 +134,11 @@ class RegionPresenter
   def top_gl_coverage_countries
     # List of all countries with at least one green list PA, grouped by region
     countries = Country.countries_with_gl.where(region: region)
-    all_gls = get_gl_data_for_countries(countries)
+    corresponding_stats = get_gl_data_for_countries(countries)
 
     {
       regionTitle: region.name,
-      countries: all_gls.map do |stat|
+      countries: corresponding_stats.map do |stat|
         {
           title: stat[:country].name,
           percentage: stat[:percentage],

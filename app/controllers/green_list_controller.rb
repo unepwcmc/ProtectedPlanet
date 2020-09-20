@@ -2,12 +2,11 @@ class GreenListController < ApplicationController
   include MapHelper
   # Show page for green listed protected areas
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
-  # before_action :find_protected_area
+
   before_action :most_protected_areas, only: [:index]
   before_action :get_green_list_sites, only: [:index, :show]
-  # before_action :redirect_if_not_green_listed
-  # after_action :record_visit
-  # after_action :enable_caching
+
+  CHART_SIZE = 10
 
   def index
     @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'greenlist')
@@ -40,17 +39,6 @@ class GreenListController < ApplicationController
       type: 'is_green_list',
       point_query_services: point_query_services
     }
-  end
-
-  def show
-    @presenter = ProtectedAreaPresenter.new @protected_area
-    @countries = @protected_area.countries.without_geometry
-    @other_designations = []
-    @networks = []
-
-    @wikipedia_article = @protected_area.try(:wikipedia_article)
-
-    @greenListViewAllUrl = search_areas_path(filters: { special_status: ['is_green_list']} )
   end
 
   def record_visit
@@ -88,32 +76,18 @@ class GreenListController < ApplicationController
   def most_protected_areas
     @regionsTopCountries = Region.without_global.map do |region|
       top_countries = RegionPresenter.new(region).top_gl_coverage_countries
-      chart_size = 10
       
-      if top_countries[:countries].count < chart_size # Always return an array 10 items
+      if top_countries[:countries].count < CHART_SIZE # Always return an array 10 items
         if top_countries[:countries].empty?
           # Create an array of empty hashes
-          top_countries[:countries] = Array.new(chart_size, {})
+          top_countries[:countries] = Array.new(CHART_SIZE, {})
         else
-          top_countries[:countries] = top_countries[:countries].in_groups_of(chart_size, {}).flatten
+          top_countries[:countries] = top_countries[:countries].in_groups_of(CHART_SIZE, {}).flatten
         end
       end
       
       top_countries
     end.compact.to_json
-  end
-
-  def redirect_if_not_green_listed
-    redirect_to protected_area_path(@protected_area) unless @protected_area.is_green_list
-  end
-
-  def find_protected_area
-    id = params[:id]
-    @protected_area = ProtectedArea.
-      where("slug = ? OR wdpa_id = ?", id, id.to_i).
-      first
-
-    @protected_area or raise_404
   end
 
   def get_green_list_sites
