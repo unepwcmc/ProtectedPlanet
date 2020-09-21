@@ -55,13 +55,14 @@ class ComfyOpengraph
 
   def process_meta_tags(fragment)
     identifier = fragment.identifier
+    
     case identifier
     when 'social-title'
-      og_title
+      return og_title
     when 'social-description'
-      og_description
+      return og_description
     when 'image'
-      og_image
+      return og_image
     else
       # expect a string by default
       fragment.content&.squish
