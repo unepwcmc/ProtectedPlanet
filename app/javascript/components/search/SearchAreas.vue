@@ -164,6 +164,14 @@ export default {
     this.handleQueryString()
   },
 
+  mounted () {
+    window.addEventListener('popstate', (e) => {
+      console.log(e)
+      console.log(this.window.location)
+      this.handlePopstate()
+    })
+  },
+
   watch: {
     activeFilterOptions () {
       this.$store.dispatch('download/updateSearchFilters', this.activeFilterOptions)
@@ -214,29 +222,43 @@ export default {
       this.ajaxSubmission()
     },
 
+    getQueryStringParams () {
+      const paramsFromUrl = new URLSearchParams(window.location.search)
+      
+      let params = []
+
+      this.config.queryStringParams.forEach(param => {
+        if(paramsFromUrl.has(param)) { params.push(param) }
+      })
+
+      return params
+    },
+
+    handlePopstate () {
+      this.resetSearchTerm()
+      this.resetSearchTerm()
+      
+      this.getFilteredSearchResults()
+    },
+
     /**
      * If a query string is present in the URL,
      * Initialise the state of the component based on its parameters
      * @see created()
      */
     handleQueryString () {
-      const paramsFromUrl = new URLSearchParams(window.location.search)
-
-      let params = []
-
-      this.config.queryStringParams.forEach(param => {
-        if(paramsFromUrl.has(param)) { params.push(param) }
-      })
-    
+      const params = this.getQueryStringParams()
+      
       if(params.includes('search_term')) {
-        const searchTerm = paramsFromUrl.get('search_term')
-
-        this.searchTerm = searchTerm
+        const searchTerm = paramsFromUrl.get('search_term') 
+        this.searchTerm = searchTerm 
         this.$store.dispatch('download/updateSearchTerm', searchTerm)
       }
 
       if(params.includes('geo_type')) { 
-        this.tabIdSelected = paramsFromUrl.get('geo_type')
+        const tabIdSelected = paramsFromUrl.get('geo_type') 
+        this.tabIdSelected = tabIdSelected
+        this.updateDisabledComponents(tabIdSelected )
       }
 
       let filterParams = []
@@ -268,8 +290,6 @@ export default {
       })
       
       this.filterGroupsWithPreSelected = this.filterGroups
-
-      this.updateDisabledComponents('site')
     },
 
     updateDisabledComponents (selectedTabId) {
