@@ -8,7 +8,6 @@ class ApplicationController < ActionController::Base
   before_action :set_host_for_local_storage
 
   helper_method :opengraph
-  include OpengraphHelper
 
   before_action :load_cms_site
   before_action :load_cms_content
@@ -28,11 +27,11 @@ class ApplicationController < ActionController::Base
     @opengraph ||= OpengraphBuilder.new({
                                           'og': {
                                             'site_name': t('meta.site.name'),
-                                            'title': og_title,
-                                            'description': og_description,
+                                            'title': t('meta.site.title'),
+                                            'description': t('meta.site.description'),
                                             'url': request.url,
                                             'type': 'website',
-                                            'image': og_image,
+                                            'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
                                             'image:alt': t('meta.image_alt'),
                                             'locale': I18n.locale
                                           },
@@ -86,8 +85,8 @@ class ApplicationController < ActionController::Base
 
     return unless @cms_page
 
-    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' })
-                  .parse(opengraph: opengraph, page: @cms_page, type: 'og')
+    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' },
+                        page: @cms_page).parse(opengraph: opengraph, type: 'og')
   end
 
   def record_invalid_error
