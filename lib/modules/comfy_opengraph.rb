@@ -13,7 +13,7 @@ class ComfyOpengraph
   #   'social-description': 'description',
   #   'theme_image': 'image'
   # })
-  def initialize(mappings, page: nil)
+  def initialize(mappings, page:)
     throw 'Mappings must be in hash format.' unless mappings.is_a?(Hash)
     @mappings = mappings.deep_stringify_keys
     @page = page
@@ -40,7 +40,7 @@ class ComfyOpengraph
   def get_fragment_value(fragment)
     if fragment.tag =~ /file/ && fragment.attachments.first # get path when fragment is file
       Rails.env.development? ? local_url(fragment) : production_url(fragment)
-    else # expect a string by default
+    else 
       process_meta_tags(fragment)
     end
   end
@@ -56,13 +56,14 @@ class ComfyOpengraph
   def process_meta_tags(fragment)
     identifier = fragment.identifier
     case identifier
-    when 'social_title'
+    when 'social-title'
       og_title
     when 'social-description'
       og_description
-    when 'theme-image'
+    when 'image'
       og_image
     else
+      # expect a string by default
       fragment.content&.squish
     end
   end
@@ -76,14 +77,14 @@ class ComfyOpengraph
 
   def og_image
     image = cms_fragment_content(:image, @page).try(:attachments)&.first
-    path_to_image = URI.join(root_url, helpers.url_for(image))
-    fallback_image = URI.join(root_url, helpers.image_path(I18n.t('meta.image')))
+    path_to_image = URI.join(root_url, url_for(image))
+    fallback_image = URI.join(root_url, image_path(I18n.t('meta.image')))
     image.blank? ? fallback_image : path_to_image
   end
 
   def og_title
     return I18n.t('meta.site.title') if @page.nil?
-
+    
     social_title = cms_fragment_content(:social_title, @page)
     title = @page.label
     fallback_title = title.blank? ? I18n.t('meta.site.title') : title

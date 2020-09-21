@@ -85,7 +85,7 @@ class ApplicationController < ActionController::Base
 
     return unless @cms_page
 
-    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' },
+    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'image': 'image' },
                         page: @cms_page).parse(opengraph: opengraph, type: 'og')
   end
 
