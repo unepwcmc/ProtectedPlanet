@@ -83,8 +83,6 @@ class ComfyOpengraph
   end
 
   def og_title
-    return I18n.t('meta.site.title') if @page.nil?
-    
     social_title = cms_fragment_content(:social_title, @page)
     title = @page.label
     fallback_title = title.blank? ? I18n.t('meta.site.title') : title
