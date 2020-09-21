@@ -54,11 +54,11 @@ class ApplicationController < ActionController::Base
   end
 
   def raise_404
-    raise PageNotFound
-  end
-
-  rescue_from PageNotFound do
-    render_404
+    begin
+      raise PageNotFound
+    rescue_from PageNotFound do
+      render_404
+    end
   end
 
   def enable_caching
@@ -113,7 +113,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_404
-    render file: Rails.root.join("/public/404.html"), layout: false, status: :not_found
+    render file: Rails.root.join("/app/views/layouts/404.html"), layout: false, status: :not_found
   end
 
   NO_REDIRECT = [
