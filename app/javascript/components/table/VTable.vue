@@ -47,7 +47,7 @@ export default {
 
   data () {
     return {
-      items: () => {},
+      items: () => ({}),
       loadedItems: 0,
       isLoading: false
     }
