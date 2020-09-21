@@ -3,8 +3,8 @@ class GreenListController < ApplicationController
   # Show page for green listed protected areas
   # Will only show if that area is a green listed area, otherwise redirects to wdpa page
 
-  before_action :most_protected_areas, only: [:index]
-  before_action :get_green_list_sites, only: [:index]
+  before_action :most_protected_areas
+  before_action :get_green_list_sites
 
   CHART_SIZE = 10
 
