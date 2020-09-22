@@ -151,7 +151,7 @@ class RegionPresenter
     top_countries.sort! do |a, b|
       # If rounded %s happen to be the same, then sort by area
       b[:percentage] == a[:percentage] ? b[:total_area] <=> a[:total_area] : b[:percentage] <=> a[:percentage]
-    end
+    end.take(10)
   end
 
   def fill_chart(stats)
