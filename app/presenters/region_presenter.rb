@@ -1,6 +1,9 @@
 class RegionPresenter
   include ActionView::Helpers::NumberHelper
 
+  # Relates to GL 'top-10' chart size (per region)
+  GL_CHART_SIZE = 10.freeze
+
   def initialize(region)
     @region = region
     @countries = @region.countries
@@ -67,17 +70,11 @@ class RegionPresenter
 
     total = polygons_count + points_count
 
+    return { polygons: 0, points: 0 } if total == 0
+
     {
-      polygons: begin
-                  ((polygons_count / total.to_f) * 100).round
-                rescue StandardError
-                  0
-                end,
-      points: begin
-                ((points_count / total.to_f) * 100).round
-              rescue StandardError
-                0
-              end
+      polygons: ((polygons_count / total.to_f) * 100).round,
+      points: ((points_count / total.to_f) * 100).round
     }
   end
 
@@ -138,28 +135,39 @@ class RegionPresenter
 
     {
       regionTitle: region.name,
-      countries: corresponding_stats.map do |stat|
-        {
-          title: stat[:country].name,
-          percentage: stat[:percentage],
-          km: number_with_delimiter(stat[:total_area].round(0)),
-          iso3: stat[:country].iso_3
-        }
-      end
+      countries: fill_chart(corresponding_stats)
     }
   end
 
   def get_gl_data_for_countries(countries)
-    countries.map do |country|
+    top_countries = countries.map do |country|
       total_area = country.country_statistic.total_area
       total_gl_area = country.total_gl_coverage
       percentage_of_total_area = ((total_gl_area / total_area).to_f * 100).round(1)
       
       { country: country, total_area: total_gl_area, percentage: percentage_of_total_area }
-    end.sort! do |a, b|
+    end
+    
+    top_countries.sort! do |a, b|
       # If rounded %s happen to be the same, then sort by area
       b[:percentage] == a[:percentage] ? b[:total_area] <=> a[:total_area] : b[:percentage] <=> a[:percentage]
-    end.take(10)
+    end
+  end
+
+  def fill_chart(stats)
+    # Always return at least an array of empty chart bars (hashes symbolising them here)
+    return Array.new(GL_CHART_SIZE, {}) if stats.empty?
+
+    countries = stats.map do |stat|
+      {
+        title: stat[:country].name,
+        percentage: stat[:percentage],
+        km: number_with_delimiter(stat[:total_area].round(0)),
+        iso3: stat[:country].iso_3
+      }
+    end
+
+    countries.count < GL_CHART_SIZE ? countries.in_groups_of(GL_CHART_SIZE, {}).flatten : countries
   end
 
   private

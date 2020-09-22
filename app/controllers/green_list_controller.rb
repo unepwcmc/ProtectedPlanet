@@ -6,7 +6,7 @@ class GreenListController < ApplicationController
   before_action :most_protected_areas
   before_action :get_green_list_sites
 
-  CHART_SIZE = 10
+
 
   def index
     @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'greenlist')
@@ -68,18 +68,7 @@ class GreenListController < ApplicationController
 
   def most_protected_areas
     @regionsTopCountries = Region.without_global.map do |region|
-      top_countries = RegionPresenter.new(region).top_gl_coverage_countries
-      
-      if top_countries[:countries].count < CHART_SIZE # Always return an array 10 items
-        if top_countries[:countries].empty?
-          # Create an array of empty hashes
-          top_countries[:countries] = Array.new(CHART_SIZE, {})
-        else
-          top_countries[:countries] = top_countries[:countries].in_groups_of(CHART_SIZE, {}).flatten
-        end
-      end
-      
-      top_countries
+      RegionPresenter.new(region).top_gl_coverage_countries
     end.compact.to_json
   end
 
