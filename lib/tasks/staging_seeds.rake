@@ -49,7 +49,7 @@ namespace :comfy do
     new_session =  SyncSeeds.new(PP_STAGING, PP_USER)
 
     # SSH into staging server with Net::SSH
-    new_session.start_session do |session|
+    new_session.start_session do 
       # First get rid of any local top-level (i.e. which exist in the main
       # directory of dest) folders/files that don't exist remotely
       new_session.compare_folders(wildcard: '*', local: dest, remote: SOURCE, base: dest)
