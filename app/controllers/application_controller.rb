@@ -28,7 +28,7 @@ class ApplicationController < ActionController::Base
                                             'site_name': t('meta.site.name'),
                                             'title': t('meta.site.title'),
                                             'description': t('meta.site.description'),
-                                            'url': request.original_url,
+                                            'url': request.url,
                                             'type': 'website',
                                             'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
                                             'image:alt': t('meta.image_alt'),
@@ -84,8 +84,8 @@ class ApplicationController < ActionController::Base
 
     return unless @cms_page
 
-    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'theme_image': 'image' })
-                  .parse(opengraph: opengraph, page: @cms_page)
+    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'image': 'image' },
+                        page: @cms_page).parse(opengraph: opengraph, type: 'og')
   end
 
   def record_invalid_error
