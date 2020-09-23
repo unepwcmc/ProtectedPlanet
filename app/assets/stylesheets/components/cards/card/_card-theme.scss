@@ -24,56 +24,6 @@
   &::before { @include border-radius; }
 
   .card {
-    &__ribbon {
-      @include flex;
-      @include flex-column;
-      @include flex-h-between;
-      @include flex-v-center;
-      background-color: $grey-black;
-      padding: rem-calc(20 10);
-      text-align: center;
-      width: rem-calc(134); height: rem-calc(134); 
-
-      position: absolute;
-      top: 0;
-
-      @include breakpoint ($small) { 
-        width: rem-calc(150); height: rem-calc(150); 
-
-        right: rem-calc(26);
-      }
-
-      @include breakpoint ($medium) { right: rem-calc(44); }
-    } 
-
-      &__icon {
-        @include icon-pin-terrestrial-light;
-        flex-shrink: 0;
-
-        &.marine-protected-areas { @include icon-pin-marine-light; }
-        &.oecms { @include icon-pin-oecm-light; }
-      }
-
-      &__number {
-        color: $primary;
-        font-size: rem-calc(20);
-        font-weight: $bold;
-        line-height: 1;
-        margin-top: rem-calc(10);
-
-        display: block;
-
-        @include breakpoint ($small) { font-size: rem-calc(30); }
-        @include breakpoint ($medium) { font-size: rem-calc(40); }
-      }
-
-        &__number-text { 
-          font-size: rem-calc(16);
-          line-height: 1; 
-
-          @include breakpoint ($small) { font-size: rem-calc(18); }
-        }
-
     &__summary {
       display: none;
 
