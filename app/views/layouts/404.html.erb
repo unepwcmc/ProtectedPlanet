@@ -1,6 +1,10 @@
-<section class="spacer-small--top spacer-small--bottom">
-  <%= render "layouts/404-content" %>
+<section class="spacer-large--medium">
+  <%= render partial: "./layouts/partials/hero-basic", locals: { 
+    title: t('global.redirect.title'),
+    summary: t('global.redirect.text', url: root_url).html_safe
+  } %>
 </section>
+
 
 <section class="container spacer-small--bottom">
   <%= render "partials/cards/articles" %>
