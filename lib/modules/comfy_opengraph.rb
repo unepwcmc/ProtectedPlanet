@@ -78,9 +78,8 @@ class ComfyOpengraph
 
   def og_image
     image = cms_fragment_content(:image, @page).try(:attachments)&.first
-    path_to_image = URI.join(root_url, url_for(image))
     fallback_image = URI.join(root_url, image_path(I18n.t('meta.image')))
-    image.blank? ? fallback_image : path_to_image
+    image.blank? ? fallback_image : URI.join(root_url, url_for(image))
   end
 
   def og_title
