@@ -14,15 +14,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
   before_action :check_for_pdf
-  after_action :store_location
-
-  NO_REDIRECT = ["/users/sign_in",
-    "/users/sign_up",
-    "/users/password/new",
-    "/users/password/edit",
-    "/users/confirmation",
-    "/users/sign_out"
-  ].freeze
 
   def admin_path?
     request.original_fullpath =~ %r{/(?:#{I18n.locale}/)?admin/?}
@@ -126,15 +117,6 @@ class ApplicationController < ActionController::Base
 
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?
-  end
-
-  def store_location
-    # store last url - this is needed for post-login redirect to whatever the user last visited.
-    return unless request.get?
-
-    if (!NO_REDIRECT.include?(request.path) && !request.xhr?)
-      session[:previous_url] = request.fullpath
-    end
   end
 
   def set_host_for_local_storage
