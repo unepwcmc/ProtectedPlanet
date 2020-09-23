@@ -11,12 +11,16 @@ module Wdpa::GlobalStatsImporter
       attrs.merge!("#{field}": value)
     end
 
-    puts attrs
     GlobalStatistic.create(attrs)
   end
 
   private
 
+  # If it's a string, ensure to remove commas before casting to float.
+  # If it's a float this will basically return the value as it is in the csv.
+  # Even though strings in the csv are mostly integers, converting it to float here
+  # shouldn't cause issues with the database where the field is explicitly an integer.
+  # Postgres should take care of it.
   def self.parse_value(val)
     val.to_s.split(',').join('').to_f
   end
