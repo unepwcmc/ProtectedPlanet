@@ -6,13 +6,13 @@
           <%= render '/partials/svgs/pin.svg' %>
         </i>
         <span class="card__number-large"><%= card[:percentage] %>%</span>
-        <p class="card__title"><%= card[:title] %></p>
         <% card[:totals].each do |total| %>
           <p class="card__total">
             <span class="card__number"><%= total[:number] %>:</span>
             <span class="card__text"><%= total[:text] %></span>
           </p>
         <% end %>
+        <p class="card__title"><%= card[:title] %></p>
       </div>
     <% end %>
   </div>

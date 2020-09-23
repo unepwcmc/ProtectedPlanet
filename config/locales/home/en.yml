@@ -3,16 +3,16 @@ en:
     facts:
       -
         theme: terrestrial
-        title: Terrestrial Protected Area Coverage
+        title: Terrestrial protected area coverage
       -
         theme: marine
-        title: Marine Protected Area Coverage
+        title: Marine protected area coverage
       -
         theme: oecm
-        title: Terrestrial OECM & Protected Area Coverage
+        title: Terrestrial OECM & protected area coverage
       -
         theme: oecm
-        title: Marine OECM & Protected Area Coverage
+        title: Marine OECM & protected area coverage
     hero:
       button: Explore Protected Areas
       stat-text: Global coverage of protected and conserved areas
