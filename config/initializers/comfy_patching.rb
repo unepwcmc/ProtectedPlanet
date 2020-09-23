@@ -238,4 +238,11 @@ Rails.configuration.to_prepare do
       [frag_identifiers, frag_attributes]
     end
   end
+
+  Comfy::Cms::ContentController.class_eval do 
+    # Needed for redirects for CMS pages (essentially anything with a locale)
+    def load_cms_page
+      raise_404 unless find_cms_page_by_full_path("/#{params[:cms_path]}")
+    end 
+  end
 end

@@ -1,0 +1,9 @@
+.error-page {
+  &__hero {
+    text-align: center;
+
+    & > .hero--basic .hero__content {
+      width: 100%;
+    }
+  }
+}

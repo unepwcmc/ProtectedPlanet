@@ -14,7 +14,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
   before_action :check_for_pdf
-  after_action :store_location
 
   def admin_path?
     request.original_fullpath =~ %r{/(?:#{I18n.locale}/)?admin/?}
@@ -113,29 +112,11 @@ class ApplicationController < ActionController::Base
   end
 
   def render_404
-    render file: Rails.root.join("/public/404.html"), layout: false, status: :not_found
+    render file: Rails.root.join("/app/views/layouts/404.html.erb"), layout: true, status: :not_found
   end
-
-  NO_REDIRECT = [
-    "/users/sign_in",
-    "/users/sign_up",
-    "/users/password/new",
-    "/users/password/edit",
-    "/users/confirmation",
-    "/users/sign_out"
-  ]
 
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?
-  end
-
-  def store_location
-    # store last url - this is needed for post-login redirect to whatever the user last visited.
-    return unless request.get?
-
-    if (!NO_REDIRECT.include?(request.path) && !request.xhr?)
-      session[:previous_url] = request.fullpath
-    end
   end
 
   def set_host_for_local_storage
