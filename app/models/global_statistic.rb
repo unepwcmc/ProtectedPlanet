@@ -28,4 +28,10 @@ class GlobalStatistic < ApplicationRecord
   def self.green_list_stats
     instance.slice(*GREEN_LIST_STATS)
   end
+
+  self.column_names.each do |column_name|
+    define_singleton_method(column_name) do
+      self.instance.send(column_name)
+    end
+  end
 end

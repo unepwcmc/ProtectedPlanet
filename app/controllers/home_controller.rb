@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   def index
     @presenter = HomePresenter.new
 
-    @pa_coverage_percentage = Stats::Global.percentage_pa_cover
+    @pa_coverage_percentage = GlobalStatistic.global_oecms_pas_coverage_percentage
 
     @config_search_areas = {
       id: 'all',
