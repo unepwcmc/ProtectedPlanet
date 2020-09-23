@@ -62,11 +62,11 @@ class ApplicationController < ActionController::Base
   end
 
   def raise_404
-    begin
-      raise PageNotFound
-    rescue_from PageNotFound do
-      render_404
-    end
+    raise PageNotFound
+  end
+
+  rescue_from PageNotFound do
+    render_404
   end
 
   def enable_caching
@@ -121,7 +121,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_404
-    render file: Rails.root.join("/app/views/layouts/404.html"), layout: false, status: :not_found
+    render file: Rails.root.join("/app/views/layouts/404.html.erb"), layout: false, status: :not_found
   end
 
   def check_for_pdf
@@ -142,5 +142,4 @@ class ApplicationController < ActionController::Base
     # TODO Check why this is not set automatically
     ActiveStorage::Current.host = request.base_url if Rails.application.config.active_storage.service == :local
   end
-end
 end
