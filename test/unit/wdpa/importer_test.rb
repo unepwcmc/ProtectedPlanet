@@ -14,8 +14,8 @@ class TestWdpaImporter < ActiveSupport::TestCase
     Wdpa::ProtectedAreaImporter.expects(:import).with(wdpa_release).in_sequence(import)
     Wdpa::NetworkImporter.expects(:import).in_sequence(import)
     Wdpa::OverseasTerritoriesImporter.expects(:import).in_sequence(import)
+    Wdpa::GlobalStatsImporter.expects(:import).in_sequence(import)
     Wdpa::GreenListImporter.expects(:import).in_sequence(import)
-    Wdpa::MarineStatsImporter.expects(:import).in_sequence(import)
 
     ImportWorkers::FinaliserWorker.expects(:can_be_started=).with(true).in_sequence(import)
 

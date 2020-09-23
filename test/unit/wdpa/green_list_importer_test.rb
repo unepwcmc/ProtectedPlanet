@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TestWdpaMarineStatsImporter < ActiveSupport::TestCase
+class TestGreenListImporter < ActiveSupport::TestCase
   def before_setup
     super
 
