@@ -16,6 +16,14 @@ class ApplicationController < ActionController::Base
   before_action :check_for_pdf
   after_action :store_location
 
+  NO_REDIRECT = ["/users/sign_in",
+    "/users/sign_up",
+    "/users/password/new",
+    "/users/password/edit",
+    "/users/confirmation",
+    "/users/sign_out"
+  ].freeze
+
   def admin_path?
     request.original_fullpath =~ %r{/(?:#{I18n.locale}/)?admin/?}
   end
@@ -116,15 +124,6 @@ class ApplicationController < ActionController::Base
     render file: Rails.root.join("/app/views/layouts/404.html"), layout: false, status: :not_found
   end
 
-  NO_REDIRECT = [
-    "/users/sign_in",
-    "/users/sign_up",
-    "/users/password/new",
-    "/users/password/edit",
-    "/users/confirmation",
-    "/users/sign_out"
-  ]
-
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?
   end
@@ -143,4 +142,5 @@ class ApplicationController < ActionController::Base
     # TODO Check why this is not set automatically
     ActiveStorage::Current.host = request.base_url if Rails.application.config.active_storage.service == :local
   end
+end
 end
