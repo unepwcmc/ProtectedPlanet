@@ -21,6 +21,9 @@ Rails.configuration.to_prepare do
     after_save :assign_layout_categories
 
     def assign_layout_categories
+      # If database tables have not been created yet, return early and do nothing
+      # This happens during a migration generated prior to the creation of such tables
+      return unless ActiveRecord::Base.connection.table_exists? Comfy::Cms::LayoutsCategory.table_name
       # _categories = [{ tag_params: 'topics', tag_class: 'categories'}]
       _categories = self.content_tokens.select do |t|
         unless t.is_a?(Hash)
