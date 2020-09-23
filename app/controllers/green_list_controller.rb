@@ -6,8 +6,6 @@ class GreenListController < ApplicationController
   before_action :most_protected_areas
   before_action :get_green_list_sites
 
-
-
   def index
     @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'greenlist')
 
@@ -44,7 +42,7 @@ class GreenListController < ApplicationController
   private
 
   def green_list_statistics
-    @green_list_statistics ||= $redis.hgetall('green_list_stats')
+    @green_list_statistics ||= GlobalStatistic.green_list_stats
   end
 
   def map_overlays

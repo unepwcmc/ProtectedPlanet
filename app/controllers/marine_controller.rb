@@ -123,7 +123,7 @@ class MarineController < ApplicationController
   end
 
   def marine_statistics
-    @marine_statistics = $redis.hgetall('wdpa_marine_stats')
+    @marine_statistics = GlobalStatistic.marine_stats
   end
 
   def growth

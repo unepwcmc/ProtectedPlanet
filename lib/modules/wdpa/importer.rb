@@ -20,8 +20,8 @@ class Wdpa::Importer
     Wdpa::GeometryRatioCalculator.calculate
     Wdpa::NetworkImporter.import
     Wdpa::OverseasTerritoriesImporter.import
+    Wdpa::GlobalStatsImporter.import
     Wdpa::GreenListImporter.import
-    Wdpa::MarineStatsImporter.import
     Wdpa::PameImporter.import
     Wdpa::StoryMapLinkListImporter.import
     Wdpa::BiopamaCountriesImporter.import
