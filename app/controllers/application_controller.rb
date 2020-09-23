@@ -121,7 +121,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_404
-    render file: Rails.root.join("/app/views/layouts/404.html.erb"), layout: false, status: :not_found
+    render file: Rails.root.join("/app/views/layouts/404.html.erb"), layout: true, status: :not_found
   end
 
   def check_for_pdf

@@ -34,5 +34,5 @@ en:
     status:
       updated: Updated
     redirect:
-      title: Sorry, that page doesn't exist.
-      text: "Feel free to browse the themes and articles below, or go back to the <a href=\"%{url}\">homepage</a>"
+      title: Sorry, that page can't be found.
+      text: "Feel free to browse the themes and articles below, or go back to the <a href=\"%{url}\">homepage</a>."
