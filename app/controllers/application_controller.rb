@@ -23,7 +23,6 @@ class ApplicationController < ActionController::Base
   def opengraph
     return if admin_path?
 
-    # Methods to populate the site name dynamically are found in opengraph_helper
     @opengraph ||= OpengraphBuilder.new({
                                           'og': {
                                             'site_name': t('meta.site.name'),
