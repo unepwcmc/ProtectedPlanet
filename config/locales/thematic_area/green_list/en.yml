@@ -2,8 +2,8 @@ en:
   thematic_area:
     green_list:
       hero:
-        button_text: Explore green listed protected areas
-        stat_text_1: Percent of the world covered by green listed protected areas
-        stat_text_2: Green listed Protected Areas
+        button_text: Explore Green Listed protected areas
+        stat_text_1: Percent of the world covered by Green Listed protected areas
+        stat_text_2: Green Listed Protected Areas
         stat_text_3: Total area protected
-      card_text: Greenlist Protected Areas
+      card_text: Green List Protected Areas
