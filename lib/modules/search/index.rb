@@ -3,6 +3,14 @@ class Search::Index
   MAPPINGS_TEMPLATE = File.read(File.join(TEMPLATE_DIRECTORY, 'mappings.json'))
 
   def self.create
+    page_relation = Comfy::Cms::SearchablePage.includes([
+      :fragments_for_index,
+      {:translations_for_index => :fragments_for_index},
+      :categories
+    ])
+    cms_index = Search::Index.new Search::CMS_INDEX, page_relation
+    cms_index.create
+
     pa_relation = ProtectedArea.without_geometry.includes([
       {:countries_for_index => :region_for_index},
       :sub_locations,
@@ -11,27 +19,17 @@ class Search::Index
       :governance
     ])
 
-
     region_index = Search::Index.new Search::REGION_INDEX, Region.without_geometry.all
     region_index.create
     country_index = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
     country_index.create
     pa_index = Search::Index.new Search::PA_INDEX, pa_relation
     pa_index.create
+
+    cms_index.index
     region_index.index
     country_index.index
     pa_index.index
-  end
-
-  def self.create_cms_fragments
-    page_relation = Comfy::Cms::SearchablePage.includes([
-      :fragments_for_index,
-      {:translations_for_index => :fragments_for_index},
-      :categories
-    ])
-    cms_index = Search::Index.new Search::CMS_INDEX, page_relation
-    cms_index.create
-    cms_index.index
   end
 
   def self.count
