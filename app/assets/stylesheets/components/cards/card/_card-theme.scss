@@ -3,7 +3,7 @@
   @include border-radius;
   @include flex;
   @include flex-column;
-  @include flex-h-end;
+  @include flex-h-start;
   background-color: $grey-dark;
   background-position: center;
   background-size: cover;
