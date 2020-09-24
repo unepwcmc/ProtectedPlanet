@@ -17,8 +17,6 @@ class Download::Requesters::Search < Download::Requesters::Base
     'search'
   end
 
-  private
-
   def identifier
     token
   end
@@ -26,6 +24,8 @@ class Download::Requesters::Search < Download::Requesters::Base
   def token
     @token ||= Download::Utils.search_token(@search_term, filters)
   end
+  
+  private
 
   def filters
     @filters

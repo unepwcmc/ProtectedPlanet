@@ -97,6 +97,11 @@ incorrectly for RGeo's use. You can fix this easily:
   ln -s /usr/lib/libgeos-3.4.2.so /usr/lib/libgeos.so
 ```
 
+**Update by J. Feist**
+If you are using Ubuntu and are having issues installing GEOS (via GDAL that you will notice after failure to `bundle _1.17.3_ install` then see [this](https://stackoverflow.com/questions/12141422/error-gdal-config-not-found) SO question - you can install the library required with `sudo apt update && sudo apt install libgdal-dev`.
+
+You may also need to install PostGIS for PostgreSQL e.g. `sudo apt install -y postgresql-10-postgis-2.4 && sudo service postgresql restart` if you get [this](https://gis.stackexchange.com/questions/271394/error-could-not-access-file-libdir-postgis-2-4-no-such-file-or-directory?newreg=ced3ebbc15f444e6b6fd0b64f7a8775b) error.
+
 Please note, if you experience an error when viewing the regions or countries pages like this:
 
 ```

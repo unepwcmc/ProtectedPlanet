@@ -28,6 +28,14 @@ class Country < ApplicationRecord
     country_statistic
   end
 
+  def assessments
+    pame_evaluations.count
+  end
+
+  def assessed_pas
+    pame_evaluations.map(&:wdpa_id).uniq.count
+  end
+
   def protected_areas_with_iucn_categories
     valid_categories = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
     iucn_categories.where(

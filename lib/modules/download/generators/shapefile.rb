@@ -13,10 +13,11 @@ class Download::Generators::Shapefile < Download::Generators::Base
     }
   }
 
-  def initialize zip_path, wdpa_ids
+  def initialize zip_path, wdpa_ids, number_of_pieces=3
     @path = File.dirname(zip_path)
     @filename = File.basename(zip_path, File.extname(zip_path))
     @wdpa_ids = wdpa_ids
+    @number_of_pieces = number_of_pieces
   end
 
   def generate
@@ -24,34 +25,49 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
     shapefile_paths = []
 
-    clean_up_after do
-      QUERY_CONDITIONS.each do |name, props|
-        shapefile_paths |= export_component name, props
+    @number_of_pieces.times do |i|
+      clean_up_after do
+        QUERY_CONDITIONS.each do |name, props|
+          shapefile_paths |= export_component name, props, i
+        end
+
+        export_sources
+
+        system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
+        system("zip -j #{zip_path} #{shapefile_paths.join(' ')}") and system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
       end
-
-      export_sources
-
-      system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
-      system("zip -j #{zip_path} #{shapefile_paths.join(' ')}") and system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
     end
+    merge_files
   rescue Ogr::Postgres::ExportError
     return false
   end
 
   private
 
-  def export_component name, props
+  def export_component name, props, piece_index
     component_paths = shapefile_components(name)
     view_name = create_view query(props[:select], props[:where])
 
-    return [] if ActiveRecord::Base.connection.select_value("""
+    total_count = ActiveRecord::Base.connection.select_value("""
       SELECT COUNT(*) FROM #{view_name}
-    """).to_i.zero?
+    """).to_i
+
+    return [] if total_count.zero?
+
+    limit = (total_count / @number_of_pieces.to_f).ceil
+    offset = limit * piece_index
+    order_by = 'ORDER BY \""WDPAID"\" ASC'
+    sql = """
+      SELECT *
+      FROM #{view_name}
+      #{order_by if name.to_s == 'polygons'}
+      LIMIT #{limit} OFFSET #{offset}
+    """.squish
 
     export_success = Ogr::Postgres.export(
       :shapefile,
       component_paths.first,
-      "SELECT * FROM #{view_name}"
+      sql
     )
 
     raise Ogr::Postgres::ExportError unless export_success
@@ -77,13 +93,20 @@ class Download::Generators::Shapefile < Download::Generators::Base
     end
   end
 
-  def zip_path
-    File.join(@path, "#{@filename}.zip")
+  def zip_path(index='')
+    File.join(@path, "#{@filename}#{index}.zip")
   end
 
   def shapefile_components name
     SHAPEFILE_PARTS.collect do |ext|
       File.join(@path, "#{@filename}-#{name}.#{ext}")
     end
+  end
+
+  def merge_files
+    range = (0..@number_of_pieces-1)
+    files_paths = range.map { |i| zip_path(i) }.join(' ')
+    system("zip -j #{zip_path} #{files_paths}") and system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
+    range.each { |i| FileUtils.rm_rf(zip_path(i)) }
   end
 end

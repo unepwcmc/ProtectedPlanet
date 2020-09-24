@@ -23,4 +23,24 @@ class DownloadRequestersSearchTest < ActiveSupport::TestCase
 
     Download::Requesters::Search.new('shp', 'san guillermo', {}).request
   end
+
+  test "token should depend on search term and all filters" do
+    no_filter_token = Download::Requesters::Search.new('badger', {}).token
+    fra_filter_token = Download::Requesters::Search.new('badger', {country: 'fra'}).token
+    bra_filter_token = Download::Requesters::Search.new('badger', {country: 'bra'}).token
+
+    assert_not_equal no_filter_token, fra_filter_token
+    assert_not_equal no_filter_token, bra_filter_token
+    assert_not_equal bra_filter_token, fra_filter_token
+  end
+
+  test "token should be agnostic to order of filters" do
+    one_filter_token = Download::Requesters::Search.new('badger', {country: 'fra', designation: 'Conservation Area'}).token
+    two_filter_token = Download::Requesters::Search.new('badger', {designation: 'Conservation Area', country: 'fra'}).token
+
+    assert_equal one_filter_token, two_filter_token
+  end
+
+
+
 end

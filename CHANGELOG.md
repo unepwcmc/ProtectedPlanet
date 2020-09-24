@@ -1,3 +1,51 @@
+### 3.2.16
+
+* Add country, pame_country and marine stats (WDPA September 2020 release).
+
+### 3.2.15
+
+* Added assorted statistics for August 2020 release.
+* Shapefile README included.
+
+### 3.2.14
+
+* Allow to split data into multiple shapefiles
+
+### 3.2.13
+
+* Add country, pame_country and marine stats (WDPA June 2020 release).
+
+### 3.2.12
+
+* Fix PAME evaluations count mismatch between country page and API
+* Fix data download bug sometimes downloading incorrect files
+
+### 3.2.11
+
+* Add country, pame_country and marine stats (WDPA May 2020 release).
+* Fix coverage percentage statistics
+
+### 3.2.10
+
+* Add country, pame_country and marine stats (WDPA April 2020 release).
+
+### 3.2.9
+
+* Add country, pame_country and marine stats (WDPA March 2020 release).
+
+### 3.2.8
+
+* Calculate and populate assessments and assessed_pas fields for PameStatisic during import
+
+### 3.2.7
+
+* Add country, pame_country and marine stats (WDPA February 2020 release).
+
+### 3.2.6
+
+* Add country, pame_country and marine stats (WDPA January 2020 release).
+* Update rack, nokogiri and rubyzip gems
+
 ### 3.2.5
 
 * Add download tracking for links in CMS (e.g. OECM downloads)
