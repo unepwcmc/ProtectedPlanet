@@ -1,7 +1,7 @@
 # config valid only for current version of Capistrano
 lock '3.11.0'
 
-set :application, 'ProtectedPlanet-copy'
+set :application, 'ProtectedPlanet'
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
 
 set :deploy_user, 'wcmc'
