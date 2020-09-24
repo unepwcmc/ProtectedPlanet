@@ -23,8 +23,8 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
         # Below lines were needed on staging as the ProtectedArea model
         # wasn't getting the new columns information after switching from the
         # postgres db to the newly created db
-        # ProtectedArea.connection.schema_cache.clear!
-        # ProtectedArea.reset_column_information
+        ProtectedArea.connection.schema_cache.clear!
+        ProtectedArea.reset_column_information
         protected_area_id = ProtectedArea.create!(standardised_attributes).id
       end
     rescue 
