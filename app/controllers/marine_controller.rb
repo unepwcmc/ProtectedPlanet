@@ -26,9 +26,9 @@ class MarineController < ApplicationController
       RegionPresenter.new(region).marine_coverage
     end
 
-    @pas_km = @marine_statistics['total_ocean_area_protected']
-    @pas_percent = @marine_statistics['total_ocean_pa_coverage_percentage']
-    @pas_total = @marine_statistics['total_marine_protected_areas']
+    @pas_km = @marine_statistics['total_ocean_area_oecms_pas']
+    @pas_percent = @marine_statistics['total_ocean_oecms_pas_coverage_percentage']
+    @pas_total = @marine_statistics['total_marine_oecms_pas']
     @map = {
       overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
@@ -123,7 +123,7 @@ class MarineController < ApplicationController
   end
 
   def marine_statistics
-    @marine_statistics = $redis.hgetall('wdpa_marine_stats')
+    @marine_statistics = GlobalStatistic.marine_stats
   end
 
   def growth
