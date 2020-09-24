@@ -1,10 +1,10 @@
 set :stage, :staging
-set :branch, "refresh-copy"
+set :branch, "refresh"
 
 server 'new-web.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
-set :application, "protectedplanet-copy"
-set :server_name, "protectedplanet-copy"
+set :application, "protectedplanet"
+set :server_name, "protectedplanet"
 set :sudo_user, "wcmc"
 set :app_port, "80"
 
