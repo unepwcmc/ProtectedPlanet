@@ -23,12 +23,23 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
         # Below lines were needed on staging as the ProtectedArea model
         # wasn't getting the new columns information after switching from the
         # postgres db to the newly created db
-        #ProtectedArea.connection.schema_cache.clear!
-        #ProtectedArea.reset_column_information
+        ProtectedArea.connection.schema_cache.clear!
+        ProtectedArea.reset_column_information
         protected_area_id = ProtectedArea.create!(standardised_attributes).id
       end
-    rescue
+    rescue StandardError => e
       Rails.logger.info("ProtectedArea with WDPAID #{attributes[:wdpaid]} not imported")
+      Rails.logger.info(e.message)
+      Rails.logger.info(e.backtrace)
+      Rails.logger.info("===DB CONFIGS===")
+      Rails.logger.info(ActiveRecord::Base.configurations)
+      Rails.logger.info(Rails.configuration.database_configuration)
+      Rails.logger.info(ActiveRecord::Base.connection.current_database)
+      Rails.logger.info(ProtectedArea.connection.current_database)
+      ProtectedArea.connection.schema_cache.clear!
+      ProtectedArea.reset_column_information
+      Rails.logger.info(ProtectedArea.column_names)
+      Rails.logger.info("===DB CONFIGS===")
     end
 
     return protected_area_id
