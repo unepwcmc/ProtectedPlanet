@@ -34,7 +34,7 @@ export default {
           source: {
             type: 'raster',
             tiles: [layer.url],
-            tileSize: 256,
+            tileSize: 128,
           },
           layout: {
             visibility: 'visible'
