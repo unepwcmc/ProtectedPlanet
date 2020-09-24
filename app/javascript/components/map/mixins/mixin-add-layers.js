@@ -33,7 +33,8 @@ export default {
           maxzoom: 22,
           source: {
             type: 'raster',
-            tiles: [layer.url]
+            tiles: [layer.url],
+            tileSize: 128,
           },
           layout: {
             visibility: 'visible'

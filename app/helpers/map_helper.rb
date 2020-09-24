@@ -5,7 +5,7 @@ WDPA_FEATURE_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/P
 WDPA_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_of_Protected_Areas/MapServer'
 WDPA_POINT_LAYER_URL = WDPA_MAP_SERVER_URL + '/0'
 WDPA_POLY_LAYER_URL = WDPA_MAP_SERVER_URL + '/1'
-MARINE_WDPA_MAP_SERVER_URL = 'https://gis.unep-wcmc.org/arcgis/rest/services/wdpa/public/MapServer'
+MARINE_WDPA_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/WDPA_Marine_and_Coastal/MapServer'
 MARINE_WDPA_POINT_LAYER_URL = MARINE_WDPA_MAP_SERVER_URL + '/0'
 MARINE_WDPA_POLY_LAYER_URL = MARINE_WDPA_MAP_SERVER_URL + '/1'
 
