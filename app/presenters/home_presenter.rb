@@ -15,12 +15,15 @@ class HomePresenter
     @marine_pas ||= number_with_delimiter(ProtectedArea.where(marine: true).count)
   end
 
+  # TEMPORARILY USING CSV DATA FOR OECM NUMBERS - if importer manages to successfully populate OECMs, we'll go with that instead
   def terrestrial_oecms
-    number_with_delimiter(ProtectedArea.where(marine: false, is_oecm: true).count)
+    # number_with_delimiter(ProtectedArea.where(marine: false, is_oecm: true).count)
+    GlobalStatistic.total_terrestrial_oecms
   end
 
   def marine_oecms
-    number_with_delimiter(ProtectedArea.where(marine: true, is_oecm: true).count)
+    # number_with_delimiter(ProtectedArea.where(marine: true, is_oecm: true).count)
+    GlobalStatistic.total_marine_oecms
   end
 
   def terrestrial_cover
