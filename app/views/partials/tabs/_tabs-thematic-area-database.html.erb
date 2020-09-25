@@ -15,7 +15,7 @@
       <section class="map-section">
         <%= render partial: "partials/maps/main", locals: {
           map: map,
-          map_options: local_assigns.has_key? :map_options ? map_options : nil
+          map_options: local_assigns.has_key?(:map_options) ? map_options : nil
         } %>
       </section>
     </tab-target>
