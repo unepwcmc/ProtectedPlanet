@@ -9,15 +9,15 @@ en:
         title: Marine protected area coverage
       -
         theme: oecm
-        title: Terrestrial OECM & protected area coverage
+        title: Terrestrial protected area & OECM coverage
       -
         theme: oecm
-        title: Marine OECM & protected area coverage
+        title: Marine protected areas & OECM coverage
     hero:
       button: Explore Protected Areas
-      stat-text: Global coverage of protected and OECM areas
+      stat-text: Global coverage of protected areas and OECMs
     pas:
-      title: Explore Protected Areas by...
+      title: Explore Protected Areas and OECMs by...
       button: Explore All
       levels:
         -
