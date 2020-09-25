@@ -22,6 +22,9 @@ class OecmController < ApplicationController
         { url: OECM_FEATURE_SERVER_LAYER_URL, isPoint: false }
       ]
     }
+    @map_options = {
+      map: { center: [-100,0] }
+    }
     @filters = { db_type: ['oecm'] }
   end
 
