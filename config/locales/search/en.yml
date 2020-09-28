@@ -13,13 +13,6 @@ en:
           wdpa: WDPA
           oecm: OECM
           pame: PAME
-      types:
-        name: Types
-        items:
-          publications: Publications
-          statistics: Statistics
-          technical: Technical
-          training: Training
     download: Download
     filters: Filters
     filter-by: Filter by

@@ -3,6 +3,7 @@
 # Helper class to set Opengraph meta-tags for use with Comfy CMS @cms_page's
 class ComfyOpengraph
   include Rails.application.routes.url_helpers
+  include ActionView::Helpers::AssetUrlHelper
   include Comfy::CmsHelper
 
   attr_accessor :mappings

@@ -1,6 +1,11 @@
 <div class="map--main">
   <v-map-header title="<%= map_yml[:title] %>"></v-map-header>
-  <v-map :services-for-point-query="<%= map[:point_query_services].to_json %>"></v-map>
+  <v-map 
+    <% if local_assigns.has_key?(:map_options) && !map_options.nil? %>
+      :options="<%= map_options.to_json %>"
+    <% end %>
+    :services-for-point-query="<%= map[:point_query_services].to_json %>"
+  ></v-map>
   <v-map-filters
     :is-hidden="<%= !!map[:areFiltersHidden] %>"
     :overlays="<%= map[:overlays].to_json %>"
