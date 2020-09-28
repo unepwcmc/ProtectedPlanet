@@ -7,6 +7,8 @@ set :server_name, "protectedplanet"
 set :sudo_user, "wcmc"
 set :app_port, "80"
 
+set :branch, "refresh-with-master"
+
 
 
 # server-based syntax
