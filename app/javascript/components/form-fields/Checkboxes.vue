@@ -76,6 +76,13 @@ export default {
     this.$eventHub.$on('reset:filter-options', this.reset)
   },
 
+  watch: {
+    preSelected () {
+      this.input = this.preSelected
+      this.changeInput()
+    }
+  },
+
   methods: {
     changeInput () {
       this.$emit('update:options', this.input)
