@@ -13,12 +13,12 @@ module Wdpa::GlobalStatsImporter
       attrs.merge!("#{field}": value)
     end
 
-    stats = GlobalStatistic.new(attrs)
-    return stats.save if first_instance.nil?
+    stats = GlobalStatistic.first_or_create(attrs)
+    init_stats = GlobalStatistic.new(attrs)
 
     # Destroy GlobalStatistic if it differs and recreate
-    if first_instance.attributes.except!(*EXCLUDED_ATTRS) != stats.attributes.except!(*EXCLUDED_ATTRS) 
-      GlobalStatistic.destroy_all && stats.save
+    if stats.attributes.except!(*EXCLUDED_ATTRS) != init_stats.attributes.except!(*EXCLUDED_ATTRS) 
+      stats.update(attrs)
     end
   end
 
@@ -31,9 +31,5 @@ module Wdpa::GlobalStatsImporter
   # Postgres should take care of it.
   def self.parse_value(val)
     val.to_s.split(',').join('').to_f
-  end
-
-  def first_instance
-    GlobalStatistic.first
   end
 end
