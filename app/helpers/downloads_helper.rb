@@ -15,6 +15,11 @@ module DownloadsHelper
       title: 'File Geodatabase',
       commercialAvailable: true
     },
+    mpa_map: {
+      isDownload: false,
+      title: 'MPA Map',
+      url: URI.join(Rails.application.routes.url_helpers.root_url, 'MPA_Map.pdf')
+    },
     esri_wdpa: {
       isDownload: false,
       title: 'ESRI Web Service',
@@ -44,7 +49,7 @@ module DownloadsHelper
   end
 
   def download_params(format, domain, token)
-    return {} if %w(esri_wdpa esri_oecm).include?(format)
+    return {} if %w(esri_wdpa esri_oecm mpa_map).include?(format)
     _domain = format == 'pdf' ? 'pdf' : domain
     {
       params: {
