@@ -353,7 +353,6 @@ export default {
 
       const newUrl = `${window.location.pathname}?${searchParams.toString()}`
 
-      // window.history.pushState({ query: 1 }, null, newUrl)
       window.history.replaceState({ page: 1 }, null, newUrl)
     },
 
