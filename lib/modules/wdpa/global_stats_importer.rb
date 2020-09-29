@@ -2,6 +2,7 @@ module Wdpa::GlobalStatsImporter
   extend self
 
   GLOBAL_STATS_CSV = Rails.root.join('lib/data/seeds/global_stats.csv').freeze
+  
 
   def self.import
     attrs = {singleton_guard: 0}
@@ -11,7 +12,8 @@ module Wdpa::GlobalStatsImporter
       attrs.merge!("#{field}": value)
     end
 
-    GlobalStatistic.create(attrs)
+    stats = GlobalStatistic.first_or_initialize(attrs)
+    stats.update(attrs)
   end
 
   private
