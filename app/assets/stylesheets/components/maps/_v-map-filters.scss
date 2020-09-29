@@ -8,7 +8,7 @@
     position: absolute;
     top: rem-calc(17);
     left: rem-calc(18);
-    z-index: 1;
+    z-index: 0;
   }
 
   @include breakpoint($medium) {
