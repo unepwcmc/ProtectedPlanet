@@ -3,17 +3,23 @@ module Wdpa::GlobalStatsImporter
 
   GLOBAL_STATS_CSV = Rails.root.join('lib/data/seeds/global_stats.csv').freeze
 
-  def self.import
-    GlobalStatistic.destroy_all
+  EXCLUDED_ATTRS = %w(id created_at updated_at).freeze
 
+  def self.import
     attrs = {singleton_guard: 0}
     CSV.foreach(GLOBAL_STATS_CSV, headers: true) do |row|
       field = row['type']
       value = parse_value(row['value'])
       attrs.merge!("#{field}": value)
     end
-    
-    GlobalStatistic.first_or_create(attrs)
+
+    stats = GlobalStatistic.new(attrs)
+    return stats.save if first_instance.nil?
+
+    # Destroy GlobalStatistic if it differs and recreate
+    if first_instance.attributes.except!(*EXCLUDED_ATTRS) != stats.attributes.except!(*EXCLUDED_ATTRS) 
+      GlobalStatistic.destroy_all && stats.save
+    end
   end
 
   private
@@ -25,5 +31,9 @@ module Wdpa::GlobalStatsImporter
   # Postgres should take care of it.
   def self.parse_value(val)
     val.to_s.split(',').join('').to_f
+  end
+
+  def first_instance
+    GlobalStatistic.first
   end
 end
