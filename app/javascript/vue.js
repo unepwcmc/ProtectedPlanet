@@ -66,7 +66,8 @@ export const eventHub = new Vue()
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
 
-    Vue.use(VueAnalytics, { id: 'UA-12920389-2' }) // production
+    Vue.use(VueAnalytics, { id: 'UA-12920389-5' }) // staging
+    // Vue.use(VueAnalytics, { id: 'UA-12920389-2' }) // production
 
     Vue.prototype.$eventHub = new Vue()
 

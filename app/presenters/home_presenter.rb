@@ -4,6 +4,9 @@ class HomePresenter
   def initialize
   end
 
+  # Number of areas is still taken from the imported database rather than the global stats CSV.
+  # This is because we select out some sites for coverage stats so the number in the
+  # global stats csv is the number of the sites we use to calculate the coverage numbers beneath it.
   def terrestrial_pas
     @terrestrial_pas ||= number_with_delimiter(ProtectedArea.where(marine: false).count)
   end
@@ -12,28 +15,31 @@ class HomePresenter
     @marine_pas ||= number_with_delimiter(ProtectedArea.where(marine: true).count)
   end
 
+  # TEMPORARILY USING CSV DATA FOR OECM NUMBERS - if importer manages to successfully populate OECMs, we'll go with that instead
   def terrestrial_oecms
-    number_with_delimiter(ProtectedArea.where(marine: false, is_oecm: true).count)
+    # number_with_delimiter(ProtectedArea.where(marine: false, is_oecm: true).count)
+    GlobalStatistic.total_terrestrial_oecms
   end
 
   def marine_oecms
-    number_with_delimiter(ProtectedArea.where(marine: true, is_oecm: true).count)
+    # number_with_delimiter(ProtectedArea.where(marine: true, is_oecm: true).count)
+    GlobalStatistic.total_marine_oecms
   end
 
   def terrestrial_cover
-    CountryStatistic.global_percentage_pa_land_cover
+    GlobalStatistic.total_land_pa_coverage_percentage
   end
 
   def marine_cover
-    CountryStatistic.global_percentage_pa_marine_cover
+    GlobalStatistic.total_ocean_pa_coverage_percentage
   end
 
   def oecm_pa_land_cover
-    Stats::Global.percentage_oecms_land_cover.round(2)
+    GlobalStatistic.total_land_oecms_pas_coverage_percentage
   end
 
   def oecm_pa_marine_cover
-    Stats::Global.percentage_oecms_marine_cover.round(2)
+    GlobalStatistic.total_ocean_oecms_pas_coverage_percentage
   end
   
   def fact_card_stats

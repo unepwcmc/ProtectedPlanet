@@ -22,6 +22,9 @@ export default {
       type: Boolean,
       required: true
     },
+    gaId: {
+      type: String
+    },
     onText: {
       type: String,
       default: 'ON',
@@ -42,10 +45,12 @@ export default {
   },
   methods: {
     toggle (newState) {
-      if (typeof newState === 'boolean') {
-        this.$emit('change', newState)
-      } else {
-        this.$emit('change', !this.active)
+      const newBoolean = typeof newState === 'boolean' ? newState : !this.active
+
+      this.$emit('change', newBoolean)
+
+      if(this.gaId) {
+        this.$ga.event(`Toggle - Show map layer: ${newBoolean}`, 'click', this.gaId)
       }
     }
   }

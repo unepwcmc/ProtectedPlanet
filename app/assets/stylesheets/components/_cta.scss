@@ -46,6 +46,7 @@
     background-position: center;
     background-size: cover;
     color: $white; 
+    z-index: 0;
 
     .cta {
       &__content {

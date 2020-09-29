@@ -14,8 +14,9 @@ export const MAP_OPTIONS_DEFAULT = {
   container: 'map-target',
   scrollZoom: false,
   attributionControl: false,
-  bounds: [[-180, -90], [180, 90]],
   preserveDrawingBuffer: true, // needed for PDF rendering
+  zoom: 1.3,
+  //bounds: [[-180, -90], [180, 90]],
   //boundingISO: ISO3,
   //boundingRegion; Name e.g. Europe,
 }

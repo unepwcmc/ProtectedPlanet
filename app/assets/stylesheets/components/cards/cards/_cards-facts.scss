@@ -65,7 +65,7 @@ $cards-facts-height-tablet: rem-calc(294);
 
       @include breakpoint($small) { 
         font-size: rem-calc(20); 
-        margin-top: 0;
+        margin-top: rem-calc(10);
       }
     }
 

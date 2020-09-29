@@ -12,4 +12,11 @@ namespace :cms_categories do
       end
     end
   end
+
+  task destroy: :environment do
+    Comfy::Cms::LayoutsCategory.destroy_all
+    Comfy::Cms::PagesCategory.destroy_all
+    Comfy::Cms::PageCategory.destroy_all
+    Comfy::Cms::LayoutCategory.destroy_all
+  end
 end

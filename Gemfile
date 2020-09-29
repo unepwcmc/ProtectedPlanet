@@ -32,6 +32,8 @@ gem 'sprockets-vue', '~> 0.1.0'
 gem 'rails-controller-testing'
 
 gem 'gdal', '~> 2.0'
+gem 'net-sftp'
+gem 'net-scp'
 #
 group :production, :staging do
 #  gem 'unicorn'
@@ -51,7 +53,6 @@ group :development do
   gem 'capistrano-git-with-submodules', '2.0.3'
   gem 'capistrano-service'
   gem 'awesome_print'
-  gem 'net-sftp'
   # gem 'listen', '~> 3.1.5'
   # gem 'spring-watcher-listen', '~> 2.0.0'
   #

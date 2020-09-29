@@ -3,7 +3,7 @@ class OecmController < ApplicationController
   include MapHelper
 
   def index
-    @oecm_coverage_percentage = Stats::Global.percentage_oecm_cover
+    @oecm_coverage_percentage = GlobalStatistic.global_oecms_pas_coverage_percentage
 
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri_oecm'], 'general', 'oecm')
 
@@ -21,6 +21,9 @@ class OecmController < ApplicationController
       point_query_services: [
         { url: OECM_FEATURE_SERVER_LAYER_URL, isPoint: false }
       ]
+    }
+    @map_options = {
+      map: { center: [-100,0] }
     }
     @filters = { db_type: ['oecm'] }
   end

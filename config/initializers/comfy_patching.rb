@@ -21,6 +21,9 @@ Rails.configuration.to_prepare do
     after_save :assign_layout_categories
 
     def assign_layout_categories
+      # If database tables have not been created yet, return early and do nothing
+      # This happens during a migration generated prior to the creation of such tables
+      return unless ActiveRecord::Base.connection.table_exists? Comfy::Cms::LayoutsCategory.table_name
       # _categories = [{ tag_params: 'topics', tag_class: 'categories'}]
       _categories = self.content_tokens.select do |t|
         unless t.is_a?(Hash)
@@ -234,5 +237,12 @@ Rails.configuration.to_prepare do
 
       [frag_identifiers, frag_attributes]
     end
+  end
+
+  Comfy::Cms::ContentController.class_eval do 
+    # Needed for redirects for CMS pages (essentially anything with a locale)
+    def load_cms_page
+      raise_404 unless find_cms_page_by_full_path("/#{params[:cms_path]}")
+    end 
   end
 end
