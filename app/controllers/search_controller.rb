@@ -35,10 +35,6 @@ class SearchController < ApplicationController
     render json: @results.to_json
   end
 
-  def map
-    render :index
-  end
-
   def autocomplete
     db_type = search_params[:type]
     @results = Autocompletion.lookup(search_params[:search_term], db_type, autocomplete_search_index(db_type))

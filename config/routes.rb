@@ -19,33 +19,44 @@ Rails.application.routes.draw do
 
   get '/assets/tiles/:id', to: 'assets#tiles', as: 'tiles'
 
+  put '/admin/maintenance', as: 'maintenance'
+  put '/admin/clear_cache', as: 'clear_cache'
+
+  namespace :api do
+    namespace :v3 do
+      resources :protected_areas, only: [:show] do
+        member do
+          get 'geojson'
+          get 'overlap/:comparison_wdpa_id', to: 'protected_areas#overlap'
+        end
+      end
+
+      get '/networks/:id/bounds', to: 'networks#bounds'
+      get '/search/by_point', to: 'search#by_point'
+    end
+  end
+
+  get '/marine/download_designations', to: 'marine#download_designations'
+
+  get '/search', to: 'search#index'
+  get '/search-areas', to: 'search_areas#index', as: :search_areas
+  get '/search-areas-results', to: 'search_areas#search_results', as: :search_areas_results
+
+  post '/search/autocomplete', to: 'search#autocomplete'
+  get '/search-results', to: 'search#search_results', as: :search_results
+
+  get '/search-cms', to: 'search_cms#index', as: :search_cms
+
+  get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
+  resources :downloads, only: [:show, :create, :update]
+
+  # TODO to be removed?
+  #get '/country_codes', to: 'country#codes', as: 'country_codes'
+
   scope "(:locale)", locale: /en|es|fr/ do
 
     root to: 'home#index'
     get '/', to: 'home#index'
-
-    put '/admin/maintenance', as: 'maintenance'
-    put '/admin/clear_cache', as: 'clear_cache'
-
-
-    namespace :api do
-      namespace :v3 do
-        resources :protected_areas, only: [:show] do
-          member do
-            get 'geojson'
-            get 'overlap/:comparison_wdpa_id', to: 'protected_areas#overlap'
-          end
-        end
-
-        get '/networks/:id/bounds', to: 'networks#bounds'
-        get '/search/by_point', to: 'search#by_point'
-      end
-    end
-    
-    # resources :projects, only: [:create, :index, :update, :destroy]
-
-    get '/marine/download_designations', to: 'marine#download_designations'
-    # get '/green_list/:id', to: 'green_list#show', as: 'green_list'
 
     get '/target-11-dashboard/load-countries', to: 'target_dashboard#load_countries',
       as: 'target_dashboard_load_countries'
@@ -54,26 +65,16 @@ Rails.application.routes.draw do
 
     get '/country/:iso', to: 'country#show', as: 'country'
     get '/country/:iso/pdf', to: 'country#pdf', as: 'country_pdf'
-    get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
+    # TODO to be removed?
+    #get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
     get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
     get '/terms', to: redirect("/c/terms-and-conditions")
-
-    get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
-    resources :downloads, only: [:show, :create, :update]
-
-    get '/search/map', to: 'search#map'
-    post '/search', to: 'search#create'
-
-    get '/country_codes', to: 'country#codes', as: 'country_codes'
-
 
     # routes worked on so far as part of the refresh
 
     post '/pame/download', to: 'pame#download'
     post '/pame/list', to: 'pame#list'
-
-    get '/search', to: 'search#index'
 
     get '/thematic-areas/green-list', to: 'green_list#index'
     get '/thematic-areas/oecms', to: 'oecm#index'
@@ -81,14 +82,6 @@ Rails.application.routes.draw do
     get '/thematic-areas/marine-protected-areas', to: 'marine#index'
     get '/thematic-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
     get '/thematic-areas/wdpa', to: 'wdpa#index'
-
-    get '/search-areas', to: 'search_areas#index', as: :search_areas
-    get '/search-areas-results', to: 'search_areas#search_results', as: :search_areas_results
-
-    post '/search/autocomplete', to: 'search#autocomplete'
-    get '/search-results', to: 'search#search_results', as: :search_results
-
-    get '/search-cms', to: 'search_cms#index', as: :search_cms
 
     # Ensure that this route is defined last
 
