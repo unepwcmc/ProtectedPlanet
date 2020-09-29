@@ -2,8 +2,7 @@ module Wdpa::GlobalStatsImporter
   extend self
 
   GLOBAL_STATS_CSV = Rails.root.join('lib/data/seeds/global_stats.csv').freeze
-
-  EXCLUDED_ATTRS = %w(id created_at updated_at).freeze
+  
 
   def self.import
     attrs = {singleton_guard: 0}
@@ -13,13 +12,8 @@ module Wdpa::GlobalStatsImporter
       attrs.merge!("#{field}": value)
     end
 
-    stats = GlobalStatistic.first_or_create(attrs)
-    init_stats = GlobalStatistic.new(attrs)
-
-    # Destroy GlobalStatistic if it differs and recreate
-    if stats.attributes.except!(*EXCLUDED_ATTRS) != init_stats.attributes.except!(*EXCLUDED_ATTRS) 
-      stats.update(attrs)
-    end
+    stats = GlobalStatistic.first_or_initialize(attrs)
+    stats.update(attrs)
   end
 
   private
