@@ -80,7 +80,7 @@ class PameEvaluation < ApplicationRecord
   def self.parse_filters(filters)
     site_ids = []
     country_ids = []
-    where_params = {sites: "", methodology: "", year: "", iso3: ""}
+    where_params = {sites: "", methodology: "", year: "", iso3: "", type: ""}
     filters.each do |filter|
       options = filter["options"]
       case filter['name']
@@ -95,6 +95,11 @@ class PameEvaluation < ApplicationRecord
         where_params[:methodology] = options.empty? ? nil : "methodology IN (#{options.join(',')})"
       when 'year'
         where_params[:year] = options.empty? ? nil : "pame_evaluations.year IN (#{options.join(',')})"
+      else 
+        where_params[:type] = nil if options.empty? || options.length == 2
+        if options.length == 1
+          where_params[:type] = options[0] == 'Marine' ? "protected_areas.marine" : "protected_areas.marine = false"
+        end
       end
     end
     where_params
@@ -110,8 +115,10 @@ class PameEvaluation < ApplicationRecord
       .from(query)
     else
       PameEvaluation
+      .joins(:protected_area)
       .where(where_params[:methodology])
       .where(where_params[:year])
+      .where(where_params[:type])
     end
     .where("protected_area_id IS NOT NULL AND restricted = false")
     .paginate(page: page || 1, per_page: 50).order('id ASC')
@@ -123,6 +130,7 @@ class PameEvaluation < ApplicationRecord
     .where(where_params[:sites])
     .where(where_params[:methodology])
     .where(where_params[:year])
+    .where(where_params[:type])
     .to_sql
   end
 
@@ -132,6 +140,7 @@ class PameEvaluation < ApplicationRecord
     .where(where_params[:iso3])
     .where(where_params[:methodology])
     .where(where_params[:year])
+    .where(where_params[:type])
     .to_sql
   end
 
