@@ -4,6 +4,8 @@ module Wdpa::GlobalStatsImporter
   GLOBAL_STATS_CSV = Rails.root.join('lib/data/seeds/global_stats.csv').freeze
 
   def self.import
+    GlobalStatistic.first.destroy
+    
     attrs = {singleton_guard: 0}
     CSV.foreach(GLOBAL_STATS_CSV, headers: true) do |row|
       field = row['type']
