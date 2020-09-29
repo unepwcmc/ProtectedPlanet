@@ -204,6 +204,12 @@ class PameEvaluation < ApplicationRecord
         title: "Year of assessment",
         options: unique_year,
         type: 'multiple'
+      },
+      {
+        name: 'type',
+        title: 'Type',
+        options: ['Marine', 'Terrestrial'],
+        type: 'multiple'
       }
     ].to_json
   end
