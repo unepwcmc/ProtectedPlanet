@@ -18,6 +18,7 @@
         v-if="type == 'checkbox'"
         :clear-index="clearIndex"
         :id="id"
+        :gaId="updatedGaId"
         :options="options"
         :pre-selected="preSelected"
         v-on:update:options="updateFilter"
@@ -27,6 +28,7 @@
         v-if="type == 'radio'"
         :clear-index="clearIndex"
         :id="id"
+        :gaId="updatedGaId"
         :name="name"
         :options="options"
         v-on:update:options="updateFilter"
@@ -36,6 +38,7 @@
     <checkbox-search
       v-if="type == 'checkbox-search'"
       :clear-index="clearIndex"
+      :gaId="updatedGaId"
       :id="id"
       :name="name"
       :options="options"
@@ -58,6 +61,9 @@ export default {
   props: {
     id: {
       required: true,
+      type: String
+    },
+    gaId: {
       type: String
     },
     name: {
@@ -92,6 +98,10 @@ export default {
   computed: {
     preSelectedCheckboxSearch () {
       return Array.isArray(this.preSelected) && this.preSelected.length ? this.preSelected[0] : null
+    },
+
+    updatedGaId () {
+      return `${this.gaId} - ${this.title}`
     }
   },
 

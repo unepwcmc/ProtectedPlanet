@@ -30,8 +30,8 @@
 
     methods: {
       download () {
-        console.log('download')
-        const csrf = document.querySelectorAll('meta[name="csrf-token"]')[0].getAttribute('content'),
+        const csrf = document.querySelectorAll('meta[name="csrf-token"]')[0].
+        getAttribute('content'),
           data = this.$store.state.pame.selectedFilterOptions,
           config = {
             headers: {
@@ -43,11 +43,12 @@
 
         axios.post('/pame/download', data, config)
           .then((response) => {
-            console.log('post successful')
             const date = new Date().toJSON().slice(0,10),
               filename = `protectedplanet-pame-${date}.csv`
 
             this.createBlob(filename, response.data)
+
+            this.$ga.event('Button', 'click', 'PAME - CSV download')
           })
           .catch(function (error) {
             console.log(error)
@@ -56,7 +57,6 @@
 
       createBlob (filename, data) {
         let blob = new Blob([data])
-        console.log('blob')
 
         if (typeof window.navigator.msSaveBlob !== 'undefined') {
           // IE workaround for "HTML7007: One or more blob URLs were 

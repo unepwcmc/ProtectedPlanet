@@ -25,6 +25,7 @@
         class="search__filters"
         :filter-close-text="textClose"
         :filterGroups="filterGroupsWithPreSelected"
+        :gaId="gaId"
         :is-active="isFilterPaneActive"
         :text-clear="textClear"
         :title="textFilters"
@@ -36,6 +37,7 @@
           :children="tabs"
           class="tabs--search-areas"
           :defaultSelectedId="tabIdDefault"
+          :gaId="gaId"
           :preSelectedId="tabIdSelected"
           v-on:click:tab="updateSelectedTab"
         />
@@ -103,6 +105,9 @@ export default {
     filterGroups: {
       type: Array, // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
       required: true
+    },
+    gaId: {
+      type: String
     },
     items_per_page: {
       type: Number,

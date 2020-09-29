@@ -112,6 +112,9 @@
         this.children.forEach(child => {
           child.isSelected = this.activeOptions.includes(child.option) ? true : false
         })
+
+        const eventLabel = `pame filter: ${this.title} - cancel`
+        this.$ga.event('Button', 'click', eventLabel)
       },
 
       clear () {
@@ -119,6 +122,9 @@
         this.children.forEach(child => {
           child.isSelected = false
         })
+
+        const eventLabel = `pame filter: ${this.title} - clear`
+        this.$ga.event('Button', 'click', eventLabel)
       },
 
       apply () {
@@ -134,6 +140,9 @@
         this.$store.commit('pame/updateFilterOptions', newFilterOptions)
         this.$store.commit('pame/updateRequestedPage', 1)
         this.$eventHub.$emit('getNewItems')
+
+        const eventLabel = `pame filter: ${this.title} - apply`
+        this.$ga.event('Button', 'click', eventLabel)
       }
     }
   }

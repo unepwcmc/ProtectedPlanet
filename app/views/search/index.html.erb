@@ -3,6 +3,7 @@
     :categories="<%= @categories.to_json %>"
     :data-page-load="<%= @results.to_json %>"
     endpoint="<%= search_results_path %>"
+    ga-id="search site"
     placeholder="<%= t('global.placeholder.search-site') %>"
     query="<%= @query %>"
     no-results-text="<%= t('search.no-results') %>"

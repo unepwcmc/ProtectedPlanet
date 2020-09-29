@@ -40,6 +40,9 @@ export default {
       type: String,
       required: true 
     },
+    gaId: {
+      type: String
+    },
     options: { 
       type: Array, // { title: String }
       required: true 
@@ -88,7 +91,8 @@ export default {
       this.$emit('update:options', this.input)
 
       if(this.gaId) {
-        this.$ga.event(`Checkbox - Filter: ${newBoolean}`, 'click', this.gaId)
+        const eventLabel = `${this.gaId} - ${selectedId}`
+        this.$ga.event(`Checkbox - checked: ${newBoolean}`, 'click', eventLabel)
       }
     },
     
