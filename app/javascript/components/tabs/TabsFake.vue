@@ -70,7 +70,7 @@ export default {
     },
 
     googleAnalyticsId (child) {
-      return `${this.gaId} - ${this.child.title}`
+      return `${this.gaId} - ${child.title}`
     },
 
     reset () {
