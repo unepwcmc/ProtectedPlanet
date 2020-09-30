@@ -120,7 +120,7 @@ class ProtectedAreasController < ApplicationController
     other_sites = @countries.first.protected_areas.count
     if @countries.length <= 1
       # If a particular country has too few sites
-      other_sites <= 4 ? country_own_sites + remainder_sites : country_own_sites
+      other_sites < OTHER_SITES ? country_own_sites + remainder_sites(other_sites) : country_own_sites
     else
       ProtectedArea.without_geometry.all_except(@protected_area.id).transboundary_sites.take(OTHER_SITES)
     end
@@ -130,8 +130,8 @@ class ProtectedAreasController < ApplicationController
     @countries.first.protected_areas.without_geometry.all_except(@protected_area.id).take(OTHER_SITES)
   end
 
-  def remainder_sites
-    ProtectedArea.without_geometry.all_except(@protected_area.id).take(OTHER_SITES - country_own_sites.length)
+  def remainder_sites(other_sites)
+    ProtectedArea.without_geometry.all_except(@protected_area.id).take(OTHER_SITES - other_sites)
   end
 
   def determine_search_path(area)

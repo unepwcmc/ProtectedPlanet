@@ -9,7 +9,7 @@
       </i>
       <p class="no-margin">
           <span class="card__number"><%= theme[:pas_no] %></span>
-          <span class="card__number-text"><%= t('global.area-types.wdpa') %></span>
+          <span class="card__number-text"><%= theme[:obj][:slug] == 'oecms' ? t('global.area-types.oecm') : t('global.area-types.wdpa') %></span>
       </p>
     </div>
   <% end %>
