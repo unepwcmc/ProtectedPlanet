@@ -30,7 +30,7 @@
           :text-no-results="textNoResults"
           v-on:request-more="requestMore"
           v-on:reset-pagination="resetPagination"
-          v-show="!loadingResults"
+          v-show="!updatingResults"
         />
         <span :class="['icon--loading-spinner margin-center listing__spinner', { 'icon-visible': loadingResults } ]" />
       </div>
@@ -159,8 +159,10 @@ export default {
             this.updateProperties(response, resetFilters)
           }
 
-          this.loadingMoreResults = false
-          this.updatingResults = false
+          setTimeout(() => { 
+            this.loadingMoreResults = false
+            this.updatingResults = false
+          }, 500)
         })
         .catch(function (error) {
           console.log('error', error)
