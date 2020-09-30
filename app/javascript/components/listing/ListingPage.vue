@@ -30,7 +30,7 @@
           :text-no-results="textNoResults"
           v-on:request-more="requestMore"
           v-on:reset-pagination="resetPagination"
-          v-show="!updatingResults"
+          v-show="!loadingResults"
         />
         <span :class="['icon--loading-spinner margin-center listing__spinner', { 'icon-visible': loadingResults } ]" />
       </div>
