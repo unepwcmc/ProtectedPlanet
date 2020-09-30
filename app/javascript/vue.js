@@ -65,9 +65,12 @@ export const eventHub = new Vue()
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
-
-    Vue.use(VueAnalytics, { id: 'UA-12920389-5' }) // staging
-    // Vue.use(VueAnalytics, { id: 'UA-12920389-2' }) // production
+    
+    if(process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'staging') {
+      Vue.use(VueAnalytics, { id: 'UA-12920389-5' }) // staging
+    } else if(process.env.NODE_ENV == 'production') {
+      Vue.use(VueAnalytics, { id: 'UA-12920389-2' }) // production
+    }
 
     Vue.prototype.$eventHub = new Vue()
 

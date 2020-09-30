@@ -3,6 +3,9 @@
     <h2><%= title %></h2>
     <div><%= content %></div>
     
-    <chart-column-tabbed :json="<%= regionsTopCountries %>"></chart-column-tabbed>
+    <chart-column-tabbed 
+      ga-id="<%= ga_id %>"
+      :json="<%= regionsTopCountries %>"
+    ></chart-column-tabbed>
   </div>
 </section>

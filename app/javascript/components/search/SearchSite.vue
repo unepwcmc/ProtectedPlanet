@@ -9,6 +9,7 @@
 
     <tabs-fake
       :children="categories"
+      :gaId="gaId"
       class="tabs--search-main"
       v-on:click:tab="updateCategory"
     />
@@ -58,6 +59,9 @@ export default {
     },
     endpoint: {
       required: true,
+      type: String
+    },
+    gaId: {
       type: String
     },
     itemsPerPage: {

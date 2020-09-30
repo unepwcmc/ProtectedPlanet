@@ -2,6 +2,7 @@
   <div>
     <tabs-fake 
       :children="tabs"
+      :gaId="gaId"
       :pre-selected="preSelectedTabId"
       v-on:click:tab="updateSelectedTab"
     />
@@ -34,6 +35,9 @@ export default {
   components: { RadioButtons, TabsFake },
 
   props: {
+    gaId: {
+      type: String
+    },
     id: { 
       type: String,
       required: true 

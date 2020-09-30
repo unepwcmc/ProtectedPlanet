@@ -15,6 +15,7 @@
         class="listing__filters"
         :filter-close-text="textFiltersClose"
         :filter-groups="filterGroupsWithPreSelected"
+        :gaId="gaId"
         :is-active="isFilterPaneActive"
         :text-clear="textClear"
         :title="textFilterTrigger"
@@ -30,7 +31,7 @@
           :text-no-results="textNoResults"
           v-on:request-more="requestMore"
           v-on:reset-pagination="resetPagination"
-          v-show="!loadingResults"
+          v-show="!updatingResults"
         />
         <span :class="['icon--loading-spinner margin-center listing__spinner', { 'icon-visible': loadingResults } ]" />
       </div>
@@ -61,6 +62,9 @@ export default {
     filterGroups: {
       required: true,
       type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
+    },
+    gaId: {
+      type: String
     },
     itemsPerPage: {
       default: 6,
@@ -107,6 +111,7 @@ export default {
         queryStringParamsFilters: ['topics', 'types']
       },
       activeFilterOptions: [],
+      ajaxRequests: 0,
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
       loadingMoreResults: false,
@@ -137,6 +142,8 @@ export default {
         this.updatingResults = true 
       }
 
+      this.ajaxRequests = this.ajaxRequests + 1
+
       let filters = {...this.activeFilterOptions, ...{ ancestor: this.pageId }}
 
       let data = {
@@ -152,15 +159,20 @@ export default {
 
       axios.get(this.endpointSearch, data)
         .then(response => {
-          
           if(pagination){
             this.newResults.results = this.newResults.results.concat(response.data.results)
           } else {
             this.updateProperties(response, resetFilters)
           }
 
-          this.loadingMoreResults = false
-          this.updatingResults = false
+          this.ajaxRequests = this.ajaxRequests - 1
+
+          if(this.ajaxRequests == 0) {
+            setTimeout(() => { 
+              this.loadingMoreResults = false
+              this.updatingResults = false
+            }, 1000)
+          }
         })
         .catch(function (error) {
           console.log('error', error)
@@ -252,7 +264,7 @@ export default {
 
       const newUrl = `${window.location.pathname}?${searchParams.toString()}`
 
-      window.history.pushState({ query: 1 }, null, newUrl)
+      window.history.replaceState({ page: 1 }, null, newUrl)
     }
   }
 }

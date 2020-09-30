@@ -71,6 +71,11 @@ export default {
       } else {
         this.addNewDownloadItem()
       }
+
+      if(this.gaId) {
+        const eventLabel = `${this.gaId} request - ${option.title}`
+        this.$ga.event(`Button`, 'click', eventLabel)
+      }
     },
 
     clickNonCommercial () {
