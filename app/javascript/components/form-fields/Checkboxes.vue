@@ -66,6 +66,7 @@ export default {
 
   watch: {
     clearIndex () {
+      
       this.reset()
       this.changeInput()
     }
@@ -77,13 +78,6 @@ export default {
     }
 
     this.$eventHub.$on('reset:filter-options', this.reset)
-  },
-
-  watch: {
-    preSelected () {
-      this.input = this.preSelected
-      this.changeInput()
-    }
   },
 
   methods: {

@@ -97,6 +97,8 @@
       @include flex-v-center;
       margin: 0;
 
+      @include breakpoint($small) { margin-right: rem-calc(20); }
+
       &:before { 
         @include icon-warning;
         content: '';
@@ -110,6 +112,8 @@
       @include flex;
       @include flex-v-center;
       margin: 0;
+      
+      @include breakpoint($small) { margin-right: rem-calc(20); }
 
       &:before {
         @include icon-loading-spinner;
