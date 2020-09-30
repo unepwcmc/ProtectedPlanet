@@ -107,7 +107,6 @@ export default {
         queryStringParamsFilters: ['topics', 'types']
       },
       activeFilterOptions: [],
-      ajaxRequests: 0,
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
       loadingMoreResults: false,
@@ -138,8 +137,6 @@ export default {
         this.updatingResults = true 
       }
 
-      this.ajaxRequests = this.ajaxRequests + 1
-
       let filters = {...this.activeFilterOptions, ...{ ancestor: this.pageId }}
 
       let data = {
@@ -162,12 +159,10 @@ export default {
             this.updateProperties(response, resetFilters)
           }
 
-          this.ajaxRequests = this.ajaxRequests - 1
-
-          if(this.ajaxRequests == 0) {
+          setTimeout(() => { 
             this.loadingMoreResults = false
             this.updatingResults = false
-          }
+          }, 1000)
         })
         .catch(function (error) {
           console.log('error', error)
