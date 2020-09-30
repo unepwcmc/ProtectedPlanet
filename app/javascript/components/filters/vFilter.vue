@@ -101,7 +101,7 @@ export default {
     },
 
     updatedGaId () {
-      return `${this.gaId} - ${this.title}`
+      return `${this.gaId} - Filter title: ${this.title}`
     }
   },
 

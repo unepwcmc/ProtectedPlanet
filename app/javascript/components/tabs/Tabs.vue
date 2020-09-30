@@ -40,9 +40,13 @@ export default {
   methods: {
     click (selectedId) {
       this.selectedId = selectedId
-      
+
       if(this.gaId) {
-        const eventLabel = `${this.gaId} - ${selectedId}`
+        const selectedTab = this.tabTriggers.filter( trigger => {
+          return trigger.id == selectedId
+        })
+
+        const eventLabel = `${this.gaId} - Tab: ${selectedTab[0].title}`
         this.$ga.event('Tab', 'click', eventLabel)
       }
     },

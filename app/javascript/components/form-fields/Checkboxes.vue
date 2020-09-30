@@ -91,8 +91,16 @@ export default {
       this.$emit('update:options', this.input)
 
       if(this.gaId) {
-        const eventLabel = `${this.gaId} - ${selectedId}`
-        this.$ga.event(`Checkbox - checked: ${newBoolean}`, 'click', eventLabel)
+        const selectedOptions = this.options.filter( option => {
+          return this.input.includes(option.id)
+        })
+
+        const selectedOptionTitles = selectedOptions.map(option => {
+          return option.title
+        }).join(', ')
+
+        const eventLabel = `${this.gaId} - Checkbox(es): ${selectedOptionTitles}`
+        this.$ga.event("Checkbox (checked)", 'click', eventLabel)
       }
     },
     

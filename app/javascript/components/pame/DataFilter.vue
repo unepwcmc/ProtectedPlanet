@@ -113,7 +113,7 @@
           child.isSelected = this.activeOptions.includes(child.option) ? true : false
         })
 
-        const eventLabel = `pame filter: ${this.title} - cancel`
+        const eventLabel = `Page: PAME - Filter title: ${this.title} - Button: cancel`
         this.$ga.event('Button', 'click', eventLabel)
       },
 
@@ -123,7 +123,7 @@
           child.isSelected = false
         })
 
-        const eventLabel = `pame filter: ${this.title} - clear`
+        const eventLabel = `Page: PAME - Filter title: ${this.title} - Button: clear`
         this.$ga.event('Button', 'click', eventLabel)
       },
 
@@ -141,7 +141,7 @@
         this.$store.commit('pame/updateRequestedPage', 1)
         this.$eventHub.$emit('getNewItems')
 
-        const eventLabel = `pame filter: ${this.title} - apply`
+        const eventLabel = `Page: PAME - Filter title: ${this.title} - Button: Apply`
         this.$ga.event('Button', 'click', eventLabel)
       }
     }

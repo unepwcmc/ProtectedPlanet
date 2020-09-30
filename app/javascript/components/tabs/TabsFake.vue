@@ -64,7 +64,11 @@ export default {
       this.$emit('click:tab', selectedId)
 
       if(this.gaId) {
-        const eventLabel = `${this.gaId} - ${selectedId}`
+        const selectedTab = this.children.filter( child => {
+          return child.id == selectedId
+        })
+
+        const eventLabel = `${this.gaId} - Tab: ${selectedTab[0].title}`
         this.$ga.event('Fake Tab', 'click', eventLabel)
       }
     },
