@@ -164,14 +164,6 @@ export default {
     this.handleQueryString()
   },
 
-  mounted () {
-    window.addEventListener('popstate', (e) => {
-      console.log(e)
-      console.log(this.window.location)
-      this.handlePopstate()
-    })
-  },
-
   watch: {
     activeFilterOptions () {
       this.$store.dispatch('download/updateSearchFilters', this.activeFilterOptions)
@@ -230,13 +222,6 @@ export default {
       })
 
       return params
-    },
-
-    handlePopstate () {
-      this.resetSearchTerm()
-      this.resetSearchTerm()
-      
-      this.getFilteredSearchResults()
     },
 
     /**
