@@ -2,22 +2,28 @@
   <li>
     <span class="modal__li-title">{{ titleTrimmed }}</span>
 
-    <span 
+    <p 
       class="modal__li-failed"
       v-show="hasFailed"
-    >{{ text.failed }}</span>
+    >
+      <span class="modal__li-text">{{ text.failed }}</span>
+    </p>
 
-    <span 
+    <p 
       class="modal__li-generating"
       v-show="isGenerating"
-    >{{ text.generating }}</span>
+    >
+      <span class="modal__li-text">{{ text.generating }}</span>
+    </p>
 
     <a 
       class="modal__li-download"
       :href="url"  
       v-show="isReady"
       @click="downloadItem"
-    >{{ text.download }}</a>
+    >
+      <span class="modal__li-text">{{ text.download }}</span>
+    </a>
 
     <span 
       class="modal__li-delete" 

@@ -72,6 +72,8 @@
       @include flex-v-center;
       background-color: $grey-xlight;
       margin-bottom: rem-calc(10);
+      padding: rem-calc(0 10);
+      min-height: rem-calc(40);
 
       @include breakpoint($small) {
         font-size: rem-calc(20);
@@ -93,7 +95,7 @@
     &__li-failed {
       @include flex;
       @include flex-v-center;
-      margin-right: rem-calc(20);
+      margin: 0;
 
       &:before { 
         @include icon-warning;
@@ -107,7 +109,7 @@
     &__li-generating {
       @include flex;
       @include flex-v-center;
-      margin-right: rem-calc(20);
+      margin: 0;
 
       &:before {
         @include icon-loading-spinner;
@@ -118,8 +120,18 @@
       }
     }
 
+    &__li-text {
+      display: none;
+
+      @include breakpoint($small) { display: block; }
+    }
+
     &__li-title {
       margin-right: auto;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 60%;
     }
   }
 }
