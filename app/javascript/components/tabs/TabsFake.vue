@@ -47,8 +47,10 @@ export default {
     this.setInitialTab()
   },
 
-  mounted () {
-    
+  watch: {
+    preSelectedId () {
+      this.click(this.preSelectedId)
+    }
   },
 
   methods: {

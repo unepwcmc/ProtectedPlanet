@@ -97,6 +97,12 @@ export default {
     if(this.prePopulatedSearchTerm) { this.searchTerm = this.prePopulatedSearchTerm }
   },
 
+  watch: {
+    prePopulatedSearchTerm () {
+      this.searchTerm = this.prePopulatedSearchTerm
+    }
+  },
+
   methods: {
     updateAutocomplete (e) {
       if(this.searchTerm.length < 3 || e.key == 'Enter') {

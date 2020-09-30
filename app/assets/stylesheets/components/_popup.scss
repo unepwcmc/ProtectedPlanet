@@ -19,6 +19,8 @@ $popup-download-arrow-height: rem-calc(8);
     top: calc(100% + #{$popup-download-arrow-height});
     right: 0;
 
+    a { text-decoration: none; }
+    
     &:before {
       @include triangle (rem-calc(38), $popup-download-arrow-height, $grey-dark);
 
