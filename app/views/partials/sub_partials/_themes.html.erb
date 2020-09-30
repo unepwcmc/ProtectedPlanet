@@ -2,6 +2,17 @@
   title: "View the #{theme[:obj][:label]} page", 
   class: "card--theme", 
   style: "background-image: url('#{cms_fragment_render(:image, theme[:obj])}')" do %>
+  <% unless theme[:pas_no] == -1 %>
+    <div class="card__ribbon">
+      <i class="card__icon <%= theme[:obj][:slug] %>">
+        <%= render '/partials/svgs/pin.svg' %>
+      </i>
+      <p class="no-margin">
+          <span class="card__number"><%= theme[:pas_no] %></span>
+          <span class="card__number-text"><%= t('global.area-types.wdpa') %></span>
+      </p>
+    </div>
+  <% end %>
 
   <h3 class="card__title"><%= theme[:obj][:label] %></h3>
   <p class="card__summary"><%= cms_fragment_content(:summary, theme[:obj]) %></p>

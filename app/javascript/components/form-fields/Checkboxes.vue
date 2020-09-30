@@ -40,6 +40,9 @@ export default {
       type: String,
       required: true 
     },
+    gaId: {
+      type: String
+    },
     options: { 
       type: Array, // { title: String }
       required: true 
@@ -88,7 +91,16 @@ export default {
       this.$emit('update:options', this.input)
 
       if(this.gaId) {
-        this.$ga.event(`Checkbox - Filter: ${newBoolean}`, 'click', this.gaId)
+        const selectedOptions = this.options.filter( option => {
+          return this.input.includes(option.id)
+        })
+
+        const selectedOptionTitles = selectedOptions.map(option => {
+          return option.title
+        }).join(', ')
+
+        const eventLabel = `${this.gaId} - Checkbox(es): ${selectedOptionTitles}`
+        this.$ga.event("Checkbox (checked)", 'click', eventLabel)
       }
     },
     

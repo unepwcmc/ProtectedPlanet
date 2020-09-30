@@ -15,6 +15,7 @@
         class="listing__filters"
         :filter-close-text="textFiltersClose"
         :filter-groups="filterGroupsWithPreSelected"
+        :gaId="gaId"
         :is-active="isFilterPaneActive"
         :text-clear="textClear"
         :title="textFilterTrigger"
@@ -61,6 +62,9 @@ export default {
     filterGroups: {
       required: true,
       type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
+    },
+    gaId: {
+      type: String
     },
     itemsPerPage: {
       default: 6,
@@ -260,7 +264,7 @@ export default {
 
       const newUrl = `${window.location.pathname}?${searchParams.toString()}`
 
-      window.history.pushState({ query: 1 }, null, newUrl)
+      window.history.replaceState({ page: 1 }, null, newUrl)
     }
   }
 }

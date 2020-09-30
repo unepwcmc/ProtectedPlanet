@@ -16,6 +16,7 @@
       class="modal__li-download"
       :href="url"  
       v-show="isReady"
+      @click="downloadItem"
     >{{ text.download }}</a>
 
     <span 
@@ -124,6 +125,13 @@ export default {
     deleteItem () {
       this.$store.dispatch('download/deleteDownloadItem', this.params)
     }, 
+
+    downloadItem () {
+      if(this.gaId) {
+        const eventLabel = `${this.gaId} file - ${this.title}`
+        this.$ga.event('Button', 'click', eventLabel)
+      }
+    },
 
     startPolling () {
       this.interval = window.setInterval(this.ajaxRequestDownloadStatus, 15000)
