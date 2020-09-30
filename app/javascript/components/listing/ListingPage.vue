@@ -107,6 +107,7 @@ export default {
         queryStringParamsFilters: ['topics', 'types']
       },
       activeFilterOptions: [],
+      ajaxRequests: 0,
       filterGroupsWithPreSelected: [],
       isFilterPaneActive: false,
       loadingMoreResults: false,
@@ -137,6 +138,8 @@ export default {
         this.updatingResults = true 
       }
 
+      this.ajaxRequests = this.ajaxRequests + 1
+
       let filters = {...this.activeFilterOptions, ...{ ancestor: this.pageId }}
 
       let data = {
@@ -152,17 +155,20 @@ export default {
 
       axios.get(this.endpointSearch, data)
         .then(response => {
-          
           if(pagination){
             this.newResults.results = this.newResults.results.concat(response.data.results)
           } else {
             this.updateProperties(response, resetFilters)
           }
 
-          setTimeout(() => { 
-            this.loadingMoreResults = false
-            this.updatingResults = false
-          }, 1000)
+          this.ajaxRequests = this.ajaxRequests - 1
+
+          if(this.ajaxRequests == 0) {
+            setTimeout(() => { 
+              this.loadingMoreResults = false
+              this.updatingResults = false
+            }, 2000)
+          }
         })
         .catch(function (error) {
           console.log('error', error)
