@@ -171,7 +171,7 @@ export default {
             setTimeout(() => { 
               this.loadingMoreResults = false
               this.updatingResults = false
-            }, 2000)
+            }, 1000)
           }
         })
         .catch(function (error) {
