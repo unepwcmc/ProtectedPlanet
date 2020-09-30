@@ -21,6 +21,9 @@ export default {
   name: 'tabs',
   components: { TabTrigger },
   props: {
+    gaId: {
+      type: String
+    },
     tabTriggers: {
       type: Array, // [ { id: Number, title: String } ] 
       required: true
@@ -37,7 +40,17 @@ export default {
   methods: {
     click (selectedId) {
       this.selectedId = selectedId
+
+      if(this.gaId) {
+        const selectedTab = this.tabTriggers.filter( trigger => {
+          return trigger.id == selectedId
+        })
+
+        const eventLabel = `${this.gaId} - Tab: ${selectedTab[0].title}`
+        this.$ga.event('Tab', 'click', eventLabel)
+      }
     },
+
     setDefaultTab () {
       this.selectedId = this.tabTriggers[0].id
     },

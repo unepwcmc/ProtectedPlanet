@@ -22,6 +22,7 @@
           <v-filter
             v-for="filter in filterGroup.filters"
             :key="filter._uid"
+            :gaId="gaId"
             :id="filter.id"
             :name="filter.name"
             :options="filter.options"
@@ -59,6 +60,9 @@ export default {
     filterGroups: {
       required: true,
       type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
+    },
+    gaId: {
+      type: String
     },
     isActive: {
       required: true,

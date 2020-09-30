@@ -3,6 +3,7 @@
     <tabs-fake 
       :children="tabs"
       class="tabs--rounded-small"
+      :gaId="gaId"
       :pre-selected-id="selectedTabId"
       v-on:click:tab="updateSelectedTab"
     />
@@ -38,6 +39,9 @@ export default {
   props: {
     clearIndex: {
       type: Number
+    },
+    gaId: {
+      type: String
     },
     id: { 
       type: String,

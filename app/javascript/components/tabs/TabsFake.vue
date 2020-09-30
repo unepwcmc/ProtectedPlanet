@@ -3,6 +3,7 @@
     <tab-fake
       v-for="(child, index) in children" 
       :key="index"
+      :gaId="googleAnalyticsId(child)"
       :id="child.id"
       :selectedId="selectedId"
       :title="child.title"
@@ -26,6 +27,9 @@ export default {
     },
     defaultSelectedId: {
       default: '',
+      type: String
+    },
+    gaId: {
       type: String
     },
     preSelectedId: {
@@ -58,6 +62,19 @@ export default {
       this.selectedId = selectedId
 
       this.$emit('click:tab', selectedId)
+
+      if(this.gaId) {
+        const selectedTab = this.children.filter( child => {
+          return child.id == selectedId
+        })
+
+        const eventLabel = `${this.gaId} - Tab: ${selectedTab[0].title}`
+        this.$ga.event('Fake Tab', 'click', eventLabel)
+      }
+    },
+
+    googleAnalyticsId (child) {
+      return `${this.gaId} - ${child.title}`
     },
 
     reset () {
