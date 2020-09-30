@@ -162,7 +162,7 @@ export default {
           setTimeout(() => { 
             this.loadingMoreResults = false
             this.updatingResults = false
-          }, 500)
+          }, 1000)
         })
         .catch(function (error) {
           console.log('error', error)
