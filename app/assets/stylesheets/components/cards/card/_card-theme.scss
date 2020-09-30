@@ -12,7 +12,7 @@
   margin-left: 0;
   padding: rem-calc(32 30);
   text-decoration: none;
-  height: rem-calc(460);
+  height: rem-calc(480);
 
   position: relative;
 
@@ -82,10 +82,9 @@
 
     &__title {
       @include text-theme-cards;
-      margin-top: rem-calc(100);
+      margin-top: rem-calc(120);
 
-      @include breakpoint($small) { margin-top: rem-calc(120); }
-
+      @include breakpoint($medium) { margin-top: rem-calc(150); }
     }
   }
 }
