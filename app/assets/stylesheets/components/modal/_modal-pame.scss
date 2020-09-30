@@ -32,6 +32,11 @@
     border-radius: $radius-global;
     padding: rem-calc(34 32);
     width: 60%; height: auto;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
   }
 
   .modal__title { margin-top: 0; }
