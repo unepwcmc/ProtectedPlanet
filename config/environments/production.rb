@@ -119,5 +119,5 @@ Rails.application.configure do
     :password => secrets[:password]
   }
 
-  config.active_storage.service = :local
+  config.active_storage.service = :production
 end
