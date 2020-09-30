@@ -16,7 +16,7 @@
 
   position: relative;
 
-  @include breakpoint-between($small, $medium) { padding-right: 30%; };
+  @include breakpoint-between($small, $medium) { padding-right: 20%; };
   @include breakpoint($medium) { height: rem-calc(760); }
 
   &:hover::before { background-color: rgba(0,0,0,0.7); }
@@ -40,7 +40,7 @@
       @include breakpoint ($small) { 
         width: rem-calc(150); height: rem-calc(150); 
 
-        right: rem-calc(26);
+        left: rem-calc(26);
       }
 
       @include breakpoint ($medium) { left: rem-calc(32); }
@@ -82,7 +82,10 @@
 
     &__title {
       @include text-theme-cards;
-      margin-top: rem-calc(150);
+      margin-top: rem-calc(100);
+
+      @include breakpoint($small) { margin-top: rem-calc(120); }
+
     }
   }
 }
