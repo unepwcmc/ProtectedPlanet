@@ -10,6 +10,7 @@
     endpoint-pagination="<%= search_areas_results_path(filters: @filters) %>"
     endpoint-search="<%= search_areas_results_path(filters: @filters) %>"
     :filter-groups="<%= @filter_groups.to_json %>"
+    ga-id="Component: search areas"
     no-results-text="<%= t('search.no-results') %>"
     sm-trigger-element="sm-trigger-infinite-scroll"
     :tabs="<%= @tabs.to_json %>"

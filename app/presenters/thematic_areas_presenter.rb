@@ -21,42 +21,33 @@ class ThematicAreasPresenter
     _cards.map do |c|
       {
         obj: c,
-        pas_no: pas_figure(c.label)
+        pas_no: pas_figure(c.slug)
       }
     end
   end
 
-  THEMATIC_AREAS = {
-    marine: 'Marine Protected Areas',
-    green_list: 'The IUCN Green List of Protected and Conserved Areas',
-    wdpa: 'WDPA',
-    oecm: 'OECMs',
-    connectivity: 'Connectivity Conservation',
-    pame: 'Protected Areas Management Effectiveness (PAME)',
-    equity: 'Equity and protected areas',
-    aichi11: 'Global Partnership on Aichi Target 11'
-  }.freeze
-  def pas_figure(label)
+  # Finds by slug rather than by label - which is more likely to change after all
+  THEMATIC_AREAS = %w(wdpa protected-areas-management-effectiveness-pame oecms
+    indigenous-and-community-conserved-areas global-partnership-on-aichi-target-11
+    green-list connectivity-conservation equity marine-protected-areas).freeze
+
+  def pas_figure(slug)
     pas = ProtectedArea
-    pas = case label
-    when theme(:marine)
-      pas.where(marine: true)
-    when theme(:green_list)
-      pas.where.not(green_list_status_id: nil)
-    when theme(:wdpa)
+    pas = case slug
+    when 'marine-protected-areas'
+      pas.marine_areas
+    when 'green-list'
+      pas.green_list_areas
+    when 'wdpa'
       pas.wdpas
-    when theme(:oecm)
+    when 'oecms'
       pas.oecms
-    when theme(:pame)
+    when 'protected-areas-management-effectiveness-pame'
       pas.with_pame_evaluations
     else
       -1 #Not applicable - hide ribbon
     end
 
     pas.respond_to?(:count) ? number_with_delimiter(pas.count) : pas
-  end
-
-  def theme(key)
-    THEMATIC_AREAS[key]
   end
 end
