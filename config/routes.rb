@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   namespace :admin do
-    resources :home_carousel_slides
     resources :call_to_actions
   end
 
@@ -50,6 +49,9 @@ Rails.application.routes.draw do
   get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
   resources :downloads, only: [:show, :create, :update]
 
+  post '/pame/download', to: 'pame#download'
+  post '/pame/list', to: 'pame#list'
+
   # TODO to be removed?
   #get '/country_codes', to: 'country#codes', as: 'country_codes'
 
@@ -69,12 +71,8 @@ Rails.application.routes.draw do
     #get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
     get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
-    get '/terms', to: redirect("/c/terms-and-conditions")
-
-    # routes worked on so far as part of the refresh
-
-    post '/pame/download', to: 'pame#download'
-    post '/pame/list', to: 'pame#list'
+    # TODO to be removed?
+    #get '/terms', to: redirect("/c/terms-and-conditions")
 
     get '/thematic-areas/green-list', to: 'green_list#index'
     get '/thematic-areas/oecms', to: 'oecm#index'
@@ -84,7 +82,6 @@ Rails.application.routes.draw do
     get '/thematic-areas/wdpa', to: 'wdpa#index'
 
     # Ensure that this route is defined last
-
     comfy_route :cms_admin, path: "/admin"
     comfy_route :cms, path: "/", sitemap: false
   end
