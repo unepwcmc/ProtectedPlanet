@@ -40,7 +40,7 @@ module EquityHelper
                ProtectedArea.find_by(name: name_of_site)&.wdpa_id
              end
 
-    URI.join(root_url, wdpaid.to_s)
+    protected_area_path(wdpaid)
   end
 
   def include_image(pa_page)
