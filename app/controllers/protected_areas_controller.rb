@@ -32,6 +32,7 @@ class ProtectedAreasController < ApplicationController
     @wdpa_other = get_other_sites
 
 
+
     @otherWdpasViewAllUrl = determine_search_path(@protected_area)
   
 
@@ -105,18 +106,24 @@ class ProtectedAreasController < ApplicationController
     other_designations.reject { |pa| pa.id == @protected_area.id }
   end
 
-  # TODO: Methods, models, controllers, modules related to Networks are slated for removal
-
-  # TRANSBOUNDARY_SITES = "Transboundary sites".freeze
-  # def load_networks
-  #   networks = @protected_area.networks.reject(&:designation)
-  #   # ensure that transboundary sites network always appears first
-  #   networks.sort { |a,b| a.name == TRANSBOUNDARY_SITES ? -1 : a.name <=> b.name }
-  # end
-
+  OTHER_SITES = 3.freeze
   def get_other_sites
-    return @countries.first.protected_areas.without_geometry.all_except(@protected_area.id).take(3) if @countries.length <= 1
-    ProtectedArea.without_geometry.all_except(@protected_area.id).transboundary_sites.take(3)
+    # Get country sites if the site has 1 country, get transboundary sites otherwise
+    other_sites = @countries.length == 1 ? country_own_sites : transboundary_sites
+    # If the sites taken are less than 3 get more random sites until 3 is reached
+    other_sites.count < OTHER_SITES ? other_sites.concat(remainder_sites(other_sites.count)) : other_sites
+  end
+
+  def transboundary_sites
+    ProtectedArea.without_geometry.all_except(@protected_area.id).transboundary_sites.take(OTHER_SITES)
+  end
+
+  def country_own_sites
+    @countries.first.protected_areas.without_geometry.all_except(@protected_area.id).take(OTHER_SITES)
+  end
+
+  def remainder_sites(other_sites)
+    ProtectedArea.without_geometry.all_except(@protected_area.id).take(OTHER_SITES - other_sites)
   end
 
   def determine_search_path(area)

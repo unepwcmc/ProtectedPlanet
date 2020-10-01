@@ -68,6 +68,7 @@
 
   &__results-wrapper { 
     @include flex-grow;
+    width: 100%; //need for ie11
   }
 
   &__spinner {
