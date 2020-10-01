@@ -6,10 +6,19 @@ module Autocompletion
     'region' => :iso
   }.freeze
 
-  def self.lookup(term, db_type='wdpa', search_index=Search::PA_INDEX)
-    search = Search.search(term.downcase, get_filters(db_type), search_index)
+  def self.lookup(term, db_type='wdpa', search_index='sites')
+    search = Search.search(term.downcase, get_filters(db_type), Search::PA_INDEX)
 
     results = search.results.objects.values.compact.flatten
+
+    # TODO Workaround to also fetch countries and regions excluded by the db_type filter above.
+    # An ideal solution would be to use just one query and ignore the filter for documents that
+    # do not have the fields we are filtering by
+    if search_index && search_index != 'sites'
+      region_country_index = Search::COUNTRY_REGION_INDEX
+      search = Search.search(term.downcase, {}, region_country_index)
+      results.concat(search.results.objects.values.compact.flatten)
+    end
 
     # Count the number of items with the same name
     # and store it in an hash
