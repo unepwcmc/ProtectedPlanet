@@ -51,6 +51,8 @@ $card-search-results-areas-height: rem-calc(155);
           width: $card-search-results-areas-width; height: $card-search-results-areas-height;
 
           position: absolute;
+          top: 0; //for IE 11
+          left: 0; //for IE 11
         }
 
         &__image-placeholder { 
