@@ -57,6 +57,7 @@
     &__results {
       @include flex-grow;
       min-height: rem-calc(300);
+      width: 100%; //need for ie11
 
       @include breakpoint($small) { min-height: rem-calc(600); }
     }
