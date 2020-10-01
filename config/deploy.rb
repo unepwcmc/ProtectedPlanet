@@ -30,6 +30,6 @@ set :keep_releases, 5
 set :passenger_restart_with_touch, false
 
 
-#namespace :deploy do
-#  after :publishing, 'service:sidekiq_pp:restart'
-#end
+namespace :deploy do
+  after :publishing, 'service:pp_default:restart, service:pp_import:restart'
+end
