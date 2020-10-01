@@ -12,16 +12,12 @@ export default {
     id: {
       type: Number,
       required: true
-    },
-    selectedId: {
-      type: Number,
-      required: true
     }
   },
 
   computed: {
     isActive () {
-      return this.id == this.selectedId
+      return this.id == this.$attrs['selected-id'] //need to do this way for ie11
     }
   }
 }
