@@ -22,22 +22,28 @@ class ApplicationController < ActionController::Base
   def opengraph
     return if admin_path?
 
-    @opengraph ||= OpengraphBuilder.new({
-                                          'og': {
-                                            'site_name': t('meta.site.name'),
-                                            'title': t('meta.site.title'),
-                                            'description': t('meta.site.description'),
-                                            'url': request.url,
-                                            'type': 'website',
-                                            'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
-                                            'image:alt': t('meta.image_alt'),
-                                            'locale': I18n.locale
-                                          },
-                                          'twitter': {
-                                            'site': t('meta.twitter.site'),
-                                            'creator': t('meta.twitter.creator')
-                                          }
-                                        })
+    @opengraph ||= OpengraphBuilder.new('og': og_tags, 'twitter': twitter_tags)
+  end
+
+  def og_tags
+    {
+      'site_name': t('meta.site.name'),
+      'title': t('meta.site.title'),
+      'description': t('meta.site.description'),
+      'url': request.url,
+      'type': 'website',
+      'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
+      'image:alt': t('meta.image_alt'),
+      'locale': I18n.locale
+    }
+  end
+
+  def twitter_tags
+    {
+      'card': t('meta.twitter.card'),
+      'site': t('meta.twitter.site'),
+      'creator': t('meta.twitter.creator')
+    }
   end
 
   def default_url_options

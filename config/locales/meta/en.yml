@@ -11,5 +11,6 @@ en:
     image_alt: >-
       Screenshot of the Protected Planet website
     twitter:
+      card: "summary_large_image"
       site: "@protectedplanet"
       creator: "@protectedplanet"
