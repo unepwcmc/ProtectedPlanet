@@ -68,7 +68,8 @@ export default {
         return new Promise((resolve, reject) => {
           axios.post('/search/autocomplete', {
             search_term: searchTerm,
-            type: this.type
+            type: this.type,
+            index: 'areas'
           })
             .then(response => {
               /**
