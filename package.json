@@ -16,6 +16,7 @@
     "puppeteer": "^5.2.1",
     "save": "^2.4.0",
     "scrollmagic": "^2.0.6",
+    "url-search-params-polyfill": "^8.1.0",
     "vue": "^2.6.10",
     "vue-analytics": "^5.17.2",
     "vue-flickity": "^1.2.1",
