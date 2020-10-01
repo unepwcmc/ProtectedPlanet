@@ -71,7 +71,7 @@ class ComfyOpengraph
   end
 
   def og_image
-    image = Comfy::Cms::Fragment.find_by(identifier: 'hero_image')&.attachments.first
+    image = @page.fragments.find_by(identifier: 'hero_image')&.attachments.first
     fallback_image = URI.join(root_url, image_path(I18n.t('meta.image')))
     image.blank? ? fallback_image : resize(image)
   end
@@ -88,7 +88,7 @@ class ComfyOpengraph
 
     # In line with Twitter guidelines for maximum dimensions
     # IMPORTANT: takes an ActiveStorage attachment rather than a relative path to the image 
-    variant = image.variant(size: '1200x638')
+    variant = image.variant(resize: "1200x630")
     URI.join(root_url, rails_representation_path(variant, only_path: true))
   end
 
