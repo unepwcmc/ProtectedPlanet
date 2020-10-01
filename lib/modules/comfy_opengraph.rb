@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'mini_magick'
 
 # Helper class to set Opengraph meta-tags for use with Comfy CMS @cms_page's
 class ComfyOpengraph
@@ -26,7 +27,7 @@ class ComfyOpengraph
       id = fragment.identifier.to_s
       next unless @mappings.key?(id)
 
-      value = get_fragment_value(fragment)
+      value = process_meta_tags(fragment)
       next if value.blank? # don't use the value if it isn't set
 
       # set opengraph meta-tag via a new hash
@@ -38,20 +39,12 @@ class ComfyOpengraph
 
   private
 
-  def get_fragment_value(fragment)
-    if fragment.tag =~ /file/ && fragment.attachments.first # get path when fragment is file
-      Rails.env.development? ? local_url(fragment) : production_url(fragment)
-    else 
-      process_meta_tags(fragment)
-    end
+  def local_url(image)
+    URI.join(root_url, rails_blob_path(image.blob, only_path: true))
   end
 
-  def local_url(fragment)
-    URI.join(root_url, rails_blob_path(fragment.attachments.first.blob, only_path: true))
-  end
-
-  def production_url(fragment)
-    fragment.attachments.first.service_url&.split('?')&.first
+  def production_url(image)
+    image.service_url&.split('?')&.first
   end
 
   def process_meta_tags(fragment)
@@ -78,9 +71,25 @@ class ComfyOpengraph
   end
 
   def og_image
-    image = cms_fragment_content(:image, @page).try(:attachments)&.first
+    image = Comfy::Cms::Fragment.find_by(identifier: 'image').attachments.first
     fallback_image = URI.join(root_url, image_path(I18n.t('meta.image')))
-    image.blank? ? fallback_image : URI.join(root_url, url_for(image))
+    image.blank? ? fallback_image : resize(image)
+  end
+
+  def resize(image)
+    #TODO - Get this working as we don't want to resize unnecessarily
+    # Using FastImage as MiniMagick is way too slow
+    # actual_image = MiniMagick::Image.open(local_url(image))
+
+    # # Return if image dimensions are sufficient
+    # if actual_image.height <= 4096 && actual_image.width <= 4096
+    #   return Rails.env.development? ? local_url(image) : production_url(image)
+    # end
+
+    # In line with Twitter guidelines for maximum dimensions
+    # IMPORTANT: takes an ActiveStorage attachment rather than a relative path to the image 
+    variant = image.variant(size: '4096x4096')
+    URI.join(root_url, rails_representation_path(variant, only_path: true))
   end
 
   def og_title
