@@ -88,7 +88,7 @@ class ComfyOpengraph
 
     # In line with Twitter guidelines for maximum dimensions
     # IMPORTANT: takes an ActiveStorage attachment rather than a relative path to the image 
-    variant = image.variant(size: '4096x4096')
+    variant = image.variant(size: '1200x638')
     URI.join(root_url, rails_representation_path(variant, only_path: true))
   end
 

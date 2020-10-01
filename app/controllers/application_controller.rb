@@ -34,6 +34,8 @@ class ApplicationController < ActionController::Base
       'type': 'website',
       'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
       'image:alt': t('meta.image_alt'),
+      'image:height': t('meta.image_height'),
+      'image:width': t('meta.image_width'),
       'locale': I18n.locale
     }
   end
