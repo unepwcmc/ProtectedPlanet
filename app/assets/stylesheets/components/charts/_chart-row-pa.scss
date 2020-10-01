@@ -7,7 +7,7 @@ $chart-row-pa-height: rem-calc(52);
 // pa row charts
 //--------------------------------------------------
 &--row-pa {
-  padding: rem-calc(40 0 20 0);
+  padding: rem-calc(40 0);
 
   .chart {
     &__row {
@@ -20,18 +20,24 @@ $chart-row-pa-height: rem-calc(52);
         @include flex-h-between;
         @include flex-v-center;
         height: $chart-row-pa-height;
+
+        position: relative;
       }
 
       &__bar-label {
-        color: $white;
-        font-size: rem-calc(20);
-        font-weight: $bold;
-        margin-right: rem-calc(10);
+        @include chart-tooltip('top', $black);
+        position: absolute;
+
+        top: calc(100% + 2px);
+        left: 50%;
+
+        transform: translateX(-50%);
       }
 
       &__coverage {
         background-color: $chart-aqua;
         height: rem-calc(52);
+        
         position: relative;
       }
 
