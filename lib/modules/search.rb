@@ -10,6 +10,7 @@ class Search
   PA_INDEX = "protectedareas_#{Rails.env}".freeze
   CMS_INDEX = "cms_#{Rails.env}".freeze
   AREAS_INDEX = [PA_INDEX, COUNTRY_INDEX, REGION_INDEX].join(',').freeze
+  COUNTRY_REGION_INDEX = [COUNTRY_INDEX, REGION_INDEX].join(',').freeze
   DEFAULT_INDEX_NAME = "#{AREAS_INDEX},#{CMS_INDEX}".freeze
   attr_reader :search_term, :options
 

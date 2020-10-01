@@ -3,8 +3,8 @@
   ga-id="<%= ga_id %>"
   :tab-triggers="<%= tabs %>"
 >
-  <template slot-scope="{ selectedId }">
-    <tab-target :id="1" :selected-id="selectedId">
+  <template slot-scope="slotProps">
+    <tab-target :id="1" :selected-id="slotProps.selectedId">
       <section class="container--medium">
         <%= cms_fragment_render("tab-content-1") %>
       </section>
@@ -21,13 +21,13 @@
       </section>
     </tab-target>
 
-    <tab-target :id="2" :selected-id="selectedId">
+    <tab-target :id="2" :selected-id="slotProps.selectedId">
       <section class="container--medium">
         <%= cms_fragment_render("tab-content-2") %>
       </section>
     </tab-target>
 
-    <tab-target :id="3" :selected-id="selectedId">
+    <tab-target :id="3" :selected-id="slotProps.selectedId">
       <section class="container--medium">
         <%= cms_fragment_render("tab-content-3") %>
       </section>
