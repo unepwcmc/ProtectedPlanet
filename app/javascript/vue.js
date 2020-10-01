@@ -1,8 +1,7 @@
-// import { polyfill } from 'es6-object-assign'
 import 'babel-polyfill'
 import { findPolyfill } from './utilities/polyfill-find'
+import 'url-search-params-polyfill'
 findPolyfill()
-// polyfill()
 
 // dependencies
 import Vue from 'vue/dist/vue.esm'
