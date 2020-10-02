@@ -71,12 +71,13 @@ class ComfyOpengraph
   end
 
   def og_image
-    image = URI.join(root_url, url_for(cms_fragment_render(:hero_image, @page)))
+    hero_image = cms_fragment_render(:hero_image, @page)
+    image = URI.join(root_url, url_for(hero_image))
     fallback_image = image_url(I18n.t('meta.image'))
-    image.blank? ? fallback_image : resize(image)
+    hero_image.blank? ? fallback_image : image                        
   end
 
-  def resize(image)
+  # def resize(image)
     #TODO - Get this working as we don't want to resize unnecessarily
     # Using FastImage as MiniMagick is way too slow
     # actual_image = MiniMagick::Image.open(local_url(image))
@@ -88,9 +89,9 @@ class ComfyOpengraph
 
     # In line with Twitter guidelines for maximum dimensions
     # IMPORTANT: takes an ActiveStorage attachment rather than a relative path to the image 
-    variant = image.variant(resize: "1200x630")
-    URI.join(root_url, rails_representation_path(variant, only_path: true))
-  end
+  #   variant = image.variant(resize: "1200x630")
+  #   URI.join(root_url, rails_representation_path(variant, only_path: true))
+  # end
 
   def og_title
     social_title = cms_fragment_content(:social_title, @page)
