@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require 'mini_magick'
+# require 'mini_magick'
 
 # Helper class to set Opengraph meta-tags for use with Comfy CMS @cms_page's
 class ComfyOpengraph
@@ -71,10 +71,10 @@ class ComfyOpengraph
   end
 
   def og_image
-    hero_image = cms_fragment_render(:hero_image, @page)
+    hero_image = @page.fragments.find_by(identifier: 'hero_image')&.attachments.first
     image = URI.join(root_url, url_for(hero_image))
     fallback_image = image_url(I18n.t('meta.image'))
-    hero_image.blank? ? fallback_image : image                        
+    hero_image.blank? ? fallback_image : image
   end
 
   # def resize(image)
