@@ -11,17 +11,17 @@ class S3
     @client = Aws::S3::Client.new(region: Rails.application.secrets.s3_region)
   end
 
-  def self.upload object_name, file_path, opts={}
+  def self.upload(object_name, file_path, opts={})
     s3 = S3.new
     s3.upload object_name, file_path, opts
   end
 
-  def self.delete_all path
+  def self.delete_all(path)
     s3 = S3.new
-    s3.delete_all path
+    s3.delete_all(path)
   end
 
-  def self.link_to file_name, opts={for_import: false}
+  def self.link_to(file_name, opts={for_import: false})
     prefix = opts[:for_import] ? IMPORT_PREFIX : CURRENT_PREFIX
     prefixed_file_name = prefix + file_name
 
@@ -29,7 +29,7 @@ class S3
     URI.join(url, prefixed_file_name).to_s
   end
 
-  def upload object_name, source, opts
+  def upload(object_name, source, opts)
     # Default to downloads bucket unless specified (e.g. for when uploading CMS files)
     bucket = opts[:bucket] || Rails.application.secrets.aws_downloads_bucket
 
@@ -45,7 +45,7 @@ class S3
   end
 
 
-  def delete_all path
+  def delete_all(path)
     bucket = @s3.bucket(Rails.application.secrets.aws_downloads_bucket)
     objects = bucket.objects(prefix: path)
 
