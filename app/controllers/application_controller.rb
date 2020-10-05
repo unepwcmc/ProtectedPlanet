@@ -36,7 +36,8 @@ class ApplicationController < ActionController::Base
       'image:alt': t('meta.image_alt'),
       'image:height': t('meta.image_height'),
       'image:width': t('meta.image_width'),
-      'locale': I18n.locale
+      'locale': 'en_GB',
+      'locale:alternate': "#{I18n.locale}_#{I18n.locale.upcase}"
     }
   end
 
