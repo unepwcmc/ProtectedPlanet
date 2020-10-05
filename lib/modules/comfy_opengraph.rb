@@ -71,7 +71,11 @@ class ComfyOpengraph
   end
 
   def og_image
+<<<<<<< HEAD
     # hero_image = @page.fragments.find_by(identifier: 'hero_image')&.attachments.first
+=======
+    hero_image = @page.fragments.find_by(identifier: 'hero_image')&.attachments.first
+>>>>>>> 8424894711a9d04f0eb20af0fc7dbc117046e902
     fallback_image = URI.join(root_url, image_url(I18n.t('meta.image')))
     # hero_image.blank? ? fallback_image : resize(hero_image) # TODO - can't get S3 hosted images to display
   end
