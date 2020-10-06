@@ -15,7 +15,7 @@ class Download::Generators::Pdf < Download::Generators::Base
     `node --trace-warnings #{rasterizer} '#{url}' #{dest_pdf}`
 
     # Can reuse shared methods? TODO
-    system("zip -j #{@zip_path} #{dest_pdf}") and system("zip -ru #{@zip_path} *", chdir: ATTACHMENTS_PATH)
+    system("zip -j #{@zip_path} #{dest_pdf}") and add_attachments
   end
 
   private

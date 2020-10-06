@@ -105,7 +105,12 @@ class Download::Generators::Shapefile < Download::Generators::Base
   def merge_files
     range = (0..@number_of_pieces-1)
     files_paths = range.map { |i| zip_path(i) }.join(' ')
-    system("zip -j #{zip_path} #{files_paths}") and add_sources and add_attachments
+
+    system("zip -j #{zip_path} #{files_paths}") and
+    add_sources and
+    add_attachments and
+    add_shapefile_readme
+
     range.each { |i| FileUtils.rm_rf(zip_path(i)) }
   end
 
