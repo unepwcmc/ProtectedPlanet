@@ -9,7 +9,9 @@ en:
       ocean:
         national-title: National Waters
         high-title: High Seas
-        legend-text: "% of Protected Area Coverage"
+        legend_text_1: "% of Protected Area Coverage"
+        legend_text_2: "% of Ocean that is National waters"
+        legend_text_3: "% of Ocean that is High Seas"
       national:
         sub_title: Top 6 countries
         chart_text: "%{country} and its %{overseas} overseas countries and territories have a combined area of %{km}km<sup>2</sup>"
