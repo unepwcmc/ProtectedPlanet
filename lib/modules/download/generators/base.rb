@@ -100,7 +100,7 @@ class Download::Generators::Base
   end
 
   def add_shapefile_readme
-    system("zip -ru #{zip_path} #{SHAPEFILE_README_PATH}")
+    system("zip -j #{zip_path} #{SHAPEFILE_README_PATH}")
   end
 
   def path_without_extension
