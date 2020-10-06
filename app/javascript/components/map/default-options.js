@@ -2,7 +2,7 @@ export const BASELAYERS_DEFAULT = [
   {
     id: 'terrain',
     name: 'Terrain',
-    style: 'mapbox://styles/unepwcmc/ckc4wk9b914981imt5d1qac0r'
+    style: 'mapbox://styles/unepwcmc/ck6hsqzns0vx31iqxdcgccgow'
   },
   {
     id: 'satellite',
