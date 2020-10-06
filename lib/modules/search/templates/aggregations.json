@@ -48,7 +48,7 @@
       "aggregation": {
         "terms": {
           "field": "designation.id",
-          "size": 500
+          "size": 3000
         }
       }
     }
