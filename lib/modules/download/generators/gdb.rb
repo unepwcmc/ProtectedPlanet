@@ -29,7 +29,7 @@ class Download::Generators::Gdb < Download::Generators::Base
       export_sources
 
       system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
-      system("zip -r #{zip_path} #{gdb_filenames(gdb_paths)}", chdir: @path) and system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
+      system("zip -r #{zip_path} #{gdb_filenames(gdb_paths)}", chdir: @path) and add_attachments
     end
   rescue Ogr::Postgres::ExportError
     return false

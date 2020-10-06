@@ -23,7 +23,7 @@
               <li class="list__li flex flex-v-start">
                 <span><%= jurisdiction["designation_name"] %></span>
                 <span class="list__right"><%= jurisdiction["count"] %></span>
-                <%= link_to '', '/', title: jurisdiction["designation_name"], class: 'list__a' %>
+                <%= link_to '', designation_link(jurisdiction['designation_name']), title: jurisdiction['designation_name'], class: 'list__a' %>
               </li>
             <% end %>
           </ul>
