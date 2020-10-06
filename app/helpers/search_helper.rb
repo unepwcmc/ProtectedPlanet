@@ -148,4 +148,8 @@ module SearchHelper
       end)
     end
   end
+
+  def designation_link(desig)
+    search_areas_path(filters: { designation: [desig] })
+  end
 end
