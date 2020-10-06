@@ -90,6 +90,14 @@ class Download::Generators::Base
     File.join(File.dirname(zip_path), "WDPA_sources.csv")
   end
 
+  def add_sources
+    system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
+  end
+
+  def add_attachments
+    system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
+  end
+
   def path_without_extension
     filename_without_extension = File.basename(zip_path, File.extname(zip_path))
     File.join(File.dirname(zip_path), filename_without_extension)
