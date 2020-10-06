@@ -2,12 +2,12 @@ export const BASELAYERS_DEFAULT = [
   {
     id: 'terrain',
     name: 'Terrain',
-    style: 'mapbox://styles/unepwcmc/ckek07ou668y019lzobq4gv5a'
+    style: 'mapbox://styles/unepwcmc/ckfy4y2nm0vqn19mkcmiyqo73'
   },
   {
     id: 'satellite',
     name: 'Satellite',
-    style: 'mapbox://styles/unepwcmc/ckek09j5n0j2r19qmvey6tux6'
+    style: 'mapbox://styles/unepwcmc/ckfy4tzxq0vq719lgi34s2lad'
   }
 ]
 export const MAP_OPTIONS_DEFAULT = {
