@@ -1,8 +1,8 @@
 # config valid only for current version of Capistrano
 lock '3.11.0'
 
-set :application, 'ProtectedPlanet'
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
+set :application, "ProtectedPlanet"
 
 set :deploy_user, 'wcmc'
 set :deploy_to, "/home/#{fetch(:deploy_user)}/#{fetch(:application)}"
@@ -30,6 +30,7 @@ set :keep_releases, 5
 set :passenger_restart_with_touch, false
 
 
-#namespace :deploy do
-#  after :publishing, 'service:sidekiq_pp:restart'
-#end
+namespace :deploy do
+  after :publishing, 'service:pp_default:restart'
+  after :publishing, 'service:pp_import:restart'
+end
