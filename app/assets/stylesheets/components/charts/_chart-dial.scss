@@ -1,0 +1,49 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-dial-color: $grey-black;
+$chart-text-color: $chart-font-color;
+$chart-dial-font: $chart-font;
+$chart-dial-font-size: rem-calc(20);
+$chart-dial-font-size-tablet: rem-calc(22);
+$chart-dial-font-size-desktop: rem-calc(26);
+
+//--------------------------------------------------
+// dial charts
+//--------------------------------------------------
+&--dial {
+  font: $chart-dial-font;
+  margin: rem-calc(10 0);
+  width: auto; height: rem-calc(160);
+
+  @include breakpoint($medium) { width: 100%; height: auto; }
+
+  .chart {
+    &__arc {
+      &--default, &--background { fill: $chart-item-background; }
+      &--global { fill: $chart-purple; }
+      &--marine { fill: $chart-blue-light; }
+      &--terrestrial { fill: $chart-aqua; }
+    }
+
+    &__arrow-circle { fill: $chart-dial-color; }
+
+    &__arrow-head { fill: $chart-dial-color; }
+
+    &__arrow-line { 
+      stroke: $chart-dial-color; 
+      stroke-width: rem-calc(3);
+    }
+    
+    &__arrow-line--target { 
+      @include chart-target-line;
+    }
+
+    &__title {
+      @include responsive(font-size, $chart-dial-font-size, $chart-dial-font-size-tablet, $chart-dial-font-size-desktop);  
+      fill: $chart-text-color;
+      font-family: $chart-dial-font;
+      font-weight: $bold;
+    }
+  }
+}

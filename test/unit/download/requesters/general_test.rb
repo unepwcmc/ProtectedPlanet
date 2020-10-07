@@ -11,8 +11,7 @@ class DownloadRequesterGeneralTest < ActiveSupport::TestCase
       returns(download_properties).
       twice
 
-
-    requester = Download::Requesters::General.new token
+    requester = Download::Requesters::General.new 'shp', token
     assert_equal({'token' => '123', 'status' => 'completed'}, requester.request)
   end
 end

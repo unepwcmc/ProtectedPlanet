@@ -1,0 +1,19 @@
+<%= render partial: "./layouts/partials/hero-basic", locals: { 
+  image: cms_fragment_render(:image, @cms_page),
+  title: @cms_page.label 
+} %>
+
+<section class="container--medium spacer-small--top spacer-small--bottom">
+  <%= cms_fragment_render("content") %>
+</section>
+
+
+<div class="flex flex-h-center spacer-small--bottom">
+  <%= render "partials/social/social-share" %>
+</div>
+
+<section class="container spacer-small--bottom">
+  <%= render "partials/cards/articles" %>
+</section>
+
+<%= render "partials/ctas/live-report" %>

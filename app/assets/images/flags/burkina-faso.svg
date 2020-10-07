@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 22.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve">
+<style type="text/css">
+	.st0{clip-path:url(#SVGID_2_);fill:#029E49;}
+	.st1{clip-path:url(#SVGID_2_);fill:#E73231;}
+	.st2{clip-path:url(#SVGID_2_);fill:#FDD21A;}
+</style>
+<g id="XMLID_1_">
+	<g>
+		<defs>
+			<path id="SVGID_1_" d="M59,60H0.9999695C0.4477234,60,0,59.5526733,0,59V0.9999695c0-0.5522461,0.4477234-1,0.9999695-1H59
+				c0.5526886,0,0.9999847,0.4477539,0.9999847,1V59C59.9999847,59.5526733,59.5526886,60,59,60L59,60z"/>
+		</defs>
+		<clipPath id="SVGID_2_">
+			<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+		</clipPath>
+		<polygon class="st0" points="-14.9443054,0.0371094 74.9442902,0.0371094 74.9442902,59.9628906 -14.9443054,59.9628906 
+			-14.9443054,0.0371094 		"/>
+		<polygon class="st1" points="-14.9443054,0.0371094 74.9442902,0.0371094 74.9442902,29.9999695 -14.9443054,29.9999695 
+			-14.9443054,0.0371094 		"/>
+		<polyline class="st2" points="30,20.0121765 26.9136047,29.5112 31.6630859,31.054657 		"/>
+		<polyline class="st2" points="30,20.0121765 33.0858765,29.5112 28.3368835,31.054657 		"/>
+		<polyline class="st2" points="39.4989624,26.9135742 29.5112,26.9135742 29.5112,31.907196 		"/>
+		<polyline class="st2" points="39.4989624,26.9135742 31.4188843,32.7841797 28.4833679,28.7440796 		"/>
+		<polyline class="st2" points="35.8700867,38.0800781 32.7841797,28.5814819 28.0346985,30.1244812 		"/>
+		<polyline class="st2" points="35.8700867,38.0800781 27.7904663,32.2099915 30.7255859,28.1693726 		"/>
+		<polyline class="st2" points="24.1293945,38.0800781 32.2099915,32.2099915 29.2743835,28.1693726 		"/>
+		<polyline class="st2" points="24.1293945,38.0800781 27.2157898,28.5814819 31.9647827,30.1244812 		"/>
+		<polyline class="st2" points="20.5009766,26.9135742 28.5814819,32.7841797 31.516571,28.7440796 		"/>
+		<polyline class="st2" points="20.5009766,26.9135742 30.4887695,26.9135742 30.4887695,31.907196 		"/>
+	</g>
+</g>
+</svg>

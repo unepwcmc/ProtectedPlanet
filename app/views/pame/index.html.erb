@@ -1,0 +1,49 @@
+<%= render partial: "./layouts/partials/hero-basic", locals: { 
+  classes: "#{@cms_page.slug} bg-image-overlay--white",
+  image: cms_fragment_render(:image, @cms_page),
+  title: @cms_page.label,
+} %>
+
+<section class="spacer-medium--bottom">
+  <tabs
+    class="tabs--hero"
+    ga-id="Slug: <%= @cms_page.slug %>"
+    :tab-triggers="<%= @tabs %>"
+  >
+    <template slot-scope="slotProps">
+      <tab-target :id="1" :selected-id="slotProps.selectedId">
+        <div class="container">
+          <filtered-table 
+            :attributes="<%= @table_attributes %>"
+            endpoint="/pame/list"
+            :filters="<%= @filters %>" 
+            :json="<%= @json %>" 
+          >
+          </filtered-table>
+        </div>
+      </tab-target>
+
+      <tab-target :id="2" :selected-id="slotProps.selectedId">
+        <section class="container--medium">
+          <%= cms_fragment_render("tab-content-2") %>
+        </section>
+      </tab-target>
+
+      <tab-target :id="3" :selected-id="slotProps.selectedId">
+        <section class="container--medium">
+          <%= cms_fragment_render("tab-content-3") %>
+        </section>
+      </tab-target>
+
+      <tab-target :id="4" :selected-id="slotProps.selectedId">
+        <section class="container--medium">
+          <%= cms_fragment_render("tab-content-4") %>
+        </section>
+      </tab-target>
+    </template>
+  </tabs>
+</section>
+
+<%= render "partials/ctas/live-report" %> 
+
+<pame-modal :text="<%= t('thematic_area.pame.modal').to_json %>"></pame-modal>

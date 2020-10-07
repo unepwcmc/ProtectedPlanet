@@ -1,0 +1,22 @@
+<div class="cards--squares">
+  <h2 class="cards__title"></h2>
+  
+  <div class="cards__cards">
+    <% cards.each do |card| %>
+      <div class="card">
+        <%= link_to card[:url], 
+          title: '', 
+          class: 'card__link',
+          style: "background-image: url('#{card[:image]}')" do 
+        %>
+          <h3 class="card__title"><%= card[:title] %></h3>
+          <i class="icon--circle-chevron-white"></i>
+        <% end %>
+      </div>
+    <% end %>
+    
+    <div class="cards__button-wrapper">
+      <%= link_to @pas_button, @pas_link, title: @pas_button, class: 'cards__button button--accent' %>
+    </div>
+  </div>
+</div>

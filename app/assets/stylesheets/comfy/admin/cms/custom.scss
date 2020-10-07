@@ -1,0 +1,12 @@
+//--------------------------------------------------
+// custom fields
+//--------------------------------------------------
+#fragment-published_date { background-color: $white; }
+
+[for="fragment-types"],
+[for="fragment-topics"] { padding-top: 0; }
+
+.alert.alert-alert { 
+  background-color: $red; 
+  color: $white;
+}

@@ -1,0 +1,31 @@
+<section class="container">
+  <div class="container--component">
+    <h2><%= title %></h2>
+    <div><%= content %></div>
+    <div>
+
+      <% charts.each do |chart| %>
+        <% if chart[:title] %>
+          <h3><%= chart[:title] %></h3>
+        <% end %>
+        
+        <chart-row-pa 
+          coverage="<%= chart[:coverage] %>" 
+          percent="<%= chart[:total] %>" 
+          theme="<%= chart[:theme] %>"
+        ></chart-row-pa>
+      
+        <% if chart[:legend] %>
+          <ul class="chart--legend--horizontal">
+            <% chart[:legend].each do |key| %>
+              <li class="chart__legend-li">
+                <span class="chart__legend-key <%= key[:theme] %>"></span>
+                <span class="chart__legend-text"><%= key[:title] %></span>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,94 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.cta {
+//--------------------------------------------------
+// api
+//--------------------------------------------------
+  &--api {
+    color: $white;
+
+    .cta {
+      &__container {
+        margin-top: rem-calc(30);
+        padding: rem-calc(30 24 34 34);
+
+        position: relative;
+      }
+        &__bg {
+          display: none;
+
+          @include breakpoint($small) { 
+            height: 122%;
+            
+            display: block;
+            position: absolute;
+            top: -6%; 
+            right: 0;
+          }
+
+          @include breakpoint($medium) { top: -11%; }
+        }
+
+        &__content { 
+          @include breakpoint($small) { width: 70%; }
+          @include breakpoint($medium) { width: 64%; }
+        }
+    }
+  }
+
+//--------------------------------------------------
+// live report
+//--------------------------------------------------
+  &--live-report {
+    @include bg-image-overlay;
+    background-image: image_url('cta/live-report.jpg');
+    background-position: center;
+    background-size: cover;
+    color: $white; 
+    z-index: 0;
+
+    .cta {
+      &__content {
+        @include flex;
+        padding: rem-calc(66 0 40 0);
+        height: 100%;
+        
+        align-items: flex-start;
+        flex-direction: column;
+        justify-content: normal;
+        position: relative;
+
+        @include breakpoint($small) {
+          padding: 0;
+
+          align-items: center;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+      }
+
+      &__intro {
+        @include breakpoint($small) { width: 75%; }
+        @include breakpoint($medium) { width: 90%; }
+      }
+
+      &__ribbon {
+        @include text-alert;
+
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      &__text {
+        @include breakpoint($small) { padding: rem-calc(60 0 20 0); }
+        @include breakpoint($medium) { padding: rem-calc(70 0 40 0); }
+      }
+
+      &__title {
+        @include breakpoint($small) { width: rem-calc(370); }
+      }
+    }
+  }
+}

@@ -1,65 +1,63 @@
-<div v-cloak class="new-styles page-padding--bottom">
-  <div class="container">
-    <header class="hero--thematic-area center">
-      <%= image_tag 'icons/aichi-11.svg', alt: 'Aichi 11 icon', class: 'icon--aichi margin-center' %>
-      <h1 class="hero__title hero__title--article"><%= t('thematic_area.target_11_dashboard.title') %></h1>
-    </header>
-  </div>
+<%= render partial: "./layouts/partials/hero-basic", locals: { 
+  classes: 'thematic-area' ,
+  image: cms_fragment_render(:image, @cms_page),
+  summary: cms_fragment_render("summary"),
+  title: @cms_page.label
+} %>
 
-  <main>
-    <section class="section-padding bg--grey-lighter">
-      <div class="container">
-        <h2><%= t('thematic_area.target_11_dashboard.subtitle_1') %></h2>
-      </div>
-      
-      <div class="container--desktop-up">
+<main v-cloak>
+  <section class="spacer-small--top">
+    <div class="container--desktop-up">
 
-        <agile class="agile--basic" :options="<%= get_config_carousel_global %>" >
-          <% @global_stats.each do |stat| %>
-            <div class="agile__slide">
-              <div class="agile__slide-content">
-                <tooltip 
-                  :on-hover="false" 
-                  text="<%= getTooltipText(stat[:id]) %>"
-                  class="agile__tooltip"
-                >
-                  <i class="icon--info-circle block"></i>
-                </tooltip>
+      <flickity ref="flickity" :options="<%= get_config_carousel_t11 %>" class="flickity--basic">
+        <% @global_stats.each do |stat| %>
+          <div class="carousel-cell">
+            <div class="carousel-cell__content">
+              <tooltip 
+                :on-hover="false" 
+                text="<%= global_tooltip_text(stat[:id]) %>"
+                class="carousel-cell__tooltip"
+              >
+                <i class="svg--info block">
+                  <%= render '/partials/svgs/info.svg' %>
+                </i>
+              </tooltip>
 
-                <h3 class="agile__slide-title"><%= stat[:title] %></h3>
-                
-                <% stat[:charts].each do |chart| %>
-                  <chart-dial
-                    title="<%= chart[:title] %>"
-                    colour="<%= chart[:colour] %>"
-                    :dial-value="<%= chart[:value] %>"
-                    <% if chart[:target] != nil %>
-                      :dial-target="<%= chart[:target] %>" 
-                    <% end %> 
-                  ></chart-dial>
-                <% end %>
-              </div>
+              <h3 class="carousel-cell__title"><%= stat[:title] %></h3>
+              
+              <% stat[:charts].each do |chart| %>
+                <chart-dial
+                  title="<%= chart[:title] %>"
+                  colour="<%= chart[:colour] %>"
+                  :dial-value="<%= chart[:value] == nil ? 0 : chart[:value] %>"
+                  <% if chart[:target] != nil %>
+                    :dial-target="<%= chart[:target] %>" 
+                  <% end %> 
+                ></chart-dial>
+              <% end %>
             </div>
-          <% end %>
-        </agile>
-      </div>
-    </section>
+          </div>
+        <% end %>
+      </flickity>
+    </div>
+  </section>
 
-    <section class="section-padding">
-      <div class="container">
-        <h2><%= t('thematic_area.target_11_dashboard.subtitle_2') %></h2>
-      </div>
-        
-      <div class="container--desktop-up">
-        <target-11-dashboard
-          class="sm-trigger-sticky-bar"
-          :select="<%= @search %>"
-          :table-headings="<%= @country_and_regions_headings %>" 
-          :table-data-src="<%= @endpoint.to_json %>"
-          :tooltip-array="<%= t("thematic_area.target_11_dashboard.tooltips").to_json %>"
-        >
-        </target-11-dashboard>
-      </div>
-    </section>
-  </main>
-</div>
+  <section class="spacer-small--top spacer-medium--bottom">
+    <div class="container--desktop-up">
+      <target-11-dashboard
+        :select="<%= @search %>"
+        :table-headings="<%= @country_and_regions_headings %>" 
+        :table-data-src="<%= @endpoint.to_json %>"
+        :tooltip-array="<%= region_and_country_tooltips %>"
+      > 
+        <slot>
+          <i class="svg--info-light block">
+            <%= render '/partials/svgs/info.svg' %>
+          </i>
+        </slot>
+      </target-11-dashboard>
+    </div>
+  </section>
+</main>
+
+<%= render "partials/ctas/live-report" %>

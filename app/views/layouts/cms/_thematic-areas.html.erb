@@ -1,0 +1,15 @@
+<%= render partial: "./layouts/partials/hero-small", locals: { 
+  classes: @cms_page[:slug],
+  image: cms_fragment_render(:image, @cms_page),
+  title: @cms_page.label
+} %>
+
+<section class="spacer-small--top spacer-small--bottom">
+  <%= render "partials/cards/themes" %>
+</section>
+
+<section class="container spacer-small--bottom">
+  <%= render "partials/cards/resources" %>
+</section>
+
+<%= render "partials/ctas/live-report" %>

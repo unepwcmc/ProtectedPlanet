@@ -44,7 +44,7 @@ require 'whenever/capistrano'
 
 
 
-set :services, [:sidekiq_pp]
+set :services, [:pp_default, :pp_import ]
 require 'capistrano/service'
 
 

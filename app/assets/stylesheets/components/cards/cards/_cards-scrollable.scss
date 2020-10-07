@@ -1,0 +1,87 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+@mixin card-scrollable-stat ($colour) {
+  @include responsive(width, 100%, 50%, 46%);
+  padding-left: rem-calc(22);
+
+  position: relative;
+
+  &::before {
+    background-color: $colour;
+    border: solid 2px white;
+    border-radius: 100%;
+    content: '';
+    width: rem-calc(14); height: rem-calc(14);
+
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--scrollable {
+  @include responsive(overflow-x, scroll, scroll, initial);
+  margin-top: rem-calc(14);
+
+  .cards {
+    @include flex;
+    @include flex-h-between;
+    @include responsive(flex-wrap, nowrap, nowrap, wrap);
+  }
+
+  .cards__card {
+    @include flex-no-shrink;
+    @include responsive(margin-right, 8%, 4%, 0);
+    @include responsive(width, 80%, 53%, 47%);
+  }
+
+  .card__heading {
+    @include flex;
+    @include flex-v-center;
+    margin-bottom: rem-calc(12);
+  }
+
+  .card__h3 { margin: rem-calc(0 0 0 10); }
+  
+  .card__stats {
+    @include flex;
+    @include flex-h-between;
+    @include responsive(flex-wrap, wrap, nowrap, nowrap);
+  }
+  
+  .card__stat {
+    @include card-scrollable-stat($chart-purple);
+  }
+
+  .card__stat-overseas {
+    @include card-scrollable-stat($chart-green);
+  }
+
+  .card__stat-bold {
+    @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
+    font-weight: $bold;
+    line-height: 1;
+
+    display: block;
+  }
+
+  .card__stat-text {
+    font-size: rem-calc(14);
+    line-height: 1.3;
+    margin-top: rem-calc(7);
+
+    display: inline-block;
+  }
+
+  .card__text {
+    @include responsive(font-size, rem-calc(14), rem-calc(16), rem-calc(16));
+    line-height: 1.3;
+    margin-bottom: 0
+  }
+}

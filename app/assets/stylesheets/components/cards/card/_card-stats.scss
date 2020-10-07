@@ -1,0 +1,95 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin card-stat-content {
+  @include flex;
+  @include flex-column;
+
+  @include breakpoint($small) { @include flex-row; }
+}
+
+@mixin card-stats-for-pdf {
+  .pdf & {
+    background-color: transparent;
+    border: solid 1px $grey;
+    color: $body-font-colour;
+
+    .card__h1 { color: inherit; }
+  }
+}
+
+@mixin card-stats-padding {
+  padding: rem-calc(16 18); 
+
+  @include breakpoint($small) { padding: rem-calc(28 30); }
+}
+
+@mixin card-stats-number {
+  color: $primary;
+  font-size: rem-calc(30);
+  font-weight: $bold;
+  line-height: 1;
+  
+  display: block;
+
+  @include breakpoint($small) { font-size: rem-calc(40); }
+}
+
+@mixin card-stats {
+  @include card-stats-for-pdf;
+  @include card-stats-padding;
+  background-color: $white;
+  margin-top: rem-calc(30);
+}
+
+@mixin card-stats-h2 { margin-top: 0; } 
+
+@mixin card-stats-third { width: calc(33% - 16px); }
+
+@mixin card-button-external { @include button-all($small: true); }
+
+@mixin card-chart-wrapper {
+  @include container-medium;
+  @include breakpoint-down($small) { padding: 0; }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--stats-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include breakpoint($small) { 
+    flex-wrap: nowrap;
+    justify-content: space-between; 
+  }
+
+  .pdf & { justify-content: unset; }
+}
+
+&--stats-half {
+  width: 100%; 
+
+  @include breakpoint($small) { width: calc(50% - 15px); }
+
+  .pdf & { 
+    width: 555px; 
+  }
+
+  &:first-child { 
+    @include breakpoint($small) { margin-right: rem-calc(30); }
+  }
+}
+
+@import './stats/card-stats-affiliations';
+@import './stats/card-stats-attributes';
+@import './stats/card-stats-coverage';
+@import './stats/card-stats-designations';
+@import './stats/card-stats-governance';
+@import './stats/card-stats-growth-chart';
+@import './stats/card-stats-iucn';
+@import './stats/card-stats-management';
+@import './stats/card-stats-overview';
+@import './stats/card-stats-related';
+@import './stats/card-stats-sources';

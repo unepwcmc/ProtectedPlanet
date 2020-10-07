@@ -1,0 +1,29 @@
+<div class="card--stats-affiliations <%= get_local_classes local_assigns %>">
+  <h2 class="card__h2"><%= t('stats.affiliations.title') %></h2>
+  
+  <% if affiliations.length > 0 %>
+    <ul class="card__logos">
+      <% affiliations.each do |link| %>
+        <li class="card__logo">
+          <%= image_tag link[:image_url], alt: link[:image_alt], class: 'card__logo-image' %>
+
+          <% if link[:affiliation] == 'greenlist' %>
+            <p><%= t('stats.green-list.intro') %>
+            <p class="card__subtitle"><%= t('stats.green-list.type') %></p>
+            <span><%= link[:type] %></span>
+
+            <% if link[:date] %>
+              <p class="card__subtitle"><%= t('stats.green-list.date') %></p>
+              <span><%= link[:date] %></span>
+            <% end %>
+          <% end %>
+    
+          <%= link_to t('global.button.more'), link[:link_url], title: link[:link_title], target: '_blank', class: 'card__button' %>
+        </li>
+      <% end %>
+    </ul>
+
+  <% else %>
+    <p><%= t('stats.no-infomation') %></p>
+  <% end %>
+</div>

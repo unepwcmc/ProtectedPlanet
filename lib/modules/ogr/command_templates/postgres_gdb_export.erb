@@ -1,0 +1,12 @@
+ogr2ogr -skipfailures
+-f "FileGDB"
+<%= file_name %>
+PG:"host=<%= db_config[:host] %>
+  user=<%= db_config[:username] %> 
+  <% unless db_config[:password].nil? %>
+    password=<%= db_config[:password] %>
+  <% end %>
+  dbname=<%= db_config[:database] %>"
+-sql "<%= query %>"
+-nlt "<%= geom_type.upcase %>"
+-nln "<%= file_name.split('/').last[0..-5] %>"

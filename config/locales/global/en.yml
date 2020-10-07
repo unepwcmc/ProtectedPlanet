@@ -1,0 +1,38 @@
+en:
+  global:
+    area-types:
+      wdpa: Protected Areas
+      oecm: OECMs
+    button:
+      all: View all
+      download-pdf: PDF Download
+      download: Download
+      link: Link
+      more: More info
+      pdf: PDF
+    footer:
+      copyright: "ProtectedPlanet 2014-%{date}. All rights reserved"
+      title1: Explore
+      title2: General Info
+      title3: Follow us
+      title4: Get in touch
+    geo-types:
+      countries: Countries
+      regions: Regions
+    logos:
+      iucn: IUCN logo
+      pp: Protected Planet logo
+      wcmc: UN Environment World Conservation Monitoring logo
+    links:
+      email: "Email: %{email}"
+      visit: "Visit: %{link}"
+    placeholder:
+      search-oecm-wdpa: Search for a protected area or OECM...
+      search-oecm: Search for an OECM...
+      search-wdpa: Search for a protected area...
+      search-site: Search...
+    status:
+      updated: Updated
+    redirect:
+      title: Sorry, that page can't be found.
+      text: "Feel free to browse the themes and articles below, or go back to the <a href=\"%{url}\">homepage</a>."

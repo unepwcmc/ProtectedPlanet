@@ -1,0 +1,10 @@
+//----------------------------------------
+// classes
+//----------------------------------------
+.page--resource {
+  .page {
+    &__date { @include text-small; }
+    
+    &__h1 { @include h1-resource; }
+  }
+}

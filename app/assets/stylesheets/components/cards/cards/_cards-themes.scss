@@ -1,0 +1,24 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--themes {
+  .cards {
+    &__cards { 
+      @include flex; 
+      @include flex-h-between; 
+      @include flex-wrap; 
+    }
+  }
+
+  .card--theme {
+    width: 100%;
+    
+    @include breakpoint($medium) { width: calc(50% - 10px); };
+
+    &:nth-child(3n) { 
+      width: 100%; height: rem-calc(460); 
+
+      @include breakpoint($medium) { padding-right: 50%; };
+    }
+  }
+}

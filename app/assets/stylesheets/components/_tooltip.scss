@@ -1,0 +1,101 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$tooltip-background-color: $grey-xlight;
+$tooltip-border-style: solid rem-calc(10);
+$tooltip-padding-mobile: rem-calc(34 30 22 22);
+$tooltip-padding: rem-calc(34 30 28 26);
+$tooltip-end-position: rem-calc(10);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin tooltip-end () {
+  left: inherit;
+  right: -$tooltip-end-position;
+  transform: none;
+}
+
+@mixin tooltip-arrow-end () {
+  @include tooltip-end;
+  right: $tooltip-end-position;
+}
+
+@mixin tooltip-center () {
+  left: 50%;
+  right: inherit;
+  transform: translateX(-50%);
+}
+
+@mixin tooltip-last-slide () {
+  .tooltip__target {
+    @include tooltip-end;
+
+    &:after { @include tooltip-arrow-end; }
+  }
+}
+
+//--------------------------------------------------
+// tooltips
+//--------------------------------------------------
+.tooltip {
+  position: relative;
+
+  &__trigger {
+    cursor: pointer;
+    opacity: 0.7;
+
+    &:hover,
+    .tooltip--active & { opacity: 1; }
+  }
+
+  &__target {
+    @include text-tooltip;
+    @include box-shadow-grey;
+    @include tooltip-end;
+    @include responsive(padding, $tooltip-padding-mobile, $tooltip-padding-mobile, $tooltip-padding);
+    @include responsive(width, 78vw, rem-calc(260), rem-calc(300));
+    line-height: 1.4;
+
+    background-color: $tooltip-background-color;
+
+    position: absolute;
+    top: 145%;
+    z-index: 1;
+
+    @include breakpoint($medium) { @include tooltip-center; }
+
+    .tooltip--end & {
+      @include tooltip-end;
+      @include breakpoint($medium) { @include tooltip-end; }
+    }
+
+    &:after {
+      @include tooltip-arrow-end;
+      border-bottom: $tooltip-border-style $tooltip-background-color;
+      border-right: $tooltip-border-style transparent;
+      border-left: $tooltip-border-style transparent;
+      content: '';
+      width: 0; height: 0;
+
+      position: absolute;
+      bottom: 100%;
+      
+      @include breakpoint($medium) { @include tooltip-center; }
+
+      .tooltip--end & {
+        @include tooltip-arrow-end;
+        @include breakpoint($medium) { @include tooltip-arrow-end; }
+      }
+    }
+  }
+
+  &__close {
+    @include icon-button-reset;
+    @include icon-close;
+    
+    position: absolute;
+    top: rem-calc(10);
+    right: rem-calc(10);
+  }
+}

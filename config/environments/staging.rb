@@ -35,7 +35,7 @@ Rails.application.configure do
   config.serve_static_files = false
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
+  config.assets.js_compressor = Uglifier.new(:harmony => true)
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
@@ -106,15 +106,17 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.asset_host = secrets['asset_host']
-  config.action_mailer.default_url_options = { :host => secrets['host'] }
+  config.action_mailer.asset_host = secrets[:asset_host]
+  config.action_mailer.default_url_options = { :host => secrets[:host] }
   config.action_mailer.smtp_settings = {
     :enable_starttls_auto => true,
-    :address => secrets['address'],
+    :address => secrets[:address],
     :port => 587,
-    :domain => secrets['domain'],
+    :domain => secrets[:domain],
     :authentication => :login,
-    :user_name => secrets['username'],
-    :password => secrets['password']
+    :user_name => secrets[:username],
+    :password => secrets[:password]
   }
+
+  config.active_storage.service = :staging
 end

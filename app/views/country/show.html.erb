@@ -1,5 +1,86 @@
-<div class="container--profile container--push-bottom">
-  <%= render "hero" %>
-  <%= render "factsheet" %>
-  <%= render "info_box" %>
+<%= render partial: "./partials/bars/topbar-secondary", locals: { 
+  download_options: @download_options 
+} %>
+
+<div class="page--country bg--grey-xlight spacer-small--top">
+  <div class="container">
+    <section class="page__section--overview-map">
+      <%= render partial: "partials/stats/stats-overview", locals: { 
+        flag: @flag_path[0],
+        chart_point_poly: @country_presenter.chart_point_poly,
+        legend_map: map_legend,
+        title: @country.name,
+        total_oecm: @total_oecm,
+        total_pame: @total_pame,
+        total_wdpa: @total_wdpa,
+      } %>
+
+      <div class="page__map map--country">
+        <%= render partial: "partials/maps/header", locals: {
+          map: @map,
+          map_options: @map_options
+        } %>
+      </div>
+    </section>
+
+    <section>
+      <div class="card--stats-wrapper">
+        <%= render partial: "partials/stats/stats-coverage", locals: { 
+          stats: @country_presenter.terrestrial_stats, 
+          type: 'terrestrial' 
+        } %>
+
+        <%= render partial: "partials/stats/stats-coverage", locals: { 
+          stats: @country_presenter.marine_stats, 
+          type: 'marine' 
+        } %>
+      </div>
+      
+      <%= render partial: "partials/messages/message-warning-stats", locals: {
+        documents: @country_presenter.documents
+      } %>
+
+      <div class="card--stats-wrapper pdf-break-before">
+        <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
+        
+        <%= render partial: "partials/stats/stats-governance", locals: { governance_types: @governance_types} %>
+      </div>
+
+      <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
+
+      <%= render partial: "partials/stats/stats-designations", locals: { designations: @country_designations } %>
+
+      <div class="card--stats-growth-chart">
+        <div class="card__chart-wrapper">
+          <h2><%= t('stats.growth.title') %></h2>
+
+          <am-chart-line 
+            :data="<%= @coverage_growth %>"
+          >
+          </am-chart-line>
+          
+          <p class="text--small"><%= t('stats.coverage-chart-smallprint') %></p>
+        </div>
+      </div>
+
+      <% if has_related_countries? %>
+
+        <%= render partial: "partials/stats/stats-related-countries", locals: { 
+          country_children: @country.children.any? ? @country.children : nil,
+          country_parent: @country.parent.present? ? @country.parent : nil
+        } %>
+      
+      <% end %>
+      
+      <%= render partial: "partials/cards/sites", locals: { 
+        cards: @sites,
+        title: @country.name + ' ' + t('country.protected_areas'),
+        url: @sitesViewAllUrl
+      } %>
+    </section>  
+    
+    <section class="spacer-small--bottom">
+      <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
+    </section>
+  </div>
 </div>

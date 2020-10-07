@@ -1,0 +1,187 @@
+@import './accessibility';
+@import './background';
+@import './beautify-scrollbar';
+@import './border-and-shadows';
+@import './cms';
+@import './form-fields';
+@import './images';
+
+@mixin limit_lines($number, $line-height: 1.25) {
+  overflow-y: hidden;
+  max-height: calc(#{($number * $line-height) + em} - 1px);
+}
+
+@mixin prevent-text-highlighting {
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /*Chrome/Opera */
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+}
+
+//--------------------------------------------------
+// display
+//--------------------------------------------------
+.block { display: block; }
+.inline-block { display: inline-block; }
+
+.full-height {
+  height: 100vh;
+}
+
+@mixin flex-stack-mobile {
+  display: flex;
+  flex-wrap: wrap;
+
+  @include breakpoint($small) {
+    flex-wrap: nowrap;
+  }
+}
+
+//--------------------------------------------------
+// fouc (flash of unstyled content)
+//--------------------------------------------------
+[v-cloak] { display: none; }
+
+//--------------------------------------------------
+// font
+//--------------------------------------------------
+.red { color: red; }
+.white { color: white; }
+.bold { font-weight: $bold; }
+
+//--------------------------------------------------
+// lists
+//--------------------------------------------------
+@mixin ul-unstyled {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+@mixin ul-inline { 
+  li { display: inline-block; }
+}
+
+.ul-inline { @include ul-inline; }
+.ul-unstyled { @include ul-unstyled; }
+
+//--------------------------------------------------
+// positioning
+//--------------------------------------------------
+@mixin item-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+}
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+.text-thin { font-weight: $thin; }
+
+.relative { position: relative; }
+
+.bottom-right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.center-right {
+  position: absolute;
+  top: 50%;
+  right: 0;
+
+  transform: translate(0, -50%);
+}
+
+.top-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+//--------------------------------------------------
+// margin & padding
+//--------------------------------------------------
+.no-margin--top { margin-top: 0; }
+.no-margin { margin: 0; }
+.margin-center { 
+  margin-right: auto; 
+  margin-left: auto; 
+}
+
+.margin-space--right { margin-right: rem-calc(14); }
+.margin-space--bottom { margin-bottom: rem-calc(14); }
+.margin-space--left { margin-left: rem-calc(14); }
+
+.no-padding { padding: 0; }
+
+//--------------------------------------------------
+// shapes
+//--------------------------------------------------
+@mixin triangle ($base, $height, $color, $direction:'up') {
+  content: '';
+  width: 0; 
+  height: 0; 
+  border-left: $base/2 solid transparent;
+  border-right: $base/2 solid transparent;
+  
+  border-bottom: $height solid $color;
+
+  display: block;
+
+  @if ($direction == 'right') {
+    transform: rotate(90deg);
+  }
+  @if ($direction == 'down') {
+    transform: rotate(180deg);
+  }
+  @if ($direction == 'left') {
+    transform: rotate(270deg);
+  }
+}
+
+//--------------------------------------------------
+// spacing
+//--------------------------------------------------
+@mixin gutters($sides:'both', $type:'padding') {
+  $sides: if($sides == 'both', ('left', 'right'), ($sides));
+
+  @each $s in $sides {
+    #{$type}-#{$s}: $gutter-small;
+
+    @include breakpoint($medium) { #{$type}-#{$s}: $gutter-medium; }
+    @include breakpoint($large) { #{$type}-#{$s}: $gutter-large; }
+  }
+}
+
+@mixin item-spacing($sides:'all', $type:'padding') {
+  $sides: if($sides == 'all', ('top','bottom','left','right'), ($sides));
+
+  @each $s in $sides {
+    #{$type}-#{$s}: $item-spacing-small;
+
+    @include breakpoint($medium) { #{$type}-#{$s}: $item-spacing-medium; }
+    @include breakpoint($large) { #{$type}-#{$s}: $item-spacing-large; }
+  }
+}
+
+//--------------------------------------------------
+// user interaction
+//--------------------------------------------------
+.no-select {
+  -webkit-touch-callout: none; 
+  -webkit-user-select: none; 
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none; 
+}
+
+.hover--pointer {
+  &:hover {
+    cursor: pointer;
+  }
+}

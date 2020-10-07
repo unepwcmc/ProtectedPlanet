@@ -24,9 +24,13 @@
       },
       total: {
         type: Number,
-        default: 0
+        required: true,
       },
-      animate: { default: false }
+      trigger: { 
+        type: String,
+        required: true
+      },
+      animate: { default: false } //animate on page load
     },
 
     data() {
@@ -61,10 +65,10 @@
         var interval = window.setInterval(() => {
 
           if(this.increase && this.number + this.step < this.total){
-              this.increment()
+            this.increment()
 
           } else if (!this.increase && this.number - this.step > this.total ){
-              this.decrement()
+            this.decrement()
 
           } else {
             this.number = this.total
@@ -96,25 +100,8 @@
       scrollMagicHandlers () {
         const counterScrollMagic = new ScrollMagic.Controller()
 
-        // coverage stats shown over the map
-        new ScrollMagic.Scene({ triggerElement: '.sm-coverage', reverse: false })
-          .on('start', () => {
-            if($(this.$el).hasClass('sm-coverage-counter')) { this.count() }
-          })
-          .addTo(counterScrollMagic)
-
-        // national waters and high seas infographic
-        new ScrollMagic.Scene({ triggerElement: '.sm-infographic', reverse: false })
-          .on('start', () => {
-            if($(this.$el).hasClass('sm-infographic-counter')) { this.count() }
-          })
-          .addTo(counterScrollMagic)
-
-        // pledges
-        new ScrollMagic.Scene({ triggerElement: '.sm-pledges', reverse: false })
-          .on('start', () => {
-            if($(this.$el).hasClass('sm-pledges')) { this.count() }
-          })
+        new ScrollMagic.Scene({ triggerElement: `.${this.trigger}`, reverse: false })
+          .on('start', () => { this.count() })
           .addTo(counterScrollMagic)
       }
     },
@@ -123,7 +110,7 @@
       styledNumber () {
         const roundingNumber = Math.pow(10, this.decimal)
 
-        return (Math.ceil(this.number * roundingNumber)/roundingNumber).toLocaleString()
+        return (Math.round(this.number * roundingNumber)/roundingNumber).toLocaleString()
       }
     }
   }

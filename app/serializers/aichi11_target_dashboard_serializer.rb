@@ -11,7 +11,7 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
       id: 'coverage',
       name: 'Coverage',
       relation: 'country_statistic',
-      column_name: 'percentage_pa_type_cover'
+      column_name: 'percentage_oecms_pa_type_cover'
     },
     effectively_managed: {
       id: 'effectively_managed',
@@ -159,13 +159,16 @@ class Aichi11TargetDashboardSerializer < CountrySerializer
     _column_name = stat[:column_name].gsub(/type/, column_type)
     target_column = "#{stat_name}_#{type}"
 
+
     value = record[_column_name] || 0
     target = is_importance_region?(stat_name, record) ? nil : Aichi11Target.instance.public_send(target_column)
+
     {
-      title: type.capitalize,
+      # Hacky fix - connectivity only applies to terrestrial regions, not marine
+      title: stat[:name] == 'Well connected' ? 'Terrestrial' : type.capitalize,
       value: value,
       target: target,
-      colour: type
+      colour: stat[:name] == 'Well connected' ? 'terrestrial' : type
     }
   end
 

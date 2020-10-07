@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render "layouts/partials/head" %>
+  </head>
+
+  <body>
+    <%= render "layouts/partials/topbar" %>
+    <%= render "layouts/partials/hero-thematic" %>
+    <%= yield %>
+    <%= render "partials/carousels/thematic" %>
+    <%= render "partials/ctas/live-report" %>
+    <%= render "layouts/partials/footer" %>
+  </body>
+</html>

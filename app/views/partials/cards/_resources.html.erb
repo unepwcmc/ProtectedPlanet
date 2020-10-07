@@ -1,0 +1,27 @@
+<% get_all = false if local_assigns[:get_all].nil? %>
+<% get_resource_cards get_all %>
+
+<div class="cards--resources">
+  <div class="flex flex-v-center flex-h-between">
+    <h2><%= @items[:title] %></h2>
+    
+    <% if @items[:url] && !get_all %>
+      <%= link_to t('global.button.all'), @items[:url], title: t('global.button.all'), class: 'button--all' %>
+    <% end %>
+  </div>
+
+  <div class="cards__cards <%= !get_all ? 'preview' : '' %>">
+    <% @items[:cards].each_with_index do |card, index| %>
+      <listing-page-card-resources
+        :key="<%= index %>"
+        date="<%= card[:date] %>"
+        file-url="<%= card[:fileUrl] %>"
+        link-title="<%= card[:linkTitle] %>"
+        link-url="<%= card[:linkUrl] %>"
+        summary="<%= card[:summary] %>"
+        title="<%= card[:title] %>"
+        url="<%= card[:url] %>"
+      ></listing-page-card-resources>
+    <% end %>
+  </div>
+</div>

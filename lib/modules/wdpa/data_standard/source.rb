@@ -5,6 +5,7 @@ class Wdpa::DataStandard::Source < Wdpa::DataStandard
     :resp_party => {name: :responsible_party, type: :string},
     :resp_email => {name: :responsible_email, type: :string},
     :year       => {name: :year, type: :year},
+    :update_yr  => {name: :update_year, type: :year},
     :char_set   => {name: :character_set, type: :string},
     :ref_system => {name: :reference_system, type: :string},
     :scale      => {name: :scale, type: :string},

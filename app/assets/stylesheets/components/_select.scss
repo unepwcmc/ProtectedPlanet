@@ -1,0 +1,42 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$select-width-desktop: rem-calc(500);
+$select-height: rem-calc(48);
+
+$select-padding-side: rem-calc(12);
+$select-padding: rem-calc(10) $select-padding-side;
+
+$search-icon-padding-right: rem-calc(18);
+$search-icon-padding-left: $select-padding-side;
+
+$select-input-padding-right: #{$search-icon-padding-right} + #{$search-icon-padding-left} + #{$icon-search-width};
+
+$select-hover-color: $grey-light;
+$select-selected-color: $grey-light;
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin vselect-icon-basic() {
+  @include button-plain;
+  background-color: transparent;
+  margin-right: $search-icon-padding-right;
+  margin-left: $search-icon-padding-left;
+  padding: 0;
+
+  display: inline-block;
+
+  position: relative;
+}
+
+//--------------------------------------------------
+// selects
+//--------------------------------------------------
+.select {
+  @import './select/select-equity';
+  @import './select/select-searchable';
+}
+
+
+@import './select/selector';

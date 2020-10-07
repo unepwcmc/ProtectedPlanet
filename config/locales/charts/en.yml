@@ -1,0 +1,8 @@
+en:
+  charts:
+    legend:
+      coverage_km2: Coverage in km2
+      global: Global
+      number-pa: Number of Protected Areas 
+    units:
+      km2: km2

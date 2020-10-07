@@ -1,0 +1,25 @@
+<% get_all = false if local_assigns[:get_all].nil? %>
+<% get_news_items get_all %>
+
+<div class="cards--articles">
+
+  <% unless get_all %>
+    <div class="flex flex-v-center flex-h-between">
+      <h2><%= @items[:title] %></h2>
+      <%= link_to t('global.button.all'), @items[:url], title: t('global.button.all'), class: 'button--all' %>
+    </div>
+  <% end %>
+
+  <div class="cards__cards">
+    <% @items[:cards].each_with_index do |card, index| %>
+      <listing-page-card-news
+        key="<%= index %>"
+        date="<%= cms_fragment_content_datetime(:published_date, card).strftime('%d %B %y') %>"
+        image="<%= cms_fragment_render(:image, card) %>"
+        summary="<%= cms_fragment_content(:summary, card) %>"
+        title="<%= card[:label].truncate(59, separator: ' ') %>"
+        url="<%= card[:url] %>"
+      ></listing-page-card-news>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$image-placeholder: black;
+
+//--------------------------------------------------
+// mixins - shared
+//--------------------------------------------------
+@mixin bg-colour($bg, $text) {
+  background-color: $bg;
+  color: $text;
+}
+
+@mixin bg-image-overlay($colour: rgba($black, 0.4)) {
+  position: relative;
+  z-index: 1;
+
+  &::before {
+    background-color: $colour;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+}
+
+@mixin bg-image-overlay-hover($colour: rgba($black, 0.4)) {
+  position: relative;
+  z-index: 1;
+
+  &:hover::before {
+    background-color: $colour;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+}
+
+@mixin bg-gradient-overlay($colour: #ffffff) {
+  position: relative;
+  
+  &:after {
+    @include breakpoint($small) {
+      background: linear-gradient(to right, rgba($colour,0%) 80%, $colour);
+      content: '';
+      pointer-events: none;
+      width: 100%; height: 100%;
+      
+      display: block;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
+}
+
+//--------------------------------------------------
+// mixins - specific
+//--------------------------------------------------
+@mixin bg-grey-xlight { @include bg-colour($grey-xlight, $body-font-colour); }
+@mixin bg-grey-light { @include bg-colour($grey-light, $body-font-colour); }
+@mixin bg-grey { @include bg-colour($grey, $white); }
+@mixin bg-grey-dark { @include bg-colour($grey-dark, $white); }
+@mixin bg-grey-xdark { @include bg-colour($grey-xdark, $white); }
+@mixin bg-grey-black { @include bg-colour($grey-black, $white); }
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.bg--primary { @include bg-colour($primary, $white); }
+.bg--grey-xlight { @include bg-grey-xlight; }
+.bg--grey-light { @include bg-grey-light; }
+.bg--grey { @include bg-grey; }
+.bg--grey-dark { @include bg-grey-dark; }
+.bg--grey-xdark { @include bg-grey-xdark; }
+.bg--grey-black { @include bg-grey-black; }
+
+.bg-img {
+  background-color: $image-placeholder;
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-image-overlay { @include bg-image-overlay; }
+.bg-image-overlay--white { @include bg-image-overlay(rgba($white, 0.8)); }
+
+.bg-gradient-overlay--white { @include bg-gradient-overlay; }

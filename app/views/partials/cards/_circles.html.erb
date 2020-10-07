@@ -1,0 +1,13 @@
+<div class="cards--circles spacer-small--top">
+  <h2 class="cards__title"></h2>
+
+  <div class="cards__cards">
+    <% cards.each do |card| %>
+      <%= link_to card[:url], title: "Explore Protected Areas by #{card[:title]}", class: 'card' do  %>
+        <i class="card__icon icon--<%= card[:icon] %>"></i>
+        <h3 class="card__title"><%= card[:title] %></h3>
+        <i class="card__chevron icon--circle-chevron-black %>"></i>
+      <% end %>
+    <% end %>
+  </div>
+</div>

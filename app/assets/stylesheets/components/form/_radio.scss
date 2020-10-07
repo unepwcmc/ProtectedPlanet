@@ -1,0 +1,36 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.radio {
+  &__label {
+    @include flex;
+    @include flex-v-center;
+    @include text-filter;
+
+    position: relative;
+  }
+
+    &__input {
+      @include input-hidden;
+
+      &:checked + .radio__input-fake::before {
+        @include input-custom-radio-selected(rem-calc(14), $green);
+      }
+
+      &:focus + .radio__input-fake { @include input-custom-focus; } 
+    }
+
+    &__input-fake {
+      @include input-custom-radio(rem-calc(20)); 
+    }
+}

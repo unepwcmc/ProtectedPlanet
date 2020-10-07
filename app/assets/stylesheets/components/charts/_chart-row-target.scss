@@ -1,0 +1,44 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-row-target-font: $chart-font;
+$chart-row-target-font-color: $chart-font-color;
+$chart-row-target-font-size: rem-calc(18);
+
+//--------------------------------------------------
+// row target charts
+//--------------------------------------------------
+&--row-target {
+  margin: rem-calc(10) 0;
+
+  .chart {
+    &__marker {
+      &--target { 
+        @include chart-target-line;
+      }
+
+      &--value { stroke: $grey-xdark; }
+    }
+
+    &__marker-title {
+      fill: $chart-row-target-font-color;
+      font-family: $chart-row-target-font;
+      font-size: $chart-row-target-font-size;
+      font-weight: $bold;
+    }
+
+    &__stroke {
+      &--default { stroke: $chart-item-background; }
+      &--marine { stroke: $chart-blue-light; }
+      &--global { stroke: $chart-purple; }
+      &--terrestrial { stroke: $chart-aqua; }
+    }
+
+    &__title {
+      fill: $chart-row-target-font-color;
+      font-size: $chart-row-target-font-size;
+      font-family: $chart-row-target-font;
+      font-weight: $bold;
+    }
+  }
+}

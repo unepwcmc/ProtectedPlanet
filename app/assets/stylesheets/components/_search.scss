@@ -1,0 +1,43 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$search-input-size-mobile: 547px; //px
+$search-input-size-tablet: 547px; //px
+$search-input-size-desktop: 547px; //px
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin search-spinner {
+  margin-top: rem-calc(55);
+  margin-bottom: rem-calc(55);
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.search {
+  @import './search/search-autocomplete';
+  @import './search/search-main';
+  @import './search/search-results';
+  @import './search/search-results-areas';
+
+//--------------------------------------------------
+// class - protected areas
+//--------------------------------------------------
+  &--pa {
+    height: 0;
+
+    position: relative; //make sure the dropdown sits on top of map
+    z-index: 1; //make sure the dropdown sits on top of map
+
+    .search {
+      &__container {
+        @include flex;
+        @include flex-h-center;
+
+        transform: translateY(-50%);
+      }
+    }
+  }
+}

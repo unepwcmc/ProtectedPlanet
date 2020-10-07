@@ -1,0 +1,26 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+@mixin chart-row-height {
+  @include responsive(height, rem-calc(34), rem-calc(40), rem-calc(40));
+}
+
+//--------------------------------------------------
+// row charts
+//--------------------------------------------------
+&--row {
+  .chart__row {
+    @include flex;
+    @include chart-row-height;
+    background-color: $white;
+  }
+
+  .chart__bar {
+    @include chart-row-height;
+  }
+
+  .chart__bar-overseas {
+    @include chart-row-height;
+    background-color: $chart-green;
+  }
+}

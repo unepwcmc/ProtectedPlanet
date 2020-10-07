@@ -1,0 +1,19 @@
+<div class="topbar">
+  <div class="topbar__container container">
+    <%= render '/partials/global/site-logo' %>
+
+    <% unless @for_pdf %>
+      <nav-burger 
+        :links="<%= get_nav_primary %>" 
+        class="topbar__nav nav--primary"
+      ></nav-burger>
+    <% end %>
+
+    <search-site-topbar 
+      class="topbar__search" 
+      endpoint="/<%= locale %>/search?search_term="
+      placeholder="<%= t('global.placeholder.search-site') %>"
+      :popout="true"
+    ></search-site-topbar>
+  </div>
+</div>

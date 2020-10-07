@@ -1,7 +1,0 @@
-<div class="js-download-btn tooltip-old__trigger">
-  <button href="#" class="js-trigger big-button <%= custom_classes %>">
-    <i class="fa fa-download big-button__icon"></i><%= custom_text rescue "Download the WDPA dataset" %>
-  </button>
-
-  <%= download_dropdown((item_id rescue nil), download_type, (types rescue [:csv, :shp])) %>
-</div>

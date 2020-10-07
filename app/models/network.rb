@@ -1,3 +1,6 @@
+#  TODO: To be removed at a later date - because networks are no longer being used
+#  to determine whether a protected area is transboundary
+
 class Network < ApplicationRecord
   has_many :networks_protected_areas, dependent: :destroy
   has_many :protected_areas, through: :networks_protected_areas
