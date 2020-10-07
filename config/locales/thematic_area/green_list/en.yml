@@ -7,3 +7,6 @@ en:
         stat_text_2: Green Listed Protected Areas
         stat_text_3: Total area protected
       card_text: Green List Protected Areas
+      chart_row_pa:
+        legend_text_1: "% of Protected Area Coverage that is Green Listed"
+        legend_text_2: "% of Protected Area Coverage"

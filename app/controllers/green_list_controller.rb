@@ -22,7 +22,7 @@ class GreenListController < ApplicationController
       datapoints: ProtectedArea.greenlist_coverage_growth(2000)
     }.to_json 
     
-    @total_area_percent = (Stats::Global.percentage_pa_cover - @pas_percent.to_f).round(2)
+    @total_area_percent = GlobalStatistic.global_oecms_pas_coverage_percentage
 
     @filters = {
       db_type: ['wdpa'],

@@ -14,15 +14,18 @@
           percent="<%= chart[:total] %>" 
           theme="<%= chart[:theme] %>"
         ></chart-row-pa>
-
-      <% end %>
       
-      <div class="chart--legend--horizontal">
-        <div class="chart__legend-item">
-          <span class="chart__legend-key theme--aqua"></span>
-          <span class="chart__legend-text"><%= t('thematic_area.marine.ocean.legend-text') %></span>
-        </div>
-      </div>
+        <% if chart[:legend] %>
+          <ul class="chart--legend--horizontal">
+            <% chart[:legend].each do |key| %>
+              <li class="chart__legend-li">
+                <span class="chart__legend-key <%= key[:theme] %>"></span>
+                <span class="chart__legend-text"><%= key[:title] %></span>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      <% end %>
     </div>
   </div>
 </section>

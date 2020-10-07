@@ -42,12 +42,21 @@ $pane-side-padding: 42px;
 
       &__close {
         @include button-close;
-        @include responsive(display, block, none, none);
-        margin: rem-calc(20 20 0) auto;
+
+        display: block;
+        position: absolute;
+        top: rem-calc(20);
+        right: rem-calc(20);
+        z-index: 1;
+
+        @include breakpoint($small) {
+          display: none;
+        }
       }
 
       &__pane {
         background-color: $pane-color;
+        padding: rem-calc(20 0);
         width: 100%; height: 100%;
             
         position: fixed;
@@ -60,6 +69,8 @@ $pane-side-padding: 42px;
         transition: transform 0.4s ease-in-out;
 
         @include breakpoint($small) {
+          padding: 0;
+          
           position: static; //initial doesn't work in IE11
           top: unset;
           right: unset;
@@ -87,6 +98,10 @@ $pane-side-padding: 42px;
           @include flex;
           @include ul-unstyled;
           height: 100%;
+
+          @include breakpoint-down($small) {
+            overflow: scroll;
+          }
         }
 
           &__li {
@@ -106,7 +121,11 @@ $pane-side-padding: 42px;
 
               position: relative;
               
-              &.active { z-index: 3; }
+              &.active { 
+                @include breakpoint($small) {
+                  z-index: 3; 
+                }
+              }
             }
 
               &__dropdown-toggle {

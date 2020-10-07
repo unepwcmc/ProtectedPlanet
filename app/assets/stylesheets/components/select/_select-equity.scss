@@ -1,161 +1,152 @@
 &--equity {
+  margin: 0 auto;
+  max-width: rem-calc(685);
+
+  display: block;
+
+  @include breakpoint($medium) {
+    max-width: none;
+
+    display: flex;
+  }
+
+  &__button {
+    @include flex-vs-start;
+    border-radius: rem-calc(4);
+  }
+
+  &__content {
+    @include flex;
+    @include flex-v-center;
+    border: 1px solid $grey-dark;
+    padding: rem-calc(20 0);
+
+    @include breakpoint($small) {
+      width: 100%; height: rem-calc(507);
+    }
+
     @include breakpoint($medium) {
-        display: flex;
-        max-width: none;
-    }
-    
-    max-width: rem-calc(685);
-    margin: 0 auto;
-    display: block;
-
-    &__button {
-        @include flex-vs-start;
-        border-radius: rem-calc(4);
+      width: 50%; height: auto;
     }
 
-    &__content {
-        @include breakpoint-down($small) {
-            img {
-                object-fit: contain;
-            }
-        }
-        @include breakpoint($small) {
-            height: rem-calc(507);
-            padding: rem-calc(30 0);
-
-            img {
-                object-fit: cover; 
-            }
-        }
-        @include breakpoint($medium) {
-            width: 50%;
-            height: auto;
-            padding: rem-calc(60 0);
-        }
-
-        @include flex;
-        border: 1px solid $grey-dark;
-       
-        height: rem-calc(271);
-        padding: rem-calc(20 0);
-
-        img {
-            margin: 0 auto;                 
-        }
+    img {
+      margin: 0 auto;                 
+      width: 100%;
     }
+  }
 
-    &__description {
-        @include flex-grow;
+  &__description {
+    @include flex-grow;
+  }
+
+  &__header {
+    margin-top: 0;
+    margin-bottom: 0;
+
+    @include breakpoint($small) {
+      margin-bottom: rem-calc(8);
     }
-
-    &__header {
-        @include breakpoint($small) {
-            margin-bottom: rem-calc(8);
-        }
-        @include breakpoint($medium) {
-            margin-bottom: rem-calc(14);
-        }
-
-        margin-top: 0;
-        margin-bottom: 0;
+    @include breakpoint($medium) {
+      margin-bottom: rem-calc(14);
     }
+  }
 
-    &__panel {
-        @include breakpoint($small) {
-            padding: rem-calc(50 44 62 49);
-        }
-        @include breakpoint($medium) {
-            padding: rem-calc(41 40 29 57);
-            width: 50%;
-        }
-        padding: rem-calc(32 13 29 18);
+  &__panel {
+    @include flex;
+    @include flex-column;
+    background-color: $grey-xlight;
+    padding: rem-calc(32 13 29 18);
 
-        @include flex;
-        @include flex-column;
-
-        background-color: $grey-xlight;
+    @include breakpoint($small) {
+      padding: rem-calc(50 44 62 49);
     }
+    @include breakpoint($medium) {
+      padding: rem-calc(41 40 29 57);
+      width: 50%;
+    }
+  }
 
 
 }
 
 // Custom select for this component
 &--dropdown {
-    &__custom-select {
-        @include breakpoint($small) {
-            margin: rem-calc(30 0 36);
-        }
-        @include breakpoint($medium) {
-            margin: rem-calc(14 0 19);
-        }
-        margin: rem-calc(0 0 27);
-        position: relative;
-        user-select: none;
-        width: 100%;
+  &__custom-select {
+    @include breakpoint($small) {
+      margin: rem-calc(30 0 36);
+    }
+    @include breakpoint($medium) {
+      margin: rem-calc(14 0 19);
+    }
+    margin: rem-calc(0 0 27);
+    position: relative;
+    user-select: none;
+    width: 100%;
+  }
+
+  &__selected {
+    @include breakpoint($small) {
+      padding: rem-calc(20 24);
     }
 
-    &__selected {
-        @include breakpoint($small) {
-            padding: rem-calc(20 24);
-        }
+    @include flex;
+    @include flex-v-center;
+    @include flex-h-between;
+    @include text-body;
 
-        @include flex;
-        @include flex-v-center;
-        @include flex-h-between;
-        @include text-body;
+    background: $white;
+    border: 1px solid $grey-black;
+    cursor: pointer;
+    line-height: 1.9;
+    padding: rem-calc(11 20);
+    position: relative;
+  }
 
-        background: $white;
-        border: 1px solid $grey-black;
-        cursor: pointer;
-        line-height: 1.9;
-        padding: rem-calc(11 20);
-        position: relative;
+  &__options {
+    display: none;
+
+    &--active {
+      background: $white;
+      border: 1px solid $grey-black;
+      border-top: 0;
+      overflow: scroll;
+      height: 40vh;
+      
+      display: block;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 2;
     }
+  }
 
-    &__options {
-        display: none;
+  &__option {
+    @include text-body;
+    line-height: 1.9;
+    padding: rem-calc(2 20);
+    
+    display: block;
+    position: relative;
 
-        &--active {
-            height: 40vh;
-            background: $white;
-            border: 1px solid $grey-black;
-            border-top: 0;
-            overflow: scroll;
-            display: block;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            z-index: 2;
-        }
+    @include breakpoint($small) {
+      padding: rem-calc(5 24);
+      }
+
+    &:hover {
+      background-color: $grey-light;
     }
+  }
 
-    &__option {
-        @include breakpoint($small) {
-            padding: rem-calc(5 24);
-        }
-        
-        @include text-body;
+  &__dropdown {
+    @include icon-chevron-black-down;
+    height: rem-calc(10);
+    width: rem-calc(18);
+    transform: rotate(0deg);
 
-        line-height: 1.9;
-        display: block;
-        padding: rem-calc(2 20);
-        position: relative;
-
-        &:hover {
-            background-color: $grey-light;
-        }
+    &--active {
+      @extend .select--dropdown__dropdown;
+      transform: rotate(180deg);
     }
-
-    &__dropdown {
-        @include icon-chevron-black-down;
-        height: rem-calc(10);
-        width: rem-calc(18);
-        transform: rotate(0deg);
-
-        &--active {
-            @extend .select--dropdown__dropdown;
-            transform: rotate(180deg);
-        }
-    }
+  }
 }

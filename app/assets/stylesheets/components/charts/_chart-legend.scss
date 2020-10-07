@@ -70,11 +70,11 @@
   font-size: rem-calc(14);
   margin: rem-calc(14 0);
   
-  .chart__legend-li { margin-right: rem-calc(14); }
-
-  .chart__legend-item { 
+  .chart__legend-li { 
     @include chart-legend-item; 
     @include flex-v-center;
+    margin-right: rem-calc(24); 
+    margin-bottom: rem-calc(10); 
   }
 
   .chart__legend-index { @include chart-legend-index; }

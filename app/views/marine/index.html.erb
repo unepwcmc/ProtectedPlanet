@@ -26,12 +26,14 @@
   charts: [
     {
       coverage: marine_stats('national_waters_pa_coverage_percentage'),
+      legend: chart_row_pa_legend_national,
       theme: 'theme--purple',
       title: t('thematic_area.marine.ocean.national-title'),
       total: marine_stats('national_waters_percentage')
     },
     {
       coverage: marine_stats('high_seas_pa_coverage_percentage'),
+      legend: chart_row_pa_legend_high_seas,
       theme: 'theme--blue',
       title: t('thematic_area.marine.ocean.high-title'),
       total: marine_stats('global_ocean_percentage')
