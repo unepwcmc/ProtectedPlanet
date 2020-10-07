@@ -1,5 +1,5 @@
 set :stage, :staging
-set :branch, "sidekiq-fix"
+set :branch, "master"
 
 server 'new-web-copy.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
