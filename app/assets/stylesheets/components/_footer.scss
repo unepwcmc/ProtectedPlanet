@@ -1,0 +1,57 @@
+.footer {
+  border-bottom: solid rem-calc(17) $green-dark;
+
+  &__container {
+    @include flex;
+    @include responsive(flex-wrap, wrap, wrap, nowrap);
+    @include responsive(justify-content, initial, space-between, space-between);
+  }
+
+    &__col {
+      @include responsive(margin, rem-calc(0 0 34 0), rem-calc(0 0 30 0), rem-calc(0 30));
+
+      &:first-child { 
+        @include responsive(display, none, none, block);
+        margin-left: 0; 
+      }
+
+      &:nth-child(2),
+      &:nth-child(3) {
+        @include responsive(width, 50%, 27%, auto);
+      }
+
+      &:nth-child(4) {
+        @include responsive(width, 100%, 46%, auto);
+      }
+
+      &:last-child { 
+        @include text-small;
+        @include responsive(width, auto, auto, rem-calc(186)); 
+        color: white;
+        opacity: .7;
+        margin-right: 0;
+      }
+    }
+
+      &__link {
+        @include text-footer-links;
+        margin-bottom: rem-calc(6);
+        
+        display: block;
+      }
+
+      &__link-partner {
+        text-decoration: none;
+
+        &:first-child { margin-right: rem-calc(24); } 
+      }
+
+        &__logo-partner {
+          margin-bottom: rem-calc(12);
+          width: auto; height: rem-calc(30);
+        }
+
+      &__logo-site {
+        width: auto; height: rem-calc(40);
+      }
+}

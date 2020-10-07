@@ -1,0 +1,12 @@
+<download 
+  button-text="<%= t('global.button.download') %>"
+
+  <% if local_assigns.has_key? :classes %>
+    class="<%= classes %>"
+  <% end %>
+
+  gaId="download"
+  :options="<%= options %>"
+  :text-commercial="<%= download_text[:commercial].to_json %>"
+>
+</download>

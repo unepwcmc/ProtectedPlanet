@@ -10,10 +10,10 @@ class DownloadRouterTest < ActiveSupport::TestCase
    request to the correct requester' do
     expected_response = {'status' => 'generating', 'token' => '123'}
     domain = 'search'
-    params = {'q' => 'san guillermo', 'filters' => {}}
+    params = {'format' => 'csv', 'q' => 'san guillermo', 'filters' => {}}
 
     Download::Requesters::Search.expects(:request).
-      with('san guillermo', {}).
+      with('csv', 'san guillermo', {}).
       returns(expected_response)
 
     assert_equal expected_response, Download::Router.request(domain, params)
@@ -23,10 +23,10 @@ class DownloadRouterTest < ActiveSupport::TestCase
    request to the correct requester' do
     expected_response = {'status' => 'ready', 'token' => '123'}
     domain = 'general'
-    params = {'id' => 'USA'}
+    params = {'format' => 'csv', 'id' => 'USA'}
 
     Download::Requesters::General.expects(:request).
-      with('USA').
+      with('csv', 'USA').
       returns(expected_response)
 
     assert_equal expected_response, Download::Router.request(domain, params)

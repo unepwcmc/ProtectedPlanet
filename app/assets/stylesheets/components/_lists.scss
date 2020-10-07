@@ -1,0 +1,174 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin list-theme ($theme) {
+  @for $i from 1 through length($theme) {
+    .list__li:nth-child(#{$i}) {
+      .list__icon { background-color: nth($theme, $i); }
+    }
+  }
+}
+
+@mixin list-underline {
+  @include ul-unstyled;
+
+  .list {
+    &__li {
+      @include flex;
+      @include theme-chart-list-icon($theme-chart);
+      border-top: solid 1px $grey-light;
+      padding: rem-calc(14 0);
+
+      &:first-child { border-top: none; }
+    }
+
+    &__icon {
+      @include circle-icon;
+      @include flex-no-shrink;
+      background-color: $grey;
+      margin-right: rem-calc(24);
+    }
+
+    &__title {
+      font-weight: $bold;
+      margin-right: rem-calc(10);
+    }
+
+    &__right {
+      margin-left: auto;
+
+      justify-content: flex-end;
+    }
+
+    &__value {
+      margin-right: rem-calc(24);
+    }
+
+    &__a {
+      @include button-with-icon;
+      @include flex-no-shrink;
+      font-size: rem-calc(16);
+
+      @include breakpoint-down($medium) {
+        text-indent: -9999px;
+      }
+
+      &::after {
+        @include icon-circle-chevron-black;
+        height: rem-calc(21);
+        width: rem-calc(21);
+      }
+    }
+  }
+}
+
+@mixin list-scrollbar {
+  @include beautify-scrollbar;
+  max-height: rem-calc(280);
+  overflow-y: scroll;
+  padding-right: rem-calc(19);
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.list {
+//--------------------------------------------------
+// links
+//--------------------------------------------------
+  &--links {
+    @include ul-unstyled;
+
+    .list {
+      &__li {
+        @include flex;
+        @include flex-h-between;
+        @include flex-v-center;
+        background-color: $grey-xlight;
+        margin-top: rem-calc(10);
+        padding: rem-calc(14 20);
+        max-width: rem-calc(700);
+      }
+
+      &__a { margin-left: rem-calc(14); }
+    }
+  }
+//--------------------------------------------------
+// stripes
+//--------------------------------------------------
+  &--stripes {
+    @include ul-unstyled;
+
+    .list {
+      &__li {
+        padding: rem-calc(16 14);
+
+        &:nth-child(odd) { 
+          background-color: $grey-xlight; 
+
+          .pdf & { background-color: transparent;  }
+        }
+
+        .pdf & { border-bottom: solid 1px $grey-light; }
+      }
+
+        &__title {
+          font-weight: $bold;
+          margin-right: rem-calc(14);
+
+          display: block;
+
+          @include breakpoint($medium) { display: inline; }
+        } 
+    }
+  }
+//--------------------------------------------------
+// underline
+//--------------------------------------------------
+  &--underline {
+    @include list-underline;
+
+    &.theme--governance { @include list-theme($theme-chart); }
+  }
+
+//--------------------------------------------------
+// underline with scrollbar
+//--------------------------------------------------
+  &--underline-scrollbar {
+    @include list-underline;
+    @include list-scrollbar;
+  }
+
+//--------------------------------------------------
+// underline with scrollbar - sources
+//--------------------------------------------------
+  &--underline-sources {
+    @include list-underline;
+    @include list-scrollbar;
+    width: 100%;
+
+    .list {
+      &__date { 
+        flex-shrink: 0;
+        margin-right: rem-calc(10);
+
+        @include breakpoint($medium){ width: 15%; }
+      }
+
+      &__li {
+        @include breakpoint-down($medium){ @include flex-column; }
+      }
+
+      &__party {
+        @include breakpoint($medium){ width: 40%; }
+      }
+
+      &__title {
+        font-weight: $bold;
+        margin-right: rem-calc(10);
+
+        @include breakpoint($medium){ width: 45%; }
+      }
+    }
+  }
+}

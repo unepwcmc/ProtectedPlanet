@@ -1,0 +1,52 @@
+<% unless @for_pdf %>
+  <% get_footer_links %>
+  
+  <footer class="footer bg--primary spacer-large--top spacer-medium--bottom">
+    <div class="container footer__container">
+      <div class="footer__col">
+        <%= render '/partials/global/site-logo' %>
+      </div>
+
+      <div class="footer__col">
+        <h3><%= t('global.footer.title1') %></h3>
+
+        <% @links["links1"].each do |link| %>
+          <%= link_to link[:title], link[:url], title: t('global.links.visit', link: link[:title]), class: 'footer__link' %>
+        <% end %>
+      </div>
+
+      <div class="footer__col">
+        <h3><%= t('global.footer.title2') %></h3>
+        
+        <% @links["links2"].each do |link| %>
+          <%= link_to link[:title], link[:url], title: t('global.links.visit', link: link[:title]), class: 'footer__link' %>
+        <% end %>
+      </div>
+
+      <div class="footer__col">
+        <h3><%= t('global.footer.title3') %></h3>
+        
+        <div class="social--media-white">
+          <%= render "partials/social/social-follow" %>
+        </div>
+
+        <h3><%= t('global.footer.title4') %></h3>
+        <%= link_to 'protectedareas@unep-wcmc.org', 'mailto:protectedareas@unep-wcmc.org', title: t('global.links.email', email: 'protectedareas@unep-wcmc.org'), class: 'footer__link' %>
+      </div>
+
+      <div class="footer__col">
+        <div>
+          <%= link_to 'http://www.iucn.org', title: 'here', target: '_blank', class: 'footer__link-partner' do %>
+            <%= image_tag 'logos/iucn.svg', alt: t('global.logos.iucn'), class: 'footer__logo-partner' %>
+          <% end %>
+
+          <%= link_to 'http://unep-wcmc.org', title: 'here', target: '_blank', class: 'footer__link-partner' do %>
+            <%= image_tag 'https://s3.amazonaws.com/wcmc.logo/UNEP_WCMC_logo_white.svg', alt: t('global.logos.wcmc'), class: 'footer__logo-partner' %>
+          <% end %>
+        </div>
+
+        <span>&copy;<%= t('global.footer.copyright', date: Date.today.year) %></span>
+      </div>
+    </div>
+  </footer>
+<% end %>

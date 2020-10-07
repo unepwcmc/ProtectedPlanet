@@ -1,0 +1,8 @@
+<section class="container spacer-large--top">
+  <search-areas-home
+    :config="<%= config %>"
+    endpoint-autocomplete="<%= search_autocomplete_path %>"
+    endpoint-search="<%= search_areas_path(search_term: "SEARCHTERM", filters: @filters) %>"
+  >
+  </search-areas-home>
+</section>

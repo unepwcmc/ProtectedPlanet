@@ -61,7 +61,7 @@ import ChartRowTarget from '../charts/chart-row-target/ChartRowTarget.vue'
 import Tooltip from '../tooltip/Tooltip'
 
 export default {
-  name: 'TableRow',
+  name: 'table-row',
 
   components: { ChartRowTarget, Tooltip },
 

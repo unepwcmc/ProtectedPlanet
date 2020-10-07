@@ -1,0 +1,13 @@
+<%= render partial: "./layouts/partials/hero-basic", locals: { 
+  title: @cms_page.label 
+} %>
+
+<section class="container spacer-medium--top">
+  <%= cms_fragment_render("content") %>
+</section>
+
+<section class="container spacer-small--top">
+  <%= render "partials/cards/articles" %>
+</section>
+
+<%= render "partials/ctas/live-report" %>

@@ -1,0 +1,20 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--resources {
+  @include card-resource;
+
+  .cards {
+    &__cards {
+      @include flex;
+      @include flex-wrap;
+
+      &.preview {
+        .card:nth-child(3),
+        .card:nth-child(4) { 
+          @include breakpoint-down($medium) { display: none; }
+        }
+      }
+    }
+  }
+}

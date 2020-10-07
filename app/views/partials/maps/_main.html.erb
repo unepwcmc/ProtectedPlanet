@@ -1,0 +1,29 @@
+<div class="map--main">
+  <v-map-header title="<%= map_yml[:title] %>"></v-map-header>
+  <v-map 
+    <% if local_assigns.has_key?(:map_options) && !map_options.nil? %>
+      :options="<%= map_options.to_json %>"
+    <% end %>
+    :services-for-point-query="<%= map[:point_query_services].to_json %>"
+  ></v-map>
+  <v-map-filters
+    :is-hidden="<%= !!map[:areFiltersHidden] %>"
+    :overlays="<%= map[:overlays].to_json %>"
+    title="<%= map[:title] %>"
+  >
+    <template v-slot:top>
+      <v-map-pa-search
+        v-if="<%= !map[:areFiltersHidden] %>"
+        :autocomplete-error-messages="<%= map_yml[:autocomplete_error_messages].to_json %>"
+        :autocomplete-placeholder="<%= map_yml[:autocomplete_placeholder].to_json %>"
+        type="<%= map[:type] %>"
+      ></v-map-pa-search>
+    </template>
+    <template v-slot:bottom>
+      <v-map-disclaimer
+        class="v-map-disclaimer--embedded"
+        :disclaimer="<%= map_yml[:disclaimer].to_json %>"
+      ></v-map-disclaimer>
+    </template>
+  </v-map-filters>
+</div>

@@ -1,0 +1,19 @@
+<div class="cards--facts">
+  <div class="cards__scrollable">
+    <% cards.each do |card| %>
+      <div class="cards__card">
+        <i class="card__pin icon--pin-<%= card[:theme] %>">
+          <%= render '/partials/svgs/pin.svg' %>
+        </i>
+        <span class="card__number-large"><%= card[:percentage] %>%</span>
+        <% card[:totals].each do |total| %>
+          <p class="card__total">
+            <span class="card__number"><%= total[:number] %>:</span>
+            <span class="card__text"><%= total[:text] %></span>
+          </p>
+        <% end %>
+        <p class="card__title"><%= card[:title] %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

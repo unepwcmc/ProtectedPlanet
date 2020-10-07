@@ -1,0 +1,14 @@
+input {
+  @include input-basic;
+  @include input-text;
+  height: rem-calc(47);
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.input--search {
+  width: 100%;
+
+  
+}

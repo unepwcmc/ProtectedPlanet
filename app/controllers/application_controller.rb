@@ -1,11 +1,64 @@
 class ApplicationController < ActionController::Base
+  # Clumsy rescue from fragments custom not null database errors
+  rescue_from ActiveRecord::StatementInvalid, :with => :record_invalid_error
   class PageNotFound < StandardError; end;
 
   protect_from_forgery with: :exception
+  # Required for development
+  before_action :set_host_for_local_storage
 
-  after_action :store_location
-  before_action :load_cms_pages
+  helper_method :opengraph
+
+  before_action :load_cms_site
+  before_action :load_cms_content
+
+  before_action :set_locale
   before_action :check_for_pdf
+
+  def admin_path?
+    request.original_fullpath =~ %r{/(?:#{I18n.locale}/)?admin/?}
+  end
+
+  def opengraph
+    return if admin_path?
+
+    @opengraph ||= OpengraphBuilder.new('og': og_tags, 'twitter': twitter_tags)
+  end
+
+  def og_tags
+    {
+      'site_name': t('meta.site.name'),
+      'title': t('meta.site.title'),
+      'description': t('meta.site.description'),
+      'url': request.url,
+      'type': 'website',
+      'image': URI.join(root_url, helpers.image_path(t('meta.image'))),
+      'image:alt': t('meta.image_alt'),
+      'image:height': t('meta.image_height'),
+      'image:width': t('meta.image_width'),
+      'locale': 'en_GB'
+    }
+  end
+
+  def twitter_tags
+    {
+      'card': t('meta.twitter.card'),
+      'site': t('meta.twitter.site'),
+      'creator': t('meta.twitter.creator')
+    }
+  end
+
+  def default_url_options
+    { locale: I18n.locale }
+  end
+
+  def set_locale
+    if params[:locale].present?
+      I18n.locale = params[:locale]
+    else
+      I18n.locale = I18n.default_locale
+    end
+  end
 
   def raise_404
     raise PageNotFound
@@ -25,38 +78,58 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def render_404
-    render file: Rails.root.join("/public/404.html"), layout: false, status: :not_found
+  def load_cms_site
+    return if admin_path?
+
+    @cms_site ||= Comfy::Cms::Site.first
   end
 
-  NO_REDIRECT = [
-    "/users/sign_in",
-    "/users/sign_up",
-    "/users/password/new",
-    "/users/password/edit",
-    "/users/confirmation",
-    "/users/sign_out"
-  ]
+  def load_cms_content
+    return if admin_path?
 
-  def load_cms_pages
-    @updates_and_news  = Comfy::Cms::Category.find_by_label("Updates & News")
-    @connectivity_page = Comfy::Cms::Page.find_by_label("Connectivity Conservation")
-    @pame_page         = Comfy::Cms::Page.find_by_label("Protected Areas Management Effectiveness (PAME)")
-    @wdpa_page         = Comfy::Cms::Page.find_by_label("World Database on Protected Areas")
-    @green_list_page   = Comfy::Cms::Page.find_by_slug("green-list")
-    @equity_page       = Comfy::Cms::Page.find_by_slug("equity")
+    @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath.gsub(%r{\A/#{I18n.locale}/?}, '/'))
+
+    return unless @cms_page
+
+    ComfyOpengraph.new({ 'social-title': 'title', 'social-description': 'description', 'image': 'image' },
+                        page: @cms_page).parse(opengraph: opengraph, type: 'og')
+  end
+
+  def record_invalid_error
+    message = "We're sorry, but something went wrong"
+
+    fragments_params = params[:page][:fragments_attributes]
+    if fragments_params.present? && is_comfy_page_edit?
+      null_fragments = []
+      # Only get custom not null cms tags
+      # Currently only works with dates but it's already more generalised to work with texts
+      fragments_params.values.select { |v| v['tag'].include?('not_null') }.map do |fragment|
+        if fragment['tag'].include?('date') && fragment['datetime'].blank? ||
+            fragment['tag'].include?('text') && fragment['content'].blank?
+          null_fragments << fragment['identifier']
+        end
+      end
+      message = "The following fields cannot be empty: #{null_fragments.join(', ')}"
+    end
+
+    redirect_to request.referrer, alert: message
+  end
+
+  def is_comfy_page_edit?
+    params[:controller] == 'comfy/admin/cms/pages' && params[:action] == 'update'
+  end
+
+  def render_404
+    render file: Rails.root.join("/app/views/layouts/404.html.erb"), layout: true, status: :not_found
   end
 
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?
   end
 
-  def store_location
-    # store last url - this is needed for post-login redirect to whatever the user last visited.
-    return unless request.get?
-
-    if (!NO_REDIRECT.include?(request.path) && !request.xhr?)
-      session[:previous_url] = request.fullpath
-    end
+  def set_host_for_local_storage
+    Rails.application.routes.default_url_options[:host] = request.base_url
+    # TODO Check why this is not set automatically
+    # ActiveStorage::Current.host = request.base_url if Rails.application.config.active_storage.service == :local
   end
 end

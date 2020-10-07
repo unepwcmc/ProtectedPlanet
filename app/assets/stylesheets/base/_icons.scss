@@ -1,0 +1,71 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.icon {
+  &--aichi { @include icon-aichi; }
+  
+  &--area { @include icon-area; }
+  
+  &--circle-chevron-black { @include icon-circle-chevron-black; }
+  &--circle-chevron-white { @include icon-circle-chevron-white; }
+  &--circle-chevron-green-large-prev { @include icon-circle-chevron-green-large-left; }
+  &--circle-chevron-green-large-next { @include icon-circle-chevron-green-large-right; }
+
+  &--close { @include icon-close; }
+
+  &--country { @include icon-country; }
+
+  &--cross { @include icon-cross; }
+
+  &--earth { @include icon-earth(rem-calc(60)); }
+  
+  &--flag { @include icon-flag; }
+  
+  &--flag-outline { 
+    @include icon-flag;
+    border: solid 2px $white;
+  }
+
+  &--info-circle { @include icon-info; }
+
+  &--info { //temp-refresh
+    padding-left: rem-calc(24);
+    position: relative;
+
+    &:before {
+      color: #317fce;
+      content: '\f05a';
+      font-family: 'FontAwesome';
+      font-size: rem-calc(16),;
+      font-weight: normal;
+      line-height: rem-calc(21);
+
+      display: inline-block;
+      position: absolute;
+      top: rem-calc(-2);
+      left: 0;
+    }
+  }
+
+  &--loading-spinner { 
+    @include icon-loading-spinner; 
+
+    visibility: hidden;
+  }
+  
+  &--pin-terrestrial { @include icon-pin-terrestrial; }
+  &--pin-marine { @include icon-pin-marine; }
+  &--pin-oecm { @include icon-pin-oecm; }
+
+  &--pin-terrestrial-light { @include icon-pin-terrestrial-light; }
+
+  &--region { @include icon-region; }
+  &--search { @include icon-search; }
+  &--shield { @include icon-shield; }
+  &--sort { @include icon-sort; }
+
+//--------------------------------------------------
+// helpers
+//--------------------------------------------------
+  &-visible { visibility: visible; }
+}

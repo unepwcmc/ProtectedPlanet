@@ -1,0 +1,117 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin card-stats-overview-section {
+  margin-top: rem-calc(20);
+
+  @include breakpoint($small) { margin-top: rem-calc(30); }
+}
+
+@mixin card-stats-overview-subtitle {
+  font-size: rem-calc(16);
+  font-weight: $bold;
+
+  display: block;
+}
+
+@mixin card-stats-overview-for-pdf {
+  @include card-stats-for-pdf;
+  
+  .pdf & { 
+    margin-right: rem-calc(30);
+    width: 376px;
+  }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--stats-overview {
+  @include bg-grey-black;
+  @include card-stats-overview-for-pdf;
+  @include card-stats-padding;
+  width: 100%;
+
+  @include breakpoint($small) {
+    @include flex-no-shrink; 
+    margin-right: rem-calc(30);
+    width: calc(50% - 15px); 
+  }
+
+  @include breakpoint($medium) { 
+    margin-right: rem-calc(30);
+    width: 33%; 
+  }
+
+  .card {
+    &__external-button { 
+      @extend .button--link-external; 
+      line-height: 1;
+    }
+
+    &__external-label {
+      margin-right: 4%;
+      width: 74%;
+    }
+
+    &__external-link {
+      @include flex;
+      @include flex-h-between;
+      @include flex-v-start;
+      font-size: rem-calc(16);
+      margin-bottom: rem-calc(20);
+    }
+  
+    &__external-title { font-weight: $bold; }
+
+    &__flag { 
+      margin-right: rem-calc(14);
+
+      transform: translateY(-2px);
+    }
+
+    &__heading {
+      @include flex;
+      margin-bottom: rem-calc(18);
+    }
+
+    &__h1 { 
+      color: $white;
+      font-size: rem-calc(20);
+      margin: 0;
+
+      @include breakpoint($small) { font-size: rem-calc(25); }
+    }
+
+    &__number {
+      @include card-stats-number;
+      margin-right: rem-calc(10);
+    }
+
+    &__section { @include card-stats-overview-section; }
+      
+    &__section-with-border {
+      @include card-stats-overview-section;
+      border-bottom: solid 1px $grey-light;
+      padding-bottom: rem-calc(20);
+    }
+
+    &__text {
+      font-size: rem-calc(16);
+    }
+
+    &__subtitle {
+      @include card-stats-overview-subtitle;
+    }
+
+    &__subtitle-margined {
+      @include card-stats-overview-subtitle;
+      margin-bottom: rem-calc(6);
+    }
+
+    &__text {
+      font-size: rem-calc(16);
+      width: 68%;
+    }
+  }
+}

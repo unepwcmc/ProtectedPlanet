@@ -1,0 +1,138 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-item-background: $grey-xlight;
+$chart-font: $body-font;
+$chart-font-color: $grey-xdark;
+$chart-font-size: rem-calc(14);
+
+$chart-target-color: $purple-dark;
+$chart-target-dasharray: 2;
+$chart-target-stroke-width: rem-calc(3);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin chart-target-line() {
+  stroke: $chart-target-color;
+  stroke-dasharray: $chart-target-dasharray;
+  stroke-width: $chart-target-stroke-width;
+}
+
+@mixin chart-scrollable($width: 750, $height: 405) {
+  $ie11-padding: calc((#{$height}/#{$width})*1%);
+  $mobile-width: calc((#{$width}/#{$height})*100%);
+  
+  &__wrapper-ie11 { // do not remove - this is required to set the sizing for ie11
+    @include breakpoint($small) { 
+      padding-bottom: $ie11-padding;
+      width: 100%;
+
+      position: relative;
+    }
+  }
+
+    &__scrollable {
+      @include breakpoint-down($small) { 
+        overflow-x: auto;
+
+        display: flex;
+      }
+    }
+
+      &__chart {
+        height: rem-calc($height);
+        
+        @include breakpoint-down($small) { min-width: $mobile-width; }
+      }
+
+        &__svg { 
+          width: 100%; height: 100%;
+          
+          @include breakpoint($small) { 
+            position: absolute;
+            top: 0;
+            left: 0;
+          }
+        }
+}
+
+@mixin chart-tooltip($arrow, $bg-colour: $black, $text-color: $white) {
+  @extend .flex;
+  @extend .flex-center;
+  background-color: $bg-colour;
+  border: solid rem-calc(2) $bg-colour;
+  border-radius: $radius-global;
+  color: $text-color;
+  font-size: rem-calc(18);
+  font-weight: $fw-black;
+  padding: rem-calc(0 4 0 4);
+  width: auto; height: rem-calc(30);
+  min-width: rem-calc(40);
+
+  &::before {
+    border-right: 13px solid transparent;
+    border-left: 13px solid transparent;
+    content: '';
+    width: 0; height: 0;
+
+    position: absolute;
+    
+    @if $arrow == 'bottom' {
+      border-top: 13px solid $bg-colour; 
+      top: 100%;
+    }
+
+    @if $arrow == 'top' {
+      border-bottom: 13px solid $bg-colour; 
+      bottom: 100%;
+    }
+  }
+
+  &::after {
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    content: '';
+    width: 0; height: 0;
+
+    position: absolute;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    @if $arrow == 'bottom' { 
+      border-top: 10px solid $bg-colour; 
+      top: 100%;
+    }
+
+    @if $arrow == 'top' { 
+      border-bottom: 10px solid $bg-colour; 
+      bottom: 100%;
+    }
+  }
+}
+
+
+//--------------------------------------------------
+// amCharts
+//--------------------------------------------------
+.am-chart {
+  @import './charts/am-chart-line';
+  @import './charts/am-chart-pie';
+}
+
+//--------------------------------------------------
+// custom charts
+//--------------------------------------------------
+.chart {
+  @import './charts/chart-column';
+  @import './charts/chart-column-tabbed';
+  @import './charts/chart-dial';
+  @import './charts/chart-row';
+  @import './charts/chart-row-pa';
+  @import './charts/chart-row-stacked';
+  @import './charts/chart-row-target';
+  @import './charts/chart-square';
+}
+
+@import './charts/chart-legend';

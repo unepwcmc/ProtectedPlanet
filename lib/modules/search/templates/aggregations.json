@@ -1,78 +1,96 @@
 {
-    "is_green_list": {
-	"terms": {
-	    "field": "is_green_list"
-	}
-    },
-    "has_irreplaceability_info": {
-	"terms": {
-	    "field": "has_irreplaceability_info"
-	}
-    },
-    "country": {
-	"nested": {
-	    "path": "countries_for_index"
-	},
-	"aggs": {
-	    "aggregation": {
-		"terms": {
-		    "field": "countries_for_index.id",
-		    "size": 500
-		}
-	    }
-	}
-    },
-    "region": {
-	"nested": {
-	    "path": "countries_for_index.region_for_index"
-	},
-	"aggs": {
-	    "aggregation": {
-		"terms": {
-		    "field": "countries_for_index.region_for_index.id",
-		    "size": 500
-		}
-	    }
-	}
-    },
-    "designation": {
-	"nested": {
-	    "path": "designation"
-	},
-	"aggs": {
-	    "aggregation": {
-		"terms": {
-		    "field": "designation.id",
-		    "size": 500
-		}
-	    }
-	}
-    },
-    "iucn_category": {
-	"nested": {
-	    "path": "iucn_category"
-	},
-	"aggs": {
-	    "aggregation": {
-		"terms": {
-		    "field": "iucn_category.id",
-		    "size": 500
-		}
-	    }
-	}
-    },
-    "governance": {
-	"nested": {
-	    "path": "governance"
-	},
-	"aggs": {
-	    "aggregation": {
-		"terms": {
-		    "field": "governance.id",
-		    "size": 500
-		}
-	    }
-	}
+  "is_green_list": {
+    "terms": {
+      "field": "is_green_list"
     }
-    
+  },
+  "has_irreplaceability_info": {
+    "terms": {
+      "field": "has_irreplaceability_info"
+    }
+  },
+  "is_oecm": {
+    "terms": {
+      "field": "is_oecm"
+    }
+  },
+  "country": {
+    "nested": {
+      "path": "countries_for_index"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "countries_for_index.id",
+          "size": 500
+        }
+      }
+    }
+  },
+  "region": {
+    "nested": {
+      "path": "countries_for_index.region_for_index"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "countries_for_index.region_for_index.id",
+          "size": 500
+        }
+      }
+    }
+  },
+  "designation": {
+    "nested": {
+      "path": "designation"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "designation.id",
+          "size": 3000
+        }
+      }
+    }
+  },
+  "iucn_category": {
+    "nested": {
+      "path": "iucn_category"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "iucn_category.id",
+          "size": 500
+        }
+      }
+    }
+  },
+  "governance": {
+    "nested": {
+      "path": "governance"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "governance.id",
+          "size": 500
+        }
+      }
+    }
+  },
+  "category": {
+    "nested": {
+      "path": "categories"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "categories.id",
+          "size": 500
+        }
+      }
+    }
+  }
+
 }

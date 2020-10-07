@@ -1,0 +1,40 @@
+@import 'settings';
+
+.pdf {
+  .topbar,
+  .topbar--secondary,
+  .v-map-baselayer-controls,
+  .mapboxgl-ctrl-top-right,
+  .modal--download.active,
+  .card__stat-box,
+  a { display: none !important; }
+  
+  .container { width: 100%; }
+
+  .pdf-break-after { page-break-after: always; }
+  .pdf-break-before { page-break-before: always; }
+  .pdf-break-inside-avoid { page-break-inside: avoid; }
+
+  .page--country,
+  .page--site,
+  .page--region { background-color: transparent; }
+  
+  &--protected-area {
+    .flex-2-fiths,
+    .flex-3-fiths {
+      flex: 100%;
+    }
+
+    .pa-card {
+      flex: 0 0 50% !important;
+      padding: 0 10px;
+    }
+
+    .js-tab-content.u-hide { display: block; }
+
+    .leaflet-control-layers,
+    .leaflet-control { 
+      display: none; 
+    }
+  }
+}

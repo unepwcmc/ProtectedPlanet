@@ -1,0 +1,37 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$form-radius: $button-radius;
+$form-font-color: $body-font-colour;
+$form-input-font: $body-font;
+$form-input-font-size: rem-calc(18);
+$form-input-padding: rem-calc(6 8);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin input-plain() {
+  border: none;
+  box-shadow: none;
+}
+
+@mixin input-basic() {
+  border: solid 1px $grey;
+  border-radius: $form-radius;
+  padding: $form-input-padding;
+}
+
+@mixin input-text() {
+  color: $form-font-color;
+  font-family: $form-input-font;
+  font-size: $form-input-font-size;
+}
+
+@mixin input-margin() {
+  margin-bottom: rem-calc(14);
+}
+
+//--------------------------------------------------
+// form fields
+//--------------------------------------------------
+@import './form/**/*';

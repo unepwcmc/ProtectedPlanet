@@ -1,0 +1,31 @@
+<%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
+
+<%= render partial: "./layouts/partials/hero-area-types", locals: { 
+    button_search_text: cms_fragment_render("button-search"),
+    button_search_url: search_areas_path(filters: @filters),
+    image: cms_fragment_render(:image, @cms_page),
+    hero_stat_text: t('thematic_area.oecm.hero-stat-text'),
+    hero_stat_percentage: @oecm_coverage_percentage,
+    classes: "#{@cms_page.slug} bg-image-overlay--white",
+    summary: cms_fragment_render("summary"),
+    title: @cms_page.label
+  }
+%>
+
+<%= render partial: "partials/tabs/tabs-thematic-area-database", locals: { 
+  config_search: @config_search_areas,
+  ga_id: "Slug: #{@cms_page.slug}",
+  map: @map,
+  map_options: @map_options,
+  tabs: @tabs
+} %>
+
+<section class="container spacer-small--top">
+  <%= render "partials/cards/resources" %>
+</section>
+
+<section class="spacer-small--bottom">
+  <%= render "partials/carousels/themes" %>
+</section>
+
+<%= render "partials/ctas/live-report" %>

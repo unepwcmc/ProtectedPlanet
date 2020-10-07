@@ -1,37 +1,25 @@
 module TargetDashboardHelper
-  def getTooltipText id
+  def global_tooltip_text(id)
     tooltip = t("thematic_area.target_11_dashboard.tooltips").select { |_tooltip| _tooltip[:id] == id.to_s }.first
-
-    tooltip ? tooltip[:text] : ''
+    tooltip ? t("thematic_area.target_11_dashboard.#{id}_text", geo_type: 'the world\'s') : ''
   end
 
-  def get_config_carousel_global
-    {
-      navButtons: false,
-      infinite: true,
-      responsive: [
+  def region_and_country_tooltips
+    t("thematic_area.target_11_dashboard.tooltips").map do |tooltip|
+      id = tooltip[:id]
       {
-          breakpoint: 628,
-          settings: {
-            dots: true,
-            slidesToShow: 1,
-          }
-        },
-        {
-          breakpoint: 768,
-          settings: {
-            dots: true,
-            slidesToShow: 2,
-          }
-        },
-        {
-          breakpoint: 1024,
-          settings: {
-            dots: false,
-            slidesToShow: 5
-          }
-        }
-      ]
+        id: id,
+        title: tooltip[:title],
+        text: t("thematic_area.target_11_dashboard.#{id}_text", geo_type: 'the country/region\'s')
+      }
+    end.to_json
+  end
+
+  def get_config_carousel_t11
+    {
+      cellAlign: 'left',
+      prevNextButtons: false,
+      wrapAround: true
     }.to_json
   end
 end

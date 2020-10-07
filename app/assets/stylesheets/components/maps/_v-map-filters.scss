@@ -1,0 +1,68 @@
+.v-map-filters {
+  background-color: $grey-xdark;
+  color: $grey-light;
+
+  @include breakpoint($small) {
+    width: rem-calc(340);
+
+    position: absolute;
+    top: rem-calc(17);
+    left: rem-calc(18);
+    z-index: 0;
+  }
+
+  @include breakpoint($medium) {
+    width: rem-calc(496);
+    
+    top: rem-calc(32);
+    left: rem-calc(43);
+  }
+
+  .v-map-header {
+    @include breakpoint-down($small) {
+      display: none;
+    }
+  }
+
+  &__body {
+    @include responsive(
+      padding,
+      rem-calc(30 18),
+      rem-calc(18 18 40),
+      rem-calc(18 18 40),
+      rem-calc(25 25 60),
+    );
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  &--hidden {
+    @include screen-reader;
+  }
+}
+
+.v-map-pa-search {
+  &__dropdown {
+    margin-bottom: rem-calc(16);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    .selector {
+      margin-left: rem-calc(16);
+
+      max-width: rem-calc(162);
+      
+      flex: 1;
+
+      &__options {
+        overflow-y: auto;
+
+        height: auto;
+      }
+    }
+  }
+}

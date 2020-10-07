@@ -1,0 +1,33 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.v-map-header {
+  background-color: $grey-black;
+  padding: rem-calc(14 24);
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+
+
+  &__title {
+    color: $grey-xlight;
+    font-family: $header-font;
+    font-size: rem-calc(20);
+    font-weight: $bold;
+    line-height: $header-font-line-height;
+
+    @include breakpoint($small) { font-size: rem-calc(25); }
+  }
+
+  &__close {
+    margin-left: rem-calc(12);
+    @include icon-cross-white;
+    cursor: pointer;
+
+    &.closed {
+      @include icon-minus-white;
+    }
+  }
+}

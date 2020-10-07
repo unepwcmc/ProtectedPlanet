@@ -51,6 +51,11 @@ class Aichi11TargetSerializer
     }
     chart_json = DEFAULT_CHART_JSON.dup
 
+    # Connectivity is terrestrial only
+    if endpoint.to_s == 'well_connected'
+      chart_json.merge!({ colour: 'terrestrial', title: 'Terrestrial' })
+    end
+
     value = yield
     target = endpoint.to_s == 'importance' ? nil : instance.public_send("#{endpoint.to_s}_global")
     chart_hash = { value: value, target: target }
@@ -66,11 +71,11 @@ class Aichi11TargetSerializer
         name: 'Coverage',
         slug: 'coverage',
         terrestrial: {
-          value: CountryStatistic.global_percentage_pa_land_cover,
+          value: CountryStatistic.global_percentage_oecms_pa_land_cover,
           target: instance.coverage_terrestrial
         },
         marine: {
-          value: CountryStatistic.global_percentage_pa_marine_cover,
+          value: CountryStatistic.global_percentage_oecms_pa_marine_cover,
           target: instance.coverage_marine
         }
       },

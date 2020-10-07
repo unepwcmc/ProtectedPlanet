@@ -1,2 +1,0 @@
-class LegacyProtectedArea < ApplicationRecord
-end

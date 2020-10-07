@@ -1,0 +1,15 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.svg {
+  &--info {
+    line-height: 0;
+    .circle { fill: $grey-dark; }
+    .i { fill: none; }
+  }
+
+  &--info-light {
+    .circle { fill: $grey-xlight; }
+    .i { fill: none; }
+  }
+}

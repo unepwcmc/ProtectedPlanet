@@ -1,0 +1,22 @@
+en:
+  social:
+    follow:
+      twitter:
+        title: Follow us on Twitter
+        url: https://twitter.com/protectedplanet?lang=en
+      facebook:
+        title: Follow us on Facebook
+        url: https://facebook.com/protectedplanet
+      linkedin:
+        title: Follow us on LinkedIn
+        url: https://www.linkedin.com/company/unep-wcmc
+    share:
+      twitter:
+        title: Share on Twitter
+        url: https://twitter.com/intent/tweet/?url=%{url}
+      facebook:
+        title: Share on Facebook
+        url: https://facebook.com/sharer/sharer.php?u=%{url}
+      linkedin:
+        title: Share on LinkedIn
+        url: https://www.linkedin.com/shareArticle?url=%{url} 

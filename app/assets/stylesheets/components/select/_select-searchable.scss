@@ -1,0 +1,96 @@
+&--searchable {
+  @include gutters;
+  width: 100%;
+  
+  position: relative;
+
+  @include breakpoint($small) { width: $select-width-desktop; }
+  @include breakpoint($large) { 
+    padding: 0;
+    margin-bottom: rem-calc(26); 
+  }
+
+  .select {
+
+    &__label { }
+
+    &__search {
+      &--active { 
+        .v-select__search-input { 
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      } 
+    }
+
+      &__search-input {
+        @include input-plain;
+        @include input-basic;
+        @include input-text;
+        padding-right: $select-input-padding-right;
+        width: 100%; height: $select-height;
+        
+
+        &::-ms-clear { display: none; }
+      }
+
+      &__search-icons {
+        display: flex; //temp-refresh
+        align-items: center; //temp-refresh
+        justify-content: center; //temp-refresh
+        height: 100%;
+
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+
+        &__search-icon {
+          @include vselect-icon-basic;
+          @include icon-search;
+        }
+
+        &__search-icon--delete {
+          @include vselect-icon-basic;
+          @include icon-cross;
+          opacity: 0.6;
+          transform: scale(.5);
+        }
+
+        &__search-icon--reset {
+          @include vselect-icon-basic;
+          @include icon-cross;
+        }
+
+    &__dropdown {
+      @include input-basic;
+      @include ul-unstyled;
+      background-color: $white;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-top: none;
+      padding: 0;
+      width: 100%;
+
+      position: absolute;
+      z-index: 1;
+    }
+
+      &__option {
+        @include input-text;
+        padding: $select-padding;
+
+        &:hover {
+          background-color: $select-hover-color;
+        }
+      }
+
+      &__option--selected {
+        background: $select-selected-color;
+      }
+      
+      &__option--highlighted {
+        background: $select-hover-color;
+      }
+  }
+}

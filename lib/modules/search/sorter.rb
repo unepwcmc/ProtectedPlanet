@@ -1,6 +1,7 @@
 class Search::Sorter
   SORTERS = {
-    geo_distance: { type: 'geo_distance', field: 'protected_area.coordinates' }
+    geo_distance: { type: 'geo_distance', field: 'protected_area.coordinates' },
+    datetime: { type: 'datetime' }
   }
 
   def initialize term, options

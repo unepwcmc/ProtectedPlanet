@@ -1,0 +1,14 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--articles {
+  @include card-news;
+  
+  .cards {
+    &__cards {
+      @include flex;
+      @include flex-h-between;
+      @include flex-wrap;
+    }
+  }
+}

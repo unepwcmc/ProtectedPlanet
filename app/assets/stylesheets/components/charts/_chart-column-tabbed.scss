@@ -1,0 +1,24 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--column-tabbed {
+
+  .chart__tab-target {
+    @include flex;
+    @include responsive(flex-wrap, wrap, wrap, nowrap);
+  }
+
+  .chart__chart {
+    @include responsive(width, 100%, 100%, 75%);
+  }
+
+  .chart__legend {
+    @include responsive(margin-top, rem-calc(14), rem-calc(24), 0);
+    @include responsive(padding-left, 0, 0, rem-calc(30));
+    @include responsive(width, 100%, 100%, 25%);
+  }
+}

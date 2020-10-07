@@ -12,6 +12,9 @@ Bundler.require(*Rails.groups)
 
 module ProtectedPlanet
   class Application < Rails::Application
+    # Ensuring that ActiveStorage routes are loaded before Comfy's globbing
+    # route. Without this file serving routes are inaccessible.
+    config.railties_order = [ActiveStorage::Engine, :main_app, :all]
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -26,10 +29,11 @@ module ProtectedPlanet
 
     config.autoload_paths += %W(
       #{config.root}/lib/modules
+      #{config.root}/lib/cms_tags
       #{config.root}/app/presenters
       #{config.root}/app/serializers
     )
-    config.assets.paths << Rails.root.join('node_modules')
+    # config.assets.paths << Rails.root.join('node_modules')
     config.assets.precompile += %w(base.js country.js home.js map.js protected_areas.js search.js resources.js content.js marine.js green_list.js region.js target_dashboard.js)
     config.assets.precompile += %w(d3/d3.js)
     config.assets.precompile += %w(d3/d3.min.js)
@@ -40,7 +44,5 @@ module ProtectedPlanet
     config.to_prepare do
       Devise::Mailer.layout "mailer"
     end
-
-    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}')]
   end
 end

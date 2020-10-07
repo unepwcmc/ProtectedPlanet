@@ -1,0 +1,14 @@
+<div class="card--message">
+  <p class="card__warning"><%= t('stats.warning').html_safe %></p>
+
+  <% if has_documents local_assigns %>
+    <ul class="list--links">
+      <% documents.each do |document| %>
+        <li class="list__li">
+          <span><%= document[:name] %></span>
+          <%= link_to t("global.button.#{document[:type]}"), document[:url], title: document[:name], class: "list__a button--#{document[:type]}", target: '_blank' %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</div>

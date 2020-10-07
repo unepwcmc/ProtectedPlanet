@@ -1,0 +1,25 @@
+<header class="hero--home bg-image-overlay--white">
+  <div class="hero__container container">
+    <div class="hero__text">
+      <h1 class="h1-home"><%= cms_fragment_content("title") %></h1>
+      <p class="hero__intro"><%= cms_fragment_content("introduction") %></p>
+
+      <%= link_to button, @pas_link, title: button, class: 'button--primary' %>
+    </div>
+    <div>
+      <div class="hero__stats circle--grey-black sm-home-hero-stats">
+        <i class="hero__icon icon--pin-terrestrial-light">
+          <%= render '/partials/svgs/pin.svg' %>
+        </i>
+        <div class="hero__stat-number">
+          <counter 
+            :total="<%= hero_stat_percentage %>" 
+            trigger="sm-home-hero-stats" 
+            :decimal="1"
+          ></counter>%
+        </div>
+        <span class="hero__stat-text"><%= hero_stat_text %></span>
+      </div>
+    </div>
+  </div>
+</header>

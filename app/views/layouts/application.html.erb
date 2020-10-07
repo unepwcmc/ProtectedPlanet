@@ -1,31 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <%= render "layouts/application/head" %>
+    <%= render "layouts/partials/head" %>
   </head>
 
   <body>
-    <div id="v-app">
-      <main class="body-container <%= controller_name %>-parent">
-        <header class="js-expandable-section">
-          <%= render 'layouts/application/navbar' %>
-          <%= yield :header %>
-        </header>
+    <div id="v-app" class="<%= if @for_pdf then 'pdf' end %>">
+      <%= render "layouts/partials/topbar" %>
+        
+      <%= yield %>
+      
+      <%= render "layouts/partials/footer" %>  
 
-          <%= yield %>
-      </main>
+      <download-modal
+        endpoint-create="/downloads"
+        endpoint-poll="/downloads/poll"
+        :text-download="<%= download_text[:download].to_json %>"
+        :text-status="<%= download_text[:status].to_json %>"
+      ></download-modal>
     </div>
-
-    <%= render "layouts/application/footer" %>
-
-    <%= render 'shared/download_modal' %>
-
-    <%= javascript_include_tag controller_name %>
-
-    <% if Rails.env == 'production' %>
-      <%= render 'shared/hotjar' %>
-      <%= render 'shared/mouseflow' %>
-      <%= render 'shared/uservoice' %>
-    <% end %>
   </body>
 </html>

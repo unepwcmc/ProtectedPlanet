@@ -1,0 +1,36 @@
+<tabs
+  class="tabs--hero"
+  ga-id="<%= ga_id %>"
+  :tab-triggers="<%= tabs %>"
+>
+  <template slot-scope="slotProps">
+    <tab-target :id="1" :selected-id="slotProps.selectedId">
+      <section class="container--medium">
+        <%= cms_fragment_render("tab-content-1") %>
+      </section>
+
+      <section class="spacer-large--bottom">
+        <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
+      </section>
+
+      <section class="map-section">
+        <%= render partial: "partials/maps/main", locals: {
+          map: map,
+          map_options: local_assigns.has_key?(:map_options) ? map_options : nil
+        } %>
+      </section>
+    </tab-target>
+
+    <tab-target :id="2" :selected-id="slotProps.selectedId">
+      <section class="container--medium">
+        <%= cms_fragment_render("tab-content-2") %>
+      </section>
+    </tab-target>
+
+    <tab-target :id="3" :selected-id="slotProps.selectedId">
+      <section class="container--medium">
+        <%= cms_fragment_render("tab-content-3") %>
+      </section>
+    </tab-target>
+  </template>
+</tabs>

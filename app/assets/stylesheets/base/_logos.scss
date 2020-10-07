@@ -1,0 +1,25 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin logo-basic {
+  background-repeat: no-repeat;
+  display: block;
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.logo {
+  &--protected-planet {
+    @include logo-basic;
+    @include responsive(width, rem-calc(137), rem-calc(164), rem-calc(216));
+    @include responsive(height, rem-calc(20), rem-calc(24), rem-calc(33));
+    background-image: image_url('logos/protected-planet.svg');
+
+    .footer & {
+      width: rem-calc(239); height: rem-calc(35);
+    }
+  }
+
+  
+}

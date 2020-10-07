@@ -1,0 +1,40 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-column-margin: 1%;
+$chart-column-width: 9%;
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--column {
+  @include flex;
+  width: 100%;
+
+  .chart__column {
+    margin-left: $chart-column-margin;
+    width: $chart-column-width;
+
+    &:first-child { margin-left: 0; }
+  }
+
+  .chart__bar {
+    @include flex;
+    @include flex-v-end;
+    @include responsive(height, rem-calc(300), rem-calc(450), rem-calc(450));
+    background-color: $white;
+  }
+
+  .chart__coverage {
+    background-color: $chart-aqua;
+    width: 100%;
+  }
+
+  .chart__label {
+    font-weight: $bold;
+    padding: rem-calc(10 0);
+    text-align: center;
+
+    display: block;
+  }
+}

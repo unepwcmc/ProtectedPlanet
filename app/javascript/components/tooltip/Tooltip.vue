@@ -2,7 +2,8 @@
   <div 
     :class="['tooltip', { 'tooltip--active': isActive }]"
   >
-    <div v-if="onHover"
+    <div 
+      v-if="onHover"
       v-touch="toggleTooltip"
       tabindex="0"
       :aria-describedby="id"
@@ -15,12 +16,11 @@
     </div>
     <div 
       v-else
-      v-touch="toggleTooltip"
       tabindex="0"
       :aria-describedby="id"
       :aria-expanded="isActive"
       class="tooltip__trigger"
-      @click:prevent="toggleTooltip()"
+      @click="toggleTooltip"
     >
       <slot />
     </div>
@@ -46,7 +46,7 @@
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
 
 export default {
-  name: 'Tooltip',
+  name: 'tooltip',
 
   mixins: [ mixinPopupCloseListeners({ closeCallback: 'closeTooltip' }) ],
 
@@ -63,8 +63,8 @@ export default {
 
   data () {
     return {
-      isActive: false,
-      id: `tooltip_${this._uid}`
+      id: `tooltip_${this._uid}`,
+      isActive: false
     }
   },
 

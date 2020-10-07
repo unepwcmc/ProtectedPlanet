@@ -1,0 +1,194 @@
+//--------------------------------------------------
+// borders
+//--------------------------------------------------
+$radius-global: rem-calc(5);
+
+//--------------------------------------------------
+// colours
+//--------------------------------------------------
+$white: #ffffff;
+$black: #000000;
+
+$grey-xlight: #f4f4f4;
+$grey-light: #c8c8c8;
+$grey: #919191;
+$grey-dark: #666666;
+$grey-xdark: #404040;
+$grey-black: #242424;
+
+$blue: #004DA8;
+
+$green-bright: #38A800;
+$green: #71A32B;
+$green-dark: #527B19;
+$green--darker: #415519;
+
+$orange: #D9B143;
+
+$pink: #F84489;
+
+$purple: #7B1977;
+$purple-dark: #794B9D;
+
+$red: #FA3232;
+
+$chart-aqua: #65C9B2;
+$chart-black: #151617;
+$chart-blue-light: #64BAD9;
+$chart-blue: #5F81CB;
+$chart-blue-dark: #1A4D9F;
+$chart-green: #71A22B;
+$chart-orange: #FAA51B;
+$chart-orange-dark: #E57133;
+$chart-pink-light: #EF5F6C;
+$chart-pink: #EF266C;
+$chart-purple: #A54897;
+$chart-yellow: #F5F58A;
+
+$alert: $red;
+
+$primary: $green;
+$primary-dark: $green--darker;
+
+$global: $purple;
+$oecm: $orange;
+$marine: $blue;
+$terrestrial: $green-bright;
+
+$map-oecm: rgba($orange, .8);
+$map-marine: rgba($blue, .8);
+$map-terrestrial: rgba($pink, .8);
+
+$pin-marine: $marine;
+$pin-oecm: $oecm;
+$pin-terrestrial: $terrestrial;
+
+$theme-designation: [$chart-purple, $chart-aqua, $chart-blue];
+$theme-chart: [
+  $chart-blue-light, 
+  $chart-purple, 
+  $chart-aqua, 
+  $chart-blue, 
+  $chart-orange, 
+  $chart-pink-light, 
+  $chart-black, 
+  $chart-green, 
+  $chart-yellow, 
+  $chart-pink, 
+  $chart-blue-dark, 
+  $chart-orange-dark
+];
+
+//--------------------------------------------------
+// buttons
+//--------------------------------------------------
+$button-radius: 3px;
+// $button-font-size: rem-calc(25);
+// $button-default-color: $grey;
+
+// $button-padding-small: rem-calc(12 15);
+// $button-padding-medium: rem-calc(20 30);
+
+//--------------------------------------------------
+// shadows
+//--------------------------------------------------
+// $shadow-light: rem-calc(0 1 2 1) rgba($black, 0.3);
+// $shadow-dark: rem-calc(2 3 3 2) rgba($black, 0.5);
+
+//--------------------------------------------------
+// fonts
+//--------------------------------------------------
+$fontAwesome: normal normal normal 14px/1 FontAwesome;
+$playfair-display: 'Playfair Display';
+$hind-siliguri: 'Hind Siliguri';
+
+$header-font: $playfair-display, serif;
+$header-font-color: $grey-black;
+$header-font-line-height: 1.1;
+
+$body-font: $hind-siliguri, sans-serif;
+$body-font-colour: $grey-black;
+$body-font-line-height: 1.3;
+
+$p-font-line-height: 1.6;
+
+$thin: 100;
+$extra-light: 300;
+$fw-light: 300;
+$regular: 400;
+$fw-medium: 500;
+$semi-bold: 600;
+$bold: 700;
+$extra-bold: 800;
+$fw-black: 900;
+
+//--------------------------------------------------
+// breakpoints
+//--------------------------------------------------
+// must be in px not rem!
+// IF MODIFIED, PLEASE CHECK ELSEWHERE IN PROJECT e.g. in mixin-responsive.js
+$small: 767px; 
+$medium: 1024px;
+$large: 1200px;
+
+//--------------------------------------------------
+// z-indices
+//--------------------------------------------------
+$z-100: 100;
+$z-200: 200;
+$z-300: 300;
+$z-400: 400;
+
+//--------------------------------------------------
+// padding
+//--------------------------------------------------
+$gutter-small: rem-calc(20);
+$gutter-medium: rem-calc(25);
+$gutter-large: rem-calc(30);
+
+$spacer-small-mobile: rem-calc(16);
+$spacer-small-tablet: rem-calc(24);
+$spacer-small-desktop: rem-calc(36);
+
+$spacer-medium-mobile: rem-calc(24);
+$spacer-medium-tablet: rem-calc(34);
+$spacer-medium-desktop: rem-calc(50);
+
+$spacer-large-mobile: rem-calc(30);
+$spacer-large-tablet: rem-calc(60);
+$spacer-large-desktop: rem-calc(80);
+
+$item-spacing-small: rem-calc(14);
+$item-spacing-medium: rem-calc(20);
+$item-spacing-large: rem-calc(32);
+$item-spacing-xlarge: rem-calc(56);
+
+//--------------------------------------------------
+// dimensions
+//--------------------------------------------------
+$site-width: $large;
+$site-width-rem: rem-calc($site-width);
+
+// $site-width-medium-tablet: 80%;
+// $site-width-medium-laptop: 78%;
+$site-width-medium-desktop: rem-calc(750);
+
+$filters-menu-max-height: rem-calc(300);
+
+//--------------------------------------------------
+// tables
+//--------------------------------------------------
+// $collapse-table-borders: true;
+// $table-cell-padding: rem-calc(8);
+
+//--------------------------------------------------
+// topbars and footers
+//--------------------------------------------------
+// $navbar-height-small: rem-calc(90);
+// $topbar-height-laptop: rem-calc(90);
+// $topbar-height-desktop: rem-calc(118);
+
+//--------------------------------------------------
+// branding
+//--------------------------------------------------
+// $unepwcmc-w-to-h-ratio: 118/27;

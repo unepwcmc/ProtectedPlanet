@@ -1,0 +1,20 @@
+<% if local_assigns.has_key? :image %>
+  <header class="hero--basic bg-image-overlay--white" style="background-image: url('<%= image %>')">
+<% else %>
+  <header class="hero--basic bg-image-overlay--white <%= get_local_classes local_assigns %>">
+<% end %>
+
+  <div class="hero__container container">
+    <div class="hero__content">
+      <h1><%= title %></h1>
+
+      <% if local_assigns.has_key? :summary %>
+        <p class="hero__intro"><%= summary %></p>
+      <% end %>
+      
+      <% if local_assigns.has_key? :button_link %>
+        <%= link_to button_text, button_link, target: '_blank', title: t('global.links.visit', link: button_link), class: 'button--external' %>
+      <% end %>
+    </div>
+  </div>
+</header>

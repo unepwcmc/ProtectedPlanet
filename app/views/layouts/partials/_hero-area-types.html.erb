@@ -1,0 +1,36 @@
+<header 
+  class="hero--area-type <%= get_local_classes local_assigns %>"
+  <% if local_assigns.has_key? :image %>
+    style="background-image: url('<%= image %>')"
+  <% end %>
+>
+  <div class="hero__container container">
+    <div class="hero__content">
+      <h1><%= title %></h1>
+
+      <% if local_assigns.has_key? :summary %>
+        <p class="hero__intro"><%= summary %></p>
+      <% end %>
+
+      <%= link_to button_search_text, 
+        button_search_url, 
+        title: t('global.links.visit', link: button_search_url), 
+        class: 'hero__button-1 button--primary' 
+      %>
+    </div>
+
+    <div>
+      <div class="hero__stats circle--grey-black sm-home-hero-stats">
+        <i class="hero__icon icon--pin-green"></i>
+        <div class="hero__stat-number">
+          <counter 
+            :total="<%= hero_stat_percentage %>" 
+            trigger="sm-home-hero-stats" 
+            :decimal="1"
+          ></counter>%
+        </div>
+        <span class="hero__stat-text"><%= hero_stat_text %></span>
+      </div>
+    </div>
+  </div>
+</header>

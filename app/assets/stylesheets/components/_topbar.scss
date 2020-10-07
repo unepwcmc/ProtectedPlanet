@@ -1,0 +1,68 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.topbar {
+  background-color: $white;
+
+  .topbar__container {
+    @include flex;
+    @include flex-v-center;
+  }
+
+    .topbar__logo {
+      @include flex;
+      @include flex-center;
+      background-color: $primary;
+      order: 1;
+      padding: rem-calc(0 16);
+      height: rem-calc(52);
+
+      @include breakpoint($small) { 
+        padding: rem-calc(0 20);
+        height: rem-calc(56);
+      }; 
+
+      @include breakpoint($medium) { 
+        padding: rem-calc(0 30);
+        height: rem-calc(67);
+      }; 
+    }
+
+    .topbar__nav {
+      order: 2;
+      @include breakpoint($small) { 
+        margin-left: auto;
+        order: 1; 
+      }
+    }
+
+    .topbar__search {	
+      margin-left: auto;
+      order: 1;
+      
+      @include breakpoint($small) { 
+        margin-left: rem-calc(14);
+        order: 2; 
+      }
+
+      @include breakpoint($medium) { margin-left: rem-calc(30); }
+    }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.topbar--secondary {
+  @include box-shadow-bottom-grey;
+
+  position: relative; //to make box shadow appear over hero
+  z-index: 2; //to make box shadow appear over hero
+
+  .topbar__container {
+    @include flex;
+    @include flex-h-end;
+    @include flex-v-center;
+    @include responsive(padding-top, rem-calc(6), rem-calc(10), rem-calc(14));
+    @include responsive(padding-bottom, rem-calc(6), rem-calc(10), rem-calc(14));
+  }
+}

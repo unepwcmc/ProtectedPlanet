@@ -1,0 +1,37 @@
+//--------------------------------------------------
+// borders - mixins
+//--------------------------------------------------
+@mixin border($colour){
+  border: solid 1px $colour;
+}
+
+@mixin border-radius { border-radius: $radius-global; }
+
+@mixin border-radius-top($radius) {
+  border-top-right-radius: $radius;
+  border-top-left-radius: $radius;
+}
+
+@mixin border-radius-bottom($radius) {
+  border-bottom-right-radius: $radius;
+  border-bottom-left-radius: $radius;
+}
+
+@mixin border-grey-xlight { @include border($grey-xlight); }
+@mixin border-grey-light { @include border($grey-light); }
+
+//--------------------------------------------------
+// box shadows - mixins
+//--------------------------------------------------
+@mixin box-shadow($colour){ box-shadow: 2px 2px 6px $colour; }
+@mixin box-shadow-bottom($colour){ box-shadow: 0 3px 3px $colour; }
+
+//--------------------------------------------------
+// box shadows - specific mixins
+//--------------------------------------------------
+@mixin box-shadow-grey-xlight { @include box-shadow($grey-xlight); }
+@mixin box-shadow-grey-light { @include box-shadow($grey-light); }
+@mixin box-shadow-grey { @include box-shadow($grey); }
+
+@mixin box-shadow-bottom-grey-light { @include box-shadow-bottom($grey-light); }
+@mixin box-shadow-bottom-grey { @include box-shadow-bottom($grey); }

@@ -1,4 +1,6 @@
 class MarineController < ApplicationController
+  include ActionView::Helpers::NumberHelper
+  include MapHelper
 
   #Static stats
   before_action :marine_statistics, only: [:index, :download_designations]
@@ -11,20 +13,39 @@ class MarineController < ApplicationController
   before_action :most_protected_areas, only: [:index]
   before_action :national_statistics, only: [:index]
   before_action :designations, only: [:index, :download_designations]
-  before_action :green_list_areas, only: [:index]
 
-  COUNTRIES = [
-    "United States of America",
-    "France",
-    "Australia",
-    "United Kingdom of Great Britain and Northern Ireland",
-    "New Zealand",
-    "Denmark",
-    "Norway",
-    "Netherlands"
-  ]
 
   def index
+    @marineSites = ProtectedArea.marine_areas.limit(3) ## FERDI 3 marine PAs
+    @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
+    @marineViewAllUrl = search_areas_path(filters: {is_type: ['marine']}) 
+
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'mpa_map'], 'general', 'marine')
+
+    @regionCoverage = Region.without_global.map do |region|
+      RegionPresenter.new(region).marine_coverage
+    end
+
+    @pas_km = @marine_statistics['total_ocean_area_oecms_pas']
+    @pas_percent = @marine_statistics['total_ocean_oecms_pas_coverage_percentage']
+    @pas_total = @marine_statistics['total_marine_oecms_pas']
+    @map = {
+      overlays: MapOverlaysSerializer.new(marine_overlays, map_yml).serialize,
+      title: I18n.t('map.title'),
+      type: 'marine',
+      point_query_services: [
+        { 
+          url: OECM_FEATURE_SERVER_LAYER_URL,
+          isPoint: false,
+          queryString: MARINE_WHERE_QUERY
+        },
+        { url: WDPA_POINT_LAYER_URL, isPoint: true, queryString: MARINE_WHERE_QUERY },
+        { url: WDPA_POLY_LAYER_URL, isPoint: false, queryString: MARINE_WHERE_QUERY }
+        # { url: MARINE_WDPA_POINT_LAYER_URL, isPoint: true },
+        # { url: MARINE_WDPA_POLY_LAYER_URL, isPoint: false }
+      ]
+    }
+    @filters = { db_type: ['wdpa'], is_marine: true }
   end
 
   def download_designations
@@ -36,6 +57,14 @@ class MarineController < ApplicationController
   end
 
   private
+
+  def marine_overlays
+    overlays(['oecm_marine', 'marine_wdpa'], {
+      marine_wdpa: {
+        isShownByDefault: true
+      }
+    })
+  end
 
   def generate_designations_csv
     columns = ["PA name", "Country", "Size", "Date of designation"]
@@ -63,64 +92,9 @@ class MarineController < ApplicationController
   end
 
   def most_protected_areas
-    #@top10ProtectedAreas =
-    #  ProtectedArea.without_proposed.most_protected_marine_areas(10).map do |pa|
-    #    ProtectedAreaPresenter.new(pa).name_size
-    #  end.to_json
-    #  Use hardcoded data until we fix the issue on the source
-
-    @top10ProtectedAreas = [
-      {
-        name: 'Ross Sea Region Marine Protected Area',
-        url: '/555624810',
-        km: 2060058
-      },
-      {
-        name: 'Marae Moana',
-        url: '/555624907',
-        km: 1981965
-      },
-      {
-        name: 'Réserve Naturelle Nationale des Terres australes françaises',
-        url: '/345888',
-        km: 1654999
-      },
-      {
-        name: 'Papahānaumokuākea Marine National Monument',
-        url: '/220201',
-        km: 1516557
-      },
-      {
-        name: 'Parc Naturel de la Mer de Corail',
-        url: '/555577562',
-        km: 1291643
-      },
-      {
-        name: 'Pacific Remote Islands',
-        url: '/400011',
-        km: 1277784
-      },
-      {
-        name: 'South Georgia and South Sandwich Islands Marine Protected Area',
-        url: '/555547601',
-        km: 1069872
-      },
-      {
-        name: 'Coral Sea',
-        url: '/555556875',
-        km: 995251
-      },
-      {
-        name: 'Steller Sea Lion Protection Areas, Gulf',
-        url: '/555586970',
-        km: 866717
-      },
-      {
-        name: 'Pitcairn Islands Marine Reserve',
-        url: '/555624172',
-        km: 839568
-      }
-    ].to_json
+    @regionsTopCountries = Region.without_global.map do |region|
+      RegionPresenter.new(region).top_marine_coverage_countries
+    end.to_json
   end
 
   def least_protected_areas
@@ -130,13 +104,15 @@ class MarineController < ApplicationController
   end
 
   def national_statistics
-    @nationalProtectedAreas = {
+    ## TODO it should take into account ABNJ as well
+    @top_marine_coverage_countries = {
       name: "ocean areas",
       children:
-        Country.where(name: COUNTRIES).map do |country|
-          CountryPresenter.new(country).marine_statistics
+        CountryStatistic.top_marine_coverage.map do |country_statistic|
+          ## TODO if country is nil check if that corresponds to ABNJ
+          CountryPresenter.new(country_statistic.country).marine_page_statistics
         end
-    }.to_json
+    }
   end
 
   def designations
@@ -147,243 +123,39 @@ class MarineController < ApplicationController
   end
 
   def marine_statistics
-    @marine_statistics = $redis.hgetall('wdpa_marine_stats')
+    @marine_statistics = GlobalStatistic.marine_stats
   end
 
   def growth
-    @protectedAreasGrowth = [
-      {
-        id: "Global",
-        dataset: [
-          {
-            year: 2000,
-            percent: 0.67
-          },
-          {
-            year: 2001,
-            percent: 0.73
-          },
-          {
-            year: 2002,
-            percent: 0.99
-          },
-          {
-            year: 2003,
-            percent: 1.00
-          },
-          {
-            year: 2004,
-            percent: 1.11
-          },
-          {
-            year: 2005,
-            percent: 1.13
-          },
-          {
-            year: 2006,
-            percent: 1.05
-          },
-          {
-            year: 2007,
-            percent: 1.43
-          },
-          {
-            year: 2008,
-            percent: 1.85
-          },
-          {
-            year: 2009,
-            percent: 2.32
-          },
-          {
-            year: 2010,
-            percent: 2.50
-          },
-          {
-            year: 2011,
-            percent: 2.53
-          },
-          {
-            year: 2012,
-            percent: 3.38
-          },
-          {
-            year: 2013,
-            percent: 3.47
-          },
-          {
-            year: 2014,
-            percent: 4.15
-          },
-          {
-            year: 2015,
-            percent: 4.43
-          },
-          {
-            year: 2016,
-            percent: 5.01
-          },
-          {
-            year: 2017,
-            percent: 6.4
-          }
-        ]
-      },
-      {
-        id: "National",
-        dataset: [
-          {
-            year: 2000,
-            percent: 1.72
-          },
-          {
-            year: 2001,
-            percent: 1.88
-          },
-          {
-            year: 2002,
-            percent: 2.54
-          },
-          {
-            year: 2003,
-            percent: 2.57
-          },
-          {
-            year: 2004,
-            percent: 2.86
-          },
-          {
-            year: 2005,
-            percent: 2.89
-          },
-          {
-            year: 2006,
-            percent: 2.70
-          },
-          {
-            year: 2007,
-            percent: 3.68
-          },
-          {
-            year: 2008,
-            percent: 3.93
-          },
-          {
-            year: 2009,
-            percent: 5.13
-          },
-          {
-            year: 2010,
-            percent: 5.88
-          },
-          {
-            year: 2011,
-            percent: 5.94
-          },
-          {
-            year: 2012,
-            percent: 8.43
-          },
-          {
-            year: 2013,
-            percent: 8.65
-          },
-          {
-            year: 2014,
-            percent: 9.66
-          },
-          {
-            year: 2015,
-            percent: 10.36
-          },
-          {
-            year: 2016,
-            percent: 12.74
-          },
-          {
-            year: 2017,
-            percent: 16.02
-          }
-        ]
-      },
-      {
-        id: "ABNJ",
-        dataset: [
-          {
-            year: 2000,
-            percent: 0.00
-          },
-          {
-            year: 2001,
-            percent: 0.00
-          },
-          {
-            year: 2002,
-            percent: 0.00
-          },
-          {
-            year: 2003,
-            percent: 0.00
-          },
-          {
-            year: 2004,
-            percent: 0.00
-          },
-          {
-            year: 2005,
-            percent: 0.00
-          },
-          {
-            year: 2006,
-            percent: 0.00
-          },
-          {
-            year: 2007,
-            percent: 0.00
-          },
-          {
-            year: 2008,
-            percent: 0.00
-          },
-          {
-            year: 2009,
-            percent: 0.00
-          },
-          {
-            year: 2010,
-            percent: 0.17
-          },
-          {
-            year: 2011,
-            percent: 0.17
-          },
-          {
-            year: 2012,
-            percent: 0.17
-          },
-          {
-            year: 2013,
-            percent: 0.17
-          },
-          {
-            year: 2014,
-            percent: 0.25
-          },
-          {
-            year: 2015,
-            percent: 0.25
-          },
-          {
-            year: 2016,
-            percent: 0.25
-          },
-          {
-            year: 2017,
-            percent: 1.18
-          }
-        ]
-      }
-    ].to_json
+    @protectedAreasGrowth = {
+      # x = x axis
+      # 1, 2, 3 = series on the chart and also make the y axis
+      datapoints: [
+        { "x": Time.new(2000, 1, 1), "1": 2526266, "2": 0, "3": 2526266 },
+        { "x": Time.new(2001, 1, 1), "1": 2723044, "2": 0, "3": 2723044 },
+        { "x": Time.new(2002, 1, 1), "1": 2845701, "2": 0, "3": 2845701 },
+        { "x": Time.new(2003, 1, 1), "1": 2878904, "2": 0, "3": 2878904 },
+        { "x": Time.new(2004, 1, 1), "1": 2980729, "2": 0, "3": 2980729 },
+        { "x": Time.new(2005, 1, 1), "1": 3079037, "2": 0, "3": 3079037 },
+        { "x": Time.new(2006, 1, 1), "1": 6670152, "2": 0, "3": 6670152 },
+        { "x": Time.new(2007, 1, 1), "1": 7835671, "2": 0, "3": 7835671 },
+        { "x": Time.new(2008, 1, 1), "1": 7916368, "2": 0, "3": 7916368 },
+        { "x": Time.new(2009, 1, 1), "1": 9583472, "2": 0, "3": 9583472 },
+        { "x": Time.new(2010, 1, 1), "1": 10649529, "2": 380819, "3": 11030348 },
+        { "x": Time.new(2011, 1, 1), "1": 10713142, "2": 380819, "3": 11093961 },
+        { "x": Time.new(2012, 1, 1), "1": 12409801, "2": 558231, "3": 12968032 },
+        { "x": Time.new(2013, 1, 1), "1": 12641722, "2": 558231, "3": 13199953 },
+        { "x": Time.new(2014, 1, 1), "1": 14053366, "2": 558231, "3": 14611597 },
+        { "x": Time.new(2015, 1, 1), "1": 15085513, "2": 558231, "3": 15643744 },
+        { "x": Time.new(2016, 1, 1), "1": 16938756, "2": 558231, "3": 17496987 },
+        { "x": Time.new(2017, 1, 1), "1": 19363517, "2": 2608187, "3": 21971704 },
+        { "x": Time.new(2018, 1, 1), "1": 23665971, "2": 2608187, "3": 26274158 },
+        { "x": Time.new(2019, 1, 1), "1": 24360959, "2": 2608187, "3": 26969146 },
+        { "x": Time.new(2020, 1, 1), "1": 24360975, "2": 2608187, "3": 26969162 }
+      ],
+      units: "km2",
+      legend: ["National", "ABNJ", "Global"]
+    }.to_json
   end
 
   def ecoregions
@@ -493,9 +265,5 @@ class MarineController < ApplicationController
         }
       ]
     }.to_json
-  end
-
-  def green_list_areas
-    @green_list_areas = ProtectedArea.marine_areas.green_list_areas
   end
 end

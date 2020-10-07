@@ -52,6 +52,18 @@ module SearchHelper
     only_text ? strip_tags(title) : title
   end
 
+  def cms_pages_for_search
+    _filters = {filters: {ancestor: @cms_page.id } }
+    _options = {
+      page: 1,
+      size: Search::CmsSerializer::DEFAULT_PAGE_SIZE[@cms_page.slug.underscore.to_sym],
+      sort: {datetime: 'published_date'}
+    }
+    _search = Search.search('', _options.merge(_filters), Search::CMS_INDEX)
+
+    Search::CmsSerializer.new(_search, _options).serialize
+  end
+
   private
 
   def title_with_query query
@@ -99,7 +111,7 @@ module SearchHelper
   end
 
   def pa_autocomplete_link result
-    version = Rails.application.secrets.mapbox['version']
+    version = Rails.application.secrets.mapbox[:version]
     image_params = {id: result[:identifier], type: result[:type], version: version}
 
     link_to protected_area_url(result[:identifier]), class: "autocompletion__result" do
@@ -118,7 +130,7 @@ module SearchHelper
   end
 
   def country_autocomplete_link result
-    version = Rails.application.secrets.mapbox['version']
+    version = Rails.application.secrets.mapbox[:version]
     image_params = {id: result[:identifier], type: result[:type], version: version}
     type = (result[:type] == "country" ? "country/territory" : result[:type])
 
@@ -135,5 +147,9 @@ module SearchHelper
         concat content_tag(:span, type.titleize, class: "autocompletion__type")
       end)
     end
+  end
+
+  def designation_link(desig)
+    search_areas_path(filters: { designation: [desig] })
   end
 end

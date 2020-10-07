@@ -1,0 +1,72 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+@mixin input-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: rem-calc(1);
+  margin: - rem-calc(1);
+  overflow: hidden;
+  padding: 0;
+  white-space: nowrap;
+  width: rem-calc(1);
+  opacity: 0;
+  position: absolute;
+}
+
+@mixin input-custom-focus {
+  // border: solid 2px $black;
+  outline: 0;
+}
+
+//--------------------------------------------------
+// radio buttons
+//--------------------------------------------------
+@mixin input-custom-radio($width) {
+  @include flex;
+  @include flex-no-shrink;
+  border-radius: 50%;
+  border: solid 1px $grey;
+  margin: rem-calc(4 8 4 4); //allow space for custom focus
+  width: $width; height: $width;
+
+  display: inline-block;
+  position: relative;
+}
+
+@mixin input-custom-radio-selected($width, $colour) {
+  @include flex-no-shrink;
+  @include item-center;
+  background: $colour;
+  border-radius: 50%;
+  content: '';
+  width: $width; height: $width;
+
+  display: block;
+}
+
+//--------------------------------------------------
+// checkboxes
+//--------------------------------------------------
+@mixin input-custom-checkbox($width) {
+  border: solid 1px $grey;
+  margin: rem-calc(4 8 4 4); //allow space for custom focus
+  width: $width; height: $width;
+
+  display: inline-block;
+  position: relative;
+}
+
+@mixin input-custom-checkbox-selected() {
+  @include icon-tick;
+}

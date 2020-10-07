@@ -1,0 +1,19 @@
+en:
+  thematic_area:
+    marine:
+      hero:
+        button_text: Explore marine protected areas
+        stat_text_1: Percent of the ocean covered by marine protected areas
+        stat_text_2: Marine Protected Areas
+        stat_text_3: Total area protected
+      ocean:
+        national-title: National Waters
+        high-title: High Seas
+        legend_text_1: "% of Protected Area Coverage"
+        legend_text_2: "% of Ocean that is National waters"
+        legend_text_3: "% of Ocean that is High Seas"
+      national:
+        sub_title: Top 6 countries
+        chart_text: "%{country} and its %{overseas} overseas countries and territories have a combined area of %{km}km<sup>2</sup>"
+        chart_stat_text: of their national waters are protected
+        chart_stat_text_overseas: of their overseas territories waters are protected

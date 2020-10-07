@@ -1,0 +1,16 @@
+en:
+  download:
+    modal-commercial:
+      commercial-text: Commercial use of the WDPA will redirect you to the IBAT website.
+      commercial-title: Commercial Use
+      non-commercial-text: Download WDPA straight from the site.
+      non-commercial-title: Non Commercial Use
+      title: Download Options
+    modal-download: 
+      citation-text: "UNEP-WCMC and IUCN (2020), Protected Planet: The World Database on Protected Areas (WDPA) [Online], September 2020, Cambridge, UK: UNEP-WCMC and IUCN. Available at: <a href='http://protectedplanet.net' target='_blank' title='Visit Protected Planet'>www.protectedplanet.net</a>."
+      citation-title: Citation
+      title: Downloads
+    status:
+      download: Download
+      failed: Download Failed
+      generating: Generating...

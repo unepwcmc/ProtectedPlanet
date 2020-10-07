@@ -1,0 +1,24 @@
+test:
+ service: Disk
+ root: <%= Rails.root.join("tmp/storage") %>
+
+local:
+ service: Disk
+ root: <%= Rails.root.join("storage") %>
+
+# Main service to be used for staging 
+staging:
+  service: S3
+  access_key_id: <%= Rails.application.secrets.aws_access_key_id %>
+  secret_access_key: <%= Rails.application.secrets.aws_secret_access_key %>
+  region: <%= Rails.application.secrets.s3_region %>
+  bucket: <%= Rails.application.secrets.aws_files_bucket %>
+
+production:
+  service: S3
+  access_key_id: <%= Rails.application.secrets.aws_access_key_id %>
+  secret_access_key: <%= Rails.application.secrets.aws_secret_access_key %>
+  region: <%= Rails.application.secrets.s3_region %>
+  bucket:  <%= Rails.application.secrets.aws_files_bucket %>
+
+  

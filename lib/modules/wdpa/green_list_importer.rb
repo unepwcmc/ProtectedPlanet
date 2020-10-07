@@ -1,30 +1,43 @@
 module Wdpa::GreenListImporter
+  # Make sure headers are: wdpaid,status,expiry_date
   GREEN_LIST_SITES_CSV = "#{Rails.root}/lib/data/seeds/green_list_sites.csv"
   extend self
 
   def import
     ActiveRecord::Base.transaction do
-      old_green_list = ProtectedArea.where(is_green_list: true)
-      old_green_list.update_all(is_green_list: false)
-      csv = CSV.read(GREEN_LIST_SITES_CSV)
-      csv.shift # remove headers
+      ProtectedArea.where.not(green_list_status_id: nil).
+        update_all(green_list_status_id: nil)
+      GreenListStatus.destroy_all
 
-      sites = csv.map { |row| row }.flatten.uniq
+      invalid = []
+      not_found = []
+      duplicates = []
 
-      sites.each do |site|
-        wdpa_id = Integer(site) rescue false
-        if wdpa_id
-          pa = ProtectedArea.find_by_wdpa_id(wdpa_id)
-        else
-          pa = ProtectedArea.find_by_slug(site)
+      CSV.foreach(GREEN_LIST_SITES_CSV, headers: true) do |row|
+        wdpa_id = Integer(row['wdpaid']) rescue false
+        unless wdpa_id
+          invalid << row['wdpaid']
+          next
         end
 
-        unless pa.blank?
-          pa.is_green_list = true
+        pa = ProtectedArea.find_by_wdpa_id(wdpa_id)
+
+        if pa.blank?
+          not_found << wdpa_id
+        else
+          if pa.green_list_status_id
+            duplicates << wdpa_id
+            next
+          end
+          gls = GreenListStatus.find_or_create_by(row.to_h.slice('status', 'expiry_date'))
+          pa.green_list_status_id = gls.id
           pa.save
-          puts "Marked #{site} as a green list site"
         end
       end
+
+      puts "Invalid WDPAIDs found: #{invalid.join(',')}"
+      puts "PA with WDPAID not found: #{not_found.join(',')}"
+      puts "Statuses rows for same WDPAID found: #{duplicates.join(',')}"
     end
   end
 end

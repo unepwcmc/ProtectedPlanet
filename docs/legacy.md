@@ -1,4 +1,4 @@
-# Legacy Protected Planet
+# Legacy Protected Planet - REMOVED AFTER 2020 REFRESH
 
 We've done our best to not break links for the old Protected Planet.
 

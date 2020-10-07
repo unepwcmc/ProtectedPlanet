@@ -1,0 +1,54 @@
+en:
+  search:
+    categories:
+      - all
+      - news-and-stories
+      - resources
+      - areas
+    clear: Clear all
+    custom_categories:
+      topics:
+        name: Topics
+        items:
+          wdpa: WDPA
+          oecm: OECM
+          pame: PAME
+    download: Download
+    filters: Filters
+    filter-by: Filter by
+    filter-group-db:
+      options:
+        - OECM
+        - WDPA
+    filter-group-designation:
+      title: Designations
+    filter-group-geo-type:
+      title: "View sites within:"
+      options:
+        - Country
+        - Region
+    filter-group-governance:
+      title: Governance
+    filter-group-iucn-category:
+      title: IUCN Category
+    filter-group-special-status:
+      title: Special status level
+      options:
+        - Green Listed
+        - PARCC
+        - Transboundary
+    filter-group-type:
+      title: Type
+      options:
+        terrestrial: Terrestrial
+        marine: Marine
+    geo-types:
+      region: Regions
+      country: Countries
+      site: Individual Areas
+    map: Map View
+    no-results: No results. Please search again.
+    protected-areas: Protected Areas
+    results: results
+    search-areas-title: Explore protected areas and OECMs
+    

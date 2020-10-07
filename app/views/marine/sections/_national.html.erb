@@ -1,7 +1,0 @@
-<h2 class="header--h2-insights">MPAs within national waters</h2>
-
-<p class="template--marine__section__introduction">
-  Marine Protected Areas (MPAs) can be created for a variety of purposes in different areas within the global ocean. There is a higher percentage of MPAs established within national waters than in ABNJ (relative to the size of area). In addition, a number of nations have extensive national waters around their overseas countries or territories (a territory or country that is a part of or dependent upon another state but is geographically distinct from that state). Much of the recent growth in MPA coverage has been driven by the establishment of very large MPAs created or expanded by a few overseas countries and territories. As of 2018, the <%= link_to 'USA', country_path('USA') %>, <%= link_to 'France', country_path('FRA') %> and <%= link_to 'United Kingdom', country_path('GB') %> and their overseas countries and territories make up over 50% of the area covered by MPAs while <%= link_to 'Australia', country_path('AUS') %> , <%= link_to 'Cook Islands', country_path('COK')%>, <%= link_to 'New Zealand', country_path('NZL') %> and <%= link_to 'Mexico', country_path('MEX') %> cover an additional 30%.
-</p>
-
-<chart-treemap-interactive :json="<%= @nationalProtectedAreas %>"></chart-treemap-interactive>

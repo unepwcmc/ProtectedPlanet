@@ -1,6 +1,6 @@
 module ProtectedAreasHelper
   def map_bounds protected_area=nil
-    return Rails.application.secrets.default_map_bounds unless protected_area
+    return Rails.application.secrets.default_map_bounds.stringify_keys unless protected_area
 
     {
       'from' => protected_area.bounds.first,
@@ -12,13 +12,6 @@ module ProtectedAreasHelper
     !!protected_area.wikipedia_article
   end
 
-  def url_for_related_source source, protected_area
-    File.join(
-      Rails.application.secrets.related_sources_base_urls[source],
-      protected_area.wdpa_id.to_s
-    )
-  end
-
   def completion_attribute label, complete
     if complete
       content_tag(:li, class: 'complete') do
@@ -27,14 +20,6 @@ module ProtectedAreasHelper
       end
     else
       content_tag(:li, label, class: 'non-complete')
-    end
-  end
-
-  def parse_management_plan management_plan
-    if (management_plan.is_a? String) && (management_plan.starts_with?("http"))
-      link_to("View Management Plan", management_plan)
-    else
-      management_plan
     end
   end
 
@@ -65,5 +50,15 @@ module ProtectedAreasHelper
   }.freeze
   def management_plan_document
     MP_DOCUMENTS[@protected_area.wdpa_id]
+  end
+
+  def map_layer_type
+    if @protected_area.is_oecm 
+      I18n.t('map.overlays.oecm.title')
+    elsif @protected_area.marine
+      I18n.t('map.overlays.marine_wdpa.title')
+    else
+      I18n.t('map.overlays.terrestrial_wdpa.title')
+    end
   end
 end

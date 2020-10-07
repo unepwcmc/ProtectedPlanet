@@ -1,24 +1,25 @@
 <template>
   <div>
+    <v-select-searchable 
+      :config="select.config" 
+      :options="select.options"
+    />
+    
+    <span class="sm-trigger-sticky-bar" />
+
     <sticky-bar 
       trigger-element=".sm-trigger-sticky-bar" 
-      class="sticky-bar--basic"
+      class="sticky-bar--target-11"
     >
-      
-      <v-select-searchable 
-        class="v-select--searchable"
-        :config="select.config" 
-        :options="select.options"
-      >
-      </v-select-searchable>
-        
       <table-head 
         :headings="tableHeadings"
         :tooltipArray="tooltipArray"
         class="table-head--horizontal-scroll"
-      ></table-head>
+      >
+        <slot />
+      </table-head>
     </sticky-bar>
-        
+
     <v-table 
       :data-src="tableDataSrc"
       :tooltipArray="tooltipArray"
@@ -35,7 +36,7 @@ import TableHead from '../table/TableHead'
 import VTable from '../table/VTable'
 
 export default {
-  name: 'Target11Dashboard',
+  name: 'target-11-dashboard',
 
   components: { StickyBar, TableHead, VSelectSearchable, VTable },
 

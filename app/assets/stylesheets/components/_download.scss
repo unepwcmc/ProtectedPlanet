@@ -1,0 +1,54 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+//--------------------------------------------------
+// download hero
+//--------------------------------------------------
+.download--hero {
+  .download__trigger {
+    @include button-download-trigger;
+  }
+}
+
+//--------------------------------------------------
+// download search
+//--------------------------------------------------
+.download--search {
+  position: relative;
+
+  .download__trigger {
+    @include button-download-trigger-small;
+  }
+
+  .download__target {
+    display: none;
+
+    &.active { display: block; }
+  } 
+}
+
+//--------------------------------------------------
+// download small
+//--------------------------------------------------
+.download--small {
+  .download__target {
+    display: none;
+    position: relative;
+    
+    &.active { display: block; }
+  } 
+
+  .download__trigger {
+    @include button-download-trigger-small;
+
+    @include breakpoint-down($small) { 
+      width: rem-calc(38); height: rem-calc(38);
+    }
+  }
+}

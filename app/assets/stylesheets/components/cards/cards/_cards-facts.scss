@@ -1,0 +1,79 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$cards-facts-margin: rem-calc(10);
+$cards-facts-width-mobile: rem-calc(240);
+$cards-facts-width-tablet: rem-calc(274);
+$cards-facts-height-tablet: rem-calc(294);
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--facts {
+  @include breakpoint-down($site-width) { overflow-x: scroll; }
+
+  .cards {
+    &__card {
+      background-color: $grey-xlight;
+      margin-bottom: rem-calc(24);
+      margin-right: $cards-facts-margin;
+      padding: rem-calc(24 18);
+      width: $cards-facts-width-mobile; height: $cards-facts-width-mobile;
+  
+      display: inline-block;
+      flex-shrink: 0;
+
+      @include breakpoint($small) {
+        padding: rem-calc(22);
+        width: $cards-facts-width-tablet; height: $cards-facts-height-tablet;
+      }
+    }
+
+    &__scrollable { display: flex; }
+  }
+
+  .card {
+    &__number {
+      color: $primary;
+      font-size: rem-calc(16);
+      font-weight: $bold;
+
+      @include breakpoint($small) { font-size: rem-calc(20); }
+    }
+
+    &__number-large {
+      color: $primary;
+      font-size: rem-calc(40);
+      line-height: 1.2;
+      margin-top: rem-calc(6);
+      text-align: center;
+
+      display: block;
+
+      @include breakpoint($small) { font-size: rem-calc(70); }
+    }
+
+    &__pin {
+      margin: 0 auto;
+    }
+
+    &__title {
+      font-size: rem-calc(16);
+      font-weight: $bold;
+      line-height: 1.2;
+      margin: rem-calc(10 0);
+
+      @include breakpoint($small) { 
+        font-size: rem-calc(20); 
+        margin-top: rem-calc(10);
+      }
+    }
+
+    &__total {
+      line-height: 1.2;
+      margin: 0;
+
+      @include breakpoint($small) { font-size: rem-calc(18); }
+    }
+  }
+}

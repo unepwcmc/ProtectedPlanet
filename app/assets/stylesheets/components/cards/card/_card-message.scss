@@ -1,0 +1,17 @@
+&--message {
+  border: solid $grey 9px;
+  background-color: $white;
+  margin-top: rem-calc(30);
+  padding: rem-calc(28 39);
+
+  .card {
+    &__title { 
+      font-size: rem-calc(20); 
+      font-weight: $bold;
+    }
+
+    &__warning {
+      margin-top: 0;
+    }
+  }
+}

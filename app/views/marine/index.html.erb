@@ -1,75 +1,86 @@
-<%= content_for :twitter_card, "summary_large_image" %>
-<%= content_for :social_title, "Explore the World's Marine Protected Areas" %>
-<%= content_for :social_description, "Over 70% of the surface of Earth is ocean, comprised of highly diverse ecosystems, and providing a wide range of marine ecosystem services that support human society, health and the economy. This website presents the most recent official coverage statistics for marine protected areas, updated monthly from the World Database on Protected Areas." %>
-<%= content_for :social_image, image_url('social-marine.png') %>
-<%= content_for :social_image_alt, "A map of the world with highlighted areas that represent protected areas. The following statistics are shown: there are #{@marine_statistics['total_marine_protected_areas']} marine protected areas, #{@marine_statistics['total_ocean_pa_coverage_percentage']} of the ocean is covered by protected areas and the total area protected is 23,036,078km² These statistics are for 2017." %>
+<%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 
-<div class="v-marine template--marine">
-  <sticky-tab>
-    <p>Highlight some text to share via Twitter or Email.</p>
-  </sticky-tab>
+<%= render partial: "./layouts/partials/hero-thematic", locals: {
+  button_text: t('thematic_area.marine.hero.button_text'),
+  button_url: @marineViewAllUrl,
+  classes: @cms_page.slug,
+  image: cms_fragment_render(:image, @cms_page),
+  hero_small_text: cms_fragment_render(:hero_small_text, @cms_page),
+  hero_small_text_url: cms_fragment_render(:hero_small_text_url, @cms_page),
+  title: @cms_page.label,
+  stat_pas_km: @pas_km,
+  stat_pas_percent: @pas_percent,
+  stat_pas_total: @pas_total,
+  stat_text_1: t('thematic_area.marine.hero.stat_text_1'),
+  stat_text_2: t('thematic_area.marine.hero.stat_text_2'),
+  stat_text_3: t('thematic_area.marine.hero.stat_text_3'),
+  summary: cms_fragment_render(:summary, @cms_page)
+} %>
 
-  <social-share-text></social-share-text>
+<section class="container--medium spacer-small--top">
+  <h2><%= cms_fragment_render(:section_distribution_title, @cms_page) %></h2>
+  <div><%= cms_fragment_render(:section_distribution_content, @cms_page) %></div>
+</section>
 
-  <%= render partial: "marine/sections/header" %>
+<%= render partial: "partials/charts/chart-row-pa", locals: {
+  charts: [
+    {
+      coverage: marine_stats('national_waters_pa_coverage_percentage'),
+      legend: chart_row_pa_legend_national,
+      theme: 'theme--purple',
+      title: t('thematic_area.marine.ocean.national-title'),
+      total: marine_stats('national_waters_percentage')
+    },
+    {
+      coverage: marine_stats('high_seas_pa_coverage_percentage'),
+      legend: chart_row_pa_legend_high_seas,
+      theme: 'theme--blue',
+      title: t('thematic_area.marine.ocean.high-title'),
+      total: marine_stats('global_ocean_percentage')
+    }
+  ],
+  content: cms_fragment_render(:section_ocean_content, @cms_page),
+  title: cms_fragment_render(:section_ocean_title, @cms_page)
+} %>
 
-  <div class="container--push-bottom">
+<%= render partial: "partials/charts/chart-coverage-growth", locals: {
+  content: cms_fragment_render(:section_coverage_content, @cms_page),
+  chart_data: @protectedAreasGrowth,
+  title: cms_fragment_render(:section_coverage_title, @cms_page)
+} %>
 
-    <div id="coverage" class="section--block-color">
-      <section class="template--marine__section u-no-padding--bottom">
-        <%= render partial: "marine/sections/coverage_map" %>
-      </section>
-    </div>
+<section class="container--medium">
+  <h2><%= cms_fragment_render(:section_size_title, @cms_page) %></h2>
+  <div><%= cms_fragment_render(:section_size_content, @cms_page) %></div>
+</section>
 
-    <div class="js-download-btn tooltip-old__trigger marine-download">
-      <button href="#" class="js-trigger btn-map-download btn-map-download--marine">
-        <i class="fa fa-download big-button__icon"></i>Download the marine dataset
-      </button>
+<%= render partial: "partials/charts/chart-top-ten", locals: {
+  content: cms_fragment_render(:section_size_growth_content, @cms_page),
+  ga_id: 'Slug: @cms_page.slug - Component: regions top countries',
+  regionsTopCountries: @regionsTopCountries,
+  title: cms_fragment_render(:section_size_growth_title, @cms_page)
+} %>
 
-      <%= download_dropdown("marine", "general", [:csv, :shp, :pdf]) %>
-    </div>
+<%= render partial: "marine/sections/coverage_growth", locals: {
+  regionCoverage: @regionCoverage,
+} %>
 
-    <section id="distribution" class="template--marine__section container--profile">
-      <%= render partial: "marine/sections/distribution" %>
-    </section>
+<section class="map-section">
+  <%= render partial: "partials/maps/main", locals: {
+    map: @map
+  } %>
+</section>
 
-    <div id="growth" class="section--block-color">
-      <section class="template--marine__section container--profile">
-        <%= render partial: "marine/sections/growth" %>
-      </section>
-    </div>
+<section class="container spacer-small--top">
+  <%= render partial: "partials/cards/sites", locals: { 
+    cards: @marineSites, 
+    title: "#{t('global.area-types.wdpa')} (#{@marineSitesTotal})",
+    url: @marineViewAllUrl
+  } %>
+</section>
 
-    <section id="national" class="template--marine__section container--profile">
-      <%= render partial: "marine/sections/national" %>
-    </section>
+<section class="spacer-small--top spacer-small--bottom">
+  <%= render "partials/carousels/themes" %>
+</section>
 
-    <div id="size-distribution" class="section--block-color template--marine__fact-padding-bottom">
-      <section class="template--marine__section container--profile">
-        <%= render partial: "marine/sections/size_distribution" %>
-      </section>
-    </div>
-
-    <section id="ecoregions" class="template--marine__section container--profile template--marine__fact-padding-top">
-      <%= render partial: "marine/sections/ecoregions" %>
-    </section>
-
-    <div id="pledges">
-      <section class="template--marine__section">
-        <%= render partial: "marine/sections/pledges" %>
-      </section>
-
-      <section id="designations" class="template--marine__section container--profile">
-        <%= render partial: "marine/sections/designations" %>
-      </section>
-    </div>
-
-    <section id="greenlist" class="template--marine__section container--profile">
-      <%= render partial: "marine/sections/greenlist" %>
-    </section>
-
-    <footer class="template--marine__section container--profile template--marine__footer">
-      <%= render partial: "marine/sections/footer" %>
-    </footer>
-
-  </div>
-</div>
+<%= render "partials/ctas/live-report" %>

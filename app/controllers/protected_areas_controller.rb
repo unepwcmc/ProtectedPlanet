@@ -1,22 +1,53 @@
 class ProtectedAreasController < ApplicationController
   after_action :record_visit
   after_action :enable_caching
+  include MapHelper
 
   def show
     id = params[:id]
-    wdpa_id = id.match(/\D/).present? ? 0 : id.to_i
-    @protected_area = ProtectedArea.
-      where("slug = ? OR wdpa_id = ?", id, wdpa_id).
-      first
+    
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'protected_area', id)
+
+    # If found by slug, redirect to search page
+    # This is to overcome possible issues with PAs with same name/slug and different WDPA ID
+    pa = ProtectedArea.find_by(slug: id)
+    redirect_to search_areas_path(search_term: pa.name) and return if pa
+
+    @protected_area = ProtectedArea.find_by(wdpa_id: id.to_i)
 
     @protected_area or raise_404
 
     @presenter = ProtectedAreaPresenter.new @protected_area
     @countries = @protected_area.countries.without_geometry
     @other_designations = load_other_designations
-    @networks = load_networks
+    # @networks = load_networks
 
     @wikipedia_article = @protected_area.try(:wikipedia_article)
+
+    @locations = get_locations
+
+    # In the format [{title: ..., year: ..., responsible_party: ... }, ...]
+    @sources = @protected_area.sources_per_pa
+
+    @wdpa_other = get_other_sites
+
+
+
+    @otherWdpasViewAllUrl = determine_search_path(@protected_area)
+  
+
+    @map = {
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
+      point_query_services: point_query_services
+    }
+
+    @map_options = {
+      map: { 
+        boundsUrl: @protected_area.extent_url
+      }
+    }
+
+    helpers.opengraph_title_and_description_with_suffix(@protected_area.name)
 
     respond_to do |format|
       format.html
@@ -33,6 +64,33 @@ class ProtectedAreasController < ApplicationController
 
   private
 
+  def map_overlays
+    overlays(['individual_site'], {
+      individual_site: @protected_area.arcgis_layer_config
+    })
+  end
+
+  def point_query_services
+    all_services_for_point_query.map do |service|
+      service.merge({
+        queryString: wdpaid_where_query([@protected_area.wdpa_id])
+      })
+    end
+  end
+
+  def get_locations
+    locations = []
+    
+    if @countries.any?
+      @countries.each_with_index do |country, i|
+        locations << ActionController::Base.helpers.link_to(country.name, country_path(country.iso))
+      end
+    else
+      locations << 'Areas Beyond National Jurisdiction'
+    end
+    
+    locations.join(', ')
+  end
 
   def record_visit
     return if @protected_area.nil?
@@ -48,10 +106,31 @@ class ProtectedAreasController < ApplicationController
     other_designations.reject { |pa| pa.id == @protected_area.id }
   end
 
-  TRANSBOUNDARY_SITES = "Transboundary sites".freeze
-  def load_networks
-    networks = @protected_area.networks.reject(&:designation)
-    # ensure that transboundary sites network always appears first
-    networks.sort { |a,b| a.name == TRANSBOUNDARY_SITES ? -1 : a.name <=> b.name }
+  OTHER_SITES = 3.freeze
+  def get_other_sites
+    # Get country sites if the site has 1 country, get transboundary sites otherwise
+    other_sites = @countries.length == 1 ? country_own_sites : transboundary_sites
+    # If the sites taken are less than 3 get more random sites until 3 is reached
+    other_sites.count < OTHER_SITES ? other_sites.concat(remainder_sites(other_sites.count)) : other_sites
+  end
+
+  def transboundary_sites
+    ProtectedArea.without_geometry.all_except(@protected_area.id).transboundary_sites.take(OTHER_SITES)
+  end
+
+  def country_own_sites
+    @countries.first.protected_areas.without_geometry.all_except(@protected_area.id).take(OTHER_SITES)
+  end
+
+  def remainder_sites(other_sites)
+    ProtectedArea.without_geometry.all_except(@protected_area.id).take(OTHER_SITES - other_sites)
+  end
+
+  def determine_search_path(area)
+    if area.is_transboundary
+      search_areas_path(filters: { special_status: ['is_transboundary'] })
+    else
+      search_areas_path(filters: { location: { type: 'site', options: ["#{@countries.first.name}"] } })
+    end
   end
 end
