@@ -17,7 +17,7 @@ class PameController < ApplicationController
     @json = PameEvaluation.paginate_evaluations(DEFAULT_PARAMS).to_json
     @updated_at = UPDATED_AT
 
-    @tabs = get_tabs.to_json
+    @tabs = get_tabs(4).to_json
   end
 
   def list
