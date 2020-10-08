@@ -12,7 +12,7 @@ class OecmController < ApplicationController
       placeholder: I18n.t('global.placeholder.search-oecm')
     }.to_json
 
-    @tabs = get_tabs.to_json
+    @tabs = get_tabs(3).to_json
 
     @map = {
       overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize,
