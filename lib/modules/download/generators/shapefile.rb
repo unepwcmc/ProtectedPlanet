@@ -1,5 +1,5 @@
 class Download::Generators::Shapefile < Download::Generators::Base
-  TYPE = 'shapefile'
+  TYPE = 'shapefile'.freeze
   SHAPEFILE_PARTS = ['shp', 'shx',  'dbf', 'prj', 'cpg']
 
   QUERY_CONDITIONS = {
@@ -31,7 +31,9 @@ class Download::Generators::Shapefile < Download::Generators::Base
           shapefile_paths |= export_component name, props, i
         end
 
-        return false unless system("zip -j #{zip_path(i)} #{shapefile_paths.join(' ')}")
+        export_sources
+
+        system("zip -j #{zip_path(i)} #{shapefile_paths.join(' ')}")
       end
     end
     merge_files
@@ -103,7 +105,13 @@ class Download::Generators::Shapefile < Download::Generators::Base
   def merge_files
     range = (0..@number_of_pieces-1)
     files_paths = range.map { |i| zip_path(i) }.join(' ')
-    system("zip -j #{zip_path} #{files_paths}") and system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
+
+    system("zip -j #{zip_path} #{files_paths}") and
+    add_sources and
+    add_attachments and
+    add_shapefile_readme
+
     range.each { |i| FileUtils.rm_rf(zip_path(i)) }
   end
+
 end

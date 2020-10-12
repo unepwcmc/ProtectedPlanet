@@ -5,18 +5,16 @@
       :key="getVForKey('row', index)"
       class="table-head__cell"
     >
-      <span class="table-head__title-wrapper">
-        <span class="table-head__title">{{ heading.title }}</span>
+      <span class="table-head__title">{{ heading.title }}</span>
 
-        <tooltip 
-          v-if="!isFirstHeading(index)"
-          :on-hover="false" 
-          :text="getTooltipText(heading.id)"
-          :class="['carousel__tooltip', { 'tooltip--end': isLastHeading(index) }]"
-        >
-          <i class="icon--info-circle block"></i>
-        </tooltip>
-      </span>
+      <tooltip 
+        v-if="!isFirstHeading(index)"
+        :on-hover="false" 
+        :text="getTooltipText(heading.id)"
+        :class="['table-head__tooltip', { 'tooltip--end': isLastHeading(index) }]"
+      >
+        <slot />  
+      </tooltip>
 
       <table-sort 
         v-if="index !== 0"
@@ -32,7 +30,7 @@ import TableSort from './TableSort'
 import Tooltip from '../tooltip/Tooltip'
 
 export default {
-  name: 'TableHead',
+  name: 'table-head',
 
   components: { TableSort, Tooltip },
 

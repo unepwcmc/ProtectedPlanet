@@ -1,55 +1,53 @@
-<%= content_for :seo, "Learn about and visualise the protected area #{@protected_area.name} (#{@protected_area.designation.try(:name)}), situated in #{@countries.map(&:name).join("; ") rescue "Areas Beyond National Jurisdiction"}" %>
-<%= content_for :seo_image, tiles_url(type: "protected_area", id: @protected_area.wdpa_id, version: 1) %>
-<%= content_for :page_title, @protected_area.name %>
+<%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 
-<% has_designations = @protected_area.networks.detect(&:designation).present? %>
-
-<div class="template--site container--profile container--push-bottom pdf--protected-area">
-  <h1 class="header--h1-small">
-    <%= @protected_area.name %> in
-    <% if @countries.any? %>
-      <% @countries.each_with_index do |country, i| %>
-        <%= link_to country.name, country_path(country.iso) %><%= ", " if i < @countries.length - 2 %><%= " and " if i == @countries.length - 2 %>
-      <% end %>
-    <% else %>
-      <a href="#">Areas Beyond National Jurisdiction</a>
-    <% end %>
-  </h1>
-
-  <% if has_designations %>
-    <% unless @for_pdf %>
-      <%= render partial: "protected_areas/designations/info_box" %>
-    <% end %>
-  <% end %>
-
-  <% unless @for_pdf %>
-    <div class="header__links">
-      <div class="js-download-btn link link--hero-download u-only-desktop tooltip-old__trigger js-trigger">
-        <i class="fa fa-download"></i>Download site GIS file
-        <%= download_dropdown(@protected_area.wdpa_id, 'protected_area', (types rescue [:csv, :shp])) %>
+<div class="page--site bg--grey-xlight spacer-small--top">
+  <div class="container">
+    <section class="page__section--overview-map">
+      <%= render partial: "partials/stats/stats-overview", locals: { 
+        area: reported_area,
+        location: @locations.html_safe,
+        title: @protected_area.name,
+        type: map_layer_type,
+        wdpa_id: @protected_area.wdpa_id,
+        external_links: @presenter.external_links
+      } %>
+      
+      <div class="map--site">
+        <%= render partial: "partials/maps/header", locals: {
+          map: @map,
+          map_options: @map_options
+        } %>
       </div>
+    </section>
 
-      <%= link_to url_for(action: :show, id: @protected_area.wdpa_id, format: :pdf), class: 'link link--hero-download' do %>
-        <i class="fa fa-file-pdf-o"></i>Download site
-      <% end %>
+    <div class="page__col-wrapper pdf-break-after">
+      <div class="page__col-1">
+        <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
+      </div>
+      <div class="page__col-2">
+        <%= render partial: "partials/stats/stats-pame" , locals: { classes: 'page__col-child' } %>
+        <%= render partial: "partials/stats/stats-affiliations", locals: { 
+          classes: 'page__col-child',
+          affiliations: @presenter.affiliations 
+        } %>
+      </div>
     </div>
-  <% end %>
 
-  <%= render partial: "map_site" %>
-
-  <%= render partial: "factsheet" %>
-
-  <% if has_designations %>
-    <%= render partial: "designations" %>
-  <% end %>
-
-  <% if @networks.any? %>
-    <% unless @for_pdf %>
-      <%= render partial: "map_connections" %>
-    <% end %>
-
-    <%= render partial: "site_network_tabs" %>
-  <% end %>
-
-  <%#= render partial: "info_footer" %>
+    <%= render partial: "partials/stats/stats-sources", locals: { 
+      small: true,
+      sources: @sources 
+    } %>
+    
+    <section class="spacer-large--top">
+      <%= render partial: "partials/cards/sites", locals: { 
+        cards: @wdpa_other, 
+        title: t('thematic_area.wdpa.other_protected_areas'),
+        url: @otherWdpasViewAllUrl
+      } %>
+    </section>
+    
+    <section class="spacer-small--bottom">
+      <%= render partial: "partials/messages/message-citation", locals: { title: @protected_area.name } %>
+    </section>
+  </div>  
 </div>

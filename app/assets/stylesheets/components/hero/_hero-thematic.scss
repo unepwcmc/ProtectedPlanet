@@ -1,0 +1,68 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--thematic {
+  @include hero-medium;
+  @include hero-padding;
+
+  .hero__container { @include hero-container; }
+
+  .hero__content {
+    @include breakpoint($small) { 
+      padding-right: rem-calc(35);
+      padding-left: rem-calc(80);
+    }
+  
+    @include breakpoint($medium) { 
+      margin-right: 10%;
+      padding-right: 0;
+      padding-left: 0;
+    }
+  }
+
+  .hero__intro { @include hero-intro; }
+
+  .hero__small-text {
+    font-weight: $bold;
+    margin-top: rem-calc(24);
+
+    display: block;
+  }
+  
+  .hero__stats {
+    @include flex;
+    @include flex-no-shrink;
+    @include responsive(padding-right, 0, rem-calc(35),0); 
+    @include responsive(padding-left, 0, rem-calc(35), 0); 
+    @include responsive(width, 100%, 100%, 33%);
+  }
+
+  .hero__stats-content {
+    @include border-radius;
+    @include flex;
+    @include flex-column;
+    @include flex-h-between;
+    @include responsive(margin-top, rem-calc(20), rem-calc(28), 0);
+    @include responsive(padding, rem-calc(40), rem-calc(44), rem-calc(44)); 
+    width: 100%;
+  }
+
+  .hero__stat-number {
+    @include text-accent;
+  }
+
+  .hero__stat-number-small {
+    @include text-accent;
+    @include responsive(font-size, rem-calc(30), rem-calc(40), rem-calc(40));
+    padding-top: rem-calc(20);
+
+    display: block;
+  }
+
+  .hero__stat-text { 
+    @include hero-stat-text;
+    margin-bottom: 0;
+
+    display: block;
+  }
+}

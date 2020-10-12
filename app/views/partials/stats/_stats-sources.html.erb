@@ -1,0 +1,15 @@
+<div class="card--stats-sources sm-sources pdf-break-inside-avoid">
+  <h2 class="card__h2"><%= t('stats.sources.title') %> (<%= sources.count %>)</h2>
+  
+  <div class="card__content flex">
+    <ol class="list--underline-sources">
+      <% sources.each do |source| %>
+        <li class="list__li">
+          <span class="list__title"><%= source[:title] %></span>
+          <span class="list__date"><%= t('stats.sources.updated') %>: <%= source[:date_updated] %></span>
+          <span class="list__party"><%= source[:resp_party] %></span>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+</div>

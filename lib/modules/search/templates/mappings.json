@@ -1,127 +1,333 @@
 {
-    "settings": {
-	"analysis": {
-            "normalizer": {
-		"lc_normalizer": {
-                    "type": "custom",
-                    "char_filter": [],
-                    "filter": ["lowercase", "asciifolding"]
-		}
-            }
-	}
-    },
-    "mappings": {
-	"dynamic": "false",
-	"properties": {
-	    "id": {
-		"type": "long"
-	    },
+  "settings": {
+    "analysis": {
+      "filter": {
+        "english_stop": {
+          "type": "stop",
+          "stopwords": "_english_"
+        },
+        "english_stemmer": {
+          "type": "stemmer",
+          "language": "english"
+        },
+        "french_stop": {
+          "type": "stop",
+          "stopwords": "_french_"
+        },
+        "french_stemmer": {
+          "type": "stemmer",
+          "language": "french"
+        },
+        "spanish_stop": {
+          "type": "stop",
+          "stopwords": "_spanish_"
+        },
+        "spanish_stemmer": {
+          "type": "stemmer",
+          "language": "spanish"
+        }
+      },
+      "normalizer": {
+        "lc_normalizer": {
+          "type": "custom",
+          "char_filter": [],
+          "filter": ["lowercase", "asciifolding"]
+        }
+      },
+      "analyzer": {
+        "html_analyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "char_filter": ["html_strip"],
+          "filter": ["lowercase", "asciifolding"]
+        },
+        "html_analyzer_english": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "char_filter": ["html_strip"],
+          "filter": ["lowercase", "asciifolding", "english_stop", "english_stemmer"]
+        },
+        "html_analyzer_french": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "char_filter": ["html_strip"],
+          "filter": ["lowercase", "asciifolding", "french_stop", "french_stemmer"]
+        },
+        "html_analyzer_spanish": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "char_filter": ["html_strip"],
+          "filter": ["lowercase", "asciifolding", "spanish_stop", "spanish_stemmer"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "dynamic": "false",
+    "properties": {
+      "id": {
+        "type": "long"
+      },
 	    "wdpa_id": {
-		"type": "integer"
+        "type": "integer"
 	    },
 	    "type": {
-		"type": "text"
+        "type": "text"
 	    },
 	    "name": {
-		"type": "text",
-		"analyzer": "english"
+        "type": "text",
+        "analyzer": "english"
 	    },
 	    "original_name": {
-		"type": "text"
+        "type": "text"
 	    },
 	    "marine": {
-		"type": "boolean"
+        "type": "boolean"
 	    },
 	    "has_irreplaceability_info": {
-		"type": "boolean"
+        "type": "boolean"
 	    },
 	    "is_green_list": {
-		"type": "boolean"
+        "type": "boolean"
 	    },
 	    "has_parcc_info": {
-		"type": "boolean"
-	    },
+        "type": "boolean"
+      },
+      "is_oecm": {
+        "type": "boolean"
+      },
+      "is_transboundary": {
+        "type": "boolean"
+      },
 	    "coordinates": {
-		"type": "geo_point"
+        "type": "geo_point"
 	    },
 	    "sub_location": {
-		"type": "nested",
-		"properties": {
-		    "name": {
-			"type": "keyword"
-		    }
-		}
+        "type": "nested",
+        "properties": {
+          "name": {
+            "type": "keyword"
+          }
+        }
 	    },
 	    "iso_3": {
-		"type": "keyword",
-		"normalizer": "lc_normalizer"
+        "type": "keyword",
+        "normalizer": "lc_normalizer"
 	    },
 	    "region_name": {
-		"type": "text",
-		"analyzer": "english"
+        "type": "text",
+        "analyzer": "english"
 	    },
-
 	    "countries_for_index": {
-		"type": "nested",
-		"properties": {
-		    "id": {
-			"type": "integer"
-		    },
-		    "name": {
-			"type": "keyword",
-			"normalizer": "lc_normalizer"
-		    },
-		    "iso_3": {
-			"type": "keyword",
-			"normalizer": "lc_normalizer"
-		    },
-		    "region_for_index": {
-			"type": "nested",
-			"properties": {
-			    "id": {
-				"type": "integer"
-			    },
-			    "name": {
-				"type": "keyword",
-				"normalizer": "lc_normalizer"
-			    }
-			}
-		    }
-		}
-	    },
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "keyword",
+            "normalizer": "lc_normalizer"
+          },
+          "iso_3": {
+            "type": "keyword",
+            "normalizer": "lc_normalizer"
+          },
+          "region_for_index": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "keyword",
+                "normalizer": "lc_normalizer"
+              }
+            }
+          }
+        }
+      },
+      "regions_for_index": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "text",
+            "analyzer": "english"
+          },
+          "iso": {
+            "type": "keyword",
+            "normalizer": "lc_normalizer"
+          }
+        }
+      },
 	    "iucn_category": {
-		"type": "nested",
-		"properties": {
-		    "id": {
-			"type": "integer"
-		    },
-		    "name": {
-			"type": "keyword"
-		    }
-		}
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "keyword"
+          }
+        }
 	    },
 	    "designation": {
-		"type": "nested",
-		"properties": {
-		    "id": {
-			"type": "integer"
-		    },
-		    "name": {
-			"type": "keyword"
-		    }
-		}
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "keyword"
+          }
+        }
 	    },
 	    "governance": {
-		"type": "nested",
-		"properties": {
-		    "id": {
-			"type": "integer"
-		    },
-		    "name": {
-			"type": "keyword"
-		    }
-		}
-	    }
-	}
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "keyword"
+          }
+        }
+	    },
+      "label": {
+        "type": "text",
+        "analyzer": "html_analyzer",
+        "fields": {
+          "english": {
+            "type": "text",
+            "analyzer": "html_analyzer_english"
+          },
+          "french": {
+            "type": "text",
+            "analyzer": "html_analyzer_french"
+          },
+          "spanish": {
+            "type": "text",
+            "analyzer": "html_analyzer_spanish"
+          }
+        }
+      },
+      "ancestors": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "keyword"
+          }
+        }
+      },
+      "categories": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "keyword"
+          }
+        }
+      },
+      "topics": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "keyword"
+          }
+        }
+      },
+      "page_types": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "label": {
+            "type": "keyword"
+          }
+        }
+      },
+      "published_date": {
+        "type": "date",
+        "format": "yyyy-MM-dd"
+      },
+      "fragments_for_index": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "content": {
+            "type": "text",
+            "analyzer": "html_analyzer",
+            "fields": {
+              "english": {
+                "type": "text",
+                "analyzer": "html_analyzer_english"
+              },
+              "french": {
+                "type": "text",
+                "analyzer": "html_analyzer_french"
+              },
+              "spanish": {
+                "type": "text",
+                "analyzer": "html_analyzer_spanish"
+              }
+            }
+          }
+        }
+      },
+      "translations_for_index": {
+        "type": "nested",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "page_id": {
+            "type": "integer"
+          },
+          "published_date": {
+            "type": "date",
+            "format": "yyyy-MM-dd"
+          },
+          "fragments_for_index": {
+            "type": "nested",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "content": {
+                "type": "text",
+                "analyzer": "html_analyzer",
+                "fields": {
+                  "english": {
+                    "type": "text",
+                    "analyzer": "html_analyzer_english"
+                  },
+                  "french": {
+                    "type": "text",
+                    "analyzer": "html_analyzer_french"
+                  },
+                  "spanish": {
+                    "type": "text",
+                    "analyzer": "html_analyzer_spanish"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }

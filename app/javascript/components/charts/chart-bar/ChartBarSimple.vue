@@ -1,6 +1,6 @@
 <template>
   <div class="v-horizontal-bars">
-    <chart-bar-simple-bar v-for="bar, key in bars" 
+    <chart-bar-simple-bar v-for="(bar, key) in bars" 
       :key="key"
       :name="bar.name"
       :km="bar.km"
@@ -37,7 +37,7 @@
     },
 
     mounted () {
-      this.scrollMagicHandlers()
+      // this.scrollMagicHandlers()
     },
 
     methods: {

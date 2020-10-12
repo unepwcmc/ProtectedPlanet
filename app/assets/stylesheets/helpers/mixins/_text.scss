@@ -1,0 +1,183 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+//--------------------------------------------------
+// base mixins
+//--------------------------------------------------
+@mixin text-1 {
+  color: $header-font-color;
+  font-family: $header-font;
+  line-height: $header-font-line-height;
+}
+
+@mixin text-2 {
+  font-family: $body-font;
+  line-height: $body-font-line-height;
+}
+
+@mixin text-3 {
+  @include responsive(font-size, rem-calc(14), rem-calc(14), rem-calc(15));
+  font-family: $body-font;
+}
+
+//--------------------------------------------------
+// mixins used in classes
+//--------------------------------------------------
+@mixin h1 {
+  @include text-1;
+  @include responsive(font-size, rem-calc(30), rem-calc(40), rem-calc(40));
+  font-weight: $bold;
+}
+
+@mixin h1-home {
+  @include text-1;
+  @include responsive(font-size, rem-calc(40), rem-calc(40), rem-calc(70));
+  font-weight: $bold;
+  margin-top: 0;
+  margin-bottom: .35em;
+}
+
+@mixin h1-landing {
+  @include text-1;
+  @include responsive(font-size, rem-calc(30), rem-calc(50), rem-calc(50));
+  font-weight: $bold;
+}
+
+@mixin h1-resource {
+  @include text-1;
+  @include responsive(font-size, rem-calc(20), rem-calc(20), rem-calc(25));
+  font-weight: $bold;
+}
+
+@mixin h2 {
+  @include text-1;
+  @include responsive(font-size, rem-calc(20), rem-calc(25), rem-calc(25));
+  color: $header-font-color;
+}
+
+@mixin h2-wysiwyg {
+  font-family: $body-font;
+  line-height: $header-font-line-height;
+
+  @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
+}
+
+@mixin h3 {
+  @include text-2;
+  @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
+  font-weight: $bold;
+  margin-top: 0;
+  margin-bottom: .5em;
+}
+
+@mixin h3-wysiwyg {
+  font-family: $body-font;
+  line-height: $header-font-line-height;
+
+  @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
+}
+
+@mixin h4 {
+  @include text-2;
+  @include responsive(font-size, rem-calc(18), rem-calc(18), rem-calc(16));
+  margin: 1.5em 0 .8em 0;
+}
+
+@mixin h4-wysiwyg {
+  font-family: $body-font;
+  line-height: $header-font-line-height;
+
+  @include responsive(font-size, rem-calc(16), rem-calc(16), rem-calc(16));
+}
+
+@mixin h-big {
+  @include text-1;
+  @include responsive(font-size, rem-calc(25), rem-calc(40), rem-calc(40));
+  font-weight: $regular;
+  color: inherit;
+  margin: 0 0 .5em 0;
+}
+
+@mixin text-accent {
+  color: $primary;
+  font-size: rem-calc(30);
+  font-weight: $bold;
+  line-height: 1;
+
+  @include breakpoint($small) { font-size: rem-calc(60); }
+}
+
+@mixin text-alert {
+  @include text-intro;
+  background-color: $alert;
+  color: $white;
+  font-weight: $bold;
+  padding: rem-calc(14 20);
+}
+
+@mixin text-body {
+  @include text-2;
+  font-size: rem-calc(16);
+}
+
+@mixin text-card-title {
+  font-size: rem-calc(20);
+  font-weight: $bold;
+}
+
+@mixin text-filter {
+  @include text-2;
+  font-size: rem-calc(14);
+}
+
+@mixin text-footer-links {
+  @include text-2;
+  @include responsive(font-size, rem-calc(16), rem-calc(16), rem-calc(18));
+  text-decoration: none;
+}
+
+@mixin text-intro {
+  @include text-2;
+  @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
+  line-height: 1.35;
+}
+
+@mixin text-nav-link {
+  @include responsive(font-size, rem-calc(16), rem-calc(16), rem-calc(18));
+  font-weight: 500;
+  text-decoration: none;
+}
+
+@mixin text-pagination {
+  @include text-2;
+  @include responsive(font-size, rem-calc(16), rem-calc(16), rem-calc(18));
+}
+
+@mixin text-pagination-no-results {
+  @include text-2;
+  @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
+}
+
+@mixin text-small {
+  @include text-2;
+  color: $grey;
+  font-size: rem-calc(14);
+}
+
+@mixin text-tabs-fake {
+  @include text-2;
+  @include responsive(font-size, rem-calc(18), rem-calc(20), rem-calc(20));
+}
+
+@mixin text-theme-cards {
+  @include text-1;
+  @include responsive(font-size, rem-calc(25), rem-calc(40), rem-calc(40));
+  @include responsive(margin-bottom, rem-calc(14), rem-calc(4), rem-calc(4));
+  color: $white;
+  font-weight: $regular;
+}
+
+@mixin text-tooltip {
+  @include text-3;
+}

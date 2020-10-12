@@ -1,5 +1,7 @@
 class Country < ApplicationRecord
   include GeometryConcern
+  include MapHelper
+  include SourceHelper
 
   has_and_belongs_to_many :protected_areas
 
@@ -10,7 +12,7 @@ class Country < ApplicationRecord
   belongs_to :region_for_index, -> { select('regions.id, regions.name') }, :class_name => 'Region', :foreign_key => 'region_id'
 
   has_many :sub_locations
-  has_many :designations, -> { uniq }, through: :protected_areas
+  has_many :designations, -> { distinct }, through: :protected_areas
   has_many :iucn_categories, through: :protected_areas
 
   belongs_to :parent, class_name: "Country", foreign_key: :country_id
@@ -41,6 +43,16 @@ class Country < ApplicationRecord
     )
   end
 
+  def self.countries_with_gl
+    joins(:protected_areas).where.not(protected_areas: {green_list_status_id: nil}).distinct
+  end
+
+  def total_gl_coverage
+    protected_areas.green_list_areas.reduce(0) do |sum, x|
+      sum + x.reported_area
+    end
+  end
+
   def self.data_providers
     joins(:protected_areas).uniq
   end
@@ -49,17 +61,35 @@ class Country < ApplicationRecord
     js = self.as_json(
       only: [:name, :iso_3, :id],
       include: {
-        region_for_index: { only: [ :name] }
+        region_for_index: { only: [:name] }
       }
     )
     #crude remapping to flatten
-    js['region_name'] = js['region_for_index']['name']
-    return js
+    # TODO This line is now breaking the indexing. It looks like it's not require anymore
+    #js['region_name'] = js['region_for_index']['name']
+    js
+  end
+
+  def extent_url
+    country_extent_url(iso_3)
   end
 
   def random_protected_areas wanted=1
     random_offset = rand(protected_areas.count-wanted)
     protected_areas.offset(random_offset).limit(wanted)
+  end
+
+  def sources_per_country
+    sources = ActiveRecord::Base.connection.execute("""
+      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party 
+      FROM sources
+      INNER JOIN countries_protected_areas
+      ON countries_protected_areas.country_id = #{self.id}
+      INNER JOIN protected_areas_sources 
+      ON protected_areas_sources.protected_area_id = countries_protected_areas.protected_area_id
+      AND protected_areas_sources.source_id = sources.id
+      """)
+    convert_into_hash(sources.uniq)
   end
 
   def protected_areas_per_designation(jurisdiction=nil)
@@ -123,20 +153,33 @@ class Country < ApplicationRecord
 
   def protected_areas_per_governance
     ActiveRecord::Base.connection.execute("""
-      SELECT governances.id AS governance_id, governances.name AS governance_name, governances.governance_type AS governance_type, pas_per_governances.count, round((pas_per_governances.count::decimal/(SUM(pas_per_governances.count) OVER ())::decimal) * 100, 2) AS percentage
+      SELECT governances.id AS governance_id, governances.name AS governance_name, governances.governance_type AS governance_type, pas_per_governances.count AS count, round((pas_per_governances.count::decimal/(SUM(pas_per_governances.count) OVER ())::decimal) * 100, 2) AS percentage
       FROM governances
       INNER JOIN (
         #{protected_areas_inner_join(:governance_id)}
       ) AS pas_per_governances
         ON pas_per_governances.governance_id = governances.id
+        ORDER BY count DESC
     """)
+  end
+
+  def coverage_growth
+    _year = 'EXTRACT(year from legal_status_updated_at)'
+    ActiveRecord::Base.connection.execute(
+      <<-SQL
+        SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count
+        FROM (#{protected_areas_inner_join(_year)}) t
+        ORDER BY year
+      SQL
+    )
   end
 
   private
 
-  def protected_areas_inner_join group_by
+  def protected_areas_inner_join(group_by, extra_aggregation=nil)
+    _extra_aggr = extra_aggregation ? extra_aggregation.insert(0, ',') : nil
     """
-      SELECT #{group_by}, COUNT(protected_areas.id) AS count
+      SELECT #{group_by}, COUNT(protected_areas.id) AS count #{_extra_aggr}
       FROM protected_areas
       INNER JOIN countries_protected_areas
         ON protected_areas.id = countries_protected_areas.protected_area_id

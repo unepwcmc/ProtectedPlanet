@@ -1,10 +1,13 @@
 source 'https://rubygems.org'
 
-gem 'rails', '5.0.5'
+gem 'rails', '5.2.0'
 gem 'webpacker', '~> 4.0.2'
 
+gem 'bourbon'
+gem "neat"
+
 gem 'pg', '~> 0.21'
-gem 'activerecord-postgis-adapter', '4.1.0'
+gem 'activerecord-postgis-adapter', '5.1.0'
 gem 'dbf', '~> 2.0.7'
 #
 gem 'elasticsearch', '~> 7.2.0'
@@ -12,7 +15,7 @@ gem 'elasticsearch', '~> 7.2.0'
 gem 'sass-rails', '~> 5.0.7'
 gem 'sprockets-rails', '~> 3.2.1'
 
-gem 'uglifier', '~> 2.7.2'
+gem 'uglifier', '~> 4.1.17'
 gem 'coffee-rails', '~> 4.2.2'
 gem "autoprefixer-rails"
 gem "exception_notification", '~> 4.3.0'
@@ -27,7 +30,10 @@ gem 'vuejs-rails', '~> 2.3.2'
 gem 'sprockets-vue', '~> 0.1.0'
 
 gem 'rails-controller-testing'
+
 gem 'gdal', '~> 2.0'
+gem 'net-sftp'
+gem 'net-scp'
 #
 group :production, :staging do
 #  gem 'unicorn'
@@ -46,10 +52,11 @@ group :development do
   gem 'capistrano-sidekiq','1.0.2'
   gem 'capistrano-git-with-submodules', '2.0.3'
   gem 'capistrano-service'
+  gem 'awesome_print'
   # gem 'listen', '~> 3.1.5'
   # gem 'spring-watcher-listen', '~> 2.0.0'
   #
-  # gem 'web-console', '>= 3.3.0'
+  gem 'web-console', '>= 3.3.0'
   # gem 'listen', '>= 3.0.5', '< 3.2'
   # gem 'spring-watcher-listen', '~> 2.0.0'
 end
@@ -102,7 +109,7 @@ gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
 gem 'devise', '~> 4.7.1' # MAJOR VERSION CHANGE, CHECK DOCS
 
-gem 'comfortable_mexican_sofa', '1.12.10'
+gem 'comfortable_mexican_sofa', '~> 2.0.0'
 gem 'nokogiri', '~> 1.10.4'
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'

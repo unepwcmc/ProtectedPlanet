@@ -1,14 +1,15 @@
 class Download::Requesters::ProtectedArea < Download::Requesters::Base
-  def initialize wdpa_id
+  def initialize format, wdpa_id
+    @format = format
     @wdpa_id = wdpa_id
   end
 
   def request
     unless ['ready', 'generating'].include? generation_info['status']
-      DownloadWorkers::ProtectedArea.perform_async identifier
+      DownloadWorkers::ProtectedArea.perform_async(@format, identifier)
     end
 
-    {'token' => identifier}.merge(generation_info)
+    json_response
   end
 
   def domain

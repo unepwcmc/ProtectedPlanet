@@ -1,7 +1,7 @@
 <div class="vertical-nav">
   <h3 class="<%= bem('vertical-nav__element', :heading) %>">Sections</h3>
 
-  <% Nokogiri::HTML(cms_block_content(:content)).css('h2').each do |section| %>
+  <% Nokogiri::HTML(cms_fragment_content(:content)).css('h2').each do |section| %>
     <a href="#<%= section.attr('id') %>" class="vertical-nav__element"><%= section.content %></a>
   <% end %>
 </div>

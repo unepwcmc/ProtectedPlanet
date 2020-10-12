@@ -1,7 +1,15 @@
+### 4.0.0
+
+* Refresh! Major restyling of all components
+
+### 3.2.16
+
+* Add country, pame_country and marine stats (WDPA September 2020 release).
+
 ### 3.2.15
 
 * Added assorted statistics for August 2020 release.
-* Shapefile README included. 
+* Shapefile README included.
 
 ### 3.2.14
 

@@ -1,0 +1,62 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$circle-small-mobile: rem-calc(16);
+$circle-small-tablet: rem-calc(16);
+$circle-small-desktop: rem-calc(16);
+
+$circle-medium-mobile: rem-calc(217);
+$circle-medium-tablet: rem-calc(217);
+$circle-medium-desktop: rem-calc(249);
+
+$circle-large-mobile: rem-calc(238);
+$circle-large-tablet: rem-calc(303);
+$circle-large-desktop: rem-calc(344);
+
+//--------------------------------------------------
+// shared mixins
+//--------------------------------------------------
+@mixin circle-basic {
+  @include flex-center;
+  border-radius: 100%;
+}
+
+@mixin circle-large {
+  @include responsive(width, $circle-large-mobile, $circle-large-tablet, $circle-large-desktop);
+  @include responsive(height, $circle-large-mobile, $circle-large-tablet, $circle-large-desktop);
+}
+
+@mixin circle-medium {
+  @include responsive(width, $circle-medium-mobile, $circle-medium-tablet, $circle-medium-desktop);
+  @include responsive(height, $circle-medium-mobile, $circle-medium-tablet, $circle-medium-desktop);
+}
+
+@mixin circle-small {
+  @include responsive(width, $circle-small-mobile, $circle-small-tablet, $circle-small-desktop);
+  @include responsive(height, $circle-small-mobile, $circle-small-tablet, $circle-small-desktop);
+}
+
+//--------------------------------------------------
+// specific mixins
+//--------------------------------------------------
+@mixin circle-grey-xlight {
+  @include circle-basic;
+  @include circle-medium;
+  background-color: $grey-xlight;
+  border: solid 2px $grey-xlight;
+}
+
+@mixin circle-icon {
+  @include circle-basic;
+  @include circle-small;
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.circle--grey-black {
+  @include circle-basic;
+  @include circle-large;
+  background-color: $grey-black;
+  color: $white;
+}

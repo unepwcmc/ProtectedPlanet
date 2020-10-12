@@ -1,0 +1,85 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-row-stacked-height-mobile: rem-calc(44);
+$chart-row-stacked-height-tablet: rem-calc(82);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin chart-bars ($theme) {
+  @for $i from 1 through length($theme) {
+    .chart__bar:nth-child(#{$i}) {
+      background-color: nth($theme, $i);
+
+      .chart__percent {
+        @if $i%2 != 0 { 
+          @include chart-tooltip('bottom'); 
+          bottom: 100%;
+        }
+
+        @if $i%2 == 0 { 
+          @include chart-tooltip('top'); 
+          top: 100%;
+        }
+      }
+    }
+  }
+}
+
+@mixin chart-row-stacked {
+  margin-bottom: rem-calc(60);
+
+  @include breakpoint($small) { margin-bottom: rem-calc(70); }
+
+  .chart__chart {
+    margin-top: rem-calc(54);
+    width: 100%; height: $chart-row-stacked-height-mobile;
+
+    @include breakpoint($small) { 
+      height: $chart-row-stacked-height-tablet;
+    }
+  }
+
+  .chart__bar {
+    margin-bottom: 0;
+    height: 100%;
+
+    position: relative;
+  }
+
+  .chart__percent {
+    position: absolute;
+    left: 50%;
+
+    transform: translateX(-50%);
+  }
+}
+
+@mixin chart-theme ($theme) {
+  background-color: $grey-xlight;
+  .chart__bar { background-color: $theme; }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--row-stacked--basic {
+  @include chart-row-stacked;
+
+  &.theme--aqua { @include chart-theme($chart-aqua); }
+  &.theme--blue { @include chart-theme($chart-blue); }
+  &.theme--green { @include chart-theme($chart-green); }
+  &.theme--purple { @include chart-theme($chart-purple); }
+
+  .chart__percent {
+    @include chart-tooltip('bottom'); 
+
+    bottom: 100%;
+  }
+}
+
+&--row-stacked--designation {
+  @include chart-row-stacked;
+  @include chart-bars($theme-chart);
+}

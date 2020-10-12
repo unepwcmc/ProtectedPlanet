@@ -1,0 +1,17 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--basic {
+  @include hero-medium;
+  @include hero-padding;
+  @include flex;
+  @include flex-v-center;
+  z-index: 0;
+
+  .hero__content {
+    @include breakpoint($small) { width: 80%; }
+    @include breakpoint($medium) { width: 63%; }
+  }
+
+  .hero__intro { @include hero-intro; }
+}

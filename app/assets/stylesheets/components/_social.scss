@@ -1,0 +1,60 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin social-basic ($image) {
+  background-image: image-url($image);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  display: inline-block;
+
+  &:hover { opacity: .75; } 
+}
+
+@mixin social-icon ($image) {
+  @include social-basic($image);
+  @include responsive(margin-right, rem-calc(10), rem-calc(14), rem-calc(14));
+  @include responsive(width, rem-calc(31), rem-calc(41), rem-calc(41));
+  @include responsive(height, rem-calc(31), rem-calc(41), rem-calc(41));
+}
+
+@mixin social-icon-white ($image) {
+  @include social-basic($image);
+  margin: rem-calc(0 14 24 0);
+  width: rem-calc(26); height: rem-calc(30);
+
+  &:first-child { 
+    margin-top: 0;
+  }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.social {
+//--------------------------------------------------
+// following or sharing via social media 
+//--------------------------------------------------
+  &--media {
+    @include flex;
+    @include responsive(margin-right, rem-calc(3), rem-calc(14), rem-calc(20));
+    position: relative;
+
+    .social__icon {
+      &--email { @include social-icon('icons/email.svg'); }
+      &--facebook { @include social-icon('icons/facebook.svg'); }
+      &--linkedin { @include social-icon('icons/linkedin.svg'); }
+      &--twitter { @include social-icon('icons/twitter.svg'); }
+    }
+  }  
+
+  &--media-white {
+    .social__icon {
+      &--email { @include social-icon-white('icons/email-white.svg'); }
+      &--facebook { @include social-icon-white('icons/facebook-white.svg'); }
+      &--linkedin { @include social-icon-white('icons/linkedin-white.svg'); }
+      &--twitter { @include social-icon-white('icons/twitter-white.svg'); }
+    }
+  }
+}

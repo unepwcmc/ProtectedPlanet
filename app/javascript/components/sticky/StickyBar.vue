@@ -16,7 +16,7 @@ import ScrollMagic from 'scrollmagic'
 import mixinResponsive from '../../mixins/mixin-responsive.js'
 
 export default {
-  name: 'StickyBar',
+  name: 'sticky-bar',
 
   mixins: [ mixinResponsive],
 

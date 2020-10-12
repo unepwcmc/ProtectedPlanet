@@ -7,11 +7,11 @@
   object = {}
 
   object[:title] = child.label
-  object[:text] = cms_block_content_render(:text, child)
-  object[:url] = cms_block_content(:url, child)
-  
-  if(cms_block_content(:image, child).try(:file) && cms_block_content(:image, child).file.url(:dropdownImage)) 
-    object[:image] = cms_block_content(:image, child).file.url(:dropdownImage) 
+  object[:text] = cms_fragment_content(:text, child)
+  object[:url] = cms_fragment_content(:url, child)
+
+  if(cms_fragment_content(:image, child).try(:file) && cms_fragment_content(:image, child).file.url(:dropdownImage))
+    object[:image] = cms_fragment_content(:image, child).file.url(:dropdownImage)
   end
 
   @options.push(object)

@@ -1,0 +1,101 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$flickity-themes-cell-spacing: rem-calc(10);
+
+$flickity-themes-width-mobile: 80%;
+$flickity-themes-width-tablet: 74%;
+$flickity-themes-width-laptop: calc((100% - #{$gutter-large}*4 - #{$flickity-themes-cell-spacing}*2)/2);
+$flickity-themes-width-desktop: calc((#{$site-width-rem} - #{$gutter-large}*2)/2);
+
+$flickity-themes-slider-margin-mobile: calc((100% - #{$flickity-themes-width-mobile})/2);
+$flickity-themes-slider-margin-tablet: calc((100% - #{$flickity-themes-width-tablet})/2);
+$flickity-themes-slider-margin-laptop: calc((100% - #{$flickity-themes-width-laptop}*2)/2);
+$flickity-themes-slider-margin-desktop: calc((100% - #{$flickity-themes-width-desktop}*2)/2);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin flickity-themes-margin-left {
+  margin-left: $flickity-themes-slider-margin-mobile;
+  
+  @include breakpoint($small) { margin-left: $flickity-themes-slider-margin-tablet; }
+  @include breakpoint($medium) { margin-left: $flickity-themes-slider-margin-laptop; } 
+  @include breakpoint($large) { margin-left: $flickity-themes-slider-margin-desktop; }
+}
+
+@mixin flickity-themes-margin-right {
+  margin-right: $flickity-themes-slider-margin-mobile;
+  
+  @include breakpoint($small) { margin-right: $flickity-themes-slider-margin-tablet; }
+  @include breakpoint($medium) { margin-right: $flickity-themes-slider-margin-laptop; } 
+  @include breakpoint($large) { margin-right: $flickity-themes-slider-margin-desktop; }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--themes {
+  color: $white;
+  overflow: hidden;
+
+  .flickity-prev-next-button {
+    &:disabled { visibility: hidden; }
+
+    .flickity-button-icon { display: none; }
+  }
+
+  .flickity-prev-next-button.previous { 
+    @include button-prev;
+    @include flickity-themes-margin-left;
+    @include icon-circle-chevron-green-large-left();
+
+    left: 0;
+
+    transform: translate(-50%, -50%);
+  }
+
+  .flickity-prev-next-button.next { 
+    @include button-next;
+    @include flickity-themes-margin-right;
+    @include icon-circle-chevron-green-large-right();
+
+    right: 0;
+
+    transform: translate(50%, -50%);
+  }
+
+  .flickity-slider {
+    @include breakpoint($medium) {
+      margin-left: calc((100% - #{$gutter-large}*4 - #{$flickity-themes-width-laptop} - #{$flickity-themes-cell-spacing}*2)/-2);
+    } 
+
+    @include breakpoint($large) { 
+      margin-left: calc((#{$site-width-rem} - #{$gutter-large}*2 - #{$flickity-themes-width-desktop})/-2);
+    }
+  }
+
+  .carousel-cell {
+    padding-right: rem-calc(5);
+    padding-left: rem-calc(5);
+    width: $flickity-themes-width-mobile;
+    
+    @include breakpoint($small) {
+      padding-right: $flickity-themes-cell-spacing;
+      padding-left: $flickity-themes-cell-spacing;
+      width: $flickity-themes-width-tablet;
+    }
+
+    @include breakpoint($medium) {
+      padding-right: $flickity-themes-cell-spacing;
+      padding-left: $flickity-themes-cell-spacing;
+      width: $flickity-themes-width-laptop;
+    }
+
+    @include breakpoint($large) {
+      padding-right: $flickity-themes-cell-spacing;
+      padding-left: $flickity-themes-cell-spacing;
+      width: $flickity-themes-width-desktop;
+    }
+  }
+}

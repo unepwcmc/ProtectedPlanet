@@ -1,0 +1,25 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--area-type {
+  @include hero-medium;
+  @include hero-padding;
+  @include hero-stat-bubble;
+  z-index: 0;
+    
+  .hero__container {
+    @include hero-container;
+    margin-bottom: rem-calc(20);
+    
+    @include breakpoint($small) { flex-direction: row; }
+    @include breakpoint($medium) { margin-bottom: 0; }
+  }
+
+  .hero__content {
+    @include breakpoint($small) { width: 50%; }
+    @include breakpoint($medium) { 
+      margin-right: 20%;
+      width: 58%; 
+    }
+  }
+}

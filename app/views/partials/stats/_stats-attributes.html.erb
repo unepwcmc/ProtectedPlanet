@@ -1,0 +1,12 @@
+<div class="card--stats-attributes">
+  <h2 class="card__h2"><%= t('stats.attributes.title') %></h2>
+
+  <ul class="list--stripes">
+    <% attributes.each do |attribute| %>
+      <li class="list__li">
+        <span class="list__title"><%= attribute[:title] %></span>
+        <span class="list__value"><%= attribute[:value] %></span>
+      </li>
+    <% end %>
+  </ul>
+</div>

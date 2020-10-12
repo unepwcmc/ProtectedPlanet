@@ -1,0 +1,12 @@
+<div class="map--header">
+  <v-map 
+    :options="<%= map_options.to_json %>"
+    :services-for-point-query="<%= map[:point_query_services].to_json %>"
+  ></v-map>
+  <v-map-filters
+    title="<%= map_yml[:title] %>"
+    :overlays="<%= map[:overlays].to_json %>"
+    :is-hidden="true"
+  ></v-map-filters>
+  <v-map-disclaimer :disclaimer="<%= map_yml[:disclaimer].to_json %>"></v-map-disclaimer>
+</div> 

@@ -1,3 +1,8 @@
+# frozen_string_literal: true
+
+require 'cms_tags/date_not_null'
+require 'cms_tags/text_custom'
+require 'cms_tags/categories'
 # encoding: utf-8
 
 ComfortableMexicanSofa.configure do |config|
@@ -35,10 +40,10 @@ ComfortableMexicanSofa.configure do |config|
   # Sofa allows you to setup entire site from files. Database is updated with each
   # request (if necessary). Please note that database entries are destroyed if there's
   # no corresponding file. Fixtures are disabled by default.
-  config.enable_fixtures = false
+  # config.enable_fixtures = false
 
   # Path where fixtures can be located.
-  config.fixtures_path = File.expand_path('cms', Rails.root)
+  # config.fixtures_path = File.expand_path('cms', Rails.root)
 
   # Importing fixtures into Database
   # To load fixtures into the database just run this rake task:
@@ -94,14 +99,13 @@ ComfortableMexicanSofa.configure do |config|
 
   # Create thumbnails of all images uploaded to the CMS
   # - dropdownImage dimensions were calculated at thier largest in the desktop breakpoint
-  config.upload_file_options[:styles] = { dropdownImage: '853x853>'}
-
+  # config.upload_file_options[:styles] = { dropdownImage: '853x853>'}
 end
 
 # Default credentials for ComfortableMexicanSofa::AccessControl::AdminAuthentication
 # YOU REALLY WANT TO CHANGE THIS BEFORE PUTTING YOUR SITE LIVE
-ComfortableMexicanSofa::AccessControl::AdminAuthentication.username = ENV["COMFY_ADMIN_USERNAME"]
-ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = ENV["COMFY_ADMIN_PASSWORD"]
+ComfortableMexicanSofa::AccessControl::AdminAuthentication.username = ENV['COMFY_ADMIN_USERNAME']
+ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = ENV['COMFY_ADMIN_PASSWORD']
 
 # Uncomment this module and `config.admin_auth` above to use custom admin authentication
 # module ComfyAdminAuthentication
@@ -123,3 +127,66 @@ ComfortableMexicanSofa::AccessControl::AdminAuthentication.password = ENV["COMFY
 #     return true
 #   end
 # end
+
+module ComfortableMexicanSofa
+  # ------------------------------------------------------------- #
+  # ADD ADDITIONAL MODELS HERE THAT SHOULD BE INCLUDED IN EXPORTS #
+  # ------------------------------------------------------------- #
+  #
+  # THE EXPORT OF MODEL DATA IS IN A SIMPLE JSON FORMAT.
+  #
+  # PLEASE TAKE THIS INTO CONSIDERATION IF YOU INTEND TO RESTORE MORE COMPLEX
+  # MODEL DATA. YOU MAY NEED TO ENHANCE THIS EXTENDED FUNCTIONALITY IF SO.
+  # ------------------------------------------------------------- #
+  module ExtraModels
+    COMFY_CMS_INCLUDED_EXPORT_MODELS = %w[CallToAction].freeze
+  end
+
+  module Seeds
+    class Importer
+      old_import = instance_method(:import!)
+
+      # RUN THE EXISTING IMPORT, THEN RUN THE EXTENDED IMPORT BEHAVIOUR.
+      define_method(:import!) do |*args|
+        ActiveRecord::Base.transaction do
+          old_import.bind(self).call(*args)
+
+          ExtraModels::COMFY_CMS_INCLUDED_EXPORT_MODELS.each do |model_name|
+            path = ::File.join(ComfortableMexicanSofa.config.seeds_path, from, model_name.underscore + '.json')
+            raise Error, "File for import: '#{path}' is not found" unless ::File.exist?(path)
+
+            model_name.constantize.destroy_all
+            ::File.open(path, 'r') do |file|
+              ::JSON.load(file).each do |record|
+                model_name.constantize.create!(record)
+              end
+            end
+            message = "[CMS SEEDS] Imported Model \t #{model_name}"
+            ComfortableMexicanSofa.logger.info(message)
+          end
+        end
+      end
+    end
+
+    class Exporter
+      old_export = instance_method(:export!)
+
+      # RUN THE EXISTING EXPORT, THEN RUN THE EXTENDED EXPORT BEHAVIOUR.
+      define_method(:export!) do |*args|
+        ActiveRecord::Base.transaction do
+          old_export.bind(self).call(*args)
+
+          ExtraModels::COMFY_CMS_INCLUDED_EXPORT_MODELS.each do |model_name|
+            path = ::File.join(ComfortableMexicanSofa.config.seeds_path, to, model_name.underscore + '.json')
+            ::FileUtils.rm_rf(path)
+            ::File.open(path, 'w') do |file|
+              file.write(model_name.constantize.all.to_json)
+            end
+            message = "[CMS SEEDS] Exported Model \t #{model_name}"
+            ComfortableMexicanSofa.logger.info(message)
+          end
+        end
+      end
+    end
+  end
+end

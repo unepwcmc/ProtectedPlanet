@@ -1,0 +1,54 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$chart-row-pa-height: rem-calc(52);
+
+//--------------------------------------------------
+// pa row charts
+//--------------------------------------------------
+&--row-pa {
+  padding: rem-calc(40 0);
+
+  .chart {
+    &__row {
+      background-color: $white;
+      height: $chart-row-pa-height;
+    }
+
+      &__bar {
+        @include flex;
+        @include flex-h-between;
+        @include flex-v-center;
+        height: $chart-row-pa-height;
+
+        position: relative;
+      }
+
+      &__bar-label {
+        @include chart-tooltip('top', $black);
+        position: absolute;
+
+        top: calc(100% + 2px);
+        left: 50%;
+
+        transform: translateX(-50%);
+      }
+
+      &__coverage {
+        background-color: $chart-aqua;
+        height: rem-calc(52);
+        
+        position: relative;
+      }
+
+      &__coverage-label {
+        @include chart-tooltip('bottom', $black);
+        position: absolute;
+
+        bottom: calc(100% + 2px);
+        left: 50%;
+
+        transform: translateX(-50%);
+      }
+  }
+}

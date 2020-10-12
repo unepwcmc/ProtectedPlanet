@@ -1,0 +1,125 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$modal-commercial-link-height: rem-calc(107);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin modal-commercial-link () {
+  @include border-radius;
+  color: $white;
+  font-size: rem-calc(14);
+  line-height: 1.2;
+  margin: rem-calc(20 0);
+  padding: rem-calc(16);
+  text-align: center;
+  text-decoration: none;
+  width: 100%; height: $modal-commercial-link-height;
+
+  display: inline-block;
+
+  @include breakpoint($small) { 
+    margin: 0; 
+    width: rem-calc(310);
+  }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.modal-wrapper--download-commercial {
+
+  &.active::before { display: block; }
+
+  &::before {
+    background-color: rgba($black, .6);
+    content: '';
+
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+  }
+}
+
+.modal--download-commercial {
+  @include border-radius;
+  background-color: $white;
+  padding: rem-calc(34 26 14 26);
+  width: 90%;
+
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  
+  transform: translate(-50%, -50%);
+  
+  @include breakpoint($small) { 
+    padding: rem-calc(32 38 60 38);
+    width: rem-calc(748); 
+  }
+
+  &.active { display: block; }
+
+  .modal {
+    &__close {
+      @include button-close;
+
+      position: absolute;
+      top: rem-calc(18);
+      right: rem-calc(18);
+    }
+
+    &__divider {
+      background-color: $grey-light;
+      width: 100%; height: 1px;
+
+      display: block;
+
+      @include breakpoint($small) { 
+        width: 1px; height: $modal-commercial-link-height;
+      }
+    }
+
+    &__links {
+      @include breakpoint($small) {
+        display: flex;
+        justify-content: space-between;
+      }
+    } 
+    
+    &__link-commercial {
+      @include modal-commercial-link;
+      background-color: $purple;
+    }
+
+    &__link-non-commercial {
+      @include modal-commercial-link;
+      background-color: $primary;
+      cursor: pointer;
+    }
+
+    &__link-title {
+      font-size: rem-calc(20);
+      font-weight: bold;
+      margin-bottom: rem-calc(10);
+
+      display: block;
+    }
+
+    &__title {
+      font-size: rem-calc(20);
+      font-weight: $bold;
+      margin: rem-calc(0 0 20 0);
+      text-align: center;
+
+      @include breakpoint($small) { margin-bottom: rem-calc(40); }
+    }
+  }
+}

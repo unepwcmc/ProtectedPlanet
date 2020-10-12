@@ -1,5 +1,6 @@
 class ProtectedArea < ApplicationRecord
   include GeometryConcern
+  include SourceHelper
 
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'
@@ -19,15 +20,30 @@ class ProtectedArea < ApplicationRecord
   belongs_to :designation
   delegate :jurisdiction, to: :designation, allow_nil: true
   belongs_to :wikipedia_article
+  belongs_to :green_list_status
 
   after_create :create_slug
+
+  scope :all_except, -> (pa) { where.not(id: pa) }
+
+  scope :oecms, -> { where(is_oecm: true) }
+  scope :wdpas, -> { where(is_oecm: false) }
+
+  scope :terrestrial_areas, -> {
+    where(marine: false)
+  }
 
   scope :marine_areas, -> {
     where(marine: true)
   }
 
   scope :green_list_areas, -> {
-    where(is_green_list: true)
+    where.not(green_list_status_id: nil)
+  }
+
+  scope :non_candidate_green_list_areas, -> {
+    includes(:green_list_status)
+    .where.not(green_list_statuses: {status: 'Candidate'}, green_list_status_id: nil)
   }
 
   scope :most_protected_marine_areas, -> (limit) {
@@ -65,14 +81,57 @@ class ProtectedArea < ApplicationRecord
     }
   end
 
+  def is_green_list
+    green_list_status_id.present?
+  end
+
+  def self.greenlist_coverage_growth(start_year = 0)
+    # Is in this format: [{year: year, value: area}...]
+    # Takes an optional start year from which to start counting
+    growth = <<-SQL
+      SELECT DISTINCT ON(t.year) JSON_BUILD_OBJECT(
+        'year', t.year, 'value', t.area
+      ) AS data
+      FROM (
+        SELECT pa.legal_status_updated_at AS year,
+              SUM(pa.gis_area) OVER(ORDER BY pa.legal_status_updated_at) AS area
+        FROM protected_areas pa
+        JOIN green_list_statuses gls ON gls.id = pa.green_list_status_id
+        WHERE gls.status <> 'Candidate'
+        ORDER BY year
+      ) t
+      WHERE EXTRACT(YEAR FROM t.year) >= ?
+    SQL
+    
+    result = ActiveRecord::Base.connection.execute(
+      ActiveRecord::Base.send(:sanitize_sql_array, [
+        growth, start_year
+      ])
+    )
+
+    result.map { |r| JSON.parse(r['data']) }
+  end
+
+  def sources_per_pa
+    sources = ActiveRecord::Base.connection.execute("""
+      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party 
+      FROM sources
+      INNER JOIN protected_areas_sources 
+      ON protected_areas_sources.protected_area_id = #{self.id}
+      AND protected_areas_sources.source_id = sources.id
+      """)
+      # Helper method
+    convert_into_hash(sources.uniq)
+  end
+
   def wdpa_ids
     wdpa_id
   end
 
   def as_indexed_json options={}
-    js = self.as_json(
-      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_green_list],
-      methods: [:coordinates],
+    self.as_json(
+      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_oecm],
+      methods: [:coordinates, :is_green_list, :is_transboundary],
       include: {
         countries_for_index: {
           only: [:name, :id, :iso_3],
@@ -84,7 +143,6 @@ class ProtectedArea < ApplicationRecord
         governance: { only: [:id, :name] }
       }
     )
-    return js
   end
 
   def as_api_feeder
@@ -142,7 +200,58 @@ class ProtectedArea < ApplicationRecord
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
+  def self.transboundary_sites    
+    ProtectedArea.joins(:countries)
+    .group('protected_areas.id')
+    .having('COUNT(countries_protected_areas.country_id) > 1')
+  end
+
+  def is_transboundary
+    countries.count > 1
+  end
+  
+  def arcgis_layer_config
+    {
+      layers: [{url: arcgis_layer, isPoint: is_point?}],
+      color: layer_color,
+      queryString: arcgis_query_string
+    }
+  end
+
+  def layer_color
+    if is_oecm
+      OVERLAY_YELLOW
+    elsif marine
+      OVERLAY_BLUE
+    else
+      OVERLAY_GREEN
+    end
+  end
+
+  def arcgis_layer
+    if is_oecm
+      OECM_LAYER_URL
+    else
+      is_point? ? WDPA_POINT_LAYER_URL : WDPA_POLY_LAYER_URL
+    end
+  end
+
+  def arcgis_query_string
+    "/query?where=wdpaid+%3D+%27#{wdpa_id}%27&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
+  end
+
+  def extent_url
+    {
+      url: "#{arcgis_layer}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      padding: 0.2
+    }
+  end
+
   private
+
+  def is_point?
+    the_geom.geometry_type.type_name.match('Point').present?
+  end
 
   def bounding_box_query
     dirty_query = """
@@ -188,7 +297,7 @@ class ProtectedArea < ApplicationRecord
   end
 
   def create_slug
-    updated_slug = [name, designation.try(:name)].join(' ').parameterize
+    updated_slug = [wdpa_id, name, designation.try(:name)].join(' ').parameterize
     update_attributes(slug: updated_slug)
   end
 

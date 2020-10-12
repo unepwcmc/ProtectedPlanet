@@ -41,7 +41,7 @@
     },
 
     mounted () {
-      this.scrollMagicHandlers()
+      // this.scrollMagicHandlers()
     },
 
     methods: {

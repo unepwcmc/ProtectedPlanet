@@ -1,0 +1,161 @@
+//--------------------------------------------------
+// html elements
+//--------------------------------------------------
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  @include text-body;
+  color: $body-font-colour;
+  font-family: $body-font;
+  margin: 0;
+}
+
+section {
+  
+}
+
+h1 { 
+  @include h1; 
+
+  &.h1-home { @include h1-home; }
+}
+
+h2 { 
+  @include h2; 
+  
+  &.h2-big { @include h-big;  }
+  &.h2-big-white { @include h-big; color: $white; }
+  .container--component & { margin-top: 0; }
+}
+
+h3 {
+  @include h3;
+
+  &.h3-big-white { @include h-big; color: $white; }
+}
+
+h4 {
+  @include h4;
+}
+  
+p,a { 
+  color: inherit; 
+  line-height: $p-font-line-height;
+
+  &.text-intro { @include text-intro; }
+}
+  
+a { 
+  text-decoration: underline; 
+
+  &:hover { text-decoration: none; }
+}
+
+label { cursor: pointer; }
+
+em { font-style: italic; }
+
+img { max-width: 100%; }
+
+sup {
+  font-size: .6em;
+}
+
+input {
+  &:focus { @include input-custom-focus; }
+}
+
+//--------------------------------------------------
+// site structure
+//--------------------------------------------------
+.site-width { @include site-width; }
+.site-width-medium { @include site-width-medium; }
+
+.gutter {
+  &-left { @include gutters('left'); }
+
+  &-right { @include gutters('right'); }
+}
+
+.container {
+  @include site-width;
+  @include container;
+}
+
+.container--medium { @include container-medium; }
+
+.container--desktop-up {
+  @include breakpoint($large) {
+    @include site-width;
+    @include container;
+  }
+}
+
+.container--component {
+  $container-component-padding: calc((100% - #{$site-width-medium-desktop})/2);
+  $cc-padding-small: rem-calc(20 $gutter-small 20);
+  $cc-padding-medium: rem-calc(30 $gutter-medium 30);
+  $cc-padding-large: rem-calc(40 $container-component-padding 40);
+
+  @include bg-grey-xlight;
+  @include border-radius;
+  @include responsive(margin-top, rem-calc(26), rem-calc(30), rem-calc(36));
+  @include responsive(margin-bottom, rem-calc(26), rem-calc(30), rem-calc(36));
+  @include responsive(padding, $cc-padding-small, $cc-padding-medium, $cc-padding-large);
+}
+
+//--------------------------------------------------
+// component spacers
+//--------------------------------------------------
+@mixin spacer-top($mobile, $tablet, $desktop) {
+  padding-top: $mobile;
+  @include breakpoint($small) { padding-top: $tablet; }
+  @include breakpoint($medium) { padding-top: $desktop; }
+}
+
+@mixin spacer-bottom($mobile, $tablet, $desktop) {
+  padding-bottom: $mobile;
+  @include breakpoint($small) { padding-bottom: $tablet; }
+  @include breakpoint($medium) { padding-bottom: $desktop; }
+}
+
+.spacer-small--top {
+  @include spacer-top($spacer-small-mobile, $spacer-small-tablet, $spacer-small-desktop);
+}
+
+.spacer-small--bottom {
+  @include spacer-bottom($spacer-small-mobile, $spacer-small-tablet, $spacer-small-desktop);
+}
+
+.spacer-medium--top {
+  @include spacer-top($spacer-medium-mobile, $spacer-medium-tablet, $spacer-medium-desktop);
+}
+
+.spacer-medium--bottom {
+  @include spacer-bottom($spacer-medium-mobile, $spacer-medium-tablet, $spacer-medium-desktop);
+}
+
+.spacer-large--top {
+  @include spacer-top($spacer-large-mobile, $spacer-large-tablet, $spacer-large-desktop);
+}
+
+.spacer-large--bottom {
+  @include spacer-bottom($spacer-large-mobile, $spacer-large-tablet, $spacer-large-desktop);
+}
+
+//--------------------------------------------------
+// item padding
+//--------------------------------------------------
+@mixin item-spacing($sides:'all', $type:'padding') {
+  $sides: if($sides == 'all', ('top','bottom','left','right'), ($sides));
+
+  @each $s in $sides {
+    #{$type}-#{$s}: $item-spacing-small;
+
+    @include breakpoint($medium) { #{$type}-#{$s}: $item-spacing-medium; }
+    @include breakpoint($large) { #{$type}-#{$s}: $item-spacing-large; }
+  }
+}

@@ -1,18 +1,77 @@
+# frozen_string_literal: true
+require 'enumerator'
+
 class CountryController < ApplicationController
   after_action :enable_caching
-  before_action :load_vars, except: [:codes, :compare]
+  before_action :load_vars, except: %i[codes compare]
+  include MapHelper
 
   def show
+    @country_presenter = CountryPresenter.new @country
+
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
+
+    @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
+   
+    @iucn_categories = @country.protected_areas_per_iucn_category
+    @iucn_categories_chart = @country.protected_areas_per_iucn_category
+      .enum_for(:each_with_index)
+      .map do |category, i|
+      { 
+        id: i+1,
+        title: category['iucn_category_name'], 
+        value: category['count'] 
+      }
+    end.to_json
+
+    @governance_types = @country.protected_areas_per_governance
+    @governance_chart = @governance_types.map do |item|
+      { 
+        id: item['governance_id'],
+        title: item['governance_name'],
+        value: item['count']
+      }
+    end.to_json
+
+    @coverage_growth = @country_presenter.coverage_growth 
+
+    @country_designations = @country_presenter.designations
+
+    # For the stacked row chart percentages
+    @designation_percentages = @country_designations.map do |designation|
+      { percent: designation[:percent] }
+    end.to_json
+
+    @sites = @country.protected_areas.take(3)
+    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
+
+    @sources = @country.sources_per_country
+
+    @total_oecm = @country.protected_areas.oecms.count
+    @total_pame = @country.protected_areas.with_pame_evaluations.count
+    @total_wdpa = @country.protected_areas.wdpas.count
+
+    @map = {
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
+      point_query_services: all_services_for_point_query
+    }
+
+    @map_options = {
+      map: { boundsUrl: @country.extent_url }
+    }
+    
+    helpers.opengraph_title_and_description_with_suffix(@country.name)
+
     respond_to do |format|
       format.html
-      format.pdf {
-        rasterizer = Rails.root.join("vendor/assets/javascripts/rasterize.js")
+      format.pdf do
+        rasterizer = Rails.root.join('vendor/assets/javascripts/rasterize.js')
         url = url_for(action: :pdf, iso: @country.iso)
         dest_pdf = Rails.root.join("tmp/#{@country.iso}-country.pdf").to_s
 
         `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
         send_file dest_pdf, type: 'application/pdf'
-      }
+      end
     end
   end
 
@@ -22,10 +81,10 @@ class CountryController < ApplicationController
 
   def codes
     countries = Country.order(:name).pluck(:name, :iso_3)
-    csv = CSV.generate { |rows|
-      rows << ["Name", "ISO3"]
+    csv = CSV.generate do |rows|
+      rows << %w[Name ISO3]
       countries.each(&rows.method(:<<))
-    }
+    end
 
     send_data csv, filename: 'protectedplanet-country-codes.csv'
   end
@@ -36,24 +95,37 @@ class CountryController < ApplicationController
   end
 
   def protected_areas
-    redirect_to search_path(main: "country", country: @country.id)
+    redirect_to search_path(main: 'country', country: @country.id)
   end
 
   private
 
+  def map_overlays
+    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+  end
+
   def load_vars
     @country = if params[:iso].size == 2
-      Country.where(iso: params[:iso].upcase).first
-    else
-      Country.where(iso_3: params[:iso].upcase).first
+                 Country.where(iso: params[:iso].upcase).first
+               else
+                 Country.where(iso_3: params[:iso].upcase).first
     end
 
     @country or raise_404
 
-    @presenter = StatisticPresenter.new @country
     @pame_statistics = @country.pame_statistic
-    @designations_by_jurisdiction = @country.designations.group_by { |design|
-      design.jurisdiction.name rescue "Not Reported"
-    }
+  end
+
+  def pas_sample(size = 3)
+    iso = params[:iso].upcase
+    pas = nil
+
+    pas = if iso.size == 2
+            ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
+          else
+            ProtectedArea.joins(:countries).where("countries.iso_3 = '#{iso}'")
+          end
+
+    pas.order(:name).first(size)
   end
 end

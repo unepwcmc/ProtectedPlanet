@@ -52,6 +52,7 @@ branches:
   only:
     - master
     - develop
+    - refresh
 addons:
   code_climate:
     repo_token:

@@ -9,7 +9,8 @@ module Download
       :no_tk_area, :status, :status_yr,
       :gov_type, :own_type, :mang_auth,
       :mang_plan, :verif, :metadataid,
-      :sub_loc, :parent_iso3, :iso3
+      :sub_loc, :parent_iso3, :iso3,
+      :supp_info, :cons_obj
     ]
 
     POLYGONS_COLUMNS = POINTS_COLUMNS.clone
@@ -17,7 +18,7 @@ module Download
 
     SOURCE_COLUMNS = [
       :metadataid, :data_title, :resp_party,
-      :year, :char_set,
+      :year, :update_yr, :char_set,
       :ref_system, :scale, :lineage,
       :citation, :disclaimer, :language
     ]

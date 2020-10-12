@@ -1,0 +1,30 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--circles {
+  
+  .cards {
+    &__cards {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+
+      @include breakpoint($small) { 
+        flex-direction: row;
+        justify-content: space-around;
+      }
+    }
+  }
+
+  .card {
+    @include circle-grey-xlight;
+    @include flex;
+    @include flex-column;
+    @include responsive(margin-bottom, rem-calc(14), 0, 0);
+    text-decoration: none;
+
+    &:hover { border: solid 2px $primary; }
+
+    &__title { margin: rem-calc(10); }
+  }
+}

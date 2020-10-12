@@ -7,8 +7,8 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
 
     put(
       '/admin/maintenance',
-      {maintenance_mode_on: true},
-      {"X-Auth-Key" => key}
+      params: { maintenance_mode_on: true },
+      headers: { "X-Auth-Key" => key }
     )
     assert_response :success
 
@@ -23,22 +23,23 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
   test 'PUT /admin/maintenance mode, given a false mode status, turns
    off maintenance mode' do
     key = Rails.application.secrets.maintenance_mode_key
-
+    seed_cms_home
+    
     put(
       '/admin/maintenance',
-      {maintenance_mode_on: true},
-      {"X-Auth-Key" => key}
+      params: { maintenance_mode_on: true },
+      headers: { "X-Auth-Key" => key }
     )
     assert_response :success
 
     put(
       '/admin/maintenance',
-      {maintenance_mode_on: false},
-      {"X-Auth-Key" => key}
+      params: { maintenance_mode_on: false },
+      headers: { "X-Auth-Key" => key }
     )
     assert_response :success
 
-    get '/'
+    get '/en'
     assert_response :success
 
     assert_no_match(/Down for Maintenance/, @response.body)
@@ -49,7 +50,7 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
 
   test 'PUT /admin/maintenance returns 401 if an invalid authentication
    code is given' do
-    put '/admin/maintenance', maintenance_mode_on: false
+    put '/admin/maintenance', params: { maintenance_mode_on: false }
     assert_response 401
   end
 
@@ -58,7 +59,7 @@ class AdminMaintenanceTest < ActionDispatch::IntegrationTest
     Rails.cache.write(cache_key, 'value')
 
     key = Rails.application.secrets.maintenance_mode_key
-    put('/admin/clear_cache', {}, {"X-Auth-Key" => key})
+    put '/admin/clear_cache', params: {}, headers: {"X-Auth-Key" => key}
 
     assert_response :success
     assert_nil Rails.cache.read(cache_key)

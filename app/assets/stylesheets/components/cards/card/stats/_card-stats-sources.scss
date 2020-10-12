@@ -1,0 +1,12 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--stats-sources {
+  @include card-stats;
+
+  .card {
+    &__content { @include card-stat-content; }
+
+    &__h2 { @include card-stats-h2; }
+  }
+}

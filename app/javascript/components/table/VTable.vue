@@ -14,17 +14,17 @@
 <script>
 import axios from 'axios'
 import ScrollMagic from 'scrollmagic'
-import { setCsrfToken } from '../../helpers/request-helpers'
+import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import mixinId from '../../mixins/mixin-ids'
 
 import TableRow from './TableRow'
 
 export default {
-  name: 'VTable',
+  name: 'v-table',
 
   components: { TableRow },
 
-  mixins: [ mixinId ],
+  mixins: [ mixinAxiosHelpers, mixinId ],
 
   props: {
     dataSrc: {
@@ -47,7 +47,7 @@ export default {
 
   data () {
     return {
-      items: () => {},
+      items: () => ({}),
       loadedItems: 0,
       isLoading: false
     }
@@ -108,6 +108,8 @@ export default {
       endpoint = endpoint.replace('SORTBY', sortField)
       endpoint = endpoint.replace('ORDER', sortDirection)
       endpoint = endpoint.replace('SEARCHID', searchId)
+
+      this.axiosSetHeaders()
 
       axios.get(endpoint)
         .then(response => {

@@ -1,0 +1,64 @@
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+$cards-squares-width-tablet: 48%;
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin cards-squares-card { 
+  @include responsive(margin, rem-calc(10 0), rem-calc(14 0), rem-calc(17 0));
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--squares {
+  .cards {
+    &__cards {
+      @include flex;
+      @include flex-h-between;
+      @include flex-wrap;
+    }
+
+    &__button-wrapper { 
+      @include cards-squares-card;
+      @include flex;
+      @include flex-center;
+      @include responsive(background-color, transparent, $grey-xlight, transparent);
+      @include responsive(width, 100%, $cards-squares-width-tablet, 100%);
+    }
+
+      &__button {
+        @include responsive(margin, rem-calc(10 auto 20 auto), rem-calc(28 0), 0);
+
+      }
+  }
+
+  .card {
+    @include cards-squares-card;
+    @include responsive(padding-top, 100%, 48%, 30%);
+    @include responsive(width, 100%, $cards-squares-width-tablet, 31%);
+    color: $white;
+
+    position: relative;
+
+    &__link {
+      @include bg-image-overlay-hover;
+      @include border-radius;
+      @include flex;
+      @include flex-column;
+      @include flex-center;
+      background-color: $grey-dark;
+      background-position: center;
+      background-size: cover;
+      text-decoration: none;
+      width: 100%; height: 100%;
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      &:before { @include border-radius; }
+    }
+  }
+}

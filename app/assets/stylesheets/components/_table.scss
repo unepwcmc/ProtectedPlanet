@@ -1,0 +1,62 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$table-head-bg-color: $grey-xdark;
+
+$table-horizontal-scroll-cell-width-mobile: 86vw;
+$table-horizontal-scroll-cell-width-tablet: 40vw;
+$table-horizontal-scroll-cell-width-desktop: 80vw;
+
+$table-horizontal-scroll-row-width-mobile: $table-horizontal-scroll-cell-width-mobile * 4;
+$table-horizontal-scroll-row-width-tablet: $table-horizontal-scroll-cell-width-tablet * 4;
+$table-horizontal-scroll-row-width-desktop: 80vw;
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+@mixin table-cell-basic() {
+  @include responsive(margin-right, rem-calc(20), rem-calc(20), rem-calc(20), 0);
+  @include responsive(padding, rem-calc(8 10), rem-calc(8 10), rem-calc(8 10), rem-calc(18 20));
+  @include responsive(width, $table-horizontal-scroll-cell-width-mobile, $table-horizontal-scroll-cell-width-tablet, $table-horizontal-scroll-cell-width-tablet, 20%);
+}
+
+@mixin table-row-spacing() {
+  @include responsive(margin-bottom, rem-calc(30), rem-calc(32), rem-calc(32), rem-calc(16));
+}
+
+// fix the columns widths so that they don't change
+// size when you use the pagination
+@mixin table-pame-column-widths() {
+  &:first-child { width: 142px; }
+  &:nth-child(2) { width: 138px; }
+  &:nth-child(3) { width: 127px; }
+  &:nth-child(4) { width: 128px; }
+  &:nth-child(5) { width: 100px; }
+  &:nth-child(6) { width: 138px; }
+  &:nth-child(7) { width: 128px; }
+  &:nth-child(8) { width: 128px; }
+  &:nth-child(9) { width: 110px; }
+}
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.filtered-table {
+  min-height: $filters-menu-max-height + rem-calc(200);
+}
+
+//--------------------------------------------------
+// table head
+//--------------------------------------------------
+.table-head {
+  @import './table/table-head-horizontal-scroll';
+  @import './table/table-head-pame';
+}
+
+//--------------------------------------------------
+// table body
+//--------------------------------------------------
+.table {
+  @import './table/table-horizontal-scroll';
+  @import './table/table-pame';
+}

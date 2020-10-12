@@ -2,5 +2,6 @@
 
 FactoryGirl.define do
   factory :country_statistic do
+    association :country, factory: :country, name: 'My country'
   end
 end

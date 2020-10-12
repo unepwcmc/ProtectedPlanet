@@ -1,0 +1,40 @@
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.page--site {
+  .page {
+    &__section--overview-map {
+      @include flex-stack-mobile;
+    }
+
+    &__col-wrapper {
+      @include flex;
+      @include flex-wrap;
+
+      @include breakpoint($medium) { @include flex-nowrap; } 
+    }
+
+      &__col-1 {
+        width: 100%;
+        @include breakpoint($medium) { width: calc(50% - 15px); }
+
+        .pdf & { 
+          margin-right: 30px;
+          width: 555px; 
+        }
+      }
+
+      &__col-2 {
+        width: 100%;
+        
+        @include breakpoint($medium) { 
+          margin-left: auto;
+          width: calc(50% - 15px);
+
+          display: block;
+        }
+
+        .pdf & { width: 555px; }
+      }
+  }
+}

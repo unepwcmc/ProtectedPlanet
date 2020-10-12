@@ -1,42 +1,12 @@
-<%= content_for :page_title, search_title(params, true) %>
-
-<div class="container--fullscreen container--push-bottom">
-
-  <% if @search.present? && @search.results.count > 0 %>
-    <div class="u-only-desktop js-download-btn hero__top u-center">
-      <h1 class="hero__title--base hero__title"><%= search_title(params) %></h1>
-      <div class="u-only-desktop tooltip-old__trigger u-right js-trigger link-with-icon--bold link-with-icon">
-        <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
-        <%= download_dropdown('search', 'search', [:csv, :shp]) %>
-      </div>
-    </div>
-
-    <div class="hero hero--no-margin-bottom u-only-mobile">
-      <div class="js-download-btn hero__top u-center">
-        <h1 class="hero__title--base hero__title"><%= search_title(params) %></h1>
-        <div class="u-only-desktop tooltip-old__trigger u-right js-trigger link-with-icon--bold link-with-icon">
-          <i class="link-with-icon__icon fa fa-download"></i>Download this dataset
-          <%= download_dropdown('search', 'search', [:csv, :shp]) %>
-        </div>
-      </div>
-    </div>
-
-    <aside class="u-only-desktop filter-bar">
-      <div class="filter-bar__inner">
-        <header class="header-with-delimiter filter-bar__header">
-          <h2>
-            Filters
-           <%= clear_filters_link(params) %>
-          </h2>
-        </header>
-        <%= render partial: 'facets', locals: {aggregations: @search.aggregations} %>
-      </div>
-      <%#= link_to("", search_path(params), class: "filter-bar__header-icon grid-icon") %>
-      <%#= link_to("", search_map_path(params), class: "filter-bar__header-icon map-icon") %>
-    </aside>
-  <% end %>
-
-  <div class="<%= (@search.nil? || @search.results.count.zero?) ? 'fullscreen-message' : 'search-grid' %>">
-    <%= render partial: 'grid' %>
-  </div>
+<div class="container--medium spacer-large--top spacer-medium--bottom">
+  <search-site
+    :categories="<%= @categories.to_json %>"
+    :data-page-load="<%= @results.to_json %>"
+    endpoint="<%= search_results_path %>"
+    ga-id="Component: search site"
+    placeholder="<%= t('global.placeholder.search-site') %>"
+    query="<%= @query %>"
+    no-results-text="<%= t('search.no-results') %>"
+    results-text="<%= t('search.results') %>"
+  ></search-site>
 </div>

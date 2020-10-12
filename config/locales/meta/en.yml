@@ -1,0 +1,18 @@
+en:
+  meta:
+    site:
+      name: Protected Planet
+      name_with_suffix: Protected Planet | %{suffix}
+      title: Explore the World's Protected Areas
+      title_with_suffix: Explore the World's Protected Areas in %{suffix}
+      description: >-
+        Protected Planet is the most up to date and complete source of data on protected areas and other effective area-based conservation measures (OECMs), updated monthly with submissions from governments, non-governmental organizations, landowners and communities.
+    image: social.png
+    image_alt: >-
+      Screenshot of the Protected Planet website
+    image_height: 630
+    image_width: 1200
+    twitter:
+      card: "summary_large_image"
+      site: "@protectedplanet"
+      creator: "@protectedplanet"

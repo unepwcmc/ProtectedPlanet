@@ -3,6 +3,14 @@ class Search::Index
   MAPPINGS_TEMPLATE = File.read(File.join(TEMPLATE_DIRECTORY, 'mappings.json'))
 
   def self.create
+    page_relation = Comfy::Cms::SearchablePage.includes([
+      :fragments_for_index,
+      {:translations_for_index => :fragments_for_index},
+      :categories
+    ])
+    cms_index = Search::Index.new Search::CMS_INDEX, page_relation
+    cms_index.create
+
     pa_relation = ProtectedArea.without_geometry.includes([
       {:countries_for_index => :region_for_index},
       :sub_locations,
@@ -11,21 +19,33 @@ class Search::Index
       :governance
     ])
 
-
+    region_index = Search::Index.new Search::REGION_INDEX, Region.without_geometry.all
+    region_index.create
     country_index = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
     country_index.create
     pa_index = Search::Index.new Search::PA_INDEX, pa_relation
     pa_index.create
+
+    cms_index.index
+    region_index.index
     country_index.index
     pa_index.index
   end
 
-  def self.count 
-    self.new(Search::COUNTRY_INDEX).count + self.new(Search::PA_INDEX).count
+  def self.count
+    self.new(Search::REGION_INDEX).count +
+    self.new(Search::COUNTRY_INDEX).count +
+    self.new(Search::PA_INDEX).count +
+    self.new(Search::CMS_INDEX).count
   end
 
   def self.delete
-    [Search::COUNTRY_INDEX, Search::PA_INDEX].each do |index_name|
+    [
+      Search::REGION_INDEX,
+      Search::COUNTRY_INDEX,
+      Search::PA_INDEX,
+      Search::CMS_INDEX
+    ].each do |index_name|
       index = self.new index_name
       index.delete
     end
@@ -33,27 +53,27 @@ class Search::Index
 
 
   def initialize index_name, collection=nil
-    @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch['url'])
+    @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch[:url])
     @index_name = index_name
     @collection = collection
   end
 
   def create
-    @client.indices.create index: @index_name, body:  mappings 
+    @client.indices.create index: @index_name, body:  mappings
   end
-  
+
   def index
     documents_in_batches { |batch| @client.bulk body: batch }
   end
 
   def delete
     @client.indices.delete index: @index_name
-    
+
   rescue Elasticsearch::Transport::Transport::Errors::NotFound
     Rails.logger.warn("Index #{@index_name} not found. Skipping")
   end
 
-  def count 
+  def count
     @client.count(index: @index_name)['count']
   end
 

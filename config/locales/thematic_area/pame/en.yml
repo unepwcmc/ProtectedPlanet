@@ -1,0 +1,10 @@
+en:
+  thematic_area:
+    pame:
+      modal:
+        id: MetadataID
+        language: Language
+        modal_title: Source details
+        responsible: Responsible party
+        title: Data title
+        year: Year of submission

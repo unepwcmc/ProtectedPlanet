@@ -1,0 +1,69 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$card-search-results-areas-width: 100%;
+$card-search-results-areas-height: rem-calc(155);
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+&--search-results-areas {
+  @include flex;
+  @include flex-h-between;
+  @include flex-wrap;
+
+  &.preview {
+    .card__link:nth-child(3) { 
+      @include breakpoint-down($medium) { display: none; }
+    }
+  }
+
+  .card {
+    &__link {
+      @include box-shadow-grey-light;
+      @include flex;
+      @include flex-column;
+      @include responsive('width', 100%, 48%, 31.5%);
+      @include responsive('height', auto, rem-calc(360), rem-calc(360));
+      background-color: $white;
+      margin-bottom: rem-calc(30);
+      min-height: rem-calc(280);
+      padding: rem-calc(18 18 16 18);
+      text-decoration: none;
+
+      &:not(:first-child):not(:nth-child(3n+1)):not(:nth-child(3n)):last-child { 
+        margin-left: 5%;
+        margin-right: auto; 
+      }
+    }
+
+      &__content {
+        font-size: rem-calc(18);
+      }
+
+        &__image {
+          background-position: center;
+          background-size: cover;
+          width: $card-search-results-areas-width; height: $card-search-results-areas-height;
+
+          position: absolute;
+          top: 0; //for IE 11
+          left: 0; //for IE 11
+        }
+
+        &__image-placeholder { 
+          @include image-placeholder($card-search-results-areas-width, $card-search-results-areas-height); 
+          
+          position: relative;
+        }
+
+        &__title {
+          @include text-card-title;
+          margin: rem-calc(12 0 2 0);
+        }
+  }
+}

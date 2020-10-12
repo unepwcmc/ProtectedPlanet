@@ -1,0 +1,35 @@
+@mixin beautify-scrollbar($width: 9) {
+  &::-webkit-scrollbar,
+  &::-webkit-scrollbar-button {
+    width: rem-calc($width);
+    height: rem-calc($width);
+  }
+  &::-webkit-scrollbar-thumb,
+  &::-webkit-scrollbar-track {
+    background-clip: padding-box;
+    border-radius: rem-calc($width);
+  }
+  &::-webkit-scrollbar-thumb {
+    background: $grey-black;
+    &:hover {
+      background: $grey-black;
+    }
+    &:active {
+      background-color: $white;
+    }
+  }
+  &::-webkit-scrollbar-track {
+    background-color: $grey-xlight; 
+    &:hover {
+      background-color: $grey-xlight; 
+    }
+  }
+  &::-webkit-scrollbar-corner {
+      background: transparent;
+  }
+
+  .pdf & {
+    overflow: unset;
+    max-height: unset;
+  }
+}

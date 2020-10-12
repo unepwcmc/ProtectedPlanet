@@ -1,0 +1,78 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+
+//--------------------------------------------------
+// mixins
+//--------------------------------------------------
+
+//--------------------------------------------------
+// classes
+//--------------------------------------------------
+.listing {
+  &__bar {
+    @include box-shadow-bottom-grey-light;
+    background-color: $white;
+    border-bottom: solid 1px $grey-light;
+    padding: rem-calc(12 0); 
+  }
+
+  &__bar-content {
+    @include container;
+    @include site-width;
+    @include flex;
+    @include flex-v-center;
+  }
+
+  &__cards-news {
+    @include card-news;
+    @include flex;
+    @include flex-h-between;
+    @include flex-wrap;
+  }
+
+  &__cards-resources {
+    @include card-resource($per-row: 3);
+    @include flex;
+    @include flex-wrap;
+  }
+
+  &__filters {
+    @include flex-no-shrink;
+    
+    @include breakpoint($small) { 
+      padding-right: rem-calc(24); 
+      width: 33%;
+    }
+
+    @include breakpoint($medium) { width: 25%; }
+  }
+
+  &__filters-trigger { @include button-filter-trigger; }
+
+  &__main {
+    @include container;
+    @include site-width;
+    min-height: rem-calc(100);
+
+    @include breakpoint($small) { 
+      min-height: rem-calc(600);
+
+      display: flex; 
+    }
+  }
+  
+  &__results {
+    margin-top: rem-calc(24);
+  }
+
+  &__results-wrapper { 
+    @include flex-grow;
+    width: 100%; //need for ie11
+  }
+
+  &__spinner {
+    margin-top: rem-calc(55);
+    margin-bottom: rem-calc(55);
+  }
+}

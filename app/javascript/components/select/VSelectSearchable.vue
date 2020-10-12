@@ -1,7 +1,7 @@
 <template>
   <div
-    class="v-select v-select--search relative"
-    :class="{'v-select--disabled': isDisabled}"
+    class="select--searchable relative"
+    :class="{'select--disabled': isDisabled}"
   >
     <input
       :id="config.id"
@@ -12,16 +12,16 @@
 
     <div
       v-if="config.label"
-      class="v-select__label"
+      class="select__label"
     >
       <label
         :for="toggleId"
-        class="v-select__selection"
+        class="select__selection"
       >{{ config.label }}</label>
       <slot name="label-icon" />
     </div>
 
-    <div :class="['v-select__search relative', {'v-select__search--active': isActive}]">
+    <div :class="['select__search relative', {'select__search--active': isActive}]">
       <label
         v-if="config.label"
         class="screen-reader"
@@ -30,7 +30,7 @@
       <input
         :id="searchId"
         v-model="searchTerm"
-        class="v-select__search-input"
+        class="select__search-input"
         type="text"
         role="combobox"
         aria-haspopup="listbox"
@@ -43,20 +43,20 @@
         @focus="openSelect"
       >
 
-      <span class="v-select__search-icons">
+      <span class="select__search-icons">
         <button
           v-show="!showResetIcon && !hasSelectedOption"
-          class="v-select__search-icon"
+          class="select__search-icon"
         />
         <button 
           v-show="showResetIcon"
           :id="searchResetId"
-          class="v-select__search-icon v-select__search-icon--delete"
+          class="select__search-icon select__search-icon--delete"
           @click="resetSearchTerm"
         />
         <button 
           v-show="hasSelectedOption"
-          class="v-select__search-icon--reset"
+          class="select__search-icon--reset"
           @click="resetSelect"
         />
         <span 
@@ -70,14 +70,14 @@
       v-show="showOptions" 
       :id="dropdownId" 
       role="listbox" 
-      class="v-select__dropdown"
+      class="select__dropdown"
     >
       <li
         v-for="(option, index) in filteredOptions"
         v-show="matchesSearchTerm(option)"
         :id="getOptionInputId(option)"
         :key="option.id"
-        :class="['v-select__option hover--pointer', conditionalOptionClasses(option, index)]"
+        :class="['select__option hover--pointer', conditionalOptionClasses(option, index)]"
         role="option"
         :aria-selected="isHighlighted(index).toString()"
         @click="selectOption(option)"
@@ -95,7 +95,7 @@ const UNDEFINED_ID = '__UNDEFINED__'
 const UNDEFINED_OBJECT = { id: UNDEFINED_ID, name: 'None' }
 
 export default {
-  name: 'VSelectSearch',
+  name: 'v-select-search',
 
   mixins: [
     mixinPopupCloseListeners({closeCallback: 'closeSelect'}),
@@ -202,8 +202,8 @@ export default {
 
     conditionalOptionClasses (option, index) {
       return {
-        'v-select__option--selected': this.isSelected(option),
-        'v-select__option--highlighted': this.isHighlighted(index)
+        'select__option--selected': this.isSelected(option),
+        'select__option--highlighted': this.isHighlighted(index)
       }
     },
 

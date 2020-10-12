@@ -1,15 +1,42 @@
-<%= render partial: "home_banner" %>
-<div class="container--fullscreen container--push-bottom">
-  <% render layout: "banner" do %>
-    <span class="alert__title alert__title--success">The Protected Planet API is live! 🌍</span>
-    <br>
-    <span>
-      <a class="link-with-icon" href="http://api.protectedplanet.net/request">Request a token now</a>
-      and
-      <a class="link-with-icon" href="http://api.protectedplanet.net/documentation">discover all its functionalities</a>
-    </span>
-  <% end %>
-  <%= render partial: "hero" %>
-  <%= render partial: "thematic_areas" %>
-  <%= render partial: "statistics_cover" %>
-</div>
+<%= render partial: "./layouts/partials/hero-home", locals: {
+    button: t('home.hero.button'),
+    hero_stat_percentage: @pa_coverage_percentage,
+    hero_stat_text: t('home.hero.stat-text')
+  }
+%>
+
+<section class="container spacer-small--top">
+  <%= render partial: "partials/cards/facts", locals: { cards: @site_facts } %>
+</section>
+
+<%= render partial: "partials/search/protected-areas", locals: { config: @config_search_areas } %>
+
+<section class="container spacer-small--top">
+  <h2 class="text-center"><%= @pas_title %></h2>
+
+  <%= render partial: "partials/cards/circles", locals: { cards: @pas_levels } %>
+
+  <%= render partial: "partials/cards/squares", locals: { cards: pas_categories } %>
+</section>
+
+<section class="map-section spacer-small--top">
+  <%= render partial: "partials/maps/main", locals: {
+    map: @main_map
+  } %>
+</section>
+
+<section class="spacer-small--top">
+  <%= render "partials/carousels/themes" %>
+</section>
+
+<%= render "partials/ctas/api" %>
+
+<section class="container spacer-medium--top">
+  <%= render "partials/cards/resources" %>
+</section>
+
+<section class="container spacer-medium--bottom">
+  <%= render "partials/cards/articles" %>
+</section>
+
+<%= render "partials/ctas/live-report" %>

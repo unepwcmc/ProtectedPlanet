@@ -1,0 +1,289 @@
+//--------------------------------------------------
+// variables
+//--------------------------------------------------
+$icon-search-width: rem-calc(21);
+
+//--------------------------------------------------
+// shared mixins
+//--------------------------------------------------
+@mixin icon-basic() {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  
+  display: block;
+}
+
+@mixin icon-image($filename, $width, $height) {
+  background-image: image_url("icons/#{$filename}");
+  width: $width; height: $height;
+}
+
+@mixin icon-button-reset() {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+@mixin icon-circle-chevron($mobile: rem-calc(34), $tablet: rem-calc(34), $desktop: rem-calc(34)) {
+  @include icon-basic;
+  @include responsive(width, $mobile, $tablet, $desktop);
+  @include responsive(height, $mobile, $tablet, $desktop);
+}
+
+@mixin icon-circle-chevron-large() {
+  @include icon-circle-chevron(rem-calc(50), rem-calc(72), rem-calc(72));
+}
+
+@mixin icon-earth($size: rem-calc(60)) {
+  @include icon-basic;
+  @include icon-image('earth.svg', $size, $size); 
+}
+
+//--------------------------------------------------
+// mixins for specific classes
+//--------------------------------------------------
+@mixin icon-aichi() {
+  @include responsive(width, rem-calc(85), rem-calc(85), rem-calc(110));
+  @include responsive(height, rem-calc(85), rem-calc(85), rem-calc(110));
+  margin-bottom: rem-calc(20);
+
+  display: block;
+}
+
+@mixin icon-area() { 
+  @include icon-basic;
+  @include icon-image('area.svg', rem-calc(52), rem-calc(52)); 
+}
+
+@mixin icon-arrow-external() {
+  @include icon-basic;
+  @include icon-image('arrow-external.svg', rem-calc(17), rem-calc(12));
+}
+
+@mixin icon-arrow-external-white() {
+  @include icon-basic;
+  @include icon-image('arrow-external-white.svg', rem-calc(17), rem-calc(12));
+}
+
+@mixin icon-burger() {
+  @include icon-basic;
+  @include icon-image('burger.svg', rem-calc(24), rem-calc(15));
+}
+
+@mixin icon-close() {
+  @include icon-basic;
+  @include icon-image('close.svg', rem-calc(29), rem-calc(29));
+}
+
+@mixin icon-cross() {
+  @include icon-basic;
+  @include icon-image('cross.svg', rem-calc(20), rem-calc(20));
+}
+
+@mixin icon-cross-small() {
+  @include icon-basic;
+  @include icon-image('cross.svg', rem-calc(11), rem-calc(11));
+}
+
+@mixin icon-cross-white() {
+  @include icon-basic;
+  @include icon-image('cross-white.svg', rem-calc(20), rem-calc(20));
+}
+
+@mixin icon-chevron-black-down() {
+  @include icon-basic;
+  @include icon-image('chevron-black-down.svg', rem-calc(14), rem-calc(8));
+}
+
+@mixin icon-chevron-black-up() {
+  @include icon-basic;
+  @include icon-image('chevron-black-up.svg', rem-calc(14), rem-calc(8));
+}
+
+@mixin icon-chevron-white-down() {
+  @include icon-basic;
+  @include icon-image('chevron-white-down.svg', rem-calc(14), rem-calc(8));
+}
+
+@mixin icon-chevron-white-up() {
+  @include icon-basic;
+  @include icon-image('chevron-white-up.svg', rem-calc(14), rem-calc(8));
+}
+
+@mixin icon-circle-chevron-black() {
+  @include icon-basic;
+  @include icon-image('circle-chevron-black.svg', rem-calc(34), rem-calc(34));
+}
+
+@mixin icon-circle-chevron-green-large-left() {
+  @include icon-circle-chevron-large;
+  background-image: image_url('icons/circle-chevron-green-left.svg');
+}
+
+@mixin icon-circle-chevron-green-large-right() {
+  @include icon-circle-chevron-large;
+  background-image: image_url('icons/circle-chevron-green-right.svg');
+}
+
+@mixin icon-circle-chevron-green-left() {
+  @include icon-circle-chevron;
+  background-image: image_url('icons/circle-chevron-green-left.svg');
+}
+
+@mixin icon-circle-chevron-green-right() {
+  @include icon-circle-chevron;
+  background-image: image_url('icons/circle-chevron-green-right.svg');
+}
+
+@mixin icon-circle-chevron-grey-left() {
+  @include icon-circle-chevron;
+  background-image: image_url('icons/circle-chevron-grey-left.svg');
+}
+
+@mixin icon-circle-chevron-grey-right() {
+  @include icon-circle-chevron;
+  background-image: image_url('icons/circle-chevron-grey-right.svg');
+}
+
+@mixin icon-circle-chevron-white() {
+  @include icon-basic;
+  @include icon-image('circle-chevron-white.svg', rem-calc(34), rem-calc(34));
+}
+
+@mixin icon-country() { 
+  @include icon-basic;
+  @include icon-image('country.svg', rem-calc(65), rem-calc(50)); 
+}
+
+@mixin icon-download() {
+  @include icon-basic;
+  @include icon-image('download.svg', rem-calc(20), rem-calc(19));
+}
+
+@mixin icon-download-black() {
+  @include icon-basic;
+  @include icon-image('download-black.svg', rem-calc(20), rem-calc(19));
+}
+
+@mixin icon-filters() {
+  @include icon-basic;
+  @include icon-image('filter.svg', rem-calc(19), rem-calc(13));
+}
+
+@mixin icon-flag () {
+  @include icon-basic;
+  @include flex-no-shrink;
+  border-radius: 100%;
+  width: rem-calc(35); height: rem-calc(35);
+}
+
+@mixin icon-info() {
+  @include icon-basic;
+  @include icon-image('info.svg', rem-calc(23), rem-calc(23));
+}
+
+@mixin icon-loading-spinner() {
+  @include icon-basic;
+  @include icon-image('loading-spinner.svg', rem-calc(40), rem-calc(40));
+}
+
+@mixin icon-minus-mapbox {
+  background-image: image-url('icons/minus-mapbox.svg');
+}
+
+@mixin icon-minus-white() {
+  @include icon-basic;
+  @include icon-image('minus-white.svg', rem-calc(22), rem-calc(20));
+}
+
+@mixin icon-pin ($circle: #ccc, $outline: #000) {
+  @include icon-basic;
+  width: rem-calc(29); height: rem-calc(38);
+
+  .circle { fill: $circle; }
+  .outline { fill: $outline; }
+  .tick { fill: #fff; }
+}
+
+@mixin icon-pin-marine { @include icon-pin($pin-marine); }
+@mixin icon-pin-oecm { @include icon-pin($pin-oecm); }
+@mixin icon-pin-terrestrial { @include icon-pin($pin-terrestrial); }
+@mixin icon-pin-marine-light { @include icon-pin($pin-marine, #fff); }
+@mixin icon-pin-oecm-light { @include icon-pin($pin-oecm, #fff); }
+@mixin icon-pin-terrestrial-light { @include icon-pin($pin-terrestrial, #fff); }
+
+@mixin icon-pin-outline {
+  @include icon-basic;
+  @include icon-image('pin-outline.svg', rem-calc(14), rem-calc(20));
+}
+
+@mixin icon-pin-map {
+  @include icon-basic;
+  @include icon-image('pin.svg', rem-calc(22), rem-calc(32));
+}
+
+@mixin icon-placeholder-image() {
+  @include icon-basic;
+  @include icon-image('image.svg', rem-calc(114), rem-calc(91));
+}
+
+@mixin icon-plus-mapbox {
+  background-image: image-url('icons/plus.svg');
+}
+
+@mixin icon-region() { @include icon-earth(); }
+
+@mixin icon-search() {
+  @include icon-basic;
+  @include icon-button-reset;
+  @include icon-image('search.svg', $icon-search-width, rem-calc(23));
+}
+
+@mixin icon-search-green() {
+  @include icon-basic;
+  @include icon-image('search-green.svg', $icon-search-width, rem-calc(23));
+}
+
+@mixin icon-search-white() {
+  @include icon-basic;
+  @include icon-button-reset;
+  @include icon-image('search-white.svg', $icon-search-width, rem-calc(23));
+}
+
+@mixin icon-shield() {
+  @include icon-basic;
+  @include responsive(width, rem-calc(23), rem-calc(40), rem-calc(40));
+  @include responsive(height, rem-calc(27), rem-calc(48), rem-calc(48));
+  background-image: image_url('icons/shield.svg');
+}
+
+@mixin icon-sort() {
+  @include icon-button-reset;
+
+  &::before {
+    @include triangle(rem-calc(8), rem-calc(7), $grey); // ($base, $height, $color, $direction:'up')
+    content: '';
+    margin-bottom: rem-calc(1);
+
+    display: block;
+  }
+
+  &::after {
+    @include triangle(rem-calc(8), rem-calc(7), $grey, 'down'); // ($base, $height, $color, $direction:'up')
+    content: '';
+
+    display: block;
+  }
+}
+
+@mixin icon-tick {
+  @include icon-basic;
+  background-image: image-url('icons/tick.svg');
+}
+
+@mixin icon-warning() {
+  @include icon-basic;
+  @include icon-image('warning.svg', rem-calc(22), rem-calc(19));
+}
