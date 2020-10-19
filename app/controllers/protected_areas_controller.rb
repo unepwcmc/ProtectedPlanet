@@ -130,7 +130,8 @@ class ProtectedAreasController < ApplicationController
     if area.is_transboundary
       search_areas_path(filters: { special_status: ['is_transboundary'] })
     else
-      search_areas_path(filters: { location: { type: 'site', options: ["#{@countries.first.name}"] } })
+      location_filter = @countries.present? ? { location: { type: 'country', options: ["#{@countries.first.name}"] } } : {}
+      search_areas_path(filters: location_filter)
     end
   end
 end
