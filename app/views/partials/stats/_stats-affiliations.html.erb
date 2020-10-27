@@ -16,6 +16,11 @@
               <p class="card__subtitle"><%= t('stats.green-list.date') %></p>
               <span><%= link[:date] %></span>
             <% end %>
+
+            <% if link[:url] %>
+              <p class="card__subtitle"><%= t('stats.green-list.url') %></p>
+              <span><a href="<%= link[:url] %>"><%= @protected_area.name %></a></span>
+            <% end %>
           <% end %>
     
           <%= link_to t('global.button.more'), link[:link_url], title: link[:link_title], target: '_blank', class: 'card__button' %>

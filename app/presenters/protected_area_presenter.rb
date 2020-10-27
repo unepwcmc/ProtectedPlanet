@@ -150,7 +150,7 @@ class ProtectedAreaPresenter
       image_url: green_list_logo(gls.status),
       link_title: "View the Green List page for #{protected_area.name}",
       type: gls.status,
-      url: '' ##TODO links needed from CSV provided by IUCN.
+      url: gls.url ? gls.url : ''
     }
   end
 

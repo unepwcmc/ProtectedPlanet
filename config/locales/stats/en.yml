@@ -21,6 +21,7 @@ en:
       intro: This site is part of the IUCN Green List Community
       type: Green List Status
       date: Certification Expiry Date
+      url: IUCN Profile
     iucn-categories: 
       title: IUCN Management Categories
     location: Location

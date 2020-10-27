@@ -1,6 +1,6 @@
 module Wdpa::GreenListImporter
   # Make sure headers are: wdpaid,status,expiry_date
-  GREEN_LIST_SITES_CSV = "#{Rails.root}/lib/data/seeds/green_list_sites.csv"
+  GREEN_LIST_SITES_CSV = "#{Rails.root}/lib/data/seeds/green_list_sites_with_urls.csv"
   extend self
 
   def import
@@ -29,7 +29,7 @@ module Wdpa::GreenListImporter
             duplicates << wdpa_id
             next
           end
-          gls = GreenListStatus.find_or_create_by(row.to_h.slice('status', 'expiry_date'))
+          gls = GreenListStatus.find_or_create_by(row.to_h.slice('status', 'expiry_date', 'url'))
           pa.green_list_status_id = gls.id
           pa.save
         end
