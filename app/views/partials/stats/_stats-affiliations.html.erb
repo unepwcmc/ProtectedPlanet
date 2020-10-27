@@ -18,8 +18,10 @@
             <% end %>
 
             <% if link[:url] %>
-              <p class="card__subtitle"><%= t('stats.green-list.url') %></p>
-              <span><a href="<%= link[:url] %>"><%= @protected_area.name %></a></span>
+              <a class="card__subtitle--link" href="<%= link[:url] %>" >
+                <p class="card__link"><%= t('stats.green-list.url') %></p>
+                <span class="icon--circle-chevron-black"></span>
+              </a>
             <% end %>
           <% end %>
     
