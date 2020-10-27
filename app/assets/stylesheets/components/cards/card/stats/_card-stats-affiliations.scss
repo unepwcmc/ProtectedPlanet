@@ -4,12 +4,6 @@
 &--stats-affiliations {
   @include card-stats;
 
-  .icon--circle-chevron-black {
-    display: inline-block;
-    height: rem-calc(21);
-    width: rem-calc(21);
-  }
-
   .card {
     &__button {
       @include card-button-external;
@@ -20,10 +14,6 @@
     }
 
     &__h2 { @include card-stats-h2; }
-
-    &__link {
-      margin-right: rem-calc(5);
-    }
 
     &__logos {
       @include flex;
