@@ -1,6 +1,6 @@
 module Wdpa::GreenListImporter
   # Make sure headers are: wdpaid,status,expiry_date
-  GREEN_LIST_SITES_CSV = "#{Rails.root}/lib/data/seeds/green_list_sites_with_urls.csv"
+  GREEN_LIST_SITES_CSV = "#{Rails.root}/lib/data/seeds/green_list_sites.csv"
   extend self
 
   def import
