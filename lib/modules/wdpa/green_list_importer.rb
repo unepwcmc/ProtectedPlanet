@@ -30,6 +30,10 @@ module Wdpa::GreenListImporter
             next
           end
           gls = GreenListStatus.find_or_create_by(row.to_h.slice('status', 'expiry_date'))
+
+          # Link to IUCN profile of site
+          pa.green_list_url = row['url']
+          
           pa.green_list_status_id = gls.id
           pa.save
         end
