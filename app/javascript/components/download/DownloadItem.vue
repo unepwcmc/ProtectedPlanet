@@ -151,7 +151,12 @@ export default {
       this.hasFailed = data.hasFailed
       this.id = 'id' in data ? data.id : Math.round(Math.random(0,1)*100000)
       this.title = data.title
-      this.url = data.url
+      this.url = this.secureUrl(data.url)
+    },
+
+    secureUrl(url) {
+      // Quick fix to replace http with https to stop Chrome flagging as insecure
+      url.replace(/^http:\/\//i, 'https://')
     }
   }
 }
