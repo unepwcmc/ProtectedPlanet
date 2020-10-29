@@ -18,7 +18,11 @@
             <% end %>
 
             <% if link[:url] %>
-              <a class="card__subtitle--link" href="<%= link[:url] %>" >
+              <a class="card__subtitle--link" 
+                 href="<%= link[:url] %>" 
+                 title="View the IUCN profile for <%= @protected_area.name %>" 
+                 target="_blank"
+              >
                 <p><%= t('stats.green-list.url') %></p>
                 <span class="button--external-link"></span>
               </a>
