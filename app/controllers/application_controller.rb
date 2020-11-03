@@ -68,6 +68,10 @@ class ApplicationController < ActionController::Base
     render_404
   end
 
+  rescue_from StandardError do
+    render_500
+  end
+
   def enable_caching
     expires_in Rails.application.secrets.cache_max_age, public: true
   end
@@ -121,6 +125,10 @@ class ApplicationController < ActionController::Base
 
   def render_404
     render file: Rails.root.join("/app/views/layouts/404.html.erb"), layout: true, status: :not_found
+  end
+
+  def render_500
+    render file: Rails.root.join("/app/views/layouts/500.html.erb"), layout: true, status: :internal_server_error
   end
 
   def check_for_pdf
