@@ -1,0 +1,21 @@
+<section class="error-page__hero spacer-large--medium">
+  <%= render partial: "./layouts/partials/hero-basic", locals: { 
+    title: t('global.redirect.alt_title'),
+    summary: t('global.redirect.text', url: root_url).html_safe
+  } %>
+</section>
+
+
+<section class="container spacer-small--bottom">
+  <%= render "partials/cards/articles" %>
+</section>
+
+<section class="container spacer-small--top">
+  <%= render "partials/cards/resources" %>
+</section>
+
+<section class="spacer-small--bottom">
+  <%= render "partials/carousels/themes" %>
+</section>
+
+<%= render "partials/ctas/live-report" %>

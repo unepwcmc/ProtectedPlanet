@@ -1,3 +1,9 @@
+### 4.0.1
+
+* Fixed suggested sites not being displayed for sites with ABNJ status
+* Custom 500 page created
+* IUCN link now shown for GL sites if present 
+
 ### 4.0.0
 
 * Refresh! Major restyling of all components

@@ -37,6 +37,12 @@
       font-weight: $bold;
       line-height: 1.2;
       margin: rem-calc(14 0 0 0);
+
+      &--link {
+        @include flex;
+        @include flex-v-center;
+        text-decoration: none;
+      }
     }
   }
 }

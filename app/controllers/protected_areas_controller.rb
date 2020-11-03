@@ -5,7 +5,7 @@ class ProtectedAreasController < ApplicationController
 
   def show
     id = params[:id]
-    
+
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'protected_area', id)
 
     # If found by slug, redirect to search page
@@ -34,7 +34,7 @@ class ProtectedAreasController < ApplicationController
 
 
     @otherWdpasViewAllUrl = determine_search_path(@protected_area)
-  
+
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
@@ -42,7 +42,7 @@ class ProtectedAreasController < ApplicationController
     }
 
     @map_options = {
-      map: { 
+      map: {
         boundsUrl: @protected_area.extent_url
       }
     }
@@ -80,7 +80,7 @@ class ProtectedAreasController < ApplicationController
 
   def get_locations
     locations = []
-    
+
     if @countries.any?
       @countries.each_with_index do |country, i|
         locations << ActionController::Base.helpers.link_to(country.name, country_path(country.iso))
@@ -88,7 +88,7 @@ class ProtectedAreasController < ApplicationController
     else
       locations << 'Areas Beyond National Jurisdiction'
     end
-    
+
     locations.join(', ')
   end
 
@@ -130,8 +130,12 @@ class ProtectedAreasController < ApplicationController
     if area.is_transboundary
       search_areas_path(filters: { special_status: ['is_transboundary'] })
     else
-      location_filter = @countries.present? ? { location: { type: 'country', options: ["#{@countries.first.name}"] } } : {}
-      search_areas_path(filters: location_filter)
+      filters = @countries.empty? ? {} : { filters: location_filter(@countries.first.name) }
+      search_areas_path(filters)
     end
+  end
+
+  def location_filter(country_name)
+    { location: { type: 'country', options: [country_name] } }
   end
 end
