@@ -169,13 +169,25 @@ $padding-medium: rem-calc(27);
 }
 
 @mixin button-external {
-  @include button-with-icon;
+  
   &::after { 
     @include icon-arrow-external; 
     display: inline-block;
 
   }
 }
+
+@mixin button-external-link {
+  @include button-with-icon;
+  &::after {
+    @include icon-circle-chevron-black;
+    height: rem-calc(21);
+    width: rem-calc(21);
+
+    display: inline-block;
+  }
+}
+
 @mixin button-filter-trigger {
   @include button-with-icon;
   @include button-outline;
@@ -273,6 +285,11 @@ $padding-medium: rem-calc(27);
     font-weight: $bold;
     &::after { @include icon-arrow-external-white; }
   }
+
+  &--external-link {
+    @include button-external-link;
+  }
+
   &--link { 
     @include button-external; 
     color: $primary;
