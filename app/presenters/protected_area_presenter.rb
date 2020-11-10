@@ -197,7 +197,7 @@ class ProtectedAreaPresenter
     {
       link: url_for_related_source('dopa_info', protected_area),
       text: I18n.t('stats.dopa.title'),
-      button_title: I18n.t('stats.dopa.button-title', name: protected_area.name) #TODO Not used?
+      button_title: I18n.t('stats.dopa.button-title', name: protected_area.name)
     }
   end
 
@@ -206,7 +206,7 @@ class ProtectedAreaPresenter
     {
       link: url_for_related_source('who_info', protected_area),
       text: I18n.t('stats.who.title'),
-      button_title: I18n.t('stats.who.button-title', name: protected_area.name) #TODO Not used?
+      button_title: I18n.t('stats.who.button-title', name: protected_area.name) 
     }
   end
 
