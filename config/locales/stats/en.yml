@@ -13,6 +13,9 @@ en:
     dopa: 
       title: Find even more information by visiting the Digital Observatory for Protected Areas (DOPA)
       button-title: View information about %{name} on DOPA
+    who:
+      title: Read an assessment of this site by visiting the IUCN World Heritage Outlook
+      button-title: View information about %{name} on IUCN World Heritage Outlook
     growth:
       title: Growth in protected area coverage
     governance: 
