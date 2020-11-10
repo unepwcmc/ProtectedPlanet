@@ -26,11 +26,11 @@ $padding-medium: rem-calc(27);
 @mixin button-font {
   @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
 }
-@mixin button-disabled { 
-  cursor: not-allowed; 
+@mixin button-disabled {
+  cursor: not-allowed;
   opacity: .2;
 }
-@mixin button-height { 
+@mixin button-height {
   @include responsive(height, $height-small, $height-medium, $height-medium);
   display: inline-flex;
   align-items: center;
@@ -62,10 +62,10 @@ $padding-medium: rem-calc(27);
   background-color: $primary;
   font-size: rem-calc(18);
   padding: 0 $padding-medium;
-  &::after { 
-    @include icon-download-black; 
+  &::after {
+    @include icon-download-black;
     content: '';
-    margin-left: rem-calc(10); 
+    margin-left: rem-calc(10);
     display: inline-block;
   }
 }
@@ -107,16 +107,16 @@ $padding-medium: rem-calc(27);
     }
   }
 }
-@mixin button-burger { 
-  @include button-basic; 
+@mixin button-burger {
+  @include button-basic;
   @include icon-burger;
 }
-@mixin button-close { 
-  @include button-basic; 
+@mixin button-close {
+  @include button-basic;
   @include icon-cross;
 }
 @mixin button-clear {
-  @include button-basic; 
+  @include button-basic;
   @include flex;
   @include flex-v-center;
 
@@ -137,8 +137,8 @@ $padding-medium: rem-calc(27);
   @include button-download;
   @include responsive(padding, 0, 0 $padding-medium, 0 $padding-medium);
   @include responsive(width, $height-small, auto, auto);
-  &::after { 
-    @include responsive(margin-left, 0, rem-calc(10), rem-calc(10)); 
+  &::after {
+    @include responsive(margin-left, 0, rem-calc(10), rem-calc(10));
   }
   .download__trigger-text {
     @include responsive(display, none, initial, initial);
@@ -169,11 +169,11 @@ $padding-medium: rem-calc(27);
 }
 
 @mixin button-external {
-  
-  &::after { 
-    @include icon-arrow-external; 
-    display: inline-block;
 
+  &::after {
+    @include icon-arrow-external;
+    display: inline-block;
+    content: '';
   }
 }
 
@@ -192,8 +192,8 @@ $padding-medium: rem-calc(27);
   @include button-with-icon;
   @include button-outline;
   @include breakpoint-down($small) { padding: rem-calc(0 12); }
-  &::after { 
-    @include icon-filters; 
+  &::after {
+    @include icon-filters;
     @include breakpoint-down($small) { margin: 0; }
   }
   .button__text { @include responsive(display, none, inline, inline); }
@@ -202,13 +202,13 @@ $padding-medium: rem-calc(27);
   @include button-with-icon;
   @include button-outline;
   white-space: nowrap;
-  
+
   &::after { @include icon-pin-outline; }
 
   &.active {
-    &::after { 
-      @include icon-cross-small; 
-      
+    &::after {
+      @include icon-cross-small;
+
       width: rem-calc(14);
     }
   }
@@ -228,7 +228,7 @@ $padding-medium: rem-calc(27);
     margin: 0 auto;
 
     @include breakpoint-down($small) {
-      width: rem-calc(15); height: rem-calc(15);  
+      width: rem-calc(15); height: rem-calc(15);
     }
   }
   @include breakpoint($small) {
@@ -248,7 +248,7 @@ $padding-medium: rem-calc(27);
   }
   &:hover,
   .active { border-color: $primary; }
-  &.active { 
+  &.active {
     background-color: $primary;
     color: $white;
   }
@@ -261,8 +261,8 @@ $padding-medium: rem-calc(27);
   &--all { @include button-all; }
   &--download {
     @include button-with-icon;
-    &::after { 
-      @include icon-download; 
+    &::after {
+      @include icon-download;
       display: inline-block;
     }
   }
@@ -273,9 +273,9 @@ $padding-medium: rem-calc(27);
     font-weight: $bold;
     @include breakpoint($small) { font-size: rem-calc(16); }
     @include breakpoint($medium) { font-size: rem-calc(16); }
-    
-    &::after { 
-      @include icon-download; 
+
+    &::after {
+      @include icon-download;
       display: inline-block;
     }
   }
@@ -290,8 +290,8 @@ $padding-medium: rem-calc(27);
     @include button-external-link;
   }
 
-  &--link { 
-    @include button-external; 
+  &--link {
+    @include button-external;
     color: $primary;
     font-size: rem-calc(16);
     font-weight: $bold;
@@ -299,8 +299,11 @@ $padding-medium: rem-calc(27);
     @include breakpoint($medium) { font-size: rem-calc(16); }
   }
 
-  &--link-external { @include button-external; }
-  
+  &--link-external {
+    @include button-external;
+    content: '';
+  }
+
   &--link-external-primary {
     @include button-external;
     color: $primary;
