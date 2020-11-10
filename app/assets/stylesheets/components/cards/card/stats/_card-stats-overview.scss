@@ -16,8 +16,8 @@
 
 @mixin card-stats-overview-for-pdf {
   @include card-stats-for-pdf;
-  
-  .pdf & { 
+
+  .pdf & {
     margin-right: rem-calc(30);
     width: 376px;
   }
@@ -33,20 +33,21 @@
   width: 100%;
 
   @include breakpoint($small) {
-    @include flex-no-shrink; 
+    @include flex-no-shrink;
     margin-right: rem-calc(30);
-    width: calc(50% - 15px); 
+    width: calc(50% - 15px);
   }
 
-  @include breakpoint($medium) { 
+  @include breakpoint($medium) {
     margin-right: rem-calc(30);
-    width: 33%; 
+    width: 33%;
   }
 
   .card {
-    &__external-button { 
-      @extend .button--link-external; 
+    &__external-button {
+      @extend .button--link-external;
       line-height: 1;
+      text-decoration: none;
     }
 
     &__external-label {
@@ -61,10 +62,10 @@
       font-size: rem-calc(16);
       margin-bottom: rem-calc(20);
     }
-  
+
     &__external-title { font-weight: $bold; }
 
-    &__flag { 
+    &__flag {
       margin-right: rem-calc(14);
 
       transform: translateY(-2px);
@@ -75,7 +76,7 @@
       margin-bottom: rem-calc(18);
     }
 
-    &__h1 { 
+    &__h1 {
       color: $white;
       font-size: rem-calc(20);
       margin: 0;
@@ -89,7 +90,7 @@
     }
 
     &__section { @include card-stats-overview-section; }
-      
+
     &__section-with-border {
       @include card-stats-overview-section;
       border-bottom: solid 1px $grey-light;
