@@ -46,7 +46,6 @@
   .card {
     &__external-button {
       @extend .button--link-external;
-      line-height: 1;
       text-decoration: none;
     }
 
