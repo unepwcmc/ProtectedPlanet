@@ -45,9 +45,11 @@ class ProtectedAreaPresenter
   end
 
   def external_links
-    # In the event that the link to the equivalent site on the DOPA explorer is a 404
-    return [dopa_link, story_map_links].flatten unless dopa_link.nil?
-    story_map_links
+    [
+      dopa_link,
+      world_heritage_outlook_link,
+      story_map_links
+    ].compact.flatten
   end
 
   def percentage_complete
@@ -193,9 +195,18 @@ class ProtectedAreaPresenter
   def dopa_link 
     return unless protected_area.is_dopa
     {
-      link: "https://dopa-explorer.jrc.ec.europa.eu/wdpa/#{protected_area.wdpa_id}",
+      link: url_for_related_source('dopa_info', protected_area),
       text: I18n.t('stats.dopa.title'),
-      button_title: I18n.t('stats.dopa.button-title'),
+      button_title: I18n.t('stats.dopa.button-title', name: protected_area.name)
+    }
+  end
+
+  def world_heritage_outlook_link
+    return unless protected_area.is_whs?
+    {
+      link: url_for_related_source('who_info', protected_area),
+      text: I18n.t('stats.who.title'),
+      button_title: I18n.t('stats.who.button-title', name: protected_area.name) 
     }
   end
 

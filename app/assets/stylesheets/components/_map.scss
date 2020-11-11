@@ -81,8 +81,8 @@
 
   &--site {
     .map__mapbox {
-      @include breakpoint($small) { height: rem-calc(456); }
-      @include breakpoint($medium) { height: rem-calc(465); }
+      @include breakpoint($small) { height: rem-calc(486); }
+      @include breakpoint($medium) { height: rem-calc(565); }
     }
   }
 
