@@ -3,12 +3,7 @@ class Search::Index
   MAPPINGS_TEMPLATE = File.read(File.join(TEMPLATE_DIRECTORY, 'mappings.json'))
 
   def self.create
-    page_relation = Comfy::Cms::SearchablePage.includes([
-      :fragments_for_index,
-      {:translations_for_index => :fragments_for_index},
-      :categories
-    ])
-    cms_index = Search::Index.new Search::CMS_INDEX, page_relation
+    cms_index = init_cms_index
     cms_index.create
 
     pa_relation = ProtectedArea.without_geometry.includes([
@@ -32,6 +27,13 @@ class Search::Index
     pa_index.index
   end
 
+  def self.create_cms_fragments
+    cms_index = init_cms_index
+    cms_index.create
+
+    cms_index.index
+  end
+
   def self.count
     self.new(Search::REGION_INDEX).count +
     self.new(Search::COUNTRY_INDEX).count +
@@ -39,13 +41,14 @@ class Search::Index
     self.new(Search::CMS_INDEX).count
   end
 
-  def self.delete
-    [
-      Search::REGION_INDEX,
-      Search::COUNTRY_INDEX,
-      Search::PA_INDEX,
-      Search::CMS_INDEX
-    ].each do |index_name|
+  INDEXES = [
+    Search::REGION_INDEX,
+    Search::COUNTRY_INDEX,
+    Search::PA_INDEX,
+    Search::CMS_INDEX
+  ].freeze
+  def self.delete(indexes = INDEXES)
+    indexes.each do |index_name|
       index = self.new index_name
       index.delete
     end
@@ -79,6 +82,15 @@ class Search::Index
 
 
   private
+
+  def self.init_cms_index
+    page_relation = Comfy::Cms::SearchablePage.includes([
+      :fragments_for_index,
+      {:translations_for_index => :fragments_for_index},
+      :categories
+    ])
+    Search::Index.new Search::CMS_INDEX, page_relation
+  end
 
   def documents_in_batches
     @collection.find_in_batches.each do |group|

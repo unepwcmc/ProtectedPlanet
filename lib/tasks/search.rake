@@ -10,4 +10,18 @@ namespace :search do
 
     logger.info "Reindex complete."
   end
+
+  namespace :cms do
+    desc 'Reindex CMS search'
+    task reindex: :environment do
+      logger = Logger.new(STDOUT)
+
+      logger.info "Deleting index..."
+      Search::Index.delete([Search::CMS_INDEX])
+      logger.info "Populating index..."
+      Search::Index.create_cms_fragments
+
+      logger.info "Reindex complete."
+    end
+  end
 end
