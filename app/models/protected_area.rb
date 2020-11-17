@@ -247,6 +247,10 @@ class ProtectedArea < ApplicationRecord
     }
   end
 
+  def is_whs?
+    designation.name == 'World Heritage Site (natural or mixed)'
+  end
+
   private
 
   def is_point?

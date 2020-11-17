@@ -1,3 +1,28 @@
+### 4.1.1
+
+November release
+* Updated with November statistics (GD PAME, Global Monthly, National Monthly and GL)
+
+### 4.1.0
+
+**New Feature**
+
+* Add World Heritage Outlook website link to PA page
+
+**Amendments**
+
+* Increase PA page map's height
+
+**Bug fixes**
+
+* Fix links green arrow icons not showing
+
+### 4.0.1
+
+* Fixed suggested sites not being displayed for sites with ABNJ status
+* Custom 500 page created
+* IUCN link now shown for GL sites if present
+
 ### 4.0.0
 
 * Refresh! Major restyling of all components

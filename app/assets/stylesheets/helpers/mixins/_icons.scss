@@ -10,7 +10,7 @@ $icon-search-width: rem-calc(21);
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-  
+
   display: block;
 }
 
@@ -38,7 +38,7 @@ $icon-search-width: rem-calc(21);
 
 @mixin icon-earth($size: rem-calc(60)) {
   @include icon-basic;
-  @include icon-image('earth.svg', $size, $size); 
+  @include icon-image('earth.svg', $size, $size);
 }
 
 //--------------------------------------------------
@@ -52,14 +52,14 @@ $icon-search-width: rem-calc(21);
   display: block;
 }
 
-@mixin icon-area() { 
+@mixin icon-area() {
   @include icon-basic;
-  @include icon-image('area.svg', rem-calc(52), rem-calc(52)); 
+  @include icon-image('area.svg', rem-calc(52), rem-calc(52));
 }
 
 @mixin icon-arrow-external() {
   @include icon-basic;
-  @include icon-image('arrow-external.svg', rem-calc(17), rem-calc(12));
+  @include icon-image('arrow-external.svg', rem-calc(25), rem-calc(12));
 }
 
 @mixin icon-arrow-external-white() {
@@ -152,9 +152,9 @@ $icon-search-width: rem-calc(21);
   @include icon-image('circle-chevron-white.svg', rem-calc(34), rem-calc(34));
 }
 
-@mixin icon-country() { 
+@mixin icon-country() {
   @include icon-basic;
-  @include icon-image('country.svg', rem-calc(65), rem-calc(50)); 
+  @include icon-image('country.svg', rem-calc(65), rem-calc(50));
 }
 
 @mixin icon-download() {
