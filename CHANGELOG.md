@@ -1,3 +1,8 @@
+### 4.1.1
+
+November release
+* Updated with November statistics (GD PAME, Global Monthly, National Monthly and GL)
+
 ### 4.1.0
 
 **New Feature**
