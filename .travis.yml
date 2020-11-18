@@ -53,6 +53,7 @@ branches:
     - master
     - develop
     - refresh
+    - travis_fix
 addons:
   code_climate:
     repo_token:
