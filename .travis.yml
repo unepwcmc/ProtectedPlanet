@@ -34,7 +34,7 @@ install:
   - nvm install node
   - node -v
   - npm i -g yarn
-  - yarn
+  - yarn install
   - bundle install
 bundler_args: --without development production staging --jobs=6
 rvm:
