@@ -12,7 +12,7 @@ class HomePresenter
   end
   
   def marine_pas
-    @marine_pas ||= number_with_delimiter(ProtectedArea.where(marine: true).count)
+    @marine_pas ||= number_with_delimiter(GlobalStatistic.total_marine_protected_areas)
   end
 
   # TEMPORARILY USING CSV DATA FOR OECM NUMBERS - if importer manages to successfully populate OECMs, we'll go with that instead
