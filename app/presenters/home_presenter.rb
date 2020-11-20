@@ -4,25 +4,19 @@ class HomePresenter
   def initialize
   end
 
-  # Number of areas is still taken from the imported database rather than the global stats CSV.
-  # This is because we select out some sites for coverage stats so the number in the
-  # global stats csv is the number of the sites we use to calculate the coverage numbers beneath it.
   def terrestrial_pas
-    @terrestrial_pas ||= number_with_delimiter(ProtectedArea.where(marine: false).count)
+    @terrestrial_pas ||= number_with_delimiter(GlobalStatistic.total_terrestrial_protected_areas)
   end
   
   def marine_pas
     @marine_pas ||= number_with_delimiter(GlobalStatistic.total_marine_protected_areas)
   end
 
-  # TEMPORARILY USING CSV DATA FOR OECM NUMBERS - if importer manages to successfully populate OECMs, we'll go with that instead
   def terrestrial_oecms
-    # number_with_delimiter(ProtectedArea.where(marine: false, is_oecm: true).count)
     GlobalStatistic.total_terrestrial_oecms
   end
 
   def marine_oecms
-    # number_with_delimiter(ProtectedArea.where(marine: true, is_oecm: true).count)
     GlobalStatistic.total_marine_oecms
   end
 
