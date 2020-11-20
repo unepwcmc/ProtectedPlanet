@@ -7,8 +7,8 @@ module Download::Poller
 
   def self.json_response(params)
     domain = params['domain']
-    filters = get_filters(params)
-    token = filters ? Download::Utils.search_token(search_term(params), filters) : params['token']
+    # filters = get_filters(params)
+    token = domain == 'search' ? params['backEndToken'] : params['token']
     format = params['format']
 
     generation_info = Download.generation_info(domain, token, format)

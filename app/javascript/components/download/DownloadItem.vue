@@ -70,7 +70,8 @@ export default {
       id: '',
       interval: null,
       title: '',
-      url: ''
+      url: '',
+      backEndToken: ''
     }
   },
 
@@ -116,7 +117,7 @@ export default {
       }
 
       axios.get(this.endpointPoll, {
-          params: this.params
+          params: this.updatedParams
         })
         .then(response => {
           this.updateDownloadItem(response.data)
@@ -152,6 +153,7 @@ export default {
       this.id = 'id' in data ? data.id : Math.round(Math.random(0,1)*100000)
       this.title = data.title
       this.url = data.url
+      this.updatedParams = {...this.params, backEndToken: data.token}
     }
   }
 }

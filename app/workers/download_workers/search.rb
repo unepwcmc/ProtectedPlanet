@@ -19,6 +19,7 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   end
 
   def generate_download
+    p protected_area_ids
     Download.generate(@format, filename(ids_digest, @format), {wdpa_ids: protected_area_ids})
   end
 
