@@ -65,6 +65,24 @@ class CountryPresenter
     }
   end
 
+  def marine_combined_stats
+    marine_stats.merge!(
+      {
+        protected_km2: number_with_delimiter((statistic.pa_marine_area + statistic.oecms_pa_marine_area).round(0)),
+        protected_percentage: (statistic.percentage_pa_marine_cover + statistic.percent_oecms_pa_marine_area).round(2)
+      }
+    )
+  end
+
+  def terrestrial_combined_stats
+    terrestrial_stats.merge!(
+      {
+        protected_km2: number_with_delimiter((statistic.pa_land_area + statistic.oecms_pa_land_area).round(0)),
+        protected_percentage: (statistic.percentage_pa_land_cover + statistic.percent_oecms_pa_land_area).round(2)
+      }
+    )
+  end
+
   def marine_page_statistics
     {
       title: country.name,
