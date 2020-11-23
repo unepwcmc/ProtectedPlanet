@@ -23,11 +23,10 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   end
 
   def ids_digest
-    sha = Download::Utils.search_token(@search_term, JSON.parse(@filters_json))
-    return "#{sha}" if @search_term.blank?
-    return "#{@search_term}_#{sha}".gsub(' ', '_') if @filters_values.empty?
+    return "#{@token}" if @search_term.blank?
+    return "#{@search_term}_#{@token}".gsub(' ', '_') if @filters_values.empty?
     filter = @filters_values.map { |f| f.to_s[0..9] }.join(',')
-    "#{@search_term[0..11]}_#{filter}_#{sha}".gsub(' ', '_')
+    "#{@search_term[0..11]}_#{filter}_#{@token}".gsub(' ', '_')
   end
 
   def protected_area_ids
