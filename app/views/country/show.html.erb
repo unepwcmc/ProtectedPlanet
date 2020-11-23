@@ -24,6 +24,14 @@
     </section>
 
     <section>
+      <div class="card--stats-toggle">
+        <tabs-fake
+          :children="[{ id: 'wdpa', title: 'Protected Areas' }, { id: 'wdpaoecm', title: 'Protected Areas & OECMs' }]"
+          class="tabs--rounded"
+        ></tabs-fake>
+      </div>
+
+
       <div class="card--stats-wrapper">
         <%= render partial: "partials/stats/stats-coverage", locals: { 
           stats: @country_presenter.terrestrial_stats, 
