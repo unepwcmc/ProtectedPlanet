@@ -19,9 +19,6 @@
   @include ul-unstyled;
   @include tabs-horizontal-scroll;
   margin: rem-calc(26 0);
-  
-  @include breakpoint($small) { margin: rem-calc(26 0 32 0); }
-  @include breakpoint($medium) { margin: rem-calc(30 0 10 0); }
 
   .tab {
     &__trigger {
@@ -31,6 +28,7 @@
     }
   }
 }
+
 //--------------------------------------------------
 // mixins for tab
 //--------------------------------------------------
@@ -83,25 +81,45 @@
 &--search-main {
   @include tabs-rounded;
 
+  @include breakpoint($small) { margin: rem-calc(26 0 32 0); }
+  @include breakpoint($medium) { margin: rem-calc(30 0 10 0); }
+
   .tab {
     &__trigger {
       &:first-child { margin-left: 0; }
     }
   }
 }
+
 //--------------------------------------------------
 // tabs search areas
 //--------------------------------------------------
 &--search-areas {
   @include tabs-rounded;
 
-  @include breakpoint($small) { justify-content: center; }
+  @include breakpoint($small) { 
+    margin: rem-calc(26 0 32 0);
+
+    justify-content: center;
+  }
+
+  @include breakpoint($medium) { margin: rem-calc(30 0 10 0); }
 
   .tab {
     &__trigger {
       &:first-child { margin-left: 0; }
     }
   }
+}
+
+//--------------------------------------------------
+// tabs small
+//--------------------------------------------------
+&--rounded {
+  @include tabs-rounded;
+  margin: 0;
+  
+  @include breakpoint($small) { justify-content: center; }
 }
 
 //--------------------------------------------------

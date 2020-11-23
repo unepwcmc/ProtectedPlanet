@@ -49,6 +49,7 @@ import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
 import TableHead from './components/table/TableHead'
 import Tabs from './components/tabs/Tabs'
+import TabsFake from './components/tabs/TabsFake'
 import TabTarget from './components/tabs/TabTarget'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
@@ -117,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
         StickyNav,
         TableHead,
         Tabs,
+        TabsFake,
         TabTarget,
         Target11Dashboard,
         Tooltip,
