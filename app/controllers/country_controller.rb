@@ -90,7 +90,7 @@ class CountryController < ApplicationController
     if has_oecms
       @iucn_categories_oecm ||= @country.protected_areas_per_iucn_category
       @governance_types_oecm ||= @country.protected_areas_per_governance
-      @coverage_growth ||= @country_presenter.coverage_growth_chart
+      @coverage_growth_oecm ||= @country_presenter.coverage_growth_chart
     end
 
     @iucn_categories ||= @country.protected_areas_per_iucn_category(exclude_oecms: true)
