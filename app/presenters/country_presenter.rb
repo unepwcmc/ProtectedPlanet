@@ -7,6 +7,27 @@ class CountryPresenter
     @designations_presenter = DesignationsPresenter.new(country)
   end
 
+  def iucn_categories_chart(chart_input)
+    chart_input.enum_for(:each_with_index)
+      .map do |category, i|
+      { 
+        id: i+1,
+        title: category['iucn_category_name'], 
+        value: category['count'] 
+      }
+    end.to_json
+  end
+
+  def governance_chart(chart_input)
+    chart_input.map do |item|
+      { 
+        id: item['governance_id'],
+        title: item['governance_name'],
+        value: item['count']
+      }
+    end.to_json
+  end
+
   def chart_point_poly
     [
       { 
@@ -22,11 +43,11 @@ class CountryPresenter
     ]
   end
 
-  def coverage_growth
+  def coverage_growth_chart(exclude_oecms: false)
     {
       title: I18n.t('charts.legend.coverage_km2'),
       units: I18n.t('charts.units.km2'),
-      datapoints: @country.coverage_growth.map { |el| { year: el['year'], value: el['count'] } }
+      datapoints: @country.coverage_growth(exclude_oecms).map { |el| { year: el['year'], value: el['count'] } }
     }.to_json 
   end
 

@@ -3,7 +3,7 @@
 
   <am-chart-pie
     class="am-chart--pie"
-    :dataset="<%= @governance_chart %>"
+    :dataset="<%= @country_presenter.iucn_categories_chart(governance_types) %>"
     :doughnut="true"
     id="am-pie-governance-type"
   ></am-chart-pie>
