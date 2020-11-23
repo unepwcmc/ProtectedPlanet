@@ -71,7 +71,7 @@ export default {
       interval: null,
       title: '',
       url: '',
-      backEndToken: ''
+      updatedParams: ''
     }
   },
 
@@ -131,6 +131,7 @@ export default {
 
     deleteItem () {
       this.$store.dispatch('download/deleteDownloadItem', this.params)
+      this.stopPolling()
     }, 
 
     downloadItem () {

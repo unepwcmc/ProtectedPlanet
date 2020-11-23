@@ -19,12 +19,11 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   end
 
   def generate_download
-    p protected_area_ids
     Download.generate(@format, filename(ids_digest, @format), {wdpa_ids: protected_area_ids})
   end
 
   def ids_digest
-    sha = Digest::SHA256.hexdigest(protected_area_ids.join)
+    sha = Download::Utils.search_token(@search_term, JSON.parse(@filters_json))
     return "#{sha}" if @search_term.blank?
     return "#{@search_term}_#{sha}".gsub(' ', '_') if @filters_values.empty?
     filter = @filters_values.map { |f| f.to_s[0..9] }.join(',')
