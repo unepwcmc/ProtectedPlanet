@@ -4,7 +4,6 @@ require 'enumerator'
 class CountryController < ApplicationController
   after_action :enable_caching
   before_action :load_vars, except: %i[codes compare]
-  before_action :assign_oecm_variables, only: :show
 
   include MapHelper
 
@@ -31,6 +30,9 @@ class CountryController < ApplicationController
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
    
     #  Variables that have an OECM counterpart
+    @iucn_categories ||= @country.protected_areas_per_iucn_category(exclude_oecms: true)
+    @governance_types ||= @country.protected_areas_per_governance(exclude_oecms: true)
+    @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
     # Not sure what to do about this yet
     @country_designations ||= @country_presenter.designations
 
@@ -46,7 +48,7 @@ class CountryController < ApplicationController
 
     @sources = @country.sources_per_country
 
-    @total_oecm = @country.protected_areas.oecms.count
+   
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.wdpas.count
 
@@ -100,19 +102,16 @@ class CountryController < ApplicationController
   private
 
   def has_oecms
-    @country.protected_areas.where(is_oecm: true).count.positive?
+    @total_oecm = @country.protected_areas.oecms.count
+    @total_oecm.positive?
   end
 
   def assign_oecm_variables
-    if has_oecms
-      @iucn_categories_oecm ||= @country.protected_areas_per_iucn_category
-      @governance_types_oecm ||= @country.protected_areas_per_governance
-      @coverage_growth_oecm ||= @country_presenter.coverage_growth_chart
-    end
-
-    @iucn_categories ||= @country.protected_areas_per_iucn_category(exclude_oecms: true)
-    @governance_types ||= @country.protected_areas_per_governance(exclude_oecms: true)
-    @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
+    return unless has_oecms
+    
+    @iucn_categories_oecm ||= @country.protected_areas_per_iucn_category
+    @governance_types_oecm ||= @country.protected_areas_per_governance
+    @coverage_growth_oecm ||= @country_presenter.coverage_growth_chart
   end
 
   def map_overlays
@@ -130,6 +129,7 @@ class CountryController < ApplicationController
 
     @pame_statistics = @country.pame_statistic
     @country_presenter = CountryPresenter.new @country
+    assign_oecm_variables
   end
 
   def pas_sample(size = 3)
