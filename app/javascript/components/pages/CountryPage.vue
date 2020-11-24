@@ -27,6 +27,10 @@
         :data="activeDatabase.governance"
       />
     </div>
+
+    <stats-sources
+      :data="activeDatabase.sources"
+    />
   </div>
 </template>
 
@@ -34,6 +38,7 @@
 import StatsCoverage from '../stats/StatsCoverage.vue'
 import StatsGovernance from '../stats/StatsGovernance.vue'
 import StatsIucnCategories from '../stats/StatsIucnCategories.vue'
+import StatsSources from '../stats/StatsSources.vue'
 import TabsFake from '../tabs/TabsFake.vue'
 
 export default {
@@ -43,6 +48,7 @@ export default {
     StatsCoverage,
     StatsGovernance,
     StatsIucnCategories,
+    StatsSources,
     TabsFake
   },
 

@@ -28,7 +28,12 @@ class CountryController < ApplicationController
         governance: {
           title: I18n.t('stats.governance.title')
         },
-        sources: {},
+        sources: {
+          count: @country.sources_per_country.count,
+          source_updated: I18n.t('stats.sources.updated'),
+          sources: @country.sources_per_country,
+          title: I18n.t('stats.sources.title')
+        },
         designations: {},
         growth: {},
         sites: {}
@@ -65,8 +70,6 @@ class CountryController < ApplicationController
 
     @sites = @country.protected_areas.take(3)
     @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
-
-    @sources = @country.sources_per_country
 
    
     @total_pame = @country.protected_areas.with_pame_evaluations.count
