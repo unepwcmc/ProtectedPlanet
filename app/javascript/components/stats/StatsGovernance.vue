@@ -20,9 +20,9 @@
       <span class="list__title">{{ type.governance_name}}</span>
       <span class="list__value">{{ type.count }}</span>
       <a 
-        href="chart_link(type)[:link]" 
+        :href="`${type.link}`" 
         class="list__right list__a"
-        title="chart_link(type)[:title]"
+        :title="`View the ${type.governance_name} sites for ${data.country}`"
       >
         View list
       </a>

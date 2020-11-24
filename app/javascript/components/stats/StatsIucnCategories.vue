@@ -22,9 +22,9 @@
         {{ category.count }}, {{ category.percentage | decimals }}
       </span>
       <a 
-        href="chart_link(category)[:link]" 
+        :href="`${category.link}`"  
         class="list__right list__a"
-        title="chart_link(category)[:title]"
+        :title="`View the ${category.iucn_category_name} sites for ${data.country}`"
       >
         View list
       </a>

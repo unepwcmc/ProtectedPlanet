@@ -7,6 +7,7 @@ class CountryController < ApplicationController
   before_action :build_stats, only: :show
 
   include MapHelper
+  include CountriesHelper
 
   def show
      # Components above tabs
@@ -95,15 +96,15 @@ class CountryController < ApplicationController
           text: I18n.t('stats.warning')
         },
         iucn: {
-          categories: @country.protected_areas_per_iucn_category, #this was what was missing
-          #links don't currently work because the partial was using the chart_link method
           chart: @iucn_categories,
+          country: @country.name,
+          categories: create_chart_links(@country.protected_areas_per_iucn_category), 
           title: I18n.t('stats.iucn-categories.title')
         },
         governance: {
           chart: @governance_types,
-          governance: @country.protected_areas_per_governance, #this was what was missing
-          #links don't currently work because the partial was using the chart_link method
+          country: @country.name,
+          governance: create_chart_links(@country.protected_areas_per_governance), 
           title: I18n.t('stats.governance.title')
         },
         sources: {
@@ -236,6 +237,14 @@ class CountryController < ApplicationController
       ].flatten
     else
       @country.protected_areas.order(:name).first(size)
+    end
+  end
+
+  def create_chart_links(input_data)
+    input_data.map do |category|
+      category.merge!({
+        link: chart_link(category)[:link]
+      })
     end
   end
 end
