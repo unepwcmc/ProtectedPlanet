@@ -172,7 +172,7 @@ class CountryController < ApplicationController
           title: I18n.t('stats.growth.title_wdpa_oecm') #different
         },
         sites: {
-          cards: @sites_oecm, # get 1 oecm and 2 pas
+          cards: @sites_oecm, 
           title: @country.name + ' ' + I18n.t('global.area-types.wdpa_oecm'),#different
           view_all: @sitesViewAllUrl,
           text_view_all: I18n.t('global.button.all')#same as wdpa only
@@ -207,7 +207,7 @@ class CountryController < ApplicationController
     @designation_percentages ||= @country_presenter.designations_without_oecm.map do |designation|
                                 { percent: designation[:percent] }
                               end
-    @sites = pas_sample(3, false)
+    @sites = site_cards(3, false)
     @sources = @country.sources_per_country(exclude_oecms: true)
     @growth = @country_presenter.coverage_growth_chart(exclude_oecms: true)
     @sitesViewAllUrlWdpa = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] },  db_type: ['wdpa'] })
@@ -222,13 +222,13 @@ class CountryController < ApplicationController
     @designation_percentages_oecm ||= @country_presenter.designations.map do |designation|
                                   { percent: designation[:percent] }
                                 end
-    @sites_oecm = pas_sample
+    @sites_oecm = site_cards
     @sources_oecm = @country.sources_per_country
     @growth_oecm = @country_presenter.coverage_growth_chart
     @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
   end
 
-  def pas_sample(size = 3, show_oecm = true)
+  def site_cards(size = 3, show_oecm = true)
     if show_oecm 
       [
         @country.protected_areas.oecms.first,
