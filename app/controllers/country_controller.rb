@@ -47,7 +47,7 @@ class CountryController < ApplicationController
 
     if has_oecms
       @stats_data.merge!(build_oecm_hash) 
-      @tabs.push!({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') }) 
+      @tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') }) 
     end
   end
 
