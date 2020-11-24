@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div class="card--stats-toggle">
+    <div 
+      class="card--stats-toggle"
+      v-if="tabs.count > 0"
+    >
       <tabs-fake
         :children="tabs"
         class="tabs--rounded"
