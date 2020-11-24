@@ -9,7 +9,6 @@ class CountryController < ApplicationController
   include MapHelper
 
   def show
-<<<<<<< HEAD
     @country_presenter = CountryPresenter.new @country
 
     @stats_data = {
@@ -27,8 +26,6 @@ class CountryController < ApplicationController
       }
     }.to_json
 
-=======
->>>>>>> 121857fe7cd56fb4f333b276ccfd5ef24f2c0758
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
 
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
