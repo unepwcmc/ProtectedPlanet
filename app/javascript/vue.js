@@ -19,6 +19,7 @@ import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
+import CountryPage from './components/pages/CountryPage'
 import ChartBar from './components/charts/chart-bar/ChartBar'
 import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
@@ -30,6 +31,7 @@ import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
+import ChartToggle from './components/charts/chart-toggle/ChartToggle'
 import Download from './components/download/Download'
 import DownloadModal from './components/download/DownloadModal'
 import Flickity from 'vue-flickity'
@@ -49,7 +51,6 @@ import StickyBar from './components/sticky/StickyBar'
 import StickyNav from './components/sticky/StickyNav'
 import TableHead from './components/table/TableHead'
 import Tabs from './components/tabs/Tabs'
-import TabsFake from './components/tabs/TabsFake'
 import TabTarget from './components/tabs/TabTarget'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
@@ -88,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
         Carousel,
         CarouselSlide,
         Counter,
+        CountryPage,
         ChartBar,
         ChartBarSimple,
         ChartBarStacked,
@@ -99,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowStacked,
         ChartRowTarget,
         ChartSunburst,
+        ChartToggle,
         Download,
         DownloadModal,
 	      FilteredTable,
@@ -118,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         StickyNav,
         TableHead,
         Tabs,
-        TabsFake,
         TabTarget,
         Target11Dashboard,
         Tooltip,

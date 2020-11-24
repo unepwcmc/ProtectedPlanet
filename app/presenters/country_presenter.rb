@@ -49,7 +49,14 @@ class CountryPresenter
       protected_km2: number_with_delimiter(statistic.pa_marine_area.round(0)),
       protected_national_report: statistic.percentage_nr_marine_cover,
       protected_percentage: statistic.percentage_pa_marine_cover.round(2),
-      total_km2: number_with_delimiter(statistic.marine_area.round(0))
+      total_km2: number_with_delimiter(statistic.marine_area.round(0)),
+      title: I18n.t("stats.marine-title"),
+      text_coverage: I18n.t("stats.coverage"),
+      text_national_report: I18n.t("stats.nr-report-title"),
+      text_protected: I18n.t("stats.marine-protected"),
+      text_pame: I18n.t("stats.pame.areas-assessed"),
+      text_pame_assessments: I18n.t("stats.pame.with-assessments"),
+      text_total: I18n.t("stats.marine-total"),
     }
   end
 
@@ -61,7 +68,14 @@ class CountryPresenter
       protected_km2: number_with_delimiter(statistic.pa_land_area.round(0)),
       protected_national_report: statistic.percentage_nr_land_cover,
       protected_percentage: statistic.percentage_pa_land_cover.round(2),
-      total_km2: number_with_delimiter(statistic.land_area.round(0))
+      total_km2: number_with_delimiter(statistic.land_area.round(0)),
+      title: I18n.t("stats.terrestrial-title"),
+      text_coverage: I18n.t("stats.coverage"),
+      text_national_report: I18n.t("stats.nr-report-title"),
+      text_protected: I18n.t("stats.terrestrial-protected"),
+      text_pame: I18n.t("stats.pame.areas-assessed"),
+      text_pame_assessments: I18n.t("stats.pame.with-assessments"),
+      text_total: I18n.t("stats.terrestrial-total"),
     }
   end
 
