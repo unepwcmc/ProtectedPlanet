@@ -65,7 +65,7 @@ en:
       updated: Updated
     type: Type
     warning: "<span class='card__title'>Disclaimer:</span> These statistics might differ from those reported officially by countries due to difference in methodologies and datasets used to assess protected area coverage and differences in the base maps used to measure terrestrial and marine area of a country or territory."
-    warning_wdap_oecm: "<span class='card__title'>Disclaimer:</span> These statistics might differ from those reported officially by countries due to difference in methodologies and datasets used to assess protected area and OECM coverage and differences in the base maps used to measure terrestrial and marine area of a country or territory."
+    warning_wdpa_oecm: "<span class='card__title'>Disclaimer:</span> These statistics might differ from those reported officially by countries due to difference in methodologies and datasets used to assess protected area and OECM coverage and differences in the base maps used to measure terrestrial and marine area of a country or territory."
     wdpa:
       id: WDPA ID
       total: Total Protected Areas
