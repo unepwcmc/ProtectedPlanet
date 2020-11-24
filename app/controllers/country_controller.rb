@@ -91,7 +91,7 @@ class CountryController < ApplicationController
           @marine_stats
         ],
         message: {
-          documents: @country_presenter.documents,
+          documents: @country_presenter.documents, #need to add translated text for link to documents hash 
           text: I18n.t('stats.warning')
         },
         iucn: {
@@ -109,6 +109,8 @@ class CountryController < ApplicationController
           title: I18n.t('stats.sources.title')
         },
         designations: {
+          #this needs adding into juristictions hash V
+          #designation_link(jurisdiction['designation_name'])
           chart: @designation_percentages,
           designations:  @country_presenter.designations_without_oecm,
           title: I18n.t('stats.designations.title')
@@ -120,8 +122,8 @@ class CountryController < ApplicationController
         },
         sites: {
           cards: @sites,
-          title: @country.name + ' ' + I18n.t('country.protected_areas'),
-          view_all: @sitesViewAllUrl,
+          title: @country.name + ' ' + I18n.t('global.area-types.wdpa'),
+          view_all: @sitesViewAllUrl,#this should prob show wdpa only
           text_view_all: I18n.t('global.button.all')
         }
       }
@@ -138,38 +140,38 @@ class CountryController < ApplicationController
           @marine_combined_stats
         ],
         message: {
-          documents: @country_presenter.documents,
-          text: I18n.t('stats.warning_wdpa_oecm')
+          documents: @country_presenter.documents, #same
+          text: I18n.t('stats.warning_wdap_oecm') #different
         },
         iucn: {
-          chart: @iucn_categories_oecm,
-          title: I18n.t('stats.iucn-categories.title')
+          chart: @iucn_categories_oecm, # needs to be categories types for WDPA and OECMs
+          title: I18n.t('stats.iucn-categories.title') #same as wdpa only 
         },
         governance: {
-          chart: @governance_types_oecm,
-          title: I18n.t('stats.governance.title')
+          chart: @governance_types_oecm, # needs to be governance types for WDPA and OECMs
+          title: I18n.t('stats.governance.title')#same as wdpa only 
         },
         sources: {
-          count: @sources_oecm.count,
-          source_updated: I18n.t('stats.sources.updated'),
-          sources: @sources_oecm,
-          title: I18n.t('stats.sources.title')
+          count: @sources_oecm.count,  # needs to be sources for WDPA and OECMs
+          source_updated: I18n.t('stats.sources.updated'),#same as wdpa only
+          sources: @sources_oecm,# needs to be sources for WDPA and OECMs
+          title: I18n.t('stats.sources.title')#same as wdpa only 
         },
         designations: {
-          chart: @designation_percentages_oecm,
-          designations: @country_presenter.designations,
-          title: I18n.t('stats.designations.title')
+          chart: @designation_percentages_oecm, # needs to include designations for WDPA and OECMs
+          designations: @country_presenter.designations, # needs to include designations for WDPA and OECMs
+          title: I18n.t('stats.designations.title') #same as wdpa only
         },
         growth: {
-          chart: @growth_oecm,
-          smallprint: I18n.t('stats.coverage-chart-smallprint'),
-          title: I18n.t('stats.growth.title_wdpa_oecm')
+          chart: @growth_oecm, # needs to include WDPA and OECMs
+          smallprint: I18n.t('stats.coverage-chart-smallprint'), #same as wdpa only
+          title: I18n.t('stats.growth.title_wdpa_oecm') #different
         },
         sites: {
-          cards: @sites_oecm,
-          title: @country.name + ' ' + I18n.t('country.protected_areas'),
-          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }),
-          text_view_all: I18n.t('global.button.all')
+          cards: @sites_oecm, # get 1 oecm and 2 pas
+          title: @country.name + ' ' + I18n.t('global.area-types.wdpa_oecm'),#different
+          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }),#this should prob show wdpa and oecms
+          text_view_all: I18n.t('global.button.all')#same as wdpa only
         }
       }
     }
