@@ -6,8 +6,8 @@
       <div class="card__chart">
         <div class="chart--square">
           <span 
-            class="`chart__area theme--${data.type}`" 
-            style="`width: ${data.protected_percentage}%; height: ${data.protected_percentage}%;`"
+            :class="`chart__area theme--${data.type}`" 
+            :style="`width: ${data.protected_percentage}%; height: ${data.protected_percentage}%;`"
           ></span>
         </div>
       </div>
