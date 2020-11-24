@@ -95,11 +95,15 @@ class CountryController < ApplicationController
           text: I18n.t('stats.warning')
         },
         iucn: {
+          categories: @country.protected_areas_per_iucn_category, #this was what was missing
+          #links don't currently work because the partial was using the chart_link method
           chart: @iucn_categories,
           title: I18n.t('stats.iucn-categories.title')
         },
         governance: {
           chart: @governance_types,
+          governance: @country.protected_areas_per_governance, #this was what was missing
+          #links don't currently work because the partial was using the chart_link method
           title: I18n.t('stats.governance.title')
         },
         sources: {
