@@ -104,7 +104,12 @@ class CountryController < ApplicationController
           chart: @governance_types,
           title: I18n.t('stats.governance.title')
         },
-        sources: @sources,
+        sources: {
+          count: @sources.count,
+          source_updated: I18n.t('stats.sources.updated'),
+          sources: @sources,
+          title: I18n.t('stats.sources.title')
+        },
         designations: @designation_percentages,
         growth: @growth,
         sites: @sites
@@ -129,7 +134,12 @@ class CountryController < ApplicationController
           chart: @governance_types_oecm,
           title: I18n.t('stats.governance.title')
         },
-        sources: @sources_oecm,
+        sources: {
+          count: @sources_oecm.count,
+          source_updated: I18n.t('stats.sources.updated'),
+          sources: @sources_oecm,
+          title: I18n.t('stats.sources.title')
+        },
         designations: @designation_percentages_oecm,
         growth: @growth_oecm,
         sites: @sites_oecm
