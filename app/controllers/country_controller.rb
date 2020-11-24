@@ -127,7 +127,7 @@ class CountryController < ApplicationController
         sites: {
           cards: @sites,
           title: @country.name + ' ' + I18n.t('global.area-types.wdpa'),
-          view_all: @sitesViewAllUrl,#this should prob show wdpa only
+          view_all: @sitesViewAllUrlWdpa,
           text_view_all: I18n.t('global.button.all')
         }
       }
@@ -174,7 +174,7 @@ class CountryController < ApplicationController
         sites: {
           cards: @sites_oecm, # get 1 oecm and 2 pas
           title: @country.name + ' ' + I18n.t('global.area-types.wdpa_oecm'),#different
-          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }),#this should prob show wdpa and oecms
+          view_all: @sitesViewAllUrl,
           text_view_all: I18n.t('global.button.all')#same as wdpa only
         }
       }
@@ -207,11 +207,10 @@ class CountryController < ApplicationController
     @designation_percentages ||= @country_presenter.designations_without_oecm.map do |designation|
                                 { percent: designation[:percent] }
                               end
-    # Need to rework pas_sample method so that it shows only WDPA sites
-    @sites = pas_sample
+    @sites = pas_sample(3, false)
     @sources = @country.sources_per_country(exclude_oecms: true)
     @growth = @country_presenter.coverage_growth_chart(exclude_oecms: true)
-    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
+    @sitesViewAllUrlWdpa = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] },  db_type: ['wdpa'] })
   end
 
   def assign_oecm_variables    
@@ -223,22 +222,20 @@ class CountryController < ApplicationController
     @designation_percentages_oecm ||= @country_presenter.designations.map do |designation|
                                   { percent: designation[:percent] }
                                 end
-    # Need to rework pas_sample method so that it shows one OECM and two WDPAs
     @sites_oecm = pas_sample
     @sources_oecm = @country.sources_per_country
     @growth_oecm = @country_presenter.coverage_growth_chart
+    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
   end
 
-  def pas_sample(size = 3)
-    iso = params[:iso].upcase
-    pas = nil
-
-    pas = if iso.size == 2
-            ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
-          else
-            ProtectedArea.joins(:countries).where("countries.iso_3 = '#{iso}'")
-          end
-
-    pas.order(:name).first(size)
+  def pas_sample(size = 3, show_oecm = true)
+    if show_oecm 
+      [
+        @country.protected_areas.oecms.first,
+        @country.protected_areas.take(2)
+      ].flatten
+    else
+      @country.protected_areas.order(:name).first(size)
+    end
   end
 end
