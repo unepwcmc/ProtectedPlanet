@@ -45,6 +45,7 @@ en:
       button-title: Download the Management Plan for %{site}
     no-infomation: No information available
     nr-report-title: th National Report coverage
+    nr_latest: Latest National Report
     oecm:
       title: Total Other effective area-based conservation measures
     pame:

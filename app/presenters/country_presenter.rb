@@ -160,7 +160,7 @@ class CountryPresenter
     return unless @statistic.nr_report_url.present?
     {
       url: @statistic.nr_report_url,
-      name: I18n.t('country.link.national_report'),
+      name: I18n.t('stats.nr_latest'),
       type: 'link'
     }
   end

@@ -25,8 +25,6 @@ class CountryController < ApplicationController
     @map_options = {
       map: { boundsUrl: @country.extent_url }
     }
-    
-    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
 
     helpers.opengraph_title_and_description_with_suffix(@country.name)
 
@@ -123,7 +121,7 @@ class CountryController < ApplicationController
         sites: {
           cards: @sites,
           title: @country.name + ' ' + I18n.t('country.protected_areas'),
-          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }),
+          view_all: @sitesViewAllUrl,
           text_view_all: I18n.t('global.button.all')
         }
       }
@@ -141,7 +139,7 @@ class CountryController < ApplicationController
         ],
         message: {
           documents: @country_presenter.documents,
-          text: I18n.t('stats.warning_wdap_oecm')
+          text: I18n.t('stats.warning_wdpa_oecm')
         },
         iucn: {
           chart: @iucn_categories_oecm,
@@ -207,6 +205,7 @@ class CountryController < ApplicationController
     @sites = pas_sample
     @sources = @country.sources_per_country(exclude_oecms: true)
     @growth = @country_presenter.coverage_growth_chart(exclude_oecms: true)
+    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
   end
 
   def assign_oecm_variables    
@@ -215,8 +214,6 @@ class CountryController < ApplicationController
     @coverage_growth_oecm ||= @country_presenter.coverage_growth_chart
     @terrestrial_combined_stats ||= @country_presenter.terrestrial_combined_stats
     @marine_combined_stats ||= @country_presenter.marine_combined_stats
-    # TODO - Need to create a new method that factors in/out OECMs
-    # For designations, sites and oecms
     @designation_percentages_oecm ||= @country_presenter.designations.map do |designation|
                                   { percent: designation[:percent] }
                                 end
