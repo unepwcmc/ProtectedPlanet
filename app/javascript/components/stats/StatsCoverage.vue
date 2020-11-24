@@ -29,21 +29,21 @@
         <div>
           <p 
             class="card__stat"
-            v-if="data.protected_national_report && data.national_report_version"
+            v-if="hasNationalReport"
           >
             <span class="card__number block">
               {{ data.protected_national_report }}%
             </span>
-            {{ data.national_report_version }} {{ data.nr_report_title }}
+            {{ data.national_report_version }}{{ data.text_national_report }}
           </p>
           <div 
             class="card__subsection"
-            v-if="data.pame_percentage && data.pame_km2"
+            v-if="hasPameData"
           >
             <p class="card__subtitle">PAME</p>
 
             <p class="card__stat">
-                <span class="card__number block"> {{ data.pame_percentage }}% </span> {{ data.text_pame_assessments }}%
+                <span class="card__number block"> {{ data.pame_percentage }}% </span> {{ data.text_pame_assessments }}
               </p>
               <p class="card__stat">
                 <span class="card__number block">{{ data.pame_km2 }}km<sup>2</sup></span> {{ data.text_pame }}
@@ -64,6 +64,16 @@ export default {
     data: {
       required: true,
       type: Object
+    }
+  },
+
+  computed: {
+    hasNationalReport () {
+      return this.data.protected_national_report && this.data.national_report_version
+    },
+    
+    hasPameData () {
+      return this.data.pame_percentage && this.data.pame_km2
     }
   }
 }

@@ -2,7 +2,7 @@
   <div>
     <div class="card--stats-toggle">
       <tabs-fake
-        :children="[{ id: 'wdpa', title: 'Protected Areas' }, { id: 'wdpa_oecm', title: 'Protected Areas & OECMs' }]"
+        :children="tabs"
         class="tabs--rounded"
         v-on:click:tab="updateDatabaseId"
       ></tabs-fake>
@@ -15,11 +15,25 @@
         :data="stat"
       />
     </div>
+
+    <slot></slot>
+
+    <div class="card--stats-wrapper pdf-break-before">
+      <stats-iucn-categories
+        :data="activeDatabase.iucn"
+      />
+
+      <stats-governance
+        :data="activeDatabase.governance"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 import StatsCoverage from '../stats/StatsCoverage.vue'
+import StatsGovernance from '../stats/StatsGovernance.vue'
+import StatsIucnCategories from '../stats/StatsIucnCategories.vue'
 import TabsFake from '../tabs/TabsFake.vue'
 
 export default {
@@ -27,6 +41,8 @@ export default {
 
   components: {
     StatsCoverage,
+    StatsGovernance,
+    StatsIucnCategories,
     TabsFake
   },
 
@@ -34,6 +50,10 @@ export default {
     data: {
       required: true,
       type: Object
+    },
+    tabs: {
+      required: true,
+      type: Array
     }
   },
 

@@ -26,17 +26,12 @@
     <section>
       <country-page
         :data="<%= @stats_data %>"
-      ></country-page>
-      
-      <%= render partial: "partials/messages/message-warning-stats", locals: {
-        documents: @country_presenter.documents
-      } %>
-
-      <div class="card--stats-wrapper pdf-break-before">
-        <%= render partial: "partials/stats/stats-iucn-categories", locals: { iucn_categories: @iucn_categories } %>
-        
-        <%= render partial: "partials/stats/stats-governance", locals: { governance_types: @governance_types} %>
-      </div>
+        :tabs="<%= @tabs %>"
+      >
+        <%= render partial: "partials/messages/message-warning-stats", locals: {
+          documents: @country_presenter.documents
+        } %>
+      </country-page>
 
       <%= render partial: "partials/stats/stats-sources", locals: { sources: @sources } %>
 

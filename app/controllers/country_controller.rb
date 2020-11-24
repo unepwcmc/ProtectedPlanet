@@ -45,8 +45,15 @@ class CountryController < ApplicationController
   end
 
   def build_stats
+    @tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
     @stats_data = build_standard_hash
-    @stats_data.merge(build_oecm_hash) if has_oecms
+
+    if has_oecms
+      @stats_data.merge!(build_oecm_hash) 
+      @tabs.push!({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') }) 
+    end
+
+    @tabs.to_json
     @stats_data.to_json
   end
 
@@ -80,21 +87,6 @@ class CountryController < ApplicationController
     @total_oecm.positive?
   end
 
-  def assign_oecm_variables    
-    @iucn_categories_oecm ||= @country.protected_areas_per_iucn_category
-    @governance_types_oecm ||= @country.protected_areas_per_governance
-    @coverage_growth_oecm ||= @country_presenter.coverage_growth_chart
-    @terrestrial_combined_stats ||= @country_presenter.terrestrial_combined_stats
-    @marine_combined_stats ||= @country_presenter.marine_combined_stats
-    # TODO - Need to create a new method that factors in/out OECMs
-    # For designations, sites and oecms
-    @designation_percentages_oecm ||= @country_presenter.designations.map do |designation|
-                                  { percent: designation[:percent] }
-                                end.to_json
-    @sites_oecm = @country.pas_sample
-    @sources_oecm = @country.sources_per_country
-  end
-
   def build_standard_hash
     load_assorted_vars
 
@@ -104,11 +96,17 @@ class CountryController < ApplicationController
           @terrestrial_stats,
           @marine_stats
         ],
-        iucn: {},
-        governance: {},
+        iucn: {
+          chart: @iucn_categories,
+          title: I18n.t('stats.iucn-categories.title')
+        },
+        governance: {
+          chart: @governance_types,
+          title: I18n.t('stats.governance.title')
+        },
         sources: @sources,
         designations: @designation_percentages,
-        growth: '',
+        growth: @growth,
         sites: @sites
       }
     }
@@ -123,11 +121,17 @@ class CountryController < ApplicationController
           @terrestrial_combined_stats, 
           @marine_combined_stats
         ],
-        iucn: {},
-        governance: {},
+        iucn: {
+          chart: @iucn_categories_oecm,
+          title: I18n.t('stats.iucn-categories.title')
+        },
+        governance: {
+          chart: @governance_types_oecm,
+          title: I18n.t('stats.governance.title')
+        },
         sources: @sources_oecm,
         designations: @designation_percentages_oecm,
-        growth: '',
+        growth: @growth_oecm,
         sites: @sites_oecm
       }
     }
@@ -151,8 +155,8 @@ class CountryController < ApplicationController
   end
 
   def load_assorted_vars
-    @iucn_categories ||= @country.protected_areas_per_iucn_category(exclude_oecms: true)
-    @governance_types ||= @country.protected_areas_per_governance(exclude_oecms: true)
+    @iucn_categories ||= @country_presenter.iucn_categories(protected_areas_per_iucn_category(exclude_oecms: true))
+    @governance_types ||= @country_presenter.governance_chart(protected_areas_per_governance(exclude_oecms: true))
     @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
     @terrestrial_stats ||= @country_presenter.terrestrial_stats
     @marine_stats ||= @country_presenter.marine_stats
@@ -161,6 +165,23 @@ class CountryController < ApplicationController
                               end.to_json
     @sites = @country.pas_sample
     @sources = @country.sources_per_country
+    @growth = @country_presenter.coverage_growth_chart(exclude_oecms: true)
+  end
+
+  def assign_oecm_variables    
+    @iucn_categories_oecm ||= @country_presenter.iucn_categories(protected_areas_per_iucn_category)
+    @governance_types_oecm ||= @country_presenter.governance_chart(protected_areas_per_governance)
+    @coverage_growth_oecm ||= @country_presenter.coverage_growth_chart
+    @terrestrial_combined_stats ||= @country_presenter.terrestrial_combined_stats
+    @marine_combined_stats ||= @country_presenter.marine_combined_stats
+    # TODO - Need to create a new method that factors in/out OECMs
+    # For designations, sites and oecms
+    @designation_percentages_oecm ||= @country_presenter.designations.map do |designation|
+                                  { percent: designation[:percent] }
+                                end.to_json
+    @sites_oecm = @country.pas_sample
+    @sources_oecm = @country.sources_per_country
+    @growth_oecm = @country_presenter.coverage_growth_chart
   end
 
   def pas_sample(size = 3)
