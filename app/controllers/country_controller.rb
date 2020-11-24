@@ -3,52 +3,20 @@ require 'enumerator'
 
 class CountryController < ApplicationController
   after_action :enable_caching
-  before_action :load_vars, except: %i[codes compare]
+  before_action :load_essential_vars, except: %i[codes compare]
+  before_action :build_stats, only: :show
 
   include MapHelper
 
   def show
     @country_presenter = CountryPresenter.new @country
 
-    @stats_data = {
-      wdpa: {
-        coverage: [
-          @country_presenter.terrestrial_stats,
-          @country_presenter.marine_stats,
-        ]
-      },
-      wdpa_oecm: {
-        coverage: [
-          @country_presenter.terrestrial_combined_stats,
-          @country_presenter.marine_combined_stats,
-        ]
-      }
-    }.to_json
-
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
 
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
    
-    #  Variables that have an OECM counterpart
-    @iucn_categories ||= @country.protected_areas_per_iucn_category(exclude_oecms: true)
-    @governance_types ||= @country.protected_areas_per_governance(exclude_oecms: true)
-    @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
-    # Not sure what to do about this yet
-    @country_designations ||= @country_presenter.designations
-
-    # For the stacked row chart percentages
-    @designation_percentages = @country_designations.map do |designation|
-      { percent: designation[:percent] }
-    end.to_json
-    ## END of section
-
-
-    @sites = @country.protected_areas.take(3)
     @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
 
-    @sources = @country.sources_per_country
-
-   
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.wdpas.count
 
@@ -74,6 +42,12 @@ class CountryController < ApplicationController
         send_file dest_pdf, type: 'application/pdf'
       end
     end
+  end
+
+  def build_stats
+    @stats_data = build_standard_hash
+    @stats_data.merge(build_oecm_hash) if has_oecms
+    @stats_data.to_json
   end
 
   def pdf
@@ -106,12 +80,57 @@ class CountryController < ApplicationController
     @total_oecm.positive?
   end
 
-  def assign_oecm_variables
-    return unless has_oecms
-    
+  def assign_oecm_variables    
     @iucn_categories_oecm ||= @country.protected_areas_per_iucn_category
     @governance_types_oecm ||= @country.protected_areas_per_governance
     @coverage_growth_oecm ||= @country_presenter.coverage_growth_chart
+    @terrestrial_combined_stats ||= @country_presenter.terrestrial_combined_stats
+    @marine_combined_stats ||= @country_presenter.marine_combined_stats
+    # TODO - Need to create a new method that factors in/out OECMs
+    # For designations, sites and oecms
+    @designation_percentages_oecm ||= @country_presenter.designations.map do |designation|
+                                  { percent: designation[:percent] }
+                                end.to_json
+    @sites_oecm = @country.pas_sample
+    @sources_oecm = @country.sources_per_country
+  end
+
+  def build_standard_hash
+    load_assorted_vars
+
+    {
+      wdpa: {
+        coverage: [
+          @terrestrial_stats,
+          @marine_stats
+        ],
+        iucn: {},
+        governance: {},
+        sources: @sources,
+        designations: @designation_percentages,
+        growth: '',
+        sites: @sites
+      }
+    }
+  end
+
+  def build_oecm_hash
+    assign_oecm_variables
+
+    {
+      wdpa_oecm: {
+        coverage: [
+          @terrestrial_combined_stats, 
+          @marine_combined_stats
+        ],
+        iucn: {},
+        governance: {},
+        sources: @sources_oecm,
+        designations: @designation_percentages_oecm,
+        growth: '',
+        sites: @sites_oecm
+      }
+    }
   end
 
   def map_overlays
@@ -129,7 +148,19 @@ class CountryController < ApplicationController
 
     @pame_statistics = @country.pame_statistic
     @country_presenter = CountryPresenter.new @country
-    assign_oecm_variables
+  end
+
+  def load_assorted_vars
+    @iucn_categories ||= @country.protected_areas_per_iucn_category(exclude_oecms: true)
+    @governance_types ||= @country.protected_areas_per_governance(exclude_oecms: true)
+    @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
+    @terrestrial_stats ||= @country_presenter.terrestrial_stats
+    @marine_stats ||= @country_presenter.marine_stats
+    @designation_percentages ||= @country_presenter.designations.map do |designation|
+                                { percent: designation[:percent] }
+                              end.to_json
+    @sites = @country.pas_sample
+    @sources = @country.sources_per_country
   end
 
   def pas_sample(size = 3)
