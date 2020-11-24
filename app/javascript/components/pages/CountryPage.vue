@@ -35,6 +35,10 @@
     <stats-designations
       :data="activeDatabase.designations"
     />
+
+    <stats-growth
+      :data="activeDatabase.growth"
+    />
   </div>
 </template>
 
@@ -42,6 +46,7 @@
 import StatsCoverage from '../stats/StatsCoverage.vue'
 import StatsDesignations from '../stats/StatsDesignations.vue'
 import StatsGovernance from '../stats/StatsGovernance.vue'
+import StatsGrowth from '../stats/StatsGrowth.vue'
 import StatsIucnCategories from '../stats/StatsIucnCategories.vue'
 import StatsSources from '../stats/StatsSources.vue'
 import TabsFake from '../tabs/TabsFake.vue'
@@ -53,6 +58,7 @@ export default {
     StatsCoverage,
     StatsDesignations,
     StatsGovernance,
+    StatsGrowth,
     StatsIucnCategories,
     StatsSources,
     TabsFake

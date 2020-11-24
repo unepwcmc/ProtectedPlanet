@@ -33,19 +33,6 @@
         } %>
       </country-page>
 
-      <div class="card--stats-growth-chart">
-        <div class="card__chart-wrapper">
-          <h2><%= t('stats.growth.title') %></h2>
-
-          <am-chart-line 
-            :data="<%= @coverage_growth %>"
-          >
-          </am-chart-line>
-          
-          <p class="text--small"><%= t('stats.coverage-chart-smallprint') %></p>
-        </div>
-      </div>
-
       <% if has_related_countries? %>
 
         <%= render partial: "partials/stats/stats-related-countries", locals: { 

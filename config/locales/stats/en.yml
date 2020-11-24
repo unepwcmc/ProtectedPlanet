@@ -6,7 +6,7 @@ en:
       title: Attributes
     citation: Citation Text
     coverage: Coverage
-    coverage-chart-smallprint: The graph excludes status years with no information reported (STAT_YR = 0).
+    coverage-chart-smallprint: The graph excludes status years with no information reported (STATUS_YR = 0).
     countries: Number of countries
     designations:
       title: Designations

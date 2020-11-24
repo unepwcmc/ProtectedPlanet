@@ -10,6 +10,10 @@ class CountryController < ApplicationController
   def show
     @country_presenter = CountryPresenter.new @country
     
+    #  Variables that have an OECM counterpart
+    @iucn_categories ||= @country.protected_areas_per_iucn_category(exclude_oecms: true)
+    @governance_types ||= @country.protected_areas_per_governance(exclude_oecms: true)
+    @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
     @country_designations ||= @country_presenter.designations
     # For the stacked row chart percentages
     @designation_percentages = @country_designations.map do |designation|
@@ -32,6 +36,7 @@ class CountryController < ApplicationController
           title: I18n.t('stats.iucn-categories.title')
         },
         governance: {
+          #chart: 
           title: I18n.t('stats.governance.title')
         },
         sources: {
@@ -45,7 +50,11 @@ class CountryController < ApplicationController
           designations: @country_designations,
           title: I18n.t('stats.designations.title')
         },
-        growth: {},
+        growth: {
+          chart: @coverage_growth,
+          smallprint: I18n.t('stats.coverage-chart-smallprint'),
+          title: I18n.t('stats.growth.title')
+        },
         sites: {}
       },
       wdpa_oecm: {
@@ -64,10 +73,7 @@ class CountryController < ApplicationController
 
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
    
-    #  Variables that have an OECM counterpart
-    @iucn_categories ||= @country.protected_areas_per_iucn_category(exclude_oecms: true)
-    @governance_types ||= @country.protected_areas_per_governance(exclude_oecms: true)
-    @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
+    
     # Not sure what to do about this yet
     
 

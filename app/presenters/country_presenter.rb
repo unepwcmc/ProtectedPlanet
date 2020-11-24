@@ -48,7 +48,7 @@ class CountryPresenter
       title: I18n.t('charts.legend.coverage_km2'),
       units: I18n.t('charts.units.km2'),
       datapoints: @country.coverage_growth(exclude_oecms).map { |el| { year: el['year'], value: el['count'] } }
-    }.to_json 
+    }
   end
 
   def designations
