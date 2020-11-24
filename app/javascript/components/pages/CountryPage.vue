@@ -22,14 +22,17 @@
       <stats-iucn-categories
         :data="activeDatabase.iucn"
       />
-      
-      <!-- "partials/stats/stats-governance", locals: { governance_types: @governance_types} -->
+
+      <stats-governance
+        :data="activeDatabase.governance"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import StatsCoverage from '../stats/StatsCoverage.vue'
+import StatsGovernance from '../stats/StatsGovernance.vue'
 import StatsIucnCategories from '../stats/StatsIucnCategories.vue'
 import TabsFake from '../tabs/TabsFake.vue'
 
@@ -38,6 +41,7 @@ export default {
 
   components: {
     StatsCoverage,
+    StatsGovernance,
     StatsIucnCategories,
     TabsFake
   },

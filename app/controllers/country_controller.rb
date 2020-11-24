@@ -25,7 +25,9 @@ class CountryController < ApplicationController
           # chart: @country_presenter.iucn_categories(iucn_categories),
           title: I18n.t('stats.iucn-categories.title')
         },
-        governance: {},
+        governance: {
+          title: I18n.t('stats.governance.title')
+        },
         sources: {},
         designations: {},
         growth: {},

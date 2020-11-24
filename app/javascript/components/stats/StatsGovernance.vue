@@ -7,24 +7,22 @@
     class="am-chart--pie"
     :dataset="data.chart"
     :doughnut="true"
-    id="am-pie-iucn-categories"
+    id="am-pie-governance-type"
   ></am-chart-pie>
 
-  <ul class="list--underline">
+  <ul class="list--underline theme--governance">
     <li 
       class="list__li"
-      v-for="(category, i) in data.categories"
+      v-for="(type, i) in data.governance"
       :key="i"
     >
       <i class="list__icon"></i>
-      <span class="list__title">{{ i+1 }}. {{ category.iucn_category_name}}</span>
-      <span class="list__value">
-        {{ category.count }}, {{ category.percentage | decimals }}
-      </span>
+      <span class="list__title">{{ type.governance_name}}</span>
+      <span class="list__value">{{ type.count }}</span>
       <a 
-        href="chart_link(category)[:link]" 
+        href="chart_link(type)[:link]" 
         class="list__right list__a"
-        title="chart_link(category)[:title]"
+        title="chart_link(type)[:title]"
       >
         View list
       </a>
@@ -37,7 +35,7 @@
 import AmChartPie from '../charts/am-chart-pie/AmChartPie'
 
 export default {
-  name: 'StatsIucnCategories',
+  name: 'StatsGovernance',
 
   components: {
     AmChartPie
