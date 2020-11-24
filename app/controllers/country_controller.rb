@@ -141,7 +141,7 @@ class CountryController < ApplicationController
         ],
         message: {
           documents: @country_presenter.documents, #same
-          text: I18n.t('stats.warning_wdap_oecm') #different
+          text: I18n.t('stats.warning_wdpa_oecm') #different
         },
         iucn: {
           chart: @iucn_categories_oecm, # needs to be categories types for WDPA and OECMs
