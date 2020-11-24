@@ -13,20 +13,33 @@ class CountryController < ApplicationController
     @tabs = [
       { id: 'wdpa', title: I18n.t('global.area-types.wdpa') }, 
       { id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') }
-  ].to_json
+    ].to_json
 
     @stats_data = {
       wdpa: {
         coverage: [
           @country_presenter.terrestrial_stats,
           @country_presenter.marine_stats,
-        ]
+        ],
+        iucn: {
+          # chart: @country_presenter.iucn_categories(iucn_categories),
+          title: I18n.t('stats.iucn-categories.title')
+        },
+        governance: {},
+        sources: {},
+        designations: {},
+        growth: {},
+        sites: {}
       },
       wdpa_oecm: {
         coverage: [
           @country_presenter.terrestrial_combined_stats,
           @country_presenter.marine_combined_stats,
-        ]
+        ],
+        iucn: {
+          # chart: @country_presenter.iucn_categories(iucn_categories),
+          title: I18n.t('stats.iucn-categories.title')
+        },
       }
     }.to_json
 

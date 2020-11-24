@@ -15,11 +15,22 @@
         :data="stat"
       />
     </div>
+
+    <slot></slot>
+
+    <div class="card--stats-wrapper pdf-break-before">
+      <stats-iucn-categories
+        :data="activeDatabase.iucn"
+      />
+      
+      <!-- "partials/stats/stats-governance", locals: { governance_types: @governance_types} -->
+    </div>
   </div>
 </template>
 
 <script>
 import StatsCoverage from '../stats/StatsCoverage.vue'
+import StatsIucnCategories from '../stats/StatsIucnCategories.vue'
 import TabsFake from '../tabs/TabsFake.vue'
 
 export default {
@@ -27,6 +38,7 @@ export default {
 
   components: {
     StatsCoverage,
+    StatsIucnCategories,
     TabsFake
   },
 
