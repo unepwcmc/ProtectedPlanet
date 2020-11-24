@@ -9,13 +9,9 @@ class CountryController < ApplicationController
   include MapHelper
 
   def show
-    @country_presenter = CountryPresenter.new @country
-
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
 
-    @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
-   
-    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
+    @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg")
 
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.wdpas.count
@@ -29,6 +25,8 @@ class CountryController < ApplicationController
       map: { boundsUrl: @country.extent_url }
     }
     
+    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
+
     helpers.opengraph_title_and_description_with_suffix(@country.name)
 
     respond_to do |format|
@@ -174,7 +172,7 @@ class CountryController < ApplicationController
                                 { percent: designation[:percent] }
                               end.to_json
     @sites = @country.pas_sample
-    @sources = @country.sources_per_country
+    @sources = @country.sources_per_country(exclude_oecms: true)
     @growth = @country_presenter.coverage_growth_chart(exclude_oecms: true)
   end
 

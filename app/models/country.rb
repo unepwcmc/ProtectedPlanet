@@ -79,7 +79,7 @@ class Country < ApplicationRecord
     protected_areas.offset(random_offset).limit(wanted)
   end
 
-  def sources_per_country
+  def sources_per_country(exclude_oecms: false)
     sources = ActiveRecord::Base.connection.execute("""
       SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party 
       FROM sources
@@ -88,6 +88,10 @@ class Country < ApplicationRecord
       INNER JOIN protected_areas_sources 
       ON protected_areas_sources.protected_area_id = countries_protected_areas.protected_area_id
       AND protected_areas_sources.source_id = sources.id
+      
+      #{"INNER JOIN protected_areas
+      ON protected_areas_sources.protected_area_id = protected_areas.id
+      WHERE protected_areas.is_oecm = false" if exclude_oecms}
       """)
     convert_into_hash(sources.uniq)
   end
