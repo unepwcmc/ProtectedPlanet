@@ -72,7 +72,7 @@ class CountryController < ApplicationController
           designations: @country_designations,
           title: I18n.t('stats.designations.title')
         },
-        growth: { #SL don't edit yet
+        growth: {
           chart: @coverage_growth,
           smallprint: I18n.t('stats.coverage-chart-smallprint'),
           title: I18n.t('stats.growth.title_wdpa')
@@ -105,8 +105,8 @@ class CountryController < ApplicationController
           title: I18n.t('stats.sources.title') #same as wdpa only
         },
         # designations:#SL don't edit yet
-        growth: {#SL don't edit yet
-          # chart: @coverage_growth, #different
+        growth: {
+          chart: @coverage_growth, # needs to include sources for OECMs
           smallprint: I18n.t('stats.coverage-chart-smallprint'), #same as wdpa only
           title: I18n.t('stats.growth.title_wdpa_oecm') #different
         },
