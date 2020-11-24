@@ -28,19 +28,15 @@
         :data="<%= @stats_data %>"
         :tabs="<%= @tabs %>"
       >
-        <%= render partial: "partials/messages/message-warning-stats", locals: {
-          documents: @country_presenter.documents
-        } %>
+        <template slot="related_countries">
+          <% if has_related_countries? %>
+            <%= render partial: "partials/stats/stats-related-countries", locals: { 
+              country_children: @country.children.any? ? @country.children : nil,
+              country_parent: @country.parent.present? ? @country.parent : nil
+            } %>
+          <% end %>
+        </template>
       </country-page>
-
-      <% if has_related_countries? %>
-
-        <%= render partial: "partials/stats/stats-related-countries", locals: { 
-          country_children: @country.children.any? ? @country.children : nil,
-          country_parent: @country.parent.present? ? @country.parent : nil
-        } %>
-      
-      <% end %>
     </section>  
     
     <section class="spacer-small--bottom">

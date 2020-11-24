@@ -9,6 +9,24 @@ class CountryController < ApplicationController
 
   def show
     @country_presenter = CountryPresenter.new @country
+
+    # Components above tabs
+    @total_pame = @country.protected_areas.with_pame_evaluations.count
+    @total_wdpa = @country.protected_areas.wdpas.count
+
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
+
+    @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
+   
+    @map = {
+      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
+      point_query_services: all_services_for_point_query
+    }
+
+    @map_options = {
+      map: { boundsUrl: @country.extent_url }
+    }
+    # End Components above tabs
     
     #  Variables that have an OECM counterpart
     @iucn_categories ||= @country.protected_areas_per_iucn_category(exclude_oecms: true)
@@ -31,6 +49,10 @@ class CountryController < ApplicationController
           @country_presenter.terrestrial_stats,
           @country_presenter.marine_stats,
         ],
+        message: {
+          documents: @country_presenter.documents,
+          text: I18n.t('stats.warning')
+        },
         iucn: {
           # chart: @country_presenter.iucn_categories(iucn_categories),
           title: I18n.t('stats.iucn-categories.title')
@@ -53,7 +75,7 @@ class CountryController < ApplicationController
         growth: {
           chart: @coverage_growth,
           smallprint: I18n.t('stats.coverage-chart-smallprint'),
-          title: I18n.t('stats.growth.title')
+          title: I18n.t('stats.growth.title_wdpa')
         },
         sites: {
           cards: @country.protected_areas.take(3),
@@ -67,39 +89,25 @@ class CountryController < ApplicationController
           @country_presenter.terrestrial_combined_stats,
           @country_presenter.marine_combined_stats,
         ],
+        message: {
+          documents: @country_presenter.documents, #same
+          text: I18n.t('stats.warning_wdap_oecm') #different
+        },
         iucn: {
           # chart: @country_presenter.iucn_categories(iucn_categories),
           title: I18n.t('stats.iucn-categories.title')
         },
+        governance: {},
+        # sources:
+        # designations:
+        growth: {
+          # chart: @coverage_growth, #different
+          smallprint: I18n.t('stats.coverage-chart-smallprint'), #same as wdpa only
+          title: I18n.t('stats.growth.title_wdpa_oecm') #different
+        },
+        # sites:
       }
     }.to_json
-
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
-
-    @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
-   
-    
-    # Not sure what to do about this yet
-    
-
-    
-    ## END of section
-
-
-    
-
-   
-    @total_pame = @country.protected_areas.with_pame_evaluations.count
-    @total_wdpa = @country.protected_areas.wdpas.count
-
-    @map = {
-      overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
-      point_query_services: all_services_for_point_query
-    }
-
-    @map_options = {
-      map: { boundsUrl: @country.extent_url }
-    }
     
     helpers.opengraph_title_and_description_with_suffix(@country.name)
 
