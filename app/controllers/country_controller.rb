@@ -108,7 +108,11 @@ class CountryController < ApplicationController
           sources: @sources,
           title: I18n.t('stats.sources.title')
         },
-        designations: @designation_percentages,
+        designations: {
+          chart: @designation_percentages,
+          designations:  @country_presenter.designations_without_oecm,
+          title: I18n.t('stats.designations.title')
+        },
         growth: @growth,
         sites: @sites
       }
@@ -138,7 +142,11 @@ class CountryController < ApplicationController
           sources: @sources_oecm,
           title: I18n.t('stats.sources.title')
         },
-        designations: @designation_percentages_oecm,
+        designations: {
+          chart: @designation_percentages_oecm,
+          designations: @country_presenter.designations,
+          title: I18n.t('stats.designations.title')
+        },
         growth: @growth_oecm,
         sites: @sites_oecm
       }
@@ -168,7 +176,7 @@ class CountryController < ApplicationController
     @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
     @terrestrial_stats ||= @country_presenter.terrestrial_stats
     @marine_stats ||= @country_presenter.marine_stats
-    @designation_percentages ||= @country_presenter.designations.map do |designation|
+    @designation_percentages ||= @country_presenter.designations_without_oecm.map do |designation|
                                 { percent: designation[:percent] }
                               end.to_json
     @sites = @country.pas_sample

@@ -88,7 +88,7 @@ class Country < ApplicationRecord
       INNER JOIN protected_areas_sources 
       ON protected_areas_sources.protected_area_id = countries_protected_areas.protected_area_id
       AND protected_areas_sources.source_id = sources.id
-      
+
       #{"INNER JOIN protected_areas
       ON protected_areas_sources.protected_area_id = protected_areas.id
       WHERE protected_areas.is_oecm = false" if exclude_oecms}
@@ -96,19 +96,19 @@ class Country < ApplicationRecord
     convert_into_hash(sources.uniq)
   end
 
-  def protected_areas_per_designation(jurisdiction=nil)
+  def protected_areas_per_designation(jurisdiction=nil, exclude_oecms: false)
     ActiveRecord::Base.connection.execute("""
       SELECT designations.id AS designation_id, designations.name AS designation_name, pas_per_designations.count
       FROM designations
       INNER JOIN (
-        #{protected_areas_inner_join(:designation_id, false)}
+        #{protected_areas_inner_join(:designation_id, exclude_oecms)}
       ) AS pas_per_designations
         ON pas_per_designations.designation_id = designations.id
       #{"WHERE designations.jurisdiction_id = #{jurisdiction.id}" if jurisdiction}
     """)
   end
 
-  def protected_areas_per_jurisdiction
+  def protected_areas_per_jurisdiction(exclude_oecms: false)
     ActiveRecord::Base.connection.execute("""
       SELECT jurisdictions.name, COUNT(*)
       FROM jurisdictions
@@ -119,6 +119,7 @@ class Country < ApplicationRecord
         INNER JOIN countries_protected_areas
           ON protected_areas.id = countries_protected_areas.protected_area_id
           AND countries_protected_areas.country_id = #{self.id}
+        #{"WHERE protected_areas.is_oecm = false" if exclude_oecms}
       ) AS pas_for_country ON pas_for_country.designation_id = designations.id
       GROUP BY jurisdictions.name
     """)

@@ -55,6 +55,10 @@ class CountryPresenter
     @designations_presenter.designations
   end
 
+  def designations_without_oecm
+    @designations_presenter.designations_without_oecm
+  end
+
   def documents
     [
       national_report,
