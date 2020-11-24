@@ -184,7 +184,7 @@ class CountryController < ApplicationController
     overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
   end
 
-  def load_vars
+  def load_essential_vars
     @country = if params[:iso].size == 2
                  Country.where(iso: params[:iso].upcase).first
                else
@@ -198,8 +198,8 @@ class CountryController < ApplicationController
   end
 
   def load_assorted_vars
-    @iucn_categories ||= @country_presenter.iucn_categories(protected_areas_per_iucn_category(exclude_oecms: true))
-    @governance_types ||= @country_presenter.governance_chart(protected_areas_per_governance(exclude_oecms: true))
+    @iucn_categories ||= @country_presenter.iucn_categories_chart(@country.protected_areas_per_iucn_category(exclude_oecms: true))
+    @governance_types ||= @country_presenter.governance_chart(@country.protected_areas_per_governance(exclude_oecms: true))
     @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
     @terrestrial_stats ||= @country_presenter.terrestrial_stats
     @marine_stats ||= @country_presenter.marine_stats
@@ -207,14 +207,14 @@ class CountryController < ApplicationController
                                 { percent: designation[:percent] }
                               end.to_json
     # Need to rework pas_sample method so that it shows only WDPA sites
-    @sites = @country.pas_sample
+    @sites = pas_sample
     @sources = @country.sources_per_country(exclude_oecms: true)
     @growth = @country_presenter.coverage_growth_chart(exclude_oecms: true)
   end
 
   def assign_oecm_variables    
-    @iucn_categories_oecm ||= @country_presenter.iucn_categories(protected_areas_per_iucn_category)
-    @governance_types_oecm ||= @country_presenter.governance_chart(protected_areas_per_governance)
+    @iucn_categories_oecm ||= @country_presenter.iucn_categories_chart(@country.protected_areas_per_iucn_category)
+    @governance_types_oecm ||= @country_presenter.governance_chart(@country.protected_areas_per_governance)
     @coverage_growth_oecm ||= @country_presenter.coverage_growth_chart
     @terrestrial_combined_stats ||= @country_presenter.terrestrial_combined_stats
     @marine_combined_stats ||= @country_presenter.marine_combined_stats
@@ -224,7 +224,7 @@ class CountryController < ApplicationController
                                   { percent: designation[:percent] }
                                 end.to_json
     # Need to rework pas_sample method so that it shows one OECM and two WDPAs
-    @sites_oecm = @country.pas_sample
+    @sites_oecm = pas_sample
     @sources_oecm = @country.sources_per_country
     @growth_oecm = @country_presenter.coverage_growth_chart
   end

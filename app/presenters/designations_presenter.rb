@@ -49,7 +49,7 @@ class DesignationsPresenter
   end
 
   def all_pas(exclude_oecms)
-    geo_entity.protected_areas_per_jurisdiction(exclude_oecms)
+    geo_entity.protected_areas_per_jurisdiction(exclude_oecms: exclude_oecms)
   end
 
   def total_number_of_designations(exclude_oecms)
@@ -57,7 +57,7 @@ class DesignationsPresenter
   end
 
   def percent_of_total(jurisdiction, exclude_oecms: false)
-    total = designation_total(jurisdiction, exclude_oecms)
+    total = designation_total(jurisdiction, exclude_oecms: exclude_oecms)
     (( total.to_f / total_number_of_designations(exclude_oecms).to_f ) * 100).round(2)
   end
 
@@ -70,6 +70,6 @@ class DesignationsPresenter
     jurisdiction = get_jurisdiction(jurisdiction)
     return [] unless jurisdiction
 
-    geo_entity.protected_areas_per_designation(jurisdiction, exclude_oecms)
+    geo_entity.protected_areas_per_designation(jurisdiction, exclude_oecms: exclude_oecms)
   end
 end
