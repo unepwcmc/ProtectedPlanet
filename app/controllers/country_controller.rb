@@ -55,7 +55,12 @@ class CountryController < ApplicationController
           smallprint: I18n.t('stats.coverage-chart-smallprint'),
           title: I18n.t('stats.growth.title')
         },
-        sites: {}
+        sites: {
+          cards: @country.protected_areas.take(3),
+          title: @country.name + ' ' + I18n.t('country.protected_areas'),
+          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }),
+          text_view_all: I18n.t('global.button.all')
+        }
       },
       wdpa_oecm: {
         coverage: [
@@ -81,8 +86,7 @@ class CountryController < ApplicationController
     ## END of section
 
 
-    @sites = @country.protected_areas.take(3)
-    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
+    
 
    
     @total_pame = @country.protected_areas.with_pame_evaluations.count

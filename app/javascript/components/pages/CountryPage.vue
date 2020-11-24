@@ -39,6 +39,10 @@
     <stats-growth
       :data="activeDatabase.growth"
     />
+
+    <stats-sites
+      :data="activeDatabase.sites"
+    />
   </div>
 </template>
 
@@ -48,6 +52,7 @@ import StatsDesignations from '../stats/StatsDesignations.vue'
 import StatsGovernance from '../stats/StatsGovernance.vue'
 import StatsGrowth from '../stats/StatsGrowth.vue'
 import StatsIucnCategories from '../stats/StatsIucnCategories.vue'
+import StatsSites from '../stats/StatsSites.vue'
 import StatsSources from '../stats/StatsSources.vue'
 import TabsFake from '../tabs/TabsFake.vue'
 
@@ -60,6 +65,7 @@ export default {
     StatsGovernance,
     StatsGrowth,
     StatsIucnCategories,
+    StatsSites,
     StatsSources,
     TabsFake
   },

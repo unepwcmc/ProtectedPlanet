@@ -41,12 +41,6 @@
         } %>
       
       <% end %>
-      
-      <%= render partial: "partials/cards/sites", locals: { 
-        cards: @sites,
-        title: @country.name + ' ' + t('country.protected_areas'),
-        url: @sitesViewAllUrl
-      } %>
     </section>  
     
     <section class="spacer-small--bottom">
