@@ -10,6 +10,11 @@ class CountryController < ApplicationController
   def show
     @country_presenter = CountryPresenter.new @country
 
+    @tabs = [
+      { id: 'wdpa', title: I18n.t('global.area-types.wdpa') }, 
+      { id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') }
+  ].to_json
+
     @stats_data = {
       wdpa: {
         coverage: [

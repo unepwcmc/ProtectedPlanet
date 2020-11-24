@@ -3,6 +3,7 @@ en:
     area-types:
       wdpa: Protected Areas
       oecm: OECMs
+      wdpa_oecm: Protected Areas & OECMs
     button:
       all: View all
       download-pdf: PDF Download

@@ -2,7 +2,7 @@
   <div>
     <div class="card--stats-toggle">
       <tabs-fake
-        :children="[{ id: 'wdpa', title: 'Protected Areas' }, { id: 'wdpa_oecm', title: 'Protected Areas & OECMs' }]"
+        :children="tabs"
         class="tabs--rounded"
         v-on:click:tab="updateDatabaseId"
       ></tabs-fake>
@@ -34,6 +34,10 @@ export default {
     data: {
       required: true,
       type: Object
+    },
+    tabs: {
+      required: true,
+      type: Array
     }
   },
 
