@@ -53,11 +53,11 @@ class CountryController < ApplicationController
           documents: @country_presenter.documents, #need to add translated text for link to documents hash 
           text: I18n.t('stats.warning')
         },
-        iucn: {
+        iucn: { #SL don't edit yet
           # chart: @country_presenter.iucn_categories(iucn_categories),
           title: I18n.t('stats.iucn-categories.title')
         },
-        governance: {
+        governance: { #SL don't edit yet
           #chart: 
           title: I18n.t('stats.governance.title')
         },
@@ -67,17 +67,17 @@ class CountryController < ApplicationController
           sources: @country.sources_per_country,
           title: I18n.t('stats.sources.title')
         },
-        designations: {
+        designations: { #SL don't edit yet
           chart: @designation_percentages,
           designations: @country_designations,
           title: I18n.t('stats.designations.title')
         },
-        growth: {
+        growth: { #SL don't edit yet
           chart: @coverage_growth,
           smallprint: I18n.t('stats.coverage-chart-smallprint'),
           title: I18n.t('stats.growth.title_wdpa')
         },
-        sites: {
+        sites: { #SL don't edit yet
           cards: @country.protected_areas.take(3),
           title: @country.name + ' ' + I18n.t('country.protected_areas'),
           view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }),
@@ -93,19 +93,24 @@ class CountryController < ApplicationController
           documents: @country_presenter.documents, #same
           text: I18n.t('stats.warning_wdap_oecm') #different
         },
-        iucn: {
+        iucn: { #SL don't edit yet
           # chart: @country_presenter.iucn_categories(iucn_categories),
           title: I18n.t('stats.iucn-categories.title')
         },
-        governance: {},
-        # sources:
-        # designations:
-        growth: {
+        governance: {},#SL don't edit yet
+        sources: {
+          count: @country.sources_per_country.count, # needs to include sources for OECMs
+          source_updated: I18n.t('stats.sources.updated'), #same as wdpa only
+          sources: @country.sources_per_country, # needs to include sources for OECMs
+          title: I18n.t('stats.sources.title') #same as wdpa only
+        },
+        # designations:#SL don't edit yet
+        growth: {#SL don't edit yet
           # chart: @coverage_growth, #different
           smallprint: I18n.t('stats.coverage-chart-smallprint'), #same as wdpa only
           title: I18n.t('stats.growth.title_wdpa_oecm') #different
         },
-        # sites:
+        # sites:#SL don't edit yet
       }
     }.to_json
     
