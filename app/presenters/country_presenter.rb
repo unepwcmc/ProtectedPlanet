@@ -15,7 +15,7 @@ class CountryPresenter
         title: category['iucn_category_name'], 
         value: category['count'] 
       }
-    end.to_json
+    end
   end
 
   def governance_chart(chart_input)
@@ -25,7 +25,7 @@ class CountryPresenter
         title: item['governance_name'],
         value: item['count']
       }
-    end.to_json
+    end
   end
 
   def chart_point_poly
@@ -75,14 +75,14 @@ class CountryPresenter
       protected_national_report: statistic.percentage_nr_marine_cover,
       protected_percentage: statistic.percentage_pa_marine_cover.round(2),
       total_km2: number_with_delimiter(statistic.marine_area.round(0)),
-      title: I18n.t("stats.marine-title"),
+      title: I18n.t("stats.coverage_marine.title_wdpa"),
       type: 'marine',
       text_coverage: I18n.t("stats.coverage"),
       text_national_report: I18n.t("stats.nr-report-title"),
-      text_protected: I18n.t("stats.marine-protected"),
+      text_protected: I18n.t("stats.coverage_marine.covered"),
       text_pame: I18n.t("stats.pame.areas-assessed"),
       text_pame_assessments: I18n.t("stats.pame.with-assessments"),
-      text_total: I18n.t("stats.marine-total"),
+      text_total: I18n.t("stats.coverage_marine.total"),
     }
   end
 
@@ -95,14 +95,14 @@ class CountryPresenter
       protected_national_report: statistic.percentage_nr_land_cover,
       protected_percentage: statistic.percentage_pa_land_cover.round(2),
       total_km2: number_with_delimiter(statistic.land_area.round(0)),
-      title: I18n.t("stats.terrestrial-title"),
+      title: I18n.t("stats.coverage_terrestrial.title_wdpa"),
       type: 'terrestrial',
-      text_coverage: I18n.t("stats.coverage"),
-      text_national_report: I18n.t("stats.nr-report-title"),
-      text_protected: I18n.t("stats.terrestrial-protected"),
-      text_pame: I18n.t("stats.pame.areas-assessed"),
-      text_pame_assessments: I18n.t("stats.pame.with-assessments"),
-      text_total: I18n.t("stats.terrestrial-total"),
+      text_coverage: I18n.t("stats.coverage"), #same as marine
+      text_national_report: I18n.t("stats.nr-report-title"), #same as marine
+      text_protected: I18n.t("stats.coverage_terrestrial.covered"),
+      text_pame: I18n.t("stats.pame.areas-assessed"), #same as marine
+      text_pame_assessments: I18n.t("stats.pame.with-assessments"), #same as marine
+      text_total: I18n.t("stats.coverage_terrestrial.total"),
     }
   end
 
@@ -110,7 +110,8 @@ class CountryPresenter
     marine_stats.merge!(
       {
         protected_km2: number_with_delimiter(statistic.oecms_pa_marine_area.round(0)),
-        protected_percentage: statistic.percentage_oecms_pa_marine_cover.round(2)
+        protected_percentage: statistic.percentage_oecms_pa_marine_cover.round(2),
+        title: I18n.t("stats.coverage_marine.title_wdpa_oecm")
       }
     )
   end
@@ -119,7 +120,8 @@ class CountryPresenter
     terrestrial_stats.merge!(
       {
         protected_km2: number_with_delimiter(statistic.oecms_pa_land_area.round(0)),
-        protected_percentage: statistic.percentage_oecms_pa_land_cover.round(2)
+        protected_percentage: statistic.percentage_oecms_pa_land_cover.round(2),
+        title: I18n.t("stats.coverage_terrestrial.title_wdpa_oecm")
       }
     )
   end

@@ -51,9 +51,6 @@ class CountryController < ApplicationController
       @stats_data.merge!(build_oecm_hash) 
       @tabs.push!({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') }) 
     end
-
-    @tabs.to_json
-    @stats_data.to_json
   end
 
   def pdf
@@ -205,7 +202,7 @@ class CountryController < ApplicationController
     @marine_stats ||= @country_presenter.marine_stats
     @designation_percentages ||= @country_presenter.designations_without_oecm.map do |designation|
                                 { percent: designation[:percent] }
-                              end.to_json
+                              end
     # Need to rework pas_sample method so that it shows only WDPA sites
     @sites = pas_sample
     @sources = @country.sources_per_country(exclude_oecms: true)
@@ -222,7 +219,7 @@ class CountryController < ApplicationController
     # For designations, sites and oecms
     @designation_percentages_oecm ||= @country_presenter.designations.map do |designation|
                                   { percent: designation[:percent] }
-                                end.to_json
+                                end
     # Need to rework pas_sample method so that it shows one OECM and two WDPAs
     @sites_oecm = pas_sample
     @sources_oecm = @country.sources_per_country
