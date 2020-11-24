@@ -77,11 +77,11 @@ class CountryController < ApplicationController
           smallprint: I18n.t('stats.coverage-chart-smallprint'),
           title: I18n.t('stats.growth.title_wdpa')
         },
-        sites: { #SL don't edit yet
+        sites: {
           cards: @country.protected_areas.take(3),
-          title: @country.name + ' ' + I18n.t('country.protected_areas'),
-          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }),
-          text_view_all: I18n.t('global.button.all')
+          title: @country.name + ' ' + I18n.t('global.area-types.wdpa'),
+          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }), #this should prob show wdpa only
+          text_view_all: I18n.t('global.button.all') 
         }
       },
       wdpa_oecm: {
@@ -110,7 +110,12 @@ class CountryController < ApplicationController
           smallprint: I18n.t('stats.coverage-chart-smallprint'), #same as wdpa only
           title: I18n.t('stats.growth.title_wdpa_oecm') #different
         },
-        # sites:#SL don't edit yet
+        sites: { 
+          cards: @country.protected_areas.take(3), # get 1 oecm and 2 pas
+          title: @country.name + ' ' + I18n.t('global.area-types.wdpa_oecm'), #different
+          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }), #this should prob show wdpa and oecms
+          text_view_all: I18n.t('global.button.all') #same as wdpa only
+        }
       }
     }.to_json
     
