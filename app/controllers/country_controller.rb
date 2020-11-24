@@ -50,7 +50,7 @@ class CountryController < ApplicationController
           @country_presenter.marine_stats,
         ],
         message: {
-          documents: @country_presenter.documents,
+          documents: @country_presenter.documents, #need to add translated text for link to documents hash 
           text: I18n.t('stats.warning')
         },
         iucn: {
