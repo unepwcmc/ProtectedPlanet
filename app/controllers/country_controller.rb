@@ -9,6 +9,12 @@ class CountryController < ApplicationController
 
   def show
     @country_presenter = CountryPresenter.new @country
+    
+    @country_designations ||= @country_presenter.designations
+    # For the stacked row chart percentages
+    @designation_percentages = @country_designations.map do |designation|
+      { percent: designation[:percent] }
+    end
 
     @tabs = [
       { id: 'wdpa', title: I18n.t('global.area-types.wdpa') }, 
@@ -34,7 +40,11 @@ class CountryController < ApplicationController
           sources: @country.sources_per_country,
           title: I18n.t('stats.sources.title')
         },
-        designations: {},
+        designations: {
+          chart: @designation_percentages,
+          designations: @country_designations,
+          title: I18n.t('stats.designations.title')
+        },
         growth: {},
         sites: {}
       },
@@ -59,12 +69,9 @@ class CountryController < ApplicationController
     @governance_types ||= @country.protected_areas_per_governance(exclude_oecms: true)
     @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
     # Not sure what to do about this yet
-    @country_designations ||= @country_presenter.designations
+    
 
-    # For the stacked row chart percentages
-    @designation_percentages = @country_designations.map do |designation|
-      { percent: designation[:percent] }
-    end.to_json
+    
     ## END of section
 
 

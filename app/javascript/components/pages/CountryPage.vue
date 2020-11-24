@@ -31,11 +31,16 @@
     <stats-sources
       :data="activeDatabase.sources"
     />
+
+    <stats-designations
+      :data="activeDatabase.designations"
+    />
   </div>
 </template>
 
 <script>
 import StatsCoverage from '../stats/StatsCoverage.vue'
+import StatsDesignations from '../stats/StatsDesignations.vue'
 import StatsGovernance from '../stats/StatsGovernance.vue'
 import StatsIucnCategories from '../stats/StatsIucnCategories.vue'
 import StatsSources from '../stats/StatsSources.vue'
@@ -46,6 +51,7 @@ export default {
 
   components: {
     StatsCoverage,
+    StatsDesignations,
     StatsGovernance,
     StatsIucnCategories,
     StatsSources,
