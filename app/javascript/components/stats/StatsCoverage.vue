@@ -34,7 +34,7 @@
             <span class="card__number block">
               {{ data.protected_national_report }}%
             </span>
-            {{ data.national_report_version }} {{ data.nr_report_title }}
+            {{ data.national_report_version }}{{ data.text_national_report }}
           </p>
           <div 
             class="card__subsection"
@@ -43,7 +43,7 @@
             <p class="card__subtitle">PAME</p>
 
             <p class="card__stat">
-                <span class="card__number block"> {{ data.pame_percentage }}% </span> {{ data.text_pame_assessments }}%
+                <span class="card__number block"> {{ data.pame_percentage }}% </span> {{ data.text_pame_assessments }}
               </p>
               <p class="card__stat">
                 <span class="card__number block">{{ data.pame_km2 }}km<sup>2</sup></span> {{ data.text_pame }}
