@@ -3,7 +3,7 @@
 
   <am-chart-pie
     class="am-chart--pie"
-    :dataset="<%= @iucn_categories_chart %>"
+    :dataset="<%= @country_presenter.iucn_categories_chart(iucn_categories) %>"
     :doughnut="true"
     id="am-pie-iucn-categories"
   ></am-chart-pie>

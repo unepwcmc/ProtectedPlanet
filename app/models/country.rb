@@ -38,7 +38,7 @@ class Country < ApplicationRecord
 
   def protected_areas_with_iucn_categories
     valid_categories = "'Ia', 'Ib', 'II', 'II', 'IV', 'V', 'VI'"
-    iucn_categories.where(
+    chart_categories = iucn_categories.where(
       "iucn_categories.name IN (#{valid_categories})"
     )
   end
@@ -97,7 +97,7 @@ class Country < ApplicationRecord
       SELECT designations.id AS designation_id, designations.name AS designation_name, pas_per_designations.count
       FROM designations
       INNER JOIN (
-        #{protected_areas_inner_join(:designation_id)}
+        #{protected_areas_inner_join(:designation_id, false)}
       ) AS pas_per_designations
         ON pas_per_designations.designation_id = designations.id
       #{"WHERE designations.jurisdiction_id = #{jurisdiction.id}" if jurisdiction}
@@ -140,35 +140,35 @@ class Country < ApplicationRecord
     """)
   end
 
-  def protected_areas_per_iucn_category
+  def protected_areas_per_iucn_category(exclude_oecms: false)
     ActiveRecord::Base.connection.execute("""
       SELECT iucn_categories.id AS iucn_category_id, iucn_categories.name AS iucn_category_name, pas_per_iucn_categories.count, round((pas_per_iucn_categories.count::decimal/(SUM(pas_per_iucn_categories.count) OVER ())::decimal) * 100, 2) AS percentage
       FROM iucn_categories
       INNER JOIN (
-        #{protected_areas_inner_join(:iucn_category_id)}
+        #{protected_areas_inner_join(:iucn_category_id, exclude_oecms)}
       ) AS pas_per_iucn_categories
         ON pas_per_iucn_categories.iucn_category_id = iucn_categories.id
     """)
   end
 
-  def protected_areas_per_governance
+  def protected_areas_per_governance(exclude_oecms: false)
     ActiveRecord::Base.connection.execute("""
       SELECT governances.id AS governance_id, governances.name AS governance_name, governances.governance_type AS governance_type, pas_per_governances.count AS count, round((pas_per_governances.count::decimal/(SUM(pas_per_governances.count) OVER ())::decimal) * 100, 2) AS percentage
       FROM governances
       INNER JOIN (
-        #{protected_areas_inner_join(:governance_id)}
+        #{protected_areas_inner_join(:governance_id, exclude_oecms)}
       ) AS pas_per_governances
         ON pas_per_governances.governance_id = governances.id
         ORDER BY count DESC
     """)
   end
 
-  def coverage_growth
+  def coverage_growth(exclude_oecms)
     _year = 'EXTRACT(year from legal_status_updated_at)'
     ActiveRecord::Base.connection.execute(
       <<-SQL
         SELECT TO_TIMESTAMP(date_part::text, 'YYYY') AS year, SUM(count) OVER (ORDER BY date_part::INT) AS count
-        FROM (#{protected_areas_inner_join(_year)}) t
+        FROM (#{protected_areas_inner_join(_year, exclude_oecms)}) t
         ORDER BY year
       SQL
     )
@@ -176,14 +176,14 @@ class Country < ApplicationRecord
 
   private
 
-  def protected_areas_inner_join(group_by, extra_aggregation=nil)
-    _extra_aggr = extra_aggregation ? extra_aggregation.insert(0, ',') : nil
+  def protected_areas_inner_join(group_by, exclude_oecms)
     """
-      SELECT #{group_by}, COUNT(protected_areas.id) AS count #{_extra_aggr}
+      SELECT #{group_by}, COUNT(protected_areas.id) AS count 
       FROM protected_areas
       INNER JOIN countries_protected_areas
         ON protected_areas.id = countries_protected_areas.protected_area_id
         AND countries_protected_areas.country_id = #{self.id}
+      #{"WHERE protected_areas.is_oecm = false" if exclude_oecms}
       GROUP BY #{group_by}
     """
   end
