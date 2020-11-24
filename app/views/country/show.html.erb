@@ -28,38 +28,15 @@
         :data="<%= @stats_data %>"
         :tabs="<%= @tabs %>"
       >
-        <%= render partial: "partials/messages/message-warning-stats", locals: {
-          documents: @country_presenter.documents
-        } %>
+        <template slot="related_countries">
+          <% if has_related_countries? %>
+            <%= render partial: "partials/stats/stats-related-countries", locals: { 
+              country_children: @country.children.any? ? @country.children : nil,
+              country_parent: @country.parent.present? ? @country.parent : nil
+            } %>
+          <% end %>
+        </template>
       </country-page>
-
-      <div class="card--stats-growth-chart">
-        <div class="card__chart-wrapper">
-          <h2><%= t('stats.growth.title') %></h2>
-
-          <am-chart-line 
-            :data="<%= @coverage_growth %>"
-          >
-          </am-chart-line>
-          
-          <p class="text--small"><%= t('stats.coverage-chart-smallprint') %></p>
-        </div>
-      </div>
-
-      <% if has_related_countries? %>
-
-        <%= render partial: "partials/stats/stats-related-countries", locals: { 
-          country_children: @country.children.any? ? @country.children : nil,
-          country_parent: @country.parent.present? ? @country.parent : nil
-        } %>
-      
-      <% end %>
-      
-      <%= render partial: "partials/cards/sites", locals: { 
-        cards: @sites,
-        title: @country.name + ' ' + t('country.protected_areas'),
-        url: @sitesViewAllUrl
-      } %>
     </section>  
     
     <section class="spacer-small--bottom">

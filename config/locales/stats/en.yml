@@ -6,7 +6,7 @@ en:
       title: Attributes
     citation: Citation Text
     coverage: Coverage
-    coverage-chart-smallprint: The graph excludes status years with no information reported (STAT_YR = 0).
+    coverage-chart-smallprint: The graph excludes status years with no information reported (STATUS_YR = 0).
     countries: Number of countries
     designations:
       title: Designations
@@ -17,7 +17,8 @@ en:
       title: Read an assessment of this site by visiting the IUCN World Heritage Outlook
       button-title: View information about %{name} on IUCN World Heritage Outlook
     growth:
-      title: Growth in protected area coverage
+      title_wdpa: Growth in protected area coverage
+      title_wdpa_oecm: Growth in protected area and OECM coverage
     governance: 
       title: Governance types
     green-list:
@@ -32,8 +33,8 @@ en:
     management-plan:
       button: View Management Plan
       button-title: Download the Management Plan for %{site}
-    marine-protected: Marine and Coastal Area Protected
-    marine-title: Marine Protected Areas Coverage
+    marine-protected: Marine and Coastal Area Covered
+    marine-title: Marine Protected Area Coverage
     marine-total: Total Marine and Coastal Area
     no-infomation: No information available
     nr-report-title: th National Report Coverage
@@ -54,11 +55,12 @@ en:
       title: Sources
       total: Total Sources
       updated: Updated
-    terrestrial-protected: Land Area Protected
-    terrestrial-title: Terrestrial Protected Areas Coverage
+    terrestrial-protected: Land Area Covered
+    terrestrial-title: Terrestrial Protected Area Coverage
     terrestrial-total: Total Land Area
     type: Type
     warning: "<span class='card__title'>Disclaimer:</span> These statistics might differ from those reported officially by countries due to difference in methodologies and datasets used to assess protected area coverage and differences in the base maps used to measure terrestrial and marine area of a country or territory."
+    warning_wdap_oecm: "<span class='card__title'>Disclaimer:</span> These statistics might differ from those reported officially by countries due to difference in methodologies and datasets used to assess protected area and OECM coverage and differences in the base maps used to measure terrestrial and marine area of a country or territory."
     wdpa:
       id: WDPA ID
       total: Total Protected Areas

@@ -46,14 +46,6 @@ export default {
       required: true,
       type: Object
     }
-  },
-
-  filters: {
-    decimals(percentage) {
-      if (!percentage) return ''
-      
-      return Math.round((percentage + Number.EPSILON) * 100) / 100
-    }
   }
 }
 </script>

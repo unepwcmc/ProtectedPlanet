@@ -9,6 +9,7 @@ class CountryController < ApplicationController
   include MapHelper
 
   def show
+     # Components above tabs
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
 
     @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg")
@@ -94,6 +95,10 @@ class CountryController < ApplicationController
           @terrestrial_stats,
           @marine_stats
         ],
+        message: {
+          documents: @country_presenter.documents,
+          text: I18n.t('stats.warning')
+        },
         iucn: {
           chart: @iucn_categories,
           title: I18n.t('stats.iucn-categories.title')
@@ -113,8 +118,17 @@ class CountryController < ApplicationController
           designations:  @country_presenter.designations_without_oecm,
           title: I18n.t('stats.designations.title')
         },
-        growth: @growth,
-        sites: @sites
+        growth: {
+          chart: @coverage_growth,
+          smallprint: I18n.t('stats.coverage-chart-smallprint'),
+          title: I18n.t('stats.growth.title_wdpa')
+        },
+        sites: {
+          cards: @sites,
+          title: @country.name + ' ' + I18n.t('country.protected_areas'),
+          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }),
+          text_view_all: I18n.t('global.button.all')
+        }
       }
     }
   end
@@ -128,6 +142,10 @@ class CountryController < ApplicationController
           @terrestrial_combined_stats, 
           @marine_combined_stats
         ],
+        message: {
+          documents: @country_presenter.documents,
+          text: I18n.t('stats.warning_wdap_oecm')
+        },
         iucn: {
           chart: @iucn_categories_oecm,
           title: I18n.t('stats.iucn-categories.title')
@@ -147,8 +165,17 @@ class CountryController < ApplicationController
           designations: @country_presenter.designations,
           title: I18n.t('stats.designations.title')
         },
-        growth: @growth_oecm,
-        sites: @sites_oecm
+        growth: {
+          chart: @growth_oecm,
+          smallprint: I18n.t('stats.coverage-chart-smallprint'),
+          title: I18n.t('stats.growth.title_wdpa_oecm')
+        },
+        sites: {
+          cards: @sites_oecm,
+          title: @country.name + ' ' + I18n.t('country.protected_areas'),
+          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }),
+          text_view_all: I18n.t('global.button.all')
+        }
       }
     }
   end
@@ -179,6 +206,7 @@ class CountryController < ApplicationController
     @designation_percentages ||= @country_presenter.designations_without_oecm.map do |designation|
                                 { percent: designation[:percent] }
                               end.to_json
+    # Need to rework pas_sample method so that it shows only WDPA sites
     @sites = @country.pas_sample
     @sources = @country.sources_per_country(exclude_oecms: true)
     @growth = @country_presenter.coverage_growth_chart(exclude_oecms: true)
@@ -195,6 +223,7 @@ class CountryController < ApplicationController
     @designation_percentages_oecm ||= @country_presenter.designations.map do |designation|
                                   { percent: designation[:percent] }
                                 end.to_json
+    # Need to rework pas_sample method so that it shows one OECM and two WDPAs
     @sites_oecm = @country.pas_sample
     @sources_oecm = @country.sources_per_country
     @growth_oecm = @country_presenter.coverage_growth_chart

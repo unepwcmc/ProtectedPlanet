@@ -16,7 +16,9 @@
       />
     </div>
 
-    <slot></slot>
+    <stats-message
+      :data="activeDatabase.message"
+    />
 
     <div class="card--stats-wrapper pdf-break-before">
       <stats-iucn-categories
@@ -35,6 +37,16 @@
     <stats-designations
       :data="activeDatabase.designations"
     />
+
+    <stats-growth
+      :data="activeDatabase.growth"
+    />
+
+    <slot name="related_countries" />
+
+    <stats-sites
+      :data="activeDatabase.sites"
+    />
   </div>
 </template>
 
@@ -42,7 +54,10 @@
 import StatsCoverage from '../stats/StatsCoverage.vue'
 import StatsDesignations from '../stats/StatsDesignations.vue'
 import StatsGovernance from '../stats/StatsGovernance.vue'
+import StatsGrowth from '../stats/StatsGrowth.vue'
 import StatsIucnCategories from '../stats/StatsIucnCategories.vue'
+import StatsMessage from '../stats/StatsMessage.vue'
+import StatsSites from '../stats/StatsSites.vue'
 import StatsSources from '../stats/StatsSources.vue'
 import TabsFake from '../tabs/TabsFake.vue'
 
@@ -53,7 +68,10 @@ export default {
     StatsCoverage,
     StatsDesignations,
     StatsGovernance,
+    StatsGrowth,
+    StatsMessage,
     StatsIucnCategories,
+    StatsSites,
     StatsSources,
     TabsFake
   },
