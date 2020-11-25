@@ -215,7 +215,7 @@ class CountryController < ApplicationController
     @sites = site_cards(3, false)
     @sources = @country.sources_per_country(exclude_oecms: true)
     @growth = @country_presenter.coverage_growth_chart(exclude_oecms: true)
-    @sitesViewAllUrlWdpa = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] },  db_type: ['wdpa'] })
+    @sitesViewAllUrlWdpa = view_all_link(db_type: ['wdpa'])
   end
 
   def assign_oecm_variables    
@@ -230,7 +230,7 @@ class CountryController < ApplicationController
     @sites_oecm = site_cards
     @sources_oecm = @country.sources_per_country
     @growth_oecm = @country_presenter.coverage_growth_chart
-    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
+    @sitesViewAllUrl = view_all_link
   end
 
   def site_cards(size = 3, show_oecm = true)

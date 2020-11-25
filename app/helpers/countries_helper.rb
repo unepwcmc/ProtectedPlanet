@@ -40,4 +40,15 @@ module CountriesHelper
     
     @country && (restricted_iso3.include? @country.iso_3)
   end
+
+  def view_all_link(additional_filter_hash = nil)
+    base_filters = { filters: { location: { type: 'country', options: [@country.name.to_s] } } }
+
+    if additional_filter_hash.nil? || !additional_filter_hash.is_a?(Hash)
+      search_areas_path(base_filters)
+    else
+      combined_filters = base_filters.deep_merge(filters: additional_filter_hash)
+      search_areas_path(combined_filters)
+    end
+  end
 end
