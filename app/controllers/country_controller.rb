@@ -115,7 +115,7 @@ class CountryController < ApplicationController
         },
         designations: {
           chart: @designation_percentages,
-          designations: @country_presenter.designations_without_oecm,
+          designations: create_chart_links(@country_presenter.designations_without_oecm, true),
           title: I18n.t('stats.designations.title')
         },
         growth: {
@@ -238,10 +238,22 @@ class CountryController < ApplicationController
     end
   end
 
-  def create_chart_links(input_data)
+  def create_chart_links(input_data, is_designations=false)
+    if is_designations
+      input_data.map do |j|
+        j[:jurisdictions] = j[:jurisdictions].map do |category|
+          category.merge!({
+            link: chart_link(category)[:link],
+            title: chart_link(category)[:title]
+          })
+        end
+      end
+    end
+
     input_data.map do |category|
       category.merge!({
-        link: chart_link(category)[:link]
+        link: chart_link(category)[:link],
+        title: chart_link(category)[:title]
       })
     end
   end

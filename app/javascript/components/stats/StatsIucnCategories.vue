@@ -24,7 +24,7 @@
       <a 
         :href="`${category.link}`"  
         class="list__right list__a"
-        :title="`View the ${category.iucn_category_name} sites for ${data.country}`"
+        :title="category.title"
       >
         View list
       </a>

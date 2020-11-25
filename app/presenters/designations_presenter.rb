@@ -1,5 +1,5 @@
 class DesignationsPresenter
-  include CountriesHelper
+  include Rails.application.routes.url_helpers
 
   def initialize(geo_entity)
     @geo_entity = geo_entity

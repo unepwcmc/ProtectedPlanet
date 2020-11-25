@@ -22,7 +22,7 @@
       <a 
         :href="`${type.link}`" 
         class="list__right list__a"
-        :title="`View the ${type.governance_name} sites for ${data.country}`"
+        :title="type.title"
       >
         View list
       </a>
