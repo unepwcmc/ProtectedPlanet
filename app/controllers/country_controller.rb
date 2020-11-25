@@ -116,7 +116,7 @@ class CountryController < ApplicationController
         },
         designations: {
           chart: @designation_percentages,
-          designations: create_chart_links(@country_presenter.designations(exclude_oecms: true), true),
+          designations: @country_presenter.designations(exclude_oecms: true),
           title: I18n.t('stats.designations.title')
         },
         growth: {
