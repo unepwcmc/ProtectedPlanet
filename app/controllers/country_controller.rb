@@ -195,7 +195,7 @@ class CountryController < ApplicationController
                  Country.where(iso: params[:iso].upcase).first
                else
                  Country.where(iso_3: params[:iso].upcase).first
-    end
+                end
 
     @country or raise_404
 

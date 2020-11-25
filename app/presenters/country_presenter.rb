@@ -73,13 +73,9 @@ class CountryPresenter
       total_km2: number_with_delimiter(statistic.marine_area.round(0)),
       title: I18n.t("stats.coverage_marine.title_wdpa"),
       type: 'marine',
-      text_coverage: I18n.t("stats.coverage"),
-      text_national_report: I18n.t("stats.nr-report-title"),
       text_protected: I18n.t("stats.coverage_marine.covered"),
-      text_pame: I18n.t("stats.pame.areas-assessed"),
-      text_pame_assessments: I18n.t("stats.pame.with-assessments"),
       text_total: I18n.t("stats.coverage_marine.total"),
-    }
+    }.merge!(merge_shared_text_into_stats)
   end
 
   def terrestrial_stats
@@ -93,12 +89,17 @@ class CountryPresenter
       total_km2: number_with_delimiter(statistic.land_area.round(0)),
       title: I18n.t("stats.coverage_terrestrial.title_wdpa"),
       type: 'terrestrial',
+      text_protected: I18n.t("stats.coverage_terrestrial.covered"),
+      text_total: I18n.t("stats.coverage_terrestrial.total"),
+    }.merge!(merge_shared_text_into_stats)
+  end
+
+  def merge_shared_text_into_stats
+    {
       text_coverage: I18n.t("stats.coverage"), #same as marine
       text_national_report: I18n.t("stats.nr-report-title"), #same as marine
-      text_protected: I18n.t("stats.coverage_terrestrial.covered"),
       text_pame: I18n.t("stats.pame.areas-assessed"), #same as marine
       text_pame_assessments: I18n.t("stats.pame.with-assessments"), #same as marine
-      text_total: I18n.t("stats.coverage_terrestrial.total"),
     }
   end
 
