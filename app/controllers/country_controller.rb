@@ -98,13 +98,13 @@ class CountryController < ApplicationController
         iucn: {
           chart: @iucn_categories,
           country: @country.name,
-          categories: create_chart_links(@country.protected_areas_per_iucn_category), 
+          categories: create_chart_links(@country.protected_areas_per_iucn_category(exclude_oecms: true)), 
           title: I18n.t('stats.iucn-categories.title')
         },
         governance: {
           chart: @governance_types,
           country: @country.name,
-          governance: create_chart_links(@country.protected_areas_per_governance), 
+          governance: create_chart_links(@country.protected_areas_per_governance(exclude_oecms: true)), 
           title: I18n.t('stats.governance.title')
         },
         sources: {
@@ -148,10 +148,14 @@ class CountryController < ApplicationController
         },
         iucn: {
           chart: @iucn_categories_oecm, # needs to be categories types for WDPA and OECMs
+          country: @country.name,
+          categories: create_chart_links(@country.protected_areas_per_iucn_category), 
           title: I18n.t('stats.iucn-categories.title') #same as wdpa only 
         },
         governance: {
           chart: @governance_types_oecm, # needs to be governance types for WDPA and OECMs
+          country: @country.name,
+          governance: create_chart_links(@country.protected_areas_per_governance), 
           title: I18n.t('stats.governance.title')#same as wdpa only 
         },
         sources: {
