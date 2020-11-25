@@ -149,13 +149,13 @@ class CountryController < ApplicationController
           link: I18n.t('global.button.link')
         },
         iucn: {
-          chart: @iucn_categories_oecm, # needs to be categories types for WDPA and OECMs
+          chart: @iucn_categories_oecm, 
           country: @country.name,
           categories: create_chart_links(@country.protected_areas_per_iucn_category), 
           title: I18n.t('stats.iucn-categories.title') #same as wdpa only 
         },
         governance: {
-          chart: @governance_types_oecm, # needs to be governance types for WDPA and OECMs
+          chart: @governance_types_oecm, 
           country: @country.name,
           governance: create_chart_links(@country.protected_areas_per_governance), 
           title: I18n.t('stats.governance.title')#same as wdpa only 
@@ -167,12 +167,12 @@ class CountryController < ApplicationController
           title: I18n.t('stats.sources.title')#same as wdpa only 
         },
         designations: {
-          chart: @designation_percentages_oecm, # needs to include designations for WDPA and OECMs
-          designations: @country_presenter.designations, # needs to include designations for WDPA and OECMs
+          chart: @designation_percentages_oecm,
+          designations: @country_presenter.designations,
           title: I18n.t('stats.designations.title') #same as wdpa only
         },
         growth: {
-          chart: @growth_oecm, # needs to include WDPA and OECMs
+          chart: @growth_oecm, 
           smallprint: I18n.t('stats.coverage-chart-smallprint'), #same as wdpa only
           title: I18n.t('stats.growth.title_wdpa_oecm') #different
         },
