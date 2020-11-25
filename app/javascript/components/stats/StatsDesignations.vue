@@ -37,7 +37,7 @@
             <a 
               class="list__a"
               :href="`${jurisdiction.link}`"
-              :title="jurisdiction.title"
+              :title="jurisdiction.link_title"
             />
           </li>
         </ul>

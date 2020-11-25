@@ -21,7 +21,7 @@ module CountriesHelper
 
     if category_name
       title_variable = "View the #{category[category_name]} sites for #{name}"
-      filters.merge!("#{category_name}": [title_variable]) 
+      filters.merge!("#{category_name}": [category[category_name]]) 
     end
 
     # This hash is used to populate the view links of the various charts for the

@@ -116,7 +116,7 @@ class CountryController < ApplicationController
         },
         designations: {
           chart: @designation_percentages,
-          designations: @country_presenter.designations(exclude_oecms: true),
+          designations: create_chart_links(@country_presenter.designations(exclude_oecms: true), true),
           title: I18n.t('stats.designations.title')
         },
         growth: {
@@ -168,7 +168,7 @@ class CountryController < ApplicationController
         },
         designations: {
           chart: @designation_percentages_oecm,
-          designations: @country_presenter.designations,
+          designations: create_chart_links(@country_presenter.designations, true),
           title: I18n.t('stats.designations.title') #same as wdpa only
         },
         growth: {
@@ -247,16 +247,18 @@ class CountryController < ApplicationController
   def create_chart_links(input_data, is_designations=false)
     if is_designations
       input_data.map do |j|
-        j[:jurisdictions] = j[:jurisdictions].map do |category|
-          category.merge!({
-            link: chart_link(category)[:link],
-            title: chart_link(category)[:title]
-          })
-        end
+        jurisdictions_with_links = { 
+          jurisdictions: merge_chart_links(j[:jurisdictions]) 
+        }           
+        j.merge!(jurisdictions_with_links)        
       end
+    else
+      merge_chart_links(input_data)
     end
+  end
 
-    input_data.map do |category|
+  def merge_chart_links(input)
+    input.map do |category|
       category.merge!({
         link: chart_link(category)[:link],
         title: chart_link(category)[:title]
