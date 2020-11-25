@@ -54,7 +54,7 @@ export default {
     decimals(percentage) {
       if (!percentage) return ''
       
-      return Math.round((percentage + Number.EPSILON) * 100) / 100
+      return Math.round((Number(percentage) + Number.EPSILON) * 100) / 100
     }
   }
 }

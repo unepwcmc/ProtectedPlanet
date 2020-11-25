@@ -51,12 +51,8 @@ class CountryPresenter
     }
   end
 
-  def designations
-    @designations_presenter.designations
-  end
-
-  def designations_without_oecm
-    @designations_presenter.designations_without_oecm
+  def designations(exclude_oecms: false)
+    @designations_presenter.designations(exclude_oecms: exclude_oecms)
   end
 
   def documents

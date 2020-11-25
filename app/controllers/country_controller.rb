@@ -115,7 +115,7 @@ class CountryController < ApplicationController
         },
         designations: {
           chart: @designation_percentages,
-          designations: create_chart_links(@country_presenter.designations_without_oecm, true),
+          designations: create_chart_links(@country_presenter.designations(exclude_oecms: true), true),
           title: I18n.t('stats.designations.title')
         },
         growth: {
@@ -143,8 +143,8 @@ class CountryController < ApplicationController
           @marine_combined_stats
         ],
         message: {
-          documents: @country_presenter.documents, #same
-          text: I18n.t('stats.warning_wdpa_oecm') #different
+          documents: @country_presenter.documents, 
+          text: I18n.t('stats.warning_wdpa_oecm') 
         },
         iucn: {
           chart: @iucn_categories_oecm, # needs to be categories types for WDPA and OECMs
@@ -203,7 +203,7 @@ class CountryController < ApplicationController
     @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
     @terrestrial_stats ||= @country_presenter.terrestrial_stats
     @marine_stats ||= @country_presenter.marine_stats
-    @designation_percentages ||= @country_presenter.designations_without_oecm.map do |designation|
+    @designation_percentages ||= @country_presenter.designations(exclude_oecms: true).map do |designation|
                                 { percent: designation[:percent] }
                               end
     @sites = site_cards(3, false)
