@@ -2,7 +2,7 @@
   <div>
     <div 
       class="card--stats-toggle"
-      v-if="tabs.count > 0"
+      v-if="tabs.length > 1"
     >
       <tabs-fake
         :children="tabs"
@@ -11,7 +11,10 @@
       ></tabs-fake>
     </div>
 
-    <div class="card--stats-wrapper">
+    <div 
+      class="card--stats-wrapper"
+      v-if="data.coverage"
+    >
       <stats-coverage
         v-for="stat in activeDatabase.coverage"
         :key="stat._uid"
@@ -34,7 +37,13 @@
     </div>
 
     <stats-sources
-      :data="activeDatabase.sources"
+      v-if="activeDatabase.sources"
+      v-bind="{
+        count: activeDatabase.sources.count,
+        title: activeDatabase.sources.title,
+        sourceUpdated: activeDatabase.sources.source_updated,
+        sources: activeDatabase.sources.sources
+      }"
     />
 
     <stats-designations
