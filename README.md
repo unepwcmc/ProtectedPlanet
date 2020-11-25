@@ -42,10 +42,8 @@ Protected Planet is released under the [BSD
 1. Import DB 
 1. Import db seeds in `rake 'comfy:cms_seeds:import[protected-planet, protectedplanet]'`
 1. Go to 'http://localhost:3000/en/admin/sites' and update the host to be `localhost:3000`
-1. Index Elasicsearch in `rails c`
-- Search::Index.delete 
-- Search::Index.create 
-- Search::Index.create_cms_fragments 
+1. Reindex the search: `rake search:reindex` 
+1. Update your local CMS seeds (CMS pages, files, layouts etc.) using `rake comfy:staging_import` 
 
 ### Run application
 1. `elasticsearch`
