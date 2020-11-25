@@ -7,18 +7,35 @@
       <tabs-fake
         :children="tabs"
         class="tabs--rounded"
+        :defaultSelectedId="tabs[0].id"
         v-on:click:tab="updateDatabaseId"
       ></tabs-fake>
     </div>
 
     <div 
       class="card--stats-wrapper"
-      v-if="data.coverage"
+      v-if="hasCoverageStats"
     >
       <stats-coverage
         v-for="stat in activeDatabase.coverage"
         :key="stat._uid"
-        :data="stat"
+        v-bind="{
+          nationalReportVersion: stat.national_report_version,
+          pameKm2: stat.pame_km2,
+          pamePercentage: stat.pame_percentage,
+          protectedKm2: stat.protected_km2,
+          protectedNationalReport: stat.protected_national_report,
+          protectedPercentage: stat.protected_percentage,
+          textCoverage: stat.text_coverage,
+          textNationalReport: stat.text_national_report,
+          textPame: stat.text_pame,
+          textPameAssessments: stat.text_pame_assessments,
+          textProtected: stat.text_protected,
+          textTotal: stat.text_total,
+          title: stat.title,
+          totalKm2: stat.total_km2,
+          type: stat.type,
+        }"
       />
     </div>
 
@@ -101,18 +118,21 @@ export default {
 
   data () {
     return  {
-      databaseId: 'wdpa'
+      databaseId: ''
     }
   },
 
   computed: {
     activeDatabase () {
       return this.data[this.databaseId]
+    },
+    hasCoverageStats () {
+      return 'coverage' in this.activeDatabase && this.activeDatabase.coverage.length > 1
     }
   },
 
-  mounted () {
-    this.databaseId = 'wdpa'
+  created () {
+    this.databaseId = this.tabs[0].id
   },
 
   methods: {
