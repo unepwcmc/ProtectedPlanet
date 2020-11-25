@@ -7,6 +7,7 @@ class CountryController < ApplicationController
   before_action :build_stats, only: :show
 
   include MapHelper
+  include CountriesHelper
 
   def show
      # Components above tabs
@@ -92,18 +93,19 @@ class CountryController < ApplicationController
         ],
         message: {
           documents: @country_presenter.documents, #need to add translated text for link to documents hash 
-          text: I18n.t('stats.warning')
+          text: I18n.t('stats.warning'),
+          link: I18n.t('global.button.link')
         },
         iucn: {
-          categories: @country.protected_areas_per_iucn_category, #this was what was missing
-          #links don't currently work because the partial was using the chart_link method
           chart: @iucn_categories,
+          country: @country.name,
+          categories: create_chart_links(@country.protected_areas_per_iucn_category(exclude_oecms: true)), 
           title: I18n.t('stats.iucn-categories.title')
         },
         governance: {
           chart: @governance_types,
-          governance: @country.protected_areas_per_governance, #this was what was missing
-          #links don't currently work because the partial was using the chart_link method
+          country: @country.name,
+          governance: create_chart_links(@country.protected_areas_per_governance(exclude_oecms: true)), 
           title: I18n.t('stats.governance.title')
         },
         sources: {
@@ -113,10 +115,8 @@ class CountryController < ApplicationController
           title: I18n.t('stats.sources.title')
         },
         designations: {
-          #this needs adding into juristictions hash V
-          #designation_link(jurisdiction['designation_name'])
           chart: @designation_percentages,
-          designations:  @country_presenter.designations_without_oecm,
+          designations: create_chart_links(@country_presenter.designations(exclude_oecms: true), true),
           title: I18n.t('stats.designations.title')
         },
         growth: {
@@ -127,7 +127,7 @@ class CountryController < ApplicationController
         sites: {
           cards: @sites,
           title: @country.name + ' ' + I18n.t('global.area-types.wdpa'),
-          view_all: @sitesViewAllUrl,#this should prob show wdpa only
+          view_all: @sitesViewAllUrlWdpa,
           text_view_all: I18n.t('global.button.all')
         }
       }
@@ -144,15 +144,20 @@ class CountryController < ApplicationController
           @marine_combined_stats
         ],
         message: {
-          documents: @country_presenter.documents, #same
-          text: I18n.t('stats.warning_wdpa_oecm') #different
+          documents: @country_presenter.documents, 
+          text: I18n.t('stats.warning_wdpa_oecm'),
+          link: I18n.t('global.button.link')
         },
         iucn: {
-          chart: @iucn_categories_oecm, # needs to be categories types for WDPA and OECMs
+          chart: @iucn_categories_oecm, 
+          country: @country.name,
+          categories: create_chart_links(@country.protected_areas_per_iucn_category), 
           title: I18n.t('stats.iucn-categories.title') #same as wdpa only 
         },
         governance: {
-          chart: @governance_types_oecm, # needs to be governance types for WDPA and OECMs
+          chart: @governance_types_oecm, 
+          country: @country.name,
+          governance: create_chart_links(@country.protected_areas_per_governance), 
           title: I18n.t('stats.governance.title')#same as wdpa only 
         },
         sources: {
@@ -162,19 +167,19 @@ class CountryController < ApplicationController
           title: I18n.t('stats.sources.title')#same as wdpa only 
         },
         designations: {
-          chart: @designation_percentages_oecm, # needs to include designations for WDPA and OECMs
-          designations: @country_presenter.designations, # needs to include designations for WDPA and OECMs
+          chart: @designation_percentages_oecm,
+          designations: create_chart_links(@country_presenter.designations, true),
           title: I18n.t('stats.designations.title') #same as wdpa only
         },
         growth: {
-          chart: @growth_oecm, # needs to include WDPA and OECMs
+          chart: @growth_oecm, 
           smallprint: I18n.t('stats.coverage-chart-smallprint'), #same as wdpa only
           title: I18n.t('stats.growth.title_wdpa_oecm') #different
         },
         sites: {
-          cards: @sites_oecm, # get 1 oecm and 2 pas
+          cards: @sites_oecm, 
           title: @country.name + ' ' + I18n.t('global.area-types.wdpa_oecm'),#different
-          view_all: search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } }),#this should prob show wdpa and oecms
+          view_all: @sitesViewAllUrl,
           text_view_all: I18n.t('global.button.all')#same as wdpa only
         }
       }
@@ -190,7 +195,7 @@ class CountryController < ApplicationController
                  Country.where(iso: params[:iso].upcase).first
                else
                  Country.where(iso_3: params[:iso].upcase).first
-    end
+                end
 
     @country or raise_404
 
@@ -204,14 +209,13 @@ class CountryController < ApplicationController
     @coverage_growth ||= @country_presenter.coverage_growth_chart(exclude_oecms: true)
     @terrestrial_stats ||= @country_presenter.terrestrial_stats
     @marine_stats ||= @country_presenter.marine_stats
-    @designation_percentages ||= @country_presenter.designations_without_oecm.map do |designation|
+    @designation_percentages ||= @country_presenter.designations(exclude_oecms: true).map do |designation|
                                 { percent: designation[:percent] }
                               end
-    # Need to rework pas_sample method so that it shows only WDPA sites
-    @sites = pas_sample
+    @sites = site_cards(3, false)
     @sources = @country.sources_per_country(exclude_oecms: true)
     @growth = @country_presenter.coverage_growth_chart(exclude_oecms: true)
-    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
+    @sitesViewAllUrlWdpa = view_all_link(db_type: ['wdpa'])
   end
 
   def assign_oecm_variables    
@@ -223,22 +227,42 @@ class CountryController < ApplicationController
     @designation_percentages_oecm ||= @country_presenter.designations.map do |designation|
                                   { percent: designation[:percent] }
                                 end
-    # Need to rework pas_sample method so that it shows one OECM and two WDPAs
-    @sites_oecm = pas_sample
+    @sites_oecm = site_cards
     @sources_oecm = @country.sources_per_country
     @growth_oecm = @country_presenter.coverage_growth_chart
+    @sitesViewAllUrl = view_all_link
   end
 
-  def pas_sample(size = 3)
-    iso = params[:iso].upcase
-    pas = nil
+  def site_cards(size = 3, show_oecm = true)
+    if show_oecm 
+      [
+        @country.protected_areas.oecms.first,
+        @country.protected_areas.take(2)
+      ].flatten
+    else
+      @country.protected_areas.order(:name).first(size)
+    end
+  end
 
-    pas = if iso.size == 2
-            ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
-          else
-            ProtectedArea.joins(:countries).where("countries.iso_3 = '#{iso}'")
-          end
+  def create_chart_links(input_data, is_designations=false)
+    if is_designations
+      input_data.map do |j|
+        jurisdictions_with_links = { 
+          jurisdictions: merge_chart_links(j[:jurisdictions]) 
+        }           
+        j.merge!(jurisdictions_with_links)        
+      end
+    else
+      merge_chart_links(input_data)
+    end
+  end
 
-    pas.order(:name).first(size)
+  def merge_chart_links(input)
+    input.map do |category|
+      category.merge!({
+        link: chart_link(category)[:link],
+        title: chart_link(category)[:title]
+      })
+    end
   end
 end

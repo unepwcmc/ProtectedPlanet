@@ -19,12 +19,12 @@
       <i class="list__icon"></i>
       <span class="list__title">{{ i+1 }}. {{ category.iucn_category_name}}</span>
       <span class="list__value">
-        {{ category.count }}, {{ category.percentage | decimals }}
+        {{ category.count }}, {{ category.percentage | decimals }}%
       </span>
       <a 
-        href="chart_link(category)[:link]" 
+        :href="`${category.link}`"  
         class="list__right list__a"
-        title="chart_link(category)[:title]"
+        :title="category.title"
       >
         View list
       </a>
@@ -54,7 +54,7 @@ export default {
     decimals(percentage) {
       if (!percentage) return ''
       
-      return Math.round((percentage + Number.EPSILON) * 100) / 100
+      return Math.round((Number(percentage) + Number.EPSILON) * 100) / 100
     }
   }
 }

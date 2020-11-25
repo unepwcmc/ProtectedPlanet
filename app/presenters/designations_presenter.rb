@@ -1,29 +1,20 @@
 class DesignationsPresenter
+  include Rails.application.routes.url_helpers
+
   def initialize(geo_entity)
     @geo_entity = geo_entity
   end
 
   JURISDICTIONS = %w(National Regional International).freeze
-  def designations
-    JURISDICTIONS.map do |j|
-      {
-        title: designation_title(j),
-        total: designation_total(j),
-        percent: percent_of_total(j),
-        has_jurisdiction: get_jurisdiction(j),
-        jurisdictions: jurisdictions(j)
-      }
-    end
-  end
 
-  def designations_without_oecm
+  def designations(exclude_oecms: false)
     JURISDICTIONS.map do |j|
       {
         title: designation_title(j),
-        total: designation_total(j, exclude_oecms: true),
-        percent: percent_of_total(j, exclude_oecms: true),
+        total: designation_total(j, exclude_oecms: exclude_oecms),
+        percent: percent_of_total(j, exclude_oecms: exclude_oecms),
         has_jurisdiction: get_jurisdiction(j),
-        jurisdictions: jurisdictions(j, exclude_oecms: true)
+        jurisdictions: jurisdictions(j, exclude_oecms: exclude_oecms)
       }
     end
   end

@@ -20,7 +20,7 @@
           target="_blank"
           :title="document.name"
         >
-          t("global.button.#{document[:type]}")
+          {{ data.link }}
         </a>
       </li>
     </ul>

@@ -16,7 +16,7 @@
         class="card__link"
         v-for="(card, i) in data.cards"
         :key="i"
-        href="protected_area_path(card.wdpa_id)"
+        :href="`/${card.wdpa_id}`"
         :title="`View more about the site: ${card.name}`"
       >
         <div class="card__image-placeholder">
