@@ -93,7 +93,8 @@ class CountryController < ApplicationController
         ],
         message: {
           documents: @country_presenter.documents, #need to add translated text for link to documents hash 
-          text: I18n.t('stats.warning')
+          text: I18n.t('stats.warning'),
+          link: I18n.t('global.button.link')
         },
         iucn: {
           chart: @iucn_categories,
@@ -144,7 +145,8 @@ class CountryController < ApplicationController
         ],
         message: {
           documents: @country_presenter.documents, 
-          text: I18n.t('stats.warning_wdpa_oecm') 
+          text: I18n.t('stats.warning_wdpa_oecm'),
+          link: I18n.t('global.button.link')
         },
         iucn: {
           chart: @iucn_categories_oecm, # needs to be categories types for WDPA and OECMs

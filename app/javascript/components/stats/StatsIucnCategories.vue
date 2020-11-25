@@ -19,7 +19,7 @@
       <i class="list__icon"></i>
       <span class="list__title">{{ i+1 }}. {{ category.iucn_category_name}}</span>
       <span class="list__value">
-        {{ category.count }}, {{ category.percentage | decimals }}
+        {{ category.count }}, {{ category.percentage | decimals }}%
       </span>
       <a 
         :href="`${category.link}`"  
