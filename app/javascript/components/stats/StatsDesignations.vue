@@ -36,7 +36,7 @@
             <span class="list__right">{{ jurisdiction.count }}</span>
             <a 
               class="list__a"
-              href="designation_link(jurisdiction['designation_name'])"
+              :href="`/${jurisdiction.link}`"
               :title="jurisdiction.designation_name"
             />
           </li>

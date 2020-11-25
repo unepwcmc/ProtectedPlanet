@@ -114,10 +114,8 @@ class CountryController < ApplicationController
           title: I18n.t('stats.sources.title')
         },
         designations: {
-          #this needs adding into juristictions hash V
-          #designation_link(jurisdiction['designation_name'])
           chart: @designation_percentages,
-          designations:  @country_presenter.designations_without_oecm,
+          designations: @country_presenter.designations_without_oecm,
           title: I18n.t('stats.designations.title')
         },
         growth: {

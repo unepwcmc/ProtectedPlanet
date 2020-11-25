@@ -16,9 +16,12 @@ module CountriesHelper
     if category.has_key?('governance_name')
       filters.merge!(governance: ["#{category['governance_name']}"]) 
       title_variable = category['governance_name']
-    else
+    elsif category.has_key?('iucn_category_name')
       filters.merge!(iucn_category: ["#{category['iucn_category_name']}"]) 
       title_variable = category['iucn_category_name']
+    else
+      filters.merge!(designation: ["#{category['designation_name']}"]) 
+      title_variable = category['designation_name']
     end
     
     # This hash is used to populate the view links of the torus charts for the show pages

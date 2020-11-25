@@ -1,4 +1,6 @@
 class DesignationsPresenter
+  include CountriesHelper
+
   def initialize(geo_entity)
     @geo_entity = geo_entity
   end
