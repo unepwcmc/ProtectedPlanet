@@ -32,8 +32,6 @@ class RegionPresenter
 
   def marine_stats
     {
-      pame_km2: nil, # #TODO FERDI - Not sure we have this kind of stat
-      pame_percentage: nil, # #TODO FERDI - Not sure we have this kind of stat
       protected_km2: pa_marine_area.round(0),
       protected_percentage: percentage_pa_marine_cover.round(2),
       total_km2: marine_area.round(0)
@@ -42,8 +40,6 @@ class RegionPresenter
 
   def terrestrial_stats
     {
-      pame_km2: nil, # #TODO FERDI - Not sure we have this kind of stat
-      pame_percentage: nil, # #TODO FERDI - Not sure we have this kind of stat
       protected_km2: pa_land_area.round(0),
       protected_percentage: percentage_pa_land_cover.round(2),
       total_km2: land_area.round(0)
