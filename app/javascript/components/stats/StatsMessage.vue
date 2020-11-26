@@ -2,15 +2,15 @@
   <div class="card--message">
     <p 
       class="card__warning"
-      v-html="data.text"
+      v-html="text"
     />
 
     <ul class="list--links"
-      v-if="data.documents"
+      v-if="documents"
     >
       <li 
         class="list__li"
-        v-for="(document, i) in data.documents"
+        v-for="(document, i) in documents"
         :key="i"
       >
         <span>{{ document.name }}</span>
@@ -32,9 +32,21 @@ export default {
   name: 'StatsMessage',
 
   props: {
-    data: {
+    documents:{
+      type: Array
+    },
+    link: {
+      type: String
+    },
+    text:{
       required: true,
-      type: Object
+      type: String
+    }
+  },
+
+  computed: {
+    hasDocuments () {
+      return this.documents && this.documents.length > 1
     }
   }
 }

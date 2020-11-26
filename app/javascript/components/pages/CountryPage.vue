@@ -40,21 +40,27 @@
     </div>
 
     <stats-message
-      :data="activeDatabase.message"
+      v-bind="{
+        documents: activeDatabase.message.documents,
+        link: activeDatabase.message.link,
+        text: activeDatabase.message.text
+      }"
     />
 
     <div class="card--stats-wrapper pdf-break-before">
       <stats-iucn-categories
+        v-if="hasIucnCategories"
         :data="activeDatabase.iucn"
       />
 
       <stats-governance
+        v-if="hasGovernanceTypes"
         :data="activeDatabase.governance"
       />
     </div>
 
     <stats-sources
-      v-if="activeDatabase.sources"
+      v-if="hasSources"
       v-bind="{
         count: activeDatabase.sources.count,
         title: activeDatabase.sources.title,
@@ -128,6 +134,15 @@ export default {
     },
     hasCoverageStats () {
       return 'coverage' in this.activeDatabase && this.activeDatabase.coverage.length > 1
+    },
+    hasIucnCategories () {
+      return 'iucn' in this.activeDatabase
+    },
+    hasGovernanceTypes () {
+      return 'governance' in this.activeDatabase
+    },
+    hasSources () {
+      return 'sources' in this.activeDatabase && this.activeDatabase.sources.length > 1
     }
   },
 
