@@ -19,7 +19,6 @@ import AmChartPie from './components/charts/am-chart-pie/AmChartPie'
 import Carousel from './components/carousel/Carousel'
 import CarouselSlide from './components/carousel/CarouselSlide'
 import Counter from './components/counter/Counter'
-import CountryPage from './components/pages/CountryPage'
 import ChartBar from './components/charts/chart-bar/ChartBar'
 import ChartBarSimple from './components/charts/chart-bar/ChartBarSimple'
 import ChartBarStacked from './components/charts/chart-bar/ChartBarStacked'
@@ -41,6 +40,7 @@ import ListingPageCardNews from './components/listing/ListingPageCardNews.vue'
 import ListingPageCardResources from './components/listing/ListingPageCardResources.vue'
 import NavBurger from './components/nav/NavBurger'
 import PameModal from './components/pame/PameModal'
+import RegionCountryPages from './components/pages/RegionCountryPages'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
@@ -89,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
         Carousel,
         CarouselSlide,
         Counter,
-        CountryPage,
         ChartBar,
         ChartBarSimple,
         ChartBarStacked,
@@ -111,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ListingPageCardResources,
         NavBurger,
         PameModal,
+        RegionCountryPages,
         SearchAreas,
         SearchAreasHome,
         SearchSite,

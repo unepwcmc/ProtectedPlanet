@@ -122,7 +122,7 @@ import StatsSources from '../stats/StatsSources.vue'
 import TabsFake from '../tabs/TabsFake.vue'
 
 export default {
-  name: 'CountryPage',
+  name: 'RegionCountryPages',
 
   components: {
     StatsCoverage,
