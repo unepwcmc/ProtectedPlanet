@@ -71,14 +71,18 @@ class CountryTabPresenter < CountryPresenter
   def sites(oecms_tab: false)
     {
       cards: site_cards(3, oecms_tab),
-      title: @country.name + ' ' + 
-      ( oecms_tab ?  I18n.t('global.area-types.wdpa_oecm') : I18n.t('global.area-types.wdpa')),
+      title: other_sites_title(oecms_tab),
       view_all: oecms_tab ? view_all_link : view_all_link(db_type: ['wdpa']),
       text_view_all: I18n.t('global.button.all')
     }
   end
 
   private
+
+  def other_sites_title(oecms_tab)
+    text = oecms_tab ?  I18n.t('global.area-types.wdpa_oecm') : I18n.t('global.area-types.wdpa')
+    @country.name + ' ' + text
+  end
 
   def country_presenter
     @country_presenter
