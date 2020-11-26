@@ -62,35 +62,19 @@ class CountryPresenter
     ].compact.flatten
   end
 
-  def marine_stats
+  def build_stats(type)
     {
       national_report_version: statistic.nr_version,
-      pame_km2: number_with_delimiter(statistic.pame_statistic.pame_pa_marine_area.round(0)),
-      pame_percentage: statistic.pame_statistic.pame_percentage_pa_marine_cover.round(2),
-      protected_km2: number_with_delimiter(statistic.pa_marine_area.round(0)),
-      protected_national_report: statistic.percentage_nr_marine_cover,
-      protected_percentage: statistic.percentage_pa_marine_cover.round(2),
-      total_km2: number_with_delimiter(statistic.marine_area.round(0)),
-      title: I18n.t("stats.coverage_marine.title_wdpa"),
-      type: 'marine',
-      text_protected: I18n.t("stats.coverage_marine.covered"),
-      text_total: I18n.t("stats.coverage_marine.total"),
-    }.merge!(merge_shared_text_into_stats)
-  end
-
-  def terrestrial_stats
-    {
-      national_report_version: statistic.nr_version,
-      pame_km2: number_with_delimiter(statistic.pame_statistic.pame_pa_land_area.round(0)),
-      pame_percentage: statistic.pame_statistic.pame_percentage_pa_land_cover.round(2),
-      protected_km2: number_with_delimiter(statistic.pa_land_area.round(0)),
-      protected_national_report: statistic.percentage_nr_land_cover,
-      protected_percentage: statistic.percentage_pa_land_cover.round(2),
-      total_km2: number_with_delimiter(statistic.land_area.round(0)),
-      title: I18n.t("stats.coverage_terrestrial.title_wdpa"),
-      type: 'terrestrial',
-      text_protected: I18n.t("stats.coverage_terrestrial.covered"),
-      text_total: I18n.t("stats.coverage_terrestrial.total"),
+      pame_km2: number_with_delimiter(statistic.pame_statistic.send("pame_pa_#{type}_area").round(0)),
+      pame_percentage: statistic.pame_statistic.send("pame_percentage_pa_#{type}_cover").round(2),
+      protected_km2: number_with_delimiter(statistic.send("pa_#{type}_area").round(0)),
+      protected_national_report: statistic.send("percentage_nr_#{type}_cover"),
+      protected_percentage: statistic.send("percentage_pa_#{type}_cover").round(2),
+      total_km2: number_with_delimiter(statistic.send("#{type}_area").round(0)),
+      title: I18n.t("stats.coverage_#{yml_key(type)}.title_wdpa"),
+      type: yml_key(type),
+      text_protected: I18n.t("stats.coverage_#{yml_key(type)}.covered"),
+      text_total: I18n.t("stats.coverage_#{yml_key(type)}.total"),
     }.merge!(merge_shared_text_into_stats)
   end
 
@@ -103,22 +87,12 @@ class CountryPresenter
     }
   end
 
-  def marine_combined_stats
-    marine_stats.merge!(
+  def build_combined_stats(type)
+    build_stats(type).merge!(
       {
-        protected_km2: number_with_delimiter(statistic.oecms_pa_marine_area.round(0)),
-        protected_percentage: statistic.percentage_oecms_pa_marine_cover.round(2),
-        title: I18n.t("stats.coverage_marine.title_wdpa_oecm")
-      }
-    )
-  end
-
-  def terrestrial_combined_stats
-    terrestrial_stats.merge!(
-      {
-        protected_km2: number_with_delimiter(statistic.oecms_pa_land_area.round(0)),
-        protected_percentage: statistic.percentage_oecms_pa_land_cover.round(2),
-        title: I18n.t("stats.coverage_terrestrial.title_wdpa_oecm")
+        protected_km2: number_with_delimiter(statistic.send("oecms_pa_#{type}_area").round(0)),
+        protected_percentage: statistic.send("percentage_oecms_pa_#{type}_cover").round(2),
+        title: I18n.t("stats.coverage_#{yml_key(type)}.title_wdpa_oecm")
       }
     )
   end
@@ -174,6 +148,10 @@ class CountryPresenter
   end
 
   private
+
+  def yml_key(type)
+    type == 'land' ? 'terrestrial' : 'marine'
+  end
 
   def country
     @country

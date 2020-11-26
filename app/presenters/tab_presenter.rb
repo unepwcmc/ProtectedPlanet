@@ -17,8 +17,8 @@ class TabPresenter
     combined = oecms_tab ? 'combined_' : nil
 
     [
-      presenter.send("terrestrial_#{combined}stats"),
-      presenter.send("marine_#{combined}stats")
+      presenter.send("build_#{combined}stats", 'land'),
+      presenter.send("build_#{combined}stats", 'marine')
     ]
   end
 
