@@ -73,7 +73,7 @@ class CountryController < ApplicationController
     oecm = tab == :wdpa_oecm
     hash = {}
 
-    # What this does is call the corresponding method in country presenter to build
+    # What this does is call the corresponding method in tab presenter to build
     # the value for each key, populating the hash
     hash[tab] = TABS_KEYS.map do |key|
       { "#{key}": @tab_presenter.send("#{key}", oecms_tab: oecm) }

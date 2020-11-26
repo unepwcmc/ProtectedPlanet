@@ -43,14 +43,14 @@ class Region < ApplicationRecord
     """)
   end
 
-  def protected_areas_per_iucn_category
+  def protected_areas_per_iucn_category(exclude_oecms: false)
     region_data = {}
     processed_data = []
     total_region_count = []
     correct_order = ["Ia", "Ib", "II", "III", "IV", "V", "VI", "Not Reported", "Not Assigned", "Not Applicable"]
 
     countries.each do |country|
-      country.protected_areas_per_iucn_category.each do |protected_area|
+      country.protected_areas_per_iucn_category(exclude_oecms: exclude_oecms).each do |protected_area|
         region_pa_category = region_data[protected_area["iucn_category_name"]] ||= {}
         region_pa_category["count"] ||= 0
         region_pa_category["count"] += protected_area["count"].to_i
@@ -143,7 +143,7 @@ class Region < ApplicationRecord
     all_countries_and_territories.flatten.uniq
   end
 
-  def sources_per_region
+  def sources_per_region(exclude_oecms: false)
     sources = ActiveRecord::Base.connection.execute("""
       SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party 
       FROM sources
@@ -152,6 +152,10 @@ class Region < ApplicationRecord
       INNER JOIN protected_areas_sources 
       ON protected_areas_sources.protected_area_id = countries_protected_areas.protected_area_id
       AND protected_areas_sources.source_id = sources.id
+
+      #{"INNER JOIN protected_areas
+      ON protected_areas_sources.protected_area_id = protected_areas.id
+      WHERE protected_areas.is_oecm = false" if exclude_oecms}
       """)
     convert_into_hash(sources.uniq)
   end

@@ -24,7 +24,7 @@ class TabPresenter
 
   def message(oecms_tab: false)
     {
-      documents: presenter.documents, #need to add translated text for link to documents hash 
+      documents: presenter.try(:documents), #need to add translated text for link to documents hash 
       text: oecms_tab ? I18n.t('stats.warning_wdpa_oecm') : I18n.t('stats.warning')
     }
   end
@@ -48,12 +48,10 @@ class TabPresenter
   end
 
   def sources(oecms_tab: false)
-    sources = @geo_entity.sources_per_country(exclude_oecms: !oecms_tab)
-
     {
-      count: sources.count,
+      count: sources_per_geo_entity(exclude_oecms: !oecms_tab).count,
       source_updated: I18n.t('stats.sources.updated'),
-      sources: sources,
+      sources: sources_per_geo_entity(exclude_oecms: !oecms_tab),
       title: I18n.t('stats.sources.title')
     }
   end
@@ -84,6 +82,14 @@ class TabPresenter
   end
 
   private
+
+  def sources_per_geo_entity(exclude_oecms: false)
+    if @geo_entity.class.to_s == 'Country'
+      @geo_entity.sources_per_country(exclude_oecms: exclude_oecms)
+    else
+      @geo_entity.sources_per_region(exclude_oecms: exclude_oecms)
+    end
+  end
 
   def other_sites_title(oecms_tab)
     text = oecms_tab ?  I18n.t('global.area-types.wdpa_oecm') : I18n.t('global.area-types.wdpa')
