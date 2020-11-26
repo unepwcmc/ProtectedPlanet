@@ -1,11 +1,10 @@
 <template>
   <div class="card--stats-iucn card--stats-half">
-    <h2 class="card__h2">{{ data.title }}</h2>
+    <h2 class="card__h2">{{ title }}</h2>
 
   <am-chart-pie
-    v-if="data.chart"
     class="am-chart--pie"
-    :dataset="data.chart"
+    :dataset="chart"
     :doughnut="true"
     id="am-pie-iucn-categories"
   ></am-chart-pie>
@@ -13,7 +12,7 @@
   <ul class="list--underline">
     <li 
       class="list__li"
-      v-for="(category, i) in data.categories"
+      v-for="(category, i) in categories"
       :key="i"
     >
       <i class="list__icon"></i>
@@ -44,9 +43,17 @@ export default {
   },
 
   props: {
-    data: {
+    categories: {
       required: true,
-      type: Object
+      type: Array
+    },
+    chart: {
+      required: true,
+      type: Array
+    },
+    title: {
+      required: true,
+      type: String
     }
   },
 
