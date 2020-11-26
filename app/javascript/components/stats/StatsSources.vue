@@ -1,16 +1,16 @@
 <template>
   <div class="card--stats-sources sm-sources pdf-break-inside-avoid">
-    <h2 class="card__h2">{{ data.title }} {{ data.count }}</h2>
+    <h2 class="card__h2">{{ title }} {{ count }}</h2>
     
     <div class="card__content flex">
       <ol class="list--underline-sources">
         <li 
           class="list__li"
-          v-for="(source, i) in data.sources"
+          v-for="(source, i) in sources"
           :key="i"
         >
           <span class="list__title">{{ source.title }}</span>
-          <span class="list__date">{{ data.source_updated }}: {{ source.date_updated }}</span>
+          <span class="list__date">{{ sourceUpdated }}: {{ source.date_updated }}</span>
           <span class="list__party">{{ source.resp_party }}</span>
         </li>
       </ol>
@@ -23,9 +23,21 @@ export default {
   name: 'StatsSources',
 
   props: {
-    data: {
+    count: {
       required: true,
-      type: Object
+      type: Number
+    },
+    sources: {
+      required: true,
+      type: Array
+    },
+    sourceUpdated: {
+      required: true,
+      type: String
+    },
+    title: {
+      required: true,
+      type: String
     }
   }
 }

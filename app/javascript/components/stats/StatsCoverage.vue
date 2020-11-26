@@ -1,28 +1,28 @@
 <template>
   <div class="card--stats-coverage card--stats-half">
-    <h2 class="card__h2">{{ data.title }}</h2>
+    <h2 class="card__h2">{{ title }}</h2>
 
     <div class="card__content">
       <div class="card__chart">
         <div class="chart--square">
           <span 
-            :class="`chart__area theme--${data.type}`" 
-            :style="`width: ${data.protected_percentage}%; height: ${data.protected_percentage}%;`"
+            :class="`chart__area theme--${type}`" 
+            :style="`width: ${protectedPercentage}%; height: ${protectedPercentage}%;`"
           ></span>
         </div>
       </div>
 
       <div>
         <div class="card__stat-large">
-          <span class="card__number-large block">{{ data.protected_percentage }}%</span> {{ data.text_coverage }}
+          <span class="card__number-large block">{{ protectedPercentage }}%</span> {{ textCoverage }}
         </div>
 
         <div>
           <p class="card__stat">
-            <span class="card__number block">{{ data.protected_km2 }}km<sup>2</sup></span> {{ data.text_protected }}
+            <span class="card__number block">{{ protectedKm2 }}km<sup>2</sup></span> {{ textProtected }}
           </p>
           <p class="card__stat">
-            <span class="card__number block">{{ data.total_km2 }}km<sup>2</sup></span> {{ data.text_total }}
+            <span class="card__number block">{{ totalKm2 }}km<sup>2</sup></span> {{ textTotal }}
           </p>
         </div>
 
@@ -32,9 +32,9 @@
             v-if="hasNationalReport"
           >
             <span class="card__number block">
-              {{ data.protected_national_report }}%
+              {{ protectedNationalReport }}%
             </span>
-            {{ data.national_report_version }}{{ data.text_national_report }}
+            {{ nationalReportVersion }}{{ textNationalReport }}
           </p>
           <div 
             class="card__subsection"
@@ -43,10 +43,10 @@
             <p class="card__subtitle">PAME</p>
 
             <p class="card__stat">
-                <span class="card__number block"> {{ data.pame_percentage }}% </span> {{ data.text_pame_assessments }}
+                <span class="card__number block"> {{ pamePercentage }}% </span> {{ textPameAssessments }}
               </p>
               <p class="card__stat">
-                <span class="card__number block">{{ data.pame_km2 }}km<sup>2</sup></span> {{ data.text_pame }}
+                <span class="card__number block">{{ pameKm2 }}km<sup>2</sup></span> {{ textPame }}
               </p>
             </div>
           </div>
@@ -61,19 +61,69 @@ export default {
   name: 'StatsCoverage',
 
   props: {
-    data: {
+    nationalReportVersion:{
+      type: Number
+    },
+    pameKm2:{
+      type: String
+    },
+    pamePercentage:{
+      type: Number
+    },
+    protectedKm2:{
       required: true,
-      type: Object
+      type: String
+    },
+    protectedNationalReport:{
+      type: Number
+    },
+    protectedPercentage:{
+      required: true,
+      type: Number
+    },
+    textCoverage:{
+      required: true,
+      type: String
+    },
+    textNationalReport:{
+      type: String
+    },
+    textPame:{
+      required: true,
+      type: String
+    },
+    textPameAssessments:{
+      type: String
+    },
+    textProtected:{
+      required: true,
+      type: String
+    },
+    textTotal:{
+      required: true,
+      type: String
+    },
+    title:{
+      required: true,
+      type: String
+    },
+    totalKm2:{
+      required: true,
+      type: String
+    },
+    type:{
+      required: true,
+      type: String
     }
   },
 
   computed: {
     hasNationalReport () {
-      return this.data.protected_national_report && this.data.national_report_version
+      return this.protectedNationalReport != null && this.nationalReportVersion != null
     },
     
     hasPameData () {
-      return this.data.pame_percentage && this.data.pame_km2
+      return this.pamePercentage != null && this.pameKm2 != null
     }
   }
 }
