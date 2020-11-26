@@ -1,6 +1,7 @@
 class DesignationsPresenter
   include Rails.application.routes.url_helpers
 
+  # TODO - Need to fix this for regions
   def initialize(geo_entity)
     @geo_entity = geo_entity
   end

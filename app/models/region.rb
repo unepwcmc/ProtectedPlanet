@@ -31,12 +31,12 @@ class Region < ApplicationRecord
     )
   end
 
-  def protected_areas_per_governance
+  def protected_areas_per_governance(exclude_oecms: false)
     ActiveRecord::Base.connection.execute("""
       SELECT governances.id AS governance_id, governances.name AS governance_name, governances.governance_type AS governance_type, pas_per_governances.count AS count, round((pas_per_governances.count::decimal/(SUM(pas_per_governances.count) OVER ())::decimal) * 100, 2) AS percentage
       FROM governances
       INNER JOIN (
-        #{protected_areas_inner_join(:governance_id)}
+        #{protected_areas_inner_join(:governance_id, exclude_oecms)}
       ) AS pas_per_governances
         ON pas_per_governances.governance_id = governances.id
       ORDER BY count DESC
@@ -105,19 +105,19 @@ class Region < ApplicationRecord
     region_extent_url(name)
   end
 
-  def protected_areas_per_designation(jurisdiction=nil)
+  def protected_areas_per_designation(jurisdiction=nil, exclude_oecms: false)
     ActiveRecord::Base.connection.execute("""
       SELECT designations.id AS designation_id, designations.name AS designation_name, pas_per_designations.count
       FROM designations
       INNER JOIN (
-        #{protected_areas_inner_join(:designation_id)}
+        #{protected_areas_inner_join(:designation_id, exclude_oecms)}
       ) AS pas_per_designations
         ON pas_per_designations.designation_id = designations.id
       #{"WHERE designations.jurisdiction_id = #{jurisdiction.id}" if jurisdiction}
     """)
   end
 
-  def protected_areas_per_jurisdiction
+  def protected_areas_per_jurisdiction(exclude_oecms: false)
     ActiveRecord::Base.connection.execute("""
       SELECT jurisdictions.name, COUNT(*)
       FROM jurisdictions
@@ -128,6 +128,7 @@ class Region < ApplicationRecord
         INNER JOIN countries_protected_areas
           ON protected_areas.id = countries_protected_areas.protected_area_id
           AND countries_protected_areas.country_id IN (#{self.countries.pluck(:id).join(",")})
+          #{"WHERE protected_areas.is_oecm = false" if exclude_oecms}
       ) AS pas_for_country ON pas_for_country.designation_id = designations.id
       GROUP BY jurisdictions.name
     """)
@@ -157,13 +158,14 @@ class Region < ApplicationRecord
 
   private
 
-  def protected_areas_inner_join group_by
+  def protected_areas_inner_join(group_by, exclude_oecms)
     """
       SELECT #{group_by}, COUNT(protected_areas.id) AS count
       FROM protected_areas
       INNER JOIN countries_protected_areas
         ON protected_areas.id = countries_protected_areas.protected_area_id
         AND countries_protected_areas.country_id IN (#{self.countries.pluck(:id).join(",")})
+        #{"WHERE protected_areas.is_oecm = false" if exclude_oecms}
       GROUP BY #{group_by}
     """
   end

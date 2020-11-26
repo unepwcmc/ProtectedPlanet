@@ -8,9 +8,9 @@ module CountriesHelper
   end
 
   def chart_link(category)
-    return unless @country || @region
+    return unless @geo_entity || @country || @region
 
-    geo_entity = @country || @region
+    geo_entity = @geo_entity || @country || @region
     geo_type = geo_entity.class.to_s.downcase 
     name = geo_entity.name
     title_variable = ""
@@ -42,7 +42,12 @@ module CountriesHelper
   end
 
   def view_all_link(additional_filter_hash = nil)
-    base_filters = { filters: { location: { type: 'country', options: [@country.name.to_s] } } }
+    return unless @country || @region || @geo_entity
+
+    geo_entity = @country || @region || @geo_entity
+    geo_type = geo_entity.class.to_s.downcase
+
+    base_filters = { filters: { location: { type: geo_type, options: [geo_entity.name] } } }
 
     if additional_filter_hash.nil? || !additional_filter_hash.is_a?(Hash)
       search_areas_path(base_filters)
