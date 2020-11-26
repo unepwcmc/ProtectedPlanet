@@ -20,7 +20,7 @@
           target="_blank"
           :title="document.name"
         >
-          {{ document.type }}
+          {{ document.button_text }}
         </a>
       </li>
     </ul>

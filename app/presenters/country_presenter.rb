@@ -143,12 +143,14 @@ class CountryPresenter
       {
         url: 'https://wdpa.s3.amazonaws.com/Country_informations/MYS/COMMUNICATION%20PLAN%202012-2017.pdf',
         name: 'Department of Marine Park Malaysia CP',
-        type: I18n.t("global.button.pdf")
+        type: 'pdf',
+        button_text: I18n.t("global.button.pdf")
       },
       {
         url: 'https://wdpa.s3.amazonaws.com/Country_informations/MYS/TOTAL%20ECONOMIC%20VALUE%20OF%20MARINE%20BIODIVERSITY.pdf',
         name: 'Malaysia Marine Parks Biodiversity',
-        type: I18n.t("global.button.pdf")
+        type: 'pdf',
+        button_text: I18n.t("global.button.pdf")
       }
     ]
   end
@@ -158,7 +160,8 @@ class CountryPresenter
     {
       url: @statistic.nr_report_url,
       name: I18n.t('stats.nr_latest'),
-      type: I18n.t("global.button.link")
+      type: 'link',
+      button_text: I18n.t("global.button.link")
     }
   end
 
