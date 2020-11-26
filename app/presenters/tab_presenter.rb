@@ -1,48 +1,54 @@
-class CountryTabPresenter < CountryPresenter
+class TabPresenter 
   include CountriesHelper
   include Rails.application.routes.url_helpers
 
-  def initialize(country)
-    @country = country
-    @country_presenter = CountryPresenter.new(country)
+  def initialize(geo_entity)
+    @geo_entity = geo_entity
+    @presenter = nil
+    
+    if geo_entity.class.to_s == 'Country'
+      @presenter = CountryPresenter.new(geo_entity)
+    else
+      @presenter = RegionPresenter.new(geo_entity)
+    end
   end
 
   def coverage(oecms_tab: false)
     combined = oecms_tab ? 'combined_' : nil
 
     [
-      country_presenter.send("terrestrial_#{combined}stats"),
-      country_presenter.send("marine_#{combined}stats")
+      presenter.send("terrestrial_#{combined}stats"),
+      presenter.send("marine_#{combined}stats")
     ]
   end
 
   def message(oecms_tab: false)
     {
-      documents: country_presenter.documents, #need to add translated text for link to documents hash 
+      documents: presenter.documents, #need to add translated text for link to documents hash 
       text: oecms_tab ? I18n.t('stats.warning_wdpa_oecm') : I18n.t('stats.warning')
     }
   end
 
   def iucn(oecms_tab: false)
     {
-      chart: country_presenter.iucn_categories_chart(@country.protected_areas_per_iucn_category(exclude_oecms: !oecms_tab)),
-      country: @country.name,
-      categories: create_chart_links(@country.protected_areas_per_iucn_category(exclude_oecms: !oecms_tab)), 
+      chart: presenter.iucn_categories_chart(@geo_entity.protected_areas_per_iucn_category(exclude_oecms: !oecms_tab)),
+      country: @geo_entity.name,
+      categories: create_chart_links(@geo_entity.protected_areas_per_iucn_category(exclude_oecms: !oecms_tab)), 
       title: I18n.t('stats.iucn-categories.title')
     }
   end
 
   def governance(oecms_tab: false)
     {
-      chart: country_presenter.governance_chart(@country.protected_areas_per_governance(exclude_oecms: !oecms_tab)),
-      country: @country.name,
-      governance: create_chart_links(@country.protected_areas_per_governance(exclude_oecms: !oecms_tab)), 
+      chart: presenter.governance_chart(@geo_entity.protected_areas_per_governance(exclude_oecms: !oecms_tab)),
+      country: @geo_entity.name,
+      governance: create_chart_links(@geo_entity.protected_areas_per_governance(exclude_oecms: !oecms_tab)), 
       title: I18n.t('stats.governance.title')
     }
   end
 
   def sources(oecms_tab: false)
-    sources = @country.sources_per_country(exclude_oecms: !oecms_tab)
+    sources = @geo_entity.sources_per_country(exclude_oecms: !oecms_tab)
 
     {
       count: sources.count,
@@ -55,14 +61,14 @@ class CountryTabPresenter < CountryPresenter
   def designations(oecms_tab: false)
     {
       chart: designation_percentages(oecms_tab),
-      designations: create_chart_links(country_presenter.designations(exclude_oecms: !oecms_tab), true),
+      designations: create_chart_links(presenter.designations(exclude_oecms: !oecms_tab), true),
       title: I18n.t('stats.designations.title')
     }
   end
 
   def growth(oecms_tab: false)
     {
-      chart: country_presenter.coverage_growth_chart(exclude_oecms: !oecms_tab), 
+      chart: presenter.coverage_growth_chart(exclude_oecms: !oecms_tab), 
       smallprint: I18n.t('stats.coverage-chart-smallprint'),
       title: oecms_tab ? I18n.t('stats.growth.title_wdpa_oecm') : I18n.t('stats.growth.title_wdpa')
     }
@@ -81,15 +87,15 @@ class CountryTabPresenter < CountryPresenter
 
   def other_sites_title(oecms_tab)
     text = oecms_tab ?  I18n.t('global.area-types.wdpa_oecm') : I18n.t('global.area-types.wdpa')
-    @country.name + ' ' + text
+    @geo_entity.name + ' ' + text
   end
 
-  def country_presenter
-    @country_presenter
+  def presenter
+    @presenter
   end
 
   def designation_percentages(exclude_oecms)
-    country_presenter.designations(exclude_oecms: !exclude_oecms).map do |designation|
+    presenter.designations(exclude_oecms: !exclude_oecms).map do |designation|
       { percent: designation[:percent] }
     end
   end
@@ -119,11 +125,11 @@ class CountryTabPresenter < CountryPresenter
   def site_cards(size = 3, show_oecm = true)
     if show_oecm 
       [
-        @country.protected_areas.oecms.first,
-        @country.protected_areas.take(2)
+        @geo_entity.protected_areas.oecms.first,
+        @geo_entity.protected_areas.take(2)
       ].flatten
     else
-      @country.protected_areas.order(:name).first(size)
+      @geo_entity.protected_areas.order(:name).first(size)
     end
   end
 end

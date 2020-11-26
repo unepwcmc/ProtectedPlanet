@@ -76,7 +76,7 @@ class CountryController < ApplicationController
     # What this does is call the corresponding method in country presenter to build
     # the value for each key, populating the hash
     hash[tab] = TABS_KEYS.map do |key|
-      { "#{key}": @country_tab_presenter.send("#{key}", oecms_tab: oecm) }
+      { "#{key}": @tab_presenter.send("#{key}", oecms_tab: oecm) }
     end.reduce(&:merge)
 
     hash
@@ -101,6 +101,6 @@ class CountryController < ApplicationController
 
     @pame_statistics = @country.pame_statistic
     @country_presenter = CountryPresenter.new(@country)
-    @country_tab_presenter = CountryTabPresenter.new(@country)
+    @tab_presenter = TabPresenter.new(@country)
   end
 end

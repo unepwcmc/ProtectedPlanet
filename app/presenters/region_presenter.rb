@@ -26,8 +26,8 @@ class RegionPresenter
     ]
   end
 
-  def designations
-    @designations_presenter.designations
+  def designations(exclude_oecms: false)
+    @designations_presenter.designations(exclude_oecms: exclude_oecms)
   end
 
   def marine_stats
