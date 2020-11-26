@@ -1,11 +1,11 @@
 <template>
   <div class="card--stats-iucn card--stats-half">
-    <h2 class="card__h2">{{ data.title }}</h2>
+    <h2 class="card__h2">{{ title }}</h2>
 
   <am-chart-pie
-    v-if="data.chart"
+    v-if="chart"
     class="am-chart--pie"
-    :dataset="data.chart"
+    :dataset="chart"
     :doughnut="true"
     id="am-pie-governance-type"
   ></am-chart-pie>
@@ -13,7 +13,7 @@
   <ul class="list--underline theme--governance">
     <li 
       class="list__li"
-      v-for="(type, i) in data.governance"
+      v-for="(type, i) in governance"
       :key="i"
     >
       <i class="list__icon"></i>
@@ -42,10 +42,18 @@ export default {
   },
 
   props: {
-    data: {
+    governance: {
       required: true,
-      type: Object
+      type: Array
+    },
+    chart: {
+      required: true,
+      type: Array
+    },
+    title: {
+      required: true,
+      type: String
     }
-  }
+  },
 }
 </script>

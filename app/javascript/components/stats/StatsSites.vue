@@ -1,20 +1,20 @@
 <template>
   <div>
     <div class="flex flex-v-center flex-h-between">
-      <h2>{{ data.title }}</h2>
+      <h2>{{ title }}</h2>
       <a 
         class="margin-space--left button--all"
-        :href="data.view_all"
-        :title="data.text_view_all"
+        :href="view_all"
+        :title="text_view_all"
       >
-      {{ data.text_view_all }}
+      {{ text_view_all }}
       </a>
     </div>
 
     <div class="cards--search-results-areas preview">
       <a
         class="card__link"
-        v-for="(card, i) in data.cards"
+        v-for="(card, i) in cards"
         :key="i"
         :href="`/${card.wdpa_id}`"
         :title="`View more about the site: ${card.name}`"
@@ -36,9 +36,21 @@ export default {
   name: 'StatsSites',
 
   props: {
-    data: {
+    cards: {
       required: true,
-      type: Object
+      type: Array
+    },
+    text_view_all: {
+      required: true,
+      type: String
+    },
+    title: {
+      required: true,
+      type: String
+    },
+    view_all: {
+      required: true,
+      type: String
     }
   }
 }

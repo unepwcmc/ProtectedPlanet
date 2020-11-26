@@ -50,12 +50,20 @@
     <div class="card--stats-wrapper pdf-break-before">
       <stats-iucn-categories
         v-if="hasIucnCategories"
-        :data="activeDatabase.iucn"
+        v-bind="{
+          categories: activeDatabase.iucn.categories,
+          chart: activeDatabase.iucn.chart,
+          title: activeDatabase.iucn.title
+        }"
       />
 
       <stats-governance
         v-if="hasGovernanceTypes"
-        :data="activeDatabase.governance"
+        v-bind="{
+          governance: activeDatabase.governance.governance,
+          chart: activeDatabase.governance.chart,
+          title: activeDatabase.governance.title
+        }"
       />
     </div>
 
@@ -70,17 +78,34 @@
     />
 
     <stats-designations
-      :data="activeDatabase.designations"
+      v-if="hasDesignations"
+      v-bind="{
+        chart: activeDatabase.designations.chart,
+        designations: activeDatabase.designations.designations,
+        title: activeDatabase.designations.title,
+      }"
     />
 
     <stats-growth
-      :data="activeDatabase.growth"
+      v-if="hasGrowth"
+      v-bind="{
+        chart: activeDatabase.growth.chart,
+        smallprint: activeDatabase.growth.smallprint,
+        title: activeDatabase.growth.title,
+      }"
     />
 
     <slot name="related_countries" />
 
     <stats-sites
-      :data="activeDatabase.sites"
+      v-if="hasSites"
+      v-bind="{
+        cards: activeDatabase.sites.cards,
+        text_view_all: activeDatabase.sites.text_view_all,
+        title: activeDatabase.sites.title,
+        view_all: activeDatabase.sites.view_all
+        
+      }"
     />
   </div>
 </template>
@@ -135,14 +160,23 @@ export default {
     hasCoverageStats () {
       return 'coverage' in this.activeDatabase && this.activeDatabase.coverage.length > 1
     },
-    hasIucnCategories () {
-      return 'iucn' in this.activeDatabase
+    hasDesignations () {
+      return 'designations' in this.activeDatabase && this.activeDatabase.designations.designations.length > 1
     },
     hasGovernanceTypes () {
       return 'governance' in this.activeDatabase
     },
+    hasGrowth () {
+      return 'growth' in this.activeDatabase
+    },
+    hasIucnCategories () {
+      return 'iucn' in this.activeDatabase
+    },
+    hasSites () {
+      return 'sites' in this.activeDatabase && this.activeDatabase.sites.cards.length > 1
+    },
     hasSources () {
-      return 'sources' in this.activeDatabase && this.activeDatabase.sources.length > 1
+      return 'sources' in this.activeDatabase && this.activeDatabase.sources.sources.length > 1
     }
   },
 

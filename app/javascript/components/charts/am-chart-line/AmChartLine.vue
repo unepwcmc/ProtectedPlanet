@@ -36,22 +36,34 @@ export default {
     }
   },
 
+  data () {
+    return {
+      chart: {},
+    }
+  },
+
   mounted() {
     this.createChart()
+  },
+
+  watch: {
+    data () {
+      this.chart.data = this.data.datapoints
+    }
   },
 
   methods: {
     createChart () {
       am4core.options.autoSetClassName = true
       
-      const chart = am4core.create("chartdiv", am4charts.XYChart)
-      chart.data = this.data.datapoints
-      chart.paddingTop = 70
-      chart.paddingRight = 40
-      chart.paddingLeft = -20
-      chart.background.fill = this.chartBackgroundColour
+      this.chart = am4core.create("chartdiv", am4charts.XYChart)
+      this.chart.data = this.data.datapoints
+      this.chart.paddingTop = 70
+      this.chart.paddingRight = 40
+      this.chart.paddingLeft = -20
+      this.chart.background.fill = this.chartBackgroundColour
 
-      let yearAxis = chart.xAxes.push(new am4charts.DateAxis())
+      let yearAxis = this.chart.xAxes.push(new am4charts.DateAxis())
       yearAxis.renderer.grid.template.disabled = true
       yearAxis.renderer.line.strokeOpacity = 1
       yearAxis.renderer.line.strokeWidth = 1
@@ -62,7 +74,7 @@ export default {
       yearAxis.renderer.ticks.template.stroke = am4core.color("#c8c8c8");
       yearAxis.renderer.ticks.template.length = 6;
 
-      let axis = chart.yAxes.push(new am4charts.ValueAxis())
+      let axis = this.chart.yAxes.push(new am4charts.ValueAxis())
       axis.title.text = `[bold]${this.data.units}[/]`
       axis.title.rotation = 0
       axis.title.valign = "top"
@@ -73,7 +85,7 @@ export default {
       axis.renderer.line.strokeWidth = 1
       axis.renderer.line.stroke = am4core.color("#c8c8c8")
     
-      let series = chart.series.push(new am4charts.LineSeries())
+      let series = this.chart.series.push(new am4charts.LineSeries())
       series.dataFields.valueY = "value"
       series.dataFields.dateX = "year"
       series.name = this.data.title
@@ -86,7 +98,7 @@ export default {
         bullet.fill = am4core.color("#65C9B2")
       }
 
-      const legend = chart.legend = new am4charts.Legend()
+      const legend = this.chart.legend = new am4charts.Legend()
       legend.maxWidth = undefined
     }
   }

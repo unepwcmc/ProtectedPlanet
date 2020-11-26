@@ -1,14 +1,14 @@
 <template>
   <div class="card--stats-growth-chart">
     <div class="card__chart-wrapper">
-      <h2>{{ data.title }}</h2>
+      <h2>{{ title }}</h2>
 
       <am-chart-line 
-        :data="data.chart"
+        :data="chart"
       >
       </am-chart-line>
       
-      <p class="text--small">{{ data.smallprint }}</p>
+      <p class="text--small">{{ smallprint }}</p>
     </div>
   </div>
 </template>
@@ -24,9 +24,17 @@ export default {
   },
 
   props: {
-    data: {
+    chart: {
       required: true,
       type: Object
+    },
+    smallprint: {
+      required: true,
+      type: String
+    },
+    title: {
+      required: true,
+      type: String
     }
   }
 }

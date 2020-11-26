@@ -1,12 +1,12 @@
 <template>
   <div class="card--stats-designations">
-    <h2 class="card__h2">{{ data.title }}</h2>
+    <h2 class="card__h2">{{ title }}</h2>
 
     <div>
       <chart-row-stacked 
-        v-if="data.chart"
+        v-if="chart"
         class="chart--row-stacked--designation"
-        :rows="data.chart"
+        :rows="chart"
       ></chart-row-stacked>
     </div>
     
@@ -14,7 +14,7 @@
       
       <div 
         class="chart__legend-group pdf-break-inside-avoid"
-        v-for="(designation, i) in data.designations"
+        v-for="(designation, i) in designations"
         :key="i"
       >
         <div class="chart__legend-item">
@@ -57,9 +57,17 @@ export default {
   },
 
   props: {
-    data: {
+    chart: {
       required: true,
-      type: Object
+      type: Array
+    },
+    designations: {
+      required: true,
+      type: Array
+    },
+    title: {
+      required: true,
+      type: String
     }
   }
 }
