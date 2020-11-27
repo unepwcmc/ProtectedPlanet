@@ -9,22 +9,8 @@ class RegionController < ApplicationController
   def show
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', params[:iso].upcase)
 
-    # @designations = @presenter.designations
-
-    # # For the stacked row chart percentages
-    # @designation_percentages = @designations.map do |designation|
-    #   { percent: designation[:percent] }
-    # end.to_json
-
-    # @sources = @region.sources_per_region
-
     @total_pame = @region.protected_areas.with_pame_evaluations.count
     @total_wdpa = @region.protected_areas.wdpas.count
-
-
-    # @region_pas = pas_sample
-    # @regionPasViewAllUrl = search_areas_path(filters: { location: { type: 'region', options: ["#{@region.name}"] } })
-
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
@@ -87,12 +73,4 @@ class RegionController < ApplicationController
     @presenter = RegionPresenter.new @region
     @tab_presenter = TabPresenter.new(@region)
   end
-
-  def pas_sample(size=3)
-    ProtectedArea.joins(:countries).
-      where("countries.region_id = #{@region.id}").
-      order(:name).first(size)
-  end
-
- 
 end

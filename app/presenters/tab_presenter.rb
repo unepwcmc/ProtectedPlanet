@@ -128,7 +128,7 @@ class TabPresenter
     end
   end
 
-  def site_cards(size = 3, show_oecm = true)
+  def site_cards(size, show_oecm = true)
     if show_oecm 
       [
         @geo_entity.protected_areas.oecms.first,
