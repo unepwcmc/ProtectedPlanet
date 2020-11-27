@@ -75,11 +75,6 @@ class CountryPresenter
       type: yml_key(type),
       text_protected: I18n.t("stats.coverage_#{yml_key(type)}.covered"),
       text_total: I18n.t("stats.coverage_#{yml_key(type)}.total"),
-    }.merge!(merge_shared_text_into_stats)
-  end
-
-  def merge_shared_text_into_stats
-    {
       text_coverage: I18n.t("stats.coverage"), #same as marine
       text_national_report: I18n.t("stats.nr-report-title"), #same as marine
       text_pame: I18n.t("stats.pame.areas-assessed"), #same as marine
