@@ -104,12 +104,11 @@ class RegionPresenter
   end
 
   def percentage_oecms_pa_land_cover
-    @statistics.map(&:percentage_oecms_pa_land_cover).compact.reduce(:+)
+    (oecms_pa_land_area / land_area * 100).round(2) 
   end
 
   def percentage_pa_land_cover
-    # (pa_land_area / land_area * 100).round(2) - not sure how accurate this stat is
-    @statistics.map(&:percentage_pa_land_cover).compact.reduce(:+)
+    (pa_land_area / land_area * 100).round(2) 
   end
 
   def oecms_pa_land_area
@@ -125,12 +124,11 @@ class RegionPresenter
   end
 
   def percentage_oecms_pa_marine_cover
-    @statistics.map(&:percentage_oecms_pa_marine_cover).compact.reduce(:+)
+    (oecms_pa_marine_area / marine_area * 100).round(2) 
   end
 
   def percentage_pa_marine_cover
-    # (pa_marine_area / marine_area * 100).round(2) - not sure how accurate this stat is
-    @statistics.map(&:percentage_pa_marine_cover).compact.reduce(:+)
+    (pa_marine_area / marine_area * 100).round(2) 
   end
 
   def oecms_pa_marine_area
