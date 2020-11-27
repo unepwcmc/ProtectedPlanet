@@ -83,7 +83,7 @@ class ProtectedAreasController < ApplicationController
 
     if @countries.any?
       @countries.each_with_index do |country, i|
-        locations << ActionController::Base.helpers.link_to(country.name, country_path(country.iso))
+        locations << ActionController::Base.helpers.link_to(country.name, country_path(country.iso_3))
       end
     else
       locations << 'Areas Beyond National Jurisdiction'
