@@ -89,7 +89,6 @@ export default {
       type: String
     },
     textPame:{
-      required: true,
       type: String
     },
     textPameAssessments:{
