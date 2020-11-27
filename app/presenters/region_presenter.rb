@@ -54,9 +54,9 @@ class RegionPresenter
 
   def build_stats(type)
     {
-      protected_km2: send("pa_#{type}_area").round(0),
+      protected_km2: number_with_delimiter(send("pa_#{type}_area").round(0)),
       protected_percentage: send("percentage_pa_#{type}_cover").round(2),
-      total_km2: send("#{type}_area").round(0),
+      total_km2: number_with_delimiter(send("#{type}_area").round(0)),
       title: I18n.t("stats.coverage_#{yml_key(type)}.title_wdpa"),
       type: yml_key(type),
       text_protected: I18n.t("stats.coverage_#{yml_key(type)}.covered"),
@@ -108,7 +108,8 @@ class RegionPresenter
   end
 
   def percentage_pa_land_cover
-    (pa_land_area / land_area * 100).round(2)
+    # (pa_land_area / land_area * 100).round(2) - not sure how accurate this stat is
+    @statistics.map(&:percentage_pa_land_cover).compact.reduce(:+)
   end
 
   def oecms_pa_land_area
@@ -128,7 +129,8 @@ class RegionPresenter
   end
 
   def percentage_pa_marine_cover
-    (pa_marine_area / marine_area * 100).round(2)
+    # (pa_marine_area / marine_area * 100).round(2) - not sure how accurate this stat is
+    @statistics.map(&:percentage_pa_marine_cover).compact.reduce(:+)
   end
 
   def oecms_pa_marine_area
