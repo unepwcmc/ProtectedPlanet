@@ -56,8 +56,8 @@ class ComfyOpengraph
     when 'social-description'
       return og_description
     # TODO - can't get S3 hosted images to display
-    # when 'image'
-    #   return og_image
+    when 'image'
+      return og_image
     else
       # expect a string by default
       fragment.content&.squish
@@ -72,9 +72,9 @@ class ComfyOpengraph
   end
 
   def og_image
-    hero_image = @page.fragments.find_by(identifier: 'hero_image')&.attachments.first
+    hero_image = @page.fragments.find_by(identifier: 'hero_image')&.attachments&.first
     fallback_image = URI.join(root_url, image_path(I18n.t('meta.image')))
-    hero_image.blank? ? fallback_image : resize(hero_image) 
+    hero_image.blank? ? fallback_image : resize(hero_image)
   end
 
   # TODO - Get this working as we don't want to resize unnecessarily
