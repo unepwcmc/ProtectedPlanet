@@ -26,6 +26,7 @@ class ImportWorkers::FinaliserWorker
     # we can't get from the WDPA
     CmsTransfer.transfer
     ApiTransfer.transfer
+    ActiveStorageTransfer.transfer
 
     # Clear the redis cache and delete all downloads
     # from the S3 bucket. This will trigger the generation
