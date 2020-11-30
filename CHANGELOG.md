@@ -1,3 +1,13 @@
+### 4.1.3 
+
+* Added country (with OECM), PAME and GD PAME statistics for December. 
+
+### 4.1.2
+
+* Rake task created to only reindex the CMS in Elasticsearch 
+* Active Storage tables now transfer over upon import 
+* Homepage statistics in cards now aligned with marine page statistics
+
 ### 4.1.1
 
 November release
