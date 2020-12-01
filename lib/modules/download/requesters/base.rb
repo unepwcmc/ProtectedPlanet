@@ -19,7 +19,8 @@ class Download::Requesters::Base
   end
 
   def json_response
-    filename = Download.generation_info(domain, identifier, format)['filename']
+    is_ready = generation_info['status'] == 'ready'
+    filename = is_ready ? generation_info['filename'] : Download::Utils.filename(domain, token, format)
     {
       'id' => computed_id,
       'title' => filename,
