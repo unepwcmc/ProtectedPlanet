@@ -19,7 +19,7 @@ class Download::Requesters::Base
   end
 
   def json_response
-    filename = Download::Utils.filename(domain, identifier, format)
+    filename = Download.generation_info(domain, identifier, format)['filename']
     {
       'id' => computed_id,
       'title' => filename,
