@@ -53,10 +53,10 @@ class StatisticPresenter
     define_method(nr_stat) do
       (@statistic.send(nr_stat) && @statistic.send(nr_stat) > 100.0) ? 100.0 : @statistic.send(nr_stat).round(0) rescue nil
     end
-
+    
     percent_oecm_stat = "percentage_oecms_pa_#{land_type}_cover".to_sym
     define_method(percent_oecm_stat) do
-      (@statistic.send(percent_oecm_stat) && @statistic.send(percent_oecm_stat) > 100.0) ? 100.0 : @statistic.send(percent_oecm_stat).round(0) rescue nil
+      (@statistic.send(percent_oecm_stat) && @statistic.send(percent_oecm_stat) > 100.0) ? 100.0 : @statistic.send(percent_oecm_stat) rescue nil
     end
   end
 
