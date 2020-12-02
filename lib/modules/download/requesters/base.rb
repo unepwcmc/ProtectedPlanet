@@ -19,8 +19,6 @@ class Download::Requesters::Base
   end
 
   def json_response
-    is_ready = generation_info['status'] == 'ready'
-    filename = is_ready ? generation_info['filename'] : Download::Utils.filename(domain, token, format)
     {
       'id' => computed_id,
       'title' => filename,
@@ -28,6 +26,19 @@ class Download::Requesters::Base
       'hasFailed' => Download.has_failed?(domain, identifier, format),
       'token' => identifier
     }
+  end
+
+  def filename
+    if ready?
+      generation_info['filename']
+    else
+      if domain == 'search'
+        # Use the 'backend token' / SHA256 digest instead of the normal token
+        Download::Utils.filename(domain, token, format) 
+      else
+        Download::Utils.filename(domain, identifier, format)
+      end
+    end
   end
 
   def format
@@ -38,7 +49,11 @@ class Download::Requesters::Base
     "#{identifier}-#{format}"
   end
 
+  def ready?
+    generation_info['status'] == 'ready'
+  end
+
   def url(filename)
-    generation_info['status'] == 'ready' ? Download.link_to(filename) : ''
+    ready? ? Download.link_to(filename) : ''
   end
 end
