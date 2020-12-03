@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# require 'mini_magick'
 
 # Helper class to set Opengraph meta-tags for use with Comfy CMS @cms_page's
 class ComfyOpengraph
@@ -55,7 +54,6 @@ class ComfyOpengraph
       return og_title
     when 'social-description'
       return og_description
-    # TODO - can't get S3 hosted images to display
     when 'image'
       return og_image
     else
@@ -77,15 +75,7 @@ class ComfyOpengraph
     hero_image.blank? ? fallback_image : resize(hero_image)
   end
 
-  # TODO - Get this working as we don't want to resize unnecessarily
   def resize(image)
-    # actual_image = MiniMagick::Image.open(local_url(image))
-
-    # # Return if image dimensions are sufficient
-    # if actual_image.height <= 4096 && actual_image.width <= 4096
-    #   return Rails.env.development? ? local_url(image) : production_url(image)
-    # end
-
     # In line with Twitter guidelines for maximum dimensions
     # IMPORTANT: takes an ActiveStorage attachment rather than a relative path to the image 
     variant = image.variant(resize: "1200x630")
