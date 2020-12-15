@@ -70,7 +70,7 @@ export default {
           this.updateTabParams(this.removeEncodedChars(this.tabTriggers[this.selectedId - 1]))
         }
         else {
-          this.selectedId = 0
+          this.selectedId = 1
         }
       }
     },
