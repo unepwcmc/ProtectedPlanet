@@ -91,7 +91,8 @@ class ApplicationController < ActionController::Base
   def load_cms_content
     return if admin_path?
 
-    @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath.gsub(%r{\A/#{I18n.locale}/?}, '/'))
+    @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath
+                  .gsub(%r{\A/#{I18n.locale}/?}, '/')[/[^?]+/])
 
     return unless @cms_page
 
