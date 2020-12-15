@@ -34,15 +34,16 @@ export default {
   },
   data () {
     return {
-      selectedId: undefined
+      selectedId: undefined,
+      tab: undefined
     }
   },
   created () {
-    this.setDefaultTab()
+    this.setDefaultTabIndex()
   },
   methods: {
     click (selectedId) {
-      this.selectedId = selectedId
+      this.setTab(selectedId)
 
       if(this.gaId) {
         const selectedTab = this.tabTriggers.filter( trigger => {
@@ -53,12 +54,13 @@ export default {
         this.$ga.event('Tab', 'click', eventLabel)
       }
 
-      this.updateTabParams(this.removeEncodedChars(this.tabTriggers[this.selectedId - 1]))
+      this.updateTabParams(this.removeEncodedChars(this.tab))
     },
 
-    setDefaultTab () {
+    setDefaultTabIndex () {
       if (this.preselectedTab === "") {
-        this.selectedId = this.tabTriggers[0].id
+        this.setTab(this.tabTriggers[0].id )
+        this.updateTabParams(this.removeEncodedChars(this.tab))
       }
       else {
         const tabParam = this.tabTriggers.find((tab) => {
@@ -66,13 +68,19 @@ export default {
         })
 
         if (tabParam) {
-          this.selectedId = tabParam.id
-          this.updateTabParams(this.removeEncodedChars(this.tabTriggers[this.selectedId - 1]))
+          this.setTab(tabParam.id)
         }
         else {
-          this.selectedId = 1
+          this.setTab()
         }
+
+        this.updateTabParams(this.removeEncodedChars(this.tab))
       }
+    },
+
+    setTab (id = 1) {
+      this.selectedId = id
+      this.tab = this.tabTriggers[this.selectedId - 1]
     },
 
     removeEncodedChars(tab) {
