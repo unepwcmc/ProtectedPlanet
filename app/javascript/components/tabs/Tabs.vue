@@ -27,11 +27,14 @@ export default {
     tabTriggers: {
       type: Array, // [ { id: Number, title: String } ] 
       required: true
+    },
+    preselectedTab: {
+      type: String
     }
   },
   data () {
     return {
-      selectedId: 0
+      selectedId: undefined
     }
   },
   created () {
@@ -49,11 +52,42 @@ export default {
         const eventLabel = `${this.gaId} - Tab: ${selectedTab[0].title}`
         this.$ga.event('Tab', 'click', eventLabel)
       }
+
+      this.updateTabParams(this.removeEncodedChars(this.tabTriggers[this.selectedId - 1]))
     },
 
     setDefaultTab () {
-      this.selectedId = this.tabTriggers[0].id
+      if (this.preselectedTab === "") {
+        this.selectedId = this.tabTriggers[0].id
+      }
+      else {
+        const tabParam = this.tabTriggers.find((tab) => {
+          return this.removeEncodedChars(tab) === this.preselectedTab
+        })
+
+        if (tabParam) {
+          this.selectedId = tabParam.id
+          this.updateTabParams(this.removeEncodedChars(this.tabTriggers[this.selectedId - 1]))
+        }
+        else {
+          this.selectedId = 0
+        }
+      }
     },
+
+    removeEncodedChars(tab) {
+      return tab.title.replace(/[^\x00-\x7F]|\n/g, "")
+    },
+
+    updateTabParams(tabName) {
+      let tabParams = new URLSearchParams(window.location.search)
+
+      tabParams.set('tab', tabName)
+
+      const newUrl = `${window.location.pathname}?${tabParams.toString()}`
+
+      window.history.replaceState({ page: 1 }, null, newUrl)
+    }
   }
 }
 </script>
