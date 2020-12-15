@@ -117,9 +117,22 @@
 //--------------------------------------------------
 &--rounded {
   @include tabs-rounded;
+  @include beautify-scrollbar($width: 5);
   margin: 0;
+  padding-bottom: rem-calc(10);
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $grey;
+  }
   
-  @include breakpoint($small) { justify-content: center; }
+  @include breakpoint($small) { 
+    padding-bottom: 0;
+    justify-content: center; 
+
+    &::-webkit-scrollbar-track {
+      display: none;
+    }
+  }
 }
 
 //--------------------------------------------------
