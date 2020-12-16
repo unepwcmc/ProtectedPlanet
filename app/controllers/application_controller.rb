@@ -91,8 +91,11 @@ class ApplicationController < ActionController::Base
   def load_cms_content
     return if admin_path?
 
-    @cms_page ||= Comfy::Cms::Page.find_by_full_path(request.original_fullpath
-                  .gsub(%r{\A/#{I18n.locale}/?}, '/')[/[^?]+/])
+    # Strips out the locale and any query params (including the query character) 
+    # when attempting to find the page in the DB by its full_path
+    sanitised_request = request.original_fullpath.gsub(%r{\A/#{I18n.locale}/?}, '/')[/[^?]+/]
+
+    @cms_page ||= Comfy::Cms::Page.find_by_full_path(sanitised_request)
 
     return unless @cms_page
 
