@@ -1,6 +1,7 @@
-### 4.1.4 
+### 4.2.0
 
-* Fixed downloads not being generated correctly on the search page, as well as Chrome flagging such downloads as insecure.
+* Added tabs for country and region pages which feature OECMs, allowing users to
+switch between WDPA-only and WDPA and OECM statistics. 
 
 ### 4.1.3 
 

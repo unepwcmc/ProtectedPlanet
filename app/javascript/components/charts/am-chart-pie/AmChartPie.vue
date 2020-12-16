@@ -46,6 +46,12 @@ export default {
     this.createChart()
   },
 
+  watch: {
+    dataset () {
+      this.chart.data = this.dataset
+    }
+  },
+
   methods: {
     createChart () {
       this.chart = am4core.create(this.id, am4charts.PieChart);

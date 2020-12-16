@@ -30,6 +30,7 @@ import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
+import ChartToggle from './components/charts/chart-toggle/ChartToggle'
 import Download from './components/download/Download'
 import DownloadModal from './components/download/DownloadModal'
 import Flickity from 'vue-flickity'
@@ -39,6 +40,7 @@ import ListingPageCardNews from './components/listing/ListingPageCardNews.vue'
 import ListingPageCardResources from './components/listing/ListingPageCardResources.vue'
 import NavBurger from './components/nav/NavBurger'
 import PameModal from './components/pame/PameModal'
+import RegionCountryPages from './components/pages/RegionCountryPages'
 import SearchAreas from './components/search/SearchAreas'
 import SearchAreasHome from './components/search/SearchAreasHome'
 import SearchSite from './components/search/SearchSite'
@@ -98,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowStacked,
         ChartRowTarget,
         ChartSunburst,
+        ChartToggle,
         Download,
         DownloadModal,
 	      FilteredTable,
@@ -107,6 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ListingPageCardResources,
         NavBurger,
         PameModal,
+        RegionCountryPages,
         SearchAreas,
         SearchAreasHome,
         SearchSite,
