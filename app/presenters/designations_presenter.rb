@@ -1,18 +1,21 @@
 class DesignationsPresenter
+  include Rails.application.routes.url_helpers
+
+  # TODO - Need to fix this for regions
   def initialize(geo_entity)
     @geo_entity = geo_entity
   end
 
   JURISDICTIONS = %w(National Regional International).freeze
-  def designations
-    designations_by_jurisdiction = get_designations
+
+  def designations(exclude_oecms: false)
     JURISDICTIONS.map do |j|
       {
         title: designation_title(j),
-        total: designation_total(j),
-        percent: percent_of_total(j),
+        total: designation_total(j, exclude_oecms: exclude_oecms),
+        percent: percent_of_total(j, exclude_oecms: exclude_oecms),
         has_jurisdiction: get_jurisdiction(j),
-        jurisdictions: jurisdictions(j)
+        jurisdictions: jurisdictions(j, exclude_oecms: exclude_oecms)
       }
     end
   end
@@ -37,28 +40,28 @@ class DesignationsPresenter
     "#{jurisdiction} designations"
   end
 
-  def all_pas
-    @all_pas ||= geo_entity.protected_areas_per_jurisdiction 
+  def all_pas(exclude_oecms)
+    geo_entity.protected_areas_per_jurisdiction(exclude_oecms: exclude_oecms)
   end
 
-  def total_number_of_designations
-    all_pas.reduce(0) { |count, j| count + j["count"] }
+  def total_number_of_designations(exclude_oecms)
+    all_pas(exclude_oecms).reduce(0) { |count, j| count + j["count"] }
   end
 
-  def percent_of_total(jurisdiction)
-    total_per_jurisdiction = designation_total(jurisdiction)
-    (( total_per_jurisdiction.to_f / total_number_of_designations.to_f ) * 100).round(2)
+  def percent_of_total(jurisdiction, exclude_oecms: false)
+    total = designation_total(jurisdiction, exclude_oecms: exclude_oecms)
+    (( total.to_f / total_number_of_designations(exclude_oecms).to_f ) * 100).round(2)
   end
 
-  def designation_total(jurisdiction)
-    designations = all_pas.find { |result| result["name"] == jurisdiction }
+  def designation_total(jurisdiction, exclude_oecms: false)
+    designations = all_pas(exclude_oecms).find { |result| result["name"] == jurisdiction }
     designations ? designations['count'] : 0
   end
 
-  def jurisdictions(jurisdiction)
+  def jurisdictions(jurisdiction, exclude_oecms: false)
     jurisdiction = get_jurisdiction(jurisdiction)
     return [] unless jurisdiction
 
-    geo_entity.protected_areas_per_designation(jurisdiction)
+    geo_entity.protected_areas_per_designation(jurisdiction, exclude_oecms: exclude_oecms)
   end
 end

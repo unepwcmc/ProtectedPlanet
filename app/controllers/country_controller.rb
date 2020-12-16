@@ -3,51 +3,20 @@ require 'enumerator'
 
 class CountryController < ApplicationController
   after_action :enable_caching
-  before_action :load_vars, except: %i[codes compare]
+  before_action :load_essential_vars
+  before_action :build_stats, only: :show
+
   include MapHelper
+  include CountriesHelper
+
+  TABS_KEYS = %i[coverage message iucn governance sources designations growth sites].freeze
 
   def show
-    @country_presenter = CountryPresenter.new @country
-
+     # Components above tabs
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
 
-    @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg"),
-   
-    @iucn_categories = @country.protected_areas_per_iucn_category
-    @iucn_categories_chart = @country.protected_areas_per_iucn_category
-      .enum_for(:each_with_index)
-      .map do |category, i|
-      { 
-        id: i+1,
-        title: category['iucn_category_name'], 
-        value: category['count'] 
-      }
-    end.to_json
+    @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg")
 
-    @governance_types = @country.protected_areas_per_governance
-    @governance_chart = @governance_types.map do |item|
-      { 
-        id: item['governance_id'],
-        title: item['governance_name'],
-        value: item['count']
-      }
-    end.to_json
-
-    @coverage_growth = @country_presenter.coverage_growth 
-
-    @country_designations = @country_presenter.designations
-
-    # For the stacked row chart percentages
-    @designation_percentages = @country_designations.map do |designation|
-      { percent: designation[:percent] }
-    end.to_json
-
-    @sites = @country.protected_areas.take(3)
-    @sitesViewAllUrl = search_areas_path(filters: { location: { type: 'country', options: ["#{@country.name}"] } })
-
-    @sources = @country.sources_per_country
-
-    @total_oecm = @country.protected_areas.oecms.count
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.wdpas.count
 
@@ -59,7 +28,7 @@ class CountryController < ApplicationController
     @map_options = {
       map: { boundsUrl: @country.extent_url }
     }
-    
+
     helpers.opengraph_title_and_description_with_suffix(@country.name)
 
     respond_to do |format|
@@ -75,23 +44,18 @@ class CountryController < ApplicationController
     end
   end
 
+  def build_stats
+    @tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
+    @stats_data = build_standard_hash
+
+    if has_oecms
+      @stats_data.merge!(build_oecm_hash)
+      @tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') }) 
+    end
+  end
+
   def pdf
     @for_pdf = true
-  end
-
-  def codes
-    countries = Country.order(:name).pluck(:name, :iso_3)
-    csv = CSV.generate do |rows|
-      rows << %w[Name ISO3]
-      countries.each(&rows.method(:<<))
-    end
-
-    send_data csv, filename: 'protectedplanet-country-codes.csv'
-  end
-
-  def compare
-    # Removed in PP 2.0, redirects to simple country page
-    redirect_to country_path(params[:iso])
   end
 
   def protected_areas
@@ -100,32 +64,43 @@ class CountryController < ApplicationController
 
   private
 
+  def has_oecms
+    @total_oecm = @country.protected_areas.oecms.count
+    @total_oecm.positive?
+  end
+
+  def build_hash(tab)
+    oecm = tab == :wdpa_oecm
+    hash = {}
+
+    # What this does is call the corresponding method in tab presenter to build
+    # the value for each key, populating the hash
+    hash[tab] = TABS_KEYS.map do |key|
+      { "#{key}": @tab_presenter.send("#{key}", oecms_tab: oecm) }
+    end.reduce(&:merge)
+
+    hash
+  end
+
+  def build_standard_hash
+    build_hash(:wdpa)
+  end
+
+  def build_oecm_hash
+    build_hash(:wdpa_oecm)
+  end
+
   def map_overlays
     overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
   end
 
-  def load_vars
-    @country = if params[:iso].size == 2
-                 Country.where(iso: params[:iso].upcase).first
-               else
-                 Country.where(iso_3: params[:iso].upcase).first
-    end
+  def load_essential_vars
+    @country = Country.find_by(iso_3: params[:iso].upcase)
 
     @country or raise_404
 
     @pame_statistics = @country.pame_statistic
-  end
-
-  def pas_sample(size = 3)
-    iso = params[:iso].upcase
-    pas = nil
-
-    pas = if iso.size == 2
-            ProtectedArea.joins(:countries).where("countries.iso = '#{iso}'")
-          else
-            ProtectedArea.joins(:countries).where("countries.iso_3 = '#{iso}'")
-          end
-
-    pas.order(:name).first(size)
+    @country_presenter = CountryPresenter.new(@country)
+    @tab_presenter = TabPresenter.new(@country)
   end
 end
