@@ -1,3 +1,8 @@
+### 4.2.1
+
+* Added global, national statistics for January release along with PAME data.
+
+
 ### 4.2.0
 
 * Added tabs for country and region pages which feature OECMs, allowing users to
