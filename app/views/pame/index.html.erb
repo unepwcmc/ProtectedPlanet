@@ -8,6 +8,7 @@
   <tabs
     class="tabs--hero"
     ga-id="Slug: <%= @cms_page.slug %>"
+    preselected-tab="<%= params[:tab] %>"
     :tab-triggers="<%= @tabs %>"
   >
     <template slot-scope="slotProps">
