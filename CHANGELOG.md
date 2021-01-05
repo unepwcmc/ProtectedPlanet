@@ -1,7 +1,8 @@
-### 4.2.1
+### 4.3.0
 
+* Tabs on relevant thematic area pages (e.g. PAME) are now directly linked to,
+enabling them to be shared.
 * Added global, national statistics for January release along with PAME data.
-
 
 ### 4.2.0
 
