@@ -110,7 +110,7 @@ module MapHelper
   
   def region_extent_url (name)
     {
-      url: "https://data-gis.unep-wcmc.org/server/rest/services/GADM_EEZ_Layer/FeatureServer/0/query?where=region+%3D+%27#{CGI.escape(name)}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson", 
+      url: "https://data-gis.unep-wcmc.org/server/rest/services/EEZ_WVS/MapServer/0/query?where=geoandunep+%3D+%27#{CGI.escape(name)}%27&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=&having=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&queryByDistance=&returnExtentOnly=true&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=html",
       padding: 5
     }
   end
