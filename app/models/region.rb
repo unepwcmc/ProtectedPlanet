@@ -102,7 +102,8 @@ class Region < ApplicationRecord
   end
 
   def extent_url
-    region_extent_url(name)
+    # Hack to allow ArcGis query builder to fetch correct results
+    region_extent_url(name.gsub(/&/, '+'))
   end
 
   def protected_areas_per_designation(jurisdiction=nil, exclude_oecms: false)
