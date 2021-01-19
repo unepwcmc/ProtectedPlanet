@@ -43,8 +43,7 @@
 
         axios.post('/pame/download', data, config)
           .then((response) => {
-            const date = new Date().toJSON().slice(0,10),
-              filename = `protectedplanet-pame-${date}.csv`
+            const filename = response.headers['content-disposition'].split('filename\="')[1].split('\"')[0]
 
             this.createBlob(filename, response.data)
 
