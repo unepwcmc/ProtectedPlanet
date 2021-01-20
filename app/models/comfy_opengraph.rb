@@ -71,8 +71,13 @@ class ComfyOpengraph
 
   def og_image
     hero_image = @page.fragments.find_by(identifier: 'hero_image')&.attachments&.first
-    fallback_image = URI.join(root_url, image_path(I18n.t('meta.image')))
     hero_image.blank? ? fallback_image : resize(hero_image)
+  end
+
+  def fallback_image
+    image = @page.fragments.find_by(identifier: 'image')&.attachments&.first
+    
+    image.blank? ? URI.join(root_url, image_path(I18n.t('meta.image'))) : image
   end
 
   def resize(image)

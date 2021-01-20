@@ -10,7 +10,7 @@ module Download
       :gov_type, :own_type, :mang_auth,
       :mang_plan, :verif, :metadataid,
       :sub_loc, :parent_iso3, :iso3,
-      :supp_info, :cons_obj
+      # :supp_info, :cons_obj
     ]
 
     POLYGONS_COLUMNS = POINTS_COLUMNS.clone
