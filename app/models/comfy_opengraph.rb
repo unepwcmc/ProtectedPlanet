@@ -38,14 +38,6 @@ class ComfyOpengraph
 
   private
 
-  def local_url(image)
-    URI.join(root_url, rails_blob_path(image.blob, only_path: true))
-  end
-
-  def production_url(image)
-    image.service_url&.split('?')&.first
-  end
-
   def process_meta_tags(fragment)
     identifier = fragment.identifier
     
@@ -70,15 +62,17 @@ class ComfyOpengraph
   end
 
   def og_image
+    # For the news and stories pages
     hero_image = @page.fragments.find_by(identifier: 'hero_image')&.attachments&.first
     
-    hero_image.blank? ? fallback_image : resize(hero_image)
+    hero_image.blank? ? thematic_og_image : resize(hero_image)
   end
 
-  def fallback_image
-    image = URI.join(root_url, rails_blob_path(cms_fragment_content(:image, @page).first, only_path: true))
-
-    image.blank? ? URI.join(root_url, image_path(I18n.t('meta.image'))) : image
+  def thematic_og_image
+    # This is for the thematic area pages, which use :image as the identifier as opposed to hero_image
+    image = cms_fragment_content(:image, @page).first
+    fallback_image = URI.join(root_url, image_path(I18n.t('meta.image')))
+    image.blank? ? fallback_image : resize(image)
   end
 
   def resize(image)
