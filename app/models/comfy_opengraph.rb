@@ -63,7 +63,7 @@ class ComfyOpengraph
 
   def og_image
     # For the news and stories pages
-    hero_image = @page.fragments.find_by(identifier: 'hero_image')&.attachments&.first
+    hero_image = cms_fragment_content(:hero_image, @page).first
     
     hero_image.blank? ? thematic_og_image : resize(hero_image)
   end
