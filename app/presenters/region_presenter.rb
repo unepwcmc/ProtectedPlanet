@@ -11,6 +11,28 @@ class RegionPresenter
     @designations_presenter = DesignationsPresenter.new(region)
   end
 
+  def iucn_categories_chart(chart_input)
+    chart_input.enum_for(:each_with_index)
+      .map do |category, i|
+      { 
+        id: i+1,
+        title: category['iucn_category_name'], 
+        value: category['count'] 
+      }
+    end
+  end
+
+  def governance_chart(chart_input)
+    chart_input.map do |item|
+      { 
+        id: item['governance_id'],
+        title: item['governance_name'],
+        value: item['count']
+      }
+    end
+  end
+
+
   def chart_point_poly
     [
       {
@@ -26,28 +48,31 @@ class RegionPresenter
     ]
   end
 
-  def designations
-    @designations_presenter.designations
+  def designations(exclude_oecms: false)
+    @designations_presenter.designations(exclude_oecms: exclude_oecms)
   end
 
-  def marine_stats
+  def build_stats(type)
     {
-      pame_km2: nil, # #TODO FERDI - Not sure we have this kind of stat
-      pame_percentage: nil, # #TODO FERDI - Not sure we have this kind of stat
-      protected_km2: pa_marine_area.round(0),
-      protected_percentage: percentage_pa_marine_cover.round(2),
-      total_km2: marine_area.round(0)
+      protected_km2: number_with_delimiter(send("pa_#{type}_area").round(0)),
+      protected_percentage: send("percentage_pa_#{type}_cover").round(2),
+      total_km2: number_with_delimiter(send("#{type}_area").round(0)),
+      title: I18n.t("stats.coverage_#{yml_key(type)}.title_wdpa"),
+      type: yml_key(type),
+      text_protected: I18n.t("stats.coverage_#{yml_key(type)}.covered"),
+      text_total: I18n.t("stats.coverage_#{yml_key(type)}.total"),
+      text_coverage: I18n.t("stats.coverage"), 
     }
   end
 
-  def terrestrial_stats
-    {
-      pame_km2: nil, # #TODO FERDI - Not sure we have this kind of stat
-      pame_percentage: nil, # #TODO FERDI - Not sure we have this kind of stat
-      protected_km2: pa_land_area.round(0),
-      protected_percentage: percentage_pa_land_cover.round(2),
-      total_km2: land_area.round(0)
-    }
+  def build_combined_stats(type)
+    build_stats(type).merge!(
+      {
+        protected_km2: number_with_delimiter(send("oecms_pa_#{type}_area").round(0)),
+        protected_percentage: send("percentage_oecms_pa_#{type}_cover").round(2),
+        title: I18n.t("stats.coverage_#{yml_key(type)}.title_wdpa_oecm")
+      }
+    )
   end
 
   def total_points_percentage
@@ -78,8 +103,16 @@ class RegionPresenter
     }
   end
 
+  def percentage_oecms_pa_land_cover
+    (oecms_pa_land_area / land_area * 100).round(2) 
+  end
+
   def percentage_pa_land_cover
-    (pa_land_area / land_area * 100).round(2)
+    (pa_land_area / land_area * 100).round(2) 
+  end
+
+  def oecms_pa_land_area
+    @statistics.map(&:oecms_pa_land_area).compact.reduce(:+)
   end
 
   def pa_land_area
@@ -90,8 +123,16 @@ class RegionPresenter
     @statistics.map(&:land_area).compact.reduce(:+)
   end
 
+  def percentage_oecms_pa_marine_cover
+    (oecms_pa_marine_area / marine_area * 100).round(2) 
+  end
+
   def percentage_pa_marine_cover
-    (pa_marine_area / marine_area * 100).round(2)
+    (pa_marine_area / marine_area * 100).round(2) 
+  end
+
+  def oecms_pa_marine_area
+    @statistics.map(&:oecms_pa_marine_area).compact.reduce(:+)
   end
 
   def pa_marine_area
@@ -173,6 +214,10 @@ class RegionPresenter
   private
 
   attr_reader :region
+
+  def yml_key(type)
+    type == 'land' ? 'terrestrial' : 'marine'
+  end
 
   def overseas_territories_url
     overseas_territories = region.countries.map(&:iso_3).join(',')

@@ -1,3 +1,23 @@
+### 4.2.1
+
+* Added global, national statistics for January release along with PAME data.
+
+
+### 4.2.0
+
+* Added tabs for country and region pages which feature OECMs, allowing users to
+switch between WDPA-only and WDPA and OECM statistics. 
+
+### 4.1.3 
+
+* Added country (with OECM), PAME and GD PAME statistics for December. 
+
+### 4.1.2
+
+* Rake task created to only reindex the CMS in Elasticsearch 
+* Active Storage tables now transfer over upon import 
+* Homepage statistics in cards now aligned with marine page statistics
+
 ### 4.1.1
 
 November release
