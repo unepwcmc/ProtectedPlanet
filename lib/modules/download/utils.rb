@@ -54,11 +54,20 @@ module Download
       end
     end
 
+    BASENAMES = {
+      'wdpa' => 'WDPA',
+      'oecm' => 'WDOECM',
+      'default' => 'WDPA_WDOECM'
+    }.freeze
+    # identifier is the search token if domain is search
     def self.filename domain, identifier, format
-      "WDPA_#{Wdpa::S3.current_wdpa_identifier}".tap { |base_filename|
-        base_filename << "_#{domain}"     if domain != 'general'
-        base_filename << "_#{identifier}_#{format}" if (identifier != 'all' && identifier.present?)
-      }
+      basename = BASENAMES[identifier] || BASENAMES['default']
+      current_wdpa_id = Wdpa::S3.current_wdpa_identifier
+
+      "#{basename}_#{current_wdpa_id}_Public".tap do |base_filename|
+        base_filename << "_#{identifier}" if domain == 'search'
+        base_filename << "_#{format}" if format.present? && format != 'gdb'
+      end
     end
 
     def self.extract_filters filters
@@ -67,7 +76,7 @@ module Download
     end
 
     def self.filters_dump filters
-      filters_dump = Marshal.dump filters.to_hash.sort.to_json
+      Marshal.dump filters.to_hash.sort.to_json
     end
 
     def self.search_token term, filters

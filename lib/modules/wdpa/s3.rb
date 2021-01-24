@@ -28,8 +28,8 @@ class Wdpa::S3
   end
 
   def current_wdpa_identifier
-    # Assuming WDPA_MMMYYYY_Public.zip
-    current_wdpa.key.split('_').second
+    # Assuming WDPA_WDOECM_MMMYYYY_Public.zip
+    current_wdpa.key.split('_').third
   end
 
   private
