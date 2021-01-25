@@ -1,5 +1,5 @@
 namespace :cache do
-  desc "Clear the Rails cache (Home page, PA Page)"
+  desc "Clear the Rails cache (everything except downloads which is handled by Redis)"
   task clear: :environment do
     logger = Logger.new(STDOUT)
 

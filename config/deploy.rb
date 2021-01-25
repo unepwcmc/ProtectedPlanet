@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.11.0'
+lock '3.14.1'
 
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
 set :application, "ProtectedPlanet"
@@ -33,4 +33,5 @@ set :passenger_restart_with_touch, false
 namespace :deploy do
   after :publishing, 'service:pp_default:restart'
   after :publishing, 'service:pp_import:restart'
+  after :finishing, 'cache:clear'
 end
