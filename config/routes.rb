@@ -14,6 +14,18 @@ Rails.application.routes.draw do
   get '/admin', to: redirect('/admin/sites')
   #root to: 'home#index'
 
+  ## Non-CMS routes - no localisation
+  get '/region/:iso', to: 'region#show', as: 'region'
+
+  get '/country/:iso', to: 'country#show', as: 'country'
+  get '/country/:iso/pdf', to: 'country#pdf', as: 'country_pdf'
+  get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
+  get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
+
+  # JSON endpoints - non-localised
+  get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
+  resources :downloads, only: [:show, :create, :update]
+
   #TODO
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 
@@ -42,38 +54,22 @@ Rails.application.routes.draw do
       end
     end
     
+    ## Only CMS routes are present below
+
+    # TODO - remove? 
     # resources :projects, only: [:create, :index, :update, :destroy]
 
     get '/marine/download_designations', to: 'marine#download_designations'
-    # get '/green_list/:id', to: 'green_list#show', as: 'green_list'
+
+    # TODO - remove?
+    # get '/green_list/:id', to: 'green_list#show', as: 'green_list' 
 
     get '/target-11-dashboard/load-countries', to: 'target_dashboard#load_countries',
       as: 'target_dashboard_load_countries'
 
-    get '/region/:iso', to: 'region#show', as: 'region'
-
-    get '/country/:iso', to: 'country#show', as: 'country'
-    get '/country/:iso/pdf', to: 'country#pdf', as: 'country_pdf'
-    get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
-    get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
-
     get '/terms', to: redirect("/c/terms-and-conditions")
 
-    get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
-    resources :downloads, only: [:show, :create, :update]
-
-    get '/search/map', to: 'search#map'
-    post '/search', to: 'search#create'
-
     get '/country_codes', to: 'country#codes', as: 'country_codes'
-
-
-    # routes worked on so far as part of the refresh
-
-    post '/pame/download', to: 'pame#download'
-    post '/pame/list', to: 'pame#list'
-
-    get '/search', to: 'search#index'
 
     get '/thematic-areas/green-list', to: 'green_list#index'
     get '/thematic-areas/oecms', to: 'oecm#index'
@@ -82,13 +78,21 @@ Rails.application.routes.draw do
     get '/thematic-areas/global-partnership-on-aichi-target-11', to: 'target_dashboard#index'
     get '/thematic-areas/wdpa', to: 'wdpa#index'
 
-    get '/search-areas', to: 'search_areas#index', as: :search_areas
-    get '/search-areas-results', to: 'search_areas#search_results', as: :search_areas_results
+    # JSON endpoints - CMS
+    post '/pame/download', to: 'pame#download'
+    post '/pame/list', to: 'pame#list'
 
+    # Used for site-wide search
     post '/search/autocomplete', to: 'search#autocomplete'
     get '/search-results', to: 'search#search_results', as: :search_results
 
+    # Used to fetch news articles/resources
     get '/search-cms', to: 'search_cms#index', as: :search_cms
+
+    # Used for PA/region/country search
+    get '/search-areas', to: 'search_areas#index', as: :search_areas
+    get '/search-areas-results', to: 'search_areas#search_results', as: :search_areas_results
+    get '/search', to: 'search#index'
 
     # Ensure that this route is defined last
 
