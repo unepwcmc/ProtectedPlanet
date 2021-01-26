@@ -1,4 +1,4 @@
-ogr2ogr -skipfailures
+ogr2ogr -update -skipfailures
 -f "FileGDB"
 <%= file_name %>
 PG:"host=<%= db_config[:host] %>
