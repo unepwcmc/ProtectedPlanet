@@ -28,7 +28,7 @@ class Download::Generators::Gdb < Download::Generators::Base
 
       export_sources
 
-      system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
+      #system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
       system("zip -r #{zip_path} #{gdb_filenames(gdb_paths)}", chdir: @path) and add_attachments
     end
   rescue Ogr::Postgres::ExportError
@@ -60,6 +60,15 @@ class Download::Generators::Gdb < Download::Generators::Base
     query = "SELECT #{select}"
     query << " FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
     add_conditions(query, conditions).squish
+  end
+
+  def export_sources
+    _query = <<-SQL
+      SELECT #{Download::Utils.source_columns}
+      FROM standard_sources
+    SQL
+
+    Ogr::Postgres.export(:gdb, gdb_component, _query, 'source')
   end
 
   def clean_up_after

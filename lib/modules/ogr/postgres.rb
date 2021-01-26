@@ -22,7 +22,10 @@ class Ogr::Postgres
 
   def self.export file_type, file_name, query, geom_type='polygon'
     template = file_type == :gdb ? TEMPLATES[:gdb_export] : TEMPLATES[:export]
+    # Used for adding the -update flag so to add different layers (poly point source)
+    # into the same .gdb file
     needs_updating = File.exist?(file_name)
+    # The name of the feature, e.g. WDPA_poly_MmmYYYY, WDPA_point_MmmYYYY
     feature_name = get_feature_name(file_name, geom_type)
     system ogr_command(template, binding)
   end
@@ -54,6 +57,11 @@ class Ogr::Postgres
   # the WDPA_WDOECM bit depends on what the areas are about, e.g. only WDPA,
   # only WDOECM or both. The 'Public' bit is removed and the date
   # and the geometry type are swapped.
+  FEATURE_TYPES = {
+    'polygon' => 'poly',
+    'point' => 'point',
+    'source' => 'source'
+  }.freeze
   def self.get_feature_name(filename, geom_type)
     # Remove any possible folder structure from the path and also the extension
     filename = filename.split('/').last[0..-5]
@@ -63,7 +71,7 @@ class Ogr::Postgres
     # we remove this bit.
     attrs.pop if %w(polygons points).include?(attrs[-1])
     # Replace 'Public' with the geometry type formatted correctly, e.g. => ['WDPA', 'MmmYYY', 'poly']
-    attrs[-1] = geom_type == 'polygon' ? 'poly' : 'point'
+    attrs[-1] = FEATURE_TYPES[geom_type]
     # Swap date and geometry type, e.g. => ['WDPA', 'poly', 'MmmYYY']
     attrs[-1], attrs[-2] = attrs[-2], attrs[-1]
     # Join and get the new filename, e.g. => 'WDPA_poly_MmmYYY'
