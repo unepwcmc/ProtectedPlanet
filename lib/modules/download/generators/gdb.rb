@@ -38,7 +38,7 @@ class Download::Generators::Gdb < Download::Generators::Base
   private
 
   def export_component name, props
-    component_path = gdb_component(name)
+    component_path = gdb_component
     view_name = create_view query(props[:select], props[:where])
 
     return [] if ActiveRecord::Base.connection.select_value("""
@@ -70,17 +70,15 @@ class Download::Generators::Gdb < Download::Generators::Base
   end
 
   def clean_up
-    QUERY_CONDITIONS.each do |name, _|
-      FileUtils.rm_rf gdb_component(name)
-    end
+    FileUtils.rm_rf gdb_component
   end
 
   def zip_path
     File.join(@path, "#{@filename}.zip")
   end
 
-  def gdb_component(name)
-    File.join(@path, "#{@filename}_#{name}.gdb")
+  def gdb_component
+    File.join(@path, "#{@filename}.gdb")
   end
 
   def gdb_filenames(gdb_paths)
