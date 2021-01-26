@@ -22,6 +22,7 @@ class Ogr::Postgres
 
   def self.export file_type, file_name, query, geom_type='polygon'
     template = file_type == :gdb ? TEMPLATES[:gdb_export] : TEMPLATES[:export]
+    needs_updating = File.exist?(file_name)
     feature_name = get_feature_name(file_name, geom_type)
     system ogr_command(template, binding)
   end
