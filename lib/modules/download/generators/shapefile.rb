@@ -93,7 +93,9 @@ class Download::Generators::Shapefile < Download::Generators::Base
   end
 
   def zip_path(index='')
-    File.join(@path, "#{@filename}_#{index}.zip")
+    _filename = @filename
+    _filename << "_#{index}" if index.present?
+    File.join(@path, "#{_filename}.zip")
   end
 
   def shapefile_components name
