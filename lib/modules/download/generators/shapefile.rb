@@ -93,8 +93,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
   end
 
   def zip_path(index='')
-    _filename = @filename
-    _filename << "_#{index}" if index.present?
+    _filename = index.present? ? "#{@filename}_#{index}" : @filename
     File.join(@path, "#{_filename}.zip")
   end
 
