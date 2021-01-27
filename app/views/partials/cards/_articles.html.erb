@@ -18,7 +18,7 @@
         image="<%= cms_fragment_render(:image, card) %>"
         summary="<%= cms_fragment_content(:summary, card) %>"
         title="<%= card[:label].truncate(59, separator: ' ') %>"
-        url="<%= card[:url] %>"
+        url="<%= card[:full_path] %>"
       ></listing-page-card-news>
     <% end %>
   </div>
