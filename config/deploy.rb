@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.14.1'
+lock '3.11.0'
 
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
 set :application, "ProtectedPlanet"
