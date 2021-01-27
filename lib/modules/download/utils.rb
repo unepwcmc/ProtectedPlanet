@@ -65,7 +65,7 @@ module Download
       current_wdpa_id = Wdpa::S3.current_wdpa_identifier
 
       "#{basename}_#{current_wdpa_id}_Public".tap do |base_filename|
-        base_filename << "_#{identifier}" if domain == 'search'
+        base_filename << "_#{identifier}" if needs_identifier_suffix?(domain, identifier)
         base_filename << "_#{format}" if format.present? && format != 'gdb'
       end
     end
@@ -81,6 +81,11 @@ module Download
 
     def self.search_token term, filters
       Digest::SHA256.hexdigest(term.to_s + filters_dump(filters))
+    end
+
+    def self.needs_identifier_suffix?(domain, identifier)
+      return true if %w(search protected_area pdf).include?(domain)
+      !BASENAMES.keys.include?(identifier)
     end
   end
 end
