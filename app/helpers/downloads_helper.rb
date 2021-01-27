@@ -88,10 +88,9 @@ module DownloadsHelper
 
   def switch_citation_text
     # Should reflect the month/year of the last monthly release
-    # Assumes that monthly releases will be regular (which they might not be!)
-    # This approach doesn't require complicated dependency injection though
-    current_month = Time.now.strftime('%B')
-    current_year = Time.now.strftime('%Y')
+    current_month_year = Date.parse(Wdpa::S3.current_wdpa_identifier)
+    current_month = current_month_year.strftime('%B')
+    current_year = current_month_year.strftime('%Y')
     text_variation = '-misc'
 
     if current_page?(thematic_areas_oecms_path)
