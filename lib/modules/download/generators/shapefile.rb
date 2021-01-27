@@ -17,7 +17,8 @@ class Download::Generators::Shapefile < Download::Generators::Base
     @path = File.dirname(zip_path)
     @filename = File.basename(zip_path, File.extname(zip_path))
     @wdpa_ids = wdpa_ids
-    @number_of_pieces = number_of_pieces
+    # If there are 2 areas involved max, generate just one shp
+    @number_of_pieces = (wdpa_ids.size > 2 || wdpa_ids.blank?) ? number_of_pieces : 1
   end
 
   def generate
