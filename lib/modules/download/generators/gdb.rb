@@ -26,7 +26,7 @@ class Download::Generators::Gdb < Download::Generators::Base
 
       export_sources
 
-      system("zip -r #{zip_path} #{gdb_component}", chdir: @path) and add_attachments
+      system("zip -r #{zip_path} #{gdb_filename}", chdir: @path) and add_attachments
     end
   rescue Ogr::Postgres::ExportError
     return false
@@ -85,5 +85,9 @@ class Download::Generators::Gdb < Download::Generators::Base
 
   def gdb_component
     File.join(@path, "#{@filename}.gdb")
+  end
+
+  def gdb_filename
+    gdb_component.split('/').last
   end
 end
