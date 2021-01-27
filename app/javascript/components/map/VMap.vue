@@ -1,9 +1,6 @@
 <template>
   <div class="v-map">
-    <div
-      :id="containerId"
-      class="map__mapbox"
-    />
+    <div :id="containerId" class="map__mapbox" />
     <v-map-baselayer-controls
       v-if="controlsOptions.showBaselayerControls"
       :baselayers="baselayers"
@@ -14,7 +11,13 @@
 <script>
 import { containsObjectWithId } from '../../helpers/array-helpers'
 import { executeAfterCondition } from '../../helpers/timing-helpers'
-import { BASELAYERS_DEFAULT, CONTROLS_OPTIONS_DEFAULT, EMPTY_OPTIONS, MAP_OPTIONS_DEFAULT } from './default-options'
+import { 
+  BASELAYERS_DEFAULT, 
+  CONTROLS_OPTIONS_DEFAULT, 
+  EMPTY_OPTIONS, 
+  MAP_OPTIONS_DEFAULT, 
+  RTL_TEXT_PLUGIN_URL
+} from './default-options'
 
 import VMapBaselayerControls from './VMapBaselayerControls'
 import mixinAddLayers from './mixins/mixin-add-layers'
@@ -43,7 +46,7 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       accessToken: process.env.MAPBOX_ACCESS_TOKEN,
       containerId: MAP_OPTIONS_DEFAULT.container,
@@ -52,18 +55,18 @@ export default {
   },
 
   computed: {
-    baselayers () {
+    baselayers() {
       return this.options.baselayers || BASELAYERS_DEFAULT
     },
 
-    controlsOptions () {
+    controlsOptions() {
       return {
         ...CONTROLS_OPTIONS_DEFAULT,
         ...this.options.controls
       }
     },
 
-    mapOptions () {
+    mapOptions() {
       const options = {
         ...MAP_OPTIONS_DEFAULT,
         ...this.options.map,
@@ -77,17 +80,17 @@ export default {
       return options
     },
 
-    selectedBaselayer () {
+    selectedBaselayer() {
       return this.$store.state.map.selectedBaselayer
     },
 
-    visibleLayers () {
+    visibleLayers() {
       return this.$store.state.map.visibleLayers
     }
   },
 
   watch: {
-    visibleLayers (newLayers, oldLayers) {
+    visibleLayers(newLayers, oldLayers) {
       const layersToHide = oldLayers.filter(oL =>
         !containsObjectWithId(newLayers, oL.id)
       )
@@ -96,7 +99,7 @@ export default {
       this.showLayers(newLayers)
     },
 
-    selectedBaselayer () {
+    selectedBaselayer() {
       this.executeAfterStyleLoad(() => {
         this.map.setStyle(this.selectedBaselayer.style)
         this.showLayers(this.visibleLayers)
@@ -104,20 +107,26 @@ export default {
     }
   },
 
-  mounted () {
+  mounted() {
     this.initBoundingBoxAndMap()
   },
 
   methods: {
-    initMap () {
+    initMap() {
       /* eslint-disable no-undef */
       mapboxgl.accessToken = this.accessToken
+      // Add support for RTL languages
+      mapboxgl.setRTLTextPlugin(
+        RTL_TEXT_PLUGIN_URL, 
+        null, 
+        true // Lazy loading
+      )
       this.map = new mapboxgl.Map(this.mapOptions)
       this.addControls()
       this.addEventHandlersToMap()
     },
 
-    addEventHandlersToMap () {
+    addEventHandlersToMap() {
       this.$eventHub.$on('map:resize', () => this.map.resize())
 
       this.map.on('style.load', () => {
@@ -125,21 +134,21 @@ export default {
       })
 
       if (this.onClick) {
-        this.map.on('click', e => { 
-          if (e.originalEvent.detail === 1) { 
-            this.onClick(e) 
+        this.map.on('click', e => {
+          if (e.originalEvent.detail === 1) {
+            this.onClick(e)
           }
         })
       }
     },
 
-    showLayers (layers) {
+    showLayers(layers) {
       this.executeAfterStyleLoad(() => {
         layers.forEach(l => this.showLayer(l))
       })
     },
 
-    showLayer (layer) {
+    showLayer(layer) {
       const mapboxLayer = this.map.getLayer(layer.id)
       const isVisible = mapboxLayer && mapboxLayer.visibility === 'visible'
 
@@ -150,7 +159,7 @@ export default {
       }
     },
 
-    addLayerBeneathBoundariesAndLabels (layer) {
+    addLayerBeneathBoundariesAndLabels(layer) {
       executeAfterCondition(
         () => this.firstForegroundLayerId,
         () => { this.addLayer(layer) },
@@ -158,7 +167,7 @@ export default {
       )
     },
 
-    addLayer (layer) {
+    addLayer(layer) {
       if (layer.type === 'raster_tile') {
         this.addRasterTileLayer(layer)
       } else if (layer.type === 'raster_data') {
@@ -166,17 +175,17 @@ export default {
       }
     },
 
-    hideLayers (layers) {
+    hideLayers(layers) {
       this.setLayerVisibilities(layers, false)
     },
 
-    setLayerVisibilities (layers, isVisible) {
+    setLayerVisibilities(layers, isVisible) {
       layers.forEach(l => {
         this.setLayerVisibility(l, isVisible)
       })
     },
 
-    setLayerVisibility (layer, isVisible) {
+    setLayerVisibility(layer, isVisible) {
       const layerId = layer.id
       const visibility = isVisible ? 'visible' : 'none'
 

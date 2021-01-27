@@ -1,3 +1,15 @@
+### 4.4.1
+
+* Feb 2021 release (new GL data, PAME data, public map, global and national monthly statistics)
+
+### 4.4.0 
+
+Assorted fixes: 
+- Update country and region extend URLs which are now sourced from the ArcGIS layer directly
+- Added the rake task for clearing the cache during deployment
+- Links for the news article cards on the homepage have been fixed
+- RTL languages are now represented correctly on maps
+
 ### 4.3.0
 
 * Tabs on relevant thematic area pages (e.g. PAME) are now directly linked to,
