@@ -33,4 +33,5 @@ set :passenger_restart_with_touch, false
 namespace :deploy do
   after :publishing, 'service:pp_default:restart'
   after :publishing, 'service:pp_import:restart'
+  after :finishing, 'cache:clear'
 end
