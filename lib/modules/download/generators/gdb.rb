@@ -19,17 +19,14 @@ class Download::Generators::Gdb < Download::Generators::Base
   def generate
     return false if @wdpa_ids.is_a?(Array) && @wdpa_ids.empty?
 
-    gdb_paths = []
-
     clean_up_after do
       QUERY_CONDITIONS.each do |name, props|
-        gdb_paths << export_component(name, props)
+        export_component(name, props)
       end
 
       export_sources
 
-      #system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
-      system("zip -r #{zip_path} #{gdb_filenames(gdb_paths)}", chdir: @path) and add_attachments
+      system("zip -r #{zip_path} #{gdb_component}", chdir: @path) and add_attachments
     end
   rescue Ogr::Postgres::ExportError
     return false
@@ -88,9 +85,5 @@ class Download::Generators::Gdb < Download::Generators::Base
 
   def gdb_component
     File.join(@path, "#{@filename}.gdb")
-  end
-
-  def gdb_filenames(gdb_paths)
-    gdb_paths.flatten.compact.uniq.map { |p| p.split('/').last }.join(' ')
   end
 end
