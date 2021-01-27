@@ -10,6 +10,7 @@ export const BASELAYERS_DEFAULT = [
     style: 'mapbox://styles/unepwcmc/ckfy4tzxq0vq719lgi34s2lad'
   }
 ]
+export const RTL_TEXT_PLUGIN_URL = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'
 export const MAP_OPTIONS_DEFAULT = {
   container: 'map-target',
   scrollZoom: false,
