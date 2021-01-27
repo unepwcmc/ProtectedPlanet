@@ -74,7 +74,7 @@ module DownloadsHelper
         title: I18n.t('download.modal-commercial.title')
       },
       download: {
-        citationText: switch_citation_text, 
+        citationText: citation_text, 
         citationTitle: I18n.t('download.modal-download.citation-title'), 
         title: I18n.t('download.modal-download.title')
       },
@@ -86,9 +86,14 @@ module DownloadsHelper
     }
   end
 
-  def switch_citation_text
-    # Should reflect the month/year of the last monthly release
-    current_month_year = Date.parse(Wdpa::S3.current_wdpa_identifier)
+  def citation_text
+    # Reflects the month/year of the last monthly release
+    begin
+      current_month_year = Date.parse(Wdpa::S3.current_wdpa_identifier)
+    rescue TypeError || ArgumentError
+      # If it can't parse it, falls back to the current date
+      current_month_year = Time.now
+    end
     current_month = current_month_year.strftime('%B')
     current_year = current_month_year.strftime('%Y')
     text_variation = '-misc'
