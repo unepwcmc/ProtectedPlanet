@@ -11,7 +11,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
       select: Download::Utils.download_columns(reject: [:gis_area, :gis_m_area]),
       where: %{"TYPE" = 'Point'}
     }
-  }
+  }.freeze
 
   def initialize zip_path, wdpa_ids, number_of_pieces=3
     @path = File.dirname(zip_path)

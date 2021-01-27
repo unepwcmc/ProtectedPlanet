@@ -8,7 +8,7 @@ class Download::Generators::Gdb < Download::Generators::Base
       select: Download::Utils.download_columns(reject: [:gis_area, :gis_m_area]),
       where: %{"TYPE" = 'Point'}
     }
-  }
+  }.freeze
 
   def initialize zip_path, wdpa_ids
     @path = File.dirname(zip_path)
