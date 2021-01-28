@@ -70,11 +70,14 @@ class Ogr::Postgres
     # Given the original filename should also contains 'polygons' or 'points' at the end,
     # we remove this bit.
     attrs.pop if %w(polygons points).include?(attrs[-1])
+    # If the filename does not end with 'Public' it means there's also an identifier (e.g. an ISO or a WDPA ID)
+    # So the original filename would have been something like WDPA_MmmYYY_Public_identifier
+    identifier = attrs.pop unless attrs[-1].downcase == 'public'
     # Replace 'Public' with the geometry type formatted correctly, e.g. => ['WDPA', 'MmmYYY', 'poly']
     attrs[-1] = FEATURE_TYPES[geom_type]
     # Swap date and geometry type, e.g. => ['WDPA', 'poly', 'MmmYYY']
     attrs[-1], attrs[-2] = attrs[-2], attrs[-1]
     # Join and get the new filename, e.g. => 'WDPA_poly_MmmYYY'
-    attrs.join('_')
+    [attrs, identifier].flatten.compact.join('_')
   end
 end
