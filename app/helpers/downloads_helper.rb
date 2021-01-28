@@ -90,7 +90,7 @@ module DownloadsHelper
     # Reflects the month/year of the last monthly release
     begin
       current_month_year = Date.parse(Wdpa::S3.current_wdpa_identifier)
-    rescue TypeError || ArgumentError
+    rescue TypeError, ArgumentError
       # If it can't parse it, falls back to the current date
       current_month_year = Time.now
     end
