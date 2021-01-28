@@ -88,7 +88,11 @@ class Download::Generators::Base
   end
 
   def sources_path
-    File.join(File.dirname(zip_path), "WDPA_sources.csv")
+    File.join(File.dirname(zip_path), "WDPA_sources_#{current_wdpa_id}.csv")
+  end
+
+  def current_wdpa_id
+    Wdpa::S3.current_wdpa_identifier
   end
 
   def add_sources
