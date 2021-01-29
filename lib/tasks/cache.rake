@@ -1,6 +1,6 @@
 namespace :cache do
   desc "Clear the Rails cache (everything except downloads which is handled by Redis)"
-  task clear: do
+  task :clear do
     logger = Logger.new(STDOUT)
 
     logger.info "Clearing cache..."
