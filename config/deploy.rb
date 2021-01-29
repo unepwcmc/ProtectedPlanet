@@ -2,7 +2,7 @@
 lock '3.11.0'
 
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
-set :application, "ProtectedPlanet-copy"
+set :application, "ProtectedPlanet"
 
 set :deploy_user, 'wcmc'
 set :deploy_to, "/home/#{fetch(:deploy_user)}/#{fetch(:application)}"
