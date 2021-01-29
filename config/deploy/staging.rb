@@ -1,13 +1,16 @@
 set :stage, :staging
 set :branch, "clear_cache"
 
-server 'new-web-copy.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
+server 'new-web.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
-set :application, "protectedplanet-copy"
-set :server_name, "protectedplanet-copy"
+set :application, "protectedplanet"
+set :server_name, "protectedplanet"
 set :sudo_user, "wcmc"
 set :app_port, "80"
 
+namespace :deploy do
+  after :published, 'deploy:clear_cache RAILS_ENV=production'
+end
 
 
 # server-based syntax
