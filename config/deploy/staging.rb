@@ -8,11 +8,6 @@ set :server_name, "protectedplanet"
 set :sudo_user, "wcmc"
 set :app_port, "80"
 
-namespace :deploy do
-  after :published, 'deploy:clear_cache'
-end
-
-
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.

@@ -10,13 +10,6 @@ set :app_port, "80"
 set :branch, "master"
 
 
-
-namespace :deploy do
-  after :published, 'deploy:clear_cache'
-end
-
-
-
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
