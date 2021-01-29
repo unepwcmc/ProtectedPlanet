@@ -80,8 +80,12 @@ group :test, :development do
   gem 'ejs'
   # gem 'minitest', '5.10.3' # Explicit minitest version fixes test reporting errors
   gem 'minitest', '~> 5.10', '!= 5.10.2'
-  gem 'byebug', '~> 9.0', '>= 9.0.5'
+  
 
+end
+
+group :test, :development, :staging do 
+  gem 'byebug', '~> 9.0', '>= 9.0.5'
 end
 
 
