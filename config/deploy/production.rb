@@ -12,7 +12,7 @@ set :branch, "master"
 
 
 namespace :deploy do
-  after :published, 'deploy:clear_cache RAILS_ENV=production'
+  after :published, 'deploy:clear_cache'
 end
 
 

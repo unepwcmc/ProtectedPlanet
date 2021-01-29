@@ -9,7 +9,7 @@ set :sudo_user, "wcmc"
 set :app_port, "80"
 
 namespace :deploy do
-  after :published, 'deploy:clear_cache RAILS_ENV=staging'
+  after :published, 'deploy:clear_cache'
 end
 
 
