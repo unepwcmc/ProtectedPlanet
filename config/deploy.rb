@@ -2,7 +2,7 @@
 lock '3.11.0'
 
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
-set :application, "ProtectedPlanet"
+set :application, "ProtectedPlanet-copy"
 
 set :deploy_user, 'wcmc'
 set :deploy_to, "/home/#{fetch(:deploy_user)}/#{fetch(:application)}"
@@ -28,6 +28,19 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 set :keep_releases, 5
 
 set :passenger_restart_with_touch, false
+
+namespace :cache do
+  desc "Clear the Rails cache (everything except downloads which is handled by Redis)"
+  task :clear do
+    on roles(:all) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rails, 'cache:clear'
+        end
+      end
+    end
+  end
+end
 
 
 namespace :deploy do
