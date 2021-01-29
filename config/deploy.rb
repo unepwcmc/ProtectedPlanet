@@ -29,20 +29,6 @@ set :keep_releases, 5
 
 set :passenger_restart_with_touch, false
 
-namespace :cache do
-  desc "Clear the Rails cache (everything except downloads which is handled by Redis)"
-  task :clear do
-    on roles(:all) do
-      within release_path do
-        with rails_env: fetch(:rails_env) do
-          execute :rails, 'cache:clear'
-        end
-      end
-    end
-  end
-end
-
-
 namespace :deploy do
   after :publishing, 'service:pp_default:restart'
   after :publishing, 'service:pp_import:restart'
