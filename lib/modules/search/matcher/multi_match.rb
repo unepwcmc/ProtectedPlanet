@@ -1,5 +1,5 @@
 class Search::Matcher::MultiMatch < Search::Matcher
-  def to_h
+  def to_matcher_hash
     if @options[:boost]
       query_with_booster
     else
@@ -29,6 +29,7 @@ class Search::Matcher::MultiMatch < Search::Matcher
         "multi_match" => {
           "query" => "#{@term}",
           "fields" => @options[:fields],
+          "minimum_should_match" => @options[:minimum_should_match] || "0%",
           "fuzziness" => "0"
         }
       }

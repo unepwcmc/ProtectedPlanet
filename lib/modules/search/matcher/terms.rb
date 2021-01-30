@@ -1,5 +1,5 @@
 class Search::Matcher::Terms < Search::Matcher
-  def to_h
+  def to_matcher_hash
     if @term.blank?
       ids = []
     else
