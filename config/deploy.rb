@@ -2,7 +2,7 @@
 lock '3.11.0'
 
 set :repo_url, 'git@github.com:unepwcmc/ProtectedPlanet.git'
-set :application, "ProtectedPlanet-copy"
+set :application, "ProtectedPlanet"
 
 set :deploy_user, 'wcmc'
 set :deploy_to, "/home/#{fetch(:deploy_user)}/#{fetch(:application)}"
@@ -32,5 +32,5 @@ set :passenger_restart_with_touch, false
 namespace :deploy do
   after :publishing, 'service:pp_default:restart'
   after :publishing, 'service:pp_import:restart'
-  after :finishing, 'cache:clear'
+  after :published, 'deploy:clear_cache'
 end

@@ -53,6 +53,7 @@ group :development do
   gem 'capistrano-git-with-submodules', '2.0.3'
   gem 'capistrano-service'
   gem 'awesome_print'
+
   # gem 'listen', '~> 3.1.5'
   # gem 'spring-watcher-listen', '~> 2.0.0'
   #
@@ -79,8 +80,12 @@ group :test, :development do
   gem 'ejs'
   # gem 'minitest', '5.10.3' # Explicit minitest version fixes test reporting errors
   gem 'minitest', '~> 5.10', '!= 5.10.2'
-  gem 'byebug', '~> 9.0', '>= 9.0.5'
+  
 
+end
+
+group :test, :development, :staging do 
+  gem 'byebug', '~> 9.0', '>= 9.0.5'
 end
 
 
