@@ -1,10 +1,6 @@
 class Search::Matcher::MultiMatch < Search::Matcher
   def to_matcher_hash
-    if @options[:boost]
-      query_with_booster
-    else
-      query
-    end
+    @options[:boost] ? query_with_booster : query
   end
 
   private
@@ -18,7 +14,7 @@ class Search::Matcher::MultiMatch < Search::Matcher
       }
     }
   end
-
+  
   def query
     if @term.blank?
       {

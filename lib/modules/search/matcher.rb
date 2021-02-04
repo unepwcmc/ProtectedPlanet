@@ -8,14 +8,13 @@ class Search::Matcher
       { type: 'nested', path: 'sub_location', fields: ['sub_location.english_name'] },
       { type: 'nested', path: 'designation', fields: ['designation.name'] },
       { type: 'nested', path: 'iucn_category', fields: ['iucn_category.name'] },
-      { type: 'nested', path: 'governance', fields: ['governance.name'] },
-      # { type: 'multi_match', fields: ["name^2", "iso_3^3", "countries_for_index", "region_name"] },
+      { type: 'nested', path: 'governance', fields: ['governance.name'] },  
       { type: 'terms',  path: 'wdpa_id' },
       {
         type: 'multi_match',
         fields: %w[iso_3 name original_name],
         boost: true,
-        minimum_should_match: '100%',
+        minimum_should_match: '100%', # Restricting the number of extraneous results that are returned by making sure all search terms are matched
         functions: [
           {
             'filter' => { 'match' => { 'type' => 'country' } },
