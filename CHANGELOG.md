@@ -1,3 +1,13 @@
+### 4.5.0
+
+Assorted fixes:
+* PAME download names have been standardised, as well as shapefile filenames, following a convention: see 
+  [this](https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/188#update-65893225)
+  for more details 
+* Other changes to downloads: single GDB file implemented, sources exported into same GDB file
+* Download citations now reflect last WDPA release data, as well as differing name depending on page
+* Add Capistrano task to clear the cache during deployment to avoid missing styles 
+
 ### 4.4.1
 
 * Feb 2021 release (new GL data, PAME data, public map, global and national monthly statistics)
@@ -6,7 +16,6 @@
 
 Assorted fixes: 
 - Update country and region extend URLs which are now sourced from the ArcGIS layer directly
-- Added the rake task for clearing the cache during deployment
 - Links for the news article cards on the homepage have been fixed
 - RTL languages are now represented correctly on maps
 
