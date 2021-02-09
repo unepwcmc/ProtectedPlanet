@@ -11,13 +11,14 @@ class Download::Generators::Shapefile < Download::Generators::Base
       select: Download::Utils.download_columns(reject: [:gis_area, :gis_m_area]),
       where: %{"TYPE" = 'Point'}
     }
-  }
+  }.freeze
 
   def initialize zip_path, wdpa_ids, number_of_pieces=3
     @path = File.dirname(zip_path)
     @filename = File.basename(zip_path, File.extname(zip_path))
     @wdpa_ids = wdpa_ids
-    @number_of_pieces = number_of_pieces
+    # If there are 2 areas involved max, generate just one shp
+    @number_of_pieces = (wdpa_ids.size > 2 || wdpa_ids.blank?) ? number_of_pieces : 1
   end
 
   def generate
@@ -93,7 +94,8 @@ class Download::Generators::Shapefile < Download::Generators::Base
   end
 
   def zip_path(index='')
-    File.join(@path, "#{@filename}#{index}.zip")
+    _filename = index.present? ? "#{@filename}_#{index}" : @filename
+    File.join(@path, "#{_filename}.zip")
   end
 
   def shapefile_components name

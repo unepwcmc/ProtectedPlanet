@@ -1,4 +1,8 @@
-ogr2ogr -skipfailures
+ogr2ogr 
+<% if needs_updating %>
+  -update
+<% end %>
+-skipfailures
 -f "FileGDB"
 <%= file_name %>
 PG:"host=<%= db_config[:host] %>
@@ -8,5 +12,7 @@ PG:"host=<%= db_config[:host] %>
   <% end %>
   dbname=<%= db_config[:database] %>"
 -sql "<%= query %>"
--nlt "<%= geom_type.upcase %>"
--nln "<%= file_name.split('/').last[0..-5] %>"
+<% unless geom_type == 'source' %>
+  -nlt "<%= geom_type.upcase %>"
+<% end %>
+-nln "<%= feature_name %>"

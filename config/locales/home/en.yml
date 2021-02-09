@@ -42,6 +42,6 @@ en:
           slug: 
           filter: 'terrestrial'
         -
-          title: Green List Protected Areas
+          title: Green Listed Protected Areas
           slug: /green-list
           filter: 'is_green_list'

@@ -43,8 +43,11 @@
 
         axios.post('/pame/download', data, config)
           .then((response) => {
-            const date = new Date().toJSON().slice(0,10),
-              filename = `protectedplanet-pame-${date}.csv`
+            // content-disposition looks something like: 'attachment; filename="the_file_name_here.csv"
+            // so splitting the string by 'filename=" will leave us with ['attachemnt;', 'the_file_name_here.csv"']
+            // we then get the last item and split it further by the the remaining '"' to ensure anything after that is gone.
+            // Finally we get the first element of that split.
+            const filename = response.headers['content-disposition'].split('filename\="')[1].split('\"')[0]
 
             this.createBlob(filename, response.data)
 
