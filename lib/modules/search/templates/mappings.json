@@ -76,10 +76,11 @@
 	    },
 	    "name": {
         "type": "text",
-        "analyzer": "english"
+        "analyzer": "html_analyzer"
 	    },
 	    "original_name": {
-        "type": "text"
+        "type": "text",
+        "analyzer": "html_analyzer"
 	    },
 	    "marine": {
         "type": "boolean"

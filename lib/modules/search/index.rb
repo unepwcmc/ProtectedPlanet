@@ -2,29 +2,33 @@ class Search::Index
   TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'templates')
   MAPPINGS_TEMPLATE = File.read(File.join(TEMPLATE_DIRECTORY, 'mappings.json'))
 
+  INDEXES = [
+    Search::CMS_INDEX,
+    Search::REGION_INDEX,
+    Search::COUNTRY_INDEX,
+    Search::PA_INDEX
+  ].freeze
+
   def self.create
     cms_index = init_cms_index
     cms_index.create
 
     pa_relation = ProtectedArea.without_geometry.includes([
-      {:countries_for_index => :region_for_index},
-      :sub_locations,
-      :designation,
-      :iucn_category,
-      :governance
-    ])
+                                                            { countries_for_index: :region_for_index },
+                                                            :sub_locations,
+                                                            :designation,
+                                                            :iucn_category,
+                                                            :governance
+                                                          ])
 
-    region_index = Search::Index.new Search::REGION_INDEX, Region.without_geometry.all
+    region_index = new(Search::REGION_INDEX, Region.without_geometry.all)
     region_index.create
-    country_index = Search::Index.new Search::COUNTRY_INDEX, Country.without_geometry.all
+    country_index = new(Search::COUNTRY_INDEX, Country.without_geometry.all)
     country_index.create
-    pa_index = Search::Index.new Search::PA_INDEX, pa_relation
+    pa_index = new(Search::PA_INDEX, pa_relation)
     pa_index.create
 
-    cms_index.index
-    region_index.index
-    country_index.index
-    pa_index.index
+    INDEXES.each { |i| i.index }
   end
 
   def self.create_cms_fragments
@@ -35,27 +39,27 @@ class Search::Index
   end
 
   def self.count
-    self.new(Search::REGION_INDEX).count +
-    self.new(Search::COUNTRY_INDEX).count +
-    self.new(Search::PA_INDEX).count +
-    self.new(Search::CMS_INDEX).count
+    count = 0
+
+    INDEXES.each do |index|
+      count += new(index).count
+
+    rescue Elasticsearch::Transport::Transport::Errors::NotFound
+      Rails.logger.info("#{index} not found, skipping...")
+      next
+    end
+
+    count
   end
 
-  INDEXES = [
-    Search::REGION_INDEX,
-    Search::COUNTRY_INDEX,
-    Search::PA_INDEX,
-    Search::CMS_INDEX
-  ].freeze
   def self.delete(indexes = INDEXES)
     indexes.each do |index_name|
-      index = self.new index_name
+      index = new index_name
       index.delete
     end
   end
 
-
-  def initialize index_name, collection=nil
+  def initialize(index_name, collection = nil)
     @client = Elasticsearch::Client.new(url: Rails.application.secrets.elasticsearch[:url])
     @index_name = index_name
     @collection = collection
@@ -71,7 +75,6 @@ class Search::Index
 
   def delete
     @client.indices.delete index: @index_name
-
   rescue Elasticsearch::Transport::Transport::Errors::NotFound
     Rails.logger.warn("Index #{@index_name} not found. Skipping")
   end
@@ -80,21 +83,20 @@ class Search::Index
     @client.count(index: @index_name)['count']
   end
 
-
   private
 
   def self.init_cms_index
     page_relation = Comfy::Cms::SearchablePage.includes([
-      :fragments_for_index,
-      {:translations_for_index => :fragments_for_index},
-      :categories
-    ])
-    Search::Index.new Search::CMS_INDEX, page_relation
+                                                          :fragments_for_index,
+                                                          { translations_for_index: :fragments_for_index },
+                                                          :categories
+                                                        ])
+    new(Search::CMS_INDEX, page_relation)
   end
 
   def documents_in_batches
     @collection.find_in_batches.each do |group|
-     batch = group.each_with_object([]) do |object, bulk|
+      batch = group.each_with_object([]) do |object, bulk|
         bulk << index_header(object)
         bulk << object.as_indexed_json
       end
@@ -103,8 +105,8 @@ class Search::Index
     end
   end
 
-  def index_header model
-    {index: {_index: @index_name}}
+  def index_header _model
+    { index: { _index: @index_name } }
   end
 
   def mappings
