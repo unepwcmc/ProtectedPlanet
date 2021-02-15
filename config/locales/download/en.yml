@@ -7,7 +7,9 @@ en:
       non-commercial-title: Non Commercial Use
       title: Download Options
     modal-download: 
-      citation-text: "UNEP-WCMC and IUCN (2020), Protected Planet: The World Database on Protected Areas (WDPA) [Online], September 2020, Cambridge, UK: UNEP-WCMC and IUCN. Available at: <a href='http://protectedplanet.net' target='_blank' title='Visit Protected Planet'>www.protectedplanet.net</a>."
+      citation-text-wdpa: "UNEP-WCMC and IUCN (%{year}), Protected Planet: The World Database on Protected Areas (WDPA) [Online],  %{month} %{year}, Cambridge, UK: UNEP-WCMC and IUCN. Available at: <a href='http://protectedplanet.net' target='_blank' title='Visit Protected Planet'>www.protectedplanet.net</a>."
+      citation-text-oecm: "UNEP-WCMC and IUCN (%{year}), Protected Planet: The World Database on Other Effective Area-based Conservation Measures (WD-OECM) [Online], %{month} %{year}, Cambridge, UK: UNEP-WCMC and IUCN. Available at: <a href='http://protectedplanet.net' target='_blank' title='Visit Protected Planet'>www.protectedplanet.net</a>."
+      citation-text-misc: "UNEP-WCMC and IUCN (%{year}), Protected Planet: The World Database on Protected Areas (WDPA) and World Database on Other Effective Area-based Conservation Measures (WD-OECM) [Online],  %{month} %{year}, Cambridge, UK: UNEP-WCMC and IUCN. Available at: <a href='http://protectedplanet.net' target='_blank' title='Visit Protected Planet'>www.protectedplanet.net</a>."
       citation-title: Citation
       title: Downloads
     status:

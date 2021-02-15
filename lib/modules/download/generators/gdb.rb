@@ -8,7 +8,7 @@ class Download::Generators::Gdb < Download::Generators::Base
       select: Download::Utils.download_columns(reject: [:gis_area, :gis_m_area]),
       where: %{"TYPE" = 'Point'}
     }
-  }
+  }.freeze
 
   def initialize zip_path, wdpa_ids
     @path = File.dirname(zip_path)
@@ -19,17 +19,14 @@ class Download::Generators::Gdb < Download::Generators::Base
   def generate
     return false if @wdpa_ids.is_a?(Array) && @wdpa_ids.empty?
 
-    gdb_paths = []
-
     clean_up_after do
       QUERY_CONDITIONS.each do |name, props|
-        gdb_paths << export_component(name, props)
+        export_component(name, props)
       end
 
       export_sources
 
-      system("zip -ru #{zip_path} #{File.basename(sources_path)}", chdir: File.dirname(sources_path))
-      system("zip -r #{zip_path} #{gdb_filenames(gdb_paths)}", chdir: @path) and add_attachments
+      system("zip -r #{zip_path} #{gdb_filename}", chdir: @path) and add_attachments
     end
   rescue Ogr::Postgres::ExportError
     return false
@@ -38,7 +35,7 @@ class Download::Generators::Gdb < Download::Generators::Base
   private
 
   def export_component name, props
-    component_path = gdb_component(name)
+    component_path = gdb_component
     view_name = create_view query(props[:select], props[:where])
 
     return [] if ActiveRecord::Base.connection.select_value("""
@@ -62,6 +59,15 @@ class Download::Generators::Gdb < Download::Generators::Base
     add_conditions(query, conditions).squish
   end
 
+  def export_sources
+    _query = <<-SQL
+      SELECT #{Download::Utils.source_columns}
+      FROM standard_sources
+    SQL
+
+    Ogr::Postgres.export(:gdb, gdb_component, _query, 'source')
+  end
+
   def clean_up_after
     return_value = yield
     clean_up
@@ -70,20 +76,18 @@ class Download::Generators::Gdb < Download::Generators::Base
   end
 
   def clean_up
-    QUERY_CONDITIONS.each do |name, _|
-      FileUtils.rm_rf gdb_component(name)
-    end
+    FileUtils.rm_rf gdb_component
   end
 
   def zip_path
     File.join(@path, "#{@filename}.zip")
   end
 
-  def gdb_component(name)
-    File.join(@path, "#{@filename}_#{name}.gdb")
+  def gdb_component
+    File.join(@path, "#{@filename}.gdb")
   end
 
-  def gdb_filenames(gdb_paths)
-    gdb_paths.flatten.compact.uniq.map { |p| p.split('/').last }.join(' ')
+  def gdb_filename
+    gdb_component.split('/').last
   end
 end

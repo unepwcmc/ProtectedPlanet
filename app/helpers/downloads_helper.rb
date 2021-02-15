@@ -37,7 +37,8 @@ module DownloadsHelper
       commercialAvailable: false
     }
   }.freeze
-  def download_options options_array, domain, token
+
+  def download_options(options_array, domain, token)
     download_options = []
 
     options_array.map do |option|
@@ -50,11 +51,13 @@ module DownloadsHelper
   end
 
   def download_params(format, domain, token)
-    return {} if %w(esri_wdpa esri_oecm mpa_map).include?(format)
-    _domain = format == 'pdf' ? 'pdf' : domain
+    return {} if %w[esri_wdpa esri_oecm mpa_map].include?(format)
+
+    domain = format == 'pdf' ? 'pdf' : domain
+
     {
       params: {
-        domain: _domain,
+        domain: domain,
         format: format,
         token: token
       }
@@ -71,7 +74,7 @@ module DownloadsHelper
         title: I18n.t('download.modal-commercial.title')
       },
       download: {
-        citationText: I18n.t('download.modal-download.citation-text'), 
+        citationText: citation_text, 
         citationTitle: I18n.t('download.modal-download.citation-title'), 
         title: I18n.t('download.modal-download.title')
       },
@@ -81,5 +84,26 @@ module DownloadsHelper
         generating: I18n.t('download.status.generating')
       }
     }
+  end
+
+  def citation_text
+    # Reflects the month/year of the last monthly release
+    begin
+      current_month_year = Date.parse(Wdpa::S3.current_wdpa_identifier)
+    rescue TypeError, ArgumentError
+      # If it can't parse it, falls back to the current date
+      current_month_year = Time.now
+    end
+    current_month = current_month_year.strftime('%B')
+    current_year = current_month_year.strftime('%Y')
+    text_variation = '-misc'
+
+    if current_page?(thematic_areas_oecms_path)
+      text_variation = '-oecm'
+    elsif current_page?(thematic_areas_wdpa_path)
+      text_variation = '-wdpa'
+    end
+
+    I18n.t("download.modal-download.citation-text#{text_variation}", month: current_month, year: current_year)
   end
 end
