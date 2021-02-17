@@ -28,7 +28,10 @@ class Search::Index
     pa_index = new(Search::PA_INDEX, pa_relation)
     pa_index.create
 
-    INDEXES.each { |i| i.index }
+    cms_index.index
+    region_index.index
+    country_index.index
+    pa_index.index
   end
 
   def self.create_cms_fragments
