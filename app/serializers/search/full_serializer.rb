@@ -1,6 +1,4 @@
 class Search::FullSerializer < Search::BaseSerializer
-  include CmsHelper
-
   DEFAULT_RESULT = {
     title: '',
     url: '',
@@ -20,7 +18,7 @@ class Search::FullSerializer < Search::BaseSerializer
   def serialize
     return DEFAULT_OBJ unless @search
 
-    all_objects = sorted_pages
+    all_objects = @results.objects.values.compact.flatten
     per_page = @options[:per_page].to_i
     DEFAULT_OBJ.merge(
       {
@@ -41,29 +39,5 @@ class Search::FullSerializer < Search::BaseSerializer
         end
       }
     )
-  end
-
-  private 
-
-  OLDEST_DATE = DateTime.new(0).freeze
-
-  def all_results
-    @results.objects.values.compact.flatten
-  end
-
-  def sorted_pages
-    unless @results.cms_pages.blank?
-      return all_results.sort_by! do |p|
-        find_date(p) || OLDEST_DATE
-      end.reverse
-    end
-    
-    all_results
-  end
-
-  def find_date(page)
-    return unless page.is_a?(Comfy::Cms::SearchablePage)
-
-    cms_fragment_content_datetime(:published_date, page)
   end
 end

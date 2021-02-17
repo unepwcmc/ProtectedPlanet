@@ -2,7 +2,6 @@ class SearchController < ApplicationController
   include Concerns::Searchable
   after_action :enable_caching
 
-  before_action :load_sorter, only: [:index, :search_results]
   before_action :load_search, only: [:index, :search_results]
 
   def index
@@ -50,10 +49,6 @@ class SearchController < ApplicationController
   end
 
   private
-
-  def load_sorter
-    @sorter = {sort: {datetime: 'published_date'} }
-  end
 
   def search_params
     params.permit(:search_term, :type, :index, :requested_page, :items_per_page, :search_index, :filters)
