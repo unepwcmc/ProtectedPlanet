@@ -82,7 +82,7 @@ class Search::FiltersSerializer < Search::BaseSerializer
 
   def objs_for(aggregation)
     records = sorted_records(@aggregations[aggregation], aggregation)
-    records.map { |obj| { id: obj[:label], title: obj[:label] } }
+    records.map { |obj| { id: obj[:label], title: obj[:label] } }.uniq
   end
 
   def sorted_records(records, agg_type)
