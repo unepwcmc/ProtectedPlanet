@@ -70,13 +70,12 @@ class CountryController < ApplicationController
   end
 
   def build_hash(tab)
-    oecm = tab == :wdpa_oecm
     hash = {}
 
     # What this does is call the corresponding method in tab presenter to build
     # the value for each key, populating the hash
     hash[tab] = TABS_KEYS.map do |key|
-      { "#{key}": @tab_presenter.send("#{key}", oecms_tab: oecm) }
+      { "#{key}": @tab_presenter.send("#{key}", oecms_tab: tab == :wdpa_oecm) }
     end.reduce(&:merge)
 
     hash
@@ -99,7 +98,6 @@ class CountryController < ApplicationController
 
     @country or raise_404
 
-    @pame_statistics = @country.pame_statistic
     @country_presenter = CountryPresenter.new(@country)
     @tab_presenter = TabPresenter.new(@country)
   end
