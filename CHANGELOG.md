@@ -1,3 +1,31 @@
+### 4.5.1
+
+* Duplicate search filters (in the Designations filter option of the PA search) have been removed.
+* Social media previews have been fixed for Facebook and LinkedIn - partial fix for Twitter, but 
+  only for articles without images in the content. 
+
+
+### 4.5.0
+
+Assorted fixes:
+* PAME download names have been standardised, as well as shapefile filenames, following a convention: see 
+  [this](https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/188#update-65893225)
+  for more details 
+* Other changes to downloads: single GDB file implemented, sources exported into same GDB file
+* Download citations now reflect last WDPA release data, as well as differing name depending on page
+* Add Capistrano task to clear the cache during deployment to avoid missing styles 
+
+### 4.4.1
+
+* Feb 2021 release (new GL data, PAME data, public map, global and national monthly statistics)
+
+### 4.4.0 
+
+Assorted fixes: 
+- Update country and region extend URLs which are now sourced from the ArcGIS layer directly
+- Links for the news article cards on the homepage have been fixed
+- RTL languages are now represented correctly on maps
+
 ### 4.3.0
 
 * Tabs on relevant thematic area pages (e.g. PAME) are now directly linked to,
