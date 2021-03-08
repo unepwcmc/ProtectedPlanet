@@ -7,6 +7,8 @@ namespace :search do
     Search::Index.delete
     logger.info "Populating index..."
     Search::Index.create
+    logger.info "Clearing cache"
+    Rake::Task['cache:clear'].invoke
 
     logger.info "Reindex complete."
   end
