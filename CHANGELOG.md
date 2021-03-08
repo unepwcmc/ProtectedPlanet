@@ -1,6 +1,12 @@
-### 4.5.1
+###4.5.2
 
 * Mar 2021 release (new GL data, PAME data, public map, global and national monthly statistics)
+
+### 4.5.1
+
+* Duplicate search filters (in the Designations filter option of the PA search) have been removed.
+* Social media previews have been fixed for Facebook and LinkedIn - partial fix for Twitter, but
+  only for articles without images in the content.
 
 
 ### 4.5.0
