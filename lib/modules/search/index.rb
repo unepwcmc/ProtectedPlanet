@@ -13,13 +13,15 @@ class Search::Index
     cms_index = init_cms_index
     cms_index.create
 
-    pa_relation = ProtectedArea.without_geometry.includes([
-                                                            { countries_for_index: :region_for_index },
-                                                            :sub_locations,
-                                                            :designation,
-                                                            :iucn_category,
-                                                            :governance
-                                                          ])
+    pa_relation = ProtectedArea.without_geometry.includes(
+      [
+        { countries_for_index: :region_for_index },
+        :sub_locations,
+        :designation,
+        :iucn_category,
+        :governance
+      ]
+    )
 
     region_index = new(Search::REGION_INDEX, Region.without_geometry.all)
     region_index.create
@@ -89,11 +91,14 @@ class Search::Index
   private
 
   def self.init_cms_index
-    page_relation = Comfy::Cms::SearchablePage.includes([
-                                                          :fragments_for_index,
-                                                          { translations_for_index: :fragments_for_index },
-                                                          :categories
-                                                        ])
+    page_relation = Comfy::Cms::SearchablePage.includes(
+      [
+        :fragments_for_index,
+        { translations_for_index: :fragments_for_index },
+        :categories
+      ]
+    )
+    
     new(Search::CMS_INDEX, page_relation)
   end
 
@@ -108,7 +113,7 @@ class Search::Index
     end
   end
 
-  def index_header _model
+  def index_header(_model)
     { index: { _index: @index_name } }
   end
 
