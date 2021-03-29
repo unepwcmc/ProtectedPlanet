@@ -12,19 +12,6 @@ Rails.application.routes.draw do
   get '/en', to: 'home#index'
   get '/', to: redirect('/en')
   get '/admin', to: redirect('/admin/sites')
-  #root to: 'home#index'
-
-  ## Non-CMS routes - no localisation
-  get '/region/:iso', to: 'region#show', as: 'region'
-
-  get '/country/:iso', to: 'country#show', as: 'country'
-  get '/country/:iso/pdf', to: 'country#pdf', as: 'country_pdf'
-  get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
-  get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
-
-  # JSON endpoints - non-localised
-  get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
-  resources :downloads, only: [:show, :create, :update]
 
   #TODO
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
@@ -39,6 +26,17 @@ Rails.application.routes.draw do
     put '/admin/maintenance', as: 'maintenance'
     put '/admin/clear_cache', as: 'clear_cache'
 
+    ## Non-CMS routes
+    get '/region/:iso', to: 'region#show', as: 'region'
+
+    get '/country/:iso', to: 'country#show', as: 'country'
+    get '/country/:iso/pdf', to: 'country#pdf', as: 'country_pdf'
+    get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
+    get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
+
+    # JSON endpoints
+    get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
+    resources :downloads, only: [:show, :create, :update]
 
     namespace :api do
       namespace :v3 do
@@ -56,13 +54,7 @@ Rails.application.routes.draw do
     
     ## Only CMS routes are present below
 
-    # TODO - remove? 
-    # resources :projects, only: [:create, :index, :update, :destroy]
-
     get '/marine/download_designations', to: 'marine#download_designations'
-
-    # TODO - remove?
-    # get '/green_list/:id', to: 'green_list#show', as: 'green_list' 
 
     get '/target-11-dashboard/load-countries', to: 'target_dashboard#load_countries',
       as: 'target_dashboard_load_countries'
