@@ -1,4 +1,8 @@
 Rails.configuration.to_prepare do
+  Comfy::Cms::Fragment.class_eval do 
+    validates_with UrlValidator, if: -> { identifier == 'resource_link_url' }
+  end
+
   Comfy::Cms::Page.class_eval do
     has_many :pages_categories, foreign_key: 'page_id', dependent: :destroy
     has_many :page_categories, through: :pages_categories, foreign_key: 'page_id'
@@ -244,5 +248,24 @@ Rails.configuration.to_prepare do
     def load_cms_page
       raise_404 unless find_cms_page_by_full_path("/#{params[:cms_path]}")
     end 
+  end
+
+  # Monkey patch needed as the default error message for CMS is 'Failure to update page' in all cases
+  Comfy::Admin::Cms::PagesController.class_eval do 
+    def update
+      @page.save!
+      flash[:success] = I18n.t("comfy.admin.cms.pages.updated")
+      redirect_to action: :edit, id: @page
+    rescue ActiveRecord::RecordInvalid
+      specific_fragment_errors = @page.errors.messages[:'fragments.base'].join(', ')
+
+      unless specific_fragment_errors.blank? 
+        flash.now[:danger] = specific_fragment_errors
+      else
+        flash.now[:danger] = I18n.t("comfy.admin.cms.pages.update_failure")
+      end
+
+      render action: :edit
+    end
   end
 end
