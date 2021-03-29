@@ -2,9 +2,7 @@ class HomeController < ApplicationController
   include MapHelper
 
   def index
-    @presenter = HomePresenter.new
-
-    @pa_coverage_percentage = GlobalStatistic.global_oecms_pas_coverage_percentage
+    @pa_coverage_percentage = home_presenter.pas_coverage_percentage
 
     @config_search_areas = {
       id: 'all',
@@ -16,7 +14,8 @@ class HomeController < ApplicationController
     @pas_link = search_areas_path(geo_type: 'site')
     @pas_levels = levels
 
-    @site_facts = @presenter.fact_card_stats
+    @site_facts = home_presenter.fact_card_stats
+    @update_date = home_presenter.update_date
 
     comfy_themes = Comfy::Cms::Page.find_by_slug("thematic-areas")
     @themes_title = comfy_themes.label
@@ -54,4 +53,7 @@ class HomeController < ApplicationController
     @home_yml ||= I18n.t('home')
   end
 
+  def home_presenter 
+    @presenter ||= HomePresenter.new
+  end
 end
