@@ -20,7 +20,7 @@ module MarineHelper
       },
       {
         theme: 'theme--blue',
-        title: t('thematic_area.marine.ocean.legend_text_2'),
+        title: t('thematic_area.marine.ocean.legend_text_3'),
       }
     ]
   end
