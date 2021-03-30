@@ -166,7 +166,8 @@ module CmsHelper
   #  variation of resource link, if it is just a link, or whether it is a file
   # if those specific fragments for that page are present
   def get_resource(fragment_text, fragment_link, button_text, button_class)
-    frag_text, frag_link = @cms_page.fragments.where(identifier: [fragment_text, fragment_link])
+    frag_text = @cms_page.fragments.find_by(identifier: fragment_text)
+    frag_link = @cms_page.fragments.find_by(identifier: fragment_link)
     return unless frag_text || frag_link
 
     {
@@ -174,13 +175,13 @@ module CmsHelper
       classes: "button--#{button_class}",
       text: cms_fragment_render(fragment_text, @cms_page),
       title: cms_fragment_render(fragment_text, @cms_page),
-      url: linkify(frag_link)
+      url: transform_into_url(frag_link)
     }
   end
 
   # Turns link[:url] value into a valid link if no http:// or https:// supplied
   # Also sanitises it in the case of a download link
-  def linkify(fragment_link)
+  def transform_into_url(fragment_link)
     if fragment_link.tag == 'file'
       return if !fragment_link.attachments || fragment_link.attachments.first.blank?
       if Rails.env.development?
@@ -189,13 +190,7 @@ module CmsHelper
         return fragment_link.attachments.first.service_url&.split('?')&.first
       end
     else
-      begin
-        url = URI.parse(fragment_link.content)
-        (url.is_a?(URI::HTTP) && !url.host.nil?) ? url.to_s : nil
-      rescue URI::InvalidURIError
-        Rails.logger.info "Invalid or missing URL"
-        return 
-      end
+      fragment_link.content
     end
   end
 
