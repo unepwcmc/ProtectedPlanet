@@ -7,7 +7,7 @@
 
 <section class="container spacer-small--top">
   <%= render partial: "partials/cards/facts", locals: { cards: @site_facts } %>
-  <h2>Statistics updated: <span class="text-thin"><%=  @update_date %></span></h2>
+  <p class="p-larger no-margin--top"><span class="bold">Statistics updated: </span><%=  @update_date %></p>
 </section>
 
 <%= render partial: "partials/search/protected-areas", locals: { config: @config_search_areas } %>
