@@ -95,7 +95,10 @@
         max-height: rem-calc(56);
       }
 
-      &__a { margin-left: rem-calc(14); }
+      &__a { 
+        margin-left: rem-calc(14);
+        max-height: rem-calc(46);
+      }
     }
   }
 //--------------------------------------------------
