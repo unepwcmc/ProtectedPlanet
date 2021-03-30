@@ -65,8 +65,8 @@ class CountryPresenter
   def build_stats(type)
     {
       national_report_version: statistic.nr_version,
-      pame_km2: number_with_delimiter(statistic.pame_statistic.send("pame_pa_#{type}_area").round(0)),
-      pame_percentage: statistic.pame_statistic.send("pame_percentage_pa_#{type}_cover").round(2),
+      pame_km2: number_with_delimiter(statistic&.pame_statistic&.send("pame_pa_#{type}_area")&.round(0)),
+      pame_percentage: statistic&.pame_statistic&.send("pame_percentage_pa_#{type}_cover")&.round(2),
       protected_km2: number_with_delimiter(statistic.send("pa_#{type}_area").round(0)),
       protected_national_report: statistic.send("percentage_nr_#{type}_cover"),
       protected_percentage: statistic.send("percentage_pa_#{type}_cover").round(2),
