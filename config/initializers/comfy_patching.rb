@@ -1,6 +1,6 @@
 Rails.configuration.to_prepare do
   Comfy::Cms::Fragment.class_eval do 
-    validates_with UrlValidator, if: -> { identifier == 'resource_link_url' }
+    validates_with UrlValidator, if: -> { identifier == 'resource_link_url' }, fields: [:content]
   end
 
   Comfy::Cms::Page.class_eval do
