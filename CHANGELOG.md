@@ -1,3 +1,11 @@
+### 4.5.3 
+
+* Apr 2021 release (new PAME data, global and national monthly statistics)
+* Fixed High seas bar chart legend key text
+* Latest WDPA release update date now present on home page
+* Routes re-organised
+* Fix country pages for territories that lack a PAME statistic (e.g. Nauru)
+
 ### 4.5.0
 
 Assorted fixes:
