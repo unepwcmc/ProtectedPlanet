@@ -50,6 +50,9 @@
     @include flex;
     @include flex-column;
     @include responsive(margin, rem-calc(22) auto 0 auto, 0 0 0 auto, 0 0 0 0);
+
+    // Temporarily hidden
+    display: none;
   }
 
     .hero__icon { 

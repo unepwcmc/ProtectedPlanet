@@ -48,7 +48,7 @@
             class="table__cell-chart"
           />
 
-          <span class="table__cell-index">{{ index + 1 }} <em class="text-thin">of</em> {{ statsCount }}</span>
+          <span class="table__cell-index">{{ index + 1 }} <em class="thin">of</em> {{ statsCount }}</span>
         </div>
       </div>
     </div>
