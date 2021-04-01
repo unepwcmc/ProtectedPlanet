@@ -1,20 +1,38 @@
+### 4.5.3 
+
+* Apr 2021 release (new PAME data, global and national monthly statistics)
+* Fixed High seas bar chart legend key text
+* Latest WDPA release update date now present on home page
+* Routes re-organised
+* Fix country pages for territories that lack a PAME statistic (e.g. Nauru)
+  
+### 4.5.2
+
+* Mar 2021 release (new GL data, PAME data, public map, global and national monthly statistics)
+
+### 4.5.1
+
+* Duplicate search filters (in the Designations filter option of the PA search) have been removed.
+* Social media previews have been fixed for Facebook and LinkedIn - partial fix for Twitter, but
+  only for articles without images in the content.
+
 ### 4.5.0
 
 Assorted fixes:
-* PAME download names have been standardised, as well as shapefile filenames, following a convention: see 
+* PAME download names have been standardised, as well as shapefile filenames, following a convention: see
   [this](https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/188#update-65893225)
-  for more details 
+  for more details
 * Other changes to downloads: single GDB file implemented, sources exported into same GDB file
 * Download citations now reflect last WDPA release data, as well as differing name depending on page
-* Add Capistrano task to clear the cache during deployment to avoid missing styles 
+* Add Capistrano task to clear the cache during deployment to avoid missing styles
 
 ### 4.4.1
 
 * Feb 2021 release (new GL data, PAME data, public map, global and national monthly statistics)
 
-### 4.4.0 
+### 4.4.0
 
-Assorted fixes: 
+Assorted fixes:
 - Update country and region extend URLs which are now sourced from the ArcGIS layer directly
 - Links for the news article cards on the homepage have been fixed
 - RTL languages are now represented correctly on maps
@@ -28,16 +46,16 @@ enabling them to be shared.
 ### 4.2.0
 
 * Added tabs for country and region pages which feature OECMs, allowing users to
-switch between WDPA-only and WDPA and OECM statistics. 
+switch between WDPA-only and WDPA and OECM statistics.
 
-### 4.1.3 
+### 4.1.3
 
-* Added country (with OECM), PAME and GD PAME statistics for December. 
+* Added country (with OECM), PAME and GD PAME statistics for December.
 
 ### 4.1.2
 
-* Rake task created to only reindex the CMS in Elasticsearch 
-* Active Storage tables now transfer over upon import 
+* Rake task created to only reindex the CMS in Elasticsearch
+* Active Storage tables now transfer over upon import
 * Homepage statistics in cards now aligned with marine page statistics
 
 ### 4.1.1
