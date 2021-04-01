@@ -22,19 +22,19 @@ class HomePresenter
   end
 
   def terrestrial_cover
-    GlobalStatistic.total_land_pa_coverage_percentage
+    GlobalStatistic.total_land_pa_coverage_percentage.round(2)
   end
 
   def marine_cover
-    GlobalStatistic.total_ocean_pa_coverage_percentage
+    GlobalStatistic.total_ocean_pa_coverage_percentage.round(2)
   end
 
   def oecm_pa_land_cover
-    GlobalStatistic.total_land_oecms_pas_coverage_percentage
+    GlobalStatistic.total_land_oecms_pas_coverage_percentage.round(2)
   end
 
   def oecm_pa_marine_cover
-    GlobalStatistic.total_ocean_oecms_pas_coverage_percentage
+    GlobalStatistic.total_ocean_oecms_pas_coverage_percentage.round(2)
   end
   
   def fact_card_stats
