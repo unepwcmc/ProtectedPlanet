@@ -1,7 +1,8 @@
 class HomePresenter
   include ActionView::Helpers::NumberHelper
 
-  def initialize
+  def pas_coverage_percentage
+    GlobalStatistic.global_oecms_pas_coverage_percentage
   end
 
   def terrestrial_pas
@@ -91,5 +92,9 @@ class HomePresenter
         ]
       }
     ]
+  end
+
+  def update_date 
+    WDPA_UPDATE_MONTH + ' ' + WDPA_UPDATE_YEAR
   end
 end

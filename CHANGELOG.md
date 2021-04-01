@@ -1,3 +1,11 @@
+### 4.5.3 
+
+* Apr 2021 release (new PAME data, global and national monthly statistics)
+* Fixed High seas bar chart legend key text
+* Latest WDPA release update date now present on home page
+* Routes re-organised
+* Fix country pages for territories that lack a PAME statistic (e.g. Nauru)
+  
 ### 4.5.2
 
 * Mar 2021 release (new GL data, PAME data, public map, global and national monthly statistics)
@@ -7,7 +15,6 @@
 * Duplicate search filters (in the Designations filter option of the PA search) have been removed.
 * Social media previews have been fixed for Facebook and LinkedIn - partial fix for Twitter, but
   only for articles without images in the content.
-
 
 ### 4.5.0
 

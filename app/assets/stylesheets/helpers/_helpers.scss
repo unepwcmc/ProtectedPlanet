@@ -49,6 +49,8 @@
 .red { color: red; }
 .white { color: white; }
 .bold { font-weight: $bold; }
+.thin { font-weight: $thin; }
+.p-larger { font-size: rem-calc(18); }
 
 //--------------------------------------------------
 // lists
@@ -79,7 +81,6 @@
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-left { text-align: left; }
-.text-thin { font-weight: $thin; }
 
 .relative { position: relative; }
 
