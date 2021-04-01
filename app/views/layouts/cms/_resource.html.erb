@@ -11,14 +11,14 @@
     <%= cms_fragment_render("content") %>
   </section>
   
-  <section class="container--medium spacer-small--top">
+  <section class="container--medium spacer-small--top spacer-large--bottom">
     <% unless get_resource_links.empty? %>
       <ul class="list--links">
         <% get_resource_links.each do |link| %>
           <% unless link[:url].blank? %>
             <li class="list__li">
               <span><%= link[:text] %></span>
-              <% link_to link[:button], link[:url], title: link[:text], class: "list__a #{link[:classes]}", target: '_blank' %>
+              <%= link_to link[:button], link[:url], title: link[:text], class: "list__a #{link[:classes]}", target: '_blank' %>
             </li>
           <% end %>
         <% end %>

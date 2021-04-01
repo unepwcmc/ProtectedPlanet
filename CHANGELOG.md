@@ -1,3 +1,7 @@
+### 4.5.4 
+
+* Add custom validator for resource page links and fix resource page links/attachments not appearing on resource pages
+
 ### 4.5.3 
 
 * Apr 2021 release (new PAME data, global and national monthly statistics)

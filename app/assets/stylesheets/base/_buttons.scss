@@ -260,11 +260,7 @@ $padding-medium: rem-calc(27);
   &--accent { @include button-block; }
   &--all { @include button-all; }
   &--download {
-    @include button-with-icon;
-    &::after {
-      @include icon-download;
-      display: inline-block;
-    }
+    @include button-download;
   }
   &--pdf {
     @include button-with-icon;
