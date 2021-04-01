@@ -84,13 +84,21 @@
         @include flex;
         @include flex-h-between;
         @include flex-v-center;
+
+        @include responsive(font-size, rem-calc(16), rem-calc(18), rem-calc(18));
+
         background-color: $grey-xlight;
         margin-top: rem-calc(10);
         padding: rem-calc(14 20);
+
         max-width: rem-calc(700);
+        max-height: rem-calc(56);
       }
 
-      &__a { margin-left: rem-calc(14); }
+      &__a { 
+        margin-left: rem-calc(14);
+        max-height: rem-calc(46);
+      }
     }
   }
 //--------------------------------------------------
