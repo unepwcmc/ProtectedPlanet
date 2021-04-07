@@ -37,6 +37,7 @@ class ImportTools::PostgresHandler
   end
 
   def seed
+    ENV['no_ctas'] = true
     Rake::Task['db:seed'].invoke
   end
 
