@@ -6,7 +6,7 @@
   <div class="container">
     <section class="page__section--overview-map">
       <%= render partial: "partials/stats/stats-overview", locals: { 
-        flag: @flag_path[0],
+        flag: @flag_path,
         chart_point_poly: @country_presenter.chart_point_poly,
         legend_map: map_legend,
         title: @country.name,
