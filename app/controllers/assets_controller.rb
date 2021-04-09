@@ -4,7 +4,7 @@ class AssetsController < ApplicationController
   def tiles
     area_type = params[:type]
     raise_404 unless TYPES.include?(area_type)
-
+byebug
     method_name = "#{area_type}_tile"
     image = AssetGenerator.send(method_name, send(area_type))
 
