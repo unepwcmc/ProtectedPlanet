@@ -76,11 +76,22 @@
 	    },
 	    "name": {
         "type": "text",
-        "analyzer": "html_analyzer"
+        "analyzer": "english",
+        "fields": {
+          "stemmed": { 
+            "type":       "text",
+            "analyzer":   "html_analyzer"
+          }
+        }
 	    },
 	    "original_name": {
         "type": "text",
-        "analyzer": "html_analyzer"
+        "fields": {
+          "stemmed": { 
+            "type":       "text",
+            "analyzer":   "html_analyzer"
+          }
+        }
 	    },
 	    "marine": {
         "type": "boolean"

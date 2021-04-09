@@ -12,9 +12,9 @@ class Search::Matcher
       { type: 'terms',  path: 'wdpa_id' },
       {
         type: 'multi_match',
-        fields: %w[iso_3 name original_name],
+        fields: %w[iso_3 name name.stemmed original_name original_name.stemmed],
         boost: true,
-        minimum_should_match: '100%', # Restricting the number of extraneous results that are returned by making sure all search terms are matched
+        minimum_should_match: '100%',
         functions: [
           {
             'filter' => { 'match' => { 'type' => 'country' } },

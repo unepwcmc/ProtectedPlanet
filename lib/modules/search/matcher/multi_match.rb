@@ -25,7 +25,8 @@ class Search::Matcher::MultiMatch < Search::Matcher
         "multi_match" => {
           "query" => "#{@term}",
           "fields" => @options[:fields],
-          "minimum_should_match" => @options[:minimum_should_match] || "0%",
+          "minimum_should_match" => @options[:minimum_should_match] || '0%',
+          "type" => 'most_fields',
           "fuzziness" => "0"
         }
       }
