@@ -6,7 +6,7 @@ module AssetGenerator
     raise AssetGenerationFailedError if protected_area.nil?
 
     tile_url = mapbox_url protected_area.geojson
-    request_tile tile_url[:host], tile_url[:path]
+    request_tile tile_url
   rescue AssetGenerationFailedError
     ''#fallback_tile
   end
@@ -15,7 +15,8 @@ module AssetGenerator
     raise AssetGenerationFailedError if country.nil?
 
     tile_url = mapbox_url country.geojson({"fill-opacity" => 0, "stroke-width" => 0})
-    request_tile tile_url[:host], tile_url[:path]
+    request_tile tile_url
+
   rescue AssetGenerationFailedError
     ''#fallback_tile
   end
@@ -24,14 +25,9 @@ module AssetGenerator
     raise AssetGenerationFailedError if region.nil?
 
     tile_url = mapbox_url region.geojson({"fill-opacity" => 0, "stroke-width" => 0})
-    request_tile tile_url[:host], tile_url[:path]
+    request_tile tile_url
   rescue AssetGenerationFailedError
     ''#fallback_tile
-  end
-
-  def self.link_to asset_id
-    file_name = "tiles/#{asset_id}"
-    S3.link_to file_name
   end
 
   private
@@ -39,23 +35,26 @@ module AssetGenerator
   def self.mapbox_url geojson
     mapbox_config = Rails.application.secrets.mapbox
     access_token = mapbox_config[:access_token] || mapbox_config['access_token']
-    uri = URI(mapbox_config[:base_url] || mapbox_config['base_url'])
+    base_url = mapbox_config[:base_url] || mapbox_config['base_url']
     size = {y: 138, x: 304}
 
     raise AssetGenerationFailedError unless geojson.present?
+    
+    tile_url = base_url + "geojson(#{geojson})/auto/#{size[:x]}x#{size[:y]}@2x"
+    tile_url << "?access_token=#{access_token}"
 
-    path = uri.path
-    path << "geojson(#{geojson})/auto/#{size[:x]}x#{size[:y]}@2x.png"
-    path << "?access_token=#{access_token}"
-
-    {host: uri.host, path: path}
+    
   end
 
-  def self.request_tile host, path
-    res = Net::HTTP.get_response(host, path)
-    raise AssetGenerationFailedError if res.code != '200'
-
-    res.body
+  def self.request_tile tile_url
+    uri = URI(URI.encode(tile_url, '[]'))
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    response = http.get(uri.request_uri)
+    
+    raise AssetGenerationFailedError if response.code != '200'
+    
+    response.body
   end
 
   def self.fallback_tile
