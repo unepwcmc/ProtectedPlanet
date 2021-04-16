@@ -6,7 +6,6 @@ module AssetGenerator
     raise AssetGenerationFailedError if protected_area.nil?
 
     tile_url = mapbox_url protected_area.geojson
-    # request_tile tile_url[:host], tile_url[:path]
     request_tile tile_url
   rescue AssetGenerationFailedError
     ''#fallback_tile
@@ -16,7 +15,6 @@ module AssetGenerator
     raise AssetGenerationFailedError if country.nil?
 
     tile_url = mapbox_url country.geojson({"fill-opacity" => 0, "stroke-width" => 0})
-    # request_tile tile_url[:host], tile_url[:path]
     request_tile tile_url
 
   rescue AssetGenerationFailedError
@@ -27,15 +25,9 @@ module AssetGenerator
     raise AssetGenerationFailedError if region.nil?
 
     tile_url = mapbox_url region.geojson({"fill-opacity" => 0, "stroke-width" => 0})
-    # request_tile tile_url[:host], tile_url[:path]
     request_tile tile_url
   rescue AssetGenerationFailedError
     ''#fallback_tile
-  end
-
-  def self.link_to asset_id
-    file_name = "tiles/#{asset_id}"
-    S3.link_to file_name
   end
 
   private
@@ -48,7 +40,6 @@ module AssetGenerator
 
     raise AssetGenerationFailedError unless geojson.present?
     
-    # path = uri.path
     tile_url = base_url + "geojson(#{geojson})/auto/#{size[:x]}x#{size[:y]}@2x"
     tile_url << "?access_token=#{access_token}"
 
@@ -60,9 +51,8 @@ module AssetGenerator
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     response = http.get(uri.request_uri)
-    # res = Net::HTTP.get_response(host, path)
-    # byebug
-    raise AssetGenerationFailedError if res.code != '200'
+    
+    raise AssetGenerationFailedError if response.code != '200'
     
     response.body
   end
