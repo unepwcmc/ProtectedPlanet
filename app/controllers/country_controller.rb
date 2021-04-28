@@ -105,7 +105,14 @@ class CountryController < ApplicationController
   private 
 
   def flag_path(country_name)
-    path_string = country_name.downcase.gsub(' ', '-').gsub(',', '')
+    character_replacements = {
+      ' ' => '-',
+      ',' => ''
+    }
+
+    path_string = country_name.downcase
+    character_replacements.each { |key, val| path_string.gsub!(key, val) }
+
     ActionController::Base.helpers.image_url("flags/#{path_string}.svg")
   end
 end
