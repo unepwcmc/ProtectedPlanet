@@ -4,6 +4,15 @@
 
 <div class="page--country bg--grey-xlight spacer-small--top">
   <div class="container">
+
+    <% if country_has_restricted_data %>
+      <section class="spacer-small--bottom">
+        <%= render partial: "partials/messages/message-country-restricted", locals: { 
+          message: get_restricted_message
+        } %>
+      </section>
+    <% end %>
+
     <section class="page__section--overview-map">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         flag: @flag_path[0],

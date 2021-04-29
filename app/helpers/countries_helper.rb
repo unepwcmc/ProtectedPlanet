@@ -6,6 +6,18 @@ module CountriesHelper
   def has_related_countries?
     @country.children.any? || @country.parent.present?
   end
+  
+  def country_has_restricted_data
+    I18n.exists?("country.message.restricted.#{get_iso3}", locale)
+  end
+
+  def get_iso3 
+    @country.iso_3.downcase
+  end
+  
+  def get_restricted_message
+    I18n.t("country.message.restricted.#{get_iso3}")
+  end
 
   def chart_link(category)
     return unless geo_entity
