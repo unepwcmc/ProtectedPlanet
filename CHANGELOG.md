@@ -1,3 +1,15 @@
+### 4.6.0
+
+- Update the jurisdictions.csv seed file to include the missing jurisdiction
+- Fix flags not appearing for the country pages
+- Fix CTA content being wiped after monthly imports
+- Improve accuracy of the search (now ignoring diacritics)
+- Fix the equity page and conditionally render links to the associated PA for the dropdown
+- Fix the map thumbnails 
+- May release of the WDPA:
+  - New GL sites
+  - GD PAME data
+
 ### 4.5.4 
 
 * Add custom validator for resource page links and fix resource page links/attachments not appearing on resource pages
