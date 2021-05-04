@@ -31,7 +31,6 @@ module EquityHelper
   }.freeze
 
   def pa_link(label)
-    wdpaid = ''
     name_of_site = label.split(',').first.squish
 
     wdpaid = if EDGE_CASES.key?(name_of_site.to_sym)
@@ -39,8 +38,8 @@ module EquityHelper
              else
                ProtectedArea.find_by(name: name_of_site)&.wdpa_id
              end
-
-    protected_area_path(wdpaid)
+    
+    protected_area_path(wdpaid) if wdpaid
   end
 
   def include_image(pa_page)

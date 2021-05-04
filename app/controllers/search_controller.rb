@@ -30,8 +30,9 @@ class SearchController < ApplicationController
       page: search_params[:requested_page],
       per_page: search_params[:items_per_page]
     }
-    @results = Search::FullSerializer.new(@search, _options).serialize
 
+    @results = Search::FullSerializer.new(@search, _options).serialize
+    
     render json: @results.to_json
   end
 
@@ -46,6 +47,8 @@ class SearchController < ApplicationController
 
     render json: Autocompletion.lookup(search_term, db_type, index)
   end
+
+  private
 
   def search_params
     params.permit(:search_term, :type, :index, :requested_page, :items_per_page, :search_index, :filters)

@@ -1,5 +1,5 @@
 class Search::Matcher::Nested < Search::Matcher
-  def to_h
+  def to_matcher_hash
     {
       "nested" => {
         "path" => @options[:path],

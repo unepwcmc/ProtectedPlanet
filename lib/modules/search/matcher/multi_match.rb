@@ -1,10 +1,6 @@
 class Search::Matcher::MultiMatch < Search::Matcher
-  def to_h
-    if @options[:boost]
-      query_with_booster
-    else
-      query
-    end
+  def to_matcher_hash
+    @options[:boost] ? query_with_booster : query
   end
 
   private
@@ -18,7 +14,7 @@ class Search::Matcher::MultiMatch < Search::Matcher
       }
     }
   end
-
+  
   def query
     if @term.blank?
       {
@@ -29,6 +25,8 @@ class Search::Matcher::MultiMatch < Search::Matcher
         "multi_match" => {
           "query" => "#{@term}",
           "fields" => @options[:fields],
+          "minimum_should_match" => @options[:minimum_should_match] || '0%',
+          "type" => 'most_fields',
           "fuzziness" => "0"
         }
       }

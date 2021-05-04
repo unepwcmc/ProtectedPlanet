@@ -15,7 +15,7 @@ class CountryController < ApplicationController
      # Components above tabs
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
 
-    @flag_path = ActionController::Base.helpers.image_url("flags/#{@country.name.downcase}.svg")
+    @flag_path = flag_path(@country.name)
 
     @total_pame = @country.protected_areas.with_pame_evaluations.count
     @total_wdpa = @country.protected_areas.wdpas.count
@@ -100,5 +100,19 @@ class CountryController < ApplicationController
 
     @country_presenter = CountryPresenter.new(@country)
     @tab_presenter = TabPresenter.new(@country)
+  end
+
+  private 
+
+  def flag_path(country_name)
+    character_replacements = {
+      ' ' => '-',
+      ',' => ''
+    }
+
+    path_string = country_name.downcase
+    character_replacements.each { |key, val| path_string.gsub!(key, val) }
+
+    ActionController::Base.helpers.image_url("flags/#{path_string}.svg")
   end
 end

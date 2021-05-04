@@ -9,6 +9,7 @@
       <p class="select--equity__description">{{ selected.text }}</p>
       <select-dropdown :protected-areas="protectedAreas" @pa-selected="changeSelection" />
       <a
+        v-show="selected.url"
         :href="selected.url"
         class="button--primary select--equity__button"
         title="View the protected area"
