@@ -17,9 +17,14 @@ class Search::Sorter
     constructed_sorters = []
 
     params.each do |name, value|
-      constructed_sorters.push self.new(
-        value, SORTERS[name.to_sym]
-      ).to_h
+      # For pure string/numerical sorting
+      if name.is_a?(Hash)
+        constructed_sorters.push(name.deep_stringify_keys)
+      else
+        constructed_sorters.push self.new(
+          value, SORTERS[name.to_sym]
+        ).to_h
+      end
     end
 
     constructed_sorters
