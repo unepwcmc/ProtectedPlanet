@@ -1,10 +1,10 @@
 class Search
   CONFIGURATION_FILE = File.read(Rails.root.join('config', 'search.yml')).freeze
-  ALLOWED_FILTERS = %i(
+  ALLOWED_FILTERS = %i[
     type country iucn_category designation region marine has_irreplaceability_info
     has_parcc_info governance is_green_list is_transboundary ancestor
     is_oecm topic page_type
-  ).freeze
+  ].freeze
   COUNTRY_INDEX = "countries_#{Rails.env}".freeze
   REGION_INDEX = "regions_#{Rails.env}".freeze
   PA_INDEX = "protectedareas_#{Rails.env}".freeze
@@ -18,16 +18,16 @@ class Search
     @@configuration ||= YAML.load(CONFIGURATION_FILE)
   end
 
-  def self.search search_term, options={}, index_name=DEFAULT_INDEX_NAME
+  def self.search(search_term, options = {}, index_name = DEFAULT_INDEX_NAME)
     # after receiving some crazy long search terms that crash elasticsearch
     # we are limiting this to 128 characters
-    instance = self.new (search_term.present? ? search_term[0..127] : search_term), options, index_name
+    instance = new (search_term.present? ? search_term[0..127] : search_term), options, index_name
     instance.search
 
     instance
   end
 
-  def initialize search_term='', options, index_name
+  def initialize search_term = '', options, index_name
     self.search_term = search_term
     self.options = options
     @index_name = index_name
@@ -36,9 +36,9 @@ class Search
   def search
     @query_results ||= elastic_search.search(index: @index_name, body: query)
   rescue Faraday::TimeoutError => e
-    Rails.logger.warn "timeout in search"
+    Rails.logger.warn 'timeout in search'
     Rails.logger.warn e
-    @query_results ||= {"hits" => {"total" => 0, "hits" => []}}
+    @query_results ||= { 'hits' => { 'total' => 0, 'hits' => [] } }
   end
 
   def results
@@ -71,7 +71,6 @@ class Search
     end
   end
 
-
   attr_writer :search_term, :options
 
   RESULTS_SIZE = 20.0
@@ -87,24 +86,27 @@ class Search
     {
       size: size,
       from: options[:offset] || offset(size),
+
       # This line helps countries come first in search, may need tweaking as initial weights are dependent on the relative
       # frequency of terms in the countries and PA indices which is hard to anticipate!
-      indices_boost: [{COUNTRY_INDEX => 5}, {PA_INDEX => 1} ],
-
-      query: Search::Query.new(search_term, options).to_h,
-    }.tap( &method(:optional_queries) )
+      indices_boost: [{ COUNTRY_INDEX => 5 }, { PA_INDEX => 1 }],
+      query: Search::Query.new(search_term, options).to_h
+    }.tap(&method(:optional_queries))
   end
 
-  def optional_queries query
-    unless options[:without_aggregations]
-      query[:aggs] = Search::Aggregation.all
-    end
+  def optional_queries(query)
+    query[:aggs] = Search::Aggregation.all unless options[:without_aggregations]
+
     if options[:sort].present?
       query[:sort] = Search::Sorter.from_params(options[:sort])
     end
+
+    if options[:last_wdpa_id].present?
+      query[:search_after] = [options[:last_wdpa_id]]
+    end
   end
 
-  def offset(size=RESULTS_SIZE)
+  def offset(size = RESULTS_SIZE)
     size * (current_page - 1)
   end
 end
