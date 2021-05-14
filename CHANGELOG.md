@@ -1,3 +1,8 @@
+### 4.6.2
+
+- Hotfix for the search areas page downloads - allow searches with more than 10000 hits 
+to be downloaded in full.
+
 ### 4.6.1
 
 May release continued - late-arriving global and national monthly stats
