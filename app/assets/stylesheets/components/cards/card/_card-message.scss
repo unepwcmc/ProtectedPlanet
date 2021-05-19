@@ -14,4 +14,12 @@
       margin-top: 0;
     }
   }
+
+  &-plain {
+    @include gutters;
+    background-color: $grey-light;
+    font-size: rem-calc(14); 
+    padding-top: rem-calc(6);
+    padding-bottom: rem-calc(6);
+  }
 }
