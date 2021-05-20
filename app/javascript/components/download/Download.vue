@@ -1,7 +1,7 @@
 <template>
   <div>
     <button
-      class="download__trigger"
+      :class="['download__trigger', { 'disabled': downloadDisabled }]"
       @click="toggleDownloadPane"
     >
       <span class="download__trigger-text">{{ buttonText }}</span>
@@ -41,7 +41,12 @@ export default {
     textCommercial: {
       required: true,
       type: Object //See download_text in downloads_helper.rb
-    }
+    },
+    downloadDisabled: {
+      default: false,
+      required: false,
+      type: Boolean
+    },
   },
 
   data () {
@@ -93,6 +98,7 @@ export default {
     },
 
     toggleDownloadPane () {
+      if (this.downloadDisabled) return;
       this.showPopup = !this.showPopup
     }
   }
