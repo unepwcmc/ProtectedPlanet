@@ -5,6 +5,9 @@
   </head>
 
   <body>
+    
+    <%= render "layouts/partials/cookieconsent" %>
+
     <div id="v-app" class="<%= if @for_pdf then 'pdf' end %>">
       <%= render "layouts/partials/topbar" %>
         
