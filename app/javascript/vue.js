@@ -9,6 +9,10 @@ import VueAnalytics from 'vue-analytics'
 import Vue2TouchEvents from 'vue2-touch-events'
 import VueLazyload from 'vue-lazyload'
 
+// cookieconsent
+import 'cookieconsent';
+import 'cookieconsent/build/cookieconsent.min.css';
+
 // store
 import store from './store/store.js'
 
