@@ -80,6 +80,7 @@ module Download
     end
 
     def self.search_token term, filters
+      return '' if (term.empty? && filters.empty?)
       Digest::SHA256.hexdigest(term.to_s + filters_dump(filters))
     end
 
