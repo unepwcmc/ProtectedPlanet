@@ -1,3 +1,12 @@
+### 4.6.3
+
+- June 2021 WDPA release
+  - National and global monthly statistics
+  - Green List sites
+  - GD PAME data
+- Fixed filenames being too long for downloads of all areas via the search page
+- Add disclaimer on certain country pages for data sourced from restricted PAs
+
 ### 4.6.2
 
 - Hotfix for the search areas page downloads - allow searches with more than 10000 hits 
