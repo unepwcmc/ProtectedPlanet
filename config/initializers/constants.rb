@@ -1,2 +1,2 @@
-WDPA_UPDATE_MONTH = 'May'.freeze
+WDPA_UPDATE_MONTH = 'June'.freeze
 WDPA_UPDATE_YEAR = '2021'.freeze
