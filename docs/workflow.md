@@ -1,56 +1,33 @@
 # Development Workflow, Conventions and Tips
 
 ### Frontend development
-TODO: Update this readme at the end of the frontend upgrade
+The Protected Planet SCSS code lives in `app/assets/stylesheets`.
 
-The Protected Planet CSS code lives in the
-[protectedplanet-frontend](https://github.com/unepwcmc/protectedplanet-frontend)
-repository. When installing Protected Planet, the rake command `rake bower:install`
-downloads and extract the frontend into
-`vendor/assets/bower_components/protectedplanet-frontend`. While this is awesome in
-staging/production, it's a bummer on development, as all changes to the frontend code
-will be discarded.
+The frontend utilises Vue v2.6.10 and Vuex in the Single File Component format
+(SFCs) - these reside within `app/javascript/components`, `app/javascript/` more
+generally being the folder which holds all of the various other helpers and mixins.
 
-To solve this issue, after running `rake bower:install` in your PP repository,
-clone the `protectedplanet-frontend` repository somewhere else
-on your machine, and symlink it to your vendor folder. Like this:
-
-```bash
-$ cd ..
-
-$ git clone git@github.com:unepwcmc/protectedplanet-frontend.git
-# follow the installation steps in the protectedplanet-frontend README
-
-$ cd ProtectedPlanet/vendor/assets/bower_components
-$ rm -rf protectedplanet-frontend # remove the bower-installed package
-
-# the first argument HAS to be an absolute path, you can't do relative paths
-$ ln -s /Users/you/projects/protectedplanet-frontend protectedplanet-frontend
-```
-
-Now you can edit the frontend code in the protectedplanet-frontend folder, and it
-will be immediately reflected in the development website.
-
-For more information on how to write and commit frontend code, check the
-[protectedplanet-frontend README](https://github.com/unepwcmc/protectedplanet-frontend).
+Props for these SFCs are (against convention) piped in directly into the components
+from the backend in the various ERB view files.
 
 ### Testing
 
-The application is built test-first, using TDD. New features are expected to have
-test coverage.
+The application is built test-first, using TDD, but only on the backend. New features are 
+expected to have test coverage.
 
-### Tabs (nope)
+At present, there are no front end tests in the application.
 
-No tabs please, 2 spaces in all languages (HTML, CSS, Ruby, Coffeescript...).
+UPDATE 16/6/21: Tests will need to be fixed - they have not been working for some 
+time now. Consider replacing Minitest with RSpec and rewriting the specs.
 
 ### Line-length
 
-100 (but try to keep it below 80) characters
+Try to keep your lines 80 characters maximum!
 
 ### Commit workflow
 
 Work on feature branches, commit often with small commits with only one change
-to the code. When you're ready to merge your code into the master branch,
+to the code. When you're ready to merge your code into the develop branch,
 submit a pull request and have someone else review it.
 
 ### Commenting your code

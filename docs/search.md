@@ -5,20 +5,20 @@ The Protected Planet search feature is powered by
 
 ## How it works
 
-There's a simple
-[video tutorial](http://www.elasticsearch.org/webinars/getting-started-with-elasticsearch/?watch=1),
-but it's pretty straightforward.
+[Official docs](https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-elastic-stack.html)
 
 Elasticsearch operates effectively as a JSON document store, that is
 accessed by a JSON [query
-DSL](http://www.elasticsearch.org/videos/introducing-query-dsl?watch=1).
+DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html).
 Documents (protected areas, countries and regions) are converted to JSON
 and saved in Elasticsearch as an index for querying.
 
 The application does not hook in to Elasticsearch in any magic ways, and
 nor does Elasticsearch hook in to the application. Queries are passed
 over http to Elasticsearch, and results parsed in to ActiveRecord models
-by the application.
+by the application. We *do* utilise the elasticsearch gem, and that is effectively 
+the Ruby wrapper for the Elasticsearch service, allowing us to use the same DSL.
+More information can be found in the [Github repo for the gem](https://github.com/elastic/elasticsearch-ruby)
 
 ## Installation
 
@@ -87,6 +87,8 @@ Search.search 'manbone', filters: {type: 'country', country: 123}
 Search.search 'manbone', page: 3
 ```
 
+Various other utility classes can be found within `lib/modules/search`, namely
+the sorters and the matchers, which allows them to be easily extensible.
 
 ### Troubleshooting
 
@@ -95,20 +97,5 @@ Search.search 'manbone', page: 3
 Run this in the console:
 
 ```
-  > Search::Index.delete
-  > reload!
-  > Search::Index.create
-  > Search::Index.create_cms_fragments
+  RAILS_ENV=<environment> bundle exec rake search:reindex
 ```
-This procedure is not error-proof either, as `reload!` might not work properly itself. So you may have to re-index manually:
-
-`Search::Index.new(Search::<NAME OF INDEX IN CAPS>_INDEX).create` 
-
-before running:
-
-```
-  > Search::Index.delete
-  > Search::Index.create
-  > Search::Index.create_cms_fragments
-```
-again.
