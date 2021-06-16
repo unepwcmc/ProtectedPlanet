@@ -1,14 +1,20 @@
 # Downloads
 
 Protected Planet allows users to download all, or subsets of, the WDPA
-in three formats: CSV, KML and Shapefile. All downloads are required to
-contain the WDPA manual in English, Spanish, and French.
+in a number of different formats, but three formats are common to every situation:
+CSV, Shapefile or File Geodatabase. All downloads are required to contain the 
+WDPA manual in English, Spanish, and French.
+
 
 ## Generation
 
-There are currently four types of downloads: the entire WDPA, Protected
-Areas by country -- both statically generated --, Protected Areas
-filtered by a search, and single Protected Areas.
+There are currently four types of downloads: the entire WDPA, Protected Areas by
+country or region, Protected Areas filtered by a search, and single Protected Areas.
+
+All downloads are created in the backend via async requests initiated from the Vue
+frontend. The frontend will poll the backend at regular intervals until the download
+is ready, at which point a URL will be produced from the S3 hosted file and the 
+download can be initiated.
 
 The Download class is fairly naive and generates datasets for any given
 array of WDPA IDs. It is the responsibility of the caller to decide what
@@ -36,16 +42,16 @@ of a new WDPA version.
 ## Storage and access
 
 Downloads are stored in S3 under the `pp-downloads-<environment>`
-bucket. Each download is given a name based on its contents, such as
-'all' or '233' (Country ID) and combined with its type: `all-csv.zip`,
-`233-kml.zip` and are retrieved based on this.
+bucket. Each download is first prefixed with `WDPA_WDOECM_<timestamp of release>_Public`, 
+given a name based on its contents, such as 'all' or 'AFG' (Country iso3) and 
+combined with its type: `WDPA_WDOECM_Jun2021_Public_AFG_csv.zip`, and are retrieved based on this.
 
 The Download class is responsible for generating links to downloads
 given a name:
 
 ```
   Download.link_to '233', :csv
-    #=> 'https://pp-downloads-production.s3.amazonaws.com/233-csv.zip'
+    #=> 'https://pp-downloads-production.s3.amazonaws.com/WDPA_WDOECM_Jun2021_Public_AFG_csv.zip'
 ```
 
 ## Shapefile notes

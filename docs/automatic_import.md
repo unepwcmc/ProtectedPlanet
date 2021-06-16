@@ -5,5 +5,4 @@ the WDPA monthly releases as easy and fast as possible.
 
 ## What you have to do
 
-The import process is detailed in the handover notes, in the informatics
-Dropbox (at `informatics/guidance`)
+The import process is detailed [here](https://github.com/unepwcmc/wiki/wiki/WDPA-Release)
