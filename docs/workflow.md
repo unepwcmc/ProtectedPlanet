@@ -30,6 +30,10 @@ Work on feature branches, commit often with small commits with only one change
 to the code. When you're ready to merge your code into the develop branch,
 submit a pull request and have someone else review it.
 
+If any files are changed within the `db` submodule, you will first need to create a 
+PR for your updates in the `protectedplanet-db` repository and merge that in before
+any PRs affecting the larger application.
+
 ### Commenting your code
 
 Writing small (less than 10 lines), well named functions is preferable to
