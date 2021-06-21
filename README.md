@@ -29,6 +29,7 @@ git submodule update --init --recursive
 7. [Downloads](docs/downloads.md)
 8. [Statistics](docs/statistics.md)
 9. [Caching](docs/caching.md)
+10. [CMS](docs/cms.md)
 
 ## Licence
 

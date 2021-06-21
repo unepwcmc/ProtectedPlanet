@@ -1,11 +1,16 @@
 # Development Workflow, Conventions and Tips
 
 ### Frontend development
-The Protected Planet SCSS code lives in `app/assets/stylesheets`.
+The Protected Planet SCSS code lives in `app/assets/stylesheets` and is compiled via
+Sprockets.
 
 The frontend utilises Vue v2.6.10 and Vuex in the Single File Component format
 (SFCs) - these reside within `app/javascript/components`, `app/javascript/` more
 generally being the folder which holds all of the various other helpers and mixins.
+Webpacker takes care of compiling the JavaScript.
+
+Vuex holds stateful client-side information, such as the download keys for the various
+downloads, map layers and the filters that have been applied to the PAME table. 
 
 Props for these SFCs are (against convention) piped in directly into the components
 from the backend in the various ERB view files.

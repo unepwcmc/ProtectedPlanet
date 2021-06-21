@@ -1,3 +1,13 @@
+# ------------------------------------------------------------- #
+# EXTRA MONKEY PATCHES FOR THE CMS #
+# ------------------------------------------------------------- #
+#
+# LOGIC FOR MONKEY PATCHING THE CLASSES OF COMFORTABLE MEXICAN SOFA IS 
+# CONTAINED BELOW. THIS INCLUDES VALIDATION AND COMPATIBILITY FIXES FOR 
+# THE ADDITION OF THE NEW PAGE CATEGORIES AS WELL AS MODIFIYING THE EXPORTER TO
+# ACCOMMODATE THE NEW LAYOUT AND PAGE CATEGORY MODELS
+# ------------------------------------------------------------- #
+
 Rails.configuration.to_prepare do
   Comfy::Cms::Fragment.class_eval do 
     validates_with UrlValidator, if: -> { identifier == 'resource_link_url' }, fields: [:content]
