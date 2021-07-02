@@ -15,11 +15,10 @@ en:
         title: Other effective area-based conservation measures
     title: Discover Protected Areas
     title_oecm: Discover OECMs
-    disclaimer: 
+    disclaimer:
       heading: Map Disclaimer
-      body: The designations employed and the presentation of material on this map do not imply the expression of any opinion whatsoever on the part of the Secretariat of the United Nations concerning the legal status of any country, territory, city or area or of its authorities, or concerning the delimitation of its frontiers or boundaries.
+      body: The designations employed and the presentation of material on this map do not imply the expression of any opinion whatsoever on the part of the Secretariat of the United Nations concerning the legal status of any country, territory, city or area or of its authorities, or concerning the delimitation of its frontiers or boundaries. Final status of the Abyei area is not yet determined.
     autocomplete_error_messages:
       no_results: No results.
       invalid_search_string: Type a minimum of 3 characters.
     autocomplete_placeholder: Search for a Region, Country or Area
-      
