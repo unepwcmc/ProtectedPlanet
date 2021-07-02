@@ -62,8 +62,6 @@ import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
 
-export const eventHub = new Vue()
-
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
     
