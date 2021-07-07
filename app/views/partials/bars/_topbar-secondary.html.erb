@@ -8,7 +8,8 @@
 
       <%= render partial: "partials/download/download", locals: { 
         classes: 'download--small', 
-        options: download_options
+        options: download_options,
+        download_disabled: local_assigns.has_key?(:download_disabled) ? download_disabled : false
       } %>
     </div>
   </sticky-bar>

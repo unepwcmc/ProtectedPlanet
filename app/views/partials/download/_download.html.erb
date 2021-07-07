@@ -5,6 +5,10 @@
     class="<%= classes %>"
   <% end %>
 
+  <% if local_assigns.has_key? :download_disabled %>
+  :download-disabled="<%= download_disabled %>"
+  <% end %>
+  
   gaId="download"
   :options="<%= options %>"
   :text-commercial="<%= download_text[:commercial].to_json %>"
