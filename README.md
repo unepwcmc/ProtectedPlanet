@@ -29,23 +29,16 @@ git submodule update --init --recursive
 7. [Downloads](docs/downloads.md)
 8. [Statistics](docs/statistics.md)
 9. [Caching](docs/caching.md)
+10. [CMS](docs/cms.md)
 
 ## Licence
 
 Protected Planet is released under the [BSD
 3-Clause](http://opensource.org/licenses/BSD-3-Clause) License.
 
-## Local 
+## Local (after setup) 
 
-### Setup
-
-1. Import DB 
-1. Import db seeds in `rake 'comfy:cms_seeds:import[protected-planet, protectedplanet]'`
-1. Go to 'http://localhost:3000/en/admin/sites' and update the host to be `localhost:3000`
-1. Reindex the search: `rake search:reindex` 
-1. Update your local CMS seeds (CMS pages, files, layouts etc.) using `rake comfy:staging_import` 
-
-### Run application
+### Run application (within separate tabs)
 1. `elasticsearch`
 1. `redis-server`
 1. `./bin/webpack-dev-server`

@@ -9,6 +9,10 @@ import VueAnalytics from 'vue-analytics'
 import Vue2TouchEvents from 'vue2-touch-events'
 import VueLazyload from 'vue-lazyload'
 
+// cookieconsent
+import 'cookieconsent';
+import 'cookieconsent/build/cookieconsent.min.css';
+
 // store
 import store from './store/store.js'
 
@@ -61,8 +65,6 @@ import VMapHeader from './components/map/VMapHeader'
 import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
-
-export const eventHub = new Vue()
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {

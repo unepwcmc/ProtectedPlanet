@@ -1,0 +1,22 @@
+<script>
+  cookieconsent.initialise({
+    palette: {
+      popup: {
+        background: "#404040",
+        text: '#fff'
+      },
+      button: {
+        background: "#71A32B",
+        text: '#fff'
+      },
+    },
+    revokable: true,
+    onStatusChange: function(status) {
+      console.log(this.hasConsented() ? 'enable cookies' : 'disable cookies');
+    },
+    law: {
+      regionalLaw: false,
+    },
+    location: true,
+  });
+</script>
