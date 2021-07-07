@@ -54,19 +54,23 @@ After that, it's pretty standard:
 
 ```
   bundle install
-  rake db:create
-  rake db:migrate
-  rake bower:install
-
-  bundle exec rails s
+  rails db:create
+  rails db:migrate
+  rails db:seed
 ```
+
+There's subsequently two ways you can get the WDPA into your system. Either you 
+can import the release locally, or alternatively you can get a database dump from
+S3 and restore it into your local database.
+
+#### Local import of release
 
 Before you can really do much with the website, you'll need to import
 a WDPA release. We have a small subset in the development S3 bucket,
 so make sure you have the right secrets in your `.env`, and run this:
 
 ```
-  bundle exec sidekiq
+  bundle exec sidekiq -C config/sidekiq-import.yml
 
   # in another window
   bundle exec rails c
@@ -75,14 +79,42 @@ so make sure you have the right secrets in your `.env`, and run this:
 
 This will look for the latest file in the S3 bucket, and use it to import
 its protected areas, countries, and whatnot. After 5 to 10 minutes, the main
-worker will be done (you can check this in the sidekiq output). At this point,
-go back to the rails console and enter
+worker will be done (you can check this in the sidekiq output).
+
+At this point,go back to the rails console and enter
 
 ```
   > ImportWorkers::FinaliserWorker.perform_async
 ```
 This will take another couple of minutes. After this, you are ready to `localhost:3000`!
 
+**Do be aware that this method takes at least several hours to complete, depending
+on the speed of your internet connection.** 
+
+#### Alternative setup
+
+For this, you will need: 
+- Access to the centre's S3 instance
+- PostgreSQL installed and working
+
+This approach uses a database dump from production and restores it directly into 
+your local database. With this method, you can be sure that you have the most up
+to date data, particularly with respect to the CMS which most frequently changes. 
+
+1. Download the latest database dump, which should be a TAR file, from the Daily folder within the `pp.bkp` bucket
+2. In the terminal, run `pg_restore -d pp_development <path/to/your/file/dump_name.tar> -c -U <username>`
+
+
+### Final steps
+
+1. Run `rake cms_categories:import` to create the custom Comfy page and layout categories.
+2. Run `rake comfy:staging_import` to import the seeds from staging. Don't worry if you see a lot of modified content
+in your resulting `db/cms_seeds` folder - this is likely to happen as the CLS team regularly tests out updates. 
+3. Import db seeds in `rake 'comfy:cms_seeds:import[protected-planet, protectedplanet]'`
+4. Go to 'http://localhost:3000/en/admin/sites' and update the host to be `localhost:3000`
+if not already set.
+3. Reindex the search: `rake search:reindex` 
+4. Update your local CMS seeds (CMS pages, files, layouts etc.) using `rake comfy:staging_import` 
 
 #### GEOS and Linux
 
