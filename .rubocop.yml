@@ -1,0 +1,26 @@
+AllCops:
+  NewCops: enable
+
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented
+
+Layout/ArgumentAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/ArrayAlignment:
+  EnforcedStyle: with_fixed_indentation
+
+Layout/BlockAlignment:
+  EnforcedStyleAlignWith: either
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
+
+Naming/VariableNumber:
+  Enabled: false
+
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
+
+Layout/HashAlignment:
+  EnforcedLastArgumentHashStyle: always_ignore

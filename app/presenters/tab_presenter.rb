@@ -1,16 +1,17 @@
-class TabPresenter 
+class TabPresenter
   include CountriesHelper
   include Rails.application.routes.url_helpers
+  include ActionView::Helpers::AssetTagHelper
 
   def initialize(geo_entity)
     @geo_entity = geo_entity
     @presenter = nil
-    
-    if geo_entity.class.to_s == 'Country'
-      @presenter = CountryPresenter.new(geo_entity)
-    else
-      @presenter = RegionPresenter.new(geo_entity)
-    end
+
+    @presenter = if geo_entity.class.to_s == 'Country'
+                   CountryPresenter.new(geo_entity)
+                 else
+                   RegionPresenter.new(geo_entity)
+                 end
   end
 
   def coverage(oecms_tab: false)
@@ -24,7 +25,7 @@ class TabPresenter
 
   def message(oecms_tab: false)
     {
-      documents: presenter.try(:documents), #need to add translated text for link to documents hash 
+      documents: presenter.try(:documents), # need to add translated text for link to documents hash
       text: oecms_tab ? I18n.t('stats.warning_wdpa_oecm') : I18n.t('stats.warning')
     }
   end
@@ -33,7 +34,7 @@ class TabPresenter
     {
       chart: presenter.iucn_categories_chart(@geo_entity.protected_areas_per_iucn_category(exclude_oecms: !oecms_tab)),
       country: @geo_entity.name,
-      categories: create_chart_links(@geo_entity.protected_areas_per_iucn_category(exclude_oecms: !oecms_tab)), 
+      categories: create_chart_links(@geo_entity.protected_areas_per_iucn_category(exclude_oecms: !oecms_tab)),
       title: I18n.t('stats.iucn-categories.title')
     }
   end
@@ -42,7 +43,7 @@ class TabPresenter
     {
       chart: presenter.governance_chart(@geo_entity.protected_areas_per_governance(exclude_oecms: !oecms_tab)),
       country: @geo_entity.name,
-      governance: create_chart_links(@geo_entity.protected_areas_per_governance(exclude_oecms: !oecms_tab)), 
+      governance: create_chart_links(@geo_entity.protected_areas_per_governance(exclude_oecms: !oecms_tab)),
       title: I18n.t('stats.governance.title')
     }
   end
@@ -66,7 +67,7 @@ class TabPresenter
 
   def growth(oecms_tab: false)
     {
-      chart: presenter.coverage_growth_chart(exclude_oecms: !oecms_tab), 
+      chart: presenter.coverage_growth_chart(exclude_oecms: !oecms_tab),
       smallprint: I18n.t('stats.coverage-chart-smallprint'),
       title: oecms_tab ? I18n.t('stats.growth.title_wdpa_oecm') : I18n.t('stats.growth.title_wdpa')
     }
@@ -74,7 +75,7 @@ class TabPresenter
 
   def sites(oecms_tab: false)
     {
-      cards: site_cards(3, oecms_tab),
+      site_details: fetch_site_names_and_wdpaids(3, oecms_tab),
       title: other_sites_title(oecms_tab),
       view_all: oecms_tab ? view_all_link : view_all_link(db_type: ['wdpa']),
       text_view_all: I18n.t('global.button.all')
@@ -92,13 +93,11 @@ class TabPresenter
   end
 
   def other_sites_title(oecms_tab)
-    text = oecms_tab ?  I18n.t('global.area-types.wdpa_oecm') : I18n.t('global.area-types.wdpa')
+    text = oecms_tab ? I18n.t('global.area-types.wdpa_oecm') : I18n.t('global.area-types.wdpa')
     @geo_entity.name + ' ' + text
   end
 
-  def presenter
-    @presenter
-  end
+  attr_reader :presenter
 
   def designation_percentages(exclude_oecms)
     presenter.designations(exclude_oecms: !exclude_oecms).map do |designation|
@@ -106,13 +105,13 @@ class TabPresenter
     end
   end
 
-  def create_chart_links(input_data, is_designations=false)
+  def create_chart_links(input_data, is_designations = false)
     if is_designations
       input_data.map do |j|
-        jurisdictions_with_links = { 
-          jurisdictions: merge_chart_links(j[:jurisdictions]) 
-        }           
-        j.merge!(jurisdictions_with_links)        
+        jurisdictions_with_links = {
+          jurisdictions: merge_chart_links(j[:jurisdictions])
+        }
+        j.merge!(jurisdictions_with_links)
       end
     else
       merge_chart_links(input_data)
@@ -123,19 +122,33 @@ class TabPresenter
     input.map do |category|
       category.merge!({
         link: chart_link(category)[:link],
-        title: chart_link(category)[:title]
+                        title: chart_link(category)[:title]
       })
     end
   end
 
-  def site_cards(size, show_oecm = true)
-    if show_oecm 
-      [
-        @geo_entity.protected_areas.oecms.first,
-        @geo_entity.protected_areas.take(2)
-      ].flatten
+  def fetch_site_names_and_wdpaids(size, show_oecm)
+    protected_areas = []
+
+    if show_oecm
+      oecms = @geo_entity.related_protected_areas_without_geometry(limit: 1, &:oecms)
+      related_protected_areas = @geo_entity.related_protected_areas_without_geometry(limit: size - 1)
+
+      protected_areas << oecms
     else
-      @geo_entity.protected_areas.order(:name).first(size)
+      related_protected_areas = @geo_entity.related_protected_areas_without_geometry(limit: size)
     end
+
+    protected_areas << related_protected_areas
+
+    protected_areas.flatten.map { |protected_area| protected_area_to_tab(protected_area) }
+  end
+
+  def protected_area_to_tab(protected_area)
+    {
+      name: protected_area[:name],
+      wdpa_id: protected_area[:wdpa_id],
+      thumbnail_link: ApplicationController.helpers.protected_area_cover(protected_area, with_tag: false)
+    }
   end
 end

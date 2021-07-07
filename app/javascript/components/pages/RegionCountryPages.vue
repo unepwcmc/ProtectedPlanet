@@ -100,11 +100,10 @@
     <stats-sites
       v-if="hasSites"
       v-bind="{
-        cards: activeDatabase.sites.cards,
-        text_view_all: activeDatabase.sites.text_view_all,
+        siteDetails: activeDatabase.sites.site_details,
+        textViewAll: activeDatabase.sites.text_view_all,
         title: activeDatabase.sites.title,
-        view_all: activeDatabase.sites.view_all
-        
+        viewAll: activeDatabase.sites.view_all 
       }"
     />
   </div>
@@ -173,7 +172,7 @@ export default {
       return 'iucn' in this.activeDatabase
     },
     hasSites () {
-      return 'sites' in this.activeDatabase && this.activeDatabase.sites.cards.length > 1
+      return 'sites' in this.activeDatabase && this.activeDatabase.sites.site_details.length > 1
     },
     hasSources () {
       return 'sources' in this.activeDatabase && this.activeDatabase.sources.sources.length > 1
