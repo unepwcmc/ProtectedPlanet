@@ -154,6 +154,10 @@ module CmsHelper
     @cta_live_report ||= CallToAction.find_by_css_class('live-report')
   end
 
+  def cta_mpa 
+    @cta_mpa ||= CallToAction.find_by_css_class('mpa-guide')
+  end
+
   def get_resource_links 
     [
       get_resource(:resource_link_text, :resource_link_url, 'link', 'link-external'),

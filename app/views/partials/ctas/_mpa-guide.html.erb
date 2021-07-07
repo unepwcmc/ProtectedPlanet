@@ -1,0 +1,12 @@
+<% if cta_mpa %>
+  <section class="cta--mpa container">
+    <div class="cta__container">
+      <div class="cta__content">
+        <h2 class="h2-big-white"><%= cta_mpa.title %></h2>
+        <p class="cta__intro text-intro"><%= cta_mpa.summary %></p>
+
+        <%= link_to t('ctas.mpa.button'), cta_mpa.url, target: '_blank', class: 'button--outline-white' %>
+      </div>
+    </div>
+  </section>
+<% end %>

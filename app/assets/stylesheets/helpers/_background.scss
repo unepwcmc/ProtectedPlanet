@@ -44,21 +44,21 @@ $image-placeholder: black;
   }
 }
 
-@mixin bg-gradient-overlay($colour: #ffffff) {
+@mixin bg-gradient-overlay($direction: left, $colour: #ffffff) {
   position: relative;
-  
-  &:after {
-    @include breakpoint($small) {
-      background: linear-gradient(to right, rgba($colour,0%) 80%, $colour);
-      content: '';
-      pointer-events: none;
-      width: 100%; height: 100%;
-      
-      display: block;
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
+  z-index: 1;
+
+  &::before {
+    background: linear-gradient(to $direction, rgba($colour, 0%) 60%, $colour);
+    content: '';
+    pointer-events: none;
+    width: 100%; height: 100%;
+    
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: -1;
   }
 }
 
