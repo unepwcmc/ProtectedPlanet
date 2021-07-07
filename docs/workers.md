@@ -33,20 +33,9 @@ You can check the status of the current Sidekiq jobs at the route
 `/admin/sidekiq`. The username is admin, and the password is available
 from the WCMC Informatics password database.
 
-## Assets
-
-Importing assets for Protected Areas tends to be quite time consuming as
-they contact external services. As such they have associated workers
-that retrieve content in the background.
-
-Asset importing is done during the WDPA import, but you can start it
-manually:
-
-```
-Wdpa::ProtectedAreaImporter::AssetImporter.import
-```
-
 ### Wikipedia Articles
+
+**NOTE: Not used anymore - potentially will need to remove these classes**
 
 Each Protected Area has a Wikipedia summary (the first section of a
 Wikipedia article) where one can be found.
