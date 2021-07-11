@@ -11,6 +11,11 @@ ADD docker/scripts /ProtectedPlanet/docker/scripts
 
 COPY --chown=unepwcmc:unepwcmc . /ProtectedPlanet
 
+ARG NODE_ENV
+ARG RAILS_ENV
+ENV NODE_ENV $NODE_ENV
+ENV RAILS_ENV $RAILS_ENV
+
 RUN /bin/bash -l -c "bundle install"
 RUN /bin/bash -l -c "yarn install"
 
