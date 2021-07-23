@@ -1,5 +1,9 @@
 ### WDPA Import
 
+Updated documentation can be found on the Wiki for the [WDPA Release](https://github.com/unepwcmc/wiki/wiki/WDPA-Release).
+
+## Archive
+
 The WDPA is uploaded to AWS S3 on a monthly basis (though sometimes more
 often) by the Protected Areas team at UNEP-WCMC. It's stored as a [File
 Geodatabase](http://webhelp.esri.com/arcgisdesktop/9.2/index.cfm?topicname=types_of_geodatabases),
