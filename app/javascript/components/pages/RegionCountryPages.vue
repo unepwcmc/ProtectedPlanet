@@ -176,7 +176,7 @@ export default {
       return 'sites' in this.activeDatabase && this.activeDatabase.sites.cards.length > 1
     },
     hasSources () {
-      return 'sources' in this.activeDatabase && this.activeDatabase.sources.sources.length > 1
+      return 'sources' in this.activeDatabase && this.activeDatabase.sources.sources.length >= 1
     }
   },
 
