@@ -1,5 +1,7 @@
 class Region < ApplicationRecord
   include GeometryConcern
+  include RelatableProtectedAreas
+
   include MapHelper
   include SourceHelper
 
