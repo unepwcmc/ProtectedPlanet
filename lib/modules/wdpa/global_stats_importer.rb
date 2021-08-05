@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 module Wdpa::GlobalStatsImporter
-  def self.latest_global_stats_csv
-    ::Utilities::Files.latest_file_by_glob('lib/data/seeds/global_stats_*.csv')
+  def self.latest_global_statistics_csv
+    ::Utilities::Files.latest_file_by_glob('lib/data/seeds/global_statistics_*.csv')
   end
 
   def self.import
     attrs = { singleton_guard: 0 }
-    CSV.foreach(latest_global_stats_csv, headers: true) do |row|
+    CSV.foreach(latest_global_statistics_csv, headers: true) do |row|
       field = row['type']
       value = parse_value(row['value'])
       attrs.merge!("#{field}": value)
