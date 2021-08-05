@@ -1,2 +1,4 @@
-WDPA_UPDATE_MONTH = 'June'.freeze
-WDPA_UPDATE_YEAR = '2021'.freeze
+# frozen_string_literal: true
+
+WDPA_UPDATE_MONTH = 'August'
+WDPA_UPDATE_YEAR = '2021'

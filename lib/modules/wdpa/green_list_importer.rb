@@ -1,20 +1,30 @@
+# frozen_string_literal: true
+
 module Wdpa::GreenListImporter
   # Make sure headers are: wdpaid,status,expiry_date
-  GREEN_LIST_SITES_CSV = "#{Rails.root}/lib/data/seeds/green_list_sites.csv"
-  extend self
+
+  module_function
+
+  def latest_green_list_sites_csv
+    ::Utilities::Files.latest_file_by_glob('lib/data/seeds/green_list_sites_*.csv')
+  end
 
   def import
     ActiveRecord::Base.transaction do
-      ProtectedArea.where.not(green_list_status_id: nil).
-        update_all(green_list_status_id: nil)
+      ProtectedArea.where.not(green_list_status_id: nil)
+        .update_all(green_list_status_id: nil)
       GreenListStatus.destroy_all
 
       invalid = []
       not_found = []
       duplicates = []
 
-      CSV.foreach(GREEN_LIST_SITES_CSV, headers: true) do |row|
-        wdpa_id = Integer(row['wdpaid']) rescue false
+      CSV.foreach(latest_green_list_sites_csv, headers: true) do |row|
+        wdpa_id = begin
+                    Integer(row['wdpaid'])
+                  rescue StandardError
+                    false
+                  end
         unless wdpa_id
           invalid << row['wdpaid']
           next
@@ -33,7 +43,7 @@ module Wdpa::GreenListImporter
 
           # Link to IUCN profile of site
           pa.green_list_url = row['url']
-          
+
           pa.green_list_status_id = gls.id
           pa.save
         end

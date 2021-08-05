@@ -1,15 +1,19 @@
+# frozen_string_literal: true
+
 require 'csv'
 
 module Wdpa::PameImporter
-  PAME_EVALUATIONS = "#{Rails.root}/lib/data/seeds/pame_data_2021-06-01.csv".freeze
+  def self.latest_pame_data_csv
+    ::Utilities::Files.latest_file_by_glob('lib/data/seeds/pame_data_*.csv')
+  end
 
-  def self.import(csv_file=nil)
-    puts "Deleting old PAME evaluations..."
+  def self.import(csv_file = nil)
+    puts 'Deleting old PAME evaluations...'
     PameEvaluation.delete_all
-    puts "Importing PAME evaluations..."
+    puts 'Importing PAME evaluations...'
     hidden_evaluations = []
 
-    csv_file = csv_file || PAME_EVALUATIONS
+    csv_file ||= latest_pame_data_csv
 
     CSV.foreach(csv_file, headers: true) do |row|
       id                   = row[0].to_i
@@ -20,14 +24,14 @@ module Wdpa::PameImporter
       metadata_id          = row[6].to_i
       name                 = row[7]
       url                  = row[5]
-      restricted           = row[13] == "FALSE" ? false : true
-      assessment_is_public = row[14] == "FALSE" ? false : true
+      restricted           = row[13] != 'FALSE'
+      assessment_is_public = row[14] != 'FALSE'
 
-      if assessment_is_public
-        url = url.blank? ? "Not currently public" : url
-      else
-        url = "Not reported"
-      end
+      url = if assessment_is_public
+              url.blank? ? 'Not currently public' : url
+            else
+              'Not reported'
+            end
 
       iso3s           = row[2]
       pame_source     = PameSource.where({
@@ -35,13 +39,13 @@ module Wdpa::PameImporter
         resp_party: row[10],
         year:       row[11].to_i,
         language:   row[12]
-        }).first_or_create do |ps|
-          # if the record doesn't exist, create it...
-          ps.data_title = row[9]
-          ps.resp_party = row[10]
-          ps.year       = row[11].to_i
-          ps.language   = row[12]
-        end
+      }).first_or_create do |ps|
+        # if the record doesn't exist, create it...
+        ps.data_title = row[9]
+        ps.resp_party = row[10]
+        ps.year       = row[11].to_i
+        ps.language   = row[12]
+      end
 
       pame_evaluation = PameEvaluation.where({
         id: id,
@@ -70,7 +74,7 @@ module Wdpa::PameImporter
         hidden_evaluations << wdpa_id unless restricted
       end
 
-      iso3s.split(",").each do |iso3|
+      iso3s.split(',').each do |iso3|
         country = Country.find_by(iso_3: iso3)
         if country.present?
           pame_evaluation.countries << country unless pame_evaluation.countries.include? country
@@ -78,8 +82,8 @@ module Wdpa::PameImporter
       end
     end
 
-    puts "Import finished!"
+    puts 'Import finished!'
     puts "The following are hidden: #{hidden_evaluations.count}"
-    puts hidden_evaluations.join(",")
+    puts hidden_evaluations.join(',')
   end
 end
