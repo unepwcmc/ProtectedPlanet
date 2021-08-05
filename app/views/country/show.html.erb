@@ -1,5 +1,6 @@
 <%= render partial: "./partials/bars/topbar-secondary", locals: { 
-  download_options: @download_options 
+  download_options: @download_options,
+  download_disabled: @total_wdpa == 0
 } %>
 
 <div class="page--country bg--grey-xlight spacer-small--top">

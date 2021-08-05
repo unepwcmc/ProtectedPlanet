@@ -1,12 +1,13 @@
-module Wdpa::GlobalStatsImporter
-  extend self
+# frozen_string_literal: true
 
-  GLOBAL_STATS_CSV = Rails.root.join('lib/data/seeds/global_stats.csv').freeze
-  
+module Wdpa::GlobalStatsImporter
+  def self.latest_global_statistics_csv
+    ::Utilities::Files.latest_file_by_glob('lib/data/seeds/global_statistics_*.csv')
+  end
 
   def self.import
-    attrs = {singleton_guard: 0}
-    CSV.foreach(GLOBAL_STATS_CSV, headers: true) do |row|
+    attrs = { singleton_guard: 0 }
+    CSV.foreach(latest_global_statistics_csv, headers: true) do |row|
       field = row['type']
       value = parse_value(row['value'])
       attrs.merge!("#{field}": value)
@@ -15,8 +16,6 @@ module Wdpa::GlobalStatsImporter
     stats = GlobalStatistic.first_or_initialize(attrs)
     stats.update(attrs)
   end
-
-  private
 
   # If it's a string, ensure to remove commas before casting to float.
   # If it's a float this will basically return the value as it is in the csv.

@@ -4,27 +4,33 @@
       <h2>{{ title }}</h2>
       <a 
         class="margin-space--left button--all"
-        :href="view_all"
-        :title="text_view_all"
+        :href="viewAll"
+        :title="textViewAll"
       >
-      {{ text_view_all }}
+        {{ textViewAll }}
       </a>
     </div>
 
     <div class="cards--search-results-areas preview">
       <a
-        class="card__link"
-        v-for="(card, i) in cards"
+        v-for="(siteDetail, i) in siteDetails"
         :key="i"
-        :href="`/${card.wdpa_id}`"
-        :title="`View more about the site: ${card.name}`"
+        class="card__link"
+        :href="`/${siteDetail.wdpa_id}`"
+        :title="`View more about the site: ${siteDetail.name}`"
       >
         <div class="card__image-placeholder">
-          <div alt="title" class="card__image" style="background-image: url(<%= protected_area_cover(card, with_tag: false) %>)"></div>
+          <div
+            alt="title"
+            class="card__image"
+            :style="{
+              backgroundImage: 'url(' + siteDetail.thumbnail_link + ')'
+            }"
+          />
         </div>
 
         <div class="card__content">
-          <h3 class="card__title">{{ card.name }}</h3>
+          <h3 class="card__title">{{ siteDetail.name }}</h3>
         </div>
       </a>
     </div>
@@ -36,11 +42,11 @@ export default {
   name: 'StatsSites',
 
   props: {
-    cards: {
+    siteDetails: {
       required: true,
       type: Array
     },
-    text_view_all: {
+    textViewAll: {
       required: true,
       type: String
     },
@@ -48,7 +54,7 @@ export default {
       required: true,
       type: String
     },
-    view_all: {
+    viewAll: {
       required: true,
       type: String
     }

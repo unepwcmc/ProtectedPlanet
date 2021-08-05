@@ -1,5 +1,26 @@
 ### 4.6.5
 
+- Chore: August 2021 WDPA release
+  - National and global monthly statistics
+  - Green List sites
+  - GD PAME data
+  - Update global map
+
+- Refactor: Change format of CSV seeds:
+  - `pame_country_stats.csv -> pame_country_statistics_<YYYY-MM-DD>.csv`
+  - `country_stats.csv -> country_statistics_<YYYY-MM-DD>.csv`
+  - `global_stats.csv -> global_statistics_<YYYY-MM-DD>.csv`
+  - `green_list_sites.csv -> green_list_sites_<YYYY-MM-DD>.csv`
+
+- Refactor: Update relevant importers with logic to select latest CSVs automatically
+
+- Fix: stats cards
+- Fix: non-rendering sources by requiring >=1 sources
+- Fix: Country#show: Disable download when no WDPAs
+- Fix: Replace #zero? with simple equality operator
+
+### 4.6.5
+
 - Update global monthly stats for July 2021
 
 ### 4.6.4
