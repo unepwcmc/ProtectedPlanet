@@ -1,3 +1,14 @@
+### 4.6.5
+
+- Update global monthly stats for July 2021
+
+### 4.6.4
+
+- July 2021 WDPA release
+  - National and global monthly statistics
+  - GD PAME data
+  - Update global map
+
 ### 4.6.3
 
 - June 2021 WDPA release
