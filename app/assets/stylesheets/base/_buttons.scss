@@ -308,6 +308,12 @@ $padding-medium: rem-calc(27);
     @include breakpoint($small) { font-size: rem-calc(16); }
     @include breakpoint($medium) { font-size: rem-calc(16); }
   }
+
+  &--link-plain {
+    color: $primary;
+    font-weight: $bold;
+    line-height: inherit;
+  }
   &--outline-black { @include button-outline($black); }
   &--outline-white { @include button-outline($white); }
   &--primary { @include button-primary; }

@@ -1,10 +1,11 @@
 en:
   download:
     modal-commercial:
-      commercial-text: Commercial use of the WDPA will redirect you to the IBAT website.
+      commercial-text: Meaning any use by or for a commercial entity, whether revenue-generating or not, or any use that generates revenue for any type of entity. Further details <a class="button--link-plain" href='https://www.protectedplanet.net/en/legal' target='_blank' title='View Protected Planet Legal'>here</a>. For commercial use, please visit <a class="button--link-plain" href='https://www.ibat-alliance.org/' target='_blank' title='Visit IBAT'>IBAT</a>.
       commercial-title: Commercial Use
-      non-commercial-text: Download WDPA straight from the site.
+      non-commercial-text: Download data from Protected Planet.
       non-commercial-title: Non Commercial Use
+      non-commercial-button: Continue
       title: Download Options
     modal-download: 
       citation-text-wdpa: "UNEP-WCMC and IUCN (%{year}), Protected Planet: The World Database on Protected Areas (WDPA) [Online],  %{month} %{year}, Cambridge, UK: UNEP-WCMC and IUCN. Available at: <a href='http://protectedplanet.net' target='_blank' title='Visit Protected Planet'>www.protectedplanet.net</a>."
