@@ -1,7 +1,7 @@
 en:
   download:
     modal-commercial:
-      commercial-text: Meaning any use by or for a commercial entity, whether revenue-generating or not, or any use that generates revenue for any type of entity. Further details <a class="button--link-plain" href='https://www.protectedplanet.net/en/legal' target='_blank' title='View Protected Planet Legal'>here</a>. For commercial use, please visit <a class="button--link-plain" href='https://www.ibat-alliance.org/' target='_blank' title='Visit IBAT'>IBAT</a>.
+      commercial-text: Meaning any use by or for a commercial entity, whether revenue-generating or not, or any use that generates revenue for any type of entity. Further details <a class="button--link-plain" href='https://www.protectedplanet.net/en/legal' target='_blank' title='View Protected Planet Terms and Conditions' target='_blank'>here</a>. For commercial use, please visit <a class="button--link-plain" href='https://www.ibat-alliance.org/' target='_blank' title='Visit IBAT' target='_blank'>IBAT</a>.
       commercial-title: Commercial Use
       non-commercial-text: Download data from Protected Planet.
       non-commercial-title: Non Commercial Use
