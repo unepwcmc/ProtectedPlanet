@@ -71,6 +71,7 @@ module DownloadsHelper
         commercialTitle:I18n.t('download.modal-commercial.commercial-title'),
         nonCommercialText: I18n.t('download.modal-commercial.non-commercial-text'),
         nonCommercialTitle: I18n.t('download.modal-commercial.non-commercial-title'),
+        nonCommercialButton: I18n.t('download.modal-commercial.non-commercial-button'),
         title: I18n.t('download.modal-commercial.title')
       },
       download: {

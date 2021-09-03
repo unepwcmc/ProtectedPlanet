@@ -52,20 +52,3 @@
   display: block;
   @include breakpoint($medium) { display: none; }
 }
-
-//--------------------------------------------------
-// mixins - old
-//--------------------------------------------------
-//keep old responsive mixins with old breakpoints to avoid breaking styles across the existing site
-
-@mixin only-mobile {
-  @media only screen and (max-width: 768px) {
-    @content;
-  }
-}
-
-@mixin only-desktop {
-  @media only screen and (min-width: 768px) {
-    @content;
-  }
-}
