@@ -91,4 +91,43 @@
       }
     }
   }
+
+//--------------------------------------------------
+// MPA
+//--------------------------------------------------
+&--mpa {
+  @include bg-gradient-overlay($colour: rgba($black, 0.6));
+  background-image: image_url('cta/mpa-guide.jpg');
+  background-position: center;
+  background-size: cover;
+  color: $white; 
+  z-index: 0;
+
+  .cta {
+    &__container {
+      padding: rem-calc(30 24 34 34);
+
+      position: relative;
+    }
+      &__bg {
+        display: none;
+
+        @include breakpoint($small) { 
+          height: 122%;
+          
+          display: block;
+          position: absolute;
+          top: -6%; 
+          right: 0;
+        }
+
+        @include breakpoint($medium) { top: -11%; }
+      }
+
+      &__content { 
+        @include breakpoint($small) { width: 70%; }
+        @include breakpoint($medium) { width: 64%; }
+      }
+    }
+  }
 }
