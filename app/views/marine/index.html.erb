@@ -17,6 +17,10 @@
   summary: cms_fragment_render(:summary, @cms_page)
 } %>
 
+<section class="spacer-small--top">
+<%= render "partials/ctas/mpa-guide" %>
+</section>
+
 <section class="container--medium spacer-small--top">
   <h2><%= cms_fragment_render(:section_distribution_title, @cms_page) %></h2>
   <div><%= cms_fragment_render(:section_distribution_content, @cms_page) %></div>
@@ -78,8 +82,6 @@
     url: @marineViewAllUrl
   } %>
 </section>
-
-<%= render "partials/ctas/mpa-guide" %>
 
 <section class="spacer-small--top spacer-small--bottom">
   <%= render "partials/carousels/themes" %>
