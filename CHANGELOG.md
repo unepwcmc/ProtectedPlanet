@@ -7,7 +7,7 @@
 
 - Feat: MPA guide component
   - `_mpa-guide.html.erb` partial added
-  - Corresponding stylesh added to `components/_cta.scss`
+  - Corresponding styles added to `components/_cta.scss`
 
 - Fix: Commercial download text
   - Text updated
