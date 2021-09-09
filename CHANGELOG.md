@@ -1,4 +1,11 @@
-### 4.6.5
+### 4.7.1
+
+- Chore: September 2021 WDPA release
+  - September statistics: `country_statistics`, `global_statistics`, `pame_country` and `pame_data`
+  - Map PDF 
+  - Update constant
+
+### 4.7.0
 
 - Chore: August 2021 WDPA release
   - National and global monthly statistics
