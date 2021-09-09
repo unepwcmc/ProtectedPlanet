@@ -1,27 +1,26 @@
 //--------------------------------------------------
 // variables
 //--------------------------------------------------
-$modal-commercial-link-height: rem-calc(107);
+$modal-commercial-link-height: rem-calc(150);
 
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
 @mixin modal-commercial-link () {
   @include border-radius;
-  color: $white;
-  font-size: rem-calc(14);
-  line-height: 1.2;
   margin: rem-calc(20 0);
   padding: rem-calc(16);
   text-align: center;
-  text-decoration: none;
   width: 100%; height: $modal-commercial-link-height;
 
   display: inline-block;
 
+  &:nth-child(1) { text-align: left; }
+
   @include breakpoint($small) { 
     margin: 0; 
-    width: rem-calc(310);
+    padding: rem-calc(0 16);
+    width: rem-calc(320);
   }
 }
 
@@ -78,11 +77,13 @@ $modal-commercial-link-height: rem-calc(107);
 
     &__divider {
       background-color: $grey-light;
+      margin-top: rem-calc(20);
       width: 100%; height: 1px;
 
       display: block;
 
       @include breakpoint($small) { 
+        margin-top: 0;
         width: 1px; height: $modal-commercial-link-height;
       }
     }
@@ -94,22 +95,25 @@ $modal-commercial-link-height: rem-calc(107);
       }
     } 
     
-    &__link-commercial {
+    &__link {
       @include modal-commercial-link;
-      background-color: $purple;
     }
 
-    &__link-non-commercial {
-      @include modal-commercial-link;
-      background-color: $primary;
-      cursor: pointer;
+    &__link-button {
+      @include button-primary;
+      margin-top: rem-calc(14);
     }
 
     &__link-title {
       font-size: rem-calc(20);
       font-weight: bold;
       margin-bottom: rem-calc(10);
+      text-align: center;
 
+      display: block;
+    }
+
+    &__link-text {
       display: block;
     }
 

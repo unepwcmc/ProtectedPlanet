@@ -1,4 +1,19 @@
-### 4.6.5
+### 4.8.0
+
+- Chore: September 2021 WDPA release
+  - September statistics: `country_statistics`, `global_statistics`, `pame_country` and `pame_data`
+  - Map PDF 
+  - Update constant
+
+- Feat: MPA guide component
+  - `_mpa-guide.html.erb` partial added
+  - Corresponding styles added to `components/_cta.scss`
+
+- Fix: Commercial download text
+  - Text updated
+  - Styling changes made to download modal
+
+### 4.7.0
 
 - Chore: August 2021 WDPA release
   - National and global monthly statistics
