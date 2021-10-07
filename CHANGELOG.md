@@ -1,3 +1,15 @@
+### 4.8.1
+
+- Chore: October WDPA Release
+  - October statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country` and `pame_data`
+  - Map PDF
+  - Constant updated
+  
+- Chore: Content update in `config/locales/country/en.yml`
+  - Turkey and Benin now have restricted data notices
+  - Finland's restricted data notice has been removed
+  - The number of Protected Areas in Estonia's resricted data message is now 3589, rather than 3222
+
 ### 4.8.0
 
 - Chore: September 2021 WDPA release
