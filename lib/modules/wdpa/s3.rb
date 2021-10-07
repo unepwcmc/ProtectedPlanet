@@ -35,7 +35,15 @@ class Wdpa::S3
   private
 
   def current_wdpa
-    available_wdpa_databases.sort_by(&:last_modified).last.object
+    latest = available_wdpa_databases.max_by do |object|
+      filename = object.key # e.g. "WDPA_WDOECM_Sep2020_Public.gdb.zip"
+
+      Date.parse(filename)
+    rescue ArgumentError
+      # Ignore files that cannot be parsed
+      Date.parse('1900-01-01')
+    end
+    latest.object
   end
 
   def available_wdpa_databases
