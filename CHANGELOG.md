@@ -1,3 +1,12 @@
+### 4.8.2
+
+- Chore: October WDPA Release
+  - October statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data` and also 'green_list_sites'.
+  - Constant updated
+  
+- Chore: Content update in `config/locales/country/en.yml`
+  - Benin's restricted data notice has been removed
+
 ### 4.8.1
 
 - Chore: October WDPA Release
