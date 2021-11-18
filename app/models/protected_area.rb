@@ -147,7 +147,7 @@ class ProtectedArea < ApplicationRecord
 
   def as_api_feeder
     attributes = self.as_json(
-      only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area]
+      only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area, :international_criteria, :management_plan]
     )
 
     relations = {
@@ -158,7 +158,8 @@ class ProtectedArea < ApplicationRecord
       legal_status: {'name' => legal_status.try(:name)},
       governance: {'name' => governance.try(:name)},
       networks_no: networks.count,
-      designations_no: networks.detect(&:designation).try(:protected_areas).try(:count) || 0
+      designations_no: networks.detect(&:designation).try(:protected_areas).try(:count) || 0,
+      management_authority: {'name' => management_authority.try(:name)}
     }.as_json
 
     relations.merge attributes
