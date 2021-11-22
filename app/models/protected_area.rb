@@ -147,7 +147,12 @@ class ProtectedArea < ApplicationRecord
 
   def as_api_feeder
     attributes = self.as_json(
-      only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area, :international_criteria, :management_plan]
+      only: [
+        :wdpa_id, :name, :original_name, :owner_type,
+        :international_criteria, :is_green_list,
+        :management_plan, :legal_status_updated_at,
+        :reported_area, :marine, :reported_marine_area
+      ]
     )
 
     relations = {
@@ -159,7 +164,9 @@ class ProtectedArea < ApplicationRecord
       governance: {'name' => governance.try(:name)},
       networks_no: networks.count,
       designations_no: networks.detect(&:designation).try(:protected_areas).try(:count) || 0,
-      management_authority: {'name' => management_authority.try(:name)}
+      management_authority: {'name' => management_authority.try(:name)},
+      pame_evaluations: pame_evaluations.map {|pe| {'name' => pe.try(:name), 'methodology' => pe.try(:methodology), 'year' => pe.try(:year), 'url' => pe.try(:url), 'assessment_is_public' => pe.try(:assessment_is_public) }},
+      no_take_status: {'name' => no_take_status.try(:name), 'area' => no_take_status.try(:area) }
     }.as_json
 
     relations.merge attributes
