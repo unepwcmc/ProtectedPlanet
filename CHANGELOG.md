@@ -1,4 +1,4 @@
-# 4.8.3
+### 4.8.3
 
 - Chore: December WDPA Release
   - December statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
@@ -7,7 +7,7 @@
 ### 4.8.2
 
 - Chore: November WDPA Release
-  - November statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data` and also 'green_list_sites'.
+  - November statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data` and also `green_list_sites`.
   - Constant updated
   
 - Chore: Content update in `config/locales/country/en.yml`
