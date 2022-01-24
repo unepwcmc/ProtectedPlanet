@@ -35,6 +35,11 @@ class Wdpa::S3
   private
 
   def current_wdpa
+    from_constants = available_wdpa_databases.filter {|object| object.key.include?("#{WDPA_UPDATE_MONTH.first(3)}#{WDPA_UPDATE_YEAR}") }
+    from_constants.present? ? from_constants.object : latest_wdpa
+  end
+
+  def latest_wdpa
     latest = available_wdpa_databases.max_by do |object|
       filename = object.key # e.g. "WDPA_WDOECM_Sep2020_Public.gdb.zip"
 
@@ -47,7 +52,9 @@ class Wdpa::S3
   end
 
   def available_wdpa_databases
-    bucket_name = Rails.application.secrets.aws_bucket
-    @s3.bucket(bucket_name).objects
+    @_available_wdpa_databases ||= begin
+      bucket_name = Rails.application.secrets.aws_bucket
+      @s3.bucket(bucket_name).objects
+    end
   end
 end
