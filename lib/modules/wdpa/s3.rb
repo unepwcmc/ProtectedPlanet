@@ -35,8 +35,8 @@ class Wdpa::S3
   private
 
   def current_wdpa
-    from_constants = available_wdpa_databases.filter {|object| object.key.include?("#{WDPA_UPDATE_MONTH.first(3)}#{WDPA_UPDATE_YEAR}") }
-    from_constants.present? ? from_constants.object : latest_wdpa
+    wdpa_from_constants = available_wdpa_databases.find {|object| object.key.include?("#{WDPA_UPDATE_MONTH.first(3)}#{WDPA_UPDATE_YEAR}") }
+    wdpa_from_constants ? wdpa_from_constants.object : latest_wdpa
   end
 
   def latest_wdpa
