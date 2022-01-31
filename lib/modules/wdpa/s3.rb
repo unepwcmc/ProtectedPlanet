@@ -35,6 +35,10 @@ class Wdpa::S3
   private
 
   def current_wdpa
+    # This uses the release date constants in config/initializers/constants.rb to 
+    # find the S3 bucket associated with the current release, and return it.
+    # If it doesn't find a bucket with the constant dates it falls back on 
+    # the previous method to fetch the most recent bucket 
     wdpa_from_constants = available_wdpa_databases.find {|object| object.key.include?("#{WDPA_UPDATE_MONTH.first(3)}#{WDPA_UPDATE_YEAR}") }
     wdpa_from_constants ? wdpa_from_constants.object : latest_wdpa
   end

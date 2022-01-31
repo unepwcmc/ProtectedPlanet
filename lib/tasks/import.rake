@@ -6,10 +6,16 @@ namespace :import do
 
   desc "Import statistics files for new release"
   task new_release_statistics: :environment do
-    class BucketAndConstantMistmatchError < StandardError; end;
+
+    # To be run AFTER deploying a new release 
+    # Function:
+      # 1. Checks an S3 bucket exists for the date constants provided in config/initializers/constants.rb
+      # 2. Runs the required importers to complete the release
+
+    class BucketAndConstantMismatchError < StandardError; end;
 
     bucket_identifier = "#{WDPA_UPDATE_MONTH.first(3)}#{WDPA_UPDATE_YEAR}"
-    raise BucketAndConstantMistmatchError unless Wdpa::S3.current_wdpa_identifier == bucket_identifier
+    raise BucketAndConstantMismatchError unless Wdpa::S3.current_wdpa_identifier == bucket_identifier
     puts "Bucket matching release constants found: #{ bucket_identifier }"
 
     puts "importing release statistics"
@@ -28,7 +34,7 @@ namespace :import do
 
     puts "Imports complete"
 
-  rescue BucketAndConstantMistmatchError
+  rescue BucketAndConstantMismatchError
     puts "Import failed. No bucket found matching release constants in config/initializers/constants.rb: #{WDPA_UPDATE_MONTH.first(3)}#{WDPA_UPDATE_YEAR}"
   rescue => error
     puts error
