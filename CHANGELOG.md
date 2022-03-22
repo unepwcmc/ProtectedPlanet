@@ -1,6 +1,6 @@
 ### 4.8.7
 
-- Use constants to select S3 bucket for data download
+- Use date constants to select S3 bucket for data download
 
 ### 4.8.6
 
