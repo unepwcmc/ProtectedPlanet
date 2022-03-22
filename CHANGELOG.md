@@ -1,3 +1,7 @@
+### 4.8.7
+
+- Use constants to select S3 bucket for data download
+
 ### 4.8.6
 
 - Chore: March 2022 WDPA Release
