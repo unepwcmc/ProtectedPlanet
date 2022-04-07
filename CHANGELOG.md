@@ -1,3 +1,10 @@
+### 4.8.8
+
+- Chore: April 2022 WDPA Release
+  - April statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - Constants updated
+  - Map PDF replaced
+
 ### 4.8.7
 
 - Use date constants to select S3 bucket for data download
@@ -5,7 +12,7 @@
 ### 4.8.6
 
 - Chore: March 2022 WDPA Release
-  - February statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - March statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - Constants updated
   - Map PDF replaced
 
@@ -34,7 +41,7 @@
 - Chore: November WDPA Release
   - November statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data` and also `green_list_sites`.
   - Constant updated
-  
+
 - Chore: Content update in `config/locales/country/en.yml`
   - Benin's restricted data notice has been removed
 
@@ -44,7 +51,7 @@
   - October statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country` and `pame_data`
   - Map PDF
   - Constant updated
-  
+
 - Chore: Content update in `config/locales/country/en.yml`
   - Turkey and Benin now have restricted data notices
   - Finland's restricted data notice has been removed
@@ -54,7 +61,7 @@
 
 - Chore: September 2021 WDPA release
   - September statistics: `country_statistics`, `global_statistics`, `pame_country` and `pame_data`
-  - Map PDF 
+  - Map PDF
   - Update constant
 
 - Feat: MPA guide component
@@ -108,7 +115,7 @@
 
 ### 4.6.2
 
-- Hotfix for the search areas page downloads - allow searches with more than 10000 hits 
+- Hotfix for the search areas page downloads - allow searches with more than 10000 hits
 to be downloaded in full.
 
 ### 4.6.1
@@ -122,23 +129,23 @@ May release continued - late-arriving global and national monthly stats
 - Fix CTA content being wiped after monthly imports
 - Improve accuracy of the search (now ignoring diacritics)
 - Fix the equity page and conditionally render links to the associated PA for the dropdown
-- Fix the map thumbnails 
+- Fix the map thumbnails
 - May release of the WDPA:
   - New GL sites
   - GD PAME data
 
-### 4.5.4 
+### 4.5.4
 
 * Add custom validator for resource page links and fix resource page links/attachments not appearing on resource pages
 
-### 4.5.3 
+### 4.5.3
 
 * Apr 2021 release (new PAME data, global and national monthly statistics)
 * Fixed High seas bar chart legend key text
 * Latest WDPA release update date now present on home page
 * Routes re-organised
 * Fix country pages for territories that lack a PAME statistic (e.g. Nauru)
-  
+
 ### 4.5.2
 
 * Mar 2021 release (new GL data, PAME data, public map, global and national monthly statistics)
