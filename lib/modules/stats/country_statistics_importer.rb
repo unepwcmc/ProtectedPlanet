@@ -14,7 +14,7 @@ module Stats::CountryStatisticsImporter
     import_stats(latest_pame_country_statistics_csv, PameStatistic)
 
     # Import stats from DOPA services
-    Stats::CountryStatisticsApi.import
+    # Stats::CountryStatisticsApi.import
 
     # Import Aichi11Target stats from CSV
     Aichi11Target.instance
