@@ -102,7 +102,7 @@ class ProtectedArea < ApplicationRecord
       ) t
       WHERE EXTRACT(YEAR FROM t.year) >= ?
     SQL
-    
+
     result = ActiveRecord::Base.connection.execute(
       ActiveRecord::Base.send(:sanitize_sql_array, [
         growth, start_year
@@ -114,9 +114,9 @@ class ProtectedArea < ApplicationRecord
 
   def sources_per_pa
     sources = ActiveRecord::Base.connection.execute("""
-      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party 
+      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party
       FROM sources
-      INNER JOIN protected_areas_sources 
+      INNER JOIN protected_areas_sources
       ON protected_areas_sources.protected_area_id = #{self.id}
       AND protected_areas_sources.source_id = sources.id
       """)
@@ -200,7 +200,7 @@ class ProtectedArea < ApplicationRecord
     reported_areas.inject(0){ |sum, area| sum + area.to_i }
   end
 
-  def self.transboundary_sites    
+  def self.transboundary_sites
     ProtectedArea.joins(:countries)
     .group('protected_areas.id')
     .having('COUNT(countries_protected_areas.country_id) > 1')
@@ -209,7 +209,7 @@ class ProtectedArea < ApplicationRecord
   def is_transboundary
     countries.count > 1
   end
-  
+
   def arcgis_layer_config
     {
       layers: [{url: arcgis_layer, isPoint: is_point?}],
@@ -230,7 +230,7 @@ class ProtectedArea < ApplicationRecord
 
   def arcgis_layer
     if is_oecm
-      OECM_LAYER_URL
+      is point? ? OECM_POINT_LAYER_URL : OECM_POLY_LAYER_URL
     else
       is_point? ? WDPA_POINT_LAYER_URL : WDPA_POLY_LAYER_URL
     end
