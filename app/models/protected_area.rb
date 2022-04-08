@@ -230,7 +230,7 @@ class ProtectedArea < ApplicationRecord
 
   def arcgis_layer
     if is_oecm
-      is point? ? OECM_POINT_LAYER_URL : OECM_POLY_LAYER_URL
+      is_point? ? OECM_POINT_LAYER_URL : OECM_POLY_LAYER_URL
     else
       is_point? ? WDPA_POINT_LAYER_URL : WDPA_POLY_LAYER_URL
     end
