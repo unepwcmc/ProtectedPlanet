@@ -1,3 +1,6 @@
+### 4.8.9
+- Revert bug 'fix', downloads now look in the most recent bucket again.
+
 ### 4.8.8
 
 - Chore: April 2022 WDPA Release
