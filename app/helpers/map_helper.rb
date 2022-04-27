@@ -1,6 +1,7 @@
 OECM_FEATURE_SERVER_LAYER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/FeatureServer/0'
 OECM_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_on_other_effective_area_based_conservation_measures/MapServer'
-OECM_LAYER_URL = OECM_MAP_SERVER_URL + '/0'
+OECM_POINT_LAYER_URL = OECM_MAP_SERVER_URL + '/0'
+OECM_POLY_LAYER_URL = OECM_MAP_SERVER_URL + '/1'
 WDPA_FEATURE_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_of_Protected_Areas/FeatureServer'
 WDPA_MAP_SERVER_URL = 'https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_of_Protected_Areas/MapServer'
 WDPA_POINT_LAYER_URL = WDPA_MAP_SERVER_URL + '/0'
@@ -86,13 +87,13 @@ ALL_SERVICES_FOR_POINT_QUERY = [
 module MapHelper
   def overlays (ids, options={})
     includedOverlays = OVERLAYS.select {|o| ids.include?(o[:id])}
-  
+
     includedOverlays.map do |defaultOptions|
       customOptions = options[defaultOptions[:id].to_sym]
       defaultOptions.merge(customOptions || {})
     end
   end
-  
+
   def map_yml
     I18n.t('map')
   end
@@ -103,11 +104,11 @@ module MapHelper
 
   def country_extent_url (iso3)
     {
-      url: "https://data-gis.unep-wcmc.org/server/rest/services/GADM_EEZ_Layer/FeatureServer/0/query?where=iso_ter+%3D+%27#{iso3}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson", 
+      url: "https://data-gis.unep-wcmc.org/server/rest/services/GADM_EEZ_Layer/FeatureServer/0/query?where=iso_ter+%3D+%27#{iso3}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
       padding: 5
     }
   end
-  
+
   def region_extent_url (name)
     {
       url: "https://data-gis.unep-wcmc.org/server/rest/services/EEZ_WVS/MapServer/0/query?where=geoandunep+%3D%27#{CGI.escape(name)}%27&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&having=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&queryByDistance=&returnExtentOnly=true&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson",
