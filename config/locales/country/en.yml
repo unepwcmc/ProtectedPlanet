@@ -2,8 +2,6 @@ en:
   country:
     message:
       restricted:
-        can: 
-          Canada chooses to restrict some data on its protected areas and OECMs. As a result, data on 356 protected areas and 3 OECMs is not publicly-available and cannot be viewed or downloaded on this page. While these sites are included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly-available data only.
         nzl:
           New Zealand chooses to restrict some data on its protected areas. As a result, data on 1 protected area is not publicly-available and cannot be viewed or downloaded on this page. While this site is included in the coverage statistics presented here, all other statistics (e.g. number of protected areas; breakdown by governance type etc.) on this page are based upon the publicly-available data only.
         ind:
