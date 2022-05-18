@@ -115,6 +115,6 @@ gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 gem 'devise', '~> 4.7.1' # MAJOR VERSION CHANGE, CHECK DOCS
 
 gem 'comfortable_mexican_sofa', '~> 2.0.0'
-gem 'nokogiri', '~> 1.10.4'
+gem 'nokogiri', '~> 1.13.5'
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'
