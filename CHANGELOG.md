@@ -1,3 +1,11 @@
+### 4.8.10
+
+- Chore: May 2022 WDPA Release
+  - May statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - Constants updated
+  - Map PDF replaced
+- Fix: Remove Canada's data restriction notice
+
 ### 4.8.9
 - Revert bug 'fix', downloads now look in the most recent bucket again.
 
