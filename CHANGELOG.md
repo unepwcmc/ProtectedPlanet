@@ -1,3 +1,10 @@
+### 4.8.11
+
+- Chore: June 2022 WDPA Release
+  - June statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - Constants updated
+  - Map PDF replaced
+
 ### 4.8.10
 
 - Chore: May 2022 WDPA Release
