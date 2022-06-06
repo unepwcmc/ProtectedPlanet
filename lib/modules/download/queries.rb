@@ -18,7 +18,7 @@ module Download
 
     SOURCE_COLUMNS = [
       :metadataid, :data_title, :resp_party,
-      :year, :update_yr, :char_set,
+      :year, :update_yr, :char_set, :verifier,
       :ref_system, :scale, :lineage,
       :citation, :disclaimer, :language
     ]
