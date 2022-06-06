@@ -34,6 +34,8 @@ Rails.application.routes.draw do
     get '/country/:iso/compare(/:iso_to_compare)', to: 'country#compare', as: 'compare_countries'
     get '/country/:iso/protected_areas', to: 'country#protected_areas', as: 'country_protected_areas'
 
+    get '/global_statistics', to: 'global_statistics#show'
+
     # JSON endpoints
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
     resources :downloads, only: [:show, :create, :update]
