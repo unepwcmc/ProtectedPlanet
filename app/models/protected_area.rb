@@ -254,7 +254,10 @@ class ProtectedArea < ApplicationRecord
   private
 
   def is_point?
-    the_geom.geometry_type.type_name.match('Point').present?
+    @is_point ||= begin
+      extent = bounds
+      extent[0][0] == extent[1][0] && extent[0][1] == extent[1][1]
+    end
   end
 
   def bounding_box_query
