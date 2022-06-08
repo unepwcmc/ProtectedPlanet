@@ -26,7 +26,10 @@ class CountryController < ApplicationController
     }
 
     @map_options = {
-      map: { boundsUrl: @country.extent_url }
+      map: {
+        boundsUrl: @country.extent_url,
+        boundsForDatelineCountries: @country.bounds_for_dateline_countries
+      }
     }
 
     helpers.opengraph_title_and_description_with_suffix(@country.name)

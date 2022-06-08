@@ -181,6 +181,23 @@ class Country < ApplicationRecord
     )
   end
 
+  def bounds_for_dateline_countries
+    # The WCMC API we use for bounding boxes does not handle countries that
+    # cross the dateline well, so we need to manually set the bounding box.
+    # Because they cross the dateline, the maximum longitudes are over 180 degrees,
+    # which is the format required by MapBox to display them.
+    case iso_3
+    when 'RUS'
+      [[10, 20], [200, 82]]
+    when 'FJI'
+      [[172, -20], [185, -15]]
+    when 'NZL'
+      [[152, -60], [200, -15]]
+    else
+      nil
+    end
+  end
+
   private
 
   def protected_areas_inner_join(group_by, exclude_oecms)

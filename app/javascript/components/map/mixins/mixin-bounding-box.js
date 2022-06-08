@@ -16,8 +16,13 @@ export default {
       this.$eventHub.$on('map:zoom-to', this.zoomTo)
     },
 
-    initBoundingBoxAndMap () {  
-      if (this.mapOptions.boundsUrl) {
+    initBoundingBoxAndMap () {
+      if (this.mapOptions.boundsForDatelineCountries) {
+        // User hardcoded bounds for dateline countries, because the API we
+        // use returns min/max longitudes of -180 and +180.
+        this.initBounds = this.mapOptions.boundsForDatelineCountries
+        this.initMap()
+      } else if (this.mapOptions.boundsUrl) {
         axiosGetWithoutCSRF(
           this.mapOptions.boundsUrl.url, 
           this.getExtentResponseHandler(this.mapOptions.boundsUrl.padding)
@@ -30,7 +35,7 @@ export default {
     getExtentResponseHandler (padding) {      
       return res => {
         const extent = res.data.extent
-  
+
         if (extent) {
           this.initBounds = this.getBoundsFromExtent(extent, padding)
         }
@@ -76,7 +81,8 @@ export default {
       this.addPopup(coords, options)
     },
 
-    getBoundsFromExtent (extent, padding=5) {  
+    getBoundsFromExtent (extent, padding=5) {
+
       return [
         [
           Math.max(extent.xmin - padding, -180), 
