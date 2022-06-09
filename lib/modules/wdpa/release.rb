@@ -14,7 +14,7 @@ class Wdpa::Release
   end
 
   def download
-    Wdpa::S3.download_latest_wdpa_to zip_path
+    Wdpa::S3.download_current_wdpa_to zip_path
     system("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
 
     import_tables.each do |original_table, std_table|
