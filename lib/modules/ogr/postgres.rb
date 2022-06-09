@@ -5,7 +5,7 @@ class Ogr::Postgres
   DRIVERS = {
     shapefile: 'ESRI Shapefile',
     csv:       'CSV',
-    gdb:       'OpenFileGDB'
+    gdb:       'FileGDB'
   }
 
   TEMPLATE_DIRECTORY = File.join(File.dirname(__FILE__), 'command_templates')
