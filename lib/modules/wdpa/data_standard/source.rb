@@ -12,7 +12,6 @@ class Wdpa::DataStandard::Source < Wdpa::DataStandard
     :lineage    => {name: :lineage, type: :string},
     :citation   => {name: :citation, type: :string},
     :disclaimer => {name: :disclaimer, type: :string},
-    :language   => {name: :language, type: :string},
-    :verifier   => {name: :verifier, type: :string}
+    :language   => {name: :language, type: :string}
   }
 end

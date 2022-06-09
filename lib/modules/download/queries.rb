@@ -18,9 +18,10 @@ module Download
 
     SOURCE_COLUMNS = [
       :metadataid, :data_title, :resp_party,
-      :year, :update_yr, :char_set, :verifier,
+      :year, :update_yr, :char_set,
       :ref_system, :scale, :lineage,
-      :citation, :disclaimer, :language
+      :citation, :disclaimer, :language,
+      :verifier
     ]
 
     def self.for_points extra_columns={}
