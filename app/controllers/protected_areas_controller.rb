@@ -43,7 +43,8 @@ class ProtectedAreasController < ApplicationController
 
     @map_options = {
       map: {
-        boundsUrl: @protected_area.extent_url
+        boundsUrl: @protected_area.extent_url,
+        maxZoom: 0
       }
     }
 
