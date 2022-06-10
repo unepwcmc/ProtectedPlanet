@@ -13,8 +13,8 @@ en:
       total: Total marine and coastal area
     coverage_terrestrial:
       covered: Land area covered
-      title_wdpa: Terrestrial protected area coverage
-      title_wdpa_oecm: Terrestrial protected area & OECM coverage
+      title_wdpa: Terrestrial and inland waters protected area coverage
+      title_wdpa_oecm: Terrestrial and inland waters protected area & OECM coverage
       total: Total land area
     coverage-chart-smallprint: The graph excludes status years with no information reported (STATUS_YR = 0).
     countries: Number of countries

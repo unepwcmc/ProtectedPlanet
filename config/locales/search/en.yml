@@ -40,7 +40,7 @@ en:
     filter-group-type:
       title: Type
       options:
-        terrestrial: Terrestrial
+        terrestrial: Terrestrial and inland waters
         marine: Marine
     geo-types:
       region: Regions

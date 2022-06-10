@@ -3,13 +3,13 @@ en:
     facts:
       -
         theme: terrestrial
-        title: Terrestrial protected area coverage
+        title: Terrestrial and inland waters protected area coverage
       -
         theme: marine
         title: Marine protected area coverage
       -
         theme: oecm
-        title: Terrestrial protected area & OECM coverage
+        title: Terrestrial and inland waters protected area & OECM coverage
       -
         theme: oecm
         title: Marine protected area & OECM coverage
@@ -34,14 +34,14 @@ en:
           icon: area
       categories:
         -
-          title: Marine Protected Areas
+          title: Marine Protected Areas and OECMs
           slug: /marine-protected-areas
           filter: 'marine'
         -
-          title: Terrestrial Protected Areas
+          title: Terrestrial and Inland Waters Protected Areas and OECMs
           slug: 
           filter: 'terrestrial'
         -
-          title: Green Listed Protected Areas
+          title: Green Listed Protected Areas and OECMs
           slug: /green-list
           filter: 'is_green_list'
