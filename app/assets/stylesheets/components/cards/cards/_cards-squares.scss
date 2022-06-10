@@ -60,5 +60,10 @@ $cards-squares-width-tablet: 48%;
 
       &:before { @include border-radius; }
     }
+
+    &__title {
+      overflow-wrap: break-word;
+      text-align: center;
+    }
   }
 }
