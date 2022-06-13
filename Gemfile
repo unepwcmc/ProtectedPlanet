@@ -118,3 +118,7 @@ gem 'comfortable_mexican_sofa', '~> 2.0.0'
 gem 'nokogiri', '~> 1.10.4'
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'
+
+
+gem 'ed25519', '>= 1.2', '< 2.0'
+gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
