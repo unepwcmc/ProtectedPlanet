@@ -1,3 +1,8 @@
+### 4.8.12
+- Removed Western Sahara flag
+- Fixed French Guiana typo
+- Added SAR China to Hong Kong and Macau
+
 ### 4.8.11
 
 - Chore: June 2022 WDPA Release
