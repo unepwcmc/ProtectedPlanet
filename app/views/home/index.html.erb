@@ -8,7 +8,7 @@
 <section class="container spacer-small--top">
   <%= render partial: "partials/cards/facts", locals: { cards: @site_facts } %>
   <p class="p-larger no-margin--top"><span class="bold">Statistics updated: </span><%=  @update_date %></p>
-  <%= link_to('Download latest global statistics', global_statistics_path) %>
+  <%= link_to('Download latest global statistics', global_statistics_download_path) %>
 </section>
 
 <%= render partial: "partials/search/protected-areas", locals: { config: @config_search_areas } %>
