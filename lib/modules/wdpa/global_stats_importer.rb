@@ -10,7 +10,10 @@ module Wdpa::GlobalStatsImporter
     CSV.foreach(latest_global_statistics_csv, headers: true) do |row|
       field = row['type']
       value = parse_value(row['value'])
-      attrs.merge!("#{field}": value)
+
+      # The global_statistics csv can now be downloaded so a methodology url has been added
+      # to the end of the spreadsheet. We need to not add this line to the attributes.
+      attrs.merge!("#{field}": value) if field.present?
     end
 
     stats = GlobalStatistic.first_or_initialize(attrs)
