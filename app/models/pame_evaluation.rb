@@ -340,7 +340,7 @@ class PameEvaluation < ApplicationRecord
   def self.last_csv_update_date
     pame_data_csvs = Dir.glob("#{Rails.root}/lib/data/seeds/pame_data*")
     latest_pame_csv = pame_data_csvs.sort.last.split('_').last
-    latest_pame_csv.split.first.to_date
+    latest_pame_csv.split('.').first.to_date
   end
 end
 
