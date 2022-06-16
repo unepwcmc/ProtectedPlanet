@@ -1,3 +1,9 @@
+### 4.8.13
+- Removed MPA download option
+- Changed Mapbox basemap to most recent version
+- Hid PA growth charts from country pages
+- Changed PA text to include "and other effective area-based conservation measures"
+ 
 ### 4.8.12
 - Removed Western Sahara flag
 - Fixed French Guiana typo
