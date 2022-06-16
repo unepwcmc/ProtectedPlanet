@@ -6,14 +6,14 @@ en:
       greenlist_marine:
         title: Marine Green Listed Protected Areas
       terrestrial_wdpa:
-        title: Terrestrial Protected Areas
+        title: Terrestrial and Inland Waters Protected Areas
       marine_wdpa:
         title: Marine Protected Areas
       oecm_marine:
         title: Other effective area-based conservation measures
       oecm:
         title: Other effective area-based conservation measures
-    title: Discover Protected Areas
+    title: Discover Protected Areas and OECMs
     title_oecm: Discover OECMs
     disclaimer:
       heading: Map Disclaimer

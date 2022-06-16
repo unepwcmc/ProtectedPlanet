@@ -20,7 +20,8 @@ class MarineController < ApplicationController
     @marineSitesTotal = number_with_delimiter(ProtectedArea.marine_areas.count())
     @marineViewAllUrl = search_areas_path(filters: {is_type: ['marine']}) 
 
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'mpa_map'], 'general', 'marine')
+    # Removed mpa_map from ['csv', 'shp', 'gdb', 'map_map'] in feat/hide-mpa-download-button
+    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'marine')
 
     @regionCoverage = Region.without_global.map do |region|
       RegionPresenter.new(region).marine_coverage

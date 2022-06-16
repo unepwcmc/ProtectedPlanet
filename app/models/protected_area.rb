@@ -245,12 +245,12 @@ class ProtectedArea < ApplicationRecord
   end
 
   def arcgis_query_string
-    "/query?where=wdpaid+%3D+%27#{wdpa_id}%27&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
+    "/query?where=wdpaid+%3D+#{wdpa_id}&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
   end
 
   def extent_url
     {
-      url: "#{arcgis_layer}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      url: "#{arcgis_layer}/query?where=wdpaid+%3D+#{wdpa_id}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
       padding: 0.2
     }
   end
@@ -262,7 +262,10 @@ class ProtectedArea < ApplicationRecord
   private
 
   def is_point?
-    the_geom.geometry_type.type_name.match('Point').present?
+    @is_point ||= begin
+      extent = bounds
+      extent[0][0] == extent[1][0] && extent[0][1] == extent[1][1]
+    end
   end
 
   def bounding_box_query

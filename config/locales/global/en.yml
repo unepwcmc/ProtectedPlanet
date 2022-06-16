@@ -20,6 +20,7 @@ en:
     geo-types:
       countries: Countries
       regions: Regions
+      sites: Protected Areas and OECMs
     logos:
       iucn: IUCN logo
       pp: Protected Planet logo

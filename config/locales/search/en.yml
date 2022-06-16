@@ -40,7 +40,7 @@ en:
     filter-group-type:
       title: Type
       options:
-        terrestrial: Terrestrial
+        terrestrial: Terrestrial and inland waters
         marine: Marine
     geo-types:
       region: Regions
@@ -48,7 +48,7 @@ en:
       site: Individual Areas
     map: Map View
     no-results: No results. Please search again.
-    protected-areas: Protected Areas
+    protected-areas: protected areas and other effective area-based conservation measures
     results: results
     search-areas-title: Explore protected areas and OECMs
     

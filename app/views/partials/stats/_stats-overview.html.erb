@@ -2,7 +2,9 @@
 
   <% if local_assigns[:flag] %>
     <div class="card__heading">
-      <i class="card__flag icon--flag-outline" style="background-image:url('<%= flag %>');"></i>
+      <% unless @country.iso_3 == 'ESH' # temporary fix until we can figure out where the flag asset is cached %>
+        <i class="card__flag icon--flag-outline" style="background-image:url('<%= flag %>');"></i>
+      <% end %>
       <h1 class="card__h1"><%= title %></h1>
     </div>
   <% else %>
