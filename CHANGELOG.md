@@ -1,3 +1,18 @@
+### 4.8.14
+- Added global statistics download
+- Fixed PAME file downloads
+- Limited map zoom on global WMS layer
+- Updated external API calls to work after API changes
+- Stopped trying to load geom into memory and use extent to determine whether PA is point or polygon
+- Fixed region links on search results
+- Minor text changes
+- 
+### 4.8.13
+- Removed MPA download option
+- Changed Mapbox basemap to most recent version
+- Hid PA growth charts from country pages
+- Changed PA text to include "and other effective area-based conservation measures"
+ 
 ### 4.8.12
 - Removed Western Sahara flag
 - Fixed French Guiana typo
