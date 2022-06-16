@@ -237,12 +237,12 @@ class ProtectedArea < ApplicationRecord
   end
 
   def arcgis_query_string
-    "/query?where=wdpaid+%3D+%27#{wdpa_id}%27&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
+    "/query?where=wdpaid+%3D+#{wdpa_id}&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
   end
 
   def extent_url
     {
-      url: "#{arcgis_layer}/query?where=wdpaid+%3D+%27#{wdpa_id}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      url: "#{arcgis_layer}/query?where=wdpaid+%3D+#{wdpa_id}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
       padding: 0.2
     }
   end
