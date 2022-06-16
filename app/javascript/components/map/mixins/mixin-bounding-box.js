@@ -17,10 +17,10 @@ export default {
     },
 
     initBoundingBoxAndMap () {
-      if (this.mapOptions.boundsForDatelineCountries) {
+      if (this.mapOptions.bounds) {
         // User hardcoded bounds for dateline countries, because the API we
         // use returns min/max longitudes of -180 and +180.
-        this.initBounds = this.mapOptions.boundsForDatelineCountries
+        this.initBounds = this.mapOptions.bounds
         this.initMap()
       } else if (this.mapOptions.boundsUrl) {
         axiosGetWithoutCSRF(

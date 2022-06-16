@@ -164,6 +164,14 @@ class ProtectedArea < ApplicationRecord
     relations.merge attributes
   end
 
+  def new_bounds
+    query = "SELECT ST_AsText(ST_ShiftLongitude('SRID=4326;#{the_geom}')) AS shifted"
+    res = ActiveRecord::Base.connection.execute(query)
+    factory = RGeo::Cartesian.factory
+    envelope = factory.parse_wkt(res.as_json.first['shifted']).buffer(1).envelope.coordinates.first[0, 2]
+    envelope
+  end
+
   def bounds
     [
       [bounding_box["min_y"], bounding_box["min_x"]],

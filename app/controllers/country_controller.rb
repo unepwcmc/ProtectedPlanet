@@ -28,7 +28,7 @@ class CountryController < ApplicationController
     @map_options = {
       map: {
         boundsUrl: @country.extent_url,
-        boundsForDatelineCountries: @country.bounds_for_dateline_countries
+        bounds: @country.bounds_for_dateline_countries
       }
     }
 

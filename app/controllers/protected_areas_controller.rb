@@ -35,7 +35,6 @@ class ProtectedAreasController < ApplicationController
 
     @otherWdpasViewAllUrl = determine_search_path(@protected_area)
 
-
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
       point_query_services: point_query_services
@@ -43,7 +42,8 @@ class ProtectedAreasController < ApplicationController
 
     @map_options = {
       map: {
-        boundsUrl: @protected_area.extent_url
+        boundsUrl: @protected_area.extent_url,
+        bounds: nil# @protected_area.new_bounds
       }
     }
 
