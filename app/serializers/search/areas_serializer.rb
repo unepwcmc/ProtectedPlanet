@@ -34,7 +34,7 @@ class Search::AreasSerializer < Search::BaseSerializer
 
   def geo_hash(geo_type, areas, total=0)
     areas = areas.present? ? areas.first(9) : []
-    geo_type_locale = geo_type == 'site' ? 'area-types.wdpa' : "geo-types.#{geo_type.pluralize}"
+    geo_type_locale = "geo-types.#{geo_type.pluralize}"
     {
       geoType: geo_type,
       title: I18n.t("global.#{geo_type_locale}"),

@@ -7,9 +7,6 @@ class PameController < ApplicationController
     filters: []
   }.to_json
 
-  # Format for this date is: Year-MON (4 digits-3 chars)
-  UPDATED_AT = "2020-DEC".freeze
-
   def index
     @table_attributes = PameEvaluation::TABLE_ATTRIBUTES.to_json
     @filters = PameEvaluation.filters_to_json
@@ -26,10 +23,11 @@ class PameController < ApplicationController
   end
 
   def download
+    last_update = PameEvaluation.last_csv_update_date.strftime('%Y-%^b')
     send_data PameEvaluation.to_csv(params.to_json), {
                 type: "text/csv; charset=utf-8; header=present",
                 disposition: "attachment",
-                filename: "protectedplanet-pame-#{UPDATED_AT}.csv" }
+                filename: "protectedplanet-pame-#{last_update}.csv" }
   end
 end
 
