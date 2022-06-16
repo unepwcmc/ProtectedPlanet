@@ -43,7 +43,7 @@ class ProtectedAreasController < ApplicationController
     @map_options = {
       map: {
         boundsUrl: @protected_area.extent_url,
-        bounds: nil# @protected_area.new_bounds
+        bounds: @protected_area.new_bounds
       }
     }
 
