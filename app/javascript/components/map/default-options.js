@@ -17,6 +17,7 @@ export const MAP_OPTIONS_DEFAULT = {
   attributionControl: false,
   preserveDrawingBuffer: true, // needed for PDF rendering
   zoom: 1.3,
+  maxZoom: 10 // Maximum zoom where tiles are cached for the web-map service
   //bounds: [[-180, -90], [180, 90]],
   //boundingISO: ISO3,
   //boundingRegion; Name e.g. Europe,
