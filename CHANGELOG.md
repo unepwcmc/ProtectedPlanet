@@ -1,3 +1,6 @@
+### 4.8.15
+- Styled download global statistics link on homepage
+
 ### 4.8.14
 - Added global statistics download
 - Fixed PAME file downloads
