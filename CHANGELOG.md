@@ -1,3 +1,6 @@
+### 4.8.16
+- fixed url for country boundaries
+
 ### 4.8.15
 - Styled download global statistics link on homepage
 
@@ -9,7 +12,7 @@
 - Stopped trying to load geom into memory and use extent to determine whether PA is point or polygon
 - Fixed region links on search results
 - Minor text changes
-- 
+
 ### 4.8.13
 - Removed MPA download option
 - Changed Mapbox basemap to most recent version
