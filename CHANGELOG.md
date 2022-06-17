@@ -1,3 +1,6 @@
+### 4.8.16
+- fixed url for country boundaries
+
 ### 4.8.15
 - Styled download global statistics link on homepage
 
