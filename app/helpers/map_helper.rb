@@ -104,7 +104,7 @@ module MapHelper
 
   def country_extent_url (iso3)
     {
-      url: "https://data-gis.unep-wcmc.org/server/rest/services/GADM_EEZ_Layer/FeatureServer/0/query?where=iso_ter+%3D+#{iso3}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      url: "https://data-gis.unep-wcmc.org/server/rest/services/GADM_EEZ_Layer/FeatureServer/0/query?where=iso_ter+%3D+%27#{iso3}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
       padding: 5
     }
   end

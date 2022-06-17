@@ -9,7 +9,7 @@
 - Stopped trying to load geom into memory and use extent to determine whether PA is point or polygon
 - Fixed region links on search results
 - Minor text changes
-- 
+
 ### 4.8.13
 - Removed MPA download option
 - Changed Mapbox basemap to most recent version
