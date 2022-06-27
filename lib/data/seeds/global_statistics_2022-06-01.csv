@@ -1,37 +1,38 @@
-type,value
-total_protected_areas,271151
-total_terrestrial_protected_areas,253368
-total_marine_protected_areas,17783
-total_land_pa_coverage_percentage,15.79
-total_land_area_protected,21301849
-total_ocean_pa_coverage_percentage,8.09
-total_ocean_area_protected,29301877
-national_waters_pa_coverage_percentage,18.33
-national_waters_pa_coverage_area,25887089
-high_seas_pa_coverage_percentage,1.54
-high_seas_pa_coverage_area,3414788
-national_waters_percentage,39
-global_ocean_percentage,61
-total_oecms,775
-total_terrestrial_oecms,585
-total_marine_oecms,190
-total_land_oecms_coverage_percentage,1.08
-total_land_area_oecms,1459689
-total_ocean_oecms_coverage_percentage,0.09
-total_ocean_area_oecms,308366
-national_waters_oecms_coverage_percentage,0.22
-national_waters_oecms_coverage_area,308366
-total_oecms_pas,271926
-total_terrestrial_oecms_pas,253953
-total_marine_oecms_pas,17973
-total_land_oecms_pas_coverage_percentage,16.87
-total_land_area_oecms_pas,22761538
-total_ocean_oecms_pas_coverage_percentage,8.17
-total_ocean_area_oecms_pas,29610243
-national_waters_oecms_pas_coverage_percentage,18.55
-national_waters_oecms_pas_coverage_area,26195455
-global_oecms_pas_coverage_percentage,10.53
-global_oecms_pas,52371782
-green_list_perc,0.14
-green_list_area,733351
-green_list_count,61
+type,description,value
+total_protected_areas,number of protected areas,"271,151"
+total_terrestrial_protected_areas,number of terrestrial and inland waters protected areas,"253,368"
+total_marine_protected_areas,number of marine protected areas,"17,783"
+total_land_pa_coverage_percentage,percentage coverage of land by protected areas,15.79
+total_land_area_protected,land area covered by protected areas (km2),"21,301,849"
+total_ocean_pa_coverage_percentage,percentage coverage of ocean by protected areas,8.09
+total_ocean_area_protected,ocean area covered by protected areas (km2),"29,301,877"
+national_waters_pa_coverage_percentage,percentage coverage of national waters (EEZ) by protected areas,18.33
+national_waters_pa_coverage_area,national waters (EEZ) area covered by protected areas (km2),"25,887,089"
+high_seas_pa_coverage_percentage,percentage coverage of Areas Beyond National Jurisdiction (ABNJ) by protected areas,1.54
+high_seas_pa_coverage_area,Areas Beyond National Jurisdiction (ABNJ) area covered by protected areas (km2),"3,414,788"
+national_waters_percentage,percentage of ocean that is national waters,39
+global_ocean_percentage,percentage of ocean that is in Areas Beyond National Jurisdiction (ABNJ),61
+total_oecms,number of OECMs,775
+total_terrestrial_oecms,number of terrestrial and inland waters OECMs,585
+total_marine_oecms,number of marine OECMs,190
+total_land_oecms_coverage_percentage,percentage coverage of land by OECMs,1.08
+total_land_area_oecms,land area covered by OECMs (km2),"1,459,689"
+total_ocean_oecms_coverage_percentage,percentage coverage of ocean by OECMs,0.09
+total_ocean_area_oecms,ocean area covered by OECMs (km2),"308,366"
+national_waters_oecms_coverage_percentage,percentage coverage of national waters (EEZ) by OECMs,0.22
+national_waters_oecms_coverage_area,national waters (EEZ) area covered by OECMs (km2),"308,366"
+total_oecms_pas,number of protected areas and OECMs,"271,926"
+total_terrestrial_oecms_pas,number of terrestrial and inland waters protected areas and OECMs,"253,953"
+total_marine_oecms_pas,number of marine protected areas and OECMs,"17,973"
+total_land_oecms_pas_coverage_percentage,percentage coverage of land by protected areas and OECMs,16.87
+total_land_area_oecms_pas,land area covered by protected areas and OECMs (km2),"22,761,538"
+total_ocean_oecms_pas_coverage_percentage,percentage coverage of ocean by protected areas and OECMs,8.17
+total_ocean_area_oecms_pas,ocean area covered by protected areas and OECMs (km2),"29,610,243"
+national_waters_oecms_pas_coverage_percentage,percentage coverage of national waters (EEZ) by protected areas and OECMs,18.55
+national_waters_oecms_pas_coverage_area,national waters (EEZ) area covered by protected areas and OECMs (km2),"26,195,455"
+global_oecms_pas_coverage_percentage,percentage coverage of land + ocean by protected areas and OECMs,10.53
+global_oecms_pas,land + ocean area covered by protected areas and OECMs (km2),"52,371,782"
+green_list_perc,percent of the world covered by Green Listed protected areas and OECMs,0.14
+green_list_area,area covered by Green Listed protected areas and OECMs (km2),"733,351"
+green_list_count,number of Green Listed protected areas and OECMs,61
+,methodology used is described here: https://www.protectedplanet.net/en/resources/calculating-protected-area-coverage ,
