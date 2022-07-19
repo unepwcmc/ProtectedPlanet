@@ -1,3 +1,6 @@
+### 4.8.18
+- bug fix: use constants to choose bucket for user downloads, use latest bucket for releases
+
 ### 4.8.17
 - Chore: July 2022 WDPA Release
   - July statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
