@@ -108,15 +108,16 @@ class Region < ApplicationRecord
     region_extent_url(name.gsub(/&/, '+'))
   end
 
-  def protected_areas_per_designation(jurisdiction=nil, exclude_oecms: false)
+  def protected_areas_per_designation(jurisdictions=[], exclude_oecms: false)
     ActiveRecord::Base.connection.execute("""
-      SELECT designations.id AS designation_id, designations.name AS designation_name, pas_per_designations.count
+      SELECT designations.name AS designation_name, SUM(pas_per_designations.count) as count
       FROM designations
       INNER JOIN (
         #{protected_areas_inner_join(:designation_id, exclude_oecms)}
       ) AS pas_per_designations
         ON pas_per_designations.designation_id = designations.id
-      #{"WHERE designations.jurisdiction_id = #{jurisdiction.id}" if jurisdiction}
+      #{"WHERE designations.jurisdiction_id IN (#{jurisdictions.pluck(:id).join(',')})" if jurisdictions.any?}
+      GROUP BY designations.name
     """)
   end
 
