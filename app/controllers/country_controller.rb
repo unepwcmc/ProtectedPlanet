@@ -75,7 +75,13 @@ class CountryController < ApplicationController
     # What this does is call the corresponding method in tab presenter to build
     # the value for each key, populating the hash
     hash[tab] = TABS_KEYS.map do |key|
-      { "#{key}": @tab_presenter.send("#{key}", oecms_tab: tab == :wdpa_oecm) }
+      if key == :sources
+        # All sources should be shown here, we should not
+        # only show the OECM sources on the OECM tab.
+        { "#{key}": @tab_presenter.send("#{key}", oecms_tab: true) }
+      else
+        { "#{key}": @tab_presenter.send("#{key}", oecms_tab: tab == :wdpa_oecm) }
+      end
     end.reduce(&:merge)
 
     hash
