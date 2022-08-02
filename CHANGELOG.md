@@ -1,3 +1,9 @@
+### 4.8.19
+- Chore: Aug 2022 WDPA Release
+  - Aug statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
 ### 4.8.18
 - bug fix: use constants to choose bucket for user downloads, use latest bucket for releases
 
