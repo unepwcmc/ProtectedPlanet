@@ -1,3 +1,9 @@
+### 4.8.17
+- Chore: July 2022 WDPA Release
+  - July statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - Constants updated
+  - Map PDF replaced
+
 ### 4.8.16
 - fixed url for country boundaries
 

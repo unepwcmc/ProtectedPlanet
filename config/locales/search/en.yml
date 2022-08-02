@@ -35,6 +35,7 @@ en:
       title: Special status level
       options:
         - Green Listed
+        - Green List candidates
         - PARCC
         - Transboundary
     filter-group-type:

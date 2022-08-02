@@ -82,7 +82,11 @@ class ProtectedArea < ApplicationRecord
   end
 
   def is_green_list
-    green_list_status_id.present?
+    green_list_status&.status.in?(['Green Listed', 'Relisted'])
+  end
+
+  def is_green_list_candidate
+    green_list_status&.status == 'Candidate'
   end
 
   def self.greenlist_coverage_growth(start_year = 0)
@@ -131,7 +135,7 @@ class ProtectedArea < ApplicationRecord
   def as_indexed_json options={}
     self.as_json(
       only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_oecm],
-      methods: [:coordinates, :is_green_list, :is_transboundary],
+      methods: [:coordinates, :special_status],
       include: {
         countries_for_index: {
           only: [:name, :id, :iso_3],
@@ -143,6 +147,15 @@ class ProtectedArea < ApplicationRecord
         governance: { only: [:id, :name] }
       }
     )
+  end
+
+  def special_status
+    [
+      ({ name: 'is_green_list' } if is_green_list),
+      ({ name: 'is_green_list_candidate' } if is_green_list_candidate),
+      ({ name: 'has_parcc_info' } if has_parcc_info),
+      ({ name: 'is_transboundary' } if is_transboundary)
+    ].compact
   end
 
   def as_api_feeder

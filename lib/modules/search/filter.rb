@@ -18,7 +18,6 @@ class Search::Filter
         }
       }
     end
-
     constructed_filters
   end
 
