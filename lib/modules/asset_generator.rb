@@ -5,7 +5,7 @@ module AssetGenerator
   def self.protected_area_tile protected_area
     raise AssetGenerationFailedError if protected_area.nil?
 
-    tile_url = mapbox_url protected_area.geojson
+    tile_url = mapbox_url protected_area.geojson_for_mapbox_uri
     request_tile tile_url
   rescue AssetGenerationFailedError
     ''#fallback_tile
@@ -42,8 +42,6 @@ module AssetGenerator
     
     tile_url = base_url + "geojson(#{geojson})/auto/#{size[:x]}x#{size[:y]}@2x"
     tile_url << "?access_token=#{access_token}"
-
-    
   end
 
   def self.request_tile tile_url
