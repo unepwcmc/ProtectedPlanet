@@ -89,18 +89,14 @@ filters:
       type: 'geo'
       path: 'location'
       field: 'protected_area.coordinates'
-    has_parcc_info:
-      type: 'equality'
-      path: 'has_parcc_info'
+    special_status:
+      type: 'nested'
+      path: 'special_status'
+      field: 'special_status.name'
+      required: true
     has_irreplaceability_info:
       type: 'equality'
       path: 'has_irreplaceability_info'
-    is_green_list:
-      type: 'equality'
-      path: 'is_green_list'
-    is_transboundary:
-      type: 'equality'
-      path: 'is_transboundary'
     is_oecm:
       type: 'equality'
       path: 'is_oecm'

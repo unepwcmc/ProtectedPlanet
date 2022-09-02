@@ -99,3 +99,34 @@ Run this in the console:
 ```
   RAILS_ENV=<environment> bundle exec rake search:reindex
 ```
+
+### Elasticsearch implementation in Protected Planet
+
+methods/files that need changing to add/modify filtering:
+- `#as_indexed_json`: this is the method that creates the json that is stored and queried in elasticsearch. if it's not in here, it can't be queried.
+- `search.yml`: Adds configuration details for each search field. Currently, fields can be boolean (see note below), nested, or geo. The type is used to select the right processing class in the search/ namespace. With nested filters you need to also specify the required param, or by default a NOT filter will be applied.
+- `modules/search.rb`: modify ALLOWED_FILTERS
+- `search/filter_params.rb`: processes the params before submission to elasticsearch. Nested search types don't need processing, but boolean usually do (see note below)
+- `aggregations.json`: used in the aggregation.rb to support elasticsearch aggregations (is this being used?)
+- `mappings.json`: used to create search indexes in elasticsearch, so new/modified search attributes should be added here
+- `search/filters_serializer.rb`: creates the filter options displayed in the front end, and the params they submit
+
+##### Boolean vs nested filters
+
+The boolean and nested filters are combined to form the final elasticsearch query. The filters are grouped under their 'name' like this:
+
+```
+{
+  boolean_field_1: [boolean_filter_1a AND boolean_filter_1b AND boolean_filter_1c]
+} AND {
+  boolean_field_2: [boolean_filter_2a AND boolean_filter_2b AND boolean_filter_2c]
+} AND {
+  nested_field_1: [nested_filter_1a OR nested_filter_1b OR nested_filter_1c]
+} AND {
+  nested_field_2: [nested_filter_2a OR nested_filter_2b OR nested_filter_2c]  
+}
+```
+
+***However*** Because of the way the filters are set up in the UI, boolean filters appear to be processed as OR statements. They are not, we delete some of the filters on the back end to make it appear this way. If a user selects WDPA and OECM, if we submitted both of those parameters we would get zero results, because a Protected Area can't be both of them. so in the back end we delete the filters if both are submitted. same for Type. This works ok, because both categories are binary, and the WDPA/OECM and Marine/Terrestrial categories aren't mutually exclusive. If you have a filter that isn't binary, e.g. Green Listed, Green List Candidate, and Neither, we can't use this method.
+
+However, with Elasticsearch we can convert these binary values into nested values to make groups of non-exclusive binary options (see ProtectedArea#as_indexed_json and #special_status).
