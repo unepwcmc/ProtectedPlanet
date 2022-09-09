@@ -97,7 +97,7 @@ gem 'aws-sdk', '3.0.1' # DRAMATIC CHANGES
 gem 'httparty', '~> 0.15.1' # FROM 13 to 15 BREAKING CHANGES
 gem 'httmultiparty', '~> 0.3.14'
 
-gem 'sidekiq', '~> 5.2.5' # DRAMATIC CHANGES
+gem 'sidekiq', '~> 6.4.0' # DRAMATIC CHANGES
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 
@@ -115,7 +115,7 @@ gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 gem 'devise', '~> 4.7.1' # MAJOR VERSION CHANGE, CHECK DOCS
 
 gem 'comfortable_mexican_sofa', '~> 2.0.0'
-gem 'nokogiri', '~> 1.10.4'
+gem 'nokogiri', '~> 1.13.6'
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'
 gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
