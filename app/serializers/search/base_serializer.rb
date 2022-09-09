@@ -39,6 +39,8 @@ class Search::BaseSerializer
       protected_area_path(obj.wdpa_id)
     elsif obj.is_a?(Country)
       country_path(iso: obj.iso_3)
+    elsif obj.is_a?(Region)
+      region_path(iso: obj.iso)
     else
       '#'
     end

@@ -2,7 +2,7 @@ en:
   thematic_area:
     green_list:
       hero:
-        button_text: Explore Green Listed protected areas
+        button_text: Explore Green List and candidate sites
         stat_text_1: Percent of the world covered by Green Listed protected areas
         stat_text_2: Green Listed Protected Areas
         stat_text_3: Total area protected

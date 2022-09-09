@@ -86,14 +86,18 @@
       }"
     />
 
-    <stats-growth
-      v-if="hasGrowth"
-      v-bind="{
-        chart: activeDatabase.growth.chart,
-        smallprint: activeDatabase.growth.smallprint,
-        title: activeDatabase.growth.title,
-      }"
-    />
+    <!--
+      Growth chart hidden because calculation is incorrect
+      https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/265
+      <stats-growth
+        v-if="hasGrowth"
+        v-bind="{
+          chart: activeDatabase.growth.chart,
+          smallprint: activeDatabase.growth.smallprint,
+          title: activeDatabase.growth.title,
+        }"
+      />
+    -->
 
     <slot name="related_countries" />
 

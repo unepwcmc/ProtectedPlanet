@@ -2,12 +2,12 @@ export const BASELAYERS_DEFAULT = [
   {
     id: 'terrain',
     name: 'Terrain',
-    style: 'mapbox://styles/unepwcmc/ckfy4y2nm0vqn19mkcmiyqo73'
+    style: 'mapbox://styles/unepwcmc/cko1hsfi50vog17l697cr4d6p'
   },
   {
     id: 'satellite',
     name: 'Satellite',
-    style: 'mapbox://styles/unepwcmc/ckfy4tzxq0vq719lgi34s2lad'
+    style: 'mapbox://styles/unepwcmc/ckniq2twg0q3b17s5gqfxhagf'
   }
 ]
 export const RTL_TEXT_PLUGIN_URL = 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js'
@@ -17,6 +17,7 @@ export const MAP_OPTIONS_DEFAULT = {
   attributionControl: false,
   preserveDrawingBuffer: true, // needed for PDF rendering
   zoom: 1.3,
+  maxZoom: 10 // Maximum zoom where tiles are cached for the web-map service
   //bounds: [[-180, -90], [180, 90]],
   //boundingISO: ISO3,
   //boundingRegion; Name e.g. Europe,

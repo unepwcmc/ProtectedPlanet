@@ -99,16 +99,7 @@
 	    "has_irreplaceability_info": {
         "type": "boolean"
 	    },
-	    "is_green_list": {
-        "type": "boolean"
-	    },
-	    "has_parcc_info": {
-        "type": "boolean"
-      },
       "is_oecm": {
-        "type": "boolean"
-      },
-      "is_transboundary": {
         "type": "boolean"
       },
 	    "coordinates": {
@@ -202,6 +193,14 @@
           "id": {
             "type": "integer"
           },
+          "name": {
+            "type": "keyword"
+          }
+        }
+	    },
+      "special_status": {
+        "type": "nested",
+        "properties": {
           "name": {
             "type": "keyword"
           }

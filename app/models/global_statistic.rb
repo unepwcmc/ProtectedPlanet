@@ -39,4 +39,9 @@ class GlobalStatistic < ApplicationRecord
       self.instance.send(column_name)
     end
   end
+
+  def self.latest_csv
+    global_statistics_csvs = Dir.glob("#{Rails.root}/lib/data/seeds/global_statistics*")
+    global_statistics_csvs.sort.last
+  end
 end

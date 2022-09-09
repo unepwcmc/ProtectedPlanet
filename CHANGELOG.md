@@ -1,3 +1,50 @@
+### 4.8.20
+- Chore: Sep 2022 WDPA Release
+  - Sep statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
+### 4.8.19
+- Chore: Aug 2022 WDPA Release
+  - Aug statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
+### 4.8.18
+- bug fix: use constants to choose bucket for user downloads, use latest bucket for releases
+
+### 4.8.17
+- Chore: July 2022 WDPA Release
+  - July statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - Constants updated
+  - Map PDF replaced
+
+### 4.8.16
+- fixed url for country boundaries
+
+### 4.8.15
+- Styled download global statistics link on homepage
+
+### 4.8.14
+- Added global statistics download
+- Fixed PAME file downloads
+- Limited map zoom on global WMS layer
+- Updated external API calls to work after API changes
+- Stopped trying to load geom into memory and use extent to determine whether PA is point or polygon
+- Fixed region links on search results
+- Minor text changes
+
+### 4.8.13
+- Removed MPA download option
+- Changed Mapbox basemap to most recent version
+- Hid PA growth charts from country pages
+- Changed PA text to include "and other effective area-based conservation measures"
+ 
+### 4.8.12
+- Removed Western Sahara flag
+- Fixed French Guiana typo
+- Added SAR China to Hong Kong and Macau
+
 ### 4.8.11
 
 - Chore: June 2022 WDPA Release

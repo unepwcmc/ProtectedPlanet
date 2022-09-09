@@ -7,8 +7,8 @@
         <div class="chart--square">
           <span 
             :class="`chart__area theme--${type}`" 
-            :style="`width: ${protectedPercentage}%; height: ${protectedPercentage}%;`"
-          ></span>
+            :style="`width: ${ squareEdgeLength(protectedPercentage) }%; height: ${ squareEdgeLength(protectedPercentage) }%;`"
+          />
         </div>
       </div>
 
@@ -123,6 +123,12 @@ export default {
     
     hasPameData () {
       return this.pamePercentage != null && this.pameKm2 != null
+    }
+  },
+
+  methods: {
+    squareEdgeLength (percentage) {
+      return Math.sqrt(percentage * 100)
     }
   }
 }
