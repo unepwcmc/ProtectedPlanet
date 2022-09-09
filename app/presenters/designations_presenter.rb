@@ -1,7 +1,6 @@
 class DesignationsPresenter
   include Rails.application.routes.url_helpers
 
-  # TODO - Need to fix this for regions
   def initialize(geo_entity)
     @geo_entity = geo_entity
   end
@@ -10,12 +9,13 @@ class DesignationsPresenter
 
   def designations(exclude_oecms: false)
     JURISDICTIONS.map do |j|
+      juristiction_count_data = jurisdiction_counts(j, exclude_oecms: exclude_oecms)
       {
         title: designation_title(j),
-        total: designation_total(j, exclude_oecms: exclude_oecms),
-        percent: percent_of_total(j, exclude_oecms: exclude_oecms),
+        total: designation_total(juristiction_count_data),
+        percent: percent_of_total(juristiction_count_data, exclude_oecms: exclude_oecms),
         has_jurisdiction: get_jurisdiction(j),
-        jurisdictions: jurisdictions(j, exclude_oecms: exclude_oecms)
+        jurisdictions: juristiction_count_data
       }
     end
   end
@@ -41,27 +41,34 @@ class DesignationsPresenter
   end
 
   def all_pas(exclude_oecms)
-    geo_entity.protected_areas_per_jurisdiction(exclude_oecms: exclude_oecms)
+    @all_pas ||= geo_entity.protected_areas_per_jurisdiction(exclude_oecms: exclude_oecms)
   end
 
   def total_number_of_designations(exclude_oecms)
     all_pas(exclude_oecms).reduce(0) { |count, j| count + j["count"] }
   end
 
-  def percent_of_total(jurisdiction, exclude_oecms: false)
-    total = designation_total(jurisdiction, exclude_oecms: exclude_oecms)
-    (( total.to_f / total_number_of_designations(exclude_oecms).to_f ) * 100).round(2)
+  def percent_of_total(jurisdictions, exclude_oecms: false)
+    total = designation_total(jurisdictions)
+    (( total / total_number_of_designations(exclude_oecms).to_f ) * 100).round(2)
   end
 
-  def designation_total(jurisdiction, exclude_oecms: false)
-    designations = all_pas(exclude_oecms).find { |result| result["name"] == jurisdiction }
-    designations ? designations['count'] : 0
+  def designation_total(jurisdictions)
+    jurisdictions.reduce(0) { |count, j| count + j["count"].to_i }
   end
 
-  def jurisdictions(jurisdiction, exclude_oecms: false)
-    jurisdiction = get_jurisdiction(jurisdiction)
-    return [] unless jurisdiction
+  def jurisdiction_counts(jurisdiction, exclude_oecms: false)
+    jurisdictions = get_jurisdictions(jurisdiction)
+    return [] unless jurisdictions.any?
 
-    geo_entity.protected_areas_per_designation(jurisdiction, exclude_oecms: exclude_oecms)
+    geo_entity.protected_areas_per_designation(jurisdictions, exclude_oecms: exclude_oecms)
+  end
+
+  def get_jurisdictions(jurisdiction)
+    # 'Not Applicable' jurisdictions are to be included with
+    # 'National' in the country and region show pages.
+    # https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/241
+    jurisdictions = jurisdiction == 'National' ? ['National', 'Not Applicable'] : jurisdiction
+    Jurisdiction.where(name: jurisdictions)
   end
 end

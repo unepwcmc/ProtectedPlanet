@@ -16,7 +16,6 @@ class Search::FilterParams
     sanitise_type_filter
     sanitise_ancestor_filter
     sanitise_categories_filter
-    sanitise_special_status_filter
     filters
   end
 
@@ -53,16 +52,6 @@ class Search::FilterParams
     return if ancestor.blank? || FAKE_CATEGORIES.include?(ancestor)
 
     filters['ancestor'] = ancestor.to_i
-  end
-
-  def sanitise_special_status_filter
-    # ['has_parcc_info', 'is_green_list']
-    special_status = filters.delete('special_status')
-    return unless special_status
-
-    special_status.map do |status|
-      filters[status.to_sym] = true
-    end
   end
 
   def sanitise_categories_filter

@@ -52,7 +52,8 @@ module Autocompletion
     'oecm' => { is_oecm: true },
     'wdpa' => { is_oecm: false },
     'marine' => { marine: true },
-    'is_green_list' => { is_green_list: true }
+    'is_green_list' => { is_green_list: true },
+    'is_green_list_candidate' => { is_green_list_candidate: true }
   }.freeze
   def self.get_filters(type)
     filter = ALLOWED_FILTERS[type]

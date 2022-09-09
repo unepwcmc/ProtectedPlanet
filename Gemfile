@@ -97,7 +97,7 @@ gem 'aws-sdk', '3.0.1' # DRAMATIC CHANGES
 gem 'httparty', '~> 0.15.1' # FROM 13 to 15 BREAKING CHANGES
 gem 'httmultiparty', '~> 0.3.14'
 
-gem 'sidekiq', '~> 5.2.5' # DRAMATIC CHANGES
+gem 'sidekiq', '~> 6.4.0' # DRAMATIC CHANGES
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 

@@ -79,9 +79,10 @@ OVERLAYS = [
 ].freeze
 
 ALL_SERVICES_FOR_POINT_QUERY = [
-  { url: OECM_FEATURE_SERVER_LAYER_URL, isPoint: false },
+  { url: WDPA_POLY_LAYER_URL, isPoint: false },
   { url: WDPA_POINT_LAYER_URL, isPoint: true },
-  { url: WDPA_POLY_LAYER_URL, isPoint: false }
+  { url: OECM_POINT_LAYER_URL, isPoint: true },
+  { url: OECM_POLY_LAYER_URL, isPoint: false }
 ].freeze
 
 module MapHelper
