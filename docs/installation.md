@@ -34,16 +34,38 @@ package manager. For example, on OS X:
 ```
   # Get https://rvm.io or any other ruby version manager, then...
   brew update
-  brew install postgresql
-  brew install gdal --with-postgresql
+  # Install postgresql@9.4 (see instructions below)
+  # Install GDAL v2 now (see instructions below)
   brew install postgis
   brew install redis
-  brew install elasticsearch
+  brew tap elastic/tap 
+  brew install elastic/tap/elasticsearch-full # https://www.elastic.co/guide/en/elasticsearch/reference/7.17/brew.html
 
   # for assets
   brew install yarn
   yarn install
 ```
+#### PostgreSQL Installation
+
+Brew may refuse to install v9. You could:
+
+1. Download the [PostgreSQL legacy app](https://postgresapp.com/downloads_legacy.html) 
+2. For Mac, try https://ralphjsmit.com/set-up-dbngin-tableplus
+3. Your own method
+
+#### GDAL Installation
+1. Brew uninstall GDAL (if installed through Brew)
+2. Install GDAL from http://www.kyngchaos.com/files/software/frameworks/GDAL_Complete-2.1.dmg
+3. Check `which gdal-config` to see which path it originates from. 
+4. 
+If this doesn't work on MacOS, check `/Library/Frameworks/GDAL.framework/Programs/gdal-config` - you may need to add this to your PATH
+3. `gem uninstall gdal`
+4.
+```
+gem install gdal -v 2 -- --with-gdal-lib=/Library/Frameworks/GDAL.framework/unix/lib --with-gdal-includes=/Library/Frameworks/GDAL.framework/Versions/Current/Headers/
+```
+
+#### Set up
 
 Use `brew services` to start `redis`, `elasticsearch`, and `postgres`.
 
