@@ -60,7 +60,6 @@
 <script>
 import axios from 'axios'
 import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
-import Download from '../download/Download.vue'
 import FilterTrigger from '../filters/FilterTrigger.vue'
 import FiltersSearch from '../filters/FiltersSearch.vue'
 import SearchAreasInputAutocomplete from '../search/SearchAreasInputAutocomplete.vue'
@@ -71,7 +70,6 @@ export default {
   name: 'search-areas',
 
   components: {
-    Download,
     FilterTrigger,
     FiltersSearch,
     SearchAreasInputAutocomplete,
