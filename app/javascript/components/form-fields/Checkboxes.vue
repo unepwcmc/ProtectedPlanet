@@ -41,7 +41,8 @@ export default {
       required: true 
     },
     gaId: {
-      type: String
+      type: String,
+      default: undefined,
     },
     options: { 
       type: Array, // { title: String }
@@ -94,7 +95,8 @@ export default {
         }).join(', ')
 
         const eventLabel = `${this.gaId} - Checkbox(es): ${selectedOptionTitles}`
-        this.$ga.event("Checkbox (checked)", 'click', eventLabel)
+
+        this.$ga.event('Checkbox (checked)', 'click', eventLabel)
       }
     },
     

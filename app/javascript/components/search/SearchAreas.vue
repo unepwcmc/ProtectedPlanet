@@ -105,7 +105,8 @@ export default {
       required: true
     },
     gaId: {
-      type: String
+      type: String,
+      required: true
     },
     items_per_page: {
       type: Number,

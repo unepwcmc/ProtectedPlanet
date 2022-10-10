@@ -64,7 +64,8 @@ export default {
       type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
     },
     gaId: {
-      type: String
+      type: String,
+      required: true
     },
     itemsPerPage: {
       default: 6,
