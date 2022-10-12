@@ -16,6 +16,9 @@ en:
     hero:
       button: Explore Protected Areas
       stat-text: Global coverage of protected areas and OECMs
+    download:
+      label: Statistics updated
+      link: Download latest global statistics
     pas:
       title: Explore Protected Areas and OECMs by...
       button: Explore All
