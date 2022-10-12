@@ -8,6 +8,7 @@
         :children="tabs"
         class="tabs--rounded"
         :defaultSelectedId="tabs[0].id"
+        :gaId="gaId"
         v-on:click:tab="updateDatabaseId"
       ></tabs-fake>
     </div>
@@ -143,6 +144,10 @@ export default {
     data: {
       required: true,
       type: Object
+    },
+    gaId: {
+      type: String,
+      default: ''
     },
     tabs: {
       required: true,
