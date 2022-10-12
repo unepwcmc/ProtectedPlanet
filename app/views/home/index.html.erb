@@ -8,8 +8,19 @@
 <section class="container spacer-small--top">
   <%= render partial: "partials/cards/facts", locals: { cards: @site_facts } %>
   <p class="p-larger no-margin--top">
-    <span class="bold">Statistics updated: </span><%=  @update_date %>
-    <%= link_to('Download latest global statistics', global_statistics_download_path, { class: "margin-space--left" }) %>
+    <span class="bold">
+      <%= t('home.download.label') %>: 
+    </span>
+    
+    <%= @update_date %>
+
+    <ga-link
+      class="margin-space--left"
+      ga-id="Download global statistics"
+      href="<%= global_statistics_download_path %>"
+    >
+      <%= t('home.download.link') %>
+    </ga-link>
   </p>
 </section>
 
