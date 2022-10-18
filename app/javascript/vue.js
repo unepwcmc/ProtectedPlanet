@@ -34,11 +34,11 @@ import ChartRowPa from './components/charts/chart-row-pa/ChartRowPa'
 import ChartRowStacked from './components/charts/chart-row-stacked/ChartRowStacked'
 import ChartRowTarget from './components/charts/chart-row-target/ChartRowTarget'
 import ChartSunburst from './components/charts/chart-sunburst/ChartSunburst'
-import ChartToggle from './components/charts/chart-toggle/ChartToggle'
 import Download from './components/download/Download'
 import DownloadModal from './components/download/DownloadModal'
 import Flickity from 'vue-flickity'
 import FilteredTable from './components/pame/FilteredTable'
+import GaLink from './components/link/GaLink'
 import ListingPage from './components/listing/ListingPage.vue'
 import ListingPageCardNews from './components/listing/ListingPageCardNews.vue'
 import ListingPageCardResources from './components/listing/ListingPageCardResources.vue'
@@ -102,8 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ChartRowStacked,
         ChartRowTarget,
         ChartSunburst,
-        ChartToggle,
         Download,
+        GaLink,
         DownloadModal,
 	      FilteredTable,
         Flickity,

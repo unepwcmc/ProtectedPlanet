@@ -37,6 +37,7 @@
       <region-country-pages
         :data="<%= @stats_data.to_json %>"
         :tabs="<%= @tabs.to_json %>"
+        ga-id="Country page stats"
       >
         <template slot="related_countries">
           <% if has_related_countries? %>

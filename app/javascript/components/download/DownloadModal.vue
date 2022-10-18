@@ -21,6 +21,7 @@
           class="modal__li"
           :endpointCreate="endpointCreate"
           :endpointPoll="endpointPoll"
+          :gaId="gaId"
           :key="download.id"
           :params="download"
           :text="textStatus"
@@ -45,6 +46,10 @@ export default {
     endpointPoll: {
       required: true,
       type: String
+    },
+    gaId: {
+      type: String,
+      required: true
     },
     textDownload: {
       required: true,

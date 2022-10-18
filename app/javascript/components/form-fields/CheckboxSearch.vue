@@ -18,6 +18,7 @@
       <checkboxes 
         :clear-index="clearIndex"
         :id="id"
+        :ga-id="gaId"
         :options="autocomplete"
         :pre-selected="preSelectedCheckboxes"
         ref="checkboxes"
