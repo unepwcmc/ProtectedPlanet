@@ -23,7 +23,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import DownloadCommercial from './DownloadCommercial.vue'
 import DownloadPopup from './DownloadPopup.vue'
@@ -47,6 +46,10 @@ export default {
       required: false,
       type: Boolean
     },
+    gaId: {
+      type: String,
+      required: true
+    }
   },
 
   data () {
@@ -79,7 +82,8 @@ export default {
 
       if(this.gaId) {
         const eventLabel = `${this.gaId} request - ${option.title}`
-        this.$ga.event(`Button`, 'click', eventLabel)
+
+        this.$ga.event('Button', 'click', eventLabel)
       }
     },
 

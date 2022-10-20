@@ -49,6 +49,10 @@ export default {
       required: true,
       type: String
     },
+    gaId: {
+      type: String,
+      required: true
+    },
     params: {
       required: true,
       type: Object //{ domain: String, token: String }
