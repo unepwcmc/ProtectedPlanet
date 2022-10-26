@@ -1,8 +1,13 @@
-### 4.8.21
+### 4.8.23
+- Bug fix: Google search results
+  - Remove bingbot line in robots.txt to enable Google indexing
+
+### 4.8.22
 - Bug fix: Google Analytics Event tracking
   - Add in missing ids to enable GA event tracking
   - Add tracking to Download global statistics link
   - Add tracking to Region/Country page stats tabs
+
 ### 4.8.21
 - Chore: Oct 2022 WDPA Release
   - Oct statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
