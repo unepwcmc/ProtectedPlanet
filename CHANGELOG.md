@@ -1,3 +1,14 @@
+### 4.8.21
+- Bug fix: Google Analytics Event tracking
+  - Add in missing ids to enable GA event tracking
+  - Add tracking to Download global statistics link
+  - Add tracking to Region/Country page stats tabs
+### 4.8.21
+- Chore: Oct 2022 WDPA Release
+  - Oct statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
 ### 4.8.20
 - Chore: Sep 2022 WDPA Release
   - Sep statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
