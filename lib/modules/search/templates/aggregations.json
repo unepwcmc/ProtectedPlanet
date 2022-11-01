@@ -1,9 +1,4 @@
 {
-  "is_green_list": {
-    "terms": {
-      "field": "is_green_list"
-    }
-  },
   "has_irreplaceability_info": {
     "terms": {
       "field": "has_irreplaceability_info"
@@ -87,6 +82,19 @@
       "aggregation": {
         "terms": {
           "field": "categories.id",
+          "size": 500
+        }
+      }
+    }
+  },
+  "special_status": {
+    "nested": {
+      "path": "special_status"
+    },
+    "aggs": {
+      "aggregation": {
+        "terms": {
+          "field": "special_status.name",
           "size": 500
         }
       }

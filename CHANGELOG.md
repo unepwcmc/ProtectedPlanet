@@ -1,3 +1,9 @@
+### 4.8.24
+- Chore: Nov 2022 WDPA Release
+  - Nov statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
 ### 4.8.23
 - Bug fix: Google search results
   - Remove bingbot line in robots.txt to enable Google indexing

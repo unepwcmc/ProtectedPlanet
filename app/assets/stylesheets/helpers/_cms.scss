@@ -17,4 +17,12 @@
   p, 
   ul,
   li { font-size: inherit; }
+
+  &.container--medium {
+    table, th, td {
+      padding: rem-calc(5);
+      border: rem-calc(1) solid; 
+      border-collapse: collapse;
+    }
+  }
 }
