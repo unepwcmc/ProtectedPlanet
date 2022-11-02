@@ -66,7 +66,7 @@ group :test do
   gem 'factory_girl_rails', '~> 4.4.1'
   gem 'mocha', '~> 1.0.0'
   gem 'webmock', '~> 1.22.0', require: false
-  gem 'timecop', '~> 0.7.1'
+  gem 'timecop', '~> 0.9.5'
   gem 'capybara', '~> 2.3.0'
   # gem 'codeclimate-test-reporter', require: nil
   gem 'simplecov', require: false, group: :test
