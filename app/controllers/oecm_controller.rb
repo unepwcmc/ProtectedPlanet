@@ -18,9 +18,7 @@ class OecmController < ApplicationController
       overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize,
       title: I18n.t('map.title_oecm'),
       type: 'oecm',
-      point_query_services: [
-        { url: OECM_FEATURE_SERVER_LAYER_URL, isPoint: false }
-      ]
+      point_query_services: oecm_services_for_point_query
     }
     @map_options = {
       map: { center: [-100,0] }

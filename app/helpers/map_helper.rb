@@ -38,7 +38,7 @@ OVERLAYS = [
   {
     id: 'marine_wdpa',
     isToggleable: false,
-    layers: [{url: MARINE_WDPA_MAP_SERVER_URL }],
+    layers: [{url: MARINE_WDPA_MAP_SERVER_URL}],
     color: OVERLAY_BLUE,
     isShownByDefault: false,
     type: 'raster_tile'
@@ -54,7 +54,7 @@ OVERLAYS = [
   {
     id: 'oecm_marine',
     isToggleable: true,
-    layers: [{url: OECM_MAP_SERVER_URL + '/0'}],
+    layers: [{url: OECM_POLY_LAYER_URL}, {url: OECM_POINT_LAYER_URL, isPoint: true}],
     color: OVERLAY_YELLOW,
     isShownByDefault: true,
     type: 'raster_data',
@@ -63,7 +63,7 @@ OVERLAYS = [
   {
     id: 'greenlist_terrestrial',
     isToggleable: false,
-    layers: [{url: WDPA_MAP_SERVER_URL + '/0', isPoint: true}, {url: WDPA_MAP_SERVER_URL + '/1'}],
+    layers: [{url: WDPA_POINT_LAYER_URL, isPoint: true}, {url: WDPA_POLY_LAYER_URL}],
     color: OVERLAY_GREEN,
     isShownByDefault: true,
     type: 'raster_data'
@@ -71,18 +71,21 @@ OVERLAYS = [
   {
     id: 'greenlist_marine',
     isToggleable: false,
-    layers: [{url: WDPA_MAP_SERVER_URL + '/0', isPoint: true}, {url: WDPA_MAP_SERVER_URL + '/1'}],
+    layers: [{url: WDPA_POINT_LAYER_URL, isPoint: true}, {url: WDPA_POLY_LAYER_URL}],
     color: OVERLAY_BLUE,
     isShownByDefault: true,
     type: 'raster_data'
   }
 ].freeze
 
+# Point layers first as this query is faster and stops on first successful query
 ALL_SERVICES_FOR_POINT_QUERY = [
-  { url: WDPA_POLY_LAYER_URL, isPoint: false },
-  { url: WDPA_POINT_LAYER_URL, isPoint: true },
-  { url: OECM_POINT_LAYER_URL, isPoint: true },
-  { url: OECM_POLY_LAYER_URL, isPoint: false }
+  { type: 'marine', url: MARINE_WDPA_POINT_LAYER_URL, isPoint: true },
+  { type: 'wdpa', url: WDPA_POINT_LAYER_URL, isPoint: true },
+  { type: 'oecm', url: OECM_POINT_LAYER_URL, isPoint: true },
+  { type: 'marine', url: MARINE_WDPA_POLY_LAYER_URL, isPoint: false },
+  { type: 'wdpa', url: WDPA_POLY_LAYER_URL, isPoint: false },
+  { type: 'oecm', url: OECM_POLY_LAYER_URL, isPoint: false }
 ].freeze
 
 module MapHelper
@@ -101,6 +104,24 @@ module MapHelper
 
   def all_services_for_point_query
     ALL_SERVICES_FOR_POINT_QUERY
+  end
+
+  def marine_services_for_point_query
+    marine_services = ALL_SERVICES_FOR_POINT_QUERY.select do |s|
+      s[:type] == 'marine' || s[:type] == 'oecm'
+    end
+
+    marine_services.map do |s| 
+      s[:type] == 'oecm' ? s.merge({ queryString: MARINE_WHERE_QUERY }) : s
+    end
+  end
+
+  def oecm_services_for_point_query
+    ALL_SERVICES_FOR_POINT_QUERY.select {|s| s[:type] == 'oecm' }
+  end
+
+  def wdpa_services_for_point_query
+    ALL_SERVICES_FOR_POINT_QUERY.select {|s| s[:type] == 'wdpa' }
   end
 
   def country_extent_url (iso3)
