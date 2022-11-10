@@ -103,7 +103,8 @@ module MapHelper
   end
 
   def all_services_for_point_query
-    ALL_SERVICES_FOR_POINT_QUERY
+    # Marine are subset of wdpa, so not required if wdpa already included
+    ALL_SERVICES_FOR_POINT_QUERY.select { |s| s[:type] != 'marine' }
   end
 
   def marine_services_for_point_query
