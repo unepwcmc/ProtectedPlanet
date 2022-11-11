@@ -3,8 +3,8 @@
   - Nov statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - `constants.rb` updated
   - Map PDF replaced
+- Feature: Add filter for Green List candidate sites on search page
 - Bug fix: Fix size of percentage boxes (e.g., on country pages)
-- Bug fix: Add filter for Green List candidate sites on search page
 - Bug fix: Fix missing thumbnail images
 
 ### 4.8.23
