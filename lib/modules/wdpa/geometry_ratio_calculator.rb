@@ -1,4 +1,4 @@
- module Wdpa::GeometryRatioCalculator
+module Wdpa::GeometryRatioCalculator
   def self.calculate
     Country.pluck(:id).each do |country_id|
       geometry_counts = calculate_geometry_counts(country_id)
