@@ -57,7 +57,7 @@ class GreenListController < ApplicationController
   end
 
   def point_query_services
-    all_services_for_point_query.map do |service|
+    wdpa_services_for_point_query.map do |service|
       service.merge({
         queryString: wdpaid_where_query(green_list_areas.map(&:wdpa_id))
       })

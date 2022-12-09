@@ -20,10 +20,7 @@ class WdpaController < ApplicationController
       overlays: MapOverlaysSerializer.new(wdpa_overlays, map_yml).serialize,
       title: I18n.t('map.title'),
       type: 'wdpa',
-      point_query_services: [
-        { url: WDPA_POINT_LAYER_URL, isPoint: true },
-        { url: WDPA_POLY_LAYER_URL, isPoint: false }
-      ]
+      point_query_services: wdpa_services_for_point_query
     }
   end
 
