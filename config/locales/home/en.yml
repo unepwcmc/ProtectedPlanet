@@ -14,7 +14,7 @@ en:
         theme: oecm
         title: Marine protected area & OECM coverage
     hero:
-      button: Explore Protected Areas
+      button: Explore Protected Areas and OECMs
       stat-text: Global coverage of protected areas and OECMs
     download:
       label: Statistics updated
