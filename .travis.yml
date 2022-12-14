@@ -9,16 +9,16 @@ before_install:
   - sudo apt-get purge libgdal1
   - sudo apt-add-repository --remove ppa:ubuntugis/ppa -y
   - sudo apt-get update
-  - sudo apt-get install libgdal1h
+  - sudo apt-get install libgdal1i
   - sudo apt-get install gdal-bin
   - sudo apt-get install libproj-dev
   - sudo apt-get install libspatialite-dev --force-yes
-  - sudo apt-get install libgeos-c1 --force-yes
-  - echo libgeos-c1 hold | sudo dpkg --set-selections
-  - echo libgdal1 hold | sudo dpkg --set-selections
+  - sudo apt-get install libgeos-c1v5 --force-yes
+  - echo libgeos-c1v5 hold | sudo dpkg --set-selections
+  - echo libgdal1i hold | sudo dpkg --set-selections
   - sudo apt-get install libgdal-dev --force-yes
   - sudo apt-get install libgdal1-dev --force-yes
-  - sudo apt-get install postgresql-9.3-postgis-2.3 -f
+  - sudo apt-get install postgresql-9.5-postgis-2.2 -f
   - psql -c 'create database pp_test' -U postgres
   - psql -c 'create database pp_test_backup' -U postgres
   - psql -c 'CREATE EXTENSION postgis;' -U postgres -d pp_test
@@ -57,6 +57,6 @@ addons:
   code_climate:
     repo_token:
       secure: "YsOamnH3K8SwysSe2EKm11Wi+Qi0ZsTMGDL3jD+9uWYWM6+MIFEFY7xJf2psoImHzzMoJE5EYtIbQBNk0WB2dtehdaI29yaQ+5RFoMw+z+M2t119GKE3QgD8W0vlhXWKadVXbSnU3EUCaHn+u2rzFU0jNx/+GCoPuG2ltfJf404="
-  postgresql: 9.3
+  postgresql: 9.5
 services:
   - redis-server
