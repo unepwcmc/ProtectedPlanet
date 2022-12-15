@@ -31,7 +31,7 @@ before_install:
   - sudo chown -R elasticsearch:elasticsearch /etc/default/elasticsearch
   - sudo service elasticsearch start
 install:
-  - nvm install node
+  - nvm install 10
   - node -v
   - npm i -g yarn
   - yarn
