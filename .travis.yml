@@ -18,11 +18,7 @@ before_install:
   - echo libgdal1i hold | sudo dpkg --set-selections
   - sudo apt-get install libgdal-dev --force-yes
   - sudo apt-get install libgdal1-dev --force-yes
-  - sudo apt-get install postgresql-9.6-postgis-2.4 postgresql-9.6-postgis-2.4-scripts -f
-  - sudo systemctl daemon-reload
-  - sudo systemctl start postgresql
-  - sleep 20
-  - psql -c 'alter extension postgis update to "2.4"' -U postgres;
+  - sudo apt-get install postgresql-9.6-postgis-2.4 -f
   - psql -c 'create database pp_test' -U postgres
   - psql -c 'create database pp_test_backup' -U postgres
   - psql -c 'CREATE EXTENSION postgis;' -U postgres -d pp_test
