@@ -57,6 +57,7 @@ addons:
   code_climate:
     repo_token:
       secure: "YsOamnH3K8SwysSe2EKm11Wi+Qi0ZsTMGDL3jD+9uWYWM6+MIFEFY7xJf2psoImHzzMoJE5EYtIbQBNk0WB2dtehdaI29yaQ+5RFoMw+z+M2t119GKE3QgD8W0vlhXWKadVXbSnU3EUCaHn+u2rzFU0jNx/+GCoPuG2ltfJf404="
-  #postgresql: 9.5
+  postgresql: 9.6
+sudo: required
 services:
   - redis-server
