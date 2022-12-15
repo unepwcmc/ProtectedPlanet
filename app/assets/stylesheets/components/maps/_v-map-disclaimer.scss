@@ -21,6 +21,11 @@
     }
   }
 
+  &__body {
+    overflow-y: auto;
+    max-height: 14em;
+  }
+
   &--embedded {
     &.v-map-disclaimer {
       background: transparent;
