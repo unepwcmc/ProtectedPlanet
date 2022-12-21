@@ -26,7 +26,8 @@ module GeometryConcern
     # Returns a stringified geojson for making a request to the Mapbox API, to generate a preview thumbnail.
     # If the string is too long it will be rejected, so we then need to simplify it.
     # We fall back on a convex transformation, which provides a very crude outline, but is a short string.
-    if geojson_suitable_for_mapbox_url?((geojson = geojson_query(geo_properties)))
+    geojson = geojson_query(geo_properties)
+    if geojson_suitable_for_mapbox_url?(geojson)
       geojson
     else
       convex_geojson_query(geo_properties)
