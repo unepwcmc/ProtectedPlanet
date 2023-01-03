@@ -6,7 +6,7 @@ class Region < ApplicationRecord
   include SourceHelper
 
   has_many :countries
-  has_many :protected_areas, -> { distinct }, through: :countries
+  has_many :protected_areas, through: :countries
   has_many :designations, -> { distinct }, through: :protected_areas
   has_many :iucn_categories, through: :protected_areas
 
