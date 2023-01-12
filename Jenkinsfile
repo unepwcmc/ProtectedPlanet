@@ -144,12 +144,12 @@ def prepare() {
 
 def prepareDatabase() {
     COMMAND = "rake db:create db:migrate db:seed"
-    sh "docker-compose --project-name=${JOB_NAME} run -e "RAILS_ENV=test" web ${COMMAND}"
+    sh "docker-compose --project-name=${JOB_NAME} run web RAILS_ENV=test ${COMMAND}"
 }
 
 def rakeTest() {
     COMMAND = "rake test"
-    sh "docker-compose --project-name=${JOB_NAME} run -e "RAILS_ENV=test" web ${COMMAND}"
+    sh "docker-compose --project-name=${JOB_NAME} run web RAILS_ENV=test ${COMMAND}"
 }
 
 def deploy() {
