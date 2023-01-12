@@ -2,7 +2,7 @@ version: '3'
 services:
   web:
     build: .
-    command: /bin/bash -l -c "bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid; bundle exec rails s -p 3000 -b '0.0.0.0'"
     user: unepwcmc
     volumes:
       - .:/ProtectedPlanet
@@ -19,15 +19,18 @@ services:
       - webpacker
   db:
     container_name: protectedplanet-db
-    image: kartoza/postgis
+    image: kartoza/postgis:11.5-2.5
     ports:
       - "5432:5432"
     env_file:
       - '.env'
     volumes:
       - protectedplanet_pg_data:/var/lib/postgresql
+      - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
     image: redis
+    ports:
+      - "6379:6379"
     env_file:
       - '.env'
     volumes:
@@ -37,7 +40,7 @@ services:
      volumes:
        - .:/ProtectedPlanet
        - protectedplanet_import_data:/import_data
-     links:
+     depends_on:
        - db
        - redis
      command: /bin/bash -l -c "bundle exec sidekiq"
@@ -69,7 +72,7 @@ services:
     env_file: 
       - '.env'
     command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
-    user: unepwcmc
+    user: unepwcmc #rm -rf /ProtectedPlanet/.cache/yarn/
     volumes: 
       - .:/ProtectedPlanet
       - protectedplanet_bundler:/usr/local/bundle
@@ -78,12 +81,7 @@ services:
 
 volumes:
   protectedplanet_pg_data:
-    driver: local
   protectedplanet_redis_data:
-    driver: local
   protectedplanet_import_data:
-    driver: local
   protectedplanet_es_data:
-    driver: local
   protectedplanet_bundler:
-    driver: local
