@@ -128,7 +128,6 @@ pipeline {
 	    deleteWorkspace()
 	}
     }
-  }
 }
 
 
