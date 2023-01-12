@@ -127,9 +127,8 @@ pipeline {
 	    deleteWorkspace()
 	}
     }
-
+  }
 }
-
 
 
 def buildProject() {
