@@ -72,7 +72,7 @@ services:
     env_file: 
       - '.env'
     command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
-    user: unepwcmc #rm -rf /ProtectedPlanet/.cache/yarn/
+    user: unepwcmc
     volumes: 
       - .:/ProtectedPlanet
       - protectedplanet_bundler:/usr/local/bundle
