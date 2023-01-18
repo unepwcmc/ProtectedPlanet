@@ -46,6 +46,7 @@ services:
      env_file:
        - '.env'
   elasticsearch:
+    container_name: protectedplanet-elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
     environment:
       - cluster.name=docker-cluster
