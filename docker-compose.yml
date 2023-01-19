@@ -1,12 +1,14 @@
 version: '3'
 services:
   web:
+    container_name: protectedplanet-web
     build: .
     command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid; bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/ProtectedPlanet
       - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
+      - ${SSH_AUTH_SOCK}:/ssh-agent
     ports:
       - "3000:3000"
     env_file:
@@ -27,6 +29,7 @@ services:
       - protectedplanet_pg_data:/var/lib/postgresql
       - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
+    container_name: protectedplanet-redis
     image: redis
     ports:
       - "6379:6379"
@@ -64,9 +67,14 @@ services:
       - 'protectedplanet_es_data:/usr/share/elasticsearch/data'
   kibana:
     image: docker.elastic.co/kibana/kibana:7.0.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://protectedplanet-elasticsearch:9200
+    env_file:
+      - '.env'
     ports:
       - "5601:5601"
-  webpacker: 
+  webpacker:
+    container_name: protectedplanet-webpacker
     build: .
     env_file: 
       - '.env'
