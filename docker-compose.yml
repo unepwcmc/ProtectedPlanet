@@ -9,8 +9,9 @@ services:
       - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
       - ${SSH_AUTH_SOCK}:/ssh-agent
-    ports:
-      - "3000:3000"
+    environment:
+      - SSH_AUTH_SOCK=/ssh-agent
+    network_mode: host
     env_file:
       - '.env'
     depends_on:
@@ -21,8 +22,7 @@ services:
   db:
     container_name: protectedplanet-db
     image: kartoza/postgis:11.5-2.5
-    ports:
-      - "5432:5432"
+    network_mode: host
     env_file:
       - '.env'
     volumes:
@@ -31,8 +31,7 @@ services:
   redis:
     container_name: protectedplanet-redis
     image: redis
-    ports:
-      - "6379:6379"
+    network_mode: host
     env_file:
       - '.env'
     volumes:
@@ -42,6 +41,7 @@ services:
      volumes:
        - .:/ProtectedPlanet
        - protectedplanet_import_data:/import_data
+     network_mode: host
      depends_on:
        - db
        - redis
@@ -59,8 +59,7 @@ services:
       memlock:
         soft: -1
         hard: -1
-    ports:
-      - "9200:9200"
+    network_mode: host
     env_file:
       - '.env'
     volumes:
@@ -68,11 +67,11 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:7.0.0
     environment:
-      - ELASTICSEARCH_HOSTS=http://protectedplanet-elasticsearch:9200
+      - ELASTICSEARCH_HOSTS=http://localhost:9200
     env_file:
       - '.env'
-    ports:
-      - "5601:5601"
+    network_mode: host
+
   webpacker:
     container_name: protectedplanet-webpacker
     build: .
@@ -82,8 +81,7 @@ services:
     volumes: 
       - .:/ProtectedPlanet
       - protectedplanet_bundler:/usr/local/bundle
-    ports:
-      - '3035:3035'
+    network_mode: host
 
 volumes:
   protectedplanet_pg_data:

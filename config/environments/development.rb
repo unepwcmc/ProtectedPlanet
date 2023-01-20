@@ -15,12 +15,6 @@
 
 Rails.application.configure do
 
-  # Check if we use Docker to allow docker ip through web-console
-  if ENV['DOCKERISED'] == 'true'
-    host_ip = `/sbin/ip route|awk '/default/ { print $3 }'`.strip
-    config.web_console.whitelisted_ips << host_ip
-  end
-
   # Settings specified here will take precedence over those in config/application.rb.
   # config.webpacker.check_yarn_integrity = true
 
