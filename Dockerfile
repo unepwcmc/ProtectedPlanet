@@ -26,7 +26,7 @@ ADD Gemfile.lock /ProtectedPlanet/Gemfile.lock
 ADD package.json /ProtectedPlanet/package.json
 ADD docker/scripts /ProtectedPlanet/docker/scripts
 
-RUN gem install bundler -v 1.17.3 && bundle _1.17.3_ install
+RUN gem install bundler && bundle install
 RUN yarn install
 
 COPY . /ProtectedPlanet
