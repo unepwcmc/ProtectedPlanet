@@ -1,3 +1,6 @@
+### 4.8.27
+- Revert geojson simplification methods for mapbox
+
 ### 4.8.26
 - Chore: Jan 2023 WDPA Release
   - Jan statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
