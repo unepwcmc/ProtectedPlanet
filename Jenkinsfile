@@ -171,6 +171,7 @@ def dockerImageCleanup() {
 	docker ps -a --no-trunc  | grep "pp" | awk '{print $1}' | xargs -r --no-run-if-empty docker stop
 	docker ps -a --no-trunc  | grep "pp" | awk '{print $1}' | xargs -r --no-run-if-empty docker rm -f
 	docker images --no-trunc | grep "pp" | awk '{print $3}' | xargs -r --no-run-if-empty docker rmi -f
+        docker images --no-trunc | grep "<none>" | awk '{print $3}' | xargs -r --no-run-if-empty docker rmi -f
     '''    
 }
 
