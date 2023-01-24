@@ -22,67 +22,14 @@ module GeometryConcern
     ]
   end
 
-  def geojson_for_mapbox_uri geo_properties=nil
-    # Returns a stringified geojson for making a request to the Mapbox API, to generate a preview thumbnail.
-    # If the string is too long it will be rejected, so we then need to simplify it.
-    # First we can buffer it, which reduces complexity but retains the original shape well.
-    # Finally, if the string is still too long, we fall back on a convex transformation, which
-    # provides a very crude outline, but is a short string.
-    if geojson_suitable_for_mapbox_url?((geojson = geojson_query(geo_properties)))
-      geojson
-    elsif geojson_suitable_for_mapbox_url?((buffered_geojson = buffered_geojson_query(geo_properties)))
-      buffered_geojson
-    else
-      convex_geojson_query(geo_properties)
-    end
-  end
-
-  def geojson_suitable_for_mapbox_url?(geojson)
-    geojson.present? && geojson.length <= 5000
-  end
-
   def geojson geo_properties=nil
-    geojson_query(geo_properties)
-  end
-
-  private
-
-  def buffered_geojson_query geo_properties
-    # We send a geojson to mapbox to create thumbnails. If the length of these exceeds a uri
-    # length of ~5000 characters, mapbox returns a 403. This method simplifies the geojson by
-    # first simplifying the geometry (to make the buffer faster), adding a buffer, and then
-    # simplifying again.
-    simplified_geojson = ActiveRecord::Base.connection.select_value("""
-    SELECT ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_Buffer(ST_SimplifyPreserveTopology(ST_MakeValid(#{main_geom_column}), 0.005), 0.005), 0.005), 3)
+    geojson = ActiveRecord::Base.connection.select_value("""
+      SELECT ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_MakeValid(#{main_geom_column}), 0.003), 3)
       FROM #{self.class.table_name}
       WHERE id = #{id}
     """.squish)
 
-    simplified_geojson.present? ? to_uri(simplified_geojson, geo_properties) : nil
-  end
-
-  def convex_geojson_query geo_properties
-    # Very simple polygon, if other polygon thumbnail methods fail.
-    simplified_geojson = ActiveRecord::Base.connection.select_value("""
-    SELECT ST_AsGeoJSON(ST_ConvexHull(ST_MakeValid(#{main_geom_column})), 3)
-      FROM #{self.class.table_name}
-      WHERE id = #{id}
-    """.squish)
-
-    simplified_geojson.present? ? to_uri(simplified_geojson, geo_properties) : nil
-  end
-
-  def geojson_query(geo_properties)
-    simplified_geojson = ActiveRecord::Base.connection.select_value("""
-    SELECT ST_AsGeoJSON(ST_SimplifyPreserveTopology(ST_MakeValid(#{main_geom_column}), 0.003), 3)
-      FROM #{self.class.table_name}
-      WHERE id = #{id}
-    """.squish)
-
-    simplified_geojson.present? ? to_uri(simplified_geojson, geo_properties) : nil
-  end
-
-  def to_uri(geojson, geo_properties=nil)
+    return nil unless geojson.present?
     geometry = JSON.parse(geojson)
 
     URI.encode({
@@ -91,6 +38,8 @@ module GeometryConcern
       "geometry" => geometry
     }.to_json)
   end
+
+  private
 
   def geometry_properties
     if self.respond_to?(:marine) && marine
