@@ -1,8 +1,5 @@
 FROM ruby:2.6.3
 
-# throw errors if Gemfile has been modified since Gemfile.lock
-RUN bundle config --global frozen 1
-
 RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     && wget -qO- https://deb.nodesource.com/setup_12.x | bash \
     && apt-get install -y \
@@ -24,10 +21,11 @@ WORKDIR /ProtectedPlanet
 ADD Gemfile /ProtectedPlanet/Gemfile
 ADD Gemfile.lock /ProtectedPlanet/Gemfile.lock
 ADD package.json /ProtectedPlanet/package.json
+ADD yarn.lock /ProtectedPlanet/yarn.lock
 ADD docker/scripts /ProtectedPlanet/docker/scripts
 
-RUN gem install bundler && bundle install
-RUN yarn install
+RUN cd /ProtectedPlanet && gem install bundler -v 1.17.3 && bundle _1.17.3_ install
+RUN cd /ProtectedPlanet &&  yarn install
 
 COPY . /ProtectedPlanet
 
