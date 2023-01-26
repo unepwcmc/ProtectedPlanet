@@ -24,8 +24,8 @@ ADD package.json /ProtectedPlanet/package.json
 ADD yarn.lock /ProtectedPlanet/yarn.lock
 ADD docker/scripts /ProtectedPlanet/docker/scripts
 
-RUN cd /ProtectedPlanet && gem install bundler -v 1.17.3 && bundle _1.17.3_ install
-RUN cd /ProtectedPlanet &&  yarn install
+RUN gem install bundler -v 1.17.3 && bundle _1.17.3_ install
+RUN yarn install
 
 COPY . /ProtectedPlanet
 
