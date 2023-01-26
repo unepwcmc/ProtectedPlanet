@@ -9,7 +9,7 @@ services:
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
-      - ${SSH_AUTH_SOCK}:/ssh-agent
+      - /tmp/ssh-XXXXXX10xMQw/agent.1407:/ssh-agent
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
     network_mode: host
