@@ -1272,7 +1272,7 @@ GEM
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.10)
-    timecop (0.7.4)
+    timecop (0.9.6)
     tinymce-rails (4.3.13)
       railties (>= 3.1.1)
     turnout (2.5.0)
@@ -1374,7 +1374,7 @@ DEPENDENCIES
   sprockets-rails (~> 3.2.1)
   sprockets-vue (~> 0.1.0)
   system
-  timecop (~> 0.7.1)
+  timecop (~> 0.9.6)
   tinymce-rails (~> 4.3.2)
   turnout (~> 2.5.0)
   uglifier (~> 4.1.17)
