@@ -22,8 +22,12 @@
 </section>
 
 <section class="container--medium spacer-small--top">
-  <h2><%= cms_fragment_render(:section_distribution_title, @cms_page) %></h2>
-  <div><%= cms_fragment_render(:section_distribution_content, @cms_page) %></div>
+  <h2><%= t('thematic_area.marine.distribution.title') %></h2>
+  <div>
+    <%= t('thematic_area.marine.distribution.content', total_ocean_pa_coverage_percentage: '%.2f' % marine_stats('total_ocean_pa_coverage_percentage'),
+      national_waters_pa_coverage_percentage: '%.2f' % marine_stats('national_waters_pa_coverage_percentage'),
+      high_seas_pa_coverage_percentage: '%.2f' % marine_stats('high_seas_pa_coverage_percentage')).html_safe %>
+  </div>
 </section>
 
 <%= render partial: "partials/charts/chart-row-pa", locals: {
