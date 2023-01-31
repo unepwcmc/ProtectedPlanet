@@ -50,7 +50,7 @@ group :development do
   gem 'capistrano-maintenance','1.2.1', require: false
   gem 'capistrano-passenger', '0.2.0', require: false
   gem 'capistrano-sidekiq','1.0.2'
-  gem 'capistrano-git-with-submodules', '2.0.3'
+  gem 'capistrano-git-with-submodules', '2.0.6'
   gem 'capistrano-service'
   gem 'awesome_print'
 
