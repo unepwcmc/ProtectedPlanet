@@ -1,5 +1,5 @@
 set :stage, :staging
-set :branch, "fix/297/disclaimer-update"
+set :branch, "develop"
 
 server 'new-web.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
