@@ -3,6 +3,7 @@
   - Feb statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - `constants.rb` updated
   - Map PDF replaced
+  - Update map disclaimer
 
 ### 4.8.27
 - Revert geojson simplification methods for mapbox
