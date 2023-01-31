@@ -1029,7 +1029,7 @@ GEM
     crass (1.0.6)
     css_parser (1.7.1)
       addressable
-    dalli (2.7.10)
+    dalli (3.2.3)
     database_cleaner (1.8.0)
     dbf (2.0.13)
       fastercsv (~> 1.5)
@@ -1336,7 +1336,7 @@ DEPENDENCIES
   capybara (~> 2.3.0)
   coffee-rails (~> 4.2.2)
   comfortable_mexican_sofa (~> 2.0.0)
-  dalli (~> 2.7.2)
+  dalli (~> 3.2.3)
   database_cleaner
   dbf (~> 2.0.7)
   devise (~> 4.7.1)
