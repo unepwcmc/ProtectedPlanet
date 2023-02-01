@@ -57,28 +57,37 @@ docker compose run -v {PATH_TO_WDPA_SQL_DUMP}:/import_database/pp_development.sq
 ```
 
 ## Step 4: CMS setup
-**4.1.  Go to 'http://localhost:3000/en/admin/sites' and update the host to be `localhost:3000`**
+Step 3 should populate the database with the newest CMS data. Step 4.1. will add minor changes (e.g. correct images)
 
-**4.2. Reindex elasticsearch**
+**4.1. Finish CMS setup**
+
+```
+docker exec -it protectedplanet-web rake cms_categories:import
+
+docker exec -it protectedplanet-web rake comfy:staging_import
+
+docker exec -it protectedplanet-web rake 'comfy:cms_seeds:import[protected-planet, protected-planet]'
+```
+
+**4.2.  Go to 'http://localhost:3000/en/admin/sites' and update the host to be `localhost:3000`**
+
+**4.3. Reindex elasticsearch**
 
 ```
 docker exec -it protectedplanet-web rake search:reindex
 ```
 
-Step 3 should populate the database with the newest CMS data. In case of a problem with the CMS seeds (images not rendering etc.), import the CMS seeds from staging:
-
-`docker exec -it protectedplanet-web rake cms_categories:import`
-
-`docker exec -it protectedplanet-web rake comfy:staging_import`
-
-`docker exec -it protectedplanet-web rake 'comfy:cms_seeds:import[protected-planet, protected-planet]'`
-
-and run 4.1-4.2 again
-
-
 ### Debugging
 For debugging with byebug, attach to the server console:
 `docker attach protectedplanet-web`
+
+
+# Deployment
+To deploy the project with docker:
+
+```
+sudo docker exec -it protectedplanet-web cap staging deploy
+```
 
 ### Troubleshooting:
 - if yarn integrity problems appear: temporary fix `docker run web yarn install`
