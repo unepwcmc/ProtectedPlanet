@@ -1,6 +1,22 @@
+### 4.8.28
+- Chore: Feb 2023 WDPA Release
+  - Feb statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+  - Update map disclaimer
+
+### 4.8.27
+- Revert geojson simplification methods for mapbox
+
+### 4.8.26
+- Chore: Jan 2023 WDPA Release
+  - Jan statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
 ### 4.8.25
 - Chore: Dec 2022 WDPA Release
-  - Nov statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - Dec statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - `constants.rb` updated
   - Map PDF replaced
 
@@ -9,6 +25,9 @@
   - Nov statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - `constants.rb` updated
   - Map PDF replaced
+- Feature: Add filter for Green List candidate sites on search page
+- Bug fix: Fix size of percentage boxes (e.g., on country pages)
+- Bug fix: Fix missing thumbnail images
 
 ### 4.8.23
 - Bug fix: Google search results
