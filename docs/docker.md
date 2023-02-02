@@ -6,6 +6,8 @@ To overcome difficulties with the installation of old packages/versions on diffe
 - Docker 20.10.22
 - SQL dump of the production database from the Centre's AWS S3
 - Freshly cloned repository with updated .env (LastPass)
+ 
+_To avoid potential problems, remove `node_modules` from your current directory._
   
 
 ## Step 1: Docker setup
@@ -97,8 +99,8 @@ sudo docker exec -it protectedplanet-web cap staging deploy
 - to force the image to rebuild without cache: `docker compose build --no-cache`
 
 - Docker cleanup:
-  - to remove all containers: `docker rm -f $(sudo docker ps -a -q)`
-  - to remove all volumes: `docker volume rm $(sudo docker volume ls -q)`
-  - (careful) to remove all images: `docker rmi $(docker images -a -q)`
+  - to remove all containers: `docker rm -f $(docker ps -a -q)`
+  - to remove all volumes: `docker volume rm $(docker volume ls -q)`
+  - (careful) to remove all images: `docker rmi $(docker image ls -q)`
 
   
