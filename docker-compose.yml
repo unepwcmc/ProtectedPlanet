@@ -40,18 +40,20 @@ services:
     volumes:
       - protectedplanet_redis_data:/data
   sidekiq:
-     build: .
-     volumes:
+    build: .
+    volumes:
       - .:/ProtectedPlanet
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_import_data:/import_data
-     network_mode: host
-     depends_on:
-       - db
-       - redis
-     command: /bin/bash -l -c "bundle exec sidekiq"
-     env_file:
-       - '.env'
+    network_mode: host
+    depends_on:
+      - db
+      - redis
+    command: /bin/bash -l -c "bundle exec sidekiq"
+    env_file:
+      - '.env'
+    stdin_open: true
+    tty: true
   elasticsearch:
     container_name: protectedplanet-elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
