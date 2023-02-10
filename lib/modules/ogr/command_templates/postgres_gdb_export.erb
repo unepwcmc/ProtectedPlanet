@@ -12,4 +12,7 @@ PG:"host=<%= db_config[:host] %>
   <% end %>
   dbname=<%= db_config[:database] %>"
 -sql "<%= query %>"
+<% unless geom_type == 'source' %>
+  -nlt "<%= geom_type.upcase %>"
+<% end %>
 -nln "<%= feature_name %>"
