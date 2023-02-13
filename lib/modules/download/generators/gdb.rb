@@ -1,10 +1,10 @@
 class Download::Generators::Gdb < Download::Generators::Base
   QUERY_CONDITIONS = {
-    polygons: {
+    multipolygons: {
       select: Download::Utils.download_columns,
       where: %{"TYPE" = 'Polygon'}
     },
-    points:   {
+    multipoints:   {
       select: Download::Utils.download_columns(reject: [:gis_area, :gis_m_area]),
       where: %{"TYPE" = 'Point'}
     }
