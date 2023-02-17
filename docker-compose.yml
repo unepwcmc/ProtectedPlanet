@@ -9,10 +9,10 @@ services:
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
-      - ${SSH_AUTH_SOCK}:/ssh-agent
-    environment:
-      - SSH_AUTH_SOCK=/ssh-agent
+      - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
     network_mode: host
+    environment:
+      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
     env_file:
       - '.env'
     depends_on:

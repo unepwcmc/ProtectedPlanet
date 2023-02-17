@@ -14,13 +14,13 @@ _To avoid potential problems, remove `node_modules` from your current directory.
 **1.1. Download and/or build all required images:**
 
 ```
-docker compose build
+SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose build
 ```
 
 **1.2. Start the containers:**
 
 ```
-docker compose up
+SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose up
 ```
 
 The following services should be running now:
@@ -92,6 +92,8 @@ sudo docker exec -it protectedplanet-web cap staging deploy
 ```
 
 ### Troubleshooting:
+- `SSH_AUTH_SOCK` not found: make sure `echo ${SSH_AUTH_SOCK}` returns a path to your ssh agent
+
 - if yarn integrity problems appear: temporary fix `docker run web yarn install`
 
 - if CMS seeds downloading fails, remove `db/cms_seeds` and retry
