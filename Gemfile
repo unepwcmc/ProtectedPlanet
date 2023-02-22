@@ -37,7 +37,7 @@ gem 'net-scp'
 #
 group :production, :staging do
 #  gem 'unicorn'
-  gem 'dalli', '~> 2.7.2'
+  gem 'dalli', '~> 3.2.4'
   gem 'rack-cache', '~> 1.2'
 end
 #
