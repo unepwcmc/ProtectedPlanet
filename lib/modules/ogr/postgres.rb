@@ -20,7 +20,7 @@ class Ogr::Postgres
     system ogr_command(TEMPLATES[:import], binding)
   end
 
-  def self.export file_type, file_name, query, geom_type='multipolygon'
+  def self.export file_type, file_name, query, geom_type='polygon'
     template = file_type == :gdb ? TEMPLATES[:gdb_export] : TEMPLATES[:export]
     # Used for adding the -update flag so to add different layers (poly point source)
     # into the same .gdb file
@@ -58,6 +58,9 @@ class Ogr::Postgres
   # only WDOECM or both. The 'Public' bit is removed and the date
   # and the geometry type are swapped.
   FEATURE_TYPES = {
+    'polygon' => 'poly',
+    'point' => 'point',
+    # .gdb related types
     'multipolygon' => 'poly',
     'multipoint' => 'point',
     'source' => 'source'
@@ -69,7 +72,7 @@ class Ogr::Postgres
     attrs = filename.split('_')
     # Given the original filename should also contains 'polygons' or 'points' at the end,
     # we remove this bit.
-    attrs.pop if %w(multipolygons multipoints).include?(attrs[-1])
+    attrs.pop if %w(multipolygons multipoints polygons points).include?(attrs[-1])
     # If the filename does not end with 'Public' it means there's also an identifier (e.g. an ISO or a WDPA ID)
     # So the original filename would have been something like WDPA_MmmYYY_Public_identifier
     identifier = attrs.pop unless attrs[-1].downcase == 'public'

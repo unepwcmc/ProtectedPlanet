@@ -3,11 +3,11 @@ class Download::Generators::Shapefile < Download::Generators::Base
   SHAPEFILE_PARTS = ['shp', 'shx',  'dbf', 'prj', 'cpg']
 
   QUERY_CONDITIONS = {
-    multipolygons: {
+    polygons: {
       select: Download::Utils.download_columns,
       where: %{"TYPE" = 'Polygon'}
     },
-    multipoints:   {
+    points:   {
       select: Download::Utils.download_columns(reject: [:gis_area, :gis_m_area]),
       where: %{"TYPE" = 'Point'}
     }
@@ -60,7 +60,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
     sql = """
       SELECT *
       FROM #{view_name}
-      #{order_by if name.to_s == 'multipolygons'}
+      #{order_by if name.to_s == 'polygons'}
       LIMIT #{limit} OFFSET #{offset}
     """.squish
 
