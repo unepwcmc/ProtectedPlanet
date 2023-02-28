@@ -1,3 +1,9 @@
+### 4.8.29
+- Chore: Mar 2023 WDPA Release
+  - Mar statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
 ### 4.8.28
 - Chore: Feb 2023 WDPA Release
   - Feb statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
