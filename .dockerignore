@@ -4,3 +4,4 @@ tmp/*
 Dockerfile
 README.md
 .env*
+docker-compose.yml
