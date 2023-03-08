@@ -1,4 +1,5 @@
 ### 4.9.0
+- Added Docker
 - Update Wdpa::GeometryRatioCalculator to add additional geom count fields to CountryStatistics, which will be returned by API
 
 ### 4.8.29
