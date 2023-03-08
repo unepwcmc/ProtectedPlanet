@@ -1,3 +1,6 @@
+### 4.9.0
+- Update Wdpa::GeometryRatioCalculator to add additional geom count fields to CountryStatistics, which will be returned by API
+
 ### 4.8.29
 - Chore: Mar 2023 WDPA Release
   - Mar statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
