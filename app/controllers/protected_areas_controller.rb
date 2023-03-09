@@ -4,6 +4,11 @@ class ProtectedAreasController < ApplicationController
   include MapHelper
 
   def show
+    # Emergency fix: Some Protected Areas in disputed territories should not be shown, so we raise an error here based on ID
+    # Prohibted IDs should be removed from the ProtectedArea class when this is resolved or a long term solution is implemented.
+    # TODO: Ticket https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/326
+    raise PageNotFound if params[:id].to_i.in?(ProtectedArea::PROHIBITED_WDPA_IDS)
+
     id = params[:id]
 
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'protected_area', id)
