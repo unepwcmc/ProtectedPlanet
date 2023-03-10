@@ -55,7 +55,7 @@ docker exec -e "RAILS_ENV=test" -it protectedplanet-web rake db:create db:migrat
 
 ## Step 3: PP (WDPA) import
 ```
-SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose run -v {PATH_TO_WDPA_SQL_DUMP}:/import_database/pp_development.sql -e "PGPASSWORD={PGPASSWORD_FROM_ENV_FILE}" web bash -c "psql protectedplanet-db < /import_database/pp_development.sql -U postgres -h 0.0.0.0"
+SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose run -v {PATH_TO_WDPA_SQL_DUMP}:/import_database/pp_development.sql -e "PGPASSWORD={PGPASSWORD_FROM_ENV_FILE}" web bash -c "psql pp_development < /import_database/pp_development.sql -U postgres -h 0.0.0.0"
 ```
 
 ## Step 4: CMS setup
