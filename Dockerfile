@@ -10,8 +10,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
         postgresql-client \
         nodejs \
     && wget --no-check-certificate https://download.osgeo.org/gdal/2.2.3/gdal-2.2.3.tar.gz -O - | tar -xz \
+    && wget https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.2/FileGDB_API-RHEL7-64gcc83.tar.gz -O - | tar -xz \
+    && cp ./FileGDB_API-RHEL7-64gcc83/lib/libfgdbunixrtl.a ./FileGDB_API-RHEL7-64gcc83/lib/libfgdbunixrtl.so ./FileGDB_API-RHEL7-64gcc83/lib/libFileGDBAPI.so /usr/local/lib \
+    && cp -a ./FileGDB_API-RHEL7-64gcc83/include/. /usr/local/include \
     && cd ./gdal-2.2.3 && ./configure \
         --prefix=/usr \
+        --with-fgdb=/usr/local \
         --with-geos \
         --with-geotiff=internal \
         --with-hide-internal-symbols \
@@ -65,6 +69,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
         --without-xerces \
         --without-xml2 \
     && make && make install \
+    && ldconfig \
     && apt-get install -y libproj-dev proj-data proj-bin libgeos-dev python-gdal \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && npm install -g yarn
