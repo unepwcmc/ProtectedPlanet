@@ -1,3 +1,5 @@
+### 4.9.1
+- Update pdf with new map that excludes Crimea PAs
 ### 4.9.0
 - Added Docker
 - Update Wdpa::GeometryRatioCalculator to add additional geom count fields to CountryStatistics, which will be returned by API
