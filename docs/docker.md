@@ -79,16 +79,35 @@ docker exec -it protectedplanet-web rake 'comfy:cms_seeds:import[protected-plane
 docker exec -it protectedplanet-web rake search:reindex
 ```
 
+## Step 5: API setup (optional)
+The [Protected Planet API](https://github.com/unepwcmc/protectedplanet-api) is a separate Sinatra/Grape application that uses the same database and is included as a service in the docker-compose.yml.
+
+To use this service, you need to add the path to your local protectedplanet-api directory in your .env file under the `API_PATH` key.
+
+The api service has an 'api' profile and so does not start automatically with `docker compose up`. You can either run it alongside all of the standard ProtectedPlanet services with:
+```
+SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose --profile api up
+```
+or run only the api and db services with:
+```
+SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose run api
+```
+
 ### Debugging
 For debugging with byebug, attach to the server console:
 `docker attach protectedplanet-web`
 
 
 # Deployment
-To deploy the project with docker:
+To deploy PP.net with docker:
 
 ```
 sudo docker exec -it protectedplanet-web cap staging deploy
+```
+
+To deploy the PP API with docker:
+```
+sudo docker exec -it protectedplanet-api cap staging deploy
 ```
 
 ### Troubleshooting:
