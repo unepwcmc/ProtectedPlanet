@@ -97,7 +97,10 @@ services:
     command: /bin/bash -l -c "bundle exec rackup"
     volumes:
       - ${API_PATH}:/ProtectedPlanetApi
+      - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
     network_mode: host
+    environment:
+      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
     env_file:
       - ${API_PATH}/.env
     depends_on:

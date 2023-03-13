@@ -99,10 +99,15 @@ For debugging with byebug, attach to the server console:
 
 
 # Deployment
-To deploy the project with docker:
+To deploy PP.net with docker:
 
 ```
 sudo docker exec -it protectedplanet-web cap staging deploy
+```
+
+To deploy the PP API with docker:
+```
+sudo docker exec -it protectedplanet-api cap staging deploy
 ```
 
 ### Troubleshooting:
