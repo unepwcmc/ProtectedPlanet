@@ -45,6 +45,8 @@ package manager. For example, on OS X:
   brew install yarn
   yarn install
 ```
+#### Ruby Installation
+    RUBY_CFLAGS="-w" rbenv install 2.6.3
 #### PostgreSQL Installation
 
 Brew may refuse to install v9. You could:
