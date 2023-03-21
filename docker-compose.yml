@@ -10,7 +10,10 @@ services:
       - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
       - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
-    network_mode: host
+    ports:
+      - "3000:3000"
+    networks:
+      - protectedplanet
     environment:
       - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
     env_file:
@@ -25,7 +28,10 @@ services:
   db:
     container_name: protectedplanet-db
     image: kartoza/postgis:11.5-2.5
-    network_mode: host
+    ports:
+      - "5432:5432"
+    networks:
+      - protectedplanet
     env_file:
       - '.env'
     volumes:
@@ -34,7 +40,10 @@ services:
   redis:
     container_name: protectedplanet-redis
     image: redis
-    network_mode: host
+    ports:
+      - "6379:6379"
+    networks:
+      - protectedplanet
     env_file:
       - '.env'
     volumes:
@@ -45,7 +54,8 @@ services:
       - .:/ProtectedPlanet
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_import_data:/import_data
-    network_mode: host
+    networks:
+      - protectedplanet
     depends_on:
       - db
       - redis
@@ -65,7 +75,10 @@ services:
       memlock:
         soft: -1
         hard: -1
-    network_mode: host
+    ports:
+      - "9200:9200"
+    networks:
+      - protectedplanet
     env_file:
       - '.env'
     volumes:
@@ -73,10 +86,13 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:8.6.0
     environment:
-      - ELASTICSEARCH_HOSTS=http://localhost:9200
+      - ELASTICSEARCH_HOSTS=http://protectedplanet-elasticsearch:9200
     env_file:
       - '.env'
-    network_mode: host
+    ports:
+      - "5601:5601"
+    networks:
+      - protectedplanet
 
   webpacker:
     container_name: protectedplanet-webpacker
@@ -88,7 +104,10 @@ services:
       - .:/ProtectedPlanet
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_bundler:/usr/local/bundle
-    network_mode: host
+    ports:
+      - "3035:3035"
+    networks:
+      - protectedplanet
 
   api:
     container_name: protectedplanet-api
@@ -98,7 +117,10 @@ services:
     volumes:
       - ${API_PATH}:/ProtectedPlanetApi
       - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
-    network_mode: host
+    ports:
+      - "9292:9292"
+    networks:
+      - protectedplanet
     environment:
       - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
     env_file:
@@ -109,6 +131,9 @@ services:
     tty: true
     profiles: ['api']
 
+networks:
+  protectedplanet:
+    driver: bridge
 
 volumes:
   protectedplanet_pg_data:
