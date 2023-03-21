@@ -9,13 +9,13 @@ services:
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
-      - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
+      - ${SSH_AUTH_SOCK}:/ssh-agent
     ports:
       - "3000:3000"
     networks:
       - protectedplanet
     environment:
-      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+      - SSH_AUTH_SOCK=/ssh-agent
     env_file:
       - '.env'
     depends_on:
@@ -116,13 +116,13 @@ services:
     command: /bin/bash -l -c "bundle exec rackup"
     volumes:
       - ${API_PATH}:/ProtectedPlanetApi
-      - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
+      - ${SSH_AUTH_SOCK}:/ssh-agent
     ports:
       - "9292:9292"
     networks:
       - protectedplanet
     environment:
-      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+      - SSH_AUTH_SOCK=/ssh-agent
     env_file:
       - ${API_PATH}/.env
     depends_on:
