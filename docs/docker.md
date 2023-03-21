@@ -113,6 +113,8 @@ sudo docker exec -it protectedplanet-api cap staging deploy
 ### Troubleshooting:
 - `SSH_AUTH_SOCK` not found: make sure `echo ${SSH_AUTH_SOCK}` returns a path to your ssh agent
 
+- For Mac OS X Please make sure you use `/run/host-services/ssh-auth.sock:/ssh-agent` for ssh agent path in docker-compose.yml file
+
 - if yarn integrity problems appear: temporary fix `docker run web yarn install`
 
 - if CMS seeds downloading fails, remove `db/cms_seeds` and retry

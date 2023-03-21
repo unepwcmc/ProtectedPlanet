@@ -9,6 +9,7 @@ services:
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
+      # - /run/host-services/ssh-auth.sock:/ssh-agent # Use this setting for Mac OS X and comment out ${SSH_AUTH_SOCK}:/ssh-agent below
       - ${SSH_AUTH_SOCK}:/ssh-agent
     ports:
       - "3000:3000"
@@ -116,6 +117,7 @@ services:
     command: /bin/bash -l -c "bundle exec rackup"
     volumes:
       - ${API_PATH}:/ProtectedPlanetApi
+      # - /run/host-services/ssh-auth.sock:/ssh-agent # Use this setting for Mac OS X and comment out ${SSH_AUTH_SOCK}:/ssh-agent below
       - ${SSH_AUTH_SOCK}:/ssh-agent
     ports:
       - "9292:9292"
