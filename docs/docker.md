@@ -82,7 +82,13 @@ docker exec -it protectedplanet-web rake search:reindex
 ## Step 5: API setup (optional)
 The [Protected Planet API](https://github.com/unepwcmc/protectedplanet-api) is a separate Sinatra/Grape application that uses the same database and is included as a service in the docker-compose.yml.
 
-To use this service, you need to add the path to your local protectedplanet-api directory in your .env file under the `API_PATH` key.
+To use this service, you need to:
+- add the path to your local protectedplanet-api directory in your .env file under the `API_PATH` key.
+- set the environment variables in the pp-api .env to match the PP docker configuration, e.g:
+```
+POSTGRES_HOST=protectedplanet-db
+POSTGRES_PASSWORD=postgres
+```
 
 The api service has an 'api' profile and so does not start automatically with `docker compose up`. You can either run it alongside all of the standard ProtectedPlanet services with:
 ```
