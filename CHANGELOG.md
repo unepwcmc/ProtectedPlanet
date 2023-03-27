@@ -1,3 +1,15 @@
+### 4.9.1
+- Update pdf with new map that excludes Crimea PAs
+### 4.9.0
+- Added Docker
+- Update Wdpa::GeometryRatioCalculator to add additional geom count fields to CountryStatistics, which will be returned by API
+
+### 4.8.29
+- Chore: Mar 2023 WDPA Release
+  - Mar statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
 ### 4.8.28
 - Chore: Feb 2023 WDPA Release
   - Feb statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`

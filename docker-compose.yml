@@ -1,15 +1,18 @@
 version: '3'
 services:
   web:
+    container_name: protectedplanet-web
     build: .
-    command: /bin/bash -l -c "bundle exec rails s -p 3000 -b '0.0.0.0'"
-    user: unepwcmc
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid; bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/ProtectedPlanet
+      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
-    ports:
-      - "3000:3000"
+      - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
+    network_mode: host
+    environment:
+      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
     env_file:
       - '.env'
     depends_on:
@@ -17,35 +20,43 @@ services:
       - redis
       - elasticsearch
       - webpacker
+    stdin_open: true
+    tty: true
   db:
     container_name: protectedplanet-db
-    image: kartoza/postgis
-    ports:
-      - "5432:5432"
+    image: kartoza/postgis:11.5-2.5
+    network_mode: host
     env_file:
       - '.env'
     volumes:
       - protectedplanet_pg_data:/var/lib/postgresql
+      - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
+    container_name: protectedplanet-redis
     image: redis
+    network_mode: host
     env_file:
       - '.env'
     volumes:
       - protectedplanet_redis_data:/data
   sidekiq:
-     build: .
-     volumes:
-       - .:/ProtectedPlanet
-       - protectedplanet_import_data:/import_data
-     links:
-       - db
-       - redis
-     command: /bin/bash -l -c "bundle exec sidekiq"
-     user: unepwcmc
-     env_file:
-       - '.env'
+    build: .
+    volumes:
+      - .:/ProtectedPlanet
+      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
+      - protectedplanet_import_data:/import_data
+    network_mode: host
+    depends_on:
+      - db
+      - redis
+    command: /bin/bash -l -c "bundle exec sidekiq"
+    env_file:
+      - '.env'
+    stdin_open: true
+    tty: true
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
+    container_name: protectedplanet-elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -54,36 +65,55 @@ services:
       memlock:
         soft: -1
         hard: -1
-    ports:
-      - "9200:9200"
+    network_mode: host
     env_file:
       - '.env'
     volumes:
       - 'protectedplanet_es_data:/usr/share/elasticsearch/data'
   kibana:
-    image: docker.elastic.co/kibana/kibana:7.0.0
-    ports:
-      - "5601:5601"
-  webpacker: 
+    image: docker.elastic.co/kibana/kibana:8.6.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://localhost:9200
+    env_file:
+      - '.env'
+    network_mode: host
+
+  webpacker:
+    container_name: protectedplanet-webpacker
     build: .
     env_file: 
       - '.env'
     command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
-    user: unepwcmc
     volumes: 
       - .:/ProtectedPlanet
+      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_bundler:/usr/local/bundle
-    ports:
-      - '3035:3035'
+    network_mode: host
+
+  api:
+    container_name: protectedplanet-api
+    build:
+      context: ${API_PATH}
+    command: /bin/bash -l -c "bundle exec rackup"
+    volumes:
+      - ${API_PATH}:/ProtectedPlanetApi
+      - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
+    network_mode: host
+    environment:
+      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+    env_file:
+      - ${API_PATH}/.env
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+    profiles: ['api']
+
 
 volumes:
   protectedplanet_pg_data:
-    driver: local
   protectedplanet_redis_data:
-    driver: local
   protectedplanet_import_data:
-    driver: local
   protectedplanet_es_data:
-    driver: local
   protectedplanet_bundler:
-    driver: local
+  protectedplanet_node_modules:
