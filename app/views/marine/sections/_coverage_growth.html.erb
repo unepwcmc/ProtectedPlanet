@@ -3,7 +3,7 @@
     <h2><%= t('thematic_area.marine.coverage_growth.title') %></h2>
     <div>
       <%= t('thematic_area.marine.coverage_growth.content', total_ocean_pa_coverage_percentage: '%.2f' % marine_stats('total_ocean_pa_coverage_percentage'),
-        total_ocean_area_protected: '%.2f' % marine_stats('total_ocean_area_protected')).html_safe %>
+        total_ocean_area_protected: number_with_delimiter(marine_stats('total_ocean_area_protected'))).html_safe %>
     </div>
     
     <div class="cards--basic">
