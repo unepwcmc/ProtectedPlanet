@@ -1,3 +1,11 @@
+### 4.9.2
+- Chore: Apr 2023 WDPA Release
+  - Apr statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+- Fix .gdb download - use MultiPoints instead of Points in the generated dataset
+- Remove some content of the marine thematic area page from CMS for dynamic statistics in text
+- small button fix
 ### 4.9.1
 - Update pdf with new map that excludes Crimea PAs
 ### 4.9.0
