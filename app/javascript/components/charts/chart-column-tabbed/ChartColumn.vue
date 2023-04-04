@@ -8,7 +8,7 @@
       <div class="chart__bar">
         <span 
           class="chart__coverage" 
-          :style="{ height: calculateHeight(column.percentage) + '%' }" 
+          :style="{ height: calculateHeight(column.percentage) }" 
           v-show="hasData(column)"
         />
       </div>
