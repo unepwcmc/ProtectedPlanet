@@ -1,3 +1,6 @@
+### 4.9.3
+- Fix: Cap percentage to 100.0 for marine protected area if it goes over 100%
+
 ### 4.9.2
 - Chore: Apr 2023 WDPA Release
   - Apr statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
