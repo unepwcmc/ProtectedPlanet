@@ -159,9 +159,10 @@ class RegionPresenter
     {
       regionTitle: region.name,
       countries: sorted_stats.map do |stat|
+        percentage= stat.percentage_pa_marine_cover>100 ? 100.0 : stat.percentage_pa_marine_cover 
         {
           title: stat.country.name,
-          percentage: stat.percentage_pa_marine_cover.round(1),
+          percentage: percentage.round(1),
           km: number_with_delimiter(stat.pa_marine_area.round(0)),
           iso3: stat.country.iso_3
         }
