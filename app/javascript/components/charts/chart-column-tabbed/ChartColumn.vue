@@ -8,7 +8,7 @@
       <div class="chart__bar">
         <span 
           class="chart__coverage" 
-          :style="{ height: column.percentage + '%' }" 
+          :style="{ height: calculateHeight(column.percentage) }" 
           v-show="hasData(column)"
         />
       </div>
@@ -39,6 +39,10 @@
       // should show a blank column with no data
       hasData (column) {
         return Boolean(column.percentage)
+      },
+      //To calculate the height of the bar
+      calculateHeight(percentage) {
+      return percentage <= 100 ? `${percentage}%` : '100%'
       }
     }
   }
