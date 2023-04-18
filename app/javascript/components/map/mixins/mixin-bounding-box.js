@@ -77,6 +77,7 @@ export default {
     },
 
     getBoundsFromExtent (extent, padding=5) {
+      // handle PAs split by the int date line
       const isDateLineSplit = extent.xmin < 0 & extent.xmax > 0
       return [
         [
