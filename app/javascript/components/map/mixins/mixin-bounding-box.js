@@ -76,17 +76,17 @@ export default {
       this.addPopup(coords, options)
     },
 
-    getBoundsFromExtent (extent, padding=5) {
+    getBoundsFromExtent (extent, padding=[5,5,5]) {
       // handle PAs split by the int date line
-      const isDateLineSplit = extent.xmin < 0 & extent.xmax > 0
+      const isDateLineSplit = extent.xmin < 179 & extent.xmax > 179
       return [
         [
-          isDateLineSplit? extent.xmax - padding : Math.max(extent.xmin - padding, -180),
-          Math.max(extent.ymin - padding, -90)
+          isDateLineSplit? 180 - padding[0] : Math.max(extent.xmin - padding[0], -180),
+          Math.max(extent.ymin - padding[2], -90)
         ],
         [
-          isDateLineSplit? extent.xmax + padding : Math.min(extent.xmax + padding, 180),
-          Math.min(extent.ymax + padding, 90)
+          isDateLineSplit? 180 + padding[1] : Math.min(extent.xmax + padding[1], 180),
+          Math.min(extent.ymax + padding[2], 90)
         ]
       ]
     }
