@@ -30,7 +30,7 @@ export default {
     getExtentResponseHandler (padding) {      
       return res => {
         const extent = res.data.extent
-  
+
         if (extent) {
           this.initBounds = this.getBoundsFromExtent(extent, padding)
         }
@@ -76,14 +76,15 @@ export default {
       this.addPopup(coords, options)
     },
 
-    getBoundsFromExtent (extent, padding=5) {  
+    getBoundsFromExtent (extent, padding=5) {
+      const isDateLineSplit = extent.xmin < 0 & extent.xmax > 0
       return [
         [
-          Math.max(extent.xmin - padding, -180), 
+          isDateLineSplit? extent.xmax - padding : Math.max(extent.xmin - padding, -180),
           Math.max(extent.ymin - padding, -90)
         ],
         [
-          Math.min(extent.xmax + padding, 180), 
+          isDateLineSplit? extent.xmax + padding : Math.min(extent.xmax + padding, 180),
           Math.min(extent.ymax + padding, 90)
         ]
       ]
