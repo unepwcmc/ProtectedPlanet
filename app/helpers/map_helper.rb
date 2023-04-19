@@ -88,6 +88,18 @@ ALL_SERVICES_FOR_POINT_QUERY = [
   { type: 'oecm', url: OECM_POLY_LAYER_URL, isPoint: false }
 ].freeze
 
+# workaround for data-gis API issue with territories / PAs split by the int date line
+# [<longitudinal padding west from IDL>, <longitudinal padding east from IDL>, <latitudinal padding>]
+CUSTOM_DATE_LINE_PADDING = {
+  # countries
+  'FJI' => [5,5,2],
+  'KIR' => [10,30,2],
+  'NZL' => [20,5,5],
+  'RUS' =>[150,10,5],
+  'USA' => [10,120,5],
+  'WLF' => [1,5,0.3]
+}
+
 module MapHelper
   def overlays (ids, options={})
     includedOverlays = OVERLAYS.select {|o| ids.include?(o[:id])}
@@ -126,16 +138,16 @@ module MapHelper
   end
 
   def country_extent_url (iso3)
-    {
+    return {
       url: "https://data-gis.unep-wcmc.org/server/rest/services/GADM_EEZ_Layer/FeatureServer/0/query?where=iso_ter+%3D+%27#{iso3}%27&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
-      padding: 5
+      padding: CUSTOM_DATE_LINE_PADDING[iso3] == nil ? [5,5,5] : CUSTOM_DATE_LINE_PADDING[iso3]
     }
   end
 
   def region_extent_url (name)
     {
       url: "https://data-gis.unep-wcmc.org/server/rest/services/EEZ_WVS/MapServer/0/query?where=geoandunep+%3D%27#{CGI.escape(name)}%27&text=&objectIds=&time=&geometry=&geometryType=esriGeometryEnvelope&inSR=&spatialRel=esriSpatialRelIntersects&relationParam=&outFields=&returnGeometry=true&returnTrueCurves=false&maxAllowableOffset=&geometryPrecision=&outSR=4326&having=&returnIdsOnly=false&returnCountOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&gdbVersion=&historicMoment=&returnDistinctValues=false&resultOffset=&resultRecordCount=&queryByDistance=&returnExtentOnly=true&datumTransformation=&parameterValues=&rangeValues=&quantizationParameters=&featureEncoding=esriDefault&f=pjson",
-      padding: 5
+      padding: [5,5,5]
     }
   end
 

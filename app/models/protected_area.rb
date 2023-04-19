@@ -256,7 +256,7 @@ class ProtectedArea < ApplicationRecord
   def extent_url
     {
       url: "#{arcgis_layer}/query?where=wdpaid+%3D+#{wdpa_id}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
-      padding: 0.2
+      padding: [0.2, 0.2, 0.2]
     }
   end
 
