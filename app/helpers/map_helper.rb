@@ -97,7 +97,7 @@ CUSTOM_DATE_LINE_PADDING = {
   'NZL' => [20,5,5],
   'RUS' =>[150,10,5],
   'USA' => [10,120,5],
-  'WLF' => [1,5,5]
+  'WLF' => [1,5,0.3]
 }
 
 module MapHelper
