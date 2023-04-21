@@ -31,11 +31,11 @@ class Country < ApplicationRecord
   end
 
   def assessments
-    pame_evaluations.count
+    pame_evaluations.select{|pe| pe[:protected_area_id]}.count
   end
 
   def assessed_pas
-    pame_evaluations.map(&:wdpa_id).uniq.count
+    pame_evaluations.select{|pe| pe[:protected_area_id]}.map(&:wdpa_id).uniq.count
   end
 
   def protected_areas_with_iucn_categories
