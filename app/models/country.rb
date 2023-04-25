@@ -31,11 +31,17 @@ class Country < ApplicationRecord
   end
 
   def assessments
-    protected_areas.joins(:pame_evaluations).count
+    # count excluding overseas territories
+    pame_evaluations.joins(protected_area: :countries).where(countries: {id: id}).count +
+    # overseas territories only
+    (parent&.pame_evaluations&.joins(protected_area: :countries)&.where(countries: {id: id})&.count || 0)
   end
 
   def assessed_pas
-    protected_areas.joins(:pame_evaluations).pluck(:wdpa_id).uniq.count
+    # count excluding overseas territories
+    pame_evaluations.joins(protected_area: :countries).where(countries: {id: id})&.pluck(:protected_area_id).uniq.count +
+    # overseas territories only
+    (parent&.pame_evaluations&.joins(protected_area: :countries)&.where(countries: {id: id})&.pluck(:protected_area_id)&.uniq&.count || 0)
   end
 
   def protected_areas_with_iucn_categories
