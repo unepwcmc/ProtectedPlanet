@@ -108,7 +108,7 @@ class PameEvaluation < ApplicationRecord
   def self.run_query(page, where_params)
     if where_params[:sites].present?
       query = PameEvaluation.connection.unprepared_statement {
-        "((#{pame_evaluations_from_pa_query(where_params)}) UNION (#{pame_evaluations_from_countries_query(where_params)})) AS pame_evaluations"
+        "(#{pame_evaluations_from_pa_query(where_params)}) AS pame_evaluations"
       }
 
       PameEvaluation
@@ -126,21 +126,12 @@ class PameEvaluation < ApplicationRecord
 
   def self.pame_evaluations_from_pa_query(where_params)
     PameEvaluation
-    .joins(:protected_area)
+    .joins(:protected_area, :countries)
     .where(where_params[:sites])
     .where(where_params[:methodology])
     .where(where_params[:year])
     .where(where_params[:type])
-    .to_sql
-  end
-
-  def self.pame_evaluations_from_countries_query(where_params)
-    PameEvaluation
-    .joins(:countries)
     .where(where_params[:iso3])
-    .where(where_params[:methodology])
-    .where(where_params[:year])
-    .where(where_params[:type])
     .to_sql
   end
 
