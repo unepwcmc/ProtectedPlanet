@@ -4,7 +4,6 @@ class Wdpa::DataStandard
     :wdpa_pid     => {name: :wdpa_parent_id, type: :integer, label: 'WDPA Parent ID'},
     :name         => {name: :name, type: :string, label: 'Name'},
     :orig_name    => {name: :original_name, type: :string, label: 'Original Name'},
-    :marine       => {name: :marine, type: :boolean, label: 'Marine/Terrestrial'},
     :rep_m_area   => {name: :reported_marine_area, type: :float, label: 'Reported Marine Area'},
     :rep_area     => {name: :reported_area, type: :float, label: 'Reported Area'},
     :gis_m_area   => {name: :gis_marine_area, type: :float, label: 'GIS Marine Area'},
@@ -27,7 +26,10 @@ class Wdpa::DataStandard
     :own_type     => {name: :owner_type, type: :string, label: 'Owner Type'},
     :pa_def       => {name: :is_oecm, type: :oecm, label: 'PA Def'},
     :supp_info    => {name: :supplementary_info, type: :string, label: 'Supplementary Info'},
-    :cons_obj     => {name: :conservation_objectives, type: :string, label: 'Conservation objectives'}
+    :cons_obj     => {name: :conservation_objectives, type: :string, label: 'Conservation objectives'},
+    :marine       => {name: :marine_type, type: :integer, label: 'Marine Type'},
+    :verif        => {name: :verif, type: :string, label: 'Verified by' },
+    :parent_iso3   => {name: :parent_iso3, type: :string, label: 'Parent ISO' }
   }
 
   POLYGON_ATTRIBUTES = [
@@ -98,6 +100,14 @@ class Wdpa::DataStandard
         standardised_value = Wdpa::Attribute.standardise value, as: attribute[:type]
         standardised_attributes[attribute[:name]] = standardised_value
       end
+
+      # Previously PP imported the :marine attribute from the WDPA release
+      # as a boolean into the :marine field. We need the additional data
+      # stored in the WDPA marine field, so we need to import the original data
+      # and then generate the attribute for the existing boolean :marine field.
+      if standardised_attributes[:marine_type]
+        standardised_attributes[:marine] = marine_type_to_boolean(standardised_attributes[:marine_type])
+      end
     end
 
     standardised_attributes
@@ -122,5 +132,9 @@ class Wdpa::DataStandard
     end
 
     hash
+  end
+
+  def self.marine_type_to_boolean(marine_type)
+    marine_type.to_i == 0 ? false : true
   end
 end
