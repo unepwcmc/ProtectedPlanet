@@ -1,3 +1,11 @@
+### 4.9.4
+- Chore: May 2023 WDPA Release
+  - May statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+- Fix map zoom for territories crossing the international date line
+- Add missing protected area attributes to the database (via importer) - `marine_type`, `verif` and `parent_iso3`
+
 ### 4.9.3
 - Fix: Cap percentage to 100.0 for marine protected area if it goes over 100%
 
