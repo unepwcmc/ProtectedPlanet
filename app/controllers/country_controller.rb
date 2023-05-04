@@ -17,7 +17,7 @@ class CountryController < ApplicationController
 
     @flag_path = flag_path(@country.name)
 
-    @total_pame = @country.protected_areas.with_pame_evaluations.count
+    @total_pame = @country.protected_areas.map(&:pame_evaluations).flatten.count
     @total_wdpa = @country.protected_areas.wdpas.count
 
     @map = {
