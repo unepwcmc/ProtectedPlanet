@@ -33,19 +33,19 @@ class Country < ApplicationRecord
   def assessments
     # join protected_area table to exclude PAME evaluations where wdpa_id doesn't exist anymore or the site is restricted
     # count PAME evaluations of protected areas within the given country - excluding overseas territories
-    pame_evaluations.joins(protected_area: :countries).where(countries: {id: id}).count +
+    return pame_evaluations.joins(protected_area: :countries).where(countries: {id: id}).count if country_id.nil?
     # protected areas located in the overseas territories have PAME evaluations reported by their parent country
     # look up the parent country and count PAME evaluations for the given overseas territory
-    (parent&.pame_evaluations&.joins(protected_area: :countries)&.where(countries: {id: id})&.count || 0)
+    parent&.pame_evaluations&.joins(protected_area: :countries)&.where(countries: {id: id})&.count
   end
 
   def assessed_pas
     # join protected_area table to exclude PAME evaluations where wdpa_id doesn't exist anymore or the site is restricted
     # count protected areas with PAME evaluations within the given country - excluding overseas territories
-    pame_evaluations.joins(protected_area: :countries).where(countries: {id: id})&.pluck(:protected_area_id).uniq.count +
+    return pame_evaluations.joins(protected_area: :countries).where(countries: {id: id})&.pluck(:protected_area_id).uniq.count if country_id.nil?
     # protected areas located in the overseas territories have PAME evaluations reported by their parent country
     # look up the parent country and count protected areas with PAME evaluations for the given overseas territory
-    (parent&.pame_evaluations&.joins(protected_area: :countries)&.where(countries: {id: id})&.pluck(:protected_area_id)&.uniq&.count || 0)
+    parent&.pame_evaluations&.joins(protected_area: :countries)&.where(countries: {id: id})&.pluck(:protected_area_id)&.uniq&.count
   end
 
   def protected_areas_with_iucn_categories
