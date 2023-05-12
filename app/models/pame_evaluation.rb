@@ -88,7 +88,11 @@ class PameEvaluation < ApplicationRecord
         countries = options
         site_ids << countries.map{ |iso3| Country.find_by(iso_3: iso3).protected_areas.pluck(:id) }
         where_params[:sites] = site_ids.flatten.empty? ? nil : "pame_evaluations.protected_area_id IN (#{site_ids.join(',')})"
-        country_ids << countries.map{ |iso3| "#{ Country.find_by(iso_3: iso3).id }" }
+        country_ids << countries.map { |iso3|
+          country = Country.find_by(iso_3: iso3)
+          # include the parent country id for the overseas territory because PAME evaluation is assigned to the parent country
+          [country.id, country.country_id].compact
+        }
         where_params[:iso3] = country_ids.flatten.empty? ? nil : "countries.id IN (#{country_ids.join(',')})"
       when 'methodology'
         options = options.map{ |e| "'#{e}'" }
@@ -108,7 +112,7 @@ class PameEvaluation < ApplicationRecord
   def self.run_query(page, where_params)
     if where_params[:sites].present?
       query = PameEvaluation.connection.unprepared_statement {
-        "((#{pame_evaluations_from_pa_query(where_params)}) UNION (#{pame_evaluations_from_countries_query(where_params)})) AS pame_evaluations"
+        "(#{pame_evaluations_from_pa_query(where_params)}) AS pame_evaluations"
       }
 
       PameEvaluation
@@ -126,21 +130,12 @@ class PameEvaluation < ApplicationRecord
 
   def self.pame_evaluations_from_pa_query(where_params)
     PameEvaluation
-    .joins(:protected_area)
+    .joins(:protected_area, :countries)
     .where(where_params[:sites])
     .where(where_params[:methodology])
     .where(where_params[:year])
     .where(where_params[:type])
-    .to_sql
-  end
-
-  def self.pame_evaluations_from_countries_query(where_params)
-    PameEvaluation
-    .joins(:countries)
     .where(where_params[:iso3])
-    .where(where_params[:methodology])
-    .where(where_params[:year])
-    .where(where_params[:type])
     .to_sql
   end
 
