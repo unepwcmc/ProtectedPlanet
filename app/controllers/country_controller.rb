@@ -17,7 +17,8 @@ class CountryController < ApplicationController
 
     @flag_path = flag_path(@country.name)
 
-    @total_pame = @country.protected_areas.with_pame_evaluations.count
+    # exclude transboundary PAs where the PAME evaluation is associated only with another country
+    @total_pame = @country.protected_areas.with_pame_evaluations.includes(pame_evaluations: :countries).where(pame_evaluations: {countries: {id: @country.id}}).count
     @total_wdpa = @country.protected_areas.wdpas.count
 
     @map = {

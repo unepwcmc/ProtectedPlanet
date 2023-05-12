@@ -1,3 +1,6 @@
+### 4.9.5
+- bug fix: PAME evaluation counts and overseas territories
+
 ### 4.9.4
 - Chore: May 2023 WDPA Release
   - May statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
