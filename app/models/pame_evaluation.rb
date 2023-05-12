@@ -88,7 +88,11 @@ class PameEvaluation < ApplicationRecord
         countries = options
         site_ids << countries.map{ |iso3| Country.find_by(iso_3: iso3).protected_areas.pluck(:id) }
         where_params[:sites] = site_ids.flatten.empty? ? nil : "pame_evaluations.protected_area_id IN (#{site_ids.join(',')})"
-        country_ids << countries.map{ |iso3| "#{ Country.find_by(iso_3: iso3).id }" }
+        country_ids << countries.map { |iso3|
+          c = Country.find_by(iso_3: iso3)
+          # include the parent country id for the overseas territory because PAME evaluation is assigned to the parent country
+          c.country_id? ? [c.id, c.country_id] : c.id
+        }
         where_params[:iso3] = country_ids.flatten.empty? ? nil : "countries.id IN (#{country_ids.join(',')})"
       when 'methodology'
         options = options.map{ |e| "'#{e}'" }
