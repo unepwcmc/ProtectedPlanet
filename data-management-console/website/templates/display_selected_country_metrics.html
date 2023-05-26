@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Metrics for Selected Countries</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js" type="text/javascript"></script>
+</head>
+<body>
+<h1>Key aggregated metrics for {{selected_countries}}</h1>
+<TABLE>
+<TR><TD style="width:65%"><canvas id="rep_area_chart" style="min-height:200px;max-height:200px;max-width:400px"></canvas></TD>
+<TD><canvas id="gis_area_chart" style="min-height:200px;max-height:200px;max-width:400px"></canvas></TD></TR>
+<TR><TD><canvas id="rep_m_area_chart" style="min-height:200px;max-height:200px;max-width:400px"></canvas></TD>
+<TD><canvas id="gis_m_area_chart" style="min-height:200px;max-height:200px;max-width:400px"></canvas></TD></TR>
+<TR><TD><canvas id="no_tk_chart" style="min-height:200px;max-height:200px;max-width:400px"></canvas></TD><TD></TD></TR>
+</TABLE>
+<script>
+const xValues = {{ years }};
+
+new Chart("rep_area_chart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      data: {{ rep_area }},
+      backgroundColor: "red",
+      label: "{{ rep_area_name }}",
+      fill: false
+    }]
+  },
+  options: {
+    legend: {display: true},
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero:true,
+                callback: function(value, index, values) {
+                    if(parseInt(value) >= 1000){
+                       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    } else {
+                       return value;
+                    }
+               }
+            }
+        }]
+    },
+    elements: {
+        line: {
+            tension: 0
+        }
+    }
+  }
+});
+
+new Chart("gis_area_chart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      data: {{ gis_area }},
+      backgroundColor: "green",
+      label: "{{ gis_area_name }}",
+      fill: false
+    },]
+  },
+  options: {
+    legend: {display: true},
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero:true,
+                callback: function(value, index, values) {
+                    if(parseInt(value) >= 1000){
+                       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    } else {
+                       return value;
+                    }
+               }
+            }
+        }]
+    },
+    elements: {
+        line: {
+            tension: 0
+        }
+    }
+  }
+});
+
+new Chart("rep_m_area_chart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      data: {{ rep_m_area }},
+      backgroundColor: "blue",
+      label: "{{ rep_m_area_name }}",
+      fill: false
+    }]
+  },
+  options: {
+    legend: {display: true},
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero:true,
+                callback: function(value, index, values) {
+                    if(parseInt(value) >= 1000){
+                       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    } else {
+                       return value;
+                    }
+               }
+            }
+        }]
+    },
+    elements: {
+        line: {
+            tension: 0
+        }
+    }
+  }
+});
+
+new Chart("gis_m_area_chart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      data: {{ gis_m_area }},
+      backgroundColor: "violet",
+      label: "{{ gis_m_area_name }}",
+      fill: false
+    }]
+  },
+  options: {
+    legend: {display: true},
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero:true,
+                callback: function(value, index, values) {
+                    if(parseInt(value) >= 1000){
+                       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    } else {
+                       return value;
+                    }
+               }
+            }
+        }]
+    },
+    elements: {
+        line: {
+            tension: 0
+        }
+    }
+  }
+});
+new Chart("no_tk_chart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      data: {{ no_tk_area }},
+      backgroundColor: "orange",
+      label: "{{ no_tk_area_name }}",
+      fill: false
+    }]
+  },
+  options: {
+    legend: {display: true},
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero:true,
+                callback: function(value, index, values) {
+                    if(parseInt(value) >= 1000){
+                       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    } else {
+                       return value;
+                    }
+               }
+            }
+        }]
+    },
+    elements: {
+        line: {
+            tension: 0
+        }
+    }
+  }
+});
+</script>
+<br><br><div><a href="country_metrics">Back to Country Selection</a>
+<div><a href="index">Back to Main Index</a>
+</body>
+</html>

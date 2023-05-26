@@ -1,0 +1,89 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "iso3",
+		"elements": [
+			{
+				"name": "code",
+				"type": "CHAR(4)"
+			},
+			{
+				"name": "description",
+				"type": "VARCHAR(255)"
+			},
+			{
+				"name": "originator_id",
+				"type": "INTEGER"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["code"]
+			}
+		]	
+	},
+	{
+		"name": "designations",
+		"elements": [
+			{
+				"name": "code",
+				"type": "INT"
+			},
+			{
+				"name": "description",
+				"type": "VARCHAR(255)"
+			},
+			{
+				"name": "originator_id",
+				"type": "INTEGER"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["code"]
+			}
+		]	
+	},
+	{
+		"name": "marine_enum",
+		"elements": [
+			{
+				"name": "code",
+				"type": "INT"
+			},
+			{
+				"name": "description",
+				"type": "VARCHAR(255)"
+			},
+			{
+				"name": "originator_id",
+				"type": "INTEGER"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["code"]
+			}
+		]
+	},
+	{
+		"name": "iucn_cat",
+		"elements": [
+			{
+				"name": "code",
+				"type": "INT"
+			},
+			{
+				"name": "description",
+				"type": "VARCHAR(255)"
+			},
+			{
+				"name": "originator_id",
+				"type": "int"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["code"]
+			}
+		]
+	}
+  ]
+}

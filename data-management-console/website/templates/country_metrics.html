@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Country Metrics</title>
+</head>
+<body>
+<form action="metrics_for_countries">
+    <fieldset>
+      <legend>Choose your countries</legend>
+        {% for code,description in codes_and_descriptions %}
+      <div>
+        <input type="checkbox" id="selected_country" name="interest" value="{{code}}" />
+        <label for="selected_country">{{description}}</label>
+      </div>
+        {%endfor %}
+    </fieldset>
+    <input type="submit"></input>
+</form>
+</body>
+</html>

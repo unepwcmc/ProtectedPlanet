@@ -1,0 +1,91 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "metadata",
+		"elements": [
+			{
+				"name": "SchemaName",
+				"type": "VARCHAR(32)"
+			},
+			{
+				"name": "TableName",
+				"type": "VARCHAR(32)"
+			},
+			{
+				"name": "ColumnName",
+				"type": "VARCHAR(32)"
+			},
+			{
+				"name": "Type",
+				"type": "VARCHAR(64)"
+			},
+			{
+				"name": "KeyColumns",
+				"type": "VARCHAR(2048)"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["SchemaName", "TableName", "ColumnName"]
+			}
+		]	
+	},
+	{
+		"name": "ingestion_stages",
+		"elements": [
+			{
+				"name": "code",
+				"type": "int"
+			},
+			{
+				"name": "description",
+				"type": "varchar(255)"
+			}
+		]
+	},
+	{
+		"name": "ingestion_history",
+		"elements": [
+			{
+				"name": "ingestion_id",
+				"type": "INT"
+			},
+			{
+				"name": "ingestion_time",
+				"type": "TIMESTAMP"
+			},
+			{
+				"name": "ingestion_stage",
+				"type": "int"
+			},
+			{
+				"name": "data_group",
+				"type": "varchar(255)"
+			},
+			{
+				"source cols": [ "ingestion_stage" ],
+				"type": "FOREIGN KEY",
+				"target table": "ingestion_stages",
+				"target cols": [ "description" ]
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["ingestion_id"]
+			}
+		]	
+	},
+	{
+		"name": "ingestion_details",
+		"elements": [
+			{
+				"name": "ingestion_id",
+				"type": "int"
+			},
+			{
+				"name": "provider_id",
+				"type": "int"
+			}
+		]
+	}
+	]
+}

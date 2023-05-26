@@ -1,0 +1,152 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "wdpa",
+		"elements": [
+			{
+				"name": "wdpa_id",
+				"type": "bigint"
+			},
+			{
+				"name": "name",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "original_name",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "parcel_id",
+				"type": "varchar(20)"
+			},
+			{
+				"name": "no_take",
+				"type": "int"
+			},
+			{
+				"name": "iucn_category",
+				"type": "int"
+			},
+			{
+				"name": "originator_id",
+				"type": "int"
+			},
+			{
+				"name": "pa_def",
+				"type": "varchar(20)"
+			},
+			{
+				"name": "desig",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "desig_eng",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "marine",
+				"type": "varchar(20)"
+			},
+			{
+				"name": "rep_m_area",
+				"type": "double precision"
+			},
+			{
+				"name": "gis_m_area",
+				"type": "double precision"
+			},
+			{
+				"name": "rep_area",
+				"type": "double precision"
+			},
+			{
+				"name": "gis_area",
+				"type": "double precision"
+			},
+			{
+				"source cols": [ "no_take" ],
+				"type": "FOREIGN KEY",
+				"target table": "marine_enum",
+				"target cols": [ "code" ]
+			},
+			{
+				"source cols": [ "iucn_category" ],
+				"type": "FOREIGN KEY",
+				"target table": "iucn_cat",
+				"target cols": [ "code" ]
+			},
+			{
+				"name": "no_tk_area",
+				"type": "double precision"
+			},
+			{
+				"name": "status_yr",
+				"type": "int"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": [ "wdpa_id", "parcel_id" ]
+			}		
+		]	
+	},
+	{
+		"name": "spatial_data",
+		"elements": [
+			{
+				"name": "wdpa_id",
+				"type": "bigint"
+			},
+			{
+				"name": "parcel_id",
+				"type": "varchar(20)"
+			},
+			{
+				"name": "shape",
+				"type": "geometry"
+			},
+			{
+				"name": "originator_id",
+				"type": "INTEGER"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": [ "wdpa_id","parcel_id" ]
+			},
+			{
+				"name": "shape_area",
+				"type": "double precision"
+			},
+			{
+				"name": "shape_length",
+				"type": "double precision"
+			}
+		]
+	},
+	  {
+		  "name": "wdpa_iso_assoc",
+		  "elements": [
+			  {
+				  "name": "wdpa_id",
+				  "type": "bigint"
+			  },
+			  {
+				  "name": "parcel_id",
+				  "type": "varchar(20)"
+			  },
+			  {
+				  "name": "code",
+				  "type": "varchar(4)"
+			  },
+			  {
+				"name": "originator_id",
+				"type": "INTEGER"
+			  },
+    		{
+				"type": "PRIMARY KEY",
+				"PK fields": [ "wdpa_id","parcel_id", "code" ]
+			}
+		  ]
+	  }
+	]
+}

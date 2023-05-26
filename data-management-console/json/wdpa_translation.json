@@ -1,0 +1,128 @@
+{
+  "version": 0.1,
+  "Flat_WDPA": [
+		{
+			"name": "metadataid",
+			"target_name": "originator_id",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "metadataid",
+			"target_name": "originator_id",
+			"target_table": "spatial_data"
+		},
+		{
+			"name": "wdpaid",
+			"target_name": "wdpa_id",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "wdpaid",
+			"target_name": "wdpa_id",
+			"target_table": "spatial_data"
+		},
+		{
+			"name": "wdpa_pid",
+			"target_name": "parcel_id",
+			"target_table": "wdpa",
+			"function": "parcel_id_from_pid"
+		},
+		{
+			"name": "wdpa_pid",
+			"target_name": "parcel_id",
+			"target_table": "spatial_data",
+			"function": "parcel_id_from_pid"
+		},
+		{
+			"name": "name",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "orig_name",
+			"target_name": "original_name",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "iso3",
+			"function": "multi-key",
+			"delimiter": ";",
+			"code_column": "code",
+			"source_table": "wdpa",
+			"source_columns": [ "wdpa_id", "parcel_id"],
+			"lookup_column": "code",
+			"lookup_table": "ISO3",
+			"target_table": "wdpa_iso_assoc"
+		},
+	  	{
+			"name": "no_take",
+			"target_name": "no_take",
+			"target_table": "wdpa",
+			"function": "foreign-key",
+			"code_column": "code",
+			"lookup_column": "description",
+			"lookup_table": "marine_enum"
+		},
+	  	{
+			"name": "iucn_cat",
+			"target_name": "iucn_category",
+			"target_table": "wdpa",
+			"function": "foreign-key",
+			"code_column": "code",
+			"lookup_column": "description",
+			"lookup_table": "iucn_cat"
+		},
+	  	{
+			"name": "pa_def",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "desig",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "desig_eng",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "marine",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "rep_m_area",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "gis_m_area",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "rep_area",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "gis_area",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "no_tk_area",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "status_yr",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "geom",
+			"target_name": "shape",
+			"target_table": "spatial_data"
+	  	},
+		{
+			"name": "shape_length",
+			"target_table": "spatial_data"
+	  	},
+		{
+			"name": "shape_area",
+			"target_table": "spatial_data"
+	  	}
+	]
+}

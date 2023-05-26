@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Load Quarantine File Into Staging</title>
+</head>
+<body>
+<form action="/load_quarantine_data_action">
+  <label for="tablename">Quarantine table to load</label><br>
+  <input type="text" id="tablename" name="tablename" value=""><br>
+  <hr>
+  <label for="translation_schema">Translation schema to use</label><br>
+  <select id="translation_schema" name="translation_schema">
+      <option>wdpa_translation.json</option>
+      <option>source_translation.json</option>
+  </select>
+  <hr>
+  <label for="driving_column">Driving column to use</label><br>
+  <select id="driving_column" name="driving_column">
+      <option>metadataid</option>
+      <option>None</option>
+  </select>
+  <hr>
+  <label for="time_of_creation">Time of creation</label><br>
+  <input type="text" id="time_of_creation" name="time_of_creation" value=""><br>
+  <hr>
+  <label for="data_group">Data group to load</label><br>
+  <select id="data_group" name="data_group">
+      <option>WDPA Data</option>
+      <option>WDPA Source</option>
+  </select>
+  <hr>
+  <input type="submit" value="Submit">
+</form>
+</body>
+</html>

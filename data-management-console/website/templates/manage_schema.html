@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pick a schema to manage</title>
+</head>
+<body>
+        <form action="display_schema">
+        {% for schema in all_schemas: %}
+            <input type="radio" id="{{schema}}" name="chosen_schema" value="{{schema}}"></input>
+            <label for="{{schema}}">{{schema}}</label><br>
+    	{% endfor %}
+        <input type="Submit" />
+        </form>
+</body>
+</html>
