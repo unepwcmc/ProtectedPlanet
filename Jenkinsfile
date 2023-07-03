@@ -134,7 +134,7 @@ pipeline {
 def buildProject() {
     sh 'echo "Building Project.............."'
     sh "cp .env-jenkins-docker .env"
-    sh "docker-compose -f ${COMPOSE_FILE} --project-name=${JOB_NAME} build"
+    sh "docker-compose -f ${COMPOSE_FILE} --project-name=${JOB_NAME} build web db redis sidekiq elasticsearch kibana webpacker"
 }
 
 def prepare() {
