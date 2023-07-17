@@ -5,12 +5,12 @@
 		"name": "ingestion",
 		"elements": [
 			{
-				"name": "INGEST_ID",
+				"name": "ingestion_id",
 				"type": "INTEGER"
 			},
 			{
 				"type": "PRIMARY KEY",
-				"PK fields": "INGEST_ID"
+				"PK fields": "ingestion_id"
 			}
 		]	
 	}

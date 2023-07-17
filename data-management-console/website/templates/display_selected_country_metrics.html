@@ -22,9 +22,9 @@ new Chart("rep_area_chart", {
   data: {
     labels: xValues,
     datasets: [{
-      data: {{ rep_area }},
+      data: {{ reported_area }},
       backgroundColor: "red",
-      label: "{{ rep_area_name }}",
+      label: "{{ reported_area_name }}",
       fill: false
     }]
   },
@@ -92,9 +92,9 @@ new Chart("rep_m_area_chart", {
   data: {
     labels: xValues,
     datasets: [{
-      data: {{ rep_m_area }},
+      data: {{ reported_marine_area }},
       backgroundColor: "blue",
-      label: "{{ rep_m_area_name }}",
+      label: "{{ reported_marine_area_name }}",
       fill: false
     }]
   },
@@ -127,9 +127,9 @@ new Chart("gis_m_area_chart", {
   data: {
     labels: xValues,
     datasets: [{
-      data: {{ gis_m_area }},
+      data: {{ gis_marine_area }},
       backgroundColor: "violet",
-      label: "{{ gis_m_area_name }}",
+      label: "{{ gis_marine_area_name }}",
       fill: false
     }]
   },
@@ -161,9 +161,9 @@ new Chart("no_tk_chart", {
   data: {
     labels: xValues,
     datasets: [{
-      data: {{ no_tk_area }},
+      data: {{ no_take_area }},
       backgroundColor: "orange",
-      label: "{{ no_tk_area_name }}",
+      label: "{{ no_take_area_name }}",
       fill: false
     }]
   },

@@ -1,0 +1,377 @@
+{
+  "version": 0.1,
+  "Flat_ICCA": [
+    {
+        "name": "icca_reference_number",
+        "target_name": "icca_id",
+        "target_table": "icca"
+    },
+    {
+        "name": "wdpa_pid",
+        "target_name":"wdpa_id",
+        "target_table": "icca",
+        "function": "wdpa_id_from_pid"
+    },
+    {
+        "name": "wdpa_pid",
+        "target_name":"parcel_id",
+        "target_table": "icca",
+        "function": "parcel_id_from_pid"
+    },
+    {
+      "name": "pp_status",
+      "target_table": "icca"
+    },
+    {
+      "name": "creation_year",
+      "function": "check-year",
+      "target_table": "icca"
+    },
+    {
+      "name": "modification_year",
+      "function": "check-year",
+      "target_table": "icca"
+    },
+    {
+      "name": "version",
+      "function": "get_integer",
+      "target_table": "icca"
+    },
+    {
+        "name": "fpic",
+        "target_name": "fpic_id",
+        "target_table": "icca",
+        "function": "foreign-key",
+        "code_column": "id",
+        "lookup_column": "description",
+        "lookup_table": "fpic_cat"
+    },
+    {
+      "name": "pp_status",
+      "target_table": "icca"
+    },
+    {
+      "name": "scope",
+      "target_table": "icca"
+    },
+    {
+        "name": "verified",
+        "target_name": "verified_id",
+        "target_table": "icca",
+        "function": "foreign-key",
+        "code_column": "id",
+        "lookup_column": "description",
+        "lookup_table": "verification_cat"
+    },
+    {
+      "name": "verifier_person",
+      "target_table": "icca"
+    },
+    {
+      "name": "verifier_organization",
+      "target_table": "icca"
+    },
+    {
+      "name": "verifier_email",
+      "target_table": "icca"
+    },
+    {
+        "name": "case_study_published",
+        "target_name": "case_study_published_id",
+        "target_table": "icca",
+        "function": "foreign-key",
+        "code_column": "id",
+        "lookup_column": "description",
+        "lookup_table": "case_study_published_cat"
+    },
+    {
+      "name": "information_provider",
+      "target_table": "icca"
+    },
+    {
+        "name": "responsible_party_name",
+        "target_name": "provider_id",
+        "target_table": "icca",
+        "function": "foreign-key",
+        "code_column": "id",
+        "lookup_column": "name",
+        "lookup_table": "icca_providers"
+    },
+        {
+          "name": "submission_date",
+          "function": "check-year",
+          "target_table": "icca"
+        },
+        {
+          "name": "language",
+          "target_table": "icca"
+        },
+        {
+          "name": "icca_original_name",
+          "target_name": "original_name",
+          "target_table": "icca"
+        },
+        {
+          "name": "icca_name",
+          "target_name": "local_name",
+          "target_table": "icca"
+        },
+        {
+          "name": "icca_name_latin",
+          "target_name": "latin_name",
+          "target_table": "icca"
+        },
+        {
+          "name": "origin",
+          "target_table": "icca"
+        },
+        {
+          "name": "further_objectives",
+          "target_table": "icca"
+        },
+        {
+          "name": "latitude",
+          "function": "check_valid_double",
+          "target_table": "icca"
+        },
+        {
+          "name": "longitude",
+          "function": "check_valid_double",
+          "target_table": "icca"
+        },
+        {
+          "name": "marine",
+          "target_table": "icca"
+        },
+        {
+          "name": "reported_marine_area",
+          "function": "check_valid_double",
+          "target_table": "icca"
+        },
+	  	{
+			"name": "no_take",
+			"target_name": "no_take_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "no_take"
+		},
+	  	{
+			"name": "no_take_permanency",
+			"target_name": "no_take_permanency_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "no_take_permanency_cat"
+		},
+        {
+          "name": "no_take_area",
+          "function": "check_valid_double",
+          "target_table": "icca"
+        },
+        {
+          "name": "habitat_types_community_desc",
+          "target_table": "icca"
+        },
+        {
+          "name": "date_of_origin",
+          "target_table": "icca"
+        },
+	  	{
+			"name": "internal_recognition",
+			"target_name": "internal_recognition_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "internal_recognition_cat"
+		},
+	  	{
+			"name": "external_recognition",
+			"target_name": "external_recognition_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "external_recognition_cat"
+		},
+	  	{
+			"name": "governance_council",
+			"target_name": "governance_council_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "governance_council_cat"
+		},
+	  	{
+			"name": "governance_type",
+			"target_name": "governance_type_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "governance_type_cat"
+		},
+	  	{
+			"name": "community_decisions",
+			"target_name": "community_decisions_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "community_decisions_cat"
+		},
+	  	{
+			"name": "ownership_type",
+			"target_name": "ownership_type_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "ownership_type_cat"
+		},
+	  	{
+			"name": "management_authority",
+			"target_name": "management_authority_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "mgmt_authority_cat"
+		},
+	  	{
+			"name": "management_plan",
+			"target_name": "management_plan_format_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "mgmt_plan_format_cat"
+		},
+        {
+          "name": "community_name",
+          "target_table": "icca"
+        },
+        {
+          "name": "community_count",
+          "function": "get_integer",
+          "target_table": "icca"
+        },
+        {
+          "name": "household_count",
+          "function": "get_integer",
+          "target_table": "icca"
+        },
+        {
+          "name": "people_count",
+          "function": "get_integer",
+          "target_name": "person_count",
+          "target_table": "icca"
+        },
+	  	{
+			"name": "community_identity",
+			"target_name": "community_identity_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "community_identity_cat"
+		},
+	  	{
+			"name": "community_mobility",
+			"target_name": "community_mobility_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "community_mobility_cat"
+		},
+	  	{
+			"name": "community_mobility_beyond_icca",
+			"target_name": "community_mob_bey_icca_id",
+			"target_table": "icca",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "comm_mob_bey_icca_cat"
+		},
+        {
+          "name": "resource_use_further_details",
+          "target_table": "icca"
+        },
+		{
+			"name": "iso3",
+			"function": "multi-key",
+			"delimiter": ";",
+			"code_column": "iso3_id",
+			"source_table": "icca",
+			"source_columns": [ "icca_id"],
+			"lookup_column": "code",
+			"lookup_table": "iso3",
+			"target_table": "icca_iso3_assoc"
+		},
+		{
+			"name": "habitat_types_global",
+			"function": "multi-key",
+			"delimiter": ";",
+			"code_column": "habitat_types_global_id",
+			"source_table": "icca",
+			"source_columns": [ "icca_id"],
+			"lookup_column": "code",
+			"lookup_table": "habitat_types_global_cat",
+			"target_table": "icca_habitat_types_assoc"
+		},
+		{
+			"name": "objectives",
+			"function": "multi-key",
+			"delimiter": ";",
+			"code_column": "objective_id",
+			"source_table": "icca",
+			"source_columns": [ "icca_id"],
+			"lookup_column": "code",
+			"lookup_table": "icca_objectives_cat",
+			"target_table": "icca_objectives_assoc"
+		},
+		{
+			"name": "resource_use",
+			"function": "multi-key",
+			"delimiter": ";",
+			"code_column": "resource_use_id",
+			"source_table": "icca",
+			"source_columns": [ "icca_id"],
+			"lookup_column": "code",
+			"lookup_table": "icca_resource_use_cat",
+			"target_table": "icca_resource_use_assoc"
+		},
+		{
+			"name": "community_rights",
+			"function": "multi-key",
+			"delimiter": ";",
+			"code_column": "community_rights_id",
+			"source_table": "icca",
+			"source_columns": [ "icca_id"],
+			"lookup_column": "code",
+			"lookup_table": "icca_comm_rights_cat",
+			"target_table": "icca_comm_rights_assoc"
+		},
+		{
+			"name": "resource_use_within_comm",
+			"function": "multi-key",
+			"delimiter": ";",
+			"code_column": "res_use_comm_id",
+			"source_table": "icca",
+			"source_columns": [ "icca_id"],
+			"lookup_column": "code",
+			"lookup_table": "icca_res_use_comm_cat",
+			"target_table": "icca_res_use_comm_assoc"
+		}
+  ],
+  "Distinct": {
+		"icca_providers": "name",
+        "icca_habitat_types_assoc": ["icca_id", "habitat_types_global_id"],
+        "icca_objectives_assoc": ["icca_id", "objective_id"]
+	  }
+}

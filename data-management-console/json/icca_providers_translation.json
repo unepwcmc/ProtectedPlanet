@@ -1,0 +1,34 @@
+{
+  "version": 0.1,
+  "Flat_ICCA_Providers": [
+		{
+			"name": "responsible_party_name",
+			"target_name": "name",
+			"target_table": "icca_providers"
+		},
+        {
+			"name": "responsible_party_organization",
+			"target_name": "organization",
+			"target_table": "icca_providers"
+        },
+        {
+			"name": "responsible_party_email",
+			"target_name": "email",
+			"target_table": "icca_providers"
+        },
+        {
+			"name": "responsible_party_reason",
+			"target_name": "reason",
+			"target_table": "icca_providers"
+        },
+	  	{
+			"name": "responsible_party_category",
+			"target_name": "category_id",
+			"target_table": "icca_providers",
+			"function": "foreign-key",
+			"code_column": "id",
+			"lookup_column": "description",
+			"lookup_table": "icca_providers_cat"
+		}
+	  ]
+    }

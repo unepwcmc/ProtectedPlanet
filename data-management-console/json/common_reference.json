@@ -5,8 +5,12 @@
 		"name": "iso3",
 		"elements": [
 			{
+				"name": "id",
+				"type": "int"
+			},
+			{
 				"name": "code",
-				"type": "CHAR(4)"
+				"type": "VARCHAR(4)"
 			},
 			{
 				"name": "description",
@@ -18,7 +22,11 @@
 			},
 			{
 				"type": "PRIMARY KEY",
-				"PK fields": ["code"]
+				"PK fields": ["id"]
+			},
+			{
+				"type": "CODE COLUMN",
+				"field": "id"
 			}
 		]	
 	},
@@ -26,8 +34,8 @@
 		"name": "designations",
 		"elements": [
 			{
-				"name": "code",
-				"type": "INT"
+				"name": "id",
+				"type": "int"
 			},
 			{
 				"name": "description",
@@ -39,16 +47,20 @@
 			},
 			{
 				"type": "PRIMARY KEY",
-				"PK fields": ["code"]
+				"PK fields": ["id"]
+			},
+			{
+				"type": "CODE COLUMN",
+				"field": "id"
 			}
 		]	
 	},
 	{
-		"name": "marine_enum",
+		"name": "no_take",
 		"elements": [
 			{
-				"name": "code",
-				"type": "INT"
+				"name": "id",
+				"type": "int"
 			},
 			{
 				"name": "description",
@@ -60,16 +72,47 @@
 			},
 			{
 				"type": "PRIMARY KEY",
-				"PK fields": ["code"]
+				"PK fields": ["id"]
+			},
+			{
+				"type": "CODE COLUMN",
+				"field": "id"
 			}
 		]
 	},
-	{
-		"name": "iucn_cat",
+	  {
+		  "name": "iucn_cat",
+		  "elements": [
+			  {
+				  "name": "id",
+				  "type": "int"
+			  },
+			  {
+				  "name": "description",
+				  "type": "VARCHAR(255)"
+			  },
+			  {
+				  "name": "originator_id",
+				  "type": "int"
+			  },
+			  {
+				  "type": "PRIMARY KEY",
+				  "PK fields": [
+					  "id"
+				  ]
+			  },
+			  {
+				  "type": "CODE COLUMN",
+				  "field": "id"
+			  }
+		  ]
+	  },
+	  {
+		"name": "green_list_status",
 		"elements": [
 			{
-				"name": "code",
-				"type": "INT"
+				"name": "id",
+				"type": "int"
 			},
 			{
 				"name": "description",
@@ -81,9 +124,646 @@
 			},
 			{
 				"type": "PRIMARY KEY",
-				"PK fields": ["code"]
+				"PK fields": ["id"]
+			},
+			{
+				"type": "CODE COLUMN",
+				"field": "id"
 			}
 		]
+	},
+	  {
+		"name": "international_criteria",
+		"elements": [
+			{
+				"name": "id",
+				"type": "int"
+			},
+			{
+				"name": "description",
+				"type": "VARCHAR(255)"
+			},
+			{
+				"name": "originator_id",
+				"type": "int"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["id"]
+			},
+			{
+				"type": "CODE COLUMN",
+				"field": "id"
+			}
+		]
+	},
+	  {
+		"name": "designation_status",
+		"elements": [
+			{
+				"name": "id",
+				"type": "int"
+			},
+			{
+				"name": "description",
+				"type": "VARCHAR(255)"
+			},
+			{
+				"name": "originator_id",
+				"type": "int"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["id"]
+			},
+			{
+				"type": "CODE COLUMN",
+				"field": "id"
+			}
+		]
+	},
+	  {
+		"name": "orig_designation_status",
+		"elements": [
+			{
+				"name": "id",
+				"type": "int"
+			},
+			{
+				"name": "description",
+				"type": "VARCHAR(255)"
+			},
+			{
+				"name": "originator_id",
+				"type": "int"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["id"]
+			},
+			{
+				"type": "CODE COLUMN",
+				"field": "id"
+			}
+		]
+	},
+    {
+      "name": "icca_objectives_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "habitat_types_global_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "internal_recognition_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "external_recognition_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "icca_providers_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "fpic_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "verification_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "case_study_published_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "no_take_permanency_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "governance_council_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "governance_type_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "community_decisions_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "ownership_type_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "mgmt_authority_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "mgmt_plan_format_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "community_identity_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "community_mobility_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+    {
+      "name": "comm_mob_bey_icca_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		},
+		{
+			"type": "CODE COLUMN",
+			"field": "id"
+		}
+      ]
+    },
+	{
+	  "name": "icca_resource_use_cat",
+	  "elements": [
+		  {
+			  "name": "id",
+			  "type": "int"
+		  },
+		  {
+			  "name": "description",
+			  "type": "varchar(2047)"
+		  },
+		  {
+			  "name": "originator_id",
+			  "type": "int"
+		  },
+		  {
+			  "type": "PRIMARY KEY",
+			  "PK fields": [
+				  "id"
+			  ]
+		  },
+		  {
+			  "type": "CODE COLUMN",
+			  "field": "id"
+		  }
+	  ]
+	},
+	{
+	  "name": "icca_comm_rights_cat",
+	  "elements": [
+		  {
+			  "name": "id",
+			  "type": "int"
+		  },
+		  {
+			  "name": "description",
+			  "type": "varchar(2047)"
+		  },
+		  {
+			  "name": "originator_id",
+			  "type": "int"
+		  },
+		  {
+			  "type": "PRIMARY KEY",
+			  "PK fields": [
+				  "id"
+			  ]
+		  },
+		  {
+			  "type": "CODE COLUMN",
+			  "field": "id"
+		  }
+	  ]
+	},
+	{
+	  "name": "icca_equal_access_cat",
+	  "elements": [
+		  {
+			  "name": "id",
+			  "type": "int"
+		  },
+		  {
+			  "name": "description",
+			  "type": "varchar(2047)"
+		  },
+		  {
+			  "name": "originator_id",
+			  "type": "int"
+		  },
+		  {
+			  "type": "PRIMARY KEY",
+			  "PK fields": [
+				  "id"
+			  ]
+		  },
+		  {
+			  "type": "CODE COLUMN",
+			  "field": "id"
+		  }
+	  ]
+	},
+	{
+	  "name": "icca_res_use_comm_cat",
+	  "elements": [
+		  {
+			  "name": "id",
+			  "type": "int"
+		  },
+		  {
+			  "name": "description",
+			  "type": "varchar(2047)"
+		  },
+		  {
+			  "name": "originator_id",
+			  "type": "int"
+		  },
+		  {
+			  "type": "PRIMARY KEY",
+			  "PK fields": [
+				  "id"
+			  ]
+		  },
+		  {
+			  "type": "CODE COLUMN",
+			  "field": "id"
+		  }
+	  ]
 	}
   ]
 }

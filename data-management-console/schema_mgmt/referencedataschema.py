@@ -3,7 +3,8 @@ import sys
 from postgres.postgresexecutor import PostgresExecutor
 from schema_mgmt.extractor import Extractor
 
-class ReferenceDataSchemaPopulator():
+
+class ReferenceDataSchemaPopulator:
 
     @staticmethod
     def create_reference_data_schema(schema_to_populate):
@@ -15,11 +16,14 @@ class ReferenceDataSchemaPopulator():
         ingestion_sch = Extractor.get_all_definitions(INGESTION_COLS)
         ingestion_table_def = ingestion_sch[0]
 
+        OBJECTID_COLS = "../json/objectid_columns.json"
+        objectid_sch = Extractor.get_all_definitions(OBJECTID_COLS)
+        objectid_table_def = objectid_sch[0]
+
         SCHEMA_FILE = "../json/common_reference.json"
-        app_schema_tables = list(Extractor.get_all_definitions(SCHEMA_FILE))
+        app_schema_tables = list(Extractor.get_all_definitions(SCHEMA_FILE, objectid_table_def=objectid_table_def))
         PostgresExecutor.replace_tables(app_schema_tables, 'staging', True, schema_to_populate)
 
-        app_schema_tables = list(Extractor.get_all_definitions(SCHEMA_FILE, historical_table_def, ingestion_table_def))
+        app_schema_tables = list(
+            Extractor.get_all_definitions(SCHEMA_FILE, historical_table_def, ingestion_table_def, objectid_table_def))
         PostgresExecutor.replace_tables(app_schema_tables, None, True, schema_to_populate)
-
-

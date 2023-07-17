@@ -1,0 +1,134 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "pame",
+		"elements": [
+			{
+				"name": "evaluation_id",
+				"type": "bigint"
+			},
+			{
+				"name": "wdpa_id",
+				"type": "bigint"
+			},
+			{
+				"name": "methodology",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "url",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "name",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "designation",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "source_data_title",
+				"type": "varchar(254)"
+			},
+            {
+              "name": "responsible_party_id",
+              "type": "int"
+            },
+            {
+                "source cols": [ "responsible_party_id" ],
+                "type": "FOREIGN KEY",
+                "target table": "pame_providers",
+                "target cols": [ "responsible_party" ]
+            },
+			{
+				"name": "source_language",
+				"type": "varchar(50)"
+			},
+			{
+				"name": "originator_id",
+				"type": "int"
+			},
+			{
+				"name": "source_year",
+				"type": "int"
+			},
+			{
+				"name": "year",
+				"type": "int"
+			},
+			{
+				"name": "restricted",
+				"type": "int"
+			},
+			{
+				"name": "assessment_is_public",
+				"type": "int"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": [ "evaluation_id" ]
+			}
+		]
+    },
+    {
+      "name": "pame_providers",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "uuid",
+          "type": "uuid DEFAULT gen_random_uuid()"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+        {
+          "name": "responsible_party",
+          "type": "varchar(254)"
+        },
+        {
+          "type": "PRIMARY KEY",
+          "PK fields": [
+            "responsible_party"
+          ]
+        },
+        {
+            "type": "CODE COLUMN",
+            "field": "id"
+        }
+      ]
+    },
+    {
+        "name": "pame_iso3_assoc",
+        "elements": [
+            {
+                "name": "evaluation_id",
+                "type": "bigint"
+            },
+            {
+              "name": "originator_id",
+              "type": "int"
+            },
+            {
+                "name": "iso3_id",
+                "type": "int"
+            },
+            {
+                "source cols": [ "iso3_id" ],
+                "type": "FOREIGN KEY",
+                "target table": "iso3",
+                "target cols": [ "code" ]
+            },
+    		{
+				"type": "PRIMARY KEY",
+				"PK fields": [ "evaluation_id", "iso3_id" ]
+			}
+		  ]
+	  }
+	]
+}

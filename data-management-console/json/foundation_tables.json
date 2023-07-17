@@ -34,8 +34,8 @@
 		"name": "ingestion_stages",
 		"elements": [
 			{
-				"name": "code",
-				"type": "int"
+				"name": "id",
+				"type": "SERIAL"
 			},
 			{
 				"name": "description",
@@ -55,7 +55,7 @@
 				"type": "TIMESTAMP"
 			},
 			{
-				"name": "ingestion_stage",
+				"name": "ingestion_stage_id",
 				"type": "int"
 			},
 			{
@@ -63,7 +63,7 @@
 				"type": "varchar(255)"
 			},
 			{
-				"source cols": [ "ingestion_stage" ],
+				"source cols": [ "ingestion_stage_id" ],
 				"type": "FOREIGN KEY",
 				"target table": "ingestion_stages",
 				"target cols": [ "description" ]
@@ -83,6 +83,39 @@
 			},
 			{
 				"name": "provider_id",
+				"type": "int"
+			}
+		]
+	},
+	{
+		"name": "ingestion_history_providers",
+		"elements": [
+			{
+				"name": "ingestion_id",
+				"type": "int"
+			},
+			{
+				"name": "ingestion_data_source_id",
+				"type": "int"
+			},
+			{
+				"name": "added",
+				"type": "int"
+			},
+			{
+				"name": "equaled",
+				"type": "int"
+			},
+			{
+				"name": "updated",
+				"type": "int"
+			},
+			{
+				"name": "deleted",
+				"type": "int"
+			},
+			{
+				"name": "already_deleted",
 				"type": "int"
 			}
 		]

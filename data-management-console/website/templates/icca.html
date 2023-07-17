@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PAME</title>
+</head>
+<body>
+<TABLE border="2">
+    <TR>
+    <TH>ICCA ID</TH>
+    <TH>WDPA ID</TH>
+    <TH>Parcel ID</TH>
+    <TH>Name</TH>
+    <TH>Local Name</TH>
+    <TH>Latitude</TH>
+    <TH>Longitude</TH>
+    <TH>Creation Year</TH>
+    <TH>Scope</TH>
+    </TR>
+    {% for entry in entries %}
+    <TR>
+        <TD>{{entry[0]}}</TD>
+        <TD>{{entry[1]}}</TD>
+        <TD>{{entry[2]}}</TD>
+        <TD>{{entry[3]}}</TD>
+        <TD>{{entry[4]}}</TD>
+        <TD>{{entry[5]}}</TD>
+        <TD>{{entry[6]}}</TD>
+        <TD>{{entry[7]}}</TD>
+        <TD>{{entry[8]}}</TD>
+    </TR>
+    {%endfor %}
+</TABLE>
+</body>
+</html>

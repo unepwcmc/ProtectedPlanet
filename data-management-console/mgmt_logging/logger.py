@@ -46,5 +46,10 @@ class Logger():
 
     @classmethod
     def get_output(cls):
-        return cls._mystream.get_output()
+        str = cls._mystream.get_output()
+        try:
+            cls._mystream.flush()
+        except Exception as e:
+            print(str(e))
+        return str
 

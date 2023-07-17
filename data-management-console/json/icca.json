@@ -1,0 +1,545 @@
+{
+  "version": 0.1,
+  "tables": [
+    {
+      "name": "icca",
+      "elements": [
+        {
+          "name": "icca_id",
+          "type": "int"
+        },
+        {
+          "name": "wdpa_id",
+          "type": "bigint"
+        },
+        {
+          "name": "parcel_id",
+          "type": "varchar(20)"
+        },
+        {
+          "name": "originator_id",
+          "type": "int"
+        },
+        {
+          "name": "pp_status",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "creation_year",
+          "type": "int"
+        },
+        {
+          "name": "modification_year",
+          "type": "int"
+        },
+        {
+          "name": "version",
+          "type": "int"
+        },
+        {
+          "name": "fpic_id",
+          "type": "int"
+        },
+        {
+          "name": "scope",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "verified_id",
+          "type": "int"
+        },
+        {
+          "name": "verifier_person",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "verifier_organization",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "verifier_email",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "case_study_published_id",
+          "type": "int"
+        },
+        {
+          "name": "information_provider",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "provider_id",
+          "type": "int"
+        },
+        {
+          "name": "submission_date",
+          "type": "int"
+        },
+        {
+          "name": "language",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "original_name",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "local_name",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "latin_name",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "origin",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "further_objectives",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "latitude",
+          "type": "double precision"
+        },
+        {
+          "name": "longitude",
+          "type": "double precision"
+        },
+        {
+          "name": "marine",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "reported_marine_area",
+          "type": "double precision"
+        },
+        {
+          "name": "no_take_id",
+          "type": "int"
+        },
+        {
+          "name": "no_take_permanency_id",
+          "type": "int"
+        },
+        {
+          "name": "no_take_area",
+          "type": "double precision"
+        },
+        {
+          "name": "habitat_types_community_desc",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "date_of_origin",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "internal_recognition_id",
+          "type": "int"
+        },
+        {
+          "name": "external_recognition_id",
+          "type": "int"
+        },
+        {
+          "name": "governance_council_id",
+          "type": "int"
+        },
+        {
+          "name": "governance_type_id",
+          "type": "int"
+        },
+        {
+          "name": "community_decisions_id",
+          "type": "int"
+        },
+        {
+          "name": "ownership_type_id",
+          "type": "int"
+        },
+        {
+          "name": "management_authority_id",
+          "type": "int"
+        },
+        {
+          "name": "management_plan_format_id",
+          "type": "int"
+        },
+        {
+          "name": "community_name",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "community_count",
+          "type": "int"
+        },
+        {
+          "name": "household_count",
+          "type": "int"
+        },
+        {
+          "name": "person_count",
+          "type": "int"
+        },
+        {
+          "name": "community_identity_id",
+          "type": "int"
+        },
+        {
+          "name": "community_mobility_id",
+          "type": "int"
+        },
+        {
+          "name": "community_mob_bey_icca_id",
+          "type": "int"
+        },
+        {
+          "name": "resource_use_further_details",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "equal_access_id",
+          "type": "int"
+        },
+        {
+            "source cols": [ "fpic_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "fpic_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "verified_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "verification_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "case_study_published_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "case_study_published_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "provider_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "icca_providers",
+            "target cols": [ "name" ]
+        },
+        {
+            "source cols": [ "no_take_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "no_take",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "no_take_permanency_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "no_take_permanency_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "governance_council_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "governance_council_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "governance_type_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "governance_type_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "internal_recognition_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "internal_recognition_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "external_recognition_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "external_recognition_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "community_decisions_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "community_decisions_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "ownership_type_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "ownership_type_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "management_authority_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "mgmt_authority_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "management_plan_format_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "mgmt_plan_format_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "community_identity_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "community_identity_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "community_mobility_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "community_mobility_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "community_mob_bey_icca_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "comm_mob_bey_icca_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "source cols": [ "equal_access_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "icca_equal_access_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "type": "PRIMARY KEY",
+            "PK fields": [ "icca_id" ]
+        }
+      ]
+    },
+    {
+      "name":  "icca_providers",
+      "elements":   [
+        {
+          "name": "id",
+          "type": "int GENERATED BY DEFAULT AS IDENTITY"
+        },
+        {
+          "name":  "name",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "organization",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "email",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "category_id",
+          "type": "int"
+        },
+        {
+          "name": "reason",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "originator_id",
+          "type": "int"
+        },
+        {
+            "source cols": [ "category_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "icca_providers_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "type": "PRIMARY KEY",
+            "PK fields": [ "id" ]
+        },
+        {
+            "type": "CODE COLUMN",
+            "field": "id"
+        }
+      ]
+    },
+    {
+      "name": "icca_objectives_assoc",
+      "elements": [
+        {
+          "name": "icca_id",
+          "type": "int"
+        },
+        {
+          "name": "objective_id",
+          "type": "int"
+        },
+        {
+            "name": "originator_id",
+            "type": "INTEGER"
+        },
+        {
+            "source cols": [ "objective_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "icca_objectives_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "type": "PRIMARY KEY",
+            "PK fields": [ "icca_id","objective_id" ]
+        }
+      ]
+    },
+    {
+      "name": "icca_iso3_assoc",
+      "elements": [
+        {
+          "name": "iso3_id",
+          "type": "int"
+        },
+        {
+          "name": "icca_id",
+          "type": "int"
+        },
+        {
+            "name": "originator_id",
+            "type": "INTEGER"
+        },
+        {
+            "source cols": [ "iso3_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "iso3",
+            "target cols": [ "code" ]
+        },
+        {
+            "type": "PRIMARY KEY",
+            "PK fields": [ "iso3_id","icca_id" ]
+        }
+      ]
+    },
+    {
+      "name": "icca_habitat_types_assoc",
+      "elements": [
+        {
+          "name": "icca_id",
+          "type": "int"
+        },
+        {
+          "name": "habitat_types_global_id",
+          "type": "int"
+        },
+        {
+          "name": "originator_id",
+          "type": "INTEGER"
+        },
+        {
+          "source cols": [
+            "habitat_types_global_id"
+          ],
+          "type": "FOREIGN KEY",
+          "target table": "habitat_types_global_cat",
+          "target cols": [
+            "description"
+          ]
+        },
+        {
+          "type": "PRIMARY KEY",
+          "PK fields": [
+            "icca_id",
+            "habitat_types_global_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "icca_resource_use_assoc",
+      "elements": [
+        {
+          "name": "icca_id",
+          "type": "int"
+        },
+        {
+          "name": "resource_use_id",
+          "type": "int"
+        },
+        {
+          "name": "originator_id",
+          "type": "INTEGER"
+        },
+        {
+          "source cols": [
+            "resource_use_id"
+          ],
+          "type": "FOREIGN KEY",
+          "target table": "icca_resource_use_cat",
+          "target cols": [
+            "description"
+          ]
+        },
+        {
+          "type": "PRIMARY KEY",
+          "PK fields": [
+            "icca_id",
+            "resource_use_id"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "icca_comm_rights_assoc",
+      "elements": [
+        {
+          "name": "icca_id",
+          "type": "int"
+        },
+        {
+          "name": "community_rights_id",
+          "type": "int"
+        },
+        {
+            "name": "originator_id",
+            "type": "INTEGER"
+        },
+        {
+            "source cols": [ "community_rights_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "icca_comm_rights_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "type": "PRIMARY KEY",
+            "PK fields": [ "icca_id","community_rights_id" ]
+        }
+      ]
+    },
+    {
+      "name": "icca_res_use_comm_assoc",
+      "elements": [
+        {
+          "name": "icca_id",
+          "type": "int"
+        },
+        {
+          "name": "res_use_comm_id",
+          "type": "int"
+        },
+        {
+            "name": "originator_id",
+            "type": "INTEGER"
+        },
+        {
+            "source cols": [ "res_use_comm_id" ],
+            "type": "FOREIGN KEY",
+            "target table": "icca_res_use_comm_cat",
+            "target cols": [ "description" ]
+        },
+        {
+            "type": "PRIMARY KEY",
+            "PK fields": [ "icca_id","res_use_comm_id" ]
+        }
+      ]
+    }
+  ]
+}

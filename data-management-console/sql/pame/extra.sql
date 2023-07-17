@@ -1,0 +1,3 @@
+CREATE OR REPLACE FUNCTION staging_pame_providers_id() RETURNS TRIGGER LANGUAGE PLPGSQL AS $$ BEGIN IF NEW.id is NULL THEN NEW.id = hashtext(NEW.responsible_party); END IF; RETURN NEW; END; $$
+DROP TRIGGER IF EXISTS trig_staging_pame_providers ON staging_pame_providers
+CREATE TRIGGER trig_staging_pame_providers BEFORE INSERT ON staging_pame_providers FOR EACH ROW EXECUTE procedure staging_pame_providers_id();

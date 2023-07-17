@@ -1,14 +1,13 @@
-DELETE FROM INGESTION_STAGES
-
-INSERT INTO INGESTION_STAGES(code, description) VALUES(1, 'Generate new PA')
-INSERT INTO INGESTION_STAGES(code, description) VALUES(2, 'Submit data for new PA')
-INSERT INTO INGESTION_STAGES(code, description) VALUES(3, 'Data submission')
-INSERT INTO INGESTION_STAGES(code, description) VALUES(4, 'Data submission')
-INSERT INTO INGESTION_STAGES(code, description) VALUES(5, 'Passed validation')
-INSERT INTO INGESTION_STAGES(code, description) VALUES(6, 'Submitted')
-INSERT INTO INGESTION_STAGES(code, description) VALUES(7, 'Flagged for manual QA')
-INSERT INTO INGESTION_STAGES(code, description) VALUES(8, 'Passed manual QA')
-INSERT INTO INGESTION_STAGES(code, description) VALUES(9, 'New data requested')
-INSERT INTO INGESTION_STAGES(code, description) VALUES(10, 'Approved')
-INSERT INTO INGESTION_STAGES(code, description) VALUES(11, 'Entered into history')
+DELETE FROM ingestion_stages
+INSERT INTO ingestion_stages(description) VALUES('Generate new PA')
+INSERT INTO ingestion_stages(description) VALUES('Submit data for new PA')
+INSERT INTO ingestion_stages(description) VALUES('Data submission')
+INSERT INTO ingestion_stages(description) VALUES('Data submission')
+INSERT INTO ingestion_stages(description) VALUES('Passed validation')
+INSERT INTO ingestion_stages(description) VALUES('Submitted')
+INSERT INTO ingestion_stages(description) VALUES('Flagged for manual QA')
+INSERT INTO ingestion_stages(description) VALUES('Passed manual QA')
+INSERT INTO ingestion_stages(description) VALUES('New data requested')
+INSERT INTO ingestion_stages(description) VALUES('Approved')
+INSERT INTO ingestion_stages(description) VALUES('Entered into history')
 

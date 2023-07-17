@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Green List</title>
+</head>
+<body>
+<TABLE border="2">
+    <TR>
+    <TH>Wdpa Id</TH>
+    <TH>Parcel Id</TH>
+    <TH>Status</TH>
+    <TH>URL</TH>
+    <TH>Expiry Date</TH>
+    </TR>
+    {% for entry in entries %}
+    <TR>
+        <TD>{{entry[0]}}</TD>
+        <TD>{{entry[1]}}</TD>
+        <TD>{{entry[2]}}</TD>
+        <TD>{{entry[3]}}</TD>
+        <TD>{{entry[4]}}</TD>
+    </TR>
+    {%endfor %}
+</TABLE>
+</body>
+</html>

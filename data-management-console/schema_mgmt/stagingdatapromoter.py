@@ -1,104 +1,146 @@
+import gc
 import time
+import traceback
+
 from metadata_mgmt.metadatareader import MetadataReader
 from mgmt_logging.logger import Logger
 from postgres.postgresexecutor import PostgresExecutor
+from schema_mgmt.ingestionstats import IngestionStats
+from schema_mgmt.ingestor import Ingestor
+from schema_mgmt.ingestorconstants import IngestorConstants
+from runtime_mgmt.datagroupmanager import DataGroupManager
+from schema_mgmt.memorymanager import MemoryManager
+
+ALL_NUMERICAL = "all numerical"
+TIME_OF_CREATION_NOW = "Now"
 
 
 class LoaderFromStagingToMain:
 
-	@staticmethod
-	def process_individual_row(quarantine_table, target_table, row, quarantine_positions, target_positions, tolerances):
-		quarantine_key = quarantine_table.primary_key()
-		quarantine_vals = []
-		for key in quarantine_key.column_names.split(","):
-			pos = quarantine_positions[key]
-			quarantine_vals.append(row[pos])
-		target_key = target_table.primary_key()
-		target_vals = []
-		for key in target_key.column_names.split(","):
-			pos = target_positions[key]
-			target_vals.append(row[pos])
-		if target_vals[0] is None:
-			return "RowToAdd"
-		if quarantine_vals[0] is None:
-			if row[target_positions["IsDeleted"]] == 1:
-				return "RowAlreadyDeleted"
-			return "RowToDelete"
-		for col in quarantine_table.columns():
-			quarantine_pos = quarantine_positions[col.name]
-			quarantine_val = row[quarantine_pos]
-			target_pos = target_positions[col.name]
-			target_val = row[target_pos]
-			# apply toleranes here for numerical fields
-			tolerance_to_apply = tolerances.get(quarantine_table.name) and tolerances.get(quarantine_table.name).get(col.name)
-			if quarantine_val != target_val:
-				return "RowToUpdate"
-		return "Equal"
+    @staticmethod
+    def process_individual_row(row, quarantine_positions, tolerances):
+        try:
+            # if there's no row in the main table, this is an add
+            if row[len(quarantine_positions)] is None:
+                return "RowToAdd"
+            # if there's no row in the staging table, this is a delete
+            if row[0] is None:
+                return "RowToDelete"
+            # must therefore be an update
+            tolerance_to_apply = tolerances.get(ALL_NUMERICAL)
+            for i in range(1, len(quarantine_positions)):
+                quarantine_val = row[i]
+                if type(quarantine_val) == bool:
+                    if not quarantine_val:
+                        return "RowToUpdate"
+                elif isinstance(quarantine_val, (float, int)):
+                    if quarantine_val > tolerance_to_apply:
+                        return "RowToUpdate"
+                else:
+                    raise Exception("What are we looking at?")
+            return "Equal"
+        except Exception as ex:
+            print(str(ex))
+            raise ex
+    def process_quarantine_rows(self, quarantine_table, target_table, originator_id, ingestion_id, time_of_creation,
+                                executor, tolerances, closed_universe) -> IngestionStats:
+        chunk_size = 2000
+        start_time = time.time()
+        try:
+            PostgresExecutor.open_read_cursor()
+            [quarantine_positions, target_positions] = executor.construct_query_clause(quarantine_table,
+                                                                                       target_table,
+                                                                                       originator_id,
+                                                                                       closed_universe)
+            summary = IngestionStats()
+            total_rows = 0
+            while True:
+                # use a read cursor to get the chunks and a
+                # separate write cursor to write out the added, updated and deleted rows
+                rows = executor.get_row_chunk(chunk_size)
+                if not rows:
+                    break
+                executor.begin_transaction()
+                for row in rows:
+                    action = self.process_individual_row(row, quarantine_positions, tolerances)
+                    if action == "RowToAdd":
+                        executor.create_new_row(row, quarantine_table, quarantine_positions, target_table,
+                                                originator_id,
+                                                ingestion_id, time_of_creation)
+                        summary.increment_add()
+                    elif action == "Equal":
+                        summary.increment_equal()
+                    elif action == "RowToUpdate":
+                        executor.timestamp_existing_row(row, target_positions, target_table, time_of_creation)
+                        executor.create_new_row(row, quarantine_table, quarantine_positions, target_table,
+                                                originator_id,
+                                                ingestion_id, time_of_creation)
+                        summary.increment_update()
+                    elif action == "RowToDelete":
+                        executor.timestamp_existing_row(row, target_positions, target_table, time_of_creation)
+                        executor.create_deleted_row(row, target_table, target_positions, originator_id,
+                                                    ingestion_id,
+                                                    time_of_creation)
+                        summary.increment_deleted()
+                    elif action == "RowAlreadyDeleted":
+                        summary.increment_already_deleted()
+                    else:
+                        Logger.get_logger().info("Not yet implemented")
+                    total_rows += 1
+                executor.end_transaction()
+                gc.collect()
+            MemoryManager.output_memory(f'After {total_rows} rows: ')
+            duration = time.time() - start_time
+            if total_rows:
+                log_info = f'Time per row [{target_table.name}:{total_rows} rows] is {duration / total_rows}'
+                print(log_info)
+                Logger.get_logger().info(log_info)
+            Logger.get_logger().info(summary)
+            return summary
+        except Exception as ex:
+            print("Exception raised in staging data promoter")
+            print(str(ex))
+            traceback.print_exc(limit=None, file=None, chain=True)
+            raise ex
+        finally:
+            PostgresExecutor.close_read_cursor()
 
-	def process_quarantine_rows(self, quarantine_table, target_table, originator_id, ingestion_id, time_of_creation, executor, tolerances, closed_universe):
-		start_time = time.time()
-		try:
-			[rows, quarantine_positions, target_positions] = executor.construct_query_clause(quarantine_table, target_table, originator_id, closed_universe)
-		except Exception as ex:
-			print(str(ex))
-			raise ex
-		summary = {"add": 0, "equal": 0, "update": 0, "delete": 0, "already deleted": 0}
-		for row in rows:
-			action = self.process_individual_row(quarantine_table, target_table, row, quarantine_positions, target_positions, tolerances)
-			match action:
-				case "RowToAdd":
-					executor.create_new_row(row, quarantine_table, quarantine_positions, target_table, originator_id, ingestion_id, time_of_creation)
-					summary["add"] += 1
-				case "Equal":
-					summary["equal"] += 1
-				case "RowToUpdate":
-					executor.timestamp_existing_row(row, target_positions, target_table, time_of_creation)
-					executor.create_new_row(row, quarantine_table, quarantine_positions, target_table, originator_id, ingestion_id, time_of_creation)
-					summary["update"] += 1
-				case "RowToDelete":
-					executor.timestamp_existing_row(row, target_positions, target_table, time_of_creation)
-					executor.create_deleted_row(row, target_table, target_positions, originator_id, ingestion_id, time_of_creation)
-					summary["delete"] += 1
-				case "RowAlreadyDeleted":
-					summary["already deleted"] += 1
-				case _:
-					Logger.get_logger().info("Not yet implemented")
-		duration = time.time() - start_time
-		if rows:
-			print(f'Time per row is {duration/len(rows)}')
-		Logger.get_logger().info(f'Row count was {len(rows)}')
-		Logger.get_logger().info(summary)
-		return summary
+    def ingest_standard(self, executor: PostgresExecutor, time_of_creation, data_group,
+                        tolerances={ALL_NUMERICAL: 1e-3}):
+        executor.open_read_cursor()
+        originator_ids = DataGroupManager.originator_ids(data_group)
+        tables_to_process = DataGroupManager.tables(data_group)
+        driving_table = DataGroupManager.driving_table(data_group)
+        total_schema = MetadataReader.tables(force=True)
+        if time_of_creation == TIME_OF_CREATION_NOW:
+            time_of_creation = executor.get_time_from_database()
+        # if we are called with an empty array of originator ids, this is a migration so we assume a closed universe
+        closed_universe = not originator_ids
 
-
-	def ingest_standard(self, executor: PostgresExecutor, originator_ids, tables_to_process, time_of_creation, data_group, driving_table=None, tolerances=None):
-		if tolerances is None:
-			tolerances = {}
-		total_schema = MetadataReader.tables(force=True)
-		if time_of_creation == "Now":
-			time_of_creation = executor.get_time_from_database()
-		# if we are called with an empty array of originator ids, this is a migration so we assume a closed universe
-		closed_universe = not originator_ids
-
-		if driving_table is not None:
-			originator_ids = executor.get_staging_data_originators(driving_table)
-		ingestion_id = executor.get_next_ingestion_id()
-		for originator_id in originator_ids:
-			executor.begin_transaction(executor._conn)
-			print(f"Processing for originator {originator_id}")
-			Logger.get_logger().info(f"Processing for originator {originator_id}")
-			try:
-				for table_name in tables_to_process:
-					quarantine_table = total_schema["staging_" + table_name]
-					target_table = total_schema[table_name]
-					self.process_quarantine_rows(quarantine_table, target_table, originator_id, ingestion_id, time_of_creation, executor, tolerances, closed_universe)
-			except Exception as e:
-				print(str(e))
-				executor.rollback()
-				raise e
-			else:
-				executor.end_transaction()
-		executor.begin_transaction(executor._conn)
-		ingestion_provider_ids = originator_ids or [10000]
-		executor.add_ingestion(ingestion_provider_ids, ingestion_id, time_of_creation, data_group)
-		executor.end_transaction()
+        if driving_table:
+            originator_ids = executor.get_staging_data_originators(driving_table)
+        ingestion_id = Ingestor.get_next_ingestion_id(executor)
+        MemoryManager.output_memory("Starting ingestion")
+        PostgresExecutor.close_read_cursor()
+        stats = {}
+        for originator_id in originator_ids:
+            print(f"Processing for originator {originator_id}")
+            Logger.get_logger().info(f"Processing for originator {originator_id}")
+            try:
+                for table_name in tables_to_process:
+                    quarantine_table = total_schema["staging_" + table_name]
+                    target_table = total_schema[table_name]
+                    summary = self.process_quarantine_rows(quarantine_table, target_table, originator_id, ingestion_id,
+                                                           time_of_creation, executor, tolerances, closed_universe)
+                    if table_name == driving_table or not driving_table:
+                        stats[originator_id] = summary
+                MemoryManager.output_memory(f"After originator {originator_id}")
+            except Exception as e:
+                print(str(e))
+                executor.rollback()
+                return
+        Logger.get_logger().info("Adding ingestion information")
+        executor.begin_transaction()
+        ingestion_provider_ids = originator_ids or [IngestorConstants.WCMC_SPECIAL_PROVIDER_ID]
+        Ingestor.add_ingestion(executor, ingestion_provider_ids, ingestion_id, time_of_creation, data_group, stats)
+        executor.end_transaction()

@@ -1,0 +1,44 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "green_list",
+		"elements": [
+			{
+				"name": "wdpa_id",
+				"type": "bigint"
+			},
+			{
+				"name": "parcel_id",
+				"type": "varchar(20)"
+			},
+			{
+				"name": "status_id",
+				"type": "int"
+			},
+			{
+				"name": "url",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "expiry_date",
+				"type": "DATE"
+			},
+			{
+			  "name": "originator_id",
+			  "type": "bigint"
+			},
+            {
+                "source cols": [ "status_id" ],
+                "type": "FOREIGN KEY",
+                "target table": "green_list_status",
+                "target cols": [ "description" ]
+            },
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": [ "wdpa_id", "parcel_id" ]
+			}
+		]
+    }
+  ]
+}
