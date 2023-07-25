@@ -83,7 +83,11 @@ class Country < ApplicationRecord
   end
 
   def extent_url
-    country_extent_url(iso_3)
+    # To account for incorporation of IOT into MUS, which is not reflected in the WDPA
+    # data yet. This is a temporary fix until the WDPA data is updated.
+    # TO DO: Remove this conditional once the WDPA data is updated.
+    iso_3_value = iso_3 == 'IOT' ? 'MUS' : iso_3
+    country_extent_url(iso_3_value)
   end
 
   def random_protected_areas wanted=1
