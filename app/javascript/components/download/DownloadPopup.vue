@@ -4,6 +4,7 @@
       <li 
         v-for="option in options"
         :key="option._uid"
+        v-if="option.title != 'PDF'"
       >
         <span
           v-if="option.isDownload" 
