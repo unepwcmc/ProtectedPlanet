@@ -1,5 +1,5 @@
 set :stage, :staging
-set :branch, "develop"
+set :branch, "fix/disable_pdf_downloads"
 
 server 'new-web.pp-staging.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
