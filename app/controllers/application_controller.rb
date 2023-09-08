@@ -14,14 +14,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
   before_action :check_for_pdf
-  before_action :raise_error_if_pdf_request
-
-  def raise_error_if_pdf_request
-    if params.dig(:download, :format) == 'pdf'
-      Rails.logger.warn('PDF request')
-    end
-    return render_500 if params[:for_pdf].present? || params.dig(:download, :format) == 'pdf'
-  end
 
   def admin_path?
     request.original_fullpath =~ %r{/(?:#{I18n.locale}/)?admin/?}
@@ -145,6 +137,7 @@ class ApplicationController < ActionController::Base
 
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?
+    return render_500 if @for_pdf
   end
 
   def set_host_for_local_storage
