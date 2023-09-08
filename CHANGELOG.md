@@ -1,3 +1,15 @@
+### 4.9.10
+- Chore: September 2023 WDPA Release
+  - September statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
+### 4.9.9
+- Chore: August 2023 WDPA Release
+  - August statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
 ### 4.9.8
 - Update country names
 - remove parent-child relationship between IOT and GBR
@@ -5,7 +17,7 @@
 
 ### 4.9.7
 - Chore: July 2023 WDPA Release
-  - June statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - July statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - `constants.rb` updated
   - Map PDF replaced
 
