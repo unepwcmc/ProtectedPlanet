@@ -1,4 +1,5 @@
 set :stage, :production
+set :branch, :master
 
 server 'new-web.pp-production.linode.protectedplanet.net', user: 'wcmc', roles: %w{web app db}
 
@@ -7,7 +8,6 @@ set :server_name, "protectedplanet"
 set :sudo_user, "wcmc"
 set :app_port, "80"
 
-set :branch, "fix/disable_pdf_downloads"
 
 
 # server-based syntax

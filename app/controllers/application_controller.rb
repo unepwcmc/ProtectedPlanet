@@ -136,8 +136,6 @@ class ApplicationController < ActionController::Base
   end
 
   def check_for_pdf
-    puts '------------------------------------------------------------------------------------------------'
-    puts request
     @for_pdf = params[:for_pdf].present?
   end
 
