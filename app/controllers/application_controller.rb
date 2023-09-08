@@ -137,6 +137,7 @@ class ApplicationController < ActionController::Base
 
   def check_for_pdf
     @for_pdf = params[:for_pdf].present?
+    return render_500 if @for_pdf
   end
 
   def set_host_for_local_storage

@@ -4,10 +4,6 @@ class ProtectedAreasController < ApplicationController
   include MapHelper
 
   def show
-    if params[:format] == 'pdf'
-      return render_500
-    end
-
     id = params[:id]
 
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'protected_area', id)
