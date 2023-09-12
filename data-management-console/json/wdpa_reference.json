@@ -1,0 +1,176 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "sub_location_cat",
+		"elements": [
+			{
+				"name": "id",
+				"type": "int"
+			},
+			{
+				"name": "code",
+				"type": "VARCHAR(20)"
+			},
+			{
+				"name": "description",
+				"type": "VARCHAR(255)"
+			},
+			{
+				"name": "originator_id",
+				"type": "INTEGER"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["id"]
+			}
+		]
+	},
+	  {
+		"name": "green_list_status",
+		"elements": [
+			{
+				"name": "id",
+				"type": "int"
+			},
+			{
+				"name": "description",
+				"type": "VARCHAR(255)"
+			},
+			{
+				"name": "originator_id",
+				"type": "int"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["id"]
+			}
+		]
+	},
+	{
+      "name": "wdpa_status_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+		{
+			"name": "code",
+			"type": "varchar(50)"
+		},
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+	  ]
+	},
+	{
+      "name": "wdpa_governance_type_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+		{
+			"name": "code",
+			"type": "varchar(50)"
+		},
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+	  ]
+	},
+	{
+      "name": "designation_type_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+		{
+			"name": "code",
+			"type": "varchar(50)"
+		},
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+	  ]
+	},
+	{
+      "name": "conservation_objective_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+		{
+			"name": "code",
+			"type": "varchar(50)"
+		},
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+	  ]
+	},
+	{
+      "name": "wdpa_verification_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+		{
+			"name": "code",
+			"type": "varchar(50)"
+		},
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+	  ]
+	}
+  ]
+}

@@ -17,18 +17,17 @@ class DataGroupManager:
         return cls._data_group_dictionary[data_group]["tables"]
 
     @classmethod
-    def originator_ids(cls, data_group):
-        return cls._data_group_dictionary[data_group]["originator_ids"]
+    def is_loaded_by_WCMC(cls, data_group):
+        return "True" == cls._data_group_dictionary[data_group].get("loaded_by_WCMC")
 
     @classmethod
     def driving_table(cls, data_group):
-        return cls._data_group_dictionary[data_group]["driving_table"]
+        return cls._data_group_dictionary[data_group].get("driving_table")
 
     @classmethod
     def driving_column(cls, data_group):
-        return cls._data_group_dictionary[data_group]["driving_column"]
+        return cls._data_group_dictionary[data_group].get("driving_column")
 
     @classmethod
     def translation_schema(cls, data_group):
         return cls._data_group_dictionary[data_group]["translation_schema"]
-

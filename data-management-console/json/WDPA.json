@@ -5,7 +5,7 @@
 		"name": "wdpa",
 		"elements": [
 			{
-				"name": "wdpa_id",
+				"name": "site_id",
 				"type": "bigint"
 			},
 			{
@@ -21,12 +21,28 @@
 				"type": "varchar(20)"
 			},
 			{
-				"name": "no_take",
+				"name": "no_take_id",
 				"type": "int"
 			},
 			{
-				"name": "iucn_category",
+				"source cols": [ "no_take_id" ],
+				"known as": "no_take",
+				"type": "FOREIGN KEY",
+				"target table": "no_take_cat",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+				"name": "iucn_category_id",
 				"type": "int"
+			},
+			{
+				"source cols": [ "iucn_category_id" ],
+				"known as": "iucn_category",
+				"type": "FOREIGN KEY",
+				"target table": "iucn_category_cat",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
 			},
 			{
 				"name": "originator_id",
@@ -37,27 +53,35 @@
 				"type": "varchar(20)"
 			},
 			{
-				"name": "desig",
+				"name": "designation",
 				"type": "varchar(254)"
 			},
 			{
-				"name": "desig_eng",
+				"name": "designation_english",
 				"type": "varchar(254)"
 			},
 			{
-				"name": "marine",
-				"type": "varchar(20)"
+				"name": "marine_id",
+				"type": "int"
 			},
 			{
-				"name": "rep_m_area",
+				"source cols": [ "marine_id" ],
+				"known as": "marine",
+				"type": "FOREIGN KEY",
+				"target table": "marine_cat",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+				"name": "reported_marine_area",
 				"type": "double precision"
 			},
 			{
-				"name": "gis_m_area",
+				"name": "gis_marine_area",
 				"type": "double precision"
 			},
 			{
-				"name": "rep_area",
+				"name": "reported_area",
 				"type": "double precision"
 			},
 			{
@@ -65,36 +89,152 @@
 				"type": "double precision"
 			},
 			{
-				"source cols": [ "no_take" ],
-				"type": "FOREIGN KEY",
-				"target table": "marine_enum",
-				"target cols": [ "code" ]
+				"source cols": [ "originator_id" ],
+				"known as": "_internal_",
+				"type": "FOREIGN KEY N",
+				"target table": "wdpa_sources",
+				"lookup cols": [ "originator_id" ],
+				"target cols": [ "originator_id" ]
 			},
 			{
-				"source cols": [ "iucn_category" ],
-				"type": "FOREIGN KEY",
-				"target table": "iucn_cat",
-				"target cols": [ "code" ]
+				"source cols": [ "site_id", "parcel_id" ],
+				"known as": "iso3",
+				"type": "FOREIGN KEY N",
+				"target table": "iso3",
+				"association table alias": "wdpa_iso3_assoc",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
 			},
 			{
-				"name": "no_tk_area",
+				"source cols": [ "site_id", "parcel_id" ],
+				"known as": "international_criteria",
+				"type": "FOREIGN KEY N",
+				"target table": "international_criteria_cat",
+				"association table alias": "wdpa_international_criteria_assoc",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+				"source cols": [ "site_id", "parcel_id" ],
+				"known as": "parent_iso3",
+				"type": "FOREIGN KEY N",
+				"target table": "iso3",
+				"association table alias": "wdpa_parent_iso3_assoc",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+				"source cols": [ "site_id", "parcel_id" ],
+				"known as": "sub_loc",
+				"type": "FOREIGN KEY N",
+				"target table": "sub_location_cat",
+				"association table alias": "wdpa_sub_location_assoc",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+				"name": "no_take_area",
 				"type": "double precision"
 			},
 			{
-				"name": "status_yr",
+				"name": "status_year",
 				"type": "int"
 			},
 			{
 				"type": "PRIMARY KEY",
-				"PK fields": [ "wdpa_id", "parcel_id" ]
-			}		
-		]	
+				"PK fields": [ "site_id", "parcel_id" ]
+			},
+			{
+			  "name": "designation_type_id",
+			  "type": "int"
+			},
+			{
+				"source cols": [ "designation_type_id" ],
+				"known as": "designation_type",
+				"type": "FOREIGN KEY",
+				"target table": "designation_type_cat",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+			  "name": "status_id",
+			  "type": "int"
+			},
+			{
+				"source cols": [ "status_id" ],
+				"known as": "status",
+				"type": "FOREIGN KEY",
+				"target table": "wdpa_status_cat",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+			  "name": "governance_type_id",
+			  "type": "int"
+			},
+			{
+				"source cols": [ "governance_type_id" ],
+				"known as": "governance_type",
+				"type": "FOREIGN KEY",
+				"target table": "wdpa_governance_type_cat",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+			  "name": "ownership_type_id",
+			  "type": "int"
+			},
+			{
+				"source cols": [ "ownership_type_id" ],
+				"known as": "ownership_type",
+				"type": "FOREIGN KEY",
+				"target table": "ownership_type_cat",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+			  "name": "conservation_objective_id",
+			  "type": "int"
+			},
+			{
+				"source cols": [ "conservation_objective_id" ],
+				"known as": "conservation_objective",
+				"type": "FOREIGN KEY",
+				"target table": "conservation_objective_cat",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+			  "name": "verification_id",
+			  "type": "int"
+			},
+			{
+				"source cols": [ "verification_id" ],
+				"known as": "verification",
+				"type": "FOREIGN KEY",
+				"target table": "wdpa_verification_cat",
+				"lookup cols": [ "code" ],
+				"target cols": [ "id" ]
+			},
+			{
+			  "name": "management_authority",
+			  "type": "varchar(254)"
+			},
+			{
+			  "name": "management_plan",
+			  "type": "varchar(254)"
+			},
+			{
+			  "name": "supplemental_info",
+			  "type": "varchar(255)"
+			}
+		]
 	},
 	{
 		"name": "spatial_data",
 		"elements": [
 			{
-				"name": "wdpa_id",
+				"name": "site_id",
 				"type": "bigint"
 			},
 			{
@@ -102,7 +242,7 @@
 				"type": "varchar(20)"
 			},
 			{
-				"name": "shape",
+				"name": "geom",
 				"type": "geometry"
 			},
 			{
@@ -111,7 +251,7 @@
 			},
 			{
 				"type": "PRIMARY KEY",
-				"PK fields": [ "wdpa_id","parcel_id" ]
+				"PK fields": [ "site_id","parcel_id" ]
 			},
 			{
 				"name": "shape_area",
@@ -120,33 +260,30 @@
 			{
 				"name": "shape_length",
 				"type": "double precision"
+			},
+			{
+				"name": "geom_as_text",
+				"associated": "geom_as_text",
+				"type": "VIRTUAL COLUMN",
+				"representation": "text",
+				"function": "ST_AsText(geom)"
+			},
+			{
+				"name": "geom_as_geojson",
+				"associated": "geom_as_geojson",
+				"type": "VIRTUAL COLUMN",
+				"representation": "text",
+				"function": "ST_AsGeoJSON(geom)"
+			},
+			{
+				"source cols": [ "site_id, parcel_id" ],
+				"known as": "_internal_",
+				"type": "FOREIGN KEY",
+				"target table": "wdpa",
+				"lookup cols": [ "site_id", "parcel_id" ],
+				"target cols": [ "site_id", "parcel_id" ]
 			}
 		]
-	},
-	  {
-		  "name": "wdpa_iso_assoc",
-		  "elements": [
-			  {
-				  "name": "wdpa_id",
-				  "type": "bigint"
-			  },
-			  {
-				  "name": "parcel_id",
-				  "type": "varchar(20)"
-			  },
-			  {
-				  "name": "code",
-				  "type": "varchar(4)"
-			  },
-			  {
-				"name": "originator_id",
-				"type": "INTEGER"
-			  },
-    		{
-				"type": "PRIMARY KEY",
-				"PK fields": [ "wdpa_id","parcel_id", "code" ]
-			}
-		  ]
-	  }
+	}
 	]
 }

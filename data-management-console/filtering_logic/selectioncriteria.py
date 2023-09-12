@@ -55,6 +55,7 @@ class SelectionClause:
 
     def __init__(self):
         self.field_clause = None
+        self.bin_op = None
 
     def consume_token(self, token_list):
         if len(token_list) == 0:
@@ -69,14 +70,16 @@ class SelectionClause:
         if token_list[0] == "]":
             return FSMEnum.TABLE_OR_PATH_SEPARATOR_OR_FIELDS, token_list[1:]
         # now check for further clauses
-        bin_op = BinaryOperatorClause(self.field_clause)
-        potential_status, remaining_token_list = bin_op.consume_token(token_list)
+        self.bin_op = BinaryOperatorClause(self.field_clause)
+        potential_status, remaining_token_list = self.bin_op.consume_token(token_list)
         if potential_status == FSMEnum.FIELD_CLAUSE_COMPLETE:
             potential_status, remaining_token_list = self.consume_token(remaining_token_list)
             if potential_status != FSMEnum.NOT_ACCEPTED:
                 return potential_status, remaining_token_list
         return FSMEnum.NOT_ACCEPTED, None
 
+    def is_binary_clause(self):
+        return self.bin_op is not None
 
 class FieldClause:
 

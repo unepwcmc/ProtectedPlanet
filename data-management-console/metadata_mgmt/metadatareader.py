@@ -1,7 +1,8 @@
 import traceback
 
 from postgres.postgresexecutor import PostgresExecutor
-from schema_mgmt.tables import TableDefinition, PrimaryKey, CodeColumn, ForeignKey, VirtualColumn, TableColumn
+from schema_management.tables import TableDefinition, PrimaryKey, ForeignKey, VirtualColumn, TableColumn, \
+    ForeignKeyN
 
 
 class MetadataReader:
@@ -14,11 +15,11 @@ class MetadataReader:
         tables = {}
         cursor = PostgresExecutor.open_read_cursor()
         cursor.execute(
-            'SELECT SchemaName, TableName, ColumnName, Type, KeyColumns FROM METADATA ORDER BY TableName, ColumnName')
+            'SELECT DISTINCT 1, TableName, ColumnName, Type, KeyColumns FROM metadata ORDER BY TableName, ColumnName')
         rows = cursor.fetchall()
         last_name = ""
         for row in rows:
-            [_, table_name, column_name, data_type, extra_info] = row
+            [_, table_name, column_name, data_type, key_column_info] = row
             if table_name != last_name:
                 # print(f"Reading metadata for table {table_name}")
                 last_name = table_name
@@ -26,22 +27,23 @@ class MetadataReader:
                 tables[table_name] = TableDefinition(table_name, [])
             # use "match" syntax once we have Python 3.10 installed
             if data_type == "FOREIGN KEY":
-                source_columns, target_table, target_columns = ForeignKey.parse_out_key_columns(extra_info)
-                fk = ForeignKey(table_name, source_columns, target_table, target_columns)
+                source_columns, target_table, target_columns, lookup_columns, known_as = ForeignKey.parse_out_key_columns(key_column_info)
+                fk = ForeignKey(table_name, source_columns, target_table, target_columns, lookup_columns, known_as)
+                tables[table_name].elements.append(fk)
+            elif data_type == "FOREIGN KEY N":
+                source_columns, target_table, target_columns, lookup_columns, known_as, association_table_alias = ForeignKeyN.parse_out_key_columns(key_column_info)
+                fk = ForeignKeyN(table_name, source_columns, target_table, target_columns, lookup_columns, known_as, association_table_alias)
                 tables[table_name].elements.append(fk)
             # print(f"Foreign Key for source columns {source_columns} to target {target_table}:{target_columns}")
             elif data_type == "PRIMARY KEY":
-                pk = PrimaryKey(table_name, extra_info)
+                pk = PrimaryKey(table_name, key_column_info.split(","))
                 tables[table_name].elements.append(pk)
-            # print(f"Primary Key on {key_columns}")
-            elif data_type == "CODE COLUMN":
-                cc = CodeColumn(table_name, extra_info)
-                tables[table_name].elements.append(cc)
-            # print(f"Code column on {key_columns}")
             elif data_type == "VIRTUAL COLUMN":
-                associated_column_name, function_to_call, representation = VirtualColumn.parse_out_key_elements(extra_info)
+                associated_column_name, function_to_call, representation = VirtualColumn.parse_out_key_elements(key_column_info)
                 vc = VirtualColumn(table_name, column_name, associated_column_name, function_to_call, representation)
                 tables[table_name].elements.append(vc)
+            elif data_type == "INDEX REQUEST":
+                continue
             else:
                 col = TableColumn(table_name, column_name, data_type)
                 # print(f'Added column {column_name}')

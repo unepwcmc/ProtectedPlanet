@@ -6,15 +6,15 @@
 		"elements": [
 			{
 				"name": "SchemaName",
-				"type": "VARCHAR(32)"
+				"type": "VARCHAR(64)"
 			},
 			{
 				"name": "TableName",
-				"type": "VARCHAR(32)"
+				"type": "VARCHAR(64)"
 			},
 			{
 				"name": "ColumnName",
-				"type": "VARCHAR(32)"
+				"type": "VARCHAR(64)"
 			},
 			{
 				"name": "Type",
@@ -64,8 +64,10 @@
 			},
 			{
 				"source cols": [ "ingestion_stage_id" ],
+				"known as": "ingestion_stage",
 				"type": "FOREIGN KEY",
 				"target table": "ingestion_stages",
+				"lookup cols": [ "description" ],
 				"target cols": [ "description" ]
 			},
 			{

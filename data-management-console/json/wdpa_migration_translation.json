@@ -13,12 +13,12 @@
 		},
 		{
 			"name": "wdpaid",
-			"target_name": "wdpa_id",
+			"target_name": "site_id",
 			"target_table": "wdpa"
 		},
 		{
 			"name": "wdpaid",
-			"target_name": "wdpa_id",
+			"target_name": "site_id",
 			"target_table": "spatial_data"
 		},
 		{
@@ -42,61 +42,114 @@
 			"target_name": "original_name",
 			"target_table": "wdpa"
 		},
+	  	{
+			"name": "mang_auth",
+			"target_name": "management_authority",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "mang_plan",
+			"target_name": "management_plan",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "supp_info",
+			"target_name": "supplemental_info",
+			"target_table": "wdpa"
+		},
 		{
 			"name": "iso3",
 			"function": "multi-key",
 			"delimiter": ";",
-			"code_column": "iso3_id",
-			"source_table": "wdpa",
-			"source_columns": [ "wdpa_id", "parcel_id"],
-			"lookup_column": "code",
-			"lookup_table": "iso3",
-			"target_table": "wdpa_iso3_assoc"
+			"target_attribute": "iso3",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "parent_iso3",
+			"function": "multi-key",
+			"delimiter": ";",
+			"target_attribute": "parent_iso3",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "sub_loc",
+			"function": "multi-key",
+			"delimiter": ";",
+			"target_attribute": "sub_loc",
+			"target_table": "wdpa"
 		},
 	  	{
 			"name": "no_take",
-			"target_name": "no_take_id",
-			"target_table": "wdpa",
 			"function": "foreign-key",
-			"code_column": "id",
-			"lookup_column": "description",
-			"lookup_table": "no_take"
+			"target_name": "no_take_id",
+			"target_attribute": "no_take",
+			"target_table": "wdpa"
 		},
 	  	{
 			"name": "iucn_cat",
-			"target_name": "iucn_category_id",
-			"target_table": "wdpa",
 			"function": "foreign-key",
-			"code_column": "id",
-			"lookup_column": "description",
-			"lookup_table": "iucn_cat"
+			"target_name": "iucn_category_id",
+			"target_attribute": "iucn_category",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "desig_type",
+			"function": "foreign-key",
+			"target_name": "designation_type_id",
+			"target_attribute": "designation_type",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "status",
+			"function": "foreign-key",
+			"target_name": "status_id",
+			"target_attribute": "status",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "gov_type",
+			"function": "foreign-key",
+			"target_name": "governance_type_id",
+			"target_attribute": "governance_type",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "own_type",
+			"function": "foreign-key",
+			"target_name": "ownership_type_id",
+			"target_attribute": "ownership_type",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "cons_obj",
+			"function": "foreign-key",
+			"target_name": "conservation_objective_id",
+			"target_attribute": "conservation_objective",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "verif",
+			"function": "foreign-key",
+			"target_name": "verification_id",
+			"target_attribute": "verification",
+			"target_table": "wdpa"
 		},
 	  	{
 			"name": "int_crit",
-			"target_name": "international_criteria_id",
-			"target_table": "wdpa",
-			"function": "foreign-key",
-			"code_column": "id",
-			"lookup_column": "description",
-			"lookup_table": "international_criteria"
+			"function": "multi-category",
+			"delimiter": "()",
+			"target_attribute": "international_criteria",
+			"target_table": "wdpa"
 		},
 	  	{
 			"name": "desig_eng",
-			"target_name": "orig_designation_status_id",
-			"target_table": "wdpa",
-			"function": "foreign-key",
-			"code_column": "id",
-			"lookup_column": "description",
-			"lookup_table": "orig_designation_status"
+			"target_name": "designation_english",
+			"target_table": "wdpa"
 		},
 	  	{
 			"name": "desig",
-			"target_name": "designation_status_id",
-			"target_table": "wdpa",
-			"function": "foreign-key",
-			"code_column": "id",
-			"lookup_column": "description",
-			"lookup_table": "designation_status"
+			"target_name": "designation",
+			"target_table": "wdpa"
 		},
 	  	{
 			"name": "pa_def",
@@ -104,6 +157,9 @@
 		},
 	  	{
 			"name": "marine",
+			"function": "foreign-key",
+			"target_name": "marine_id",
+			"target_attribute": "marine",
 			"target_table": "wdpa"
 		},
 	  	{

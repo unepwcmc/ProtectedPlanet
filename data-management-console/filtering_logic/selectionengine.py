@@ -1,20 +1,30 @@
-import json
 import time
 from collections import deque
+from typing import Union
 
+import psycopg2
+
+from filtering_logic.blockregistry import BlockRegistry
+from filtering_logic.datablockfactory import DataBlockFactory
+from filtering_logic.selectionengineexceptions import UnterminatedStringException
 from filtering_logic.datablock import DataBlock
-from filtering_logic.wdpadatablocks import WDPADataBlock  # do this to force the registry to be populated
+from filtering_logic.queryexceptions import InvalidTermException
 from filtering_logic.executionchain import ExecutionChain
 from filtering_logic.selectioncriteria import *
+from metadata_mgmt.metadatareader import MetadataReader
+from postgres.postgresexecutor import PostgresExecutor
+from schema_management.extractor import Extractor
 
 
 class LineState:
 
     def __init__(self, line_to_process):
         self.line_to_process: str = line_to_process
+        # replace all double quotes with single quotes
+        self.line_to_process.replace('"', "'")
         self.cursor = 0
 
-    def get_token(self):
+    def get_token(self) -> Union[str, None]:
         token_start = self.cursor
         line_end = len(self.line_to_process)
         while token_start < line_end and self.line_to_process[token_start:token_start + 1].isspace():
@@ -24,6 +34,15 @@ class LineState:
         token_end = token_start
         if self.line_to_process[token_end:token_end + 1] in "[]:;,.":
             token_end += 1
+        elif self.line_to_process[token_end:token_end + 1] in "'":
+            token_end += 1
+            while token_end < line_end and self.line_to_process[token_end:token_end + 1] not in "'":
+                token_end += 1
+            if token_end < line_end and self.line_to_process[token_end] == "'":
+                token_end += 1
+            else:
+                err_msg = f"Unterminated string >> {self.line_to_process[token_start:token_end]}"
+                raise UnterminatedStringException(err_msg)
         elif self.line_to_process[token_end:token_end + 1] in "<=>&":
             while token_end < line_end and self.line_to_process[token_end:token_end + 1] in "<=>&":
                 token_end += 1
@@ -46,7 +65,7 @@ class SelectionEngine:
         self.permitted_transitions = {
             FSMEnum.START: [PathKeyword],
             FSMEnum.PATH_EQUALS: [PathEqualsKeyword],
-            FSMEnum.SELECT_OR_TABLE: [SelectionClause, TableNameSeparator, PathSeparator, PathCompletion],
+            FSMEnum.SELECT_OR_TABLE: [TableNameSeparator, PathSeparator, SelectionClause, PathCompletion],
             FSMEnum.TABLE_NAME: [TableName],
             FSMEnum.FIELDS: [FieldList],
             FSMEnum.STATEMENT_IN_COMPLETION: [StatementSeparator],
@@ -59,11 +78,11 @@ class SelectionEngine:
         self._current_state = FSMEnum.START
         self._current_stack = deque()
 
-    def get_transitions(self, potential_state):
+    def get_transitions(self, potential_state) -> list:
         permitted_transitions = self.permitted_transitions.get(potential_state)
         return permitted_transitions
 
-    def process_lines(self, lines_to_process: list):
+    def process_lines(self, lines_to_process: list[str]):
         for i in range(0, len(lines_to_process)):
             print(f"processing {lines_to_process[i]}")
             self.process_line(lines_to_process[i])
@@ -84,7 +103,7 @@ class SelectionEngine:
         else:
             print(f"We have {len(self.statements)} statements")
 
-    def process_line_internal(self, token_list, permitted_transitions):
+    def process_line_internal(self, token_list, permitted_transitions) -> (bool, list):
         for class_type in permitted_transitions:
             # need to create an instance of the type
             node = class_type()
@@ -113,25 +132,28 @@ class SelectionEngine:
                 # somewhere downstream failed - backtrack
                 self._current_stack.pop()
             # keep going around until all options exhausted
-        return False, remaining_token_list
+        #        return False, remaining_token_list
+        err_msg = f'Invalid Term detected: >>> {" ".join(token_list)}'
+        raise InvalidTermException(err_msg)
 
-    def process_query(self, query: str):
+    def process_query(self, query: str) -> dict:
         start_time = time.time()
         self.process_lines([query])
         #        self.process_lines(
         #            [
-        #                "path=iso3[code='ESP'].wdpa[wdpa_id < 100000]&&fields=wdpa:name&&fields=iso3:description&&timestamp=2023-06-28",
-        #                "path=iso3[code='ESP'].wdpa.pame;iso3.wdpa.green_list&&fields=iso3:code,description&&fields=wdpa:wdpa_id,parcel_id,name&&fields=pame:source_data_title&&fields=green_list:url&&timestamp=2026-06-28",
-        #                "path=wdpa[pa_def='0']&&fields=wdpa:wdpa_id,parcel_id,name, pa_def",
-        #                "path=wdpa&&fields=wdpa:wdpa_id,parcel_id,name, pa_def&&fields=spatial_data:shape_area",
-        #                "path=wdpa&&fields=wdpa:wdpa_id,parcel_id,name, pa_def&&fields=spatial_data:shape_area&&timestamp=2021-01-01&&as_of=2018-01-01",
-        #                "path=wdpa&&fields=wdpa:wdpa_id,parcel_id,name, pa_def&&fields=spatial_data:shape_area&&&&timestamp=2023-07-01&&as_of=2023-07-01",
+        #                "path=iso3[code='ESP'].wdpa[site_id < 100000]&&fields=wdpa:name&&fields=iso3:description&&timestamp=2023-06-28",
+        #                "path=iso3[code='ESP'].wdpa.pame;iso3.wdpa.green_list&&fields=iso3:code,description&&fields=wdpa:site_id,parcel_id,name&&fields=pame:source_data_title&&fields=green_list:url&&timestamp=2026-06-28",
+        #                "path=wdpa[pa_def='0']&&fields=wdpa:site_id,parcel_id,name, pa_def",
+        #                "path=wdpa&&fields=wdpa:site_id,parcel_id,name, pa_def&&fields=spatial_data:shape_area",
+        #                "path=wdpa&&fields=wdpa:site_id,parcel_id,name, pa_def&&fields=spatial_data:shape_area&&timestamp=2021-01-01&&as_of=2018-01-01",
+        #                "path=wdpa&&fields=wdpa:site_id,parcel_id,name, pa_def&&fields=spatial_data:shape_area&&&&timestamp=2023-07-01&&as_of=2023-07-01",
         #            ])
 
         duration = time.time() - start_time
         print(f"Took {duration} seconds to parse the statements")
         for statement in self.statements:
             start_time = time.time()
+            BlockRegistry.clear_where_conditions()
             ch = ExecutionChain()
             # each statement is a deque that must follow a specific pattern
             # PathKeyword
@@ -151,24 +173,38 @@ class SelectionEngine:
             master_timestamp = None
             master_as_of = None
             master_offset = 0
-            master_limit = 1000
+            master_limit = 10000
+            fully_qualified_table_name = []
+            next_el = None
             while True:
                 if isinstance(element, TableName):
                     table_name = element.name()
                     table_names.append(table_name)
-                    data_block: DataBlock = ch.get_block_for_name(table_name)
+                    fully_qualified_table_name.append(table_name)
+                    data_block: DataBlock = ch.get_block_for_name(table_name, fully_qualified_table_name)
                     next_el = statement.popleft()
                     if isinstance(next_el, SelectionClause):
-                        field_name = next_el.field_clause.field_name
-                        operator = next_el.field_clause.operator
-                        field_value = next_el.field_clause.field_value
-                        where_clause = f"{table_name}.{field_name} {operator} {field_value}"
+                        if next_el.is_binary_clause():
+                            left_field_name = next_el.bin_op.left_clause.field_name
+                            left_operator = next_el.bin_op.left_clause.operator
+                            left_field_value = next_el.bin_op.left_clause.field_value
+                            binary_operator = next_el.bin_op.binary_operator
+                            right_field_name = next_el.bin_op.right_clause.field_name
+                            right_operator = next_el.bin_op.right_clause.operator
+                            right_field_value = next_el.bin_op.right_clause.field_value
+                            where_clause = f"{table_name}.{left_field_name} {left_operator} {left_field_value} {binary_operator} {table_name}.{right_field_name} {right_operator} {right_field_value}"
+                        else:
+                            field_name = next_el.field_clause.field_name
+                            operator = next_el.field_clause.operator
+                            field_value = next_el.field_clause.field_value
+                            where_clause = f"{table_name}.{field_name} {operator} {field_value}"
                         next_el = statement.popleft()
                         data_block.add_where_clause(where_clause)
                     ch.add_block(table_names, data_block)
                 if isinstance(next_el, TableNameSeparator):
                     element = statement.popleft()
                     continue
+                fully_qualified_table_name = []  # reset the path if we've finished collecting the fully qualified table name
                 if isinstance(next_el, PathCompletion):
                     element = statement.popleft()
                     break
@@ -180,7 +216,7 @@ class SelectionEngine:
             while element:
                 if isinstance(element, FieldGroup):
                     table_name = element.table_name
-                    block_for_fields = ch.get_block_for_name(table_name)
+                    block_for_fields = ch.get_block_for_name(table_name, [])
                     element = statement.popleft() if len(statement) else None
                     if not isinstance(element, FieldList):
                         raise RuntimeError("Fieldlist must follow a FieldGroup")
@@ -203,6 +239,10 @@ class SelectionEngine:
                     err_msg = f"Unexpected token {type(element)} found"
                     raise RuntimeError(err_msg)
 
+            if master_timestamp is None:
+                master_timestamp = '9998-01-01 00:00:00'
+            if master_as_of is None:
+                master_as_of = '9998-01-01 00:00:00'
             chain_of_objects = ch.construct_chain(master_timestamp, master_as_of, master_offset, master_limit)
             duration = time.time() - start_time
             print(f"Took {duration} seconds to construct the chain")
@@ -210,15 +250,11 @@ class SelectionEngine:
             chain_of_objects["start_position"] = master_offset
             chain_of_objects["end_position"] = master_offset + master_limit - 1
             chain_of_objects["duration"] = duration
-            print("Constructing JSON")
-            output_json = json.dumps(chain_of_objects)
-            print(f"Length of output JSON is {len(output_json)}")
-            # pprint.pprint(chain_of_objects)
             duration = time.time() - start_time
-            print(f"Took {duration} seconds for total process")
+            print(f"Took {duration} seconds for execution chain")
             self.set_cursor(master_limit + master_offset)
             self.set_page_size(master_limit)
-            return output_json
+            return chain_of_objects
 
     def set_cursor(self, next_page_start):
         self.cursor = next_page_start
@@ -232,7 +268,23 @@ class SelectionEngine:
     def get_page_size(self):
         return self.page_size
 
-# connection_str = f"dbname=WDPA user=postgres password=WCMC%1"
-# with psycopg2.connect(connection_str) as conn:
-#    PostgresExecutor.set_connection(conn)
-#    SelectionEngine.process_query('path=wdpa[wdpa_id = 903141]&&fields=wdpa:wdpa_id, parcel_id, name, original_name, no_take, originator_id, iso3, iucn_cat, pa_def, designation_status, original_designation_status, marine, reported_marine_area, gis_marine_area, reported_area, gis_area, no_take_area, status_year&&fields=spatial_data:shape_area, shape_length')
+if __name__ == "__main__":
+    connection_str = f"dbname=WDPA user=postgres password=WCMC%1"
+    with psycopg2.connect(connection_str) as conn:
+        PostgresExecutor.set_connection(conn)
+        tables = MetadataReader.tables()
+        BlockRegistry.reset()
+        # register each table name as a simple datablock
+        # also register any association tables as associationdatablock
+        for table in tables.keys():
+            DataBlockFactory.create_simple_block(table)
+            association_table_names, target_table_names = Extractor.extract_association_and_target_table_names(
+                table, tables)
+            for association_table_name, target_table_name in zip(association_table_names, target_table_names):
+                # usually, for the forward order e.g. wdpa.iso3, we have the virtual columns
+                # most queries are of the backward form iso3[code='BEL'].wdpa.  This may not
+                DataBlockFactory.create_compound_block([table, target_table_name],
+                                                       [association_table_name, target_table_name])
+                DataBlockFactory.create_compound_block([target_table_name, table], [association_table_name, table])
+
+        SelectionEngine().process_query("path=wdpa[site_id = 903141 or parcel_id='A']&&fields=wdpa:site_id, parcel_id")

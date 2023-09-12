@@ -1,12 +1,20 @@
+import time
 import traceback
+
 from postgres.postgresconverter import PostgresConverter
 from mgmt_logging.logger import Logger
-from schema_mgmt.ingestionstats import IngestionStats
+from schema_management.ingestionstats import IngestionStats
 
 
 class PostgresExecutor:
     _read_cursor = None
+    _read_cursor_open_count = 0
+    _read_cursor_close_count = 0
     _write_cursor = None
+    _write_cursor_open_count = 0
+    _write_cursor_close_count = 0
+    _foreign_key_cursor = None
+    _foreign_key_cursor_open_count = 0
     _conn = None
 
     @classmethod
@@ -34,6 +42,8 @@ class PostgresExecutor:
             return [quarantine_positions, target_positions]
         except Exception as ex:
             print(str(ex))
+            [main_clause, quarantine_positions, target_positions] = PostgresConverter.construct_query_clause(
+                quarantine_table, target_table, originator_id, closed_universe)
             print(f"Construct query clause had a problem: {main_clause}")
             raise ex
 
@@ -43,20 +53,32 @@ class PostgresExecutor:
 
     @classmethod
     def open_read_cursor(cls):
-        if cls._read_cursor is None:
+        if cls._read_cursor is None or cls._read_cursor.closed:
             cls._read_cursor = cls._conn.cursor()
+            cls._read_cursor_open_count += 1
         return cls._read_cursor
 
     @classmethod
     def close_read_cursor(cls):
         if cls._read_cursor is not None:
             cls._read_cursor.close()
+            cls._read_cursor_close_count += 1
             cls._read_cursor = None
+
+
+    @classmethod
+    def foreign_key_cursor(cls):
+        if cls._foreign_key_cursor is None or cls._foreign_key_cursor.closed:
+            cls._foreign_key_cursor = cls._conn.cursor()
+            cls._foreign_key_cursor_open_count += 1
+        return cls._foreign_key_cursor
 
     @classmethod
     def begin_transaction(cls):
         Logger.get_logger().info("Beginning transaction")
-        cls._write_cursor = cls._conn.cursor()
+        if cls._write_cursor is None or cls._write_cursor.closed:
+            cls._write_cursor = cls._conn.cursor()
+            cls._write_cursor_open_count += 1
         cls._write_cursor.execute("BEGIN TRANSACTION")
         return cls._write_cursor
 
@@ -66,15 +88,20 @@ class PostgresExecutor:
         if cls._write_cursor is not None:
             cls._write_cursor.execute("COMMIT")
             cls._write_cursor.close()
+            cls._write_cursor_close_count += 1
             cls._write_cursor = None
 
     @classmethod
     def rollback(cls):
         if cls._write_cursor is not None:
             cls._write_cursor.execute("ROLLBACK")
+            cls._write_cursor.close()
+            cls._write_cursor_close_count += 1
             cls._write_cursor = None
         if cls._read_cursor is not None:
+            cls._read_cursor.close()
             cls._read_cursor = None
+            cls._read_cursor_close_count += 1
 
     @classmethod
     def get_time_from_database(cls):
@@ -94,30 +121,43 @@ class PostgresExecutor:
             f'---------------{target_table.name} has {active_rows} active rows and {deleted_rows} deleted rows')
 
     @classmethod
-    def replace_tables(cls, tables, area, store_metadata, schema):
+    def code_tables(cls, tables, area, store_metadata, schema, drop_only=False, remove_metadata=True,
+                    add_objectid_index=True):
         converter = PostgresConverter()
         Logger.get_logger().info(f'Area {area}, table count {len(tables)}')
         for table in tables:
             drop_command = converter.drop_table(schema, table, area)
             Logger.get_logger().info(drop_command)
+            print(drop_command)
             clear_command = converter.clear_metadata_for_this_table(schema, table, area)
-            Logger.get_logger().info(clear_command)
             try:
                 cls._write_cursor.execute(drop_command)
-                if schema != 'foundation':
+                if remove_metadata:
+                    Logger.get_logger().info(clear_command)
+                    print(clear_command)
                     cls._write_cursor.execute(clear_command)
             # TODO - refine the below exception handler as it's very broad in this form
             except Exception as e:
                 Logger.get_logger().info(f'No existing table {table.name}')
                 print(str(e))
+                # if we couldn't drop a table because it's not there, that's fine
+                if drop_only:
+                    continue
                 cls.rollback()
             else:
+                if drop_only:
+                    continue
                 try:
                     create_command = converter.code_table(schema, table, area)
                     Logger.get_logger().info(create_command)
                     print(create_command)
                     cls._write_cursor.execute(create_command)
-                    if schema != 'foundation':
+                    index_commands = converter.code_indexes(schema, table, area)
+                    for index_command in index_commands:
+                        print(index_command)
+                        Logger.get_logger().info(index_command)
+                        cls._write_cursor.execute(index_command)
+                    if add_objectid_index:
                         create_objectid_index_command = converter.create_objectid_index(schema, table, area)
                         Logger.get_logger().info(create_objectid_index_command)
                         cls._write_cursor.execute(create_objectid_index_command)
@@ -125,10 +165,14 @@ class PostgresExecutor:
                         metadata_row_commands = PostgresConverter.store_metadata(schema, table, area)
                         for metadata_command in metadata_row_commands:
                             Logger.get_logger().info(metadata_command)
+                            print(metadata_command)
                             cls._write_cursor.execute(metadata_command)
-                except Exception as e:
-                    print(str(e))
+                except Exception as ex:
+                    print(str(ex))
+                    traceback.print_exc(limit=None, file=None, chain=True)
                     cls.rollback()
+                else:
+                    print(f'Created table {table.name}')
 
     @classmethod
     def print_total_count(cls, target_table):
@@ -169,13 +213,14 @@ class PostgresExecutor:
             Logger.get_logger().info(row)
 
     @classmethod
-    def load_keys(cls, lookup_table, lookup_column, code_column, time_of_creation):
+    def load_keys(cls, lookup_table, lookup_column, id_column, time_of_creation):
         keys = {}
-        sql = PostgresConverter.load_keys(lookup_table, lookup_column, code_column, time_of_creation)
-        cls._read_cursor.execute(sql)
-        rows = cls._read_cursor.fetchall()
+        sql = PostgresConverter.load_keys(lookup_table, lookup_column, id_column, time_of_creation)
+        cursor = cls.foreign_key_cursor()
+        cursor.execute(sql)
+        rows = cursor.fetchall()
         for row in rows:
-            foreign_key_value = row[1]
+            foreign_key_value = str(row[1]).lower()
             keys[foreign_key_value] = row[0]
         Logger.get_logger().info(f'Foreign key table {lookup_table} had {len(rows)} rows at {time_of_creation}')
         return keys
@@ -189,7 +234,8 @@ class PostgresExecutor:
         return metadata_ids
 
     @classmethod
-    def get_cursor_for_driving_column(cls, input_columns, originator_id, driving_table, driving_column):
+    def get_cursor_for_driving_column(cls, input_columns, driving_table: str, originator_id: int = None,
+                                      driving_column: str = None):
         sql = PostgresConverter.get_rows_for_given_driver_column_value(input_columns, originator_id, driving_table,
                                                                        driving_column)
         cls._read_cursor.execute(sql)
@@ -200,9 +246,7 @@ class PostgresExecutor:
 
     @classmethod
     def store_transformed_and_associated_rows(cls, transformed_row_values, distinct_rows):
-        CHUNK_SIZE = 5000
-        # I suspect there's a bug in Python 3.10 as the obvious construct keeps giving Access Violations (C000005)
-        # rearranging the code to try and avoid this
+        CHUNK_SIZE = 100000
         target_tables_list = list(transformed_row_values.keys())
         array_of_vals_to_store_list = list(transformed_row_values.values())
         i = 0
@@ -234,7 +278,9 @@ class PostgresExecutor:
                 try:
                     cls._write_cursor.execute(sql)
                 except Exception as e:
+                    print(sql)
                     print(str(e))
+                    time.sleep(100)
                     traceback.print_exc(limit=None, file=None, chain=True)
                 else:
                     start_index += len(vals_to_persist)
@@ -252,7 +298,7 @@ class PostgresExecutor:
         cls._write_cursor.execute(PostgresConverter.delete_staging_rows(table_name))
 
     @classmethod
-    def create_deleted_row(cls, row, target_table, target_positions, originator_id, ingestion_id, time_of_creation):
+    def create_deleted_row(cls, row, target_table, target_positions, ingestion_id, time_of_creation):
         cols = list(target_positions.keys())
         cols.remove("FromZ")
         cols.remove("ToZ")
@@ -300,7 +346,7 @@ class PostgresExecutor:
         print('Added ingestion')
 
     @classmethod
-    def create_new_row(cls, row, source_table, source_positions, target_table, originator_id, ingestion_id,
+    def create_new_row(cls, row, source_table, source_positions, target_table, ingestion_id,
                        time_of_creation):
         cols = list(source_positions.keys())
         cols.remove("objectid")  # dont copy objectid across

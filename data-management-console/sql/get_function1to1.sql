@@ -1,0 +1,2 @@
+DROP FUNCTION IF EXISTS %GET_FUNCTION%;
+CREATE OR REPLACE FUNCTION %GET_FUNCTION%(code_in %ARG_TYPE0%, update_time TIMESTAMP, as_of_time TIMESTAMP) RETURNS TEXT LANGUAGE PLPGSQL AS $$ declare ret_string varchar(10000); begin SELECT a.%VALUE_COLUMN% into ret_string from %REFERENCE_TABLE_NAME% a where a.%TARGET_COLUMN_NAME% = code_in AND a.EffectiveFromZ <= update_time AND a.EffectiveToZ > as_of_time; return ret_string; end; $$

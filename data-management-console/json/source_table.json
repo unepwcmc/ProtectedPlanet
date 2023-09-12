@@ -2,7 +2,7 @@
   "version": 0.1,
   "tables": [
     {
-      "name": "data_sources",
+      "name": "data_providers",
       "elements": [
         {
           "name": "originator_id",
@@ -10,6 +10,10 @@
         },
         {
           "name": "data_title",
+          "type": "varchar(254)"
+        },
+        {
+          "name": "responsible_party",
           "type": "varchar(254)"
         },
         {
@@ -26,21 +30,11 @@
         },
         {
           "name": "language",
-          "type": "varchar(254)"
+          "type": "varchar(20)"
         },
         {
           "name": "character_set",
-          "type": "varchar(254)"
-        },
-        {
-          "name": "responsible_party_id",
-          "type": "int"
-        },
-        {
-            "source cols": [ "responsible_party_id" ],
-            "type": "FOREIGN KEY",
-            "target table": "data_providers",
-            "target cols": [ "responsible_party" ]
+          "type": "varchar(20)"
         },
         {
           "name": "reference_system",
@@ -52,48 +46,19 @@
         },
         {
           "name": "lineage",
-          "type": "varchar(510)"
-        },
-        {
-          "name": "citation",
-          "type": "varchar(510)"
-        },
-        {
-          "name": "disclaimer",
-          "type": "varchar(510)"
-        },
-        {
-          "type": "PRIMARY KEY",
-          "PK fields": ["originator_id"]
-        }
-      ]
-    },
-    {
-      "name": "data_providers",
-      "elements": [
-        {
-            "name": "id",
-            "type": "int"
-        },
-        {
-          "name": "uuid",
-          "type": "uuid DEFAULT gen_random_uuid()"
-        },
-        {
-          "name": "responsible_party",
           "type": "varchar(254)"
         },
         {
-          "name": "originator_id",
-          "type": "bigint"
+          "name": "citation",
+          "type": "varchar(254)"
         },
         {
-          "type": "PRIMARY KEY",
-          "PK fields": ["responsible_party"]
+          "name": "disclaimer",
+          "type": "varchar(254)"
         },
         {
-            "type": "CODE COLUMN",
-            "field": "id"
+            "type": "PRIMARY KEY",
+            "PK fields": [ "originator_id" ]
         }
       ]
     }

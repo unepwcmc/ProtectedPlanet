@@ -6,21 +6,13 @@
 			"target_table": "pame"
 		},
 		{
-			"name": "evaluation_id",
-			"target_table": "pame_iso3_assoc"
-		},
-		{
 			"name": "metadata_id",
 			"target_name": "originator_id",
 			"target_table": "pame"
 		},
 		{
-			"name": "metadata_id",
-			"target_name": "originator_id",
-			"target_table": "pame_iso3_assoc"
-		},
-		{
 			"name": "wdpa_id",
+			"target_name": "site_id",
 			"target_table": "pame"
 		},
 		{
@@ -29,11 +21,10 @@
 		},
 	  	{
 			"name": "source_responsible_party",
-			"target_name": "responsible_party_id",
-			"target_table": "pame",
 			"function": "foreign-key",
-			"lookup_column": "responsible_party",
-			"lookup_table": "pame_providers"
+			"target_name": "responsible_party_id",
+			"target_attribute": "responsible_party",
+			"target_table": "pame"
 		},
         {
             "name": "methodology",
@@ -48,12 +39,8 @@
 			"name": "iso3",
 			"function": "multi-key",
 			"delimiter": ";",
-			"code_column": "iso3_id",
-			"source_table": "pame",
-			"source_columns": [ "evaluation_id"],
-			"lookup_column": "code",
-			"lookup_table": "iso3",
-			"target_table": "pame_iso3_assoc"
+			"target_attribute": "iso3",
+			"target_table": "pame"
 		},
         {
             "name": "source_year",

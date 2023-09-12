@@ -23,12 +23,10 @@
         },
 	  	{
 			"name": "responsible_party_category",
-			"target_name": "category_id",
-			"target_table": "icca_providers",
 			"function": "foreign-key",
-			"code_column": "id",
-			"lookup_column": "description",
-			"lookup_table": "icca_providers_cat"
+			"target_name": "category_id",
+			"target_attribute": "provider_category",
+			"target_table": "icca_providers"
 		}
 	  ]
     }

@@ -1,6 +1,33 @@
 {
   "version": 0.1,
   "tables": [
+    {
+      "name": "pame_providers",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "uuid",
+          "type": "uuid DEFAULT gen_random_uuid()"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+        {
+          "name": "responsible_party",
+          "type": "varchar(254)"
+        },
+        {
+          "type": "PRIMARY KEY",
+          "PK fields": [
+            "responsible_party"
+          ]
+        }
+      ]
+    },
 	{
 		"name": "pame",
 		"elements": [
@@ -9,7 +36,7 @@
 				"type": "bigint"
 			},
 			{
-				"name": "wdpa_id",
+				"name": "site_id",
 				"type": "bigint"
 			},
 			{
@@ -38,9 +65,11 @@
             },
             {
                 "source cols": [ "responsible_party_id" ],
+				"known as": "responsible_party",
                 "type": "FOREIGN KEY",
                 "target table": "pame_providers",
-                "target cols": [ "responsible_party" ]
+                "lookup cols": [ "responsible_party" ],
+				"target cols": [ "id" ]
             },
 			{
 				"name": "source_language",
@@ -67,68 +96,27 @@
 				"type": "int"
 			},
 			{
+				"source cols": ["evaluation_id"],
+				"known as": "iso3",
+				"type": "FOREIGN KEY N",
+				"target table": "iso3",
+				"lookup cols": ["code"],
+				"target cols": ["id"]
+			},
+			{
 				"type": "PRIMARY KEY",
 				"PK fields": [ "evaluation_id" ]
+			},
+			{
+				"source cols": [ "site_id" ],
+				"known as": "wdpa",
+				"type": "FOREIGN KEY",
+				"target table": "wdpa",
+				"lookup cols": [ "site_id" ],
+				"target cols": [ "site_id" ]
 			}
+
 		]
-    },
-    {
-      "name": "pame_providers",
-      "elements": [
-        {
-          "name": "id",
-          "type": "int"
-        },
-        {
-          "name": "uuid",
-          "type": "uuid DEFAULT gen_random_uuid()"
-        },
-		{
-			"name": "originator_id",
-			"type": "int"
-		},
-        {
-          "name": "responsible_party",
-          "type": "varchar(254)"
-        },
-        {
-          "type": "PRIMARY KEY",
-          "PK fields": [
-            "responsible_party"
-          ]
-        },
-        {
-            "type": "CODE COLUMN",
-            "field": "id"
-        }
-      ]
-    },
-    {
-        "name": "pame_iso3_assoc",
-        "elements": [
-            {
-                "name": "evaluation_id",
-                "type": "bigint"
-            },
-            {
-              "name": "originator_id",
-              "type": "int"
-            },
-            {
-                "name": "iso3_id",
-                "type": "int"
-            },
-            {
-                "source cols": [ "iso3_id" ],
-                "type": "FOREIGN KEY",
-                "target table": "iso3",
-                "target cols": [ "code" ]
-            },
-    		{
-				"type": "PRIMARY KEY",
-				"PK fields": [ "evaluation_id", "iso3_id" ]
-			}
-		  ]
-	  }
+    }
 	]
 }

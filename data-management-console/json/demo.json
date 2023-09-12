@@ -1,0 +1,62 @@
+{
+  "version": 0.1,
+  "tables": [
+    {
+      "name": "crustaceans",
+      "elements": [
+        {
+          "name": "crustacean_id",
+          "type": "int"
+        },
+        {
+          "name": "colloquial_name",
+          "type": "varchar(200)"
+        },
+        {
+          "name": "url",
+          "type": "varchar(200)"
+        },
+        {
+          "name": "site_id",
+          "type": "bigint"
+        },
+        {
+          "name": "parcel_id",
+          "type": "varchar(20)"
+        },
+        {
+          "name": "count",
+          "type": "int"
+        },
+        {
+          "name": "originator_id",
+          "type": "int"
+        },
+        {
+          "name": "case_study_published_id",
+          "type": "int"
+        },
+        {
+            "source cols": [ "crustacean_id" ],
+            "known as": "iso3",
+            "type": "FOREIGN KEY N",
+            "target table": "iso3",
+            "lookup cols": [ "code" ],
+            "target cols": [ "id" ]
+        },
+        {
+            "source cols": [ "case_study_published_id" ],
+            "known as": "case_study_published",
+            "type": "FOREIGN KEY",
+            "target table": "case_study_published_cat",
+            "lookup cols": [ "description" ],
+            "target cols": [ "id" ]
+        },
+        {
+            "type": "PRIMARY KEY",
+            "PK fields": [ "crustacean_id" ]
+        }
+      ]
+    }
+  ]
+}

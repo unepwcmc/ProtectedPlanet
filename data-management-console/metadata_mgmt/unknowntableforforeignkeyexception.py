@@ -1,0 +1,2 @@
+class UnknownTableForForeignKeyException(Exception):
+    pass

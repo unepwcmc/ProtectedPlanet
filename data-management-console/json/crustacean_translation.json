@@ -1,0 +1,50 @@
+{
+  "version": 0.1,
+  "Crustacean_World": [
+    {
+      "name": "id",
+      "target_name": "crustacean_id",
+      "target_table": "crustaceans"
+    },
+    {
+      "name": "name",
+      "target_name": "colloquial_name",
+      "target_table": "crustaceans"
+    },
+    {
+      "name": "url",
+      "target_table": "crustaceans"
+    },
+    {
+      "name": "wdpa_id",
+      "target_name": "site_id",
+      "target_table": "crustaceans"
+    },
+    {
+      "name": "parcel_id",
+      "target_table": "crustaceans"
+    },
+    {
+      "name": "count",
+      "target_table": "crustaceans"
+    },
+    {
+      "name": "iso3",
+      "function": "multi-key",
+      "delimiter": ";",
+      "target_attribute": "iso3",
+      "target_table": "crustaceans"
+    },
+    {
+        "name": "case_study_published",
+        "function": "foreign-key",
+        "target_name": "case_study_published_id",
+        "target_attribute" : "case_study_published",
+        "target_table": "crustaceans"
+    }
+  ],
+  "Distinct": {
+    "crustaceans_iso3_iso3": ["crustacean_id", "id"]
+  }
+
+}

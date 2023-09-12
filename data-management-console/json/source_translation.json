@@ -4,64 +4,11 @@
 		{
 			"name": "metadataid",
 			"target_name": "originator_id",
-			"target_table": "data_sources"
+			"target_table": "data_providers"
 		},
 		{
 			"name": "data_title",
-			"target_table": "data_sources"
-		},
-	  	{
-			"name": "resp_party",
-			"target_name": "responsible_party_id",
-			"target_table": "data_sources",
-			"function": "foreign-key",
-			"lookup_column": "responsible_party",
-			"lookup_table": "data_providers"
-		},
-        {
-            "name": "verifier",
-			"target_table": "data_sources"
-        },
-        {
-	        "name": "year",
-			"function": "check-year",
-			"target_table": "data_sources"
-        },
-        {
-            "name": "update_yr",
-			"function": "check-year",
-            "target_name": "update_year",
-			"target_table": "data_sources"
-        },
-        {
-            "name": "language",
-			"target_table": "data_sources"
-        },
-        {
-            "name": "char_set",
-            "target_name": "character_set",
-			"target_table": "data_sources"
-        },
-        {
-            "name": "ref_system",
-            "target_name": "reference_system",
-			"target_table": "data_sources"
-        },
-        {
-            "name": "scale",
-			"target_table": "data_sources"
-        },
-        {
-            "name": "lineage",
-			"target_table": "data_sources"
-        },
-        {
-            "name": "citation",
-			"target_table": "data_sources"
-        },
-        {
-            "name": "disclaimer",
-			"target_table": "data_sources"
-        }
+			"target_table": "data_providers"
+		}
   ]
 }

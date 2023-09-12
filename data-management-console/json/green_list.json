@@ -5,7 +5,7 @@
 		"name": "green_list",
 		"elements": [
 			{
-				"name": "wdpa_id",
+				"name": "site_id",
 				"type": "bigint"
 			},
 			{
@@ -30,13 +30,15 @@
 			},
             {
                 "source cols": [ "status_id" ],
+				"known as": "status",
                 "type": "FOREIGN KEY",
                 "target table": "green_list_status",
-                "target cols": [ "description" ]
+                "lookup cols": [ "description" ],
+                "target cols": [ "id" ]
             },
 			{
 				"type": "PRIMARY KEY",
-				"PK fields": [ "wdpa_id", "parcel_id" ]
+				"PK fields": [ "site_id", "parcel_id" ]
 			}
 		]
     }

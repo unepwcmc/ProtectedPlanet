@@ -3,9 +3,9 @@
   "Source": [
 		{
 			"name": "wdpaid",
-			"target_name":"wdpa_id",
+			"target_name":"site_id",
 			"target_table": "green_list",
-		  	"function": "wdpa_id_from_pid"
+		  	"function": "site_id_from_pid"
 		},
 	  	{
 		  "name": "wdpaid",
@@ -19,11 +19,10 @@
 		},
 	  	{
 			"name": "status",
-			"target_name": "status_id",
-			"target_table": "green_list",
 			"function": "foreign-key",
-			"lookup_column": "description",
-			"lookup_table": "green_list_status"
+			"target_name": "status_id",
+			"target_attribute": "status",
+			"target_table": "green_list"
 		},
         {
             "name": "expiry_date",

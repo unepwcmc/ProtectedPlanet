@@ -1,0 +1,30 @@
+{
+  "version": 0.1,
+  "tables": [
+    {
+      "name": "wdpa_providers",
+      "elements": [
+        {
+            "name": "id",
+            "type": "int"
+        },
+        {
+          "name": "uuid",
+          "type": "uuid DEFAULT gen_random_uuid()"
+        },
+        {
+          "name": "responsible_party",
+          "type": "varchar(254)"
+        },
+        {
+          "name": "originator_id",
+          "type": "bigint"
+        },
+        {
+          "type": "PRIMARY KEY",
+          "PK fields": ["responsible_party"]
+        }
+      ]
+    }
+    ]
+}

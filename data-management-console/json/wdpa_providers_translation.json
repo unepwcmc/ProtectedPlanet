@@ -1,0 +1,13 @@
+{
+  "version": 0.1,
+  "Source": [
+	  	{
+			"name": "resp_party",
+			"target_name": "responsible_party",
+			"target_table": "wdpa_providers"
+		}
+  ],
+  "Distinct": {
+		"wdpa_providers": "responsible_party"
+	  }
+}

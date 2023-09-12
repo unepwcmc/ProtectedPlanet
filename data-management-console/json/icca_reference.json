@@ -1,0 +1,667 @@
+{
+  "version": 0.1,
+  "tables": [
+    {
+      "name": "icca_objectives_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(130)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "habitat_types_global_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(60)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "internal_recognition_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(90)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "external_recognition_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(70)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "icca_providers_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(70)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "fpic_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(20)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "submission_status_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(255)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "scope_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(80)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(100)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "peer_reviewed_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(20)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "case_study_published_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(20)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "no_take_permanency_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(20)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "governance_council_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(50)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "icca_governance_type_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(50)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "community_decisions_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(90)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "management_plan_format_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(20)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "community_identity_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(20)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "community_mobility_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(40)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+    {
+      "name": "community_mobility_beyond_icca_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(30)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+    },
+	{
+	  "name": "resource_use_cat",
+	  "elements": [
+        {
+		  "name": "id",
+		  "type": "int"
+	    },
+        {
+          "name": "code",
+          "type": "varchar(30)"
+        },
+	    {
+          "name": "description",
+		  "type": "varchar(2047)"
+	    },
+	    {
+		  "name": "originator_id",
+		  "type": "int"
+		},
+		{
+		  "type": "PRIMARY KEY",
+		  "PK fields": ["id"]
+        }
+	  ]
+	},
+	{
+	  "name": "community_rights_cat",
+	  "elements": [
+        {
+		  "name": "id",
+		  "type": "int"
+		},
+        {
+          "name": "code",
+          "type": "varchar(60)"
+        },
+		{
+		  "name": "description",
+		  "type": "varchar(2047)"
+		},
+		{
+		  "name": "originator_id",
+		  "type": "int"
+		},
+		{
+		  "type": "PRIMARY KEY",
+		  "PK fields": ["id"]
+		}
+	  ]
+	},
+	{
+	  "name": "equal_access_cat",
+	  "elements": [
+		  {
+			  "name": "id",
+			  "type": "int"
+		  },
+        {
+          "name": "code",
+          "type": "varchar(20)"
+        },
+		  {
+			  "name": "description",
+			  "type": "varchar(2047)"
+		  },
+		  {
+			  "name": "originator_id",
+			  "type": "int"
+		  },
+		  {
+			  "type": "PRIMARY KEY",
+			  "PK fields": [
+				  "id"
+			  ]
+		  }
+	  ]
+	},
+	{
+	  "name": "resource_use_in_community_cat",
+	  "elements": [
+		  {
+			  "name": "id",
+			  "type": "int"
+		  },
+          {
+            "name": "code",
+            "type": "varchar(30)"
+          },
+          {
+			  "name": "description",
+			  "type": "varchar(2047)"
+		  },
+		  {
+			  "name": "originator_id",
+			  "type": "int"
+		  },
+		  {
+			  "type": "PRIMARY KEY",
+			  "PK fields": [
+				  "id"
+			  ]
+		  }
+	  ]
+	},
+    {
+      "name": "opportunities_status_cat",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(20)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+        {
+          "name": "originator_id",
+          "type": "int"
+        },
+        {
+          "type": "PRIMARY KEY",
+          "PK fields": [
+            "id"
+          ]
+        }
+      ]
+    },
+	{
+	  "name": "threats_cat",
+	  "elements": [
+		  {
+			  "name": "id",
+			  "type": "int"
+		  },
+          {
+            "name": "code",
+            "type": "varchar(150)"
+          },
+          {
+			  "name": "description",
+			  "type": "varchar(2047)"
+		  },
+		  {
+			  "name": "originator_id",
+			  "type": "int"
+		  },
+		  {
+			  "type": "PRIMARY KEY",
+			  "PK fields": [
+				  "id"
+			  ]
+		  }
+	  ]
+	},
+	{
+	  "name": "support_needed_cat",
+	  "elements": [
+		  {
+			  "name": "id",
+			  "type": "int"
+		  },
+          {
+            "name": "code",
+            "type": "varchar(150)"
+          },
+          {
+			  "name": "description",
+			  "type": "varchar(2047)"
+		  },
+		  {
+			  "name": "originator_id",
+			  "type": "int"
+		  },
+		  {
+			  "type": "PRIMARY KEY",
+			  "PK fields": [
+				  "id"
+			  ]
+		  }
+	  ]
+	},
+	{
+	  "name": "protected_planet_status_cat",
+	  "elements": [
+		  {
+			  "name": "id",
+			  "type": "int"
+		  },
+          {
+            "name": "code",
+            "type": "varchar(30)"
+          },
+          {
+			  "name": "description",
+			  "type": "varchar(2047)"
+		  },
+		  {
+			  "name": "originator_id",
+			  "type": "int"
+		  },
+		  {
+			  "type": "PRIMARY KEY",
+			  "PK fields": [
+				  "id"
+			  ]
+		  }
+	  ]
+	}
+  ]
+}

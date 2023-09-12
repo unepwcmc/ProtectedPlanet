@@ -10,7 +10,7 @@
 			},
 			{
 				"type": "PRIMARY KEY",
-				"PK fields": "ingestion_id"
+				"PK fields": ["ingestion_id"]
 			}
 		]	
 	}

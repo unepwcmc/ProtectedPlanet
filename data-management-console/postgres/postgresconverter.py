@@ -1,11 +1,12 @@
 import datetime
 
-from schema_mgmt.ingestorconstants import IngestorConstants
+from schema_management.ingestorconstants import IngestorConstants
+from schema_management.tables import TableDefinition
 
 
 class PostgresConverter:
     @staticmethod
-    def code_column(name, data_type):
+    def encode_column(name, data_type):
         return f'{name} {data_type}'
 
     @staticmethod
@@ -20,14 +21,22 @@ class PostgresConverter:
         return f' PRIMARY KEY({primary_key_fields})'
 
     @staticmethod
+    def code_index_request(table_name, area, columns, index_name):
+        return f'CREATE INDEX {index_name} on {PostgresConverter.fully_qualified_table_name(table_name, area)}({",".join(columns)})'
+
+    @staticmethod
     def fully_qualified_table_name(table_name, area):
         if area is not None:
             table_name = area + "_" + table_name
         return table_name
 
     @staticmethod
-    def code_table(_, table, area):
+    def code_table(_, table: TableDefinition, area):
         return f'CREATE TABLE {PostgresConverter.fully_qualified_table_name(table.name, area)} ({",".join(table.convert(PostgresConverter()))})'
+
+    @staticmethod
+    def code_indexes(_, table: TableDefinition, area):
+        return table.convert_index_requests(PostgresConverter(), area)
 
     @staticmethod
     def drop_table(_, table, area):
@@ -48,7 +57,7 @@ class PostgresConverter:
 
     @staticmethod
     def get_staging_data_originators(driving_table):
-        return f"SELECT DISTINCT originator_id FROM staging_{driving_table}"
+        return f"SELECT DISTINCT originator_id FROM stg_{driving_table} ORDER BY originator_id"
 
     @staticmethod
     def clear_metadata_for_this_table(schema, table, area):
@@ -66,13 +75,11 @@ class PostgresConverter:
         # this clause needs to go first otherwise INT GENERATED DEFAULT .... will look like int
         if "uuid" in col_type or "serial" in col_type or "generated" in col_type:
             return ""
-        # now check for foreign keys - these will be int's but must match (no tolerance applicable)
-        if is_foreign_key:
-            return f"a.{col.name} = b.{col.name}"
         # genuine business data types
         if "char" in col_type or "date" in col_type or "timestamp" in col_type:
             return f"CASE WHEN a.{col.name} is not NULL and b.{col.name} is NOT NULL THEN CAST(a.{col.name} = b.{col.name} AS BOOLEAN) WHEN a.{col.name} IS NULL and b.{col.name} IS NULL THEN CAST(1 AS BOOLEAN) ELSE CAST(0 AS BOOLEAN) END"
-        if "int" in col_type or "double" in col_type or "float" in col_type:
+        # if a foreign key doesn't match, the difference must be >= 1 which will be above any reasonable tolerance
+        if is_foreign_key or "int" in col_type or "double" in col_type or "float" in col_type:
             # set the value to just enough to indicate there's a change without danger of a numerical overflow
             return f"CASE WHEN a.{col.name} is not NULL and b.{col.name} is NOT NULL THEN abs(a.{col.name}-b.{col.name}) WHEN a.{col.name} IS NULL and b.{col.name} IS NULL THEN 0 ELSE 10000 END"
         if "geom" in col_type:
@@ -88,7 +95,7 @@ class PostgresConverter:
         position = 1
 
         # create the common where clause based on the PK
-        for PK in quarantine_table.primary_key().column_names.split(","):
+        for PK in quarantine_table.primary_key().column_names:
             where_clause_elements.append(f" a.{PK}=b.{PK} ")
 
         main_clause_for_update_columns = ["a.objectid"]
@@ -116,9 +123,9 @@ class PostgresConverter:
         main_clause_for_update += " AND b.ToZ=TIMESTAMP '9999-01-01 00:00:00'"
 
         main_clause_for_addition_columns = ["a.objectid"]
-        for _ in range(len(quarantine_positions)-1):
+        for _ in range(len(quarantine_positions) - 1):
             main_clause_for_addition_columns.append("NULL")
-        #no objectid in the main table
+        # no objectid in the main table
         main_clause_for_addition_columns.append("NULL")
         main_clause_for_addition_columns.append("'ADD'")
 
@@ -130,7 +137,7 @@ class PostgresConverter:
         main_clause_for_addition += f" AND b.ToZ=TIMESTAMP '9999-01-01 00:00:00') "
 
         main_clause_for_deletion_columns = ["NULL"]
-        for _ in range(len(quarantine_positions)-1):
+        for _ in range(len(quarantine_positions) - 1):
             main_clause_for_deletion_columns.append("NULL")
         main_clause_for_deletion_columns.append("b.objectid")
         main_clause_for_deletion_columns.append("'DELETED'")
@@ -145,7 +152,7 @@ class PostgresConverter:
             main_clause_for_deletion += f" AND b.ORIGINATOR_ID={originator_id}"
         main_clause_for_deletion += ")"
         main_clause = " UNION ".join([main_clause_for_addition, main_clause_for_update])
-
+        print(main_clause)
         return main_clause, quarantine_positions, target_positions
 
     @staticmethod
@@ -159,8 +166,8 @@ class PostgresConverter:
         return "SELECT now()::timestamp(0)"
 
     @staticmethod
-    def load_keys(lookup_table, lookup_column, code_column, time_of_creation):
-        sql = f"SELECT {code_column}, {lookup_column} from {lookup_table} WHERE FromZ <= TIMESTAMP '{time_of_creation}' AND ToZ > TIMESTAMP '{time_of_creation}'"
+    def load_keys(lookup_table, lookup_column, id_column, time_of_creation):
+        sql = f"SELECT {id_column}, {lookup_column} from {lookup_table} WHERE FromZ <= TIMESTAMP '{time_of_creation}' AND ToZ > TIMESTAMP '{time_of_creation}'"
         return sql
 
     @staticmethod
@@ -174,7 +181,7 @@ class PostgresConverter:
     @staticmethod
     def get_rows_for_given_driver_column_value(input_columns, originator_id, driving_table, driving_column):
         sql = f"SELECT {','.join(input_columns.keys())} FROM {driving_table} "
-        if driving_column:
+        if driving_column is not None:
             sql += f" WHERE {driving_column}={originator_id}"
         return sql
 
@@ -183,7 +190,7 @@ class PostgresConverter:
         if len(vals_to_store) == 0:
             return None
         cols_to_store = ",".join(vals_to_store[0].keys())
-        sql = f"INSERT INTO staging_{target_table} ({cols_to_store}) VALUES"
+        sql = f"INSERT INTO stg_{target_table} ({cols_to_store}) VALUES"
         sub_sqls = []
         for val_to_store in vals_to_store:
             sub_sql = "("

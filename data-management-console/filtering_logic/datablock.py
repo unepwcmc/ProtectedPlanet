@@ -1,18 +1,18 @@
-from abc import ABC, abstractmethod
-
-
 # a datablock acts as a unit in a data pipeline. It declares 4 things:
 #   the name of the schema piece it can handle
 #   the datastreamer it requires to fetch the data, including any configuration parameters for that streamer
 #   the keys which it uses to attach to any prior block in the pipeline
 #   the keys to which subsequent blocks in the pipeline can attach
+from filtering_logic.postgresstreamer import PostgresStreamer
 
-class DataBlock(ABC):
+
+class DataBlock:
 
     def __init__(self, name):
         self._name = name
         self._where_clause = ""
         self._fields = []
+        self.stream = None
 
     def add_fields_and_table(self, fields):
         # append the fields
@@ -37,14 +37,14 @@ class DataBlock(ABC):
         self._where_clause = ""
         self._fields = []
 
-    @abstractmethod
     def streamer(self):
-        pass
+        self.stream = PostgresStreamer()
+        return self.stream
 
-    @abstractmethod
-    def forward_keys(self):
-        pass
 
-    @abstractmethod
-    def backward_keys(self):
-        pass
+
+class AssociationDataBlock(DataBlock):
+    def __init__(self, name: list[str], first_block: DataBlock, second_block: DataBlock):
+        super().__init__(".".join(name))
+        self.first_block = first_block
+        self.second_block = second_block
