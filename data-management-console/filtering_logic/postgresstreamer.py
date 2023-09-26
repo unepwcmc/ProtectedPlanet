@@ -88,7 +88,9 @@ class PostgresStreamer:
         from_phrase += " FROM " + ",".join([t[0] + " " + t[1] for t in tables])
         insert_sql += from_phrase
         if where_conditions:
-            where_clause = " WHERE " + " AND ".join(where_conditions)
+            # bracket these otherwise a user-defined clause containing OR will cause havoc with the logic
+            bracketed_where_conditions = [ '(' + where_cond + ')' for where_cond in where_conditions ]
+            where_clause = " WHERE " + " AND ".join(bracketed_where_conditions)
             insert_sql += where_clause
         else:
             insert_sql += " WHERE 1=1 "

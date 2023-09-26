@@ -273,16 +273,16 @@ INSERT INTO stg_marine_cat(code, description, originator_id) VALUES('1', 'Coasta
 INSERT INTO stg_marine_cat(code, description, originator_id) VALUES('2', 'Marine', 10000);
 
 /* Install international_criteria_cat data */
-INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('i', 'Description 1', 10000)
-INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('ii', 'Description 2', 10000)
-INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('iii', 'Description 3', 10000)
-INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('iv', 'Description 4', 10000)
-INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('v', 'Description 5', 10000)
-INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('vi', 'Description 6', 10000)
-INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('vii', 'Description 7', 10000)
-INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('viii', 'Description 8', 10000)
-INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('ix', 'Description 9', 10000)
-INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('x', 'Description 10', 10000)
+INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('i', 'To represent a masterpiece of human creative genius', 10000)
+INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('ii', 'To exhibit an important interchange of human values, over a span of time or within a cultural area of the world, on developments in architecture or technology, monumental arts, town-planning or landscape design', 10000)
+INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('iii', 'To bear a unique or at least exceptional testimony to a cultural tradition or to a civilization which is living or which has disappeared', 10000)
+INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('iv', 'To be an outstanding example of a type of building, architectural or technological ensemble or landscape which illustrates (a) significant stage(s) in human history', 10000)
+INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('v', 'To be an outstanding example of a traditional human settlement, land-use, or sea-use which is representative of a culture (or cultures), or human interaction with the environment especially when it has become vulnerable under the impact of irreversible change', 10000)
+INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('vi', 'To be directly or tangibly associated with events or living traditions, with ideas, or with beliefs, with artistic and literary works of outstanding universal significance. (The Committee considers that this criterion should preferably be used in conjunction with other criteria)', 10000)
+INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('vii', 'To contain superlative natural phenomena or areas of exceptional natural beauty and aesthetic importance', 10000)
+INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('viii', "To be outstanding examples representing major stages of earth's history, including the record of life, significant on-going geological processes in the development of landforms, or significant geomorphic or physiographic features", 10000)
+INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('ix', 'To be outstanding examples representing significant on-going ecological and biological processes in the evolution and development of terrestrial, fresh water, coastal and marine ecosystems and communities of plants and animals', 10000)
+INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('x', 'To contain the most important and significant natural habitats for in-situ conservation of biological diversity, including those containing threatened species of outstanding universal value from the point of view of science or conservation', 10000)
 INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('Not Reported', 'Not Reported', 10000)
 INSERT INTO stg_international_criteria_cat(code, description, originator_id) VALUES('Not Applicable', 'Not Applicable', 10000)
 

@@ -1,13 +1,14 @@
 import gc
+import os
 import sys
 import time
 import traceback
 from collections import defaultdict
 from datetime import datetime
+from pathlib import Path
 
+from jinja2 import Template
 import psycopg2
-from flask import render_template, Flask, jsonify, request
-
 from filtering_logic.blockregistry import BlockRegistry
 from filtering_logic.datablockfactory import DataBlockFactory
 from filtering_logic.queryexceptions import InvalidTermException
@@ -15,7 +16,6 @@ from filtering_logic.selectionengine import SelectionEngine
 from metadata_mgmt.metadatareader import MetadataReader
 from mgmt_logging.logger import Logger
 from postgres.postgresexecutor import PostgresExecutor
-from qa.validation_checks import QAVerifier
 from runtime_mgmt.datagroupmanager import DataGroupManager
 from schema_management.extractor import Extractor
 from schema_management.schema_populator import SchemaPopulator
@@ -25,9 +25,6 @@ from translation.translation import QuarantineToStagingTranslator
 from translation.translationerrormanager import TranslationException
 from website.filterargshelper import FilterArgsHelper
 from website.jsonexporter import JsonExporter
-
-app = Flask(__name__)
-app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 
 def get_all_schemas():
@@ -39,8 +36,7 @@ def get_all_schemas():
         return [row[0] for row in rows]
 
 
-@app.route('/South_Africa_Metrics', methods=['GET'])
-def metrics():
+def south_africa_metrics(_):
     with psycopg2.connect(connection_string()) as conn:
         PostgresExecutor.set_connection(conn)
         cursor = PostgresExecutor.open_read_cursor()
@@ -102,17 +98,11 @@ def metrics():
                     deletions += 1
                 number_updated += updated
             historical_changes.append((start_year, additions, deletions, number_updated))
-        return render_template('ZAF_Metrics.html', **metrics_dict, historical_changes=historical_changes)
+        metrics_dict["historical_changes"] = historical_changes
+        return render_template('ZAF_Metrics.html', metrics_dict)
 
 
-@app.route('/run_verifications', methods=['GET', 'POST'])
-def run_verifications():
-    metadata_id = request.args.get("metadataid")
-    return jsonify(QAVerifier.verify(metadata_id))
-
-
-@app.route('/metrics_for_countries', methods=['GET'])
-def metrics_for_countries():
+def metrics_for_countries(request):
     with psycopg2.connect(connection_string()) as conn:
         PostgresExecutor.set_connection(conn)
         start_time = time.time()
@@ -145,18 +135,11 @@ def metrics_for_countries():
         PostgresExecutor.close_read_cursor()
     duration = time.time() - start_time
     print(f'Time taken was {duration}')
-    return render_template('display_selected_country_metrics.html', **metrics_dict,
-                           selected_countries=",".join(countries_of_interest))
+    metrics_dict["selected_countries"] = ",".join(countries_of_interest)
+    return render_template('display_selected_country_metrics.html', metrics_dict)
 
 
-@app.route('/manage_schema')
-def manage_schema():
-    schemas = get_all_schemas()
-    return render_template('manage_schema.html', all_schemas=schemas)
-
-
-@app.route('/create_foundation')
-def create_foundation():
+def create_foundation(_):
     #    with psycopg2.connect("dbname=WDPA user=postgres password=WCMC%1") as conn:
     with psycopg2.connect(connection_string()) as conn:
         try:
@@ -179,9 +162,7 @@ def create_foundation():
             executor.end_transaction()
 
 
-@app.route('/uninstall_foundation')
-def uninstall_foundation():
-    #    with psycopg2.connect("dbname=WDPA user=postgres password=WCMC%1") as conn:
+def uninstall_foundation(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             executor = PostgresExecutor()
@@ -198,8 +179,7 @@ def uninstall_foundation():
             executor.end_transaction()
 
 
-@app.route('/create_reference_data')
-def create_reference_data():
+def create_reference_data(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             executor = PostgresExecutor()
@@ -222,8 +202,7 @@ def create_reference_data():
             executor.end_transaction()
 
 
-@app.route('/uninstall_reference_data')
-def uninstall_reference_data():
+def uninstall_reference_data(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             executor = PostgresExecutor()
@@ -240,36 +219,32 @@ def uninstall_reference_data():
             executor.end_transaction()
 
 
-@app.route("/promote_reference_data_action")
-def promote_reference_data_action():
-    with psycopg2.connect(connection_string()) as conn:
-        PostgresExecutor.set_connection(conn)
-        executor = PostgresExecutor()
-        cursor = executor.open_read_cursor()
-        time_of_creation = request.args.get("time_of_creation")
-        new_description = request.args.get("new_desc")
-        cursor.execute('DELETE FROM stg_iucn_cat')
-        sql = f"INSERT INTO stg_iucn_cat(id, description, originator_id) VALUES(2, '{new_description}', 10000)"
-        cursor.execute(sql)
-        data_group = "Reference Data"
-        LoaderFromStagingToMain(data_group).ingest_standard(executor, time_of_creation,
-                                                            DataGroupManager.tables(data_group))
-        executor.close_read_cursor()
-        return render_for_html(Logger.get_output())
-
-
 def render_for_html(out_msg):
-    return "<br>".join(out_msg) + '<br><br><div><a href="index">Back to Main Index</a>'
+    return render_as_bytes("<br>".join(out_msg) + '<br><br><div><a href="index">Back to Main Index</a>')
 
 
-@app.route('/')
-@app.route('/index')
-def index():
-    return render_template('index.html')
+def render_as_bytes(bytes_in):
+    raw_data = bytes(bytes_in, "utf-8")
+    return raw_data
 
 
-@app.route('/uninstall_wdpa')
-def uninstall_wdpa():
+def load_file(file_name: str):
+    full_path_name = os.getcwd() + "/" + file_name
+    return Path(full_path_name).read_text()
+
+
+def render_template(file_name: str, args: dict = {}):
+    t = Template(load_file(f'templates/{file_name}'))
+    ans_as_str = t.render(args)
+    raw_data = bytes(ans_as_str, "utf-8")
+    return raw_data
+
+
+def return_home_page(_):
+    return render_template('index.html', {})
+
+
+def uninstall_wdpa(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             PostgresExecutor.set_connection(conn)
@@ -287,8 +262,7 @@ def uninstall_wdpa():
     return render_for_html(Logger.get_output())
 
 
-@app.route('/install_wdpa')
-def install_wdpa():
+def install_wdpa(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             executor = PostgresExecutor()
@@ -324,8 +298,7 @@ def install_wdpa():
     return render_for_html(Logger.get_output())
 
 
-@app.route('/uninstall_pame')
-def uninstall_pame():
+def uninstall_pame(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             PostgresExecutor.set_connection(conn)
@@ -340,8 +313,7 @@ def uninstall_pame():
     return render_for_html(Logger.get_output())
 
 
-@app.route('/install_pame')
-def install_pame():
+def install_pame(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             PostgresExecutor.set_connection(conn)
@@ -360,8 +332,7 @@ def install_pame():
             PostgresExecutor.end_transaction()
 
 
-@app.route('/uninstall_green_list')
-def uninstall_green_list():
+def uninstall_green_list(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             PostgresExecutor.set_connection(conn)
@@ -376,8 +347,7 @@ def uninstall_green_list():
     return render_for_html(Logger.get_output())
 
 
-@app.route('/install_green_list')
-def install_green_list():
+def install_green_list(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             executor = PostgresExecutor()
@@ -403,8 +373,7 @@ def install_green_list():
             PostgresExecutor.end_transaction()
 
 
-@app.route('/uninstall_icca')
-def uninstall_icca():
+def uninstall_icca(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             PostgresExecutor.set_connection(conn)
@@ -419,8 +388,7 @@ def uninstall_icca():
     return render_for_html(Logger.get_output())
 
 
-@app.route('/install_icca')
-def install_icca():
+def install_icca(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             executor = PostgresExecutor()
@@ -450,8 +418,7 @@ def install_icca():
             executor.end_transaction()
 
 
-@app.route('/uninstall_demo')
-def uninstall_demo():
+def uninstall_demo(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             PostgresExecutor.set_connection(conn)
@@ -466,7 +433,6 @@ def uninstall_demo():
     return render_for_html(Logger.get_output())
 
 
-@app.route('/install_demo')
 def install_demo():
     with psycopg2.connect(connection_string()) as conn:
         try:
@@ -512,7 +478,6 @@ def install_demo():
             executor.end_transaction()
 
 
-@app.route('/clear_database')
 def clear_database():
     with psycopg2.connect(connection_string()) as conn:
         try:
@@ -560,17 +525,10 @@ def clear_database():
     return render_for_html(Logger.get_output())
 
 
-@app.route('/load_quarantine_data')
 def load_quarantine_data():
     return render_template('load_quarantine_data.html')
 
 
-@app.route('/promote_reference_data')
-def promote_reference_data():
-    return render_template('promote_reference_data.html')
-
-
-@app.route("/country_metrics")
 def country_metrics():
     with psycopg2.connect(connection_string()) as conn:
         PostgresExecutor.set_connection(conn)
@@ -580,12 +538,10 @@ def country_metrics():
         rows = cursor.fetchall()
         codes_and_descriptions = [[row[0], row[1]] for row in rows]
         PostgresExecutor.close_read_cursor()
-        return render_template('country_metrics.html', codes_and_descriptions=codes_and_descriptions)
+        return render_template('country_metrics.html', {"codes_and_descriptions": codes_and_descriptions})
 
 
-@app.route('/fire_query')
-def fire_query():
-    print("Handling ad-hoc query")
+def fire_query(request):
     gc.enable()
     with psycopg2.connect(connection_string()) as conn:
         PostgresExecutor.set_connection(conn)
@@ -611,20 +567,21 @@ def fire_query():
             se = SelectionEngine()
             output = JsonExporter.export(se.process_query(query_text))
             PostgresExecutor.rollback()
-            return output
+            return render_as_bytes(output)
         except InvalidTermException as ite:
-            return {"error": str(ite)}, 400
+            request.setResponseCode(400)
+            return render_as_bytes({"error": str(ite)})
         except Exception as e:
             print(str(e))
             traceback.print_exc(limit=None, file=None, chain=True)
-            return {"error": str(e)}, 400
+            request.setResponseCode(400)
+            return render_as_bytes({"error": str(e)})
         finally:
             # ensure we throw away all temporary tables
             PostgresExecutor.rollback()
 
 
-@app.route('/load_quarantine_data_action')
-def load_quarantine_data_to_staging():
+def load_quarantine_data_to_staging(request):
     print("loading quarantine action")
     gc.enable()
     with psycopg2.connect(connection_string()) as conn:
@@ -654,85 +611,10 @@ def load_quarantine_data_to_staging():
             PostgresExecutor.close_read_cursor()
 
 
-@app.route('/define_adhoc_query')
-def define_adhoc_query():
+def define_adhoc_query(_):
     return render_template('define_adhoc_query.html')
 
 
-@app.route('/merge_staging_to_main')
-def merge_staging_to_main_action(request):
-    print("merging staging to main")
-    with psycopg2.connect(connection_string()) as conn:
-        time_of_creation = request.args.get("time_of_creation")
-        data_group = request.args.get("data_group")
-        executor = PostgresExecutor()
-        try:
-            executor.set_connection(conn)
-            print(time_of_creation)
-            LoaderFromStagingToMain(data_group).ingest_standard(executor, time_of_creation,
-                                                                DataGroupManager.tables(data_group))
-            print("Successfully merged")
-            return render_for_html(Logger.get_output())
-        except Exception as e:
-            print(str(e))
-            traceback.print_exc(limit=None, file=None, chain=True)
-            executor.rollback()
-            return {"error": str(e)}, 400
-        finally:
-            executor.close_read_cursor()
-
-
-@app.route('/green_list')
-def green_list():
-    with psycopg2.connect(connection_string()) as conn:
-        PostgresExecutor.set_connection(conn)
-        cursor = PostgresExecutor.open_read_cursor()
-        try:
-            sql = "SELECT a.site_id, a.parcel_id, b.description, a.url, a.expiry_date "
-            sql += "from green_list a, green_list_status b "
-            sql += "WHERE b.id = a.status_id"
-            cursor.execute(sql)
-            entries = cursor.fetchall()
-            return render_template('green_list.html', entries=entries)
-        except Exception as e:
-            return {"error": str(e)}, 400
-        finally:
-            PostgresExecutor.close_read_cursor()
-
-
-@app.route('/pame')
-def pame():
-    with psycopg2.connect(connection_string()) as conn:
-        PostgresExecutor.set_connection(conn)
-        cursor = PostgresExecutor.open_read_cursor()
-        try:
-            sql = "SELECT a.evaluation_id, a.site_id, a.name, a.designation, a.methodology, a.source_data_title, a.source_year, a.year, a.url  from pame a"
-            cursor.execute(sql)
-            entries = cursor.fetchall()
-            return render_template('pame.html', entries=entries)
-        except Exception as e:
-            return {"error": str(e)}, 400
-        finally:
-            PostgresExecutor.close_read_cursor()
-
-
-@app.route('/icca')
-def icca():
-    with psycopg2.connect(connection_string()) as conn:
-        PostgresExecutor.set_connection(conn)
-        cursor = PostgresExecutor.open_read_cursor()
-        try:
-            sql = "SELECT a.icca_id, a.site_id, a.parcel_id, a.original_name, a.local_name, a.latitude, a.longitude, a.creation_year, a.scope  from icca a"
-            cursor.execute(sql)
-            entries = cursor.fetchall()
-            return render_template('icca.html', entries=entries)
-        except Exception as e:
-            return {"error": str(e)}, 400
-        finally:
-            PostgresExecutor.close_read_cursor()
-
-
-@app.route('/view_metadata')
 def view_metadata():
     with psycopg2.connect(connection_string()) as conn:
         PostgresExecutor.set_connection(conn)
@@ -743,7 +625,7 @@ def view_metadata():
             sql += " AND type NOT IN ('PRIMARY KEY', 'FOREIGN KEY', 'FOREIGN KEY N') ORDER by tablename, columnname "
             cursor.execute(sql)
             entries = cursor.fetchall()
-            return render_template('metadata.html', entries=entries)
+            return render_template('metadata.html', {"entries": entries})
         except Exception as e:
             return {"error": str(e)}, 400
         finally:
@@ -781,5 +663,3 @@ if len(sys.argv) >= 6:
     password = sys.argv[5]
 else:
     password = "WCMC%1"
-
-app.run(host='0.0.0.0', port=port)

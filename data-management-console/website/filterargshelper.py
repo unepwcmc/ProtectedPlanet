@@ -1,9 +1,9 @@
-from flask import request
-from schema_mgmt.filterargs import FilterArgs
+from twisted.web.server import Request
+from schema_management.filterargs import FilterArgs
 
 
 class FilterArgsHelper:
 
     @staticmethod
-    def gather(req: request):
+    def gather(req: Request):
         return FilterArgs(req.args)

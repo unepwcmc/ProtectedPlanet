@@ -19,6 +19,8 @@ class DataBlockFactory:
             raise MalformedCompoundBlockException(err_msg)
         cdb = BlockRegistry.get_compound_block_for_name(fully_qualified_name)
         if cdb is None:
+            if "iso3" in block_name_list:
+                pass
             first_block = cls.create_simple_block(block_name_list[0])
             second_block = cls.create_simple_block(block_name_list[1])
             cdb = BlockRegistry.add_compound_block(fully_qualified_name,

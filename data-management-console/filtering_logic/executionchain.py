@@ -1,6 +1,4 @@
 import traceback
-from collections import defaultdict
-from functools import reduce
 
 from filtering_logic.blockregistry import BlockRegistry
 from filtering_logic.chaintable import ChainTable
@@ -93,18 +91,17 @@ class ExecutionChain:
                 main_table_data_block = block_at_this_level.second_block
                 association_streamer = association_block.streamer()
 
-                #                (backward_keys, forward_keys, is_one_to_one) = ForeignKeyHandler.get_relationship(
-                #                    association_block.name()
-                #                    , main_table_data_block.name())
+                backward_keys, forward_keys, main_table_keys = ForeignKeyHandler.get_association_foreign_keys(association_block.name(), main_table_data_block.name())
 
-                association_keys_for_mapping = {main_table_data_block.name(): ["wdpa_iso3_iso3.site_id", "wdpa_iso3_iso3.parcel_id"]}
+                association_keys_for_mapping = {main_table_data_block.name(): backward_keys}
                 association_chaintable: ChainTable = association_streamer.chain(prior,
-                                                                                ["wdpa_iso3_iso3.id"],
+                                                                                forward_keys,
                                                                                 association_keys_for_mapping,
-                                                                                ["iso3.id"],
+                                                                                backward_keys_for_mapping,
                                                                                 [],
                                                                                 association_block.name(),
-                                                                                block_at_this_level.where_clause(),
+                                                                                # just changed block_at_this_level.where_clause(),
+                                                                                "",
                                                                                 master_timestamp,
                                                                                 master_as_of, master_offset,
                                                                                 master_limit)
@@ -115,21 +112,27 @@ class ExecutionChain:
                 lower_levels_blocks = {key: value for key, value in chain.items() if
                                        key != ExecutionChain.DATA_BLOCK_AT_THIS_LEVEL}
 
+                # block at this level will be a compound name like 'iso3.wdpa'
+                # just want the second part to determine how to join further elements to it
+                name_parts = block_at_this_level.name().split(".")
+                assert(len(name_parts) == 2)
+                second_name_part = name_parts[1]
                 for lower_level_block_key in lower_levels_blocks.keys():
                     (backward_keys, forward_keys, is_one_to_one) = ForeignKeyHandler.get_relationship(
-                        block_at_this_level.name(), lower_level_block_key)
+                        second_name_part, lower_level_block_key)
                     backward_key_set[lower_level_block_key] = backward_keys
                     forward_key_set[lower_level_block_key] = forward_keys
                     is_one_to_one_set[lower_level_block_key] = is_one_to_one
 
                 main_table_chaintable: ChainTable = main_table_streamer.chain(association_chaintable,
-                                                                              ["wdpa.site_id", "wdpa.parcel_id"],
+                                                                              main_table_keys,
                                                                               backward_key_set,
-                                                                              ["wdpa.site_id", "wdpa.parcel_id"],
-                                                                              #main_table_data_block.fields(),
-                                                                              ["wdpa.site_id", "wdpa.parcel_id", "wdpa.name"],
+                                                                              main_table_keys,
+                                                                              association_block.fields(),
                                                                               main_table_data_block.name(),
-                                                                              "", master_timestamp,
+                                                                              # just changed "",
+                                                                              block_at_this_level.where_clause(),
+                                                                              master_timestamp,
                                                                               master_as_of, master_offset, master_limit)
 
                 for lower_level_block_key, lower_level_block_value in lower_levels_blocks.items():
@@ -144,20 +147,41 @@ class ExecutionChain:
                                                                        forward_keys_for_lower_level,
                                                                        backward_keys_for_lower_level, master_timestamp,
                                                                        master_as_of, 0, 1000000)
-                    back_res = main_table_chaintable.backward_results()
+
+                    row_number_to_upper_level = main_table_chaintable.row_number_to_upper_level()
                     for forward_key, value in lower_level_table.forward_results().items():
-                        parent_object_keys = back_res.get(forward_key)
-                        for parent_obj_key in parent_object_keys:
-                            parent_obj = main_table_chaintable.forward_results().get(parent_obj_key)
+                        # forward key from below is this level's row number
+                        collected_forward_row_number_for_this_table = row_number_to_upper_level[forward_key]
+                        parent_object_keys = main_table_chaintable.forward_results().get(collected_forward_row_number_for_this_table)
+                        parent_obj = parent_object_keys[forward_key]
+                        for val in value.values():
                             if parent_obj.get(lower_level_block_key) is None:
-                                parent_obj[lower_level_block_key] = [value]
+                                if is_one_to_one_set[lower_level_block_key]:
+                                    parent_obj[lower_level_block_key] = val
+                                else:
+                                    # an association table might return us a list of values per row
+                                    # we shall accept the list "as-is" rather than making a list of it
+                                    #TODO - re-examine this when the returned list is reflecting points in time
+                                    if isinstance(val, list):
+                                        parent_obj[lower_level_block_key] = val
+                                    else:
+                                        parent_obj[lower_level_block_key] = [val]
                             else:
-                                parent_obj[lower_level_block_key].append(value)
+                                parent_obj[lower_level_block_key].append(val)
+
+#                    back_res = main_table_chaintable.backward_results()
+#                    for forward_key, value in lower_level_table.forward_results().items():
+#                        parent_object_keys = back_res.get(forward_key)
+#                        for parent_obj_key in parent_object_keys:
+#                            parent_obj = main_table_chaintable.forward_results().get(parent_obj_key)
+#                            if parent_obj.get(lower_level_block_key) is None:
+#                                parent_obj[lower_level_block_key] = [value]
+#                            else:
+#                                parent_obj[lower_level_block_key].append(value)
 
                 lower_level_block_key = main_table_data_block.name()
 
                 print("Completing Compound Data")
-                back_res = association_chaintable.backward_results()[lower_level_block_key]
                 row_number_to_upper_level = association_chaintable.row_number_to_upper_level()
                 for forward_key, value in main_table_chaintable.forward_results().items():
                     # forward key from below is this level's row number

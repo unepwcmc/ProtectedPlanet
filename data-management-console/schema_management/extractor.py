@@ -112,9 +112,17 @@ class Extractor:
                 for col in cols:
                     col.table_name = assoc_table_name
 
+#               Add Foreign Keys so the DSL can navigate correctly from the association table
+                foreign_key_to_source = ForeignKey(assoc_table_name, fk.source_columns, schema_table.name, fk.source_columns, fk.source_columns, 'assoc_lookup_1' )
+                foreign_key_to_target = ForeignKey(assoc_table_name, fk.target_columns, target_table_actual.name, fk.target_columns, fk.target_columns, 'assoc_lookup_2' )
+                cols.append(foreign_key_to_source)
+                cols.append(foreign_key_to_target)
+
+#               Add Primary Key
                 primary_key = PrimaryKey(assoc_table_name, fk.source_columns + fk.target_columns)
                 cols.append(primary_key)
 
+#               Add Originator
                 originator_id_column = TableColumn(assoc_table_name, "originator_id", "int")
                 cols.append(originator_id_column)
                 index_request_src = IndexRequest(assoc_table_name, fk.source_columns)

@@ -60,11 +60,11 @@
 			},
 			{
 				"name": "code",
-				"type": "VARCHAR(255)"
+				"type": "VARCHAR(20)"
 			},
 			{
 				"name": "description",
-				"type": "VARCHAR(255)"
+				"type": "VARCHAR(300)"
 			},
 			{
 				"name": "originator_id",

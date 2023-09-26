@@ -1,4 +1,4 @@
-COPY public.staging_orig_designation_status (id, description, originator_id, objectid) FROM stdin;
+COPY public.stg_orig_designation_status (id, description, originator_id, objectid) FROM stdin;
 -1108392310	Commonwealth Marine Reserve	10000	1
 -146874530	Riparian Buffer Zone	10000	2
 -1169407148	Area of Ecological Importance	10000	3
@@ -1874,6 +1874,6 @@ COPY public.staging_orig_designation_status (id, description, originator_id, obj
 
 
 
-SELECT pg_catalog.setval('public.staging_orig_designation_status_objectid_seq', 1871, true);
+SELECT pg_catalog.setval('public.stg_orig_designation_status_objectid_seq', 1871, true);
 
 

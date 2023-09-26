@@ -17,7 +17,9 @@ class FilterArgs:
 
     def __init__(self, args_dict):
         self.elements = {}
-        for key, value in args_dict.items():
+        for k, v in args_dict.items():
+            key = bytes.decode(k, "utf-8")
+            value = bytes.decode(v[0], "utf-8")
             if "range:" in value.lower():
                 self.elements[key] = FilterOnRange(value)
             else:
