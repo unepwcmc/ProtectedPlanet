@@ -1,0 +1,2 @@
+class GeometryIntersectionException(Exception):
+    pass
