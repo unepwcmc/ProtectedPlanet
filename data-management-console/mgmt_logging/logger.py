@@ -1,3 +1,4 @@
+# An in-memory logger which will flush either upon specific command or when its internal buffer is full.
 import logging.handlers
 
 class MyStream():
