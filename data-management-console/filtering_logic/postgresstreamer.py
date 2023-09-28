@@ -1,3 +1,11 @@
+# The postgresstreamer is returned by the streamer() method of the datablocks (where appropriate)
+# and knows how to turn a datablock into a series of SQL calls.
+# Currently, it operates one table at a time, joining that table to its predecessor.  To achieve this,
+# it creates a temporary table corresponding to the table in which it is interested (using column aliases
+# instead of the actual column names, in order to avoid potential name clashes) and selects the subset of
+# rows corresponding to the query into that temporary table.  Row limits may also be applied to top-level tables.
+# The results are then read back from the temporary tables and turned into a ChainTable
+
 import string
 from collections import defaultdict
 
@@ -67,7 +75,8 @@ class PostgresStreamer:
             abbreviated_backward = {self.unqualified_column_name(key): value for key, value in
                                     incoming.backward_keys().items()}
             for index in range(0, len(forward_keys)):
-                translated_incoming_col = abbreviated_backward[self.unqualified_column_name(backward_keys_for_mapping[index])]
+                translated_incoming_col = abbreviated_backward[
+                    self.unqualified_column_name(backward_keys_for_mapping[index])]
                 where_conditions.append(f'{translated_incoming_col} = {forward_keys[index]}')
         if conditions_requested:
             where_conditions.append(conditions_requested)
@@ -77,7 +86,6 @@ class PostgresStreamer:
         all_fields_including_virtual = self.translate_virtual_fields(all_fields, master_timestamp, master_as_of)
 
         insert_sql = f"INSERT INTO {temp_table_name} SELECT * FROM ( SELECT " + ",".join(all_fields_including_virtual)
-        table_dict = dict(zip(tables, string.ascii_lowercase))
         tables = list(zip(tables, string.ascii_lowercase))
         # replace table names with aliases
         from_phrase = f", ROW_NUMBER() OVER (ORDER BY a.OBJECTID), {tables[0][0]}.objectid "
@@ -89,7 +97,7 @@ class PostgresStreamer:
         insert_sql += from_phrase
         if where_conditions:
             # bracket these otherwise a user-defined clause containing OR will cause havoc with the logic
-            bracketed_where_conditions = [ '(' + where_cond + ')' for where_cond in where_conditions ]
+            bracketed_where_conditions = ['(' + where_cond + ')' for where_cond in where_conditions]
             where_clause = " WHERE " + " AND ".join(bracketed_where_conditions)
             insert_sql += where_clause
         else:
@@ -134,7 +142,7 @@ class PostgresStreamer:
         cursor.execute(max_row_sql)
         rows = cursor.fetchall()
         rows_available = rows[0][0]
-        print(f"{temp_table_name} has max rows: {rows_available}" )
+        print(f"{temp_table_name} has max rows: {rows_available}")
         print(retrieval_sql)
         cursor.execute(retrieval_sql)
         rows = cursor.fetchall()
@@ -143,9 +151,8 @@ class PostgresStreamer:
         backward_results = {table_name: defaultdict(list) for table_name in backward_keys_dict.keys()}
         row_number_to_upper_level = {}
         for row in rows:
-            #forward_key: list = row[0:len(forward_keys)]
-            forward_key = row[len(row)-1]
-            backward_key = row[len(row)-2]
+            forward_key = row[len(row) - 1]
+            backward_key = row[len(row) - 2]
             row_result = {}
             for field_position, field_name in translated_fields.items():
                 short_field_name = self.unqualified_column_name(field_name)
@@ -156,12 +163,12 @@ class PostgresStreamer:
             for table_name in backward_keys_dict.keys():
                 backward_results[table_name][backward_key].append(forward_key)
             row_number_to_upper_level[backward_key] = forward_key
-#            backward_key_index = 0
-#            for table_name, backward_fields in backward_keys_dict.items():
-#                backward_key = row[len(forward_keys) + backward_key_index:len(forward_keys) + len(
-#                    backward_fields) + backward_key_index]
-#                backward_results[table_name][backward_key].append(forward_key)
-#                backward_key_index += len(backward_fields)
+        #            backward_key_index = 0
+        #            for table_name, backward_fields in backward_keys_dict.items():
+        #                backward_key = row[len(forward_keys) + backward_key_index:len(forward_keys) + len(
+        #                    backward_fields) + backward_key_index]
+        #                backward_results[table_name][backward_key].append(forward_key)
+        #                backward_key_index += len(backward_fields)
         PostgresExecutor.end_transaction()
         result = ChainTable(temp_table_name, backward_keys_translated, translated_fields, forward_results,
                             backward_results, row_number_to_upper_level, rows_available)

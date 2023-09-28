@@ -8,7 +8,7 @@ from collections import defaultdict
 
 class ChainTable:
     def __init__(self, name: str, backward_keys: dict, translated_fields: dict, forward_results: dict,
-                 backward_results: defaultdict, row_number_to_upper_level: dict, max_rows_retrievable):
+                 backward_results: dict, row_number_to_upper_level: dict, max_rows_retrievable):
         self._name = name
         self._backward_keys = backward_keys
         self._translated_fields = translated_fields
@@ -29,7 +29,7 @@ class ChainTable:
     def forward_results(self) -> dict:
         return self._forward_results
 
-    def backward_results(self) -> defaultdict:
+    def backward_results(self) -> dict:
         return self._backward_results
 
     def filter_results(self, lower_level_key):

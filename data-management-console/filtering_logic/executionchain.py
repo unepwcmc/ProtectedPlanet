@@ -1,3 +1,9 @@
+# An executionchain contains hierarchical dictionaries of tables to be executed and interacts with
+#   The BlockRegistry: to turn those tables into datablocks
+#   The streamers used by each datablock to retrieve the data associated with each block
+# The executionchain then stitches together the results of these sequential calls to create hierarchical
+# dictionaries of answers which are then passed back to the caller (who may choose to turn them into json objects, for example)
+
 import traceback
 
 from filtering_logic.blockregistry import BlockRegistry
@@ -91,7 +97,8 @@ class ExecutionChain:
                 main_table_data_block = block_at_this_level.second_block
                 association_streamer = association_block.streamer()
 
-                backward_keys, forward_keys, main_table_keys = ForeignKeyHandler.get_association_foreign_keys(association_block.name(), main_table_data_block.name())
+                backward_keys, forward_keys, main_table_keys = ForeignKeyHandler.get_association_foreign_keys(
+                    association_block.name(), main_table_data_block.name())
 
                 association_keys_for_mapping = {main_table_data_block.name(): backward_keys}
                 association_chaintable: ChainTable = association_streamer.chain(prior,
@@ -115,7 +122,7 @@ class ExecutionChain:
                 # block at this level will be a compound name like 'iso3.wdpa'
                 # just want the second part to determine how to join further elements to it
                 name_parts = block_at_this_level.name().split(".")
-                assert(len(name_parts) == 2)
+                assert (len(name_parts) == 2)
                 second_name_part = name_parts[1]
                 for lower_level_block_key in lower_levels_blocks.keys():
                     (backward_keys, forward_keys, is_one_to_one) = ForeignKeyHandler.get_relationship(
@@ -152,7 +159,8 @@ class ExecutionChain:
                     for forward_key, value in lower_level_table.forward_results().items():
                         # forward key from below is this level's row number
                         collected_forward_row_number_for_this_table = row_number_to_upper_level[forward_key]
-                        parent_object_keys = main_table_chaintable.forward_results().get(collected_forward_row_number_for_this_table)
+                        parent_object_keys = main_table_chaintable.forward_results().get(
+                            collected_forward_row_number_for_this_table)
                         parent_obj = parent_object_keys[forward_key]
                         for val in value.values():
                             if parent_obj.get(lower_level_block_key) is None:
@@ -161,7 +169,7 @@ class ExecutionChain:
                                 else:
                                     # an association table might return us a list of values per row
                                     # we shall accept the list "as-is" rather than making a list of it
-                                    #TODO - re-examine this when the returned list is reflecting points in time
+                                    # TODO - re-examine this when the returned list is reflecting points in time
                                     if isinstance(val, list):
                                         parent_obj[lower_level_block_key] = val
                                     else:
@@ -169,15 +177,15 @@ class ExecutionChain:
                             else:
                                 parent_obj[lower_level_block_key].append(val)
 
-#                    back_res = main_table_chaintable.backward_results()
-#                    for forward_key, value in lower_level_table.forward_results().items():
-#                        parent_object_keys = back_res.get(forward_key)
-#                        for parent_obj_key in parent_object_keys:
-#                            parent_obj = main_table_chaintable.forward_results().get(parent_obj_key)
-#                            if parent_obj.get(lower_level_block_key) is None:
-#                                parent_obj[lower_level_block_key] = [value]
-#                            else:
-#                                parent_obj[lower_level_block_key].append(value)
+                #                    back_res = main_table_chaintable.backward_results()
+                #                    for forward_key, value in lower_level_table.forward_results().items():
+                #                        parent_object_keys = back_res.get(forward_key)
+                #                        for parent_obj_key in parent_object_keys:
+                #                            parent_obj = main_table_chaintable.forward_results().get(parent_obj_key)
+                #                            if parent_obj.get(lower_level_block_key) is None:
+                #                                parent_obj[lower_level_block_key] = [value]
+                #                            else:
+                #                                parent_obj[lower_level_block_key].append(value)
 
                 lower_level_block_key = main_table_data_block.name()
 
@@ -240,7 +248,8 @@ class ExecutionChain:
                     for forward_key, value in lower_level_table.forward_results().items():
                         # forward key from below is this level's row number
                         collected_forward_row_number_for_this_table = row_number_to_upper_level[forward_key]
-                        parent_object_keys = this_level_chaintable.forward_results().get(collected_forward_row_number_for_this_table)
+                        parent_object_keys = this_level_chaintable.forward_results().get(
+                            collected_forward_row_number_for_this_table)
                         parent_obj = parent_object_keys[forward_key]
                         for val in value.values():
                             if parent_obj.get(lower_level_block_key) is None:
@@ -249,34 +258,34 @@ class ExecutionChain:
                                 else:
                                     # an association table might return us a list of values per row
                                     # we shall accept the list "as-is" rather than making a list of it
-                                    #TODO - re-examine this when the returned list is reflecting points in time
+                                    # TODO - re-examine this when the returned list is reflecting points in time
                                     if isinstance(val, list):
                                         parent_obj[lower_level_block_key] = val
                                     else:
                                         parent_obj[lower_level_block_key] = [val]
                             else:
                                 parent_obj[lower_level_block_key].append(val)
-                        #if parent_obj.get(lower_level_block_key) is None:
+                        # if parent_obj.get(lower_level_block_key) is None:
                         #    if is_one_to_one_set[lower_level_block_key] and len(value) == 1:
                         #        parent_obj[lower_level_block_key] = value[0]
                         #    else:
                         #        parent_obj[lower_level_block_key] = value
-                        #else:
+                        # else:
                         #    parent_obj[lower_level_block_key].append(value)
 
-                        #value = reduce(lambda a,b: a+b, list(value.values()))
-                        #if parent_obj.get(lower_level_block_key) is None:
+                        # value = reduce(lambda a,b: a+b, list(value.values()))
+                        # if parent_obj.get(lower_level_block_key) is None:
                         #    if is_one_to_one_set[lower_level_block_key] and len(value) == 1:
                         #        parent_obj[lower_level_block_key] = value[0]
                         #    else:
                         #        parent_obj[lower_level_block_key] = value
-                        #else:
+                        # else:
                         #    parent_obj[lower_level_block_key].append(value)
 
                     print("Checking for filtering at lower level")
                     # if the lower level table is filtered, knock out all the parent entries which haven't got a child
                     # from this lower_level_table
-                    #if lower_level_block_value[ExecutionChain.DATA_BLOCK_AT_THIS_LEVEL].is_filtered():
+                    # if lower_level_block_value[ExecutionChain.DATA_BLOCK_AT_THIS_LEVEL].is_filtered():
                     this_level_chaintable.filter_results(lower_level_block_key)
                 return this_level_chaintable
         except ColumnByNameException as cbn:
