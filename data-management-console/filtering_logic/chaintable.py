@@ -1,10 +1,14 @@
-import datetime
+# The ChainTable knows how to link to prior and subsequent chaintables within the executionchain.
+# It also carries the results from the query executed at that level
+# the algorithm in executionchain.py knows how to stitch together the results of a ChainTable with its
+# predecessor in the order of execution
+
 from collections import defaultdict
 
 
 class ChainTable:
     def __init__(self, name: str, backward_keys: dict, translated_fields: dict, forward_results: dict,
-                 backward_results: defaultdict, row_number_to_upper_level:dict, max_rows_retrievable):
+                 backward_results: defaultdict, row_number_to_upper_level: dict, max_rows_retrievable):
         self._name = name
         self._backward_keys = backward_keys
         self._translated_fields = translated_fields

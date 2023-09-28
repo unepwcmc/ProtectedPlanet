@@ -1,8 +1,9 @@
-# a datablock acts as a unit in a data pipeline. It declares 4 things:
-#   the name of the schema piece it can handle
-#   the datastreamer it requires to fetch the data, including any configuration parameters for that streamer
-#   the keys which it uses to attach to any prior block in the pipeline
-#   the keys to which subsequent blocks in the pipeline can attach
+# A datablock acts as a unit in a data pipeline. It declares 4 things:
+#   The name of the schema piece it can handle
+#   The fields which should be retrieved (derived from the &&fields clause of the DSL)
+#   The datastreamer it requires to fetch the data, including any configuration parameters for that streamer
+#   Any 'where' clause conditions associated with this table
+# The same datablock will represent its associated table in all table paths within the same query.
 from filtering_logic.postgresstreamer import PostgresStreamer
 
 

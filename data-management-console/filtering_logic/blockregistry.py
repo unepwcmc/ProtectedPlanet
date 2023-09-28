@@ -1,3 +1,11 @@
+# The BlockRegistry maintains a mapping of names to DataBlock|AssociationBlock - this way,
+# the same block is used whenever the same simple or compound name is encountered within a query.
+# Compound names are used when an association is being represented and map to AssociationBlocks; the goal
+# is to hide the association table from the user in order to make the syntax clearer to understand e.g.
+# iso3.wdpa navigates from iso3 to wdpa_iso3_assoc to wdpa.  Simple names are individual tables e.g. wdpa.
+# When asked to find the block corresponding to a name, the BlockRegistry first checks for compound names
+# and then simple names.
+
 from filtering_logic.datablock import DataBlock, AssociationDataBlock
 from filtering_logic.queryexceptions import UnknownBlockException
 

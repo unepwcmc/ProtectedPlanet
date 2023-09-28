@@ -1,3 +1,7 @@
+# The DataBlockFactory is called during startup of the Data Management Service to pre-create all the blocks
+# referenced within the metadata i.e. the universe of blocks on which the DSL may operate.
+# Accordingly, it will create both simple (for single table) and compound (for association table) blocks.
+
 from filtering_logic.blockregistry import BlockRegistry
 from filtering_logic.datablock import DataBlock, AssociationDataBlock
 from filtering_logic.selectionengineexceptions import MalformedCompoundBlockException
