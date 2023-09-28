@@ -1,3 +1,4 @@
+# Small helper class for API endpoints
 import json
 import time
 

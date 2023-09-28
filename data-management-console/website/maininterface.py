@@ -1,3 +1,5 @@
+# Contains the main functionality for all the operations performed by the services (this may be split out in future).
+# Some example reports (which would really be part of the Ruby application) are also included for reference.
 import gc
 import os
 import sys

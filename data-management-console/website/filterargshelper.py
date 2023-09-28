@@ -1,3 +1,4 @@
+# Small helper class
 from twisted.web.server import Request
 from schema_management.filterargs import FilterArgs
 
