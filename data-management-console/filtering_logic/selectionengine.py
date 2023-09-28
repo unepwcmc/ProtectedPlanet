@@ -1,3 +1,9 @@
+# The SelectionEngine receives a DSL query, tokenizes it, executes a Finite State Machine to
+# (1) check the DSL corresponds to the grammar (2) build up an execution stack of tokens
+# (3) turn those tokens into an executionchain (4) invoke the execution chain
+# (5) return the answers as a hierarchical dictionary of dictionaries.
+# By checking the grammar first, we can protect against many SQL injection attacks (as we do not support
+# many of those syntaxes as part of the grammar)
 import time
 from collections import deque
 from typing import Union
@@ -20,7 +26,7 @@ class LineState:
 
     def __init__(self, line_to_process):
         self.line_to_process: str = line_to_process
-        # replace all double quotes with single quotes
+        # replace all double quotes with single quotes as this will be passed to the database as a literal
         self.line_to_process.replace('"', "'")
         self.cursor = 0
 
@@ -267,6 +273,7 @@ class SelectionEngine:
 
     def get_page_size(self):
         return self.page_size
+
 
 if __name__ == "__main__":
     connection_str = f"dbname=WDPA user=postgres password=WCMC%1"

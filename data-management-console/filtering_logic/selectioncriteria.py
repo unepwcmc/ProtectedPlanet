@@ -1,3 +1,8 @@
+# These are the components of the grammar supported by the DSL.
+# Each component returns whether it can consume the token or tokens at the head of the token list passed to it
+# If it cannot accept the token(s), FSMEnum.NOT_ACCEPTED should be returned; if it can accept the tokens, it should
+# return the next status (e.g.FSMEnum.FIELD_CLAUSE_COMPLETE) as well as the tail of the token list (i.e. having removed
+# the tokens it would consume to change states)
 from enum import Enum
 
 
@@ -80,6 +85,7 @@ class SelectionClause:
 
     def is_binary_clause(self):
         return self.bin_op is not None
+
 
 class FieldClause:
 
