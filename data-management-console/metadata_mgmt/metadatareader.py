@@ -1,3 +1,7 @@
+# During installation, the .json files are translated into entries in the metadata table.  After installation, these metadata
+# entries power every action performed on the data in the database by any of the Services.
+# The metadatareader reads the entries from the metadata table and reconstructs in memory the objects defined in schema_management/tables.py:
+# table columns, foreign keys, primary keys, index requests.
 import traceback
 
 from postgres.postgresexecutor import PostgresExecutor
