@@ -1,1 +1,0 @@
-CREATE OR REPLACE function gen_random_uuid() RETURNS uuid as $$ SELECT md5(random()::text || clock_timestamp()::text)::uuid $$ LANGUAGE SQL;
