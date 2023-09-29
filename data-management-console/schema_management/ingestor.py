@@ -1,3 +1,4 @@
+# Each ingestion needs to request an id and then store the outcomes (IngestionStats)
 class Ingestor:
 
     _next = None

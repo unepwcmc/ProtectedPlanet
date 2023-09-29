@@ -1,3 +1,4 @@
+# Helper class to grab all the supplied arguments from an HTTP request and put them into a dictionary
 class FilterOnValue:
 
     def __init__(self, value):

@@ -1,3 +1,4 @@
+# Class to capture the statistics around how a dataset merges into history (how many added, updated, deleted, equal)
 class IngestionStats:
 
     def __init__(self):

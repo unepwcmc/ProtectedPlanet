@@ -1,3 +1,10 @@
+# Turns the incoming JSON file into all the metadata that the services will need:
+#   Table Definitions (including Primary Keys, Table Columns and Foreign Keys )
+#   Association Tables are expanded out from Foreign Key 1:N associations
+#   Virtual Columns are created and defined
+# Also can be queried for a list of association table names (where it filters the loaded metadata)
+# TODO - consider whether these two functionalities should both be in extractor.py
+
 import json
 
 from metadata_mgmt.metadatareader import MetadataReader
@@ -32,7 +39,8 @@ class Extractor:
                 association_table_alias = incoming_json['association table alias']
             else:
                 association_table_alias = AbbreviateName.abbreviate_name([table_name, target_table, known_as])
-            return ForeignKeyN(table_name, source_columns, target_table, target_cols, lookup_cols, known_as, association_table_alias)
+            return ForeignKeyN(table_name, source_columns, target_table, target_cols, lookup_cols, known_as,
+                               association_table_alias)
         elif data_type == "PRIMARY KEY":
             pk_field_names = incoming_json['PK fields']
             return PrimaryKey(table_name, pk_field_names)
@@ -112,17 +120,19 @@ class Extractor:
                 for col in cols:
                     col.table_name = assoc_table_name
 
-#               Add Foreign Keys so the DSL can navigate correctly from the association table
-                foreign_key_to_source = ForeignKey(assoc_table_name, fk.source_columns, schema_table.name, fk.source_columns, fk.source_columns, 'assoc_lookup_1' )
-                foreign_key_to_target = ForeignKey(assoc_table_name, fk.target_columns, target_table_actual.name, fk.target_columns, fk.target_columns, 'assoc_lookup_2' )
+                #               Add Foreign Keys so the DSL can navigate correctly from the association table
+                foreign_key_to_source = ForeignKey(assoc_table_name, fk.source_columns, schema_table.name,
+                                                   fk.source_columns, fk.source_columns, 'assoc_lookup_1')
+                foreign_key_to_target = ForeignKey(assoc_table_name, fk.target_columns, target_table_actual.name,
+                                                   fk.target_columns, fk.target_columns, 'assoc_lookup_2')
                 cols.append(foreign_key_to_source)
                 cols.append(foreign_key_to_target)
 
-#               Add Primary Key
+                #               Add Primary Key
                 primary_key = PrimaryKey(assoc_table_name, fk.source_columns + fk.target_columns)
                 cols.append(primary_key)
 
-#               Add Originator
+                #               Add Originator
                 originator_id_column = TableColumn(assoc_table_name, "originator_id", "int")
                 cols.append(originator_id_column)
                 index_request_src = IndexRequest(assoc_table_name, fk.source_columns)
