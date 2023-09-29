@@ -1,3 +1,5 @@
+# Turns the 1:1 and 1:n Foreign Keys into virtual columns for easier DSL syntax.
+# Uses various templated sql files within the sql/ directory and substitutes the key variables into them
 from schema_management.abbreviatename import AbbreviateName
 from sql.sql_runner import SqlRunner
 from schema_management.tables import TableDefinition, VirtualColumn

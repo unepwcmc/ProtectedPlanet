@@ -1,3 +1,8 @@
+# Responsible for taking the data in the nominated staging tables, determining on a row-by-row basis
+# whether it should be added to the main table, updated in the main table, marked as deleted in the main table
+# or remains equal (so no action needed).
+# Equality of numeric fields is within a threshold which can be defined as a parameter to the method here.
+
 import gc
 import time
 import traceback

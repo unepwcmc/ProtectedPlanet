@@ -1,3 +1,5 @@
+# Our internal representation of the metadata of a database table.  Used by the Translator, StagingDataPromoter
+# and Query Service, and stored in the metadata table.  Read in upon service startup by the MetadataReader.
 import copy
 
 from mgmt_logging.logger import Logger
