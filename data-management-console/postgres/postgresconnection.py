@@ -1,3 +1,5 @@
+# Manages the underlying Postgres connection
+# Currently, the service uses only a single connection and routes all Postgres operations through that
 import psycopg2
 
 class PostgresConnection:
