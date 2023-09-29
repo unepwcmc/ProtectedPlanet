@@ -1,3 +1,6 @@
+# Creates and drops schemas so used as part of the application installation process
+# Also handles the special sql installation needs associated with reference data
+
 import traceback
 
 from mgmt_logging.logger import Logger
