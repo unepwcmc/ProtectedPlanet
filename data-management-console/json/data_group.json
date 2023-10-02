@@ -65,6 +65,16 @@
       "loaded_by_WCMC": "True",
       "translation_schema": "icca_translation.json"
     },
+  "ICCA Spatial - Poly": {
+    "tables": ["icca_spatial_data"],
+    "loaded_by_WCMC": "True",
+    "translation_schema": "icca_poly_spatial_translation.json"
+  },
+  "ICCA Spatial - Point": {
+    "tables": ["icca_spatial_data"],
+    "loaded_by_WCMC": "True",
+    "translation_schema": "icca_point_spatial_translation.json"
+  },
   "Crustacean World":  {
       "tables": ["crustaceans"],
       "loaded_by_WCMC": "True",

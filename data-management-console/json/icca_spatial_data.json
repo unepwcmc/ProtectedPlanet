@@ -1,0 +1,84 @@
+{
+  "version": 0.1,
+  "tables": [
+    {
+      "name": "icca_spatial_data",
+      "elements": [
+        {
+          "name": "site_id",
+          "type": "bigint"
+        },
+        {
+          "name": "geom",
+          "type": "geometry"
+        },
+        {
+          "name": "name_local_language",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "latin_name",
+          "type": "varchar(10000)"
+        },
+        {
+          "name": "data_status",
+          "type": "varchar(254)"
+        },
+        {
+          "name": "shape_area",
+          "type": "double precision"
+        },
+        {
+          "name": "shape_length",
+          "type": "double precision"
+        },
+        {
+          "name": "latitude",
+          "type": "double precision"
+        },
+        {
+          "name": "longitude",
+          "type": "double precision"
+        },
+        {
+          "name": "originator_id",
+          "type": "int"
+        },
+        {
+          "name": "ddlat",
+          "type": "varchar(100)"
+        },
+        {
+          "name": "ddlon",
+          "type": "varchar(100)"
+        },
+        {
+          "name": "is_polygon",
+          "type": "integer"
+        },
+        {
+            "source cols": ["site_id"],
+            "known as": "parent_iso3",
+            "type": "FOREIGN KEY N",
+            "target table": "iso3",
+            "association table alias": "icca_spatial_data_iso3_assoc",
+            "lookup cols": [ "code" ],
+            "target cols": [ "id" ]
+        },
+        {
+            "source cols": [ "site_id" ],
+            "known as": "_internal_",
+            "type": "FOREIGN KEY",
+            "target table": "icca",
+            "lookup cols": [ "site_id" ],
+            "target cols": [ "site_id" ]
+        },
+
+        {
+            "type": "PRIMARY KEY",
+            "PK fields": [ "site_id" ]
+        }
+      ]
+    }
+  ]
+}
