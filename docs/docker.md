@@ -81,6 +81,7 @@ docker exec -it protectedplanet-web rake 'comfy:cms_seeds:import[protected-plane
 ```
 
 **4.2.  Go to 'http://localhost:3000/en/admin/sites' and update the host to be `localhost:3000`**
+Credentials are found in your .env file under COMFY_ADMIN_USERNAME and COMFY_ADMIN_PASSWORD
 
 **4.3. Reindex elasticsearch**
 
