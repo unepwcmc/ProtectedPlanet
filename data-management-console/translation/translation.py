@@ -38,7 +38,9 @@ class QuarantineToStagingTranslator:
             "translate-boolean": QuarantineToStagingTranslator.translate_boolean,
             "get_integer": QuarantineToStagingTranslator.get_integer,
             "check-valid-double": QuarantineToStagingTranslator.check_valid_double,
-            "check-valid-integer": QuarantineToStagingTranslator.check_valid_integer
+            "check-valid-integer": QuarantineToStagingTranslator.check_valid_integer,
+            "constant0": QuarantineToStagingTranslator.constant0,
+            "constant1": QuarantineToStagingTranslator.constant1
         }
         self.input_columns = defaultdict(list)
         self.default_columns = defaultdict(list)
@@ -46,7 +48,7 @@ class QuarantineToStagingTranslator:
 
     def site_id_from_pid(self, parcel_id, _):
         parts = parcel_id.split("_")
-        return parts[0]
+        return int(parts[0])
 
     def parcel_id_from_pid(self, parcel_id, _):
         parts = parcel_id.split("_")
@@ -210,6 +212,12 @@ class QuarantineToStagingTranslator:
             print(f'{date_in} cannot be converted to a valid date - returning sentinel value')
             return datetime.strptime('Jan-70', '%b-%y').date()
 
+
+    def constant0(self, val_in, _):
+        return 0
+
+    def constant1(self, val_in, _):
+        return 1
 
     def read_translation_schema(self, schema_file):
         self.input_columns = defaultdict(list)
