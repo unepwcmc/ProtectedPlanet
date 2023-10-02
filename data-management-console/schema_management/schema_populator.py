@@ -47,9 +47,10 @@ class SchemaPopulator:
             VirtualColumnGenerator.create_virtual_column_functions(cursor, app_schema_tables)
 
             Logger.get_logger().info("Creating indexes ")
-        except Exception as e:
-            print(str(e))
+        except Exception as ex:
+            print(str(ex))
             traceback.print_exc(limit=None, file=None, chain=True)
+            raise ex
 
     @staticmethod
     def drop_schema(schema_to_remove, remove_metadata=True):
