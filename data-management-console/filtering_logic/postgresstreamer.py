@@ -112,7 +112,8 @@ class PostgresStreamer:
         if master_limit is not None:
             insert_sql += row_number_sql
 
-        max_row_sql = f"SELECT COUNT(1) "
+#   want the datetime of most recent change (which could be to either FromZ or EffectiveFromZ)
+        max_row_sql = f"SELECT COUNT(FromZ), MAX(FromZ), MAX(EffectiveFromZ) "
         max_row_sql += " FROM " + ",".join([t[0] + " " + t[1] for t in tables])
         if where_conditions:
             where_clause = " WHERE " + " AND ".join(where_conditions)
@@ -142,6 +143,8 @@ class PostgresStreamer:
         cursor.execute(max_row_sql)
         rows = cursor.fetchall()
         rows_available = rows[0][0]
+        most_recent_fromz_change = rows[0][1]
+        most_recent_effective_fromz_change = rows[0][2]
         print(f"{temp_table_name} has max rows: {rows_available}")
         print(retrieval_sql)
         cursor.execute(retrieval_sql)
@@ -172,6 +175,7 @@ class PostgresStreamer:
         PostgresExecutor.end_transaction()
         result = ChainTable(temp_table_name, backward_keys_translated, translated_fields, forward_results,
                             backward_results, row_number_to_upper_level, rows_available)
+        result.set_most_recent_change(most_recent_fromz_change, most_recent_effective_fromz_change)
         return result
 
     def qualified_column_type(self, column_table_str):

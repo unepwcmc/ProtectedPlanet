@@ -79,7 +79,8 @@ class ExecutionChain:
                 for _, val in data.items():
                     result_data.append(val)
             return {"data": result_data,
-                    "max_rows": top_level_chaintable.max_rows_retrievable()}
+                    "max_rows": top_level_chaintable.max_rows_retrievable(),
+                    "latest_change": top_level_chaintable.format_most_recent_change()}
         except ColumnByNameException as cbn:
             return {"column error": str(cbn)}
         except Exception as e:
@@ -155,6 +156,7 @@ class ExecutionChain:
                                                                        backward_keys_for_lower_level, master_timestamp,
                                                                        master_as_of, 0, 1000000)
 
+                    main_table_chaintable.set_most_recent_change(main_table_chaintable.most_recent_change, lower_level_table.most_recent_change)
                     row_number_to_upper_level = main_table_chaintable.row_number_to_upper_level()
                     for forward_key, value in lower_level_table.forward_results().items():
                         # forward key from below is this level's row number
@@ -191,6 +193,8 @@ class ExecutionChain:
 
                 print("Completing Compound Data")
                 row_number_to_upper_level = association_chaintable.row_number_to_upper_level()
+                association_chaintable.set_most_recent_change(association_chaintable.most_recent_change,
+                                                             main_table_chaintable.most_recent_change)
                 for forward_key, value in main_table_chaintable.forward_results().items():
                     # forward key from below is this level's row number
                     collected_forward_row_number_for_this_table = row_number_to_upper_level[forward_key]
@@ -225,7 +229,7 @@ class ExecutionChain:
                     is_one_to_one_set[lower_level_block_key] = is_one_to_one
                 # for the highest level, we should really use the primary key to give a natural ordering
                 # use forward keys for the moment
-                this_level_chaintable = streamer.chain(prior, forward_keys_from_higher_level,
+                this_level_chaintable:ChainTable = streamer.chain(prior, forward_keys_from_higher_level,
                                                        backward_key_set,
                                                        backward_keys_for_mapping,
                                                        block_at_this_level.fields(),
@@ -244,6 +248,7 @@ class ExecutionChain:
                                                                        forward_keys_for_lower_level,
                                                                        backward_keys_for_lower_level, master_timestamp,
                                                                        master_as_of, None, None)
+                    this_level_chaintable.set_most_recent_change(this_level_chaintable.most_recent_change, lower_level_table.most_recent_change)
                     row_number_to_upper_level = this_level_chaintable.row_number_to_upper_level()
                     for forward_key, value in lower_level_table.forward_results().items():
                         # forward key from below is this level's row number

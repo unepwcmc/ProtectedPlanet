@@ -4,11 +4,14 @@
 # predecessor in the order of execution
 
 from collections import defaultdict
+from datetime import datetime
 
 
 class ChainTable:
+
     def __init__(self, name: str, backward_keys: dict, translated_fields: dict, forward_results: dict,
                  backward_results: dict, row_number_to_upper_level: dict, max_rows_retrievable):
+        self.DATE_FORMAT_STRING = "%Y-%m-%d %H:%M:%S"
         self._name = name
         self._backward_keys = backward_keys
         self._translated_fields = translated_fields
@@ -16,6 +19,7 @@ class ChainTable:
         self._backward_results = backward_results
         self._max_rows_retrievable = max_rows_retrievable
         self._row_number_to_upper_level = row_number_to_upper_level
+        self.most_recent_change = datetime.strptime("1970-01-01 00:00:00", self.DATE_FORMAT_STRING)
 
     def name(self) -> str:
         return self._name
@@ -62,3 +66,9 @@ class ChainTable:
                 for k2, v2 in v1.items():
                     res[k][k2].append(v2)
         self._forward_results = res
+
+    def set_most_recent_change(self, fromz_change:datetime, effective_fromz_change:datetime):
+        self.most_recent_change = max(fromz_change, effective_fromz_change)
+
+    def format_most_recent_change(self):
+        return datetime.strftime(self.most_recent_change, self.DATE_FORMAT_STRING)
