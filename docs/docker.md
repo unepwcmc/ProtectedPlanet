@@ -54,6 +54,15 @@ docker exec -e "RAILS_ENV=test" -it protectedplanet-web rake db:create db:migrat
 ```
 
 ## Step 3: PP (WDPA) import
+
+You will need to download a recent copy of the PP production database. If you are using [aws cli](https://github.com/unepwcmc/wiki/wiki/AWS-CLI), you can run the following:
+```
+aws s3 ls # see buckets
+aws s3 ls s3://pp.bkp --recursive --human-readable --summarize # see contents of bucket
+aws s3 cp s3://pp.bkp/Weekly/db/pp_weekly/2023.02.01.05.00.06/pp_weekly.tar pp.tar # copy a pp db dump to a local file
+```
+
+Than import the sql dump into the docker database:
 ```
 SSH_AUTH_SOCK=$SSH_AUTH_SOCK docker compose run -v {PATH_TO_WDPA_SQL_DUMP}:/import_database/pp_development.sql -e "PGPASSWORD={PGPASSWORD_FROM_ENV_FILE}" web bash -c "psql pp_development < /import_database/pp_development.sql -U postgres -h 0.0.0.0"
 ```
