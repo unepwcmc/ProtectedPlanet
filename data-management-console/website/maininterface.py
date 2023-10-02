@@ -141,7 +141,7 @@ def metrics_for_countries(request):
     return render_template('display_selected_country_metrics.html', metrics_dict)
 
 
-def create_foundation(_):
+def create_foundation(request):
     #    with psycopg2.connect("dbname=WDPA user=postgres password=WCMC%1") as conn:
     with psycopg2.connect(connection_string()) as conn:
         try:
@@ -156,10 +156,11 @@ def create_foundation(_):
                                  add_objectid_index=False)  # foundation tables don't store their own metadata
             SqlRunner.execute(cursor, f'../sql/{SCHEMA_TO_POPULATE}/post_install.sql')
             return render_for_html(Logger.get_output())
-        except Exception as e:
-            print(str(e))
+        except Exception as ex:
+            print(str(ex))
             traceback.print_exc(limit=None, file=None, chain=True)
-            raise e
+            request.setResponseCode(400)
+            return render_as_bytes({"error": str(ex)})
         finally:
             executor.end_transaction()
 
@@ -226,7 +227,7 @@ def render_for_html(out_msg):
 
 
 def render_as_bytes(bytes_in):
-    raw_data = bytes(bytes_in, "utf-8")
+    raw_data = bytes(str(bytes_in), "utf-8")
     return raw_data
 
 
@@ -420,6 +421,48 @@ def install_icca(_):
             executor.end_transaction()
 
 
+def uninstall_icca_spatial(request):
+    with psycopg2.connect(connection_string()) as conn:
+        try:
+            executor = PostgresExecutor()
+            executor.set_connection(conn)
+            cursor = executor.begin_transaction()
+            SchemaPopulator.drop_schema("icca_spatial_data")
+            executor.end_transaction()
+        except Exception as ex:
+            print(str(ex))
+            traceback.print_exc(limit=None, file=None, chain=True)
+            executor.rollback()
+            request.setResponseCode(400)
+            return render_as_bytes({"error": str(ex)})
+
+        else:
+            print("Successfully created")
+            return render_for_html(Logger.get_output())
+        finally:
+            executor.end_transaction()
+
+
+def install_icca_spatial(request):
+    with psycopg2.connect(connection_string()) as conn:
+        try:
+            executor = PostgresExecutor()
+            executor.set_connection(conn)
+            cursor = executor.begin_transaction()
+            SchemaPopulator.create_schema("icca_spatial_data", cursor)
+            executor.end_transaction()
+        except Exception as ex:
+            print(str(ex))
+            traceback.print_exc(limit=None, file=None, chain=True)
+            executor.rollback()
+            request.setResponseCode(400)
+            return render_as_bytes({"error": str(ex)})
+        else:
+            print("Successfully created")
+            return render_for_html(Logger.get_output())
+        finally:
+            executor.end_transaction()
+
 def uninstall_demo(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
@@ -527,7 +570,7 @@ def clear_database():
     return render_for_html(Logger.get_output())
 
 
-def load_quarantine_data():
+def load_quarantine_data(request):
     return render_template('load_quarantine_data.html')
 
 
@@ -617,7 +660,7 @@ def define_adhoc_query(_):
     return render_template('define_adhoc_query.html')
 
 
-def view_metadata():
+def view_metadata(request):
     with psycopg2.connect(connection_string()) as conn:
         PostgresExecutor.set_connection(conn)
         cursor = PostgresExecutor.open_read_cursor()

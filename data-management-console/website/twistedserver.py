@@ -19,6 +19,7 @@ mappings = {
     '/install_demo': install_demo,
     '/install_green_list': install_green_list,
     '/install_icca': install_icca,
+    '/install_icca_spatial_data': install_icca_spatial,
     '/install_pame': install_pame,
     '/install_wdpa': install_wdpa,
     '/load_quarantine_data': load_quarantine_data,
@@ -29,6 +30,7 @@ mappings = {
     '/uninstall_foundation': uninstall_foundation,
     '/uninstall_green_list': uninstall_green_list,
     '/uninstall_icca': uninstall_icca,
+    '/uninstall_icca_spatial_data': uninstall_icca_spatial,
     '/uninstall_pame': uninstall_pame,
     '/uninstall_reference_data': uninstall_reference_data,
     '/uninstall_wdpa': uninstall_wdpa,
@@ -74,10 +76,11 @@ class DummyServer(resource.Resource):
             url_parts = url.split('?')
             function_to_run = mappings.get(url_parts[0])
             if function_to_run is None:
-                return b''
+                request.setResponseCode(404)
+                return b'No such request is recognized'
             return function_to_run(request)
 
 
 s = server.Site(DummyServer())
-reactor.listenTCP(8080, s)
+reactor.listenTCP(port, s)
 reactor.run()
