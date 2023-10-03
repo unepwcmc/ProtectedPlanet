@@ -73,7 +73,20 @@
             "lookup cols": [ "site_id" ],
             "target cols": [ "site_id" ]
         },
-
+        {
+            "name": "geom_as_text",
+            "associated": "geom_as_text",
+            "type": "VIRTUAL COLUMN",
+            "representation": "text",
+            "function": "ST_AsText(geom)"
+        },
+        {
+            "name": "geom_as_geojson",
+            "associated": "geom_as_geojson",
+            "type": "VIRTUAL COLUMN",
+            "representation": "text",
+            "function": "ST_AsGeoJSON(geom)"
+        },
         {
             "type": "PRIMARY KEY",
             "PK fields": [ "site_id" ]
