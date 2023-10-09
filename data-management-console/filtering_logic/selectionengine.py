@@ -20,7 +20,7 @@ from filtering_logic.selectioncriteria import *
 from metadata_mgmt.metadatareader import MetadataReader
 from postgres.postgresexecutor import PostgresExecutor
 from schema_management.extractor import Extractor
-
+from filtering_logic.newdsl import process_new_dsl
 
 class LineState:
 
@@ -249,7 +249,8 @@ class SelectionEngine:
                 master_timestamp = '9998-01-01 00:00:00'
             if master_as_of is None:
                 master_as_of = '9998-01-01 00:00:00'
-            chain_of_objects = ch.construct_chain(master_timestamp, master_as_of, master_offset, master_limit)
+            chain_of_objects = process_new_dsl(ch.get_chain(), master_timestamp, master_as_of, master_offset, master_limit)
+#            chain_of_objects = ch.construct_chain(master_timestamp, master_as_of, master_offset, master_limit)
             duration = time.time() - start_time
             print(f"Took {duration} seconds to construct the chain")
             # add in some key metadata

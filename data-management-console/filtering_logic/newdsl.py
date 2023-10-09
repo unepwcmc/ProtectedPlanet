@@ -156,24 +156,30 @@ def turn_raw_data_into_chains(raw_data: dict, cardinalities: list, path_to_proce
     list[dict], int | Any]:
     retval = []
     latest_change = SENTINEL_DATETIME
+    current_block_name = ''
     for key, value in raw_data.items():
         current_block = path_to_process[0]
-        current_block_name = current_block.name()
+        if isinstance(current_block, AssociationDataBlock):
+            current_block_name = current_block.second_block.name()
+            fields = current_block.first_block.fields()
+        else:
+            current_block_name = current_block.name()
+            fields = current_block.fields()
         field_names = [field.replace(current_block_name + ".", "") for field in
-                       current_block.fields()]  # just want the field name not the table name
+                       fields]  # just want the field name not the table name
         # put the latest_change in there too
         objectid, fromz, effectivefromz = key[0:3]
         this_row = lookup_or_create(current_block_name, objectid, dict(zip(field_names, key[3:])))
         latest_change = max(latest_change, fromz, effectivefromz)
         if len(value):
-            lower_level_as_chain, latest_change = turn_raw_data_into_chains(value, cardinalities[1:],
+            lower_level_as_chain, latest_change, lower_block_name = turn_raw_data_into_chains(value, cardinalities[1:],
                                                                             path_to_process[1:])
             if cardinalities[0] == False:  # 1 to Many
-                this_row[path_to_process[1].name()] = lower_level_as_chain
+                this_row[lower_block_name] = lower_level_as_chain
             else:
-                this_row[path_to_process[1].name()] = lower_level_as_chain[0]
+                this_row[lower_block_name] = lower_level_as_chain[0]
         retval.append(this_row)
-    return retval, latest_change
+    return retval, latest_change, current_block_name
 
 
 def process_path(path_to_process: list[DataBlock], master_timestamp, master_as_of, cursor) -> tuple[
@@ -182,7 +188,7 @@ def process_path(path_to_process: list[DataBlock], master_timestamp, master_as_o
         create_views(path_to_process, master_timestamp, master_as_of, cursor)
         sql, cardinalities, field_ranges = create_sql(path_to_process, master_timestamp, master_as_of)
         raw_data = get_raw_data(sql, field_ranges, cursor)
-        result_data, latest_change = turn_raw_data_into_chains(raw_data, cardinalities, path_to_process)
+        result_data, latest_change, _ = turn_raw_data_into_chains(raw_data, cardinalities, path_to_process)
         return result_data, latest_change
     except ColumnByNameException as cbn:
         err_msg = {"column error": str(cbn)}
