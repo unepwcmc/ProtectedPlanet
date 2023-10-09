@@ -207,12 +207,13 @@ def process_recursively(current_block_path: list, next_steps: dict, master_times
         return process_path(path_to_process, master_timestamp, master_as_of, cursor)
     else:
         result_data = None
-        latest_change = None
+        latest_change = SENTINEL_DATETIME
         for block_name, further_steps in next_steps.items():
             if block_name == DATA_BLOCK_AT_THIS_LEVEL:
                 continue
-            result_data, latest_change = process_recursively(current_block_path + [next_steps[DATA_BLOCK_AT_THIS_LEVEL]], further_steps,
+            result_data, most_recent_change = process_recursively(current_block_path + [next_steps[DATA_BLOCK_AT_THIS_LEVEL]], further_steps,
                                                              master_timestamp, master_as_of, cursor)
+            latest_change = max(latest_change, most_recent_change)
         return result_data, latest_change
 
 
