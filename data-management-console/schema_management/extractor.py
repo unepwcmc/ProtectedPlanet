@@ -121,8 +121,8 @@ class Extractor:
                     col.table_name = assoc_table_name
 
                 #               Add Foreign Keys so the DSL can navigate correctly from the association table
-                foreign_key_to_source = ForeignKey(assoc_table_name, fk.source_columns, schema_table.name,
-                                                   fk.source_columns, fk.source_columns, 'assoc_lookup_1')
+                foreign_key_to_source = ForeignKeyN(assoc_table_name, fk.source_columns, schema_table.name,
+                                                   fk.source_columns, fk.source_columns, 'assoc_lookup_1', assoc_table_name)
                 foreign_key_to_target = ForeignKey(assoc_table_name, fk.target_columns, target_table_actual.name,
                                                    fk.target_columns, fk.target_columns, 'assoc_lookup_2')
                 cols.append(foreign_key_to_source)
@@ -161,6 +161,6 @@ class Extractor:
                 assoc_tables = Extractor.extract_association_tables(schema_tables, MetadataReader.tables(True),
                                                                     historical_table_def, ingestion_table_def,
                                                                     objectid_table_def)
-                schema_tables += assoc_tables
+
             print(f'Completed file {schema_file}')
-            return schema_tables
+            return schema_tables, schema_tables + assoc_tables
