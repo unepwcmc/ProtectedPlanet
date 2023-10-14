@@ -150,7 +150,7 @@ def create_foundation(request):
             cursor = executor.begin_transaction()
             SCHEMA_TO_POPULATE = 'foundation_tables'
             APP_SCHEMA_FILE = f'../json/{SCHEMA_TO_POPULATE}.json'
-            app_schema_tables = list(Extractor.get_all_definitions(APP_SCHEMA_FILE, is_foundation=True))
+            _, app_schema_tables = Extractor.get_all_definitions(APP_SCHEMA_FILE, is_foundation=True)
             executor.code_tables(app_schema_tables, None, True, SCHEMA_TO_POPULATE,
                                  remove_metadata=False,
                                  add_objectid_index=False)  # foundation tables don't store their own metadata
@@ -523,7 +523,7 @@ def install_demo():
             executor.end_transaction()
 
 
-def clear_database():
+def clear_database(request):
     with psycopg2.connect(connection_string()) as conn:
         try:
             PostgresExecutor.set_connection(conn)
@@ -542,7 +542,7 @@ def clear_database():
             PostgresExecutor.end_transaction()
             cursor = PostgresExecutor.begin_transaction()
             for table_name in tables_to_drop:
-                drop_sql = f'DROP TABLE IF EXISTS {table_name}'
+                drop_sql = f'DROP TABLE IF EXISTS {table_name} CASCADE'
                 print(drop_sql)
                 Logger.get_logger().info(drop_sql)
                 cursor.execute(drop_sql)
