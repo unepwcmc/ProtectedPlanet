@@ -1,0 +1,13 @@
+{
+  "version": 0.1,
+  "Source": [
+	  	{
+			"name": "source_responsible_party",
+			"target_name": "responsible_party",
+			"target_table": "pame_providers"
+		}
+  ],
+  "Distinct": {
+		"pame_providers": "responsible_party"
+	  }
+}

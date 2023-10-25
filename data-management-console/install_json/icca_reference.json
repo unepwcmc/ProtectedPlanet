@@ -1,0 +1,117 @@
+{
+  "version": 0.1,
+  "tables": [
+    {
+      "name": "icca_objectives_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "habitat_types_global_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "internal_recognition_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "external_recognition_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "icca_providers_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "fpic_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "submission_status_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "scope_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "peer_reviewed_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "case_study_published_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "no_take_permanency_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "governance_council_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "icca_governance_type_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "community_decisions_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "management_plan_format_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "community_identity_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "community_mobility_cat",
+      "base_type": "base_types:reference_data"
+    },
+    {
+      "name": "community_mobility_beyond_icca_cat",
+      "base_type": "base_types:reference_data"
+    },
+	{
+	  "name": "resource_use_cat",
+      "base_type": "base_types:reference_data"
+	},
+	{
+	  "name": "community_rights_cat",
+      "base_type": "base_types:reference_data"
+	},
+	{
+	  "name": "equal_access_cat",
+      "base_type": "base_types:reference_data"
+	},
+	{
+	  "name": "resource_use_within_community_cat",
+      "base_type": "base_types:reference_data"
+	},
+    {
+      "name": "opportunities_status_cat",
+      "base_type": "base_types:reference_data"
+    },
+	{
+	  "name": "threats_cat",
+      "base_type": "base_types:reference_data"
+	},
+	{
+	  "name": "support_needed_cat",
+      "base_type": "base_types:reference_data"
+	},
+	{
+	  "name": "protected_planet_status_cat",
+      "base_type": "base_types:reference_data"
+	},
+	{
+	  "name": "defined_as_protected_area_cat",
+      "base_type": "base_types:reference_data"
+	},
+	{
+	  "name": "defined_as_oecm_cat",
+      "base_type": "base_types:reference_data"
+	}
+  ]
+}

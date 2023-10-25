@@ -1,0 +1,210 @@
+{
+  "version": 0.1,
+  "Flat_WDPA": [
+		{
+			"name": "metadataid",
+			"target_name": "originator_id",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "metadataid",
+			"target_name": "originator_id",
+			"target_table": "spatial_data"
+		},
+		{
+			"name": "wdpaid",
+			"target_name": "site_id",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "wdpaid",
+			"target_name": "site_id",
+			"target_table": "spatial_data"
+		},
+		{
+			"name": "wdpa_pid",
+			"target_name": "parcel_id",
+			"target_table": "wdpa",
+			"function": "parcel_id_from_pid"
+		},
+		{
+			"name": "wdpa_pid",
+			"target_name": "parcel_id",
+			"target_table": "spatial_data",
+			"function": "parcel_id_from_pid"
+		},
+		{
+			"name": "name",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "orig_name",
+			"target_name": "original_name",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "mang_auth",
+			"target_name": "management_authority",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "mang_plan",
+			"target_name": "management_plan",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "supp_info",
+			"target_name": "supplemental_info",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "iso3",
+			"function": "multi-key",
+			"delimiter": ";",
+			"target_attribute": "iso3",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "parent_iso3",
+			"function": "multi-key",
+			"delimiter": ";",
+			"target_attribute": "parent_iso3",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "sub_loc",
+			"function": "multi-key",
+			"delimiter": ";",
+			"target_attribute": "sub_loc",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "no_take",
+			"function": "foreign-key",
+			"target_name": "no_take_id",
+			"target_attribute": "no_take",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "iucn_cat",
+			"function": "foreign-key",
+			"target_name": "iucn_category_id",
+			"target_attribute": "iucn_category",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "desig_type",
+			"function": "foreign-key",
+			"target_name": "designation_type_id",
+			"target_attribute": "designation_type",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "status",
+			"function": "foreign-key",
+			"target_name": "status_id",
+			"target_attribute": "status",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "gov_type",
+			"function": "foreign-key",
+			"target_name": "governance_type_id",
+			"target_attribute": "governance_type",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "own_type",
+			"function": "foreign-key",
+			"target_name": "ownership_type_id",
+			"target_attribute": "ownership_type",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "cons_obj",
+			"function": "foreign-key",
+			"target_name": "conservation_objective_id",
+			"target_attribute": "conservation_objective",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "verif",
+			"function": "foreign-key",
+			"target_name": "verification_id",
+			"target_attribute": "verification",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "int_crit",
+			"function": "multi-category",
+			"delimiter": "()",
+			"target_attribute": "international_criteria",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "desig_eng",
+			"target_name": "designation_english",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "desig",
+			"target_name": "designation",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "pa_def",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "marine",
+			"function": "foreign-key",
+			"target_name": "marine_id",
+			"target_attribute": "marine",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "rep_m_area",
+			"target_name": "reported_marine_area",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "gis_m_area",
+			"target_name": "gis_marine_area",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "rep_area",
+			"target_name": "reported_area",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "gis_area",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "no_tk_area",
+			"target_name": "no_take_area",
+			"target_table": "wdpa"
+		},
+	  	{
+			"name": "status_yr",
+			"target_name": "status_year",
+			"target_table": "wdpa"
+		},
+		{
+			"name": "geom",
+			"target_table": "spatial_data"
+	  	},
+		{
+			"name": "shape_length",
+			"target_table": "spatial_data"
+	  	},
+		{
+			"name": "shape_area",
+			"target_table": "spatial_data"
+	  	}
+	],
+	"Distinct": {
+		"wdpa_sub_location_assoc": [ "site_id", "parcel_id"]
+	}
+}

@@ -1,0 +1,18 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "ingestion",
+		"elements": [
+			{
+				"name": "ingestion_id",
+				"type": "INTEGER"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["ingestion_id"]
+			}
+		]	
+	}
+	]
+}

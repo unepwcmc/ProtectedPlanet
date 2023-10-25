@@ -1,0 +1,34 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "historical_additions",
+		"elements": [
+			{
+				"name": "fromz",
+				"type": "TIMESTAMP"
+			},
+			{
+				"name": "toz",
+				"type": "TIMESTAMP"
+			},
+			{
+				"name": "effectivefromz",
+				"type": "TIMESTAMP"
+			},
+			{
+				"name": "effectivetoz",
+				"type": "TIMESTAMP"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["ToZ"]
+			},
+			{
+				"name": "isdeleted",
+				"type": "INT"
+			}
+		]	
+	}
+	]
+}

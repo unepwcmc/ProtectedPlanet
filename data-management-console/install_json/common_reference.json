@@ -1,0 +1,29 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "iso3",
+      	"base_type": "base_types:reference_data"
+	},
+	{
+		"name": "no_take_cat",
+      	"base_type": "base_types:reference_data"
+	},
+	  {
+		"name": "international_criteria_cat",
+      	"base_type": "base_types:reference_data"
+	},
+	  {
+		"name": "marine_cat",
+      	"base_type": "base_types:reference_data"
+	},
+	{
+		"name": "iucn_category_cat",
+		"base_type": "base_types:reference_data"
+	  },
+    {
+      "name": "ownership_type_cat",
+      "base_type": "base_types:reference_data"
+    }
+  ]
+}

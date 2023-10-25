@@ -1,0 +1,32 @@
+{
+  "version": 0.1,
+  "Source": [
+		{
+			"name": "wdpaid",
+			"target_name":"site_id",
+			"target_table": "green_list",
+		  	"function": "site_id_from_pid"
+		},
+	  	{
+		  "name": "wdpaid",
+		  "target_name": "parcel_id",
+		  "target_table": "green_list",
+		  "function": "parcel_id_from_pid"
+	  	},
+		{
+			"name": "url",
+			"target_table": "green_list"
+		},
+	  	{
+			"name": "status",
+			"function": "foreign-key",
+			"target_name": "status_id",
+			"target_attribute": "status",
+			"target_table": "green_list"
+		},
+        {
+            "name": "expiry_date",
+			"target_table": "green_list"
+        }
+  ]
+}

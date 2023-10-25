@@ -1,0 +1,77 @@
+{
+  "version": 0.1,
+  "Source": [
+		{
+			"name": "evaluation_id",
+			"target_table": "pame"
+		},
+		{
+			"name": "metadata_id",
+			"target_name": "originator_id",
+			"target_table": "pame"
+		},
+		{
+			"name": "wdpa_id",
+			"target_name": "site_id",
+			"target_table": "pame"
+		},
+		{
+			"name": "source_data_title",
+			"target_table": "pame"
+		},
+	  	{
+			"name": "source_responsible_party",
+			"function": "foreign-key",
+			"target_name": "responsible_party_id",
+			"target_attribute": "responsible_party",
+			"target_table": "pame"
+		},
+        {
+            "name": "methodology",
+			"target_table": "pame"
+        },
+        {
+	        "name": "year",
+			"function": "check-year",
+			"target_table": "pame"
+        },
+		{
+			"name": "iso3",
+			"function": "multi-key",
+			"delimiter": ";",
+			"target_attribute": "iso3",
+			"target_table": "pame"
+		},
+        {
+            "name": "source_year",
+			"function": "check-year",
+			"target_table": "pame"
+        },
+        {
+            "name": "source_language",
+			"target_table": "pame"
+        },
+        {
+            "name": "restricted",
+            "function": "translate-boolean",
+			"target_table": "pame"
+        },
+        {
+            "name": "assessment_is_public",
+            "function": "translate-boolean",
+			"target_table": "pame"
+        },
+        {
+            "name": "designation",
+			"target_table": "pame"
+        },
+        {
+            "name": "url",
+			"target_table": "pame"
+        },
+        {
+            "name": "name",
+			"target_table": "pame"
+        }
+  ]
+}

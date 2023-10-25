@@ -1,0 +1,130 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "metadata",
+		"elements": [
+			{
+				"name": "schemaname",
+				"type": "VARCHAR(64)"
+			},
+			{
+				"name": "tablename",
+				"type": "VARCHAR(64)"
+			},
+			{
+				"name": "columnname",
+				"type": "VARCHAR(64)"
+			},
+			{
+				"name": "type",
+				"type": "VARCHAR(64)"
+			},
+			{
+				"name": "keycolumns",
+				"type": "VARCHAR(2048)"
+			},
+			{
+				"name": "is_modified",
+				"type": "int DEFAULT 0"
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["schemaname", "tablename", "columnname"]
+			}
+		]	
+	},
+	{
+		"name": "ingestion_stages",
+		"elements": [
+			{
+				"name": "id",
+				"type": "SERIAL"
+			},
+			{
+				"name": "description",
+				"type": "varchar(255)"
+			}
+		]
+	},
+	{
+		"name": "ingestion_history",
+		"elements": [
+			{
+				"name": "ingestion_id",
+				"type": "INT"
+			},
+			{
+				"name": "ingestion_time",
+				"type": "TIMESTAMP"
+			},
+			{
+				"name": "ingestion_stage_id",
+				"type": "int"
+			},
+			{
+				"name": "data_group",
+				"type": "varchar(255)"
+			},
+			{
+				"source cols": [ "ingestion_stage_id" ],
+				"known as": "ingestion_stage",
+				"type": "FOREIGN KEY",
+				"target table": "ingestion_stages",
+				"lookup cols": [ "description" ],
+				"target cols": [ "description" ]
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": ["ingestion_id"]
+			}
+		]	
+	},
+	{
+		"name": "ingestion_details",
+		"elements": [
+			{
+				"name": "ingestion_id",
+				"type": "int"
+			},
+			{
+				"name": "provider_id",
+				"type": "int"
+			}
+		]
+	},
+	{
+		"name": "ingestion_history_providers",
+		"elements": [
+			{
+				"name": "ingestion_id",
+				"type": "int"
+			},
+			{
+				"name": "ingestion_data_source_id",
+				"type": "int"
+			},
+			{
+				"name": "added",
+				"type": "int"
+			},
+			{
+				"name": "equaled",
+				"type": "int"
+			},
+			{
+				"name": "updated",
+				"type": "int"
+			},
+			{
+				"name": "deleted",
+				"type": "int"
+			},
+			{
+				"name": "already_deleted",
+				"type": "int"
+			}
+		]
+	}
+	]
+}

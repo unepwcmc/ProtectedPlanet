@@ -1,0 +1,46 @@
+{
+  "version": 0.1,
+  "tables": [
+	{
+		"name": "green_list",
+		"elements": [
+			{
+				"name": "site_id",
+				"type": "bigint"
+			},
+			{
+				"name": "parcel_id",
+				"type": "varchar(20)"
+			},
+			{
+				"name": "status_id",
+				"type": "int"
+			},
+			{
+				"name": "url",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "expiry_date",
+				"type": "DATE"
+			},
+			{
+			  "name": "originator_id",
+			  "type": "bigint"
+			},
+            {
+                "source cols": [ "status_id" ],
+				"known as": "status",
+                "type": "FOREIGN KEY",
+                "target table": "green_list_status",
+                "lookup cols": [ "description" ],
+                "target cols": [ "id" ]
+            },
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": [ "site_id", "parcel_id" ]
+			}
+		]
+    }
+  ]
+}

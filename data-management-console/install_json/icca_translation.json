@@ -1,0 +1,390 @@
+{
+  "version": 0.1,
+  "Flat_ICCA": [
+    {
+        "name": "wdpapid",
+        "target_name":"site_id",
+        "target_table": "icca"
+    },
+    {
+      "name": "creation_date",
+      "function": "check-date",
+      "target_table": "icca"
+    },
+    {
+      "name": "modification_year",
+      "function": "check-year",
+      "target_table": "icca"
+    },
+    {
+      "name": "version",
+      "function": "get_integer",
+      "target_table": "icca"
+    },
+    {
+      "name": "pp_status",
+      "function": "foreign-key",
+      "target_name": "submission_status_id",
+      "target_attribute": "submission_status",
+      "target_table": "icca"
+    },
+    {
+      "name": "url",
+      "target_table": "icca"
+    },
+    {
+        "name": "fpic",
+        "function": "foreign-key",
+        "target_name": "fpic_id",
+        "target_attribute" : "fpic",
+        "target_table": "icca"
+    },
+    {
+      "name": "scope",
+      "function": "foreign-key",
+      "target_name": "scope_id",
+      "target_attribute": "scope",
+      "target_table": "icca"
+    },
+    {
+        "name": "verified",
+        "function": "foreign-key",
+        "target_name": "peer_reviewed_id",
+        "target_attribute" : "peer_reviewed",
+        "target_table": "icca"
+    },
+    {
+      "name": "verifier_person",
+      "target_table": "icca"
+    },
+    {
+      "name": "verifier_organization",
+      "target_table": "icca"
+    },
+    {
+        "name": "case_study_published",
+        "function": "foreign-key",
+        "target_name": "case_study_published_id",
+        "target_attribute" : "case_study_published",
+        "target_table": "icca"
+    },
+    {
+      "name": "information_provider_name",
+      "target_table": "icca"
+    },
+    {
+        "name": "responsible_party_organization",
+        "function": "foreign-key",
+        "target_name": "provider_id",
+        "target_attribute" : "provider",
+        "target_table": "icca"
+    },
+        {
+          "name": "submission_date",
+          "function": "check-month-and-year",
+          "target_table": "icca"
+        },
+        {
+          "name": "dataset_language",
+          "target_name": "dataset_language",
+          "target_table": "icca"
+        },
+        {
+          "name": "local_name",
+          "target_name": "name_local_language",
+          "target_table": "icca"
+        },
+        {
+          "name": "national_name",
+          "target_name": "name_national_language",
+          "target_table": "icca"
+        },
+        {
+          "name": "latin_name",
+          "target_name": "latin_name",
+          "target_table": "icca"
+        },
+        {
+          "name": "origin",
+          "target_name": "origin_story_and_history",
+          "target_table": "icca"
+        },
+        {
+          "name": "latitude",
+          "function": "check-valid-double",
+          "target_table": "icca"
+        },
+        {
+          "name": "longitude",
+          "function": "check-valid-double",
+          "target_table": "icca"
+        },
+        {
+          "name": "reported_area",
+          "function": "check-valid-double",
+          "target_table": "icca"
+        },
+    {
+        "name": "marine",
+        "function": "foreign-key",
+        "target_name": "marine_id",
+        "target_attribute" : "marine",
+        "target_table": "icca"
+    },
+        {
+          "name": "reported_marine_area",
+          "function": "check-valid-double",
+          "target_table": "icca"
+        },
+    {
+        "name": "no_take",
+        "function": "foreign-key",
+        "target_name": "no_take_id",
+        "target_attribute" : "no_take",
+        "target_table": "icca"
+    },
+    {
+        "name": "no_take_permanency",
+        "function": "foreign-key",
+        "target_name": "no_take_permanency_id",
+        "target_attribute" : "no_take_permanency",
+        "target_table": "icca"
+    },
+        {
+          "name": "no_take_area",
+          "function": "check-valid-double",
+          "target_table": "icca"
+        },
+        {
+          "name": "habitat_types_comm_description",
+          "target_name": "habitat_types_community_description",
+          "target_table": "icca"
+        },
+        {
+          "name": "date_of_origin",
+          "target_table": "icca"
+        },
+	  	{
+			"name": "governance_council",
+			"function": "foreign-key-with-other",
+            "target_name": "governance_council_id",
+            "target_attribute": "governance_council",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "governance_type",
+			"function": "foreign-key-with-other",
+			"target_name": "governance_type_id",
+            "target_attribute": "governance_type",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "ownership_type",
+			"function": "foreign-key-with-other",
+			"target_name": "ownership_type_id",
+            "target_attribute": "ownership_type",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "management_authority",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "management_plan_format",
+			"function": "foreign-key-with-other",
+            "target_name": "management_plan_format_id",
+            "target_attribute": "management_plan",
+			"target_table": "icca"
+		},
+        {
+          "name": "community_name",
+          "target_table": "icca"
+        },
+        {
+          "name": "community_count",
+          "function": "get_integer",
+          "target_table": "icca"
+        },
+        {
+          "name": "household_count",
+          "function": "get_integer",
+          "target_table": "icca"
+        },
+        {
+          "name": "person_count",
+          "function": "get_integer",
+          "target_name": "person_count",
+          "target_table": "icca"
+        },
+	  	{
+			"name": "community_identity",
+			"function": "foreign-key-with-other",
+			"target_name": "community_identity_id",
+            "target_attribute": "community_identity",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "community_mobility",
+			"function": "foreign-key-with-other",
+			"target_name": "community_mobility_id",
+            "target_attribute": "community_mobility",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "community_mobility_beyond_icca",
+			"function": "foreign-key-with-other",
+			"target_name": "community_mobility_beyond_icca_id",
+            "target_attribute": "community_mobility_beyond_icca",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "equal_access",
+			"function": "foreign-key",
+			"target_name": "equal_access_id",
+            "target_attribute": "equal_access",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "relationship_strength",
+			"function": "foreign-key",
+			"target_name": "relationship_strength_status_id",
+            "target_attribute": "relationship_strength_status",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "connection",
+			"function": "foreign-key",
+			"target_name": "connection_status_id",
+            "target_attribute": "connection_status",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "governance_functioning",
+			"function": "foreign-key",
+			"target_name": "governance_functioning_status_id",
+            "target_attribute": "governance_functioning_status",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "conservation",
+			"function": "foreign-key",
+			"target_name": "biodiversity_conservation_status_id",
+            "target_attribute": "biodiversity_conservation_status",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "livelihoods_and_wellbeing",
+			"function": "foreign-key",
+			"target_name": "livelihoods_and_wellbeing_status_id",
+            "target_attribute": "livelihoods_and_wellbeing_status",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "opportunity_external_recognition",
+			"function": "foreign-key",
+			"target_name": "external_status_id",
+            "target_attribute": "external_status",
+			"target_table": "icca"
+		},
+		{
+			"name": "iso3",
+			"function": "multi-key",
+			"delimiter": ";",
+			"target_attribute": "iso3",
+			"target_table": "icca"
+		},
+		{
+			"name": "habitat_types_global",
+			"function": "multi-key-with-other",
+			"delimiter": ";",
+			"target_attribute": "habitat_types_global",
+			"target_table": "icca"
+		},
+		{
+			"name": "objectives",
+			"function": "multi-key-with-other",
+			"delimiter": ";",
+            "target_attribute": "objectives",
+			"target_table": "icca"
+		},
+		{
+			"name": "resource_use",
+			"function": "multi-key-with-other",
+			"delimiter": ";",
+            "target_attribute": "resource_use",
+			"target_table": "icca"
+		},
+		{
+			"name": "community_rights",
+			"function": "multi-key-with-other",
+			"delimiter": ";",
+            "target_attribute": "community_rights",
+			"target_table": "icca"
+		},
+		{
+			"name": "support_needed",
+			"function": "multi-key-with-other",
+			"delimiter": ";",
+            "target_attribute": "support_needed",
+			"target_table": "icca"
+		},
+		{
+			"name": "threats",
+			"function": "multi-key-with-other",
+			"delimiter": ";",
+            "target_attribute": "threats",
+			"target_table": "icca"
+		},
+        {
+          "name": "resource_use_further_details",
+          "target_table": "icca"
+        },
+        {
+          "name": "resource_use_within_community_further_details",
+          "target_table": "icca"
+        },
+        {
+          "name": "objectives_further_details",
+          "target_name": "objectives_further_details",
+          "target_table": "icca"
+        },
+        {
+          "name": "threats_further_details",
+          "target_table": "icca"
+        },
+        {
+          "name": "support_needed_further_details",
+          "target_table": "icca"
+        },
+        {
+          "name": "designation",
+          "target_table": "icca"
+        },
+        {
+          "name": "designation_english",
+          "target_table": "icca"
+        },
+	  	{
+			"name": "protected_planet_status",
+			"function": "foreign-key",
+			"target_name": "protected_planet_status_id",
+            "target_attribute": "protected_planet_status",
+			"target_table": "icca"
+		},
+	  	{
+			"name": "iucn_category",
+			"function": "foreign-key",
+			"target_name": "iucn_category_id",
+            "target_attribute": "iucn_category",
+			"target_table": "icca"
+		},
+        {
+          "name": "designation_type",
+          "target_table": "icca"
+        },
+        {
+          "name": "extra_information",
+          "target_table": "icca"
+        }
+   ]
+}

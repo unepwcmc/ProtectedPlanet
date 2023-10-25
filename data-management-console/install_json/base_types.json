@@ -1,0 +1,55 @@
+{
+  "version": "0.1",
+  "reference_data": {
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(130)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(2047)"
+        },
+        {
+          "name": "is_standard",
+          "type": "int DEFAULT 1"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+  },
+  "reference_data_with_other": {
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "code",
+          "type": "varchar(130)"
+        },
+        {
+          "name": "description",
+          "type": "varchar(255)"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+		{
+			"type": "PRIMARY KEY",
+			"PK fields": ["id"]
+		}
+      ]
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "version": 0.1,
+  "tables": [
+    {
+      "name": "pame_providers",
+      "elements": [
+        {
+          "name": "id",
+          "type": "int"
+        },
+        {
+          "name": "uuid",
+          "type": "uuid DEFAULT gen_random_uuid()"
+        },
+		{
+			"name": "originator_id",
+			"type": "int"
+		},
+        {
+          "name": "responsible_party",
+          "type": "varchar(254)"
+        },
+        {
+          "type": "PRIMARY KEY",
+          "PK fields": [
+            "responsible_party"
+          ]
+        }
+      ]
+    },
+	{
+		"name": "pame",
+		"elements": [
+			{
+				"name": "evaluation_id",
+				"type": "bigint"
+			},
+			{
+				"name": "site_id",
+				"type": "bigint"
+			},
+			{
+				"name": "methodology",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "url",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "name",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "designation",
+				"type": "varchar(254)"
+			},
+			{
+				"name": "source_data_title",
+				"type": "varchar(254)"
+			},
+            {
+              "name": "responsible_party_id",
+              "type": "int"
+            },
+            {
+                "source cols": [ "responsible_party_id" ],
+				"known as": "responsible_party",
+                "type": "FOREIGN KEY",
+                "target table": "pame_providers",
+                "lookup cols": [ "responsible_party" ],
+				"target cols": [ "id" ]
+            },
+			{
+				"name": "source_language",
+				"type": "varchar(50)"
+			},
+			{
+				"name": "originator_id",
+				"type": "int"
+			},
+			{
+				"name": "source_year",
+				"type": "int"
+			},
+			{
+				"name": "year",
+				"type": "int"
+			},
+			{
+				"name": "restricted",
+				"type": "int"
+			},
+			{
+				"name": "assessment_is_public",
+				"type": "int"
+			},
+			{
+				"source cols": ["evaluation_id"],
+				"known as": "iso3",
+				"type": "FOREIGN KEY N",
+				"target table": "iso3",
+				"lookup cols": ["code"],
+				"target cols": ["id"]
+			},
+			{
+				"type": "PRIMARY KEY",
+				"PK fields": [ "evaluation_id" ]
+			},
+			{
+				"source cols": [ "site_id" ],
+				"known as": "wdpa",
+				"type": "FOREIGN KEY",
+				"target table": "wdpa",
+				"lookup cols": [ "site_id" ],
+				"target cols": [ "site_id" ]
+			}
+
+		]
+    }
+	]
+}
