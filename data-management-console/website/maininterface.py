@@ -5,6 +5,7 @@ import os
 import sys
 import time
 import traceback
+import uuid
 from collections import defaultdict
 from datetime import datetime
 from pathlib import Path
@@ -15,16 +16,19 @@ from filtering_logic.blockregistry import BlockRegistry
 from filtering_logic.datablockfactory import DataBlockFactory
 from filtering_logic.queryexceptions import InvalidTermException
 from filtering_logic.selectionengine import SelectionEngine
-from metadata_mgmt.metadatareader import MetadataReader
-from mgmt_logging.logger import Logger
+from install_json.json_path import JsonPath
+from runtime_mgmt.runtimemanagementexceptions import UnknownFieldToSetException
+from schema_management.tableexceptions import DuplicateFieldDeclaration
+from util.metadatareader import MetadataReader
+from util.logger import Logger
 from postgres.postgresexecutor import PostgresExecutor
-from runtime_mgmt.datagroupmanager import DataGroupManager
+from util.datagroupmanager import DataGroupManager
 from schema_management.extractor import Extractor
-from schema_management.schema_populator import SchemaPopulator
-from schema_management.stagingdatapromoter import LoaderFromStagingToMain
+from data_population.schema_populator import SchemaPopulator
+from data_population.stagingdatapromoter import LoaderFromStagingToMain
 from sql.sql_runner import SqlRunner
-from translation.translation import QuarantineToStagingTranslator
-from translation.translationerrormanager import TranslationException
+from data_population.translation import QuarantineToStagingTranslator
+from data_population.translationerrormanager import TranslationException
 from website.filterargshelper import FilterArgsHelper
 from website.jsonexporter import JsonExporter
 
@@ -49,7 +53,7 @@ def south_africa_metrics(_):
             metrics_dict[metric + "_name"] = metric
             metric_values = []
             for year in years:
-                sql = f"SELECT SUM({metric}) FROM WDPA WHERE FromZ <= "
+                sql = f"SELECT SUM({metric}) FROM WDPA WHERE fromz <= "
                 sql += f"'{year}-01-01 00:00:00' AND ToZ > '{year}-01-01 00:00:00' "
                 sql += " AND ISDELETED=0"
                 cursor.execute(sql)
@@ -60,7 +64,7 @@ def south_africa_metrics(_):
         PostgresExecutor.close_read_cursor()
 
         parcels = defaultdict(list)
-        sql = "SELECT SITE_ID, PARCEL_ID, FromZ, ToZ, IsDeleted FROM WDPA ORDER BY site_ID, PARCEL_ID, FromZ"
+        sql = "SELECT SITE_ID, PARCEL_ID, fromz, ToZ, IsDeleted FROM WDPA ORDER BY site_ID, PARCEL_ID, FromZ"
         cursor.execute(sql)
         rows = cursor.fetchall()
         for row in rows:
@@ -81,15 +85,15 @@ def south_africa_metrics(_):
                 first = True
                 for change in changes:
                     # skip this record if it is outside the time range
-                    if change["FromZ"] >= end_time or change["ToZ"] < start_time:
+                    if change["fromz"] >= end_time or change["toZ"] < start_time:
                         first = False
                         continue
-                    if change["FromZ"] < start_time:
+                    if change["fromz"] < start_time:
                         first = False
                         continue
                     if first:
                         added = True
-                    elif change["isDeleted"]:
+                    elif change["isdeleted"]:
                         deleted = True
                     else:
                         updated += 1
@@ -120,7 +124,7 @@ def metrics_for_countries(request):
             for year in years:
                 sql = f"SELECT sum({metric}) from wdpa a, wdpa_iso3_assoc b, iso3 c "
                 sql += f'WHERE c.CODE IN ({",".join(countries_of_interest_for_sql)}) '
-                sql += f"AND c.id = b.iso3_id AND b.FROMZ <= TIMESTAMP '{year}-06-01 00:00:00' "
+                sql += f"AND c.id = b.iso3_id AND b.fromz <= TIMESTAMP '{year}-06-01 00:00:00' "
                 sql += f"AND b.ToZ >= TIMESTAMP '{year}-06-01 00:00:00' "
                 sql += f"AND a.site_id = b.site_id and a.parcel_id = b.parcel_id "
                 sql += f"AND a.FROMZ <= TIMESTAMP '{year}-06-01 00:00:00' AND a.ToZ >= TIMESTAMP '{year}-06-01 00:00:00' "
@@ -149,7 +153,7 @@ def create_foundation(request):
             executor.set_connection(conn)
             cursor = executor.begin_transaction()
             SCHEMA_TO_POPULATE = 'foundation_tables'
-            APP_SCHEMA_FILE = f'../json/{SCHEMA_TO_POPULATE}.json'
+            APP_SCHEMA_FILE = JsonPath.make_json_path(SCHEMA_TO_POPULATE)
             _, app_schema_tables = Extractor.get_all_definitions(APP_SCHEMA_FILE, is_foundation=True)
             executor.code_tables(app_schema_tables, None, True, SCHEMA_TO_POPULATE,
                                  remove_metadata=False,
@@ -187,11 +191,13 @@ def create_reference_data(_):
         try:
             executor = PostgresExecutor()
             executor.set_connection(conn)
+            MetadataReader.tables(executor, force=True)
             cursor = PostgresExecutor.begin_transaction()
             SchemaPopulator.create_schema('common_reference', cursor, is_reference_data=True)
             executor.end_transaction()
             cursor = executor.begin_transaction()
             SqlRunner.execute(cursor, '../sql/common_reference/post_install.sql')
+            executor.end_transaction()
             time_of_creation = '2000-01-01 00:00:00'
             data_group = "Reference Data"
             LoaderFromStagingToMain(data_group).ingest_standard(executor, time_of_creation,
@@ -201,8 +207,6 @@ def create_reference_data(_):
             print(str(e))
             traceback.print_exc(limit=None, file=None, chain=True)
             executor.rollback()
-        finally:
-            executor.end_transaction()
 
 
 def uninstall_reference_data(_):
@@ -210,6 +214,7 @@ def uninstall_reference_data(_):
         try:
             executor = PostgresExecutor()
             executor.set_connection(conn)
+            MetadataReader.tables(executor, force=True)
             executor.begin_transaction()
             SchemaPopulator.drop_schema("common_reference")
             return render_for_html(Logger.get_output())
@@ -236,7 +241,9 @@ def load_file(file_name: str):
     return Path(full_path_name).read_text()
 
 
-def render_template(file_name: str, args: dict = {}):
+def render_template(file_name: str, args=None):
+    if args is None:
+        args = {}
     t = Template(load_file(f'templates/{file_name}'))
     ans_as_str = t.render(args)
     raw_data = bytes(ans_as_str, "utf-8")
@@ -250,8 +257,10 @@ def return_home_page(_):
 def uninstall_wdpa(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
-            PostgresExecutor.set_connection(conn)
-            PostgresExecutor.begin_transaction()
+            executor = PostgresExecutor()
+            executor.set_connection(conn)
+            executor.begin_transaction()
+            MetadataReader.tables(executor, force=True)
             SchemaPopulator.drop_schema("wdpa")
             SchemaPopulator.drop_schema("wdpa_source")
             SchemaPopulator.drop_schema("wdpa_providers")
@@ -270,6 +279,7 @@ def install_wdpa(_):
         try:
             executor = PostgresExecutor()
             executor.set_connection(conn)
+            MetadataReader.tables(executor)
             cursor = executor.begin_transaction()
             SqlRunner.execute(cursor, '../sql/wdpa/pre_install.sql')
             SchemaPopulator.create_schema("wdpa_reference", cursor, is_reference_data=True)
@@ -287,17 +297,15 @@ def install_wdpa(_):
             SqlRunner.execute(cursor, '../sql/wdpa/post_install.sql')
             executor.end_transaction()
 
-            executor.begin_transaction()
             time_of_creation = '2000-01-01 00:00:00'
-            DataGroupManager.parameterize('../json/data_group.json')
+            DataGroupManager.parameterize(JsonPath.make_json_path('data_group'))
             for data_group in ["WDPA Reference Data", "WDPA Providers", "WDPA Source"]:
                 LoaderFromStagingToMain(data_group).ingest_standard(executor, time_of_creation,
                                                                     DataGroupManager.tables(data_group))
         except Exception as e:
             print(str(e))
             traceback.print_exc(limit=None, file=None, chain=True)
-        finally:
-            executor.end_transaction()
+            executor.rollback()
     return render_for_html(Logger.get_output())
 
 
@@ -361,7 +369,7 @@ def install_green_list(_):
             SqlRunner.execute(cursor, '../sql/green_list/post_install.sql')
             executor.end_transaction()
             time_of_creation = '2000-01-01 00:00:00'
-            DataGroupManager.parameterize('../json/data_group.json')
+            DataGroupManager.parameterize(JsonPath.make_json_path('data_group'))
             data_group = "Green List Reference Data"
             LoaderFromStagingToMain(data_group).ingest_standard(executor, time_of_creation,
                                                                 DataGroupManager.tables(data_group))
@@ -379,15 +387,18 @@ def install_green_list(_):
 def uninstall_icca(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
-            PostgresExecutor.set_connection(conn)
-            PostgresExecutor.begin_transaction()
+            executor = PostgresExecutor()
+            executor.set_connection(conn)
+            MetadataReader.tables(executor, force=True)
+            executor.begin_transaction()
             SchemaPopulator.drop_schema("icca")
-            PostgresExecutor.end_transaction()
+            executor.end_transaction()
         except Exception as e:
             print(str(e))
             traceback.print_exc(limit=None, file=None, chain=True)
         finally:
-            PostgresExecutor.close_read_cursor()
+            executor.close_read_cursor()
+            MetadataReader.tables(executor, force=True)
     return render_for_html(Logger.get_output())
 
 
@@ -396,20 +407,26 @@ def install_icca(_):
         try:
             executor = PostgresExecutor()
             executor.set_connection(conn)
+            MetadataReader.tables(executor, force=True)
             cursor = executor.begin_transaction()
             SqlRunner.execute(cursor, '../sql/icca/pre_install.sql')
             SchemaPopulator.create_schema("icca_reference", cursor, is_reference_data=True)
             executor.end_transaction()
             cursor = executor.begin_transaction()
+            MetadataReader.tables(executor, force=True)
             SchemaPopulator.create_schema("icca", cursor)
             SqlRunner.execute(cursor, '../sql/icca/post_install.sql')
             executor.end_transaction()
             time_of_creation = '2000-01-01 00:00:00'
-            DataGroupManager.parameterize('../json/data_group.json')
-            executor.begin_transaction()
+            DataGroupManager.parameterize(JsonPath.make_json_path('data_group'))
             data_group = "ICCA Reference Data"
             LoaderFromStagingToMain(data_group).ingest_standard(executor, time_of_creation,
                                                                 DataGroupManager.tables(data_group))
+        except DuplicateFieldDeclaration as dfd:
+            print(str(dfd))
+            traceback.print_exc(limit=None, file=None, chain=True)
+            executor.rollback()
+            return render_for_html([str(dfd)])
         except Exception as e:
             print(str(e))
             traceback.print_exc(limit=None, file=None, chain=True)
@@ -426,7 +443,6 @@ def uninstall_icca_spatial(request):
         try:
             executor = PostgresExecutor()
             executor.set_connection(conn)
-            cursor = executor.begin_transaction()
             SchemaPopulator.drop_schema("icca_spatial_data")
             executor.end_transaction()
         except Exception as ex:
@@ -462,6 +478,7 @@ def install_icca_spatial(request):
             return render_for_html(Logger.get_output())
         finally:
             executor.end_transaction()
+
 
 def uninstall_demo(_):
     with psycopg2.connect(connection_string()) as conn:
@@ -519,11 +536,11 @@ def install_demo():
             print("Successfully created")
             return render_for_html(Logger.get_output())
         finally:
-            MetadataReader.tables(True)
+            MetadataReader.tables(executor, True)
             executor.end_transaction()
 
 
-def clear_database(request):
+def clear_database(_):
     with psycopg2.connect(connection_string()) as conn:
         try:
             PostgresExecutor.set_connection(conn)
@@ -570,7 +587,7 @@ def clear_database(request):
     return render_for_html(Logger.get_output())
 
 
-def load_quarantine_data(request):
+def load_quarantine_data(_):
     return render_template('load_quarantine_data.html')
 
 
@@ -627,11 +644,11 @@ def fire_query(request):
 
 
 def load_quarantine_data_to_staging(request):
-    print("loading quarantine action")
     gc.enable()
     with psycopg2.connect(connection_string()) as conn:
         executor = PostgresExecutor()
         executor.set_connection(conn)
+        MetadataReader.tables(executor, force=True)
         filter_args = FilterArgsHelper.gather(request)
         filter_args.print_supplied_args()
         source_table_name = filter_args.get_arg("tablename")
@@ -646,8 +663,15 @@ def load_quarantine_data_to_staging(request):
             print("Successfully merged")
             return render_for_html(Logger.get_output())
         except TranslationException as te:
-            te.log_errors()
-            return render_for_html(Logger.get_output())
+            uuid_for_this_run = uuid.uuid4()
+            QuarantineToStagingTranslator.add_reference_data_summary(uuid_for_this_run, translator)
+            return render_template('reference_data_errors.html',
+                                   {"attribute_errors": te.unknown_attribute_errors(),
+                                    "attribute_error_count": len(te.unknown_attribute_errors()),
+                                    "length_errors": te.field_length_errors(), "uuid": str(uuid_for_this_run)})
+        except UnknownFieldToSetException as uf:
+            return render_template('mapping_field_errors.html',
+                                   {"mapping_field_error": str(uf)})
         except Exception as e:
             print(str(e))
             traceback.print_exc(limit=None, file=None, chain=True)
@@ -660,13 +684,49 @@ def define_adhoc_query(_):
     return render_template('define_adhoc_query.html')
 
 
-def view_metadata(request):
+def reviewed_reference_data_errors(request):
+    filter_args = FilterArgsHelper.gather(request)
+    filter_args.print_supplied_args()
+    action = filter_args.get_arg("action")
+    if action.lower()[:6] != "accept":
+        return render_template('index.html')
+    uuid_for_this_run = action[6:]
+    with psycopg2.connect(connection_string()) as conn:
+        try:
+            executor = PostgresExecutor()
+            executor.set_connection(conn)
+            executor.begin_transaction()
+            # must widen fields first in case the error is that we are adding *reference* data
+            # that is too wide
+            QuarantineToStagingTranslator.widen_fields(executor, uuid_for_this_run)
+            # reload so the system knows about the widened fields
+            MetadataReader.tables(executor, force=True)
+            result, table_store, data_group, creation_time = QuarantineToStagingTranslator.import_reference_data(
+                uuid_for_this_run)
+            if not result:
+                return render_as_bytes(
+                    {"error": "Possible restart of server since this data was assessed - please rerun"})
+            if table_store.tables():
+                QuarantineToStagingTranslator(data_group, creation_time).persist(executor, table_store)
+                LoaderFromStagingToMain(data_group).ingest_standard(executor, creation_time, table_store.tables(),
+                                                                    force_originator=True)
+            executor.begin_transaction()
+            QuarantineToStagingTranslator.remove_error_object(uuid_for_this_run)
+            executor.end_transaction()
+            return render_as_bytes(f'Successfully updated reference data for {",".join(table_store.tables())}')
+        except Exception as e:
+            print(str(e))
+            executor.rollback()
+
+
+
+def view_metadata(_):
     with psycopg2.connect(connection_string()) as conn:
         PostgresExecutor.set_connection(conn)
         cursor = PostgresExecutor.open_read_cursor()
         try:
             sql = "SELECT distinct tablename, columnname, type FROM METADATA WHERE tablename NOT LIKE 'staging%' "
-            sql += " AND columnname not in ('objectid','EffectiveFromZ', 'EffectiveToZ','FromZ','ToZ','ingestion_id','%id','id','IsDeleted') "
+            sql += " AND columnname not in ('objectid','effectivefromz', 'effectivetoz','fromz','toz','ingestion_id','%id','id','IsDeleted') "
             sql += " AND type NOT IN ('PRIMARY KEY', 'FOREIGN KEY', 'FOREIGN KEY N') ORDER by tablename, columnname "
             cursor.execute(sql)
             entries = cursor.fetchall()
@@ -683,7 +743,7 @@ def connection_string():
     return connection_str
 
 
-DataGroupManager.parameterize('../json/data_group.json')
+DataGroupManager.parameterize(JsonPath.make_json_path('data_group'))
 if len(sys.argv) >= 2:
     port = int(sys.argv[1])
 else:
