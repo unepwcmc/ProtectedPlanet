@@ -2,11 +2,11 @@ import datetime
 from typing import Any
 
 from filtering_logic.datablock import DataBlock, AssociationDataBlock
-from metadata_mgmt.metadatareader import MetadataReader
+from util.metadatareader import MetadataReader
 from postgres.postgresexecutor import PostgresExecutor
 from schema_management.tableexceptions import ColumnByNameException
-from schema_management.tables import TableDefinition, VirtualColumn
-from translation.foreignkeyhandler import ForeignKeyHandler
+from schema_management.tabledefinitions import TableDefinition, VirtualColumn
+from data_population.foreignkeyhandler import ForeignKeyHandler
 
 processed_blocks = {}
 all_tables_by_objectid = {}
@@ -26,8 +26,8 @@ def translate_individual_part(field: str, master_timestamp, master_as_of) -> str
     column_info = table_data.column_by_name(parts[1])
     if isinstance(column_info, VirtualColumn):
         print(f'Field is {field}')
-        print(column_info.function_to_call)
-        function_prototype = column_info.function_to_call
+        print(column_info.function_to_call())
+        function_prototype = column_info.function_to_call()
         function_prototype = function_prototype.replace('update_time', f"TIMESTAMP '{master_timestamp}'")
         function_prototype = function_prototype.replace('as_of', f"TIMESTAMP '{master_as_of}'")
         return function_prototype
@@ -57,7 +57,7 @@ def create_views(path_to_process: list[DataBlock], master_timestamp, master_as_o
                 connector = " AND "
             else:
                 connector = " WHERE "
-            sql += connector + f" {block.name()}.FromZ <= TIMESTAMP '{master_timestamp}' AND {block.name()}.ToZ > TIMESTAMP '{master_timestamp}' AND {block.name()}.EffectiveFromZ <= TIMESTAMP '{master_as_of}' AND {block.name()}.EffectiveToZ > TIMESTAMP '{master_as_of}'"
+            sql += connector + f" {block.name()}.fromz <= TIMESTAMP '{master_timestamp}' AND {block.name()}.toz > TIMESTAMP '{master_timestamp}' AND {block.name()}.effectivefromz <= TIMESTAMP '{master_as_of}' AND {block.name()}.effectivetoz > TIMESTAMP '{master_as_of}'"
         print(sql)
         cursor.execute(sql)
         processed_blocks[block.name()] = True
@@ -82,7 +82,7 @@ def create_sql(path_to_process: list[DataBlock], master_timestamp, master_as_of)
         block_to_process = mapped_block
         if isinstance(mapped_block[1], AssociationDataBlock):
             # the association table will contribute no fields
-            alias = mapped_block[0]+"_al"
+            alias = mapped_block[0] + "_al"
             first_block = block_to_process[1].first_block
             all_tables.append(f'{transformed_view_name(first_block.name())} {alias}')
             (backward_keys, forward_keys, _) = ForeignKeyHandler.get_relationship(
@@ -98,9 +98,10 @@ def create_sql(path_to_process: list[DataBlock], master_timestamp, master_as_of)
             # the fields are held on
             block_to_process[1].second_block.add_fields_and_table(first_block.fields())
             block_to_process[1].second_block.add_where_clause(first_block.where_clause())
-            block_to_process =  (mapped_block[0], block_to_process[1].second_block)
+            block_to_process = (mapped_block[0], block_to_process[1].second_block)
             predecessor = (alias, first_block)
-        fields_wanted = [f'{block_to_process[0]}.objectid', f'{block_to_process[0]}.fromz', f'{block_to_process[0]}.effectivefromz']
+        fields_wanted = [f'{block_to_process[0]}.objectid', f'{block_to_process[0]}.fromz',
+                         f'{block_to_process[0]}.effectivefromz']
         fields_wanted += translate_virtual_fields(block_to_process[1].fields(), master_timestamp, master_as_of)
         field_ranges.append((len(all_fields), len(all_fields) + len(fields_wanted)))
         all_fields += [f'{field.replace(block_to_process[1].name() + ".", block_to_process[0] + ".")} ' for field in
@@ -141,7 +142,7 @@ def get_raw_data(sql, field_ranges, cursor) -> dict:
     return top_level_dict
 
 
-def lookup_or_create(block_name:str, objectid: int, row_entries:dict):
+def lookup_or_create(block_name: str, objectid: int, row_entries: dict):
     if all_tables_by_objectid.get(block_name) is None:
         all_tables_by_objectid[block_name] = {}
     this_row = all_tables_by_objectid[block_name].get(objectid)
@@ -152,8 +153,9 @@ def lookup_or_create(block_name:str, objectid: int, row_entries:dict):
         this_row = this_row
     return this_row
 
+
 def turn_raw_data_into_chains(raw_data: dict, cardinalities: list, path_to_process: list[DataBlock]) -> tuple[
-    list[dict], int | Any]:
+    list[dict], int | Any, str]:
     retval = []
     latest_change = SENTINEL_DATETIME
     current_block_name = ''
@@ -173,8 +175,8 @@ def turn_raw_data_into_chains(raw_data: dict, cardinalities: list, path_to_proce
         latest_change = max(latest_change, fromz, effectivefromz)
         if len(value):
             lower_level_as_chain, latest_change, lower_block_name = turn_raw_data_into_chains(value, cardinalities[1:],
-                                                                            path_to_process[1:])
-            if cardinalities[0] == False:  # 1 to Many
+                                                                                              path_to_process[1:])
+            if not cardinalities[0]:  # 1 to Many
                 this_row[lower_block_name] = lower_level_as_chain
             else:
                 this_row[lower_block_name] = lower_level_as_chain[0]
@@ -193,11 +195,12 @@ def process_path(path_to_process: list[DataBlock], master_timestamp, master_as_o
     except ColumnByNameException as cbn:
         err_msg = {"column error": str(cbn)}
         print(err_msg)
-        return ([err_msg], 0)
+        return [err_msg], SENTINEL_DATETIME
     except Exception as e:
         err_msg = {"general error": str(e)}
         print(err_msg)
-        return ([err_msg], 0)
+        return [err_msg], SENTINEL_DATETIME
+
 
 def process_recursively(current_block_path: list, next_steps: dict, master_timestamp, master_as_of, cursor):
     if len(next_steps) == 1:
@@ -211,8 +214,9 @@ def process_recursively(current_block_path: list, next_steps: dict, master_times
         for block_name, further_steps in next_steps.items():
             if block_name == DATA_BLOCK_AT_THIS_LEVEL:
                 continue
-            result_data, most_recent_change = process_recursively(current_block_path + [next_steps[DATA_BLOCK_AT_THIS_LEVEL]], further_steps,
-                                                             master_timestamp, master_as_of, cursor)
+            result_data, most_recent_change = process_recursively(
+                current_block_path + [next_steps[DATA_BLOCK_AT_THIS_LEVEL]], further_steps, master_timestamp,
+                master_as_of, cursor)
             latest_change = max(latest_change, most_recent_change)
         return result_data, latest_change
 
@@ -227,15 +231,13 @@ def process_new_dsl(chain: dict, master_timestamp, master_as_of, master_offset, 
     # first, split into all paths
     executor = PostgresExecutor()
     cursor = executor.begin_transaction()
-    latest_change = 1
+    latest_change = SENTINEL_DATETIME
     result_data = {}
     for head, steps in chain.items():
         result_data, latest_change = process_recursively([], steps, master_timestamp, master_as_of, cursor)
     max_rows_retrievable = len(result_data)
-    result_data = result_data[master_offset:master_offset+master_limit]
+    result_data = result_data[master_offset:master_offset + master_limit]
     executor.end_transaction()
     return {"data": result_data,
             "max_rows": max_rows_retrievable,
             "latest_change": latest_change}
-
-

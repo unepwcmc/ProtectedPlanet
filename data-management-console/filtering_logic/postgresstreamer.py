@@ -10,9 +10,9 @@ import string
 from collections import defaultdict
 
 from filtering_logic.chaintable import ChainTable
-from metadata_mgmt.metadatareader import MetadataReader
+from util.metadatareader import MetadataReader
 from postgres.postgresexecutor import PostgresExecutor
-from schema_management.tables import TableDefinition, VirtualColumn
+from schema_management.tabledefinitions import TableDefinition, VirtualColumn
 
 
 class PostgresStreamer:
@@ -33,8 +33,8 @@ class PostgresStreamer:
             column_info = table_data.column_by_name(parts[1])
             if isinstance(column_info, VirtualColumn):
                 print(f'Field is {field}')
-                print(column_info.function_to_call)
-                function_prototype = column_info.function_to_call
+                print(column_info.function_to_call())
+                function_prototype = column_info.function_to_call()
                 function_prototype = function_prototype.replace('update_time', f"TIMESTAMP '{master_timestamp}'")
                 function_prototype = function_prototype.replace('as_of', f"TIMESTAMP '{master_as_of}'")
                 print(function_prototype)
@@ -105,15 +105,15 @@ class PostgresStreamer:
         for (table, letter) in tables:
             insert_sql = insert_sql.replace(table + ".", letter + ".")
         if len(tables) == 1:
-            insert_sql += f" AND a.FromZ <= TIMESTAMP '{master_timestamp}' AND a.ToZ > TIMESTAMP '{master_timestamp}' AND a.EffectiveFromZ <= TIMESTAMP '{master_as_of}' AND a.EffectiveToZ > TIMESTAMP '{master_as_of}'"
+            insert_sql += f" AND a.fromz <= TIMESTAMP '{master_timestamp}' AND a.toz > TIMESTAMP '{master_timestamp}' AND a.effectivefromz <= TIMESTAMP '{master_as_of}' AND a.effectivetoz > TIMESTAMP '{master_as_of}'"
         if len(tables) == 2:
-            insert_sql += f" AND b.FromZ <= TIMESTAMP '{master_timestamp}' AND b.ToZ > TIMESTAMP '{master_timestamp}' AND b.EffectiveFromZ <= TIMESTAMP '{master_as_of}' AND b.EffectiveToZ > TIMESTAMP '{master_as_of}'"
+            insert_sql += f" AND b.fromz <= TIMESTAMP '{master_timestamp}' AND b.toz > TIMESTAMP '{master_timestamp}' AND b.effectivefromz <= TIMESTAMP '{master_as_of}' AND b.effectivetoz > TIMESTAMP '{master_as_of}'"
         insert_sql += ") x "
         if master_limit is not None:
             insert_sql += row_number_sql
 
 #   want the datetime of most recent change (which could be to either FromZ or EffectiveFromZ)
-        max_row_sql = f"SELECT COUNT(FromZ), MAX(FromZ), MAX(EffectiveFromZ) "
+        max_row_sql = f"SELECT COUNT(fromz), MAX(fromz), MAX(effectivefromz) "
         max_row_sql += " FROM " + ",".join([t[0] + " " + t[1] for t in tables])
         if where_conditions:
             where_clause = " WHERE " + " AND ".join(where_conditions)
@@ -123,9 +123,9 @@ class PostgresStreamer:
         for (table, letter) in tables:
             max_row_sql = max_row_sql.replace(table + ".", letter + ".")
         if len(tables) == 1:
-            max_row_sql += f" AND a.FromZ <= TIMESTAMP '{master_timestamp}' AND a.ToZ > TIMESTAMP '{master_timestamp}' AND a.EffectiveFromZ <= TIMESTAMP '{master_as_of}' AND a.EffectiveToZ > TIMESTAMP '{master_as_of}'"
+            max_row_sql += f" AND a.fromz <= TIMESTAMP '{master_timestamp}' AND a.toZ > TIMESTAMP '{master_timestamp}' AND a.effectivefromz <= TIMESTAMP '{master_as_of}' AND a.effectivetoz > TIMESTAMP '{master_as_of}'"
         if len(tables) == 2:
-            max_row_sql += f" AND b.FromZ <= TIMESTAMP '{master_timestamp}' AND b.ToZ > TIMESTAMP '{master_timestamp}'  AND b.EffectiveFromZ <= TIMESTAMP '{master_as_of}' AND b.EffectiveToZ > TIMESTAMP '{master_as_of}'"
+            max_row_sql += f" AND b.fromz <= TIMESTAMP '{master_timestamp}' AND b.toZ > TIMESTAMP '{master_timestamp}'  AND b.effectivefromz <= TIMESTAMP '{master_as_of}' AND b.effectivetoz > TIMESTAMP '{master_as_of}'"
 
         retrieval_cols = [f"col{n}" for n in range(0, len(all_fields))]
         retrieval_cols.append("objectid")
@@ -183,8 +183,8 @@ class PostgresStreamer:
         table_data: TableDefinition = self.all_tables[table_and_column_name[0]]
         column_info = table_data.column_by_name(table_and_column_name[1])
         if isinstance(column_info, VirtualColumn):
-            return column_info.representation
-        return column_info.data_type
+            return column_info.representation()
+        return column_info.data_type()
 
     def unqualified_column_name(self, column_table_str):
         table_and_column_name = column_table_str.split(".")
