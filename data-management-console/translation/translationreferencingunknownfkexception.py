@@ -1,2 +1,0 @@
-class TranslationReferencingUnknownFKException(Exception):
-    pass
