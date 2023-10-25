@@ -6,13 +6,16 @@
 # TODO - consider whether these two functionalities should both be in extractor.py
 
 import json
+from collections import Counter
 
-from metadata_mgmt.metadatareader import MetadataReader
-from metadata_mgmt.unknowntableforforeignkeyexception import UnknownTableForForeignKeyException
+from install_json.json_path import JsonPath
+from schema_management.tableexceptions import DuplicateFieldDeclaration, LowerCaseColumnsOnlyException
+from util.metadatareader import MetadataReader
+from schema_management.unknowntableforforeignkeyexception import UnknownTableForForeignKeyException
 from schema_management.abbreviatename import AbbreviateName
-from schema_management.tables import TableDefinition, TableColumn, ForeignKey, PrimaryKey, VirtualColumn, \
+from schema_management.tabledefinitions import TableDefinition, TableColumn, ForeignKey, PrimaryKey, VirtualColumn, \
     ForeignKeyN, IndexRequest
-from mgmt_logging.logger import Logger
+from util.logger import Logger
 from schema_management.virtualcolumngenerator import VirtualColumnGenerator
 
 
@@ -20,7 +23,6 @@ class Extractor:
     @staticmethod
     def extract(incoming_json, table_name):
         data_type = incoming_json['type']
-        print(f'Extracting {table_name}:{data_type}')
         # can't use match syntax until Python 3.10
         if data_type == "FOREIGN KEY":
             source_columns = incoming_json['source cols']
@@ -28,18 +30,22 @@ class Extractor:
             target_cols = incoming_json['target cols']
             lookup_cols = incoming_json['lookup cols']
             known_as = incoming_json['known as']
-            return ForeignKey(table_name, source_columns, target_table, target_cols, lookup_cols, known_as)
+            residual_field = incoming_json['residual field'] if incoming_json.get('residual field') else ''
+            return ForeignKey(table_name, source_columns, target_table, target_cols, lookup_cols, known_as,
+                              residual_field)
         elif data_type == "FOREIGN KEY N":
             source_columns = incoming_json['source cols']
             target_table = incoming_json['target table']
             target_cols = incoming_json['target cols']
             lookup_cols = incoming_json['lookup cols']
             known_as = incoming_json['known as']
+            residual_field = incoming_json['residual field'] if incoming_json.get('residual field') else ''
             if incoming_json.get('association table alias'):
                 association_table_alias = incoming_json['association table alias']
             else:
                 association_table_alias = AbbreviateName.abbreviate_name([table_name, target_table, known_as])
             return ForeignKeyN(table_name, source_columns, target_table, target_cols, lookup_cols, known_as,
+                               residual_field,
                                association_table_alias)
         elif data_type == "PRIMARY KEY":
             pk_field_names = incoming_json['PK fields']
@@ -65,10 +71,37 @@ class Extractor:
         return tables
 
     @staticmethod
+    def get_inherited_and_declared_columns(table):
+        inherited_columns = []
+        declared_columns = []
+        inherited_from: str | None = table.get('base_type')
+        if inherited_from:
+            base_file, base_class_name = inherited_from.split(':')
+            with open(JsonPath.make_json_path(base_file), 'r') as file:
+                raw_schema = json.load(file)
+                base_declaration = raw_schema[base_class_name]
+                elements = base_declaration['elements']
+                inherited_columns = [Extractor.extract(el, table['name']) for el in elements]
+        if 'elements' in table:
+            declared_columns = [Extractor.extract(el, table['name']) for el in table['elements']]
+        total_columns = inherited_columns + declared_columns
+        # check for inadvertent duplicates in this list of columns
+        actual_columns = [column.name() for column in total_columns if isinstance(column, TableColumn)]
+        non_lowercase_columns = [column for column in actual_columns if column != column.lower()]
+        if non_lowercase_columns:
+            err_msg = f'The following columns should be specified in lower case {",".join(non_lowercase_columns)}'
+            raise LowerCaseColumnsOnlyException(err_msg)
+        counter = Counter(actual_columns)
+        duplicated_items = {k: v for k, v in counter.items() if v > 1}
+        if duplicated_items:
+            raise DuplicateFieldDeclaration(duplicated_items)
+        print(f'Extracting {len(total_columns)} columns for table {table["name"]}')
+        return total_columns
+
+    @staticmethod
     def extract_tables(schema, history, ingest, objectid):
         Logger.get_logger().info(f'Extracting tables: history is {history}, ingest is {ingest}')
-        tables = [TableDefinition(table['name'],
-                                  [Extractor.extract(el, table['name']) for el in table['elements']])
+        tables = [TableDefinition(table['name'], Extractor.get_inherited_and_declared_columns(table))
                   for table in schema['tables']]
         Logger.get_logger().info(f'Received schema for {len(tables)} tables')
         tables = Extractor.add_extra_columns(tables, history, ingest, objectid)
@@ -80,12 +113,12 @@ class Extractor:
         target_table_names = []
         schema_table = all_tables[table_name]
         foreign_keys_for_assoc: list[ForeignKeyN] = list(
-            filter(lambda x: isinstance(x, ForeignKeyN), schema_table.elements))
+            filter(lambda x: isinstance(x, ForeignKeyN), schema_table.elements()))
         for fk in foreign_keys_for_assoc:
-            if fk.known_as == '_internal_':
+            if fk.known_as() == '_internal_':
                 continue
-            target_table_names.append(fk.target_table)
-            assoc_table_name = fk.association_table_alias
+            target_table_names.append(fk.target_table())
+            assoc_table_name = fk.association_table_alias()
             assoc_table_names.append(assoc_table_name)
         return assoc_table_names, target_table_names
 
@@ -94,49 +127,50 @@ class Extractor:
         assoc_tables = []
         for schema_table in schema_tables:
             foreign_keys_for_assoc: list[ForeignKeyN] = list(
-                filter(lambda x: isinstance(x, ForeignKeyN), schema_table.elements))
+                filter(lambda x: isinstance(x, ForeignKeyN), schema_table.elements()))
             for fk in foreign_keys_for_assoc:
-                if fk.known_as == '_internal_':
+                if fk.known_as() == '_internal_':
                     continue
-                assoc_table_name = fk.association_table_alias
+                assoc_table_name = fk.association_table_alias()
                 # we'll need data about column types from the target table
-                target_table = list(filter(lambda x: x.name == fk.target_table, schema_tables))
+                target_table = list(filter(lambda x: x.name() == fk.target_table(), schema_tables))
                 if not target_table:
-                    target_table_actual = existing_tables.get(fk.target_table)
+                    target_table_actual = existing_tables.get(fk.target_table())
                 else:
                     target_table_actual = target_table[0]
                 if target_table_actual is None:
-                    raise UnknownTableForForeignKeyException(fk.target_table)
+                    raise UnknownTableForForeignKeyException(fk.target_table())
 
                 # get all the cols in one place, gathered from source and target (so we can be sure to match the types)
                 cols = []
                 try:
-                    cols: list = [schema_table.column_by_name(coll).copy() for coll in fk.source_columns] + [
+                    cols: list = [schema_table.column_by_name(coll).copy() for coll in fk.source_columns()] + [
                         target_table_actual.column_by_name(coll).copy() for coll in
-                        fk.target_columns]
+                        fk.target_columns()]
                 except Exception as e:
                     print(str(e))
                 # we change the name - this is why we needed to copy in the step above
                 for col in cols:
-                    col.table_name = assoc_table_name
+                    col.set_table_name(assoc_table_name)
 
                 #               Add Foreign Keys so the DSL can navigate correctly from the association table
-                foreign_key_to_source = ForeignKeyN(assoc_table_name, fk.source_columns, schema_table.name,
-                                                   fk.source_columns, fk.source_columns, 'assoc_lookup_1', assoc_table_name)
-                foreign_key_to_target = ForeignKey(assoc_table_name, fk.target_columns, target_table_actual.name,
-                                                   fk.target_columns, fk.target_columns, 'assoc_lookup_2')
+                foreign_key_to_source = ForeignKeyN(assoc_table_name, fk.source_columns(), schema_table.name(),
+                                                    fk.source_columns(), fk.source_columns(), 'assoc_lookup_1', '',
+                                                    assoc_table_name)
+                foreign_key_to_target = ForeignKey(assoc_table_name, fk.target_columns(), target_table_actual.name(),
+                                                   fk.target_columns(), fk.target_columns(), 'assoc_lookup_2', '')
                 cols.append(foreign_key_to_source)
                 cols.append(foreign_key_to_target)
 
                 #               Add Primary Key
-                primary_key = PrimaryKey(assoc_table_name, fk.source_columns + fk.target_columns)
+                primary_key = PrimaryKey(assoc_table_name, fk.source_columns() + fk.target_columns())
                 cols.append(primary_key)
 
                 #               Add Originator
                 originator_id_column = TableColumn(assoc_table_name, "originator_id", "int")
                 cols.append(originator_id_column)
-                index_request_src = IndexRequest(assoc_table_name, fk.source_columns)
-                index_request_tgt = IndexRequest(assoc_table_name, fk.target_columns)
+                index_request_src = IndexRequest(assoc_table_name, fk.source_columns())
+                index_request_tgt = IndexRequest(assoc_table_name, fk.target_columns())
                 cols.append(index_request_src)
                 cols.append(index_request_tgt)
                 try:
@@ -151,16 +185,15 @@ class Extractor:
     @staticmethod
     def get_all_definitions(schema_file, historical_table_def=None, ingestion_table_def=None, objectid_table_def=None,
                             is_foundation=False):
-        print(f'Loading file {schema_file}')
         with open(schema_file, 'r') as file:
             raw_schema = json.load(file)
             schema_tables = list(
                 Extractor.extract_tables(raw_schema, historical_table_def, ingestion_table_def, objectid_table_def))
             if not is_foundation:
                 VirtualColumnGenerator.create_virtual_columns(schema_tables)
-                assoc_tables = Extractor.extract_association_tables(schema_tables, MetadataReader.tables(True),
+                assoc_tables = Extractor.extract_association_tables(schema_tables, MetadataReader.tables(),
                                                                     historical_table_def, ingestion_table_def,
                                                                     objectid_table_def)
-
-            print(f'Completed file {schema_file}')
-            return schema_tables, schema_tables + assoc_tables
+                return schema_tables, schema_tables + assoc_tables
+            # no association tables for foundation
+            return schema_tables, schema_tables
