@@ -1,7 +1,8 @@
+# Contains the actual Postgresql syntax to perform the required operations
 import datetime
 
-from schema_management.ingestorconstants import IngestorConstants
-from schema_management.tables import TableDefinition
+from data_population.ingestorconstants import IngestorConstants
+from schema_management.tabledefinitions import TableDefinition
 
 
 class PostgresConverter:
@@ -32,7 +33,7 @@ class PostgresConverter:
 
     @staticmethod
     def code_table(_, table: TableDefinition, area):
-        return f'CREATE TABLE {PostgresConverter.fully_qualified_table_name(table.name, area)} ({",".join(table.convert(PostgresConverter()))})'
+        return f'CREATE TABLE {PostgresConverter.fully_qualified_table_name(table.name(), area)} ({",".join(table.convert(PostgresConverter()))})'
 
     @staticmethod
     def code_indexes(_, table: TableDefinition, area):
@@ -40,12 +41,12 @@ class PostgresConverter:
 
     @staticmethod
     def drop_table(_, table, area):
-        return f'DROP TABLE IF EXISTS {PostgresConverter.fully_qualified_table_name(table.name, area)}'
+        return f'DROP TABLE IF EXISTS {PostgresConverter.fully_qualified_table_name(table.name(), area)} CASCADE'
 
     @staticmethod
-    def store_metadata(schema, table, area):
+    def store_metadata(schema, table: TableDefinition, area):
         sql = []
-        for el in table.elements:
+        for el in table.elements():
             element_value = el.metadata()
             element_value = (
                 PostgresConverter.fully_qualified_table_name(element_value[0], area), element_value[1],
@@ -61,15 +62,15 @@ class PostgresConverter:
 
     @staticmethod
     def clear_metadata_for_this_table(schema, table, area):
-        return f"DELETE FROM metadata WHERE schemaname='{schema}' AND tablename='{PostgresConverter.fully_qualified_table_name(table.name, area)}'"
+        return f"DELETE FROM metadata WHERE schemaname='{schema}' AND tablename='{PostgresConverter.fully_qualified_table_name(table.name(), area)}'"
 
     @staticmethod
     def create_objectid_index(_, table, area):
-        return f"CREATE UNIQUE INDEX ON {PostgresConverter.fully_qualified_table_name(table.name, area)} (objectid)"
+        return f"CREATE UNIQUE INDEX ON {PostgresConverter.fully_qualified_table_name(table.name(), area)} (objectid)"
 
     @staticmethod
     def comparison_clause(col, is_foreign_key):
-        col_type = col.data_type.lower()
+        col_type = col.data_type().lower()
         # auto-generated ones should be automatically true as it's OK for these
         # non-business types to have different values
         # this clause needs to go first otherwise INT GENERATED DEFAULT .... will look like int
@@ -77,13 +78,13 @@ class PostgresConverter:
             return ""
         # genuine business data types
         if "char" in col_type or "date" in col_type or "timestamp" in col_type:
-            return f"CASE WHEN a.{col.name} is not NULL and b.{col.name} is NOT NULL THEN CAST(a.{col.name} = b.{col.name} AS BOOLEAN) WHEN a.{col.name} IS NULL and b.{col.name} IS NULL THEN CAST(1 AS BOOLEAN) ELSE CAST(0 AS BOOLEAN) END"
+            return f"CASE WHEN a.{col.name()} is not NULL and b.{col.name()} is NOT NULL THEN CAST(a.{col.name()} = b.{col.name()} AS BOOLEAN) WHEN a.{col.name()} IS NULL and b.{col.name()} IS NULL THEN CAST(1 AS BOOLEAN) ELSE CAST(0 AS BOOLEAN) END"
         # if a foreign key doesn't match, the difference must be >= 1 which will be above any reasonable tolerance
         if is_foreign_key or "int" in col_type or "double" in col_type or "float" in col_type:
             # set the value to just enough to indicate there's a change without danger of a numerical overflow
-            return f"CASE WHEN a.{col.name} is not NULL and b.{col.name} is NOT NULL THEN abs(a.{col.name}-b.{col.name}) WHEN a.{col.name} IS NULL and b.{col.name} IS NULL THEN 0 ELSE 10000 END"
+            return f"CASE WHEN a.{col.name()} is not NULL and b.{col.name()} is NOT NULL THEN abs(a.{col.name()}-b.{col.name()}) WHEN a.{col.name()} IS NULL and b.{col.name()} IS NULL THEN 0 ELSE 10000 END"
         if "geom" in col_type:
-            return f"CASE WHEN a.{col.name} is not NULL and b.{col.name} is NOT NULL THEN CAST(CAST(a.{col.name} as text) = CAST(b.{col.name} as text) AS INT) WHEN a.{col.name} IS NULL and b.{col.name} IS NULL THEN 0 ELSE 10000 END"
+            return f"CASE WHEN a.{col.name()} is not NULL and b.{col.name()} is NOT NULL THEN CAST(CAST(a.{col.name()} as text) = CAST(b.{col.name()} as text) AS INT) WHEN a.{col.name()} IS NULL and b.{col.name()} IS NULL THEN 0 ELSE 10000 END"
         raise Exception("Need more equality clauses")
 
     @staticmethod
@@ -95,27 +96,27 @@ class PostgresConverter:
         position = 1
 
         # create the common where clause based on the PK
-        for PK in quarantine_table.primary_key().column_names:
+        for PK in quarantine_table.primary_key().column_names():
             where_clause_elements.append(f" a.{PK}=b.{PK} ")
 
         main_clause_for_update_columns = ["a.objectid"]
         foreign_key_dictionary = {}
         FKs = quarantine_table.foreign_keys()
         for FK in FKs:
-            for col_name in FK.source_columns:
+            for col_name in FK.source_columns():
                 foreign_key_dictionary[col_name] = True
 
         for col in quarantine_table.columns():
-            comp_clause = PostgresConverter.comparison_clause(col, col.name in foreign_key_dictionary)
+            comp_clause = PostgresConverter.comparison_clause(col, col.name() in foreign_key_dictionary)
             if comp_clause:
                 main_clause_for_update_columns.append(comp_clause)
-                quarantine_positions[col.name] = position
+                quarantine_positions[col.name()] = position
                 position += 1
         main_clause_for_update_columns.append("b.objectid")
         target_positions["objectid"] = position
         main_clause_for_update_columns.append("'UPDATE'")
 
-        main_clause_for_update = f'SELECT {", ".join(main_clause_for_update_columns)} FROM {quarantine_table.name} a JOIN {target_table.name} b '
+        main_clause_for_update = f'SELECT {", ".join(main_clause_for_update_columns)} FROM {quarantine_table.name()} a JOIN {target_table.name()} b '
         where_clause_for_update = " ON " + " and ".join(where_clause_elements)
         main_clause_for_update += where_clause_for_update
         if originator_id != IngestorConstants.WCMC_SPECIAL_PROVIDER_ID:
@@ -129,10 +130,10 @@ class PostgresConverter:
         main_clause_for_addition_columns.append("NULL")
         main_clause_for_addition_columns.append("'ADD'")
 
-        main_clause_for_addition = f'SELECT {", ".join(main_clause_for_addition_columns)} FROM {quarantine_table.name} a WHERE '
+        main_clause_for_addition = f'SELECT {", ".join(main_clause_for_addition_columns)} FROM {quarantine_table.name()} a WHERE '
         if originator_id != IngestorConstants.WCMC_SPECIAL_PROVIDER_ID:
             main_clause_for_addition += f" a.ORIGINATOR_ID={originator_id} AND "
-        main_clause_for_addition += f" NOT EXISTS (SELECT 1 FROM {target_table.name} b WHERE " + " AND ".join(
+        main_clause_for_addition += f" NOT EXISTS (SELECT 1 FROM {target_table.name()} b WHERE " + " AND ".join(
             where_clause_elements)
         main_clause_for_addition += f" AND b.ToZ=TIMESTAMP '9999-01-01 00:00:00') "
 
@@ -141,12 +142,12 @@ class PostgresConverter:
             main_clause_for_deletion_columns.append("NULL")
         main_clause_for_deletion_columns.append("b.objectid")
         main_clause_for_deletion_columns.append("'DELETED'")
-        main_clause_for_deletion = f'SELECT {", ".join(main_clause_for_deletion_columns)} FROM {target_table.name} a WHERE '
+        main_clause_for_deletion = f'SELECT {", ".join(main_clause_for_deletion_columns)} FROM {target_table.name()} a WHERE '
         # if we have a closed universe (during migration), we know we have enough information to determine whether the record
         # has been moved to another provider, so don't filter by originator
         # when the universe is not closed (a single data provider's information is arriving), we should not delete (as of current knowledge)
         main_clause_for_deletion += " AND a.ToZ=TIMESTAMP '9999-01-01 00:00:00' AND a.ISDELETED=0 "
-        main_clause_for_deletion += f" AND NOT EXISTS (SELECT 1 FROM {quarantine_table.name} b "
+        main_clause_for_deletion += f" AND NOT EXISTS (SELECT 1 FROM {quarantine_table.name()} b "
         main_clause_for_deletion += ' WHERE ' + " and ".join(where_clause_elements)
         if not closed_universe and originator_id is not None:
             main_clause_for_deletion += f" AND b.ORIGINATOR_ID={originator_id}"
@@ -157,8 +158,8 @@ class PostgresConverter:
 
     @staticmethod
     def count_as_of(target_table, time_of_interest):
-        sql = f"SELECT COUNT(1), SUM(IsDeleted) FROM {target_table.name} WHERE FromZ <= '{time_of_interest}' AND ToZ > '{time_of_interest}' "
-        sql += f" AND EffectiveFromZ <='{time_of_interest}' AND EffectiveToZ > '{time_of_interest}'"
+        sql = f"SELECT COUNT(1), SUM(IsDeleted) FROM {target_table.name()} WHERE fromz <= '{time_of_interest}' AND toz > '{time_of_interest}' "
+        sql += f" AND effectivefromz <='{time_of_interest}' AND effectivetoz > '{time_of_interest}'"
         return sql
 
     @staticmethod
@@ -167,28 +168,34 @@ class PostgresConverter:
 
     @staticmethod
     def load_keys(lookup_table, lookup_column, id_column, time_of_creation):
-        sql = f"SELECT {id_column}, {lookup_column} from {lookup_table} WHERE FromZ <= TIMESTAMP '{time_of_creation}' AND ToZ > TIMESTAMP '{time_of_creation}'"
+        sql = f"SELECT {id_column}, {lookup_column} from {lookup_table} WHERE fromz <= TIMESTAMP '{time_of_creation}' AND toz > TIMESTAMP '{time_of_creation}'"
         return sql
 
     @staticmethod
     def get_originator_column_name():
-        return "ORIGINATOR_ID"
+        return "originator_id"
 
     @staticmethod
     def get_quarantine_data_by_driving_column(driving_table, driving_column):
         return f'SELECT DISTINCT {driving_column} FROM {driving_table}'
 
     @staticmethod
-    def get_rows_for_given_driver_column_value(input_columns, originator_id, driving_table, driving_column):
-        sql = f"SELECT {','.join(input_columns.keys())} FROM {driving_table} "
+    def get_rows_for_given_driver_column_value(input_columns: dict, originator_id, driving_table, driving_column):
+        # if it has a generator function, need a placeholder here that supplies a value
+        input_column_keys_for_query = []
+        for key, input_column in input_columns.items():
+            generator_sequence = input_column[0].get("generator_sequence")
+            if generator_sequence:
+                input_column_keys_for_query.append(f"nextval('{generator_sequence}')")
+            else:
+                input_column_keys_for_query.append(key)
+        sql = f"SELECT {','.join(input_column_keys_for_query)} FROM {driving_table} "
         if driving_column is not None:
             sql += f" WHERE {driving_column}={originator_id}"
         return sql
 
     @staticmethod
     def construct_sql_to_store(target_table, vals_to_store):
-        if len(vals_to_store) == 0:
-            return None
         cols_to_store = ",".join(vals_to_store[0].keys())
         sql = f"INSERT INTO stg_{target_table} ({cols_to_store}) VALUES"
         sub_sqls = []
@@ -212,4 +219,26 @@ class PostgresConverter:
 
     @staticmethod
     def delete_staging_rows(table_def):
-        return f"DELETE FROM {table_def.name}"
+        return f"DELETE FROM {table_def.name()}"
+
+    @classmethod
+    def generic_query(cls, table_name, requested_fields: list, where_param: dict):
+        sql = f"SELECT {','.join(requested_fields)} FROM {table_name} WHERE 1=1 "
+        if where_param.get("toz"):
+            timestamp = where_param["toz"]
+            sql += f"AND fromz <= TIMESTAMP {timestamp} AND toz > TIMESTAMP {timestamp}"
+        if where_param.get("effectivetoz"):
+            timestamp = where_param["effectivetoz"]
+            sql += f"AND effectivefromz <= TIMESTAMP {timestamp} AND effectivetoz > TIMESTAMP {timestamp}"
+        remaining_where_params = {k: v for k, v in where_param.items() if k != "toz" and k != "effectivetoz"}
+        where_conditions = [f" {key}={value} " for key, value in remaining_where_params.items()]
+        sql += " AND ".join(where_conditions)
+        return sql
+
+    @staticmethod
+    def widen_field(target_table: str, target_name: str, required_width: int):
+        return f'ALTER TABLE {target_table} ALTER COLUMN {target_name} TYPE VARCHAR({required_width})'
+
+    @staticmethod
+    def adjust_metadata(target_table: str, target_name: str, required_width: int):
+        return f"UPDATE METADATA set type='VARCHAR({required_width})' WHERE tablename='{target_table}' and columnname='{target_name}'"

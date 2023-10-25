@@ -1,12 +1,14 @@
 import time
 import traceback
 
+from data_population.ingestionstats import IngestionStats
 from postgres.postgresconverter import PostgresConverter
-from mgmt_logging.logger import Logger
-from schema_management.ingestionstats import IngestionStats
+from runtime_mgmt.table import TableStore
+from util.executor import Executor
+from util.logger import Logger
 
 
-class PostgresExecutor:
+class PostgresExecutor(Executor):
     _read_cursor = None
     _read_cursor_open_count = 0
     _read_cursor_close_count = 0
@@ -42,7 +44,7 @@ class PostgresExecutor:
             return [quarantine_positions, target_positions]
         except Exception as ex:
             print(str(ex))
-            [main_clause, quarantine_positions, target_positions] = PostgresConverter.construct_query_clause(
+            [main_clause, _, _] = PostgresConverter.construct_query_clause(
                 quarantine_table, target_table, originator_id, closed_universe)
             print(f"Construct query clause had a problem: {main_clause}")
             raise ex
@@ -64,7 +66,6 @@ class PostgresExecutor:
             cls._read_cursor.close()
             cls._read_cursor_close_count += 1
             cls._read_cursor = None
-
 
     @classmethod
     def foreign_key_cursor(cls):
@@ -118,7 +119,7 @@ class PostgresExecutor:
         deleted_rows = rows[0][1] or 0
         active_rows = rows[0][0] - deleted_rows
         Logger.get_logger().info(
-            f'---------------{target_table.name} has {active_rows} active rows and {deleted_rows} deleted rows')
+            f'---------------{target_table.name()} has {active_rows} active rows and {deleted_rows} deleted rows')
 
     @classmethod
     def code_tables(cls, tables, area, store_metadata, schema, drop_only=False, remove_metadata=True,
@@ -138,7 +139,7 @@ class PostgresExecutor:
                     cls._write_cursor.execute(clear_command)
             # TODO - refine the below exception handler as it's very broad in this form
             except Exception as e:
-                Logger.get_logger().info(f'No existing table {table.name}')
+                Logger.get_logger().info(f'No existing table {table.name()}')
                 print(str(e))
                 # if we couldn't drop a table because it's not there, that's fine
                 if drop_only:
@@ -147,68 +148,62 @@ class PostgresExecutor:
             else:
                 if drop_only:
                     continue
-                try:
-                    create_command = converter.code_table(schema, table, area)
-                    Logger.get_logger().info(create_command)
-                    print(create_command)
-                    cls._write_cursor.execute(create_command)
-                    index_commands = converter.code_indexes(schema, table, area)
-                    for index_command in index_commands:
-                        print(index_command)
-                        Logger.get_logger().info(index_command)
-                        cls._write_cursor.execute(index_command)
-                    if add_objectid_index:
-                        create_objectid_index_command = converter.create_objectid_index(schema, table, area)
-                        Logger.get_logger().info(create_objectid_index_command)
-                        cls._write_cursor.execute(create_objectid_index_command)
-                    if store_metadata:
-                        metadata_row_commands = PostgresConverter.store_metadata(schema, table, area)
-                        for metadata_command in metadata_row_commands:
-                            Logger.get_logger().info(metadata_command)
-                            print(metadata_command)
-                            cls._write_cursor.execute(metadata_command)
-                except Exception as ex:
-                    print(str(ex))
-                    traceback.print_exc(limit=None, file=None, chain=True)
-                    cls.rollback()
-                else:
-                    print(f'Created table {table.name}')
+                create_command = converter.code_table(schema, table, area)
+                Logger.get_logger().info(create_command)
+                print(create_command)
+                cls._write_cursor.execute(create_command)
+                index_commands = converter.code_indexes(schema, table, area)
+                for index_command in index_commands:
+                    print(index_command)
+                    Logger.get_logger().info(index_command)
+                    cls._write_cursor.execute(index_command)
+                if add_objectid_index:
+                    create_objectid_index_command = converter.create_objectid_index(schema, table, area)
+                    Logger.get_logger().info(create_objectid_index_command)
+                    cls._write_cursor.execute(create_objectid_index_command)
+                if store_metadata:
+                    metadata_row_commands = PostgresConverter.store_metadata(schema, table, area)
+                    for metadata_command in metadata_row_commands:
+                        Logger.get_logger().info(metadata_command)
+                        print(metadata_command)
+                        cls._write_cursor.execute(metadata_command)
+                print(f'Created table {table.name()}')
 
     @classmethod
     def print_total_count(cls, target_table):
-        sql = f'SELECT COUNT(1) FROM {target_table.name} '
+        sql = f'SELECT COUNT(1) FROM {target_table.name()} '
         cls._read_cursor.execute(sql)
         rows = cls._read_cursor.fetchall()
-        Logger.get_logger().info(f'---------------There are {rows[0][0]} rows for {target_table.name}')
+        Logger.get_logger().info(f'---------------There are {rows[0][0]} rows for {target_table.name()}')
 
     @classmethod
     def print_current_view(cls, target_table):
-        sql = f"SELECT * FROM {target_table.name} WHERE ToZ=TIMESTAMP '9999-01-01 00:00:00' "
+        sql = f"SELECT * FROM {target_table.name()} WHERE ToZ=TIMESTAMP '9999-01-01 00:00:00' "
         sql += f" AND EffectiveToZ=TIMESTAMP '9999-01-01 00:00:00' AND isDeleted = 0"
         cls._read_cursor.execute(sql)
         rows = cls._read_cursor.fetchall()
-        Logger.get_logger().info(f'---------------Showing all current rows for {target_table.name}')
+        Logger.get_logger().info(f'---------------Showing all current rows for {target_table.name()}')
         for row in rows:
             Logger.get_logger().info(row)
 
     @classmethod
     def print_current_total_count(cls, target_table):
-        sql = f"SELECT COUNT(1), SUM(IsDeleted) FROM {target_table.name} WHERE ToZ=TIMESTAMP '9999-01-01 00:00:00' "
+        sql = f"SELECT COUNT(1), SUM(IsDeleted) FROM {target_table.name()} WHERE ToZ=TIMESTAMP '9999-01-01 00:00:00' "
         sql += f" AND EffectiveToZ=TIMESTAMP '9999-01-01 00:00:00'"
         cls._read_cursor.execute(sql)
         rows = cls._read_cursor.fetchall()
         deleted_rows = rows[0][1]
         active_rows = rows[0][0] - deleted_rows
         Logger.get_logger().info(
-            f'---------------{target_table.name} has {active_rows} active rows and {deleted_rows} deleted rows')
+            f'---------------{target_table.name()} has {active_rows} active rows and {deleted_rows} deleted rows')
 
     @classmethod
     def print_view_as_of(cls, target_table, time_of_interest):
-        sql = f"SELECT * FROM {target_table.name} WHERE FromZ <= '{time_of_interest}' AND ToZ > '{time_of_interest}' "
+        sql = f"SELECT * FROM {target_table.name()} WHERE FromZ <= '{time_of_interest}' AND ToZ > '{time_of_interest}' "
         sql += f" AND EffectiveFromZ <='{time_of_interest}' AND EffectiveToZ > '{time_of_interest}' AND isDeleted = 0"
         cls._read_cursor.execute(sql)
         rows = cls._read_cursor.fetchall()
-        Logger.get_logger().info(f'---------------Showing all rows as of {target_table.name}')
+        Logger.get_logger().info(f'---------------Showing all rows as of {target_table.name()}')
         for row in rows:
             Logger.get_logger().info(row)
 
@@ -220,7 +215,8 @@ class PostgresExecutor:
         cursor.execute(sql)
         rows = cursor.fetchall()
         for row in rows:
-            foreign_key_value = str(row[1]).lower()
+            # want case-insensitive comparisons without leading and trailing whitespace being meaningful
+            foreign_key_value = str(row[1]).lower().strip()
             keys[foreign_key_value] = row[0]
         Logger.get_logger().info(f'Foreign key table {lookup_table} had {len(rows)} rows at {time_of_creation}')
         return keys
@@ -245,47 +241,34 @@ class PostgresExecutor:
         return cls._read_cursor.fetchmany(chunk_size)
 
     @classmethod
-    def store_transformed_and_associated_rows(cls, transformed_row_values, distinct_rows):
-        CHUNK_SIZE = 100000
-        target_tables_list = list(transformed_row_values.keys())
-        array_of_vals_to_store_list = list(transformed_row_values.values())
+    def store_transformed_and_associated_rows(cls, table_store: TableStore, distinct_rows):
+        CHUNK_SIZE = 5000
+        target_tables_list = table_store.tables()
         i = 0
         rows_stored = {}
         while i < len(target_tables_list):
-            target_table = target_tables_list[i]
-            rows_stored[target_table] = 0
-            array_of_vals_to_store = array_of_vals_to_store_list[i]
-            #        for target_table, array_of_vals_to_store in transformed_row_values.items():
-            if len(array_of_vals_to_store) == 0:
-                continue
-            if target_table in distinct_rows.keys():
-                key = distinct_rows[target_table]
-                if isinstance(key, str):
-                    dict_of_vals = {val[key]: val for val in array_of_vals_to_store}
-                else:
-                    dict_of_vals = {tuple([val[key_el] for key_el in key]): val for val in array_of_vals_to_store}
-                array_of_vals = list(dict_of_vals.values())
-            else:
-                array_of_vals = array_of_vals_to_store
+            target_table_name = target_tables_list[i]
+            rows_stored[target_table_name] = 0
+            target_table = table_store.get_table(target_table_name)
+            if target_table_name in distinct_rows.keys():
+                target_table.unique_all(distinct_rows[target_table_name])
+            array_of_vals = target_table.rows()
             start_index = 0
-            end_index = len(array_of_vals)
-            while start_index < end_index:
-                # take a chunk of values within a single SQL statement
-                vals_to_persist = array_of_vals[start_index:start_index + CHUNK_SIZE]
-                sql = PostgresConverter.construct_sql_to_store(target_table, vals_to_persist)
-                if sql is None:  # there were no values
-                    continue
+            while start_index < len(array_of_vals):
+                # take a chunk of values within a single SQL statement for efficiency
+                vals_to_persist = TableStore.rows_as_dict(array_of_vals[start_index:start_index + CHUNK_SIZE])
+                sql = PostgresConverter.construct_sql_to_store(target_table_name, vals_to_persist)
                 try:
                     cls._write_cursor.execute(sql)
                 except Exception as e:
                     print(sql)
                     print(str(e))
-                    time.sleep(100)
                     traceback.print_exc(limit=None, file=None, chain=True)
+                    time.sleep(10)
                 else:
                     start_index += len(vals_to_persist)
-                    print(f'{target_table} stored {start_index} so far')
-            rows_stored[target_table] = end_index
+                    print(f'{target_table.name()} stored {start_index} so far')
+            rows_stored[target_table] = len(array_of_vals)
             i += 1
         return rows_stored
 
@@ -300,18 +283,18 @@ class PostgresExecutor:
     @classmethod
     def create_deleted_row(cls, row, target_table, target_positions, ingestion_id, time_of_creation):
         cols = list(target_positions.keys())
-        cols.remove("FromZ")
-        cols.remove("ToZ")
-        cols.remove("EffectiveFromZ")
-        cols.remove("EffectiveToZ")
+        cols.remove("fromz")
+        cols.remove("toz")
+        cols.remove("effectivefromz")
+        cols.remove("effectivetoz")
         cols.remove("ingestion_id")
-        cols.remove("IsDeleted")
+        cols.remove("isdeleted")
         cols.remove("objectid")
-        sql = f"INSERT INTO {target_table.name} (" + ",".join(
-            cols) + ",FromZ, ToZ, EffectiveFromZ, EffectiveToZ, ingestion_id, IsDeleted ) SELECT "
+        sql = f"INSERT INTO {target_table.name()} (" + ",".join(
+            cols) + ",fromz, toz, effectivefromz, effectivetoz, ingestion_id, isdeleted ) SELECT "
         values = []
         for columnName in cols:
-            if columnName not in ["FromZ", "ToZ", "EffectiveFromZ", "EffectiveToZ", "ingestion_id", "IsDeleted"]:
+            if columnName not in ["fromz", "toz", "effectivefromz", "effectivetoz", "ingestion_id", "isdeleted"]:
                 values.append(f' {columnName} ')
 
         values.append("'" + time_of_creation + "'")  # FromZ
@@ -321,12 +304,12 @@ class PostgresExecutor:
         values.append(str(ingestion_id))
         values.append(str(1))  # isDeleted
         sql += ",".join(values)
-        sql += f" FROM {target_table.name} WHERE objectid={row[target_positions['objectid']]}"
+        sql += f" FROM {target_table.name()} WHERE objectid={row[target_positions['objectid']]}"
         cls._write_cursor.execute(sql)
 
     @classmethod
     def timestamp_existing_row(cls, row, target_positions, target_table, modification_time):
-        sql = f"UPDATE {target_table.name} SET ToZ = '{modification_time}' WHERE objectid={row[target_positions['objectid']]}"
+        sql = f"UPDATE {target_table.name()} SET ToZ = '{modification_time}' WHERE objectid={row[target_positions['objectid']]}"
         cls._write_cursor.execute(sql)
 
     @classmethod
@@ -350,8 +333,8 @@ class PostgresExecutor:
                        time_of_creation):
         cols = list(source_positions.keys())
         cols.remove("objectid")  # dont copy objectid across
-        sql = f"INSERT INTO {target_table.name} (" + ",".join(
-            cols) + ",FromZ, ToZ, EffectiveFromZ, EffectiveToZ, ingestion_id, IsDeleted ) SELECT "
+        sql = f"INSERT INTO {target_table.name()} (" + ",".join(
+            cols) + ",fromz, toz, effectivefromz, effectivetoz, ingestion_id, isdeleted ) SELECT "
         values = []
         for columnName in cols:
             values.append(f' {columnName} ')
@@ -363,14 +346,35 @@ class PostgresExecutor:
         values.append(str(ingestion_id))
         values.append(str(0))  # isDeleted
         sql += ",".join(values)
-        sql += f" FROM {source_table.name} WHERE objectid={row[source_positions['objectid']]}"
+        sql += f" FROM {source_table.name()} WHERE objectid={row[source_positions['objectid']]}"
         cls._write_cursor.execute(sql)
 
     @classmethod
     def print_all_rows(cls, target_table):
-        sql = f'SELECT * FROM {target_table.name} '
+        sql = f'SELECT * FROM {target_table.name()} '
         cls._read_cursor.execute(sql)
         rows = cls._read_cursor.fetchall()
-        Logger.get_logger().info(f'---------------Showing all rows for {target_table.name}')
+        Logger.get_logger().info(f'---------------Showing all rows for {target_table.name()}')
         for row in rows:
             Logger.get_logger().info(row)
+
+    @classmethod
+    def get_dependent_rows(cls, table_name: str, master_row_id: int, timestamp: str, as_of: str):
+        sql = PostgresConverter.generic_query(table_name,
+                                              [
+                                                  "code", "description", "standard"
+                                              ],
+                                              {
+                                                  "master_id": master_row_id,
+                                                  "ToZ": timestamp,
+                                                  "EffectiveToZ": as_of
+                                              })
+
+    @classmethod
+    def widen_field(cls, target_table:str, target_attribute:str, required_width:int):
+        sql = PostgresConverter.widen_field(target_table, target_attribute, required_width)
+        print(sql)
+        cls._write_cursor.execute(sql)
+        sql = PostgresConverter.adjust_metadata(target_table, target_attribute, required_width)
+        print(sql)
+        cls._write_cursor.execute(sql)
