@@ -12,6 +12,8 @@ from pathlib import Path
 
 from jinja2 import Template
 import psycopg2
+
+from data_population.foreignkeyhandler import ForeignKeyHandler
 from filtering_logic.blockregistry import BlockRegistry
 from filtering_logic.datablockfactory import DataBlockFactory
 from filtering_logic.queryexceptions import InvalidTermException
@@ -283,18 +285,23 @@ def install_wdpa(_):
             cursor = executor.begin_transaction()
             SqlRunner.execute(cursor, '../sql/wdpa/pre_install.sql')
             SchemaPopulator.create_schema("wdpa_reference", cursor, is_reference_data=True)
+            MetadataReader.tables(executor, force=True)
             executor.end_transaction()
             cursor = executor.begin_transaction()
             SchemaPopulator.create_schema("wdpa_providers", cursor)
+            MetadataReader.tables(executor, force=True)
             executor.end_transaction()
             cursor = executor.begin_transaction()
             SchemaPopulator.create_schema("wdpa_source", cursor)
+            MetadataReader.tables(executor, force=True)
             executor.end_transaction()
             cursor = executor.begin_transaction()
             SchemaPopulator.create_schema("wdpa", cursor)
+            MetadataReader.tables(executor, force=True)
             executor.end_transaction()
             cursor = executor.begin_transaction()
             SqlRunner.execute(cursor, '../sql/wdpa/post_install.sql')
+            MetadataReader.tables(executor, force=True)
             executor.end_transaction()
 
             time_of_creation = '2000-01-01 00:00:00'
@@ -549,7 +556,9 @@ def clear_database(_):
             sql += "WHERE schemaname = 'public' AND tablename <> 'spatial_ref_sys' "
             sql += " AND tablename NOT LIKE 'wdpadata%' AND tablename not LIKE 'green_list_m%' "
             sql += " AND tablename NOT LIKE 'pame_may%' AND tablename NOT LIKE 'zaf%' "
-            sql += " AND tablename NOT LIKE 'icca_jun%' AND tablename NOT LIKE 'icca_aug%' ORDER BY tablename "
+            sql += " AND tablename NOT LIKE 'icca_jun%' AND tablename NOT LIKE 'icca_aug%' "
+            sql += " AND tablename NOT LIKE 'icca_poly%' AND tablename NOT LIKE 'icca_point%' "
+            sql += " ORDER BY tablename "
             cursor.execute(sql)
             tables_to_drop = []
             rows = cursor.fetchall()
@@ -606,13 +615,14 @@ def country_metrics():
 def fire_query(request):
     gc.enable()
     with psycopg2.connect(connection_string()) as conn:
-        PostgresExecutor.set_connection(conn)
+        executor = PostgresExecutor()
+        executor.set_connection(conn)
         filter_args = FilterArgsHelper.gather(request)
         filter_args.print_supplied_args()
         query_text = filter_args.get_arg("query_text")
         # query_text = "path=iso3[code='ESP'].wdpa.pame;iso3.wdpa.green_list&&fields=iso3:code,description&&fields=wdpa:site_id,parcel_id,name&&fields=pame:source_data_title&&fields=green_list:url&&timestamp=2026-06-28"
         try:
-            tables = MetadataReader.tables()
+            tables = MetadataReader.tables(executor, force=True)
             BlockRegistry.reset()
             # register each table name as a simple datablock
             # also register any association tables as associationdatablock
@@ -654,10 +664,14 @@ def load_quarantine_data_to_staging(request):
         source_table_name = filter_args.get_arg("tablename")
         data_group = filter_args.get_arg("data_group")
         time_of_creation = filter_args.get_arg("time_of_creation")
+        force_reference_data = (filter_args.get_arg("force").lower() == 'true')
+        # the only errors you can allow defaults to be supplied by translation routines
+        # are coercing values.  All other error types must be fixed
+        raise_translation_errors = (filter_args.get_arg("coerce_values").lower() == "false")
         try:
             print("Translation phase")
             translator = QuarantineToStagingTranslator(data_group, time_of_creation)
-            translator.translate(executor, source_table_name)
+            translator.translate(executor, source_table_name, raise_translation_errors=raise_translation_errors)
             print("Merge phase")
             LoaderFromStagingToMain(data_group).ingest_standard(executor, time_of_creation, translator.get_all_tables())
             print("Successfully merged")
@@ -665,9 +679,13 @@ def load_quarantine_data_to_staging(request):
         except TranslationException as te:
             uuid_for_this_run = uuid.uuid4()
             QuarantineToStagingTranslator.add_reference_data_summary(uuid_for_this_run, translator)
+            if force_reference_data:
+                update_reference_data(str(uuid_for_this_run))
+                return render_as_bytes(f'Successfully updated reference data')
             return render_template('reference_data_errors.html',
                                    {"attribute_errors": te.unknown_attribute_errors(),
                                     "attribute_error_count": len(te.unknown_attribute_errors()),
+                                    "coerced_value_errors": te.coerced_values(),
                                     "length_errors": te.field_length_errors(), "uuid": str(uuid_for_this_run)})
         except UnknownFieldToSetException as uf:
             return render_template('mapping_field_errors.html',
@@ -691,33 +709,42 @@ def reviewed_reference_data_errors(request):
     if action.lower()[:6] != "accept":
         return render_template('index.html')
     uuid_for_this_run = action[6:]
+    return update_reference_data(uuid_for_this_run)
+
+
+def update_reference_data(uuid_for_this_run):
     with psycopg2.connect(connection_string()) as conn:
         try:
             executor = PostgresExecutor()
             executor.set_connection(conn)
+            ForeignKeyHandler.reset(executor)
             executor.begin_transaction()
             # must widen fields first in case the error is that we are adding *reference* data
             # that is too wide
             QuarantineToStagingTranslator.widen_fields(executor, uuid_for_this_run)
+            executor.end_transaction()
+            print('Fields widened')
+            executor.begin_transaction()
             # reload so the system knows about the widened fields
             MetadataReader.tables(executor, force=True)
+            print('Importing reference data')
             result, table_store, data_group, creation_time = QuarantineToStagingTranslator.import_reference_data(
                 uuid_for_this_run)
+            print('Reference data imported to staging')
+            executor.end_transaction()
             if not result:
                 return render_as_bytes(
                     {"error": "Possible restart of server since this data was assessed - please rerun"})
             if table_store.tables():
+                print('Persisting reference data')
                 QuarantineToStagingTranslator(data_group, creation_time).persist(executor, table_store)
                 LoaderFromStagingToMain(data_group).ingest_standard(executor, creation_time, table_store.tables(),
                                                                     force_originator=True)
-            executor.begin_transaction()
             QuarantineToStagingTranslator.remove_error_object(uuid_for_this_run)
-            executor.end_transaction()
             return render_as_bytes(f'Successfully updated reference data for {",".join(table_store.tables())}')
         except Exception as e:
             print(str(e))
             executor.rollback()
-
 
 
 def view_metadata(_):
