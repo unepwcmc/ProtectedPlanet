@@ -87,5 +87,6 @@ class ForeignKeyHandler:
                 [f'{main_table_name}.{target_col}' for target_col in association_foreign_keys[1].target_columns()])
 
     @classmethod
-    def reset(cls):
+    def reset(cls, executor):
         cls._cached_keys.clear()
+        executor.close_foreign_key_cursor()

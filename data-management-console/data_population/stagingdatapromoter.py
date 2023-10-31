@@ -56,7 +56,7 @@ class LoaderFromStagingToMain:
         chunk_size = 10000
         start_time = time.time()
         try:
-            PostgresExecutor.open_read_cursor()
+            executor.open_read_cursor()
             [quarantine_positions, target_positions] = executor.construct_query_clause(quarantine_table,
                                                                                        target_table,
                                                                                        originator_id,
@@ -110,13 +110,13 @@ class LoaderFromStagingToMain:
             traceback.print_exc(limit=None, file=None, chain=True)
             raise ex
         finally:
-            PostgresExecutor.close_read_cursor()
+            executor.close_read_cursor()
 
     def ingest_standard(self, executor: PostgresExecutor, time_of_creation, tables_to_process: list[str],
                         tolerances={ALL_NUMERICAL: 1e-3}, closed_universe=False, force_originator=False):
-        executor.begin_transaction()
-        executor.open_read_cursor()
         total_schema = MetadataReader.tables(executor, force=True)
+        executor.open_read_cursor()
+        executor.begin_transaction()
         driving_table = tables_to_process[0]
         if time_of_creation == TIME_OF_CREATION_NOW:
             time_of_creation = executor.get_time_from_database()
@@ -151,3 +151,4 @@ class LoaderFromStagingToMain:
         ingestion_provider_ids = originator_ids or [IngestorConstants.WCMC_SPECIAL_PROVIDER_ID]
         Ingestor.add_ingestion(executor, ingestion_provider_ids, ingestion_id, time_of_creation, self.data_group, stats)
         executor.end_transaction()
+        executor.close_read_cursor()

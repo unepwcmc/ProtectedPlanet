@@ -17,7 +17,8 @@ from data_population.translationreferencedataobject import TranslationReferenceD
 from install_json.json_path import JsonPath
 from postgres.postgresexecutor import PostgresExecutor
 from runtime_mgmt.row import Row
-from runtime_mgmt.runtimemanagementexceptions import RowCellCannotContainValueException, UnknownFieldToSetException
+from runtime_mgmt.runtimemanagementexceptions import RowCellCannotContainValueException, UnknownFieldToSetException, \
+    ValueNeedsToBeCoercedException
 from runtime_mgmt.table import TableStore, Table
 from schema_management.extractor import Extractor
 from schema_management.tabledefinitions import ForeignKey, ForeignKeyN
@@ -40,6 +41,7 @@ class QuarantineToStagingTranslator:
         self._error_manager = TranslationErrorManager()
         self._driving_table = None
         self._table_store = None
+        self._raise_translation_errors = True
         self._known_mapping_functions = {
             "identity": QuarantineToStagingTranslator.identity_func,
             "site_id_from_pid": QuarantineToStagingTranslator.site_id_from_pid,
@@ -70,11 +72,11 @@ class QuarantineToStagingTranslator:
                                                       translator._data_group, translator._error_manager)
         QuarantineToStagingTranslator.reference_data_error_summaries[str(uuid)] = obj_to_store
 
-    def site_id_from_pid(self, parcel_id, dummy, _):
+    def site_id_from_pid(self, parcel_id, *_):
         parts = parcel_id.split("_")
         return int(parts[0])
 
-    def parcel_id_from_pid(self, parcel_id, dummy, _):
+    def parcel_id_from_pid(self, parcel_id, *_):
         parts = parcel_id.split("_")
         if len(parts) == 1:
             return ""
@@ -92,12 +94,12 @@ class QuarantineToStagingTranslator:
                 foreign_key_value = ForeignKeyHandler.get_id_for_code(code_attribute, target_table, value)
                 row_to_add.set_field_value(target_column_in_assoc, foreign_key_value)
                 row_to_add.set_field_value(PostgresExecutor.get_originator_column_name(), originator)
-            except KeyError as k:
+            except KeyError:
                 self._error_manager.add_unknown_source_columns(source_columns, target_table)
                 assoc_table.rollback()
                 # gather errors for reporting
             except UnknownAttributeException as ua:
-                self._error_manager.add_unknown_attribute(ua.target_table(), ua.value())
+                self._error_manager.add_unknown_attribute(ua.target_table(), ua.lookup_column(), ua.value())
                 try:
                     lookup_column = ua.lookup_column()
                     reference_table = ua.target_table()
@@ -209,10 +211,10 @@ class QuarantineToStagingTranslator:
                                                            target_table, code_attribute, target_column_in_assoc,
                                                            originator)
 
-    def identity_func(self, data_val, dummy, _):
+    def identity_func(self, data_val: Any, *_):
         return data_val
 
-    def lookup_foreign_key_value(self, value_of_key, mapping_properties, _):
+    def lookup_foreign_key_value(self, value_of_key, mapping_properties, *_):
         target_attribute: str = mapping_properties["target_attribute"]
         target_table: str = mapping_properties["target_table"]
         try:
@@ -221,7 +223,7 @@ class QuarantineToStagingTranslator:
             return foreign_key_value
         except UnknownAttributeException as ua:
             # catch the unknown attribute exception
-            self._error_manager.add_unknown_attribute(ua.target_table(), ua.value())
+            self._error_manager.add_unknown_attribute(ua.target_table(), ua.lookup_column(), ua.value())
             lookup_column = ua.lookup_column()
             reference_table = ua.target_table()
             # also check whether this value would fit in the reference table if it were accepted
@@ -232,7 +234,7 @@ class QuarantineToStagingTranslator:
             test_row.set_field_value(lookup_column, value_of_key)
             return 0
 
-    def lookup_foreign_key_with_other_value(self, value_of_key: str, mapping_properties: dict, row_with_values: Row):
+    def lookup_foreign_key_with_other_value(self, value_of_key: str, mapping_properties: dict, row_with_values: Row, _):
         target_attribute = mapping_properties["target_attribute"]
         target_table = mapping_properties["target_table"]
         fk: ForeignKey = TranslationFKHelper.fk_for_attribute(target_table, target_attribute)
@@ -243,8 +245,9 @@ class QuarantineToStagingTranslator:
             if residual_field and position != -1:
                 ForeignKeyHandler.load_keys(PostgresExecutor, target_attribute, target_table, self._time_of_creation)
                 foreign_key_value = ForeignKeyHandler.get_id_for_code(target_attribute, target_table, "other:")
-                row_with_values.set_field_value(residual_field, value_of_key[position + 6:].strip() if len(value_of_key) > (
-                        position + 6) else "")
+                row_with_values.set_field_value(residual_field,
+                                                value_of_key[position + 6:].strip() if len(value_of_key) > (
+                                                        position + 6) else "")
                 return foreign_key_value
             # no "Other:" entry, just an FK
             ForeignKeyHandler.load_keys(PostgresExecutor, target_attribute, target_table, self._time_of_creation)
@@ -257,7 +260,7 @@ class QuarantineToStagingTranslator:
 
             raise UnknownFieldToSetException(err_msg)
         except UnknownAttributeException as ua:
-            self._error_manager.add_unknown_attribute(ua.target_table(), ua.value())
+            self._error_manager.add_unknown_attribute(ua.target_table(), ua.lookup_column(), ua.value())
             lookup_column = ua.lookup_column()
             reference_table = ua.target_table()
             # also check whether this value would fit in the reference table if it were accepted
@@ -268,59 +271,77 @@ class QuarantineToStagingTranslator:
             test_row.set_field_value(lookup_column, value_of_key)
             return 0
 
-    def translate_boolean(self, value_of_key: str, dummy, _):
+    def translate_boolean(self, value_of_key: str, *_):
         if value_of_key.lower() == "true":
             return 1
         return 0
 
-    def get_integer(self, value_of_key: str, dummy, _):
+    def get_integer(self, value_of_key: str, _, current_row: Row, target_name: str):
         parts = value_of_key.split(' ')
         if len(parts) == 0:
             return 0
         try:
             return int(parts[0])
         except ValueError:
-            return 0
+            proposed_value = 0
+            if self._raise_translation_errors:
+                raise ValueNeedsToBeCoercedException(current_row.table_name(), target_name, value_of_key,
+                                                     proposed_value)
+            return proposed_value
 
-    def check_valid_double(self, value_of_key: str, dummy, _):
+    def check_valid_double(self, value_of_key: str, _, current_row: Row, target_name: str):
         try:
             test = float(value_of_key)
             return test
         except ValueError:
-            return 0
+            proposed_value = 0
+            if self._raise_translation_errors:
+                raise ValueNeedsToBeCoercedException(current_row.table_name(), target_name, value_of_key,
+                                                     proposed_value)
+            return proposed_value
 
-    def check_valid_integer(self, value_of_key: str, dummy, _):
+    def check_valid_integer(self, value_of_key: str, _, current_row: Row, target_name: str):
         try:
             test = int(value_of_key)
             return test
         except ValueError:
-            return 0
+            proposed_value = 0
+            if self._raise_translation_errors:
+                raise ValueNeedsToBeCoercedException(current_row.table_name(), target_name, value_of_key,
+                                                     proposed_value)
+            return proposed_value
 
-    def valid_year(self, year_in, dummy, _):
+    def valid_year(self, year_in: str, _, current_row: Row, target_name: str):
         try:
             return int(year_in)
         except ValueError:
-            print(f"Forcing {year_in} to 0 in valid_year")
-            return 0
+            proposed_value = 0
+            if self._raise_translation_errors:
+                raise ValueNeedsToBeCoercedException(current_row.table_name(), target_name, year_in, proposed_value)
+            return proposed_value
 
-    def valid_date(self, date_in: str, dummy, _):
+    def valid_date(self, date_in: str, _, current_row: Row, target_name: str):
         try:
             return datetime.strptime(date_in, '%d/%m/%Y').date()
         except ValueError:
-            print(f'{date_in} cannot be converted to a valid date - returning sentinel value')
-            return datetime.strptime('01/01/1970', '%d/%m/%Y').date()
+            proposed_value = datetime.strptime('01/01/1970', '%d/%m/%Y').date()
+            if self._raise_translation_errors:
+                raise ValueNeedsToBeCoercedException(current_row.table_name(), target_name, date_in, proposed_value)
+            return proposed_value
 
-    def valid_month_and_year(self, date_in: str, dummy, _):
+    def valid_month_and_year(self, date_in: str, _, current_row: Row, target_name: str):
         try:
             return datetime.strptime(date_in, '%b-%y').date()
         except ValueError:
-            print(f'{date_in} cannot be converted to a valid date - returning sentinel value')
-            return datetime.strptime('Jan-70', '%b-%y').date()
+            proposed_value = datetime.strptime('Jan-70', '%b-%y').date()
+            if self._raise_translation_errors:
+                raise ValueNeedsToBeCoercedException(current_row.table_name(), target_name, date_in, proposed_value)
+            return proposed_value
 
-    def constant0(self, dummy1, dummy2, _):
+    def constant0(self, *_):
         return 0
 
-    def constant1(self, dummy1, dummy2, _):
+    def constant1(self, *_):
         return 1
 
     def read_translation_schema(self, schema_file):
@@ -375,7 +396,7 @@ class QuarantineToStagingTranslator:
     def run_extended_function(self, function_to_run: Callable, val: Any, translation_properties: dict, current_row: Row,
                               target_name: str):
         try:
-            val_to_store = function_to_run(self, val, translation_properties, current_row)
+            val_to_store = function_to_run(self, val, translation_properties, current_row, target_name)
             current_row.set_field_value(target_name, val_to_store)
         except NonExistentForeignKeyException as foreign_key_exception:
             print(str(foreign_key_exception))
@@ -390,6 +411,13 @@ class QuarantineToStagingTranslator:
                 rcccve.length_of_field(),
                 rcccve.length_of_value()
             )
+        except ValueNeedsToBeCoercedException as vntbce:
+            self._error_manager.add_value_needs_to_be_coerced(
+                vntbce.table_name(),
+                vntbce.field_name(),
+                vntbce.current_value(),
+                vntbce.proposed_value()
+            )
 
     def store_standard_field(self, target_table: Table, field_name: str, val: Any):
         try:
@@ -402,7 +430,8 @@ class QuarantineToStagingTranslator:
                 rcccve.length_of_value()
             )
 
-    def translate(self, executor, driving_table, scan_only=False):
+    def translate(self, executor, driving_table, raise_translation_errors=True):
+        self._raise_translation_errors = raise_translation_errors
         self._driving_table = driving_table
         self._table_store = TableStore()
         MetadataReader.tables(executor, force=True)
@@ -412,7 +441,9 @@ class QuarantineToStagingTranslator:
         # prime the table cache
         if not is_loaded_by_WCMC:
             driving_column = DataGroupManager.driving_column(self._data_group)
+            executor.open_read_cursor()
             list_of_originators = executor.get_quarantine_data_by_driving_column(driving_table, driving_column)
+            executor.close_read_cursor()
             for originator in list_of_originators:
                 executor.open_read_cursor()
                 originator_id = originator[0]
@@ -420,7 +451,7 @@ class QuarantineToStagingTranslator:
                 Logger.get_logger().info(f"Processing originator {originator_id}")
                 executor.get_cursor_for_driving_column(self._input_columns, driving_table, originator_id,
                                                        driving_column)
-                transformed_row_count = self.handle_translation_in_chunks(executor, scan_only, originator_id,
+                transformed_row_count = self.handle_translation_in_chunks(executor, raise_translation_errors, originator_id,
                                                                           chunk_size=5000)
                 log_info = f'Metadata provider {originator_id} has supplied {transformed_row_count} rows'
                 Logger.get_logger().info(log_info)
@@ -428,6 +459,7 @@ class QuarantineToStagingTranslator:
                 Logger.get_logger().info(log_info)
                 executor.close_read_cursor()
                 gc.collect()
+                self._error_manager.raise_any_errors()
         else:
             print(f"Starting on full table")
             executor.open_read_cursor()
@@ -436,13 +468,14 @@ class QuarantineToStagingTranslator:
                 chunk_size = 10000000  # got to grab all rows
             else:
                 chunk_size = 5000
-            transformed_row_count = self.handle_translation_in_chunks(executor, scan_only, chunk_size=chunk_size)
+            transformed_row_count = self.handle_translation_in_chunks(executor, raise_translation_errors, chunk_size=chunk_size)
             print(f'Full table was {transformed_row_count} rows')
             executor.close_read_cursor()
             gc.collect()
+            self._error_manager.raise_any_errors()
 
     # called with the cursor already primed with the rows we need to process
-    def handle_translation_in_chunks(self, executor, scan_only,
+    def handle_translation_in_chunks(self, executor, raise_translation_errors=True,
                                      originator_id=IngestorConstants.WCMC_SPECIAL_PROVIDER_ID,
                                      chunk_size=5000):
         transformed_row_count = 0
@@ -485,11 +518,12 @@ class QuarantineToStagingTranslator:
                     column_index += 1
                 transformed_row_count += 1
             print(f'Read in {transformed_row_count} so far - storing the data')
-            # now store the transformed data
-            self._error_manager.raise_any_errors()
-            if not scan_only:
-                self.persist(executor, self._table_store)
-                self._table_store.reset()
+            # now store the transformed data if there are no errors, or if errors are only coercable values
+            # and we wish to coerce those values
+            if (raise_translation_errors and self._error_manager.has_errors()) or self._error_manager.has_errors_which_must_be_fixed():
+                return transformed_row_count
+            self.persist(executor, self._table_store)
+            self._table_store.reset()
         return transformed_row_count
 
     def persist(self, executor: Executor, table_store: TableStore):
@@ -498,7 +532,7 @@ class QuarantineToStagingTranslator:
         rows_stored = executor.store_transformed_and_associated_rows(table_store, self._distinct_rows_only)
         for target_table, row_count in rows_stored.items():
             count_of_rows_stored[target_table] += row_count
-        ForeignKeyHandler.reset()
+        ForeignKeyHandler.reset(executor)
         executor.end_transaction()
         return count_of_rows_stored
 
@@ -513,9 +547,10 @@ class QuarantineToStagingTranslator:
             table_name = unknown_attribute_value[0]
             reference_data_table = table_store.get_table(table_name, add_if_absent=True)
             row = reference_data_table.add_row()
-            row.set_field_value('code', unknown_attribute_value[1])
-            row.set_field_value('description', unknown_attribute_value[1])
-            row.set_field_value('is_standard', 0)
+            row.set_field_value(unknown_attribute_value[1], unknown_attribute_value[2])
+            # if this is a reference data table, set description and is_standard
+            row.set_field_value_if_present('description', unknown_attribute_value[2])
+            row.set_field_value_if_present('is_standard', 0)
         return True, table_store, error_object.data_group(), error_object.creation_time()
 
     @staticmethod
