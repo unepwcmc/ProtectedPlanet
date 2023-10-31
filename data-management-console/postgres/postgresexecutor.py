@@ -17,13 +17,15 @@ class PostgresExecutor(Executor):
     _write_cursor_close_count = 0
     _foreign_key_cursor = None
     _foreign_key_cursor_open_count = 0
+    _foreign_key_cursor_close_count = 0
     _conn = None
 
     @classmethod
     def get_next_ingestion_id(cls):
         sql = 'SELECT MAX(ingestion_id) FROM INGESTION_HISTORY'
-        cls._read_cursor.execute(sql)
-        rows = cls._read_cursor.fetchall()
+        cursor = cls.get_read_cursor()
+        cursor.execute(sql)
+        rows = cursor.fetchall()
         max_used = rows[0][0] or 0
         Logger.get_logger().info(f"Next ingestion id is {max_used + 1}")
         return max_used + 1
@@ -31,8 +33,9 @@ class PostgresExecutor(Executor):
     @classmethod
     def get_staging_data_originators(cls, driving_table):
         sql = PostgresConverter.get_staging_data_originators(driving_table)
-        cls._read_cursor.execute(sql)
-        originator_ids = [row[0] for row in cls._read_cursor.fetchall()]
+        cursor = cls.get_read_cursor()
+        cursor.execute(sql)
+        originator_ids = [row[0] for row in cursor.fetchall()]
         return originator_ids
 
     @classmethod
@@ -40,7 +43,8 @@ class PostgresExecutor(Executor):
         [main_clause, quarantine_positions, target_positions] = PostgresConverter.construct_query_clause(
             quarantine_table, target_table, originator_id, closed_universe)
         try:
-            cls._read_cursor.execute(main_clause)
+            cursor = cls.get_read_cursor()
+            cursor.execute(main_clause)
             return [quarantine_positions, target_positions]
         except Exception as ex:
             print(str(ex))
@@ -52,6 +56,10 @@ class PostgresExecutor(Executor):
     @classmethod
     def set_connection(cls, conn):
         cls._conn = conn
+
+    @classmethod
+    def get_read_cursor(cls):
+        return cls._read_cursor
 
     @classmethod
     def open_read_cursor(cls):
@@ -68,11 +76,18 @@ class PostgresExecutor(Executor):
             cls._read_cursor = None
 
     @classmethod
-    def foreign_key_cursor(cls):
+    def open_foreign_key_cursor(cls):
         if cls._foreign_key_cursor is None or cls._foreign_key_cursor.closed:
             cls._foreign_key_cursor = cls._conn.cursor()
             cls._foreign_key_cursor_open_count += 1
         return cls._foreign_key_cursor
+
+    @classmethod
+    def close_foreign_key_cursor(cls):
+        if cls._foreign_key_cursor is not None:
+            cls._foreign_key_cursor.close()
+            cls._foreign_key_cursor = None
+            cls._foreign_key_cursor_close_count += 1
 
     @classmethod
     def begin_transaction(cls):
@@ -95,12 +110,18 @@ class PostgresExecutor(Executor):
     @classmethod
     def rollback(cls):
         if cls._write_cursor is not None:
-            cls._write_cursor.execute("ROLLBACK")
-            cls._write_cursor.close()
+            try:
+                cls._write_cursor.execute("ROLLBACK")
+                cls._write_cursor.close()
+            except Exception as e:
+                print(f'Error while rolling back is {str(e)}')
             cls._write_cursor_close_count += 1
             cls._write_cursor = None
         if cls._read_cursor is not None:
-            cls._read_cursor.close()
+            try:
+                cls._read_cursor.close()
+            except Exception as e:
+                print(f'Error while rolling back is {str(e)}')
             cls._read_cursor = None
             cls._read_cursor_close_count += 1
 
@@ -211,7 +232,7 @@ class PostgresExecutor(Executor):
     def load_keys(cls, lookup_table, lookup_column, id_column, time_of_creation):
         keys = {}
         sql = PostgresConverter.load_keys(lookup_table, lookup_column, id_column, time_of_creation)
-        cursor = cls.foreign_key_cursor()
+        cursor = cls.open_foreign_key_cursor()
         cursor.execute(sql)
         rows = cursor.fetchall()
         for row in rows:
@@ -360,21 +381,23 @@ class PostgresExecutor(Executor):
 
     @classmethod
     def get_dependent_rows(cls, table_name: str, master_row_id: int, timestamp: str, as_of: str):
-        sql = PostgresConverter.generic_query(table_name,
-                                              [
-                                                  "code", "description", "standard"
-                                              ],
-                                              {
-                                                  "master_id": master_row_id,
-                                                  "ToZ": timestamp,
-                                                  "EffectiveToZ": as_of
-                                              })
+        PostgresConverter.generic_query(table_name,
+                                        [
+                                            "code", "description", "standard"
+                                        ],
+                                        {
+                                            "master_id": master_row_id,
+                                            "ToZ": timestamp,
+                                            "EffectiveToZ": as_of
+                                        })
 
     @classmethod
-    def widen_field(cls, target_table:str, target_attribute:str, required_width:int):
+    def widen_field(cls, target_table: str, target_attribute: str, required_width: int):
         sql = PostgresConverter.widen_field(target_table, target_attribute, required_width)
         print(sql)
         cls._write_cursor.execute(sql)
+        print('Widened field')
         sql = PostgresConverter.adjust_metadata(target_table, target_attribute, required_width)
         print(sql)
         cls._write_cursor.execute(sql)
+        print('Widened field')
