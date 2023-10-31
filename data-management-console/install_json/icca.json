@@ -655,6 +655,10 @@
           "type": "varchar(10000)"
         },
         {
+            "name": "gis_area",
+            "type": "double precision"
+        },
+        {
             "type": "PRIMARY KEY",
             "PK fields": [ "site_id" ]
         }
