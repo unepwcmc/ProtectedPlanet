@@ -53,6 +53,12 @@ class Row:
                 row_representation[key] = row_cell.value()
         return row_representation
 
+    def set_field_value_if_present(self, field_name:str, val:Any):
+        cell_to_set: RowCell = self._values.get(field_name)
+        if cell_to_set is None:
+            return
+        self.set_field_value(field_name, val)
+
     def set_field_value(self, field_name: str, val: Any):
         cell_to_set: RowCell = self._values.get(field_name)
         if cell_to_set is None:
@@ -67,6 +73,9 @@ class Row:
                 if length_of_field < len(val):
                     raise RowCellCannotContainValueException(self._table_name, field_name, length_of_field, len(val))
         cell_to_set.set_value(val)
+
+    def table_name(self):
+        return self._table_name
 
     @staticmethod
     def unique(rows:list[Row]) -> list[Row]:
