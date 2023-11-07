@@ -36,3 +36,5 @@ tmp/cache/webpacker
 .byebug_history
 
 .vscode/
+
+vendor/bundle
