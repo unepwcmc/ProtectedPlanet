@@ -1,9 +1,10 @@
 ### 4.9.13
-- Chore: Fix November 2023 WDPA Release
-  - November statistics CSVs has been fixed (no more comma delimiter in numeric values)
-  - Oman total protected superficie has been updated
-  
-  ### 4.9.12
+- Chore: December 2023 WDPA Release
+  - December statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
+### 4.9.12
 - Chore: November 2023 WDPA Release
   - November statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - `constants.rb` updated
