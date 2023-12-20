@@ -18,6 +18,7 @@ class DesignationsPresenter
       juristiction_count_data = jurisdiction_counts(j, exclude_oecms: exclude_oecms)
       {
         title: designation_title(j),
+        type: j,
         total: designation_total(juristiction_count_data),
         percent: percent_of_total(juristiction_count_data, exclude_oecms: exclude_oecms),
         has_jurisdiction: get_jurisdiction(j),
