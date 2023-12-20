@@ -1,5 +1,4 @@
 <div class="card--stats-overview">
-
   <% if local_assigns[:flag] %>
     <div class="card__heading">
       <% unless @country.iso_3 == 'ESH' # temporary fix until we can figure out where the flag asset is cached %>
@@ -10,12 +9,33 @@
   <% else %>
     <h1 class="card__h1"><%= title %></h1>
   <% end %>
-
   <% if local_assigns[:total_wdpa] %>
     <div class="card__section">
       <span class="card__number"><%= total_wdpa %></span>
-      <span class="card__subtitle-margined"><%= t('stats.wdpa.total') %></span>
-
+      <div class="card__subtitle-margined card__flex">
+        <span><%= t('stats.wdpa.total') %></span>
+        <tooltip-second
+              :on-hover="false"
+              class="carousel__tooltip"
+            >
+          <template #trigger>
+            <icon-exclamation-circle class="card__tooltip--icon" />
+          </template>
+          <template #header>
+            <span></span>
+          </template>
+          <template #content>
+            <div class="card__tooltip--content">
+              <span><%= t('stats.tooltip.description') %></span>
+              <span class="card__tooltip--designations">
+                <span><%= t('stats.tooltip.designations') %></span>
+                <span>=</span>
+                <span>xx</span>
+              </span>
+            </div>
+          </template>
+        </tooltip-second>
+      </div>
       <% unless local_assigns[:total_pame].nil? %>
         <div class="flex">
           <span class="card__number"><%= total_pame %></span>
@@ -24,7 +44,6 @@
       <% end %>
     </div>
   <% end %>
-  
   <% if local_assigns[:wdpa_id] && local_assigns[:area] %>
     <div class="card__section">
       <span class="card__number"><%= wdpa_id %></span>
@@ -35,7 +54,6 @@
       <span class="card__subtitle"><%= t('stats.reported-area') %></span>
     </div>
   <% end %>
-
   <% if local_assigns[:legend_map] %>
     <div class="card__section">
       <%= render partial: 'partials/charts/chart-legend', locals: { 
@@ -44,21 +62,18 @@
       } %>
     </div>
   <% end %>
-
   <% if local_assigns[:type] && local_assigns[:location]%>
     <div class="card__section">
       <p>
         <span class="card__subtitle"><%= t('stats.type') %></span>
         <span class="card__text"><%= type %></span>
       </p>
-    
       <p>
         <span class="card__subtitle"><%= t('stats.location') %></span>
         <span class="card__text"><%= location %></span>
       </p>
     </div>
   <% end %>
-  
   <% if local_assigns[:external_links] %>
     <div class="card__section">
       <% external_links.each do |link| %>
@@ -67,7 +82,6 @@
             <span class="card__external-title"><%= link[:title] %></span>
             <span class="card__external-text"><%= link[:text] %></span>
           </span>
-          
           <a class="card__external-button" href="<%= link[:link] %>" target="_blank" title="<%= link[:button_title] %>">
             <%= t('stats.story_map.link', default: 'Link') %>
           </a>
@@ -75,27 +89,47 @@
       <% end %>
     </div>
   <% end %>
-  
   <% if local_assigns[:total_oecm] %>
     <div class="card__section">
       <span class="card__number"><%= total_oecm %></span>
-      <span class="card__subtitle"><%= t('stats.oecm.title') %></span>
+      <div class="card__subtitle card__flex">
+        <span class="card__text--max-width"><%= t('stats.oecm.title') %></span>
+        <div>
+          <tooltip-second
+              :on-hover="false"
+              class="carousel__tooltip"
+            >
+            <template #trigger>
+              <icon-exclamation-circle class="card__tooltip--icon" />
+            </template>
+            <template #header>
+              <span></span>
+            </template>
+            <template #content>
+              <div class="card__tooltip--content">
+                <span><%= t('stats.tooltip.description') %></span>
+                <span class="card__tooltip--designations">
+                  <span><%= t('stats.tooltip.designations') %></span>
+                  <span>=</span>
+                  <span>xx</span>
+                </span>
+              </div>
+            </template>
+          </tooltip-second>
+        </div>
+      </div>
     </div>
   <% end %>
-
   <% if local_assigns[:total_countries] %>
     <div class="card__section">
       <span class="card__number"><%= total_countries %></span>
       <span class="card__subtitle"><%= t('stats.countries') %></span>
     </div>
   <% end %>
-
   <% if local_assigns[:chart_point_poly] %>
     <div class="card__section">
       <span class="card__subtitle-margined">Polygons/Points ratio</span>
-
       <%= render partial: 'partials/charts/chart-row', locals: { rows: chart_point_poly } %>
-
       <%= render partial: 'partials/charts/chart-legend', locals: { 
         classes: 'chart--legend--points-poly',
         rows: chart_point_poly

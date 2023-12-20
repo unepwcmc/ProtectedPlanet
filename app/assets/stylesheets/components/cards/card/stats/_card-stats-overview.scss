@@ -4,7 +4,9 @@
 @mixin card-stats-overview-section {
   margin-top: rem-calc(20);
 
-  @include breakpoint($small) { margin-top: rem-calc(30); }
+  @include breakpoint($small) {
+    margin-top: rem-calc(30);
+  }
 }
 
 @mixin card-stats-overview-subtitle {
@@ -62,7 +64,9 @@
       margin-bottom: rem-calc(20);
     }
 
-    &__external-title { font-weight: $bold; }
+    &__external-title {
+      font-weight: $bold;
+    }
 
     &__flag {
       margin-right: rem-calc(14);
@@ -80,7 +84,9 @@
       font-size: rem-calc(20);
       margin: 0;
 
-      @include breakpoint($small) { font-size: rem-calc(25); }
+      @include breakpoint($small) {
+        font-size: rem-calc(25);
+      }
     }
 
     &__number {
@@ -88,7 +94,9 @@
       margin-right: rem-calc(10);
     }
 
-    &__section { @include card-stats-overview-section; }
+    &__section {
+      @include card-stats-overview-section;
+    }
 
     &__section-with-border {
       @include card-stats-overview-section;
@@ -112,6 +120,45 @@
     &__text {
       font-size: rem-calc(16);
       width: 68%;
+
+      &--max-width {
+        max-width: 15rem;
+      }
+    }
+
+    &__flex {
+      @include flex;
+      gap: 0.75rem;
+    }
+
+    &__tooltip {
+      &--header {
+        color: black
+      }
+
+      &--icon {
+        width: 1.2rem;
+        height: 1.2rem;
+        color: $primary;
+      }
+
+      &--content {
+        @include flex;
+        @include flex-column;
+        gap: 0.75rem;
+        color: black;
+        font-weight: normal;
+        width: 16rem;
+
+        @include breakpoint($medium) {
+          width: 19.188rem;
+        }
+      }
+
+      &--designations {
+        @include flex;
+        gap: 0.75rem;
+      }
     }
   }
 }
