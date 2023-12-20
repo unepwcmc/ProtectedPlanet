@@ -86,6 +86,8 @@ ADD docker/scripts /ProtectedPlanet/docker/scripts
 
 RUN gem install bundler -v 1.17.3 && bundle _1.17.3_ install
 RUN yarn install
+# If you are running on Mac OS X, make sure you have this line enabled and comment out RUN yan install above
+# RUN export PUPPETEER_SKIP_DOWNLOAD=true && yarn install
 
 COPY . /ProtectedPlanet
 

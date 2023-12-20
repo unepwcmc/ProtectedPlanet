@@ -21,6 +21,7 @@ git submodule update --init --recursive
 
 1. [Getting Started and Configuration](docs/installation.md)
     * [Docker Setup](docs/docker.md)
+    * [Docker Setup - For Mac](docs/docker-mac.md)
 2. [Importing and Managing the WDPA](docs/wdpa.md)
     * [Automatic Import](docs/automatic_import.md)
 3. [Deployment](docs/deployment.md)
