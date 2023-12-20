@@ -2,10 +2,8 @@
   download_options: @download_options,
   download_disabled: @total_wdpa == 0
 } %>
-
 <div class="page--country bg--grey-xlight spacer-small--top">
   <div class="container">
-
     <% if country_has_restricted_data %>
       <section class="spacer-small--bottom">
         <%= render partial: "partials/messages/message-country-restricted", locals: { 
@@ -13,7 +11,6 @@
         } %>
       </section>
     <% end %>
-
     <section class="page__section--overview-map">
       <%= render partial: "partials/stats/stats-overview", locals: { 
         flag: @flag_path,
@@ -23,8 +20,8 @@
         total_oecm: @total_oecm,
         total_pame: @total_pame,
         total_wdpa: @total_wdpa,
+        number_of_national_desinitions: @number_of_national_desinitions
       } %>
-
       <div class="page__map map--country">
         <%= render partial: "partials/maps/header", locals: {
           map: @map,
@@ -32,7 +29,6 @@
         } %>
       </div>
     </section>
-
     <section>
       <region-country-pages
         :data="<%= @stats_data.to_json %>"
@@ -48,8 +44,7 @@
           <% end %>
         </template>
       </region-country-pages>
-    </section>  
-    
+    </section>
     <section class="spacer-small--bottom">
       <%= render partial: "partials/messages/message-citation", locals: { title: @country.name } %>
     </section>

@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'enumerator'
 
 class CountryController < ApplicationController
   after_action :enable_caching
@@ -12,13 +11,13 @@ class CountryController < ApplicationController
   TABS_KEYS = %i[coverage message iucn governance sources designations growth sites].freeze
 
   def show
-     # Components above tabs
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'general', @country.iso_3)
+    # Components above tabs
+    @download_options = helpers.download_options(%w[csv shp gdb pdf], 'general', @country.iso_3)
 
     @flag_path = flag_path(@country.name)
 
     # exclude transboundary PAs where the PAME evaluation is associated only with another country
-    @total_pame = @country.protected_areas.with_pame_evaluations.includes(pame_evaluations: :countries).where(pame_evaluations: {countries: {id: @country.id}}).count
+    @total_pame = @country.protected_areas.with_pame_evaluations.includes(pame_evaluations: :countries).where(pame_evaluations: { countries: { id: @country.id } }).count
     @total_wdpa = @country.protected_areas.wdpas.count
 
     @map = {
@@ -47,11 +46,12 @@ class CountryController < ApplicationController
 
   def build_stats
     @tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
-    @stats_data = build_standard_hash
+    @stats_data = build_hash(:wdpa)
+    @number_of_national_desinitions = get_number_of_national_desinitions
 
     if has_oecms
       @stats_data.merge!(build_oecm_hash)
-      @tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') }) 
+      @tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') })
     end
   end
 
@@ -65,6 +65,17 @@ class CountryController < ApplicationController
 
   private
 
+  def get_number_of_national_desinitions
+    number_of_national_desinitions = 0
+    designations_list = @stats_data[:wdpa][:designations][:designations]
+    designations_list.each do |designation|
+ 
+      total = designation[:total]
+      number_of_national_desinitions = total if designation[:type] == 'National' && total.is_a?(Integer)
+    end
+    number_of_national_desinitions
+  end
+
   def has_oecms
     @total_oecm = @country.protected_areas.oecms.count
     @total_oecm.positive?
@@ -76,14 +87,10 @@ class CountryController < ApplicationController
     # What this does is call the corresponding method in tab presenter to build
     # the value for each key, populating the hash
     hash[tab] = TABS_KEYS.map do |key|
-      { "#{key}": @tab_presenter.send("#{key}", oecms_tab: tab == :wdpa_oecm) }
+      { "#{key}": @tab_presenter.send(key.to_s, oecms_tab: tab == :wdpa_oecm) }
     end.reduce(&:merge)
 
     hash
-  end
-
-  def build_standard_hash
-    build_hash(:wdpa)
   end
 
   def build_oecm_hash
@@ -91,7 +98,7 @@ class CountryController < ApplicationController
   end
 
   def map_overlays
-    overlays(['oecm', 'marine_wdpa', 'terrestrial_wdpa'])
+    overlays(%w[oecm marine_wdpa terrestrial_wdpa])
   end
 
   def load_essential_vars
@@ -102,8 +109,6 @@ class CountryController < ApplicationController
     @country_presenter = CountryPresenter.new(@country)
     @tab_presenter = TabPresenter.new(@country)
   end
-
-  private 
 
   def flag_path(country_name)
     character_replacements = {
