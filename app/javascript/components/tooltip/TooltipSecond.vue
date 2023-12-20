@@ -60,7 +60,7 @@ export default {
   data() {
     return {
       id: `tooltip_${this._uid}`,
-      isActive: true
+      isActive: false
     }
   },
 
