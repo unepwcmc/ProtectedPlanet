@@ -72,6 +72,13 @@ class DesignationsPresenter
   end
 
   def get_jurisdictions(jurisdiction)
+    # 'Not Applicable' jurisdictions are to be included with
+    # 'National' in the country and region show pages.
+    # https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/241
+    # jurisdictions = jurisdiction == 'National' ? ['National', 'Not Applicable'] : jurisdiction
+
+    # As 20 DEC 2023 Not Applicable is now showing as a category
+    # https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/337#update-73110217
     Jurisdiction.where(name: jurisdiction)
   end
 end
