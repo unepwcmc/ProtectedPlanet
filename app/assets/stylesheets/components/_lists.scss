@@ -64,7 +64,7 @@
 
 @mixin list-scrollbar {
   @include beautify-scrollbar;
-  max-height: rem-calc(280);
+  max-height: rem-calc(340);
   overflow-y: scroll;
   padding-right: rem-calc(19);
 }
