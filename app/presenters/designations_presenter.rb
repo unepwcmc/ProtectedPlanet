@@ -27,11 +27,12 @@ class DesignationsPresenter
     end
   end
 
-  def designations_list(jurisdictions: [], is_oecm: false)
+  def designations_list(jurisdictions: [], only_unique_wdpa_ids: false, is_oecm: false)
     jurisdictions = get_jurisdictions(jurisdictions)
     return [] unless jurisdictions.any?
 
-    geo_entity.designations_list_by_wdpa_or_oecm(jurisdictions: jurisdictions, is_oecm: is_oecm)
+    geo_entity.designations_list_by_wdpa_or_oecm(jurisdictions: jurisdictions,
+      only_unique_wdpa_ids: only_unique_wdpa_ids, is_oecm: is_oecm)
   end
 
   private

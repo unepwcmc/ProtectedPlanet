@@ -83,8 +83,8 @@ class CountryController < ApplicationController
 
   def calculate_national_designations_counts
     # ['National'] -> all avaliable juriidctions are in /app/presenters/designations_presenter.rb
-    @wdpa_national_designations_count = @country_presenter.get_designations_list(['National'], is_oecm: false).count
-    @oecm_national_designations_count = @country_presenter.get_designations_list(['National'], is_oecm: true).count
+    @wdpa_national_designations_count = @country_presenter.get_designations_list(['National'],only_unique_wdpa_ids: true, is_oecm: false).count
+    @oecm_national_designations_count = @country_presenter.get_designations_list(['National'],only_unique_wdpa_ids: true, is_oecm: true).count
   end
 
   def build_hash(tab)
