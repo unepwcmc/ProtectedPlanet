@@ -4,7 +4,7 @@ class DesignationsPresenter
   def initialize(geo_entity)
     @geo_entity = geo_entity
   end
-
+  # All avaliable JURISDICTIONS
   JURISDICTIONS = ['National', 'Regional', 'International', 'Not Applicable'].freeze
   JURISDICTIONS_TITLE = {
     'National' => 'National',
@@ -27,6 +27,13 @@ class DesignationsPresenter
     end
   end
 
+  def designations_list(jurisdictions: [], is_oecm: false)
+    jurisdictions = get_jurisdictions(jurisdictions)
+    return [] unless jurisdictions.any?
+
+    geo_entity.designations_list_by_wdpa_or_oecm(jurisdictions: jurisdictions, is_oecm: is_oecm)
+  end
+
   private
 
   attr_reader :geo_entity
@@ -45,7 +52,7 @@ class DesignationsPresenter
 
   def designation_title(jurisdiction)
     jurisdiction_title = JURISDICTIONS_TITLE[jurisdiction]
-    jurisdiction_title ? "#{jurisdiction_title} designations": 'Designation Title Not Found'
+    jurisdiction_title ? "#{jurisdiction_title} designations" : 'Designation Title Not Found'
   end
 
   def all_pas(exclude_oecms)

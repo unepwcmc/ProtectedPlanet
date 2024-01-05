@@ -124,7 +124,24 @@ class Country < ApplicationRecord
       GROUP BY designations.name
     """)
   end
-
+  def designations_list_by_wdpa_or_oecm(jurisdictions:[], is_oecm: false)
+    ActiveRecord::Base.connection.execute("""
+      SELECT  protected_areas.wdpa_id, protected_areas.designation_id,protected_areas.name as protected_areas_name,
+      protected_areas.designation_id,protected_areas.is_oecm, protected_areas.is_dopa,
+      countries_protected_areas.country_id,designations.jurisdiction_id,
+      jurisdictions.name as jurisdiction_name
+      FROM protected_areas
+      INNER JOIN countries_protected_areas
+        ON protected_areas.id = countries_protected_areas.protected_area_id
+        AND countries_protected_areas.country_id = #{self.id}
+      INNER JOIN designations
+        ON protected_areas.designation_id = designations.id
+      INNER JOIN jurisdictions
+      ON designations.jurisdiction_id = jurisdictions.id
+        and jurisdictions.id IN (#{jurisdictions.pluck(:id).join(',') if jurisdictions.any?})
+      WHERE protected_areas.is_oecm = #{is_oecm}
+    """)
+  end
   def protected_areas_per_jurisdiction(exclude_oecms: false)
     ActiveRecord::Base.connection.execute("""
       SELECT jurisdictions.name, COUNT(*)

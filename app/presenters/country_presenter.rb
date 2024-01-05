@@ -55,6 +55,10 @@ class CountryPresenter
     @designations_presenter.designations(exclude_oecms: exclude_oecms)
   end
 
+  def get_designations_list(jurisdictions, is_oecm: false)
+    @designations_presenter.designations_list(jurisdictions: jurisdictions, is_oecm: is_oecm)
+  end
+
   def documents
     [
       national_report,

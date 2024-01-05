@@ -30,7 +30,10 @@
               <span class="card__tooltip--designations">
                 <span><%= t('stats.tooltip.designations') %></span>
                 <span>=</span>
-                <span><%= local_assigns[:number_of_national_desinitions] %></span>
+                <span>
+                  <%# Search For calculate_national_designations_counts to see how it's done in the backend %>
+                  <%= wdpa_national_designations_count %>
+                </span>
               </span>
             </div>
           </template>
@@ -111,7 +114,10 @@
                 <span class="card__tooltip--designations">
                   <span><%= t('stats.tooltip.designations') %></span>
                   <span>=</span>
-                  <span><%= local_assigns[:number_of_national_desinitions] %></span>
+                  <span>
+                    <%# Search For calculate_national_designations_counts to see how it's done in the backend %>
+                    <%= oecm_national_designations_count %>
+                  </span>
                 </span>
               </div>
             </template>

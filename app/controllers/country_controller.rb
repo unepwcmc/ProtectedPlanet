@@ -4,6 +4,7 @@ class CountryController < ApplicationController
   after_action :enable_caching
   before_action :load_essential_vars
   before_action :build_stats, only: :show
+  before_action :calculate_national_designations_counts, only: :show
 
   include MapHelper
   include CountriesHelper
@@ -69,7 +70,6 @@ class CountryController < ApplicationController
     number_of_national_desinitions = 0
     designations_list = @stats_data[:wdpa][:designations][:designations]
     designations_list.each do |designation|
- 
       total = designation[:total]
       number_of_national_desinitions = total if designation[:type] == 'National' && total.is_a?(Integer)
     end
@@ -79,6 +79,12 @@ class CountryController < ApplicationController
   def has_oecms
     @total_oecm = @country.protected_areas.oecms.count
     @total_oecm.positive?
+  end
+
+  def calculate_national_designations_counts
+    # ['National'] -> all avaliable juriidctions are in /app/presenters/designations_presenter.rb
+    @wdpa_national_designations_count = @country_presenter.get_designations_list(['National'], is_oecm: false).count
+    @oecm_national_designations_count = @country_presenter.get_designations_list(['National'], is_oecm: true).count
   end
 
   def build_hash(tab)
