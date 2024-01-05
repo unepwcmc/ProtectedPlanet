@@ -74,8 +74,9 @@ en:
       link_type:
         english_version: English Version
         arabic_version: Arabic Version
-    tooltip:
-          title: Other effective area-based conservation measures
+    wdpa_tooltip:
+          description: Some geographic locations are designated more than once, e.g., as both a National Park (a national designation) and a World Heritage Site (an international designation). In the WDPA, these designations are counted as separate protected areas, meaning this number might appear higher than expected.
+          designations: Number of national designations only
+    oecm_tooltip:
           description: Some geographic locations are designated more than once, e.g., as both a Watershed Management Area (a national designation) and a World Heritage Site (an international designation). In the WD-OECM, these designations are counted as separate OECMs, meaning this number might appear higher than expected.
-          designations: Number of national designations
-
+          designations: Number of national designations only
