@@ -126,7 +126,7 @@ class Country < ApplicationRecord
   end
   def designations_list_by_wdpa_or_oecm(jurisdictions:[], is_oecm: false)
     ActiveRecord::Base.connection.execute("""
-      SELECT  protected_areas.wdpa_id, protected_areas.designation_id,protected_areas.name as protected_areas_name,
+      SELECT DISTINCT protected_areas.wdpa_id, protected_areas.designation_id,protected_areas.name as protected_areas_name,
       protected_areas.designation_id,protected_areas.is_oecm, protected_areas.is_dopa,
       countries_protected_areas.country_id,designations.jurisdiction_id,
       jurisdictions.name as jurisdiction_name
