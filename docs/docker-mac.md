@@ -10,7 +10,12 @@ To overcome difficulties with the installation of old packages/versions on diffe
 _To avoid potential problems, remove `node_modules` from your current directory._
 
 ## Before you start
-Change docker-compos-mac.xxx to docker-compos.yml ***make sure you don't accidentally commit it to git to overwrite the default docker-compose (for Linux)
+
+1. Change docker-compos-mac.xxx to docker-compos.yml
+2. (Optional) you should not encounter this error becasue docker is running in Linux env but do look for PUPPETEER_SKIP_DOWNLOAD in /project_root/Dockerfile to see how you might encounter the error while following the steps
+
+<mark>***make sure you don't accidentally commit it to git to overwrite the default docker-compose that is only for Linux environment</mark>
+
 ## Step 1: Docker setup
 **1.1. Download and/or build all required images:**
 
@@ -41,7 +46,16 @@ To attach to individual container's console:
 
 `docker attach protectedplanet-web`
 
-## Step 2: Rails setup
+## Step 2: DB setup (New method)
+**2.1. Run migrations for development**
+
+```
+docker exec -it protectedplanet-web rake db:create
+```
+
+** Since in the next step [Step 3: PP (WDPA) import](#step-3:-pp-(wdpa)-import) we are importing production db dump so we do not want to duplicate some table content again to avoid errors while importing db. However, if you find the new method does not work for you please update this section as I am the first developer using this method
+
+## Step 2: DB setup (Old method)
 **2.1. Run migrations for development**
 
 ```
@@ -64,19 +78,19 @@ aws s3 cp s3://pp.bkp/Weekly/db/pp_weekly/2023.02.01.05.00.06/pp_weekly.tar pp.t
 ```
 
 Once downloaded unzip the .tar file until you see .sql file
-
 Copy the .sql file FULL path and use the command below to import the sql dump into the docker database
-
 Replace {PATH_TO_WDPA_SQL_DUMP} with the actual file path
+
 ```
 SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock docker compose run -v {PATH_TO_WDPA_SQL_DUMP}:/import_database/pp_development.sql -e "PGPASSWORD=postgres" web bash -c "psql pp_development < /import_database/pp_development.sql -U postgres -h protectedplanet-db"
 ```
 *** Notice! the pp_development here has to be the same set for variable POSTGRES_DBNAME in .env file
 
-*** You might see the error -> could not connect to server: Connection refused
-	Is the server running on host "protectedplanet-db" (172.18.0.4) and accepting
-	TCP/IP connections on port 5432
-  that is because web is run before db so you just have to hit the same command again once you see db container is running after first time of hitting the command
+*** You might see the following error
+  could not connect to server: Connection refused. Is the server running on host "protectedplanet-db" (172.18.0.4) and accepting TCP/IP connections on port 5432.
+
+  That is because web container is run before db container. The solution for this is do not stop any running containers instead run the command again.
+
 ## Step 4: CMS setup
 Step 3 should populate the database with the newest CMS data. Step 4.1. will add minor changes (e.g. correct images)
 
@@ -112,6 +126,10 @@ or run only the api and db services with:
 ```
 SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock docker compose run api
 ```
+
+## Recommend you to read this section
+### The md below gives you all difficulties and tips that other developers have faced when set up/ work on this project so you overcome them without spending a lot of time finding solutions.
+[Development workflow, conventions and tips](docs/workflow.md)
 
 ### Debugging
 For debugging with byebug, attach to the server console:
