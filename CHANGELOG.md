@@ -13,7 +13,7 @@
   - Map PDF replaced
 
 ### 4.9.13
- - Chore: December 2023 WDPA Release
+- Chore: December 2023 WDPA Release
   - December statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - `constants.rb` updated
   - Map PDF replaced
