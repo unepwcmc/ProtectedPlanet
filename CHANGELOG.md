@@ -1,3 +1,10 @@
+### 4.10.1
+- Feature: Add Tooltip containing number of national designations only for WDPA and OECM to country page - statistics area
+- Feature: Designations section in country page
+  - Add Other category
+  - For national designations category decoupled national and other categories
+- Chore: Add documentations for mac user setup
+- Chore: Update docker md to
 ### 4.9.14
 - Chore: January 2024 WDPA Release
   - January statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
@@ -6,7 +13,7 @@
   - Map PDF replaced
 
 ### 4.9.13
-- Chore: December 2023 WDPA Release
+ - Chore: December 2023 WDPA Release
   - December statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - `constants.rb` updated
   - Map PDF replaced
