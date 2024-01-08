@@ -5,6 +5,7 @@
   - For national designations category decoupled national and other categories
 - Chore: Add documentations for mac user setup
 - Chore: Update docker md to
+
 ### 4.9.14
 - Chore: January 2024 WDPA Release
   - January statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
@@ -29,7 +30,7 @@
   - October statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - `constants.rb` updated
   - Map PDF replaced
-  
+
 ### 4.9.10
 - Chore: September 2023 WDPA Release
   - September statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
