@@ -48,7 +48,6 @@ class CountryController < ApplicationController
   def build_stats
     @tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
     @stats_data = build_hash(:wdpa)
-    @number_of_national_desinitions = get_number_of_national_desinitions
 
     if has_oecms
       @stats_data.merge!(build_oecm_hash)
@@ -66,15 +65,6 @@ class CountryController < ApplicationController
 
   private
 
-  def get_number_of_national_desinitions
-    number_of_national_desinitions = 0
-    designations_list = @stats_data[:wdpa][:designations][:designations]
-    designations_list.each do |designation|
-      total = designation[:total]
-      number_of_national_desinitions = total if designation[:type] == 'National' && total.is_a?(Integer)
-    end
-    number_of_national_desinitions
-  end
 
   def has_oecms
     @total_oecm = @country.protected_areas.oecms.count
