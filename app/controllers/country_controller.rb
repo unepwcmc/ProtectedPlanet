@@ -47,10 +47,10 @@ class CountryController < ApplicationController
 
   def build_stats
     @tabs = [{ id: 'wdpa', title: I18n.t('global.area-types.wdpa') }]
-    @stats_data = build_standard_hash(:wdpa)
+    @stats_data =  build_hash(:wdpa)
 
     if has_oecms
-      @stats_data.merge!(build_oecm_hash)
+      @stats_data.merge!(build_hash(:wdpa_oecm))
       @tabs.push({ id: 'wdpa_oecm', title: I18n.t('global.area-types.wdpa_oecm') })
     end
   end
@@ -87,14 +87,6 @@ class CountryController < ApplicationController
     end.reduce(&:merge)
 
     hash
-  end
-
-  def build_standard_hash
-    build_hash(:wdpa)
-  end
-
-  def build_oecm_hash
-    build_hash(:wdpa_oecm)
   end
 
   def map_overlays
