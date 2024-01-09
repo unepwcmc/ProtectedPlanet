@@ -124,7 +124,21 @@ class Country < ApplicationRecord
       GROUP BY designations.name
     """)
   end
-
+  def designations_list_by_wdpa_or_oecm(jurisdictions: [], only_unique_wdpa_ids: false, is_oecm: false)
+    # If you need to have more fields in select feel free to add.
+    # Please refrain from adding the_geom field as it takes a long time to render it will slow down everything!
+    # In some senarios we want the return results to have only unique wdpa ids but in most cases it should be returing everything
+    # if is_oecm is set to false then it returns WDPA designations for current country is set to true then returns OCEM designations
+    ProtectedArea
+      .select("#{'DISTINCT' if only_unique_wdpa_ids} wdpa_id,designation_id")
+      .joins('INNER JOIN countries_protected_areas ON protected_areas.id = countries_protected_areas.protected_area_id')
+      .joins(designation: :jurisdiction)
+      .where(
+        jurisdictions: { id: jurisdictions.any? ? jurisdictions.pluck(:id).join(',') : [] },
+        protected_areas: { is_oecm: is_oecm },
+        countries_protected_areas: { country_id: id }
+      )
+  end
   def protected_areas_per_jurisdiction(exclude_oecms: false)
     ActiveRecord::Base.connection.execute("""
       SELECT jurisdictions.name, COUNT(*)

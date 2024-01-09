@@ -7,6 +7,9 @@ $tooltip-padding-mobile: rem-calc(34 30 22 22);
 $tooltip-padding: rem-calc(34 30 28 26);
 $tooltip-end-position: rem-calc(10);
 
+$tooltip-padding-mobile-second: rem-calc(5 5 5 5);
+$tooltip-padding-second: rem-calc(10 10 10 10);
+
 //--------------------------------------------------
 // mixins
 //--------------------------------------------------
@@ -31,7 +34,9 @@ $tooltip-end-position: rem-calc(10);
   .tooltip__target {
     @include tooltip-end;
 
-    &:after { @include tooltip-arrow-end; }
+    &:after {
+      @include tooltip-arrow-end;
+    }
   }
 }
 
@@ -46,7 +51,9 @@ $tooltip-end-position: rem-calc(10);
     opacity: 0.7;
 
     &:hover,
-    .tooltip--active & { opacity: 1; }
+    .tooltip--active & {
+      opacity: 1;
+    }
   }
 
   &__target {
@@ -61,13 +68,18 @@ $tooltip-end-position: rem-calc(10);
 
     position: absolute;
     top: 145%;
-    z-index: 1;
+    z-index: 2;
 
-    @include breakpoint($medium) { @include tooltip-center; }
+    @include breakpoint($medium) {
+      @include tooltip-center;
+    }
 
     .tooltip--end & {
       @include tooltip-end;
-      @include breakpoint($medium) { @include tooltip-end; }
+
+      @include breakpoint($medium) {
+        @include tooltip-end;
+      }
     }
 
     &:after {
@@ -76,16 +88,22 @@ $tooltip-end-position: rem-calc(10);
       border-right: $tooltip-border-style transparent;
       border-left: $tooltip-border-style transparent;
       content: '';
-      width: 0; height: 0;
+      width: 0;
+      height: 0;
 
       position: absolute;
       bottom: 100%;
-      
-      @include breakpoint($medium) { @include tooltip-center; }
+
+      @include breakpoint($medium) {
+        @include tooltip-center;
+      }
 
       .tooltip--end & {
         @include tooltip-arrow-end;
-        @include breakpoint($medium) { @include tooltip-arrow-end; }
+
+        @include breakpoint($medium) {
+          @include tooltip-arrow-end;
+        }
       }
     }
   }
@@ -93,9 +111,56 @@ $tooltip-end-position: rem-calc(10);
   &__close {
     @include icon-button-reset;
     @include icon-close;
-    
+
     position: absolute;
     top: rem-calc(10);
     right: rem-calc(10);
+  }
+
+  &__header {
+    @include flex;
+    @include flex-v-center;
+    @include flex-h-between;
+    gap: 0.75rem;
+  }
+
+  &__target-second {
+    @include text-tooltip;
+    @include box-shadow-grey;
+    @include responsive(padding, $tooltip-padding-mobile-second, $tooltip-padding-mobile-second, $tooltip-padding-second);
+    background-color: white;
+    position: absolute;
+    top: 130%;
+    z-index: 2;
+    left: -8rem;
+
+    @include breakpoint($medium) {
+      @include tooltip-center;
+    }
+
+    &:after {
+      @include tooltip-arrow-end;
+      border-bottom: $tooltip-border-style $tooltip-background-color;
+      border-right: $tooltip-border-style transparent;
+      border-left: $tooltip-border-style transparent;
+      content: '';
+      width: 0;
+      height: 0;
+      position: absolute;
+      bottom: 100%;
+      left: 8rem;
+
+      @include breakpoint($medium) {
+        @include tooltip-center;
+      }
+
+    }
+
+    &--close {
+      @include icon-button-reset;
+      @include icon-close;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
   }
 }

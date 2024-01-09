@@ -85,7 +85,11 @@ ADD yarn.lock /ProtectedPlanet/yarn.lock
 ADD docker/scripts /ProtectedPlanet/docker/scripts
 
 RUN gem install bundler -v 1.17.3 && bundle _1.17.3_ install
+# if you see Failed to set up Chromium r782078! it is likely becasue you are running from a mac
+# https://stackoverflow.com/questions/63187371/puppeteer-is-not-able-to-install-error-failed-to-set-up-chromium-r782078-set
+# if so use second line that has PUPPETEER_SKIP_DOWNLOAD=true to run yarn install.
 RUN yarn install
+# RUN export PUPPETEER_SKIP_DOWNLOAD=true && yarn install
 
 COPY . /ProtectedPlanet
 

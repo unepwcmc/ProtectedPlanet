@@ -10,8 +10,8 @@ import Vue2TouchEvents from 'vue2-touch-events'
 import VueLazyload from 'vue-lazyload'
 
 // cookieconsent
-import 'cookieconsent';
-import 'cookieconsent/build/cookieconsent.min.css';
+import 'cookieconsent'
+import 'cookieconsent/build/cookieconsent.min.css'
 
 // store
 import store from './store/store.js'
@@ -58,6 +58,7 @@ import Tabs from './components/tabs/Tabs'
 import TabTarget from './components/tabs/TabTarget'
 import Target11Dashboard from './components/pages/Target11Dashboard'
 import Tooltip from './components/tooltip/Tooltip'
+import TooltipSecond from './components/tooltip/TooltipSecond'
 import VMapDisclaimer from './components/map/VMapDisclaimer'
 import VMap from './components/map/VMap'
 import VMapPASearch from './components/map/VMapPASearch'
@@ -65,6 +66,7 @@ import VMapHeader from './components/map/VMapHeader'
 import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
+import IconExclamationCircle from './components/icon/ExclamationCircle'
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
@@ -126,13 +128,15 @@ document.addEventListener('DOMContentLoaded', () => {
         TabTarget,
         Target11Dashboard,
         Tooltip,
+        TooltipSecond,
         VMap,
         'v-map-pa-search': VMapPASearch,
         VMapDisclaimer,
         VMapHeader,
         VMapFilters,
         VSelectSearchable,
-        VTable
+        VTable,
+        IconExclamationCircle
       },
       beforeCreate() { 
         this.$store.dispatch('download/initialiseStore')
@@ -142,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
           this.$store.dispatch('download/updateLocalStorage')
 
           // the absence of a returnValue property on the event will guarantee the browser unload happens
-          delete e['returnValue'];
+          delete e['returnValue']
         })
       }
     })

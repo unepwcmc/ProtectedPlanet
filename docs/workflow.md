@@ -49,3 +49,23 @@ comments, but obviously comment when your code isn't intuitive.
 New developers will be expected to be able to get the application up and
 running on their development machines purely by reading the README. Doing
 anything in the app workflow which isn't intuitive? Make sure it's in the docs.
+
+# Tips
+
+### Fed up seeing error page rather than actual error?
+
+1. Go to [application_controller.rb](/app/controllers/application_controller.rb)
+2. Uncomment the section that has error handling and render_500
+
+
+### Want to hide DB quries in logs so you can see your -> puts "hello world"
+<mark>••• Do not push following to repo! This is only for local development purpose</mark>
+
+1. create a new rb file under /config/initializers    i,e /config/initializers/activerecord_logger.rb
+2. add the following lines
+
+    ```ruby
+        # The following lines are for not showing db queries in logs
+        old_logger = ActiveRecord::Base.logger
+        ActiveRecord::Base.logger = nil
+    ```

@@ -4,14 +4,21 @@ class DesignationsPresenter
   def initialize(geo_entity)
     @geo_entity = geo_entity
   end
-
-  JURISDICTIONS = %w(National Regional International).freeze
+  # All avaliable JURISDICTIONS
+  JURISDICTIONS = ['National', 'Regional', 'International', 'Not Applicable'].freeze
+  JURISDICTIONS_TITLE = {
+    'National' => 'National',
+    'Regional' => 'Regional',
+    'International' => 'International',
+    'Not Applicable' => 'Other'
+  }.freeze
 
   def designations(exclude_oecms: false)
     JURISDICTIONS.map do |j|
       juristiction_count_data = jurisdiction_counts(j, exclude_oecms: exclude_oecms)
       {
         title: designation_title(j),
+        type: j,
         total: designation_total(juristiction_count_data),
         percent: percent_of_total(juristiction_count_data, exclude_oecms: exclude_oecms),
         has_jurisdiction: get_jurisdiction(j),
@@ -20,16 +27,24 @@ class DesignationsPresenter
     end
   end
 
-  private
+  def designations_list(jurisdictions: [], only_unique_wdpa_ids: false, is_oecm: false)
+    jurisdictions = get_jurisdictions(jurisdictions)
+    return [] unless jurisdictions.any?
 
-  def geo_entity
-    @geo_entity
+    geo_entity.designations_list_by_wdpa_or_oecm(jurisdictions: jurisdictions,
+      only_unique_wdpa_ids: only_unique_wdpa_ids, is_oecm: is_oecm)
   end
 
+  private
+
+  attr_reader :geo_entity
+
   def get_designations
-    geo_entity.designations.group_by { |design|
-      design.jurisdiction.name rescue "Not Reported"
-    }
+    geo_entity.designations.group_by do |design|
+      design.jurisdiction.name
+    rescue StandardError
+      'Not Reported'
+    end
   end
 
   def get_jurisdiction(jurisdiction)
@@ -37,7 +52,8 @@ class DesignationsPresenter
   end
 
   def designation_title(jurisdiction)
-    "#{jurisdiction} designations"
+    jurisdiction_title = JURISDICTIONS_TITLE[jurisdiction]
+    jurisdiction_title ? "#{jurisdiction_title} designations" : 'Designation Title Not Found'
   end
 
   def all_pas(exclude_oecms)
@@ -45,16 +61,16 @@ class DesignationsPresenter
   end
 
   def total_number_of_designations(exclude_oecms)
-    all_pas(exclude_oecms).reduce(0) { |count, j| count + j["count"] }
+    all_pas(exclude_oecms).reduce(0) { |count, j| count + j['count'] }
   end
 
   def percent_of_total(jurisdictions, exclude_oecms: false)
     total = designation_total(jurisdictions)
-    (( total / total_number_of_designations(exclude_oecms).to_f ) * 100).round(2)
+    ((total / total_number_of_designations(exclude_oecms).to_f) * 100).round(2)
   end
 
   def designation_total(jurisdictions)
-    jurisdictions.reduce(0) { |count, j| count + j["count"].to_i }
+    jurisdictions.reduce(0) { |count, j| count + j['count'].to_i }
   end
 
   def jurisdiction_counts(jurisdiction, exclude_oecms: false)
@@ -68,7 +84,10 @@ class DesignationsPresenter
     # 'Not Applicable' jurisdictions are to be included with
     # 'National' in the country and region show pages.
     # https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/241
-    jurisdictions = jurisdiction == 'National' ? ['National', 'Not Applicable'] : jurisdiction
-    Jurisdiction.where(name: jurisdictions)
+    # jurisdictions = jurisdiction == 'National' ? ['National', 'Not Applicable'] : jurisdiction
+
+    # As 20 DEC 2023 Not Applicable is now showing as a category
+    # https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/337#update-73110217
+    Jurisdiction.where(name: jurisdiction)
   end
 end

@@ -1,0 +1,155 @@
+version: '3'
+services:
+  web:
+    platform: linux/x86_64
+    container_name: protectedplanet-web
+    build: .
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid; bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/ProtectedPlanet
+      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
+      - protectedplanet_import_data:/import_data
+      - protectedplanet_bundler:/usr/local/bundle
+      - /run/host-services/ssh-auth.sock:/ssh-agent # Use this setting for Mac OS X and comment out ${SSH_AUTH_SOCK}:/ssh-agent below
+      # - ${SSH_AUTH_SOCK}:/ssh-agent
+    ports:
+      - "3000:3000"
+    networks:
+      - protectedplanet
+    environment:
+      - PUPPETEER_SKIP_DOWNLOAD=true
+      - SSH_AUTH_SOCK=/ssh-agent
+    env_file:
+      - '.env'
+    depends_on:
+      - db
+      - redis
+      - elasticsearch
+      - webpacker
+    stdin_open: true
+    tty: true
+  db:
+    platform: linux/x86_64
+    container_name: protectedplanet-db
+    image: kartoza/postgis:11.5-2.5
+    ports:
+      - "5432:5432"
+    networks:
+      - protectedplanet
+    env_file:
+      - '.env'
+    volumes:
+      - protectedplanet_pg_data:/var/lib/postgresql
+      - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    platform: linux/x86_64
+    container_name: protectedplanet-redis
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - protectedplanet
+    env_file:
+      - '.env'
+    volumes:
+      - protectedplanet_redis_data:/data
+  sidekiq:
+    platform: linux/x86_64
+    build: .
+    volumes:
+      - .:/ProtectedPlanet
+      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
+      - protectedplanet_import_data:/import_data
+    networks:
+      - protectedplanet
+    depends_on:
+      - db
+      - redis
+    command: /bin/bash -l -c "bundle exec sidekiq"
+    env_file:
+      - '.env'
+    stdin_open: true
+    tty: true
+  elasticsearch:
+    platform: linux/x86_64
+    container_name: protectedplanet-elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+    networks:
+      - protectedplanet
+    env_file:
+      - '.env'
+    volumes:
+      - 'protectedplanet_es_data:/usr/share/elasticsearch/data'
+  kibana:
+    platform: linux/x86_64
+    image: docker.elastic.co/kibana/kibana:8.6.0
+    environment:
+      - ELASTICSEARCH_HOSTS=http://protectedplanet-elasticsearch:9200
+    env_file:
+      - '.env'
+    ports:
+      - "5601:5601"
+    networks:
+      - protectedplanet
+
+  webpacker:
+    platform: linux/x86_64
+    container_name: protectedplanet-webpacker
+    build: .
+    env_file: 
+      - '.env'
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
+    volumes: 
+      - .:/ProtectedPlanet
+      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
+      - protectedplanet_bundler:/usr/local/bundle
+    ports:
+      - "3035:3035"
+    networks:
+      - protectedplanet
+
+  api:
+    platform: linux/x86_64
+    container_name: protectedplanet-api
+    build:
+      context: ${API_PATH}
+    command: /bin/bash -l -c "bundle exec rackup --host 0.0.0.0"
+    volumes:
+      - ${API_PATH}:/ProtectedPlanetApi
+      - /run/host-services/ssh-auth.sock:/ssh-agent # Use this setting for Mac OS X and comment out ${SSH_AUTH_SOCK}:/ssh-agent below
+      # - ${SSH_AUTH_SOCK}:/ssh-agent
+    ports:
+      - "9292:9292"
+    networks:
+      - protectedplanet
+    environment:
+      - SSH_AUTH_SOCK=/ssh-agent
+    env_file:
+      - ${API_PATH}/.env
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+    profiles: ['api']
+
+networks:
+  protectedplanet:
+    driver: bridge
+
+volumes:
+  protectedplanet_pg_data:
+  protectedplanet_redis_data:
+  protectedplanet_import_data:
+  protectedplanet_es_data:
+  protectedplanet_bundler:
+  protectedplanet_node_modules:
