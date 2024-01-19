@@ -1,3 +1,7 @@
+### 4.10.2
+- Fix: Differentiate state-overview for country and Region Page
+- Fix: Put back Other category to National Designations
+
 ### 4.10.1
 - Feature: Add Tooltip containing number of national designations only for WDPA and OECM to country page - statistics area
 - Feature: Designations section in country page
