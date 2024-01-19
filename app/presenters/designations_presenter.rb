@@ -93,7 +93,7 @@ class DesignationsPresenter
 
     # As 20 DEC 2023 Not Applicable is now showing as a category for country page
     # https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/337#update-73110217
-    if @is_regional == true
+    if @is_regional
       Jurisdiction.where(name: jurisdiction == 'National' ? ['National', 'Not Applicable'] : jurisdiction)
     else
       Jurisdiction.where(name: jurisdiction)

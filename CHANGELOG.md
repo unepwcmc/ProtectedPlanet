@@ -1,3 +1,6 @@
+### 4.10.3
+- Fix: remove wrong check for get_jurisdictions
+
 ### 4.10.2
 - Fix: Differentiate state-overview for country and Region Page
 - Fix: Put back Other category to National Designations
