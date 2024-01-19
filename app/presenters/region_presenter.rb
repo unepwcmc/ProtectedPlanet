@@ -8,7 +8,7 @@ class RegionPresenter
     @region = region
     @countries = @region.countries
     @statistics = @countries.map(&:statistic).compact
-    @designations_presenter = DesignationsPresenter.new(region)
+    @designations_presenter = DesignationsPresenter.new(region, true)
   end
 
   def iucn_categories_chart(chart_input)

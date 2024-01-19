@@ -1,11 +1,16 @@
 class DesignationsPresenter
   include Rails.application.routes.url_helpers
 
-  def initialize(geo_entity)
+  JURISDICTIONSCOUNTRY=['National', 'Regional', 'International','Not Applicable'].freeze
+  JURISDICTIONSREGION=['National', 'Regional', 'International'].freeze
+
+  def initialize(geo_entity, is_regional= false)
     @geo_entity = geo_entity
+    @is_regional = is_regional
+    @JURISDICTIONS =  @is_regional ? JURISDICTIONSREGION : JURISDICTIONSCOUNTRY
   end
   # All avaliable JURISDICTIONS
-  JURISDICTIONS = ['National', 'Regional', 'International', 'Not Applicable'].freeze
+
   JURISDICTIONS_TITLE = {
     'National' => 'National',
     'Regional' => 'Regional',
@@ -14,7 +19,7 @@ class DesignationsPresenter
   }.freeze
 
   def designations(exclude_oecms: false)
-    JURISDICTIONS.map do |j|
+    @JURISDICTIONS.map do |j|
       juristiction_count_data = jurisdiction_counts(j, exclude_oecms: exclude_oecms)
       {
         title: designation_title(j),
@@ -86,8 +91,12 @@ class DesignationsPresenter
     # https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/241
     # jurisdictions = jurisdiction == 'National' ? ['National', 'Not Applicable'] : jurisdiction
 
-    # As 20 DEC 2023 Not Applicable is now showing as a category
+    # As 20 DEC 2023 Not Applicable is now showing as a category for country page
     # https://unep-wcmc.codebasehq.com/projects/protected-planet-support-and-maintenance/tickets/337#update-73110217
-    Jurisdiction.where(name: jurisdiction)
+    if @is_regional == true
+      Jurisdiction.where(name: jurisdiction == 'National' ? ['National', 'Not Applicable'] : jurisdiction)
+    else
+      Jurisdiction.where(name: jurisdiction)
+    end
   end
 end
