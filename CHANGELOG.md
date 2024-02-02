@@ -1,4 +1,4 @@
-### 4.9.14
+### 4.10.4
 - Chore: January 2024 WDPA Release
   - January statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
   - `overseas_territories` updated
