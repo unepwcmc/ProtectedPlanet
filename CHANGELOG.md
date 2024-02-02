@@ -1,3 +1,9 @@
+### 4.10.4
+- Chore: February 2024 WDPA Release
+  - February statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
+  - `constants.rb` updated
+  - Map PDF replaced
+
 ### 4.10.3
 - Fix: remove wrong check for get_jurisdictions
 
