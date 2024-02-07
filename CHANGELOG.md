@@ -1,3 +1,6 @@
+### 4.10.5
+- update: Global Stats CSV of Feb 2024
+
 ### 4.10.4
 - Chore: February 2024 WDPA Release
   - February statistics CSVs added: `country_statistics`, `global_statistics`, `pame_country`, `pame_data`
