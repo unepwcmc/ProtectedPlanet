@@ -1,3 +1,6 @@
+### 4.10.5
+- update: Global Stats CSV of Feb 2024
+
 ### 4.10.3
 - Fix: remove wrong check for get_jurisdictions
 
