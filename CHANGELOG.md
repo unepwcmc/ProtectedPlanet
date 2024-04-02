@@ -1,9 +1,12 @@
+<<<<<<< HEAD
 ### 4.10.7
 - Chore: April 2024 WDPA Release
   - update constants.rb
   - add March CSVs: country_statistics, global_statistics, pame_country, pame_data
   - replace Global Map PDF
   
+=======
+>>>>>>> master
 ### 4.10.6
 - Chore: March 2024 WDPA Release
   - update constants.rb
