@@ -28,9 +28,9 @@ module Wdpa::PameImporter
       assessment_is_public = row[14] != 'FALSE'
 
       url = if assessment_is_public
-              url.blank? ? 'Not currently public' : url
+              url.blank? ? 'Not reported' : url
             else
-              'Not reported'
+              'Not public'
             end
 
       iso3s           = row[2]
