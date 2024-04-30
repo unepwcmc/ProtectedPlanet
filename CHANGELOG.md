@@ -2,7 +2,7 @@
 - Chore: May 2024 WDPA Release
   - update constants.rb
   - add March CSVs: country_statistics, global_statistics, pame_country, pame_data
-  - replace Global Map PDF
+  - replace Global Map PDF by a lower resolution (JPEG2000)
   
   ### 4.10.7
 - Chore: April 2024 WDPA Release
