@@ -1,4 +1,4 @@
-type,description,Value
+type,description,value
 total_protected_areas,number of protected areas,294035
 total_terrestrial_protected_areas,number of terrestrial and inland waters protected areas,275835
 total_marine_protected_areas,number of marine protected areas,18200
