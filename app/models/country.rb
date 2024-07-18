@@ -22,6 +22,10 @@ class Country < ApplicationRecord
 
   has_and_belongs_to_many :pame_evaluations
 
+  BLACKLISTED_ISO3 = ['IOT'].freeze #Add countries in this list which we dont to show anywhere
+
+  default_scope { where.not(iso_3: BLACKLISTED_ISO3) }
+
   def wdpa_ids
     protected_areas.map(&:wdpa_id)
   end
@@ -97,11 +101,11 @@ class Country < ApplicationRecord
 
   def sources_per_country(exclude_oecms: false)
     sources = ActiveRecord::Base.connection.execute("""
-      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party 
+      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party
       FROM sources
       INNER JOIN countries_protected_areas
       ON countries_protected_areas.country_id = #{self.id}
-      INNER JOIN protected_areas_sources 
+      INNER JOIN protected_areas_sources
       ON protected_areas_sources.protected_area_id = countries_protected_areas.protected_area_id
       AND protected_areas_sources.source_id = sources.id
 
@@ -214,7 +218,7 @@ class Country < ApplicationRecord
 
   def protected_areas_inner_join(group_by, exclude_oecms)
     """
-      SELECT #{group_by}, COUNT(protected_areas.id) AS count 
+      SELECT #{group_by}, COUNT(protected_areas.id) AS count
       FROM protected_areas
       INNER JOIN countries_protected_areas
         ON protected_areas.id = countries_protected_areas.protected_area_id
