@@ -1,3 +1,6 @@
+### 4.10.12
+  - fix the issue with PAME data CSV sent with ANSI encoding rather than UTF8-BOM expected
+
 ### 4.10.11
 - Chore: Aug 2024 WDPA Release
   - update constants.rb
