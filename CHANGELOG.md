@@ -1,4 +1,10 @@
-### 4.10.10
+### 4.10.11
+- Chore: Aug 2024 WDPA Release
+  - update constants.rb
+  - add August CSVs: country_statistics, global_statistics, pame_country, pame_data
+  - many changes happen in the stats due to many updates by PP NC team and upgrade in the methodology
+  
+  ### 4.10.10
 - Chore: Jul 2024 WDPA Release
   - update constants.rb
   - add July CSVs: country_statistics, global_statistics, pame_country, pame_data
