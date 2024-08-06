@@ -1,3 +1,6 @@
+### 4.10.13
+  - fix the issue with duplicated "evaluation_id" in PAME data CSV
+  
 ### 4.10.12
   - fix the issue with PAME data CSV sent with ANSI encoding rather than UTF8-BOM expected
 
