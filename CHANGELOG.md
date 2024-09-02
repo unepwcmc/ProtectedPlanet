@@ -1,3 +1,8 @@
+### 4.10.14
+- Chore: Sep 2024 WDPA Release
+  - update constants.rb
+  - add September CSVs: country_statistics, global_statistics, pame_country, pame_data
+  
 ### 4.10.13
   - fix the issue with duplicated "evaluation_id" in PAME data CSV
   
