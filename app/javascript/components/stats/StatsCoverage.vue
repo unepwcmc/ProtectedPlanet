@@ -32,7 +32,7 @@
             v-if="hasNationalReport"
           >
             <span class="card__number block">
-              {{ protectedNationalReport }}%
+              {{ protectedNationalReportWithTwoDecimals }}%
             </span>
             {{ nationalReportVersion }}{{ textNationalReport }}
           </p>
@@ -120,7 +120,9 @@ export default {
     hasNationalReport () {
       return this.protectedNationalReport != null && this.nationalReportVersion != null
     },
-    
+    protectedNationalReportWithTwoDecimals() {
+      return this.hasNationalReport? this.protectedNationalReport.toFixed(2):''
+    },
     hasPameData () {
       return this.pamePercentage != null && this.pameKm2 != null
     }
