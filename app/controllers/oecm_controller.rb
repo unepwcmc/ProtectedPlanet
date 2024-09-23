@@ -5,14 +5,15 @@ class OecmController < ApplicationController
   def index
     @oecm_coverage_percentage = GlobalStatistic.global_oecms_pas_coverage_percentage
 
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'esri_oecm'], 'general', 'oecm')
+    @download_options = helpers.download_options(%w[csv shp gdb esri_oecm], 'general', 'oecm')
 
     @config_search_areas = {
       id: 'oecm',
       placeholder: I18n.t('global.placeholder.search-oecm')
     }.to_json
 
-    @tabs = get_tabs(3).to_json
+    @tabs_list = get_tabs(5, true)
+    @tabs = @tabs_list.to_json
 
     @map = {
       overlays: MapOverlaysSerializer.new(oecm_overlays, map_yml).serialize,
@@ -21,7 +22,7 @@ class OecmController < ApplicationController
       point_query_services: oecm_services_for_point_query
     }
     @map_options = {
-      map: { center: [-100,0] }
+      map: { center: [-100, 0] }
     }
     @filters = { db_type: ['oecm'] }
   end
@@ -30,7 +31,7 @@ class OecmController < ApplicationController
 
   def oecm_overlays
     overlays(['oecm'], {
-      'oecm': {
+      oecm: {
         isToggleable: false
       }
     })

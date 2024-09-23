@@ -2,36 +2,35 @@
   class="tabs--hero"
   ga-id="<%= ga_id %>"
   preselected-tab="<%= params[:tab] %>"
-  :tab-triggers="<%= tabs %>"
+  :tab-triggers="<%= tabs_json %>"
 >
   <template slot-scope="slotProps">
-    <tab-target :id="1" :selected-id="slotProps.selectedId">
-      <section class="container--medium">
-        <%= cms_fragment_render("tab-content-1") %>
-      </section>
-
-      <section class="spacer-large--bottom">
-        <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
-      </section>
-
-      <section class="map-section">
-        <%= render partial: "partials/maps/main", locals: {
+    <%# If the senario are more complicated then you will need to render each tab by yourself so you have more freedom to change content in each tab %>
+    <% tabs_list.each do |tab|%>
+      <% @tab_element_id = tab[:id].to_json %>
+      <% @thematic_area_database_tab_cms_content = cms_fragment_render(tab[:content_id]) %>
+      <% if tab[:id] == 1 %>
+        <tab-target :id=<%= @tab_element_id %> :selected-id="slotProps.selectedId">
+          <section class="container--medium">
+            <%= @thematic_area_database_tab_cms_content %>
+          </section>
+          <section class="spacer-large--bottom">
+            <%= render partial: "partials/search/protected-areas", locals: { config: config_search } %>
+          </section>
+          <section class="map-section">
+            <%= render partial: "partials/maps/main", locals: {
           map: map,
           map_options: local_assigns.has_key?(:map_options) ? map_options : nil
         } %>
-      </section>
-    </tab-target>
-
-    <tab-target :id="2" :selected-id="slotProps.selectedId">
-      <section class="container--medium">
-        <%= cms_fragment_render("tab-content-2") %>
-      </section>
-    </tab-target>
-
-    <tab-target :id="3" :selected-id="slotProps.selectedId">
-      <section class="container--medium">
-        <%= cms_fragment_render("tab-content-3") %>
-      </section>
-    </tab-target>
+          </section>
+        </tab-target>
+      <% else %>
+        <tab-target :id=<%= @tab_element_id %> :selected-id="slotProps.selectedId">
+          <section class="container--medium">
+            <%= @thematic_area_database_tab_cms_content %>
+          </section>
+        </tab-target>
+      <% end %>
+    <% end %>
   </template>
 </tabs>
