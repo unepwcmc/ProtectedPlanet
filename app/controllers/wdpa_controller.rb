@@ -13,8 +13,8 @@ class WdpaController < ApplicationController
     }.to_json
 
     @filters = { db_type: ['wdpa'] }
-
-    @tabs = get_tabs(3).to_json
+    @tabs_list = get_tabs(5, true)
+    @tabs = @tabs_list.to_json
 
     @map = {
       overlays: MapOverlaysSerializer.new(wdpa_overlays, map_yml).serialize,
