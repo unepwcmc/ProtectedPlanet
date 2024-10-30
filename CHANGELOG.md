@@ -1,3 +1,12 @@
+### 4.10.16
+- Chore: Oct 2024 WDPA Update Statistics
+  - add Updated October CSVs: country_statistics, global_statistics, pame_country
+
+### 4.10.15
+- Chore: Oct 2024 WDPA Release
+  - update constants.rb
+  - add October CSVs: country_statistics, global_statistics, pame_country, pame_data
+  
 ### 4.10.14
 - Chore: Sep 2024 WDPA Release
   - update constants.rb
