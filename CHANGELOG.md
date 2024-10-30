@@ -1,3 +1,9 @@
+### 4.10.17
+- Chore: Nov 2024 WDPA Release
+  - update constants.rb
+  - add November CSVs: country_statistics, global_statistics, pame_country, pame_data
+  - the statistics have been calculated using new basemap
+  
 ### 4.10.16
 - Chore: Oct 2024 WDPA Update Statistics
   - add Updated October CSVs: country_statistics, global_statistics, pame_country
