@@ -1,3 +1,8 @@
+### 4.10.18
+- Chore: Nov 2024 WDPA Release (b)
+  - edit November CSVs: country_statistics, global_statistics, pame_country to make it UTF8 compliand (without BOM)
+  causing the error Error creating record for : unknown attribute 'iso3' for CountryStatistic. when we import National Stats
+  
 ### 4.10.17
 - Chore: Nov 2024 WDPA Release
   - update constants.rb
