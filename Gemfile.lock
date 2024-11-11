@@ -1091,7 +1091,8 @@ GEM
       httparty (>= 0.7.3)
       mimemagic
       multipart-post
-    httparty (0.15.7)
+    httparty (0.21.0)
+      mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
@@ -1349,7 +1350,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.4.1)
   gdal (~> 2.0)
   httmultiparty (~> 0.3.14)
-  httparty (~> 0.15.1)
+  httparty (~> 0.21.0)
   jquery-rails (~> 4.3.3)
   levenshtein (~> 0.2.2)
   minitest (~> 5.10, != 5.10.2)
