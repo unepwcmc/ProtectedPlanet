@@ -1,3 +1,9 @@
+### 4.10.19
+- Chore: Dec 2024 WDPA Release
+  - update constants.rb
+  - add December CSVs: country_statistics, global_statistics, pame_country, pame_data
+  - delete all the old / previous CSVs (before November 2024)
+
 ### 4.10.18
 - Chore: Nov 2024 WDPA Release (b)
   - edit November CSVs: country_statistics, global_statistics, pame_country to make it UTF8 compliand (without BOM)
