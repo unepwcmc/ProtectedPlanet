@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 
-WDPA_UPDATE_MONTH = 'Dec'
-WDPA_UPDATE_YEAR = '2024'
+WDPA_UPDATE_MONTH = 'Jan'
+WDPA_UPDATE_YEAR = '2025'
