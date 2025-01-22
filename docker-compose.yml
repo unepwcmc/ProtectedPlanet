@@ -13,6 +13,7 @@ services:
     network_mode: host
     environment:
       - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+      - WEBPACKER_DEV_SERVER_HOST=webpacker
     env_file:
       - '.env'
     depends_on:
