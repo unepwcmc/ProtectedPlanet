@@ -121,11 +121,15 @@ export default {
     },
 
     updateFilter(updatedOptions) {
-      const data = {
-        id: this.id,
-        options: updatedOptions
-      }
+      let options = updatedOptions
 
+      if(this.type === 'radio') {
+          options = updatedOptions ? [updatedOptions] : []
+      }
+    const data = {
+        id: this.id,
+        options
+      }
       this.$emit('update:filter', data)
     }
   }

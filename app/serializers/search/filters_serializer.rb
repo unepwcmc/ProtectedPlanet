@@ -75,6 +75,22 @@ class Search::FiltersSerializer < Search::BaseSerializer
             options: objs_for('iucn_category'),
             title: I18n.t('search.filter-group-iucn-category.title'),
             type: 'checkbox'
+          },
+          {
+            id: 'is_whs',
+            name: 'is_whs',
+            options: [
+              { 
+                id: 'include', 
+                title: I18n.t('search.filter-group-is-whs.options')[0]
+              },
+              { 
+                id: 'exclude', 
+                title: I18n.t('search.filter-group-is-whs.options')[1]
+              }
+            ],
+            title: I18n.t('search.filter-group-is-whs.title'),
+            type: 'radio'
           }
         ]
       }
