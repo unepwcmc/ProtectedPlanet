@@ -13,11 +13,6 @@ class DownloadsController < ApplicationController
     render json: Download.poll(download_params)
   end
 
-  def update
-    download_params.merge!({'email' => user_email})
-    render status: 200, json: Download.set_email(download_params)
-  end
-
   private
 
   # TODO Permit only the expected params
@@ -25,7 +20,4 @@ class DownloadsController < ApplicationController
     params.permit!
   end
 
-  def user_email
-    download_params[:email] || current_user.try(:email)
-  end
 end

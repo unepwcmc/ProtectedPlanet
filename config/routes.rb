@@ -7,8 +7,6 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
   mount Sidekiq::Web => '/admin/sidekiq'
 
-  devise_for :users
-
   get '/en', to: 'home#index'
   get '/', to: redirect('/en')
   get '/admin', to: redirect('/admin/sites')
