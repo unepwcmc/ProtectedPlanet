@@ -5,6 +5,7 @@ class Search::FiltersSerializer < Search::BaseSerializer
   end
 
   def serialize
+    puts "HHHHH",objs_for('designation').to_json
     [
       {
         title: I18n.t('search.filter-by'),
@@ -38,6 +39,20 @@ class Search::FiltersSerializer < Search::BaseSerializer
               { id: 'is_transboundary', title: I18n.t('search.filter-group-special-status.options')[3] }
             ],
             title: I18n.t('search.filter-group-special-status.title'),
+            type: 'checkbox'
+          },
+          {
+            # treat it like another copy of designation above with only World Heritage Site option, 
+            # If you do add more options please test designation options in the frontend filter panel to see if it behaves as expected
+            id: 'designation',
+            name: 'designation',
+            options: [
+              { 
+                id: 'World Heritage Site (natural or mixed)',
+                title: I18n.t('search.filter-group-is-whs.options')[0]
+              }
+            ],
+            title: I18n.t('search.filter-group-is-whs.title'),
             type: 'checkbox'
           },
           {
@@ -75,22 +90,6 @@ class Search::FiltersSerializer < Search::BaseSerializer
             options: objs_for('iucn_category'),
             title: I18n.t('search.filter-group-iucn-category.title'),
             type: 'checkbox'
-          },
-          {
-            id: 'is_whs',
-            name: 'is_whs',
-            options: [
-              { 
-                id: 'include', 
-                title: I18n.t('search.filter-group-is-whs.options')[0]
-              },
-              { 
-                id: 'exclude', 
-                title: I18n.t('search.filter-group-is-whs.options')[1]
-              }
-            ],
-            title: I18n.t('search.filter-group-is-whs.title'),
-            type: 'radio'
           }
         ]
       }

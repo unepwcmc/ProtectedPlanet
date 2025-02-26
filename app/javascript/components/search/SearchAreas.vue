@@ -130,8 +130,7 @@ export default {
           'special_status',
           'designation',
           'governance',
-          'iucn_category',
-          // 'is_whs'
+          'iucn_category'
         ]
       },
       activeFilterOptions: [],
@@ -174,8 +173,8 @@ export default {
       // TODO: change here to not to trigger API calls everytime
       axios.get(this.endpointSearch, data)
         .then(response => {
- 
-          
+
+
           if (pagination) {
             this.newResults.areas = this.newResults.areas.concat(response.data.areas.areas)
           } else {
@@ -242,21 +241,23 @@ export default {
       if (paramsFromUrl.has('filters[location][type]')) { filterParams.push('location[type]') }
       if (paramsFromUrl.has('filters[location][options][]')) { filterParams.push('location[options]') }
 
+      // Append preSelected if there is any in url params
       this.filterGroups.map(filterGroup => {
         return filterGroup.filters.map(filter => {
+          // Reset preSelected in if there are previous settings
+          this.$delete(filter, 'preSelected')
+
           filterParams.forEach(key => {
             if (filter.id == key) {
-              filter.preSelected = paramsFromUrl.getAll(`filters[${key}][]`)
+              this.$set(filter, 'preSelected', paramsFromUrl.getAll(`filters[${key}][]`))
             }
-
             if (filter.id == 'location' && key == 'location[type]') {
-              filter.preSelected = [{
+              this.$set(filter, 'preSelected', [{
                 type: paramsFromUrl.get('filters[location][type]'),
                 options: paramsFromUrl.getAll('filters[location][options][]')
-              }]
+              }])
             }
           })
-
           return filter
         })
       })
@@ -272,21 +273,16 @@ export default {
       }
     },
 
-    updateFilters(filters) {
+    updateFilters(filters) { 
       this.$eventHub.$emit('reset:pagination')
       this.activeFilterOptions = filters
       this.getFilteredSearchResults()
       this.updateQueryString({ filters: filters })
+      this.handleQueryString()
       this.$store.dispatch('download/updateSearchFilters', filters)
-    },
-    // updateSearchResults(){
-    //   this.getFilteredSearchResults()
-    //   this.updateQueryString({ filters: filters })
-    //   this.$store.dispatch('download/updateSearchFilters', filters)
-    // },
+    }, 
     updateProperties(response, resetFilters) {
       this.newResults = response.data.areas
-
       if (resetFilters) this.filterGroupsWithPreSelected = response.data.filters
     },
 

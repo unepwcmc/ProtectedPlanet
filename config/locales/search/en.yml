@@ -47,7 +47,6 @@ en:
       title: "World Heritage Sites"
       options:
         - Only WHSs
-        - None WHSs
     geo-types:
       region: Regions
       country: Countries
