@@ -4,7 +4,6 @@
       <div class="filter__pane-topbar">
         <span class="filter__pane-title" v-html="title" />
       </div>
-
       <div class="filter__filter-groups">
         <div v-for="filterGroup in filterGroups" :key="filterGroup._uid" class="filter__group">
           <h3>{{ filterGroup.title }}</h3>

@@ -10,7 +10,7 @@
         class="search__search-input"
         type="text"
         :placeholder="config.placeholder"
-        v-on:keyup="updateAutocomplete"
+        v-on:keyup="updateAutocompleteDebounce"
         v-on:keyup.enter="submit"
       >
     </div>
@@ -74,7 +74,8 @@ export default {
   data () {
     return {
       autocomplete: [], // [ { title: String, url: String } ]
-      searchTerm: ''
+      searchTerm: '',
+      timer: undefined
     }
   },
 
@@ -104,8 +105,14 @@ export default {
   },
 
   methods: {
+    debounce(func, timeout = 700){ 
+      return (...args) => { 
+        clearTimeout(this.timer);
+        this.timer = setTimeout(() => { func.apply(this, args); }, timeout);
+      }
+    },
     updateAutocomplete (e) {
-      if(this.searchTerm.length < 3 || e.key == 'Enter') {
+      if(e.key == 'Enter') {
         this.resetAutocomplete()
         return false
       }
@@ -122,7 +129,9 @@ export default {
         console.log(error)
       })
     },
-
+    updateAutocompleteDebounce(e){
+      this.debounce(() => this.updateAutocomplete(e))()
+    },
     resetSearchTerm () {
       this.searchTerm = ''
       this.resetAutocomplete()

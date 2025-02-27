@@ -5,9 +5,7 @@
         <label :for="inputId(option.title)" class="checkbox__label no-margin flex flex-v-center">
           <input :id="inputId(option.title)" @change="changeInput($eventHub)" class="checkbox__input" type="checkbox"
             :value="option.id" v-model="input">
-
           <span class="checkbox__input-fake" />
-
           <span class="checkbox__text">{{ option.title }}</span>
         </label>
       </p>
@@ -58,21 +56,30 @@ export default {
       this.reset()
       this.changeInput()
     },
-    preSelected() {
-      this.updateValueFromPreselected()
+    preSelected: {
+      handler: function (newPreSelcted) {
+        if (this.hasPreSelectedOptions) {
+          this.updateValueFromPreselected()
+        } else {
+          this.reset()
+        } 
+      },
+      immediate: false
     }
   },
 
   mounted() {
-    this.updateValueFromPreselected()
+    if (this.hasPreSelectedOptions) {
+      this.updateValueFromPreselected()
+    }
+
     this.$eventHub.$on('reset:filter-options', this.reset)
   },
 
   methods: {
     updateValueFromPreselected() {
-      if (this.hasPreSelectedOptions) {
-        this.input = this.preSelected
-      }
+      this.input = this.preSelected
+
     },
     changeInput() {
       this.$emit('update:options', this.input)

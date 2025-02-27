@@ -297,7 +297,6 @@ export default {
         Object.keys(filters).forEach(key => {
           let queryKey = `filters[${key}][]`
           let queryValues = filters[key]
-          // console.log(params);
 
           if (key == 'location') {
             this.updateQueryStringParam(searchParams, 'filters[location][type]', filters[key].type)
