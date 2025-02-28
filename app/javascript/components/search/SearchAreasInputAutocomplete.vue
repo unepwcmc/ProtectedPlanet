@@ -50,15 +50,16 @@
 import axios from 'axios'
 import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
+import useCommon from '../../composables/useCommon'
+
+const { debounceFn } = useCommon()
 
 export default {
   name: 'search-areas-input-autocomplete',
-
   mixins: [
     mixinAxiosHelpers,
-    mixinPopupCloseListeners({closeCallback: 'closeSelect'}),
+    mixinPopupCloseListeners({ closeCallback: 'closeSelect' }),
   ],
-
   props: {
     config: {
       required: true,
@@ -130,7 +131,7 @@ export default {
       })
     },
     updateAutocompleteDebounce(e){
-      this.debounce(() => this.updateAutocomplete(e))()
+      debounceFn(() => this.updateAutocomplete(e))()
     },
     resetSearchTerm () {
       this.searchTerm = ''
