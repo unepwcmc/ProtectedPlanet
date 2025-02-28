@@ -9,11 +9,12 @@
           <h3>{{ filterGroup.title }}</h3>
           <v-filter v-for="filter in filterGroup.filters" :key="filter._uid" :gaId="gaId" :id="filter.id"
             :name="filter.name" :options="filter.options" :pre-selected="filter.preSelected" :title="filter.title"
-            :text-clear="textClear" :type="filter.type" v-on:update:filter="updateFilterGroup" />
+            :text-clear="textClear" :type="filter.type" v-on:update:filter="updateSelectedOptions" />
         </div>
+        <span class="filter__pane-view filter__pane-view--desktop" v-html="filterCloseText" @click="updateFilterGroup" />
       </div>
-
-      <span class="filter__pane-view" v-html="filterCloseText" @click="toggleFilterPane" />
+      <span class="filter__pane-view filter__pane-view--mobile" v-html="filterCloseText" @click="updateFilterGroup" />
+     
     </div>
   </div>
 </template>
@@ -65,12 +66,7 @@ export default {
       this.resetting = true
       this.activeFilterOptions = {}
     },
-
-    toggleFilterPane() {
-      this.$emit('toggle:filter-pane')
-    },
-
-    updateFilterGroup(updatedFilter) {
+    updateSelectedOptions(updatedFilter) {
       if (this.resetting) {
         this.resetting = false
         return false
@@ -78,7 +74,11 @@ export default {
 
       this.activeFilterOptions[updatedFilter.id] = updatedFilter.options
 
-      this.$emit('update:filter-group', this.activeFilterOptions)
+      this.$emit('update:selected-options', this.activeFilterOptions)
+    },
+    updateFilterGroup() {
+      this.$emit('toggle:filter-pane')
+      this.$emit('update:filter-group')
     }
   }
 }

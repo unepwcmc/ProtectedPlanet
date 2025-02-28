@@ -15,7 +15,8 @@
     <div class="search__main">
       <filters-search class="search__filters" :filter-close-text="textClose" :filterGroups="filterGroupsWithPreSelected"
         :gaId="gaId" :is-active="isFilterPaneActive" :text-clear="textClear" :title="textFilters"
-        v-on:update:filter-group="updateFilters" v-on:toggle:filter-pane="toggleFilterPane" />
+         v-on:update:filter-group="updateFilters"
+        v-on:update:selected-options="updateSelectedOptions" />
       <div class="search__results">
         <tabs-fake :children="tabs" class="tabs--search-areas" :defaultSelectedId="tabIdDefault" :gaId="gaId"
           :preSelectedId="tabIdSelected" v-on:click:tab="updateSelectedTab" />
@@ -272,15 +273,17 @@ export default {
         this.disableFilters()
       }
     },
-
-    updateFilters(filters) { 
-      this.$eventHub.$emit('reset:pagination')
+    updateSelectedOptions(filters){ 
       this.activeFilterOptions = filters
+    },
+    updateFilters() { 
+      this.toggleFilterPane()
+      this.$eventHub.$emit('reset:pagination') 
       this.getFilteredSearchResults()
-      this.updateQueryString({ filters: filters })
+      this.updateQueryString({ filters: this.activeFilterOptions })
       this.handleQueryString()
-      this.$store.dispatch('download/updateSearchFilters', filters)
-    }, 
+      this.$store.dispatch('download/updateSearchFilters', this.activeFilterOptions)
+    },
     updateProperties(response, resetFilters) {
       this.newResults = response.data.areas
       if (resetFilters) this.filterGroupsWithPreSelected = response.data.filters
