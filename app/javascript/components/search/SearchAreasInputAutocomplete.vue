@@ -75,8 +75,7 @@ export default {
   data () {
     return {
       autocomplete: [], // [ { title: String, url: String } ]
-      searchTerm: '',
-      timer: undefined
+      searchTerm: ''
     }
   },
 
@@ -106,12 +105,6 @@ export default {
   },
 
   methods: {
-    debounce(func, timeout = 700){ 
-      return (...args) => { 
-        clearTimeout(this.timer);
-        this.timer = setTimeout(() => { func.apply(this, args); }, timeout);
-      }
-    },
     updateAutocomplete (e) {
       if(e.key == 'Enter') {
         this.resetAutocomplete()
