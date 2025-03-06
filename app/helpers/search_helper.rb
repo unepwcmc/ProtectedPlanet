@@ -62,7 +62,7 @@ module SearchHelper
     }
     search_results = Search.search('', all_options.merge(filter_options), Search::CMS_INDEX)
 
-    Search::CmsSerializer.new(search_results, _options).serialize(sort_by_published_date)
+    Search::CmsSerializer.new(search_results, all_options).serialize(sort_by_published_date)
   end
 
   private
