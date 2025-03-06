@@ -74,6 +74,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
     && apt-get install -y libproj-dev proj-data proj-bin libgeos-dev python-gdal \
     && apt-get clean && rm -rf /var/lib/apt/lists/* \
     && npm install -g yarn
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN npm install -g yarn
 
 RUN mkdir /ProtectedPlanet
 WORKDIR /ProtectedPlanet
