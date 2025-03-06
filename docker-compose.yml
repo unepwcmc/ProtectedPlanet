@@ -61,6 +61,7 @@ services:
       - .:/ProtectedPlanet
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_import_data:/import_data
+      - protectedplanet_bundler:/usr/local/bundle
     networks:
       - protectedplanet
     depends_on:
