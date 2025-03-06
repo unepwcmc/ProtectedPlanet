@@ -49,11 +49,11 @@ group :development do
   gem 'capistrano-rvm', '0.1.2', require: false
   gem 'capistrano-maintenance','1.2.1', require: false
   gem 'capistrano-passenger', '0.2.0', require: false
-  gem 'capistrano-sidekiq','1.0.2'
+  gem 'capistrano-sidekiq', '1.0.2'
   gem 'capistrano-git-with-submodules', '2.0.3'
   gem 'capistrano-service'
   gem 'awesome_print'
-
+  # gem 'rubocop', '~> 0.80.0'
   # gem 'listen', '~> 3.1.5'
   # gem 'spring-watcher-listen', '~> 2.0.0'
   #
@@ -101,7 +101,7 @@ gem 'sidekiq', '~> 5.2.5' # DRAMATIC CHANGES
 gem 'sinatra', '>= 1.3.0', :require => nil
 gem 'whenever', require: false
 
-gem 'appsignal', '~> 1.3.6'
+gem 'appsignal', '~> 3.3.11'
 
 gem 'system'
 gem 'dotenv', '~> 0.11.1'
@@ -113,6 +113,8 @@ gem 'turnout', '~> 2.5.0'
 gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
 gem 'comfortable_mexican_sofa', '~> 2.0.0'
+# Use this in local docker file, comment out the one with v1.10.4
+# gem 'nokogiri'
 gem 'nokogiri', '~> 1.10.4'
 gem 'tinymce-rails', '~> 4.3.2'
 gem 'phantompdf', '~> 1.2.2'

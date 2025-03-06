@@ -15,7 +15,7 @@ $pane-side-padding: 42px;
   @include text-nav-link;
   @include flex;
   @include flex-v-center;
-  @include responsive(padding, rem-calc(9 24), rem-calc(0 12), rem-calc(0 30));
+  @include responsive(padding, rem-calc(9 24), rem-calc(0 6), rem-calc(0 12));
   height: 100%;
 
   &.is-current-page { font-weight: $bold; }

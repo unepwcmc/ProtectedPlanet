@@ -118,6 +118,7 @@ module ApplicationHelper
       map_page('about'),
       map_page('news-and-stories'),
       map_page('resources'),
+      map_page('monthly-release-news'),
       map_page('thematic-areas', true),
     ].to_json
   end

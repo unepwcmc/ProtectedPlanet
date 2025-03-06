@@ -1,26 +1,11 @@
 <template>
   <div>
     <div class="flex flex-wrap flex-column">
-      <p 
-        v-for="option in options"
-        :key="option.id"
-        class="checkbox no-margin"
-      >
-        <label
-          :for="inputId(option.title)"
-          class="checkbox__label no-margin flex flex-v-center"
-        >
-          <input
-            :id="inputId(option.title)"
-            @change="changeInput($eventHub)"
-            class="checkbox__input"
-            type="checkbox"
-            :value="option.id"
-            v-model="input"
-          >
-          
+      <p v-for="option in options" :key="option.id" class="checkbox no-margin">
+        <label :for="inputId(option.title)" class="checkbox__label no-margin flex flex-v-center">
+          <input :id="inputId(option.title)" @change="changeInput($eventHub)" class="checkbox__input" type="checkbox"
+            :value="option.id" v-model="input">
           <span class="checkbox__input-fake" />
-        
           <span class="checkbox__text">{{ option.title }}</span>
         </label>
       </p>
@@ -36,57 +21,71 @@ export default {
     clearIndex: {
       type: Number
     },
-    id: { 
+    id: {
       type: String,
-      required: true 
+      required: true
     },
     gaId: {
       type: String,
       default: undefined,
     },
-    options: { 
+    options: {
       type: Array, // { title: String }
-      required: true 
+      required: true
     },
     preSelected: {
       type: Array // [ String ]
     }
   },
 
-  data () {
+  data() {
     return {
       input: []
     }
   },
 
   computed: {
-    hasPreSelectedOptions () {
+    hasPreSelectedOptions() {
       return Array.isArray(this.preSelected) && this.preSelected.length
     }
   },
 
   watch: {
-    clearIndex () {
-      
+    clearIndex() {
+
       this.reset()
       this.changeInput()
+    },
+    preSelected: {
+      handler: function (newPreSelcted) {
+        if (this.hasPreSelectedOptions) {
+          this.updateValueFromPreselected()
+        } else {
+          this.reset()
+        } 
+      },
+      immediate: false
     }
   },
 
-  mounted () {
-    if(this.hasPreSelectedOptions) { 
-      this.input = this.preSelected
+  mounted() {
+    if (this.hasPreSelectedOptions) {
+      this.updateValueFromPreselected()
     }
 
     this.$eventHub.$on('reset:filter-options', this.reset)
   },
 
   methods: {
-    changeInput () {
+    updateValueFromPreselected() {
+      this.input = this.preSelected
+
+    },
+    changeInput() {
       this.$emit('update:options', this.input)
 
-      if(this.gaId) {
-        const selectedOptions = this.options.filter( option => {
+      if (this.gaId) {
+        const selectedOptions = this.options.filter(option => {
           return this.input.includes(option.id)
         })
 
@@ -99,12 +98,12 @@ export default {
         this.$ga.event('Checkbox (checked)', 'click', eventLabel)
       }
     },
-    
-    inputId (title) {
+
+    inputId(title) {
       return `${this.id}-${title}`
     },
-    
-    reset () {
+
+    reset() {
       this.input = []
     }
   }

@@ -1,45 +1,19 @@
 <template>
-  <div 
-    class="filters--sidebar"
-    v-show="isActive"
-  >
+  <div class="filters--sidebar" v-show="isActive">
     <div class="filter__pane">
       <div class="filter__pane-topbar">
-        <span 
-          class="filter__pane-title"
-          v-html="title"
-        />
+        <span class="filter__pane-title" v-html="title" />
       </div>
-
       <div class="filter__filter-groups">
-        <div
-          v-for="filterGroup in filterGroups"
-          :key="filterGroup._uid"
-          class="filter__group"
-        >
+        <div v-for="filterGroup in filterGroups" :key="filterGroup._uid" class="filter__group">
           <h3>{{ filterGroup.title }}</h3>
-          
-          <v-filter
-            v-for="filter in filterGroup.filters"
-            :key="filter._uid"
-            :gaId="gaId"
-            :id="filter.id"
-            :name="filter.name"
-            :options="filter.options"
-            :pre-selected="filter.preSelected"
-            :title="filter.title"
-            :text-clear="textClear"
-            :type="filter.type"
-            v-on:update:filter="updateFilterGroup"
-          />
+          <v-filter v-for="filter in filterGroup.filters" :key="filter._uid" :gaId="gaId" :id="filter.id"
+            :name="filter.name" :options="filter.options" :pre-selected="filter.preSelected" :title="filter.title"
+            :text-clear="textClear" :type="filter.type" v-on:update:filter="updateFilterGroup" />
         </div>
       </div>
 
-      <span 
-        class="filter__pane-view"
-        v-html="filterCloseText"
-        @click="toggleFilterPane"
-      />
+      <span class="filter__pane-view" v-html="filterCloseText" @click="toggleFilterPane" />
     </div>
   </div>
 </template>
@@ -79,31 +53,31 @@ export default {
     }
   },
 
-  data () {
+  data() {
     return {
       activeFilterOptions: {},
-      resetting: false
+      resetting: false,
     }
   },
 
   methods: {
-    reset () {
+    reset() {
       this.resetting = true
       this.activeFilterOptions = {}
     },
 
-    toggleFilterPane () {
+    toggleFilterPane() {
       this.$emit('toggle:filter-pane')
     },
 
-    updateFilterGroup (updatedFilter) {
-      if(this.resetting) {
+    updateFilterGroup(updatedFilter) {
+      if (this.resetting) {
         this.resetting = false
         return false
       }
 
       this.activeFilterOptions[updatedFilter.id] = updatedFilter.options
-      
+
       this.$emit('update:filter-group', this.activeFilterOptions)
     }
   }

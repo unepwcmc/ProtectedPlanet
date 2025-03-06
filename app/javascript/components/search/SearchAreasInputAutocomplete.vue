@@ -10,7 +10,7 @@
         class="search__search-input"
         type="text"
         :placeholder="config.placeholder"
-        v-on:keyup="updateAutocomplete"
+        v-on:keyup="updateAutocompleteDebounce"
         v-on:keyup.enter="submit"
       >
     </div>
@@ -50,15 +50,16 @@
 import axios from 'axios'
 import mixinAxiosHelpers from '../../mixins/mixin-axios-helpers'
 import mixinPopupCloseListeners from '../../mixins/mixin-popup-close-listeners'
+import useCommon from '../../composables/useCommon'
+
+const { debounceFn } = useCommon()
 
 export default {
   name: 'search-areas-input-autocomplete',
-
   mixins: [
     mixinAxiosHelpers,
-    mixinPopupCloseListeners({closeCallback: 'closeSelect'}),
+    mixinPopupCloseListeners({ closeCallback: 'closeSelect' }),
   ],
-
   props: {
     config: {
       required: true,
@@ -105,7 +106,7 @@ export default {
 
   methods: {
     updateAutocomplete (e) {
-      if(this.searchTerm.length < 3 || e.key == 'Enter') {
+      if(e.key == 'Enter') {
         this.resetAutocomplete()
         return false
       }
@@ -122,7 +123,9 @@ export default {
         console.log(error)
       })
     },
-
+    updateAutocompleteDebounce(e){
+      debounceFn(() => this.updateAutocomplete(e))()
+    },
     resetSearchTerm () {
       this.searchTerm = ''
       this.resetAutocomplete()
