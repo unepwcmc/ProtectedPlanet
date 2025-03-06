@@ -59,11 +59,6 @@ export default {
       required: true,
       type: String
     },
-    sortByPublishedDate: {
-      required: false,
-      type: Boolean,
-      default: false
-    },
     filterGroups: {
       required: true,
       type: Array // [ { title: String, filters: [ { id: String, name: String, title: String, options: [ { id: String, title: String }], type: String } ] } ]
@@ -157,8 +152,7 @@ export default {
           filters: filters,
           items_per_page: this.itemsPerPage,
           requested_page: requestedPage,
-          search_index: 'cms',
-          sort_by_published_date: this.sortByPublishedDate || false
+          search_index: 'cms'
         }
       }
 

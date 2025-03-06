@@ -53,16 +53,16 @@ module SearchHelper
     only_text ? strip_tags(title) : title
   end
 
-  def cms_pages_for_search(sort_by_published_date = false)
+  def cms_pages_for_search
     filter_options = { filters: { ancestor: @cms_page.id } }
     all_options = {
       page: 1,
       size: Search::CmsSerializer::DEFAULT_PAGE_SIZE[@cms_page.slug.underscore.to_sym],
       sort: { datetime: 'published_date' }
     }
+   
     search_results = Search.search('', all_options.merge(filter_options), Search::CMS_INDEX)
-
-    Search::CmsSerializer.new(search_results, all_options).serialize(sort_by_published_date)
+    Search::CmsSerializer.new(search_results, all_options).serialize
   end
 
   private

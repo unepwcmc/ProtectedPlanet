@@ -23,14 +23,13 @@ class Search::CmsSerializer < Search::BaseSerializer
     results: [DEFAULT_RESULT]
   }.freeze
 
-  def serialize(sort_by_published_date = false)
-    return DEFAULT_OBJ.to_json unless @search
-
+  def serialize
+    return DEFAULT_OBJ.to_json unless @search 
     DEFAULT_OBJ.merge(
       {
         total: total,
         totalPages: total_pages,
-        results: sorted_pages(sort_by_published_date).map do |record|
+        results: sorted_pages.map do |record|
           {
             date: date(record),
             fileUrl: file(record),
@@ -49,17 +48,12 @@ class Search::CmsSerializer < Search::BaseSerializer
   private
 
   OLDEST_DATE = DateTime.new(0).freeze
-  def sorted_pages(sort_by_published_date = false)
+  def sorted_pages
     return [] if @results.cms_pages.blank?
-    if sort_by_published_date
-      @results.cms_pages.sort_by do |p|
-        p.published_date || OLDEST_DATE
-      end.reverse
-    else
-      @results.cms_pages.sort_by do |p|
-        p.position || -1
-      end
-    end 
+    @results.cms_pages.sort_by do |p|
+      p.published_date || OLDEST_DATE
+    end.reverse
+    
   end
 
   def date(page)
@@ -90,6 +84,7 @@ class Search::CmsSerializer < Search::BaseSerializer
 
   DEFAULT_PAGE_SIZE = {
     resources: 9.0,
+    monthly_release_news: 9.0,
     news_and_stories: 6.0,
     default: 9.0
   }.freeze

@@ -6,12 +6,10 @@
   } %>
   <listing-page
     endpoint-search="/en/search-cms"
-    :sort-by-published-date="true"
-    :sort-by-published-date="true"
     :filter-groups="<%= get_category_filters %>"
     ga-id="Slug: <%= @cms_page.slug %>"
     :page-id="<%= @cms_page.id %>"
-    :results="<%= cms_pages_for_search(true) %>"
+    :results="<%= cms_pages_for_search %>"
     sm-trigger-element="sm-listing"
     template="news"
     text-clear="<%= t('search.clear') %>"
