@@ -1,18 +1,24 @@
 version: '3'
 services:
   web:
+    platform: linux/x86_64
     container_name: protectedplanet-web
     build: .
-    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid; bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid;bundle i;yarn install; bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/ProtectedPlanet
+      - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
-      - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
-    network_mode: host
+      - /run/host-services/ssh-auth.sock:/ssh-agent # Use this setting for Mac OS X and comment out ${SSH_AUTH_SOCK}:/ssh-agent below
+    ports:
+      - "3000:3000"
+    networks:
+      - protectedplanet
     environment:
-      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+      - PUPPETEER_SKIP_DOWNLOAD=true
+      - SSH_AUTH_SOCK=/ssh-agent
       - WEBPACKER_DEV_SERVER_HOST=webpacker
     env_file:
       - '.env'
@@ -24,29 +30,39 @@ services:
     stdin_open: true
     tty: true
   db:
+    platform: linux/x86_64
     container_name: protectedplanet-db
     image: kartoza/postgis:11.5-2.5
-    network_mode: host
+    ports:
+      - "5441:5432"
+    networks:
+      - protectedplanet
     env_file:
       - '.env'
     volumes:
       - protectedplanet_pg_data:/var/lib/postgresql
       - ./entrypoints/init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
+    platform: linux/x86_64
     container_name: protectedplanet-redis
     image: redis
-    network_mode: host
+    ports:
+      - "6379:6379"
+    networks:
+      - protectedplanet
     env_file:
       - '.env'
     volumes:
       - protectedplanet_redis_data:/data
   sidekiq:
+    platform: linux/x86_64
     build: .
     volumes:
       - .:/ProtectedPlanet
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_import_data:/import_data
-    network_mode: host
+    networks:
+      - protectedplanet
     depends_on:
       - db
       - redis
@@ -56,8 +72,9 @@ services:
     stdin_open: true
     tty: true
   elasticsearch:
+    # platform: linux/x86_64
     container_name: protectedplanet-elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.0
+    image: elasticsearch:8.6.0
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
@@ -66,42 +83,57 @@ services:
       memlock:
         soft: -1
         hard: -1
-    network_mode: host
+    ports:
+      - "9200:9200"
+    networks:
+      - protectedplanet
     env_file:
       - '.env'
     volumes:
       - 'protectedplanet_es_data:/usr/share/elasticsearch/data'
   kibana:
-    image: docker.elastic.co/kibana/kibana:8.6.0
+    # platform: linux/x86_64
+    image: kibana:8.6.0
     environment:
-      - ELASTICSEARCH_HOSTS=http://localhost:9200
+      - ELASTICSEARCH_HOSTS=http://protectedplanet-elasticsearch:9200
     env_file:
       - '.env'
-    network_mode: host
+    ports:
+      - "5601:5601"
+    networks:
+      - protectedplanet
 
   webpacker:
+    platform: linux/x86_64
     container_name: protectedplanet-webpacker
     build: .
     env_file: 
       - '.env'
-    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; bundle i;yarn install; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
     volumes: 
       - .:/ProtectedPlanet
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
       - protectedplanet_bundler:/usr/local/bundle
-    network_mode: host
+    ports:
+      - "3035:3035"
+    networks:
+      - protectedplanet
 
   api:
+    platform: linux/x86_64
     container_name: protectedplanet-api
     build:
       context: ${API_PATH}
-    command: /bin/bash -l -c "bundle exec rackup"
+    command: /bin/bash -l -c "bundle exec rackup --host 0.0.0.0"
     volumes:
       - ${API_PATH}:/ProtectedPlanetApi
-      - ${SSH_AUTH_SOCK}:${SSH_AUTH_SOCK}
-    network_mode: host
+      - /run/host-services/ssh-auth.sock:/ssh-agent # Use this setting for Mac OS X and comment out ${SSH_AUTH_SOCK}:/ssh-agent below
+    ports:
+      - "9292:9292"
+    networks:
+      - protectedplanet
     environment:
-      - SSH_AUTH_SOCK=${SSH_AUTH_SOCK}
+      - SSH_AUTH_SOCK=/ssh-agent
     env_file:
       - ${API_PATH}/.env
     depends_on:
@@ -110,6 +142,9 @@ services:
     tty: true
     profiles: ['api']
 
+networks:
+  protectedplanet:
+    driver: bridge
 
 volumes:
   protectedplanet_pg_data:
