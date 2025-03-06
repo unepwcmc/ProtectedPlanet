@@ -40,6 +40,7 @@ require "capistrano/rails/migrations"
 require "capistrano/passenger"
 require 'capistrano/maintenance'
 require 'whenever/capistrano'
+require 'appsignal/capistrano'
 #require 'capistrano/sidekiq'
 
 
