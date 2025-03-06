@@ -1,8 +1,6 @@
 #= require jquery
 #= require leaflet
 
-#= require cartodb.core
-
 # set the Mocha test interface
 # see http:#visionmedia.github.com/mocha/#interfaces
 mocha.ui('bdd')
