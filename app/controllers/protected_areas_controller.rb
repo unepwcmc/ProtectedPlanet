@@ -5,6 +5,7 @@ class ProtectedAreasController < ApplicationController
 
   def show
     id = params[:id]
+    raise_404 unless params[:format].nil?
 
     @download_options = helpers.download_options(['csv', 'shp', 'gdb', 'pdf'], 'protected_area', id)
 
@@ -14,7 +15,6 @@ class ProtectedAreasController < ApplicationController
     redirect_to search_areas_path(search_term: pa.name) and return if pa
 
     @protected_area = ProtectedArea.find_by(wdpa_id: id.to_i)
-
     @protected_area or raise_404
 
     @presenter = ProtectedAreaPresenter.new @protected_area
@@ -47,19 +47,19 @@ class ProtectedAreasController < ApplicationController
         maxZoom: 0
       }
     }
-
+    
     helpers.opengraph_title_and_description_with_suffix(@protected_area.name)
-
     respond_to do |format|
-      format.html
-      format.pdf {
-        rasterizer = Rails.root.join("vendor/assets/javascripts/rasterize.js")
-        url = url_for(action: :show, id: @protected_area.wdpa_id, for_pdf: true)
-        dest_pdf = Rails.root.join("tmp/#{@protected_area.wdpa_id}-site.pdf").to_s
-
-        `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
-        send_file dest_pdf, type: 'application/pdf'
-      }
+      format.html 
+      # format.pdf {
+      #   rasterizer = Rails.root.join("vendor/assets/javascripts/rasterize.js")
+      #   url = url_for(action: :show, id: @protected_area.wdpa_id, for_pdf: true)
+      #   dest_pdf = Rails.root.join("tmp/#{@protected_area.wdpa_id}-site.pdf").to_s
+      #   byebug
+      #   `phantomjs #{rasterizer} '#{url}' #{dest_pdf} A4`
+        
+      #   send_file dest_pdf, type: 'application/pdf'
+      # }
     end
   end
 
