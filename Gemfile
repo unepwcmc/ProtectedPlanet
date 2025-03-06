@@ -112,8 +112,6 @@ gem 'turnout', '~> 2.5.0'
 
 gem 'bystander', '2.0.0', git: 'https://github.com/unepwcmc/bystander'
 
-gem 'devise', '~> 4.7.1' # MAJOR VERSION CHANGE, CHECK DOCS
-
 gem 'comfortable_mexican_sofa', '~> 2.0.0'
 # Use this in local docker file, comment out the one with v1.10.4
 # gem 'nokogiri'
