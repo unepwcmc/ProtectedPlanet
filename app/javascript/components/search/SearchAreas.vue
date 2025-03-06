@@ -170,7 +170,6 @@ export default {
       }
 
       this.axiosSetHeaders()
-      // TODO: change here to not to trigger API calls everytime
       axios.get(this.endpointSearch, data)
         .then(response => {
 
