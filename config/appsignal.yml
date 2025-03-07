@@ -14,7 +14,7 @@ default: &defaults
   # https://docs.appsignal.com/ruby/configuration/ignore-errors.html
   ignore_errors:
     - "Rails::HealthController#show"
-    - ActiveRecord::NotFound
+    - "ActiveRecord::RecordNotFound"
   #   - Exception
   #   - NoMemoryError
   #   - ScriptError
