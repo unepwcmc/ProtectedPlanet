@@ -1,11 +1,18 @@
+# frozen_string_literal: true
+
 class Search::FiltersSerializer < Search::BaseSerializer
-  def initialize(search, opts={})
+  def initialize(search, opts = {})
     super(search, opts)
     @aggregations = @search.aggregations
   end
 
+  INTERNATIONAL_DESIGNATION_IDS = [
+    'World Heritage Site (natural or mixed)',
+    'Ramsar Site, Wetland of International Importance',
+    'UNESCO-MAB Biosphere Reserve'
+  ].freeze
+
   def serialize
-    puts "HHHHH",objs_for('designation').to_json
     [
       {
         title: I18n.t('search.filter-by'),
@@ -16,7 +23,7 @@ class Search::FiltersSerializer < Search::BaseSerializer
             options: [
               { id: 'oecm', title: I18n.t('search.filter-group-db.options')[0] },
               { id: 'wdpa', title: I18n.t('search.filter-group-db.options')[1] }
-          ],
+            ],
             type: 'checkbox'
           },
           {
@@ -41,33 +48,29 @@ class Search::FiltersSerializer < Search::BaseSerializer
             title: I18n.t('search.filter-group-special-status.title'),
             type: 'checkbox'
           },
-          # {
-          #   # treat it like another copy of designation above with only World Heritage Site option, 
-          #   # If you do add more options please test designation options in the frontend filter panel to see if it behaves as expected
-          #   id: 'designation',
-          #   name: 'designation',
-          #   options: [
-          #     { 
-          #       id: 'World Heritage Site (natural or mixed)',
-          #       title: I18n.t('search.filter-group-is-whs.options')[0]
-          #     }
-          #   ],
-          #   title: I18n.t('search.filter-group-is-whs.title'),
-          #   type: 'checkbox'
-          # },
+          {
+            # treat it like another copy of designation above with only international designations
+            # as of 10March2025 Nature Conserve team is not clear what they want for all types of designations,
+            # In future when they figure out all types of designations then please do make it proper design. (i,e Probably have all types of designations in db design)
+            id: 'designation',
+            name: 'designation',
+            options: objs_for_international_designation,
+            title: I18n.t('search.filter-group-internal-designation.title'),
+            type: 'checkbox'
+          },
           {
             id: 'location',
             name: 'location',
             options: [
-              { 
-                id: 'country', 
+              {
+                id: 'country',
                 title: I18n.t('search.filter-group-geo-type.options')[0],
-                autocomplete: objs_for('country'),
+                autocomplete: objs_for('country')
               },
-              { 
-                id: 'region', 
+              {
+                id: 'region',
                 title: I18n.t('search.filter-group-geo-type.options')[1],
-                autocomplete: objs_for('region'),
+                autocomplete: objs_for('region')
               }
             ],
             title: I18n.t('search.filter-group-geo-type.title'),
@@ -94,6 +97,12 @@ class Search::FiltersSerializer < Search::BaseSerializer
         ]
       }
     ]
+  end
+
+  def objs_for_international_designation
+    objs_for('designation').select do |option|
+      INTERNATIONAL_DESIGNATION_IDS.include?(option[:id])
+    end
   end
 
   def objs_for(aggregation)

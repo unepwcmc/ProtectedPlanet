@@ -43,10 +43,8 @@ en:
       options:
         terrestrial: Terrestrial and inland waters
         marine: Marine
-    filter-group-is-whs:
-      title: "World Heritage Sites"
-      options:
-        - Only WHSs
+    filter-group-internal-designation:
+      title: "International designations"
     geo-types:
       region: Regions
       country: Countries

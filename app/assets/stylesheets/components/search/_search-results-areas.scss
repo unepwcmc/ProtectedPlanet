@@ -51,7 +51,7 @@
     &__filters {
       @include flex-no-shrink;
       @include responsive(padding-right, 0, rem-calc(24), rem-calc(24));
-      @include responsive(width, 0, 33%, 25%);
+      @include responsive(width, 0, 33%, 27.5%);
     }
 
     &__results {
