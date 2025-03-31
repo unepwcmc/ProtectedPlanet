@@ -1,4 +1,10 @@
-### 4.10.22
+### 4.10.23
+- Chore: April 2025 WDPA Release
+  - update constants.rb
+  - add April CSVs: country_statistics, global_statistics, pame_country, pame_data (1403 new rows)
+  - PAME data has a colum P empty that has to be deleted to avoid any issue during the deploy
+  
+  ### 4.10.22
 - Chore: Mar 2025 WDPA Release
   - update constants.rb
   - add March CSVs: country_statistics, global_statistics, pame_country, pame_data
