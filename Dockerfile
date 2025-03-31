@@ -10,7 +10,11 @@ RUN apt-get install -y \
         shared-mime-info \
         build-essential
 RUN apt-get install -y postgresql postgresql-client
-RUN apt-get install -y zip 
+RUN apt-get install -y zip
+
+# To install dependecies for puppeteer to generate pdfs
+RUN apt-get update && apt-get install -y chromium
+
 
 # for sassc specifically
 RUN apt-get install -y \

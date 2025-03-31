@@ -1,6 +1,6 @@
 .git*
-log/*
-tmp/*
+log/
+tmp/
 Dockerfile
 README.md
 .env*
