@@ -44,8 +44,9 @@ module Download
   }.freeze
 
   def self.generate format, download_name, opts={}
-    generator = GENERATORS[format.to_sym]
 
+    generator = GENERATORS[format.to_sym]
+    puts "HIHIHIHI",generator
     zip_path = Utils.zip_path(download_name)
 
     generated = generator.generate zip_path, opts[option(format)]

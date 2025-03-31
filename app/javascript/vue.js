@@ -67,6 +67,7 @@ import VMapFilters from './components/map/VMapFilters'
 import VSelectSearchable from './components/select/VSelectSearchable'
 import VTable from './components/table/VTable'
 import IconExclamationCircle from './components/icon/ExclamationCircle'
+import StatsAttributesSet from './components/stats/StatsAttributesSet'
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
@@ -82,6 +83,20 @@ document.addEventListener('DOMContentLoaded', () => {
     Vue.use(Vue2TouchEvents)
 
     Vue.use(VueLazyload)
+
+    Vue.directive('click-outside', {
+      bind: function (el, binding, vnode) {
+        el.clickOutsideEvent = function (event) {
+          if (!(el == event.target || el.contains(event.target))) {
+            vnode.context[binding.expression](event);
+          }
+        };
+        document.body.addEventListener('click', el.clickOutsideEvent)
+      },
+      unbind: function (el) {
+        document.body.removeEventListener('click', el.clickOutsideEvent)
+      },
+    });
 
     const app = new Vue({
       el: '#v-app',
@@ -136,7 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
         VMapFilters,
         VSelectSearchable,
         VTable,
-        IconExclamationCircle
+        IconExclamationCircle,
+        StatsAttributesSet
       },
       beforeCreate() { 
         this.$store.dispatch('download/initialiseStore')

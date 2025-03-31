@@ -1,0 +1,44 @@
+.ct-dropdown {
+    @include flex;
+    @include flex-column;
+    gap: 0.25rem;
+    width: 100%;
+
+    &__title{
+        font-weight: $bold;
+    }
+
+    &__container {
+        position: relative;
+    }
+
+    &__button {
+        @include button-green;
+    }
+
+    &__icon {
+        width: 0.5rem;
+    }
+
+}
+
+.ct-dropdown-options {
+    &__options {
+        @include box-shadow-grey;
+        overflow-y: auto;
+        max-height: 20rem;
+        list-style-type: none;
+        padding-inline-start: unset;
+        z-index: 1;
+        position: absolute;
+        left: 0;
+        margin-top: .25rem; 
+        min-width: 60%;
+    }
+
+    &__option {
+        background-color: white;
+        padding: 0.75rem;
+        cursor: pointer;
+    }
+}

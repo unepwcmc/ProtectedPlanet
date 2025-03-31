@@ -2,9 +2,19 @@
 // classes
 //--------------------------------------------------
 &--stats-attributes {
-  @include card-stats;
+  @include card-stats; 
+  @include flex;
+  @include flex-column;
+  gap: 1rem;
 
-  .card {
-    &__h2 { @include card-stats-h2; }
+ 
+  .pdf & {
+    .card{
+      &__all-attributes{
+        @include flex;
+        @include flex-column;
+        gap: 4rem;
+      }   
+    }
   }
 }

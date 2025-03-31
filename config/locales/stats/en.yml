@@ -4,6 +4,9 @@ en:
       title: Affiliations
     attributes: 
       title: Attributes
+      description: The protected area consists of different areas please select from the dropdown to see its attributes.
+      dropdown_title: Parcel Id
+      default_dropdown_text: Please select parcel ID
     citation: Citation Text
     coverage: Coverage
     coverage_marine:
