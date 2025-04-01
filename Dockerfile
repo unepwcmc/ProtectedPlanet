@@ -105,11 +105,13 @@ ADD docker/scripts /ProtectedPlanet/docker/scripts
 RUN bundle config build.nokogiri --use-system-libraries
 RUN gem install bundler -v 1.17.3 && bundle _1.17.3_ install
 
-# if you see Failed to set up Chromium r782078! it is likely becasue you are running from a mac
-# https://stackoverflow.com/questions/63187371/puppeteer-is-not-able-to-install-error-failed-to-set-up-chromium-r782078-set
-# if so use second line that has PUPPETEER_SKIP_DOWNLOAD=true to run yarn install.
+# As it fails for not able to download r809590 during first time of yarn install so we need to skip it first and then manually install it after yarn install
+ENV PUPPETEER_SKIP_DOWNLOAD = true
 RUN yarn install
-# RUN export PUPPETEER_SKIP_DOWNLOAD=true && yarn install
+# For some reason Chromium r809590 is not installed during yarn install so you will have to manually run this to install Chromium
+# puppeteer is used to generate
+ENV PUPPETEER_SKIP_DOWNLOAD = false
+RUN node node_modules/puppeteer/install.js
 
 COPY . /ProtectedPlanet
 
