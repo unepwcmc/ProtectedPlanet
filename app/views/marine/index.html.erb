@@ -69,8 +69,10 @@
   title: cms_fragment_render(:section_size_growth_title, @cms_page)
 } %>
 
-<%= render partial: "marine/sections/coverage_growth", locals: {
-  regionCoverage: @regionCoverage,
+<%# As of 01Apr2025 we do not have correct coverage_growth data 
+    the @regionCoverage is only coverage data not  'Growth' data
+render partial: "marine/sections/coverage_growth", locals: {
+ regionCoverage: @regionCoverage,
 } %>
 
 <section class="map-section">
