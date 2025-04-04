@@ -56,8 +56,6 @@ export default {
       this.openOptions = false
     },
     toggle(){
-      console.log("Hi");
-      
       this.openOptions = !this.openOptions;
     },
     closeOptions(){

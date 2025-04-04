@@ -24,7 +24,7 @@ In the Rails console, run the following:
 This downloads the WDPA, imports it to your local PostgreSQL install and
 creates the appropriate Rails models for the Protected Areas.
 
-Some attributes (wikipedia summaries, etc.) take some time to generate
+Some attributes take some time to generate
 and so depend on Sidekiq workers to be calculated. Thus having a Redis
 server running is a requirement so that these jobs can be queued -- see
 the [workers docs](workers.md) for more info.

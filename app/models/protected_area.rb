@@ -19,7 +19,6 @@ class ProtectedArea < ApplicationRecord
   belongs_to :no_take_status
   belongs_to :designation
   delegate :jurisdiction, to: :designation, allow_nil: true
-  belongs_to :wikipedia_article
   belongs_to :green_list_status
 
   after_create :create_slug

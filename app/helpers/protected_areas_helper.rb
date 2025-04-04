@@ -8,9 +8,10 @@ module ProtectedAreasHelper
     }
   end
 
-  def related_links? protected_area
-    !!protected_area.wikipedia_article
-  end
+  # as of 04Apr it doesn't seem to be used
+  # def related_links? protected_area
+  #   !!protected_area.wikipedia_article
+  # end
 
   def completion_attribute label, complete
     if complete

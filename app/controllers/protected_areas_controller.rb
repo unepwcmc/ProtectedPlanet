@@ -22,8 +22,6 @@ class ProtectedAreasController < ApplicationController
     @other_designations = load_other_designations
     # @networks = load_networks
 
-    @wikipedia_article = @protected_area.try(:wikipedia_article)
-
     @locations = get_locations
 
     # In the format [{title: ..., year: ..., responsible_party: ... }, ...]

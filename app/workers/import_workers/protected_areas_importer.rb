@@ -1,3 +1,5 @@
+# As of 03Apr2025 This file doesn't seem to be used Wdpa::ProtectedAreaImporter seems to be replacing this
+# 
 class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
   def perform table, limit, offset
     query = create_query(table, limit, offset)
