@@ -14,9 +14,9 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
       end
     end
 
-    imported_pa_ids.compact.each do |pa_id|
-      ImportWorkers::WikipediaSummaryWorker.perform_async pa_id
-    end
+    # imported_pa_ids.compact.each do |pa_id|
+    #   ImportWorkers::WikipediaSummaryWorker.perform_async pa_id
+    # end
   ensure
     finalise_job
   end
