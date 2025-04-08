@@ -1,7 +1,10 @@
 class Wdpa::DataStandard
   STANDARD_ATTRIBUTES = {
     :wdpaid       => {name: :wdpa_id, type: :integer, label: 'WDPA ID'},
-    :wdpa_pid     => {name: :wdpa_parent_id, type: :integer, label: 'WDPA Parent ID'},
+    # As of 07Apr2025 wdpa_parent_id is not used in the project but it used in ProtectedPlanet-api  
+    # see lib/modules/wdpa/protected_area_importer/attribute_importer.rb for more info
+    # :wdpa_pid => {name: :wdpa_parent_id, type: :integer, label: 'WDPA Parent ID'},
+    :wdpa_pid     => {name: :wdpa_pid, type: :string, label: 'WDPA Parcel ID'},
     :name         => {name: :name, type: :string, label: 'Name'},
     :orig_name    => {name: :original_name, type: :string, label: 'Original Name'},
     :rep_m_area   => {name: :reported_marine_area, type: :float, label: 'Reported Marine Area'},
@@ -24,7 +27,7 @@ class Wdpa::DataStandard
     :wkb_geometry => {name: :the_geom, type: :geometry, label: 'Geometry'},
     :metadataid   => {name: :sources, type: :integer, label: 'Source'},
     :own_type     => {name: :owner_type, type: :string, label: 'Owner Type'},
-    :pa_def       => {name: :is_oecm, type: :oecm, label: 'PA Def'},
+    :pa_def       => {name: :is_oecm, type: :oecm, label: 'PA Def'}, # 0 means is_oecm is true
     :supp_info    => {name: :supplementary_info, type: :string, label: 'Supplementary Info'},
     :cons_obj     => {name: :conservation_objectives, type: :string, label: 'Conservation objectives'},
     :marine       => {name: :marine_type, type: :integer, label: 'Marine Type'},

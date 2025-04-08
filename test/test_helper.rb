@@ -34,24 +34,17 @@ module MiniTest::Assertions
 end
 
 class ActionDispatch::IntegrationTest
-  include Warden::Test::Helpers
-  Warden.test_mode!
 
   # Make the Capybara DSL available in all integration tests
   include Capybara::DSL
   Capybara.app = Rails.application
 
-  def sign_in user
-    login_as(user, scope: :user)
-  end
-
   def teardown
-    Warden.test_reset!
+
   end
 end
 
 class ActionController::TestCase
-  include Devise::TestHelpers
 
 end
 
@@ -64,7 +57,9 @@ class ActiveSupport::TestCase
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'about')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'news-and-stories')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'resources')
+    FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'monthly-release-news')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'thematic-areas')
+    # As of 07Apr2025 The oecms and wdpa don't seem to be needed
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'oecms')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'wdpa')
     FactoryGirl.create(:cms_page, site: @site, layout: @layout, slug: 'legal')

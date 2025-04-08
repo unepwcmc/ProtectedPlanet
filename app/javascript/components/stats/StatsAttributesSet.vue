@@ -6,7 +6,7 @@
     </div>
     <dropdown v-if="showDropdown" v-model="chosenPacelId" :title="dropdownTitle" :defaultDropdownText="defaultDropdownText" :options="options" />
     <div v-if="showAllAttributes" class="card__all-attributes">
-      <div v-for="(attributes, index) in attributesInfoForPdf" :key="`${index}attributesInfoModified`">
+      <div v-for="(attributes, index) in attributesInfoForPdf" :key="`${index}attributesInfo`">
         <StatsAttributes  :attributes="attributes" />
       </div>
     </div>
@@ -69,8 +69,8 @@ export default {
     }
   },
   beforeMount() {
-    if (this.attributesInfoModified.length === 1 ) {
-      this.chosenPacelId = this.attributesInfoModified[0].wpda_pid
+    if (this.attributesInfo.length === 1 ) {
+      this.chosenPacelId = this.attributesInfo[0].wpda_pid
     }
   },
   computed: {
@@ -80,14 +80,8 @@ export default {
     showDropdown() {
       return this.moreThanOneParcels && !this.showAllAttributes
     },
-    attributesInfoModified() {
-      // TODO: Delete here
-      this.attributesInfo[0].attributes[0].value = "Pacific Rim National Park Reserve Of Canada_A"
-      this.attributesInfo[1].attributes[0].value = "Pacific Rim National Park Reserve Of Canada_B"
-      return this.attributesInfo
-    },
     attributesInfoForPdf() {
-      return this.attributesInfoModified.map((attributeInfo) => {
+      return this.attributesInfo.map((attributeInfo) => {
         return [
           { title: this.dropdownTitle, value: attributeInfo.wpda_pid },
           ...attributeInfo.attributes
@@ -95,13 +89,13 @@ export default {
       })
     },
     options() {
-      return this.attributesInfoModified.map((attributeInfo) => attributeInfo.wpda_pid)
+      return this.attributesInfo.map((attributeInfo) => attributeInfo.wpda_pid)
     },
     moreThanOneParcels() {
-      return this.attributesInfoModified.length > 1
+      return this.attributesInfo.length > 1
     },
     currentAttrbiteSet() {
-      const chosenAttributeSet = this.attributesInfoModified
+      const chosenAttributeSet = this.attributesInfo
         .find((attributeInfo) => attributeInfo.wpda_pid === this.chosenPacelId)
       return chosenAttributeSet?.attributes ?? []
     }

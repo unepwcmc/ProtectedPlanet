@@ -7,6 +7,7 @@ class ProtectedArea < ApplicationRecord
   has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
 
+  has_many :protected_area_parcels, foreign_key: 'wdpa_id', primary_key: 'wdpa_id', dependent: :destroy
   has_many :networks_protected_areas, dependent: :destroy
   has_many :networks, through: :networks_protected_areas
   has_many :pame_evaluations
@@ -27,7 +28,6 @@ class ProtectedArea < ApplicationRecord
 
   scope :oecms, -> { where(is_oecm: true) }
   scope :wdpas, -> { where(is_oecm: false) }
-
   scope :terrestrial_areas, -> {
     where(marine: false)
   }
