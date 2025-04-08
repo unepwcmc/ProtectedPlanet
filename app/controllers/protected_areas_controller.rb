@@ -15,8 +15,7 @@ class ProtectedAreasController < ApplicationController
     redirect_to search_areas_path(search_term: pa.name) and return if pa
 
     @protected_area = ProtectedArea.find_by(wdpa_id: id.to_i)
-    @protected_area or raise_404
-    @protected_area_parcels = @protected_area.protected_area_parcels
+    @protected_area or raise_404 
     @presenter = ProtectedAreaPresenter.new @protected_area
     @countries = @protected_area.countries.without_geometry
     @other_designations = load_other_designations
