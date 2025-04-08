@@ -21,7 +21,6 @@ git submodule update --init --recursive
 
 1. [Getting Started and Configuration](docs/installation.md)
     * [Docker Setup](docs/docker.md)
-    * [Docker Setup - For Mac](docs/docker-mac.md)
 2. [Importing and Managing the WDPA](docs/wdpa.md)
     * [Automatic Import](docs/automatic_import.md)
 3. [Deployment](docs/deployment.md)
@@ -32,7 +31,7 @@ git submodule update --init --recursive
 8. [Statistics](docs/statistics.md)
 9. [Caching](docs/caching.md)
 10. [CMS](docs/cms.md)
-
+11. [Relationships between Protected Areas and Parcels](docs/protected_area_parcels.md)
 ## Licence
 
 Protected Planet is released under the [BSD
