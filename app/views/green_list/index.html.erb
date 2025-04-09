@@ -40,22 +40,25 @@
   title: cms_fragment_render(:section_coverage_title, @cms_page),
   units: 'km2'
 } %>
-
+<%#
+  As of 01Apr2025 we do not have enough data to show so hidding
 <div class="container">
   <div class="container--component">
-    <h2><%= cms_fragment_render(:section_coverage_title, @cms_page) %></h2>
-    <div><%= cms_fragment_render(:section_coverage_content, @cms_page) %></div>
-
+    <h2><% cms_fragment_render(:section_coverage_title, @cms_page)></h2>
+    <div><% cms_fragment_render(:section_coverage_content, @cms_page)></div>
     <div>
       <am-chart-line 
-        :data="<%= @protectedAreaGrowth %>"
+        :data="<% @protectedAreaGrowth >"
         :dots="true"
       ></am-chart-line>
     </div>
   </div>
-</div>
+</div> %>
 
-<%= render partial: "partials/charts/chart-top-ten", locals: {
+
+<%# As of 01Apr2025 the data is too less to show so we do not display the chart
+    
+    render partial: "partials/charts/chart-top-ten", locals: {
   content: cms_fragment_render(:section_size_content, @cms_page),
   ga_id: 'Slug: @cms_page.slug - Component: regions top countries',
   regionsTopCountries: @regionsTopCountries,
