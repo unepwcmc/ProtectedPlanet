@@ -39,17 +39,22 @@ module AssetGenerator
     size = {y: 138, x: 304}
 
     raise AssetGenerationFailedError unless geojson.present?
-    
+
     tile_url = base_url + "geojson(#{geojson})/auto/#{size[:x]}x#{size[:y]}@2x"
     tile_url << "?access_token=#{access_token}"
   end
 
   def self.request_tile tile_url
     uri = URI(URI.encode(tile_url, '[]'))
+    request = Net::HTTP::Get.new(uri)
+    # As we have set whitelist to only allow pp server/urls to use the mapbox token
+    # so we need to set referer header so mapbox knows the request comes from pp server
+    # see https://docs.mapbox.com/accounts/guides/tokens/#url-restrictions
+    # and https://console.mapbox.com/account/access-tokens/
+    request['Referer'] = Rails.application.routes.url_helpers.root_url
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
-    response = http.get(uri.request_uri)
-    
+    response = http.request(request)
     raise AssetGenerationFailedError if response.code != '200'
     
     response.body
