@@ -8,10 +8,13 @@ class ProtectedAreaParcel < ApplicationRecord
   has_and_belongs_to_many :sub_locations
   # has_and_belongs_to_many :sources
 
-  has_many :networks_protected_areas
-  has_many :networks, through: :networks_protected_areas
-  has_many :pame_evaluations
-  has_many :story_map_links
+  # As of 09Apr It seems networks are not used in the system now
+  # has_many :networks_protected_areas
+  # has_many :networks, through: :networks_protected_areas
+
+  # We should only access pame_evaluations through protected_area
+  # has_many :pame_evaluations
+  # has_many :story_map_links
 
   belongs_to :protected_area, foreign_key: 'wdpa_id', primary_key: 'wdpa_id'
   belongs_to :legal_status
@@ -22,6 +25,7 @@ class ProtectedAreaParcel < ApplicationRecord
   belongs_to :designation
   delegate :jurisdiction, to: :designation, allow_nil: true
 
+  # As of 09Apr2025 we are not clear if there is possibility to only green list certain parcels in a PA
   # belongs_to :green_list_status
 
   after_create :create_slug

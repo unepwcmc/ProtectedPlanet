@@ -29,12 +29,13 @@ module ProtectedAreasHelper
   end
 
   def reported_area
-    all_areas_of_the_pa = @protected_area.protected_area_parcels.length.zero? ? [@protected_area] : @protected_area.protected_area_parcels
+    # We add up all reported_area in all parcels
+    parcels_including_protected_area_self = @protected_area.parcels_including_protected_area_self
     reported_area_km = 0
-    all_areas_of_the_pa.each do |pa|
+    parcels_including_protected_area_self.each do |pa|
       reported_area_km += pa.reported_area
     end
-    reported_area_km.try(:nonzero?) ? "#{reported_area_km.round(2)} km&sup2;".html_safe : 'Not Reported'
+    reported_area_km&.nonzero? ? "#{reported_area_km.round(2)} km&sup2;".html_safe : 'Not Reported'
   end
 
   def pame_evaluations_summary

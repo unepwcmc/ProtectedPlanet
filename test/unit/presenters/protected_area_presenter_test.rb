@@ -104,7 +104,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     assert_equal 55.0, presenter1.percentage_complete
     assert_equal 60.0, presenter2.percentage_complete
   end
-  test '#attributes, test a protected area\'s with multiple parcels' do
+  test '#parcels_attribute, test a protected area\'s with multiple parcels' do
     time = Time.local(2025, 04, 07)
     region = FactoryGirl.create(:region, id: 225_672, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 2_265_721, iso_3: 'MBN', name: 'Manboneland', region: region)
@@ -157,7 +157,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     # Sublocation
     expected_response = [
       {
-        wpda_pid: '555999_A',
+        wdpa_pid: '555999_A',
         attributes: [
           { title: 'Original Name', value: 'San GuillermoAAA' },
           { title: 'English Designation', value: 'National' },
@@ -173,7 +173,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
         ]
       },
       {
-        wpda_pid: '555999_B',
+        wdpa_pid: '555999_B',
         attributes: [
           { title: 'Original Name', value: 'San GuillermoBBBBB' },
           { title: 'English Designation', value: 'National' },
@@ -189,7 +189,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
         ]
       },
       {
-        wpda_pid: '555999_C',
+        wdpa_pid: '555999_C',
         attributes: [
           { title: 'Original Name', value: 'San GuillermoCCC' },
           { title: 'English Designation', value: 'National' },
@@ -207,9 +207,9 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     ]
 
     presenter = ProtectedAreaPresenter.new(pa)
-    assert_equal expected_response, presenter.attributes
+    assert_equal expected_response, presenter.parcels_attribute
   end
-  test '#attributes, test a protected area\'s with only one parcel' do
+  test '#parcels_attribute, test a protected area\'s with only one parcel' do
   time = Time.local(2025, 04, 07)
   region = FactoryGirl.create(:region, id: 225_672, name: 'North Manmerica')
   country = FactoryGirl.create(:country, id: 2_265_721, iso_3: 'MBN', name: 'Manboneland', region: region)
@@ -243,7 +243,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
   # Create PA
   pa = FactoryGirl.create(:protected_area, pa_info_base)
   expected_response = [{
-    wpda_pid: '555999',
+    wdpa_pid: '555999',
     attributes: [
       { title: 'Original Name', value: 'San GuillermoAAA' },
       { title: 'English Designation', value: 'National' },
@@ -260,6 +260,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
   }]
 
   presenter = ProtectedAreaPresenter.new(pa)
-  assert_equal expected_response, presenter.attributes
+  assert_equal expected_response, presenter.parcels_attribute
 end
 end

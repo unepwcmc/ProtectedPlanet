@@ -4,9 +4,9 @@ class ProtectedAreaPresenter
   include ActionView::Helpers::NumberHelper
   include ActionView::Helpers::UrlHelper
 
-  POLYGON = lambda { |pa, _property|
-    type = ProtectedArea.select('ST_GeometryType(the_geom) AS type').where(id: pa.id).first.type
-    type == 'ST_MultiPolygon'
+  POLYGON = -> (pa, _property) {
+    type = ProtectedArea.select("ST_GeometryType(the_geom) AS type").where(id: pa.id).first.type
+    type == "ST_MultiPolygon"
   }
 
   # Warning: do NOT use .present? there, as some of the possible values
@@ -78,11 +78,11 @@ class ProtectedAreaPresenter
     }
   end
 
-  def attributes
-    parcels = protected_area.protected_area_parcels.length.zero? ? [protected_area] : protected_area.protected_area_parcels
-    parcels.sort_by { |item| item.wdpa_pid }.map do |parcel|
+  def parcels_attribute
+    parcels_including_protected_area_self = protected_area.parcels_including_protected_area_self
+    parcels_including_protected_area_self.sort_by { |item| item.wdpa_pid }.map do |parcel|
       {
-        wpda_pid: parcel.wdpa_pid,
+        wdpa_pid: parcel.wdpa_pid,
         attributes: [
           {
             title: 'Original Name',
@@ -128,14 +128,14 @@ class ProtectedAreaPresenter
             title: 'International Criteria',
             value: parcel.international_criteria || 'Not Reported'
           }
-        ].concat(oecm_attributes(parcel))
+        ].concat(parcel_oecm_attributes(parcel))
       }
     end
   end
 
   private
 
-  def oecm_attributes(parcel)
+  def parcel_oecm_attributes(parcel)
     return [] unless parcel.is_oecm
     [
       {

@@ -54,7 +54,7 @@ export default {
     /**
      *
      *  {
-     *    wpda_pid: string
+     *    wdpa_pid: string
      *    attributes: {
      *      title: string
      *      value: string 
@@ -70,7 +70,7 @@ export default {
   },
   beforeMount() {
     if (this.attributesInfo.length === 1 ) {
-      this.chosenPacelId = this.attributesInfo[0].wpda_pid
+      this.chosenPacelId = this.attributesInfo[0].wdpa_pid
     }
   },
   computed: {
@@ -83,20 +83,20 @@ export default {
     attributesInfoForPdf() {
       return this.attributesInfo.map((attributeInfo) => {
         return [
-          { title: this.dropdownTitle, value: attributeInfo.wpda_pid },
+          { title: this.dropdownTitle, value: attributeInfo.wdpa_pid },
           ...attributeInfo.attributes
         ]
       })
     },
     options() {
-      return this.attributesInfo.map((attributeInfo) => attributeInfo.wpda_pid)
+      return this.attributesInfo.map((attributeInfo) => attributeInfo.wdpa_pid)
     },
     moreThanOneParcels() {
       return this.attributesInfo.length > 1
     },
     currentAttrbiteSet() {
       const chosenAttributeSet = this.attributesInfo
-        .find((attributeInfo) => attributeInfo.wpda_pid === this.chosenPacelId)
+        .find((attributeInfo) => attributeInfo.wdpa_pid === this.chosenPacelId)
       return chosenAttributeSet?.attributes ?? []
     }
   }

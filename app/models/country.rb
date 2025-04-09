@@ -6,6 +6,7 @@ class Country < ApplicationRecord
   include SourceHelper
 
   has_and_belongs_to_many :protected_areas
+  has_and_belongs_to_many :protected_area_parcels
 
   has_one :country_statistic
   has_one :pame_statistic

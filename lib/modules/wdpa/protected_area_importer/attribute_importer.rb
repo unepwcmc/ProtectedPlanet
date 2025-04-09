@@ -138,14 +138,14 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
   end
 
   def self.build_query(table, limit, offset)
-    select = ''"
+    select = """
       SELECT array_to_string(ARRAY(
         SELECT c.column_name::text
         FROM information_schema.columns As c
         WHERE table_name = '#{table}'
           AND  c.column_name <> '#{GEOMETRY_COLUMN}'
       ), ',') As query
-    "''
+    """
 
     select_part = db.select_value(select)
     "SELECT #{select_part} FROM #{table} ORDER BY wdpaid LIMIT #{limit} OFFSET #{offset}"

@@ -264,6 +264,15 @@ class ProtectedArea < ApplicationRecord
     designation.name == 'World Heritage Site (natural or mixed)'
   end
 
+  # If there is no parcels then the protected_area itself is considered as a parcel in this function
+  def parcels_including_protected_area_self
+    if protected_area_parcels.any?
+      protected_area_parcels
+    else
+      [self]
+    end
+  end
+  
   private
 
   def is_point?

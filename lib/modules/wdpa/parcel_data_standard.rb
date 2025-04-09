@@ -46,16 +46,16 @@ class Wdpa::ParcelDataStandard
   ].freeze
 
   def self.attributes_from_standards_hash(standards_hash)
-    attributes = standardise_values standards_hash
-    attributes = create_models attributes
-    attributes = remove_nested_attributes attributes
+    attributes = standardise_values(standards_hash)
+    attributes = create_models(attributes)
+    attributes = remove_nested_attributes(attributes)
 
     attributes
   end
 
   private
 
-  def standardise_values(hash)
+  def self.standardise_values(hash)
     standardised_attributes = {}
 
     hash.each do |key, value|
@@ -77,7 +77,7 @@ class Wdpa::ParcelDataStandard
     standardised_attributes
   end
 
-  def create_models(hash)
+  def self.create_models(hash)
     attributes = {}
 
     hash.each do |key, value|
@@ -89,7 +89,7 @@ class Wdpa::ParcelDataStandard
     attributes
   end
 
-  def remove_nested_attributes(hash)
+  def self.remove_nested_attributes(hash)
     NESTED_ATTRIBUTES.each do |attribute|
       hash.delete attribute
     end
@@ -97,7 +97,7 @@ class Wdpa::ParcelDataStandard
     hash
   end
 
-  def marine_type_to_boolean(marine_type)
+  def self.marine_type_to_boolean(marine_type)
     marine_type.to_i != 0
   end
 end
