@@ -24,7 +24,7 @@ In the Rails console, run the following:
 This downloads the WDPA, imports it to your local PostgreSQL install and
 creates the appropriate Rails models for the Protected Areas.
 
-Some attributes (wikipedia summaries, etc.) take some time to generate
+Some attributes take some time to generate
 and so depend on Sidekiq workers to be calculated. Thus having a Redis
 server running is a requirement so that these jobs can be queued -- see
 the [workers docs](workers.md) for more info.
@@ -41,8 +41,6 @@ You can find more info in the [download documentation](downloads.md).
 
 #### Map Tiles and Geometries
 
-Map tiles are stored and rendered by [CartoDB](http://cartodb.com). Due
-to the complexity of running this, there is no easy way to render tiles
-for your local dataset, and so locally you will render the same tiles
-that are run in production -- thankfully you are unlikely to find this a
-problem.
+Map tiles are stored and rendered in WCMC ESRI server [The_World_Database_of_Protected_Areas](https://data-gis.unep-wcmc.org/server/rest/services/ProtectedSites/The_World_Database_of_Protected_Areas)
+
+You can also query details 

@@ -17,7 +17,6 @@ services:
     networks:
       - protectedplanet
     environment:
-      - PUPPETEER_SKIP_DOWNLOAD=true
       - SSH_AUTH_SOCK=/ssh-agent
     env_file:
       - '.env'

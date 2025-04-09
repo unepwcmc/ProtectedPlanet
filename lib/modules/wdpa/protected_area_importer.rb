@@ -8,7 +8,7 @@ class Wdpa::ProtectedAreaImporter
     field: :has_irreplaceability_info
   }
 
-  def self.import wdpa_release
+  def self.import
     Wdpa::ProtectedAreaImporter::AttributeImporter.import
     Wdpa::ProtectedAreaImporter::GeometryImporter.import
 

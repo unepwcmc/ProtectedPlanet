@@ -37,17 +37,19 @@ database, keeping the table names defined by the WDPA.
 
 ### Standardisation
 
-`Wdpa::DataStandard` (see above) converts the GDB imported data (which
+`Wdpa::DataStandard` and `Wdpa::ParcelDataStandard` (see above) converts the GDB imported data (which
 is constrained by limitations, such as column name length) in to
 standardised hashes of
-[ProtectedArea](../../../app/models/protected_area.rb) attributes and
+`Wdpa::DataStandard` -> [ProtectedArea](../../../app/models/protected_area.rb) attributes and
+relations.
+`Wdpa::ParcelDataStandard` -> [ProtectedAreaParcel](../../../app/models/protected_area_parcel.rb) attributes and
 relations.
 
 ### Creating Protected Areas
 
 `Wdpa::ProtectedAreaImporter::AttributesImporter` takes the array of
 attributes from the standardisation process and creates the
-Protected Areas in the Rails database through `ProtectedArea#create`.
+Protected Areas and Parcels (if a PA has multiple parcels) in the Rails database through `ProtectedArea#create` and `ProtectedAreaParcel#create`.
 
 ### Importing Geometries
 
@@ -55,6 +57,7 @@ Protected Areas in the Rails database through `ProtectedArea#create`.
 Area geometries on to the matching `ProtectedArea` models. It does so
 through an `UPDATE` SQL query, for performance reasons (primarily to
 avoid the ActiveRecord Postgis Adapter).
+TODO: think about adding Geometry to ProtectedAreaParcel but only if it is needed as this takes a lot of space in db
 
 ### Cleanup
 

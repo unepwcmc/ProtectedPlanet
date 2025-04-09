@@ -16,7 +16,7 @@ class Wdpa::Release
   def download
     Wdpa::S3.download_latest_wdpa_to zip_path
     system("unzip -j '#{zip_path}' '\*.gdb/\*' -d '#{gdb_path}'")
-
+    Rails.logger.info("Downloaded latest WDPA files, now processing the raw data.")
     import_tables.each do |original_table, std_table|
       Ogr::Postgres.import(
         gdb_path,
@@ -27,6 +27,7 @@ class Wdpa::Release
 
     create_import_view
     create_downloads_view
+    Rails.logger.info("The raw data has been processed.")
   end
 
   def import_tables
@@ -99,6 +100,7 @@ class Wdpa::Release
   end
 
   def clean_up
+    Rails.logger.info("We are now removing the files downloaded from S3")
     FileUtils.rm_rf(zip_path)
     FileUtils.rm_rf(gdb_path)
   end

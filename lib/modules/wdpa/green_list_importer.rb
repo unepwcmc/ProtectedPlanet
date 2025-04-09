@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+# TODO: 
+# As of 04Apr2025 Greenlist is only imported to protected_areas (ProtectedArea) table 
+# parcels in protected_area_parcels also need to be updated/imported for greenlist status
+# protected_area_parcels
+# Currently the system only greenlist PAs in protected_areas (ProtectedArea) table and thinking the whole site is greenlisted
+# Reason: In case for a PA which has multiple parcels but not all parcels are greenlisted
+# green_list_url is already in protected_area_parcels table green_list_status_id column needs adding 
+# See app/models/protected_area_parcel.rb to link up
+
 module Wdpa::GreenListImporter
   # Make sure headers are: wdpaid,status,expiry_date
 

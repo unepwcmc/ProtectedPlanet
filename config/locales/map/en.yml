@@ -15,6 +15,10 @@ en:
         title: Other effective area-based conservation measures
     title: Discover Protected Areas and OECMs
     title_oecm: Discover OECMs
+    popup_attributes:
+      name: Name
+      wdpaid: ID
+      parcel_id: Parcel ID
     disclaimer:
       heading: Map Disclaimer
       body: The designations employed and the presentation of material on this map do not imply the expression of any opinion whatsoever on the part of the Secretariat of the United Nations concerning the legal status of any country, territory, city or area or of its authorities, or concerning the delimitation of its frontiers or boundaries.<br><br>

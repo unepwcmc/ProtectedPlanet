@@ -57,6 +57,7 @@
 @mixin flex-v-start { align-items: flex-start; }
 @mixin flex-v-end { align-items: flex-end; }
 @mixin flex-v-center {align-items: center; }
+@mixin flex-v-between {align-items: space-between; }
 @mixin flex-v-baseline { align-items: baseline; }
 @mixin flex-v-stretch { align-items: stretch; }
 
@@ -90,6 +91,11 @@
   @include flex;
   @include flex-h-center;
   @include flex-v-center;
+}
+@mixin flex-between {
+  @include flex;
+  @include flex-h-between;
+  @include flex-v-between;
 }
 
 //--------------------------------------------------
@@ -153,6 +159,7 @@
 .flex-v-start { @include flex-v-start(); }
 .flex-v-end { @include flex-v-end(); }
 .flex-v-center {@include flex-v-center(); }
+.flex-v-between { @include flex-v-between(); }
 .flex-v-baseline { @include flex-v-baseline(); }
 .flex-v-stretch { @include flex-v-stretch(); }
 .flex-vs-start { @include flex-vs-start(); }

@@ -1,5 +1,4 @@
 <%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
-
 <div class="page--site bg--grey-xlight spacer-small--top">
   <div class="container">
     <section class="page__section--overview-map">
@@ -11,7 +10,6 @@
         wdpa_id: @protected_area.wdpa_id,
         external_links: @presenter.external_links
       } %>
-      
       <div class="map--site">
         <%= render partial: "partials/maps/header", locals: {
           map: @map,
@@ -19,10 +17,12 @@
         } %>
       </div>
     </section>
-
     <div class="page__col-wrapper pdf-break-after">
       <div class="page__col-1">
-        <%= render partial: "partials/stats/stats-attributes", locals: { attributes: @presenter.attributes } %>
+        <%= render partial: "partials/stats/stats-attributes-set", locals: { 
+          parcels_attribute: @presenter.parcels_attribute, 
+          for_pdf: @for_pdf
+       } %>
       </div>
       <div class="page__col-2">
         <%= render partial: "partials/stats/stats-pame" , locals: { classes: 'page__col-child' } %>
@@ -32,12 +32,10 @@
         } %>
       </div>
     </div>
-
     <%= render partial: "partials/stats/stats-sources", locals: { 
       small: true,
       sources: @sources 
     } %>
-    
     <section class="spacer-large--top">
       <%= render partial: "partials/cards/sites", locals: { 
         cards: @wdpa_other, 
@@ -45,9 +43,8 @@
         url: @otherWdpasViewAllUrl
       } %>
     </section>
-    
     <section class="spacer-small--bottom">
       <%= render partial: "partials/messages/message-citation", locals: { title: @protected_area.name } %>
     </section>
-  </div>  
+  </div>
 </div>

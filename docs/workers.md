@@ -32,29 +32,3 @@ Having two separate sidekiq processes avoids this issue.
 You can check the status of the current Sidekiq jobs at the route
 `/admin/sidekiq`. The username is admin, and the password is available
 from the WCMC Informatics password database.
-
-### Wikipedia Articles
-
-**NOTE: Not used anymore - potentially will need to remove these classes**
-
-Each Protected Area has a Wikipedia summary (the first section of a
-Wikipedia article) where one can be found.
-
-The Wikipedia Summary worker uses the terrifyingly awful Wikipedia API
-to attempt to find articles by searching with the Protected Area name
-and designation (e.g. 'Killbear Provincial Park'), and then separately
-requesting the article summary.
-
-The documentation for the API seems generally poor, but these links
-helped:
-
-* http://en.wikipedia.org/w/api.php
-* http://stackoverflow.com/a/8838848/245017
-* http://stackoverflow.com/a/8814262/245017
-
-The Wikipedia workers are enqueued during the WDPA import, but can be
-run manually for Protected Areas:
-
-```
-WikipediaSummaryWorker.perform_async <protected_area_id>
-```

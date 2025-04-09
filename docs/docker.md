@@ -2,9 +2,6 @@
 
 To overcome difficulties with the installation of old packages/versions on different machines and make the setup faster, you can choose to run this project with [Docker](https://docs.docker.com/get-docker/).
 
-## Docker for Mac
-The documentation below is for docker in Linux environment for mac users please go [Docker Setup - For Mac](docker-mac.md)
-
 ## Prerequisites
 - Docker 20.10.22
 - SQL dump of the production database from the Centre's AWS S3

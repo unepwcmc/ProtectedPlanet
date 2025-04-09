@@ -17,7 +17,6 @@ services:
     networks:
       - protectedplanet
     environment:
-      - PUPPETEER_SKIP_DOWNLOAD=true
       - SSH_AUTH_SOCK=/ssh-agent
       - WEBPACKER_DEV_SERVER_HOST=webpacker
     env_file:
@@ -119,7 +118,24 @@ services:
       - "3035:3035"
     networks:
       - protectedplanet
-
+  sidekiq-import:
+    platform: linux/x86_64
+    build: .
+    volumes:
+      - .:/ProtectedPlanet
+      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
+      - protectedplanet_import_data:/import_data
+      - protectedplanet_bundler:/usr/local/bundle
+    networks:
+      - protectedplanet
+    depends_on:
+      - db
+      - redis
+    command: /bin/bash -l -c "bundle exec sidekiq -C /ProtectedPlanet/config/sidekiq-import.yml"
+    env_file:
+      - '.env'
+    stdin_open: true
+    tty: true
   api:
     platform: linux/x86_64
     container_name: protectedplanet-api

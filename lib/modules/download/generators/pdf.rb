@@ -11,7 +11,6 @@ class Download::Generators::Pdf < Download::Generators::Base
   def generate
     rasterizer = Rails.root.join('vendor/assets/javascripts/rasterize.js')
     url = url_for(params)
-
     `node --trace-warnings #{rasterizer} '#{url}' #{dest_pdf}`
 
     # Can reuse shared methods? TODO
