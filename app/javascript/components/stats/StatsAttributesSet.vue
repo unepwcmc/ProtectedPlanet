@@ -6,7 +6,7 @@
     </div>
     <dropdown v-if="showDropdown" v-model="chosenPacelId" :title="dropdownTitle" :defaultDropdownText="defaultDropdownText" :options="options" />
     <div v-if="showAllAttributes" class="card__all-attributes">
-      <div v-for="(attributes, index) in attributesInfoForPdf" :key="`${index}attributesInfo`">
+      <div v-for="(attributes, index) in allAttributesInfo" :key="`${index}attributesInfo`">
         <StatsAttributes  :attributes="attributes" />
       </div>
     </div>
@@ -80,7 +80,7 @@ export default {
     showDropdown() {
       return this.moreThanOneParcels && !this.showAllAttributes
     },
-    attributesInfoForPdf() {
+    allAttributesInfo() {
       return this.attributesInfo.map((attributeInfo) => {
         return [
           { title: this.dropdownTitle, value: attributeInfo.wdpa_pid },
