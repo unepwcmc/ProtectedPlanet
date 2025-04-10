@@ -55,9 +55,9 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
         protected_area_id = ProtectedArea.create!(standardised_attributes).id
       end
     rescue StandardError => e
-      Rails.logger.info("ProtectedArea with
+      Rails.logger.warn("Wdpa::ProtectedAreaImporter::AttributeImporter.import ProtectedArea
       WDPAID #{standardised_attributes[:wdpa_id]}
-      WDPA_PID #{standardised_attributes[:wdpa_pid]} not imported
+      WDPA_PID #{standardised_attributes[:wdpa_pid]} was not imported
       Error message: #{e.message}")
     end
     protected_area_id
@@ -76,9 +76,9 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
         protected_area_pid = ProtectedAreaParcel.create!(standardised_attributes).id
       end
     rescue StandardError => e
-      Rails.logger.info("ProtectedAreaParcel
+      Rails.logger.warn("Wdpa::ProtectedAreaImporter::AttributeImporter.import ProtectedAreaParcel
       WDPAID #{standardised_attributes[:wdpa_id]}
-      WDPA_PID #{standardised_attributes[:wdpa_pid]} not imported.
+      WDPA_PID #{standardised_attributes[:wdpa_pid]} was not imported
       Error message: #{e.message}")
     end
     protected_area_pid
