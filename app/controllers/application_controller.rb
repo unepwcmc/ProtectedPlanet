@@ -76,6 +76,7 @@ class ApplicationController < ActionController::Base
     expires_in Rails.application.secrets.cache_max_age, public: true
   end
 
+  # as of 04Apr it doesn't seem to be used
   def after_sign_in_path_for(resource)
     session[:previous_url] || root_path
   end

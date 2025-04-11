@@ -154,6 +154,3 @@ sudo docker exec -it protectedplanet-api cap staging deploy
   - to remove all containers: `docker rm -f $(docker ps -a -q)`
   - to remove all volumes: `docker volume rm $(docker volume ls -q)`
   - (careful) to remove all images: `docker rmi $(docker image ls -q)`
-
-# Edit this file
-<mark>If you do edit this file please consider if [Docker Setup - For Mac](docker-mac.md) also needs editting</mark>
