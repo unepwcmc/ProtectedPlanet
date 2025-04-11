@@ -17,6 +17,13 @@ Changes can be pulled by running
 ```
 from within the submodule (here `db`) folder.
 
+## ProtectedPlanet-db fetch
+From time to time if your db is not up to date then 
+- cd inside db folder
+- git fetch
+- git merge origin/master
+- You should now have the latest db repo
+
 ### Installation
 
 The application depends on:

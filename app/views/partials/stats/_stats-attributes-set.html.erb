@@ -1,8 +1,7 @@
 <stats-attributes-set
   title="<%= t('stats.attributes.title').html_safe %>" 
-  description="<%= t('stats.attributes.description').html_safe %>" 
-  dropdown-title="<%= t('stats.attributes.dropdown_title').html_safe %>" 
-  default-dropdown-text="<%= t('stats.attributes.default_dropdown_text').html_safe %>" 
+  description="<%= description.html_safe %>" 
+  dropdown-title="<%= t('stats.attributes.dropdown_title').html_safe %>"
   :show-all-attributes="<%= for_pdf == true %>"
   :attributes-info="<%= parcels_attribute.to_json %>"
 ></stats-attributes-set>

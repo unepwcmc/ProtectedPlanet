@@ -1,3 +1,13 @@
+<% 
+# If a site has multiple parcels then
+# The area km2 is the addition for all parcels
+# The map shows all (parcels) polygons/points belonging to the site.
+# The name is the first parcel
+# The attributes table shows all parcel attributes
+# The rest info in the page are still only against wdpa_id only not taking parcel Ids into consideration 
+# If in future more info are taking parcel ids into consideration Please ADD COMMENTS here.
+%>
+
 <%= render partial: "./partials/bars/topbar-secondary", locals: { download_options: @download_options } %>
 <div class="page--site bg--grey-xlight spacer-small--top">
   <div class="container">
@@ -21,14 +31,15 @@
       <div class="page__col-1">
         <%= render partial: "partials/stats/stats-attributes-set", locals: { 
           parcels_attribute: @presenter.parcels_attribute, 
-          for_pdf: @for_pdf
+          for_pdf: @for_pdf,
+          description: stats_attributes_set_description
        } %>
       </div>
       <div class="page__col-2">
         <%= render partial: "partials/stats/stats-pame" , locals: { classes: 'page__col-child' } %>
         <%= render partial: "partials/stats/stats-affiliations", locals: { 
           classes: 'page__col-child',
-          affiliations: @presenter.affiliations 
+          affiliations: @presenter.affiliations
         } %>
       </div>
     </div>

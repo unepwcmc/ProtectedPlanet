@@ -4,7 +4,7 @@
       <h2 class="card__h2" v-text="title" />
       <span v-if="showDescription" v-text="description" />
     </div>
-    <dropdown v-if="showDropdown" v-model="chosenPacelId" :title="dropdownTitle" :defaultDropdownText="defaultDropdownText" :options="options" />
+    <dropdown v-if="showDropdown" v-model="chosenPacelId" :title="dropdownTitle" :options="options" />
     <div v-if="showAllAttributes" class="card__all-attributes">
       <div v-for="(attributes, index) in allAttributesInfo" :key="`${index}attributesInfo`">
         <StatsAttributes  :attributes="attributes" />
@@ -38,10 +38,6 @@ export default {
       type: String,
       default: undefined
     },
-    defaultDropdownText:{
-      type: String,
-      default: undefined
-    },
     showAllAttributes: {
       type: Boolean,
       default: false
@@ -69,7 +65,8 @@ export default {
     }
   },
   beforeMount() {
-    if (this.attributesInfo.length === 1 ) {
+    if (this.attributesInfo.length > 0 ) {
+      // No matter what condition we are displaying first parcel 
       this.chosenPacelId = this.attributesInfo[0].wdpa_pid
     }
   },
