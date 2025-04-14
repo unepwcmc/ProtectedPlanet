@@ -50,6 +50,14 @@ docker exec -it protectedplanet-web rake db:create
 ** Since in the next step [Step 3: PP (WDPA) import](#step-3:-pp-(wdpa)-import) we are importing production db dump so we do not want to duplicate some table content again to avoid errors while importing db. However, if you find the new method does not work for you please update this section as I am the first developer using this method
 
 ## Step 2: Rails setup
+
+## ProtectedPlanet-db fetch
+Migration files are in ProtectedPlanet-db folder and from time to time if your db is not up to date then 
+- cd inside db folder
+- git fetch
+- git merge origin/master
+- You should now have the latest db repo
+
 **2.1. Run migrations for development**
 
 ```
