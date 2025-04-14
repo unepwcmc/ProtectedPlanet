@@ -4,6 +4,10 @@
 # TODO: green_list_status needs linking up see lib/modules/wdpa/green_list_importer.rb for more info
 
 class ProtectedAreaParcel < ApplicationRecord
+
+  # Make sure to make the uniqueness based on the conbination of wdpa_id + wdpa_pid
+  validates :wdpa_id, uniqueness: { scope: :wdpa_pid }
+
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :sub_locations
   # has_and_belongs_to_many :sources

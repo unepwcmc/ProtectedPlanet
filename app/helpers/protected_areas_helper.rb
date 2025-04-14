@@ -33,7 +33,7 @@ module ProtectedAreasHelper
     parcels_including_protected_area_self = @protected_area.parcels_including_protected_area_self
     reported_area_km = 0
     parcels_including_protected_area_self.each do |pa|
-      reported_area_km += pa.reported_area
+      reported_area_km += pa.reported_area.to_f
     end
     reported_area_km&.nonzero? ? "#{reported_area_km.round(2)} km&sup2;".html_safe : 'Not Reported'
   end
