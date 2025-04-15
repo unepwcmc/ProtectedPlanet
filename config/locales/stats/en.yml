@@ -5,7 +5,7 @@ en:
     attributes: 
       title: Attributes 
       description:
-        pa: The protected area consists of different parcels or zones. Please select from the dropdown to see descriptive data for each parcel.
+        pa: This protected area consists of different parcels or zones. Please select from the dropdown to see descriptive data for each parcel.
         marine_pa: The marine protected area consists of different parcels or zones. Please select from the dropdown to see descriptive data for each parcel.
         oecm: The OECM consists of different parcels or zones. Please select from the dropdown to see descriptive data for each parcel.
       dropdown_title: Parcel ID
