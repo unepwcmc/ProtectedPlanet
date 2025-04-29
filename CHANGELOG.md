@@ -1,3 +1,9 @@
+### 4.11.1
+- Chore: May 2025 WDPA Release
+  - update constants.rb
+  - add May CSVs: country_statistics, global_statistics, pame_country, pame_data
+  - PAME data had the "P" column as empty column which has to be deleted to avoid any issue during the deployment
+  
 ### 4.11.0
 - feat: Update add parcels table
 - feat: Display PA parcels to frontend
