@@ -1,3 +1,7 @@
+### 4.11.2
+- Chore: 
+  - fix: updating the PAME stats CSV that was build with wrong selection of columns
+  
 ### 4.11.1
 - Chore: May 2025 WDPA Release
   - update constants.rb
