@@ -79,8 +79,6 @@ class PameEvaluation < ApplicationRecord
   end
 
   def self.parse_filters(filters)
-    site_ids = []
-    country_ids = []
     where_params = { sites: '', methodology: '', year: '', iso3: '', type: '' }
     filters.each do |filter|
       options = filter['options']
@@ -90,13 +88,13 @@ class PameEvaluation < ApplicationRecord
         site_ids = countries.flat_map do |iso3|
           Country.find_by(iso_3: iso3)&.protected_areas&.pluck(:id) || []
         end
-        where_params[:sites] = site_ids.flatten.empty? ? nil : "pame_evaluations.protected_area_id IN (#{site_ids.join(',')})"
-        country_ids << countries.map { |iso3|
+        where_params[:sites] = site_ids.empty? ? nil : "pame_evaluations.protected_area_id IN (#{site_ids.join(',')})"
+        country_ids = countries.flat_map { |iso3|
           country = Country.find_by(iso_3: iso3)
           # include the parent country id for the overseas territory because PAME evaluation is assigned to the parent country
           [country.id, country.country_id].compact
         }
-        where_params[:iso3] = country_ids.flatten.empty? ? nil : "countries.id IN (#{country_ids.join(',')})"
+        where_params[:iso3] = country_ids.empty? ? nil : "countries.id IN (#{country_ids.join(',')})"
       when 'methodology'
         options = options.map{ |e| "'#{e}'" }
         where_params[:methodology] = options.empty? ? nil : "methodology IN (#{options.join(',')})"
