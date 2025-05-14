@@ -8,12 +8,13 @@
       <section class="container--medium spacer-small--bottom">
         <%= cms_fragment_render("tab-content-1") %>
       </section>
-  
-      <section class="container">
-        <select-equity
-          :protected-areas="<%= protected_areas.to_json %>"
-        ><select-equity>
-      </section>
+     <%#
+          As of 14May2025 NC decided not to show the chart
+          protected_areas.to_json is in app/helpers/equity_helper.rb
+          <section class="container">
+            <select-equity :protected-areas="<%= protected_areas.to_json % >"></select-equity>
+          </section>
+      %>
     </tab-target>
 
     <tab-target :id="2" :selected-id="slotProps.selectedId">

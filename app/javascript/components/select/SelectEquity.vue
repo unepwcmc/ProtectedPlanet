@@ -1,4 +1,5 @@
 <template>
+  <!--  As of 14May2025 NC decided not to show the chart -->
   <div class="select--equity">
     <div class="select--equity__content">
       <img :src="selected.image" :alt="'Visual results for ' + selected.title" />

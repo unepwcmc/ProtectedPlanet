@@ -11,16 +11,17 @@ module EquityHelper
     @text ||= cms_fragment_content(:text, @pa_pages.first)
   end
 
-  def protected_areas
-    pa_pages.published.map do |child|
-      {
-        title: child.label,
-        text: parsed_text(text),
-        url: pa_link(child.label),
-        image: include_image(cms_fragment_content(:text, child))
-      }
-    end
-  end
+  #  As of 14May2025 NC decided not to show the chart See app/views/partials/tabs/_tabs-equity.html.erb
+  # def protected_areas
+  #   pa_pages.published.map do |child|
+  #     {
+  #       title: child.label,x
+  #       text: parsed_text(text),
+  #       url: pa_link(child.label),
+  #       image: include_image(cms_fragment_content(:text, child))
+  #     }
+  #   end
+  # end
 
   # Where the site exists but the name is misspelt
   EDGE_CASES = {

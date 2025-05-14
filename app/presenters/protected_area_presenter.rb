@@ -80,6 +80,8 @@ class ProtectedAreaPresenter
 
   def parcels_attribute
     parcels_including_protected_area_self = protected_area.parcels_including_protected_area_self
+    # TODO: once the parcel IDs are change to be 345345_1 345345_2 
+    # We will need to change this to item.split('_').last.to_i
     parcels_including_protected_area_self.sort_by { |item| item.wdpa_pid }.map do |parcel|
       {
         wdpa_pid: parcel.wdpa_pid,
