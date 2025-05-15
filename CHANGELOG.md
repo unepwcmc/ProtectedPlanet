@@ -1,3 +1,7 @@
+### 4.11.3
+- Fix: Catch the scenario that if a country i,e VAT has no PAs then it was returning all PAME list instead of empty list
+- Chore: remove remove equity chart in equity page
+
 ### 4.11.2
 - Chore: 
   - fix: updating the PAME stats CSV that was build with wrong selection of columns
