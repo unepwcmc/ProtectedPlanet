@@ -47,12 +47,11 @@ class PameEvaluation < ApplicationRecord
     }
   ].freeze
 
-  def self.paginate_evaluations(json=nil, order=nil)
+  def self.paginate_evaluations(json = nil)
     json_params = json.nil? ? nil : JSON.parse(json)
-    page = json_params.present? ? json_params["requested_page"].to_i : 1
+    page = json_params.present? ? json_params['requested_page'].to_i : 1
 
-    order = (order && ['ASC', 'DESC'].include?(order.upcase)) ? order : 'DESC'
-    evaluations = generate_query(page, json_params["filters"])
+    evaluations = generate_query(page, json_params['filters'])
     items = serialise(evaluations)
     structure_data(page, items)
   end
@@ -69,7 +68,9 @@ class PameEvaluation < ApplicationRecord
 
   def self.generate_query(page, filter_params)
     # if params are empty then return the paginated results without filtering
-    return PameEvaluation.where('protected_area_id IS NOT NULL AND restricted = false').order('id ASC').paginate(page: page || 1, per_page: 50) if filter_params.empty?
+    return PameEvaluation.where('protected_area_id IS NOT NULL AND restricted = false')
+            .order('id ASC')
+            .paginate(page: page || 1, per_page: 50) if filter_params.empty?
 
     filters = filter_params.select { |hash| hash["options"].present? }
 
@@ -78,28 +79,28 @@ class PameEvaluation < ApplicationRecord
   end
 
   def self.parse_filters(filters)
-    site_ids = []
-    country_ids = []
-    where_params = {sites: "", methodology: "", year: "", iso3: "", type: ""}
+    where_params = { sites: '', methodology: '', year: '', iso3: '', type: '' }
     filters.each do |filter|
-      options = filter["options"]
+      options = filter['options']
       case filter['name']
       when 'iso3'
         countries = options
-        site_ids << countries.map{ |iso3| Country.find_by(iso_3: iso3).protected_areas.pluck(:id) }
-        where_params[:sites] = site_ids.flatten.empty? ? nil : "pame_evaluations.protected_area_id IN (#{site_ids.join(',')})"
-        country_ids << countries.map { |iso3|
+        site_ids = countries.flat_map do |iso3|
+          Country.find_by(iso_3: iso3)&.protected_areas&.pluck(:id) || []
+        end
+        where_params[:sites] = site_ids.empty? ? nil : "pame_evaluations.protected_area_id IN (#{site_ids.join(',')})"
+        country_ids = countries.flat_map { |iso3|
           country = Country.find_by(iso_3: iso3)
           # include the parent country id for the overseas territory because PAME evaluation is assigned to the parent country
           [country.id, country.country_id].compact
         }
-        where_params[:iso3] = country_ids.flatten.empty? ? nil : "countries.id IN (#{country_ids.join(',')})"
+        where_params[:iso3] = country_ids.empty? ? nil : "countries.id IN (#{country_ids.join(',')})"
       when 'methodology'
         options = options.map{ |e| "'#{e}'" }
         where_params[:methodology] = options.empty? ? nil : "methodology IN (#{options.join(',')})"
       when 'year'
         where_params[:year] = options.empty? ? nil : "pame_evaluations.year IN (#{options.join(',')})"
-      else 
+      else
         where_params[:type] = nil if options.empty? || options.length == 2
         if options.length == 1
           where_params[:type] = options[0] == 'Marine' ? "protected_areas.marine" : "protected_areas.marine = false"
@@ -110,14 +111,22 @@ class PameEvaluation < ApplicationRecord
   end
 
   def self.run_query(page, where_params)
+
     if where_params[:sites].present?
+      # When there are filters present and siteIDs are found
       query = PameEvaluation.connection.unprepared_statement {
         "(#{pame_evaluations_from_pa_query(where_params)}) AS pame_evaluations"
       }
 
       PameEvaluation
       .from(query)
+    elsif where_params[:sites].nil?
+      # where_params should be already parsed using parse_filters fn  -> where_params = parse_filters(raw_filters) so 
+      # where_params[:sites].nil? it mean filters are present but no siteIDs are found 
+      # (i,e as of 14May 2025 iso3: "VAT" has no PAs so if filtered down using VAT it should be returning empty list)
+      PameEvaluation.none
     else
+      # when there is no filter applied then get all PAME
       PameEvaluation
       .joins(:protected_area)
       .where(where_params[:methodology])
