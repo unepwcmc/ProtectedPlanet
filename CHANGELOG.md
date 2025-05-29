@@ -1,3 +1,9 @@
+### 4.11.4
+- Chore: June 2025 WDPA Release
+  - update constants.rb
+  - add June CSVs: country_statistics, global_statistics, pame_country, pame_data
+  - ~1700 new PAME records this month
+
 ### 4.11.3
 - Fix: Catch the scenario that if a country i,e VAT has no PAs then it was returning all PAME list instead of empty list
 - Chore: remove remove equity chart in equity page
