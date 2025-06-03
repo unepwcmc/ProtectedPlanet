@@ -1,3 +1,6 @@
+### 4.11.5
+- Update PAME CSV to avoid issue caused by 22 duplicated `evaluation_id` and `_` (underscore) in `wdpa_id` when ingesting the GD-PAME in the Step11 of the monthly workflow
+
 ### 4.11.4
 - Chore: June 2025 WDPA Release
   - update constants.rb
