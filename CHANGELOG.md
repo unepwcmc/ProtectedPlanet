@@ -1,3 +1,6 @@
+### 4.11.6
+- Update PAME CSV to avoid issue caused by 34 duplicated `evaluation_id` and the wdpa_id = `5.56+e8` (556000000) in 389 records which is not a correct wdpa_id value
+
 ### 4.11.5
 - Update PAME CSV to avoid issue caused by 22 duplicated `evaluation_id` and `_` (underscore) in `wdpa_id` when ingesting the GD-PAME in the Step11 of the monthly workflow
 
