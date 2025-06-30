@@ -1,3 +1,9 @@
+### 4.11.7
+- Chore: July 2025 WDPA Release
+  - update constants.rb
+  - add July CSVs: country_statistics, global_statistics, pame_country, pame_data
+  - edit extra line at the end of `country_stats` CSV and extra character at the end of `global_statistics` CSV
+
 ### 4.11.6
 - Update PAME CSV to avoid issue caused by 34 duplicated `evaluation_id` and the wdpa_id = `5.56+e8` (556000000) in 389 records which is not a correct wdpa_id value
 
