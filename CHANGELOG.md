@@ -1,3 +1,9 @@
+### 4.11.8
+- Chore: August 2025 WDPA Release
+  - update constants.rb
+  - add August CSVs: country_statistics, global_statistics, pame_country, pame_data
+  - correct `country_stats` CSV because the space characters have been replaced by `0` in the column `nr_version` and `nr_report` of CSV. NC has been notified of the issue to avoid it happens again next month.
+
 ### 4.11.7
 - Chore: July 2025 WDPA Release
   - update constants.rb
