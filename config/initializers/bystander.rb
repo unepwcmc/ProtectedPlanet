@@ -15,6 +15,7 @@ if ENV['SLACK_WEBHOOK_URL'].present?
       add Wdpa::Release, :release
       add Wdpa::SourceImporter, :source_importer
       add Wdpa::ProtectedAreaImporter, :pa_importer
+      # As of 19Aug2025 CountryGeometryPopulator is not used as stats are now from NC team
       add Wdpa::CountryGeometryPopulator, :geometry_populator
       add ImportTools::WebHandler, :web_handler
     end
