@@ -19,8 +19,6 @@ services:
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
       - WEBPACKER_DEV_SERVER_HOST=webpacker
-    env_file:
-      - '.env'
     depends_on:
       - db
       - redis
@@ -67,8 +65,6 @@ services:
       - db
       - redis
     command: /bin/bash -l -c "bundle exec sidekiq"
-    env_file:
-      - '.env'
     stdin_open: true
     tty: true
   elasticsearch:
@@ -107,8 +103,6 @@ services:
     platform: linux/x86_64
     container_name: protectedplanet-webpacker
     build: .
-    env_file: 
-      - '.env'
     command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; bundle i;yarn install; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
     volumes: 
       - .:/ProtectedPlanet
@@ -132,8 +126,6 @@ services:
       - db
       - redis
     command: /bin/bash -l -c "bundle exec sidekiq -C /ProtectedPlanet/config/sidekiq-import.yml"
-    env_file:
-      - '.env'
     stdin_open: true
     tty: true
   api:
@@ -151,8 +143,6 @@ services:
       - protectedplanet
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
-    env_file:
-      - ${API_PATH}/.env
     depends_on:
       - db
     stdin_open: true
