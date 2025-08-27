@@ -23,6 +23,7 @@ module ImportTools
     Rails.root.join("lib", "data", "seeds", "pre_seeded_database.sql")
   end
 
+  # as of 20Aug20205 not used anymore
   def self.statistics_monthly_import
     ActiveRecord::Base.transaction do
       CountryStatistic.delete_all
