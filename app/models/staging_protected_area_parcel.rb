@@ -3,7 +3,9 @@
 # As of 04Apr2025 sources and green_list_status are not linked up
 # TODO: green_list_status needs linking up see lib/modules/wdpa/green_list_importer.rb for more info
 
-class ProtectedAreaParcel < ApplicationRecord
+class StagingProtectedAreaParcel < ApplicationRecord
+
+  self.table_name = "staging_protected_area_parcels"
 
   # Make sure to make the uniqueness based on the conbination of wdpa_id + wdpa_pid
   validates :wdpa_id, uniqueness: { scope: :wdpa_pid }
@@ -29,17 +31,10 @@ class ProtectedAreaParcel < ApplicationRecord
   belongs_to :designation
   delegate :jurisdiction, to: :designation, allow_nil: true
 
-  # As of 09Apr2025 we are not clear if there is possibility to only green list certain parcels in a PA
-  # belongs_to :green_list_status
-
   after_create :create_slug
 
   def create_slug
     updated_slug = [wdpa_id, wdpa_pid, name, designation.try(:name)].join(' ').parameterize
     update_attributes(slug: updated_slug)
-  end
-
-  def table_name
-    "protected_area_parcels"
   end
 end

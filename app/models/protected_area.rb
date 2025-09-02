@@ -340,4 +340,8 @@ class ProtectedArea < ApplicationRecord
       "iucn_categories.name IN (#{valid_categories})"
     )
   end
+
+  def table_name
+    "protected_areas"
+  end
 end
