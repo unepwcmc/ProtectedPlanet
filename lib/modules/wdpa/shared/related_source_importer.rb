@@ -1,9 +1,10 @@
+# This module is used by s3bucket/portal importer make sure to keep this when removing s3bucket importer
 require 'csv'
 
 module Wdpa
   module Shared
     class RelatedSourceImporter
-      # Unified configuration - same for both GDB and Portal
+      # Unified configuration - same for both s3bucket and Portal importer
       PARCC_IMPORT = {
         path: Rails.root.join('lib/data/seeds/parcc_info.csv'),
         field: :has_parcc_info

@@ -61,7 +61,7 @@ class Wdpa::ParcelDataStandard
     hash.each do |key, value|
       attributes = Array.wrap(self::STANDARD_ATTRIBUTES[key])
       attributes.each do |attribute|
-        standardised_value = Wdpa::Attribute.standardise value, as: attribute[:type]
+        standardised_value = Wdpa::Shared::TypeConverter.convert value, as: attribute[:type]
         standardised_attributes[attribute[:name]] = standardised_value
       end
 

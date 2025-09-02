@@ -3,49 +3,47 @@ module Wdpa
     module Utils
       class ColumnMapper
         # Portal to ProtectedPlanet column mapping based on STANDARD_ATTRIBUTES from Wdpa::DataStandard
-        # This ensures consistency with the existing WDPA import logic
         PORTAL_TO_PP_MAPPING = {
           # Core WDPA identifiers
-          'wdpaid' => 'wdpa_id',                    # WDPA ID (primary identifier)
-          'wdpa_pid' => 'wdpa_pid',                 # WDPA Parcel ID
+          'wdpaid' => { name: 'wdpa_id', type: :integer },
+          'wdpa_pid' => { name: 'wdpa_pid', type: :string },
           
           # Names and descriptions
-          'name' => 'name',                         # Protected Area Name
-          'orig_name' => 'original_name',           # Original Name
+          'name' => { name: 'name', type: :string },
+          'orig_name' => { name: 'original_name', type: :string },
           
           # Area measurements
-          'rep_m_area' => 'reported_marine_area',   # Reported Marine Area
-          'rep_area' => 'reported_area',            # Reported Area
-          'gis_m_area' => 'gis_marine_area',        # GIS Marine Area
-          'gis_area' => 'gis_area',                 # GIS Area
+          'rep_m_area' => { name: 'reported_marine_area', type: :float },
+          'rep_area' => { name: 'reported_area', type: :float },
+          'gis_m_area' => { name: 'gis_marine_area', type: :float },
+          'gis_area' => { name: 'gis_area', type: :float },
           
           # Geographic and administrative
-          'iso3' => 'countries',                    # Country (ISO3 code)
-          'status' => 'legal_status',               # Legal Status
-          'status_yr' => 'legal_status_updated_at', # Status Year
+          'iso3' => { name: 'countries', type: :csv },                    # CSV type for semicolon-separated values
+          'status' => { name: 'legal_status', type: :string },
+          'status_yr' => { name: 'legal_status_updated_at', type: :year },
           
           # Conservation classification
-          'iucn_cat' => 'iucn_category',           # IUCN Category
-          'gov_type' => 'governance',               # Governance Type
+          'iucn_cat' => { name: 'iucn_category', type: :string },
+          'gov_type' => { name: 'governance', type: :string },
           
           # Management information
-          'mang_auth' => 'management_authority',    # Management Authority
-          'mang_plan' => 'management_plan',         # Management Plan
-          'int_crit' => 'international_criteria',   # International Criteria
+          'mang_auth' => { name: 'management_authority', type: :string },
+          'mang_plan' => { name: 'management_plan', type: :string },
+          'int_crit' => { name: 'international_criteria', type: :string },
           
           # Marine and protection status
-          'marine' => 'marine_type',                # Marine Type (will be converted to boolean)
-          'no_take' => 'no_take_status',            # No-take Status
-          'no_take_area' => 'no_take_area',         # No-take Area
+          'marine' => { name: 'marine_type', type: :integer },            # Will be converted to boolean marine
+          'no_take' => { name: 'no_take_status', type: :string },
+          'no_take_area' => { name: 'no_take_area', type: :float },
           
           # Designation details
-          'desig_eng' => 'designation',             # Designation
-          'desig_type' => 'jurisdiction',           # Jurisdiction (will be used by designation)
+          'desig_eng' => { name: 'designation', type: :string },
+          'desig_type' => { name: 'jurisdiction', type: :string },        # Will be used by designation
           
           # Geometry and metadata
-          'wkb_geometry' => 'the_geom',             # Geometry (PostGIS)
-          # 'is_polygon' => 'is_polygon',             # Geometry Type Flag
-          'metadataid' => 'sources'                 # Source Reference
+          'wkb_geometry' => { name: 'the_geom', type: :geometry },
+          'metadataid' => { name: 'sources', type: :integer }             # Will be processed as array
         }.freeze
 
         # Portal to ProtectedPlanet SOURCES column mapping based on STANDARD_ATTRIBUTES from Wdpa::DataStandard::Source
@@ -71,23 +69,19 @@ module Wdpa
           
           portal_attributes.each do |portal_key, value|
             if PORTAL_TO_PP_MAPPING.key?(portal_key)
-              pp_key = PORTAL_TO_PP_MAPPING[portal_key]
+              mapping = PORTAL_TO_PP_MAPPING[portal_key]
+              pp_key = mapping[:name]
+              type = mapping[:type]
 
-              # Apply special transformations based on STANDARD_ATTRIBUTES
+              # Use shared type converter for type conversion
               case portal_key
               when 'marine'
                 # Convert marine_type to boolean marine (as per data standard)
-                attributes['marine_type'] = value
-                attributes['marine'] = marine_type_to_boolean(value)
-              when 'wkb_geometry'
-                # Ensure geometry is properly formatted for PostGIS
-                attributes[pp_key] = value
-              when 'metadataid'
-                # Always wrap sources as array for PortalRelation
-                attributes[pp_key] = Array(value)
+                attributes['marine_type'] = Wdpa::Shared::TypeConverter.convert(value, as: type)
+                attributes['marine'] = marine_type_to_boolean(attributes['marine_type'])
               else
-                # Standard mapping
-                attributes[pp_key] = value
+                # Standard type conversion using the shared type system
+                attributes[pp_key] = Wdpa::Shared::TypeConverter.convert(value, as: type)
               end
             else
               # Log unmapped columns for debugging

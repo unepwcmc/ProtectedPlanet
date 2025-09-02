@@ -25,14 +25,7 @@ module Wdpa
         end
 
         # Convert ISO3 codes to Country objects for HABTM association
-        def countries(value)
-          # Handle both single ISO3 and semicolon-separated values
-          iso_codes = if value.is_a?(String)
-                       value.split(';').map(&:strip)
-                     else
-                       Array(value)
-                     end
-          
+        def countries(iso_codes)          
           # Convert ISO3 codes to Country objects
           countries = iso_codes.map do |iso_3|
             Country.find_by(iso_3: iso_3)
