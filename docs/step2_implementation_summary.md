@@ -263,5 +263,4 @@ unset WDPA_PORTAL_TEST_MODE
 ## 🏆 **Congratulations!**
 
 Your Step 2 implementation is **feature-complete** and ready for thorough testing. This represents a significant milestone in your portal migration project!
-
-**Next**: Test with `rake pp:portal:test_importer` and then move to Step 3: Release Orchestrator.
+ 

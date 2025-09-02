@@ -6,8 +6,8 @@ module Wdpa
           # TO_BE_DELETED_STEP_1: Test mode logic - remove once Step 1 materialized views are ready
           # First, ensure any existing staging tables are completely removed
           drop_staging_tables
-          
-          Wdpa::Portal::Config::StagingConfig.staging_tables.each do |table_name|            
+
+          Wdpa::Portal::Config::StagingConfig.staging_tables.each do |table_name|
             create_staging_table(table_name)
           end
 
@@ -18,20 +18,11 @@ module Wdpa
 
         def self.drop_staging_tables
           Wdpa::Portal::Config::StagingConfig.staging_tables.each do |table_name|
-            if ActiveRecord::Base.connection.table_exists?(table_name)
-              drop_table_indexes(table_name)
-              ActiveRecord::Base.connection.drop_table(table_name)
-              Rails.logger.info "Dropped staging table: #{table_name}"
-            end
-          end
-        end
+            next unless ActiveRecord::Base.connection.table_exists?(table_name)
 
-        def self.clear_staging_tables
-          Wdpa::Portal::Config::StagingConfig.staging_tables.each do |table_name|
-            if ActiveRecord::Base.connection.table_exists?(table_name)
-              ActiveRecord::Base.connection.execute("TRUNCATE TABLE #{table_name}")
-              Rails.logger.info "Cleared staging table: #{table_name}"
-            end
+            drop_table_indexes(table_name)
+            ActiveRecord::Base.connection.drop_table(table_name)
+            Rails.logger.info "Dropped staging table: #{table_name}"
           end
         end
 
@@ -44,23 +35,21 @@ module Wdpa
         # Shared method to ensure staging tables exist
         # Used by both rake tasks and importers
         def self.ensure_staging_tables_exist!(create_if_missing: false)
-          unless staging_tables_exist?
-            if create_if_missing
-              Rails.logger.info "Staging tables don't exist. Creating them..."
-              create_staging_tables
-              Rails.logger.info "✅ Staging tables created successfully"
-            else
-              missing_tables = Wdpa::Portal::Config::StagingConfig.staging_tables.select do |table_name|
-                !ActiveRecord::Base.connection.table_exists?(table_name)
-              end
-              error_msg = "Required staging tables are missing: #{missing_tables.join(', ')}. Please create staging tables before running import."
-              Rails.logger.error error_msg
-              raise StandardError, error_msg
+          return if staging_tables_exist?
+
+          if create_if_missing
+            Rails.logger.info "Staging tables don't exist. Creating them..."
+            create_staging_tables
+            Rails.logger.info '✅ Staging tables created successfully'
+          else
+            missing_tables = Wdpa::Portal::Config::StagingConfig.staging_tables.select do |table_name|
+              !ActiveRecord::Base.connection.table_exists?(table_name)
             end
+            error_msg = "Required staging tables are missing: #{missing_tables.join(', ')}. Please create staging tables before running import."
+            Rails.logger.error error_msg
+            raise StandardError, error_msg
           end
         end
-
-        private
 
         def self.create_staging_table(staging_table_name)
           live_table_name = Wdpa::Portal::Config::StagingConfig.get_live_table_name_from_staging_name(staging_table_name)
@@ -70,7 +59,7 @@ module Wdpa
 
         def self.create_exact_table_copy(source_table_name, target_table_name, options = {})
           connection = ActiveRecord::Base.connection
-          
+
           # Default options for comprehensive copying
           default_options = {
             copy_structure: true,      # Copy table structure
@@ -81,32 +70,31 @@ module Wdpa
             copy_triggers: false,      # Copy triggers (usually not needed for staging)
             empty_table: true          # Create empty table
           }.merge(options)
-          
+
           if default_options[:copy_structure] && default_options[:copy_constraints]
             # Use CREATE TABLE LIKE for comprehensive copying
             sql = "CREATE TABLE #{target_table_name} (LIKE #{source_table_name}"
-            sql += " INCLUDING ALL" if default_options[:copy_constraints]
-            sql += " INCLUDING STORAGE" if default_options[:copy_storage]
-            sql += " INCLUDING COMMENTS" if default_options[:copy_comments]
-            sql += ")"
-            
+            sql += ' INCLUDING ALL' if default_options[:copy_constraints]
+            sql += ' INCLUDING STORAGE' if default_options[:copy_storage]
+            sql += ' INCLUDING COMMENTS' if default_options[:copy_comments]
+            sql += ')'
+
             connection.execute(sql)
             Rails.logger.debug "Created #{target_table_name} with comprehensive copying options"
           else
             # Fallback to simple schema copy
             create_exact_table_copy(source_table_name, target_table_name)
           end
-          
+
           # Copy indexes separately if requested (CREATE TABLE LIKE doesn't copy indexes)
-          if default_options[:copy_indexes]
-            copy_indexes_from_table(source_table_name, target_table_name)
-          end
+          return unless default_options[:copy_indexes]
+
+          copy_indexes_from_table(source_table_name, target_table_name)
         end
 
         # Add any custom references or foreign keys that should exist in staging but
         # are not present in the live schema. Keep this list small and explicit.
         def self.ensure_staging_custom_references
-          # We already copy the column and its indexes from live when creating staging tables.
           # Here we add any additional foreign keys defined in the staging configuration.
           Wdpa::Portal::Config::StagingConfig.staging_foreign_keys.each do |fk_config|
             add_foreign_key_if_missing(**fk_config)
@@ -125,42 +113,36 @@ module Wdpa
           columns_info = ActiveRecord::Base.connection.columns(source_table_name).map { |c| [c.name, c.sql_type] }.to_h
 
           indexes.each do |index|
-            begin
-              # Create new index name for the staging table
-              new_index_name = Wdpa::Portal::Config::StagingConfig.generate_staging_index_name(index.name)
-              
-              # Build the index creation SQL
-              columns = index.columns.join(', ')
-              unique = index.unique ? 'UNIQUE' : ''
-              
-              # Handle special index types (like GIST for geometry)
-              index_type = ''
-              if index.columns.any? { |col| columns_info[col] =~ /\Ageometry/i }
-                index_type = 'USING GIST'
-              end
-              
-              index_sql = "CREATE #{unique} INDEX #{new_index_name} ON #{target_table_name} #{index_type} (#{columns}) ".strip
-              ActiveRecord::Base.connection.execute(index_sql)
-              
-              Rails.logger.debug "Created index: #{new_index_name}"
-            rescue => e
-              # Log the error but continue with other indexes
-              Rails.logger.warn "Failed to create index for #{target_table_name}: #{e.message}"
-            end
+            # Create new index name for the staging table
+            new_index_name = Wdpa::Portal::Config::StagingConfig.generate_staging_index_name(index.name)
+
+            # Build the index creation SQL
+            columns = index.columns.join(', ')
+            unique = index.unique ? 'UNIQUE' : ''
+
+            # Handle special index types (like GIST for geometry)
+            index_type = ''
+            index_type = 'USING GIST' if index.columns.any? { |col| columns_info[col] =~ /\Ageometry/i }
+
+            index_sql = "CREATE #{unique} INDEX #{new_index_name} ON #{target_table_name} #{index_type} (#{columns}) ".strip
+            ActiveRecord::Base.connection.execute(index_sql)
+
+            Rails.logger.debug "Created index: #{new_index_name}"
+          rescue StandardError => e
+            # Log the error but continue with other indexes
+            Rails.logger.warn "Failed to create index for #{target_table_name}: #{e.message}"
           end
         end
 
         def self.drop_table_indexes(table_name)
           # Get all indexes for the table
           indexes = ActiveRecord::Base.connection.indexes(table_name)
-          
+
           indexes.each do |index|
-            begin
-              ActiveRecord::Base.connection.execute("DROP INDEX IF EXISTS #{index.name}")
-              Rails.logger.debug "Dropped index: #{index.name}"
-            rescue => e
-              Rails.logger.warn "Failed to drop index #{index.name}: #{e.message}"
-            end
+            ActiveRecord::Base.connection.execute("DROP INDEX IF EXISTS #{index.name}")
+            Rails.logger.debug "Dropped index: #{index.name}"
+          rescue StandardError => e
+            Rails.logger.warn "Failed to drop index #{index.name}: #{e.message}"
           end
         end
 
@@ -171,10 +153,12 @@ module Wdpa
           # Ensure source column exists; otherwise do nothing (it should exist from the live schema copy)
           return unless column_exists?(table_name, column_name)
 
-          if !conn.respond_to?(:foreign_key_exists?) || !conn.foreign_key_exists?(table_name, column: column_name)
-            conn.add_foreign_key(table_name, referenced_table_name, column: column_name)
-            Rails.logger.info "Added foreign key #{table_name}(#{column_name}) -> #{referenced_table_name}(id)"
+          unless !conn.respond_to?(:foreign_key_exists?) || !conn.foreign_key_exists?(table_name, column: column_name)
+            return
           end
+
+          conn.add_foreign_key(table_name, referenced_table_name, column: column_name)
+          Rails.logger.info "Added foreign key #{table_name}(#{column_name}) -> #{referenced_table_name}(id)"
         end
       end
     end

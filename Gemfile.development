@@ -1,0 +1,26 @@
+# Development-specific Gemfile for ProtectedPlanet
+# This Gemfile includes development tools like Capistrano, RuboCop
+# Usage: bundle install --gemfile=Gemfile.development
+
+
+source 'https://rubygems.org'
+
+# Ruby version (should match main Gemfile)
+ruby '2.6.3' # Update this to match your Ruby version
+
+# Capistrano for deployment
+gem 'capistrano'
+gem 'capistrano-rails'
+gem 'capistrano-bundler'
+gem 'capistrano-rvm'
+gem 'capistrano-maintenance'
+gem 'capistrano-passenger'
+gem 'capistrano-sidekiq'
+gem 'capistrano-git-with-submodules'
+gem 'capistrano-service'
+  
+# Code quality and linting
+gem 'rubocop', '~> 0.80.0'
+gem 'rubocop-rails'
+gem 'rubocop-performance'
+gem 'rubocop-rspec'

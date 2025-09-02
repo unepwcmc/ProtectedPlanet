@@ -3,7 +3,7 @@
 module Wdpa
   module Portal
     module Utils
-      class PortalRelation
+      class ProtectedAreaParcelRelation
         def initialize(current_attributes)
           @current_attributes = current_attributes
         end
@@ -12,27 +12,22 @@ module Wdpa
         def create_models
           # Process each attribute - directly call conversion methods if they exist
           @current_attributes.each do |key, value|
-            if respond_to?(key, true)
-              @current_attributes[key] = send(key, value)
-            end
+            @current_attributes[key] = send(key, value) if respond_to?(key, true)
           end
-          
+
           # Remove temporary fields that were only used for lookups
           @current_attributes.delete('jurisdiction')
           @current_attributes.delete('no_take_area')
-          
+
           @current_attributes
         end
 
-        # Convert ISO3 codes to Country objects for HABTM association
-        def countries(iso_codes)          
-          # Convert ISO3 codes to Country objects
+        # Convert ISO3 codes to Country objects for HABTM association (parcel-specific)
+        def countries(iso_codes)
+          # Convert ISO3 codes to Country objects (parcel-specific logic)
           countries = iso_codes.map do |iso_3|
             Country.find_by(iso_3: iso_3)
           end.compact
-          
-          Rails.logger.debug "PortalRelation: Converted #{iso_codes} to #{countries.count} countries"
-          countries
         end
 
         # Convert legal status names to LegalStatus objects
@@ -55,9 +50,12 @@ module Wdpa
           ManagementAuthority.where(name: value).first_or_create
         end
 
-        # Convert no-take status names to NoTakeStatus objects
         def no_take_status(value)
-          NoTakeStatus.where(name: value).first
+          # Follow the pattern from parcel_relation.rb - create with name and area
+          Staging::NoTakeStatus.create({
+            name: value,
+            area: @current_attributes[:no_take_area]
+          })
         end
 
         # Convert designation names to Designation objects with jurisdiction
@@ -70,16 +68,8 @@ module Wdpa
           }).first_or_create
         end
 
-        # Convert green list status names to GreenListStatus objects
-        def green_list_status(value)
-          GreenListStatus.where(name: value).first
-        end
-
-        # Convert source metadata IDs to StagingSource objects for HABTM association
-        def sources(values)
-          Array(values).map { |id| StagingSource.find_by(metadataid: id) }.compact
-        end
-
+        # NOTE: Parcels don't have sources - they inherit from the parent ProtectedArea
+        # So we don't include a sources method here
       end
     end
   end
