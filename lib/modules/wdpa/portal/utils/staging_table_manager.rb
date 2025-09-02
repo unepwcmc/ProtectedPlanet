@@ -10,6 +10,10 @@ module Wdpa
           Wdpa::Portal::Config::StagingConfig.staging_tables.each do |table_name|            
             create_staging_table(table_name)
           end
+
+          # After all tables exist, add any additional references/foreign keys
+          # that don't come from the live schema but are needed in staging.
+          ensure_staging_custom_references
         end
 
         def self.drop_staging_tables
@@ -99,6 +103,16 @@ module Wdpa
           end
         end
 
+        # Add any custom references or foreign keys that should exist in staging but
+        # are not present in the live schema. Keep this list small and explicit.
+        def self.ensure_staging_custom_references
+          # We already copy the column and its indexes from live when creating staging tables.
+          # Here we add any additional foreign keys defined in the staging configuration.
+          Wdpa::Portal::Config::StagingConfig.staging_foreign_keys.each do |fk_config|
+            add_foreign_key_if_missing(**fk_config)
+          end
+        end
+
         def self.column_exists?(table_name, column_name)
           connection = ActiveRecord::Base.connection
           columns = connection.columns(table_name)
@@ -147,6 +161,19 @@ module Wdpa
             rescue => e
               Rails.logger.warn "Failed to drop index #{index.name}: #{e.message}"
             end
+          end
+        end
+
+        # Adds only a foreign key (if missing) from table_name(column_name) to referenced_table_name(id).
+        # Use when the column and index are already present via table copy.
+        def self.add_foreign_key_if_missing(table_name:, column_name:, referenced_table_name:)
+          conn = ActiveRecord::Base.connection
+          # Ensure source column exists; otherwise do nothing (it should exist from the live schema copy)
+          return unless column_exists?(table_name, column_name)
+
+          if !conn.respond_to?(:foreign_key_exists?) || !conn.foreign_key_exists?(table_name, column: column_name)
+            conn.add_foreign_key(table_name, referenced_table_name, column: column_name)
+            Rails.logger.info "Added foreign key #{table_name}(#{column_name}) -> #{referenced_table_name}(id)"
           end
         end
       end

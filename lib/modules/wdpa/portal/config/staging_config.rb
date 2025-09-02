@@ -11,11 +11,11 @@ module Wdpa
 				end
 
 				def self.dummy_data_count
-					5000
+					50
 				end
 
 				def self.batch_import_protected_areas_from_view_size
-					500
+					10
 				end
 
 				# Staging table configuration
@@ -53,6 +53,7 @@ module Wdpa
 						Source.table_name => StagingSource.table_name,
 						ProtectedArea.table_name => StagingProtectedArea.table_name,
 						ProtectedAreaParcel.table_name => StagingProtectedAreaParcel.table_name,
+						GreenListStatus.table_name => StagingGreenListStatus.table_name,
 						# Add junction tables:
     				"countries_protected_areas" => "staging_countries_protected_areas",
 						"protected_areas_sources" => "staging_protected_areas_sources"
@@ -73,6 +74,19 @@ module Wdpa
 
 				def self.staging_tables_exist?
 					staging_live_tables_hash.values.all? { |table| ActiveRecord::Base.connection.table_exists?(table) }
+				end
+
+				# Foreign key configurations for staging tables
+				# These are additional foreign keys that should exist in staging but are not present in the live schema
+				def self.staging_foreign_keys
+					[
+						{
+							table_name: StagingProtectedArea.table_name,
+							column_name: :green_list_status_id,
+							referenced_table_name: StagingGreenListStatus.table_name
+						}
+						# Add more foreign key configurations here as needed
+					]
 				end
 			end
 		end
