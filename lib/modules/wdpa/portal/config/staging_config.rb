@@ -66,9 +66,8 @@ module Wdpa
             'countries_protected_areas' => 'staging_countries_protected_areas',
             'protected_areas_sources' => 'staging_protected_areas_sources',
             # Add junction tables for protected area parcels
-            'countries_protected_area_parcels' => 'staging_countries_protected_area_parcels'
-            # We don't need sources for protected area parcels as they inherit from the parent ProtectedArea
-            # 'protected_area_parcels_sources' => 'staging_protected_area_parcels_sources',
+            'countries_protected_area_parcels' => 'staging_countries_protected_area_parcels',
+            'protected_area_parcels_sources' => 'staging_protected_area_parcels_sources'
           }
         end
 

@@ -25,7 +25,7 @@ module Wdpa
         # Convert ISO3 codes to Country objects for HABTM association (parcel-specific)
         def countries(iso_codes)
           # Convert ISO3 codes to Country objects (parcel-specific logic)
-          countries = iso_codes.map do |iso_3|
+          iso_codes.map do |iso_3|
             Country.find_by(iso_3: iso_3)
           end.compact
         end
@@ -68,8 +68,10 @@ module Wdpa
           }).first_or_create
         end
 
-        # NOTE: Parcels don't have sources - they inherit from the parent ProtectedArea
-        # So we don't include a sources method here
+        # Convert source metadata IDs to Staging::Source objects for HABTM association
+        def sources(values)
+          Array(values).map { |id| Staging::Source.find_by(metadataid: id) }.compact
+        end
       end
     end
   end
