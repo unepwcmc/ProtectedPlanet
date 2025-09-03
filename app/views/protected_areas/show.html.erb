@@ -43,13 +43,12 @@
         } %>
       </div>
     </div>
-    <%= render partial: "partials/stats/stats-sources", locals: { 
-      small: true,
-      sources: @sources 
+    <%= render partial: "partials/stats/stats-parcels-sources", locals: {
+      sources: @sources.to_json
     } %>
     <section class="spacer-large--top">
       <%= render partial: "partials/cards/sites", locals: { 
-        cards: @wdpa_other, 
+        cards: @wdpa_other,
         title: t('thematic_area.wdpa.other_protected_areas'),
         url: @otherWdpasViewAllUrl
       } %>

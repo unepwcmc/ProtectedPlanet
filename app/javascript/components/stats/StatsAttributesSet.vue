@@ -96,6 +96,13 @@ export default {
         .find((attributeInfo) => attributeInfo.wdpa_pid === this.chosenPacelId)
       return chosenAttributeSet?.attributes ?? []
     }
+  },
+  watch: {
+    chosenPacelId(newParcelId) {
+      // Emit parcel selection event to parent and root
+      this.$emit('parcel-selected', newParcelId)
+      this.$root.$emit('parcel-selected', newParcelId)
+    }
   }
 }
 </script>

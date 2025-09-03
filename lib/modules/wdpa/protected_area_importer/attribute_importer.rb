@@ -40,6 +40,8 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
   def self.create_protected_area(attributes)
     protected_area_id = nil
     standardised_attributes = Wdpa::DataStandard.attributes_from_standards_hash(attributes.symbolize_keys)
+    # Set wdpa_parent_id for ProtectedPlanet-api compatibility (see comment above)
+    # Note: wdpa_pid is already set by DataStandard, we just need wdpa_parent_id for API compatibility
     standardised_attributes[:wdpa_parent_id] = standardised_attributes[:wdpa_pid].to_i
     begin
       ActiveRecord::Base.transaction(requires_new: true) do

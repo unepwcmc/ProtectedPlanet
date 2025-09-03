@@ -116,15 +116,32 @@ class ProtectedArea < ApplicationRecord
   end
 
   def sources_per_pa
-    sources = ActiveRecord::Base.connection.execute("""
+    result = {}
+
+    # Get sources from the protected area itself
+    pa_sources = ActiveRecord::Base.connection.execute(<<~SQL)
       SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party
       FROM sources
       INNER JOIN protected_areas_sources
       ON protected_areas_sources.protected_area_id = #{self.id}
       AND protected_areas_sources.source_id = sources.id
-      """)
-      # Helper method
-    convert_into_hash(sources.uniq)
+    SQL
+    result[self.wdpa_pid] = convert_into_hash(pa_sources.to_a) if pa_sources.any?
+
+    # Get sources from all parcels
+    parcel_sources = ActiveRecord::Base.connection.execute(<<~SQL)
+      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party, protected_area_parcels.wdpa_pid
+      FROM sources
+      INNER JOIN protected_area_parcels_sources ON protected_area_parcels_sources.source_id = sources.id
+      INNER JOIN protected_area_parcels ON protected_area_parcels.id = protected_area_parcels_sources.protected_area_parcel_id
+      WHERE protected_area_parcels.wdpa_id = #{self.wdpa_id}
+    SQL
+
+    parcel_sources.group_by { |source| source['wdpa_pid'] }.each do |wdpa_pid, sources|
+      result[wdpa_pid] = convert_into_hash(sources.map { |s| s.except('wdpa_pid') })
+    end
+
+    result
   end
 
   def wdpa_ids
