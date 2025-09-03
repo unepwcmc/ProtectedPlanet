@@ -78,7 +78,7 @@ module Wdpa
           ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')}")
 
           # Create a table with dummy polygon data that includes multi-parcel protected areas
-          # Some protected areas will have multiple parcels (e.g., wdpa_id: 12123 with parcels 12123_1, 12123_2, etc.)
+          # Generate data in format like: wdpa_id:111, wdpa_pid:111_1 and wdpa_id:1111, wdpa_pid:111_2
           sql = <<~SQL
             CREATE TABLE #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')} AS
             WITH base_data AS (
@@ -140,7 +140,6 @@ module Wdpa
                   ((b.base_id * 0.1 + (p.parcel_num - 1) * 0.2 + 0.1)::numeric(10,6)) || ', ' ||
                   (b.base_id * 0.1 + (p.parcel_num - 1) * 0.2)::numeric(10,6) || ' ' ||#{' '}
                   (b.base_id * 0.1 + (p.parcel_num - 1) * 0.2)::numeric(10,6) || '))') as wkb_geometry,
-                true as is_polygon,
                 b.base_metadataid as metadataid
               FROM base_data b
               CROSS JOIN parcel_numbers p
@@ -180,7 +179,6 @@ module Wdpa
                   ((base_id * 0.1 + 0.1)::numeric(10,6)) || ', ' ||
                   (base_id * 0.1)::numeric(10,6) || ' ' ||#{' '}
                   (base_id * 0.1)::numeric(10,6) || '))') as wkb_geometry,
-                true as is_polygon,
                 base_metadataid as metadataid
               FROM base_data
               WHERE base_id NOT IN (1, 2, 3, 4, 5)  -- Single-parcel areas (all other IDs)
@@ -197,11 +195,11 @@ module Wdpa
             raise "Failed to create #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')} table"
           end
 
-          # Count total records (should be more than dummy_data_count due to multi-parcel areas)
+          # Count total records
           total_records = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')}").to_i
 
           Rails.logger.info "Created dummy #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')} table with #{total_records} records"
-          Rails.logger.info 'Multi-parcel protected areas created: wdpa_id 1-5 (5 parcels each)'
+          Rails.logger.info 'Multi-parcel protected areas created: wdpa_id 1-5 (5 parcels each) - format like 1_1, 1_2, etc.'
         end
 
         def self.create_dummy_points_table
@@ -238,7 +236,6 @@ module Wdpa
               ST_GeomFromText('POINT(' ||#{' '}
                 ((generate_series(#{Wdpa::Portal::Config::StagingConfig.dummy_data_count + 1}, #{Wdpa::Portal::Config::StagingConfig.dummy_data_count * 2}) * 0.1 - 90)::numeric(10,6)) || ' ' ||#{' '}
                 ((generate_series(#{Wdpa::Portal::Config::StagingConfig.dummy_data_count + 1}, #{Wdpa::Portal::Config::StagingConfig.dummy_data_count * 2}) * 0.1 - 180)::numeric(10,6)) || ')') as wkb_geometry,
-              false as is_polygon,
               generate_series(#{Wdpa::Portal::Config::StagingConfig.dummy_data_count + 1}, #{Wdpa::Portal::Config::StagingConfig.dummy_data_count * 2}) as metadataid
           SQL
 

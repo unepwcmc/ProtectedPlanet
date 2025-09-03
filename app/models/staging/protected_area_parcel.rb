@@ -8,7 +8,7 @@ module Staging
     has_and_belongs_to_many :countries,
       # We still read countries from live countries table
       join_table: 'staging_countries_protected_area_parcels',
-      foreign_key: 'protected_area_id',
+      foreign_key: 'protected_area_parcel_id',
       association_foreign_key: 'country_id'
 
     # As of 02Sep2025 we are not importing sub_locations to protected_area_parcels table
@@ -18,7 +18,7 @@ module Staging
       # we can use the name 'sources' everywhere but then it is linking from Staging::Source not Source table
       class_name: 'Staging::Source',
       join_table: 'staging_protected_area_parcels_sources',
-      foreign_key: 'protected_area_id',
+      foreign_key: 'protected_area_parcel_id',
       association_foreign_key: 'source_id'
 
     # As of 09Apr It seems networks are not used in the system now
