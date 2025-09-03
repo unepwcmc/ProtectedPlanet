@@ -51,8 +51,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
         'Test Polygon PA' as name,
         'Designated' as status,
         'Ia' as iucn_cat,
-        ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry,
-        1 as is_polygon
+        ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry;
       UNION ALL
       SELECT 
         2 as wdpaid,
@@ -60,8 +59,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
         'Test Polygon PA 2' as name,
         'Designated' as status,
         'II' as iucn_cat,
-        ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry,
-        1 as is_polygon;
+        ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry;
 
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::StagingConfig.portal_view_for('points')} AS
       SELECT 
@@ -70,8 +68,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
         'Test Point PA' as name,
         'Designated' as status,
         'III' as iucn_cat,
-        ST_GeomFromText('POINT(0.5 0.5)') as wkb_geometry,
-        0 as is_polygon;
+        ST_GeomFromText('POINT(0.5 0.5)') as wkb_geometry;
 
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::StagingConfig.portal_view_for('sources')} AS
       SELECT 
