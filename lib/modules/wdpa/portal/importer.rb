@@ -56,7 +56,6 @@ module Wdpa
         results[:green_list] = Wdpa::Portal::Importers::GreenListImporter.import
 
         # Import related sources (PARCC, Irreplaceability)
-        results[:related_sources] = import_related_sources
         results[:related_sources] = Wdpa::Shared::Importer::RelatedSource.import_staging
 
 
