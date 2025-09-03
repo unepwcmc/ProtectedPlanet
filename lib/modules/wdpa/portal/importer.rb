@@ -58,6 +58,8 @@ module Wdpa
         # Import related sources (PARCC, Irreplaceability)
         results[:related_sources] = Wdpa::Shared::Importer::RelatedSource.import_staging
 
+        # Import overseas territories relationships
+        results[:overseas_territories] = Wdpa::Shared::Importer::OverseasTerritories.import
 
         # TODO_IMPORT: Add post-import validation once Step 1 is complete
         # This should validate that imported data matches expected counts from materialized views

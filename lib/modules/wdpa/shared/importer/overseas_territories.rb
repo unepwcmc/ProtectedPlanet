@@ -1,4 +1,4 @@
-module Wdpa::OverseasTerritoriesImporter
+module Wdpa::Shared::Importer::OverseasTerritories
   OVERSEAS_TERRITORIES_CSV = "#{Rails.root}/lib/data/seeds/overseas_territories.csv".freeze
   extend self
 
