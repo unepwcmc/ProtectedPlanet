@@ -112,9 +112,23 @@ module Wdpa
           indexes = ActiveRecord::Base.connection.indexes(source_table_name)
           columns_info = ActiveRecord::Base.connection.columns(source_table_name).map { |c| [c.name, c.sql_type] }.to_h
 
+          # Track problematic indexes for user feedback
+          problematic_indexes = []
+
           indexes.each do |index|
             # Create new index name for the staging table
             new_index_name = Wdpa::Portal::Config::StagingConfig.generate_staging_index_name(index.name)
+
+            # Check for index name length issues (limit is 63 characters by Postgres)
+            if new_index_name.length > 63
+              problematic_indexes << {
+                original_name: index.name,
+                staging_name: new_index_name,
+                length: new_index_name.length
+              }
+              Rails.logger.warn "⚠️  SKIPPING INDEX: #{index.name} (#{new_index_name.length} chars > 63 limit)"
+              next
+            end
 
             # Build the index creation SQL
             columns = index.columns.join(', ')
@@ -132,6 +146,15 @@ module Wdpa
             # Log the error but continue with other indexes
             Rails.logger.warn "Failed to create index for #{target_table_name}: #{e.message}"
           end
+
+          # Provide user-friendly feedback about problematic indexes
+          return unless problematic_indexes.any?
+
+          Rails.logger.error "🚨 INDEX NAME TOO LONG: #{source_table_name}"
+          problematic_indexes.each do |issue|
+            Rails.logger.error "   #{issue[:original_name]} (#{issue[:length]} chars)"
+          end
+          Rails.logger.error '💡 Fix: Find the migration in db/migrate and make another migration to update to use shorter index names (< 55 chars as we also append a prefix to the index name for staging tables)'
         end
 
         def self.drop_table_indexes(table_name)
