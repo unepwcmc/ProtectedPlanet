@@ -57,6 +57,8 @@ module Wdpa
 
         # Import related sources (PARCC, Irreplaceability)
         results[:related_sources] = import_related_sources
+        results[:related_sources] = Wdpa::Shared::Importer::RelatedSource.import_staging
+
 
         # TODO_IMPORT: Add post-import validation once Step 1 is complete
         # This should validate that imported data matches expected counts from materialized views
@@ -145,14 +147,6 @@ module Wdpa
         # Import geometries to staging tables using SQL updates
         # Handles both Staging::ProtectedArea and Staging::ProtectedAreaParcel
         Wdpa::Portal::Importers::GeometryImporter.import
-      end
-
-      def import_related_sources
-        # The current implementation uses placeholder paths for PARCC and Irreplaceability data
-        {
-          parcc: Wdpa::Shared::RelatedSourceImporter.parcc_import,
-          irreplaceability: Wdpa::Shared::RelatedSourceImporter.irreplaceability_import
-        }
       end
     end
   end
