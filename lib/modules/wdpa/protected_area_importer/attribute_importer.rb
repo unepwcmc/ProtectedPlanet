@@ -30,12 +30,8 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
           #  - See standardised_attributes[:wdpa_parent_id] in create_protected_area to know how the attribute is stored into db
           attributes['wdpa_parent_id'] = attributes['wdpa_pid']
 
-          if add_entry_to_protected_areas_table
-            imported_pa_ids << create_protected_area(attributes)
-          end
-          if add_entry_to_protected_areas_parcels_table
-            imported_pa_pids << create_protected_area_parcel(attributes)
-          end
+          imported_pa_ids << create_protected_area(attributes) if add_entry_to_protected_areas_table
+          imported_pa_pids << create_protected_area_parcel(attributes) if add_entry_to_protected_areas_parcels_table
         end
       end
     end
@@ -84,8 +80,6 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
     protected_area_pid
   end
 
-  private
-
   def self.current_entry_parcel_info(protected_area_attributes, wdpaids_multiple_parcels_map)
     wdpa_id = protected_area_attributes['wdpaid']
     wdpa_pid = protected_area_attributes['wdpa_pid']
@@ -123,7 +117,7 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
       end
     end
     protected_area_ids_with_multiple_parcels
-    end
+  end
 
   def self.protected_areas_in_bulk(size)
     RAW_PROTECTED_AREA_TABLES.each do |table|
@@ -138,14 +132,14 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
   end
 
   def self.build_query(table, limit, offset)
-    select = """
+    select = <<~SQL
       SELECT array_to_string(ARRAY(
         SELECT c.column_name::text
         FROM information_schema.columns As c
         WHERE table_name = '#{table}'
           AND  c.column_name <> '#{GEOMETRY_COLUMN}'
       ), ',') As query
-    """
+    SQL
 
     select_part = db.select_value(select)
     "SELECT #{select_part} FROM #{table} ORDER BY wdpaid LIMIT #{limit} OFFSET #{offset}"

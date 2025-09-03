@@ -51,4 +51,8 @@ class Wdpa::ParcelRelation
       area: @current_attributes[:no_take_area]
     })
   end
+
+  def sources value
+    Source.where(metadataid: value)
+  end
 end

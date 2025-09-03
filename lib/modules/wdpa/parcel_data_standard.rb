@@ -26,8 +26,8 @@ class Wdpa::ParcelDataStandard
     # As of 04Apr2025 there is no usuage for each parcel's geom so no duplication to save db size
     # if in future this is needed then put it back in oder for geom to be included in attributes_from_standards_hash
     # :wkb_geometry => {name: :the_geom, type: :geometry, label: 'Geometry'},
-    # As of 04Apr2025 it is not linked up as it is the same sources (for all parcels) no matter which parcel
-    # :metadataid   => {name: :sources, type: :integer, label: 'Source'},
+    # Sources for parcels - each parcel can have its own sources
+    metadataid: { name: :sources, type: :integer, label: 'Source' },
     own_type: { name: :owner_type, type: :string, label: 'Owner Type' },
     pa_def: { name: :is_oecm, type: :oecm, label: 'PA Def' }, # 0 means is_oecm is true
     supp_info: { name: :supplementary_info, type: :string, label: 'Supplementary Info' },
@@ -48,12 +48,8 @@ class Wdpa::ParcelDataStandard
   def self.attributes_from_standards_hash(standards_hash)
     attributes = standardise_values(standards_hash)
     attributes = create_models(attributes)
-    attributes = remove_nested_attributes(attributes)
-
-    attributes
+    remove_nested_attributes(attributes)
   end
-
-  private
 
   def self.standardise_values(hash)
     standardised_attributes = {}
