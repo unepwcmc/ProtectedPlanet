@@ -1,5 +1,5 @@
 module Wdpa::Portal::Importers
-  class ProtectedAreaAttributeImporter
+  class ProtectedAreaAttribute
     def self.import
       # Import protected area attributes (non-spatial data only) to staging tables
       # Handles both Staging::ProtectedArea and Staging::ProtectedAreaParcel

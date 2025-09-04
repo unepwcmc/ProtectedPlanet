@@ -1,5 +1,5 @@
 module Wdpa::Portal::Importers
-  class ProtectedAreaGeometryImporter
+  class ProtectedAreaGeometry
     def self.import
       results = {}
 
