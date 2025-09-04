@@ -4,7 +4,7 @@ module Wdpa::Shared::Importer::OverseasTerritories
 
   def import
     csv = CSV.read(OVERSEAS_TERRITORIES_CSV)
-    csv.shift # remove headers
+    csv.shift
 
     results = {
       success: true,
@@ -32,10 +32,10 @@ module Wdpa::Shared::Importer::OverseasTerritories
             next
           end
 
-          # if parent_country.children.map(&:iso_3).include?(child_iso)
-          #   results[:skipped] << "Relationship already exists: #{child_iso} -> #{parent_iso}"
-          #   next
-          # end
+          if parent_country.children.map(&:iso_3).include?(child_iso)
+            results[:skipped] << "Relationship already exists: #{child_iso} -> #{parent_iso}"
+            next
+          end
 
           parent_country.children << child_country
 

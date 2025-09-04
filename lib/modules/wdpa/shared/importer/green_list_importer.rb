@@ -2,18 +2,24 @@
 
 require 'csv'
 
-module Wdpa::Portal::Importers
+module Wdpa::Shared::Importers
   class GreenListImporter
+    # Portal-specific green list importer
+    # Based on Wdpa::GreenListImporter but adapted for staging tables and portal workflow
+
     def self.import
       new.import
     end
 
     def import
       ActiveRecord::Base.transaction do
+        # Clear existing staging green list data
         clear_existing_data
 
+        # Process CSV file
         result = process_csv_file
 
+        # Return import results
         result
       end
     rescue StandardError => e
@@ -31,6 +37,7 @@ module Wdpa::Portal::Importers
     private
 
     def clear_existing_data
+      # Clear existing staging green list data
       Staging::ProtectedArea.where.not(green_list_status_id: nil)
         .update_all(green_list_status_id: nil)
       Staging::GreenListStatus.destroy_all
@@ -65,6 +72,7 @@ module Wdpa::Portal::Importers
         Rails.logger.warn "Green list row processing failed: #{e.message}"
       end
 
+      # Log results
       log_import_results(invalid, not_found, duplicates, imported_count)
 
       {
@@ -81,12 +89,14 @@ module Wdpa::Portal::Importers
       wdpa_id = validate_wdpa_id(row['wdpaid'])
       return { status: :invalid, wdpa_id: row['wdpaid'] } unless wdpa_id
 
+      # Find staging protected area
       pa = Staging::ProtectedArea.find_by_wdpa_id(wdpa_id)
       return { status: :not_found, wdpa_id: wdpa_id } if pa.blank?
 
       # Check for duplicates
       return { status: :duplicate, wdpa_id: wdpa_id } if pa.green_list_status_id
 
+      # Create or find green list status
       gls = Staging::GreenListStatus.find_or_create_by(
         row.to_h.slice('status', 'expiry_date')
       )
@@ -106,6 +116,7 @@ module Wdpa::Portal::Importers
     end
 
     def csv_file_path
+      # Use configuration from StagingConfig
       ::Utilities::Files.latest_file_by_glob(Wdpa::Portal::Config::StagingConfig.green_list_csv_path)
     end
 

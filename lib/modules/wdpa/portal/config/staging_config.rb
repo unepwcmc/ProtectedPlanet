@@ -1,6 +1,3 @@
-# TO_BE_DELETED_STEP_1: This configuration should be removed once Step 1 materialized views are ready
-# This file provides centralized configuration for portal import staging tables and test mode
-
 module Wdpa::Portal::Config
   class StagingConfig
     def self.test_mode?
@@ -15,7 +12,6 @@ module Wdpa::Portal::Config
       10
     end
 
-    # Staging table configuration
     def self.staging_table_index_prefix
       'staging_'
     end
@@ -24,7 +20,6 @@ module Wdpa::Portal::Config
       "#{staging_table_index_prefix}#{original_index_name}"
     end
 
-    # Portal view names (TODO_IMPORT: Verify these match what Step 1 developer creates)
     PORTAL_VIEWS = {
       'polygons' => 'portal_standard_polygons',
       'points' => 'portal_standard_points',
@@ -110,7 +105,6 @@ module Wdpa::Portal::Config
       ]
     end
 
-    # Green list import configuration
     def self.green_list_csv_path
       'lib/data/seeds/green_list_sites_*.csv'
     end

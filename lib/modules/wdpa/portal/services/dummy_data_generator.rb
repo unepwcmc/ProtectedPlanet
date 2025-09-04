@@ -1,7 +1,3 @@
-# TO_BE_DELETED_STEP_1: This entire file should be deleted once Step 1 materialized views are ready
-# This service generates dummy tables for testing purposes only
-# Once Step 1 is complete, the real materialized views will be available and this file can be removed
-
 module Wdpa
   module Portal
     module Services
@@ -11,16 +7,12 @@ module Wdpa
 
           Rails.logger.info 'Generating dummy portal_standard_* tables for testing...'
 
-          # Create dummy portal_standard_sources table first (referenced by protected areas)
           create_dummy_sources_table
 
-          # Create dummy portal_standard_polygons table
           create_dummy_polygons_table
 
-          # Create dummy portal_standard_points table
           create_dummy_points_table
 
-          # Verify all tables were created successfully
           verify_tables_created
 
           Rails.logger.info 'Dummy portal_standard_* tables created successfully'

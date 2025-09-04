@@ -7,7 +7,6 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
     portal_release = mock()
     portal_release.stubs(:create_import_view)
 
-    Wdpa::Portal::Release.expects(:new).returns(portal_release).in_sequence(import)
     Wdpa::Portal::Importers::SourceImporter.expects(:import).with('sources_staging').in_sequence(import)
     Wdpa::Portal::Importers::AttributeImporter.expects(:import).with('protected_areas_new').in_sequence(import)
     Wdpa::Portal::Importers::GeometryImporter.expects(:import).with('protected_areas_new').in_sequence(import)

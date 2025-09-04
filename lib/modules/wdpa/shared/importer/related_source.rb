@@ -1,9 +1,7 @@
-# This module is used by s3bucket/portal importer make sure to keep this when removing s3bucket importer
 require 'csv'
 
 module Wdpa::Shared::Importer
   class RelatedSource
-    # Unified configuration - same for both s3bucket and Portal importer
     PARCC_IMPORT = {
       path: Rails.root.join('lib/data/seeds/parcc_info.csv'),
       field: :has_parcc_info
@@ -45,7 +43,6 @@ module Wdpa::Shared::Importer
       field = import_config[:field]
       target_table = import_config[:target_table]
 
-      # Validate inputs
       unless File.exist?(path)
         Rails.logger.error "File not found: #{path}"
         return {
@@ -68,7 +65,6 @@ module Wdpa::Shared::Importer
           }
         end
 
-        # Update target table
         Rails.logger.info "Updating #{target_table} with #{field} data"
         update_table(wdpa_ids, field, target_table)
 
@@ -90,13 +86,11 @@ module Wdpa::Shared::Importer
     def self.update_table(wdpa_ids, field, target_table)
       connection = ActiveRecord::Base.connection
 
-      # Check if column exists in target table
       unless column_exists?(target_table, field)
         Rails.logger.warn "Column #{field} does not exist in #{target_table}, skipping update"
         return
       end
 
-      # Update records in target table
       updated_count = 0
       wdpa_ids.each do |wdpa_id|
         result = connection.execute(

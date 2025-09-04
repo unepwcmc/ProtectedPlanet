@@ -1,0 +1,1 @@
+Anything in this folder are used by s3bucket/portal importer make sure to keep this when removing s3bucket importer
