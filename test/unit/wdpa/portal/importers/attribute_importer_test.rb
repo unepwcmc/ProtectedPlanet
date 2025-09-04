@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class Wdpa::Portal::Importers::AttributeImporterTest < ActiveSupport::TestCase
+class Wdpa::Portal::Importers::ProtectedAreaAttributeTest < ActiveSupport::TestCase
   def setup
     # Create staging table for testing
     Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
@@ -31,7 +31,7 @@ class Wdpa::Portal::Importers::AttributeImporterTest < ActiveSupport::TestCase
     Wdpa::Portal::Utils::PortalProtectedAreasRelation.stubs(:new).returns(relation)
 
     # Run import
-    result = Wdpa::Portal::Importers::AttributeImporter.import('protected_areas_new')
+    result = Wdpa::Portal::Importers::ProtectedAreaAttribute.import('protected_areas_new')
 
     # Verify result
     assert result[:success]
@@ -62,7 +62,7 @@ class Wdpa::Portal::Importers::AttributeImporterTest < ActiveSupport::TestCase
     Wdpa::Portal::Utils::PortalProtectedAreasRelation.stubs(:new).returns(relation)
 
     # Run import
-    result = Wdpa::Portal::Importers::AttributeImporter.import('protected_areas_new')
+    result = Wdpa::Portal::Importers::ProtectedAreaAttribute.import('protected_areas_new')
 
     # Verify result
     refute result[:success]

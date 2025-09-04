@@ -3,7 +3,7 @@
 require 'csv'
 
 module Wdpa::Portal::Importers
-  class GreenListImporter
+  class GreenList
     def self.import
       new.import
     end

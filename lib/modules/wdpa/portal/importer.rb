@@ -18,19 +18,20 @@ module Wdpa::Portal
 
       {
         sources: Wdpa::Portal::Importers::SourceImporter.import,
-        protected_areas: Wdpa::Portal::Importers::AttributeImporter.import,
-        geometries: Wdpa::Portal::Importers::GeometryImporter.import,
-        green_list: Wdpa::Portal::Importers::GreenListImporter.import,
-        related_sources: Wdpa::Shared::Importer::RelatedSource.import_staging,
-        overseas_territories: Wdpa::Shared::Importer::OverseasTerritories.import,
-        global_stats: Wdpa::Shared::Importer::GlobalStats.import_staging,
-        countries_geometry_statistics: Wdpa::Portal::Importers::CountriesGeometryStatistics.calculate
+        protected_areas_attributes: Wdpa::Portal::Importers::ProtectedAreaAttribute.import,
+        protected_areas_geometries: Wdpa::Portal::Importers::ProtectedAreaGeometry.import,
+        protected_areas_related_sources: Wdpa::Shared::Importer::ProtectedAreasRelatedSource.import_staging,
+        countries_protected_areas_geometry_statistics: Wdpa::Portal::Importers::CountriesProtectedAreaGeometryStatistics.calculate,
+        green_list: Wdpa::Portal::Importers::GreenList.import,
+        country_overseas_territories: Wdpa::Shared::Importer::CountryOverseasTerritories.import,
+        global_stats: Wdpa::Shared::Importer::GlobalStats.import_staging
+
       }
 
       # Wdpa::SourceImporter.import wdpa_release ## complete
       # Wdpa::ProtectedAreaImporter.import ## complete
-      # Wdpa::GeometryRatioCalculator.calculate
-      # Wdpa::Shared::Importer::OverseasTerritories.import ## complete
+      # Wdpa::GeometryRatioCalculator.calculate  ## complete
+      # Wdpa::Shared::Importer::CountryOverseasTerritories.import ## complete
       # Wdpa::Shared::Importer::GlobalStats.import ## complete
       # Wdpa::GreenListImporter.import ## complete
       # Wdpa::PameImporter.import

@@ -20,7 +20,7 @@ class Wdpa::Importer
     Wdpa::ProtectedAreaImporter.import
     Wdpa::GeometryRatioCalculator.calculate
     Wdpa::NetworkImporter.import # As of 20Aug2025, this is no longer used see lib/modules/wdpa/network_importer.rb
-    Wdpa::Shared::Importer::OverseasTerritories.import
+    Wdpa::Shared::Importer::CountryOverseasTerritories.import
     Wdpa::Shared::Importer::GlobalStats.import_live
     Wdpa::GreenListImporter.import
     Wdpa::PameImporter.import

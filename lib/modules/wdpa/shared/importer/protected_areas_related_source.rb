@@ -1,7 +1,7 @@
 require 'csv'
 
 module Wdpa::Shared::Importer
-  class RelatedSource
+  class ProtectedAreasRelatedSource
     PARCC_IMPORT = {
       path: Rails.root.join('lib/data/seeds/parcc_info.csv'),
       field: :has_parcc_info

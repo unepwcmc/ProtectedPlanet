@@ -1,12 +1,12 @@
 module Wdpa::Portal::Importers
-  class CountriesGeometryStatistics
+  class CountriesProtectedAreaGeometryStatistics
     def self.calculate
       country_ids = Country.pluck(:id)
       processed_countries_count = 0
       errors = []
 
       country_ids.each do |country_id|
-        geometry_counts = calculate_geometry_counts(country_id)
+        geometry_counts = calculate_country_pas_geometry_counts(country_id)
         statistics = Staging::CountryStatistic.find_or_initialize_by(country_id: country_id)
         statistics.assign_attributes(geometry_counts)
         statistics.save
@@ -24,7 +24,7 @@ module Wdpa::Portal::Importers
       }
     end
 
-    def self.calculate_geometry_counts(country_id)
+    def self.calculate_country_pas_geometry_counts(country_id)
       staging_protected_areas_table = Staging::ProtectedArea.table_name
       staging_countries_protected_areas_table = Wdpa::Portal::Config::StagingConfig.get_staging_table_name_from_live_table('countries_protected_areas')
       statics_query = <<~SQL

@@ -4,7 +4,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
   def setup
     # Create staging tables
     Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
-    
+
     # Create test portal views with sample data
     create_test_portal_views
   end
@@ -17,12 +17,12 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
 
   test 'complete portal import workflow' do
     # Test attribute import
-    attribute_result = Wdpa::Portal::Importers::AttributeImporter.import('protected_areas_new')
+    attribute_result = Wdpa::Portal::Importers::ProtectedAreaAttribute.import('protected_areas_new')
     assert attribute_result[:success], "Attribute import failed: #{attribute_result[:errors]}"
     assert_equal 2, attribute_result[:imported_count]
 
     # Test geometry import
-    geometry_result = Wdpa::Portal::Importers::GeometryImporter.import('protected_areas_new')
+    geometry_result = Wdpa::Portal::Importers::ProtectedAreaGeometry.import('protected_areas_new')
     assert geometry_result[:success], "Geometry import failed: #{geometry_result[:errors]}"
 
     # Test source import
@@ -35,8 +35,8 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
 
     # Verify data integrity
     staging_pa = ProtectedAreaNew.first
-    assert staging_pa.the_geom.present?, "Geometry should be imported"
-    assert staging_pa.wdpa_id.present?, "WDPA ID should be present"
+    assert staging_pa.the_geom.present?, 'Geometry should be imported'
+    assert staging_pa.wdpa_id.present?, 'WDPA ID should be present'
   end
 
   private
@@ -45,7 +45,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
     # Create test portal views with sample data
     ActiveRecord::Base.connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')} AS
-      SELECT 
+      SELECT#{' '}
         1 as wdpaid,
         '1' as wdpa_pid,
         'Test Polygon PA' as name,
@@ -53,7 +53,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
         'Ia' as iucn_cat,
         ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry;
       UNION ALL
-      SELECT 
+      SELECT#{' '}
         2 as wdpaid,
         '2' as wdpa_pid,
         'Test Polygon PA 2' as name,
@@ -62,7 +62,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
         ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry;
 
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::StagingConfig.portal_view_for('points')} AS
-      SELECT 
+      SELECT#{' '}
         3 as wdpaid,
         '3' as wdpa_pid,
         'Test Point PA' as name,
@@ -71,7 +71,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
         ST_GeomFromText('POINT(0.5 0.5)') as wkb_geometry;
 
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::StagingConfig.portal_view_for('sources')} AS
-      SELECT 
+      SELECT#{' '}
         1 as id,
         'Test Source' as title,
         'Test Description' as description,
@@ -86,4 +86,3 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
     end
   end
 end
-
