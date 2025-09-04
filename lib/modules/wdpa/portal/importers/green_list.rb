@@ -27,7 +27,7 @@ module Wdpa::Portal::Importers
 
     private
 
-    def clear_existing_data
+    def self.clear_existing_data
       Staging::ProtectedArea.where.not(green_list_status_id: nil)
         .update_all(green_list_status_id: nil)
       Staging::GreenListStatus.destroy_all
@@ -35,7 +35,7 @@ module Wdpa::Portal::Importers
       Rails.logger.info 'Cleared existing staging green list data'
     end
 
-    def process_csv_file
+    def self.process_csv_file
       invalid = []
       not_found = []
       duplicates = []
@@ -74,7 +74,7 @@ module Wdpa::Portal::Importers
       }
     end
 
-    def process_row(row)
+    def self.process_row(row)
       wdpa_id = validate_wdpa_id(row['wdpaid'])
       return { status: :invalid, wdpa_id: row['wdpaid'] } unless wdpa_id
 
@@ -96,17 +96,17 @@ module Wdpa::Portal::Importers
       { status: :success, wdpa_id: wdpa_id }
     end
 
-    def validate_wdpa_id(wdpa_id_string)
+    def self.validate_wdpa_id(wdpa_id_string)
       Integer(wdpa_id_string)
     rescue StandardError
       false
     end
 
-    def csv_file_path
+    def self.csv_file_path
       ::Utilities::Files.latest_file_by_glob(Wdpa::Portal::Config::StagingConfig.green_list_csv_path)
     end
 
-    def log_import_results(invalid, not_found, duplicates, imported_count)
+    def self.log_import_results(invalid, not_found, duplicates, imported_count)
       Rails.logger.info 'Green list import completed:'
       Rails.logger.info "  - Imported: #{imported_count} records"
       Rails.logger.info "  - Invalid WDPAIDs: #{invalid.join(',')}" if invalid.any?
