@@ -65,12 +65,12 @@ module Wdpa
 
         # Maps portal attributes to ProtectedArea attributes (non-spatial data only)
         def self.map_portal_to_pp_protected_area(portal_attributes)
-          map_portal_to_pp_with_relation(portal_attributes, Wdpa::Portal::Utils::ProtectedAreaRelation)
+          map_portal_to_pp_with_relation(portal_attributes, Wdpa::Portal::Relation::ProtectedArea)
         end
 
         # Maps portal attributes to ProtectedAreaParcel attributes (non-spatial data only)
         def self.map_portal_to_pp_protected_area_parcel(portal_attributes)
-          map_portal_to_pp_with_relation(portal_attributes, Wdpa::Portal::Utils::ProtectedAreaParcelRelation)
+          map_portal_to_pp_with_relation(portal_attributes, Wdpa::Portal::Relation::ProtectedAreaParcel)
         end
 
         # Common logic for mapping portal attributes with different relation classes

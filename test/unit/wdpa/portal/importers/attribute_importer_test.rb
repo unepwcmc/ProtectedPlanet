@@ -25,10 +25,10 @@ class Wdpa::Portal::Importers::AttributeImporterTest < ActiveSupport::TestCase
     ]
 
     # Mock the relation to return our test data
-    relation = mock()
+    relation = mock
     relation.stubs(:find_in_batches).yields(mock_portal_data)
-    
-    Wdpa::Portal::Importers::PortalProtectedAreasRelation.stubs(:new).returns(relation)
+
+    Wdpa::Portal::Utils::PortalProtectedAreasRelation.stubs(:new).returns(relation)
 
     # Run import
     result = Wdpa::Portal::Importers::AttributeImporter.import('protected_areas_new')
@@ -56,10 +56,10 @@ class Wdpa::Portal::Importers::AttributeImporterTest < ActiveSupport::TestCase
       }
     ]
 
-    relation = mock()
+    relation = mock
     relation.stubs(:find_in_batches).yields(mock_portal_data)
-    
-    Wdpa::Portal::Importers::PortalProtectedAreasRelation.stubs(:new).returns(relation)
+
+    Wdpa::Portal::Utils::PortalProtectedAreasRelation.stubs(:new).returns(relation)
 
     # Run import
     result = Wdpa::Portal::Importers::AttributeImporter.import('protected_areas_new')
@@ -71,4 +71,3 @@ class Wdpa::Portal::Importers::AttributeImporterTest < ActiveSupport::TestCase
     assert_includes result[:errors].first, 'Standardization error'
   end
 end
-

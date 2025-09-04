@@ -1,5 +1,5 @@
-module Wdpa::Portal::Importers
-  class PortalSourcesRelation
+module Wdpa::Portal::Adapters::Relation
+  class Sources
     # TODO_IMPORT: Update this method once Step 1 materialized views are ready
     # This method currently uses a placeholder table name for portal sources
     # Once Step 1 is complete, this table should exist in the Portal database
