@@ -1,4 +1,4 @@
-module Wdpa::Portal::Importers::SourceImporter
+module Wdpa::Portal::Importers
   class SourceImporter
     def self.import
       adapter = Wdpa::Portal::Adapters::ImportViewsAdapter.new

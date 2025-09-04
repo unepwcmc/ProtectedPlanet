@@ -1,7 +1,7 @@
 class ProtectedArea < ApplicationRecord
   include GeometryConcern
   include SourceHelper
-
+  
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'
   has_and_belongs_to_many :sub_locations
@@ -356,9 +356,5 @@ class ProtectedArea < ApplicationRecord
     joins(:iucn_category).where(
       "iucn_categories.name IN (#{valid_categories})"
     )
-  end
-
-  def table_name
-    "protected_areas"
   end
 end

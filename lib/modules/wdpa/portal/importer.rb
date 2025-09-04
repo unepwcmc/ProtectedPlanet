@@ -3,11 +3,6 @@ module Wdpa::Portal
     def self.import
       unless validate_required_views_exist
         error_msg = 'Required materialized views do not exist.'
-        error_msg += if Wdpa::Portal::Config::StagingConfig.test_mode?
-                       'Check that dummy data generation succeeded.'
-                     else
-                       'Step 1 materialized views may not be ready yet.'
-                     end
         raise StandardError, error_msg
       end
 
@@ -22,10 +17,10 @@ module Wdpa::Portal
         protected_areas_geometries: Wdpa::Portal::Importers::ProtectedAreaGeometry.import,
         protected_areas_related_sources: Wdpa::Shared::Importer::ProtectedAreasRelatedSource.import_staging,
         countries_protected_areas_geometry_statistics: Wdpa::Portal::Importers::CountriesProtectedAreaGeometryStatistics.calculate,
-        green_list: Wdpa::Portal::Importers::GreenList.import,
         country_overseas_territories: Wdpa::Shared::Importer::CountryOverseasTerritories.import,
-        global_stats: Wdpa::Shared::Importer::GlobalStats.import_staging
-
+        global_stats: Wdpa::Shared::Importer::GlobalStats.import_staging,
+        green_list: Wdpa::Portal::Importers::GreenList.import,
+        pame: Wdpa::Portal::Importers::Pame.import,
       }
 
       # Wdpa::SourceImporter.import wdpa_release ## complete
@@ -34,7 +29,7 @@ module Wdpa::Portal
       # Wdpa::Shared::Importer::CountryOverseasTerritories.import ## complete
       # Wdpa::Shared::Importer::GlobalStats.import ## complete
       # Wdpa::GreenListImporter.import ## complete
-      # Wdpa::PameImporter.import
+      # Wdpa::PameImporter.import ## complete 
       # Wdpa::StoryMapLinkListImporter.import
       # Wdpa::BiopamaCountriesImporter.import
 

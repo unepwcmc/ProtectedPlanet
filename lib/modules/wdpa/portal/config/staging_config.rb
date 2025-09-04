@@ -1,9 +1,5 @@
 module Wdpa::Portal::Config
   class StagingConfig
-    def self.test_mode?
-      ENV['WDPA_PORTAL_TEST_MODE'] == 'true'
-    end
-
     def self.dummy_data_count
       70
     end
@@ -12,12 +8,8 @@ module Wdpa::Portal::Config
       10
     end
 
-    def self.staging_table_index_prefix
-      'staging_'
-    end
-
-    def self.generate_staging_index_name(original_index_name)
-      "#{staging_table_index_prefix}#{original_index_name}"
+    def self.generate_staging_table_index_name(original_name)
+      "staging_#{original_name}"
     end
 
     PORTAL_VIEWS = {
@@ -57,12 +49,18 @@ module Wdpa::Portal::Config
         NoTakeStatus.table_name => Staging::NoTakeStatus.table_name,
         CountryStatistic.table_name => Staging::CountryStatistic.table_name,
         GlobalStatistic.table_name => Staging::GlobalStatistic.table_name,
-        # Add junction tables for protected areas
-        'countries_protected_areas' => 'staging_countries_protected_areas',
-        'protected_areas_sources' => 'staging_protected_areas_sources',
-        # Add junction tables for protected area parcels
-        'countries_protected_area_parcels' => 'staging_countries_protected_area_parcels',
-        'protected_area_parcels_sources' => 'staging_protected_area_parcels_sources'
+        PameEvaluation.table_name => Staging::PameEvaluation.table_name,
+        PameSource.table_name => Staging::PameSource.table_name,
+        StoryMapLink.table_name => Staging::StoryMapLink.table_name,
+
+        # Add junction tables for countries
+        Country.countries_pas_junction_table_name => Country.staging_countries_pas_junction_table_name,
+        Country.countries_pa_parcels_junction_table_name => Country.staging_countries_pa_parcels_junction_table_name,
+        Country.countries_pame_evaluations_junction_table_name => Country.staging_countries_pame_evaluations_junction_table_name,
+        
+        # Add junction tables for sources
+        Source.protected_areas_sources_junction_table_name => Staging::Source.protected_areas_sources_junction_table_name,
+        Source.protected_area_parcels_sources_junction_table_name => Staging::Source.protected_area_parcels_sources_junction_table_name
       }
     end
 

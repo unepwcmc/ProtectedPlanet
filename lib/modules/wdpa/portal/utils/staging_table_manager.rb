@@ -107,7 +107,7 @@ module Wdpa::Portal::Utils
 
       indexes.each do |index|
         # Create new index name for the staging table
-        new_index_name = Wdpa::Portal::Config::StagingConfig.generate_staging_index_name(index.name)
+        new_index_name = Wdpa::Portal::Config::StagingConfig.generate_staging_table_index_name(index.name)
 
         # Check for index name length issues (limit is 63 characters by Postgres)
         if new_index_name.length > 63

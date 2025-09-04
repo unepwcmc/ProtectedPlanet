@@ -3,8 +3,6 @@ module Wdpa
     module Services
       class DummyDataGenerator
         def self.generate_test_views
-          return unless Wdpa::Portal::Config::StagingConfig.test_mode?
-
           Rails.logger.info 'Generating dummy portal_standard_* tables for testing...'
 
           create_dummy_sources_table
@@ -19,8 +17,6 @@ module Wdpa
         end
 
         def self.cleanup_test_views
-          return unless Wdpa::Portal::Config::StagingConfig.test_mode?
-
           Rails.logger.info 'Cleaning up dummy portal_standard_* tables...'
 
           tables = Wdpa::Portal::Config::StagingConfig.portal_views
@@ -69,129 +65,172 @@ module Wdpa
           # Drop existing view first to ensure clean schema
           ActiveRecord::Base.connection.execute("DROP TABLE IF EXISTS #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')}")
 
-          # Create a table with dummy polygon data that includes multi-parcel protected areas
-          # Generate data in format like: wdpa_id:111, wdpa_pid:111_1 and wdpa_id:1111, wdpa_pid:111_2
-          sql = <<~SQL
-            CREATE TABLE #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')} AS
-            WITH base_data AS (
-              SELECT#{' '}
-                generate_series(1, #{Wdpa::Portal::Config::StagingConfig.dummy_data_count}) as base_id,
-                'Test Protected Area ' || generate_series(1, #{Wdpa::Portal::Config::StagingConfig.dummy_data_count}) as base_name,
-                'Original Test Name ' || generate_series(1, #{Wdpa::Portal::Config::StagingConfig.dummy_data_count}) as base_orig_name,
-                (random() * 1000 + 100)::numeric(10,2) as base_rep_m_area,
-                (random() * 1000 + 100)::numeric(10,2) as base_rep_area,
-                (random() * 1000 + 100)::numeric(10,2) as base_gis_m_area,
-                (random() * 1000 + 100)::numeric(10,2) as base_gis_area,
-                (ARRAY['GBR', 'USA', 'CAN', 'AUS', 'BRA', 'KEN', 'TZA', 'ZAF', 'IND', 'CHN'])[floor(random() * 10 + 1)] as base_iso3,
-                (2015 + floor(random() * 8))::integer as base_status_yr,
-                (ARRAY['Ia', 'Ib', 'II', 'III', 'IV', 'V', 'VI', 'Not Reported'])[floor(random() * 8 + 1)] as base_iucn_cat,
-                (ARRAY['Government', 'Joint', 'Private', 'Communal', 'Not Reported'])[floor(random() * 5 + 1)] as base_gov_type,
-                (ARRAY['Yes', 'No', 'Not Reported'])[floor(random() * 3 + 1)] as base_mang_plan,
-                (ARRAY['Yes', 'No', 'Not Reported'])[floor(random() * 3 + 1)] as base_int_crit,
-                (ARRAY['Marine', 'Terrestrial', 'Both', 'Not Reported'])[floor(random() * 4 + 1)] as base_marine,
-                (ARRAY['National', 'Regional', 'International', 'Not Reported'])[floor(random() * 4 + 1)] as base_desig_eng,
-                (ARRAY['National', 'Regional', 'International', 'Not Reported'])[floor(random() * 4 + 1)] as base_desig_type,
-                (ARRAY['Yes', 'No', 'Not Reported'])[floor(random() * 3 + 1)] as base_no_take,
-                (random() * 100 + 10)::numeric(10,2) as base_no_take_area,
-                (random() * 1000 + 1)::integer as base_metadataid
-            ),
-            parcel_numbers AS (
-              SELECT generate_series(1, 5) as parcel_num
-            ),
-            multi_parcel_data AS (
-              SELECT#{' '}
-                b.base_id as wdpaid,
-                b.base_id::text || '_' || p.parcel_num as wdpa_pid,
-                b.base_name || ' - Parcel ' || p.parcel_num as name,
-                b.base_orig_name || ' - Parcel ' || p.parcel_num as orig_name,
-                b.base_rep_m_area as rep_m_area,
-                b.base_rep_area as rep_area,
-                b.base_gis_m_area as gis_m_area,
-                b.base_gis_area as gis_area,
-                b.base_iso3 as iso3,
-                'Designated' as status,
-                b.base_status_yr as status_yr,
-                b.base_iucn_cat as iucn_cat,
-                b.base_gov_type as gov_type,
-                'Test Management Authority ' || b.base_id as mang_auth,
-                b.base_mang_plan as mang_plan,
-                b.base_int_crit as int_crit,
-                b.base_marine as marine,
-                b.base_desig_eng as desig_eng,
-                b.base_desig_type as desig_type,
-                b.base_no_take as no_take,
-                b.base_no_take_area as no_take_area,
-                ST_GeomFromText('POLYGON((' ||#{' '}
-                  (b.base_id * 0.1 + (p.parcel_num - 1) * 0.2)::numeric(10,6) || ' ' ||#{' '}
-                  (b.base_id * 0.1 + (p.parcel_num - 1) * 0.2)::numeric(10,6) || ', ' ||
-                  ((b.base_id * 0.1 + (p.parcel_num - 1) * 0.2 + 0.1)::numeric(10,6)) || ' ' ||#{' '}
-                  (b.base_id * 0.1 + (p.parcel_num - 1) * 0.2)::numeric(10,6) || ', ' ||
-                  ((b.base_id * 0.1 + (p.parcel_num - 1) * 0.2 + 0.1)::numeric(10,6)) || ' ' ||#{' '}
-                  ((b.base_id * 0.1 + (p.parcel_num - 1) * 0.2 + 0.1)::numeric(10,6)) || ', ' ||
-                  (b.base_id * 0.1 + (p.parcel_num - 1) * 0.2)::numeric(10,6) || ' ' ||#{' '}
-                  ((b.base_id * 0.1 + (p.parcel_num - 1) * 0.2 + 0.1)::numeric(10,6)) || ', ' ||
-                  (b.base_id * 0.1 + (p.parcel_num - 1) * 0.2)::numeric(10,6) || ' ' ||#{' '}
-                  (b.base_id * 0.1 + (p.parcel_num - 1) * 0.2)::numeric(10,6) || '))') as wkb_geometry,
-                b.base_metadataid as metadataid
-              FROM base_data b
-              CROSS JOIN parcel_numbers p
-              WHERE b.base_id IN (1, 2, 3, 4, 5)  -- Multi-parcel areas (using first 5 IDs for testing)
-            ),
-            single_parcel_data AS (
-              SELECT#{' '}
-                base_id as wdpaid,
-                base_id::text as wdpa_pid,
-                base_name as name,
-                base_orig_name as orig_name,
-                base_rep_m_area,
-                base_rep_area,
-                base_gis_m_area,
-                base_gis_area,
-                base_iso3,
-                'Designated' as status,
-                base_status_yr,
-                base_iucn_cat,
-                base_gov_type,
-                'Test Management Authority ' || base_id as mang_auth,
-                base_mang_plan,
-                base_int_crit,
-                base_marine,
-                base_desig_eng,
-                base_desig_type,
-                base_no_take,
-                base_no_take_area,
-                ST_GeomFromText('POLYGON((' ||#{' '}
-                  (base_id * 0.1)::numeric(10,6) || ' ' ||#{' '}
-                  (base_id * 0.1)::numeric(10,6) || ', ' ||
-                  ((base_id * 0.1 + 0.1)::numeric(10,6)) || ' ' ||#{' '}
-                  (base_id * 0.1)::numeric(10,6) || ', ' ||
-                  ((base_id * 0.1 + 0.1)::numeric(10,6)) || ' ' ||#{' '}
-                  ((base_id * 0.1 + 0.1)::numeric(10,6)) || ', ' ||
-                  (base_id * 0.1)::numeric(10,6) || ' ' ||#{' '}
-                  ((base_id * 0.1 + 0.1)::numeric(10,6)) || ', ' ||
-                  (base_id * 0.1)::numeric(10,6) || ' ' ||#{' '}
-                  (base_id * 0.1)::numeric(10,6) || '))') as wkb_geometry,
-                base_metadataid as metadataid
-              FROM base_data
-              WHERE base_id NOT IN (1, 2, 3, 4, 5)  -- Single-parcel areas (all other IDs)
-            )
-            SELECT * FROM multi_parcel_data
-            UNION ALL
-            SELECT * FROM single_parcel_data
-          SQL
+          # Specific WDPA IDs requested by user (removing duplicates)
+          specific_wdpa_ids = [17_231, 902_497, 555_558_374, 303_317, 309_970, 354_414, 32_674, 17_709, 18_807, 10_110, 306_777,
+            792, 4106, 303_067, 345_942, 306_779, 306_780, 555_526_767, 303_072, 18_805, 4044, 62_735, 3014, 143, 7523, 555_526_045, 555_539_517, 303_038, 555_577_562, 303_320, 555_547_502, 20_299, 7878, 62_990, 168_201, 10_279, 256, 95_349, 30_697, 555_624_257, 61_611, 68_175, 555_526_032, 365_025, 659, 17_744, 64_511, 12_223, 7873, 10_754, 718, 63_642, 147_297, 555_599_909, 61_498, 330_608, 322, 67_860, 15_089, 147_302, 555_637_437, 388_659, 767, 1085, 819, 555_526_036, 311_888, 555_555_490, 95_996, 303_322, 64_513, 303_552, 17_360, 83_037, 555_555_513, 555_542_446, 108_125, 555_525_592, 555_544_085, 391_970, 20_186, 63_136, 26_654, 6271, 106_711, 18_998, 62_716, 3981, 15_260, 186, 555_577_562, 147_283, 1088, 769, 26_625, 555_555_517, 555_555_499, 83_268, 68_137, 555_526_606, 3451, 663, 5977, 61_595, 13_165, 662, 9782, 6307, 7461, 306_808, 9817, 768, 389_011, 349_467, 555_592_552, 303_066, 555_705_647, 555_697_546, 915, 721, 13_966, 345_888, 4114, 555_514_399, 555_705_603, 303_045, 902_487, 555_624_365, 555_548_807, 555_582_988, 555_525_849, 30_040, 36_534, 313_091, 17_748,
+            # Additional IDs from PAME data
+            555_622_076, 555_622_075, 555_622_070, 555_542_444, 555_622_067, 555_622_077, 555_622_072, 555_542_441, 555_558_373, 555_622_078, 555_542_442, 555_622_074, 555_622_073, 555_622_069, 555_622_084, 555_622_086,
+            # Additional IDs from transboundary sites
+            100_672, 100_673, 100_764, 100_798, 2904, 365_380, 555_605_094, 555_558_197, 142, 236, 2554, 61_610, 145_532, 328_846,
+            # Additional IDs from DOPA4 and other sources
+            1, 3, 4, 6, 7, 8, 10, 12, 15, 16, 17, 18, 19, 20, 21, 22, 24, 27, 30, 555_576_134].uniq
 
-          ActiveRecord::Base.connection.execute(sql)
+          # Create the table with a simpler approach
+          table_name = Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')
 
-          # Verify the table was created
-          unless table_exists?(Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons'))
-            raise "Failed to create #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')} table"
+          # First create the table structure with unique constraint
+          create_table_sql = "CREATE TABLE #{table_name} (
+            wdpaid integer,
+            wdpa_pid text,
+            name text,
+            orig_name text,
+            rep_m_area numeric(10,2),
+            rep_area numeric(10,2),
+            gis_m_area numeric(10,2),
+            gis_area numeric(10,2),
+            iso3 text,
+            status text,
+            status_yr integer,
+            iucn_cat text,
+            gov_type text,
+            mang_auth text,
+            mang_plan text,
+            int_crit text,
+            marine text,
+            desig_eng text,
+            desig_type text,
+            no_take text,
+            no_take_area numeric(10,2),
+            wkb_geometry geometry,
+            metadataid integer,
+            UNIQUE(wdpaid, wdpa_pid)
+          )"
+
+          ActiveRecord::Base.connection.execute(create_table_sql)
+
+          # Insert specific WDPA IDs with parcels (first 10 get 5 parcels each)
+          multi_parcel_ids = specific_wdpa_ids.first(10)
+          multi_parcel_ids.each do |wdpa_id|
+            5.times do |parcel_num|
+              insert_sql = "INSERT INTO #{table_name} VALUES (
+                #{wdpa_id},
+                '#{wdpa_id}_#{parcel_num + 1}',
+                'Test Protected Area #{wdpa_id} - Parcel #{parcel_num + 1}',
+                'Original Test Name #{wdpa_id} - Parcel #{parcel_num + 1}',
+                #{rand(100..1100).round(2)},
+                #{rand(100..1100).round(2)},
+                #{rand(100..1100).round(2)},
+                #{rand(100..1100).round(2)},
+                '#{%w[GBR USA CAN AUS BRA KEN TZA ZAF IND CHN].sample}',
+                'Designated',
+                #{rand(2015..2022)},
+                '#{['Ia', 'Ib', 'II', 'III', 'IV', 'V', 'VI', 'Not Reported'].sample}',
+                '#{['Government', 'Joint', 'Private', 'Communal', 'Not Reported'].sample}',
+                'Test Management Authority #{wdpa_id}',
+                '#{['Yes', 'No', 'Not Reported'].sample}',
+                '#{['Yes', 'No', 'Not Reported'].sample}',
+                '#{['Marine', 'Terrestrial', 'Both', 'Not Reported'].sample}',
+                '#{['National', 'Regional', 'International', 'Not Reported'].sample}',
+                '#{['National', 'Regional', 'International', 'Not Reported'].sample}',
+                '#{['Yes', 'No', 'Not Reported'].sample}',
+                #{rand(10..110).round(2)},
+                ST_GeomFromText('POLYGON((#{(wdpa_id * 0.1) + (parcel_num * 0.2)} #{(wdpa_id * 0.1) + (parcel_num * 0.2)}, #{(wdpa_id * 0.1) + (parcel_num * 0.2) + 0.1} #{(wdpa_id * 0.1) + (parcel_num * 0.2)}, #{(wdpa_id * 0.1) + (parcel_num * 0.2) + 0.1} #{(wdpa_id * 0.1) + (parcel_num * 0.2) + 0.1}, #{(wdpa_id * 0.1) + (parcel_num * 0.2)} #{(wdpa_id * 0.1) + (parcel_num * 0.2) + 0.1}, #{(wdpa_id * 0.1) + (parcel_num * 0.2)} #{(wdpa_id * 0.1) + (parcel_num * 0.2)}))'),
+                #{rand(1..1000)}
+              )"
+              begin
+                ActiveRecord::Base.connection.execute(insert_sql)
+              rescue ActiveRecord::StatementInvalid => e
+                raise e unless e.message.include?('duplicate key value')
+
+                Rails.logger.warn "Skipping duplicate entry: wdpa_id=#{wdpa_id}, wdpa_pid=#{wdpa_id}_#{parcel_num + 1}"
+              end
+            end
           end
 
-          # Count total records
-          total_records = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')}").to_i
+          # Insert remaining specific WDPA IDs as single parcels
+          single_parcel_ids = specific_wdpa_ids[10..-1]
+          single_parcel_ids.each do |wdpa_id|
+            insert_sql = "INSERT INTO #{table_name} VALUES (
+              #{wdpa_id},
+              '#{wdpa_id}',
+              'Test Protected Area #{wdpa_id}',
+              'Original Test Name #{wdpa_id}',
+              #{rand(100..1100).round(2)},
+              #{rand(100..1100).round(2)},
+              #{rand(100..1100).round(2)},
+              #{rand(100..1100).round(2)},
+              '#{%w[GBR USA CAN AUS BRA KEN TZA ZAF IND CHN].sample}',
+              'Designated',
+              #{rand(2015..2022)},
+              '#{['Ia', 'Ib', 'II', 'III', 'IV', 'V', 'VI', 'Not Reported'].sample}',
+              '#{['Government', 'Joint', 'Private', 'Communal', 'Not Reported'].sample}',
+              'Test Management Authority #{wdpa_id}',
+              '#{['Yes', 'No', 'Not Reported'].sample}',
+              '#{['Yes', 'No', 'Not Reported'].sample}',
+              '#{['Marine', 'Terrestrial', 'Both', 'Not Reported'].sample}',
+              '#{['National', 'Regional', 'International', 'Not Reported'].sample}',
+              '#{['National', 'Regional', 'International', 'Not Reported'].sample}',
+              '#{['Yes', 'No', 'Not Reported'].sample}',
+              #{rand(10..110).round(2)},
+              ST_GeomFromText('POLYGON((#{wdpa_id * 0.1} #{wdpa_id * 0.1}, #{(wdpa_id * 0.1) + 0.1} #{wdpa_id * 0.1}, #{(wdpa_id * 0.1) + 0.1} #{(wdpa_id * 0.1) + 0.1}, #{wdpa_id * 0.1} #{(wdpa_id * 0.1) + 0.1}, #{wdpa_id * 0.1} #{wdpa_id * 0.1}))'),
+              #{rand(1..1000)}
+            )"
+            begin
+              ActiveRecord::Base.connection.execute(insert_sql)
+            rescue ActiveRecord::StatementInvalid => e
+              raise e unless e.message.include?('duplicate key value')
 
-          Rails.logger.info "Created dummy #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')} table with #{total_records} records"
-          Rails.logger.info 'Multi-parcel protected areas created: wdpa_id 1-5 (5 parcels each) - format like 1_1, 1_2, etc.'
+              Rails.logger.warn "Skipping duplicate entry: wdpa_id=#{wdpa_id}, wdpa_pid=#{wdpa_id}"
+            end
+          end
+
+          # Insert random WDPA IDs as single parcels
+          random_start = specific_wdpa_ids.max + 1
+          random_end = random_start + Wdpa::Portal::Config::StagingConfig.dummy_data_count - 1
+          (random_start..random_end).each do |wdpa_id|
+            insert_sql = "INSERT INTO #{table_name} VALUES (
+              #{wdpa_id},
+              '#{wdpa_id}',
+              'Test Protected Area #{wdpa_id}',
+              'Original Test Name #{wdpa_id}',
+              #{rand(100..1100).round(2)},
+              #{rand(100..1100).round(2)},
+              #{rand(100..1100).round(2)},
+              #{rand(100..1100).round(2)},
+              '#{%w[GBR USA CAN AUS BRA KEN TZA ZAF IND CHN].sample}',
+              'Designated',
+              #{rand(2015..2022)},
+              '#{['Ia', 'Ib', 'II', 'III', 'IV', 'V', 'VI', 'Not Reported'].sample}',
+              '#{['Government', 'Joint', 'Private', 'Communal', 'Not Reported'].sample}',
+              'Test Management Authority #{wdpa_id}',
+              '#{['Yes', 'No', 'Not Reported'].sample}',
+              '#{['Yes', 'No', 'Not Reported'].sample}',
+              '#{['Marine', 'Terrestrial', 'Both', 'Not Reported'].sample}',
+              '#{['National', 'Regional', 'International', 'Not Reported'].sample}',
+              '#{['National', 'Regional', 'International', 'Not Reported'].sample}',
+              '#{['Yes', 'No', 'Not Reported'].sample}',
+              #{rand(10..110).round(2)},
+              ST_GeomFromText('POLYGON((#{wdpa_id * 0.1} #{wdpa_id * 0.1}, #{(wdpa_id * 0.1) + 0.1} #{wdpa_id * 0.1}, #{(wdpa_id * 0.1) + 0.1} #{(wdpa_id * 0.1) + 0.1}, #{wdpa_id * 0.1} #{(wdpa_id * 0.1) + 0.1}, #{wdpa_id * 0.1} #{wdpa_id * 0.1}))'),
+              #{rand(1..1000)}
+            )"
+            begin
+              ActiveRecord::Base.connection.execute(insert_sql)
+            rescue ActiveRecord::StatementInvalid => e
+              raise e unless e.message.include?('duplicate key value')
+
+              Rails.logger.warn "Skipping duplicate entry: wdpa_id=#{wdpa_id}, wdpa_pid=#{wdpa_id}"
+            end
+          end
+
+          # Verify the table was created
+          raise "Failed to create #{table_name} table" unless table_exists?(table_name)
+
+          # Count total records
+          total_records = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{table_name}").to_i
+
+          Rails.logger.info "Created dummy #{table_name} table with #{total_records} records"
+          Rails.logger.info "Generated #{specific_wdpa_ids.length} specific WDPA IDs and #{Wdpa::Portal::Config::StagingConfig.dummy_data_count} random ones"
+          Rails.logger.info 'Multi-parcel protected areas created: first 10 specific WDPA IDs (5 parcels each) - format like 17231_1, 17231_2, etc.'
         end
 
         def self.create_dummy_points_table

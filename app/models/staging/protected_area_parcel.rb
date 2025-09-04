@@ -7,7 +7,7 @@ module Staging
 
     has_and_belongs_to_many :countries,
       # We still read countries from live countries table
-      join_table: 'staging_countries_protected_area_parcels',
+      join_table: Country.countries_pa_parcels_junction_table_name,
       foreign_key: 'protected_area_parcel_id',
       association_foreign_key: 'country_id'
 
@@ -17,7 +17,7 @@ module Staging
     has_and_belongs_to_many :sources,
       # we can use the name 'sources' everywhere but then it is linking from Staging::Source not Source table
       class_name: 'Staging::Source',
-      join_table: 'staging_protected_area_parcels_sources',
+      join_table: Staging::Source.protected_area_parcels_sources_junction_table_name,
       foreign_key: 'protected_area_parcel_id',
       association_foreign_key: 'source_id'
 

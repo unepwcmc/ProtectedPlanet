@@ -4,7 +4,7 @@
 # TODO: green_list_status needs linking up see lib/modules/wdpa/green_list_importer.rb for more info
 
 class ProtectedAreaParcel < ApplicationRecord
-
+  
   # Make sure to make the uniqueness based on the conbination of wdpa_id + wdpa_pid
   validates :wdpa_id, uniqueness: { scope: :wdpa_pid }
 
@@ -37,9 +37,5 @@ class ProtectedAreaParcel < ApplicationRecord
   def create_slug
     updated_slug = [wdpa_id, wdpa_pid, name, designation.try(:name)].join(' ').parameterize
     update_attributes(slug: updated_slug)
-  end
-
-  def table_name
-    "protected_area_parcels"
   end
 end

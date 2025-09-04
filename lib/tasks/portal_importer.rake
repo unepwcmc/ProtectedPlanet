@@ -3,7 +3,6 @@ namespace :portal_importer do
   task generate_dummy_views: :environment do
     puts 'Generating dummy portal tables for testing...'
 
-    ENV['WDPA_PORTAL_TEST_MODE'] = 'true'
     Wdpa::Portal::Services::DummyDataGenerator.generate_test_views
 
     puts 'Dummy portal tables created successfully!'
@@ -17,8 +16,6 @@ namespace :portal_importer do
   desc 'Clean up dummy portal tables'
   task cleanup_dummy_views: :environment do
     puts 'Cleaning up dummy portal tables...'
-
-    ENV['WDPA_PORTAL_TEST_MODE'] = 'true'
     Wdpa::Portal::Services::DummyDataGenerator.cleanup_test_views
     puts 'Dummy portal tables cleaned up successfully!'
   end
@@ -67,7 +64,6 @@ namespace :portal_importer do
       puts '✅ Dummy data already exists'
     else
       puts "❌ Dummy data doesn't exist. Generating it first..."
-      ENV['WDPA_PORTAL_TEST_MODE'] = 'true'
       Wdpa::Portal::Services::DummyDataGenerator.generate_test_views
       puts '✅ Dummy data generated'
     end
@@ -120,7 +116,6 @@ namespace :portal_importer do
   task test_config: :environment do
     puts 'Portal Test Mode Configuration:'
     puts '================================='
-    puts "Test Mode Enabled: #{Wdpa::Portal::Config::StagingConfig.test_mode?}"
     puts "Dummy Data Count: #{Wdpa::Portal::Config::StagingConfig.dummy_data_count}"
     puts ''
     puts 'Environment Variables:'

@@ -27,6 +27,30 @@ class Country < ApplicationRecord
 
   default_scope { where.not(iso_3: BLACKLISTED_ISO3) }
 
+  def self.countries_pas_junction_table_name
+    'countries_protected_areas'
+  end
+
+  def self.countries_pa_parcels_junction_table_name
+    'countries_protected_area_parcels'
+  end
+
+  def self.countries_pame_evaluations_junction_table_name
+    'countries_pame_evaluations'
+  end
+
+  def self.staging_countries_pas_junction_table_name
+    'staging_countries_protected_areas'
+  end
+
+  def self.staging_countries_pa_parcels_junction_table_name
+    'staging_countries_protected_area_parcels'
+  end
+
+  def self.staging_countries_pame_evaluations_junction_table_name
+    'staging_countries_pame_evaluations'
+  end
+
   def wdpa_ids
     protected_areas.map(&:wdpa_id)
   end
