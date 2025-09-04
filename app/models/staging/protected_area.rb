@@ -30,8 +30,8 @@ module Staging
 
     has_many :networks_protected_areas, dependent: :destroy
     has_many :networks, through: :networks_protected_areas
-    has_many :pame_evaluations
-    has_many :story_map_links
+    has_many :pame_evaluations, class_name: 'Staging::PameEvaluation'
+    has_many :story_map_links, class_name: 'Staging::StoryMapLink'
 
     belongs_to :no_take_status, class_name: 'Staging::NoTakeStatus'
     belongs_to :legal_status

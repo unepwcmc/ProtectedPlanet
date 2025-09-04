@@ -21,6 +21,7 @@ module Wdpa::Portal
         global_stats: Wdpa::Shared::Importer::GlobalStats.import_staging,
         green_list: Wdpa::Portal::Importers::GreenList.import,
         pame: Wdpa::Portal::Importers::Pame.import,
+        story_map_links: Wdpa::Shared::Importer::StoryMapLinkList.import_staging,
       }
 
       # Wdpa::SourceImporter.import wdpa_release ## complete
@@ -30,7 +31,7 @@ module Wdpa::Portal
       # Wdpa::Shared::Importer::GlobalStats.import ## complete
       # Wdpa::GreenListImporter.import ## complete
       # Wdpa::PameImporter.import ## complete 
-      # Wdpa::StoryMapLinkListImporter.import
+      # Wdpa::StoryMapLinkListImporter.import ## complete 
       # Wdpa::BiopamaCountriesImporter.import
 
       # TODO_IMPORT: Add post-import validation once Step 1 is complete
