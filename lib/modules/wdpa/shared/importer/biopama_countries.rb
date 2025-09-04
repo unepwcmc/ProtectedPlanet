@@ -1,8 +1,12 @@
 module Wdpa::Shared::Importer
   class BiopamaCountries
+    # NOTE: This importer intentionally updates the LIVE Country table regardless of whether
+    # it's called from live or staging import processes. BIOPAMA country flags are global
+    # metadata that should be consistent across all environments and don't need staging
+    # table separation.
     BIOPAMA_COUNTRIES_CSV = "#{Rails.root}/lib/data/seeds/biopama_countries_iso_codes.csv"
 
-    def self.import
+    def self.update_live_table
       countries_updated = 0
       countries_not_found = 0
 

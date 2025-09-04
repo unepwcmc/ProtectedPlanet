@@ -1,6 +1,6 @@
 module Wdpa::Portal::Importers
   class CountriesProtectedAreaGeometryStatistics
-    def self.calculate
+    def self.import_staging
       country_ids = Country.pluck(:id)
       processed_countries_count = 0
       errors = []

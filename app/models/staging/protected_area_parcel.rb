@@ -7,7 +7,7 @@ module Staging
 
     has_and_belongs_to_many :countries,
       # We still read countries from live countries table
-      join_table: Country.countries_pa_parcels_junction_table_name,
+      join_table: Country.staging_countries_pa_parcels_junction_table_name,
       foreign_key: 'protected_area_parcel_id',
       association_foreign_key: 'country_id'
 

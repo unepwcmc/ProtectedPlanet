@@ -1,31 +1,28 @@
 # frozen_string_literal: true
 
+# As of 04Apr2025, Greenlist is only imported into the `protected_areas` table.
+
+# Protential future Issue:
+# - At the moment, the system only greenlists entire a protected area in the `protected_areas` table
+#   the entire site is greenlisted which might not be the case in future.
+
+# In future if greenlist is only applying to parcel A, B but not C (not entire protected area)
+# then the following actions are needed to change the code here:
+# - Parcels in `protected_area_parcels` also need to be updated/imported for Greenlist status.
+# - This is problematic for PAs with multiple parcels, where not all parcels are greenlisted.
+# - `green_list_url` already exists in the `protected_area_parcels` table.
+# - Add `green_list_status_id` column to `protected_area_parcels` to track individual parcel status.
+
+# See app/models/protected_area_parcel.rb to link up
 require 'csv'
 
 module Wdpa::Portal::Importers
   class GreenList
-    def self.import
-      new.import
-    end
-
-    def import
+    def self.import_staging
       ActiveRecord::Base.transaction do
         clear_existing_data
-
-        result = process_csv_file
-
-        result
+        process_csv_file
       end
-    rescue StandardError => e
-      Rails.logger.error "Green list import failed: #{e.message}"
-      {
-        success: false,
-        imported_count: 0,
-        errors: ["Green list import failed: #{e.message}"],
-        invalid_wdpa_ids: [],
-        not_found_wdpa_ids: [],
-        duplicates: []
-      }
     end
 
     private

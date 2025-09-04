@@ -1,6 +1,6 @@
 module Wdpa::Portal::Importers
   class SourceImporter
-    def self.import
+    def self.import_staging
       adapter = Wdpa::Portal::Adapters::ImportViewsAdapter.new
       relation = adapter.sources_relation
 

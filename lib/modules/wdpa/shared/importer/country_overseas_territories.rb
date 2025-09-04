@@ -4,13 +4,17 @@ require 'csv'
 
 module Wdpa::Shared::Importer
   class CountryOverseasTerritories
+    # NOTE: This importer intentionally updates the LIVE Country table regardless of whether
+    # it's called from live or staging import processes. Country relationships (parent-child)
+    # are global metadata that should be consistent across all environments and don't need
+    # staging table separation.
     OVERSEAS_TERRITORIES_CSV = "#{Rails.root}/lib/data/seeds/overseas_territories.csv".freeze
 
-    def self.import
-      new.import
+    def self.update_live_table
+      new.update_live_table
     end
 
-    def import
+    def update_live_table
       csv = CSV.read(OVERSEAS_TERRITORIES_CSV)
       csv.shift
 

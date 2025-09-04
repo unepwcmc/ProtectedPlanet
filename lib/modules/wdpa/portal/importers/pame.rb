@@ -8,7 +8,7 @@ module Wdpa::Portal::Importers
       ::Utilities::Files.latest_file_by_glob('lib/data/seeds/pame_data_*.csv')
     end
 
-    def self.import(csv_file = nil)
+    def self.import_staging(csv_file = nil)
       Rails.logger.info 'Deleting old staging PAME evaluations...'
       Staging::PameEvaluation.delete_all
       Rails.logger.info 'Importing staging PAME evaluations...'

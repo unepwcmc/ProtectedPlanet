@@ -1,6 +1,6 @@
 module Wdpa::Portal::Importers
   class ProtectedAreaGeometry
-    def self.import
+    def self.import_staging
       results = {}
 
       results[:protected_areas] = import_geometry_for_table(Staging::ProtectedArea.table_name)
