@@ -25,7 +25,7 @@ class Wdpa::Importer
     Wdpa::GreenListImporter.import
     Wdpa::PameImporter.import
     Wdpa::Shared::Importer::StoryMapLinkList.import_live
-    Wdpa::BiopamaCountriesImporter.import
+    Wdpa::Shared::Importer::BiopamaCountries.import
     Rails.logger.info('Wdpa::Importer.execute_importers: All importers have completed its job')
   end
 end
