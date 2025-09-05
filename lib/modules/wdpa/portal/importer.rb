@@ -24,13 +24,11 @@ module Wdpa::Portal
         protected_areas_attributes: Wdpa::Portal::Importers::ProtectedAreaAttribute.import_staging,
         protected_areas_geometries: Wdpa::Portal::Importers::ProtectedAreaGeometry.import_staging,
         protected_areas_related_sources: Wdpa::Shared::Importer::ProtectedAreasRelatedSource.import_staging,
-        # Do we need this here as it will be imported in country_statistics
-        countries_protected_areas_geometry_statistics: Wdpa::Portal::Importers::CountriesProtectedAreaGeometryStatistics.import_staging,
         global_stats: Wdpa::Shared::Importer::GlobalStats.import_staging,
         green_list: Wdpa::Portal::Importers::GreenList.import_staging,
         pame: Wdpa::Portal::Importers::Pame.import_staging,
         story_map_links: Wdpa::Shared::Importer::StoryMapLinkList.import_staging,
-        country_statistics: Wdpa::Portal::Importers::CountryStatistics.import_staging
+        country_statistics: Wdpa::Portal::Importers::CountryStatistics.import_staging,
       }
     end
 

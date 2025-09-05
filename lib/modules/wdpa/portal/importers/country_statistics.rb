@@ -11,17 +11,70 @@ module Wdpa::Portal::Importers
     end
 
     def self.import_staging
-      ActiveRecord::Base.transaction do
-        CountryStatistic.delete_all
-        PameStatistic.delete_all
-        import_stats(latest_country_statistics_csv, CountryStatistic)
-        import_stats(latest_pame_country_statistics_csv, PameStatistic)
+      errors = []
+      geometry_result = nil
+      country_result = nil
+      pame_result = nil
 
-        # Check this thing
-        # Import Aichi11Target stats from CSV
-        Aichi11Target.instance
-        Wdpa::GeometryRatioCalculator.calculate
+      ActiveRecord::Base.transaction do
+        geometry_result = import_geometry_statistics
+        country_result = import_country_statistics
+        pame_result = import_pame_statistics
+
+        errors.concat(geometry_result[:errors])
+        errors.concat(country_result[:errors])
+        errors.concat(pame_result[:errors])
       end
+
+      Rails.logger.info 'Country statistics import completed'
+      {
+        country_stats_imported_success: country_result[:errors].empty?,
+        country_stats_imported_errors: country_result[:errors],
+        country_stats_imported: country_result[:country_stats_imported],
+
+        countries_pame_stats_imported_success: pame_result[:errors].empty?,
+        countries_pame_stats_imported_errors: pame_result[:errors],
+        countries_pame_stats_imported: pame_result[:pame_stats_imported],
+
+        countries_pa_geometry_counted_success: geometry_result[:errors].empty?,
+        countries_pa_geometry_counted_errors: geometry_result[:errors],
+        countries_pa_geometry_counted: geometry_result[:pa_geometry_counted]
+      }
+    end
+
+    def self.import_geometry_statistics
+      result = Wdpa::Portal::Importers::CountriesProtectedAreaGeometryStatistics.import_staging
+
+      {
+        pa_geometry_counted: result[:processed_countries_count] || 0,
+        errors: result[:errors] || []
+      }
+    end
+
+    def self.import_country_statistics
+      imported = import_stats(latest_country_statistics_csv, Staging::CountryStatistic)
+      {
+        country_stats_imported: imported,
+        errors: []
+      }
+    rescue StandardError => e
+      {
+        country_stats_imported: 0,
+        errors: ["Country statistics import failed: #{e.message}"]
+      }
+    end
+
+    def self.import_pame_statistics
+      imported = import_stats(latest_pame_country_statistics_csv, Staging::PameStatistic)
+      {
+        pame_stats_imported: imported,
+        errors: []
+      }
+    rescue StandardError => e
+      {
+        pame_stats_imported: 0,
+        errors: ["PAME statistics import failed: #{e.message}"]
+      }
     end
 
     def self.import_stats(path, model)
@@ -29,16 +82,20 @@ module Wdpa::Portal::Importers
         hash[iso_3] = id
       end
 
+      imported_count = 0
       CSV.foreach(path, headers: true) do |row|
         country_iso3 = row.delete('iso3').last
         country_id = countries[country_iso3]
         # If the value is na (not applicable) use nil
         row.each { |key, value| row[key] = nil if value && value.downcase == 'na' }
         attrs = { country_id: country_id }.merge(row)
-        attrs = attrs.merge(pame_assessments(country_id)) if model == PameStatistic
+        attrs = attrs.merge(pame_assessments(country_id)) if model == Staging::PameStatistic
 
         model.create(attrs)
+        imported_count += 1
       end
+
+      imported_count
     end
 
     def self.pame_assessments(country_id)
