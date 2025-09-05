@@ -51,6 +51,7 @@ module Wdpa::Portal::Config
         GlobalStatistic.table_name => Staging::GlobalStatistic.table_name,
         PameEvaluation.table_name => Staging::PameEvaluation.table_name,
         PameSource.table_name => Staging::PameSource.table_name,
+        PameStatistic.table_name => Staging::PameStatistic.table_name,
         StoryMapLink.table_name => Staging::StoryMapLink.table_name,
 
         # Add junction tables for countries
