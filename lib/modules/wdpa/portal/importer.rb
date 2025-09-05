@@ -36,7 +36,8 @@ module Wdpa::Portal
     def self.update_data_in_live_tables
       {
         country_overseas_territories: Wdpa::Shared::Importer::CountryOverseasTerritories.update_live_table,
-        biopama_countries: Wdpa::Shared::Importer::BiopamaCountries.update_live_table
+        biopama_countries: Wdpa::Shared::Importer::BiopamaCountries.update_live_table,
+        aichi11_target: Aichi11Target.update_live_table
       }
     end
 

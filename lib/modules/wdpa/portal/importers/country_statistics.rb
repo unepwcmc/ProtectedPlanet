@@ -11,7 +11,6 @@ module Wdpa::Portal::Importers
     end
 
     def self.import_staging
-      errors = []
       geometry_result = nil
       country_result = nil
       pame_result = nil
@@ -20,10 +19,6 @@ module Wdpa::Portal::Importers
         geometry_result = import_geometry_statistics
         country_result = import_country_statistics
         pame_result = import_pame_statistics
-
-        errors.concat(geometry_result[:errors])
-        errors.concat(country_result[:errors])
-        errors.concat(pame_result[:errors])
       end
 
       Rails.logger.info 'Country statistics import completed'
