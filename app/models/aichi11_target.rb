@@ -44,17 +44,15 @@ class Aichi11Target < ActiveRecord::Base
         break
       end
 
-      if first_row
-        if record.persisted?
-          record.update_attributes!(first_row.to_h)
-          Rails.logger.info 'Aichi11Target: Updated existing record with fresh CSV data'
-        else
-          record.assign_attributes(first_row.to_h)
-          record.save!
-          Rails.logger.info 'Aichi11Target: Created new record from CSV data'
-        end
+      raise StandardError, 'No data found in CSV file' unless first_row
+
+      if record.persisted?
+        record.update_attributes!(first_row.to_h)
+        Rails.logger.info 'Aichi11Target: Updated existing record with fresh CSV data'
       else
-        raise StandardError, 'No data found in CSV file'
+        record.assign_attributes(first_row.to_h)
+        record.save!
+        Rails.logger.info 'Aichi11Target: Created new record from CSV data'
       end
 
       {

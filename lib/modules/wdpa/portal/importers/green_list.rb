@@ -16,7 +16,9 @@
 # See app/models/protected_area_parcel.rb to link up
 require 'csv'
 
-module Wdpa::Portal::Importers
+module Wdpa
+  module Portal
+    module Importers
   class GreenList
     def self.import_staging
       ActiveRecord::Base.transaction do
@@ -114,4 +116,6 @@ module Wdpa::Portal::Importers
       Rails.logger.info "  - Duplicates: #{duplicates.join(',')}" if duplicates.any?
     end
   end
+end
+end
 end
