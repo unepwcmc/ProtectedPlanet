@@ -103,7 +103,7 @@ module Wdpa::Portal::Importers
     end
 
     def self.csv_file_path
-      ::Utilities::Files.latest_file_by_glob(Wdpa::Portal::Config::StagingConfig.green_list_csv_path)
+      ::Utilities::Files.latest_file_by_glob('lib/data/seeds/green_list_sites_*.csv')
     end
 
     def self.log_import_results(invalid, not_found, duplicates, imported_count)

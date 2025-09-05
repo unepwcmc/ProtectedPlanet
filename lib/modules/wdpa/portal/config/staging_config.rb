@@ -58,7 +58,7 @@ module Wdpa::Portal::Config
         Country.countries_pas_junction_table_name => Country.staging_countries_pas_junction_table_name,
         Country.countries_pa_parcels_junction_table_name => Country.staging_countries_pa_parcels_junction_table_name,
         Country.countries_pame_evaluations_junction_table_name => Country.staging_countries_pame_evaluations_junction_table_name,
-        
+
         # Add junction tables for sources
         Source.protected_areas_sources_junction_table_name => Staging::Source.protected_areas_sources_junction_table_name,
         Source.protected_area_parcels_sources_junction_table_name => Staging::Source.protected_area_parcels_sources_junction_table_name
@@ -79,33 +79,6 @@ module Wdpa::Portal::Config
 
     def self.staging_tables_exist?
       staging_live_tables_hash.values.all? { |table| ActiveRecord::Base.connection.table_exists?(table) }
-    end
-
-    # Foreign key configurations for staging tables
-    # These are additional foreign keys that should exist in staging but are not present in the live schema
-    def self.staging_foreign_keys
-      [
-        {
-          table_name: Staging::ProtectedArea.table_name,
-          column_name: :green_list_status_id,
-          referenced_table_name: Staging::GreenListStatus.table_name
-        },
-        {
-          table_name: Staging::ProtectedArea.table_name,
-          column_name: :no_take_status_id,
-          referenced_table_name: Staging::NoTakeStatus.table_name
-        },
-        {
-          table_name: Staging::ProtectedAreaParcel.table_name,
-          column_name: :no_take_status_id,
-          referenced_table_name: Staging::NoTakeStatus.table_name
-        }
-        # Add more foreign key configurations here as needed
-      ]
-    end
-
-    def self.green_list_csv_path
-      'lib/data/seeds/green_list_sites_*.csv'
     end
   end
 end
