@@ -23,24 +23,22 @@ module Wdpa
 
       def self.import_data_to_staging_tables
         {
-          sources: Wdpa::Portal::Importers::SourceImporter.import_staging,
-          protected_areas_attributes: Wdpa::Portal::Importers::ProtectedAreaAttribute.import_staging,
-          protected_areas_geometries: Wdpa::Portal::Importers::ProtectedAreaGeometry.import_staging,
-          protected_areas_related_sources: Wdpa::Shared::Importer::ProtectedAreasRelatedSource.import_staging,
-          global_stats: Wdpa::Shared::Importer::GlobalStats.import_staging,
-          green_list: Wdpa::Portal::Importers::GreenList.import_staging,
-          pame: Wdpa::Portal::Importers::Pame.import_staging,
-          story_map_links: Wdpa::Shared::Importer::StoryMapLinkList.import_staging,
-          country_statistics: Wdpa::Portal::Importers::CountryStatistics.import_staging
+          sources: Wdpa::Portal::Importers::Source.import_staging,
+          protected_areas: Wdpa::Portal::Importers::ProtectedArea.import_staging,
+          global_stats: Wdpa::Shared::Importer::GlobalStats.import_staging, # not depending on any importer
+          green_list: Wdpa::Portal::Importers::GreenList.import_staging, # only run after ProtectedArea importer
+          pame: Wdpa::Portal::Importers::Pame.import_staging, # only run after ProtectedArea importer
+          story_map_links: Wdpa::Shared::Importer::StoryMapLinkList.import_staging, # only run after ProtectedArea importer
+          country_statistics: Wdpa::Portal::Importers::CountryStatistics.import_staging # only run after ProtectedArea importer
         }
       end
 
       # The importers here update data in live country table
       def self.update_data_in_live_tables
         {
-          country_overseas_territories: Wdpa::Shared::Importer::CountryOverseasTerritories.update_live_table,
-          biopama_countries: Wdpa::Shared::Importer::BiopamaCountries.update_live_table,
-          aichi11_target: Aichi11Target.update_live_table
+          country_overseas_territories: Wdpa::Shared::Importer::CountryOverseasTerritories.update_live_table, # not depending on any importer
+          biopama_countries: Wdpa::Shared::Importer::BiopamaCountries.update_live_table, # As of 05Sep2025 it might not used # not depending on any importer
+          aichi11_target: Aichi11Target.update_live_table # As of 05Sep2025 it is probably not used # not depending on any importer
         }
       end
 

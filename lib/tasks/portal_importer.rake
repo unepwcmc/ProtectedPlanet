@@ -50,29 +50,28 @@ namespace :portal_importer do
   desc 'Portal importer'
   task import: :environment do
     puts 'start importing portal data'
-    # Ensure staging tables exist (create if missing for rake tasks)
-    begin
-      Wdpa::Portal::Utils::StagingTableManager.ensure_staging_tables_exist!(create_if_missing: true)
-      puts '✅ Staging tables ready'
-    rescue StandardError => e
-      puts "❌ Failed to ensure staging tables: #{e.message}"
-      raise e
-    end
 
-    # Ensure dummy data exists
-    if Wdpa::Portal::Config::StagingConfig.portal_views_exist?
-      puts '✅ Dummy data already exists'
-    else
-      puts "❌ Dummy data doesn't exist. Generating it first..."
+    begin
+      puts '🧹 Cleaning up test views...'
+      Wdpa::Portal::Services::DummyDataGenerator.cleanup_test_views
+      puts '✅ Test views cleaned up'
+
+      puts '🗑️ Dropping staging tables...'
+      Wdpa::Portal::Utils::StagingTableManager.drop_staging_tables
+      puts '✅ Staging tables dropped'
+
+      puts '📊 Generating test views...'
       Wdpa::Portal::Services::DummyDataGenerator.generate_test_views
-      puts '✅ Dummy data generated'
-    end
+      puts '✅ Test views generated'
 
-    puts ''
-    puts '🚀 Running Portal Importer...'
-    puts '=============================='
+      puts '🏗️ Creating staging tables...'
+      Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
+      puts '✅ Staging tables created'
 
-    begin
+      puts ''
+      puts '🚀 Running Portal Importer...'
+      puts '=============================='
+
       # Run the portal importer
       results = Wdpa::Portal::Importer.import
 
@@ -80,17 +79,39 @@ namespace :portal_importer do
       puts '📊 Import Results:'
       puts '=================='
 
-      if results[:protected_areas]
-        puts 'Protected Areas:'
-        puts "  - Attributes: #{results[:protected_areas][:attributes]}"
-        puts "  - Geometries: #{results[:protected_areas][:geometries]}"
+      # Show all results
+      results.each do |key, value|
+        puts "#{key.to_s.humanize}:"
+
+        case key
+        when :protected_areas
+          if value.is_a?(Hash)
+            puts "  - Duration: #{value[:duration_hours]} hours"
+            puts "  - Attributes: #{value[:protected_areas_attributes]}"
+            puts "  - Geometries: #{value[:protected_areas_geometries]}"
+            puts '  - Related Sources:'
+            if value[:protected_areas_related_sources]
+              puts "    * PARCC: #{value[:protected_areas_related_sources][:parcc]}"
+              puts "    * Irreplaceability: #{value[:protected_areas_related_sources][:irreplaceability]}"
+            end
+          else
+            puts "  #{value}"
+          end
+        when :sources, :global_stats, :green_list, :pame, :story_map_links, :country_statistics
+          if value.is_a?(Hash)
+            puts "  - Success: #{value[:success]}"
+            puts "  - Imported Count: #{value[:imported_count]}" if value[:imported_count]
+            puts "  - Errors: #{value[:errors].length}" if value[:errors] && value[:errors].any?
+            puts "  - Details: #{value[:details]}" if value[:details]
+          else
+            puts "  #{value}"
+          end
+        else
+          puts "  #{value}"
+        end
+        puts ''
       end
 
-      puts "Sources: #{results[:sources]}" if results[:sources]
-
-      puts "Related Sources: #{results[:related_sources]}" if results[:related_sources]
-
-      puts ''
       puts '✅ Portal import completed successfully!'
 
       # Show staging table counts
@@ -106,9 +127,6 @@ namespace :portal_importer do
       puts "❌ Portal import failed: #{e.message}"
       puts e.backtrace.first(5)
     end
-
-    puts ''
-    puts '🏁 Test completed!'
   end
 
   # TO_BE_DELETED_STEP_1: Test mode configuration task - remove once Step 1 materialized views are ready

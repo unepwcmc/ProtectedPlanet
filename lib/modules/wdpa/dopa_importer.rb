@@ -1,3 +1,4 @@
+# As of 05Sep2025, this doesn't seem to be used please double check though
 module Wdpa::DopaImporter
   DOPA_LIST = "#{Rails.root}/lib/data/seeds/dopa4_pas_list.csv"
   extend self

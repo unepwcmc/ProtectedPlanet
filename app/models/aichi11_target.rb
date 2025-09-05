@@ -1,3 +1,4 @@
+# As of 05Sep2025 It is likely not used anymore
 class Aichi11Target < ActiveRecord::Base
   validates_inclusion_of :singleton_guard, in: [0]
 

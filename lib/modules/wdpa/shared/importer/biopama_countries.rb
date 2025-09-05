@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# As of 05Sep2025 it might not used check with NC for confirmation
 module Wdpa
   module Shared
     module Importer
