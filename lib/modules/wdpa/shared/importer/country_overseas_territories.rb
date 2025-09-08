@@ -29,8 +29,9 @@ module Wdpa
             skipped: []
           }
 
-          ActiveRecord::Base.transaction do
-            csv.each do |parent_iso, child_isos|
+          csv.each do |parent_iso, child_isos|
+            # Wrap each parent-child relationship in its own transaction
+            ActiveRecord::Base.transaction do
               parent_country = Country.find_by_iso_3(parent_iso)
               child_isos = child_isos.split(';')
 

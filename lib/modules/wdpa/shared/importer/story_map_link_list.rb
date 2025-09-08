@@ -12,7 +12,7 @@ module Wdpa
           result
         end
 
-        def self.import_staging
+        def self.import_to_staging
           result = import_data(Staging::ProtectedArea, Staging::StoryMapLink)
           Rails.logger.info "Staging story map links import completed: #{result[:links_processed]} processed, #{result[:links_created]} created, #{result[:sites_not_found]} sites not found"
           result
@@ -37,11 +37,12 @@ module Wdpa
           soft_errors = []
 
           begin
-            ActiveRecord::Base.transaction do
-              csv = CSV.read(STORY_MAP_LINK_LIST_SITES_CSV)
-              csv.shift # remove headers
+            csv = CSV.read(STORY_MAP_LINK_LIST_SITES_CSV)
+            csv.shift # remove headers
 
-              csv.each do |row|
+            csv.each do |row|
+              # Wrap each row in its own transaction to prevent batch failure
+              ActiveRecord::Base.transaction do
                 links_processed += 1
                 site_id = begin
                   Integer(row[0])
@@ -65,10 +66,10 @@ module Wdpa
                   sites_not_found_list << row[0]
                   Rails.logger.warn "Protected Area with site_id #{row[0]} doesn't exist"
                 end
-              rescue StandardError => e
-                soft_errors << "Failed to process row: #{e.message}"
-                Rails.logger.warn "Failed to process row: #{e.message}"
               end
+            rescue StandardError => e
+              soft_errors << "Failed to process row #{row[0]}: #{e.message}"
+              Rails.logger.warn "Failed to process story map link row: #{e.message}"
             end
 
             {

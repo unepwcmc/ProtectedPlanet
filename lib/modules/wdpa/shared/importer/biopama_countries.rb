@@ -17,29 +17,28 @@ module Wdpa
             countries_not_found = 0
             soft_errors = []
 
-            ActiveRecord::Base.transaction do
-              csv = CSV.read(BIOPAMA_COUNTRIES_CSV)
-              csv.shift # remove headers
+            csv = CSV.read(BIOPAMA_COUNTRIES_CSV)
+            csv.shift # remove headers
 
-              csv.each do |row|
-                begin
-                  next if row[0].blank?
+            csv.each do |row|
+              # Wrap each row in its own transaction to prevent batch failure
+              ActiveRecord::Base.transaction do
+                next if row[0].blank?
 
-                  iso = row[0].strip
-                  country = Country.find_by_iso_3(iso)
+                iso = row[0].strip
+                country = Country.find_by_iso_3(iso)
 
-                  if country
-                    country.update_attributes(is_biopama: true)
-                    countries_updated += 1
-                  else
-                    countries_not_found += 1
-                    Rails.logger.warn "Country with ISO code #{iso} does not exist"
-                  end
-                rescue StandardError => e
-                  soft_errors << "Failed to process country #{row[0]}: #{e.message}"
-                  Rails.logger.warn "Failed to process country #{row[0]}: #{e.message}"
+                if country
+                  country.update_attributes(is_biopama: true)
+                  countries_updated += 1
+                else
+                  countries_not_found += 1
+                  Rails.logger.warn "Country with ISO code #{iso} does not exist"
                 end
               end
+            rescue StandardError => e
+              soft_errors << "Failed to process country #{row[0]}: #{e.message}"
+              Rails.logger.warn "Failed to process country #{row[0]}: #{e.message}"
             end
 
             Rails.logger.info "BIOPAMA countries import completed: #{countries_updated} updated, #{countries_not_found} not found"
