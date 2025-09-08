@@ -52,18 +52,6 @@ namespace :portal_importer do
     puts 'start importing portal data'
 
     begin
-      puts '🧹 Cleaning up test views...'
-      Wdpa::Portal::Services::DummyDataGenerator.cleanup_test_views
-      puts '✅ Test views cleaned up'
-
-      puts '🗑️ Dropping staging tables...'
-      Wdpa::Portal::Utils::StagingTableManager.drop_staging_tables
-      puts '✅ Staging tables dropped'
-
-      puts '📊 Generating test views...'
-      Wdpa::Portal::Services::DummyDataGenerator.generate_test_views
-      puts '✅ Test views generated'
-
       puts '🏗️ Creating staging tables...'
       Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
       puts '✅ Staging tables created'
@@ -86,23 +74,101 @@ namespace :portal_importer do
         case key
         when :protected_areas
           if value.is_a?(Hash)
-            puts "  - Duration: #{value[:duration_hours]} hours"
-            puts "  - Attributes: #{value[:protected_areas_attributes]}"
-            puts "  - Geometries: #{value[:protected_areas_geometries]}"
-            puts '  - Related Sources:'
-            if value[:protected_areas_related_sources]
-              puts "    * PARCC: #{value[:protected_areas_related_sources][:parcc]}"
-              puts "    * Irreplaceability: #{value[:protected_areas_related_sources][:irreplaceability]}"
+            puts "  - Success: #{value[:success]}"
+            puts "  - Soft Errors: #{value[:soft_errors]&.length || 0}"
+            puts "  - Hard Errors: #{value[:hard_errors]&.length || 0}"
+            if value[:additional_fields]
+              puts "  - Duration: #{value[:additional_fields][:duration_hours]} hours"
+              puts "  - Attributes: #{value[:additional_fields][:protected_areas_attributes]}"
+              puts "  - Geometries: #{value[:additional_fields][:protected_areas_geometries]}"
+              puts '  - Related Sources:'
+              if value[:additional_fields][:protected_areas_related_sources]
+                puts "    * PARCC: #{value[:additional_fields][:protected_areas_related_sources][:parcc]}"
+                puts "    * Irreplaceability: #{value[:additional_fields][:protected_areas_related_sources][:irreplaceability]}"
+              end
             end
           else
             puts "  #{value}"
           end
-        when :sources, :global_stats, :green_list, :pame, :story_map_links, :country_statistics
+        when :sources, :green_list, :pame
           if value.is_a?(Hash)
             puts "  - Success: #{value[:success]}"
             puts "  - Imported Count: #{value[:imported_count]}" if value[:imported_count]
-            puts "  - Errors: #{value[:errors].length}" if value[:errors] && value[:errors].any?
-            puts "  - Details: #{value[:details]}" if value[:details]
+            puts "  - Soft Errors: #{value[:soft_errors]&.length || 0}"
+            puts "  - Hard Errors: #{value[:hard_errors]&.length || 0}"
+            # Show additional fields for specific importers
+            if value[:additional_fields]
+              if key == :pame
+                if value[:additional_fields][:total_sources]
+                  puts "  - Total Sources: #{value[:additional_fields][:total_sources]}"
+                end
+                if value[:additional_fields][:site_ids_not_recognised]
+                  puts "  - Sites Not Recognised: #{value[:additional_fields][:site_ids_not_recognised]&.length || 0}"
+                end
+              elsif key == :green_list
+                if value[:additional_fields][:invalid_wdpa_ids]
+                  puts "  - Invalid WDPA IDs: #{value[:additional_fields][:invalid_wdpa_ids]&.length || 0}"
+                end
+                if value[:additional_fields][:not_found_wdpa_ids]
+                  puts "  - Not Found WDPA IDs: #{value[:additional_fields][:not_found_wdpa_ids]&.length || 0}"
+                end
+                if value[:additional_fields][:duplicates]
+                  puts "  - Duplicates: #{value[:additional_fields][:duplicates]&.length || 0}"
+                end
+              end
+            end
+          else
+            puts "  #{value}"
+          end
+        when :country_statistics
+          if value.is_a?(Hash)
+            puts "  - Success: #{value[:success]}"
+            puts "  - Soft Errors: #{value[:soft_errors]&.length || 0}"
+            puts "  - Hard Errors: #{value[:hard_errors]&.length || 0}"
+            if value[:additional_fields]
+              puts "  - Country PA Geometry: #{value[:additional_fields][:country_pa_geometry]}"
+              puts "  - Country Stats: #{value[:additional_fields][:country_stats]}"
+              puts "  - Country PAME Stats: #{value[:additional_fields][:country_pame_stats]}"
+            end
+          else
+            puts "  #{value}"
+          end
+        when :global_stats
+          if value.is_a?(Hash)
+            puts "  - Success: #{value[:success]}"
+            puts "  - Fields Updated: #{value[:fields_updated]}" if value[:fields_updated]
+            puts "  - Soft Errors: #{value[:soft_errors]&.length || 0}"
+            puts "  - Hard Errors: #{value[:hard_errors]&.length || 0}"
+          else
+            puts "  #{value}"
+          end
+        when :story_map_links
+          if value.is_a?(Hash)
+            puts "  - Success: #{value[:success]}"
+            puts "  - Links Processed: #{value[:links_processed]}" if value[:links_processed]
+            puts "  - Links Created: #{value[:links_created]}" if value[:links_created]
+            puts "  - Sites Not Found: #{value[:sites_not_found]}" if value[:sites_not_found]
+            puts "  - Soft Errors: #{value[:soft_errors]&.length || 0}"
+            puts "  - Hard Errors: #{value[:hard_errors]&.length || 0}"
+          else
+            puts "  #{value}"
+          end
+        when :country_overseas_territories, :biopama_countries, :aichi11_target
+          if value.is_a?(Hash)
+            puts "  - Success: #{value[:success]}"
+            puts "  - Imported Count: #{value[:imported_count]}" if value[:imported_count]
+            puts "  - Soft Errors: #{value[:soft_errors]&.length || 0}"
+            puts "  - Hard Errors: #{value[:hard_errors]&.length || 0}"
+            # Show specific fields for live table importers
+            if key == :country_overseas_territories
+              if value[:relationships_created]
+                puts "  - Relationships Created: #{value[:relationships_created]&.keys&.length || 0}"
+              end
+              puts "  - Skipped: #{value[:skipped]&.length || 0}" if value[:skipped]
+            elsif key == :biopama_countries
+              puts "  - Countries Updated: #{value[:countries_updated]}" if value[:countries_updated]
+              puts "  - Countries Not Found: #{value[:countries_not_found]}" if value[:countries_not_found]
+            end
           else
             puts "  #{value}"
           end

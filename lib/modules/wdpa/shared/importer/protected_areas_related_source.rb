@@ -30,8 +30,28 @@ module Wdpa
             parcc: parcc_import(Staging::ProtectedArea.table_name),
             irreplaceability: irreplaceability_import(Staging::ProtectedArea.table_name)
           }
+
+          # Check if any sub-importer failed
+          has_hard_errors = (result[:parcc][:hard_errors]&.any? ||
+                           result[:irreplaceability][:hard_errors]&.any?)
+
           Rails.logger.info "Related source imports completed: #{result[:parcc][:imported_count] + result[:irreplaceability][:imported_count]} records"
-          result
+
+          {
+            success: !has_hard_errors,
+            soft_errors: (result[:parcc][:soft_errors] || []) + (result[:irreplaceability][:soft_errors] || []),
+            hard_errors: (result[:parcc][:hard_errors] || []) + (result[:irreplaceability][:hard_errors] || []),
+            parcc: result[:parcc],
+            irreplaceability: result[:irreplaceability]
+          }
+        rescue StandardError => e
+          {
+            success: false,
+            soft_errors: [],
+            hard_errors: ["Setup error: #{e.message}"],
+            parcc: { imported_count: 0, soft_errors: [], hard_errors: [] },
+            irreplaceability: { imported_count: 0, soft_errors: [], hard_errors: [] }
+          }
         end
 
         def self.parcc_import(target_table)
@@ -49,11 +69,7 @@ module Wdpa
 
           unless File.exist?(path)
             Rails.logger.error "File not found: #{path}"
-            return {
-              success: false,
-              imported_count: 0,
-              errors: ["File not found: #{path}"]
-            }
+            return { success: false, imported_count: 0, soft_errors: [], hard_errors: ["File not found: #{path}"] }
           end
 
           begin
@@ -62,46 +78,39 @@ module Wdpa
 
             if wdpa_ids.empty?
               Rails.logger.warn "No WDPA IDs found in #{path}"
-              return {
-                success: true,
-                imported_count: 0,
-                errors: ["No WDPA IDs found in #{path}"]
-              }
+              return { success: true, imported_count: 0, soft_errors: ["No WDPA IDs found in #{path}"],
+                       hard_errors: [] }
             end
 
             Rails.logger.info "Updating #{target_table} with #{field} data"
-            update_table(wdpa_ids, field, target_table)
+            soft_errors = update_table(wdpa_ids, field, target_table)
 
-            {
-              success: true,
-              imported_count: wdpa_ids.length,
-              errors: []
-            }
+            { success: true, imported_count: 0, soft_errors: soft_errors, hard_errors: [] }
           rescue StandardError => e
             Rails.logger.error "Import failed: #{e.message}"
-            {
-              success: false,
-              imported_count: 0,
-              errors: ["Import failed: #{e.message}"]
-            }
+            { success: false, imported_count: 0, soft_errors: [], hard_errors: ["Import failed: #{e.message}"] }
           end
         end
 
         def self.update_table(wdpa_ids, field, target_table)
           connection = ActiveRecord::Base.connection
+          soft_errors = []
 
           unless column_exists?(target_table, field)
             Rails.logger.warn "Column #{field} does not exist in #{target_table}, skipping update"
-            return
+            return ["Column #{field} does not exist in #{target_table}"]
           end
 
-          updated_count = 0
           wdpa_ids.each do |wdpa_id|
-            result = connection.execute(
+            connection.execute(
               "UPDATE #{connection.quote_table_name(target_table)} SET #{connection.quote_column_name(field)} = true WHERE wdpa_id = #{wdpa_id.to_i}"
             )
-            updated_count += result.cmd_tuples if result.respond_to?(:cmd_tuples)
+          rescue StandardError => e
+            soft_errors << "Failed to update WDPA ID #{wdpa_id}: #{e.message}"
+            Rails.logger.warn "Failed to update WDPA ID #{wdpa_id}: #{e.message}"
           end
+
+          soft_errors
         end
 
         def self.column_exists?(table_name, column_name)

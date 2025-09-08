@@ -4,8 +4,8 @@ module Wdpa
   module Portal
     module Importers
       module ProtectedArea
-        class Attribute
-          def self.import_staging
+        class Attribute < Base
+          def self.perform_import
             # Import protected area attributes (non-spatial data only) to staging tables
             # Handles both Staging::ProtectedArea and Staging::ProtectedAreaParcel
             # Geometry data is handled separately by GeometryImporter
@@ -17,27 +17,27 @@ module Wdpa
             relation = adapter.protected_areas_relation
 
             imported_count = 0
-            errors = []
+            soft_errors = []
 
             relation.find_in_batches do |batch|
               batch_result = process_batch(batch, wdpaids_multiple_parcels_map)
               imported_count += batch_result[:count]
-              errors.concat(batch_result[:errors])
+              soft_errors.concat(batch_result[:soft_errors])
             rescue StandardError => e
-              errors << "Batch processing error: #{e.message}"
               Rails.logger.error("Batch processing failed: #{e.message}")
+              raise e # Re-raise as hard error to stop import
             end
 
             {
-              success: errors.empty?,
               imported_count: imported_count,
-              errors: errors
+              soft_errors: soft_errors,
+              hard_errors: []
             }
           end
 
           def self.process_batch(batch, wdpaids_multiple_parcels_map)
             imported_count = 0
-            errors = []
+            soft_errors = []
 
             batch.each do |pa_attributes|
               # Determine if this should go to ProtectedArea and/or ProtectedAreaParcel
@@ -57,10 +57,10 @@ module Wdpa
                 imported_count += 1
               end
             rescue StandardError => e
-              errors << "Error processing SITE_ID #{pa_attributes['wdpaid']} SITE_PID #{pa_attributes['wdpa_pid']}: #{e.message}"
+              soft_errors << "Row error processing SITE_ID #{pa_attributes['wdpaid']} SITE_PID #{pa_attributes['wdpa_pid']}: #{e.message}"
             end
 
-            { count: imported_count, errors: errors }
+            { count: imported_count, soft_errors: soft_errors }
           end
 
           def self.current_entry_parcel_info(protected_area_attributes, wdpaids_multiple_parcels_map)

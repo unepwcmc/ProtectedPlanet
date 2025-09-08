@@ -23,7 +23,8 @@ module Wdpa
           results = {
             success: true,
             imported_count: 0,
-            errors: [],
+            soft_errors: [],
+            hard_errors: [],
             relationships_created: {},
             skipped: []
           }
@@ -58,7 +59,13 @@ module Wdpa
 
                 results[:imported_count] += 1
                 Rails.logger.info "Added #{child_country.iso_3} to parent #{parent_country.iso_3}"
+              rescue StandardError => e
+                results[:soft_errors] << "Failed to process child country #{child_iso}: #{e.message}"
+                Rails.logger.warn "Failed to process child country #{child_iso}: #{e.message}"
               end
+            rescue StandardError => e
+              results[:soft_errors] << "Failed to process parent country #{parent_iso}: #{e.message}"
+              Rails.logger.warn "Failed to process parent country #{parent_iso}: #{e.message}"
             end
           end
 
@@ -69,7 +76,8 @@ module Wdpa
           {
             success: false,
             imported_count: 0,
-            errors: ["Import failed: #{e.message}"],
+            soft_errors: [],
+            hard_errors: ["Import failed: #{e.message}"],
             relationships_created: {},
             skipped: []
           }

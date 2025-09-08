@@ -5,17 +5,29 @@ require 'csv'
 module Wdpa
   module Portal
     module Importers
-      class Pame
+      class Pame < Base
         def self.latest_pame_data_csv
           ::Utilities::Files.latest_file_by_glob('lib/data/seeds/pame_data_*.csv')
         end
 
         def self.import_staging(csv_file = nil)
+          result = perform_import(csv_file)
+          standard_result(
+            result[:imported_count] || 0,
+            result[:soft_errors] || [],
+            result[:hard_errors] || [],
+            result[:additional_fields] || {}
+          )
+        rescue StandardError => e
+          failure_result("Setup error: #{e.message}")
+        end
+
+        def self.perform_import(csv_file = nil)
           Rails.logger.info 'Deleting old staging PAME evaluations...'
           Staging::PameEvaluation.delete_all
           Rails.logger.info 'Importing staging PAME evaluations...'
           site_ids_not_recognised = []
-          errors = []
+          soft_errors = []
 
           csv_file ||= latest_pame_data_csv
 
@@ -85,7 +97,7 @@ module Wdpa
               end
             end
           rescue StandardError => e
-            errors << "Error processing row id #{row[0]}: #{e.message}"
+            soft_errors << "Row error processing id #{row[0]}: #{e.message}"
             Rails.logger.error "Error processing PAME row: #{e.message}"
           end
 
@@ -97,11 +109,13 @@ module Wdpa
           Rails.logger.info "Total PAME sources imported: #{total_sources}"
 
           {
-            success: errors.empty?,
-            evaluations_imported: total_evaluations,
-            sources_imported: total_sources,
-            site_ids_not_recognised: site_ids_not_recognised,
-            errors: errors
+            imported_count: total_evaluations,
+            soft_errors: soft_errors,
+            hard_errors: [],
+            additional_fields: {
+              total_sources: total_sources,
+              site_ids_not_recognised: site_ids_not_recognised
+            }
           }
         end
       end

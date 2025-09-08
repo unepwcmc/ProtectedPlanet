@@ -3,7 +3,7 @@
 module Wdpa
   module Portal
     module Importers
-      class CountryStatistics
+      class CountryStatistics < Base
         def self.latest_country_statistics_csv
           ::Utilities::Files.latest_file_by_glob('lib/data/seeds/country_statistics_*.csv')
         end
@@ -12,66 +12,44 @@ module Wdpa
           ::Utilities::Files.latest_file_by_glob('lib/data/seeds/pame_country_statistics_*.csv')
         end
 
-        def self.import_staging
-          geometry_result = nil
-          country_result = nil
-          pame_result = nil
-
+        def self.perform_import
           ActiveRecord::Base.transaction do
-            geometry_result = import_geometry_statistics
+            geometry_result = Wdpa::Portal::Importers::CountriesProtectedAreaGeometryStatistics.import_staging
             country_result = import_country_statistics
             pame_result = import_pame_statistics
+
+            # Check if any sub-importer failed
+            all_hard_errors = (country_result[:hard_errors] || []) +
+                              (pame_result[:hard_errors] || []) +
+                              (geometry_result[:hard_errors] || [])
+            all_soft_errors = (country_result[:soft_errors] || []) +
+                              (pame_result[:soft_errors] || []) +
+                              (geometry_result[:soft_errors] || [])
+
+            Rails.logger.info 'Country statistics import completed'
+            {
+              imported_count: 0, # Complex importer
+              soft_errors: all_soft_errors,
+              hard_errors: all_hard_errors,
+              additional_fields: {
+                country_pa_geometry: geometry_result,
+                country_stats: country_result,
+                country_pame_stats: pame_result
+              }
+            }
           end
-
-          Rails.logger.info 'Country statistics import completed'
-          {
-            country_stats_imported_success: country_result[:errors].empty?,
-            country_stats_imported_errors: country_result[:errors],
-            country_stats_imported: country_result[:country_stats_imported],
-
-            countries_pame_stats_imported_success: pame_result[:errors].empty?,
-            countries_pame_stats_imported_errors: pame_result[:errors],
-            countries_pame_stats_imported: pame_result[:pame_stats_imported],
-
-            countries_pa_geometry_counted_success: geometry_result[:errors].empty?,
-            countries_pa_geometry_counted_errors: geometry_result[:errors],
-            countries_pa_geometry_counted: geometry_result[:pa_geometry_counted]
-          }
-        end
-
-        def self.import_geometry_statistics
-          result = Wdpa::Portal::Importers::CountriesProtectedAreaGeometryStatistics.import_staging
-
-          {
-            pa_geometry_counted: result[:processed_countries_count] || 0,
-            errors: result[:errors] || []
-          }
         end
 
         def self.import_country_statistics
-          imported = import_stats(latest_country_statistics_csv, Staging::CountryStatistic)
-          {
-            country_stats_imported: imported,
-            errors: []
-          }
+          import_stats(latest_country_statistics_csv, Staging::CountryStatistic)
         rescue StandardError => e
-          {
-            country_stats_imported: 0,
-            errors: ["Country statistics import failed: #{e.message}"]
-          }
+          { imported_count: 0, soft_errors: [], hard_errors: ["Country statistics import failed: #{e.message}"] }
         end
 
         def self.import_pame_statistics
-          imported = import_stats(latest_pame_country_statistics_csv, Staging::PameStatistic)
-          {
-            pame_stats_imported: imported,
-            errors: []
-          }
+          import_stats(latest_pame_country_statistics_csv, Staging::PameStatistic)
         rescue StandardError => e
-          {
-            pame_stats_imported: 0,
-            errors: ["PAME statistics import failed: #{e.message}"]
-          }
+          { imported_count: 0, soft_errors: [], hard_errors: ["PAME statistics import failed: #{e.message}"] }
         end
 
         def self.import_stats(path, model)
@@ -80,6 +58,8 @@ module Wdpa
           end
 
           imported_count = 0
+          soft_errors = []
+
           CSV.foreach(path, headers: true) do |row|
             country_iso3 = row.delete('iso3').last
             country_id = countries[country_iso3]
@@ -90,9 +70,11 @@ module Wdpa
 
             model.create(attrs)
             imported_count += 1
+          rescue StandardError => e
+            soft_errors << "Row error processing country #{row['iso3']}: #{e.message}"
           end
 
-          imported_count
+          { imported_count: imported_count, soft_errors: soft_errors, hard_errors: [] }
         end
 
         def self.pame_assessments(country_id)

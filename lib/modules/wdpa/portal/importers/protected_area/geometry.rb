@@ -4,24 +4,27 @@ module Wdpa
   module Portal
     module Importers
       module ProtectedArea
-        class Geometry
-          def self.import_staging
-            results = {}
+        class Geometry < Base
+          def self.perform_import
+            protected_areas_result = import_geometry_for_table(Staging::ProtectedArea.table_name)
+            protected_area_parcels_result = import_geometry_for_table(Staging::ProtectedAreaParcel.table_name)
 
-            results[:protected_areas] = import_geometry_for_table(Staging::ProtectedArea.table_name)
+            # Merge all hard and soft errors
+            all_hard_errors = (protected_areas_result[:hard_errors] || []) +
+                              (protected_area_parcels_result[:hard_errors] || [])
+            all_soft_errors = (protected_areas_result[:soft_errors] || []) +
+                              (protected_area_parcels_result[:soft_errors] || [])
 
-            results[:protected_area_parcels] = import_geometry_for_table(Staging::ProtectedAreaParcel.table_name)
-
-            total_imported = results[:protected_areas][:imported_count] + results[:protected_area_parcels][:imported_count]
-            all_errors = results[:protected_areas][:errors] + results[:protected_area_parcels][:errors]
-
-            Rails.logger.info "Geometry import completed: #{total_imported} records updated"
+            Rails.logger.info 'Geometry import completed'
 
             {
-              success: all_errors.empty?,
-              imported_count: total_imported,
-              errors: all_errors,
-              details: results
+              imported_count: 0, # Complex importer
+              soft_errors: all_soft_errors,
+              hard_errors: all_hard_errors,
+              additional_fields: {
+                protected_areas: protected_areas_result,
+                protected_area_parcels: protected_area_parcels_result
+              }
             }
           end
 
@@ -29,31 +32,37 @@ module Wdpa
             unless validate_target_table(target_table)
               return {
                 imported_count: 0,
-                errors: ["Target staging table #{target_table} does not exist or has no records"]
+                soft_errors: [],
+                hard_errors: ["Target staging table #{target_table} does not exist or has no records"]
               }
             end
 
             imported_count = 0
-            errors = []
+            soft_errors = []
+            hard_errors = []
 
             Wdpa::Portal::Config::StagingConfig.portal_protected_area_views.each do |view|
               result = import_geometry_from_view(view, target_table)
               imported_count += result[:count]
-              errors.concat(result[:errors])
+              soft_errors.concat(result[:soft_errors] || [])
+              hard_errors.concat(result[:hard_errors] || [])
             rescue StandardError => e
-              errors << "Geometry import error for #{view} in #{target_table}: #{e.message}"
+              hard_errors << "Geometry import error for #{view} in #{target_table}: #{e.message}"
               Rails.logger.error "Geometry import failed for #{view} in #{target_table}: #{e.message}"
             end
 
             Rails.logger.info "#{target_table}: #{imported_count} records updated"
-            { imported_count: imported_count, errors: errors }
+            { imported_count: imported_count, soft_errors: soft_errors, hard_errors: hard_errors }
           end
 
           def self.import_geometry_from_view(view, target_table)
             connection = ActiveRecord::Base.connection
 
             geometry_column = get_geometry_column(target_table)
-            return { count: 0, errors: ["No geometry column found in #{target_table}"] } unless geometry_column
+            unless geometry_column
+              return { count: 0, soft_errors: [],
+                       hard_errors: ["No geometry column found in #{target_table}"] }
+            end
 
             matching_condition = get_matching_condition(target_table)
 
@@ -69,7 +78,7 @@ module Wdpa
             result = connection.execute(update_query)
 
             Rails.logger.info "#{target_table} from #{view}: #{result.cmd_tuples} records"
-            { count: result.cmd_tuples, errors: [] }
+            { count: result.cmd_tuples, soft_errors: [], hard_errors: [] }
           end
 
           def self.validate_target_table(target_table)

@@ -19,103 +19,111 @@ require 'csv'
 module Wdpa
   module Portal
     module Importers
-  class GreenList
-    def self.import_staging
-      ActiveRecord::Base.transaction do
-        clear_existing_data
-        process_csv_file
-      end
-    end
-
-    private
-
-    def self.clear_existing_data
-      Staging::ProtectedArea.where.not(green_list_status_id: nil)
-        .update_all(green_list_status_id: nil)
-      Staging::GreenListStatus.destroy_all
-
-      Rails.logger.info 'Cleared existing staging green list data'
-    end
-
-    def self.process_csv_file
-      invalid = []
-      not_found = []
-      duplicates = []
-      imported_count = 0
-      errors = []
-
-      CSV.foreach(csv_file_path, headers: true) do |row|
-        result = process_row(row)
-
-        case result[:status]
-        when :success
-          imported_count += 1
-        when :invalid
-          invalid << result[:wdpa_id]
-        when :not_found
-          not_found << result[:wdpa_id]
-        when :duplicate
-          duplicates << result[:wdpa_id]
-        when :error
-          errors << result[:error]
+      class GreenList < Base
+        def self.import_staging
+          result = perform_import
+          standard_result(
+            result[:imported_count] || 0,
+            result[:soft_errors] || [],
+            result[:hard_errors] || [],
+            result[:additional_fields] || {}
+          )
+        rescue StandardError => e
+          failure_result("Setup error: #{e.message}")
         end
-      rescue StandardError => e
-        errors << "Error processing row #{row['wdpaid']}: #{e.message}"
-        Rails.logger.warn "Green list row processing failed: #{e.message}"
+
+        def self.perform_import
+          ActiveRecord::Base.transaction do
+            clear_existing_data
+            process_csv_file
+          end
+        end
+
+        def self.clear_existing_data
+          Staging::ProtectedArea.where.not(green_list_status_id: nil)
+            .update_all(green_list_status_id: nil)
+          Staging::GreenListStatus.destroy_all
+
+          Rails.logger.info 'Cleared existing staging green list data'
+        end
+
+        def self.process_csv_file
+          invalid = []
+          not_found = []
+          duplicates = []
+          imported_count = 0
+          soft_errors = []
+
+          CSV.foreach(csv_file_path, headers: true) do |row|
+            result = process_row(row)
+
+            case result[:status]
+            when :success
+              imported_count += 1
+            when :invalid
+              invalid << result[:wdpa_id]
+            when :not_found
+              not_found << result[:wdpa_id]
+            when :duplicate
+              duplicates << result[:wdpa_id]
+            when :error
+              soft_errors << result[:error]
+            end
+          rescue StandardError => e
+            soft_errors << "Row error processing #{row['wdpaid']}: #{e.message}"
+            Rails.logger.warn "Green list row processing failed: #{e.message}"
+          end
+
+          Rails.logger.info 'Green list import completed:'
+          Rails.logger.info "  - Imported: #{imported_count} records"
+          Rails.logger.info "  - Invalid WDPAIDs: #{invalid.join(',')}" if invalid.any?
+          Rails.logger.info "  - Not found WDPAIDs: #{not_found.join(',')}" if not_found.any?
+          Rails.logger.info "  - Duplicates: #{duplicates.join(',')}" if duplicates.any?
+
+          {
+            imported_count: imported_count,
+            soft_errors: soft_errors,
+            hard_errors: [],
+            additional_fields: {
+              invalid_wdpa_ids: invalid,
+              not_found_wdpa_ids: not_found,
+              duplicates: duplicates
+            }
+          }
+        end
+
+        def self.process_row(row)
+          wdpa_id = validate_wdpa_id(row['wdpaid'])
+          return { status: :invalid, wdpa_id: row['wdpaid'] } unless wdpa_id
+
+          pa = Staging::ProtectedArea.find_by_wdpa_id(wdpa_id)
+          return { status: :not_found, wdpa_id: wdpa_id } if pa.blank?
+
+          # Check for duplicates
+          return { status: :duplicate, wdpa_id: wdpa_id } if pa.green_list_status_id
+
+          gls = Staging::GreenListStatus.find_or_create_by(
+            row.to_h.slice('status', 'expiry_date')
+          )
+
+          # Update protected area
+          pa.green_list_url = row['url']
+          pa.green_list_status_id = gls.id
+          pa.save!
+
+          { status: :success, wdpa_id: wdpa_id }
+        end
+
+        def self.validate_wdpa_id(wdpa_id_string)
+          Integer(wdpa_id_string)
+        rescue StandardError
+          false
+        end
+
+        def self.csv_file_path
+          ::Utilities::Files.latest_file_by_glob('lib/data/seeds/green_list_sites_*.csv')
+        end
       end
-
-      log_import_results(invalid, not_found, duplicates, imported_count)
-
-      {
-        success: errors.empty?,
-        imported_count: imported_count,
-        errors: errors,
-        invalid_wdpa_ids: invalid,
-        not_found_wdpa_ids: not_found,
-        duplicates: duplicates
-      }
-    end
-
-    def self.process_row(row)
-      wdpa_id = validate_wdpa_id(row['wdpaid'])
-      return { status: :invalid, wdpa_id: row['wdpaid'] } unless wdpa_id
-
-      pa = Staging::ProtectedArea.find_by_wdpa_id(wdpa_id)
-      return { status: :not_found, wdpa_id: wdpa_id } if pa.blank?
-
-      # Check for duplicates
-      return { status: :duplicate, wdpa_id: wdpa_id } if pa.green_list_status_id
-
-      gls = Staging::GreenListStatus.find_or_create_by(
-        row.to_h.slice('status', 'expiry_date')
-      )
-
-      # Update protected area
-      pa.green_list_url = row['url']
-      pa.green_list_status_id = gls.id
-      pa.save!
-
-      { status: :success, wdpa_id: wdpa_id }
-    end
-
-    def self.validate_wdpa_id(wdpa_id_string)
-      Integer(wdpa_id_string)
-    rescue StandardError
-      false
-    end
-
-    def self.csv_file_path
-      ::Utilities::Files.latest_file_by_glob('lib/data/seeds/green_list_sites_*.csv')
-    end
-
-    def self.log_import_results(invalid, not_found, duplicates, imported_count)
-      Rails.logger.info 'Green list import completed:'
-      Rails.logger.info "  - Imported: #{imported_count} records"
-      Rails.logger.info "  - Invalid WDPAIDs: #{invalid.join(',')}" if invalid.any?
-      Rails.logger.info "  - Not found WDPAIDs: #{not_found.join(',')}" if not_found.any?
-      Rails.logger.info "  - Duplicates: #{duplicates.join(',')}" if duplicates.any?
     end
   end
-end
-end
 end

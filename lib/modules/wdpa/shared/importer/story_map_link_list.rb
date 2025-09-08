@@ -16,43 +16,82 @@ module Wdpa
           result = import_data(Staging::ProtectedArea, Staging::StoryMapLink)
           Rails.logger.info "Staging story map links import completed: #{result[:links_processed]} processed, #{result[:links_created]} created, #{result[:sites_not_found]} sites not found"
           result
+        rescue StandardError => e
+          Rails.logger.error "Story map links import failed: #{e.message}"
+          {
+            success: false,
+            soft_errors: [],
+            hard_errors: ["Setup error: #{e.message}"],
+            links_processed: 0,
+            links_created: 0,
+            sites_not_found: 0,
+            sites_not_found_list: []
+          }
         end
 
         def self.import_data(protected_area_class, story_map_link_class)
           links_processed = 0
+          links_created = 0
           sites_not_found = 0
           sites_not_found_list = []
+          soft_errors = []
 
-          ActiveRecord::Base.transaction do
-            csv = CSV.read(STORY_MAP_LINK_LIST_SITES_CSV)
-            csv.shift # remove headers
+          begin
+            ActiveRecord::Base.transaction do
+              csv = CSV.read(STORY_MAP_LINK_LIST_SITES_CSV)
+              csv.shift # remove headers
 
-            csv.each do |row|
-              links_processed += 1
-              site_id = begin
-                Integer(row[0])
-              rescue StandardError
-                false
-              end
-              protected_area = protected_area_class.find_by_wdpa_id(site_id)
+              csv.each do |row|
+                links_processed += 1
+                site_id = begin
+                  Integer(row[0])
+                rescue StandardError
+                  false
+                end
 
-              if protected_area.present?
-                story_map_link_class.where(protected_area: protected_area, link: row[1], link_type: row[2])
-                  .first_or_create
-              else
-                sites_not_found += 1
-                sites_not_found_list << row[0]
-                Rails.logger.warn "Protected Area with site_id #{row[0]} doesn't exist"
+                if site_id == false
+                  soft_errors << "Invalid site_id format: #{row[0]}"
+                  next
+                end
+
+                protected_area = protected_area_class.find_by_wdpa_id(site_id)
+
+                if protected_area.present?
+                  link = story_map_link_class.where(protected_area: protected_area, link: row[1], link_type: row[2])
+                    .first_or_create
+                  links_created += 1 if link.persisted?
+                else
+                  sites_not_found += 1
+                  sites_not_found_list << row[0]
+                  Rails.logger.warn "Protected Area with site_id #{row[0]} doesn't exist"
+                end
+              rescue StandardError => e
+                soft_errors << "Failed to process row: #{e.message}"
+                Rails.logger.warn "Failed to process row: #{e.message}"
               end
             end
-          end
 
-          {
-            success: true,
-            links_processed: links_processed,
-            sites_not_found: sites_not_found,
-            sites_not_found_list: sites_not_found_list.uniq
-          }
+            {
+              success: true,
+              soft_errors: soft_errors,
+              hard_errors: [],
+              links_processed: links_processed,
+              links_created: links_created,
+              sites_not_found: sites_not_found,
+              sites_not_found_list: sites_not_found_list.uniq
+            }
+          rescue StandardError => e
+            Rails.logger.error "Story map links import failed: #{e.message}"
+            {
+              success: false,
+              soft_errors: soft_errors,
+              hard_errors: ["Import failed: #{e.message}"],
+              links_processed: links_processed,
+              links_created: links_created,
+              sites_not_found: sites_not_found,
+              sites_not_found_list: sites_not_found_list.uniq
+            }
+          end
         end
       end
     end
