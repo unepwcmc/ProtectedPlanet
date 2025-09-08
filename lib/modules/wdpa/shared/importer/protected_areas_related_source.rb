@@ -5,7 +5,12 @@ require 'csv'
 module Wdpa
   module Shared
     module Importer
-      class ProtectedAreasRelatedSource
+      class ProtectedAreasRelatedSource < Wdpa::Shared::ImporterBase::Base
+        TARGET_TABLE = {
+          staging_target_table: Staging::ProtectedArea.table_name,
+          live_target_table: ProtectedArea.table_name
+        }.freeze
+
         PARCC_IMPORT = {
           path: Rails.root.join('lib/data/seeds/parcc_info.csv'),
           field: :has_parcc_info
@@ -18,58 +23,39 @@ module Wdpa
 
         def self.import_live
           result = {
-            parcc: parcc_import(ProtectedArea.table_name),
-            irreplaceability: irreplaceability_import(ProtectedArea.table_name)
+            parcc: import_data(PARCC_IMPORT, 'live'),
+            irreplaceability: import_data(IRREPLACEABILITY_IMPORT, 'live')
           }
           Rails.logger.info "Related source imports completed: #{result[:parcc][:imported_count] + result[:irreplaceability][:imported_count]} records"
           result
         end
 
-        def self.import_staging
+        def self.import_to_staging
           result = {
-            parcc: parcc_import(Staging::ProtectedArea.table_name),
-            irreplaceability: irreplaceability_import(Staging::ProtectedArea.table_name)
+            parcc: import_data(PARCC_IMPORT, 'staging'),
+            irreplaceability: import_data(IRREPLACEABILITY_IMPORT, 'staging')
           }
-
-          # Check if any sub-importer failed
-          has_hard_errors = (result[:parcc][:hard_errors]&.any? ||
-                           result[:irreplaceability][:hard_errors]&.any?)
-
           Rails.logger.info "Related source imports completed: #{result[:parcc][:imported_count] + result[:irreplaceability][:imported_count]} records"
-
-          {
-            success: !has_hard_errors,
-            soft_errors: (result[:parcc][:soft_errors] || []) + (result[:irreplaceability][:soft_errors] || []),
-            hard_errors: (result[:parcc][:hard_errors] || []) + (result[:irreplaceability][:hard_errors] || []),
-            parcc: result[:parcc],
-            irreplaceability: result[:irreplaceability]
-          }
-        rescue StandardError => e
-          {
-            success: false,
-            soft_errors: [],
-            hard_errors: ["Setup error: #{e.message}"],
-            parcc: { imported_count: 0, soft_errors: [], hard_errors: [] },
-            irreplaceability: { imported_count: 0, soft_errors: [], hard_errors: [] }
-          }
+          result
         end
 
-        def self.parcc_import(target_table)
-          import_data(PARCC_IMPORT.merge(target_table: target_table))
-        end
-
-        def self.irreplaceability_import(target_table)
-          import_data(IRREPLACEABILITY_IMPORT.merge(target_table: target_table))
-        end
-
-        def self.import_data(import_config)
+        def self.import_data(import_config, is_for)
           path = import_config[:path]
           field = import_config[:field]
-          target_table = import_config[:target_table]
+
+          unless %w[live staging].include?(is_for)
+            return Wdpa::Shared::ImporterBase::Base.failure_result("Invalid target environment: #{is_for}. Must be 'live' or 'staging'")
+          end
+
+          target_table = if is_for == 'live'
+                           TARGET_TABLE[:live_target_table]
+                         else
+                           TARGET_TABLE[:staging_target_table]
+                         end
 
           unless File.exist?(path)
             Rails.logger.error "File not found: #{path}"
-            return { success: false, imported_count: 0, soft_errors: [], hard_errors: ["File not found: #{path}"] }
+            return Wdpa::Shared::ImporterBase::Base.failure_result("File not found: #{path}")
           end
 
           begin
@@ -78,17 +64,17 @@ module Wdpa
 
             if wdpa_ids.empty?
               Rails.logger.warn "No WDPA IDs found in #{path}"
-              return { success: true, imported_count: 0, soft_errors: ["No WDPA IDs found in #{path}"],
-                       hard_errors: [] }
+              return Wdpa::Shared::ImporterBase::Base.success_result(:imported_count, ["No WDPA IDs found in #{path}"],
+                [])
             end
 
             Rails.logger.info "Updating #{target_table} with #{field} data"
             soft_errors = update_table(wdpa_ids, field, target_table)
 
-            { success: true, imported_count: 0, soft_errors: soft_errors, hard_errors: [] }
+            Wdpa::Shared::ImporterBase::Base.success_result(:imported_count, soft_errors, [])
           rescue StandardError => e
             Rails.logger.error "Import failed: #{e.message}"
-            { success: false, imported_count: 0, soft_errors: [], hard_errors: ["Import failed: #{e.message}"] }
+            Wdpa::Shared::ImporterBase::Base.failure_result("Import failed: #{e.message}")
           end
         end
 
@@ -119,7 +105,7 @@ module Wdpa
           columns.any? { |col| col.name == column_name.to_s }
         end
 
-        private_class_method :parcc_import, :irreplaceability_import, :import_data, :update_table, :column_exists?
+        private_class_method :import_data, :update_table, :column_exists?
       end
     end
   end

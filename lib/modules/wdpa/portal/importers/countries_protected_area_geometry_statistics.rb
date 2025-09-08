@@ -3,8 +3,9 @@
 module Wdpa
   module Portal
     module Importers
-      class CountriesProtectedAreaGeometryStatistics
-        def self.import_staging
+      class CountriesProtectedAreaGeometryStatistics < Base
+
+        def self.import_to_staging
           country_ids = Country.pluck(:id)
           processed_countries_count = 0
           errors = []
@@ -21,11 +22,9 @@ module Wdpa
 
           Rails.logger.info "Country geometry statistics calculation completed: #{processed_countries_count} countries processed"
 
-          {
-            success: errors.empty?,
-            processed_countries_count: processed_countries_count,
-            errors: errors
-          }
+          success_result(:processed_countries_count, errors, [], {
+            processed_countries_count: processed_countries_count
+          })
         end
 
         def self.calculate_country_pas_geometry_counts(country_id)

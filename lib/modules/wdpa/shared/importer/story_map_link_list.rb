@@ -3,7 +3,7 @@
 module Wdpa
   module Shared
     module Importer
-      class StoryMapLinkList
+      class StoryMapLinkList < Wdpa::Shared::ImporterBase::Base
         STORY_MAP_LINK_LIST_SITES_CSV = "#{Rails.root}/lib/data/seeds/story_map_link_sites.csv"
 
         def self.import_live
@@ -18,15 +18,12 @@ module Wdpa
           result
         rescue StandardError => e
           Rails.logger.error "Story map links import failed: #{e.message}"
-          {
-            success: false,
-            soft_errors: [],
-            hard_errors: ["Setup error: #{e.message}"],
+          Wdpa::Shared::ImporterBase::Base.failure_result("Setup error: #{e.message}", :links_processed, {
             links_processed: 0,
             links_created: 0,
             sites_not_found: 0,
             sites_not_found_list: []
-          }
+          })
         end
 
         def self.import_data(protected_area_class, story_map_link_class)
@@ -72,26 +69,20 @@ module Wdpa
               Rails.logger.warn "Failed to process story map link row: #{e.message}"
             end
 
-            {
-              success: true,
-              soft_errors: soft_errors,
-              hard_errors: [],
+            Wdpa::Shared::ImporterBase::Base.success_result(:links_processed, soft_errors, [], {
               links_processed: links_processed,
               links_created: links_created,
               sites_not_found: sites_not_found,
               sites_not_found_list: sites_not_found_list.uniq
-            }
+            })
           rescue StandardError => e
             Rails.logger.error "Story map links import failed: #{e.message}"
-            {
-              success: false,
-              soft_errors: soft_errors,
-              hard_errors: ["Import failed: #{e.message}"],
+            Wdpa::Shared::ImporterBase::Base.failure_result("Import failed: #{e.message}", :links_processed, {
               links_processed: links_processed,
               links_created: links_created,
               sites_not_found: sites_not_found,
               sites_not_found_list: sites_not_found_list.uniq
-            }
+            })
           end
         end
       end

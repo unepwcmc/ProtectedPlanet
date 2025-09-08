@@ -4,10 +4,9 @@ module Wdpa
   module Portal
     module Adapters
       class Sources
-        def find_each(&block)
+        def each(&block)
           if portal_sources_exist?
             query = "SELECT * FROM #{Wdpa::Portal::Config::StagingConfig.portal_view_for('sources')}"
-
             ActiveRecord::Base.connection.select_all(query).each(&block)
           else
             raise StandardError,
@@ -25,7 +24,7 @@ module Wdpa
         end
 
         def portal_sources_exist?
-          ActiveRecord::Base.connection.table_exists?(Wdpa::Portal::Config::StagingConfig.portal_view_for('sources'))
+          Wdpa::Portal::Utils::ViewManager.view_exists?(Wdpa::Portal::Config::StagingConfig.portal_view_for('sources'))
         end
       end
     end

@@ -56,11 +56,10 @@ class Aichi11Target < ActiveRecord::Base
         Rails.logger.info 'Aichi11Target: Created new record from CSV data'
       end
 
-      {
-        success: true,
+      Wdpa::Shared::ImporterBase::Base.success_result(:imported_count, [], [], {
         action: was_created ? 'created' : 'updated',
         message: "Aichi11Target #{was_created ? 'created' : 'updated'} successfully"
-      }
+      })
     end
   rescue StandardError => e
     error_type = case e
@@ -73,12 +72,10 @@ class Aichi11Target < ActiveRecord::Base
                  end
 
     Rails.logger.error "Aichi11Target: #{error_type.downcase} - #{e.message}"
-    {
-      success: false,
+    Wdpa::Shared::ImporterBase::Base.failure_result("Aichi11Target import failed: #{error_type} - #{e.message}", :imported_count, {
       action: 'failed',
-      message: "Aichi11Target import failed: #{error_type} - #{e.message}",
       error: e.message
-    }
+    })
   end
 
   def self.aichi11_target_csv_path

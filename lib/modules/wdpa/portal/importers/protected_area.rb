@@ -3,39 +3,40 @@
 module Wdpa
   module Portal
     module Importers
-      module ProtectedArea
-        extend Base
-        def self.perform_import
+      class ProtectedArea < Base
+        def self.import_to_staging
           Rails.logger.info 'Starting comprehensive protected area import to staging tables...'
 
           start_time = Time.current
           attributes_result = import_attributes
           geometry_result = import_geometries
-          related_sources_result = import_related_sources
+
+          # Only run related sources if no hard errors from previous imports
+          related_sources_result = if attributes_result[:hard_errors].empty? && geometry_result[:protected_areas][:hard_errors].empty? && geometry_result[:protected_area_parcels][:hard_errors].empty?
+                                     import_related_sources
+                                   else
+                                    error_msg = 'Skipping related sources import due to hard errors in attributes or geometry imports'
+                                     Rails.logger.warn error_msg
+                                     {
+                                       parcc: failure_result(error_msg),
+                                       irreplaceability: failure_result(error_msg)
+                                     }
+                                   end
 
           duration_hours = (Time.current - start_time) / 3600.0
           Rails.logger.info "Protected Area Import completed in #{duration_hours.round(2)} hours"
 
-          # Merge all errors
-          all_errors = merge_errors([attributes_result, geometry_result, related_sources_result])
-
-          {
-            imported_count: 0, # Complex importers don't have simple count
-            soft_errors: all_errors[:soft_errors],
-            hard_errors: all_errors[:hard_errors],
-            additional_fields: {
-              duration_hours: duration_hours.round(2),
-              protected_areas_attributes: attributes_result,
-              protected_areas_geometries: geometry_result,
-              protected_areas_related_sources: related_sources_result
-            }
-          }
+          success_result(:imported_count, [], [], {
+            duration_hours: duration_hours.round(2),
+            protected_areas_attributes: attributes_result,
+            protected_areas_geometries: geometry_result
+          }.merge(related_sources_result))
         end
 
         private
 
         def self.import_attributes
-          result = Wdpa::Portal::Importers::ProtectedArea::Attribute.import_staging
+          result = Wdpa::Portal::Importers::ProtectedArea::Attribute.import_to_staging
           Rails.logger.info "✓ Attributes imported: #{result[:imported_count]} records"
           result
         rescue StandardError => e
@@ -45,7 +46,7 @@ module Wdpa
         end
 
         def self.import_geometries
-          result = Wdpa::Portal::Importers::ProtectedArea::Geometry.import_staging
+          result = Wdpa::Portal::Importers::ProtectedArea::Geometry.import_to_staging
           Rails.logger.info "✓ Geometries imported: #{result[:imported_count]} records"
           result
         rescue StandardError => e
@@ -55,7 +56,7 @@ module Wdpa
         end
 
         def self.import_related_sources
-          result = Wdpa::Shared::Importer::ProtectedAreasRelatedSource.import_staging
+          result = Wdpa::Shared::Importer::ProtectedAreasRelatedSource.import_to_staging
 
           Rails.logger.info "✓ PARCC imported: #{result[:parcc][:imported_count]} records"
           Rails.logger.info "✓ Irreplaceability imported: #{result[:irreplaceability][:imported_count]} records"

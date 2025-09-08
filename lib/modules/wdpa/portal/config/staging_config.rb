@@ -4,10 +4,6 @@ module Wdpa
   module Portal
     module Config
       class StagingConfig
-        def self.dummy_data_count
-          70
-        end
-
         def self.batch_import_protected_areas_from_view_size
           10
         end
@@ -17,6 +13,9 @@ module Wdpa
         end
 
         PORTAL_VIEWS = {
+          'iso3_agg' => 'portal_iso3_agg',
+          'parent_iso3_agg' => 'portal_parent_iso3_agg',
+          'int_crit_agg' => 'portal_int_crit_agg',
           'polygons' => 'portal_standard_polygons',
           'points' => 'portal_standard_points',
           'sources' => 'portal_standard_sources'
@@ -28,10 +27,6 @@ module Wdpa
 
         def self.portal_view_for(type)
           PORTAL_VIEWS[type]
-        end
-
-        def self.portal_views_exist?
-          PORTAL_VIEWS.values.all? { |view| ActiveRecord::Base.connection.table_exists?(view) }
         end
 
         def self.portal_views
@@ -79,10 +74,6 @@ module Wdpa
 
         def self.get_staging_table_name_from_live_table(live_table)
           staging_live_tables_hash[live_table]
-        end
-
-        def self.staging_tables_exist?
-          staging_live_tables_hash.values.all? { |table| ActiveRecord::Base.connection.table_exists?(table) }
         end
       end
     end

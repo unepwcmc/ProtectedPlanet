@@ -6,12 +6,12 @@ module Wdpa
       class ColumnMapper
         PORTAL_TO_PP_MAPPING = {
           # Core WDPA identifiers
-          'wdpaid' => { name: 'wdpa_id', type: :integer },
-          'wdpa_pid' => { name: 'wdpa_pid', type: :string },
+          'site_id' => { name: 'wdpa_id', type: :integer },
+          'site_pid' => { name: 'wdpa_pid', type: :string },
 
           # Names and descriptions
-          'name' => { name: 'name', type: :string },
-          'orig_name' => { name: 'original_name', type: :string },
+          'name_eng' => { name: 'name', type: :string },
+          'name' => { name: 'original_name', type: :string },
 
           # Area measurements
           'rep_m_area' => { name: 'reported_marine_area', type: :float },
@@ -34,9 +34,10 @@ module Wdpa
           'int_crit' => { name: 'international_criteria', type: :string },
 
           # Marine and protection status
+          # TODO: check where is it
           'marine' => { name: 'marine_type', type: :integer }, # Will be converted to boolean marine
           'no_take' => { name: 'no_take_status', type: :string },
-          'no_take_area' => { name: 'no_take_area', type: :float },
+          'no_tk_area' => { name: 'no_take_area', type: :float },
 
           # Designation details
           'desig_eng' => { name: 'designation', type: :string },
@@ -45,23 +46,45 @@ module Wdpa
           # Geometry and metadata
           'wkb_geometry' => { name: 'the_geom', type: :geometry },
           'metadataid' => { name: 'sources', type: :integer } # Will be processed as array
+
+          # NEW FIELDS FROM PORTAL MATERIALIZED VIEWS
+          # TODO: check this
+          # 'site_type' => { name: 'site_type', type: :string },
+          # 'realm' => { name: 'realm', type: :string },
+          # 'prnt_iso3' => { name: 'parent_countries', type: :csv },
+          # 'govsubtype' => { name: 'governance_subtype', type: :string },
+          # 'cons_obj' => { name: 'conservation_objective', type: :string },
+          # 'supp_info' => { name: 'supplemental_info', type: :string },
+          # 'inlnd_wtrs' => { name: 'inland_waters', type: :string },
+          # 'desig' => { name: 'original_designation', type: :string },
+          # 'own_type' => { name: 'ownership_type', type: :string },
+          # 'ownsubtype' => { name: 'ownership_subtype', type: :string },
+          # 'verif' => { name: 'verification_status', type: :string },
+          # 'oecm_asmt' => { name: 'oecm_assessment', type: :string },
+          # 'shape_length' => { name: 'shape_length', type: :float },
+          # 'shape_area' => { name: 'shape_area', type: :float }
         }.freeze
 
         # Portal to ProtectedPlanet SOURCES column mapping based on STANDARD_ATTRIBUTES from Wdpa::DataStandard::Source
         # This ensures consistency with the existing WDPA source import logic
         PORTAL_TO_PP_SOURCES_MAPPING = {
-          'title' => 'title',
-          'responsible_party' => 'responsible_party',
+          'data_title' => 'title',
+          'resp_party' => 'responsible_party',
+          # Check where it is
           'responsible_email' => 'responsible_email',
           'year' => 'year',
           'language' => 'language',
-          'character_set' => 'character_set',
-          'reference_system' => 'reference_system',
+          'char_set' => 'character_set',
+          'ref_system' => 'reference_system',
           'scale' => 'scale',
           'lineage' => 'lineage',
           'citation' => 'citation',
           'metadataid' => 'metadataid',
           'disclaimer' => 'disclaimer'
+
+          # Check where it is
+          # 'update_yr' => 'update_year',
+          # 'verifier' => 'verifier',
         }.freeze
 
         # Maps portal attributes to ProtectedArea attributes (non-spatial data only)

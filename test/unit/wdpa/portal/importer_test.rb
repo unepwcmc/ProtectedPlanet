@@ -10,7 +10,7 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
     Wdpa::Portal::Importers::Source.expects(:import).with('sources_staging').in_sequence(import)
     Wdpa::Portal::Importers::ProtectedAreaAttribute.expects(:import).with('protected_areas_new').in_sequence(import)
     Wdpa::Portal::Importers::ProtectedAreaGeometry.expects(:import).with('protected_areas_new').in_sequence(import)
-    Wdpa::Shared::Importer::ProtectedAreasRelatedSource.expects(:import_staging).twice.in_sequence(import)
+    Wdpa::Shared::Importer::ProtectedAreasRelatedSource.expects(:import_to_staging).twice.in_sequence(import)
 
     ImportWorkers::FinaliserWorker.expects(:can_be_started=).with(true).in_sequence(import)
 

@@ -32,11 +32,11 @@ module Wdpa
         end
 
         def iucn_category(value)
-          IucnCategory.where(name: value).first
+          IucnCategory.where(name: value).first_or_create
         end
 
         def governance(value)
-          Governance.where(name: value).first
+          Governance.where(name: value).first_or_create
         end
 
         def management_authority(value)
@@ -53,7 +53,7 @@ module Wdpa
         # Convert designation names to Designation objects with jurisdiction
         def designation(value)
           jurisdiction_name = @current_attributes[:jurisdiction]
-          jurisdiction = jurisdiction_name ? Jurisdiction.where(name: jurisdiction_name).first : nil
+          jurisdiction = jurisdiction_name ? Jurisdiction.where(name: jurisdiction_name).first_or_create : nil
           Designation.where({
             name: value,
             jurisdiction: jurisdiction

@@ -20,23 +20,11 @@ module Wdpa
   module Portal
     module Importers
       class GreenList < Base
-        def self.import_staging
-          result = perform_import
-          standard_result(
-            result[:imported_count] || 0,
-            result[:soft_errors] || [],
-            result[:hard_errors] || [],
-            result[:additional_fields] || {}
-          )
+        def self.import_to_staging
+          clear_existing_data
+          process_csv_file
         rescue StandardError => e
-          failure_result("Setup error: #{e.message}")
-        end
-
-        def self.perform_import
-          ActiveRecord::Base.transaction do
-            clear_existing_data
-            process_csv_file
-          end
+          failure_result("Import failed: #{e.message}")
         end
 
         def self.clear_existing_data
@@ -55,19 +43,22 @@ module Wdpa
           soft_errors = []
 
           CSV.foreach(csv_file_path, headers: true) do |row|
-            result = process_row(row)
+            # Wrap each row in its own transaction to prevent batch failure
+            ActiveRecord::Base.transaction do
+              result = process_row(row)
 
-            case result[:status]
-            when :success
-              imported_count += 1
-            when :invalid
-              invalid << result[:wdpa_id]
-            when :not_found
-              not_found << result[:wdpa_id]
-            when :duplicate
-              duplicates << result[:wdpa_id]
-            when :error
-              soft_errors << result[:error]
+              case result[:status]
+              when :success
+                imported_count += 1
+              when :invalid
+                invalid << result[:wdpa_id]
+              when :not_found
+                not_found << result[:wdpa_id]
+              when :duplicate
+                duplicates << result[:wdpa_id]
+              when :error
+                soft_errors << result[:error]
+              end
             end
           rescue StandardError => e
             soft_errors << "Row error processing #{row['wdpaid']}: #{e.message}"
@@ -80,16 +71,11 @@ module Wdpa
           Rails.logger.info "  - Not found WDPAIDs: #{not_found.join(',')}" if not_found.any?
           Rails.logger.info "  - Duplicates: #{duplicates.join(',')}" if duplicates.any?
 
-          {
-            imported_count: imported_count,
-            soft_errors: soft_errors,
-            hard_errors: [],
-            additional_fields: {
-              invalid_wdpa_ids: invalid,
-              not_found_wdpa_ids: not_found,
-              duplicates: duplicates
-            }
-          }
+          success_result(:imported_count, soft_errors, [], {
+            invalid_wdpa_ids: invalid,
+            not_found_wdpa_ids: not_found,
+            duplicates: duplicates
+          })
         end
 
         def self.process_row(row)

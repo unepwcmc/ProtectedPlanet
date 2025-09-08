@@ -10,19 +10,7 @@ module Wdpa
           ::Utilities::Files.latest_file_by_glob('lib/data/seeds/pame_data_*.csv')
         end
 
-        def self.import_staging(csv_file = nil)
-          result = perform_import(csv_file)
-          standard_result(
-            result[:imported_count] || 0,
-            result[:soft_errors] || [],
-            result[:hard_errors] || [],
-            result[:additional_fields] || {}
-          )
-        rescue StandardError => e
-          failure_result("Setup error: #{e.message}")
-        end
-
-        def self.perform_import(csv_file = nil)
+        def self.import_to_staging(csv_file = nil)
           Rails.logger.info 'Deleting old staging PAME evaluations...'
           Staging::PameEvaluation.delete_all
           Rails.logger.info 'Importing staging PAME evaluations...'
@@ -108,15 +96,12 @@ module Wdpa
           Rails.logger.info "Total PAME evaluations imported: #{total_evaluations}"
           Rails.logger.info "Total PAME sources imported: #{total_sources}"
 
-          {
-            imported_count: total_evaluations,
-            soft_errors: soft_errors,
-            hard_errors: [],
-            additional_fields: {
-              total_sources: total_sources,
-              site_ids_not_recognised: site_ids_not_recognised
-            }
-          }
+          success_result(:imported_count, soft_errors, [], {
+            total_sources: total_sources,
+            site_ids_not_recognised: site_ids_not_recognised
+          })
+        rescue StandardError => e
+          failure_result("Import failed: #{e.message}")
         end
       end
     end

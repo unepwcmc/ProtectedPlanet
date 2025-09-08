@@ -30,21 +30,6 @@ module Wdpa
 
           total_count
         end
-
-        def exists?
-          Wdpa::Portal::Config::StagingConfig.portal_protected_area_views.any? do |view_name|
-            ActiveRecord::Base.connection.select_value("SELECT 1 FROM #{view_name} LIMIT 1")
-            true
-          rescue StandardError
-            false
-          end
-        end
-
-        def portal_views_exist?
-          Wdpa::Portal::Config::StagingConfig.portal_protected_area_views.all? do |view_name|
-            ActiveRecord::Base.connection.table_exists?(view_name)
-          end
-        end
       end
     end
   end
