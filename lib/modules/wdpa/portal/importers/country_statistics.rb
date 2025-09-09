@@ -28,13 +28,13 @@ module Wdpa
         def self.import_country_statistics
           import_stats(latest_country_statistics_csv, Staging::CountryStatistic)
         rescue StandardError => e
-          failure_result("Country statistics import failed: #{e.message}")
+          failure_result("Country statistics import failed: #{e.message}", 0)
         end
 
         def self.import_pame_statistics
           import_stats(latest_pame_country_statistics_csv, Staging::PameStatistic)
         rescue StandardError => e
-          failure_result("PAME statistics import failed: #{e.message}")
+          failure_result("PAME statistics import failed: #{e.message}", 0)
         end
 
         def self.import_stats(path, model)
@@ -59,7 +59,7 @@ module Wdpa
             soft_errors << "Row error processing country #{row['iso3']}: #{e.message}"
           end
 
-          success_result(:imported_count, soft_errors, [])
+          success_result(imported_count, soft_errors, [])
         end
 
         def self.pame_assessments(country_id)

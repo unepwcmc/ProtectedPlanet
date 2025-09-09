@@ -96,12 +96,12 @@ module Wdpa
           Rails.logger.info "Total PAME evaluations imported: #{total_evaluations}"
           Rails.logger.info "Total PAME sources imported: #{total_sources}"
 
-          success_result(:imported_count, soft_errors, [], {
+          success_result(0, soft_errors, [], {
             total_sources: total_sources,
             site_ids_not_recognised: site_ids_not_recognised
           })
         rescue StandardError => e
-          failure_result("Import failed: #{e.message}")
+          failure_result("Import failed: #{e.message}", 0)
         end
       end
     end

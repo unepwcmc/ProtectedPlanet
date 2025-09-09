@@ -56,7 +56,7 @@ class Aichi11Target < ActiveRecord::Base
         Rails.logger.info 'Aichi11Target: Created new record from CSV data'
       end
 
-      Wdpa::Shared::ImporterBase::Base.success_result(:imported_count, [], [], {
+      Wdpa::Shared::ImporterBase::Base.success_result(1, [], [], {
         action: was_created ? 'created' : 'updated',
         message: "Aichi11Target #{was_created ? 'created' : 'updated'} successfully"
       })
@@ -72,7 +72,7 @@ class Aichi11Target < ActiveRecord::Base
                  end
 
     Rails.logger.error "Aichi11Target: #{error_type.downcase} - #{e.message}"
-    Wdpa::Shared::ImporterBase::Base.failure_result("Aichi11Target import failed: #{error_type} - #{e.message}", :imported_count, {
+    Wdpa::Shared::ImporterBase::Base.failure_result("Aichi11Target import failed: #{error_type} - #{e.message}", 0, {
       action: 'failed',
       error: e.message
     })

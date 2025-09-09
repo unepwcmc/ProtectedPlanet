@@ -18,7 +18,7 @@ module Wdpa
           result
         rescue StandardError => e
           Rails.logger.error "Story map links import failed: #{e.message}"
-          Wdpa::Shared::ImporterBase::Base.failure_result("Setup error: #{e.message}", :links_processed, {
+          Wdpa::Shared::ImporterBase::Base.failure_result("Setup error: #{e.message}", 0, {
             links_processed: 0,
             links_created: 0,
             sites_not_found: 0,
@@ -69,7 +69,7 @@ module Wdpa
               Rails.logger.warn "Failed to process story map link row: #{e.message}"
             end
 
-            Wdpa::Shared::ImporterBase::Base.success_result(:links_processed, soft_errors, [], {
+            Wdpa::Shared::ImporterBase::Base.success_result(links_processed, soft_errors, [], {
               links_processed: links_processed,
               links_created: links_created,
               sites_not_found: sites_not_found,
@@ -77,7 +77,7 @@ module Wdpa
             })
           rescue StandardError => e
             Rails.logger.error "Story map links import failed: #{e.message}"
-            Wdpa::Shared::ImporterBase::Base.failure_result("Import failed: #{e.message}", :links_processed, {
+            Wdpa::Shared::ImporterBase::Base.failure_result("Import failed: #{e.message}", 0, {
               links_processed: links_processed,
               links_created: links_created,
               sites_not_found: sites_not_found,

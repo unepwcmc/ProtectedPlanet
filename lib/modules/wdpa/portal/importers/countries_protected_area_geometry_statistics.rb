@@ -22,7 +22,7 @@ module Wdpa
 
           Rails.logger.info "Country geometry statistics calculation completed: #{processed_countries_count} countries processed"
 
-          success_result(:processed_countries_count, errors, [], {
+          success_result(processed_countries_count, errors, [], {
             processed_countries_count: processed_countries_count
           })
         end

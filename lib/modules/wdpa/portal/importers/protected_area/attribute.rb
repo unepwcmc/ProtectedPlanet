@@ -27,7 +27,7 @@ module Wdpa
             raise e # Re-raise as hard error to stop import
           end
 
-          success_result(:imported_count, soft_errors, [])
+          success_result(imported_count, soft_errors, [])
         end
 
         def self.process_batch(batch, wdpaids_multiple_parcels_map)

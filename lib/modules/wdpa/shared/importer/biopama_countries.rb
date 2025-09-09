@@ -42,13 +42,13 @@ module Wdpa
 
           Rails.logger.info "BIOPAMA countries import completed: #{countries_updated} updated, #{countries_not_found} not found"
 
-          Wdpa::Shared::ImporterBase::Base.success_result(:countries_updated, soft_errors, [], {
+          Wdpa::Shared::ImporterBase::Base.success_result(countries_updated, soft_errors, [], {
             countries_updated: countries_updated,
             countries_not_found: countries_not_found
           })
         rescue StandardError => e
           Rails.logger.error "BIOPAMA countries import failed: #{e.message}"
-          Wdpa::Shared::ImporterBase::Base.failure_result("BIOPAMA countries import failed: #{e.message}", :countries_updated, {
+          Wdpa::Shared::ImporterBase::Base.failure_result("BIOPAMA countries import failed: #{e.message}", 0, {
             countries_updated: 0,
             countries_not_found: 0
           })

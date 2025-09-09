@@ -9,7 +9,7 @@ module Wdpa
           protected_area_parcels_result = import_geometry_for_table(Staging::ProtectedAreaParcel.table_name)
 
           Rails.logger.info 'Geometry import completed'
-          success_result(:imported_count, [], [], {
+          success_result(0, [], [], {
             protected_areas: protected_areas_result,
             protected_area_parcels: protected_area_parcels_result
           })
@@ -17,7 +17,7 @@ module Wdpa
 
         def self.import_geometry_for_table(target_table)
           unless validate_target_table(target_table)
-            return failure_result("Target staging table #{target_table} does not exist or has no records")
+            return failure_result("Target staging table #{target_table} does not exist or has no records", 0)
           end
 
           imported_count = 0
@@ -26,7 +26,7 @@ module Wdpa
 
           Wdpa::Portal::Config::StagingConfig.portal_protected_area_views.each do |view|
             result = import_geometry_from_view(view, target_table)
-            imported_count += result[:count]
+            imported_count += result[:imported_count]
             soft_errors.concat(result[:soft_errors] || [])
             hard_errors.concat(result[:hard_errors] || [])
           rescue StandardError => e
@@ -35,7 +35,7 @@ module Wdpa
           end
 
           Rails.logger.info "#{target_table}: #{imported_count} records updated"
-          success_result(:imported_count, soft_errors, hard_errors)
+          success_result(imported_count, soft_errors, hard_errors)
         end
 
         def self.import_geometry_from_view(view, target_table)
@@ -43,7 +43,7 @@ module Wdpa
 
           geometry_column = get_geometry_column(target_table)
           unless geometry_column
-            return failure_result("No geometry column found in #{target_table}", :count).merge({ count: 0 })
+            return failure_result("No geometry column found in #{target_table}", 0, { number_of_records_updated: 0 })
           end
 
           matching_condition = get_matching_condition(target_table)
@@ -60,7 +60,8 @@ module Wdpa
           result = connection.execute(update_query)
 
           Rails.logger.info "#{target_table} from #{view}: #{result.cmd_tuples} records"
-          success_result(:count, [], []).merge({ count: result.cmd_tuples })
+          imported_count = result.cmd_tuples
+          success_result(imported_count, [], [], { number_of_records_updated: imported_count })
         end
 
         def self.validate_target_table(target_table)
@@ -72,7 +73,7 @@ module Wdpa
           end
 
           count = connection.execute("SELECT COUNT(*) FROM #{target_table}").first['count'].to_i
-          if count == 0
+          if count.zero?
             Rails.logger.error "Target table #{target_table} has no records"
             return false
           end

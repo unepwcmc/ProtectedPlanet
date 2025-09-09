@@ -9,7 +9,7 @@ module Wdpa
         def self.import_to_staging
           raise NotImplementedError, 'Subclasses must implement import_to_staging'
         rescue StandardError => e
-          failure_result("Setup error: #{e.message}")
+          failure_result("Setup error: #{e.message}", 0)
         end
       end
     end

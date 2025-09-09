@@ -26,11 +26,11 @@ module Wdpa
 
         {
           success: !has_hard_errors,
-          hard_errors: has_hard_errors ? ['Import completed with hard errors'] : []
+          hard_errors: has_hard_errors ? ['Import completed with hard errors. Check the results for more details. If hard errors are arounce protected areas then you must re-run the import again otherwise you can run individual importers to re-import. See import_data_to_staging_tables, update_data_in_live_tables functions to understand the importer orders'] : []
         }.merge(staging_tables_results).merge(live_tables_results)
       rescue StandardError => e
         Rails.logger.error "Portal import failed: #{e.message}"
-        failure_result("Portal import failed: #{e.message}", :imported_count, {
+        failure_result("Portal import failed: #{e.message}", 0, {
           staging_tables_results: {},
           live_tables_results: {}
         })
@@ -40,11 +40,27 @@ module Wdpa
         # Run importers in dependency order
         sources_result = Wdpa::Portal::Importers::Source.import_to_staging
         protected_areas_result = Wdpa::Portal::Importers::ProtectedArea.import_to_staging
-        global_stats_result = Wdpa::Shared::Importer::GlobalStats.import_to_staging
-        green_list_result = Wdpa::Portal::Importers::GreenList.import_to_staging
-        pame_result = Wdpa::Portal::Importers::Pame.import_to_staging
-        story_map_links_result = Wdpa::Shared::Importer::StoryMapLinkList.import_to_staging
-        country_statistics_result = Wdpa::Portal::Importers::CountryStatistics.import_to_staging
+
+        # Only run subsequent importers if there are no hard errors in protected_areas
+        if protected_areas_result[:hard_errors].empty?
+          global_stats_result = Wdpa::Shared::Importer::GlobalStats.import_to_staging
+          green_list_result = Wdpa::Portal::Importers::GreenList.import_to_staging
+          pame_result = Wdpa::Portal::Importers::Pame.import_to_staging
+          story_map_links_result = Wdpa::Shared::Importer::StoryMapLinkList.import_to_staging
+          country_statistics_result = Wdpa::Portal::Importers::CountryStatistics.import_to_staging
+        else
+          # Skip subsequent importers due to hard errors in protected_areas
+          errors = failure_result('Skipped due to hard errors in protected areas importer')
+          global_stats_result = errors
+          green_list_result = errors
+          pame_result = errors
+          story_map_links_result = errors
+          country_statistics_result = {
+            country_pa_geometry: errors,
+            country_general_stats: errors,
+            country_pame_stats: errors
+          }
+        end
 
         {
           sources: sources_result,

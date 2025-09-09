@@ -85,13 +85,13 @@ module Wdpa
             Rails.logger.info "Relationships created: #{relationships_created.keys.join(', ')}"
           end
 
-          Wdpa::Shared::ImporterBase::Base.success_result(:imported_count, soft_errors, [], {
+          Wdpa::Shared::ImporterBase::Base.success_result(imported_count, soft_errors, [], {
             relationships_created: relationships_created,
             info: info
           })
         rescue StandardError => e
           Rails.logger.error "Overseas territories import failed: #{e.message}"
-          Wdpa::Shared::ImporterBase::Base.failure_result("Import failed: #{e.message}", :imported_count, {
+          Wdpa::Shared::ImporterBase::Base.failure_result("Import failed: #{e.message}", 0, {
             relationships_created: {},
             info: {
               parent_country_not_found: [],

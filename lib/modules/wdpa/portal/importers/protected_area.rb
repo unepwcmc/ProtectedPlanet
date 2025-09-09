@@ -18,19 +18,24 @@ module Wdpa
                                     error_msg = 'Skipping related sources import due to hard errors in attributes or geometry imports'
                                      Rails.logger.warn error_msg
                                      {
-                                       parcc: failure_result(error_msg),
-                                       irreplaceability: failure_result(error_msg)
+                                       parcc: failure_result(error_msg, 0),
+                                       irreplaceability: failure_result(error_msg, 0)
                                      }
                                    end
 
           duration_hours = (Time.current - start_time) / 3600.0
+          has_hard_errors = attributes_result[:hard_errors].any? ||
+          geometry_result[:protected_areas][:hard_errors].any? || 
+          geometry_result[:protected_area_parcels][:hard_errors].any? ? ["Hard errors detected in the protected area import"] : []
           Rails.logger.info "Protected Area Import completed in #{duration_hours.round(2)} hours"
 
-          success_result(:imported_count, [], [], {
+          {
+            hard_errors: has_hard_errors,
             duration_hours: duration_hours.round(2),
             protected_areas_attributes: attributes_result,
-            protected_areas_geometries: geometry_result
-          }.merge(related_sources_result))
+            protected_areas_geometries: geometry_result,
+            related_sources_result: related_sources_result
+          }
         end
 
         private
@@ -42,7 +47,7 @@ module Wdpa
         rescue StandardError => e
           error_msg = "Failed to import protected area attributes: #{e.message}"
           Rails.logger.error error_msg
-          failure_result(error_msg)
+          failure_result(error_msg, 0)
         end
 
         def self.import_geometries
@@ -52,7 +57,7 @@ module Wdpa
         rescue StandardError => e
           error_msg = "Failed to import protected area geometries: #{e.message}"
           Rails.logger.error error_msg
-          failure_result(error_msg)
+          failure_result(error_msg, 0)
         end
 
         def self.import_related_sources
@@ -65,8 +70,8 @@ module Wdpa
           error_msg = "Failed to import related protected area sources (parcc and irreplaceability): #{e.message}"
           Rails.logger.error error_msg
           {
-            parcc: failure_result(error_msg),
-            irreplaceability: failure_result(error_msg)
+            parcc: failure_result(error_msg, 0),
+            irreplaceability: failure_result(error_msg, 0)
           }
         end
 

@@ -24,7 +24,7 @@ module Wdpa
           clear_existing_data
           process_csv_file
         rescue StandardError => e
-          failure_result("Import failed: #{e.message}")
+          failure_result("Import failed: #{e.message}", 0)
         end
 
         def self.clear_existing_data
@@ -71,7 +71,7 @@ module Wdpa
           Rails.logger.info "  - Not found WDPAIDs: #{not_found.join(',')}" if not_found.any?
           Rails.logger.info "  - Duplicates: #{duplicates.join(',')}" if duplicates.any?
 
-          success_result(:imported_count, soft_errors, [], {
+          success_result(imported_count, soft_errors, [], {
             invalid_wdpa_ids: invalid,
             not_found_wdpa_ids: not_found,
             duplicates: duplicates

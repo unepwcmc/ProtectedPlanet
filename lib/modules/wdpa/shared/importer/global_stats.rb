@@ -26,10 +26,11 @@ module Wdpa
           stats.update(attrs)
 
           Rails.logger.info "Global statistics import completed: #{attrs.keys.length} fields updated"
-          Wdpa::Shared::ImporterBase::Base.success_result(:fields_updated, soft_errors, [], { fields_updated: attrs.keys.length })
+          fields_updated = attrs.keys.length
+          Wdpa::Shared::ImporterBase::Base.success_result(fields_updated, soft_errors, [], { fields_updated: fields_updated })
         rescue StandardError => e
           Rails.logger.error "Global statistics import failed: #{e.message}"
-          Wdpa::Shared::ImporterBase::Base.failure_result("Global statistics import failed: #{e.message}", :fields_updated)
+          Wdpa::Shared::ImporterBase::Base.failure_result("Global statistics import failed: #{e.message}", 0)
         end
 
         def self.import_to_staging
@@ -50,10 +51,11 @@ module Wdpa
           stats.update(attrs)
 
           Rails.logger.info "Global statistics import completed: #{attrs.keys.length} fields updated"
-          Wdpa::Shared::ImporterBase::Base.success_result(:fields_updated, soft_errors, [], { fields_updated: attrs.keys.length })
+          fields_updated = attrs.keys.length
+          Wdpa::Shared::ImporterBase::Base.success_result(fields_updated, soft_errors, [], { fields_updated: fields_updated })
         rescue StandardError => e
           Rails.logger.error "Global statistics import failed: #{e.message}"
-          Wdpa::Shared::ImporterBase::Base.failure_result("Global statistics import failed: #{e.message}", :fields_updated)
+          Wdpa::Shared::ImporterBase::Base.failure_result("Global statistics import failed: #{e.message}", 0)
         end
 
         def self.parse_value(val)
