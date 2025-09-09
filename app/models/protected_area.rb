@@ -17,6 +17,7 @@ class ProtectedArea < ApplicationRecord
   belongs_to :iucn_category
   belongs_to :governance
   belongs_to :management_authority
+  belongs_to :realm
   belongs_to :no_take_status
   belongs_to :designation
   delegate :jurisdiction, to: :designation, allow_nil: true

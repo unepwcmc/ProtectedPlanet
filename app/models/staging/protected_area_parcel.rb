@@ -34,6 +34,7 @@ module Staging
     belongs_to :iucn_category
     belongs_to :governance
     belongs_to :management_authority
+    belongs_to :realm
     belongs_to :no_take_status, class_name: 'Staging::NoTakeStatus'
     belongs_to :designation
     delegate :jurisdiction, to: :designation, allow_nil: true

@@ -33,9 +33,6 @@ module Wdpa
           'mang_plan' => { name: 'management_plan', type: :string },
           'int_crit' => { name: 'international_criteria', type: :string },
 
-          # Marine and protection status
-          # TODO: check where is it
-          'marine' => { name: 'marine_type', type: :integer }, # Will be converted to boolean marine
           'no_take' => { name: 'no_take_status', type: :string },
           'no_tk_area' => { name: 'no_take_area', type: :float },
 
@@ -45,33 +42,44 @@ module Wdpa
 
           # Geometry and metadata
           'wkb_geometry' => { name: 'the_geom', type: :geometry },
-          'metadataid' => { name: 'sources', type: :integer } # Will be processed as array
+          'metadataid' => { name: 'sources', type: :integer }, # Will be processed as array
 
-          # NEW FIELDS FROM PORTAL MATERIALIZED VIEWS
-          # TODO: check this
-          # 'site_type' => { name: 'site_type', type: :string },
-          # 'realm' => { name: 'realm', type: :string },
-          # 'prnt_iso3' => { name: 'parent_countries', type: :csv },
+          'own_type' => { name: :owner_type, type: :string },
+
+          'supp_info' => { name: :supplementary_info, type: :string },
+          'cons_obj' => { name: :conservation_objectives, type: :string },
+          'verif' => { name: :verif, type: :string },
+          'prnt_iso3' => { name: :parent_iso3, type: :string },
+
+          # Marine and protection status
+          'realm' => { name: 'realm', type: :string } # Will be converted to boolean marine
+          # TODO: New
           # 'govsubtype' => { name: 'governance_subtype', type: :string },
-          # 'cons_obj' => { name: 'conservation_objective', type: :string },
-          # 'supp_info' => { name: 'supplemental_info', type: :string },
+          # # TODO: it is now pa oecm
+          # 'site_type' => { name: :is_oecm, type: :oecm }, # 0 means is_oecm is true
+          # # TODO: New
           # 'inlnd_wtrs' => { name: 'inland_waters', type: :string },
-          # 'desig' => { name: 'original_designation', type: :string },
-          # 'own_type' => { name: 'ownership_type', type: :string },
+          # # TODO: New
           # 'ownsubtype' => { name: 'ownership_subtype', type: :string },
-          # 'verif' => { name: 'verification_status', type: :string },
-          # 'oecm_asmt' => { name: 'oecm_assessment', type: :string },
-          # 'shape_length' => { name: 'shape_length', type: :float },
-          # 'shape_area' => { name: 'shape_area', type: :float }
+          # # TODO: New
+          # 'oecm_asmt' => { name: 'oecm_assessment', type: :string }
         }.freeze
+
+        PROTECTED_AREA_COLUMNS_TO_BE_REMOVED_BEFORE_INSERT = [
+          PORTAL_TO_PP_MAPPING['desig_type'][:name],
+          PORTAL_TO_PP_MAPPING['no_tk_area'][:name]
+        ]
+
+        PROTECTED_AREA_PARCEL_COLUMNS_TO_BE_REMOVED_BEFORE_INSERT = [
+          PORTAL_TO_PP_MAPPING['desig_type'][:name],
+          PORTAL_TO_PP_MAPPING['no_tk_area'][:name]
+        ]
 
         # Portal to ProtectedPlanet SOURCES column mapping based on STANDARD_ATTRIBUTES from Wdpa::DataStandard::Source
         # This ensures consistency with the existing WDPA source import logic
         PORTAL_TO_PP_SOURCES_MAPPING = {
           'data_title' => 'title',
           'resp_party' => 'responsible_party',
-          # Check where it is
-          'responsible_email' => 'responsible_email',
           'year' => 'year',
           'language' => 'language',
           'char_set' => 'character_set',
@@ -80,11 +88,9 @@ module Wdpa
           'lineage' => 'lineage',
           'citation' => 'citation',
           'metadataid' => 'metadataid',
-          'disclaimer' => 'disclaimer'
-
-          # Check where it is
-          # 'update_yr' => 'update_year',
-          # 'verifier' => 'verifier',
+          'disclaimer' => 'disclaimer',
+          'update_yr' => 'update_year',
+          'verifier' => 'verifier'
         }.freeze
 
         # Maps portal attributes to ProtectedArea attributes (non-spatial data only)
@@ -112,10 +118,17 @@ module Wdpa
 
               # Use shared type converter for type conversion
               case portal_key
-              when 'marine'
-                # Convert marine_type to boolean marine (as per data standard)
-                attributes['marine_type'] = Wdpa::Shared::TypeConverter.convert(value, as: type)
-                attributes['marine'] = marine_type_to_boolean(attributes['marine_type'])
+              when 'realm'
+                # Store the realm value first
+                attributes[pp_key] = Wdpa::Shared::TypeConverter.convert(value, as: type)
+                # Then derive marine and marine_type from it
+                attributes['marine'] = realm_is_marine(value)
+
+                # TODO: This should become a legacy field at some point
+                # consider removing the field as realm is now used instead
+                # Check usuage in protected_planet_api and if not used, remove the field
+                # make sure to remove 'marine_type' in s3 bucket way of importers
+                attributes['marine_type'] = realm_to_marine_type(value)
               else
                 # Standard type conversion using the shared type system
                 attributes[pp_key] = Wdpa::Shared::TypeConverter.convert(value, as: type)
@@ -131,8 +144,41 @@ module Wdpa
         end
 
         # Converts marine_type to boolean marine (as per data standard)
-        def self.marine_type_to_boolean(marine_type)
-          !(marine_type.to_i == 0)
+        # Handles string values: Terrestrial = 0, Coastal = 1, Marine = 2
+        def self.realm_to_marine_type(realm)
+          error_msg = "Invalid realm: '#{realm}'. Accepted values are: 'Terrestrial', 'Coastal', 'Marine'"
+
+          raise ArgumentError, error_msg if realm.nil? || realm.to_s.strip.empty?
+
+          realm_str = realm.to_s.downcase.strip
+
+          # Handle string format: Terrestrial = 0, Coastal = 1, Marine = 2
+          case realm_str
+          when 'terrestrial'
+            0 # Terrestrial
+          when 'coastal'
+            1 # Coastal
+          when 'marine'
+            2 # Marine
+          else
+            raise ArgumentError, error_msg
+          end
+        end
+
+        def self.realm_is_marine(realm)
+          error_msg = "Invalid realm: '#{realm}'. Accepted values are: 'Terrestrial', 'Coastal', 'Marine'"
+
+          raise ArgumentError, error_msg if realm.nil? || realm.to_s.strip.empty?
+
+          realm_str = realm.to_s.downcase.strip
+          case realm_str
+          when 'terrestrial'
+            false
+          when 'coastal', 'marine'
+            true
+          else
+            raise ArgumentError, error_msg
+          end
         end
 
         # Maps portal SOURCE attributes to ProtectedPlanet attributes using the standard mapping
