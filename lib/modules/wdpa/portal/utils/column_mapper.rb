@@ -15,7 +15,7 @@ module Wdpa
 
           # Marine and protection status
           'realm' => { name: 'realm', type: :string }, # Will be converted to boolean marine
-          'site_type' => { name: :is_oecm, type: :oecm_string },
+          'site_type' => { name: :site_type, type: :string },
 
           # Area measurements
           'rep_m_area' => { name: 'reported_marine_area', type: :float },
@@ -58,7 +58,7 @@ module Wdpa
           'verif' => { name: :verif, type: :string },
 
           'inlnd_wtrs' => { name: 'inland_waters', type: :string },
-          'oecm_asmt' => { name: 'oecm_assessment', type: :string },
+          'oecm_asmt' => { name: 'oecm_assessment', type: :string }
         }.freeze
 
         PROTECTED_AREA_COLUMNS_TO_BE_REMOVED_BEFORE_INSERT = [
@@ -112,12 +112,13 @@ module Wdpa
               # Skip geometry data - it's handled separately by GeometryImporter
               next if type == :geometry
 
-              # Use shared type converter for type conversion
+              # Default type conversion using the shared type system
+              attributes[pp_key] = Wdpa::Shared::TypeConverter.convert(value, as: type)
+
+              # Additional setup for specific portal keys
               case portal_key
               when 'realm'
-                # Store the realm value first
-                attributes[pp_key] = Wdpa::Shared::TypeConverter.convert(value, as: type)
-                # Then derive marine and marine_type from it
+                # Derive marine and marine_type from realm
                 attributes['marine'] = realm_is_marine(value)
 
                 # TODO: This should become a legacy field at some point
@@ -125,9 +126,10 @@ module Wdpa
                 # Check usuage in protected_planet_api and if not used, remove the field
                 # make sure to remove 'marine_type' in s3 bucket way of importers
                 attributes['marine_type'] = realm_to_marine_type(value)
-              else
-                # Standard type conversion using the shared type system
-                attributes[pp_key] = Wdpa::Shared::TypeConverter.convert(value, as: type)
+              when 'site_type'
+                # TODO: This should become a legacy field at some point
+                # consider removing the field as realm is now used instead of is_oecm
+                attributes['is_oecm'] = Wdpa::Shared::TypeConverter.convert(value, as: :oecm_string)
               end
             else
               # Log unmapped columns for debugging

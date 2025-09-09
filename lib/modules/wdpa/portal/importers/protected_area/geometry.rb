@@ -74,8 +74,13 @@ module Wdpa
 
           count = connection.execute("SELECT COUNT(*) FROM #{target_table}").first['count'].to_i
           if count.zero?
-            Rails.logger.error "Target table #{target_table} has no records"
-            return false
+            # Only treat empty ProtectedArea table as a hard error
+            if target_table == Staging::ProtectedArea.table_name
+              Rails.logger.error "Target table #{target_table} has no records"
+              return false
+            else
+              Rails.logger.warn "Target table #{target_table} has no records, but continuing"
+            end
           end
 
           Rails.logger.info "#{target_table}: #{count} records validated"

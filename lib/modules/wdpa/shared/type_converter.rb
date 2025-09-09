@@ -11,7 +11,7 @@ module Wdpa::Shared
       integer: ->(value) { value.to_i },
       string: ->(value) { value.to_s },
       float: ->(value) { value.to_f },
-      csv: ->(value) { value.split(';').map(&:strip) },
+      csv: ->(value) { value.present? ? value.split(';').map(&:strip) : [] },
       year: lambda { |value|
         value = value.to_s
         return nil if value.to_i.zero?
