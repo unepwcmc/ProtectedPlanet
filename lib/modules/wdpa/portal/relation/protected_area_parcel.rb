@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# If you change here you might need to also include the changes to protected_area.rb in this folder
 module Wdpa
   module Portal
     module Relation
@@ -14,11 +15,19 @@ module Wdpa
             @current_attributes[key] = send(key, value) if respond_to?(key, true)
           end
 
-          # Remove temporary fields that were only used for lookups
-          @current_attributes.delete('jurisdiction')
-          @current_attributes.delete('no_take_area')
+          # Remove fields that should not be inserted
+          remove_fields
 
           @current_attributes
+        end
+
+        # Remove temporary fields that were only used for lookups
+        def remove_fields
+          Wdpa::Portal::Utils::ColumnMapper::PROTECTED_AREA_PARCEL_COLUMNS_TO_BE_REMOVED_BEFORE_INSERT.each do |column_name|
+            next unless column_name
+
+            @current_attributes.delete(column_name)
+          end
         end
 
         def countries(iso_codes)
@@ -32,17 +41,21 @@ module Wdpa
         end
 
         def iucn_category(value)
-          IucnCategory.where(name: value).first
+          IucnCategory.where(name: value).first_or_create
         end
 
         def governance(value)
-          Governance.where(name: value).first
+          Governance.where(name: value).first_or_create
         end
 
         def management_authority(value)
           ManagementAuthority.where(name: value).first_or_create
         end
 
+        def realm(value)
+          Realm.where(name: value).first_or_create
+        end
+        
         def no_take_status(value)
           Staging::NoTakeStatus.create({
             name: value,
@@ -52,7 +65,7 @@ module Wdpa
 
         def designation(value)
           jurisdiction_name = @current_attributes[:jurisdiction]
-          jurisdiction = jurisdiction_name ? Jurisdiction.where(name: jurisdiction_name).first : nil
+          jurisdiction = jurisdiction_name ? Jurisdiction.where(name: jurisdiction_name).first_or_create : nil
           Designation.where({
             name: value,
             jurisdiction: jurisdiction
