@@ -13,6 +13,10 @@ module Wdpa
           'name_eng' => { name: 'name', type: :string },
           'name' => { name: 'original_name', type: :string },
 
+          # Marine and protection status
+          'realm' => { name: 'realm', type: :string }, # Will be converted to boolean marine
+          'site_type' => { name: :is_oecm, type: :oecm_string },
+
           # Area measurements
           'rep_m_area' => { name: 'reported_marine_area', type: :float },
           'rep_area' => { name: 'reported_area', type: :float },
@@ -21,18 +25,20 @@ module Wdpa
 
           # Geographic and administrative
           'iso3' => { name: 'countries', type: :csv }, # CSV type for semicolon-separated values
+          'prnt_iso3' => { name: :parent_iso3, type: :string },
+
           'status' => { name: 'legal_status', type: :string },
           'status_yr' => { name: 'legal_status_updated_at', type: :year },
 
           # Conservation classification
           'iucn_cat' => { name: 'iucn_category', type: :string },
           'gov_type' => { name: 'governance', type: :string },
+          'govsubtype' => { name: 'governance_subtype', type: :string },
 
           # Management information
           'mang_auth' => { name: 'management_authority', type: :string },
           'mang_plan' => { name: 'management_plan', type: :string },
           'int_crit' => { name: 'international_criteria', type: :string },
-
           'no_take' => { name: 'no_take_status', type: :string },
           'no_tk_area' => { name: 'no_take_area', type: :float },
 
@@ -45,24 +51,14 @@ module Wdpa
           'metadataid' => { name: 'sources', type: :integer }, # Will be processed as array
 
           'own_type' => { name: :owner_type, type: :string },
+          'ownsubtype' => { name: 'ownership_subtype', type: :string },
 
           'supp_info' => { name: :supplementary_info, type: :string },
           'cons_obj' => { name: :conservation_objectives, type: :string },
           'verif' => { name: :verif, type: :string },
-          'prnt_iso3' => { name: :parent_iso3, type: :string },
 
-          # Marine and protection status
-          'realm' => { name: 'realm', type: :string } # Will be converted to boolean marine
-          # TODO: New
-          # 'govsubtype' => { name: 'governance_subtype', type: :string },
-          # # TODO: it is now pa oecm
-          # 'site_type' => { name: :is_oecm, type: :oecm }, # 0 means is_oecm is true
-          # # TODO: New
-          # 'inlnd_wtrs' => { name: 'inland_waters', type: :string },
-          # # TODO: New
-          # 'ownsubtype' => { name: 'ownership_subtype', type: :string },
-          # # TODO: New
-          # 'oecm_asmt' => { name: 'oecm_assessment', type: :string }
+          'inlnd_wtrs' => { name: 'inland_waters', type: :string },
+          'oecm_asmt' => { name: 'oecm_assessment', type: :string },
         }.freeze
 
         PROTECTED_AREA_COLUMNS_TO_BE_REMOVED_BEFORE_INSERT = [
