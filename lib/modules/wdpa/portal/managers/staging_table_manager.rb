@@ -4,20 +4,48 @@ module Wdpa
   module Portal
     module Managers
       class StagingTableManager
-        def self.create_staging_tables(include_indexes: false)
+        def self.create_staging_tables
           drop_staging_tables
+          create_all_staging_tables
+          add_all_foreign_keys
+        end
 
+        def self.create_all_staging_tables
           Wdpa::Portal::Config::PortalImportConfig.staging_tables.each do |table_name|
-            create_staging_table(table_name, include_indexes: include_indexes)
+            create_staging_table(table_name)
+          end
+        end
+
+        def self.add_all_foreign_keys
+          Wdpa::Portal::Config::PortalImportConfig.staging_tables.each do |table_name|
+            add_foreign_keys_to_staging_table(table_name)
           end
         end
 
         def self.drop_staging_tables
-          Wdpa::Portal::Config::PortalImportConfig.staging_tables.each do |table_name|
-            if ActiveRecord::Base.connection.table_exists?(table_name)
-              ActiveRecord::Base.connection.drop_table(table_name)
-              Rails.logger.info "Dropped staging table: #{table_name}"
-            end
+          tables_to_drop = get_tables_in_drop_order
+          tables_to_drop.each { |table_name| drop_table_safely(table_name) }
+        end
+
+        def self.get_tables_in_drop_order
+          # Drop tables in reverse order of swap sequence to handle foreign key dependencies
+          Wdpa::Portal::Config::PortalImportConfig.swap_sequence_live_table_names.reverse.map do |live_table|
+            Wdpa::Portal::Config::PortalImportConfig.staging_live_tables_hash[live_table]
+          end.compact
+        end
+
+        def self.drop_table_safely(table_name)
+          return unless ActiveRecord::Base.connection.table_exists?(table_name)
+
+          begin
+            ActiveRecord::Base.connection.drop_table(table_name)
+            Rails.logger.info "Dropped staging table: #{table_name}"
+          rescue ActiveRecord::StatementInvalid => e
+            raise e unless e.message.include?('DependentObjectsStillExist')
+
+            Rails.logger.warn "Cannot drop #{table_name} due to dependencies, using CASCADE"
+            ActiveRecord::Base.connection.drop_table(table_name, if_exists: true, force: :cascade)
+            Rails.logger.info "Dropped staging table with CASCADE: #{table_name}"
           end
         end
 
@@ -44,34 +72,123 @@ module Wdpa
           end
         end
 
-        def self.create_staging_table(staging_table_name, include_indexes: false)
+        def self.create_staging_table(staging_table_name)
           live_table_name = Wdpa::Portal::Config::PortalImportConfig.get_live_table_name_from_staging_name(staging_table_name)
-          create_exact_table_copy(live_table_name, staging_table_name, include_indexes: include_indexes)
+          create_exact_table_copy(live_table_name, staging_table_name)
           Rails.logger.info "Created staging table: #{staging_table_name}"
         end
 
-        def self.create_exact_table_copy(source_table_name, target_table_name, include_indexes: false)
+        def self.add_foreign_keys_to_staging_table(staging_table_name)
+          live_table_name = Wdpa::Portal::Config::PortalImportConfig.get_live_table_name_from_staging_name(staging_table_name)
+          add_foreign_keys(staging_table_name, live_table_name)
+          Rails.logger.info "Added foreign keys to: #{staging_table_name}"
+        end
+
+        def self.create_exact_table_copy(source_table_name, target_table_name)
           connection = ActiveRecord::Base.connection
 
-          index_clause = include_indexes ? 'INCLUDING INDEXES' : 'EXCLUDING INDEXES'
-          
+          # Create table structure (INCLUDING ALL copies indexes, constraints, defaults, comments)
+          # but NOT foreign key constraints - this is a PostgreSQL limitation
           sql = <<~SQL
             CREATE TABLE #{target_table_name}
             (LIKE #{source_table_name}
              INCLUDING DEFAULTS
              INCLUDING CONSTRAINTS
-             #{index_clause}
+             INCLUDING INDEXES
              INCLUDING COMMENTS)
           SQL
 
           connection.execute(sql)
-          performance_note = include_indexes ? '' : ' (indexes excluded for performance)'
-          Rails.logger.debug "Created #{target_table_name} as exact copy of #{source_table_name}#{performance_note}"
+
+          # Create separate sequence for staging table to avoid primary key conflicts
+          create_staging_sequence(source_table_name, target_table_name)
+
+          Rails.logger.debug "Created #{target_table_name} as exact copy of #{source_table_name}"
         end
 
-        def self.column_exists?(table_name, column_name)
+        def self.create_staging_sequence(source_table_name, target_table_name)
           connection = ActiveRecord::Base.connection
-          connection.columns(table_name).any? { |col| col.name == column_name.to_s }
+          primary_key = connection.primary_key(source_table_name)
+          return unless primary_key
+
+          sequence_name = "#{target_table_name}_#{primary_key}_seq"
+
+          if sequence_exists?(sequence_name)
+            Rails.logger.debug "Reusing existing sequence #{sequence_name} for #{target_table_name}"
+            reset_sequence(sequence_name)
+          else
+            create_new_sequence(connection, sequence_name, target_table_name)
+          end
+
+          set_table_default_to_sequence(connection, target_table_name, primary_key, sequence_name)
+        end
+
+        def self.create_new_sequence(connection, sequence_name, target_table_name)
+          connection.execute(<<~SQL)
+            CREATE SEQUENCE #{sequence_name}
+            AS integer
+            START WITH 1
+            INCREMENT BY 1
+            NO MINVALUE
+            NO MAXVALUE
+            CACHE 1
+          SQL
+          Rails.logger.debug "Created separate sequence #{sequence_name} for #{target_table_name}"
+        end
+
+        def self.set_table_default_to_sequence(connection, target_table_name, primary_key, sequence_name)
+          connection.execute(<<~SQL)
+            ALTER TABLE #{target_table_name}
+            ALTER COLUMN #{primary_key} SET DEFAULT nextval('#{sequence_name}'::regclass)
+          SQL
+        end
+
+        def self.reset_sequence(sequence_name)
+          connection = ActiveRecord::Base.connection
+          connection.execute("ALTER SEQUENCE #{sequence_name} RESTART WITH 1")
+          Rails.logger.debug "Reset sequence #{sequence_name} to start from 1"
+        end
+
+        def self.sequence_exists?(sequence_name)
+          connection = ActiveRecord::Base.connection
+          result = connection.execute(<<~SQL)
+            SELECT EXISTS (
+              SELECT 1 FROM pg_sequences#{' '}
+              WHERE schemaname = 'public'#{' '}
+              AND sequencename = '#{sequence_name}'
+            )
+          SQL
+          result.first['exists']
+        end
+
+        def self.add_foreign_keys(staging_table_name, live_table_name)
+          connection = ActiveRecord::Base.connection
+          live_foreign_keys = connection.foreign_keys(live_table_name)
+
+          live_foreign_keys.each do |fk|
+            add_single_foreign_key(connection, staging_table_name, fk)
+          end
+        end
+
+        def self.add_single_foreign_key(connection, staging_table_name, fk)
+          referenced_table = determine_referenced_table(fk.to_table)
+
+          connection.add_foreign_key(staging_table_name, referenced_table,
+            name: fk.name,
+            column: fk.column,
+            primary_key: fk.primary_key,
+            on_delete: fk.on_delete,
+            on_update: fk.on_update)
+
+          Rails.logger.debug "Added FK: #{staging_table_name}.#{fk.column} -> #{referenced_table}.#{fk.primary_key}"
+        end
+
+        def self.determine_referenced_table(live_table_name)
+          # Check if there's a corresponding staging table using the config mapping
+          staging_table_name = Wdpa::Portal::Config::PortalImportConfig.staging_live_tables_hash[live_table_name]
+          # Reference staging table if it exists in our config
+          # Reference live table if no staging table exists
+          staging_table_name || live_table_name
         end
       end
     end
