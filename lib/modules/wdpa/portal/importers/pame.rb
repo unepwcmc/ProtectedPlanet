@@ -96,7 +96,7 @@ module Wdpa
           Rails.logger.info "Total PAME evaluations imported: #{total_evaluations}"
           Rails.logger.info "Total PAME sources imported: #{total_sources}"
 
-          success_result(0, soft_errors, [], {
+          build_result(0, soft_errors, [], {
             total_sources: total_sources,
             site_ids_not_recognised: site_ids_not_recognised
           })

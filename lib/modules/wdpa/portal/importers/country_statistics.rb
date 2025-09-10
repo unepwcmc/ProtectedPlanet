@@ -59,7 +59,7 @@ module Wdpa
             soft_errors << "Row error processing country #{row['iso3']}: #{e.message}"
           end
 
-          success_result(imported_count, soft_errors, [])
+          build_result(imported_count, soft_errors, [])
         end
 
         def self.pame_assessments(country_id)

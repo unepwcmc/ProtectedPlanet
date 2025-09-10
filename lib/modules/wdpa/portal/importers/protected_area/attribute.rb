@@ -27,7 +27,7 @@ module Wdpa
             raise e # Re-raise as hard error to stop import
           end
 
-          success_result(imported_count, soft_errors, [])
+          build_result(imported_count, soft_errors, [])
         end
 
         def self.process_batch(batch, site_ids_with_multiple_site_pids)

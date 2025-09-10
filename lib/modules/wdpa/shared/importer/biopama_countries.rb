@@ -42,7 +42,7 @@ module Wdpa
 
           Rails.logger.info "BIOPAMA countries import completed: #{countries_updated} updated, #{countries_not_found} not found"
 
-          Wdpa::Shared::ImporterBase::Base.success_result(countries_updated, soft_errors, [], {
+          Wdpa::Shared::ImporterBase::Base.build_result(countries_updated, soft_errors, [], {
             countries_updated: countries_updated,
             countries_not_found: countries_not_found
           })

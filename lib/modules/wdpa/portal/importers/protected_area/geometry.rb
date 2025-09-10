@@ -9,10 +9,10 @@ module Wdpa
           protected_area_parcels_result = import_geometry_for_table(Staging::ProtectedAreaParcel.table_name)
 
           Rails.logger.info 'Geometry import completed'
-          success_result(0, [], [], {
+          {
             protected_areas: protected_areas_result,
             protected_area_parcels: protected_area_parcels_result
-          })
+          }
         end
 
         def self.import_geometry_for_table(target_table)
@@ -35,7 +35,7 @@ module Wdpa
           end
 
           Rails.logger.info "#{target_table}: #{imported_count} records updated"
-          success_result(imported_count, soft_errors, hard_errors)
+          build_result(imported_count, soft_errors, hard_errors)
         end
 
         def self.import_geometry_from_view(view, target_table)
@@ -61,7 +61,7 @@ module Wdpa
 
           Rails.logger.info "#{target_table} from #{view}: #{result.cmd_tuples} records"
           imported_count = result.cmd_tuples
-          success_result(imported_count, [], [], { number_of_records_updated: imported_count })
+          build_result(imported_count, [], [], { number_of_records_updated: imported_count })
         end
 
         def self.validate_target_table(target_table)

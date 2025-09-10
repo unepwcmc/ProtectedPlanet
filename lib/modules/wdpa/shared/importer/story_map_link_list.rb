@@ -69,7 +69,7 @@ module Wdpa
               Rails.logger.warn "Failed to process story map link row: #{e.message}"
             end
 
-            Wdpa::Shared::ImporterBase::Base.success_result(links_processed, soft_errors, [], {
+            Wdpa::Shared::ImporterBase::Base.build_result(links_processed, soft_errors, [], {
               links_processed: links_processed,
               links_created: links_created,
               sites_not_found: sites_not_found,

@@ -85,7 +85,7 @@ module Wdpa
             Rails.logger.info "Relationships created: #{relationships_created.keys.join(', ')}"
           end
 
-          Wdpa::Shared::ImporterBase::Base.success_result(imported_count, soft_errors, [], {
+          Wdpa::Shared::ImporterBase::Base.build_result(imported_count, soft_errors, [], {
             relationships_created: relationships_created,
             info: info
           })

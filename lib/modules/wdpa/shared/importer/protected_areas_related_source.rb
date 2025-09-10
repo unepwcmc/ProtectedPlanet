@@ -44,7 +44,9 @@ module Wdpa
           field = import_config[:field]
 
           unless %w[live staging].include?(is_for)
-            return Wdpa::Shared::ImporterBase::Base.failure_result("Invalid target environment: #{is_for}. Must be 'live' or 'staging'", 0)
+            return Wdpa::Shared::ImporterBase::Base.failure_result(
+              "Invalid target environment: #{is_for}. Must be 'live' or 'staging'", 0
+            )
           end
 
           target_table = if is_for == 'live'
@@ -64,14 +66,14 @@ module Wdpa
 
             if wdpa_ids.empty?
               Rails.logger.warn "No WDPA IDs found in #{path}"
-              return Wdpa::Shared::ImporterBase::Base.success_result(0, ["No WDPA IDs found in #{path}"],
+              return Wdpa::Shared::ImporterBase::Base.build_result(0, ["No WDPA IDs found in #{path}"],
                 [])
             end
 
             Rails.logger.info "Updating #{target_table} with #{field} data"
             soft_errors = update_table(wdpa_ids, field, target_table)
 
-            Wdpa::Shared::ImporterBase::Base.success_result(0, soft_errors, [])
+            Wdpa::Shared::ImporterBase::Base.build_result(0, soft_errors, [])
           rescue StandardError => e
             Rails.logger.error "Import failed: #{e.message}"
             Wdpa::Shared::ImporterBase::Base.failure_result("Import failed: #{e.message}", 0)
