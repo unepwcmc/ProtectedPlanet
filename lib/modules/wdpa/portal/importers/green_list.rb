@@ -73,7 +73,7 @@ module Wdpa
           Rails.logger.info "  - Not found SITE_IDs: #{not_found.join(',')}" if not_found.any?
           Rails.logger.info "  - Duplicates: #{duplicates.join(',')}" if duplicates.any?
 
-          success_result(imported_count, soft_errors, [], {
+          build_result(imported_count, soft_errors, [], {
             invalid_site_ids: invalid,
             not_found_site_ids: not_found,
             duplicates: duplicates

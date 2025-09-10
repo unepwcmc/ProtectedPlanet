@@ -20,7 +20,7 @@ module Wdpa
             Rails.logger.warn "Row processing failed: #{e.message}"
           end
 
-          success_result(imported_count, soft_errors, [])
+          build_result(imported_count, soft_errors, [])
         rescue StandardError => e
           failure_result("Import failed: #{e.message}", 0)
         end

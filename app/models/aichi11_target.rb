@@ -56,7 +56,7 @@ class Aichi11Target < ActiveRecord::Base
         Rails.logger.info 'Aichi11Target: Created new record from CSV data'
       end
 
-      Wdpa::Shared::ImporterBase::Base.success_result(1, [], [], {
+      Wdpa::Shared::ImporterBase::Base.build_result(1, [], [], {
         action: was_created ? 'created' : 'updated',
         message: "Aichi11Target #{was_created ? 'created' : 'updated'} successfully"
       })

@@ -21,7 +21,7 @@ module Wdpa
         live_tables_results = update_data_in_live_tables
 
         # Check for hard errors by checking if any nested keys 'hard_errors'
-        # All importers should return hash using success_result, failure_result in Wdpa::Shared::ImporterBase
+        # All importers should return hash using build_result, failure_result in Wdpa::Shared::ImporterBase
         has_hard_errors = check_for_hard_errors(staging_tables_results, live_tables_results)
 
         {

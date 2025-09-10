@@ -6,7 +6,7 @@ module Wdpa
       # Base class for all importers with shared helper methods
       # Helper methods for error handling - shared across all importers
       class Base
-        def self.success_result(imported_count = 0, soft_errors = [], hard_errors = [], additional_fields = {})
+        def self.build_result(imported_count = 0, soft_errors = [], hard_errors = [], additional_fields = {})
           {
             success: hard_errors.empty?,
             imported_count: imported_count,
