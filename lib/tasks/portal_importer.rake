@@ -20,7 +20,7 @@ namespace :portal_importer do
 
     begin
       Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
-      puts "✅ Staging tables created: #{Wdpa::Portal::Config::StagingConfig.staging_tables.join(', ')}"
+      puts "✅ Staging tables created: #{Wdpa::Portal::Config::PortalImportConfig.staging_tables.join(', ')}"
     rescue StandardError => e
       puts "❌ Failed to create staging tables: #{e.message}"
       puts '🔄 Rolling back any partially created tables...'
@@ -83,7 +83,7 @@ namespace :portal_importer do
       puts ''
       puts '📈 Staging Table Results:'
       puts '=========================='
-      Wdpa::Portal::Config::StagingConfig.staging_tables.each do |table|
+      Wdpa::Portal::Config::PortalImportConfig.staging_tables.each do |table|
         count = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{table}").to_i
         puts "  #{table}: #{count} records"
       end

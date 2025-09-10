@@ -78,7 +78,7 @@ module Wdpa
         def self.protected_area_ids_with_multiple_parcels
           pa_ids_with_multiple_parcels = {}
 
-          Wdpa::Portal::Config::StagingConfig.portal_protected_area_views.each do |view|
+          Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_views.each do |view|
             # Find WDPA IDs that have more than one parcel
             find_wdpa_ids_with_multiple_parcels_command = <<~SQL
               SELECT site_id, MIN(site_pid) AS first_site_pid

@@ -3,7 +3,7 @@
 module Wdpa
   module Portal
     module Config
-      class StagingConfig
+      class PortalImportConfig
         def self.batch_import_protected_areas_from_view_size
           10
         end

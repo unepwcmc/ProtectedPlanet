@@ -24,7 +24,7 @@ module Wdpa
           soft_errors = []
           hard_errors = []
 
-          Wdpa::Portal::Config::StagingConfig.portal_protected_area_views.each do |view|
+          Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_views.each do |view|
             result = import_geometry_from_view(view, target_table)
             imported_count += result[:imported_count]
             soft_errors.concat(result[:soft_errors] || [])

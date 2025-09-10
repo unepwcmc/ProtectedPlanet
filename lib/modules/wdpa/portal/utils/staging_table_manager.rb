@@ -7,13 +7,13 @@ module Wdpa
         def self.create_staging_tables
           drop_staging_tables
 
-          Wdpa::Portal::Config::StagingConfig.staging_tables.each do |table_name|
+          Wdpa::Portal::Config::PortalImportConfig.staging_tables.each do |table_name|
             create_staging_table(table_name)
           end
         end
 
         def self.drop_staging_tables
-          Wdpa::Portal::Config::StagingConfig.staging_tables.each do |table_name|
+          Wdpa::Portal::Config::PortalImportConfig.staging_tables.each do |table_name|
             next unless ActiveRecord::Base.connection.table_exists?(table_name)
 
             drop_table_indexes(table_name)
@@ -23,7 +23,7 @@ module Wdpa
         end
 
         def self.staging_tables_exist?
-          Wdpa::Portal::Config::StagingConfig.staging_tables.all? do |table_name|
+          Wdpa::Portal::Config::PortalImportConfig.staging_tables.all? do |table_name|
             ActiveRecord::Base.connection.table_exists?(table_name)
           end
         end
@@ -36,7 +36,7 @@ module Wdpa
             create_staging_tables
             Rails.logger.info '✅ Staging tables created successfully'
           else
-            missing_tables = Wdpa::Portal::Config::StagingConfig.staging_tables.select do |table_name|
+            missing_tables = Wdpa::Portal::Config::PortalImportConfig.staging_tables.select do |table_name|
               !ActiveRecord::Base.connection.table_exists?(table_name)
             end
             error_msg = "Required staging tables are missing: #{missing_tables.join(', ')}. Please create staging tables before running import."
@@ -46,7 +46,7 @@ module Wdpa
         end
 
         def self.create_staging_table(staging_table_name)
-          live_table_name = Wdpa::Portal::Config::StagingConfig.get_live_table_name_from_staging_name(staging_table_name)
+          live_table_name = Wdpa::Portal::Config::PortalImportConfig.get_live_table_name_from_staging_name(staging_table_name)
           create_exact_table_copy(live_table_name, staging_table_name)
           Rails.logger.info "Created staging table: #{staging_table_name}"
         end
@@ -99,7 +99,7 @@ module Wdpa
 
           indexes.each do |index|
             # Create new index name for the staging table
-            new_index_name = Wdpa::Portal::Config::StagingConfig.generate_staging_table_index_name(index.name)
+            new_index_name = Wdpa::Portal::Config::PortalImportConfig.generate_staging_table_index_name(index.name)
 
             # Check for index name length issues (limit is 63 characters by Postgres)
             if new_index_name.length > 63

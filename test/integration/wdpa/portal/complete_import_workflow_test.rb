@@ -24,12 +24,15 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
 
     # Verify overall success
     assert result[:sources][:success], "Sources import failed: #{result[:sources][:hard_errors]}"
-    assert result[:protected_areas][:success], "Protected areas import failed: #{result[:protected_areas][:hard_errors]}"
+    assert result[:protected_areas][:success],
+      "Protected areas import failed: #{result[:protected_areas][:hard_errors]}"
     assert result[:global_stats][:success], "Global stats import failed: #{result[:global_stats][:hard_errors]}"
     assert result[:green_list][:success], "Green list import failed: #{result[:green_list][:hard_errors]}"
     assert result[:pame][:success], "PAME import failed: #{result[:pame][:hard_errors]}"
-    assert result[:story_map_links][:success], "Story map links import failed: #{result[:story_map_links][:hard_errors]}"
-    assert result[:country_statistics][:success], "Country statistics import failed: #{result[:country_statistics][:hard_errors]}"
+    assert result[:story_map_links][:success],
+      "Story map links import failed: #{result[:story_map_links][:hard_errors]}"
+    assert result[:country_statistics][:success],
+      "Country statistics import failed: #{result[:country_statistics][:hard_errors]}"
 
     # Verify imported counts
     assert_equal 2, result[:sources][:imported_count]
@@ -105,8 +108,8 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
   def create_test_portal_views_with_new_fields
     # Create test portal views with comprehensive sample data including new fields
     ActiveRecord::Base.connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')} AS
-      SELECT 
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('polygons')} AS
+      SELECT#{' '}
         1 as wdpaid,
         '1' as wdpa_pid,
         'Test Terrestrial PA' as name,
@@ -119,7 +122,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
         'Completed' as oecm_assessment,
         ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
       UNION ALL
-      SELECT 
+      SELECT#{' '}
         2 as wdpaid,
         '2' as wdpa_pid,
         'Test Marine PA' as name,
@@ -132,7 +135,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
         'Pending' as oecm_assessment,
         ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry
       UNION ALL
-      SELECT 
+      SELECT#{' '}
         3 as wdpaid,
         '3' as wdpa_pid,
         'Test Coastal PA' as name,
@@ -145,8 +148,8 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
         'In Progress' as oecm_assessment,
         ST_GeomFromText('POLYGON((2 2, 3 2, 3 3, 2 3, 2 2))') as wkb_geometry;
 
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::StagingConfig.portal_view_for('points')} AS
-      SELECT 
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('points')} AS
+      SELECT#{' '}
         4 as wdpaid,
         '4' as wdpa_pid,
         'Test Point PA' as name,
@@ -159,7 +162,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
         'Completed' as oecm_assessment,
         ST_GeomFromText('POINT(0.5 0.5)') as wkb_geometry
       UNION ALL
-      SELECT 
+      SELECT#{' '}
         5 as wdpaid,
         '5' as wdpa_pid,
         'Test Marine Point PA' as name,
@@ -172,15 +175,15 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
         'Pending' as oecm_assessment,
         ST_GeomFromText('POINT(1.5 1.5)') as wkb_geometry;
 
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::StagingConfig.portal_view_for('sources')} AS
-      SELECT 
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('sources')} AS
+      SELECT#{' '}
         1 as id,
         'Test Source 1' as title,
         'Test Description 1' as description,
         2024 as year,
         'en' as language
       UNION ALL
-      SELECT 
+      SELECT#{' '}
         2 as id,
         'Test Source 2' as title,
         'Test Description 2' as description,
@@ -192,8 +195,8 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
   def create_test_portal_views_with_invalid_realm
     # Create test portal views with invalid realm data
     ActiveRecord::Base.connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::StagingConfig.portal_view_for('polygons')} AS
-      SELECT 
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('polygons')} AS
+      SELECT#{' '}
         1 as wdpaid,
         '1' as wdpa_pid,
         'Test PA with Invalid Realm' as name,
@@ -213,7 +216,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
     Realm.create!(name: 'Terrestrial')
     Realm.create!(name: 'Marine')
     Realm.create!(name: 'Coastal')
-    
+
     Designation.create!(name: 'Test Designation')
     ManagementAuthority.create!(name: 'Test Authority')
     LegalStatus.create!(name: 'Test Legal Status')
@@ -226,7 +229,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
   end
 
   def drop_test_portal_views
-    Wdpa::Portal::Config::StagingConfig.portal_views.each do |view|
+    Wdpa::Portal::Config::PortalImportConfig.portal_views.each do |view|
       ActiveRecord::Base.connection.execute("DROP MATERIALIZED VIEW IF EXISTS #{view}")
     end
   end

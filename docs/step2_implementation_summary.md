@@ -8,7 +8,7 @@ Your Step 2 implementation is now complete and ready for testing! Here's what ha
 - ✅ **Refactored to use `PORTAL_VIEWS` hash** - Centralized portal view configuration
 - ✅ **Updated `StagingSource` model** - Now uses `staging_sources` table (Rails convention)
 - ✅ **Replaced raw SQL with ActiveRecord** - `create_source` now uses `StagingSource.create!`
-- ✅ **Centralized configuration** - All table names managed in `StagingConfig`
+- ✅ **Centralized configuration** - All table names managed in `PortalImportConfig`
 
 ## ✅ **What's Been Implemented:**
 

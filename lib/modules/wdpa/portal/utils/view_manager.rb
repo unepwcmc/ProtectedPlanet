@@ -15,7 +15,7 @@ module Wdpa
 
         # Validate that all required views exist (used by importer)
         def self.validate_required_views_exist
-          required_views = Wdpa::Portal::Config::StagingConfig.portal_views
+          required_views = Wdpa::Portal::Config::PortalImportConfig.portal_views
 
           missing_views = required_views.select do |view_name|
             !view_exists?(view_name)
@@ -32,7 +32,7 @@ module Wdpa
 
         # Refresh all materialized views before import (with automatic index creation)
         def self.refresh_materialized_views
-          views = Wdpa::Portal::Config::StagingConfig.portal_views
+          views = Wdpa::Portal::Config::PortalImportConfig.portal_views
           views.each do |view_name|
             Rails.logger.info "Refreshing materialized view: #{view_name}"
 

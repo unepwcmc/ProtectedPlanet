@@ -4,7 +4,6 @@ module Wdpa
   module Portal
     module Importers
       class CountriesProtectedAreaGeometryStatistics < Base
-
         def self.import_to_staging
           country_ids = Country.pluck(:id)
           processed_countries_count = 0
@@ -29,7 +28,7 @@ module Wdpa
 
         def self.calculate_country_pas_geometry_counts(country_id)
           staging_protected_areas_table = Staging::ProtectedArea.table_name
-          staging_countries_protected_areas_table = Wdpa::Portal::Config::StagingConfig.get_staging_table_name_from_live_table('countries_protected_areas')
+          staging_countries_protected_areas_table = Wdpa::Portal::Config::PortalImportConfig.get_staging_table_name_from_live_table('countries_protected_areas')
           statics_query = <<~SQL
             SELECT
               COALESCE(SUM((CASE WHEN GeometryType(the_geom) IN ('MULTIPOINT', 'POINT') THEN 1 ELSE 0 END)), 0) AS points_count,
