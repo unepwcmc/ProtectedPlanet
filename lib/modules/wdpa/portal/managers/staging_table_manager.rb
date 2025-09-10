@@ -87,15 +87,12 @@ module Wdpa
         def self.create_exact_table_copy(source_table_name, target_table_name)
           connection = ActiveRecord::Base.connection
 
-          # Create table structure (INCLUDING ALL copies indexes, constraints, defaults, comments)
-          # but NOT foreign key constraints - this is a PostgreSQL limitation
+          # Use INCLUDING ALL to copy everything Rails creates, then handle FKs separately
+          # This ensures we get triggers, functions, and other Rails-specific elements
           sql = <<~SQL
             CREATE TABLE #{target_table_name}
             (LIKE #{source_table_name}
-             INCLUDING DEFAULTS
-             INCLUDING CONSTRAINTS
-             INCLUDING INDEXES
-             INCLUDING COMMENTS)
+             INCLUDING ALL)
           SQL
 
           connection.execute(sql)
@@ -109,17 +106,25 @@ module Wdpa
         def self.create_staging_sequence(source_table_name, target_table_name)
           connection = ActiveRecord::Base.connection
           primary_key = connection.primary_key(source_table_name)
-          return unless primary_key
 
+          # Skip sequence creation for junction tables (no primary key)
+          unless primary_key
+            Rails.logger.debug "Skipping sequence creation for junction table #{target_table_name} (no primary key)"
+            return
+          end
+
+          # Use Rails 5.2 naming convention: table_column_seq
           sequence_name = "#{target_table_name}_#{primary_key}_seq"
 
           if sequence_exists?(sequence_name)
-            Rails.logger.debug "Reusing existing sequence #{sequence_name} for #{target_table_name}"
-            reset_sequence(sequence_name)
-          else
-            create_new_sequence(connection, sequence_name, target_table_name)
+            Rails.logger.debug "Dropping existing sequence #{sequence_name} for #{target_table_name}"
+            drop_sequence(connection, sequence_name)
           end
 
+          create_new_sequence(connection, sequence_name, target_table_name)
+
+          # Set ownership and permissions like Rails does
+          set_sequence_ownership(connection, sequence_name, target_table_name, primary_key)
           set_table_default_to_sequence(connection, target_table_name, primary_key, sequence_name)
         end
 
@@ -136,6 +141,14 @@ module Wdpa
           Rails.logger.debug "Created separate sequence #{sequence_name} for #{target_table_name}"
         end
 
+        def self.set_sequence_ownership(connection, sequence_name, target_table_name, primary_key)
+          # Set sequence ownership to the table column (like Rails does)
+          connection.execute(<<~SQL)
+            ALTER SEQUENCE #{sequence_name} OWNED BY #{target_table_name}.#{primary_key}
+          SQL
+          Rails.logger.debug "Set sequence ownership: #{sequence_name} -> #{target_table_name}.#{primary_key}"
+        end
+
         def self.set_table_default_to_sequence(connection, target_table_name, primary_key, sequence_name)
           connection.execute(<<~SQL)
             ALTER TABLE #{target_table_name}
@@ -143,18 +156,17 @@ module Wdpa
           SQL
         end
 
-        def self.reset_sequence(sequence_name)
-          connection = ActiveRecord::Base.connection
-          connection.execute("ALTER SEQUENCE #{sequence_name} RESTART WITH 1")
-          Rails.logger.debug "Reset sequence #{sequence_name} to start from 1"
+        def self.drop_sequence(connection, sequence_name)
+          connection.execute("DROP SEQUENCE IF EXISTS #{sequence_name}")
+          Rails.logger.debug "Dropped sequence #{sequence_name}"
         end
 
         def self.sequence_exists?(sequence_name)
           connection = ActiveRecord::Base.connection
           result = connection.execute(<<~SQL)
             SELECT EXISTS (
-              SELECT 1 FROM pg_sequences#{' '}
-              WHERE schemaname = 'public'#{' '}
+              SELECT 1 FROM pg_sequences
+              WHERE schemaname = 'public'
               AND sequencename = '#{sequence_name}'
             )
           SQL
