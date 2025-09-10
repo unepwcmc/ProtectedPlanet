@@ -3,12 +3,12 @@ require 'test_helper'
 class Wdpa::Portal::Importers::ProtectedAreaAttributeTest < ActiveSupport::TestCase
   def setup
     # Create staging table for testing
-    Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
   end
 
   def teardown
     # Clean up staging tables
-    Wdpa::Portal::Utils::StagingTableManager.drop_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
   end
 
   test 'imports protected areas to staging table' do

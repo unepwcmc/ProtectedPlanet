@@ -50,7 +50,7 @@ class RealmTest < ActiveSupport::TestCase
 
   test 'realm has many staging protected areas' do
     # Create staging table for testing
-    Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
 
     staging_pa1 = Staging::ProtectedArea.create!(
       wdpa_id: 1,
@@ -68,12 +68,12 @@ class RealmTest < ActiveSupport::TestCase
     assert_equal 2, @realm.staging_protected_areas.count
 
     # Clean up
-    Wdpa::Portal::Utils::StagingTableManager.drop_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
   end
 
   test 'realm has many staging protected area parcels' do
     # Create staging table for testing
-    Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
 
     staging_parcel1 = Staging::ProtectedAreaParcel.create!(
       wdpa_id: 1,
@@ -91,7 +91,7 @@ class RealmTest < ActiveSupport::TestCase
     assert_equal 2, @realm.staging_protected_area_parcels.count
 
     # Clean up
-    Wdpa::Portal::Utils::StagingTableManager.drop_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
   end
 
   test 'realm name is required' do

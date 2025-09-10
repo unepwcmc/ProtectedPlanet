@@ -2,7 +2,7 @@
 
 module Wdpa
   module Portal
-    module Utils
+    module Managers
       class ViewManager
         # Check if a single view exists
         def self.view_exists?(view_name)

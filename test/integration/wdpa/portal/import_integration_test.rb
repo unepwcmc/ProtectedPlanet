@@ -3,7 +3,7 @@ require 'test_helper'
 class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
   def setup
     # Create staging tables
-    Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
 
     # Create test portal views with sample data
     create_test_portal_views
@@ -11,7 +11,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
 
   def teardown
     # Clean up
-    Wdpa::Portal::Utils::StagingTableManager.drop_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
     drop_test_portal_views
   end
 

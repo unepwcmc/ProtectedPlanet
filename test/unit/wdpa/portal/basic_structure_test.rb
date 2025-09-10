@@ -26,7 +26,7 @@ class Wdpa::Portal::BasicStructureTest < ActiveSupport::TestCase
 
   test 'staging table manager can be instantiated' do
     assert_nothing_raised do
-      Wdpa::Portal::Utils::StagingTableManager
+      Wdpa::Portal::Managers::StagingTableManager
     end
   end
 end

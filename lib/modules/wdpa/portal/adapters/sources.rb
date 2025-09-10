@@ -24,7 +24,7 @@ module Wdpa
         end
 
         def portal_sources_exist?
-          Wdpa::Portal::Utils::ViewManager.view_exists?(Wdpa::Portal::Config::PortalImportConfig.portal_view_for('sources'))
+          Wdpa::Portal::Managers::ViewManager.view_exists?(Wdpa::Portal::Config::PortalImportConfig.portal_view_for('sources'))
         end
       end
     end

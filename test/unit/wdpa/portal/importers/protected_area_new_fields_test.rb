@@ -3,12 +3,12 @@ require 'test_helper'
 class Wdpa::Portal::Importers::ProtectedAreaNewFieldsTest < ActiveSupport::TestCase
   def setup
     # Create staging tables for testing
-    Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
   end
 
   def teardown
     # Clean up staging tables
-    Wdpa::Portal::Utils::StagingTableManager.drop_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
   end
 
   test 'imports new fields to protected areas' do

@@ -3,7 +3,7 @@ require 'test_helper'
 class ModelStagingRelationshipsTest < ActiveSupport::TestCase
   def setup
     # Create staging tables for testing
-    Wdpa::Portal::Utils::StagingTableManager.create_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
 
     # Create test models
     @designation = Designation.create!(name: 'Test Designation')
@@ -16,7 +16,7 @@ class ModelStagingRelationshipsTest < ActiveSupport::TestCase
 
   def teardown
     # Clean up staging tables
-    Wdpa::Portal::Utils::StagingTableManager.drop_staging_tables
+    Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
   end
 
   test 'designation has staging relationships' do

@@ -4,18 +4,18 @@ module Wdpa
   module Portal
     class Importer < Wdpa::Shared::ImporterBase::Base
       def self.import(refresh_materialized_views: true)
-        unless Wdpa::Portal::Utils::ViewManager.validate_required_views_exist
+        unless Wdpa::Portal::Managers::ViewManager.validate_required_views_exist
           error_msg = 'Required materialized views do not exist.'
           raise StandardError, error_msg
         end
 
         # Refresh materialized views to ensure latest data (only if refresh_views is true)
-        Wdpa::Portal::Utils::ViewManager.refresh_materialized_views if refresh_materialized_views
+        Wdpa::Portal::Managers::ViewManager.refresh_materialized_views if refresh_materialized_views
 
         # Ensure staging tables exist (raise error if missing - should be created before import)
-        Wdpa::Portal::Utils::StagingTableManager.ensure_staging_tables_exist!(create_if_missing: true)
+        Wdpa::Portal::Managers::StagingTableManager.ensure_staging_tables_exist!(create_if_missing: true)
         # Check again if still not there then raise an error
-        Wdpa::Portal::Utils::StagingTableManager.ensure_staging_tables_exist!(create_if_missing: false)
+        Wdpa::Portal::Managers::StagingTableManager.ensure_staging_tables_exist!(create_if_missing: false)
 
         staging_tables_results = import_data_to_staging_tables
         live_tables_results = update_data_in_live_tables
