@@ -105,9 +105,9 @@ module Wdpa
 
         def self.get_matching_condition(target_table)
           connection = ActiveRecord::Base.connection
-          has_wdpa_pid = connection.column_exists?(target_table, 'wdpa_pid')
+          has_site_pid = connection.column_exists?(target_table, 'wdpa_pid')
 
-          if has_wdpa_pid
+          if has_site_pid
             # For tables with wdpa_pid (parcels): match on both wdpa_id AND wdpa_pid to ensure correct parcel
             # Cast both sides to text to handle type differences between portal views and staging tables
             "#{target_table}.wdpa_id = v.site_id AND #{target_table}.wdpa_pid::text = v.site_pid::text"

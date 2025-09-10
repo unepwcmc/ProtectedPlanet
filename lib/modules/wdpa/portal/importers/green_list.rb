@@ -14,6 +14,8 @@
 # - Add `green_list_status_id` column to `protected_area_parcels` to track individual parcel status.
 
 # See app/models/protected_area_parcel.rb to link up
+
+# In this file we are still using WDPAIDs instead of SITE_IDs but the message return should be SITE_IDs
 require 'csv'
 
 module Wdpa
@@ -67,13 +69,13 @@ module Wdpa
 
           Rails.logger.info 'Green list import completed:'
           Rails.logger.info "  - Imported: #{imported_count} records"
-          Rails.logger.info "  - Invalid WDPAIDs: #{invalid.join(',')}" if invalid.any?
-          Rails.logger.info "  - Not found WDPAIDs: #{not_found.join(',')}" if not_found.any?
+          Rails.logger.info "  - Invalid SITE_IDs: #{invalid.join(',')}" if invalid.any?
+          Rails.logger.info "  - Not found SITE_IDs: #{not_found.join(',')}" if not_found.any?
           Rails.logger.info "  - Duplicates: #{duplicates.join(',')}" if duplicates.any?
 
           success_result(imported_count, soft_errors, [], {
-            invalid_wdpa_ids: invalid,
-            not_found_wdpa_ids: not_found,
+            invalid_site_ids: invalid,
+            not_found_site_ids: not_found,
             duplicates: duplicates
           })
         end
