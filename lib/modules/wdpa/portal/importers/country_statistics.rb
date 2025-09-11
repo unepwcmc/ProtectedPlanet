@@ -13,9 +13,9 @@ module Wdpa
         end
 
         def self.import_to_staging
-          geometry_result = Wdpa::Portal::Importers::CountriesProtectedAreaGeometryStatistics.import_to_staging
           country_result = import_country_statistics
           pame_result = import_pame_statistics
+          geometry_result = Wdpa::Portal::Importers::CountriesProtectedAreaGeometryStatistics.import_to_staging
 
           Rails.logger.info 'Country statistics import completed'
           {
