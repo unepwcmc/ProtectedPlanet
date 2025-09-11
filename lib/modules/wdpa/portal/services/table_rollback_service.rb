@@ -52,7 +52,7 @@ module Wdpa
           Rails.logger.debug "🔧 Set timeouts: lock=#{Wdpa::Portal::Config::PortalImportConfig.lock_timeout_ms}ms, statement=#{Wdpa::Portal::Config::PortalImportConfig.statement_timeout_ms}ms"
         end
 
-        def reset_connection_settings 
+        def reset_connection_settings
           @connection.execute(@original_lock_timeout ? "SET lock_timeout = '#{@original_lock_timeout}'" : 'SET lock_timeout = DEFAULT')
           @connection.execute(@original_statement_timeout ? "SET statement_timeout = '#{@original_statement_timeout}'" : 'SET statement_timeout = DEFAULT')
           Rails.logger.debug '🔄 Restored original timeouts'
@@ -190,14 +190,16 @@ module Wdpa
 
         def cleanup_old_backups_impl(keep_days)
           Rails.logger.info "🧹 Cleaning up backup tables older than #{keep_days} days..."
-          cutoff_date = keep_days.days.ago.strftime('%Y%m%d')
+          cutoff_date = keep_days.days.ago.strftime('%y%m%d')
           cleaned_count = 0
 
           @connection.tables.each do |table|
             next unless Wdpa::Portal::Config::PortalImportConfig.is_backup_table?(table)
 
             backup_timestamp = Wdpa::Portal::Config::PortalImportConfig.extract_backup_timestamp(table)
-            next unless backup_timestamp < cutoff_date
+            # Extract date part (first 6 characters: YYMMDD) for comparison
+            backup_date = backup_timestamp[0..5]
+            next unless backup_date < cutoff_date
 
             @connection.drop_table(table)
             Rails.logger.info "🗑️ Dropped old backup: #{table}"

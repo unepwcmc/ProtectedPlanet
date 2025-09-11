@@ -157,9 +157,7 @@ module Wdpa
 
           def generate_unique_index_name(candidate_index_name = nil)
             # If candidate name is provided and available, use it
-            if candidate_index_name && !index_exists?(candidate_index_name)
-              return candidate_index_name
-            end
+            return candidate_index_name if candidate_index_name && !index_exists?(candidate_index_name)
 
             # Otherwise, generate a random unique name
             loop do
@@ -172,15 +170,14 @@ module Wdpa
           end
 
           def parse_backup_timestamp(timestamp)
-            # Parse YYMMDDHHMMSS format (e.g., 2509101533)
+            # Parse YYMMDDHHMM format (e.g., 2509101533)
             year = 2000 + timestamp[0..1].to_i
             month = timestamp[2..3].to_i
             day = timestamp[4..5].to_i
             hour = timestamp[6..7].to_i
             minute = timestamp[8..9].to_i
-            second = timestamp[10..11].to_i
 
-            Time.new(year, month, day, hour, minute, second)
+            Time.new(year, month, day, hour, minute, 0)
           rescue StandardError
             nil
           end

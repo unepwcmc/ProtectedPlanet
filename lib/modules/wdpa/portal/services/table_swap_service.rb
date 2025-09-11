@@ -46,7 +46,7 @@ module Wdpa
 
         def initialize_swap_variables
           Rails.logger.info '🚀 Starting table swap: staging → live...'
-          @backup_timestamp = Time.current.strftime('%y%m%d%H%M%S')
+          @backup_timestamp = Time.current.strftime('%y%m%d%H%M')
           @swapped_tables = []
           @connection = ActiveRecord::Base.connection
           @index_cache = {}
@@ -95,7 +95,7 @@ module Wdpa
             swap_single_table(live_table, staging_table)
             @swapped_tables << live_table
           end
-          
+
           Rails.logger.info "✅ Swapped #{@swapped_tables.length} tables: #{@swapped_tables.join(', ')}"
         end
 
@@ -133,7 +133,8 @@ module Wdpa
 
           return unless tmp_pkey_name && original_pkey_name
 
-          backup_new_name = Wdpa::Portal::Config::PortalImportConfig.generate_backup_name(original_pkey_name, @backup_timestamp) 
+          backup_new_name = Wdpa::Portal::Config::PortalImportConfig.generate_backup_name(original_pkey_name,
+            @backup_timestamp)
 
           # Rename original key name to use backup_new_name for backup table to free up the original name
           rename_database_object('constraint', backup_table, original_pkey_name, backup_new_name)

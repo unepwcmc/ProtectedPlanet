@@ -7,9 +7,9 @@ module Wdpa
         STAGING_PREFIX = 'staging_'
         BACKUP_PREFIX = '_bk'
         BACKUP_PATTERNS = {
-          suffix: /#{BACKUP_PREFIX}\d{12}$/,
-          table: /^.+#{BACKUP_PREFIX}\d{12}$/,
-          extract: /#{BACKUP_PREFIX}(\d{12})$/
+          suffix: /#{BACKUP_PREFIX}\d{10}$/,
+          table: /^.+#{BACKUP_PREFIX}\d{10}$/,
+          extract: /#{BACKUP_PREFIX}(\d{10})$/
         }
 
         def self.batch_import_protected_areas_from_view_size
