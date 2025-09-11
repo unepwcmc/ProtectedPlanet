@@ -97,6 +97,9 @@ module Wdpa
 
           connection.execute(sql)
 
+          # Clean up automatically generated _idx suffixes from indexes
+          cleanup_auto_generated_index_suffixes(target_table_name)
+
           # Create separate sequence for staging table to avoid primary key conflicts
           create_staging_sequence(source_table_name, target_table_name)
 
@@ -170,7 +173,8 @@ module Wdpa
               AND sequencename = '#{sequence_name}'
             )
           SQL
-          result.first['exists']
+          exists_value = result.first.values.first
+          %w[t true 1].include?(exists_value.to_s.downcase)
         end
 
         def self.add_foreign_keys(staging_table_name, live_table_name)
@@ -189,8 +193,7 @@ module Wdpa
             name: fk.name,
             column: fk.column,
             primary_key: fk.primary_key,
-            on_delete: fk.on_delete,
-            on_update: fk.on_update)
+            on_delete: fk.on_delete)
 
           Rails.logger.debug "Added FK: #{staging_table_name}.#{fk.column} -> #{referenced_table}.#{fk.primary_key}"
         end
@@ -201,6 +204,51 @@ module Wdpa
           # Reference staging table if it exists in our config
           # Reference live table if no staging table exists
           staging_table_name || live_table_name
+        end
+
+        def self.cleanup_auto_generated_index_suffixes(table_name)
+          connection = ActiveRecord::Base.connection
+
+          # Get all indexes for the table
+          indexes = connection.execute(<<~SQL)
+            SELECT indexname, indexdef
+            FROM pg_indexes
+            WHERE tablename = '#{table_name}'
+            AND schemaname = 'public'
+            AND indexname LIKE '%_idx'
+          SQL
+
+          indexes.each do |index|
+            old_name = index['indexname']
+
+            # Only process indexes that end with _idx
+            next unless old_name.end_with?('_idx')
+
+            # Remove exactly one _idx suffix (regardless of how many there are)
+            new_name = old_name.sub(/_idx$/, '')
+
+            # Only rename if the new name doesn't already exist
+            if index_exists?(connection, new_name)
+              Rails.logger.debug "📝 Skipped renaming #{old_name} (target name #{new_name} already exists)"
+            else
+              begin
+                connection.execute("ALTER INDEX #{old_name} RENAME TO #{new_name}")
+                Rails.logger.debug "📝 Cleaned up index suffix: #{old_name} → #{new_name}"
+              rescue StandardError => e
+                Rails.logger.warn "⚠️ Failed to rename index #{old_name}: #{e.message}"
+              end
+            end
+          end
+        end
+
+        def self.index_exists?(connection, index_name)
+          result = connection.execute(<<~SQL)
+            SELECT 1
+            FROM pg_indexes
+            WHERE indexname = '#{index_name}'
+            AND schemaname = 'public'
+          SQL
+          result.any?
         end
       end
     end

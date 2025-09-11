@@ -1,4 +1,5 @@
 {
+  "license": "MIT",
   "scripts": {
     "start": "./bin/webpack-dev-server --host 0.0.0.0 --inline --content-base .",
     "lint": "eslint --ext .js,.vue"

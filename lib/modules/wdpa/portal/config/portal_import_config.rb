@@ -4,12 +4,53 @@ module Wdpa
   module Portal
     module Config
       class PortalImportConfig
+        STAGING_PREFIX = 'staging_'
+        BACKUP_PREFIX = '_bk'
+        BACKUP_PATTERNS = {
+          suffix: /#{BACKUP_PREFIX}\d{12}$/,
+          table: /^.+#{BACKUP_PREFIX}\d{12}$/,
+          extract: /#{BACKUP_PREFIX}(\d{12})$/
+        }
+
         def self.batch_import_protected_areas_from_view_size
           10
         end
 
+        # Database operation timeouts (in milliseconds)
+        def self.lock_timeout_ms
+          30_000 # 30 seconds
+        end
+
+        def self.statement_timeout_ms
+          300_000 # 5 minutes
+        end
+
         def self.generate_staging_table_index_name(original_name)
-          "staging_#{original_name}"
+          "#{STAGING_PREFIX}#{original_name}"
+        end
+
+        def self.generate_live_table_index_name_from_staging(staging_index_name)
+          staging_index_name.gsub(/^#{STAGING_PREFIX}/, '')
+        end
+
+        def self.generate_backup_name(original_name, timestamp)
+          "#{original_name}#{BACKUP_PREFIX}#{timestamp}"
+        end
+
+        def self.is_backup_table?(table_name)
+          table_name.match?(BACKUP_PATTERNS[:table])
+        end
+
+        def self.extract_backup_timestamp(table_name)
+          table_name.match(BACKUP_PATTERNS[:extract])[1]
+        end
+
+        def self.extract_table_name_from_backup(table_name)
+          table_name.gsub(BACKUP_PATTERNS[:suffix], '')
+        end
+
+        def self.remove_backup_suffix(name)
+          name.gsub(BACKUP_PATTERNS[:suffix], '')
         end
 
         PORTAL_VIEWS = {
