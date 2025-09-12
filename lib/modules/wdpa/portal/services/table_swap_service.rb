@@ -199,12 +199,12 @@ module Wdpa
             old_name = sequence[:name]
 
             # Only process staging sequences
-            unless old_name.start_with?('staging_')
+            unless old_name.start_with?(Wdpa::Portal::Config::PortalImportConfig::STAGING_PREFIX)
               Rails.logger.debug "ℹ️ Skipping non-staging sequence: #{old_name}"
               next
             end
 
-            new_name = old_name.sub(/^staging_/, '')
+            new_name = old_name.sub(/^#{Wdpa::Portal::Config::PortalImportConfig::STAGING_PREFIX}/, '')
             Rails.logger.debug "🔄 Renaming staging sequence: #{old_name} → #{new_name}"
             rename_database_object('sequence', live_table, old_name, new_name)
             Rails.logger.debug "✅ Renamed staging sequence: #{old_name} → #{new_name}"
