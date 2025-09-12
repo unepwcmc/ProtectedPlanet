@@ -53,7 +53,9 @@ module Wdpa
             attrs = { country_id: country_id }.merge(row)
             attrs = attrs.merge(pame_assessments(country_id)) if model == Staging::PameStatistic
 
-            model.create(attrs)
+            record = model.find_or_initialize_by(country_id: country_id)
+            record.assign_attributes(attrs)
+            record.save!
             imported_count += 1
           rescue StandardError => e
             soft_errors << "Row error processing country #{row['iso3']}: #{e.message}"
