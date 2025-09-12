@@ -27,12 +27,12 @@ module Wdpa
           end
 
           def list_available_backups
-            puts '📋 Available backups:'
+            puts '📋 Available backups: (YYMMDDHHMM)'
             puts '===================='
 
             begin
               backups = Wdpa::Portal::Services::Core::TableRollbackService.list_available_backups
-              log_backup_listing_results(backups)
+              puts 'No backups found' if backups.empty?
               backups
             rescue StandardError => e
               puts "❌ Failed to list backups: #{e.message}"
@@ -49,20 +49,6 @@ module Wdpa
             puts 'Usage: rake portal_importer:rollback[20250110_143022]'
             puts 'Run "rake portal_importer:list_backups" to see available timestamps'
             exit 1
-          end
-
-          def log_backup_listing_results(backups)
-            if backups.empty?
-              puts 'No backups found'
-            else
-              backups.each do |timestamp, tables|
-                puts "📅 #{timestamp}:"
-                tables.each do |table_info|
-                  puts "  - #{table_info[:table]} (#{table_info[:backup_table]})"
-                end
-                puts ''
-              end
-            end
           end
         end
       end

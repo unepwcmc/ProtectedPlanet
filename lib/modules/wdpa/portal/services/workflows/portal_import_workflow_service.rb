@@ -60,8 +60,7 @@ module Wdpa
 
           def import_data_to_staging
             Rails.logger.info '📥 Importing data to staging tables...'
-            refresh_materialized_views
-            @results = Wdpa::Portal::Importer.import(refresh_materialized_views: false)
+            @results = Wdpa::Portal::Importer.import(refresh_materialized_views: true)
 
             unless check_for_import_errors
               Rails.logger.error '❌ Import completed with errors. Stopping workflow.'
@@ -86,12 +85,9 @@ module Wdpa
           end
 
           def cleanup_after_workflow
-            Rails.logger.info '🧹 Cleaning up after swap...'
-            Wdpa::Portal::Services::Core::TableCleanupService.cleanup_after_swap
-            Rails.logger.info '✅ Cleanup completed'
+            Wdpa::Portal::Services::Workflows::PortalCleanupWorkflowService.cleanup_after_swap
             true
-          rescue StandardError => e
-            Rails.logger.error "❌ Failed to cleanup after workflow: #{e.message}"
+          rescue StandardError 
             false
           end
 

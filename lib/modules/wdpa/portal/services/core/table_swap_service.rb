@@ -30,11 +30,15 @@ module Wdpa
               Rails.logger.error "❌ Transaction failed: #{e.message}"
               raise
             ensure
-              service.reset_connection_settings
+              service.restore_after_swap
             end
           end
 
           # --- INITIALIZATION ---
+
+          def restore_after_swap
+            restore_timeouts
+          end
 
           def initialize_swap_variables
             Rails.logger.info '🚀 Starting table swap: staging → live...'
@@ -46,17 +50,10 @@ module Wdpa
 
           def prepare_for_swap
             @connection.execute('SELECT 1')
-            @original_lock_timeout = get_current_setting('lock_timeout')
-            @original_statement_timeout = get_current_setting('statement_timeout')
-            @connection.execute("SET lock_timeout = #{Wdpa::Portal::Config::PortalImportConfig.lock_timeout_ms}")
-            @connection.execute("SET statement_timeout = #{Wdpa::Portal::Config::PortalImportConfig.statement_timeout_ms}")
-          end
-
-          def reset_connection_settings
-            @connection.execute(@original_lock_timeout ? "SET lock_timeout = '#{@original_lock_timeout}'" : 'SET lock_timeout = DEFAULT')
-            @connection.execute(@original_statement_timeout ? "SET statement_timeout = '#{@original_statement_timeout}'" : 'SET statement_timeout = DEFAULT')
-          rescue StandardError => e
-            Rails.logger.error "❌ Failed to reset connection settings: #{e.message}"
+            setup_timeouts(
+              Wdpa::Portal::Config::PortalImportConfig.lock_timeout_ms,
+              Wdpa::Portal::Config::PortalImportConfig.statement_timeout_ms
+            )
           end
 
           # --- VALIDATION ---
@@ -67,7 +64,6 @@ module Wdpa
             end.keys
 
             raise "Missing staging tables: #{missing.join(', ')}" if missing.any?
-
           end
 
           # --- TABLE SWAPPING ---
@@ -111,7 +107,6 @@ module Wdpa
 
           # --- DATABASE OBJECT MANAGEMENT ---
           def rename_primary_keys_after_swap(live_table, backup_table)
-
             tmp_pkey_name = get_primary_key_name(live_table)
             original_pkey_name = get_primary_key_name(backup_table)
 
@@ -127,29 +122,27 @@ module Wdpa
           end
 
           def rename_indexes_after_swap(live_table, backup_table)
-
             live_indexes   = get_table_indexes(live_table)
             backup_indexes = get_table_indexes(backup_table)
 
             live_indexes.each do |live_index|
               matching_backup = find_matching_backup(live_index, backup_indexes)
 
-              if matching_backup
-                # Rename backup index to keep a backup copy
-                backup_new_name = generate_unique_index_name
-                rename_database_object('index', backup_table, matching_backup[:name], backup_new_name)
+              next unless matching_backup
 
-                # Rename live index to the canonical backup index name
-                rename_database_object('index', live_table, live_index[:name], matching_backup[:name])
+              # Rename backup index to keep a backup copy
+              backup_new_name = generate_unique_index_name
+              rename_database_object('index', backup_table, matching_backup[:name], backup_new_name)
 
-                # Remove the matched backup index from the array to prevent duplicate matches
-                backup_indexes.reject! { |backup| backup[:name] == matching_backup[:name] }
-              end
+              # Rename live index to the canonical backup index name
+              rename_database_object('index', live_table, live_index[:name], matching_backup[:name])
+
+              # Remove the matched backup index from the array to prevent duplicate matches
+              backup_indexes.reject! { |backup| backup[:name] == matching_backup[:name] }
             end
           end
 
           def rename_sequences_after_swap(live_table, backup_table)
-
             # Get sequences for both tables
             live_sequences = get_table_sequences(live_table)
             backup_sequences = get_table_sequences(backup_table)
@@ -162,7 +155,6 @@ module Wdpa
 
                 rename_database_object('sequence', backup_table, old_name, new_name)
               end
-            else
             end
 
             # STEP 2: Rename staging sequences to original names (now safe)
@@ -172,9 +164,7 @@ module Wdpa
               old_name = sequence[:name]
 
               # Only process staging sequences
-              unless old_name.start_with?(Wdpa::Portal::Config::PortalImportConfig::STAGING_PREFIX)
-                next
-              end
+              next unless old_name.start_with?(Wdpa::Portal::Config::PortalImportConfig::STAGING_PREFIX)
 
               new_name = old_name.sub(/^#{Wdpa::Portal::Config::PortalImportConfig::STAGING_PREFIX}/, '')
               rename_database_object('sequence', live_table, old_name, new_name)

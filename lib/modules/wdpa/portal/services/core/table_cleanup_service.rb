@@ -9,60 +9,45 @@ module Wdpa
 
           # --- MAIN OPERATIONS ---
 
-          def self.cleanup_after_swap(swapped_tables = nil)
+          def self.cleanup_after_swap
             service = new
-            service.initialize_cleanup_variables(swapped_tables)
+            service.initialize_cleanup_variables
             service.prepare_for_cleanup
 
             begin
               service.perform_vacuum_operations
-              service.perform_reindex_operations
-              Rails.logger.info '✅ Table cleanup completed successfully'
+              Rails.logger.info '✅ Table vaccum completed successfully'
 
               # Also cleanup old backups after swap
               Rails.logger.info '🧹 Cleaning up old backups after swap...'
-              service.cleanup_old_backups_impl(3) # Keep last 3 backups by default
+              service.cleanup_old_backups_impl(Wdpa::Portal::Config::PortalImportConfig.keep_backup_count)
               Rails.logger.info '✅ Backup cleanup completed'
             rescue StandardError => e
               Rails.logger.error "❌ Table cleanup failed: #{e.message}"
               raise
             ensure
-              service.restore_timeouts
+              service.restore_after_cleanup
             end
           end
 
-          def self.cleanup_specific_tables(table_names)
+          def self.cleanup_old_backups(keep_count)
             service = new
-            service.initialize_cleanup_variables(table_names)
-            service.prepare_for_cleanup
-
-            begin
-              service.perform_vacuum_operations
-              service.perform_reindex_operations
-              Rails.logger.info "✅ Cleanup completed for tables: #{table_names.join(', ')}"
-            rescue StandardError => e
-              Rails.logger.error "❌ Table cleanup failed: #{e.message}"
-              raise
-            ensure
-              service.restore_timeouts
-            end
-          end
-
-          def self.cleanup_old_backups(keep_count = 3)
-            service = new
-            service.initialize_cleanup_variables(nil)
+            service.initialize_cleanup_variables
             service.cleanup_old_backups_impl(keep_count)
           end
 
           # --- INITIALIZATION ---
+          def restore_after_cleanup
+            restore_timeouts
+          end
 
-          def initialize_cleanup_variables(swapped_tables = nil)
+          def initialize_cleanup_variables
             Rails.logger.info '🧹 Starting table cleanup operations...'
             @connection = ActiveRecord::Base.connection
-            @tables_to_cleanup = swapped_tables || Wdpa::Portal::Config::PortalImportConfig.swap_sequence_live_table_names
-            @index_cache = {}
+            @tables_to_cleanup = Wdpa::Portal::Config::PortalImportConfig.swap_sequence_live_table_names
             @original_lock_timeout = nil
             @original_statement_timeout = nil
+            @index_cache = {}
           end
 
           def prepare_for_cleanup
@@ -93,146 +78,6 @@ module Wdpa
                 # Continue with other tables even if one fails
               end
             end
-          end
-
-          # --- REINDEX OPERATIONS ---
-
-          def perform_reindex_operations
-            Rails.logger.info '🔄 Performing REINDEX CONCURRENTLY operations...'
-
-            @tables_to_cleanup.each do |table_name|
-              next unless @connection.table_exists?(table_name)
-
-              # Get all indexes for the table
-              indexes = get_table_indexes(table_name)
-              next if indexes.empty?
-
-              Rails.logger.info "🔄 Reindexing #{indexes.length} indexes for #{table_name}..."
-
-              indexes.each do |index|
-                perform_concurrent_reindex(table_name, index[:name])
-              end
-            end
-          end
-
-          def perform_concurrent_reindex(table_name, index_name)
-            start_time = Time.current
-
-            begin
-              Rails.logger.debug "🔄 REINDEX CONCURRENTLY #{index_name}..."
-              @connection.execute("REINDEX CONCURRENTLY INDEX #{index_name}")
-              duration = Time.current - start_time
-              Rails.logger.debug "✅ REINDEX CONCURRENTLY completed for #{index_name} (#{duration.round(2)}s)"
-            rescue StandardError => e
-              Rails.logger.warn "⚠️ REINDEX CONCURRENTLY failed for #{index_name}: #{e.message}"
-              # Try regular REINDEX as fallback for critical indexes
-              perform_regular_reindex(table_name, index_name) if critical_index?(index_name)
-            end
-          end
-
-          def perform_regular_reindex(_table_name, index_name)
-            start_time = Time.current
-
-            begin
-              Rails.logger.warn "🔄 Falling back to regular REINDEX for #{index_name}..."
-              @connection.execute("REINDEX INDEX #{index_name}")
-              duration = Time.current - start_time
-              Rails.logger.info "✅ Regular REINDEX completed for #{index_name} (#{duration.round(2)}s)"
-            rescue StandardError => e
-              Rails.logger.error "❌ Regular REINDEX also failed for #{index_name}: #{e.message}"
-            end
-          end
-
-          # --- UTILITY METHODS ---
-
-          def critical_index?(index_name)
-            # Consider primary key indexes and unique indexes as critical
-            index_name.end_with?('_pkey') ||
-              index_name.include?('unique') ||
-              index_name.include?('_uk_')
-          end
-
-          # --- STATISTICS AND MONITORING ---
-
-          def self.get_table_statistics(table_name)
-            service = new
-            service.initialize_cleanup_variables([table_name])
-
-            stats = {}
-
-            # Get table size
-            result = service.instance_variable_get(:@connection).execute(<<~SQL)
-              SELECT#{' '}
-                pg_size_pretty(pg_total_relation_size('#{table_name}')) as total_size,
-                pg_size_pretty(pg_relation_size('#{table_name}')) as table_size,
-                pg_size_pretty(pg_indexes_size('#{table_name}')) as indexes_size
-            SQL
-
-            if result.any?
-              first_row = result.first
-              stats[:total_size] = first_row['total_size']
-              stats[:table_size] = first_row['table_size']
-              stats[:indexes_size] = first_row['indexes_size']
-            end
-
-            # Get index count using inherited method
-            indexes = service.get_table_indexes(table_name)
-            stats[:index_count] = indexes.length
-
-            stats
-          end
-
-          def self.get_cleanup_recommendations(table_name)
-            service = new
-            service.initialize_cleanup_variables([table_name])
-
-            recommendations = []
-
-            # Check for bloated tables
-            result = service.instance_variable_get(:@connection).execute(<<~SQL)
-              SELECT#{' '}
-                schemaname,
-                tablename,
-                n_dead_tup,
-                n_live_tup,
-                ROUND(n_dead_tup::numeric / GREATEST(n_live_tup, 1) * 100, 2) as dead_tuple_percentage
-              FROM pg_stat_user_tables#{' '}
-              WHERE tablename = '#{table_name}'
-            SQL
-
-            if result.any?
-              stats_row = result.first
-              dead_tuple_percentage = stats_row['dead_tuple_percentage'].to_f
-
-              if dead_tuple_percentage > 10
-                recommendations << "High dead tuple percentage (#{dead_tuple_percentage}%) - VACUUM recommended"
-              end
-
-              if dead_tuple_percentage > 50
-                recommendations << "Very high dead tuple percentage (#{dead_tuple_percentage}%) - VACUUM FULL may be needed"
-              end
-            end
-
-            # Check for unused indexes
-            result = service.instance_variable_get(:@connection).execute(<<~SQL)
-              SELECT#{' '}
-                schemaname,
-                tablename,
-                indexname,
-                idx_scan,
-                idx_tup_read,
-                idx_tup_fetch
-              FROM pg_stat_user_indexes#{' '}
-              WHERE tablename = '#{table_name}'
-              AND idx_scan = 0
-            SQL
-
-            if result.any?
-              unused_indexes = result.map { |index_row| index_row['indexname'] }
-              recommendations << "Unused indexes detected: #{unused_indexes.join(', ')} - consider dropping"
-            end
-
-            recommendations
           end
 
           # --- BACKUP CLEANUP METHODS ---

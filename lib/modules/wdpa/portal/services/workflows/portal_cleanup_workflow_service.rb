@@ -5,11 +5,22 @@ module Wdpa
     module Services
       module Workflows
         class PortalCleanupWorkflowService
-          def self.cleanup_old_backups(keep_count = 3)
-            new.cleanup_old_backups(keep_count)
+
+          # Run postgres vaccum etc... + cleanup_old_backups
+          def self.cleanup_after_swap
+            Rails.logger.info '🧹 Cleaning up after swap...'
+
+            begin
+              Wdpa::Portal::Services::Core::TableCleanupService.cleanup_after_swap
+              Rails.logger.info '✅ Cleanup completed'
+            rescue StandardError => e
+              Rails.logger.error "❌ Failed to cleanup after workflow: #{e.message}"
+              raise e
+            end
           end
 
-          def cleanup_old_backups(keep_count)
+          # Only cleanup old backup tables
+          def self.cleanup_old_backups(keep_count)
             Rails.logger.info "🧹 Cleaning up backup tables, keeping the last #{keep_count} backups..."
 
             begin

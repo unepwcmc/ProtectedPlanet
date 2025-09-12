@@ -8,6 +8,24 @@ module Wdpa
     module Services
       module Concerns
         module TableOperationUtilities
+          # --- TIMEOUT MANAGEMENT ---
+
+          def setup_timeouts(lock_timeout_ms, statement_timeout_ms)
+            @original_lock_timeout = get_current_setting('lock_timeout')
+            @original_statement_timeout = get_current_setting('statement_timeout')
+            @connection.execute("SET lock_timeout = #{lock_timeout_ms}")
+            @connection.execute("SET statement_timeout = #{statement_timeout_ms}")
+            Rails.logger.debug "🔧 Set timeouts: lock=#{lock_timeout_ms}ms, statement=#{statement_timeout_ms}ms"
+          end
+
+          def restore_timeouts
+            @connection.execute(@original_lock_timeout ? "SET lock_timeout = '#{@original_lock_timeout}'" : 'SET lock_timeout = DEFAULT')
+            @connection.execute(@original_statement_timeout ? "SET statement_timeout = '#{@original_statement_timeout}'" : 'SET statement_timeout = DEFAULT')
+            Rails.logger.debug '🔄 Restored original timeouts'
+          rescue StandardError => e
+            Rails.logger.error "❌ Failed to restore connection settings: #{e.message}"
+          end
+
           # --- OBJECT QUERIES ---
 
           # Only returning indexes

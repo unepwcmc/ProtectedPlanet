@@ -41,6 +41,11 @@ module Wdpa
           300_000 # 5 minutes
         end
 
+        # Number of backups to keep when cleaning up old backups
+        def self.keep_backup_count
+          2
+        end
+
         # ============================================================================
         # TABLE DEFINITIONS
         # ============================================================================
