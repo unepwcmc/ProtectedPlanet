@@ -9,7 +9,7 @@ module Wdpa
         # ============================================================================
 
         STAGING_PREFIX = 'staging_'
-        BACKUP_PREFIX = '_bk'
+        BACKUP_PREFIX = 'bk'
 
         PORTAL_VIEWS = {
           'iso3_agg' => 'portal_iso3_agg',
@@ -101,7 +101,7 @@ module Wdpa
         end
 
         def self.generate_backup_name(original_name, timestamp)
-          "#{original_name}#{BACKUP_PREFIX}#{timestamp}"
+          "#{BACKUP_PREFIX}#{timestamp}_#{original_name}"
         end
 
         # ============================================================================
@@ -109,19 +109,19 @@ module Wdpa
         # ============================================================================
 
         def self.is_backup_table?(table_name)
-          table_name.match?(/^.+#{BACKUP_PREFIX}\d{10}$/)
+          table_name.match?(/^#{BACKUP_PREFIX}\d{10}_.+$/)
         end
 
         def self.extract_backup_timestamp(table_name)
-          table_name.match(/#{BACKUP_PREFIX}\d{10}$/)[1]
+          table_name.match(/^#{BACKUP_PREFIX}(\d{10})_/)[1]
         end
 
         def self.extract_table_name_from_backup(table_name)
-          table_name.gsub(/#{BACKUP_PREFIX}\d{10}$/, '')
+          table_name.gsub(/^#{BACKUP_PREFIX}\d{10}_/, '')
         end
 
         def self.remove_backup_suffix(name)
-          name.gsub(/#{BACKUP_PREFIX}\d{10}$/, '')
+          name.gsub(/^#{BACKUP_PREFIX}\d{10}_/, '')
         end
 
         # ============================================================================
