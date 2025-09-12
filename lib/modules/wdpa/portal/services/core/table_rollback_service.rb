@@ -5,7 +5,8 @@ require 'securerandom'
 module Wdpa
   module Portal
     module Services
-      class TableRollbackService
+      module Core
+        class TableRollbackService
         include Concerns::TableOperationUtilities
 
         # --- MAIN OPERATIONS ---
@@ -182,34 +183,6 @@ module Wdpa
 
         # --- CLEANUP & MONITORING ---
 
-        def self.cleanup_old_backups(keep_days = 3)
-          service = new
-          service.initialize_rollback_variables(nil)
-          service.cleanup_old_backups_impl(keep_days)
-        end
-
-        def cleanup_old_backups_impl(keep_days)
-          Rails.logger.info "🧹 Cleaning up backup tables older than #{keep_days} days..."
-          cutoff_date = keep_days.days.ago.strftime('%y%m%d')
-          cleaned_count = 0
-
-          @connection.tables.each do |table|
-            next unless Wdpa::Portal::Config::PortalImportConfig.is_backup_table?(table)
-
-            backup_timestamp = Wdpa::Portal::Config::PortalImportConfig.extract_backup_timestamp(table)
-            # Extract date part (first 6 characters: YYMMDD) for comparison
-            backup_date = backup_timestamp[0..5]
-            next unless backup_date < cutoff_date
-
-            @connection.drop_table(table)
-            Rails.logger.info "🗑️ Dropped old backup: #{table}"
-            cleaned_count += 1
-          end
-
-          Rails.logger.info "✅ Cleaned up #{cleaned_count} old backup tables"
-          cleaned_count
-        end
-
         def self.list_available_backups
           service = new
           service.initialize_rollback_variables(nil)
@@ -229,5 +202,5 @@ module Wdpa
         end
       end
     end
-  end
+        end  end
 end
