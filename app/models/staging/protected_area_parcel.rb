@@ -1,6 +1,7 @@
 module Staging
   class ProtectedAreaParcel < ApplicationRecord
     self.table_name = 'staging_protected_area_parcels'
+    self.primary_key = 'id'
 
     # Make sure to make the uniqueness based on the conbination of wdpa_id + wdpa_pid
     validates :wdpa_id, uniqueness: { scope: :wdpa_pid }

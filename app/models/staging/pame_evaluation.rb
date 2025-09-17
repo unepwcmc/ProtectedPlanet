@@ -3,6 +3,7 @@
 module Staging
   class PameEvaluation < ApplicationRecord
     self.table_name = 'staging_pame_evaluations'
+    self.primary_key = 'id'
 
     belongs_to :protected_area, class_name: 'Staging::ProtectedArea', optional: true
     belongs_to :pame_source, class_name: 'Staging::PameSource'
