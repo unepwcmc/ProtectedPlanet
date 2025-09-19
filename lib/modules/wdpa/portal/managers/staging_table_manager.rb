@@ -4,10 +4,26 @@ module Wdpa
   module Portal
     module Managers
       class StagingTableManager
+        def self.include_indexes?
+          lw = ActiveModel::Type::Boolean.new.cast(ENV['PP_RELEASE_STAGING_LIGHTWEIGHT'])
+          return false if lw
+          val = ENV['PP_RELEASE_STAGING_INCLUDE_INDEXES']
+          return true if val.nil?
+          ActiveModel::Type::Boolean.new.cast(val)
+        end
+
+        def self.include_foreign_keys?
+          lw = ActiveModel::Type::Boolean.new.cast(ENV['PP_RELEASE_STAGING_LIGHTWEIGHT'])
+          return false if lw
+          val = ENV['PP_RELEASE_STAGING_INCLUDE_FKS']
+          return true if val.nil?
+          ActiveModel::Type::Boolean.new.cast(val)
+        end
+
         def self.create_staging_tables
           drop_staging_tables
           create_all_staging_tables
-          add_all_foreign_keys
+          add_all_foreign_keys if include_foreign_keys?
         end
 
         def self.create_all_staging_tables
@@ -74,7 +90,20 @@ module Wdpa
 
         def self.create_staging_table(staging_table_name)
           live_table_name = Wdpa::Portal::Config::PortalImportConfig.get_live_table_name_from_staging_name(staging_table_name)
+          unless ActiveRecord::Base.connection.table_exists?(live_table_name)
+            Rails.logger.warn "Skipping staging for #{staging_table_name} because live table #{live_table_name} does not exist"
+            return
+          end
           create_exact_table_copy(live_table_name, staging_table_name)
+
+          # If we excluded FKs at creation time (via LIKE options), ensure none remain
+          unless include_foreign_keys?
+            drop_all_foreign_keys(staging_table_name)
+          end
+
+          # Ensure primary key constraint on staging has the expected staging_ prefix
+          rename_primary_key_to_staging_prefix(live_table_name, staging_table_name)
+
           Rails.logger.info "Created staging table: #{staging_table_name}"
         end
 
@@ -87,12 +116,17 @@ module Wdpa
         def self.create_exact_table_copy(source_table_name, target_table_name)
           connection = ActiveRecord::Base.connection
 
-          # Use INCLUDING ALL to copy everything Rails creates, then handle FKs separately
-          # This ensures we get triggers, functions, and other Rails-specific elements
+          # Build LIKE options dynamically to control indexes and constraints
+          like_opts = [
+            'INCLUDING DEFAULTS',
+            'INCLUDING CONSTRAINTS' # includes PK/UNIQUE/NOT NULL; we will drop FKs if needed
+          ]
+          like_opts << 'INCLUDING INDEXES' if include_indexes?
+
           sql = <<~SQL
             CREATE TABLE #{target_table_name}
             (LIKE #{source_table_name}
-             INCLUDING ALL)
+             #{like_opts.join(' ')})
           SQL
 
           connection.execute(sql)
@@ -103,7 +137,7 @@ module Wdpa
           # Create separate sequence for staging table to avoid primary key conflicts
           create_staging_sequence(source_table_name, target_table_name)
 
-          Rails.logger.debug "Created #{target_table_name} as exact copy of #{source_table_name}"
+          Rails.logger.debug "Created #{target_table_name} as copy of #{source_table_name} with options: #{like_opts.join(', ')}"
         end
 
         def self.create_staging_sequence(source_table_name, target_table_name)
@@ -186,6 +220,19 @@ module Wdpa
           end
         end
 
+        def self.drop_all_foreign_keys(staging_table_name)
+          connection = ActiveRecord::Base.connection
+          existing_fks = connection.foreign_keys(staging_table_name)
+          existing_fks.each do |fk|
+            begin
+              connection.remove_foreign_key(staging_table_name, name: fk.name)
+              Rails.logger.debug "Removed FK from #{staging_table_name}: #{fk.name}"
+            rescue StandardError => e
+              Rails.logger.warn "Failed to remove FK #{fk.name} from #{staging_table_name}: #{e.message}"
+            end
+          end
+        end
+
         def self.add_single_foreign_key(connection, staging_table_name, fk)
           referenced_table = determine_referenced_table(fk.to_table)
 
@@ -204,6 +251,37 @@ module Wdpa
           # Reference staging table if it exists in our config
           # Reference live table if no staging table exists
           staging_table_name || live_table_name
+        end
+
+        # --- Primary key helpers (for swap compatibility) ---
+        def self.get_primary_key_name(table_name)
+          result = ActiveRecord::Base.connection.execute(<<~SQL)
+            SELECT conname
+            FROM pg_constraint
+            WHERE conrelid = '#{table_name}'::regclass
+              AND contype = 'p'
+          SQL
+          result.first&.dig('conname')
+        end
+
+        def self.rename_primary_key_to_staging_prefix(live_table_name, staging_table_name)
+          live_pk = get_primary_key_name(live_table_name)
+          staging_pk = get_primary_key_name(staging_table_name)
+
+          # Skip if either side lacks a primary key (e.g., some junction tables)
+          return unless live_pk && staging_pk
+
+          expected = "staging_#{live_pk}"
+          return if staging_pk == expected
+
+          begin
+            ActiveRecord::Base.connection.execute(
+              "ALTER TABLE #{staging_table_name} RENAME CONSTRAINT #{staging_pk} TO #{expected}"
+            )
+            Rails.logger.debug "Renamed staging PK on #{staging_table_name}: #{staging_pk} -> #{expected}"
+          rescue StandardError => e
+            Rails.logger.warn "Failed to rename PK on #{staging_table_name}: #{e.message}"
+          end
         end
 
         def self.cleanup_auto_generated_index_suffixes(table_name)
@@ -249,6 +327,45 @@ module Wdpa
             AND schemaname = 'public'
           SQL
           result.any?
+        end
+
+        # Copy indexes from the live table to the staging table (useful when we skipped them at creation)
+        def self.add_all_indexes
+          Wdpa::Portal::Config::PortalImportConfig.staging_live_tables_hash.each do |live_table, staging_table|
+            add_indexes_to_staging_table(staging_table, live_table)
+          end
+        end
+
+        def self.add_indexes_to_staging_table(staging_table_name, live_table_name)
+          connection = ActiveRecord::Base.connection
+
+          live_indexes = connection.indexes(live_table_name)
+          staging_indexes = connection.indexes(staging_table_name)
+
+          require 'set' unless defined?(Set)
+          existing_signatures = staging_indexes.map do |ix|
+            [ix.columns, ix.where, ix.unique, ix.using]
+          end.to_set
+
+          live_indexes.each do |ix|
+            # Skip expression-only indexes we can’t reproduce via add_index easily
+            next if ix.columns.nil? || ix.columns.empty?
+
+            sig = [ix.columns, ix.where, ix.unique, ix.using]
+            next if existing_signatures.include?(sig)
+
+            options = {}
+            options[:unique] = ix.unique if ix.unique
+            options[:using]  = ix.using  if ix.using
+            options[:where]  = ix.where  if ix.where
+
+            begin
+              connection.add_index(staging_table_name, ix.columns, **options)
+              Rails.logger.debug "Added index on #{staging_table_name}(#{ix.columns.join(',')})"
+            rescue StandardError => e
+              Rails.logger.warn "Failed to add index on #{staging_table_name}(#{ix.columns.join(',')}): #{e.message}"
+            end
+          end
         end
       end
     end
