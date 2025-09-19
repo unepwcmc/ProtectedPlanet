@@ -3,11 +3,19 @@
 module Wdpa
   module Portal
     class Importer < Wdpa::Shared::ImporterBase::Base
-      def self.import(refresh_materialized_views: true)
+      def self.import(refresh_materialized_views: true, only: nil, skip: nil, sample: nil, label: nil)
         unless Wdpa::Portal::Managers::ViewManager.validate_required_views_exist
           error_msg = 'Required materialized views do not exist.'
           raise StandardError, error_msg
         end
+
+        # Apply runtime flags
+        Wdpa::Portal::ImportRuntimeConfig.reset!
+        Wdpa::Portal::ImportRuntimeConfig.only = only || ENV['PP_IMPORT_ONLY']
+        Wdpa::Portal::ImportRuntimeConfig.skip = skip || ENV['PP_IMPORT_SKIP']
+        Wdpa::Portal::ImportRuntimeConfig.sample = sample || ENV['PP_IMPORT_SAMPLE']
+        Wdpa::Portal::ImportRuntimeConfig.label = label || ENV['PP_RELEASE_LABEL']
+        Wdpa::Portal::ImportRuntimeConfig.checkpoints_enabled = (ENV['PP_IMPORT_CHECKPOINTS_DISABLE'] != 'true')
 
         # Refresh materialized views to ensure latest data (only if refresh_views is true)
         Wdpa::Portal::Managers::ViewManager.refresh_materialized_views if refresh_materialized_views
@@ -37,17 +45,30 @@ module Wdpa
       end
 
       def self.import_data_to_staging_tables
-        # Run importers in dependency order
-        sources_result = Wdpa::Portal::Importers::Source.import_to_staging
-        protected_areas_result = Wdpa::Portal::Importers::ProtectedArea.import_to_staging
+        only = Wdpa::Portal::ImportRuntimeConfig.only_list
+        skip = Wdpa::Portal::ImportRuntimeConfig.skip_list
 
-        # Only run subsequent importers if there are no hard errors in protected_areas
+        # Helper to decide if an importer should run
+        should_run = lambda do |name|
+          n = name.to_s
+          return false if skip.include?(n)
+          return true if only.empty?
+          only.include?(n)
+        end
+
+        sources_result = should_run.call('sources') ? Wdpa::Portal::Importers::Source.import_to_staging : success_result(0)
+        protected_areas_result = should_run.call('protected_areas') ? Wdpa::Portal::Importers::ProtectedArea.import_to_staging : success_result(0)
+
         if protected_areas_result[:hard_errors].empty?
-          global_stats_result = Wdpa::Shared::Importer::GlobalStats.import_to_staging
-          green_list_result = Wdpa::Portal::Importers::GreenList.import_to_staging
-          pame_result = Wdpa::Portal::Importers::Pame.import_to_staging
-          story_map_links_result = Wdpa::Shared::Importer::StoryMapLinkList.import_to_staging
-          country_statistics_result = Wdpa::Portal::Importers::CountryStatistics.import_to_staging
+          global_stats_result = should_run.call('global_stats') ? Wdpa::Shared::Importer::GlobalStats.import_to_staging : success_result(0)
+          green_list_result = should_run.call('green_list') ? Wdpa::Portal::Importers::GreenList.import_to_staging : success_result(0)
+          pame_result = should_run.call('pame') ? Wdpa::Portal::Importers::Pame.import_to_staging : success_result(0)
+          story_map_links_result = should_run.call('story_map_links') ? Wdpa::Shared::Importer::StoryMapLinkList.import_to_staging : success_result(0)
+          country_statistics_result = if should_run.call('country_statistics')
+                                         Wdpa::Portal::Importers::CountryStatistics.import_to_staging
+                                       else
+                                         { country_pa_geometry: success_result(0), country_general_stats: success_result(0), country_pame_stats: success_result(0) }
+                                       end
         else
           # Skip subsequent importers due to hard errors in protected_areas
           errors = failure_result('Skipped due to hard errors in protected areas importer')
@@ -80,6 +101,10 @@ module Wdpa
           biopama_countries: Wdpa::Shared::Importer::BiopamaCountries.update_live_table, # As of 05Sep2025 it might not used # not depending on any importer
           aichi11_target: Aichi11Target.update_live_table # As of 05Sep2025 it is probably not used # not depending on any importer
         }
+      end
+
+      def self.success_result(count)
+        { success: true, imported_count: count, soft_errors: [], hard_errors: [] }
       end
 
       def self.check_for_hard_errors(staging_results, live_results)

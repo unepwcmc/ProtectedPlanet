@@ -25,10 +25,16 @@ module Wdpa
           hard_errors = []
 
           Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_views.each do |view|
+            if Wdpa::Portal::ImportRuntimeConfig.checkpoints? && Wdpa::Portal::Checkpoint.geometry_done?(view)
+              Rails.logger.info "Skipping geometry update for #{view} (checkpoint)"
+              next
+            end
+
             result = import_geometry_from_view(view, target_table)
             imported_count += result[:imported_count]
             soft_errors.concat(result[:soft_errors] || [])
             hard_errors.concat(result[:hard_errors] || [])
+            Wdpa::Portal::Checkpoint.mark_geometry_done(view) if Wdpa::Portal::ImportRuntimeConfig.checkpoints?
           rescue StandardError => e
             hard_errors << "Geometry import error for #{view} in #{target_table}: #{e.message}"
             Rails.logger.error "Geometry import failed for #{view} in #{target_table}: #{e.message}"

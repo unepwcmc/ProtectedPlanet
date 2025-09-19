@@ -4,6 +4,7 @@ module Staging
     include SourceHelper
 
     self.table_name = 'staging_protected_areas'
+    self.primary_key = 'id'
 
     has_and_belongs_to_many :countries,
       # We still read countries from live countries table not like sources below

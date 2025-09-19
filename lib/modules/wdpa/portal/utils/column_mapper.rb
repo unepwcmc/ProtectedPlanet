@@ -144,13 +144,8 @@ module Wdpa
         # Converts marine_type to boolean marine (as per data standard)
         # Handles string values: Terrestrial = 0, Coastal = 1, Marine = 2
         def self.realm_to_marine_type(realm)
-          error_msg = "Invalid realm: '#{realm}'. Accepted values are: 'Terrestrial', 'Coastal', 'Marine'"
-
-          raise ArgumentError, error_msg if realm.nil? || realm.to_s.strip.empty?
-
           realm_str = realm.to_s.downcase.strip
 
-          # Handle string format: Terrestrial = 0, Coastal = 1, Marine = 2
           case realm_str
           when 'terrestrial'
             0 # Terrestrial
@@ -159,15 +154,12 @@ module Wdpa
           when 'marine'
             2 # Marine
           else
-            raise ArgumentError, error_msg
+            Rails.logger.warn "Unknown or missing realm '#{realm}'. Defaulting marine_type to Terrestrial (0)"
+            0
           end
         end
 
         def self.realm_is_marine(realm)
-          error_msg = "Invalid realm: '#{realm}'. Accepted values are: 'Terrestrial', 'Coastal', 'Marine'"
-
-          raise ArgumentError, error_msg if realm.nil? || realm.to_s.strip.empty?
-
           realm_str = realm.to_s.downcase.strip
           case realm_str
           when 'terrestrial'
@@ -175,7 +167,8 @@ module Wdpa
           when 'coastal', 'marine'
             true
           else
-            raise ArgumentError, error_msg
+            Rails.logger.warn "Unknown or missing realm '#{realm}'. Defaulting marine=false"
+            false
           end
         end
 
@@ -183,11 +176,27 @@ module Wdpa
         def self.map_portal_sources_to_pp(portal_attributes)
           mapped = {}
 
+          # Determine destination table (prefer staging if present)
+          dest_table = begin
+            if ActiveRecord::Base.connection.table_exists?(Staging::Source.table_name)
+              Staging::Source.table_name
+            else
+              Source.table_name
+            end
+          rescue StandardError
+            # Fallback to live sources table
+            'sources'
+          end
+
           portal_attributes.each do |portal_key, value|
             if PORTAL_TO_PP_SOURCES_MAPPING.key?(portal_key)
               pp_key = PORTAL_TO_PP_SOURCES_MAPPING[portal_key]
-              # Apply transformations for source fields
-              mapped[pp_key] = value
+              # Only include mapped column if it exists in the destination table
+              if ActiveRecord::Base.connection.column_exists?(dest_table, pp_key)
+                mapped[pp_key] = value
+              else
+                Rails.logger.debug "Skipping source column not present in #{dest_table}: #{pp_key} (from #{portal_key})"
+              end
             else
               # Log unmapped columns for debugging
               Rails.logger.debug "Unmapped portal source column: #{portal_key} (value: #{value})"

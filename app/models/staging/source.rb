@@ -1,6 +1,7 @@
 module Staging
   class Source < ApplicationRecord
     self.table_name = 'staging_sources'
+    self.primary_key = 'id'
 
     def self.protected_areas_sources_junction_table_name
       'staging_protected_areas_sources'
