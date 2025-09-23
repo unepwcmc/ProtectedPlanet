@@ -62,7 +62,7 @@ class Download::Generators::Gdb < Download::Generators::Base
   def export_sources
     _query = <<-SQL
       SELECT #{Download::Utils.source_columns}
-      FROM standard_sources
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['sources']}
     SQL
 
     Ogr::Postgres.export(:gdb, gdb_component, _query, 'source')

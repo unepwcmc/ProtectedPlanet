@@ -5,18 +5,19 @@ class Download::Generators::Base
   SHAPEFILE_README_PATH = File.join(Rails.root, 'lib', 'data', 'documents', 'Shapefile_splitting_README.txt').freeze
   TMP_DOWNLOADS_PREFIX = 'tmp_downloads_'
 
-  def self.generate zip_path, wdpa_ids = nil
+  def self.generate(zip_path, wdpa_ids = nil)
     generator = new zip_path, wdpa_ids
     generator.generate
   end
 
-  def initialize zip_path, wdpa_ids
+  def initialize(zip_path, wdpa_ids)
     @zip_path = zip_path
     @wdpa_ids = wdpa_ids
   end
 
   def generate
     return false if @wdpa_ids.is_a?(Array) && @wdpa_ids.empty?
+
     clean_up_after { export and export_sources and zip }
   end
 
@@ -42,26 +43,26 @@ class Download::Generators::Base
 
   private
 
-  def export_from_postgres type
+  def export_from_postgres(type)
     view_name = create_view(query)
     Ogr::Postgres.export type, path, "SELECT * FROM #{view_name}"
   end
 
-  def create_view query
+  def create_view(query)
     query_shasum = Digest::SHA1.hexdigest query
     view_name = "#{TMP_DOWNLOADS_PREFIX}#{query_shasum}"
 
     db.execute "CREATE OR REPLACE VIEW #{view_name} AS #{query}"
-    return view_name
+    view_name
   end
 
   def export_sources
-    return true if File.exists?(sources_path)
+    return true if File.exist?(sources_path)
 
-    Ogr::Postgres.export :csv, sources_path, """
+    Ogr::Postgres.export :csv, sources_path, "
       SELECT #{Download::Utils.source_columns}
-      FROM standard_sources
-    """
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['sources']}
+    "
   end
 
   def export
@@ -74,19 +75,19 @@ class Download::Generators::Base
     system("zip -ru #{zip_path} *", chdir: ATTACHMENTS_PATH)
   end
 
-  def query conditions=[]
-    query = %{SELECT "TYPE", #{Download::Utils.download_columns}}
+  def query(conditions = [])
+    query = %(SELECT "TYPE", #{Download::Utils.download_columns})
     query << " FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
     add_conditions(query, conditions).squish
   end
 
-  def add_conditions query, conditions
+  def add_conditions(query, conditions)
     conditions = Array.wrap(conditions)
     conditions << %{"WDPAID" IN (#{@wdpa_ids.join(',')})} if @wdpa_ids.present?
 
-    query.tap { |q|
+    query.tap do |q|
       q << " WHERE #{conditions.join(' AND ')}" if conditions.any?
-    }
+    end
   end
 
   def clean_up_after
@@ -104,9 +105,7 @@ class Download::Generators::Base
     raise NotImplementedError
   end
 
-  def zip_path
-    @zip_path
-  end
+  attr_reader :zip_path
 
   def sources_path
     File.join(File.dirname(zip_path), "WDPA_sources_#{current_wdpa_id}.csv")
