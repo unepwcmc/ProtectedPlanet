@@ -89,6 +89,9 @@ module Wdpa
           'verifier' => 'verifier'
         }.freeze
 
+        # Source columns in portal views that are intentionally not mapped and should not log
+        PORTAL_SOURCES_IGNORED_COLUMNS = %w[index_id].freeze
+
         # Maps portal attributes to ProtectedArea attributes (non-spatial data only)
         def self.map_portal_to_pp_protected_area(portal_attributes)
           map_portal_to_pp_with_relation(portal_attributes, Wdpa::Portal::Relation::ProtectedArea)
@@ -199,6 +202,8 @@ module Wdpa
               end
             else
               # Log unmapped columns for debugging
+              next if PORTAL_SOURCES_IGNORED_COLUMNS.include?(portal_key)
+
               Rails.logger.debug "Unmapped portal source column: #{portal_key} (value: #{value})"
             end
           end
