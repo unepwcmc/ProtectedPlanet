@@ -197,6 +197,8 @@ class Wdpa::Portal::Services::Core::TableSwapServiceTest < ActiveSupport::TestCa
     service_instance.expects(:validate_staging_tables_existence)
     service_instance.expects(:perform_atomic_swaps)
     service_instance.expects(:restore_after_swap)
+    service_instance.stubs(:instance_variable_get).with(:@connection).returns(@connection)
+    service_instance.stubs(:instance_variable_get).with(:@backup_timestamp).returns(@backup_timestamp)
 
     # Mock transaction
     @connection.expects(:transaction).yields
@@ -212,6 +214,8 @@ class Wdpa::Portal::Services::Core::TableSwapServiceTest < ActiveSupport::TestCa
     service_instance.expects(:prepare_for_swap)
     service_instance.expects(:validate_staging_tables_existence).raises(StandardError, 'Test error')
     service_instance.expects(:restore_after_swap)
+    service_instance.stubs(:instance_variable_get).with(:@connection).returns(@connection)
+    service_instance.stubs(:instance_variable_get).with(:@backup_timestamp).returns(@backup_timestamp)
 
     # Mock transaction that raises error
     @connection.expects(:transaction).raises(ActiveRecord::Rollback)

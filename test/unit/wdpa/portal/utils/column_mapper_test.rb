@@ -69,74 +69,62 @@ class Wdpa::Portal::Utils::ColumnMapperTest < ActiveSupport::TestCase
     end
   end
 
-  test 'map_portal_to_pp processes realm field correctly' do
+  test 'map_portal_to_pp_protected_area processes realm field correctly' do
     portal_attributes = {
       'realm' => 'Marine',
-      'name' => 'Test PA',
-      'wdpa_id' => 123
+      'name_eng' => 'Test PA',
+      'site_id' => 123
     }
 
-    result = Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp(
-      portal_attributes,
-      'protected_areas',
-      Wdpa::Portal::Relation::ProtectedArea
-    )
+    result = Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp_protected_area(portal_attributes)
 
     # Should have realm, marine, and marine_type fields
-    assert_equal 'Marine', result[:realm]
-    assert_equal true, result[:marine]
-    assert_equal 2, result[:marine_type]
-    assert_equal 'Test PA', result[:name]
-    assert_equal 123, result[:wdpa_id]
+    # realm is converted to a Realm model object
+    assert_instance_of Realm, result['realm']
+    assert_equal 'Marine', result['realm'].name
+    assert_equal true, result['marine']
+    assert_equal 2, result['marine_type']
+    assert_equal 'Test PA', result['name']
+    assert_equal 123, result['wdpa_id']
   end
 
-  test 'map_portal_to_pp handles empty realm field' do
+  test 'map_portal_to_pp_protected_area handles empty realm field' do
     portal_attributes = {
       'realm' => '',
-      'name' => 'Test PA',
-      'wdpa_id' => 123
+      'name_eng' => 'Test PA',
+      'site_id' => 123
     }
 
     assert_raises(ArgumentError) do
-      Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp(
-        portal_attributes,
-        'protected_areas',
-        Wdpa::Portal::Relation::ProtectedArea
-      )
+      Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp_protected_area(portal_attributes)
     end
   end
 
-  test 'map_portal_to_pp handles invalid realm field' do
+  test 'map_portal_to_pp_protected_area handles invalid realm field' do
     portal_attributes = {
       'realm' => 'Freshwater',
-      'name' => 'Test PA',
-      'wdpa_id' => 123
+      'name_eng' => 'Test PA',
+      'site_id' => 123
     }
 
     assert_raises(ArgumentError) do
-      Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp(
-        portal_attributes,
-        'protected_areas',
-        Wdpa::Portal::Relation::ProtectedArea
-      )
+      Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp_protected_area(portal_attributes)
     end
   end
 
-  test 'map_portal_to_pp processes other fields normally' do
+  test 'map_portal_to_pp_protected_area processes other fields normally' do
     portal_attributes = {
-      'name' => 'Test PA',
-      'wdpa_id' => 123,
+      'name_eng' => 'Test PA',
+      'site_id' => 123,
       'status' => 'Designated'
     }
 
-    result = Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp(
-      portal_attributes,
-      'protected_areas',
-      Wdpa::Portal::Relation::ProtectedArea
-    )
+    result = Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp_protected_area(portal_attributes)
 
-    assert_equal 'Test PA', result[:name]
-    assert_equal 123, result[:wdpa_id]
-    assert_equal 'Designated', result[:status]
+    assert_equal 'Test PA', result['name']
+    assert_equal 123, result['wdpa_id']
+    # legal_status is converted to a LegalStatus model object
+    assert_instance_of LegalStatus, result['legal_status']
+    assert_equal 'Designated', result['legal_status'].name
   end
 end

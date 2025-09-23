@@ -6,7 +6,7 @@
 # SimpleCov.start
 
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 require 'rails/test_help'
 
 ActiveRecord::Migration.maintain_test_schema!
@@ -16,13 +16,17 @@ require 'webmock/minitest'
 
 require 'database_cleaner'
 
-WebMock.disable_net_connect!(:allow => ["codeclimate.com"], :allow_localhost => true)
+WebMock.disable_net_connect!(allow: ['codeclimate.com'], allow_localhost: true)
+
+# Configure DatabaseCleaner
+DatabaseCleaner.strategy = :transaction
+DatabaseCleaner.clean_with(:truncation)
 
 Mocha::Configuration.prevent(:stubbing_non_existent_method)
 
 class ActionMailer::TestCase
-  def html_body mail
-    mail.body.parts.find{ |p| p.content_type.match(/html/) }.body.raw_source
+  def html_body(mail)
+    mail.body.parts.find { |p| p.content_type.match(/html/) }.body.raw_source
   end
 end
 
@@ -34,21 +38,26 @@ module MiniTest::Assertions
 end
 
 class ActionDispatch::IntegrationTest
-
   # Make the Capybara DSL available in all integration tests
   include Capybara::DSL
   Capybara.app = Rails.application
 
-  def teardown
-
-  end
+  def teardown; end
 end
 
 class ActionController::TestCase
-
 end
 
 class ActiveSupport::TestCase
+  # Setup database cleaner
+  setup do
+    DatabaseCleaner.start
+  end
+
+  teardown do
+    DatabaseCleaner.clean
+  end
+
   # helper method to seed cms pages required for header/footer
   # any test that tries to render a view will need to call this first
   def seed_cms
@@ -74,7 +83,6 @@ class ActiveSupport::TestCase
     # and the CTAs
     FactoryGirl.create(:cms_cta, css_class: 'api')
     FactoryGirl.create(:cms_cta, css_class: 'live-report')
-
   end
 end
 
@@ -86,5 +94,5 @@ end
 Bystander.enable_testing!
 
 def assert_greater(a, b)
-    assert_operator a, :>, b
+  assert_operator a, :>, b
 end

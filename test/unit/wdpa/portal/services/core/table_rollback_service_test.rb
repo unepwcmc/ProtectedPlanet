@@ -230,6 +230,7 @@ class Wdpa::Portal::Services::Core::TableRollbackServiceTest < ActiveSupport::Te
     service_instance.expects(:validate_backup_tables_exist)
     service_instance.expects(:perform_atomic_rollbacks)
     service_instance.expects(:restore_after_rollback)
+    service_instance.stubs(:instance_variable_get).with(:@connection).returns(@connection)
     
     # Mock transaction
     @connection.expects(:transaction).yields
@@ -245,6 +246,7 @@ class Wdpa::Portal::Services::Core::TableRollbackServiceTest < ActiveSupport::Te
     service_instance.expects(:prepare_for_rollback)
     service_instance.expects(:validate_backup_tables_exist).raises(StandardError, 'Backup not found')
     service_instance.expects(:restore_after_rollback)
+    service_instance.stubs(:instance_variable_get).with(:@connection).returns(@connection)
     
     # Mock transaction that raises error
     @connection.expects(:transaction).raises(ActiveRecord::Rollback)

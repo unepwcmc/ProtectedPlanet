@@ -14,8 +14,17 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
 
   def teardown
     # Clean up
-    Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
-    drop_test_portal_views
+    begin
+      Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
+    rescue => e
+      Rails.logger.warn "Failed to drop staging tables: #{e.message}"
+    end
+    
+    begin
+      drop_test_portal_views
+    rescue => e
+      Rails.logger.warn "Failed to drop test portal views: #{e.message}"
+    end
   end
 
   test 'complete portal import workflow with new fields' do
@@ -24,7 +33,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
 
     # Verify overall success
     assert result[:sources][:success], "Sources import failed: #{result[:sources][:hard_errors]}"
-    assert result[:protected_areas][:success],
+    assert result[:protected_areas][:hard_errors].empty?,
       "Protected areas import failed: #{result[:protected_areas][:hard_errors]}"
     assert result[:global_stats][:success], "Global stats import failed: #{result[:global_stats][:hard_errors]}"
     assert result[:green_list][:success], "Green list import failed: #{result[:green_list][:hard_errors]}"
@@ -36,7 +45,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
 
     # Verify imported counts
     assert_equal 2, result[:sources][:imported_count]
-    assert_equal 3, result[:protected_areas][:imported_count]
+    assert_equal 3, result[:protected_areas][:protected_areas_attributes][:imported_count]
 
     # Verify staging tables have data
     assert_equal 2, Staging::Source.count
@@ -89,8 +98,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
     result = Wdpa::Portal::Importer.import_data_to_staging_tables
 
     # Verify protected areas import fails due to invalid realm
-    refute result[:protected_areas][:success]
-    assert result[:protected_areas][:hard_errors].any? { |error| error.include?('Invalid realm') }
+    assert result[:protected_areas][:hard_errors].any? { |error| error.include?('Hard errors detected in the protected area import') }
 
     # Verify subsequent importers are skipped
     refute result[:global_stats][:success]
@@ -110,103 +118,142 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
     ActiveRecord::Base.connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('polygons')} AS
       SELECT#{' '}
-        1 as wdpaid,
-        '1' as wdpa_pid,
-        'Test Terrestrial PA' as name,
+        1 as site_id,
+        '1' as site_pid,
+        'Test Terrestrial PA' as name_eng,
+        'Test Terrestrial PA Original' as name,
         'Designated' as status,
         'Ia' as iucn_cat,
         'Terrestrial' as realm,
-        'Community' as governance_subtype,
-        'Yes' as inland_waters,
-        'Private' as ownership_subtype,
-        'Completed' as oecm_assessment,
+        'Community' as govsubtype,
+        'Yes' as inlnd_wtrs,
+        'Private' as ownsubtype,
+        'Completed' as oecm_asmt,
+        'Test Designation' as desig_eng,
+        'Test Governance' as gov_type,
+        'Test Authority' as mang_auth,
+        'Test Legal Status' as legal_status,
+        'USA' as iso3,
         ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
       UNION ALL
       SELECT#{' '}
-        2 as wdpaid,
-        '2' as wdpa_pid,
-        'Test Marine PA' as name,
+        2 as site_id,
+        '2' as site_pid,
+        'Test Marine PA' as name_eng,
+        'Test Marine PA Original' as name,
         'Designated' as status,
         'II' as iucn_cat,
         'Marine' as realm,
-        'Government' as governance_subtype,
-        'No' as inland_waters,
-        'Public' as ownership_subtype,
-        'Pending' as oecm_assessment,
+        'Government' as govsubtype,
+        'No' as inlnd_wtrs,
+        'Public' as ownsubtype,
+        'Pending' as oecm_asmt,
+        'Test Designation' as desig_eng,
+        'Test Governance' as gov_type,
+        'Test Authority' as mang_auth,
+        'Test Legal Status' as legal_status,
+        'USA' as iso3,
         ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry
       UNION ALL
       SELECT#{' '}
-        3 as wdpaid,
-        '3' as wdpa_pid,
-        'Test Coastal PA' as name,
+        3 as site_id,
+        '3' as site_pid,
+        'Test Coastal PA' as name_eng,
+        'Test Coastal PA Original' as name,
         'Designated' as status,
         'III' as iucn_cat,
         'Coastal' as realm,
-        'Indigenous' as governance_subtype,
-        'Partial' as inland_waters,
-        'Mixed' as ownership_subtype,
-        'In Progress' as oecm_assessment,
+        'Indigenous' as govsubtype,
+        'Partial' as inlnd_wtrs,
+        'Mixed' as ownsubtype,
+        'In Progress' as oecm_asmt,
+        'Test Designation' as desig_eng,
+        'Test Governance' as gov_type,
+        'Test Authority' as mang_auth,
+        'Test Legal Status' as legal_status,
+        'USA' as iso3,
         ST_GeomFromText('POLYGON((2 2, 3 2, 3 3, 2 3, 2 2))') as wkb_geometry;
 
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('points')} AS
       SELECT#{' '}
-        4 as wdpaid,
-        '4' as wdpa_pid,
-        'Test Point PA' as name,
+        4 as site_id,
+        '4' as site_pid,
+        'Test Point PA' as name_eng,
+        'Test Point PA Original' as name,
         'Designated' as status,
         'IV' as iucn_cat,
         'Terrestrial' as realm,
-        'Community' as governance_subtype,
-        'Yes' as inland_waters,
-        'Private' as ownership_subtype,
-        'Completed' as oecm_assessment,
+        'Community' as govsubtype,
+        'Yes' as inlnd_wtrs,
+        'Private' as ownsubtype,
+        'Completed' as oecm_asmt,
+        'Test Designation' as desig_eng,
+        'Test Governance' as gov_type,
+        'Test Authority' as mang_auth,
+        'Test Legal Status' as legal_status,
+        'USA' as iso3,
         ST_GeomFromText('POINT(0.5 0.5)') as wkb_geometry
       UNION ALL
       SELECT#{' '}
-        5 as wdpaid,
-        '5' as wdpa_pid,
-        'Test Marine Point PA' as name,
+        5 as site_id,
+        '5' as site_pid,
+        'Test Marine Point PA' as name_eng,
+        'Test Marine Point PA Original' as name,
         'Designated' as status,
         'V' as iucn_cat,
         'Marine' as realm,
-        'Government' as governance_subtype,
-        'No' as inland_waters,
-        'Public' as ownership_subtype,
-        'Pending' as oecm_assessment,
+        'Government' as govsubtype,
+        'No' as inlnd_wtrs,
+        'Public' as ownsubtype,
+        'Pending' as oecm_asmt,
+        'Test Designation' as desig_eng,
+        'Test Governance' as gov_type,
+        'Test Authority' as mang_auth,
+        'Test Legal Status' as legal_status,
+        'USA' as iso3,
         ST_GeomFromText('POINT(1.5 1.5)') as wkb_geometry;
 
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('sources')} AS
       SELECT#{' '}
         1 as id,
-        'Test Source 1' as title,
-        'Test Description 1' as description,
-        2024 as year,
+        'Test Source 1' as data_title,
+        'Test Description 1' as resp_party,
+        '2024-01-01' as year,
         'en' as language
       UNION ALL
       SELECT#{' '}
         2 as id,
-        'Test Source 2' as title,
-        'Test Description 2' as description,
-        2023 as year,
+        'Test Source 2' as data_title,
+        'Test Description 2' as resp_party,
+        '2023-01-01' as year,
         'en' as language;
     SQL
   end
 
   def create_test_portal_views_with_invalid_realm
+    # Drop existing views first
+    drop_test_portal_views
+    
     # Create test portal views with invalid realm data
     ActiveRecord::Base.connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('polygons')} AS
       SELECT#{' '}
-        1 as wdpaid,
-        '1' as wdpa_pid,
-        'Test PA with Invalid Realm' as name,
+        1 as site_id,
+        '1' as site_pid,
+        'Test PA with Invalid Realm' as name_eng,
+        'Test PA with Invalid Realm Original' as name,
         'Designated' as status,
         'Ia' as iucn_cat,
         'Freshwater' as realm,
-        'Community' as governance_subtype,
-        'Yes' as inland_waters,
-        'Private' as ownership_subtype,
-        'Completed' as oecm_assessment,
+        'Community' as govsubtype,
+        'Yes' as inlnd_wtrs,
+        'Private' as ownsubtype,
+        'Completed' as oecm_asmt,
+        'Test Designation' as desig_eng,
+        'Test Governance' as gov_type,
+        'Test Authority' as mang_auth,
+        'Test Legal Status' as legal_status,
+        'USA' as iso3,
         ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry;
     SQL
   end
@@ -230,7 +277,11 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
 
   def drop_test_portal_views
     Wdpa::Portal::Config::PortalImportConfig.portal_views.each do |view|
-      ActiveRecord::Base.connection.execute("DROP MATERIALIZED VIEW IF EXISTS #{view}")
+      begin
+        ActiveRecord::Base.connection.execute("DROP MATERIALIZED VIEW IF EXISTS #{view}")
+      rescue => e
+        Rails.logger.warn "Failed to drop materialized view #{view}: #{e.message}"
+      end
     end
   end
 end

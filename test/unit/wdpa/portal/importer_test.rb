@@ -45,12 +45,13 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
     assert_empty result[:hard_errors]
   end
 
-  test '.import raises error when views do not exist' do
+  test '.import returns failure result when views do not exist' do
     Wdpa::Portal::Managers::ViewManager.expects(:validate_required_views_exist).returns(false)
 
-    assert_raises(StandardError, /Required materialized views do not exist/) do
-      Wdpa::Portal::Importer.import
-    end
+    result = Wdpa::Portal::Importer.import
+
+    refute result[:success]
+    assert_includes result[:hard_errors].first, 'Required materialized views do not exist'
   end
 
   test '.import skips refresh when refresh_materialized_views is false' do

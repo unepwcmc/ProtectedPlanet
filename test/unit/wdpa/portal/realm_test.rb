@@ -49,6 +49,13 @@ class RealmTest < ActiveSupport::TestCase
   end
 
   test 'realm has many staging protected areas' do
+    # Stop any existing DatabaseCleaner
+    DatabaseCleaner.clean
+
+    # Use truncation strategy for this test to avoid transaction conflicts
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.start
+
     # Create staging table for testing
     Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
 
@@ -69,9 +76,18 @@ class RealmTest < ActiveSupport::TestCase
 
     # Clean up
     Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
+    DatabaseCleaner.clean
+    DatabaseCleaner.strategy = :transaction
   end
 
   test 'realm has many staging protected area parcels' do
+    # Stop any existing DatabaseCleaner
+    DatabaseCleaner.clean
+
+    # Use truncation strategy for this test to avoid transaction conflicts
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.start
+
     # Create staging table for testing
     Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
 
@@ -92,6 +108,8 @@ class RealmTest < ActiveSupport::TestCase
 
     # Clean up
     Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
+    DatabaseCleaner.clean
+    DatabaseCleaner.strategy = :transaction
   end
 
   test 'realm name is required' do
@@ -101,8 +119,9 @@ class RealmTest < ActiveSupport::TestCase
   end
 
   test 'realm name is unique' do
-    Realm.create!(name: 'Terrestrial')
-    duplicate_realm = Realm.new(name: 'Terrestrial')
+    # Create a new realm with a different name first
+    Realm.create!(name: 'Marine')
+    duplicate_realm = Realm.new(name: 'Marine')
     refute duplicate_realm.valid?
     assert_includes duplicate_realm.errors[:name], 'has already been taken'
   end

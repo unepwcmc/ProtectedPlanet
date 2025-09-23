@@ -2,6 +2,13 @@ require 'test_helper'
 
 class ModelStagingRelationshipsTest < ActiveSupport::TestCase
   def setup
+    # Stop any existing DatabaseCleaner
+    DatabaseCleaner.clean
+
+    # Use truncation strategy for this test to avoid transaction conflicts
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.start
+
     # Create staging tables for testing
     Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
 
@@ -17,6 +24,10 @@ class ModelStagingRelationshipsTest < ActiveSupport::TestCase
   def teardown
     # Clean up staging tables
     Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
+
+    # Clean up and reset strategy
+    DatabaseCleaner.clean
+    DatabaseCleaner.strategy = :transaction
   end
 
   test 'designation has staging relationships' do

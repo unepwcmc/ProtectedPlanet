@@ -2,6 +2,13 @@ require 'test_helper'
 
 class Wdpa::Portal::ImporterConditionalTest < ActiveSupport::TestCase
   def setup
+    # Stop any existing DatabaseCleaner
+    DatabaseCleaner.clean
+
+    # Use truncation strategy for this test to avoid transaction conflicts
+    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.start
+
     # Create staging tables for testing
     Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
   end
@@ -9,6 +16,10 @@ class Wdpa::Portal::ImporterConditionalTest < ActiveSupport::TestCase
   def teardown
     # Clean up staging tables
     Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
+
+    # Clean up and reset strategy
+    DatabaseCleaner.clean
+    DatabaseCleaner.strategy = :transaction
   end
 
   test 'runs all importers when protected areas import succeeds' do
@@ -115,15 +126,30 @@ class Wdpa::Portal::ImporterConditionalTest < ActiveSupport::TestCase
     refute result[:green_list][:success]
     refute result[:pame][:success]
     refute result[:story_map_links][:success]
-    refute result[:country_statistics][:success]
+    refute result[:country_statistics][:country_pa_geometry][:success]
+    refute result[:country_statistics][:country_general_stats][:success]
+    refute result[:country_statistics][:country_pame_stats][:success]
 
     # Verify skip messages
+    assert_not_nil result[:global_stats][:hard_errors]
     assert_includes result[:global_stats][:hard_errors].first, 'Skipped due to hard errors in protected areas importer'
+    assert_not_nil result[:green_list][:hard_errors]
     assert_includes result[:green_list][:hard_errors].first, 'Skipped due to hard errors in protected areas importer'
+    assert_not_nil result[:pame][:hard_errors]
     assert_includes result[:pame][:hard_errors].first, 'Skipped due to hard errors in protected areas importer'
+    assert_not_nil result[:story_map_links][:hard_errors]
     assert_includes result[:story_map_links][:hard_errors].first,
       'Skipped due to hard errors in protected areas importer'
-    assert_includes result[:country_statistics][:hard_errors].first,
+
+    # country_statistics is a nested hash with multiple keys
+    assert_not_nil result[:country_statistics][:country_pa_geometry][:hard_errors]
+    assert_includes result[:country_statistics][:country_pa_geometry][:hard_errors].first,
+      'Skipped due to hard errors in protected areas importer'
+    assert_not_nil result[:country_statistics][:country_general_stats][:hard_errors]
+    assert_includes result[:country_statistics][:country_general_stats][:hard_errors].first,
+      'Skipped due to hard errors in protected areas importer'
+    assert_not_nil result[:country_statistics][:country_pame_stats][:hard_errors]
+    assert_includes result[:country_statistics][:country_pame_stats][:hard_errors].first,
       'Skipped due to hard errors in protected areas importer'
 
     # Verify imported counts are 0 for skipped importers
@@ -131,7 +157,9 @@ class Wdpa::Portal::ImporterConditionalTest < ActiveSupport::TestCase
     assert_equal 0, result[:green_list][:imported_count]
     assert_equal 0, result[:pame][:imported_count]
     assert_equal 0, result[:story_map_links][:imported_count]
-    assert_equal 0, result[:country_statistics][:imported_count]
+    assert_equal 0, result[:country_statistics][:country_pa_geometry][:imported_count]
+    assert_equal 0, result[:country_statistics][:country_general_stats][:imported_count]
+    assert_equal 0, result[:country_statistics][:country_pame_stats][:imported_count]
   end
 
   test 'runs subsequent importers when protected areas has only soft errors' do
