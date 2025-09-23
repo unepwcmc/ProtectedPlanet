@@ -14,6 +14,8 @@ module PortalRelease
           # Delegate to core cleanup: VACUUM ANALYZE live tables and clean old backups
           begin
             Wdpa::Portal::Services::Core::TableCleanupService.cleanup_after_swap
+            # Drop any leftover temporary download views
+            Download::Generators::Base.clean_tmp_download_views
             log.event('post_swap_cleanup_done')
           rescue StandardError => e
             Rails.logger.warn("Post-swap cleanup failed: #{e.class}: #{e.message}")

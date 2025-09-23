@@ -130,7 +130,7 @@ Phases (in order):
 - If PP_RELEASE_DRY_RUN=false, runs an atomic table swap staging→live; backups are created with bkYYMMDDHHMM_ prefix.
 
 9) post_swap
-- Non‑dry run: VACUUM ANALYZE live tables and cleanup backups beyond retention.
+- Non‑dry run: VACUUM ANALYZE live tables, cleanup backups beyond retention, and drop temporary download views (prefix: tmp_downloads_).
 - Dry run: ANALYZE staging for visibility only.
 
 10) cleanup_and_retention

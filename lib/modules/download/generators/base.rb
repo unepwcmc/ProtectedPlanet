@@ -3,6 +3,7 @@ require 'digest/sha1'
 class Download::Generators::Base
   ATTACHMENTS_PATH = File.join(Rails.root, 'lib', 'data', 'documents', 'resources').freeze
   SHAPEFILE_README_PATH = File.join(Rails.root, 'lib', 'data', 'documents', 'Shapefile_splitting_README.txt').freeze
+  TMP_DOWNLOADS_PREFIX = 'tmp_downloads_'
 
   def self.generate zip_path, wdpa_ids = nil
     generator = new zip_path, wdpa_ids
@@ -19,6 +20,26 @@ class Download::Generators::Base
     clean_up_after { export and export_sources and zip }
   end
 
+  # Drops all temporary download views created by generators
+  # (views with names starting with "tmp_downloads_")
+  def self.clean_tmp_download_views
+    conn = ActiveRecord::Base.connection
+    sql = <<-SQL
+      SELECT table_name
+      FROM information_schema.views
+      WHERE table_schema = 'public'
+        AND table_name LIKE '#{TMP_DOWNLOADS_PREFIX}%'
+    SQL
+    views = conn.select_values(sql)
+
+    views.each do |view_name|
+      conn.execute "DROP VIEW IF EXISTS #{view_name}"
+    rescue StandardError => e
+      Rails.logger.warn "Failed to drop temp download view #{view_name}: #{e.message}"
+    end
+    views.length
+  end
+
   private
 
   def export_from_postgres type
@@ -28,7 +49,7 @@ class Download::Generators::Base
 
   def create_view query
     query_shasum = Digest::SHA1.hexdigest query
-    view_name = "tmp_downloads_#{query_shasum}"
+    view_name = "#{TMP_DOWNLOADS_PREFIX}#{query_shasum}"
 
     db.execute "CREATE OR REPLACE VIEW #{view_name} AS #{query}"
     return view_name
