@@ -1,16 +1,23 @@
 module Download
   module Queries
     POINTS_COLUMNS = %i[
-      wkb_geometry wdpaid wdpa_pid
-      pa_def name orig_name
-      desig desig_eng desig_type
-      iucn_cat int_crit marine
-      rep_m_area rep_area no_take
-      no_tk_area status status_yr
-      gov_type own_type mang_auth
-      mang_plan verif metadataid
-      sub_loc parent_iso3 iso3
+      wkb_geometry
+      site_id site_pid
+      site_type name_eng name
+      desig_eng desig_type
+      iucn_cat int_crit
+      realm
+      rep_m_area rep_area
+      no_take no_tk_area
+      status status_yr
+      gov_type govsubtype
+      own_type ownsubtype
+      mang_auth mang_plan
+      verif metadataid
+      prnt_iso3 iso3
       supp_info cons_obj
+      inlnd_wtrs
+      oecm_asmt
     ]
 
     POLYGONS_COLUMNS = POINTS_COLUMNS.clone

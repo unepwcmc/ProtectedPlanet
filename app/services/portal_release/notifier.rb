@@ -184,6 +184,8 @@ module PortalRelease
         ['refresh_views', 'Refresh portal materialized views']
       when 'preflight'
         ['preflight', 'Checks: views exist, counts, geometry, duplicates']
+      when 'create_portal_downloads_view'
+        ['create_portal_downloads_view', 'Delete and recreate combined file generator downloads view']
       when 'build_staging'
         ['build_staging', 'Create/prepare staging tables']
       when 'import_core'

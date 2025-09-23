@@ -6,6 +6,7 @@ module PortalRelease
       acquire_lock
       refresh_views
       preflight
+      create_portal_downloads_view
       build_staging
       import_core
       import_related
@@ -110,6 +111,11 @@ module PortalRelease
       Preflight.run!(@release, @log, @notify, @ctx)
     end
 
+    def create_portal_downloads_view
+      @ctx[:phase] = 'create_portal_downloads_view'
+      Preflight.create_portal_downloads_view!(@log)
+    end
+
     def build_staging
       @ctx[:phase] = 'build_staging'
       Staging.new(@log).prepare!
@@ -157,4 +163,3 @@ module PortalRelease
     end
   end
 end
-

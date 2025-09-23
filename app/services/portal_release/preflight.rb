@@ -69,7 +69,22 @@ module PortalRelease
             HAVING COUNT(*) > 1
           ) d
         SQL
-        raise "Duplicate rows by (site_id, site_pid): points=#{dup_points}, polygons=#{dup_polys}" if dup_points.positive? || dup_polys.positive?
+        return unless dup_points.positive? || dup_polys.positive?
+
+        raise "Duplicate rows by (site_id, site_pid): points=#{dup_points}, polygons=#{dup_polys}"
+      end
+
+      # Creates or replaces the combined portal downloads view used by generators/exporters
+      # Combines polygons and points portal standard views.
+      # Mirrors logic in Wdpa::Release#create_downloads_view but targets portal_* views.
+      def create_portal_downloads_view!(log = nil)
+        conn = ActiveRecord::Base.connection
+        downloads_view = 'portal_downloads_protected_areas'
+        create_query = "CREATE OR REPLACE VIEW #{downloads_view} AS "
+        as_query = Download::Queries.mixed(true)
+
+        conn.execute(create_query + "(SELECT #{as_query[:select]} FROM #{as_query[:from]})")
+        log&.event('portal_downloads_view_created', payload: { view: downloads_view })
       end
     end
   end
