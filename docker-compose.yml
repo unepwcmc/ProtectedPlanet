@@ -16,6 +16,8 @@ services:
       - "3000:3000"
     networks:
       - protectedplanet
+    env_file:
+      - '.env'
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
       - WEBPACKER_DEV_SERVER_HOST=webpacker
@@ -61,6 +63,8 @@ services:
       - protectedplanet_bundler:/usr/local/bundle
     networks:
       - protectedplanet
+    env_file:
+      - '.env'
     depends_on:
       - db
       - redis
@@ -110,6 +114,8 @@ services:
       - protectedplanet_bundler:/usr/local/bundle
     ports:
       - "3035:3035"
+    env_file:
+      - '.env'
     networks:
       - protectedplanet
   sidekiq-import:
@@ -122,6 +128,8 @@ services:
       - protectedplanet_bundler:/usr/local/bundle
     networks:
       - protectedplanet
+    env_file:
+      - '.env'
     depends_on:
       - db
       - redis
