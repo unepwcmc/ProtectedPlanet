@@ -2,7 +2,8 @@ namespace :pp do
   namespace :portal do
     desc "Run portal-backed WDPA release. Usage: rake pp:portal:release['WDPA_YYYY_MM']"
     task :release, [:label] => :environment do |_t, args|
-      label = args[:label] || Time.now.utc.strftime('WDPA_%Y_%m')
+      # Default to e.g. "Mar2025" when no label is supplied
+      label = args[:label] || Time.now.utc.strftime('%b%Y')
       PortalRelease::Service.new(label: label).run!
     end
 
