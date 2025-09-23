@@ -44,11 +44,19 @@ module PortalRelease
     end
 
     def initialize(label:)
-      @label   = label
-      @release = Release.create!(label: label)
-      @log     = ::PortalRelease::Logger.new(@release)
-      @notify  = ::PortalRelease::Notifier.new(@release)
-      @ctx     = {}
+      @label = label
+      @ctx   = {}
+
+      begin
+        @release = Release.create!(label: label)
+        @log     = ::PortalRelease::Logger.new(@release)
+        @notify  = ::PortalRelease::Notifier.new(@release)
+      rescue ActiveRecord::RecordInvalid => e
+        # Send error notification even without a release record
+        @notify = ::PortalRelease::Notifier.new(label)
+        @notify.error(e, phase: 'initialisation')
+        raise
+      end
     end
 
     def run!
