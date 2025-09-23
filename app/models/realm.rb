@@ -1,4 +1,6 @@
 class Realm < ApplicationRecord
+  validates :name, presence: true, uniqueness: true
+
   has_many :protected_areas
   has_many :protected_area_parcels
 
