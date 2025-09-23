@@ -56,7 +56,7 @@ docker compose exec -T web bash -lc \
   'PP_RELEASE_DRY_RUN=true \
    PP_RELEASE_STAGING_LIGHTWEIGHT=true \
    PP_RELEASE_REFRESH_VIEWS=false \
-   bundle exec rake pp:portal:release["WDPA_2025_09_DRYRUN"]'
+   bundle exec rake pp:portal:release["Sep2025_DRYRUN"]'
 ```
 
 Real swap (production-like):
@@ -66,7 +66,7 @@ docker compose exec -T web bash -lc \
   'PP_RELEASE_DRY_RUN=false \
    PP_RELEASE_STAGING_LIGHTWEIGHT=false \
    PP_RELEASE_REFRESH_VIEWS=true \
-   bundle exec rake pp:portal:release["WDPA_2025_09"]'
+   bundle exec rake pp:portal:release["Sep2025"]'
 ```
 
 Resume a release from a specific phase (e.g. import_core):
@@ -74,7 +74,7 @@ Resume a release from a specific phase (e.g. import_core):
 ```bash
 docker compose exec -T web bash -lc \
   'PP_RELEASE_START_AT=import_core \
-   bundle exec rake pp:portal:release["WDPA_2025_09"]'
+   bundle exec rake pp:portal:release["Sep2025"]'
 ```
 
 Run only certain phases:
@@ -82,7 +82,7 @@ Run only certain phases:
 ```bash
 docker compose exec -T web bash -lc \
   'PP_RELEASE_ONLY_PHASES=refresh_views,preflight \
-   bundle exec rake pp:portal:release["WDPA_2025_09_CHECK"]'
+   bundle exec rake pp:portal:release["Sep2025_CHECK"]'
 ```
 
 Status, abort & rollback helpers:
