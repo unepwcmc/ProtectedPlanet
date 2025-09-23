@@ -17,6 +17,7 @@ module PortalRelease
         if counts[:points].zero? && counts[:polygons].zero?
           raise 'Empty source views (both points and polygons are empty)'
         end
+
         # Optionally ensure sources present; comment this out if not required
         # raise 'Empty sources view' if counts[:sources].zero?
         check_geometry!
@@ -35,17 +36,19 @@ module PortalRelease
       def counts_snapshot
         conn = ActiveRecord::Base.connection
         {
-          points: conn.select_value('SELECT COUNT(*) FROM portal_standard_points').to_i,
-          polygons: conn.select_value('SELECT COUNT(*) FROM portal_standard_polygons').to_i,
-          sources: conn.select_value('SELECT COUNT(*) FROM portal_standard_sources').to_i
+          points: conn.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['points']}").to_i,
+          polygons: conn.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['polygons']}").to_i,
+          sources: conn.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['sources']}").to_i
         }
       end
 
       def check_geometry!
         conn = ActiveRecord::Base.connection
-        bad_points = conn.select_value("SELECT COUNT(*) FROM portal_standard_points WHERE wkb_geometry IS NOT NULL AND (ST_SRID(wkb_geometry) <> 4326 OR NOT ST_IsValid(wkb_geometry))").to_i
-        bad_polys  = conn.select_value("SELECT COUNT(*) FROM portal_standard_polygons WHERE wkb_geometry IS NOT NULL AND (ST_SRID(wkb_geometry) <> 4326 OR NOT ST_IsValid(wkb_geometry))").to_i
-        raise "Invalid geometry in views: points=#{bad_points}, polygons=#{bad_polys}" if bad_points.positive? || bad_polys.positive?
+        bad_points = conn.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['points']}   WHERE wkb_geometry IS NOT NULL AND (ST_SRID(wkb_geometry) <> 4326 OR NOT ST_IsValid(wkb_geometry))").to_i
+        bad_polys  = conn.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['polygons']} WHERE wkb_geometry IS NOT NULL AND (ST_SRID(wkb_geometry) <> 4326 OR NOT ST_IsValid(wkb_geometry))").to_i
+        return unless bad_points.positive? || bad_polys.positive?
+
+        raise "Invalid geometry in views: points=#{bad_points}, polygons=#{bad_polys}"
       end
 
       def check_duplicates!
@@ -53,7 +56,7 @@ module PortalRelease
         dup_points = conn.select_value(<<~SQL).to_i
           SELECT COUNT(*) FROM (
             SELECT site_id, site_pid, COUNT(*) c
-            FROM portal_standard_points
+            FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['points']}
             GROUP BY 1,2
             HAVING COUNT(*) > 1
           ) d
@@ -61,7 +64,7 @@ module PortalRelease
         dup_polys = conn.select_value(<<~SQL).to_i
           SELECT COUNT(*) FROM (
             SELECT site_id, site_pid, COUNT(*) c
-            FROM portal_standard_polygons
+            FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['polygons']}
             GROUP BY 1,2
             HAVING COUNT(*) > 1
           ) d
@@ -71,4 +74,3 @@ module PortalRelease
     end
   end
 end
-
