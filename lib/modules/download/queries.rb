@@ -4,7 +4,7 @@ module Download
       wkb_geometry
       site_id site_pid
       site_type name_eng name
-      desig_eng desig_type
+      desig desig_eng desig_type
       iucn_cat int_crit
       realm
       rep_m_area rep_area
@@ -53,7 +53,7 @@ module Download
       { select: "#{aliased_columns}", from: polygons_view }
     end
 
-    def self.mixed(with_type)
+    def self.build_query_for_downloads_view(with_type)
       add_type = ->(type) { %('#{type}' AS "TYPE", ) if with_type }
       points = for_points({ 13 => %(NULL AS "GIS_M_AREA"), 15 => %(NULL AS "GIS_AREA") })
 

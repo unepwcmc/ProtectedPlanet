@@ -79,12 +79,16 @@ module PortalRelease
       # Mirrors logic in Wdpa::Release#create_downloads_view but targets portal_* views.
       def create_portal_downloads_view!(log = nil)
         conn = ActiveRecord::Base.connection
-        downloads_view = 'portal_downloads_protected_areas'
-        create_query = "CREATE OR REPLACE VIEW #{downloads_view} AS "
-        as_query = Download::Queries.mixed(true)
+        downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']
 
-        conn.execute(create_query + "(SELECT #{as_query[:select]} FROM #{as_query[:from]})")
-        log&.event('portal_downloads_view_created', payload: { view: downloads_view })
+        conn.transaction do
+          # Drop the view first to avoid column name conflicts with CREATE OR REPLACE
+          conn.execute("DROP VIEW IF EXISTS #{downloads_view}")
+          as_query = Download::Queries.build_query_for_downloads_view(true)
+
+          conn.execute("CREATE VIEW #{downloads_view} AS (SELECT #{as_query[:select]} FROM #{as_query[:from]})")
+          log&.event('portal_downloads_view_created', payload: { view: downloads_view })
+        end
       end
     end
   end

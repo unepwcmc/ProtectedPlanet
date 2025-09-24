@@ -17,7 +17,8 @@ module Wdpa
           'int_crit_agg' => 'portal_int_crit_agg',
           'polygons' => 'portal_standard_polygons',
           'points' => 'portal_standard_points',
-          'sources' => 'portal_standard_sources'
+          'sources' => 'portal_standard_sources',
+          'downloads' => 'portal_downloads_protected_areas'
         }
 
         # Portal views that contain protected area data (for parcel logic)
