@@ -18,6 +18,7 @@ module Wdpa
           'polygons' => 'portal_standard_polygons',
           'points' => 'portal_standard_points',
           'sources' => 'portal_standard_sources',
+          # This view is created by PortalRelease::Preflight.create_portal_downloads_view! in app/services/portal_release/preflight.rb
           'downloads' => 'portal_downloads_protected_areas'
         }
 

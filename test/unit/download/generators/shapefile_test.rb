@@ -13,16 +13,16 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     shp_point_file_path = './all-shp-points.shp'
     shp_point_joined_files = './all-shp-points.shp ./all-shp-points.shx ./all-shp-points.dbf ./all-shp-points.prj ./all-shp-points.cpg'
 
-    shp_polygon_query = """
+    shp_polygon_query = "
       SELECT #{Download::Utils.download_columns}
-      FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
       WHERE \"TYPE\" = 'Polygon'
-    """.squish
-    shp_point_query = """
-      SELECT #{Download::Utils.download_columns(reject: [:gis_area, :gis_m_area])}
-      FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
+    ".squish
+    shp_point_query = "
+      SELECT #{Download::Utils.download_columns(reject: %i[gis_area gis_m_area])}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
       WHERE \"TYPE\" = 'Point'
-    """.squish
+    ".squish
 
     view_name_poly = 'temporary_view_123'
     Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_polygon_query).returns(view_name_poly)
@@ -31,13 +31,19 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
     ActiveRecord::Base.connection.stubs(:select_value).returns(3)
     poly_query = "SELECT * FROM #{view_name_poly}" << ' ORDER BY \""WDPAID"\" ASC'
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "#{poly_query} LIMIT 1 OFFSET 0").returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "#{poly_query} LIMIT 1 OFFSET 1").returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "#{poly_query} LIMIT 1 OFFSET 2").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path,
+      "#{poly_query} LIMIT 1 OFFSET 0").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path,
+      "#{poly_query} LIMIT 1 OFFSET 1").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path,
+      "#{poly_query} LIMIT 1 OFFSET 2").returns(true)
     point_query = "SELECT * FROM #{view_name_point}"
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "#{point_query} LIMIT 1 OFFSET 0").returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "#{point_query} LIMIT 1 OFFSET 1").returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "#{point_query} LIMIT 1 OFFSET 2").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path,
+      "#{point_query} LIMIT 1 OFFSET 0").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path,
+      "#{point_query} LIMIT 1 OFFSET 1").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path,
+      "#{point_query} LIMIT 1 OFFSET 2").returns(true)
 
     create_zip_command = "zip -j #{zip_file_path0} #{shp_polygon_joined_files} #{shp_point_joined_files}"
     Download::Generators::Shapefile.any_instance.expects(:system).with(create_zip_command).returns(true)
@@ -49,9 +55,8 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     merge_zip_command = "zip -j #{zip_file_path} #{zip_file_path0} #{zip_file_path1} #{zip_file_path2}"
     Download::Generators::Shapefile.any_instance.expects(:system).with(merge_zip_command).returns(true)
     update_zip_command = "zip -ru #{zip_file_path} *"
-    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
     Download::Generators::Shapefile.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
-
 
     Download::Generators::Shapefile.generate zip_file_path
   end
@@ -62,7 +67,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).returns(false)
 
     assert_equal false, Download::Generators::Shapefile.generate(''),
-      "Expected #generate to return false on failure"
+      'Expected #generate to return false on failure'
   end
 
   test '#generate returns false if the zip fails' do
@@ -72,7 +77,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Download::Generators::Shapefile.any_instance.expects(:system).returns(false)
 
     assert_equal false, Download::Generators::Shapefile.generate(''),
-      "Expected #generate to return false on failure"
+      'Expected #generate to return false on failure'
   end
 
   test '#generate removes non-zip files when finished' do
@@ -100,11 +105,11 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     ActiveRecord::Base.connection.stubs(:execute)
     ActiveRecord::Base.connection.stubs(:select_value).returns(3).times(6)
     Ogr::Postgres.expects(:export).times(6).returns(true)
-    Download::Generators::Shapefile.
-      any_instance.
-      expects(:system).
-      returns(true).
-      times(5) # number_of_pieces + 2 related to merge_files method
+    Download::Generators::Shapefile
+      .any_instance
+      .expects(:system)
+      .returns(true)
+      .times(5) # number_of_pieces + 2 related to merge_files method
 
     FileUtils.expects(:rm_rf).with(shp_polygons_paths).times(3)
     FileUtils.expects(:rm_rf).with(shp_points_paths).times(3)
@@ -127,20 +132,20 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     shp_point_file_path = './all-shp-points.shp'
     shp_point_joined_files = './all-shp-points.shp ./all-shp-points.shx ./all-shp-points.dbf ./all-shp-points.prj ./all-shp-points.cpg'
 
-    wdpa_ids = [1,2,3]
+    wdpa_ids = [1, 2, 3]
 
-    shp_polygon_query = """
+    shp_polygon_query = "
       SELECT #{Download::Utils.download_columns}
-      FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
       WHERE \"TYPE\" = 'Polygon'
-      AND \"WDPAID\" IN (1,2,3)
-    """.squish
-    shp_point_query = """
-      SELECT #{Download::Utils.download_columns(reject: [:gis_area, :gis_m_area])}
-      FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
+      AND \"SITE_ID\" IN (1,2,3)
+    ".squish
+    shp_point_query = "
+      SELECT #{Download::Utils.download_columns(reject: %i[gis_area gis_m_area])}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
       WHERE \"TYPE\" = 'Point'
-      AND \"WDPAID\" IN (1,2,3)
-    """.squish
+      AND \"SITE_ID\" IN (1,2,3)
+    ".squish
 
     view_name_poly = 'temporary_view_123'
     Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_polygon_query).returns(view_name_poly)
@@ -149,13 +154,19 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
     ActiveRecord::Base.connection.stubs(:select_value).returns(1).times(6)
     poly_query = "SELECT * FROM #{view_name_poly}" << ' ORDER BY \""WDPAID"\" ASC'
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "#{poly_query} LIMIT 1 OFFSET 0").returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "#{poly_query} LIMIT 1 OFFSET 1").returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path, "#{poly_query} LIMIT 1 OFFSET 2").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path,
+      "#{poly_query} LIMIT 1 OFFSET 0").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path,
+      "#{poly_query} LIMIT 1 OFFSET 1").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path,
+      "#{poly_query} LIMIT 1 OFFSET 2").returns(true)
     point_query = "SELECT * FROM #{view_name_point}"
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "#{point_query} LIMIT 1 OFFSET 0").returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "#{point_query} LIMIT 1 OFFSET 1").returns(true)
-    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path, "#{point_query} LIMIT 1 OFFSET 2").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path,
+      "#{point_query} LIMIT 1 OFFSET 0").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path,
+      "#{point_query} LIMIT 1 OFFSET 1").returns(true)
+    Ogr::Postgres.expects(:export).with(:shapefile, shp_point_file_path,
+      "#{point_query} LIMIT 1 OFFSET 2").returns(true)
 
     create_zip_command = "zip -j #{zip_file_path0} #{shp_polygon_joined_files} #{shp_point_joined_files}"
     Download::Generators::Shapefile.any_instance.expects(:system).with(create_zip_command).returns(true)
@@ -167,7 +178,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     merge_zip_command = "zip -j #{zip_file_path} #{zip_file_path0} #{zip_file_path1} #{zip_file_path2}"
     Download::Generators::Shapefile.any_instance.expects(:system).with(merge_zip_command).returns(true)
     update_zip_command = "zip -ru #{zip_file_path} *"
-    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
     Download::Generators::Shapefile.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
 
     Download::Generators::Shapefile.generate zip_file_path, wdpa_ids
@@ -188,6 +199,6 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Download::Generators::Base.any_instance.expects(:system)
     Ogr::Postgres.expects(:export).never
 
-    Download::Generators::Shapefile.generate('./none.zip', [1,2,3])
+    Download::Generators::Shapefile.generate('./none.zip', [1, 2, 3])
   end
 end

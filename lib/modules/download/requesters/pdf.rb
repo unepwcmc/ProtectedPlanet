@@ -1,6 +1,6 @@
 class Download::Requesters::Pdf < Download::Requesters::Base
   def initialize token
-    # token can be WDPAID or ISO
+    # token can be SITE_ID or ISO
     @token = token
   end
 

@@ -2,15 +2,15 @@ class Download::Generators::Gdb < Download::Generators::Base
   QUERY_CONDITIONS = {
     multipolygons: {
       select: Download::Utils.download_columns,
-      where: %{"TYPE" = 'Polygon'}
+      where: %("TYPE" = 'Polygon')
     },
-    multipoints:   {
-      select: Download::Utils.download_columns(reject: [:gis_area, :gis_m_area]),
-      where: %{"TYPE" = 'Point'}
+    multipoints: {
+      select: Download::Utils.download_columns(reject: %i[gis_area gis_m_area]),
+      where: %("TYPE" = 'Point')
     }
   }.freeze
 
-  def initialize zip_path, wdpa_ids
+  def initialize(zip_path, wdpa_ids)
     @path = File.dirname(zip_path)
     @filename = File.basename(zip_path, File.extname(zip_path))
     @wdpa_ids = wdpa_ids
@@ -29,18 +29,18 @@ class Download::Generators::Gdb < Download::Generators::Base
       system("zip -r #{zip_path} #{gdb_filename}", chdir: @path) and add_attachments
     end
   rescue Ogr::Postgres::ExportError
-    return false
+    false
   end
 
   private
 
-  def export_component name, props
+  def export_component(name, props)
     component_path = gdb_component
     view_name = create_view query(props[:select], props[:where])
 
-    return [] if ActiveRecord::Base.connection.select_value("""
+    return [] if ActiveRecord::Base.connection.select_value("
       SELECT COUNT(*) FROM #{view_name}
-    """).to_i.zero?
+    ").to_i.zero?
 
     export_success = Ogr::Postgres.export(
       :gdb,
@@ -50,12 +50,13 @@ class Download::Generators::Gdb < Download::Generators::Base
     )
 
     raise Ogr::Postgres::ExportError unless export_success
+
     component_path
   end
 
-  def query select, conditions=[]
+  def query(select, conditions = [])
     query = "SELECT #{select}"
-    query << " FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
+    query << " FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}"
     add_conditions(query, conditions).squish
   end
 
