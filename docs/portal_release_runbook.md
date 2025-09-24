@@ -166,7 +166,7 @@ Release flow control (app/services/portal_release/service.rb):
 - PP_RELEASE_STOP_AFTER — phase name to stop after
 - PP_RELEASE_ONLY_PHASES — comma‑separated list of phases to run
 - PP_RELEASE_DRY_RUN — true/false; if true, skip atomic swap and post‑swap VACUUM of live tables
-- PP_RELEASE_REFRESH_VIEWS — true/false; refresh portal MVs in the refresh_views phase
+- PP_RELEASE_REFRESH_VIEWS — true/false; refresh portal MVs in the refresh_views phase (defaults to true)
 
 Swap/rollback (app/services/portal_release/swap_manager.rb):
 - PP_RELEASE_ROLLBACK_TO — timestamp YYMMDDHHMM to rollback to (e.g. 2509121644)

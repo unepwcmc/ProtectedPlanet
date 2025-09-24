@@ -4,7 +4,9 @@ module PortalRelease
   class Preflight
     class << self
       def refresh_mvs!(log)
-        return unless ActiveModel::Type::Boolean.new.cast(ENV['PP_RELEASE_REFRESH_VIEWS'])
+        # Default to true if PP_RELEASE_REFRESH_VIEWS is not set
+        refresh_views = ENV['PP_RELEASE_REFRESH_VIEWS']
+        return unless ActiveModel::Type::Boolean.new.cast(refresh_views.nil? ? 'true' : refresh_views)
 
         Wdpa::Portal::Managers::ViewManager.refresh_materialized_views
         log.event('mvs_refreshed')
