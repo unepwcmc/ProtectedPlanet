@@ -33,7 +33,7 @@ class Aichi11Target < ActiveRecord::Base
     end
   end
 
-  def self.update_live_table
+  def self.update_live_table(notifier: nil)
     ActiveRecord::Base.transaction do
       record = first || new
       was_created = !record.persisted?
@@ -55,6 +55,9 @@ class Aichi11Target < ActiveRecord::Base
         record.save!
         Rails.logger.info 'Aichi11Target: Created new record from CSV data'
       end
+
+      Rails.logger.info "Aichi11Target #{was_created ? 'created' : 'updated'} successfully"
+      notifier&.phase("Aichi11Target #{was_created ? 'created' : 'updated'} successfully")
 
       Wdpa::Shared::ImporterBase::Base.build_result(1, [], [], {
         action: was_created ? 'created' : 'updated',

@@ -19,16 +19,16 @@ module PortalRelease
     end
 
     def started(label)
-      post(":rocket: WDPA release #{label} started")
+      # Just to make a seperator on the slack channel
+      post("----------------------------")
+      post(":rocket: WDPA release #{label} started (#{Rails.env})")
     end
 
     # Generic phase text notifier; keep for backwards compatibility
     # If counts is a nested structure, we summarise it to avoid overly long Slack messages.
     def phase(text, counts: nil, tables: nil)
       extra = []
-      if counts
-        extra << summarise(counts)
-      end
+      extra << summarise(counts) if counts
       extra << tables&.join(', ') if tables
       post(":information_source: #{text} #{extra.compact.join(' | ')}")
     end
@@ -36,6 +36,7 @@ module PortalRelease
     # Explicit phase-complete notifier (can be silenced via env)
     def phase_complete(phase, duration_s: nil)
       return unless phase_notifications_enabled?
+
       suffix = duration_s ? " in #{format('%.1f', duration_s)}s" : ''
       title, expl = friendly_phase_and_explainer(phase)
       expl_text = expl ? " — #{expl}" : ''
@@ -48,6 +49,18 @@ module PortalRelease
 
     def error(e, phase:)
       post(":rotating_light: Release #{@label} failed in #{phase}: #{e.message}")
+    end
+
+    def progress(processed_count, total_estimated = nil, _phase = 'import')
+      return unless Wdpa::Portal::Config::PortalImportConfig.progress_notifications_enabled?
+
+      message = "It is now importing #{format_number(processed_count)} out of #{format_number(total_estimated)} protected areas"
+      post(":hourglass_flowing_sand: #{message}")
+    end
+
+    def import_completion(processed_count, _phase = 'import')
+      message = "Import completed: #{format_number(processed_count)} protected areas processed"
+      post(":white_check_mark: #{message}")
     end
 
     # Rollback notifications
@@ -85,6 +98,10 @@ module PortalRelease
       ActiveModel::Type::Boolean.new.cast(ENV['PP_RELEASE_SLACK_VERBOSE'])
     end
 
+    def format_number(number)
+      number.to_s.reverse.gsub(/(\d{3})(?=.)/, '\1,').reverse
+    end
+
     # Turn a nested Hash/Array structure (like importer results) into a concise summary string.
     # - Hashes are flattened using dot notation (e.g., sources.imported_count=514)
     # - Arrays are replaced by their counts; in verbose mode we add a small preview
@@ -120,6 +137,7 @@ module PortalRelease
 
     def summarise_array(key, arr)
       return "#{key}=0" if arr.nil? || arr.empty?
+
       if verbose?
         preview_count = (ENV['PP_RELEASE_SLACK_PREVIEW_COUNT'] || 5).to_i
         preview = arr.first(preview_count).map { |e| e.to_s }.join(', ')
@@ -133,6 +151,7 @@ module PortalRelease
     # Format a human-readable Block Kit card for the core importer results.
     # Focuses on the most meaningful metrics, no dot-notation.
     public
+
     def import_core_summary(results)
       ok = !!value(results, :success)
       hard_errors = Array(value(results, :hard_errors)).size
@@ -141,7 +160,8 @@ module PortalRelease
       src_count = value(results, :sources, :imported_count)
       pa_attrs = value(results, :protected_areas, :protected_areas_attributes, :imported_count)
       pa_geom_areas   = value(results, :protected_areas, :protected_areas_geometries, :protected_areas, :imported_count)
-      pa_geom_parcels = value(results, :protected_areas, :protected_areas_geometries, :protected_area_parcels, :imported_count)
+      pa_geom_parcels = value(results, :protected_areas, :protected_areas_geometries, :protected_area_parcels,
+        :imported_count)
       fields_updated = value(results, :global_stats, :fields_updated)
 
       gl_imported   = value(results, :green_list, :imported_count)
@@ -154,8 +174,8 @@ module PortalRelease
 
       blocks = [
         { type: 'header', text: { type: 'plain_text', text: "Import core — #{status_text}", emoji: true } },
-        { type: 'context', elements: [ { type: 'mrkdwn', text: "Label: `#{@label}` · Hard errors: #{hard_errors}" } ] },
-        { type: 'section', text: { type: 'mrkdwn', text: "*Summary*" } },
+        { type: 'context', elements: [{ type: 'mrkdwn', text: "Label: `#{@label}` · Hard errors: #{hard_errors}" }] },
+        { type: 'section', text: { type: 'mrkdwn', text: '*Summary*' } },
         {
           type: 'section',
           fields: [
@@ -163,13 +183,15 @@ module PortalRelease
             { type: 'mrkdwn', text: "*Protected areas imported*\n#{pa_attrs || 0}" },
             { type: 'mrkdwn', text: "*Geometries (areas/parcels)*\n#{pa_geom_areas || 0} / #{pa_geom_parcels || 0}" },
             { type: 'mrkdwn', text: "*Global statistics fields updated*\n#{fields_updated || 0}" },
-            { type: 'mrkdwn', text: "*Green List*\n#{gl_imported || 0} (Not found #{gl_not_found}, Invalid #{gl_invalid}#{gl_duplicates.positive? ? ", Duplicates #{gl_duplicates}" : ''})" },
-            { type: 'mrkdwn', text: "*PAME*\n#{pame_imported || 0}#{pame_unrec.positive? ? " (Unrecognised #{pame_unrec})" : ''}" }
+            { type: 'mrkdwn',
+              text: "*Green List*\n#{gl_imported || 0} (Not found #{gl_not_found}, Invalid #{gl_invalid}#{gl_duplicates.positive? ? ", Duplicates #{gl_duplicates}" : ''})" },
+            { type: 'mrkdwn',
+              text: "*PAME*\n#{pame_imported || 0}#{pame_unrec.positive? ? " (Unrecognised #{pame_unrec})" : ''}" }
           ]
         }
       ]
 
-      post_json(text: "Import core completed", blocks: blocks)
+      post_json(text: 'Import core completed', blocks: blocks)
     end
 
     private
@@ -212,13 +234,8 @@ module PortalRelease
     # Safe dig that accepts symbol or string keys at each level
     def value(h, *keys)
       keys.reduce(h) do |acc, key|
-        if acc.is_a?(Hash)
-          acc[key] || acc[key.to_s]
-        else
-          nil
-        end
+        acc[key] || acc[key.to_s] if acc.is_a?(Hash)
       end
     end
   end
 end
-

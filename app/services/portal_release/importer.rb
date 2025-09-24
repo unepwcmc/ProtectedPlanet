@@ -2,9 +2,10 @@
 
 module PortalRelease
   class Importer
-    def initialize(log, label:)
+    def initialize(log, label:, notifier: nil)
       @log = log
       @label = label
+      @notifier = notifier
     end
 
     def run_core!
@@ -21,7 +22,8 @@ module PortalRelease
         only: import_only,
         skip: import_skip,
         sample: import_sample,
-        label: @label
+        label: @label,
+        notifier: @notifier
       )
 
       @log.event('import_core_finished', payload: { success: results[:success], hard_errors: results[:hard_errors] })
@@ -34,4 +36,3 @@ module PortalRelease
     end
   end
 end
-

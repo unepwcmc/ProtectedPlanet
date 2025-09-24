@@ -46,6 +46,17 @@ module Wdpa
           2
         end
 
+        # Progress notification settings for large imports
+        def self.progress_notification_interval
+          # Send progress update every N records
+          50000
+        end
+
+        def self.progress_notifications_enabled?
+          # Enable/disable progress notifications (default: true)
+          ENV['PP_IMPORT_PROGRESS_NOTIFICATIONS'] != 'false'
+        end
+
         # ============================================================================
         # TABLE DEFINITIONS
         # ============================================================================

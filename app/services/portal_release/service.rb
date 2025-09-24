@@ -5,8 +5,8 @@ module PortalRelease
     PHASES = %i[
       acquire_lock
       refresh_views
-      preflight
       create_portal_downloads_view
+      preflight
       build_staging
       import_core
       import_related
@@ -131,7 +131,7 @@ module PortalRelease
 
     def import_core
       @ctx[:phase] = 'import_core'
-      results = Importer.new(@log, label: @label).run_core!
+      results = Importer.new(@log, label: @label, notifier: @notify).run_core!
       @release.update!(state: 'importing', stats_json: (@release.stats_json || {}).merge({ importer: results }))
       # Human-readable Slack summary for core import
       @notify.import_core_summary(results) if results.respond_to?(:each)

@@ -4,7 +4,7 @@ module Wdpa
   module Portal
     module Importers
       class Source < Base
-        def self.import_to_staging
+        def self.import_to_staging(notifier: nil)
           adapter = Wdpa::Portal::Adapters::ImportViewsAdapter.new
           relation = adapter.sources_relation
 
@@ -20,8 +20,11 @@ module Wdpa
             Rails.logger.warn "Row processing failed: #{e.message}"
           end
 
+          Rails.logger.info 'Sources imported successfully'
+          notifier&.phase("#{imported_count} Sources imported")
           build_result(imported_count, soft_errors, [])
         rescue StandardError => e
+          notifier&.phase("Import failed: #{e.message}")
           failure_result("Import failed: #{e.message}", 0)
         end
       end

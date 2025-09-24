@@ -181,6 +181,7 @@ Importer (app/services/portal_release/importer.rb and dev tasks):
 - PP_IMPORT_SKIP — comma list of importers to skip
 - PP_IMPORT_SAMPLE — integer to limit batch sizes for sampling
 - PP_IMPORT_CHECKPOINTS_DISABLE — set to 'false' to enable checkpoint resume mode via dev tasks
+- PP_IMPORT_PROGRESS_NOTIFICATIONS — set to 'false' to silence per-import progress notifications (defaults to true)
 
 Logging & Slack (app/services/portal_release/*.rb):
 - PP_SLACK_WEBHOOK_URL — Slack Incoming Webhook for release notifications (start/phase complete/swap/fail/rollback)
@@ -225,6 +226,8 @@ docker compose exec -T web bash -lc 'tail -n 100 -f log/portal_release.log'
 export PP_SLACK_WEBHOOK_URL={{PP_SLACK_WEBHOOK_URL}}
 # Optional: reduce noise by disabling per‑phase posts
 export PP_RELEASE_SLACK_PHASE_COMPLETE=false
+# Optional: silence importer progress notifications (defaults to true)
+export PP_IMPORT_PROGRESS_NOTIFICATIONS=false
 ```
 
 3) Run a dry run and watch for start/phase/finish messages in Slack and the log file:

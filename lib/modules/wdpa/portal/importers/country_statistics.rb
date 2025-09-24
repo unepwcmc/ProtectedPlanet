@@ -12,12 +12,13 @@ module Wdpa
           ::Utilities::Files.latest_file_by_glob('lib/data/seeds/pame_country_statistics_*.csv')
         end
 
-        def self.import_to_staging
+        def self.import_to_staging(notifier: nil)
           country_result = import_country_statistics
           pame_result = import_pame_statistics
           geometry_result = Wdpa::Portal::Importers::CountriesProtectedAreaGeometryStatistics.import_to_staging
 
-          Rails.logger.info 'Country statistics import completed'
+          Rails.logger.info "Country PA geometry: #{geometry_result[:imported_count]}, Country general stats: #{country_result[:imported_count]}, Country PAME: #{pame_result[:imported_count]}"
+          notifier&.phase("#{geometry_result[:imported_count]} Country PA geometry, #{country_result[:imported_count]} Country general, #{pame_result[:imported_count]} Country PAME imported")
           {
             country_pa_geometry: geometry_result,
             country_general_stats: country_result,
