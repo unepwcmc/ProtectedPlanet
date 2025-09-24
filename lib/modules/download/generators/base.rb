@@ -5,18 +5,18 @@ class Download::Generators::Base
   SHAPEFILE_README_PATH = File.join(Rails.root, 'lib', 'data', 'documents', 'Shapefile_splitting_README.txt').freeze
   TMP_DOWNLOADS_PREFIX = 'tmp_downloads_'
 
-  def self.generate(zip_path, wdpa_ids = nil)
-    generator = new zip_path, wdpa_ids
+  def self.generate(zip_path, site_ids = nil)
+    generator = new zip_path, site_ids
     generator.generate
   end
 
-  def initialize(zip_path, wdpa_ids)
+  def initialize(zip_path, site_ids)
     @zip_path = zip_path
-    @wdpa_ids = wdpa_ids
+    @site_ids = site_ids
   end
 
   def generate
-    return false if @wdpa_ids.is_a?(Array) && @wdpa_ids.empty?
+    return false if @site_ids.is_a?(Array) && @site_ids.empty?
 
     clean_up_after { export and export_sources and zip }
   end
@@ -61,7 +61,7 @@ class Download::Generators::Base
 
     Ogr::Postgres.export :csv, sources_path, "
       SELECT #{Download::Utils.source_columns}
-      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['sources']}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['sources']}
     "
   end
 
@@ -83,7 +83,7 @@ class Download::Generators::Base
 
   def add_conditions(query, conditions)
     conditions = Array.wrap(conditions)
-    conditions << %{"SITE_ID" IN (#{@wdpa_ids.join(',')})} if @wdpa_ids.present?
+    conditions << %{"SITE_ID" IN (#{@site_ids.join(',')})} if @site_ids.present?
 
     query.tap do |q|
       q << " WHERE #{conditions.join(' AND ')}" if conditions.any?
@@ -108,11 +108,7 @@ class Download::Generators::Base
   attr_reader :zip_path
 
   def sources_path
-    File.join(File.dirname(zip_path), "WDPA_sources_#{current_wdpa_id}.csv")
-  end
-
-  def current_wdpa_id
-    Wdpa::S3.current_wdpa_identifier
+    File.join(File.dirname(zip_path), "WDPA_sources_#{Release.latest_succeeded_label}.csv")
   end
 
   def add_sources

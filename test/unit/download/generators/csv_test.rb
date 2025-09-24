@@ -79,7 +79,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     csv_file_path = './all-csv.csv'
     wdpa_file_path = 'WDPA_sources.csv'
 
-    wdpa_ids = [1, 2, 3]
+    site_ids = [1, 2, 3]
     query = "
       SELECT \"TYPE\", #{Download::Utils.download_columns}
       FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
@@ -104,7 +104,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
 
     Ogr::Postgres.expects(:export).with(:csv, csv_file_path, "SELECT * FROM #{view_name}").returns(true)
 
-    assert_equal true, Download::Generators::Csv.generate(zip_file_path, wdpa_ids),
+    assert_equal true, Download::Generators::Csv.generate(zip_file_path, site_ids),
       'Expected #generate to return true on success'
   end
 end

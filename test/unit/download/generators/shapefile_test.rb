@@ -132,7 +132,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     shp_point_file_path = './all-shp-points.shp'
     shp_point_joined_files = './all-shp-points.shp ./all-shp-points.shx ./all-shp-points.dbf ./all-shp-points.prj ./all-shp-points.cpg'
 
-    wdpa_ids = [1, 2, 3]
+    site_ids = [1, 2, 3]
 
     shp_polygon_query = "
       SELECT #{Download::Utils.download_columns}
@@ -181,10 +181,10 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
     Download::Generators::Shapefile.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
 
-    Download::Generators::Shapefile.generate zip_file_path, wdpa_ids
+    Download::Generators::Shapefile.generate zip_file_path, site_ids
   end
 
-  test '#generate, given a path and an empty array of wdpa_ids,
+  test '#generate, given a path and an empty array of site_ids,
    returns immediately' do
     Download::Generators::Base.any_instance.expects(:system).never
     Ogr::Postgres.expects(:export).never

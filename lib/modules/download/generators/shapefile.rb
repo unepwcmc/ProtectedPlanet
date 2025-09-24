@@ -13,16 +13,16 @@ class Download::Generators::Shapefile < Download::Generators::Base
     }
   }.freeze
 
-  def initialize(zip_path, wdpa_ids, number_of_pieces = 3)
+  def initialize(zip_path, site_ids, number_of_pieces = 3)
+    super(zip_path, site_ids)
     @path = File.dirname(zip_path)
     @filename = File.basename(zip_path, File.extname(zip_path))
-    @wdpa_ids = wdpa_ids
     # If there are 2 areas involved max, generate just one shp
-    @number_of_pieces = wdpa_ids.size > 2 || wdpa_ids.blank? ? number_of_pieces : 1
+    @number_of_pieces = site_ids.size > 2 || site_ids.blank? ? number_of_pieces : 1
   end
 
   def generate
-    return false if @wdpa_ids.is_a?(Array) && @wdpa_ids.empty?
+    return false if @site_ids.is_a?(Array) && @site_ids.empty?
 
     shapefile_paths = []
 

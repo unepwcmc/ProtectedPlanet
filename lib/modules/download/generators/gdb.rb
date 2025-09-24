@@ -10,14 +10,14 @@ class Download::Generators::Gdb < Download::Generators::Base
     }
   }.freeze
 
-  def initialize(zip_path, wdpa_ids)
+  def initialize(zip_path, site_ids)
+    super(zip_path, site_ids)
     @path = File.dirname(zip_path)
     @filename = File.basename(zip_path, File.extname(zip_path))
-    @wdpa_ids = wdpa_ids
   end
 
   def generate
-    return false if @wdpa_ids.is_a?(Array) && @wdpa_ids.empty?
+    return false if @site_ids.is_a?(Array) && @site_ids.empty?
 
     clean_up_after do
       QUERY_CONDITIONS.each do |name, props|
@@ -61,12 +61,12 @@ class Download::Generators::Gdb < Download::Generators::Base
   end
 
   def export_sources
-    _query = <<-SQL
+    query = <<-SQL
       SELECT #{Download::Utils.source_columns}
-      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['sources']}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['sources']}
     SQL
 
-    Ogr::Postgres.export(:gdb, gdb_component, _query, 'source')
+    Ogr::Postgres.export(:gdb, gdb_component, query, 'source')
   end
 
   def clean_up_after
