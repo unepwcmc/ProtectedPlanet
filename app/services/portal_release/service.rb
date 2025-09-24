@@ -48,6 +48,7 @@ module PortalRelease
       @ctx   = {}
 
       begin
+        validate_label_format!(@label)
         @release = Release.create!(label: label)
         @log     = ::PortalRelease::Logger.new(@release)
         @notify  = ::PortalRelease::Notifier.new(@release)
@@ -94,6 +95,15 @@ module PortalRelease
     end
 
     private
+
+    # Only "MMMYYYY" is allowed
+    LABEL_REGEX = /\A[A-Z][a-z]{2}\d{4}\z/.freeze
+
+    def validate_label_format!(label)
+      return if LABEL_REGEX.match?(label.to_s)
+
+      raise ArgumentError, "Invalid release label '#{label}'. Expected format MMMYYYY (e.g., Sep2025)."
+    end
 
     # Yields to the phase block and returns duration in seconds
     def time
