@@ -4,10 +4,10 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
   def setup
     # Mock the configuration
     @config = mock('PortalImportConfig')
-    @config.stubs(:portal_views).returns(%w[portal_standard_polygons portal_standard_points
+    @config.stubs(:portal_materialised_view_values).returns(%w[portal_standard_polygons portal_standard_points
       portal_standard_sources])
 
-    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_views).returns(@config.portal_views)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_materialised_view_values).returns(@config.portal_materialised_view_values)
   end
 
   test '.import validates views and imports data to staging tables' do

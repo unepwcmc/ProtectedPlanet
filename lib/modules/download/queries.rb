@@ -40,7 +40,7 @@ module Download
         aliased_columns.insert(position, name)
       end
 
-      points_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['points']
+      points_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['points']
       { select: "#{aliased_columns.join(',')}", from: points_view }
     end
 
@@ -49,7 +49,7 @@ module Download
         %(#{column} AS "#{column.upcase}")
       end.join(',')
 
-      polygons_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['polygons']
+      polygons_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['polygons']
       { select: "#{aliased_columns}", from: polygons_view }
     end
 

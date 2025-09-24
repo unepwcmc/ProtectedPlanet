@@ -32,9 +32,9 @@ module PortalRelease
 
     def source_counts
       {
-        points: c("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['points']}"),
-        polygons: c("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['polygons']}"),
-        sources: c("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['sources']}")
+        points: c("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['points']}"),
+        polygons: c("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['polygons']}"),
+        sources: c("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['sources']}")
       }
     end
 
