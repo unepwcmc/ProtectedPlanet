@@ -15,12 +15,12 @@ module PortalRelease
         @release = nil
         @label   = release_or_label.to_s
       end
-      @webhook = ENV['PP_SLACK_WEBHOOK_URL']
+      @webhook = ENV.fetch('PP_SLACK_WEBHOOK_URL', nil)
     end
 
     def started(label)
       # Just to make a seperator on the slack channel
-      post("----------------------------")
+      post('----------------------------')
       post(":rocket: WDPA release #{label} started (#{Rails.env})")
     end
 
@@ -37,7 +37,7 @@ module PortalRelease
     def phase_complete(phase, duration_s: nil)
       return unless phase_notifications_enabled?
 
-      suffix = duration_s ? " in #{format('%.1f', duration_s)}s" : ''
+      suffix = duration_s ? " in #{format_duration(duration_s)}" : ''
       title, expl = friendly_phase_and_explainer(phase)
       expl_text = expl ? " — #{expl}" : ''
       post(":white_check_mark: #{title} complete#{suffix}#{expl_text}")
@@ -89,17 +89,30 @@ module PortalRelease
     end
 
     def phase_notifications_enabled?
-      v = ENV['PP_RELEASE_SLACK_PHASE_COMPLETE']
+      v = ENV.fetch('PP_RELEASE_SLACK_PHASE_COMPLETE', nil)
       # default to true unless explicitly set to a false-ish value
       !(v && %w[0 false no off].include?(v.to_s.downcase))
     end
 
     def verbose?
-      ActiveModel::Type::Boolean.new.cast(ENV['PP_RELEASE_SLACK_VERBOSE'])
+      ActiveModel::Type::Boolean.new.cast(ENV.fetch('PP_RELEASE_SLACK_VERBOSE', nil))
     end
 
     def format_number(number)
       number.to_s.reverse.gsub(/(\d{3})(?=.)/, '\1,').reverse
+    end
+
+    def format_duration(seconds)
+      return "#{format('%.1f', seconds)}s" if seconds < 60
+
+      minutes = seconds / 60
+      return "#{format('%.1f', minutes)}m" if minutes < 60
+
+      hours = minutes / 60
+      return "#{format('%.1f', hours)}h" if hours < 24
+
+      days = hours / 24
+      "#{format('%.1f', days)}d"
     end
 
     # Turn a nested Hash/Array structure (like importer results) into a concise summary string.
