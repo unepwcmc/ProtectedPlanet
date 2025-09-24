@@ -219,7 +219,7 @@ module PortalRelease
       when 'finalise_swap'
         ['finalise_swap', 'Promote staging to live tables']
       when 'post_swap'
-        ['post_swap', 'Analyze tables and clear caches']
+        ['post_swap', 'Analyze tables and clear caches/reindex search index']
       when 'cleanup'
         ['cleanup', 'Retention and cleanup tasks']
       when 'cleanup_and_retention'

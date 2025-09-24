@@ -82,7 +82,9 @@ module PortalRelease
         downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']
 
         conn.transaction do
-          # Drop the view first to avoid column name conflicts with CREATE OR REPLACE
+          # Drop all temporary download views that depends on the downloads view
+          Download::Generators::Base.clean_tmp_download_views
+
           conn.execute("DROP VIEW IF EXISTS #{downloads_view}")
           as_query = Download::Queries.build_query_for_downloads_view(true)
 
