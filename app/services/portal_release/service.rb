@@ -103,7 +103,7 @@ module PortalRelease
     def validate_label_format!(label)
       return if LABEL_REGEX.match?(label.to_s)
 
-      raise ArgumentError, "Invalid release label '#{label}'. Expected format MMMYYYY (e.g., Sep2025)."
+      raise ArgumentError, "Invalid release label '#{label}'. Expected format MMMYYYY with English month abbreviation (e.g., Jan2025, Feb2025)."
     end
 
     # Yields to the phase block and returns duration in seconds

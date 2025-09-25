@@ -182,6 +182,7 @@ module Wdpa
           # --- CLEANUP & MONITORING ---
 
           def self.list_available_backups
+            Rails.logger.info 'ℹ️ The return array will be showing from latest to oldest timestamps.'
             service = new
             service.initialize_rollback_variables(nil)
             service.list_available_backups_impl
@@ -191,7 +192,6 @@ module Wdpa
             backup_tables = @connection.tables.select do |table|
               Wdpa::Portal::Config::PortalImportConfig.is_backup_table?(table)
             end
-            Rails.logger.info 'ℹ️ The return array will be showing from latest to oldest timestamps.'
             backup_tables
               .map { |table| Wdpa::Portal::Config::PortalImportConfig.extract_backup_timestamp(table) }
               .uniq
