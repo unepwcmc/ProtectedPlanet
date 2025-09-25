@@ -11,7 +11,7 @@ High-level flow:
 5) Import related: secondary/related data
 6) Validate + Manifest: sanity checks and publish per‑release manifest JSON
 7) Finalise swap: atomically swap staging → live (creates timestamped backups)
-8) Post‑swap: VACUUM ANALYZE live tables and clean old backups
+8) Post‑swap: VACUUM ANALYZE live tables, clear downloads/cache, rebuild search index, and clean old backups
 9) Retention: keep the most recent backups (configurable in code)
 
 Key tables (live):
@@ -49,6 +49,12 @@ docker compose ps
 
 ## Quick start examples
 
+Monthly release (production):
+
+```bash
+  bundle exec rake pp:portal:release
+```
+
 Dry run (no swap), lightweight staging, do NOT refresh portal MVs:
 
 ```bash
@@ -56,7 +62,7 @@ docker compose exec -T web bash -lc \
   'PP_RELEASE_DRY_RUN=true \
    PP_RELEASE_STAGING_LIGHTWEIGHT=true \
    PP_RELEASE_REFRESH_VIEWS=false \
-   bundle exec rake pp:portal:release["WDPA_2025_09_DRYRUN"]'
+   bundle exec rake pp:portal:release["Sep2025_DRYRUN"]'
 ```
 
 Real swap (production-like):
@@ -66,7 +72,7 @@ docker compose exec -T web bash -lc \
   'PP_RELEASE_DRY_RUN=false \
    PP_RELEASE_STAGING_LIGHTWEIGHT=false \
    PP_RELEASE_REFRESH_VIEWS=true \
-   bundle exec rake pp:portal:release["WDPA_2025_09"]'
+   bundle exec rake pp:portal:release["Sep2025"]'
 ```
 
 Resume a release from a specific phase (e.g. import_core):
@@ -74,7 +80,7 @@ Resume a release from a specific phase (e.g. import_core):
 ```bash
 docker compose exec -T web bash -lc \
   'PP_RELEASE_START_AT=import_core \
-   bundle exec rake pp:portal:release["WDPA_2025_09"]'
+   bundle exec rake pp:portal:release["Sep2025"]'
 ```
 
 Run only certain phases:
@@ -82,10 +88,10 @@ Run only certain phases:
 ```bash
 docker compose exec -T web bash -lc \
   'PP_RELEASE_ONLY_PHASES=refresh_views,preflight \
-   bundle exec rake pp:portal:release["WDPA_2025_09_CHECK"]'
+   bundle exec rake pp:portal:release["Sep2025_CHECK"]'
 ```
 
-Status, abort & rollback helpers:
+Status, abort & list_backups & rollback helpers:
 
 ```bash
 # Status JSON
@@ -94,9 +100,11 @@ docker compose exec -T web bash -lc 'bundle exec rake pp:portal:status'
 # Abort current in‑flight release (drops staging tables)
 docker compose exec -T web bash -lc 'bundle exec rake pp:portal:abort'
 
+# List available rollback timestamps (newest first)
+docker compose exec -T web bash -lc 'bundle exec rake pp:portal:list_backups'
+
 # Rollback to a backup timestamp (YYMMDDHHMM) — note quoting for zsh
-docker compose exec -T web bash -lc \
-  'PP_RELEASE_ROLLBACK_TO="2509121644" bundle exec rake pp:portal:rollback'
+docker compose exec -T web bash -lc 'bundle exec rake pp:portal:rollback["2509121644"]'
 ```
 
 ---
@@ -130,7 +138,7 @@ Phases (in order):
 - If PP_RELEASE_DRY_RUN=false, runs an atomic table swap staging→live; backups are created with bkYYMMDDHHMM_ prefix.
 
 9) post_swap
-- Non‑dry run: VACUUM ANALYZE live tables, cleanup backups beyond retention, and drop temporary download views (prefix: tmp_downloads_).
+- Non‑dry run: VACUUM ANALYZE live tables, clear downloads/cache, rebuild search index, and cleanup backups beyond retention.
 - Dry run: ANALYZE staging for visibility only.
 
 10) cleanup_and_retention
@@ -145,9 +153,11 @@ Phases (in order):
 ## Rake tasks
 
 Core tasks (lib/tasks/portal_release.rake):
-- pp:portal:release["LABEL"] — run the full release orchestration
+- pp:portal:release — run the full release orchestration
+  - If you need a different month then you can do pp:portal:release["Sep2025"]
 - pp:portal:abort — abort current in‑flight release (drops staging tables)
-- pp:portal:rollback — rollback to PP_RELEASE_ROLLBACK_TO (YYMMDDHHMM)
+- pp:portal:rollback["YYMMDDHHMM"] — rollback to specific backup timestamp
+- pp:portal:list_backups — list available backup timestamps (newest first)
 - pp:portal:status — print last release status JSON
 
 Developer helpers (lib/tasks/portal_dev_tools.rake):
@@ -159,6 +169,20 @@ Developer helpers (lib/tasks/portal_dev_tools.rake):
 
 ---
 
+## Rollback process
+
+The rollback process performs the following steps:
+
+1) **Validate timestamp exists** — checks that the provided backup timestamp is available
+2) **Atomic database rollback** — swaps live tables with backup tables using database transactions
+3) **Clear downloads/cache** — removes generated downloads from S3 and Redis cache
+4) **Rebuild search index** — recreates Elasticsearch index to reflect rolled-back data
+5) **Clear Rails cache** — ensures fresh data is served after rollback
+
+Rollback is considered successful if the database rollback completes, even if cleanup operations fail.
+
+---
+
 ## Environment flags (all optional unless noted)
 
 Release flow control (app/services/portal_release/service.rb):
@@ -166,10 +190,10 @@ Release flow control (app/services/portal_release/service.rb):
 - PP_RELEASE_STOP_AFTER — phase name to stop after
 - PP_RELEASE_ONLY_PHASES — comma‑separated list of phases to run
 - PP_RELEASE_DRY_RUN — true/false; if true, skip atomic swap and post‑swap VACUUM of live tables
-- PP_RELEASE_REFRESH_VIEWS — true/false; refresh portal MVs in the refresh_views phase
+- PP_RELEASE_REFRESH_VIEWS — true/false; refresh portal MVs in the refresh_views phase (defaults to true)
 
 Swap/rollback (app/services/portal_release/swap_manager.rb):
-- PP_RELEASE_ROLLBACK_TO — timestamp YYMMDDHHMM to rollback to (e.g. 2509121644)
+- No environment variables needed — rollback timestamp is passed as argument to rake task
 
 Staging table creation (lib/modules/wdpa/portal/managers/staging_table_manager.rb):
 - PP_RELEASE_STAGING_LIGHTWEIGHT — true to disable indexes and FKs during initial staging creation
@@ -181,6 +205,7 @@ Importer (app/services/portal_release/importer.rb and dev tasks):
 - PP_IMPORT_SKIP — comma list of importers to skip
 - PP_IMPORT_SAMPLE — integer to limit batch sizes for sampling
 - PP_IMPORT_CHECKPOINTS_DISABLE — set to 'false' to enable checkpoint resume mode via dev tasks
+- PP_IMPORT_PROGRESS_NOTIFICATIONS — set to 'false' to silence per-import progress notifications (defaults to true)
 
 Logging & Slack (app/services/portal_release/*.rb):
 - PP_SLACK_WEBHOOK_URL — Slack Incoming Webhook for release notifications (start/phase complete/swap/fail/rollback)
@@ -225,6 +250,8 @@ docker compose exec -T web bash -lc 'tail -n 100 -f log/portal_release.log'
 export PP_SLACK_WEBHOOK_URL={{PP_SLACK_WEBHOOK_URL}}
 # Optional: reduce noise by disabling per‑phase posts
 export PP_RELEASE_SLACK_PHASE_COMPLETE=false
+# Optional: silence importer progress notifications (defaults to true)
+export PP_IMPORT_PROGRESS_NOTIFICATIONS=false
 ```
 
 3) Run a dry run and watch for start/phase/finish messages in Slack and the log file:
@@ -278,8 +305,11 @@ docker compose exec -T web bash -lc \
 5) Rollback to a specific backup:
 
 ```bash
-docker compose exec -T web bash -lc \
-  'PP_RELEASE_ROLLBACK_TO="2509121644" bundle exec rake pp:portal:rollback'
+# First, list available timestamps
+docker compose exec -T web bash -lc 'bundle exec rake pp:portal:list_backups'
+
+# Then rollback to a specific timestamp
+docker compose exec -T web bash -lc 'bundle exec rake pp:portal:rollback["2509121644"]'
 ```
 
 Note: In zsh, always quote arguments with brackets or env values to avoid shell expansion.
@@ -290,6 +320,7 @@ Note: In zsh, always quote arguments with brackets or env values to avoid shell 
 ## Where to see results
 
 - Status: `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:status'`
+- Available rollback timestamps: `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:list_backups'`
 - Manifest: public/manifests/<LABEL>.json
 - Release record: via Rails console or DB (Release.last)
 - Logs: application logs (container stdout) include phase events
@@ -377,6 +408,9 @@ docker image prune -a -f
 
 - zsh bracket expansion errors
   - Always quote rake arguments with brackets: rake task['arg'] inside single quotes.
+
+- Rollback fails with "timestamp not found"
+  - Use `pp:portal:list_backups` to see available timestamps before attempting rollback.
 
 
 ---

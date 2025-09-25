@@ -6,10 +6,10 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
 
     # Mock the configuration
     @config = mock('PortalImportConfig')
-    @config.stubs(:portal_views).returns(%w[portal_standard_polygons portal_standard_points
+    @config.stubs(:portal_materialised_view_values).returns(%w[portal_standard_polygons portal_standard_points
       portal_standard_sources])
 
-    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_views).returns(@config.portal_views)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_materialised_view_values).returns(@config.portal_materialised_view_values)
   end
 
   def teardown
@@ -177,8 +177,8 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
 
   test 'refresh_materialized_views with empty view list' do
     # Mock empty view list
-    @config.stubs(:portal_views).returns([])
-    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_views).returns([])
+    @config.stubs(:portal_materialised_view_values).returns([])
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_materialised_view_values).returns([])
 
     # Should complete without error
     assert_nothing_raised do
@@ -188,8 +188,8 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
 
   test 'validate_required_views_exist with empty view list' do
     # Mock empty view list
-    @config.stubs(:portal_views).returns([])
-    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_views).returns([])
+    @config.stubs(:portal_materialised_view_values).returns([])
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_materialised_view_values).returns([])
 
     result = Wdpa::Portal::Managers::ViewManager.validate_required_views_exist
     assert result

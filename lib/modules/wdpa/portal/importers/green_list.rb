@@ -22,10 +22,14 @@ module Wdpa
   module Portal
     module Importers
       class GreenList < Base
-        def self.import_to_staging
+        def self.import_to_staging(notifier: nil)
           clear_existing_data
-          process_csv_file
+          results = process_csv_file
+
+          notifier&.phase("#{results[:imported_count]} Green list import completed")
+          results
         rescue StandardError => e
+          notifier&.phase("Import failed: #{e.message}")
           failure_result("Import failed: #{e.message}", 0)
         end
 

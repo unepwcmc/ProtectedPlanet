@@ -1,28 +1,28 @@
 class Download::Generators::Shapefile < Download::Generators::Base
   TYPE = 'shapefile'.freeze
-  SHAPEFILE_PARTS = ['shp', 'shx',  'dbf', 'prj', 'cpg']
+  SHAPEFILE_PARTS = %w[shp shx dbf prj cpg]
 
   QUERY_CONDITIONS = {
     polygons: {
       select: Download::Utils.download_columns,
-      where: %{"TYPE" = 'Polygon'}
+      where: %("TYPE" = 'Polygon')
     },
-    points:   {
-      select: Download::Utils.download_columns(reject: [:gis_area, :gis_m_area]),
-      where: %{"TYPE" = 'Point'}
+    points: {
+      select: Download::Utils.download_columns(reject: %i[gis_area gis_m_area]),
+      where: %("TYPE" = 'Point')
     }
   }.freeze
 
-  def initialize zip_path, wdpa_ids, number_of_pieces=3
+  def initialize(zip_path, site_ids, number_of_pieces = 3)
+    super(zip_path, site_ids)
     @path = File.dirname(zip_path)
     @filename = File.basename(zip_path, File.extname(zip_path))
-    @wdpa_ids = wdpa_ids
     # If there are 2 areas involved max, generate just one shp
-    @number_of_pieces = (wdpa_ids.size > 2 || wdpa_ids.blank?) ? number_of_pieces : 1
+    @number_of_pieces = site_ids.size > 2 || site_ids.blank? ? number_of_pieces : 1
   end
 
   def generate
-    return false if @wdpa_ids.is_a?(Array) && @wdpa_ids.empty?
+    return false if @site_ids.is_a?(Array) && @site_ids.empty?
 
     shapefile_paths = []
 
@@ -39,30 +39,30 @@ class Download::Generators::Shapefile < Download::Generators::Base
     end
     merge_files
   rescue Ogr::Postgres::ExportError
-    return false
+    false
   end
 
   private
 
-  def export_component name, props, piece_index
+  def export_component(name, props, piece_index)
     component_paths = shapefile_components(name)
     view_name = create_view query(props[:select], props[:where])
 
-    total_count = ActiveRecord::Base.connection.select_value("""
+    total_count = ActiveRecord::Base.connection.select_value("
       SELECT COUNT(*) FROM #{view_name}
-    """).to_i
+    ").to_i
 
     return [] if total_count.zero?
 
     limit = (total_count / @number_of_pieces.to_f).ceil
     offset = limit * piece_index
-    order_by = 'ORDER BY \""WDPAID"\" ASC'
-    sql = """
+    order_by = 'ORDER BY \""SITE_ID"\" ASC'
+    sql = "
       SELECT *
       FROM #{view_name}
       #{order_by if name.to_s == 'polygons'}
       LIMIT #{limit} OFFSET #{offset}
-    """.squish
+    ".squish
 
     export_success = Ogr::Postgres.export(
       :shapefile,
@@ -71,12 +71,13 @@ class Download::Generators::Shapefile < Download::Generators::Base
     )
 
     raise Ogr::Postgres::ExportError unless export_success
+
     component_paths
   end
 
-  def query select, conditions=[]
+  def query(select, conditions = [])
     query = "SELECT #{select}"
-    query << " FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}"
+    query << " FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}"
     add_conditions(query, conditions).squish
   end
 
@@ -93,27 +94,26 @@ class Download::Generators::Shapefile < Download::Generators::Base
     end
   end
 
-  def zip_path(index='')
-    _filename = index.present? ? "#{@filename}_#{index}" : @filename
-    File.join(@path, "#{_filename}.zip")
+  def zip_path(index = '')
+    base_filename = index.present? ? "#{@filename}_#{index}" : @filename
+    File.join(@path, "#{base_filename}.zip")
   end
 
-  def shapefile_components name
+  def shapefile_components(name)
     SHAPEFILE_PARTS.collect do |ext|
       File.join(@path, "#{@filename}-#{name}.#{ext}")
     end
   end
 
   def merge_files
-    range = (0..@number_of_pieces-1)
+    range = (0..@number_of_pieces - 1)
     files_paths = range.map { |i| zip_path(i) }.join(' ')
 
     system("zip -j #{zip_path} #{files_paths}") and
-    add_sources and
-    add_attachments and
-    add_shapefile_readme
+      add_sources and
+      add_attachments and
+      add_shapefile_readme
 
     range.each { |i| FileUtils.rm_rf(zip_path(i)) }
   end
-
 end

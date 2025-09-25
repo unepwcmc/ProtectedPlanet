@@ -1,5 +1,5 @@
 class DownloadWorkers::Search < DownloadWorkers::Base
-  def perform format, token, search_term, filters
+  def perform(format, token, search_term, filters)
     @format = format
     @token = token
     @search_term = search_term
@@ -8,7 +8,7 @@ class DownloadWorkers::Search < DownloadWorkers::Base
 
     while_generating(key(token, format)) do
       generate_download
-      {status: 'ready', filename: filename(ids_digest, format)}.to_json
+      { status: 'ready', filename: filename(ids_digest, format) }.to_json
     end
   end
 
@@ -19,17 +19,18 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   end
 
   def generate_download
-    Download.generate(@format, filename(ids_digest, @format), {wdpa_ids: protected_area_ids})
+    Download.generate(@format, filename(ids_digest, @format), { site_ids: protected_area_site_ids })
   end
 
   def ids_digest
     return "#{@token}" if @search_term.blank?
     return "#{@search_term}_#{@token}".gsub(' ', '_') if @filters_values.empty?
+
     filter = @filters_values.map { |f| f.to_s[0..9] }.join(',')
     "#{@search_term[0..11]}_#{filter}_#{@token}".gsub(' ', '_')
   end
 
-  def protected_area_ids
+  def protected_area_site_ids
     search.all_wdpa_ids
   end
 

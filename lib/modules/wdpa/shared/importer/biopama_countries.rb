@@ -11,7 +11,7 @@ module Wdpa
         # table separation.
         BIOPAMA_COUNTRIES_CSV = "#{Rails.root}/lib/data/seeds/biopama_countries_iso_codes.csv"
 
-        def self.update_live_table
+        def self.update_live_table(notifier: nil)
           countries_updated = 0
           countries_not_found = 0
           soft_errors = []
@@ -41,6 +41,7 @@ module Wdpa
           end
 
           Rails.logger.info "BIOPAMA countries import completed: #{countries_updated} updated, #{countries_not_found} not found"
+          notifier&.phase("BIOPAMA countries import completed: #{countries_updated} updated, #{countries_not_found} not found")
 
           Wdpa::Shared::ImporterBase::Base.build_result(countries_updated, soft_errors, [], {
             countries_updated: countries_updated,

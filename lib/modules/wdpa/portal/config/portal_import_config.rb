@@ -11,13 +11,17 @@ module Wdpa
         STAGING_PREFIX = 'staging_'
         BACKUP_PREFIX = 'bk'
 
-        PORTAL_VIEWS = {
+        PORTAL_MATERIALISED_VIEWS = {
           'iso3_agg' => 'portal_iso3_agg',
           'parent_iso3_agg' => 'portal_parent_iso3_agg',
           'int_crit_agg' => 'portal_int_crit_agg',
           'polygons' => 'portal_standard_polygons',
           'points' => 'portal_standard_points',
-          'sources' => 'portal_standard_sources'
+          'sources' => 'portal_standard_sources',
+        }
+        PORTAL_VIEWS = {
+        # This view is created by PortalRelease::Preflight.create_portal_downloads_view! in app/services/portal_release/preflight.rb
+          'downloads' => 'portal_downloads_protected_areas'
         }
 
         # Portal views that contain protected area data (for parcel logic)
@@ -44,6 +48,17 @@ module Wdpa
         # Number of backups to keep when cleaning up old backups
         def self.keep_backup_count
           2
+        end
+
+        # Progress notification settings for large imports
+        def self.progress_notification_interval
+          # Send progress update every N records
+          50000
+        end
+
+        def self.progress_notifications_enabled?
+          # Enable/disable progress notifications (default: true)
+          ENV['PP_IMPORT_PROGRESS_NOTIFICATIONS'] != 'false'
         end
 
         # ============================================================================
@@ -154,16 +169,16 @@ module Wdpa
         # PORTAL VIEW UTILITIES
         # ============================================================================
 
-        def self.portal_view_for(type)
-          PORTAL_VIEWS[type]
+        def self.portal_materialised_view_for(type)
+          PORTAL_MATERIALISED_VIEWS[type]
         end
 
-        def self.portal_views
-          PORTAL_VIEWS.values
+        def self.portal_materialised_view_values
+          PORTAL_MATERIALISED_VIEWS.values
         end
 
-        def self.portal_protected_area_views
-          PORTAL_PROTECTED_AREA_VIEW_TYPES.map { |type| PORTAL_VIEWS[type] }
+        def self.portal_protected_area_materialised_views
+          PORTAL_PROTECTED_AREA_VIEW_TYPES.map { |type| PORTAL_MATERIALISED_VIEWS[type] }
         end
 
         # ============================================================================

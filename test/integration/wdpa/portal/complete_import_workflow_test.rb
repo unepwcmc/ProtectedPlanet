@@ -108,7 +108,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
   def create_test_portal_views_with_new_fields
     # Create test portal views with comprehensive sample data including new fields
     ActiveRecord::Base.connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('polygons')} AS
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('polygons')} AS
       SELECT#{' '}
         1 as wdpaid,
         '1' as wdpa_pid,
@@ -148,7 +148,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
         'In Progress' as oecm_assessment,
         ST_GeomFromText('POLYGON((2 2, 3 2, 3 3, 2 3, 2 2))') as wkb_geometry;
 
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('points')} AS
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('points')} AS
       SELECT#{' '}
         4 as wdpaid,
         '4' as wdpa_pid,
@@ -175,7 +175,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
         'Pending' as oecm_assessment,
         ST_GeomFromText('POINT(1.5 1.5)') as wkb_geometry;
 
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('sources')} AS
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('sources')} AS
       SELECT#{' '}
         1 as id,
         'Test Source 1' as title,
@@ -195,7 +195,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
   def create_test_portal_views_with_invalid_realm
     # Create test portal views with invalid realm data
     ActiveRecord::Base.connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_view_for('polygons')} AS
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('polygons')} AS
       SELECT#{' '}
         1 as wdpaid,
         '1' as wdpa_pid,
@@ -229,7 +229,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
   end
 
   def drop_test_portal_views
-    Wdpa::Portal::Config::PortalImportConfig.portal_views.each do |view|
+    Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_values.each do |view|
       ActiveRecord::Base.connection.execute("DROP MATERIALIZED VIEW IF EXISTS #{view}")
     end
   end

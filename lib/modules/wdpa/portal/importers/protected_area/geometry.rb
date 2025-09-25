@@ -4,11 +4,13 @@ module Wdpa
   module Portal
     module Importers
       class ProtectedArea::Geometry < Base
-        def self.import_to_staging
+        def self.import_to_staging(notifier: nil)
           protected_areas_result = import_geometry_for_table(Staging::ProtectedArea.table_name)
           protected_area_parcels_result = import_geometry_for_table(Staging::ProtectedAreaParcel.table_name)
 
-          Rails.logger.info 'Geometry import completed'
+          Rails.logger.info "#{protected_areas_result[:imported_count]} PA Geometries imported ,#{protected_area_parcels_result[:imported_count]} PA parcel geometries imported"
+          notifier&.phase("#{protected_areas_result[:imported_count]} PA Geometries imported, #{protected_area_parcels_result[:imported_count]} PA parcel geometries imported")
+
           {
             protected_areas: protected_areas_result,
             protected_area_parcels: protected_area_parcels_result
@@ -24,7 +26,7 @@ module Wdpa
           soft_errors = []
           hard_errors = []
 
-          Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_views.each do |view|
+          Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_materialised_views.each do |view|
             if Wdpa::Portal::ImportRuntimeConfig.checkpoints? && Wdpa::Portal::Checkpoint.geometry_done?(view)
               Rails.logger.info "Skipping geometry update for #{view} (checkpoint)"
               next

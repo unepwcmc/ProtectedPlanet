@@ -34,7 +34,7 @@ module Wdpa
           Wdpa::Shared::ImporterBase::Base.failure_result("Global statistics import failed: #{e.message}", 0)
         end
 
-        def self.import_to_staging
+        def self.import_to_staging(notifier: nil)
           attrs = { singleton_guard: 0 }
           soft_errors = []
 
@@ -51,11 +51,13 @@ module Wdpa
           stats = Staging::GlobalStatistic.first_or_initialize(attrs)
           stats.update(attrs)
 
-          Rails.logger.info "Global statistics import completed: #{attrs.keys.length} fields updated"
           fields_updated = attrs.keys.length
+          Rails.logger.info "Global statistics import completed: #{fields_updated} fields updated"
+          notifier&.phase("#{fields_updated} Global statistics imported/updated.")
           Wdpa::Shared::ImporterBase::Base.build_result(fields_updated, soft_errors, [],
             { fields_updated: fields_updated })
         rescue StandardError => e
+          notifier&.phase("Global statistics import failed: #{e.message}")
           Rails.logger.error "Global statistics import failed: #{e.message}"
           Wdpa::Shared::ImporterBase::Base.failure_result("Global statistics import failed: #{e.message}", 0)
         end

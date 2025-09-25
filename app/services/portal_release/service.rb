@@ -5,6 +5,7 @@ module PortalRelease
     PHASES = %i[
       acquire_lock
       refresh_views
+      create_portal_downloads_view
       preflight
       build_staging
       import_core
@@ -23,9 +24,8 @@ module PortalRelease
       true
     end
 
-    def self.rollback_last!
-      # Allow rollback to post Slack notifications even without a Release context
-      SwapManager.new.rollback!
+    def self.rollback_to!(timestamp)
+      SwapManager.new.rollback_to!(timestamp)
     end
 
     def self.status_report
@@ -43,11 +43,20 @@ module PortalRelease
     end
 
     def initialize(label:)
-      @label   = label
-      @release = Release.create!(label: label)
-      @log     = ::PortalRelease::Logger.new(@release)
-      @notify  = ::PortalRelease::Notifier.new(@release)
-      @ctx     = {}
+      @label = label
+      @ctx   = {}
+
+      begin
+        validate_label_format!(@label)
+        @release = Release.create!(label: label)
+        @log     = ::PortalRelease::Logger.new(@release)
+        @notify  = ::PortalRelease::Notifier.new(@release)
+      rescue ActiveRecord::RecordInvalid => e
+        # Send error notification even without a release record
+        @notify = ::PortalRelease::Notifier.new(label)
+        @notify.error(e, phase: 'initialisation')
+        raise
+      end
     end
 
     def run!
@@ -86,6 +95,17 @@ module PortalRelease
 
     private
 
+    # Only "MMMYYYY" is allowed
+    # NOTE: This regex only matches English month abbreviations (Jan, Feb, Mar, etc.).
+    #       If other locales are required, update this validation accordingly.
+    LABEL_REGEX = /\A[A-Z][a-z]{2}\d{4}\z/.freeze
+
+    def validate_label_format!(label)
+      return if LABEL_REGEX.match?(label.to_s)
+
+      raise ArgumentError, "Invalid release label '#{label}'. Expected format MMMYYYY with English month abbreviation (e.g., Jan2025, Feb2025)."
+    end
+
     # Yields to the phase block and returns duration in seconds
     def time
       started = Process.clock_gettime(Process::CLOCK_MONOTONIC)
@@ -110,6 +130,11 @@ module PortalRelease
       Preflight.run!(@release, @log, @notify, @ctx)
     end
 
+    def create_portal_downloads_view
+      @ctx[:phase] = 'create_portal_downloads_view'
+      Preflight.create_portal_downloads_view!(@log)
+    end
+
     def build_staging
       @ctx[:phase] = 'build_staging'
       Staging.new(@log).prepare!
@@ -117,7 +142,7 @@ module PortalRelease
 
     def import_core
       @ctx[:phase] = 'import_core'
-      results = Importer.new(@log, label: @label).run_core!
+      results = Importer.new(@log, label: @label, notifier: @notify).run_core!
       @release.update!(state: 'importing', stats_json: (@release.stats_json || {}).merge({ importer: results }))
       # Human-readable Slack summary for core import
       @notify.import_core_summary(results) if results.respond_to?(:each)
@@ -157,4 +182,3 @@ module PortalRelease
     end
   end
 end
-

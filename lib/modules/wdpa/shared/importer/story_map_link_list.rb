@@ -12,11 +12,13 @@ module Wdpa
           result
         end
 
-        def self.import_to_staging
+        def self.import_to_staging(notifier: nil)
           result = import_data(Staging::ProtectedArea, Staging::StoryMapLink)
           Rails.logger.info "Staging story map links import completed: #{result[:links_processed]} processed, #{result[:links_created]} created, #{result[:sites_not_found]} sites not found"
+          notifier&.phase("Staging story map links import completed: #{result[:links_processed]} processed, #{result[:links_created]} created, #{result[:sites_not_found]} sites not found")
           result
         rescue StandardError => e
+          notifier&.phase("Story map links import failed: #{e.message}")
           Rails.logger.error "Story map links import failed: #{e.message}"
           Wdpa::Shared::ImporterBase::Base.failure_result("Setup error: #{e.message}", 0, {
             links_processed: 0,

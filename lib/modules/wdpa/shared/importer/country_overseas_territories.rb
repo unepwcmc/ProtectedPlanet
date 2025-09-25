@@ -12,11 +12,11 @@ module Wdpa
         # staging table separation.
         OVERSEAS_TERRITORIES_CSV = "#{Rails.root}/lib/data/seeds/overseas_territories.csv"
 
-        def self.update_live_table
-          new.update_live_table
+        def self.update_live_table(notifier: nil)
+          new.update_live_table(notifier: notifier)
         end
 
-        def update_live_table
+        def update_live_table(notifier: nil)
           csv = CSV.read(OVERSEAS_TERRITORIES_CSV)
           csv.shift
 
@@ -74,7 +74,8 @@ module Wdpa
             end
           end
 
-          Rails.logger.info "Overseas territories import completed: #{imported_count} relationships created"
+          Rails.logger.info "Overseas territories import completed: #{imported_count} relationships created, already added so skipped: #{info[:already_added_so_skipped]}"
+          notifier&.phase("Overseas territories import completed: #{imported_count} relationships created, already added so skipped: #{info[:already_added_so_skipped]}")
           if info[:parent_country_not_found].any?
             Rails.logger.info "info parent countries not found: #{info[:parent_country_not_found].join(', ')}"
           end

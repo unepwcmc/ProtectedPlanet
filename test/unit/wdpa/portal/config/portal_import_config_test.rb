@@ -10,7 +10,7 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
     assert_equal 'bk', Wdpa::Portal::Config::PortalImportConfig::BACKUP_PREFIX
   end
 
-  test 'portal_views contains all required views' do
+  test 'portal_materialised_view_values contains all required views' do
     expected_views = {
       'iso3_agg' => 'portal_iso3_agg',
       'parent_iso3_agg' => 'portal_parent_iso3_agg',
@@ -20,7 +20,7 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
       'sources' => 'portal_standard_sources'
     }
 
-    assert_equal expected_views, @config::PORTAL_VIEWS
+    assert_equal expected_views, @config::PORTAL_MATERIALISED_VIEWS
   end
 
   test 'portal_protected_area_view_types contains correct types' do
@@ -197,19 +197,19 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
     assert_nil result
   end
 
-  test 'portal_view_for returns correct view name' do
-    assert_equal 'portal_standard_polygons', @config.portal_view_for('polygons')
-    assert_equal 'portal_standard_points', @config.portal_view_for('points')
-    assert_equal 'portal_standard_sources', @config.portal_view_for('sources')
+  test 'portal_materialised_view_for returns correct view name' do
+    assert_equal 'portal_standard_polygons', @config.portal_materialised_view_for('polygons')
+    assert_equal 'portal_standard_points', @config.portal_materialised_view_for('points')
+    assert_equal 'portal_standard_sources', @config.portal_materialised_view_for('sources')
   end
 
-  test 'portal_view_for returns nil for unknown view type' do
-    result = @config.portal_view_for('unknown')
+  test 'portal_materialised_view_for returns nil for unknown view type' do
+    result = @config.portal_materialised_view_for('unknown')
     assert_nil result
   end
 
-  test 'portal_views returns all view names' do
-    result = @config.portal_views
+  test 'portal_materialised_view_values returns all view names' do
+    result = @config.portal_materialised_view_values
 
     expected = %w[
       portal_iso3_agg
@@ -223,8 +223,8 @@ class Wdpa::Portal::Config::PortalImportConfigTest < ActiveSupport::TestCase
     assert_equal expected, result
   end
 
-  test 'portal_protected_area_views returns protected area view names' do
-    result = @config.portal_protected_area_views
+  test 'portal_protected_area_materialised_views returns protected area view names' do
+    result = @config.portal_protected_area_materialised_views
 
     expected = %w[portal_standard_polygons portal_standard_points]
     assert_equal expected, result

@@ -26,7 +26,7 @@ module PortalRelease
       end
 
       # 2) Swap staging -> live unless dry-run
-      if ActiveModel::Type::Boolean.new.cast(ENV['PP_RELEASE_DRY_RUN'])
+      if ActiveModel::Type::Boolean.new.cast(ENV.fetch('PP_RELEASE_DRY_RUN', nil))
         log.event('swap_skipped', payload: { label: label, reason: 'dry_run' })
         notify.phase('Swap skipped (dry run)')
         return
@@ -43,24 +43,54 @@ module PortalRelease
       end
     end
 
-    def rollback!
-      timestamp = ENV['PP_RELEASE_ROLLBACK_TO']
-      unless timestamp && !timestamp.strip.empty?
-        Rails.logger.warn('Rollback requested but PP_RELEASE_ROLLBACK_TO not set (YYMMDDHHMM). Use rake pp:portal:rollback with env or set variable.')
-        return
+    def rollback_to!(timestamp)
+      notifier = ::PortalRelease::Notifier.new('PP_ROLLBACK')
+
+      # Validate that the timestamp exists before attempting rollback
+      available_backups = Wdpa::Portal::Services::Core::TableRollbackService.list_available_backups
+      unless available_backups.include?(timestamp)
+        error_msg = "Rollback timestamp '#{timestamp}' not found. Available timestamps: #{available_backups.join(', ')}"
+        Rails.logger.error(error_msg)
+        notifier.rollback_failed(StandardError.new(error_msg), timestamp)
+        raise ArgumentError, error_msg
       end
 
-      notifier = ::PortalRelease::Notifier.new('PP_ROLLBACK')
       begin
+        # 1. Perform the database rollback (CRITICAL - if this fails, rollback fails)
+        Rails.logger.info("Starting database rollback to backup #{timestamp}...")
         Wdpa::Portal::Services::Core::TableRollbackService.rollback_to_backup(timestamp)
-        Rails.logger.info("Rollback to backup #{timestamp} completed")
+        Rails.logger.info("Database rollback to backup #{timestamp} completed")
+
+        # Mark rollback as successful since database is restored
         notifier.rollback_ok(timestamp)
       rescue StandardError => e
-        Rails.logger.error("Rollback failed: #{e.class}: #{e.message}")
+        Rails.logger.error("Database rollback failed: #{e.class}: #{e.message}")
         notifier.rollback_failed(e, timestamp)
         raise
+      end
+
+      # 2. Perform cleanup operations (NON-CRITICAL - if these fail, rollback still succeeded)
+      begin
+        # Clear generated downloads (S3 + Redis cache)
+        Download.clear_downloads
+        Rails.logger.info('Downloads cleared successfully')
+
+        # Rebuild search index to reflect rolled-back data
+        Search::Index.delete
+        Search::Index.create
+        Rails.logger.info('Search index rebuilt successfully')
+
+        # Clear Rails cache to ensure fresh data is served
+        Rails.cache.clear
+        Rails.logger.info('Rails cache cleared successfully')
+
+        Rails.logger.info('Rollback cleanup completed successfully')
+        notifier.rollback_cleanup_okay(timestamp)
+      rescue StandardError => e
+        # Log cleanup failure but don't fail the rollback
+        Rails.logger.warn("Rollback cleanup failed (but database rollback succeeded): #{e.class}: #{e.message}")
+        notifier.rollback_cleanup_failed(e, timestamp)
       end
     end
   end
 end
-

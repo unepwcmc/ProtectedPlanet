@@ -50,7 +50,7 @@ rake pp:portal:rollback
 
 ## Configuration
 
-- `PP_RELEASE_REFRESH_VIEWS=true` to refresh Portal materialized views in preflight
+- `PP_RELEASE_REFRESH_VIEWS=true` to refresh Portal materialized views in preflight (defaults to true)
 - `PP_SLACK_WEBHOOK_URL` to enable Slack notifications (optional)
 
 ## Next (Step 4)
