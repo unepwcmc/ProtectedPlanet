@@ -96,6 +96,8 @@ module PortalRelease
     private
 
     # Only "MMMYYYY" is allowed
+    # NOTE: This regex only matches English month abbreviations (Jan, Feb, Mar, etc.).
+    #       If other locales are required, update this validation accordingly.
     LABEL_REGEX = /\A[A-Z][a-z]{2}\d{4}\z/.freeze
 
     def validate_label_format!(label)
