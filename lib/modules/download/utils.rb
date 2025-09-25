@@ -64,7 +64,7 @@ module Download
     # identifier is the search token if domain is search
     def self.filename(domain, identifier, format)
       basename = BASENAMES[identifier] || BASENAMES['default']
-      current_release_label = Release.latest_succeeded_label
+      current_release_label = Release.current_label
       "#{basename}_#{current_release_label}_Public".tap do |base_filename|
         base_filename << "_#{identifier}" if needs_identifier_suffix?(domain, identifier)
         base_filename << "_#{format}" if format.present? && format != 'gdb'
@@ -72,8 +72,8 @@ module Download
     end
 
     def self.extract_filters(filters)
-      _filters = Search::FilterParams.standardise(filters)
-      _filters.stringify_keys.slice(*::Search::ALLOWED_FILTERS.map(&:to_s))
+      filters = Search::FilterParams.standardise(filters)
+      filters.stringify_keys.slice(*::Search::ALLOWED_FILTERS.map(&:to_s))
     end
 
     def self.filters_dump(filters)

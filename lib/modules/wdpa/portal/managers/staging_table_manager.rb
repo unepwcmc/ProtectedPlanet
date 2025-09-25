@@ -5,25 +5,31 @@ module Wdpa
     module Managers
       class StagingTableManager
         def self.include_indexes?
-          lw = ActiveModel::Type::Boolean.new.cast(ENV['PP_RELEASE_STAGING_LIGHTWEIGHT'])
+          lw = ActiveModel::Type::Boolean.new.cast(ENV.fetch('PP_RELEASE_STAGING_LIGHTWEIGHT', nil))
           return false if lw
-          val = ENV['PP_RELEASE_STAGING_INCLUDE_INDEXES']
+
+          val = ENV.fetch('PP_RELEASE_STAGING_INCLUDE_INDEXES', nil)
           return true if val.nil?
+
           ActiveModel::Type::Boolean.new.cast(val)
         end
 
         def self.include_foreign_keys?
-          lw = ActiveModel::Type::Boolean.new.cast(ENV['PP_RELEASE_STAGING_LIGHTWEIGHT'])
+          lw = ActiveModel::Type::Boolean.new.cast(ENV.fetch('PP_RELEASE_STAGING_LIGHTWEIGHT', nil))
           return false if lw
-          val = ENV['PP_RELEASE_STAGING_INCLUDE_FKS']
+
+          val = ENV.fetch('PP_RELEASE_STAGING_INCLUDE_FKS', nil)
           return true if val.nil?
+
           ActiveModel::Type::Boolean.new.cast(val)
         end
 
         def self.create_staging_tables
-          drop_staging_tables
-          create_all_staging_tables
-          add_all_foreign_keys if include_foreign_keys?
+          ActiveRecord::Base.transaction do
+            drop_staging_tables
+            create_all_staging_tables
+            add_all_foreign_keys if include_foreign_keys?
+          end
         end
 
         def self.create_all_staging_tables
@@ -39,8 +45,10 @@ module Wdpa
         end
 
         def self.drop_staging_tables
-          tables_to_drop = get_tables_in_drop_order
-          tables_to_drop.each { |table_name| drop_table_safely(table_name) }
+          ActiveRecord::Base.transaction do
+            tables_to_drop = get_tables_in_drop_order
+            tables_to_drop.each { |table_name| drop_table_safely(table_name) }
+          end
         end
 
         def self.get_tables_in_drop_order
@@ -97,9 +105,7 @@ module Wdpa
           create_exact_table_copy(live_table_name, staging_table_name)
 
           # If we excluded FKs at creation time (via LIKE options), ensure none remain
-          unless include_foreign_keys?
-            drop_all_foreign_keys(staging_table_name)
-          end
+          drop_all_foreign_keys(staging_table_name) unless include_foreign_keys?
 
           # Ensure primary key constraint on staging has the expected staging_ prefix
           rename_primary_key_to_staging_prefix(live_table_name, staging_table_name)
@@ -224,12 +230,10 @@ module Wdpa
           connection = ActiveRecord::Base.connection
           existing_fks = connection.foreign_keys(staging_table_name)
           existing_fks.each do |fk|
-            begin
-              connection.remove_foreign_key(staging_table_name, name: fk.name)
-              Rails.logger.debug "Removed FK from #{staging_table_name}: #{fk.name}"
-            rescue StandardError => e
-              Rails.logger.warn "Failed to remove FK #{fk.name} from #{staging_table_name}: #{e.message}"
-            end
+            connection.remove_foreign_key(staging_table_name, name: fk.name)
+            Rails.logger.debug "Removed FK from #{staging_table_name}: #{fk.name}"
+          rescue StandardError => e
+            Rails.logger.warn "Failed to remove FK #{fk.name} from #{staging_table_name}: #{e.message}"
           end
         end
 

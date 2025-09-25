@@ -173,13 +173,17 @@ Developer helpers (lib/tasks/portal_dev_tools.rake):
 
 The rollback process performs the following steps:
 
-1) **Validate timestamp exists** — checks that the provided backup timestamp is available
-2) **Atomic database rollback** — swaps live tables with backup tables using database transactions
-3) **Clear downloads/cache** — removes generated downloads from S3 and Redis cache
-4) **Rebuild search index** — recreates Elasticsearch index to reflect rolled-back data
-5) **Clear Rails cache** — ensures fresh data is served after rollback
+1) **Check for active release** — prevents rollback while a release is in progress (safety check)
+2) **Validate timestamp exists** — checks that the provided backup timestamp is available
+3) **Atomic database rollback** — swaps live tables with backup tables using database transactions
+4) **Update current release** — automatically makes the release corresponding to the backup timestamp the current active release
+5) **Clear downloads/cache** — removes generated downloads from S3 and Redis cache
+6) **Rebuild search index** — recreates Elasticsearch index to reflect rolled-back data
+7) **Clear Rails cache** — ensures fresh data is served after rollback
 
 Rollback is considered successful if the database rollback completes, even if cleanup operations fail.
+
+**Safety Note:** Rollback will be blocked if a release is currently running. Use `pp:portal:abort` to stop an active release before attempting rollback.
 
 ---
 
@@ -309,7 +313,15 @@ docker compose exec -T web bash -lc \
 docker compose exec -T web bash -lc 'bundle exec rake pp:portal:list_backups'
 
 # Then rollback to a specific timestamp
-docker compose exec -T web bash -lc 'bundle exec rake pp:portal:rollback["2509121644"]'
+docker compose exec -T web bash -lc 'bundle exec rake pp:portal:rollback["2509251325"]'
+```
+
+6) Post-rollback data fixes and resume:
+
+```bash
+# Resume release from import_related phase
+docker compose exec -T web bash -lc \
+  'PP_RELEASE_START_AT=import_related bundle exec rake pp:portal:release'
 ```
 
 Note: In zsh, always quote arguments with brackets or env values to avoid shell expansion.

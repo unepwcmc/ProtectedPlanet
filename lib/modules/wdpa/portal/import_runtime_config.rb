@@ -5,13 +5,14 @@ module Wdpa
     # Runtime config for importer execution, populated from args/env by Wdpa::Portal::Importer
     module ImportRuntimeConfig
       class << self
-        attr_accessor :only, :skip, :sample, :label, :checkpoints_enabled
+        attr_accessor :only, :skip, :sample, :label, :release_id, :checkpoints_enabled
 
         def reset!
           self.only = nil
           self.skip = nil
           self.sample = nil
           self.label = nil
+          self.release_id = nil
           self.checkpoints_enabled = true
         end
 
@@ -34,6 +35,7 @@ module Wdpa
         def sample_limit
           l = sample
           return nil if l.nil? || l.to_s.strip.empty?
+
           l.to_i > 0 ? l.to_i : nil
         end
 
@@ -44,4 +46,3 @@ module Wdpa
     end
   end
 end
-

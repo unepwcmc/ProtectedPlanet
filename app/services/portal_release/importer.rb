@@ -2,9 +2,10 @@
 
 module PortalRelease
   class Importer
-    def initialize(log, label:, notifier: nil)
+    def initialize(log, label:, release_id: nil, notifier: nil)
       @log = log
       @label = label
+      @release_id = release_id
       @notifier = notifier
     end
 
@@ -13,9 +14,9 @@ module PortalRelease
 
       # Step 2 orchestrator handles all staging imports and returns a result hash
       # Wire through runtime flags for importer filtering and checkpoints
-      import_only = ENV['PP_IMPORT_ONLY']
-      import_skip = ENV['PP_IMPORT_SKIP']
-      import_sample = ENV['PP_IMPORT_SAMPLE']
+      import_only = ENV.fetch('PP_IMPORT_ONLY', nil)
+      import_skip = ENV.fetch('PP_IMPORT_SKIP', nil)
+      import_sample = ENV.fetch('PP_IMPORT_SAMPLE', nil)
 
       results = Wdpa::Portal::Importer.import(
         refresh_materialized_views: false,
@@ -23,14 +24,13 @@ module PortalRelease
         skip: import_skip,
         sample: import_sample,
         label: @label,
+        release_id: @release_id,
         notifier: @notifier
       )
 
       @log.event('import_core_finished', payload: { success: results[:success], hard_errors: results[:hard_errors] })
 
-      unless results[:success]
-        raise "Importer reported hard errors: #{Array(results[:hard_errors]).join('; ')}"
-      end
+      raise "Importer reported hard errors: #{Array(results[:hard_errors]).join('; ')}" unless results[:success]
 
       results
     end

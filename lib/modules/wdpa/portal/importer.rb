@@ -3,7 +3,7 @@
 module Wdpa
   module Portal
     class Importer < Wdpa::Shared::ImporterBase::Base
-      def self.import(refresh_materialized_views: true, only: nil, skip: nil, sample: nil, label: nil, notifier: nil)
+      def self.import(refresh_materialized_views: true, only: nil, skip: nil, sample: nil, label: nil, release_id: nil, notifier: nil)
         notifier&.phase('Start running all importers.')
         unless Wdpa::Portal::Managers::ViewManager.validate_required_views_exist
           error_msg = 'Required materialized views do not exist.'
@@ -16,6 +16,7 @@ module Wdpa
         Wdpa::Portal::ImportRuntimeConfig.skip = skip || ENV.fetch('PP_IMPORT_SKIP', nil)
         Wdpa::Portal::ImportRuntimeConfig.sample = sample || ENV.fetch('PP_IMPORT_SAMPLE', nil)
         Wdpa::Portal::ImportRuntimeConfig.label = label || ENV.fetch('PP_RELEASE_LABEL', nil)
+        Wdpa::Portal::ImportRuntimeConfig.release_id = release_id
         Wdpa::Portal::ImportRuntimeConfig.checkpoints_enabled = (ENV['PP_IMPORT_CHECKPOINTS_DISABLE'] != 'true')
 
         # Refresh materialized views to ensure latest data (only if refresh_views is true)

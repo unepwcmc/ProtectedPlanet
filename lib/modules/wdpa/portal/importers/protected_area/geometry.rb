@@ -64,11 +64,14 @@ module Wdpa
               AND v.wkb_geometry IS NOT NULL
           SQL
 
-          Rails.logger.debug "Executing geometry update: #{update_query}"
-          result = connection.execute(update_query)
+          imported_count = 0
+          connection.transaction do
+            Rails.logger.debug "Executing geometry update: #{update_query}"
+            result = connection.execute(update_query)
+            imported_count = result.cmd_tuples
+          end
 
-          Rails.logger.info "#{target_table} from #{view}: #{result.cmd_tuples} records"
-          imported_count = result.cmd_tuples
+          Rails.logger.info "#{target_table} from #{view}: #{imported_count} records"
           build_result(imported_count, [], [], { number_of_records_updated: imported_count })
         end
 

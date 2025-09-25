@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # Simple checkpoint store for Step 2 importers.
-# Uses the current Release (by label) if available to persist checkpoints in stats_json.
-# Falls back to a tmp JSON file if no label is provided.
+# Uses the current Release (by release_id) if available to persist checkpoints in stats_json.
+# Falls back to a tmp JSON file if no release_id is provided.
 module Wdpa
   module Portal
     module Checkpoint
@@ -65,9 +65,9 @@ module Wdpa
         private
 
         def current_release
-          label = Wdpa::Portal::ImportRuntimeConfig.label
-          return nil if label.nil? || label.to_s.strip.empty?
-          Release.find_by(label: label)
+          release_id = Wdpa::Portal::ImportRuntimeConfig.release_id
+          return nil if release_id.nil?
+          Release.find_by(id: release_id)
         rescue StandardError
           nil
         end

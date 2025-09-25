@@ -110,7 +110,7 @@ class Download::Generators::Base
   attr_reader :zip_path
 
   def sources_path
-    File.join(File.dirname(zip_path), "WDPA_sources_#{Release.latest_succeeded_label}.csv")
+    File.join(File.dirname(zip_path), "WDPA_sources_#{Release.current_label}.csv")
   end
 
   def add_sources
