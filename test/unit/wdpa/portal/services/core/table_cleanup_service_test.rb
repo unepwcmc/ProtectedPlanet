@@ -119,7 +119,7 @@ class Wdpa::Portal::Services::Core::TableCleanupServiceTest < ActiveSupport::Tes
     assert_equal expected, result
   end
 
-  test 'cleanup_old_backups_impl keeps specified number of backups' do
+  test 'cleanup_old_backups keeps specified number of backups' do
     @service.initialize_cleanup_variables
     
     # Create test backup tables
@@ -140,11 +140,11 @@ class Wdpa::Portal::Services::Core::TableCleanupServiceTest < ActiveSupport::Tes
     # Mock transaction
     @connection.expects(:transaction).yields
     
-    result = @service.cleanup_old_backups_impl(2)
+    result = @service.cleanup_old_backups(2)
     assert_equal 1, result
   end
 
-  test 'cleanup_old_backups_impl keeps all backups when under limit' do
+  test 'cleanup_old_backups keeps all backups when under limit' do
     @service.initialize_cleanup_variables
     
     # Create only one backup
@@ -159,7 +159,7 @@ class Wdpa::Portal::Services::Core::TableCleanupServiceTest < ActiveSupport::Tes
     # Mock transaction
     @connection.expects(:transaction).yields
     
-    result = @service.cleanup_old_backups_impl(2)
+    result = @service.cleanup_old_backups(2)
     assert_equal 0, result
   end
 
@@ -198,7 +198,7 @@ class Wdpa::Portal::Services::Core::TableCleanupServiceTest < ActiveSupport::Tes
     # Mock transaction
     @connection.expects(:transaction).yields
     
-    result = @service.cleanup_old_backups_impl(1)
+    result = @service.cleanup_old_backups(1)
     assert_equal 1, result
   end
 
@@ -215,21 +215,12 @@ class Wdpa::Portal::Services::Core::TableCleanupServiceTest < ActiveSupport::Tes
     service_instance.expects(:initialize_cleanup_variables)
     service_instance.expects(:prepare_for_cleanup)
     service_instance.expects(:perform_vacuum_operations)
-    service_instance.expects(:cleanup_old_backups_impl).with(2)
+    service_instance.expects(:cleanup_old_backups).with(2)
     service_instance.expects(:restore_after_cleanup)
     
     Wdpa::Portal::Services::Core::TableCleanupService.cleanup_after_swap
   end
 
-  test 'cleanup_old_backups runs cleanup workflow' do
-    service_instance = mock('service_instance')
-    Wdpa::Portal::Services::Core::TableCleanupService.expects(:new).returns(service_instance)
-    
-    service_instance.expects(:initialize_cleanup_variables)
-    service_instance.expects(:cleanup_old_backups_impl).with(3)
-    
-    Wdpa::Portal::Services::Core::TableCleanupService.cleanup_old_backups(3)
-  end
 
   test 'cleanup_after_swap handles errors gracefully' do
     service_instance = mock('service_instance')
