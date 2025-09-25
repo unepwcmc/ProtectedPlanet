@@ -61,8 +61,8 @@ module PortalRelease
 
     def run!
       phases = PHASES
-      start_at = (ENV['PP_RELEASE_START_AT'] || ENV['PP_RELEASE_SKIP_TO']).to_s.strip
-      stop_after = (ENV['PP_RELEASE_STOP_AFTER'] || ENV['PP_RELEASE_SKIP_AFTER']).to_s.strip
+      start_at = (ENV['PP_RELEASE_START_AT'] || ENV.fetch('PP_RELEASE_SKIP_TO', nil)).to_s.strip
+      stop_after = (ENV['PP_RELEASE_STOP_AFTER'] || ENV.fetch('PP_RELEASE_SKIP_AFTER', nil)).to_s.strip
       only_phases = (ENV['PP_RELEASE_ONLY_PHASES'] || '').split(',').map(&:strip).reject(&:empty?)
 
       phases = phases.select { |p| only_phases.include?(p.to_s) } unless only_phases.empty?
@@ -103,7 +103,8 @@ module PortalRelease
     def validate_label_format!(label)
       return if LABEL_REGEX.match?(label.to_s)
 
-      raise ArgumentError, "Invalid release label '#{label}'. Expected format MMMYYYY with English month abbreviation (e.g., Jan2025, Feb2025)."
+      raise ArgumentError,
+        "Invalid release label '#{label}'. Expected format MMMYYYY with English month abbreviation (e.g., Jan2025, Feb2025)."
     end
 
     # Yields to the phase block and returns duration in seconds
@@ -142,7 +143,7 @@ module PortalRelease
 
     def import_core
       @ctx[:phase] = 'import_core'
-      results = Importer.new(@log, label: @label, notifier: @notify).run_core!
+      results = Importer.new(@log, label: @label, release_id: @release.id, notifier: @notify).run_core!
       @release.update!(state: 'importing', stats_json: (@release.stats_json || {}).merge({ importer: results }))
       # Human-readable Slack summary for core import
       @notify.import_core_summary(results) if results.respond_to?(:each)
@@ -161,7 +162,7 @@ module PortalRelease
 
     def finalise_swap
       @ctx[:phase] = 'finalise_swap'
-      SwapManager.new.finalise!(label: @label, log: @log, notify: @notify)
+      SwapManager.new.finalise!(release: @release, log: @log, notify: @notify)
       @release.update!(state: 'swapped')
     end
 

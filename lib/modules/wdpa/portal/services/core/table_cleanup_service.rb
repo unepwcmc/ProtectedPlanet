@@ -20,20 +20,19 @@ module Wdpa
 
               # Also cleanup old backups after swap
               Rails.logger.info '🧹 Cleaning up old backups after swap...'
-              service.cleanup_old_backups_impl(Wdpa::Portal::Config::PortalImportConfig.keep_backup_count)
+              service.cleanup_old_backups(Wdpa::Portal::Config::PortalImportConfig.keep_backup_count)
               Rails.logger.info '✅ Backup cleanup completed'
+
+              # Cleanup orphaned release timestamps
+              Rails.logger.info '🧹 Cleaning up orphaned release timestamps...'
+              service.cleanup_orphaned_release_timestamps
+              Rails.logger.info '✅ Release timestamp cleanup completed'
             rescue StandardError => e
               Rails.logger.error "❌ Table cleanup failed: #{e.message}"
               raise
             ensure
               service.restore_after_cleanup
             end
-          end
-
-          def self.cleanup_old_backups(keep_count)
-            service = new
-            service.initialize_cleanup_variables
-            service.cleanup_old_backups_impl(keep_count)
           end
 
           # --- INITIALIZATION ---
@@ -82,7 +81,7 @@ module Wdpa
 
           # --- BACKUP CLEANUP METHODS ---
 
-          def cleanup_old_backups_impl(keep_count)
+          def cleanup_old_backups(keep_count)
             Rails.logger.info "🧹 Cleaning up backup tables, keeping the last #{keep_count} backups..."
 
             @connection.transaction do
@@ -153,6 +152,26 @@ module Wdpa
 
             # Sort by deletion order and return backup table names (compatible with older Ruby versions)
             deletion_order.map { |original_table| backup_table_map[original_table] }.compact
+          end
+
+          # --- RELEASE TIMESTAMP CLEANUP METHODS ---
+
+          def cleanup_orphaned_release_timestamps
+            Rails.logger.info '🧹 Cleaning up orphaned backup timestamps in releases table...'
+
+            @connection.transaction do
+              available_timestamps = Wdpa::Portal::Services::Core::TableRollbackService.list_available_backups
+
+              # Convert timestamp strings to datetime for database comparison
+              available_datetimes = available_timestamps.map do |timestamp_string|
+                ::Release.parse_backup_timestamp_string(timestamp_string)
+              end.compact
+
+              # Find releases with backup timestamps not in the available list
+              orphaned_releases = ::Release.where.not(backup_timestamp: nil)
+                .where.not(backup_timestamp: available_datetimes)
+              orphaned_releases.update_all(backup_timestamp: nil)
+            end
           end
         end
       end

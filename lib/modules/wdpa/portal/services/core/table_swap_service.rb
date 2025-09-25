@@ -32,6 +32,9 @@ module Wdpa
             ensure
               service.restore_after_swap
             end
+
+            # Return the backup timestamp for use by the release system
+            service.instance_variable_get(:@backup_timestamp)
           end
 
           # --- INITIALIZATION ---
@@ -42,7 +45,7 @@ module Wdpa
 
           def initialize_swap_variables
             Rails.logger.info '🚀 Starting table swap: staging → live...'
-            @backup_timestamp = Time.current.strftime('%y%m%d%H%M')
+            @backup_timestamp = Release.current_backup_timestamp_string
             @swapped_tables = []
             @connection = ActiveRecord::Base.connection
             @index_cache = {}
