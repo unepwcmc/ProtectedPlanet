@@ -22,7 +22,7 @@ namespace :pp do
         backups
       end
     rescue StandardError => e
-      Rails.logger.warn 'Error listing backups: #{e.message}'
+      Rails.logger.warn "Error listing backups: #{e.message}"
       exit 1
     end
 
