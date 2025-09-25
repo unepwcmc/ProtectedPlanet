@@ -85,7 +85,12 @@ class Download::Generators::Base
     conditions = Array.wrap(conditions)
     if @site_ids.present?
       sanitized_ids = @site_ids.select { |id| id.to_s =~ /\A\d+\z/ }.map(&:to_i)
-      conditions << %{"SITE_ID" IN (#{sanitized_ids.join(',')})} unless sanitized_ids.empty?
+      if sanitized_ids.empty?
+        # If site_ids were provided but none are valid, ensure no rows are returned
+        conditions << "1=0"
+      else
+        conditions << %{"SITE_ID" IN (#{sanitized_ids.join(',')})}
+      end
     end
     query.tap do |q|
       q << " WHERE #{conditions.join(' AND ')}" if conditions.any?
