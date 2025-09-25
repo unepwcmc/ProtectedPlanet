@@ -77,7 +77,7 @@ module PortalRelease
     end
 
     def rollback_cleanup_okay(timestamp)
-      post(":white_check_mark: cleanup has been done. Rollabck to #{timestamp} is now complete. The website is now using rollback data.")
+      post(":white_check_mark: cleanup has been done. Rollback to #{timestamp} is now complete. The website is now using rollback data.")
     end
 
     def rollback_step_started(step, timestamp)
