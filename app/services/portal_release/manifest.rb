@@ -20,9 +20,9 @@ module PortalRelease
 
       path = Rails.root.join('public', 'manifests')
       FileUtils.mkdir_p(path)
-      file = path.join("#{@release.label}.json")
+      file = path.join("#{@release.id}_#{@release.label}.json")
       File.write(file, JSON.pretty_generate(manifest))
-      @release.update!(manifest_url: "/manifests/#{@release.label}.json")
+      @release.update!(manifest_url: "/manifests/#{@release.id}_#{@release.label}.json")
       @log.event('manifest_written', payload: { url: @release.manifest_url })
     end
 
@@ -33,4 +33,3 @@ module PortalRelease
     end
   end
 end
-
