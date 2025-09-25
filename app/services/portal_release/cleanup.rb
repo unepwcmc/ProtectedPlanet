@@ -4,7 +4,7 @@ module PortalRelease
   class Cleanup
     class << self
       def post_swap!(log)
-        if ActiveModel::Type::Boolean.new.cast(ENV['PP_RELEASE_DRY_RUN'])
+        if ActiveModel::Type::Boolean.new.cast(ENV.fetch('PP_RELEASE_DRY_RUN', nil))
           # Analyze staging tables in dry-run for visibility
           [::Staging::ProtectedArea.table_name, ::Staging::ProtectedAreaParcel.table_name,
             ::Staging::Source.table_name].each do |t|
@@ -26,6 +26,9 @@ module PortalRelease
             # Rebuild searchable index to reflect new release data
             Search::Index.delete
             Search::Index.create
+
+            # Clear Rails cache to ensure fresh data is served
+            Rails.cache.clear
 
             log.event('post_swap_cleanup_done')
           rescue StandardError => e

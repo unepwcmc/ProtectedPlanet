@@ -13,9 +13,27 @@ namespace :pp do
       PortalRelease::Service.abort_current!
     end
 
-    desc 'Rollback last swapped release (noop until Step 4)'
-    task rollback: :environment do
-      PortalRelease::Service.rollback_last!
+    desc 'List available backup timestamps for rollback'
+    task list_backups: :environment do
+      backups = Wdpa::Portal::Services::Core::TableRollbackService.list_available_backups
+      if backups.empty?
+        Rails.logger.warn '⚠️ No backup timestamps found.'
+      else
+        backups
+      end
+    rescue StandardError => e
+      Rails.logger.warn 'Error listing backups: #{e.message}'
+      exit 1
+    end
+
+    desc 'Rollback to specific backup timestamp. Usage: rake pp:portal:rollback[YYMMDDHHMM]'
+    task :rollback, [:timestamp] => :environment do |_t, args|
+      unless args[:timestamp] && !args[:timestamp].strip.empty?
+        Rails.logger.warn 'Error: Timestamp required. Usage: rake pp:portal:rollback[YYMMDDHHMM]'
+        exit 1
+      end
+
+      PortalRelease::Service.rollback_to!(args[:timestamp])
     end
 
     desc 'Show release status summary'

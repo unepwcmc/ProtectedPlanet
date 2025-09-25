@@ -25,7 +25,9 @@ module Wdpa
                 Rails.logger.info '✅ Table rollback completed successfully'
               rescue StandardError => e
                 Rails.logger.error "❌ Table rollback failed: #{e.message}"
-                raise ActiveRecord::Rollback
+                # Re-raise the original error so it propagates to callers
+                # (the transaction will still be rolled back automatically)
+                raise
               end
             rescue StandardError => e
               Rails.logger.error "❌ Transaction failed: #{e.message}"
@@ -189,7 +191,7 @@ module Wdpa
             backup_tables = @connection.tables.select do |table|
               Wdpa::Portal::Config::PortalImportConfig.is_backup_table?(table)
             end
-
+            Rails.logger.info 'ℹ️ The return array will be showing from latest to oldest timestamps.'
             backup_tables
               .map { |table| Wdpa::Portal::Config::PortalImportConfig.extract_backup_timestamp(table) }
               .uniq

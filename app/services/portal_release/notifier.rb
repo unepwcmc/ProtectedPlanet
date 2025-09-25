@@ -65,11 +65,24 @@ module PortalRelease
 
     # Rollback notifications
     def rollback_ok(timestamp)
-      post(":rewind: Rollback to backup #{timestamp} succeeded")
+      post(":rewind: Rollback to backup #{timestamp} succeeded. Now cleaning up...")
     end
 
     def rollback_failed(e, timestamp)
       post(":rotating_light: Rollback to backup #{timestamp} failed: #{e.message}")
+    end
+
+    def rollback_cleanup_failed(e, timestamp)
+      post(":warning: Rollback to backup #{timestamp} succeeded, but cleanup failed: #{e.message}")
+    end
+
+    def rollback_cleanup_okay(timestamp)
+      post(":white_check_mark: cleanup has been done. Rollabck to #{timestamp} is now complete. The website is now using rollback data.")
+    end
+
+    def rollback_step_started(step, timestamp)
+      step_name = step.humanize.gsub('_', ' ')
+      post(":hourglass_flowing_sand: Rollback step '#{step_name}' started (backup #{timestamp})")
     end
 
     private

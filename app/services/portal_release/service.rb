@@ -24,9 +24,8 @@ module PortalRelease
       true
     end
 
-    def self.rollback_last!
-      # Allow rollback to post Slack notifications even without a Release context
-      SwapManager.new.rollback!
+    def self.rollback_to!(timestamp)
+      SwapManager.new.rollback_to!(timestamp)
     end
 
     def self.status_report
