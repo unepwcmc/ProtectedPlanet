@@ -69,6 +69,9 @@ module Wdpa
             Rails.logger.debug "Executing geometry update: #{update_query}"
             result = connection.execute(update_query)
             imported_count = result.cmd_tuples
+
+            # Calculate coordinates after geometry import
+            import_coordinates(geometry_column, target_table) if imported_count > 0
           end
 
           Rails.logger.info "#{target_table} from #{view}: #{imported_count} records"
@@ -126,6 +129,38 @@ module Wdpa
             # For tables without site_pid (protected areas): match only on site_id (single record per site_id)
             "#{target_table}.site_id = v.site_id"
           end
+        end
+
+        def self.import_coordinates(geometry_column, target_table)
+          connection = ActiveRecord::Base.connection
+
+          # Check if coordinate columns exist in the target table
+          unless connection.column_exists?(target_table, "#{geometry_column}_longitude") &&
+                 connection.column_exists?(target_table, "#{geometry_column}_latitude")
+            Rails.logger.debug "Coordinate columns not found in #{target_table}, skipping coordinate calculation"
+            return
+          end
+
+          coordinate_query = <<~SQL
+            UPDATE #{target_table}
+            SET #{geometry_column}_longitude = (
+              CASE ST_IsValid(#{geometry_column})
+                WHEN TRUE THEN ST_X(ST_Centroid(#{geometry_column}))
+                WHEN FALSE THEN ST_X(ST_Centroid(ST_MakeValid(#{geometry_column})))
+              END
+            ),
+            #{geometry_column}_latitude = (
+              CASE ST_IsValid(#{geometry_column})
+                WHEN TRUE THEN ST_Y(ST_Centroid(#{geometry_column}))
+                WHEN FALSE THEN ST_Y(ST_Centroid(ST_MakeValid(#{geometry_column})))
+              END
+            )
+            WHERE #{geometry_column} IS NOT NULL
+          SQL
+
+          Rails.logger.debug "Executing coordinate calculation: #{coordinate_query}"
+          result = connection.execute(coordinate_query)
+          Rails.logger.info "#{target_table}: #{result.cmd_tuples} coordinate records updated"
         end
       end
     end
