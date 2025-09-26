@@ -4,7 +4,6 @@ class ProtectedArea < ApplicationRecord
   
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'
-  has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
 
   has_many :protected_area_parcels, foreign_key: 'site_id', primary_key: 'site_id', dependent: :destroy
@@ -159,7 +158,6 @@ class ProtectedArea < ApplicationRecord
           only: [:name, :id, :iso_3],
           include: { region_for_index: { only: [:id, :name] } }
         },
-        sub_locations: { only: [:english_name] },
         iucn_category: { only: [:id, :name] },
         designation: { only: [:id, :name] },
         governance: { only: [:id, :name] }
@@ -182,7 +180,6 @@ class ProtectedArea < ApplicationRecord
     )
 
     relations = {
-      sub_locations: sub_locations.map{|sl| {english_name: sl.try(:english_name)}},
       countries: countries_for_index.map {|c| {'name' => c.try(:name), 'iso_3' => c.try(:iso_3), 'region' => {'name' => c.try(:region_for_index).try(:name)}}},
       iucn_category: {'name' => iucn_category.try(:name)},
       designation: {'name' => designation.try(:name), 'jurisdiction' => {'name' => designation.try(:jurisdiction).try(:name)}},

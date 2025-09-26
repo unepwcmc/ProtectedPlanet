@@ -9,7 +9,6 @@ class ProtectedAreaParcel < ApplicationRecord
   validates :site_id, uniqueness: { scope: :site_pid }
 
   has_and_belongs_to_many :countries
-  has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
 
   # As of 09Apr It seems networks are not used in the system now

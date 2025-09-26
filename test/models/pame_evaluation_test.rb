@@ -4,13 +4,12 @@ class PameEvaluationTest < ActiveSupport::TestCase
   test 'basic to_csv with default where clause' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, name: 'Manboneland', region: region)
-    sub_location = FactoryGirl.create(:sub_location, english_name: 'Manboneland City')
 
     iucn_category = FactoryGirl.create(:iucn_category, id: 456, name: 'IA')
     designation = FactoryGirl.create(:designation, id: 654, name: 'National')
     governance = FactoryGirl.create(:governance, id: 654, name: 'Regional')
     pa = FactoryGirl.create(:protected_area,
-      name: 'Manbone', countries: [country], sub_locations: [sub_location],
+      name: 'Manbone', countries: [country],
       original_name: 'Manboné', iucn_category: iucn_category,
       designation: designation, marine: true, site_id: 555_999,
       governance: governance,
@@ -29,13 +28,12 @@ class PameEvaluationTest < ActiveSupport::TestCase
   test 'restricted excluded in to_csv with default where clause' do
     region = FactoryGirl.create(:region, id: 987, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 123, name: 'Manboneland', region: region)
-    sub_location = FactoryGirl.create(:sub_location, english_name: 'Manboneland City')
 
     iucn_category = FactoryGirl.create(:iucn_category, id: 456, name: 'IA')
     designation = FactoryGirl.create(:designation, id: 654, name: 'National')
     governance = FactoryGirl.create(:governance, id: 654, name: 'Regional')
     pa = FactoryGirl.create(:protected_area,
-      name: 'Manbone', countries: [country], sub_locations: [sub_location],
+      name: 'Manbone', countries: [country],
       original_name: 'Manboné', iucn_category: iucn_category,
       designation: designation, marine: true, site_id: 555_999,
       governance: governance,

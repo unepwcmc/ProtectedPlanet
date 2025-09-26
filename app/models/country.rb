@@ -40,7 +40,6 @@ class Country < ApplicationRecord
                                   select('regions.id, regions.name')
                                 }, class_name: 'Region', foreign_key: 'region_id'
 
-  has_many :sub_locations
   has_many :designations, -> { distinct }, through: :protected_areas
   has_many :iucn_categories, through: :protected_areas
 

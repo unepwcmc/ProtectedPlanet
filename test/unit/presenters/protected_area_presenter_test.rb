@@ -7,7 +7,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     time = Time.local(2025, 0o4, 0o7)
     region = FactoryGirl.create(:region, id: 225_672, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 2_265_721, iso_3: 'MBN', name: 'Manboneland', region: region)
-    sub_location = FactoryGirl.create(:sub_location, iso: 'ABC')
     iucn_category = FactoryGirl.create(:iucn_category, id: 775_677, name: 'IA')
     jurisdiction = FactoryGirl.create(:jurisdiction, id: 765_677, name: 'International')
     designation = FactoryGirl.create(:designation, id: 876_567, name: 'National', jurisdiction: jurisdiction)
@@ -22,7 +21,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
       marine: true,
       gis_area: 0.0000231,
       countries: [country],
-      sub_locations: [sub_location],
       iucn_category: iucn_category,
       designation: designation,
       governance: governance,
@@ -112,7 +110,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     time = Time.local(2025, 0o4, 0o7)
     region = FactoryGirl.create(:region, id: 225_672, name: 'North Manmerica')
     country = FactoryGirl.create(:country, id: 2_265_721, iso_3: 'MBN', name: 'Manboneland', region: region)
-    sub_location = FactoryGirl.create(:sub_location, iso: 'ABC')
     iucn_category = FactoryGirl.create(:iucn_category, id: 775_677, name: 'IA')
     jurisdiction = FactoryGirl.create(:jurisdiction, id: 765_677, name: 'International')
     designation = FactoryGirl.create(:designation, id: 876_567, name: 'National', jurisdiction: jurisdiction)
@@ -127,7 +124,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
       marine: true,
       gis_area: 0.0000231,
       countries: [country],
-      sub_locations: [sub_location],
       iucn_category: iucn_category,
       designation: designation,
       governance: governance,

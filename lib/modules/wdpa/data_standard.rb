@@ -12,8 +12,6 @@ class Wdpa::DataStandard
     gis_m_area: { name: :gis_marine_area, type: :float, label: 'GIS Marine Area' },
     gis_area: { name: :gis_area, type: :float, label: 'GIS Area' },
     iso3: { name: :countries, type: :csv, label: 'Country' },
-    # No need to import sub_locations as we are not using it in the system
-    # :sub_loc      => {name: :sub_locations, type: :csv, label: 'Sublocations'},
     status: { name: :legal_status, type: :string, label: 'Legal Status' },
     status_yr: { name: :legal_status_updated_at, type: :year, label: 'Status Year' },
     iucn_cat: { name: :iucn_category, type: :string, label: 'IUCN Category' },

@@ -12,9 +12,6 @@ module Staging
       foreign_key: 'protected_area_parcel_id',
       association_foreign_key: 'country_id'
 
-    # As of 02Sep2025 we are not importing sub_locations to protected_area_parcels table
-    # has_and_belongs_to_many :sub_locations
-
     has_and_belongs_to_many :sources,
       # we can use the name 'sources' everywhere but then it is linking from Staging::Source not Source table
       class_name: 'Staging::Source',

@@ -131,30 +131,6 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
       'Expected no Country models to be returned'
   end
 
-  test '.attributes_from_standards_hash returns SubLocation models for given
-   ISO codes' do
-    FactoryGirl.create(:sub_location, iso: 'AT-NOR', english_name: 'Norway')
-    FactoryGirl.create(:sub_location, iso: 'AT-AT', english_name: 'Galaxy')
-
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({ sub_loc: 'AT-AT; AT-NOR;' })
-
-    assert_equal 2, attributes[:sub_locations].length,
-      'Expected two SubLocation models to be returned'
-
-    assert_kind_of SubLocation, attributes[:sub_locations].first
-    assert_equal   'AT-AT', attributes[:sub_locations].first.iso
-
-    assert_kind_of SubLocation, attributes[:sub_locations].second
-    assert_equal   'AT-NOR', attributes[:sub_locations].second.iso
-  end
-
-  test '.attributes_from_standards_hash returns an empty array if the
-   sub locations do not exist' do
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({ sub_loc: 'AT-AT' })
-
-    assert_equal 0, attributes[:sub_locations].length,
-      'Expected no SubLocation models to be returned'
-  end
 
   test '.attributes_from_standards_hash returns LegalStatus models for a
    given legal status' do

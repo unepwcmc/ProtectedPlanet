@@ -105,14 +105,6 @@
 	    "coordinates": {
         "type": "geo_point"
 	    },
-	    "sub_location": {
-        "type": "nested",
-        "properties": {
-          "name": {
-            "type": "keyword"
-          }
-        }
-	    },
 	    "iso_3": {
         "type": "keyword",
         "normalizer": "lc_normalizer"

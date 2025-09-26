@@ -16,7 +16,6 @@ class Search::Index
     pa_relation = ProtectedArea.without_geometry.includes(
       [
         { countries_for_index: :region_for_index },
-        :sub_locations,
         :designation,
         :iucn_category,
         :governance

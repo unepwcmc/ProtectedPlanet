@@ -11,11 +11,6 @@ class Wdpa::ParcelRelation
 
   private
 
-  def sub_locations(value)
-    sub_locations = value.map { |iso| SubLocation.where(iso: iso).first }
-    sub_locations.compact
-  end
-
   def legal_status(value)
     LegalStatus.where(name: value).first_or_create
   end
@@ -52,7 +47,7 @@ class Wdpa::ParcelRelation
     })
   end
 
-  def sources value
+  def sources(value)
     Source.where(metadataid: value)
   end
 end
