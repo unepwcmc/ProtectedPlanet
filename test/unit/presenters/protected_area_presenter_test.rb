@@ -51,7 +51,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     parcel_c_info[:original_name] = 'San GuillermoCCC'
     FactoryGirl.create(:protected_area_parcel, parcel_c_info)
 
-    # Sublocation
     expected_response = [
       {
         site_pid: '555999_A',
@@ -62,7 +61,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
           { title: 'Status', value: 'Proposed' },
           { title: 'Type of Designation', value: 'International' },
           { title: 'Status Year', value: time.year.to_s },
-          { title: 'Sublocation', value: 'ABC' },
           { title: 'Governance Type', value: 'Bone Man' },
           { title: 'Management Authority', value: 'Authority of Authorities' },
           { title: 'Management Plan', value: 'A plan' },
@@ -78,7 +76,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
           { title: 'Status', value: 'Proposed' },
           { title: 'Type of Designation', value: 'International' },
           { title: 'Status Year', value: time.year.to_s },
-          { title: 'Sublocation', value: 'ABC' },
           { title: 'Governance Type', value: 'Bone Man' },
           { title: 'Management Authority', value: 'Authority of Authorities' },
           { title: 'Management Plan', value: 'A plan' },
@@ -94,7 +91,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
           { title: 'Status', value: 'Proposed' },
           { title: 'Type of Designation', value: 'International' },
           { title: 'Status Year', value: time.year.to_s },
-          { title: 'Sublocation', value: 'ABC' },
           { title: 'Governance Type', value: 'Bone Man' },
           { title: 'Management Authority', value: 'Authority of Authorities' },
           { title: 'Management Plan', value: 'A plan' },
@@ -146,7 +142,6 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
         { title: 'Status', value: 'Proposed' },
         { title: 'Type of Designation', value: 'International' },
         { title: 'Status Year', value: time.year.to_s },
-        { title: 'Sublocation', value: 'ABC' },
         { title: 'Governance Type', value: 'Bone Man' },
         { title: 'Management Authority', value: 'Authority of Authorities' },
         { title: 'Management Plan', value: 'A plan' },
