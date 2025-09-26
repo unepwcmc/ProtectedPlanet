@@ -15,7 +15,7 @@ class DownloadWorkers::General < DownloadWorkers::Base
   end
 
   def collect_site_ids(type, identifier = nil)
-    site_ids_per_country = ->(country) { country.protected_areas.pluck(:wdpa_id) }
+    site_ids_per_country = ->(country) { country.protected_areas.pluck(:site_id) }
 
     case type
     when 'general'
@@ -26,13 +26,13 @@ class DownloadWorkers::General < DownloadWorkers::Base
       region = Region.where(iso: identifier).first
       Set.new(region.countries.flat_map(&site_ids_per_country)).to_a
     when 'marine'
-      ProtectedArea.marine_areas.pluck(:wdpa_id)
+      ProtectedArea.marine_areas.pluck(:site_id)
     when 'greenlist'
-      ProtectedArea.green_list_areas.pluck(:wdpa_id)
+      ProtectedArea.green_list_areas.pluck(:site_id)
     when 'oecm'
-      ProtectedArea.oecms.pluck(:wdpa_id)
+      ProtectedArea.oecms.pluck(:site_id)
     when 'wdpa'
-      ProtectedArea.wdpas.pluck(:wdpa_id)
+      ProtectedArea.wdpas.pluck(:site_id)
     end
   end
 end

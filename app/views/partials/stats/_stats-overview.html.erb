@@ -21,9 +21,9 @@
       <% end %>
     </div>
   <% end %>
-  <% if local_assigns[:wdpa_id] && local_assigns[:area] %>
+  <% if local_assigns[:site_id] && local_assigns[:area] %>
     <div class="card__section">
-      <span class="card__number"><%= wdpa_id %></span>
+      <span class="card__number"><%= site_id %></span>
       <span class="card__subtitle"><%= t('stats.wdpa.id') %></span>
     </div>
     <div class="card__section-with-border">

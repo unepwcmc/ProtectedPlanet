@@ -5,11 +5,10 @@ class Search::Matcher
       # Leaving it commented for reference mainly
       # { type: 'nested', path: 'countries_for_index', fields: ['countries_for_index.name'] },
       # { type: 'nested', path: 'countries_for_index.region_for_index', fields: ['countries_for_index.region_for_index.name'] },
-      { type: 'nested', path: 'sub_location', fields: ['sub_location.english_name'] },
       { type: 'nested', path: 'designation', fields: ['designation.name'] },
       { type: 'nested', path: 'iucn_category', fields: ['iucn_category.name'] },
-      { type: 'nested', path: 'governance', fields: ['governance.name'] },  
-      { type: 'terms',  path: 'wdpa_id' },
+      { type: 'nested', path: 'governance', fields: ['governance.name'] },
+      { type: 'terms',  path: 'site_id' },
       {
         type: 'multi_match',
         fields: %w[iso_3 name name.stemmed original_name original_name.stemmed],

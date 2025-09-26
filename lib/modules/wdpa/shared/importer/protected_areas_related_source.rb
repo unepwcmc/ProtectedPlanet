@@ -62,16 +62,16 @@ module Wdpa
 
           begin
             rows = CSV.read(path)
-            wdpa_ids = rows.map(&:first).compact
+            site_ids = rows.map(&:first).compact
 
-            if wdpa_ids.empty?
-              Rails.logger.warn "No WDPA IDs found in #{path}"
-              return Wdpa::Shared::ImporterBase::Base.build_result(0, ["No WDPA IDs found in #{path}"],
+            if site_ids.empty?
+              Rails.logger.warn "No Site IDs found in #{path}"
+              return Wdpa::Shared::ImporterBase::Base.build_result(0, ["No Site IDs found in #{path}"],
                 [])
             end
 
             Rails.logger.info "Updating #{target_table} with #{field} data"
-            soft_errors = update_table(wdpa_ids, field, target_table)
+            soft_errors = update_table(site_ids, field, target_table)
 
             Wdpa::Shared::ImporterBase::Base.build_result(0, soft_errors, [])
           rescue StandardError => e
@@ -80,7 +80,7 @@ module Wdpa
           end
         end
 
-        def self.update_table(wdpa_ids, field, target_table)
+        def self.update_table(site_ids, field, target_table)
           connection = ActiveRecord::Base.connection
           soft_errors = []
 
@@ -89,13 +89,13 @@ module Wdpa
             return ["Column #{field} does not exist in #{target_table}"]
           end
 
-          wdpa_ids.each do |wdpa_id|
+          site_ids.each do |site_id|
             connection.execute(
-              "UPDATE #{connection.quote_table_name(target_table)} SET #{connection.quote_column_name(field)} = true WHERE wdpa_id = #{wdpa_id.to_i}"
+              "UPDATE #{connection.quote_table_name(target_table)} SET #{connection.quote_column_name(field)} = true WHERE site_id = #{site_id.to_i}"
             )
           rescue StandardError => e
-            soft_errors << "Failed to update WDPA ID #{wdpa_id}: #{e.message}"
-            Rails.logger.warn "Failed to update WDPA ID #{wdpa_id}: #{e.message}"
+            soft_errors << "Failed to update Site ID #{site_id}: #{e.message}"
+            Rails.logger.warn "Failed to update Site ID #{site_id}: #{e.message}"
           end
 
           soft_errors

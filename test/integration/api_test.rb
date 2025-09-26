@@ -18,14 +18,14 @@ class ApiTest < ActionDispatch::IntegrationTest
     original_name: 'Manboné', iucn_category: iucn_category,
     designation: designation, governance: governance,
     legal_status: legal_status, legal_status_updated_at: time,
-    marine: true, wdpa_id: 555999,reported_area: 10.2)
+    marine: true, site_id: 555999,reported_area: 10.2)
 
     FactoryGirl.create(:protected_area,
     name: 'Killbear', countries: [country], sub_locations: [sub_location],
     original_name: 'Manboné', iucn_category: iucn_category,
     designation: designation, governance: governance,
     legal_status: legal_status, legal_status_updated_at: time,
-    marine: true, wdpa_id: 555333, reported_area: 10.2)
+    marine: true, site_id: 555333, reported_area: 10.2)
 
     get '/api/v3/protected_areas/555999'
 

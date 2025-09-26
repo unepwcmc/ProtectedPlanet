@@ -16,7 +16,7 @@ module Search::Aggregators::Model
   private
 
   IDENTIFIERS = {
-    'ProtectedArea' => 'wdpa_id',
+    'ProtectedArea' => 'site_id',
     'Country' => 'iso_3',
     'Region' => 'iso'
   }.freeze

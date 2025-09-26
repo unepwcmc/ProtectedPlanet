@@ -17,10 +17,10 @@ module Wdpa::PameImporter
 
     CSV.foreach(csv_file, headers: true) do |row|
       id                   = row[0].to_i
-      wdpa_id              = row[1].to_i
+      site_id              = row[1].to_i
       methodology          = row[3]
       year                 = row[4].to_i
-      protected_area       = ProtectedArea.find_by_wdpa_id(wdpa_id) || nil
+      protected_area       = ProtectedArea.find_by_site_id(site_id) || nil
       metadata_id          = row[6].to_i
       name                 = row[7]
       url                  = row[5]
@@ -66,19 +66,15 @@ module Wdpa::PameImporter
         pe.url                  = url
         pe.pame_source          = pame_source
         pe.restricted           = restricted
-        pe.wdpa_id              = wdpa_id
+        pe.site_id              = site_id
         pe.name                 = name
         pe.assessment_is_public = assessment_is_public
       end
-      if protected_area.nil?
-        hidden_evaluations << wdpa_id unless restricted
-      end
+      hidden_evaluations << site_id if protected_area.nil? && !restricted
 
       iso3s.split(';').each do |iso3|
         country = Country.find_by(iso_3: iso3)
-        if country.present?
-          pame_evaluation.countries << country unless pame_evaluation.countries.include? country
-        end
+        pame_evaluation.countries << country if country.present? && !(pame_evaluation.countries.include? country)
       end
     end
 

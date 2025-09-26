@@ -27,12 +27,12 @@ class Network < ApplicationRecord
       FROM (
         SELECT ST_Extent(pa.the_geom) AS extent
         FROM protected_areas pa
-        WHERE wdpa_id IN (?)
+        WHERE site_id IN (?)
       ) e
     """.squish
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, protected_areas.pluck(:wdpa_id)
+      dirty_query, protected_areas.pluck(:site_id)
     ])
   end
 

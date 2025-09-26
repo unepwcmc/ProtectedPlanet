@@ -12,8 +12,8 @@ export default {
       type: Object,
       default: () => ({
         name: "Name",
-        wdpaid: "ID",
-        parcel_id: "Parcel ID",
+        site_id: "ID",
+        site_pid: "SITE_PID (Parcel ID)",
       })
     }
   },
@@ -95,9 +95,9 @@ export default {
         if (features.length) {
           pa = features[0].attributes
           const html = this.generateHtml([
-            { title: this.popupAttributes.name, value: pa.name, url: pa.wdpaid ? `/${pa.wdpaid}` : undefined },
-            { title: this.popupAttributes.wdpaid, value: pa.wdpaid },
-            { title: this.popupAttributes.parcel_id, value: pa.site_pid }
+            { title: this.popupAttributes.name, value: pa.name, url: pa.site_id ? `/${pa.site_id}` : undefined },
+            { title: this.popupAttributes.site_id, value: pa.site_id },
+            { title: this.popupAttributes.site_pid, value: pa.site_pid }
           ])
           this.addPopup(coords, html)
         }

@@ -1,7 +1,7 @@
 class CountryPresenter
   include ActionView::Helpers::NumberHelper
-  
-  def initialize country
+
+  def initialize(country)
     @country = country
     @statistic = StatisticPresenter.new(country)
     @designations_presenter = DesignationsPresenter.new(country)
@@ -10,17 +10,17 @@ class CountryPresenter
   def iucn_categories_chart(chart_input)
     chart_input.enum_for(:each_with_index)
       .map do |category, i|
-      { 
-        id: i+1,
-        title: category['iucn_category_name'], 
-        value: category['count'] 
+      {
+        id: i + 1,
+        title: category['iucn_category_name'],
+        value: category['count']
       }
     end
   end
 
   def governance_chart(chart_input)
     chart_input.map do |item|
-      { 
+      {
         id: item['governance_id'],
         title: item['governance_name'],
         value: item['count']
@@ -30,15 +30,15 @@ class CountryPresenter
 
   def chart_point_poly
     [
-      { 
-        percentage: total_polygons_percentage, 
-        theme: 'theme--primary', 
-        title: "#{I18n.t('stats.polygons')} #{total_polygons_percentage}%" 
+      {
+        percentage: total_polygons_percentage,
+        theme: 'theme--primary',
+        title: "#{I18n.t('stats.polygons')} #{total_polygons_percentage}%"
       },
-      { 
-        percentage: total_points_percentage, 
-        theme: 'theme--primary-dark', 
-        title: "#{I18n.t('stats.points')} #{total_points_percentage}%" 
+      {
+        percentage: total_points_percentage,
+        theme: 'theme--primary-dark',
+        title: "#{I18n.t('stats.points')} #{total_points_percentage}%"
       }
     ]
   end
@@ -55,8 +55,9 @@ class CountryPresenter
     @designations_presenter.designations(exclude_oecms: exclude_oecms)
   end
 
-  def get_designations_list(jurisdictions, only_unique_wdpa_ids: false, is_oecm: false)
-    @designations_presenter.designations_list(jurisdictions: jurisdictions, only_unique_wdpa_ids: only_unique_wdpa_ids, is_oecm: is_oecm)
+  def get_designations_list(jurisdictions, only_unique_site_ids: false, is_oecm: false)
+    @designations_presenter.designations_list(jurisdictions: jurisdictions, only_unique_site_ids: only_unique_site_ids,
+      is_oecm: is_oecm)
   end
 
   def documents
@@ -79,10 +80,10 @@ class CountryPresenter
       type: yml_key(type),
       text_protected: I18n.t("stats.coverage_#{yml_key(type)}.covered"),
       text_total: I18n.t("stats.coverage_#{yml_key(type)}.total"),
-      text_coverage: I18n.t("stats.coverage"), #same as marine
-      text_national_report: I18n.t("stats.nr-report-title"), #same as marine
-      text_pame: I18n.t("stats.pame.areas-assessed"), #same as marine
-      text_pame_assessments: I18n.t("stats.pame.with-assessments"), #same as marine
+      text_coverage: I18n.t('stats.coverage'), # same as marine
+      text_national_report: I18n.t('stats.nr-report-title'), # same as marine
+      text_pame: I18n.t('stats.pame.areas-assessed'), # same as marine
+      text_pame_assessments: I18n.t('stats.pame.with-assessments') # same as marine
     }
   end
 
@@ -105,36 +106,38 @@ class CountryPresenter
       flag: "flags/#{flag_name}",
       nationalKm: statistic.pa_marine_area.round,
       nationalPercentage: statistic.percentage_pa_marine_cover.round(2),
-      overseasKm: statistic.overseas_total_protected_marine_area.round, ##check how this is being calculated
-      overseasPercentage: statistic.overseas_percentage.round(2) ##check how this is being calculated - discuss
+      overseasKm: statistic.overseas_total_protected_marine_area.round, # #check how this is being calculated
+      overseasPercentage: statistic.overseas_percentage.round(2) # #check how this is being calculated - discuss
     }
   end
 
   def malaysia_documents
-    return unless @country && @country.iso_3 == "MYS"
+    return unless @country && @country.iso_3 == 'MYS'
+
     [
       {
         url: 'https://wdpa.s3.amazonaws.com/Country_informations/MYS/COMMUNICATION%20PLAN%202012-2017.pdf',
         name: 'Department of Marine Park Malaysia CP',
         type: 'pdf',
-        button_text: I18n.t("global.button.pdf")
+        button_text: I18n.t('global.button.pdf')
       },
       {
         url: 'https://wdpa.s3.amazonaws.com/Country_informations/MYS/TOTAL%20ECONOMIC%20VALUE%20OF%20MARINE%20BIODIVERSITY.pdf',
         name: 'Malaysia Marine Parks Biodiversity',
         type: 'pdf',
-        button_text: I18n.t("global.button.pdf")
+        button_text: I18n.t('global.button.pdf')
       }
     ]
   end
 
   def national_report
     return unless @statistic.nr_report_url.present?
+
     {
       url: @statistic.nr_report_url,
       name: I18n.t('stats.nr_latest'),
       type: 'link',
-      button_text: I18n.t("global.button.link")
+      button_text: I18n.t('global.button.link')
     }
   end
 
@@ -152,13 +155,7 @@ class CountryPresenter
     type == 'land' ? 'terrestrial' : 'marine'
   end
 
-  def country
-    @country
-  end
-
-  def statistic
-    @statistic
-  end
+  attr_reader :country, :statistic
 
   def overseas_territories_url
     overseas_territories = country.children.map(&:iso_3).join(',')
@@ -166,6 +163,6 @@ class CountryPresenter
   end
 
   def flag_name
-    country.name.underscore.gsub(' ', '-').gsub(/"/, '').gsub(',','').gsub(/'/,'')
+    country.name.underscore.gsub(' ', '-').gsub(/"/, '').gsub(',', '').gsub(/'/, '')
   end
 end

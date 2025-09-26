@@ -7,7 +7,7 @@ class GreenListController < ApplicationController
   before_action :get_green_list_sites
 
   def index
-    @download_options = helpers.download_options(['csv', 'shp', 'gdb'], 'general', 'greenlist')
+    @download_options = helpers.download_options(%w[csv shp gdb], 'general', 'greenlist')
 
     stats = green_list_statistics
     @pas_km = stats['green_list_area']
@@ -15,21 +15,21 @@ class GreenListController < ApplicationController
     @pas_total = stats['green_list_count']
 
     # Starts from 2000
-    @protectedAreaGrowth = 
-    {
-      title: I18n.t('charts.legend.coverage_km2'),
-      units: I18n.t('charts.units.km2'),
-      datapoints: ProtectedArea.greenlist_coverage_growth(2000)
-    }.to_json 
-    
+    @protectedAreaGrowth =
+      {
+        title: I18n.t('charts.legend.coverage_km2'),
+        units: I18n.t('charts.units.km2'),
+        datapoints: ProtectedArea.greenlist_coverage_growth(2000)
+      }.to_json
+
     @total_area_percent = GlobalStatistic.global_oecms_pas_coverage_percentage
 
     @filters = {
-      db_type: ['wdpa', 'oecm'],
-      special_status: ['is_green_list', 'is_green_list_candidate']
+      db_type: %w[wdpa oecm],
+      special_status: %w[is_green_list is_green_list_candidate]
     }
 
-    @greenListViewAllUrl = search_areas_path(filters: { special_status: ['is_green_list', 'is_green_list_candidate']} )
+    @greenListViewAllUrl = search_areas_path(filters: { special_status: %w[is_green_list is_green_list_candidate] })
 
     @map = {
       overlays: MapOverlaysSerializer.new(map_overlays, map_yml).serialize,
@@ -46,7 +46,7 @@ class GreenListController < ApplicationController
   end
 
   def map_overlays
-    overlays(['greenlist_terrestrial', 'greenlist_marine'], {
+    overlays(%w[greenlist_terrestrial greenlist_marine], {
       greenlist_terrestrial: {
         queryString: greenlist_query_string(terrestrial_green_list_area_ids)
       },
@@ -59,7 +59,7 @@ class GreenListController < ApplicationController
   def point_query_services
     wdpa_services_for_point_query.map do |service|
       service.merge({
-        queryString: wdpaid_where_query(green_list_areas.map(&:wdpa_id))
+        queryString: site_ids_where_query(green_list_areas.map(&:site_id))
       })
     end
   end
@@ -79,10 +79,10 @@ class GreenListController < ApplicationController
   end
 
   def terrestrial_green_list_area_ids
-    green_list_areas.terrestrial_areas.map(&:wdpa_id)
+    green_list_areas.terrestrial_areas.map(&:site_id)
   end
 
   def marine_green_list_area_ids
-    green_list_areas.marine_areas.map(&:wdpa_id)
+    green_list_areas.marine_areas.map(&:site_id)
   end
 end

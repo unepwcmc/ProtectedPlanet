@@ -59,7 +59,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
     pa = FactoryGirl.create(:protected_area,
       name: 'Manbone', countries: [country], sub_locations: [sub_location],
       original_name: 'Manboné', iucn_category: iucn_category,
-      designation: designation, marine: true, wdpa_id: 555999,
+      designation: designation, marine: true, site_id: 555999,
       governance: governance,
       the_geom_latitude: 1, the_geom_longitude: 2,
       has_irreplaceability_info: true, has_parcc_info: false
@@ -67,7 +67,7 @@ class ProtectedAreaTest < ActiveSupport::TestCase
 
     expected_json = {
       "id" => pa.id,
-      "wdpa_id" => 555999,
+      "site_id" => 555999,
       "name" => 'Manbone',
       "original_name" => "Manboné",
       "marine" => true,
@@ -153,11 +153,11 @@ class ProtectedAreaTest < ActiveSupport::TestCase
       name: 'Manbone', countries: [country], sub_locations: [sub_location],
       original_name: 'Manboné', iucn_category: iucn_category,
       designation: designation, governance: governance,
-      legal_status: legal_status, legal_status_updated_at: time, marine: true, wdpa_id: 555999,
+      legal_status: legal_status, legal_status_updated_at: time, marine: true, site_id: 555999,
       reported_area: 10.2)
 
       expected_json = {
-        "wdpa_id" => 555999,
+        "site_id" => 555999,
         "name" => 'Manbone',
         "original_name" => "Manboné",
         "marine" => true,
@@ -200,8 +200,8 @@ class ProtectedAreaTest < ActiveSupport::TestCase
   end
 
   test "::most_visited, given a date, returns an array of most visited PAs for the month" do
-    pa1 = FactoryGirl.create(:protected_area, wdpa_id: 345)
-    pa2 = FactoryGirl.create(:protected_area, wdpa_id: 123)
+    pa1 = FactoryGirl.create(:protected_area, site_id: 345)
+    pa2 = FactoryGirl.create(:protected_area, site_id: 123)
 
     $redis.expects(:zrevrangebyscore).with(
       "09-1955", "+inf", "-inf",  {with_scores: true, limit: [0, 3]}

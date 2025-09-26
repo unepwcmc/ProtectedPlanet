@@ -31,7 +31,7 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
       pa = ProtectedArea.create!(standardised_attributes)
     rescue => err
       Bystander.log("""
-        PA with WDPAID #{protected_area_attributes[:wdpaid]} was not imported because:
+        PA with SITE_ID #{protected_area_attributes[:wdpaid]} was not imported because:
         > #{err.message}
       """)
       raise ActiveRecord::Rollback

@@ -12,7 +12,7 @@ class SavedSearch < ApplicationRecord
     JSON.parse(filters) if filters.present?
   end
 
-  def all_wdpa_ids
+  def all_site_ids
     search_results.flatten
   end
 
@@ -22,18 +22,18 @@ class SavedSearch < ApplicationRecord
     # Perform initial search to store the first set of results 
     @results = []
 
-    initial_set = extract_wdpa_ids(download_search.results)
+    initial_set = extract_site_ids(download_search.results)
 
     @results << initial_set
 
     # Return early if number of hits is less than 10000 to avoid unnecessary searches
     return @results if @results.last.length < MAX_SIZE
-    
+
     # Keep looping until there are no more results
     loop do 
-      last_wdpa_id = @results.last.last
+      last_site_id = @results.last.last
 
-      next_batch = extract_wdpa_ids(download_search(last_wdpa_id).results)
+      next_batch = extract_site_ids(download_search(last_site_id).results)
 
       break if next_batch.empty?
 
@@ -43,8 +43,8 @@ class SavedSearch < ApplicationRecord
     @results
   end
 
-  def extract_wdpa_ids(results)
-    results.pluck('wdpa_id')
+  def extract_site_ids(results)
+    results.pluck('site_id')
   end 
 
   def search_query_options
@@ -52,16 +52,16 @@ class SavedSearch < ApplicationRecord
       offset: 0, # Have to set this to 0 for Elastic's search_after API
       filters: parsed_filters || {},
       without_aggregations: true,
-      sort: [{ 'wdpa_id': 'asc' }],
+      sort: [{ 'site_id': 'asc' }],
       size: MAX_SIZE
     }
   end
 
   # Make use of Elasticsearch search_after API to search after the WDPA ID passed
   # to the search. 
-  def download_search(last_wdpaid_of_results = nil)
-    if last_wdpaid_of_results
-      merged_query_options = search_query_options.merge({ last_wdpa_id: last_wdpaid_of_results })
+  def download_search(last_site_id_of_results = nil)
+    if last_site_id_of_results
+      merged_query_options = search_query_options.merge({ last_site_id: last_site_id_of_results })
     else 
       merged_query_options = search_query_options
     end

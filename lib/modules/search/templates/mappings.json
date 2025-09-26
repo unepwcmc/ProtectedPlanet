@@ -68,7 +68,7 @@
       "id": {
         "type": "long"
       },
-	    "wdpa_id": {
+	    "site_id": {
         "type": "integer"
 	    },
 	    "type": {

@@ -9,7 +9,7 @@
 
 <div class="cards--search-results-areas <%= preview ? 'preview' : '' %>">
   <% cards.each do |card| %>
-    <%= link_to protected_area_path(card.wdpa_id), title: "View more about the site: #{ card.name }", class: "card__link" do %>
+    <%= link_to protected_area_path(card.site_id), title: "View more about the site: #{ card.name }", class: "card__link" do %>
 
       <div class="card__image-placeholder">
         <div alt="title" class="card__image" style="background-image: url(<%= protected_area_cover(card, with_tag: false) %>)"></div>

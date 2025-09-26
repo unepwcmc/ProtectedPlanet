@@ -25,8 +25,8 @@ module Staging
     has_many :protected_area_parcels,
       # we can use the name 'protected_area_parcels' everywhere but then it is linking to Staging::ProtectedAreaParcel not ProtectedAreaParcel (live) table
       class_name: 'Staging::ProtectedAreaParcel',
-      foreign_key: 'wdpa_id',
-      primary_key: 'wdpa_id',
+      foreign_key: 'site_id',
+      primary_key: 'site_id',
       dependent: :destroy
 
     has_many :networks_protected_areas, dependent: :destroy

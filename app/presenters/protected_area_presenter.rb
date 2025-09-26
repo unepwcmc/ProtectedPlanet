@@ -16,7 +16,7 @@ class ProtectedAreaPresenter
 
   SECTIONS = [{
     name: 'Basic Info',
-    fields: %i[wdpaid site_pid metadataid name orig_name marine].map(&ASSERT_PRESENCE)
+    fields: %i[site_id site_pid metadataid name orig_name marine].map(&ASSERT_PRESENCE)
   }, {
     name: 'Geometries',
     fields: %i[gis_m_area gis_area].map(&ASSERT_PRESENCE) | [{ field: :wkb_geometry, assert: POLYGON }]
@@ -62,7 +62,7 @@ class ProtectedAreaPresenter
   def name_size
     {
       name: protected_area.name,
-      wdpa_id: protected_area.wdpa_id,
+      site_id: protected_area.site_id,
       km: protected_area.gis_marine_area.to_i
     }
   end
@@ -71,7 +71,7 @@ class ProtectedAreaPresenter
     size = protected_area.reported_area.to_f.round(2)
     {
       name: protected_area.name,
-      wdpa_id: protected_area.wdpa_id,
+      site_id: protected_area.site_id,
       country: marine_designation_country,
       iso: protected_area.countries.first.try(:iso_3),
       size: "#{number_with_delimiter(size, delimiter: ',')}km²",
@@ -244,7 +244,7 @@ class ProtectedAreaPresenter
   def url_for_related_source(source, protected_area)
     File.join(
       Rails.application.secrets.related_sources_base_urls[source.to_sym],
-      protected_area.wdpa_id.to_s
+      protected_area.site_id.to_s
     )
   end
 

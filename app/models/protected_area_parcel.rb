@@ -20,7 +20,7 @@ class ProtectedAreaParcel < ApplicationRecord
   # has_many :pame_evaluations
   # has_many :story_map_links
 
-  belongs_to :protected_area, foreign_key: 'wdpa_id', primary_key: 'wdpa_id'
+  belongs_to :protected_area, foreign_key: 'site_id', primary_key: 'site_id'
   belongs_to :legal_status
   belongs_to :iucn_category
   belongs_to :governance

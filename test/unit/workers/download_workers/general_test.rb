@@ -16,7 +16,7 @@ class DownloadWorkersGeneralTest < ActiveSupport::TestCase
     pa1 = FactoryGirl.create(:protected_area, countries: [country])
     pa2 = FactoryGirl.create(:protected_area, countries: [country])
 
-    Download.expects(:generate).with('WDPA_Jun2015_USA', { site_ids: [pa1.wdpa_id, pa2.wdpa_id] })
+    Download.expects(:generate).with('WDPA_Jun2015_USA', { site_ids: [pa1.site_id, pa2.site_id] })
 
     DownloadWorkers::General.new.perform('country', 'USA')
   end
@@ -27,7 +27,7 @@ class DownloadWorkersGeneralTest < ActiveSupport::TestCase
     pa1 = FactoryGirl.create(:protected_area, countries: [country])
     pa2 = FactoryGirl.create(:protected_area, countries: [country])
 
-    Download.expects(:generate).with('WDPA_Jun2015_NA', { site_ids: [pa1.wdpa_id, pa2.wdpa_id] })
+    Download.expects(:generate).with('WDPA_Jun2015_NA', { site_ids: [pa1.site_id, pa2.site_id] })
 
     DownloadWorkers::General.new.perform('region', 'NA')
   end

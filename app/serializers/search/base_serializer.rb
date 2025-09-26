@@ -36,7 +36,7 @@ class Search::BaseSerializer
       path = obj.full_path
       path[0] == '/' ? path[1..-1] : path
     elsif obj.is_a?(ProtectedArea)
-      protected_area_path(obj.wdpa_id)
+      protected_area_path(obj.site_id)
     elsif obj.is_a?(Country)
       country_path(iso: obj.iso_3)
     elsif obj.is_a?(Region)

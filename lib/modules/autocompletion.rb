@@ -1,7 +1,7 @@
 module Autocompletion
   AUTOCOMPLETION_KEY = "autocompletion".freeze
   IDENTIFIER_FIELDS = {
-    'protected_area' => :wdpa_id,
+    'protected_area' => :site_id,
     'country' => :iso_3,
     'region' => :iso
   }.freeze

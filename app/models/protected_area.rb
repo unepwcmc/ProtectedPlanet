@@ -7,7 +7,7 @@ class ProtectedArea < ApplicationRecord
   has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
 
-  has_many :protected_area_parcels, foreign_key: 'wdpa_id', primary_key: 'wdpa_id', dependent: :destroy
+  has_many :protected_area_parcels, foreign_key: 'site_id', primary_key: 'site_id', dependent: :destroy
   has_many :networks_protected_areas, dependent: :destroy
   has_many :networks, through: :networks_protected_areas
   has_many :pame_evaluations
@@ -74,9 +74,9 @@ class ProtectedArea < ApplicationRecord
     opts = {with_scores: true, limit: [0, limit]}
 
     results = $redis.zrevrangebyscore(year_month, "+inf", "-inf", opts)
-    results.map { |wdpa_id, visits|
+    results.map { |site_id, visits|
       {
-        protected_area: ProtectedArea.find_by_wdpa_id(wdpa_id),
+        protected_area: ProtectedArea.find_by_site_id(site_id),
         visits: visits.to_i
       }
     }
@@ -146,13 +146,13 @@ class ProtectedArea < ApplicationRecord
     result
   end
 
-  def wdpa_ids
-    wdpa_id
+  def site_ids
+    site_id
   end
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_oecm],
+      only: [:id, :site_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_oecm],
       methods: [:coordinates, :special_status],
       include: {
         countries_for_index: {
@@ -178,7 +178,7 @@ class ProtectedArea < ApplicationRecord
 
   def as_api_feeder
     attributes = self.as_json(
-      only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area]
+      only: [:site_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area]
     )
 
     relations = {
@@ -269,12 +269,12 @@ class ProtectedArea < ApplicationRecord
   end
 
   def arcgis_query_string
-    "/query?where=wdpaid+%3D+#{wdpa_id}&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
+    "/query?where=site_id+%3D+#{site_id}&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
   end
 
   def extent_url
     {
-      url: "#{arcgis_layer}/query?where=wdpaid+%3D+#{wdpa_id}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      url: "#{arcgis_layer}/query?where=site_id+%3D+#{site_id}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
       padding: [0.2, 0.2, 0.2]
     }
   end
@@ -310,12 +310,12 @@ class ProtectedArea < ApplicationRecord
       FROM (
         SELECT ST_Extent(pa.the_geom) AS extent
         FROM protected_areas pa
-        WHERE wdpa_id = ?
+        WHERE site_id = ?
       ) e
     """.squish
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, wdpa_id
+      dirty_query, site_id
     ])
   end
 
@@ -330,12 +330,12 @@ class ProtectedArea < ApplicationRecord
       FROM (
         SELECT ST_SimplifyPreserveTopology(pa1.the_geom, 0.003) AS a, ST_SimplifyPreserveTopology(pa2.the_geom, 0.003) AS b
         FROM protected_areas AS pa1, protected_areas AS pa2
-        WHERE pa1.wdpa_id = ? AND pa2.wdpa_id = ?
+        WHERE pa1.site_id = ? AND pa2.site_id = ?
       ) AS intersection;
     """.squish
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, wdpa_id, pa.wdpa_id
+      dirty_query, site_id, pa.site_id
     ])
   end
 
@@ -345,7 +345,7 @@ class ProtectedArea < ApplicationRecord
   end
 
   def create_slug
-    updated_slug = [wdpa_id, name, designation.try(:name)].join(' ').parameterize
+    updated_slug = [site_id, name, designation.try(:name)].join(' ').parameterize
     update_attributes(slug: updated_slug)
   end
 

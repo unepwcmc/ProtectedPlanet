@@ -54,7 +54,7 @@ class AddNewFieldsMigrationTest < ActiveSupport::TestCase
     realm = Realm.create!(name: 'Terrestrial')
 
     protected_area = ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test PA',
       designation: designation,
       realm: realm,
@@ -74,7 +74,7 @@ class AddNewFieldsMigrationTest < ActiveSupport::TestCase
     realm = Realm.create!(name: 'Marine')
 
     parcel = ProtectedAreaParcel.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Parcel',
       realm: realm,
       governance_subtype: 'Government',
@@ -94,7 +94,7 @@ class AddNewFieldsMigrationTest < ActiveSupport::TestCase
     realm = Realm.create!(name: 'Terrestrial')
 
     protected_area = ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test PA',
       designation: designation,
       realm: realm

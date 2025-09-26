@@ -16,7 +16,7 @@
 # See app/models/protected_area_parcel.rb to link up
 
 module Wdpa::GreenListImporter
-  # Make sure headers are: wdpaid,status,expiry_date
+  # Make sure headers are: site_id,status,expiry_date
 
   module_function
 
@@ -35,23 +35,23 @@ module Wdpa::GreenListImporter
       duplicates = []
 
       CSV.foreach(latest_green_list_sites_csv, headers: true) do |row|
-        wdpa_id = begin
-                    Integer(row['wdpaid'])
+        site_id = begin
+                    Integer(row['site_id'])
                   rescue StandardError
                     false
                   end
-        unless wdpa_id
-          invalid << row['wdpaid']
+        unless site_id
+          invalid << row['site_id']
           next
         end
 
-        pa = ProtectedArea.find_by_wdpa_id(wdpa_id)
+        pa = ProtectedArea.find_by_site_id(site_id)
 
         if pa.blank?
-          not_found << wdpa_id
+          not_found << site_id
         else
           if pa.green_list_status_id
-            duplicates << wdpa_id
+            duplicates << site_id
             next
           end
           gls = GreenListStatus.find_or_create_by(row.to_h.slice('status', 'expiry_date'))

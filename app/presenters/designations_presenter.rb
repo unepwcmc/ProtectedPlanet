@@ -1,13 +1,13 @@
 class DesignationsPresenter
   include Rails.application.routes.url_helpers
 
-  JURISDICTIONSCOUNTRY=['National', 'Regional', 'International','Not Applicable'].freeze
-  JURISDICTIONSREGION=['National', 'Regional', 'International'].freeze
+  JURISDICTIONSCOUNTRY = ['National', 'Regional', 'International', 'Not Applicable'].freeze
+  JURISDICTIONSREGION = %w[National Regional International].freeze
 
-  def initialize(geo_entity, is_regional= false)
+  def initialize(geo_entity, is_regional = false)
     @geo_entity = geo_entity
     @is_regional = is_regional
-    @JURISDICTIONS =  @is_regional ? JURISDICTIONSREGION : JURISDICTIONSCOUNTRY
+    @JURISDICTIONS = @is_regional ? JURISDICTIONSREGION : JURISDICTIONSCOUNTRY
   end
   # All avaliable JURISDICTIONS
 
@@ -32,12 +32,12 @@ class DesignationsPresenter
     end
   end
 
-  def designations_list(jurisdictions: [], only_unique_wdpa_ids: false, is_oecm: false)
+  def designations_list(jurisdictions: [], only_unique_site_ids: false, is_oecm: false)
     jurisdictions = get_jurisdictions(jurisdictions)
     return [] unless jurisdictions.any?
 
     geo_entity.designations_list_by_wdpa_or_oecm(jurisdictions: jurisdictions,
-      only_unique_wdpa_ids: only_unique_wdpa_ids, is_oecm: is_oecm)
+      only_unique_site_ids: only_unique_site_ids, is_oecm: is_oecm)
   end
 
   private

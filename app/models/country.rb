@@ -58,8 +58,8 @@ class Country < ApplicationRecord
 
   default_scope { where.not(iso_3: BLACKLISTED_ISO3) }
 
-  def wdpa_ids
-    protected_areas.map(&:wdpa_id)
+  def site_ids
+    protected_areas.map(&:site_id)
   end
 
   def statistic
@@ -68,7 +68,7 @@ class Country < ApplicationRecord
 
   def assessments
     # If you change here then also change def staging_assessments below for importer to run correctly
-    # join protected_area table to exclude PAME evaluations where wdpa_id doesn't exist anymore or the site is restricted
+    # join protected_area table to exclude PAME evaluations where site_id doesn't exist anymore or the site is restricted
     # count PAME evaluations of protected areas within the given country - excluding overseas territories
     return pame_evaluations.joins(protected_area: :countries).where(countries: { id: id }).count if country_id.nil?
 
@@ -80,7 +80,7 @@ class Country < ApplicationRecord
   def assessed_pas
     # If you change here then also change def staging_assessed_pas below for importer to run correctly
 
-    # join protected_area table to exclude PAME evaluations where wdpa_id doesn't exist anymore or the site is restricted
+    # join protected_area table to exclude PAME evaluations where site_id doesn't exist anymore or the site is restricted
     # count protected areas with PAME evaluations within the given country - excluding overseas territories
     if country_id.nil?
       return pame_evaluations.joins(protected_area: :countries).where(countries: { id: id })&.pluck(:protected_area_id)&.uniq&.count
@@ -195,13 +195,13 @@ class Country < ApplicationRecord
     ")
   end
 
-  def designations_list_by_wdpa_or_oecm(jurisdictions: [], only_unique_wdpa_ids: false, is_oecm: false)
+  def designations_list_by_wdpa_or_oecm(jurisdictions: [], only_unique_site_ids: false, is_oecm: false)
     # If you need to have more fields in select feel free to add.
     # Please refrain from adding the_geom field as it takes a long time to render it will slow down everything!
     # In some senarios we want the return results to have only unique wdpa ids but in most cases it should be returing everything
     # if is_oecm is set to false then it returns WDPA designations for current country is set to true then returns OCEM designations
     ProtectedArea
-      .select("#{'DISTINCT' if only_unique_wdpa_ids} wdpa_id,designation_id")
+      .select("#{'DISTINCT' if only_unique_site_ids} site_id,designation_id")
       .joins('INNER JOIN countries_protected_areas ON protected_areas.id = countries_protected_areas.protected_area_id')
       .joins(designation: :jurisdiction)
       .where(

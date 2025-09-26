@@ -4,7 +4,7 @@ class TestWdpaParcelDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns the correct attribute
    for WDPA ID' do
     attributes = Wdpa::ParcelDataStandard.attributes_from_standards_hash({wdpaid: 1234})
-    assert_equal({wdpa_id: 1234}, attributes)
+    assert_equal({site_id: 1234}, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
