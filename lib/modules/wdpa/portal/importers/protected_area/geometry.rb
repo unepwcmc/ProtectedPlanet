@@ -27,8 +27,9 @@ module Wdpa
           hard_errors = []
 
           Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_materialised_views.each do |view|
-            if Wdpa::Portal::ImportRuntimeConfig.checkpoints? && Wdpa::Portal::Checkpoint.geometry_done?(view)
-              Rails.logger.info "Skipping geometry update for #{view} (checkpoint)"
+            if Wdpa::Portal::ImportRuntimeConfig.checkpoints? && Wdpa::Portal::Checkpoint.geometry_done?(view,
+              target_table)
+              Rails.logger.info "Skipping geometry update for #{view} to #{target_table} table (checkpoint)"
               next
             end
 
@@ -36,7 +37,10 @@ module Wdpa
             imported_count += result[:imported_count]
             soft_errors.concat(result[:soft_errors] || [])
             hard_errors.concat(result[:hard_errors] || [])
-            Wdpa::Portal::Checkpoint.mark_geometry_done(view) if Wdpa::Portal::ImportRuntimeConfig.checkpoints?
+            if Wdpa::Portal::ImportRuntimeConfig.checkpoints?
+              Wdpa::Portal::Checkpoint.mark_geometry_done(view,
+                target_table)
+            end
           rescue StandardError => e
             hard_errors << "Geometry import error for #{view} in #{target_table}: #{e.message}"
             Rails.logger.error "Geometry import failed for #{view} in #{target_table}: #{e.message}"
@@ -158,9 +162,11 @@ module Wdpa
             WHERE #{geometry_column} IS NOT NULL
           SQL
 
-          Rails.logger.debug "Executing coordinate calculation: #{coordinate_query}"
-          result = connection.execute(coordinate_query)
-          Rails.logger.info "#{target_table}: #{result.cmd_tuples} coordinate records updated"
+          connection.transaction do
+            Rails.logger.debug 'Executing coordinate calculation'
+            result = connection.execute(coordinate_query)
+            Rails.logger.info "#{target_table}: #{result.cmd_tuples} coordinate records updated"
+          end
         end
       end
     end

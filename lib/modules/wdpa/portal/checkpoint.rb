@@ -51,14 +51,27 @@ module Wdpa
         end
 
         # Geometry processed per view toggles
-        def geometry_done?(view_name)
-          !!store.dig('geometry', view_name.to_s, 'done')
+        def geometry_done?(view_name, table_name = nil)
+          if table_name
+            !!store.dig('geometry', view_name.to_s, table_name.to_s, 'done')
+          else
+            # Backward compatibility: check if any table has this view done
+            geometry_section = store.dig('geometry', view_name.to_s)
+            return false unless geometry_section
+            geometry_section.values.any? { |table_data| table_data['done'] }
+          end
         end
 
-        def mark_geometry_done(view_name)
+        def mark_geometry_done(view_name, table_name = nil)
           store['geometry'] ||= {}
           store['geometry'][view_name.to_s] ||= {}
-          store['geometry'][view_name.to_s]['done'] = true
+          if table_name
+            store['geometry'][view_name.to_s][table_name.to_s] ||= {}
+            store['geometry'][view_name.to_s][table_name.to_s]['done'] = true
+          else
+            # Backward compatibility: mark for all tables
+            store['geometry'][view_name.to_s]['done'] = true
+          end
           persist!
         end
 
