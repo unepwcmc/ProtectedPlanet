@@ -1,7 +1,7 @@
 # As of 03Apr2025 This file doesn't seem to be used Wdpa::ProtectedAreaImporter seems to be replacing this
-# 
+#
 class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
-  def perform table, limit, offset
+  def perform(table, limit, offset)
     query = create_query(table, limit, offset)
     imported_pa_ids = []
 
@@ -29,27 +29,27 @@ class ImportWorkers::ProtectedAreasImporter < ImportWorkers::Base
     pa = nil
     begin
       pa = ProtectedArea.create!(standardised_attributes)
-    rescue => err
-      Bystander.log("""
-        PA with SITE_ID #{protected_area_attributes[:wdpaid]} was not imported because:
-        > #{err.message}
-      """)
+    rescue StandardError => e
+      Bystander.log("
+        PA with SITE_ID #{standardised_attributes[:site_id]} was not imported because:
+        > #{e.message}
+      ")
       raise ActiveRecord::Rollback
     end
 
     pa ? pa.id : nil
   end
 
-  GEOMETRY_COLUMN = "wkb_geometry"
-  def create_query table, limit, offset
-    select = """
+  GEOMETRY_COLUMN = 'wkb_geometry'
+  def create_query(table, limit, offset)
+    select = "
       SELECT array_to_string(ARRAY(
         SELECT c.column_name::text
         FROM information_schema.columns As c
         WHERE table_name = '#{table}'
           AND  c.column_name <> '#{GEOMETRY_COLUMN}'
       ), ',') As query
-    """
+    "
 
     select_part = db.select_value(select)
     "SELECT #{select_part} FROM #{table} ORDER BY wdpaid LIMIT #{limit} OFFSET #{offset}"
