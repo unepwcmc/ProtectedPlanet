@@ -14,20 +14,6 @@ class ProtectedAreaPresenter
   PRESENCE = ->(pa, property) { !pa.try(property).nil? }
   ASSERT_PRESENCE = ->(field) { { field: field, assert: PRESENCE } }
 
-  SECTIONS = [{
-    name: 'Basic Info',
-    fields: %i[site_id site_pid metadataid name orig_name marine].map(&ASSERT_PRESENCE)
-  }, {
-    name: 'Geometries',
-    fields: %i[gis_m_area gis_area].map(&ASSERT_PRESENCE) | [{ field: :wkb_geometry, assert: POLYGON }]
-  }, {
-    name: 'Categorisation',
-    fields: %i[iso3 sub_loc iucn_cat gov_type mang_auth mang_plan int_crit desig_eng desig_type].map(&ASSERT_PRESENCE)
-  }, {
-    name: 'Special',
-    fields: %i[no_take no_tk_area].map(&ASSERT_PRESENCE)
-  }].freeze
-
   def initialize(protected_area)
     @protected_area = protected_area
   end
@@ -39,24 +25,12 @@ class ProtectedAreaPresenter
     ].compact
   end
 
-  # As of 07Apr2025 it doesn't seem to be used
-  def data_info
-    SECTIONS.each_with_object({}) do |section, all_info|
-      all_info[section[:name]] = completeness_for(section[:fields])
-    end
-  end
-
   def external_links
     [
       dopa_link,
       world_heritage_outlook_link,
       story_map_links
     ].compact.flatten
-  end
-
-  # As of 07Apr2025 it doesn't seem to be used
-  def percentage_complete
-    ((num_fields_with_data.to_f / all_fields.count) * 100).round(2)
   end
 
   def name_size
@@ -112,12 +86,12 @@ class ProtectedAreaPresenter
             value: parcel.legal_status_updated_at.try(:strftime, '%Y') || 'Not Reported'
           },
           {
-            title: 'Sublocation',
-            value: parcel.sub_locations.map(&:iso).join(', ')
-          },
-          {
             title: 'Governance Type',
             value: parcel.governance.try(:name) || 'Not Reported'
+          },
+          {
+            title: 'Governance Subtype',
+            value: parcel.governance_subtype || 'Not Reported'
           },
           {
             title: 'Management Authority',
@@ -126,6 +100,14 @@ class ProtectedAreaPresenter
           {
             title: 'Management Plan',
             value: parse_management_plan(parcel.management_plan)
+          },
+          {
+            title: 'Ownership Type',
+            value: parcel.owner_type || 'Not Reported'
+          },
+          {
+            title: 'Ownership Subtype',
+            value: parcel.ownership_subtype || 'Not Reported'
           },
           {
             title: 'International Criteria',
@@ -149,6 +131,14 @@ class ProtectedAreaPresenter
       {
         title: 'Conservation Objectives',
         value: parcel.conservation_objectives
+      },
+      {
+        title: 'Inland Waters',
+        value: parcel.inland_waters || 'Not Reported'
+      },
+      {
+        title: 'OECM Assessment',
+        value: parcel.oecm_assessment || 'Not Reported'
       }
     ]
   end
@@ -222,17 +212,6 @@ class ProtectedAreaPresenter
     }
   end
 
-  # As of 07Apr2025 it doesn't seem to be used
-  def num_fields_with_data
-    all_fields.count do |attribute|
-      standard_attr = standard_attributes[attribute[:field]]
-
-      attribute[:assert].call(
-        protected_area, standard_attr[:name]
-      )
-    end
-  end
-
   def parse_management_plan(management_plan)
     if (management_plan.is_a? String) && management_plan.starts_with?('http')
       ActionController::Base.helpers.link_to('View Management Plan', management_plan)
@@ -246,10 +225,6 @@ class ProtectedAreaPresenter
       Rails.application.secrets.related_sources_base_urls[source.to_sym],
       protected_area.site_id.to_s
     )
-  end
-
-  def all_fields
-    SECTIONS.flat_map { |section| section[:fields] }
   end
 
   # As of 07Apr2025 it doesn't seem to be used
