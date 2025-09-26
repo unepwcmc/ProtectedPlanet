@@ -61,22 +61,10 @@ module Wdpa
         def self.drop_table_safely(table_name)
           return unless ActiveRecord::Base.connection.table_exists?(table_name)
 
-          begin
-            ActiveRecord::Base.connection.drop_table(table_name)
-            Rails.logger.info "Dropped staging table: #{table_name}"
-          rescue ActiveRecord::StatementInvalid => e
-            Rails.logger.warn "Cannot drop #{table_name} normally, trying CASCADE: #{e.message}"
-            # Force drop with CASCADE in a new connection to avoid aborted transaction issues
-            force_drop_table_with_cascade(table_name)
-          end
-        end
-
-        def self.force_drop_table_with_cascade(table_name)
-          # Use a new connection to avoid aborted transaction issues
           ActiveRecord::Base.connection_pool.with_connection do |conn|
-            conn.execute("DROP TABLE IF EXISTS #{table_name} CASCADE")
+            conn.drop_table(table_name, if_exists: true, force: :cascade)
           end
-          Rails.logger.info "Force dropped staging table with CASCADE: #{table_name}"
+          Rails.logger.info "Dropped staging table: #{table_name}"
         end
 
         def self.staging_tables_exist?
