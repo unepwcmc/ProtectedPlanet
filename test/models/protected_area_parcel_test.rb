@@ -7,7 +7,7 @@ class ProtectedAreaParcelTest < ActiveSupport::TestCase
    designation = FactoryGirl.create(:designation, name: 'Protected Area')
    protected_area = ProtectedArea.create(
     wdpa_id: 123, 
-    wdpa_pid: "123_A",
+    site_pid: "123_A",
     name: 'Finn and Jake Land',
     designation: designation)
    assert_equal '123-123_A-finn-and-jake-land-protected-area', protected_area.slug

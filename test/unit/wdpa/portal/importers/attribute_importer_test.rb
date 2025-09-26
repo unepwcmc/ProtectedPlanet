@@ -16,7 +16,7 @@ class Wdpa::Portal::Importers::ProtectedAreaAttributeTest < ActiveSupport::TestC
     mock_portal_data = [
       {
         'wdpaid' => 1,
-        'wdpa_pid' => '1',
+        'site_pid' => '1',
         'name' => 'Test Protected Area',
         'status' => 'Designated',
         'iucn_cat' => 'Ia',
@@ -49,7 +49,7 @@ class Wdpa::Portal::Importers::ProtectedAreaAttributeTest < ActiveSupport::TestC
     mock_portal_data = [
       {
         'wdpaid' => 1,
-        'wdpa_pid' => '1',
+        'site_pid' => '1',
         'name' => nil, # Invalid: name is required
         'status' => 'Designated',
         'iucn_cat' => 'Ia'

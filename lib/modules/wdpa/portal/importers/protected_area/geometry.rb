@@ -116,15 +116,15 @@ module Wdpa
 
         def self.get_matching_condition(target_table)
           connection = ActiveRecord::Base.connection
-          has_site_pid = connection.column_exists?(target_table, 'wdpa_pid')
+          has_site_pid = connection.column_exists?(target_table, 'site_pid')
 
           if has_site_pid
-            # For tables with wdpa_pid (parcels): match on both wdpa_id AND wdpa_pid to ensure correct parcel
+            # For tables with site_pid (parcels): match on both site_id AND site_pid to ensure correct parcel
             # Cast both sides to text to handle type differences between portal views and staging tables
-            "#{target_table}.wdpa_id = v.site_id AND #{target_table}.wdpa_pid::text = v.site_pid::text"
+            "#{target_table}.site_id = v.site_id AND #{target_table}.site_pid::text = v.site_pid::text"
           else
-            # For tables without wdpa_pid (protected areas): match only on wdpa_id (single record per wdpa_id)
-            "#{target_table}.wdpa_id = v.site_id"
+            # For tables without site_pid (protected areas): match only on site_id (single record per site_id)
+            "#{target_table}.site_id = v.site_id"
           end
         end
       end

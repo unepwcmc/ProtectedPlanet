@@ -3,7 +3,7 @@
 class Wdpa::ParcelDataStandard
   STANDARD_ATTRIBUTES = {
     wdpaid: { name: :wdpa_id, type: :integer, label: 'WDPA ID' },
-    wdpa_pid: { name: :wdpa_pid, type: :string, label: 'WDPA Parcel ID' },
+    wdpa_pid: { name: :site_pid, type: :string, label: 'Site Parcel ID' },
     name: { name: :name, type: :string, label: 'Name' },
     orig_name: { name: :original_name, type: :string, label: 'Original Name' },
     rep_m_area: { name: :reported_marine_area, type: :float, label: 'Reported Marine Area' },

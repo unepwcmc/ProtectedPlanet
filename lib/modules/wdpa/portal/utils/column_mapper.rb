@@ -6,8 +6,8 @@ module Wdpa
       class ColumnMapper
         PORTAL_TO_PP_MAPPING = {
           # Core WDPA identifiers
-          'site_id' => { name: 'wdpa_id', type: :integer },
-          'site_pid' => { name: 'wdpa_pid', type: :string },
+          'site_id' => { name: 'site_id', type: :integer },
+          'site_pid' => { name: 'site_pid', type: :string },
 
           # Names and descriptions
           'name_eng' => { name: 'name', type: :string },

@@ -65,9 +65,7 @@ module Wdpa
             ActiveRecord::Base.connection.drop_table(table_name)
             Rails.logger.info "Dropped staging table: #{table_name}"
           rescue ActiveRecord::StatementInvalid => e
-            raise e unless e.message.include?('DependentObjectsStillExist')
-
-            Rails.logger.warn "Cannot drop #{table_name} due to dependencies, using CASCADE"
+            Rails.logger.warn "Cannot drop #{table_name} normally, trying CASCADE: #{e.message}"
             ActiveRecord::Base.connection.drop_table(table_name, if_exists: true, force: :cascade)
             Rails.logger.info "Dropped staging table with CASCADE: #{table_name}"
           end

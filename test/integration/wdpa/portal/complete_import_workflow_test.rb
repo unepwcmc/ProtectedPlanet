@@ -111,7 +111,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('polygons')} AS
       SELECT#{' '}
         1 as wdpaid,
-        '1' as wdpa_pid,
+        '1' as site_pid,
         'Test Terrestrial PA' as name,
         'Designated' as status,
         'Ia' as iucn_cat,
@@ -124,7 +124,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
       UNION ALL
       SELECT#{' '}
         2 as wdpaid,
-        '2' as wdpa_pid,
+        '2' as site_pid,
         'Test Marine PA' as name,
         'Designated' as status,
         'II' as iucn_cat,
@@ -137,7 +137,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
       UNION ALL
       SELECT#{' '}
         3 as wdpaid,
-        '3' as wdpa_pid,
+        '3' as site_pid,
         'Test Coastal PA' as name,
         'Designated' as status,
         'III' as iucn_cat,
@@ -151,7 +151,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('points')} AS
       SELECT#{' '}
         4 as wdpaid,
-        '4' as wdpa_pid,
+        '4' as site_pid,
         'Test Point PA' as name,
         'Designated' as status,
         'IV' as iucn_cat,
@@ -164,7 +164,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
       UNION ALL
       SELECT#{' '}
         5 as wdpaid,
-        '5' as wdpa_pid,
+        '5' as site_pid,
         'Test Marine Point PA' as name,
         'Designated' as status,
         'V' as iucn_cat,
@@ -198,7 +198,7 @@ class Wdpa::Portal::CompleteImportWorkflowTest < ActionDispatch::IntegrationTest
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('polygons')} AS
       SELECT#{' '}
         1 as wdpaid,
-        '1' as wdpa_pid,
+        '1' as site_pid,
         'Test PA with Invalid Realm' as name,
         'Designated' as status,
         'Ia' as iucn_cat,

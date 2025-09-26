@@ -4,9 +4,9 @@ class ProtectedAreaPresenter
   include ActionView::Helpers::NumberHelper
   include ActionView::Helpers::UrlHelper
 
-  POLYGON = -> (pa, _property) {
-    type = ProtectedArea.select("ST_GeometryType(the_geom) AS type").where(id: pa.id).first.type
-    type == "ST_MultiPolygon"
+  POLYGON = lambda { |pa, _property|
+    type = ProtectedArea.select('ST_GeometryType(the_geom) AS type').where(id: pa.id).first.type
+    type == 'ST_MultiPolygon'
   }
 
   # Warning: do NOT use .present? there, as some of the possible values
@@ -16,7 +16,7 @@ class ProtectedAreaPresenter
 
   SECTIONS = [{
     name: 'Basic Info',
-    fields: %i[wdpaid wdpa_pid metadataid name orig_name marine].map(&ASSERT_PRESENCE)
+    fields: %i[wdpaid site_pid metadataid name orig_name marine].map(&ASSERT_PRESENCE)
   }, {
     name: 'Geometries',
     fields: %i[gis_m_area gis_area].map(&ASSERT_PRESENCE) | [{ field: :wkb_geometry, assert: POLYGON }]
@@ -53,6 +53,7 @@ class ProtectedAreaPresenter
       story_map_links
     ].compact.flatten
   end
+
   # As of 07Apr2025 it doesn't seem to be used
   def percentage_complete
     ((num_fields_with_data.to_f / all_fields.count) * 100).round(2)
@@ -80,11 +81,11 @@ class ProtectedAreaPresenter
 
   def parcels_attribute
     parcels_including_protected_area_self = protected_area.parcels_including_protected_area_self
-    # TODO: once the parcel IDs are change to be 345345_1 345345_2 
+    # TODO: once the parcel IDs are change to be 345345_1 345345_2
     # We will need to change this to item.split('_').last.to_i
-    parcels_including_protected_area_self.sort_by { |item| item.wdpa_pid }.map do |parcel|
+    parcels_including_protected_area_self.sort_by { |item| item.site_pid }.map do |parcel|
       {
-        wdpa_pid: parcel.wdpa_pid,
+        site_pid: parcel.site_pid,
         attributes: [
           {
             title: 'Original Name',
@@ -139,6 +140,7 @@ class ProtectedAreaPresenter
 
   def parcel_oecm_attributes(parcel)
     return [] unless parcel.is_oecm
+
     [
       {
         title: 'Supplementary Information',
@@ -185,6 +187,7 @@ class ProtectedAreaPresenter
   def marine_designation_country
     protected_area.countries.first.try(:name) || 'Area Beyond National Jurisdiction'
   end
+
   # As of 07Apr2025 it doesn't seem to be used
   def completeness_for(attributes)
     attributes.map do |attribute|
@@ -218,6 +221,7 @@ class ProtectedAreaPresenter
       button_title: I18n.t('stats.who.button-title', name: protected_area.name)
     }
   end
+
   # As of 07Apr2025 it doesn't seem to be used
   def num_fields_with_data
     all_fields.count do |attribute|
@@ -247,6 +251,7 @@ class ProtectedAreaPresenter
   def all_fields
     SECTIONS.flat_map { |section| section[:fields] }
   end
+
   # As of 07Apr2025 it doesn't seem to be used
   def standard_attributes
     Wdpa::DataStandard::STANDARD_ATTRIBUTES

@@ -18,9 +18,17 @@ module PortalRelease
     ].freeze
 
     def self.abort_current!
+      # Release the lock first to allow new releases to start
+      begin
+        Lock.new.release!(Rails.logger)
+        Rails.logger.info('Lock released during abort')
+      rescue StandardError => e
+        Rails.logger.warn("Failed to release lock during abort: #{e.message}")
+      end
+      
       # Minimal abort: drop staging tables to leave clean state
       Wdpa::Portal::Managers::StagingTableManager.drop_staging_tables
-      Rails.logger.warn('Aborted current release; staging tables dropped')
+      Rails.logger.warn('Aborted current release; staging tables dropped and lock released')
       true
     end
 

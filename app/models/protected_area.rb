@@ -24,6 +24,7 @@ class ProtectedArea < ApplicationRecord
   belongs_to :green_list_status
 
   after_create :create_slug
+  before_save :set_legacy_fields
 
   scope :all_except, -> (pa) { where.not(id: pa) }
 
@@ -127,19 +128,19 @@ class ProtectedArea < ApplicationRecord
       ON protected_areas_sources.protected_area_id = #{self.id}
       AND protected_areas_sources.source_id = sources.id
     SQL
-    result[self.wdpa_pid] = convert_into_hash(pa_sources.to_a) if pa_sources.any?
+    result[self.site_pid] = convert_into_hash(pa_sources.to_a) if pa_sources.any?
 
     # Get sources from all parcels
     parcel_sources = ActiveRecord::Base.connection.execute(<<~SQL)
-      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party, protected_area_parcels.wdpa_pid
+      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party, protected_area_parcels.site_pid
       FROM sources
       INNER JOIN protected_area_parcels_sources ON protected_area_parcels_sources.source_id = sources.id
       INNER JOIN protected_area_parcels ON protected_area_parcels.id = protected_area_parcels_sources.protected_area_parcel_id
-      WHERE protected_area_parcels.wdpa_id = #{self.wdpa_id}
+      WHERE protected_area_parcels.site_id = #{self.site_id}
     SQL
 
-    parcel_sources.group_by { |source| source['wdpa_pid'] }.each do |wdpa_pid, sources|
-      result[wdpa_pid] = convert_into_hash(sources.map { |s| s.except('wdpa_pid') })
+    parcel_sources.group_by { |source| source['site_pid'] }.each do |site_pid, sources|
+      result[site_pid] = convert_into_hash(sources.map { |s| s.except('site_pid') })
     end
 
     result
@@ -357,5 +358,13 @@ class ProtectedArea < ApplicationRecord
     joins(:iucn_category).where(
       "iucn_categories.name IN (#{valid_categories})"
     )
+  end
+
+  private
+
+  # To be removed after migration - ensures wdpa_id and wdpa_pid are filled for backward compatibility
+  def set_legacy_fields
+    self.wdpa_id = site_id if site_id.present?
+    self.wdpa_pid = site_pid if site_pid.present?
   end
 end

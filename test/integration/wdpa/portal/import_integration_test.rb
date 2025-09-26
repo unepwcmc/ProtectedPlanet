@@ -47,7 +47,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('polygons')} AS
       SELECT#{' '}
         1 as wdpaid,
-        '1' as wdpa_pid,
+        '1' as site_pid,
         'Test Polygon PA' as name,
         'Designated' as status,
         'Ia' as iucn_cat,
@@ -55,7 +55,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
       UNION ALL
       SELECT#{' '}
         2 as wdpaid,
-        '2' as wdpa_pid,
+        '2' as site_pid,
         'Test Polygon PA 2' as name,
         'Designated' as status,
         'II' as iucn_cat,
@@ -64,7 +64,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('points')} AS
       SELECT#{' '}
         3 as wdpaid,
-        '3' as wdpa_pid,
+        '3' as site_pid,
         'Test Point PA' as name,
         'Designated' as status,
         'III' as iucn_cat,

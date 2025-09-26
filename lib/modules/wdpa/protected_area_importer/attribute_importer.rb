@@ -21,14 +21,14 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
           add_entry_to_protected_areas_table = entry_info[:is_first_or_only_parcel]
           add_entry_to_protected_areas_parcels_table = entry_info[:has_multiple_parcels]
 
-          # In ProtectedPlanet-api wdpa_parent_id is used as wdpa_pid in models/protected_area.rb
+          # In ProtectedPlanet-api wdpa_parent_id is used as site_pid in models/protected_area.rb
           # so we cannot delete wdpa_parent_id field
           # TODO:
-          #  - update ProtectedPlanet-api project to change wdpa_parent_id to wdpa_pid
+          #  - update ProtectedPlanet-api project to change wdpa_parent_id to site_pid
           #  - make migration to ProtectedPlanet-db project to remove wdpa_parent_id in protected_areas table
           #  - In this project remove wdpa_parent_id in lib/modules/wdpa/data_standard.rb
           #  - See standardised_attributes[:wdpa_parent_id] in create_protected_area to know how the attribute is stored into db
-          attributes['wdpa_parent_id'] = attributes['wdpa_pid']
+          attributes['wdpa_parent_id'] = attributes['site_pid']
 
           imported_pa_ids << create_protected_area(attributes) if add_entry_to_protected_areas_table
           imported_pa_pids << create_protected_area_parcel(attributes) if add_entry_to_protected_areas_parcels_table
@@ -41,8 +41,8 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
     protected_area_id = nil
     standardised_attributes = Wdpa::DataStandard.attributes_from_standards_hash(attributes.symbolize_keys)
     # Set wdpa_parent_id for ProtectedPlanet-api compatibility (see comment above)
-    # Note: wdpa_pid is already set by DataStandard, we just need wdpa_parent_id for API compatibility
-    standardised_attributes[:wdpa_parent_id] = standardised_attributes[:wdpa_pid].to_i
+    # Note: site_pid is already set by DataStandard, we just need wdpa_parent_id for API compatibility
+    standardised_attributes[:wdpa_parent_id] = standardised_attributes[:site_pid].to_i
     begin
       ActiveRecord::Base.transaction(requires_new: true) do
         # Below lines are needed as the ProtectedArea model
@@ -55,7 +55,7 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
     rescue StandardError => e
       Rails.logger.warn("Wdpa::ProtectedAreaImporter::AttributeImporter.import ProtectedArea
       WDPAID #{standardised_attributes[:wdpa_id]}
-      WDPA_PID #{standardised_attributes[:wdpa_pid]} was not imported
+      SITE_PID #{standardised_attributes[:site_pid]} was not imported
       Error message: #{e.message}")
     end
     protected_area_id
@@ -76,7 +76,7 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
     rescue StandardError => e
       Rails.logger.warn("Wdpa::ProtectedAreaImporter::AttributeImporter.import ProtectedAreaParcel
       WDPAID #{standardised_attributes[:wdpa_id]}
-      WDPA_PID #{standardised_attributes[:wdpa_pid]} was not imported
+      SITE_PID #{standardised_attributes[:site_pid]} was not imported
       Error message: #{e.message}")
     end
     protected_area_pid
@@ -84,13 +84,13 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
 
   def self.current_entry_parcel_info(protected_area_attributes, wdpaids_multiple_parcels_map)
     wdpa_id = protected_area_attributes['wdpaid']
-    wdpa_pid = protected_area_attributes['wdpa_pid']
+    site_pid = protected_area_attributes['site_pid']
     parcel_info = wdpaids_multiple_parcels_map[wdpa_id]
     {
       wdpa_id: wdpa_id,
-      wdpa_pid: wdpa_pid,
+      site_pid: site_pid,
       parcel_info: parcel_info,
-      is_first_or_only_parcel: parcel_info.nil? || parcel_info == wdpa_pid,
+      is_first_or_only_parcel: parcel_info.nil? || parcel_info == site_pid,
       has_multiple_parcels: !parcel_info.nil?
     }
   end
@@ -100,22 +100,22 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
 
     RAW_PROTECTED_AREA_TABLES.each do |table|
       # The following sql command will return all wdpaids that have more then one parcels
-      # and its first_wdpa_pid (ordering by all wdpa_pid)
+      # and its first_site_pid (ordering by all site_pid)
 
       # i,e wdpaid 18422 has parcels of 18422_A, 18422_B, 18422_C
-      # and first_wdpa_pid is 18422_A (sorted by sql MIN(wdpa_pid) )
+      # and first_site_pid is 18422_A (sorted by sql MIN(site_pid) )
 
       # Example return as below
-      # wdpaid, first_wdpa_pid
+      # wdpaid, first_site_pid
       # 18422 , 18422_A
       # 18426 , 18426_A
       find_wdpa_ids_with_multiple_parcels_command = "
-        SELECT wdpaid, MIN(wdpa_pid) AS first_wdpa_pid
+        SELECT wdpaid, MIN(site_pid) AS first_site_pid
         FROM #{table}
         GROUP BY wdpaid
         HAVING COUNT(*) > 1;"
       ActiveRecord::Base.connection.execute(find_wdpa_ids_with_multiple_parcels_command).each do |row|
-        protected_area_ids_with_multiple_parcels[row['wdpaid']] = row['first_wdpa_pid']
+        protected_area_ids_with_multiple_parcels[row['wdpaid']] = row['first_site_pid']
       end
     end
     protected_area_ids_with_multiple_parcels

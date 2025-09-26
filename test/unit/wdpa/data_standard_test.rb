@@ -9,8 +9,8 @@ class TestWdpaDataStandard < ActiveSupport::TestCase
 
   test '.attributes_from_standards_hash returns the correct attribute
    for WDPA Parent ID' do
-    attributes = Wdpa::DataStandard.attributes_from_standards_hash({wdpa_pid: "1234"})
-    assert_equal({wdpa_pid: "1234"}, attributes)
+    attributes = Wdpa::DataStandard.attributes_from_standards_hash({site_pid: "1234"})
+    assert_equal({site_pid: "1234"}, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute

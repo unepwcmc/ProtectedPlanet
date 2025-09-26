@@ -97,7 +97,7 @@ export default {
           const html = this.generateHtml([
             { title: this.popupAttributes.name, value: pa.name, url: pa.wdpaid ? `/${pa.wdpaid}` : undefined },
             { title: this.popupAttributes.wdpaid, value: pa.wdpaid },
-            { title: this.popupAttributes.parcel_id, value: pa.wdpa_pid }
+            { title: this.popupAttributes.parcel_id, value: pa.site_pid }
           ])
           this.addPopup(coords, html)
         }

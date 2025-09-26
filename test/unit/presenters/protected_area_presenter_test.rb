@@ -7,7 +7,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
    on the protected area\'s attributes' do
     pa = FactoryGirl.create(
       :protected_area,
-      wdpa_pid: '123',
+      site_pid: '123',
       sources: [FactoryGirl.create(:source)],
       name: 'San Guillermo',
       original_name: 'San Guillermo',
@@ -117,7 +117,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     management_authority = FactoryGirl.create(:management_authority, name: 'Authority of Authorities')
     pa_parcel_base = {
       wdpa_id: 555_999,
-      wdpa_pid: '555999_A',
+      site_pid: '555999_A',
       name: 'San GuillermoAAA',
       original_name: 'San GuillermoAAA',
       marine: true,
@@ -143,13 +143,13 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     FactoryGirl.create(:protected_area_parcel, parcel_a_info)
 
     parcel_b_info = pa_parcel_base
-    parcel_b_info[:wdpa_pid] = '555999_B'
+    parcel_b_info[:site_pid] = '555999_B'
     parcel_b_info[:name] = 'San GuillermoBBBBB'
     parcel_b_info[:original_name] = 'San GuillermoBBBBB'
     FactoryGirl.create(:protected_area_parcel, parcel_b_info)
 
     parcel_c_info = pa_parcel_base
-    parcel_c_info[:wdpa_pid] = '555999_C'
+    parcel_c_info[:site_pid] = '555999_C'
     parcel_c_info[:name] = 'San GuillermoCCC'
     parcel_c_info[:original_name] = 'San GuillermoCCC'
     FactoryGirl.create(:protected_area_parcel, parcel_c_info)
@@ -157,7 +157,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
     # Sublocation
     expected_response = [
       {
-        wdpa_pid: '555999_A',
+        site_pid: '555999_A',
         attributes: [
           { title: 'Original Name', value: 'San GuillermoAAA' },
           { title: 'English Designation', value: 'National' },
@@ -173,7 +173,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
         ]
       },
       {
-        wdpa_pid: '555999_B',
+        site_pid: '555999_B',
         attributes: [
           { title: 'Original Name', value: 'San GuillermoBBBBB' },
           { title: 'English Designation', value: 'National' },
@@ -189,7 +189,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
         ]
       },
       {
-        wdpa_pid: '555999_C',
+        site_pid: '555999_C',
         attributes: [
           { title: 'Original Name', value: 'San GuillermoCCC' },
           { title: 'English Designation', value: 'National' },
@@ -222,7 +222,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
   management_authority = FactoryGirl.create(:management_authority, name: 'Authority of Authorities')
   pa_info_base = {
     wdpa_id: 555_999,
-    wdpa_pid: '555999',
+    site_pid: '555999',
     name: 'San GuillermoAAA',
     original_name: 'San GuillermoAAA',
     marine: true,
@@ -243,7 +243,7 @@ class ProtectedAreaPresenterTest < ActiveSupport::TestCase
   # Create PA
   pa = FactoryGirl.create(:protected_area, pa_info_base)
   expected_response = [{
-    wdpa_pid: '555999',
+    site_pid: '555999',
     attributes: [
       { title: 'Original Name', value: 'San GuillermoAAA' },
       { title: 'English Designation', value: 'National' },
