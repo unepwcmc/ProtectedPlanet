@@ -3,7 +3,7 @@ module Staging
     self.table_name = 'staging_protected_area_parcels'
     self.primary_key = 'id'
 
-    # Make sure to make the uniqueness based on the conbination of site_id + site_pid
+    # Make sure to make the uniqueness based on the combination of site_id + site_pid
     validates :site_id, uniqueness: { scope: :site_pid }
 
     has_and_belongs_to_many :countries,
