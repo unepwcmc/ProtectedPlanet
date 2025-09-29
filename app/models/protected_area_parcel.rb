@@ -5,7 +5,7 @@
 # TODO: green_list_status needs linking up see lib/modules/wdpa/green_list_importer.rb for more info
 
 class ProtectedAreaParcel < ApplicationRecord
-  # Make sure to make the uniqueness based on the conbination of site_id + site_pid
+  # Make sure to make the uniqueness based on the combination of site_id + site_pid
   validates :site_id, uniqueness: { scope: :site_pid }
 
   has_and_belongs_to_many :countries
