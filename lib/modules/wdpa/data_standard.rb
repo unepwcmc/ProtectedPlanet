@@ -1,9 +1,6 @@
 class Wdpa::DataStandard
   STANDARD_ATTRIBUTES = {
     wdpaid: { name: :site_id, type: :integer, label: 'Site ID' },
-    # As of 07Apr2025 wdpa_parent_id is not used in the project but it used in ProtectedPlanet-api
-    # see lib/modules/wdpa/protected_area_importer/attribute_importer.rb for more info
-    # :wdpa_pid => {name: :wdpa_parent_id, type: :integer, label: 'WDPA Parent ID'},
     wdpa_pid: { name: :site_pid, type: :string, label: 'Site Parcel ID' },
     name: { name: :name, type: :string, label: 'Name' },
     orig_name: { name: :original_name, type: :string, label: 'Original Name' },
@@ -109,13 +106,6 @@ class Wdpa::DataStandard
 
     # Set wdpa_id to be the same as site_id for compatibility
     standardised_attributes[:wdpa_id] = standardised_attributes[:site_id] if standardised_attributes[:site_id]
-
-    # Set wdpa_parent_id for ProtectedPlanet-api compatibility
-    # Note: site_pid is already set by DataStandard, we just need wdpa_parent_id for API compatibility
-    if standardised_attributes[:site_pid]
-      standardised_attributes[:wdpa_parent_id] =
-        standardised_attributes[:site_pid].to_i
-    end
 
     standardised_attributes
   end

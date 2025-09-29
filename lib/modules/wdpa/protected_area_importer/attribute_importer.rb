@@ -21,15 +21,6 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
           add_entry_to_protected_areas_table = entry_info[:is_first_or_only_parcel]
           add_entry_to_protected_areas_parcels_table = entry_info[:has_multiple_parcels]
 
-          # In ProtectedPlanet-api wdpa_parent_id is used as wdpa_pid in models/protected_area.rb
-          # so we cannot delete wdpa_parent_id field
-          # TODO:
-          #  - update ProtectedPlanet-api project to change wdpa_parent_id to wdpa_pid
-          #  - make migration to ProtectedPlanet-db project to remove wdpa_parent_id in protected_areas table
-          #  - In this project remove wdpa_parent_id in lib/modules/wdpa/data_standard.rb
-          #  - See standardised_attributes[:wdpa_parent_id] in create_protected_area to know how the attribute is stored into db
-          attributes['wdpa_parent_id'] = attributes['site_pid'] || attributes['wdpa_pid']
-
           imported_pa_ids << create_protected_area(attributes) if add_entry_to_protected_areas_table
           imported_pa_pids << create_protected_area_parcel(attributes) if add_entry_to_protected_areas_parcels_table
         end
@@ -40,7 +31,7 @@ class Wdpa::ProtectedAreaImporter::AttributeImporter
   def self.create_protected_area(attributes_in_view)
     protected_area_id = nil
     standardised_attributes = Wdpa::DataStandard.attributes_from_standards_hash(attributes_in_view.symbolize_keys)
-    
+
     begin
       ActiveRecord::Base.transaction(requires_new: true) do
         # Below lines are needed as the ProtectedArea model
