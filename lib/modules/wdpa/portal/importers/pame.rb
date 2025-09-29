@@ -71,7 +71,6 @@ module Wdpa
                 pe.url                  = url
                 pe.pame_source          = pame_source
                 pe.restricted           = restricted
-                pe.site_id              = site_id
                 pe.name                 = name
                 pe.assessment_is_public = assessment_is_public
               end
@@ -96,7 +95,6 @@ module Wdpa
           Rails.logger.info "Total PAME evaluations imported: #{total_evaluations}"
           notifier&.phase("#{total_evaluations} PAME evaluations imported.")
           Rails.logger.info "Total PAME sources imported: #{total_sources}"
-          
 
           build_result(total_evaluations, soft_errors, [], {
             total_sources: total_sources,

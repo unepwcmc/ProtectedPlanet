@@ -151,7 +151,7 @@ class PameEvaluation < ApplicationRecord
 
   def self.serialise(evaluations)
     evaluations.to_a.map! do |evaluation|
-      site_id = evaluation.protected_area&.site_id || evaluation.site_id
+      site_id = evaluation.protected_area&.site_id
       name = evaluation.protected_area&.name || evaluation.name
       designation = evaluation.protected_area&.designation&.name || 'N/A'
       countries = evaluation.protected_area&.countries || evaluation.countries
