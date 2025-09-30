@@ -112,7 +112,11 @@ class ProtectedAreaPresenter
           {
             title: 'International Criteria',
             value: parcel.international_criteria || 'Not Reported'
-          }
+          },
+          {
+            title: 'Inland Waters',
+            value: parcel.inland_waters || 'Not Reported'
+          },
         ].concat(parcel_oecm_attributes(parcel))
       }
     end
@@ -131,10 +135,6 @@ class ProtectedAreaPresenter
       {
         title: 'Conservation Objectives',
         value: parcel.conservation_objectives
-      },
-      {
-        title: 'Inland Waters',
-        value: parcel.inland_waters || 'Not Reported'
       },
       {
         title: 'OECM Assessment',
