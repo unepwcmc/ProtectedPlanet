@@ -2,8 +2,8 @@
 
 class Wdpa::ParcelDataStandard
   STANDARD_ATTRIBUTES = {
-    wdpaid: { name: :wdpa_id, type: :integer, label: 'WDPA ID' },
-    wdpa_pid: { name: :wdpa_pid, type: :string, label: 'WDPA Parcel ID' },
+    wdpaid: { name: :site_id, type: :integer, label: 'Site ID' },
+    wdpa_pid: { name: :site_pid, type: :string, label: 'Site Parcel ID' },
     name: { name: :name, type: :string, label: 'Name' },
     orig_name: { name: :original_name, type: :string, label: 'Original Name' },
     rep_m_area: { name: :reported_marine_area, type: :float, label: 'Reported Marine Area' },
@@ -11,7 +11,6 @@ class Wdpa::ParcelDataStandard
     gis_m_area: { name: :gis_marine_area, type: :float, label: 'GIS Marine Area' },
     gis_area: { name: :gis_area, type: :float, label: 'GIS Area' },
     iso3: { name: :countries, type: :csv, label: 'Country' },
-    sub_loc: { name: :sub_locations, type: :csv, label: 'Sublocations' },
     status: { name: :legal_status, type: :string, label: 'Legal Status' },
     status_yr: { name: :legal_status_updated_at, type: :year, label: 'Status Year' },
     iucn_cat: { name: :iucn_category, type: :string, label: 'IUCN Category' },
@@ -69,6 +68,9 @@ class Wdpa::ParcelDataStandard
         standardised_attributes[:marine] = marine_type_to_boolean(standardised_attributes[:marine_type])
       end
     end
+
+    # Set wdpa_id to be the same as site_id for compatibility
+    standardised_attributes[:wdpa_id] = standardised_attributes[:site_id] if standardised_attributes[:site_id]
 
     standardised_attributes
   end

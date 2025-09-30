@@ -36,7 +36,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
     # Verify data integrity
     staging_pa = ProtectedAreaNew.first
     assert staging_pa.the_geom.present?, 'Geometry should be imported'
-    assert staging_pa.wdpa_id.present?, 'WDPA ID should be present'
+    assert staging_pa.site_id.present?, 'WDPA ID should be present'
   end
 
   private
@@ -46,16 +46,16 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
     ActiveRecord::Base.connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('polygons')} AS
       SELECT#{' '}
-        1 as wdpaid,
-        '1' as wdpa_pid,
+        1 as site_id,
+        '1' as site_pid,
         'Test Polygon PA' as name,
         'Designated' as status,
         'Ia' as iucn_cat,
         ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry;
       UNION ALL
       SELECT#{' '}
-        2 as wdpaid,
-        '2' as wdpa_pid,
+        2 as site_id,
+        '2' as site_pid,
         'Test Polygon PA 2' as name,
         'Designated' as status,
         'II' as iucn_cat,
@@ -63,8 +63,8 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
 
       CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('points')} AS
       SELECT#{' '}
-        3 as wdpaid,
-        '3' as wdpa_pid,
+        3 as site_id,
+        '3' as site_pid,
         'Test Point PA' as name,
         'Designated' as status,
         'III' as iucn_cat,

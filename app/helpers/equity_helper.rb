@@ -34,13 +34,13 @@ module EquityHelper
   def pa_link(label)
     name_of_site = label.split(',').first.squish
 
-    wdpaid = if EDGE_CASES.key?(name_of_site.to_sym)
-               EDGE_CASES[name_of_site.to_sym]
-             else
-               ProtectedArea.find_by(name: name_of_site)&.wdpa_id
-             end
-    
-    protected_area_path(wdpaid) if wdpaid
+    site_id = if EDGE_CASES.key?(name_of_site.to_sym)
+                EDGE_CASES[name_of_site.to_sym]
+              else
+                ProtectedArea.find_by(name: name_of_site)&.site_id
+              end
+
+    protected_area_path(site_id) if site_id
   end
 
   def include_image(pa_page)

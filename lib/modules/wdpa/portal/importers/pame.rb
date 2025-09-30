@@ -22,10 +22,10 @@ module Wdpa
           CSV.foreach(csv_file, headers: true) do |row|
             ActiveRecord::Base.transaction do
               id                   = row[0].to_i
-              wdpa_id              = row[1].to_i
+              site_id              = row[1].to_i
               methodology          = row[3]
               year                 = row[4].to_i
-              protected_area       = Staging::ProtectedArea.find_by_wdpa_id(wdpa_id) || nil
+              protected_area       = Staging::ProtectedArea.find_by_site_id(site_id) || nil
               metadata_id          = row[6].to_i
               name                 = row[7]
               url                  = row[5]
@@ -71,11 +71,10 @@ module Wdpa
                 pe.url                  = url
                 pe.pame_source          = pame_source
                 pe.restricted           = restricted
-                pe.wdpa_id              = wdpa_id
                 pe.name                 = name
                 pe.assessment_is_public = assessment_is_public
               end
-              site_ids_not_recognised << wdpa_id if protected_area.nil?
+              site_ids_not_recognised << site_id if protected_area.nil?
 
               iso3s.split(';').each do |iso3|
                 country = Country.find_by(iso_3: iso3)
@@ -96,7 +95,6 @@ module Wdpa
           Rails.logger.info "Total PAME evaluations imported: #{total_evaluations}"
           notifier&.phase("#{total_evaluations} PAME evaluations imported.")
           Rails.logger.info "Total PAME sources imported: #{total_sources}"
-          
 
           build_result(total_evaluations, soft_errors, [], {
             total_sources: total_sources,

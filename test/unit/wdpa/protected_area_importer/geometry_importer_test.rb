@@ -21,7 +21,7 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
         UPDATE protected_areas pa
         SET the_geom = import.wkb_geometry
         FROM #{table_names["geom1"]} import
-        WHERE pa.wdpa_id = import.wdpaid;
+        WHERE pa.site_id = import.wdpaid;
       """.squish)
 
     ActiveRecord::Base.connection.
@@ -30,7 +30,7 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
         UPDATE protected_areas pa
         SET second_geom = import.second_geometry
         FROM #{table_names["geom1"]} import
-        WHERE pa.wdpa_id = import.wdpaid;
+        WHERE pa.site_id = import.wdpaid;
       """.squish)
 
     ActiveRecord::Base.connection.
@@ -75,7 +75,7 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
         UPDATE protected_areas pa
         SET the_geom = import.wkb_geometry
         FROM #{table_names["geom2"]} import
-        WHERE pa.wdpa_id = import.wdpaid;
+        WHERE pa.site_id = import.wdpaid;
       """.squish)
 
     ActiveRecord::Base.connection.
@@ -84,7 +84,7 @@ class TestWdpaGeometryImporterService < ActiveSupport::TestCase
         UPDATE protected_areas pa
         SET second_geom = import.second_geometry
         FROM #{table_names["geom2"]} import
-        WHERE pa.wdpa_id = import.wdpaid;
+        WHERE pa.site_id = import.wdpaid;
       """.squish)
 
     ActiveRecord::Base.connection.

@@ -7,13 +7,13 @@ class RealmTest < ActiveSupport::TestCase
 
   test 'realm has many protected areas' do
     pa1 = ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test PA 1',
       designation: Designation.first || Designation.create!(name: 'Test Designation'),
       realm: @realm
     )
     pa2 = ProtectedArea.create!(
-      wdpa_id: 2,
+      site_id: 2,
       name: 'Test PA 2',
       designation: Designation.first || Designation.create!(name: 'Test Designation'),
       realm: @realm
@@ -26,19 +26,19 @@ class RealmTest < ActiveSupport::TestCase
 
   test 'realm has many protected area parcels' do
     pa = ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test PA',
       designation: Designation.first || Designation.create!(name: 'Test Designation'),
       realm: @realm
     )
 
     parcel1 = ProtectedAreaParcel.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Parcel 1',
       realm: @realm
     )
     parcel2 = ProtectedAreaParcel.create!(
-      wdpa_id: 2,
+      site_id: 2,
       name: 'Test Parcel 2',
       realm: @realm
     )
@@ -53,12 +53,12 @@ class RealmTest < ActiveSupport::TestCase
     Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
 
     staging_pa1 = Staging::ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging PA 1',
       realm: @realm
     )
     staging_pa2 = Staging::ProtectedArea.create!(
-      wdpa_id: 2,
+      site_id: 2,
       name: 'Test Staging PA 2',
       realm: @realm
     )
@@ -76,12 +76,12 @@ class RealmTest < ActiveSupport::TestCase
     Wdpa::Portal::Managers::StagingTableManager.create_staging_tables
 
     staging_parcel1 = Staging::ProtectedAreaParcel.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging Parcel 1',
       realm: @realm
     )
     staging_parcel2 = Staging::ProtectedAreaParcel.create!(
-      wdpa_id: 2,
+      site_id: 2,
       name: 'Test Staging Parcel 2',
       realm: @realm
     )

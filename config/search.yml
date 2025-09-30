@@ -67,9 +67,9 @@ filters:
     marine:
       type: 'equality'
       path: 'marine'
-    wdpa_id:
+    site_id:
       type: 'equality'
-      path: 'wdpa_id'
+      path: 'site_id'
     iucn_category:
       type: 'nested'
       path: 'iucn_category'

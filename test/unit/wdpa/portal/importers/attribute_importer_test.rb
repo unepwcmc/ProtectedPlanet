@@ -15,8 +15,8 @@ class Wdpa::Portal::Importers::ProtectedAreaAttributeTest < ActiveSupport::TestC
     # Mock portal data
     mock_portal_data = [
       {
-        'wdpaid' => 1,
-        'wdpa_pid' => '1',
+        'site_id' => 1,
+        'site_pid' => '1',
         'name' => 'Test Protected Area',
         'status' => 'Designated',
         'iucn_cat' => 'Ia',
@@ -40,7 +40,7 @@ class Wdpa::Portal::Importers::ProtectedAreaAttributeTest < ActiveSupport::TestC
 
     # Verify data was imported
     staging_pa = ProtectedAreaNew.first
-    assert_equal 1, staging_pa.wdpa_id
+    assert_equal 1, staging_pa.site_id
     assert_equal 'Test Protected Area', staging_pa.name
   end
 
@@ -48,8 +48,8 @@ class Wdpa::Portal::Importers::ProtectedAreaAttributeTest < ActiveSupport::TestC
     # Mock portal data with invalid record
     mock_portal_data = [
       {
-        'wdpaid' => 1,
-        'wdpa_pid' => '1',
+        'site_id' => 1,
+        'site_pid' => '1',
         'name' => nil, # Invalid: name is required
         'status' => 'Designated',
         'iucn_cat' => 'Ia'

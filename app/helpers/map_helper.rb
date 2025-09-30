@@ -151,12 +151,12 @@ module MapHelper
     }
   end
 
-  def wdpaid_where_query wdpaids
-    'where=wdpaid+IN+%28' + wdpaids.join('%2C+') + '%29'
+  def site_ids_where_query site_ids
+    'where=site_id+IN+%28' + site_ids.join('%2C+') + '%29'
   end
 
-  def greenlist_query_string wdpaids
-    '/query?' + wdpaid_where_query(wdpaids) + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
+  def greenlist_query_string site_ids
+    '/query?' + site_ids_where_query(site_ids) + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
   end
 
   def map_search_types

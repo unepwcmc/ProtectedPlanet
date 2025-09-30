@@ -1,5 +1,5 @@
 class AssetsController < ApplicationController
-  TYPES = %w(protected_area country region).freeze
+  TYPES = %w[protected_area country region].freeze
 
   def tiles
     area_type = params[:type]
@@ -15,7 +15,7 @@ class AssetsController < ApplicationController
   private
 
   def protected_area
-    @protected_area ||= ProtectedArea.where(wdpa_id: params[:id]).first
+    @protected_area ||= ProtectedArea.where(site_id: params[:id]).first
   end
 
   def country

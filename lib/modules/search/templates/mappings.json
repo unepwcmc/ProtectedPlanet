@@ -68,7 +68,7 @@
       "id": {
         "type": "long"
       },
-	    "wdpa_id": {
+	    "site_id": {
         "type": "integer"
 	    },
 	    "type": {
@@ -104,14 +104,6 @@
       },
 	    "coordinates": {
         "type": "geo_point"
-	    },
-	    "sub_location": {
-        "type": "nested",
-        "properties": {
-          "name": {
-            "type": "keyword"
-          }
-        }
 	    },
 	    "iso_3": {
         "type": "keyword",

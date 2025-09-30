@@ -14,8 +14,6 @@
 # - Add `green_list_status_id` column to `protected_area_parcels` to track individual parcel status.
 
 # See app/models/protected_area_parcel.rb to link up
-
-# In this file we are still using WDPAIDs instead of SITE_IDs but the message return should be SITE_IDs
 require 'csv'
 
 module Wdpa
@@ -57,17 +55,17 @@ module Wdpa
               when :success
                 imported_count += 1
               when :invalid
-                invalid << result[:wdpa_id]
+                invalid << result[:site_id]
               when :not_found
-                not_found << result[:wdpa_id]
+                not_found << result[:site_id]
               when :duplicate
-                duplicates << result[:wdpa_id]
+                duplicates << result[:site_id]
               when :error
                 soft_errors << result[:error]
               end
             end
           rescue StandardError => e
-            soft_errors << "Row error processing #{row['wdpaid']}: #{e.message}"
+            soft_errors << "Row error processing #{row['site_id']}: #{e.message}"
             Rails.logger.warn "Green list row processing failed: #{e.message}"
           end
 
@@ -85,14 +83,14 @@ module Wdpa
         end
 
         def self.process_row(row)
-          wdpa_id = validate_wdpa_id(row['wdpaid'])
-          return { status: :invalid, wdpa_id: row['wdpaid'] } unless wdpa_id
+          site_id = validate_site_id(row['site_id'])
+          return { status: :invalid, site_id: row['site_id'] } unless site_id
 
-          pa = Staging::ProtectedArea.find_by_wdpa_id(wdpa_id)
-          return { status: :not_found, wdpa_id: wdpa_id } if pa.blank?
+          pa = Staging::ProtectedArea.find_by_site_id(site_id)
+          return { status: :not_found, site_id: site_id } if pa.blank?
 
           # Check for duplicates
-          return { status: :duplicate, wdpa_id: wdpa_id } if pa.green_list_status_id
+          return { status: :duplicate, site_id: site_id } if pa.green_list_status_id
 
           gls = Staging::GreenListStatus.find_or_create_by(
             row.to_h.slice('status', 'expiry_date')
@@ -103,11 +101,11 @@ module Wdpa
           pa.green_list_status_id = gls.id
           pa.save!
 
-          { status: :success, wdpa_id: wdpa_id }
+          { status: :success, site_id: site_id }
         end
 
-        def self.validate_wdpa_id(wdpa_id_string)
-          Integer(wdpa_id_string)
+        def self.validate_site_id(site_id_string)
+          Integer(site_id_string)
         rescue StandardError
           false
         end

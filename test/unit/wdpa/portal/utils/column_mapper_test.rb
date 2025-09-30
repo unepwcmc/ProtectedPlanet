@@ -73,7 +73,7 @@ class Wdpa::Portal::Utils::ColumnMapperTest < ActiveSupport::TestCase
     portal_attributes = {
       'realm' => 'Marine',
       'name' => 'Test PA',
-      'wdpa_id' => 123
+      'site_id' => 123
     }
 
     result = Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp(
@@ -87,14 +87,14 @@ class Wdpa::Portal::Utils::ColumnMapperTest < ActiveSupport::TestCase
     assert_equal true, result[:marine]
     assert_equal 2, result[:marine_type]
     assert_equal 'Test PA', result[:name]
-    assert_equal 123, result[:wdpa_id]
+    assert_equal 123, result[:site_id]
   end
 
   test 'map_portal_to_pp handles empty realm field' do
     portal_attributes = {
       'realm' => '',
       'name' => 'Test PA',
-      'wdpa_id' => 123
+      'site_id' => 123
     }
 
     assert_raises(ArgumentError) do
@@ -110,7 +110,7 @@ class Wdpa::Portal::Utils::ColumnMapperTest < ActiveSupport::TestCase
     portal_attributes = {
       'realm' => 'Freshwater',
       'name' => 'Test PA',
-      'wdpa_id' => 123
+      'site_id' => 123
     }
 
     assert_raises(ArgumentError) do
@@ -125,7 +125,7 @@ class Wdpa::Portal::Utils::ColumnMapperTest < ActiveSupport::TestCase
   test 'map_portal_to_pp processes other fields normally' do
     portal_attributes = {
       'name' => 'Test PA',
-      'wdpa_id' => 123,
+      'site_id' => 123,
       'status' => 'Designated'
     }
 
@@ -136,7 +136,7 @@ class Wdpa::Portal::Utils::ColumnMapperTest < ActiveSupport::TestCase
     )
 
     assert_equal 'Test PA', result[:name]
-    assert_equal 123, result[:wdpa_id]
+    assert_equal 123, result[:site_id]
     assert_equal 'Designated', result[:status]
   end
 end

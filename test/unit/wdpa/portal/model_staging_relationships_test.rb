@@ -21,12 +21,12 @@ class ModelStagingRelationshipsTest < ActiveSupport::TestCase
 
   test 'designation has staging relationships' do
     staging_pa = Staging::ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging PA',
       designation: @designation
     )
     staging_parcel = Staging::ProtectedAreaParcel.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging Parcel',
       designation: @designation
     )
@@ -37,12 +37,12 @@ class ModelStagingRelationshipsTest < ActiveSupport::TestCase
 
   test 'management authority has staging relationships' do
     staging_pa = Staging::ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging PA',
       management_authority: @management_authority
     )
     staging_parcel = Staging::ProtectedAreaParcel.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging Parcel',
       management_authority: @management_authority
     )
@@ -53,12 +53,12 @@ class ModelStagingRelationshipsTest < ActiveSupport::TestCase
 
   test 'legal status has staging relationships' do
     staging_pa = Staging::ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging PA',
       legal_status: @legal_status
     )
     staging_parcel = Staging::ProtectedAreaParcel.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging Parcel',
       legal_status: @legal_status
     )
@@ -69,12 +69,12 @@ class ModelStagingRelationshipsTest < ActiveSupport::TestCase
 
   test 'iucn category has staging relationships' do
     staging_pa = Staging::ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging PA',
       iucn_category: @iucn_category
     )
     staging_parcel = Staging::ProtectedAreaParcel.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging Parcel',
       iucn_category: @iucn_category
     )
@@ -85,12 +85,12 @@ class ModelStagingRelationshipsTest < ActiveSupport::TestCase
 
   test 'governance has staging relationships' do
     staging_pa = Staging::ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging PA',
       governance: @governance
     )
     staging_parcel = Staging::ProtectedAreaParcel.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging Parcel',
       governance: @governance
     )
@@ -101,12 +101,12 @@ class ModelStagingRelationshipsTest < ActiveSupport::TestCase
 
   test 'realm has staging relationships' do
     staging_pa = Staging::ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging PA',
       realm: @realm
     )
     staging_parcel = Staging::ProtectedAreaParcel.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging Parcel',
       realm: @realm
     )
@@ -116,8 +116,8 @@ class ModelStagingRelationshipsTest < ActiveSupport::TestCase
   end
 
   test 'staging relationships return correct class names' do
-    staging_pa = @designation.staging_protected_areas.build(wdpa_id: 1, name: 'Test')
-    staging_parcel = @designation.staging_protected_area_parcels.build(wdpa_id: 1, name: 'Test')
+    staging_pa = @designation.staging_protected_areas.build(site_id: 1, name: 'Test')
+    staging_parcel = @designation.staging_protected_area_parcels.build(site_id: 1, name: 'Test')
 
     assert_instance_of Staging::ProtectedArea, staging_pa
     assert_instance_of Staging::ProtectedAreaParcel, staging_parcel
@@ -126,12 +126,12 @@ class ModelStagingRelationshipsTest < ActiveSupport::TestCase
   test 'staging relationships can be queried' do
     # Create multiple staging records
     Staging::ProtectedArea.create!(
-      wdpa_id: 1,
+      site_id: 1,
       name: 'Test Staging PA 1',
       designation: @designation
     )
     Staging::ProtectedArea.create!(
-      wdpa_id: 2,
+      site_id: 2,
       name: 'Test Staging PA 2',
       designation: @designation
     )

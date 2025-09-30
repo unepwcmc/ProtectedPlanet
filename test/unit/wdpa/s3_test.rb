@@ -72,19 +72,19 @@ class TestWdpaS3Downloader < ActiveSupport::TestCase
       'Expected new_wdpa? to return true when given a time older than the current_wdpa'
   end
 
-  test '#current_wdpa_identifier returns a part of the WDPA filename' do
+  test '#current_site_identifier returns a part of the WDPA filename' do
     file_mock = mock()
     file_mock.expects(:key).returns('WDPA_Apr2015_Public.zip')
     Wdpa::S3.any_instance.expects(:current_wdpa).returns(file_mock)
 
-    assert_equal 'Apr2015', Wdpa::S3.current_wdpa_identifier
+    assert_equal 'Apr2015', Wdpa::S3.current_site_identifier
   end
 
-  test '#current_wdpa_identifier returns Month+Year independently from the length of the months name' do
+  test '#current_site_identifier returns Month+Year independently from the length of the months name' do
     file_mock = mock()
     file_mock.expects(:key).returns('WDPA_June2015_Public.zip')
     Wdpa::S3.any_instance.expects(:current_wdpa).returns(file_mock)
 
-    assert_equal 'June2015', Wdpa::S3.current_wdpa_identifier
+    assert_equal 'June2015', Wdpa::S3.current_site_identifier
   end
 end

@@ -31,7 +31,7 @@ class DownloadWorkers::Search < DownloadWorkers::Base
   end
 
   def protected_area_site_ids
-    search.all_wdpa_ids
+    search.all_site_ids
   end
 
   def search

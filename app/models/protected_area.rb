@@ -4,10 +4,9 @@ class ProtectedArea < ApplicationRecord
   
   has_and_belongs_to_many :countries
   has_and_belongs_to_many :countries_for_index, -> { select(:id, :name, :iso_3, :region_id).includes(:region_for_index) }, :class_name => 'Country'
-  has_and_belongs_to_many :sub_locations
   has_and_belongs_to_many :sources
 
-  has_many :protected_area_parcels, foreign_key: 'wdpa_id', primary_key: 'wdpa_id', dependent: :destroy
+  has_many :protected_area_parcels, foreign_key: 'site_id', primary_key: 'site_id', dependent: :destroy
   has_many :networks_protected_areas, dependent: :destroy
   has_many :networks, through: :networks_protected_areas
   has_many :pame_evaluations
@@ -24,6 +23,7 @@ class ProtectedArea < ApplicationRecord
   belongs_to :green_list_status
 
   after_create :create_slug
+  before_save :set_legacy_fields
 
   scope :all_except, -> (pa) { where.not(id: pa) }
 
@@ -73,9 +73,9 @@ class ProtectedArea < ApplicationRecord
     opts = {with_scores: true, limit: [0, limit]}
 
     results = $redis.zrevrangebyscore(year_month, "+inf", "-inf", opts)
-    results.map { |wdpa_id, visits|
+    results.map { |site_id, visits|
       {
-        protected_area: ProtectedArea.find_by_wdpa_id(wdpa_id),
+        protected_area: ProtectedArea.find_by_site_id(site_id),
         visits: visits.to_i
       }
     }
@@ -127,38 +127,37 @@ class ProtectedArea < ApplicationRecord
       ON protected_areas_sources.protected_area_id = #{self.id}
       AND protected_areas_sources.source_id = sources.id
     SQL
-    result[self.wdpa_pid] = convert_into_hash(pa_sources.to_a) if pa_sources.any?
+    result[self.site_pid] = convert_into_hash(pa_sources.to_a) if pa_sources.any?
 
     # Get sources from all parcels
     parcel_sources = ActiveRecord::Base.connection.execute(<<~SQL)
-      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party, protected_area_parcels.wdpa_pid
+      SELECT sources.title, EXTRACT(YEAR FROM sources.update_year) AS year, sources.responsible_party, protected_area_parcels.site_pid
       FROM sources
       INNER JOIN protected_area_parcels_sources ON protected_area_parcels_sources.source_id = sources.id
       INNER JOIN protected_area_parcels ON protected_area_parcels.id = protected_area_parcels_sources.protected_area_parcel_id
-      WHERE protected_area_parcels.wdpa_id = #{self.wdpa_id}
+      WHERE protected_area_parcels.site_id = #{self.site_id}
     SQL
 
-    parcel_sources.group_by { |source| source['wdpa_pid'] }.each do |wdpa_pid, sources|
-      result[wdpa_pid] = convert_into_hash(sources.map { |s| s.except('wdpa_pid') })
+    parcel_sources.group_by { |source| source['site_pid'] }.each do |site_pid, sources|
+      result[site_pid] = convert_into_hash(sources.map { |s| s.except('site_pid') })
     end
 
     result
   end
 
-  def wdpa_ids
-    wdpa_id
+  def site_ids
+    site_id
   end
 
   def as_indexed_json options={}
     self.as_json(
-      only: [:id, :wdpa_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_oecm],
+      only: [:id, :site_id, :name, :original_name, :marine, :has_irreplaceability_info, :has_parcc_info, :is_oecm],
       methods: [:coordinates, :special_status],
       include: {
         countries_for_index: {
           only: [:name, :id, :iso_3],
           include: { region_for_index: { only: [:id, :name] } }
         },
-        sub_locations: { only: [:english_name] },
         iucn_category: { only: [:id, :name] },
         designation: { only: [:id, :name] },
         governance: { only: [:id, :name] }
@@ -177,11 +176,10 @@ class ProtectedArea < ApplicationRecord
 
   def as_api_feeder
     attributes = self.as_json(
-      only: [:wdpa_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area]
+      only: [:site_id, :name, :original_name, :marine, :legal_status_updated_at, :reported_area]
     )
 
     relations = {
-      sub_locations: sub_locations.map{|sl| {english_name: sl.try(:english_name)}},
       countries: countries_for_index.map {|c| {'name' => c.try(:name), 'iso_3' => c.try(:iso_3), 'region' => {'name' => c.try(:region_for_index).try(:name)}}},
       iucn_category: {'name' => iucn_category.try(:name)},
       designation: {'name' => designation.try(:name), 'jurisdiction' => {'name' => designation.try(:jurisdiction).try(:name)}},
@@ -268,12 +266,12 @@ class ProtectedArea < ApplicationRecord
   end
 
   def arcgis_query_string
-    "/query?where=wdpaid+%3D+#{wdpa_id}&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
+    "/query?where=site_id+%3D+#{site_id}&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
   end
 
   def extent_url
     {
-      url: "#{arcgis_layer}/query?where=wdpaid+%3D+#{wdpa_id}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      url: "#{arcgis_layer}/query?where=site_id+%3D+#{site_id}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
       padding: [0.2, 0.2, 0.2]
     }
   end
@@ -309,12 +307,12 @@ class ProtectedArea < ApplicationRecord
       FROM (
         SELECT ST_Extent(pa.the_geom) AS extent
         FROM protected_areas pa
-        WHERE wdpa_id = ?
+        WHERE site_id = ?
       ) e
     """.squish
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, wdpa_id
+      dirty_query, site_id
     ])
   end
 
@@ -329,12 +327,12 @@ class ProtectedArea < ApplicationRecord
       FROM (
         SELECT ST_SimplifyPreserveTopology(pa1.the_geom, 0.003) AS a, ST_SimplifyPreserveTopology(pa2.the_geom, 0.003) AS b
         FROM protected_areas AS pa1, protected_areas AS pa2
-        WHERE pa1.wdpa_id = ? AND pa2.wdpa_id = ?
+        WHERE pa1.site_id = ? AND pa2.site_id = ?
       ) AS intersection;
     """.squish
 
     ActiveRecord::Base.send(:sanitize_sql_array, [
-      dirty_query, wdpa_id, pa.wdpa_id
+      dirty_query, site_id, pa.site_id
     ])
   end
 
@@ -344,7 +342,7 @@ class ProtectedArea < ApplicationRecord
   end
 
   def create_slug
-    updated_slug = [wdpa_id, name, designation.try(:name)].join(' ').parameterize
+    updated_slug = [site_id, name, designation.try(:name)].join(' ').parameterize
     update_attributes(slug: updated_slug)
   end
 
@@ -357,5 +355,13 @@ class ProtectedArea < ApplicationRecord
     joins(:iucn_category).where(
       "iucn_categories.name IN (#{valid_categories})"
     )
+  end
+
+  private
+
+  # To be removed after migration - ensures wdpa_id and wdpa_pid are filled for backward compatibility
+  def set_legacy_fields
+    self.wdpa_id = site_id if site_id.present?
+    self.wdpa_pid = site_pid if site_pid.present?
   end
 end

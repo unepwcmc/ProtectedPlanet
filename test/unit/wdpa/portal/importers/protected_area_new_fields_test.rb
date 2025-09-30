@@ -15,8 +15,8 @@ class Wdpa::Portal::Importers::ProtectedAreaNewFieldsTest < ActiveSupport::TestC
     # Mock portal data with new fields
     mock_portal_data = [
       {
-        'wdpaid' => 1,
-        'wdpa_pid' => '1',
+        'site_id' => 1,
+        'site_pid' => '1',
         'name' => 'Test Protected Area',
         'status' => 'Designated',
         'iucn_cat' => 'Ia',
@@ -56,8 +56,8 @@ class Wdpa::Portal::Importers::ProtectedAreaNewFieldsTest < ActiveSupport::TestC
     # Mock portal data with new fields for parcels
     mock_portal_data = [
       {
-        'wdpaid' => 1,
-        'wdpa_pid' => '1',
+        'site_id' => 1,
+        'site_pid' => '1',
         'name' => 'Test Parcel',
         'status' => 'Designated',
         'iucn_cat' => 'Ia',
@@ -97,8 +97,8 @@ class Wdpa::Portal::Importers::ProtectedAreaNewFieldsTest < ActiveSupport::TestC
     # Mock portal data without new fields
     mock_portal_data = [
       {
-        'wdpaid' => 1,
-        'wdpa_pid' => '1',
+        'site_id' => 1,
+        'site_pid' => '1',
         'name' => 'Test Protected Area',
         'status' => 'Designated',
         'iucn_cat' => 'Ia',
@@ -131,8 +131,8 @@ class Wdpa::Portal::Importers::ProtectedAreaNewFieldsTest < ActiveSupport::TestC
     # Mock portal data without realm field
     mock_portal_data = [
       {
-        'wdpaid' => 1,
-        'wdpa_pid' => '1',
+        'site_id' => 1,
+        'site_pid' => '1',
         'name' => 'Test Protected Area',
         'status' => 'Designated',
         'iucn_cat' => 'Ia'

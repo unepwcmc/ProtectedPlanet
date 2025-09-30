@@ -50,7 +50,7 @@ export default {
     /**
      *
      *  {
-     *    wdpa_pid: string
+     *    site_pid: string
      *    attributes: {
      *      title: string
      *      value: string 
@@ -67,7 +67,7 @@ export default {
   beforeMount() {
     if (this.attributesInfo.length > 0 ) {
       // No matter what condition we are displaying first parcel 
-      this.chosenPacelId = this.attributesInfo[0].wdpa_pid
+      this.chosenPacelId = this.attributesInfo[0].site_pid
     }
   },
   computed: {
@@ -80,20 +80,20 @@ export default {
     allAttributesInfo() {
       return this.attributesInfo.map((attributeInfo) => {
         return [
-          { title: this.dropdownTitle, value: attributeInfo.wdpa_pid },
+          { title: this.dropdownTitle, value: attributeInfo.site_pid },
           ...attributeInfo.attributes
         ]
       })
     },
     options() {
-      return this.attributesInfo.map((attributeInfo) => attributeInfo.wdpa_pid)
+      return this.attributesInfo.map((attributeInfo) => attributeInfo.site_pid)
     },
     moreThanOneParcels() {
       return this.attributesInfo.length > 1
     },
     currentAttrbiteSet() {
       const chosenAttributeSet = this.attributesInfo
-        .find((attributeInfo) => attributeInfo.wdpa_pid === this.chosenPacelId)
+        .find((attributeInfo) => attributeInfo.site_pid === this.chosenPacelId)
       return chosenAttributeSet?.attributes ?? []
     }
   },

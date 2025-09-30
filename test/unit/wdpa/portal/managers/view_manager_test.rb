@@ -49,12 +49,12 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
     # Create all required views
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW portal_standard_polygons AS
-      SELECT 1 as wdpaid, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
+      SELECT 1 as site_id, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
     SQL
 
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW portal_standard_points AS
-      SELECT 1 as wdpaid, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
+      SELECT 1 as site_id, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
     SQL
 
     @connection.execute(<<~SQL)
@@ -76,7 +76,7 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
     # Create only one view
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW portal_standard_polygons AS
-      SELECT 1 as wdpaid, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
+      SELECT 1 as site_id, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
     SQL
 
     result = Wdpa::Portal::Managers::ViewManager.validate_required_views_exist
@@ -87,12 +87,12 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
     # Create test views
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW portal_standard_polygons AS
-      SELECT 1 as wdpaid, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
+      SELECT 1 as site_id, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
     SQL
 
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW portal_standard_points AS
-      SELECT 1 as wdpaid, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
+      SELECT 1 as site_id, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
     SQL
 
     @connection.execute(<<~SQL)
@@ -156,12 +156,12 @@ class Wdpa::Portal::Managers::ViewManagerTest < ActiveSupport::TestCase
     # Create test views
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW portal_standard_polygons AS
-      SELECT 1 as wdpaid, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
+      SELECT 1 as site_id, 'test' as name, ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))') as wkb_geometry
     SQL
 
     @connection.execute(<<~SQL)
       CREATE MATERIALIZED VIEW portal_standard_points AS
-      SELECT 1 as wdpaid, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
+      SELECT 1 as site_id, 'test' as name, ST_GeomFromText('POINT(0 0)') as wkb_geometry
     SQL
 
     # Mock the first refresh to succeed, second to fail

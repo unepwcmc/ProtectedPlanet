@@ -16,7 +16,7 @@
         v-for="(siteDetail, i) in siteDetails"
         :key="i"
         class="card__link"
-        :href="`/${siteDetail.wdpa_id}`"
+        :href="`/${siteDetail.site_id}`"
         :title="`View more about the site: ${siteDetail.name}`"
       >
         <div class="card__image-placeholder">

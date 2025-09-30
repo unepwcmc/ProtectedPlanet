@@ -3,8 +3,8 @@
     <p class="table__cell">{{ item.name }}</p>
     <p class="table__cell">{{ item.designation }}</p>
     <p class="table__cell">
-      <template v-if="item.restricted">{{ item.wdpa_id }}</template>
-      <a v-else :href="item.wdpa_url" title="View protected area on Protected Planet" target="_blank">{{ item.wdpa_id }}</a>
+      <template v-if="item.restricted">{{ item.site_id }}</template>
+      <a v-else :href="item.pa_site_url" title="View protected area on Protected Planet" target="_blank">{{ item.site_id }}</a>
     </p>
     <p class="table__cell">{{ item.id }}</p>
     <p class="table__cell">{{ checkForMultiples('iso3') }}</p>

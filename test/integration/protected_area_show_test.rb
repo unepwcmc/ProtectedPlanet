@@ -8,7 +8,7 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
       :protected_area, name: 'Killbear', slug: 'killbear', countries: [@country]
     )
 
-    search_mock = mock().tap { |m| m.stubs(:results).returns([]) }
+    search_mock = mock.tap { |m| m.stubs(:results).returns([]) }
     Search.stubs(:search).returns(search_mock)
 
     seed_cms
@@ -16,11 +16,11 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
 
   test 'renders the Protected Area name' do
     get "/#{@protected_area.slug}"
-    assert_match /Killbear/, @response.body
+    assert_match(/Killbear/, @response.body)
   end
 
   test 'renders the Protected Area name given a WDPA ID' do
-    get "/#{@protected_area.wdpa_id}"
-    assert_match /Killbear/, @response.body
+    get "/#{@protected_area.site_id}"
+    assert_match(/Killbear/, @response.body)
   end
 end

@@ -1,7 +1,7 @@
 class Download::Requesters::ProtectedArea < Download::Requesters::Base
-  def initialize format, wdpa_id
+  def initialize format, site_id
     @format = format
-    @wdpa_id = wdpa_id
+    @site_id = site_id
   end
 
   def request
@@ -19,7 +19,7 @@ class Download::Requesters::ProtectedArea < Download::Requesters::Base
   private
 
   def identifier
-    @wdpa_id
+    @site_id
   end
 end
 

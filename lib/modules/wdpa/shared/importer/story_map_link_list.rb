@@ -54,7 +54,7 @@ module Wdpa
                   next
                 end
 
-                protected_area = protected_area_class.find_by_wdpa_id(site_id)
+                protected_area = protected_area_class.find_by_site_id(site_id)
 
                 if protected_area.present?
                   link = story_map_link_class.where(protected_area: protected_area, link: row[1], link_type: row[2])
