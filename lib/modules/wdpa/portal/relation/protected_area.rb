@@ -59,13 +59,13 @@ module Wdpa
         def no_take_status(value)
           Staging::NoTakeStatus.create({
             name: value,
-            area: @current_attributes[:no_take_area]
+            area: @current_attributes['no_take_area']
           })
         end
 
         # Convert designation names to Designation objects with jurisdiction
         def designation(value)
-          jurisdiction_name = @current_attributes[:jurisdiction]
+          jurisdiction_name = @current_attributes['jurisdiction']
           jurisdiction = jurisdiction_name ? Jurisdiction.where(name: jurisdiction_name).first_or_create : nil
           Designation.where({
             name: value,
