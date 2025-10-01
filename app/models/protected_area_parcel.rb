@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-# This file was copied from app/models/protected_area.rb then modified to only including/linking nedded columns
-# As of 04Apr2025 sources and green_list_status are not linked up
-# TODO: green_list_status needs linking up see lib/modules/wdpa/green_list_importer.rb for more info
+# This file was copied from app/models/protected_area.rb then modified to only including/linking needed columns
 
 class ProtectedAreaParcel < ApplicationRecord
   # Make sure to make the uniqueness based on the combination of site_id + site_pid
@@ -27,10 +25,8 @@ class ProtectedAreaParcel < ApplicationRecord
   belongs_to :realm
   belongs_to :no_take_status
   belongs_to :designation
+  belongs_to :green_list_status
   delegate :jurisdiction, to: :designation, allow_nil: true
-
-  # As of 09Apr2025 we are not clear if there is possibility to only green list certain parcels in a PA
-  # belongs_to :green_list_status
 
   after_create :create_slug
   before_save :set_legacy_fields

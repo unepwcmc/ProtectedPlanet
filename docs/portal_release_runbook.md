@@ -52,7 +52,7 @@ docker compose ps
 Monthly release (production):
 
 ```bash
-  PP_RELEASE_REFRESH_VIEWS=false bundle exec rake pp:portal:release
+  bundle exec rake pp:portal:release
 ```
 
 Mimic Monthly release without refreshing portal views:

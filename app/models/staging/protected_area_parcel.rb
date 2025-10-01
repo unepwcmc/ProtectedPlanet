@@ -35,6 +35,7 @@ module Staging
     belongs_to :realm
     belongs_to :no_take_status, class_name: 'Staging::NoTakeStatus'
     belongs_to :designation
+    belongs_to :green_list_status, class_name: 'Staging::GreenListStatus'
     delegate :jurisdiction, to: :designation, allow_nil: true
 
     after_create :create_slug
