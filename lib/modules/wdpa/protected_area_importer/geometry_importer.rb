@@ -21,7 +21,7 @@ class Wdpa::ProtectedAreaImporter::GeometryImporter
       UPDATE protected_areas pa
       SET #{standardised_name} = import.#{original_name}
       FROM #{table} import
-      WHERE pa.wdpa_id = import.wdpaid;
+      WHERE pa.site_id = import.wdpaid;
     """.squish)
   end
 

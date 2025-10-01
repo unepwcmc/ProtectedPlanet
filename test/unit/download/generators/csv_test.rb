@@ -6,10 +6,10 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     zip_file_path = './all-csv.zip'
     csv_file_path = './all-csv.csv'
     wdpa_file_path = 'WDPA_sources.csv'
-    query = """
+    query = "
       SELECT \"TYPE\", #{Download::Utils.download_columns}
-      FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
-    """.squish
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
+    ".squish
 
     File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
 
@@ -20,17 +20,17 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     Download::Generators::Csv.any_instance.expects(:system).with(create_zip_command).returns(true)
 
     wdpa_zip_command = "zip -ru #{zip_file_path} #{wdpa_file_path}"
-    opts = {chdir: "."}
+    opts = { chdir: '.' }
     Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
-    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
     Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
 
     Ogr::Postgres.expects(:export).with(:csv, csv_file_path, "SELECT * FROM #{view_name}").returns(true)
 
     assert_equal true, Download::Generators::Csv.generate(zip_file_path),
-      "Expected #generate to return true on success"
+      'Expected #generate to return true on success'
   end
 
   test '#generate returns false if the export fails' do
@@ -38,7 +38,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     Ogr::Postgres.expects(:export).returns(false)
 
     assert_equal false, Download::Generators::Csv.generate(''),
-      "Expected #generate to return false on failure"
+      'Expected #generate to return false on failure'
   end
 
   test '#generate returns false if the zip fails' do
@@ -50,15 +50,15 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     Download::Generators::Csv.any_instance.expects(:system).returns(false)
 
     wdpa_zip_command = "zip -ru  #{wdpa_file_path}"
-    opts = {chdir: "."}
+    opts = { chdir: '.' }
     Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
 
-    update_zip_command = "zip -ru  *"
-    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    update_zip_command = 'zip -ru  *'
+    opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
     Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, opts).returns(false)
 
     assert_equal false, Download::Generators::Csv.generate(''),
-      "Expected #generate to return false on failure"
+      'Expected #generate to return false on failure'
   end
 
   test '#generate removes non-zip files when finished' do
@@ -79,12 +79,12 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     csv_file_path = './all-csv.csv'
     wdpa_file_path = 'WDPA_sources.csv'
 
-    wdpa_ids = [1,2,3]
-    query = """
+    site_ids = [1, 2, 3]
+    query = "
       SELECT \"TYPE\", #{Download::Utils.download_columns}
-      FROM #{Wdpa::Release::DOWNLOADS_VIEW_NAME}
-      WHERE \"WDPAID\" IN (1,2,3)
-    """.squish
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
+      WHERE \"SITE_ID\" IN (1,2,3)
+    ".squish
 
     File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
 
@@ -95,16 +95,16 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     Download::Generators::Csv.any_instance.expects(:system).with(create_zip_command).returns(true)
 
     wdpa_zip_command = "zip -ru #{zip_file_path} #{wdpa_file_path}"
-    opts = {chdir: "."}
+    opts = { chdir: '.' }
     Download::Generators::Csv.any_instance.expects(:system).with(wdpa_zip_command, opts).returns(true)
 
     update_zip_command = "zip -ru #{zip_file_path} *"
-    opts = {chdir: Download::Generators::Base::ATTACHMENTS_PATH}
+    opts = { chdir: Download::Generators::Base::ATTACHMENTS_PATH }
     Download::Generators::Csv.any_instance.expects(:system).with(update_zip_command, opts).returns(true)
 
     Ogr::Postgres.expects(:export).with(:csv, csv_file_path, "SELECT * FROM #{view_name}").returns(true)
 
-    assert_equal true, Download::Generators::Csv.generate(zip_file_path, wdpa_ids),
+    assert_equal true, Download::Generators::Csv.generate(zip_file_path, site_ids),
       'Expected #generate to return true on success'
   end
 end

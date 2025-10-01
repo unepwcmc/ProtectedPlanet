@@ -2,8 +2,8 @@
 
 class Wdpa::ParcelDataStandard
   STANDARD_ATTRIBUTES = {
-    wdpaid: { name: :wdpa_id, type: :integer, label: 'WDPA ID' },
-    wdpa_pid: { name: :wdpa_pid, type: :string, label: 'WDPA Parcel ID' },
+    wdpaid: { name: :site_id, type: :integer, label: 'Site ID' },
+    wdpa_pid: { name: :site_pid, type: :string, label: 'Site Parcel ID' },
     name: { name: :name, type: :string, label: 'Name' },
     orig_name: { name: :original_name, type: :string, label: 'Original Name' },
     rep_m_area: { name: :reported_marine_area, type: :float, label: 'Reported Marine Area' },
@@ -11,7 +11,6 @@ class Wdpa::ParcelDataStandard
     gis_m_area: { name: :gis_marine_area, type: :float, label: 'GIS Marine Area' },
     gis_area: { name: :gis_area, type: :float, label: 'GIS Area' },
     iso3: { name: :countries, type: :csv, label: 'Country' },
-    sub_loc: { name: :sub_locations, type: :csv, label: 'Sublocations' },
     status: { name: :legal_status, type: :string, label: 'Legal Status' },
     status_yr: { name: :legal_status_updated_at, type: :year, label: 'Status Year' },
     iucn_cat: { name: :iucn_category, type: :string, label: 'IUCN Category' },
@@ -26,8 +25,8 @@ class Wdpa::ParcelDataStandard
     # As of 04Apr2025 there is no usuage for each parcel's geom so no duplication to save db size
     # if in future this is needed then put it back in oder for geom to be included in attributes_from_standards_hash
     # :wkb_geometry => {name: :the_geom, type: :geometry, label: 'Geometry'},
-    # As of 04Apr2025 it is not linked up as it is the same sources (for all parcels) no matter which parcel
-    # :metadataid   => {name: :sources, type: :integer, label: 'Source'},
+    # Sources for parcels - each parcel can have its own sources
+    metadataid: { name: :sources, type: :integer, label: 'Source' },
     own_type: { name: :owner_type, type: :string, label: 'Owner Type' },
     pa_def: { name: :is_oecm, type: :oecm, label: 'PA Def' }, # 0 means is_oecm is true
     supp_info: { name: :supplementary_info, type: :string, label: 'Supplementary Info' },
@@ -48,12 +47,8 @@ class Wdpa::ParcelDataStandard
   def self.attributes_from_standards_hash(standards_hash)
     attributes = standardise_values(standards_hash)
     attributes = create_models(attributes)
-    attributes = remove_nested_attributes(attributes)
-
-    attributes
+    remove_nested_attributes(attributes)
   end
-
-  private
 
   def self.standardise_values(hash)
     standardised_attributes = {}
@@ -61,7 +56,7 @@ class Wdpa::ParcelDataStandard
     hash.each do |key, value|
       attributes = Array.wrap(self::STANDARD_ATTRIBUTES[key])
       attributes.each do |attribute|
-        standardised_value = Wdpa::Attribute.standardise value, as: attribute[:type]
+        standardised_value = Wdpa::Shared::TypeConverter.convert value, as: attribute[:type]
         standardised_attributes[attribute[:name]] = standardised_value
       end
 
@@ -73,6 +68,9 @@ class Wdpa::ParcelDataStandard
         standardised_attributes[:marine] = marine_type_to_boolean(standardised_attributes[:marine_type])
       end
     end
+
+    # Set wdpa_id to be the same as site_id for compatibility
+    standardised_attributes[:wdpa_id] = standardised_attributes[:site_id] if standardised_attributes[:site_id]
 
     standardised_attributes
   end

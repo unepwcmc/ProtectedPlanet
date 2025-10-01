@@ -63,7 +63,7 @@ module ApplicationHelper
 
   def protected_area_cover(protected_area, with_tag: true)
     version = Rails.application.secrets.mapbox[:version]
-    image_params = {id: protected_area.wdpa_id, type: "protected_area", version: version}
+    image_params = {id: protected_area.site_id, type: "protected_area", version: version}
     data = cover_data(image_params, protected_area.class)
 
     return tiles_path(image_params) unless with_tag

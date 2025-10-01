@@ -73,7 +73,7 @@ class Search::AreasSerializer < Search::BaseSerializer
     {
       image: ApplicationController.helpers.protected_area_cover(site, with_tag: false),
       title: site.name,
-      url: protected_area_path(site.wdpa_id)
+      url: protected_area_path(site.site_id)
     }
   end
 

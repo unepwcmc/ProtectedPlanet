@@ -6,21 +6,21 @@ class TestGreenListImporter < ActiveSupport::TestCase
   def before_setup
     super
 
-    wdpa_ids = [1, 2, 3]
-    wdpa_ids.each do |wdpa_id|
-      FactoryGirl.create(:protected_area, wdpa_id: wdpa_id)
+    site_ids = [1, 2, 3]
+    site_ids.each do |site_id|
+      FactoryGirl.create(:protected_area, site_id: site_id)
     end
 
     # multiple_yields from mocha expects multiple arrays,
     # an array for each row
     csv_content = [
       [{
-        'wdpaid' => 1,
+        'site_id' => 1,
         'status' => 'Green Listed',
         'expiry_date' => Date.today
       }],
       [{
-        'wdpaid' => 2,
+        'site_id' => 2,
         'status' => 'Candidate',
         'expiry_date' => Date.today
       }]
@@ -45,8 +45,8 @@ class TestGreenListImporter < ActiveSupport::TestCase
 
   test '#import creates GreenListStatus records with correct status' do
     Wdpa::GreenListImporter.import
-    gls_1 = ProtectedArea.find_by(wdpa_id: 1).green_list_status
-    gls_2 = ProtectedArea.find_by(wdpa_id: 2).green_list_status
+    gls_1 = ProtectedArea.find_by(site_id: 1).green_list_status
+    gls_2 = ProtectedArea.find_by(site_id: 2).green_list_status
 
     assert_equal gls_1.status, 'Green Listed'
     assert_equal gls_2.status, 'Candidate'
@@ -54,8 +54,8 @@ class TestGreenListImporter < ActiveSupport::TestCase
 
   test '#import creates GreenListStatus records with correct expiry date' do
     Wdpa::GreenListImporter.import
-    gls_1 = ProtectedArea.find_by(wdpa_id: 1).green_list_status
-    gls_2 = ProtectedArea.find_by(wdpa_id: 2).green_list_status
+    gls_1 = ProtectedArea.find_by(site_id: 1).green_list_status
+    gls_2 = ProtectedArea.find_by(site_id: 2).green_list_status
 
     assert_equal gls_1.expiry_date, Date.today
     assert_equal gls_2.expiry_date, Date.today

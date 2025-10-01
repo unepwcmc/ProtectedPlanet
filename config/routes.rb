@@ -11,13 +11,12 @@ Rails.application.routes.draw do
   get '/', to: redirect('/en')
   get '/admin', to: redirect('/admin/sites')
 
-  #TODO
+  # TODO
   get '/:id', to: 'protected_areas#show', as: 'protected_area'
 
   get '/assets/tiles/:id', to: 'assets#tiles', as: 'tiles'
 
-  scope "(:locale)", locale: /en|es|fr/ do
-
+  scope '(:locale)', locale: /en|es|fr/ do
     root to: 'home#index'
     get '/', to: 'home#index'
 
@@ -36,14 +35,14 @@ Rails.application.routes.draw do
 
     # JSON endpoints
     get '/downloads/poll', to: 'downloads#poll', as: 'download_poll'
-    resources :downloads, only: [:show, :create, :update]
+    resources :downloads, only: %i[show create update]
 
     namespace :api do
       namespace :v3 do
         resources :protected_areas, only: [:show] do
           member do
             get 'geojson'
-            get 'overlap/:comparison_wdpa_id', to: 'protected_areas#overlap'
+            get 'overlap/:comparison_site_id', to: 'protected_areas#overlap'
           end
         end
 
@@ -51,7 +50,7 @@ Rails.application.routes.draw do
         get '/search/by_point', to: 'search#by_point'
       end
     end
-    
+
     ## Only CMS routes are present below
 
     get '/marine/download_designations', to: 'marine#download_designations'
@@ -59,7 +58,7 @@ Rails.application.routes.draw do
     get '/target-11-dashboard/load-countries', to: 'target_dashboard#load_countries',
       as: 'target_dashboard_load_countries'
 
-    get '/terms', to: redirect("/c/terms-and-conditions")
+    get '/terms', to: redirect('/c/terms-and-conditions')
 
     get '/country_codes', to: 'country#codes', as: 'country_codes'
 
@@ -88,8 +87,7 @@ Rails.application.routes.draw do
 
     # Ensure that this route is defined last
 
-    comfy_route :cms_admin, path: "/admin"
-    comfy_route :cms, path: "/", sitemap: false
+    comfy_route :cms_admin, path: '/admin'
+    comfy_route :cms, path: '/', sitemap: false
   end
-
 end
