@@ -38,3 +38,4 @@ tmp/cache/webpacker
 .vscode/
 
 vendor/bundle
+/public/manifests
