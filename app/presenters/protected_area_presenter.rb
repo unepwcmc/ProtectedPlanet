@@ -62,8 +62,12 @@ class ProtectedAreaPresenter
         site_pid: parcel.site_pid,
         attributes: [
           {
-            title: 'Original Name',
+            title: 'Name',
             value: parcel.original_name
+          },
+          {
+            title: 'English Name',
+            value: parcel.name
           },
           {
             title: 'English Designation',
@@ -117,6 +121,10 @@ class ProtectedAreaPresenter
             title: 'Inland Waters',
             value: parcel.inland_waters || 'Not Reported'
           },
+          {
+            title: 'Supplementary Information',
+            value: parcel.supplementary_info
+          }
         ].concat(parcel_oecm_attributes(parcel))
       }
     end
@@ -128,10 +136,6 @@ class ProtectedAreaPresenter
     return [] unless parcel.is_oecm
 
     [
-      {
-        title: 'Supplementary Information',
-        value: parcel.supplementary_info
-      },
       {
         title: 'Conservation Objectives',
         value: parcel.conservation_objectives
