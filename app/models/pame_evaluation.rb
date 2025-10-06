@@ -253,30 +253,6 @@ class PameEvaluation < ApplicationRecord
                #{where_statement}
                GROUP BY pame_evaluations.id, protected_areas.site_id, protected_areas.name, designation, pame_sources.data_title,
                         pame_sources.resp_party, pame_sources.year, pame_sources.language
-
-       /*        UNION
-
-        SELECT pame_evaluations.id AS id,
-               pame_evaluations.metadata_id AS metadata_id,
-               pame_evaluations.url AS url,
-               pame_evaluations.year AS evaluation_year,
-               pame_evaluations.methodology AS methodology,
-               pame_evaluations.site_id AS site_id,
-               ARRAY_TO_STRING(ARRAY_AGG(countries.iso_3),';') AS countries,
-               pame_evaluations.name AS site_name,
-               NULL AS designation,
-               pame_sources.data_title AS data_title,
-               pame_sources.resp_party AS resp_party,
-               pame_sources.year AS source_year,
-               pame_sources.language AS language
-               FROM pame_evaluations
-               INNER JOIN pame_sources ON pame_evaluations.pame_source_id = pame_sources.id
-               INNER JOIN countries_pame_evaluations ON pame_evaluations.id = countries_pame_evaluations.pame_evaluation_id
-               INNER JOIN countries ON countries_pame_evaluations.country_id = countries.id
-               #{restricted_where_statement}
-               GROUP BY pame_evaluations.id, site_id, pame_evaluations.name, designation, pame_sources.data_title,
-                        pame_sources.resp_party, pame_sources.year, pame_sources.language;
-      */
     SQL
     evaluations = ActiveRecord::Base.connection.execute(query)
 
@@ -285,9 +261,12 @@ class PameEvaluation < ApplicationRecord
       evaluation_columns << 'evaluation_id'
 
       excluded_attributes = %w[assessment_is_public restricted protected_area_id pame_source_id created_at
-        updated_at id site_id source_id]
+        updated_at id site_id source_id wdpa_id]
 
       evaluation_columns.delete_if { |k, _v| excluded_attributes.include? k }
+
+      # Include site_id explicitly in the header as it's not a model column
+      evaluation_columns << 'site_id'
 
       additional_columns = %w[iso3 designation source_data_title source_resp_party source_year
         source_language]
@@ -337,7 +316,7 @@ class PameEvaluation < ApplicationRecord
 
     restricted_where_statement << '(pame_evaluations.protected_area_id IS NULL AND restricted = false)'
     restricted_where_statement = restricted_where_statement.join(' AND ')
-
+    puts "restricted_where_statement, #{restricted_where_statement}"
     generate_csv(where_statement, restricted_where_statement)
   end
 
