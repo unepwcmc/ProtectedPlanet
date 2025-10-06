@@ -30,7 +30,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_point_query).returns(view_name_point)
 
     ActiveRecord::Base.connection.stubs(:select_value).returns(3)
-    poly_query = "SELECT * FROM #{view_name_poly}" << ' ORDER BY \""WDPAID"\" ASC'
+    poly_query = "SELECT * FROM #{view_name_poly}" << ' ORDER BY \""SITE_ID"\" ASC'
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path,
       "#{poly_query} LIMIT 1 OFFSET 0").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path,
@@ -120,7 +120,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Download::Generators::Shapefile.generate(zip_file_path)
   end
 
-  test '#generate, given a zip file path and WDPA IDs, exports
+  test '#generate, given a zip file path and SITE IDs, exports
    shapefiles for each geometry table, and returns them as a single zip' do
     zip_file_path  = './all-shp.zip'
     zip_file_path0 = './all-shp0.zip'
@@ -153,7 +153,7 @@ class DownloadShapefileTest < ActiveSupport::TestCase
     Download::Generators::Shapefile.any_instance.stubs(:create_view).with(shp_point_query).returns(view_name_point)
 
     ActiveRecord::Base.connection.stubs(:select_value).returns(1).times(6)
-    poly_query = "SELECT * FROM #{view_name_poly}" << ' ORDER BY \""WDPAID"\" ASC'
+    poly_query = "SELECT * FROM #{view_name_poly}" << ' ORDER BY \""SITE_ID"\" ASC'
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path,
       "#{poly_query} LIMIT 1 OFFSET 0").returns(true)
     Ogr::Postgres.expects(:export).with(:shapefile, shp_polygon_file_path,

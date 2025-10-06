@@ -17,7 +17,7 @@ class SearchResultsTest < ActiveSupport::TestCase
   end
 
   test '.with_coords returns all the search result models with their
-   coordinates, WDPA ID and name' do
+   coordinates, SITE ID and name' do
     es_response = {
       'hits' => {
         'hits' => [{

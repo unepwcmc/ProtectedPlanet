@@ -10,7 +10,7 @@ class ProtectedAreasController < ApplicationController
     @download_options = helpers.download_options(%w[csv shp gdb pdf], 'protected_area', id)
 
     # If found by slug, redirect to search page
-    # This is to overcome possible issues with PAs with same name/slug and different WDPA ID
+    # This is to overcome possible issues with PAs with same name/slug and different SITE ID
     pa = ProtectedArea.find_by(slug: id)
     redirect_to search_areas_path(search_term: pa.name) and return if pa
 

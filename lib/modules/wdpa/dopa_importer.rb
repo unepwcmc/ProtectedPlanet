@@ -11,12 +11,12 @@ module Wdpa::DopaImporter
 
       pas_to_update = []
 
-      # Read the CSV to get the WDPA IDs
+      # Read the CSV to get the SITE IDs
       CSV.foreach(DOPA_LIST, headers: true) do |row| 
        pas_to_update << row['site_id']
       end
 
-      # Find all WDPA IDs (if they exist) in the CSV
+      # Find all SITE IDs (if they exist) in the CSV
       areas = ProtectedArea.where(site_id: pas_to_update)
       
       # Turn off verbose logging
@@ -25,7 +25,7 @@ module Wdpa::DopaImporter
         areas.in_batches.update_all(is_dopa: true)
       end
 
-      # Missing WDPA IDs
+      # Missing SITE IDs
       missing_pas = pas_to_update - areas.map(&:site_id)
       logger.info "Could not update #{missing_pas.join(', ')}"
     end

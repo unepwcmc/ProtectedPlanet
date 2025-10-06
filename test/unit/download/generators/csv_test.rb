@@ -73,7 +73,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     Download::Generators::Csv.generate('./all-csv.zip')
   end
 
-  test '#generate, given a path and WDPA IDs, calls ogr2ogr with the path, a query,
+  test '#generate, given a path and SITE IDs, calls ogr2ogr with the path, a query,
    and the specific driver' do
     zip_file_path = './all-csv.zip'
     csv_file_path = './all-csv.csv'

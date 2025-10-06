@@ -73,9 +73,9 @@ module Wdpa::GreenListImporter
         end
       end
 
-      puts "Invalid WDPAIDs found: #{invalid.join(',')}"
-      puts "PA with WDPAID not found: #{not_found.join(',')}"
-      puts "Statuses rows for same WDPAID found: #{duplicates.join(',')}"
+      puts "Invalid SITEIDs found: #{invalid.join(',')}"
+      puts "PA with SITEID not found: #{not_found.join(',')}"
+      puts "Statuses rows for same SITEID found: #{duplicates.join(',')}"
     end
   end
 end

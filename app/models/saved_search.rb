@@ -57,7 +57,7 @@ class SavedSearch < ApplicationRecord
     }
   end
 
-  # Make use of Elasticsearch search_after API to search after the WDPA ID passed
+  # Make use of Elasticsearch search_after API to search after the SITE ID passed
   # to the search. 
   def download_search(last_site_id_of_results = nil)
     if last_site_id_of_results

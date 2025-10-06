@@ -108,7 +108,7 @@ module Wdpa
           sites_with_multiple_parcels = {}
 
           Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_materialised_views.each do |view|
-            # Find WDPA IDs that have more than one parcel
+            # Find SITE IDs that have more than one parcel
             find_site_ids_with_multiple_parcels_command = <<~SQL
               SELECT site_id, MIN(site_pid) AS first_site_pid
               FROM #{view}

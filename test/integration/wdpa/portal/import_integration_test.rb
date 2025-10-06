@@ -36,7 +36,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
     # Verify data integrity
     staging_pa = ProtectedAreaNew.first
     assert staging_pa.the_geom.present?, 'Geometry should be imported'
-    assert staging_pa.site_id.present?, 'WDPA ID should be present'
+    assert staging_pa.site_id.present?, 'SITE ID should be present'
   end
 
   private

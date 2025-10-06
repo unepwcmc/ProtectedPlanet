@@ -197,7 +197,7 @@ class Country < ApplicationRecord
   def designations_list_by_wdpa_or_oecm(jurisdictions: [], only_unique_site_ids: false, is_oecm: false)
     # If you need to have more fields in select feel free to add.
     # Please refrain from adding the_geom field as it takes a long time to render it will slow down everything!
-    # In some senarios we want the return results to have only unique wdpa ids but in most cases it should be returing everything
+    # In some senarios we want the return results to have only unique site ids but in most cases it should be returing everything
     # if is_oecm is set to false then it returns WDPA designations for current country is set to true then returns OCEM designations
     ProtectedArea
       .select("#{'DISTINCT' if only_unique_site_ids} site_id,designation_id")

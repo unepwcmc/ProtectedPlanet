@@ -1,4 +1,4 @@
-# A constant to translate between WDPA ID and the path for the green list image for that WDPA (located within the green_list directory within images)
+# A constant to translate between SITE ID and the path for the green list image for that WDPA (located within the green_list directory within images)
 # We're using the translation approach below as we don't want to store the images in the protected_area model in the database and there are only a few green list sites.
 
 # All images are cropped to 600px * 400px

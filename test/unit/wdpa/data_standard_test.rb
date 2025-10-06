@@ -2,13 +2,13 @@ require 'test_helper'
 
 class TestWdpaDataStandard < ActiveSupport::TestCase
   test '.attributes_from_standards_hash returns the correct attribute
-   for WDPA ID' do
+   for SITE ID' do
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ wdpaid: 1234 })
     assert_equal({ site_id: 1234 }, attributes)
   end
 
   test '.attributes_from_standards_hash returns the correct attribute
-   for WDPA Parent ID' do
+   for SITE_PID' do
     attributes = Wdpa::DataStandard.attributes_from_standards_hash({ site_pid: '1234' })
     assert_equal({ site_pid: '1234' }, attributes)
   end

@@ -19,7 +19,7 @@ class ProtectedAreaShowTest < ActionDispatch::IntegrationTest
     assert_match(/Killbear/, @response.body)
   end
 
-  test 'renders the Protected Area name given a WDPA ID' do
+  test 'renders the Protected Area name given a SITE ID' do
     get "/#{@protected_area.site_id}"
     assert_match(/Killbear/, @response.body)
   end
