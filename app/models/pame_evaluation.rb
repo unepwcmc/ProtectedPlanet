@@ -316,7 +316,6 @@ class PameEvaluation < ApplicationRecord
 
     restricted_where_statement << '(pame_evaluations.protected_area_id IS NULL AND restricted = false)'
     restricted_where_statement = restricted_where_statement.join(' AND ')
-    puts "restricted_where_statement, #{restricted_where_statement}"
     generate_csv(where_statement, restricted_where_statement)
   end
 
