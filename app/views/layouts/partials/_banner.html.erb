@@ -1,0 +1,6 @@
+<% if banner_visible? %>
+  <banner-banner 
+    :banners="<%= active_banners.to_json %>"
+    :signature="<%= banner_signature.to_json %>"
+  ></banner-banner>
+<% end %>

@@ -1,0 +1,105 @@
+// Banner styles
+.banner {
+  background-color: $grey-xlight;
+  border-bottom: 1px solid $grey-light;
+  padding: 0.25rem 0;
+  position: relative;
+  z-index: $z-100;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $gutter-small;
+  }
+  // Carousel
+  &--carousel {
+    .banner__container {
+      align-items: stretch;
+    }
+
+    .banner__slides {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .banner__slide {
+      display: none;
+    }
+
+    .banner__slide.is-active {
+      display: block;
+    }
+
+    .banner__nav {
+      background: none;
+      border: 1px solid $grey-light;
+      color: $grey-dark;
+      cursor: pointer;
+      padding: rem-calc(4 8);
+      line-height: 1;
+      align-self: center;
+      border-radius: $radius-global;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: $white;
+        border-color: $primary;
+        color: $primary;
+      }
+    }
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__title {
+    @include h3; 
+    color: $header-font-color;
+  }
+
+  &__body {
+    font-size: rem-calc(16);
+    line-height: $body-font-line-height;
+    color: $body-font-colour;
+
+    p {
+      margin: 0;
+    }
+
+    a {
+      color: $primary;
+      text-decoration: underline;
+
+      &:hover {
+        color: $primary-dark;
+        text-decoration: none;
+      }
+    }
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    font-size: rem-calc(24);
+    color: $grey;
+    cursor: pointer;
+    padding: rem-calc(4);
+    line-height: 1;
+    flex-shrink: 0;
+    border-radius: $radius-global;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: $grey-dark;
+      background: rgba($grey, 0.1);
+    }
+
+    &:focus {
+      outline: 2px solid $primary;
+      outline-offset: 2px;
+    }
+  }
+
+}

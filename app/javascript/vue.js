@@ -69,6 +69,7 @@ import VTable from './components/table/VTable'
 import IconExclamationCircle from './components/icon/ExclamationCircle'
 import StatsAttributesSet from './components/stats/StatsAttributesSet'
 import StatsParcelsSources from './components/stats/StatsParcelsSources'
+import BannerBanner from './components/banner/Banner'
 
 document.addEventListener('DOMContentLoaded', () => {
   if(document.getElementById('v-app')) {
@@ -154,7 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
         VTable,
         IconExclamationCircle,
         StatsAttributesSet,
-        StatsParcelsSources
+        StatsParcelsSources,
+        BannerBanner
       },
       beforeCreate() { 
         this.$store.dispatch('download/initialiseStore')
