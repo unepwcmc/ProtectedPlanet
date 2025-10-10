@@ -9,7 +9,7 @@ module Download
       opts = { reject: [] }.merge(opts)
       add_quotes = ->(str) { %("#{str}") }
 
-      Download::Queries::POLYGONS_COLUMNS
+      Download::Config.polygons_columns
         .reject { |col| opts[:reject].include? col }
         .map(&:upcase)
         .map(&add_quotes)
@@ -19,7 +19,7 @@ module Download
     def self.source_columns
       add_quotes = ->(str) { %("#{str}") }
 
-      Download::Queries::SOURCE_COLUMNS
+      Download::Config.source_columns
         .map(&:upcase)
         .map(&add_quotes)
         .join(',')
@@ -65,7 +65,7 @@ module Download
     # identifier is the search token if domain is search
     def self.filename(domain, identifier, format)
       basename = BASENAMES[identifier] || BASENAMES['default']
-      current_release_label = Release.current_label
+      current_release_label = Download::Config.current_label
       "#{basename}_#{current_release_label}_Public".tap do |base_filename|
         base_filename << "_#{identifier}" if needs_identifier_suffix?(domain, identifier)
         base_filename << "_#{format}" if format.present? && format != 'gdb'

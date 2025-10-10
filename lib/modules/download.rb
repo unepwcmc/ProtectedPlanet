@@ -1,3 +1,5 @@
+require_relative 'download/config'
+
 module Download
   def self.request(params)
     Download::Router.request(params.delete('domain'), params)

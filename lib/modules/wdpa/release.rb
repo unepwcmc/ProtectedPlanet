@@ -69,7 +69,7 @@ class Wdpa::Release
 
   def create_downloads_view
     create_query = "CREATE OR REPLACE VIEW #{DOWNLOADS_VIEW_NAME} AS "
-    as_query = Download::Queries.build_query_for_downloads_view(true)
+    as_query = Download::Queries.build_query_for_downloads_view('legacy')
 
     db.execute(create_query + "(SELECT #{as_query[:select]} FROM #{as_query[:from]})")
   end

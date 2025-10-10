@@ -56,14 +56,14 @@ class Download::Generators::Gdb < Download::Generators::Base
 
   def query(select, conditions = [])
     query = "SELECT #{select}"
-    query << " FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}"
+    query << " FROM #{Download::Config.downloads_view}"
     add_conditions(query, conditions).squish
   end
 
   def export_sources
     query = <<-SQL
       SELECT #{Download::Utils.source_columns}
-      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['sources']}
+      FROM #{Download::Config.sources_view}
     SQL
 
     Ogr::Postgres.export(:gdb, gdb_component, query, 'source')

@@ -56,7 +56,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
     limit = (total_count / @number_of_pieces.to_f).ceil
     offset = limit * piece_index
-    order_by = 'ORDER BY \""SITE_ID"\" ASC'
+    order_by = "ORDER BY \"#{Download::Config.id_column}\" ASC"
     sql = "
       SELECT *
       FROM #{view_name}
@@ -77,7 +77,7 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
   def query(select, conditions = [])
     query = "SELECT #{select}"
-    query << " FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}"
+    query << " FROM #{Download::Config.downloads_view}"
     add_conditions(query, conditions).squish
   end
 

@@ -88,7 +88,7 @@ module PortalRelease
           Download::Generators::Base.clean_tmp_download_views
 
           conn.execute("DROP VIEW IF EXISTS #{downloads_view}")
-          as_query = Download::Queries.build_query_for_downloads_view(true)
+          as_query = Download::Queries.build_query_for_downloads_view('portal')
 
           conn.execute("CREATE VIEW #{downloads_view} AS (SELECT #{as_query[:select]} FROM #{as_query[:from]})")
           log&.event('portal_downloads_view_created', payload: { view: downloads_view })

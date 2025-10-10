@@ -61,7 +61,7 @@ class Download::Generators::Base
 
     Ogr::Postgres.export :csv, sources_path, "
       SELECT #{Download::Utils.source_columns}
-      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['sources']}
+      FROM #{Download::Config.sources_view}
     "
   end
 
@@ -77,7 +77,7 @@ class Download::Generators::Base
 
   def query(conditions = [])
     query = %(SELECT "TYPE", #{Download::Utils.download_columns})
-    query << " FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}"
+    query << " FROM #{Download::Config.downloads_view}"
     add_conditions(query, conditions).squish
   end
 
@@ -89,7 +89,8 @@ class Download::Generators::Base
         # If site_ids were provided but none are valid, ensure no rows are returned
         conditions << "1=0"
       else
-        conditions << %{"SITE_ID" IN (#{sanitized_ids.join(',')})}
+        # Use SITE_ID for portal views, WDPAID for standard views
+        conditions << %{"#{Download::Config.id_column}" IN (#{sanitized_ids.join(',')})}
       end
     end
     query.tap do |q|
@@ -115,7 +116,7 @@ class Download::Generators::Base
   attr_reader :zip_path
 
   def sources_path
-    File.join(File.dirname(zip_path), "WDPA_sources_#{Release.current_label}.csv")
+    File.join(File.dirname(zip_path), "WDPA_sources_#{Download::Config.current_label}.csv")
   end
 
   def add_sources
