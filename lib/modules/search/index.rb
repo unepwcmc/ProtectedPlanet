@@ -33,6 +33,10 @@ class Search::Index
     region_index.index
     country_index.index
     pa_index.index
+
+    
+    # To clean up the cache
+    Rails.cache.clear
   end
 
   def self.create_cms_fragments
