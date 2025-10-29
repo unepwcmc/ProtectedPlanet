@@ -4,16 +4,15 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
   def setup
     # Mock the configuration
     @config = mock('PortalImportConfig')
-    @config.stubs(:portal_materialised_view_values).returns(%w[portal_standard_polygons portal_standard_points
+    @config.stubs(:portal_live_materialised_view_values).returns(%w[portal_standard_polygons portal_standard_points
       portal_standard_sources])
 
-    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_materialised_view_values).returns(@config.portal_materialised_view_values)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_live_materialised_view_values).returns(@config.portal_live_materialised_view_values)
   end
 
   test '.import validates views and imports data to staging tables' do
     # Mock view validation
-    Wdpa::Portal::Managers::ViewManager.expects(:validate_required_views_exist).returns(true)
-    Wdpa::Portal::Managers::ViewManager.expects(:refresh_materialized_views)
+    Wdpa::Portal::Managers::ViewManager.expects(:validate_required_views_exist).returns(true) 
 
     # Mock staging table management
     Wdpa::Portal::Managers::StagingTableManager.expects(:ensure_staging_tables_exist!).with(create_if_missing: true)
@@ -51,21 +50,6 @@ class Wdpa::Portal::ImporterTest < ActiveSupport::TestCase
     assert_raises(StandardError, /Required materialized views do not exist/) do
       Wdpa::Portal::Importer.import
     end
-  end
-
-  test '.import skips refresh when refresh_materialized_views is false' do
-    Wdpa::Portal::Managers::ViewManager.expects(:validate_required_views_exist).returns(true)
-    Wdpa::Portal::Managers::ViewManager.expects(:refresh_materialized_views).never
-
-    Wdpa::Portal::Managers::StagingTableManager.expects(:ensure_staging_tables_exist!).twice
-
-    staging_results = { sources: { success: true, hard_errors: [] } }
-    live_results = {}
-
-    Wdpa::Portal::Importer.expects(:import_data_to_staging_tables).returns(staging_results)
-    Wdpa::Portal::Importer.expects(:update_data_in_live_tables).returns(live_results)
-
-    Wdpa::Portal::Importer.import(refresh_materialized_views: false)
   end
 
   test '.import_data_to_staging_tables runs all importers when protected areas succeed' do

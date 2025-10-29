@@ -84,6 +84,9 @@ module Wdpa
             end
 
             Rails.logger.info "✅ Swapped #{@swapped_tables.length} tables: #{@swapped_tables.join(', ')}"
+            
+            # Swap portal materialized views (staging → prod, prod → backup)
+            swap_portal_materialized_views
           end
 
           def swap_single_table(live_table, staging_table)
@@ -172,6 +175,38 @@ module Wdpa
               new_name = old_name.sub(/^#{Wdpa::Portal::Config::PortalImportConfig::STAGING_PREFIX}/, '')
               rename_database_object('sequence', live_table, old_name, new_name)
             end
+          end
+
+          # --- PORTAL MATERIALIZED VIEW SWAPPING ---
+
+          def swap_portal_materialized_views
+            Rails.logger.info '🔄 Swapping portal materialized views...'
+            
+            Wdpa::Portal::Config::PortalImportConfig.portal_live_materialised_view_values.each do |live_materialised_view|
+              staging_view = Wdpa::Portal::Config::PortalImportConfig.get_staging_materialised_view_name_from_live(live_materialised_view)
+              backup_view = Wdpa::Portal::Config::PortalImportConfig.generate_backup_name(live_materialised_view, @backup_timestamp)
+
+              # If staging view missing, skip view swap but continue table swap
+              next unless Wdpa::Portal::Managers::ViewManager.materialized_view_exists?(staging_view)
+
+              # Rename prod -> backup if prod exists
+              if Wdpa::Portal::Managers::ViewManager.materialized_view_exists?(live_materialised_view)
+                @connection.execute("ALTER MATERIALIZED VIEW #{live_materialised_view} RENAME TO #{backup_view}")
+
+                # Rename indexes on the backup MV to avoid name collisions
+                Wdpa::Portal::Managers::ViewManager.rename_materialised_view_indexes_add_backup_suffix(backup_view, @backup_timestamp)
+              end
+              # Promote staging -> prod
+              @connection.execute("ALTER MATERIALIZED VIEW #{staging_view} RENAME TO #{live_materialised_view}")
+
+              # After promotion, remove staging_ prefix from index names on the new live MV
+              Wdpa::Portal::Managers::ViewManager.rename_materialised_view_indexes_remove_staging_prefix(live_materialised_view)
+            end
+            
+            Rails.logger.info '✅ Portal materialized views swapped'
+          rescue StandardError => e
+            Rails.logger.warn("⚠️ Portal materialized views swap failed: #{e.class}: #{e.message}")
+            # Continue; table swap already completed. Views can be fixed manually.
           end
         end
       end

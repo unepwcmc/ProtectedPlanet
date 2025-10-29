@@ -9,7 +9,7 @@ module Wdpa
           sample_limit = Wdpa::Portal::ImportRuntimeConfig.sample_limit
           use_checkpoints = Wdpa::Portal::ImportRuntimeConfig.checkpoints?
 
-          Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_materialised_views.each do |view_name|
+          Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_staging_materialised_views.each do |view_name|
             total_count = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{view_name}").to_i
 
             offset = 0
@@ -38,7 +38,7 @@ module Wdpa
         def count
           total_count = 0
 
-          Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_materialised_views.each do |view_name|
+          Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_staging_materialised_views.each do |view_name|
             count_result = ActiveRecord::Base.connection.select_value("SELECT COUNT(*) FROM #{view_name}")
             total_count += count_result.to_i
           end

@@ -28,6 +28,13 @@ class Wdpa::Portal::Services::Core::TableCleanupServiceTest < ActiveSupport::Tes
     Wdpa::Portal::Config::PortalImportConfig.stubs(:junction_tables).returns(@config.junction_tables)
     Wdpa::Portal::Config::PortalImportConfig.stubs(:main_entity_tables).returns(@config.main_entity_tables)
     Wdpa::Portal::Config::PortalImportConfig.stubs(:independent_table_names).returns(@config.independent_table_names)
+    
+    # Mock live materialized views
+    @config.stubs(:portal_live_materialised_view_values).returns(['portal_standard_polygons', 'portal_standard_points'])
+    @config.stubs(:PORTAL_DOWNALOAD_VIEWS).returns('portal_downloads_protected_areas')
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_live_materialised_view_values).returns(@config.portal_live_materialised_view_values)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:PORTAL_DOWNALOAD_VIEWS).returns(@config.PORTAL_DOWNALOAD_VIEWS)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:generate_backup_name).returns { |name, timestamp| "bk#{timestamp}_#{name}" }
   end
 
   def teardown
@@ -37,6 +44,14 @@ class Wdpa::Portal::Services::Core::TableCleanupServiceTest < ActiveSupport::Tes
     @connection.execute('DROP TABLE IF EXISTS bk2501011200_sources CASCADE')
     @connection.execute('DROP TABLE IF EXISTS bk2501011201_sources CASCADE')
     @connection.execute('DROP TABLE IF EXISTS bk2501011202_sources CASCADE')
+    
+    # Clean up any test materialized views
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS bk2501011200_portal_standard_polygons CASCADE')
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS bk2501011201_portal_standard_polygons CASCADE')
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS bk2501011202_portal_standard_polygons CASCADE')
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS bk2501011200_portal_standard_points CASCADE')
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS bk2501011201_portal_standard_points CASCADE')
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS bk2501011202_portal_standard_points CASCADE')
   end
 
   test 'initializes cleanup variables correctly' do
@@ -234,5 +249,122 @@ class Wdpa::Portal::Services::Core::TableCleanupServiceTest < ActiveSupport::Tes
     assert_raises(StandardError, 'Cleanup failed') do
       Wdpa::Portal::Services::Core::TableCleanupService.cleanup_after_swap
     end
+  end
+
+  # --- MATERIALIZED VIEW CLEANUP TESTS ---
+
+  test 'get_backup_materialized_views_for_timestamp returns correct views' do
+    @service.initialize_cleanup_variables
+    
+    # Create test backup materialized views
+    @connection.execute('CREATE MATERIALIZED VIEW bk2501011200_portal_standard_polygons AS SELECT 1 as id')
+    @connection.execute('CREATE MATERIALIZED VIEW bk2501011200_portal_standard_points AS SELECT 1 as id')
+    @connection.execute('CREATE MATERIALIZED VIEW bk2501011201_portal_standard_polygons AS SELECT 1 as id')
+    
+    # Mock the pg_matviews query result
+    mock_result = [
+      { 'matviewname' => 'bk2501011200_portal_standard_polygons' },
+      { 'matviewname' => 'bk2501011200_portal_standard_points' },
+      { 'matviewname' => 'bk2501011201_portal_standard_polygons' },
+      { 'matviewname' => 'regular_materialized_view' }
+    ]
+    
+    @connection.expects(:execute).with(regexp_matches(/SELECT matviewname.*FROM pg_matviews/)).returns(mock_result)
+    
+    result = @service.get_backup_materialized_views_for_timestamp('2501011200')
+    
+    expected = ['bk2501011200_portal_standard_polygons', 'bk2501011200_portal_standard_points']
+    assert_equal expected.sort, result.sort
+  end
+
+  test 'cleanup_old_backups includes materialized views' do
+    @service.initialize_cleanup_variables
+    
+    # Mock table grouping
+    @service.expects(:group_backups_by_timestamp).returns({
+      '2501011200' => ['bk2501011200_sources'],
+      '2501011201' => ['bk2501011201_sources'],
+      '2501011202' => ['bk2501011202_sources']
+    })
+    
+    # Mock materialized view lookup for the timestamp to be removed
+    @service.expects(:get_backup_materialized_views_for_timestamp).with('2501011200').returns(['bk2501011200_portal_standard_polygons'])
+    
+    # Mock table cleanup
+    @service.expects(:sort_tables_by_dependency).with(['bk2501011200_sources']).returns(['bk2501011200_sources'])
+    @connection.expects(:drop_table).with('bk2501011200_sources')
+    
+    # Mock materialized view cleanup
+    @connection.expects(:execute).with('DROP MATERIALIZED VIEW IF EXISTS bk2501011200_portal_standard_polygons CASCADE')
+    
+    # Mock transaction
+    @connection.expects(:transaction).yields
+    
+    result = @service.cleanup_old_backups(2)
+    assert_equal 2, result  # 1 table + 1 materialized view
+  end
+
+  test 'cleanup_old_backups handles materialized view drop errors gracefully' do
+    @service.initialize_cleanup_variables
+    
+    # Mock grouping with only materialized views
+    @service.expects(:group_backups_by_timestamp).returns({
+      '2501011200' => []
+    })
+    
+    @service.expects(:get_backup_materialized_views_for_timestamp).with('2501011200').returns(['bk2501011200_portal_standard_polygons'])
+    
+    # Mock materialized view drop to raise error
+    @connection.expects(:execute).with('DROP MATERIALIZED VIEW IF EXISTS bk2501011200_portal_standard_polygons CASCADE')
+      .raises(ActiveRecord::StatementInvalid.new('Drop failed'))
+    
+    # Mock transaction
+    @connection.expects(:transaction).yields
+    
+    # Should not raise error, just log it and continue
+    assert_nothing_raised do
+      result = @service.cleanup_old_backups(1)
+      assert_equal 0, result  # No successful drops due to error
+    end
+  end
+
+  test 'cleanup_old_backups keeps all backups when under limit including materialized views' do
+    @service.initialize_cleanup_variables
+    
+    # Mock grouping with only one backup
+    @service.expects(:group_backups_by_timestamp).returns({
+      '2501011200' => ['bk2501011200_sources']
+    })
+    
+    # Should not call materialized view lookup since we're keeping all backups
+    @service.expects(:get_backup_materialized_views_for_timestamp).never
+    
+    # Should not drop anything
+    @connection.expects(:drop_table).never
+    @connection.expects(:execute).never
+    
+    # Mock transaction
+    @connection.expects(:transaction).yields
+    
+    result = @service.cleanup_old_backups(2)
+    assert_equal 0, result
+  end
+
+  test 'get_backup_materialized_views_for_timestamp finds backup views for live materialized views' do
+    @service.initialize_cleanup_variables
+    
+    # Mock the generate_backup_name method
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:generate_backup_name).returns { |view, timestamp| "bk#{timestamp}_#{view}" }
+    
+    # Mock individual backup view existence checks
+    @connection.stubs(:execute).with(/SELECT 1.*matviewname = 'bk2501011200_portal_standard_polygons'/).returns([{ '1' => '1' }])  # Exists
+    @connection.stubs(:execute).with(/SELECT 1.*matviewname = 'bk2501011200_portal_standard_points'/).returns([])  # Doesn't exist
+    @connection.stubs(:execute).with(/SELECT 1.*matviewname = 'bk2501011200_portal_downloads_protected_areas'/).returns([{ '1' => '1' }])  # Exists
+    
+    result = @service.get_backup_materialized_views_for_timestamp('2501011200')
+    
+    # Should only include backup views that actually exist
+    expected_backups = ['bk2501011200_portal_standard_polygons', 'bk2501011200_portal_downloads_protected_areas']
+    assert_equal expected_backups.sort, result.sort
   end
 end

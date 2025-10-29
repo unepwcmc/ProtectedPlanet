@@ -10,7 +10,7 @@ namespace :pp do
     desc 'Run portal importer with only=<list>, optional sample'
     task :"dev:import_only", [:only] => :environment do |_t, args|
       ENV['PP_IMPORT_ONLY'] = args[:only].to_s if args[:only]
-      Wdpa::Portal::Importer.import(refresh_materialized_views: false)
+      Wdpa::Portal::Importer.import(create_staging_materialized_views: false)
     end
 
     # Run portal importer with skip list
@@ -18,7 +18,7 @@ namespace :pp do
     desc 'Run portal importer with skip=<list>'
     task :"dev:import_skip", [:skip] => :environment do |_t, args|
       ENV['PP_IMPORT_SKIP'] = args[:skip].to_s if args[:skip]
-      Wdpa::Portal::Importer.import(refresh_materialized_views: false)
+      Wdpa::Portal::Importer.import(create_staging_materialized_views: false)
     end
 
     # Resume importer using checkpoints (label optional to persist in Release)
@@ -27,7 +27,7 @@ namespace :pp do
     task :"dev:import_resume", [:label] => :environment do |_t, args|
       ENV['PP_RELEASE_LABEL'] = args[:label].to_s if args[:label]
       ENV['PP_IMPORT_CHECKPOINTS_DISABLE'] = 'false'
-      Wdpa::Portal::Importer.import(refresh_materialized_views: false)
+      Wdpa::Portal::Importer.import(create_staging_materialized_views: false)
     end
 
     # Resume a full release from a specific phase (default: import_core)

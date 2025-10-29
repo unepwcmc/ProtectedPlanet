@@ -26,7 +26,7 @@ module Wdpa
           soft_errors = []
           hard_errors = []
 
-          Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_materialised_views.each do |view|
+          Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_staging_materialised_views.each do |view|
             if Wdpa::Portal::ImportRuntimeConfig.checkpoints? && Wdpa::Portal::Checkpoint.geometry_done?(view,
               target_table)
               Rails.logger.info "Skipping geometry update for #{view} to #{target_table} table (checkpoint)"

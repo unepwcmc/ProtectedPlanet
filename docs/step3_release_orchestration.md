@@ -20,7 +20,7 @@ This step coordinates a full release cycle using Step 2 importers to populate st
 
 ```bash
 # Optional: refresh MVs during preflight
-export PP_RELEASE_REFRESH_VIEWS=true
+export PP_RELEASE_CREATE_STAGING_MATERIALIZED_VIEWS=true
 
 # Start a release
 rake pp:portal:release['WDPA_YYYY_MM']
@@ -38,7 +38,7 @@ rake pp:portal:rollback
 ## Phases
 
 1. acquire_lock: Single-run guard (pg advisory lock)
-2. refresh_views: Optional concurrent refresh of `portal_standard_*`
+2. create_staging_materialized_views: Optional create materialized views of `portal_standard_*`
 3. preflight: Contract checks, counts, geometry validity, duplicates
 4. build_staging: Recreate `staging_*` tables from live structure
 5. import_core: Calls `Wdpa::Portal::Importer.import` to fill staging
@@ -50,7 +50,7 @@ rake pp:portal:rollback
 
 ## Configuration
 
-- `PP_RELEASE_REFRESH_VIEWS=true` to refresh Portal materialized views in preflight (defaults to true)
+- `PP_RELEASE_CREATE_STAGING_MATERIALIZED_VIEWS=true` to create staging Portal materialized views in preflight (defaults to true)
 - `PP_SLACK_WEBHOOK_URL` to enable Slack notifications (optional)
 
 ## Next (Step 4)

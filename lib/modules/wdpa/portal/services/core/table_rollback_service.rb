@@ -35,6 +35,17 @@ module Wdpa
             ensure
               service.restore_after_rollback
             end
+
+            # Create downloads view after rollback completes (backup tables are now live)
+            # This is outside the transaction to avoid blocking, but happens after successful rollback
+            begin
+              Rails.logger.info '🔄 Creating portal downloads view after rollback...'
+              PortalRelease::Preflight.create_portal_downloads_view!
+              Rails.logger.info '✅ Portal downloads view created after rollback'
+            rescue StandardError => e
+              Rails.logger.warn("⚠️ Downloads view creation failed (rollback succeeded): #{e.class}: #{e.message}")
+              # Continue; rollback succeeded even if downloads view creation failed
+            end
           end
 
           # --- INITIALIZATION ---
@@ -87,6 +98,9 @@ module Wdpa
             end
 
             Rails.logger.info "✅ Rolled back #{@swapped_tables.length} tables: #{@swapped_tables.join(', ')}"
+            
+            # Rollback portal materialized views (backup → prod)
+            rollback_portal_materialized_views
           end
 
           def rollback_single_table(live_table, backup_table, staging_table)
@@ -198,6 +212,38 @@ module Wdpa
               .sort
               .reverse
           end
+
+
+          # --- PORTAL MATERIALIZED VIEW ROLLBACK ---
+
+          def rollback_portal_materialized_views
+            Rails.logger.info '🔄 Rolling back portal materialized views...'
+            
+            Wdpa::Portal::Config::PortalImportConfig.portal_live_materialised_view_values.each do |live_materialised_view|
+              backup_view = Wdpa::Portal::Config::PortalImportConfig.generate_backup_name(live_materialised_view, @backup_timestamp)
+              staging_view = Wdpa::Portal::Config::PortalImportConfig.get_staging_materialised_view_name_from_live(live_materialised_view)
+
+              # Move current prod to staging for safety if exists
+              if Wdpa::Portal::Managers::ViewManager.materialized_view_exists?(live_materialised_view)
+                @connection.execute("DROP MATERIALIZED VIEW IF EXISTS #{staging_view} CASCADE")
+                @connection.execute("ALTER MATERIALIZED VIEW #{live_materialised_view} RENAME TO #{staging_view}")
+                # Rename indexes on the new staging MV to add staging prefix (to avoid name collisions with restored live)
+                Wdpa::Portal::Managers::ViewManager.rename_materialised_view_indexes_add_staging_prefix(staging_view)
+              end
+              # Restore backup to prod if exists
+              if Wdpa::Portal::Managers::ViewManager.materialized_view_exists?(backup_view)
+                # Before promotion, restore canonical index names by removing backup prefix
+                Wdpa::Portal::Managers::ViewManager.rename_materialised_view_indexes_remove_backup_prefix(backup_view)
+                @connection.execute("ALTER MATERIALIZED VIEW #{backup_view} RENAME TO #{live_materialised_view}")
+              end
+            end
+            
+            Rails.logger.info '✅ Portal materialized views rolled back'
+          rescue StandardError => e
+            Rails.logger.warn("⚠️ Portal materialized views rollback failed: #{e.class}: #{e.message}")
+            # Continue; table rollback already completed. Views can be fixed manually.
+          end
+
         end
       end
     end

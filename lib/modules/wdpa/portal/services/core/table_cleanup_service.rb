@@ -82,7 +82,7 @@ module Wdpa
           # --- BACKUP CLEANUP METHODS ---
 
           def cleanup_old_backups(keep_count)
-            Rails.logger.info "🧹 Cleaning up backup tables, keeping the last #{keep_count} backups..."
+            Rails.logger.info "🧹 Cleaning up backup tables and materialized views, keeping the last #{keep_count} backups..."
 
             @connection.transaction do
               # Group backup tables by timestamp
@@ -100,27 +100,66 @@ module Wdpa
 
               cleaned_count = 0
               timestamps_to_remove.each do |timestamp|
-                # Sort tables by dependency order (independent tables first, then dependent ones)
-                tables_to_drop = sort_tables_by_dependency(backup_groups[timestamp])
+                # Cleanup backup tables for this timestamp
+                if backup_groups[timestamp]
+                  tables_to_drop = sort_tables_by_dependency(backup_groups[timestamp])
+                  tables_to_drop.each do |table|
+                    @connection.drop_table(table)
+                    Rails.logger.info "🗑️ Dropped old backup table: #{table} (timestamp: #{timestamp})"
+                    cleaned_count += 1
+                  rescue ActiveRecord::StatementInvalid => e
+                    if e.message.include?('DependentObjectsStillExist')
+                      Rails.logger.warn "⚠️ Cannot drop #{table} due to dependencies, using CASCADE"
+                      @connection.drop_table(table, if_exists: true, force: :cascade)
+                      Rails.logger.info "🗑️ Dropped old backup table with CASCADE: #{table} (timestamp: #{timestamp})"
+                      cleaned_count += 1
+                    else
+                      Rails.logger.error "❌ Failed to drop #{table}: #{e.message}"
+                      raise e
+                    end
+                  end
+                end
 
-                tables_to_drop.each do |table|
-                  @connection.drop_table(table)
-                  Rails.logger.info "🗑️ Dropped old backup: #{table} (timestamp: #{timestamp})"
+                # Cleanup backup materialized views for this timestamp
+                backup_materialized_views = get_backup_materialized_views_for_timestamp(timestamp)
+                Rails.logger.debug "🔍 Found #{backup_materialized_views.length} backup materialized views for timestamp #{timestamp}: #{backup_materialized_views.join(', ')}"
+
+                backup_materialized_views.each do |materialized_view|
+                  # SAFETY CHECK: Ensure we're only dropping backup views, never live views
+                  unless Wdpa::Portal::Config::PortalImportConfig.is_backup_table?(materialized_view)
+                    Rails.logger.error "❌ SAFETY CHECK FAILED: Attempted to drop non-backup view #{materialized_view} (skipping)"
+                    next
+                  end
+
+                  # SAFETY CHECK: Ensure the view is not a currently live view
+                  live_views = Wdpa::Portal::Config::PortalImportConfig.portal_live_materialised_view_values
+                  if live_views.include?(materialized_view)
+                    Rails.logger.error "❌ SAFETY CHECK FAILED: Attempted to drop live view #{materialized_view} (skipping)"
+                    next
+                  end
+
+                  Rails.logger.debug "🗑️ Attempting to drop backup materialized view: #{materialized_view}"
+                  # Drop without CASCADE first to avoid unintended side effects
+                  begin
+                    @connection.execute("DROP MATERIALIZED VIEW IF EXISTS #{materialized_view}")
+                  rescue ActiveRecord::StatementInvalid => e
+                    if e.message.include?('DependentObjectsStillExist') || e.message.include?('cannot be dropped')
+                      Rails.logger.warn "⚠️ Cannot drop #{materialized_view} without CASCADE due to dependencies, retrying with CASCADE"
+                      Rails.logger.warn "🔍 Dependencies: #{e.message}"
+                      @connection.execute("DROP MATERIALIZED VIEW IF EXISTS #{materialized_view} CASCADE")
+                    else
+                      raise
+                    end
+                  end
+                  Rails.logger.info "🗑️ Dropped old backup materialized view: #{materialized_view} (timestamp: #{timestamp})"
                   cleaned_count += 1
                 rescue ActiveRecord::StatementInvalid => e
-                  if e.message.include?('DependentObjectsStillExist')
-                    Rails.logger.warn "⚠️ Cannot drop #{table} due to dependencies, using CASCADE"
-                    @connection.drop_table(table, if_exists: true, force: :cascade)
-                    Rails.logger.info "🗑️ Dropped old backup with CASCADE: #{table} (timestamp: #{timestamp})"
-                    cleaned_count += 1
-                  else
-                    Rails.logger.error "❌ Failed to drop #{table}: #{e.message}"
-                    raise e
-                  end
+                  Rails.logger.error "❌ Failed to drop materialized view #{materialized_view}: #{e.message}"
+                  # Continue with other views even if one fails
                 end
               end
 
-              Rails.logger.info "✅ Cleaned up #{cleaned_count} old backup tables, kept #{timestamps_to_keep.length} most recent backup(s)"
+              Rails.logger.info "✅ Cleaned up #{cleaned_count} old backup objects (tables + materialized views), kept #{timestamps_to_keep.length} most recent backup(s)"
               cleaned_count
             end
           end
@@ -137,6 +176,36 @@ module Wdpa
             end
 
             backup_groups
+          end
+
+          def get_backup_materialized_views_for_timestamp(timestamp)
+            backup_materialized_views = []
+
+            # Get list of live materialized views
+            live_materialized_views = Wdpa::Portal::Config::PortalImportConfig.portal_live_materialised_view_values
+            
+            Rails.logger.debug "🔍 Looking for backup materialized views for live views: #{live_materialized_views.join(', ')}"
+
+            # For each live materialized view, check if a backup exists with the given timestamp
+            live_materialized_views.each do |live_view|
+              backup_view_name = Wdpa::Portal::Config::PortalImportConfig.generate_backup_name(live_view, timestamp)
+              
+              # Check if the backup materialized view exists
+              sql = <<~SQL
+                SELECT 1
+                FROM pg_matviews
+                WHERE schemaname = 'public' AND matviewname = '#{backup_view_name}'
+              SQL
+              result = @connection.execute(sql)
+              
+              if result.any?
+                backup_materialized_views << backup_view_name
+                Rails.logger.debug "🔍 Found backup materialized view: #{backup_view_name}"
+              end
+            end
+
+            Rails.logger.debug "🔍 Found #{backup_materialized_views.length} backup materialized views for timestamp #{timestamp}: #{backup_materialized_views.join(', ')}"
+            backup_materialized_views
           end
 
           def sort_tables_by_dependency(tables)

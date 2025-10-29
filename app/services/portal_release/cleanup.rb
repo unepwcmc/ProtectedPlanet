@@ -16,11 +16,8 @@ module PortalRelease
           begin
             Wdpa::Portal::Services::Core::TableCleanupService.cleanup_after_swap
 
-            # the clean up is already done in create_portal_downloads_view! in app/services/portal_release/preflight.rb
-            # Please keep this here for historical reasons.
-            # Download::Generators::Base.clean_tmp_download_views
-
             # Invalidate previously generated downloads so new requests regenerate against the new release
+            # This also cleans up the temporary download views created by the generators. clean_tmp_download_views
             Download.clear_downloads
 
             # Rebuild searchable index to reflect new release data

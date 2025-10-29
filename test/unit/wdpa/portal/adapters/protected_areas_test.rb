@@ -8,11 +8,11 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
     # Mock the configuration
     @config = mock('PortalImportConfig')
     @config.stubs(:batch_import_protected_areas_from_view_size).returns(2)
-    @config.stubs(:portal_protected_area_materialised_views).returns(%w[portal_standard_polygons
+    @config.stubs(:portal_protected_area_staging_materialised_views).returns(%w[portal_standard_polygons
       portal_standard_points])
 
     Wdpa::Portal::Config::PortalImportConfig.stubs(:batch_import_protected_areas_from_view_size).returns(@config.batch_import_protected_areas_from_view_size)
-    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_protected_area_materialised_views).returns(@config.portal_protected_area_materialised_views)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_protected_area_staging_materialised_views).returns(@config.portal_protected_area_staging_materialised_views)
   end
 
   def teardown
@@ -87,7 +87,7 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
 
   test 'find_in_batches handles single view' do
     # Mock single view
-    @config.stubs(:portal_protected_area_materialised_views).returns(['portal_standard_polygons'])
+    @config.stubs(:portal_protected_area_staging_materialised_views).returns(['portal_standard_polygons'])
 
     # Create test materialized view
     @connection.execute(<<~SQL)
@@ -151,7 +151,7 @@ class Wdpa::Portal::Adapters::ProtectedAreasTest < ActiveSupport::TestCase
 
   test 'count handles single view' do
     # Mock single view
-    @config.stubs(:portal_protected_area_materialised_views).returns(['portal_standard_polygons'])
+    @config.stubs(:portal_protected_area_staging_materialised_views).returns(['portal_standard_polygons'])
 
     # Create test materialized view
     @connection.execute(<<~SQL)

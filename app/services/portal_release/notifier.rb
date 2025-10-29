@@ -24,6 +24,12 @@ module PortalRelease
       post(":rocket: WDPA release #{label} started (#{Rails.env})")
     end
 
+    # Rollback start notification
+    def rollback_started(timestamp)
+      post('----------------------------')
+      post(":rewind: WDPA rollback to #{timestamp} started (#{Rails.env})")
+    end
+
     # Generic phase text notifier; keep for backwards compatibility
     # If counts is a nested structure, we summarise it to avoid overly long Slack messages.
     def phase(text, counts: nil, tables: nil)
@@ -228,8 +234,8 @@ module PortalRelease
       case key
       when 'acquire_lock'
         ['acquire_lock', 'Ensure single release run (advisory lock)']
-      when 'refresh_views'
-        ['refresh_views', 'Refresh portal materialized views']
+      when 'create_staging_materialized_views'
+        ['create_staging_materialized_views', 'Create staging portal materialized views']
       when 'preflight'
         ['preflight', 'Checks: views exist, counts, geometry, duplicates']
       when 'create_portal_downloads_view'
@@ -252,6 +258,8 @@ module PortalRelease
         ['cleanup', 'Retention and cleanup tasks']
       when 'release_lock'
         ['release_lock', 'Release advisory lock']
+      when 'reset_checkpoints'
+        ['reset_checkpoints', 'Reset portal checkpoints for next run']
       else
         [key, nil]
       end

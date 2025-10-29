@@ -64,6 +64,8 @@ module PortalRelease
 
     def rollback_to!(timestamp)
       notifier = ::PortalRelease::Notifier.new('PP_ROLLBACK')
+      # Announce rollback start
+      notifier.rollback_started(timestamp)
 
       # Check if a release is currently running (CRITICAL SAFETY CHECK)
       unless PortalRelease::Lock.lock_available?
@@ -105,25 +107,24 @@ module PortalRelease
         raise
       end
 
-      # 3. Perform cleanup operations (NON-CRITICAL - if these fail, rollback still succeeded)
+      # 3. Post-swap cleanup (NON-CRITICAL). Always use Cleanup.post_swap! with a logger
       begin
-        # Clear generated downloads (S3 + Redis cache)
-        Download.clear_downloads
-        Rails.logger.info('Downloads cleared successfully')
+        log = if target_release
+          ::PortalRelease::Logger.new(target_release)
+        else
+          # Lightweight shim to satisfy interface when no release record is available
+          Class.new do
+            def event(event_name, payload: {}, phase: nil)
+              json = { event: event_name.to_s, phase: phase&.to_s, payload: payload }.to_json
+              Rails.logger.info(json)
+            end
+          end.new
+        end
 
-        # Rebuild search index to reflect rolled-back data
-        Search::Index.delete
-        Search::Index.create
-        Rails.logger.info('Search index rebuilt successfully')
-
-        # Clear Rails cache to ensure fresh data is served
-        Rails.cache.clear
-        Rails.logger.info('Rails cache cleared successfully')
-
-        Rails.logger.info('Rollback cleanup completed successfully')
+        Cleanup.post_swap!(log)
+        Rails.logger.info('Rollback post-swap cleanup completed via Cleanup.post_swap!')
         notifier.rollback_cleanup_okay(timestamp)
       rescue StandardError => e
-        # Log cleanup failure but don't fail the rollback
         Rails.logger.warn("Rollback cleanup failed (but database rollback succeeded): #{e.class}: #{e.message}")
         notifier.rollback_cleanup_failed(e, timestamp)
       end

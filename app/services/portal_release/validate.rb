@@ -31,10 +31,11 @@ module PortalRelease
     end
 
     def source_counts
+      staging_views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
       {
-        points: c("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['points']}"),
-        polygons: c("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['polygons']}"),
-        sources: c("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['sources']}")
+        points: c("SELECT COUNT(*) FROM #{staging_views[:points]}"),
+        polygons: c("SELECT COUNT(*) FROM #{staging_views[:polygons]}"),
+        sources: c("SELECT COUNT(*) FROM #{staging_views[:sources]}")
       }
     end
 

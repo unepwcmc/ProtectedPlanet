@@ -19,7 +19,7 @@ module PortalRelease
       import_sample = ENV.fetch('PP_IMPORT_SAMPLE', nil)
 
       results = Wdpa::Portal::Importer.import(
-        refresh_materialized_views: false,
+        create_staging_materialized_views: false,
         only: import_only,
         skip: import_skip,
         sample: import_sample,
