@@ -1,3 +1,8 @@
+### 4.11.11
+Chore: November 2025 WDPA Release
+  - update constants.rb
+  - add October CSVs: country_statistics, global_statistics, pame_country, pame_data CSV, green list sites.
+
 ### 4.11.10
 Chore: October 2025 WDPA Release
   - update constants.rb
