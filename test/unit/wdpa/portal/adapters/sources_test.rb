@@ -7,9 +7,9 @@ class Wdpa::Portal::Adapters::SourcesTest < ActiveSupport::TestCase
 
     # Mock the configuration
     @config = mock('PortalImportConfig')
-    @config.stubs(:portal_materialised_view_for).with('sources').returns('portal_standard_sources')
+    @config.stubs(:portal_staging_materialised_views).with('sources').returns('portal_standard_sources')
 
-    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_materialised_view_for).with('sources').returns(@config.portal_materialised_view_for('sources'))
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_staging_materialised_views).with('sources').returns(@config.portal_staging_materialised_views[:sources])
   end
 
   def teardown

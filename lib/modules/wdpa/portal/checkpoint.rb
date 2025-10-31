@@ -38,6 +38,15 @@ module Wdpa
           true
         end
 
+        # Reset all checkpoints (attributes, geometry, etc.) after a run
+        def reset_all!
+          Rails.logger.info '🧹 Resetting portal checkpoints after run'
+          @store = {}
+          persist!
+        rescue StandardError => e
+          Rails.logger.warn "⚠️ Failed to reset checkpoints: #{e.message}"
+        end
+
         # Offsets for attributes batches per view
         def get_offset(view_name)
           store.dig('attributes', view_name.to_s, 'offset').to_i

@@ -3,13 +3,14 @@
 module PortalRelease
   class Preflight
     class << self
-      def refresh_mvs!(log)
-        # Default to true if PP_RELEASE_REFRESH_VIEWS is not set
-        refresh_views = ENV.fetch('PP_RELEASE_REFRESH_VIEWS', nil)
-        return unless ActiveModel::Type::Boolean.new.cast(refresh_views.nil? ? 'true' : refresh_views)
+      def create_staging_mvs!(log)
+        # Default to true if PP_RELEASE_CREATE_STAGING_MATERIALIZED_VIEWS is not set
+        create_staging_materialized_views = ENV.fetch('PP_RELEASE_CREATE_STAGING_MATERIALIZED_VIEWS', nil)
+        return unless ActiveModel::Type::Boolean.new.cast(create_staging_materialized_views.nil? ? 'true' : create_staging_materialized_views)
 
-        Wdpa::Portal::Managers::ViewManager.refresh_materialized_views
-        log.event('mvs_refreshed')
+        # Create and refresh staging MVs (this creates them and populates with data)
+        Wdpa::Portal::Managers::ViewManager.ensure_staging_materialized_views!
+        log.event('staging_mvs_created')
       end
 
       def run!(release, log, notify, _ctx)
@@ -37,17 +38,21 @@ module PortalRelease
 
       def counts_snapshot
         conn = ActiveRecord::Base.connection
+
+        views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
         {
-          points: conn.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['points']}").to_i,
-          polygons: conn.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['polygons']}").to_i,
-          sources: conn.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['sources']}").to_i
+          points: conn.select_value("SELECT COUNT(*) FROM #{views[:points]}").to_i,
+          polygons: conn.select_value("SELECT COUNT(*) FROM #{views[:polygons]}").to_i,
+          sources: conn.select_value("SELECT COUNT(*) FROM #{views[:sources]}").to_i
         }
       end
 
       def check_geometry!
         conn = ActiveRecord::Base.connection
-        bad_points = conn.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['points']}   WHERE wkb_geometry IS NOT NULL AND (ST_SRID(wkb_geometry) <> 4326 OR NOT ST_IsValid(wkb_geometry))").to_i
-        bad_polys  = conn.select_value("SELECT COUNT(*) FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['polygons']} WHERE wkb_geometry IS NOT NULL AND (ST_SRID(wkb_geometry) <> 4326 OR NOT ST_IsValid(wkb_geometry))").to_i
+
+        views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
+        bad_points = conn.select_value("SELECT COUNT(*) FROM #{views[:points]}   WHERE wkb_geometry IS NOT NULL AND (ST_SRID(wkb_geometry) <> 4326 OR NOT ST_IsValid(wkb_geometry))").to_i
+        bad_polys  = conn.select_value("SELECT COUNT(*) FROM #{views[:polygons]} WHERE wkb_geometry IS NOT NULL AND (ST_SRID(wkb_geometry) <> 4326 OR NOT ST_IsValid(wkb_geometry))").to_i
         return unless bad_points.positive? || bad_polys.positive?
 
         raise "Invalid geometry in views: points=#{bad_points}, polygons=#{bad_polys}"
@@ -55,10 +60,12 @@ module PortalRelease
 
       def check_duplicates!
         conn = ActiveRecord::Base.connection
+
+        views = Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views
         dup_points = conn.select_value(<<~SQL).to_i
           SELECT COUNT(*) FROM (
             SELECT site_id, site_pid, COUNT(*) c
-            FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['points']}
+            FROM #{views[:points]}
             GROUP BY 1,2
             HAVING COUNT(*) > 1
           ) d
@@ -66,7 +73,7 @@ module PortalRelease
         dup_polys = conn.select_value(<<~SQL).to_i
           SELECT COUNT(*) FROM (
             SELECT site_id, site_pid, COUNT(*) c
-            FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['polygons']}
+            FROM #{views[:polygons]}
             GROUP BY 1,2
             HAVING COUNT(*) > 1
           ) d
@@ -76,16 +83,16 @@ module PortalRelease
         raise "Duplicate rows by (site_id, site_pid): points=#{dup_points}, polygons=#{dup_polys}"
       end
 
-      # Creates or replaces the combined portal downloads view used by generators/exporters
-      # Combines polygons and points portal standard views.
-      # Mirrors logic in Wdpa::Release#create_downloads_view but targets portal_* views.
+
+      # Creates or replaces the staging portal downloads view used by generators/exporters
+      # Combines polygons and points from staging materialized views.
       def create_portal_downloads_view!(log = nil)
         conn = ActiveRecord::Base.connection
-        downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']
+        downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS
 
         conn.transaction do
           # Drop all temporary download views that depends on the downloads view
-          Download::Generators::Base.clean_tmp_download_views
+          Download.clear_downloads
 
           conn.execute("DROP VIEW IF EXISTS #{downloads_view}")
           as_query = Download::Queries.build_query_for_downloads_view('portal')

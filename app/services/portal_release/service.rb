@@ -4,17 +4,18 @@ module PortalRelease
   class Service
     PHASES = %i[
       acquire_lock
-      refresh_views
-      create_portal_downloads_view
+      create_staging_materialized_views
       preflight
       build_staging
       import_core
       import_related
       validate_and_manifest
       finalise_swap
+      create_portal_downloads_view
       post_swap
       cleanup_and_retention
       release_lock
+      reset_checkpoints
     ].freeze
 
     def self.abort_current!
@@ -129,9 +130,9 @@ module PortalRelease
       Lock.new.acquire!(@release, @log, @notify)
     end
 
-    def refresh_views
-      @ctx[:phase] = 'refresh_views'
-      Preflight.refresh_mvs!(@log)
+    def create_staging_materialized_views
+      @ctx[:phase] = 'create_staging_materialized_views'
+      Preflight.create_staging_mvs!(@log)
     end
 
     def preflight
@@ -146,7 +147,7 @@ module PortalRelease
 
     def build_staging
       @ctx[:phase] = 'build_staging'
-      Staging.new(@log).prepare!
+      PortalRelease::Staging.new(@log).prepare!
     end
 
     def import_core
@@ -188,6 +189,11 @@ module PortalRelease
 
     def release_lock
       Lock.new.release!(@log)
+    end
+
+    def reset_checkpoints
+      @ctx[:phase] = 'reset_checkpoints'
+      Wdpa::Portal::Checkpoint.reset_all!
     end
   end
 end

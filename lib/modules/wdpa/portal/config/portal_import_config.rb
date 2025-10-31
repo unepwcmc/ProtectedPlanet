@@ -11,22 +11,8 @@ module Wdpa
         STAGING_PREFIX = 'staging_'
         BACKUP_PREFIX = 'bk'
 
-        PORTAL_MATERIALISED_VIEWS = {
-          'iso3_agg' => 'portal_iso3_agg',
-          'parent_iso3_agg' => 'portal_parent_iso3_agg',
-          'int_crit_agg' => 'portal_int_crit_agg',
-          'polygons' => 'portal_standard_polygons',
-          'points' => 'portal_standard_points',
-          'sources' => 'portal_standard_sources',
-        }
-        PORTAL_VIEWS = {
         # This view is created by PortalRelease::Preflight.create_portal_downloads_view! in app/services/portal_release/preflight.rb
-          'downloads' => 'portal_downloads_protected_areas'
-        }
-
-        # Portal views that contain protected area data (for parcel logic)
-        # Only polygons and points contain protected area parcel data
-        PORTAL_PROTECTED_AREA_VIEW_TYPES = %w[polygons points]
+        PORTAL_DOWNALOAD_VIEWS = "portal_downloads_protected_areas"
 
         # ============================================================================
         # CONFIGURATION VALUES
@@ -169,16 +155,68 @@ module Wdpa
         # PORTAL VIEW UTILITIES
         # ============================================================================
 
-        def self.portal_materialised_view_for(type)
-          PORTAL_MATERIALISED_VIEWS[type]
+        # All staging and live table name related configurations
+        # It has to in this order as 
+        def self.portal_materialised_views_hash
+          {
+            iso3_agg: {
+              live: 'portal_iso3_agg',
+              staging: 'staging_portal_iso3_agg'
+            },
+            parent_iso3_agg: {
+              live: 'portal_parent_iso3_agg',
+              staging: 'staging_portal_parent_iso3_agg'
+            },
+            int_crit_agg: {
+              live: 'portal_int_crit_agg',
+              staging: 'staging_portal_int_crit_agg'
+            },
+            polygons: {
+              live: 'portal_standard_polygons',
+              staging: 'staging_portal_standard_polygons'
+            },
+            points: {
+              live: 'portal_standard_points',
+              staging: 'staging_portal_standard_points'
+            },
+            sources: {
+              live: 'portal_standard_sources',
+              staging: 'staging_portal_standard_sources'
+            },
+          }
         end
 
-        def self.portal_materialised_view_values
-          PORTAL_MATERIALISED_VIEWS.values
+        def self.get_live_materialised_view_name_from_staging(staging_name)
+          mapping = portal_materialised_views_hash
+          entry = mapping.values.find { |v| v[:staging] == staging_name }
+          entry ? entry[:live] : nil
         end
 
-        def self.portal_protected_area_materialised_views
-          PORTAL_PROTECTED_AREA_VIEW_TYPES.map { |type| PORTAL_MATERIALISED_VIEWS[type] }
+        def self.get_staging_materialised_view_name_from_live(live_name)
+          mapping = portal_materialised_views_hash
+          entry = mapping.values.find { |v| v[:live] == live_name }
+          entry ? entry[:staging] : nil
+        end
+
+        def self.portal_live_materialised_views
+          portal_materialised_views_hash.transform_values { |v| v[:live] }
+        end
+
+        def self.portal_live_materialised_view_values
+          portal_live_materialised_views.values
+        end
+
+        def self.portal_staging_materialised_views
+          portal_materialised_views_hash.transform_values { |v| v[:staging] }
+        end
+
+        def self.portal_staging_materialised_view_values
+          portal_staging_materialised_views.values
+        end
+
+        def self.portal_protected_area_staging_materialised_views
+          [portal_materialised_views_hash[:polygons][:staging], 
+          portal_materialised_views_hash[:points][:staging]]
         end
 
         # ============================================================================

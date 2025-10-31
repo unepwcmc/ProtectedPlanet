@@ -36,6 +36,11 @@ class Wdpa::Portal::Services::Core::TableRollbackServiceTest < ActiveSupport::Te
     @connection.execute('DROP TABLE IF EXISTS protected_areas_staging CASCADE')
     @connection.execute('DROP TABLE IF EXISTS bk2501011200_sources CASCADE')
     @connection.execute('DROP TABLE IF EXISTS bk2501011200_protected_areas CASCADE')
+    
+    # Clean up any test materialized views
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS portal_standard_polygons CASCADE')
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS staging_portal_standard_polygons CASCADE')
+    @connection.execute('DROP MATERIALIZED VIEW IF EXISTS bk2501011200_portal_standard_polygons CASCADE')
   end
 
   test 'initializes rollback variables correctly' do
@@ -263,5 +268,79 @@ class Wdpa::Portal::Services::Core::TableRollbackServiceTest < ActiveSupport::Te
     
     result = Wdpa::Portal::Services::Core::TableRollbackService.list_available_backups
     assert_equal ['2501011200', '2501011201'], result
+  end
+
+  test 'rollback_portal_materialized_views renames live to staging with staging prefix on indexes' do
+    @service.initialize_rollback_variables(@backup_timestamp)
+    
+    # Mock configuration
+    @config.stubs(:portal_live_materialised_view_values).returns(['portal_standard_polygons'])
+    @config.stubs(:get_staging_materialised_view_name_from_live).with('portal_standard_polygons').returns('staging_portal_standard_polygons')
+    @config.stubs(:generate_backup_name).with('portal_standard_polygons', @backup_timestamp).returns("bk#{@backup_timestamp}_portal_standard_polygons")
+    
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_live_materialised_view_values).returns(@config.portal_live_materialised_view_values)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:get_staging_materialised_view_name_from_live).returns { |name| @config.get_staging_materialised_view_name_from_live(name) }
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:generate_backup_name).returns { |name, ts| @config.generate_backup_name(name, ts) }
+    
+    # Create test materialized views
+    @connection.execute('CREATE MATERIALIZED VIEW portal_standard_polygons AS SELECT 1 as id')
+    @connection.execute("CREATE MATERIALIZED VIEW bk#{@backup_timestamp}_portal_standard_polygons AS SELECT 2 as id")
+    @connection.execute('CREATE INDEX idx_polygons_id ON portal_standard_polygons (id)')
+    @connection.execute("CREATE INDEX bk#{@backup_timestamp}_idx_polygons_id ON bk#{@backup_timestamp}_portal_standard_polygons (id)")
+    
+    # Mock ViewManager methods
+    Wdpa::Portal::Managers::ViewManager.stubs(:materialized_view_exists?).with('portal_standard_polygons').returns(true)
+    Wdpa::Portal::Managers::ViewManager.stubs(:materialized_view_exists?).with("bk#{@backup_timestamp}_portal_standard_polygons").returns(true)
+    Wdpa::Portal::Managers::ViewManager.expects(:rename_materialised_view_indexes_add_staging_prefix).with('staging_portal_standard_polygons')
+    Wdpa::Portal::Managers::ViewManager.expects(:rename_materialised_view_indexes_remove_backup_prefix).with("bk#{@backup_timestamp}_portal_standard_polygons")
+    
+    @service.rollback_portal_materialized_views
+    
+    # Verify views were renamed (use materialized view check instead of table_exists?)
+    assert Wdpa::Portal::Managers::ViewManager.materialized_view_exists?('portal_standard_polygons')
+    assert Wdpa::Portal::Managers::ViewManager.materialized_view_exists?('staging_portal_standard_polygons')
+  end
+
+  test 'rollback_portal_materialized_views handles missing live view gracefully' do
+    @service.initialize_rollback_variables(@backup_timestamp)
+    
+    @config.stubs(:portal_live_materialised_view_values).returns(['portal_standard_polygons'])
+    @config.stubs(:get_staging_materialised_view_name_from_live).with('portal_standard_polygons').returns('staging_portal_standard_polygons')
+    @config.stubs(:generate_backup_name).with('portal_standard_polygons', @backup_timestamp).returns("bk#{@backup_timestamp}_portal_standard_polygons")
+    
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_live_materialised_view_values).returns(@config.portal_live_materialised_view_values)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:get_staging_materialised_view_name_from_live).returns { |name| @config.get_staging_materialised_view_name_from_live(name) }
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:generate_backup_name).returns { |name, ts| @config.generate_backup_name(name, ts) }
+    
+    # Create only backup view
+    @connection.execute("CREATE MATERIALIZED VIEW bk#{@backup_timestamp}_portal_standard_polygons AS SELECT 2 as id")
+    
+    # Mock ViewManager - live view doesn't exist
+    Wdpa::Portal::Managers::ViewManager.stubs(:materialized_view_exists?).with('portal_standard_polygons').returns(false)
+    Wdpa::Portal::Managers::ViewManager.stubs(:materialized_view_exists?).with("bk#{@backup_timestamp}_portal_standard_polygons").returns(true)
+    Wdpa::Portal::Managers::ViewManager.expects(:rename_materialised_view_indexes_add_staging_prefix).never
+    Wdpa::Portal::Managers::ViewManager.expects(:rename_materialised_view_indexes_remove_backup_prefix).with("bk#{@backup_timestamp}_portal_standard_polygons")
+    
+    @service.rollback_portal_materialized_views
+  end
+
+  test 'rollback_portal_materialized_views handles errors gracefully' do
+    @service.initialize_rollback_variables(@backup_timestamp)
+    
+    @config.stubs(:portal_live_materialised_view_values).returns(['portal_standard_polygons'])
+    @config.stubs(:get_staging_materialised_view_name_from_live).with('portal_standard_polygons').returns('staging_portal_standard_polygons')
+    @config.stubs(:generate_backup_name).with('portal_standard_polygons', @backup_timestamp).returns("bk#{@backup_timestamp}_portal_standard_polygons")
+    
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:portal_live_materialised_view_values).returns(@config.portal_live_materialised_view_values)
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:get_staging_materialised_view_name_from_live).returns { |name| @config.get_staging_materialised_view_name_from_live(name) }
+    Wdpa::Portal::Config::PortalImportConfig.stubs(:generate_backup_name).returns { |name, ts| @config.generate_backup_name(name, ts) }
+    
+    # Mock ViewManager to raise error
+    Wdpa::Portal::Managers::ViewManager.stubs(:materialized_view_exists?).raises(StandardError, 'Database error')
+    
+    # Should not raise, but log warning
+    assert_nothing_raised do
+      @service.rollback_portal_materialized_views
+    end
   end
 end

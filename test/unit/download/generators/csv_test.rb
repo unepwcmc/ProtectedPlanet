@@ -8,7 +8,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     wdpa_file_path = 'WDPA_sources.csv'
     query = "
       SELECT \"TYPE\", #{Download::Utils.download_columns}
-      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS}
     ".squish
 
     File.stubs(:exists?).with('./WDPA_sources.csv').returns(true)
@@ -82,7 +82,7 @@ class DownloadGeneratorsCsvTest < ActiveSupport::TestCase
     site_ids = [1, 2, 3]
     query = "
       SELECT \"TYPE\", #{Download::Utils.download_columns}
-      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS}
       WHERE \"SITE_ID\" IN (1,2,3)
     ".squish
 

@@ -44,7 +44,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
   def create_test_portal_views
     # Create test portal views with sample data
     ActiveRecord::Base.connection.execute(<<~SQL)
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('polygons')} AS
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views[:polygons]} AS
       SELECT#{' '}
         1 as site_id,
         '1' as site_pid,
@@ -61,7 +61,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
         'II' as iucn_cat,
         ST_GeomFromText('POLYGON((1 1, 2 1, 2 2, 1 2, 1 1))') as wkb_geometry;
 
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('points')} AS
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views[:points]} AS
       SELECT#{' '}
         3 as site_id,
         '3' as site_pid,
@@ -70,7 +70,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
         'III' as iucn_cat,
         ST_GeomFromText('POINT(0.5 0.5)') as wkb_geometry;
 
-      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_for('sources')} AS
+      CREATE MATERIALIZED VIEW #{Wdpa::Portal::Config::PortalImportConfig.portal_staging_materialised_views[:sources]} AS
       SELECT#{' '}
         1 as id,
         'Test Source' as title,
@@ -81,7 +81,7 @@ class Wdpa::Portal::ImportIntegrationTest < ActionDispatch::IntegrationTest
   end
 
   def drop_test_portal_views
-    Wdpa::Portal::Config::PortalImportConfig.portal_materialised_view_values.each do |view|
+    Wdpa::Portal::Config::PortalImportConfig.portal_live_materialised_view_values.each do |view|
       ActiveRecord::Base.connection.execute("DROP MATERIALIZED VIEW IF EXISTS #{view}")
     end
   end

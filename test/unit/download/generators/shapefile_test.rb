@@ -15,12 +15,12 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
     shp_polygon_query = "
       SELECT #{Download::Utils.download_columns}
-      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS}
       WHERE \"TYPE\" = 'Polygon'
     ".squish
     shp_point_query = "
       SELECT #{Download::Utils.download_columns(reject: %i[gis_area gis_m_area])}
-      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS}
       WHERE \"TYPE\" = 'Point'
     ".squish
 
@@ -136,13 +136,13 @@ class DownloadShapefileTest < ActiveSupport::TestCase
 
     shp_polygon_query = "
       SELECT #{Download::Utils.download_columns}
-      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS}
       WHERE \"TYPE\" = 'Polygon'
       AND \"SITE_ID\" IN (1,2,3)
     ".squish
     shp_point_query = "
       SELECT #{Download::Utils.download_columns(reject: %i[gis_area gis_m_area])}
-      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads']}
+      FROM #{Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS}
       WHERE \"TYPE\" = 'Point'
       AND \"SITE_ID\" IN (1,2,3)
     ".squish

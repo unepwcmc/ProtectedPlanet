@@ -65,25 +65,25 @@ module Download
     # View names
     def self.points_view
       has_successful_portal_release? ? 
-        Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['points'] : 
+        Wdpa::Portal::Config::PortalImportConfig.portal_materialised_views_hash[:points][:live] :
         'standard_points'
     end
 
     def self.polygons_view
       has_successful_portal_release? ? 
-        Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['polygons'] : 
+        Wdpa::Portal::Config::PortalImportConfig.portal_materialised_views_hash[:polygons][:live] :
         'standard_polygons'
     end
 
     def self.sources_view
       has_successful_portal_release? ? 
-        Wdpa::Portal::Config::PortalImportConfig::PORTAL_MATERIALISED_VIEWS['sources'] : 
+        Wdpa::Portal::Config::PortalImportConfig.portal_materialised_views_hash[:sources][:live] :
         'standard_sources'
     end
 
     def self.downloads_view
       has_successful_portal_release? ? 
-        Wdpa::Portal::Config::PortalImportConfig::PORTAL_VIEWS['downloads'] : 
+        Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS : 
         Wdpa::Release::DOWNLOADS_VIEW_NAME
     end
 
