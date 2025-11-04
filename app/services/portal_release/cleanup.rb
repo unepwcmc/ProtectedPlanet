@@ -16,13 +16,13 @@ module PortalRelease
           begin
             Wdpa::Portal::Services::Core::TableCleanupService.cleanup_after_swap
 
-            # Invalidate previously generated downloads so new requests regenerate against the new release
-            # This also cleans up the temporary download views created by the generators. clean_tmp_download_views
-            Download.clear_downloads
-
             # Rebuild searchable index to reflect new release data
             Search::Index.delete
             Search::Index.create
+
+            # Invalidate previously generated downloads so new requests regenerate against the new release
+            # This also cleans up the temporary download views created by the generators. clean_tmp_download_views
+            Download.clear_downloads
 
             # Clear Rails cache to ensure fresh data is served
             Rails.cache.clear
