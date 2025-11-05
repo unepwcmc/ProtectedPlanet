@@ -56,11 +56,12 @@ The release follows 11 phases:
 
 ### Production Release
 ```bash
-# Full production release
-bundle exec rake pp:portal:release
-
 # With specific month/year
-bundle exec rake pp:portal:release['Oct2025']
+RAILS_ENV=production bundle exec rake pp:portal:release['Oct2025']
+
+
+# Full production release (current month +1)
+RAILS_ENV=production bundle exec rake pp:portal:release
 ```
 
 ### Development & Testing

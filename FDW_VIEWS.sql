@@ -107,6 +107,7 @@ WITH site AS (
 dim AS (
   SELECT
     s.wdpa_id,
+    s.parcel_id,
     COALESCE(st.description->>'en', st.code) AS site_type,
     -- English designation: use catalog description (en) when id present; otherwise use free text
     CASE WHEN s.english_designation_id IS NULL THEN s.english_designation_text
@@ -122,10 +123,10 @@ dim AS (
     COALESCE(iw.description->>'en', iw.code)                           AS inlnd_wtrs,
     COALESCE(coo.description->>'en', coo.code)                         AS cons_obj
   FROM (
-    SELECT DISTINCT ON (wdpa_id) *
+    SELECT DISTINCT ON (wdpa_id, parcel_id) *
     FROM site
     WHERE archived_at IS NULL
-    ORDER BY wdpa_id, status_yr DESC, wdpa_pk DESC
+    ORDER BY wdpa_id, parcel_id, status_yr DESC, wdpa_pk DESC
   ) s
   LEFT JOIN portal_fdw.site_type_cat        st  ON st.id  = s.site_type_id
   LEFT JOIN portal_fdw.designation_eng_cat  de  ON de.id  = s.english_designation_id
@@ -224,7 +225,7 @@ SELECT
 FROM site
 JOIN portal_fdw.spatial_data par ON par.wdpa_id = site.wdpa_pk
 JOIN portal_fdw.data_restriction_levels dr ON dr.id = site.data_restriction_level_id
-LEFT JOIN dim               ON dim.wdpa_id = site.wdpa_id
+LEFT JOIN dim               ON dim.wdpa_id = site.wdpa_id AND dim.parcel_id = site.parcel_id
 LEFT JOIN agg               ON agg.wdpa_id = site.wdpa_id
 LEFT JOIN portal_fdw.conservation_objective_cat coo ON coo.id = site.conservation_objective_id
 WHERE par.is_polygon = 0
@@ -232,9 +233,8 @@ WHERE par.is_polygon = 0
   AND dr.code IN ('not restricted', 'commercial restriction')
 WITH NO DATA;
 
--- Indexes removed for performance
--- Uncomment if required for manual queries:
--- CREATE INDEX IF NOT EXISTS idx_portal_pt_ids ON staging_portal_standard_points (site_id, site_pid);
+-- Unique index required for CONCURRENT refreshes (natural key: site_id + site_pid)
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_points_pk ON staging_portal_standard_points (site_id, site_pid);
 
 -- 3) Standardized views (Polygons)
 --    Polygons are spatial_data rows where is_polygon = 1
@@ -284,6 +284,7 @@ WITH site AS (
 dim AS (
   SELECT
     s.wdpa_id,
+    s.parcel_id,
     COALESCE(st.description->>'en', st.code) AS site_type,
     CASE WHEN s.english_designation_id IS NULL THEN s.english_designation_text
          ELSE COALESCE(de.description->>'en', de.code) END            AS desig_eng,
@@ -298,10 +299,10 @@ dim AS (
     COALESCE(iw.description->>'en', iw.code)                           AS inlnd_wtrs,
     COALESCE(coo.description->>'en', coo.code)                         AS cons_obj
   FROM (
-    SELECT DISTINCT ON (wdpa_id) *
+    SELECT DISTINCT ON (wdpa_id, parcel_id) *
     FROM site
     WHERE archived_at IS NULL
-    ORDER BY wdpa_id, status_yr DESC, wdpa_pk DESC
+    ORDER BY wdpa_id, parcel_id, status_yr DESC, wdpa_pk DESC
   ) s
   LEFT JOIN portal_fdw.site_type_cat        st  ON st.id  = s.site_type_id
   LEFT JOIN portal_fdw.designation_eng_cat  de  ON de.id  = s.english_designation_id
@@ -405,7 +406,7 @@ SELECT
 FROM site
 JOIN portal_fdw.spatial_data par ON par.wdpa_id = site.wdpa_pk
 JOIN portal_fdw.data_restriction_levels dr ON dr.id = site.data_restriction_level_id
-LEFT JOIN dim               ON dim.wdpa_id = site.wdpa_id
+LEFT JOIN dim               ON dim.wdpa_id = site.wdpa_id AND dim.parcel_id = site.parcel_id
 LEFT JOIN agg               ON agg.wdpa_id = site.wdpa_id
 LEFT JOIN portal_fdw.conservation_objective_cat coo ON coo.id = site.conservation_objective_id
 WHERE par.is_polygon = 1
@@ -413,9 +414,8 @@ WHERE par.is_polygon = 1
   AND dr.code IN ('not restricted', 'commercial restriction')
 WITH NO DATA;
 
--- Indexes removed for performance - not needed for sequential importer scans
--- Uncomment if required for manual queries:
--- CREATE INDEX IF NOT EXISTS idx_portal_poly_ids ON staging_portal_standard_polygons (site_id, site_pid);
+-- Unique index required for CONCURRENT refreshes (natural key: site_id + site_pid)
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_polygons_pk ON staging_portal_standard_polygons (site_id, site_pid);
 
 -- 4) Standardized view (Sources)
 --    Only includes sources used by non-archived wdpas with allowed restriction levels
