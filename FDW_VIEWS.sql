@@ -28,38 +28,41 @@ DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_iso3_agg;
 
 
 -- 1) Helper aggregate materialized views (many-to-many → concatenated text)
---    Keyed by wdpa site_id (wdpa_id in outputs), not the internal PK.
+--    Keyed by wdpa site_id (wdpa_id in outputs) and parcel_id, not the internal PK.
 CREATE MATERIALIZED VIEW staging_portal_iso3_agg AS
 SELECT d.site_id AS wdpa_id,
+       d.parcel_id AS parcel_id,
        string_agg(DISTINCT i.code, ';' ORDER BY i.code) AS iso3s
 FROM portal_fdw.wdpa_iso3 w
 JOIN portal_fdw.wdpas d ON d.id = w.wdpa_id
 JOIN portal_fdw.iso3 i  ON i.id = w.iso3_id
-GROUP BY d.site_id
+GROUP BY d.site_id, d.parcel_id
 WITH NO DATA;
 
 CREATE MATERIALIZED VIEW staging_portal_parent_iso3_agg AS
 SELECT d.site_id AS wdpa_id,
+       d.parcel_id AS parcel_id,
        string_agg(DISTINCT i.code, ';' ORDER BY i.code) AS parent_iso3s
 FROM portal_fdw.wdpa_parent_iso3 w
 JOIN portal_fdw.wdpas d ON d.id = w.wdpa_id
 JOIN portal_fdw.iso3 i  ON i.id = w.parent_iso3_id
-GROUP BY d.site_id
+GROUP BY d.site_id, d.parcel_id
 WITH NO DATA;
 
 CREATE MATERIALIZED VIEW staging_portal_int_crit_agg AS
 SELECT d.site_id AS wdpa_id,
+       d.parcel_id AS parcel_id,
 string_agg(DISTINCT COALESCE(c.description->>'en', c.code), ';' ORDER BY COALESCE(c.description->>'en', c.code)) AS int_crit
 FROM portal_fdw.wdpa_international_criteria w
 JOIN portal_fdw.wdpas d ON d.id = w.wdpa_id
 JOIN portal_fdw.international_criteria_cat c ON c.id = w.international_criteria_cat_id
-GROUP BY d.site_id
+GROUP BY d.site_id, d.parcel_id
 WITH NO DATA;
 
 -- Unique indexes required for CONCURRENT refreshes
-CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_iso3_agg_pk        ON staging_portal_iso3_agg(wdpa_id);
-CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_parent_iso3_agg_pk ON staging_portal_parent_iso3_agg(wdpa_id);
-CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_intcrit_agg_pk     ON staging_portal_int_crit_agg(wdpa_id);
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_iso3_agg_pk        ON staging_portal_iso3_agg(wdpa_id, parcel_id);
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_parent_iso3_agg_pk ON staging_portal_parent_iso3_agg(wdpa_id, parcel_id);
+CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_intcrit_agg_pk     ON staging_portal_int_crit_agg(wdpa_id, parcel_id);
 
 -- 2) Standardized views (Points)
 --    Points are spatial_data rows where is_polygon = 0
@@ -145,6 +148,7 @@ dim AS (
 agg AS (
   SELECT
     s.wdpa_id,
+    s.parcel_id,
     i.iso3s,
     p.parent_iso3s,
     c.int_crit,
@@ -152,37 +156,40 @@ agg AS (
     os.ownsubtype,
     oa.oecm_asmt
   FROM (
-    SELECT DISTINCT wdpa_id
+    SELECT DISTINCT wdpa_id, parcel_id
     FROM site
     WHERE archived_at IS NULL
   ) s
-  LEFT JOIN staging_portal_iso3_agg        i ON i.wdpa_id = s.wdpa_id
-  LEFT JOIN staging_portal_parent_iso3_agg p ON p.wdpa_id = s.wdpa_id
-  LEFT JOIN staging_portal_int_crit_agg    c ON c.wdpa_id = s.wdpa_id
+  LEFT JOIN staging_portal_iso3_agg        i ON i.wdpa_id = s.wdpa_id AND i.parcel_id = s.parcel_id
+  LEFT JOIN staging_portal_parent_iso3_agg p ON p.wdpa_id = s.wdpa_id AND p.parcel_id = s.parcel_id
+  LEFT JOIN staging_portal_int_crit_agg    c ON c.wdpa_id = s.wdpa_id AND c.parcel_id = s.parcel_id
   LEFT JOIN (
     SELECT d.site_id AS wdpa_id,
+           d.parcel_id AS parcel_id,
 string_agg(DISTINCT COALESCE(gst.description->>'en', gst.code), ';' ORDER BY COALESCE(gst.description->>'en', gst.code)) AS govsubtype
     FROM portal_fdw.wdpa_governance_subtypes wgs
     JOIN portal_fdw.wdpas d ON d.id = wgs.wdpa_id
     JOIN portal_fdw.governance_subtype_cat gst ON gst.id = wgs.governance_subtype_cat_id
-    GROUP BY d.site_id
-  ) gs ON gs.wdpa_id = s.wdpa_id
+    GROUP BY d.site_id, d.parcel_id
+  ) gs ON gs.wdpa_id = s.wdpa_id AND gs.parcel_id = s.parcel_id
   LEFT JOIN (
     SELECT d.site_id AS wdpa_id,
+           d.parcel_id AS parcel_id,
 string_agg(DISTINCT COALESCE(ost.description->>'en', ost.code), ';' ORDER BY COALESCE(ost.description->>'en', ost.code)) AS ownsubtype
     FROM portal_fdw.wdpa_ownership_subtypes wos
     JOIN portal_fdw.wdpas d ON d.id = wos.wdpa_id
     JOIN portal_fdw.ownership_subtype_cat ost ON ost.id = wos.ownership_subtype_cat_id
-    GROUP BY d.site_id
-  ) os ON os.wdpa_id = s.wdpa_id
+    GROUP BY d.site_id, d.parcel_id
+  ) os ON os.wdpa_id = s.wdpa_id AND os.parcel_id = s.parcel_id
   LEFT JOIN (
     SELECT d.site_id AS wdpa_id,
+           d.parcel_id AS parcel_id,
 string_agg(DISTINCT COALESCE(oc.description->>'en', oc.code), ';' ORDER BY COALESCE(oc.description->>'en', oc.code)) AS oecm_asmt
     FROM portal_fdw.wdpa_oecm_assessments woa
     JOIN portal_fdw.wdpas d ON d.id = woa.wdpa_id
     JOIN portal_fdw.oecm_assessment_cat oc ON oc.id = woa.oecm_assessment_cat_id
-    GROUP BY d.site_id
-  ) oa ON oa.wdpa_id = s.wdpa_id
+    GROUP BY d.site_id, d.parcel_id
+  ) oa ON oa.wdpa_id = s.wdpa_id AND oa.parcel_id = s.parcel_id
 )
 SELECT
   (row_number() OVER (ORDER BY site.wdpa_id, site.parcel_id))::integer AS ogc_fid,
@@ -226,7 +233,7 @@ FROM site
 JOIN portal_fdw.spatial_data par ON par.wdpa_id = site.wdpa_pk
 JOIN portal_fdw.data_restriction_levels dr ON dr.id = site.data_restriction_level_id
 LEFT JOIN dim               ON dim.wdpa_id = site.wdpa_id AND dim.parcel_id = site.parcel_id
-LEFT JOIN agg               ON agg.wdpa_id = site.wdpa_id
+LEFT JOIN agg               ON agg.wdpa_id = site.wdpa_id AND agg.parcel_id = site.parcel_id
 LEFT JOIN portal_fdw.conservation_objective_cat coo ON coo.id = site.conservation_objective_id
 WHERE par.is_polygon = 0
   AND site.archived_at IS NULL
@@ -321,6 +328,7 @@ dim AS (
 agg AS (
   SELECT
     s.wdpa_id,
+    s.parcel_id,
     i.iso3s,
     p.parent_iso3s,
     c.int_crit,
@@ -328,37 +336,40 @@ agg AS (
     os.ownsubtype,
     oa.oecm_asmt
   FROM (
-    SELECT DISTINCT wdpa_id
+    SELECT DISTINCT wdpa_id, parcel_id
     FROM site
     WHERE archived_at IS NULL
   ) s
-  LEFT JOIN staging_portal_iso3_agg        i ON i.wdpa_id = s.wdpa_id
-  LEFT JOIN staging_portal_parent_iso3_agg p ON p.wdpa_id = s.wdpa_id
-  LEFT JOIN staging_portal_int_crit_agg    c ON c.wdpa_id = s.wdpa_id
+  LEFT JOIN staging_portal_iso3_agg        i ON i.wdpa_id = s.wdpa_id AND i.parcel_id = s.parcel_id
+  LEFT JOIN staging_portal_parent_iso3_agg p ON p.wdpa_id = s.wdpa_id AND p.parcel_id = s.parcel_id
+  LEFT JOIN staging_portal_int_crit_agg    c ON c.wdpa_id = s.wdpa_id AND c.parcel_id = s.parcel_id
   LEFT JOIN (
     SELECT d.site_id AS wdpa_id,
+           d.parcel_id AS parcel_id,
 string_agg(DISTINCT COALESCE(gst.description->>'en', gst.code), ';' ORDER BY COALESCE(gst.description->>'en', gst.code)) AS govsubtype
     FROM portal_fdw.wdpa_governance_subtypes wgs
     JOIN portal_fdw.wdpas d ON d.id = wgs.wdpa_id
     JOIN portal_fdw.governance_subtype_cat gst ON gst.id = wgs.governance_subtype_cat_id
-    GROUP BY d.site_id
-  ) gs ON gs.wdpa_id = s.wdpa_id
+    GROUP BY d.site_id, d.parcel_id
+  ) gs ON gs.wdpa_id = s.wdpa_id AND gs.parcel_id = s.parcel_id
   LEFT JOIN (
     SELECT d.site_id AS wdpa_id,
+           d.parcel_id AS parcel_id,
 string_agg(DISTINCT COALESCE(ost.description->>'en', ost.code), ';' ORDER BY COALESCE(ost.description->>'en', ost.code)) AS ownsubtype
     FROM portal_fdw.wdpa_ownership_subtypes wos
     JOIN portal_fdw.wdpas d ON d.id = wos.wdpa_id
     JOIN portal_fdw.ownership_subtype_cat ost ON ost.id = wos.ownership_subtype_cat_id
-    GROUP BY d.site_id
-  ) os ON os.wdpa_id = s.wdpa_id
+    GROUP BY d.site_id, d.parcel_id
+  ) os ON os.wdpa_id = s.wdpa_id AND os.parcel_id = s.parcel_id
   LEFT JOIN (
     SELECT d.site_id AS wdpa_id,
+           d.parcel_id AS parcel_id,
 string_agg(DISTINCT COALESCE(oc.description->>'en', oc.code), ';' ORDER BY COALESCE(oc.description->>'en', oc.code)) AS oecm_asmt
     FROM portal_fdw.wdpa_oecm_assessments woa
     JOIN portal_fdw.wdpas d ON d.id = woa.wdpa_id
     JOIN portal_fdw.oecm_assessment_cat oc ON oc.id = woa.oecm_assessment_cat_id
-    GROUP BY d.site_id
-  ) oa ON oa.wdpa_id = s.wdpa_id
+    GROUP BY d.site_id, d.parcel_id
+  ) oa ON oa.wdpa_id = s.wdpa_id AND oa.parcel_id = s.parcel_id
 )
 SELECT
   (row_number() OVER (ORDER BY site.wdpa_id, site.parcel_id))::integer AS ogc_fid,
@@ -407,7 +418,7 @@ FROM site
 JOIN portal_fdw.spatial_data par ON par.wdpa_id = site.wdpa_pk
 JOIN portal_fdw.data_restriction_levels dr ON dr.id = site.data_restriction_level_id
 LEFT JOIN dim               ON dim.wdpa_id = site.wdpa_id AND dim.parcel_id = site.parcel_id
-LEFT JOIN agg               ON agg.wdpa_id = site.wdpa_id
+LEFT JOIN agg               ON agg.wdpa_id = site.wdpa_id AND agg.parcel_id = site.parcel_id
 LEFT JOIN portal_fdw.conservation_objective_cat coo ON coo.id = site.conservation_objective_id
 WHERE par.is_polygon = 1
   AND site.archived_at IS NULL
