@@ -33,7 +33,7 @@ module Wdpa
 
         # Number of backups to keep when cleaning up old backups
         def self.keep_backup_count
-          2
+          1
         end
 
         # Progress notification settings for large imports

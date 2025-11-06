@@ -40,5 +40,30 @@ namespace :pp do
     task status: :environment do
       puts PortalRelease::Service.status_report
     end
+
+    desc 'Manually clean up old backups. Usage: rake pp:portal:cleanup_backups[2] (keeps 2 most recent backups)'
+    task :cleanup_backups, [:keep_count] => :environment do |_t, args|
+      keep_count = (args[:keep_count] || '1').to_i
+
+      if keep_count < 0
+        Rails.logger.error 'Error: keep_count must be >= 0'
+        exit 1
+      end
+
+      Rails.logger.info "🧹 Starting manual backup cleanup (keeping #{keep_count} most recent backup(s))..."
+
+      begin
+        # Use the existing TableCleanupService
+        service = Wdpa::Portal::Services::Core::TableCleanupService.new
+        service.instance_variable_set(:@connection, ActiveRecord::Base.connection)
+        service.instance_variable_set(:@index_cache, {})
+        service.cleanup_old_backups(keep_count)
+        Rails.logger.info '✅ Backup cleanup completed successfully'
+      rescue StandardError => e
+        Rails.logger.error "❌ Backup cleanup failed: #{e.class}: #{e.message}"
+        Rails.logger.error e.backtrace.join("\n")
+        exit 1
+      end
+    end
   end
 end
