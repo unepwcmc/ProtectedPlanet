@@ -235,6 +235,23 @@ module Wdpa
         def self.swap_sequence_live_table_names
           @swap_sequence_live_table_names ||= independent_table_names.keys + main_entity_tables.keys + junction_tables.keys
         end
+
+        # ============================================================================
+        # MATERIALIZED VIEW DELETION SEQUENCE
+        # ============================================================================
+
+        # Materialized view deletion sequence - CRITICAL: Order matters for dependencies
+        #
+        # The deletion must happen in this specific order to avoid dependency violations:
+        # 1. Standard views first (dependent views) - these depend on helper aggregate views
+        # 2. Helper aggregate views last (dependencies) - these are referenced by standard views
+        #
+        # This ordering ensures that when we drop views, dependent views are dropped first,
+        # then their dependencies. This is the reverse of creation order (hash order).
+        def self.deletion_sequence_materialized_view_names
+          # Reverse the hash order: dependent views first, then dependencies
+          portal_materialised_views_hash.values.reverse.map { |v| v[:live] }
+        end
       end
     end
   end

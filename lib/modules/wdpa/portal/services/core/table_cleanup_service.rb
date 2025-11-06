@@ -124,7 +124,11 @@ module Wdpa
                 backup_materialized_views = get_backup_materialized_views_for_timestamp(timestamp)
                 Rails.logger.debug "🔍 Found #{backup_materialized_views.length} backup materialized views for timestamp #{timestamp}: #{backup_materialized_views.join(', ')}"
 
-                backup_materialized_views.each do |materialized_view|
+                # Sort materialized views by dependency order (dependent views first, then helpers)
+                views_to_drop = sort_materialized_views_by_dependency(backup_materialized_views)
+                Rails.logger.debug "🔍 Dropping materialized views in order: #{views_to_drop.join(', ')}"
+
+                views_to_drop.each do |materialized_view|
                   # SAFETY CHECK: Ensure we're only dropping backup views, never live views
                   unless Wdpa::Portal::Config::PortalImportConfig.is_backup_table?(materialized_view)
                     Rails.logger.error "❌ SAFETY CHECK FAILED: Attempted to drop non-backup view #{materialized_view} (skipping)"
@@ -221,6 +225,19 @@ module Wdpa
 
             # Sort by deletion order and return backup table names (compatible with older Ruby versions)
             deletion_order.map { |original_table| backup_table_map[original_table] }.compact
+          end
+
+          def sort_materialized_views_by_dependency(views)
+            # Get deletion order from config (dependent views first, then dependencies)
+            deletion_order = Wdpa::Portal::Config::PortalImportConfig.deletion_sequence_materialized_view_names
+
+            # Create a mapping from original view names to backup view names
+            backup_view_map = views.index_by do |backup_view|
+              Wdpa::Portal::Config::PortalImportConfig.extract_table_name_from_backup(backup_view)
+            end
+
+            # Sort by deletion order and return backup view names (compatible with older Ruby versions)
+            deletion_order.map { |original_view| backup_view_map[original_view] }.compact
           end
 
           # --- RELEASE TIMESTAMP CLEANUP METHODS ---
