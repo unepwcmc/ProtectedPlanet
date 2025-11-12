@@ -7,6 +7,20 @@
 -- - The FDW server (portal_srv) and foreign tables in schema portal_fdw already exist.
 -- - This script only creates materialized views in the local DB (public schema) over portal_fdw tables.
 -- - PostGIS should be installed (CREATE EXTENSION IF NOT EXISTS postgis;).
+--
+-- ⚠️  IMPORTANT: INDEX MAINTENANCE ⚠️
+-- If you modify this file (add/remove JOINs, WHERE clauses, columns, or change query patterns):
+--   1. Review and update Portal DB indexes (parent database)
+--      - Add indexes for new JOIN columns (foreign keys)
+--      - Add indexes for new WHERE clause columns
+--      - Add composite indexes for new query patterns
+--   2. Review and update materialized view indexes in this file
+--      - Add indexes for new columns used in WHERE/ORDER BY/GROUP BY
+--      - Ensure unique indexes exist for CONCURRENT refreshes
+--      - Add spatial indexes if new geometry columns are added
+--
+-- Performance impact: Missing indexes on Portal DB will cause slow FDW queries.
+-- Missing indexes on materialized views will cause slow refreshes and queries.
 
 -- 0) Ensure PostGIS (safe if already present)
 CREATE EXTENSION IF NOT EXISTS postgis;
@@ -29,6 +43,9 @@ DROP MATERIALIZED VIEW IF EXISTS public.staging_portal_iso3_agg;
 
 -- 1) Helper aggregate materialized views (many-to-many → concatenated text)
 --    Keyed by wdpa site_id (wdpa_id in outputs) and parcel_id, not the internal PK.
+--    ⚠️  If you modify JOINs or GROUP BY here, check Portal DB indexes for:
+--        - wdpa_iso3, wdpa_parent_iso3, wdpa_international_criteria junction tables
+--        - wdpas.id and wdpas(site_id, parcel_id) indexes
 CREATE MATERIALIZED VIEW staging_portal_iso3_agg AS
 SELECT d.site_id AS wdpa_id,
        d.parcel_id AS parcel_id,
@@ -60,12 +77,16 @@ GROUP BY d.site_id, d.parcel_id
 WITH NO DATA;
 
 -- Unique indexes required for CONCURRENT refreshes
+-- ⚠️  If you change GROUP BY columns, update these indexes to match
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_iso3_agg_pk        ON staging_portal_iso3_agg(wdpa_id, parcel_id);
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_parent_iso3_agg_pk ON staging_portal_parent_iso3_agg(wdpa_id, parcel_id);
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_intcrit_agg_pk     ON staging_portal_int_crit_agg(wdpa_id, parcel_id);
 
 -- 2) Standardized views (Points)
 --    Points are spatial_data rows where is_polygon = 0
+--    ⚠️  If you modify JOINs, WHERE clauses, or add columns here, check:
+--        - Portal DB: wdpas.archived_at, spatial_data(wdpa_id, is_polygon), data_restriction_levels.code indexes
+--        - This file: Ensure unique index on (site_id, site_pid) and spatial index on wkb_geometry exist
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_points AS
 WITH site AS (
@@ -241,10 +262,17 @@ WHERE par.is_polygon = 0
 WITH NO DATA;
 
 -- Unique index required for CONCURRENT refreshes (natural key: site_id + site_pid)
+-- ⚠️  If you change the natural key columns, update this index
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_points_pk ON staging_portal_standard_points (site_id, site_pid);
+-- Spatial index for efficient geometry queries (ST_DWithin, ST_Intersects, etc.)
+-- ⚠️  If you add/modify geometry columns, ensure spatial indexes exist for all geometry columns
+CREATE INDEX IF NOT EXISTS staging_idx_portal_points_geom ON staging_portal_standard_points USING GIST (wkb_geometry);
 
 -- 3) Standardized views (Polygons)
 --    Polygons are spatial_data rows where is_polygon = 1
+--    ⚠️  If you modify JOINs, WHERE clauses, or add columns here, check:
+--        - Portal DB: wdpas.archived_at, spatial_data(wdpa_id, is_polygon), data_restriction_levels.code indexes
+--        - This file: Ensure unique index on (site_id, site_pid) and spatial index on wkb_geometry exist
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_polygons AS
 WITH site AS (
@@ -426,10 +454,17 @@ WHERE par.is_polygon = 1
 WITH NO DATA;
 
 -- Unique index required for CONCURRENT refreshes (natural key: site_id + site_pid)
+-- ⚠️  If you change the natural key columns, update this index
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_polygons_pk ON staging_portal_standard_polygons (site_id, site_pid);
+-- Spatial index for efficient geometry queries (ST_DWithin, ST_Intersects, etc.)
+-- ⚠️  If you add/modify geometry columns, ensure spatial indexes exist for all geometry columns
+CREATE INDEX IF NOT EXISTS staging_idx_portal_polygons_geom ON staging_portal_standard_polygons USING GIST (wkb_geometry);
 
 -- 4) Standardized view (Sources)
 --    Only includes sources used by non-archived wdpas with allowed restriction levels
+--    ⚠️  If you modify JOINs or WHERE clauses here, check Portal DB indexes for:
+--        - source.id, wdpas.source_id, wdpas.archived_at, data_restriction_levels.code
+--        - This file: Ensure unique index on index_id and index on metadataid exist
 
 CREATE MATERIALIZED VIEW public.staging_portal_standard_sources AS
 WITH allowed_sources AS (
@@ -463,8 +498,10 @@ LEFT JOIN portal_fdw.language_cat      lang ON lower(lang.code)= lower(s.languag
 WITH NO DATA;
 
 -- Non-unique index (metadataid has duplicates in dev data)
+-- ⚠️  If you add columns used in WHERE/ORDER BY, consider adding indexes
 CREATE INDEX IF NOT EXISTS staging_idx_portal_sources_metadataid ON staging_portal_standard_sources(metadataid);
 -- Unique index required for CONCURRENT refreshes
+-- ⚠️  If you change how index_id is generated, update this index
 CREATE UNIQUE INDEX IF NOT EXISTS staging_idx_portal_sources_pk ON staging_portal_standard_sources(index_id);
 
 -- 5) refreshes (make sure to run this after creating the views)
