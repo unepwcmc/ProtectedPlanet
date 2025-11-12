@@ -16,7 +16,7 @@ Rails.application.configure do
   config.enable_dependency_loading = true
 
   # Full error reports are disabled and caching is turned on.
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
 
   # Use a different cache store in production.

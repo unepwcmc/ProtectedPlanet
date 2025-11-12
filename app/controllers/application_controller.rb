@@ -64,13 +64,13 @@ class ApplicationController < ActionController::Base
     raise PageNotFound
   end
 
-  rescue_from PageNotFound do
-    render_404
-  end
+  # rescue_from PageNotFound do
+  #   render_404
+  # end
 
-  rescue_from StandardError do
-    render_500
-  end
+  # rescue_from StandardError do
+  #   render_500
+  # end
 
   def enable_caching
     expires_in Rails.application.secrets.cache_max_age, public: true
