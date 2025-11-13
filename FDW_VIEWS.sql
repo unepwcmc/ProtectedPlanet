@@ -236,7 +236,7 @@ SELECT
   LEFT(dim.own_type::varchar, 254)                           AS own_type,
   LEFT(site.mang_auth::varchar, 254)                         AS mang_auth,
   LEFT(site.mang_plan::varchar, 254)                         AS mang_plan,
-  LEFT(COALESCE(coo.code,'')::varchar, 100)                  AS cons_obj,
+  LEFT(dim.cons_obj::varchar, 100)                           AS cons_obj,
   LEFT(site.supp_info::varchar, 254)                         AS supp_info,
   LEFT(dim.verif::varchar, 20)                               AS verif,
   LEFT(dim.inlnd_wtrs::varchar, 100)                         AS inlnd_wtrs,
