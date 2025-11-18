@@ -4,7 +4,7 @@ services:
     platform: linux/x86_64
     container_name: protectedplanet-web
     build: .
-    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid;bundle i;yarn install; bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid;bundle i;yarn install; bundle exec rails db:migrate; bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/ProtectedPlanet
       - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519

@@ -83,6 +83,14 @@ module PortalRelease
         duration = time { send(phase) }
         @log.phase_completed(@ctx[:phase], duration: duration)
         @notify.phase_complete(@ctx[:phase], duration_s: duration)
+        
+        # Stop after post_swap if dry run is enabled
+        if ActiveModel::Type::Boolean.new.cast(ENV.fetch('PP_RELEASE_DRY_RUN', nil)) && phase.to_s == 'post_swap'
+          @log.event('dry_run_stopped_after_post_swap')
+          @notify.phase('Dry run stopped after post_swap phase')
+          break
+        end
+        
         break if !stop_after.empty? && phase.to_s == stop_after
       end
 

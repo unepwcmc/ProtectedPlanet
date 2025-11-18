@@ -34,7 +34,9 @@ git submodule update --init --recursive
 11. [Relationships between Protected Areas and Parcels](docs/protected_area_parcels.md)
 12. [Green List Functionality](docs/green_list.md)
 13. [Portal Release Runbook](docs/portal_release_runbook.md)
-14. [Banner system](docs/banner_system.md)
+14. [DB Connection between PP and Data Management Portal (FDW) Setup - Production](docs/FDW_SETUP_PROD.md)
+15. [DB Connection between PP and Data Management Portal (FDW) Setup - Local Development](docs/FDW_SETUP_LOCAL.md)
+16. [Banner system](docs/banner_system.md)
 ## Licence
 
 Protected Planet is released under the [BSD

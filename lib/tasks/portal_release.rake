@@ -1,10 +1,14 @@
 namespace :pp do
   namespace :portal do
-    desc "Run portal-backed WDPA release. Usage: rake pp:portal:release['WDPA_YYYY_MM']"
+    desc "Run portal-backed WDPA release. Usage: rake pp:portal:release['Nov2025']"
     task :release, [:label] => :environment do |_t, args|
-      # Default to e.g. "Mar2025" when no label is supplied
-      # Each month we run release for next month data so month +1 is used to get the correct label
-      label = args[:label] || Time.now.utc.advance(months: 1).strftime('%b%Y')
+      unless args[:label] && !args[:label].strip.empty?
+        Rails.logger.error 'Error: Release label is required. Usage: rake pp:portal:release["Nov2025"]'
+        Rails.logger.error 'Label format: MMMYYYY (e.g., Nov2025, Jan2026)'
+        exit 1
+      end
+
+      label = args[:label].strip
       PortalRelease::Service.new(label: label).run!
     end
 

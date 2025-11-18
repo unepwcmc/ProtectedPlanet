@@ -1,3 +1,4 @@
+@ -1,381 +0,0 @@
 # ProtectedPlanet ↔ Portal FDW Integration (macOS + Docker Desktop)
 
 Goal
@@ -59,90 +60,65 @@ pg_ctl -D "$(psql -U postgres -d postgres -Atc 'SHOW data_directory;')" reload
 psql -U postgres -d postgres -c "SELECT pg_reload_conf();"
 ```
 
-1.6 Grant Portal DB schema permissions (CRITICAL - must be done before FDW setup)
-- **IMPORTANT**: Run these commands on Portal DB, not on PP website Database.
-- This must be completed before importing foreign tables, otherwise queries will fail with permission errors.
+2) Create the FDW on the PP DB (Docker)
 
+2.1 Set environment variables
 ```bash path=null start=null
-# replace <portal_db_name> and <port> as needed
-# If on same server, you may need to specify port (e.g., -p 5433 if PostgreSQL 15 is on a different port)
-psql -U postgres -p <port> -d <portal_db_name> -X <<'SQL'
--- First, verify which schemas exist
-SELECT schema_name FROM information_schema.schemata 
-WHERE schema_name NOT IN ('pg_catalog', 'information_schema', 'pg_toast') 
-ORDER BY schema_name;
+# PP DB connection (example values)
+export PP_DB_HOST=127.0.0.1
+export PP_DB_PORT=55432
+export PP_DB_NAME=pp_development
+export PP_DB_USER=postgres
+export PP_DB_PASSWORD={{PP_DB_PASSWORD}}     # e.g., 'postgres' in dev
 
--- Then grant permissions (adjust schema names based on what exists - commonly 'wdpa' and 'reference')
-GRANT USAGE ON SCHEMA wdpa TO portal_ro_user;
-GRANT USAGE ON SCHEMA reference TO portal_ro_user;
-GRANT SELECT ON ALL TABLES IN SCHEMA wdpa TO portal_ro_user;
-GRANT SELECT ON ALL TABLES IN SCHEMA reference TO portal_ro_user;
-ALTER DEFAULT PRIVILEGES IN SCHEMA wdpa GRANT SELECT ON TABLES TO portal_ro_user;
-ALTER DEFAULT PRIVILEGES IN SCHEMA reference GRANT SELECT ON TABLES TO portal_ro_user;
-
--- Optional: Set connection limit for portal_ro_user (recommended for production)
-ALTER ROLE portal_ro_user CONNECTION LIMIT 10;
-SQL
+# Portal DB connection details
+export PORTAL_DB_HOST=host.docker.internal   # Portal DB on host macOS
+export PORTAL_DB_PORT=5432
+export PORTAL_DB_NAME=pp_data_management_backend_development
+export PORTAL_RO_PASSWORD={{PORTAL_RO_PASSWORD}}
 ```
 
-2) Create the FDW on the PP DB
-
-**Prerequisites:**
-- Ensure `portal_srv_read` role exists in PP DB (create with `CREATE ROLE portal_srv_read LOGIN;` if needed)
-- Ensure `portal_ro_user` role exists in Portal DB and permissions are granted (see step 1.6 above)
-
-**Connection details:**
-- Replace `<pp_db_host>`, `<pp_db_port>`, `<pp_db_name>`, `<pp_db_user>`, and `<pp_db_password>` with your PP DB connection details
-- Replace `<portal_db_host>`, `<portal_db_port>`, and `<portal_db_name>` with your Portal DB connection details
-- Replace `<portal_ro_password>` with the portal_ro_user password (or leave empty if using trust/auth already configured)
-
-**Complete FDW setup script:**
+2.2 Create extension, server, mapping, and schema
 ```bash path=null start=null
-# Connect to PP DB and set up FDW extension, server, mappings, and import foreign tables
-PGPASSWORD='<pp_db_password>' psql -h <pp_db_host> -p <pp_db_port> -U <pp_db_user> -d <pp_db_name> <<'SQL'
--- Enable PostgreSQL Foreign Data Wrapper extension
+PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
+  -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<SQL
 CREATE EXTENSION IF NOT EXISTS postgres_fdw;
 
--- Run to create portal_srv_read role if not exist
---CREATE ROLE portal_srv_read LOGIN;
-
--- Remove existing server if present (cleanup)
 DROP SERVER IF EXISTS portal_srv CASCADE;
 
--- Create foreign server pointing to Portal DB
 CREATE SERVER portal_srv
   FOREIGN DATA WRAPPER postgres_fdw
   OPTIONS (
-    host '<portal_db_host>',        -- Use 'localhost' if Portal DB is on same server as PP website DB
-    dbname '<portal_db_name>',
-    port '<portal_db_port>',
+    host '$PORTAL_DB_HOST',
+    dbname '$PORTAL_DB_NAME',
+    port '$PORTAL_DB_PORT',
     use_remote_estimate 'true',
     fetch_size '50000',
-    sslmode 'prefer'                 -- SECURITY: Change to 'require' in production to enforce SSL
+    sslmode 'prefer'                 -- change to 'require' if Portal enforces SSL
   );
 
--- Grant permission to use the foreign server
-GRANT USAGE ON FOREIGN SERVER portal_srv TO portal_srv_read;
+-- For dev convenience; in staging/prod, use your app role instead of PUBLIC
+GRANT USAGE ON FOREIGN SERVER portal_srv TO PUBLIC;
 
--- Map portal_srv_read role to portal_ro_user on Portal DB
-CREATE USER MAPPING IF NOT EXISTS FOR portal_srv_read
+CREATE USER MAPPING IF NOT EXISTS FOR PUBLIC
   SERVER portal_srv
-  OPTIONS (user 'portal_ro_user', password '<portal_ro_password>');
+  OPTIONS (user 'portal_ro_user', password '$PORTAL_RO_PASSWORD');
 
--- Create schema for foreign tables
 CREATE SCHEMA IF NOT EXISTS portal_fdw;
+GRANT USAGE ON SCHEMA portal_fdw TO PUBLIC;
 
--- Grant schema usage and create permissions
-GRANT USAGE ON SCHEMA portal_fdw TO portal_srv_read;
-GRANT CREATE ON SCHEMA portal_fdw TO portal_srv_read;
+-- Ensure future imports default to readable
+ALTER DEFAULT PRIVILEGES IN SCHEMA portal_fdw GRANT SELECT ON TABLES TO PUBLIC;
+SQL
+```
 
--- Set default privileges for future tables
-ALTER DEFAULT PRIVILEGES IN SCHEMA portal_fdw GRANT SELECT ON TABLES TO portal_srv_read;
+3) Import only the tables required by Wdpa model associations
+- From schema wdpa and reference.
 
--- Switch to portal_srv_read role (required for IMPORT)
-SET ROLE portal_srv_read;
-
--- Import wdpa schema tables
+3.1 Import wdpa schema tables
+```bash path=null start=null
+PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
+  -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<'SQL'
 IMPORT FOREIGN SCHEMA wdpa
   LIMIT TO (
     wdpas,
@@ -177,8 +153,13 @@ IMPORT FOREIGN SCHEMA wdpa
   )
   FROM SERVER portal_srv
   INTO portal_fdw;
+SQL
+```
 
--- Import reference schema tables
+3.2 Import reference schema tables
+```bash path=null start=null
+PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
+  -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<'SQL'
 IMPORT FOREIGN SCHEMA reference
   LIMIT TO (
     iso3,
@@ -187,20 +168,19 @@ IMPORT FOREIGN SCHEMA reference
   FROM SERVER portal_srv
   INTO portal_fdw;
 
--- Grant SELECT permission on all imported foreign tables
-GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO portal_srv_read;
+GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO PUBLIC;  -- dev only; restrict in prod
 SQL
 ```
 
-3) Verify
+4) Verify
 
-3.1 List imported foreign tables
+4.1 List imported foreign tables
 ```bash path=null start=null
 PGPASSWORD="$PP_DB_PASSWORD" psql -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -Atc \
   "select foreign_table_schema||'.'||foreign_table_name from information_schema.foreign_tables where foreign_table_schema='portal_fdw' order by 1;"
 ```
 
-3.2 Sanity counts
+4.2 Sanity counts
 ```bash path=null start=null
 PGPASSWORD="$PP_DB_PASSWORD" psql -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -Atc \
   "SELECT 'wdpas', count(*) FROM portal_fdw.wdpas
@@ -209,7 +189,7 @@ PGPASSWORD="$PP_DB_PASSWORD" psql -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_U
    UNION ALL SELECT 'iso3', count(*) FROM portal_fdw.iso3;"
 ```
 
-4) Materialized views schema (contract)
+5) Final materialized views schema (contract)
 
 portal_standard_points (public)
 Filters applied:
@@ -260,16 +240,15 @@ Filters applied:
 - shape_area: double precision (m^2)
 - wkb_geometry: geometry(POLYGON/MULTIPOLYGON, 4326)
 
-5) Variations: if the Portal DB runs in Docker
+6) Variations: if the Portal DB runs in Docker
 
 Option A — Expose Portal DB to host and keep FDW host=host.docker.internal
 - In the Portal docker-compose, publish a port (e.g., 5432:5432).
 - Ensure in the Portal DB container:
   - listen_addresses = '*'.
-  - pg_hba.conf allows the source (use specific Docker network CIDR, NOT 0.0.0.0/0 in production), using scram-sha-256.
+  - pg_hba.conf allows the source (0.0.0.0/0 for dev or specific Docker network), using scram-sha-256.
 ```conf path=null start=null
-# SECURITY WARNING: 0.0.0.0/0 allows from any IP - use specific CIDR in production!
-host    all    portal_ro_user    0.0.0.0/0    scram-sha-256  # Dev only - replace with specific network CIDR
+host    all    portal_ro_user    0.0.0.0/0    scram-sha-256
 ```
 - Reload inside the container:
 ```bash path=null start=null
@@ -284,14 +263,14 @@ Option B — Put PP DB and Portal DB on the same Docker network
 Staging/Production adjustments
 - Replace host.docker.internal with the real Portal DB hostname.
 - Use sslmode='require' if enforced.
-- Replace PUBLIC with your app role (example: portal_srv_read):
+- Replace PUBLIC with your app role (example: pp_app):
 ```sql path=null start=null
-GRANT USAGE ON FOREIGN SERVER portal_srv TO portal_srv_read;
-CREATE USER MAPPING IF NOT EXISTS FOR portal_srv_read
+GRANT USAGE ON FOREIGN SERVER portal_srv TO pp_app;
+CREATE USER MAPPING IF NOT EXISTS FOR pp_app
   SERVER portal_srv
   OPTIONS (user 'portal_ro_user', password :'portal_ro_password');
-GRANT USAGE ON SCHEMA portal_fdw TO portal_srv_read;
-GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO portal_srv_read;
+GRANT USAGE ON SCHEMA portal_fdw TO pp_app;
+GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO pp_app;
 ```
 
 Maintenance: importing new tables later
@@ -302,42 +281,32 @@ IMPORT FOREIGN SCHEMA wdpa
   FROM SERVER portal_srv
   INTO portal_fdw;
 
-GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO portal_srv_read;
+GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO PUBLIC;  -- or app role
 SQL
 ```
 
-6) Operations: routine update (re-import and apply updated FDW views)
+Operations: routine update (re-import and apply updated FDW views)
 - Use this when the Portal schema changes (e.g., new reference tables/columns like inland_waters_cat / inland_waters_id) or when FDW_VIEWS.sql (located in the ProtectedPlanet folder) is updated.
 
-6.1 Portal DB privileges (run once, on the Portal DB)
-- Ensure the read-only role can access the wdpa and reference schemas and all tables.
+0) Portal DB privileges (run once, on the Portal DB)
+- Ensure the read-only role can access the wdpa schema and new tables.
 ```bash path=null start=null
 # Replace <portal_db_name> and run on the Portal DB host or container
 psql -U postgres -d <portal_db_name> -X <<'SQL'
--- Grant schema usage
 GRANT USAGE ON SCHEMA wdpa TO portal_ro_user;
-GRANT USAGE ON SCHEMA reference TO portal_ro_user;
-
--- Grant SELECT on ALL existing tables in wdpa schema
-GRANT SELECT ON ALL TABLES IN SCHEMA wdpa TO portal_ro_user;
-
--- Grant SELECT on ALL existing tables in reference schema
-GRANT SELECT ON ALL TABLES IN SCHEMA reference TO portal_ro_user;
-
--- Ensure future tables are also accessible
+GRANT SELECT ON wdpa.inland_waters_cat TO portal_ro_user;
 ALTER DEFAULT PRIVILEGES IN SCHEMA wdpa GRANT SELECT ON TABLES TO portal_ro_user;
-ALTER DEFAULT PRIVILEGES IN SCHEMA reference GRANT SELECT ON TABLES TO portal_ro_user;
 SQL
 ```
 
-6.2 Drop dependent MVs on PP DB (safe if absent)
+1) Drop dependent MVs on PP DB (safe if absent)
 ```bash path=null start=null
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
   -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -v ON_ERROR_STOP=1 \
   -c "DROP MATERIALIZED VIEW IF EXISTS public.portal_standard_points; DROP MATERIALIZED VIEW IF EXISTS public.portal_standard_polygons; DROP MATERIALIZED VIEW IF EXISTS public.portal_standard_sources;"
 ```
 
-6.3 Re-import updated foreign tables on PP DB
+2) Re-import updated foreign tables on PP DB
 - Optionally ensure the foreign column exists before re-import (no-op if already present).
 ```bash path=null start=null
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
@@ -360,10 +329,10 @@ IMPORT FOREIGN SCHEMA wdpa LIMIT TO (inland_waters_cat) FROM SERVER portal_srv I
 SQL
 ```
 
-6.4 Apply updated materialized views (FDW_VIEWS.sql from ProtectedPlanet folder) on PP DB
+3) Apply updated materialized views (FDW_VIEWS.sql from ProtectedPlanet folder) on PP DB
 ```bash path=null start=null
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
-  -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -v ON_ERROR_STOP=1 -f FDW_VIEWS.sql
+  -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -v ON_ERROR_STOP=1 -f ../ProtectedPlanet/FDW_VIEWS.sql
 ```
 
 - Docker alternative (if you prefer executing inside the DB container):
@@ -373,14 +342,14 @@ docker cp ../ProtectedPlanet/FDW_VIEWS.sql <pp_db_container>:/FDW_VIEWS.sql
 docker exec <pp_db_container> psql -U postgres -d pp_development -v ON_ERROR_STOP=1 -f /FDW_VIEWS.sql
 ```
 
-6.5 Verify views and counts
+4) Verify views and counts
 ```bash path=null start=null
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
   -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -Atc \
   "SELECT 'points', count(*) FROM portal_standard_points UNION ALL SELECT 'polys', count(*) FROM portal_standard_polygons;"
 ```
 
-6.6 Optional: contract check from app container
+5) Optional: contract check from app container
 ```bash path=null start=null
 # Replace <app_container> with your web app container (e.g., protectedplanet-web)
 docker exec <app_container> bash -lc "RAILS_ENV=development ruby script/check_portal_views_contract.rb"
@@ -410,4 +379,3 @@ Appendix: known-good values from this repo (dev)
 - Portal DB name: pp_data_management_backend_development
 - PP DB connection: 127.0.0.1:55432, db=pp_development, user=postgres
 - Example Postgres (Homebrew) reload: /opt/homebrew/opt/postgresql@14/bin/pg_ctl -D /opt/homebrew/var/postgresql@14 reload
-

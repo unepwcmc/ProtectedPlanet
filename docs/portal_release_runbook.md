@@ -21,8 +21,8 @@ docker compose ps  # Check status
 
 | Task | Production | Local Development |
 |------|------------|------------------|
-| **Run release** | `bundle exec rake pp:portal:release` | `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:release'` |
-| **Dry run** | `PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release` | `docker compose exec -T web bash -lc 'PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release'` |
+| **Run release** | `bundle exec rake pp:portal:release["Nov2025"]` | `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:release["Nov2025"]'` |
+| **Dry run** | `PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Nov2025"]` | `docker compose exec -T web bash -lc 'PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Nov2025"]'` |
 | **Check status** | `bundle exec rake pp:portal:status` | `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:status'` |
 | **Abort release** | `bundle exec rake pp:portal:abort` | `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:abort'` |
 | **Rollback** | `bundle exec rake pp:portal:rollback["2509121644"]` | `docker compose exec -T web bash -lc 'bundle exec rake pp:portal:rollback["2509121644"]'` |
@@ -54,30 +54,54 @@ The release follows 11 phases:
 
 ## 🛠️ Commands
 
+> **⚠️ Important**: The release label is **REQUIRED** for all `pp:portal:release` commands. Format: `MMMYYYY` (e.g., `Nov2025`, `Jan2026`). The task will fail with an error if the label is not provided.
+
 ### Production Release
 ```bash
-# With specific month/year
-RAILS_ENV=production bundle exec rake pp:portal:release['Oct2025']
-
-
-# Full production release (current month +1)
-RAILS_ENV=production bundle exec rake pp:portal:release
+# Release label is REQUIRED (format: MMMYYYY, e.g., Nov2025, Jan2026)
+RAILS_ENV=production bundle exec rake pp:portal:release["Oct2025"]
 ```
 
 ### Development & Testing
 ```bash
-# Dry run with lightweight staging
+# Dry run with lightweight staging (label is REQUIRED)
 PP_RELEASE_DRY_RUN=true \
 PP_RELEASE_STAGING_LIGHTWEIGHT=true \
 PP_RELEASE_CREATE_STAGING_MATERIALIZED_VIEWS=false \
-bundle exec rake pp:portal:release
+bundle exec rake pp:portal:release["Nov2025"]
 
-# Resume from specific phase
-PP_RELEASE_START_AT=import_core bundle exec rake pp:portal:release["Sep2025"]
+# Resume from specific phase (after dry run - use SAME label as dry run)
+PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Nov2025"]
 
-# Run only specific phases
+# Run only specific phases (label is REQUIRED)
 PP_RELEASE_ONLY_PHASES=create_staging_materialized_views,preflight bundle exec rake pp:portal:release["Sep2025"]
 ```
+
+### Do a dry run without swapping tables
+
+If want to do a release without the release becoming live you can do a dry run and it will stop at post_swap then you can check all staging_xxx tables in DB before continuing post_swap and make all staging tables to become live
+
+When you run with `PP_RELEASE_DRY_RUN=true`, the release will:
+- ✅ Complete all phases up to `finalise_swap`
+- ⏭️ Skip the actual swap (only logs it)
+- ✅ Run `post_swap` (runs ANALYZE on staging tables, skips full cleanup)
+- 🛑 **Stop after `post_swap`** (does not continue to `cleanup_and_retention` phase; lock is still released via ensure block)
+
+```bash
+# 1. Dry run (stops after post_swap phase)
+PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Nov2025"]
+
+# 2. Check the release status and note the label, you should see the status is currently at swapped
+bundle exec rake pp:portal:status
+
+# 3. Run the following from finalise_swap to do the actual swap and rest of steps to finish up
+PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Nov2025"]
+```
+
+**Important Notes:**
+- Use the **same release label** that was used in the dry run
+- The dry run stops automatically after `post_swap` phase completes
+- Resuming from `finalise_swap` will perform the actual atomic swap and continue with remaining phases (`post_swap`, `cleanup_and_retention`, `release_lock`)
 
 ### Developer Tools
 ```bash
@@ -104,8 +128,8 @@ bundle exec rake pp:portal:list_backups
 # Rollback to specific timestamp
 bundle exec rake pp:portal:rollback["2509251325"]
 
-# After rolling back all current tables/views become staging tables/views and then you can fix whatever that needs fixing and then start from finalise_swap to swap from staging to live tables to correct a release
-PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release
+# After rolling back all current tables/views become staging tables/views and then you can fix whatever that needs fixing and then start from finalise_swap to swap from staging to live tables to correct a release (label is REQUIRED)
+PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Nov2025"]
 ```
 
 ---

@@ -50,7 +50,7 @@ module PortalRelease
     end
 
     def success
-      post(":tada: Release #{@label} succeeded")
+      post(":tada: Release #{@label} succeeded (#{Rails.env})")
     end
 
     def error(e, phase:)
