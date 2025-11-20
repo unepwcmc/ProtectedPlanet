@@ -1,14 +1,13 @@
-@ -1,381 +0,0 @@
 # ProtectedPlanet ↔ Portal FDW Integration (macOS + Docker Desktop)
 
-Goal
+## Goal
 - Allow the PP database (in Docker) to read specific tables from the Portal database via PostgreSQL FDW.
 
-Recommended topology
+## Recommended topology
 - Portal DB: runs on host macOS (Homebrew Postgres). Variation: Portal DB in Docker (see Variations).
 - PP DB: runs in Docker, exposed on localhost:55432.
 
-Prerequisites
+## Prerequisites
 - macOS with Docker Desktop installed.
 - Portal DB (Postgres) running locally (Homebrew or Docker) with a read-only account:
   - CREATE ROLE portal_ro_user LOGIN PASSWORD '...';
@@ -16,42 +15,44 @@ Prerequisites
 - PP DB running in Docker and accessible on localhost:55432.
 - Portal app DB name (for this repo): pp_data_management_backend_development.
 
-Security notes
+## Security notes
 - Prefer scram-sha-256 for pg_hba.conf.
 - Never paste secrets inline. Use environment variables like PORTAL_RO_PASSWORD and PP_DB_PASSWORD.
 - In staging/prod, grant access to a specific application role, not PUBLIC.
 
-1) Configure the Portal DB to accept connections from the PP container
+## 1. Configure the Portal DB to accept connections from the PP container
 
-1.1 Find key Postgres paths
-```bash path=null start=null
+### 1.1 Find key Postgres paths
+```bash
 # Shows exact files/paths on your machine
 psql -U postgres -d postgres -Atc "SHOW hba_file; SHOW data_directory; SHOW listen_addresses;"
 ```
 
-1.2 Back up pg_hba.conf
-```bash path=null start=null
+### 1.2 Back up pg_hba.conf
+```bash
 HBA=$(psql -U postgres -d postgres -Atc "SHOW hba_file;")
 cp -a "$HBA" "${HBA}.bak-$(date +%Y%m%d-%H%M%S)"
 ```
 
-1.3 Add auth rules for portal_ro_user
-- Allow localhost and Docker Desktop’s bridge subnet (commonly 192.168.65.0/24 on macOS). Adjust the subnet if yours differs.
-```conf path=null start=null
+### 1.3 Add auth rules for portal_ro_user
+- Allow localhost and Docker Desktop's bridge subnet (commonly 192.168.65.0/24 on macOS). Adjust the subnet if yours differs.
+
+```conf
 # Add near the top, before broader/less specific rules
 host    all    portal_ro_user    127.0.0.1/32       scram-sha-256
 host    all    portal_ro_user    192.168.65.0/24    scram-sha-256
 ```
 
-1.4 Ensure Postgres listens on a reachable interface
+### 1.4 Ensure Postgres listens on a reachable interface
 - If listen_addresses is only localhost and host.docker.internal fails, set it to '*':
-```bash path=null start=null
+
+```bash
 CONF=$(psql -U postgres -d postgres -Atc "SHOW config_file;")
 # Edit $CONF and set: listen_addresses = '*'
 ```
 
-1.5 Reload Postgres
-```bash path=null start=null
+### 1.5 Reload Postgres
+```bash
 # Homebrew (version may vary)
 /opt/homebrew/opt/postgresql@14/bin/pg_ctl -D /opt/homebrew/var/postgresql@14 reload || \
 pg_ctl -D "$(psql -U postgres -d postgres -Atc 'SHOW data_directory;')" reload
@@ -60,10 +61,10 @@ pg_ctl -D "$(psql -U postgres -d postgres -Atc 'SHOW data_directory;')" reload
 psql -U postgres -d postgres -c "SELECT pg_reload_conf();"
 ```
 
-2) Create the FDW on the PP DB (Docker)
+## 2. Create the FDW on the PP DB (Docker)
 
-2.1 Set environment variables
-```bash path=null start=null
+### 2.1 Set environment variables
+```bash
 # PP DB connection (example values)
 export PP_DB_HOST=127.0.0.1
 export PP_DB_PORT=55432
@@ -78,8 +79,8 @@ export PORTAL_DB_NAME=pp_data_management_backend_development
 export PORTAL_RO_PASSWORD={{PORTAL_RO_PASSWORD}}
 ```
 
-2.2 Create extension, server, mapping, and schema
-```bash path=null start=null
+### 2.2 Create extension, server, mapping, and schema
+```bash
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
   -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<SQL
 CREATE EXTENSION IF NOT EXISTS postgres_fdw;
@@ -112,11 +113,11 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA portal_fdw GRANT SELECT ON TABLES TO PUBLIC;
 SQL
 ```
 
-3) Import only the tables required by Wdpa model associations
+## 3. Import only the tables required by Wdpa model associations
 - From schema wdpa and reference.
 
-3.1 Import wdpa schema tables
-```bash path=null start=null
+### 3.1 Import wdpa schema tables
+```bash
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
   -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<'SQL'
 IMPORT FOREIGN SCHEMA wdpa
@@ -156,8 +157,8 @@ IMPORT FOREIGN SCHEMA wdpa
 SQL
 ```
 
-3.2 Import reference schema tables
-```bash path=null start=null
+### 3.2 Import reference schema tables
+```bash
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
   -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<'SQL'
 IMPORT FOREIGN SCHEMA reference
@@ -189,9 +190,11 @@ PGPASSWORD="$PP_DB_PASSWORD" psql -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_U
    UNION ALL SELECT 'iso3', count(*) FROM portal_fdw.iso3;"
 ```
 
-5) Final materialized views schema (contract)
+That is all done. If you want to test creating all staging materialised views please view the SQL [here](../FDW_VIEWS.sql)
 
-portal_standard_points (public)
+## 5. Final materialized views schema (contract)
+
+### portal_standard_points (public)
 Filters applied:
 - wdpas.archived_at IS NULL
 - data_restriction_level = 'not restricted'
@@ -229,7 +232,7 @@ Filters applied:
 - oecm_asmt: varchar(254) (aggregated oecm_assessment codes)
 - wkb_geometry: geometry(POINT, 4326)
 
-portal_standard_polygons (public)
+### portal_standard_polygons (public)
 Filters applied:
 - wdpas.archived_at IS NULL
 - data_restriction_level = 'not restricted'
@@ -240,31 +243,35 @@ Filters applied:
 - shape_area: double precision (m^2)
 - wkb_geometry: geometry(POLYGON/MULTIPOLYGON, 4326)
 
-6) Variations: if the Portal DB runs in Docker
+## 6. Variations: if the Portal DB runs in Docker
 
-Option A — Expose Portal DB to host and keep FDW host=host.docker.internal
+### Option A — Expose Portal DB to host and keep FDW host=host.docker.internal
 - In the Portal docker-compose, publish a port (e.g., 5432:5432).
 - Ensure in the Portal DB container:
   - listen_addresses = '*'.
   - pg_hba.conf allows the source (0.0.0.0/0 for dev or specific Docker network), using scram-sha-256.
-```conf path=null start=null
+
+```conf
 host    all    portal_ro_user    0.0.0.0/0    scram-sha-256
 ```
+
 - Reload inside the container:
-```bash path=null start=null
+
+```bash
 docker exec -u postgres <portal_db_container> psql -U postgres -d postgres -c "SELECT pg_reload_conf();"
 ```
 
-Option B — Put PP DB and Portal DB on the same Docker network
+### Option B — Put PP DB and Portal DB on the same Docker network
 - Use a shared external network in both compose files.
 - In FDW, set host to the Portal DB service name (e.g., portal-db) and port 5432.
-- Update Portal DB’s pg_hba.conf to allow that network’s CIDR; reload.
+- Update Portal DB's pg_hba.conf to allow that network's CIDR; reload.
 
-Staging/Production adjustments
+### Staging/Production adjustments
 - Replace host.docker.internal with the real Portal DB hostname.
 - Use sslmode='require' if enforced.
 - Replace PUBLIC with your app role (example: pp_app):
-```sql path=null start=null
+
+```sql
 GRANT USAGE ON FOREIGN SERVER portal_srv TO pp_app;
 CREATE USER MAPPING IF NOT EXISTS FOR pp_app
   SERVER portal_srv
@@ -273,8 +280,8 @@ GRANT USAGE ON SCHEMA portal_fdw TO pp_app;
 GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO pp_app;
 ```
 
-Maintenance: importing new tables later
-```bash path=null start=null
+### Maintenance: importing new tables later
+```bash
 PGPASSWORD="$PP_DB_PASSWORD" psql -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<'SQL'
 IMPORT FOREIGN SCHEMA wdpa
   LIMIT TO (new_table_1, new_table_2)
@@ -285,12 +292,13 @@ GRANT SELECT ON ALL TABLES IN SCHEMA portal_fdw TO PUBLIC;  -- or app role
 SQL
 ```
 
-Operations: routine update (re-import and apply updated FDW views)
+## 7. Operations: routine update (re-import and apply updated FDW views)
 - Use this when the Portal schema changes (e.g., new reference tables/columns like inland_waters_cat / inland_waters_id) or when FDW_VIEWS.sql (located in the ProtectedPlanet folder) is updated.
 
-0) Portal DB privileges (run once, on the Portal DB)
+### 7.1 Portal DB privileges (run once, on the Portal DB)
 - Ensure the read-only role can access the wdpa schema and new tables.
-```bash path=null start=null
+
+```bash
 # Replace <portal_db_name> and run on the Portal DB host or container
 psql -U postgres -d <portal_db_name> -X <<'SQL'
 GRANT USAGE ON SCHEMA wdpa TO portal_ro_user;
@@ -299,16 +307,17 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA wdpa GRANT SELECT ON TABLES TO portal_ro_user
 SQL
 ```
 
-1) Drop dependent MVs on PP DB (safe if absent)
-```bash path=null start=null
+### 7.2 Drop dependent MVs on PP DB (safe if absent)
+```bash
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
   -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -v ON_ERROR_STOP=1 \
   -c "DROP MATERIALIZED VIEW IF EXISTS public.portal_standard_points; DROP MATERIALIZED VIEW IF EXISTS public.portal_standard_polygons; DROP MATERIALIZED VIEW IF EXISTS public.portal_standard_sources;"
 ```
 
-2) Re-import updated foreign tables on PP DB
+### 7.3 Re-import updated foreign tables on PP DB
 - Optionally ensure the foreign column exists before re-import (no-op if already present).
-```bash path=null start=null
+
+```bash
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
   -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<'SQL'
 DO $$
@@ -329,53 +338,54 @@ IMPORT FOREIGN SCHEMA wdpa LIMIT TO (inland_waters_cat) FROM SERVER portal_srv I
 SQL
 ```
 
-3) Apply updated materialized views (FDW_VIEWS.sql from ProtectedPlanet folder) on PP DB
-```bash path=null start=null
+### 7.4 Apply updated materialized views (FDW_VIEWS.sql from ProtectedPlanet folder) on PP DB
+```bash
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
   -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -v ON_ERROR_STOP=1 -f ../ProtectedPlanet/FDW_VIEWS.sql
 ```
 
-- Docker alternative (if you prefer executing inside the DB container):
-```bash path=null start=null
+#### Docker alternative (if you prefer executing inside the DB container):
+```bash
 # Replace <pp_db_container> with your DB container name (e.g., protectedplanet-db)
 docker cp ../ProtectedPlanet/FDW_VIEWS.sql <pp_db_container>:/FDW_VIEWS.sql
 docker exec <pp_db_container> psql -U postgres -d pp_development -v ON_ERROR_STOP=1 -f /FDW_VIEWS.sql
 ```
 
-4) Verify views and counts
-```bash path=null start=null
+### 7.5 Verify views and counts
+```bash
 PGPASSWORD="$PP_DB_PASSWORD" psql --no-psqlrc \
   -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -Atc \
   "SELECT 'points', count(*) FROM portal_standard_points UNION ALL SELECT 'polys', count(*) FROM portal_standard_polygons;"
 ```
 
-5) Optional: contract check from app container
-```bash path=null start=null
+### 7.6 Optional: contract check from app container
+```bash
 # Replace <app_container> with your web app container (e.g., protectedplanet-web)
 docker exec <app_container> bash -lc "RAILS_ENV=development ruby script/check_portal_views_contract.rb"
 ```
 
-Troubleshooting
+## Troubleshooting
 - No pg_hba.conf entry: Add appropriate host line for portal_ro_user and reload.
 - Connection refused: Ensure listen_addresses includes '*', and correct host/port.
 - Password authentication failed: Confirm portal_ro_user password and mapping.
 - Identify Docker Desktop subnet (macOS often 192.168.65.0/24). If different, adjust pg_hba.
 
-Cleanup (optional)
-```bash path=null start=null
+## Cleanup (optional)
+```bash
 # Remove FDW from PP DB
 PGPASSWORD="$PP_DB_PASSWORD" psql -h "$PP_DB_HOST" -p "$PP_DB_PORT" -U "$PP_DB_USER" -d "$PP_DB_NAME" -X <<'SQL'
 DROP SERVER IF EXISTS portal_srv CASCADE;
 DROP SCHEMA IF EXISTS portal_fdw CASCADE;
 SQL
 ```
-```bash path=null start=null
+
+```bash
 # Restore original pg_hba.conf (replace the timestamp accordingly)
 cp /opt/homebrew/var/postgresql@14/pg_hba.conf.bak-YYYYMMDD-HHMMSS /opt/homebrew/var/postgresql@14/pg_hba.conf
 /opt/homebrew/opt/postgresql@14/bin/pg_ctl -D /opt/homebrew/var/postgresql@14 reload
 ```
 
-Appendix: known-good values from this repo (dev)
+## Appendix: known-good values from this repo (dev)
 - Portal DB name: pp_data_management_backend_development
 - PP DB connection: 127.0.0.1:55432, db=pp_development, user=postgres
 - Example Postgres (Homebrew) reload: /opt/homebrew/opt/postgresql@14/bin/pg_ctl -D /opt/homebrew/var/postgresql@14 reload
