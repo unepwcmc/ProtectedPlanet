@@ -8,8 +8,9 @@ module Wdpa
           protected_areas_result = import_geometry_for_table(Staging::ProtectedArea.table_name)
           protected_area_parcels_result = import_geometry_for_table(Staging::ProtectedAreaParcel.table_name)
 
-          Rails.logger.info "#{protected_areas_result[:imported_count]} PA Geometries imported ,#{protected_area_parcels_result[:imported_count]} PA parcel geometries imported"
-          notifier&.phase("#{protected_areas_result[:imported_count]} PA Geometries imported, #{protected_area_parcels_result[:imported_count]} PA parcel geometries imported")
+          message = "#{protected_areas_result[:imported_count]} PA Geometries imported, #{protected_area_parcels_result[:imported_count]} PA parcel geometries imported"
+          Rails.logger.info message
+          notifier&.phase(message)
 
           {
             protected_areas: protected_areas_result,

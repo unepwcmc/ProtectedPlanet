@@ -9,7 +9,7 @@ module Wdpa
           # Handles both Staging::ProtectedArea and Staging::ProtectedAreaParcel
           # Geometry data is handled separately by GeometryImporter
 
-          # Get mapping of SITE IDs with multiple parcels (similar to existing importer)
+          # Get mapping of SITE IDs with parcels (sites that have site_pids with underscores)
           site_ids_with_multiple_site_pids = get_site_ids_with_multiple_site_pids_map
 
           adapter = Wdpa::Portal::Adapters::ImportViewsAdapter.new
@@ -45,8 +45,9 @@ module Wdpa
             Rails.logger.error("Batch processing failed: #{e.message}")
             raise e # Re-raise as hard error to stop import
           end
-          Rails.logger.info "#{imported_pa_count} Protected area attributes imported, #{imported_parcel_count} Protected area parcel attributes imported"
-          notifier&.phase("#{imported_pa_count} Protected area attributes imported, #{imported_parcel_count} Protected area parcel attributes imported")
+          message = "#{imported_pa_count} Protected area attributes imported, #{imported_parcel_count} Protected area parcel attributes imported. Note: ProtectedArea contains first parcel as representative for sites having multiple parcels, and all parcels including first parcel are also stored in ProtectedAreaParcel table, so counts here are greater than portal total counts"
+          Rails.logger.info message
+          notifier&.phase(message)
 
           build_result(imported_count, soft_errors, [], {
             protected_areas_imported_count: imported_pa_count,
@@ -79,11 +80,11 @@ module Wdpa
               if add_to_protected_area_parcels
                 parcel_attrs = Wdpa::Portal::Utils::ColumnMapper.map_portal_to_pp_protected_area_parcel(pa_attributes)
                 Staging::ProtectedAreaParcel.create!(parcel_attrs)
-                # Don't count the first parcel as it's already counted in protected_area
-                # Only count additional parcels (when add_to_protected_areas is false)
+                # Count all parcels created in ProtectedAreaParcel (including first parcels) to match geometry count
+                imported_parcel_count += 1
+                # Don't count the first parcel in total imported_count as it's already counted in protected_area
                 unless add_to_protected_areas
                   imported_count += 1
-                  imported_parcel_count += 1
                 end
               end
             end
@@ -108,17 +109,20 @@ module Wdpa
           }
         end
 
-        # A site that has multiple site_pids is a site that has multiple parcels
+        # A site that has site_pids with underscores (_) indicates it has parcels
+        # Returns a map of site_id => first_site_pid for sites that have parcels
+        # Optimized: Uses position() function which can use indexes better than LIKE with leading wildcard
         def self.get_site_ids_with_multiple_site_pids_map
           sites_with_multiple_parcels = {}
 
           Wdpa::Portal::Config::PortalImportConfig.portal_protected_area_staging_materialised_views.each do |view|
-            # Find SITE IDs that have more than one parcel
+            # Find SITE IDs that have site_pids with underscores (indicating parcels)
+            # Using position() instead of LIKE '%_%' for better index usage
             find_site_ids_with_multiple_parcels_command = <<~SQL
               SELECT site_id, MIN(site_pid) AS first_site_pid
               FROM #{view}
+              WHERE position('_' in site_pid) > 0
               GROUP BY site_id
-              HAVING COUNT(*) > 1
             SQL
 
             ActiveRecord::Base.connection.execute(find_site_ids_with_multiple_parcels_command).each do |row|
