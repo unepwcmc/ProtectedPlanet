@@ -93,9 +93,18 @@ module PortalRelease
         # Clear downloads outside transaction to avoid aborting transaction if operations fail
         # This includes dropping temporary download views that depend on the main downloads view
         Download.clear_downloads
+        
+        # Clear downloads again right before transaction to catch any views created between the two calls
+        # This ensures we drop all dependent views before dropping the main view
+        begin
+          Download::Generators::Base.clean_tmp_download_views
+        rescue StandardError => e
+          Rails.logger.warn("Failed to clean tmp download views before transaction: #{e.message}")
+        end
 
         conn.transaction do
-          conn.execute("DROP VIEW IF EXISTS #{downloads_view}")
+          # Use CASCADE to drop the view and any dependent views that might have been created
+          conn.execute("DROP VIEW IF EXISTS #{downloads_view} CASCADE")
           as_query = Download::Queries.build_query_for_downloads_view('portal')
           conn.execute("CREATE VIEW #{downloads_view} AS (SELECT #{as_query[:select]} FROM #{as_query[:from]})")
         end
