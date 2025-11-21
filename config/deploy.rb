@@ -30,6 +30,8 @@ set :keep_releases, 5
 set :passenger_restart_with_touch, false
 
 namespace :deploy do
+  before 'deploy:assets:precompile', 'deploy:migrate'
+  
   after :publishing, 'service:pp_default:restart'
   after :publishing, 'service:pp_import:restart'
   after :published, 'deploy:clear_cache'
