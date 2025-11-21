@@ -89,17 +89,17 @@ module PortalRelease
       def create_portal_downloads_view!(log = nil)
         conn = ActiveRecord::Base.connection
         downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS
+        
+        # Clear downloads outside transaction to avoid aborting transaction if operations fail
+        # This includes dropping temporary download views that depend on the main downloads view
+        Download.clear_downloads
 
         conn.transaction do
-          # Drop all temporary download views that depends on the downloads view
-          Download.clear_downloads
-
           conn.execute("DROP VIEW IF EXISTS #{downloads_view}")
           as_query = Download::Queries.build_query_for_downloads_view('portal')
-
           conn.execute("CREATE VIEW #{downloads_view} AS (SELECT #{as_query[:select]} FROM #{as_query[:from]})")
-          log&.event('portal_downloads_view_created', payload: { view: downloads_view })
         end
+        log&.event('portal_downloads_view_created', payload: { view: downloads_view })
       end
     end
   end
