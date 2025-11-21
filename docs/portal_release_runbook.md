@@ -79,29 +79,27 @@ PP_RELEASE_ONLY_PHASES=create_staging_materialized_views,preflight bundle exec r
 
 ### Do a dry run without swapping tables
 
-If want to do a release without the release becoming live you can do a dry run and it will stop at post_swap then you can check all staging_xxx tables in DB before continuing post_swap and make all staging tables to become live
+If want to do a release without the release becoming live you can do a dry run and it will stop at validate_and_manifest then you can check all staging_xxx tables in DB before continuing with the swap and make all staging tables to become live
 
 When you run with `PP_RELEASE_DRY_RUN=true`, the release will:
-- ✅ Complete all phases up to `finalise_swap`
-- ⏭️ Skip the actual swap (only logs it)
-- ✅ Run `post_swap` (runs ANALYZE on staging tables, skips full cleanup)
-- 🛑 **Stop after `post_swap`** (does not continue to `cleanup_and_retention` phase; lock is still released via ensure block)
+- ✅ Complete all phases up to `validate_and_manifest` (includes validation and manifest creation)
+- 🛑 **Stop after `validate_and_manifest`** (does not continue to `finalise_swap` or subsequent phases; lock is still released via ensure block)
 
 ```bash
-# 1. Dry run (stops after post_swap phase)
-PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Nov2025"]
+# 1. Dry run (stops after validate_and_manifest phase)
+RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Nov2025"]
 
-# 2. Check the release status and note the label, you should see the status is currently at swapped
-bundle exec rake pp:portal:status
+# 2. Check the release status and note the label, you should see the status is currently at the validate_and_manifest phase
+RAILS_ENV=production bundle exec rake pp:portal:status
 
 # 3. Run the following from finalise_swap to do the actual swap and rest of steps to finish up
-PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Nov2025"]
+RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Nov2025"]
 ```
 
 **Important Notes:**
 - Use the **same release label** that was used in the dry run
-- The dry run stops automatically after `post_swap` phase completes
-- Resuming from `finalise_swap` will perform the actual atomic swap and continue with remaining phases (`post_swap`, `cleanup_and_retention`, `release_lock`)
+- The dry run stops automatically after `validate_and_manifest` phase completes
+- Resuming from `finalise_swap` will perform the actual atomic swap and continue with remaining phases (`create_portal_downloads_view`, `post_swap`, `cleanup_and_retention`, `release_lock`)
 
 ### Developer Tools
 ```bash
@@ -142,7 +140,7 @@ PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Nov2025"]
 | `PP_RELEASE_START_AT` | Phase to start at | - |
 | `PP_RELEASE_STOP_AFTER` | Phase to stop after | - |
 | `PP_RELEASE_ONLY_PHASES` | Comma-separated phases to run | - |
-| `PP_RELEASE_DRY_RUN` | Skip atomic swap and VACUUM | `false` |
+| `PP_RELEASE_DRY_RUN` | Stop after validate_and_manifest (before swap) | `false` |
 | `PP_RELEASE_STAGING_LIGHTWEIGHT` | Disable indexes and FKs during staging | `false` |
 
 ### Importer Control

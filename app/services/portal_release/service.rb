@@ -78,18 +78,23 @@ module PortalRelease
       phases = phases.drop_while { |p| !start_at.empty? && p.to_s != start_at } unless start_at.empty?
 
       phases.each do |phase|
+        # Stop before starting phases after validate_and_manifest if dry run is enabled
+        if ActiveModel::Type::Boolean.new.cast(ENV.fetch('PP_RELEASE_DRY_RUN', nil))
+          # Check if we've already completed validate_and_manifest and are about to start a later phase
+          validate_and_manifest_index = phases.index(:validate_and_manifest)
+          current_index = phases.index(phase)
+          if validate_and_manifest_index && current_index && current_index > validate_and_manifest_index
+            @log.event('dry_run_stopped_after_validate_and_manifest')
+            @notify.phase('Dry run stopped after validate_and_manifest phase')
+            break
+          end
+        end
+        
         @ctx[:phase] = phase.to_s
         @log.phase_started(@ctx[:phase])
         duration = time { send(phase) }
         @log.phase_completed(@ctx[:phase], duration: duration)
         @notify.phase_complete(@ctx[:phase], duration_s: duration)
-        
-        # Stop after post_swap if dry run is enabled
-        if ActiveModel::Type::Boolean.new.cast(ENV.fetch('PP_RELEASE_DRY_RUN', nil)) && phase.to_s == 'post_swap'
-          @log.event('dry_run_stopped_after_post_swap')
-          @notify.phase('Dry run stopped after post_swap phase')
-          break
-        end
         
         break if !stop_after.empty? && phase.to_s == stop_after
       end
