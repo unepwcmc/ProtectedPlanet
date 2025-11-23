@@ -56,7 +56,8 @@ class Download::Generators::Shapefile < Download::Generators::Base
 
     limit = (total_count / @number_of_pieces.to_f).ceil
     offset = limit * piece_index
-    order_by = "ORDER BY \"#{Download::Config.id_column}\" ASC"
+    order_by = %(ORDER BY "#{Download::Config.id_column}" ASC)
+
     sql = "
       SELECT *
       FROM #{view_name}
@@ -64,10 +65,14 @@ class Download::Generators::Shapefile < Download::Generators::Base
       LIMIT #{limit} OFFSET #{offset}
     ".squish
 
+    # Escape double quotes in the SQL query for shell safety
+    # The ERB template wraps the query in double quotes, so inner double quotes need to be escaped
+    # This handles SQL identifiers like: ORDER BY "SITE_ID"
+    escaped_sql = sql.gsub('"', '\\"')
     export_success = Ogr::Postgres.export(
       :shapefile,
       component_paths.first,
-      sql
+      escaped_sql
     )
 
     raise Ogr::Postgres::ExportError unless export_success
