@@ -38,7 +38,6 @@ module PortalRelease
 
         backup_timestamp = Wdpa::Portal::Services::Core::TableSwapService.promote_staging_to_live
         log.event('swap_completed', payload: { label: release.label, backup_timestamp: backup_timestamp })
-        notify.phase('Swap completed — staging promoted to live tables')
 
         # 3) Atomically record backup on previous and make new release current
         parsed_backup_time = Release.parse_backup_timestamp_string(backup_timestamp)
@@ -87,7 +86,7 @@ module PortalRelease
       begin
         # 1. Perform the database rollback (CRITICAL - if this fails, rollback fails)
         Rails.logger.info("Starting database rollback to backup #{timestamp}...")
-        Wdpa::Portal::Services::Core::TableRollbackService.rollback_to_backup(timestamp)
+        Wdpa::Portal::Services::Core::TableRollbackService.rollback_to_backup(timestamp, notifier: notifier)
         Rails.logger.info("Database rollback to backup #{timestamp} completed")
 
         # 2. Find and make the corresponding release current
@@ -109,6 +108,7 @@ module PortalRelease
 
       # 3. Post-swap cleanup (NON-CRITICAL). Always use Cleanup.post_swap! with a logger
       begin
+        notifier.rollback_step_started('post_swap_cleanup', timestamp)
         log = if target_release
           ::PortalRelease::Logger.new(target_release)
         else
@@ -121,8 +121,9 @@ module PortalRelease
           end.new
         end
 
-        Cleanup.post_swap!(log)
+        Cleanup.post_swap!(log, notifier: notifier)
         Rails.logger.info('Rollback post-swap cleanup completed via Cleanup.post_swap!')
+        notifier.phase("Post-swap cleanup completed (backup #{timestamp})")
         notifier.rollback_cleanup_okay(timestamp)
       rescue StandardError => e
         Rails.logger.warn("Rollback cleanup failed (but database rollback succeeded): #{e.class}: #{e.message}")

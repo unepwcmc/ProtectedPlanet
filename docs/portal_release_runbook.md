@@ -124,10 +124,10 @@ bundle exec rake pp:portal:dev:import_resume["label"]
 bundle exec rake pp:portal:list_backups
 
 # Rollback to specific timestamp
-bundle exec rake pp:portal:rollback["2509251325"]
+bundle exec rake pp:portal:rollback["2511241422"]
 
 # After rolling back all current tables/views become staging tables/views and then you can fix whatever that needs fixing and then start from finalise_swap to swap from staging to live tables to correct a release (label is REQUIRED)
-PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Nov2025"]
+RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Nov2025"]
 ```
 
 ---

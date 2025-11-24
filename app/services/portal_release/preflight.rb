@@ -89,26 +89,90 @@ module PortalRelease
       def create_portal_downloads_view!(log = nil)
         conn = ActiveRecord::Base.connection
         downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS
-        
-        # Clear downloads outside transaction to avoid aborting transaction if operations fail
-        # This includes dropping temporary download views that depend on the main downloads view
-        Download.clear_downloads
-        
-        # Clear downloads again right before transaction to catch any views created between the two calls
-        # This ensures we drop all dependent views before dropping the main view
-        begin
-          Download::Generators::Base.clean_tmp_download_views
-        rescue StandardError => e
-          Rails.logger.warn("Failed to clean tmp download views before transaction: #{e.message}")
+        staging_view = Wdpa::Portal::Config::PortalImportConfig.generate_staging_name(downloads_view)
+        backup_timestamp = ::Release.current_backup_timestamp_string
+        backup_view = Wdpa::Portal::Config::PortalImportConfig.generate_backup_name(downloads_view, backup_timestamp)
+
+        # Validate that required materialized views exist before building query
+        validate_required_materialized_views_for_downloads!
+
+        # Atomic staging download view creation and rename swap (all in transaction - must all succeed or all fail)
+        conn.transaction do
+          # Step 1: Drop staging view if exists, then create fresh (inside transaction for atomicity)
+          # Note: ActiveRecord doesn't have drop_view, so we use SQL directly
+          as_query = Download::Queries.build_query_for_downloads_view('portal')
+          conn.execute("DROP VIEW IF EXISTS #{staging_view} CASCADE")
+          conn.execute("CREATE VIEW #{staging_view} AS (SELECT #{as_query[:select]} FROM #{as_query[:from]})")
+
+          # Step 2: Check if live view exists before renaming
+          if conn.data_source_exists?(downloads_view)
+            # Rename live view → backup (timestamped name like bk2501011200_portal_downloads_protected_areas)
+            # Active queries will continue to work on the renamed view
+            conn.execute("ALTER VIEW #{downloads_view} RENAME TO #{backup_view}")
+          end
+
+          # Step 3: Rename staging view → live view
+          # New queries will use the new view
+          # If any step fails, transaction rolls back and all changes are undone
+          conn.execute("ALTER VIEW #{staging_view} RENAME TO #{downloads_view}")
         end
 
-        conn.transaction do
-          # Use CASCADE to drop the view and any dependent views that might have been created
-          conn.execute("DROP VIEW IF EXISTS #{downloads_view} CASCADE")
-          as_query = Download::Queries.build_query_for_downloads_view('portal')
-          conn.execute("CREATE VIEW #{downloads_view} AS (SELECT #{as_query[:select]} FROM #{as_query[:from]})")
+        # Note: Backup views (bk#{timestamp}_#{view_name}) are cleaned up by TableCleanupService
+        # during the cleanup_after_swap process, along with other backup tables and materialized views
+
+        log&.event('portal_downloads_view_created', payload: { view: downloads_view, backup_view: backup_view })
+      end
+
+      # Validates that required materialized views exist before creating downloads view
+      def validate_required_materialized_views_for_downloads!
+        required_views_hash = Wdpa::Portal::Config::PortalImportConfig.portal_materialised_views_hash
+        required_view_keys = Wdpa::Portal::Config::PortalImportConfig.required_views_for_downloads
+        missing_views = []
+        
+        required_view_keys.each do |view_key|
+          view_name = required_views_hash[view_key][:live]
+          unless Wdpa::Portal::Managers::ViewManager.materialized_view_exists?(view_name)
+            missing_views << view_name
+          end
         end
-        log&.event('portal_downloads_view_created', payload: { view: downloads_view })
+        
+        if missing_views.any?
+          raise "Required materialized views missing: #{missing_views.join(', ')}. Cannot create downloads view."
+        end
+      end
+
+      # Rolls back the portal downloads view to a backup version
+      # Similar to rollback_portal_materialized_views: backup → live, live → staging
+      def rollback_portal_download_view(backup_timestamp, log = nil)
+        conn = ActiveRecord::Base.connection
+        downloads_view = Wdpa::Portal::Config::PortalImportConfig::PORTAL_DOWNALOAD_VIEWS
+        backup_view = Wdpa::Portal::Config::PortalImportConfig.generate_backup_name(downloads_view, backup_timestamp)
+        staging_view = Wdpa::Portal::Config::PortalImportConfig.generate_staging_name(downloads_view)
+
+        Rails.logger.info "🔄 Rolling back portal downloads view to backup #{backup_timestamp}..."
+
+        # Step 1: Move current live to staging (if it exists)
+        if conn.data_source_exists?(downloads_view)
+          conn.execute("DROP VIEW IF EXISTS #{staging_view} CASCADE")
+          conn.execute("ALTER VIEW #{downloads_view} RENAME TO #{staging_view}")
+          Rails.logger.debug "✅ Live downloads view #{downloads_view} -> Staging view #{staging_view}"
+        end
+
+        # Step 2: Restore backup to live (if backup exists)
+        if conn.data_source_exists?(backup_view)
+          conn.execute("ALTER VIEW #{backup_view} RENAME TO #{downloads_view}")
+          Rails.logger.info "✅ Backup downloads view #{backup_view} -> Live view #{downloads_view}"
+          log&.event('portal_downloads_view_rolled_back', payload: { view: downloads_view, backup_view: backup_view, backup_timestamp: backup_timestamp })
+        else
+          Rails.logger.warn "⚠️ Backup downloads view #{backup_view} not found, creating fresh downloads view from rolled-back materialized views"
+          # If backup doesn't exist, create a fresh view from the rolled-back materialized views
+          create_portal_downloads_view!(log)
+        end
+
+        Rails.logger.info '✅ Portal downloads view rolled back'
+      rescue StandardError => e
+        Rails.logger.error "❌ Portal downloads view rollback failed: #{e.class}: #{e.message}"
+        raise
       end
     end
   end

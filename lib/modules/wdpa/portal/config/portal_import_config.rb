@@ -98,8 +98,12 @@ module Wdpa
         # TABLE NAME GENERATION UTILITIES
         # ============================================================================
 
-        def self.generate_staging_table_index_name(original_name)
+        def self.generate_staging_name(original_name)
           "#{STAGING_PREFIX}#{original_name}"
+        end
+
+        def self.generate_staging_table_index_name(original_name)
+          generate_staging_name(original_name)
         end
 
         def self.generate_live_table_index_name_from_staging(staging_index_name)
@@ -161,29 +165,41 @@ module Wdpa
           {
             iso3_agg: {
               live: 'portal_iso3_agg',
-              staging: 'staging_portal_iso3_agg'
+              staging: 'staging_portal_iso3_agg',
+              required_for_downloads: false
             },
             parent_iso3_agg: {
               live: 'portal_parent_iso3_agg',
-              staging: 'staging_portal_parent_iso3_agg'
+              staging: 'staging_portal_parent_iso3_agg',
+              required_for_downloads: false
             },
             int_crit_agg: {
               live: 'portal_int_crit_agg',
-              staging: 'staging_portal_int_crit_agg'
+              staging: 'staging_portal_int_crit_agg',
+              required_for_downloads: false
             },
             polygons: {
               live: 'portal_standard_polygons',
-              staging: 'staging_portal_standard_polygons'
+              staging: 'staging_portal_standard_polygons',
+              required_for_downloads: true
             },
             points: {
               live: 'portal_standard_points',
-              staging: 'staging_portal_standard_points'
+              staging: 'staging_portal_standard_points',
+              required_for_downloads: true
             },
             sources: {
               live: 'portal_standard_sources',
-              staging: 'staging_portal_standard_sources'
+              staging: 'staging_portal_standard_sources',
+              required_for_downloads: false
             },
           }
+        end
+
+        # Views required for creating the downloads view
+        # Returns keys from portal_materialised_views_hash where required_for_downloads is true
+        def self.required_views_for_downloads
+          portal_materialised_views_hash.select { |_key, config| config[:required_for_downloads] }.keys
         end
 
         def self.get_live_materialised_view_name_from_staging(staging_name)

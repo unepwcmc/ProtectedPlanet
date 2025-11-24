@@ -11,40 +11,28 @@ module Wdpa
 
           # --- MAIN OPERATIONS ---
 
-          def self.rollback_to_backup(backup_timestamp)
+          def self.rollback_to_backup(backup_timestamp, notifier: nil)
             Rails.logger.info '🔄 Starting table rollback...'
             service = new
             service.initialize_rollback_variables(backup_timestamp)
+            service.instance_variable_set(:@notifier, notifier)
             service.prepare_for_rollback
+            service.execute_rollback_transaction
+          end
 
+          def execute_rollback_transaction
             begin
-              service.instance_variable_get(:@connection).transaction do
-                service.validate_backup_tables_exist
-                service.perform_atomic_rollbacks
-                Rails.logger.info "✅ Rollback completed (backup timestamp: #{service.instance_variable_get(:@backup_timestamp)})"
-                Rails.logger.info '✅ Table rollback completed successfully'
-              rescue StandardError => e
-                Rails.logger.error "❌ Table rollback failed: #{e.message}"
-                # Re-raise the original error so it propagates to callers
-                # (the transaction will still be rolled back automatically)
-                raise
+              @connection.transaction do
+                validate_backup_tables_exist
+                perform_atomic_rollbacks
+                Rails.logger.info "✅ Rollback completed (backup timestamp: #{@backup_timestamp})"
               end
             rescue StandardError => e
-              Rails.logger.error "❌ Transaction failed: #{e.message}"
+              Rails.logger.error "❌ Rollback transaction failed: #{e.class}: #{e.message}"
+              # Transaction will be rolled back automatically
               raise
             ensure
-              service.restore_after_rollback
-            end
-
-            # Create downloads view after rollback completes (backup tables are now live)
-            # This is outside the transaction to avoid blocking, but happens after successful rollback
-            begin
-              Rails.logger.info '🔄 Creating portal downloads view after rollback...'
-              PortalRelease::Preflight.create_portal_downloads_view!
-              Rails.logger.info '✅ Portal downloads view created after rollback'
-            rescue StandardError => e
-              Rails.logger.warn("⚠️ Downloads view creation failed (rollback succeeded): #{e.class}: #{e.message}")
-              # Continue; rollback succeeded even if downloads view creation failed
+              restore_after_rollback
             end
           end
 
@@ -98,9 +86,13 @@ module Wdpa
             end
 
             Rails.logger.info "✅ Rolled back #{@swapped_tables.length} tables: #{@swapped_tables.join(', ')}"
+            @notifier&.rollback_step_completed('rollback_tables', @backup_timestamp, "Rolled back #{@swapped_tables.length} tables (backup #{@backup_timestamp})")
             
             # Rollback portal materialized views (backup → prod)
             rollback_portal_materialized_views
+            
+            # Rollback portal downloads view (backup → prod)
+            rollback_portal_downloads_view
           end
 
           def rollback_single_table(live_table, backup_table, staging_table)
@@ -237,13 +229,24 @@ module Wdpa
                 @connection.execute("ALTER MATERIALIZED VIEW #{backup_view} RENAME TO #{live_materialised_view}")
               end
             end
-            
+
             Rails.logger.info '✅ Portal materialized views rolled back'
+            @notifier&.rollback_step_completed('rollback_materialized_views', @backup_timestamp, "Rolled back portal materialized views (backup #{@backup_timestamp})")
           rescue StandardError => e
             Rails.logger.warn("⚠️ Portal materialized views rollback failed: #{e.class}: #{e.message}")
             # Continue; table rollback already completed. Views can be fixed manually.
           end
 
+          def rollback_portal_downloads_view
+            Rails.logger.info '🔄 Rolling back portal downloads view...'
+            begin
+              PortalRelease::Preflight.rollback_portal_download_view(@backup_timestamp)
+              @notifier&.rollback_step_completed('rollback_downloads_view', @backup_timestamp, "Rolled back portal downloads view (backup #{@backup_timestamp})")
+            rescue StandardError => e
+              Rails.logger.warn("⚠️ Portal downloads view rollback failed: #{e.class}: #{e.message}")
+              # Continue; table rollback already completed. View can be fixed manually.
+            end
+          end
         end
       end
     end

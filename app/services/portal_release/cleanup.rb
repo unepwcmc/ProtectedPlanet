@@ -3,7 +3,7 @@
 module PortalRelease
   class Cleanup
     class << self
-      def post_swap!(log)
+      def post_swap!(log, notifier: nil)
         if ActiveModel::Type::Boolean.new.cast(ENV.fetch('PP_RELEASE_DRY_RUN', nil))
           # Analyze staging tables in dry-run for visibility
           [::Staging::ProtectedArea.table_name, ::Staging::ProtectedAreaParcel.table_name,
@@ -31,6 +31,7 @@ module PortalRelease
           rescue StandardError => e
             Rails.logger.warn("Post-swap cleanup failed: #{e.class}: #{e.message}")
             log.event('post_swap_cleanup_failed', payload: { error: e.message })
+            notifier&.error(e, phase: 'post_swap_cleanup')
           end
         end
       end

@@ -190,7 +190,7 @@ module PortalRelease
 
     def post_swap
       @ctx[:phase] = 'post_swap'
-      Cleanup.post_swap!(@log)
+      Cleanup.post_swap!(@log, notifier: @notify)
     end
 
     def cleanup_and_retention

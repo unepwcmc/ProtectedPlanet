@@ -21,13 +21,13 @@ module PortalRelease
     def started(label)
       # Just to make a seperator on the slack channel
       post('----------------------------')
-      post(":rocket: WDPA release #{label} started (#{Rails.env})")
+      post(":rocket: ProtectedPlanet release #{label} started (#{Rails.env})")
     end
 
     # Rollback start notification
     def rollback_started(timestamp)
       post('----------------------------')
-      post(":rewind: WDPA rollback to #{timestamp} started (#{Rails.env})")
+      post(":rewind: ProtectedPlanet rollback to #{timestamp} started (#{Rails.env})")
     end
 
     # Generic phase text notifier; keep for backwards compatibility
@@ -89,6 +89,12 @@ module PortalRelease
     def rollback_step_started(step, timestamp)
       step_name = step.humanize.gsub('_', ' ')
       post(":hourglass_flowing_sand: Rollback step '#{step_name}' started (backup #{timestamp})")
+    end
+
+    def rollback_step_completed(step, timestamp, message = nil)
+      step_name = step.humanize.gsub('_', ' ')
+      text = message || "#{step_name} completed (backup #{timestamp})"
+      post(":rewind: #{text}")
     end
 
     private
@@ -239,7 +245,7 @@ module PortalRelease
       when 'preflight'
         ['preflight', 'Checks: views exist, counts, geometry, duplicates']
       when 'create_portal_downloads_view'
-        ['create_portal_downloads_view', 'Delete and recreate combined file generator downloads view']
+        ['create_portal_downloads_view', 'Create staging download view and backup existing download view']
       when 'build_staging'
         ['build_staging', 'Create/prepare staging tables']
       when 'import_core'
@@ -259,7 +265,7 @@ module PortalRelease
       when 'release_lock'
         ['release_lock', 'Release advisory lock']
       when 'reset_checkpoints'
-        ['reset_checkpoints', 'Reset portal checkpoints for next run']
+        ['reset_checkpoints', 'Reset portal checkpoints for next release']
       else
         [key, nil]
       end
