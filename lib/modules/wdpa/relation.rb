@@ -34,11 +34,6 @@ class Wdpa::Relation
     countries.compact
   end
 
-  def sub_locations value
-    sub_locations = value.map { |iso| SubLocation.where(iso: iso).first }
-    sub_locations.compact
-  end
-
   def designation value
     jurisdiction = Jurisdiction.where(name: @current_attributes[:jurisdiction]).first
     Designation.where({

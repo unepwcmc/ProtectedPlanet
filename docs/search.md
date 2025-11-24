@@ -20,6 +20,8 @@ by the application. We *do* utilise the elasticsearch gem, and that is effective
 the Ruby wrapper for the Elasticsearch service, allowing us to use the same DSL.
 More information can be found in the [Github repo for the gem](https://github.com/elastic/elasticsearch-ruby)
 
+*** Notice! on staging server if you need to reindex then you will need to increase -Xms2g -Xmx2g settings from 2gb -Xms7g -Xmx7g to in /etc/elasticsearch/jvm.options and then restart service before reinexing. For some reason if you limit the heap to low then not all protected areas are indexed (A silent fail). You will get incorrect count. Make sure to turn the limit back on low after reindexing ***
+
 ## Installation
 
 Thankfully, Elasticsearch installation is super easy.

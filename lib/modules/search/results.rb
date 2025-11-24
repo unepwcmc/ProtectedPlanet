@@ -64,7 +64,7 @@ class Search::Results
   end
 
   def with_coords
-    matches.map { |result| result['_source'].slice('id', 'wdpa_id', 'name', 'coordinates') }
+    matches.map { |result| result['_source'].slice('id', 'site_id', 'name', 'coordinates') }
   end
 
   def count

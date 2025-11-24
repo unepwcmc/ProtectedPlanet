@@ -7,7 +7,7 @@ class TabPresenter
     @geo_entity = geo_entity
     @presenter = nil
 
-    @presenter = if geo_entity.class.to_s == 'Country'
+    @presenter = if geo_entity.instance_of?(::Country)
                    CountryPresenter.new(geo_entity)
                  else
                    RegionPresenter.new(geo_entity)
@@ -75,7 +75,7 @@ class TabPresenter
 
   def sites(oecms_tab: false)
     {
-      site_details: fetch_site_names_and_wdpaids(3, oecms_tab),
+      site_details: fetch_site_names_and_site_ids(3, oecms_tab),
       title: other_sites_title(oecms_tab),
       view_all: oecms_tab ? view_all_link : view_all_link(db_type: ['wdpa']),
       text_view_all: I18n.t('global.button.all')
@@ -85,7 +85,7 @@ class TabPresenter
   private
 
   def sources_per_geo_entity(exclude_oecms: false)
-    if @geo_entity.class.to_s == 'Country'
+    if @geo_entity.instance_of?(::Country)
       @geo_entity.sources_per_country(exclude_oecms: exclude_oecms)
     else
       @geo_entity.sources_per_region(exclude_oecms: exclude_oecms)
@@ -127,7 +127,7 @@ class TabPresenter
     end
   end
 
-  def fetch_site_names_and_wdpaids(size, show_oecm)
+  def fetch_site_names_and_site_ids(size, show_oecm)
     protected_areas = []
 
     if show_oecm
@@ -147,7 +147,7 @@ class TabPresenter
   def protected_area_to_tab(protected_area)
     {
       name: protected_area[:name],
-      wdpa_id: protected_area[:wdpa_id],
+      site_id: protected_area[:site_id],
       thumbnail_link: ApplicationController.helpers.protected_area_cover(protected_area, with_tag: false)
     }
   end

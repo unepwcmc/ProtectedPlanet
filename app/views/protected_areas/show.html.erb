@@ -4,7 +4,7 @@
 # The map shows all (parcels) polygons/points belonging to the site.
 # The name is the first parcel
 # The attributes table shows all parcel attributes
-# The rest info in the page are still only against wdpa_id only not taking parcel Ids into consideration 
+# The rest info in the page are still only against site_id only not taking parcel Ids into consideration 
 # If in future more info are taking parcel ids into consideration Please ADD COMMENTS here.
 %>
 
@@ -17,7 +17,7 @@
         location: @locations.html_safe,
         title: @protected_area.name,
         type: map_layer_type,
-        wdpa_id: @protected_area.wdpa_id,
+        site_id: @protected_area.site_id,
         external_links: @presenter.external_links
       } %>
       <div class="map--site">
@@ -43,13 +43,12 @@
         } %>
       </div>
     </div>
-    <%= render partial: "partials/stats/stats-sources", locals: { 
-      small: true,
-      sources: @sources 
+    <%= render partial: "partials/stats/stats-parcels-sources", locals: {
+      sources: @sources.to_json
     } %>
     <section class="spacer-large--top">
       <%= render partial: "partials/cards/sites", locals: { 
-        cards: @wdpa_other, 
+        cards: @wdpa_other,
         title: t('thematic_area.wdpa.other_protected_areas'),
         url: @otherWdpasViewAllUrl
       } %>

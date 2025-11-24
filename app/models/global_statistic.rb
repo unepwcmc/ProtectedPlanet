@@ -1,4 +1,6 @@
 class GlobalStatistic < ApplicationRecord
+  self.table_name = 'global_statistics'
+
   validates_inclusion_of :singleton_guard, :in => [0]
 
   def self.instance

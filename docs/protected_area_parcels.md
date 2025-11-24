@@ -4,12 +4,19 @@
 - There is a protected_areas_parcels table storing parcels of the protected_area (including the first parcel)
 - So if A pa has multiple parcels then the first parcel is duplicately saved into protected_areas and protected_areas_parcels
 
+# Green List Status
+- As of 29Sep2025, green list status is maintained in both protected_areas and protected_area_parcels tables
+- When a protected area is green-listed, ALL associated parcels inherit the same green list status
+- This ensures consistency between the main protected area record and all its parcels
+- Both tables have green_list_status_id and green_list_url columns
+- See [Green List Documentation](green_list.md) for detailed information about the import process
+
 # Import
-- All data are in the import tables `standard_polygons` and `standard_points` you will now see the same wdpa_id in multiple rows if the PA has more then one parcel (wdpa_pid).
+- All data are in the import tables `standard_polygons` and `standard_points` you will now see the same site_id in multiple rows if the PA has more then one parcel (site_pid).
 - See [attribute_importer.rb](/lib/modules/wdpa/protected_area_importer/attribute_importer.rb) to understand how protected_areas and protected_areas_parcels are imported
 
 # Relations between protected_areas and protected_area_parcels
-- foreign_key: 'wdpa_id', primary_key: 'wdpa_id' is used to link up the two tables
+- foreign_key: 'site_id', primary_key: 'site_id' is used to link up the two tables
 - See [protected_area.rb](/app/models/protected_area.rb) and [protected_area_parcel.rb](/app/models/protected_area_parcel.rb)
 
 # Presenter for attributes

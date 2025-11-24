@@ -1,3 +1,4 @@
+# As of 19Aug2025 This file is not used as stats are now from NC team
 class ImportWorkers::GeometryPopulatorWorker < ImportWorkers::Base
   def perform country_id
     country = Country.find(country_id)

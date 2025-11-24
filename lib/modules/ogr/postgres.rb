@@ -73,7 +73,7 @@ class Ogr::Postgres
     # Given the original filename should also contains 'polygons' or 'points' at the end,
     # we remove this bit.
     attrs.pop if %w(multipolygons multipoints polygons points).include?(attrs[-1])
-    # If the filename does not end with 'Public' it means there's also an identifier (e.g. an ISO or a WDPA ID)
+    # If the filename does not end with 'Public' it means there's also an identifier (e.g. an ISO or a SITE ID)
     # So the original filename would have been something like WDPA_MmmYYY_Public_identifier
     identifier = attrs.pop unless attrs[-1].downcase == 'public'
     # Replace 'Public' with the geometry type formatted correctly, e.g. => ['WDPA', 'MmmYYY', 'poly']

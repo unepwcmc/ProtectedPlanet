@@ -1,6 +1,6 @@
 class Wdpa::Importer
   def self.import
-    importer = self.new
+    importer = new
     importer.import
   end
 
@@ -14,18 +14,18 @@ class Wdpa::Importer
 
   private
 
-  def execute_importers wdpa_release
-    Rails.logger.info("Wdpa::Importer.execute_importers: We are now running several importers to copy data from the raw data and CSVs into db")
+  def execute_importers(wdpa_release)
+    Rails.logger.info('Wdpa::Importer.execute_importers: We are now running several importers to copy data from the raw data and CSVs into db')
     Wdpa::SourceImporter.import wdpa_release
     Wdpa::ProtectedAreaImporter.import
     Wdpa::GeometryRatioCalculator.calculate
-    Wdpa::NetworkImporter.import
-    Wdpa::OverseasTerritoriesImporter.import
-    Wdpa::GlobalStatsImporter.import
+    Wdpa::NetworkImporter.import # As of 20Aug2025, this is no longer used see lib/modules/wdpa/network_importer.rb
+    Wdpa::Shared::Importer::CountryOverseasTerritories.update_live_table
+    Wdpa::Shared::Importer::GlobalStats.import_live
     Wdpa::GreenListImporter.import
     Wdpa::PameImporter.import
-    Wdpa::StoryMapLinkListImporter.import
-    Wdpa::BiopamaCountriesImporter.import
-    Rails.logger.info("Wdpa::Importer.execute_importers: All importers have completed its job")
+    Wdpa::Shared::Importer::StoryMapLinkList.import_live
+    Wdpa::Shared::Importer::BiopamaCountries.update_live_table
+    Rails.logger.info('Wdpa::Importer.execute_importers: All importers have completed its job')
   end
 end

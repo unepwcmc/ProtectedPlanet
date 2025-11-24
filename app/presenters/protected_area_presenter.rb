@@ -4,29 +4,15 @@ class ProtectedAreaPresenter
   include ActionView::Helpers::NumberHelper
   include ActionView::Helpers::UrlHelper
 
-  POLYGON = -> (pa, _property) {
-    type = ProtectedArea.select("ST_GeometryType(the_geom) AS type").where(id: pa.id).first.type
-    type == "ST_MultiPolygon"
+  POLYGON = lambda { |pa, _property|
+    type = ProtectedArea.select('ST_GeometryType(the_geom) AS type').where(id: pa.id).first.type
+    type == 'ST_MultiPolygon'
   }
 
   # Warning: do NOT use .present? there, as some of the possible values
   # are false. .present? will return false even if the value is not nil
   PRESENCE = ->(pa, property) { !pa.try(property).nil? }
   ASSERT_PRESENCE = ->(field) { { field: field, assert: PRESENCE } }
-
-  SECTIONS = [{
-    name: 'Basic Info',
-    fields: %i[wdpaid wdpa_pid metadataid name orig_name marine].map(&ASSERT_PRESENCE)
-  }, {
-    name: 'Geometries',
-    fields: %i[gis_m_area gis_area].map(&ASSERT_PRESENCE) | [{ field: :wkb_geometry, assert: POLYGON }]
-  }, {
-    name: 'Categorisation',
-    fields: %i[iso3 sub_loc iucn_cat gov_type mang_auth mang_plan int_crit desig_eng desig_type].map(&ASSERT_PRESENCE)
-  }, {
-    name: 'Special',
-    fields: %i[no_take no_tk_area].map(&ASSERT_PRESENCE)
-  }].freeze
 
   def initialize(protected_area)
     @protected_area = protected_area
@@ -39,13 +25,6 @@ class ProtectedAreaPresenter
     ].compact
   end
 
-  # As of 07Apr2025 it doesn't seem to be used
-  def data_info
-    SECTIONS.each_with_object({}) do |section, all_info|
-      all_info[section[:name]] = completeness_for(section[:fields])
-    end
-  end
-
   def external_links
     [
       dopa_link,
@@ -53,15 +32,11 @@ class ProtectedAreaPresenter
       story_map_links
     ].compact.flatten
   end
-  # As of 07Apr2025 it doesn't seem to be used
-  def percentage_complete
-    ((num_fields_with_data.to_f / all_fields.count) * 100).round(2)
-  end
 
   def name_size
     {
       name: protected_area.name,
-      wdpa_id: protected_area.wdpa_id,
+      site_id: protected_area.site_id,
       km: protected_area.gis_marine_area.to_i
     }
   end
@@ -70,7 +45,7 @@ class ProtectedAreaPresenter
     size = protected_area.reported_area.to_f.round(2)
     {
       name: protected_area.name,
-      wdpa_id: protected_area.wdpa_id,
+      site_id: protected_area.site_id,
       country: marine_designation_country,
       iso: protected_area.countries.first.try(:iso_3),
       size: "#{number_with_delimiter(size, delimiter: ',')}km²",
@@ -80,15 +55,19 @@ class ProtectedAreaPresenter
 
   def parcels_attribute
     parcels_including_protected_area_self = protected_area.parcels_including_protected_area_self
-    # TODO: once the parcel IDs are change to be 345345_1 345345_2 
+    # TODO: once the parcel IDs are change to be 345345_1 345345_2
     # We will need to change this to item.split('_').last.to_i
-    parcels_including_protected_area_self.sort_by { |item| item.wdpa_pid }.map do |parcel|
+    parcels_including_protected_area_self.sort_by { |item| item.site_pid }.map do |parcel|
       {
-        wdpa_pid: parcel.wdpa_pid,
+        site_pid: parcel.site_pid,
         attributes: [
           {
-            title: 'Original Name',
+            title: 'Name',
             value: parcel.original_name
+          },
+          {
+            title: 'English Name',
+            value: parcel.name
           },
           {
             title: 'English Designation',
@@ -111,12 +90,12 @@ class ProtectedAreaPresenter
             value: parcel.legal_status_updated_at.try(:strftime, '%Y') || 'Not Reported'
           },
           {
-            title: 'Sublocation',
-            value: parcel.sub_locations.map(&:iso).join(', ')
-          },
-          {
             title: 'Governance Type',
             value: parcel.governance.try(:name) || 'Not Reported'
+          },
+          {
+            title: 'Governance Subtype',
+            value: parcel.governance_subtype || 'Not Reported'
           },
           {
             title: 'Management Authority',
@@ -127,8 +106,24 @@ class ProtectedAreaPresenter
             value: parse_management_plan(parcel.management_plan)
           },
           {
+            title: 'Ownership Type',
+            value: parcel.owner_type || 'Not Reported'
+          },
+          {
+            title: 'Ownership Subtype',
+            value: parcel.ownership_subtype || 'Not Reported'
+          },
+          {
             title: 'International Criteria',
             value: parcel.international_criteria || 'Not Reported'
+          },
+          {
+            title: 'Inland Waters',
+            value: parcel.inland_waters || 'Not Reported'
+          },
+          {
+            title: 'Supplementary Information',
+            value: parcel.supplementary_info
           }
         ].concat(parcel_oecm_attributes(parcel))
       }
@@ -139,14 +134,15 @@ class ProtectedAreaPresenter
 
   def parcel_oecm_attributes(parcel)
     return [] unless parcel.is_oecm
+
     [
-      {
-        title: 'Supplementary Information',
-        value: parcel.supplementary_info
-      },
       {
         title: 'Conservation Objectives',
         value: parcel.conservation_objectives
+      },
+      {
+        title: 'OECM Assessment',
+        value: parcel.oecm_assessment || 'Not Reported'
       }
     ]
   end
@@ -185,6 +181,7 @@ class ProtectedAreaPresenter
   def marine_designation_country
     protected_area.countries.first.try(:name) || 'Area Beyond National Jurisdiction'
   end
+
   # As of 07Apr2025 it doesn't seem to be used
   def completeness_for(attributes)
     attributes.map do |attribute|
@@ -218,16 +215,6 @@ class ProtectedAreaPresenter
       button_title: I18n.t('stats.who.button-title', name: protected_area.name)
     }
   end
-  # As of 07Apr2025 it doesn't seem to be used
-  def num_fields_with_data
-    all_fields.count do |attribute|
-      standard_attr = standard_attributes[attribute[:field]]
-
-      attribute[:assert].call(
-        protected_area, standard_attr[:name]
-      )
-    end
-  end
 
   def parse_management_plan(management_plan)
     if (management_plan.is_a? String) && management_plan.starts_with?('http')
@@ -240,13 +227,10 @@ class ProtectedAreaPresenter
   def url_for_related_source(source, protected_area)
     File.join(
       Rails.application.secrets.related_sources_base_urls[source.to_sym],
-      protected_area.wdpa_id.to_s
+      protected_area.site_id.to_s
     )
   end
 
-  def all_fields
-    SECTIONS.flat_map { |section| section[:fields] }
-  end
   # As of 07Apr2025 it doesn't seem to be used
   def standard_attributes
     Wdpa::DataStandard::STANDARD_ATTRIBUTES

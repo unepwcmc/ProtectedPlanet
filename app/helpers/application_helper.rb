@@ -1,4 +1,3 @@
-# coding: utf-8
 module ApplicationHelper
   include ActionView::Helpers::NumberHelper
   include BemHelper
@@ -10,20 +9,20 @@ module ApplicationHelper
   }.freeze
 
   PLACEHOLDERS = {
-    ProtectedArea => "search-placeholder-country.png",
-    Country => "search-placeholder-country.png",
-    Region => "search-placeholder-region.png"
+    ProtectedArea => 'search-placeholder-country.png',
+    Country => 'search-placeholder-country.png',
+    Region => 'search-placeholder-region.png'
   }.freeze
 
-  def get_square_side area
-    Math.sqrt(area/100) * 100
+  def get_square_side(area)
+    Math.sqrt(area / 100) * 100
   end
 
-  def commaify number
+  def commaify(number)
     number_with_delimiter(number, delimeter: ',')
   end
 
-  def spaceify number
+  def spaceify(number)
     number_with_delimiter(number, delimeter: ' ')
   end
 
@@ -31,8 +30,6 @@ module ApplicationHelper
     case controller_name
     when 'target_dashboard'
       'thematic_area.target_11_dashboard'
-    else
-      nil
     end
   end
 
@@ -40,11 +37,11 @@ module ApplicationHelper
     request.fullpath == current_path
   end
 
-  def cover item
+  def cover(item)
     send COVER_HELPERS[item.class], item
   end
 
-  def cover_placeholder klass
+  def cover_placeholder(klass)
     PLACEHOLDERS[klass]
   end
 
@@ -57,13 +54,13 @@ module ApplicationHelper
     {
       'data-src': tiles_path(image_params),
       'data-error': image_path(placeholder),
-      'data-loading': image_path(placeholder),
+      'data-loading': image_path(placeholder)
     }
   end
 
   def protected_area_cover(protected_area, with_tag: true)
     version = Rails.application.secrets.mapbox[:version]
-    image_params = {id: protected_area.wdpa_id, type: "protected_area", version: version}
+    image_params = { id: protected_area.site_id, type: 'protected_area', version: version }
     data = cover_data(image_params, protected_area.class)
 
     return tiles_path(image_params) unless with_tag
@@ -79,20 +76,20 @@ module ApplicationHelper
 
   def country_cover(country, with_tag: true)
     version = Rails.application.secrets.mapbox[:version]
-    image_params = {id: country.iso, type: "country", version: version}
+    image_params = { id: country.iso, type: 'country', version: version }
     data = cover_data(image_params, country.class)
 
     return tiles_path(image_params) unless with_tag
 
     image_tag(
       cover_placeholder(country.class),
-      {alt: country.name}.merge(data)
+      { alt: country.name }.merge(data)
     )
   end
 
   def region_cover(region, with_tag: true)
     version = Rails.application.secrets.mapbox[:version]
-    image_params = {id: region.iso, type: "region", version: version}
+    image_params = { id: region.iso, type: 'region', version: version }
     return tiles_path(image_params) unless with_tag
 
     image_tag(
@@ -105,11 +102,11 @@ module ApplicationHelper
     ERB::Util.url_encode(text)
   end
 
-  def is_regional_page controller_name
+  def is_regional_page(controller_name)
     controller_name == 'region'
   end
 
-  def get_cms_url path
+  def get_cms_url(path)
     root_path + path
   end
 
@@ -119,7 +116,7 @@ module ApplicationHelper
       map_page('news-and-stories'),
       map_page('resources'),
       map_page('monthly-release-news'),
-      map_page('thematic-areas', true),
+      map_page('thematic-areas', true)
     ].to_json
   end
 
@@ -127,7 +124,7 @@ module ApplicationHelper
   #   !card[:pdf].present? && !card[:external_link].present?
   # end
 
-  def get_resource_cards(all=false)
+  def get_resource_cards(all = false)
     presenter = ResourcesPresenter.new(@cms_site, all)
     _resources = presenter.resources
 
@@ -151,15 +148,17 @@ module ApplicationHelper
     @items = _resources
   end
 
-  def get_news_items all = false
+  def get_news_items(all = false)
     news_page = @cms_site.pages.find_by_slug('news-and-stories')
     published_pages = news_page.children.published
-    sorted_cards = published_pages.sort_by { |c| c.fragments.where(identifier: 'published_date').first.datetime }.reverse
+    sorted_cards = published_pages.sort_by do |c|
+      c.fragments.where(identifier: 'published_date').first.datetime
+    end.reverse
 
     @items = {
-      "title": news_page.label,
-      "url": all ? false : get_cms_url(news_page.full_path),
-      "cards": all ? sorted_cards : sorted_cards.first(2)
+      title: news_page.label,
+      url: all ? false : get_cms_url(news_page.full_path),
+      cards: all ? sorted_cards : sorted_cards.first(2)
     }
   end
 
@@ -169,23 +168,28 @@ module ApplicationHelper
 
   def get_footer_links
     @links = {}
-    @links["links1"] = make_footer_links(['resources', 'oecms', 'wdpa'])
-    @links["links2"] = make_footer_links(['about', 'legal'])
+    @links['links1'] = make_footer_links(%w[resources oecms wdpa])
+    @links['links2'] = make_footer_links(%w[about legal])
   end
 
-  def get_local_classes local_assigns
+  def get_local_classes(local_assigns)
     (local_assigns.has_key? :classes) ? local_assigns[:classes] : ''
   end
 
   private
 
-  def make_footer_links slug_array
+  def make_footer_links(slug_array)
     slug_array.map do |slug|
       page = @cms_site.pages.find_by_slug(slug)
-      
+
       {
-        "title": page.fragments.find_by(identifier: 'short_title') ? cms_fragment_render(:short_title, page) : page.label,
-        "url": get_cms_url(page.full_path)
+        title: if page.fragments.find_by(identifier: 'short_title')
+                 cms_fragment_render(:short_title,
+                   page)
+               else
+                 page.label
+               end,
+        url: get_cms_url(page.full_path)
       }
     end
   end
@@ -200,23 +204,49 @@ module ApplicationHelper
     cms_page = Comfy::Cms::Page.find_by_slug(slug)
 
     mapped_page = {
-      "id": cms_page.slug,
-      "label": cms_page.label,
-      "url": get_cms_url(cms_page.full_path),
-      "is_current_page": active_nav_item?(get_cms_url cms_page.full_path)
+      id: cms_page.slug,
+      label: cms_page.label,
+      url: get_cms_url(cms_page.full_path),
+      is_current_page: active_nav_item?(get_cms_url(cms_page.full_path))
     }
 
     if map_children
-      mapped_page["children"] = cms_page.children.published.map do |page|
+      mapped_page['children'] = cms_page.children.published.map do |page|
         {
-          "id": page.slug,
-          "label": page.label,
-          "url": get_cms_url(page.full_path),
-          "is_current_page": active_nav_item?(get_cms_url page.full_path)
+          id: page.slug,
+          label: page.label,
+          url: get_cms_url(page.full_path),
+          is_current_page: active_nav_item?(get_cms_url(page.full_path))
         }
       end
     end
 
     mapped_page
+  end
+
+  def active_banners
+    @active_banners ||= Banner.active.order(updated_at: :desc).to_a
+  end
+
+  def banner_signature
+    # Signature of current active banners set to support dismissing a group
+    @banner_signature ||= Digest::SHA1.hexdigest(active_banners.map(&:id).join('-'))
+  end
+
+  def current_banner
+    # For backward compatibility where only first is used
+    active_banners.first
+  end
+
+  def banner_visible?
+    return false if active_banners.empty?
+
+    if active_banners.size == 1
+      return false if cookies[:banner_closed] == active_banners.first.id.to_s
+
+      return true
+    end
+
+    cookies[:banner_closed_sig] != banner_signature
   end
 end

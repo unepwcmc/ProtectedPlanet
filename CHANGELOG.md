@@ -1,3 +1,30 @@
+### 4.11.11
+Chore: November 2025 WDPA Release
+  - update constants.rb
+  - add October CSVs: country_statistics, global_statistics, pame_country, pame_data CSV, green list sites.
+
+### 4.11.10
+Chore: October 2025 WDPA Release
+  - update constants.rb
+  - add October CSVs: country_statistics, global_statistics, pame_country, pame_data CSV.
+
+### 4.11.9
+Chore: September 2025 WDPA Release
+  - update constants.rb
+  - add September CSVs: country_statistics, global_statistics, pame_country, pame_data CSV.
+
+### 4.11.8
+- Chore: August 2025 WDPA Release
+  - update constants.rb
+  - add August CSVs: country_statistics, global_statistics, pame_country, pame_data
+  - correct country_stats CSV because the space characters have been replaced by 0 in the column nr_version and nr_report of CSV. NC has been notified of the issue to avoid it happens again next month.
+
+### 4.11.7
+- Chore: July 2025 WDPA Release
+  - update constants.rb
+  - add July CSVs: country_statistics, global_statistics, pame_country, pame_data
+  - edit extra line at the end of `country_stats` CSV and extra character at the end of `global_statistics` CSV
+
 ### 4.11.6
 - Update PAME CSV to avoid issue caused by 34 duplicated `evaluation_id` and the wdpa_id = `5.56+e8` (556000000) in 389 records which is not a correct wdpa_id value
 

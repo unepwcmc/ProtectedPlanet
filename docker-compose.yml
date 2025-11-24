@@ -4,7 +4,7 @@ services:
     platform: linux/x86_64
     container_name: protectedplanet-web
     build: .
-    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid;bundle i;yarn install; bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: /bin/bash -l -c "rm -rf /ProtectedPlanet/tmp/pids/server.pid;bundle i;yarn install; bundle exec rails db:migrate; bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - .:/ProtectedPlanet
       - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
@@ -16,11 +16,11 @@ services:
       - "3000:3000"
     networks:
       - protectedplanet
+    env_file:
+      - '.env'
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
       - WEBPACKER_DEV_SERVER_HOST=webpacker
-    env_file:
-      - '.env'
     depends_on:
       - db
       - redis
@@ -63,12 +63,12 @@ services:
       - protectedplanet_bundler:/usr/local/bundle
     networks:
       - protectedplanet
+    env_file:
+      - '.env'
     depends_on:
       - db
       - redis
     command: /bin/bash -l -c "bundle exec sidekiq"
-    env_file:
-      - '.env'
     stdin_open: true
     tty: true
   elasticsearch:
@@ -107,8 +107,6 @@ services:
     platform: linux/x86_64
     container_name: protectedplanet-webpacker
     build: .
-    env_file: 
-      - '.env'
     command: /bin/bash -l -c "rm -rf /ProtectedPlanet/app/public/packs; bundle i;yarn install; rm -rf /ProtectedPlanet/tmp/cache/webpacker; /ProtectedPlanet/docker/scripts/webpacker"
     volumes: 
       - .:/ProtectedPlanet
@@ -116,6 +114,8 @@ services:
       - protectedplanet_bundler:/usr/local/bundle
     ports:
       - "3035:3035"
+    env_file:
+      - '.env'
     networks:
       - protectedplanet
   sidekiq-import:
@@ -128,12 +128,12 @@ services:
       - protectedplanet_bundler:/usr/local/bundle
     networks:
       - protectedplanet
+    env_file:
+      - '.env'
     depends_on:
       - db
       - redis
     command: /bin/bash -l -c "bundle exec sidekiq -C /ProtectedPlanet/config/sidekiq-import.yml"
-    env_file:
-      - '.env'
     stdin_open: true
     tty: true
   api:
@@ -151,8 +151,6 @@ services:
       - protectedplanet
     environment:
       - SSH_AUTH_SOCK=/ssh-agent
-    env_file:
-      - ${API_PATH}/.env
     depends_on:
       - db
     stdin_open: true

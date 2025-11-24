@@ -58,7 +58,7 @@ module ProtectedAreasHelper
     3150 => 'https://wdpa.s3.amazonaws.com/Country_informations/MYS/Pulau_Tioman_3150.pdf'
   }.freeze
   def management_plan_document
-    MP_DOCUMENTS[@protected_area.wdpa_id]
+    MP_DOCUMENTS[@protected_area.site_id]
   end
 
   def area_type_is

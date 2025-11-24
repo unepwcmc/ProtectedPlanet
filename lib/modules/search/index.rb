@@ -16,7 +16,6 @@ class Search::Index
     pa_relation = ProtectedArea.without_geometry.includes(
       [
         { countries_for_index: :region_for_index },
-        :sub_locations,
         :designation,
         :iucn_category,
         :governance
@@ -34,6 +33,10 @@ class Search::Index
     region_index.index
     country_index.index
     pa_index.index
+
+    
+    # To clean up the cache
+    Rails.cache.clear
   end
 
   def self.create_cms_fragments

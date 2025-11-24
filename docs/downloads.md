@@ -22,11 +22,11 @@ until the download is ready, at which point a URL will be produced from the S3
 hosted file and the download can be initiated.
 
 The Download class is fairly naive and generates datasets for any given
-array of WDPA IDs. It is the responsibility of the caller to decide what
+array of SITE IDs. It is the responsibility of the caller to decide what
 is to be downloaded, and what the file should be saved as in S3.
 
 ```
-Download.generate 'download_name', wdpa_ids: [123, 456, 2881]
+Download.generate 'download_name', site_ids: [123, 456, 2881]
 ```
 
 ### Data

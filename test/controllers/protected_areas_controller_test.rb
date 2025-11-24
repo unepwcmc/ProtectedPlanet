@@ -26,7 +26,7 @@ class ProtectedAreasControllerTest < ActionController::TestCase
       :protected_area, designation: designation, countries: [country]
     )
 
-    get :show, params: {id: protected_area.wdpa_id}
+    get :show, params: {id: protected_area.site_id}
   end
 
   test '#show, given a PA that does not exist, renders a 404 page' do

@@ -5,26 +5,26 @@ class SearchResultsTest < ActiveSupport::TestCase
     es_response = {
       'hits' => {
         'hits' => [
-          { '_source' => {'wdpa_id' => 123, 'id' => 24} },
-          { '_source' => {'wdpa_id' => 345, 'id' => 1} },
+          { '_source' => {'site_id' => 123, 'id' => 24} },
+          { '_source' => {'site_id' => 345, 'id' => 1} },
           { '_source' => {'id' => 22} }
         ]
       }
     }
 
     results = Search::Results.new(es_response)
-    assert_equal [123, 345, nil], results.pluck('wdpa_id')
+    assert_equal [123, 345, nil], results.pluck('site_id')
   end
 
   test '.with_coords returns all the search result models with their
-   coordinates, WDPA ID and name' do
+   coordinates, SITE ID and name' do
     es_response = {
       'hits' => {
         'hits' => [{
           '_type' => 'protected_area',
           '_source' => {
             'id' => 123,
-            'wdpa_id' => 32423123,
+            'site_id' => 32423123,
             'name' => 'San Huirremo',
             'coordinates' => [1, -2]
           }
@@ -32,7 +32,7 @@ class SearchResultsTest < ActiveSupport::TestCase
           '_type' => 'protected_area',
           '_source' => {
             'id' => 456,
-            'wdpa_id' => 32431878,
+            'site_id' => 32431878,
             'name' => 'San Terremo',
             'coordinates' => [-1, 0]
           }
@@ -42,12 +42,12 @@ class SearchResultsTest < ActiveSupport::TestCase
 
     expected = [{
       'id' => 123,
-      'wdpa_id' => 32423123,
+      'site_id' => 32423123,
       'name' => 'San Huirremo',
       'coordinates' => [1, -2]
     }, {
       'id' => 456,
-      'wdpa_id' => 32431878,
+      'site_id' => 32431878,
       'name' => 'San Terremo',
       'coordinates' => [-1, 0]
     }]

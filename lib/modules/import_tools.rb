@@ -1,5 +1,5 @@
 module ImportTools
-  class AlreadyRunningImportError < StandardError; end;
+  class AlreadyRunningImportError < StandardError; end
 
   def self.create_import
     ImportTools::Import.new
@@ -20,7 +20,7 @@ module ImportTools
   end
 
   def self.dump_path
-    Rails.root.join("lib", "data", "seeds", "pre_seeded_database.sql")
+    Rails.root.join('lib', 'data', 'seeds', 'pre_seeded_database.sql')
   end
 
   def self.statistics_monthly_import

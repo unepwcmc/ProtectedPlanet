@@ -101,8 +101,8 @@ class Search
       query[:sort] = Search::Sorter.from_params(options[:sort])
     end
 
-    if options[:last_wdpa_id].present?
-      query[:search_after] = [options[:last_wdpa_id]]
+    if options[:last_site_id].present?
+      query[:search_after] = [options[:last_site_id]]
     end
   end
 

@@ -52,7 +52,7 @@
       // Check pame_evalutation.rb for the copy
       &:nth-child(1) { &:before { content: 'Name:'; } }
       &:nth-child(2) { &:before { content: 'Designation:'; } }
-      &:nth-child(3) { &:before { content: 'WDPA ID:'; } }
+      &:nth-child(3) { &:before { content: 'SITE ID:'; } }
       &:nth-child(4) { &:before { content: 'Assessment ID:'; } }
       &:nth-child(5) { &:before { content: 'Country:'; } }
       &:nth-child(6) { &:before { content: 'Methodology:'; } }

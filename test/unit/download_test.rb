@@ -44,7 +44,7 @@ class DownloadTest < ActiveSupport::TestCase
     csv_zip_path = File.join(Rails.root, 'tmp', 'an_download-csv.zip')
     Download::Generators::Csv.expects(:generate).with(csv_zip_path, pa_ids)
 
-    download_success = Download.generate download_name, wdpa_ids: pa_ids
+    download_success = Download.generate download_name, site_ids: pa_ids
     assert download_success, "Expected Download.generate to return true on success"
   end
 

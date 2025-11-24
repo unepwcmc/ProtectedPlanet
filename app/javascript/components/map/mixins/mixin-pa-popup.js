@@ -12,8 +12,8 @@ export default {
       type: Object,
       default: () => ({
         name: "Name",
-        wdpaid: "ID",
-        parcel_id: "Parcel ID",
+        site_id: "ID",
+        site_pid: "SITE_PID (Parcel ID)",
       })
     }
   },
@@ -94,10 +94,12 @@ export default {
 
         if (features.length) {
           pa = features[0].attributes
+          // ESRI returns wdpaid/wdpa_pid fields, but we use internal site_id/site_pid keys from translation
+          // Map ESRI field values to internal attribute keys for display
           const html = this.generateHtml([
             { title: this.popupAttributes.name, value: pa.name, url: pa.wdpaid ? `/${pa.wdpaid}` : undefined },
-            { title: this.popupAttributes.wdpaid, value: pa.wdpaid },
-            { title: this.popupAttributes.parcel_id, value: pa.wdpa_pid }
+            { title: this.popupAttributes.site_id, value: pa.wdpaid }, // ESRI field: wdpaid -> internal: site_id
+            { title: this.popupAttributes.site_pid, value: pa.wdpa_pid } // ESRI field: wdpa_pid -> internal: site_pid
           ])
           this.addPopup(coords, html)
         }

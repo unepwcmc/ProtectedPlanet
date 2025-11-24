@@ -8,7 +8,7 @@ class TestWdpaProtectedAreaImporter < ActiveSupport::TestCase
 
     Wdpa::ProtectedAreaImporter::AttributeImporter.expects(:import)
     Wdpa::ProtectedAreaImporter::GeometryImporter.expects(:import)
-    Wdpa::ProtectedAreaImporter::RelatedSourceImporter.expects(:import).twice
+    Wdpa::Shared::Importer::ProtectedAreasRelatedSource.expects(:import_live)
 
     Wdpa::ProtectedAreaImporter.import wdpa_release
   end
