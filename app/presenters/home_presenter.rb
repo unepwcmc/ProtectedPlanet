@@ -94,7 +94,11 @@ class HomePresenter
     ]
   end
 
-  def update_date 
-    WDPA_UPDATE_MONTH + ' ' + WDPA_UPDATE_YEAR
+  def update_date
+    current_label = Release.current_label
+    return 'Unknown' unless current_label
+    
+    # Format MMMYYYY to "MMM YYYY" (e.g., "Nov2025" -> "Nov 2025")
+    current_label.insert(3, ' ')
   end
 end

@@ -48,7 +48,8 @@ class Wdpa::S3
 
   def current_wdpa
     wdpa_from_constants = available_wdpa_databases.find do |object|
-      object.key.include?("#{WDPA_UPDATE_MONTH.first(3)}#{WDPA_UPDATE_YEAR}")
+      # Here and this file is redundant because as we are now using protal release
+      object.key.include?("Oct2025")
     end
     wdpa_from_constants ? wdpa_from_constants.object : latest_wdpa
   rescue
