@@ -266,16 +266,12 @@ class ProtectedArea < ApplicationRecord
   end
 
   def arcgis_query_string
-    # "/query?where=site_id+%3D+#{site_id}&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
-    # ESRI queries use wdpaid/wdpa_pid field names, but we use internal site_id/site_pid values
-    "/query?where=wdpaid+%3D+#{site_id}&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
+    "/query?where=site_id+%3D+#{site_id}&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson"
   end
 
   def extent_url
     {
-      # url: "#{arcgis_layer}/query?where=site_id+%3D+#{site_id}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
-      # ESRI queries use wdpaid/wdpa_pid field names, but we use internal site_id/site_pid values
-      url: "#{arcgis_layer}/query?where=wdpaid+%3D+#{site_id}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
+      url: "#{arcgis_layer}/query?where=site_id+%3D+#{site_id}&returnGeometry=false&returnExtentOnly=true&outSR=4326&f=pjson",
       padding: [0.2, 0.2, 0.2]
     }
   end

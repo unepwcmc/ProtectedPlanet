@@ -152,8 +152,7 @@ module MapHelper
   end
 
   def site_ids_where_query site_ids
-    # 'where=site_id+IN+%28' + site_ids.join('%2C+') + '%29'
-    'where=wdpaid+IN+%28' + site_ids.join('%2C+') + '%29'
+    'where=site_id+IN+%28' + site_ids.join('%2C+') + '%29'
   end
 
   def greenlist_query_string site_ids
