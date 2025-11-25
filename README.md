@@ -21,8 +21,7 @@ git submodule update --init --recursive
 
 1. [Getting Started and Configuration](docs/installation.md)
     * [Docker Setup](docs/docker.md)
-2. [Importing and Managing the WDPA](docs/wdpa.md)
-    * [Automatic Import](docs/automatic_import.md)
+2. [Release Process (Sync Data Management Portal and Protected Planet)](docs/release/release_process.md)
 3. [Deployment](docs/deployment.md)
 4. [Development workflow, conventions and tips](docs/workflow.md)
 5. [Search](docs/search.md)
@@ -33,10 +32,9 @@ git submodule update --init --recursive
 10. [CMS](docs/cms.md)
 11. [Relationships between Protected Areas and Parcels](docs/protected_area_parcels.md)
 12. [Green List Functionality](docs/green_list.md)
-13. [Release Process (Sync Data Management Portal and Protected Planet)](docs/release/release_process.md)
-14. [DB Connection between PP and Data Management Portal (FDW) Setup - Production](docs/fdw_setup/local.md)
-15. [DB Connection between PP and Data Management Portal (FDW) Setup - Local Development](docs/fdw_setup/prod.md)
-16. [Banner system](docs/banner_system.md)
+13. [DB Connection between PP and Data Management Portal (FDW) Setup - Production](docs/fdw_setup/local.md)
+14. [DB Connection between PP and Data Management Portal (FDW) Setup - Local Development](docs/fdw_setup/prod.md)
+15. [Banner system](docs/banner_system.md)
 ## Licence
 
 Protected Planet is released under the [BSD

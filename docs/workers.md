@@ -1,3 +1,8 @@
+> ⚠️ **Import workeer is not used anymore**
+> 
+> As of 24 November 2025, we are now using portal importer for montly releases. Once the old way of release is rmoved in code we can delete the info about import worker
+> Please visit the [Protected Planet Wiki](https://github.com/unepwcmc/protected-planet-wiki) for updated details
+
 # Workers
 
 Background processing is handled by [Sidekiq](http://sidekiq.org)

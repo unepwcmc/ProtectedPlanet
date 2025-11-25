@@ -1,3 +1,8 @@
+> ⚠️ **THIS README IS OUTDATED**
+> 
+> As of 24 November 2025, this information is no longer current. Once the old way of release is rmoved in code we can delete this readme
+> Please visit the [Protected Planet Wiki](https://github.com/unepwcmc/protected-planet-wiki) for updated details
+
 # WDPA Modules
 
 This set of modules encapsulates the behaviour for handling the WDPA
