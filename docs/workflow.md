@@ -4,7 +4,7 @@
 The Protected Planet SCSS code lives in `app/assets/stylesheets` and is compiled via
 Sprockets.
 
-The frontend utilises Vue v2.6.10 and Vuex in the Single File Component format
+The frontend utilises Vue v2.7.16 and Vuex v3.1.0 in the Single File Component format
 (SFCs) - these reside within `app/javascript/components`, `app/javascript/` more
 generally being the folder which holds all of the various other helpers and mixins.
 Webpacker takes care of compiling the JavaScript.
@@ -22,8 +22,8 @@ expected to have test coverage.
 
 At present, there are no front end tests in the application.
 
-UPDATE 16/6/21: Tests will need to be fixed - they have not been working for some 
-time now. Consider replacing Minitest with RSpec and rewriting the specs.
+> **Note**: As of 16/6/21, tests need to be fixed - they have not been working for some 
+> time now. Consider replacing Minitest with RSpec and rewriting the specs.
 
 ### Line-length
 

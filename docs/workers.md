@@ -1,8 +1,3 @@
-> ⚠️ **Import workeer is not used anymore**
-> 
-> As of 24 November 2025, we are now using portal importer for montly releases. Once the old way of release is rmoved in code we can delete the info about import worker
-> Please visit the [Protected Planet Wiki](https://github.com/unepwcmc/protected-planet-wiki) for updated details
-
 # Workers
 
 Background processing is handled by [Sidekiq](http://sidekiq.org)
@@ -13,24 +8,27 @@ so that the jobs can be enqueued (though not necessarily processed):
 redis-server
 ```
 
-Jobs are processed by running (in two different windows/panes):
+## Current Setup
+
+Jobs are processed by running:
 
 ```
-# 1
 bundle exec sidekiq -q default
-
-# 2
-bundle exec sidekiq -q import
 ```
 
-The need for two different sidekiq processes (which also happens in production)
-is due to the nature of the WDPA import process. As we completely recreate the
-DB at every import, the `import` sidekiq process has to switch connection to a 
-new DB, where the import happens. As all sidekiq workers share the same connection 
-pool, jobs that are supposed to be running in the current DB (the ones in the `default`
-queue) would instead connect to the new unfinished DB.
+> **Note**: As of 24 November 2025, the `import` queue is no longer used for monthly releases. We now use the portal importer for releases. The import queue workers are legacy code that may be removed in the future.
 
-Having two separate sidekiq processes avoids this issue.
+For monthly releases, see the [Release Process Documentation](release/release_process.md) and [Portal Release Runbook](release/portal_release_runbook.md).
+
+## Legacy Import Workers
+
+The following information is kept for reference only, as the old import worker system is deprecated:
+
+**Historical Context**: Previously, two separate sidekiq processes were needed:
+- `default` queue - Regular application jobs
+- `import` queue - WDPA import jobs
+
+This was necessary because the old import process completely recreated the database at every import. The `import` sidekiq process had to switch connection to a new DB where the import happened. Since all sidekiq workers share the same connection pool, jobs in the `default` queue would have connected to the unfinished import DB. Having two separate sidekiq processes avoided this issue.
 
 ## Status
 

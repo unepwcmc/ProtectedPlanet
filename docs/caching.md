@@ -1,12 +1,9 @@
 # Caching
 
-
 > ## ⚠️ **WARNING**
 >
-> This file is left here for reference. Explicit caching has been removed, however
-> As of 25Nov2025 - Consider to remove Memcached and do something that is simplier setup less dependency
-> the Rake task is still run automatically after every deploy and every monthly
-> import. It can also be run manually if required.
+> This file is left here for reference. Explicit caching has been removed,
+> As of 25Nov2025 - Consider removing Memcached and implementing a simpler solution with fewer dependencies.
 
 ## How does it work?
 
