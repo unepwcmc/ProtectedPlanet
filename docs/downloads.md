@@ -3,10 +3,13 @@
 Protected Planet allows users to download all, or subsets of, the WDPA
 in a number of different formats, but three formats are common to every situation:
 CSV, Shapefile or File Geodatabase. All downloads are required to contain the 
-WDPA manual in English, Spanish, and French.
+WDPA manual and supporting documentation. The manual is available in multiple languages
+including English, Spanish, French, Russian, and Arabic, along with metadata and
+summary tables.
 
-Country and region pages also have PDF downloads available, which uses Puppeteer
-to render a snapshot of the page as a PDF, essentially producing a factsheet.
+Country and region pages also have PDF downloads available, which uses a Node.js script
+(`rasterize.js`) that leverages Puppeteer to render a snapshot of the page as a PDF,
+essentially producing a factsheet.
 
 On the WDPA and WDOECM thematic area pages, the two layers each have a direct link
 to the ESRI server which hosts them.
@@ -36,30 +39,45 @@ tables.
 
 As the polygon and points geometries are stored separately, we create a
 postgres `VIEW` during import that is based on a `UNION` of the two
-tables. This view is managed by `Wdpa::Release`.
+tables. This view is managed by `Download::Config.downloads_view`, which
+selects the appropriate view based on whether a portal release exists
+(uses portal materialized views) or falls back to the standard WDPA release
+views managed by `Wdpa::Release`.
 
 ### Caching
 
-The downloads are cached after the first generation, using a hash of the search
-terms or requested IDs within Redis. 
+The downloads are cached after the first generation using Redis. The caching strategy
+varies by download type:
+
+- **Search downloads**: Uses a SHA256 hash of the search terms and filters as the cache key
+- **General/Country/Region downloads**: Uses the identifier (e.g., country ISO3, region ISO) as the cache key
+- **Protected Area downloads**: Uses the site ID as the cache key
+
 Downloads are then dropped every month, with the release of a new WDPA version.
 
 ## Storage and access
 
 Downloads are stored in S3 under the `pp-downloads-<environment>`
-bucket. Each download is first prefixed with `WDPA_WDOECM_<timestamp of release>_Public`, 
-given a name based on its contents, such as 'all' or 'AFG' (Country iso3) and 
-combined with its type: `WDPA_WDOECM_Jun2021_Public_AFG_csv.zip`. 
+bucket. Each download is prefixed with either `current/` (for regular downloads)
+or `import/` (for import-related downloads).
+
+The file naming convention follows this pattern:
+- Base: `WDPA_WDOECM_<release_label>_Public`
+- Identifier suffix (for country/region/search/PA): `_<identifier>`
+- Format suffix (for CSV/Shapefile, nothing added for GDB): `_<format>`
+- Extension: `.zip`
+
+Example: `WDPA_WDOECM_Jun2021_Public_AFG_csv.zip`
 
 Downloads generated via the search are provided a SHA256 hash which takes the place of 
-the name. 
+the identifier in the filename.
 
 The Download class is responsible for generating links to downloads
-given a name:
+given a download name (which already includes the format):
 
 ```
-  Download.link_to '233', :csv
-    #=> 'https://pp-downloads-production.s3.amazonaws.com/WDPA_WDOECM_Jun2021_Public_AFG_csv.zip'
+  Download.link_to 'WDPA_WDOECM_Jun2021_Public_AFG_csv'
+    #=> 'https://pp-downloads-production.s3.amazonaws.com/current/WDPA_WDOECM_Jun2021_Public_AFG_csv.zip'
 ```
 
 ## Shapefile notes

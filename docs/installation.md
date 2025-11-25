@@ -1,3 +1,8 @@
+> ## ⚠️ **WARNING**
+>
+> Please use docker.md to setup locally
+>
+
 ## Setup and Configuration
 
 Protected Planet is a standard Rails app, using a PostgreSQL database with

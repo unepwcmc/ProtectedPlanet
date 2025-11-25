@@ -5,7 +5,7 @@ To overcome difficulties with the installation of old packages/versions on diffe
 ## Prerequisites
 - Docker 20.10.22
 - SQL dump of the production database from the Centre's AWS S3
-- Freshly cloned repository with updated .env (LastPass)
+- Freshly cloned repository with updated .env (Keeper)
  
 _To avoid potential problems, remove `node_modules` from your current directory._
   

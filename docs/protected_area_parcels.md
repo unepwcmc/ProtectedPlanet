@@ -12,8 +12,11 @@
 - See [Green List Documentation](green_list.md) for detailed information about the import process
 
 # Import
-- All data are in the import tables `standard_polygons` and `standard_points` you will now see the same site_id in multiple rows if the PA has more then one parcel (site_pid).
-- See [attribute_importer.rb](/lib/modules/wdpa/protected_area_importer/attribute_importer.rb) to understand how protected_areas and protected_areas_parcels are imported
+## Portal Release Import
+- When a portal release exists, data are sourced from portal materialized views: `portal_standard_polygons` and `portal_standard_points` (or their staging versions: `staging_portal_standard_polygons` and `staging_portal_standard_points`).
+- The same site_id will appear in multiple rows if the PA has more than one parcel (site_pid).
+- See [portal attribute importer](/lib/modules/wdpa/portal/importers/protected_area/attribute.rb) to understand how protected_areas and protected_areas_parcels are imported for portal releases.
+- The system automatically selects the appropriate importer and views based on whether a portal release exists (see `Download::Config.has_successful_portal_release?`).
 
 # Relations between protected_areas and protected_area_parcels
 - foreign_key: 'site_id', primary_key: 'site_id' is used to link up the two tables

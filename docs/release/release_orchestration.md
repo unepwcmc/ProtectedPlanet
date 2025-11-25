@@ -4,6 +4,8 @@
 
 This document provides code-level technical details about the portal-backed release orchestration system. It references actual code and implementation details rather than duplicating usage instructions.
 
+> **Related**: See [Release Data Imports](release_data_imports.md) for a comprehensive guide to what data is imported during a release.
+
 ---
 
 ## Architecture Overview

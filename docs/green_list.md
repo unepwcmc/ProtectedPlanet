@@ -64,4 +64,4 @@ ProtectedAreaParcel.joins(:green_list_status)
 
 ## Related Documentation
 - [Protected Area Parcels](protected_area_parcels.md)
-- [WDPA Import Process](wdpa.md)
+- [Release Process](./release/release_process.md)

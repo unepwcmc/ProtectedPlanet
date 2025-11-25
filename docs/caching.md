@@ -1,19 +1,12 @@
 # Caching
 
-As the import process drops the database and replaces it, Protected
-Planet is an almost entirely static site. One of the many advantages of
-this is that we can aggressively cache most of the pages.
 
 > ## ⚠️ **WARNING**
 >
 > This file is left here for reference. Explicit caching has been removed, however
+> As of 25Nov2025 - Consider to remove Memcached and do something that is simplier setup less dependency
 > the Rake task is still run automatically after every deploy and every monthly
 > import. It can also be run manually if required.
-
-## What is cached?
-
-In production only, the home page and all Protected Area show pages are cached for 30 days
-on first visit.
 
 ## How does it work?
 

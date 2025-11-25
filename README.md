@@ -19,15 +19,15 @@ If you already cloned it:
 git submodule update --init --recursive
 ```
 
-1. [Getting Started and Configuration](docs/installation.md)
-    * [Docker Setup](docs/docker.md)
-2. [Release Process (Sync Data Management Portal and Protected Planet)](docs/release/release_process.md)
+1. [Getting Started and Configuration with Docker](docs/docker.md)
+    * [Setup Without Docker - not recommended](docs/installation.md)
+2. [Release Process (Sync Data Management Portal Data to Protected Planet)](docs/release/release_process.md)
+    * [Release Data Imports](docs/release/release_data_imports.md) - What data is imported during a release
 3. [Deployment](docs/deployment.md)
 4. [Development workflow, conventions and tips](docs/workflow.md)
 5. [Search](docs/search.md)
 6. [Background Workers](docs/workers.md)
 7. [Downloads](docs/downloads.md)
-8. [Statistics](docs/statistics.md)
 9. [Caching](docs/caching.md)
 10. [CMS](docs/cms.md)
 11. [Relationships between Protected Areas and Parcels](docs/protected_area_parcels.md)

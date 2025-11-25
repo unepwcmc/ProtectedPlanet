@@ -6,11 +6,12 @@ This document walks you through the step-by-step process of releasing new protec
 
 ## 📚 Related Documentation
 
-This guide is the first in a series of three documents:
+This guide is the first in a series of four documents:
 
 1. **[Monthly Release Process](release_process.md)** (this document) - Simple guide for everyone: CSV files, git workflow, and overview
-2. **[Portal Release Runbook](portal_release_runbook.md)** - Simple guide for developers: commands and workflows to run releases
-3. **[Release Orchestration](release_orchestration.md)** - Technical reference for developers: architecture and code details
+2. **[Release Data Imports](release_data_imports.md)** - Comprehensive guide to what data is imported during a release
+3. **[Portal Release Runbook](portal_release_runbook.md)** - Simple guide for developers: commands and workflows to run releases
+4. **[Release Orchestration](release_orchestration.md)** - Technical reference for developers: architecture and code details
 
 ---
 

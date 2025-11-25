@@ -1,3 +1,6 @@
+### 5.0.0
+Feat: Hook up to use Data Management Portal for monthly release
+
 ### 4.11.11
 Chore: November 2025 WDPA Release
   - update constants.rb
