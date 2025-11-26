@@ -11,7 +11,7 @@ MARINE_WDPA_POINT_LAYER_URL = MARINE_WDPA_MAP_SERVER_URL + '/0'
 MARINE_WDPA_POLY_LAYER_URL = MARINE_WDPA_MAP_SERVER_URL + '/1'
 
 TILE_PATH = "/tile/{z}/{y}/{x}"
-MARINE_WHERE_QUERY = 'where=realm+IN+%28%27Terrestrial%27%2C+%27Coastal%27%29'
+MARINE_WHERE_QUERY = 'where=realm+IN+%28%27Marine%27%2C+%27Coastal%27%29'
 MARINE_QUERY_STRING = '/query?' + MARINE_WHERE_QUERY + '&geometryType=esriGeometryEnvelope&returnGeometry=true&f=geojson'
 
 OVERLAY_GREEN = "#38A800"
