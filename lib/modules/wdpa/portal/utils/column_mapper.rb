@@ -194,9 +194,17 @@ module Wdpa
           portal_attributes.each do |portal_key, value|
             if PORTAL_TO_PP_SOURCES_MAPPING.key?(portal_key)
               pp_key = PORTAL_TO_PP_SOURCES_MAPPING[portal_key]
+
               # Only include mapped column if it exists in the destination table
               if ActiveRecord::Base.connection.column_exists?(dest_table, pp_key)
-                mapped[pp_key] = value
+                # `year` and `update_year` are DATE columns in the DB, but the portal
+                # exposes them as 4‑digit strings. Normalise them to a proper Date
+                # using the shared `:year` converter (YYYY-01-01).
+                if %w[year update_year].include?(pp_key.to_s)
+                  mapped[pp_key] = Wdpa::Shared::TypeConverter.convert(value, as: :year)
+                else
+                  mapped[pp_key] = value
+                end
               else
                 Rails.logger.debug "Skipping source column not present in #{dest_table}: #{pp_key} (from #{portal_key})"
               end
