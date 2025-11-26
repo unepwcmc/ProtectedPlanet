@@ -1,10 +1,14 @@
+### 5.0.1
+Chore: December 2025 WDPA Release
+  - add December CSVs: country_statistics, global_statistics, pame_country, pame_data (Same as Nov2025 Data), greenlist CSV.
+  
 ### 5.0.0
 Feat: Hook up to use Data Management Portal for monthly release
 
 ### 4.11.11
 Chore: November 2025 WDPA Release
   - update constants.rb
-  - add October CSVs: country_statistics, global_statistics, pame_country, pame_data CSV, green list sites.
+  - add November CSVs: country_statistics, global_statistics, pame_country, pame_data CSV, green list sites.
 
 ### 4.11.10
 Chore: October 2025 WDPA Release
