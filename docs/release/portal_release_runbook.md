@@ -69,7 +69,7 @@ Long-running releases should be run in a persistent terminal session so they kee
 tmux new -s pp-release
 
 # Step 1: Dry run (stops after validation, does not swap tables)
-RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Oct2025"]
+RAILS_ENV=production PP_RELEASE_DRY_RUN=true bundle exec rake pp:portal:release["Dec2025"]
 
 # Detach without stopping the process
 # Press: Ctrl-b then d
@@ -80,13 +80,16 @@ tmux attach -t pp-release
 
 After the dry run completes, the staging tables are ready. You can then:
 
-1. **Check the release status**: `RAILS_ENV=production bundle exec rake pp:portal:status`
-2. **Inspect staging tables** in the database to verify data looks correct
-   - Check `staging_protected_areas`, `staging_sources`, etc.
-3. **When ready to go live** (e.g., on the first day of the month), continue with the swap:
-   ```bash
-   RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Oct2025"]
-   ```
+```bash
+# Check the release status
+RAILS_ENV=production bundle exec rake pp:portal:status
+
+# And then inspect staging tables in the database to verify data looks correct. Check `staging_protected_areas`, `staging_sources` tables, etc...
+
+# When ready to go live** (e.g., on the first day of the month), continue with the swap:
+# IMPORTANT! Make sure you change the correct label
+RAILS_ENV=production PP_RELEASE_START_AT=finalise_swap bundle exec rake pp:portal:release["Dec2025"]
+```
 
 **Important Notes:**
 - Use the **same release label** that was used in the dry run
@@ -103,7 +106,7 @@ If you want to run the entire release automatically:
 tmux new -s pp-release
 
 # Direct release (swaps tables immediately - no inspection step)
-RAILS_ENV=production bundle exec rake pp:portal:release["Oct2025"]
+RAILS_ENV=production bundle exec rake pp:portal:release["Dec2025"]
 
 # Detach without stopping the process
 # Press: Ctrl-b then d
