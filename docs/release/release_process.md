@@ -205,6 +205,23 @@ The runbook will guide you through:
 
 ---
 
+## Update the WDPA download URL
+
+Update the WDPA download short-url on [wcmc.io](https://wcmc.io). For instance, IBAT uses it to pull the latest version of the WDPA. _If you cannot access, ask for the credentials_
+
+This can be achieved over SSH directly: 
+```
+ssh wcmc@wcmc.io <<EOS
+cd ~/wukumurl/current
+bundle exec rails runner -e production 'ShortUrl.find_by_short_name("wdpa_current_release").update_attributes(url: "https://pp-import-production.s3-eu-west-1.amazonaws.com/WDPA_WDOECM_MmmYYYY_Public.zip")'
+EOS
+```
+*Be sure to update the _MMMYYYY_ in the long URL correctly:*
+
+Check that the short-URL works fine: [https://wcmc.io/wdpa_current_release](https://wcmc.io/wdpa_current_release) so that now it points to the latest version of the _GDB WDPA_WDOECM_MMMYYYY_Public.zip_ 
+
+_NB: It may also be possible to do this via the website itself, but there is no documentation How-To do it._
+
 ## ✅ Release Complete
 
 > **🎉 Once the release command completes successfully, the monthly release process is complete.**

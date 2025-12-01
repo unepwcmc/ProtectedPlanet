@@ -27,7 +27,11 @@ services:
       - elasticsearch
       - webpacker
     stdin_open: true
-    tty: true
+    tty: true    
+    # In order for container to be able to find servers
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
   db:
     platform: linux/x86_64
     container_name: protectedplanet-db
