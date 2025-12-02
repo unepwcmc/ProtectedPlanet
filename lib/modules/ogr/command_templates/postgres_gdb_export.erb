@@ -12,7 +12,7 @@ PG:"host=<%= db_config[:host] %>
   <% end %>
   dbname=<%= db_config[:database] %>"
   <%# For query we need to use '' instead of "" to avoid shell escaping %>
--sql "<%= query %>"
+-sql '<%= query %>'
 <% unless geom_type == 'source' %>
   -nlt "<%= geom_type.upcase %>"
 <% end %>
