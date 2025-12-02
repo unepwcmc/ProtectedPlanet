@@ -40,7 +40,16 @@ class Ogr::Postgres
     
     # Execute command and check for errors
     # system returns: true (success), false (failed), nil (couldn't execute)
-    system(command)
+    result = system(command)
+    
+    # Log errors to separate error log file
+    unless result
+      error_message = "Command failed with exit status: #{$?.exitstatus rescue 'unknown'}"
+      log_error_to_file(command, file_type, geom_type, error_message)
+      Rails.logger.error "[OGR::Postgres.export] #{error_message}"
+    end
+    
+    result
   end
 
   private
@@ -68,6 +77,28 @@ class Ogr::Postgres
     end
   rescue StandardError => e
     Rails.logger.warn "Failed to write OGR command to log file: #{e.message}"
+  end
+
+  def self.log_error_to_file(command, file_type, geom_type, error_message)
+    error_log_file = File.join(Rails.root, 'tmp', 'ogr_error_file.txt')
+    # Ensure the tmp directory exists
+    FileUtils.mkdir_p(File.dirname(error_log_file))
+    
+    timestamp = Time.current.iso8601
+    error_entry = <<~LOG
+      [#{timestamp}] OGR::Postgres.export ERROR
+      file_type=#{file_type}, geom_type=#{geom_type}
+      Error: #{error_message}
+      Failed ogr2ogr command:
+      #{command}
+      ---
+    LOG
+    
+    File.open(error_log_file, 'a') do |f|
+      f.write(error_entry)
+    end
+  rescue StandardError => e
+    Rails.logger.warn "Failed to write OGR error to log file: #{e.message}"
   end
 
   def self.ogr_command template, context
