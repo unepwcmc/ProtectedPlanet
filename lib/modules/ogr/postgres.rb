@@ -25,25 +25,9 @@ class Ogr::Postgres
     # Used for adding the -update flag so to add different layers (poly point source)
     # into the same .gdb file
     needs_updating = File.exist?(file_name)
-    # The name of the feature, e.g. WDPA_poly_MmmYYYY, WDPA_point_MmmYYYY
+    # The name of the feature, e.g. WDPA_poly_MmmYYYY, WDPA_point_MmmYYYY
     feature_name = get_feature_name(file_name, geom_type)
-    command = ogr_command(template, binding)
-    Rails.logger.info "[OGR::Postgres.export] file_type=#{file_type}, geom_type=#{geom_type}, command=#{command}"
-    
-    # Write command to tmp file for debugging on staging
-    log_command_to_file(command, file_type, geom_type)
-    
-    # Execute command and check for errors
-    # system returns: true (success), false (failed), nil (couldn't execute)
-    success = system(command)
-    
-    unless success
-      error_msg = "ogr2ogr command failed: #{command}"
-      Rails.logger.error "[OGR::Postgres.export] #{error_msg}"
-      log_command_error_to_file(command, file_type, geom_type, error_msg)
-    end
-    
-    success
+    system ogr_command(template, binding)
   end
 
   private
@@ -55,39 +39,6 @@ class Ogr::Postgres
   def self.ogr_command template, context
     compiled_template = ERB.new(template).result context
     compiled_template.squish
-  end
-
-  def self.log_command_to_file(command, file_type, geom_type)
-    log_file = File.join(Rails.root, 'tmp', 'ogr_command_file.txt')
-    timestamp = Time.current.iso8601
-    log_entry = <<~LOG
-      [#{timestamp}] file_type=#{file_type}, geom_type=#{geom_type}
-      #{command}
-      ---
-    LOG
-    
-    File.open(log_file, 'a') do |f|
-      f.write(log_entry)
-    end
-  rescue StandardError => e
-    Rails.logger.warn "Failed to write OGR command to log file: #{e.message}"
-  end
-
-  def self.log_command_error_to_file(command, file_type, geom_type, error_msg)
-    log_file = File.join(Rails.root, 'tmp', 'ogr_command_file.txt')
-    timestamp = Time.current.iso8601
-    log_entry = <<~LOG
-      [#{timestamp}] ERROR - file_type=#{file_type}, geom_type=#{geom_type}
-      #{error_msg}
-      Command: #{command}
-      ---
-    LOG
-    
-    File.open(log_file, 'a') do |f|
-      f.write(log_entry)
-    end
-  rescue StandardError => e
-    Rails.logger.warn "Failed to write OGR error to log file: #{e.message}"
   end
 
   # The filename convention should be as follows:
