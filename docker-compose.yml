@@ -9,7 +9,6 @@ services:
       - .:/ProtectedPlanet
       - ~/.ssh/id_ed25519:/root/.ssh/id_ed25519
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
-      - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
       - /run/host-services/ssh-auth.sock:/ssh-agent # Use this setting for Mac OS X and comment out ${SSH_AUTH_SOCK}:/ssh-agent below
     ports:
@@ -63,7 +62,6 @@ services:
     volumes:
       - .:/ProtectedPlanet
       - protectedplanet_node_modules:/ProtectedPlanet/node_modules
-      - protectedplanet_import_data:/import_data
       - protectedplanet_bundler:/usr/local/bundle
     networks:
       - protectedplanet
@@ -122,24 +120,6 @@ services:
       - '.env'
     networks:
       - protectedplanet
-  sidekiq-import:
-    platform: linux/x86_64
-    build: .
-    volumes:
-      - .:/ProtectedPlanet
-      - protectedplanet_node_modules:/ProtectedPlanet/node_modules
-      - protectedplanet_import_data:/import_data
-      - protectedplanet_bundler:/usr/local/bundle
-    networks:
-      - protectedplanet
-    env_file:
-      - '.env'
-    depends_on:
-      - db
-      - redis
-    command: /bin/bash -l -c "bundle exec sidekiq -C /ProtectedPlanet/config/sidekiq-import.yml"
-    stdin_open: true
-    tty: true
   api:
     platform: linux/x86_64
     container_name: protectedplanet-api
@@ -168,7 +148,6 @@ networks:
 volumes:
   protectedplanet_pg_data:
   protectedplanet_redis_data:
-  protectedplanet_import_data:
   protectedplanet_es_data:
   protectedplanet_bundler:
   protectedplanet_node_modules:
