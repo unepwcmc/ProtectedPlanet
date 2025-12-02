@@ -35,15 +35,7 @@ class Ogr::Postgres
     
     # Execute command and check for errors
     # system returns: true (success), false (failed), nil (couldn't execute)
-    success = system(command)
-    
-    unless success
-      error_msg = "ogr2ogr command failed: #{command}"
-      Rails.logger.error "[OGR::Postgres.export] #{error_msg}"
-      log_command_error_to_file(command, file_type, geom_type, error_msg)
-    end
-    
-    success
+    system(command)
   end
 
   private
@@ -71,23 +63,6 @@ class Ogr::Postgres
     end
   rescue StandardError => e
     Rails.logger.warn "Failed to write OGR command to log file: #{e.message}"
-  end
-
-  def self.log_command_error_to_file(command, file_type, geom_type, error_msg)
-    log_file = File.join(Rails.root, 'tmp', 'ogr_command_file.txt')
-    timestamp = Time.current.iso8601
-    log_entry = <<~LOG
-      [#{timestamp}] ERROR - file_type=#{file_type}, geom_type=#{geom_type}
-      #{error_msg}
-      Command: #{command}
-      ---
-    LOG
-    
-    File.open(log_file, 'a') do |f|
-      f.write(log_entry)
-    end
-  rescue StandardError => e
-    Rails.logger.warn "Failed to write OGR error to log file: #{e.message}"
   end
 
   # The filename convention should be as follows:
