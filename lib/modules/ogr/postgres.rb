@@ -29,7 +29,9 @@ class Ogr::Postgres
     feature_name = get_feature_name(file_name, geom_type)
     command = ogr_command(template, binding)
     # Rails.logger.info "[OGR::Postgres.export] file_type=#{file_type}, geom_type=#{geom_type}, command=#{command}"
-
+    # Write command to tmp file for debugging on staging
+    log_command_to_file(command, file_type, geom_type)
+    
     # Execute command and check for errors
     # system returns: true (success), false (failed), nil (couldn't execute)
     system(command)
@@ -41,11 +43,30 @@ class Ogr::Postgres
     ActiveRecord::Base.connection_config
   end
 
+  def self.log_command_to_file(command, file_type, geom_type)
+    log_file = File.join(Rails.root, 'tmp', 'ogr_command_file.txt')
+    # Ensure the tmp directory exists
+    FileUtils.mkdir_p(File.dirname(log_file))
+    
+    timestamp = Time.current.iso8601
+    log_entry = <<~LOG
+      [#{timestamp}] file_type=#{file_type}, geom_type=#{geom_type}
+      #{command}
+      ---
+    LOG
+    
+    File.open(log_file, 'a') do |f|
+      f.write(log_entry)
+    end
+  rescue StandardError => e
+    Rails.logger.warn "Failed to write OGR command to log file: #{e.message}"
+  end
+
   def self.ogr_command template, context
     compiled_template = ERB.new(template).result context
     compiled_template.squish
   end
-
+  
   # The filename convention should be as follows:
   #
   # WDPA_MmmYYYY_Public if full WDPA (and only WDPA areas) download
