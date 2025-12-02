@@ -17,11 +17,8 @@ module Download
     end
 
     def self.source_columns
-      add_quotes = ->(str) { %("#{str}") }
-
       Download::Config.source_columns
-        .map(&:upcase)
-        .map(&add_quotes)
+        .map { |c| "#{c} as \"#{c.upcase}\"" }  # produces "COL"
         .join(',')
     end
 

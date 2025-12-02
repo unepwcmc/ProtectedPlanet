@@ -75,11 +75,11 @@ class Download::Generators::Base
 
   def export_sources
     return true if File.exist?(sources_path)
-
-    Ogr::Postgres.export :csv, sources_path, "
-      SELECT #{Download::Utils.source_columns}
-      FROM #{Download::Config.sources_view}
-    "
+  
+    sql = "SELECT #{Download::Utils.source_columns} FROM #{Download::Config.sources_view}"
+    escaped_sql = sql.gsub('"', '\"')
+  
+    Ogr::Postgres.export(:csv, sources_path, escaped_sql)
   end
 
   def export
