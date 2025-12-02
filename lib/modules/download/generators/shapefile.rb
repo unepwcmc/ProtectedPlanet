@@ -65,10 +65,14 @@ class Download::Generators::Shapefile < Download::Generators::Base
       LIMIT #{limit} OFFSET #{offset}
     ".squish
 
+    # Escape double quotes in the SQL query for shell safety
+    # The ERB template wraps the query in double quotes, so inner double quotes need to be escaped
+    # This handles SQL identifiers like: ORDER BY "SITE_ID"
+    escaped_sql = sql.gsub('"', '\\"')
     export_success = Ogr::Postgres.export(
       :shapefile,
       component_paths.first,
-      sql
+      escaped_sql
     )
 
     raise Ogr::Postgres::ExportError unless export_success
